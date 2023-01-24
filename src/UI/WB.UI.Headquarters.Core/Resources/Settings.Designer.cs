@@ -735,7 +735,16 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure to remove export cache?.
+        ///   Looks up a localized string similar to Warning! This is an irreversible action.
+        /// </summary>
+        public static string RemoveExportCache_Warning {
+            get {
+                return ResourceManager.GetString("RemoveExportCache_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to clear export cache? All generated export files will be removed from the server and will NOT be available for download..
         /// </summary>
         public static string RemoveExportCacheConfirm {
             get {

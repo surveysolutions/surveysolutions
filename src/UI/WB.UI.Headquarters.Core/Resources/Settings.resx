@@ -130,13 +130,16 @@
     <value>Clear cache</value>
   </data>
   <data name="RemoveExportCacheConfirm" xml:space="preserve">
-    <value>Are you sure to remove export cache?</value>
+    <value>Are you sure you want to clear export cache? All generated export files will be removed from the server and will NOT be available for download.</value>
   </data>
   <data name="RemoveExportCacheSuccess" xml:space="preserve">
     <value>Cache was deleted successfully</value>
   </data>
   <data name="RemoveExportCacheFail" xml:space="preserve">
     <value>Error cache clear</value>
+  </data>
+  <data name="RemoveExportCache_Warning" xml:space="preserve">
+    <value>Warning! This is an irreversible action</value>
   </data>
   <data name="RegeneratePasswordConfirm" xml:space="preserve">
     <value>Are you sure you want to create a new password? The new password will be applied to all exported data files produced from now on.</value>

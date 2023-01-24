@@ -586,15 +586,15 @@ export default {
         removeExportCache() {
             var self = this
             modal.dialog({
-                closeButton: false,
-                message: self.$t('Settings.RemoveExportCacheConfirm'),
+                closeButton: true,
+                onEscape: true,
+                title: '<h2>' + self.$t('Pages.ConfirmationNeededTitle') + '</h2>',
+                message: `<p style="color: red;"> ${ self.$t('Settings.RemoveExportCache_Warning')}</p>` +
+                         `<p>${ self.$t('Settings.RemoveExportCacheConfirm' )}</p>`,
                 buttons: {
-                    cancel: {
-                        label: self.$t('Common.No'),
-                        callback: () => { },
-                    },
                     success: {
-                        label: self.$t('Common.Yes'),
+                        label: self.$t('Common.Clear'),
+                        className: 'btn btn-danger',
                         callback: async () => {
                             await self.$hq.ExportSettings.removeExportCache()
                                 .then(response => {
@@ -615,6 +615,11 @@ export default {
                                     }
                                 })
                         },
+                    },
+                    cancel: {
+                        label: self.$t('Common.Cancel'),
+                        className: 'btn btn-link',
+                        callback: () => { },
                     },
                 },
             })
