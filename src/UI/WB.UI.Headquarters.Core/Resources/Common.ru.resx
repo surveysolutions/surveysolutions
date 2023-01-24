@@ -231,6 +231,9 @@
   <data name="Cancel" xml:space="preserve">
     <value>Отмена</value>
   </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Очистить</value>
+  </data>
   <data name="Logoff" xml:space="preserve">
     <value>Выход из системы</value>
   </data>
