@@ -10,12 +10,17 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         private readonly NpgsqlConnection db;
         private readonly NpgsqlTransaction tr;
 
-        public MigrationLock(string connectionString, long id = 1818)
+        public MigrationLock(string connectionString, bool isGlobal = true)
         {
             this.db = new NpgsqlConnection(connectionString);
             this.db.Open();
             this.tr = db.BeginTransaction();
-            this.db.Execute(@$"select pg_advisory_xact_lock ({id}, 20433)");
+            
+            var statement = isGlobal
+                ? "select pg_advisory_xact_lock (1818, 20433)"
+                : "select pg_advisory_xact_lock (1919, 20433)";
+            
+            this.db.Execute(statement);
         }
 
         public void Dispose()
