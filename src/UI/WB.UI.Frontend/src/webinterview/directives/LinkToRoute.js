@@ -34,6 +34,11 @@ Vue.directive('linkToRoute', {
                         if (vnode.context.$store.getters.isTakeNewAssignment === true || to.includes('void(0)'))
                             return
 
+                        if (to.startsWith('/api/')) {
+                            window.open(target.href, '_blank')
+                            return
+                        }
+
                         var toPath = vnode.context.$router.options.base == '/'
                             ? to
                             : to.replace(vnode.context.$router.options.base, '')
