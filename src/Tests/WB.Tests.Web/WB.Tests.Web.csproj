@@ -15,7 +15,7 @@
         <PackageReference Include="ApprovalTests" Version="5.8.0" />
         <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
         <PackageReference Include="Autofac" Version="6.5.0" />
-        <PackageReference Include="FluentAssertions" Version="6.9.0" />
+        <PackageReference Include="FluentAssertions" Version="6.8.0" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
         <PackageReference Include="NUnit" Version="3.13.3" />
         <PackageReference Include="NUnit.Extension.NUnitProjectLoader" Version="3.7.1" />
