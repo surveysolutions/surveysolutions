@@ -120,6 +120,27 @@
   <data name="ExportEncryption_Title" xml:space="preserve">
     <value>Шифровать экспортируемые данные</value>
   </data>
+  <data name="ClearExportCache_Title" xml:space="preserve">
+    <value>Удалить экспортный кэш</value>
+  </data>
+  <data name="ClearExportCache_Description" xml:space="preserve">
+    <value>Эта операция удалит экспортный кэш. Следующий экспорт займет больше времени.</value>
+  </data>
+  <data name="RemoveExportCache" xml:space="preserve">
+    <value>Удалить кэш</value>
+  </data>
+  <data name="RemoveExportCacheConfirm" xml:space="preserve">
+    <value>Вы точно хотите почистить экспортный кэш? Все сгенерированые файлы не будут доступны для загрузки.</value>
+  </data>
+  <data name="RemoveExportCacheSuccess" xml:space="preserve">
+    <value>Кэш был удален успешно</value>
+  </data>
+  <data name="RemoveExportCacheFail" xml:space="preserve">
+    <value>Ошибка удаления</value>
+  </data>
+  <data name="RemoveExportCache_Warning" xml:space="preserve">
+    <value>Внимание! Эта операция необратима</value>
+  </data>
   <data name="RegeneratePasswordConfirm" xml:space="preserve">
     <value>Вы уверены, что хотите изменить пароль? Экспортные данные необходимо будет обновить перед тем как скачать.</value>
   </data>
