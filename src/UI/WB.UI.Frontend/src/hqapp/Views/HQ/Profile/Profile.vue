@@ -490,7 +490,7 @@
 </template>
 
 <script>
-import {MarkerClusterer, Cluster} from '@googlemaps/markerclusterer'
+import {MarkerClusterer, Cluster, SuperClusterAlgorithm} from '@googlemaps/markerclusterer'
 import Vue from 'vue'
 import * as toastr from 'toastr'
 import {DateFormats, humanFileSize} from '~/shared/helpers'
@@ -647,7 +647,11 @@ export default {
                 return this.markers
             }
 
-            this.markerCluster = new MarkerClusterer({map: this.map,markers: markers})
+            this.markerCluster = new MarkerClusterer({
+                map: this.map,
+                markers: markers,
+                algorithm: new SuperClusterAlgorithm( { minPoints: this.minimumClusterSize}),
+            })
 
             google.maps.event.addListener(this.markerCluster, 'clusteringend', () => {
                 this.drawLines()
