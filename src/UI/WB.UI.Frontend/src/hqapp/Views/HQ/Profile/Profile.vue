@@ -496,7 +496,6 @@ import * as toastr from 'toastr'
 import {DateFormats, humanFileSize} from '~/shared/helpers'
 import moment from 'moment'
 import ConnectionStats from './ConnectionStats'
-import { tsInstantiationExpression } from '@babel/types'
 
 export default {
     data: function() {
@@ -649,10 +648,6 @@ export default {
             }
 
             this.markerCluster = new MarkerClusterer({map: this.map,markers: markers})
-            // imagePath: '/img/google-maps-markers/m',
-            //     enableRetinaIcons: true,
-            //     minimumClusterSize: this.minimumClusterSize,
-            //     averageCenter: true,
 
             google.maps.event.addListener(this.markerCluster, 'clusteringend', () => {
                 this.drawLines()
