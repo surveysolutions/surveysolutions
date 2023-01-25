@@ -290,6 +290,7 @@
     <PackageReference Include="Xamarin.AndroidX.VectorDrawable">
       <Version>1.1.0.15</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.Net.ILLink.Tasks" Version="8.0.100-1.22612.2" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Migrations\Workspace" />
