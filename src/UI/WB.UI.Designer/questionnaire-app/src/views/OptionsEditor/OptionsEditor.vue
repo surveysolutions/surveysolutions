@@ -41,7 +41,7 @@
                         <v-tab-item key="table">
                             <category-table
                                 ref="table"
-                                :categories="categories"
+                                categories.sync="categories"
                                 :parent-categories="parentCategories"
                                 :loading="loading"
                                 :is-category="isCategory"

@@ -62,10 +62,10 @@
             style="overflow-wrap:anywhere;"
             dense
         >
-            <template #item.value="{ item }">
+            <template #[`item.value`]="{ item }">
                 <span class="text-no-wrap">{{ item.value }}</span>
             </template>
-            <template v-slot:item.parentValue="props">
+            <template #[`item.parentValue`]="props">
                 <div>
                     {{ props.item.parentValue }}
                     <span
@@ -77,7 +77,7 @@
                     >
                 </div>
             </template>
-            <template #item.actions="{ item }">
+            <template #[`item.actions`]="{ item }">
                 <div v-if="!readonly">
                     <v-icon small class="mr-2" @click="editItem(item)"
                         >mdi-pencil</v-icon
@@ -85,7 +85,7 @@
                     <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
                 </div>
             </template>
-            <template v-slot:no-data>
+            <template #no-data>
                 {{
                     $t('QuestionnaireEditor.OptionsUploadLimit', {
                         limit: 15000
