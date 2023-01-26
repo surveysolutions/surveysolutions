@@ -28,12 +28,14 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         {
             if (isDisposing)
             {
-                if (Target?.Player != null)
+                var player = Target?.Player;
+                if (player != null)
                 {
                     try
                     {
-                        Target.Player.Release();
-                        Target.Player.Dispose();
+                        player.Stop();
+                        player.Release();
+                        player.Dispose();
                     }
                     catch (ObjectDisposedException) { }
                     
@@ -66,9 +68,10 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
                 view.Player = null;
             }
-            
-            //var mediaId = view.Player?.CurrentMediaItem?.MediaId;
-            //if (mediaId != null && media.ContentPath == mediaId) return;
+
+            IExoPlayer.Builder exoPlayerBuilder = new IExoPlayer.Builder(view.Context);
+            var exoPlayer = exoPlayerBuilder.Build();
+            view.Player = exoPlayer;
 
             var dataSourceFactory = new DefaultDataSourceFactory(
                 view.Context, Util.GetUserAgent(view.Context, "ExoPlayerInfo")
@@ -77,27 +80,9 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             var uri = Uri.FromFile(new Java.IO.File(media.ContentPath));
             
             var mediaItem = MediaItem.FromUri(uri);
-            mediaItem.MediaId = media.ContentPath;
-            
             var mediaSourceFactory = new ProgressiveMediaSource.Factory(dataSourceFactory, new DefaultExtractorsFactory());
             var mediaSource = mediaSourceFactory.CreateMediaSource(mediaItem);
 
-            IExoPlayer exoPlayer = view.Player as IExoPlayer;
-
-            if (exoPlayer == null)
-            {
-                IExoPlayer.Builder exoPlayerBuilder = new IExoPlayer.Builder(view.Context);
-                exoPlayer = exoPlayerBuilder.Build();
-
-                view.Player = exoPlayer;
-            }
-            else
-            {
-                var currentMediaItem = exoPlayer.CurrentMediaItem;
-                exoPlayer.ClearMediaItems();
-                currentMediaItem?.Dispose();
-            }
-            
             exoPlayer.SetMediaSource(mediaSource);
             exoPlayer.Prepare();
 
@@ -106,7 +91,6 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
             exoPlayer.SeekTo(1);
         }
-        
         
         private class VideoFrameMetadataListener : Java.Lang.Object, IVideoFrameMetadataListener
         {
