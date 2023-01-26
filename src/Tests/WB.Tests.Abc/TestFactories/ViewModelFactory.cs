@@ -43,12 +43,6 @@ namespace WB.Tests.Abc.TestFactories
 {
     internal class ViewModelFactory
     {
-        internal class MediaAttachment : IMediaAttachment
-        {
-            public string ContentPath { get; set; }
-            public void Release() { }
-        }
-
         public AttachmentViewModel AttachmentViewModel(
             IQuestionnaireStorage questionnaireRepository = null,
             IStatefulInterviewRepository interviewRepository = null,
@@ -57,7 +51,6 @@ namespace WB.Tests.Abc.TestFactories
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(), 
                 Create.Service.LiteEventRegistry(),
                 attachmentContentStorage, 
-                () => new MediaAttachment(),
                 Mock.Of<IInterviewPdfService>(),
                 Mock.Of<IViewModelNavigationService>());
 

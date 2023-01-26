@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.UI.Shared.Enumerator.Activities.Callbacks;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
@@ -43,6 +44,16 @@ namespace WB.UI.Shared.Enumerator.Activities
                 nameof(this.drawerLayout.DrawerOpened),
                 OnDrawerLayoutOnDrawerOpened)  ;
         }
+        
+        protected override bool BackButtonCustomAction => true;
+        protected override void BackButtonPressed()
+        {
+            this.ViewModel.NavigateToPreviousViewModel(() =>
+            {
+                this.ViewModel.NavigateBack();
+                ReleaseActivity();
+            });
+        }
 
         private void OnDrawerLayoutOnDrawerOpened(object sender, DrawerLayout.DrawerOpenedEventArgs args)
         {
@@ -57,15 +68,6 @@ namespace WB.UI.Shared.Enumerator.Activities
             this.sectionChangeSubscriptionToken = messenger.Subscribe<SectionChangeMessage>(this.OnSectionChange);
             this.interviewCompleteActivityToken = messenger.Subscribe<InterviewCompletedMessage>(this.OnInterviewCompleteActivity);
             base.OnStart();
-        }
-
-        public override void OnBackPressed()
-        {
-            this.ViewModel.NavigateToPreviousViewModel(() =>
-            {
-                this.ViewModel.NavigateBack();
-                ReleaseActivity();
-            });
         }
 
         public override bool OnOptionsItemSelected(IMenuItem item)

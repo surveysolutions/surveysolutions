@@ -11,7 +11,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Categories
         public string Text { get; set; } = String.Empty;
         public string? AttachmentName { get; set; }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is CategoriesItem item &&
                    Id == item.Id &&

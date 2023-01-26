@@ -19,12 +19,13 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Activities.Callbacks;
 using WB.UI.Shared.Enumerator.Activities.Dashboard;
 using WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Notifications;
-
 using MvxFragmentStatePagerAdapter = WB.UI.Interviewer.CustomControls.MvxFragmentStatePagerAdapter;
+using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
 
 namespace WB.UI.Interviewer.Activities.Dashboard
 {
@@ -83,6 +84,12 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                 5000);
             snack.Show();
         }
+        
+        protected override bool BackButtonCustomAction => true;
+        protected override void BackButtonPressed()
+        {
+        }
+
 
         private void RemoveFragments()
         {
@@ -217,8 +224,6 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                 this.InvalidateOptionsMenu();
             }
         }
-
-        public override void OnBackPressed() { }
 
         private void WorkspaceListUpdated(object sender, EventArgs e)
         {

@@ -3,28 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/applicationBackground">
+    android:background="@color/exo_player_background">
 
   <FrameLayout
       android:id="@+id/control_buttons"
       android:layout_width="@dimen/exo_player_button_size"
       android:layout_height="@dimen/exo_player_button_size"
-      android:layout_gravity="left"
+      android:layout_gravity="center"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintLeft_toLeftOf="parent"
-      app:layout_constraintTop_toTopOf="parent"  >
+      app:layout_constraintTop_toTopOf="parent">
     <ImageButton
-        android:id="@id/exo_play"
-        style="@style/ExoMediaButton.Play"
-        android:tint="@color/exo_player_button_tint"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-    <ImageButton
-        android:id="@id/exo_pause"
-        style="@style/ExoMediaButton.Pause"
-        android:tint="@color/exo_player_button_tint"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+            android:id="@id/exo_play_pause"
+            style="@style/ExoStyledControls.Button.Center.PlayPause"
+            android:tint="@color/exo_player_button_tint"
+            android:layout_marginTop="@dimen/exo_player_play_button_margin_top"
+            android:layout_width="@dimen/exo_player_play_button_size"
+            android:layout_height="@dimen/exo_player_play_button_size" />
   </FrameLayout>
 
   <TextView android:id="@id/exo_position"

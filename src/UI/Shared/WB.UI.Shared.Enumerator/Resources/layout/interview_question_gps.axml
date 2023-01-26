@@ -1,53 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:local="http://schemas.android.com/apk/res-auto"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              local:MvxBind="HideKeyboardOnClick .; LongClick QuestionState.ShowCommentEditorCommand">
-  <LinearLayout style="@style/Interview_Question_Answer"
-    local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false));">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    local:MvxBind="HideKeyboardOnClick .; LongClick QuestionState.ShowCommentEditorCommand">
+    <LinearLayout
+        style="@style/Interview_Question_Answer"
+        local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false));">
 
-    <TableLayout style="@style/FullWidthWrappingLayout">
-      <TableRow local:MvxBind="Visible And(QuestionState.IsAnswered, ShowLocationOnMap);">
-        <com.google.android.gms.maps.MapView
-            xmlns:map="http://schemas.android.com/apk/res-auto"
-            local:MvxBind="SetGpsLocation Answer;"
-            android:layout_width="@dimen/Interview_Sidebar_GpsQuestions_max_width"
-            android:layout_height="@dimen/Interview_Sidebar_GpsQuestions_max_height"
-            style="@style/Interview_Question_GPS_Map"
-            map:mapType="hybrid"
-            map:liteMode="true"/>
-        <LinearLayout
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          local:MvxBind="Visible ShowLocationOnMap">
-          <include layout="@layout/interview_question__remove_button_recorded" />
-        </LinearLayout>
-      </TableRow>
-      <TableRow local:MvxBind="Visible QuestionState.IsAnswered">
-        <TextView style="@style/Interview_Question_RecordedAnswer_Link"
-          local:MvxBind="Text Format('{0}, {1}', Answer.Latitude, Answer.Longitude); 
+        <TableLayout
+            style="@style/FullWidthWrappingLayout">
+            <TableRow
+                local:MvxBind="Visible And(QuestionState.IsAnswered, ShowLocationOnMap);">
+                <com.google.android.gms.maps.MapView
+                    local:MvxBind="SetGpsLocation Answer;"
+                    android:layout_width="@dimen/Interview_Sidebar_GpsQuestions_max_width"
+                    android:layout_height="@dimen/Interview_Sidebar_GpsQuestions_max_height"
+                    style="@style/Interview_Question_GPS_Map"
+                    map:mapType="hybrid"
+                    map:liteMode="true"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    local:MvxBind="Visible ShowLocationOnMap">
+                    <include
+                        layout="@layout/interview_question__remove_button_recorded" />
+                </LinearLayout>
+            </TableRow>
+            <TableRow
+                local:MvxBind="Visible QuestionState.IsAnswered">
+                <TextView
+                    style="@style/Interview_Question_RecordedAnswer_Link"
+                    local:MvxBind="Text Format('{0}, {1}', Answer.Latitude, Answer.Longitude); 
                          Click NavigateToMapsCommand;
                          Tag Format('Answer_{0}', Identity);" />
 
-        <LinearLayout 
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          local:MvxBind="Visible Not(ShowLocationOnMap)">
-            <include layout="@layout/interview_question__remove_button_recorded" />
-        </LinearLayout>
-      </TableRow>
-      <TableRow>
-        <FrameLayout android:layout_height="wrap_content"
-          android:layout_width="wrap_content">
-          <Button style="@style/Interview_Question_InputButton"
-            local:MvxBind="HideKeyboardOnClick .; 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    local:MvxBind="Visible Not(ShowLocationOnMap)">
+                    <include
+                        layout="@layout/interview_question__remove_button_recorded" />
+                </LinearLayout>
+            </TableRow>
+            <TableRow>
+                <FrameLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content">
+                    <Button
+                        style="@style/Interview_Question_InputButton"
+                        local:MvxBind="HideKeyboardOnClick .; 
                           Click SaveAnswerCommand; 
                           Text Localization('Interview_Questions_Gps_SaveAnswer');
                           ButtonToQuestionState LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false);
                           Tag Format('btnAnswer_{0}', Identity)" />
-        </FrameLayout>
-      </TableRow>
-    </TableLayout>
-  </LinearLayout>
+                </FrameLayout>
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
 </LinearLayout>

@@ -11,9 +11,15 @@ namespace WB.UI.Headquarters.Code.UsersManagement
     {
         public UserManagementListItem(Guid userId, string userName, ICollection<HqRole> role)
         {
+            if (role == null || role.Count == 0)
+                throw new ArgumentException(nameof(role));
+            var firstRole = role.FirstOrDefault();
+            if (firstRole == null || firstRole.Name == null)
+                throw new ArgumentException(nameof(firstRole));
+
             UserId = userId;
             UserName = userName;
-            Role = role.First().Name;
+            Role = firstRole.Name;
         }
 
         public Guid UserId { get; set; }

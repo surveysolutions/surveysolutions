@@ -69,11 +69,11 @@
       <LinearLayout
           style="@style/Area_MapListPanel"
           android:id="@+id/area_map_list_maps"
-          local:MvxBind="Visibility Visibility(IsPanelVisible);">
+          local:MvxBind="Visible IsPanelVisible;">
         <ProgressBar
             style="@style/Progress_Indicator"
             android:indeterminate="true"
-            local:MvxBind="Visibility Visibility(IsInProgress);" />
+            local:MvxBind="Visible IsInProgress;" />
         <TextView
             android:id="@+id/areaEditor_No_Maps_Text"
             style="@style/Area_NoMapText"

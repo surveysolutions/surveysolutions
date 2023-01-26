@@ -167,6 +167,7 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<EditText>("FocusValueChanged", (editText) => new EditTextFocusValueChangedBinding(editText));
             registry.RegisterCustomBindingFactory<EditText>("SetFocus", (editText) => new EditTextSetFocusBinding(editText));
             registry.RegisterCustomBindingFactory<ProgressBar>("ShowProgress", (view) => new ProgressBarIndeterminateBinding(view));
+            registry.RegisterCustomBindingFactory<ProgressBar>("ProgressBarComplete", (view) => new ProgressBarCompleteBinding(view));
             registry.RegisterCustomBindingFactory<ProgressBar>("Progress", (view) => new ProgressBarProgressBinding(view));
             registry.RegisterCustomBindingFactory<ProgressBar>("IndeterminateMode", (view) => new ProgressBarIndeterminateModeBinding(view));
             registry.RegisterCustomBindingFactory<View>("BackgroundStyle", (view) => new ViewBackgroundDrawableBinding(view));
@@ -192,8 +193,8 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<ImageView>("BitmapWithFallback", (img) => new ImageViewBitmapWithFallbackBinding(img));
             registry.RegisterCustomBindingFactory<ImageView>("MarginsBitmapWithFallback", (img) => new ImageViewMarginsBitmapWithFallbackBinding(img));
             registry.RegisterCustomBindingFactory<ImageView>("QRCode", img => new ImageViewQRCodeBinding(img));
-            registry.RegisterCustomBindingFactory<PlayerView>("Video", player => new ExoPlayerBinding(player));
-            registry.RegisterCustomBindingFactory<PlayerView>("Audio", player => new ExoPlayerAudioAttachmentBinding(player));
+            registry.RegisterCustomBindingFactory<StyledPlayerView>("Video", player => new ExoPlayerBinding(player));
+            registry.RegisterCustomBindingFactory<StyledPlayerView>("Audio", player => new ExoPlayerAudioAttachmentBinding(player));
             registry.RegisterCustomBindingFactory<View>("SizeByNoiseLevel", (view) => new AudioSizeByNoiseLevelBinding(view));
             registry.RegisterCustomBindingFactory<View>("Tag", (img) => new ViewTagBinding(img));
             registry.RegisterCustomBindingFactory<SignaturePadView>("Signature", (view) => new SignatureBinding(view));

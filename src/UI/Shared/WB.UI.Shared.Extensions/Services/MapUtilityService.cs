@@ -121,7 +121,10 @@ namespace WB.UI.Shared.Extensions.Services
                         return new Basemap(BasemapStyle.OSMStandard);
                 }
             }
-            catch {}
+            catch (Exception e)
+            {
+                logger.Error("Cant load online map " + existingMap.MapType, e);
+            }
             
             return null;
         }

@@ -44,7 +44,7 @@ namespace Main.Core.Entities.SubEntities
 
         public bool HasValue() => AnswerCode.HasValue || !string.IsNullOrEmpty(AnswerValue);
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is Answer answer 
                    && EqualityComparer<decimal?>.Default.Equals(
@@ -60,8 +60,15 @@ namespace Main.Core.Entities.SubEntities
             var hashCode = 1711232258;
             hashCode = hashCode * -1521134295 + EqualityComparer<string?>.Default.GetHashCode(AnswerText);
             hashCode = hashCode * -1521134295 + EqualityComparer<decimal?>.Default.GetHashCode(GetParsedValue());
-            hashCode = hashCode * -1521134295 + EqualityComparer<decimal?>.Default.GetHashCode(GetParsedParentValue());
-            hashCode = hashCode * -1521134295 + EqualityComparer<string?>.Default.GetHashCode(AttachmentName);
+            
+            var parsedParentValue = GetParsedParentValue();
+            if (parsedParentValue.HasValue)
+                hashCode = hashCode * -1521134295 + EqualityComparer<decimal?>.Default.GetHashCode(parsedParentValue);
+            
+            var attachmentName = AttachmentName;
+            if (attachmentName != null)
+                hashCode = hashCode * -1521134295 + EqualityComparer<string?>.Default.GetHashCode(attachmentName);
+            
             return hashCode;
         }
     }
