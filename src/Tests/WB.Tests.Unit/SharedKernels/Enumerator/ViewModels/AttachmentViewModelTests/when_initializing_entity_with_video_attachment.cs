@@ -46,10 +46,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
             viewModel.Init("interview", entityIdentity, Create.Other.NavigationState());
 
             // Assert
+            viewModel.IsImage.Should().BeFalse();
             viewModel.IsVideo.Should().BeTrue();
             viewModel.Video.Should().NotBe(null);
-            viewModel.IsImage.Should().BeFalse();
-            viewModel.Video.ContentPath.Should().BeEquivalentTo("cache");
+            viewModel.Video.Should().BeEquivalentTo("cache");
         }
     }
 }

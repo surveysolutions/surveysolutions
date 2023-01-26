@@ -9,14 +9,11 @@ using Com.Google.Android.Exoplayer2.Video;
 using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.Binding;
-using MvvmCross.WeakSubscription;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
-using WB.UI.Shared.Enumerator.CustomBindings.Models;
 using Uri = Android.Net.Uri;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
-    public class ExoPlayerBinding : BaseBinding<StyledPlayerView, IMediaAttachment>
+    public class ExoPlayerBinding : BaseBinding<StyledPlayerView, string>
     {
         public ExoPlayerBinding(StyledPlayerView view) : base(view)
         {
@@ -29,18 +26,16 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         {
             if (isDisposing)
             {
-                if (Target?.Player != null)
+                var player = Target?.Player;
+                if (player != null)
                 {
-                    if (Target.Player.MediaItemCount > 0)
+                    try
                     {
-                        try
-                        {
-                            Target.Player.ClearMediaItems();
-                            Target.Player.Release();
-                            Target.Player.Dispose();
-                        }
-                        catch (ObjectDisposedException) { }
+                        player.Stop();
+                        player.Release();
+                        player.Dispose();
                     }
+                    catch (ObjectDisposedException) { }
                     
                     Target.Player = null;
                 }
@@ -49,49 +44,43 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             base.Dispose(isDisposing);
         }
 
-        protected override void SetValueToView(StyledPlayerView view, IMediaAttachment value)
+        protected override void SetValueToView(StyledPlayerView view, string path)
         {
-            var media = value as MediaAttachment;
-
             // exit if there is no content path of file not exists
-            if (media == null 
-                || string.IsNullOrWhiteSpace(media.ContentPath) 
-                || !System.IO.File.Exists(media.ContentPath))
+            if (path == null 
+                || string.IsNullOrWhiteSpace(path) 
+                || !System.IO.File.Exists(path))
             {
                 return;
             }
 
-            // we don't want to rebind same player on same view
-            if (media.View == view && media.Player != null && media.Player == view.Player) return;
-
             if (view.Player != null)
             {
-                if (view.Player.MediaItemCount > 0)
+                try
                 {
-                    try
-                    {
-                        view.Player.Stop();
-                        view.Player.ClearMediaItems();
-                        view.Player.Release();
-                        view.Player.Dispose();
-                    }
-                    catch (ObjectDisposedException) { }
+                    view.Player.Stop();
+                    view.Player.Release();
+                    view.Player.Dispose();
                 }
+                catch (ObjectDisposedException) { }
 
                 view.Player = null;
             }
+
+            IExoPlayer.Builder exoPlayerBuilder = new IExoPlayer.Builder(view.Context);
+            var exoPlayer = exoPlayerBuilder.Build();
+            view.Player = exoPlayer;
 
             var dataSourceFactory = new DefaultDataSourceFactory(
                 view.Context, Util.GetUserAgent(view.Context, "ExoPlayerInfo")
             );
 
-            var uri = Uri.FromFile(new Java.IO.File(media.ContentPath));
-
+            var uri = Uri.FromFile(new Java.IO.File(path));
+            
+            var mediaItem = MediaItem.FromUri(uri);
             var mediaSourceFactory = new ProgressiveMediaSource.Factory(dataSourceFactory, new DefaultExtractorsFactory());
-            var mediaSource = mediaSourceFactory.CreateMediaSource(MediaItem.FromUri(uri));
+            var mediaSource = mediaSourceFactory.CreateMediaSource(mediaItem);
 
-            IExoPlayer.Builder exoPlayerBuilder = new IExoPlayer.Builder(view.Context);
-            var exoPlayer = exoPlayerBuilder.Build();
             exoPlayer.SetMediaSource(mediaSource);
             exoPlayer.Prepare();
 
@@ -99,23 +88,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             exoPlayer.SetVideoFrameMetadataListener(new VideoFrameMetadataListener(view, exoPlayer)); 
 
             exoPlayer.SeekTo(1);
-            view.Player = exoPlayer;
-            
-            if (media.Player?.MediaItemCount > 0)
-            {
-                try
-                {
-                    media.Player.ClearMediaItems();
-                    media.Player.Release();
-                    media.Player.Dispose();
-                }
-                catch (ObjectDisposedException) { }
-            }
-
-            media.Player = exoPlayer;
-            media.View = view;
         }
-        
         
         private class VideoFrameMetadataListener : Java.Lang.Object, IVideoFrameMetadataListener
         {
@@ -170,7 +143,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         }
 
-        protected override void SetValueToView(StyledPlayerView view, IMediaAttachment value)
+        protected override void SetValueToView(StyledPlayerView view, string value)
         {
             base.SetValueToView(view, value);
             view.ControllerShowTimeoutMs = 0;
