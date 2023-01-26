@@ -7,27 +7,10 @@ namespace WB.UI.Shared.Enumerator.CustomBindings.Models
 {
     public class MediaAttachment : IMediaAttachment
     {
-        private IExoPlayer player;
-        public StyledPlayerView View { get; set; }
         public string ContentPath { get; set; }
 
         public void Release()
         {
-            try
-            {
-                player?.Release();
-            }
-            catch (ObjectDisposedException)
-            {
-            }
-            
-            player = null;
-        }
-        
-        public IExoPlayer Player
-        {
-            get => player;
-            set => player = value;
         }
     }
 }
