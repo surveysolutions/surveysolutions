@@ -122,18 +122,13 @@ jobs:
         distribution: 'microsoft'
         java-version: '11'
 
-    - name: Setup old .NET Core SDK
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: ${{ env.DOTNET_VERSION_COMPAT }}
-
-    - name: Install android workload
-      run: dotnet workload install android
-
     - name: Setup .NET Core SDK
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Install android workload
+      run: dotnet workload install android
 
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.0.3
