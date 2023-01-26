@@ -17,7 +17,7 @@
             @focus="onFocus"
             @blur="onBlur"
         >
-            <template v-slot:message="{ message }">
+            <template #message="{ message }">
                 <div style="white-space: pre-wrap;">{{ message }}</div>
             </template>
         </v-textarea>

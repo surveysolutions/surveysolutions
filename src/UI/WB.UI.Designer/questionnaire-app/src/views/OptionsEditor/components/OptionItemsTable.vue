@@ -184,7 +184,8 @@ export default {
                 return this.categories;
             },
             set(value) {
-                this.$emit('update:categories', value);
+                const categories = value;
+                this.$emit('change', categories);
             }
         }
     },
