@@ -9,13 +9,11 @@ using Com.Google.Android.Exoplayer2.Video;
 using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.Binding;
-using MvvmCross.WeakSubscription;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using Uri = Android.Net.Uri;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
-    public class ExoPlayerBinding : BaseBinding<StyledPlayerView, IMediaAttachment>
+    public class ExoPlayerBinding : BaseBinding<StyledPlayerView, string>
     {
         public ExoPlayerBinding(StyledPlayerView view) : base(view)
         {
@@ -46,12 +44,12 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             base.Dispose(isDisposing);
         }
 
-        protected override void SetValueToView(StyledPlayerView view, IMediaAttachment media)
+        protected override void SetValueToView(StyledPlayerView view, string path)
         {
             // exit if there is no content path of file not exists
-            if (media == null 
-                || string.IsNullOrWhiteSpace(media.ContentPath) 
-                || !System.IO.File.Exists(media.ContentPath))
+            if (path == null 
+                || string.IsNullOrWhiteSpace(path) 
+                || !System.IO.File.Exists(path))
             {
                 return;
             }
@@ -77,7 +75,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                 view.Context, Util.GetUserAgent(view.Context, "ExoPlayerInfo")
             );
 
-            var uri = Uri.FromFile(new Java.IO.File(media.ContentPath));
+            var uri = Uri.FromFile(new Java.IO.File(path));
             
             var mediaItem = MediaItem.FromUri(uri);
             var mediaSourceFactory = new ProgressiveMediaSource.Factory(dataSourceFactory, new DefaultExtractorsFactory());
@@ -145,7 +143,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         }
 
-        protected override void SetValueToView(StyledPlayerView view, IMediaAttachment value)
+        protected override void SetValueToView(StyledPlayerView view, string value)
         {
             base.SetValueToView(view, value);
             view.ControllerShowTimeoutMs = 0;
