@@ -41,13 +41,14 @@
                         <v-tab-item key="table">
                             <category-table
                                 ref="table"
-                                categories="categories"
+                                :categories="categories"
                                 :parent-categories="parentCategories"
                                 :loading="loading"
                                 :is-category="isCategory"
                                 :is-cascading="isCascading"
                                 :readonly="isReadonly"
                                 @setCascading="setCascadingCategory"
+                                @update-categories="updateCategories"
                             />
                         </v-tab-item>
                         <v-tab-item key="strings">
@@ -335,6 +336,10 @@ export default {
 
         close() {
             close();
+        },
+
+        updateCategories(newCategories) {
+            this.categories = newCategories;
         },
 
         apply() {

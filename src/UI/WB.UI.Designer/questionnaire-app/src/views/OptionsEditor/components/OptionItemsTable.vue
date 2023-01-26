@@ -185,11 +185,10 @@ export default {
             },
             set(value) {
                 const categories = value;
-                this.$emit('change', categories);
+                this.$emit('update-categories', categories);
             }
         }
     },
-
     methods: {
         reset() {
             this.search = null;
