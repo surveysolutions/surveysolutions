@@ -21,7 +21,7 @@ param(
     [switch] $signapk ,
     [string] $apkFolder = "artifacts", # where should docker build look for apk artifacts
     [string] $runtime = "win-x64",
-    [String] $nodeVersion = '17',
+    [String] $nodeVersion = '16',
 	[string] $ArcGisApiKey = $NULL
 )
 

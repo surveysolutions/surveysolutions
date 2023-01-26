@@ -51,7 +51,7 @@
         <v-data-table
             ref="table"
             :headers="headers"
-            :items="categories"
+            :items="categoriesLocal"
             :search="search"
             :items-per-page="10"
             :footer-props="{
@@ -62,10 +62,10 @@
             style="overflow-wrap:anywhere;"
             dense
         >
-            <template #item.value="{ item }">
+            <template #[`item.value`]="{ item }">
                 <span class="text-no-wrap">{{ item.value }}</span>
             </template>
-            <template v-slot:item.parentValue="props">
+            <template #[`item.parentValue`]="props">
                 <div>
                     {{ props.item.parentValue }}
                     <span
@@ -77,7 +77,7 @@
                     >
                 </div>
             </template>
-            <template #item.actions="{ item }">
+            <template #[`item.actions`]="{ item }">
                 <div v-if="!readonly">
                     <v-icon small class="mr-2" @click="editItem(item)"
                         >mdi-pencil</v-icon
@@ -85,7 +85,7 @@
                     <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
                 </div>
             </template>
-            <template v-slot:no-data>
+            <template #no-data>
                 {{
                     $t('QuestionnaireEditor.OptionsUploadLimit', {
                         limit: 15000
@@ -178,6 +178,14 @@ export default {
             return this.editedIndex === -1
                 ? this.$t('QuestionnaireEditor.NewItem')
                 : this.$t('QuestionnaireEditor.EditItem');
+        },
+        categoriesLocal: {
+            get() {
+                return this.categories;
+            },
+            set(value) {
+                this.$emit('update:categories', value);
+            }
         }
     },
 
@@ -197,15 +205,17 @@ export default {
         },
 
         editItem(item) {
-            this.editedIndex = this.categories.indexOf(item);
+            this.editedIndex = this.categoriesLocal.indexOf(item);
             this.editedItem = Object.assign({}, item);
             this.dialog = true;
         },
 
         deleteItem(item) {
-            const index = this.categories.indexOf(item);
+            const index = this.categoriesLocal.indexOf(item);
             if (confirm(this.$t('QuestionnaireEditor.DeleteItemCofirm'))) {
-                this.categories.splice(index, 1);
+                var local = this.categoriesLocal.slice();
+                local.splice(index, 1);
+                this.categoriesLocal = local;
             }
         },
 
@@ -221,7 +231,9 @@ export default {
             if (this.editedIndex > -1) {
                 Object.assign(this.categories[this.editedIndex], item);
             } else {
-                this.categories.push(item);
+                var local = this.categoriesLocal.slice();
+                local.push(item);
+                this.categoriesLocal = local;
                 this.snacks.rowAdded = true;
             }
 

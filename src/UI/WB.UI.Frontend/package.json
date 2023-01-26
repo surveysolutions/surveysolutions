@@ -161,8 +161,11 @@
         "git-clone": "0.2.0",
         "git-parse": ">=1.0.5",
         "git-url-parse": "13.1.0",
+        "graphql-tools": "8.3.15",
         "graphql-ws": "5.11.2",
         "glob-parent": "6.0.2",
+        "jest-config": "29.0.3",
+        "jest-environment-jsdom": "29.0.3",
         "json-schema": ">=0.4.0",
         "json5": "2.2.3",
         "yargs-parser": ">=13.1.2",
@@ -181,9 +184,8 @@
         "svgo": ">=2.8.0",
         "trim-newlines": ">=3.0.1",
         "ts-node": "10.8.0",
-        "jest-config": "29.0.3",
-        "jest-environment-jsdom": "29.0.3",
         "vue-jest": ">=3.0.7",
+        "ua-parser-js": "1.0.33",
         "webpack-dev-server": ">=3.11.3",
         "ws": ">=7.4.6"
     }
