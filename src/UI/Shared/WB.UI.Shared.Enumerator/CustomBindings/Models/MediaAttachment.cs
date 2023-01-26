@@ -27,19 +27,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings.Models
         public IExoPlayer Player
         {
             get => player;
-            set
-            {
-                try
-                {
-                    player?.Release();
-                }
-                catch (ObjectDisposedException)
-                {
-                }
-                
-                //player?.Dispose();
-                player = value;
-            }
+            set => player = value;
         }
     }
 }

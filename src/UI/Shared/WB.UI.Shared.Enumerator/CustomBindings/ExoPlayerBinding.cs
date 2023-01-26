@@ -31,12 +31,16 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             {
                 if (Target?.Player != null)
                 {
-                    try
+                    if (Target.Player.MediaItemCount > 0)
                     {
-                        Target.Player.Release();
-                        Target.Player.Dispose();
+                        try
+                        {
+                            Target.Player.ClearMediaItems();
+                            Target.Player.Release();
+                            Target.Player.Dispose();
+                        }
+                        catch (ObjectDisposedException) { }
                     }
-                    catch (ObjectDisposedException) { }
                     
                     Target.Player = null;
                 }
@@ -62,9 +66,18 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
             if (view.Player != null)
             {
-                view.Player.Stop();
-                view.Player.Release();
-                view.Player.Dispose();
+                if (view.Player.MediaItemCount > 0)
+                {
+                    try
+                    {
+                        view.Player.Stop();
+                        view.Player.ClearMediaItems();
+                        view.Player.Release();
+                        view.Player.Dispose();
+                    }
+                    catch (ObjectDisposedException) { }
+                }
+
                 view.Player = null;
             }
 
@@ -87,9 +100,22 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
             exoPlayer.SeekTo(1);
             view.Player = exoPlayer;
+            
+            if (media.Player?.MediaItemCount > 0)
+            {
+                try
+                {
+                    media.Player.ClearMediaItems();
+                    media.Player.Release();
+                    media.Player.Dispose();
+                }
+                catch (ObjectDisposedException) { }
+            }
+
             media.Player = exoPlayer;
             media.View = view;
         }
+        
         
         private class VideoFrameMetadataListener : Java.Lang.Object, IVideoFrameMetadataListener
         {
@@ -120,8 +146,16 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                     var ratio = (float)format.Height / (float)format.Width / (float)format.PixelWidthHeightRatio;
                     player.SetMinimumHeight((int)(player.Width * ratio));
                     player.HideController();
-                
-                    ePlayer.ClearVideoFrameMetadataListener(this);
+
+                    try
+                    {
+                        ePlayer.ClearVideoFrameMetadataListener(this);
+                    }
+                    catch 
+                    {
+                        // ignore exception
+                    }
+
                     playerView = null;
                     exoPlayer = null;
                 });
