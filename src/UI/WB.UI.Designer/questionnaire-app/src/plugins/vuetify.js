@@ -6,25 +6,21 @@ Vue.use(VueI18n);
 Vue.use(Vuetify);
 
 function loadLocaleMessages() {
-    const locales = require.context(
-        '../locale',
-        true,
-        /[A-Za-z0-9-_,\s]+\.json$/i
-    );
+    const locales = import.meta.globEager('../locale/*.json');
 
     const messages = {};
 
-    locales.keys().forEach(key => {
-        const matched = key.match(/([A-Za-z0-9-_]+)\./i);
+    for (const item in locales) {
+        const matched = item.match(/([A-Za-z0-9-_]+)\./i);
         if (matched && matched.length > 1) {
             const locale = matched[1];
 
             messages[locale] = Object.assign(
                 messages[locale] || {},
-                locales(key)
+                locales[item]
             );
         }
-    });
+    }
     return messages;
 }
 
@@ -32,8 +28,8 @@ const messages = loadLocaleMessages();
 
 // Create VueI18n instance with options
 export const i18n = new VueI18n({
-    locale: process.env.VUE_APP_I18N_LOCALE || 'en',
-    fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE || 'en',
+    locale: import.meta.env.VUE_APP_I18N_LOCALE || 'en',
+    fallbackLocale: import.meta.env.VUE_APP_I18N_FALLBACK_LOCALE || 'en',
     messages
 });
 

@@ -97,7 +97,7 @@
 </template>
 
 <script>
-import CategoryDialog from './OptionItemDialog';
+import CategoryDialog from './OptionItemDialog.vue';
 
 export default {
     name: 'CategoryEditorTable',

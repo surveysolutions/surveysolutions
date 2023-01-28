@@ -115,8 +115,8 @@
 </template>
 
 <script>
-import CategoryTable from './components/OptionItemsTable';
-import CategoryStrings from './components/OptionItemsAsStrings';
+import CategoryTable from './components/OptionItemsTable.vue';
+import CategoryStrings from './components/OptionItemsAsStrings.vue';
 import { optionsApi } from './services';
 
 export default {

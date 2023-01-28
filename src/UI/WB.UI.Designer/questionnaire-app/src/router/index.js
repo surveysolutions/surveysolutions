@@ -9,7 +9,7 @@ const routes = [
         path: '/questionnaire/editcategories/:questionnaireId',
         component: () =>
             import(
-                /* webpackChunkName: "optionsEditor" */ '../views/OptionsEditor/OptionsEditor.vue'
+                '../views/OptionsEditor/OptionsEditor.vue'
             ),
         props: route => ({
             questionnaireRev: route.params.questionnaireId,
@@ -22,7 +22,7 @@ const routes = [
         path: '/questionnaire/editoptions/:questionnaireId',
         component: () =>
             import(
-                /* webpackChunkName: "optionsEditor" */ '../views/OptionsEditor/OptionsEditor.vue'
+                '../views/OptionsEditor/OptionsEditor.vue'
             ),
         props: route => ({
             questionnaireRev: route.params.questionnaireId,
@@ -39,7 +39,7 @@ const routes = [
 
 const router = new VueRouter({
     mode: 'history',
-    base: process.env.BASE_URL,
+    base: import.meta.env.BASE_URL,
     routes
 });
 
