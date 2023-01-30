@@ -16,7 +16,7 @@ import FilterInput from './FilterInput'
 import InlineSelector from './InlineSelector'
 
 Vue.component('Confirm', Confirm)
-Vue.component('DataTables', () => import(/* webpackChunkName: "datatables" */'./DataTables'))
+Vue.component('DataTables', () => import('./DataTables'))
 Vue.component('FilterBlock', FilterBlock)
 Vue.component('Filters', Filters)
 Vue.component('HqLayout', HqLayout)

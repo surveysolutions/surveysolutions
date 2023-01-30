@@ -76,7 +76,7 @@ import Vue from 'vue'
 import moment from 'moment'
 import {forEach, findIndex, assign, sortBy, find} from 'lodash'
 
-const LineChart = () => import(/* webpackChunkName: "report" */ './CumulativeChart')
+const LineChart = () => import('./CumulativeChart')
 
 const dataSetInfo = [
     {status: 'Completed',              label: Vue.$t('Strings.InterviewStatus_Completed'),              backgroundColor: '#86B828'},
