@@ -22,7 +22,7 @@
     "PasteAfter": "Paste after",
     "QuestionnaireSummary": "({{questionsCount}}Q, {{groupsCount}}S, {{rostersCount}}R)",
     "ReadOnly": "Read Only",
-    "ReadOnlyQuestion": "It is readonly question. You can not edit it.",
+    "ReadOnlyQuestion": "It is readonly question. You cannot edit it.",
     "Save": "Save",
     "SavedAtTimestamp": "saved at {{dateTime, H:mm}}",
     "Settings": "Settings",
@@ -194,6 +194,7 @@
     "RosterVariableName": "Roster ID",
     "SectionVariableName": "Variable name",
     "SelectQuestion": "Select question",
+    "AddFilter": "Add filter",
     "SettingsCan": "Can ",
     "SettingsInviteCollaborators": "Invite more users by login or registered email",
     "SettingsOwner": "owner",
@@ -483,6 +484,7 @@
     "RowAdded": "Row added",
     "OptionsCascadingListError": "\r\nYou entered an invalid input. Each line should follow the format: \"Title...ParentValue/Value[...Attachment name]\". 'Value' and 'ParentValue' must be an integer number. 'Title' must be an alpha-numeric string. 'Attachment name' is optional. No empty lines are allowed.",
     "ShowParentValues": "Show Parent values",
-    "HideParentValues": "Hide Parent values"
+    "HideParentValues": "Hide Parent values",
+    "AddEnablingCondition": "Add enabling condition"
   }
 }

@@ -13,6 +13,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Infrastructure
 
         bool SaveInterviewer(InterviewerIdentity interviewer);
 
-        InterviewerIdentity GetInterviewerByName(string name);
+        InterviewerIdentity? GetInterviewerByName(string name);
     }
 }

@@ -456,6 +456,7 @@
     "SideBarXlsx": "Xlsx",
     "SideBarTab": "Tab",
     "SideBarTranslationGetTemplateLinkTextCsv": "Tab (txt)",
+    "AddFilter": "Add filter",
     "SettingsAnonymous": "Anonymous",
     "RegenerateQuestionnaireSharingLink": "Regenerate link",
     "AnonymousQuestionnaireGeneratedDate": "link generated: {{datetime}}",
@@ -483,6 +484,7 @@
     "CopyLink": "Copy link",
     "AnonymousQuestionnaireDescriptionSettings": "Users having this link will be able to open this questionnaire",
     "AttachmentDimensionsAreTooBig": "Dimensions are too big",
-    "HelpOverlapDetection": "Display and highlight the overlaps of this question answer with answers to the same questions in sibling roster instances"
+    "HelpOverlapDetection": "Display and highlight the overlaps of this question answer with answers to the same questions in sibling roster instances",
+    "AddEnablingCondition": "Add enabling condition"
   }
 }

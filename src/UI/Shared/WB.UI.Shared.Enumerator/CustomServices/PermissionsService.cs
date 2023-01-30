@@ -51,6 +51,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         public Task EnsureHasPermissionToInstallFromUnknownSourcesAsync()
         {
             // Check if application has permission to do package installations
+#pragma warning disable CA1416 // Validate platform compatibility
             if (Build.VERSION.SdkInt >= BuildVersionCodes.O && !Application.Context.PackageManager.CanRequestPackageInstalls())
             {
                 IMvxAndroidCurrentTopActivity topActivity = Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>();
@@ -93,6 +94,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
                 return tcs.Task;
             }
+#pragma warning restore CA1416 // Validate platform compatibility
 
             // we have all permissions to install application, proceed with next actions
             return Task.FromResult(true);

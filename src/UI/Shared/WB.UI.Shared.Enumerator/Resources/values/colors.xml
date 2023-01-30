@@ -158,11 +158,13 @@
     <color name="exo_player_seek_scrubber">@color/colorAccent</color>
     <color name="exo_player_seek_played">#2a81cb</color>
     <color name="exo_player_seek_unplayed">#2a81cb</color>
+    <color name="exo_player_background">@android:color/white</color>
 
     <color name="loading_title">#000000</color>
     <color name="loading_background">#EEEEEE</color>
     <color name="loading_progress_color">#2D9CDB</color>
     <color name="loading_progress_background">#C4C4C4</color>
+    <color name="loading_progress_color_complete">#1f9500</color>
     <color name="loading_indeterminate_progress_gradient_start">#C4C4C4</color>
     <color name="loading_indeterminate_progress_gradient_center">#FFFFFF</color>
 

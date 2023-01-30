@@ -48,6 +48,7 @@
                                 :is-cascading="isCascading"
                                 :readonly="isReadonly"
                                 @setCascading="setCascadingCategory"
+                                @update-categories="updateCategories"
                             />
                         </v-tab-item>
                         <v-tab-item key="strings">
@@ -335,6 +336,10 @@ export default {
 
         close() {
             close();
+        },
+
+        updateCategories(newCategories) {
+            this.categories = newCategories;
         },
 
         apply() {

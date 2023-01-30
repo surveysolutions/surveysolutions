@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="shown" persistent max-width="600px">
+    <v-dialog v-model="shownModel" persistent max-width="600px">
         <v-card>
             <v-card-title>
                 <span class="headline">{{ title }}</span>
@@ -114,7 +114,16 @@ export default {
             valid: true
         };
     },
-
+    computed: {
+        shownModel: {
+            get() {
+                return this.shown;
+            },
+            set(value) {
+                this.$emit('update:shown', value);
+            }
+        }
+    },
     methods: {
         async save() {
             await this.$refs.form.validate();

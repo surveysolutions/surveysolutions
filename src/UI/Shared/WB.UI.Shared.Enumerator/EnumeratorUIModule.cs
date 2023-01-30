@@ -31,10 +31,7 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.UI.Shared.Enumerator.Activities;
-using WB.UI.Shared.Enumerator.CustomBindings;
-using WB.UI.Shared.Enumerator.CustomBindings.Models;
 using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation;
 using WB.UI.Shared.Enumerator.Services;
@@ -102,7 +99,6 @@ namespace WB.UI.Shared.Enumerator
             registry.BindAsSingleton<IGoogleApiClientFactory, GoogleApiClientFactory>();
             registry.BindAsSingleton<INearbyConnectionClient, NearbyConnectionClient>();
 
-            registry.BindToMethod<IMediaAttachment>(() => new MediaAttachment());
             // SecureStorage is singleton because very very long getting secret keys
             registry.BindAsSingleton<ISecureStorage, SecureStorage>();
 

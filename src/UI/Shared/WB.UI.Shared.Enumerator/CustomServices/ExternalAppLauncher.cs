@@ -32,7 +32,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         {
             var pdfIntent = new Intent(Intent.ActionView);
 
-            var pdfFile = new File(pathToPdfFile);
+            var pdfFile = new Java.IO.File(pathToPdfFile);
             var uriForPdfFile = FileProvider.GetUriForFile(this.currentTopActivity.Activity,
                 $"{this.currentTopActivity.Activity.ApplicationContext.PackageName}.fileprovider", pdfFile);
 

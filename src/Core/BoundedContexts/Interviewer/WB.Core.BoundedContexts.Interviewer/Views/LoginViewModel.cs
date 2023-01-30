@@ -1,3 +1,4 @@
+using System;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable;
@@ -34,6 +35,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public override void UpdateLocalUser(string userName, string token, string passwordHash)
         {
             var localInterviewer = this.interviewerPrincipal.GetInterviewerByName(userName);
+            if (localInterviewer == null)
+                throw new NullReferenceException($"Interviewer with {userName} not found");
             localInterviewer.Token = token;
             localInterviewer.PasswordHash = passwordHash;
 

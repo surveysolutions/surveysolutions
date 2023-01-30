@@ -8,6 +8,8 @@ using Java.Interop;
 using WB.Core.BoundedContexts.Supervisor.ViewModel;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Activities.Callbacks;
+using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
 
 namespace WB.UI.Supervisor.Activities
 {
@@ -28,7 +30,8 @@ namespace WB.UI.Supervisor.Activities
             this.SetSupportActionBar(toolbar);
         }
 
-        public override void OnBackPressed()
+        protected override bool BackButtonCustomAction => true;
+        protected override void BackButtonPressed()
         {
             if (this.ViewModel.IsInProgress)
             {

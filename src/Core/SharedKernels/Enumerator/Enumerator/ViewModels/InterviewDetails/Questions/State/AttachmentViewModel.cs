@@ -22,7 +22,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IViewModelEventRegistry eventRegistry;
         private readonly IAttachmentContentStorage attachmentContentStorage;
-        private readonly Func<IMediaAttachment> attachmentFactory;
         private readonly IInterviewPdfService pdfService;
         private readonly IViewModelNavigationService viewModelNavigationService;
 
@@ -45,7 +44,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository,
             IViewModelEventRegistry eventRegistry,
             IAttachmentContentStorage attachmentContentStorage,
-            Func<IMediaAttachment> attachmentFactory,
             IInterviewPdfService pdfService,
             IViewModelNavigationService viewModelNavigationService)
         {
@@ -53,7 +51,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.interviewRepository = interviewRepository;
             this.eventRegistry = eventRegistry;
             this.attachmentContentStorage = attachmentContentStorage;
-            this.attachmentFactory = attachmentFactory;
             this.pdfService = pdfService;
             this.viewModelNavigationService = viewModelNavigationService;
         }
@@ -133,23 +130,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 var backingFile = this.attachmentContentStorage.GetFileCacheLocation(attachment.ContentId);
                 if (!string.IsNullOrWhiteSpace(backingFile))
                 {
-                    if (IsVideo || IsAudio)
+                    if (IsVideo)
                     {
-                        var media = this.attachmentFactory();
-                        media.ContentPath = backingFile;
-
-                        if (IsVideo)
-                        {
-                            this.Video = media;
-                        }
-                        else if (IsAudio)
-                        {
-                            this.Audio = media;
-                        }
-
+                        this.Video = backingFile;
                     }
-
-                    if (IsPdf)
+                    else if (IsAudio)
+                    {
+                        this.Audio = backingFile;
+                    }
+                    else if (IsPdf)
                     {
                         this.ContentPath = backingFile;
                     }
@@ -166,8 +155,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await RaiseAllPropertiesChanged();
         }
 
-        public IMediaAttachment Audio { get; private set; }
-        public IMediaAttachment Video { get; private set; }
+        public string Audio { get; private set; }
+        public string Video { get; private set; }
         public byte[] Image { get; private set; }
 
         public string ContentPath { get; set; }
@@ -200,8 +189,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public override void ViewDestroy(bool viewFinishing = true)
         {
-            this.Video?.Release();
-            this.Audio?.Release();
+            this.Video = null;
+            this.Audio = null;
             this.ContentPath = null;
             this.Image = null;
             base.ViewDestroy(viewFinishing);

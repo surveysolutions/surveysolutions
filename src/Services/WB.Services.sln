@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30320.27
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Services.Export.Host", "Export\WB.Services.Export.Host\WB.Services.Export.Host.csproj", "{2DC4DA35-F850-46FF-A771-4D8BADE6C197}"
 EndProject
@@ -28,9 +28,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Infrastructure.AspNetCore", "..\Core\Infrastructure\WB.Infrastructure.AspNetCore\WB.Infrastructure.AspNetCore.csproj", "{CDEFBBD1-B14E-4AC6-A0BA-0A6DE72F0133}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ddidotnet", "Export\Utils\ddidotnet\ddidotnet\ddidotnet.csproj", "{BEC2BDD2-6B51-428C-82B2-067AEC1DF8D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ddidotnet", "Export\Utils\ddidotnet\ddidotnet\ddidotnet.csproj", "{BEC2BDD2-6B51-428C-82B2-067AEC1DF8D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StatData", "Export\Utils\StatData\StatData\StatData.csproj", "{A83D3F11-1C42-494F-947A-2CF43BF945CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StatData", "Export\Utils\StatData\StatData\StatData.csproj", "{A83D3F11-1C42-494F-947A-2CF43BF945CD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

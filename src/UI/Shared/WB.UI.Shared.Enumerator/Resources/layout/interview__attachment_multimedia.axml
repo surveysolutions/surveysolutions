@@ -9,8 +9,8 @@
                     Click Attachment.ShowPhotoView;
                     Visible Attachment.IsImage;"/>
 
-    <com.google.android.exoplayer2.ui.PlayerView 
-            android:id="@+id/player_view"
+    <com.google.android.exoplayer2.ui.StyledPlayerView 
+            android:id="@+id/video_player_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="400dp"
@@ -19,8 +19,8 @@
                             Tag Attachment.Tag;
                             Visible Attachment.IsVideo;" />
 
-    <com.google.android.exoplayer2.ui.PlayerView 
-        android:id="@+id/player_view2"
+    <com.google.android.exoplayer2.ui.StyledPlayerView 
+        android:id="@+id/audio_player_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/Interview_Entity_margin_with_border_left"

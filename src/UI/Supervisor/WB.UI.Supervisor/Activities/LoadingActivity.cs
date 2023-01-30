@@ -6,6 +6,8 @@ using AndroidX.AppCompat.Widget;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Activities.Callbacks;
+using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
 
 namespace WB.UI.Supervisor.Activities
 {
@@ -25,13 +27,14 @@ namespace WB.UI.Supervisor.Activities
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             this.SetSupportActionBar(toolbar);
         }
-        
-        public override void OnBackPressed()
+
+        protected override bool BackButtonCustomAction => true;
+        protected override void BackButtonPressed()
         {
             this.ViewModel.NavigateToDashboardCommand.Execute();
             this.CancelLoadingAndFinishActivity();
         }
-         
+
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
             switch (item.ItemId)

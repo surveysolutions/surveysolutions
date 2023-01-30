@@ -56,13 +56,13 @@ namespace Main.Core.Entities.SubEntities
 
         public static string[] PropertyNames { get; } = new[] {"Latitude", "Longitude", "Accuracy", "Altitude", "Timestamp"};
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             GeoPosition? geoPosition = obj as GeoPosition;
             return geoPosition != null && this.Equals(geoPosition);
         }
 
-        public bool Equals(GeoPosition other)
+        public bool Equals(GeoPosition? other)
         {
             if (other == null)
                 return false;

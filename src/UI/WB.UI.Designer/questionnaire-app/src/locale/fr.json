@@ -336,7 +336,7 @@
     "Translation_Original": "Original",
     "SaveAs": "Save as",
     "CopyTo": "Copy to",
-    "ReadOnlyQuestion": "It is readonly question. You can not edit it.",
+    "ReadOnlyQuestion": "It is readonly question. You cannot edit it.",
     "SideBarAttachmentsEmptyLine3": "To refer to an attachment in the questionnaire add a static text element and specify the attachment {{-name}} in its attachment property",
     "SideBarEditCategories": "Edit Categories",
     "SideBarScenarioCounter": "{{count}} Scenario:",
@@ -361,6 +361,7 @@
     "BindToReusableCategories": "Bind to reusable categories",
     "SelectCategories": "Select categories",
     "SectionVariableName": "Variable name",
+    "AddFilter": "Add filter",
     "SettingsAnonymous": "Anonymous",
     "RegenerateQuestionnaireSharingLink": "Regenerate link",
     "AnonymousQuestionnaireGeneratedDate": "link generated: {{datetime}}",
@@ -483,6 +484,7 @@
     "RowAdded": "Row added",
     "OptionsCascadingListError": "\r\nYou entered an invalid input. Each line should follow the format: \"Title...ParentValue/Value[...Attachment name]\". 'Value' and 'ParentValue' must be an integer number. 'Title' must be an alpha-numeric string. 'Attachment name' is optional. No empty lines are allowed.",
     "ShowParentValues": "Show Parent values",
-    "HideParentValues": "Hide Parent values"
+    "HideParentValues": "Hide Parent values",
+    "AddEnablingCondition": "Add enabling condition"
   }
 }
