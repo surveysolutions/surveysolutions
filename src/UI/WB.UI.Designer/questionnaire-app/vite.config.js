@@ -1,9 +1,10 @@
 import path from 'path'
 import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue2'
+import Vue from '@vitejs/plugin-vue'
 import Components from 'unplugin-vue-components/vite'
 import { VuetifyResolver } from 'unplugin-vue-components/resolvers'
 import  LocalizationPlugin  from './tools/vite-plugin-localization'
+import Vuetify from 'vite-plugin-vuetify'
 
 const baseDir = path.resolve(__dirname, './');
 const join = path.join.bind(path, baseDir);
@@ -15,7 +16,8 @@ const resxFiles = [
 
 export default defineConfig({
     plugins: [
-      vue(),
+      Vue(),
+      Vuetify({ autoImport: true }),
       LocalizationPlugin({
         noHash: true,
         inline: true,

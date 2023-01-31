@@ -1,9 +1,9 @@
 import Vue from 'vue';
-import Vuetify from 'vuetify/lib';
+import createVuetify from 'vuetify';
 import VueI18n from 'vue-i18n';
 
-Vue.use(VueI18n);
-Vue.use(Vuetify);
+//Vue.use(VueI18n);
+//Vue.use(Vuetify);
 
 function loadLocaleMessages() {
     const locales = import.meta.globEager('../locale/*.json');
@@ -48,17 +48,27 @@ export const vuetify = new Vuetify({
             light: {
                 primary: '#2a81cb'
             }
-        }
-        // themes: {
-        //   light: {
-        //     primary: '#ee44aa',
-        //     secondary: '#424242',
-        //     accent: '#82B1FF',
-        //     error: '#FF5252',
-        //     info: '#2196F3',
-        //     success: '#4CAF50',
-        //     warning: '#FFC107',
-        //   },
-        // },
+        }        
     }
 });
+
+// Import Vuetify
+export const install = ({ app }) => {
+    const vuetify = createVuetify({
+        theme: {
+            options: {
+                customProperties: true
+            },
+            lang: {
+                t: (key, ...params) => i18n.t(key, params)
+            },
+            themes: {
+                light: {
+                    primary: '#2a81cb'
+                }
+            }            
+        },
+    })
+  
+    app.use(vuetify)
+  }
