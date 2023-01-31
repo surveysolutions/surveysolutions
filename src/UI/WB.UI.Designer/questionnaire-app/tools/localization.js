@@ -1,9 +1,9 @@
-const fs = require('fs');
-const path = require('path');
-const crypto = require('crypto');
-const globby = require('globby');
-const xmldoc = require('xmldoc');
-const rimraf = require('rimraf');
+import globby from 'globby';
+import fs from 'fs'
+import path from 'path'
+import crypto from 'crypto'
+import xmldoc from 'xmldoc'
+import rimraf from 'rimraf'
 
 module.exports = class LocalizationBuilder {
     constructor(options) {
@@ -70,14 +70,16 @@ module.exports = class LocalizationBuilder {
 
     getFiles() {
         const { patterns } = this.options;
-        return globby.sync(patterns, {
-            onlyFiles: true
-        });
+        let files = globby.sync(patterns, { onlyFiles: true });        
+        return files;
     }
 
     parseResxFiles() {
         console.time('parseResxFiles');
         var files = this.getFiles();
+
+        console.warn('files:')
+        console.warn(files)
 
         const locale = {}; /* en: { Namespace: { key: "sdfsdf" } } */
 

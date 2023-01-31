@@ -32,6 +32,7 @@
     "eslint-plugin-standard": "5.0.0",
     "eslint-plugin-vue": "9.9.0",
     "glob-parent": "^6.0.0",
+    "globby": "9.2.0",
     "is-svg": "^4.2.2",
     "normalize-url": "^6.1.0",
     "postcss": "^8.3.0",
@@ -42,7 +43,6 @@
     "svgo": "2.8.0",
     "trim-newlines": "4.0.2",
     "vite": "^4.0.4",
-    "vite-plugin-vue2": "2.0.3",
     "vuetify-loader": "1.9.2",
     "xmldoc": "1.2.0"
   },
