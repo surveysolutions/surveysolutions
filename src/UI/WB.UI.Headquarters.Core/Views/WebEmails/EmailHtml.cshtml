@@ -1,6 +1,6 @@
-﻿@using Microsoft.AspNetCore.Routing
+﻿@using WB.Core.BoundedContexts.Headquarters.Invitations
 @model WB.Core.BoundedContexts.Headquarters.Invitations.EmailParams
-@inject LinkGenerator linkGenerator
+@inject IWebInterviewLinkProvider webInterviewLinkProvider
 @{
     Uri webRoot = new Uri((string) ViewData["webRoot"]);
 }
@@ -103,7 +103,7 @@
                             <ul>
                                 @if (Model.Id != null)
                                 {
-                                    <li><a href="@(new Uri(webRoot, linkGenerator.GetPathByAction("Html", "WebEmails", new {id = Model.Id})))" style="color: #808080; text-decoration: none; padding: 0 10px;">View email in browser</a></li>
+                                    <li><a href="@webInterviewLinkProvider.GetViewInBrowserLink(Model.Id)" style="color: #808080; text-decoration: none; padding: 0 10px;">View email in browser</a></li>
                                 }
                             </ul>
                         </td>
