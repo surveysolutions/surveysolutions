@@ -16,7 +16,7 @@
     },
     "dependencies": {
         "@apollo/client": "3.7.1",
-        "@google/markerclustererplus": "^4.0.1",
+        "@googlemaps/markerclusterer": "^2.0.15",
         "@microsoft/signalr": "^5.0.6",
         "@toast-ui/vue-editor": "^2.5.2",
         "ag-grid-community": "^25.3.0",
