@@ -420,7 +420,7 @@ namespace WB.UI.Designer.Controllers
             
             if (isCategory)
             {
-                var categoriesFile = this.reusableCategoriesService.GetAsFile(id, entityId, fileType);
+                var categoriesFile = this.reusableCategoriesService.GetAsFile(id, entityId, fileType, hqImport: false);
 
                 if (categoriesFile?.Content == null) return NotFound();
 
@@ -438,7 +438,7 @@ namespace WB.UI.Designer.Controllers
             var title = editQuestionView?.Title ?? "";
             var fileDownloadName = this.fileSystemAccessor.MakeValidFileName($"Options-in-question-{title}.{fileExtension}");
 
-            var export = this.categoricalOptionsImportService.ExportOptions(id.QuestionnaireId.FormatGuid(), entityId, fileType);
+            var export = this.categoricalOptionsImportService.ExportOptions(id.QuestionnaireId.FormatGuid(), entityId, fileType, isCascading);
 
             return File(export, contentType, fileDownloadName);
         }

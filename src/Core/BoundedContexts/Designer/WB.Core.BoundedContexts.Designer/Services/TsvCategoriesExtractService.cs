@@ -110,9 +110,9 @@ namespace WB.Core.BoundedContexts.Designer.Services
             }
         }
 
-        public byte[] GetTemplateFile()
+        public byte[] GetTemplateFile(bool isCascading)
         {
-            return GetCsvFile(isCascading: true, new List<CategoriesItem>());
+            return GetCsvFile(isCascading, new List<CategoriesItem>());
         }
 
         private static byte[] GetCsvFile(bool isCascading, List<CategoriesItem> options)
@@ -134,9 +134,8 @@ namespace WB.Core.BoundedContexts.Designer.Services
             return bytes;
         }
 
-        public byte[] GetAsFile(List<CategoriesItem> items)
+        public byte[] GetAsFile(List<CategoriesItem> items, bool isCascading, bool hqImport)
         {
-            var isCascading = items.Any(i => i.ParentId.HasValue);
             return GetCsvFile(isCascading, items);
         }
 
