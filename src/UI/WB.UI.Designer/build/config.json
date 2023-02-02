@@ -138,7 +138,7 @@
     {
       "name": "cat__vue",
       "inputFiles": [
-        "node_modules/vue/dist/vue.js",
+        "node_modules/vue/dist/vue.global.prod.js",
         "node_modules/lodash/lodash.js"
       ]
     },    
@@ -220,8 +220,8 @@
       "name": "vue",
       "inputFiles": [
         "node_modules/es6-promise/dist/es6-promise.auto.js",
-        "node_modules/vue/dist/vue.js",
-        "node_modules/vuex/dist/vuex.js",
+        "node_modules/vue/dist/vue.global.prod.js",
+        "node_modules/vuex/dist/vuex.global.prod.js",
         "node_modules/vee-validate/dist/vee-validate.js",
         "node_modules/axios/dist/axios.js",
         "node_modules/jquery-contextmenu/dist/jquery.contextMenu.js",

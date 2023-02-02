@@ -1,9 +1,8 @@
-import Vue from 'vue';
-import createVuetify from 'vuetify';
-import VueI18n from 'vue-i18n';
+import {createVuetify} from 'vuetify'
 
-//Vue.use(VueI18n);
-//Vue.use(Vuetify);
+//import createI18n from 'vue-i18n'
+
+//import messages from '@intlify/vite-plugin-vue-i18n/messages'
 
 function loadLocaleMessages() {
     const locales = import.meta.globEager('../locale/*.json');
@@ -30,31 +29,16 @@ var userLang = navigator.language || navigator.userLanguage;
 const userLocale = userLang.split('-')[0];
 
 // Create VueI18n instance with options
-export const i18n = new VueI18n({
-    locale: userLocale || import.meta.env.VUE_APP_I18N_LOCALE || 'en',
-    fallbackLocale: import.meta.env.VUE_APP_I18N_FALLBACK_LOCALE || 'en',
-    messages
-});
+// export const createI18n({
+//     locale: userLocale || import.meta.env.VUE_APP_I18N_LOCALE || 'en',
+//     fallbackLocale: import.meta.env.VUE_APP_I18N_FALLBACK_LOCALE || 'en',
+//     globalInjection: true,
+//     messages
+// });
 
-export const vuetify = new Vuetify({
-    theme: {
-        options: {
-            customProperties: true
-        },
-        lang: {
-            t: (key, ...params) => i18n.t(key, params)
-        },
-        themes: {
-            light: {
-                primary: '#2a81cb'
-            }
-        }        
-    }
-});
 
 // Import Vuetify
-export const install = ({ app }) => {
-    const vuetify = createVuetify({
+export default createVuetify({
         theme: {
             options: {
                 customProperties: true
@@ -68,7 +52,4 @@ export const install = ({ app }) => {
                 }
             }            
         },
-    })
-  
-    app.use(vuetify)
-  }
+})

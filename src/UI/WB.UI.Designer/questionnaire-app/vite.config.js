@@ -2,7 +2,7 @@ import path from 'path'
 import { defineConfig } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import Components from 'unplugin-vue-components/vite'
-import { VuetifyResolver } from 'unplugin-vue-components/resolvers'
+//import { VuetifyResolver } from 'unplugin-vue-components/resolvers'
 import  LocalizationPlugin  from './tools/vite-plugin-localization'
 import Vuetify from 'vite-plugin-vuetify'
 
@@ -28,7 +28,7 @@ export default defineConfig({
         }
     }),
       Components({
-        resolvers: [VuetifyResolver()],
+        //resolvers: [VuetifyResolver()],
       }),
     ],
     resolve: {
