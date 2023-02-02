@@ -230,6 +230,7 @@
 <script lang="js">
 import modal from '@/shared/modal'
 import axios from 'axios'
+import * as toastr from 'toastr'
 import Vue from 'vue'
 import { filter } from 'lodash'
 
@@ -366,8 +367,11 @@ export default {
                 email: email,
             }).then(function(response){
                 self.showEmailPersonalLink = false
-            }) .catch(function (error) {
-                Vue.config.errorHandler(error, self)
+                if(response && response.data === 'fail')
+                    toastr.error('Email was not sent')
+            }).catch(function (error) {
+                if(error && error.response)
+                    Vue.config.errorHandler(error, self)
             })
         },
         validateEmail(email) {

@@ -40,6 +40,7 @@ using WB.UI.Headquarters.Models.WebInterview;
 using WB.UI.Shared.Web.Services;
 using Microsoft.Extensions.Caching.Memory;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.UI.Headquarters.Code.WebInterview;
 using WB.UI.Headquarters.Code.Workspaces;
@@ -64,7 +65,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IInvitationService invitationService;
         private readonly INativeReadSideStorage<InterviewSummary> interviewSummary;
         private readonly IInvitationMailingService invitationMailingService;
-        private readonly IAggregateRootPrototypePromoterService promoterService;
+        private readonly IInScopeExecutor inScopeExecutor;
 
         private readonly IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage;
         private readonly IPlainKeyValueStorage<WebInterviewSettings> webInterviewSettingsStorage;
@@ -129,7 +130,7 @@ namespace WB.UI.Headquarters.Controllers
             IServiceLocator serviceLocator,
             IAggregateRootPrototypeService prototypeService, 
             IQuestionnaireStorage questionnaireStorage, 
-            IAggregateRootPrototypePromoterService promoterService,
+            IInScopeExecutor inScopeExecutor,
             IMemoryCache memoryCache,
             ICalendarEventService calendarEventService,
             IWebInterviewConfigProvider webInterviewConfigProvider,
@@ -152,7 +153,7 @@ namespace WB.UI.Headquarters.Controllers
             this.serviceLocator = serviceLocator;
             this.prototypeService = prototypeService;
             this.questionnaireStorage = questionnaireStorage;
-            this.promoterService = promoterService;
+            this.inScopeExecutor = inScopeExecutor;
             this.memoryCache = memoryCache;
             this.calendarEventService = calendarEventService;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
@@ -397,7 +398,12 @@ namespace WB.UI.Headquarters.Controllers
 
             if (interviewId != null && Guid.TryParse(interviewId, out var aggregateId))
             {
-                promoterService.MaterializePrototypeIfRequired(aggregateId);
+                inScopeExecutor.Execute(serviceLocator =>
+                {
+                    var promoterServiceLocal =
+                        serviceLocator.GetInstance<IAggregateRootPrototypePromoterService>();
+                    promoterServiceLocal.MaterializePrototypeIfRequired(aggregateId);
+                });
             }
 
             var assignmentId = interviewSummary.GetById(data.InterviewId)?.AssignmentId ?? 0;
@@ -417,7 +423,6 @@ namespace WB.UI.Headquarters.Controllers
             }
             catch (EmailServiceException e)
             {
-                invitationService.InvitationWasNotSent(invitationId, assignmentId, data.Email, e.Message);
                 return this.Json("fail");
             }
         }
