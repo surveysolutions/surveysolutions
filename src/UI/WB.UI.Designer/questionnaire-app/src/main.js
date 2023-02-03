@@ -1,17 +1,17 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
-import vuetify /*, install, i18n */ from './plugins/vuetify';
+import {vuetify, i18n} /*, install, i18n */ from './plugins/vuetify';
 
-Vue.config.productionTip = false;
+//Vue.config.productionTip = false;
 
 /** Register Vue */
 const vue = createApp(App);
 vue.use(router);
 //vue.use(store);
 vue.use(vuetify);
-//vue.use(i18n);
-vue.use(install);
+vue.use(i18n);
+//vue.use(install);
 
 // Run!
 router.isReady().then(() => {

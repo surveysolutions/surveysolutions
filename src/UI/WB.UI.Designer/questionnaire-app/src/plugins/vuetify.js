@@ -1,6 +1,6 @@
 import {createVuetify} from 'vuetify'
 
-//import createI18n from 'vue-i18n'
+import {createI18n, useI18n } from 'vue-i18n'
 
 //import messages from '@intlify/vite-plugin-vue-i18n/messages'
 
@@ -28,17 +28,18 @@ const messages = loadLocaleMessages();
 var userLang = navigator.language || navigator.userLanguage;
 const userLocale = userLang.split('-')[0];
 
-// Create VueI18n instance with options
-// export const createI18n({
-//     locale: userLocale || import.meta.env.VUE_APP_I18N_LOCALE || 'en',
-//     fallbackLocale: import.meta.env.VUE_APP_I18N_FALLBACK_LOCALE || 'en',
-//     globalInjection: true,
-//     messages
-// });
+//Create VueI18n instance with options
+const i18n = new createI18n({
+    locale: userLocale || import.meta.env.VUE_APP_I18N_LOCALE || 'en',
+    fallbackLocale: import.meta.env.VUE_APP_I18N_FALLBACK_LOCALE || 'en',
+    globalInjection: true,
+    legacy: false,
+    messages
+});
 
 
 // Import Vuetify
-export default createVuetify({
+const vuetify = createVuetify({
         theme: {
             options: {
                 customProperties: true
@@ -52,4 +53,9 @@ export default createVuetify({
                 }
             }            
         },
+        locale:{
+            t: (key, ...params) => i18n.t(key, params)
+        }
 })
+
+export {vuetify, i18n}
