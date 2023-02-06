@@ -107,7 +107,7 @@ namespace WB.UI.Headquarters.Services.Quartz
             await services.GetRequiredService<AssignmentsImportTask>().Schedule(repeatIntervalInSeconds: 300);
             await services.GetRequiredService<AssignmentsVerificationTask>().Schedule(repeatIntervalInSeconds: 300);
             await services.GetRequiredService<SendInvitationsTask>().ScheduleRunAsync();
-            await services.GetRequiredService<SendRemindersTask>().Schedule(repeatIntervalInSeconds: 120);
+            await services.GetRequiredService<SendRemindersTask>().Schedule(repeatIntervalInSeconds: 60 * 60);
             await services.GetRequiredService<SendInterviewCompletedTask>().Schedule(repeatIntervalInSeconds: 60);
 
             var scheduler = await services.GetRequiredService<ISchedulerFactory>().GetScheduler();
