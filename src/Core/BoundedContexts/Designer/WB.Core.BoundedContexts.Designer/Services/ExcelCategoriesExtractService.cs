@@ -37,14 +37,14 @@ namespace WB.Core.BoundedContexts.Designer.Services
                 cell.Style.Font.Bold = true;
             }
             
-            worksheet.Cells("A1").Value = CategoriesConstants.IdColumnName;
+            worksheet.Cells("A1").Value = CategoriesConstants.ValueColumnName;
             FormatCell("A1");
-            worksheet.Cells("B1").Value = CategoriesConstants.TextColumnName;
+            worksheet.Cells("B1").Value = CategoriesConstants.TitleColumnName;
             FormatCell("B1");
 
             if (isCascading)
             {
-                worksheet.Cells("C1").Value = CategoriesConstants.ParentIdColumnName;
+                worksheet.Cells("C1").Value = CategoriesConstants.ParentValueColumnName;
                 FormatCell("C1");
                 worksheet.Cells("D1").Value = CategoriesConstants.AttachmentNameColumnName;
                 FormatCell("D1");
@@ -80,15 +80,40 @@ namespace WB.Core.BoundedContexts.Designer.Services
             
             if (string.IsNullOrEmpty(headers.IdIndex) || string.IsNullOrEmpty(headers.TextIndex))
             {
+                if (headers.IdIndex == null && headers.TextIndex != null)
+                    throw new InvalidFileException(ExceptionMessages.ProvidedFileHasErrors)
+                    {
+                        FoundErrors = new List<ImportValidationError>(new[]
+                        {
+                            new ImportValidationError
+                            {
+                                Message = string.Format(ExceptionMessages.RequiredHeaderWasNotFound, "id")
+                            }
+                        })
+                    };
+
+                if (headers.TextIndex == null && headers.IdIndex != null)
+                    throw new InvalidFileException(ExceptionMessages.ProvidedFileHasErrors)
+                    {
+                        FoundErrors = new List<ImportValidationError>(new[]
+                        {
+                            new ImportValidationError
+                            {
+                                Message = string.Format(ExceptionMessages.RequiredHeaderWasNotFound, "text")
+                            }
+                        })
+                    };
+                
+                // when both required columns not found, precess as file without headers
                 firstDataRow = 1;
                 
                 // set default headers
                 headers = new CategoriesHeaderMap
                 {
-                    IdIndex = "0",
-                    TextIndex = "1",
-                    ParentIdIndex = "2",
-                    AttachmentNameIndex = "3"
+                    IdIndex = "A",
+                    TextIndex = "B",
+                    ParentIdIndex = "C",
+                    AttachmentNameIndex = "D"
                 };
             }
 
@@ -133,16 +158,30 @@ namespace WB.Core.BoundedContexts.Designer.Services
                 new Tuple<string, string>(worksheet.Cell("B1").GetString(), "B"),
                 new Tuple<string, string>(worksheet.Cell("C1").GetString(), "C"),
                 new Tuple<string, string>(worksheet.Cell("D1").GetString(), "D")
-            }.Where(kv => !string.IsNullOrEmpty(kv.Item1))
-                .ToDictionary(k => k.Item1.Trim(), v => v.Item2);
+            }.Where(kv => !string.IsNullOrEmpty(kv.Item1)).ToList();
 
-            return new CategoriesHeaderMap()
+            var headerMap = new CategoriesHeaderMap();
+            for (int i = 0; i < headers.Count; i++)
             {
-                IdIndex = headers.GetOrNull(CategoriesConstants.IdColumnName),
-                ParentIdIndex = headers.GetOrNull(CategoriesConstants.ParentIdColumnName),
-                TextIndex = headers.GetOrNull(CategoriesConstants.TextColumnName),
-                AttachmentNameIndex = headers.GetOrNull(CategoriesConstants.AttachmentNameColumnName),
-            };
+                var rowValue = headers[i];
+
+                switch (rowValue.Item1)
+                {
+                    case CategoriesConstants.TitleColumnName:       
+                    case CategoriesConstants.OldTitleColumnName:       
+                        headerMap.TextIndex = rowValue.Item2; break;
+                    case CategoriesConstants.ValueColumnName:       
+                    case CategoriesConstants.OldValueColumnName:       
+                        headerMap.IdIndex = rowValue.Item2; break;
+                    case CategoriesConstants.ParentValueColumnName: 
+                    case CategoriesConstants.OldParentValueColumnName: 
+                        headerMap.ParentIdIndex = rowValue.Item2; break;
+                    case CategoriesConstants.AttachmentNameColumnName: 
+                        headerMap.AttachmentNameIndex = rowValue.Item2; break;
+                }
+            }
+
+            return headerMap;
         }
 
         private CategoriesRow GetRowValues(IXLWorksheet worksheet, CategoriesHeaderMap headers, int rowNumber) => new CategoriesRow
