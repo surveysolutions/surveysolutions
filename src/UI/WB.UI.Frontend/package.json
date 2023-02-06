@@ -34,6 +34,7 @@
     "datatables.net-select": "^1.3.3",
     "filemanager-webpack-plugin": "^2.0.2",
     "flatpickr": "^4.6.9",
+    "globby": "^9.2.0",
     "graphql-ws": "5.11.2",
     "i18next": "^20.3.1",
     "isomorphic-unfetch": "^3.0.0",
@@ -71,6 +72,7 @@
     "vuex-router-sync": "^5.0.0"
   },
   "devDependencies": {
+    "@originjs/vite-plugin-commonjs": "^1.0.1",
     "@vitejs/plugin-vue2": "2.2.0",
     "@vue/test-utils": "^1.3.0",
     "chokidar": "3.5.3",
@@ -81,22 +83,22 @@
     "eslint-plugin-vue": "^9.0.1",
     "graphql-tag": "^2.12.6",
     "jest": "^27.5.1",
+    "jsonfile": "^6.1.0",
     "mini-css-extract-plugin": "^0.9.0",
     "npm-force-resolutions": "0.0.6",
     "rimraf": "3.0.2",
     "sass": "^1.49.7",
     "stats-webpack-plugin": "^0.7.0",
+    "vite": "^4.0.4",
+    "vite-plugin-env-compatible": "^1.1.1",
+    "vite-plugin-html": "3.2.0",
     "vue-cli-plugin-apollo": "0.22.2",
     "vue-jest": "^3.0.7",
     "vue-property-decorator": "^8.2.2",
     "webpack-build-notifier": "^2.2.1",
     "webpack-livereload-plugin": "^2.3.0",
     "write-file-webpack-plugin": "^4.5.1",
-    "xmldoc": "^1.1.2",
-    "vite-plugin-env-compatible": "^1.1.1",
-    "vite-plugin-html": "3.2.0",
-	"vite": "^4.0.4",
-    "@originjs/vite-plugin-commonjs": "^1.0.1"
+    "xmldoc": "^1.1.2"
   },
   "prettier": {
     "semi": false,
