@@ -4,8 +4,11 @@ import vue from '@vitejs/plugin-vue2'
 import envCompatible from 'vite-plugin-env-compatible';
 import { createHtmlPlugin } from 'vite-plugin-html';
 import { viteCommonjs } from '@originjs/vite-plugin-commonjs';
+import cleanPlugin from 'vite-plugin-clean';
+import LocalizationPlugin  from './tools/vite-plugin-localization'
 
-const LocalizationPlugin = require("./tools/vite-plugin-localization.js")
+const ViteFilemanager = require('filemanager-plugin').ViteFilemanager;
+
 
 const baseDir = path.resolve(__dirname, "./");
 const join = path.join.bind(path, baseDir);
@@ -100,25 +103,16 @@ const fileTargets = [
 ]
 
 
-        const resxFiles = [
-            path.join(uiFolder, "WB.UI.Headquarters.Core/**/*.resx"),
-            path.join(uiFolder, "../Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources/*.resx"),
-            path.join(uiFolder, "../Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/*.resx")
-        ]
+const resxFiles = [
+    path.join(uiFolder, "WB.UI.Headquarters.Core/**/*.resx"),
+    path.join(uiFolder, "../Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources/*.resx"),
+    path.join(uiFolder, "../Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/*.resx")
+]
 
-        Object.keys(pages).forEach(page => {
-            resxFiles.push(path.join(uiFolder, pages[page].template))
-        })
+Object.keys(pages).forEach(page => {
+    resxFiles.push(path.join(uiFolder, pages[page].template))
+})
 
-        config.plugin('extraWatch')
-            .use(extraWatch, [{ files: resxFiles }])
-
-        config.plugin("localization")
-            .use(LocalizationPlugin, [{
-                patterns: resxFiles,
-                destination: "./.resources",
-                locales
-            }])
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -151,10 +145,20 @@ export default defineConfig({
       '.vue'
     ]
   },
+  optimizeDeps: {
+    include: ["jquery"],
+  },
   plugins: [
     vue({ jsx: true }),
     viteCommonjs(),
     envCompatible(),
+	ViteFilemanager({
+      // verbose: true,
+      onEnd: { copy: fileTargets }
+    }),
+	cleanPlugin({
+      targetFiles: fileTargets.map(target => target.destination)
+    }),
 	LocalizationPlugin({
       patterns: resxFiles,
       destination: "./.resources",
