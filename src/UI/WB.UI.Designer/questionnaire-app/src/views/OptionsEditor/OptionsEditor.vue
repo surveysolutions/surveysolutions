@@ -324,7 +324,7 @@ export default {
 
             apiRequest.then(r => {
                 this.errors = r.data.errors;
-                this.categories = r.data.options;
+                this.categories = r.data.options || [];
                 this.file = null;
                 this.snacks.fileUploaded = true;
 
