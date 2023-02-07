@@ -136,36 +136,36 @@ export default {
         headers() {
             const headers = [
                 {
-                    text: this.$t('QuestionnaireEditor.OptionsUploadValue'),
+                    title: this.$t('QuestionnaireEditor.OptionsUploadValue'),
                     sortable: false,
                     width: '10%',
-                    value: 'value'
+                    key: 'value'
                 },
                 {
-                    text: this.$t('QuestionnaireEditor.OptionsUploadTitle'),
+                    title: this.$t('QuestionnaireEditor.OptionsUploadTitle'),
                     sortable: false,
-                    value: 'title',
+                    key: 'title',
                     width: this.isCascading ? '45%' : '55%'
                 },
                 {
-                    text: this.$t('QuestionnaireEditor.AttachmentName'),
+                    title: this.$t('QuestionnaireEditor.AttachmentName'),
                     sortable: false,
                     width: '15%',
-                    value: 'attachmentName'
+                    key: 'attachmentName'
                 }
             ];
 
             if (this.isCascading) {
                 headers.push({
-                    text: this.$t('QuestionnaireEditor.OptionsUploadParent'),
+                    title: this.$t('QuestionnaireEditor.OptionsUploadParent'),
                     sortable: false,
                     width: '15%',
-                    value: 'parentValue'
+                    key: 'parentValue'
                 });
             }
 
             headers.push({
-                value: 'actions',
+                key: 'actions',
                 sortable: false,
                 width: '10%',
                 align: 'end'

@@ -1,4 +1,5 @@
 import {createVuetify} from 'vuetify'
+import { VDataTable } from 'vuetify/labs/VDataTable'
 
 import {createI18n, useI18n } from 'vue-i18n'
 
@@ -37,24 +38,26 @@ const i18n = new createI18n({
     messages
 });
 
+const myCustomLightTheme = {
+    dark: false,
+    colors: {      
+      primary: '2a81cb',      
+    }
+  }
 
 // Import Vuetify
 const vuetify = createVuetify({
         theme: {
-            options: {
-                customProperties: true
-            },
-            lang: {
-                t: (key, ...params) => i18n.t(key, params)
-            },
+            defaultTheme: 'myCustomLightTheme',            
             themes: {
-                light: {
-                    primary: '#2a81cb'
-                }
+                myCustomLightTheme
             }            
         },
         locale:{
             t: (key, ...params) => i18n.t(key, params)
+        },
+        components: {
+            VDataTable,
         }
 })
 
