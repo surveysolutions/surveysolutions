@@ -409,5 +409,30 @@ namespace WB.Tests.Unit.Designer.Services
             // assert
             Assert.That(designerDbContext.CategoriesInstances.ToList(), Has.Count.EqualTo(2));
         }
+
+        [Test]
+        public void when_store_excel_file_with_header_without_parentValue_and_data_should_be_ok()
+        {
+            // arrange
+            var questionnaireId = Id.g1;
+            var categoriesId = Id.g2;
+            var data = new string[][]
+            {
+                new[] {"1", "option 1"}, 
+                new[] {"", ""}, 
+                new[] {"2", "option 2"} 
+            };
+
+            var options = new DbContextOptionsBuilder<DesignerDbContext>().UseInMemoryDatabase(new Random().Next(0, 10000000).ToString());
+            var designerDbContext = new DesignerDbContext(options.Options);
+            var service = CreateCategoriesService(designerDbContext);
+            var type = CategoriesFileType.Excel;
+
+            // act
+            service.Store(questionnaireId, categoriesId, CreateFileWithHeader(data, type), type);
+            designerDbContext.SaveChanges();
+            // assert
+            Assert.That(designerDbContext.CategoriesInstances.ToList(), Has.Count.EqualTo(2));
+        }
     }
 }

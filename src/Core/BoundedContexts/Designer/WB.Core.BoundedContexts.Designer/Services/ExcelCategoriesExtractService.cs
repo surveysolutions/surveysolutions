@@ -188,7 +188,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
         {
             Id = worksheet.Cell($"{headers.IdIndex}{rowNumber}").GetString(),
             Text = worksheet.Cell($"{headers.TextIndex}{rowNumber}").GetString(),
-            ParentId = worksheet.Cell($"{headers.ParentIdIndex}{rowNumber}").GetString(),
+            ParentId = headers.ParentIdIndex != null ? worksheet.Cell($"{headers.ParentIdIndex}{rowNumber}").GetString() : null,
             RowId = rowNumber,
             AttachmentName = headers.AttachmentNameIndex != null ? worksheet.Cell($"{headers.AttachmentNameIndex}{rowNumber}").GetString() : null,
         };
