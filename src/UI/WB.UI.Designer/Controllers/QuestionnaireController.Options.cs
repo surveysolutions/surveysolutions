@@ -176,7 +176,7 @@ namespace WB.UI.Designer.Controllers
             }
             catch (Exception e)
             {
-                errors.Add(Resources.QuestionnaireController.TabFilesOnly);
+                errors.Add(Resources.QuestionnaireController.ExcelOrTabFilesOnly);
                 this.logger.LogError(e, e.Message);
             }
 
@@ -257,7 +257,7 @@ namespace WB.UI.Designer.Controllers
             }
             catch (Exception e)
             {
-                errors.Add(Resources.QuestionnaireController.TabFilesOnly);
+                errors.Add(Resources.QuestionnaireController.ExcelOrTabFilesOnly);
                 this.logger.LogError(e, e.Message);
             }
 
