@@ -87,7 +87,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
                         {
                             new ImportValidationError
                             {
-                                Message = string.Format(ExceptionMessages.RequiredHeaderWasNotFound, "id")
+                                Message = string.Format(ExceptionMessages.RequiredHeaderWasNotFound, "value")
                             }
                         })
                     };
@@ -99,7 +99,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
                         {
                             new ImportValidationError
                             {
-                                Message = string.Format(ExceptionMessages.RequiredHeaderWasNotFound, "text")
+                                Message = string.Format(ExceptionMessages.RequiredHeaderWasNotFound, "title")
                             }
                         })
                     };
@@ -117,7 +117,11 @@ namespace WB.Core.BoundedContexts.Designer.Services
                 };
             }
 
-            var rowsCount = worksheet.LastRowUsed().RowNumber();
+            var lastRowUsed = worksheet.LastRowUsed();
+            if (lastRowUsed == null)
+                throw new InvalidFileException(ExceptionMessages.Excel_NoCategories);
+            
+            var rowsCount = lastRowUsed.RowNumber();
             if (rowsCount > AbstractVerifier.MaxOptionsCountInFilteredComboboxQuestion + firstDataRow - 1)
                 throw new InvalidFileException(
                     ExceptionMessages.Excel_Categories_More_Than_Limit.FormatString(AbstractVerifier
