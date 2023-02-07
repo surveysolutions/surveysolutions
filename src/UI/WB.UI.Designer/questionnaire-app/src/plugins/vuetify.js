@@ -1,5 +1,6 @@
 import {createVuetify} from 'vuetify'
 import { VDataTable } from 'vuetify/labs/VDataTable'
+import 'vuetify/styles'
 
 import {createI18n, useI18n } from 'vue-i18n'
 

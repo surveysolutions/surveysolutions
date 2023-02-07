@@ -16,6 +16,7 @@
                                             '*'
                                     "
                                     :rules="[required]"
+                                    required
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="12" :sm="showParentValue ? 6 : 12">
@@ -71,8 +72,12 @@
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="success" :disabled="!valid" @click="save">{{
-                    $t('QuestionnaireEditor.Save')
+                <v-btn 
+                    class="ma-2"
+                    color="success" 
+                    :disabled="!valid" 
+                    @click="save">{{
+                        $t('QuestionnaireEditor.Save')
                 }}</v-btn>
                 <v-btn color="primary darken-1" text @click="cancel">{{
                     $t('QuestionnaireEditor.Cancel')
@@ -101,17 +106,15 @@ export default {
             itemTitle: this.item.title,
             itemValue: this.item.value,
             itemParentValue: this.item.parentValue,
-            itemAttachmentName: this.item.attachmentName,
+            itemAttachmentName: this.item.attachmentName,            
 
-            required: value =>
-                !!value || this.$t('QuestionnaireEditor.RequiredField'),
+            required: value => !!value || this.$t('QuestionnaireEditor.RequiredField'),
             maxValue: v =>
                 (/^[-+]?\d+$/.test(v) &&
                     Math.abs(parseInt(v)) <= 2147483647 &&
                     Math.abs(parseInt(v)) >= -2147483648) ||
-                this.$t('QuestionnaireEditor.ValidationIntValue'),
-
-            valid: true
+                this.$t('QuestionnaireEditor.ValidationIntValue'),            
+            vaa: true
         };
     },
     computed: {
@@ -122,13 +125,17 @@ export default {
             set(value) {
                 this.$emit('update:shown', value);
             }
+        },
+        valid: {
+            get(){return this.vaa},
+            set(value) {this.vaa = value }
         }
     },
     methods: {
         async save() {
             await this.$refs.form.validate();
             if (this.valid) {
-                this.$emit('change', {
+                this.$emit('saveCategory', {
                     title: this.itemTitle,
                     value: this.itemValue,
                     parentValue: this.itemParentValue,

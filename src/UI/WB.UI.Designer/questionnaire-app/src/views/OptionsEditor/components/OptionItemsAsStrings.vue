@@ -3,7 +3,7 @@
         <v-textarea
             ref="strings"
             v-model="categoriesAsText"
-            rows="15"
+            rows="10"
             filled
             spellcheck="false"
             wrap="off"

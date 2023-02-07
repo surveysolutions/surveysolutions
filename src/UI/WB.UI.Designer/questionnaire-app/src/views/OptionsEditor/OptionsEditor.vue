@@ -17,11 +17,11 @@
                             formTitle
                         }}</v-toolbar-title>
                     </v-toolbar>
-                    <v-tabs v-model="tab" grow>
-                        <v-tab key="table" :disabled="!stringsIsValid">{{
+                    <v-tabs v-model="tab" fixed-tabs grow>
+                        <v-tab value="table" :disabled="!stringsIsValid">{{
                             $t('QuestionnaireEditor.TableView')
                         }}</v-tab>
-                        <v-tab key="strings">{{
+                        <v-tab value="strings">{{
                             $t('QuestionnaireEditor.StringsView')
                         }}</v-tab>
                     </v-tabs>
@@ -37,8 +37,8 @@
                             </v-alert>
                         </v-card-text>
                     </div>
-                    <v-tabs-items v-model="tab">
-                        <v-tab-item key="table">
+                    <v-window v-model="tab">
+                        <v-window-item value="table">
                             <category-table
                                 ref="table"
                                 :categories="categories"
@@ -50,10 +50,10 @@
                                 @setCascading="setCascadingCategory"
                                 @update-categories="updateCategories"
                             />
-                        </v-tab-item>
-                        <v-tab-item key="strings">
+                        </v-window-item>
+                        <v-window-item value="strings">
                             <category-strings
-                                v-if="tab == 1"
+                            v-if="tab == 'strings'"
                                 ref="strings"
                                 :loading="loading"
                                 :show-parent-value="isCascading"
@@ -64,8 +64,8 @@
                                 @editing="v => (inEditMode = v)"
                                 @inprogress="v => (convert = v)"
                             />
-                        </v-tab-item>
-                    </v-tabs-items>
+                        </v-window-item>
+                    </v-window>
                 </v-card>
             </v-col>
         </v-row>
@@ -136,7 +136,7 @@ export default {
 
     data() {
         return {
-            tab: 0,
+            tab: '',
             categories: [],
             parentCategories: null,
             categoriesAsText: '',

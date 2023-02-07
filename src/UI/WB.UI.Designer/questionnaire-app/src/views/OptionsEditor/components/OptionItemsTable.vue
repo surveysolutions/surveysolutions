@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <v-card-title>
+    
+        <v-card-title class="d-flex">
             <v-text-field
                 v-model="search"
                 append-icon="mdi-magnify"
@@ -41,7 +41,7 @@
             :shown="dialog"
             :show-parent-value="isCascading"
             @cancel="dialog = false"
-            @change="save"
+            @saveCategory="save"
         />
 
         <v-snackbar v-model="snacks.rowAdded" top color="success">{{
@@ -54,16 +54,14 @@
             :items="categoriesLocal"
             :search="search"
             :items-per-page="10"
-            :footer-props="{
-                'items-per-page-options': [10, 20, 50, 100]
-            }"
+            :footer-props="{'items-per-page-options': [10, 20, 50, 100]}"
             :loading="loading"
             class="table-striped elevation-1 mb-14"
             style="overflow-wrap:anywhere;"
             dense
         >
             <template #[`item.value`]="{ item }">
-                <span class="text-no-wrap">{{ item.value }}</span>
+                <span class="text-no-wrap">{{ item.raw.value }}</span>
             </template>
             <template #[`item.parentValue`]="props">
                 <div>
@@ -79,21 +77,20 @@
             </template>
             <template #[`item.actions`]="{ item }">
                 <div v-if="!readonly">
-                    <v-icon small class="mr-2" @click="editItem(item)"
+                    <v-icon small class="mr-2" @click="editItem(item.raw)"
                         >mdi-pencil</v-icon
                     >
-                    <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
+                    <v-icon small @click="deleteItem(item.raw)">mdi-delete</v-icon>
                 </div>
             </template>
-            <template #no-data>
+            <!-- <template #no-data>
                 {{
                     $t('QuestionnaireEditor.OptionsUploadLimit', {
                         limit: 15000
                     })
                 }}
-            </template>
-        </v-data-table>
-    </div>
+            </template> -->
+        </v-data-table>    
 </template>
 
 <script>
