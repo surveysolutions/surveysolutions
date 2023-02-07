@@ -61,6 +61,8 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 
                     logger.LogDebug("Executing job {jobType} in workspace {workspace}",
                         jobType.Name, workspace);
+                    
+                    context.Put("workspace", workspace ?? "");
                     await job.Execute(context);
                 }
                 catch (Exception e)
