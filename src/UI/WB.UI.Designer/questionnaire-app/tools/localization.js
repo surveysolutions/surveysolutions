@@ -78,9 +78,6 @@ module.exports = class LocalizationBuilder {
         console.time('parseResxFiles');
         var files = this.getFiles();
 
-        console.warn('files:')
-        console.warn(files)
-
         const locale = {}; /* en: { Namespace: { key: "sdfsdf" } } */
 
         for (let index = 0; index < files.length; index++) {

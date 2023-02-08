@@ -6,7 +6,7 @@
             </v-card-title>
             <v-card-text>
                 <v-container>
-                    <v-form ref="form" v-model="valid" lazy-validation>
+                    <v-form ref="form" v-model="valid" validate-on="input" fast-fail>
                         <v-row>
                             <v-col cols="12">
                                 <v-text-field
@@ -15,7 +15,7 @@
                                         $t('QuestionnaireEditor.GroupTitle') +
                                             '*'
                                     "
-                                    :rules="[required]"
+                                    :rules="[required]"                                    
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="12" :sm="showParentValue ? 6 : 12">
@@ -27,8 +27,7 @@
                                         ) + '*'
                                     "
                                     :rules="[required, maxValue]"
-                                    type="number"
-                                    required
+                                    type="number"                                    
                                 ></v-text-field>
                             </v-col>
                             <v-col v-if="showParentValue" cols="12" sm="6">
@@ -53,8 +52,7 @@
                                         ) + '*'
                                     "
                                     :rules="[required, maxValue]"
-                                    type="number"
-                                    required
+                                    type="number"                                    
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="12">
@@ -71,8 +69,12 @@
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="success" :disabled="!valid" @click="save">{{
-                    $t('QuestionnaireEditor.Save')
+                <v-btn 
+                    class="ma-2"
+                    color="success" 
+                    :disabled="!valid" 
+                    @click="save">{{
+                        $t('QuestionnaireEditor.Save')
                 }}</v-btn>
                 <v-btn color="primary darken-1" text @click="cancel">{{
                     $t('QuestionnaireEditor.Cancel')
@@ -101,17 +103,18 @@ export default {
             itemTitle: this.item.title,
             itemValue: this.item.value,
             itemParentValue: this.item.parentValue,
-            itemAttachmentName: this.item.attachmentName,
+            itemAttachmentName: this.item.attachmentName,            
 
-            required: value =>
-                !!value || this.$t('QuestionnaireEditor.RequiredField'),
+            required: value => {
+                if(value) return true 
+                return this.$t('QuestionnaireEditor.RequiredField')
+            },
             maxValue: v =>
                 (/^[-+]?\d+$/.test(v) &&
                     Math.abs(parseInt(v)) <= 2147483647 &&
                     Math.abs(parseInt(v)) >= -2147483648) ||
-                this.$t('QuestionnaireEditor.ValidationIntValue'),
-
-            valid: true
+                this.$t('QuestionnaireEditor.ValidationIntValue'),            
+            vaa: true
         };
     },
     computed: {
@@ -122,13 +125,17 @@ export default {
             set(value) {
                 this.$emit('update:shown', value);
             }
+        },
+        valid: {
+            get(){return this.vaa},
+            set(value) {this.vaa = value }
         }
     },
     methods: {
         async save() {
             await this.$refs.form.validate();
             if (this.valid) {
-                this.$emit('change', {
+                this.$emit('saveCategory', {
                     title: this.itemTitle,
                     value: this.itemValue,
                     parentValue: this.itemParentValue,
@@ -139,6 +146,9 @@ export default {
         cancel() {
             this.$emit('cancel');
         }
+    },
+    async mounted() {
+        await this.$refs.form.validate()
     }
 };
 </script>

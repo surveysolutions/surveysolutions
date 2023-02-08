@@ -1,9 +1,10 @@
-import Vue from 'vue';
-import Vuetify from 'vuetify/lib';
-import VueI18n from 'vue-i18n';
+import {createVuetify} from 'vuetify'
+import { VDataTable } from 'vuetify/labs/VDataTable'
+import 'vuetify/styles'
 
-Vue.use(VueI18n);
-Vue.use(Vuetify);
+import {createI18n, useI18n } from 'vue-i18n'
+
+//import messages from '@intlify/vite-plugin-vue-i18n/messages'
 
 function loadLocaleMessages() {
     const locales = import.meta.globEager('../locale/*.json');
@@ -29,36 +30,36 @@ const messages = loadLocaleMessages();
 var userLang = navigator.language || navigator.userLanguage;
 const userLocale = userLang.split('-')[0];
 
-// Create VueI18n instance with options
-export const i18n = new VueI18n({
+//Create VueI18n instance with options
+const i18n = new createI18n({
     locale: userLocale || import.meta.env.VUE_APP_I18N_LOCALE || 'en',
     fallbackLocale: import.meta.env.VUE_APP_I18N_FALLBACK_LOCALE || 'en',
+    globalInjection: true,
+    legacy: false,
     messages
 });
 
-export const vuetify = new Vuetify({
-    theme: {
-        options: {
-            customProperties: true
+const myCustomLightTheme = {
+    dark: false,
+    colors: {      
+      primary: '2a81cb',      
+    }
+  }
+
+// Import Vuetify
+const vuetify = createVuetify({
+        theme: {
+            defaultTheme: 'myCustomLightTheme',            
+            themes: {
+                myCustomLightTheme
+            }            
         },
-        lang: {
+        locale:{
             t: (key, ...params) => i18n.t(key, params)
         },
-        themes: {
-            light: {
-                primary: '#2a81cb'
-            }
+        components: {
+            VDataTable,
         }
-        // themes: {
-        //   light: {
-        //     primary: '#ee44aa',
-        //     secondary: '#424242',
-        //     accent: '#82B1FF',
-        //     error: '#FF5252',
-        //     info: '#2196F3',
-        //     success: '#4CAF50',
-        //     warning: '#FFC107',
-        //   },
-        // },
-    }
-});
+})
+
+export {vuetify, i18n}

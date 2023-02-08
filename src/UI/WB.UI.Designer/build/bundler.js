@@ -10,7 +10,7 @@ const rev = require("gulp-rev");
 const gulpInject = require("gulp-inject")
 const terser = require("gulp-terser");
 const config = require("./config.json");
-const ngAnnotate = require("gulp-ng-annotate");
+const ngAnnotate = require("gulp-ng-annotate-patched");
 const minified = require("./plugins/preferminified");
 const changed = require("./plugins/changed");
 
