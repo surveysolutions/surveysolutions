@@ -244,9 +244,3 @@ export default {
     }
 };
 </script>
-
-<style css scoped>
-:deep(tbody tr:nth-of-type(odd)) {
-    background-color: rgba(0, 0, 0, 0.03);
-}
-</style>
