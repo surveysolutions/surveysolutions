@@ -45,6 +45,7 @@ using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.Questionnaire.Categories;
+using WB.Core.SharedKernels.Questionnaire.ReusableCategories;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 using WB.Infrastructure.Native.Storage;
 

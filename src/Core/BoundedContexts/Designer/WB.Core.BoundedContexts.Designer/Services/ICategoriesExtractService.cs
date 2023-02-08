@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
     public interface ICategoriesExtractService
     {
         List<CategoriesRow> Extract(Stream file);
-        byte[] GetTemplateFile();
-        byte[] GetAsFile(List<CategoriesItem> items);
+        byte[] GetTemplateFile(bool isCascading);
+        byte[] GetAsFile(List<CategoriesItem> items, bool isCascading, bool hqImport);
     }
 }

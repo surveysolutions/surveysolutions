@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Categories;
+using WB.Core.SharedKernels.Questionnaire.ReusableCategories;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 using WB.Tests.Abc;
 
@@ -45,14 +46,14 @@ public class CategoriesServiceTests
         
         var service = CreateCategoriesService(documentStorage, categoriesDb, categoriesExportService.Object);
 
-        var excelFile = service.GetAsFile(revision, Id.g2, CategoriesFileType.Excel);
+        var excelFile = service.GetAsFile(revision, Id.g2, CategoriesFileType.Excel, false);
         
         categoriesExportService.Verify(m => 
             m.GetAsExcelFile(It.Is<IEnumerable<CategoriesItem>>(list =>
                 list.First().Id == 1 && list.First().ParentId == null && list.First().Text == "1"
                 && list.Second().Id == 3 && list.Second().ParentId == null && list.Second().Text == "3"
                 && list.Last().Id == 2 && list.Last().ParentId == null && list.Last().Text == "2"
-            )), Times.Once);
+            ), true, false), Times.Once);
     }
 
     private IReusableCategoriesService CreateCategoriesService(IQuestionnaireViewFactory documentStorage,

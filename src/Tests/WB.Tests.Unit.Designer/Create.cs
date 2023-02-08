@@ -72,6 +72,7 @@ using Translation = WB.Core.SharedKernels.SurveySolutions.Documents.Translation;
 using TranslationInstance = WB.Core.BoundedContexts.Designer.Translations.TranslationInstance;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.HttpServices.Services;
+using WB.Core.SharedKernels.Questionnaire.ReusableCategories;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 
 namespace WB.Tests.Unit.Designer
