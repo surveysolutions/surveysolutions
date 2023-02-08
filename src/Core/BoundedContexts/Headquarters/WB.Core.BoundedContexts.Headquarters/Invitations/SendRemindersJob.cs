@@ -94,7 +94,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             }
             catch (Exception ex)
             {
-                this.logger.LogError(ex, "Reminders distribution job: FAILED");
+                this.logger.LogError(ex, $"Reminders distribution job for workspace {context.Get("workspace")}: FAILED");
             }
         }
 
