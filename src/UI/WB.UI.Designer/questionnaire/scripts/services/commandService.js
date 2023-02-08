@@ -186,8 +186,9 @@
 
                     return response;
 
-                }).catch(function () {
+                }).catch(function (err) {
                     blockUI.stop();
+                    throw err;
                 });
             };
 

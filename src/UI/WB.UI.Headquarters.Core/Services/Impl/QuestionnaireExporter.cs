@@ -14,6 +14,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Questionnaire.ReusableCategories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 using WB.Enumerator.Native.Questionnaire;
@@ -150,7 +151,7 @@ namespace WB.UI.Headquarters.Services.Impl
                     var categories = this.reusableCategoriesStorage.GetOptions(questionnaireIdentity, category.Id);
                     if(categories == null) continue;
 
-                    var bytes = this.reusableCategoriesExporter.GetAsExcelFile(categories);
+                    var bytes = this.reusableCategoriesExporter.GetAsExcelFile(categories, isCascading: true, hqImport: true);
                     PutEntry($"Categories/{category.Id.FormatGuid()}.xlsx", bytes);
                 }
             }

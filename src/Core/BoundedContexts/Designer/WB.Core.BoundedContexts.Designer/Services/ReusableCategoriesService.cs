@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
         public byte[] GetTemplate(CategoriesFileType fileType)
         {
             var extractService = this.categoriesExtractFactory.GetExtractService(fileType);
-            return extractService.GetTemplateFile();
+            return extractService.GetTemplateFile(isCascading: true);
         }
         
         public void DeleteAllByQuestionnaireId(Guid questionnaireId)
@@ -64,7 +64,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
             this.dbContext.SaveChanges();
         }
 
-        public CategoriesFile? GetAsFile(QuestionnaireRevision questionnaireRevision, Guid categoriesId, CategoriesFileType fileType)
+        public CategoriesFile? GetAsFile(QuestionnaireRevision questionnaireRevision, Guid categoriesId, CategoriesFileType fileType, bool hqImport)
         {
             var questionnaire = this.questionnaireStorage.Load(questionnaireRevision);
             if (questionnaire == null)
@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
             {
                 QuestionnaireTitle = questionnaire.Title,
                 CategoriesName = questionnaire.Source.Categories.FirstOrDefault(x => x.Id == categoriesId)?.Name ?? string.Empty,
-                Content = extractService.GetAsFile(items)
+                Content = extractService.GetAsFile(items, isCascading: true, hqImport)
             };
         }
 
