@@ -135,7 +135,7 @@ namespace WB.Tests.Unit.Designer.Services
 
             var service = Create.CategoricalOptionsImportService(questionnaire);
 
-            var header = $"{CategoriesConstants.IdColumnName}\t{CategoriesConstants.TextColumnName}\t{CategoriesConstants.ParentIdColumnName}\r\n";
+            var header = $"{CategoriesConstants.ValueColumnName}\t{CategoriesConstants.TitleColumnName}\t{CategoriesConstants.ParentValueColumnName}\r\n";
             // act
             var result = service.ImportOptions((header + "1\tStreet 1\t2\r\n2\tStreet 2\t2").GenerateStream(), questionnaireId.FormatGuid(), questionId, CategoriesFileType.Tsv);
 
@@ -168,7 +168,7 @@ namespace WB.Tests.Unit.Designer.Services
 
             var service = Create.CategoricalOptionsImportService(questionnaire);
 
-            var header = $"{CategoriesConstants.TextColumnName}\t{CategoriesConstants.IdColumnName}\t{CategoriesConstants.AttachmentNameColumnName}\t{CategoriesConstants.ParentIdColumnName}\r\n";
+            var header = $"{CategoriesConstants.TitleColumnName}\t{CategoriesConstants.ValueColumnName}\t{CategoriesConstants.AttachmentNameColumnName}\t{CategoriesConstants.ParentValueColumnName}\r\n";
             // act
             var result = service.ImportOptions((header + "Street 1\t1\tAttachment Name 1\t2\r\nStreet 2\t2\tattach2\t2").GenerateStream(), questionnaireId.FormatGuid(), questionId, CategoriesFileType.Tsv);
 

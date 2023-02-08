@@ -102,10 +102,9 @@
                         updateQuestionnaireCategories();
 
                         setTimeout(function() {
-                                utilityService.focus("focusCategories" + categories.categoriesId);
-                            },
-                            500);
-                    });
+                            utilityService.focus("focusCategories" + categories.categoriesId);
+                        }, 500);
+                    }).catch(function() { });
             }
 
             $scope.createAndUploadFile = function (file) {
@@ -135,7 +134,7 @@
                                     utilityService.focus("focusCategories" + categories.categoriesId);
                                 },
                                 500);
-                        });
+                        }).catch(function() { });
                 });
             };
 
@@ -178,11 +177,13 @@
             };
 
             $scope.saveCategories = function (categories) {
-                commandService.updateCategories($state.params.questionnaireId, categories).then(function () {
+                commandService.updateCategories($state.params.questionnaireId, categories).then(function (response) {
                     dataBind(categories.checkpoint, categories);
                     categories.form.$setPristine();
 
                     updateQuestionnaireCategories(categories);
+                }).catch(function() {
+                    categories.categoriesId = categories.oldCategoriesId;
                 });
             };
 

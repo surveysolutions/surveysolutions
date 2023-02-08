@@ -20,10 +20,10 @@ namespace WB.Infrastructure.Native.Questionnaire
             var rowsCount = worksheet.LastRowUsed().RowNumber();
 
             if (headers.IdIndex == null)
-                throw new InvalidOperationException("Header (id) was not found.");
+                throw new InvalidOperationException("Header (value) was not found.");
 
             if (headers.TextIndex == null)
-                throw new InvalidOperationException("Header (text) was not found.");
+                throw new InvalidOperationException("Header (title) was not found.");
 
             if (rowsCount == 1)
                 throw new InvalidOperationException("Categories were not found.");
@@ -52,9 +52,9 @@ namespace WB.Infrastructure.Native.Questionnaire
 
             return new CategoriesHeaderMap()
             {
-                IdIndex = headers.GetOrNull("id"),
-                ParentIdIndex = headers.GetOrNull("parentid"),
-                TextIndex = headers.GetOrNull("text"),
+                IdIndex = headers.GetOrNull("value") ?? headers.GetOrNull("id"),
+                ParentIdIndex = headers.GetOrNull("parentvalue") ?? headers.GetOrNull("parentid"),
+                TextIndex = headers.GetOrNull("title") ?? headers.GetOrNull("text"),
                 AttachmentNameIndex = headers.GetOrNull("attachmentname"),
             };
         }
