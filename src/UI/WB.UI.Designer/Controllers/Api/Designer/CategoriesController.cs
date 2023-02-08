@@ -50,7 +50,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [Route("{id}/xlsx/{categoriesId:Guid}")]
         public IActionResult Get(QuestionnaireRevision id, Guid categoriesId)
         {
-            var categoriesFile = this.reusableCategoriesService.GetAsFile(id, categoriesId, CategoriesFileType.Excel);
+            var categoriesFile = this.reusableCategoriesService.GetAsFile(id, categoriesId, CategoriesFileType.Excel, hqImport: false);
 
             if (categoriesFile?.Content == null) return NotFound();
 
