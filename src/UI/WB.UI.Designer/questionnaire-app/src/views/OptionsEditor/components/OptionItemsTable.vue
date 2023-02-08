@@ -58,7 +58,7 @@
             :loading="loading"
             class="table-striped elevation-1 mb-14"
             style="overflow-wrap:anywhere;"
-            dense
+            density="compact"
         >
             <template #[`item.value`]="{ item }">
                 <span class="text-no-wrap">{{ item.raw.value }}</span>
