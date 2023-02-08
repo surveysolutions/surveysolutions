@@ -423,6 +423,7 @@ namespace WB.UI.Headquarters.Controllers
             }
             catch (EmailServiceException e)
             {
+                invitationService.InvitationWasNotSent(invitationId, assignmentId, data.Email, e.Message);
                 return this.Json("fail");
             }
         }
