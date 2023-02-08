@@ -69,7 +69,7 @@
                 </v-card>
             </v-col>
         </v-row>
-        <v-footer fixed min-width="680">
+        <v-footer app min-width="680">
             <v-btn
                 v-if="!readonly"
                 class="ma-2"

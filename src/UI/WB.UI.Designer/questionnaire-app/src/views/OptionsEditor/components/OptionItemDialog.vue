@@ -6,7 +6,7 @@
             </v-card-title>
             <v-card-text>
                 <v-container>
-                    <v-form ref="form" v-model="valid" lazy-validation>
+                    <v-form ref="form" v-model="valid" validate-on="input" fast-fail>
                         <v-row>
                             <v-col cols="12">
                                 <v-text-field
@@ -15,8 +15,7 @@
                                         $t('QuestionnaireEditor.GroupTitle') +
                                             '*'
                                     "
-                                    :rules="[required]"
-                                    required
+                                    :rules="[required]"                                    
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="12" :sm="showParentValue ? 6 : 12">
@@ -28,8 +27,7 @@
                                         ) + '*'
                                     "
                                     :rules="[required, maxValue]"
-                                    type="number"
-                                    required
+                                    type="number"                                    
                                 ></v-text-field>
                             </v-col>
                             <v-col v-if="showParentValue" cols="12" sm="6">
@@ -54,8 +52,7 @@
                                         ) + '*'
                                     "
                                     :rules="[required, maxValue]"
-                                    type="number"
-                                    required
+                                    type="number"                                    
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="12">
@@ -108,7 +105,10 @@ export default {
             itemParentValue: this.item.parentValue,
             itemAttachmentName: this.item.attachmentName,            
 
-            required: value => !!value || this.$t('QuestionnaireEditor.RequiredField'),
+            required: value => {
+                if(value) return true 
+                return this.$t('QuestionnaireEditor.RequiredField')
+            },
             maxValue: v =>
                 (/^[-+]?\d+$/.test(v) &&
                     Math.abs(parseInt(v)) <= 2147483647 &&
@@ -146,6 +146,9 @@ export default {
         cancel() {
             this.$emit('cancel');
         }
+    },
+    async mounted() {
+        await this.$refs.form.validate()
     }
 };
 </script>
