@@ -2,14 +2,10 @@ import { defineConfig } from 'vite';
 import path from 'path';
 import vue from '@vitejs/plugin-vue2'
 import envCompatible from 'vite-plugin-env-compatible';
-//import { createHtmlPlugin } from 'vite-plugin-html';
-//import { vitePluginHtmlTpl, InjectOptions } from 'vite-plugin-html-tpl'
 import mpaPlugin from 'vite-plugin-mpa-plus'
 import { viteCommonjs } from '@originjs/vite-plugin-commonjs';
 import cleanPlugin from 'vite-plugin-clean';
 import LocalizationPlugin  from './tools/vite-plugin-localization'
-import cshtmlPlugin from './tools/vite-plugin-cshtml2'
-import { globalExternals } from "@fal-works/esbuild-plugin-global-externals";
 
 const ViteFilemanager = require('filemanager-plugin').ViteFilemanager;
 
@@ -41,83 +37,6 @@ const isPack = process.argv.indexOf("--package") >= 0;
 
 const hqDist = !isPack ? hqFolder : join("dist", "package", "hq")
 const webTesterDist = !isPack ? webTesterFolder : join("dist", "package", "webtester")
-
-
-console.log(path.join(hqFolder, "Views", "Shared", "_FinishInstallation.Template.cshtml"))
-console.log(path.join(baseDir, "src/hqapp/main.js"))
-
-
-const pages2 = [
-
-    /*{
-        entry: "src/pages/finishInstallation.js",
-        filename: path.join(hqDist, "Views", "Shared", "_FinishInstallation.cshtml"),
-        template: path.join(hqFolder, "Views", "Shared", "_FinishInstallation.Template.cshtml"),
-		injectOptions: {
-            data: {
-              title: 'index',
-              injectScript: `<script src="./inject.js"></script>`,
-            },
-            tags: [
-              {
-                injectTo: 'body-prepend',
-                tag: 'div',
-                attrs: {
-                  id: 'tag1',
-                },
-              },
-            ],
-          },
-    },*/
-    {
-        entry: "src/hqapp/main.js",
-        //entry: path.join(baseDir, "src/hqapp/main.js"),
-        //filename: path.join(hqDist, "Views", "Shared", "_Layout.cshtml"),
-        filename: 'dist/app-offer.html',
-        //filename: "TestLayout.html",
-        //template: path.join(hqFolder, "Views", "Shared", "_Layout.Template.cshtml")
-        template: path.join(hqFolder, "Views", "Shared", "_Layout.Template.cshtml")
-        //template: "./"
-    },
-
-    /*{
-        entry: "src/pages/logon.js",
-        filename: path.join(hqDist, "Views", "Shared", "_Logon.cshtml"),
-        template: path.join(hqFolder, "Views", "Shared", "_Logon.Template.cshtml")
-    },
-
-    {
-        entry: "src/hqapp/main.js",
-        filename: path.join(hqDist, "Views", "WebInterview", "_WebInterviewLayout.cshtml"),
-        template: path.join(hqFolder, "Views", "WebInterview", "_WebInterviewLayout.Template.cshtml")
-    },
-    {
-        entry: "src/webinterview/main.js",
-        filename: path.join(hqDist, "Views", "WebInterview", "Index.cshtml"),
-        template: path.join(hqFolder, "Views", "WebInterview", "Index.Template.cshtml")
-    },
-
-    {
-        entry: "src/webinterview/main.js",
-        filename: path.join(webTesterDist, "Views", "Shared", "_Layout.cshtml"),
-        template: path.join(webTesterFolder, "Views", "Shared", "_Layout.Template.cshtml")
-    },
-
-    {
-        entry: "src/pages/under_construction.js",
-        filename: path.join(hqDist, "Views", "UnderConstruction", "Index.cshtml"),
-        template: path.join(hqFolder, "Views", "UnderConstruction", "Index.Template.cshtml")
-    },
-
-    {
-        entry: "src/hqapp/main.js",
-        filename: path.join(hqDist, "Views", "Shared", "_EmptyLayout.cshtml"),
-        template: path.join(hqFolder, "Views", "Shared", "_EmptyLayout.Template.cshtml")
-    }*/
-];
-//const pagesRenames = pages.map( page => { return {source: page.template, destination: page.template.replace('.cshtml', '.html') }})
-//pages.forEach(page => { page.template = page.template.replace('.cshtml', '.html') })
-
 
 const pages = {
 
@@ -253,17 +172,10 @@ export default defineConfig({
     vue({ jsx: true }),
     viteCommonjs(),
     envCompatible(),
-    //cshtmlPlugin(),
 	cleanPlugin({
       targetFiles: fileTargets.map(target => target.destination)
     }),
     ViteFilemanager({
-      events: {
-        //start: { copy: { items: pagesSources }},
-        //end: { copy: { items: pagesTargets.concat(fileTargets) }}
-        //end:   { copy: { items: fileTargets }}
-        //end: { copy: { items: pagesTargets }}
-      },
 	  customHooks: [
 	    {
           hookName: 'buildStart',
@@ -274,9 +186,7 @@ export default defineConfig({
         {
           hookName: 'writeBundle',
           commands: {
-            //copy: { items: fileTargets }
             copy: { items: pagesTargets.concat(fileTargets) },
-            //copy: { items: pagesTargets },
 			//del: { items: deleteTemplates },
           }
         }
@@ -284,47 +194,15 @@ export default defineConfig({
     
       options: {
         parallel: 1,
-        log: 'all'
-        //log: 'error'
+        //log: 'all'
+        log: 'error'
       }
     }),
 	LocalizationPlugin({
-      //noHash: true,
-      //inline: true,
-      /*patterns: resxFiles,
-      destination: './src/locale',
-      locales: {
-          '.': ['QuestionnaireEditor']
-      }*/
       patterns: resxFiles,
       destination: "./.resources",
       locales: locales
     }),
-    /*createHtmlPlugin({
-      minify: false,
-        entry: "src/hqapp/main.js",
-        filename: 'dist/app-offer.html',
-        //filename: "TestLayout.html",
-        //template: path.join(hqFolder, "Views", "Shared", "_Layout.Template.cshtml")
-        template: path.join(hqFolder, "Views", "Shared", "_Layout.Template.html"),
-
-      //pages: pages,
-	  injectOptions: {
-            data: {
-              title: 'index',
-              injectScript: `<script src="./inject.js"></script>`,
-            },
-            tags: [
-              {
-                injectTo: 'body-prepend',
-                tag: 'div',
-                attrs: {
-                  id: 'tag1',
-                },
-              },
-            ],
-          },
-    })*/
 	mpaPlugin({
 		pages: pages
 	})
@@ -353,24 +231,6 @@ export default defineConfig({
 		  },
 		  chunkFileNames: 'js/[name]-[hash].js',
           entryFileNames: 'js/[name]-[hash].js'
-		  /*chunkFileNames: (assetInfo) => {
-			  console.log("chunkFileNames " + assetInfo.name);
-			  return 'assets/js/[hash].js';
-		  },
-		  entryFileNames: (assetInfo) => {
-			  console.log("entryFileNames " + assetInfo.name);
-			  return 'assets/js/[hash].js';
-		  },*/
-        /*assetFileNames: (assetInfo) => {
-		  console.log(assetInfo.name);
-          let extType = assetInfo.name.split('.').at(1);
-          if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
-            extType = 'img';
-          }
-          return `assets/${extType}/[name]-[hash][extname]`;
-        },
-        chunkFileNames: 'assets/js/[name]-[hash].js',
-        entryFileNames: 'assets/js/[hash].js',*/
       },
     },
   },

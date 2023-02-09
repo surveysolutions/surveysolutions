@@ -96,8 +96,6 @@
     "vite": "^4.0.4",
     "vite-plugin-clean": "^1.0.0",
     "vite-plugin-env-compatible": "^1.1.1",
-    "vite-plugin-html": "3.2.0",
-    "vite-plugin-html-tpl": "^1.0.6",
     "vite-plugin-mpa-plus": "^0.5.4",
     "vue-cli-plugin-apollo": "0.22.2",
     "vue-jest": "^3.0.7",
