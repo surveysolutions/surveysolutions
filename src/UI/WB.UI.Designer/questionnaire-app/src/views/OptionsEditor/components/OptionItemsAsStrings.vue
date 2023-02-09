@@ -121,9 +121,9 @@ export default {
             return true;
         },
         change(value) {
-            if (this.valid) {
-                const categories = convertToTable(value, this.showParentValue);
-                this.$emit('change', categories);
+            if (this.validate(this.categoriesAsText)) {
+                const categories = convertToTable(this.categoriesAsText, this.showParentValue);
+                this.$emit('changeCategories', categories);
             }
         },
 

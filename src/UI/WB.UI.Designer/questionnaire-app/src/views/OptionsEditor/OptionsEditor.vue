@@ -1,12 +1,12 @@
 <template>
     <v-container fluid>
-        <v-snackbar v-model="snacks.fileUploaded" top color="success">{{
+        <v-snackbar v-model="snacks.fileUploaded" location='top' color="success">{{
             $t('QuestionnaireEditor.FileUploaded')
         }}</v-snackbar>
-        <v-snackbar v-model="snacks.formReverted" top color="success">{{
+        <v-snackbar v-model="snacks.formReverted" location='top' color="success">{{
             $t('QuestionnaireEditor.DataChangesReverted')
         }}</v-snackbar>
-        <v-snackbar v-model="snacks.ajaxError" top color="error">{{
+        <v-snackbar v-model="snacks.ajaxError" location='top' color="error">{{
             $t('QuestionnaireEditor.CommunicationError')
         }}</v-snackbar>
         <v-row align="start" justify="center">
@@ -60,7 +60,7 @@
                                 :categories="categories"
                                 :readonly="isReadonly"
                                 @valid="v => (stringsIsValid = v)"
-                                @change="v => (categories = v)"
+                                @changeCategories="v => (categories = v)"
                                 @editing="v => (inEditMode = v)"
                                 @inprogress="v => (convert = v)"
                             />
@@ -95,6 +95,7 @@
                 accept=".tab, .txt, .tsv, .xls, .xlsx, .ods"
                 :label="$t('QuestionnaireEditor.Upload')"
                 dense
+                show-size
                 @change="uploadFile"
             ></v-file-input>
             <span>
@@ -307,31 +308,30 @@ export default {
             });
         },
 
-        uploadFile(files) {
+        async uploadFile() {
+            let files = this.file
             if (!files) return;
 
             const file = files.length ? files[0] : files;
-
             this.errors = [];
 
-            const apiRequest = this.isCategory
-                ? optionsApi.uploadCategory(file)
-                : optionsApi.uploadOptions(
+            const apiResponse = this.isCategory
+                ? await optionsApi.uploadCategory(file)
+                : await optionsApi.uploadOptions(
                       this.questionnaireRev,
                       this.id,
                       file
                   );
+            
+            this.errors = apiResponse.data.errors;
+            this.categories = apiResponse.data.options || [];
+            this.file = null;
+            this.snacks.fileUploaded = true;
 
-            apiRequest.then(r => {
-                this.errors = r.data.errors;
-                this.categories = r.data.options || [];
-                this.file = null;
-                this.snacks.fileUploaded = true;
-
-                if (this.$refs.table != null) {
-                    this.$refs.table.reset();
-                }
-            });
+            if (this.$refs.table != null) {
+                this.$refs.table.reset();
+            }
+            
         },
 
         close() {

@@ -114,7 +114,7 @@ export default {
                     Math.abs(parseInt(v)) <= 2147483647 &&
                     Math.abs(parseInt(v)) >= -2147483648) ||
                 this.$t('QuestionnaireEditor.ValidationIntValue'),            
-            vaa: true
+            isValid: true
         };
     },
     computed: {
@@ -127,8 +127,8 @@ export default {
             }
         },
         valid: {
-            get(){return this.vaa},
-            set(value) {this.vaa = value }
+            get(){return this.isValid},
+            set(value) {this.isValid = value }
         }
     },
     methods: {
@@ -148,7 +148,8 @@ export default {
         }
     },
     async mounted() {
-        await this.$refs.form.validate()
+        if(this.itemTitle || this.itemValue)
+            await this.$refs.form.validate()
     }
 };
 </script>
