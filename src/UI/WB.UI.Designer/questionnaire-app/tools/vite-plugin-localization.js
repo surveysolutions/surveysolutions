@@ -2,7 +2,7 @@ import LocalizationBuilder from './localization.js';
 
 export default (userOptions = {}) => {
     return {
-        name: "vite-plagin-localization",
+        name: "vite-plugin-localization",
         enforce: "pre",
         userOptions: userOptions,
         buildStart(options){
