@@ -214,7 +214,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return ReturnEmptyResult(query);
             }
 
-            QuestionnaireIdentity questionnaireIdentity;
+            QuestionnaireIdentity? questionnaireIdentity;
 
             if (query.Version == null)
             {
@@ -222,7 +222,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     .Where(q => q.QuestionnaireId.FormatGuid() == query.QuestionnaireId)
                     .ToList();
 
-                questionnaireIdentity = allQuestionnaires.OrderByDescending(q => q.Version).First();
+                questionnaireIdentity = allQuestionnaires.OrderByDescending(q => q.Version).FirstOrDefault();
+                
+                if(questionnaireIdentity == null)
+                    return ReturnEmptyResult(query);
             }
             else
             {

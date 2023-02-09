@@ -43,7 +43,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewApiControllerTests
 
         public void BecauseOf() =>
             viewModel = controller.Interviews(new InterviewsDataTableRequest()
-                {Length = 10, Search = new DataTableRequest.SearchInfo()});
+                {Search = new DataTableRequest.SearchInfo()});
 
         [NUnit.Framework.Test]
         public void should_view_model_not_be_null() =>
