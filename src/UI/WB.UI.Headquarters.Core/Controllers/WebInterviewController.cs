@@ -213,7 +213,9 @@ namespace WB.UI.Headquarters.Controllers
             var emailSettings = this.emailProviderSettingsStorage.GetById(AppSetting.EmailProviderSettings);
 
             bool isAskForEmailAvailable =
-                emailSettings != null && emailSettings.Provider != EmailProvider.None;
+                emailSettings != null 
+                && emailSettings.Provider != EmailProvider.None
+                && interview.Mode == InterviewMode.CAWI;
 
             if (isAskForEmailAvailable)
             {
