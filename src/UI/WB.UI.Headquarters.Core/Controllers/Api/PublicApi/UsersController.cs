@@ -335,6 +335,17 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     return ValidationProblem();
                 }
 
+                HqUser? supervisor = null;
+                if (createdUserRole == UserRoles.Interviewer)
+                {
+                    supervisor = await userManager.FindByNameAsync(model.Supervisor);
+                    if (supervisor == null)
+                    {
+                        ModelState.AddModelError(nameof(model.Supervisor), "Supervisor was not found");
+                        return ValidationProblem();
+                    }
+                }
+
                 var createdUser = new HqUser
                 {
                     UserName = model.UserName.Trim(),
@@ -346,10 +357,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     PasswordChangeRequired = model.Role != Roles.ApiUser
                 };
 
-                HqUser? supervisor = null;
-
-                if (createdUserRole == UserRoles.Interviewer)
-                    supervisor = await userManager.FindByNameAsync(model.Supervisor);
 
                 var workspaceContext = workspaceContextAccessor.CurrentWorkspace();
                 if (workspaceContext == null)
