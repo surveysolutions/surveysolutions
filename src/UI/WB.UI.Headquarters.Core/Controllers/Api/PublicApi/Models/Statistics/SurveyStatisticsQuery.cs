@@ -22,6 +22,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models.Statistics
         /// <summary>
         /// Question variable name or UUID
         /// </summary>
+        [Required]
         public string Question { get; set; }
 
         /// <summary>
