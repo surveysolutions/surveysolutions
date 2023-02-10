@@ -17,7 +17,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             "System.Linq",
             "System.Linq.Expressions",
             "System.Linq.Queryable",
-            "System.Text.RegularExpressions"
+            "System.Text.RegularExpressions",
+            "System.Threading"
         };
 
         private static readonly HashSet<string> ForbiddenClassesFromSystemNamespace = new HashSet<string>
