@@ -382,7 +382,7 @@
 .dataTables_wrapper{
     position: relative;
     .dataTables_filter{
-        @include absolute(-50px, -10px);
+        @include absolute(-62px, 0);
         z-index: 2;
         label{
             font-size: 0;
@@ -540,7 +540,7 @@
                 }
             }
         }
-    }
+    }    
 }
 @media (max-width: $screen-sm-min){
     .table-mobile-devices{
@@ -647,6 +647,9 @@
             }
         }
     }
+    .topic-with-button .search-pusher{
+        display: none;
+    }
 }
 @media (max-width: $screen-xs-min){
     .dataTables_wrapper {
@@ -714,6 +717,9 @@
                 border-bottom-width: 6px;
             }
         }
+    }
+    .topic-with-button .search-pusher{
+        display: none;
     }
 }
 .table.history{

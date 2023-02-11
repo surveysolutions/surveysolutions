@@ -1,15 +1,18 @@
 <template>
     <HqLayout :title="title"
         :hasFilter="true">
-        <div slot="headers">
+        <div slot="headers"
+            class="topic-with-button">
+            <h1>{{title}}</h1>
             <a href="MapDashboard"
-                style="float:right; margin-right:320px; margin-top:14px;">
+                class="btn"
+                style="margin-right:30px;padding:0;">
                 <img style="padding-top:2px;"
                     height="26px;"
                     src="/img/google-maps-markers/map.png"
                     :title="$t('Common.MapDashboard')" />
             </a>
-            <h1>{{title}}</h1>
+            <div class="search-pusher"></div>
         </div>
 
         <Filters slot="filters">
