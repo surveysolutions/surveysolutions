@@ -872,8 +872,8 @@ export default {
 
             return text
                 .replace(/%[A-Za-z0-9_]+%/g, match => this.$t('WebInterviewSettings.AnswerOn', {variable: match.replace(/%/g, '')}))
-                .replace(/%[A-Za-z0-9_]+:barcode%/g, '<img src="../../img/barcode128.png" />')
-                .replace(/%[A-Za-z0-9_]+:qrcode%/g, '<img src="../../img/qrcode.png" />')
+                .replace(/%[A-Za-z0-9_]+:barcode%/g, '<img src="../../../img/barcode128.png" />')
+                .replace(/%[A-Za-z0-9_]+:qrcode%/g, '<img src="../../../img/qrcode.png" />')
         },
         dummy() {
             return false
