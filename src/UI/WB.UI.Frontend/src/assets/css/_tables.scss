@@ -21,11 +21,9 @@
             }
     }
     tr{
-        .without-break{
-            white-space: nowrap;
-            max-width: 300px;
-            text-overflow: clip;
-            overflow: hidden;
+        .type-title{
+            white-space: break-spaces;
+            max-width: 300px;            
             position: relative;
             &:before{
                 display: block;
@@ -201,7 +199,7 @@
 .table-striped {
     tbody tr{
         background-color: #f8f9f9;
-        td.without-break{
+        td.type-title{
             &:before{
                 @include gradient-horizontal(transparent, #f8f9f9, 0%, 70%);
             }
@@ -210,13 +208,13 @@
     &> tbody > tr:nth-of-type(odd){
         background-color: #edeff0;
         &.selected{
-            td.without-break{
+            td.type-title{
                 &:before{
                     @include gradient-horizontal(transparent, $table-selected, 0%, 70%);
                 }
             }
         }
-        td.without-break{
+        td.type-title{
             &:before{
                 @include gradient-horizontal(transparent, #edeff0, 0%, 70%);
             }
@@ -333,7 +331,7 @@
                 a{
                     color: #000;
                 }
-                td.without-break{
+                td.type-title{
                     &:before{
                         @include gradient-horizontal(transparent, $blue-super-light, 0%, 70%);
                     }
@@ -382,7 +380,7 @@
 .dataTables_wrapper{
     position: relative;
     .dataTables_filter{
-        @include absolute(-50px, -10px);
+        @include absolute(-62px, 0);
         z-index: 2;
         label{
             font-size: 0;
@@ -540,7 +538,7 @@
                 }
             }
         }
-    }
+    }    
 }
 @media (max-width: $screen-sm-min){
     .table-mobile-devices{
@@ -548,7 +546,7 @@
             .version{
                 max-width: 100%;
             }
-            tr .without-break{
+            tr .type-title{
                 max-width: 100%;
             }
         thead {display: none;}
@@ -592,7 +590,7 @@
                 clear: both;
                 width: 50%;
             }
-            &.without-break{
+            &.type-title{
                 text-overflow: initial;
                 &:before{
                     float: left;
@@ -646,6 +644,9 @@
                 padding-left: 10px;
             }
         }
+    }
+    .topic-with-button .search-pusher{
+        display: none;
     }
 }
 @media (max-width: $screen-xs-min){
@@ -714,6 +715,9 @@
                 border-bottom-width: 6px;
             }
         }
+    }
+    .topic-with-button .search-pusher{
+        display: none;
     }
 }
 .table.history{
