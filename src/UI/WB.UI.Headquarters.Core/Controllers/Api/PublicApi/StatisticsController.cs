@@ -209,11 +209,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Route(@"")]
         public ActionResult Report([BindRequired]SurveyStatisticsQuery query)
         {
-            if (query.QuestionnaireId == null)
-            {
+            if(!ModelState.IsValid)
                 return ReturnEmptyResult(query);
-            }
-
+            
             QuestionnaireIdentity? questionnaireIdentity;
 
             if (query.Version == null)
@@ -247,9 +245,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     ? (questionnaire.IsQuestion(entityId) ? entityId : (Guid?) null)
                     : questionnaire.GetQuestionIdByVariable(inputVar);
             }
-
-            if (string.IsNullOrWhiteSpace(query.Question))
-                return ReturnEmptyResult(query);
 
             var questionId = GetQuestionIdByGuidOrStataCaption(query.Question);
 
