@@ -317,6 +317,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (!Enum.IsDefined(typeof(UserRoles), (UserRoles)model.Role))
             {
                 ModelState.AddModelError(nameof(model.Role), "Trying to create user with unknown role");
+                return ValidationProblem();
             }
             
             var result = new UserCreationResult();
