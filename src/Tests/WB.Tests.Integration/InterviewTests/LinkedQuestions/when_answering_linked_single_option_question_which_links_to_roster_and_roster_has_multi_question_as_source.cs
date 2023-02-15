@@ -64,10 +64,10 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         {
             var linkedToRosterQuestion = interview.GetLinkedSingleOptionQuestion(Abc.Create.Identity(linkedToRosterId));
             linkedToRosterQuestion.Options.Should().BeEquivalentTo(
-                Abc.Create.RosterVector(1), Abc.Create.RosterVector(2), Abc.Create.RosterVector(3)
-            );
+                new[]{ Abc.Create.RosterVector(1), 
+                    Abc.Create.RosterVector(2), 
+                    Abc.Create.RosterVector(3) });
         }
-
 
         static AppDomainContext appDomainContext;
         static EventContext eventContext;

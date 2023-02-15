@@ -35,7 +35,7 @@
         <PackageReference Include="AWSSDK.Core" Version="3.5.3.7" />
         <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.3.101" />
         <PackageReference Include="AWSSDK.S3" Version="3.5.9.7" />
-        <PackageReference Include="CsvHelper" Version="18.0.0" />
+        <PackageReference Include="CsvHelper" Version="19.0.0" />
         <PackageReference Include="Dapper" Version="2.0.123" />
         <PackageReference Include="Dropbox.Api" Version="6.1.0" />
         <PackageReference Include="Google.Apis" Version="1.50.0" />
@@ -59,8 +59,8 @@
         <PackageReference Include="Microsoft.Graph" Version="4.53.0" />
         <PackageReference Include="Microsoft.Graph.Core" Version="2.0.15" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
-        <PackageReference Include="Npgsql" Version="7.0.1" />
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.1" />
+        <PackageReference Include="Npgsql" Version="7.0.2" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.3" />
         <PackageReference Include="Refit" Version="6.3.2" />
         <PackageReference Include="prometheus-net" Version="4.1.1" />
         <PackageReference Include="Scrutor" Version="4.2.1" />

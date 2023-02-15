@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         [NUnit.Framework.Test] public void should_raise_YesNoQuestionAnswered_event_with_RosterVector_from_command () =>
             eventContext.GetSingleEvent<YesNoQuestionAnswered>()
-                .RosterVector.Should().BeEquivalentTo(0);
+                .RosterVector.Should().BeEquivalentTo(new []{0});
 
         [NUnit.Framework.Test] public void should_raise_YesNoQuestionAnswered_event_with_AnsweredOptions_from_command () =>
             eventContext.GetSingleEvent<YesNoQuestionAnswered>()

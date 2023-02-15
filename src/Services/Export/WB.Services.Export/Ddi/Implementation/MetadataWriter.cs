@@ -27,7 +27,8 @@ namespace WB.Services.Export.Ddi.Implementation
             return this.metaDescription.AddDataFile(fileName);
         }
 
-        public DdiVariable AddDdiVariableToFile(DdiDataFile ddiDataFile, string variableName, DdiDataType type, string label, string instruction, string literal, DdiVariableScale? ddiVariableScale)
+        public DdiVariable AddDdiVariableToFile(DdiDataFile ddiDataFile, string variableName, DdiDataType type, 
+            string label, string instruction, string literal, DdiVariableScale? ddiVariableScale)
         {
             var variable = ddiDataFile.AddVariable(type);
             variable.Name = variableName.RemoveHtmlTags();

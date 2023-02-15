@@ -42,14 +42,16 @@ namespace WB.Tests.Integration.InterviewTests.Variables
         }
 
         public void BecauseOf() =>
-            interview.AnswerTextQuestion(userId, textQuetionId, new decimal[0], DateTime.Now, "Nastya");
+            interview.AnswerTextQuestion(userId, textQuetionId, Array.Empty<decimal>(),
+                DateTime.Now, "Nastya");
 
         [NUnit.Framework.Test] public void should_raise_VariablesValuesChanged_event_for_the_variable_with_value_equal_to_6 () =>
            eventContext.ShouldContainEvent<VariablesChanged>(@event
                => (long?)@event.ChangedVariables[0].NewValue == 6 && @event.ChangedVariables[0].Identity.Id == variableId);
 
         [NUnit.Framework.Test] public void should_raise_VariablesDisabled_event_for_the_variable () =>
-           eventContext.GetSingleEvent<VariablesEnabled>().Variables.Should().BeEquivalentTo(Create.Identity(variableId, RosterVector.Empty));
+           eventContext.GetSingleEvent<VariablesEnabled>().Variables.Should()
+               .BeEquivalentTo(new []{Create.Identity(variableId, RosterVector.Empty)});
 
         private static AppDomainContext appDomainContext;
         private static EventContext eventContext;
