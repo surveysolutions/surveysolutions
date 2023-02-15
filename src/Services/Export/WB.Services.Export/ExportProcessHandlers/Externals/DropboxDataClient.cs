@@ -73,7 +73,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
             logger.LogTrace("Done Uploading file: {folder}/{fileName} - {length}bytes", folder, fileName, contentLength);
         }
 
-        public async Task<long?> GetFreeSpaceAsync()
+        public async Task<long?> GetFreeSpaceAsync(CancellationToken cancellationToken)
         {
             var storageInfo = await this.Client.Users.GetSpaceUsageAsync();
             if (storageInfo == null) return null;

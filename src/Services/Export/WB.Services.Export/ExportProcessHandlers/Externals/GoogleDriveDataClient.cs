@@ -144,14 +144,14 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
             await DriveService.Files.Create(fileMetadata, fileStream, "application/octet-stream").UploadAsync(cancellationToken);
         }
 
-        public async Task<long?> GetFreeSpaceAsync()
+        public async Task<long?> GetFreeSpaceAsync(CancellationToken cancellationToken)
         {
             var storageInfo = await this.retry.ExecuteAsync(() =>
             {
                 var storageInfoRequest = DriveService.About.Get();
                 storageInfoRequest.Fields = "storageQuota";
 
-                return storageInfoRequest.ExecuteAsync();
+                return storageInfoRequest.ExecuteAsync(cancellationToken);
             });
             if (storageInfo?.StorageQuota?.Limit == null) return null;
 
