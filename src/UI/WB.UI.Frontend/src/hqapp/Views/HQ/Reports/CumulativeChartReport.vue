@@ -72,19 +72,10 @@
 
 <script>
 import routeSync from '~/shared/routeSync'
-import Vue from 'vue'
 import moment from 'moment'
 import {forEach, findIndex, assign, sortBy, find} from 'lodash'
 
 const LineChart = () => import('./CumulativeChart')
-
-const dataSetInfo = [
-    {status: 'Completed',              label: Vue.$t('Strings.InterviewStatus_Completed'),              backgroundColor: '#86B828'},
-    {status: 'RejectedBySupervisor',   label: Vue.$t('Strings.InterviewStatus_RejectedBySupervisor'),   backgroundColor: '#FFF200'},
-    {status: 'ApprovedBySupervisor',   label: Vue.$t('Strings.InterviewStatus_ApprovedBySupervisor'),   backgroundColor: '#13A388'},
-    {status: 'RejectedByHeadquarters', label: Vue.$t('Strings.InterviewStatus_RejectedByHeadquarters'), backgroundColor: '#E06B5C'},
-    {status: 'ApprovedByHeadquarters', label: Vue.$t('Strings.InterviewStatus_ApprovedByHeadquarters'), backgroundColor: '#00647F'},
-]
 
 export default {
     mixins: [routeSync],
@@ -99,6 +90,13 @@ export default {
             base64Encoded: null,
             chart: null,
             relativeToData: false,
+            dataSetInfo: [
+                {status: 'Completed',              label: this.$t('Strings.InterviewStatus_Completed'),              backgroundColor: '#86B828'},
+                {status: 'RejectedBySupervisor',   label: this.$t('Strings.InterviewStatus_RejectedBySupervisor'),   backgroundColor: '#FFF200'},
+                {status: 'ApprovedBySupervisor',   label: this.$t('Strings.InterviewStatus_ApprovedBySupervisor'),   backgroundColor: '#13A388'},
+                {status: 'RejectedByHeadquarters', label: this.$t('Strings.InterviewStatus_RejectedByHeadquarters'), backgroundColor: '#E06B5C'},
+                {status: 'ApprovedByHeadquarters', label: this.$t('Strings.InterviewStatus_ApprovedByHeadquarters'), backgroundColor: '#00647F'},
+            ]
         }
     },
 
@@ -307,8 +305,8 @@ export default {
                     const datasets = []
 
                     forEach(response.data.dataSets, set => {
-                        const infoIndex = findIndex(dataSetInfo, {status: set.status})
-                        const info = dataSetInfo[infoIndex]
+                        const infoIndex = findIndex(this.dataSetInfo, {status: set.status})
+                        const info = this.dataSetInfo[infoIndex]
 
                         datasets.push(
                             assign(info, {

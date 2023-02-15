@@ -5,15 +5,19 @@ import '../assets/css/markup.scss'
 import '../assets/css/markup-specific.scss'
 
 import Vue from 'vue'
-import VueApollo from 'vue-apollo'
+import Vuei18n from '~/shared/plugins/locale'
+import { browserLanguage } from '~/shared/helpers'
+const i18n = Vuei18n.initialize(browserLanguage)
 
+import VueApollo from 'vue-apollo'
 Vue.use(VueApollo)
 import { sync } from 'vuex-router-sync'
-import Vuei18n from '~/shared/plugins/locale'
+
 import http from '~/shared/plugins/http'
 import config from '~/shared/config'
 import store from './store'
 import moment from 'moment'
+moment.locale(browserLanguage)
 
 import './components'
 import './compatibility.js'
@@ -40,17 +44,16 @@ poly.polyfill()
 import hqApi from './api'
 import apolloClient from './api/graphql'
 
-import { browserLanguage } from '~/shared/helpers'
-moment.locale(browserLanguage)
 
-const i18n = Vuei18n.initialize(browserLanguage)
 
 Vue.use(config)
 Vue.use(http)
 Vue.use(hqApi)
 
-const viewsProvider = require('./Views').default
-const Router = require('./router').default
+//const viewsProvider = require('./Views').default
+import viewsProvider from './Views'
+//const Router = require('./router').default
+import Router from './router'
 
 const views = viewsProvider(store)
 

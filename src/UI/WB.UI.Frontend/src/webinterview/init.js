@@ -5,7 +5,7 @@ import 'toastr/build/toastr.css'
 import 'ag-grid-community/dist/styles/ag-grid.css'
 import 'ag-grid-community/dist/styles/ag-theme-bootstrap.css'
 
-global.jQuery = require('jquery')
+window.jQuery = require('jquery')
 
 import moment from 'moment'
 moment.locale(browserLanguage)

@@ -3,7 +3,7 @@ import Vue from 'vue'
 
 /* eslint:disable:no-console */
 Vue.config.errorHandler = (error, vm) => {
-    if (error.response.data != null) {
+    if (error.response != null && error.response.data != null) {
         var data = error.response.data
 
         // handling asp net core validation errors

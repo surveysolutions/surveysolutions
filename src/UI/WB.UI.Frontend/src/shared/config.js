@@ -1,7 +1,7 @@
-const config = global.CONFIG
+const config = window.CONFIG
 
 /*  the Plugin */
-export default Object.assign(global.CONFIG || {}, {
+export default Object.assign(window.CONFIG || {}, {
     install(Vue) {
 
         config.hubName = config.hubName || 'interview'

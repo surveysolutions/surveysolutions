@@ -4,8 +4,16 @@ import vue from '@vitejs/plugin-vue2'
 import envCompatible from 'vite-plugin-env-compatible';
 import mpaPlugin from 'vite-plugin-mpa-plus'
 import { viteCommonjs } from '@originjs/vite-plugin-commonjs';
+import commonjs from '@rollup/plugin-commonjs';
 import cleanPlugin from 'vite-plugin-clean';
 import LocalizationPlugin  from './tools/vite-plugin-localization'
+import { globalExternals } from "@fal-works/esbuild-plugin-global-externals";
+import inject from '@rollup/plugin-inject';
+//import Components from 'unplugin-vue-components/vite'
+//import 'jquery';
+import legacy from '@vitejs/plugin-legacy'
+import vitePluginRequire from "vite-plugin-require";
+import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
 
 const ViteFilemanager = require('filemanager-plugin').ViteFilemanager;
 
@@ -165,12 +173,49 @@ export default defineConfig({
       '.vue'
     ]
   },
+  transpile: [
+        'autonumeric',
+        'vue-page-title',
+        '@google/markerclustererplus'
+  ],
+  define: {
+	  //global: 'window'
+	  //global: {
+		//$: require("jquery"),
+		//jquery: require("jquery"),
+		//jQuery: require("jquery"),
+	  //},
+		/*$: require("jquery"),
+		jquery: require("jquery"),
+		'window.jQuery': require("jquery"),
+		jQuery: require("jquery"),*/
+  },
+  /*externals: {
+    //jquery: 'jQuery'
+    $: 'jQuery',
+    jquery: 'jQuery',
+    //'window.jQuery': 'jQuery',
+    jQuery: 'jQuery',
+  },*/
   optimizeDeps: {
-    include: ["jquery"],
+	  //disabled: false,
+    include: ['jquery'],
   },
   plugins: [
+	/*inject({
+            $: 'jquery',
+            //jquery: 'jquery',
+            //'window.jQuery': 'jquery',
+            jQuery: 'jquery',
+        }),*/
     vue({ jsx: true }),
+	/*legacy({
+      targets: ['defaults', 'not IE 11'],
+    }),*/
+	VueI18nPlugin({ /* options */ }),
+	vitePluginRequire(),
     viteCommonjs(),
+    //commonjs(),
     envCompatible(),
 	cleanPlugin({
       targetFiles: fileTargets.map(target => target.destination)
@@ -208,16 +253,25 @@ export default defineConfig({
 	})
   ],
   build: {
+	minify: false,
     rollupOptions: {
-      external: ['jquery'],
+		plugins: [
+			inject({   // => that should be first under plugins array
+				$: 'jquery',
+				jQuery: 'jquery',
+			})
+		],
+      //external: ['jquery'],
       output: {
+		  //strict: false,
 		  globals: {
-			$: 'jquery',
-            jquery: 'jquery',
-            'window.jQuery': 'jquery',
-            jQuery: 'jquery',
-               //jquery: 'window.jQuery',
-               //jquery: 'window.$'
+			//$: 'jquery',
+            //jquery: 'jquery',
+            //'window.jQuery': 'jquery',
+            //jQuery: 'jquery',
+              // jquery: 'window.jQuery',
+              // jquery: 'window.jquery',
+              // jquery: 'window.$'
           },
 		  assetFileNames: (assetInfo) => {
 			  let extType = assetInfo.name.split('.').at(1);

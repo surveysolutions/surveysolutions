@@ -1,4 +1,4 @@
-@using WB.UI.Shared.Web.Extensions
+﻿@using WB.UI.Shared.Web.Extensions
 @using System.Globalization
 <!DOCTYPE html>
 <html lang="@CultureInfo.CurrentUICulture.Name">
@@ -8,17 +8,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @Html.GenerateFavicon(Url.Static("/img/identity/favicon-hq"))
     <title>@ViewBag.Title</title>
-    <partial name="GlobalSettings" />
+    <partial name="GlobalSettings" ></partial>
     <locale component="hq"></locale>
     @RenderSection("scripts", false)
-<link href="/js/chunk-common.js" rel="preload" as="script"><link href="/js/chunk-vendors.js" rel="preload" as="script"><link href="/js/hq_vue.js" rel="preload" as="script"></head>
+  <script type="module" crossorigin src="/js/markup-68e80956.js"></script>
+  <script type="module" crossorigin src="/js/_commonjsHelpers-8353f7e9.js"></script>
+  <script type="module" crossorigin src="/js/jquery-96d801b6.js"></script>
+  <script type="module" crossorigin src="/js/jquery-a7eb4c75.js"></script>
+  <script type="module" crossorigin src="/js/affix-26700b6c.js"></script>
+  <script type="module" crossorigin src="/js/modal-fa458387.js"></script>
+  <script type="module" crossorigin src="/js/vue.runtime.esm-70979b4c.js"></script>
+  <script type="module" crossorigin src="/js/_plugin-vue2_normalizer-9c6b8b3d.js"></script>
+  <script type="module" crossorigin src="/js/index-9535d17e.js"></script>
+  <script type="module" crossorigin src="/js/bootbox.all-702b3cc5.js"></script>
+  <script type="module" crossorigin src="/js/modal-11901139.js"></script>
+  <script type="module" crossorigin src="/js/index-95d6a55d.js"></script>
+  <script type="module" crossorigin src="/js/lodash-16a851c0.js"></script>
+  <script type="module" crossorigin src="/js/helpers-60cd3d06.js"></script>
+  <script type="module" crossorigin src="/js/vue-router.esm-d5697c8d.js"></script>
+  <script type="module" crossorigin src="/js/config-477b40b3.js"></script>
+  <script type="module" crossorigin src="/js/index-df479079.js"></script>
+  <script type="module" crossorigin src="/js/compatibility-2b332fc2.js"></script>
+  <script type="module" crossorigin src="/js/main-c61647e9.js"></script>
+  <link rel="stylesheet" href="/css/markup-eda548e9.css">
+  <link rel="stylesheet" href="/css/vue-router-43305bcc.css">
+  <link rel="stylesheet" href="/css/main-49412123.css">
+  <link rel="stylesheet" href="/css/markup-specific-53a808af.css">
+</head>
 <body class='wide-navbar'>
     <header>
-        <partial name="NavigationBar" />
+        <partial name="NavigationBar" ></partial>
     </header>
-    <partial name="NoticeBar"/>
+    <partial name="NoticeBar"></partial>
     @RenderBody()
-    <partial name="Footer" />
-    <partial name="_Clickjacking"/>
-<script type="text/javascript" src="/js/chunk-vendors.js"></script><script type="text/javascript" src="/js/chunk-common.js"></script><script type="text/javascript" src="/js/hq_vue.js"></script></body>
+    <partial name="Footer" ></partial>
+    <partial name="_Clickjacking"></partial>
+
+</body>
 </html>
