@@ -110,9 +110,9 @@ for (var attr in pages) {
   var filenamePath = path.join(destFileFolderFull, filename)
 
   pagesSources.push({ source: pageObj.template, destination: templatesFolderFull })
-  renameSources.push({ path: templatesFolderFull, oldName: templateFilename, newName: templateFilenameHtml })
+  renameSources.push({ path: path.resolve(__dirname, templatesFolderFull), oldName: templateFilename, newName: templateFilenameHtml })
 
-  renameTargets.push({ path: destFileFolderFull, oldName: filenameHtml, newName: filename })
+  renameTargets.push({ path: path.resolve(__dirname, destFileFolderFull), oldName: filenameHtml, newName: filename })
   pagesTargets.push({ source: filenamePath, destination: origFolder })
 
   pageObj.filename = filenameHtmlPath
