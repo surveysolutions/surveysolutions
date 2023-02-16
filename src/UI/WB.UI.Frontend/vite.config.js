@@ -98,22 +98,24 @@ var renameTargets = [];
 for (var attr in pages) {
   const pageObj = pages[attr]
   const filename = path.basename(pageObj.filename)
+  const filenameHtml = attr + '.html'
   const origFolder = path.dirname(pageObj.filename)
   const templateFilename = path.basename(pageObj.template)
-  const templateFilenameHtml = templateFilename.replace('.cshtml', '.html')
+  const templateFilenameHtml = attr + '.html'
   var templatesFolderFull = path.join(baseDir, ".templates", attr)
   var destFileFolderFull = path.join(baseDir, "dist", ".templates", attr)
-  var templatePath = path.join(templatesFolderFull, templateFilenameHtml)
+  var templateHtmlPath = path.join(templatesFolderFull, templateFilenameHtml)
+  var filenameHtmlPath = path.join(destFileFolderFull, filenameHtml)
   var filenamePath = path.join(destFileFolderFull, filename)
 
   pagesSources.push({ source: pageObj.template, destination: templatesFolderFull })
   renameSources.push({ path: templatesFolderFull, oldName: templateFilename, newName: templateFilenameHtml })
 
-  renameTargets.push({ path: destFileFolderFull, oldName: templateFilenameHtml, newName: filename })
+  renameTargets.push({ path: destFileFolderFull, oldName: filenameHtml, newName: filename })
   pagesTargets.push({ source: filenamePath, destination: origFolder })
 
-  pageObj.filename = filenamePath
-  pageObj.template = templatePath
+  pageObj.filename = filenameHtmlPath
+  pageObj.template = templateHtmlPath
 }
 
 
