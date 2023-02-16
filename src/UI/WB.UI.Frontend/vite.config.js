@@ -183,7 +183,7 @@ export default defineConfig({
   transpile: [
         'autonumeric',
         'vue-page-title',
-        '@google/markerclustererplus'
+        '@googlemaps/markerclusterer'
   ],
   optimizeDeps: {
     include: ['jquery'],
