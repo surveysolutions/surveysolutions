@@ -355,19 +355,6 @@ namespace WB.UI.Designer
                     name: "default",
                     pattern: "{controller=QuestionnaireList}/{action=Index}/{id?}");
                 routes.MapRazorPages();
-
-                /*if (env.IsDevelopment())
-                {
-                    routes.MapToVueCliProxy("{*path}", new SpaOptions
-                        {
-                            SourcePath = SpaRoot
-                        },
-                        port: 0,
-                        npmScript: "serve", //(System.Diagnostics.Debugger.IsAttached) ? "serve" : null,
-                        regex: "Compiled successfully",
-                        forceKill: true
-                    );
-                }*/
             });
             
             app.UseSpa(spa =>
