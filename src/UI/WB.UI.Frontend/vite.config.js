@@ -91,18 +91,28 @@ const pages = {
 };
 
 var pagesSources = [];
+var renameSources = [];
 var pagesTargets = [];
-var deleteTemplates = [];
+var renameTargets = [];
+
 for (var attr in pages) {
   const pageObj = pages[attr]
-  var filename = attr + ".html"
-  var template = attr + "_s.html"
-  var filenamePath = path.join(baseDir, "dist", ".templates", template)
-  var templatePath = path.join(baseDir, ".templates", template)
-  pagesSources.push({ source: pageObj.template, destination: templatePath, iFileCopy: true })
-  pagesTargets.push({ source: filenamePath, destination: pageObj.filename, iFileCopy: true })
-  deleteTemplates.push(templatePath)
-  pageObj.filename = filename
+  const filename = path.basename(pageObj.filename)
+  const origFolder = path.dirname(pageObj.filename)
+  const templateFilename = path.basename(pageObj.template)
+  const templateFilenameHtml = templateFilename.replace('.cshtml', '.html')
+  var templatesFolderFull = path.join(baseDir, ".templates", attr)
+  var destFileFolderFull = path.join(baseDir, "dist", ".templates", attr)
+  var templatePath = path.join(templatesFolderFull, templateFilenameHtml)
+  var filenamePath = path.join(destFileFolderFull, filename)
+
+  pagesSources.push({ source: pageObj.template, destination: templatesFolderFull })
+  renameSources.push({ path: templatesFolderFull, oldName: templateFilename, newName: templateFilenameHtml })
+
+  renameTargets.push({ path: destFileFolderFull, oldName: templateFilenameHtml, newName: filename })
+  pagesTargets.push({ source: filenamePath, destination: origFolder })
+
+  pageObj.filename = filenamePath
   pageObj.template = templatePath
 }
 
@@ -176,30 +186,32 @@ export default defineConfig({
     include: ['jquery'],
   },
   plugins: [
-	/*inject({
+    /*inject({
             $: 'jquery',
             //jquery: 'jquery',
             //'window.jQuery': 'jquery',
             jQuery: 'jquery',
         }),*/
     vue({ jsx: true }),
-	vitePluginRequire(),
+    vitePluginRequire(),
     viteCommonjs(),
     envCompatible(),
-	cleanPlugin({
+    cleanPlugin({
       targetFiles: fileTargets.map(target => target.destination)
     }),
     ViteFilemanager({
-	  customHooks: [
-	    {
+      customHooks: [
+        {
           hookName: 'buildStart',
           commands: {
-            copy: { items: pagesSources }
+            copy: { items: pagesSources },
+            rename: { items : renameSources }
           }
         },
         {
           hookName: 'writeBundle',
           commands: {
+            rename: { items : renameTargets },
             copy: { items: pagesTargets.concat(fileTargets) },
           }
         }
