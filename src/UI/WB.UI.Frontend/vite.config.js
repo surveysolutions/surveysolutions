@@ -36,6 +36,7 @@ const locales = {
 }
 
 const isPack = process.argv.indexOf("--package") >= 0;
+console.log("isPackage:  " + isPack)
 
 const hqDist = !isPack ? hqFolder : join("dist", "package", "hq")
 const webTesterDist = !isPack ? webTesterFolder : join("dist", "package", "webtester")
