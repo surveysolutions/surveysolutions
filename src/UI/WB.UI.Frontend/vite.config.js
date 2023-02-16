@@ -104,7 +104,7 @@ for (var attr in pages) {
   const templateFilename = path.basename(pageObj.template)
   const templateFilenameHtml = attr + '.html'
   var templatesFolderFull = path.join(baseDir, ".templates", attr)
-  var destFileFolderFull = path.join(baseDir, "dist", ".templates", attr)
+  var destFileFolderFull = path.join(baseDir, "dist", "dist", ".templates", attr)
   var templateHtmlPath = path.join(templatesFolderFull, templateFilenameHtml)
   var filenameHtmlPath = path.join(destFileFolderFull, filenameHtml)
   var filenamePath = path.join(destFileFolderFull, filename)
@@ -207,6 +207,9 @@ export default defineConfig({
         {
           hookName: 'buildStart',
           commands: {
+			del: {
+               items: ['./dist']
+            },
             copy: { items: pagesSources },
             rename: { items : renameSources }
           }
