@@ -209,7 +209,7 @@ export default defineConfig({
           }
         },
         {
-          hookName: 'writeBundle',
+          hookName: 'closeBundle',
           commands: {
             rename: { items : renameTargets },
             copy: { items: pagesTargets.concat(fileTargets) },
