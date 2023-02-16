@@ -205,7 +205,7 @@ export default defineConfig({
     ViteFilemanager({
       customHooks: [
         {
-          hookName: 'buildStart',
+          hookName: 'options',
           commands: {
 			del: {
                items: ['./dist']
