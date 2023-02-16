@@ -490,7 +490,7 @@
 </template>
 
 <script>
-import MarkerClusterer from '@google/markerclustererplus'
+import {MarkerClusterer, Cluster, SuperClusterAlgorithm} from '@googlemaps/markerclusterer'
 import Vue from 'vue'
 import * as toastr from 'toastr'
 import {DateFormats, humanFileSize} from '~/shared/helpers'
@@ -639,11 +639,18 @@ export default {
                 bounds.extend(marker.getPosition())
             })
 
-            this.markerCluster = new MarkerClusterer(this.map, markers, {
-                imagePath: '/img/google-maps-markers/m',
-                enableRetinaIcons: true,
-                minimumClusterSize: this.minimumClusterSize,
-                averageCenter: true,
+            MarkerClusterer.prototype.getClusters = function(){
+                return this.clusters
+            }
+
+            Cluster.prototype.getMarkers = function(){
+                return this.markers
+            }
+
+            this.markerCluster = new MarkerClusterer({
+                map: this.map,
+                markers: markers,
+                algorithm: new SuperClusterAlgorithm( { minPoints: this.minimumClusterSize}),
             })
 
             google.maps.event.addListener(this.markerCluster, 'clusteringend', () => {
@@ -681,11 +688,11 @@ export default {
 
             for (let i = 1; i < clusters.length + 1; i++) {
                 let cluster = clusters[i - 1]
-                let center = cluster.getCenter()
+                let center = cluster.position
                 let markers = cluster.getMarkers()
                 clustersMap.set(i, {
                     center: center,
-                    size: cluster.getSize(),
+                    size: cluster.count,
                 })
                 markers.forEach(marker => {
                     let markerId = marker.get('id')

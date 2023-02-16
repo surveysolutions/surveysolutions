@@ -90,7 +90,7 @@ export default {
                 {
                     data: 'questionnaireTitle',
                     title: this.$t('Reports.SurveyName'),
-                    className: 'without-break changed-recently',
+                    className: 'type-title changed-recently',
                     name: 'QuestionnaireTitle',
                     render(data, type, row) {
                         if(self.questionnaireId != null) {

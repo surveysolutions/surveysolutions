@@ -30,9 +30,12 @@ function loadLocaleMessages() {
 
 const messages = loadLocaleMessages();
 
+var userLang = navigator.language || navigator.userLanguage;
+const userLocale = userLang.split('-')[0];
+
 // Create VueI18n instance with options
 export const i18n = new VueI18n({
-    locale: process.env.VUE_APP_I18N_LOCALE || 'en',
+    locale: userLocale || process.env.VUE_APP_I18N_LOCALE || 'en',
     fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE || 'en',
     messages
 });
