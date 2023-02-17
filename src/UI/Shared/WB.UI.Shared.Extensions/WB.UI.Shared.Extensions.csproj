@@ -97,7 +97,7 @@
       <Version>1.3.1.2</Version>
     </PackageReference>
     <PackageReference Include="MvvmCross.DroidX.RecyclerView">
-      <Version>9.0.9</Version>
+      <Version>9.0.8</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.AsyncLayoutInflater">
       <Version>1.0.0.16</Version>
