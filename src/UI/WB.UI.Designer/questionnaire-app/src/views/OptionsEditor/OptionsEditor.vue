@@ -59,7 +59,7 @@
                                 :show-parent-value="isCascading"
                                 :categories="categories"
                                 :readonly="isReadonly"
-                                @valid="v => (stringsIsValid = v)"
+                                @string-valid="v => (stringsIsValid = v)"
                                 @changeCategories="v => (categories = v)"
                                 @editing="v => (inEditMode = v)"
                                 @inprogress="v => (convert = v)"
@@ -223,7 +223,7 @@ export default {
         },
 
         canApplyChanges() {
-            return this.tab == 1 ? this.stringsIsValid : true;
+            return this.tab == 'strings' ? this.stringsIsValid : true;
         }
     },
 

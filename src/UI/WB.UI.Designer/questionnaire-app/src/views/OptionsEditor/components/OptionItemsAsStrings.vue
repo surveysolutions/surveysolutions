@@ -79,7 +79,7 @@ export default {
 
         validity(to, from) {
             if (to != from) {
-                this.$emit('valid', to === true);
+                this.$emit('string-valid', to === true);
             }
         }
     },

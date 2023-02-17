@@ -44,7 +44,7 @@
             @saveCategory="save"
         />
 
-        <v-snackbar v-model="snacks.rowAdded" top color="success">{{
+        <v-snackbar v-model="snacks.rowAdded" location='top' color="success">{{
             $t('QuestionnaireEditor.RowAdded')
         }}</v-snackbar>
 
