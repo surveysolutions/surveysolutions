@@ -109,7 +109,7 @@ for (var attr in pages) {
   pagesSources.push({ source: pageObj.template, destination: templatesFolderFull, name : templateFilenameHtml })
   pagesTargets.push({ source: filenameHtmlPath, destination: origFolder, name: filename })
 
-  pageObj.filename = filenameHtmlPath
+  pageObj.filename = filenameHtml
   pageObj.template = templateHtmlPath
 }
 
