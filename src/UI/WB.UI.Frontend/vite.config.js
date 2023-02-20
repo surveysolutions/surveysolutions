@@ -101,8 +101,8 @@ for (var attr in pages) {
   const origFolder = path.dirname(pageObj.filename)
   const templateFilename = path.basename(pageObj.template)
   const templateFilenameHtml = attr + '.html'
-  var templatesFolderFull = path.join(baseDir, ".templates", attr)
-  var destFileFolderFull = path.join(baseDir, "dist", ".templates", attr)
+  var templatesFolderFull = path.join(baseDir, ".templates")
+  var destFileFolderFull = path.join(baseDir, "dist", ".templates")
   var templateHtmlPath = path.join(templatesFolderFull, templateFilenameHtml)
   var filenameHtmlPath = path.join(destFileFolderFull, filenameHtml)
   var filenamePath = path.join(destFileFolderFull, filename)
