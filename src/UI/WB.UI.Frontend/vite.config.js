@@ -92,9 +92,7 @@ const pages = {
 };
 
 var pagesSources = [];
-var renameSources = [];
 var pagesTargets = [];
-var renameTargets = [];
 
 for (var attr in pages) {
   const pageObj = pages[attr]
@@ -108,12 +106,8 @@ for (var attr in pages) {
   var templateHtmlPath = path.join(templatesFolderFull, templateFilenameHtml)
   var filenameHtmlPath = path.join(destFileFolderFull, filenameHtml)
   var filenamePath = path.join(destFileFolderFull, filename)
-
-  pagesSources.push({ source: pageObj.template, destination: templatesFolderFull })
-  renameSources.push({ path: path.resolve(__dirname, templatesFolderFull), oldName: templateFilename, newName: templateFilenameHtml })
-
-  renameTargets.push({ path: path.resolve(__dirname, destFileFolderFull), oldName: filenameHtml, newName: filename })
-  pagesTargets.push({ source: filenamePath, destination: origFolder })
+  pagesSources.push({ source: pageObj.template, destination: templatesFolderFull, name : templateFilenameHtml })
+  pagesTargets.push({ source: filenameHtmlPath, destination: origFolder, name: filename })
 
   pageObj.filename = filenameHtmlPath
   pageObj.template = templateHtmlPath
@@ -211,13 +205,11 @@ export default defineConfig({
                items: ['./dist']
             },
             copy: { items: pagesSources },
-            rename: { items : renameSources }
           }
         },
         {
           hookName: 'closeBundle',
           commands: {
-            rename: { items : renameTargets },
             copy: { items: pagesTargets.concat(fileTargets) },
           }
         }
