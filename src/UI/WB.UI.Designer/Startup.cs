@@ -23,7 +23,7 @@ using Microsoft.Net.Http.Headers;
 using Ncqrs.Domain.Storage;
 using Newtonsoft.Json.Serialization;
 using reCAPTCHA.AspNetCore;
-using VueCliMiddleware;
+//using VueCliMiddleware;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
@@ -355,19 +355,6 @@ namespace WB.UI.Designer
                     name: "default",
                     pattern: "{controller=QuestionnaireList}/{action=Index}/{id?}");
                 routes.MapRazorPages();
-
-                if (env.IsDevelopment())
-                {
-                    routes.MapToVueCliProxy("{*path}", new SpaOptions
-                        {
-                            SourcePath = SpaRoot
-                        },
-                        port: 0,
-                        npmScript: "serve", //(System.Diagnostics.Debugger.IsAttached) ? "serve" : null,
-                        regex: "Compiled successfully",
-                        forceKill: true
-                    );
-                }
             });
             
             app.UseSpa(spa =>
