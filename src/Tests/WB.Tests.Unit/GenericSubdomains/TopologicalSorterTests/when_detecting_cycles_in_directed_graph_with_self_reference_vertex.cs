@@ -32,16 +32,16 @@ namespace WB.Tests.Unit.GenericSubdomains.TopologicalSorterTests
             cycles.Count.Should().Be(4);
 
         [NUnit.Framework.Test] public void should_find_cycle_with_0_1_2 () =>
-            cycles[0].Should().BeEquivalentTo(0, 1, 2);
+            cycles[0].Should().BeEquivalentTo(new []{0, 1, 2 });
 
         [NUnit.Framework.Test] public void should_find_cycle_with_4_6 () =>
-            cycles[1].Should().BeEquivalentTo(4, 6);
+            cycles[1].Should().BeEquivalentTo(new []{4, 6});
 
         [NUnit.Framework.Test] public void should_find_cycle_with_3_5 () =>
-            cycles[2].Should().BeEquivalentTo(3, 5);
+            cycles[2].Should().BeEquivalentTo(new[]{3, 5});
 
         [NUnit.Framework.Test] public void should_find_cycle_with_7 () =>
-            cycles[3].Should().BeEquivalentTo(7);
+            cycles[3].Should().BeEquivalentTo(new [] { 7 });
 
         private static ITopologicalSorter<int> sorter;
         private static List<List<int>> cycles;

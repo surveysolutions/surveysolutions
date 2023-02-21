@@ -16,7 +16,7 @@ namespace WB.Services.Export.ExportProcessHandlers
         /// <returns>Folder Id</returns>
         Task<string> CreateApplicationFolderAsync(string subFolder );
         Task<string> CreateFolderAsync(string folder, string parentFolder);
-        Task<long?> GetFreeSpaceAsync();
+        Task<long?> GetFreeSpaceAsync(CancellationToken cancellationToken);
         Task UploadFileAsync(string folder, string fileName, Stream fileStream, long contentLength, CancellationToken cancellationToken = default);
     }
 }

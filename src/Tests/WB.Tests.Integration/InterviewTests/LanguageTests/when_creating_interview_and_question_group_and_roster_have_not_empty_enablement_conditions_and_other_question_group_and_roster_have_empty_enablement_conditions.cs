@@ -68,10 +68,10 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
             result.GroupsDisabledEventCount.Should().Be(1);
 
         [NUnit.Framework.Test] public void should_put_only_id_of_question_with_enablement_condition_to_QuestionsDisabled_event () =>
-            result.QuestionsDisabledEventQuestionIds.Should().BeEquivalentTo(questionId);
+            result.QuestionsDisabledEventQuestionIds.Should().BeEquivalentTo(new [] {questionId});
 
         [NUnit.Framework.Test] public void should_put_only_id_of_group_instances_with_enablement_conditions_to_QuestionsDisabled_event () =>
-            result.GroupsDisabledEventGroupIds.Should().BeEquivalentTo(groupId, rosterId, rosterId);
+            result.GroupsDisabledEventGroupIds.Should().BeEquivalentTo(new [] {groupId, rosterId, rosterId});
 
         private static AppDomainContext appDomainContext;
         private static InvokeResult result;

@@ -20,13 +20,13 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
     {
         private readonly ILogger<OneDriveDataClient> logger;
         private readonly ITenantContext tenantContext;
-        private IGraphServiceClient? graphServiceClient;
+        private GraphServiceClient? graphServiceClient;
         private string refreshToken = string.Empty;
         private readonly AsyncRetryPolicy retry;
 
         private static long MaxAllowedFileSizeByMicrosoftGraphApi = 4 * 1024 * 1024;
 
-        private IGraphServiceClient GraphServiceClient
+        private GraphServiceClient GraphServiceClient
         {
             get => graphServiceClient ?? throw new InvalidOperationException("Client is not initialized;");
             set => graphServiceClient = value;
@@ -121,9 +121,10 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
             }
         }
 
-        public async Task<long?> GetFreeSpaceAsync()
+        public async Task<long?> GetFreeSpaceAsync(CancellationToken cancellationToken)
         {
-            var storageInfo = await this.retry.ExecuteAsync(GraphServiceClient.Drive.Request().GetAsync);
+            var storageInfo = 
+                await this.retry.ExecuteAsync(GraphServiceClient.Drive.Request().GetAsync, cancellationToken);
             if (storageInfo?.Quota?.Total == null) return null;
 
             return storageInfo.Quota.Total - storageInfo.Quota.Used ?? 0;

@@ -69,16 +69,16 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
         [Test]
         public void should_mark_static_text_and_2_questions_as_invalid() =>
-            interview.GetInvalidEntitiesInInterview().Should().BeEquivalentTo(
+            interview.GetInvalidEntitiesInInterview().Should().BeEquivalentTo(new []{
                 Create.Identity(staticTextId),
                 Create.Identity(questionId, 0),
-                Create.Identity(questionId, 1));
+                Create.Identity(questionId, 1)});
 
         [Test]
         public void should_raise_title_changed_event_for_questions_0_and_1() =>
-            events.GetSingleEvent<SubstitutionTitlesChanged>().Questions.Should().BeEquivalentTo(
+            events.GetSingleEvent<SubstitutionTitlesChanged>().Questions.Should().BeEquivalentTo(new [] {
                 Create.Identity(questionId, 0),
-                Create.Identity(questionId, 1));
+                Create.Identity(questionId, 1)});
 
         static AppDomainContext appDomainContext;
         static EventContext events;

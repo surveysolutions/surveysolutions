@@ -61,7 +61,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
         [NUnit.Framework.Test] public void should_return_only_interviewers_questions () =>
             commentedQuestionsIdentities.Select(x => x.Id)
-                .Should().BeEquivalentTo(repliedByInterQuestionId, interQuestionId);
+                .Should().BeEquivalentTo(new[]{ repliedByInterQuestionId, interQuestionId });
 
         [NUnit.Framework.Test] public void should_return_question_without_interviewer_interviewer_reply_first () =>
             commentedQuestionsIdentities.ElementAt(0).Id.Should().Be(interQuestionId);

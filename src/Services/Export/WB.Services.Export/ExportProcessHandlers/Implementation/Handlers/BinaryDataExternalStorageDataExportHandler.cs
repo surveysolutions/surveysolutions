@@ -74,7 +74,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
                         var folderPath = await GetOrCreateFolderByType(binaryDataAction.Type,
                             binaryDataAction.InterviewKey ?? binaryDataAction.InterviewId.FormatGuid());
 
-                        var storageSize = await dataClient.GetFreeSpaceAsync();
+                        var storageSize = await dataClient.GetFreeSpaceAsync(cancellationToken);
                         if (storageSize.HasValue && storageSize.Value < binaryDataAction.ContentLength)
                             throw new IOException("There is not enough space on the disk", 0x70);
 
