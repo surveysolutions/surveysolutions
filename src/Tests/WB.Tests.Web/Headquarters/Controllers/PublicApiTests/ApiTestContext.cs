@@ -42,7 +42,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
         protected static UsersController CreateUsersController(
             ILogger logger = null,
             IUserViewFactory userViewViewFactory = null,
-            UserManager<HqUser> userManager = null)
+            UserManager<HqUser> userManager = null,
+            IWorkspaceContextAccessor workspaceContextAccessor = null)
         {
             return new UsersController(
                 userViewViewFactory ?? Mock.Of<IUserViewFactory>(),
@@ -51,7 +52,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
                 userManager ?? Create.Service.UserManager(),
                 Mock.Of<IUnitOfWork>(),
                 Mock.Of<ISystemLog>(),
-                Mock.Of<IWorkspaceContextAccessor>(),
+                workspaceContextAccessor ?? Mock.Of<IWorkspaceContextAccessor>(),
                 Mock.Of<IPlainStorageAccessor<Workspace>>());
         }
 

@@ -2,6 +2,8 @@
 using NUnit.Framework;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Moq;
+using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.Controllers.Api.PublicApi;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Models;
 
@@ -15,7 +17,12 @@ internal class UsersTests : ApiTestContext
     [TestCase(null, "Supervisor name is required for interviewer creation")]
     public async Task when_creating_interviewer_without_valid_supervisor(string supervisor, string message)
     {
-        var controller = CreateUsersController();
+        var workspaceContextAccessor = new Mock<IWorkspaceContextAccessor>();
+
+        workspaceContextAccessor.Setup(x => x.CurrentWorkspace())
+            .Returns(new WorkspaceContext("test", "test"));
+        
+        var controller = CreateUsersController(workspaceContextAccessor: workspaceContextAccessor.Object);
         RegisterUserModel model = new RegisterUserModel()
         {
             Role = Roles.Interviewer,
