@@ -20,7 +20,7 @@ export default class AssignmentsComponent {
         return [
             {
                 path: '/HQ/TakeNewAssignment/:interviewId',
-                component: () => import(/* webpackChunkName: "review" */'./CreateNew'),
+                component: () => import('./CreateNew'),
             },
             {
                 path: '/Assignments', component: Layout,
