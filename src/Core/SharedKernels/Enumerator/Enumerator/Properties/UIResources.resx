@@ -308,6 +308,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="GpsQuestion_Timeout" xml:space="preserve">
     <value>GPS was unable to determine your location. To troubleshoot, please try the following: ensure that you are outdoors, confirm that your GPS is enabled, or change your GPS's timeout setting</value>
   </data>
+  <data name="NoMapsApplication" xml:space="preserve">
+    <value>Not found any maps application</value>
+  </data>
   <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
     <value>Provided Survey Solutions Designer URL is invalid. Check settings.</value>
   </data>

@@ -1727,6 +1727,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not found any maps application.
+        /// </summary>
+        public static string NoMapsApplication {
+            get {
+                return ResourceManager.GetString("NoMapsApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} notifications.
         /// </summary>
         public static string Notifications_SummaryTitle {
