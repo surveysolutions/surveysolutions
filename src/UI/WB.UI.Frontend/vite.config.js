@@ -14,14 +14,10 @@ const ViteFilemanager = require('filemanager-plugin').ViteFilemanager;
 
 const baseDir = path.relative(__dirname, "./");
 //const baseDir = path.resolve(__dirname, "./");
-console.log("baseDir:  " + baseDir)
 const join = path.join.bind(path, baseDir);
 const uiFolder = join("..");
-console.log("uiFolder: " + uiFolder)
 const hqFolder = path.join(uiFolder, "WB.UI.Headquarters.Core");
-console.log("hqFolder: " + hqFolder)
 const webTesterFolder = path.join(uiFolder, "WB.UI.WebTester");
-console.log("webTesterFolder: " + webTesterFolder)
 
 const locales = {
     hq: ["Assignments", "Common", "Dashboard", "DataExport", "DataTables",
@@ -147,10 +143,6 @@ Object.keys(pages).forEach(page => {
 export default defineConfig({
   resolve: {
     alias: [
-      /*{
-        find: /^~/,
-        replacement: ''
-      },*/
       {
         find: '@',
         replacement: path.resolve(__dirname, 'src')
@@ -183,12 +175,6 @@ export default defineConfig({
     include: ['jquery'],
   },
   plugins: [
-    /*inject({
-            $: 'jquery',
-            //jquery: 'jquery',
-            //'window.jQuery': 'jquery',
-            jQuery: 'jquery',
-        }),*/
     vue({ jsx: true }),
     vitePluginRequire(),
     viteCommonjs(),

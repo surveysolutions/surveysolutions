@@ -50,9 +50,7 @@ Vue.use(config)
 Vue.use(http)
 Vue.use(hqApi)
 
-//const viewsProvider = require('./Views').default
 import viewsProvider from './Views'
-//const Router = require('./router').default
 import Router from './router'
 
 const views = viewsProvider(store)

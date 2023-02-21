@@ -30,7 +30,6 @@ import box from '@/shared/modal'
 
 import './componentsRegistry'
 
-//const createRouter = require('./router').default
 import createRouter from './router'
 
 import webinterviewStore from './store'
@@ -45,7 +44,6 @@ const router = createRouter(store)
 
 sync(store, router)
 
-//const App = require('./App').default
 import App from './App'
 
 box.init(i18n, browserLanguage)
