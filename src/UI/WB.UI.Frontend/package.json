@@ -11,7 +11,7 @@
     "preinstall": "npx npm-force-resolutions"
   },
   "dependencies": {
-    "@apollo/client": "3.7.1",
+    "@apollo/client": "3.7.9",
     "@googlemaps/markerclusterer": "^2.0.15",
     "@microsoft/signalr": "^5.0.6",
     "@toast-ui/vue-editor": "^2.5.2",
@@ -92,7 +92,6 @@
     "vite-plugin-clean": "^1.0.0",
     "vite-plugin-env-compatible": "^1.1.1",
     "vite-plugin-mpa-plus": "^0.5.4",
-    "vue-cli-plugin-apollo": "0.22.2",
     "vue-jest": "^3.0.7",
     "vue-property-decorator": "^8.2.2",
     "webpack-build-notifier": "^2.2.1",
@@ -148,7 +147,7 @@
     ]
   },
   "resolutions": {
-    "@apollo/client": "3.7.1",
+    "@apollo/client": "3.7.9",
     "@types/ejs": "3.1.8",
     "async": ">=3.2.3",
     "braces": ">=2.3.1",
