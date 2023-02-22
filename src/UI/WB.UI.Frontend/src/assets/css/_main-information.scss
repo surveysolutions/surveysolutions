@@ -1,5 +1,5 @@
 .main-information{
-	margin-left: $filter-width - $margin-container + 12px +15px;
+	margin-left: $filter-width - $margin-container + 12px (+15px);
 	padding: 0 0 0 30px;
 	@include transition(margin, 0.3s);
 	.panel-table{
@@ -8,7 +8,7 @@
 	}
 }
 .fullscreen-hidden-filter .main-information{
-	margin-left: $filter-width - $margin-container + 12px +15px;
+	margin-left: $filter-width - $margin-container + 12px (+15px);
 	padding: 0 0 0 30px;
 	.panel-table{
 		left: $filter-width + 12px;

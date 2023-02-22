@@ -288,7 +288,7 @@
         }
     }
     thead th.padding-left-slide:first-child{
-        padding-left: ($width-search-input +65px);
+        padding-left: ($width-search-input (+65px));
     }
 }
 .table{
