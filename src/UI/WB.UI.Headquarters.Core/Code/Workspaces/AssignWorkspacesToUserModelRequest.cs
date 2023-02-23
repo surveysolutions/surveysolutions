@@ -4,7 +4,7 @@ using WB.UI.Headquarters.Controllers.Api.PublicApi.Models;
 
 namespace WB.UI.Headquarters.Code.Workspaces
 {
-    public class AssignWorkspacesToUserModelRequest : IRequest
+    public class AssignWorkspacesToUserModelRequest : IRequest<Unit>
     {
         public AssignWorkspacesToUserModelRequest(ModelStateDictionary modelState, AssignWorkspacesToUserModel assignModel)
         {

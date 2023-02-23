@@ -37,9 +37,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         [NUnit.Framework.Test] public void should_raise_substitutions_changed_event_with_all_changed_entities () 
         {
             var @event = eventContext.GetEvent<SubstitutionTitlesChanged>();
-            @event.Groups.Should().BeEquivalentTo(Create.Entity.Identity(groupId, RosterVector.Empty));
-            @event.StaticTexts.Should().BeEquivalentTo(Create.Entity.Identity(staticTextId, RosterVector.Empty));
-            @event.Questions.Should().BeEquivalentTo(Create.Entity.Identity(questionId, RosterVector.Empty));
+            @event.Groups.Should().BeEquivalentTo(new[]{ Create.Entity.Identity(groupId, RosterVector.Empty) });
+            @event.StaticTexts.Should().BeEquivalentTo(new[]{ Create.Entity.Identity(staticTextId, RosterVector.Empty)});
+            @event.Questions.Should().BeEquivalentTo(new[]{ Create.Entity.Identity(questionId, RosterVector.Empty)});
         }
 
         static StatefulInterview interview;

@@ -1,6 +1,6 @@
 import { find } from 'lodash'
 
-global._ = require("lodash")
+window._ = require("lodash")
 
 const filtersStore = require("../filters").default;
 const searchResults = require("./_searchResults.json")

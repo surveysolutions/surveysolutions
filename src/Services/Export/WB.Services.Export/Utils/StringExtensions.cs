@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text.RegularExpressions;
-using Ganss.XSS;
+using Ganss.Xss;
 
 namespace WB.Services.Export
 {

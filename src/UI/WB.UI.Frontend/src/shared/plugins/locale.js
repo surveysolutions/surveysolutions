@@ -13,7 +13,7 @@ export default {
             resources: {
                 [locale]: window.CONFIG.locale.data,
             },
-            interpolation: { escapeValue: false },
+            interpolation: { escapeValue: false, skipOnVariables: false },
             saveMissing: true,
             missingKeyHandler(lng, ns, key, fallbackValue) {
                 console.warn('Missing translation for language', lng, 'key',ns + '.' + fallbackValue)
