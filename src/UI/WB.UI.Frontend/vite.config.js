@@ -106,9 +106,9 @@ const fileTargets = [
 
 
 const resxFiles = [
-    path.join(uiFolder, "WB.UI.Headquarters.Core/**/*.resx"),
-    path.join(uiFolder, "../Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources/*.resx"),
-    path.join(uiFolder, "../Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/*.resx")
+    "../WB.UI.Headquarters.Core/**/*.resx",
+    "../../Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources/*.resx",
+    "../../Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/*.resx"     
 ]
 
 var pagesSources = [];

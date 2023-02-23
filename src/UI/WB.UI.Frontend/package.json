@@ -29,7 +29,6 @@
     "datatables.net-select": "^1.6.0",
     "fast-glob": "^3.2.12",
     "flatpickr": "^4.6.9",
-    "globby": "^9.2.0",
     "graphql-ws": "5.11.2",
     "i18next": "^22.4.9",
     "isomorphic-unfetch": "^3.0.0",
