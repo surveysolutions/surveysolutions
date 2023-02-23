@@ -1529,6 +1529,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All responsibles.
+        /// </summary>
+        public static string MapDashboard_AllResponsibles {
+            get {
+                return ResourceManager.GetString("MapDashboard_AllResponsibles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All statuses.
+        /// </summary>
+        public static string MapDashboard_AllStatuses {
+            get {
+                return ResourceManager.GetString("MapDashboard_AllStatuses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assignments.
         /// </summary>
         public static string MapDashboard_Assignments {
@@ -1570,6 +1588,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string MapDashboard_QuestionnaireTitle {
             get {
                 return ResourceManager.GetString("MapDashboard_QuestionnaireTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire.
+        /// </summary>
+        public static string MapDashboard_ResponsibleTitle {
+            get {
+                return ResourceManager.GetString("MapDashboard_ResponsibleTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status.
+        /// </summary>
+        public static string MapDashboard_StatusTitle {
+            get {
+                return ResourceManager.GetString("MapDashboard_StatusTitle", resourceCulture);
             }
         }
         

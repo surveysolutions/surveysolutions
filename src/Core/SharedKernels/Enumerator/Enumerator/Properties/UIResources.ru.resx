@@ -578,8 +578,20 @@
   <data name="MapDashboard_AllQuestionnaires" xml:space="preserve">
     <value>Все опросники</value>
   </data>
+  <data name="MapDashboard_AllResponsibles" xml:space="preserve">
+    <value>Все пользователи</value>
+  </data>
+  <data name="MapDashboard_AllStatuses" xml:space="preserve">
+    <value>Все статусы</value>
+  </data>
   <data name="MapDashboard_QuestionnaireTitle" xml:space="preserve">
     <value>Опросник</value>
+  </data>
+  <data name="MapDashboard_ResponsibleTitle" xml:space="preserve">
+    <value>Ответственный</value>
+  </data>
+  <data name="MapDashboard_StatusTitle" xml:space="preserve">
+    <value>Статус</value>
   </data>
   <data name="MapDashboard_FiltersTitle" xml:space="preserve">
     <value>Фильтры</value>

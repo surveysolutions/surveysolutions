@@ -5,7 +5,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
     public interface IMapInteractionService
     {
         Task<AreaEditResult> EditAreaAsync(EditAreaArgs args);
-        Task OpenMapDashboardAsync();
+        Task OpenMapDashboardAsync(bool supportDifferentResponsible);
 
         public void SetLicenseKey(string key);
         public void SetApiKey(string key);

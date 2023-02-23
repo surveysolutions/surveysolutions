@@ -33,7 +33,24 @@ namespace WB.UI.Shared.Extensions.ViewModels
     {
         private readonly IAssignmentDocumentsStorage assignmentsRepository;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IPlainStorage<InterviewerDocument> usersRepository;
 
+        private static readonly InterviewStatus[] InterviewerStatuses =
+        {
+            InterviewStatus.Created,
+            InterviewStatus.InterviewerAssigned,
+            InterviewStatus.Restarted,
+            InterviewStatus.RejectedBySupervisor,
+            InterviewStatus.Completed,
+        };
+
+        private static readonly InterviewStatus[] SupervisorStatuses =
+            InterviewerStatuses.Concat(new []
+            {
+                InterviewStatus.SupervisorAssigned,
+                InterviewStatus.RejectedByHeadquarters,
+            }).ToArray();
+        
         public MapDashboardViewModel(IPrincipal principal, 
             IViewModelNavigationService viewModelNavigationService,
             IUserInteractionService userInteractionService,
@@ -43,12 +60,14 @@ namespace WB.UI.Shared.Extensions.ViewModels
             IEnumeratorSettings enumeratorSettings,
             ILogger logger,
             IMapUtilityService mapUtilityService,
-            IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher) 
+            IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher,
+            IPlainStorage<InterviewerDocument> usersRepository) 
             : base(principal, viewModelNavigationService, mapService, userInteractionService, logger, 
                    enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher)
         {
             this.assignmentsRepository = assignmentsRepository;
             this.interviewViewRepository = interviewViewRepository;
+            this.usersRepository = usersRepository;
             this.mainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
         }
 
@@ -78,8 +97,12 @@ namespace WB.UI.Shared.Extensions.ViewModels
             get => this.showAssignments;
             set => this.RaiseAndSetIfChanged(ref this.showAssignments, value);
         }
+        
+        public bool SupportDifferentResponsible { get; set; }
+        
         public override void Prepare(MapDashboardViewModelArgs parameter)
         {
+            SupportDifferentResponsible = parameter.SupportDifferentResponsible;
         }
 
         public override async Task Initialize()
@@ -102,6 +125,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
         public override async Task OnMapLoaded()
         {
             CollectQuestionnaires();
+            CollectResponsibles();
+            CollectInterviewStatuses();
             await RefreshMarkers();
         }
 
@@ -147,6 +172,41 @@ namespace WB.UI.Shared.Extensions.ViewModels
             if (SelectedQuestionnaire != AllQuestionnaireDefault)
                 SelectedQuestionnaire = AllQuestionnaireDefault;
         }
+        
+        private void CollectResponsibles()
+        {
+            if (!SupportDifferentResponsible)
+                return;
+            
+            List<ResponsibleItem> result = usersRepository.LoadAll()
+                .Where(x => !x.IsLockedByHeadquarters && !x.IsLockedBySupervisor)
+                .Select(user => new ResponsibleItem(user.InterviewerId, user.UserName))
+                .OrderBy(x => x.Title)
+                .ToList();
+
+            var responsibleItems = new List<ResponsibleItem> {AllResponsibleDefault};
+            responsibleItems.AddRange(result);
+
+            Responsibles = new MvxObservableCollection<ResponsibleItem>(responsibleItems);
+
+            if (SelectedResponsible != AllResponsibleDefault)
+                SelectedResponsible = AllResponsibleDefault;
+        }
+
+        private void CollectInterviewStatuses()
+        {
+            var statusItems = new List<StatusItem> { AllStatusDefault };
+
+            var statuses = SupportDifferentResponsible
+                ? SupervisorStatuses
+                : InterviewerStatuses;
+            statuses.ForEach(s => statusItems.Add(new StatusItem(s, s.ToString())));
+
+            Statuses = new MvxObservableCollection<StatusItem>(statusItems);
+
+            if (SelectedStatus != AllStatusDefault)
+                SelectedStatus = AllStatusDefault;
+        }
 
         private QuestionnaireItem ToQuestionnaireItem(AssignmentDocument assignmentDocument)
         {
@@ -189,6 +249,66 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 return;
             
             SelectedQuestionnaire = questionnaire;
+            await RefreshMarkers();
+        }
+        
+        private static readonly ResponsibleItem AllResponsibleDefault = new ResponsibleItem(null, UIResources.MapDashboard_AllResponsibles);
+
+        public MvxObservableCollection<ResponsibleItem> responsibles = new MvxObservableCollection<ResponsibleItem>();
+        public MvxObservableCollection<ResponsibleItem> Responsibles
+        {
+            get => this.responsibles;
+            set => this.RaiseAndSetIfChanged(ref this.responsibles, value);
+        }
+
+        private ResponsibleItem selectedResponsible = AllResponsibleDefault;
+        public ResponsibleItem SelectedResponsible
+        {
+            get => this.selectedResponsible;
+            set => this.RaiseAndSetIfChanged(ref this.selectedResponsible, value);
+        }
+
+        private MvxCommand<ResponsibleItem> responsibleSelectedCommand;
+        public MvxCommand<ResponsibleItem> ResponsibleSelectedCommand => 
+            responsibleSelectedCommand ??= new MvxCommand<ResponsibleItem>(OnResponsibleSelectedCommand);
+
+        private async void OnResponsibleSelectedCommand(ResponsibleItem responsible)
+        {
+            if (SelectedResponsible.Title == responsible.Title && 
+                SelectedResponsible.ResponsibleId == responsible.ResponsibleId)
+                return;
+            
+            SelectedResponsible = responsible;
+            await RefreshMarkers();
+        }
+
+        private static readonly StatusItem AllStatusDefault = new StatusItem(null, UIResources.MapDashboard_AllStatuses);
+
+        public MvxObservableCollection<StatusItem> statuses = new MvxObservableCollection<StatusItem>();
+        public MvxObservableCollection<StatusItem> Statuses
+        {
+            get => this.statuses;
+            set => this.RaiseAndSetIfChanged(ref this.statuses, value);
+        }
+
+        private StatusItem selectedStatus = AllStatusDefault;
+        public StatusItem SelectedStatus
+        {
+            get => this.selectedStatus;
+            set => this.RaiseAndSetIfChanged(ref this.selectedStatus, value);
+        }
+
+        private MvxCommand<StatusItem> statusSelectedCommand;
+        public MvxCommand<StatusItem> StatusSelectedCommand => 
+            statusSelectedCommand ??= new MvxCommand<StatusItem>(OnStatusSelectedCommand);
+
+        private async void OnStatusSelectedCommand(StatusItem status)
+        {
+            if (SelectedStatus.Title == status.Title && 
+                SelectedStatus.Status == status.Status)
+                return;
+            
+            SelectedStatus = status;
             await RefreshMarkers();
         }
 
@@ -275,12 +395,22 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             var markers = new List<Graphic>();
 
-            var filteredInterviews = 
-                    string.IsNullOrEmpty(SelectedQuestionnaire?.QuestionnaireId) 
-                        ? Interviews 
-                        : Interviews
+            var filteredInterviews = Interviews;
+            
+            if (!string.IsNullOrEmpty(SelectedQuestionnaire?.QuestionnaireId)) 
+                filteredInterviews = filteredInterviews
                             .Where(x => x.QuestionnaireId.StartsWith(SelectedQuestionnaire.QuestionnaireId))
                             .ToList();
+
+            if (SelectedResponsible?.ResponsibleId.HasValue ?? false) 
+                filteredInterviews = filteredInterviews
+                    .Where(x => x.ResponsibleId == SelectedResponsible.ResponsibleId)
+                    .ToList();
+
+            if (SelectedStatus?.Status != null) 
+                filteredInterviews = filteredInterviews
+                    .Where(x => x.Status == SelectedStatus.Status)
+                    .ToList();
 
             foreach (var interview in filteredInterviews)
             {
@@ -341,12 +471,17 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             var markers = new List<Graphic>();
 
-            var filteredAssignments = 
-                    string.IsNullOrEmpty(SelectedQuestionnaire?.QuestionnaireId) 
-                        ? Assignments 
-                        : Assignments
-                            .Where(x => x.QuestionnaireId.StartsWith(SelectedQuestionnaire.QuestionnaireId))
-                            .ToList();
+            var filteredAssignments = Assignments;
+            
+            if (!string.IsNullOrEmpty(SelectedQuestionnaire?.QuestionnaireId)) 
+                 filteredAssignments = filteredAssignments
+                         .Where(x => x.QuestionnaireId.StartsWith(SelectedQuestionnaire.QuestionnaireId))
+                         .ToList();
+            
+            if (SelectedResponsible?.ResponsibleId.HasValue ?? false) 
+                 filteredAssignments = filteredAssignments
+                         .Where(x => x.ResponsibleId == SelectedResponsible.ResponsibleId)
+                         .ToList();
 
             foreach (var assignment in filteredAssignments)
             {
@@ -545,5 +680,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
     public class MapDashboardViewModelArgs
     {
+        public bool SupportDifferentResponsible { get; set; } = false;
     }
 }

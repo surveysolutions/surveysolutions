@@ -11,7 +11,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
             throw new NotImplementedException("This functionality is not available");
         }
 
-        public Task OpenMapDashboardAsync()
+        public Task OpenMapDashboardAsync(bool supportDifferentResponsible)
         {
             return Task.CompletedTask;
         }

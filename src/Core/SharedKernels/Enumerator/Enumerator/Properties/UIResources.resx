@@ -647,8 +647,20 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="MapDashboard_AllQuestionnaires" xml:space="preserve">
     <value>All questionnaires</value>
   </data>
+  <data name="MapDashboard_AllResponsibles" xml:space="preserve">
+    <value>All responsibles</value>
+  </data>
+  <data name="MapDashboard_AllStatuses" xml:space="preserve">
+    <value>All statuses</value>
+  </data>
   <data name="MapDashboard_QuestionnaireTitle" xml:space="preserve">
     <value>Questionnaire</value>
+  </data>
+  <data name="MapDashboard_ResponsibleTitle" xml:space="preserve">
+    <value>Questionnaire</value>
+  </data>
+  <data name="MapDashboard_StatusTitle" xml:space="preserve">
+    <value>Status</value>
   </data>
   <data name="MapDashboard_TypeTitle" xml:space="preserve">
     <value>Type</value>

@@ -48,13 +48,16 @@ namespace WB.UI.Shared.Extensions.Services
             return await this.EditAreaImplAsync(args);
         }
 
-        public async Task OpenMapDashboardAsync()
+        public async Task OpenMapDashboardAsync(bool supportDifferentResponsible)
         {
             await this.permissions.AssureHasPermissionOrThrow<Permissions.LocationWhenInUse>().ConfigureAwait(false);
             await this.permissions.AssureHasPermissionOrThrow<Permissions.StorageWrite>().ConfigureAwait(false);
 
             await this.viewModelNavigationService.NavigateToAsync<MapDashboardViewModel, MapDashboardViewModelArgs>(
-                new MapDashboardViewModelArgs()).ConfigureAwait(false);
+                new MapDashboardViewModelArgs()
+                {
+                    SupportDifferentResponsible = supportDifferentResponsible,
+                }).ConfigureAwait(false);
         }
 
         public void SetLicenseKey(string key)
