@@ -87,29 +87,6 @@ const pages = {
     }
 };
 
-var pagesSources = [];
-var pagesTargets = [];
-
-for (var attr in pages) {
-  const pageObj = pages[attr]
-  const filename = path.basename(pageObj.filename)
-  const filenameHtml = attr + '.html'
-  const origFolder = path.dirname(pageObj.filename)
-  const templateFilename = path.basename(pageObj.template)
-  const templateFilenameHtml = attr + '.html'
-  var templatesFolderFull = path.join(baseDir, ".templates")
-  var destFileFolderFull = path.join(baseDir, "dist", ".templates")
-  var templateHtmlPath = path.join(templatesFolderFull, templateFilenameHtml)
-  var filenameHtmlPath = path.join(destFileFolderFull, filenameHtml)
-  var filenamePath = path.join(destFileFolderFull, filename)
-  pagesSources.push({ source: pageObj.template, destination: templatesFolderFull, name : templateFilenameHtml })
-  pagesTargets.push({ source: filenameHtmlPath, destination: origFolder, name: filename })
-
-  pageObj.filename = filenameHtml
-  pageObj.template = templateHtmlPath
-}
-
-
 const fileTargets = [
     { source: join(".resources", "**", "*.json"), destination: join("dist", "locale"), isFlat: false  },
 
@@ -134,10 +111,27 @@ const resxFiles = [
     path.join(uiFolder, "../Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/*.resx")
 ]
 
-Object.keys(pages).forEach(page => {
-    resxFiles.push(path.join(uiFolder, pages[page].template))
-})
+var pagesSources = [];
+var pagesTargets = [];
 
+for (var attr in pages) {
+  const pageObj = pages[attr]
+  const filename = path.basename(pageObj.filename)
+  const filenameHtml = attr + '.html'
+  const origFolder = path.dirname(pageObj.filename)
+  const templateFilename = path.basename(pageObj.template)
+  const templateFilenameHtml = attr + '.html'
+  var templatesFolderFull = path.join(baseDir, ".templates")
+  var destFileFolderFull = path.join(baseDir, "dist", ".templates")
+  var templateHtmlPath = path.join(templatesFolderFull, templateFilenameHtml)
+  var filenameHtmlPath = path.join(destFileFolderFull, filenameHtml)
+  var filenamePath = path.join(destFileFolderFull, filename)
+  pagesSources.push({ source: pageObj.template, destination: templatesFolderFull, name : templateFilenameHtml })
+  pagesTargets.push({ source: filenameHtmlPath, destination: origFolder, name: filename })
+
+  pageObj.filename = filenameHtml
+  pageObj.template = templateHtmlPath
+}
 
 // https://vitejs.dev/config/
 export default defineConfig({

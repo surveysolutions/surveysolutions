@@ -70,7 +70,11 @@ module.exports = class LocalizationBuilder {
 
     getFiles() {
         const { patterns } = this.options;
-        let files = globby.sync(patterns, { onlyFiles: true });        
+        let files = globby.sync(patterns, { onlyFiles: true });
+        
+        if(files.length === 0)
+            throw 'None of resource files (.resx) were found.';
+
         return files;
     }
 
