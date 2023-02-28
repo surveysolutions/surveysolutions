@@ -875,6 +875,8 @@
 </template>
 
 <script>
+import { questionnaireService } from '../../services';
+
 export default {
     name: 'Main',
     data() {
@@ -976,6 +978,9 @@ export default {
                     $rootScope.$emit('questionnaireLoaded');
                 });
                 },
+    },
+    mounted() {
+        this.getQuestionnaire();
     }
 }
 </script>
