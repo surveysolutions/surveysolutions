@@ -139,14 +139,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
         }
 
-        private static Regex BuildSearchRegex(string searchFor, bool matchCase, bool matchWholeWord, bool useRegex)
+        private static Regex BuildSearchRegex(string searchFor, bool matchCase, bool matchWholeWord, bool useRegex = true)
         {
             RegexOptions options = RegexOptions.Compiled | RegexOptions.CultureInvariant;
             if (!matchCase)
             {
                 options |= RegexOptions.IgnoreCase;
             }
-            string encodedSearchPattern = useRegex ? searchFor : Regex.Escape(searchFor);
+            string encodedSearchPattern = Regex.Escape(searchFor);
             string pattern = matchWholeWord ? $@"\b{encodedSearchPattern}\b" : encodedSearchPattern;
 
             Regex searchRegex = new Regex(pattern, options);
