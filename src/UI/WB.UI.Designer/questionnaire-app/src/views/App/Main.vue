@@ -898,6 +898,16 @@ export default {
         commentThreads =[],
 
         
+        isUnfoldedChapters = false,
+        isUnfoldedScenarios = false,
+        isUnfoldedMacros = false,
+        isUnfoldedLookupTables = false,
+        isUnfoldedAttachments = false,
+        isUnfoldedTranslations = false,
+        isUnfoldedMetadata = false,
+        isUnfoldedComments = false,
+        isUnfoldedCategories = false,
+
       };
     },
     methods: {
