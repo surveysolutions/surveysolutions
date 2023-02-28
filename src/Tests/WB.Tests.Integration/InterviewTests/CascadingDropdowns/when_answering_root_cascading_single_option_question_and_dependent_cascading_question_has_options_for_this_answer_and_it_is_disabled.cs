@@ -56,7 +56,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
             });
 
         [NUnit.Framework.Test] public void should_raise_QuestionsEnabled_event_for_dependent_question () =>
-            results.EnabledQuestions.Should().BeEquivalentTo(Guid.Parse("11111111111111111111111111111111"));
+            results.EnabledQuestions.Should().BeEquivalentTo(new []{Guid.Parse("11111111111111111111111111111111")});
 
         [OneTimeTearDown]
         public void TearDown()

@@ -224,6 +224,7 @@ function Invoke-Android($CapiProject, $apk, $withMaps, $appCenterKey) {
 
 #endregion
 task frontend {
+	"Starting frontend task" | Out-Host
     $nodever = (node --version).replace("v", "").split(".")[0]
     if ($nodever -ge 17) {
         $env:NODE_OPTIONS="--openssl-legacy-provider"
@@ -233,9 +234,11 @@ task frontend {
         npm ci
         npm run build
     }
+	"Finishing frontend task" | Out-Host
 }
 
 task PackageHq frontend, {
+	"Starting HQ build task" | Out-Host
     exec {
         dotnet publish @(
             "./src/UI/WB.UI.Headquarters.Core",
@@ -250,6 +253,7 @@ task PackageHq frontend, {
         )
     }
     Compress $tmp/hq $output/WB.UI.Headquarters.zip
+	"Finishing HQ build task" | Out-Host
 }
 
 task PackageHqOffline frontend, {

@@ -42,8 +42,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
           invalidEntitiesInInterview.Count().Should().Be(2);
 
         [NUnit.Framework.Test] public void should_contain_only_invalid_enabled_element () =>
-            invalidEntitiesInInterview.Should().BeEquivalentTo(
-                Create.Entity.Identity(staticText1Id), Create.Entity.Identity(prefieldQuestionId));
+            invalidEntitiesInInterview.Should().BeEquivalentTo(new []{
+                Create.Entity.Identity(staticText1Id), 
+                Create.Entity.Identity(prefieldQuestionId)});
 
         private static StatefulInterview interview;
         private static readonly Guid staticText1Id = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

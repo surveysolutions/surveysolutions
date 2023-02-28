@@ -1,8 +1,8 @@
-import { ApolloClient } from 'apollo-client'
-import { ApolloLink } from 'apollo-link'
-import { createHttpLink } from 'apollo-link-http'
-import { onError } from 'apollo-link-error'
-import { InMemoryCache } from 'apollo-cache-inmemory'
+import { ApolloClient } from '@apollo/client/core'
+import { ApolloLink } from '@apollo/client/core'
+import { createHttpLink } from '@apollo/client/core'
+import { onError } from '@apollo/client/link/error'
+import { InMemoryCache } from '@apollo/client/cache'
 import fetch from 'isomorphic-unfetch'
 
 const link = createHttpLink({

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using AutoMapper;
-using FFImageLoading.Mock;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -16,11 +14,8 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.BoundedContexts.Headquarters.Workspaces.Impl;
-using WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.HttpServices.Services;
-using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -30,12 +25,10 @@ using WB.Enumerator.Native.WebInterview.Models;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Workspaces;
-using WB.UI.Headquarters.API.WebInterview.Services;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Services.Impl;
-using WB.UI.Shared.Web.Captcha;
-using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Services;
+using ISession = NHibernate.ISession;
 
 namespace WB.Tests.Web.TestFactories
 {
@@ -126,7 +119,15 @@ namespace WB.Tests.Web.TestFactories
 
         public UserManager<HqUser> UserManager()
         {
-            var hqUserStore = new HqUserStore(Mock.Of<IUnitOfWork>(), new LocalizedIdentityErrorDescriber());
+            var session = new Mock<ISession>();
+            session.Setup(s => s.Query<HqUser>())
+                .Returns(() => new TestingQueryable<HqUser>(new List<HqUser>().AsQueryable()));
+            
+            var unitOfWork = new Mock<IUnitOfWork>();
+            unitOfWork.Setup(work => work.Session).Returns(session.Object);
+            
+            var hqUserStore = new HqUserStore(unitOfWork.Object, new LocalizedIdentityErrorDescriber());
+            
             return new UserManager<HqUser>(hqUserStore,
                 Mock.Of<IOptions<IdentityOptions>>(),
                 Mock.Of<IPasswordHasher<HqUser>>(),

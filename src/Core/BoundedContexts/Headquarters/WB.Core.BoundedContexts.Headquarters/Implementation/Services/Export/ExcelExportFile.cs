@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using ClosedXML.Excel;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
@@ -73,10 +74,38 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
 
         private static void SetCellValue(object value, IXLCell cell)
         {
-            cell.SetValue(value);
+            cell.SetValue(FromObject(value));
 
             if(value is long)
                 cell.Style.NumberFormat.Format = "#,##0";
+        }
+
+        //replace with library impl once released
+        //[Obsolete]
+        public static XLCellValue FromObject(object obj, IFormatProvider provider = null)
+        {
+            return obj switch
+            {
+                null => Blank.Value,
+                Blank blank => blank,
+                bool logical => logical,
+                string text => text,
+                XLError error => error,
+                DateTime dateTime => dateTime,
+                TimeSpan timeSpan => timeSpan,
+                sbyte number => number,
+                byte number => number,
+                short number => number,
+                ushort number => number,
+                int number => number,
+                uint number => number,
+                long number => number,
+                ulong number => number,
+                float number => number,
+                double number => number,
+                decimal number => number,
+                _ => Convert.ToString(obj, provider)
+            };
         }
 
         public override string MimeType => @"application/vnd.oasis.opendocument.spreadsheet";
