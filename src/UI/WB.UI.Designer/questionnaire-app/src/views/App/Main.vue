@@ -858,15 +858,15 @@
     </div>
     <div id="left-menu" v-controller="LeftMenuCtrl">
         <ul>
-            <li><a class="left-menu-chapters" v-class="{unfolded: isUnfoldedChapters }" v-click="unfoldChapters();" v-i18next="[title]SideBarSectionsTitle"></a></li>
-            <li><a class="left-menu-metadata" v-class="{unfolded: isUnfoldedMetadata }" v-click="unfoldMetadata();" v-i18next="[title]SideBarMetadataTitle"></a></li>
-            <li><a class="left-menu-translations" v-class="{unfolded: isUnfoldedTranslations }" v-click="unfoldTranslations();" v-i18next="[title]SideBarTranslationsTitle"></a></li>
-            <li><a class="left-menu-categories" v-class="{unfolded: isUnfoldedCategories }" v-click="unfoldCategories();" v-i18next="[title]SideBarCategoriesTitle"></a></li>
-            <li><a class="left-menu-scenarios" v-if="questionnaire.questionnaireRevision === null" v-class="{unfolded: isUnfoldedScenarios }" v-click="unfoldScenarios();" v-i18next="[title]SideBarScenarioTitle"></a></li>
-            <li><a class="left-menu-macroses" v-class="{unfolded: isUnfoldedMacros }" v-click="unfoldMacros();" v-i18next="[title]SideBarMacroTitle"></a></li>
-            <li><a class="left-menu-lookupTables" v-class="{unfolded: isUnfoldedLookupTables }" v-click="unfoldLookupTables();" v-i18next="[title]SideBarLookupTitle"></a></li>
-            <li><a class="left-menu-attachments" v-class="{unfolded: isUnfoldedAttachments }" v-click="unfoldAttachments();" v-i18next="[title]SideBarAttachmentsTitle"></a></li>
-            <li><a class="left-menu-comments" v-if="!questionnaire.isReadOnlyForUser" v-class="{unfolded: isUnfoldedComments }" v-click="unfoldComments();" v-i18next="[title]SideBarCommentsTitle"></a></li>
+            <li><a class="left-menu-chapters" v-class="{unfolded: isUnfoldedChapters }" v-click="unfoldChapters()" v-i18next="[title]SideBarSectionsTitle"></a></li>
+            <li><a class="left-menu-metadata" v-class="{unfolded: isUnfoldedMetadata }" v-click="unfoldMetadata()" v-i18next="[title]SideBarMetadataTitle"></a></li>
+            <li><a class="left-menu-translations" v-class="{unfolded: isUnfoldedTranslations }" v-click="unfoldTranslations()" v-i18next="[title]SideBarTranslationsTitle"></a></li>
+            <li><a class="left-menu-categories" v-class="{unfolded: isUnfoldedCategories }" v-click="unfoldCategories()" v-i18next="[title]SideBarCategoriesTitle"></a></li>
+            <li><a class="left-menu-scenarios" v-if="questionnaire.questionnaireRevision === null" v-class="{unfolded: isUnfoldedScenarios }" v-click="unfoldScenarios()" v-i18next="[title]SideBarScenarioTitle"></a></li>
+            <li><a class="left-menu-macroses" v-class="{unfolded: isUnfoldedMacros }" v-click="unfoldMacros()" v-i18next="[title]SideBarMacroTitle"></a></li>
+            <li><a class="left-menu-lookupTables" v-class="{unfolded: isUnfoldedLookupTables }" v-click="unfoldLookupTables()" v-i18next="[title]SideBarLookupTitle"></a></li>
+            <li><a class="left-menu-attachments" v-class="{unfolded: isUnfoldedAttachments }" v-click="unfoldAttachments()" v-i18next="[title]SideBarAttachmentsTitle"></a></li>
+            <li><a class="left-menu-comments" v-if="!questionnaire.isReadOnlyForUser" v-class="{unfolded: isUnfoldedComments }" v-click="unfoldComments()" v-i18next="[title]SideBarCommentsTitle"></a></li>
         </ul>
     </div>
     <div class="questionnaire-tree" ui-view></div>
@@ -878,8 +878,13 @@
 export default {
     name: 'Main',
     data() {
-      return {
-        questionnaire = null,
+      return {         
+        questionnaire = {
+                questionsCount: 0,
+                groupsCount: 0,
+                rostersCount: 0,
+                chapters = []
+            },
         currentUserIsAuthenticated = false,
         isReadOnlyForUser = true,
         verificationStatus = {
@@ -889,36 +894,39 @@ export default {
                 time: new Date()
             },
         lookupTables = [],
+        scenarios = [],
+        commentThreads =[],
+
         
       };
     },
-    methods: {      
-      showDownloadPdf(){
-        $uibModal.open({
-                    templateUrl: 'views/pdf.html',
-                    controller: 'pdfCtrl',
-                    windowClass: 'share-window',
-                    resolve:
-                    {
-                        currentUser: function() {
-                            return {
-                                name: $scope.currentUserName,
-                                email: $scope.currentUserEmail,
-                                isAuthenticated: $scope.currentUserIsAuthenticated
-                            }
-                        },
-                        questionnaire: function() {
-                            return $scope.questionnaire;
-                        }
-                    }
-                });
-      },
-      exportQuestionnaire(){},
-      showShareInfo(){},
-      verify(){},
-      showVerificationErrors(){},
-      showVerificationWarnings(){},
-      addNewCategory() {
+    methods: {
+        showDownloadPdf(){
+    //     $uibModal.open({
+    //                 templateUrl: 'views/pdf.html',
+    //                 controller: 'pdfCtrl',
+    //                 windowClass: 'share-window',
+    //                 resolve:
+    //                 {
+    //                     currentUser: function() {
+    //                         return {
+    //                             name: $scope.currentUserName,
+    //                             email: $scope.currentUserEmail,
+    //                             isAuthenticated: $scope.currentUserIsAuthenticated
+    //                         }
+    //                     },
+    //                     questionnaire: function() {
+    //                         return $scope.questionnaire;
+    //                     }
+    //                 }
+    //             });
+        },
+        exportQuestionnaire(){},
+        showShareInfo(){},
+        verify(){},
+        showVerificationErrors(){},
+        showVerificationWarnings(){},
+        addNewCategory() {
                 if (this.isReadOnlyForUser) {
                     notificationService.notice($i18next.t('NoPermissions'));
                     return;
@@ -940,10 +948,25 @@ export default {
                             utilityService.focus("focusCategories" + categories.categoriesId);
                         }, 500);
                     }).catch(function() { });
-            }
+            },
+        unfoldMetadata(){},
+        unfoldChapters(){},
 
 
+        getQuestionnaire() {
+                questionnaireService.getQuestionnaireById($state.params.questionnaireId).then(function (result) {
+                    this.questionnaire = result.data;
+                    if (!$state.params.chapterId && result.data.chapters.length > 0) {
+                        var defaultChapter = _.first(result.data.chapters);
+                        var itemId = defaultChapter.itemId;
+                        $scope.currentChapter = defaultChapter;
+                        $state.go('questionnaire.chapter.group', { chapterId: itemId, itemId: itemId });
+                    }
+
+                    $rootScope.$emit('questionnaireLoaded');
+                });
+                },
     }
-};
+}
 </script>
 
