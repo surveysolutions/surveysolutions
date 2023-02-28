@@ -1433,6 +1433,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close comments panel.
+        /// </summary>
+        public static string HotkeysCloseComments {
+            get {
+                return ResourceManager.GetString("HotkeysCloseComments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close lookup tables panel.
         /// </summary>
         public static string HotkeysCloseLookup {
@@ -1456,6 +1465,15 @@ namespace WB.UI.Designer.Resources {
         public static string HotkeysCloseMetadata {
             get {
                 return ResourceManager.GetString("HotkeysCloseMetadata", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close scenarios panel.
+        /// </summary>
+        public static string HotkeysCloseScenarios {
+            get {
+                return ResourceManager.GetString("HotkeysCloseScenarios", resourceCulture);
             }
         }
         
