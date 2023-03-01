@@ -87,6 +87,30 @@ const pages = {
     }
 };
 
+const fileTargets = [
+    { source: join(".resources", "**", "*.json"), destination: join("dist", "locale"), isFlat: false  },
+
+    { source: join("dist", "img", "**", "*.*"), destination: path.join(hqDist, "wwwroot", "img"), isFlat: false },
+    { source: join("dist", "fonts", "**", "*.*"), destination: path.join(hqDist, "wwwroot", "fonts") },
+    { source: join("dist", "css", "*.*"), destination: path.join(hqDist, "wwwroot", "css") },
+    { source: join("dist", "js", "*.*"), destination: path.join(hqDist, "wwwroot", "js") },
+    { source: join("dist", "locale", "hq", "*.*"), destination: path.join(hqDist, "wwwroot", "locale", "hq") },
+    { source: join("dist", "locale", "webinterview", "*.*"), destination: path.join(hqDist, "wwwroot", "locale", "webinterview") },
+
+    { source: join("dist", "img", "**", "*.*"), destination: path.join(webTesterDist, "wwwroot", "img"), isFlat: false },
+    { source: join("dist", "fonts", "*.*"), destination: path.join(webTesterDist, "wwwroot", "fonts") },
+    { source: join("dist", "css", "*.*"), destination: path.join(webTesterDist, "wwwroot", "css") },
+    { source: join("dist", "js", "*.*"), destination: path.join(webTesterDist, "wwwroot", "js") },
+    { source: join("dist", "locale", "webtester", "*.*"), destination: path.join(webTesterDist, "wwwroot", "locale", "webtester") },
+]
+
+
+const resxFiles = [
+    "../WB.UI.Headquarters.Core/**/*.resx",
+    "../../Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources/*.resx",
+    "../../Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/*.resx"     
+]
+
 var pagesSources = [];
 var pagesTargets = [];
 
@@ -108,36 +132,6 @@ for (var attr in pages) {
   pageObj.filename = filenameHtml
   pageObj.template = templateHtmlPath
 }
-
-
-const fileTargets = [
-    { source: join(".resources", "**", "*.json"), destination: join("dist", "locale"), isFlat: false  },
-
-    { source: join("dist", "img", "**", "*.*"), destination: path.join(hqDist, "wwwroot", "img"), isFlat: false },
-    { source: join("dist", "fonts", "**", "*.*"), destination: path.join(hqDist, "wwwroot", "fonts") },
-    { source: join("dist", "css", "*.*"), destination: path.join(hqDist, "wwwroot", "css") },
-    { source: join("dist", "js", "*.*"), destination: path.join(hqDist, "wwwroot", "js") },
-    { source: join("dist", "locale", "hq", "*.*"), destination: path.join(hqDist, "wwwroot", "locale", "hq") },
-    { source: join("dist", "locale", "webinterview", "*.*"), destination: path.join(hqDist, "wwwroot", "locale", "webinterview") },
-
-    { source: join("dist", "img", "**", "*.*"), destination: path.join(webTesterDist, "wwwroot", "img"), isFlat: false },
-    { source: join("dist", "fonts", "*.*"), destination: path.join(webTesterDist, "wwwroot", "fonts") },
-    { source: join("dist", "css", "*.*"), destination: path.join(webTesterDist, "wwwroot", "css") },
-    { source: join("dist", "js", "*.*"), destination: path.join(webTesterDist, "wwwroot", "js") },
-    { source: join("dist", "locale", "webtester", "*.*"), destination: path.join(webTesterDist, "wwwroot", "locale", "webtester") },
-]
-
-
-const resxFiles = [
-    path.join(uiFolder, "WB.UI.Headquarters.Core/**/*.resx"),
-    path.join(uiFolder, "../Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources/*.resx"),
-    path.join(uiFolder, "../Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/*.resx")
-]
-
-Object.keys(pages).forEach(page => {
-    resxFiles.push(path.join(uiFolder, pages[page].template))
-})
-
 
 // https://vitejs.dev/config/
 export default defineConfig({

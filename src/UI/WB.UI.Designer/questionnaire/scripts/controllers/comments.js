@@ -35,7 +35,7 @@
                 hotkeys.del(hideCommentsPane);
             }
 
-            hotkeys.add(hideCommentsPane, $i18next.t('HotkeysCloseLookup'), function (event) {
+            hotkeys.add(hideCommentsPane, $i18next.t('HotkeysCloseComments'), function (event) {
                 event.preventDefault();
                 $scope.foldback();
             });

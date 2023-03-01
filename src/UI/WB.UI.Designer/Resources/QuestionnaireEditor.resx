@@ -1050,7 +1050,6 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   <data name="HelpVirtualCoverPage" xml:space="preserve">
     <value>Cover is virtual section that shows all identifying questions.
     Questions cannot be changed in this section</value>
-
   </data>
   <data name="ConditionMightBeBroken" xml:space="preserve">
     <value>Condition or cascading depended items might be broken</value>
@@ -1064,12 +1063,18 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   <data name="HotkeysCloseMetadata" xml:space="preserve">
     <value>Close metadata panel</value>
   </data>
+  <data name="HotkeysCloseScenarios" xml:space="preserve">
+    <value>Close scenarios panel</value>
+  </data>
   <data name="HotkeysCloseTranslations" xml:space="preserve">
     <value>Close translations panel</value>
   </data>
   <data name="HotkeysCloseCategories" xml:space="preserve">
     <value>Close categories panel</value>
   </data>
+  <data name="HotkeysCloseComments" xml:space="preserve">
+    <value>Close comments panel</value>
+  </data>    
   <data name="HotkeysFocusTitle" xml:space="preserve">
     <value>Focus title field in editor</value>
   </data>
