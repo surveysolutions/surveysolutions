@@ -184,7 +184,11 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 .OrderBy(x => x.Title)
                 .ToList();
 
-            var responsibleItems = new List<ResponsibleItem> {AllResponsibleDefault};
+            var responsibleItems = new List<ResponsibleItem>
+            {
+                AllResponsibleDefault,
+                new ResponsibleItem(Principal.CurrentUserIdentity.UserId, Principal.CurrentUserIdentity.Name),
+            };
             responsibleItems.AddRange(result);
 
             Responsibles = new MvxObservableCollection<ResponsibleItem>(responsibleItems);
@@ -438,6 +442,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         break;
                 }
 
+                var responsibleName = Responsibles.FirstOrDefault(r => interview.ResponsibleId == r.ResponsibleId)?.Title;
+
                 markers.Add(new Graphic(
                     (MapPoint)GeometryEngine.Project(
                         new MapPoint(
@@ -448,6 +454,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     new[]
                     {
                         new KeyValuePair<string, object>("id", ""),
+                        new KeyValuePair<string, object>("responsible", responsibleName),
                         new KeyValuePair<string, object>("interviewId", interview.Id),
                         new KeyValuePair<string, object>("interviewKey", interview.InterviewKey),
                         new KeyValuePair<string, object>("title", title),
@@ -525,6 +532,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     new[]
                     {
                         new KeyValuePair<string, object>("id", assignment.Id),
+                        new KeyValuePair<string, object>("responsible", assignment.ResponsibleName),
                         new KeyValuePair<string, object>("title", title),
                         new KeyValuePair<string, object>("sub_title", subTitle),
                         new KeyValuePair<string, object>("can_create", canCreateInterview)
@@ -561,14 +569,19 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         string id = identifyResults.Graphics[0].Attributes["id"].ToString();
                         string title = identifyResults.Graphics[0].Attributes["title"] as string;
                         string subTitle = identifyResults.Graphics[0].Attributes["sub_title"] as string;
+                        string responsible = identifyResults.Graphics[0].Attributes["responsible"] as string;
 
+                        var popupTemplate = SupportDifferentResponsible
+                            ? $"{title}\r\n{responsible}\r\n{subTitle}"
+                            : $"{title}\r\n{subTitle}";
+                        
                         if (string.IsNullOrEmpty(id))
                         {
                             string interviewId = identifyResults.Graphics[0].Attributes["interviewId"].ToString();
                             string interviewKey = identifyResults.Graphics[0].Attributes["interviewKey"].ToString();
 
                             CalloutDefinition myCalloutDefinition =
-                                new CalloutDefinition(interviewKey, $"{title}\r\n{subTitle}")
+                                new CalloutDefinition(interviewKey, popupTemplate)
                                 {
                                     ButtonImage = await new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle,
                                             Color.Blue, 25).CreateSwatchAsync(96)
@@ -585,7 +598,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                             bool canCreate = (bool)assignmentInfo["can_create"];
 
                             CalloutDefinition myCalloutDefinition =
-                                new CalloutDefinition("#" + id, $"{title}\r\n{subTitle}");
+                                new CalloutDefinition("#" + id, popupTemplate);
                             if (canCreate)
                             {
                                 myCalloutDefinition.ButtonImage =
