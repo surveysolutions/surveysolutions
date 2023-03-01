@@ -458,6 +458,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         new KeyValuePair<string, object>("interviewId", interview.Id),
                         new KeyValuePair<string, object>("interviewKey", interview.InterviewKey),
                         new KeyValuePair<string, object>("title", title),
+                        new KeyValuePair<string, object>("status", interview.Status),
                         new KeyValuePair<string, object>("sub_title", "")
                     },
                     new CompositeSymbol(new[]
@@ -579,6 +580,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         {
                             string interviewId = identifyResults.Graphics[0].Attributes["interviewId"].ToString();
                             string interviewKey = identifyResults.Graphics[0].Attributes["interviewKey"].ToString();
+                            string status = identifyResults.Graphics[0].Attributes["status"].ToString();
+                            if (!string.IsNullOrWhiteSpace(popupTemplate))
+                                popupTemplate += $"\r\n{status}";
 
                             CalloutDefinition myCalloutDefinition =
                                 new CalloutDefinition(interviewKey, popupTemplate)
