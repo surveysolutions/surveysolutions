@@ -9,7 +9,7 @@
             
                 <a class="btn" href="../../questionnaire/questionnairehistory/{{questionnaire.questionnaireId}}" target="_blank"
                    v-if="questionnaire.hasViewerAdminRights || questionnaire.isSharedWithUser" v-i18next>History</a>
-                <button class="btn" type="button" v-click="showDownloadPdf()" v-i18next>DownloadPdf</button>
+                <!-- <button class="btn" type="button" v-click="showDownloadPdf()" v-i18next>DownloadPdf</button>
                 <a class="btn" type="button" v-show="questionnaire.hasViewerAdminRights" v-click="exportQuestionnaire()" v-i18next>SaveAs</a>
 
                 <a class="btn"  v-if="questionnaire.questionnaireRevision || questionnaire.isReadOnlyForUser" href="../../questionnaire/clone/{{questionnaire.questionnaireId}}{{questionnaire.questionnaireRevision ? '$' + questionnaire.questionnaireRevision : ''}}" target="_blank" v-i18next>CopyTo</a>
@@ -27,10 +27,10 @@
                     </ul>
                 </div>
                 <a class="btn" href="/" type="button" v-if="!currentUserIsAuthenticated" v-i18next>Login</a>
-                <a class="btn" href="/identity/account/register" type="button" v-if="!currentUserIsAuthenticated" v-i18next>Register</a>
+                <a class="btn" href="/identity/account/register" type="button" v-if="!currentUserIsAuthenticated" v-i18next>Register</a> -->
             </div>
         </div>
-        <div class="questionnarie-title">
+        <!-- <div class="questionnarie-title">
             <div class="title">
                 <div class="questionnarie-title-text">
                     {{questionnaire.title}}
@@ -64,11 +64,11 @@
                     <span class="error-message strong" v-show="questionnaire.previewRevision !== null && questionnaire.previewRevision !== undefined" v-i18next="({revision: questionnaire.previewRevision })Preview"></span>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
   </section>
 
-  <section id="spacer" class="row">
+  <!-- <section id="spacer" class="row">
     <div class="left"></div>
     <div class="right"></div>
   </section>
@@ -870,45 +870,49 @@
         </ul>
     </div>
     <div class="questionnaire-tree" ui-view></div>
-  </section>
+  </section> -->
 
 </template>
 
 <script>
-import { questionnaireService } from '../../services';
+import questionnaireService from '../../services/questionnaireService.js';
 
 export default {
     name: 'Main',
+    props: {
+        questionnaireRev: { type: String, required: true },        
+    },
     data() {
       return {         
-        questionnaire = {
+        QuestionnaireService: new questionnaireService(),
+        questionnaire : {
                 questionsCount: 0,
                 groupsCount: 0,
                 rostersCount: 0,
-                chapters = []
+                chapters : []
             },
-        currentUserIsAuthenticated = false,
-        isReadOnlyForUser = true,
-        verificationStatus = {
+        currentUserIsAuthenticated : false,
+        isReadOnlyForUser : true,
+        verificationStatus : {
                 errors: null,
                 warnings: null,
                 visible: false,
                 time: new Date()
             },
-        lookupTables = [],
-        scenarios = [],
-        commentThreads =[],
+        lookupTables: [],
+        scenarios: [],
+        commentThreads: [],
 
         
-        isUnfoldedChapters = false,
-        isUnfoldedScenarios = false,
-        isUnfoldedMacros = false,
-        isUnfoldedLookupTables = false,
-        isUnfoldedAttachments = false,
-        isUnfoldedTranslations = false,
-        isUnfoldedMetadata = false,
-        isUnfoldedComments = false,
-        isUnfoldedCategories = false,
+        isUnfoldedChapters: false,
+        isUnfoldedScenarios: false,
+        isUnfoldedMacros: false,
+        isUnfoldedLookupTables: false,
+        isUnfoldedAttachments: false,
+        isUnfoldedTranslations: false,
+        isUnfoldedMetadata: false,
+        isUnfoldedComments: false,
+        isUnfoldedCategories: false,
 
       };
     },
@@ -965,8 +969,13 @@ export default {
         unfoldChapters(){},
 
 
-        getQuestionnaire() {
-                questionnaireService.getQuestionnaireById($state.params.questionnaireId).then(function (result) {
+        async getQuestionnaire() {
+            const result = await this.QuestionnaireService.getQuestionnaireById(this.questionnaireRev);
+            this.questionnaire = result.data;
+
+
+
+                /* questionnaireService.getQuestionnaireById($state.params.questionnaireId).then(function (result) {
                     this.questionnaire = result.data;
                     if (!$state.params.chapterId && result.data.chapters.length > 0) {
                         var defaultChapter = _.first(result.data.chapters);
@@ -976,11 +985,11 @@ export default {
                     }
 
                     $rootScope.$emit('questionnaireLoaded');
-                });
-                },
+                });*/
+                }, 
     },
-    mounted() {
-        this.getQuestionnaire();
+    async mounted() {
+        await this.getQuestionnaire();
     }
 }
 </script>

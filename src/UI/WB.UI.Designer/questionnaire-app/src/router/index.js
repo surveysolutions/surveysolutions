@@ -1,9 +1,5 @@
-import Vue from 'vue';
-//import VueRouter from 'vue-router';
 import { createRouter, createWebHistory } from 'vue-router'
 import PageNotFound from '../views/PageNotFound.vue';
-
-//Vue.use(VueRouter);
 
 const routes = [
     {
@@ -30,6 +26,16 @@ const routes = [
             id: route.query.questionid,
             isCategory: false,
             cascading: route.query.cascading == 'true'
+        })
+    },
+    {
+        path: '/q/details/:questionnaireId',
+        component: () =>
+            import(
+                '../views/App/Main.vue'
+            ),
+        props: route => ({
+            questionnaireRev: route.params.questionnaireId            
         })
     },
     {
