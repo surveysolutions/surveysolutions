@@ -43,7 +43,31 @@ namespace WB.Infrastructure.Native.Questionnaire
 
             return translationFile;
         }
-        
+
+        private Dictionary<string, List<TranslationRow>> GetTranslations(QuestionnaireDocument questionnaire,
+            ITranslation translation, ICategories categoriesService) =>
+            GetTranslatedTexts(questionnaire, translation, categoriesService)
+                .OrderByDescending(x => x.Sheet)
+                .GroupBy(x => x.Sheet)
+                .ToDictionary(x => x.Key, x => x.ToList());
+
+        public Dictionary<string, string> GetExportedAliasesForTranslations(QuestionnaireDocument questionnaire,
+            ITranslation translation, ICategories categoriesService)
+        {
+            Dictionary<string, string> aliases = new Dictionary<string, string>();
+            
+            var textsToTranslateGroupedBySheets = GetTranslations(questionnaire, translation, categoriesService);
+            foreach (var textsToTranslate in textsToTranslateGroupedBySheets)
+            {
+                string workSheetName = this.GenerateWorksheetName(aliases.Keys.ToList(),
+                    textsToTranslate.Key);
+
+                aliases.Add(workSheetName, textsToTranslate.Key);
+            }
+
+            return aliases;
+        }
+
         private byte[] GetExcelFileContentEEPlus(QuestionnaireDocument questionnaire, ITranslation translation, ICategories categoriesService)
         {
             //non windows fonts
@@ -52,10 +76,7 @@ namespace WB.Infrastructure.Native.Questionnaire
             
             using (XLWorkbook excelPackage = new XLWorkbook(loadOptions))
             {
-                var textsToTranslateGroupedBySheets = GetTranslatedTexts(questionnaire, translation, categoriesService)
-                    .OrderByDescending(x => x.Sheet)
-                    .GroupBy(x => x.Sheet)
-                    .ToDictionary(x => x.Key, x => x.ToList());
+                var textsToTranslateGroupedBySheets = GetTranslations(questionnaire, translation, categoriesService);
 
                 foreach (var textsToTranslate in textsToTranslateGroupedBySheets)
                 {
@@ -124,9 +145,12 @@ namespace WB.Infrastructure.Native.Questionnaire
 
             if (!addedWorksheetNames.Contains(newWorksheetName)) return newWorksheetName;
 
-            newWorksheetName = newWorksheetName.Substring(0, newWorksheetName.Length > 28 ? 28 : newWorksheetName.Length);
+            var uniquenessPostfix = $"_{(addedWorksheetNames.Count + 1):D2}";
+            var permittedLength = 31 - uniquenessPostfix.Length;
+            
+            newWorksheetName = newWorksheetName.Substring(0, newWorksheetName.Length > permittedLength ? permittedLength : newWorksheetName.Length);
 
-            return $"{newWorksheetName}_{(addedWorksheetNames.Count + 1):D2}";
+            return $"{newWorksheetName}{uniquenessPostfix}";
         }
 
         private string CleanUpString(string text)
