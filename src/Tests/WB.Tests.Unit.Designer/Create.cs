@@ -1631,12 +1631,14 @@ namespace WB.Tests.Unit.Designer
 
         public static TranslationsService TranslationsService(
             DesignerDbContext dbContext = null,
-            IQuestionnaireViewFactory questionnaireStorage = null)
+            IQuestionnaireViewFactory questionnaireStorage = null,
+            IReusableCategoriesService reusableCategoriesService = null,
+            ITranslationsExportService translationsExportService = null)
             => new TranslationsService(
                 dbContext ?? Create.InMemoryDbContext(),
                 questionnaireStorage ?? Stub<IQuestionnaireViewFactory>.Returning(Create.QuestionnaireView()),
-                new TranslationsExportService(),
-                Mock.Of<IReusableCategoriesService>()
+                translationsExportService ?? new TranslationsExportService(),
+                reusableCategoriesService ?? Mock.Of<IReusableCategoriesService>()
             );
 
 

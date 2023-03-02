@@ -62,15 +62,15 @@
         >
             <template #[`item.value`]="{ item }">
                 <span class="text-no-wrap">{{ item.raw.value }}</span>
-            </template>
+            </template> 
             <template #[`item.parentValue`]="props">
                 <div>
-                    {{ props.item.parentValue }}
+                    {{ props.item.raw.parentValue }}
                     <span
                         v-if="parentCategories && parentCategories.length > 0"
                         class="caption text--disabled .d-none .d-md-flex .d-lg-none"
                         >{{
-                            captionForParentValue(props.item.parentValue)
+                            captionForParentValue(props.item.raw.parentValue)
                         }}</span
                     >
                 </div>
