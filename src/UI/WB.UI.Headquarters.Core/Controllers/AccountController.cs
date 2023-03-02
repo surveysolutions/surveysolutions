@@ -103,9 +103,11 @@ namespace WB.UI.Headquarters.Controllers
             returnUrl = !string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl)
                 ? returnUrl
                 : null;
-            model.RequireCaptcha = this.captchaService.ShouldShowCaptcha(model.UserName);
-
-            if (model.RequireCaptcha && !await this.captchaProvider.IsCaptchaValid(Request))
+            
+            var isCaptchaRequired = this.captchaService.ShouldShowCaptcha(model.UserName);
+            model.RequireCaptcha = isCaptchaRequired;
+            
+            if (isCaptchaRequired && !await this.captchaProvider.IsCaptchaValid(Request))
             {
                 this.ModelState.AddModelError("InvalidCaptcha", ErrorMessages.PleaseFillCaptcha);
                 return this.View(model);
