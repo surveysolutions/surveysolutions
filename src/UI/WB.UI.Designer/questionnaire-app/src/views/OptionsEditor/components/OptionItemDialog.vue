@@ -32,16 +32,14 @@
                             </v-col>
                             <v-col v-if="showParentValue" cols="12" sm="6">
                                 <v-autocomplete
-                                    v-if="
-                                        parentCategories &&
-                                            parentCategories.length > 0
-                                    "
+                                    v-if="parentCategories && parentCategories.length > 0"
                                     v-model="itemParentValue"
                                     autofocus
                                     eager
+                                    single-line
                                     :items="parentCategories"
-                                    :item-text="v => v.value + ' - ' + v.title"
-                                    item-value="value"
+                                    :item-title="getTitle"
+                                    item-value="value"                                    
                                 />
                                 <v-text-field
                                     v-else
@@ -145,11 +143,25 @@ export default {
         },
         cancel() {
             this.$emit('cancel');
+        },
+        getTitle(v){
+
+            if(v.value !== undefined)
+                return v.value + ' - ' + v.title;
+            
+            if(this.parentCategories && this.parentCategories.length > 0)
+            {
+                let item = this.parentCategories.find(x => x.value == v);
+                if(item !== undefined)
+                    return item.value + ' - ' + item.title
+            }    
+
+            return v;
         }
     },
     async mounted() {
         if(this.itemTitle || this.itemValue)
             await this.$refs.form.validate()
-    }
+    }    
 };
 </script>

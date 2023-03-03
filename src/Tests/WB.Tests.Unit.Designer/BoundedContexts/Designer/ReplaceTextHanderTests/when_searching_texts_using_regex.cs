@@ -26,7 +26,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
 
         private void BecauseOf() => matches = questionnaire.FindAllTexts("\\d", false, false, true);
 
-        [NUnit.Framework.Test] public void should_find_text_using_regex () => matches.Should().Contain(x => x.Id == staticTextId);
+        [NUnit.Framework.Test] 
+        public void should_find_text_using_regex () => 
+            matches.Should().Contain(x => x.Id == staticTextId);
 
         static Questionnaire questionnaire;
 
