@@ -1592,7 +1592,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire.
+        ///   Looks up a localized string similar to Responsible.
         /// </summary>
         public static string MapDashboard_ResponsibleTitle {
             get {

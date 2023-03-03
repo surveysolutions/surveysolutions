@@ -23,6 +23,8 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Shared.Extensions.Entities;
 using WB.UI.Shared.Extensions.Services;
@@ -458,7 +460,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         new KeyValuePair<string, object>("interviewId", interview.Id),
                         new KeyValuePair<string, object>("interviewKey", interview.InterviewKey),
                         new KeyValuePair<string, object>("title", title),
-                        new KeyValuePair<string, object>("status", interview.Status),
+                        new KeyValuePair<string, object>("status", interview.Status.ToString()),
                         new KeyValuePair<string, object>("sub_title", "")
                     },
                     new CompositeSymbol(new[]
@@ -520,8 +522,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         assignment.Quantity.GetValueOrDefault());
                 }
 
-                bool canCreateInterview =
+                bool canCreateInterview = !SupportDifferentResponsible &&
                     !assignment.Quantity.HasValue || Math.Max(val1: 0, val2: interviewsLeftByAssignmentCount) > 0;
+                bool canAssignInterview = SupportDifferentResponsible;
 
                 markers.Add(new Graphic(
                     (MapPoint)GeometryEngine.Project(
@@ -536,7 +539,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         new KeyValuePair<string, object>("responsible", assignment.ResponsibleName),
                         new KeyValuePair<string, object>("title", title),
                         new KeyValuePair<string, object>("sub_title", subTitle),
-                        new KeyValuePair<string, object>("can_create", canCreateInterview)
+                        new KeyValuePair<string, object>("can_create", canCreateInterview),
+                        new KeyValuePair<string, object>("can_assign", canAssignInterview)
                     },
                     new CompositeSymbol(new[]
                     {
@@ -600,17 +604,26 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         {
                             var assignmentInfo = identifyResults.Graphics[0].Attributes;
                             bool canCreate = (bool)assignmentInfo["can_create"];
+                            bool canAssign = (bool)assignmentInfo["can_assign"];
 
                             CalloutDefinition myCalloutDefinition =
                                 new CalloutDefinition("#" + id, popupTemplate);
-                            if (canCreate)
+                            if (canAssign)
+                            {
+                                myCalloutDefinition.ButtonImage =
+                                    await new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, Color.Blue, 25)
+                                        .CreateSwatchAsync(96);
+                                myCalloutDefinition.OnButtonClick += async (tag) => await AssignAssignmentButtonClick(assignmentInfo, tag);
+                            }
+                            else if (canCreate)
                             {
                                 myCalloutDefinition.ButtonImage =
                                     await new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, Color.Blue, 25)
                                         .CreateSwatchAsync(96);
-                                myCalloutDefinition.OnButtonClick += tag => OnAssignmentButtonClick(assignmentInfo, tag);
-                                myCalloutDefinition.Tag = id;
+                                myCalloutDefinition.OnButtonClick += tag => CreateFromAssignmentButtonClick(assignmentInfo, tag);
                             }
+
+                            myCalloutDefinition.Tag = id;
                             MapView.ShowCalloutAt(projectedLocation, myCalloutDefinition);
                         }
                     }
@@ -631,24 +644,31 @@ namespace WB.UI.Shared.Extensions.ViewModels
             if (calloutTag is string interviewId)
             {
                 var interview = interviewViewRepository.GetById(interviewId);
-                if (interview != null && interview.Status == InterviewStatus.Completed)
+                if (interview != null)
                 {
-                    var isReopen = await UserInteractionService.ConfirmAsync(
-                        EnumeratorUIResources.Dashboard_Reinitialize_Interview_Message,
-                        okButton: UIResources.Yes,
-                        cancelButton: UIResources.No);
-
-                    if (!isReopen)
+                    if (interview.Status == InterviewStatus.Completed)
                     {
-                        return;
-                    }
-                }
+                        var isReopen = await UserInteractionService.ConfirmAsync(
+                            EnumeratorUIResources.Dashboard_Reinitialize_Interview_Message,
+                            okButton: UIResources.Yes,
+                            cancelButton: UIResources.No);
 
-                await ViewModelNavigationService.NavigateToInterviewAsync(interviewId, null);
+                        if (!isReopen)
+                        {
+                            return;
+                        }
+                    }
+
+                    await ViewModelNavigationService.NavigateToAsync<LoadingInterviewViewModel, LoadingViewModelArg>(
+                        new LoadingViewModelArg
+                        {
+                            InterviewId = interview.InterviewId
+                        }, true);
+                }
             }
         }
 
-        private void OnAssignmentButtonClick(IDictionary<string, object> assignmentInfo, object calloutTag)
+        private void CreateFromAssignmentButtonClick(IDictionary<string, object> assignmentInfo, object calloutTag)
         {
             bool isCreating = assignmentInfo.ContainsKey("creating");
             if (isCreating)
@@ -659,6 +679,16 @@ namespace WB.UI.Shared.Extensions.ViewModels
             {
                 //create interview from assignment
                 ViewModelNavigationService.NavigateToCreateAndLoadInterview(assignmentId);
+            }
+        }
+
+        private async Task AssignAssignmentButtonClick(IDictionary<string, object> assignmentInfo, object calloutTag)
+        {
+            if(calloutTag != null && (Int32.TryParse(calloutTag as string, out int assignmentId)))
+            {
+                await this.ViewModelNavigationService.NavigateToAsync<SelectResponsibleForAssignmentViewModel, SelectResponsibleForAssignmentArgs>(
+                    new SelectResponsibleForAssignmentArgs(assignmentId));
+                await RefreshMarkers();
             }
         }
 

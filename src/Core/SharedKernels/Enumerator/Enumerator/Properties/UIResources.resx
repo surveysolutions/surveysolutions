@@ -657,7 +657,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Questionnaire</value>
   </data>
   <data name="MapDashboard_ResponsibleTitle" xml:space="preserve">
-    <value>Questionnaire</value>
+    <value>Responsible</value>
   </data>
   <data name="MapDashboard_StatusTitle" xml:space="preserve">
     <value>Status</value>
