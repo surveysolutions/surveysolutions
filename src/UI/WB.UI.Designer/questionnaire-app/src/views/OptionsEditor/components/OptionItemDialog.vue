@@ -36,6 +36,7 @@
                                     v-model="itemParentValue"
                                     autofocus
                                     eager
+                                    single-line
                                     :items="parentCategories"
                                     :item-title="getTitle"
                                     item-value="value"                                    
