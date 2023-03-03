@@ -68,7 +68,7 @@
                     {{ props.item.raw.parentValue }}
                     <span
                         v-if="parentCategories && parentCategories.length > 0"
-                        class="caption text--disabled .d-none .d-md-flex .d-lg-none"
+                        class="caption v-field--disabled .d-none .d-md-flex .d-lg-none"
                         >{{
                             captionForParentValue(props.item.raw.parentValue)
                         }}</span
@@ -135,19 +135,19 @@ export default {
                 {
                     title: this.$t('QuestionnaireEditor.OptionsUploadValue'),
                     sortable: false,
-                    width: '10%',
+                    width: '12%',
                     key: 'value'
                 },
                 {
                     title: this.$t('QuestionnaireEditor.OptionsUploadTitle'),
                     sortable: false,
                     key: 'title',
-                    width: this.isCascading ? '45%' : '55%'
+                    width: this.isCascading ? '42%' : '52%'
                 },
                 {
                     title: this.$t('QuestionnaireEditor.AttachmentName'),
                     sortable: false,
-                    width: '15%',
+                    width: '13%',
                     key: 'attachmentName'
                 }
             ];
@@ -164,7 +164,7 @@ export default {
             headers.push({
                 key: 'actions',
                 sortable: false,
-                width: '10%',
+                width: '13%',
                 align: 'end'
             });
 
