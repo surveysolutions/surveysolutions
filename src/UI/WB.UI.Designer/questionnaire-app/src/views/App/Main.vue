@@ -4,75 +4,82 @@
     <div class="header-line">
         <div class="header-menu">
             <div class="buttons">
-                <a class="btn" href="http://support.mysurvey.solutions/designer" target="_blank" v-i18next>Help</a>
-                <a class="btn" href="https://forum.mysurvey.solutions" target="_blank" v-i18next>Forum</a>
+                <a class="btn" href="http://support.mysurvey.solutions/designer" target="_blank">{{ $t('QuestionnaireEditor.Help') }}</a>
+                <a class="btn" href="https://forum.mysurvey.solutions" target="_blank" >{{ $t('QuestionnaireEditor.Forum') }} </a>
             
                 <a class="btn" href="../../questionnaire/questionnairehistory/{{questionnaire.questionnaireId}}" target="_blank"
-                   v-if="questionnaire.hasViewerAdminRights || questionnaire.isSharedWithUser" v-i18next>History</a>
-                <!-- <button class="btn" type="button" v-click="showDownloadPdf()" v-i18next>DownloadPdf</button>
-                <a class="btn" type="button" v-show="questionnaire.hasViewerAdminRights" v-click="exportQuestionnaire()" v-i18next>SaveAs</a>
+                   v-if="questionnaire.hasViewerAdminRights || questionnaire.isSharedWithUser">{{ $t('QuestionnaireEditor.History') }}</a>
+                <button class="btn" type="button" v-click="showDownloadPdf()">{{ $t('QuestionnaireEditor.DownloadPdf') }}</button>
+                <a class="btn" type="button" v-show="questionnaire.hasViewerAdminRights" v-click="exportQuestionnaire()" >{{ $t('QuestionnaireEditor.SaveAs') }}</a>
 
-                <a class="btn"  v-if="questionnaire.questionnaireRevision || questionnaire.isReadOnlyForUser" href="../../questionnaire/clone/{{questionnaire.questionnaireId}}{{questionnaire.questionnaireRevision ? '$' + questionnaire.questionnaireRevision : ''}}" target="_blank" v-i18next>CopyTo</a>
-                <button class="btn" type="button" v-disabled="questionnaire.isReadOnlyForUser && !questionnaire.hasViewerAdminRights && !questionnaire.isSharedWithUser" v-click="showShareInfo()" v-i18next>Settings</button>
+                <a class="btn"  v-if="questionnaire.questionnaireRevision || questionnaire.isReadOnlyForUser" href="../../questionnaire/clone/{{questionnaire.questionnaireId}}{{questionnaire.questionnaireRevision ? '$' + questionnaire.questionnaireRevision : ''}}" target="_blank">{{ $t('QuestionnaireEditor.CopyTo') }}</a>
+                <button class="btn" type="button" v-disabled="questionnaire.isReadOnlyForUser && !questionnaire.hasViewerAdminRights && !questionnaire.isSharedWithUser" v-click="showShareInfo()">{{ $t('QuestionnaireEditor.Settings') }}</button>
 
                 <div class="btn-group" v-if="currentUserIsAuthenticated">
-                    <a class="btn btn-default" v-i18next="[i18next]({currentUserName: '{{ currentUserName }}' })HellowMessageBtn"></a>
+                    <!-- <a class="btn btn-default">{{ $t('QuestionnaireEditor.HellowMessageBtn', {currentUserName:currentUserName}) }}</a> -->
                     <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="caret"></span>
-                        <span class="sr-only" v-i18next>ToggleDropdown</span>
+                        <span class="sr-only" >{{ $t('QuestionnaireEditor.ToggleDropdown') }}</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a href="../../identity/account/manage" v-i18next>ManageAccount</a></li>
-                        <li><a href="../../identity/account/logout" v-i18next>LogOut</a></li>
+                        <li><a href="../../identity/account/manage">{{ $t('QuestionnaireEditor.ManageAccount') }}</a></li>
+                        <li><a href="../../identity/account/logout">{{ $t('QuestionnaireEditor.LogOut') }}</a></li>
                     </ul>
                 </div>
-                <a class="btn" href="/" type="button" v-if="!currentUserIsAuthenticated" v-i18next>Login</a>
-                <a class="btn" href="/identity/account/register" type="button" v-if="!currentUserIsAuthenticated" v-i18next>Register</a> -->
+                <a class="btn" href="/" type="button" v-if="!currentUserIsAuthenticated">{{ $t('QuestionnaireEditor.Login') }}</a>
+                <a class="btn" href="/identity/account/register" type="button" v-if="!currentUserIsAuthenticated">{{ $t('QuestionnaireEditor.Register') }}</a>
             </div>
         </div>
-        <!-- <div class="questionnarie-title">
+        <div class="questionnarie-title">
             <div class="title">
                 <div class="questionnarie-title-text">
                     {{questionnaire.title}}
                 </div>
                 <div class="questionnarie-title-buttons">
-                    <span class="text-muted" v-i18next="[i18next]({questionsCount: '{{questionnaire.questionsCount}}',
-                                                                    groupsCount: '{{questionnaire.groupsCount}}',
-                                                                    rostersCount: '{{questionnaire.rostersCount}}' })QuestionnaireSummary">
+                    <!-- <span class="text-muted">{{ $t('QuestionnaireEditor.QuestionnaireSummary', { questionsCount: questionnaire.questionsCount, groupsCount: questionnaire.groupsCount, rostersCount: questionnaire.rostersCount}) }} 
 
-                    </span>
-                    <input id="verification-btn" type="button" class="btn" v-i18next="[value]Compile" value="COMPILE" v-click="verify()" v-if="questionnaire.questionnaireRevision === null" />
+                    </span>-->
+                    <button id="verification-btn" type="button" class="btn"                         
+                        v-click="verify()" 
+                        v-if="questionnaire.questionnaireRevision === null">{{ $t('QuestionnaireEditor.Compile') }}</button>
                     <span v-show="verificationStatus.warnings!=null && verificationStatus.errors!=null">
                         <span data-toggle="modal" v-show="(verificationStatus.warnings.length + verificationStatus.errors.length) > 0" class="error-message v-hide" v-class="{'no-errors': verificationStatus.errors.length == 0}">
-                            <a href="javascript:void(0);"
-                               v-click="showVerificationErrors()"
-                               v-i18next="[i18next]({count: verificationStatus.errors.length})ErrorsCounter">
-                            </a>
+                            <!-- <a href="javascript:void(0);"
+                               v-click="showVerificationErrors()">{{ $t('QuestionnaireEditor.ErrorsCounter',{ count: verificationStatus.errors.length}) }}
+                            </a> -->
                         </span>
                         <span data-toggle="modal" v-show="verificationStatus.warnings.length > 0" class="warniv-message v-hide">
                             <a href="javascript:void(0);"
-                               v-click="showVerificationWarnings()"
-                               v-i18next="[i18next]({count: verificationStatus.warnings.length})WarningsCounter">
+                               v-click="showVerificationWarnings()">
+                               <!-- {{ $t('QuestionnaireEditor.WarningsCounter',{ count: verificationStatus.warnings.length}) }} -->
                             </a>
                         </span>
-                        <span class="text-success" v-show="(verificationStatus.warnings.length + verificationStatus.errors.length) === 0" v-i18next>Ok</span>
+                        <span class="text-success" v-show="(verificationStatus.warnings.length + verificationStatus.errors.length) === 0" >{{ $t('QuestionnaireEditor.Ok') }} </span>
 
-                        <span class="text-success"><em v-i18next="[i18next]({dateTime: verificationStatus.time})SavedAtTimestamp"></em></span>
+                        <span class="text-success">
+                            <!-- <em>{{ $t('QuestionnaireEditor.SavedAtTimestamp',{ dateTime: verificationStatus.time}) }}</em> -->
+                        </span>
                     </span>
-                    <span class="error-message strong" v-show="questionnaire.isReadOnlyForUser" v-i18next>ReadOnly</span>
-                    <input id="webtest-btn" type="button" class="btn" v-if="questionnaire.webTestAvailable && questionnaire.questionnaireRevision === null" v-i18next="[value]Test" value="Test" v-click="webTest()" />
-                    <span class="error-message strong" v-show="questionnaire.previewRevision !== null && questionnaire.previewRevision !== undefined" v-i18next="({revision: questionnaire.previewRevision })Preview"></span>
+                    <span class="error-message strong" v-show="questionnaire.isReadOnlyForUser">{{ $t('QuestionnaireEditor.ReadOnly') }}</span>
+                    <button id="webtest-btn" type="button" class="btn" 
+                        v-if="questionnaire.webTestAvailable && questionnaire.questionnaireRevision === null" 
+                        v-click="webTest()">
+                        {{ $t('QuestionnaireEditor.Test') }}
+                    </button>
+                    <!-- <span class="error-message strong" v-show="questionnaire.previewRevision !== null && questionnaire.previewRevision !== undefined">
+                        {{ $t('QuestionnaireEditor.Preview',{ revision: questionnaire.previewRevision}) }}
+                    </span> -->
                 </div>
             </div>
-        </div> -->
+        </div>
     </div>
   </section>
 
-  <!-- <section id="spacer" class="row">
+   <section id="spacer" class="row">
     <div class="left"></div>
     <div class="right"></div>
   </section>
-
+<!--
   <section id="main" class="row">
     <div class="left-side-panel chapters" v-class="{unfolded: isFolded }" v-controller="ChaptersCtrl" data-empty-place-holder-enabled="false">
         <div class="foldback-region" v-click="foldback();$event.stopPropagation()"></div>
@@ -876,6 +883,7 @@
 
 <script>
 import questionnaireService from '../../services/questionnaireService.js';
+import userService from '../../services/userService.js'
 
 export default {
     name: 'Main',
@@ -883,8 +891,8 @@ export default {
         questionnaireRev: { type: String, required: true },        
     },
     data() {
-      return {         
-        QuestionnaireService: new questionnaireService(),
+      return {        
+        
         questionnaire : {
                 questionsCount: 0,
                 groupsCount: 0,
@@ -894,8 +902,8 @@ export default {
         currentUserIsAuthenticated : false,
         isReadOnlyForUser : true,
         verificationStatus : {
-                errors: null,
-                warnings: null,
+                errors: [],
+                warnings: [],
                 visible: false,
                 time: new Date()
             },
@@ -913,6 +921,10 @@ export default {
         isUnfoldedMetadata: false,
         isUnfoldedComments: false,
         isUnfoldedCategories: false,
+
+        currentUserName: '',
+        currentUserEmail: '',
+        currentUserIsAuthenticated: false
 
       };
     },
@@ -967,11 +979,19 @@ export default {
             },
         unfoldMetadata(){},
         unfoldChapters(){},
+        webTest(){},
 
+
+        async getCurrentUserName(){
+            const result = await userService.getCurrentUserName();
+            this.currentUserName = result.userName;
+            this.currentUserEmail = result.email;
+            this.currentUserIsAuthenticated = result.isAuthenticated;
+        },
 
         async getQuestionnaire() {
-            const result = await this.QuestionnaireService.getQuestionnaireById(this.questionnaireRev);
-            this.questionnaire = result.data;
+            const data = await questionnaireService.getQuestionnaireById(this.questionnaireRev);
+            this.questionnaire = data;
 
 
 
@@ -989,7 +1009,8 @@ export default {
                 }, 
     },
     async mounted() {
-        await this.getQuestionnaire();
+        await this.getCurrentUserName();
+        await this.getQuestionnaire();        
     }
 }
 </script>
