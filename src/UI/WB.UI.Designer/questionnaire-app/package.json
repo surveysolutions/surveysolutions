@@ -13,6 +13,8 @@
     "@intlify/unplugin-vue-i18n": "^0.8.1",
     "axios": "1.2.6",
     "core-js": "^3.27.1",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.4",
     "unplugin-vue-components": "0.23.0",
     "vue": "^3.2.47",
     "vue-i18n": "9.2.2",

@@ -73,7 +73,7 @@ const scripts = () =>
     );
 
 const inject = () =>
-  injectSections(src(["questionnaire/index.cshtml"]), dist, {
+injectSections(src(["questionnaire/index.cshtml", "questionnaire-app/index.html" /* temp hack to inject styles and scripts*/]), dist, {
     quiet: true,
     
     //addPrefix: PRODUCTION ? "~" : "~/src",
