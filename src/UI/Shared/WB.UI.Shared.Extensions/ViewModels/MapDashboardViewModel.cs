@@ -31,29 +31,13 @@ using WB.UI.Shared.Extensions.Services;
 
 namespace WB.UI.Shared.Extensions.ViewModels
 {
-    public class MapDashboardViewModel: BaseMapInteractionViewModel<MapDashboardViewModelArgs>
+    public abstract class MapDashboardViewModel: BaseMapInteractionViewModel<MapDashboardViewModelArgs>
     {
         private readonly IAssignmentDocumentsStorage assignmentsRepository;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
-        private readonly IPlainStorage<InterviewerDocument> usersRepository;
+        protected readonly IPlainStorage<InterviewerDocument> usersRepository;
 
-        private static readonly InterviewStatus[] InterviewerStatuses =
-        {
-            InterviewStatus.Created,
-            InterviewStatus.InterviewerAssigned,
-            InterviewStatus.Restarted,
-            InterviewStatus.RejectedBySupervisor,
-            InterviewStatus.Completed,
-        };
-
-        private static readonly InterviewStatus[] SupervisorStatuses =
-            InterviewerStatuses.Concat(new []
-            {
-                InterviewStatus.SupervisorAssigned,
-                InterviewStatus.RejectedByHeadquarters,
-            }).ToArray();
-        
-        public MapDashboardViewModel(IPrincipal principal, 
+        protected MapDashboardViewModel(IPrincipal principal, 
             IViewModelNavigationService viewModelNavigationService,
             IUserInteractionService userInteractionService,
             IMapService mapService,
@@ -72,6 +56,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
             this.usersRepository = usersRepository;
             this.mainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
         }
+        
+        protected abstract InterviewStatus[] InterviewStatuses { get; }
 
         private GraphicsOverlayCollection graphicsOverlays = new GraphicsOverlayCollection();
         public GraphicsOverlayCollection GraphicsOverlays
@@ -99,12 +85,11 @@ namespace WB.UI.Shared.Extensions.ViewModels
             get => this.showAssignments;
             set => this.RaiseAndSetIfChanged(ref this.showAssignments, value);
         }
-        
-        public bool SupportDifferentResponsible { get; set; }
-        
+
+        public abstract bool SupportDifferentResponsible { get; }
+
         public override void Prepare(MapDashboardViewModelArgs parameter)
         {
-            SupportDifferentResponsible = parameter.SupportDifferentResponsible;
         }
 
         public override async Task Initialize()
@@ -175,38 +160,15 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 SelectedQuestionnaire = AllQuestionnaireDefault;
         }
         
-        private void CollectResponsibles()
+        protected virtual void CollectResponsibles()
         {
-            if (!SupportDifferentResponsible)
-                return;
-            
-            List<ResponsibleItem> result = usersRepository.LoadAll()
-                .Where(x => !x.IsLockedByHeadquarters && !x.IsLockedBySupervisor)
-                .Select(user => new ResponsibleItem(user.InterviewerId, user.UserName))
-                .OrderBy(x => x.Title)
-                .ToList();
-
-            var responsibleItems = new List<ResponsibleItem>
-            {
-                AllResponsibleDefault,
-                new ResponsibleItem(Principal.CurrentUserIdentity.UserId, Principal.CurrentUserIdentity.Name),
-            };
-            responsibleItems.AddRange(result);
-
-            Responsibles = new MvxObservableCollection<ResponsibleItem>(responsibleItems);
-
-            if (SelectedResponsible != AllResponsibleDefault)
-                SelectedResponsible = AllResponsibleDefault;
         }
 
         private void CollectInterviewStatuses()
         {
             var statusItems = new List<StatusItem> { AllStatusDefault };
 
-            var statuses = SupportDifferentResponsible
-                ? SupervisorStatuses
-                : InterviewerStatuses;
-            statuses.ForEach(s => statusItems.Add(new StatusItem(s, s.ToString())));
+            InterviewStatuses.ForEach(s => statusItems.Add(new StatusItem(s, s.ToString())));
 
             Statuses = new MvxObservableCollection<StatusItem>(statusItems);
 
@@ -257,8 +219,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
             SelectedQuestionnaire = questionnaire;
             await RefreshMarkers();
         }
-        
-        private static readonly ResponsibleItem AllResponsibleDefault = new ResponsibleItem(null, UIResources.MapDashboard_AllResponsibles);
+
+        protected static readonly ResponsibleItem AllResponsibleDefault = new ResponsibleItem(null, UIResources.MapDashboard_AllResponsibles);
 
         public MvxObservableCollection<ResponsibleItem> responsibles = new MvxObservableCollection<ResponsibleItem>();
         public MvxObservableCollection<ResponsibleItem> Responsibles
@@ -591,8 +553,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
                             CalloutDefinition myCalloutDefinition =
                                 new CalloutDefinition(interviewKey, popupTemplate)
                                 {
-                                    ButtonImage = await new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle,
-                                            Color.Blue, 25).CreateSwatchAsync(96)
+                                    // ButtonImage = await new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle,
+                                    //         Color.Blue, 25).CreateSwatchAsync(96)
+                                    ButtonImage = await new TextSymbol("⋮", Color.Blue, 25, HorizontalAlignment.Center, VerticalAlignment.Middle).CreateSwatchAsync(96)
                                 };
 
                             myCalloutDefinition.OnButtonClick += OnInterviewButtonClick;
@@ -610,9 +573,11 @@ namespace WB.UI.Shared.Extensions.ViewModels
                                 new CalloutDefinition("#" + id, popupTemplate);
                             if (canAssign)
                             {
-                                myCalloutDefinition.ButtonImage =
-                                    await new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, Color.Blue, 25)
-                                        .CreateSwatchAsync(96);
+                                myCalloutDefinition.ButtonImage = await new TextSymbol("⋮", Color.Blue, 25,
+                                    HorizontalAlignment.Center, VerticalAlignment.Middle).CreateSwatchAsync(96);
+                                // myCalloutDefinition.ButtonImage =
+                                //     await new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, Color.Blue, 25)
+                                //         .CreateSwatchAsync(96);
                                 myCalloutDefinition.OnButtonClick += async (tag) => await AssignAssignmentButtonClick(assignmentInfo, tag);
                             }
                             else if (canCreate)
@@ -727,6 +692,5 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
     public class MapDashboardViewModelArgs
     {
-        public bool SupportDifferentResponsible { get; set; } = false;
     }
 }

@@ -318,7 +318,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             try
             {
                 this.Synchronization.CancelSynchronizationCommand.Execute();
-                await mapInteractionService.OpenMapDashboardAsync(supportDifferentResponsible: true);
+                await mapInteractionService.OpenSupervisorMapDashboardAsync();
                 this.Dispose();
             }
             catch (MissingPermissionsException e)

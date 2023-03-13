@@ -20,7 +20,7 @@ namespace WB.UI.Shared.Extensions.Activities
         Theme = "@style/AppTheme",
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize,
         Exported = false)]
-    public class MapDashboardActivity : BaseActivity<MapDashboardViewModel>
+    public class MapDashboardActivity<T> : BaseActivity<T> where T : MapDashboardViewModel
     {
         protected override int ViewResourceId => Resource.Layout.map_dashboard;
 
