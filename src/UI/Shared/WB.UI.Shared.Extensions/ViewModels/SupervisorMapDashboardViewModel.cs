@@ -135,7 +135,9 @@ public class SupervisorMapDashboardViewModel : MapDashboardViewModel
         string subTitle = identifyResults.Graphics[0].Attributes["sub_title"] as string;
         string responsible = identifyResults.Graphics[0].Attributes["responsible"] as string;
 
-        var popupTemplate = $"{title}\r\n{responsible}\r\n{subTitle}";
+        var popupTemplate = $"{title}\r\n{responsible}";
+        if (!string.IsNullOrWhiteSpace(subTitle))
+            popupTemplate += $"\r\n{subTitle}";
         
         if (string.IsNullOrEmpty(id))
         {
