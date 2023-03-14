@@ -70,6 +70,7 @@
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>$(Constants)</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
+    <AotAssemblies>true</AotAssemblies>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
     <AndroidLinkSkip>mscorlib;System.Runtime;System.Runtime.Extensions;System.Linq;System.Collections;System.Text.RegularExpressions;netstandard;WB.Core.SharedKernels.DataCollection.Portable;WB.Core.SharedKernels.DataCollection;</AndroidLinkSkip>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
