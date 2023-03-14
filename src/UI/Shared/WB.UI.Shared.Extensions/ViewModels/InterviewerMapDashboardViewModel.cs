@@ -1,12 +1,17 @@
 ﻿using System.Drawing;
+using Esri.ArcGISRuntime.Data;
+using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Symbology;
+using Esri.ArcGISRuntime.UI;
 using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Shared.Extensions.Services;
 
@@ -84,4 +89,93 @@ public class InterviewerMapDashboardViewModel : MapDashboardViewModel
         }).ToArray();
     }
 
+    protected override async Task ShopMapPopup(IdentifyGraphicsOverlayResult identifyResults, MapPoint projectedLocation)
+    {
+        string id = identifyResults.Graphics[0].Attributes["id"].ToString();
+        string title = identifyResults.Graphics[0].Attributes["title"] as string;
+        string subTitle = identifyResults.Graphics[0].Attributes["sub_title"] as string;
+
+        var popupTemplate = $"{title}\r\n{subTitle}";
+        
+        if (string.IsNullOrEmpty(id))
+        {
+            string interviewId = identifyResults.Graphics[0].Attributes["interviewId"].ToString();
+            string interviewKey = identifyResults.Graphics[0].Attributes["interviewKey"].ToString();
+            string status = identifyResults.Graphics[0].Attributes["status"].ToString();
+            if (!string.IsNullOrWhiteSpace(popupTemplate))
+                popupTemplate += $"\r\n{status}";
+
+            CalloutDefinition myCalloutDefinition =
+                new CalloutDefinition(interviewKey, popupTemplate)
+                {
+                    ButtonImage = await new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle,
+                            Color.Blue, 25).CreateSwatchAsync(96)
+                };
+
+            myCalloutDefinition.OnButtonClick += OnInterviewButtonClick;
+            myCalloutDefinition.Tag = interviewId;
+            
+            MapView.ShowCalloutAt(projectedLocation, myCalloutDefinition);
+        }
+        else
+        {
+            var assignmentInfo = identifyResults.Graphics[0].Attributes;
+            bool canCreate = (bool)assignmentInfo["can_create"];
+
+            CalloutDefinition myCalloutDefinition = new CalloutDefinition("#" + id, popupTemplate);
+            if (canCreate)
+            {
+                myCalloutDefinition.ButtonImage =
+                    await new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, Color.Blue, 25)
+                        .CreateSwatchAsync(96);
+                myCalloutDefinition.OnButtonClick += tag => CreateFromAssignmentButtonClick(assignmentInfo, tag);
+            }
+
+            myCalloutDefinition.Tag = id;
+            MapView.ShowCalloutAt(projectedLocation, myCalloutDefinition);
+        }
+    }
+
+    private void CreateFromAssignmentButtonClick(IDictionary<string, object> assignmentInfo, object calloutTag)
+    {
+        bool isCreating = assignmentInfo.ContainsKey("creating");
+        if (isCreating)
+            return;
+            
+        assignmentInfo["creating"] = true;
+        if(calloutTag != null && (Int32.TryParse(calloutTag as string, out int assignmentId)))
+        {
+            //create interview from assignment
+            ViewModelNavigationService.NavigateToCreateAndLoadInterview(assignmentId);
+        }
+    }
+    
+    private async void OnInterviewButtonClick(object calloutTag)
+    {
+        if (calloutTag is string interviewId)
+        {
+            var interview = interviewViewRepository.GetById(interviewId);
+            if (interview != null)
+            {
+                if (interview.Status == InterviewStatus.Completed)
+                {
+                    var isReopen = await UserInteractionService.ConfirmAsync(
+                        EnumeratorUIResources.Dashboard_Reinitialize_Interview_Message,
+                        okButton: UIResources.Yes,
+                        cancelButton: UIResources.No);
+
+                    if (!isReopen)
+                    {
+                        return;
+                    }
+                }
+
+                await ViewModelNavigationService.NavigateToAsync<LoadingInterviewViewModel, LoadingViewModelArg>(
+                    new LoadingViewModelArg
+                    {
+                        InterviewId = interview.InterviewId
+                    }, true);
+            }
+        }
+    }
 }
