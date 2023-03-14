@@ -37,9 +37,9 @@ public class InterviewerMapDashboardViewModel : MapDashboardViewModel
         IEnumeratorSettings enumeratorSettings, 
         ILogger logger, 
         IMapUtilityService mapUtilityService, 
-        IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher, 
-        IPlainStorage<InterviewerDocument> usersRepository) 
-        : base(principal, viewModelNavigationService, userInteractionService, mapService, assignmentsRepository, interviewViewRepository, enumeratorSettings, logger, mapUtilityService, mainThreadAsyncDispatcher, usersRepository)
+        IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher 
+        ) 
+        : base(principal, viewModelNavigationService, userInteractionService, mapService, assignmentsRepository, interviewViewRepository, enumeratorSettings, logger, mapUtilityService, mainThreadAsyncDispatcher)
     {
     }
 

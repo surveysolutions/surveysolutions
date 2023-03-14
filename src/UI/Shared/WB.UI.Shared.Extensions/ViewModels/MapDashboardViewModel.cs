@@ -36,7 +36,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
     {
         protected readonly IAssignmentDocumentsStorage assignmentsRepository;
         protected readonly IPlainStorage<InterviewView> interviewViewRepository;
-        protected readonly IPlainStorage<InterviewerDocument> usersRepository;
 
         protected MapDashboardViewModel(IPrincipal principal, 
             IViewModelNavigationService viewModelNavigationService,
@@ -47,14 +46,12 @@ namespace WB.UI.Shared.Extensions.ViewModels
             IEnumeratorSettings enumeratorSettings,
             ILogger logger,
             IMapUtilityService mapUtilityService,
-            IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher,
-            IPlainStorage<InterviewerDocument> usersRepository) 
+            IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher) 
             : base(principal, viewModelNavigationService, mapService, userInteractionService, logger, 
                    enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher)
         {
             this.assignmentsRepository = assignmentsRepository;
             this.interviewViewRepository = interviewViewRepository;
-            this.usersRepository = usersRepository;
             this.mainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
         }
         

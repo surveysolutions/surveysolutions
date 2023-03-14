@@ -22,6 +22,8 @@ namespace WB.UI.Shared.Extensions.ViewModels;
 
 public class SupervisorMapDashboardViewModel : MapDashboardViewModel
 {
+    private readonly IPlainStorage<InterviewerDocument> usersRepository;
+
     protected override InterviewStatus[] InterviewStatuses { get; } =
     {
         InterviewStatus.Created,
@@ -33,8 +35,20 @@ public class SupervisorMapDashboardViewModel : MapDashboardViewModel
         InterviewStatus.RejectedByHeadquarters,
     };
 
-    public SupervisorMapDashboardViewModel(IPrincipal principal, IViewModelNavigationService viewModelNavigationService, IUserInteractionService userInteractionService, IMapService mapService, IAssignmentDocumentsStorage assignmentsRepository, IPlainStorage<InterviewView> interviewViewRepository, IEnumeratorSettings enumeratorSettings, ILogger logger, IMapUtilityService mapUtilityService, IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher, IPlainStorage<InterviewerDocument> usersRepository) : base(principal, viewModelNavigationService, userInteractionService, mapService, assignmentsRepository, interviewViewRepository, enumeratorSettings, logger, mapUtilityService, mainThreadAsyncDispatcher, usersRepository)
+    public SupervisorMapDashboardViewModel(IPrincipal principal, 
+        IViewModelNavigationService viewModelNavigationService, 
+        IUserInteractionService userInteractionService, 
+        IMapService mapService, 
+        IAssignmentDocumentsStorage assignmentsRepository, 
+        IPlainStorage<InterviewView> interviewViewRepository, 
+        IEnumeratorSettings enumeratorSettings, 
+        ILogger logger, 
+        IMapUtilityService mapUtilityService, 
+        IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher, 
+        IPlainStorage<InterviewerDocument> usersRepository) 
+        : base(principal, viewModelNavigationService, userInteractionService, mapService, assignmentsRepository, interviewViewRepository, enumeratorSettings, logger, mapUtilityService, mainThreadAsyncDispatcher)
     {
+        this.usersRepository = usersRepository;
     }
 
     public override bool SupportDifferentResponsible => true;
