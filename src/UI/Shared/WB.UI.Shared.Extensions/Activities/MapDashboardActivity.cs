@@ -16,11 +16,7 @@ using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
 
 namespace WB.UI.Shared.Extensions.Activities
 {
-    [Activity(WindowSoftInputMode = SoftInput.StateHidden,
-        Theme = "@style/AppTheme",
-        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize,
-        Exported = false)]
-    public class MapDashboardActivity<T> : BaseActivity<T> where T : MapDashboardViewModel
+    public abstract class MapDashboardActivity<T> : BaseActivity<T> where T : MapDashboardViewModel
     {
         protected override int ViewResourceId => Resource.Layout.map_dashboard;
 
