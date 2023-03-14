@@ -27,6 +27,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Shared.Extensions.Entities;
+using WB.UI.Shared.Extensions.Extensions;
 using WB.UI.Shared.Extensions.Services;
 
 namespace WB.UI.Shared.Extensions.ViewModels
@@ -168,7 +169,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             var statusItems = new List<StatusItem> { AllStatusDefault };
 
-            InterviewStatuses.ForEach(s => statusItems.Add(new StatusItem(s, s.ToString())));
+            InterviewStatuses.ForEach(s => statusItems.Add(new StatusItem(s, s.ToLocalizeString())));
 
             Statuses = new MvxObservableCollection<StatusItem>(statusItems);
 
@@ -408,7 +409,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 new KeyValuePair<string, object>("interviewId", interview.Id),
                 new KeyValuePair<string, object>("interviewKey", interview.InterviewKey),
                 new KeyValuePair<string, object>("title", title),
-                new KeyValuePair<string, object>("status", interview.Status.ToString()),
+                new KeyValuePair<string, object>("status", interview.Status.ToLocalizeString()),
                 new KeyValuePair<string, object>("sub_title", "")
             };
         }

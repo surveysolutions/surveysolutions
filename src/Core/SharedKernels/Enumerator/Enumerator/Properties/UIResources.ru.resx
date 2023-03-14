@@ -829,4 +829,37 @@
   <data name="AreaMap_InitLocation" xml:space="preserve">
     <value>Запуск...</value>
   </data>
+  <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
+    <value>Утверждено Хедквотером</value>
+  </data>
+  <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
+    <value>Утверждено Супервизором</value>
+  </data>
+  <data name="InterviewStatus_Completed" xml:space="preserve">
+    <value>Завершено</value>
+  </data>
+  <data name="InterviewStatus_Created" xml:space="preserve">
+    <value>Создано</value>
+  </data>
+  <data name="InterviewStatus_Deleted" xml:space="preserve">
+    <value>Удалено</value>
+  </data>
+  <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
+    <value>Интервьюер назначен</value>
+  </data>
+  <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
+    <value>Отклонено Хедквотером</value>
+  </data>
+  <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
+    <value>Отклонено Супервизором</value>
+  </data>
+  <data name="InterviewStatus_Restarted" xml:space="preserve">
+    <value>Перезапущено</value>
+  </data>
+  <data name="InterviewStatus_Restored" xml:space="preserve">
+    <value>Восстановлено</value>
+  </data>
+  <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
+    <value>Супервизор назначен</value>
+  </data>
 </root>

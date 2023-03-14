@@ -824,5 +824,38 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   </data>
   <data name="AreaMap_InitLocation" xml:space="preserve">
     <value>Initiating...</value>
-  </data>    
+  </data>
+  <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
+    <value>Approved by Headquarters</value>
+  </data>
+  <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
+    <value>Approved by Supervisor</value>
+  </data>
+  <data name="InterviewStatus_Completed" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="InterviewStatus_Created" xml:space="preserve">
+    <value>Created</value>
+  </data>
+  <data name="InterviewStatus_Deleted" xml:space="preserve">
+    <value>Deleted</value>
+  </data>
+  <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
+    <value>Interviewer assigned</value>
+  </data>
+  <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
+    <value>Rejected by Headquarters</value>
+  </data>
+  <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
+    <value>Rejected by Supervisor</value>
+  </data>
+  <data name="InterviewStatus_Restarted" xml:space="preserve">
+    <value>Restarted</value>
+  </data>
+  <data name="InterviewStatus_Restored" xml:space="preserve">
+    <value>Restored</value>
+  </data>
+  <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
+    <value>Supervisor assigned</value>
+  </data>
 </root>

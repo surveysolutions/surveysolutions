@@ -1475,6 +1475,105 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Approved by Headquarters.
+        /// </summary>
+        public static string InterviewStatus_ApprovedByHeadquarters {
+            get {
+                return ResourceManager.GetString("InterviewStatus_ApprovedByHeadquarters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Approved by Supervisor.
+        /// </summary>
+        public static string InterviewStatus_ApprovedBySupervisor {
+            get {
+                return ResourceManager.GetString("InterviewStatus_ApprovedBySupervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Completed.
+        /// </summary>
+        public static string InterviewStatus_Completed {
+            get {
+                return ResourceManager.GetString("InterviewStatus_Completed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created.
+        /// </summary>
+        public static string InterviewStatus_Created {
+            get {
+                return ResourceManager.GetString("InterviewStatus_Created", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deleted.
+        /// </summary>
+        public static string InterviewStatus_Deleted {
+            get {
+                return ResourceManager.GetString("InterviewStatus_Deleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewer assigned.
+        /// </summary>
+        public static string InterviewStatus_InterviewerAssigned {
+            get {
+                return ResourceManager.GetString("InterviewStatus_InterviewerAssigned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rejected by Headquarters.
+        /// </summary>
+        public static string InterviewStatus_RejectedByHeadquarters {
+            get {
+                return ResourceManager.GetString("InterviewStatus_RejectedByHeadquarters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rejected by Supervisor.
+        /// </summary>
+        public static string InterviewStatus_RejectedBySupervisor {
+            get {
+                return ResourceManager.GetString("InterviewStatus_RejectedBySupervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restarted.
+        /// </summary>
+        public static string InterviewStatus_Restarted {
+            get {
+                return ResourceManager.GetString("InterviewStatus_Restarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restored.
+        /// </summary>
+        public static string InterviewStatus_Restored {
+            get {
+                return ResourceManager.GetString("InterviewStatus_Restored", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supervisor assigned.
+        /// </summary>
+        public static string InterviewStatus_SupervisorAssigned {
+            get {
+                return ResourceManager.GetString("InterviewStatus_SupervisorAssigned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to It is important that the clock setting is accurate. Your clock indicates that current date is set incorrect. Adjust the clock by setting the correct date/time before continuing your work..
         /// </summary>
         public static string InvalidTimeMessage {
