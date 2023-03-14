@@ -71,7 +71,7 @@
     <DefineConstants>$(Constants)</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
-    <AndroidLinkSkip>mscorlib;System.Runtime;System.Runtime.Extensions;System.Linq;System.Collections;System.Text.RegularExpressions;netstandard;WB.Core.SharedKernels.DataCollection.Portable;WB.Core.SharedKernels.DataCollection;</AndroidLinkSkip>
+    <AndroidLinkSkip>mscorlib;System.Runtime;System.Runtime.Extensions;System.Linq;System.Collections;System.Text.RegularExpressions;netstandard;WB.Core.SharedKernels.DataCollection.Portable;</AndroidLinkSkip>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
     <MandroidI18n>CJK,Mideast,Rare,West,Other</MandroidI18n>
     <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
