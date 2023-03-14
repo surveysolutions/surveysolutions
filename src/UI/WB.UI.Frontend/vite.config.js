@@ -128,6 +128,7 @@ for (var attr in pages) {
   var filenamePath = path.join(destFileFolderFull, filename)
   pagesSources.push({ source: pageObj.template, destination: templatesFolderFull, name : templateFilenameHtml })
   pagesTargets.push({ source: filenameHtmlPath, destination: origFolder, name: filename })
+  pagesTargets.push({ source: path.join(baseDir, "dist", filenameHtml), destination: origFolder, name: filename })
 
   pageObj.filename = filenameHtml
   pageObj.template = templateHtmlPath
