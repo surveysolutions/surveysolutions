@@ -128,7 +128,7 @@ public class SupervisorMapDashboardViewModel : MapDashboardViewModel
         }).ToArray();
     }
     
-    protected override async Task ShopMapPopup(IdentifyGraphicsOverlayResult identifyResults, MapPoint projectedLocation)
+    protected override async Task ShowMapPopup(IdentifyGraphicsOverlayResult identifyResults, MapPoint projectedLocation)
     {
         string id = identifyResults.Graphics[0].Attributes["id"].ToString();
         string title = identifyResults.Graphics[0].Attributes["title"] as string;

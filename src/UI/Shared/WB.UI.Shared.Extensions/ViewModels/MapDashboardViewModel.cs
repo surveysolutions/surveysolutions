@@ -34,7 +34,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 {
     public abstract class MapDashboardViewModel: BaseMapInteractionViewModel<MapDashboardViewModelArgs>
     {
-        protected readonly IAssignmentDocumentsStorage assignmentsRepository;
+        private readonly IAssignmentDocumentsStorage assignmentsRepository;
         protected readonly IPlainStorage<InterviewView> interviewViewRepository;
 
         protected MapDashboardViewModel(IPrincipal principal, 
@@ -220,7 +220,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         protected static readonly ResponsibleItem AllResponsibleDefault = new ResponsibleItem(null, UIResources.MapDashboard_AllResponsibles);
 
-        public MvxObservableCollection<ResponsibleItem> responsibles = new MvxObservableCollection<ResponsibleItem>();
+        private MvxObservableCollection<ResponsibleItem> responsibles = new MvxObservableCollection<ResponsibleItem>();
         public MvxObservableCollection<ResponsibleItem> Responsibles
         {
             get => this.responsibles;
@@ -250,7 +250,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         private static readonly StatusItem AllStatusDefault = new StatusItem(null, UIResources.MapDashboard_AllStatuses);
 
-        public MvxObservableCollection<StatusItem> statuses = new MvxObservableCollection<StatusItem>();
+        private MvxObservableCollection<StatusItem> statuses = new MvxObservableCollection<StatusItem>();
         public MvxObservableCollection<StatusItem> Statuses
         {
             get => this.statuses;
@@ -513,7 +513,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 {
                     if (identifyResults.Graphics[0].Geometry is MapPoint projectedLocation)
                     {
-                        await ShopMapPopup(identifyResults, projectedLocation);
+                        await ShowMapPopup(identifyResults, projectedLocation);
                     }
                 }
                 else
@@ -527,7 +527,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         }
 
-        protected abstract Task ShopMapPopup(IdentifyGraphicsOverlayResult identifyResults, MapPoint projectedLocation);
+        protected abstract Task ShowMapPopup(IdentifyGraphicsOverlayResult identifyResults, MapPoint projectedLocation);
 
         public IMvxAsyncCommand<MapDescription> SwitchMapCommand => new MvxAsyncCommand<MapDescription>(async (mapDescription) =>
         {

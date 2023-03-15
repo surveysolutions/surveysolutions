@@ -1862,7 +1862,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Not found any maps application.
+        ///   Looks up a localized string similar to Navigation application was not found.
         /// </summary>
         public static string NoMapsApplication {
             get {
