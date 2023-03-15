@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ClosedXML.Excel;
+using ClosedXML.Graphics;
+using SixLabors.Fonts;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Verifier;
@@ -28,7 +30,11 @@ namespace WB.Core.BoundedContexts.Designer.Services
         
         public byte[] GetTemplateFile(bool isCascading)
         {
-            using XLWorkbook excelPackage = new XLWorkbook();
+            //non windows fonts
+            var firstFont = SystemFonts.Collection.Families.First();
+            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(firstFont.Name) };
+            
+            using XLWorkbook excelPackage = new XLWorkbook(loadOptions);
             var worksheet = excelPackage.Worksheets.Add("Categories");
 
             void FormatCell(string address)
@@ -72,8 +78,12 @@ namespace WB.Core.BoundedContexts.Designer.Services
 
         private List<CategoriesRow> ExtractCategoriesFromExcelFile(Stream xmlFile)
         {
+            //non windows fonts
+            var firstFont = SystemFonts.Collection.Families.First();
+            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(firstFont.Name) };
+            
             var categories = new List<CategoriesRow>();
-            using XLWorkbook package = new XLWorkbook(xmlFile);
+            using XLWorkbook package = new XLWorkbook(xmlFile, loadOptions);
             var worksheet = package.Worksheets.First();
             var headers = GetHeaders(worksheet);
             int firstDataRow = 2;

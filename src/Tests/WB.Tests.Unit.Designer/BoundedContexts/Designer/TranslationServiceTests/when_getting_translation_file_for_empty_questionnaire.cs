@@ -1,8 +1,10 @@
 using System.IO;
 using System.Linq;
 using ClosedXML.Excel;
+using ClosedXML.Graphics;
 using Moq;
 using NUnit.Framework;
+using SixLabors.Fonts;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
@@ -26,7 +28,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
             TranslationFile excelFile = service.GetAsExcelFile(new QuestionnaireRevision(questionnaireId), Id.gD);
             
-            IXLWorksheet workbook = new XLWorkbook(new MemoryStream(excelFile.ContentAsExcelFile)).Worksheets.First();
+            //non windows fonts
+            var firstFont = SystemFonts.Collection.Families.First();
+            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(firstFont.Name) };
+            
+            IXLWorksheet workbook = new XLWorkbook(new MemoryStream(excelFile.ContentAsExcelFile), loadOptions).Worksheets.First();
             
             var questionnaireTitleRow = 2;
             Assert.That(workbook.Cell(questionnaireTitleRow, translationTypeColumn).Value, 
