@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using ClosedXML.Excel;
+using ClosedXML.Graphics;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Main.Core.Documents;
@@ -12,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 using NSubstitute.Extensions;
 using NUnit.Framework;
+using SixLabors.Fonts;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -64,7 +66,11 @@ namespace WB.Tests.Unit.Designer.Services
 
         private static Stream CreateExcelFile(string[][] data)
         {
-            using XLWorkbook package = new XLWorkbook();
+            //non windows fonts
+            var firstFont = SystemFonts.Collection.Families.First();
+            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(firstFont.Name) };
+            
+            using XLWorkbook package = new XLWorkbook(loadOptions);
             var worksheet = package.Worksheets.Add("Categories");
 
             for (var row = 0; row < data.Length; row++)

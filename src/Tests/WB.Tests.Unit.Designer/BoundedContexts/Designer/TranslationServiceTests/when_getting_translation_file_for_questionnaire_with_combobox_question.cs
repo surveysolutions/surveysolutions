@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ClosedXML.Excel;
+using ClosedXML.Graphics;
 using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
+using SixLabors.Fonts;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -59,8 +61,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
         private void BecauseOf()
         {
+            //non windows fonts
+            var firstFont = SystemFonts.Collection.Families.First();
+            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(firstFont.Name) };
+            
             var excelFile = service.GetAsExcelFile(new QuestionnaireRevision(questionnaireId), translationId);
-            this.workbook = new XLWorkbook(new MemoryStream(excelFile.ContentAsExcelFile));
+            this.workbook = new XLWorkbook(new MemoryStream(excelFile.ContentAsExcelFile), loadOptions);
             comboboxCells = workbook.Worksheets.First(x => x.Name == "@@_combobox");
             cascadingCells = workbook.Worksheets.First(x => x.Name == "@@_cascading");
         }

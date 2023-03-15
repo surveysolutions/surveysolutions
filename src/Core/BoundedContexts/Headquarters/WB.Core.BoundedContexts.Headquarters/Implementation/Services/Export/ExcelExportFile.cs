@@ -1,5 +1,8 @@
 using System.IO;
+using System.Linq;
 using ClosedXML.Excel;
+using ClosedXML.Graphics;
+using SixLabors.Fonts;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
@@ -11,7 +14,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
             var headers = report.Headers;
             var data = report.Data;
 
-            using (XLWorkbook excelPackage = new XLWorkbook())
+            //non windows fonts
+            var firstFont = SystemFonts.Collection.Families.First();
+            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(firstFont.Name) };
+            
+            using (XLWorkbook excelPackage = new XLWorkbook(loadOptions))
             {
                 var sheetName = report.Name == null
                         ? "Data"

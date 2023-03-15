@@ -4,8 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using ClosedXML.Excel;
+using ClosedXML.Graphics;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using SixLabors.Fonts;
 using WB.Core.BoundedContexts.Designer.Commands;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Resources;
@@ -117,7 +119,11 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
             try
             {
-                using var package = new XLWorkbook(stream);
+                //non windows fonts
+                var firstFont = SystemFonts.Collection.Families.First();
+                var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(firstFont.Name) };
+                
+                using var package = new XLWorkbook(stream, loadOptions);
 
                 if (package.Worksheets.Count == 0)
                     throw new InvalidFileException(ExceptionMessages.TranslationFileIsEmpty);

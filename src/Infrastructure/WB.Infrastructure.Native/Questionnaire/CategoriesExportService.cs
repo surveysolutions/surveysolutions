@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using ClosedXML.Excel;
+using ClosedXML.Graphics;
+using SixLabors.Fonts;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 
@@ -10,7 +13,11 @@ namespace WB.Infrastructure.Native.Questionnaire
     {
         public byte[] GetAsExcelFile(IEnumerable<CategoriesItem> items)
         {
-            using (var excelPackage = new XLWorkbook())
+            //non windows fonts
+            var firstFont = SystemFonts.Collection.Families.First();
+            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(firstFont.Name) };
+            
+            using (var excelPackage = new XLWorkbook(loadOptions))
             {
                 var worksheet = excelPackage.Worksheets.Add("Categories");
 
