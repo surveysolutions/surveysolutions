@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
-    style="@style/FullWidthWrappingLayout">
+    style="@style/FullWidthWrappingLayout"
+    android:orientation="vertical">
     <TableLayout
         style="@style/Audio_Dialog_Holder"
         android:background="@drawable/dialog_rounded"
         android:stretchColumns="0"
-        android:shrinkColumns="0">
+        android:shrinkColumns="0"
+        android:layout_gravity="center">
         <TableRow>
             <LinearLayout
                 style="@style/VerticalFullWidthWrappingLayout">
@@ -53,20 +55,23 @@
                 local:MvxItemTemplate="@layout/interview_select_responsible_item"
                 local:MvxBind="ItemsSource UiItems;" />
         </TableRow>
-        <TableRow>
-            <LinearLayout
-                style="@style/FullWidthWrappingLayout"
-                android:layout_marginTop="@dimen/Interview_Entity_Title_margin_top"
-                android:layout_span="2">
-                <Button
-                    style="@style/Done_Button"
-                    local:MvxBind="Click ReassignCommand; Enabled CanReassign; Text Localization('SelectResponsible_ReassignButtonText');" />
-                <Button
-                    style="@style/Link_Button"
-                    local:MvxBind="Click CancelCommand; Text Localization('Interviewer_RelinkDevice_Cancel');" />
-
-            </LinearLayout>
-        </TableRow>
     </TableLayout>
-</LinearLayout>
+    <LinearLayout
+            style="@style/FullWidthWrappingLayout"
+            android:layout_marginTop="@dimen/Interview_Entity_Title_margin_top"
+            android:layout_span="2"
+            android:layout_gravity="bottom"
+            android:paddingBottom="10dp"
+            android:paddingTop="28dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="10dp">
+        <Button
+                style="@style/Done_Button"
+                local:MvxBind="Click ReassignCommand; Enabled CanReassign; Text Localization('SelectResponsible_ReassignButtonText');" />
+        <Button
+                style="@style/Link_Button"
+                local:MvxBind="Click CancelCommand; Text Localization('Interviewer_RelinkDevice_Cancel');" />
+
+    </LinearLayout>
+</FrameLayout>
 

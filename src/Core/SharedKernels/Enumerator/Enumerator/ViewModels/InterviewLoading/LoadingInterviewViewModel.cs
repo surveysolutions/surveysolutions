@@ -71,7 +71,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             if (InterviewId == Guid.Empty) throw new ArgumentException(nameof(InterviewId));
 
             var interview = this.interviewsRepository.GetById(this.InterviewId.FormatGuid());
-            this.QuestionnaireTitle = interview.QuestionnaireTitle;
+            this.QuestionnaireTitle = interview?.QuestionnaireTitle;
 
             return Task.CompletedTask;
         }

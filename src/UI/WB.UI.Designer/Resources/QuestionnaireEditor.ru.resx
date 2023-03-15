@@ -1012,6 +1012,9 @@
     <value>Закрыть панель метаинформации</value>
     <comment>Закрыть панель метаинформации</comment>
   </data>
+  <data name="HotkeysCloseScenarios" xml:space="preserve">
+    <value>Закрыть панель сценариев</value>
+  </data>  
   <data name="SideBarMetadataHeader" xml:space="preserve">
     <value>Описание опросника и данные по обследованию</value>
     <comment>Метаинформация</comment>
@@ -1493,6 +1496,9 @@
   <data name="HotkeysCloseCategories" xml:space="preserve">
     <value>Закрыть панель категорий</value>
   </data>
+  <data name="HotkeysCloseComments" xml:space="preserve">
+    <value>Закрыть панель комментариев</value>
+  </data>  
   <data name="SideBarCategoriesNoName" xml:space="preserve">
     <value>список категорий без имени</value>
   </data>

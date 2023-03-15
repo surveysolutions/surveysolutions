@@ -80,10 +80,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         {
             var questionTitleRow = 4;
             ((TranslationType)Enum.Parse(typeof(TranslationType), cells.Cell(questionTitleRow, translationTypeColumn).GetString())).Should().Be(TranslationType.Title);
-            cells.Cell(questionTitleRow, translationIndexColumn).Value?.ToString().Should().BeEmpty();
-            cells.Cell(questionTitleRow, questionnaireEntityIdColumn).Value?.ToString().Should().Be(rosterId.FormatGuid());
-            cells.Cell(questionTitleRow, originalTextColumn).Value?.ToString().Should().Be("non translated title");
-            cells.Cell(questionTitleRow, translactionColumn).Value?.ToString().Should().BeEmpty();
+            cells.Cell(questionTitleRow, translationIndexColumn).Value.ToString().Should().BeEmpty();
+            cells.Cell(questionTitleRow, questionnaireEntityIdColumn).Value.ToString().Should().Be(rosterId.FormatGuid());
+            cells.Cell(questionTitleRow, originalTextColumn).Value.ToString().Should().Be("non translated title");
+            cells.Cell(questionTitleRow, translactionColumn).Value.ToString().Should().BeEmpty();
         }
 
         [NUnit.Framework.Test]
@@ -91,10 +91,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         {
             var questionTitleRow = 5;
             ((TranslationType)Enum.Parse(typeof(TranslationType), cells.Cell(questionTitleRow, translationTypeColumn).GetString())).Should().Be(TranslationType.FixedRosterTitle);
-            cells.Cell(questionTitleRow, translationIndexColumn).Value?.ToString().Should().Be("42");
-            cells.Cell(questionTitleRow, questionnaireEntityIdColumn).Value?.ToString().Should().Be(rosterId.FormatGuid());
-            cells.Cell(questionTitleRow, originalTextColumn).Value?.ToString().Should().Be("invariant option title");
-            cells.Cell(questionTitleRow, translactionColumn).Value?.ToString().Should().Be("fixed roster item 1");
+            cells.Cell(questionTitleRow, translationIndexColumn).Value.ToString().Should().Be("42");
+            cells.Cell(questionTitleRow, questionnaireEntityIdColumn).Value.ToString().Should().Be(rosterId.FormatGuid());
+            cells.Cell(questionTitleRow, originalTextColumn).Value.ToString().Should().Be("invariant option title");
+            cells.Cell(questionTitleRow, translactionColumn).Value.ToString().Should().Be("fixed roster item 1");
         }
 
         Guid rosterId;

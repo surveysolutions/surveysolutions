@@ -44,10 +44,8 @@ namespace WB.Tests.Unit.Designer.Services
         {
             var listOfData = data.ToList();
 
-            // we expect header for excel files only
-            if (type == CategoriesFileType.Excel)
-                listOfData.Insert(0, new[] {"id", "text", "parentid"});
-
+            listOfData.Insert(0, new[] {"value", "title", "parentvalue"});
+            
             return CreateFile(listOfData.ToArray(), type);
         }
 
@@ -143,7 +141,7 @@ namespace WB.Tests.Unit.Designer.Services
 
             // assert
             Assert.That(exception.FoundErrors, Has.One.Items);
-            Assert.That(exception.FoundErrors[0].Message, Contains.Substring("id was not found"));
+            Assert.That(exception.FoundErrors[0].Message, Contains.Substring("value was not found"));
         }
 
         [TestCase(CategoriesFileType.Excel)]
@@ -161,11 +159,11 @@ namespace WB.Tests.Unit.Designer.Services
 
             // assert
             Assert.That(exception.FoundErrors, Has.One.Items);
-            Assert.That(exception.FoundErrors[0].Message, Contains.Substring("text was not found"));
+            Assert.That(exception.FoundErrors[0].Message, Contains.Substring("title was not found"));
         }
 
         [TestCase(CategoriesFileType.Excel, "A", 2)]
-        [TestCase(CategoriesFileType.Tsv, "0", 1)]
+        [TestCase(CategoriesFileType.Tsv, "0", 2)]
         public void when_store_excel_file_with_category_with_empty_id_then_should_throw_excel_exception(CategoriesFileType type, string expectedColumn, int expectedRow)
         {
             // arrange
@@ -184,7 +182,7 @@ namespace WB.Tests.Unit.Designer.Services
         }
 
         [TestCase(CategoriesFileType.Excel, "A", 2)]
-        [TestCase(CategoriesFileType.Tsv, "0", 1)]
+        [TestCase(CategoriesFileType.Tsv, "0", 2)]
         public void when_store_excel_file_with_category_with_not_numeric_id_then_should_throw_excel_exception(CategoriesFileType type, string expectedColumn, int expectedRow)
         {
             // arrange
@@ -203,7 +201,7 @@ namespace WB.Tests.Unit.Designer.Services
         }
 
         [TestCase(CategoriesFileType.Excel, "C", 2)]
-        [TestCase(CategoriesFileType.Tsv, "2", 1)]
+        [TestCase(CategoriesFileType.Tsv, "2", 2)]
         public void when_store_excel_file_with_category_with_not_numeric_parent_id_then_should_throw_excel_exception(CategoriesFileType type, string expectedColumn, int expectedRow)
         {
             // arrange
@@ -222,7 +220,7 @@ namespace WB.Tests.Unit.Designer.Services
         }
 
         [TestCase(CategoriesFileType.Excel, "B", 2)]
-        [TestCase(CategoriesFileType.Tsv, "1", 1)]
+        [TestCase(CategoriesFileType.Tsv, "1", 2)]
         public void when_store_excel_file_with_category_with_empty_text_then_should_throw_excel_exception(CategoriesFileType type, string expectedColumn, int expectedRow)
         {
             // arrange
@@ -340,7 +338,7 @@ namespace WB.Tests.Unit.Designer.Services
         }
 
         [TestCase(CategoriesFileType.Excel, new[] {2, 3})]
-        [TestCase(CategoriesFileType.Tsv, new[] {1, 2})]
+        [TestCase(CategoriesFileType.Tsv, new[] {2, 3})]
         public void when_store_excel_file_with_2_categories_with_the_same_id_and_parentid_then_should_throw_excel_exception(CategoriesFileType type, int[] duplicatedRows)
         {
             // arrange
@@ -398,7 +396,7 @@ namespace WB.Tests.Unit.Designer.Services
             var categoriesId = Id.g2;
             var data = new string[][]
             {
-                new[] {"id", "text", "parentid"}, 
+                new[] {"value", "title", "parentvalue"}, 
                 new[] {"1", "option 1", "1"}, 
                 new[] {"", "", ""}, 
                 new[] {"2", "option 2", "1"} 
@@ -408,6 +406,31 @@ namespace WB.Tests.Unit.Designer.Services
             var designerDbContext = new DesignerDbContext(options.Options);
             var service = CreateCategoriesService(designerDbContext);
             var type = CategoriesFileType.Tsv;
+
+            // act
+            service.Store(questionnaireId, categoriesId, CreateFile(data, type), type);
+            designerDbContext.SaveChanges();
+            // assert
+            Assert.That(designerDbContext.CategoriesInstances.ToList(), Has.Count.EqualTo(2));
+        }
+
+        [Test]
+        public void when_store_excel_file_with_header_without_parentValue_and_data_should_be_ok()
+        {
+            // arrange
+            var questionnaireId = Id.g1;
+            var categoriesId = Id.g2;
+            var data = new string[][]
+            {
+                new[] {"1", "option 1"}, 
+                new[] {"", ""}, 
+                new[] {"2", "option 2"} 
+            };
+
+            var options = new DbContextOptionsBuilder<DesignerDbContext>().UseInMemoryDatabase(new Random().Next(0, 10000000).ToString());
+            var designerDbContext = new DesignerDbContext(options.Options);
+            var service = CreateCategoriesService(designerDbContext);
+            var type = CategoriesFileType.Excel;
 
             // act
             service.Store(questionnaireId, categoriesId, CreateFileWithHeader(data, type), type);

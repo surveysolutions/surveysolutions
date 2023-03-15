@@ -10,9 +10,11 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
 using SixLabors.Fonts;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -284,7 +286,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             var questionnaires = new Mock<IQuestionnaireViewFactory>();
             questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
 
-            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
+            var categories = new Mock<IReusableCategoriesService>();
+            categories.Setup(x => x.GetCategoriesById(questionnaire.PublicKey, categoriesId))
+                .Returns(new List<CategoriesItem>(){new CategoriesItem(){Id = 1, Text = "test"}}.AsQueryable);
+            
+            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object, reusableCategoriesService: categories.Object);
 
             //act
             var exception = Assert.Throws<InvalidFileException>(() => service.Store(questionnaireId, translationId, fileStream));
@@ -327,7 +333,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             var questionnaires = new Mock<IQuestionnaireViewFactory>();
             questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
 
-            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
+            var categories = new Mock<IReusableCategoriesService>();
+            categories.Setup(x => x.GetCategoriesById(questionnaire.PublicKey, categoriesId))
+                .Returns(new List<CategoriesItem>(){new CategoriesItem(){Id = 1, Text = "test"}}.AsQueryable);
+            
+            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object, reusableCategoriesService: categories.Object);
 
             //act
             var exception = Assert.Throws<InvalidFileException>(() => service.Store(questionnaireId, translationId, fileStream));
@@ -370,7 +380,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             var questionnaires = new Mock<IQuestionnaireViewFactory>();
             questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
 
-            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
+            var categories = new Mock<IReusableCategoriesService>();
+            categories.Setup(x => x.GetCategoriesById(questionnaire.PublicKey, categoriesId))
+                .Returns(new List<CategoriesItem>(){new CategoriesItem(){Id = 1, Text = "test"}}.AsQueryable);
+            
+            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object, reusableCategoriesService: categories.Object);
 
             //act
             var exception = Assert.Throws<InvalidFileException>(() => service.Store(questionnaireId, translationId, fileStream));
@@ -412,7 +426,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             var questionnaires = new Mock<IQuestionnaireViewFactory>();
             questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
 
-            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
+            var cat = new Mock<IReusableCategoriesService>();
+            cat.Setup(x => x.GetCategoriesById(questionnaire.PublicKey, categoriesId))
+                .Returns(new List<CategoriesItem>(){new CategoriesItem(){Id = 1, Text = "test"}}.AsQueryable);
+            
+            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object, reusableCategoriesService: cat.Object);
 
             //act
             service.Store(questionnaireId, translationId, fileStream);

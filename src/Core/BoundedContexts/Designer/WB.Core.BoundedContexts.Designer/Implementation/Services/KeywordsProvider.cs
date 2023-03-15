@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static readonly List<string> SurveySolutionsServiceVariablesKeywords = new List<string>()
         {
             "rowcode","rowname","rowindex","roster","id", "parentid1", "parentid2", "parentid3", "parentid4",
-            "self", "state", "quest", "optioncode", "complete", "cover", "overview", "questionnaire"
+            "self", "state", "quest", "optioncode", "complete", "cover", "overview", "questionnaire", "identity"
         };
 
         private static readonly List<string> WindowsFileNamingReservedNames = new List<string>()

@@ -189,12 +189,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             return zonedDateTime;
         }
 
-        protected string FormatDateTimeString(string formatString, DateTimeOffset dateTimeOffset, string timeZoneId)
-        {
-            var zonedDateTime = GetZonedDateTime(dateTimeOffset, timeZoneId);
-            return FormatDateTimeString(formatString, zonedDateTime.ToDateTimeUtc());
-        }
-        
         protected string FormatDateTimeString(string formatString, DateTime? utcDateTime)
         {
             if (!utcDateTime.HasValue)

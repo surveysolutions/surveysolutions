@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
         }
 
-        public Stream ExportOptions(string questionnaireId, Guid categoricalQuestionId, CategoriesFileType fileType)
+        public Stream ExportOptions(string questionnaireId, Guid categoricalQuestionId, CategoriesFileType fileType, bool isCascading)
         {
             var document = this.questionnaireDocumentReader.GetById(questionnaireId);
             var question = document?.Find<IQuestion>(categoricalQuestionId);
@@ -72,7 +72,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }) ?? Enumerable.Empty<CategoriesItem>();
 
             var extractService = categoriesExtractFactory.GetExtractService(fileType);
-            var bytes = extractService.GetAsFile(options.ToList());
+            var bytes = extractService.GetAsFile(options.ToList(), isCascading, hqImport: false);
 
             return new MemoryStream(bytes);
         }

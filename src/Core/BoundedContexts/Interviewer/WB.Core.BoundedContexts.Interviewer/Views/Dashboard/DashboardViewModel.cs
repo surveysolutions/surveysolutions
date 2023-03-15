@@ -212,7 +212,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             try
             {
                 this.Synchronization.CancelSynchronizationCommand.Execute();
-                await mapInteractionService.OpenMapDashboardAsync();
+                await mapInteractionService.OpenInterviewerMapDashboardAsync();
                 this.Dispose();
             }
             catch (MissingPermissionsException e)

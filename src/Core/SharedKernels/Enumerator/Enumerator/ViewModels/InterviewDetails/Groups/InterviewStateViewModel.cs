@@ -35,7 +35,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.SubgroupsCount = 0;
             this.AnsweredQuestionsCount = interviewSimpleStatus.AnsweredQuestionsCount;
             this.InvalidAnswersCount = interview.CountInvalidEntitiesInInterview();
-            this.AnsweredProgress = (int)Math.Round((double)(this.AnsweredQuestionsCount * 100)/ this.QuestionsCount);
+            this.AnsweredProgress = this.QuestionsCount == 0 
+                ? 100 
+                : (int)Math.Round((double)(this.AnsweredQuestionsCount * 100)/ this.QuestionsCount);
             this.SimpleStatus = interviewSimpleStatus.SimpleStatus;
             this.Status = interviewSimpleStatus.Status;
         }

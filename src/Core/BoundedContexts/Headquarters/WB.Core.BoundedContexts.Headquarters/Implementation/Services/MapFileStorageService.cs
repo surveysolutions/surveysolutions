@@ -586,6 +586,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             var userMaps = userMapsStorage.Query(q => q.Where(x => x.Map.Id == mapName).ToList());
 
             var interviewerRoleId = UserRoles.Interviewer.ToUserId();
+            var supervisorRoleId = UserRoles.Supervisor.ToUserId();
             var usersToLower = users.Select(em => em.ToLower()).ToList();
 
             var availableUsers = this.userStorage.Users
@@ -599,7 +600,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             var userMappings = availableUsers
                 .Where(y => y.IsArchived == false
-                                               && y.Roles.Any(role => role.Id == interviewerRoleId))
+                                               && y.Roles.Any(role => role.Id == interviewerRoleId || role.Id == supervisorRoleId))
                 .Select(x => new UserMap() { Map = map, UserName = x.UserName }).ToList();
 
             userMapsStorage.Remove(userMaps);
@@ -644,21 +645,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             var userNameLowerCase = userName.ToLower();
             var interviewerRoleId = UserRoles.Interviewer.ToUserId();
-
+            var supervisorRoleId = UserRoles.Supervisor.ToUserId();
+            
             var userQuery = this.userStorage.Users
                 .Where(x => x.UserName.ToLower() == userNameLowerCase &&
                             x.IsArchived == false &&
-                            x.Roles.Any(role => role.Id == interviewerRoleId));
+                            x.Roles.Any(role => role.Id == interviewerRoleId || role.Id == supervisorRoleId));
             if (authorizedUser.IsSupervisor)
             {
-                userQuery = userQuery.Where(x => x.WorkspaceProfile.SupervisorId == this.authorizedUser.Id);
+                var supervisorId = this.authorizedUser.Id;
+                userQuery = userQuery.Where(x => x.WorkspaceProfile.SupervisorId == supervisorId
+                                                    || x.Id == supervisorId);
             }
 
-            var interviewer = userQuery.FirstOrDefault();
+            var user = userQuery.FirstOrDefault();
 
-            if (interviewer == null)
+            if (user == null)
             {
-                throw new UserNotFoundException("Map can be assigned only to existing non archived interviewer.");
+                throw new UserNotFoundException("Map can be assigned only to existing non archived interviewer or supervisor.");
             }
 
             var userMap = this.userMapsStorage
@@ -666,7 +670,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             if (userMap != null)
             {
-                throw new InvalidOperationException("Provided map already assigned to specified interviewer.");
+                throw new InvalidOperationException("Provided map already assigned to specified user.");
             }
 
             userMapsStorage.Store(new UserMap
