@@ -70,7 +70,7 @@ namespace WB.UI.Supervisor
                 {typeof(SearchViewModel), typeof(SupervisorSearchActivity)}
 #if !EXCLUDEEXTENSIONS
                 ,{typeof (Shared.Extensions.ViewModels.GeographyEditorViewModel), typeof (Shared.Extensions.Activities.GeographyEditorActivity)}
-                ,{typeof (Shared.Extensions.ViewModels.MapDashboardViewModel), typeof (Shared.Extensions.Activities.MapDashboardActivity)}
+                ,{typeof (Shared.Extensions.ViewModels.SupervisorMapDashboardViewModel), typeof (Shared.Extensions.Activities.SupervisorMapDashboardActivity)}
 #endif
             };
 

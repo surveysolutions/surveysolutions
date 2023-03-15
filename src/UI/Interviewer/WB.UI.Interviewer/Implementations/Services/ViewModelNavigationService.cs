@@ -100,7 +100,7 @@ namespace WB.UI.Interviewer.Implementations.Services
                 {
                     AssignmentId = assignmentId,
                     InterviewId = Guid.NewGuid()
-                });
+                }, true);
         }
 
         public override Task NavigateToLoginAsync()

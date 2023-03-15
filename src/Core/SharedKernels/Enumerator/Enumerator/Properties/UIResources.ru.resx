@@ -243,6 +243,9 @@
   <data name="GpsQuestion_Timeout" xml:space="preserve">
     <value>Не удается получить вашу гео позицию. Выйдите на открытое пространство или увеличте значение таймаута в настройках.</value>
   </data>
+  <data name="NoMapsApplication" xml:space="preserve">
+    <value>Не найдено приложение карт</value>
+  </data>
   <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
     <value>Указан неверный адрес Survey Solutions Designer. Проверьте настройки.</value>
   </data>
@@ -575,8 +578,20 @@
   <data name="MapDashboard_AllQuestionnaires" xml:space="preserve">
     <value>Все опросники</value>
   </data>
+  <data name="MapDashboard_AllResponsibles" xml:space="preserve">
+    <value>Все пользователи</value>
+  </data>
+  <data name="MapDashboard_AllStatuses" xml:space="preserve">
+    <value>Все статусы</value>
+  </data>
   <data name="MapDashboard_QuestionnaireTitle" xml:space="preserve">
     <value>Опросник</value>
+  </data>
+  <data name="MapDashboard_ResponsibleTitle" xml:space="preserve">
+    <value>Ответственный</value>
+  </data>
+  <data name="MapDashboard_StatusTitle" xml:space="preserve">
+    <value>Статус</value>
   </data>
   <data name="MapDashboard_FiltersTitle" xml:space="preserve">
     <value>Фильтры</value>
@@ -813,5 +828,38 @@
   </data>
   <data name="AreaMap_InitLocation" xml:space="preserve">
     <value>Запуск...</value>
+  </data>
+  <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
+    <value>Утверждено Хедквотером</value>
+  </data>
+  <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
+    <value>Утверждено Супервизором</value>
+  </data>
+  <data name="InterviewStatus_Completed" xml:space="preserve">
+    <value>Завершено</value>
+  </data>
+  <data name="InterviewStatus_Created" xml:space="preserve">
+    <value>Создано</value>
+  </data>
+  <data name="InterviewStatus_Deleted" xml:space="preserve">
+    <value>Удалено</value>
+  </data>
+  <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
+    <value>Интервьюер назначен</value>
+  </data>
+  <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
+    <value>Отклонено Хедквотером</value>
+  </data>
+  <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
+    <value>Отклонено Супервизором</value>
+  </data>
+  <data name="InterviewStatus_Restarted" xml:space="preserve">
+    <value>Перезапущено</value>
+  </data>
+  <data name="InterviewStatus_Restored" xml:space="preserve">
+    <value>Восстановлено</value>
+  </data>
+  <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
+    <value>Супервизор назначен</value>
   </data>
 </root>
