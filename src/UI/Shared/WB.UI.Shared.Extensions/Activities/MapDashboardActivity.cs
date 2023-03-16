@@ -24,6 +24,7 @@ namespace WB.UI.Shared.Extensions.Activities
         private ActionBarDrawerToggle drawerToggle;
 
         private IDisposable onDrawerOpenedSubscription;
+        private IDisposable onMapViewMapTappedSubscription;
 
         public Toolbar Toolbar { get; private set; }
 
@@ -53,7 +54,9 @@ namespace WB.UI.Shared.Extensions.Activities
                 OnDrawerLayoutOnDrawerOpened);
             
             this.ViewModel.MapView = this.FindViewById<MapView>(Resource.Id.map_view);
-            this.ViewModel.MapView.GeoViewTapped += this.ViewModel.OnMapViewTapped;
+            onMapViewMapTappedSubscription = this.ViewModel.MapView.WeakSubscribe<MapView, GeoViewInputEventArgs>(
+                nameof(this.ViewModel.MapView.GeoViewTapped),
+                this.ViewModel.OnMapViewTapped);
             
             System.Threading.Tasks.Task.Run(() => this.ViewModel.MapControlCreatedAsync());
         }
@@ -70,15 +73,12 @@ namespace WB.UI.Shared.Extensions.Activities
             this.HideKeyboard(drawerLayout.WindowToken);
         }
 
-        protected override void OnStop()
+        protected override void OnDestroy()
         {
             onDrawerOpenedSubscription?.Dispose();
-            
-            var mapView = this.ViewModel?.MapView;
-            if (mapView != null)
-                mapView.GeoViewTapped -= this.ViewModel.OnMapViewTapped;
-            
-            base.OnStop();
+            onMapViewMapTappedSubscription?.Dispose();
+
+            base.OnDestroy();
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
