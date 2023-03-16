@@ -342,7 +342,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 this.translationsService.Count(command.QuestionnaireId, command.TranslationId);
             var resultMessage = storedTranslationsCount == 1
                 ? string.Format(QuestionnaireEditor.TranslationsObtained, storedTranslationsCount)
-                : string.Format(QuestionnaireEditor.TranslationsObtained_other, storedTranslationsCount);
+                : string.Format(QuestionnaireEditor.TranslationsObtained_plural, storedTranslationsCount);
 
             await dbContext.SaveChangesAsync();
 
@@ -409,7 +409,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
             var resultMessage = storedCategoriesCount == 1
                 ? string.Format(QuestionnaireEditor.CategoriesObtained, storedCategoriesCount)
-                : string.Format(QuestionnaireEditor.CategoriesObtained_other, storedCategoriesCount);
+                : string.Format(QuestionnaireEditor.CategoriesObtained_plural, storedCategoriesCount);
 
             return Ok(resultMessage);
         }

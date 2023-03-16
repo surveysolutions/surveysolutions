@@ -296,9 +296,9 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Obtained {0} rows from categories file.
         /// </summary>
-        public static string CategoriesObtained_other {
+        public static string CategoriesObtained_plural {
             get {
-                return ResourceManager.GetString("CategoriesObtained_other", resourceCulture);
+                return ResourceManager.GetString("CategoriesObtained_plural", resourceCulture);
             }
         }
         
@@ -467,9 +467,9 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to {{count}} errors found.
         /// </summary>
-        public static string CompilationErrorsCounter_other {
+        public static string CompilationErrorsCounter_plural {
             get {
-                return ResourceManager.GetString("CompilationErrorsCounter_other", resourceCulture);
+                return ResourceManager.GetString("CompilationErrorsCounter_plural", resourceCulture);
             }
         }
         
@@ -494,9 +494,9 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to {{count}} warnings found.
         /// </summary>
-        public static string CompilationWarningsCounter_other {
+        public static string CompilationWarningsCounter_plural {
             get {
-                return ResourceManager.GetString("CompilationWarningsCounter_other", resourceCulture);
+                return ResourceManager.GetString("CompilationWarningsCounter_plural", resourceCulture);
             }
         }
         
@@ -800,9 +800,9 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to {{count}} errors.
         /// </summary>
-        public static string ErrorsCounter_other {
+        public static string ErrorsCounter_plural {
             get {
-                return ResourceManager.GetString("ErrorsCounter_other", resourceCulture);
+                return ResourceManager.GetString("ErrorsCounter_plural", resourceCulture);
             }
         }
         
@@ -890,9 +890,9 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to in {{count}} found entities?.
         /// </summary>
-        public static string FindReplaceInAllFound_other {
+        public static string FindReplaceInAllFound_plural {
             get {
-                return ResourceManager.GetString("FindReplaceInAllFound_other", resourceCulture);
+                return ResourceManager.GetString("FindReplaceInAllFound_plural", resourceCulture);
             }
         }
         
@@ -3146,9 +3146,9 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to {{count}} Files Attachments ({{bytes}} total).
         /// </summary>
-        public static string SideBarAttachmentsCounter_other {
+        public static string SideBarAttachmentsCounter_plural {
             get {
-                return ResourceManager.GetString("SideBarAttachmentsCounter_other", resourceCulture);
+                return ResourceManager.GetString("SideBarAttachmentsCounter_plural", resourceCulture);
             }
         }
         
@@ -3308,9 +3308,9 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to {{count}} Comment threads:.
         /// </summary>
-        public static string SideBarCommentsCounter_other {
+        public static string SideBarCommentsCounter_plural {
             get {
-                return ResourceManager.GetString("SideBarCommentsCounter_other", resourceCulture);
+                return ResourceManager.GetString("SideBarCommentsCounter_plural", resourceCulture);
             }
         }
         
@@ -3434,9 +3434,9 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to {{count}} Lookup Tables:.
         /// </summary>
-        public static string SideBarLookupTablesCounter_other {
+        public static string SideBarLookupTablesCounter_plural {
             get {
-                return ResourceManager.GetString("SideBarLookupTablesCounter_other", resourceCulture);
+                return ResourceManager.GetString("SideBarLookupTablesCounter_plural", resourceCulture);
             }
         }
         
@@ -3488,9 +3488,9 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to {{count}} Macros:.
         /// </summary>
-        public static string SideBarMacroCounter_other {
+        public static string SideBarMacroCounter_plural {
             get {
-                return ResourceManager.GetString("SideBarMacroCounter_other", resourceCulture);
+                return ResourceManager.GetString("SideBarMacroCounter_plural", resourceCulture);
             }
         }
         
@@ -3812,9 +3812,9 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to {{count}} Scenarios:.
         /// </summary>
-        public static string SideBarScenarioCounter_other {
+        public static string SideBarScenarioCounter_plural {
             get {
-                return ResourceManager.GetString("SideBarScenarioCounter_other", resourceCulture);
+                return ResourceManager.GetString("SideBarScenarioCounter_plural", resourceCulture);
             }
         }
         
@@ -3866,9 +3866,9 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to {{count}} Sections:.
         /// </summary>
-        public static string SideBarSectionsCounter_other {
+        public static string SideBarSectionsCounter_plural {
             get {
-                return ResourceManager.GetString("SideBarSectionsCounter_other", resourceCulture);
+                return ResourceManager.GetString("SideBarSectionsCounter_plural", resourceCulture);
             }
         }
         
@@ -3956,9 +3956,9 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to {{count}} Translations.
         /// </summary>
-        public static string SideBarTranslationsCounter_other {
+        public static string SideBarTranslationsCounter_plural {
             get {
-                return ResourceManager.GetString("SideBarTranslationsCounter_other", resourceCulture);
+                return ResourceManager.GetString("SideBarTranslationsCounter_plural", resourceCulture);
             }
         }
         
@@ -4109,9 +4109,9 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Obtained {0} rows from translation file.
         /// </summary>
-        public static string TranslationsObtained_other {
+        public static string TranslationsObtained_plural {
             get {
-                return ResourceManager.GetString("TranslationsObtained_other", resourceCulture);
+                return ResourceManager.GetString("TranslationsObtained_plural", resourceCulture);
             }
         }
         
@@ -4415,9 +4415,9 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to View all {{count}} resolved comments.
         /// </summary>
-        public static string ViewResolvedCommentsCounter_other {
+        public static string ViewResolvedCommentsCounter_plural {
             get {
-                return ResourceManager.GetString("ViewResolvedCommentsCounter_other", resourceCulture);
+                return ResourceManager.GetString("ViewResolvedCommentsCounter_plural", resourceCulture);
             }
         }
         
@@ -4442,9 +4442,9 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to {{count}} warnings.
         /// </summary>
-        public static string WarningsCounter_other {
+        public static string WarningsCounter_plural {
             get {
-                return ResourceManager.GetString("WarningsCounter_other", resourceCulture);
+                return ResourceManager.GetString("WarningsCounter_plural", resourceCulture);
             }
         }
         

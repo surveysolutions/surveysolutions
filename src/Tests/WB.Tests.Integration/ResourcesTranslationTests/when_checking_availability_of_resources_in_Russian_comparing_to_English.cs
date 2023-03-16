@@ -56,7 +56,7 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
 
         private static bool IsNotPluralForm(string resourceName)
         {
-            return !resourceName.EndsWith("_other");
+            return !resourceName.EndsWith("_other") || !resourceName.EndsWith("_plural");
         }
     }
 }

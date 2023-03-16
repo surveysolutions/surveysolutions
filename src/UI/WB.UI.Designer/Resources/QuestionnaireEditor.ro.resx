@@ -168,7 +168,7 @@
   <data name="CategoriesObtained" xml:space="preserve">
     <value>S-a obținut {0} rând din fișierul de categorii</value>
   </data>
-  <data name="CategoriesObtained_other" xml:space="preserve">
+  <data name="CategoriesObtained_plural" xml:space="preserve">
     <value>S-au obținut {0} rânduri din fișierul de categorii</value>
   </data>
   <data name="ChangePassword" xml:space="preserve">
@@ -219,7 +219,7 @@
   <data name="CompilationErrorsCounter" xml:space="preserve">
     <value>S-a găsit o eroare {{count}}</value>
   </data>
-  <data name="CompilationErrorsCounter_other" xml:space="preserve">
+  <data name="CompilationErrorsCounter_plural" xml:space="preserve">
     <value>S-au găsit {{count}} erori</value>
   </data>
   <data name="CompilationLabel" xml:space="preserve">
@@ -228,7 +228,7 @@
   <data name="CompilationWarningsCounter" xml:space="preserve">
     <value>A fost găsit un avertisment {{count}}</value>
   </data>
-  <data name="CompilationWarningsCounter_other" xml:space="preserve">
+  <data name="CompilationWarningsCounter_plural" xml:space="preserve">
     <value>{{count}} avertismente găsite</value>
   </data>
   <data name="Compile" xml:space="preserve">
@@ -312,7 +312,7 @@
   <data name="ErrorsCounter" xml:space="preserve">
     <value>Eroare {{count}}</value>
   </data>
-  <data name="ErrorsCounter_other" xml:space="preserve">
+  <data name="ErrorsCounter_plural" xml:space="preserve">
     <value>{{count}} erori</value>
   </data>
   <data name="Export" xml:space="preserve">
@@ -336,7 +336,7 @@
   <data name="FindReplaceInAllFound" xml:space="preserve">
     <value>în {{count}} valoare găsită ?</value>
   </data>
-  <data name="FindReplaceInAllFound_other" xml:space="preserve">
+  <data name="FindReplaceInAllFound_plural" xml:space="preserve">
     <value>în {{count}} valori găsite ?</value>
   </data>
   <data name="FindReplaceMatchCase" xml:space="preserve">
@@ -1007,7 +1007,7 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
   <data name="SideBarAttachmentsCounter" xml:space="preserve">
     <value>{{count}} Fișier atașat ({{bytes}} în total)</value>
   </data>
-  <data name="SideBarAttachmentsCounter_other" xml:space="preserve">
+  <data name="SideBarAttachmentsCounter_plural" xml:space="preserve">
     <value>{{count}} Fișiere atașate ({{bytes}} în total)</value>
   </data>
   <data name="SideBarAttachmentsEmptyLine1" xml:space="preserve">
@@ -1058,7 +1058,7 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
   <data name="SideBarCommentsCounter" xml:space="preserve">
     <value>{{count}} Flux de comentarii:</value>
   </data>
-  <data name="SideBarCommentsCounter_other" xml:space="preserve">
+  <data name="SideBarCommentsCounter_plural" xml:space="preserve">
     <value>{{count}} Fluxuri de comentarii:</value>
   </data>
   <data name="SideBarCommentsTitle" xml:space="preserve">
@@ -1094,7 +1094,7 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
   <data name="SideBarLookupTablesCounter" xml:space="preserve">
     <value>{{count}} Tabel de căutare:</value>
   </data>
-  <data name="SideBarLookupTablesCounter_other" xml:space="preserve">
+  <data name="SideBarLookupTablesCounter_plural" xml:space="preserve">
     <value>{{count}} Tabelele de căutare:</value>
   </data>
   <data name="SideBarLookupTableSelectFile" xml:space="preserve">
@@ -1112,7 +1112,7 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
   <data name="SideBarMacroCounter" xml:space="preserve">
     <value>{{count}} Macrocomandă:</value>
   </data>
-  <data name="SideBarMacroCounter_other" xml:space="preserve">
+  <data name="SideBarMacroCounter_plural" xml:space="preserve">
     <value>{{count}} Macrocomenzi:</value>
   </data>
   <data name="SideBarMacroDescription" xml:space="preserve">
@@ -1220,7 +1220,7 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
   <data name="SideBarScenarioCounter" xml:space="preserve">
     <value>{{count}} Scenariu:</value>
   </data>
-  <data name="SideBarScenarioCounter_other" xml:space="preserve">
+  <data name="SideBarScenarioCounter_plural" xml:space="preserve">
     <value>{{count}} Scenarii:</value>
   </data>
   <data name="SideBarScenarioEmptyLine1" xml:space="preserve">
@@ -1238,7 +1238,7 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
   <data name="SideBarSectionsCounter" xml:space="preserve">
     <value>{{count}} Secțiune:</value>
   </data>
-  <data name="SideBarSectionsCounter_other" xml:space="preserve">
+  <data name="SideBarSectionsCounter_plural" xml:space="preserve">
     <value>{{count}} Secțiuni:</value>
   </data>
   <data name="SideBarSectionsTitle" xml:space="preserve">
@@ -1262,7 +1262,7 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
   <data name="SideBarTranslationsCounter" xml:space="preserve">
     <value>{{count}} Traducere</value>
   </data>
-  <data name="SideBarTranslationsCounter_other" xml:space="preserve">
+  <data name="SideBarTranslationsCounter_plural" xml:space="preserve">
     <value>{{count}} Traduceri</value>
   </data>
   <data name="SideBarTranslationsEmptyLine1" xml:space="preserve">
@@ -1304,7 +1304,7 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
   <data name="TranslationsObtained" xml:space="preserve">
     <value>S-a obținut {0} rând din fișierul de traducere</value>
   </data>
-  <data name="TranslationsObtained_other" xml:space="preserve">
+  <data name="TranslationsObtained_plural" xml:space="preserve">
     <value>S-au obținut {0} rânduri din fișierul de traducere</value>
   </data>
   <data name="TreeAddQuestion" xml:space="preserve">
@@ -1403,7 +1403,7 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
   <data name="ViewResolvedCommentsCounter" xml:space="preserve">
     <value>Vizualizați toate {{count}} comentariile rezolvate</value>
   </data>
-  <data name="ViewResolvedCommentsCounter_other" xml:space="preserve">
+  <data name="ViewResolvedCommentsCounter_plural" xml:space="preserve">
     <value>Vizualizați toate {{count}} comentariile rezolvate</value>
   </data>
   <data name="VirtualCoverPage" xml:space="preserve">
@@ -1412,7 +1412,7 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
   <data name="WarningsCounter" xml:space="preserve">
     <value>{{count}} avertisment</value>
   </data>
-  <data name="WarningsCounter_other" xml:space="preserve">
+  <data name="WarningsCounter_plural" xml:space="preserve">
     <value>{{count}} avertismente</value>
   </data>
   <data name="Yes" xml:space="preserve">

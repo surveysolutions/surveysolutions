@@ -153,7 +153,7 @@
   <data name="ErrorsCounter" xml:space="preserve">
     <value>{{count}} error</value>
   </data>
-  <data name="ErrorsCounter_other" xml:space="preserve">
+  <data name="ErrorsCounter_plural" xml:space="preserve">
     <value>{{count}} errors</value>
   </data>
   <data name="HellowMessageBtn" xml:space="preserve">
@@ -205,7 +205,7 @@
   <data name="SideBarAttachmentsCounter" xml:space="preserve">
     <value>{{count}} File Attachment ({{bytes}} total)</value>
   </data>
-  <data name="SideBarAttachmentsCounter_other" xml:space="preserve">
+  <data name="SideBarAttachmentsCounter_plural" xml:space="preserve">
     <value>{{count}} Files Attachments ({{bytes}} total)</value>
   </data>
   <data name="SideBarAttachmentsEmptyLine1" xml:space="preserve">
@@ -250,7 +250,7 @@
   <data name="SideBarLookupTablesCounter" xml:space="preserve">
     <value>{{count}} Lookup Table:</value>
   </data>
-  <data name="SideBarLookupTablesCounter_other" xml:space="preserve">
+  <data name="SideBarLookupTablesCounter_plural" xml:space="preserve">
     <value>{{count}} Lookup Tables:</value>
   </data>
   <data name="SideBarLookupTableSelectFile" xml:space="preserve">
@@ -265,7 +265,7 @@
   <data name="SideBarMacroCounter" xml:space="preserve">
     <value>{{count}} Macro:</value>
   </data>
-  <data name="SideBarMacroCounter_other" xml:space="preserve">
+  <data name="SideBarMacroCounter_plural" xml:space="preserve">
     <value>{{count}} Macros:</value>
   </data>
   <data name="SideBarMacroDescription" xml:space="preserve">
@@ -292,7 +292,7 @@
   <data name="SideBarScenarioCounter" xml:space="preserve">
     <value>{{count}} Scenario:</value>
   </data>
-  <data name="SideBarScenarioCounter_other" xml:space="preserve">
+  <data name="SideBarScenarioCounter_plural" xml:space="preserve">
     <value>{{count}} Scenarios:</value>
   </data>
   <data name="SideBarScenarioEmptyLine1" xml:space="preserve">
@@ -307,7 +307,7 @@
   <data name="SideBarSectionsCounter" xml:space="preserve">
     <value>{{count}} Section:</value>
   </data>
-  <data name="SideBarSectionsCounter_other" xml:space="preserve">
+  <data name="SideBarSectionsCounter_plural" xml:space="preserve">
     <value>{{count}} Sections:</value>
   </data>
   <data name="SideBarTranslationDownloadXlsx" xml:space="preserve">
@@ -343,7 +343,7 @@
   <data name="SideBarCategoriesCounter" xml:space="preserve">
     <value>{{count}} Categories</value>
   </data>
-  <data name="SideBarTranslationsCounter_other" xml:space="preserve">
+  <data name="SideBarTranslationsCounter_plural" xml:space="preserve">
     <value>{{count}} Translations</value>
   </data>
   <data name="SideBarTranslationsEmptyLine1" xml:space="preserve">
@@ -376,7 +376,7 @@
   <data name="WarningsCounter" xml:space="preserve">
     <value>{{count}} warning</value>
   </data>
-  <data name="WarningsCounter_other" xml:space="preserve">
+  <data name="WarningsCounter_plural" xml:space="preserve">
     <value>{{count}} warnings</value>
   </data>
   <data name="Close" xml:space="preserve">
@@ -385,7 +385,7 @@
   <data name="CompilationErrorsCounter" xml:space="preserve">
     <value>{{count}} error found</value>
   </data>
-  <data name="CompilationErrorsCounter_other" xml:space="preserve">
+  <data name="CompilationErrorsCounter_plural" xml:space="preserve">
     <value>{{count}} errors found</value>
   </data>
   <data name="CompilationLabel" xml:space="preserve">
@@ -394,7 +394,7 @@
   <data name="CompilationWarningsCounter" xml:space="preserve">
     <value>{{count}} warning found</value>
   </data>
-  <data name="CompilationWarningsCounter_other" xml:space="preserve">
+  <data name="CompilationWarningsCounter_plural" xml:space="preserve">
     <value>{{count}} warnings found</value>
   </data>
   <data name="MoveTo" xml:space="preserve">
@@ -571,7 +571,7 @@
   <data name="FindReplaceInAllFound" xml:space="preserve">
     <value>in {{count}} found entity?</value>
   </data>
-  <data name="FindReplaceInAllFound_other" xml:space="preserve">
+  <data name="FindReplaceInAllFound_plural" xml:space="preserve">
     <value>in {{count}} found entities?</value>
   </data>
   <data name="FindReplaceMatchingLines" xml:space="preserve">
@@ -1138,13 +1138,13 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   <data name="TranslationsObtained" xml:space="preserve">
     <value>Obtained {0} row from translation file</value>
   </data>
-  <data name="TranslationsObtained_other" xml:space="preserve">
+  <data name="TranslationsObtained_plural" xml:space="preserve">
     <value>Obtained {0} rows from translation file</value>
   </data>
   <data name="CategoriesObtained" xml:space="preserve">
     <value>Obtained {0} row from categories file</value>
   </data>
-  <data name="CategoriesObtained_other" xml:space="preserve">
+  <data name="CategoriesObtained_plural" xml:space="preserve">
     <value>Obtained {0} rows from categories file</value>
   </data>
   <data name="UnsavedChangesLeave" xml:space="preserve">
@@ -1294,7 +1294,7 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   <data name="SideBarCommentsCounter" xml:space="preserve">
     <value>{{count}} Comment thread:</value>
   </data>
-  <data name="SideBarCommentsCounter_other" xml:space="preserve">
+  <data name="SideBarCommentsCounter_plural" xml:space="preserve">
     <value>{{count}} Comment threads:</value>
   </data>
   <data name="SideBarEmptyCommentsLine" xml:space="preserve">
@@ -1303,7 +1303,7 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   <data name="ViewResolvedCommentsCounter" xml:space="preserve">
     <value>View all {{count}} resolved comment</value>
   </data>
-  <data name="ViewResolvedCommentsCounter_other" xml:space="preserve">
+  <data name="ViewResolvedCommentsCounter_plural" xml:space="preserve">
     <value>View all {{count}} resolved comments</value>
   </data>
   <data name="HideResolvedComments" xml:space="preserve">

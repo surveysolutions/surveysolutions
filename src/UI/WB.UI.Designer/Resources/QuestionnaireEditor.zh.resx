@@ -165,7 +165,7 @@
   <data name="CompilationErrorsCounter" xml:space="preserve">
     <value>发现{{count}}个错误</value>
   </data>
-  <data name="CompilationErrorsCounter_other" xml:space="preserve">
+  <data name="CompilationErrorsCounter_plural" xml:space="preserve">
     <value>发现{{count}}个错误</value>
   </data>
   <data name="CompilationLabel" xml:space="preserve">
@@ -174,7 +174,7 @@
   <data name="CompilationWarningsCounter" xml:space="preserve">
     <value>发现{{count}}个警告</value>
   </data>
-  <data name="CompilationWarningsCounter_other" xml:space="preserve">
+  <data name="CompilationWarningsCounter_plural" xml:space="preserve">
     <value>发现{{count}}个警告</value>
   </data>
   <data name="Compile" xml:space="preserve">
@@ -246,7 +246,7 @@
   <data name="ErrorsCounter" xml:space="preserve">
     <value>{{count}}个错误</value>
   </data>
-  <data name="ErrorsCounter_other" xml:space="preserve">
+  <data name="ErrorsCounter_plural" xml:space="preserve">
     <value>{{count}}个错误</value>
   </data>
   <data name="Export" xml:space="preserve">
@@ -270,7 +270,7 @@
   <data name="FindReplaceInAllFound" xml:space="preserve">
     <value>在{{count}}中找到实体？</value>
   </data>
-  <data name="FindReplaceInAllFound_other" xml:space="preserve">
+  <data name="FindReplaceInAllFound_plural" xml:space="preserve">
     <value>在{{count}}中找到实体？</value>
   </data>
   <data name="FindReplaceMatchCase" xml:space="preserve">
@@ -792,7 +792,7 @@
   <data name="SideBarAttachmentsCounter" xml:space="preserve">
     <value>{{count}}附件文件 (共{{bytes}})</value>
   </data>
-  <data name="SideBarAttachmentsCounter_other" xml:space="preserve">
+  <data name="SideBarAttachmentsCounter_plural" xml:space="preserve">
     <value>{{count}}附件文件 (共{{bytes}})</value>
   </data>
   <data name="SideBarAttachmentsEmptyLine1" xml:space="preserve">
@@ -819,7 +819,7 @@
   <data name="SideBarCommentsCounter" xml:space="preserve">
     <value>{{count}}个评论：</value>
   </data>
-  <data name="SideBarCommentsCounter_other" xml:space="preserve">
+  <data name="SideBarCommentsCounter_plural" xml:space="preserve">
     <value>{{count}}个评论：</value>
   </data>
   <data name="SideBarCommentsTitle" xml:space="preserve">
@@ -855,7 +855,7 @@
   <data name="SideBarLookupTablesCounter" xml:space="preserve">
     <value>{{count}} 个查询表：</value>
   </data>
-  <data name="SideBarLookupTablesCounter_other" xml:space="preserve">
+  <data name="SideBarLookupTablesCounter_plural" xml:space="preserve">
     <value>{{count}} 个查询表：</value>
   </data>
   <data name="SideBarLookupTableSelectFile" xml:space="preserve">
@@ -873,7 +873,7 @@
   <data name="SideBarMacroCounter" xml:space="preserve">
     <value>{{count}}个宏</value>
   </data>
-  <data name="SideBarMacroCounter_other" xml:space="preserve">
+  <data name="SideBarMacroCounter_plural" xml:space="preserve">
     <value>{{count}}个宏</value>
   </data>
   <data name="SideBarMacroDescription" xml:space="preserve">
@@ -981,7 +981,7 @@
   <data name="SideBarSectionsCounter" xml:space="preserve">
     <value>{{count}}个问卷模块：</value>
   </data>
-  <data name="SideBarSectionsCounter_other" xml:space="preserve">
+  <data name="SideBarSectionsCounter_plural" xml:space="preserve">
     <value>{{count}}个问卷模块：</value>
   </data>
   <data name="SideBarSectionsTitle" xml:space="preserve">
@@ -1005,7 +1005,7 @@
   <data name="SideBarTranslationsCounter" xml:space="preserve">
     <value>{{count}}个翻译</value>
   </data>
-  <data name="SideBarTranslationsCounter_other" xml:space="preserve">
+  <data name="SideBarTranslationsCounter_plural" xml:space="preserve">
     <value>{{count}}个翻译</value>
   </data>
   <data name="SideBarTranslationsEmptyLine1" xml:space="preserve">
@@ -1041,7 +1041,7 @@
   <data name="TranslationsObtained" xml:space="preserve">
     <value>由翻译文件获取{0}行</value>
   </data>
-  <data name="TranslationsObtained_other" xml:space="preserve">
+  <data name="TranslationsObtained_plural" xml:space="preserve">
     <value>由翻译文件获取{0}行</value>
   </data>
   <data name="TreeAddQuestion" xml:space="preserve">
@@ -1131,13 +1131,13 @@
   <data name="ViewResolvedCommentsCounter" xml:space="preserve">
     <value>查看{{count}}已处理的注释</value>
   </data>
-  <data name="ViewResolvedCommentsCounter_other" xml:space="preserve">
+  <data name="ViewResolvedCommentsCounter_plural" xml:space="preserve">
     <value>查看{{count}}已处理的注释</value>
   </data>
   <data name="WarningsCounter" xml:space="preserve">
     <value>{{count}}个警告</value>
   </data>
-  <data name="WarningsCounter_other" xml:space="preserve">
+  <data name="WarningsCounter_plural" xml:space="preserve">
     <value>{{count}}个警告</value>
   </data>
   <data name="DownloadPdf" xml:space="preserve">

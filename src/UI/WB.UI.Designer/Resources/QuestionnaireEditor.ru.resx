@@ -906,7 +906,7 @@
   <data name="TranslationsObtained" xml:space="preserve">
     <value>Получено {0} строка из файла с переводами</value>
   </data>
-  <data name="TranslationsObtained_other" xml:space="preserve">
+  <data name="TranslationsObtained_plural" xml:space="preserve">
     <value>Получено {0} строк(и) из файла с переводами</value>
   </data>
   <data name="UnsavedChangesLeave" xml:space="preserve">
@@ -1165,7 +1165,7 @@
   <data name="SideBarCommentsCounter" xml:space="preserve">
     <value>{{count}} канал(ов) обсуждения:</value>
   </data>
-  <data name="SideBarCommentsCounter_other" xml:space="preserve">
+  <data name="SideBarCommentsCounter_plural" xml:space="preserve">
     <value>{{count}} канал(ов) обсуждения:</value>
   </data>
   <data name="SideBarEmptyCommentsLine" xml:space="preserve">
@@ -1177,7 +1177,7 @@
   <data name="ViewResolvedCommentsCounter" xml:space="preserve">
     <value>Показать {{count}} закрытый комментарий</value>
   </data>
-  <data name="ViewResolvedCommentsCounter_other" xml:space="preserve">
+  <data name="ViewResolvedCommentsCounter_plural" xml:space="preserve">
     <value>Показать {{count}} закрытых комментария</value>
   </data>
   <data name="HideResolvedComments" xml:space="preserve">
@@ -1419,7 +1419,7 @@
     <value>{{count}} Сценарий:</value>
     <comment>{{count}} Сценарий:</comment>
   </data>
-  <data name="SideBarScenarioCounter_other" xml:space="preserve">
+  <data name="SideBarScenarioCounter_plural" xml:space="preserve">
     <value>{{count}} Сценарии:</value>
   </data>
   <data name="SideBarScenarioEmptyLine1" xml:space="preserve">
@@ -1526,7 +1526,7 @@
   <data name="CategoriesObtained" xml:space="preserve">
     <value>Получено {0} строка из файла с категориями</value>
   </data>
-  <data name="CategoriesObtained_other" xml:space="preserve">
+  <data name="CategoriesObtained_plural" xml:space="preserve">
     <value>Получено {0} строк(и) из файла с категориями</value>
   </data>
   <data name="DeleteConfirmCategories" xml:space="preserve">
