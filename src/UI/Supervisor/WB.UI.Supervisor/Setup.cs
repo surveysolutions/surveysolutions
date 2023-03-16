@@ -187,7 +187,10 @@ namespace WB.UI.Supervisor
             return base.GetViewModelAssemblies().Union(new[]
             {
                 typeof(Setup).Assembly,
-                typeof(DashboardViewModel).Assembly
+                typeof(DashboardViewModel).Assembly,
+#if !EXCLUDEEXTENSIONS
+                typeof(WB.UI.Shared.Extensions.ViewModels.GeographyEditorViewModel).Assembly
+#endif                
             });
         }
     }
