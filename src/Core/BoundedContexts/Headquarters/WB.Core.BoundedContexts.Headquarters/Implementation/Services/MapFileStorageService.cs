@@ -610,7 +610,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         public string[] GetAllMapsForSupervisor(Guid supervisorId)
         {
             var interviewerNames = this.userStorage.Users
-                .Where(x => supervisorId == x.WorkspaceProfile.SupervisorId && x.IsArchived == false)
+                .Where(x => (supervisorId == x.WorkspaceProfile.SupervisorId || supervisorId == x.Id) && x.IsArchived == false)
                 .Select(x => x.UserName)
                 .ToArray();
 
