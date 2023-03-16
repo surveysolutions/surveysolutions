@@ -568,9 +568,9 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Errors.
         /// </summary>
-        public static string Error_plural {
+        public static string Error_other {
             get {
-                return ResourceManager.GetString("Error_plural", resourceCulture);
+                return ResourceManager.GetString("Error_other", resourceCulture);
             }
         }
         

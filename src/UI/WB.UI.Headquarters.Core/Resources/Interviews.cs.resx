@@ -120,7 +120,7 @@
   <data name="ApproveConfirmMessage" xml:space="preserve">
     <value>{{count}} rozhovor bude schválen.</value>
   </data>
-  <data name="ApproveConfirmMessage_plural" xml:space="preserve">
+  <data name="ApproveConfirmMessage_other" xml:space="preserve">
     <value>Počet rozhovorů, které budou schváleny: {{count}}.</value>
   </data>
   <data name="DynamicFilter_MatchTypes_And" xml:space="preserve">
