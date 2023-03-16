@@ -48,7 +48,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             MainText = ReplaceVariablesWithData(MainText, interview, questionnaire);
         }
 
-        private static readonly Regex FindVariables = new Regex("%[A-Za-z0-9_]+(:[a-z]+)?%", RegexOptions.Compiled);
+        private static readonly Regex FindVariables = 
+            new Regex("%[A-Za-z0-9_]+(:[a-z]+)?%", RegexOptions.Compiled, TimeSpan.FromMilliseconds(1000));
         private string ReplaceVariablesWithData(string text, IStatefulInterview interview, IQuestionnaire questionnaire)
         {
             return FindVariables.Replace(text, match =>
