@@ -213,10 +213,10 @@
   <data name="UpdatedAt" xml:space="preserve">
     <value>Mis à jour le</value>
   </data>
-  <data name="AssignmentsSelected_plural" xml:space="preserve">
+  <data name="AssignmentsSelected_other" xml:space="preserve">
     <value>{{count}} Affectations sélectionnées</value>
   </data>
-  <data name="NumberOfAssignmentsAffected_plural" xml:space="preserve">
+  <data name="NumberOfAssignmentsAffected_other" xml:space="preserve">
     <value>{{count}} Affectations vont être modifiées</value>
   </data>
 </root>

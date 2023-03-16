@@ -144,7 +144,7 @@
   <data name="SearchResult_Count" xml:space="preserve">
     <value>已找到{{ count }}项目：</value>
   </data>
-  <data name="SearchResult_Count_plural" xml:space="preserve">
+  <data name="SearchResult_Count_other" xml:space="preserve">
     <value>已找到{{ count }}项目：</value>
   </data>
   <data name="Status" xml:space="preserve">

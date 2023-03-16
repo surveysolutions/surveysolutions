@@ -159,7 +159,7 @@
   <data name="CompilationErrorsCounter" xml:space="preserve">
     <value>{{count}} وجد خطأ</value>
   </data>
-  <data name="CompilationErrorsCounter_plural" xml:space="preserve">
+  <data name="CompilationErrorsCounter_other" xml:space="preserve">
     <value>{{count}} وجد أخطاء</value>
   </data>
   <data name="CompilationLabel" xml:space="preserve">
@@ -168,7 +168,7 @@
   <data name="CompilationWarningsCounter" xml:space="preserve">
     <value>{{count}} وجد تحذير</value>
   </data>
-  <data name="CompilationWarningsCounter_plural" xml:space="preserve">
+  <data name="CompilationWarningsCounter_other" xml:space="preserve">
     <value>{{count}} وجد تحذيرات</value>
   </data>
   <data name="Compile" xml:space="preserve">
@@ -225,7 +225,7 @@
   <data name="ErrorsCounter" xml:space="preserve">
     <value>{{count}} خطأ</value>
   </data>
-  <data name="ErrorsCounter_plural" xml:space="preserve">
+  <data name="ErrorsCounter_other" xml:space="preserve">
     <value>{{count}} أخطاء</value>
   </data>
   <data name="Export" xml:space="preserve">
@@ -681,7 +681,7 @@
   <data name="SideBarAttachmentsCounter" xml:space="preserve">
     <value>{{count}} ملف ملرفق ({{bytes}} مجموع)</value>
   </data>
-  <data name="SideBarAttachmentsCounter_plural" xml:space="preserve">
+  <data name="SideBarAttachmentsCounter_other" xml:space="preserve">
     <value>{{count}} ملفات مرفقة ({{bytes}} مجموع)</value>
   </data>
   <data name="SideBarAttachmentsEmptyLine1" xml:space="preserve">
@@ -726,7 +726,7 @@
   <data name="SideBarLookupTablesCounter" xml:space="preserve">
     <value>:{{count}} جدول البحث</value>
   </data>
-  <data name="SideBarLookupTablesCounter_plural" xml:space="preserve">
+  <data name="SideBarLookupTablesCounter_other" xml:space="preserve">
     <value>:{{count}} جداول البحث</value>
   </data>
   <data name="SideBarLookupTableSelectFile" xml:space="preserve">
@@ -756,7 +756,7 @@
   <data name="SideBarSectionsCounter" xml:space="preserve">
     <value>{{count}} قسم:</value>
   </data>
-  <data name="SideBarSectionsCounter_plural" xml:space="preserve">
+  <data name="SideBarSectionsCounter_other" xml:space="preserve">
     <value>{{count}} أقسام:</value>
   </data>
   <data name="SideBarSectionsTitle" xml:space="preserve">
@@ -780,7 +780,7 @@
   <data name="SideBarTranslationsCounter" xml:space="preserve">
     <value>{{count}} ترجمة</value>
   </data>
-  <data name="SideBarTranslationsCounter_plural" xml:space="preserve">
+  <data name="SideBarTranslationsCounter_other" xml:space="preserve">
     <value>{{count}} ترجمات</value>
   </data>
   <data name="SideBarTranslationsEmptyLine1" xml:space="preserve">
@@ -813,7 +813,7 @@
   <data name="TranslationsObtained" xml:space="preserve">
     <value>تم الحصول على صف {0} من ملف الترجمة</value>
   </data>
-  <data name="TranslationsObtained_plural" xml:space="preserve">
+  <data name="TranslationsObtained_other" xml:space="preserve">
     <value>تم الحصول على صف {0} من ملف الترجمة</value>
   </data>
   <data name="TreeAddQuestion" xml:space="preserve">
@@ -900,7 +900,7 @@
   <data name="WarningsCounter" xml:space="preserve">
     <value>{{count}} تحذير</value>
   </data>
-  <data name="WarningsCounter_plural" xml:space="preserve">
+  <data name="WarningsCounter_other" xml:space="preserve">
     <value>{{count}} تحذيرات</value>
   </data>
   <data name="DownloadPdf" xml:space="preserve">

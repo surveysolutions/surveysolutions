@@ -201,7 +201,7 @@
   <data name="Note" xml:space="preserve">
       <value>¡Nota!</value>
   </data>
-  <data name="ApproveConfirmMessage_plural" xml:space="preserve">
+  <data name="ApproveConfirmMessage_other" xml:space="preserve">
       <value>{{count}} entrevistas será aprobada.</value>
   </data>
   <data name="ApproveConfirmMessage_Statuses" xml:space="preserve">

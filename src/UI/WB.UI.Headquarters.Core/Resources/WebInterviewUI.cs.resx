@@ -308,7 +308,7 @@ Požádejte o pomoc svého Garanta.</value>
   <data name="EnterPassword" xml:space="preserve">
     <value>Zadejte heslo</value>
   </data>
-  <data name="Error_plural" xml:space="preserve">
+  <data name="Error_other" xml:space="preserve">
     <value>Chyby</value>
   </data>
   <data name="GPSError" xml:space="preserve">
