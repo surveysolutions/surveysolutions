@@ -13,13 +13,14 @@
             local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
         <TextView
                 style="@style/ToolbarTitle"
+                android:id="@+id/tv_Finish_ApplicationName"
                 local:MvxBind="Text Localization('Supervisor_ApplicationName')"/>
     </androidx.appcompat.widget.Toolbar>
     <ProgressBar style="@style/Progress_Indicator"
                  local:MvxBind="ShowProgress IsInProgress; Visibility VisibleOrInvisible(IsInProgress)"/>
     <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="@dimen/zero"
             android:layout_weight="1"
             android:fillViewport="true">
         <LinearLayout
@@ -48,6 +49,7 @@
                         local:errorEnabled="true"
                         local:endIconMode="custom"
                         local:endIconDrawable="@drawable/scan_icon"
+                        android:id="@+id/LoginPage_endpoint_layout"
                         local:MvxBind="Hint Localization('EndpointHint'); EndIconClick ScanCommand; Error EndpointValidationError">
                     <com.google.android.material.textfield.TextInputEditText
                             style="@style/Login_Editor"
@@ -61,6 +63,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         local:hintEnabled="true"
+                        android:id="@+id/LoginPage_login_layout"
                         local:MvxBind="Hint Localization('LoginNameHint')">
                     <com.google.android.material.textfield.TextInputEditText
                             style="@style/Login_Editor"
@@ -74,6 +77,7 @@
                         local:endIconMode="password_toggle"
                         local:hintEnabled="true"
                         local:errorEnabled="true"
+                        android:id="@+id/LoginPage_password_layout"
                         local:MvxBind="Hint Localization('PasswordHint'); Error PasswordError">
                     <com.google.android.material.textfield.TextInputEditText
                             style="@style/Login_Editor"
@@ -100,10 +104,10 @@
         </LinearLayout>
     </ScrollView>
     <LinearLayout
-            style="@style/Login_Footer"
-            android:id="@+id/login_page_footer"
+            style="@style/Login_Footer"            
             android:layout_alignParentBottom="true">
         <TextView
+                android:id="@+id/login_page_footer"
                 style="@style/Login_Footer_Message"
                 local:MvxBind="Html Localization('Login_FinishInstallation_Message')"/>
     </LinearLayout>
