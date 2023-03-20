@@ -27,7 +27,6 @@ namespace WB.UI.Shared.Enumerator.Services
         private readonly IEnumeratorArchiveUtils archiver;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ILogger logger;
-        private readonly IPermissionsService permissions;
         private readonly IDeviceSettings deviceSettings;
         private readonly IRestService restService;
         private readonly IPrincipal principal;
@@ -43,7 +42,6 @@ namespace WB.UI.Shared.Enumerator.Services
             IFileSystemAccessor fileSystemAccessor,
             ILogger logger,
             string privateStorage, 
-            IPermissionsService permissions,
             IDeviceSettings deviceSettings,
             IRestService restService,
             IPrincipal principal,
@@ -57,7 +55,6 @@ namespace WB.UI.Shared.Enumerator.Services
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
             this.privateStorage = privateStorage;
-            this.permissions = permissions;
             this.deviceSettings = deviceSettings;
             this.restService = restService;
             this.principal = principal;
@@ -70,14 +67,11 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public async Task<string> BackupAsync()
         {
-            await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
             return await this.BackupAsync(this.privateStorage).ConfigureAwait(false);
         }
 
         public async Task<string> BackupAsync(string backupToFolderPath)
         {
-            await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
-
             if (!this.fileSystemAccessor.IsDirectoryExists(backupToFolderPath))
                 this.fileSystemAccessor.CreateDirectory(backupToFolderPath);
 
@@ -120,10 +114,8 @@ namespace WB.UI.Shared.Enumerator.Services
             return backupFilePath;
         }
 
-        public async Task<RestorePackageInfo> GetRestorePackageInfo(string restoreFolder)
+        public RestorePackageInfo GetRestorePackageInfo(string restoreFolder)
         {
-            await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
-
             if (!this.fileSystemAccessor.IsDirectoryExists(restoreFolder))
                 this.fileSystemAccessor.CreateDirectory(restoreFolder);
 
@@ -270,8 +262,6 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public async Task RestoreAsync(string backupFilePath)
         {
-            await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
-
             if (this.fileSystemAccessor.IsFileExists(backupFilePath))
             {
                 this.CleanUpPrivateDirectory();
