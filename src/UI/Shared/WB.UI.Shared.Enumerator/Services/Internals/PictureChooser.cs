@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Android.Media;
+using MvvmCross.Base;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
 using WB.Core.GenericSubdomains.Portable.Tasks;
@@ -14,17 +15,17 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
     {
         private readonly IMedia media;
         private readonly IPermissionsService permissions;
+        private readonly IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher;
 
-        public PictureChooser(IMedia media, IPermissionsService permissions)
+        public PictureChooser(IMedia media, IPermissionsService permissions, IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher)
         {
             this.media = media;
             this.permissions = permissions;
+            this.mainThreadAsyncDispatcher = mainThreadAsyncDispatcher;
         }
 
         public async Task<Stream> TakePicture()
         {
-            await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
-            await this.permissions.AssureHasPermissionOrThrow<Permissions.Camera>().ConfigureAwait(false);
             await this.media.Initialize().ConfigureAwait(false);
             var storeCameraMediaOptions = new StoreCameraMediaOptions()
             {
@@ -33,7 +34,12 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
                 MaxWidthHeight = 1024
             };
 
-            var photo = await MediaPicker.CapturePhotoAsync().ConfigureAwait(false);
+            FileResult photo = null;
+            await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(async () =>
+            {
+                photo = await MediaPicker.CapturePhotoAsync().ConfigureAwait(false);
+            });
+
             if (photo == null)
                 return null;
             
@@ -51,11 +57,14 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
 
         public async Task<Stream> ChoosePictureGallery()
         {
-            await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
-            await this.permissions.AssureHasPermissionOrThrow<Permissions.Camera>().ConfigureAwait(false);
             await this.media.Initialize().ConfigureAwait(false);
 
-            var photo = await MediaPicker.PickPhotoAsync().ConfigureAwait(false);
+            FileResult photo = null;
+            await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(async () =>
+            {
+                photo = await MediaPicker.PickPhotoAsync().ConfigureAwait(false);
+            });
+
             return photo == null ? null : await photo.OpenReadAsync();
         }
     }
