@@ -73,7 +73,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (this.reservedKeywords.Contains(keyword))
                 return true;
 
-            if (Regex.IsMatch(keyword, @"^str\d+"))
+            if (Regex.IsMatch(keyword, @"^str\d+", RegexOptions.None,TimeSpan.FromMilliseconds(1000)))
                 return true;
 
             return false;

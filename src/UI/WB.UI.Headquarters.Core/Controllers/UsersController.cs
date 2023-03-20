@@ -257,14 +257,17 @@ namespace WB.UI.Headquarters.Controllers
                     Role = userRole.ToString(),
                     IsOwnProfile = user.Id == this.authorizedUser.Id,
                     ForceChangePassword = user.Id == this.authorizedUser.Id && user.PasswordChangeRequired,
-                    CanChangePassword = user.Id == this.authorizedUser.Id || authorizedUser.IsAdministrator,
+                    CanChangePassword = user.Id == this.authorizedUser.Id 
+                                        || authorizedUser.IsAdministrator  
+                                        || (authorizedUser.IsHeadquarter 
+                                            && user.Workspaces.All(x => this.authorizedUser.Workspaces.Contains(x.Workspace.Name))),
                     IsLockedByHeadquarters = user.IsLockedByHeadquaters,
                     IsLockedBySupervisor = user.IsLockedBySupervisor,
                     IsObserving = this.authorizedUser.IsObserving,
                     LockedOutCanBeReleased = authorizedUser.IsAdministrator,
                     CanBeLockedAsHeadquarters = authorizedUser.IsAdministrator,
                     CanBeLockedAsSupervisor = authorizedUser.IsAdministrator && (userRole == UserRoles.Interviewer),
-                    CanChangeWorkspacesList = authorizedUser.IsAdministrator && (userRole == UserRoles.Headquarter || userRole == UserRoles.ApiUser || userRole == UserRoles.Supervisor),
+                    CanChangeWorkspacesList = authorizedUser.IsAdministrator && userRole is UserRoles.Headquarter or UserRoles.ApiUser or UserRoles.Supervisor,
                     RecoveryCodes = "",
                     CanGetApiToken = (userRole is UserRoles.Administrator or UserRoles.ApiUser) && tokenProvider.CanGenerate,
                     TokenIssued = await this.tokenProvider.DoesTokenExist(user),
@@ -347,13 +350,16 @@ namespace WB.UI.Headquarters.Controllers
                     Role = user.Roles.FirstOrDefault().Id.ToUserRole().ToString(),
                     IsOwnProfile = user.Id == this.authorizedUser.Id,
                     ForceChangePassword = user.Id == this.authorizedUser.Id && user.PasswordChangeRequired,
-                    CanChangePassword = user.Id == this.authorizedUser.Id || authorizedUser.IsAdministrator,
+                    CanChangePassword = user.Id == this.authorizedUser.Id 
+                                        || authorizedUser.IsAdministrator  
+                                        || (authorizedUser.IsHeadquarter 
+                                            && user.Workspaces.All(x => this.authorizedUser.Workspaces.Contains(x.Workspace.Name))),
                     IsLockedByHeadquarters = user.IsLockedByHeadquaters,
                     IsLockedBySupervisor = user.IsLockedBySupervisor,
                     IsObserving = this.authorizedUser.IsObserving,
                     CanBeLockedAsHeadquarters = authorizedUser.IsAdministrator,
                     CanBeLockedAsSupervisor = authorizedUser.IsAdministrator,
-                    CanChangeWorkspacesList = authorizedUser.IsAdministrator && (userRole == UserRoles.Headquarter || userRole == UserRoles.ApiUser || userRole == UserRoles.Supervisor),
+                    CanChangeWorkspacesList = authorizedUser.IsAdministrator && userRole is UserRoles.Headquarter or UserRoles.ApiUser or UserRoles.Supervisor,
                     CanGetApiToken = (userRole is UserRoles.Administrator or UserRoles.ApiUser) && tokenProvider.CanGenerate,
                     RecoveryCodes = string.Join(" ", RecoveryCodes),
                     CanSetupTwoFactorAuthentication =  tokenProvider.CanGenerate && HasPermissionsToSetupTwoFactorAuthentication(user),
@@ -448,13 +454,16 @@ namespace WB.UI.Headquarters.Controllers
                     Role = user.Roles.FirstOrDefault().Id.ToUserRole().ToString(),
                     IsOwnProfile = user.Id == this.authorizedUser.Id,
                     ForceChangePassword = user.Id == this.authorizedUser.Id && user.PasswordChangeRequired,
-                    CanChangePassword = user.Id == this.authorizedUser.Id || authorizedUser.IsAdministrator,
+                    CanChangePassword = user.Id == this.authorizedUser.Id 
+                                        || authorizedUser.IsAdministrator  
+                                        || (authorizedUser.IsHeadquarter 
+                                            && user.Workspaces.All(x => this.authorizedUser.Workspaces.Contains(x.Workspace.Name))),
                     IsLockedByHeadquarters = user.IsLockedByHeadquaters,
                     IsLockedBySupervisor = user.IsLockedBySupervisor,
                     IsObserving = this.authorizedUser.IsObserving,
                     CanBeLockedAsHeadquarters = authorizedUser.IsAdministrator,
                     CanBeLockedAsSupervisor = authorizedUser.IsAdministrator,
-                    CanChangeWorkspacesList = authorizedUser.IsAdministrator && (userRole == UserRoles.Headquarter || userRole == UserRoles.ApiUser || userRole == UserRoles.Supervisor),
+                    CanChangeWorkspacesList = authorizedUser.IsAdministrator && userRole is UserRoles.Headquarter or UserRoles.ApiUser or UserRoles.Supervisor,
                     CanGetApiToken = (userRole is UserRoles.Administrator or UserRoles.ApiUser) && tokenProvider.CanGenerate,
                     CanSetupTwoFactorAuthentication = tokenProvider.CanGenerate && HasPermissionsToSetupTwoFactorAuthentication(user),
                 },
@@ -630,18 +639,18 @@ namespace WB.UI.Headquarters.Controllers
         {
             if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();
 
-            var currentUser = await this.userManager.FindByIdAsync(model.UserId.FormatGuid());
-            if (currentUser == null) return NotFound("User not found");
+            var userToUpdate = await this.userManager.FindByIdAsync(model.UserId.FormatGuid());
+            if (userToUpdate == null) return NotFound("User not found");
 
-            if (!HasPermissionsToChangeUserPassword(currentUser)) return this.Forbid();
+            if (!HasPermissionsToChangeUserPassword(userToUpdate)) return this.Forbid();
 
-            if (currentUser.IsArchived)
+            if (userToUpdate.IsArchived)
                 this.ModelState.AddModelError(nameof(ChangePasswordModel.Password), FieldsAndValidations.CannotUpdate_CurrentUserIsArchived);
 
             if (model.UserId == this.authorizedUser.Id)
             {
                 bool isPasswordValid = !string.IsNullOrEmpty(model.OldPassword)
-                                       && await this.userManager.CheckPasswordAsync(currentUser,
+                                       && await this.userManager.CheckPasswordAsync(userToUpdate,
                                            model.OldPassword);
                 if (!isPasswordValid)
                     this.ModelState.AddModelError(nameof(ChangePasswordModel.OldPassword), FieldsAndValidations.OldPasswordErrorMessage);
@@ -649,24 +658,24 @@ namespace WB.UI.Headquarters.Controllers
 
             if (this.ModelState.IsValid)
             {
-                var passwordResetToken = await this.userManager.GeneratePasswordResetTokenAsync(currentUser);
-                var updateResult = await this.userManager.ResetPasswordAsync(currentUser, passwordResetToken, model.Password);
+                var passwordResetToken = await this.userManager.GeneratePasswordResetTokenAsync(userToUpdate);
+                var updateResult = await this.userManager.ResetPasswordAsync(userToUpdate, passwordResetToken, model.Password);
 
                 if (updateResult.Succeeded)
                 {
                     var isOwnProfile = model.UserId == this.authorizedUser.Id;
-                    if (!isOwnProfile && !currentUser.IsInRole(UserRoles.ApiUser))
+                    if (!isOwnProfile && !userToUpdate.IsInRole(UserRoles.ApiUser))
                     {
-                        currentUser.PasswordChangeRequired = true;
-                        var updateUserResult = await userManager.UpdateAsync(currentUser);
+                        userToUpdate.PasswordChangeRequired = true;
+                        var updateUserResult = await userManager.UpdateAsync(userToUpdate);
                         if (!updateUserResult.Succeeded)
                             this.ModelState.AddModelError(nameof(ChangePasswordModel.Password),
                                 string.Join(@", ", updateResult.Errors.Select(x => x.Description)));
                     }
-                    else if (model.UserId == this.authorizedUser.Id && currentUser.PasswordChangeRequired)
+                    else if (model.UserId == this.authorizedUser.Id && userToUpdate.PasswordChangeRequired)
                     {
-                        currentUser.PasswordChangeRequired = false;
-                        var updateUserResult = await userManager.UpdateAsync(currentUser);
+                        userToUpdate.PasswordChangeRequired = false;
+                        var updateUserResult = await userManager.UpdateAsync(userToUpdate);
                         if (!updateUserResult.Succeeded)
                             this.ModelState.AddModelError(nameof(ChangePasswordModel.Password),
                                 string.Join(@", ", updateResult.Errors.Select(x => x.Description)));
@@ -1045,8 +1054,14 @@ namespace WB.UI.Headquarters.Controllers
             if (this.authorizedUser.IsAdministrator)
                 return true;
 
-            if (this.authorizedUser.IsHeadquarter && user.Id == this.authorizedUser.Id)
-                return true;
+            if (this.authorizedUser.IsHeadquarter)
+            {
+                if (user.Id == this.authorizedUser.Id)
+                    return true;
+
+                if(user.Workspaces.All(x => this.authorizedUser.Workspaces.Contains(x.Workspace.Name)))
+                    return true;
+            }
 
             if (this.authorizedUser.IsSupervisor && user.Id == this.authorizedUser.Id)
                 return true;
