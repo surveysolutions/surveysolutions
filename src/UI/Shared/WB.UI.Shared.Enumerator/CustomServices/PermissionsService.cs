@@ -140,8 +140,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                     }
                     else
                     {
-                        tcs.SetException(new MissingPermissionsException(UIResources.MissingPermission,
-                            manageExternalStoragePermission.GetType()));
+                        tcs.SetException(new MissingPermissionsException(UIResources.MissingPermission, 
+                            Android.Provider.Settings.ActionManageAppAllFilesAccessPermission.GetType()));
                     }
                 }
                 finally
