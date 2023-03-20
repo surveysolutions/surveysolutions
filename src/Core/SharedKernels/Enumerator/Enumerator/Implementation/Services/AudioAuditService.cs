@@ -37,7 +37,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         public async Task StartAudioRecordingAsync(Guid interviewId)
         {
             await this.permissions.AssureHasPermissionOrThrow<Permissions.Microphone>().ConfigureAwait(false);
-            await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
 
             audioAuditService.StartAuditRecording($"{interviewId.FormatGuid()}-{fileNamePrefix}");
         }
