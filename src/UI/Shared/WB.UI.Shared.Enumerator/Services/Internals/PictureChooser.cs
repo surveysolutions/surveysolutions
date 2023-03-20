@@ -6,6 +6,7 @@ using Plugin.Media.Abstractions;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using Xamarin.Essentials;
 using Stream = System.IO.Stream;
 
@@ -37,8 +38,15 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             FileResult photo = null;
             await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(async () =>
             {
-                photo = await MediaPicker.CapturePhotoAsync().ConfigureAwait(false);
-            });
+                try
+                {
+                    photo = await MediaPicker.CapturePhotoAsync().ConfigureAwait(false);
+                }
+                catch (PermissionException e)
+                {
+                    throw new MissingPermissionsException(e.Message, e);
+                }
+            }, maskExceptions: false);
 
             if (photo == null)
                 return null;
@@ -62,8 +70,15 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             FileResult photo = null;
             await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(async () =>
             {
-                photo = await MediaPicker.PickPhotoAsync().ConfigureAwait(false);
-            });
+                try
+                {
+                    photo = await MediaPicker.PickPhotoAsync().ConfigureAwait(false);
+                }
+                catch (PermissionException e)
+                {
+                    throw new MissingPermissionsException(e.Message, e);
+                }
+            }, maskExceptions: false);
 
             return photo == null ? null : await photo.OpenReadAsync();
         }
