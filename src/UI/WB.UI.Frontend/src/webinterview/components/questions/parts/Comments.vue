@@ -32,7 +32,7 @@
                             :disabled="!$store.getters.addCommentsAllowed"
                             :id="inpAddCommentId"
                             :title="inputTitle"
-                            :maxlength="$me.maxLength"/>
+                            maxlength="750"/>
                         <div class="input-group-btn">
                             <button type="button"
                                 class="btn btn-default btn-post-comment"
