@@ -213,7 +213,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             try
             {
                 await this.permissions.AssureHasPermissionOrThrow<Permissions.Microphone>().ConfigureAwait(false);
-                await this.permissions.AssureHasManageExternalStoragePermission().ConfigureAwait(false);
+                await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
 
                 this.audioDialog.OnRecorded += this.AudioDialog_OnRecorded;
                 this.audioDialog.OnCancelRecording += AudioDialog_OnCancel;

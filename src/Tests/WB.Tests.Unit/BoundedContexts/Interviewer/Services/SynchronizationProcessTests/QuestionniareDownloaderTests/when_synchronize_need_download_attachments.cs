@@ -51,10 +51,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             );
 
             attachmentContentStorage = Mock.Of<IAttachmentContentStorage>(
-                x => x.Exists("1") == false
-                && x.Exists("2") == true
-                && x.Exists("3") == true
-                && x.Exists("5") == false
+                x => x.ExistsAsync("1") ==Task.FromResult(false)
+                && x.ExistsAsync("2") == Task.FromResult(true)
+                && x.ExistsAsync("3") == Task.FromResult(true)
+                && x.ExistsAsync("5") == Task.FromResult(false)
                 && x.StoreAsync(It.IsAny<AttachmentContent>()) == Task.CompletedTask
                 );
 

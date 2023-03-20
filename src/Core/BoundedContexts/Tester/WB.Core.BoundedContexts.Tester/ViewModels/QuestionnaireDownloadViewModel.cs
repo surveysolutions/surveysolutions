@@ -272,7 +272,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             {
                 var attachmentContentId = attachment.ContentId;
 
-                var isExistsContent = this.attachmentContentStorage.Exists(attachmentContentId);
+                var isExistsContent = await this.attachmentContentStorage.ExistsAsync(attachmentContentId);
                 if (!isExistsContent)
                 {
                     var attachmentContent = await this.designerApiService.GetAttachmentContentAsync(
@@ -292,7 +292,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             foreach (var contentId in await this.attachmentContentStorage.EnumerateCacheAsync())
             {
                 if (!requiredAttachments.Contains(contentId))
-                    this.attachmentContentStorage.Remove(contentId);
+                    await this.attachmentContentStorage.RemoveAsync(contentId);
             }
         }
     }

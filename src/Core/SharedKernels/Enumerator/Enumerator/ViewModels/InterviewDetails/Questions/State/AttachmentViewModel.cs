@@ -124,10 +124,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                 if (IsImage)
                 {
-                    this.Image = this.attachmentContentStorage.GetPreviewContent(attachment.ContentId);
+                    this.Image = await this.attachmentContentStorage.GetPreviewContentAsync(attachment.ContentId);
                 }
 
-                var backingFile = this.attachmentContentStorage.GetFileCacheLocation(attachment.ContentId);
+                var backingFile = await this.attachmentContentStorage.GetFileCacheLocationAsync(attachment.ContentId);
                 if (!string.IsNullOrWhiteSpace(backingFile))
                 {
                     if (IsVideo)
@@ -177,14 +177,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                              && this.attachmentContentMetadata.ContentType.StartsWith(PdfMimeType,
                                  StringComparison.OrdinalIgnoreCase);
 
-        public IMvxCommand ShowPdf => new MvxCommand(OpenPdf);
+        public IMvxAsyncCommand ShowPdf => new MvxAsyncCommand(OpenPdfAsync);
 
-        private void OpenPdf()
+        private async Task OpenPdfAsync()
         {
             if (this.attachmentId.HasValue)
-                pdfService.OpenAttachment(interviewId, this.attachmentId.Value);
+                await pdfService.OpenAttachmentAsync(interviewId, this.attachmentId.Value);
             else
-                pdfService.Open(interviewId, this.Identity);
+                await pdfService.OpenAsync(interviewId, this.Identity);
         }
 
         public override void ViewDestroy(bool viewFinishing = true)

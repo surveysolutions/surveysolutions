@@ -62,8 +62,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
 
             if (versionFromServer.HasValue && versionFromServer > interviewerSettings.GetApplicationVersionCode())
             {
-                await this.permissions.AssureHasManageExternalStoragePermission().ConfigureAwait(false);
-
                 try
                 {
                     var apkBytes = await this.synchronizationService.GetApplicationAsync(
@@ -99,8 +97,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
 
                     if (apkBytes != null)
                     {
+                        var rootDirectory = await this.pathUtils.GetRootDirectoryAsync();
                         var pathToNewApk = this.fileSystemAccessor.CombinePath(
-                            this.pathUtils.GetRootDirectory(), "interviewer.apk");
+                            rootDirectory, "interviewer.apk");
 
                         this.fileSystemAccessor.WriteAllBytes(pathToNewApk, apkBytes);
 

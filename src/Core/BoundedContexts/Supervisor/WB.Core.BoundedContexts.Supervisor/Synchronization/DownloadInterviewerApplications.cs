@@ -54,7 +54,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
                 Status = SynchronizationStatus.Download
             });
 
-            await this.permissions.AssureHasManageExternalStoragePermission().ConfigureAwait(false);
+            await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
 
             var apksBySupervisorAppVersion = this.PreparePathToInterviewerApksDirectoryBySupervisorAppVersion();
 

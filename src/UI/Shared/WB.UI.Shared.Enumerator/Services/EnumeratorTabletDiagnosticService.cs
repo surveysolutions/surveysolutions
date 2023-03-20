@@ -61,7 +61,7 @@ namespace WB.UI.Shared.Enumerator.Services
             bool continueIfNoPatch = true,
             IProgress<TransferProgress> onDownloadProgressChanged = null)
         {
-            await this.permissions.AssureHasManageExternalStoragePermission().ConfigureAwait(false);
+            await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
             await this.permissions.EnsureHasPermissionToInstallFromUnknownSourcesAsync().ConfigureAwait(false);
             
             var pathToRootDirectory = Build.VERSION.SdkInt < BuildVersionCodes.N

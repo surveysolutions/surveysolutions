@@ -56,7 +56,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             await step.ExecuteAsync();
             // assert
 
-            permissions.Verify(x => x.AssureHasManageExternalStoragePermission(), Times.Once);
+            permissions.Verify(x => x.AssureHasExternalStoragePermissionOrThrow(), Times.Once);
             mockOfSynchronizationService.Verify(x => x.GetApplicationAsync(It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()), Times.Once);
             fileSystemService.Verify(x => x.WriteAllBytes(It.IsAny<string>(), It.IsAny<byte[]>()), Times.Once);
             navigationService.Verify(x => x.InstallNewApp(It.IsAny<string>()), Times.Once);

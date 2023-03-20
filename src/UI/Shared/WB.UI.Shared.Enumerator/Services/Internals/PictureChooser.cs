@@ -23,7 +23,7 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
 
         public async Task<Stream> TakePicture()
         {
-            await this.permissions.AssureHasManageExternalStoragePermission().ConfigureAwait(false);
+            await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
             await this.permissions.AssureHasPermissionOrThrow<Permissions.Camera>().ConfigureAwait(false);
             await this.media.Initialize().ConfigureAwait(false);
             var storeCameraMediaOptions = new StoreCameraMediaOptions()
@@ -51,7 +51,7 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
 
         public async Task<Stream> ChoosePictureGallery()
         {
-            await this.permissions.AssureHasManageExternalStoragePermission().ConfigureAwait(false);
+            await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
             await this.permissions.AssureHasPermissionOrThrow<Permissions.Camera>().ConfigureAwait(false);
             await this.media.Initialize().ConfigureAwait(false);
 

@@ -107,7 +107,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             return await Permissions.CheckStatusAsync<T>().ConfigureAwait(false);
         }
 
-        public Task AssureHasManageExternalStoragePermission()
+        public Task AssureHasExternalStoragePermissionOrThrow()
         {
             if (Build.VERSION.SdkInt < BuildVersionCodes.R)
             {
