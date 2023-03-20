@@ -7,6 +7,7 @@ using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.Platforms.Android;
 using MvvmCross.Plugin.Messenger;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services.CustomPermissions;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Utils;
@@ -18,10 +19,13 @@ namespace WB.UI.Shared.Enumerator.CustomServices
     public class PermissionsService : IPermissionsService
     {
         private readonly IMvxMainThreadAsyncDispatcher asyncDispatcher;
+        private readonly IManageExternalStoragePermission manageExternalStoragePermission;
 
-        public PermissionsService(IMvxMainThreadAsyncDispatcher asyncDispatcher)
+        public PermissionsService(IMvxMainThreadAsyncDispatcher asyncDispatcher,
+            IManageExternalStoragePermission manageExternalStoragePermission)
         {
             this.asyncDispatcher = asyncDispatcher;
+            this.manageExternalStoragePermission = manageExternalStoragePermission;
         }
 
         private MvxSubscriptionToken token;
@@ -104,6 +108,18 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         {
             if (Build.VERSION.SdkInt < BuildVersionCodes.M) return PermissionStatus.Unknown;
             return await Permissions.CheckStatusAsync<T>().ConfigureAwait(false);
+        }
+
+        public async Task AssureHasManageExternalStoragePermission()
+        {
+            if (Build.VERSION.SdkInt < BuildVersionCodes.M) return;
+
+            var status = await this.manageExternalStoragePermission.CheckStatusAsync().ConfigureAwait(false);
+            if (status == PermissionStatus.Granted)
+                return;
+            var requestStatus = await this.manageExternalStoragePermission.RequestAsync().ConfigureAwait(false);
+            if (requestStatus != PermissionStatus.Granted)
+                throw new MissingPermissionsException(UIResources.MissingPermission, manageExternalStoragePermission.GetType());
         }
     }
 }

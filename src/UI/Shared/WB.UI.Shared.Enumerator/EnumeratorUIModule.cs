@@ -23,6 +23,7 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services.CustomPermissions;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Implementation.Utils;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
@@ -33,6 +34,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.CustomServices;
+using WB.UI.Shared.Enumerator.CustomServices.CustomPermissions;
 using WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
@@ -62,6 +64,7 @@ namespace WB.UI.Shared.Enumerator
             registry.Bind<IMvxViewModelByNameLookup, MvxViewModelByNameLookup>();
             registry.Bind<IMvxNameMapping, MvxViewToViewModelNameMapping>();
             registry.Bind<IApplicationCypher, ApplicationCypher>();
+            registry.Bind<IManageExternalStoragePermission, ManageExternalStoragePermission>();
             
             registry.BindAsSingletonWithConstructorArgument<IAudioService, AudioService>("audioDirectory", "audio");
             registry.BindAsSingleton<IAudioDialog, AudioDialog>();
