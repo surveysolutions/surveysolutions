@@ -43,7 +43,7 @@ namespace WB.UI.Shared.Extensions.Services
         public async Task<AreaEditResult> EditAreaAsync(EditAreaArgs args)
         {
             await this.permissions.AssureHasPermissionOrThrow<Permissions.LocationWhenInUse>().ConfigureAwait(false);
-            await this.permissions.AssureHasPermissionOrThrow<Permissions.StorageWrite>().ConfigureAwait(false);
+            await this.permissions.AssureHasManageExternalStoragePermission().ConfigureAwait(false);
 
             return await this.EditAreaImplAsync(args);
         }
@@ -51,7 +51,7 @@ namespace WB.UI.Shared.Extensions.Services
         public async Task OpenInterviewerMapDashboardAsync()
         {
             await this.permissions.AssureHasPermissionOrThrow<Permissions.LocationWhenInUse>().ConfigureAwait(false);
-            await this.permissions.AssureHasPermissionOrThrow<Permissions.StorageWrite>().ConfigureAwait(false);
+            await this.permissions.AssureHasManageExternalStoragePermission().ConfigureAwait(false);
 
             await this.viewModelNavigationService.NavigateToAsync<InterviewerMapDashboardViewModel, MapDashboardViewModelArgs>(
                 new MapDashboardViewModelArgs()).ConfigureAwait(false);
@@ -60,7 +60,7 @@ namespace WB.UI.Shared.Extensions.Services
         public async Task OpenSupervisorMapDashboardAsync()
         {
             await this.permissions.AssureHasPermissionOrThrow<Permissions.LocationWhenInUse>().ConfigureAwait(false);
-            await this.permissions.AssureHasPermissionOrThrow<Permissions.StorageWrite>().ConfigureAwait(false);
+            await this.permissions.AssureHasManageExternalStoragePermission().ConfigureAwait(false);
 
             await this.viewModelNavigationService.NavigateToAsync<SupervisorMapDashboardViewModel, MapDashboardViewModelArgs>(
                 new MapDashboardViewModelArgs()).ConfigureAwait(false);

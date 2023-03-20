@@ -83,7 +83,6 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             try
             {
                 await this.permissions.AssureHasManageExternalStoragePermission().ConfigureAwait(false);
-                await this.permissions.AssureHasPermissionOrThrow<Permissions.StorageWrite>().ConfigureAwait(false);
             }
             catch (MissingPermissionsException)
             {

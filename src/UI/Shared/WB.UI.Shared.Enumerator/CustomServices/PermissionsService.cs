@@ -20,12 +20,14 @@ namespace WB.UI.Shared.Enumerator.CustomServices
     {
         private readonly IMvxMainThreadAsyncDispatcher asyncDispatcher;
         private readonly IManageExternalStoragePermission manageExternalStoragePermission;
+        private readonly IMvxAndroidCurrentTopActivity currentTopActivity;
 
         public PermissionsService(IMvxMainThreadAsyncDispatcher asyncDispatcher,
             IManageExternalStoragePermission manageExternalStoragePermission)
         {
             this.asyncDispatcher = asyncDispatcher;
             this.manageExternalStoragePermission = manageExternalStoragePermission;
+            this.currentTopActivity = Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>();
         }
 
         private MvxSubscriptionToken token;
@@ -58,9 +60,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 #pragma warning disable CA1416 // Validate platform compatibility
             if (Build.VERSION.SdkInt >= BuildVersionCodes.O && !Application.Context.PackageManager.CanRequestPackageInstalls())
             {
-                IMvxAndroidCurrentTopActivity topActivity = Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>();
                 // if not - open settings menu for current application
-                var addFlags = ShareCompat.IntentBuilder.From(topActivity.Activity)
+                var addFlags = ShareCompat.IntentBuilder.From(this.currentTopActivity.Activity)
                     .Intent
                     .SetAction(Android.Provider.Settings.ActionManageUnknownAppSources)
                     .SetData(Android.Net.Uri.Parse("package:" + Application.Context.PackageName))
@@ -110,16 +111,51 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             return await Permissions.CheckStatusAsync<T>().ConfigureAwait(false);
         }
 
-        public async Task AssureHasManageExternalStoragePermission()
+        public Task AssureHasManageExternalStoragePermission()
         {
-            if (Build.VERSION.SdkInt < BuildVersionCodes.M) return;
+            if (Build.VERSION.SdkInt < BuildVersionCodes.R)
+            {
+                return this.AssureHasPermissionOrThrow<Permissions.StorageWrite>();
+            }
 
-            var status = await this.manageExternalStoragePermission.CheckStatusAsync().ConfigureAwait(false);
-            if (status == PermissionStatus.Granted)
-                return;
-            var requestStatus = await this.manageExternalStoragePermission.RequestAsync().ConfigureAwait(false);
-            if (requestStatus != PermissionStatus.Granted)
-                throw new MissingPermissionsException(UIResources.MissingPermission, manageExternalStoragePermission.GetType());
+            var status = Android.OS.Environment.IsExternalStorageManager;
+            if (status)
+                return Task.FromResult(true);
+            
+            var askManageFiles = ShareCompat.IntentBuilder.From(this.currentTopActivity.Activity)
+                .Intent
+                .SetAction(Android.Provider.Settings.ActionManageAppAllFilesAccessPermission)
+                .SetData(Android.Net.Uri.Parse("package:" + Application.Context.PackageName))
+                .AddFlags(ActivityFlags.NewTask);
+            Application.Context.StartActivity(askManageFiles);
+
+            var tcs = new TaskCompletionSource<bool>();
+                
+            var messenger = Mvx.IoCProvider.GetSingleton<IMvxMessenger>();
+
+            this.token = messenger.Subscribe<ApplicationResumeMessage>(m =>
+            {
+                try
+                {
+                    var newStatus =  Android.OS.Environment.IsExternalStorageManager;
+                    if (newStatus)
+                    {
+                        tcs.SetResult(true);
+                    }
+                    else
+                    {
+                        tcs.SetException(new MissingPermissionsException(UIResources.MissingPermission,
+                            manageExternalStoragePermission.GetType()));
+                    }
+                }
+                finally
+                {
+                    // cleaning up subscription token
+                    messenger.Unsubscribe<ApplicationResumeMessage>(token);
+                }
+            });
+
+            return tcs.Task;
         }
     }
 }

@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             // act
             await step.ExecuteAsync();
             // assert
-            mockOfPermissionsService.Verify(x=>x.AssureHasPermissionOrThrow<Permissions.StorageWrite>(), Times.Once);
+            mockOfPermissionsService.Verify(x=>x.AssureHasManageExternalStoragePermission(), Times.Once);
         }
 
         [Test]

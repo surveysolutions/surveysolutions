@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
 
             if (versionFromServer.HasValue && versionFromServer > interviewerSettings.GetApplicationVersionCode())
             {
-                await this.permissions.AssureHasPermissionOrThrow<Permissions.StorageWrite>().ConfigureAwait(false);
+                await this.permissions.AssureHasManageExternalStoragePermission().ConfigureAwait(false);
 
                 try
                 {

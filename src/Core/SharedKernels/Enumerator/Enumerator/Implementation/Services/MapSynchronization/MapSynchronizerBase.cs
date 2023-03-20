@@ -64,7 +64,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
             });
             
             await this.permissionsService.AssureHasManageExternalStoragePermission().ConfigureAwait(false);
-            await this.permissionsService.AssureHasPermissionOrThrow<Permissions.StorageWrite>().ConfigureAwait(false);
 
             var items = await this.synchronizationService.GetMapList(cancellationToken).ConfigureAwait(false);
             var availableMapFiles = this.mapService.GetAvailableMaps(false);
