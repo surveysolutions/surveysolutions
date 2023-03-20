@@ -7,7 +7,6 @@ using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.Platforms.Android;
 using MvvmCross.Plugin.Messenger;
-using WB.Core.SharedKernels.Enumerator.Implementation.Services.CustomPermissions;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Utils;
