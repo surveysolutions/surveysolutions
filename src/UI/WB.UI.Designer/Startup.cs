@@ -191,7 +191,7 @@ namespace WB.UI.Designer
                     
                     Uri uri = new Uri(baseUrl);
                     var webTesterOrigin = uri.Scheme + Uri.SchemeDelimiter + uri.Host;
-                    if (Regex.IsMatch(baseUrl, ":\\d+"))
+                    if (Regex.IsMatch(baseUrl, ":\\d+", RegexOptions.None, TimeSpan.FromMilliseconds(1000)))
                     {
                         webTesterOrigin += ":" + uri.Port;
                     }
