@@ -19,14 +19,11 @@ namespace WB.UI.Shared.Enumerator.CustomServices
     public class PermissionsService : IPermissionsService
     {
         private readonly IMvxMainThreadAsyncDispatcher asyncDispatcher;
-        private readonly IManageExternalStoragePermission manageExternalStoragePermission;
         private readonly IMvxAndroidCurrentTopActivity currentTopActivity;
 
-        public PermissionsService(IMvxMainThreadAsyncDispatcher asyncDispatcher,
-            IManageExternalStoragePermission manageExternalStoragePermission)
+        public PermissionsService(IMvxMainThreadAsyncDispatcher asyncDispatcher)
         {
             this.asyncDispatcher = asyncDispatcher;
-            this.manageExternalStoragePermission = manageExternalStoragePermission;
             this.currentTopActivity = Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>();
         }
 
