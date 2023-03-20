@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         
         private const string QuestionnaireTitleRegularExpression = @"^[\w, \-\(\)\/\\]*$";
         private static readonly Regex QuestionnaireNameRegex = 
-            new Regex(QuestionnaireTitleRegularExpression, RegexOptions.None, TimeSpan.FromMilliseconds(1000));
+            new Regex(QuestionnaireTitleRegularExpression, RegexOptions.Compiled, TimeSpan.FromMilliseconds(1000));
 
         public QuestionnaireVerifications(ISubstitutionService substitutionService, IKeywordsProvider keywordsProvider,
             IAttachmentService attachmentService)
