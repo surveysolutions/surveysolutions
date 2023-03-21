@@ -41,25 +41,22 @@
             <LinearLayout android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
                           android:orientation="vertical">
-                
                 <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"                        
                         local:hintEnabled="true"
                         local:errorEnabled="true"
                         local:endIconMode="custom"
-                        local:endIconScaleType="centerInside"
                         local:endIconDrawable="@drawable/scan_icon"
                         android:id="@+id/LoginPage_endpoint_layout"
                         local:MvxBind="Hint Localization('EndpointHint'); EndIconClick ScanCommand; Error EndpointValidationError">
                     <com.google.android.material.textfield.TextInputEditText
-                            style="@style/Login_Endpoint_Editor1"
+                            style="@style/Login_Editor"
                             android:inputType="textUri|textNoSuggestions"
                             android:id="@+id/LoginPage_endpoint"
                             android:imeOptions="actionNext"
                             local:MvxBind="Text Endpoint;"/>
                 </com.google.android.material.textfield.TextInputLayout>
-
                 <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -72,18 +69,16 @@
                             android:inputType="textUri"
                             local:MvxBind="Text UserName;"/>
                 </com.google.android.material.textfield.TextInputLayout>
-                
-                <com.google.android.material.textfield.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout                        
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         local:endIconMode="password_toggle"
-                        local:endIconScaleType="centerInside"
                         local:hintEnabled="true"
                         local:errorEnabled="true"
                         android:id="@+id/LoginPage_password_layout"
                         local:MvxBind="Hint Localization('PasswordHint'); Error PasswordError">
                     <com.google.android.material.textfield.TextInputEditText
-                            style="@style/Login_Endpoint_Editor1"
+                            style="@style/Login_Editor"
                             android:inputType="textPassword"
                             android:id="@+id/LoginPage_password"
                             local:MvxBind="Text Password;"/>
@@ -101,13 +96,13 @@
                             style="@style/Login_Troubleshotting_Button"
                             android:id="@+id/LoginPage_troubleshooting_button"
                             local:MvxBind="Click NavigateToDiagnosticsPageCommand; Text Localization('Interviewer_Diagnostics');"/>
-                </LinearLayout>                
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
     <LinearLayout
-            style="@style/Login_Footer"            
+            style="@style/Login_Footer"
             android:layout_alignParentBottom="true">
         <TextView
                 android:id="@+id/login_page_footer"
