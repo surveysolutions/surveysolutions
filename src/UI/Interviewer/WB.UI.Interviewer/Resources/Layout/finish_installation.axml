@@ -43,8 +43,7 @@
                           android:orientation="vertical">
                 <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        local:passwordToggleEnabled="true"
+                        android:layout_height="wrap_content"                        
                         local:hintEnabled="true"
                         local:errorEnabled="true"
                         local:endIconMode="custom"

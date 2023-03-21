@@ -30,7 +30,7 @@
     <style name="Login_Endpoint_Editor" parent="Login_Editor">
         <item name="android:layout_marginBottom">@dimen/Login_Input_marginBottom</item>
     </style>
-
+    
     <style name="Login_Login_Editor" parent="Login_Editor">
         
     </style>
