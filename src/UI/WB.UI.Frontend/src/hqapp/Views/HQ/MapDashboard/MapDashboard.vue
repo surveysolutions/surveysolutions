@@ -327,7 +327,6 @@ export default {
             isReassignReceivedByTablet: false,
             shapefileName: null,
             geoJsonFeatures: null,
-            geoJsonLabels: [],
         }
     },
 
@@ -537,10 +536,6 @@ export default {
                 for (var i = 0; i < this.geoJsonFeatures.length; i++)
                     this.map.data.remove(this.geoJsonFeatures[i]);
                 this.geoJsonFeatures = null
-                
-                for (var i = 0; i < this.geoJsonLabels.length; i++)
-                    this.map.data.remove(this.geoJsonLabels[i]);
-                this.geoJsonLabels = []
             }
             
             if (this.shapefileName) {
@@ -551,36 +546,12 @@ export default {
                 const self = this
                 $.getJSON(geoJsonUrl, function (data) {
                     self.geoJsonFeatures = self.map.data.addGeoJson(data);
-                    /*for (var i = 0; i < self.geoJsonFeatures.length; i++) {
-                        const feature = self.geoJsonFeatures[i]
-                        const label = feature.getProperty('label')
-                        if (label) {
-                            const geometry = feature.getGeometry()
-                            var bounds = new google.maps.LatLngBounds();
-                            geometry.forEachLatLng(function(latLng) {
-                                bounds.extend(latLng);
-                            })
-                            var labelLatlng = bounds.getCenter();
-                            var labelMarker = new google.maps.Marker({
-                                position: labelLatlng,
-                                label: {
-                                    text: label,
-                                    color: 'black',
-                                    fontSize: '24px',
-                                },
-                                map: self.map,
-                                icon: '/img/google-maps-markers/invisible.png'
-                            });
-                            self.geoJsonLabels.push(labelMarker)
 
-                        }
-                    }*/
+                    self.isLoading = false
+
+                    self.reloadMarkersInBounds()
                 });
-
-                this.isLoading = false
             }
-
-            this.reloadMarkersInBounds()
         },
 
         clearAssignmentFilter() {
@@ -794,18 +765,6 @@ export default {
                         icon: iconStyle,
                     }
                 }
-
-                /*const label = feature.getProperty('label')
-                if (label) {
-                    return {
-                        fillColor: 'green',
-                        strokeWeight: 1,
-                        label: {
-                            fontSize: '12px',
-                            text: label,
-                        },
-                    }
-                }*/
 
                 const geometry = feature.getGeometry()
                 const geometryType = geometry.getType()
@@ -1026,11 +985,6 @@ export default {
             forEach(Object.keys(toRemove), key => {
                 this.map.data.remove(toRemove[key])
             })
-
-            /*if (this.shapefileName) {
-                const geoJsonUrl = this.model.shapefileJson + '?mapName=' + this.shapefileName.key
-                this.map.data.loadGeoJson(geoJsonUrl);
-            }*/
 
             if (extendBounds) {
                 if (this.totalMarkers === 0) {
