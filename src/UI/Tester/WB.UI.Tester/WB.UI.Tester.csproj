@@ -87,7 +87,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <LinkDescription Include="linker.xml" />
     <AndroidEnvironment Include="AndroidEnvironment.txt" />
     <None Include="app.config" />
     <None Include="Properties\AndroidManifest.xml">
