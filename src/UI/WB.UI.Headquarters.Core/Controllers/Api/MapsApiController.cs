@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,11 +17,15 @@ using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Enumerator.Native.WebInterview;
+using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Controllers.Services;
 using WB.UI.Headquarters.Implementation.Maps;
 using WB.UI.Headquarters.Models.Api;
+using WB.UI.Headquarters.Models.ComponentModels;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Headquarters.Services.Maps;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
@@ -369,6 +374,14 @@ namespace WB.UI.Headquarters.Controllers.Api
             return mappings.GroupBy(p => p.Map, StringComparer.OrdinalIgnoreCase)
                 .Select(g => g.First())
                 .ToList();
+        }
+        
+        [HttpGet]
+        [ApiNoCache]
+        public ComboboxModel<ComboboxViewItem> Shapefiles(string query = null)
+        {
+            var maps = mapStorageService.GetUserShapefiles(query);
+            return new ComboboxModel<ComboboxViewItem>(maps);
         }
     }
 }

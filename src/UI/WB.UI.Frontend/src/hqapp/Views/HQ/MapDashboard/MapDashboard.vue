@@ -48,6 +48,15 @@
                     </div>
                 </div>
             </FilterBlock>
+            <FilterBlock :title="$t('Common.Filters_Shapefiles')">
+                <Typeahead
+                    control-id="shapefileName"
+                    :placeholder="$t('Common.None')"
+                    :ajax-params="{ }"
+                    :fetch-url="model.shapefiles"
+                    :value="shapefileName"
+                    v-on:selected="selectedShapefileName"/>
+            </FilterBlock>
             <FilterBlock v-if="isLoading"
                 :title="$t('Reports.MapDataLoading')">
                 <div class="progress">
@@ -316,6 +325,8 @@ export default {
             assignmentId: null,
             newResponsibleId: null,
             isReassignReceivedByTablet: false,
+            shapefileName: null,
+            geoJsonFeatures: null,
         }
     },
 
@@ -515,6 +526,26 @@ export default {
             this.onChange(q => {
                 q.responsible = newValue == null ? null : newValue.value
             })
+            this.reloadMarkersInBounds()
+        },
+
+        selectedShapefileName(newValue) {
+            this.shapefileName = newValue
+
+            if (this.shapefileName) {
+                const geoJsonUrl = this.model.shapefileJson + '?mapName=' + this.shapefileName.key
+                
+                const self = this
+                $.getJSON(geoJsonUrl, function (data) {
+                    self.geoJsonFeatures = self.map.data.addGeoJson(data);
+
+                }); 
+            }
+            else if (this.geoJsonFeatures) {
+                for (var i = 0; i < this.geoJsonFeatures.length; i++)
+                    this.map.data.remove(this.geoJsonFeatures[i]);
+            }
+
             this.reloadMarkersInBounds()
         },
 
@@ -915,6 +946,14 @@ export default {
                     markers.features.push(feature)
                 }
             })
+
+            if (this.geoJsonFeatures) {
+                forEach(this.geoJsonFeatures, feature => {
+                    if (toRemove[feature.id]) {
+                        delete toRemove[feature.id]
+                    }}
+                )
+            }
 
             this.map.data.addGeoJson(markers)
 
