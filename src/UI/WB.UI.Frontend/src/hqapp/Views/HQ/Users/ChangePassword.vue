@@ -154,7 +154,7 @@ export default {
                 },
                 error => {
                     if(error.response && error.response.status === 403)
-                        window.location.href = window.location.href
+                        window.location.reload()
 
                     self.processModelState(error.response.data, self)
                 }
