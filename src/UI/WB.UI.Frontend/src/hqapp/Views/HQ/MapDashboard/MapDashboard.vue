@@ -48,10 +48,10 @@
                     </div>
                 </div>
             </FilterBlock>
-            <FilterBlock :title="$t('Common.Filters_Shapefiles')">
+            <FilterBlock :title="$t('Pages.Filters_Shapefiles')">
                 <Typeahead
                     control-id="shapefileName"
-                    :placeholder="$t('Common.None')"
+                    :placeholder="$t('Pages.Filters_None')"
                     :ajax-params="{ }"
                     :fetch-url="model.shapefiles"
                     :value="shapefileName"

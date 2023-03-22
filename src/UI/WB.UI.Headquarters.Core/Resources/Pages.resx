@@ -1249,6 +1249,12 @@
   <data name="Filters_Assignment" xml:space="preserve">
     <value>Assignment</value>
   </data>
+  <data name="Filters_Shapefiles" xml:space="preserve">
+    <value>Shapefiles</value>
+  </data>
+  <data name="Filters_None" xml:space="preserve">
+    <value>None</value>
+  </data>
   <data name="InterviewersAndDevicesTitle" xml:space="preserve">
     <value>Devices/Interviewers</value>
   </data>

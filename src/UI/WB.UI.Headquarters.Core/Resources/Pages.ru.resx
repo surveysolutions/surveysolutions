@@ -1160,6 +1160,12 @@
   <data name="Filters_Assignment" xml:space="preserve">
     <value>Задания</value>
   </data>
+  <data name="Filters_Shapefiles" xml:space="preserve">
+    <value>Шейп-файлы</value>
+  </data>
+  <data name="Filters_None" xml:space="preserve">
+    <value>Не выбрано</value>
+  </data>
   <data name="Interviewers_InterviewerNeverConnected" xml:space="preserve">
     <value>Никогда не соединялись</value>
   </data>
