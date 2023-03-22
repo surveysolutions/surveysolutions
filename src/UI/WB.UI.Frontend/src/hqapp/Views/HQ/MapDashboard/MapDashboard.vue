@@ -327,6 +327,7 @@ export default {
             isReassignReceivedByTablet: false,
             shapefileName: null,
             geoJsonFeatures: null,
+            geoJsonLabels: [],
         }
     },
 
@@ -532,50 +533,51 @@ export default {
         selectedShapefileName(newValue) {
             this.shapefileName = newValue
 
+            if (this.geoJsonFeatures) {
+                for (var i = 0; i < this.geoJsonFeatures.length; i++)
+                    this.map.data.remove(this.geoJsonFeatures[i]);
+                this.geoJsonFeatures = null
+                
+                for (var i = 0; i < this.geoJsonLabels.length; i++)
+                    this.map.data.remove(this.geoJsonLabels[i]);
+                this.geoJsonLabels = []
+            }
+            
             if (this.shapefileName) {
                 const geoJsonUrl = this.model.shapefileJson + '?mapName=' + this.shapefileName.key
                 
+                this.isLoading = true
+
                 const self = this
                 $.getJSON(geoJsonUrl, function (data) {
                     self.geoJsonFeatures = self.map.data.addGeoJson(data);
-                    for (var i = 0; i < self.geoJsonFeatures.length; i++) {
+                    /*for (var i = 0; i < self.geoJsonFeatures.length; i++) {
                         const feature = self.geoJsonFeatures[i]
                         const label = feature.getProperty('label')
                         if (label) {
                             const geometry = feature.getGeometry()
-                            let lat = 0, lng = 0, count = 0;
+                            var bounds = new google.maps.LatLngBounds();
                             geometry.forEachLatLng(function(latLng) {
-                                lat += latLng.lat()
-                                lng += latLng.lng()
-                                count++
+                                bounds.extend(latLng);
                             })
-                            if (count > 0)
-                            {
-                                lat = lat / count
-                                lng = lng / count
-                                const labelLatlng = new google.maps.LatLng(lat, lng);
-                                new google.maps.Marker({
-                                    position: labelLatlng,
-                                    label: label,
-                                    map: self.map,
-                                });
-                            }
-
-                            /*const mapLabel = new MapLabel({
-                                text: label,
+                            var labelLatlng = bounds.getCenter();
+                            var labelMarker = new google.maps.Marker({
                                 position: labelLatlng,
+                                label: {
+                                    text: label,
+                                    color: 'black',
+                                    fontSize: '24px',
+                                },
                                 map: self.map,
-                                fontSize: 35,
-                                align: 'left'
+                                icon: '/img/google-maps-markers/invisible.png'
                             });
-                            mapLabel.set('position', labelLatlng);*/
+                            self.geoJsonLabels.push(labelMarker)
+
                         }
-                    }
-                }); 
-            }
-            else if (this.geoJsonFeatures) {
-                for (var i = 0; i < this.geoJsonFeatures.length; i++)
-                    this.map.data.remove(this.geoJsonFeatures[i]);
+                    }*/
+                });
+
+                this.isLoading = false
             }
 
             this.reloadMarkersInBounds()
@@ -805,6 +807,18 @@ export default {
                     }
                 }*/
 
+                const geometry = feature.getGeometry()
+                const geometryType = geometry.getType()
+                if (geometryType == "Polygon" || geometryType == "MultiPolygon") {
+                    return {
+                        fillColor: '#DE9131',
+                        fillOpacity: 0.5,
+                        strokeColor: '#FCF7F1',
+                        //strokeOpacity: ,
+                        strokeWeight: 1,
+                    }
+                }
+
                 return {}
             })
 
@@ -887,6 +901,15 @@ export default {
                         self.infoWindow.open(self.map)
                     })
                 }
+
+                const label = event.feature.getProperty('label')
+                if (label) {
+                    Vue.nextTick(function() {
+                        self.infoWindow.setContent(label)
+                        self.infoWindow.setPosition(event.latLng)
+                        self.infoWindow.open(self.map)
+                    })
+                }
             })
 
             google.maps.event.addDomListener(mapDiv, 'click', event => {
@@ -950,8 +973,6 @@ export default {
                 south,
                 clientMapWidth: this.map.getDiv().clientWidth,
             }
-
-            const self = this
 
             let stillLoading = true
 
