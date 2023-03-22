@@ -266,7 +266,7 @@
     <PackageReference Include="Xamarin.AndroidX.VectorDrawable">
       <Version>1.1.0.16</Version>
     </PackageReference>
-    <PackageReference Include="Microsoft.Net.ILLink.Tasks" Version="8.0.100-1.23067.1" />
+    <PackageReference Include="Microsoft.Net.ILLink.Tasks" Version="8.0.100-1.22612.2" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="Extensions.props" Condition=" '$(ExcludeExtensions)' != 'True' " />
