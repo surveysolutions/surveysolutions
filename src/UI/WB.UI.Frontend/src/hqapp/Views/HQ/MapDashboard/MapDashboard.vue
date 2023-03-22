@@ -771,7 +771,7 @@ export default {
                 if (geometryType == "Polygon" || geometryType == "MultiPolygon") {
                     return {
                         fillColor: '#DE9131',
-                        fillOpacity: 0.5,
+                        fillOpacity: 0.8,
                         strokeColor: '#FCF7F1',
                         //strokeOpacity: ,
                         strokeWeight: 1,
