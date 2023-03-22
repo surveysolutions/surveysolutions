@@ -538,7 +538,39 @@ export default {
                 const self = this
                 $.getJSON(geoJsonUrl, function (data) {
                     self.geoJsonFeatures = self.map.data.addGeoJson(data);
+                    for (var i = 0; i < self.geoJsonFeatures.length; i++) {
+                        const feature = self.geoJsonFeatures[i]
+                        const label = feature.getProperty('label')
+                        if (label) {
+                            const geometry = feature.getGeometry()
+                            let lat = 0, lng = 0, count = 0;
+                            geometry.forEachLatLng(function(latLng) {
+                                lat += latLng.lat()
+                                lng += latLng.lng()
+                                count++
+                            })
+                            if (count > 0)
+                            {
+                                lat = lat / count
+                                lng = lng / count
+                                const labelLatlng = new google.maps.LatLng(lat, lng);
+                                new google.maps.Marker({
+                                    position: labelLatlng,
+                                    label: label,
+                                    map: self.map,
+                                });
+                            }
 
+                            /*const mapLabel = new MapLabel({
+                                text: label,
+                                position: labelLatlng,
+                                map: self.map,
+                                fontSize: 35,
+                                align: 'left'
+                            });
+                            mapLabel.set('position', labelLatlng);*/
+                        }
+                    }
                 }); 
             }
             else if (this.geoJsonFeatures) {
@@ -760,6 +792,19 @@ export default {
                         icon: iconStyle,
                     }
                 }
+
+                /*const label = feature.getProperty('label')
+                if (label) {
+                    return {
+                        fillColor: 'green',
+                        strokeWeight: 1,
+                        label: {
+                            fontSize: '12px',
+                            text: label,
+                        },
+                    }
+                }*/
+
                 return {}
             })
 
@@ -960,6 +1005,11 @@ export default {
             forEach(Object.keys(toRemove), key => {
                 this.map.data.remove(toRemove[key])
             })
+
+            /*if (this.shapefileName) {
+                const geoJsonUrl = this.model.shapefileJson + '?mapName=' + this.shapefileName.key
+                this.map.data.loadGeoJson(geoJsonUrl);
+            }*/
 
             if (extendBounds) {
                 if (this.totalMarkers === 0) {
