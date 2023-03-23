@@ -40,6 +40,7 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             {
                 try
                 {
+                    await this.permissions.AssureHasPermissionOrThrow<Permissions.Camera>();
                     photo = await MediaPicker.CapturePhotoAsync().ConfigureAwait(false);
                 }
                 catch (PermissionException e)
