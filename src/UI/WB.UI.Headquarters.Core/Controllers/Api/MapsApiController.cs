@@ -375,14 +375,6 @@ namespace WB.UI.Headquarters.Controllers.Api
                 .Select(g => g.First())
                 .ToList();
         }
-        
-        [HttpGet]
-        [ApiNoCache]
-        public ComboboxModel<ComboboxViewItem> Shapefiles(string query = null)
-        {
-            var maps = mapStorageService.GetUserShapefiles(query);
-            return new ComboboxModel<ComboboxViewItem>(maps);
-        }
     }
 }
 

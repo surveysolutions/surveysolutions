@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters;
@@ -16,10 +17,11 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [Authorize(Roles = "Administrator, Headquarter")]
+    [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter)]
     public class MapsController : Controller
     {
         private readonly IAuthorizedUser authorizedUser;

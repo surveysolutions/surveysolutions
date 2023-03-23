@@ -533,7 +533,7 @@ export default {
             this.shapefileName = newValue
 
             if (this.geoJsonFeatures) {
-                for (var i = 0; i < this.geoJsonFeatures.length; i++)
+                for (let i = 0; i < this.geoJsonFeatures.length; i++)
                     this.map.data.remove(this.geoJsonFeatures[i]);
                 this.geoJsonFeatures = null
             }
@@ -545,7 +545,13 @@ export default {
 
                 const self = this
                 $.getJSON(geoJsonUrl, function (data) {
-                    self.geoJsonFeatures = self.map.data.addGeoJson(data);
+                    const json = JSON.parse(data.geoJson)
+                    self.geoJsonFeatures = self.map.data.addGeoJson(json);
+
+                    const sw = new google.maps.LatLng(data.yMax, data.xMin)
+                    const ne = new google.maps.LatLng(data.yMin, data.xMax)
+                    const latlngBounds = new google.maps.LatLngBounds(sw, ne)
+                    self.map.fitBounds(latlngBounds)
 
                     self.isLoading = false
 
@@ -768,7 +774,8 @@ export default {
 
                 const geometry = feature.getGeometry()
                 const geometryType = geometry.getType()
-                if (geometryType == "Polygon" || geometryType == "MultiPolygon") {
+                //"Point", "MultiPoint", "LineString", "MultiLineString", "LinearRing", "Polygon", "MultiPolygon", or "GeometryCollection"
+                if (geometryType && type == null) {
                     return {
                         fillColor: '#DE9131',
                         fillOpacity: 0.8,
@@ -777,7 +784,7 @@ export default {
                         strokeWeight: 1,
                     }
                 }
-
+                
                 return {}
             })
 

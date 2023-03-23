@@ -60,8 +60,8 @@ namespace WB.UI.Headquarters.Controllers
                     ? Url.Action("InterviewersCombobox", "Teams")
                     : Url.Action("ResponsiblesCombobox", "Teams"),
                 UserRole = userRole.ToString(),
-                Shapefiles = Url.Action("Shapefiles", "MapsApi"),
-                ShapefileJson = Url.Action("MapPreviewJson", "Maps"),
+                Shapefiles = Url.Action("Shapefiles", "MapDashboardApi"),
+                ShapefileJson = Url.Action("ShapefileInfo", "MapDashboardApi"),
             };
             return this.View(model);
         }
