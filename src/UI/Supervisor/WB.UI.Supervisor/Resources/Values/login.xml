@@ -22,25 +22,24 @@
         <item name="android:paddingLeft">@dimen/Login_ErrorMessage_Padding</item>
         <item name="android:paddingRight">@dimen/Login_ErrorMessage_Padding</item>
     </style>
-    <style name="Login_Editor" parent="Widget.MaterialComponents.TextInputEditText.OutlinedBox">
+    <style name="Login_Editor" >
         <item name="android:layout_width">@dimen/Login_Element_width</item>
-        <item name="android:layout_height">@dimen/Theme_Button_min_height</item>
-        <item name="android:layout_gravity">center</item>
-        <item name="android:singleLine">true</item>
-        <item name="android:textColor">@color/textedit_color_selector</item>
-        <item name="android:textCursorDrawable">@null</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
     <style name="Login_Endpoint_Editor" parent="Login_Editor">
         <item name="android:layout_marginBottom">@dimen/Login_Input_marginBottom</item>
     </style>
-
+    
     <style name="Login_Login_Editor" parent="Login_Editor">
-        <item name="android:layout_marginBottom">@dimen/Login_Input_marginBottom</item>
+        
     </style>
 
-    <style name="Login_Password_Editor" parent="Login_Editor">
-        <item name="android:layout_marginBottom">@dimen/Login_Password_Editor_marginBottom</item>
+    <style name="Login_Password_Editor" >
+        <item name="android:textColor">@color/textedit_color_selector</item>
+        <item name="android:layout_width">@dimen/Login_Element_width</item>
+        <item name="android:layout_height">@dimen/Theme_Button_min_height</item>
+        <item name="android:singleLine">true</item>
     </style>
 
     <style name="Login_Button">

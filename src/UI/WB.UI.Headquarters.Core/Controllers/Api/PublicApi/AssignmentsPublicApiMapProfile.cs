@@ -69,7 +69,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         {
             if (string.IsNullOrWhiteSpace(value) 
                 //&& ctx != ctx.Mapper.DefaultContext
-                && ctx.Items.TryGetValue("questionnaire", out var ctxItem) 
+                && (ctx.TryGetItems(out var items) && items.TryGetValue("questionnaire", out var ctxItem)) 
                 && ctxItem is IQuestionnaire questionnaire)
             {
                 return questionnaire.GetEntityVariableOrThrow(Guid.Parse(identity));

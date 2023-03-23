@@ -6,7 +6,7 @@
   style="@style/Interview_Confirmation_Layout"
   android:layout_width="wrap_content"
   android:layout_height="wrap_content"
-  local:passwordToggleEnabled="true"
+  local:endIconMode="password_toggle"
   local:hintEnabled="false">
   <com.google.android.material.textfield.TextInputEditText
     style="@style/Interview_Confirmation_Editor"
