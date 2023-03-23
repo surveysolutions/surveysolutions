@@ -6,6 +6,7 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters;
@@ -642,7 +643,11 @@ namespace WB.UI.Headquarters.Controllers
             var userToUpdate = await this.userManager.FindByIdAsync(model.UserId.FormatGuid());
             if (userToUpdate == null) return NotFound("User not found");
 
-            if (!HasPermissionsToChangeUserPassword(userToUpdate)) return this.Forbid();
+            if (!HasPermissionsToChangeUserPassword(userToUpdate)) 
+                return StatusCode(StatusCodes.Status403Forbidden, new
+                {
+                    Message = "Action is not permitted"
+                });
 
             if (userToUpdate.IsArchived)
                 this.ModelState.AddModelError(nameof(ChangePasswordModel.Password), FieldsAndValidations.CannotUpdate_CurrentUserIsArchived);
@@ -1061,6 +1066,8 @@ namespace WB.UI.Headquarters.Controllers
 
                 if(user.Workspaces.All(x => this.authorizedUser.Workspaces.Contains(x.Workspace.Name)))
                     return true;
+
+                return false;
             }
 
             if (this.authorizedUser.IsSupervisor && user.Id == this.authorizedUser.Id)
