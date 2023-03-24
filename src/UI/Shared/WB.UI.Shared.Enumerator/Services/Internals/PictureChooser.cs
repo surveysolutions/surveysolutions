@@ -36,18 +36,18 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             };
 
             FileResult photo = null;
-            await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(async () =>
+            try
             {
-                try
+                await this.permissions.AssureHasPermissionOrThrow<Permissions.Camera>();
+                await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(async () =>
                 {
-                    await this.permissions.AssureHasPermissionOrThrow<Permissions.Camera>();
                     photo = await MediaPicker.CapturePhotoAsync().ConfigureAwait(false);
-                }
-                catch (PermissionException e)
-                {
-                    throw new MissingPermissionsException(e.Message, e);
-                }
-            }, maskExceptions: false);
+                }, maskExceptions: false);
+            }
+            catch (PermissionException e)
+            {
+                throw new MissingPermissionsException(e.Message, e);
+            }
 
             if (photo == null)
                 return null;
