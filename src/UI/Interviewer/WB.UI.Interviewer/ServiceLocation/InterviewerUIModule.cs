@@ -86,7 +86,7 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<ICheckVersionUriProvider, CheckForVersionUriProvider>();
 #else
             registry.Bind<WB.UI.Shared.Extensions.ViewModels.GeographyEditorViewModel>();
-            registry.Bind<WB.UI.Shared.Extensions.ViewModels.MapDashboardViewModel>();
+            registry.Bind<WB.UI.Shared.Extensions.ViewModels.InterviewerMapDashboardViewModel>();
             registry.Bind<ICheckVersionUriProvider, CheckForExtendedVersionUriProvider>();
             registry.Bind<IMapInteractionService, WB.UI.Shared.Extensions.Services.MapInteractionService>();
             registry.Bind<WB.UI.Shared.Extensions.Services.IMapUtilityService, WB.UI.Shared.Extensions.Services.MapUtilityService>();

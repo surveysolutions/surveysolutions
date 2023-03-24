@@ -4,6 +4,7 @@ using Java.Interop;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Activities.Callbacks;
 
 namespace WB.UI.Interviewer.Activities
 {
@@ -19,11 +20,13 @@ namespace WB.UI.Interviewer.Activities
         protected override int LanguagesMenuItemId => Resource.Id.interview_language;
         protected override int MenuId => Resource.Menu.interview;
 
-        public override async void OnBackPressed()
+        protected override bool BackButtonCustomAction => true;
+        protected override async void BackButtonPressed()
         {
-            await this.ViewModel.NavigateBack();
+            await this.ViewModel.NavigateBack(); 
             this.Finish();
         }
+
 
         [Export("StartInterviewApi")]
         public void StartInterviewApi()

@@ -61,7 +61,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
         private readonly IDesignerTranslationService translationsService;
-        private readonly ICategoriesService categoriesService;
+        private readonly IReusableCategoriesService reusableCategoriesService;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
         // Get the default form options so that we can use them to set the default limits for
@@ -76,7 +76,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             ILookupTableService lookupTableService,
             IAttachmentService attachmentService,
             IDesignerTranslationService translationsService,
-            ICategoriesService categoriesService,
+            IReusableCategoriesService reusableCategoriesService,
             IFileSystemAccessor fileSystemAccessor)
         {
             this.logger = logger;
@@ -86,7 +86,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             this.lookupTableService = lookupTableService;
             this.attachmentService = attachmentService;
             this.translationsService = translationsService;
-            this.categoriesService = categoriesService;
+            this.reusableCategoriesService = reusableCategoriesService;
             this.fileSystemAccessor = fileSystemAccessor;
         }
 
@@ -375,7 +375,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                         ? CategoriesFileType.Excel
                         : CategoriesFileType.Tsv;
 
-                    this.categoriesService.Store(command.QuestionnaireId, command.CategoriesId, model.File.OpenReadStream(), fileType);
+                    this.reusableCategoriesService.Store(command.QuestionnaireId, command.CategoriesId, model.File.OpenReadStream(), fileType);
                 }
             }
             catch (FormatException e)
@@ -405,7 +405,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
             await dbContext.SaveChangesAsync();
 
-            var storedCategoriesCount = this.categoriesService.GetCategoriesById(command.QuestionnaireId, command.CategoriesId).Count();
+            var storedCategoriesCount = this.reusableCategoriesService.GetCategoriesById(command.QuestionnaireId, command.CategoriesId).Count();
 
             var resultMessage = storedCategoriesCount == 1
                 ? string.Format(QuestionnaireEditor.CategoriesObtained, storedCategoriesCount)

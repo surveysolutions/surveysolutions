@@ -1,10 +1,10 @@
 import localStore from './store'
 import Vue from 'vue'
 
-const Review = () => import(/* webpackChunkName: "review" */'./Review')
-const Cover = () => import(/* webpackChunkName: "review" */'~/webinterview/components/Cover')
-const ReviewSection = () => import(/* webpackChunkName: "review" */'./ReviewSection')
-const Overview = () => import(/* webpackChunkName: "review" */'./Overview')
+const Review = () => import('./Review')
+const Cover = () => import('~/webinterview/components/Cover')
+const ReviewSection = () => import('./ReviewSection')
+const Overview = () => import('./Overview')
 
 export default class ReviewComponent {
     constructor(rootStore) {

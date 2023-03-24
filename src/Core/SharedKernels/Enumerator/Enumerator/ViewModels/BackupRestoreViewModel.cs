@@ -19,6 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ITabletDiagnosticService tabletDiagnosticService;
         private readonly ILogger logger;
+        private readonly IPermissionsService permissions;
 
         private bool isRestoreVisible;
         private bool isBackupInProgress;
@@ -37,7 +38,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             IDeviceSettings deviceSettings, 
             IFileSystemAccessor fileSystemAccessor, 
             ITabletDiagnosticService tabletDiagnosticService, 
-            ILogger logger)
+            ILogger logger,
+            IPermissionsService permissions)
         {
             this.backupRestoreService = backupRestoreService;
             this.userInteractionService = userInteractionService;
@@ -45,6 +47,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.fileSystemAccessor = fileSystemAccessor;
             this.tabletDiagnosticService = tabletDiagnosticService;
             this.logger = logger;
+            this.permissions = permissions;
         }
 
         public bool IsRestoreVisible
@@ -119,7 +122,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
                 try
                 {
-                    var package = await this.backupRestoreService.GetRestorePackageInfo(restoreFolder);
+                    await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
+
+                    var package = this.backupRestoreService.GetRestorePackageInfo(restoreFolder);
                     if (package != null)
                     {
                         this.IsRestoreVisible = true;
@@ -150,6 +155,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.IsBackupInProgress = true;
             try
             {
+                await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
+
                 var createdFileName = await
                     this.backupRestoreService.BackupAsync(this.deviceSettings.BackupFolder)
                         .ConfigureAwait(false);
@@ -180,6 +187,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 this.IsBackupInProgress = true;
                 try
                 {
+                    await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
+
                     await this.backupRestoreService.RestoreAsync(this.RestoreLocation);
                     this.tabletDiagnosticService.RestartTheApp();
                 }

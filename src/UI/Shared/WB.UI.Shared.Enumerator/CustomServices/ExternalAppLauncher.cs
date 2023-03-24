@@ -4,16 +4,19 @@ using AndroidX.Core.Content;
 using Java.IO;
 using MvvmCross;
 using MvvmCross.Platforms.Android;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.UI.Shared.Enumerator.CustomServices
 {
     internal class ExternalAppLauncher : IExternalAppLauncher
     {
+        private readonly IUserInteractionService userInteractionService;
         private readonly IMvxAndroidCurrentTopActivity currentTopActivity;
 
-        public ExternalAppLauncher()
+        public ExternalAppLauncher(IUserInteractionService userInteractionService)
         {
+            this.userInteractionService = userInteractionService;
             this.currentTopActivity = Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>();
         }
 
@@ -26,13 +29,15 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
             if(this.currentTopActivity.Activity.PackageManager != null && mapIntent.ResolveActivity(this.currentTopActivity.Activity.PackageManager) != null)
                 this.currentTopActivity.Activity.StartActivity(mapIntent);
+            else
+                userInteractionService.ShowToast(UIResources.NoMapsApplication);
         }
 
         public void OpenPdf(string pathToPdfFile)
         {
             var pdfIntent = new Intent(Intent.ActionView);
 
-            var pdfFile = new File(pathToPdfFile);
+            var pdfFile = new Java.IO.File(pathToPdfFile);
             var uriForPdfFile = FileProvider.GetUriForFile(this.currentTopActivity.Activity,
                 $"{this.currentTopActivity.Activity.ApplicationContext.PackageName}.fileprovider", pdfFile);
 

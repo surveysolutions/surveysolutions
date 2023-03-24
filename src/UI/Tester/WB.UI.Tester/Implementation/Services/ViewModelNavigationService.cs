@@ -72,7 +72,6 @@ namespace WB.UI.Tester.Implementation.Services
         }
 
         public override Task NavigateToLoginAsync() => this.NavigateToAsync<LoginViewModel>();
-        protected override void FinishActivity() => TopActivity.Activity.Finish();
         protected override void NavigateToSettingsImpl() =>
             TopActivity.Activity.StartActivity(new Intent(TopActivity.Activity, typeof(PrefsActivity)));
     }

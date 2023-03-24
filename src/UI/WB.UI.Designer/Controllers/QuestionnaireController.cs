@@ -84,7 +84,7 @@ namespace WB.UI.Designer.Controllers
         private readonly IQuestionnaireInfoViewFactory questionnaireInfoViewFactory;
         private readonly ICategoricalOptionsImportService categoricalOptionsImportService;
         private readonly DesignerDbContext dbContext;
-        private readonly ICategoriesService categoriesService;
+        private readonly IReusableCategoriesService reusableCategoriesService;
         private readonly IEmailSender emailSender;
         private readonly IViewRenderService viewRenderService;
         private readonly UserManager<DesignerIdentityUser> users;
@@ -102,7 +102,7 @@ namespace WB.UI.Designer.Controllers
             ICategoricalOptionsImportService categoricalOptionsImportService,
             ICommandService commandService,
             DesignerDbContext dbContext,
-            ICategoriesService categoriesService,
+            IReusableCategoriesService reusableCategoriesService,
             IEmailSender emailSender,
             IViewRenderService viewRenderService,
             UserManager<DesignerIdentityUser> users)
@@ -117,7 +117,7 @@ namespace WB.UI.Designer.Controllers
             this.categoricalOptionsImportService = categoricalOptionsImportService;
             this.commandService = commandService;
             this.dbContext = dbContext;
-            this.categoriesService = categoriesService;
+            this.reusableCategoriesService = reusableCategoriesService;
             this.emailSender = emailSender;
             this.viewRenderService = viewRenderService;
             this.users = users;
@@ -530,6 +530,10 @@ namespace WB.UI.Designer.Controllers
 
         private async Task SendAnonymousSharingEmailAsync(Guid id, Guid anonymousQuestionnaireId)
         {
+            var user = await this.users.GetUserAsync(User);
+            if(user?.Email == null)
+                return;
+            
             var questionnaireView = GetQuestionnaireView(id);
             if (questionnaireView == null)
                 throw new ArgumentException($"Questionnaire not found {id}");
@@ -544,7 +548,7 @@ namespace WB.UI.Designer.Controllers
 
             var messageBody = await viewRenderService.RenderToStringAsync("Emails/AnonymousSharingEmail", model);
 
-            var user = await this.users.GetUserAsync(User);
+            
             await emailSender.SendEmailAsync(user.Email,
                 NotificationResources.SystemMailer_AnonymousSharingEmail_Subject,
                 messageBody);

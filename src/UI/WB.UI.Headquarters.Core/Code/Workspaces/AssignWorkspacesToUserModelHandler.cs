@@ -13,7 +13,7 @@ using WB.UI.Headquarters.Controllers.Api.PublicApi.Models;
 
 namespace WB.UI.Headquarters.Code.Workspaces
 {
-    public class AssignWorkspacesToUserModelHandler : IRequestHandler<AssignWorkspacesToUserModelRequest>
+    public class AssignWorkspacesToUserModelHandler : IRequestHandler<AssignWorkspacesToUserModelRequest, Unit>
     {
         private readonly IPlainStorageAccessor<Workspace> workspaces;
         private readonly IUserRepository users;

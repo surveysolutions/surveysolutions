@@ -586,6 +586,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             var userMaps = userMapsStorage.Query(q => q.Where(x => x.Map.Id == mapName).ToList());
 
             var interviewerRoleId = UserRoles.Interviewer.ToUserId();
+            var supervisorRoleId = UserRoles.Supervisor.ToUserId();
             var usersToLower = users.Select(em => em.ToLower()).ToList();
 
             var availableUsers = this.userStorage.Users
@@ -599,7 +600,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             var userMappings = availableUsers
                 .Where(y => y.IsArchived == false
-                                               && y.Roles.Any(role => role.Id == interviewerRoleId))
+                                               && y.Roles.Any(role => role.Id == interviewerRoleId || role.Id == supervisorRoleId))
                 .Select(x => new UserMap() { Map = map, UserName = x.UserName }).ToList();
 
             userMapsStorage.Remove(userMaps);
@@ -609,7 +610,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         public string[] GetAllMapsForSupervisor(Guid supervisorId)
         {
             var interviewerNames = this.userStorage.Users
-                .Where(x => supervisorId == x.WorkspaceProfile.SupervisorId && x.IsArchived == false)
+                .Where(x => (supervisorId == x.WorkspaceProfile.SupervisorId || supervisorId == x.Id) && x.IsArchived == false)
                 .Select(x => x.UserName)
                 .ToArray();
 
@@ -644,21 +645,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             var userNameLowerCase = userName.ToLower();
             var interviewerRoleId = UserRoles.Interviewer.ToUserId();
-
+            var supervisorRoleId = UserRoles.Supervisor.ToUserId();
+            
             var userQuery = this.userStorage.Users
                 .Where(x => x.UserName.ToLower() == userNameLowerCase &&
                             x.IsArchived == false &&
-                            x.Roles.Any(role => role.Id == interviewerRoleId));
+                            x.Roles.Any(role => role.Id == interviewerRoleId || role.Id == supervisorRoleId));
             if (authorizedUser.IsSupervisor)
             {
-                userQuery = userQuery.Where(x => x.WorkspaceProfile.SupervisorId == this.authorizedUser.Id);
+                var supervisorId = this.authorizedUser.Id;
+                userQuery = userQuery.Where(x => x.WorkspaceProfile.SupervisorId == supervisorId
+                                                    || x.Id == supervisorId);
             }
 
-            var interviewer = userQuery.FirstOrDefault();
+            var user = userQuery.FirstOrDefault();
 
-            if (interviewer == null)
+            if (user == null)
             {
-                throw new UserNotFoundException("Map can be assigned only to existing non archived interviewer.");
+                throw new UserNotFoundException("Map can be assigned only to existing non archived interviewer or supervisor.");
             }
 
             var userMap = this.userMapsStorage
@@ -666,7 +670,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             if (userMap != null)
             {
-                throw new InvalidOperationException("Provided map already assigned to specified interviewer.");
+                throw new InvalidOperationException("Provided map already assigned to specified user.");
             }
 
             userMapsStorage.Store(new UserMap
@@ -676,6 +680,41 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             }, null);
 
             return this.mapPlainStorageAccessor.GetById(id);
+        }
+
+        public ComboboxViewItem[] GetUserShapefiles(string filter)
+        {
+            return mapPlainStorageAccessor.Query(query =>
+            {
+                if (authorizedUser.IsSupervisor)
+                {
+                    var supervisorId = authorizedUser.Id;
+                    var userNames = this.userStorage.Users
+                        .Where(x => (supervisorId == x.WorkspaceProfile.SupervisorId || supervisorId == x.Id) && x.IsArchived == false)
+                        .Select(x => x.UserName)
+                        .ToArray();
+
+                    query = query.Where(x => x.Users.Any(u => userNames.Contains(u.UserName)));
+                }
+
+                if (authorizedUser.IsInterviewer)
+                {
+                    var userName = authorizedUser.UserName;
+                    query = query.Where(x => x.Users.Any(u => u.UserName == userName));
+                }
+
+                if (!string.IsNullOrWhiteSpace(filter))
+                {
+                    query = query.Where(x => x.FileName.Contains(filter));
+                }
+
+                return query
+                    .Where(x => x.GeoJson != null)
+                    .Select(x => new { x.Id, x.FileName })
+                    .OrderBy(x => x.FileName)
+                    .Select(x => new ComboboxViewItem(x.FileName, x.Id, null));
+
+            }).ToArray();
         }
 
         public async Task<byte[]> GetMapContentAsync(string mapName)

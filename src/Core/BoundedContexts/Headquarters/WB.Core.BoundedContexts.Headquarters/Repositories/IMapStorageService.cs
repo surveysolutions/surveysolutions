@@ -22,5 +22,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         string[] GetAllMapsForSupervisor(Guid supervisorId);
         MapBrowseItem GetMapById(string id);
         MapBrowseItem AddUserToMap(string id, string userName);
+        ComboboxViewItem[] GetUserShapefiles(string filter);
     }
 }

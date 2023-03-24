@@ -313,11 +313,23 @@
   <data name="SideBarTranslationDownloadXlsx" xml:space="preserve">
     <value>Download xlsx</value>
   </data>
+  <data name="SideBarDownload" xml:space="preserve">
+    <value>Download:</value>
+  </data>
+  <data name="SideBarXlsx" xml:space="preserve">
+    <value>Xlsx</value>
+  </data>
+  <data name="SideBarTab" xml:space="preserve">
+    <value>Tab</value>
+  </data>
   <data name="SideBarTranslationGetTemplate" xml:space="preserve">
     <value>Get Template for </value>
   </data>
   <data name="SideBarTranslationGetTemplateLinkTextXlsx" xml:space="preserve">
     <value>Excel (xlsx)</value>
+  </data>
+  <data name="SideBarTranslationGetTemplateLinkTextCsv" xml:space="preserve">
+    <value>Tab (txt)</value>
   </data>
   <data name="SideBarTranslationName" xml:space="preserve">
     <value>translation name</value>
@@ -688,6 +700,9 @@
   <data name="SelectQuestion" xml:space="preserve">
     <value>Select question</value>
   </data>
+  <data name="AddFilter" xml:space="preserve">
+    <value>Add filter</value>
+  </data>
   <data name="SettingsCan" xml:space="preserve">
     <value>Can </value>
   </data>
@@ -1035,7 +1050,6 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   <data name="HelpVirtualCoverPage" xml:space="preserve">
     <value>Cover is virtual section that shows all identifying questions.
     Questions cannot be changed in this section</value>
-
   </data>
   <data name="ConditionMightBeBroken" xml:space="preserve">
     <value>Condition or cascading depended items might be broken</value>
@@ -1049,12 +1063,18 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   <data name="HotkeysCloseMetadata" xml:space="preserve">
     <value>Close metadata panel</value>
   </data>
+  <data name="HotkeysCloseScenarios" xml:space="preserve">
+    <value>Close scenarios panel</value>
+  </data>
   <data name="HotkeysCloseTranslations" xml:space="preserve">
     <value>Close translations panel</value>
   </data>
   <data name="HotkeysCloseCategories" xml:space="preserve">
     <value>Close categories panel</value>
   </data>
+  <data name="HotkeysCloseComments" xml:space="preserve">
+    <value>Close comments panel</value>
+  </data>    
   <data name="HotkeysFocusTitle" xml:space="preserve">
     <value>Focus title field in editor</value>
   </data>
@@ -1565,5 +1585,8 @@ You entered an invalid input. Each line should follow the format: "Title...Paren
   </data>
   <data name="HideParentValues" xml:space="preserve">
     <value>Hide Parent values</value>
+  </data>
+  <data name="AddEnablingCondition" xml:space="preserve">
+    <value>Add enabling condition</value>
   </data>
 </root>

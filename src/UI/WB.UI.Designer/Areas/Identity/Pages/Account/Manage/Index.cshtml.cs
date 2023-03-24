@@ -86,7 +86,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account.Manage
             }
 
             var user = await userManager.GetUserAsync(User);
-            if (user == null)
+            if (user?.UserName == null)
             {
                 return NotFound($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
             }
@@ -107,9 +107,12 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account.Manage
                 var model = new EmailChangeConfirmationModel(user.UserName, confirmationLink);
                 var messageBody = await viewRenderService.RenderToStringAsync("Emails/EmailChange", model);
 
-                await emailSender.SendEmailAsync(Input.Email,
-                    NotificationResources.SystemMailer_ConfirmationEmail_Complete_Registration_Process,
-                    messageBody);
+                if (user.PendingEmail != null)
+                {
+                    await emailSender.SendEmailAsync(user.PendingEmail,
+                        NotificationResources.SystemMailer_ConfirmationEmail_Complete_Registration_Process,
+                        messageBody);
+                }
 
                 StatusMessage = string.Format(AccountResources.EmailChangeShouldBeConfirmed, Input.Email);
 

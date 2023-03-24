@@ -120,7 +120,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                         }
 
                         var result = await signInManager.PasswordSignInAsync(user,
-                            Input.Password,
+                            Input.Password ?? string.Empty,
                             Input.RememberMe,
                             lockoutOnFailure: false);
 

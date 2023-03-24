@@ -48,6 +48,15 @@
                     </div>
                 </div>
             </FilterBlock>
+            <FilterBlock :title="$t('Pages.Filters_Shapefiles')">
+                <Typeahead
+                    control-id="shapefileName"
+                    :placeholder="$t('Pages.Filters_None')"
+                    :ajax-params="{ }"
+                    :fetch-url="model.shapefiles"
+                    :value="shapefileName"
+                    v-on:selected="selectedShapefileName"/>
+            </FilterBlock>
             <FilterBlock v-if="isLoading"
                 :title="$t('Reports.MapDataLoading')">
                 <div class="progress">
@@ -316,6 +325,8 @@ export default {
             assignmentId: null,
             newResponsibleId: null,
             isReassignReceivedByTablet: false,
+            shapefileName: null,
+            geoJsonFeatures: null,
         }
     },
 
@@ -516,6 +527,37 @@ export default {
                 q.responsible = newValue == null ? null : newValue.value
             })
             this.reloadMarkersInBounds()
+        },
+
+        selectedShapefileName(newValue) {
+            this.shapefileName = newValue
+
+            if (this.geoJsonFeatures) {
+                for (let i = 0; i < this.geoJsonFeatures.length; i++)
+                    this.map.data.remove(this.geoJsonFeatures[i]);
+                this.geoJsonFeatures = null
+            }
+            
+            if (this.shapefileName) {
+                const geoJsonUrl = this.model.shapefileJson + '?mapName=' + this.shapefileName.key
+                
+                this.isLoading = true
+
+                const self = this
+                $.getJSON(geoJsonUrl, function (data) {
+                    const json = JSON.parse(data.geoJson)
+                    self.geoJsonFeatures = self.map.data.addGeoJson(json);
+
+                    const sw = new google.maps.LatLng(data.yMax, data.xMin)
+                    const ne = new google.maps.LatLng(data.yMin, data.xMax)
+                    const latlngBounds = new google.maps.LatLngBounds(sw, ne)
+                    self.map.fitBounds(latlngBounds)
+
+                    self.isLoading = false
+
+                    self.reloadMarkersInBounds()
+                });
+            }
         },
 
         clearAssignmentFilter() {
@@ -729,6 +771,29 @@ export default {
                         icon: iconStyle,
                     }
                 }
+
+                if (type == null) {
+                    const geometry = feature.getGeometry()
+                    const geometryType = geometry.getType()
+                    //"Point", "MultiPoint", "LineString", "MultiLineString", "LinearRing", "Polygon", "MultiPolygon", or "GeometryCollection"
+                    if (geometryType == "Polygon" || geometryType == "MultiPolygon") {
+                        return {
+                            fillColor: '#DE9131',
+                            fillOpacity: 0.8,
+                            strokeColor: '#FCF7F1',
+                            //strokeOpacity: ,
+                            strokeWeight: 1,
+                        }
+                    }
+                    else if (geometryType == "LineString" || geometryType == "MultiLineString") {
+                        return {
+                            strokeColor: '#DE9131',
+                            //strokeOpacity: ,
+                            strokeWeight: 2,
+                        }
+                    }
+                }
+                
                 return {}
             })
 
@@ -811,6 +876,15 @@ export default {
                         self.infoWindow.open(self.map)
                     })
                 }
+
+                const label = event.feature.getProperty('label')
+                if (label) {
+                    Vue.nextTick(function() {
+                        self.infoWindow.setContent(label)
+                        self.infoWindow.setPosition(event.latLng)
+                        self.infoWindow.open(self.map)
+                    })
+                }
             })
 
             google.maps.event.addDomListener(mapDiv, 'click', event => {
@@ -875,8 +949,6 @@ export default {
                 clientMapWidth: this.map.getDiv().clientWidth,
             }
 
-            const self = this
-
             let stillLoading = true
 
             delay(() => {
@@ -915,6 +987,14 @@ export default {
                     markers.features.push(feature)
                 }
             })
+
+            if (this.geoJsonFeatures) {
+                forEach(this.geoJsonFeatures, feature => {
+                    if (toRemove[feature.id]) {
+                        delete toRemove[feature.id]
+                    }}
+                )
+            }
 
             this.map.data.addGeoJson(markers)
 

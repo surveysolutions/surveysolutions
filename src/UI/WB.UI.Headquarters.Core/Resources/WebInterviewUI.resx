@@ -345,7 +345,7 @@
     <value>Error</value>
     <comment>Plural form: Zero items</comment>
   </data>
-  <data name="Error_plural" xml:space="preserve">
+  <data name="Error_other" xml:space="preserve">
     <value>Errors</value>
     <comment>Plural form: plural</comment>
   </data>

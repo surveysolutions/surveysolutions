@@ -63,9 +63,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             if (input.PublicKey != null)
                 query = query.Where(x => x.Id == input.PublicKey);
             else if (!string.IsNullOrEmpty(input.UserName))
-                query = query.Where(x => x.UserName.ToLower() == input.UserName.ToLower());
+                query = query.Where(x => x.UserName != null && x.UserName.ToLower() == input.UserName.ToLower());
             else if (!string.IsNullOrEmpty(input.UserEmail))
-                query = query.Where(x => x.Email.ToLower() == input.UserEmail.ToLower());
+                query = query.Where(x =>x.Email != null &&  x.Email.ToLower() == input.UserEmail.ToLower());
             else if (!string.IsNullOrEmpty(input.DeviceId))
                 query = query.Where(x => x.Profile.DeviceId == input.DeviceId);
 
@@ -86,6 +86,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                     IsArchived = user.IsArchived,
                     IsLockedByHQ = user.IsLockedByHeadquaters,
                     IsLockedBySupervisor = user.IsLockedBySupervisor,
+                    IsRelinkAllowed = user.Profile.IsRelinkAllowed(),
                     CreationDate = user.CreationDate,
                     Roles = user.Roles,
                     SecurityStamp = user.SecurityStamp,
@@ -104,6 +105,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 IsArchived = dbUser.IsArchived,
                 IsLockedByHQ = dbUser.IsLockedByHQ,
                 IsLockedBySupervisor = dbUser.IsLockedBySupervisor,
+                IsRelinkAllowed = dbUser.IsRelinkAllowed,
                 CreationDate = dbUser.CreationDate,
                 Roles = dbUser.Roles.Select(x => x.Id.ToUserRole()).ToImmutableHashSet(),
                 SecurityStamp = dbUser.SecurityStamp,
@@ -162,13 +164,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             };
         }
 
-        public UsersView GetInterviewers(int pageSize, string searchBy, Guid? supervisorId, bool showLocked = false, bool? archived = false)
+        public UsersView GetTeamResponsibles(int pageSize, string searchBy, Guid? supervisorId, bool showLocked = false, bool? archived = false)
         {
-            var users = ApplyFilter(this.userRepository.Users, searchBy, archived, UserRoles.Interviewer)
+            var users = ApplyFilter(this.userRepository.Users, searchBy, archived, UserRoles.Interviewer, UserRoles.Supervisor)
                 .Where(user => showLocked || (!user.IsLockedBySupervisor && !user.IsLockedByHeadquaters));
 
             if (supervisorId.HasValue)
-                users = users.Where(user => user.WorkspaceProfile.SupervisorId == supervisorId);
+                users = users.Where(user => user.WorkspaceProfile.SupervisorId == supervisorId || user.Id == supervisorId);
 
             var filteredUsers = users
                 .OrderBy(x => x.UserName)
@@ -178,7 +180,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 {
                     UserId = x.Id,
                     UserName = x.UserName,
-                    IconClass = UserRoles.Interviewer.ToString().ToLower(),
+                    IconClass = x.Role.ToString().ToLower(),
                 });
 
             var result = new UsersView
@@ -271,6 +273,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                     InterviewerId = g.Key,
                     TrafficUsed = g.Sum(x => x.Statistics.TotalDownloadedBytes + x.Statistics.TotalUploadedBytes)
                 }).ToList());
+            
             var supervisors = this.userRepository.Users
                 .Where(x => supervisorIds.Contains(x.Id))
                 .Select(x => new {x.Id, x.UserName})
@@ -280,7 +283,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             {
                 interviewer.TrafficUsed = deviceSyncInfos.FirstOrDefault(x => x.InterviewerId == interviewer.UserId)
                     ?.TrafficUsed;
-                interviewer.SupervisorName = supervisors.FirstOrDefault(x => x.Id == interviewer.SupervisorId)?.UserName;
+                interviewer.SupervisorName = supervisors.FirstOrDefault(x => x.Id == interviewer.SupervisorId)?.UserName ?? String.Empty;
             }
 
             return new InterviewersView
@@ -373,7 +376,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                     InterviewerId = x.WorkspaceProfile.SupervisorId.HasValue ? x.Id : (Guid?)null,
                     SupervisorId = x.WorkspaceProfile.SupervisorId ?? x.Id,
                     UserName = x.UserName,
-                    Rank = x.UserName.ToLower().StartsWith(searchByToLower) ? 1 : 0
+                    Rank = x.UserName != null && x.UserName.ToLower().StartsWith(searchByToLower) ? 1 : 0
                 });
             };
 
@@ -420,9 +423,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                         IsLockedBySupervisor = supervisor.IsLockedBySupervisor,
                         IsLockedByHQ = supervisor.IsLockedByHeadquaters,
                         CreationDate = supervisor.CreationDate,
-                        Email = supervisor.Email,
+                        Email = supervisor.Email ?? String.Empty,
                         UserId = supervisor.Id,
-                        UserName = supervisor.UserName,
+                        UserName = supervisor.UserName ?? String.Empty,
                         IsArchived = supervisor.IsArchived,
                     });
 
@@ -471,7 +474,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             if (!string.IsNullOrWhiteSpace(searchBy))
             {
                 var searchByToLower = searchBy.ToLower();
-                allUsers = allUsers.Where(x => x.UserName.ToLower().Contains(searchByToLower) || x.Email.ToLower().Contains(searchByToLower));
+                allUsers = allUsers.Where(x =>  
+                    (x.UserName != null && x.UserName.ToLower().Contains(searchByToLower)) 
+                    || (x.Email != null && x.Email.ToLower().Contains(searchByToLower)));
             }
             return allUsers;
         }

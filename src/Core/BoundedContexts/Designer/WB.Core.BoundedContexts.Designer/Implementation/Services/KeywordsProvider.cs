@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static readonly List<string> SurveySolutionsServiceVariablesKeywords = new List<string>()
         {
             "rowcode","rowname","rowindex","roster","id", "parentid1", "parentid2", "parentid3", "parentid4",
-            "self", "state", "quest", "optioncode", "complete", "cover", "overview", "questionnaire"
+            "self", "state", "quest", "optioncode", "complete", "cover", "overview", "questionnaire", "identity"
         };
 
         private static readonly List<string> WindowsFileNamingReservedNames = new List<string>()
@@ -73,7 +73,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (this.reservedKeywords.Contains(keyword))
                 return true;
 
-            if (Regex.IsMatch(keyword, @"^str\d+"))
+            if (Regex.IsMatch(keyword, @"^str\d+", RegexOptions.None,TimeSpan.FromMilliseconds(1000)))
                 return true;
 
             return false;

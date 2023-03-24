@@ -21,13 +21,18 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
     {
         private readonly ISubstitutionService substitutionService;
         private readonly IKeywordsProvider keywordsProvider;
-        public const string QuestionnaireTitleRegularExpression = @"^[\w, \-\(\)\/\\]*$";
-        private static readonly Regex QuestionnaireNameRegex = new Regex(QuestionnaireTitleRegularExpression);
+        private readonly IAttachmentService attachmentService;
+        
+        private const string QuestionnaireTitleRegularExpression = @"^[\w, \-\(\)\/\\]*$";
+        private static readonly Regex QuestionnaireNameRegex = 
+            new Regex(QuestionnaireTitleRegularExpression, RegexOptions.Compiled, TimeSpan.FromMilliseconds(1000));
 
-        public QuestionnaireVerifications(ISubstitutionService substitutionService, IKeywordsProvider keywordsProvider)
+        public QuestionnaireVerifications(ISubstitutionService substitutionService, IKeywordsProvider keywordsProvider,
+            IAttachmentService attachmentService)
         {
             this.substitutionService = substitutionService;
             this.keywordsProvider = keywordsProvider;
+            this.attachmentService = attachmentService;
         }
 
         private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new[]
@@ -271,10 +276,17 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         {
             var foundErrors = new List<QuestionnaireVerificationMessage>();
 
+            var attachments = questionnaire.Attachments
+                .Where(a =>
+                {
+                    var attachmentMeta = attachmentService.GetAttachmentMeta(a.AttachmentId);
+                    return attachmentMeta?.FileName?.ToLower()?.EndsWith(".pdf") ?? false;
+                }) 
+                .Select(x => x.Name.ToLower());
             var allAllowedVariableNames = questionnaire
                 .Find<IComposite>(x => x is IQuestion || x is IGroup)
                 .Select(x => x.VariableName?.ToLower() ?? "")
-                .Union(questionnaire.Attachments.Select(x => x.Name.ToLower()))
+                .Union(attachments)
                 .Where(x => !string.IsNullOrEmpty(x))
                 .Distinct()
                 .ToArray();

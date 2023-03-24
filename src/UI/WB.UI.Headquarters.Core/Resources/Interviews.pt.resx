@@ -153,7 +153,7 @@
       <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; Interview(s) vai ser aprovado.&lt;/h3&gt;
 &lt;b&gt;Nota!&lt;/b&gt; Você pode aprovar entrevistas com somente o seguinte status: &lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}}&lt;/i&gt;, &lt;i&gt;{{status3}}&lt;/i&gt;.</value>
   </data>
-  <data name="ApproveConfirmMessage_plural" xml:space="preserve">
+  <data name="ApproveConfirmMessage_other" xml:space="preserve">
       <value>{{count}} Interviews vai ser aprovado.</value>
   </data>
   <data name="Note" xml:space="preserve">

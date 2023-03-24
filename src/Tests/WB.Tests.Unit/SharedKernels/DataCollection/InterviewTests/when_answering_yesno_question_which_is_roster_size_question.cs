@@ -73,14 +73,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         [NUnit.Framework.Test] public void should_raise_RosterInstancesAdded_event_with_Instances_containing_only_selected_options_which_were_not_selected_before () =>
             eventContext.GetSingleEvent<RosterInstancesAdded>()
-                .Instances.Select(rosterInstance => rosterInstance.RosterInstanceId).Should().BeEquivalentTo(
+                .Instances.Select(rosterInstance => rosterInstance.RosterInstanceId).Should().BeEquivalentTo(new []{
                     option__Selected__FromNothing_ToYes____,
-                    option__Selected__FromNo______ToYes____);
+                    option__Selected__FromNo______ToYes____});
 
         [NUnit.Framework.Test] public void should_raise_RosterInstancesAdded_event_with_SortIndexes () 
         {
             var addedRosters = eventContext.GetSingleEvent<RosterInstancesAdded>().Instances;
-            addedRosters.Select(x => x.SortIndex).Should().BeEquivalentTo(1, 2);
+            addedRosters.Select(x => x.SortIndex).Should().BeEquivalentTo(new []{1, 2});
         }
 
         [NUnit.Framework.Test] public void should_raise_RosterInstancesRemoved_event () =>
@@ -88,9 +88,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         [NUnit.Framework.Test] public void should_raise_RosterInstancesRemoved_event_with_Instances_containing_only_deselected_options_which_were_selected_before () =>
             eventContext.GetSingleEvent<RosterInstancesRemoved>()
-                .Instances.Select(rosterInstance => rosterInstance.RosterInstanceId).Should().BeEquivalentTo(
+                .Instances.Select(rosterInstance => rosterInstance.RosterInstanceId).Should().BeEquivalentTo(new []{
                     option_Deselected_FromYes_____ToNo_____,
-                    option_Deselected_FromYes_____ToNothing);
+                    option_Deselected_FromYes_____ToNothing});
 
         private static AnswerYesNoQuestion command;
         private static Interview interview;

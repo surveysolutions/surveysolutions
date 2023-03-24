@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -24,23 +25,23 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.externalAppLauncher = externalAppLauncher;
         }
 
-        public void Open(string interviewId, Identity identity)
+        public async Task OpenAsync(string interviewId, Identity identity)
         {
             var interview = this.interviewRepository.GetOrThrow(interviewId);
             var questionnaire = this.questionnaireStorage.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
             var attachment = questionnaire.GetAttachmentForEntity(identity.Id);
 
-            var attachmentContentPath = this.attachmentStorage.GetFileCacheLocation(attachment.ContentId);
+            var attachmentContentPath = await this.attachmentStorage.GetFileCacheLocationAsync(attachment.ContentId);
 
             OpenPdfInExternalApp(attachmentContentPath);
         }
 
-        public void OpenAttachment(string interviewId, Guid attachmentId)
+        public async Task OpenAttachmentAsync(string interviewId, Guid attachmentId)
         {
             var interview = this.interviewRepository.GetOrThrow(interviewId);
             var questionnaire = this.questionnaireStorage.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
             var attachment = questionnaire.GetAttachmentById(attachmentId);
-            var attachmentContentPath = this.attachmentStorage.GetFileCacheLocation(attachment.ContentId);
+            var attachmentContentPath = await this.attachmentStorage.GetFileCacheLocationAsync(attachment.ContentId);
             OpenPdfInExternalApp(attachmentContentPath);
         }
 

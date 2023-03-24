@@ -100,7 +100,7 @@ namespace WB.UI.Interviewer.Implementations.Services
                 {
                     AssignmentId = assignmentId,
                     InterviewId = Guid.NewGuid()
-                });
+                }, true);
         }
 
         public override Task NavigateToLoginAsync()
@@ -109,7 +109,6 @@ namespace WB.UI.Interviewer.Implementations.Services
             return this.NavigateToAsync<LoginViewModel>();
         }
 
-        protected override void FinishActivity() => TopActivity.Activity.Finish();
         protected override void NavigateToSettingsImpl() =>
             TopActivity.Activity.StartActivity(new Intent(TopActivity.Activity, typeof(PrefsActivity)));
     }

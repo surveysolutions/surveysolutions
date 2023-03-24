@@ -1,5 +1,5 @@
-const AdministrationLayout = () => import( /*  webpackChunkName: "diagnostics" */ './AdministrationLayout')
-const Diagnostics = () => import( /*  webpackChunkName: "diagnostics" */ './Diagnostics')
+const AdministrationLayout = () => import('./AdministrationLayout')
+const Diagnostics = () => import('./Diagnostics')
 
 export default class MapComponent {
     get routes() {

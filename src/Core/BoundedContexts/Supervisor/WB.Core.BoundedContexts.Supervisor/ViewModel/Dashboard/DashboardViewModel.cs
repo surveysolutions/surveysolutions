@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Services.Workspace;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -37,6 +38,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         private readonly ISupervisorSynchronizationService supervisorSynchronizationService;
         private readonly IPlainStorage<SupervisorIdentity> supervisorPlainStorage;
         private readonly IWorkspaceMemoryCacheSource memoryCacheSource;
+        private readonly IMapInteractionService mapInteractionService;
+        private readonly IUserInteractionService userInteractionService;
         public Guid? LastVisitedInterviewId { get; set; }
 
         public IDashboardItemsAccessor DashboardItemsAccessor { get; }
@@ -62,7 +65,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             IWorkspaceService workspaceService,
             ISupervisorSynchronizationService supervisorSynchronizationService,
             IPlainStorage<SupervisorIdentity> supervisorPlainStorage,
-            IWorkspaceMemoryCacheSource memoryCacheSource)
+            IWorkspaceMemoryCacheSource memoryCacheSource,
+            IMapInteractionService mapInteractionService,
+            IUserInteractionService userInteractionService)
             : base(principal, viewModelNavigationService)
         {
             this.mvxNavigationService = Mvx.IoCProvider.Resolve<IMvxNavigationService>();
@@ -70,6 +75,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             this.supervisorSynchronizationService = supervisorSynchronizationService;
             this.supervisorPlainStorage = supervisorPlainStorage;
             this.memoryCacheSource = memoryCacheSource;
+            this.mapInteractionService = mapInteractionService;
+            this.userInteractionService = userInteractionService;
             DashboardItemsAccessor = dashboardItemsAccessor;
             this.Synchronization = synchronization;
             this.Synchronization.Init();
@@ -239,6 +246,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         }
 
         public string CurrentWorkspace => Principal.CurrentUserIdentity.Workspace;
+        public bool DoesSupportMaps => mapInteractionService.DoesSupportMaps;
+
         public WorkspaceView[] GetWorkspaces()
         {
             return workspaceService.GetAll();
@@ -298,6 +307,23 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             finally
             {
                 this.Synchronization.IsSynchronizationInProgress = false;
+            }
+        }
+        
+        public IMvxAsyncCommand NavigateToMapDashboardCommand =>
+            new MvxAsyncCommand(async () => await NavigateToMapDashboard(), () => !string.IsNullOrEmpty(this.Principal.CurrentUserIdentity.Workspace));
+
+        private async Task NavigateToMapDashboard()
+        {
+            try
+            {
+                this.Synchronization.CancelSynchronizationCommand.Execute();
+                await mapInteractionService.OpenSupervisorMapDashboardAsync();
+                this.Dispose();
+            }
+            catch (MissingPermissionsException e)
+            {
+                userInteractionService.ShowToast(e.Message);
             }
         }
     }

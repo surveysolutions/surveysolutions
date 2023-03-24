@@ -11,7 +11,7 @@
                     Click Attachment.ShowPhotoView;
                     Visible Attachment.IsImage;"/>
 
-        <com.google.android.exoplayer2.ui.PlayerView 
+        <com.google.android.exoplayer2.ui.StyledPlayerView 
             android:id="@+id/video_player_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -21,7 +21,7 @@
                         Tag Attachment.Tag;
                         Visible Attachment.IsVideo;" />
 
-        <com.google.android.exoplayer2.ui.PlayerView 
+        <com.google.android.exoplayer2.ui.StyledPlayerView 
             android:id="@+id/audio_player_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -42,6 +42,6 @@
             local:MvxBind="Text Localization('Interview_ShowPdf'); 
                      Click Attachment.ShowPdf; 
                      Visible Attachment.IsPdf;
-                     Tag Format('Show_Pdf_{0}', Identity)"/>
+                     Tag Format('Show_Pdf_{0}', ItemTag)"/>
 
 </LinearLayout>

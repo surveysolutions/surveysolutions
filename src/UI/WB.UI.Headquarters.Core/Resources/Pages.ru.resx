@@ -1027,6 +1027,9 @@
   <data name="Interviewer_LockWarning" xml:space="preserve">
     <value>Заблокированный интервьюер (галочка отмечена) не сможет соединиться с сервером со своего планшета и отправить собранные данные </value>
   </data>
+  <data name="Tablet_RelinkMessage" xml:space="preserve">
+    <value>Одно устройство может быть привязано к аккаунту</value>
+  </data>
   <data name="Supervisor_LockWarning" xml:space="preserve">
     <value>Заблокированный супервизор (галочка отмечена) не сможет войти на сайт и совершить какие-либо действия</value>
   </data>
@@ -1156,6 +1159,12 @@
   </data>
   <data name="Filters_Assignment" xml:space="preserve">
     <value>Задания</value>
+  </data>
+  <data name="Filters_Shapefiles" xml:space="preserve">
+    <value>Шейп-файлы</value>
+  </data>
+  <data name="Filters_None" xml:space="preserve">
+    <value>Не выбрано</value>
   </data>
   <data name="Interviewers_InterviewerNeverConnected" xml:space="preserve">
     <value>Никогда не соединялись</value>

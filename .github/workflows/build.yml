@@ -11,8 +11,8 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  NODE_VERSION: 17
-  DOTNET_VERSION: '6.0.x'
+  NODE_VERSION: 18
+  DOTNET_VERSION: '7.0.x'
 
 jobs:
   prepare:
@@ -125,9 +125,13 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Install android workload
+      run: dotnet workload install android
+
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.0.3
-
+      
     - name: Build
       env:
         APP_CENTER_INTERVIEWER_DEV: ${{ secrets.APPCENTER_INTERVIEWER_KEY }}

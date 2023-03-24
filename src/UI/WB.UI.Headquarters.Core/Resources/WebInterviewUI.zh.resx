@@ -252,7 +252,7 @@
   <data name="Error" xml:space="preserve">
     <value>错误</value>
   </data>
-  <data name="Error_plural" xml:space="preserve">
+  <data name="Error_other" xml:space="preserve">
     <value>错误</value>
   </data>
   <data name="GPSError" xml:space="preserve">

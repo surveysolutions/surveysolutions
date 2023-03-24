@@ -104,6 +104,7 @@ Elmah/
 .idea/
 
 /src/UI/WB.UI.Frontend/.resources
+/src/UI/WB.UI.Frontend/.templates
 /src/UI/WB.UI.Frontend/dist
 /src/UI/WB.UI.Frontend/locale
 /src/UI/WB.UI.Frontend/styles/build/

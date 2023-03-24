@@ -11,12 +11,13 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Categories;
+using WB.Core.SharedKernels.Questionnaire.ReusableCategories;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer;
 
-[TestOf(typeof(CategoriesService))]
+[TestOf(typeof(ReusableCategoriesService))]
 public class CategoriesServiceTests
 {
     [Test]
@@ -45,24 +46,22 @@ public class CategoriesServiceTests
         
         var service = CreateCategoriesService(documentStorage, categoriesDb, categoriesExportService.Object);
 
-        var excelFile = service.GetAsExcelFile(revision, Id.g2);
+        var excelFile = service.GetAsFile(revision, Id.g2, CategoriesFileType.Excel, false);
         
         categoriesExportService.Verify(m => 
             m.GetAsExcelFile(It.Is<IEnumerable<CategoriesItem>>(list =>
                 list.First().Id == 1 && list.First().ParentId == null && list.First().Text == "1"
                 && list.Second().Id == 3 && list.Second().ParentId == null && list.Second().Text == "3"
                 && list.Last().Id == 2 && list.Last().ParentId == null && list.Last().Text == "2"
-            )), Times.Once);
+            ), true, false), Times.Once);
     }
 
-    private ICategoriesService CreateCategoriesService(IQuestionnaireViewFactory documentStorage,
-        DesignerDbContext designerDbContext,
-        ICategoriesExportService categoriesExportService)
+    private IReusableCategoriesService CreateCategoriesService(IQuestionnaireViewFactory documentStorage,
+        DesignerDbContext designerDbContext, ICategoriesExportService categoriesExportService = null)
     {
-        return new CategoriesService(
+        return new ReusableCategoriesService(
             designerDbContext ?? Mock.Of<DesignerDbContext>(),
             documentStorage ?? Mock.Of<IQuestionnaireViewFactory>(),
-            categoriesExportService ?? Mock.Of<ICategoriesExportService>(),
-            Mock.Of<ICategoriesExtractFactory>());
+            Create.CategoriesExtractFactory(categoriesExportService));
     }
 }

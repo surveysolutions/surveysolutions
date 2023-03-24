@@ -42,10 +42,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
         public async Task StoreAsync(AttachmentContent attachmentContent)
         {
             var storeInFileSystem = IsStoredInFileSystem(attachmentContent);
-            if (storeInFileSystem)
-            {
-                await this.permissionsService.AssureHasPermissionOrThrow<Permissions.StorageWrite>().ConfigureAwait(false);
-            }
 
             this.attachmentContentMetadataRepository.Store(new AttachmentContentMetadata
             {
@@ -74,13 +70,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             }
             else
             {
-                var fileCache = GetFileCacheLocation(attachmentContent.Id);
+                var fileCache = await GetFileCacheLocationAsync(attachmentContent.Id);
 
                 if (!files.IsFileExists(fileCache))
                 {
-                    if (!files.IsDirectoryExists(FileCacheDirectory))
+                    var cacheDirectory = await GetFileCacheDirectoryAsync();
+                    if (!files.IsDirectoryExists(cacheDirectory))
                     {
-                        files.CreateDirectory(FileCacheDirectory);
+                        files.CreateDirectory(cacheDirectory);
                     }
 
                     files.WriteAllBytes(fileCache, attachmentContent.Content);
@@ -93,13 +90,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             return attachmentContent.IsVideo() || attachmentContent.IsPdf() || attachmentContent.IsAudio();
         }
 
-        public void Remove(string attachmentContentId)
+        public async Task RemoveAsync(string attachmentContentId)
         {
             this.attachmentContentMetadataRepository.Remove(attachmentContentId);
             this.attachmentContentDataRepository.Remove(attachmentContentId);
             this.attachmentPreviewContentDataRepository.Remove(attachmentContentId);
 
-            var fileCache = GetFileCacheLocation(attachmentContentId);
+            var fileCache = await GetFileCacheLocationAsync(attachmentContentId);
             if (files.IsFileExists(fileCache))
             {
                 files.DeleteFile(fileCache);
@@ -112,21 +109,21 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             return attachmentContent;
         }
 
-        public bool Exists(string attachmentContentId)
+        public async Task<bool> ExistsAsync(string attachmentContentId)
         {
             var attachmentContentMeta = this.GetMetadata(attachmentContentId);
             if (attachmentContentMeta == null) return false;
 
-            var fileCache = GetFileCacheLocation(attachmentContentId);
+            var fileCache = await GetFileCacheLocationAsync(attachmentContentId);
             if (files.IsFileExists(fileCache)) return true;
 
             return this.attachmentContentDataRepository.Count(x =>
                 x.Id == attachmentContentId && x.Content != null) > 0;
         }
 
-        public byte[] GetContent(string attachmentContentId)
+        public async Task<byte[]> GetContentAsync(string attachmentContentId)
         {
-            var fileCache = GetFileCacheLocation(attachmentContentId);
+            var fileCache = await GetFileCacheLocationAsync(attachmentContentId);
             if (files.IsFileExists(fileCache))
             {
                 return files.ReadAllBytes(fileCache);
@@ -136,9 +133,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             return attachmentContentData?.Content;
         }
 
-        public byte[] GetPreviewContent(string attachmentContentId)
+        public async Task<byte[]> GetPreviewContentAsync(string attachmentContentId)
         {
-            var fileCache = GetFileCacheLocation(attachmentContentId);
+            var fileCache = await GetFileCacheLocationAsync(attachmentContentId);
             if (files.IsFileExists(fileCache))
             {
                 return files.ReadAllBytes(fileCache);
@@ -149,14 +146,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
                    ?? this.attachmentContentDataRepository.GetById(attachmentContentId)?.Content;
         }
 
-        private string FileCacheDirectory =>
-            Path.Combine(pathUtils.GetRootDirectory(), "_attachments");
+        private async Task<string> GetFileCacheDirectoryAsync() =>
+            Path.Combine(await pathUtils.GetRootDirectoryAsync(), "_attachments");
 
-        public string GetFileCacheLocation(string attachmentId)
+        public async Task<string> GetFileCacheLocationAsync(string attachmentId)
         {
             var attachmentContentMeta = this.GetMetadata(attachmentId);
 
-            return Path.Combine(FileCacheDirectory, $"{attachmentId}{GetFileExtensionByMimeType(attachmentContentMeta?.ContentType)}");
+            var cacheDirectory = await GetFileCacheDirectoryAsync();
+            return Path.Combine(cacheDirectory, $"{attachmentId}{GetFileExtensionByMimeType(attachmentContentMeta?.ContentType)}");
         }
 
         private static string GetFileExtensionByMimeType(string contentType)
@@ -172,12 +170,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 
         public async Task<IEnumerable<string>> EnumerateCacheAsync()
         {
-            await this.permissionsService.AssureHasPermissionOrThrow<Permissions.StorageWrite>().ConfigureAwait(false);
             List<string> result = new List<string>();
 
-            if (this.files.IsDirectoryExists(FileCacheDirectory))
+            var cacheDirectory = await GetFileCacheDirectoryAsync();
+
+            if (this.files.IsDirectoryExists(cacheDirectory))
             {
-                foreach (var file in this.files.GetFilesInDirectory(FileCacheDirectory))
+                foreach (var file in this.files.GetFilesInDirectory(cacheDirectory))
                 {
                     result.Add(Path.GetFileNameWithoutExtension(file));
                 }

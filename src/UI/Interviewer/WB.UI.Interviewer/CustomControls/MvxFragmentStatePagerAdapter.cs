@@ -28,13 +28,13 @@ namespace WB.UI.Interviewer.CustomControls
         public MvxFragmentStatePagerAdapter(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer) { }
 
-        public MvxFragmentStatePagerAdapter(Context context, FragmentManager fm)
+        public MvxFragmentStatePagerAdapter(Context context, AndroidX.Fragment.App.FragmentManager fm)
             : base(fm)
         {
             this._context = context;
         }
 
-        public override Fragment GetItem(int position)
+        public override AndroidX.Fragment.App.Fragment GetItem(int position)
         {
             if (position < 0 || position > this._fragments.Count - 1) return null;
 
@@ -45,7 +45,7 @@ namespace WB.UI.Interviewer.CustomControls
 
             if (cachedFragment != null) return cachedFragment;
 
-            cachedFragment = (MvxFragment)Fragment.Instantiate(this._context,
+            cachedFragment = (MvxFragment)AndroidX.Fragment.App.Fragment.Instantiate(this._context,
                 this.FragmentJavaName(this._fragments[position].Type), bundle);
 
             cachedFragment.ViewModel = this._fragments[position].ViewModel;

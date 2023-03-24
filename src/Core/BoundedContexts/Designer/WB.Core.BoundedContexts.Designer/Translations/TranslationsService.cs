@@ -4,8 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using ClosedXML.Excel;
+using ClosedXML.Graphics;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using SixLabors.Fonts;
 using WB.Core.BoundedContexts.Designer.Commands;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Resources;
@@ -52,17 +54,17 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         private readonly DesignerDbContext dbContext;
         private readonly IQuestionnaireViewFactory questionnaireStorage;
         private readonly ITranslationsExportService translationsExportService;
-        private readonly ICategoriesService categoriesService;
+        private readonly IReusableCategoriesService reusableCategoriesService;
 
         public TranslationsService(DesignerDbContext dbContext,
             IQuestionnaireViewFactory questionnaireStorage,
             ITranslationsExportService translationsExportService,
-            ICategoriesService categoriesService)
+            IReusableCategoriesService reusableCategoriesService)
         {
             this.dbContext = dbContext;
             this.questionnaireStorage = questionnaireStorage;
             this.translationsExportService = translationsExportService;
-            this.categoriesService = categoriesService;
+            this.reusableCategoriesService = reusableCategoriesService;
         }
 
         public ITranslation Get(Guid questionnaireId, Guid translationId)
@@ -103,7 +105,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 ? this.Get(questionnaire.PublicKey, translationId.Value)
                 : new QuestionnaireTranslation(new List<TranslationDto>());
 
-            var categoriesService = new CategoriesService(questionnaire.PublicKey, this.categoriesService);
+            var categoriesService = new CategoriesService(questionnaire.PublicKey, this.reusableCategoriesService);
 
             return translationsExportService.GenerateTranslationFile(questionnaire.Source, translationId ?? Guid.Empty, translation, categoriesService);
         }
@@ -117,7 +119,11 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
             try
             {
-                using var package = new XLWorkbook(stream);
+                //non windows fonts
+                var firstFont = SystemFonts.Collection.Families.First();
+                var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(firstFont.Name) };
+                
+                using var package = new XLWorkbook(stream, loadOptions);
 
                 if (package.Worksheets.Count == 0)
                     throw new InvalidFileException(ExceptionMessages.TranslationFileIsEmpty);
@@ -126,12 +132,16 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 if (questionnaire == null)
                     throw new InvalidFileException(ExceptionMessages.QuestionnaireCantBeFound);
 
+                var categoriesService = new CategoriesService(questionnaire.PublicKey, this.reusableCategoriesService);
+                var exportedAliasesForTranslations = 
+                    this.translationsExportService.GetExportedAliasesForTranslations(questionnaire.Source, 
+                        new QuestionnaireTranslation(new List<TranslationDto>()), categoriesService);
+                
                 var sheetsWithTranslation = package.Worksheets
                     .Where(x => x.Name == TranslationExcelOptions.WorksheetName ||
                                 x.Name.StartsWith(TranslationExcelOptions.OptionsWorksheetPreffix) ||
-                                (x.Name.StartsWith(TranslationExcelOptions.CategoriesWorksheetPreffix) &&
-                                 questionnaire.Source.Categories.Any(y =>
-                                     y.Name.ToLower() == x.Name.ToLower().TrimStart(TranslationExcelOptions.CategoriesWorksheetPreffix))))
+                                (x.Name.StartsWith(TranslationExcelOptions.CategoriesWorksheetPreffix) 
+                                 && exportedAliasesForTranslations.ContainsKey(x.Name)))
                     .ToList();
 
                 if (!sheetsWithTranslation.Any())
@@ -141,12 +151,17 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 Dictionary<Guid, bool> idsOfAllQuestionnaireEntities = questionnaire.Source.Children.TreeToEnumerable(x => x.Children)
                     .ToDictionary(composite => composite.PublicKey, x => x is Group);
                 idsOfAllQuestionnaireEntities[questionnaireId] = true;
-                
+
                 var translationInstances = new List<TranslationInstance>();
                 foreach (var translationWithHeaderMap in translationsWithHeaderMap)
                 {
+                    var mappedName =
+                        exportedAliasesForTranslations.ContainsKey(translationWithHeaderMap.Worksheet.Name)
+                            ? exportedAliasesForTranslations[translationWithHeaderMap.Worksheet.Name]
+                            : translationWithHeaderMap.Worksheet.Name;
+                    
                     var worksheetTranslations = GetWorksheetTranslations(translationWithHeaderMap,
-                        questionnaire.Source, idsOfAllQuestionnaireEntities, questionnaireId, translationId);
+                        questionnaire.Source, idsOfAllQuestionnaireEntities, questionnaireId, translationId, mappedName);
                     translationInstances.AddRange(worksheetTranslations);
                 }
 
@@ -177,16 +192,18 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
         private IEnumerable<TranslationInstance> GetWorksheetTranslations(
             TranslationsWithHeaderMap translationWithHeaderMap, QuestionnaireDocument questionnaire,
-            Dictionary<Guid, bool> idsOfAllQuestionnaireEntities, Guid questionnaireId, Guid translationId)
+            Dictionary<Guid, bool> idsOfAllQuestionnaireEntities, Guid questionnaireId, Guid translationId,
+            string mappedName)
         {
             var worksheet = translationWithHeaderMap.Worksheet;
-            var worksheetName = worksheet.Name.ToLower();
+            var worksheetName = mappedName.ToLower();
             var end = worksheet.LastRowUsed().RowNumber();
 
             var isCategoriesWorksheet = worksheetName.StartsWith(TranslationExcelOptions.CategoriesWorksheetPreffix);
             var categoriesWorksheetName = isCategoriesWorksheet
                 ? worksheetName.TrimStart(TranslationExcelOptions.CategoriesWorksheetPreffix)
                 : null;
+
             var categoriesId = isCategoriesWorksheet
                 ? questionnaire.Categories.Single(x => x.Name.ToLower() == categoriesWorksheetName).Id
                 : (Guid?) null;
@@ -460,16 +477,16 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         private class CategoriesService : ICategories
         {
             private readonly Guid questionnaireId;
-            private readonly ICategoriesService categoriesService;
+            private readonly IReusableCategoriesService reusableCategoriesService;
 
-            public CategoriesService(Guid questionnaireId, ICategoriesService categoriesService)
+            public CategoriesService(Guid questionnaireId, IReusableCategoriesService reusableCategoriesService)
             {
                 this.questionnaireId = questionnaireId;
-                this.categoriesService = categoriesService;
+                this.reusableCategoriesService = reusableCategoriesService;
             }
 
             public List<CategoriesItem> GetCategories(Guid categoriesId) =>
-                this.categoriesService.GetCategoriesById(questionnaireId, categoriesId).ToList();
+                this.reusableCategoriesService.GetCategoriesById(questionnaireId, categoriesId).ToList();
         }
     }
 }

@@ -87,7 +87,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
                     var workspaceSize = session.Connection.QuerySingle<long>(
                         @$"SELECT sum(pg_relation_size(quote_ident(schemaname) || '.' || quote_ident(tablename)))::bigint
-                           FROM pg_tables where schemaname = '{workspace.SchemaName}'"
+                           FROM pg_tables where schemaname = @schemaSearchName",
+                        new { schemaSearchName = workspace.SchemaName }
                         );
 
                     WorkspaceSize.Labels(workspace.Name).Set(workspaceSize);

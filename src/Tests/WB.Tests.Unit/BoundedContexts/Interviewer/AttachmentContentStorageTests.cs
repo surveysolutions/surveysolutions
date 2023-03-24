@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
 
             var storage = Create.Service.AttachmentContentStorage(files: fs.Object);
 
-            var cachedFile = storage.GetFileCacheLocation(contentId);
+            var cachedFile = await storage.GetFileCacheLocationAsync(contentId);
 
             fs.Setup(f => f.IsFileExists(cachedFile)).Returns(false);
             fs.Setup(f => f.IsDirectoryExists(Path.GetDirectoryName(cachedFile))).Returns(true);
@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
 
             var storage = Create.Service.AttachmentContentStorage(files: fs.Object);
 
-            var cachedFile = storage.GetFileCacheLocation(contentId);
+            var cachedFile = await storage.GetFileCacheLocationAsync(contentId);
 
             fs.Setup(f => f.IsFileExists(cachedFile)).Returns(true);
             fs.Setup(f => f.IsDirectoryExists(Path.GetDirectoryName(cachedFile))).Returns(true);
@@ -71,7 +71,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
 
             var storage = Create.Service.AttachmentContentStorage(files: fs.Object);
 
-            var cachedFile = storage.GetFileCacheLocation(contentId);
+            var cachedFile = await storage.GetFileCacheLocationAsync(contentId);
             var cacheDir = Path.GetDirectoryName(cachedFile);
             fs.Setup(f => f.IsFileExists(cachedFile)).Returns(false);
             fs.Setup(f => f.IsDirectoryExists(cacheDir)).Returns(false);
@@ -97,7 +97,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
 
             var storage = Create.Service.AttachmentContentStorage(files: fs.Object);
 
-            var cachedFile = storage.GetFileCacheLocation(contentId);
+            var cachedFile = await storage.GetFileCacheLocationAsync(contentId);
             var cacheDir = Path.GetDirectoryName(cachedFile);
             fs.Setup(f => f.IsFileExists(cachedFile)).Returns(false);
             fs.Setup(f => f.IsDirectoryExists(cacheDir)).Returns(false);
@@ -117,7 +117,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
 
 
         [Test]
-        public void should_get_video_files_on_fileSystem()
+        public async Task should_get_video_files_on_fileSystem()
         {
             var fs = new Mock<IFileSystemAccessor>();
             var contentId = Id.g10.FormatGuid();
@@ -125,36 +125,36 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
 
             var storage = Create.Service.AttachmentContentStorage(files: fs.Object);
 
-            var cachedFile = storage.GetFileCacheLocation(contentId);
+            var cachedFile = await storage.GetFileCacheLocationAsync(contentId);
 
             fs.Setup(f => f.IsFileExists(cachedFile)).Returns(true);
             fs.Setup(f => f.IsDirectoryExists(Path.GetDirectoryName(cachedFile))).Returns(true);
 
             fs.Setup(f => f.ReadAllBytes(cachedFile, null, null)).Returns(content);
             
-            storage.GetContent(contentId);
+            await storage.GetContentAsync(contentId);
 
-            var contentFromStorage = storage.GetContent(contentId);
+            var contentFromStorage = await storage.GetContentAsync(contentId);
 
             Assert.That(contentFromStorage, Is.EqualTo(content));
         }
 
         [Test]
-        public void when_Exists_and_no_metadata_by_attachment_in_db_then_should_be_false()
+        public async Task when_Exists_and_no_metadata_by_attachment_in_db_then_should_be_false()
         {
             // arrange
             var contentId = Id.g10.FormatGuid();
             var storage = Create.Service.AttachmentContentStorage();
 
             // act
-            var isExists = storage.Exists(contentId);
+            var isExists = await storage.ExistsAsync(contentId);
 
             // assert
             Assert.That(isExists, Is.False);
         }
 
         [Test]
-        public void when_Exists_and_no_file_by_attachment_on_file_system_then_should_be_false()
+        public async Task when_Exists_and_no_file_by_attachment_on_file_system_then_should_be_false()
         {
             // arrange
             var contentId = Id.g10.FormatGuid();
@@ -167,14 +167,14 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
                 files: fileSystemAccessor);
 
             // act
-            var isExists = storage.Exists(contentId);
+            var isExists = await storage.ExistsAsync(contentId);
 
             // assert
             Assert.That(isExists, Is.True);
         }
 
         [Test]
-        public void when_Exists_and_no_attachment_content_in_db_and_on_file_system_then_should_be_false()
+        public async Task when_Exists_and_no_attachment_content_in_db_and_on_file_system_then_should_be_false()
         {
             // arrange
             var contentId = Id.g10.FormatGuid();
@@ -187,7 +187,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
                 files: fileSystemAccessor);
 
             // act
-            var isExists = storage.Exists(contentId);
+            var isExists = await storage.ExistsAsync(contentId);
 
             // assert
             Assert.That(isExists, Is.False);

@@ -32,7 +32,7 @@ namespace WB.UI.Designer.Code
         private readonly IAttachmentService attachmentService;
         private readonly ILookupTableService lookupTableService;
         private readonly IDesignerTranslationService translationsService;
-        private readonly ICategoriesService categoriesService;
+        private readonly IReusableCategoriesService reusableCategoriesService;
         private readonly ILogger<QuestionnaireHelper> logger;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly DesignerDbContext questionnaireChangeItemStorage;
@@ -45,7 +45,7 @@ namespace WB.UI.Designer.Code
             IAttachmentService attachmentService, 
             ILookupTableService lookupTableService, 
             IDesignerTranslationService translationsService, 
-            ICategoriesService categoriesService, 
+            IReusableCategoriesService reusableCategoriesService, 
             ILogger<QuestionnaireHelper> logger, 
             IFileSystemAccessor fileSystemAccessor,
             DesignerDbContext questionnaireChangeItemStorage,
@@ -57,7 +57,7 @@ namespace WB.UI.Designer.Code
             this.attachmentService = attachmentService;
             this.lookupTableService = lookupTableService;
             this.translationsService = translationsService;
-            this.categoriesService = categoriesService;
+            this.reusableCategoriesService = reusableCategoriesService;
             this.logger = logger;
             this.fileSystemAccessor = fileSystemAccessor;
             this.questionnaireChangeItemStorage = questionnaireChangeItemStorage;
@@ -121,7 +121,7 @@ namespace WB.UI.Designer.Code
         public IPagedList<QuestionnaireListViewModel> GetSharedQuestionnairesByViewer(DesignerIdentityUser viewer, bool isAdmin, Guid? folderId)
             => this.GetQuestionnaires(viewer: viewer, isAdmin: isAdmin, type: QuestionnairesType.Shared, folderId: folderId);
 
-        private QuestionnaireListViewModel GetQuestionnaire(QuestionnaireListViewItem x, Guid viewerId, string viewerName,
+        private QuestionnaireListViewModel GetQuestionnaire(QuestionnaireListViewItem x, Guid viewerId, string? viewerName,
             bool isAdmin, bool showPublic, string? location)
             => new QuestionnaireListViewModel
             {
@@ -242,7 +242,7 @@ namespace WB.UI.Designer.Code
 
             foreach (var categories in questionnaireDocument.Categories)
             {
-                var excelFile = this.categoriesService.GetAsExcelFile(questionnaireRevision, categories.Id);
+                var excelFile = this.reusableCategoriesService.GetAsFile(questionnaireRevision, categories.Id, CategoriesFileType.Excel, hqImport: true);
                 if (excelFile?.Content == null)
                     continue;
                 zipStream.PutFileEntry($"Categories/{categories.Id.FormatGuid()}.xlsx", excelFile.Content);

@@ -260,7 +260,7 @@ Contactați echipa de suport pentru asistență.</value>
   <data name="Error" xml:space="preserve">
     <value>Eroare</value>
   </data>
-  <data name="Error_plural" xml:space="preserve">
+  <data name="Error_other" xml:space="preserve">
     <value>Erori</value>
   </data>
   <data name="GPSError" xml:space="preserve">

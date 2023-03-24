@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Identity;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Factories;
@@ -40,16 +41,18 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 
         protected static UsersController CreateUsersController(
             ILogger logger = null,
-            IUserViewFactory userViewViewFactory = null)
+            IUserViewFactory userViewViewFactory = null,
+            UserManager<HqUser> userManager = null,
+            IWorkspaceContextAccessor workspaceContextAccessor = null)
         {
             return new UsersController(
                 userViewViewFactory ?? Mock.Of<IUserViewFactory>(),
                 Mock.Of<IUserArchiveService>(),
                 Mock.Of<IAuditLogService>(),
-                Create.Service.UserManager(),
+                userManager ?? Create.Service.UserManager(),
                 Mock.Of<IUnitOfWork>(),
                 Mock.Of<ISystemLog>(),
-                Mock.Of<IWorkspaceContextAccessor>(),
+                workspaceContextAccessor ?? Mock.Of<IWorkspaceContextAccessor>(),
                 Mock.Of<IPlainStorageAccessor<Workspace>>());
         }
 

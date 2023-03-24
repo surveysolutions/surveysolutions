@@ -560,7 +560,7 @@ export default {
     },
 
     components: {
-        signalr: () => import(/* webpackChunkName: "core-signalr" */ '~/webinterview/components/signalr/core.signalr'),
+        signalr: () => import('~/webinterview/components/signalr/core.signalr'),
     },
 
     beforeMount() {

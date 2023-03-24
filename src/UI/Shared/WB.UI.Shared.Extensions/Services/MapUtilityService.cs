@@ -10,7 +10,6 @@ using Esri.ArcGISRuntime.Rasters;
 using Esri.ArcGISRuntime.Symbology;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.Enumerator.Implementation.Utils;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
 
@@ -122,7 +121,10 @@ namespace WB.UI.Shared.Extensions.Services
                         return new Basemap(BasemapStyle.OSMStandard);
                 }
             }
-            catch {}
+            catch (Exception e)
+            {
+                logger.Error("Cant load online map " + existingMap.MapType, e);
+            }
             
             return null;
         }

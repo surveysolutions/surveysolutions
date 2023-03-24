@@ -104,7 +104,7 @@ export default {
         SearchResults,
         Sidebar,
         DetailsInfo,
-        Interview: () => import(/* webpackChunkName: "interview" */'~/webinterview/components/Interview.vue'),
+        Interview: () => import('~/webinterview/components/Interview.vue'),
     },
 
     beforeDestroy() {

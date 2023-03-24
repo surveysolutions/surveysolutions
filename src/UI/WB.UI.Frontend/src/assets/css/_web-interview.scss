@@ -1051,6 +1051,10 @@
         margin: 10px 0px 10px 10px;
         padding-right: 35px;
     }
+
+    .completed .progress-bar {
+        background-color: #3ca21a;
+    }
 }
 
 @media only screen and (max-width: 1525px) {

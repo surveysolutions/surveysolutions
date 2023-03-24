@@ -38,7 +38,7 @@
             return Coordinates;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             var target = obj as Area;
             if (target == null) return false;

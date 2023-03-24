@@ -45,6 +45,7 @@ using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.Questionnaire.Categories;
+using WB.Core.SharedKernels.Questionnaire.ReusableCategories;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 using WB.Infrastructure.Native.Storage;
 
@@ -77,7 +78,9 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<IDesignerTranslationService, TranslationsService>();
             registry.Bind<ICategoriesVerifier, CategoriesVerifier>();
             registry.Bind<ICategoriesExtractFactory, CategoriesExtractFactory>();
-            registry.Bind<ICategoriesService, CategoriesService>();
+            registry.Bind<ExcelCategoriesExtractService, ExcelCategoriesExtractService>();
+            registry.Bind<TsvCategoriesExtractService, TsvCategoriesExtractService>();
+            registry.Bind<IReusableCategoriesService, ReusableCategoriesService>();
             registry.Bind<ITranslationsExportService, TranslationsExportService>();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
             registry.Bind<ICategoriesExportService, CategoriesExportService>();
@@ -194,7 +197,7 @@ namespace WB.Core.BoundedContexts.Designer
                     config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
 
                 .Handles<RemoveSharedPersonFromQuestionnaire>(
-                    (command, aggregate) => aggregate.RemoveSharedPerson(command.PersonId, command.Email, command.ResponsibleId),
+                    (command, aggregate) => aggregate.RemoveSharedPerson(command.PersonId, command.ResponsibleId),
                     config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
 
                 .Handles<PassOwnershipFromQuestionnaire>(

@@ -10,15 +10,13 @@ using Esri.ArcGISRuntime.UI.Controls;
 using MvvmCross.WeakSubscription;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Activities.Callbacks;
 using WB.UI.Shared.Extensions.ViewModels;
+using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
 
 namespace WB.UI.Shared.Extensions.Activities
 {
-    [Activity(WindowSoftInputMode = SoftInput.StateHidden,
-        Theme = "@style/AppTheme",
-        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize,
-        Exported = false)]
-    public class MapDashboardActivity : BaseActivity<MapDashboardViewModel>
+    public abstract class MapDashboardActivity<T> : BaseActivity<T> where T : MapDashboardViewModel
     {
         protected override int ViewResourceId => Resource.Layout.map_dashboard;
 
@@ -26,13 +24,9 @@ namespace WB.UI.Shared.Extensions.Activities
         private ActionBarDrawerToggle drawerToggle;
 
         private IDisposable onDrawerOpenedSubscription;
+        private IDisposable onMapViewMapTappedSubscription;
 
         public Toolbar Toolbar { get; private set; }
-
-        public override void OnBackPressed()
-        {
-            this.Cancel();
-        }
 
         private void Cancel()
         {
@@ -58,11 +52,19 @@ namespace WB.UI.Shared.Extensions.Activities
             onDrawerOpenedSubscription = this.drawerLayout.WeakSubscribe<DrawerLayout, DrawerLayout.DrawerOpenedEventArgs>(
                 nameof(this.drawerLayout.DrawerOpened),
                 OnDrawerLayoutOnDrawerOpened);
-
+            
             this.ViewModel.MapView = this.FindViewById<MapView>(Resource.Id.map_view);
-            this.ViewModel.MapView.GeoViewTapped += this.ViewModel.OnMapViewTapped;
+            onMapViewMapTappedSubscription = this.ViewModel.MapView.WeakSubscribe<MapView, GeoViewInputEventArgs>(
+                nameof(this.ViewModel.MapView.GeoViewTapped),
+                this.ViewModel.OnMapViewTapped);
             
             System.Threading.Tasks.Task.Run(() => this.ViewModel.MapControlCreatedAsync());
+        }
+
+        protected override bool BackButtonCustomAction => true;
+        protected override void BackButtonPressed()
+        {
+            this.Cancel();
         }
 
         private void OnDrawerLayoutOnDrawerOpened(object sender, DrawerLayout.DrawerOpenedEventArgs args)
@@ -71,15 +73,12 @@ namespace WB.UI.Shared.Extensions.Activities
             this.HideKeyboard(drawerLayout.WindowToken);
         }
 
-        protected override void OnStop()
+        protected override void OnDestroy()
         {
             onDrawerOpenedSubscription?.Dispose();
-            
-            var mapView = this.ViewModel?.MapView;
-            if (mapView != null)
-                mapView.GeoViewTapped -= this.ViewModel.OnMapViewTapped;
-            
-            base.OnStop();
+            onMapViewMapTappedSubscription?.Dispose();
+
+            base.OnDestroy();
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)

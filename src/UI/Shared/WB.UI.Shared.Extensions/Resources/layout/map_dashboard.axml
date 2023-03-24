@@ -69,11 +69,11 @@
       <LinearLayout
           style="@style/Area_MapListPanel"
           android:id="@+id/area_map_list_maps"
-          local:MvxBind="Visibility Visibility(IsPanelVisible);">
+          local:MvxBind="Visible IsPanelVisible;">
         <ProgressBar
             style="@style/Progress_Indicator"
             android:indeterminate="true"
-            local:MvxBind="Visibility Visibility(IsInProgress);" />
+            local:MvxBind="Visible IsInProgress;" />
         <TextView
             android:id="@+id/areaEditor_No_Maps_Text"
             style="@style/Area_NoMapText"
@@ -184,6 +184,28 @@
         local:MvxItemTemplate="@layout/item_spinner"
         local:MvxDropDownItemTemplate="@layout/item_spinnerdropdown"
         local:MvxBind="ItemsSource Questionnaires; SelectedItem SelectedQuestionnaire; HandleItemSelected QuestionnaireSelectedCommand; Enabled Or(ShowAssignments, ShowInterviews)"/>
+
+    <TextView
+        style="@style/Area_Dashboard_Text"
+        local:MvxBind="Text Localization('MapDashboard_StatusTitle');"/>
+
+    <MvxSpinner
+        android:id="@+id/spinnerStatuses"
+        style="@style/Area_Dashboard_Spinner"
+        local:MvxItemTemplate="@layout/item_spinner"
+        local:MvxDropDownItemTemplate="@layout/item_spinnerdropdown"
+        local:MvxBind="ItemsSource Statuses; SelectedItem SelectedStatus; HandleItemSelected StatusSelectedCommand; Enabled ShowInterviews"/>
+
+    <TextView
+        style="@style/Area_Dashboard_Text"
+        local:MvxBind="Visible SupportDifferentResponsible; Text Localization('MapDashboard_ResponsibleTitle');"/>
+
+    <MvxSpinner
+        android:id="@+id/spinnerResponsibles"
+        style="@style/Area_Dashboard_Spinner"
+        local:MvxItemTemplate="@layout/item_spinner"
+        local:MvxDropDownItemTemplate="@layout/item_spinnerdropdown"
+        local:MvxBind="Visible SupportDifferentResponsible; ItemsSource Responsibles; SelectedItem SelectedResponsible; HandleItemSelected ResponsibleSelectedCommand; Enabled Or(ShowAssignments, ShowInterviews)"/>
 
     <Space
         style="@style/Area_Dashboard_DrawerSpace" />

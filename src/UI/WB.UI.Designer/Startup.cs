@@ -23,7 +23,7 @@ using Microsoft.Net.Http.Headers;
 using Ncqrs.Domain.Storage;
 using Newtonsoft.Json.Serialization;
 using reCAPTCHA.AspNetCore;
-using VueCliMiddleware;
+//using VueCliMiddleware;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
@@ -104,9 +104,13 @@ namespace WB.UI.Designer
                 options.EnableForHttps = true;
             });
 
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            if (connectionString == null)
+                throw new InvalidOperationException("Connection string was not found");
+            
+            
             services.AddDbContext<DesignerDbContext>(options =>
-                options.UseNpgsql(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                options.UseNpgsql(connectionString));
             
             services.AddScoped<AntiForgeryFilter>();
             services.AddScoped<IPasswordHasher<DesignerIdentityUser>, PasswordHasher>();
@@ -180,10 +184,14 @@ namespace WB.UI.Designer
             {
                 corsOpt.AddPolicy(WebTesterCorsPolicy, b =>
                 {
-                    var st = Configuration.GetSection("WebTester").GetValue<string>("BaseUri");
-                    Uri uri = new Uri(st);
+                    var baseUrl = Configuration.GetSection("WebTester").GetValue<string>("BaseUri");
+                    if (baseUrl == null)
+                        throw new InvalidOperationException("BaseUrl was not set");
+                    
+                    
+                    Uri uri = new Uri(baseUrl);
                     var webTesterOrigin = uri.Scheme + Uri.SchemeDelimiter + uri.Host;
-                    if (Regex.IsMatch(st, ":\\d+"))
+                    if (Regex.IsMatch(baseUrl, ":\\d+", RegexOptions.None, TimeSpan.FromMilliseconds(1000)))
                     {
                         webTesterOrigin += ":" + uri.Port;
                     }
@@ -347,19 +355,6 @@ namespace WB.UI.Designer
                     name: "default",
                     pattern: "{controller=QuestionnaireList}/{action=Index}/{id?}");
                 routes.MapRazorPages();
-
-                if (env.IsDevelopment())
-                {
-                    routes.MapToVueCliProxy("{*path}", new SpaOptions
-                        {
-                            SourcePath = SpaRoot
-                        },
-                        port: 0,
-                        npmScript: "serve", //(System.Diagnostics.Debugger.IsAttached) ? "serve" : null,
-                        regex: "Compiled successfully",
-                        forceKill: true
-                    );
-                }
             });
             
             app.UseSpa(spa =>

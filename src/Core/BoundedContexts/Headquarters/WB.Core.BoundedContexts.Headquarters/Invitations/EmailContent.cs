@@ -48,7 +48,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             MainText = ReplaceVariablesWithData(MainText, interview, questionnaire);
         }
 
-        private static readonly Regex FindVariables = new Regex("%[A-Za-z0-9_]+(:[a-z]+)?%", RegexOptions.Compiled);
+        private static readonly Regex FindVariables = 
+            new Regex("%[A-Za-z0-9_]+(:[a-z]+)?%", RegexOptions.Compiled, TimeSpan.FromMilliseconds(1000));
         private string ReplaceVariablesWithData(string text, IStatefulInterview interview, IQuestionnaire questionnaire)
         {
             return FindVariables.Replace(text, match =>
@@ -83,15 +84,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 {
                     if (displayMode == "barcode" || displayMode == "qrcode")
                     {
-                        var barCodeUtilities = new BarCodeUtilities();
-
                         MemoryStream imageStream;
 
                         try
                         {
                             imageStream = displayMode == "barcode"
-                                ? barCodeUtilities.RenderBarCodeImage(text)
-                                : barCodeUtilities.RenderQrCodeImage(text);
+                                ? QRCodeBuilder.RenderBarCodeImage(text)
+                                : QRCodeBuilder.RenderQrCodeImage(text);
                         }
                         catch
                         {
@@ -109,7 +108,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                             case EmailContentAttachmentMode.Base64String:
                             {
                                 var base64String = Convert.ToBase64String(imageStream.ToArray());
-                                return $"<img src='data:image/png;base64,{base64String}'/>";
+                                return $"<img src='data:image/jpeg;base64,{base64String}'/>";
                             }
                             default:
                                 throw new ArgumentException($"Unsupported attachment mode {AttachmentMode}");

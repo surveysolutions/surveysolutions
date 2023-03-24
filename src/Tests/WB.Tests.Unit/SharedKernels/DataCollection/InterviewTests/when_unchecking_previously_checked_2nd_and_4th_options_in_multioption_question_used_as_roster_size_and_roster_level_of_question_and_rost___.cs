@@ -72,7 +72,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         [NUnit.Framework.Test] public void should_set_2nd_and_4th_options_as_roster_instance_ids_in_RosterInstancesRemoved_event () =>
             eventContext.GetEvent<RosterInstancesRemoved>().Instances.Select(instance => instance.RosterInstanceId).ToArray()
-                .Should().BeEquivalentTo(option2, option4);
+                .Should().BeEquivalentTo(new[]{ option2, option4 });
 
         private static EventContext eventContext;
         private static Interview interview;

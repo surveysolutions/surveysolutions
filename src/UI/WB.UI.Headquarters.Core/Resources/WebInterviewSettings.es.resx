@@ -123,13 +123,13 @@
   <data name="AfterXDay" xml:space="preserve">
     <value>Después de {{count}} día</value>
   </data>
-  <data name="AfterXDay_plural" xml:space="preserve">
+  <data name="AfterXDay_other" xml:space="preserve">
     <value>Después de {{count}} días</value>
   </data>
   <data name="AfterXWeek" xml:space="preserve">
     <value>Después de {{count}} semana</value>
   </data>
-  <data name="AfterXWeek_plural" xml:space="preserve">
+  <data name="AfterXWeek_other" xml:space="preserve">
     <value>Después de {{count}} semanas</value>
   </data>
   <data name="Cancel" xml:space="preserve">

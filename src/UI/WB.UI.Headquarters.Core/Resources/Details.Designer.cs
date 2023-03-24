@@ -188,9 +188,9 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to {{ count }} items found:.
         /// </summary>
-        public static string SearchResult_Count_plural {
+        public static string SearchResult_Count_other {
             get {
-                return ResourceManager.GetString("SearchResult_Count_plural", resourceCulture);
+                return ResourceManager.GetString("SearchResult_Count_other", resourceCulture);
             }
         }
         

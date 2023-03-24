@@ -35,7 +35,7 @@
         
     </style>
 
-    <style name="Login_Password_Editor" parent="Widget.MaterialComponents.TextInputEditText.OutlinedBox">
+    <style name="Login_Password_Editor" >
         <item name="android:textColor">@color/textedit_color_selector</item>
         <item name="android:layout_width">@dimen/Login_Element_width</item>
         <item name="android:layout_height">@dimen/Theme_Button_min_height</item>

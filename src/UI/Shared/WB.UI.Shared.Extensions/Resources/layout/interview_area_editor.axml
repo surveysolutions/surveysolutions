@@ -69,11 +69,11 @@
         android:orientation="vertical"
         android:layout_marginTop="?attr/actionBarSize"
         android:background="@color/toolbar_background_color"
-        local:MvxBind="Visibility Visibility(IsPanelVisible);">
+        local:MvxBind="Visible IsPanelVisible;">
         <ProgressBar
             style="@style/Progress_Indicator"
             android:indeterminate="true"
-            local:MvxBind="Visibility Visibility(IsInProgress);" />
+            local:MvxBind="Visible IsInProgress;" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

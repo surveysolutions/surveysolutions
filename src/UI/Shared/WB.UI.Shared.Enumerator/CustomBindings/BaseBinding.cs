@@ -11,7 +11,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected new TControl Target => base.Target as TControl;
 
-        public override Type TargetType => typeof(TValue);
+        public override Type TargetValueType => typeof(TValue);
 
         protected override void SetValueImpl(object target, object value)
         {

@@ -94,6 +94,7 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
+using WB.Core.SharedKernels.Questionnaire.ReusableCategories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 using WB.Core.Synchronization.MetaInfo;
@@ -275,7 +276,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.Bind<ITranslationStorage, TranslationStorage>();
             registry.Bind<ITranslationsExportService, TranslationsExportService>();
-            registry.Bind<ICategoriesExportService, CategoriesExportService >();
+            registry.Bind<ICategoriesExportService, CategoriesExportService>();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
             registry.Bind<IQuestionnaireStorage, HqQuestionnaireStorage>(); 
            

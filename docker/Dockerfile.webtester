@@ -1,4 +1,4 @@
-ARG DOTNET_VERSION=6.0
+ARG DOTNET_VERSION=7.0
 ARG DOTNET_CA_PATCH=
 ARG VERSION=21.01
 ARG INFO_VERSION=21.01
@@ -24,7 +24,7 @@ COPY [ "src/Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources", \
 COPY [ "src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources", \
        "/src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/" ]
 
-RUN npm run build -- --package
+RUN npm run build -- -- --package
 
 FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}${DOTNET_CA_PATCH} as builder
 

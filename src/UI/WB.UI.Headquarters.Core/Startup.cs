@@ -376,7 +376,12 @@ namespace WB.UI.Headquarters
             services.AddQuartzIntegration(Configuration,
                 DbUpgradeSettings.FromFirstMigration<M201905151013_AddQuartzTables>());
 
-            services.AddMediatR(typeof(Startup), typeof(HeadquartersBoundedContextModule));
+            services.AddMediatR(cfg =>
+                cfg.RegisterServicesFromAssembly(typeof(Startup).Assembly));
+            
+            services.AddMediatR(cfg =>
+                cfg.RegisterServicesFromAssembly(typeof(HeadquartersBoundedContextModule).Assembly));
+
         }
 
         private static void AddCompression(IServiceCollection services)
@@ -480,7 +485,10 @@ namespace WB.UI.Headquarters
             app.UseSwagger();
             app.UseSession();
             app.UseResponseCompression();
-            app.UseRequestDecompression();
+
+            //resolve ambiguity
+            RequestDecompressionApplicationBuilderExtensions.UseRequestDecompression(app);
+            //app.UseRequestDecompression();
 
             app.UseHqSwaggerUI();
 

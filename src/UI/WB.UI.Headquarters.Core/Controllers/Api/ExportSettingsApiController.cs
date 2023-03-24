@@ -81,6 +81,21 @@ namespace WB.UI.Headquarters.Controllers.Api
             var newExportSettingsModel = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword());
             return newExportSettingsModel;
         }
+        
+        [HttpDelete]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveExportCache()
+        {
+            if (await this.IsExistsDataExportInProgress())
+                return StatusCode((int)HttpStatusCode.Forbidden,new {message = DataExport.ErrorThereAreRunningProcesses}); 
+
+            await exportServiceApi.DeleteTenant();;
+            await this.ClearExportData();
+
+            this.logger.LogInformation("Export cache was removed by {User}.", new {User = base.User.Identity.Name});
+
+            return new JsonResult(new { Success = true });
+        }
 
         private Task ClearExportData()
         {

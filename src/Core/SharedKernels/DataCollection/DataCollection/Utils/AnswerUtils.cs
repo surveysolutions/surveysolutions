@@ -12,7 +12,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
 {
     public static class AnswerUtils
     {
-        public static int TextAnswerMaxLength => 500;
+        public static int TextAnswerMaxLength => 750;
 
         public static string AnswerToString(object answer, Func<decimal, string> getCategoricalAnswerOptionText = null, bool isTimestamp = false)
         {

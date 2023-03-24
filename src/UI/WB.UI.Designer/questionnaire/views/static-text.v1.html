@@ -15,7 +15,12 @@
             <input id="edit-static-attachment-name" type="text" class="form-control" ng-model="activeStaticText.attachmentName" spellcheck="false" maxlength="32" />
         </div>
 
-        <div class="form-group enabling-group" ng-if="doesQuestionSupportEnablementConditions()">
+        <div class="form-group" ng-show="(doesQuestionSupportEnablementConditions() && !((showEnablingConditions===undefined && activeStaticText.enablementCondition) || showEnablingConditions))">
+            <button type="button" class="btn btn-lg btn-link" ng-click="showEnablingConditions=true" ng-i18next="AddEnablingCondition"></button>
+        </div>
+        
+        <div class="row" ng-show="(doesQuestionSupportEnablementConditions() && ((showEnablingConditions===undefined && activeStaticText.enablementCondition) || showEnablingConditions))">
+          <div class="form-group col-xs-11" >
             <div class="enabling-group-marker" ng-class="{'hide-if-disabled': activeStaticText.hideIfDisabled}"></div>
             <label for="edit-question-enablement-condition">{{'EnablingCondition' | i18next}} <help key="conditionExpression" /></label>
 
@@ -27,8 +32,13 @@
             <div class="pseudo-form-control">
                 <div id="edit-question-enablement-condition" ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="activeStaticText.enablementCondition"></div>
             </div>
+          </div>
+            <div class="form-group col-xs-1">
+                <button type="button" class="btn cross instructions-cross"
+                        ng-click="showEnablingConditions=false;activeStaticText.enablementCondition='';activeStaticText.hideIfDisabled=false;staticTextForm.$setDirty();"></button>
+            </div>
         </div>
-
+            
         <div class="form-group validation-group" ng-repeat="validation in activeStaticText.validationConditions" id="validationCondition{{$index}}">
             <div class="validation-group-marker"></div>
             <label>{{'ValidationCondition' | i18next}} {{$index + 1}} <help key="validationExpression" /></label>
