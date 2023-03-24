@@ -39,10 +39,7 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             try
             {
                 await this.permissions.AssureHasPermissionOrThrow<Permissions.Camera>();
-                await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(async () =>
-                {
-                    photo = await MediaPicker.CapturePhotoAsync().ConfigureAwait(false);
-                }, maskExceptions: false);
+                photo = await MediaPicker.CapturePhotoAsync().ConfigureAwait(false);
             }
             catch (PermissionException e)
             {
@@ -69,17 +66,15 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             await this.media.Initialize().ConfigureAwait(false);
 
             FileResult photo = null;
-            await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(async () =>
+            
+            try
             {
-                try
-                {
-                    photo = await MediaPicker.PickPhotoAsync().ConfigureAwait(false);
-                }
-                catch (PermissionException e)
-                {
-                    throw new MissingPermissionsException(e.Message, e);
-                }
-            }, maskExceptions: false);
+                photo = await MediaPicker.PickPhotoAsync().ConfigureAwait(false);
+            }
+            catch (PermissionException e)
+            {
+                throw new MissingPermissionsException(e.Message, e);
+            }
 
             return photo == null ? null : await photo.OpenReadAsync();
         }
