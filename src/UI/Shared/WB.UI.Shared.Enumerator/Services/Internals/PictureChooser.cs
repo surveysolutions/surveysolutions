@@ -39,6 +39,7 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             try
             {
                 await this.permissions.AssureHasPermissionOrThrow<Permissions.Camera>();
+                await this.permissions.AssureHasExternalStoragePermissionOrThrow();
                 photo = await MediaPicker.CapturePhotoAsync().ConfigureAwait(false);
             }
             catch (PermissionException e)
@@ -69,6 +70,7 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             
             try
             {
+                await this.permissions.AssureHasExternalStoragePermissionOrThrow();
                 photo = await MediaPicker.PickPhotoAsync().ConfigureAwait(false);
             }
             catch (PermissionException e)
