@@ -17,13 +17,15 @@ namespace WB.UI.Interviewer.Implementations.Services
             IDeviceSettings deviceSettings,
             IArchivePatcherService archivePatcherService,
             ILogger logger,
-            IViewModelNavigationService navigationService) : base(fileSystemAccessor,
+            IViewModelNavigationService navigationService,
+            IPathUtils pathUtils) : base(fileSystemAccessor,
             permissions,
             synchronizationService,
             deviceSettings,
             archivePatcherService,
             logger,
-            navigationService)
+            navigationService,
+            pathUtils)
         {
         }
 

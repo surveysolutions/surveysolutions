@@ -85,7 +85,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     Stage = SyncStage.AttachmentsCleanup
                 });
 
-                this.attachmentsCleanupService.RemovedOrphanedAttachments();
+                await this.attachmentsCleanupService.RemovedOrphanedAttachmentsAsync();
             }
 
             var serverQuestionnairesPermittedToSwitchToWebMode = await this.synchronizationService.GetServerQuestionnairesPermittedToSwitchToWebModeAsync(this.Context.CancellationToken);

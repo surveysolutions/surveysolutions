@@ -18,7 +18,8 @@ namespace WB.UI.Supervisor.Services.Implementation
             IDeviceSettings deviceSettings,
             IArchivePatcherService archivePatcherService,
             ILogger logger,
-            IViewModelNavigationService navigationService
+            IViewModelNavigationService navigationService,
+            IPathUtils pathUtils
             )
             : base(
                 fileSystemAccessor,
@@ -27,7 +28,8 @@ namespace WB.UI.Supervisor.Services.Implementation
                 deviceSettings,
                 archivePatcherService,
                 logger,
-                navigationService)
+                navigationService,
+                pathUtils)
         {
         }
 
