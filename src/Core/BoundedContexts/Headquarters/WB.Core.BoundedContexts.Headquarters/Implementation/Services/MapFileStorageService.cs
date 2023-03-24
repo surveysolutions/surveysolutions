@@ -682,6 +682,41 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             return this.mapPlainStorageAccessor.GetById(id);
         }
 
+        public ComboboxViewItem[] GetUserShapefiles(string filter)
+        {
+            return mapPlainStorageAccessor.Query(query =>
+            {
+                if (authorizedUser.IsSupervisor)
+                {
+                    var supervisorId = authorizedUser.Id;
+                    var userNames = this.userStorage.Users
+                        .Where(x => (supervisorId == x.WorkspaceProfile.SupervisorId || supervisorId == x.Id) && x.IsArchived == false)
+                        .Select(x => x.UserName)
+                        .ToArray();
+
+                    query = query.Where(x => x.Users.Any(u => userNames.Contains(u.UserName)));
+                }
+
+                if (authorizedUser.IsInterviewer)
+                {
+                    var userName = authorizedUser.UserName;
+                    query = query.Where(x => x.Users.Any(u => u.UserName == userName));
+                }
+
+                if (!string.IsNullOrWhiteSpace(filter))
+                {
+                    query = query.Where(x => x.FileName.Contains(filter));
+                }
+
+                return query
+                    .Where(x => x.GeoJson != null)
+                    .Select(x => new { x.Id, x.FileName })
+                    .OrderBy(x => x.FileName)
+                    .Select(x => new ComboboxViewItem(x.FileName, x.Id, null));
+
+            }).ToArray();
+        }
+
         public async Task<byte[]> GetMapContentAsync(string mapName)
         {
             if (externalFileStorage.IsEnabled())

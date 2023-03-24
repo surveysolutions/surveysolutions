@@ -1176,6 +1176,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string Filters_None {
+            get {
+                return ResourceManager.GetString("Filters_None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shapefiles.
+        /// </summary>
+        public static string Filters_Shapefiles {
+            get {
+                return ResourceManager.GetString("Filters_Shapefiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filters.
         /// </summary>
         public static string FilterTitle {
