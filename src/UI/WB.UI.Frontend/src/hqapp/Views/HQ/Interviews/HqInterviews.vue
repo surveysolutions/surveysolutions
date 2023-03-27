@@ -1108,7 +1108,9 @@ export default {
             )
 
             var command = {
-                type: self.config.isSupervisor ? 'AssignInterviewerCommand' : 'AssignResponsibleCommand',
+                type: self.config.isSupervisor && self.newResponsibleId.iconClass === 'interviewer'
+                    ? 'AssignInterviewerCommand' 
+                    : 'AssignResponsibleCommand',
                 commands: commands,
             }
 
