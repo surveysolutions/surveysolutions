@@ -35,10 +35,12 @@
             <FilterBlock :title="$t('Pages.Filters_Assignment')">
                 <div class="input-group">
                     <input
-                        class="form-control with-clear-btn"
+                        class="form-control with-clear-btn number"
                         :placeholder="$t('Common.AllAssignments')"
-                        type="text"
-                        v-model="this.assignmentId"/>
+                        type="number"
+                        v-model.number="assignmentId"
+                        v-validate="{ 'numeric':true }"
+                    />
                     <div class="input-group-btn"
                         @click="clearAssignmentFilter">
                         <div class="btn btn-default">
@@ -955,12 +957,16 @@ export default {
                 if (stillLoading == true) this.isLoading = true
             }, 5000)
 
-            const response = await this.api.GetMarkers(request)
-
-            this.setMapData(response.data, extendBounds)
-
-            stillLoading = false
-            this.isLoading = false
+            try
+            {
+                const response = await this.api.GetMarkers(request)
+                this.setMapData(response.data, extendBounds)
+            }
+            finally
+            {
+                stillLoading = false
+                this.isLoading = false
+            }
         },
 
         setMapData(data, extendBounds) {
