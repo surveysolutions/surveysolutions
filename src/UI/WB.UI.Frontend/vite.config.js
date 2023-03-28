@@ -235,7 +235,12 @@ export default defineConfig({
 			  return `${extType}/[name]-[hash][extname]`;
 		  },
 		  chunkFileNames: 'js/[name]-[hash].js',
-          entryFileNames: 'js/[name]-[hash].js'
+          entryFileNames: 'js/[name]-[hash].js',
+		  manualChunks: (id) => {
+			if (id.includes('node_modules')) {
+				return 'vendor';
+		    }
+		  },
       },
     },
   },
