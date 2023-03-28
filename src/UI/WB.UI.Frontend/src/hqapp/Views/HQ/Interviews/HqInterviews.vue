@@ -1694,6 +1694,7 @@ export default {
                         cache: false,
                         showArchived: true,
                         showLocked: true,
+                        onlyEqual: true,
                     },
                     this.ajaxParams
                 )
@@ -1704,7 +1705,7 @@ export default {
                         onDone(
                             responsibleQueryName,
                             response.data.options.length > 0 && response.data.options[0].value === responsibleQueryName
-                                ? response.data.options[0].key
+                                ? response.data.options[0]
                                 : undefined)
                     })
             }
@@ -1741,9 +1742,9 @@ export default {
                 self.interviewMode = self.interviewModes.find(o => o.key == query.mode)
             }
 
-            self.loadResponsibleIdByName((responsibleQueryName, responsibleId) => {
+            self.loadResponsibleIdByName((responsibleQueryName, responsible) => {
                 if (responsibleId != null)
-                    self.responsibleId = {key: responsibleId, value: responsibleQueryName}
+                    self.responsibleId = responsible
                 else
                     self.responsibleId = null
 
