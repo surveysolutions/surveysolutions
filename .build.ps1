@@ -226,9 +226,9 @@ function Invoke-Android($CapiProject, $apk, $withMaps, $appCenterKey) {
 task frontend {
 	"Starting frontend task" | Out-Host
     $nodever = (node --version).replace("v", "").split(".")[0]
-    if ($nodever -ge 17) {
-        $env:NODE_OPTIONS="--max-old-space-size=12288 --openssl-legacy-provider"
-    }
+    
+	$env:NODE_OPTIONS="--max-old-space-size=16384 --openssl-legacy-provider"
+    
     exec { 
         Set-Location ./src/UI/WB.UI.Frontend
         npm ci
