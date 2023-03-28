@@ -35,8 +35,8 @@ jobs:
           if [ "${{ github.ref_name }}" == "release" ] ; then
             environment="release"
           fi
-          echo "{build_number}=${build_number}" >> $GITHUB_OUTPUT
-          echo "{environment}=${environment}" >> $GITHUB_OUTPUT
+          echo "::set-output name=build_number::${build_number}"
+          echo "::set-output name=environment::${environment}"
 
   tests-unit-web:
     name: Unit and web tests
