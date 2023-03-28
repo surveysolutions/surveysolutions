@@ -212,8 +212,10 @@ export default defineConfig({
 	})
   ],
   build: {
+	sourcemap: false,
 	//minify: false,
     rollupOptions: {
+		cache: false,
 		plugins: [
 			inject({
 				$: 'jquery',
