@@ -925,11 +925,21 @@ export default {
             }
 
             if(this.responsibleId) {
-                and.push({
-                    or: [
-                        { responsibleName: {eq: this.responsibleId.value }},
-                        { supervisorName: {eq: this.responsibleId.value }},
-                    ]})
+                if (this.config.isSupervisor && this.responsibleId.iconClass === 'supervisor') {
+                    and.push({
+                        or: [
+                            { responsibleName: {eq: this.responsibleId.value }},
+                        ]}
+                    )
+                }
+                else {
+                    and.push({
+                        or: [
+                            { responsibleName: {eq: this.responsibleId.value }},
+                            { supervisorName: {eq: this.responsibleId.value }},
+                        ]}
+                    )
+                }
             }
 
             if(this.unactiveDateStart) {
