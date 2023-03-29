@@ -229,6 +229,10 @@ task frontend {
     
 	$env:NODE_OPTIONS="--max-old-space-size=16384 --openssl-legacy-provider"
     
+	exec {
+		node -e 'console.log(v8.getHeapStatistics().heap_size_limit/(1024*1024))'
+	}	
+	
     exec { 
         Set-Location ./src/UI/WB.UI.Frontend
         npm ci
