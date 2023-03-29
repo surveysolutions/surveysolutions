@@ -1,0 +1,86 @@
+name: Build All
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_number:
+        description: 'Build Number'
+        default: 'auto'
+        required: true
+        type: string
+
+env:
+  REGISTRY: ghcr.io
+  NODE_VERSION: 18
+  DOTNET_VERSION: '7.0.x'
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+
+    outputs:
+      build_number: ${{ steps.vars.outputs.build_number }}
+      environment: ${{ steps.vars.outputs.environment }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Define build number and version strings
+        id: vars
+        run: |
+          build_number="${{ github.event.inputs.build_number }}"
+          if [[ "${build_number}" == "auto" ]]; then
+            build_number=${{ github.run_number }}
+          fi
+          environment="development"
+          if [ "${{ github.ref_name }}" == "release" ] ; then
+            environment="release"
+          fi
+          echo "::set-output name=build_number::${build_number}"
+          echo "::set-output name=environment::${environment}"
+
+  docker:
+    needs: [prepare, mobile]
+    runs-on: ubuntu-latest
+    environment: ${{ needs.prepare.outputs.environment }}
+    permissions:
+      contents: read
+      packages: write
+
+    strategy:
+      matrix:
+        task: [DockerHq, DockerDesigner, DockerWebTester]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Log in to the GitHub Container Registry
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Login to DockerHub
+        if: ${{ needs.prepare.outputs.environment == 'release' }}
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Download mobile artifacts
+        if: ${{ matrix.task == 'DockerHq' }}
+        id: download
+        uses: actions/download-artifact@v2
+        with:
+          name: Mobile Apps
+          path: artifacts
+
+      - name: Build and push
+        shell: pwsh
+        run: |
+          ./.build.ps1 ${{ matrix.task }} `
+            -BuildNumber ${{ needs.prepare.outputs.build_number }} `
+            -dockerRegistry ${{ env.REGISTRY }}/${{ github.repository }} `
+            -apkFolder "artifacts" `
+            -nodeVersion "${{ env.NODE_VERSION }}"
