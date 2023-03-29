@@ -48,7 +48,7 @@ jobs:
 
     strategy:
       matrix:
-        task: [DockerHq, DockerDesigner, DockerWebTester]
+        task: [DockerDesigner, DockerWebTester]
 
     steps:
       - name: Checkout repository
