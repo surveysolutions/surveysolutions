@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Main.Core.Entities.SubEntities;
@@ -128,8 +129,11 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
         
         [HttpPost]
-        public MapDashboardResult Markers([FromBody] MapDashboardRequest input)
+        public ActionResult<MapDashboardResult> Markers([FromBody] MapDashboardRequest input)
         {
+            if (input == null || !ModelState.IsValid)
+                return StatusCode((int)HttpStatusCode.NotAcceptable);
+            
             IncreaseBound(input, 0.2);
             
             var bounds = GeoBounds.Closed;
