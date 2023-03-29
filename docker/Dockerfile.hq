@@ -25,7 +25,7 @@ COPY [ "src/Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources", \
 COPY [ "src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources", \
        "/src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/" ]
 
-RUN npm run build -- -- --package
+RUN NODE_OPTIONS="--max-old-space-size=3072" npm run build -- -- --package
 
 # Building export
 FROM --platform=amd64 mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION} as export_builder
