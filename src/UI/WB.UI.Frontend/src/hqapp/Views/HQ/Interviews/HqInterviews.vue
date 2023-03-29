@@ -1743,7 +1743,7 @@ export default {
             }
 
             self.loadResponsibleIdByName((responsibleQueryName, responsible) => {
-                if (responsibleId != null)
+                if (responsible != null)
                     self.responsibleId = responsible
                 else
                     self.responsibleId = null
