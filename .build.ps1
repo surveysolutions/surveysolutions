@@ -225,9 +225,11 @@ function Invoke-Android($CapiProject, $apk, $withMaps, $appCenterKey) {
 #endregion
 task frontend {
 	"Starting frontend task" | Out-Host
+	Write-Build 10 "Starting frontend task"
+	
     $nodever = (node --version).replace("v", "").split(".")[0]
     
-	$env:NODE_OPTIONS="--max-old-space-size=3072 --openssl-legacy-provider"	
+	$env:NODE_OPTIONS="--max-old-space-size=6144 --openssl-legacy-provider"	
 	
 	try {
         Write-Build 10 "Calculating memory"
