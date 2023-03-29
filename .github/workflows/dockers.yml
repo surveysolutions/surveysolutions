@@ -39,7 +39,7 @@ jobs:
           echo "::set-output name=environment::${environment}"
 
   docker:
-    needs: [prepare, mobile]
+    needs: [prepare]
     runs-on: ubuntu-latest
     environment: ${{ needs.prepare.outputs.environment }}
     permissions:
