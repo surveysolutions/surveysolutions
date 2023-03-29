@@ -132,7 +132,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         public ActionResult<MapDashboardResult> Markers([FromBody] MapDashboardRequest input)
         {
             if (input == null || !ModelState.IsValid)
-                return StatusCode((int)HttpStatusCode.Conflict);
+                return StatusCode((int)HttpStatusCode.NotAcceptable);
             
             IncreaseBound(input, 0.2);
             
