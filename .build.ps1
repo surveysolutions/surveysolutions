@@ -227,7 +227,14 @@ task frontend {
 	"Starting frontend task" | Out-Host
     $nodever = (node --version).replace("v", "").split(".")[0]
     
-	$env:NODE_OPTIONS="--max-old-space-size=16384 --openssl-legacy-provider"
+	$env:NODE_OPTIONS="--max-old-space-size=16384 --openssl-legacy-provider"	
+	
+	try {
+        Write-Build 10 "Calculating memory"
+		$memoryUsed = node -e 'console.log(v8.getHeapStatistics().heap_size_limit/(1024*1024))'		
+		Write-Build 10 "Memory: $memoryUsed"
+    } 
+	catch {}
     
 	exec {
 		node -e 'console.log(v8.getHeapStatistics().heap_size_limit/(1024*1024))'
