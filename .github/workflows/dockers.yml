@@ -61,26 +61,9 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Login to DockerHub
-        if: ${{ needs.prepare.outputs.environment == 'release' }}
-        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-      - name: Download mobile artifacts
-        if: ${{ matrix.task == 'DockerHq' }}
-        id: download
-        uses: actions/download-artifact@v2
-        with:
-          name: Mobile Apps
-          path: artifacts
-
       - name: Build and push
         shell: pwsh
         run: |
           ./.build.ps1 ${{ matrix.task }} `
             -BuildNumber ${{ needs.prepare.outputs.build_number }} `
-            -dockerRegistry ${{ env.REGISTRY }}/${{ github.repository }} `
-            -apkFolder "artifacts" `
             -nodeVersion "${{ env.NODE_VERSION }}"
