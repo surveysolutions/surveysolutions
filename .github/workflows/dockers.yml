@@ -66,4 +66,5 @@ jobs:
         run: |
           ./.build.ps1 ${{ matrix.task }} `
             -BuildNumber ${{ needs.prepare.outputs.build_number }} `
+            -dockerRegistry ${{ env.REGISTRY }}/${{ github.repository }} `
             -nodeVersion "${{ env.NODE_VERSION }}"
