@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
     style="@style/FullWidthWrappingLayout"
+    android:background="@drawable/dialog_rounded"
     android:orientation="vertical">
     <TableLayout
         style="@style/Audio_Dialog_Holder"
-        android:background="@drawable/dialog_rounded"
         android:stretchColumns="0"
         android:shrinkColumns="0"
-        android:layout_gravity="center">
+        android:layout_weight="2"
+        android:gravity ="top">
         <TableRow>
             <LinearLayout
                 style="@style/VerticalFullWidthWrappingLayout">
@@ -45,8 +46,15 @@
                         local:MvxBind="Text Comments"/>
             </com.google.android.material.textfield.TextInputLayout>
         </TableRow>
-        <TableRow>
-            <MvxRecyclerView
+    </TableLayout>
+    <LinearLayout
+        style="@style/FullWidthWrappingLayout"
+        android:gravity ="fill|clip_vertical"
+        android:layout_weight="3"
+        android:paddingLeft="30dp"
+        android:paddingRight="50dp">
+
+        <MvxRecyclerView
                 android:layout_column="0"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/Interview_Assign_To_Interviewer_List_Max_Width"
@@ -54,24 +62,22 @@
                 android:scrollbars="vertical"
                 local:MvxItemTemplate="@layout/interview_select_responsible_item"
                 local:MvxBind="ItemsSource UiItems;" />
-        </TableRow>
-    </TableLayout>
+    </LinearLayout>
     <LinearLayout
             style="@style/FullWidthWrappingLayout"
             android:layout_marginTop="@dimen/Interview_Entity_Title_margin_top"
             android:layout_span="2"
-            android:layout_gravity="bottom"
+            android:gravity ="bottom"
+            android:layout_weight="1"
             android:paddingBottom="10dp"
-            android:paddingTop="28dp"
             android:paddingLeft="30dp"
             android:paddingRight="10dp">
         <Button
                 style="@style/Done_Button"
-                local:MvxBind="Click ReassignCommand; Enabled CanReassign; Text Localization('SelectResponsible_ReassignButtonText');" />
+                local:MvxBind="Click ReassignCommand; Enabled CanReassign; Text Localization('SelectResponsible_ReassignButtonText');HideKeyboardOnClick .;" />
         <Button
                 style="@style/Link_Button"
-                local:MvxBind="Click CancelCommand; Text Localization('Interviewer_RelinkDevice_Cancel');" />
-
+                local:MvxBind="Click CancelCommand; Text Localization('Interviewer_RelinkDevice_Cancel');HideKeyboardOnClick .;" />
     </LinearLayout>
-</FrameLayout>
+</LinearLayout>
 
