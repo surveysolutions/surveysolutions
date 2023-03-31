@@ -1030,7 +1030,7 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
     <value>A logical expression that validates an answer to the current question. Might include values of other questions.</value>
   </data>
   <data name="HelpValidationMessage" xml:space="preserve">
-    <value>Error or warning message is shown when validation condition evaluates to "False" or error occurres during expression evaluation.</value>
+    <value>Error or warning message is shown when validation condition evaluates to "False" or error occurs during expression evaluation.</value>
   </data>
   <data name="HelpVariableDescription" xml:space="preserve">
     <value>Text that will be shown next to a variable for testing purposes</value>
