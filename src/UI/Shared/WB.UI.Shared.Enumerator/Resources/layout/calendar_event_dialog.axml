@@ -78,13 +78,13 @@
               android:layout_height="wrap_content"
               android:layout_gravity="right"
               style="@style/Widget.App.NegativeButton"
-              local:MvxBind="Text Localization('Cancel'); Click CloseCommand; HideKeyboardOnClick .;" />
+              local:MvxBind="Text Localization('Cancel'); HideKeyboardOnClick .; Click CloseCommand;" />
             <Button
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_gravity="right"
               style="@style/Widget.App.Button"
-              local:MvxBind="Text Localization('Ok'); Click OkCommand;HideKeyboardOnClick .;" />
+              local:MvxBind="Text Localization('Ok'); HideKeyboardOnClick .; Click OkCommand;" />
       </LinearLayout>
   </LinearLayout>
 </ScrollView>
