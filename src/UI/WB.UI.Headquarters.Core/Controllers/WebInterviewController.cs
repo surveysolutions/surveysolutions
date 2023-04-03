@@ -616,7 +616,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (!string.IsNullOrWhiteSpace(assignment?.Password))
             {
-                return IsPasswordNeededForInterview(interview.Id.FormatGuid());
+                return !IsPasswordNeededForInterview(interview.Id.FormatGuid());
             }
 
             return true;
