@@ -25,7 +25,7 @@
                 style="@style/Interview_Question_RemoveAnswer"
                 android:layout_marginRight="@dimen/Interview_Audio_Dialog_Remove_Button_Margin_Left"
                 android:duplicateParentState="true"
-                local:MvxBind="Click CancelCommand;"
+                local:MvxBind="HideKeyboardOnClick .;Click CancelCommand;"
                 local:srcCompat="@drawable/delete_button"/>
         </TableRow>
         <TableRow>
@@ -74,10 +74,10 @@
             android:paddingRight="10dp">
         <Button
                 style="@style/Done_Button"
-                local:MvxBind="Click ReassignCommand; Enabled CanReassign; Text Localization('SelectResponsible_ReassignButtonText');HideKeyboardOnClick .;" />
+                local:MvxBind="HideKeyboardOnClick .;Click ReassignCommand; Enabled CanReassign; Text Localization('SelectResponsible_ReassignButtonText');" />
         <Button
                 style="@style/Link_Button"
-                local:MvxBind="Click CancelCommand; Text Localization('Interviewer_RelinkDevice_Cancel');HideKeyboardOnClick .;" />
+                local:MvxBind="HideKeyboardOnClick .;Click CancelCommand; Text Localization('Interviewer_RelinkDevice_Cancel');" />
     </LinearLayout>
 </LinearLayout>
 
