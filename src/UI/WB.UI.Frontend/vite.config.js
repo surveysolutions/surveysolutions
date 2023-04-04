@@ -214,6 +214,8 @@ export default defineConfig({
   build: {
 	//minify: false,
     rollupOptions: {
+		maxParallelFileOps: 2,
+		cache: false,
 		plugins: [
 			inject({
 				$: 'jquery',
@@ -232,7 +234,12 @@ export default defineConfig({
 			  return `${extType}/[name]-[hash][extname]`;
 		  },
 		  chunkFileNames: 'js/[name]-[hash].js',
-          entryFileNames: 'js/[name]-[hash].js'
+          entryFileNames: 'js/[name]-[hash].js',
+		  manualChunks: (id) => {
+			if (id.includes('node_modules')) {
+				return 'vendor';
+		    }
+		  },
       },
     },
   },

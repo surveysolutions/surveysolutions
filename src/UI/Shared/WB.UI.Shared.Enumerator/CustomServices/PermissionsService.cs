@@ -39,7 +39,20 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             }
             else
             {
-                await asyncDispatcher.ExecuteOnMainThreadAsync(RequestPermission<T>, maskExceptions: false);
+                var completion = new TaskCompletionSource<bool>();
+                await asyncDispatcher.ExecuteOnMainThreadAsync(async () =>
+                {
+                    try
+                    {
+                        await RequestPermission<T>();
+                        completion.SetResult(true);
+                    }
+                    catch (Exception e)
+                    {
+                        completion.SetException(e);
+                    }
+                }, maskExceptions: false);
+                await completion.Task;
             }
         }
 

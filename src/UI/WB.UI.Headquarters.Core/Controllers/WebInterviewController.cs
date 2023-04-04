@@ -90,6 +90,12 @@ namespace WB.UI.Headquarters.Controllers
             var passedInterviews = HttpContext.Session.Get<List<string>>(CaptchaCompletedKey);
             return !(passedInterviews?.Contains(interviewId)).GetValueOrDefault();
         }
+        
+        private bool IsPasswordNeededForInterview(string interviewId)
+        {
+            var passedInterviews = HttpContext.Session.Get<List<string>>(PasswordVerifiedKey);
+            return !(passedInterviews?.Contains(interviewId)).GetValueOrDefault();
+        }
 
         private void RememberCapchaFilled(string interviewId)
         {
@@ -192,8 +198,10 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
-            if (webInterviewConfig.UseCaptcha && !this.IsAuthorizedUser(interview.CurrentResponsibleId) &&
-                this.CapchaVerificationNeededForInterview(id))
+            if ((webInterviewConfig.UseCaptcha 
+                && !this.IsAuthorizedUser(interview.CurrentResponsibleId) 
+                && this.CapchaVerificationNeededForInterview(id))
+                || !IsPasswordProtectedInterviewPermitted(interview))
             {
                 var returnUrl = GenerateUrl(@"Section", id, sectionId);
                 return this.RedirectToAction("Resume", routeValues: new { id, returnUrl });
@@ -574,13 +582,15 @@ namespace WB.UI.Headquarters.Controllers
             }
             
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
-            if (webInterviewConfig.UseCaptcha && !this.IsAuthorizedUser(interview.CurrentResponsibleId) &&
-                this.CapchaVerificationNeededForInterview(id))
+            if ((webInterviewConfig.UseCaptcha 
+                && !this.IsAuthorizedUser(interview.CurrentResponsibleId) 
+                && this.CapchaVerificationNeededForInterview(id)) 
+                || !IsPasswordProtectedInterviewPermitted(interview))
             {
                 var returnUrl = GenerateUrl(nameof(Cover), id);
                 return this.RedirectToAction("Resume", routeValues: new { id = id, returnUrl = returnUrl });
             }
-
+            
             var questionnaire = questionnaireStorage.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, null);
 
             if (IsNeedShowCoverPage(interview, questionnaire))
@@ -596,6 +606,21 @@ namespace WB.UI.Headquarters.Controllers
             
             var firstSectionUrl = GenerateUrl(nameof(Section), id, questionnaire.GetFirstSectionId().FormatGuid());
             return Redirect(firstSectionUrl);
+        }
+
+
+        private bool IsPasswordProtectedInterviewPermitted(IStatefulInterview interview)
+        {
+            var assignmentId = interview.GetAssignmentId();
+            var assignment = assignmentId.HasValue ? this.assignments.GetAssignment(assignmentId.Value) : null;
+
+            if (!string.IsNullOrWhiteSpace(assignment?.Password))
+            {
+                return !IsPasswordNeededForInterview(interview.Id.FormatGuid());
+            }
+
+            return true;
+
         }
 
         private bool IsNeedShowCoverPage(IStatefulInterview interview, IQuestionnaire questionnaire)
@@ -624,8 +649,10 @@ namespace WB.UI.Headquarters.Controllers
 
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
 
-            if (webInterviewConfig.UseCaptcha && !this.IsAuthorizedUser(interview.CurrentResponsibleId) &&
-                this.CapchaVerificationNeededForInterview(id))
+            if ((webInterviewConfig.UseCaptcha 
+                 && !this.IsAuthorizedUser(interview.CurrentResponsibleId) 
+                 && this.CapchaVerificationNeededForInterview(id)) 
+                || !IsPasswordProtectedInterviewPermitted(interview))
             {
                 var returnUrl = GenerateUrl(@"Finish", id);
                 return this.RedirectToAction("Resume", routeValues: new { id = id, returnUrl = returnUrl });
@@ -768,6 +795,8 @@ namespace WB.UI.Headquarters.Controllers
                         model.IsPasswordInvalid = true;
                         return this.View("Resume", model);
                     }
+                    
+                    RememberPasswordVerified(interview.Id.FormatGuid());
                 }
             }
 
