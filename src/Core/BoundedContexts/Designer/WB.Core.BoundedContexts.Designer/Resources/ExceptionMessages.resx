@@ -333,6 +333,9 @@
   <data name="RequiredHeaderWasNotFound" xml:space="preserve">
     <value>Header {0} was not found in excel file</value>
   </data>
+  <data name="HeaderWasNotFound" xml:space="preserve">
+    <value>Header was not found in file</value>
+  </data>
     <data name="NoParentCascadingOptions" xml:space="preserve">
     <value>No categories for parent cascading question '{0}' found</value>
   </data>
