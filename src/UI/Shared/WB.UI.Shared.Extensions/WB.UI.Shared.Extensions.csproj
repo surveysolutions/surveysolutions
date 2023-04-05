@@ -49,7 +49,6 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <AndroidAsset Include="Assets\worldmap%28default%29.tpk" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
   </ItemGroup>
