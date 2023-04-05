@@ -312,6 +312,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Header was not found in file.
+        /// </summary>
+        public static string HeaderWasNotFound {
+            get {
+                return ResourceManager.GetString("HeaderWasNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Trying to import template of deleted questionnaire.
         /// </summary>
         public static string ImportOfDeletedQuestionnaire {

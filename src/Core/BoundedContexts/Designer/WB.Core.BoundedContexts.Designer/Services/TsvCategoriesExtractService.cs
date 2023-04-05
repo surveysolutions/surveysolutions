@@ -35,13 +35,6 @@ namespace WB.Core.BoundedContexts.Designer.Services
         {
             var categories = new List<CategoriesRow>();
             var errors = new List<ImportValidationError>();
-            var headers = new CategoriesHeaderMap
-            {
-                IdIndex = "0",
-                TextIndex = "1",
-                ParentIdIndex = "2",
-                AttachmentNameIndex = "3"
-            };
 
             var csvConfiguration = CreateCsvConfiguration();
             csvConfiguration.HasHeaderRecord = false;
@@ -49,14 +42,22 @@ namespace WB.Core.BoundedContexts.Designer.Services
             using (var csvReader = new CsvParser(new StreamReader(file), csvConfiguration))
             {
                 var rawRow = csvReader.Read()?.ToList();
-                var headersFromFile = TryGetHeadersFromFile(rawRow);
-                if (headersFromFile != null)
+                var headers = TryGetHeadersFromFile(rawRow);
+                if (headers == null)
                 {
-                    headers = headersFromFile;
-
-                    // if file with headers move reader to next line
-                    rawRow = csvReader.Read()?.ToList();
+                    throw new InvalidFileException(ExceptionMessages.ProvidedFileHasErrors)
+                    {
+                        FoundErrors = new List<ImportValidationError>(new[]
+                        {
+                            new ImportValidationError
+                            {
+                                Message = ExceptionMessages.HeaderWasNotFound,
+                            }
+                        })
+                    };
                 }
+                
+                rawRow = csvReader.Read()?.ToList();
 
                 while (true)
                 {
@@ -81,12 +82,13 @@ namespace WB.Core.BoundedContexts.Designer.Services
 
                     rawRow = csvReader.Read()?.ToList();
                 }
+
+                if (errors.Any())
+                    throw new InvalidFileException(ExceptionMessages.ProvidedFileHasErrors) {FoundErrors = errors};
+
+                this.verifier.VerifyAll(categories, headers);
             }
 
-            if (errors.Any())
-                throw new InvalidFileException(ExceptionMessages.ProvidedFileHasErrors) {FoundErrors = errors};
-
-            this.verifier.VerifyAll(categories, headers);
 
             return categories;
         }
