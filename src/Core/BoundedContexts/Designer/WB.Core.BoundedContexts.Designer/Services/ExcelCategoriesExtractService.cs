@@ -90,7 +90,19 @@ namespace WB.Core.BoundedContexts.Designer.Services
             
             if (string.IsNullOrEmpty(headers.IdIndex) || string.IsNullOrEmpty(headers.TextIndex))
             {
-                if (headers.IdIndex == null && headers.TextIndex != null)
+                if (headers.IdIndex == null && headers.TextIndex == null)
+                    throw new InvalidFileException(ExceptionMessages.ProvidedFileHasErrors)
+                    {
+                        FoundErrors = new List<ImportValidationError>(new[]
+                        {
+                            new ImportValidationError
+                            {
+                                Message = ExceptionMessages.HeaderWasNotFound,
+                            }
+                        })
+                    };
+
+                if (headers.IdIndex == null)
                     throw new InvalidFileException(ExceptionMessages.ProvidedFileHasErrors)
                     {
                         FoundErrors = new List<ImportValidationError>(new[]
@@ -102,7 +114,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
                         })
                     };
 
-                if (headers.TextIndex == null && headers.IdIndex != null)
+                if (headers.TextIndex == null)
                     throw new InvalidFileException(ExceptionMessages.ProvidedFileHasErrors)
                     {
                         FoundErrors = new List<ImportValidationError>(new[]
@@ -113,18 +125,6 @@ namespace WB.Core.BoundedContexts.Designer.Services
                             }
                         })
                     };
-                
-                // when both required columns not found, precess as file without headers
-                firstDataRow = 1;
-                
-                // set default headers
-                headers = new CategoriesHeaderMap
-                {
-                    IdIndex = "A",
-                    TextIndex = "B",
-                    ParentIdIndex = "C",
-                    AttachmentNameIndex = "D"
-                };
             }
 
             var lastRowUsed = worksheet.LastRowUsed();

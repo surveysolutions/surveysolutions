@@ -71,9 +71,10 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 
         protected static Stream GenerateStreamFromString(string s)
         {
+            var dataWithHeader = "value\ttitle\tparentvalue\r\n" + s;
             MemoryStream stream = new MemoryStream();
             StreamWriter writer = new StreamWriter(stream);
-            writer.Write(s);
+            writer.Write(dataWithHeader);
             writer.Flush();
             stream.Position = 0;
             return stream;

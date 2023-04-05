@@ -312,6 +312,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Заголовок не был найден в файле.
+        /// </summary>
+        public static string HeaderWasNotFound {
+            get {
+                return ResourceManager.GetString("HeaderWasNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Вы пытаетесь импортировать удаленный опросник..
         /// </summary>
         public static string ImportOfDeletedQuestionnaire {
