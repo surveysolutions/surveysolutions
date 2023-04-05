@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
             {
                 Title = o.Text,
                 Value = Convert.ToInt32(o.Id),
-                ParentValue = Convert.ToInt32(o.ParentId),
+                ParentValue = string.IsNullOrWhiteSpace(o.ParentId) ? null : Convert.ToInt32(o.ParentId),
                 AttachmentName = o.AttachmentName
             }).ToArray());
 
