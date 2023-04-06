@@ -1,4 +1,4 @@
-﻿Vue.component('CategoriesEditor',
+﻿app.component('CategoriesEditor',
     {
         template: '#categories-editor-template',
         data: function() {

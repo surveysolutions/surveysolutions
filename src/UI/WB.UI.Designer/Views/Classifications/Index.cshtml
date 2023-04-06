@@ -6,16 +6,16 @@
 
 @section Styles{
     <!-- classifications:css -->
-    <link rel="stylesheet" href="~/css/classifications.css">
+    <link rel="stylesheet" href="~/css/classifications-fc3ecec259.css">
     <!-- endinject -->
 }
 @section Scripts {
     
     <!-- list:js -->
-    <script src="~/js/list.js"></script>
+    <script src="~/js/list-eae863f0ad.js"></script>
     <!-- endinject -->
     <!-- vue:js -->
-    <script src="~/js/vue.js"></script>
+    <script src="~/js/vue-1c8178be09.js"></script>
     <!-- endinject -->
 
     <script type="text/javascript">
@@ -25,7 +25,7 @@
             Object.defineProperty(Vue.prototype, '$config', { get: function() { return options; } });
         };
 
-        Vue.use(ClassificationsConfig,
+        app.use(ClassificationsConfig,
             {
                 isAdmin: @User.IsAdmin().ToString().ToLower(),
                 userId: '@User.GetId()',
@@ -34,7 +34,7 @@
     </script>
 
     <!-- classifications:js -->
-    <script src="~/js/classifications.js"></script>
+    <script src="~/js/classifications-5883eac1fa.js"></script>
     <!-- endinject -->
 
 }

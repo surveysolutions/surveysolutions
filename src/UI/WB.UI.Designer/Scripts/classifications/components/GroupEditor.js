@@ -1,4 +1,4 @@
-﻿Vue.component('GroupEditor',
+﻿app.component('GroupEditor',
     {
         template: '#group-editor-template',
         data: function() {

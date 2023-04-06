@@ -1,4 +1,4 @@
-﻿Vue.component('ClassificationEditor',
+﻿app.component('ClassificationEditor',
 {
     template: '#classification-editor-template',
     data: function() {
