@@ -1014,6 +1014,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Email for notifications.
+        /// </summary>
+        public static string Tooltip_Table_Email {
+            get {
+                return ResourceManager.GetString("Tooltip_Table_Email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Information that identifies each assignment. These are the answers to questions marked as identifying in Designer..
         /// </summary>
         public static string Tooltip_Table_IdentifyingQuestions {
@@ -1037,6 +1046,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Tooltip_Table_IsAudioRecordingEnabled {
             get {
                 return ResourceManager.GetString("Tooltip_Table_IsAudioRecordingEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password to restrict access.
+        /// </summary>
+        public static string Tooltip_Table_Password {
+            get {
+                return ResourceManager.GetString("Tooltip_Table_Password", resourceCulture);
             }
         }
         
