@@ -235,7 +235,7 @@ namespace WB.Tests.Unit.Designer.Services
 
             // assert
             Assert.That(exception.FoundErrors, Has.One.Items);
-            Assert.That(exception.FoundErrors[0].Message, Contains.Substring($"[column: {expectedColumn}, row: {expectedRow}] Empty text"));
+            Assert.That(exception.FoundErrors[0].Message, Contains.Substring($"[column: {expectedColumn}, row: {expectedRow}] Empty title"));
         }
 
         [TestCase(CategoriesFileType.Excel)]
