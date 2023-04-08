@@ -300,17 +300,50 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         private void SaveAssignments(IList<AssignmentToImport> assignments)
         {
-            this.importAssignmentsRepository.Store(assignments.Select(x =>
-                new Tuple<AssignmentToImport, object>(GetAssignmentWithoutEmptyAnswersAndFillPasswords(x), x.Id)));
+            Dictionary<string, bool> usedPasswords =
+                assignments.Where(x => x.Password != AssignmentConstants.PasswordSpecialValue)
+                    .ToDictionary(import => import.Password, y => false);
+            
+            List<string> currentBatch = new List<string>();
+
+            var itemsToStore = assignments.Select(x =>
+                new Tuple<AssignmentToImport, object>(GetAssignmentWithoutEmptyAnswersAndFillPasswords(x, GetPasswordOrGenerate(usedPasswords, currentBatch, x.Password)), x.Id));
+            
+            this.importAssignmentsRepository.Store(itemsToStore);
+        }
+
+        private string GetPasswordOrGenerate(Dictionary<string, bool> usedPasswords, List<string> currentBatch, string argPassword)
+        {
+            if (argPassword != AssignmentConstants.PasswordSpecialValue)
+            {
+                return argPassword;
+            }
+            
+            while (currentBatch.Count == 0)
+            {
+                currentBatch.AddRange(passwordGenerator.GeneratePasswordBatch(usedPasswords));
+            }
+            
+            var currentPass = currentBatch[0];
+            
+            usedPasswords.Add(currentPass, false);
+            currentBatch.RemoveAt(0);
+
+            return currentPass;
+        }
+
+        private AssignmentToImport GetAssignmentWithoutEmptyAnswersAndFillPasswords(
+            AssignmentToImport assignmentToImport, string newPassword)
+        {
+            assignmentToImport.Answers = assignmentToImport.Answers.Where(x => x.Answer != null).ToList();
+            assignmentToImport.Password = newPassword;
+            return assignmentToImport;
         }
 
         private AssignmentToImport GetAssignmentWithoutEmptyAnswersAndFillPasswords(AssignmentToImport assignmentToImport)
         {
-            assignmentToImport.Answers = assignmentToImport.Answers.Where(x => x.Answer != null).ToList();
-
-            assignmentToImport.Password = passwordGenerator.GetPassword(assignmentToImport.Password);
-
-            return assignmentToImport;
+            return GetAssignmentWithoutEmptyAnswersAndFillPasswords(assignmentToImport, 
+                passwordGenerator.GetPassword(assignmentToImport.Password));
         }
 
         private List<AssignmentToImport> ConcatRosters(List<PreloadingAssignmentRow> assignmentRows,
