@@ -301,7 +301,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         private void SaveAssignments(IList<AssignmentToImport> assignments)
         {
             Dictionary<string, bool> usedPasswords =
-                assignments.Where(x => x.Password != AssignmentConstants.PasswordSpecialValue)
+                assignments.Where(x => x.Password != AssignmentConstants.PasswordSpecialValue && !String.IsNullOrEmpty(x.Password))
                     .ToDictionary(import => import.Password, y => false);
             
             List<string> currentBatch = new List<string>();
