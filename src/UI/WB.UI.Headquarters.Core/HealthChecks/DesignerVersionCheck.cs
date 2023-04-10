@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -35,7 +36,11 @@ namespace WB.UI.Headquarters.HealthChecks
             }
             catch (Exception e)
             {
-                return HealthCheckResult.Degraded(Diagnostics.designer_connectivity_check_Degraded.FormatString(restServiceSettings.Endpoint), e);
+                return HealthCheckResult.Degraded(Diagnostics.designer_connectivity_check_Degraded.FormatString(restServiceSettings.Endpoint), 
+                    data: new Dictionary<string, object>()
+                    {
+                        ["Message"] = e.Message
+                    });
             }
         }
     }
