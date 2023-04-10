@@ -37,10 +37,7 @@ namespace WB.UI.Headquarters.HealthChecks
             catch (Exception e)
             {
                 return HealthCheckResult.Degraded(Diagnostics.designer_connectivity_check_Degraded.FormatString(restServiceSettings.Endpoint), 
-                    data: new Dictionary<string, object>()
-                    {
-                        ["Message"] = e.Message
-                    });
+                    exception: new Exception(e.Message));
             }
         }
     }

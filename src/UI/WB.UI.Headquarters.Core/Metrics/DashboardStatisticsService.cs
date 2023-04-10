@@ -37,7 +37,7 @@ namespace WB.UI.Headquarters.Metrics
                 do
                 {
                     // if there is no requests for State for 5 seconds, then pause metrics collection
-                    if ((DateTime.UtcNow - lastQuery) > TimeSpan.FromSeconds(5))
+                    if ((DateTime.UtcNow - lastQuery) > TimeSpan.FromSeconds(10))
                     {
                         gate.Reset();
                     }
@@ -83,12 +83,12 @@ namespace WB.UI.Headquarters.Metrics
             await CollectMetricsDiff(TimeSpan.FromSeconds(2));
 
             var cpuUsage = await cpuDiff;
-            result.Add(new MetricState("CPU Usage", $"{cpuUsage.ToStr("0.##%")} on " +
+            result.Add(new MetricState("CPU usage", $"{cpuUsage.ToStr("0.##%")} on " +
                     $"{"vCPU".ToQuantity(Environment.ProcessorCount)} " +
                     $"({(cpuUsage / Environment.ProcessorCount).ToStr("0.##%")} of total)", 
                         cpuUsage / Environment.ProcessorCount));
 
-            result.Add(new MetricState("Working Memory usage", Process.GetCurrentProcess().WorkingSet64.Bytes().Humanize("0.0"),
+            result.Add(new MetricState("Working memory usage", Process.GetCurrentProcess().WorkingSet64.Bytes().Humanize("0.0"),
                 Process.GetCurrentProcess().WorkingSet64));
 
             result.Add(new MetricState(
@@ -119,7 +119,7 @@ namespace WB.UI.Headquarters.Metrics
             var readRate = await dataTransferRead;
             var writeRate = await dataTransferWrite;
 
-            result.Add(new MetricState("Database Network usage", string.Format("Read: {0} ({2}), Write: {1} ({3})",
+            result.Add(new MetricState("Database network usage", string.Format("Read: {0} ({2}), Write: {1} ({3})",
                 CommonMetrics.NpgsqlDataCounter.GetSummForLabels(ReadDbdataLabel).Bytes().Humanize("0.0"),
                 CommonMetrics.NpgsqlDataCounter.GetSummForLabels(WriteDbdataLabel).Bytes().Humanize("0.0"),
                 readRate.Bytes().Per(TimeSpan.FromSeconds(1)).Humanize("0.0"),
@@ -128,7 +128,7 @@ namespace WB.UI.Headquarters.Metrics
 
             result.Add(new MetricState("Requests", "requests".ToQuantity(await requests, "N2") + "/s", await requests));
 
-            result.Add(new MetricState("Thread Pool: ", $"{ThreadPool.PendingWorkItemCount} Pending Work Items", ThreadPool.PendingWorkItemCount));
+            result.Add(new MetricState("Thread pool", $"{ThreadPool.PendingWorkItemCount} pending work items", ThreadPool.PendingWorkItemCount));
 
             await cacheItemsDiff;
 

@@ -56,10 +56,7 @@ namespace WB.UI.Headquarters.HealthChecks
             {
                 return HealthCheckResult.Degraded(
                     Diagnostics.export_service_connectivity_check_Degraded.FormatString(uri), 
-                    data: new Dictionary<string, object>()
-                    {
-                        ["Message"] = e.Message
-                    });
+                    exception: new Exception(e.Message));
             }
         }
     }
