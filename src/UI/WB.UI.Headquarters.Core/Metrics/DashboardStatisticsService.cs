@@ -37,7 +37,7 @@ namespace WB.UI.Headquarters.Metrics
                 do
                 {
                     // if there is no requests for State for 5 seconds, then pause metrics collection
-                    if ((DateTime.UtcNow - lastQuery) > TimeSpan.FromSeconds(5))
+                    if ((DateTime.UtcNow - lastQuery) > TimeSpan.FromSeconds(10))
                     {
                         gate.Reset();
                     }
@@ -83,28 +83,28 @@ namespace WB.UI.Headquarters.Metrics
             await CollectMetricsDiff(TimeSpan.FromSeconds(2));
 
             var cpuUsage = await cpuDiff;
-            result.Add(new MetricState("CPU Usage", $"{cpuUsage.ToStr("0.##%")} on " +
+            result.Add(new MetricState("CPU usage", $"{cpuUsage.ToStr("0.##%")} on " +
                     $"{"vCPU".ToQuantity(Environment.ProcessorCount)} " +
                     $"({(cpuUsage / Environment.ProcessorCount).ToStr("0.##%")} of total)", 
                         cpuUsage / Environment.ProcessorCount));
 
-            result.Add(new MetricState("Working Memory usage", Process.GetCurrentProcess().WorkingSet64.Bytes().Humanize("0.000"),
+            result.Add(new MetricState("Working memory usage", Process.GetCurrentProcess().WorkingSet64.Bytes().Humanize("0.0"),
                 Process.GetCurrentProcess().WorkingSet64));
 
             result.Add(new MetricState(
-                "Database size", DatabaseStatsCollector.DatabaseSize.Value.Bytes().Humanize("0.000"),
+                "Database size", DatabaseStatsCollector.DatabaseSize.Value.Bytes().Humanize("0.0"),
                 DatabaseStatsCollector.DatabaseSize.Value
             ));
 
             // web interview
             var connections = CommonMetrics.WebInterviewConnection.GetDiffForLabels(OpenConnectionsLabel, ClosedConnectionsLabel);
-            result.Add(new MetricState("Web interview connections", "connection".ToQuantity(connections, "N0"), connections));
+            result.Add(new MetricState("Web interview connections", $"{connections}", connections));
 
             // stateful interviews
             var statefulInterviews = (CoreMetrics.StatefullInterviewsCached as Counter).GetDiffForLabels(CacheAddedLabel, CacheRemovedLabel);
 
             result.Add(new MetricState("Stateful interviews in cache", "interview".ToQuantity(statefulInterviews, "N0")
-                    + $" (cached {await interviewsCached:N2} / evicted {await interviewsEvicted:N2} per second)", statefulInterviews));
+                    + $" (cached {await interviewsCached:N2} interviews/s; evicted {await interviewsEvicted:N2} interviews/s)", statefulInterviews));
 
             // exceptions
             result.Add(new MetricState("Exceptions count", "exception".ToQuantity(CommonMetrics.ExceptionsOccur.Value), CommonMetrics.ExceptionsOccur.Value));
@@ -119,44 +119,44 @@ namespace WB.UI.Headquarters.Metrics
             var readRate = await dataTransferRead;
             var writeRate = await dataTransferWrite;
 
-            result.Add(new MetricState("Database Network usage", string.Format("Read: {0} ({2}), Write: {1} ({3})",
-                CommonMetrics.NpgsqlDataCounter.GetSummForLabels(ReadDbdataLabel).Bytes().Humanize("0.00"),
-                CommonMetrics.NpgsqlDataCounter.GetSummForLabels(WriteDbdataLabel).Bytes().Humanize("0.00"),
-                readRate.Bytes().Per(TimeSpan.FromSeconds(1)).Humanize("0.00"),
-                writeRate.Bytes().Per(TimeSpan.FromSeconds(1)).Humanize("0.00")
+            result.Add(new MetricState("Database network usage", string.Format("Read: {0} ({2}), Write: {1} ({3})",
+                CommonMetrics.NpgsqlDataCounter.GetSummForLabels(ReadDbdataLabel).Bytes().Humanize("0.0"),
+                CommonMetrics.NpgsqlDataCounter.GetSummForLabels(WriteDbdataLabel).Bytes().Humanize("0.0"),
+                readRate.Bytes().Per(TimeSpan.FromSeconds(1)).Humanize("0.0"),
+                writeRate.Bytes().Per(TimeSpan.FromSeconds(1)).Humanize("0.0")
             ), readRate + writeRate));
 
             result.Add(new MetricState("Requests", "requests".ToQuantity(await requests, "N2") + "/s", await requests));
 
-            result.Add(new MetricState("Thread Pool", "Queue: " + ThreadPool.PendingWorkItemCount, ThreadPool.PendingWorkItemCount));
+            result.Add(new MetricState("Thread pool", $"{ThreadPool.PendingWorkItemCount} pending work items", ThreadPool.PendingWorkItemCount));
 
             await cacheItemsDiff;
 
-            result.Add(new MetricState("Cache items", $"Total: {memoryCache.Count} ({cacheItemsDiff.Result:N2}/s)", memoryCache.Count));
+            result.Add(new MetricState("Cache", $"{memoryCache.Count} items ({cacheItemsDiff.Result:N2} items/s)", memoryCache.Count));
             
             foreach (var workspace in workspaces.AllEnabledWorkspaces())
             {
-                result.Add(new MetricState("Workspace - " + workspace.Name, workspace.DisplayName, 0));
+                result.Add(new MetricState($"Workspace [{workspace.Name}]", workspace.DisplayName, 0));
 
                 var eventsCount = DatabaseStatsCollector.DatabaseTableRowsCount.Labels("events", workspace.Name).Value;
                 var eventsSize = DatabaseStatsCollector.DatabaseTableSize.Labels("events", workspace.Name).Value.Bytes()
-                    .Humanize("0.00");
+                    .Humanize("0.0");
                 var interviews = DatabaseStatsCollector.DatabaseTableRowsCount.Labels("interviewsummaries", workspace.Name).Value;
 
                 var completedEmailCount = DatabaseStatsCollector.DatabaseTableRowsCount.Labels("completedemailrecords", workspace.Name).Value;
                 
                 result.Add(new MetricState(
-                    $"[{workspace.DisplayName}] Events",
+                    $"- Events",
                     $"{eventsSize} of {"event".ToQuantity(eventsCount, "N0")} for {"interview".ToQuantity(interviews, "N0")}",
                     eventsCount));
 
                 result.Add(new MetricState(
-                    $"[{workspace.DisplayName}] Workspace data size", DatabaseStatsCollector.WorkspaceSize.Labels(workspace.Name).Value.Bytes().Humanize("0.000"),
+                    $"- Workspace data size", DatabaseStatsCollector.WorkspaceSize.Labels(workspace.Name).Value.Bytes().Humanize("0.0"),
                     DatabaseStatsCollector.WorkspaceSize.Value
                 ));
 
                 result.Add(new MetricState(
-                    $"[{workspace.DisplayName}] Completed emails query size", $"Query size: {completedEmailCount}",
+                    $"- Completed emails queue size", $"{completedEmailCount}",
                     completedEmailCount));
             }
             
