@@ -18,6 +18,10 @@
     <script src="~/js/vue-1c8178be09.js"></script>
     <!-- endinject -->
 
+    <!-- classifications:js -->
+    <script src="~/js/classifications-f88a159d24.js"></script>
+    <!-- endinject -->
+
     <script type="text/javascript">
         var ClassificationsConfig = {};
         ClassificationsConfig.install = function(Vue, options) {
@@ -31,11 +35,8 @@
                 userId: '@User.GetId()',
                 optionsParseRegex: new RegExp(/^(.+?)[\…\.\s]+([-+]?\d+)\s*$/)
             });
-    </script>
-
-    <!-- classifications:js -->
-    <script src="~/js/classifications-5883eac1fa.js"></script>
-    <!-- endinject -->
+            
+    </script>    
 
 }
 <div class="slider" v-if="isLoading"><div class="line"></div><div class="subline inc"></div><div class="subline dec"></div></div>

@@ -1,6 +1,10 @@
-﻿$(function() {
+﻿import CategoriesEditor from "./components/CategoriesEditor";
+import ClassificationEditor from "./components/ClassificationEditor";
+import GroupEditor from "./components/GroupEditor";
 
-    app = new Vue.createApp({
+$(function() {    
+
+    const app = new Vue.createApp({
         store: store,
         el: '#designer-list',
         data: {
@@ -66,4 +70,9 @@
         });
 
     app.use(VeeValidate);    
+
+    app.component('CategoriesEditor', CategoriesEditor);
+    app.component('ClassificationEditor', ClassificationEditor);
+    app.component('GroupEditor', GroupEditor);
+     
 });

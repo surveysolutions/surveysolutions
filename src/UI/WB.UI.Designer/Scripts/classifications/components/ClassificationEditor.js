@@ -1,5 +1,5 @@
-﻿app.component('ClassificationEditor',
-{
+﻿export default defineComponent({
+
     template: '#classification-editor-template',
     data: function() {
         return {
