@@ -142,6 +142,7 @@
                             class="btn btn-default btn-lg btn-action-questionnaire"/>
                         <button
                             v-if="!hasUploadProcess"
+                            :disabled="isUploading"
                             type="button"
                             class="btn btn-success"
                             @click="uploadSimple">{{$t('BatchUpload.UploadTabFile')}}</button>
@@ -172,6 +173,7 @@
                             class="btn btn-default btn-lg btn-action-questionnaire"/>
                         <button
                             v-if="!hasUploadProcess"
+                            :disabled="isUploading"
                             type="button"
                             class="btn btn-success"
                             @click="uploadAdvanced">{{$t('BatchUpload.UploadZipFile')}}</button>
@@ -198,6 +200,7 @@ export default {
             timerId: 0,
             currentUploadProcess: null,
             errorByResponsible: undefined,
+            isUploading: false
         }
     },
     computed: {
@@ -307,6 +310,7 @@ export default {
 
             var self = this
 
+            this.isUploading = true;
             this.$http
                 .post(this.api.uploadUrl, formData, {
                     headers: {
@@ -315,6 +319,7 @@ export default {
                     },
                 })
                 .then(response => {
+                    this.isUploading = false;
                     window.clearInterval(this.timerId)
                     self.$store.dispatch('setUploadFileName', file.name)
 
@@ -327,6 +332,7 @@ export default {
                     }
                 })
                 .catch(e => {
+                    this.isUploading = false;
                     if (e.response.data.message) toastr.error(e.response.data.message)
                     else if (e.response.data.ExceptionMessage)
                         toastr.error(e.response.data.ExceptionMessage)
@@ -347,7 +353,7 @@ export default {
         this.currentUploadProcess = this.$store.getters.upload.progress
         this.timerId = window.setInterval(() => {
             this.updateStatus()
-        }, 500)
+        }, 2000)
     },
 }
 </script>
