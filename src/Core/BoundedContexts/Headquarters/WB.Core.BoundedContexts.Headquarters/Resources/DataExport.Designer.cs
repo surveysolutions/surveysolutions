@@ -285,11 +285,29 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to In queue: {{time}}.
+        /// </summary>
+        public static string DataExport_InQueue {
+            get {
+                return ResourceManager.GetString("DataExport_InQueue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interviews in {{status}}..
         /// </summary>
         public static string DataExport_InterviewsStatus {
             get {
                 return ResourceManager.GetString("DataExport_InterviewsStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Produced in: {{time}}.
+        /// </summary>
+        public static string DataExport_ProducedIn {
+            get {
+                return ResourceManager.GetString("DataExport_ProducedIn", resourceCulture);
             }
         }
         

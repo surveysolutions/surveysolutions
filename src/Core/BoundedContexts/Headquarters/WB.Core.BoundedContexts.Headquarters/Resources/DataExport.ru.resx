@@ -302,6 +302,12 @@
   <data name="DataExport_FileSize" xml:space="preserve">
     <value>Размер файла: {{size}} MB</value>
   </data>
+  <data name="DataExport_ProducedIn" xml:space="preserve">
+    <value>Сгенерирован за: {{time}}</value>
+  </data>
+  <data name="DataExport_InQueue" xml:space="preserve">
+    <value>В очереди: {{time}}</value>
+  </data>
   <data name="DataExport_Destination" xml:space="preserve">
     <value>Место назначения: {{dest}}</value>
   </data>
