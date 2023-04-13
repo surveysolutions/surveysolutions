@@ -273,7 +273,7 @@ namespace WB.UI.Headquarters.Controllers
                     CanGetApiToken = (userRole is UserRoles.Administrator or UserRoles.ApiUser) && tokenProvider.CanGenerate,
                     TokenIssued = await this.tokenProvider.DoesTokenExist(user),
                     CanSetupTwoFactorAuthentication = HasPermissionsToSetupTwoFactorAuthentication(user),
-                    IsRelinkAllowed = user.Profile.IsRelinkAllowed(),
+                    IsRelinkAllowed = user.Profile?.IsRelinkAllowed() ?? false,
                 },
                 Api = new
                 {
