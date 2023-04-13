@@ -225,7 +225,7 @@ export default {
             let diff = moment(data.endDate).diff(moment(data.beginDate));
             let duration = moment.duration(diff);
             
-            return duration.humanize();
+            return duration.humanize({m: 60, h: 24, d: 7, w: 4});
         },
         getInQueueTime(data){
             if(data == undefined || data.createdDate == undefined || data.beginDate == undefined)
@@ -234,7 +234,7 @@ export default {
             let diff = moment(data.beginDate).diff(moment(data.createdDate));
             let duration = moment.duration(diff);
             
-            return duration.humanize();
+            return duration.humanize({m: 60, h: 24, d: 7, w: 4});
         }
 
     },
