@@ -61,18 +61,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return result.UploadState;
         }
 
-        public Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview,
+        public async Task<InterviewUploadResult> UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview,
             IProgress<TransferProgress> transferProgress, CancellationToken token = default)
         {
             var interviewKey = this.interviews.GetById(interviewId.FormatGuid())?.InterviewKey;
-            return this.syncClient.SendAsync(new UploadInterviewRequest
+            await this.syncClient.SendAsync(new UploadInterviewRequest
             {
                 Interview = completedInterview,
                 InterviewKey = interviewKey
             },token, transferProgress);
+
+            return new InterviewUploadResult() { ReceivedInterviewId = interviewId };
         }
-        
-        
+
         public async Task<SyncInfoPackageResponse> GetSyncInfoPackageResponse(Guid interviewId, InterviewSyncInfoPackage interviewSyncInfoPackage,
             CancellationToken token = default)
         {

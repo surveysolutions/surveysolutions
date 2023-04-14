@@ -65,7 +65,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v3
         [HttpPost]
         [Route("{id:guid}")]
         [WriteToSyncLog(SynchronizationLogType.PostInterviewV3)]
-        public IActionResult Post([FromBody]InterviewPackageApiView package) => base.PostV3(package);
+        public ActionResult<InterviewUploadResult> Post([FromBody]InterviewPackageApiView package) => base.PostV3(package);
 
         [HttpPost]
         [Route("CheckObsoleteInterviews")]
