@@ -54,17 +54,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             List<int> ids = new List<int>();
             var assignments = this.assignmentsStorage.Query(_ =>
             {
-                if (input.Limit == null && input.Offset == null)
-                {
-                    input.Limit = input.PageSize;
-                    input.Offset = (input.Page - 1) * input.PageSize;
-                }
-
                 var items = this.ApplyFilter(input, _);
                 items = this.DefineOrderBy(items, input);
 
-                ids = items.Skip(input.Offset.Value)
-                    .Take(input.Limit.Value)
+                ids = items.Skip(input.Offset)
+                    .Take(input.Limit)
                     .Select(x => x.Id)
                     .ToList();
 
@@ -105,8 +99,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             
             var result = new AssignmentsWithoutIdentifingData
             {
-                Page = input.Offset.Value,
-                PageSize = input.Limit.Value,
+                Page = input.Offset,
+                PageSize = input.Limit,
                 Items = assignments.Select(x =>
                 {
                     var row = new AssignmentRow
@@ -130,7 +124,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                         ReceivedByTabletAtUtc = x.ReceivedByTabletAtUtc,
                         Comments = x.Comments,
                         CalendarEvent = GetCalendarEventForAssignmentOrNull(x.Id)
-                            
                     };
 
                     if (input.ShowQuestionnaireTitle)
