@@ -285,7 +285,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In queue: {{time}}.
+        ///   Looks up a localized string similar to In queue:.
         /// </summary>
         public static string DataExport_InQueue {
             get {
@@ -303,7 +303,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Produced in: {{time}}.
+        ///   Looks up a localized string similar to Produced in:.
         /// </summary>
         public static string DataExport_ProducedIn {
             get {

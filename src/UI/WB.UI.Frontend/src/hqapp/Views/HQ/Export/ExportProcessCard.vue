@@ -48,12 +48,12 @@
                     <span>{{data.error}}</span>
                 </p>
 
-                <p class="font-regular">
-                    <span class="font-bold"> {{ $t('DataExport.DataExport_InQueue') }}</span>
-                    <span>{{ getInQueueTime(data) }}</span>
+                <p class="font-regular" v-if="data.jobStatus =='Completed'">
+                    <span class="font-bold"> {{ $t('DataExport.DataExport_InQueue') }} </span>
+                    <span>{{ getInQueueTime(data) }} </span>
 
-                    <span class="font-bold" v-if="!data.isRunning"> {{ $t('DataExport.DataExport_ProducedIn') }}</span>
-                    <span  v-if="!data.isRunning"> {{ getProducedTime(data) }}</span>                    
+                    <span class="font-bold"> {{ $t('DataExport.DataExport_ProducedIn') }} </span>
+                    <span> {{ getProducedTime(data) }} </span>                    
                 </p>
 
                 <div class="d-flex ai-center"
@@ -218,25 +218,29 @@ export default {
                 }
             })
         },
+        
         getProducedTime(data){
             if(data == undefined || data.endDate == undefined || data.beginDate == undefined)
                 return 'unknown';
 
-            let diff = moment(data.endDate).diff(moment(data.beginDate));
-            let duration = moment.duration(diff);
-            
-            return duration.humanize({m: 60, h: 24, d: 7, w: 4});
+            return this.formatDiff(data.beginDate, data.endDate)            
         },
         getInQueueTime(data){
             if(data == undefined || data.createdDate == undefined || data.beginDate == undefined)
                 return 'unknown';
 
-            let diff = moment(data.beginDate).diff(moment(data.createdDate));
+            return this.formatDiff(data.beginDate, data.createdDate);
+        },
+        formatDiff(start, end)
+        {
+            if(start == undefined || end == undefined)
+                return 'unknown';
+
+            let diff = moment(end).diff(moment(start));
             let duration = moment.duration(diff);
             
             return duration.humanize({m: 60, h: 24, d: 7, w: 4});
         }
-
     },
 }
 </script>

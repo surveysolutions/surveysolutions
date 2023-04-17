@@ -295,10 +295,10 @@
     <value>File size: {{size}} MB</value>
   </data>
   <data name="DataExport_ProducedIn" xml:space="preserve">
-    <value>Produced in: {{time}}</value>
+    <value>Produced in:</value>
   </data>
   <data name="DataExport_InQueue" xml:space="preserve">
-    <value>In queue: {{time}}</value>
+    <value>In queue:</value>
   </data>
   <data name="DataExport_Destination" xml:space="preserve">
     <value>Destination: {{dest}}</value>
