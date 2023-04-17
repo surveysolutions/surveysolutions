@@ -147,7 +147,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
-        [ApiValidationAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public IActionResult StartNewInterview(int id)
         {
             var assignment = this.assignments.GetAssignment(id);
@@ -175,7 +175,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpDelete]
-        [ApiValidationAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public IActionResult DiscardInterview(Guid id)
         {
             var deleteInterview = new DeleteInterviewCommand(id, this.authorizedUser.Id);
@@ -184,7 +184,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
-        [ApiValidationAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public IActionResult RestartInterview(Guid id, string comment)
         {
             var restartCommand = new RestartInterviewCommand(id, this.authorizedUser.Id, comment, DateTime.UtcNow);
