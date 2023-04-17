@@ -448,9 +448,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     request: interviewSyncInfoPackage));
         }
 
-        public Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview, IProgress<TransferProgress> transferProgress, CancellationToken token = default)
+        public Task<InterviewUploadResult> UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview, IProgress<TransferProgress> transferProgress, CancellationToken token = default)
         {
-            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync<InterviewUploadResult>(
                 url: string.Concat(this.InterviewsController, "/", interviewId),
                 request: completedInterview,
                 credentials: this.restCredentials,
