@@ -264,7 +264,7 @@ namespace WB.UI.Headquarters.Controllers
                 return View(model);
             }
 
-            //count this try as a faling one 
+            //count this try as a failing one 
             await userManager.AccessFailedAsync(user);
             
             this.ModelState.AddModelError("InvalidCredentials", ErrorMessages.InvalidRecoveryCode);
