@@ -19,4 +19,7 @@
     <dimen name="area_editor_text_size_large">18dp</dimen>
 
     <dimen name="area_editor_padding_regular">18dp</dimen>
+
+    <dimen name="carousel_next_item_visible">26dp</dimen>
+    <dimen name="carousel_current_item_horizontal_margin">42dp</dimen>
 </resources>

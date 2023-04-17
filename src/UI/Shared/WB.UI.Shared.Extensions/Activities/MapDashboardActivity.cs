@@ -5,12 +5,22 @@ using Android.OS;
 using Android.Views;
 using AndroidX.AppCompat.App;
 using AndroidX.AppCompat.Widget;
+using AndroidX.ConstraintLayout.Helper.Widget;
 using AndroidX.DrawerLayout.Widget;
+using AndroidX.RecyclerView.Widget;
+using AndroidX.ViewPager.Widget;
+using AndroidX.ViewPager2.Widget;
 using Esri.ArcGISRuntime.UI.Controls;
+using Google.Android.Material.Divider;
+using Java.Lang;
+using MvvmCross.DroidX.RecyclerView;
+using MvvmCross.DroidX.RecyclerView.ItemTemplates;
+using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.WeakSubscription;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Activities.Callbacks;
+using WB.UI.Shared.Extensions.Activities.Carousel;
 using WB.UI.Shared.Extensions.ViewModels;
 using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
 
@@ -52,6 +62,61 @@ namespace WB.UI.Shared.Extensions.Activities
             onDrawerOpenedSubscription = this.drawerLayout.WeakSubscribe<DrawerLayout, DrawerLayout.DrawerOpenedEventArgs>(
                 nameof(this.drawerLayout.DrawerOpened),
                 OnDrawerLayoutOnDrawerOpened);
+
+            // var carousel = this.FindViewById<Carousel>(Resource.Id.markers_carusel);
+            // carousel.SetAdapter();
+
+            var markerRecyclerView = (MvxRecyclerView) this.FindViewById(Resource.Id.markers_recycler_view);
+            markerRecyclerView.HasFixedSize = true;
+
+            var horizontalLayout = new LinearLayoutManager(this, LinearLayoutManager.Horizontal, false);
+            markerRecyclerView.SetLayoutManager(horizontalLayout);
+            //var layoutManager = new LinearLayoutManager(this);
+            //markerRecyclerView.SetLayoutManager(layoutManager);
+            markerRecyclerView.SetItemAnimator(new DefaultItemAnimator());
+
+            //var adapter = new MarkersRecyclerViewAdapter((IMvxAndroidBindingContext)base.BindingContext);
+            //markerRecyclerView.SetAdapter(adapter);
+
+
+
+
+            var viewPager = this.FindViewById<ViewPager2>(Resource.Id.carousel_view_pager);
+
+            //viewPager.ClipChildren = false;
+            //viewPager.ClipToPadding = false;
+            //viewPager.OffscreenPageLimit = 3;
+            //viewPager.OverScrollMode = OverScrollMode.Never;
+            
+            var adapter = new MarkersRecyclerViewAdapter((IMvxAndroidBindingContext)base.BindingContext);
+            adapter.ItemTemplateSelector = new MvxDefaultTemplateSelector(Resource.Layout.marker_card);
+            adapter.ItemsSource = ViewModel.AvailableMarkers;
+            viewPager.Adapter = adapter;
+            
+            var bindingSet = this.CreateBindingSet();
+            bindingSet.Bind(adapter)
+                .For(v => v.ItemsSource)
+                .To(vm => vm.AvailableMarkers);
+            bindingSet.Apply();
+
+            /*var compositePageTransformer = new CompositePageTransformer();
+            compositePageTransformer.AddTransformer(
+                new MarginPageTransformer((int)(40 * Resources.DisplayMetrics.Density)));
+            viewPager.SetPageTransformer(compositePageTransformer);*/
+
+            viewPager.OffscreenPageLimit = 1;
+
+            var pageTransformer = new CarouselIPageTransformer();
+            viewPager.SetPageTransformer(pageTransformer);
+            var itemDecoration = new HorizontalMarginItemDecoration(
+                this,
+                Resource.Dimension.carousel_current_item_horizontal_margin
+            );
+            viewPager.AddItemDecoration(itemDecoration);
+            
+            
+            
+            
             
             this.ViewModel.MapView = this.FindViewById<MapView>(Resource.Id.map_view);
             onMapViewMapTappedSubscription = this.ViewModel.MapView.WeakSubscribe<MapView, GeoViewInputEventArgs>(

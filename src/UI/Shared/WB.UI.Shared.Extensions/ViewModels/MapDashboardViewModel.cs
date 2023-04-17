@@ -84,6 +84,13 @@ namespace WB.UI.Shared.Extensions.ViewModels
             set => this.RaiseAndSetIfChanged(ref this.showAssignments, value);
         }
 
+        private MvxObservableCollection<MarkerViewModel> availableMarkers = new MvxObservableCollection<MarkerViewModel>();
+        public MvxObservableCollection<MarkerViewModel> AvailableMarkers
+        {
+            get => this.availableMarkers;
+            set => this.RaiseAndSetIfChanged(ref this.availableMarkers, value);
+        }
+
         public abstract bool SupportDifferentResponsible { get; }
 
         public override void Prepare(MapDashboardViewModelArgs parameter)
@@ -101,6 +108,13 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
             Interviews = this.interviewViewRepository
                 .Where(x => x.LocationLatitude != null).ToList();
+
+            
+            var markers = Enumerable.Range(1, 100).Select(i =>
+                new MarkerViewModel() { Title = "test " + i, SubTitle = "subTitle - " + i });
+
+            AvailableMarkers = new MvxObservableCollection<MarkerViewModel>(markers);
+            
 
             this.GraphicsOverlays.Add(graphicsOverlay);
 
@@ -306,9 +320,17 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     {
                         graphicsOverlay.Graphics.Clear();
 
+                        List<MarkerViewModel> markers = new List<MarkerViewModel>();
+                        
                         if (ShowAssignments)
                         {
-                            var assignmentsMarkers = GetAssignmentsMarkers();
+                            var filteredAssignments = FilteredAssignments();
+                            markers.AddRange(filteredAssignments.Select(a => new MarkerViewModel()
+                            {
+                                Title = a.Title,
+                                SubTitle = a.ResponsibleName
+                            }));
+                            var assignmentsMarkers = GetAssignmentsMarkers(filteredAssignments);
                             if (assignmentsMarkers.Count > 0)
                             {
                                 graphicsOverlay.Graphics.AddRange(assignmentsMarkers);
@@ -317,12 +339,20 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
                         if (ShowInterviews)
                         {
-                            var interviewsMarkers = GetInterviewsMarkers();
+                            var filteredInterviews = FilteredInterviews();
+                            markers.AddRange(filteredInterviews.Select(a => new MarkerViewModel()
+                            {
+                                Title = a.InterviewKey,
+                                SubTitle = a.QuestionnaireTitle
+                            }));
+                            var interviewsMarkers = GetInterviewsMarkers(filteredInterviews);
                             if (interviewsMarkers.Count > 0)
                             {
                                 graphicsOverlay.Graphics.AddRange(interviewsMarkers);
                             }
                         }
+
+                        //AvailableMarkers = new MvxObservableCollection<MarkerViewModel>(markers);
                     }
 
                     //MapView.Map.MinScale = 591657527.591555;
@@ -357,28 +387,11 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         }
 
-        private List<Graphic> GetInterviewsMarkers()
+        private List<Graphic> GetInterviewsMarkers(List<InterviewView> interviews)
         {
             var markers = new List<Graphic>();
 
-            var filteredInterviews = Interviews;
-            
-            if (!string.IsNullOrEmpty(SelectedQuestionnaire?.QuestionnaireId)) 
-                filteredInterviews = filteredInterviews
-                            .Where(x => x.QuestionnaireId.StartsWith(SelectedQuestionnaire.QuestionnaireId))
-                            .ToList();
-
-            if (SelectedResponsible?.ResponsibleId.HasValue ?? false) 
-                filteredInterviews = filteredInterviews
-                    .Where(x => x.ResponsibleId == SelectedResponsible.ResponsibleId)
-                    .ToList();
-
-            if (SelectedStatus?.Status != null) 
-                filteredInterviews = filteredInterviews
-                    .Where(x => x.Status == SelectedStatus.Status)
-                    .ToList();
-
-            foreach (var interview in filteredInterviews)
+            foreach (var interview in interviews)
             {
                 markers.Add(new Graphic(
                     (MapPoint)GeometryEngine.Project(
@@ -392,6 +405,27 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
 
             return markers;
+        }
+
+        private List<InterviewView> FilteredInterviews()
+        {
+            var filteredInterviews = Interviews;
+
+            if (!string.IsNullOrEmpty(SelectedQuestionnaire?.QuestionnaireId))
+                filteredInterviews = filteredInterviews
+                    .Where(x => x.QuestionnaireId.StartsWith(SelectedQuestionnaire.QuestionnaireId))
+                    .ToList();
+
+            if (SelectedResponsible?.ResponsibleId.HasValue ?? false)
+                filteredInterviews = filteredInterviews
+                    .Where(x => x.ResponsibleId == SelectedResponsible.ResponsibleId)
+                    .ToList();
+
+            if (SelectedStatus?.Status != null)
+                filteredInterviews = filteredInterviews
+                    .Where(x => x.Status == SelectedStatus.Status)
+                    .ToList();
+            return filteredInterviews;
         }
 
         protected virtual KeyValuePair<string, object>[] GetInterviewAttributes(InterviewView interview)
@@ -416,23 +450,11 @@ namespace WB.UI.Shared.Extensions.ViewModels
         private List<AssignmentDocument> Assignments = new List<AssignmentDocument>();
         private List<InterviewView> Interviews = new List<InterviewView>();
 
-        private List<Graphic> GetAssignmentsMarkers()
+        private List<Graphic> GetAssignmentsMarkers(List<AssignmentDocument> assignments)
         {
             var markers = new List<Graphic>();
 
-            var filteredAssignments = Assignments;
-            
-            if (!string.IsNullOrEmpty(SelectedQuestionnaire?.QuestionnaireId)) 
-                 filteredAssignments = filteredAssignments
-                         .Where(x => x.QuestionnaireId.StartsWith(SelectedQuestionnaire.QuestionnaireId))
-                         .ToList();
-            
-            if (SelectedResponsible?.ResponsibleId.HasValue ?? false) 
-                 filteredAssignments = filteredAssignments
-                         .Where(x => x.ResponsibleId == SelectedResponsible.ResponsibleId)
-                         .ToList();
-
-            foreach (var assignment in filteredAssignments)
+            foreach (var assignment in assignments)
             {
                 markers.Add(new Graphic(
                     (MapPoint)GeometryEngine.Project(
@@ -446,6 +468,22 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
 
             return markers;
+        }
+
+        private List<AssignmentDocument> FilteredAssignments()
+        {
+            var filteredAssignments = Assignments;
+
+            if (!string.IsNullOrEmpty(SelectedQuestionnaire?.QuestionnaireId))
+                filteredAssignments = filteredAssignments
+                    .Where(x => x.QuestionnaireId.StartsWith(SelectedQuestionnaire.QuestionnaireId))
+                    .ToList();
+
+            if (SelectedResponsible?.ResponsibleId.HasValue ?? false)
+                filteredAssignments = filteredAssignments
+                    .Where(x => x.ResponsibleId == SelectedResponsible.ResponsibleId)
+                    .ToList();
+            return filteredAssignments;
         }
 
         protected virtual CompositeSymbol GetAssignmentMarkerSymbol(AssignmentDocument assignment)
