@@ -294,6 +294,12 @@
   <data name="DataExport_FileSize" xml:space="preserve">
     <value>File size: {{size}} MB</value>
   </data>
+  <data name="DataExport_ProducedIn" xml:space="preserve">
+    <value>Produced in:</value>
+  </data>
+  <data name="DataExport_InQueue" xml:space="preserve">
+    <value>In queue:</value>
+  </data>
   <data name="DataExport_Destination" xml:space="preserve">
     <value>Destination: {{dest}}</value>
   </data>
