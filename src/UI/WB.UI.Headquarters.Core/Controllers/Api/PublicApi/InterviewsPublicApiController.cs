@@ -528,7 +528,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPatch]
         [Route("{id:guid}/assignsupervisor")]
         [Consumes(MediaTypeNames.Application.Json)]
-        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter)]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
         public ActionResult PostAssignSupervisor(Guid id, [FromBody, BindRequired]  AssignChangeApiModel request)
         {
             if (!ModelState.IsValid)
@@ -545,6 +545,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             if (!userInfo.Roles.Contains(UserRoles.Supervisor))
                 return StatusCode(StatusCodes.Status406NotAcceptable, "User is not a supervisor.");
+            
+            if (authorizedUser.IsSupervisor && authorizedUser.Id != userInfo.PublicKey)
+                return StatusCode(StatusCodes.Status406NotAcceptable, "Supervisor can assign interview only to himself");
             
             return this.TryExecuteCommand(new AssignSupervisorCommand(id, this.authorizedUser.Id, userInfo.PublicKey));
         }
