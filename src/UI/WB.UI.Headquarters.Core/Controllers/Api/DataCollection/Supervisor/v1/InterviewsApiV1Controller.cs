@@ -61,7 +61,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         [WriteToSyncLog(SynchronizationLogType.PostInterviewV3)]
         [HttpPost]
         [Route("{id:guid}")]
-        public IActionResult Post([FromBody] InterviewPackageApiView package) => base.PostV3(package);
+        public ActionResult<InterviewUploadResult> Post([FromBody] InterviewPackageApiView package) => base.PostV3(package);
 
         [WriteToSyncLog(SynchronizationLogType.InterviewProcessed)]
         [HttpPost]

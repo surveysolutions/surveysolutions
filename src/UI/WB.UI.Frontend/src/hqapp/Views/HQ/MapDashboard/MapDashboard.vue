@@ -421,7 +421,13 @@ export default {
         createInterview() {
             const self = this
             const assignmentId = this.selectedTooltip.assignmentId
-            $.post('InterviewerHq/StartNewInterview/' + assignmentId, response => {
+            $.post({
+                url: 'InterviewerHq/StartNewInterview/' + assignmentId,
+                headers: {
+                    'X-CSRF-TOKEN': Vue.$hq.Util.getCsrfCookie(),
+                },
+            }, 
+            response => {
                 const interviewId = response.interviewId
                 const workspace = self.$hq.basePath
                 const url = `${workspace}WebInterview/${interviewId}/Cover`

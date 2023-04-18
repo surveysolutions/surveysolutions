@@ -53,6 +53,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
             synchronizationService
                 .Setup(s => s.GetSyncInfoPackageResponse(interviewId, It.IsAny<InterviewSyncInfoPackage>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(new SyncInfoPackageResponse()));
+            
+            synchronizationService
+                .Setup(s => s.UploadInterviewAsync(interviewId, It.IsAny<InterviewPackageApiView>(), 
+                    It.IsAny<IProgress<TransferProgress>>() , It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(new InterviewUploadResult() { ReceivedInterviewId = interviewId }));
 
             var eventStore = Create.Storage.InMemorySqliteMultiFilesEventStorage();
             eventStore.Store(new UncommittedEventStream(null, new []{ 
@@ -105,6 +110,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
             synchronizationService
                 .Setup(s => s.GetSyncInfoPackageResponse(interviewId, It.IsAny<InterviewSyncInfoPackage>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(new SyncInfoPackageResponse()));
+            
+            synchronizationService
+                .Setup(s => s.UploadInterviewAsync(interviewId, It.IsAny<InterviewPackageApiView>(), 
+                    It.IsAny<IProgress<TransferProgress>>() , It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(new InterviewUploadResult() { ReceivedInterviewId = interviewId }));
 
             var eventStore = Create.Storage.InMemorySqliteMultiFilesEventStorage();
             eventStore.Store(new UncommittedEventStream(null, new[]{
@@ -155,6 +165,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
                 .Setup(s => s.GetInterviewUploadState(interviewId, It.IsAny<EventStreamSignatureTag>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(remoteInterviewUploadState));
 
+            synchronizationService
+                .Setup(s => s.UploadInterviewAsync(interviewId, It.IsAny<InterviewPackageApiView>(), 
+                    It.IsAny<IProgress<TransferProgress>>() , It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(new InterviewUploadResult() { ReceivedInterviewId = interviewId }));
+
             var eventStore = Mock.Of<IEnumeratorEventStorage>(s =>
                 s.HasEventsWithoutHqFlag(interviewId) == true);
             var eventsContainer = Create.Entity.InterviewPackageContainer(interviewId,
@@ -182,7 +197,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
 
 
         [Test]
-        public async Task when_localy_interview_has_new_events()
+        public async Task when_locally_interview_has_new_events()
         {
             var interviewId = Id.g1;
             var responsibleId = Id.g2;
@@ -216,7 +231,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
         }
 
         [Test]
-        public async Task when_localy_interview_has_not_new_events()
+        public async Task when_locally_interview_has_not_new_events()
         {
             var interviewId = Id.g1;
             var responsibleId = Id.g2;
@@ -272,6 +287,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
                 .Setup(s => s.GetSyncInfoPackageResponse(interviewId, It.IsAny<InterviewSyncInfoPackage>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(new SyncInfoPackageResponse() { HasInterview = false }));
 
+            synchronizationService
+                .Setup(s => s.UploadInterviewAsync(interviewId, It.IsAny<InterviewPackageApiView>(), 
+                    It.IsAny<IProgress<TransferProgress>>() , It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(new InterviewUploadResult() { ReceivedInterviewId = interviewId }));
+
             var interviewFactory = Create.Service.InterviewerInterviewAccessor(localInterviewStorage, eventStore,
                 prefilledQuestions: Create.Storage.InMemorySqlitePlainStorage<PrefilledQuestionView>(),
                 interviewMultimediaViewRepository: Stub<IPlainStorage<InterviewMultimediaView>>.WithNotEmptyValues);
@@ -324,6 +344,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
             synchronizationService
                 .Setup(s => s.GetSyncInfoPackageResponse(interviewId, It.IsAny<InterviewSyncInfoPackage>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(new SyncInfoPackageResponse() { HasInterview = true, NeedSendFullStream = true }));
+            
+            synchronizationService
+                .Setup(s => s.UploadInterviewAsync(interviewId, It.IsAny<InterviewPackageApiView>(), 
+                    It.IsAny<IProgress<TransferProgress>>() , It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(new InterviewUploadResult() { ReceivedInterviewId = interviewId }));
 
             var interviewFactory = Create.Service.InterviewerInterviewAccessor(localInterviewStorage, eventStore,
                 prefilledQuestions: Create.Storage.InMemorySqlitePlainStorage<PrefilledQuestionView>(),

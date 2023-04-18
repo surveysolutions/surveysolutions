@@ -376,7 +376,7 @@
     <value>[{0}] Invalid numeric value</value>
   </data>
   <data name="Excel_Categories_Empty_Text" xml:space="preserve">
-    <value>[{0}] Empty text</value>
+    <value>[{0}] Empty title</value>
   </data>
   <data name="Excel_Categories_Empty_Value" xml:space="preserve">
     <value>[{0}] Empty value</value>

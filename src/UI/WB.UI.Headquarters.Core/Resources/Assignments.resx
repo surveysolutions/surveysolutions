@@ -369,6 +369,12 @@
   <data name="Tooltip_Table_WebMode" xml:space="preserve">
     <value>Assignment Mode</value>
   </data>
+  <data name="Tooltip_Table_Email" xml:space="preserve">
+    <value>Email for notifications</value>
+  </data>
+  <data name="Tooltip_Table_Password" xml:space="preserve">
+    <value>Password to restrict access</value>
+  </data>
   <data name="PasswordInstructions" xml:space="preserve">
     <value>At least 6 numbers and upper case letters or single symbol '?' to generate password</value>
   </data>

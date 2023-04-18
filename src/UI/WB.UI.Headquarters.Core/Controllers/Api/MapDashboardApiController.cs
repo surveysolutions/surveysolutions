@@ -150,7 +150,9 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             var mapPoints = 
                 interviewGpsAnswers.Select(g =>
-                    new MapPoint<MapMarker>(g.Longitude, g.Latitude, 
+                    new MapPoint<MapMarker>(
+                        g.Longitude, 
+                        g.Latitude >= 0 ? Math.Min(g.Latitude, 85.05) : Math.Max(g.Latitude, -85.05), 
                         new MapInterviewMarker()
                         {
                             interviewId = g.InterviewId,
@@ -158,7 +160,9 @@ namespace WB.UI.Headquarters.Controllers.Api
                             status = g.Status
                         }))
                 .Concat(assignmentGpsData.Select(a =>
-                    new MapPoint<MapMarker>(a.Longitude, a.Latitude, 
+                    new MapPoint<MapMarker>(
+                        a.Longitude, 
+                        a.Latitude >= 0 ? Math.Min(a.Latitude, 85.05) : Math.Max(a.Latitude, -85.05), 
                         new MapAssignmentMarker()
                         {
                             assignmentId = a.AssignmentId,

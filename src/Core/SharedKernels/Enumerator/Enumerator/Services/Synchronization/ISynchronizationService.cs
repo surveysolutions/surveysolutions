@@ -40,7 +40,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
         Task<List<CommittedEvent>> GetInterviewDetailsAsync(Guid interviewId, IProgress<TransferProgress> transferProgress, CancellationToken token = default);
         Task<List<CommittedEvent>> GetInterviewDetailsAfterEventAsync(Guid interviewId, Guid eventId, IProgress<TransferProgress> transferProgress, CancellationToken token = default);
         Task<InterviewUploadState> GetInterviewUploadState(Guid interviewId, EventStreamSignatureTag eventStreamSignatureTag, CancellationToken token = default);
-        Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview, IProgress<TransferProgress> transferProgress, CancellationToken token = default);
+        Task<InterviewUploadResult> UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview, IProgress<TransferProgress> transferProgress, CancellationToken token = default);
         Task UploadInterviewImageAsync(Guid interviewId, string fileName, byte[] fileData, IProgress<TransferProgress> transferProgress, CancellationToken token = default);
         Task UploadInterviewAudioAsync(Guid interviewId, string fileName, string contentType, byte[] fileData, IProgress<TransferProgress> transferProgressd, CancellationToken token = default);
         Task UploadInterviewAudioAuditAsync(Guid interviewId, string fileName, string contentType, byte[] fileData, IProgress<TransferProgress> transferProgress, CancellationToken token = default);

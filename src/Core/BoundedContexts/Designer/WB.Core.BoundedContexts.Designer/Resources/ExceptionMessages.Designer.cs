@@ -240,7 +240,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [{0}] Empty text.
+        ///   Looks up a localized string similar to [{0}] Empty title.
         /// </summary>
         public static string Excel_Categories_Empty_Text {
             get {

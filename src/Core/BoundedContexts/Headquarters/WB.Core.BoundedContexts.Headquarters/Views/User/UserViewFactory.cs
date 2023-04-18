@@ -86,7 +86,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                     IsArchived = user.IsArchived,
                     IsLockedByHQ = user.IsLockedByHeadquaters,
                     IsLockedBySupervisor = user.IsLockedBySupervisor,
-                    IsRelinkAllowed = user.Profile.IsRelinkAllowed(),
+                    IsRelinkAllowed = user.Profile == null ? false : user.Profile.IsRelinkAllowed(),
                     CreationDate = user.CreationDate,
                     Roles = user.Roles,
                     SecurityStamp = user.SecurityStamp,
