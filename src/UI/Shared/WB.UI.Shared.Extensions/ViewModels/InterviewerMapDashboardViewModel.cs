@@ -173,7 +173,8 @@ public class InterviewerMapDashboardViewModel : MapDashboardViewModel
                 await ViewModelNavigationService.NavigateToAsync<LoadingInterviewViewModel, LoadingViewModelArg>(
                     new LoadingViewModelArg
                     {
-                        InterviewId = interview.InterviewId
+                        InterviewId = interview.InterviewId,
+                        ShouldReopen = true
                     }, true);
             }
         }
