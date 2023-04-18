@@ -188,7 +188,7 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var user = await signInManager.GetTwoFactorAuthenticationUserAsync();
-            if (user == null)
+            if (user == null || user.IsLocked)
             {
                 return RedirectToAction("LogOn", new { ReturnUrl = returnUrl, RememberMe = true });
             }
@@ -240,7 +240,7 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var user = await signInManager.GetTwoFactorAuthenticationUserAsync();
-            if (user == null)
+            if (user == null || user.IsLocked)
             {
                 return RedirectToAction("LogOn", new { ReturnUrl = returnUrl, RememberMe = true });
             }
@@ -264,7 +264,9 @@ namespace WB.UI.Headquarters.Controllers
                 return View(model);
             }
 
-
+            //count this try as a failing one 
+            await userManager.AccessFailedAsync(user);
+            
             this.ModelState.AddModelError("InvalidCredentials", ErrorMessages.InvalidRecoveryCode);
             return View(model);
         }
