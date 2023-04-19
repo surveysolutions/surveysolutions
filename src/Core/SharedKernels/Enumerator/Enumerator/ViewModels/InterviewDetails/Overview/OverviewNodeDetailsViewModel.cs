@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
@@ -71,6 +72,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
 
         public List<string> Warnings { get; set; }
         
+        public IMvxCommand CancelCommand => new MvxCommand(this.Cancel);
         private void Cancel() => this.mvxNavigationService.Close(this);
         
         public void Dispose()
