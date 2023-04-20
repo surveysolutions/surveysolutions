@@ -151,6 +151,9 @@ namespace WB.UI.Shared.Enumerator
             registry.AddOrOverwrite("ValidationStyleBackground", new TextEditValidationStyleBackgroundConverter());
             registry.AddOrOverwrite("IsSynchronizationFailOrCanceled", new IsSynchronizationFailOrCanceledConverter());
             registry.AddOrOverwrite("SynchronizationStatusToTextColor", new SynchronizationStatusToTextColorConverter());
+            
+            registry.AddOrOverwrite("Visibility", new VisibilityValueConverter());
+            registry.AddOrOverwrite("InvertedVisibility", new InvertedVisibilityValueConverter());
         }
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)

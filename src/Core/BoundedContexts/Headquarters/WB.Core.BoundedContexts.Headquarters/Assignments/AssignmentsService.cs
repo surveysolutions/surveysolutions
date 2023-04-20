@@ -154,9 +154,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
             if (responsibleId.HasValue)
             {
-                gpsQuery = gpsQuery.Where(x => 
-                    x.Assignment.Responsible.Id == responsibleId.Value
-                    || x.Assignment.Responsible.ReadonlyProfile.SupervisorId == responsibleId.Value);
+                if (authorizedUser.IsSupervisor)
+                {
+                    gpsQuery = gpsQuery.Where(x => 
+                        x.Assignment.Responsible.Id == responsibleId.Value);
+                }
+                else
+                {
+                    gpsQuery = gpsQuery.Where(x => 
+                        x.Assignment.Responsible.Id == responsibleId.Value
+                        || x.Assignment.Responsible.ReadonlyProfile.SupervisorId == responsibleId.Value);
+                }
             }        
 
             if (authorizedUser.IsInterviewer)

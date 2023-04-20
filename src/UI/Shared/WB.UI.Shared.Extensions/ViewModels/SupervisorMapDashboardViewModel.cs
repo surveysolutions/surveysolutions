@@ -183,6 +183,8 @@ public class SupervisorMapDashboardViewModel : MapDashboardViewModel
         {
             await this.ViewModelNavigationService.NavigateToAsync<SelectResponsibleForAssignmentViewModel, SelectResponsibleForAssignmentArgs>(
                 new SelectResponsibleForAssignmentArgs(assignmentId));
+            
+            ReloadEntities();
             await RefreshMarkers();
         }
     }

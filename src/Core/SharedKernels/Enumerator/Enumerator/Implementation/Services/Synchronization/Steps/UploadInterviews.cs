@@ -120,11 +120,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
                         if (interviewPackage != null)
                         {
-                            await this.synchronizationService.UploadInterviewAsync(
+                            var result = await this.synchronizationService.UploadInterviewAsync(
                                 interview.InterviewId,
                                 interviewPackage,
                                 transferProgress,
                                 Context.CancellationToken);
+
+                            if (result.ReceivedInterviewId != interview.InterviewId)
+                                throw new Exception("Unexpected response");
                         }
                         else
                         {

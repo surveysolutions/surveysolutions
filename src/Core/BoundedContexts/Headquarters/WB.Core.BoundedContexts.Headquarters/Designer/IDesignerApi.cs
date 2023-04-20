@@ -55,6 +55,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
 
         [Get("/api/hq/backup/{questionnaireId}")]
         Task<RestFile> DownloadQuestionnaireBackup(Guid questionnaireId);
+        
+        [Get("/.version")]
+        Task<string> Version();
     }
 
     public class DesignerQuestionnairesListFilter

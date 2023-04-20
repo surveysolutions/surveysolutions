@@ -238,7 +238,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             return new JsonResult(events, Infrastructure.Native.Storage.EventSerializerSettings.SyncronizationJsonSerializerSettings);
         }
 
-        protected IActionResult PostV3(InterviewPackageApiView package)
+        protected ActionResult<InterviewUploadResult> PostV3(InterviewPackageApiView package)
         {
             if (string.IsNullOrEmpty(package.Events))
                 return BadRequest("Server cannot accept empty package content.");
@@ -259,7 +259,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 
             this.packagesService.StoreOrProcessPackage(interviewPackage);
 
-            return Ok();
+            return new ActionResult<InterviewUploadResult>(new InterviewUploadResult(){ReceivedInterviewId = package.InterviewId});
         }
     }
 }

@@ -240,7 +240,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [{0}] Empty text.
+        ///   Looks up a localized string similar to [{0}] Empty title.
         /// </summary>
         public static string Excel_Categories_Empty_Text {
             get {
@@ -308,6 +308,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string FailedToAddGroup {
             get {
                 return ResourceManager.GetString("FailedToAddGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Header was not found in file.
+        /// </summary>
+        public static string HeaderWasNotFound {
+            get {
+                return ResourceManager.GetString("HeaderWasNotFound", resourceCulture);
             }
         }
         

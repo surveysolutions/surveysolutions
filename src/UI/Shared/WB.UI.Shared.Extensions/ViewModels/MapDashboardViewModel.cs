@@ -97,10 +97,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
         }
 
-        public override async Task Initialize()
+        protected void ReloadEntities()
         {
-            await base.Initialize();
-
             Assignments = this.assignmentsRepository
                 .LoadAll()
                 .Where(x => x.LocationLatitude != null && (!x.Quantity.HasValue || (x.Quantity - (x.CreatedInterviewsCount ?? 0) > 0)))
@@ -109,11 +107,17 @@ namespace WB.UI.Shared.Extensions.ViewModels
             Interviews = this.interviewViewRepository
                 .Where(x => x.LocationLatitude != null).ToList();
 
-            
             var markers = Enumerable.Range(1, 100).Select(i =>
                 new MarkerViewModel() { Title = "test " + i, SubTitle = "subTitle - " + i });
-
             AvailableMarkers = new MvxObservableCollection<MarkerViewModel>(markers);
+        }
+
+            
+        public override async Task Initialize()
+        {
+            await base.Initialize();
+
+            ReloadEntities();
             
 
             this.GraphicsOverlays.Add(graphicsOverlay);
