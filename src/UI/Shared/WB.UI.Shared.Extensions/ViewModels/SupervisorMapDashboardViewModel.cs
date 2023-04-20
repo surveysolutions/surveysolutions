@@ -3,7 +3,9 @@ using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.UI;
+using MvvmCross;
 using MvvmCross.Base;
+using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -49,6 +51,7 @@ public class SupervisorMapDashboardViewModel : MapDashboardViewModel
         : base(principal, viewModelNavigationService, userInteractionService, mapService, assignmentsRepository, interviewViewRepository, enumeratorSettings, logger, mapUtilityService, mainThreadAsyncDispatcher)
     {
         this.usersRepository = usersRepository;
+        this.messenger = Mvx.IoCProvider.GetSingleton<IMvxMessenger>();
     }
 
     public override bool SupportDifferentResponsible => true;
@@ -74,6 +77,26 @@ public class SupervisorMapDashboardViewModel : MapDashboardViewModel
             SelectedResponsible = AllResponsibleDefault;
     }
     
+    private MvxSubscriptionToken messengerSubscription;
+    private readonly IMvxMessenger messenger;
+    
+    private async Task RefreshCounters()
+    {
+        ReloadEntities();
+        await RefreshMarkers();
+    }
+    public override void ViewAppeared()
+    {
+        base.ViewAppeared();
+        messengerSubscription = messenger.Subscribe<DashboardChangedMsg>(async msg => await RefreshCounters(), MvxReference.Strong);
+    }
+
+    public override void ViewDisappeared()
+    {
+        base.ViewDisappeared();
+        messengerSubscription?.Dispose();
+    }
+
     protected override Symbol GetInterviewMarkerSymbol(InterviewView interview)
     {
         Color markerColor;
@@ -183,9 +206,6 @@ public class SupervisorMapDashboardViewModel : MapDashboardViewModel
         {
             await this.ViewModelNavigationService.NavigateToAsync<SelectResponsibleForAssignmentViewModel, SelectResponsibleForAssignmentArgs>(
                 new SelectResponsibleForAssignmentArgs(assignmentId));
-            
-            ReloadEntities();
-            await RefreshMarkers();
         }
     }
     
