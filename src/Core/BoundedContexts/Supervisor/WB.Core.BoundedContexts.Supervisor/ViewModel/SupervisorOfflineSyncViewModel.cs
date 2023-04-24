@@ -110,6 +110,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             switch (errorCode)
             {
                 case ConnectionStatusCode.MissingPermissionAccessCoarseLocation:
+                case ConnectionStatusCode.MissingPermissionNearbyWifiDevices:
                 case ConnectionStatusCode.StatusEndpointUnknown:
                     SetStatus(ConnectionStatus.Error, errorMessage);
                     break;
@@ -202,6 +203,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         public IMvxAsyncCommand GoToDashboardCommand => new MvxAsyncCommand(() 
             => ViewModelNavigationService.NavigateToDashboardAsync());
+
+        protected override Task<bool> TryNearbyWifiDevicesPermission() => Task.FromResult(true);
 
         protected override async Task OnStartDiscovery()
         {

@@ -57,11 +57,14 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
 
                 if (!ShouldStartAdvertising)
                     return;
-
+                
+                var isAllowedNearby = await TryNearbyWifiDevicesPermission();
+                if (!isAllowedNearby)
+                    return;
+                
                 var isAllowedGetLocation = await TryRequestLocationPermission();
                 if (!isAllowedGetLocation)
                     return;
-
 
                 await this.OnStartDiscovery();
             }
@@ -71,6 +74,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
             }
         }
 
+        protected abstract Task<bool> TryNearbyWifiDevicesPermission();
+        
         private async Task<bool> TryRequestLocationPermission()
         {
             try

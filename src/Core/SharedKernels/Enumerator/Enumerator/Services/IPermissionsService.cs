@@ -9,5 +9,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         Task EnsureHasPermissionToInstallFromUnknownSourcesAsync();
         Task<PermissionStatus> CheckPermissionStatusAsync<T>() where T: Permissions.BasePermission, new();
         Task AssureHasExternalStoragePermissionOrThrow();
+        Task AssureHasNearbyWifiDevicesPermissionOrThrow();
     }
 }
