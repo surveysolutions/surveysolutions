@@ -105,6 +105,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bluetooth advertise permission is required for offline synchronization.
+        /// </summary>
+        public static string BluetoothAdvertisePermissionRequired {
+            get {
+                return ResourceManager.GetString("BluetoothAdvertisePermissionRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add calendar event.
         /// </summary>
         public static string Dashboard_AddCalendarEvent {

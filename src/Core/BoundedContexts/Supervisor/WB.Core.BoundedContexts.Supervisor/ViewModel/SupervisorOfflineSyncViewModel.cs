@@ -11,8 +11,10 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 {
@@ -204,7 +206,22 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         public IMvxAsyncCommand GoToDashboardCommand => new MvxAsyncCommand(() 
             => ViewModelNavigationService.NavigateToDashboardAsync());
 
-        protected override Task<bool> TryNearbyWifiDevicesPermission() => Task.FromResult(true);
+        protected override async Task<bool> TryNearbyWifiDevicesPermission()
+        {
+            try
+            {
+                await permissions.AssureHasBluetoothAdvertisePermissionOrThrow().ConfigureAwait(false);
+            }
+            catch (MissingPermissionsException)
+            {
+                ShouldStartAdvertising = false;
+                this.OnConnectionError(EnumeratorUIResources.BluetoothAdvertisePermissionRequired,
+                    ConnectionStatusCode.MissingPermissionBluetoothAdvertise);
+                return false;
+            }
+
+            return true;
+        }
 
         protected override async Task OnStartDiscovery()
         {

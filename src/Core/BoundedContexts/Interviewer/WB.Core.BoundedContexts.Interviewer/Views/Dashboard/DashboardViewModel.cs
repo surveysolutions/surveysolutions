@@ -466,7 +466,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                     this.ShowSynchronizationError(InterviewerUIResources.SendToSupervisor_BluetoothError);
                     break;
                 case ConnectionStatusCode.MissingPermissionAccessCoarseLocation:
-                case ConnectionStatusCode.MissingPermissionNearbyWifiDevices:
+                case ConnectionStatusCode.MissingPermissionBluetoothAdvertise:
                 case ConnectionStatusCode.StatusEndpointUnknown:
                     this.ShowSynchronizationError(errorMessage);
                     break;
