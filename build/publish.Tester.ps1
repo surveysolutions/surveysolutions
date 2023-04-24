@@ -38,12 +38,18 @@ if ($null -ne $androidKeyStore) {
 
 $PathToKeystore = $keyStore
 
-& (GetPathToMSBuild) -restore $AndroidProject -t:SignAndroidPackage `
-    -p:Configuration=$BuildConfiguration `
-    -p:AndroidKeyStore=True `
-    -p:VersionCode=$VersionCode `
-    -p:GIT_BRANCH=$branch `
-    -p:AndroidSigningKeyStore=$PathToKeystore `
-    -p:AndroidSigningStorePass=$KeystorePassword `
-    -p:AndroidSigningKeyAlias=$KeystoreAlias `
-    -p:AndroidSigningKeyPass=$KeystorePassword
+
+exec {
+	dotnet publish @(
+		"-restore", $AndroidProject
+		"-t:SignAndroidPackage",
+		"-p:Configuration", $BuildConfiguration,
+		"-p:AndroidKeyStore=True",
+		"-p:VersionCode", $VersionCode,
+		"-p:GIT_BRANCH", $branch,
+		"-p:AndroidSigningKeyStore", $PathToKeystore,
+		"-p:AndroidSigningStorePass", $KeystorePassword,
+		"-p:AndroidSigningKeyAlias", $KeystoreAlias,
+		"-p:AndroidSigningKeyPass", $KeystorePassword,
+	)
+}
