@@ -172,6 +172,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         {
             if (Build.VERSION.SdkInt >= BuildVersionCodes.M)
                 return AssureHasPermissionOrThrow<NearbyWifiDevicesPermission>();
+            return Task.CompletedTask;
         }
     }
 }
