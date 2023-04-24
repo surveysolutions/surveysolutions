@@ -430,6 +430,23 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.OnOfflineSynchronizationStarted?.Invoke();
         }
 
+        protected override async Task<bool> TryNearbyWifiDevicesPermission()
+        {
+            try
+            {
+                await permissions.AssureHasNearbyWifiDevicesPermissionOrThrow().ConfigureAwait(false);
+            }
+            catch (MissingPermissionsException)
+            {
+                ShouldStartAdvertising = false;
+                this.OnConnectionError(EnumeratorUIResources.NearbyPermissionRequired,
+                    ConnectionStatusCode.MissingPermissionNearbyWifiDevices);
+                return false;
+            }
+
+            return true;
+        }
+
         protected override async Task OnStartDiscovery()
         {
             var discoveryStatus = await this.nearbyConnection.StartDiscoveryAsync(
@@ -449,6 +466,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                     this.ShowSynchronizationError(InterviewerUIResources.SendToSupervisor_BluetoothError);
                     break;
                 case ConnectionStatusCode.MissingPermissionAccessCoarseLocation:
+                case ConnectionStatusCode.MissingPermissionBluetoothAdvertise:
                 case ConnectionStatusCode.StatusEndpointUnknown:
                     this.ShowSynchronizationError(errorMessage);
                     break;

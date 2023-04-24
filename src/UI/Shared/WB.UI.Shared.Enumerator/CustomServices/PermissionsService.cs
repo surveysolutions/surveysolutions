@@ -10,6 +10,7 @@ using MvvmCross.Plugin.Messenger;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Utils;
+using WB.UI.Shared.Enumerator.PermissionsCustom;
 using WB.UI.Shared.Enumerator.Services;
 using Xamarin.Essentials;
 
@@ -165,6 +166,20 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             });
 
             return tcs.Task;
+        }
+
+        public Task AssureHasBluetoothPermissionOrThrow()
+        {
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.S)
+                return AssureHasPermissionOrThrow<BluetoothPermission>();
+            return Task.CompletedTask;
+        }
+
+        public Task AssureHasNearbyWifiDevicesPermissionOrThrow()
+        {
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.Tiramisu)
+                return AssureHasPermissionOrThrow<NearbyWifiDevicesPermission>();
+            return Task.CompletedTask;
         }
     }
 }

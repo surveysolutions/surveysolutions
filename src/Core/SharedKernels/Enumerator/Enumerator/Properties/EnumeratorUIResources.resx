@@ -229,6 +229,12 @@ for further instructions</value>
   <data name="InvalidEndpointShort" xml:space="preserve">
     <value>Address is invalid</value>
   </data>
+  <data name="BluetoothPermissionRequired" xml:space="preserve">
+    <value>Bluetooth permission is required for offline synchronization</value>
+  </data>
+  <data name="NearbyPermissionRequired" xml:space="preserve">
+    <value>Nearby Wi-Fi devices permission is required for offline synchronization</value>
+  </data>
   <data name="LocationPermissionRequired" xml:space="preserve">
     <value>Location permission is required for offline synchronization</value>
   </data>
