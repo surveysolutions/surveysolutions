@@ -112,6 +112,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             switch (errorCode)
             {
                 case ConnectionStatusCode.MissingPermissionAccessCoarseLocation:
+                case ConnectionStatusCode.MissingPermissionBluetoothAdvertise:
                 case ConnectionStatusCode.MissingPermissionNearbyWifiDevices:
                 case ConnectionStatusCode.StatusEndpointUnknown:
                     SetStatus(ConnectionStatus.Error, errorMessage);
@@ -206,22 +207,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         public IMvxAsyncCommand GoToDashboardCommand => new MvxAsyncCommand(() 
             => ViewModelNavigationService.NavigateToDashboardAsync());
 
-        protected override async Task<bool> TryNearbyWifiDevicesPermission()
-        {
-            try
-            {
-                await permissions.AssureHasBluetoothAdvertisePermissionOrThrow().ConfigureAwait(false);
-            }
-            catch (MissingPermissionsException)
-            {
-                ShouldStartAdvertising = false;
-                this.OnConnectionError(EnumeratorUIResources.BluetoothAdvertisePermissionRequired,
-                    ConnectionStatusCode.MissingPermissionBluetoothAdvertise);
-                return false;
-            }
-
-            return true;
-        }
+        protected override Task<bool> TryNearbyWifiDevicesPermission() => Task.FromResult(true);
 
         protected override async Task OnStartDiscovery()
         {

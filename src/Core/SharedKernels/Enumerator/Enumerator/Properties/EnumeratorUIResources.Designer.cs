@@ -105,11 +105,11 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bluetooth advertise permission is required for offline synchronization.
+        ///   Looks up a localized string similar to Bluetooth permission is required for offline synchronization.
         /// </summary>
-        public static string BluetoothAdvertisePermissionRequired {
+        public static string BluetoothPermissionRequired {
             get {
-                return ResourceManager.GetString("BluetoothAdvertisePermissionRequired", resourceCulture);
+                return ResourceManager.GetString("BluetoothPermissionRequired", resourceCulture);
             }
         }
         

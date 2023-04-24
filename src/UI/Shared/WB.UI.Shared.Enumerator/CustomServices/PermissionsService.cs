@@ -168,10 +168,10 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             return tcs.Task;
         }
 
-        public Task AssureHasBluetoothAdvertisePermissionOrThrow()
+        public Task AssureHasBluetoothPermissionOrThrow()
         {
             if (Build.VERSION.SdkInt >= BuildVersionCodes.S)
-                return AssureHasPermissionOrThrow<BluetoothAdvertisePermission>();
+                return AssureHasPermissionOrThrow<BluetoothPermission>();
             return Task.CompletedTask;
         }
 
