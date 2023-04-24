@@ -50,6 +50,6 @@ exec {
 		"-p:AndroidSigningKeyStore", $PathToKeystore,
 		"-p:AndroidSigningStorePass", $KeystorePassword,
 		"-p:AndroidSigningKeyAlias", $KeystoreAlias,
-		"-p:AndroidSigningKeyPass", $KeystorePassword,
+		"-p:AndroidSigningKeyPass", $KeystorePassword
 	)
 }
