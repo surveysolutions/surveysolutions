@@ -554,7 +554,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         private MvxObservableCollection<MapDescription> availableMaps = new MvxObservableCollection<MapDescription>();
         private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
         
-        public IMvxCommand NavigateToDashboardCommand => 
+        public IMvxAsyncCommand NavigateToDashboardCommand => 
             new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToDashboardAsync());
         
         public override void Dispose()
