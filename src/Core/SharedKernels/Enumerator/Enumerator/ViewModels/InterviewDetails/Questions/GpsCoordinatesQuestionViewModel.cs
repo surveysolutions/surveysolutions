@@ -59,6 +59,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public AnsweringViewModel Answering { get; private set; }
 
+        public bool IsEditMode
+        {
+            get => isEditMode;
+            set => this.SetProperty(ref this.isEditMode, value);
+        }
+
         public GpsCoordinatesQuestionViewModel(
             IPrincipal principal,
             IStatefulInterviewRepository interviewRepository,
@@ -99,6 +105,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;
+            
+            this.IsEditMode = !interview.IsReadOnlyQuestion(entityIdentity);
 
             this.questionState.Init(interviewId, entityIdentity, navigationState);
             this.InstructionViewModel.Init(interviewId, entityIdentity, navigationState);
@@ -119,6 +127,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             try
             {
+                if (!IsEditMode)
+                    throw new InterviewException("You can't remove gps answer for readonly question");
+
                 var command = new RemoveAnswerCommand(this.interviewId, this.userId, this.questionIdentity);
                 await this.Answering.SendQuestionCommandAsync(command);
                 await this.QuestionState.Validity.ExecutedWithoutExceptions();
@@ -186,6 +197,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             try
             {
+                if (!IsEditMode)
+                    throw new InterviewException("You can't save gps answer for readonly question");
+
                 await this.Answering.SendQuestionCommandAsync(command);
                 await this.QuestionState.Validity.ExecutedWithoutExceptions();
 
@@ -198,7 +212,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private bool isDisposed = false;
-        
+        private bool isEditMode;
+
         public void Dispose()
         {
             if (isDisposed)
