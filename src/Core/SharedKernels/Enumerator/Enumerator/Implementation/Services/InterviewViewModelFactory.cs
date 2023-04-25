@@ -218,17 +218,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             if (questionnaire.HasQuestion(entityId))
             {
-                if (interview.IsReadOnlyQuestion(identity))
-                    return InterviewEntityType.ReadOnlyQuestion;
-
                 var questionType = questionnaire.GetQuestionType(entityId);
+
+                if (interview.IsReadOnlyQuestion(identity))
+                {
+                    if (questionType == QuestionType.GpsCoordinates)
+                        return InterviewEntityType.GpsCoordinatesQuestionModel;
+                    return InterviewEntityType.ReadOnlyQuestion;
+                }
+
                 switch (questionType)
                 {
                     case QuestionType.SingleOption:
                         if (questionnaire.IsQuestionLinked(entityId))
                         {
-                            
-
                             if (questionnaire.IsLinkedToListQuestion(entityId))
                                 return InterviewEntityType.LinkedToListQuestionSingleOptionQuestionModel;
                             
