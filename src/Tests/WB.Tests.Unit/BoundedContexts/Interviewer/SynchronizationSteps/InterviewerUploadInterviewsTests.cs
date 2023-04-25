@@ -120,7 +120,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
             eventStore.Store(new UncommittedEventStream(null, new[]{
                 Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:1, payload: Create.Event.InterviewCreated(Guid.NewGuid(), 1)),
                 Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:2, payload: Create.Event.InterviewerAssigned(Guid.NewGuid(), interviewId)),
-                Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:3, payload: Create.Event.InteviewCompleted())
+                Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:3, payload: Create.Event.InterviewCompleted())
                 }));
 
 
@@ -274,7 +274,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
             eventStore.Store(new UncommittedEventStream(null, new []{ 
                 Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:1, payload: Create.Event.InterviewCreated(Guid.NewGuid(), 1)),
                 Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:2, payload: Create.Event.InterviewerAssigned(Guid.NewGuid(), interviewId)),
-                Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:3, payload: Create.Event.InteviewCompleted()),
+                Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:3, payload: Create.Event.InterviewCompleted()),
             }));
             eventStore.MarkAllEventsAsReceivedByHq(interviewId);
 
@@ -332,7 +332,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
             eventStore.Store(new UncommittedEventStream(null, new []{ 
                 Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:1, payload: Create.Event.InterviewCreated(Guid.NewGuid(), 1)),
                 Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:2, payload: Create.Event.InterviewerAssigned(Guid.NewGuid(), interviewId)),
-                Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:3, payload: Create.Event.InteviewCompleted()),
+                Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:3, payload: Create.Event.InterviewCompleted()),
             }));
             eventStore.MarkAllEventsAsReceivedByHq(interviewId);
 
@@ -390,7 +390,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
             eventStore.Store(new UncommittedEventStream(null, new []{ 
                 Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:1, payload: Create.Event.InterviewCreated(Guid.NewGuid(), 1)),
                 Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:2, payload: Create.Event.InterviewerAssigned(Guid.NewGuid(), interviewId)),
-                Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:3, payload: Create.Event.InteviewCompleted()),
+                Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:3, payload: Create.Event.InterviewCompleted()),
             }));
             eventStore.MarkAllEventsAsReceivedByHq(interviewId);
 

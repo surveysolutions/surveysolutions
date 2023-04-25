@@ -157,7 +157,7 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewSynchronized InterviewSynchronized(InterviewSynchronizationDto synchronizationDto, DateTimeOffset? originDate = null)
             => new InterviewSynchronized(synchronizationDto, originDate ?? DateTimeOffset.Now);
 
-        public InterviewCompleted InteviewCompleted(DateTime? completionDate = null)
+        public InterviewCompleted InterviewCompleted(DateTime? completionDate = null)
             => new InterviewCompleted(
                 Guid.NewGuid(),
                 completionDate ?? DateTime.UtcNow,

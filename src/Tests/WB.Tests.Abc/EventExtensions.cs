@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Main.Core.Entities.Composite;
+using Main.Core.Events;
 using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -51,6 +52,24 @@ namespace WB.Tests.Abc
                 payload: @event,
                 globalSequence: globalSequence);
             return committedEvent;
+        }
+
+        public static AggregateRootEvent ToAggregateRootEvent<T>(this T @event,
+            Guid? eventSourceId = null,
+            string origin = null,
+            DateTime? eventTimeStamp = null,
+            Guid? eventId = null,
+            long? globalSequence = null)
+            where T : class, IEvent
+        {
+            var committedEvent = ToCommittedEvent(@event,
+                origin: origin,
+                eventId: eventId, 
+                eventSourceId: eventSourceId,
+                eventTimeStamp: eventTimeStamp,
+                globalSequence: globalSequence);
+            var aggregateRootEvent = new AggregateRootEvent(committedEvent);
+            return aggregateRootEvent;
         }
     }
 
