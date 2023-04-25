@@ -64,6 +64,7 @@ namespace WB.UI.Shared.Extensions.Activities
         protected override bool BackButtonCustomAction => true;
         protected override void BackButtonPressed()
         {
+            this.ViewModel.NavigateToDashboardCommand.Execute();
             this.Cancel();
         }
 

@@ -93,9 +93,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             try
             {
                 if (this.input.InterviewId.HasValue)
-                    await this.AssignToInterviewAsync(this.input.InterviewId.Value, selectedResponsible);
+                    await this.AssignResponsibleToInterviewAsync(this.input.InterviewId.Value, selectedResponsible);
                 else if(this.input.AssignmentId.HasValue)
-                    this.AssignToAssignment(this.input.AssignmentId.Value, selectedResponsible);
+                    this.AssignResponsibleToAssignment(this.input.AssignmentId.Value, selectedResponsible);
                 else throw new NotSupportedException("Reassign dialog support interview or assignment only");
             }
             finally
@@ -104,7 +104,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
         }
 
-        private void AssignToAssignment(int assignmentId, ResponsibleToSelectViewModel responsible)
+        private void AssignResponsibleToAssignment(int assignmentId, ResponsibleToSelectViewModel responsible)
         {
             var assignment = this.assignmentsStorage.GetById(assignmentId);
 
@@ -119,7 +119,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.auditLogService.Write(new AssignResponsibleToAssignmentAuditLogEntity(assignmentId, responsible.Id, responsible.Login));
         }
 
-        private async Task AssignToInterviewAsync(Guid interviewId, ResponsibleToSelectViewModel responsible)
+        private async Task AssignResponsibleToInterviewAsync(Guid interviewId, ResponsibleToSelectViewModel responsible)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
 

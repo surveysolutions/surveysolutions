@@ -212,9 +212,6 @@
     <PackageReference Include="MvvmCross.Plugin.ResourceLoader">
       <Version>9.0.8</Version>
     </PackageReference>
-    <PackageReference Include="MvvmCross.Plugin.Visibility">
-      <Version>9.0.8</Version>
-    </PackageReference>
     <PackageReference Include="MvvmCross.Plugin.WebBrowser">
       <Version>8.0.2</Version>
     </PackageReference>

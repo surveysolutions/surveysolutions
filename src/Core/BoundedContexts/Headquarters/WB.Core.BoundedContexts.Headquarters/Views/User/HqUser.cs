@@ -77,8 +77,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         public virtual bool IsLockedBySupervisor { get; set; }
         public virtual bool IsLockedByHeadquaters { get; set; }
 
-        public virtual bool IsLocked => IsLockedByHeadquaters || IsLockedBySupervisor;
-        public virtual bool IsArchivedOrLocked => IsArchived || IsLockedByHeadquaters || IsLockedBySupervisor;
+        public virtual bool IsLocked => IsLockedByHeadquaters 
+                                        || IsLockedBySupervisor 
+                                        || (LockoutEnd.HasValue && LockoutEnd.Value >= DateTimeOffset.UtcNow);
+        public virtual bool IsArchivedOrLocked => IsArchived || IsLocked;
 
         public virtual DateTime CreationDate { get; set; }
         public virtual string PasswordHashSha1 { get; set; }

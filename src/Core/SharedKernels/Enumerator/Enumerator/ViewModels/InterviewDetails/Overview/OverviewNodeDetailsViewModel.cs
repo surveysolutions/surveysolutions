@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MvvmCross.Commands;
+using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -17,6 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IDynamicTextViewModelFactory dynamicTextViewModelFactory;
         private readonly NavigationState navigationState;
+        private readonly IMvxNavigationService mvxNavigationService;
 
         private string interviewId;
         private Identity identity;
@@ -24,12 +27,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
         public OverviewNodeDetailsViewModel(IStatefulInterviewRepository interviewRepository,
             IDynamicTextViewModelFactory dynamicTextViewModelFactory,
             CommentsViewModel comments,
-            NavigationState navigationState)
+            NavigationState navigationState,
+            IMvxNavigationService mvxNavigationService)
         {
             Comments = comments;
             this.interviewRepository = interviewRepository;
             this.dynamicTextViewModelFactory = dynamicTextViewModelFactory;
             this.navigationState = navigationState;
+            this.mvxNavigationService = mvxNavigationService;
         }
 
         public override void Prepare(OverviewNodeDetailsViewModelArgs parameter)
@@ -66,6 +71,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
         public List<string> Errors { get; set; }
 
         public List<string> Warnings { get; set; }
+        
+        public IMvxCommand CancelCommand => new MvxCommand(this.Cancel);
+        private void Cancel() => this.mvxNavigationService.Close(this);
         
         public void Dispose()
         {
