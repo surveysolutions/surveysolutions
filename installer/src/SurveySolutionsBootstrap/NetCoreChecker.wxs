@@ -13,31 +13,31 @@
       <WixVariable Id="WindowsDotNetHosting501InstalledInstallCondition" Value="" Overridable="yes" />
 
       <!-- aspnetcorev2.dll version is v16.0.22335.13 for Bundle 6.0.13 -->
+      <!-- aspnetcorev2.dll version is v17.0.22323.1 for Bundle 7.0.1 -->
       <PackageGroup Id="WindowsDotNetHosting501">
         <ExePackage
-          Name="dotnet-hosting-6.0.13-win.exe"
+          Name="dotnet-hosting-7.0.1-win.exe"
           InstallCommand="/install /quiet /norestart /log &quot;[WindowsDotNetHosting501Log]&quot;"
           RepairCommand="/repair /quiet /norestart /log &quot;[WindowsDotNetHosting501Log]&quot;"
           UninstallCommand="/uninstall /quiet /norestart /log &quot;[WindowsDotNetHosting501Log]&quot;"
           PerMachine="yes"
-          DetectCondition="WindowsIISHostingModuleExists AND WindowsIISHostingModuleVersion &gt;= v16.0.22335.13"
+          DetectCondition="WindowsIISHostingModuleExists AND WindowsIISHostingModuleVersion &gt;= v17.0.22323.1"
           InstallCondition="!(wix.WindowsDotNetHosting501InstalledInstallCondition)"
           Vital="yes"
           Permanent="yes"
           Protocol="burn"
-          DownloadUrl="https://download.visualstudio.microsoft.com/download/pr/0cb3c095-c4f4-4d55-929b-3b4888a7b5f1/4156664d6bfcb46b63916a8cd43f8305/dotnet-hosting-6.0.13-win.exe"
+          DownloadUrl="https://download.visualstudio.microsoft.com/download/pr/352e02d2-66be-48d5-b9bf-959a9a02982d/e29621ccbdb41d69b06bb29b4434b13a/dotnet-hosting-7.0.1-win.exe"
           LogPathVariable="WindowsDotNetHosting501Log"
           Compressed="no">
-            <!-- to generate run -->
-            <!-- heat.exe payload "dotnet-hosting-6.0.13-win.exe" -o "dotnet-hosting.wxs" -->
-            <RemotePayload CertificatePublicKey="9705EC06868355E06D7DF0269606E61B39D51890" 
-                           CertificateThumbprint="AB38D4012B7F90EFE140FA937E71DB39B12E1CAD" 
-                           Description="Microsoft .NET 6.0.13 - Windows Server Hosting" 
-                           Hash="BCB8ED035C50B4EEBE0992417753E1C5079926BF" 
-                           ProductName="Microsoft .NET 6.0.13 - Windows Server Hosting" 
-                           Size="71686984" 
-                           Version="6.0.13.22580" />
-        </ExePackage>
-      </PackageGroup>
+        <!-- heat.exe payload "dotnet-hosting-3.1.1-win.exe" -o "dotnet-hosting.wxs" -->
+          <RemotePayload CertificatePublicKey="0A7D1EFF01D4EBAD21E85C51499576EBAA40E676" 
+                         CertificateThumbprint="AFBF0B8B6A18F7E23CCA1DDCD0AC1A55B4035173" 
+                         Description="Microsoft .NET 7.0.1 - Windows Server Hosting" 
+                         Hash="CEEA795BAD4D37DDA66EA249F305D2544E00FDBA" 
+                         ProductName="Microsoft .NET 7.0.1 - Windows Server Hosting" 
+                         Size="109988280" 
+                         Version="7.0.1.22568" />
+      </ExePackage>
+    </PackageGroup>
   </Fragment>
 </Wix>

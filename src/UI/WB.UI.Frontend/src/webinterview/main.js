@@ -28,13 +28,15 @@ import './init'
 import './errors'
 import box from '@/shared/modal'
 
-require('./componentsRegistry')
+import './componentsRegistry'
 
-const createRouter = require('./router').default
+import createRouter from './router'
+
+import webinterviewStore from './store'
 
 const store = new Vuex.Store({
     modules: {
-        webinterview: require('./store').default,
+        webinterview: webinterviewStore,
     },
 })
 
@@ -42,8 +44,7 @@ const router = createRouter(store)
 
 sync(store, router)
 
-const App = require('./App').default
-
+import App from './App'
 
 box.init(i18n, browserLanguage)
 

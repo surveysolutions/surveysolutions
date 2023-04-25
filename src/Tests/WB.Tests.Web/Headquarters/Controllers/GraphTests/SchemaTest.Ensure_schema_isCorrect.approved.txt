@@ -162,7 +162,7 @@ type Interview {
   "List of actions that can be applied to interview"
   actionFlags: [InterviewActionFlags!]!
   "Identifier for the assignment to which this interview belongs"
-  assignmentId: Int!
+  assignmentId: Int
   id: ID!
   status: InterviewStatus!
   "Current mode of interview"
@@ -275,6 +275,7 @@ type User {
   creationDate: Date
   isLocked: Boolean
   isArchived: Boolean
+  isRelinkAllowed: Boolean
   workspaces: [String!]!
 }
 

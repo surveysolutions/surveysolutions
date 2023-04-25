@@ -123,6 +123,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This operation will clear all export cache data. Next export will take more time..
+        /// </summary>
+        public static string ClearExportCache_Description {
+            get {
+                return ResourceManager.GetString("ClearExportCache_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear export cache.
+        /// </summary>
+        public static string ClearExportCache_Title {
+            get {
+                return ResourceManager.GetString("ClearExportCache_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Current logo.
         /// </summary>
         public static string CurrentLogo {
@@ -704,6 +722,51 @@ namespace WB.UI.Headquarters.Resources {
         public static string RegeneratePasswordConfirm {
             get {
                 return ResourceManager.GetString("RegeneratePasswordConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear cache.
+        /// </summary>
+        public static string RemoveExportCache {
+            get {
+                return ResourceManager.GetString("RemoveExportCache", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning! This is an irreversible action.
+        /// </summary>
+        public static string RemoveExportCache_Warning {
+            get {
+                return ResourceManager.GetString("RemoveExportCache_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to clear export cache? All generated export files will be removed from the server and will NOT be available for download..
+        /// </summary>
+        public static string RemoveExportCacheConfirm {
+            get {
+                return ResourceManager.GetString("RemoveExportCacheConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error cache clear.
+        /// </summary>
+        public static string RemoveExportCacheFail {
+            get {
+                return ResourceManager.GetString("RemoveExportCacheFail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cache was deleted successfully.
+        /// </summary>
+        public static string RemoveExportCacheSuccess {
+            get {
+                return ResourceManager.GetString("RemoveExportCacheSuccess", resourceCulture);
             }
         }
         

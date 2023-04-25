@@ -95,6 +95,7 @@ namespace WB.UI.Shared.Enumerator.Services.Notifications
                 return;
             }
 
+#pragma warning disable CA1416 // Validate platform compatibility
             var channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationImportance.Default)
             {
                 Description = CHANNEL_DESCRIPTION
@@ -102,6 +103,7 @@ namespace WB.UI.Shared.Enumerator.Services.Notifications
 
             var notificationManager = (NotificationManager)context.GetSystemService(Context.NotificationService);
             notificationManager.CreateNotificationChannel(channel);
+#pragma warning restore CA1416 // Validate platform compatibility
         }
 
         public void CancelAllNotifications(Context context)

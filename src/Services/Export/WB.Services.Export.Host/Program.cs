@@ -33,8 +33,11 @@ namespace WB.Services.Export.Host
                     var pathToExe = Process.GetCurrentProcess().MainModule!.FileName;
                     var pathToContentRoot = Path.GetDirectoryName(pathToExe);
 
-                    Directory.SetCurrentDirectory(pathToContentRoot!);
-                    host = host.UseContentRoot(pathToContentRoot);
+                    if (pathToContentRoot != null)
+                    {
+                        Directory.SetCurrentDirectory(pathToContentRoot);
+                        host = host.UseContentRoot(pathToContentRoot);
+                    }
                 }
 
                 await host.Build().RunAsync();
@@ -50,11 +53,17 @@ namespace WB.Services.Export.Host
         {
             return Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
                 .ConfigureSurveySolutionsLogging("export-service", (host, logConfig) =>
+                {
+                    var connectionString = host.Configuration.GetConnectionString("DefaultConnection");
+
+                    if (connectionString == null)
+                        throw new InvalidOperationException("Connection string was not found");
+                    
                     logConfig
                         .Enrich.WithProperty("workerId", "root")
                         .Destructure.ByMaskingProperties("Password", "ArchivePassword")
-                        .WriteTo.Postgres(host.Configuration.GetConnectionString("DefaultConnection"))
-                )
+                        .WriteTo.Postgres(connectionString);
+                })
                 .ConfigureSurveySolutionsAppConfiguration<Startup>("Export_", args, useWebDefaults, (host, c) =>
                 {
                     c.AddJsonFile($"appsettings.{Environment.MachineName}.json", true);

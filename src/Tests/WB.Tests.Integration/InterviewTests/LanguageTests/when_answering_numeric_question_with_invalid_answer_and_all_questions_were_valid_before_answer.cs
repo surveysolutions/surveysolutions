@@ -70,7 +70,8 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
             result.AnswersDeclaredInvalidEventCount.Should().Be(1);
 
         [NUnit.Framework.Test] public void should_raise_AnswersDeclaredInvalid_event_with_answered_question_id_only () =>
-            result.AnswersDeclaredInvalidQuestionIds.Should().BeEquivalentTo(Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+            result.AnswersDeclaredInvalidQuestionIds.Should()
+                .BeEquivalentTo(new []{Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")});
 
         private static AppDomainContext appDomainContext;
         private static InvokeResult result;

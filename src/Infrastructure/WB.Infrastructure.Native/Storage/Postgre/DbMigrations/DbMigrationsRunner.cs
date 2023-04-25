@@ -62,7 +62,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
             using var scope = serviceProvider.CreateScope();
             // Instantiate the runner
             var runner = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
-            using var migrationLock = new MigrationLock(npgConnBuilder.ConnectionString, 1919);
+            using var migrationLock = new MigrationLock(npgConnBuilder.ConnectionString, false);
 
             // Execute the migrations
             runner.MigrateUp();

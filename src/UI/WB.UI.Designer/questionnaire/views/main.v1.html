@@ -254,7 +254,7 @@
                                             <button type="button" class="btn lighter-hover" ng-click="cancel(table);$event.stopPropagation()" ng-i18next>Cancel</button>
                                         </div>
                                         <div class="permanent-actions clearfix">
-                                            <a href="{{downloadLookupFileBaseUrl + questionnaire.questionnaireId +'?lookupTableId='+ table.itemId}}" ng-show="table.hasUploadedFile" class="btn btn-default pull-right" target="_blank" ng-i18next>Download</a>
+                                            <a href="{{downloadLookupFileBaseUrl + questionnaire.questionnaireId +'?lookupTableId='+ table.itemId}}" ng-show="table.hasUploadedFile" class="btn btn-default pull-right" target="_blank" rel="noopener noreferrer" ng-i18next>Download</a>
                                             <button class="btn btn-default pull-right" ngf-select="" ngf-change="fileSelected(table, $file);$event.stopPropagation()" accept=".tab,.txt" ngf-max-size="2MB" type="file">
                                                 <span ng-hide="table.hasUploadedFile" ng-i18next="SideBarLookupTableSelectFile">Select file</span>
                                                 <span ng-show="table.hasUploadedFile" ng-i18next="SideBarLookupTableUpdateFile">Update file</span>
@@ -342,7 +342,7 @@
                                                     <button ng-disabled="isReadOnlyForUser" class="btn btn-default pull-right" ngf-select="" ngf-accept="'.pdf,image/*,video/*,audio/*'" ngf-max-size="100MB" ngf-change="fileSelected(attachment, $file);$event.stopPropagation()" type="file">
                                                         <span ng-i18next>Update</span>
                                                     </button>
-                                                    <a href="{{downloadLookupFileBaseUrl + '/' + questionnaire.questionnaireId + '/' + attachment.attachmentId}}" class="btn btn-default pull-right" target="_blank" ng-i18next>Download</a>
+                                                    <a href="{{downloadLookupFileBaseUrl + '/' + questionnaire.questionnaireId + '/' + attachment.attachmentId}}" class="btn btn-default pull-right" target="_blank" rel="noopener noreferrer" ng-i18next>Download</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -419,7 +419,7 @@
                                                 </button>
 
                                                 <a ng-if="translation.downloadUrl" href="{{translation.downloadUrl}}" class="btn btn-default"
-                                                   target="_blank" ng-i18next>SideBarTranslationDownloadXlsx</a>
+                                                   target="_blank" rel="noopener noreferrer" ng-i18next>SideBarTranslationDownloadXlsx</a>
 
                                                 <button ng-hide="translation.form.$dirty || translation.isOriginalTranslation" 
                                                         ng-disabled="isReadOnlyForUser" 
@@ -441,8 +441,11 @@
                     <div class="button-holder">
                         <p>
                             <span ng-i18next="SideBarTranslationGetTemplate"></span>
-                            <a class="btn btn-default" href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId + '/template' }}" target="_blank" ng-i18next>
+                            <a class="btn btn-default" href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId + '/template' }}" target="_blank" rel="noopener" ng-i18next>
                                 SideBarTranslationGetTemplateLinkTextXlsx
+                            </a>
+                            <a class="btn btn-default" href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId + '/templateCsv' }}" target="_blank" rel="noopener" ng-i18next>
+                                SideBarTranslationGetTemplateLinkTextCsv
                             </a>
                         </p>
                         <p>
@@ -522,15 +525,19 @@
                                                     ng-click="editCategories(questionnaire.questionnaireId, categories.categoriesId)" ng-i18next="SideBarEditCategories">
                                                 </a>
 
-                                                <a href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId  + '/xlsx/' + categories.categoriesId}}" class="btn btn-default"
-                                                   target="_blank" ng-i18next>SideBarTranslationDownloadXlsx</a>
-
                                                 <button ng-hide="categories.form.$dirty" ng-disabled="isReadOnlyForUser"
                                                         class="btn btn-default" ngf-select="" ngf-max-size="10MB"
                                                         accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.txt,.tsv,.tab"
                                                         ngf-change="fileSelected(categories, $file);$event.stopPropagation()" type="button">
                                                     <span ng-i18next>Update</span>
                                                 </button>
+
+                                                {{'SideBarDownload' | i18next}}
+                                                <a href="{{'/questionnaire/ExportOptions/' + questionnaire.questionnaireId  + '?type=xlsx&isCategory=true&entityId=' + categories.categoriesId}}" class="btn btn-default"
+                                                   target="_blank" rel="noopener" ng-i18next>SideBarXlsx</a>
+                                                <a href="{{'/questionnaire/ExportOptions/' + questionnaire.questionnaireId  + '?type=csv&isCategory=true&entityId=' + categories.categoriesId}}" class="btn btn-default"
+                                                   target="_blank" rel="noopener" ng-i18next>SideBarTab</a>
+
                                             </div>
                                         </div>
                                     </div>
@@ -541,8 +548,12 @@
                     <div class="button-holder">
                         <p>
                             <span ng-i18next="SideBarTranslationGetTemplate"></span>
-                            <a class="btn btn-default" href="{{downloadBaseUrl + '/template' }}" target="_blank" ng-i18next>
-                                SideBarTranslationGetTemplateLinkTextXlsx
+
+                            <a class="btn btn-default" href="{{downloadBaseUrl + '/template' }}" target="_blank" rel="noopener" ng-i18next>
+                                SideBarXlsx
+                            </a>
+                            <a class="btn btn-default" href="{{downloadBaseUrl + '/templateTab' }}" target="_blank" rel="noopener" ng-i18next>
+                                SideBarTab
                             </a>
                         </p>
                         <p>

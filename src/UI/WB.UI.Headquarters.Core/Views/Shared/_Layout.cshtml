@@ -1,4 +1,4 @@
-@using WB.UI.Shared.Web.Extensions
+﻿@using WB.UI.Shared.Web.Extensions
 @using System.Globalization
 <!DOCTYPE html>
 <html lang="@CultureInfo.CurrentUICulture.Name">
@@ -8,17 +8,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @Html.GenerateFavicon(Url.Static("/img/identity/favicon-hq"))
     <title>@ViewBag.Title</title>
-    <partial name="GlobalSettings" />
+    <partial name="GlobalSettings" ></partial>
     <locale component="hq"></locale>
     @RenderSection("scripts", false)
-<link href="/js/chunk-common.js" rel="preload" as="script"><link href="/js/chunk-vendors.js" rel="preload" as="script"><link href="/js/hq_vue.js" rel="preload" as="script"></head>
+  <script type="module" crossorigin src="/js/markup-55b820ba.js"></script>
+  <script type="module" crossorigin src="/js/affix-8152b575.js"></script>
+  <script type="module" crossorigin src="/js/vue-router.esm-349f27de.js"></script>
+  <script type="module" crossorigin src="/js/index-dde8c2d8.js"></script>
+  <script type="module" crossorigin src="/js/compatibility-8a561dbb.js"></script>
+  <script type="module" crossorigin src="/js/___vite-browser-external_commonjs-proxy-927a222b.js"></script>
+  <script type="module" crossorigin src="/js/main-ab1ddc9c.js"></script>
+  <link rel="stylesheet" href="/css/markup-64d6badc.css">
+  <link rel="stylesheet" href="/css/vue-router-75389ed1.css">
+  <link rel="stylesheet" href="/css/main-6cdaa2ff.css">
+  <link rel="stylesheet" href="/css/markup-specific-817adbaf.css">
+</head>
 <body class='wide-navbar'>
     <header>
-        <partial name="NavigationBar" />
+        <partial name="NavigationBar" ></partial>
     </header>
-    <partial name="NoticeBar"/>
+    <partial name="NoticeBar"></partial>
     @RenderBody()
-    <partial name="Footer" />
-    <partial name="_Clickjacking"/>
-<script type="text/javascript" src="/js/chunk-vendors.js"></script><script type="text/javascript" src="/js/chunk-common.js"></script><script type="text/javascript" src="/js/hq_vue.js"></script></body>
+    <partial name="Footer" ></partial>
+    <partial name="_Clickjacking"></partial>
+
+</body>
 </html>

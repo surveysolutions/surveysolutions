@@ -60,7 +60,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
             });
 
         [NUnit.Framework.Test] public void should_raise_QuestionsDisabled_event_for_dependent_question () =>
-            results.DisabledQuestions.Should().BeEquivalentTo(Guid.Parse("11111111111111111111111111111111"));
+            results.DisabledQuestions.Should().BeEquivalentTo(new []{Guid.Parse("11111111111111111111111111111111")});
 
         [OneTimeTearDown]
         public void TearDown()

@@ -337,11 +337,23 @@
   <data name="SideBarTranslationDownloadXlsx" xml:space="preserve">
     <value>Скачать xlsx</value>
   </data>
+  <data name="SideBarDownload" xml:space="preserve">
+    <value>Скачать:</value>
+  </data>
+  <data name="SideBarXlsx" xml:space="preserve">
+    <value>Xlsx</value>
+  </data>
+  <data name="SideBarTab" xml:space="preserve">
+    <value>Tab</value>
+  </data>
   <data name="SideBarTranslationGetTemplate" xml:space="preserve">
     <value>Получить шаблон для </value>
   </data>
   <data name="SideBarTranslationGetTemplateLinkTextXlsx" xml:space="preserve">
     <value>Excel (xlsx)</value>
+  </data>
+  <data name="SideBarTranslationGetTemplateLinkTextCsv" xml:space="preserve">
+    <value>Tab (txt)</value>
   </data>
   <data name="SideBarTranslationsTitle" xml:space="preserve">
     <value>Переводы</value>
@@ -510,6 +522,9 @@
   </data>
   <data name="SelectQuestion" xml:space="preserve">
     <value>Выбрать вопрос</value>
+  </data>
+  <data name="AddFilter" xml:space="preserve">
+    <value>Добавить фильтр</value>
   </data>
   <data name="SettingsCan" xml:space="preserve">
     <value>Может </value>
@@ -997,6 +1012,9 @@
     <value>Закрыть панель метаинформации</value>
     <comment>Закрыть панель метаинформации</comment>
   </data>
+  <data name="HotkeysCloseScenarios" xml:space="preserve">
+    <value>Закрыть панель сценариев</value>
+  </data>  
   <data name="SideBarMetadataHeader" xml:space="preserve">
     <value>Описание опросника и данные по обследованию</value>
     <comment>Метаинформация</comment>
@@ -1478,6 +1496,9 @@
   <data name="HotkeysCloseCategories" xml:space="preserve">
     <value>Закрыть панель категорий</value>
   </data>
+  <data name="HotkeysCloseComments" xml:space="preserve">
+    <value>Закрыть панель комментариев</value>
+  </data>  
   <data name="SideBarCategoriesNoName" xml:space="preserve">
     <value>список категорий без имени</value>
   </data>
@@ -1581,4 +1602,7 @@
   <data name="HideParentValues" xml:space="preserve">
     <value>Спрятать родительские значения</value>
   </data>
+  <data name="AddEnablingCondition" xml:space="preserve">
+    <value>Добавить условие</value>
+  </data>  
 </root>

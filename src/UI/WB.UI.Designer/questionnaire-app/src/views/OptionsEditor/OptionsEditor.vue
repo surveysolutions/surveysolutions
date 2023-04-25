@@ -1,12 +1,12 @@
 <template>
     <v-container fluid>
-        <v-snackbar v-model="snacks.fileUploaded" top color="success">{{
+        <v-snackbar v-model="snacks.fileUploaded" location='top' color="success">{{
             $t('QuestionnaireEditor.FileUploaded')
         }}</v-snackbar>
-        <v-snackbar v-model="snacks.formReverted" top color="success">{{
+        <v-snackbar v-model="snacks.formReverted" location='top' color="success">{{
             $t('QuestionnaireEditor.DataChangesReverted')
         }}</v-snackbar>
-        <v-snackbar v-model="snacks.ajaxError" top color="error">{{
+        <v-snackbar v-model="snacks.ajaxError" location='top' color="error">{{
             $t('QuestionnaireEditor.CommunicationError')
         }}</v-snackbar>
         <v-row align="start" justify="center">
@@ -17,11 +17,14 @@
                             formTitle
                         }}</v-toolbar-title>
                     </v-toolbar>
-                    <v-tabs v-model="tab" grow>
-                        <v-tab key="table" :disabled="!stringsIsValid">{{
+                    <v-tabs v-model="tab" 
+                            color="primary"
+                            fixed-tabs 
+                            grow>
+                        <v-tab value="table" :disabled="!stringsIsValid">{{
                             $t('QuestionnaireEditor.TableView')
                         }}</v-tab>
-                        <v-tab key="strings">{{
+                        <v-tab value="strings">{{
                             $t('QuestionnaireEditor.StringsView')
                         }}</v-tab>
                     </v-tabs>
@@ -37,8 +40,8 @@
                             </v-alert>
                         </v-card-text>
                     </div>
-                    <v-tabs-items v-model="tab">
-                        <v-tab-item key="table">
+                    <v-window v-model="tab">
+                        <v-window-item value="table">
                             <category-table
                                 ref="table"
                                 :categories="categories"
@@ -48,27 +51,28 @@
                                 :is-cascading="isCascading"
                                 :readonly="isReadonly"
                                 @setCascading="setCascadingCategory"
+                                @update-categories="updateCategories"
                             />
-                        </v-tab-item>
-                        <v-tab-item key="strings">
+                        </v-window-item>
+                        <v-window-item value="strings">
                             <category-strings
-                                v-if="tab == 1"
+                            v-if="tab == 'strings'"
                                 ref="strings"
                                 :loading="loading"
                                 :show-parent-value="isCascading"
                                 :categories="categories"
                                 :readonly="isReadonly"
-                                @valid="v => (stringsIsValid = v)"
-                                @change="v => (categories = v)"
+                                @string-valid="v => (stringsIsValid = v)"
+                                @changeCategories="v => (categories = v)"
                                 @editing="v => (inEditMode = v)"
                                 @inprogress="v => (convert = v)"
                             />
-                        </v-tab-item>
-                    </v-tabs-items>
+                        </v-window-item>
+                    </v-window>
                 </v-card>
             </v-col>
         </v-row>
-        <v-footer fixed min-width="680">
+        <v-footer app min-width="680">
             <v-btn
                 v-if="!readonly"
                 class="ma-2"
@@ -94,19 +98,29 @@
                 accept=".tab, .txt, .tsv, .xls, .xlsx, .ods"
                 :label="$t('QuestionnaireEditor.Upload')"
                 dense
+                show-size
                 @change="uploadFile"
             ></v-file-input>
-            <a :href="exportOptionsUri" class="ma-2 v-btn v-size--default">
+            <span>
                 <v-icon>mdi-download</v-icon>
-                {{ $t('QuestionnaireEditor.Download') }}</a
+                {{ $t('QuestionnaireEditor.SideBarDownload') }}
+            </span>
+            <a
+                :href="exportOptionsAsExlsUri"
+                class="ma-2 v-btn v-size--default"
+            >
+                {{ $t('QuestionnaireEditor.SideBarXlsx') }}</a
+            >
+            <a :href="exportOptionsAsTabUri" class="ma-2 v-btn v-size--default">
+                {{ $t('QuestionnaireEditor.SideBarTab') }}</a
             >
         </v-footer>
     </v-container>
 </template>
 
 <script>
-import CategoryTable from './components/OptionItemsTable';
-import CategoryStrings from './components/OptionItemsAsStrings';
+import CategoryTable from './components/OptionItemsTable.vue';
+import CategoryStrings from './components/OptionItemsAsStrings.vue';
 import { optionsApi } from './services';
 
 export default {
@@ -126,7 +140,7 @@ export default {
 
     data() {
         return {
-            tab: 0,
+            tab: '',
             categories: [],
             parentCategories: null,
             categoriesAsText: '',
@@ -193,8 +207,17 @@ export default {
             );
         },
 
-        exportOptionsUri() {
-            return optionsApi.getExportOptionsUri(
+        exportOptionsAsTabUri() {
+            return optionsApi.getExportOptionsAsTabUri(
+                this.questionnaireRev,
+                this.id,
+                this.isCategory,
+                this.isCascading
+            );
+        },
+
+        exportOptionsAsExlsUri() {
+            return optionsApi.getExportOptionsAsExlsUri(
                 this.questionnaireRev,
                 this.id,
                 this.isCategory,
@@ -203,7 +226,7 @@ export default {
         },
 
         canApplyChanges() {
-            return this.tab == 1 ? this.stringsIsValid : true;
+            return this.tab == 'strings' ? this.stringsIsValid : true;
         }
     },
 
@@ -288,35 +311,38 @@ export default {
             });
         },
 
-        uploadFile(files) {
+        async uploadFile() {
+            let files = this.file
             if (!files) return;
 
             const file = files.length ? files[0] : files;
-
             this.errors = [];
 
-            const apiRequest = this.isCategory
-                ? optionsApi.uploadCategory(file)
-                : optionsApi.uploadOptions(
+            const apiResponse = this.isCategory
+                ? await optionsApi.uploadCategory(file)
+                : await optionsApi.uploadOptions(
                       this.questionnaireRev,
                       this.id,
                       file
                   );
+            
+            this.errors = apiResponse.data.errors;
+            this.categories = apiResponse.data.options || [];
+            this.file = null;
+            this.snacks.fileUploaded = true;
 
-            apiRequest.then(r => {
-                this.errors = r.data.errors;
-                this.categories = r.data.options;
-                this.file = null;
-                this.snacks.fileUploaded = true;
-
-                if (this.$refs.table != null) {
-                    this.$refs.table.reset();
-                }
-            });
+            if (this.$refs.table != null) {
+                this.$refs.table.reset();
+            }
+            
         },
 
         close() {
             close();
+        },
+
+        updateCategories(newCategories) {
+            this.categories = newCategories;
         },
 
         apply() {

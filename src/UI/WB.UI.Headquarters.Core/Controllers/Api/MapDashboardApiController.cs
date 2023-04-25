@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Main.Core.Entities.SubEntities;
@@ -18,6 +19,7 @@ using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
@@ -43,23 +45,23 @@ namespace WB.UI.Headquarters.Controllers.Api
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesAccessor;
         private readonly IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems;
         private readonly IAssignmentsService assignmentsService;
-        private readonly IAuthorizedUser authorizedUser;
-        private readonly IMemoryCache cache;
+        private readonly IMapStorageService mapStorageService;
+        private readonly IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor;
 
         public MapDashboardApiController(
             IInterviewFactory interviewFactory,
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesAccessor,
-            IAuthorizedUser authorizedUser,
-            IMemoryCache cache,
             IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems,
-            IAssignmentsService assignmentsService)
+            IAssignmentsService assignmentsService,
+            IMapStorageService mapStorageService,
+            IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor)
         {
             this.interviewFactory = interviewFactory;
             this.questionnairesAccessor = questionnairesAccessor;
-            this.authorizedUser = authorizedUser;
-            this.cache = cache;
             this.questionnaireItems = questionnaireItems;
             this.assignmentsService = assignmentsService;
+            this.mapStorageService = mapStorageService;
+            this.mapPlainStorageAccessor = mapPlainStorageAccessor;
         }
         
         public enum MapMarkerType
@@ -127,8 +129,11 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
         
         [HttpPost]
-        public MapDashboardResult Markers([FromBody] MapDashboardRequest input)
+        public ActionResult<MapDashboardResult> Markers([FromBody] MapDashboardRequest input)
         {
+            if (input == null || !ModelState.IsValid)
+                return StatusCode((int)HttpStatusCode.NotAcceptable);
+            
             IncreaseBound(input, 0.2);
             
             var bounds = GeoBounds.Closed;
@@ -145,7 +150,9 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             var mapPoints = 
                 interviewGpsAnswers.Select(g =>
-                    new MapPoint<MapMarker>(g.Longitude, g.Latitude, 
+                    new MapPoint<MapMarker>(
+                        g.Longitude, 
+                        g.Latitude >= 0 ? Math.Min(g.Latitude, 85.05) : Math.Max(g.Latitude, -85.05), 
                         new MapInterviewMarker()
                         {
                             interviewId = g.InterviewId,
@@ -153,7 +160,9 @@ namespace WB.UI.Headquarters.Controllers.Api
                             status = g.Status
                         }))
                 .Concat(assignmentGpsData.Select(a =>
-                    new MapPoint<MapMarker>(a.Longitude, a.Latitude, 
+                    new MapPoint<MapMarker>(
+                        a.Longitude, 
+                        a.Latitude >= 0 ? Math.Min(a.Latitude, 85.05) : Math.Max(a.Latitude, -85.05), 
                         new MapAssignmentMarker()
                         {
                             assignmentId = a.AssignmentId,
@@ -337,6 +346,40 @@ namespace WB.UI.Headquarters.Controllers.Api
                             && questionnaireIds.Contains(x.Id)
                             && (query == null || x.Title.ToLower().Contains(lowerCaseQuery)))
                 .ToList());
+        }
+        
+        [HttpGet]
+        [ApiNoCache]
+        public ComboboxModel<ComboboxViewItem> Shapefiles(string query = null)
+        {
+            var maps = mapStorageService.GetUserShapefiles(query);
+            return new ComboboxModel<ComboboxViewItem>(maps);
+        }
+        
+        public class GeoJsonInfo
+        {
+            public string GeoJson { get; set; }
+            public double XMax { get; set; }
+            public double XMin { get; set; }
+            public double YMax { get; set; }
+            public double YMin { get; set; }
+        }
+        
+        [HttpGet]
+        public ActionResult<GeoJsonInfo> ShapefileInfo(string mapName)
+        {
+            var map = mapPlainStorageAccessor.GetById(mapName);
+            if (map == null)
+                return NotFound();
+
+            return new GeoJsonInfo
+            {
+                GeoJson = map.GeoJson,
+                XMax = map.XMaxVal,
+                XMin = map.XMinVal,
+                YMax = map.YMaxVal,
+                YMin = map.YMinVal,
+            };
         }
     }
 }

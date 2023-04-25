@@ -8,7 +8,9 @@ using MvvmCross;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Activities.Callbacks;
 using WB.UI.Shared.Enumerator.Services.Notifications;
+using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
 
 namespace WB.UI.Interviewer.Activities
 {
@@ -29,8 +31,9 @@ namespace WB.UI.Interviewer.Activities
             toolbar.Title = "";
             this.SetSupportActionBar(toolbar);
         }
-
-        public override void OnBackPressed()
+        
+        protected override bool BackButtonCustomAction => true;
+        protected override void BackButtonPressed()
         {
         }
 

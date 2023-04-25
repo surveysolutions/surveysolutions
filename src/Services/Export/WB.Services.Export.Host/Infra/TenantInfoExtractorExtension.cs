@@ -17,12 +17,14 @@ namespace WB.Services.Export.Host.Infra
                 return null;
             }
 
-            string baseUrl = headers["Referer"];
+            string? referer = headers["Referer"];
+            
+            string baseUrl = referer ?? string.Empty;
             string tenantId = headers["Authorization"].ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
-            string name = headers["x-tenant-name"];
-            string space = headers["x-tenant-space"];
+            string? name = headers["x-tenant-name"];
+            string? space = headers["x-tenant-space"];
 
-            return new TenantInfo(baseUrl, tenantId, name, space);
+            return new TenantInfo(baseUrl, tenantId, name ?? "", space ?? "");
         }
     }
 }

@@ -3,7 +3,7 @@ import Vue from 'vue'
 
 /* eslint:disable:no-console */
 Vue.config.errorHandler = (error, vm) => {
-    if (error.response.data != null) {
+    if (error.response && error.response.data != null) {
         var data = error.response.data
 
         // handling asp net core validation errors
@@ -116,7 +116,7 @@ export function safeStore(storeConfig, fieldToSafe = ['actions', 'mutations']) {
     }
 
     storeConfig.actions.UNHANDLED_ERROR = (ctx, error) => {
-        console.error(name, error)
+        console.error("Error on execution: %s", (error || {}).message)
         toastErr(error, error.message)
     }
 

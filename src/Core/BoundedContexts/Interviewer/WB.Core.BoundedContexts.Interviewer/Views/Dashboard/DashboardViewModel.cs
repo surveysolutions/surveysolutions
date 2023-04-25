@@ -212,7 +212,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             try
             {
                 this.Synchronization.CancelSynchronizationCommand.Execute();
-                await mapInteractionService.OpenMapDashboardAsync();
+                await mapInteractionService.OpenInterviewerMapDashboardAsync();
                 this.Dispose();
             }
             catch (MissingPermissionsException e)
@@ -256,14 +256,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             => EnumeratorUIResources.Dashboard_Title.FormatString(this.NumberOfAssignedInterviews.ToString(),
                 Principal.CurrentUserIdentity.Name);
 
-        private async void OnInterviewRemoved(object sender, InterviewRemovedArgs e)
+        private async void OnInterviewRemoved(object? sender, InterviewRemovedArgs e)
         {
             await this.RaisePropertyChanged(() => this.DashboardTitle);
             this.CreateNew.UpdateAssignment(e.AssignmentId);
             await this.CreateNew.LoadAsync(this.Synchronization);
         }
 
-        private void OnItemsLoaded(object sender, EventArgs e) =>
+        private void OnItemsLoaded(object? sender, EventArgs e) =>
             this.IsInProgress = !(this.StartedInterviews.IsItemsLoaded
                                   && this.RejectedInterviews.IsItemsLoaded
                                   && this.CompletedInterviews.IsItemsLoaded
@@ -389,9 +389,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         protected override void SaveStateToBundle(IMvxBundle bundle)
         {
             base.SaveStateToBundle(bundle);
-            if (this.LastVisitedInterviewId != null)
+            if (this.LastVisitedInterviewId.HasValue)
             {
-                bundle.Data[nameof(LastVisitedInterviewId)] = this.LastVisitedInterviewId.ToString();
+                bundle.Data[nameof(LastVisitedInterviewId)] = this.LastVisitedInterviewId.Value.ToString();
             }
         }
 
@@ -430,6 +430,23 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.OnOfflineSynchronizationStarted?.Invoke();
         }
 
+        protected override async Task<bool> TryNearbyWifiDevicesPermission()
+        {
+            try
+            {
+                await permissions.AssureHasNearbyWifiDevicesPermissionOrThrow().ConfigureAwait(false);
+            }
+            catch (MissingPermissionsException)
+            {
+                ShouldStartAdvertising = false;
+                this.OnConnectionError(EnumeratorUIResources.NearbyPermissionRequired,
+                    ConnectionStatusCode.MissingPermissionNearbyWifiDevices);
+                return false;
+            }
+
+            return true;
+        }
+
         protected override async Task OnStartDiscovery()
         {
             var discoveryStatus = await this.nearbyConnection.StartDiscoveryAsync(
@@ -449,6 +466,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                     this.ShowSynchronizationError(InterviewerUIResources.SendToSupervisor_BluetoothError);
                     break;
                 case ConnectionStatusCode.MissingPermissionAccessCoarseLocation:
+                case ConnectionStatusCode.MissingPermissionBluetoothAdvertise:
                 case ConnectionStatusCode.StatusEndpointUnknown:
                     this.ShowSynchronizationError(errorMessage);
                     break;
@@ -502,12 +520,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.Synchronization.IsSynchronizationInProgress = false;
         }
 
-        private void Synchronization_OnCancel(object sender, EventArgs e)
+        private void Synchronization_OnCancel(object? sender, EventArgs e)
         {
             this.nearbyConnection.StopAll();
         }
 
-        private async void Synchronization_OnProgressChanged(object sender, SharedKernels.Enumerator.Services.Synchronization.SyncProgressInfo e)
+        private async void Synchronization_OnProgressChanged(object? sender, SharedKernels.Enumerator.Services.Synchronization.SyncProgressInfo e)
         {
             if (e.Status == SynchronizationStatus.Fail
                 || e.Status == SynchronizationStatus.Canceled

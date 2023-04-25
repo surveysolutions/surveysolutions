@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Android.App;
-using Android.Content;
+﻿using Android.Content;
 using Android.OS;
 using Java.Interop;
-using Mono.CSharp;
 using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.UI.Shared.Enumerator.Utils

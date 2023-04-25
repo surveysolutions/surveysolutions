@@ -10,6 +10,10 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
         {
         }
 
+        public MissingPermissionsException(string message, Exception inner) : base(message, inner)
+        {
+        }
+
         public MissingPermissionsException(string message, Type permissionType) : base(message)
         {
             this.PermissionType = permissionType;

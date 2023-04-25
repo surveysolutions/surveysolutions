@@ -2,7 +2,6 @@ import { map, debounce, uniq } from 'lodash'
 import Vue from 'vue'
 
 import { batchedAction } from '../helpers'
-import { StatusNames } from '~/shared/constants'
 
 import modal from '@/shared/modal'
 

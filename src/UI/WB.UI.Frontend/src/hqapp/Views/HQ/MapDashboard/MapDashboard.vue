@@ -35,10 +35,12 @@
             <FilterBlock :title="$t('Pages.Filters_Assignment')">
                 <div class="input-group">
                     <input
-                        class="form-control with-clear-btn"
+                        class="form-control with-clear-btn number"
                         :placeholder="$t('Common.AllAssignments')"
-                        type="text"
-                        v-model="this.assignmentId"/>
+                        type="number"
+                        v-model.number="assignmentId"
+                        v-validate="{ 'numeric':true }"
+                    />
                     <div class="input-group-btn"
                         @click="clearAssignmentFilter">
                         <div class="btn btn-default">
@@ -47,6 +49,15 @@
                         </div>
                     </div>
                 </div>
+            </FilterBlock>
+            <FilterBlock :title="$t('Pages.Filters_Shapefiles')">
+                <Typeahead
+                    control-id="shapefileName"
+                    :placeholder="$t('Pages.Filters_None')"
+                    :ajax-params="{ }"
+                    :fetch-url="model.shapefiles"
+                    :value="shapefileName"
+                    v-on:selected="selectedShapefileName"/>
             </FilterBlock>
             <FilterBlock v-if="isLoading"
                 :title="$t('Reports.MapDataLoading')">
@@ -316,6 +327,8 @@ export default {
             assignmentId: null,
             newResponsibleId: null,
             isReassignReceivedByTablet: false,
+            shapefileName: null,
+            geoJsonFeatures: null,
         }
     },
 
@@ -408,7 +421,13 @@ export default {
         createInterview() {
             const self = this
             const assignmentId = this.selectedTooltip.assignmentId
-            $.post('InterviewerHq/StartNewInterview/' + assignmentId, response => {
+            $.post({
+                url: 'InterviewerHq/StartNewInterview/' + assignmentId,
+                headers: {
+                    'X-CSRF-TOKEN': Vue.$hq.Util.getCsrfCookie(),
+                },
+            }, 
+            response => {
                 const interviewId = response.interviewId
                 const workspace = self.$hq.basePath
                 const url = `${workspace}WebInterview/${interviewId}/Cover`
@@ -516,6 +535,37 @@ export default {
                 q.responsible = newValue == null ? null : newValue.value
             })
             this.reloadMarkersInBounds()
+        },
+
+        selectedShapefileName(newValue) {
+            this.shapefileName = newValue
+
+            if (this.geoJsonFeatures) {
+                for (let i = 0; i < this.geoJsonFeatures.length; i++)
+                    this.map.data.remove(this.geoJsonFeatures[i]);
+                this.geoJsonFeatures = null
+            }
+            
+            if (this.shapefileName) {
+                const geoJsonUrl = this.model.shapefileJson + '?mapName=' + this.shapefileName.key
+                
+                this.isLoading = true
+
+                const self = this
+                $.getJSON(geoJsonUrl, function (data) {
+                    const json = JSON.parse(data.geoJson)
+                    self.geoJsonFeatures = self.map.data.addGeoJson(json);
+
+                    const sw = new google.maps.LatLng(data.yMax, data.xMin)
+                    const ne = new google.maps.LatLng(data.yMin, data.xMax)
+                    const latlngBounds = new google.maps.LatLngBounds(sw, ne)
+                    self.map.fitBounds(latlngBounds)
+
+                    self.isLoading = false
+
+                    self.reloadMarkersInBounds()
+                });
+            }
         },
 
         clearAssignmentFilter() {
@@ -729,6 +779,29 @@ export default {
                         icon: iconStyle,
                     }
                 }
+
+                if (type == null) {
+                    const geometry = feature.getGeometry()
+                    const geometryType = geometry.getType()
+                    //"Point", "MultiPoint", "LineString", "MultiLineString", "LinearRing", "Polygon", "MultiPolygon", or "GeometryCollection"
+                    if (geometryType == "Polygon" || geometryType == "MultiPolygon") {
+                        return {
+                            fillColor: '#DE9131',
+                            fillOpacity: 0.8,
+                            strokeColor: '#FCF7F1',
+                            //strokeOpacity: ,
+                            strokeWeight: 1,
+                        }
+                    }
+                    else if (geometryType == "LineString" || geometryType == "MultiLineString") {
+                        return {
+                            strokeColor: '#DE9131',
+                            //strokeOpacity: ,
+                            strokeWeight: 2,
+                        }
+                    }
+                }
+                
                 return {}
             })
 
@@ -811,6 +884,15 @@ export default {
                         self.infoWindow.open(self.map)
                     })
                 }
+
+                const label = event.feature.getProperty('label')
+                if (label) {
+                    Vue.nextTick(function() {
+                        self.infoWindow.setContent(label)
+                        self.infoWindow.setPosition(event.latLng)
+                        self.infoWindow.open(self.map)
+                    })
+                }
             })
 
             google.maps.event.addDomListener(mapDiv, 'click', event => {
@@ -875,20 +957,22 @@ export default {
                 clientMapWidth: this.map.getDiv().clientWidth,
             }
 
-            const self = this
-
             let stillLoading = true
 
             delay(() => {
                 if (stillLoading == true) this.isLoading = true
             }, 5000)
 
-            const response = await this.api.GetMarkers(request)
-
-            this.setMapData(response.data, extendBounds)
-
-            stillLoading = false
-            this.isLoading = false
+            try
+            {
+                const response = await this.api.GetMarkers(request)
+                this.setMapData(response.data, extendBounds)
+            }
+            finally
+            {
+                stillLoading = false
+                this.isLoading = false
+            }
         },
 
         setMapData(data, extendBounds) {
@@ -915,6 +999,14 @@ export default {
                     markers.features.push(feature)
                 }
             })
+
+            if (this.geoJsonFeatures) {
+                forEach(this.geoJsonFeatures, feature => {
+                    if (toRemove[feature.id]) {
+                        delete toRemove[feature.id]
+                    }}
+                )
+            }
 
             this.map.data.addGeoJson(markers)
 

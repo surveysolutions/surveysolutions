@@ -4,8 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using ClosedXML.Excel;
+using ClosedXML.Graphics;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using SixLabors.Fonts;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -35,7 +37,11 @@ namespace WB.Infrastructure.Native.Questionnaire
 
             try
             {
-                using var package = new XLWorkbook(stream);
+                //non windows fonts
+                var firstFont = SystemFonts.Collection.Families.First();
+                var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(firstFont.Name) };
+                
+                using var package = new XLWorkbook(stream, loadOptions);
 
                 if (package.Worksheets.Count == 0)
                     throw new InvalidOperationException("Translation file is empty");

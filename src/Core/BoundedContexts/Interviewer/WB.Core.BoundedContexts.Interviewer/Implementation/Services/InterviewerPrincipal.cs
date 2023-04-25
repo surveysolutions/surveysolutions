@@ -57,10 +57,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return user == null;
         }
         
-        public InterviewerIdentity GetInterviewerByName(string name)
+        public InterviewerIdentity? GetInterviewerByName(string name)
         {
             var userName = name.ToLower();
-               return this.usersStorage.Where(user => user.Name.ToLower() == userName).FirstOrDefault();
+            var interviewerIdentity = this.usersStorage.Where(user => user.Name.ToLower() == userName).FirstOrDefault();
+            return interviewerIdentity;
         }
 
         protected override void UpdateUserHash(string userId, string hash)

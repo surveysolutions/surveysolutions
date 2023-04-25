@@ -11,7 +11,7 @@ using WB.UI.WebTester.Services;
 
 namespace WB.UI.WebTester.Controllers
 {
-    [Route("api/media")]
+    [Route("api/{controller}/{action}")]
     public class WebInterviewResourcesController : Controller
     {
         private readonly ICacheStorage<QuestionnaireAttachment, string> attachmentStorage;
@@ -35,7 +35,7 @@ namespace WB.UI.WebTester.Controllers
         }
 
         [HttpHead]
-        [Route("content")]
+        [ActionName("content")]
         public IActionResult ContentHead([FromQuery] string interviewId, [FromQuery] string contentId)
         {
             var attachment = attachmentStorage.Get(contentId, Guid.Parse(interviewId));
@@ -49,7 +49,7 @@ namespace WB.UI.WebTester.Controllers
         }
 
         [HttpGet]
-        [Route("content")]
+        [ActionName("content")]
         public IActionResult GetContent([FromQuery] string interviewId, [FromQuery] string contentId)
         {
             return GetAttachmentByContentId(interviewId, contentId, 200);
@@ -80,7 +80,7 @@ namespace WB.UI.WebTester.Controllers
         }
 
         [HttpGet]
-        [Route("image")]
+        [ActionName("image")]
         public IActionResult Image([FromQuery] string interviewId, [FromQuery] string questionId,
             [FromQuery] string filename)
         {
@@ -105,7 +105,7 @@ namespace WB.UI.WebTester.Controllers
         }
 
         [HttpGet]
-        [Route("attachment")]
+        [ActionName("attachment")]
         public IActionResult GetAttachment([FromQuery] string interviewId, [FromQuery] string attachment)
         {
             if (GetAttachmentById(interviewId, attachment, out var attachmentObj) && attachmentObj != null)
@@ -132,7 +132,7 @@ namespace WB.UI.WebTester.Controllers
         }
 
         [HttpHead]
-        [Route("attachment")]
+        [ActionName("attachment")]
         public IActionResult AttachmentHead([FromQuery] string interviewId, [FromQuery] string attachment)
         {
             if (GetAttachmentById(interviewId, attachment, out var attachmentObj) && attachmentObj != null)
@@ -141,7 +141,7 @@ namespace WB.UI.WebTester.Controllers
         }
 
 
-        private string GetQueryStringValue(string key)
+        private string? GetQueryStringValue(string key)
         {
             return (this.Request.Query.Where(query => query.Key == key).Select(query => query.Value))
                 .FirstOrDefault();

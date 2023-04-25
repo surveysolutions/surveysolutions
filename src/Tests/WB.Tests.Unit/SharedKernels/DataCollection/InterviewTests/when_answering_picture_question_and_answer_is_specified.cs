@@ -50,7 +50,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext.GetSingleEvent<PictureQuestionAnswered>().RosterVector.Should().BeEquivalentTo(propagationVector);
 
         [NUnit.Framework.Test] public void should_raise_PictureQuestionAnswered_event_with_AnswerTime_equal_to_answerTime () =>
-            eventContext.GetSingleEvent<PictureQuestionAnswered>().OriginDate.Value.UtcDateTime.Should().BeCloseTo(DateTime.UtcNow, 2000);
+            eventContext.GetSingleEvent<PictureQuestionAnswered>().OriginDate.Value
+                .UtcDateTime.Should().BeCloseTo(DateTime.UtcNow,TimeSpan.FromSeconds(2));
 
         [NUnit.Framework.Test] public void should_raise_PictureQuestionAnswered_event_with_PictureFileName_equal_to_pictureFileName () =>
             eventContext.GetSingleEvent<PictureQuestionAnswered>().PictureFileName.Should().Be(pictureFileName);

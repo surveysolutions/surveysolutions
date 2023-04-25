@@ -4,5 +4,6 @@
     {
         public const string PasswordChangeRequired = "Password change required";
         public const string ChangePasswordError = "Change password error";
+        public const string RelinkError = "Relink error";
     }
 }

@@ -1,4 +1,4 @@
-ARG DOTNET_VERSION=6.0
+ARG DOTNET_VERSION=7.0
 ARG DOTNET_CA_PATCH=
 ARG VERSION=21.01
 ARG INFO_VERSION=21.01
@@ -10,7 +10,7 @@ WORKDIR /app
 COPY src/UI/WB.UI.Designer/package*.json .
 RUN npm ci
 COPY src/UI/WB.UI.Designer .
-RUN npm run build
+RUN NODE_OPTIONS="--max-old-space-size=3072" npm run build
 RUN mkdir -p /dist/Areas && cp -r Areas /dist/
 RUN mkdir -p /dist/Views && cp -r Views /dist/
 RUN mkdir -p /dist/wwwroot && cp -r wwwroot /dist/

@@ -28,7 +28,7 @@ namespace WB.UI.WebTester.Infrastructure
             this.substitutionService = substitutionService;
         }
 
-        public PlainQuestionnaire Translate(WebTesterPlainQuestionnaire questionnaire, long version, string? language)
+        public PlainQuestionnaire? Translate(WebTesterPlainQuestionnaire questionnaire, long version, string? language)
         {
             return translationsCache.GetOrCreate($"{questionnaire.QuestionnaireIdentity}${language}", (entry) =>
             {

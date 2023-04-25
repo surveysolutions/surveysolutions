@@ -40,6 +40,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         public DateTime BeginDate { get;  set; }
         public DateTime? EndDate { get; set; }
         public DateTime LastUpdateDate { get;  set; }
+        //new property could be empty if export service has older version
+        public DateTime? CreatedDate { get; set; }
         public int Progress { get;  set; }
         public DataExportType Type { get;  set; }
         public DataExportFormat Format { get;  set; }

@@ -23,7 +23,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
     {
         private readonly IInterviewerSettings interviewerSettings;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IPermissionsService permissions;
         private readonly IViewModelNavigationService navigationService;
         private readonly IPathUtils pathUtils;
 
@@ -32,13 +31,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
             ILogger logger, 
             IInterviewerSettings interviewerSettings,
             IFileSystemAccessor fileSystemAccessor,
-            IPermissionsService permissions,
             IViewModelNavigationService navigationService,
             IPathUtils pathUtils) : base(sortOrder, synchronizationService, logger)
         {
             this.interviewerSettings = interviewerSettings ?? throw new ArgumentNullException(nameof(interviewerSettings));
             this.fileSystemAccessor = fileSystemAccessor;
-            this.permissions = permissions;
             this.navigationService = navigationService;
             this.pathUtils = pathUtils;
         }
@@ -62,8 +59,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
 
             if (versionFromServer.HasValue && versionFromServer > interviewerSettings.GetApplicationVersionCode())
             {
-                await this.permissions.AssureHasPermissionOrThrow<Permissions.StorageWrite>().ConfigureAwait(false);
-
                 try
                 {
                     var apkBytes = await this.synchronizationService.GetApplicationAsync(
@@ -99,8 +94,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
 
                     if (apkBytes != null)
                     {
+                        var rootDirectory = await this.pathUtils.GetRootDirectoryAsync();
                         var pathToNewApk = this.fileSystemAccessor.CombinePath(
-                            this.pathUtils.GetRootDirectory(), "interviewer.apk");
+                            rootDirectory, "interviewer.apk");
 
                         this.fileSystemAccessor.WriteAllBytes(pathToNewApk, apkBytes);
 

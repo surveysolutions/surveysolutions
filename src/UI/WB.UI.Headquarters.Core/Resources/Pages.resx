@@ -1123,6 +1123,9 @@
   <data name="Interviewer_LockWarning" xml:space="preserve">
     <value>Locked interviewers cannot connect their tablets with the server and send interviews.</value>
   </data>
+  <data name="Tablet_RelinkMessage" xml:space="preserve">
+    <value>A single device is linked to this account.</value>
+  </data>
   <data name="Supervisor_LockWarning" xml:space="preserve">
     <value>Locked supervisor (box checked) cannot login and perform any actions on the server.</value>
   </data>
@@ -1245,6 +1248,12 @@
   </data>
   <data name="Filters_Assignment" xml:space="preserve">
     <value>Assignment</value>
+  </data>
+  <data name="Filters_Shapefiles" xml:space="preserve">
+    <value>Shapefiles</value>
+  </data>
+  <data name="Filters_None" xml:space="preserve">
+    <value>None</value>
   </data>
   <data name="InterviewersAndDevicesTitle" xml:space="preserve">
     <value>Devices/Interviewers</value>

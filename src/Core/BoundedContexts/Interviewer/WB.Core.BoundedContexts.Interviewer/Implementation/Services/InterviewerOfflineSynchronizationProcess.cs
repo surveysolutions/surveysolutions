@@ -80,6 +80,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private void UpdateSupervisorOfInterviewer(Guid supervisorId, string name)
         {
             var localInterviewer = this.principal.GetInterviewerByName(name);
+            if (localInterviewer == null)
+                throw new NullReferenceException($"Interviewer with {name} not found");
             localInterviewer.SupervisorId = supervisorId;
             this.principal.SaveInterviewer(localInterviewer);
 

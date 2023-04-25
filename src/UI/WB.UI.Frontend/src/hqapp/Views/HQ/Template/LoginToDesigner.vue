@@ -76,6 +76,7 @@
                             </div>
                             <div class="form-actions">
                                 <button type="submit"
+                                    :disabled="isSigningIn"
                                     class="btn btn-success btn-lg">
                                     {{this.$t('Common.SignIn')}}
                                 </button>
@@ -96,18 +97,22 @@ export default {
             password: null,
             errorMessage: null,
             invalidCredentials: false,
+            isSigningIn: false,
         }
     },
     methods: {
         async trySignIn() {
             var validationResult = await this.$validator.validateAll()
             if(validationResult) {
+                var passwordToSend = this.password;
+                this.password = '';
+                this.isSigningIn = true;
                 this.$http({
                     method: 'post',
                     url: this.$config.model.loginAction,
                     data: {
                         userName: this.userName,
-                        password: this.password,
+                        password: passwordToSend,
                     },
                     headers: {
                         'X-CSRF-TOKEN': this.$hq.Util.getCsrfCookie(),
@@ -118,6 +123,7 @@ export default {
                             if (loginResponse.status == 200) {
                                 window.location = this.$config.model.listUrl
                             }
+                            this.isSigningIn = false;
                         }, (error) => {
                             if (error.response.status == 401) {
                                 this.invalidCredentials = true
@@ -126,6 +132,7 @@ export default {
                                 this.invalidCredentials = false
                                 this.errorMessage = error.response.data.message
                             }
+                            this.isSigningIn = false;
                         })
             }
         },

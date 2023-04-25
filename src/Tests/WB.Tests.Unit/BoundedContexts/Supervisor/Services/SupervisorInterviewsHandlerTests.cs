@@ -48,8 +48,9 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             // Act
             var response = await handler.GetInterviews(new GetInterviewsRequest(interviewerId));
 
-            response.Interviews.Select(x => x.Id).Should().BeEquivalentTo(Id.g2, Id.g5, Id.g6);
-            response.Interviews.Select(x => x.ResponsibleId).Should().BeEquivalentTo(interviewerId, interviewerId, interviewerId);
+            response.Interviews.Select(x => x.Id).Should().BeEquivalentTo(new []{Id.g2, Id.g5, Id.g6});
+            response.Interviews.Select(x => x.ResponsibleId).Should()
+                .BeEquivalentTo(new []{interviewerId, interviewerId, interviewerId});
         }
 
         [Test]
@@ -66,7 +67,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             // Act
             var response = await handler.GetInterviews(new GetInterviewsRequest(responsibleId));
 
-            response.Interviews.Select(x => x.ResponsibleId).Should().BeEquivalentTo(responsibleId);
+            response.Interviews.Select(x => x.ResponsibleId).Should().BeEquivalentTo(new []{ responsibleId });
         }
 
         [Test]
@@ -82,7 +83,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
 
             // Assert
             var interviewView = interviews.GetById(Id.g1.FormatGuid());
-            interviewView.Should().Should().NotBeNull();
+            interviewView.Should().NotBeNull();
             interviewView.ReceivedByInterviewerAtUtc.Should().BeWithin(TimeSpan.FromSeconds(3)).Before(DateTime.UtcNow);
             Assert.That(response, Is.Not.Null);
         }

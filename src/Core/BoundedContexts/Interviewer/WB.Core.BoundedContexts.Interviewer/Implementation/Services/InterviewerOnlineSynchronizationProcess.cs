@@ -117,6 +117,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private void UpdateSecurityStampOfInterviewer(string securityStamp, string name)
         {
             var localInterviewer = this.principal.GetInterviewerByName(name);
+            if (localInterviewer == null)
+                throw new NullReferenceException($"Interviewer with {name} not found");
             if (localInterviewer.SecurityStamp != securityStamp)
             {
                 localInterviewer.SecurityStamp = securityStamp;
@@ -128,6 +130,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private void UpdateSupervisorOfInterviewer(Guid supervisorId, string name)
         {
             var localInterviewer = this.principal.GetInterviewerByName(name);
+            if (localInterviewer == null)
+                throw new NullReferenceException($"Interviewer with {name} not found");
             localInterviewer.SupervisorId = supervisorId;
             this.principal.SaveInterviewer(localInterviewer);
             this.principal.SignInWithHash(localInterviewer.Name, localInterviewer.PasswordHash, true);
@@ -136,6 +140,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         protected override void UpdatePasswordOfResponsible(RestCredentials credentials)
         {
             var localInterviewer = this.principal.GetInterviewerByName(credentials.Login);
+            if (localInterviewer == null)
+                throw new NullReferenceException($"Interviewer with {credentials.Login} not found");
             localInterviewer.PasswordHash = this.passwordHasher.Hash(credentials.Password);
             localInterviewer.Token = credentials.Token;
 

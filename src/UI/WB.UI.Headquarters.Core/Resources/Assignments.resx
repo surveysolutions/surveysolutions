@@ -132,7 +132,7 @@
   <data name="AssignmentsSelected" xml:space="preserve">
     <value>{{count}} Assignment selected</value>
   </data>
-  <data name="AssignmentsSelected_plural" xml:space="preserve">
+  <data name="AssignmentsSelected_other" xml:space="preserve">
     <value>{{count}} Assignments selected</value>
   </data>
   <data name="SizeExplanation" xml:space="preserve">
@@ -159,7 +159,7 @@
   <data name="NumberOfAssignmentsAffected" xml:space="preserve">
     <value>{{count}} Assignment is going to be changed</value>
   </data>
-  <data name="NumberOfAssignmentsAffected_plural" xml:space="preserve">
+  <data name="NumberOfAssignmentsAffected_other" xml:space="preserve">
     <value>{{count}} Assignments are going to be changed</value>
   </data>
   <data name="Size" xml:space="preserve">
@@ -177,7 +177,7 @@
   <data name="WebModeReassignToNonInterviewer" xml:space="preserve">
     <value>You are reassigning web assignment to a user who is not an INTERVIEWER. If you've already sent out the link for this assignment, the respondents will not be able to respond to your survey until the assignment is returned to a user in the role INTERVIEWER.</value>
   </data>
-  <data name="WebModeReassignToNonInterviewer_plural" xml:space="preserve">
+  <data name="WebModeReassignToNonInterviewer_other" xml:space="preserve">
     <value>You are reassigning web assignments to a user who is not an INTERVIEWER. If you've already sent out the links for these assignments, the respondents will not be able to respond to your survey until the assignments are returned to a user in the role INTERVIEWER.</value>
   </data>
   <data name="ShowArchived" xml:space="preserve">
@@ -368,6 +368,12 @@
   </data>
   <data name="Tooltip_Table_WebMode" xml:space="preserve">
     <value>Assignment Mode</value>
+  </data>
+  <data name="Tooltip_Table_Email" xml:space="preserve">
+    <value>Email for notifications</value>
+  </data>
+  <data name="Tooltip_Table_Password" xml:space="preserve">
+    <value>Password to restrict access</value>
   </data>
   <data name="PasswordInstructions" xml:space="preserve">
     <value>At least 6 numbers and upper case letters or single symbol '?' to generate password</value>

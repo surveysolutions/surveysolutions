@@ -103,7 +103,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
         private readonly IDesignerTranslationService translationService;
-        private readonly ICategoriesService categoriesService;
+        private readonly IReusableCategoriesService reusableCategoriesService;
         private readonly IFindReplaceService findReplaceService;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
         private int affectedByReplaceEntries;
@@ -116,7 +116,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             IAttachmentService attachmentService,
             IDesignerTranslationService translationService,
             IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService,
-            ICategoriesService categoriesService,
+            IReusableCategoriesService reusableCategoriesService,
             IFindReplaceService findReplaceService)
         {
             this.clock = clock;
@@ -124,7 +124,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.attachmentService = attachmentService;
             this.translationService = translationService;
             this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
-            this.categoriesService = categoriesService;
+            this.reusableCategoriesService = reusableCategoriesService;
             this.findReplaceService = findReplaceService;
         }
 
@@ -195,7 +195,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
 
             foreach (var categories in clonedDocument.Categories)
-                this.categoriesService.CloneCategories(document.PublicKey, categories.Id, clonedDocument.PublicKey, categories.Id);
+                this.reusableCategoriesService.CloneCategories(document.PublicKey, categories.Id, clonedDocument.PublicKey, categories.Id);
 
             this.innerDocument = clonedDocument;
         }
@@ -1530,7 +1530,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        public void RemoveSharedPerson(Guid personId, string email, Guid responsibleId)
+        public void RemoveSharedPerson(Guid personId, Guid responsibleId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsToUnsharePersonForQuestionnaire(personId, responsibleId);
 
@@ -1547,7 +1547,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerIsNotOwnerOfQuestionnaire(ownerId);
 
-            this.RemoveSharedPerson(newOwnerId, newOwnerEmail, ownerId);
+            this.RemoveSharedPerson(newOwnerId, ownerId);
             
             this.QuestionnaireDocument.CreatedBy = newOwnerId;
 

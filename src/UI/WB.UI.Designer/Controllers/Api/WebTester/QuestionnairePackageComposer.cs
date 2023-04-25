@@ -49,7 +49,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
         }
 
 
-        public Questionnaire ComposeQuestionnaire(Guid questionnaireId)
+        public Questionnaire? ComposeQuestionnaire(Guid questionnaireId)
         {
             var anonymousQuestionnaire = this.dbContext.AnonymousQuestionnaires.FirstOrDefault(a => a.IsActive
                 && a.AnonymousQuestionnaireId == questionnaireId);
@@ -64,7 +64,8 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
 
             try
             {
-                return questionnaireCacheStorage.GetOrCreate(questionnaireKey, questionnaireId, id => ComposeQuestionnaireImpl(originalQuestionnaireId, id));
+                return questionnaireCacheStorage.GetOrCreate(questionnaireKey, questionnaireId, 
+                    id => ComposeQuestionnaireImpl(originalQuestionnaireId, id));
             }
             catch
             {

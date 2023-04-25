@@ -224,18 +224,34 @@ function Invoke-Android($CapiProject, $apk, $withMaps, $appCenterKey) {
 
 #endregion
 task frontend {
+	"Starting frontend task" | Out-Host
+	Write-Build 10 "Starting frontend task"
+	
     $nodever = (node --version).replace("v", "").split(".")[0]
-    if ($nodever -ge 17) {
-        $env:NODE_OPTIONS="--openssl-legacy-provider"
-    }
+    
+	$env:NODE_OPTIONS="--max-old-space-size=6144 --openssl-legacy-provider"	
+	
+	try {
+        Write-Build 10 "Calculating memory"
+		$memoryUsed = node -e 'console.log(v8.getHeapStatistics().heap_size_limit/(1024*1024))'		
+		Write-Build 10 "Memory: $memoryUsed"
+    } 
+	catch {}
+    
+	exec {
+		node -e 'console.log(v8.getHeapStatistics().heap_size_limit/(1024*1024))'
+	}	
+	
     exec { 
         Set-Location ./src/UI/WB.UI.Frontend
         npm ci
         npm run build
     }
+	"Finishing frontend task" | Out-Host
 }
 
 task PackageHq frontend, {
+	"Starting HQ build task" | Out-Host
     exec {
         dotnet publish @(
             "./src/UI/WB.UI.Headquarters.Core",
@@ -250,6 +266,7 @@ task PackageHq frontend, {
         )
     }
     Compress $tmp/hq $output/WB.UI.Headquarters.zip
+	"Finishing HQ build task" | Out-Host
 }
 
 task PackageHqOffline frontend, {

@@ -212,7 +212,7 @@
   <data name="Errors" xml:space="preserve">
     <value>Erreurs</value>
   </data>
-  <data name="ApproveConfirmMessage_plural" xml:space="preserve">
+  <data name="ApproveConfirmMessage_other" xml:space="preserve">
       <value>{{count}} entrevues seront approuvées.</value>
   </data>
   <data name="Note" xml:space="preserve">

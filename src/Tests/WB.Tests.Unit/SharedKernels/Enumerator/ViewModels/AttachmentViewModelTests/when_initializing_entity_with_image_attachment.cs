@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -34,8 +35,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
 
             var attachmentStorage = Mock.Of<IAttachmentContentStorage>(s =>
                 s.GetMetadata(attachmentContentId) == attachmentContentMetadata
-                && s.GetContent(attachmentContentId) == attachmentContentData.Content
-                && s.GetPreviewContent(attachmentContentId) == attachmentContentData.Content);
+                && s.GetContentAsync(attachmentContentId) == Task.FromResult(attachmentContentData.Content)
+                && s.GetPreviewContentAsync(attachmentContentId) == Task.FromResult(attachmentContentData.Content));
 
             var viewModel =
                 Create.ViewModel.AttachmentViewModel(questionnaireRepository, interviewRepository, attachmentStorage);

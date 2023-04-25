@@ -1,4 +1,5 @@
-﻿using System;
+﻿/*
+using System;
 using System.Diagnostics;
 using System.Text;
 using Npgsql.Logging;
@@ -80,3 +81,4 @@ namespace WB.Tests.Integration
         }
     }
 }
+*/

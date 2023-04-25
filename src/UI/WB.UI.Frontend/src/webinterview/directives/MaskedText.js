@@ -1,5 +1,4 @@
 import Vue from 'vue'
-const $ = window.jQuery
 
 Vue.directive('maskedText', {
     bind: (el, binding) => {

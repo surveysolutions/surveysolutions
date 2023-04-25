@@ -130,7 +130,7 @@
   <data name="AssignmentsSelected" xml:space="preserve">
     <value>{{count}} Vybraný dotazník</value>
   </data>
-  <data name="AssignmentsSelected_plural" xml:space="preserve">
+  <data name="AssignmentsSelected_other" xml:space="preserve">
     <value>Vybraných dotazníků - {{count}}</value>
   </data>
   <data name="Date" xml:space="preserve">
@@ -142,7 +142,7 @@
   <data name="NumberOfAssignmentsAffected" xml:space="preserve">
     <value>{{count}} Dotazník bude změněn</value>
   </data>
-  <data name="NumberOfAssignmentsAffected_plural" xml:space="preserve">
+  <data name="NumberOfAssignmentsAffected_other" xml:space="preserve">
     <value>Počet dotazníků, které budou změněny - {{count}}</value>
   </data>
   <data name="Password" xml:space="preserve">
@@ -517,7 +517,7 @@
   <data name="WebModeReassignToNonInterviewer" xml:space="preserve">
     <value>Přidělujete webový dotazník uživateli, který není TAZATEL. Pokud jste již odeslali odkaz na tento dotazník, respondenti nebudou moci na Váše šetření reagovat, dokud nebude dotazník vrácen uživateli v roli TAZATEL.</value>
   </data>
-  <data name="WebModeReassignToNonInterviewer_plural" xml:space="preserve">
+  <data name="WebModeReassignToNonInterviewer_other" xml:space="preserve">
     <value>Přidělujete webové dotazníky uživateli, který není TAZATEL. Pokud jste již odeslali odkazy na tyto dotazníky, respondenti nebudou moci na Váše šetření reagovat, dokud nebudou dotazníky vráceny uživateli v roli TAZATEL.</value>
   </data>
 </root>

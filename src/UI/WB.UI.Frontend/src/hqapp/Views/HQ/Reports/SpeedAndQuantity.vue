@@ -296,7 +296,7 @@ export default {
             if (value == null) return '-'
 
             const duration = moment.duration(value, 'minutes')
-            const formated = duration.format('D[d] H[h] mm[m]')
+            const formated = moment.utc(duration.as('milliseconds')).format('D[d] H[h] mm[m]')
             return `<span>${formated}</span>`
         },
         reportTypeSelected(option) {

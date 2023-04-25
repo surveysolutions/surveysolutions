@@ -19,7 +19,7 @@ namespace Main.Core.Entities.SubEntities
 
         public string? Name { get; set; }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj))
             {

@@ -1,5 +1,4 @@
 ﻿using Android.Graphics;
-using Android.Widget;
 using ZXing;
 using ZXing.Mobile;
 using ZXing.QrCode;

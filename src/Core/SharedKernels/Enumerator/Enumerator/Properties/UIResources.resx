@@ -308,6 +308,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="GpsQuestion_Timeout" xml:space="preserve">
     <value>GPS was unable to determine your location. To troubleshoot, please try the following: ensure that you are outdoors, confirm that your GPS is enabled, or change your GPS's timeout setting</value>
   </data>
+  <data name="NoMapsApplication" xml:space="preserve">
+    <value>Navigation application was not found</value>
+  </data>
   <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
     <value>Provided Survey Solutions Designer URL is invalid. Check settings.</value>
   </data>
@@ -644,8 +647,20 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="MapDashboard_AllQuestionnaires" xml:space="preserve">
     <value>All questionnaires</value>
   </data>
+  <data name="MapDashboard_AllResponsibles" xml:space="preserve">
+    <value>All responsibles</value>
+  </data>
+  <data name="MapDashboard_AllStatuses" xml:space="preserve">
+    <value>All statuses</value>
+  </data>
   <data name="MapDashboard_QuestionnaireTitle" xml:space="preserve">
     <value>Questionnaire</value>
+  </data>
+  <data name="MapDashboard_ResponsibleTitle" xml:space="preserve">
+    <value>Responsible</value>
+  </data>
+  <data name="MapDashboard_StatusTitle" xml:space="preserve">
+    <value>Status</value>
   </data>
   <data name="MapDashboard_TypeTitle" xml:space="preserve">
     <value>Type</value>
@@ -809,5 +824,38 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   </data>
   <data name="AreaMap_InitLocation" xml:space="preserve">
     <value>Initiating...</value>
-  </data>    
+  </data>
+  <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
+    <value>Approved by Headquarters</value>
+  </data>
+  <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
+    <value>Approved by Supervisor</value>
+  </data>
+  <data name="InterviewStatus_Completed" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="InterviewStatus_Created" xml:space="preserve">
+    <value>Created</value>
+  </data>
+  <data name="InterviewStatus_Deleted" xml:space="preserve">
+    <value>Deleted</value>
+  </data>
+  <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
+    <value>Interviewer assigned</value>
+  </data>
+  <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
+    <value>Rejected by Headquarters</value>
+  </data>
+  <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
+    <value>Rejected by Supervisor</value>
+  </data>
+  <data name="InterviewStatus_Restarted" xml:space="preserve">
+    <value>Restarted</value>
+  </data>
+  <data name="InterviewStatus_Restored" xml:space="preserve">
+    <value>Restored</value>
+  </data>
+  <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
+    <value>Supervisor assigned</value>
+  </data>
 </root>

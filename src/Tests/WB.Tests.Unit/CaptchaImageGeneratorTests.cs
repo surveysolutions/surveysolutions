@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+using NUnit.Framework;
+using SixLabors.Fonts;
 using WB.UI.Shared.Web.Captcha;
 
 namespace WB.Tests.Unit;
@@ -10,10 +12,10 @@ public class CaptchaImageGeneratorTests
     public void when_generate_then_should_return_result_without_exception()
     {
         string code = "12345";
-        var fontFamily = System.Drawing.SystemFonts.DefaultFont;
+        var firstFont = SystemFonts.Collection.Families.First();
 
         var captchaImageGenerator = new CaptchaImageGenerator();
-        captchaImageGenerator.ChangeFonts(fontFamily.Name);
+        captchaImageGenerator.ChangeFonts(firstFont.Name);
 
         var imageContent = captchaImageGenerator.Generate(code);
         
