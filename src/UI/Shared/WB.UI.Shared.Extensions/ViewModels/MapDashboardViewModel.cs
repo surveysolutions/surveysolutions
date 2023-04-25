@@ -90,10 +90,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
         }
 
-        public override async Task Initialize()
+        protected void ReloadEntities()
         {
-            await base.Initialize();
-
             Assignments = this.assignmentsRepository
                 .LoadAll()
                 .Where(x => x.LocationLatitude != null && (!x.Quantity.HasValue || (x.Quantity - (x.CreatedInterviewsCount ?? 0) > 0)))
@@ -101,7 +99,13 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
             Interviews = this.interviewViewRepository
                 .Where(x => x.LocationLatitude != null).ToList();
+        }
 
+        public override async Task Initialize()
+        {
+            await base.Initialize();
+
+            ReloadEntities();
             this.GraphicsOverlays.Add(graphicsOverlay);
 
             PropertyChanged += OnPropertyChanged;
@@ -550,7 +554,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         private MvxObservableCollection<MapDescription> availableMaps = new MvxObservableCollection<MapDescription>();
         private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
         
-        public IMvxCommand NavigateToDashboardCommand => 
+        public IMvxAsyncCommand NavigateToDashboardCommand => 
             new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToDashboardAsync());
         
         public override void Dispose()

@@ -370,8 +370,9 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         private void OnOfflineSynchronizationStarted()
         {
             if (!this.CheckPlayServices()) return;
+            
             this.RestoreGoogleApiConnectionIfNeeded();
-             this.ViewModel.StartDiscoveryAsyncCommand.Execute();
+            this.ViewModel.StartDiscoveryAsyncCommand.Execute();
         }
 
         /// <summary>
