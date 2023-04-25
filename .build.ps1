@@ -219,7 +219,7 @@ function Invoke-Android($CapiProject, $apk, $withMaps, $appCenterKey) {
     )
     
     $params -join ', ' | Out-Host
-    exec { dotnet $params }
+    exec { dotnet publish $params }
 }
 
 #endregion
