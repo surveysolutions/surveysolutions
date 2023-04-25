@@ -17,7 +17,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             "System.Linq",
             "System.Linq.Expressions",
             "System.Linq.Queryable",
-            "System.Text.RegularExpressions"
+            "System.Text.RegularExpressions",
+            "System.Threading"
         };
 
         private static readonly HashSet<string> ForbiddenClassesFromSystemNamespace = new HashSet<string>
@@ -28,11 +29,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             "System.Console", 
             "System.Environment", 
             "System.GC"
-        };
-
-        private static readonly HashSet<string> ForbiddenNamespaces = new HashSet<string>()
-        {
-            "System.Threading"
         };
 
         public IEnumerable<string> FindForbiddenClassesUsage(SyntaxTree syntaxTree, CSharpCompilation compilation)
@@ -69,16 +65,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                             foundForbiddenTypes.Add(symbol);
                             yield return symbol;
                         }
-                    }
-                }
-
-                if (namedTypeSymbol.Kind == SymbolKind.NamedType 
-                    && ForbiddenNamespaces.Contains(containingNamespace))
-                {
-                    if (!foundForbiddenTypes.Contains(symbol))
-                    {
-                        foundForbiddenTypes.Add(symbol);
-                        yield return symbol;
                     }
                 }
             }
