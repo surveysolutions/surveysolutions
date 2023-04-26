@@ -91,6 +91,13 @@ namespace WB.UI.Shared.Extensions.ViewModels
             set => this.RaiseAndSetIfChanged(ref this.availableMarkers, value);
         }
 
+        private int? activeMarkerIndex;
+        public int? ActiveMarkerIndex
+        {
+            get => this.activeMarkerIndex;
+            set => this.RaiseAndSetIfChanged(ref this.activeMarkerIndex, value);
+        }
+
         public abstract bool SupportDifferentResponsible { get; }
 
         public override void Prepare(MapDashboardViewModelArgs parameter)
@@ -106,10 +113,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
             Interviews = this.interviewViewRepository
                 .Where(x => x.LocationLatitude != null).ToList();
-
-            var markers = Enumerable.Range(1, 100).Select(i =>
-                new MarkerViewModel() { Title = "test " + i, SubTitle = "subTitle - " + i });
-            AvailableMarkers = new MvxObservableCollection<MarkerViewModel>(markers);
         }
 
             
@@ -119,7 +122,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
             ReloadEntities();
             
-
             this.GraphicsOverlays.Add(graphicsOverlay);
 
             PropertyChanged += OnPropertyChanged;
@@ -329,34 +331,28 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         if (ShowAssignments)
                         {
                             var filteredAssignments = FilteredAssignments();
-                            markers.AddRange(filteredAssignments.Select(a => new MarkerViewModel()
+                            var assignmentMarkers = filteredAssignments.Select(GetAssignmentMarkerViewModel).ToArray();
+                            markers.AddRange(assignmentMarkers);
+                            var assignmentsGraphics = GetAssignmentsMarkers(assignmentMarkers);
+                            if (assignmentsGraphics.Count > 0)
                             {
-                                Title = a.Title,
-                                SubTitle = a.ResponsibleName
-                            }));
-                            var assignmentsMarkers = GetAssignmentsMarkers(filteredAssignments);
-                            if (assignmentsMarkers.Count > 0)
-                            {
-                                graphicsOverlay.Graphics.AddRange(assignmentsMarkers);
+                                graphicsOverlay.Graphics.AddRange(assignmentsGraphics);
                             }
                         }
 
                         if (ShowInterviews)
                         {
                             var filteredInterviews = FilteredInterviews();
-                            markers.AddRange(filteredInterviews.Select(a => new MarkerViewModel()
+                            var interviewMarkers = filteredInterviews.Select(GetInterviewMarkerViewModel).ToArray();
+                            markers.AddRange(interviewMarkers);
+                            var interviewsGraphics = GetInterviewsMarkers(interviewMarkers);
+                            if (interviewsGraphics.Count > 0)
                             {
-                                Title = a.InterviewKey,
-                                SubTitle = a.QuestionnaireTitle
-                            }));
-                            var interviewsMarkers = GetInterviewsMarkers(filteredInterviews);
-                            if (interviewsMarkers.Count > 0)
-                            {
-                                graphicsOverlay.Graphics.AddRange(interviewsMarkers);
+                                graphicsOverlay.Graphics.AddRange(interviewsGraphics);
                             }
                         }
 
-                        //AvailableMarkers = new MvxObservableCollection<MarkerViewModel>(markers);
+                        AvailableMarkers.ReplaceWith(markers);
                     }
 
                     //MapView.Map.MinScale = 591657527.591555;
@@ -391,24 +387,27 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         }
 
-        private List<Graphic> GetInterviewsMarkers(List<InterviewView> interviews)
+        private List<Graphic> GetInterviewsMarkers(IEnumerable<MarkerViewModel> interviews)
         {
-            var markers = new List<Graphic>();
+            var markersGraphics = new List<Graphic>();
 
             foreach (var interview in interviews)
             {
-                markers.Add(new Graphic(
+                markersGraphics.Add(new Graphic(
                     (MapPoint)GeometryEngine.Project(
                         new MapPoint(
-                            interview.LocationLongitude.Value,
-                            interview.LocationLatitude.Value,
+                            interview.LocationLongitude,
+                            interview.LocationLatitude,
                             SpatialReferences.Wgs84),
                         Map.SpatialReference),
-                    GetInterviewAttributes(interview),
+                    new[]
+                    {
+                        new KeyValuePair<string, object>("marker_id", interview.Id),
+                    },
                     GetInterviewMarkerSymbol(interview)));
             }
 
-            return markers;
+            return markersGraphics;
         }
 
         private List<InterviewView> FilteredInterviews()
@@ -432,46 +431,52 @@ namespace WB.UI.Shared.Extensions.ViewModels
             return filteredInterviews;
         }
 
-        protected virtual KeyValuePair<string, object>[] GetInterviewAttributes(InterviewView interview)
+        protected virtual MarkerViewModel GetInterviewMarkerViewModel(InterviewView interview)
         {
             var questionnaireIdentity = QuestionnaireIdentity.Parse(interview.QuestionnaireId);
             var title = string.Format(EnumeratorUIResources.DashboardItem_Title, interview.QuestionnaireTitle,
                 questionnaireIdentity.Version);
 
-            return new[]
+            return new MarkerViewModel
             {
-                new KeyValuePair<string, object>("id", ""),
-                new KeyValuePair<string, object>("interviewId", interview.Id),
-                new KeyValuePair<string, object>("interviewKey", interview.InterviewKey),
-                new KeyValuePair<string, object>("title", title),
-                new KeyValuePair<string, object>("status", interview.Status.ToLocalizeString()),
-                new KeyValuePair<string, object>("sub_title", "")
+                Type = MarkerType.Interview,
+                Id = interview.Id,
+                InterviewId = interview.Id,
+                InterviewKey = interview.InterviewKey,
+                Title = title,
+                Status = interview.Status,
+                SubTitle = null,
+                LocationLatitude = interview.LocationLatitude.Value,
+                LocationLongitude = interview.LocationLongitude.Value,
             };
         }
 
-        protected abstract Symbol GetInterviewMarkerSymbol(InterviewView interview);
+        protected abstract Symbol GetInterviewMarkerSymbol(MarkerViewModel interview);
 
         private List<AssignmentDocument> Assignments = new List<AssignmentDocument>();
         private List<InterviewView> Interviews = new List<InterviewView>();
 
-        private List<Graphic> GetAssignmentsMarkers(List<AssignmentDocument> assignments)
+        private List<Graphic> GetAssignmentsMarkers(IEnumerable<MarkerViewModel> assignments)
         {
-            var markers = new List<Graphic>();
+            var markersGraphic = new List<Graphic>();
 
             foreach (var assignment in assignments)
             {
-                markers.Add(new Graphic(
+                markersGraphic.Add(new Graphic(
                     (MapPoint)GeometryEngine.Project(
                         new MapPoint(
-                            assignment.LocationLongitude.Value,
-                            assignment.LocationLatitude.Value,
+                            assignment.LocationLongitude,
+                            assignment.LocationLatitude,
                             SpatialReferences.Wgs84),
                         Map.SpatialReference),
-                    GetAssignmentAttributes(assignment),
+                    new[]
+                    {
+                        new KeyValuePair<string, object>("marker_id", assignment.Id),
+                    },
                     GetAssignmentMarkerSymbol(assignment)));
             }
 
-            return markers;
+            return markersGraphic;
         }
 
         private List<AssignmentDocument> FilteredAssignments()
@@ -490,7 +495,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             return filteredAssignments;
         }
 
-        protected virtual CompositeSymbol GetAssignmentMarkerSymbol(AssignmentDocument assignment)
+        protected virtual CompositeSymbol GetAssignmentMarkerSymbol(MarkerViewModel assignment)
         {
             return new CompositeSymbol(new[]
             {
@@ -499,7 +504,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             });
         }
 
-        protected virtual KeyValuePair<string, object>[] GetAssignmentAttributes(AssignmentDocument assignment)
+        protected virtual MarkerViewModel GetAssignmentMarkerViewModel(AssignmentDocument assignment)
         {
             var questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
             var title = string.Format(EnumeratorUIResources.DashboardItem_Title, assignment.Title,
@@ -528,11 +533,15 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     assignment.Quantity.GetValueOrDefault());
             }
             
-            return new[]
+            return new MarkerViewModel
             {
-                new KeyValuePair<string, object>("id", assignment.Id),
-                new KeyValuePair<string, object>("title", title),
-                new KeyValuePair<string, object>("sub_title", subTitle),
+                Type = MarkerType.Assignment,
+                Id = assignment.Id.ToString(),
+                AssignmentId = assignment.Id,
+                Title = title,
+                SubTitle = subTitle,
+                LocationLatitude = assignment.LocationLatitude.Value,
+                LocationLongitude = assignment.LocationLongitude.Value,
             };
         }
 
@@ -555,12 +564,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 {
                     if (identifyResults.Graphics[0].Geometry is MapPoint projectedLocation)
                     {
-                        await ShowMapPopup(identifyResults, projectedLocation);
+                        NavigateToMarkerPopup(identifyResults, projectedLocation);
                     }
-                }
-                else
-                {
-                    MapView.DismissCallout();
                 }
             }
             catch (Exception ex)
@@ -569,7 +574,17 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         }
 
-        protected abstract Task ShowMapPopup(IdentifyGraphicsOverlayResult identifyResults, MapPoint projectedLocation);
+        protected void NavigateToMarkerPopup(IdentifyGraphicsOverlayResult identifyResults,
+            MapPoint projectedLocation)
+        {
+            var markerId = identifyResults.Graphics[0].Attributes["marker_id"].ToString();
+            var markerViewModel = AvailableMarkers.FirstOrDefault(m => m.Id == markerId);
+            if (markerViewModel != null)
+            {
+                var markerIndex = AvailableMarkers.IndexOf(markerViewModel);
+                ActiveMarkerIndex = markerIndex < 0 ? null : markerIndex;
+            }
+        }
 
         public IMvxAsyncCommand<MapDescription> SwitchMapCommand => new MvxAsyncCommand<MapDescription>(async (mapDescription) =>
         {

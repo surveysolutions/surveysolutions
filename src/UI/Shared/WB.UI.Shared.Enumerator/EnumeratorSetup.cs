@@ -10,6 +10,7 @@ using Android.Widget;
 using AndroidX.AppCompat.Widget;
 using AndroidX.DrawerLayout.Widget;
 using AndroidX.RecyclerView.Widget;
+using AndroidX.ViewPager2.Widget;
 using Com.Google.Android.Exoplayer2.UI;
 using FFImageLoading.Cross;
 using Google.Android.Material.Button;
@@ -211,6 +212,7 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<RadioButton>("AssignToInterviewerText", (view) => new AssignToInterviewerTextBinding(view));
             registry.RegisterCustomBindingFactory<EditText>("TextLength", (editText) => new EditTextMaxLengthBinding(editText));
             registry.RegisterCustomBindingFactory<MapView>("SetGpsLocation", view => new ViewSetGpsLocationBinding(view));
+            registry.RegisterCustomBindingFactory<ViewPager2>("CurrentItem", view => new ViewPager2CurrentItemBinding(view));
             
             //MvxAppCompatSetupHelper.FillTargetFactories(registry);
 

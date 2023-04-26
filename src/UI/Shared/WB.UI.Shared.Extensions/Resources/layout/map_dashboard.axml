@@ -151,30 +151,6 @@
           android:layout_marginBottom="@dimen/area_editor_zoom_out_margin_bottom"
           android:layout_marginLeft="@dimen/area_editor_common_margin_left" />
 
-<!--      <LinearLayout
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:id="@+id/area_carousel"
-              local:MvxBind="Visible IsPanelVisible;">-->
-
-        <MvxRecyclerView
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:id="@+id/markers_recycler_view"
-              android:scrollbars="horizontal"
-              android:layout_centerVertical="true"
-              android:layout_centerHorizontal="true"
-              android:layout_alignParentBottom="true"
-              android:layout_marginBottom="200dp"
-              android:layout_marginLeft="10dp"
-              android:layout_marginRight="10dp"
-              hasFixedSize="true"
-              android:fastScrollEnabled="false"
-              android:nestedScrollingEnabled="false"
-              local:MvxBind="ItemsSource AvailableMarkers; Visible Not(IsPanelVisible);"
-              local:MvxItemTemplate="@layout/marker_card" />
-
-
       <androidx.constraintlayout.widget.ConstraintLayout
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
@@ -182,7 +158,6 @@
               android:layout_marginBottom="20dp"
               android:layout_marginLeft="10dp"
               android:layout_marginRight="10dp"
-
               android:clipChildren="false"
               android:clipToPadding="false">
 
@@ -191,20 +166,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
+                local:MvxBind="CurrentItem ActiveMarkerIndex;"
         />
       </androidx.constraintlayout.widget.ConstraintLayout>
-<!--
-        <androidx.constraintlayout.helper.widget.Carousel
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/markers_carusel">
-          
-        </androidx.constraintlayout.helper.widget.Carousel>
--->
 
-<!--
-      </LinearLayout>
--->
     </RelativeLayout>
   </LinearLayout>
   <LinearLayout 

@@ -63,24 +63,6 @@ namespace WB.UI.Shared.Extensions.Activities
                 nameof(this.drawerLayout.DrawerOpened),
                 OnDrawerLayoutOnDrawerOpened);
 
-            // var carousel = this.FindViewById<Carousel>(Resource.Id.markers_carusel);
-            // carousel.SetAdapter();
-
-            var markerRecyclerView = (MvxRecyclerView) this.FindViewById(Resource.Id.markers_recycler_view);
-            markerRecyclerView.HasFixedSize = true;
-
-            var horizontalLayout = new LinearLayoutManager(this, LinearLayoutManager.Horizontal, false);
-            markerRecyclerView.SetLayoutManager(horizontalLayout);
-            //var layoutManager = new LinearLayoutManager(this);
-            //markerRecyclerView.SetLayoutManager(layoutManager);
-            markerRecyclerView.SetItemAnimator(new DefaultItemAnimator());
-
-            //var adapter = new MarkersRecyclerViewAdapter((IMvxAndroidBindingContext)base.BindingContext);
-            //markerRecyclerView.SetAdapter(adapter);
-
-
-
-
             var viewPager = this.FindViewById<ViewPager2>(Resource.Id.carousel_view_pager);
 
             //viewPager.ClipChildren = false;
