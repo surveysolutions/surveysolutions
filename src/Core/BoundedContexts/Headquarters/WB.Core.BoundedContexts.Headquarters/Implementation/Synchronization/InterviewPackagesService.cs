@@ -217,10 +217,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     this.logger.Debug($"Interview events filtered duplicates by {interview.InterviewId}. Took {innerwatch.Elapsed:g}.");
 
                     var headquartersEventStore = serviceLocator.GetInstance<IHeadquartersEventStore>();
+                    var hqEvents = headquartersEventStore.Read(interview.InterviewId, 0).ToList();
                     if (interview.IsFullEventStream)
                     {
-                        var hqEvents = headquartersEventStore.Read(interview.InterviewId, 0).ToList();
                         if (hqEvents.Count > 0)
+                            aggregateRootEvents = aggregateRootEvents.FilterDuplicateEvents(hqEvents);
+                    }
+                    else if (aggregateRootEvents.Length > 0)
+                    {
+                        var firstEventId = aggregateRootEvents[0].EventIdentifier;
+                        var hasDuplicates = hqEvents.Any(e => firstEventId == e.EventIdentifier);
+                        if (hasDuplicates)
                             aggregateRootEvents = aggregateRootEvents.FilterDuplicateEvents(hqEvents);
                     }
 

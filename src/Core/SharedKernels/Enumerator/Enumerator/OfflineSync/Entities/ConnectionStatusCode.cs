@@ -12,6 +12,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Entities
         MissingPermissionChangeWifiState = 8033,
         MissingPermissionRecordAudio = 8035,
         MissingSettingLocationMustBeOn = 8025,
+        MissingPermissionNearbyWifiDevices = 8036,
+        MissingPermissionBluetoothAdvertise = 8037,
         StatusAlreadyAdvertising = 8001,
         StatusAlreadyConnectedToEndpoint = 8003,
         StatusAlreadyDiscovering = 8002,

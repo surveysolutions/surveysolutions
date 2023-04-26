@@ -185,7 +185,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var packageEvents = new[]
             {
                 Create.Event.AggregateRootEvent(Create.Event.InterviewCreated()),
-                Create.Event.AggregateRootEvent(Create.Event.InteviewCompleted())
+                Create.Event.AggregateRootEvent(Create.Event.InterviewCompleted())
             };
             var interviewId = packageEvents[0].EventSourceId;
 

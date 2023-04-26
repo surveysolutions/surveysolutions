@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.InterviewEventStreamOp
                 Create.Other.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.VariablesEnabled()),
                 Create.Other.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.VariablesChanged()),
                 Create.Other.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.SubstitutionTitlesChanged()),
-                firstCompletion = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.InteviewCompleted()),
+                firstCompletion = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.InterviewCompleted()),
 
                 lastAggregatedGroupsDisabled = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.GroupsDisabled()),
                 lastAggregatedGroupsEnabled = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.GroupsEnabled()),
@@ -68,7 +68,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.InterviewEventStreamOp
                 lastAggregatedVariablesEnabled = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.VariablesEnabled()),
                 lastAggregatedVariablesValuesChanged = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.VariablesChanged()),
                 lastAggregatedSubstitutionTitlesChanged = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.SubstitutionTitlesChanged()),
-                lastCompletion = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.InteviewCompleted()),
+                lastCompletion = Create.Other.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.InterviewCompleted()),
             };
 
             optimizer = Create.Service.InterviewEventStreamOptimizer();

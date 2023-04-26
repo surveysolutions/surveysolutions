@@ -11,9 +11,9 @@ param([string]$VersionName = $null,
 [string]$ArcGisApiKey = $NULL)
 
 $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
-. "$scriptFolder\functions.ps1"
+. "$scriptFolder/functions.ps1"
 
-$AndroidProject = "src\UI\Tester\WB.UI.Tester\WB.UI.Tester.csproj"
+$AndroidProject = "src/UI/Tester/WB.UI.Tester/WB.UI.Tester.csproj"
 
 $PathToKeystore = (Join-Path (Get-Location).Path "Security/KeyStore/$KeyStoreName")
 
@@ -38,7 +38,7 @@ if ($null -ne $androidKeyStore) {
 
 $PathToKeystore = $keyStore
 
-& (GetPathToMSBuild) -restore $AndroidProject -t:SignAndroidPackage `
+dotnet publish -restore $AndroidProject -t:SignAndroidPackage `
     -p:Configuration=$BuildConfiguration `
     -p:AndroidKeyStore=True `
     -p:VersionCode=$VersionCode `

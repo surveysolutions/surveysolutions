@@ -582,7 +582,7 @@ export default {
             else
                 this.resetDataAvalability()
 
-            const query = gql`query questionnaires ($workspace: String!, $id: Uuid, $version: Long) {
+            const query = gql`query questionnaires ($workspace: String!, $id: UUID, $version: Long) {
  questionnaires(workspace: $workspace, id: $id, version: $version) {
   nodes {
     defaultLanguageName,
