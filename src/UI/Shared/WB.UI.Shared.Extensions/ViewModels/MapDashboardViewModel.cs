@@ -339,24 +339,26 @@ namespace WB.UI.Shared.Extensions.ViewModels
         protected override void CheckMarkersAgainstShapefile()
         {
             IsWarningVisible = false;
-            
-            if (ShapeFileLoaded && !IsWarningVisible)
+
+            if (!ShapeFileLoaded || graphicsOverlay.Graphics.Count <= 0) return;
+            var shapeLayer = this.Map?.OperationalLayers[0];
+            var shapeExtent = shapeLayer?.FullExtent;
+            if (shapeExtent == null) return;
+                
+            foreach (var graphic in graphicsOverlay.Graphics)
             {
-                var shapeLayer = this.Map?.OperationalLayers[0];
-                var shapeExtent = shapeLayer?.FullExtent;
-                if (shapeExtent != null)
+                if (graphic.Geometry != null)
                 {
-                    foreach (var graphic in graphicsOverlay.Graphics)
+                    if (shapeExtent.SpatialReference != null)
                     {
-                        //var sPoint = GeometryEngine.Project(e.Position, shapeExtent.SpatialReference);
-                        if (!GeometryEngine.Contains(shapeExtent, graphic.Geometry))
-                        {
-                            Warning = UIResources.AreaMap_OverlapsWithOther;
-                            IsWarningVisible = true;
-                            return;
-                        }
+                        var projectedPoint = graphic.Geometry.Project(shapeExtent.SpatialReference);
+                        if (shapeExtent.Contains(projectedPoint)) continue;
                     }
                 }
+                
+                Warning = UIResources.AreaMap_ItemsOutsideDedicatedArea;
+                IsWarningVisible = true;
+                return;
             }
         }
 
