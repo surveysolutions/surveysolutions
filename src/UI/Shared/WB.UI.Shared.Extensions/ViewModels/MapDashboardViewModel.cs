@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
-using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
@@ -23,8 +19,6 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
-using WB.Core.SharedKernels.Enumerator.ViewModels;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Shared.Extensions.Entities;
 using WB.UI.Shared.Extensions.Extensions;
@@ -332,11 +326,36 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     //MapView.Map.MinScale = 591657527.591555;
                     //MapView.Map.MaxScale = 0;
                     await SetViewToValues();
+                    CheckMarkersAgainstShapefile();
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
                     throw;
+                }
+            }
+        }
+
+        protected override void CheckMarkersAgainstShapefile()
+        {
+            IsWarningVisible = false;
+            
+            if (ShapeFileLoaded && !IsWarningVisible)
+            {
+                var shapeLayer = this.Map?.OperationalLayers[0];
+                var shapeExtent = shapeLayer?.FullExtent;
+                if (shapeExtent != null)
+                {
+                    foreach (var graphic in graphicsOverlay.Graphics)
+                    {
+                        //var sPoint = GeometryEngine.Project(e.Position, shapeExtent.SpatialReference);
+                        if (!GeometryEngine.Contains(shapeExtent, graphic.Geometry))
+                        {
+                            Warning = UIResources.AreaMap_OverlapsWithOther;
+                            IsWarningVisible = true;
+                            return;
+                        }
+                    }
                 }
             }
         }
