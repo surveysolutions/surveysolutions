@@ -23,12 +23,11 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
-using WB.Core.SharedKernels.Enumerator.ViewModels;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Shared.Extensions.Entities;
 using WB.UI.Shared.Extensions.Extensions;
 using WB.UI.Shared.Extensions.Services;
+using WB.UI.Shared.Extensions.ViewModels.Markers;
 
 namespace WB.UI.Shared.Extensions.ViewModels
 {
@@ -84,8 +83,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
             set => this.RaiseAndSetIfChanged(ref this.showAssignments, value);
         }
 
-        private MvxObservableCollection<MarkerViewModel> availableMarkers = new MvxObservableCollection<MarkerViewModel>();
-        public MvxObservableCollection<MarkerViewModel> AvailableMarkers
+        private MvxObservableCollection<IMarkerViewModel> availableMarkers = new MvxObservableCollection<IMarkerViewModel>();
+        public MvxObservableCollection<IMarkerViewModel> AvailableMarkers
         {
             get => this.availableMarkers;
             set => this.RaiseAndSetIfChanged(ref this.availableMarkers, value);
@@ -326,7 +325,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     {
                         graphicsOverlay.Graphics.Clear();
 
-                        List<MarkerViewModel> markers = new List<MarkerViewModel>();
+                        List<IMarkerViewModel> markers = new List<IMarkerViewModel>();
                         
                         if (ShowAssignments)
                         {
@@ -387,7 +386,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         }
 
-        private List<Graphic> GetInterviewsMarkers(IEnumerable<MarkerViewModel> interviews)
+        private List<Graphic> GetInterviewsMarkers(IEnumerable<IInterviewMarkerViewModel> interviews)
         {
             var markersGraphics = new List<Graphic>();
 
@@ -396,8 +395,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 markersGraphics.Add(new Graphic(
                     (MapPoint)GeometryEngine.Project(
                         new MapPoint(
-                            interview.LocationLongitude,
-                            interview.LocationLatitude,
+                            interview.Longitude,
+                            interview.Latitude,
                             SpatialReferences.Wgs84),
                         Map.SpatialReference),
                     new[]
@@ -431,32 +430,14 @@ namespace WB.UI.Shared.Extensions.ViewModels
             return filteredInterviews;
         }
 
-        protected virtual MarkerViewModel GetInterviewMarkerViewModel(InterviewView interview)
-        {
-            var questionnaireIdentity = QuestionnaireIdentity.Parse(interview.QuestionnaireId);
-            var title = string.Format(EnumeratorUIResources.DashboardItem_Title, interview.QuestionnaireTitle,
-                questionnaireIdentity.Version);
+        protected abstract IInterviewMarkerViewModel GetInterviewMarkerViewModel(InterviewView interview);
 
-            return new MarkerViewModel
-            {
-                Type = MarkerType.Interview,
-                Id = interview.Id,
-                InterviewId = interview.Id,
-                InterviewKey = interview.InterviewKey,
-                Title = title,
-                Status = interview.Status,
-                SubTitle = null,
-                LocationLatitude = interview.LocationLatitude.Value,
-                LocationLongitude = interview.LocationLongitude.Value,
-            };
-        }
-
-        protected abstract Symbol GetInterviewMarkerSymbol(MarkerViewModel interview);
+        protected abstract Symbol GetInterviewMarkerSymbol(IInterviewMarkerViewModel interview);
 
         private List<AssignmentDocument> Assignments = new List<AssignmentDocument>();
         private List<InterviewView> Interviews = new List<InterviewView>();
 
-        private List<Graphic> GetAssignmentsMarkers(IEnumerable<MarkerViewModel> assignments)
+        private List<Graphic> GetAssignmentsMarkers(IEnumerable<IAssignmentMarkerViewModel> assignments)
         {
             var markersGraphic = new List<Graphic>();
 
@@ -465,8 +446,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 markersGraphic.Add(new Graphic(
                     (MapPoint)GeometryEngine.Project(
                         new MapPoint(
-                            assignment.LocationLongitude,
-                            assignment.LocationLatitude,
+                            assignment.Longitude,
+                            assignment.Latitude,
                             SpatialReferences.Wgs84),
                         Map.SpatialReference),
                     new[]
@@ -495,7 +476,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             return filteredAssignments;
         }
 
-        protected virtual CompositeSymbol GetAssignmentMarkerSymbol(MarkerViewModel assignment)
+        protected virtual CompositeSymbol GetAssignmentMarkerSymbol(IAssignmentMarkerViewModel assignment)
         {
             return new CompositeSymbol(new[]
             {
@@ -504,46 +485,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             });
         }
 
-        protected virtual MarkerViewModel GetAssignmentMarkerViewModel(AssignmentDocument assignment)
-        {
-            var questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
-            var title = string.Format(EnumeratorUIResources.DashboardItem_Title, assignment.Title,
-                questionnaireIdentity.Version);
-
-            var interviewsByAssignmentCount = assignment.CreatedInterviewsCount ?? 0;
-            var interviewsLeftByAssignmentCount = assignment.Quantity.GetValueOrDefault() - interviewsByAssignmentCount;
-
-            string subTitle = "";
-
-            if (assignment.Quantity.HasValue)
-            {
-                if (interviewsLeftByAssignmentCount == 1)
-                {
-                    subTitle = EnumeratorUIResources.Dashboard_AssignmentCard_SubTitleSingleInterivew;
-                }
-                else
-                {
-                    subTitle = string.Format(EnumeratorUIResources.Dashboard_AssignmentCard_SubTitleCountdownFormat,
-                        interviewsLeftByAssignmentCount, assignment.Quantity);
-                }
-            }
-            else
-            {
-                subTitle = string.Format(EnumeratorUIResources.Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat,
-                    assignment.Quantity.GetValueOrDefault());
-            }
-            
-            return new MarkerViewModel
-            {
-                Type = MarkerType.Assignment,
-                Id = assignment.Id.ToString(),
-                AssignmentId = assignment.Id,
-                Title = title,
-                SubTitle = subTitle,
-                LocationLatitude = assignment.LocationLatitude.Value,
-                LocationLongitude = assignment.LocationLongitude.Value,
-            };
-        }
+        protected abstract IAssignmentMarkerViewModel GetAssignmentMarkerViewModel(AssignmentDocument assignment);
 
         public async void OnMapViewTapped(object sender, GeoViewInputEventArgs e)
         {

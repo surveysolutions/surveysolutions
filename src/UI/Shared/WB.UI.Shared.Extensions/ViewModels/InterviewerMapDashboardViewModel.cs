@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Shared.Extensions.Services;
+using WB.UI.Shared.Extensions.ViewModels.Markers;
 
 namespace WB.UI.Shared.Extensions.ViewModels;
 
@@ -44,8 +45,13 @@ public class InterviewerMapDashboardViewModel : MapDashboardViewModel
     }
 
     public override bool SupportDifferentResponsible => false;
-    
-    protected override Symbol GetInterviewMarkerSymbol(MarkerViewModel interview)
+
+    protected override IInterviewMarkerViewModel GetInterviewMarkerViewModel(InterviewView interview)
+    {
+        return new InterviewerInterviewMarkerViewModel(interview);
+    }
+
+    protected override Symbol GetInterviewMarkerSymbol(IInterviewMarkerViewModel interview)
     {
         Color markerColor;
 
@@ -73,17 +79,9 @@ public class InterviewerMapDashboardViewModel : MapDashboardViewModel
             new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, markerColor, 16)
         });
     }
-    
-    protected override MarkerViewModel GetAssignmentMarkerViewModel(AssignmentDocument assignment)
+
+    protected override IAssignmentMarkerViewModel GetAssignmentMarkerViewModel(AssignmentDocument assignment)
     {
-        var markerViewModel = base.GetAssignmentMarkerViewModel(assignment);
-
-        var interviewsByAssignmentCount = assignment.CreatedInterviewsCount ?? 0;
-        var interviewsLeftByAssignmentCount = assignment.Quantity.GetValueOrDefault() - interviewsByAssignmentCount;
-
-        bool canCreateInterview = !assignment.Quantity.HasValue || Math.Max(val1: 0, val2: interviewsLeftByAssignmentCount) > 0;
-        markerViewModel.CanCreateInterview = canCreateInterview;
-        
-        return markerViewModel;
+        return new InterviewerAssignmentMarkerViewModel(assignment);
     }
 }

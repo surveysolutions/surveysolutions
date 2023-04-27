@@ -20,6 +20,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Shared.Extensions.Entities;
 using WB.UI.Shared.Extensions.Extensions;
 using WB.UI.Shared.Extensions.Services;
+using WB.UI.Shared.Extensions.ViewModels.Markers;
 
 namespace WB.UI.Shared.Extensions.ViewModels;
 
@@ -98,7 +99,7 @@ public class SupervisorMapDashboardViewModel : MapDashboardViewModel
         messengerSubscription?.Dispose();
     }
 
-    protected override Symbol GetInterviewMarkerSymbol(MarkerViewModel interview)
+    protected override Symbol GetInterviewMarkerSymbol(IInterviewMarkerViewModel interview)
     {
         Color markerColor;
 
@@ -129,22 +130,14 @@ public class SupervisorMapDashboardViewModel : MapDashboardViewModel
         });
     }
     
-    protected override MarkerViewModel GetInterviewMarkerViewModel(InterviewView interview)
+    protected override IInterviewMarkerViewModel GetInterviewMarkerViewModel(InterviewView interview)
     {
-        var markerViewModel = base.GetInterviewMarkerViewModel(interview);
-
         var responsibleName = Responsibles.FirstOrDefault(r => interview.ResponsibleId == r.ResponsibleId)?.Title;
-
-        markerViewModel.Responsible = responsibleName;
-
-        return markerViewModel;
+        return new SupervisorInterviewMarkerViewModel(interview, responsibleName);
     }
 
-    protected override MarkerViewModel GetAssignmentMarkerViewModel(AssignmentDocument assignment)
+    protected override IAssignmentMarkerViewModel GetAssignmentMarkerViewModel(AssignmentDocument assignment)
     {
-        var markerViewModel = base.GetAssignmentMarkerViewModel(assignment);
-        markerViewModel.Responsible = assignment.ResponsibleName;
-        markerViewModel.CanAssign = true;
-        return markerViewModel;
+        return new SupervisorAssignmentMarkerViewModel(assignment);
     }
 }

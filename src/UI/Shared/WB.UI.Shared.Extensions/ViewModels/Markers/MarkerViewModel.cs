@@ -1,22 +1,47 @@
-﻿using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+﻿using MvvmCross.Commands;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.UI.Shared.Extensions.Extensions;
 
-namespace WB.UI.Shared.Extensions.ViewModels;
+namespace WB.UI.Shared.Extensions.ViewModels.Markers;
 
-public class MarkerViewModel
+public abstract class MarkerViewModel2: IMarkerViewModel
 {
-    public string Id { get; set; }
-    public MarkerType Type { get; set; }
+    public abstract string Id { get; }
+    public MarkerType Type { get; }
     public string Title { get; set; }
     public string SubTitle { get; set; }
-    public int AssignmentId { get; set; }
+    public int? AssignmentId { get; set; }
     public string InterviewId { get; set; }
     public string InterviewKey { get; set; }
     public InterviewStatus Status { get; set; }
     public string Responsible { get; set; }
-    public double LocationLatitude { get; set; }
-    public double LocationLongitude { get; set; }
+    public double Latitude { get; set; }
+    public double Longitude { get; set; }
     public bool CanAssign { get; set; }
     public bool CanCreateInterview { get; set; }
+
+    private string textDetails;
+    public string TextDetails
+    {
+        get => textDetails ??= ConstructMarkerDetails();
+    }
+
+    private string ConstructMarkerDetails()
+    {
+        var popupTemplate = $"{Title}\r\n{Responsible}";
+        if (!string.IsNullOrWhiteSpace(SubTitle))
+            popupTemplate += $"\r\n{SubTitle}";
+
+        if (Type == MarkerType.Interview)
+        {
+            string status = Status.ToLocalizeString();
+            if (!string.IsNullOrWhiteSpace(popupTemplate))
+                popupTemplate += $"\r\n{status}";
+        }
+
+        return popupTemplate;
+    }
 }
 
 // Supervisor
