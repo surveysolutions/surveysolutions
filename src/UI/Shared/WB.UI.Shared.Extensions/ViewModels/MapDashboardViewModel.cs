@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
+using Android.Graphics;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
@@ -28,6 +28,7 @@ using WB.UI.Shared.Extensions.Entities;
 using WB.UI.Shared.Extensions.Extensions;
 using WB.UI.Shared.Extensions.Services;
 using WB.UI.Shared.Extensions.ViewModels.Markers;
+using Color = System.Drawing.Color;
 
 namespace WB.UI.Shared.Extensions.ViewModels
 {
@@ -94,7 +95,14 @@ namespace WB.UI.Shared.Extensions.ViewModels
         public int? ActiveMarkerIndex
         {
             get => this.activeMarkerIndex;
-            set => this.RaiseAndSetIfChanged(ref this.activeMarkerIndex, value);
+            set
+            {
+                if (activeMarkerIndex != value)
+                {
+                    NavigateToMarkerByCard(value, activeMarkerIndex);
+                }
+                this.RaiseAndSetIfChanged(ref this.activeMarkerIndex, value);
+            }
         }
 
         public abstract bool SupportDifferentResponsible { get; }
@@ -506,7 +514,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 {
                     if (identifyResults.Graphics[0].Geometry is MapPoint projectedLocation)
                     {
-                        NavigateToMarkerPopup(identifyResults, projectedLocation);
+                        NavigateToCardByMarker(identifyResults, projectedLocation);
                     }
                 }
             }
@@ -516,7 +524,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         }
 
-        protected void NavigateToMarkerPopup(IdentifyGraphicsOverlayResult identifyResults,
+        protected void NavigateToCardByMarker(IdentifyGraphicsOverlayResult identifyResults,
             MapPoint projectedLocation)
         {
             var markerId = identifyResults.Graphics[0].Attributes["marker_id"].ToString();
@@ -526,6 +534,34 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 var markerIndex = AvailableMarkers.IndexOf(markerViewModel);
                 ActiveMarkerIndex = markerIndex < 0 ? null : markerIndex;
             }
+        }
+
+        protected void NavigateToMarkerByCard(int? newPosition, int? oldPosition)
+        {
+            if (!newPosition.HasValue || newPosition == oldPosition)
+                return;
+
+            var newMarker = AvailableMarkers[newPosition.Value];
+            var newGraphic = graphicsOverlay.Graphics.FirstOrDefault(g => g.Attributes["marker_id"]?.ToString() == newMarker.Id);
+            if (newGraphic != null)
+            {
+                newGraphic.ZIndex = 100;
+                var newGraphicSymbol = (CompositeSymbol)newGraphic.Symbol;
+                ((SimpleMarkerSymbol)newGraphicSymbol.Symbols[0]).Size = 44;
+                ((SimpleMarkerSymbol)newGraphicSymbol.Symbols[1]).Size = 32;
+            }
+
+            var oldMarker = AvailableMarkers[newPosition.Value];
+            var oldGraphic = graphicsOverlay.Graphics.FirstOrDefault(g => g.Attributes["marker_id"]?.ToString() == oldMarker.Id);
+            if (oldGraphic != null)
+            {
+                oldGraphic.ZIndex = 0;
+                var oldGraphicSymbol = (CompositeSymbol)newGraphic.Symbol;
+                ((SimpleMarkerSymbol)oldGraphicSymbol.Symbols[0]).Size = 22;
+                ((SimpleMarkerSymbol)oldGraphicSymbol.Symbols[1]).Size = 16;
+            }
+
+            this.MapView.SetViewpointCenterAsync(newMarker.Latitude, newMarker.Longitude);
         }
 
         public IMvxAsyncCommand<MapDescription> SwitchMapCommand => new MvxAsyncCommand<MapDescription>(async (mapDescription) =>
