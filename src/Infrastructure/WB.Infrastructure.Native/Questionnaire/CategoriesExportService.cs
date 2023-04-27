@@ -63,19 +63,15 @@ namespace WB.Infrastructure.Native.Questionnaire
                         worksheet.Cell($"C{currentRowNumber}").Style.Alignment.WrapText = true;
                         worksheet.Cell($"D{currentRowNumber}").Value = row.AttachmentName;
                         worksheet.Cell($"D{currentRowNumber}").Style.Alignment.WrapText = true;
-                        worksheet.Column(3).AdjustToContents();
-                        worksheet.Column(4).AdjustToContents();
                     }
                     else
                     {
                         worksheet.Cell($"C{currentRowNumber}").Value = row.AttachmentName;
                         worksheet.Cell($"C{currentRowNumber}").Style.Alignment.WrapText = true;
-                        worksheet.Column(3).AdjustToContents();
                     }
                 }
 
                 worksheet.Protection.AllowElement(XLSheetProtectionElements.FormatColumns);
-
                 using var stream = new MemoryStream();
 
                 excelPackage.SaveAs(stream);
