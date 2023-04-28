@@ -609,7 +609,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>and {0} other.</value>
   </data>
   <data name="AreaMap_ItemsOutsideDedicatedArea" xml:space="preserve">
-    <value>There are items outside dedicated area</value>
+    <value>Some markers fall outside the outlined area</value>
   </data>  
   <data name="AreaMap_PointsFormat" xml:space="preserve">
     <value>Points: {0}</value>

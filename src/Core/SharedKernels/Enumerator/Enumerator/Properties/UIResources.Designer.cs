@@ -168,7 +168,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There are items outside dedicated area.
+        ///   Looks up a localized string similar to Some markers fall outside the outlined area.
         /// </summary>
         public static string AreaMap_ItemsOutsideDedicatedArea {
             get {
