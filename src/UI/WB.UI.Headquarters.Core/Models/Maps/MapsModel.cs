@@ -11,5 +11,6 @@
         public bool IsObserving { get; set; }
         public string UploadMapsFileUrl { get; set; }
         public string UserMapsUrl { get; set; }
+        public bool IsSupervisor { get; set; }
     }
 }

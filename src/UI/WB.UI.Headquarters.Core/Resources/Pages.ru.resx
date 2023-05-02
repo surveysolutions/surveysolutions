@@ -1788,4 +1788,7 @@
   <data name="Profile_IssueApiToken" xml:space="preserve">
       <value>Выдать</value>
   </data>
+  <data name="MapUserLink_DiscardConfirm1" xml:space="preserve">
+      <value>Если это последний пользователь в команде, то Супервизор потеряет доступ к карте.</value>
+  </data>
 </root>

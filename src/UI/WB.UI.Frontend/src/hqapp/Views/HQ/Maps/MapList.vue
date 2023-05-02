@@ -3,7 +3,7 @@
         :title="$t('Pages.MapList_Title')">
         <div slot="headers">
             <div class="topic-with-button" >
-                <h1>{{$t('Pages.MapList_Title')}}</h1>
+                <h1 v-if="actionsAlowed">{{$t('Pages.MapList_Title')}}</h1>
                 <label class="btn btn-success btn-file"
                     v-if="actionsAlowed">
                     {{$t('Pages.MapList_Upload')}}
@@ -30,10 +30,10 @@
                 <li>{{$t('Pages.MapList_UploadDescription')}} </li>
                 <li>{{$t('Pages.MapList_UploadDescriptionExtra')}}</li>
             </ol>
-            <p>
+            <p v-if="!isSupervisor">
                 <a :href="$config.model.userMapsUrl">{{$t('Pages.MapList_UserMapsLink')}}</a>
             </p>
-            <p>
+            <p v-if="!isSupervisor">
                 <a :href="$config.model.userMapLinkingUrl">{{$t('Pages.MapList_UserLinking')}}</a>
             </p>
         </div>
@@ -196,7 +196,10 @@ export default {
             return this.$config.model
         },
         actionsAlowed() {
-            return !this.config.isObserver && !this.config.isObserving
+            return !this.config.isObserver && !this.config.isObserving && !this.config.isSupervisor
+        },
+        isSupervisor() {
+            return this.config.isSupervisor
         },
         tableOptions() {
             var self = this

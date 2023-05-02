@@ -483,6 +483,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Linked users.
+        /// </summary>
+        public static string LinkedUsers {
+            get {
+                return ResourceManager.GetString("LinkedUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Link user.
+        /// </summary>
+        public static string LinkUser {
+            get {
+                return ResourceManager.GetString("LinkUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Loading. Please wait.
         /// </summary>
         public static string Loading {
@@ -614,6 +632,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Processing {
             get {
                 return ResourceManager.GetString("Processing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Properties.
+        /// </summary>
+        public static string Properties {
+            get {
+                return ResourceManager.GetString("Properties", resourceCulture);
             }
         }
         

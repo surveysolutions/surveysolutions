@@ -3525,6 +3525,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If it&apos;s the last user in the team Supervisor will loose access to the map..
+        /// </summary>
+        public static string MapUserLink_DiscardConfirm1 {
+            get {
+                return ResourceManager.GetString("MapUserLink_DiscardConfirm1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No results found.
         /// </summary>
         public static string NoResults {

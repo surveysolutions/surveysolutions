@@ -392,5 +392,14 @@
   </data>
   <data name="Disable" xml:space="preserve">
     <value>Disable</value>
-  </data>    
+  </data>
+  <data name="Properties" xml:space="preserve">
+      <value>Properties</value>
+  </data>
+  <data name="LinkedUsers" xml:space="preserve">
+      <value>Linked users</value>
+  </data>
+  <data name="LinkUser" xml:space="preserve">
+      <value>Link user</value>
+  </data>
 </root>

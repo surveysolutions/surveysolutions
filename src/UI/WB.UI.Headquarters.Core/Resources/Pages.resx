@@ -1725,4 +1725,7 @@
   <data name="Profile_IssueApiToken" xml:space="preserve">
       <value>Issue</value>
   </data>
+  <data name="MapUserLink_DiscardConfirm1" xml:space="preserve">
+      <value>If it's the last user in the team Supervisor will loose access to the map.</value>
+  </data>
 </root>

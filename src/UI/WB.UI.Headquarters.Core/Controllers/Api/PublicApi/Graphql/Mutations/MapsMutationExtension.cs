@@ -24,7 +24,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Mutations
                 .Type<Map>()
                 .Argument("fileName", a => a.Description("Map file name").Type<NonNullType<StringType>>());
 
-            descriptor.Field<MapsResolver>(t => t.DeleteUserFromMap(default!, default!, default!))
+            descriptor.Field<MapsResolver>(t => t.DeleteUserFromMap(default!, default!,default!, default!, default!))
                 .Use<TransactionMiddleware>()
                 .Authorize(roles: new[]
                 {
@@ -38,7 +38,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Mutations
                 .Argument("fileName", a => a.Description("Map file name").Type<NonNullType<StringType>>())
                 .Argument("userName", a => a.Type<NonNullType<StringType>>());
 
-            descriptor.Field<MapsResolver>(t => t.AddUserToMap(default!, default!, default!))
+            descriptor.Field<MapsResolver>(t => t.AddUserToMap(default!, default!, default!,default!, default!))
                 .Use<TransactionMiddleware>()
                 .Authorize(roles: new[]
                 {

@@ -1,27 +1,21 @@
 ﻿using System;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Maps;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
-using WB.Core.BoundedContexts.Headquarters.Maps;
-using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter)]
+    [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
     public class MapsController : Controller
     {
         private readonly IAuthorizedUser authorizedUser;
@@ -50,11 +44,13 @@ namespace WB.UI.Headquarters.Controllers
                 DeleteMapLinkUrl = Url.Action("DeleteMap", "MapsApi"),
                 IsObserver = authorizedUser.IsObserver,
                 IsObserving = authorizedUser.IsObserving,
+                IsSupervisor = authorizedUser.IsSupervisor
             };
             return this.View(model);
         }
 
         [ActivePage(MenuItem.Maps)]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter)]
         public ActionResult UserMapsLink()
         {
             var model = new UserMapLinkModel()
@@ -73,6 +69,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpGet]
         [ActivePage(MenuItem.Maps)]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter)]
         public ActionResult UserMaps()
         {
             var model = new UserMapModel()
@@ -86,6 +83,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpGet]
         [ActivePage(MenuItem.Maps)]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
         public ActionResult Details(string mapName)
         {
             if (mapName == null)
@@ -95,10 +93,16 @@ namespace WB.UI.Headquarters.Controllers
             if (map == null)
                 return NotFound();
 
+            if (authorizedUser.IsSupervisor)
+            {
+                if(map.Users.All(u => u.UserName != authorizedUser.UserName))
+                    return Forbid(); 
+            }
+
             var uploadedBy = map.UploadedBy.HasValue
                 ? userViewFactory.GetUser(map.UploadedBy.Value)?.UserName
                 : (string)null;
-            return this.View("Details",
+            var model=
                 new MapDetailsModel
                 {
                     DataUrl = Url.Action("MapUserList", "MapsApi"),
@@ -120,17 +124,34 @@ namespace WB.UI.Headquarters.Controllers
                         Count = l.Count
                     }).ToArray() ?? Array.Empty<DuplicateLabelModel>(),
                     IsPreviewGeoJson = map.IsPreviewGeoJson,
-                });
+                };
+
+            model.Api = new MapDetailsModel.ApiEndpoints
+            {
+                Users = authorizedUser.IsSupervisor
+                    ? Url.Action("InterviewersCombobox", "Teams")
+                    : Url.Action("ResponsiblesCombobox", "Teams"),
+            };
+
+            return this.View("Details", model);
         }
 
         [HttpGet]
         [ActivePage(MenuItem.Maps)]
         [ExtraHeaderPermissions(HeaderPermissionType.Esri)]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
         public ActionResult MapPreview(string mapName)
         {
             MapBrowseItem map = mapPlainStorageAccessor.GetById(mapName);
+            
             if (map == null)
                 return NotFound();
+
+            if (authorizedUser.IsSupervisor)
+            {
+                if(map.Users.All(u => u.UserName != authorizedUser.UserName))
+                    return Forbid(); 
+            }
 
             return View(map);
         }
@@ -138,6 +159,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [ActivePage(MenuItem.Maps)]
         [ExtraHeaderPermissions(HeaderPermissionType.Esri)]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter)]
         public ActionResult MapPreviewJson(string mapName)
         {
             var map = mapPlainStorageAccessor.GetById(mapName);

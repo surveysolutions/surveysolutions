@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using HotChocolate.Types;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
@@ -29,10 +31,24 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
                 .Resolve(context =>
                 {
                     var mapId = context.Parent<MapBrowseItem>().Id;
+                    var user = context.Service<IAuthorizedUser>();
+                    var unitOfWork = context.Service<IUnitOfWork>();
 
-                    return context.Service<IUnitOfWork>().Session.Query<UserMap>()
-                        .Where(a => mapId == a.Map.Id)
-                        .ToList();
+                    var mapUsers = unitOfWork.Session.Query<UserMap>()
+                        .Where(a => mapId == a.Map.Id);
+                    
+                    if (user.IsSupervisor)
+                    {
+                        //limit by team
+                        var team = unitOfWork.Session.Query<HqUser>()
+                            .Where(x => x.WorkspaceProfile.SupervisorId == user.Id)
+                            .Select(x=> x.UserName).ToList();
+                        
+                        team.Add(user.UserName);
+                        mapUsers = mapUsers.Where(z => team.Contains(z.UserName));
+                    }
+
+                    return mapUsers.ToList();
                 })
                 .Type<ListType<UserMapObjectType>>();
             descriptor.Ignore(m => m.HasGeoJson);

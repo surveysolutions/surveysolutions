@@ -668,16 +668,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             var userMap = this.userMapsStorage
                 .Query(x => x.FirstOrDefault(um => um.Map.FileName == id && um.UserName == userName));
 
-            if (userMap != null)
+            if (userMap == null)
             {
-                throw new InvalidOperationException("Provided map already assigned to specified user.");
+                userMapsStorage.Store(new UserMap
+                {
+                    UserName = userName,
+                    Map = map
+                }, null);
             }
-
-            userMapsStorage.Store(new UserMap
-            {
-                UserName = userName,
-                Map = map
-            }, null);
 
             return this.mapPlainStorageAccessor.GetById(id);
         }
