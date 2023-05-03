@@ -28,7 +28,6 @@ using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Shared.Extensions.Entities;
 using WB.UI.Shared.Extensions.Extensions;
 using WB.UI.Shared.Extensions.Services;
-using WB.UI.Shared.Extensions.ViewModels.Markers;
 using Color = System.Drawing.Color;
 
 namespace WB.UI.Shared.Extensions.ViewModels
