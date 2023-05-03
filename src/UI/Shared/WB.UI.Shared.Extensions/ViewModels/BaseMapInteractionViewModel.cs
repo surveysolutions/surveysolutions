@@ -347,8 +347,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     await this.MapView.SetViewpointGeometryAsync(newFeatureLayer.FullExtent);
 
                 ShapeFileLoaded = true;
-
-                CheckMarkersAgainstShapefile();
+                AfterShapefileLoadedHandler();
             }
             catch (Exception e)
             {
@@ -357,7 +356,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         });
 
-        protected virtual void CheckMarkersAgainstShapefile()
+        protected virtual void AfterShapefileLoadedHandler()
         {
         }
 
@@ -397,7 +396,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             {
                 RemoveShapefileLayer();
                 ShapeFileLoaded = false;
-                CheckMarkersAgainstShapefile();
+                AfterShapefileLoadedHandler();
             }
             catch (Exception e)
             {

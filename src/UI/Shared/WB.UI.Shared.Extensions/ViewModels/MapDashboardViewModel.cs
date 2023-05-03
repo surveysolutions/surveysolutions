@@ -336,7 +336,12 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         }
 
-        protected override void CheckMarkersAgainstShapefile()
+        protected override void AfterShapefileLoadedHandler()
+        {
+            CheckMarkersAgainstShapefile();
+        }
+
+        protected void CheckMarkersAgainstShapefile()
         {
             IsWarningVisible = false;
 
