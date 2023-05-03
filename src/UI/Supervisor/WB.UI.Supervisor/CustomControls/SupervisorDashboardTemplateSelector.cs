@@ -7,7 +7,7 @@ namespace WB.UI.Supervisor.CustomControls
 {
     public class SupervisorDashboardTemplateSelector : IMvxTemplateSelector
     {
-        private static readonly Type InterviewType = typeof(SupervisorDashboardInterviewViewModel);
+        private static readonly Type InterviewType = typeof(SupervisorInterviewDashboardViewModel);
         private static readonly Type SubtitleType = typeof(DashboardSubTitleViewModel);
         private static readonly Type AssignmentType = typeof(SupervisorAssignmentDashboardItemViewModel);
 
