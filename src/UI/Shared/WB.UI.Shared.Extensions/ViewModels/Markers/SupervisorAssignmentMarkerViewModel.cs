@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.UI.Shared.Extensions.ViewModels.Markers;
 
-public class SupervisorAssignmentMarkerViewModel : IAssignmentMarkerViewModel
+/*public class SupervisorAssignmentMarkerViewModel : IAssignmentMarkerViewModel
 {
     private readonly AssignmentDocument assignment;
 
@@ -82,4 +82,4 @@ public class SupervisorAssignmentMarkerViewModel : IAssignmentMarkerViewModel
             return assignmentDetails;
         }
     }
-}
+}*/

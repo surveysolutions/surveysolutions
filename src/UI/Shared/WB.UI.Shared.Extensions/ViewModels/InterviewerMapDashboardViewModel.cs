@@ -1,20 +1,16 @@
 ﻿using System.Drawing;
-using Esri.ArcGISRuntime.Data;
-using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Symbology;
-using Esri.ArcGISRuntime.UI;
 using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Markers;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Shared.Extensions.Services;
-using WB.UI.Shared.Extensions.ViewModels.Markers;
+
 
 namespace WB.UI.Shared.Extensions.ViewModels;
 
@@ -38,24 +34,20 @@ public class InterviewerMapDashboardViewModel : MapDashboardViewModel
         IEnumeratorSettings enumeratorSettings, 
         ILogger logger, 
         IMapUtilityService mapUtilityService, 
-        IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher 
+        IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher,
+        IDashboardViewModelFactory dashboardViewModelFactory
         ) 
-        : base(principal, viewModelNavigationService, userInteractionService, mapService, assignmentsRepository, interviewViewRepository, enumeratorSettings, logger, mapUtilityService, mainThreadAsyncDispatcher)
+        : base(principal, viewModelNavigationService, userInteractionService, mapService, assignmentsRepository, interviewViewRepository, enumeratorSettings, logger, mapUtilityService, mainThreadAsyncDispatcher, dashboardViewModelFactory)
     {
     }
 
     public override bool SupportDifferentResponsible => false;
 
-    protected override IInterviewMarkerViewModel GetInterviewMarkerViewModel(InterviewView interview)
-    {
-        return new InterviewerInterviewMarkerViewModel(interview);
-    }
-
-    protected override Symbol GetInterviewMarkerSymbol(IInterviewMarkerViewModel interview)
+    protected override Symbol GetInterviewMarkerSymbol(IInterviewMarkerViewModel interview, int size = 1)
     {
         Color markerColor;
 
-        switch (interview.Status)
+        switch (interview.InterviewStatus)
         {
             case InterviewStatus.Created:
             case InterviewStatus.InterviewerAssigned:
@@ -75,13 +67,8 @@ public class InterviewerMapDashboardViewModel : MapDashboardViewModel
 
         return new CompositeSymbol(new[]
         {
-            new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.White, 22), //for contrast
-            new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, markerColor, 16)
+            new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.White, 22 * size), //for contrast
+            new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, markerColor, 16 * size)
         });
-    }
-
-    protected override IAssignmentMarkerViewModel GetAssignmentMarkerViewModel(AssignmentDocument assignment)
-    {
-        return new InterviewerAssignmentMarkerViewModel(assignment);
     }
 }

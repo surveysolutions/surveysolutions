@@ -22,6 +22,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         void RefreshDataTime();
     }
 
+    public interface IDashboardItemHolder
+    {
+        IDashboardItem GetDashboardItem();
+    }
+
     public interface IDashboardViewItem
     {
         string Title { get; }

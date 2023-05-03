@@ -20,6 +20,7 @@ using MvvmCross.WeakSubscription;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Activities.Callbacks;
+using WB.UI.Shared.Enumerator.Activities.Dashboard;
 using WB.UI.Shared.Extensions.Activities.Carousel;
 using WB.UI.Shared.Extensions.ViewModels;
 using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
@@ -70,8 +71,10 @@ namespace WB.UI.Shared.Extensions.Activities
             //viewPager.OffscreenPageLimit = 3;
             //viewPager.OverScrollMode = OverScrollMode.Never;
             
-            var adapter = new MarkersRecyclerViewAdapter((IMvxAndroidBindingContext)base.BindingContext);
-            adapter.ItemTemplateSelector = new MvxDefaultTemplateSelector(Resource.Layout.marker_card);
+            //var adapter = new MarkersRecyclerViewAdapter((IMvxAndroidBindingContext)base.BindingContext);
+            var adapter = new RecyclerViewAdapter((IMvxAndroidBindingContext)base.BindingContext);
+            adapter.ItemTemplateSelector = CreateCarouselTemplateSelector();
+            //adapter.ItemTemplateSelector = new MvxDefaultTemplateSelector(Resource.Layout.marker_card);
             adapter.ItemsSource = ViewModel.AvailableMarkers;
             viewPager.Adapter = adapter;
             
@@ -105,8 +108,10 @@ namespace WB.UI.Shared.Extensions.Activities
                 nameof(this.ViewModel.MapView.GeoViewTapped),
                 this.ViewModel.OnMapViewTapped);
             
-            System.Threading.Tasks.Task.Run(() => this.ViewModel.MapControlCreatedAsync());
+            Task.Run(() => this.ViewModel.MapControlCreatedAsync());
         }
+
+        protected virtual IMvxTemplateSelector CreateCarouselTemplateSelector() => new MapDashboardTemplateSelector();
 
         protected override bool BackButtonCustomAction => true;
         protected override void BackButtonPressed()

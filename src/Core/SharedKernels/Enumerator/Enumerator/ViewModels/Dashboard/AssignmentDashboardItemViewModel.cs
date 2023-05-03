@@ -17,12 +17,13 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Markers;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Enumerator.Views.Dashboard;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 {
-    public abstract class AssignmentDashboardItemViewModel : ExpandableQuestionsDashboardItemViewModel
+    public abstract class AssignmentDashboardItemViewModel : ExpandableQuestionsDashboardItemViewModel, IAssignmentMarkerViewModel
     {
         protected readonly IServiceLocator serviceLocator;
         protected AssignmentDocument Assignment = null!;
@@ -166,5 +167,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
             base.Dispose(disposing);
         }
+
+        public string Id => Assignment.Id.ToString();
+        public MarkerType Type => MarkerType.Assignment;
+        public double Latitude => Assignment.LocationLatitude ?? 0;
+        public double Longitude => Assignment.LocationLongitude ?? 0;
     }
 }

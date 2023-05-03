@@ -4,7 +4,9 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Markers;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Shared.Extensions.Extensions;
 
@@ -23,7 +25,12 @@ public class InterviewerInterviewMarkerViewModel : IInterviewMarkerViewModel
     public MarkerType Type => MarkerType.Interview;
     public double Latitude => interview.LocationLatitude.Value;
     public double Longitude => interview.LocationLongitude.Value;
-    public InterviewStatus Status => interview.Status;
+    public IDashboardItem GetDashboardItem()
+    {
+        throw new NotImplementedException();
+    }
+
+    public InterviewStatus InterviewStatus => interview.Status;
     public bool CanAssign => false;
     public bool CanApproveReject => false;
 
@@ -41,7 +48,7 @@ public class InterviewerInterviewMarkerViewModel : IInterviewMarkerViewModel
 
             var popupTemplate = title;
     
-            string status = Status.ToLocalizeString();
+            string status = InterviewStatus.ToLocalizeString();
             if (!string.IsNullOrWhiteSpace(status))
                 popupTemplate += $"\r\n{status}";
 

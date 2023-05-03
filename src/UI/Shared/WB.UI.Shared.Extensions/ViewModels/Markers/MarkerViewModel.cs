@@ -1,6 +1,7 @@
 ﻿using MvvmCross.Commands;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Markers;
 using WB.UI.Shared.Extensions.Extensions;
 
 namespace WB.UI.Shared.Extensions.ViewModels.Markers;

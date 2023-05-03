@@ -23,6 +23,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Markers;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Shared.Extensions.Entities;
 using WB.UI.Shared.Extensions.Extensions;
@@ -36,6 +37,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
     {
         private readonly IAssignmentDocumentsStorage assignmentsRepository;
         protected readonly IPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IDashboardViewModelFactory dashboardViewModelFactory;
 
         protected MapDashboardViewModel(IPrincipal principal, 
             IViewModelNavigationService viewModelNavigationService,
@@ -46,12 +48,14 @@ namespace WB.UI.Shared.Extensions.ViewModels
             IEnumeratorSettings enumeratorSettings,
             ILogger logger,
             IMapUtilityService mapUtilityService,
-            IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher) 
+            IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher,
+            IDashboardViewModelFactory dashboardViewModelFactory) 
             : base(principal, viewModelNavigationService, mapService, userInteractionService, logger, 
                    enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher)
         {
             this.assignmentsRepository = assignmentsRepository;
             this.interviewViewRepository = interviewViewRepository;
+            this.dashboardViewModelFactory = dashboardViewModelFactory;
             this.mainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
         }
         
@@ -438,9 +442,12 @@ namespace WB.UI.Shared.Extensions.ViewModels
             return filteredInterviews;
         }
 
-        protected abstract IInterviewMarkerViewModel GetInterviewMarkerViewModel(InterviewView interview);
+        protected IInterviewMarkerViewModel GetInterviewMarkerViewModel(InterviewView interview)
+        {
+            return dashboardViewModelFactory.GetInterview(interview);
+        }
 
-        protected abstract Symbol GetInterviewMarkerSymbol(IInterviewMarkerViewModel interview);
+        protected abstract Symbol GetInterviewMarkerSymbol(IInterviewMarkerViewModel interview, int size = 1);
 
         private List<AssignmentDocument> Assignments = new List<AssignmentDocument>();
         private List<InterviewView> Interviews = new List<InterviewView>();
@@ -484,16 +491,19 @@ namespace WB.UI.Shared.Extensions.ViewModels
             return filteredAssignments;
         }
 
-        protected virtual CompositeSymbol GetAssignmentMarkerSymbol(IAssignmentMarkerViewModel assignment)
+        protected virtual CompositeSymbol GetAssignmentMarkerSymbol(IAssignmentMarkerViewModel assignment, int size = 1)
         {
             return new CompositeSymbol(new[]
             {
-                new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, Color.White, 22), //for contrast
-                new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, Color.FromArgb(0x2a,0x81,0xcb), 16)
+                new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, Color.White, 22 * size), //for contrast
+                new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, Color.FromArgb(0x2a,0x81,0xcb), 16 * size)
             });
         }
 
-        protected abstract IAssignmentMarkerViewModel GetAssignmentMarkerViewModel(AssignmentDocument assignment);
+        protected IAssignmentMarkerViewModel GetAssignmentMarkerViewModel(AssignmentDocument assignment)
+        {
+            return dashboardViewModelFactory.GetAssignment(assignment);
+        }
 
         public async void OnMapViewTapped(object sender, GeoViewInputEventArgs e)
         {
@@ -546,9 +556,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
             if (newGraphic != null)
             {
                 newGraphic.ZIndex = 100;
-                var newGraphicSymbol = (CompositeSymbol)newGraphic.Symbol;
-                ((SimpleMarkerSymbol)newGraphicSymbol.Symbols[0]).Size = 44;
-                ((SimpleMarkerSymbol)newGraphicSymbol.Symbols[1]).Size = 32;
+                newGraphic.Symbol = (newMarker.Type == MarkerType.Assignment)
+                    ? GetAssignmentMarkerSymbol((IAssignmentMarkerViewModel)newMarker, 3)
+                    : GetInterviewMarkerSymbol((IInterviewMarkerViewModel)newMarker, 3);
             }
 
             var oldMarker = AvailableMarkers[newPosition.Value];
@@ -556,9 +566,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
             if (oldGraphic != null)
             {
                 oldGraphic.ZIndex = 0;
-                var oldGraphicSymbol = (CompositeSymbol)newGraphic.Symbol;
-                ((SimpleMarkerSymbol)oldGraphicSymbol.Symbols[0]).Size = 22;
-                ((SimpleMarkerSymbol)oldGraphicSymbol.Symbols[1]).Size = 16;
+                oldGraphic.Symbol = (oldMarker.Type == MarkerType.Assignment)
+                    ? GetAssignmentMarkerSymbol((IAssignmentMarkerViewModel)oldMarker, 1)
+                    : GetInterviewMarkerSymbol((IInterviewMarkerViewModel)oldMarker, 1);
             }
 
             this.MapView.SetViewpointCenterAsync(newMarker.Latitude, newMarker.Longitude);

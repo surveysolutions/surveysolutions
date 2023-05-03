@@ -1,26 +1,21 @@
 ﻿using System.Drawing;
-using Esri.ArcGISRuntime.Data;
-using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Symbology;
-using Esri.ArcGISRuntime.UI;
 using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Markers;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Shared.Extensions.Entities;
-using WB.UI.Shared.Extensions.Extensions;
 using WB.UI.Shared.Extensions.Services;
-using WB.UI.Shared.Extensions.ViewModels.Markers;
+
 
 namespace WB.UI.Shared.Extensions.ViewModels;
 
@@ -49,8 +44,9 @@ public class SupervisorMapDashboardViewModel : MapDashboardViewModel
         ILogger logger, 
         IMapUtilityService mapUtilityService, 
         IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher, 
-        IPlainStorage<InterviewerDocument> usersRepository) 
-        : base(principal, viewModelNavigationService, userInteractionService, mapService, assignmentsRepository, interviewViewRepository, enumeratorSettings, logger, mapUtilityService, mainThreadAsyncDispatcher)
+        IPlainStorage<InterviewerDocument> usersRepository,
+        IDashboardViewModelFactory dashboardViewModelFactory) 
+        : base(principal, viewModelNavigationService, userInteractionService, mapService, assignmentsRepository, interviewViewRepository, enumeratorSettings, logger, mapUtilityService, mainThreadAsyncDispatcher, dashboardViewModelFactory)
     {
         this.usersRepository = usersRepository;
         this.messenger = Mvx.IoCProvider.GetSingleton<IMvxMessenger>();
@@ -99,11 +95,11 @@ public class SupervisorMapDashboardViewModel : MapDashboardViewModel
         messengerSubscription?.Dispose();
     }
 
-    protected override Symbol GetInterviewMarkerSymbol(IInterviewMarkerViewModel interview)
+    protected override Symbol GetInterviewMarkerSymbol(IInterviewMarkerViewModel interview, int size = 1)
     {
         Color markerColor;
 
-        switch (interview.Status)
+        switch (interview.InterviewStatus)
         {
             case InterviewStatus.Created:
             case InterviewStatus.InterviewerAssigned:
@@ -125,19 +121,8 @@ public class SupervisorMapDashboardViewModel : MapDashboardViewModel
 
         return new CompositeSymbol(new[]
         {
-            new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.White, 22), //for contrast
-            new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, markerColor, 16)
+            new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.White, 22 * size), //for contrast
+            new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, markerColor, 16 * size)
         });
-    }
-    
-    protected override IInterviewMarkerViewModel GetInterviewMarkerViewModel(InterviewView interview)
-    {
-        var responsibleName = Responsibles.FirstOrDefault(r => interview.ResponsibleId == r.ResponsibleId)?.Title;
-        return new SupervisorInterviewMarkerViewModel(interview, responsibleName);
-    }
-
-    protected override IAssignmentMarkerViewModel GetAssignmentMarkerViewModel(AssignmentDocument assignment)
-    {
-        return new SupervisorAssignmentMarkerViewModel(assignment);
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace WB.UI.Shared.Extensions.ViewModels;
+﻿namespace WB.Core.SharedKernels.Enumerator.ViewModels.Markers;
 
 public enum MarkerType
 {

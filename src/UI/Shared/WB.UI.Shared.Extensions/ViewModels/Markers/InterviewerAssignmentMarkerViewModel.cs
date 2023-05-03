@@ -4,6 +4,8 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Markers;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.UI.Shared.Extensions.ViewModels.Markers;
@@ -21,6 +23,10 @@ public class InterviewerAssignmentMarkerViewModel : IAssignmentMarkerViewModel
     public MarkerType Type => MarkerType.Assignment;
     public double Latitude => assignment.LocationLatitude.Value;
     public double Longitude => assignment.LocationLongitude.Value;
+    public IDashboardItem GetDashboardItem()
+    {
+        throw new NotImplementedException();
+    }
 
     public bool CanAssign => false;
 

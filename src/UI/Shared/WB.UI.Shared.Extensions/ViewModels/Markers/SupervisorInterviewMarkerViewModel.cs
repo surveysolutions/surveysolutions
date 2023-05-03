@@ -5,13 +5,14 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Shared.Extensions.Extensions;
 
 namespace WB.UI.Shared.Extensions.ViewModels.Markers;
 
-public class SupervisorInterviewMarkerViewModel : IInterviewMarkerViewModel
+/*public class SupervisorInterviewMarkerViewModel : IInterviewMarkerViewModel
 {
     private readonly InterviewView interview;
     private readonly string responsibleName;
@@ -26,6 +27,7 @@ public class SupervisorInterviewMarkerViewModel : IInterviewMarkerViewModel
     public MarkerType Type => MarkerType.Interview;
     public double Latitude => interview.LocationLatitude.Value;
     public double Longitude => interview.LocationLongitude.Value;
+
     public InterviewStatus Status => interview.Status;
 
     private string interviewDetails;
@@ -97,4 +99,4 @@ public class SupervisorInterviewMarkerViewModel : IInterviewMarkerViewModel
         await viewModelNavigationService.NavigateToAsync<SelectResponsibleForAssignmentViewModel, SelectResponsibleForAssignmentArgs>(
             new SelectResponsibleForAssignmentArgs(interview.InterviewId));
     }
-}
+}*/
