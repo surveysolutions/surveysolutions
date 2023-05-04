@@ -21,17 +21,14 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
     {
         public IQueryable<MapBrowseItem> GetMaps([Service] IUnitOfWork unitOfWork, [Service]IAuthorizedUser user)
         {
-            unitOfWork.DiscardChanges();
             IQueryable<MapBrowseItem> maps = unitOfWork.Session.Query<MapBrowseItem>();
             
             if (user.IsSupervisor)
             {
                 //add all team maps
                 var team = unitOfWork.Session.Query<HqUser>()   
-                    .Where(x => x.WorkspaceProfile.SupervisorId == user.Id)
-                    .Select(x=> x.UserName).ToList();
-                
-                team.Add(user.UserName);
+                    .Where(x => x.WorkspaceProfile.SupervisorId == user.Id || x.Id == user.Id)
+                    .Select(x=> x.UserName);
                 
                 maps = maps.Where(x => x.Users.Any(z => team.Contains(z.UserName)));
             }

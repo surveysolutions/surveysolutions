@@ -1,43 +1,53 @@
 <template>
     <HqLayout :hasFilter="true" :hasHeader="true" :fixedWidth="false">
-        <Filters slot="filters" title="">
-            <FilterBlock :title="$t('Common.Properties')">
-                <ul class="list-group small">
-                    <li class="list-group-item pointer" v-if="!$config.model.shapeType"><strong>{{
+        <Filters slot="filters" :title="$t('Common.Properties')">
+            <FilterBlock>
+                <ul class="list-group small" style="list-style: none;">
+                    <li v-if="!$config.model.shapeType"><strong>{{
                         $t("Pages.MapDetails_MaxScale") }}:</strong> <span>{{ $config.model.maxScale }}</span></li>
-                    <li class="list-group-item pointer" v-if="!$config.model.shapesCount"><strong>{{
+                    <li v-if="!$config.model.shapesCount"><strong>{{
                         $t("Pages.MapDetails_MinScale") }}:</strong> <span>{{ $config.model.minScale }}</span></li>
-                    <li class="list-group-item pointer" v-if="$config.model.shapeType"><strong>{{
+                    <li v-if="$config.model.shapeType"><strong>{{
                         $t("Pages.MapDetails_ShapeType") }}:</strong> <span>{{ $config.model.shapeType }}</span></li>
-                    <li class="list-group-item pointer" v-if="$config.model.shapesCount"><strong>{{
+                    <li v-if="$config.model.shapesCount"><strong>{{
                         $t("Pages.MapDetails_ShapesCount") }}:</strong> <span>{{ $config.model.shapesCount }}</span>
                     </li>
-                    <li class="list-group-item pointer"><strong>{{ $t("Pages.MapDetails_Size") }} :</strong>
-                        <span>{{ $config.model.size }}</span>
+                    <li><strong>{{ $t("Pages.MapDetails_Size") }}:</strong> <span>{{
+                        $config.model.size }}</span>
                     </li>
-                    <li class="list-group-item pointer"><strong>Wkid:</strong> <span>{{ $config.model.wkid }}</span></li>
-                    <li class="list-group-item pointer"><strong>{{ $t("Pages.MapDetails_ImportedOn") }}:</strong>
-                        <span>{{ importDate }}</span>
+                    <li><strong>Wkid:</strong> <span>{{ $config.model.wkid }}</span></li>
+                    <li><strong>{{ $t("Pages.MapDetails_ImportedOn") }}:</strong> <span>{{
+                        importDate }}</span>
                     </li>
-                    <li class="list-group-item pointer" v-if="$config.model.uploadedBy"><strong>{{
-                        $t("Pages.MapDetails_UploadedBy") }}:</strong> <span>{{ $config.model.uploadedBy }}</span></li>
+                    <li v-if="$config.model.uploadedBy"><strong>
+                            {{ $t("Pages.MapDetails_UploadedBy") }}:</strong> <span>{{ $config.model.uploadedBy }}</span>
+                    </li>
                 </ul>
             </FilterBlock>
-            <FilterBlock :title="$t('Common.LinkUser')">
-                <div>
-                    <Typeahead style="margin-left: 10px;" control-id="newLikedUserId" :placeholder="$t('Common.LinkUser')"
-                        :value="newLikedUserId" :ajax-params="{}" @selected="newLinkedUserSelected"
-                        :fetch-url="config.api.users"></Typeahead>
-                </div>
-                <div style="margin-top: 5px;">
-                    <button type="button" class="btn btn-primary" role="confirm" @click="linkUserToMap"
-                        :disabled="!newLikedUserId">{{ $t("Common.LinkUser") }}</button>
-                </div>
-            </FilterBlock>
-            <FilterBlock :title="$t('Common.LinkedUsers')">
-                <div id="list">
+
+
+            <div class="filters-container" id="linkedUsers" slot="additional">
+                <h4>
+                    {{ $t('Common.LinkedUsers') }}
+                </h4>
+                <div class="block-filter">
+
+                    <div class="input-group">
+                        <Typeahead control-id="newLikedUserId" :placeholder="$t('Common.LinkUser')" :value="newLikedUserId"
+                            :ajax-params="{}" @selected="newLinkedUserSelected" :fetch-url="config.api.users"
+                            class="with-clear-btn"></Typeahead>
+                        <div class="input-group-btn">
+                            <div class="btn btn-success" @click="linkUserToMap" :disabled="!newLikedUserId">
+                                <span aria-hidden="true" class="glyphicon add"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- <button type="button" style="margin-top: 5px;" class="btn btn-primary" role="confirm"
+                        @click="linkUserToMap" :disabled="!newLikedUserId">{{ $t("Common.LinkUser") }}</button> -->
+
                     <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addParamsToRequest"
-                        :contextMenuItems="contextMenuItems">
+                        :contextMenuItems="contextMenuItems" style="margin-left: 0px;">
                     </DataTables>
 
                     <Confirm ref="confirmDiscard" id="discardConfirm" slot="modals">
@@ -45,7 +55,7 @@
                         <p>{{ $t("Pages.MapUserLink_DiscardConfirm1") }} </p>
                     </Confirm>
                 </div>
-            </FilterBlock>
+            </div>
         </Filters>
         <div slot="headers">
             <ol class="breadcrumb">
@@ -54,6 +64,16 @@
                 </li>
             </ol>
             <h1>{{ $config.model.fileName }}</h1>
+        </div>
+        <div class="row" v-if="$config.model.duplicateMapLabels.length > 0">
+            <div class="col-md-12 col-sm-12 questionnaire-statistics">
+                <p style="color:red">{{ $t("Pages.MapDetails_DuplicateLabelsWarning") }} </p>
+                <ul class="list-unstyled">
+                    <li v-for="item in $config.model.duplicateMapLabels" :key="item.label">
+                        <strong>{{ item.label }}</strong> - <span>{{ item.count }}</span>
+                    </li>
+                </ul>
+            </div>
         </div>
         <div style="display: flex; width: 100%; height: 100%; flex-direction: column;">
             <iframe style="flex-grow: 1; border: none; margin: 0; padding: 0; min-height: 550px;" id="map-iframe"

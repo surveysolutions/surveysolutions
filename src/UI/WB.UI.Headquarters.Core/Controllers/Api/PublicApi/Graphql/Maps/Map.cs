@@ -41,10 +41,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
                     {
                         //limit by team
                         var team = unitOfWork.Session.Query<HqUser>()
-                            .Where(x => x.WorkspaceProfile.SupervisorId == user.Id)
-                            .Select(x=> x.UserName).ToList();
+                            .Where(x => x.WorkspaceProfile.SupervisorId == user.Id || x.Id == user.Id)
+                            .Select(x=> x.UserName);
                         
-                        team.Add(user.UserName);
                         mapUsers = mapUsers.Where(z => team.Contains(z.UserName));
                     }
 

@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Maps;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
+using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.UI.Headquarters.Code;
 
@@ -20,16 +21,19 @@ namespace WB.UI.Headquarters.Controllers
     {
         private readonly IAuthorizedUser authorizedUser;
         private readonly IUserViewFactory userViewFactory;
+        private readonly IUserRepository userRepository;
         private readonly IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor;
 
         public MapsController(
             IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor,
             IAuthorizedUser authorizedUser,
-            IUserViewFactory userViewFactory)
+            IUserViewFactory userViewFactory,
+            IUserRepository userRepository)
         {
             this.mapPlainStorageAccessor = mapPlainStorageAccessor;
             this.authorizedUser = authorizedUser;
             this.userViewFactory = userViewFactory;
+            this.userRepository = userRepository;
         }
 
         [ActivePage(MenuItem.Maps)]
@@ -95,7 +99,12 @@ namespace WB.UI.Headquarters.Controllers
 
             if (authorizedUser.IsSupervisor)
             {
-                if(map.Users.All(u => u.UserName != authorizedUser.UserName))
+                var team =
+                    userRepository.Users.Where(user =>
+                            user.WorkspaceProfile.SupervisorId == authorizedUser.Id || user.Id == authorizedUser.Id)
+                        .Select(x => x.UserName).ToArray();
+                
+                if(!map.Users.Any(u => team.Contains(u.UserName)))
                     return Forbid(); 
             }
 
@@ -149,7 +158,12 @@ namespace WB.UI.Headquarters.Controllers
 
             if (authorizedUser.IsSupervisor)
             {
-                if(map.Users.All(u => u.UserName != authorizedUser.UserName))
+                var team =
+                    userRepository.Users.Where(user =>
+                            user.WorkspaceProfile.SupervisorId == authorizedUser.Id || user.Id == authorizedUser.Id)
+                        .Select(x => x.UserName).ToArray();
+                
+                if(!map.Users.Any(u => team.Contains(u.UserName)))
                     return Forbid(); 
             }
 

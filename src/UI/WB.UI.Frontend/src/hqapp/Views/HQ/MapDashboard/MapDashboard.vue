@@ -480,17 +480,6 @@ export default {
                     const json = JSON.parse(data.geoJson)
                     self.geoJsonFeatures = self.map.data.addGeoJson(json);
 
-                    self.map.data.setStyle(function (feature) {
-
-                        var color = 'red';
-
-                        return ({
-                            strokeColor: color,
-                            strokeWeight: 2
-                        });
-
-                    });
-
                     const sw = new google.maps.LatLng(data.yMax, data.xMin)
                     const ne = new google.maps.LatLng(data.yMin, data.xMax)
                     const latlngBounds = new google.maps.LatLngBounds(sw, ne)
@@ -714,24 +703,10 @@ export default {
                 }
 
                 if (type == null) {
-                    const geometry = feature.getGeometry()
-                    const geometryType = geometry.getType()
                     //"Point", "MultiPoint", "LineString", "MultiLineString", "LinearRing", "Polygon", "MultiPolygon", or "GeometryCollection"
-                    if (geometryType == "Polygon" || geometryType == "MultiPolygon") {
-                        return {
-                            fillColor: '#DE9131',
-                            fillOpacity: 0.8,
-                            strokeColor: '#FCF7F1',
-                            //strokeOpacity: ,
-                            strokeWeight: 1,
-                        }
-                    }
-                    else if (geometryType == "LineString" || geometryType == "MultiLineString") {
-                        return {
-                            strokeColor: '#DE9131',
-                            //strokeOpacity: ,
-                            strokeWeight: 2,
-                        }
+                    return {
+                        strokeColor: 'red',
+                        strokeWeight: 2,
                     }
                 }
 
