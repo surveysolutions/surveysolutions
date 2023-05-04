@@ -1,83 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-        android:id="@+id/card_view"
+<RelativeLayout
+        android:id="@+id/marker_card_view"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:local="http://schemas.android.com/apk/res-auto"
-        xmlns:card_view="https://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="12dp"
-        card_view:cardBackgroundColor="@android:color/white"
-        card_view:cardCornerRadius="10dp"
-        card_view:cardElevation="5dp"
-        card_view:cardUseCompatPadding="true">
+        android:alpha="0"
+        android:minHeight="@dimen/carousel_current_item_min_height"
+        >
 
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:layout_weight="2"
-            android:padding="10dp"
-            android:orientation="vertical"
+            android:layout_alignParentBottom="true"
             >
-
-        <TextView
-                android:id="@+id/textTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:textColor="#000"
-                local:MvxBind="Text HtmlDetails;"
-                />
-
-        <LinearLayout 
-                style="@style/FullWidthWrappingLayout"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/Interview_Group_margin_top">
-            <Button
-                    android:id="@+id/btnOpen"
-                    style="@style/Button_Primary"
-                    local:MvxBind="HideKeyboardOnClick .; 
-                        Visible CanOpen;
-                        Click OpenInterviewCommand; 
-                        Text Localization('Dashboard_Open');" />
-
-            <Button
-                    android:id="@+id/btnCreate"
-                    style="@style/Button_Primary"
-                    android:layout_marginLeft="@dimen/button_shadow_margin"
-                    local:MvxBind="HideKeyboardOnClick .;
-                        Visible CanCreateInterview; 
-                        Click CreateInterviewCommand; 
-                        Text Localization('Dashboard_StartNewInterview');" />
-
-            <Button
-                    android:id="@+id/btnAssign"
-                    style="@style/Button_Primary"
-                    android:layout_marginLeft="@dimen/button_shadow_margin"
-                    local:MvxBind="HideKeyboardOnClick .;
-                        Visible CanAssign; 
-                        Click AssignCommand; 
-                        Text Localization('Supervisor_Complete_Assign_btn');" />
-
-            <Button
-                    android:id="@+id/btnApprove"
-                    style="@style/Button_Success"
-                    android:layout_marginLeft="@dimen/button_shadow_margin"
-                    local:MvxBind="HideKeyboardOnClick .;
-                        Visible CanApproveReject; 
-                        Click ApproveCommand; 
-                        Text Localization('Supervisor_Complete_Approve_btn'); " />
-            <Button
-                    android:id="@+id/btnReject"
-                    style="@style/Button_Error"
-                    android:layout_marginLeft="@dimen/button_shadow_margin"
-                    local:MvxBind="HideKeyboardOnClick .; 
-                        Visible CanApproveReject; 
-                        Click RejectCommand; 
-                        Text Localization('Supervisor_Complete_Reject_btn');" />
-        </LinearLayout>
-
+        
+        <include layout="@layout/dashboard_interview_item" />
+        
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</RelativeLayout>

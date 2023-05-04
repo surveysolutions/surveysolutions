@@ -11,7 +11,7 @@ public class MapDashboardTemplateSelector : IMvxTemplateSelector
         if (forItemObject == null) return -1;
 
         if (forItemObject is IMarkerViewModel markerViewModel)
-            return Resource.Layout.dashboard_interview_item;
+            return Resource.Layout.marker_card;
 
         return -1;
     }
