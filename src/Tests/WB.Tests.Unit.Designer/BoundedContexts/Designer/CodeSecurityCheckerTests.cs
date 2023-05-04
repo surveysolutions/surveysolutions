@@ -42,6 +42,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         [TestCase("Activator.CreateInstance(typeof(AccessViolationException))", "System.Activator")]
         [TestCase("Environment.Exit(1)", "System.Environment")]
         [TestCase("GC.Collect()", "System.GC")]
+        [TestCase("var t = new System.Threading.SemaphoreSlim(0, 3)", "System.Threading.SemaphoreSlim")]
+
         public void should_not_allow_usage_of_dangerous_classess(string codeToCheck, string expectedClassName)
         {
             string code = string.Format(TestClassToCompile, codeToCheck);
