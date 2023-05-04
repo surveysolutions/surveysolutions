@@ -41,7 +41,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         {
             if (this.Target != null)
             {
-                this.viewModel.AnswerCommand?.Execute(e.Date);
+                this.viewModel?.AnswerCommand?.Execute(e.Date);
             }
         }
 
