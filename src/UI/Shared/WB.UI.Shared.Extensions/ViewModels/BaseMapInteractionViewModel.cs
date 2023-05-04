@@ -334,7 +334,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
             try
             {
-                var newFeatureLayer = await mapUtilityService.GetShapefileAsFeatureLayer(fullPathToShapefile);
+                ShapefileFeatureTable myShapefile = await ShapefileFeatureTable.OpenAsync(fullPathToShapefile);
+                
+                var newFeatureLayer = await mapUtilityService.GetShapefileAsFeatureLayer(myShapefile);
                 newFeatureLayer.Name = ShapefileLayerName;
                 
                 RemoveShapefileLayer();

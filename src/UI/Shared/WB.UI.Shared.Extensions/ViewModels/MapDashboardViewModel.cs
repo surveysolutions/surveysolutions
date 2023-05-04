@@ -357,13 +357,14 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     if (shapeExtent.SpatialReference != null)
                     {
                         var projectedPoint = graphic.Geometry.Project(shapeExtent.SpatialReference);
-                        if (shapeExtent.Contains(projectedPoint)) continue;
+                        if (!shapeExtent.Contains(projectedPoint))
+                        {
+                            Warning = UIResources.AreaMap_ItemsOutsideDedicatedArea;
+                            IsWarningVisible = true;
+                            return;
+                        }
                     }
                 }
-                
-                Warning = UIResources.AreaMap_ItemsOutsideDedicatedArea;
-                IsWarningVisible = true;
-                return;
             }
         }
 
