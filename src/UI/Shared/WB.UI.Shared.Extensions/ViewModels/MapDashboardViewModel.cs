@@ -107,6 +107,14 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 this.RaiseAndSetIfChanged(ref this.activeMarkerIndex, value);
             }
         }
+        
+        private bool showMarkersDetails = false;
+        public bool ShowMarkersDetails
+        {
+            get => this.showMarkersDetails;
+            set => this.RaiseAndSetIfChanged(ref this.showMarkersDetails, value);
+        }
+
 
         public abstract bool SupportDifferentResponsible { get; }
 
@@ -523,8 +531,13 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 {
                     if (identifyResults.Graphics[0].Geometry is MapPoint projectedLocation)
                     {
+                        ShowMarkersDetails = true;
                         NavigateToCardByMarker(identifyResults, projectedLocation);
                     }
+                }
+                else
+                {
+                    ShowMarkersDetails = false;
                 }
             }
             catch (Exception ex)
