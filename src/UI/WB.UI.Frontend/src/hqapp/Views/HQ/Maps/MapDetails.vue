@@ -44,7 +44,9 @@
                         </ul>
                     </div>
                 </div>
-                <iframe width="100%"
+                <iframe
+                    title="Map preview" 
+                    width="100%"
                     height="550px"
                     :src="$config.model.mapPreviewUrl"></iframe>
                 <p>{{ mapDisclaimer }} </p>
