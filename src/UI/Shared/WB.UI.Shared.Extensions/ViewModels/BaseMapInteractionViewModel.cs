@@ -290,6 +290,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
         private bool isDisposed;
         private bool shapeFileLoaded;
         
+        protected ShapefileFeatureTable LoadedShapefile;
+        
 
         public MapView MapView
         {
@@ -332,11 +334,11 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     return;
             }
 
-            try
+            try 
             {
-                ShapefileFeatureTable myShapefile = await ShapefileFeatureTable.OpenAsync(fullPathToShapefile);
+                LoadedShapefile = await ShapefileFeatureTable.OpenAsync(fullPathToShapefile);
                 
-                var newFeatureLayer = await mapUtilityService.GetShapefileAsFeatureLayer(myShapefile);
+                var newFeatureLayer = await mapUtilityService.GetShapefileAsFeatureLayer(LoadedShapefile);
                 newFeatureLayer.Name = ShapefileLayerName;
                 
                 RemoveShapefileLayer();
@@ -349,17 +351,19 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     await this.MapView.SetViewpointGeometryAsync(newFeatureLayer.FullExtent);
 
                 ShapeFileLoaded = true;
-                AfterShapefileLoadedHandler();
+                await AfterShapefileLoadedHandler();
             }
             catch (Exception e)
             {
+                LoadedShapefile = null;
                 logger.Error("Error on shapefile loading", e);
                 UserInteractionService.ShowToast(UIResources.AreaMap_ErrorOnShapefileLoading);
             }
         });
 
-        protected virtual void AfterShapefileLoadedHandler()
+        protected virtual Task AfterShapefileLoadedHandler()
         {
+            return Task.CompletedTask;
         }
 
         private void RemoveShapefileLayer()
@@ -389,7 +393,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             set => this.RaiseAndSetIfChanged(ref this.warning, value);
         }
         
-        public IMvxCommand HideShapefile => new MvxCommand(() =>
+        public IMvxCommand HideShapefile => new MvxAsyncCommand(async() =>
         {
             if (!ShapeFileLoaded)
                 return;
@@ -398,7 +402,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             {
                 RemoveShapefileLayer();
                 ShapeFileLoaded = false;
-                AfterShapefileLoadedHandler();
+                await AfterShapefileLoadedHandler();
             }
             catch (Exception e)
             {
