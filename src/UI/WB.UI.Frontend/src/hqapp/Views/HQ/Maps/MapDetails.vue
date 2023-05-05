@@ -76,8 +76,8 @@
             </div>
         </div>
         <div style="display: flex; width: 100%; height: 100%; flex-direction: column;">
-            <iframe style="flex-grow: 1; border: none; margin: 0; padding: 0; min-height: 550px;" id="map-iframe"
-                :src="$config.model.mapPreviewUrl"></iframe>
+            <iframe title="Map preview" style="flex-grow: 1; border: none; margin: 0; padding: 0; min-height: 550px;"
+                id="map-iframe" :src="$config.model.mapPreviewUrl"></iframe>
             <p> {{ mapDisclaimer }} </p>
         </div>
 
