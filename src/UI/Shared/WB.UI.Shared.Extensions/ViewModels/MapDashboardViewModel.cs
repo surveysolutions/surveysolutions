@@ -370,6 +370,23 @@ namespace WB.UI.Shared.Extensions.ViewModels
                             }
                         }
 
+                        if (markers.Count > 0)
+                        {
+                            double centerLat = 0;
+                            double centerLng = 0;
+                            foreach (var marker in markers)
+                            {
+                                centerLat += marker.Latitude;
+                                centerLng += marker.Longitude;
+                            }
+                            centerLat /= markers.Count;
+                            centerLng /= markers.Count;
+                        
+                            markers = markers
+                                .OrderBy(m => GeometryHelper.GetDistance(centerLat, centerLng, m.Latitude, m.Longitude))
+                                .ToList();
+                        }
+                        
                         AvailableMarkers.ReplaceWith(markers);
                     }
 
