@@ -34,6 +34,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
 {
     public abstract class MapDashboardViewModel: BaseMapInteractionViewModel<MapDashboardViewModelArgs>
     {
+        const string MarkerId = "marker_id";
+
         private readonly IAssignmentDocumentsStorage assignmentsRepository;
         protected readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IDashboardViewModelFactory dashboardViewModelFactory;
@@ -437,7 +439,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         Map.SpatialReference),
                     new[]
                     {
-                        new KeyValuePair<string, object>("marker_id", interview.Id),
+                        new KeyValuePair<string, object>(MarkerId, interview.Id),
                     },
                     GetInterviewMarkerSymbol(interview)));
             }
@@ -491,7 +493,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         Map.SpatialReference),
                     new[]
                     {
-                        new KeyValuePair<string, object>("marker_id", assignment.Id),
+                        new KeyValuePair<string, object>(MarkerId, assignment.Id),
                     },
                     GetAssignmentMarkerSymbol(assignment)));
             }
@@ -555,6 +557,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 else
                 {
                     ShowMarkersDetails = false;
+                    ActiveMarkerIndex = null;
                 }
             }
             catch (Exception ex)
@@ -566,7 +569,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         protected void NavigateToCardByMarker(IdentifyGraphicsOverlayResult identifyResults,
             MapPoint projectedLocation)
         {
-            var markerId = identifyResults.Graphics[0].Attributes["marker_id"].ToString();
+            var markerId = identifyResults.Graphics[0].Attributes[MarkerId].ToString();
             var markerViewModel = AvailableMarkers.FirstOrDefault(m => m.Id == markerId);
             if (markerViewModel != null)
             {
@@ -577,30 +580,33 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         protected void NavigateToMarkerByCard(int? newPosition, int? oldPosition)
         {
-            if (!newPosition.HasValue || newPosition == oldPosition)
+            if (newPosition == oldPosition)
                 return;
 
-            var newMarker = AvailableMarkers[newPosition.Value];
-            var newGraphic = graphicsOverlay.Graphics.FirstOrDefault(g => g.Attributes["marker_id"]?.ToString() == newMarker.Id);
-            if (newGraphic != null)
+            void SetMarkerStyle(IMarkerViewModel marker, int zIndex, int markerSize)
             {
-                newGraphic.ZIndex = 100;
-                newGraphic.Symbol = (newMarker.Type == MarkerType.Assignment)
-                    ? GetAssignmentMarkerSymbol((IAssignmentMarkerViewModel)newMarker, 3)
-                    : GetInterviewMarkerSymbol((IInterviewMarkerViewModel)newMarker, 3);
+                var graphic = graphicsOverlay.Graphics.FirstOrDefault(g => g.Attributes[MarkerId]?.ToString() == marker.Id);
+                if (graphic != null)
+                {
+                    graphic.ZIndex = zIndex;
+                    graphic.Symbol = (marker.Type == MarkerType.Assignment)
+                        ? GetAssignmentMarkerSymbol((IAssignmentMarkerViewModel)marker, markerSize)
+                        : GetInterviewMarkerSymbol((IInterviewMarkerViewModel)marker, markerSize);
+                }
             }
 
-            var oldMarker = AvailableMarkers[newPosition.Value];
-            var oldGraphic = graphicsOverlay.Graphics.FirstOrDefault(g => g.Attributes["marker_id"]?.ToString() == oldMarker.Id);
-            if (oldGraphic != null)
+            if (oldPosition.HasValue)
             {
-                oldGraphic.ZIndex = 0;
-                oldGraphic.Symbol = (oldMarker.Type == MarkerType.Assignment)
-                    ? GetAssignmentMarkerSymbol((IAssignmentMarkerViewModel)oldMarker, 1)
-                    : GetInterviewMarkerSymbol((IInterviewMarkerViewModel)oldMarker, 1);
+                var marker = AvailableMarkers[oldPosition.Value];
+                SetMarkerStyle(marker, 0, 1);
             }
 
-            this.MapView.SetViewpointCenterAsync(newMarker.Latitude, newMarker.Longitude);
+            if (newPosition.HasValue)
+            {
+                var marker = AvailableMarkers[newPosition.Value];
+                SetMarkerStyle(marker, 100, 2);
+                this.MapView.SetViewpointCenterAsync(marker.Latitude, marker.Longitude);
+            }
         }
 
         public IMvxAsyncCommand<MapDescription> SwitchMapCommand => new MvxAsyncCommand<MapDescription>(async (mapDescription) =>
