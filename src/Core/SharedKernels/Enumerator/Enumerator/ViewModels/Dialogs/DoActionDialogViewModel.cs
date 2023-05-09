@@ -96,11 +96,40 @@ public abstract class DoActionDialogViewModel<T> : MvxViewModel<T> where T : DoA
         protected set => SetProperty(ref cancelTitle, value);
     }
 
+    public virtual bool ShowConfirm
+    {
+        get => showConfirm;
+        protected set => SetProperty(ref showConfirm, value);
+    }
+
+    public bool IsConfirmed
+    {
+        get => isConfirmed;
+        set
+        {
+            var theSame = isConfirmed == value;
+            SetProperty(ref isConfirmed, value);
+            if (!theSame)
+                ConfirmStateChanged(value);
+        }
+    }
+
+    protected virtual void ConfirmStateChanged(bool newValue) { }
+
+    public virtual string ConfirmText
+    {
+        get => confirmText;
+        protected set => SetProperty(ref confirmText, value);
+    }
+
     private IMvxAsyncCommand applyCommand;
     protected T CreateParameter;
     private bool canApply;
     private string cancelTitle = UIResources.Cancel;
     private string applyTitle;
+    private bool showConfirm;
+    private bool isConfirmed;
+    private string confirmText;
     public IMvxAsyncCommand ApplyCommand => applyCommand ??= new MvxAsyncCommand(this.DoApplyAsync, () => this.CanApply);
     protected abstract Task DoApplyAsync();
 

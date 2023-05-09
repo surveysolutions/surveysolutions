@@ -50,7 +50,19 @@ public class AssignInterviewDialogViewModel: DoActionDialogViewModel<AssignInter
     public override string DialogTitle => EnumeratorUIResources.SelectResponsible_Reassign;
     public override string ApplyTitle => EnumeratorUIResources.SelectResponsible_ReassignButtonText;
     public override string CommentHint => UIResources.Interviewer_Reassign_Comment;
-    public override string CommentHelperText => UIResources.Interviewer_Reassign_Comment;
+    public override string CommentHelperText => EnumeratorUIResources.SelectResponsible_ReassignDescription;
+    public override string ConfirmText => UIResources.Interviewer_Reassign_AlreadyReceivedInterview;
+
+    public override bool ShowResponsibles => true;
+
+    public override void Prepare(AssignInterviewDialogArgs parameter)
+    {
+        base.Prepare(parameter);
+        
+        var interviewId = CreateParameter.InterviewId;
+        var interviewView = InterviewStorage.GetById(interviewId.FormatGuid());
+        ShowConfirm = interviewView.ReceivedByInterviewerAtUtc.HasValue;
+    }
 
     protected override Task DoApplyAsync()
     {
@@ -84,8 +96,6 @@ public class AssignInterviewDialogViewModel: DoActionDialogViewModel<AssignInter
         return Task.CompletedTask;
     }
 
-    public override bool ShowResponsibles => true;
-
     protected override IEnumerable<InterviewerDocument> GetInterviewers(AssignInterviewDialogArgs parameter, out bool needAddSupervisorToResponsibles)
     {
         var interviewId = parameter.InterviewId;
@@ -107,6 +117,18 @@ public class AssignInterviewDialogViewModel: DoActionDialogViewModel<AssignInter
     {
         base.ResponsibleSelected(responsible);
 
-        CanApply = responsible != null;
+        CanApply = ShowConfirm 
+            ? responsible != null && IsConfirmed
+            : responsible != null;
+    }
+
+    protected override void ConfirmStateChanged(bool newValue)
+    {
+        base.ConfirmStateChanged(newValue);
+
+        var responsible = ResponsibleItems.SingleOrDefault(o => o.IsSelected); 
+        CanApply = ShowConfirm 
+            ? responsible != null && newValue
+            : responsible != null;
     }
 }

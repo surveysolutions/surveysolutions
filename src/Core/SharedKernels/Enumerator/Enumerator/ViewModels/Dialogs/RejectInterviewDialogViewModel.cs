@@ -44,11 +44,10 @@ public class RejectInterviewDialogViewModel: DoActionDialogViewModel<RejectInter
     }
 
     public override string DialogTitle => UIResources.Supervisor_Complete_Reject_btn;
-
     public override string ApplyTitle => UIResources.Supervisor_Complete_Reject_btn;
+    public override string CommentHint => UIResources.Interviewer_Comment;
 
     public override bool ShowResponsibles => true;
-
     public override bool CanApply => true;
 
     protected override Task DoApplyAsync()

@@ -1394,6 +1394,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Leave your comment.
+        /// </summary>
+        public static string Interviewer_Comment {
+            get {
+                return ResourceManager.GetString("Interviewer_Comment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Diagnostics.
         /// </summary>
         public static string Interviewer_Diagnostics {
@@ -1408,6 +1417,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Interviewer_Done {
             get {
                 return ResourceManager.GetString("Interviewer_Done", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to reassign this assignment which Interviewer already received..
+        /// </summary>
+        public static string Interviewer_Reassign_AlreadyReceivedAssignment {
+            get {
+                return ResourceManager.GetString("Interviewer_Reassign_AlreadyReceivedAssignment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to reassign this interview which Interviewer already received..
+        /// </summary>
+        public static string Interviewer_Reassign_AlreadyReceivedInterview {
+            get {
+                return ResourceManager.GetString("Interviewer_Reassign_AlreadyReceivedInterview", resourceCulture);
             }
         }
         

@@ -785,7 +785,15 @@
   </data>
   <data name="Interviewer_Reassign_Comment" xml:space="preserve">
     <value>Оставьте комментарий для нового ответственного</value>
-    <comment>Комментарий:</comment>
+  </data>
+  <data name="Interviewer_Comment" xml:space="preserve">
+    <value>Оставьте ваш комментарий</value>
+  </data>
+  <data name="Interviewer_Reassign_AlreadyReceivedInterview" xml:space="preserve">
+    <value>Вы хотите переназначить это интервью, которое уже получено интервьювером.</value>
+  </data>
+  <data name="Interviewer_Reassign_AlreadyReceivedAssignment" xml:space="preserve">
+    <value>Вы хотите переназначить это задание, которое уже получено интервьювером.</value>
   </data>
   <data name="ErrorMessage_PermissionForUnkownSourcesRequired" xml:space="preserve">
     <value>У приложения не хватает прав для обновления. Пожалуйста разрешите этому приложению "Установку неизвестных приложений" в настройках</value>

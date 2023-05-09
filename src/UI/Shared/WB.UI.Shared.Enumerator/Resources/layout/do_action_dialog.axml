@@ -66,6 +66,22 @@
     </LinearLayout>
     <LinearLayout
             style="@style/FullWidthWrappingLayout"
+            android:gravity="fill|clip_vertical"
+            android:layout_weight="3"
+            android:paddingLeft="30dp"
+            android:paddingRight="50dp"
+            local:MvxBind="Visible ShowConfirm;">
+
+        <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                local:MvxBind="
+                      HideKeyboardOnClick .;
+                      Text ConfirmText; 
+                      Checked IsConfirmed;"/>
+    </LinearLayout>
+    <LinearLayout
+            style="@style/FullWidthWrappingLayout"
             android:layout_marginTop="@dimen/Interview_Entity_Title_margin_top"
             android:layout_span="2"
             android:gravity ="bottom"

@@ -41,8 +41,8 @@ public class ApproveInterviewDialogViewModel : DoActionDialogViewModel<ApproveIn
     }
 
     public override string DialogTitle => UIResources.Supervisor_Complete_Approve_btn;
-
     public override string ApplyTitle => UIResources.Supervisor_Complete_Approve_btn;
+    public override string CommentHint => UIResources.Interviewer_Comment;
 
     public override bool ShowResponsibles => false;
 
