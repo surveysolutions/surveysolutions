@@ -50,8 +50,6 @@
             android:id="@+id/pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="@dimen/Dashboard_Layout_marginLeft"
-            android:paddingRight="@dimen/Dashboard_Layout_marginRight"
         >
         </androidx.viewpager.widget.ViewPager>
         <LinearLayout style="@style/Interview_GroupWithDivider"
