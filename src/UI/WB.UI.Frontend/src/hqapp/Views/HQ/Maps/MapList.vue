@@ -27,7 +27,8 @@
                 <a :href="$config.model.userMapLinkingUrl">{{ $t('Pages.MapList_UserLinking') }}</a>
             </p>
         </div>
-        <DataTables ref="table" :tableOptions="tableOptions" :contextMenuItems="contextMenuItems">
+        <DataTables ref="table" :tableOptions="tableOptions" :contextMenuItems="contextMenuItems"
+            :supportContextMenu="actionsAlowed">
         </DataTables>
 
         <Confirm ref="confirmDiscard" id="discardConfirm" :okTitle="$t('Common.Delete')" okClass="btn-danger" slot="modals">
@@ -195,6 +196,9 @@ export default {
                         name: 'FileName',
                         class: 'title',
                         title: this.$t('Pages.MapList_MapName'),
+                        render(data) {
+                            return `<a href="${self.$hq.basePath}Maps/Details?mapname=${encodeURIComponent(data)}">${data}</a>`
+                        }
                     },
                     {
                         data: 'fileName',
