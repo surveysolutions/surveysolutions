@@ -86,7 +86,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             bool showArchived = DEFAULT_SHOW_ARCHIVED,
             bool excludeHeadquarters = DEFAULT_EXCLUDE_HEADQUARTERS)
         {
-            var users = this.userViewFactory.GetAllResponsibles(pageSize: pageSize, searchBy: query, showLocked: showLocked, showArchived: showArchived);
+            var users = this.userViewFactory.GetAllResponsibles(pageSize: pageSize, searchBy: query, 
+                showLocked: showLocked, showArchived: showArchived, excludeHeadquarters: excludeHeadquarters);
             var options = users.Users.Select(x => new ResponsibleComboboxOptionModel(x.ResponsibleId.FormatGuid(), x.UserName, x.IconClass)).ToArray();
             return new ResponsibleComboboxModel(options, users.TotalCountByQuery);
         }
