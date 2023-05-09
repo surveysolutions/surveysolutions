@@ -49,7 +49,7 @@
 
                     <Confirm ref="confirmDiscard" id="discardConfirm" slot="modals" :okTitle="$t('Pages.MapDetails_Unlink')"
                         okClass="btn-danger">
-                        <p class="text-danger">{{ $t("Pages.MapUserLink_DiscardConfirm") }} </p>
+                        <p>{{ $t("Pages.MapUserLink_DiscardConfirm") }} </p>
                         <p class="text-danger">{{ $t("Pages.MapUserLink_DiscardConfirm1") }} </p>
                     </Confirm>
                 </div>
