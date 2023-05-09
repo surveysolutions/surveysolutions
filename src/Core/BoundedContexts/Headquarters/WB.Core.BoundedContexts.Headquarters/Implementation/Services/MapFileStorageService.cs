@@ -506,9 +506,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             {
                 bool isTeamInterviewer = this.userStorage.Users
                     .Any(x => x.UserName.ToLower() == lowerCasedUserName && x.WorkspaceProfile.SupervisorId == this.authorizedUser.Id);
-                if (!isTeamInterviewer)
+                if (!isTeamInterviewer && this.authorizedUser.UserName.ToLower() != lowerCasedUserName)
                 {
-                    throw new UserNotFoundException("Map can be assigned only to existing non archived interviewer.");
+                    throw new UserNotFoundException("User is not from the team.");
                 }
             }
 
@@ -525,7 +525,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 this.userMapsStorage.Remove(mapUsers);
             else
             {
-                throw new InvalidOperationException("Map is not assigned to specified interviewer.");
+                throw new InvalidOperationException("Map is not assigned to specified user.");
             }
             return map;
         }

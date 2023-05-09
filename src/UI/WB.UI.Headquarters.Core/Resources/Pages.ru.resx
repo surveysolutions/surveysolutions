@@ -1205,7 +1205,7 @@
     <value>Отменить назначение на пользователя</value>
   </data>
   <data name="MapDetails_InterviewerName" xml:space="preserve">
-    <value>Имя интервьюера</value>
+    <value>Имя пользователя</value>
   </data>
   <data name="MapDetails_MapDisclaimer" xml:space="preserve">
     <value>Загруженная карта нанесена на карту мира</value>
@@ -1304,7 +1304,7 @@
     <value>Статус</value>
   </data>
   <data name="Map_NoUsers" xml:space="preserve">
-    <value>Карта не назначена ни на одного интервьювера</value>
+    <value>Карта не назначена ни на одного пользователя</value>
   </data>
   <data name="Map_Uploaded" xml:space="preserve">
     <value>Файл загружен. Обработка.</value>
@@ -1461,6 +1461,9 @@
   </data>
   <data name="Configuration" xml:space="preserve">
     <value>Настройки</value>
+  </data>
+  <data name="MapDetails_SelectUser" xml:space="preserve">
+    <value>Выберите пользователя</value>
   </data>
   <data name="InterviewPackages" xml:space="preserve">
     <value>Интервью пакеты</value>
@@ -1791,4 +1794,8 @@
   <data name="MapUserLink_DiscardConfirm1" xml:space="preserve">
       <value>Если это последний пользователь в команде, то Супервизор потеряет доступ к карте.</value>
   </data>
+  <data name="MapDetails_Unlink" xml:space="preserve">
+    <value>Отвязать</value>
+  </data>
+
 </root>

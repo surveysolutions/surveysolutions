@@ -492,7 +492,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Link user.
+        ///   Looks up a localized string similar to User.
         /// </summary>
         public static string LinkUser {
             get {

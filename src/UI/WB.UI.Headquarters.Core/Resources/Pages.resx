@@ -1235,7 +1235,7 @@
     <value>Are you sure you want to delete the map "{{map}}"?</value>
   </data>
   <data name="MapUserLink_DiscardConfirm" xml:space="preserve">
-    <value>Are You sure You want to unlink user from the map?</value>
+    <value>Are you sure you want to unlink user from the map?</value>
   </data>
   <data name="CautionTitle" xml:space="preserve">
     <value>Caution:</value>
@@ -1289,10 +1289,13 @@
     <value>Do you want to delete map?</value>
   </data>
   <data name="MapDetails_InterviewerName" xml:space="preserve">
-    <value>Interviewer name</value>
+    <value>User name</value>
   </data>
   <data name="MapDetails_DelinkUser" xml:space="preserve">
-    <value>Unlink User from map</value>
+    <value>Unlink user from map</value>
+  </data>
+  <data name="MapDetails_Unlink" xml:space="preserve">
+    <value>Unlink</value>
   </data>
   <data name="MapDetails_MapDisclaimer" xml:space="preserve">
     <value>This preview shows the loaded map superimposed on the world map.</value>
@@ -1314,6 +1317,9 @@
   </data>
   <data name="MapDetails_UploadedBy" xml:space="preserve">
     <value>Uploaded by</value>
+  </data>
+  <data name="MapDetails_SelectUser" xml:space="preserve">
+    <value>Select user</value>
   </data>
   <data name="MapDetails_Size" xml:space="preserve">
     <value>Size(MB)</value>
@@ -1391,7 +1397,7 @@
     <value>Status</value>
   </data>
   <data name="Map_NoUsers" xml:space="preserve">
-    <value>The map is not assigned to any interviewer</value>
+    <value>The map is not assigned to any user</value>
   </data>
   <data name="Map_Uploaded" xml:space="preserve">
     <value>File was uploaded. Processing.</value>
@@ -1726,6 +1732,6 @@
       <value>Issue</value>
   </data>
   <data name="MapUserLink_DiscardConfirm1" xml:space="preserve">
-      <value>If it's the last user in the team Supervisor will loose access to the map.</value>
+      <value>If this is the last user in the team linked to the map then the team's supervisor will lose access to the map.</value>
   </data>
 </root>

@@ -139,7 +139,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 Users = authorizedUser.IsSupervisor
                     ? Url.Action("InterviewersCombobox", "Teams")
-                    : Url.Action("ResponsiblesCombobox", "Teams"),
+                    : Url.Action("ResponsiblesCombobox", "Teams", new { excludeHeadquarters = true}),
             };
 
             return this.View("Details", model);
@@ -173,12 +173,23 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [ActivePage(MenuItem.Maps)]
         [ExtraHeaderPermissions(HeaderPermissionType.Esri)]
-        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter)]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
         public ActionResult MapPreviewJson(string mapName)
         {
             var map = mapPlainStorageAccessor.GetById(mapName);
             if (map == null)
                 return NotFound();
+            
+            if (authorizedUser.IsSupervisor)
+            {
+                var team =
+                    userRepository.Users.Where(user =>
+                            user.WorkspaceProfile.SupervisorId == authorizedUser.Id || user.Id == authorizedUser.Id)
+                        .Select(x => x.UserName).ToArray();
+                
+                if(!map.Users.Any(u => team.Contains(u.UserName)))
+                    return Forbid(); 
+            }
 
             return this.Content(map.GeoJson, "application/json");
         }

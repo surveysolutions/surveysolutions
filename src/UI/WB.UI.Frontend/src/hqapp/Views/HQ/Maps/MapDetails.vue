@@ -25,13 +25,13 @@
                 </ul>
             </FilterBlock>
 
-
             <div class="filters-container" id="linkedUsers" slot="additional">
                 <h4>
                     {{ $t('Common.LinkedUsers') }}
                 </h4>
                 <div class="block-filter">
 
+                    <h5>{{ $t("Pages.MapDetails_SelectUser") }}</h5>
                     <div class="input-group">
                         <Typeahead control-id="newLikedUserId" :placeholder="$t('Common.LinkUser')" :value="newLikedUserId"
                             :ajax-params="{}" @selected="newLinkedUserSelected" :fetch-url="config.api.users"
@@ -43,16 +43,14 @@
                         </div>
                     </div>
 
-                    <!-- <button type="button" style="margin-top: 5px;" class="btn btn-primary" role="confirm"
-                        @click="linkUserToMap" :disabled="!newLikedUserId">{{ $t("Common.LinkUser") }}</button> -->
-
                     <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addParamsToRequest"
                         :contextMenuItems="contextMenuItems" style="margin-left: 0px;">
                     </DataTables>
 
-                    <Confirm ref="confirmDiscard" id="discardConfirm" slot="modals">
-                        <p>{{ $t("Pages.MapUserLink_DiscardConfirm") }} </p>
-                        <p>{{ $t("Pages.MapUserLink_DiscardConfirm1") }} </p>
+                    <Confirm ref="confirmDiscard" id="discardConfirm" slot="modals" :okTitle="$t('Pages.MapDetails_Unlink')"
+                        okClass="btn-danger">
+                        <p class="text-danger">{{ $t("Pages.MapUserLink_DiscardConfirm") }} </p>
+                        <p class="text-danger">{{ $t("Pages.MapUserLink_DiscardConfirm1") }} </p>
                     </Confirm>
                 </div>
             </div>
@@ -136,6 +134,9 @@ export default {
                     }).then(response => {
                         self.$refs.table.reload();
                     }).catch(err => {
+
+
+
                         console.error(err);
                         toastr.error(err.message.toString());
                     });
@@ -219,6 +220,11 @@ export default {
                         },
                         fetchPolicy: "network-only",
                     }).then(response => {
+
+                        if (response.data.maps.nodes == 0) {
+                            window.location.href = self.$config.model.mapsUrl;
+                        }
+
                         const users = response.data.maps.nodes[0].users;
                         const orderedUsers = orderBy(users, [column.data], [order_col.dir]);
                         self.totalRows = users.length;

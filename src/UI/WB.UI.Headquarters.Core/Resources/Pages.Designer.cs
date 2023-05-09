@@ -3138,7 +3138,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The map is not assigned to any interviewer.
+        ///   Looks up a localized string similar to The map is not assigned to any user.
         /// </summary>
         public static string Map_NoUsers {
             get {
@@ -3201,7 +3201,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unlink User from map.
+        ///   Looks up a localized string similar to Unlink user from map.
         /// </summary>
         public static string MapDetails_DelinkUser {
             get {
@@ -3237,7 +3237,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interviewer name.
+        ///   Looks up a localized string similar to User name.
         /// </summary>
         public static string MapDetails_InterviewerName {
             get {
@@ -3282,6 +3282,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select user.
+        /// </summary>
+        public static string MapDetails_SelectUser {
+            get {
+                return ResourceManager.GetString("MapDetails_SelectUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shapes count.
         /// </summary>
         public static string MapDetails_ShapesCount {
@@ -3314,6 +3323,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string MapDetails_Size {
             get {
                 return ResourceManager.GetString("MapDetails_Size", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unlink.
+        /// </summary>
+        public static string MapDetails_Unlink {
+            get {
+                return ResourceManager.GetString("MapDetails_Unlink", resourceCulture);
             }
         }
         
@@ -3516,7 +3534,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are You sure You want to unlink user from the map?.
+        ///   Looks up a localized string similar to Are you sure you want to unlink user from the map?.
         /// </summary>
         public static string MapUserLink_DiscardConfirm {
             get {
@@ -3525,7 +3543,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If it&apos;s the last user in the team Supervisor will loose access to the map..
+        ///   Looks up a localized string similar to If this is the last user in the team linked to the map then the team&apos;s supervisor will lose access to the map..
         /// </summary>
         public static string MapUserLink_DiscardConfirm1 {
             get {
