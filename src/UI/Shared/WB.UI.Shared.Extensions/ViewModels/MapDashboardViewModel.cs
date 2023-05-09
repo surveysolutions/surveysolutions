@@ -57,7 +57,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
             this.assignmentsRepository = assignmentsRepository;
             this.interviewViewRepository = interviewViewRepository;
             this.dashboardViewModelFactory = dashboardViewModelFactory;
-            this.mainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
         }
         
         protected abstract InterviewStatus[] InterviewStatuses { get; }
@@ -338,7 +337,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             if (MapView?.Map?.SpatialReference != null)
             {
-                await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() => { MapView.DismissCallout(); });
+                await this.mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() => { MapView.DismissCallout(); });
 
                 try
                 {
@@ -374,7 +373,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
                         if (markers.Count > 0)
                         {
-                            double centerLat = 0;
+                            /*double centerLat = 0;
                             double centerLng = 0;
                             foreach (var marker in markers)
                             {
@@ -382,10 +381,20 @@ namespace WB.UI.Shared.Extensions.ViewModels
                                 centerLng += marker.Longitude;
                             }
                             centerLat /= markers.Count;
-                            centerLng /= markers.Count;
+                            centerLng /= markers.Count;*/
+                            
+                            double startLat = 90;
+                            double startLng = 90;
+                            foreach (var marker in markers)
+                            {
+                                if (startLat > marker.Latitude)
+                                    startLat = marker.Latitude;
+                                if (startLng > marker.Longitude)
+                                    startLng = marker.Longitude;
+                            }
                         
                             markers = markers
-                                .OrderBy(m => GeometryHelper.GetDistance(centerLat, centerLng, m.Latitude, m.Longitude))
+                                .OrderBy(m => GeometryHelper.GetDistance(startLat, startLng, m.Latitude, m.Longitude))
                                 .ToList();
                         }
                         
@@ -628,7 +637,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
         }
         
         private MvxObservableCollection<MapDescription> availableMaps = new MvxObservableCollection<MapDescription>();
-        private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
         
         public IMvxAsyncCommand NavigateToDashboardCommand => 
             new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToDashboardAsync());

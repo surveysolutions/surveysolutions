@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -9,7 +10,9 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dialogs;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
 using WB.Core.SharedKernels.Enumerator.Views;
 
@@ -47,6 +50,57 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
                 Command = new MvxAsyncCommand(this.LoadInterviewAsync, () => this.isInterviewReadyToLoad),
                 Label = EnumeratorUIResources.Dashboard_Open
             });
+            
+            Actions.Add(new ActionDefinition
+            {
+                ActionType = ActionType.Context,
+                Command = new MvxAsyncCommand(this.AssignInterviewAsync, 
+                    () => this.isInterviewReadyToLoad && (
+                        interview.Status == InterviewStatus.Created
+                        || interview.Status == InterviewStatus.SupervisorAssigned
+                        || interview.Status == InterviewStatus.InterviewerAssigned
+                        || interview.Status == InterviewStatus.RejectedBySupervisor)),
+                Label = UIResources.Supervisor_Complete_Assign_btn
+            });
+            
+            Actions.Add(new ActionDefinition
+            {
+                ActionType = ActionType.Context,
+                Command = new MvxAsyncCommand(this.ApproveInterviewAsync, 
+                    () => this.isInterviewReadyToLoad && (
+                        interview.Status == InterviewStatus.Created
+                        || interview.Status == InterviewStatus.RejectedByHeadquarters
+                        || interview.Status == InterviewStatus.RejectedBySupervisor)),
+                Label = UIResources.Supervisor_Complete_Approve_btn
+            });
+            
+            Actions.Add(new ActionDefinition
+            {
+                ActionType = ActionType.Context,
+                Command = new MvxAsyncCommand(this.RejectInterviewAsync, 
+                    () => this.isInterviewReadyToLoad && (
+                        interview.Status == InterviewStatus.Created
+                        || interview.Status == InterviewStatus.RejectedByHeadquarters)),
+                Label = UIResources.Supervisor_Complete_Reject_btn
+            });
+        }
+
+        private async Task RejectInterviewAsync()
+        {
+            await viewModelNavigationService.NavigateToAsync<RejectInterviewDialogViewModel, RejectInterviewDialogArgs>(
+                new RejectInterviewDialogArgs(interview.InterviewId));
+        }
+
+        private async Task ApproveInterviewAsync()
+        {
+            await viewModelNavigationService.NavigateToAsync<ApproveInterviewDialogViewModel, ApproveInterviewDialogArgs>(
+                new ApproveInterviewDialogArgs(interview.InterviewId));
+        }
+
+        private async Task AssignInterviewAsync()
+        {
+            await viewModelNavigationService.NavigateToAsync<AssignInterviewDialogViewModel, AssignInterviewDialogArgs>(
+                new AssignInterviewDialogArgs(interview.InterviewId));
         }
 
         public override async Task LoadInterviewAsync()

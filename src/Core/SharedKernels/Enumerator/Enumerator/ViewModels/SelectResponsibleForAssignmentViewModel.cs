@@ -180,7 +180,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             var interviewsCount = this.interviewStorage.Count(y => y.ResponsibleId == userIdentity.UserId);
             
-            return new ResponsibleToSelectViewModel(this)
+            return new ResponsibleToSelectViewModel(option => this.SelectResponsibleCommand.Execute(option))
             {
                 Id = userIdentity.UserId,
                 Login = userIdentity.Name,
@@ -229,7 +229,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 y.ResponsibleId == interviewer.InterviewerId && 
                 (y.Status == InterviewStatus.RejectedBySupervisor || y.Status == InterviewStatus.RejectedByHeadquarters));
 
-            return new ResponsibleToSelectViewModel(this)
+            return new ResponsibleToSelectViewModel(option => this.SelectResponsibleCommand.Execute(option))
             {
                 Id = interviewer.InterviewerId,
                 Login = interviewer.UserName,

@@ -30,9 +30,11 @@ using Serilog;
 using Serilog.Extensions.Logging;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dialogs;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Activities.Dialogs;
 using WB.UI.Shared.Enumerator.Converters;
 using WB.UI.Shared.Enumerator.CustomBindings;
 using WB.UI.Shared.Enumerator.CustomControls;
@@ -95,6 +97,12 @@ namespace WB.UI.Shared.Enumerator
             lookup.Add<OverviewViewModel, OverviewFragment>();
             lookup.Add<OverviewNodeDetailsViewModel, OverviewNodeDetailsFragment>();
             lookup.Add<SelectResponsibleForAssignmentViewModel, SelectResponsibleForAssignmentFragment>();
+            
+            lookup.Add<ApproveInterviewDialogViewModel, DoActionDialogFragment>();
+            lookup.Add<AssignInterviewDialogViewModel,  DoActionDialogFragment>();
+            lookup.Add<AssignAssignmentDialogViewModel, DoActionDialogFragment>();
+            lookup.Add<RejectInterviewDialogViewModel,  DoActionDialogFragment>();
+            
             return lookup;
         }
 
