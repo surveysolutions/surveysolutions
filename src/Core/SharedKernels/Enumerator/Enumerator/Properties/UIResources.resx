@@ -396,7 +396,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Leave comment for a new responsible</value>
   </data>
   <data name="Interviewer_Comment" xml:space="preserve">
-    <value>Leave your comment</value>
+    <value>Leave a comment</value>
   </data>
   <data name="Interviewer_Reassign_AlreadyReceivedInterview" xml:space="preserve">
     <value>Do you want to reassign this interview which Interviewer already received.</value>

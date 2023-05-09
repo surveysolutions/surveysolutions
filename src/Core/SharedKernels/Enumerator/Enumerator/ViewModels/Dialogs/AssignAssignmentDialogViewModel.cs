@@ -41,7 +41,6 @@ public class AssignAssignmentDialogViewModel: DoActionDialogViewModel<AssignAssi
 
     public override string DialogTitle => EnumeratorUIResources.SelectResponsible_Reassign;
     public override string ApplyTitle => EnumeratorUIResources.SelectResponsible_ReassignButtonText;
-    public override string CommentHint => UIResources.Interviewer_Reassign_Comment;
     public override string CommentHelperText => EnumeratorUIResources.SelectResponsible_ReassignDescription;
     public override string ConfirmText => UIResources.Interviewer_Reassign_AlreadyReceivedInterview;
 

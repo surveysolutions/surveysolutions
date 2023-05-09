@@ -45,11 +45,13 @@ public class SupervisorMapDashboardViewModel : MapDashboardViewModel
         IMapUtilityService mapUtilityService, 
         IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher, 
         IPlainStorage<InterviewerDocument> usersRepository,
-        IDashboardViewModelFactory dashboardViewModelFactory) 
+        IDashboardViewModelFactory dashboardViewModelFactory,
+        IMvxMessenger messenger
+        ) 
         : base(principal, viewModelNavigationService, userInteractionService, mapService, assignmentsRepository, interviewViewRepository, enumeratorSettings, logger, mapUtilityService, mainThreadAsyncDispatcher, dashboardViewModelFactory)
     {
         this.usersRepository = usersRepository;
-        this.messenger = Mvx.IoCProvider.GetSingleton<IMvxMessenger>();
+        this.messenger = messenger;
     }
 
     public override bool SupportDifferentResponsible => true;

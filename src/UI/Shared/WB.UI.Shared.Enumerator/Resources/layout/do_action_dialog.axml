@@ -50,7 +50,7 @@
     <LinearLayout
         style="@style/FullWidthWrappingLayout"
         android:gravity="fill|clip_vertical"
-        android:layout_weight="3"
+        android:layout_weight="4"
         android:paddingLeft="30dp"
         android:paddingRight="50dp"
         local:MvxBind="Visible ShowResponsibles;">
@@ -90,10 +90,11 @@
             android:paddingLeft="30dp"
             android:paddingRight="10dp">
         <Button
-                style="@style/Done_Button"
+                style="@style/Button_Primary"
                 local:MvxBind="HideKeyboardOnClick .;Click ApplyCommand; Enabled CanApply; Text ApplyTitle;" />
         <Button
-                style="@style/Link_Button"
+                style="@style/Button_Link"
+                android:paddingLeft="10dp"
                 local:MvxBind="HideKeyboardOnClick .;Click CancelCommand; Text CancelTitle;" />
     </LinearLayout>
 </LinearLayout>

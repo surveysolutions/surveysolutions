@@ -1394,7 +1394,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Leave your comment.
+        ///   Looks up a localized string similar to Leave a comment.
         /// </summary>
         public static string Interviewer_Comment {
             get {

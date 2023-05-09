@@ -20,11 +20,21 @@ public abstract class DoActionDialogViewModel<T> : MvxViewModel<T> where T : DoA
     protected readonly IPrincipal Principal;
     protected readonly IPlainStorage<InterviewView> InterviewStorage;
     protected readonly IPlainStorage<AssignmentDocument, int> AssignmentsStorage;
+    
     private string dialogTitle;
-    private string commentHint;
+    private string commentHint = UIResources.Interviewer_Comment;
     private string commentHelperText;
     private string comments;
     private bool showResponsibles;
+    private IMvxAsyncCommand applyCommand;
+    private bool canApply;
+    private string cancelTitle = UIResources.Cancel;
+    private string applyTitle;
+    private bool showConfirm;
+    private bool isConfirmed;
+    private string confirmText;
+
+    protected T CreateParameter;
 
     protected DoActionDialogViewModel(IMvxNavigationService mvxMvxNavigationService, 
         IPrincipal principal,
@@ -122,14 +132,6 @@ public abstract class DoActionDialogViewModel<T> : MvxViewModel<T> where T : DoA
         protected set => SetProperty(ref confirmText, value);
     }
 
-    private IMvxAsyncCommand applyCommand;
-    protected T CreateParameter;
-    private bool canApply;
-    private string cancelTitle = UIResources.Cancel;
-    private string applyTitle;
-    private bool showConfirm;
-    private bool isConfirmed;
-    private string confirmText;
     public IMvxAsyncCommand ApplyCommand => applyCommand ??= new MvxAsyncCommand(this.DoApplyAsync, () => this.CanApply);
     protected abstract Task DoApplyAsync();
 

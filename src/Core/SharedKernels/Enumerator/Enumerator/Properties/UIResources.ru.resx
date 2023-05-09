@@ -787,7 +787,7 @@
     <value>Оставьте комментарий для нового ответственного</value>
   </data>
   <data name="Interviewer_Comment" xml:space="preserve">
-    <value>Оставьте ваш комментарий</value>
+    <value>Оставьте комментарий</value>
   </data>
   <data name="Interviewer_Reassign_AlreadyReceivedInterview" xml:space="preserve">
     <value>Вы хотите переназначить это интервью, которое уже получено интервьювером.</value>
