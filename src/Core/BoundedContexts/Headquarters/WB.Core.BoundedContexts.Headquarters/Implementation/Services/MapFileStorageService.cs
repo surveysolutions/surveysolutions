@@ -505,13 +505,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             if (this.authorizedUser.IsSupervisor)
             {
                 bool isTeamInterviewer = this.userStorage.Users
-                    .Any(x => x.UserName.ToLower() == lowerCasedUserName && x.WorkspaceProfile.SupervisorId == this.authorizedUser.Id);
-                if (!isTeamInterviewer && this.authorizedUser.UserName.ToLower() != lowerCasedUserName)
+                    .Any(x => x.UserName.ToLower() == lowerCasedUserName 
+                              && x.WorkspaceProfile.SupervisorId == this.authorizedUser.Id);
+
+                bool isSelf =  !string.IsNullOrEmpty(this.authorizedUser.UserName) 
+                               && this.authorizedUser.UserName.ToLower() == lowerCasedUserName;
+                
+                if (!isTeamInterviewer && !isSelf)
                 {
                     throw new UserNotFoundException("User is not from the team.");
                 }
             }
-
+            
             var map = this.mapPlainStorageAccessor.GetById(mapName);
 
             if (map == null)
