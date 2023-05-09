@@ -1,94 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+<LinearLayout 
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
     style="@style/FullWidthWrappingLayout"
     android:background="@drawable/dialog_rounded"
-    android:orientation="vertical">
-    <TableLayout
-        style="@style/Audio_Dialog_Holder"
-        android:stretchColumns="0"
-        android:shrinkColumns="0"
-        android:layout_weight="2"
-        android:gravity ="top">
-        <TableRow>
-            <LinearLayout
-                style="@style/VerticalFullWidthWrappingLayout">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/Text_Roboto_24"
-                    local:MvxBind="Text DialogTitle;"/>
-            </LinearLayout>
-            <ImageButton
+    android:orientation="vertical"
+    android:paddingBottom="10dp"
+    android:paddingTop="20dp"
+    android:paddingLeft="25dp"
+    android:paddingRight="25dp">
+
+    <FrameLayout
+        style="@style/VerticalFullWidthWrappingLayout"
+        android:gravity="top"
+        android:layout_weight="2">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Text_Roboto_24"
+            local:MvxBind="Text DialogTitle;"/>
+        <ImageButton
                 style="@style/Interview_Question_RemoveAnswer"
-                android:layout_marginRight="@dimen/Interview_Audio_Dialog_Remove_Button_Margin_Left"
                 android:duplicateParentState="true"
+                android:layout_gravity="top|right"
                 local:MvxBind="HideKeyboardOnClick .;Click CancelCommand;"
                 local:srcCompat="@drawable/delete_button"/>
-        </TableRow>
-        <TableRow>
-            <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    local:MvxBind="Hint CommentHint; 
-                                   HelperText CommentHelperText">
-                <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/LoginPage_login"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:lines="6"
-                        android:gravity="top|left"
-                        android:maxLength="500"
-                        android:scrollHorizontally="false"
-                        android:inputType="textMultiLine"
-                        local:MvxBind="Text Comments"/>
-            </com.google.android.material.textfield.TextInputLayout>
-        </TableRow>
-    </TableLayout>
+    </FrameLayout>
+    <com.google.android.material.textfield.TextInputLayout
+            android:gravity="top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            local:MvxBind="Hint CommentHint; 
+                           HelperText CommentHelperText">
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/LoginPage_login"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:lines="3"
+                android:gravity="top|left"
+                android:maxLength="500"
+                android:scrollHorizontally="false"
+                android:scrollbars="vertical"
+                android:inputType="textMultiLine"
+                local:MvxBind="Text Comments"/>
+    </com.google.android.material.textfield.TextInputLayout>
     <LinearLayout
         style="@style/FullWidthWrappingLayout"
         android:gravity="fill|clip_vertical"
         android:layout_weight="4"
-        android:paddingLeft="30dp"
-        android:paddingRight="50dp"
+        android:paddingTop="14dp"
         local:MvxBind="Visible ShowResponsibles;">
 
         <MvxRecyclerView
                 android:layout_column="0"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/Interview_Assign_To_Interviewer_List_Max_Width"
-                android:layout_marginTop="@dimen/Interview_Entity_Title_margin_top"
                 android:scrollbars="vertical"
                 local:MvxItemTemplate="@layout/interview_select_responsible_item"
                 local:MvxBind="ItemsSource ResponsibleItems;" />
     </LinearLayout>
-    <LinearLayout
-            style="@style/FullWidthWrappingLayout"
-            android:gravity="fill|clip_vertical"
+    <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="14dp"
+            android:gravity="bottom"
             android:layout_weight="3"
-            android:paddingLeft="30dp"
-            android:paddingRight="50dp"
-            local:MvxBind="Visible ShowConfirm;">
-
-        <CheckBox
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                local:MvxBind="
-                      HideKeyboardOnClick .;
-                      Text ConfirmText; 
-                      Checked IsConfirmed;"/>
-    </LinearLayout>
+            local:MvxBind="
+                  HideKeyboardOnClick .;
+                  Visible ShowConfirm;
+                  Text ConfirmText; 
+                  Checked IsConfirmed;"/>
     <LinearLayout
             style="@style/FullWidthWrappingLayout"
             android:layout_marginTop="@dimen/Interview_Entity_Title_margin_top"
             android:layout_span="2"
-            android:gravity ="bottom"
-            android:layout_weight="1"
-            android:paddingBottom="10dp"
-            android:paddingLeft="30dp"
-            android:paddingRight="10dp">
+            android:gravity="bottom"
+            android:layout_weight="1">
         <Button
                 style="@style/Button_Primary"
                 local:MvxBind="HideKeyboardOnClick .;Click ApplyCommand; Enabled CanApply; Text ApplyTitle;" />

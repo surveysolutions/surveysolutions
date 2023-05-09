@@ -42,8 +42,8 @@ public class AssignAssignmentDialogViewModel: DoActionDialogViewModel<AssignAssi
         this.usersRepository = usersRepository;
     }
 
-    public override string DialogTitle => EnumeratorUIResources.SelectResponsible_Reassign;
-    public override string ApplyTitle => EnumeratorUIResources.SelectResponsible_ReassignButtonText;
+    public override string DialogTitle => UIResources.Supervisor_Complete_Assign_btn;
+    public override string ApplyTitle => UIResources.Supervisor_Complete_Assign_btn;
     public override string CommentHelperText => EnumeratorUIResources.SelectResponsible_ReassignDescription;
 
     public override bool ShowResponsibles => true;
