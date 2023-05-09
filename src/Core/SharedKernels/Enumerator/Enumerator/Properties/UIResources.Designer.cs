@@ -1421,7 +1421,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want to reassign this assignment which Interviewer already received..
+        ///   Looks up a localized string similar to Interviewer {0} has already received this assignment {1}. Are you sure you want to reassign it?.
         /// </summary>
         public static string Interviewer_Reassign_AlreadyReceivedAssignment {
             get {
@@ -1430,7 +1430,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want to reassign this interview which Interviewer already received..
+        ///   Looks up a localized string similar to Interviewer {0} has already received this interview {1}. Are you sure you want to reassign it?.
         /// </summary>
         public static string Interviewer_Reassign_AlreadyReceivedInterview {
             get {

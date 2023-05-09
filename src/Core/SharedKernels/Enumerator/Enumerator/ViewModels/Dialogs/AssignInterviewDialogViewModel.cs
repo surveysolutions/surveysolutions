@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Humanizer;
+using Humanizer.Localisation;
 using Main.Core.Entities.SubEntities;
 using MvvmCross.Navigation;
 using MvvmCross.Plugin.Messenger;
@@ -50,7 +52,6 @@ public class AssignInterviewDialogViewModel: DoActionDialogViewModel<AssignInter
     public override string DialogTitle => EnumeratorUIResources.SelectResponsible_Reassign;
     public override string ApplyTitle => EnumeratorUIResources.SelectResponsible_ReassignButtonText;
     public override string CommentHelperText => EnumeratorUIResources.SelectResponsible_ReassignDescription;
-    public override string ConfirmText => UIResources.Interviewer_Reassign_AlreadyReceivedInterview;
 
     public override bool ShowResponsibles => true;
 
@@ -60,7 +61,17 @@ public class AssignInterviewDialogViewModel: DoActionDialogViewModel<AssignInter
         
         var interviewId = CreateParameter.InterviewId;
         var interviewView = InterviewStorage.GetById(interviewId.FormatGuid());
-        ShowConfirm = interviewView.ReceivedByInterviewerAtUtc.HasValue;
+
+        var needShowConfirm = interviewView.ReceivedByInterviewerAtUtc.HasValue;
+        if (needShowConfirm)
+        {
+            var responsible = usersRepository.GetById(interviewView.ResponsibleId.FormatGuid());
+            var timeSpan = DateTime.UtcNow - interviewView.ReceivedByInterviewerAtUtc.Value;
+            ConfirmText = string.Format(UIResources.Interviewer_Reassign_AlreadyReceivedAssignment,
+                responsible.UserName,
+                timeSpan.Humanize(minUnit: TimeUnit.Second));
+            ShowConfirm = true;
+        }
     }
 
     protected override Task DoApplyAsync()

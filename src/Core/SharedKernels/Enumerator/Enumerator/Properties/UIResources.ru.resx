@@ -790,10 +790,10 @@
     <value>Оставьте комментарий</value>
   </data>
   <data name="Interviewer_Reassign_AlreadyReceivedInterview" xml:space="preserve">
-    <value>Вы хотите переназначить это интервью, которое уже получено интервьювером.</value>
+    <value>Интервьювер {0} уже получил это интервью {1}. Вы хотите переназначить его?</value>
   </data>
   <data name="Interviewer_Reassign_AlreadyReceivedAssignment" xml:space="preserve">
-    <value>Вы хотите переназначить это задание, которое уже получено интервьювером.</value>
+    <value>Интервьювер {0} уже получил это задание {1}. Вы хотите переназначить его?</value>
   </data>
   <data name="ErrorMessage_PermissionForUnkownSourcesRequired" xml:space="preserve">
     <value>У приложения не хватает прав для обновления. Пожалуйста разрешите этому приложению "Установку неизвестных приложений" в настройках</value>
