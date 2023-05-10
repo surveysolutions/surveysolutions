@@ -59,7 +59,7 @@ public abstract class DoActionDialogViewModel<T> : MvxViewModel<T> where T : DoA
         protected set => SetProperty(ref commentHint, value);
     }
 
-    public virtual string CommentHelperText
+    public virtual string ResponsiblesTitle
     {
         get => commentHelperText;
         protected set => SetProperty(ref commentHelperText, value);

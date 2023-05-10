@@ -44,7 +44,7 @@ public class AssignAssignmentDialogViewModel: DoActionDialogViewModel<AssignAssi
 
     public override string DialogTitle => UIResources.Supervisor_Complete_Assign_btn;
     public override string ApplyTitle => UIResources.Supervisor_Complete_Assign_btn;
-    public override string CommentHelperText => EnumeratorUIResources.SelectResponsible_ReassignDescription;
+    public override string ResponsiblesTitle => EnumeratorUIResources.SelectResponsible_ReassignDescription;
 
     public override bool ShowResponsibles => true;
 

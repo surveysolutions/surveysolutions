@@ -12,9 +12,8 @@
     android:paddingRight="25dp">
 
     <FrameLayout
-        style="@style/VerticalFullWidthWrappingLayout"
-        android:gravity="top"
         android:layout_weight="2">
+        style="@style/VerticalFullWidthWrappingLayout">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -28,11 +27,9 @@
                 local:srcCompat="@drawable/delete_button"/>
     </FrameLayout>
     <com.google.android.material.textfield.TextInputLayout
-            android:gravity="top"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            local:MvxBind="Hint CommentHint; 
-                           HelperText CommentHelperText">
+            local:MvxBind="Hint CommentHint;">
         <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/LoginPage_login"
                 android:layout_width="match_parent"
@@ -43,17 +40,21 @@
                 android:scrollHorizontally="false"
                 android:scrollbars="vertical"
                 android:inputType="textMultiLine"
-                local:MvxBind="Text Comments"/>
+                local:MvxBind="Text Comments" />
     </com.google.android.material.textfield.TextInputLayout>
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:textColor="@drawable/question_option_text_color"
+            local:MvxBind="Visible ShowResponsibles; Text ResponsiblesTitle"
+            />
     <LinearLayout
         style="@style/FullWidthWrappingLayout"
-        android:gravity="fill|clip_vertical"
         android:layout_weight="4"
-        android:paddingTop="14dp"
         local:MvxBind="Visible ShowResponsibles;">
 
         <MvxRecyclerView
-                android:layout_column="0"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/Interview_Assign_To_Interviewer_List_Max_Width"
                 android:scrollbars="vertical"
@@ -63,9 +64,9 @@
     <CheckBox
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="14dp"
-            android:gravity="bottom"
             android:layout_weight="3"
+            android:layout_marginTop="14dp"
+            android:textColor="@drawable/question_option_text_color"
             local:MvxBind="
                   HideKeyboardOnClick .;
                   Visible ShowConfirm;
@@ -73,10 +74,8 @@
                   Checked IsConfirmed;"/>
     <LinearLayout
             style="@style/FullWidthWrappingLayout"
-            android:layout_marginTop="@dimen/Interview_Entity_Title_margin_top"
-            android:layout_span="2"
-            android:gravity="bottom"
             android:layout_weight="1">
+            android:layout_marginTop="@dimen/Interview_Entity_Title_margin_top">
         <Button
                 style="@style/Button_Primary"
                 local:MvxBind="HideKeyboardOnClick .;Click ApplyCommand; Enabled CanApply; Text ApplyTitle;" />
