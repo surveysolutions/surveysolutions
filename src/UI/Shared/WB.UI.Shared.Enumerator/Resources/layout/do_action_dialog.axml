@@ -9,10 +9,11 @@
     android:paddingBottom="10dp"
     android:paddingTop="20dp"
     android:paddingLeft="25dp"
-    android:paddingRight="25dp">
+    android:paddingRight="25dp"
+    android:minWidth="400dp"
+    local:MvxBind="HideKeyboardOnClick .">
 
     <FrameLayout
-        android:layout_weight="2"
         style="@style/VerticalFullWidthWrappingLayout">
         <TextView
             android:layout_width="wrap_content"
@@ -29,7 +30,7 @@
     <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0"
+            android:layout_weight="2"
             local:MvxBind="Hint CommentHint;">
         <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/LoginPage_login"
@@ -46,16 +47,14 @@
     <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginTop="14dp"
             android:textColor="@drawable/question_option_text_color"
             local:MvxBind="Visible ShowResponsibles; Text ResponsiblesTitle"
             />
     <LinearLayout
         style="@style/FullWidthWrappingLayout"
-        android:layout_weight="4"
+        android:layout_weight="2"
         local:MvxBind="Visible ShowResponsibles;">
-
         <MvxRecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/Interview_Assign_To_Interviewer_List_Max_Width"
@@ -66,18 +65,15 @@
     <CheckBox
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
             android:layout_marginTop="14dp"
             android:textColor="@drawable/question_option_text_color"
             local:MvxBind="
-                  HideKeyboardOnClick .;
                   Visible ShowConfirm;
                   Text ConfirmText; 
                   Checked IsConfirmed;"/>
     <LinearLayout
             style="@style/FullWidthWrappingLayout"
-            android:layout_weight="1">
-            android:layout_marginTop="@dimen/Interview_Entity_Title_margin_top">
+            android:layout_marginTop="10dp">
         <Button
                 style="@style/Button_Primary"
                 local:MvxBind="HideKeyboardOnClick .;Click ApplyCommand; Enabled CanApply; Text ApplyTitle;" />
