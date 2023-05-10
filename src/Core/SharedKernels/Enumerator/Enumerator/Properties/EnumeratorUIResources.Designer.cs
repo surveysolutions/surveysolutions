@@ -1236,8 +1236,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This tablet has not been setup yet. 
-        ///You need internet connection to proceed with setting up the user and domain..
+        ///   Looks up a localized string similar to This tablet has not been setup yet. You need internet connection to continue..
         /// </summary>
         public static string Login_FinishInstallation_Message {
             get {

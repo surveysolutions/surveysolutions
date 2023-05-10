@@ -28,6 +28,7 @@
     <EmbeddedResource Include="$(NugetPackageRoot)\system.io\4.3.0\ref\netstandard1.5\System.IO.dll" Visible="false" />
     <EmbeddedResource Include="$(NugetPackageRoot)\system.text.regularexpressions\4.3.0\ref\netstandard1.3\System.Text.RegularExpressions.dll" Visible="false" />
     <EmbeddedResource Include="$(NugetPackageRoot)\system.globalization\4.3.0\ref\netstandard1.3\System.Globalization.dll" Visible="false" />
+    <EmbeddedResource Include="$(NugetPackageRoot)\system.threading\4.3.0\ref\netstandard1.3\System.Threading.dll" Visible="false" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />

@@ -80,11 +80,6 @@ namespace WB.UI.Shared.Enumerator.Activities
                 this.layoutManager?.ScrollToPositionWithOffset(itemIndex, 200);
             }
         }
-        
-        public override void OnDestroy()
-        {
-            base.OnDestroy();
-        }
 
         public override void OnDetach()
         {
