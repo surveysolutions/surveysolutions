@@ -539,6 +539,9 @@
   <data name="AreaMap_OverlapsWithOther" xml:space="preserve">
     <value>и {0} других.</value>
   </data>
+  <data name="AreaMap_ItemsOutsideDedicatedArea" xml:space="preserve">
+    <value>Маркеры вне указанной зоны</value>
+  </data>
   <data name="AreaMap_Cancel" xml:space="preserve">
     <value>Отмена</value>
   </data>

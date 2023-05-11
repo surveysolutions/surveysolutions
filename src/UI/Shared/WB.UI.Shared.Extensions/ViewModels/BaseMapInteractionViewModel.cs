@@ -1,8 +1,4 @@
-﻿using System.Linq;
-using System;
-using System.Threading.Tasks;
-using Android.App;
-using Esri.ArcGISRuntime;
+﻿using Esri.ArcGISRuntime;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Location;
@@ -293,6 +289,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
         private MapView mapView;
         private bool isDisposed;
         private bool shapeFileLoaded;
+        
+        protected ShapefileFeatureTable LoadedShapefile;
+        
 
         public MapView MapView
         {
@@ -335,9 +334,11 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     return;
             }
 
-            try
+            try 
             {
-                var newFeatureLayer = await mapUtilityService.GetShapefileAsFeatureLayer(fullPathToShapefile);
+                LoadedShapefile = await ShapefileFeatureTable.OpenAsync(fullPathToShapefile);
+                
+                var newFeatureLayer = await mapUtilityService.GetShapefileAsFeatureLayer(LoadedShapefile);
                 newFeatureLayer.Name = ShapefileLayerName;
                 
                 RemoveShapefileLayer();
@@ -350,13 +351,20 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     await this.MapView.SetViewpointGeometryAsync(newFeatureLayer.FullExtent);
 
                 ShapeFileLoaded = true;
+                await AfterShapefileLoadedHandler();
             }
             catch (Exception e)
             {
+                LoadedShapefile = null;
                 logger.Error("Error on shapefile loading", e);
                 UserInteractionService.ShowToast(UIResources.AreaMap_ErrorOnShapefileLoading);
             }
         });
+
+        protected virtual Task AfterShapefileLoadedHandler()
+        {
+            return Task.CompletedTask;
+        }
 
         private void RemoveShapefileLayer()
         {
@@ -371,7 +379,21 @@ namespace WB.UI.Shared.Extensions.ViewModels
             set => this.RaiseAndSetIfChanged(ref shapeFileLoaded, value);
         }
 
-        public IMvxCommand HideShapefile => new MvxCommand(() =>
+        private bool isWarningVisible;
+        public bool IsWarningVisible
+        {
+            get => isWarningVisible;
+            set => this.RaiseAndSetIfChanged(ref isWarningVisible, value);
+        }
+
+        private string warning;
+        public string Warning
+        {
+            get => this.warning;
+            set => this.RaiseAndSetIfChanged(ref this.warning, value);
+        }
+        
+        public IMvxCommand HideShapefile => new MvxAsyncCommand(async() =>
         {
             if (!ShapeFileLoaded)
                 return;
@@ -380,10 +402,11 @@ namespace WB.UI.Shared.Extensions.ViewModels
             {
                 RemoveShapefileLayer();
                 ShapeFileLoaded = false;
+                await AfterShapefileLoadedHandler();
             }
             catch (Exception e)
             {
-                logger.Error("Error on shapefile loading", e);
+                logger.Error("Error on shapefile handling", e);
                 UserInteractionService.ShowToast(UIResources.AreaMap_ErrorOnShapefileLoading);
             }
         });
