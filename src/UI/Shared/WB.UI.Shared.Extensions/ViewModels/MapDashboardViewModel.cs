@@ -397,7 +397,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                                 .OrderBy(m => GeometryHelper.GetDistance(startLat, startLng, m.Latitude, m.Longitude))
                                 .ToList();
                         }
-                        
+
+                        ActiveMarkerIndex = null;
                         AvailableMarkers.ReplaceWith(markers);
                     }
 
@@ -429,6 +430,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
             if (graphicExtent != null)
             {
+                ShowMarkersDetails = false;
+                ActiveMarkerIndex = null;
+                
                 await MapView.SetViewpointAsync(new Viewpoint(graphicExtent), TimeSpan.FromSeconds(4));
             }
         }
@@ -614,7 +618,11 @@ namespace WB.UI.Shared.Extensions.ViewModels
             {
                 var marker = AvailableMarkers[newPosition.Value];
                 SetMarkerStyle(marker, 100, 1.5);
-                this.MapView.SetViewpointCenterAsync(marker.Latitude, marker.Longitude);
+
+                var projectedArea = GeometryEngine.Project(this.MapView.VisibleArea, SpatialReferences.Wgs84);
+                var mapPoint = new MapPoint(marker.Longitude, marker.Latitude, SpatialReferences.Wgs84);
+                if (projectedArea != null && !GeometryEngine.Contains(projectedArea, mapPoint))
+                    this.MapView.SetViewpointCenterAsync(marker.Latitude, marker.Longitude);
             }
         }
 
