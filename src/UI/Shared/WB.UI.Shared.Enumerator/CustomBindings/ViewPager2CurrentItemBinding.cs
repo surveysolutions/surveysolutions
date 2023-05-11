@@ -60,10 +60,11 @@ public class ViewPager2CurrentItemBinding : BaseBinding<ViewPager2, int?>
             
             if (prevPosition.HasValue && prevPosition != position)
             {
-                var recyclerView = (RecyclerView)viewPager.GetChildAt(0);
-                var adapter = (MvxRecyclerAdapter)recyclerView.GetAdapter();
-                var dashboardItem = (IDashboardItem)adapter?.GetItem(prevPosition.Value);
-                dashboardItem.IsExpanded = false;
+                var recyclerView = viewPager.GetChildAt(0) as RecyclerView;
+                var adapter = recyclerView?.GetAdapter() as MvxRecyclerAdapter;
+                var dashboardItem = adapter?.GetItem(prevPosition.Value) as IDashboardItem;
+                if (dashboardItem is { IsExpanded: true })
+                    dashboardItem.IsExpanded = false;
             }
 
             prevPosition = position;
