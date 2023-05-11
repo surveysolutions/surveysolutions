@@ -72,7 +72,7 @@ namespace WB.UI.Shared.Extensions.Activities
             //viewPager.OverScrollMode = OverScrollMode.Never;
             
             //var adapter = new MarkersRecyclerViewAdapter((IMvxAndroidBindingContext)base.BindingContext);
-            var adapter = new RecyclerViewAdapter((IMvxAndroidBindingContext)base.BindingContext);
+            var adapter = new CarouselViewAdapter((IMvxAndroidBindingContext)base.BindingContext);
             adapter.ItemTemplateSelector = CreateCarouselTemplateSelector();
             //adapter.ItemTemplateSelector = new MvxDefaultTemplateSelector(Resource.Layout.marker_card);
             adapter.ItemsSource = ViewModel.AvailableMarkers;
