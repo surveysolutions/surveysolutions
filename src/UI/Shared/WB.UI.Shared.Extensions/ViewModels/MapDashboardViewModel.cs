@@ -364,7 +364,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 }
             }
             
-            Multipoint pointsMultipoint = new Multipoint(pointsToCheck, SpatialReferences.Wgs84);
+            Multipoint pointsMultipoint = new Multipoint(pointsToCheck, LoadedShapefile.SpatialReference);
             queryParameters.Geometry = pointsMultipoint;
             queryParameters.SpatialRelationship = SpatialRelationship.Intersects;
             
