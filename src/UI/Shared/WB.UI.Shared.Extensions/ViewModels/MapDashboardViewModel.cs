@@ -482,7 +482,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             return dashboardViewModelFactory.GetInterview(interview);
         }
 
-        protected abstract Symbol GetInterviewMarkerSymbol(IInterviewMarkerViewModel interview, int size = 1);
+        protected abstract Symbol GetInterviewMarkerSymbol(IInterviewMarkerViewModel interview, double size = 1);
 
         private List<AssignmentDocument> Assignments = new List<AssignmentDocument>();
         private List<InterviewView> Interviews = new List<InterviewView>();
@@ -526,7 +526,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             return filteredAssignments;
         }
 
-        protected virtual CompositeSymbol GetAssignmentMarkerSymbol(IAssignmentMarkerViewModel assignment, int size = 1)
+        protected virtual CompositeSymbol GetAssignmentMarkerSymbol(IAssignmentMarkerViewModel assignment, double size = 1)
         {
             return new CompositeSymbol(new[]
             {
@@ -592,7 +592,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             if (newPosition == oldPosition)
                 return;
 
-            void SetMarkerStyle(IMarkerViewModel marker, int zIndex, int markerSize)
+            void SetMarkerStyle(IMarkerViewModel marker, int zIndex, double markerSize)
             {
                 var graphic = graphicsOverlay.Graphics.FirstOrDefault(g => g.Attributes[MarkerId]?.ToString() == marker.Id);
                 if (graphic != null)
@@ -613,7 +613,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             if (newPosition.HasValue)
             {
                 var marker = AvailableMarkers[newPosition.Value];
-                SetMarkerStyle(marker, 100, 2);
+                SetMarkerStyle(marker, 100, 1.5);
                 this.MapView.SetViewpointCenterAsync(marker.Latitude, marker.Longitude);
             }
         }

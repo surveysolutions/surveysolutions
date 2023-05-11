@@ -97,7 +97,7 @@ public class SupervisorMapDashboardViewModel : MapDashboardViewModel
         messengerSubscription?.Dispose();
     }
 
-    protected override Symbol GetInterviewMarkerSymbol(IInterviewMarkerViewModel interview, int size = 1)
+    protected override Symbol GetInterviewMarkerSymbol(IInterviewMarkerViewModel interview, double size = 1)
     {
         Color markerColor;
 
