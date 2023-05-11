@@ -12,7 +12,12 @@ public class ViewPager2CurrentItemBinding : BaseBinding<ViewPager2, int?>
     protected override void SetValueToView(ViewPager2 control, int? value)
     {
         if (value.HasValue && control.CurrentItem != value.Value)
-            control.SetCurrentItem(value.Value, true);
+        {
+            control.Post(() =>
+            {
+                control.SetCurrentItem(value.Value, true);
+            });
+        }
     }
 
     private OnPageChangeCallback onPageChangeCallback;
