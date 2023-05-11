@@ -1,5 +1,10 @@
-﻿using AndroidX.ViewPager2.Widget;
+﻿using Android.Views;
+using AndroidX.ConstraintLayout.Widget;
+using AndroidX.RecyclerView.Widget;
+using AndroidX.ViewPager2.Widget;
 using MvvmCross.Binding;
+using MvvmCross.DroidX.RecyclerView;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings;
 
@@ -28,7 +33,7 @@ public class ViewPager2CurrentItemBinding : BaseBinding<ViewPager2, int?>
         if (target == null)
             return;
 
-        onPageChangeCallback = new OnPageChangeCallback(index =>
+        onPageChangeCallback = new OnPageChangeCallback(target, index =>
         {
             this.FireValueChanged(index);
         });
@@ -37,10 +42,13 @@ public class ViewPager2CurrentItemBinding : BaseBinding<ViewPager2, int?>
     
     private class OnPageChangeCallback : ViewPager2.OnPageChangeCallback
     {
+        private ViewPager2 viewPager;
         private Action<int> action;
+        private int? prevPosition;
 
-        public OnPageChangeCallback(Action<int> action)
+        public OnPageChangeCallback(ViewPager2 viewPager, Action<int> action)
         {
+            this.viewPager = viewPager;
             this.action = action;
         }
 
@@ -48,10 +56,22 @@ public class ViewPager2CurrentItemBinding : BaseBinding<ViewPager2, int?>
         {
             action?.Invoke(position);
             base.OnPageSelected(position);
+
+            var recyclerView = (RecyclerView)viewPager.GetChildAt(0);
+            
+            if (prevPosition.HasValue && prevPosition != position)
+            {
+                var adapter = (MvxRecyclerAdapter)recyclerView.GetAdapter();
+                var dashboardItem = (IDashboardItem)adapter?.GetItem(prevPosition.Value);
+                dashboardItem.IsExpanded = false;
+            }
+
+            prevPosition = position;
         }
 
         protected override void Dispose(bool disposing)
         {
+            viewPager = null;
             action = null;
             base.Dispose(disposing);
         }
