@@ -35,12 +35,19 @@
                     <div class="input-group">
                         <Typeahead control-id="newLikedUserId" :placeholder="$t('Common.LinkUser')" :value="newLikedUserId"
                             :ajax-params="{}" @selected="newLinkedUserSelected" :fetch-url="config.api.users"
-                            class="with-clear-btn"></Typeahead>
+                            class="with-extra-btn">
+                        </Typeahead>
+
                         <div class="input-group-btn">
+                            <button class="btn btn-success" @click="linkUserToMap" :disabled="!newLikedUserId">
+                                <span aria-hidden="true" class="glyphicon add"></span>
+                            </button>
+                        </div>
+                        <!-- <div class="input-group-btn">
                             <div class="btn btn-success" @click="linkUserToMap" :disabled="!newLikedUserId">
                                 <span aria-hidden="true" class="glyphicon add"></span>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
 
                     <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addParamsToRequest"
