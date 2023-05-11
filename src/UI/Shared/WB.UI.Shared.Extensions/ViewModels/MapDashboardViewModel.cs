@@ -604,13 +604,13 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 }
             }
 
-            if (oldPosition.HasValue)
+            if (oldPosition.HasValue && AvailableMarkers.Count > oldPosition.Value)
             {
                 var marker = AvailableMarkers[oldPosition.Value];
                 SetMarkerStyle(marker, 0, 1);
             }
 
-            if (newPosition.HasValue)
+            if (newPosition.HasValue && AvailableMarkers.Count > newPosition.Value)
             {
                 var marker = AvailableMarkers[newPosition.Value];
                 SetMarkerStyle(marker, 100, 1.5);

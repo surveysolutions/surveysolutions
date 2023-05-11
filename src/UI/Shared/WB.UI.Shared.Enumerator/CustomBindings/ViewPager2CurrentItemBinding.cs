@@ -57,10 +57,10 @@ public class ViewPager2CurrentItemBinding : BaseBinding<ViewPager2, int?>
             action?.Invoke(position);
             base.OnPageSelected(position);
 
-            var recyclerView = (RecyclerView)viewPager.GetChildAt(0);
             
             if (prevPosition.HasValue && prevPosition != position)
             {
+                var recyclerView = (RecyclerView)viewPager.GetChildAt(0);
                 var adapter = (MvxRecyclerAdapter)recyclerView.GetAdapter();
                 var dashboardItem = (IDashboardItem)adapter?.GetItem(prevPosition.Value);
                 dashboardItem.IsExpanded = false;
