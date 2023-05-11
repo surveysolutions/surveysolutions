@@ -573,7 +573,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Select boundaries file</value>
   </data>
   <data name="AreaMap_ErrorOnShapefileLoading" xml:space="preserve">
-    <value>Error occured on loading. Shapefile cannot be opened</value>
+    <value>Error occured on loading. Shapefile cannot be handled</value>
   </data>
   <data name="AreaMap_NoMapsFound" xml:space="preserve">
     <value>No maps were found. Please update maps</value>
@@ -608,6 +608,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="AreaMap_OverlapsWithOther" xml:space="preserve">
     <value>and {0} other.</value>
   </data>
+  <data name="AreaMap_ItemsOutsideDedicatedArea" xml:space="preserve">
+    <value>Some markers fall outside the outlined area</value>
+  </data>  
   <data name="AreaMap_PointsFormat" xml:space="preserve">
     <value>Points: {0}</value>
   </data>

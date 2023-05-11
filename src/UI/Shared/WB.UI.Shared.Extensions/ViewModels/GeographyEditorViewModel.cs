@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Location;
@@ -814,20 +809,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 GeometryType.Multipoint => collectedPoints > 0,
                 _ => throw new ArgumentOutOfRangeException()
             };
-        }
-
-        private string warning;
-        public string Warning
-        {
-            get => this.warning;
-            set => this.RaiseAndSetIfChanged(ref this.warning, value);
-        }
- 
-        private bool isWarningVisible;
-        public bool IsWarningVisible
-        {
-            get => this.isWarningVisible;
-            set => this.RaiseAndSetIfChanged(ref this.isWarningVisible, value);
         }
 
         private string geometryArea;

@@ -70,14 +70,58 @@
             </ol>
             <h1>{{ $config.model.fileName }}</h1>
         </div>
-        <div class="row" v-if="$config.model.duplicateMapLabels.length > 0">
-            <div class="col-md-12 col-sm-12 questionnaire-statistics">
-                <p style="color:red">{{ $t("Pages.MapDetails_DuplicateLabelsWarning") }} </p>
-                <ul class="list-unstyled">
-                    <li v-for="item in $config.model.duplicateMapLabels" :key="item.label">
-                        <strong>{{ item.label }}</strong> - <span>{{ item.count }}</span>
-                    </li>
-                </ul>
+        <div class="row">
+            <div class="col-md-9 col-sm-9">
+                <div class="row">
+                    <div class="col-md-4 col-sm-4 questionnaire-statistics">
+                        <ul class="list-unstyled">
+                            <li v-if="!$config.model.shapeType"><strong>{{ $t("Pages.MapDetails_MaxScale") }}:</strong> <span>{{$config.model.maxScale}}</span></li>
+                            <li v-if="!$config.model.shapesCount"><strong>{{ $t("Pages.MapDetails_MinScale") }}:</strong> <span>{{$config.model.minScale}}</span></li>
+                            <li v-if="$config.model.shapeType"><strong>{{ $t("Pages.MapDetails_ShapeType") }}:</strong> <span>{{$config.model.shapeType}}</span></li>
+                            <li v-if="$config.model.shapesCount"><strong>{{ $t("Pages.MapDetails_ShapesCount") }}:</strong> <span>{{$config.model.shapesCount}}</span></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4 col-sm-4 questionnaire-statistics">
+                        <ul class="list-unstyled">
+                            <li><strong>{{ $t("Pages.MapDetails_Size") }} :</strong> <span>{{$config.model.size}}</span></li>
+                            <li><strong>Wkid:</strong> <span>{{$config.model.wkid}}</span></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4 col-sm-4 questionnaire-statistics">
+                        <ul class="list-unstyled">
+                            <li><strong>{{ $t("Pages.MapDetails_ImportedOn") }}:</strong> <span>{{importDate}}</span></li>
+                            <li v-if="$config.model.uploadedBy"><strong>{{ $t("Pages.MapDetails_UploadedBy") }}:</strong> <span>{{$config.model.uploadedBy}}</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row"
+                    v-if="$config.model.duplicateMapLabels.length > 0">
+                    <div class="col-md-12 col-sm-12 questionnaire-statistics">
+                        <p style="color:red">{{ $t("Pages.MapDetails_DuplicateLabelsWarning") }} </p>
+                        <ul class="list-unstyled">
+                            <li v-for="item in $config.model.duplicateMapLabels"
+                                :key="item.label">
+                                <strong>{{ item.label }}</strong> - <span>{{ item.count }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <iframe
+                    title="Map preview" 
+                    width="100%"
+                    height="550px"
+                    :src="$config.model.mapPreviewUrl"></iframe>
+                <p>{{ mapDisclaimer }} </p>
+            </div>
+
+            <div id="list"
+                class="col-md-3 col-sm-3">
+                <DataTables ref="table"
+                    :tableOptions="tableOptions"
+                    :addParamsToRequest="addParamsToRequest"
+                    :contextMenuItems="contextMenuItems">
+                </DataTables>
+
             </div>
         </div>
         <div style="display: flex; width: 100%; height: 100%; flex-direction: column;">
