@@ -4,7 +4,7 @@
         <div slot="headers" class="topic-with-button">
             <h1 v-html='title'></h1>
             <a href="MapDashboard" class="btn" style="margin-right:30px;padding:0;">
-                <img style="padding-top:2px;" height="26px;" src="/img/google-maps-markers/map.png"
+                <img style="padding-top:2px;" height="26px;" src="/img/google-maps-markers/map.png" alt="Map Dashboard"
                     :title="$t('Common.MapDashboard')" />
             </a>
             <a v-if="!config.isSupervisor" class="btn btn-success"
