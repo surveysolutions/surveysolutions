@@ -1,256 +1,178 @@
 <template>
-    <HqLayout :hasFilter="true"
-        :hasHeader="false">
+    <HqLayout :hasFilter="true" :hasHeader="false">
         <Filters slot="filters">
             <FilterBlock :title="$t('Common.Questionnaire')">
-                <Typeahead
-                    control-id="questionnaireId"
-                    :placeholder="$t('Common.AllQuestionnaires')"
-                    :ajax-params="{ }"
-                    :fetch-url="model.questionnaires"
-                    :value="selectedQuestionnaireId"
-                    :selectedKey="this.query.questionnaireId"
-                    v-on:selected="selectQuestionnaire"/>
+                <Typeahead control-id="questionnaireId" :placeholder="$t('Common.AllQuestionnaires')" :ajax-params="{}"
+                    :fetch-url="model.questionnaires" :value="selectedQuestionnaireId"
+                    :selectedKey="this.query.questionnaireId" v-on:selected="selectQuestionnaire" />
             </FilterBlock>
             <FilterBlock :title="$t('Common.QuestionnaireVersion')">
-                <Typeahead
-                    control-id="questionnaireVersion"
-                    :placeholder="$t('Common.AllVersions')"
+                <Typeahead control-id="questionnaireVersion" :placeholder="$t('Common.AllVersions')"
                     :value="selectedVersion"
                     :values="selectedQuestionnaireId == null ? null : selectedQuestionnaireId.versions"
-                    v-on:selected="selectQuestionnaireVersion"
-                    :disabled="selectedQuestionnaireId == null"/>
+                    v-on:selected="selectQuestionnaireVersion" :disabled="selectedQuestionnaireId == null" />
             </FilterBlock>
-            <FilterBlock :title="$t('Common.Responsible')"
-                v-if="model.userRole != 'Interviewer'">
-                <Typeahead
-                    control-id="responsibleId"
-                    :placeholder="$t('Common.AllResponsible')"
-                    :value="responsibleId"
-                    :ajax-params="responsibleParams"
-                    :selectedValue="this.query.responsible"
-                    v-on:selected="selectResponsible"
-                    :fetch-url="model.responsible"></Typeahead>
+            <FilterBlock :title="$t('Common.Responsible')" v-if="model.userRole != 'Interviewer'">
+                <Typeahead control-id="responsibleId" :placeholder="$t('Common.AllResponsible')" :value="responsibleId"
+                    :ajax-params="responsibleParams" :selectedValue="this.query.responsible"
+                    v-on:selected="selectResponsible" :fetch-url="model.responsible"></Typeahead>
             </FilterBlock>
             <FilterBlock :title="$t('Pages.Filters_Assignment')">
                 <div class="input-group">
-                    <input
-                        class="form-control with-clear-btn number"
-                        :placeholder="$t('Common.AllAssignments')"
-                        type="number"
-                        v-model.number="assignmentId"
-                        v-validate="{ 'numeric':true }"
-                    />
-                    <div class="input-group-btn"
-                        @click="clearAssignmentFilter">
+                    <input class="form-control with-clear-btn number" :placeholder="$t('Common.AllAssignments')"
+                        type="number" v-model.number="assignmentId" v-validate="{ 'numeric': true }" />
+                    <div class="input-group-btn" @click="clearAssignmentFilter">
                         <div class="btn btn-default">
-                            <span class="glyphicon glyphicon-remove"
-                                aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                         </div>
                     </div>
                 </div>
             </FilterBlock>
             <FilterBlock :title="$t('Pages.Filters_Shapefiles')">
-                <Typeahead
-                    control-id="shapefileName"
-                    :placeholder="$t('Pages.Filters_None')"
-                    :ajax-params="{ }"
-                    :fetch-url="model.shapefiles"
-                    :value="shapefileName"
-                    v-on:selected="selectedShapefileName"/>
+                <Typeahead control-id="shapefileName" :placeholder="$t('Pages.Filters_None')" :ajax-params="{}"
+                    :fetch-url="model.shapefiles" :value="shapefileName" v-on:selected="selectedShapefileName" />
             </FilterBlock>
-            <FilterBlock v-if="isLoading"
-                :title="$t('Reports.MapDataLoading')">
+            <FilterBlock v-if="isLoading" :title="$t('Reports.MapDataLoading')">
                 <div class="progress">
-                    <div
-                        class="progress-bar progress-bar-striped active"
-                        role="progressbar"
-                        aria-valuenow="100"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                        style="width: 100%"></div>
+                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100"
+                        aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
                 </div>
             </FilterBlock>
             <div class="preset-filters-container">
-                <div class="center-block"
-                    style="margin-left: 0">
-                    <button
-                        class="btn btn-default btn-lg"
-                        id="reloadMarkersInBounds"
-                        v-if="readyToUpdate"
-                        @click="reloadMarkersInBounds">{{$t("MapReport.ReloadMarkers")}}</button>
+                <div class="center-block" style="margin-left: 0">
+                    <button class="btn btn-default btn-lg" id="reloadMarkersInBounds" v-if="readyToUpdate"
+                        @click="reloadMarkersInBounds">{{ $t("MapReport.ReloadMarkers") }}</button>
                 </div>
             </div>
         </Filters>
         <div style="display:none;">
             <div ref="interviewTooltip">
                 <div class="row-fluid">
-                    <strong>{{$t("Common.InterviewKey")}}:</strong>
-                    &nbsp;{{selectedTooltip.interviewKey}}
+                    <strong>{{ $t("Common.InterviewKey") }}:</strong>
+                    &nbsp;{{ selectedTooltip.interviewKey }}
                 </div>
                 <div class="row-fluid">
-                    <strong>{{$t("Common.Responsible")}}:</strong>
-                    &nbsp;{{selectedTooltip.interviewerName}}
+                    <strong>{{ $t("Common.Responsible") }}:</strong>
+                    &nbsp;{{ selectedTooltip.interviewerName }}
                 </div>
                 <div class="row-fluid">
-                    <strong>{{$t("Users.Supervisor")}}:</strong>
-                    &nbsp;{{selectedTooltip.supervisorName}}
+                    <strong>{{ $t("Users.Supervisor") }}:</strong>
+                    &nbsp;{{ selectedTooltip.supervisorName }}
                 </div>
                 <div class="row-fluid">
-                    <strong>{{$t("Common.Status")}}:</strong>
-                    &nbsp;{{selectedTooltip.lastStatus}}
+                    <strong>{{ $t("Common.Status") }}:</strong>
+                    &nbsp;{{ selectedTooltip.lastStatus }}
                 </div>
                 <div class="row-fluid">
-                    <strong>{{$t("Reports.LastUpdatedDate")}}:</strong>
-                    &nbsp;{{selectedTooltip.lastUpdatedDate}}
+                    <strong>{{ $t("Reports.LastUpdatedDate") }}:</strong>
+                    &nbsp;{{ selectedTooltip.lastUpdatedDate }}
                 </div>
-                <div class="row-fluid"
-                    v-for="answer in selectedTooltip.identifyingData">
-                    <strong>{{answer.title}}:</strong>
-                    &nbsp;{{answer.answer || $t("Details.NoAnswer") }}
+                <div class="row-fluid" v-for="answer in selectedTooltip.identifyingData">
+                    <strong>{{ answer.title }}:</strong>
+                    &nbsp;{{ answer.answer || $t("Details.NoAnswer") }}
                 </div>
 
-                <div class="row-fluid"
-                    v-if="model.userRole != 'Interviewer'"
-                    style="white-space:nowrap;">
-                    <strong>{{$t("MapReport.ViewInterviewContent")}}:</strong>&nbsp;
-                    <a
-                        v-bind:href="api.GetInterviewDetailsUrl(selectedTooltip.interviewId)"
-                        target="_blank">{{$t("MapReport.details")}}</a>
+                <div class="row-fluid" v-if="model.userRole != 'Interviewer'" style="white-space:nowrap;">
+                    <strong>{{ $t("MapReport.ViewInterviewContent") }}:</strong>&nbsp;
+                    <a v-bind:href="api.GetInterviewDetailsUrl(selectedTooltip.interviewId)" target="_blank">{{
+                        $t("MapReport.details") }}</a>
                 </div>
-                <div class="row-fluid tooltip-buttons"
-                    style="white-space:nowrap;">
-                    <button
-                        class="btn btn-sm btn-success"
+                <div class="row-fluid tooltip-buttons" style="white-space:nowrap;">
+                    <button class="btn btn-sm btn-success"
                         v-if="model.userRole == 'Interviewer' && (selectedTooltip.status == 'InterviewerAssigned' || selectedTooltip.status == 'RejectedBySupervisor')"
-                        click="openInterview">{{ $t("Common.Open")}}</button>
-                    <button
-                        class="btn btn-sm btn-success"
-                        v-if="canAssign"
-                        click="assignInterview">{{ $t("Common.Assign") }}</button>
-                    <button
-                        class="btn btn-sm btn-success"
+                        click="openInterview">{{ $t("Common.Open") }}</button>
+                    <button class="btn btn-sm btn-success" v-if="canAssign" click="assignInterview">{{ $t("Common.Assign")
+                    }}</button>
+                    <button class="btn btn-sm btn-success"
                         v-if="model.userRole == 'Supervisor' && (selectedTooltip.status == 'Completed' || selectedTooltip.status == 'RejectedByHeadquarters')"
-                        click="approveSvInterview">{{ $t("Common.Approve")}}</button>
-                    <button
-                        class="btn btn-sm reject"
+                        click="approveSvInterview">{{ $t("Common.Approve") }}</button>
+                    <button class="btn btn-sm reject"
                         v-if="model.userRole == 'Supervisor' && (selectedTooltip.status == 'Completed' || selectedTooltip.status == 'RejectedByHeadquarters')"
-                        click="rejectSvInterview">{{ $t("Common.Reject")}}</button>
-                    <button
-                        class="btn btn-sm btn-success"
+                        click="rejectSvInterview">{{ $t("Common.Reject") }}</button>
+                    <button class="btn btn-sm btn-success"
                         v-if="model.userRole == 'Headquarter' && (selectedTooltip.status == 'Completed' || selectedTooltip.status == 'ApprovedBySupervisor')"
-                        click="approveHqInterview">{{ $t("Common.Approve")}}</button>
-                    <button
-                        class="btn btn-sm reject"
+                        click="approveHqInterview">{{ $t("Common.Approve") }}</button>
+                    <button class="btn btn-sm reject"
                         v-if="model.userRole == 'Headquarter' && (selectedTooltip.status == 'Completed' || selectedTooltip.status == 'ApprovedBySupervisor')"
-                        click="rejectHqInterview">{{ $t("Common.Reject")}}</button>
-                    <button
-                        class="btn btn-sm btn-primary"
+                        click="rejectHqInterview">{{ $t("Common.Reject") }}</button>
+                    <button class="btn btn-sm btn-primary"
                         v-if="model.userRole == 'Headquarter' && selectedTooltip.status == 'ApprovedByHeadquarters'"
-                        click="unapproveInterview">{{ $t("Common.Unapprove")}}</button>
+                        click="unapproveInterview">{{ $t("Common.Unapprove") }}</button>
                 </div>
             </div>
 
             <div ref="assignmentTooltip">
                 <div class="row-fluid">
-                    <strong>{{$t("Assignments.AssignmentId")}}:</strong>
-                    &nbsp;{{selectedTooltip.assignmentId}}
+                    <strong>{{ $t("Assignments.AssignmentId") }}:</strong>
+                    &nbsp;{{ selectedTooltip.assignmentId }}
                 </div>
                 <div class="row-fluid">
-                    <strong>{{$t("Common.Responsible")}}:</strong>
-                    &nbsp;{{selectedTooltip.responsibleName}}
+                    <strong>{{ $t("Common.Responsible") }}:</strong>
+                    &nbsp;{{ selectedTooltip.responsibleName }}
                 </div>
                 <div class="row-fluid">
-                    <strong>{{$t("Reports.LastUpdatedDate")}}:</strong>
-                    &nbsp;{{selectedTooltip.lastUpdatedDate}}
+                    <strong>{{ $t("Reports.LastUpdatedDate") }}:</strong>
+                    &nbsp;{{ selectedTooltip.lastUpdatedDate }}
                 </div>
-                <div class="row-fluid"
-                    v-for="answer in selectedTooltip.identifyingData">
-                    <strong>{{answer.title}}:</strong>
-                    &nbsp;{{answer.answer || $t("Details.NoAnswer")}}
+                <div class="row-fluid" v-for="answer in selectedTooltip.identifyingData">
+                    <strong>{{ answer.title }}:</strong>
+                    &nbsp;{{ answer.answer || $t("Details.NoAnswer") }}
                 </div>
 
-                <div class="row-fluid"
-                    v-if="model.userRole != 'Interviewer'"
-                    style="white-space:nowrap;">
-                    <strong>{{$t("Common.ViewAssignmentDetails")}}:</strong>&nbsp;
-                    <a
-                        v-bind:href="api.GetAssignmentDetailsUrl(selectedTooltip.assignmentId)"
-                        target="_blank">{{$t("MapReport.details")}}</a>
+                <div class="row-fluid" v-if="model.userRole != 'Interviewer'" style="white-space:nowrap;">
+                    <strong>{{ $t("Common.ViewAssignmentDetails") }}:</strong>&nbsp;
+                    <a v-bind:href="api.GetAssignmentDetailsUrl(selectedTooltip.assignmentId)" target="_blank">{{
+                        $t("MapReport.details") }}</a>
                 </div>
-                <div class="row-fluid tooltip-buttons"
-                    style="white-space:nowrap;">
-                    <button
-                        class="btn btn-sm btn-success"
-                        v-if="model.userRole == 'Interviewer'"
-                        click="createInterview">{{ $t("Common.Create") }}</button>
+                <div class="row-fluid tooltip-buttons" style="white-space:nowrap;">
+                    <button class="btn btn-sm btn-success" v-if="model.userRole == 'Interviewer'" click="createInterview">{{
+                        $t("Common.Create") }}</button>
                 </div>
             </div>
 
             <div ref="clusterTooltip">
                 <div class="row-fluid">
-                    <strong>{{$t("Reports.ClusterInfo")}}</strong>
+                    <strong>{{ $t("Reports.ClusterInfo") }}</strong>
                 </div>
-                <div class="row-fluid"
-                    v-if="selectedTooltip.interviewsCount > 0">
-                    <strong>{{$t("Common.Interviews")}}:</strong>
-                    &nbsp;{{selectedTooltip.interviewsCount}}
+                <div class="row-fluid" v-if="selectedTooltip.interviewsCount > 0">
+                    <strong>{{ $t("Common.Interviews") }}:</strong>
+                    &nbsp;{{ selectedTooltip.interviewsCount }}
                 </div>
-                <div class="row-fluid"
-                    v-if="selectedTooltip.assignmentsCount > 0">
-                    <strong>{{$t("Common.Assignments")}}:</strong>
-                    &nbsp;{{selectedTooltip.assignmentsCount}}
+                <div class="row-fluid" v-if="selectedTooltip.assignmentsCount > 0">
+                    <strong>{{ $t("Common.Assignments") }}:</strong>
+                    &nbsp;{{ selectedTooltip.assignmentsCount }}
                 </div>
             </div>
         </div>
         <div id="map-canvas"></div>
 
-        <ModalFrame ref="assignModal"
-            :title="$t('Common.Assign')">
+        <ModalFrame ref="assignModal" :title="$t('Common.Assign')">
             <form onsubmit="return false;">
                 <div class="form-group">
-                    <label
-                        class="control-label"
-                        for="newResponsibleId">{{$t("Assignments.SelectResponsible")}}</label>
-                    <Typeahead
-                        control-id="newResponsibleId"
-                        :placeholder="$t('Common.Responsible')"
-                        :value="newResponsibleId"
-                        :ajax-params="{ }"
-                        @selected="newResponsibleSelected"
+                    <label class="control-label" for="newResponsibleId">{{ $t("Assignments.SelectResponsible") }}</label>
+                    <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
+                        :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
                         :fetch-url="model.responsible"></Typeahead>
                 </div>
                 <div v-if="selectedTooltip.isReceivedByTablet">
                     <br />
-                    <input
-                        type="checkbox"
-                        id="reassignReceivedByTablet"
-                        v-model="isReassignReceivedByTablet"
-                        class="checkbox-filter"/>
-                    <label for="reassignReceivedByTablet"
-                        style="font-weight: normal">
+                    <input type="checkbox" id="reassignReceivedByTablet" v-model="isReassignReceivedByTablet"
+                        class="checkbox-filter" />
+                    <label for="reassignReceivedByTablet" style="font-weight: normal">
                         <span class="tick"></span>
-                        {{$t("Reports.AssignReceivedConfirm", 1)}}
+                        {{ $t("Reports.AssignReceivedConfirm", 1) }}
                     </label>
                     <br />
-                    <span v-if="isReassignReceivedByTablet"
-                        class="text-danger">
-                        {{$t("Reports.AssignReceivedWarning")}}
+                    <span v-if="isReassignReceivedByTablet" class="text-danger">
+                        {{ $t("Reports.AssignReceivedWarning") }}
                     </span>
                 </div>
             </form>
             <div slot="actions">
-                <button
-                    type="button"
-                    class="btn btn-primary"
-                    role="confirm"
-                    @click="assign"
-                    :disabled="!canClickAssign">{{ $t("Common.Assign") }}</button>
-                <button
-                    type="button"
-                    class="btn btn-link"
-                    data-dismiss="modal"
-                    role="cancel">{{ $t("Common.Cancel") }}</button>
+                <button type="button" class="btn btn-primary" role="confirm" @click="assign" :disabled="!canClickAssign">{{
+                    $t("Common.Assign") }}</button>
+                <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">{{ $t("Common.Cancel")
+                }}</button>
             </div>
         </ModalFrame>
 
@@ -279,12 +201,15 @@
     0% {
         content: '...';
     }
+
     25% {
         content: '';
     }
+
     50% {
         content: '.';
     }
+
     75% {
         content: '..';
     }
@@ -306,7 +231,7 @@
 <script>
 import * as toastr from 'toastr'
 import Vue from 'vue'
-import {isNull, chain, debounce, delay, forEach, find } from 'lodash'
+import { isNull, chain, debounce, delay, forEach, find } from 'lodash'
 import routeSync from '~/shared/routeSync'
 
 export default {
@@ -323,7 +248,7 @@ export default {
             totalMarkers: 0,
             selectedQuestionnaireId: null,
             responsibleId: null,
-            responsibleParams: {showArchived: true, showLocked: true},
+            responsibleParams: { showArchived: true, showLocked: true },
             assignmentId: null,
             newResponsibleId: null,
             isReassignReceivedByTablet: false,
@@ -349,16 +274,16 @@ export default {
         canAssign() {
             if (this.model.userRole == 'Supervisor' &&
                 (this.selectedTooltip.status == 'InterviewerAssigned'
-                || this.selectedTooltip.status == 'SupervisorAssigned'
-                || this.selectedTooltip.status == 'RejectedBySupervisor'
+                    || this.selectedTooltip.status == 'SupervisorAssigned'
+                    || this.selectedTooltip.status == 'RejectedBySupervisor'
                 )
             )
                 return true
 
             if (this.model.userRole == 'Headquarter' &&
                 (this.selectedTooltip.status == 'InterviewerAssigned'
-                || this.selectedTooltip.status == 'RejectedBySupervisor'
-                || this.selectedTooltip.status == 'RejectedByHeadquarters'
+                    || this.selectedTooltip.status == 'RejectedBySupervisor'
+                    || this.selectedTooltip.status == 'RejectedByHeadquarters'
                 )
             )
                 return true
@@ -367,8 +292,7 @@ export default {
         },
 
         canClickAssign() {
-            if (this.newResponsibleId)
-            {
+            if (this.newResponsibleId) {
                 if (this.selectedTooltip.isReceivedByTablet)
                     return this.isReassignReceivedByTablet
                 return true
@@ -426,20 +350,20 @@ export default {
                 headers: {
                     'X-CSRF-TOKEN': Vue.$hq.Util.getCsrfCookie(),
                 },
-            }, 
-            response => {
-                const interviewId = response.interviewId
-                const workspace = self.$hq.basePath
-                const url = `${workspace}WebInterview/${interviewId}/Cover`
-                window.open(url, '_blank')
-                self.reloadMarkersInBounds()
-            })
+            },
+                response => {
+                    const interviewId = response.interviewId
+                    const workspace = self.$hq.basePath
+                    const url = `${workspace}WebInterview/${interviewId}/Cover`
+                    window.open(url, '_blank')
+                    self.reloadMarkersInBounds()
+                })
         },
 
         assignInterview() {
             this.newResponsibleId = null
             this.isReassignReceivedByTablet = false
-            this.$refs.assignModal.modal({keyboard: false})
+            this.$refs.assignModal.modal({ keyboard: false })
         },
 
         async assign() {
@@ -495,7 +419,7 @@ export default {
                 data['marker'] = marker
                 self.selectedTooltip = data
 
-                Vue.nextTick(function() {
+                Vue.nextTick(function () {
                     self.infoWindow.setContent($(self.$refs.interviewTooltip).html())
                 })
             }
@@ -522,7 +446,7 @@ export default {
             if (value == null || this.$route.query.questionnaireId !== value.key)
                 this.selectQuestionnaireVersion(null)
             else
-                this.selectQuestionnaireVersion(this.$route.query.version ? {key: this.$route.query.version} : null)
+                this.selectQuestionnaireVersion(this.$route.query.version ? { key: this.$route.query.version } : null)
 
             this.onChange(q => {
                 q.questionnaireId = value == null ? null : value.key
@@ -545,10 +469,10 @@ export default {
                     this.map.data.remove(this.geoJsonFeatures[i]);
                 this.geoJsonFeatures = null
             }
-            
+
             if (this.shapefileName) {
                 const geoJsonUrl = this.model.shapefileJson + '?mapName=' + this.shapefileName.key
-                
+
                 this.isLoading = true
 
                 const self = this
@@ -625,15 +549,14 @@ export default {
                 delayedMapReload()
             })
 
-            this.map.data.setStyle(function(feature) {
+            this.map.data.setStyle(function (feature) {
                 const type = feature.getProperty('type')
 
-                if (type == 'Interview')
-                {
+                if (type == 'Interview') {
                     const userRole = self.model.userRole
                     const status = feature.getProperty('status')
 
-                    let interviewStyle ={
+                    let interviewStyle = {
                         icon: {
                             url: '/img/google-maps-markers/m2.png',
                             dark: false,
@@ -646,7 +569,7 @@ export default {
                     if (userRole == 'Interviewer') {
                         markerForm = 'circle'
 
-                        switch(status) {
+                        switch (status) {
                             case 'Created':
                             case 'InterviewerAssigned':
                             case 'Restarted':
@@ -663,7 +586,7 @@ export default {
                     }
 
                     else if (userRole == 'Supervisor') {
-                        switch(status) {
+                        switch (status) {
                             case 'Completed':
                             case 'SupervisorAssigned':
                                 markerForm = 'thomb'
@@ -681,7 +604,7 @@ export default {
                     }
 
                     else if (userRole == 'Headquarter') {
-                        switch(status) {
+                        switch (status) {
                             case 'ApprovedBySupervisor':
                                 markerForm = 'triangle'
                                 action = 'action'
@@ -720,11 +643,10 @@ export default {
                     interviewStyle.icon.url = `/img/google-maps-markers/${markerForm}-${action}.png`
                     return interviewStyle
                 }
-                if (type == 'Assignment')
-                {
+                if (type == 'Assignment') {
                     const rRole = feature.getProperty('responsibleRole')
                     let markerForm = ''
-                    switch(rRole) {
+                    switch (rRole) {
                         case 'Interviewer':
                             markerForm = 'circle'
                             break
@@ -781,27 +703,13 @@ export default {
                 }
 
                 if (type == null) {
-                    const geometry = feature.getGeometry()
-                    const geometryType = geometry.getType()
                     //"Point", "MultiPoint", "LineString", "MultiLineString", "LinearRing", "Polygon", "MultiPolygon", or "GeometryCollection"
-                    if (geometryType == "Polygon" || geometryType == "MultiPolygon") {
-                        return {
-                            fillColor: '#DE9131',
-                            fillOpacity: 0.8,
-                            strokeColor: '#FCF7F1',
-                            //strokeOpacity: ,
-                            strokeWeight: 1,
-                        }
-                    }
-                    else if (geometryType == "LineString" || geometryType == "MultiLineString") {
-                        return {
-                            strokeColor: '#DE9131',
-                            //strokeOpacity: ,
-                            strokeWeight: 2,
-                        }
+                    return {
+                        strokeColor: 'red',
+                        strokeWeight: 2,
                     }
                 }
-                
+
                 return {}
             })
 
@@ -825,7 +733,7 @@ export default {
 
                             self.selectedTooltip = data
 
-                            Vue.nextTick(function() {
+                            Vue.nextTick(function () {
                                 self.infoWindow.setContent($(self.$refs.clusterTooltip).html())
                                 self.infoWindow.setPosition(event.latLng)
                                 self.infoWindow.setOptions({
@@ -840,8 +748,7 @@ export default {
                         }
                     })
                 }
-                else if (type == 'Interview')
-                {
+                else if (type == 'Interview') {
                     const interviewId = event.feature.getProperty('interviewId')
 
                     const response = await this.api.InteriewSummaryUrl(interviewId)
@@ -854,7 +761,7 @@ export default {
 
                         self.selectedTooltip = data
 
-                        Vue.nextTick(function() {
+                        Vue.nextTick(function () {
                             self.infoWindow.setContent($(self.$refs.interviewTooltip).html())
                             self.infoWindow.setPosition(event.latLng)
                             self.infoWindow.setOptions({
@@ -864,8 +771,7 @@ export default {
                         })
                     }
                 }
-                else if (type == 'Assignment')
-                {
+                else if (type == 'Assignment') {
                     const assignmentId = event.feature.getProperty('assignmentId')
 
                     const response = await this.api.AssignmentUrl(assignmentId)
@@ -875,7 +781,7 @@ export default {
 
                     self.selectedTooltip = data
 
-                    Vue.nextTick(function() {
+                    Vue.nextTick(function () {
                         self.infoWindow.setContent($(self.$refs.assignmentTooltip).html())
                         self.infoWindow.setPosition(event.latLng)
                         self.infoWindow.setOptions({
@@ -887,7 +793,7 @@ export default {
 
                 const label = event.feature.getProperty('label')
                 if (label) {
-                    Vue.nextTick(function() {
+                    Vue.nextTick(function () {
                         self.infoWindow.setContent(label)
                         self.infoWindow.setPosition(event.latLng)
                         self.infoWindow.open(self.map)
@@ -963,13 +869,11 @@ export default {
                 if (stillLoading == true) this.isLoading = true
             }, 5000)
 
-            try
-            {
+            try {
                 const response = await this.api.GetMarkers(request)
                 this.setMapData(response.data, extendBounds)
             }
-            finally
-            {
+            finally {
                 stillLoading = false
                 this.isLoading = false
             }
@@ -1004,7 +908,8 @@ export default {
                 forEach(this.geoJsonFeatures, feature => {
                     if (toRemove[feature.id]) {
                         delete toRemove[feature.id]
-                    }}
+                    }
+                }
                 )
             }
 

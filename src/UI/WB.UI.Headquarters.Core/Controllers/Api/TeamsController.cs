@@ -20,6 +20,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         private const string DEFAULTEMPTYQUERY = "";
         private const bool DEFAULT_SHOW_LOCKED = false;
         private const bool DEFAULT_SHOW_ARCHIVED = false;
+        private const bool DEFAULT_EXCLUDE_HEADQUARTERS = false;
 
         private readonly IAuthorizedUser authorizedUser;
         private readonly ITeamViewFactory teamViewFactory;
@@ -79,9 +80,14 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
-        public ResponsibleComboboxModel ResponsiblesCombobox(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE, bool showLocked = DEFAULT_SHOW_LOCKED, bool showArchived = DEFAULT_SHOW_ARCHIVED)
+        public ResponsibleComboboxModel ResponsiblesCombobox(string query = DEFAULTEMPTYQUERY, 
+            int pageSize = DEFAULTPAGESIZE, 
+            bool showLocked = DEFAULT_SHOW_LOCKED, 
+            bool showArchived = DEFAULT_SHOW_ARCHIVED,
+            bool excludeHeadquarters = DEFAULT_EXCLUDE_HEADQUARTERS)
         {
-            var users = this.userViewFactory.GetAllResponsibles(pageSize: pageSize, searchBy: query, showLocked: showLocked, showArchived: showArchived);
+            var users = this.userViewFactory.GetAllResponsibles(pageSize: pageSize, searchBy: query, 
+                showLocked: showLocked, showArchived: showArchived, excludeHeadquarters: excludeHeadquarters);
             var options = users.Users.Select(x => new ResponsibleComboboxOptionModel(x.ResponsibleId.FormatGuid(), x.UserName, x.IconClass)).ToArray();
             return new ResponsibleComboboxModel(options, users.TotalCountByQuery);
         }

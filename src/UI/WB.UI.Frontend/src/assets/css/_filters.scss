@@ -71,6 +71,10 @@
 			margin-bottom: 0;
 		}
 	}
+    .with-extra-btn .dropdown-toggle {
+        border-top-right-radius: 0px; 
+        border-bottom-right-radius: 0px;
+    }
 }
 .form-date{
 	margin-bottom: 15px;

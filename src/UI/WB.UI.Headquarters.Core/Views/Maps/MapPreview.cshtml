@@ -30,7 +30,7 @@
     
         <link rel="stylesheet" href="https://js.arcgis.com/4.22/esri/css/main.css">
         <script src="https://js.arcgis.com/4.22/"></script>
-        <script>
+    <script>
             require([
                     "esri/Map",
                     "esri/views/MapView",
@@ -44,12 +44,15 @@
                     "esri/layers/support/LabelClass",
                     "esri/symbols/SimpleLineSymbol",
                     "esri/symbols/SimpleFillSymbol",
+                    "esri/symbols/SimpleMarkerSymbol",
                     "esri/geometry/support/webMercatorUtils",
+                    "esri/renderers/SimpleRenderer",
                     "dojo/on",
                     "dojo/dom",
                     "dojo/domReady!"
                 ],
-                function (Map, MapView, Graphic, Geometry, Polygon, Extent, FeatureLayer, GeoJSONLayer, Field, LabelClass, SimpleLineSymbol, SimpleFillSymbol, webMercatorUtils, on, dom) {
+                function (Map, MapView, Graphic, Geometry, Polygon, Extent, FeatureLayer, GeoJSONLayer, Field, 
+                    LabelClass, SimpleLineSymbol, SimpleFillSymbol, SimpleMarkerSymbol, webMercatorUtils, SimpleRenderer, on, dom) {
 
                     var startExtent = new Extent({
                         "xmin":@Model.XMinVal,"ymin":@Model.YMinVal,"xmax":@Model.XMaxVal,"ymax":@Model.YMaxVal,
@@ -66,13 +69,7 @@
                     
                     var polygon = Polygon.fromExtent(startExtent);
                     
-                    var fillSymbol = new SimpleFillSymbol({
-                        outline: {
-                            color: [255, 255, 255],
-                            width: 1
-                        }
-                    });
-
+                    
                     var view = new MapView({
                         spatialReference: {"wkid":102100},
                         container: "viewDiv",
@@ -100,11 +97,9 @@
                         var geojsonurl = "@Url.Action("MapPreviewJson", "Maps", new { mapName = Model.FileName })"
                         const geojsonlayer = new GeoJSONLayer({
                             url: geojsonurl,
-                            //geometryType: "polygon",
                             labelingInfo : labelClass,
                             labelsVisible: true,
-                          });
-                        
+                            });                                
           
                         function layerviewCreate(evt) {
                             loading.style.display = 'block'
@@ -115,11 +110,42 @@
                             });
                         }
                         
-                        on(geojsonlayer, "layerview-create", layerviewCreate);
+                        on(geojsonlayer, "layerview-create", layerviewCreate);                        
+                        geojsonlayer.load().then(() => {
+                          if (geojsonlayer.geometryType === "point") {
+                                geojsonlayer.renderer = new SimpleRenderer({
+                                                        symbol: new SimpleMarkerSymbol({
+                                                          style: "circle",
+                                                          color: "red",
+                                                          size: "10px",
+                                                        }),
+                                                      });
+                          } else if (geojsonlayer.geometryType === "polyline") {
+                                geojsonlayer.renderer = new SimpleRenderer({
+                                                        symbol: new SimpleLineSymbol({
+                                                          style: "solid",
+                                                          color: "red",
+                                                          width: "2px",
+                                                        }),
+                                                      });
+                          } else if (geojsonlayer.geometryType === "polygon") {
+                                geojsonlayer.renderer = new SimpleRenderer({
+                                                        symbol: new SimpleFillSymbol({                                                          
+                                                          
+                                                          outline: {
+                                                            color: "red",
+                                                            width: "2px",
+                                                          },
+                                                        }),
+                                                      });
+                                                      }
+                        });
                         
                         map.add(geojsonlayer);
                     }
                     else {
+                        var fillSymbol = new SimpleFillSymbol({ outline: { color: [255, 255, 255], width: 1 } });
+                    
                         var polygonGraphic = new Graphic({
                             geometry: polygon,
                             symbol: fillSymbol
