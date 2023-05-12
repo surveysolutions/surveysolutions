@@ -182,7 +182,7 @@
                 android:orientation="vertical"
                 android:layout_marginBottom="1dp"
                 android:background="@color/lower_panel_background_color"
-                local:MvxBind="Visible And(IsWarningVisible, Not(IsPanelVisible));">
+                local:MvxBind="Visible IsWarningVisible;">
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -194,7 +194,7 @@
                     android:singleLine="false"
                     android:maxLines="2"
                     android:id="@+id/areaEditor_Warnings"
-                    local:MvxBind="Text Warning; Visible And(IsWarningVisible, Not(IsPanelVisible));"/>
+                    local:MvxBind="Text Warning;"/>
         </LinearLayout>
         <LinearLayout
                 android:layout_width="match_parent"

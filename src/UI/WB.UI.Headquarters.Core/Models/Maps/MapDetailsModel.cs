@@ -28,6 +28,13 @@ namespace WB.UI.Headquarters.Models.Maps
         public string DeleteMapUserLinkUrl { get; set; }
         public DuplicateLabelModel[] DuplicateMapLabels { get; set; }
         public bool IsPreviewGeoJson { get; set; }
+        
+        public ApiEndpoints Api { get; set; }
+
+        public class ApiEndpoints
+        {
+            public string Users { get; set; }
+        }
     }
 
     public class DuplicateLabelModel

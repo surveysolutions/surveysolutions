@@ -164,7 +164,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             };
         }
 
-        public UsersView GetTeamResponsibles(int pageSize, string searchBy, Guid? supervisorId, bool showLocked = false, bool? archived = false, QueryFilterRule filterRule = QueryFilterRule.Contains)
+        public UsersView GetTeamResponsibles(int pageSize, string searchBy, Guid? supervisorId, bool showLocked = false, 
+            bool? archived = false, QueryFilterRule filterRule = QueryFilterRule.Contains)
         {
             var users = ApplyFilter(this.userRepository.Users, searchBy, filterRule, archived, UserRoles.Interviewer, UserRoles.Supervisor)
                 .Where(user => showLocked || (!user.IsLockedBySupervisor && !user.IsLockedByHeadquaters));
@@ -361,14 +362,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             return interviewers;
         }
 
-        public ResponsibleView GetAllResponsibles(int pageSize, string searchBy, bool showLocked = false, bool showArchived = false)
+        public ResponsibleView GetAllResponsibles(int pageSize, string searchBy, 
+            bool showLocked = false, bool showArchived = false, bool excludeHeadquarters = false)
         {
             Func<IQueryable<HqUser>, IQueryable<ResponsiblesViewItem>> query = users =>
             {
                 bool? isArchivedShowed = showArchived ? (bool?)null : false;
                 string searchByToLower = searchBy?.ToLower() ?? string.Empty;
+                var roles = excludeHeadquarters 
+                    ? new[] { UserRoles.Supervisor, UserRoles.Interviewer } 
+                    : new[] { UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Headquarter };
 
-                var responsible = ApplyFilter(users, searchBy, QueryFilterRule.Contains, isArchivedShowed, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Headquarter)
+                var responsible = ApplyFilter(users, searchBy, QueryFilterRule.Contains, isArchivedShowed, 
+                        roles)
                     .Where(user => showLocked || !user.IsLockedByHeadquaters && !user.IsLockedBySupervisor);
 
                 return responsible.Select(x => new ResponsiblesViewItem

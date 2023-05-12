@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Android.Graphics;
+using System.Drawing;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
@@ -405,12 +406,53 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     //MapView.Map.MinScale = 591657527.591555;
                     //MapView.Map.MaxScale = 0;
                     await SetViewToValues();
+                    await CheckMarkersAgainstShapefile();
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
                     throw;
                 }
+            }
+        }
+
+        protected override async Task AfterShapefileLoadedHandler()
+        {
+            await CheckMarkersAgainstShapefile();
+        }
+
+        protected async Task CheckMarkersAgainstShapefile()
+        {
+            IsWarningVisible = false;
+
+            if (!ShapeFileLoaded 
+                || graphicsOverlay.Graphics.Count <= 0 
+                || LoadedShapefile?.SpatialReference == null) return;
+            
+            var queryParameters = new QueryParameters();
+
+            List<MapPoint> pointsToCheck = new List<MapPoint>();
+            foreach (var graphic in graphicsOverlay.Graphics)
+            {
+                if (graphic.Geometry != null && graphic.Geometry.GeometryType == GeometryType.Point)
+                { 
+                    var projectedPoint = graphic.Geometry.Project(LoadedShapefile.SpatialReference);
+                    if (projectedPoint is MapPoint mapPoint)
+                    {
+                        pointsToCheck.Add(mapPoint);
+                    }
+                }
+            }
+            
+            Multipoint pointsMultipoint = new Multipoint(pointsToCheck, LoadedShapefile.SpatialReference);
+            queryParameters.Geometry = pointsMultipoint;
+            queryParameters.SpatialRelationship = SpatialRelationship.Intersects;
+            
+            var queryResult = await LoadedShapefile.QueryFeaturesAsync(queryParameters);
+            if (queryResult.Count() != pointsToCheck.Count())
+            {
+                Warning = UIResources.AreaMap_ItemsOutsideDedicatedArea;
+                IsWarningVisible = true;
             }
         }
 

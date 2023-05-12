@@ -141,7 +141,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error occured on loading. Shapefile cannot be opened.
+        ///   Looks up a localized string similar to Error occured on loading. Shapefile cannot be handled.
         /// </summary>
         public static string AreaMap_ErrorOnShapefileLoading {
             get {
@@ -164,6 +164,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string AreaMap_InitLocation {
             get {
                 return ResourceManager.GetString("AreaMap_InitLocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Some markers fall outside the outlined area.
+        /// </summary>
+        public static string AreaMap_ItemsOutsideDedicatedArea {
+            get {
+                return ResourceManager.GetString("AreaMap_ItemsOutsideDedicatedArea", resourceCulture);
             }
         }
         

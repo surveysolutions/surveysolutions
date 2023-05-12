@@ -32,7 +32,7 @@ using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.UI.Headquarters.Controllers.Api
 {
-    [Authorize(Roles = "Administrator, Headquarter")]
+    [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter)]
     [Route("api/[controller]/[action]")]
     public class MapsApiController : ControllerBase
     {
