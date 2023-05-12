@@ -311,66 +311,76 @@ namespace WB.Services.Export.Questionnaire
             }
         }
 
-        private ExportedQuestionHeaderItem CreateExportedQuestionHeaderForMultiColumnItem(Question question, int columnCount,
+        private ExportedQuestionHeaderItem CreateExportedQuestionHeaderForMultiColumnItem(Question question, 
+            int maxAnswerCount,
             QuestionnaireDocument questionnaire,
             int? lengthOfRosterVectorWhichNeedToBeExported,
             HeaderStructureForLevel headerStructureForLevel)
         {
-            var isQuestionLinked = IsQuestionLinked(question);
+            this.ThrowIfQuestionIsNotMultiSelectOrTextList(question);
+            
             var asCategorical = question as MultyOptionsQuestion;
             var isMultiCombobox = asCategorical?.IsFilteredCombobox ?? false;
+            var isQuestionLinked = IsQuestionLinked(question);
+            var exportVariableName = questionnaire.GetExportVariableName(question.PublicKey);
 
             var exportedHeaderItem = this.CreateExportedQuestionHeaderItem(question, questionnaire, headerStructureForLevel, lengthOfRosterVectorWhichNeedToBeExported);
-            this.ThrowIfQuestionIsNotMultiSelectOrTextList(question);
-
-            exportedHeaderItem.ColumnValues = new int[columnCount];
+            exportedHeaderItem.ColumnValues = new int[maxAnswerCount];
             exportedHeaderItem.ColumnHeaders = new List<HeaderColumn>();
-            var exportVariableName = questionnaire.GetExportVariableName(question.PublicKey);
             
-            for (int i = 0; i < columnCount; i++)
+            var storageType = GetStorageType(question, exportedHeaderItem.QuestionSubType);
+            
+            for (int i = 0; i < maxAnswerCount; i++)
             {
-                HeaderColumn headerColumn = new HeaderColumn();
-
+                var headerColumn = new HeaderColumn
+                {
+                    ExportType = storageType
+                };
+                var columnValue = 0;
                 
-                if (isQuestionLinked || isMultiCombobox || asCategorical == null)
+                if (!isQuestionLinked && asCategorical != null && asCategorical.CategoriesId.HasValue)
                 {
-                    headerColumn.Name = string.Format(GeneratedTitleExportFormat, exportVariableName, i);
+                    columnValue = questionnaire.Categories.First(c => c.Id == asCategorical.CategoriesId.Value).Values[i].Id;
                 }
-                else
+                else if (!isQuestionLinked && question.Answers[i] != null)
                 {
-                    var columnValue = asCategorical.CategoriesId.HasValue 
-                        ? questionnaire.Categories.First(c => c.Id == asCategorical.CategoriesId.Value).Values[i].Id
-                        : int.Parse(question.Answers[i].AnswerValue);
-
-                    headerColumn.Name = string.Format(GeneratedTitleExportFormat,
-                        exportVariableName, DecimalToHeaderConverter.ToHeader(columnValue));
-
-                    exportedHeaderItem.ColumnValues[i] = columnValue;
+                    columnValue = int.Parse(question.Answers[i].AnswerValue);
                 }
+
+                headerColumn.Name = isQuestionLinked || isMultiCombobox
+                    ? string.Format(GeneratedTitleExportFormat, exportVariableName, i)
+                    : string.Format(GeneratedTitleExportFormat, exportVariableName, DecimalToHeaderConverter.ToHeader(columnValue));
+
+                exportedHeaderItem.ColumnValues[i] = columnValue;
 
                 if (!isQuestionLinked)
                 {
                     var questionLabel = string.IsNullOrEmpty(question.VariableLabel) ? question.QuestionText : question.VariableLabel;
 
-                    if (question.QuestionType == QuestionType.MultyOption)
+                    switch (question.QuestionType)
                     {
-                        var optionText = asCategorical?.IsFilteredCombobox ?? false
-                            ? i.ToString()
-                            : asCategorical?.CategoriesId.HasValue ?? false
-                                ? questionnaire.Categories.First(c => c.Id == asCategorical!.CategoriesId!.Value).Values[i].Text
-                                : question.Answers[i].AnswerText;
+                        case QuestionType.MultyOption:
+                            var optionText = asCategorical?.IsFilteredCombobox ?? false
+                                ? i.ToString()
+                                : asCategorical?.CategoriesId.HasValue ?? false
+                                    ? questionnaire.Categories.First(c => c.Id == asCategorical.CategoriesId.Value).Values[i].Text
+                                    : question.Answers[i].AnswerText;
 
-                        headerColumn.Title = $"{questionLabel}:{optionText}";
-                    }
-                    if (question.QuestionType == QuestionType.TextList)
-                    {
-                        headerColumn.Title = $"{questionLabel}:{i}";
+                            headerColumn.Title = $"{questionLabel}:{optionText}";
+                            break;
+
+                        case QuestionType.TextList:
+                            headerColumn.Title = $"{questionLabel}:{i}";
+                            break;
                     }
                 }
-
-                headerColumn.ExportType = GetStorageType(question, exportedHeaderItem.QuestionSubType);
                 exportedHeaderItem.ColumnHeaders.Add(headerColumn);
+                
+                //column for value of text list question answer
+                if (question.QuestionType == QuestionType.TextList)
+                    exportedHeaderItem.ColumnHeaders.Add(new HeaderColumn() { Title = headerColumn.Title + "c" });
             }
+            
             return exportedHeaderItem;
         }
 
@@ -543,7 +553,7 @@ namespace WB.Services.Export.Questionnaire
                             this.AddHeadersForMultiOptions(headerStructureForLevel, question, questionnaire);
                         }
                     }
-                    else if (this.IsQuestionTextList(question))
+                    else if (question.QuestionType == QuestionType.TextList)
                     {
                         this.AddHeadersForTextList(headerStructureForLevel, question, questionnaire);
                     }
@@ -585,11 +595,6 @@ namespace WB.Services.Export.Questionnaire
             return question.QuestionType == QuestionType.MultyOption;
         }
 
-        private bool IsQuestionTextList(Question question)
-        {
-            return question.QuestionType == QuestionType.TextList;
-        }
-
         private void AddHeadersForVariable(IDictionary<Guid, IExportedHeaderItem> headerItems, Variable variable)
         {
             headerItems.Add(variable.PublicKey, this.CreateExportedVariableHeaderItem(variable));
@@ -618,37 +623,37 @@ namespace WB.Services.Export.Questionnaire
         private void AddHeadersForMultiOptions(HeaderStructureForLevel headerStructureForLevel, Question question,
             QuestionnaireDocument questionnaire)
         {
-            var columnCount = GetColumnsCountForMultiOptionQuestion(question, questionnaire);
+            var maxAnswerCount = GetAnswerCountForMultiOptionQuestion(question, questionnaire);
 
             headerStructureForLevel.HeaderItems.Add(question.PublicKey,
-                this.CreateExportedQuestionHeaderForMultiColumnItem(question, columnCount,
+                this.CreateExportedQuestionHeaderForMultiColumnItem(question, maxAnswerCount,
                     questionnaire,
                     this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire),
                     headerStructureForLevel));
         }
 
-        private int GetColumnsCountForMultiOptionQuestion(Question question, QuestionnaireDocument questionnaire)
+        private int GetAnswerCountForMultiOptionQuestion(Question question, QuestionnaireDocument questionnaire)
         {
             MultyOptionsQuestion? typedQuestion = question as MultyOptionsQuestion;
             if (typedQuestion == null) return question.Answers.Count;
             
-            var optionCount = typedQuestion.CategoriesId != null
+            var maxAllowedAnswers = typedQuestion.CategoriesId != null
                 ? questionnaire.Categories.First(c => c.Id == typedQuestion.CategoriesId.Value).Values.Length
                 : question.Answers.Count;
 
             if (typedQuestion.IsFilteredCombobox ?? false)
-                return Math.Min(typedQuestion.MaxAllowedAnswers ?? Constants.MaxLongRosterRowCount, optionCount);
+                return Math.Min(typedQuestion.MaxAllowedAnswers ?? Constants.MaxLongRosterRowCount, maxAllowedAnswers);
 
-            return optionCount;
+            return maxAllowedAnswers;
         }
 
         private void AddHeadersForTextList(HeaderStructureForLevel headerStructureForLevel, Question question,
             QuestionnaireDocument questionnaire)
         {
             var textListQuestion = question as TextListQuestion;
-            var maxCount = textListQuestion?.MaxAnswerCount ?? Constants.MaxLongRosterRowCount;
+            var maxAnswerCount = textListQuestion?.MaxAnswerCount ?? Constants.MaxLongRosterRowCount;
             headerStructureForLevel.HeaderItems.Add(question.PublicKey,
-                this.CreateExportedQuestionHeaderForMultiColumnItem(question, maxCount,
+                this.CreateExportedQuestionHeaderForMultiColumnItem(question, maxAnswerCount,
                     questionnaire,
                     this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire),
                     headerStructureForLevel));
@@ -660,10 +665,10 @@ namespace WB.Services.Export.Questionnaire
             QuestionnaireDocument questionnaire)
         {
             var textListQuestion = linkToTextListQuestion as TextListQuestion;
-            var maxCount = textListQuestion?.MaxAnswerCount ?? Constants.MaxLongRosterRowCount;
+            var maxAnswerCount = textListQuestion?.MaxAnswerCount ?? Constants.MaxLongRosterRowCount;
 
             headerStructureForLevel.HeaderItems.Add(question.PublicKey,
-                 this.CreateExportedQuestionHeaderForMultiColumnItem(question, maxCount,
+                 this.CreateExportedQuestionHeaderForMultiColumnItem(question, maxAnswerCount,
                      questionnaire,
                      this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire),
                      headerStructureForLevel));
