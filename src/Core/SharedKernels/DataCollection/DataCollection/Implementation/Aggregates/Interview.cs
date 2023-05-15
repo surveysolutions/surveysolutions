@@ -7,6 +7,7 @@ using Ncqrs.Domain;
 using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -2288,7 +2289,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 new InterviewPropertiesForExpressions(new InterviewProperties(this.EventSourceId), this.properties);
             expressionStorage.Initialize(new InterviewStateForExpressions(changedInterviewTree,
                 interviewPropertiesForExpressions));
-            using var updater = new InterviewTreeUpdater(expressionStorage, questionnaire, removeLinkedAnswers);
+
+            var loggerProvider = this.ServiceLocatorInstance.GetInstance<ILoggerProvider>();
+            
+            using var updater = new InterviewTreeUpdater(expressionStorage, questionnaire, removeLinkedAnswers, loggerProvider);
             if (questionnaire.SupportsExpressionsGraph() && entityIdentity != null)
             {
                 var expressionsPlayOrder = questionnaire.GetExpressionsPlayOrder(entityIdentity.Id);
