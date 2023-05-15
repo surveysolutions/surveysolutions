@@ -195,14 +195,17 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         public async Task MapControlCreatedAsync()
         {
-            await this.Map.LoadAsync().ConfigureAwait(false);
+            await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(async () =>
+            {
+                await this.Map.LoadAsync().ConfigureAwait(false);
+            }).ConfigureAwait(false);
             
             var mapToDisplay = GetSelectedMap(this.AvailableMaps);
-            var selectedMapToLoad = mapToDisplay.MapName;
-            this.FirstLoad = true;
+            var selectedMapToLoad = mapToDisplay?.MapName;
 
             if (this.Map.LoadStatus != LoadStatus.FailedToLoad)
             {
+                this.FirstLoad = true;
                 await UpdateBaseMap(selectedMapToLoad).ConfigureAwait(false);
                 await OnMapLoaded().ConfigureAwait(false);
             }
@@ -238,6 +241,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         public async Task UpdateBaseMap(string selectedMapToLoad)
         {
+            logger.Debug($"UpdateBaseMap was called with map: {selectedMapToLoad}" );
+            
             var existingMap = this.AvailableMaps.FirstOrDefault(x => x.MapName == selectedMapToLoad);
             if (existingMap == null) return;
 
@@ -248,6 +253,10 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 
                 this.SelectedMap = selectedMapToLoad;
                 this.Map.Basemap = baseMap;
+            }
+            else
+            {
+                
             }
 
             if (this.Map.LoadStatus == LoadStatus.Loaded 
@@ -262,6 +271,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 
                 if (this.MapView?.VisibleArea != null)
                 {
+                    logger.Debug("projecting areas" );
                     await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() =>
                     {
                         var projectedArea =

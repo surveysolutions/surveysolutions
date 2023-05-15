@@ -70,12 +70,7 @@ namespace WB.UI.Shared.Extensions.Activities
             recyclerView.LayoutParameters = (new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent,
                 ViewGroup.LayoutParams.WrapContent));
             recyclerView.ClearOnChildAttachStateChangeListeners();
-            //viewPager.ClipChildren = false;
-            //viewPager.ClipToPadding = false;
-            //viewPager.OffscreenPageLimit = 3;
-            //viewPager.OverScrollMode = OverScrollMode.Never;
-            
-            //var adapter = new MarkersRecyclerViewAdapter((IMvxAndroidBindingContext)base.BindingContext);
+
             var adapter = new CarouselViewAdapter((IMvxAndroidBindingContext)base.BindingContext);
             adapter.ItemTemplateSelector = CreateCarouselTemplateSelector();
             //adapter.ItemTemplateSelector = new MvxDefaultTemplateSelector(Resource.Layout.marker_card);
@@ -88,11 +83,7 @@ namespace WB.UI.Shared.Extensions.Activities
                 .To(vm => vm.AvailableMarkers);
             bindingSet.Apply();
 
-            /*var compositePageTransformer = new CompositePageTransformer();
-            compositePageTransformer.AddTransformer(
-                new MarginPageTransformer((int)(40 * Resources.DisplayMetrics.Density)));
-            viewPager.SetPageTransformer(compositePageTransformer);*/
-
+            
             viewPager.OffscreenPageLimit = 1;
 
             var pageTransformer = new CarouselIPageTransformer();
@@ -102,17 +93,13 @@ namespace WB.UI.Shared.Extensions.Activities
                 Resource.Dimension.carousel_current_item_horizontal_margin
             );
             viewPager.AddItemDecoration(itemDecoration);
-            
-            
-            
-            
-            
+
             this.ViewModel.MapView = this.FindViewById<MapView>(Resource.Id.map_view);
             onMapViewMapTappedSubscription = this.ViewModel.MapView.WeakSubscribe<MapView, GeoViewInputEventArgs>(
                 nameof(this.ViewModel.MapView.GeoViewTapped),
                 this.ViewModel.OnMapViewTapped);
             
-            Task.Run(() => this.ViewModel.MapControlCreatedAsync());
+            Task.Run(async () => await this.ViewModel.MapControlCreatedAsync());
         }
 
         protected virtual IMvxTemplateSelector CreateCarouselTemplateSelector() => new MapDashboardTemplateSelector();
