@@ -13,6 +13,7 @@ using MvvmCross.DroidX.RecyclerView;
 using MvvmCross.IoC;
 using MvvmCross.Views;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
+using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
 using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.UI.LinkerInclusion
@@ -71,10 +72,19 @@ namespace WB.UI.LinkerInclusion
             linearLayout.Clickable = !linearLayout.Clickable;
         }
 
+        
+        public class Test
+        {
+            public int TestInt { get; set; }
+        }
+        
         public void Include()
         {
             //fix for Thai calendar (KP-6403)
             var thai = new System.Globalization.ThaiBuddhistCalendar();
+            
+            //fix lost refs #2559
+            var result = new List<Test>().Sum(x => x.TestInt);
         }
 
         public void Include(RestException re)
