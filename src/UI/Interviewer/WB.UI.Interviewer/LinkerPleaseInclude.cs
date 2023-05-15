@@ -38,6 +38,7 @@ namespace WB.UI.LinkerInclusion
         {
             text.TextChanged += (sender, args) => text.Text = "" + text.Text;
             text.Hint = "" + text.Hint;
+            text.Touch += (sender, args) => { var test = $"{args.Event.Action}{args.Event.GetX()}{args.Event.GetY()}"; };
         }
 
         public void Include(CompoundButton cb)
@@ -118,7 +119,7 @@ namespace WB.UI.LinkerInclusion
 
         public void Include(Activity act)
         {
-            act.Title = act.Title + "";
+            act.Title = "" + act.Title;
         }
 
         public void Include(MvvmCross.IoC.MvxPropertyInjector injector)
