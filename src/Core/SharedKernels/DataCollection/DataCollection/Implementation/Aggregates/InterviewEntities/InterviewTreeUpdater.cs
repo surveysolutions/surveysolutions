@@ -4,7 +4,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -18,20 +17,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         private readonly Identity questionnaireIdentity;
         private readonly bool updateLinkedAnswers;
 
-        private readonly ILogger logger;
-        
         private readonly HashSet<Identity> disabledNodes = new HashSet<Identity>();
         private readonly ConcurrentDictionary<Identity, IInterviewLevel> memoryCache = new ConcurrentDictionary<Identity, IInterviewLevel>();
 
         public InterviewTreeUpdater(IInterviewExpressionStorage expressionStorage, IQuestionnaire questionnaire,
-            bool removeLinkedAnswers, 
-            ILoggerProvider loggerProvider)
+            bool removeLinkedAnswers)
         {
             this.expressionStorage = expressionStorage;
             this.questionnaire = questionnaire;
             this.questionnaireIdentity = new Identity(questionnaire.QuestionnaireId, RosterVector.Empty);
             this.updateLinkedAnswers = removeLinkedAnswers;
-            this.logger = loggerProvider.GetForType(GetType());
         }
 
         public void UpdateEnablement(IInterviewTreeNode entity)
@@ -359,15 +354,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return node.Parent?.IsDisabled() ?? false;
         }
 
-        private object? GetVariableValue(Func<object> expression)
+        private static object? GetVariableValue(Func<object> expression)
         {
             try
             {
                 return expression();
             }
-            catch(Exception exc)
+            catch
             {
-                logger.Warn("Failed to evaluate variable expression", exc);
                 return null;
             }
         }
