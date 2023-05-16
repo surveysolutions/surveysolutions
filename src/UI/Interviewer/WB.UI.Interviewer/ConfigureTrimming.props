@@ -14,6 +14,12 @@
       <ManagedAssemblyToLink Condition="'%(Filename)' == 'System.Linq.Expressions'">
         <IsTrimmable>false</IsTrimmable>
       </ManagedAssemblyToLink>
+      <ManagedAssemblyToLink Condition="'%(Filename)' == 'System.Linq.Queryable'">
+        <IsTrimmable>false</IsTrimmable>
+      </ManagedAssemblyToLink>
+      <ManagedAssemblyToLink Condition="'%(Filename)' == 'System.Linq.Parallel'">
+        <IsTrimmable>false</IsTrimmable>
+      </ManagedAssemblyToLink>
       <ManagedAssemblyToLink Condition="'%(Filename)' == 'System.Runtime'">
         <IsTrimmable>false</IsTrimmable>
       </ManagedAssemblyToLink>
