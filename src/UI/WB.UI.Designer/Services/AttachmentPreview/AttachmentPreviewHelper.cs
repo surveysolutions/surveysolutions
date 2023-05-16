@@ -74,14 +74,16 @@ public class AttachmentPreviewHelper : IAttachmentPreviewHelper
         if (!sizeToScale.HasValue) return source;
         using (var outputStream = new MemoryStream())
         {
-            using (Image image = Image.Load(source, out var format))
+            using (Image image = Image.Load(source))
             {
                 var opt = new ResizeOptions()
                 {
                     Mode = ResizeMode.Max,
                     Size = new Size(sizeToScale.Value)
                 };
-                image.Mutate(ctx => ctx.Resize(opt)); 
+                image.Mutate(ctx => ctx.Resize(opt));
+
+                var format = Image.DetectFormat(source);
                 image.Save(outputStream, format); 
             } 
 

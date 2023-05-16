@@ -15,7 +15,7 @@ namespace WB.UI.Shared.Web.Services
 
         public void Validate(byte[] source)
         {
-            using var _ = Image.Load(source, out var format);
+            using var _ = Image.Load(source);
         }
 
         public byte[] ResizeImage(byte[] source, int height, int width)
