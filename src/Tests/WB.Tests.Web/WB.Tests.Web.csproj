@@ -21,7 +21,7 @@
         <PackageReference Include="NUnit.Extension.NUnitProjectLoader" Version="3.7.1" />
         <PackageReference Include="NUnit.Extension.TeamCityEventListener" Version="1.0.8" />
         <PackageReference Include="NUnit.Extension.VSProjectLoader" Version="3.9.0" />
-        <PackageReference Include="NUnit3TestAdapter" Version="4.3.1">
+        <PackageReference Include="NUnit3TestAdapter" Version="4.4.2">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
