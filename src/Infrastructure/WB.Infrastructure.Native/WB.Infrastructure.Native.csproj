@@ -20,7 +20,7 @@
     <ProjectReference Include="..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ClosedXML" Version="0.100.3" />
+    <PackageReference Include="ClosedXML" Version="0.101.0" />
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="DotNetZip" Version="1.16.0" />
     <PackageReference Include="FluentMigrator" Version="3.3.2" />
@@ -32,9 +32,9 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
-    <PackageReference Include="NHibernate" Version="5.4.1" />
-    <PackageReference Include="Npgsql" Version="7.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NHibernate" Version="5.4.2" />
+    <PackageReference Include="Npgsql" Version="7.0.4" />
     <PackageReference Include="prometheus-net" Version="4.1.1" />
     <PackageReference Include="System.IO.Packaging" Version="7.0.0" />
   </ItemGroup>

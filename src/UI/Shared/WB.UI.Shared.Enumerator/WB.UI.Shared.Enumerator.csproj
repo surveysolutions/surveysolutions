@@ -85,7 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Autofac">
-      <Version>6.5.0</Version>
+      <Version>7.0.1</Version>
     </PackageReference>
     <PackageReference Include="Humanizer.Core">
       <Version>2.14.1</Version>
@@ -109,16 +109,16 @@
       <Version>7.0.0</Version>
     </PackageReference>
     <PackageReference Include="MvvmCross.Plugin.Messenger">
-      <Version>9.0.8</Version>
+      <Version>9.0.10</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
-      <Version>13.0.2</Version>
+      <Version>13.0.3</Version>
     </PackageReference>
     <PackageReference Include="NLog">
-      <Version>5.1.0</Version>
+      <Version>5.1.4</Version>
     </PackageReference>
     <PackageReference Include="NLog.Extensions.Logging">
-      <Version>5.2.0</Version>
+      <Version>5.2.3</Version>
     </PackageReference>
     <PackageReference Include="Plugin.CurrentActivity">
       <Version>2.1.0.4</Version>
@@ -151,22 +151,22 @@
       <Version>5.0.1</Version>
     </PackageReference>
     <PackageReference Include="Xam.Plugins.Android.ExoPlayer.UI">
-      <Version>2.18.9</Version>
+      <Version>2.18.11</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Android.PhotoView">
       <Version>2.1.4</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.ConstraintLayout">
-      <Version>2.1.4.3</Version>
+      <Version>2.1.4.4</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.MediaRouter">
-      <Version>1.3.1.2</Version>
+      <Version>1.3.1.3</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.Preference">
-      <Version>1.2.0.4</Version>
+      <Version>1.2.0.5</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.Work.Runtime">
-      <Version>2.7.1.6</Version>
+      <Version>2.8.1.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.ANRWatchDog">
       <Version>1.4.25</Version>
@@ -181,25 +181,25 @@
       <Version>2.4.11.982</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Google.Android.Material">
-      <Version>1.8.0</Version>
+      <Version>1.8.0.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.GooglePlayServices.Maps">
       <Version>118.1.0.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.GooglePlayServices.Nearby">
-      <Version>118.3.0.1</Version>
+      <Version>118.4.0</Version>
     </PackageReference>
     <PackageReference Include="ZXing.Net.Mobile">
       <Version>3.0.0-beta5</Version>
     </PackageReference>
     <PackageReference Include="MvvmCross.DroidX.RecyclerView">
-      <Version>9.0.8</Version>
+      <Version>9.0.10</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.AsyncLayoutInflater">
-      <Version>1.0.0.16</Version>
+      <Version>1.0.0.17</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.VectorDrawable">
-      <Version>1.1.0.16</Version>
+      <Version>1.1.0.17</Version>
     </PackageReference>
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
