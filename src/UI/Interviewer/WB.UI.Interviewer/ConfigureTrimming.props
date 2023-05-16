@@ -5,6 +5,9 @@
       <ManagedAssemblyToLink Condition="'%(Filename)' == 'System.Private.CoreLib'">
         <IsTrimmable>false</IsTrimmable>
       </ManagedAssemblyToLink>
+      <ManagedAssemblyToLink Condition="'%(Filename)' == 'System.Linq'">
+        <IsTrimmable>false</IsTrimmable>
+      </ManagedAssemblyToLink>
     </ItemGroup>
   </Target>
 </Project>
