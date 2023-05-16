@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using Android.OS;
-using Android.Runtime;
+﻿using Android.Runtime;
 using Android.Views;
 using Android.Views.InputMethods;
 using AndroidX.RecyclerView.Widget;
@@ -81,11 +78,6 @@ namespace WB.UI.Shared.Enumerator.Activities
             }
         }
         
-        public override void OnDestroy()
-        {
-            base.OnDestroy();
-        }
-
         public override void OnDetach()
         {
             base.OnDetach();
