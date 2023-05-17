@@ -384,11 +384,11 @@ namespace WB.UI.Shared.Extensions.ViewModels
                             centerLat /= markers.Count;
                             centerLng /= markers.Count;*/
                             
-                            double startLat = 90;
+                            double startLat = -90;
                             double startLng = 90;
                             foreach (var marker in markers)
                             {
-                                if (startLat > marker.Latitude)
+                                if (startLat < marker.Latitude)
                                     startLat = marker.Latitude;
                                 if (startLng > marker.Longitude)
                                     startLng = marker.Longitude;
