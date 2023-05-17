@@ -224,6 +224,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             var item = (InterviewDashboardItemViewModel)sender;
             item.OnItemRemoved -= InterviewItemRemoved;
+            item.OnItemUpdated -= OnItemUpdated;
 
             if (item.AssignmentId.HasValue)
             {

@@ -24,6 +24,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Markers;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Shared.Extensions.Entities;
@@ -37,8 +38,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
     {
         const string MarkerId = "marker_id";
 
-        private readonly IAssignmentDocumentsStorage assignmentsRepository;
-        protected readonly IPlainStorage<InterviewView> interviewViewRepository;
+        protected readonly IAssignmentDocumentsStorage AssignmentsRepository;
+        protected readonly IPlainStorage<InterviewView> InterviewViewRepository;
         private readonly IDashboardViewModelFactory dashboardViewModelFactory;
 
         protected MapDashboardViewModel(IPrincipal principal, 
@@ -55,8 +56,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
             : base(principal, viewModelNavigationService, mapService, userInteractionService, logger, 
                    enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher)
         {
-            this.assignmentsRepository = assignmentsRepository;
-            this.interviewViewRepository = interviewViewRepository;
+            this.AssignmentsRepository = assignmentsRepository;
+            this.InterviewViewRepository = interviewViewRepository;
             this.dashboardViewModelFactory = dashboardViewModelFactory;
         }
         
@@ -126,12 +127,12 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         protected void ReloadEntities()
         {
-            Assignments = this.assignmentsRepository
+            Assignments = this.AssignmentsRepository
                 .LoadAll()
                 .Where(x => x.LocationLatitude != null && (!x.Quantity.HasValue || (x.Quantity - (x.CreatedInterviewsCount ?? 0) > 0)))
                 .ToList();
 
-            Interviews = this.interviewViewRepository
+            Interviews = this.InterviewViewRepository
                 .Where(x => x.LocationLatitude != null).ToList();
         }
 
@@ -400,7 +401,26 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         }
 
                         ActiveMarkerIndex = null;
+                        
+                    
+                        this.AvailableMarkers.ToList().ForEach(uiItem =>
+                        {
+                            if (uiItem is InterviewDashboardItemViewModel interview)
+                                interview.OnItemRemoved -= Markers_InterviewItemRemoved;
+                            if (uiItem is IDashboardItemWithEvents withEvents)
+                                withEvents.OnItemUpdated -= Markers_OnItemUpdated;
+                            uiItem.DisposeIfDisposable();
+                        });
+                    
                         AvailableMarkers.ReplaceWith(markers);
+
+                        this.AvailableMarkers.ToList().ForEach(item =>
+                        {
+                            if (item is InterviewDashboardItemViewModel interview)
+                                interview.OnItemRemoved += Markers_InterviewItemRemoved;
+                            if (item is IDashboardItemWithEvents withEvents)
+                                withEvents.OnItemUpdated += Markers_OnItemUpdated;
+                        });
                     }
 
                     //MapView.Map.MinScale = 591657527.591555;
@@ -414,6 +434,63 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     throw;
                 }
             }
+        }
+        
+        protected void Markers_OnItemUpdated(object sender, EventArgs args)
+        {
+            IMarkerViewModel newDashboardItem = null;
+            IMarkerViewModel dashboardItem = sender as IMarkerViewModel;
+            
+            if (sender is IAssignmentMarkerViewModel assignment)
+            {
+                var assignmentDocument = AssignmentsRepository.GetById(assignment.AssignmentId);
+                newDashboardItem = dashboardViewModelFactory.GetAssignment(assignmentDocument);
+            }
+
+            if (sender is IInterviewMarkerViewModel interview)
+            {
+                var interviewView = InterviewViewRepository.GetById(interview.Id);
+                newDashboardItem = dashboardViewModelFactory.GetInterview(interviewView);
+            }
+            
+            if (newDashboardItem != null)
+            {
+                var indexOf = AvailableMarkers.IndexOf(dashboardItem);
+                AvailableMarkers[indexOf] = newDashboardItem;
+            }
+
+            if (dashboardItem is IDashboardItemWithEvents dashboardItemWithEvents)
+                dashboardItemWithEvents.OnItemUpdated -= Markers_OnItemUpdated;
+            if (dashboardItem is InterviewDashboardItemViewModel oldInterview)
+                oldInterview.OnItemRemoved -= Markers_InterviewItemRemoved;
+
+            if (newDashboardItem is IDashboardItemWithEvents newDashboardItemWithEvents)
+                newDashboardItemWithEvents.OnItemUpdated += Markers_OnItemUpdated;
+            if (newDashboardItem is InterviewDashboardItemViewModel newInterview)
+                newInterview.OnItemRemoved += Markers_InterviewItemRemoved;
+        }
+
+        protected void Markers_InterviewItemRemoved(object sender, EventArgs e)
+        {
+            var item = (InterviewDashboardItemViewModel)sender;
+            item.OnItemRemoved -= Markers_InterviewItemRemoved;
+            item.OnItemUpdated -= Markers_OnItemUpdated;
+
+            if (item.AssignmentId.HasValue)
+            {
+                AssignmentsRepository.DecreaseInterviewsCount(item.AssignmentId.Value);
+
+                this.AvailableMarkers
+                    .OfType<AssignmentDashboardItemViewModel>()
+                    .FirstOrDefault(x => x.AssignmentId == item.AssignmentId.Value)
+                    ?.DecreaseInterviewsCount();
+
+                ReloadEntities();
+            }
+
+            Interviews.RemoveAll(i => i.InterviewId == item.InterviewId);
+
+            AvailableMarkers.RemoveItems(item.ToEnumerable());
         }
 
         protected override async Task AfterShapefileLoadedHandler()
@@ -696,6 +773,16 @@ namespace WB.UI.Shared.Extensions.ViewModels
             if (MapView != null)
                 MapView.GeoViewTapped -= OnMapViewTapped;
 
+            this.AvailableMarkers.ToList().ForEach(item =>
+            {
+                if (item is IDashboardItemWithEvents withEvents)
+                    withEvents.OnItemUpdated -= Markers_OnItemUpdated;
+                if (item is InterviewDashboardItemViewModel interview)
+                    interview.OnItemRemoved -= Markers_InterviewItemRemoved;
+
+                item?.DisposeIfDisposable();
+            });
+            
             base.Dispose();
         }
     }
