@@ -496,6 +496,17 @@ namespace WB.UI.Shared.Extensions.ViewModels
         protected override async Task AfterShapefileLoadedHandler()
         {
             await CheckMarkersAgainstShapefile();
+
+            ShowMarkersDetails = false;
+            ActiveMarkerIndex = null;
+        }
+
+        protected override void ShowedFullMap()
+        {
+            base.ShowedFullMap();
+
+            ShowMarkersDetails = false;
+            ActiveMarkerIndex = null;
         }
 
         protected async Task CheckMarkersAgainstShapefile()

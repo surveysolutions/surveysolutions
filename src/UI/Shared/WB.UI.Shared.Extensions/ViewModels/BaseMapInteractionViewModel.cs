@@ -111,9 +111,15 @@ namespace WB.UI.Shared.Extensions.ViewModels
         public IMvxAsyncCommand ShowFullMapCommand => new MvxAsyncCommand(async () =>
         {
             if (this.Map?.Basemap?.BaseLayers.Count > 0 && this.Map?.Basemap?.BaseLayers[0]?.FullExtent != null)
+            {
                 await MapView.SetViewpointGeometryAsync(this.Map.Basemap.BaseLayers[0].FullExtent);
+
+                ShowedFullMap();
+            }
         });
-        
+
+        protected virtual void ShowedFullMap() { }
+
         public IMvxAsyncCommand SwitchLocatorCommand => new MvxAsyncCommand(async () =>
         {
             if (!IsLocationServiceSwitchEnabled)
