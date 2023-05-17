@@ -146,24 +146,24 @@
         android:layout_marginTop="@dimen/area_editor_undo_margin_top" />       
     <ImageButton
         style="@style/Area_CompassButton"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         local:MvxBind="Click RotateMapToNorth; Visible Not(IsPanelVisible);"
-        android:layout_marginBottom="@dimen/area_editor_compass_margin_bottom"
+        android:layout_marginTop="@dimen/area_editor_compass_margin_bottom"
         android:layout_marginRight="@dimen/area_editor_common_margin_left" />
     <ImageButton
         style="@style/Area_ZoomMapInButton"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         local:MvxBind="Click ZoomMapIn; Visible Not(IsPanelVisible);"
-        android:layout_marginBottom="@dimen/area_editor_zoom_in_margin_bottom"
+        android:layout_marginTop="@dimen/area_editor_zoom_in_margin_bottom"
         android:layout_marginRight="@dimen/area_editor_common_margin_left" />
     <ImageButton
         style="@style/Area_ZoomMapOutButton"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         local:MvxBind="Click ZoomMapOut; Visible Not(IsPanelVisible);"
-        android:layout_marginBottom="@dimen/area_editor_zoom_out_margin_bottom"
+        android:layout_marginTop="@dimen/area_editor_zoom_out_margin_bottom"
         android:layout_marginRight="@dimen/area_editor_common_margin_left" />
     
     <LinearLayout
