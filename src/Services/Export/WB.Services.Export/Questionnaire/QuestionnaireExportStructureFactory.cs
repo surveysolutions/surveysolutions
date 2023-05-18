@@ -317,70 +317,65 @@ namespace WB.Services.Export.Questionnaire
             int? lengthOfRosterVectorWhichNeedToBeExported,
             HeaderStructureForLevel headerStructureForLevel)
         {
-            this.ThrowIfQuestionIsNotMultiSelectOrTextList(question);
-            
+            var isQuestionLinked = IsQuestionLinked(question);
             var asCategorical = question as MultyOptionsQuestion;
             var isMultiCombobox = asCategorical?.IsFilteredCombobox ?? false;
-            var isQuestionLinked = IsQuestionLinked(question);
-            var exportVariableName = questionnaire.GetExportVariableName(question.PublicKey);
 
             var exportedHeaderItem = this.CreateExportedQuestionHeaderItem(question, questionnaire, headerStructureForLevel, lengthOfRosterVectorWhichNeedToBeExported);
+            this.ThrowIfQuestionIsNotMultiSelectOrTextList(question);
+
             exportedHeaderItem.ColumnValues = new int[maxAnswerCount];
             exportedHeaderItem.ColumnHeaders = new List<HeaderColumn>();
-            
-            var storageType = GetStorageType(question, exportedHeaderItem.QuestionSubType);
+            var exportVariableName = questionnaire.GetExportVariableName(question.PublicKey);
             
             for (int i = 0; i < maxAnswerCount; i++)
             {
-                var headerColumn = new HeaderColumn
-                {
-                    ExportType = storageType
-                };
-                var columnValue = 0;
+                HeaderColumn headerColumn = new HeaderColumn();
+
                 
-                if (!isQuestionLinked && asCategorical != null && asCategorical.CategoriesId.HasValue)
+                if (isQuestionLinked || isMultiCombobox || asCategorical == null)
                 {
-                    columnValue = questionnaire.Categories.First(c => c.Id == asCategorical.CategoriesId.Value).Values[i].Id;
+                    headerColumn.Name = string.Format(GeneratedTitleExportFormat, exportVariableName, i);
                 }
-                else if (!isQuestionLinked && question.Answers[i] != null)
+                else
                 {
-                    columnValue = int.Parse(question.Answers[i].AnswerValue);
+                    var columnValue = asCategorical.CategoriesId.HasValue 
+                        ? questionnaire.Categories.First(c => c.Id == asCategorical.CategoriesId.Value).Values[i].Id
+                        : int.Parse(question.Answers[i].AnswerValue);
+
+                    headerColumn.Name = string.Format(GeneratedTitleExportFormat,
+                        exportVariableName, DecimalToHeaderConverter.ToHeader(columnValue));
+
+                    exportedHeaderItem.ColumnValues[i] = columnValue;
                 }
-
-                headerColumn.Name = isQuestionLinked || isMultiCombobox
-                    ? string.Format(GeneratedTitleExportFormat, exportVariableName, i)
-                    : string.Format(GeneratedTitleExportFormat, exportVariableName, DecimalToHeaderConverter.ToHeader(columnValue));
-
-                exportedHeaderItem.ColumnValues[i] = columnValue;
 
                 if (!isQuestionLinked)
                 {
                     var questionLabel = string.IsNullOrEmpty(question.VariableLabel) ? question.QuestionText : question.VariableLabel;
 
-                    switch (question.QuestionType)
+                    if (question.QuestionType == QuestionType.MultyOption)
                     {
-                        case QuestionType.MultyOption:
-                            var optionText = asCategorical?.IsFilteredCombobox ?? false
-                                ? i.ToString()
-                                : asCategorical?.CategoriesId.HasValue ?? false
-                                    ? questionnaire.Categories.First(c => c.Id == asCategorical.CategoriesId.Value).Values[i].Text
-                                    : question.Answers[i].AnswerText;
+                        var optionText = asCategorical?.IsFilteredCombobox ?? false
+                            ? i.ToString()
+                            : asCategorical?.CategoriesId.HasValue ?? false
+                                ? questionnaire.Categories.First(c => c.Id == asCategorical!.CategoriesId!.Value).Values[i].Text
+                                : question.Answers[i].AnswerText;
 
-                            headerColumn.Title = $"{questionLabel}:{optionText}";
-                            break;
-
-                        case QuestionType.TextList:
-                            headerColumn.Title = $"{questionLabel}:{i}";
-                            break;
+                        headerColumn.Title = $"{questionLabel}:{optionText}";
+                    }
+                    if (question.QuestionType == QuestionType.TextList)
+                    {
+                        headerColumn.Title = $"{questionLabel}:{i}";
                     }
                 }
+
+                headerColumn.ExportType = GetStorageType(question, exportedHeaderItem.QuestionSubType);
                 exportedHeaderItem.ColumnHeaders.Add(headerColumn);
                 
                 //column for value of text list question answer
                 if (question.QuestionType == QuestionType.TextList)
-                    exportedHeaderItem.ColumnHeaders.Add(new HeaderColumn() { Title = headerColumn.Title + "c" });
+                    exportedHeaderItem.ColumnHeaders.Add(new HeaderColumn() { Title = headerColumn.Title + "c", Name = headerColumn.Name + "c"});
             }
-            
             return exportedHeaderItem;
         }
 
