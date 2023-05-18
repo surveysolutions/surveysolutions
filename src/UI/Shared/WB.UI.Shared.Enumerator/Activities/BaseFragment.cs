@@ -8,7 +8,7 @@ using MvvmCross.ViewModels;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
-    public abstract class BaseFragment<TViewModel> : MvvmCross.Platforms.Android.Views.Fragments.MvxFragment<TViewModel> where TViewModel : MvxViewModel
+    public abstract class BaseFragment<TViewModel> : MvxFragment<TViewModel> where TViewModel : MvxViewModel
     {
         protected abstract int ViewResourceId { get; }
 
@@ -20,14 +20,10 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         public override void OnDestroy()
         {
-            this.ViewModel?.DisposeIfDisposable();
-            this.BindingContext?.ClearAllBindings();
             base.OnDestroy();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
+            
+            this.BindingContext?.ClearAllBindings();
+            this.ViewModel?.DisposeIfDisposable();
         }
     }
 }
