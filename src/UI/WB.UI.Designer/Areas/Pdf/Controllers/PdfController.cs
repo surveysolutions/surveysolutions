@@ -353,12 +353,14 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
 
         private async Task<string> RenderActionResultToString(string viewName, object model)
         {
-            string webRoot = new Uri($"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}").ToString().TrimEnd('/');
+            var uri = new Uri($"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}");
+            string webRoot = uri.ToString().TrimEnd('/');
+            string webAppRoot = uri.GetLeftPart(System.UriPartial.Authority);
             var routeData = new Microsoft.AspNetCore.Routing.RouteData();
             routeData.DataTokens.Add("area", "Pdf");
             routeData.Values.Add("controller", "Pdf");
             routeData.Values.Add("area", "Pdf");
-            return await this.viewRenderingService.RenderToStringAsync(viewName, model, webRoot, routeData);
+            return await this.viewRenderingService.RenderToStringAsync(viewName, model, webRoot, webAppRoot, routeData);
         }
 
         private PdfQuestionnaireModel? LoadQuestionnaire(QuestionnaireRevision id, Guid? requestedByUserId, string? requestedByUserName, Guid? translation, bool useDefaultTranslation)
