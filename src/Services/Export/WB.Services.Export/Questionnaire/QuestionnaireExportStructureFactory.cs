@@ -374,7 +374,12 @@ namespace WB.Services.Export.Questionnaire
                 
                 //column for value of text list question answer
                 if (question.QuestionType == QuestionType.TextList)
-                    exportedHeaderItem.ColumnHeaders.Add(new HeaderColumn() { Title = headerColumn.Title + "c", Name = headerColumn.Name + "c"});
+                    exportedHeaderItem.ColumnHeaders.Add(new HeaderColumn()
+                    {
+                        Title = headerColumn.Title + "c", 
+                        Name = headerColumn.Name + "c",
+                        ExportType = ExportValueType.NumericInt
+                    });
             }
             return exportedHeaderItem;
         }
