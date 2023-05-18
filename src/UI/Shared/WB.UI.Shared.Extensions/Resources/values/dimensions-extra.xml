@@ -23,6 +23,6 @@
 
     <dimen name="carousel_next_item_visible">26dp</dimen>
     <dimen name="carousel_current_item_horizontal_margin">42dp</dimen>
-    <dimen name="carousel_current_item_min_height">220dp</dimen>
-    <dimen name="carousel_current_item_max_height">400dp</dimen>
+    <dimen name="carousel_current_item_min_height">240dp</dimen>
+    <dimen name="carousel_current_item_max_height">500dp</dimen>
 </resources>

@@ -149,33 +149,32 @@
           app:layout_constraintTop_toBottomOf="@+id/prefilledQuestions" />
 
     <TextView
-      android:id="@+id/show_location"
-      style="@style/Dashboard_Location"
-      app:MvxBind="Visible And(HasSecondaryAction, Or(IsExpanded, Not(HasExpandedView)));
-                Text SecondaryAction.Label;                               
-                Click SecondaryAction.Command;"
-
-      app:layout_constraintBaseline_toBaselineOf="@+id/main_action"
-      app:layout_constraintLeft_toRightOf="@+id/main_action" />
-
-    <TextView
         android:id="@+id/show_qr_code"
         style="@style/Dashboard_Location"
         app:MvxBind="Visible And(HasExtraAction, Or(IsExpanded, Not(HasExpandedView)));
                 Text ExtraAction.Label;                               
                 Click ExtraAction.Command;"
 
-        app:layout_constraintBaseline_toBaselineOf="@+id/show_location"
-        app:layout_constraintLeft_toRightOf="@+id/show_location" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/main_action"
+        app:layout_constraintLeft_toRightOf="@+id/main_action" />
 
-    <View
-      android:id="@+id/footer"
-      android:layout_width="wrap_content"
-      android:layout_height="14dp"
-      android:visibility="visible"
-      app:layout_goneMarginTop="14dp"
-      app:layout_constraintTop_toBottomOf="@id/main_action"
-    />
+      <TextView
+          android:id="@+id/show_location"
+          style="@style/Dashboard_Location"
+          app:MvxBind="Visible And(HasSecondaryAction, Or(IsExpanded, Not(HasExpandedView)));
+            Click SecondaryAction.Command;"
+
+          app:layout_constraintBaseline_toBaselineOf="@+id/main_action"
+          app:layout_constraintRight_toRightOf="parent" />
+
+      <View
+          android:id="@+id/footer"
+          android:layout_width="wrap_content"
+          android:layout_height="14dp"
+          android:visibility="visible"
+          app:layout_goneMarginTop="14dp"
+          app:layout_constraintTop_toBottomOf="@id/main_action"
+        />
     
   </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
