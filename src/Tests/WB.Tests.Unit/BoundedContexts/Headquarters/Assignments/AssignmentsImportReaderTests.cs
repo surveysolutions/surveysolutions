@@ -197,6 +197,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         [TestCase("has__Errors")]
         [TestCase("interview__Key")]
         [TestCase("interview__Status")]
+        [TestCase("assignment__Id")]
         public void when_read_text_file_with_1_row_and_system_column_should_return_preloaded_file_with_empty_preloading_values(string systemVariable)
         {
             // arrange

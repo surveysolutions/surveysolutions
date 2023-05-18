@@ -41,7 +41,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                     if(variable == null)
                         return new string[]{ ExportFormatSettings.MissingNumericQuestionValue};
                     var val = Convert.ToDouble(variable);
-                    if(double.IsNaN(val)|| double.IsInfinity(val))
+                    if(double.IsNaN(val) || double.IsInfinity(val))
                         return new string[] { ExportFormatSettings.MissingNumericQuestionValue };
 
                     return new string[] {val.ToString(CultureInfo.InvariantCulture)};
@@ -226,7 +226,7 @@ namespace WB.Services.Export.CsvExport.Exporters
 
             var result = new string[header.ColumnHeaders.Count];
             
-            var answers = answer as InterviewTextListAnswer[] ?? new InterviewTextListAnswer[0];
+            var answers = answer as InterviewTextListAnswer[] ?? Array.Empty<InterviewTextListAnswer>();
 
             for (int i = 0; i < result.Length; i++)
             {
@@ -241,11 +241,10 @@ namespace WB.Services.Export.CsvExport.Exporters
                 else
                 {
                     result[i] = answers.Length > itemIndex 
-                        ? this.ConvertAnswerToStringValue(answers[itemIndex].Value, header) 
-                        : ExportFormatSettings.MissingStringQuestionValue;
+                        ? this.ConvertAnswerToStringValue((int) answers[itemIndex].Value, header) 
+                        : ExportFormatSettings.MissingNumericQuestionValue;
                 }
             }
-
             return result;
         }
 
