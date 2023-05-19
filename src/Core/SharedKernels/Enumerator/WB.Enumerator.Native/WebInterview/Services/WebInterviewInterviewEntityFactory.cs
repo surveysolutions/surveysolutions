@@ -138,10 +138,9 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         }
                         else
                         {
-                            result = this.Map<InterviewSingleOptionQuestion>(question, res =>
-                            {
-                                res.Options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200, null);
-                            });
+                            var singleOptionQuestion = this.Map<InterviewSingleOptionQuestion>(question);
+                            singleOptionQuestion.Options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200, null);
+                            result = singleOptionQuestion;
                         }
                         break;
                     case InterviewQuestionType.Cascading:
