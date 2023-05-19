@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:local="http://schemas.android.com/apk/res-auto"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:minWidth="400dp"
+            local:MvxBind="HideKeyboardOnClick .">
+
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            style="@style/Widget.App.NegativeButton"
+            local:MvxBind="Text Localization('Cancel'); HideKeyboardOnClick .; Click CloseCommand;" />
+    <TextView
+            style="@style/Interview_Question_Title"
+            local:MvxBind="Html Title;" />
+    <include layout="@layout/dashboard_interview_item" /> 
+    <!--<MvxFrameControl
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            local:MvxTemplate="@layout/dashboard_interview_item"
+            local:MvxBind="DataContext DashboardViewItem" />-->
+</LinearLayout>

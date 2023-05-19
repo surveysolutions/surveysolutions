@@ -74,7 +74,8 @@ namespace WB.UI.Interviewer
                 {typeof (MapsViewModel), typeof(MapsActivity) },
                 {typeof (PhotoViewViewModel), typeof(PhotoViewActivity) },
                 {typeof(SearchViewModel), typeof(InterviewerSearchActivity)},
-                {typeof(CalendarEventDialogViewModel), typeof(CalendarEventDialog)}
+                {typeof(CalendarEventDialogViewModel), typeof(CalendarEventDialog)},
+                {typeof(DashboardItemDetailDialogViewModel), typeof(DashboardItemDetailDialog)}
 #if !EXCLUDEEXTENSIONS
                 ,{typeof (Shared.Extensions.ViewModels.GeographyEditorViewModel), typeof (Shared.Extensions.Activities.GeographyEditorActivity)}
                 ,{typeof (Shared.Extensions.ViewModels.InterviewerMapDashboardViewModel), typeof (Shared.Extensions.Activities.InterviewerMapDashboardActivity)}

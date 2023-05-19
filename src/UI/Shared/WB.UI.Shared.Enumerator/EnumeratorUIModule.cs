@@ -88,6 +88,7 @@ namespace WB.UI.Shared.Enumerator
             registry.Bind<CoverInterviewFragment>();
             registry.Bind<OverviewFragment>();
             registry.Bind<CalendarEventDialog>();
+            registry.Bind<DashboardItemDetailDialog>();
 
             registry.Bind<IAssignmentsSynchronizer, AssignmentsSynchronizer>();
             registry.Bind<IAssignmentDocumentFromDtoBuilder, AssignmentDocumentFromDtoBuilder>();
