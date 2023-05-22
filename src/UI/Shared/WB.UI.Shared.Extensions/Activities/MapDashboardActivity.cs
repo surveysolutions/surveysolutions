@@ -98,8 +98,6 @@ namespace WB.UI.Shared.Extensions.Activities
             onMapViewMapTappedSubscription = this.ViewModel.MapView.WeakSubscribe<MapView, GeoViewInputEventArgs>(
                 nameof(this.ViewModel.MapView.GeoViewTapped),
                 this.ViewModel.OnMapViewTapped);
-            
-            Task.Run(async () => await this.ViewModel.MapControlCreatedAsync());
         }
 
         protected virtual IMvxTemplateSelector CreateCarouselTemplateSelector() => new MapDashboardTemplateSelector();
