@@ -193,6 +193,7 @@
               android:id="@+id/carousel_view_pager"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              android:background="@android:color/transparent"
               android:layout_alignParentBottom="true"
               android:layout_marginBottom="@dimen/area_editor_lower_carousel_margin_bottom"
               android:orientation="horizontal"

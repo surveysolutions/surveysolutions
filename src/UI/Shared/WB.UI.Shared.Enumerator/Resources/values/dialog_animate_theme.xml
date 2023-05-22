@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="DialogAnimationTheme" parent="@android:style/Theme.Panel">
+        <item name="android:windowAnimationStyle">@style/DialogAnimation.Window</item>
+    </style>
+
+    <style name="DialogAnimation.Window" parent="@android:style/Animation.Activity">
+        <item name="android:windowEnterAnimation">@anim/show_from_bottom</item>
+        <item name="android:windowExitAnimation">@anim/hide_to_bottom</item>
+    </style>
+</resources>

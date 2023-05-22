@@ -64,7 +64,12 @@ public class ViewPager2CurrentItemBinding : BaseBinding<ViewPager2, int?>
                 var adapter = recyclerView?.GetAdapter() as MvxRecyclerAdapter;
                 var dashboardItem = adapter?.GetItem(prevPosition.Value) as IDashboardItem;
                 if (dashboardItem is { IsExpanded: true })
+                {
                     dashboardItem.IsExpanded = false;
+                    
+                    // var minHeight = viewPager.Resources.GetDimension(Resource.Dimension.carousel_current_item_min_height);
+                    // viewPager.LayoutParameters.Height = minHeight;
+                }
             }
 
             prevPosition = position;

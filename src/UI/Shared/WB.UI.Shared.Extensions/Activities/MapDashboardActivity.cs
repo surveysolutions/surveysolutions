@@ -1,6 +1,7 @@
 ﻿using System;
 using Android.App;
 using Android.Content.PM;
+using Android.Graphics;
 using Android.OS;
 using Android.Views;
 using AndroidX.AppCompat.App;
@@ -16,6 +17,7 @@ using Java.Lang;
 using MvvmCross.DroidX.RecyclerView;
 using MvvmCross.DroidX.RecyclerView.ItemTemplates;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
+using MvvmCross.Platforms.Android.Views;
 using MvvmCross.WeakSubscription;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.UI.Shared.Enumerator.Activities;
@@ -36,6 +38,7 @@ namespace WB.UI.Shared.Extensions.Activities
 
         private IDisposable onDrawerOpenedSubscription;
         private IDisposable onMapViewMapTappedSubscription;
+        private OnLayoutChangeListener onLayoutChangeListener;
 
         public Toolbar Toolbar { get; private set; }
 
@@ -69,8 +72,17 @@ namespace WB.UI.Shared.Extensions.Activities
             RecyclerView recyclerView = (RecyclerView) viewPager.GetChildAt(0);
             recyclerView.LayoutParameters = (new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent,
                 ViewGroup.LayoutParams.WrapContent));
-            recyclerView.ClearOnChildAttachStateChangeListeners();
+            //recyclerView.ClearOnChildAttachStateChangeListeners();
+            recyclerView.SetBackgroundColor(Color.Transparent);
+            recyclerView.Clickable = false;
+            recyclerView.Focusable = false;
+            recyclerView.FocusableInTouchMode = false;
 
+            var emptyOnTouchListener = new OnTouchListener();
+            recyclerView.SetOnTouchListener(emptyOnTouchListener);
+            viewPager.SetOnTouchListener(emptyOnTouchListener);
+            recyclerView.InterceptTouchEvent += RecyclerViewOnInterceptTouchEvent;
+            
             var adapter = new CarouselViewAdapter((IMvxAndroidBindingContext)base.BindingContext);
             adapter.ItemTemplateSelector = CreateCarouselTemplateSelector();
             //adapter.ItemTemplateSelector = new MvxDefaultTemplateSelector(Resource.Layout.marker_card);
@@ -83,7 +95,6 @@ namespace WB.UI.Shared.Extensions.Activities
                 .To(vm => vm.AvailableMarkers);
             bindingSet.Apply();
 
-            
             viewPager.OffscreenPageLimit = 1;
 
             var pageTransformer = new CarouselIPageTransformer();
@@ -94,12 +105,34 @@ namespace WB.UI.Shared.Extensions.Activities
             );
             viewPager.AddItemDecoration(itemDecoration);
 
+
+            onLayoutChangeListener = new OnLayoutChangeListener(() =>
+            {
+                //viewPager.RequestTransform();
+                //viewPager.SetCurrentItem(viewPager.CurrentItem, true);
+            });
+            viewPager.AddOnLayoutChangeListener(onLayoutChangeListener);
+
             this.ViewModel.MapView = this.FindViewById<MapView>(Resource.Id.map_view);
             onMapViewMapTappedSubscription = this.ViewModel.MapView.WeakSubscribe<MapView, GeoViewInputEventArgs>(
                 nameof(this.ViewModel.MapView.GeoViewTapped),
                 this.ViewModel.OnMapViewTapped);
             
             Task.Run(async () => await this.ViewModel.MapControlCreatedAsync());
+        }
+
+        private void RecyclerViewOnInterceptTouchEvent(object sender, RecyclerView.InterceptTouchEventEventArgs e)
+        {
+            e.Handled = false;
+        }
+
+
+        public class OnTouchListener : Java.Lang.Object, View.IOnTouchListener
+        {
+            public bool OnTouch(View v, MotionEvent e)
+            {
+                return false;
+            }
         }
 
         protected virtual IMvxTemplateSelector CreateCarouselTemplateSelector() => new MapDashboardTemplateSelector();
@@ -117,12 +150,13 @@ namespace WB.UI.Shared.Extensions.Activities
             this.HideKeyboard(drawerLayout.WindowToken);
         }
 
-        protected override void OnDestroy()
+        protected override void Dispose(bool disposing)
         {
             onDrawerOpenedSubscription?.Dispose();
             onMapViewMapTappedSubscription?.Dispose();
+            onLayoutChangeListener?.Dispose();
 
-            base.OnDestroy();
+            base.Dispose(disposing);
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
