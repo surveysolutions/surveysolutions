@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -52,9 +52,10 @@ namespace WB.UI.Shared.Extensions.ViewModels
             ILogger logger,
             IMapUtilityService mapUtilityService,
             IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher,
-            IDashboardViewModelFactory dashboardViewModelFactory) 
+            IDashboardViewModelFactory dashboardViewModelFactory, 
+            IPermissionsService permissionsService) 
             : base(principal, viewModelNavigationService, mapService, userInteractionService, logger, 
-                   enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher)
+                   enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher, permissionsService)
         {
             this.AssignmentsRepository = assignmentsRepository;
             this.InterviewViewRepository = interviewViewRepository;

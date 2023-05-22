@@ -1808,6 +1808,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application needs to have a permission to use location. Retry enabled location and allow access. If you don&apos;t see permissions popup then go to Settings and allow application to use location..
+        /// </summary>
+        public static string MissingPermissions_MapsLocation {
+            get {
+                return ResourceManager.GetString("MissingPermissions_MapsLocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application needs to have a permission to use microphone in order to answer this question. Retry answering question and allow access. If you don&apos;t see permissions popup then go to Settings and allow application to use microphone..
         /// </summary>
         public static string MissingPermissions_Microphone {
