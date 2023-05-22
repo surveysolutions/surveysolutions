@@ -42,33 +42,4 @@ public class InterviewerMapDashboardViewModel : MapDashboardViewModel
     }
 
     public override bool SupportDifferentResponsible => false;
-
-    protected override Symbol GetInterviewMarkerSymbol(IInterviewMarkerViewModel interview, double size = 1)
-    {
-        Color markerColor;
-
-        switch (interview.InterviewStatus)
-        {
-            case InterviewStatus.Created:
-            case InterviewStatus.InterviewerAssigned:
-            case InterviewStatus.Restarted:    
-                markerColor = Color.FromArgb(0x2a, 0x81, 0xcb);
-                break;
-            case InterviewStatus.Completed:
-                markerColor = Color.FromArgb(0x1f,0x95,0x00);
-                break;
-            case InterviewStatus.RejectedBySupervisor:
-                markerColor = Color.FromArgb(0xe4,0x51,0x2b);
-                break;
-            default:
-                markerColor = Color.Yellow;
-                break;
-        }
-
-        return new CompositeSymbol(new[]
-        {
-            new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.White, 22 * size), //for contrast
-            new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, markerColor, 16 * size)
-        });
-    }
 }
