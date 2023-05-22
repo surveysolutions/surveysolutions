@@ -10,9 +10,6 @@
         style="@style/FullWidthWrappingLayout"
         android:id="@+id/dashboard_tab_recycler"
         android:scrollbars="vertical"
-        android:paddingLeft="@dimen/Dashboard_Layout_marginLeft"
-        android:paddingRight="@dimen/Dashboard_Layout_marginRight"
-        android:scrollbarStyle="outsideInset"
         local:MvxTemplateSelector="WB.UI.Supervisor.CustomControls.SupervisorDashboardTemplateSelector, WB.UI.Supervisor"
         local:MvxBind="ItemsSource UiItems; ScrollToPosition HighLightedItemIndex" />
 </LinearLayout>
