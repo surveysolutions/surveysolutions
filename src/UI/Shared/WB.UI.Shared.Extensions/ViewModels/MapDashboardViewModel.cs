@@ -153,7 +153,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             CollectQuestionnaires();
             CollectResponsibles();
             CollectInterviewStatuses();
-            await RefreshMarkers();
+            await RefreshMarkers(needShowAllMarkers: true);
         }
 
         public override MapDescription GetSelectedMap(MvxObservableCollection<MapDescription> mapsToSelectFrom)
@@ -256,7 +256,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 return;
             
             SelectedQuestionnaire = questionnaire;
-            await RefreshMarkers();
+            await RefreshMarkers(needShowAllMarkers: true);
         }
 
         protected static readonly ResponsibleItem AllResponsibleDefault = new ResponsibleItem(null, UIResources.MapDashboard_AllResponsibles);
@@ -286,7 +286,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 return;
             
             SelectedResponsible = responsible;
-            await RefreshMarkers();
+            await RefreshMarkers(needShowAllMarkers: true);
         }
 
         private static readonly StatusItem AllStatusDefault = new StatusItem(null, UIResources.MapDashboard_AllStatuses);
@@ -316,7 +316,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 return;
             
             SelectedStatus = status;
-            await RefreshMarkers();
+            await RefreshMarkers(needShowAllMarkers: true);
         }
 
         private async void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -325,17 +325,17 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 e.PropertyName == nameof(ShowAssignments))
             {
                 this.CollectQuestionnaires();
-                await this.RefreshMarkers();
+                await this.RefreshMarkers(needShowAllMarkers: true);
             }
         }
 
         private readonly GraphicsOverlay graphicsOverlay = new GraphicsOverlay();
 
-        public IMvxCommand RefreshMarkersCommand => new MvxAsyncCommand(async() => await RefreshMarkers());
+        public IMvxCommand RefreshMarkersCommand => new MvxAsyncCommand(async() => await RefreshMarkers(needShowAllMarkers: true));
 
         private readonly object graphicsOverlayLock = new object ();
 
-        protected async Task RefreshMarkers()
+        protected async Task RefreshMarkers(bool needShowAllMarkers)
         {
             if (MapView?.Map?.SpatialReference != null)
             {
@@ -375,16 +375,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
                         if (markers.Count > 0)
                         {
-                            /*double centerLat = 0;
-                            double centerLng = 0;
-                            foreach (var marker in markers)
-                            {
-                                centerLat += marker.Latitude;
-                                centerLng += marker.Longitude;
-                            }
-                            centerLat /= markers.Count;
-                            centerLng /= markers.Count;*/
-                            
                             double startLat = -90;
                             double startLng = 90;
                             foreach (var marker in markers)
@@ -423,9 +413,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         });
                     }
 
-                    //MapView.Map.MinScale = 591657527.591555;
-                    //MapView.Map.MaxScale = 0;
-                    await SetViewToValues();
+                    if (needShowAllMarkers)
+                        await SetViewToValues();
+                    
                     await CheckMarkersAgainstShapefile();
                 }
                 catch (Exception e)

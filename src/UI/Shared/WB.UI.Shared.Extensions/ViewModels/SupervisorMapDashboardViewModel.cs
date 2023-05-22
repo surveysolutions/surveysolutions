@@ -80,15 +80,15 @@ public class SupervisorMapDashboardViewModel : MapDashboardViewModel
     private MvxSubscriptionToken messengerSubscription;
     private readonly IMvxMessenger messenger;
     
-    private async Task RefreshCounters()
+    private async Task RefreshCounters(bool needShowAllMarkers)
     {
         ReloadEntities();
-        await RefreshMarkers();
+        await RefreshMarkers(needShowAllMarkers);
     }
     public override void ViewAppeared()
     {
         base.ViewAppeared();
-        messengerSubscription = messenger.Subscribe<DashboardChangedMsg>(async msg => await RefreshCounters(), MvxReference.Strong);
+        messengerSubscription = messenger.Subscribe<DashboardChangedMsg>(async msg => await RefreshCounters(false), MvxReference.Strong);
     }
 
     public override void ViewDisappeared()
