@@ -171,7 +171,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         {
             this.DetailedIdentifyingData = preffilledQuestions;
             this.IdentifyingData = this.DetailedIdentifyingData.Take(3).ToList();
-            this.HasExpandedView = this.PrefilledQuestions.Count > 0;
+            this.HasExpandedView = this.PrefilledQuestions.Count > 0 
+                                   || CalendarEvent != null 
+                                   || !string.IsNullOrEmpty(Comments);
             this.IsExpanded = false;
         }
 
