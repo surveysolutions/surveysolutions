@@ -92,14 +92,6 @@
       app:layout_constraintLeft_toLeftOf="@+id/subtitle"
       app:layout_constraintRight_toRightOf="@+id/right_guideline"
       app:layout_constraintTop_toBottomOf="@+id/subtitle" />
-
-    <TextView
-              android:id="@+id/calendareventFull"
-              app:MvxBind="Visible And(CalendarEvent, IsExpanded); Text CalendarEvent; TextColor CalendarEventToColor(CalendarEventStart);"
-              style="@style/Dashboard_InterviewItem_SubTitle"
-              app:layout_constraintLeft_toLeftOf="@+id/subtitle"
-              app:layout_constraintRight_toRightOf="@+id/right_guideline"
-              app:layout_constraintTop_toBottomOf="@+id/responsible" />  
       
     <TextView
       android:id="@+id/calendarevent"
@@ -110,13 +102,21 @@
       app:layout_constraintRight_toRightOf="@+id/right_guideline"
       app:layout_constraintTop_toBottomOf="@+id/responsible" />
 
-    <TextView
+      <TextView
+              android:id="@+id/calendareventFull"
+              app:MvxBind="Visible And(CalendarEvent, IsExpanded); Text CalendarEvent; TextColor CalendarEventToColor(CalendarEventStart);"
+              style="@style/Dashboard_InterviewItem_SubTitle"
+              app:layout_constraintLeft_toLeftOf="@+id/subtitle"
+              app:layout_constraintRight_toRightOf="@+id/right_guideline"
+              app:layout_constraintTop_toBottomOf="@+id/calendarevent" />
+
+      <TextView
         android:id="@+id/comments"
         app:MvxBind="Visible And(Comments, Not(IsExpanded)); Text Comments;"
         style="@style/Dashboard_InterviewItem_SubTitle"
         app:layout_constraintLeft_toLeftOf="@+id/subtitle"
         app:layout_constraintRight_toRightOf="@+id/right_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/calendarevent" />
+        app:layout_constraintTop_toBottomOf="@+id/calendareventFull" />
 
       <TextView
               android:id="@+id/commentsFull"
@@ -124,7 +124,7 @@
               style="@style/Dashboard_InterviewItem_SubTitle"
               app:layout_constraintLeft_toLeftOf="@+id/subtitle"
               app:layout_constraintRight_toRightOf="@+id/right_guideline"
-              app:layout_constraintTop_toBottomOf="@+id/calendarevent" />
+              app:layout_constraintTop_toBottomOf="@+id/comments" />
 
     <TextView android:id="@+id/assignmentId"
         app:MvxBind="Text AssignmentIdLabel"
