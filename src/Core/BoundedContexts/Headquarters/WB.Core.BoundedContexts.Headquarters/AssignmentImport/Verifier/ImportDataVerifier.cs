@@ -307,7 +307,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private IEnumerable<Func<PreloadedFileInfo, string, IQuestionnaire, IEnumerable<PanelImportVerificationError>>> ColumnVerifiers => new[]
         {
             Error(UnknownColumn, "PL0003", messages.PL0003_ColumnWasntMappedOnQuestion),
-            Error(TextListQuestion_InvalidSortIndex, "PL0003", messages.PL0003_ColumnWasntMappedOnQuestion),
+            Error(TextListQuestion_InvalidColumnSuffix, "PL0003", messages.PL0003_ColumnWasntMappedOnQuestion),
             Error(CategoricalMultiQuestion_OptionNotFound, "PL0014", messages.PL0014_ParsedValueIsNotAllowed)
         };
 
@@ -618,13 +618,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             if (columnName == ServiceColumns.InterviewId) return false;
 
-            if ((columnName == ServiceColumns.ResponsibleColumnName ||
-                 columnName == ServiceColumns.AssignmentsCountColumnName ||
-                 columnName == ServiceColumns.EmailColumnName ||
-                 columnName == ServiceColumns.PasswordColumnName ||
-                 columnName == ServiceColumns.WebModeColumnName ||
-                 columnName == ServiceColumns.RecordAudioColumnName ||
-                 columnName == ServiceColumns.CommentsColumnName) && 
+            if (columnName is ServiceColumns.ResponsibleColumnName 
+                    or ServiceColumns.AssignmentsCountColumnName 
+                    or ServiceColumns.EmailColumnName 
+                    or ServiceColumns.PasswordColumnName 
+                    or ServiceColumns.WebModeColumnName 
+                    or ServiceColumns.RecordAudioColumnName 
+                    or ServiceColumns.CommentsColumnName && 
                 IsQuestionnaireFile(file.QuestionnaireOrRosterName, questionnaire)) return false;
 
             if (ServiceColumns.AllSystemVariables.Contains(columnName)) return false;
@@ -742,7 +742,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             }
         }
 
-        private bool TextListQuestion_InvalidSortIndex(PreloadedFileInfo file, string columnName, IQuestionnaire questionnaire)
+        private bool TextListQuestion_InvalidColumnSuffix(PreloadedFileInfo file, string columnName, IQuestionnaire questionnaire)
         {
             var compositeColumn = columnName.Split(new[] { ServiceColumns.ColumnDelimiter },
                 StringSplitOptions.RemoveEmptyEntries);
@@ -750,14 +750,18 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             if (compositeColumn.Length < 2) return false;
 
             var questionVariable = compositeColumn[0];
-            var sortIndex = compositeColumn[1];
+            var columnSuffix = compositeColumn[1].EndsWith("c") 
+                ? compositeColumn[1].Remove(compositeColumn[1].Length - 1) 
+                : compositeColumn[1];
 
+            //check for name__12 and name__12c 
+            
             var questionId = questionnaire.GetQuestionIdByVariable(questionVariable);
             if (questionId == null)
                 return false;
 
             var questionType = questionnaire.GetQuestionType(questionId.Value);
-            return questionType == QuestionType.TextList && !int.TryParse(sortIndex, out _);
+            return questionType == QuestionType.TextList && !int.TryParse(columnSuffix, out _);
         }
 
         private bool CategoricalMultiQuestion_OptionNotFound(PreloadedFileInfo file, string columnName, IQuestionnaire questionnaire)
