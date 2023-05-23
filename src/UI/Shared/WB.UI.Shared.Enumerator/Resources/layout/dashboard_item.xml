@@ -6,5 +6,5 @@
         android:layout_marginLeft="@dimen/Dashboard_Layout_marginLeft" 
         android:layout_marginRight="@dimen/Dashboard_Layout_marginRight"
         >
-        <include layout="@layout/dashboard_interview_item" />
+        <include layout="@layout/dashboard_card" />
 </LinearLayout>

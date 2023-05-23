@@ -15,7 +15,7 @@
                     app:layout_constraintHeight_max="@dimen/carousel_current_item_max_height"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:fillViewport="true">
-                <include layout="@layout/dashboard_interview_item" />
+                <include layout="@layout/dashboard_card" />
             </ScrollView>
     
 </androidx.constraintlayout.widget.ConstraintLayout>
