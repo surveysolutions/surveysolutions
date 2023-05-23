@@ -127,16 +127,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
             }
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                // release managed resources here
-            }
-
-            base.Dispose(disposing);
-        }
-
         protected override void BindTitles()
         {
             base.BindTitles();

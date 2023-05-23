@@ -389,15 +389,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             set => this.SetProperty(ref this.responsible, value);
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-            }
-
-            base.Dispose(disposing);
-        }
-
         public string Id => interview.Id;
         public MarkerType Type => MarkerType.Interview;
         public double Latitude => interview.LocationLatitude ?? 0;
