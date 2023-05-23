@@ -533,6 +533,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="MissingPermissions_Storage" xml:space="preserve">
     <value>Application needs to have a permission to use storage in order to answer this question. Retry answering question and allow access. If you don't see permissions popup then go to Settings and allow application to use storage.</value>
   </data>
+  <data name="MissingPermissions_MapsLocation" xml:space="preserve">
+    <value>Application needs to have a permission to use location. Retry enabled location and allow access. If you don't see permissions popup then go to Settings and allow application to use location.</value>
+  </data>
   <data name="MissingPermissions_Microphone_Global" xml:space="preserve">
     <value>Application needs to have a permission to use microphone. Retry last action and allow access. If you don't see permissions popup then go to Settings and allow application to use microphone.</value>
   </data>

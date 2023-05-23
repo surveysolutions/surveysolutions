@@ -207,6 +207,8 @@
     <item name="android:textSize">@dimen/textsize_22</item>
     <item name="android:fontFamily">Roboto</item>
     <item name="android:layout_marginBottom">@dimen/Dashboard_TabMenu_marginBottom</item>
+    <item name="android:layout_marginLeft">@dimen/Dashboard_Layout_marginLeft</item>
+    <item name="android:layout_marginRight">@dimen/Dashboard_Layout_marginRight</item>
   </style>
   
     <style name="Dashboard_Menu_Handle">

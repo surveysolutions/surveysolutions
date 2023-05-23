@@ -46,9 +46,10 @@ public class SupervisorMapDashboardViewModel : MapDashboardViewModel
         IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher, 
         IPlainStorage<InterviewerDocument> usersRepository,
         IDashboardViewModelFactory dashboardViewModelFactory,
-        IMvxMessenger messenger
+        IMvxMessenger messenger,
+        IPermissionsService permissionsService 
         ) 
-        : base(principal, viewModelNavigationService, userInteractionService, mapService, assignmentsRepository, interviewViewRepository, enumeratorSettings, logger, mapUtilityService, mainThreadAsyncDispatcher, dashboardViewModelFactory)
+        : base(principal, viewModelNavigationService, userInteractionService, mapService, assignmentsRepository, interviewViewRepository, enumeratorSettings, logger, mapUtilityService, mainThreadAsyncDispatcher, dashboardViewModelFactory, permissionsService)
     {
         this.usersRepository = usersRepository;
         this.messenger = messenger;
@@ -80,51 +81,21 @@ public class SupervisorMapDashboardViewModel : MapDashboardViewModel
     private MvxSubscriptionToken messengerSubscription;
     private readonly IMvxMessenger messenger;
     
-    private async Task RefreshCounters()
+    private async Task RefreshCounters(bool needShowAllMarkers)
     {
         ReloadEntities();
-        await RefreshMarkers();
+        await RefreshMarkers(needShowAllMarkers);
     }
+    
     public override void ViewAppeared()
     {
         base.ViewAppeared();
-        messengerSubscription = messenger.Subscribe<DashboardChangedMsg>(async msg => await RefreshCounters(), MvxReference.Strong);
+        messengerSubscription = messenger.Subscribe<DashboardChangedMsg>(async msg => await RefreshCounters(false), MvxReference.Strong);
     }
 
     public override void ViewDisappeared()
     {
         base.ViewDisappeared();
         messengerSubscription?.Dispose();
-    }
-
-    protected override Symbol GetInterviewMarkerSymbol(IInterviewMarkerViewModel interview, double size = 1)
-    {
-        Color markerColor;
-
-        switch (interview.InterviewStatus)
-        {
-            case InterviewStatus.Created:
-            case InterviewStatus.InterviewerAssigned:
-            case InterviewStatus.Restarted:    
-            case InterviewStatus.ApprovedBySupervisor:
-            case InterviewStatus.RejectedBySupervisor:
-                markerColor = Color.FromArgb(0x1f,0x95,0x00);
-                break;
-            case InterviewStatus.Completed:
-                markerColor = Color.FromArgb(0x2a, 0x81, 0xcb);
-                break;
-            case InterviewStatus.RejectedByHeadquarters:
-                markerColor = Color.FromArgb(0xe4,0x51,0x2b);
-                break;
-            default:
-                markerColor = Color.Yellow;
-                break;
-        }
-
-        return new CompositeSymbol(new[]
-        {
-            new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.White, 22 * size), //for contrast
-            new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, markerColor, 16 * size)
-        });
     }
 }

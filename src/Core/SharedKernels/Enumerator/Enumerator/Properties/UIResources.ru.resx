@@ -485,6 +485,9 @@
   <data name="MissingPermissions_Storage" xml:space="preserve">
     <value>Приложению необходимо разрешение на использование хранилища для ответа на данный вопрос</value>
   </data>
+  <data name="MissingPermissions_MapsLocation" xml:space="preserve">
+    <value>Приложению необходимо разрешение на использование gps координат. Если вы не видите окна с запросом разрешения, то идите в настройки и разрешите приложению исполтзовать геопозицию.</value>
+  </data>
   <data name="Multimedia_PickFromGallery" xml:space="preserve">
     <value>Выбрать из галереи</value>
   </data>

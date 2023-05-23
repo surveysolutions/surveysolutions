@@ -50,7 +50,6 @@ namespace WB.UI.Shared.Extensions.Services
 
         public async Task OpenInterviewerMapDashboardAsync()
         {
-            await this.permissions.AssureHasPermissionOrThrow<Permissions.LocationWhenInUse>().ConfigureAwait(false);
             await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
 
             await this.viewModelNavigationService.NavigateToAsync<InterviewerMapDashboardViewModel, MapDashboardViewModelArgs>(
@@ -59,7 +58,6 @@ namespace WB.UI.Shared.Extensions.Services
 
         public async Task OpenSupervisorMapDashboardAsync()
         {
-            await this.permissions.AssureHasPermissionOrThrow<Permissions.LocationWhenInUse>().ConfigureAwait(false);
             await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
 
             await this.viewModelNavigationService.NavigateToAsync<SupervisorMapDashboardViewModel, MapDashboardViewModelArgs>(

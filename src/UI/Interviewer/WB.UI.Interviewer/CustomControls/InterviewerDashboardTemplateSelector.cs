@@ -18,7 +18,7 @@ namespace WB.UI.Interviewer.CustomControls
             var typeOfViewModel = forItemObject.GetType();
 
             if (typeOfViewModel == InterviewType || typeOfViewModel == AssignmentType)
-                return Resource.Layout.dashboard_interview_item;
+                return Resource.Layout.dashboard_item;
 
             if (typeOfViewModel == SubtitleType)
                 return Resource.Layout.dashboard_tab_subtitle;
