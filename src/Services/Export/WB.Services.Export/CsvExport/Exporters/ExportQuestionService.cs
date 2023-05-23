@@ -126,7 +126,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                         }
                             break;
                     }
-                    return BuildAnswerListForQuestionByHeader(question.AsObject(), header);
+                    return BuildMultiOptionAnswerForQuestionByHeader(question.AsObject(), header);
                 }
                 case QuestionType.SingleOption:
                 {
@@ -212,7 +212,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             return this.ConvertAnswerToString(answer, header.QuestionType, header.QuestionSubType);
         }
 
-        private string[] BuildAnswerListForQuestionByHeader(object? answer, ExportedQuestionHeaderItem header)
+        private string[] BuildMultiOptionAnswerForQuestionByHeader(object? answer, ExportedQuestionHeaderItem header)
         {
             return header.ColumnHeaders.Count == 1 
                 ? new string[] { this.ConvertAnswerToStringValue(answer, header) } 
