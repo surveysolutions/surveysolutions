@@ -102,7 +102,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         {
             DetailedIdentifyingData = Assignment.IdentifyingAnswers.Select(ToIdentifyingQuestion).ToList();
             IdentifyingData = DetailedIdentifyingData.Take(count: 3).ToList();
-            HasExpandedView = DetailedIdentifyingData.Count > 0;
+            HasExpandedView = DetailedIdentifyingData.Count > 0 
+                              || CalendarEvent != null 
+                              || !string.IsNullOrEmpty(Comments);
             IsExpanded = false;
         }
 
