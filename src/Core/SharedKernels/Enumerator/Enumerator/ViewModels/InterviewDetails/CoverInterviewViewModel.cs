@@ -197,12 +197,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                             ? interview.GetVariableValueAsString(Identity.Create(entity.EntityId, RosterVector.Empty))
                             : string.Empty;
 
-                    GeoPosition geoPosition = null;
+                    GeoLocation geoLocation = null;
                     if (entity.QuestionType == QuestionType.GpsCoordinates)
                     {
                         var gpsQuestion = interview.GetGpsQuestion(Identity.Create(entity.EntityId, RosterVector.Empty));
                         var gpsAnswer = gpsQuestion.GetAnswer();
-                        geoPosition = gpsAnswer.Value;
+                        geoLocation = gpsAnswer.ToGeoLocation();
+                        value = string.Format(CultureInfo.InvariantCulture, "{0}, {1}", gpsAnswer.Value.Latitude, gpsAnswer.Value.Longitude); 
                     }
                     
                     return new CoverPrefilledEntity
@@ -210,7 +211,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                         Identity = entityIdentity,
                         Title = title,
                         Answer = value,
-                        GeoPosition = geoPosition,
+                        GeoLocation = geoLocation,
                         Attachment = attachmentViewModel
                     };
                 })
