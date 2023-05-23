@@ -12,6 +12,7 @@ public class CarouselIPageTransformer : Java.Lang.Object, ViewPager2.IPageTransf
         var currentItemHorizontalMarginPx = page.Resources.GetDimension(Resource.Dimension.carousel_current_item_horizontal_margin);
         var pageTranslationX = nextItemVisiblePx + currentItemHorizontalMarginPx;
 
+        page.TranslationY = position <= 0 ? -pageTranslationX * position : pageTranslationX * position;
         page.TranslationX = -pageTranslationX * position;
         page.ScaleY = 1 - (0.25f * Math.Abs(position));
         //page.Alpha = 0.25f + (1 - Math.Abs(position));
