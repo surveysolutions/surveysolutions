@@ -68,6 +68,23 @@ public class ViewPager2CurrentItemBinding : BaseBinding<ViewPager2, int?>
             }
 
             prevPosition = position;
+            
+            
+            var view = viewPager.FindViewWithTag("position-" + position);
+            view?.Post(() =>
+            {
+                var wMeasureSpec = View.MeasureSpec.MakeMeasureSpec(view.Width, MeasureSpecMode.Exactly);
+                var hMeasureSpec = View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified);
+                view.Measure(wMeasureSpec, hMeasureSpec);
+
+                var pager = viewPager;
+
+                if (pager?.LayoutParameters != null && pager.LayoutParameters.Height != view.MeasuredHeight)
+                {
+                    pager.LayoutParameters.Height = view.MeasuredHeight;
+                    pager.RequestLayout();
+                }
+            });
         }
 
         protected override void Dispose(bool disposing)

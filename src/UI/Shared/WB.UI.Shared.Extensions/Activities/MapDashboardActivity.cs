@@ -66,10 +66,10 @@ namespace WB.UI.Shared.Extensions.Activities
 
             var viewPager = this.FindViewById<ViewPager2>(Resource.Id.carousel_view_pager);
 
-            RecyclerView recyclerView = (RecyclerView) viewPager.GetChildAt(0);
-            recyclerView.LayoutParameters = (new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent,
-                ViewGroup.LayoutParams.WrapContent));
-            recyclerView.ClearOnChildAttachStateChangeListeners();
+            // RecyclerView recyclerView = (RecyclerView) viewPager.GetChildAt(0);
+            // recyclerView.LayoutParameters = (new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent,
+            //     ViewGroup.LayoutParams.WrapContent));
+            // recyclerView.ClearOnChildAttachStateChangeListeners();
 
             var adapter = new CarouselViewAdapter((IMvxAndroidBindingContext)base.BindingContext);
             adapter.ItemTemplateSelector = CreateCarouselTemplateSelector();
