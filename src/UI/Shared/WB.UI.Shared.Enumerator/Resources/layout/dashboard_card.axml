@@ -95,7 +95,7 @@
       
     <TextView
       android:id="@+id/calendarevent"
-      android:maxLines="1"
+      android:maxLines="2"
       app:MvxBind="Visible And(CalendarEvent, Not(IsExpanded)); Text CalendarEvent; TextColor CalendarEventToColor(CalendarEventStart);"      
       style="@style/Dashboard_InterviewItem_SubTitle"
       app:layout_constraintLeft_toLeftOf="@+id/subtitle"
