@@ -117,8 +117,6 @@ namespace WB.UI.Shared.Extensions.Activities
             onMapViewMapTappedSubscription = this.ViewModel.MapView.WeakSubscribe<MapView, GeoViewInputEventArgs>(
                 nameof(this.ViewModel.MapView.GeoViewTapped),
                 this.ViewModel.OnMapViewTapped);
-            
-            Task.Run(async () => await this.ViewModel.MapControlCreatedAsync());
         }
 
         private void RecyclerViewOnInterceptTouchEvent(object sender, RecyclerView.InterceptTouchEventEventArgs e)

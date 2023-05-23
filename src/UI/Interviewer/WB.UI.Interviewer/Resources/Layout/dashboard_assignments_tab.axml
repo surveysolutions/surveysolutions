@@ -26,9 +26,6 @@
     style="@style/FullWidthWrappingLayout"
     android:id="@+id/dashboard_tab_recycler"
     android:scrollbars="vertical"
-    android:paddingLeft="@dimen/Dashboard_Layout_marginLeft"
-    android:paddingRight="@dimen/Dashboard_Layout_marginRight"
-    android:scrollbarStyle="outsideInset"
     local:MvxTemplateSelector="WB.UI.Interviewer.CustomControls.InterviewerDashboardTemplateSelector, WB.UI.Interviewer"
     local:MvxBind="ItemsSource UiItems" />
 </LinearLayout>

@@ -154,13 +154,11 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_marginTop">@dimen/dashboard_card_base_margin</item>
     <item name="android:layout_marginBottom">@dimen/dashboard_card_duo_margin</item>
-    <item name="android:background">@drawable/default_input_button</item>
     <item name="android:paddingLeft">@dimen/dashboard_card_base_margin</item>
     <item name="android:paddingRight">@dimen/dashboard_card_base_margin</item>
     <item name="android:textSize">@dimen/textsize_12</item>
     <item name="android:letterSpacing">0.05</item>
     <item name="android:textAllCaps">true</item>
-
     <item name="android:fontFamily">sans-serif-medium</item>
     <item name="android:textStyle">normal</item>
   </style>
@@ -209,6 +207,8 @@
     <item name="android:textSize">@dimen/textsize_22</item>
     <item name="android:fontFamily">Roboto</item>
     <item name="android:layout_marginBottom">@dimen/Dashboard_TabMenu_marginBottom</item>
+    <item name="android:layout_marginLeft">@dimen/Dashboard_Layout_marginLeft</item>
+    <item name="android:layout_marginRight">@dimen/Dashboard_Layout_marginRight</item>
   </style>
   
     <style name="Dashboard_Menu_Handle">
