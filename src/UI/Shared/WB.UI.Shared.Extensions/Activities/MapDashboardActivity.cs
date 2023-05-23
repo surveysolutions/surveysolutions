@@ -18,6 +18,7 @@ using MvvmCross.DroidX.RecyclerView.ItemTemplates;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.WeakSubscription;
 using WB.Core.GenericSubdomains.Portable.Tasks;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Activities.Callbacks;
 using WB.UI.Shared.Enumerator.Activities.Dashboard;
@@ -36,7 +37,8 @@ namespace WB.UI.Shared.Extensions.Activities
 
         private IDisposable onDrawerOpenedSubscription;
         private IDisposable onMapViewMapTappedSubscription;
-
+        private ViewPager2.OnPageChangeCallback onPageChangeCallback;
+        private View.IOnTouchListener onTouchListener;
         public Toolbar Toolbar { get; private set; }
 
         private void Cancel()
@@ -47,7 +49,7 @@ namespace WB.UI.Shared.Extensions.Activities
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-            
+
             this.Toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             this.Toolbar.Title = "";
             this.SetSupportActionBar(this.Toolbar);
@@ -60,13 +62,19 @@ namespace WB.UI.Shared.Extensions.Activities
             this.drawerToggle.DrawerIndicatorEnabled = true;
             this.drawerToggle.SyncState();
 
-            onDrawerOpenedSubscription = this.drawerLayout.WeakSubscribe<DrawerLayout, DrawerLayout.DrawerOpenedEventArgs>(
-                nameof(this.drawerLayout.DrawerOpened),
-                OnDrawerLayoutOnDrawerOpened);
+            onDrawerOpenedSubscription =
+                this.drawerLayout.WeakSubscribe<DrawerLayout, DrawerLayout.DrawerOpenedEventArgs>(
+                    nameof(this.drawerLayout.DrawerOpened),
+                    OnDrawerLayoutOnDrawerOpened);
 
             var viewPager = this.FindViewById<ViewPager2>(Resource.Id.carousel_view_pager);
-
-            // RecyclerView recyclerView = (RecyclerView) viewPager.GetChildAt(0);
+            onPageChangeCallback = new CarouselOnPageChangeCallback(viewPager);
+            viewPager.RegisterOnPageChangeCallback(onPageChangeCallback);
+            onTouchListener = new CarouselOnTouchListener();
+            viewPager.SetOnTouchListener(onTouchListener);
+            
+            RecyclerView recyclerView = (RecyclerView) viewPager.GetChildAt(0);
+            recyclerView.SetOnTouchListener(onTouchListener);
             // recyclerView.LayoutParameters = (new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent,
             //     ViewGroup.LayoutParams.WrapContent));
             // recyclerView.ClearOnChildAttachStateChangeListeners();
@@ -76,14 +84,14 @@ namespace WB.UI.Shared.Extensions.Activities
             //adapter.ItemTemplateSelector = new MvxDefaultTemplateSelector(Resource.Layout.marker_card);
             adapter.ItemsSource = ViewModel.AvailableMarkers;
             viewPager.Adapter = adapter;
-            
+
             var bindingSet = this.CreateBindingSet();
             bindingSet.Bind(adapter)
                 .For(v => v.ItemsSource)
                 .To(vm => vm.AvailableMarkers);
             bindingSet.Apply();
 
-            
+
             viewPager.OffscreenPageLimit = 1;
 
             var pageTransformer = new CarouselIPageTransformer();
@@ -98,6 +106,92 @@ namespace WB.UI.Shared.Extensions.Activities
             onMapViewMapTappedSubscription = this.ViewModel.MapView.WeakSubscribe<MapView, GeoViewInputEventArgs>(
                 nameof(this.ViewModel.MapView.GeoViewTapped),
                 this.ViewModel.OnMapViewTapped);
+        }
+
+        private class CarouselOnTouchListener : Java.Lang.Object, View.IOnTouchListener
+        {
+            public bool OnTouch(View sender, MotionEvent e)
+            {
+                if (e.Action != MotionEventActions.Move && e.Action != MotionEventActions.Up)
+                    return false;
+                
+                var viewPager = (ViewPager2)sender.Parent;
+                var view = viewPager.FindViewWithTag("position-" + viewPager.CurrentItem);
+                int height;
+                if (e.Action == MotionEventActions.Move)
+                {
+                    height = 1000;
+                }
+                else
+                {
+                    var wMeasureSpec = View.MeasureSpec.MakeMeasureSpec(view.Width, MeasureSpecMode.Exactly);
+                    var hMeasureSpec = View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified);
+                    view.Measure(wMeasureSpec, hMeasureSpec);
+                    height = view.MeasuredHeight;
+                }
+
+                view?.Post(() =>
+                {
+                    if (viewPager?.LayoutParameters != null && viewPager.LayoutParameters.Height != height)
+                    {
+                        viewPager.LayoutParameters.Height = height;
+                        viewPager.RequestLayout();
+                    }
+                });
+
+                return false;
+            }
+        }
+    
+
+        private class CarouselOnPageChangeCallback : ViewPager2.OnPageChangeCallback
+        {
+            private ViewPager2 viewPager;
+            private int? prevPosition;
+
+            public CarouselOnPageChangeCallback(ViewPager2 viewPager)
+            {
+                this.viewPager = viewPager;
+            }
+
+            public override void OnPageSelected(int position)
+            {
+                base.OnPageSelected(position);
+
+                
+                if (prevPosition.HasValue && prevPosition != position)
+                {
+                    var recyclerView = viewPager.GetChildAt(0) as RecyclerView;
+                    var adapter = recyclerView?.GetAdapter() as MvxRecyclerAdapter;
+                    var dashboardItem = adapter?.GetItem(prevPosition.Value) as IDashboardItem;
+                    if (dashboardItem is { IsExpanded: true })
+                        dashboardItem.IsExpanded = false;
+                }
+
+                prevPosition = position;
+                
+                
+                var view = viewPager.FindViewWithTag("position-" + position);
+
+                view?.Post(() =>
+                {
+                    var wMeasureSpec = View.MeasureSpec.MakeMeasureSpec(view.Width, MeasureSpecMode.Exactly);
+                    var hMeasureSpec = View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified);
+                    view.Measure(wMeasureSpec, hMeasureSpec);
+
+                    if (viewPager?.LayoutParameters != null && viewPager.LayoutParameters.Height != view.MeasuredHeight)
+                    {
+                        viewPager.LayoutParameters.Height = view.MeasuredHeight;
+                        viewPager.RequestLayout();
+                    }
+                });
+            }
+            
+            protected override void Dispose(bool disposing)
+            {
+                viewPager = null;
+                base.Dispose(disposing);
+            }
         }
 
         protected virtual IMvxTemplateSelector CreateCarouselTemplateSelector() => new MapDashboardTemplateSelector();
@@ -119,6 +213,8 @@ namespace WB.UI.Shared.Extensions.Activities
         {
             onDrawerOpenedSubscription?.Dispose();
             onMapViewMapTappedSubscription?.Dispose();
+            onPageChangeCallback?.Dispose();
+            onTouchListener?.Dispose();
 
             base.OnDestroy();
         }

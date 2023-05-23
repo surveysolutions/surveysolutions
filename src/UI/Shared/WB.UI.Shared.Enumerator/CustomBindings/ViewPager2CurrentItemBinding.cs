@@ -33,7 +33,7 @@ public class ViewPager2CurrentItemBinding : BaseBinding<ViewPager2, int?>
         if (target == null)
             return;
 
-        onPageChangeCallback = new OnPageChangeCallback(target, index =>
+        onPageChangeCallback = new OnPageChangeCallback(index =>
         {
             this.FireValueChanged(index);
         });
@@ -42,13 +42,10 @@ public class ViewPager2CurrentItemBinding : BaseBinding<ViewPager2, int?>
     
     private class OnPageChangeCallback : ViewPager2.OnPageChangeCallback
     {
-        private ViewPager2 viewPager;
         private Action<int> action;
-        private int? prevPosition;
 
-        public OnPageChangeCallback(ViewPager2 viewPager, Action<int> action)
+        public OnPageChangeCallback(Action<int> action)
         {
-            this.viewPager = viewPager;
             this.action = action;
         }
 
@@ -56,40 +53,10 @@ public class ViewPager2CurrentItemBinding : BaseBinding<ViewPager2, int?>
         {
             action?.Invoke(position);
             base.OnPageSelected(position);
-
-            
-            if (prevPosition.HasValue && prevPosition != position)
-            {
-                var recyclerView = viewPager.GetChildAt(0) as RecyclerView;
-                var adapter = recyclerView?.GetAdapter() as MvxRecyclerAdapter;
-                var dashboardItem = adapter?.GetItem(prevPosition.Value) as IDashboardItem;
-                if (dashboardItem is { IsExpanded: true })
-                    dashboardItem.IsExpanded = false;
-            }
-
-            prevPosition = position;
-            
-            
-            var view = viewPager.FindViewWithTag("position-" + position);
-            view?.Post(() =>
-            {
-                var wMeasureSpec = View.MeasureSpec.MakeMeasureSpec(view.Width, MeasureSpecMode.Exactly);
-                var hMeasureSpec = View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified);
-                view.Measure(wMeasureSpec, hMeasureSpec);
-
-                var pager = viewPager;
-
-                if (pager?.LayoutParameters != null && pager.LayoutParameters.Height != view.MeasuredHeight)
-                {
-                    pager.LayoutParameters.Height = view.MeasuredHeight;
-                    pager.RequestLayout();
-                }
-            });
         }
 
         protected override void Dispose(bool disposing)
         {
-            viewPager = null;
             action = null;
             base.Dispose(disposing);
         }
