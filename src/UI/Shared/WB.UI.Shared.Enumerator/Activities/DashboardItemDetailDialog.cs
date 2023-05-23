@@ -40,6 +40,19 @@ public class DashboardItemDetailDialog : MvxDialogFragment<DashboardItemDetailDi
         base.OnCreate(bundle);
     }*/
 
+    public override Dialog OnCreateDialog(Bundle? savedInstanceState)
+    {
+        //return base.OnCreateDialog(savedInstanceState);
+        if (this.Context == null)
+            throw new InvalidOperationException("Context is null");
+        
+        Dialog dialog = new Dialog(this.Context/*, Resource.Style.DialogAnimationTheme*/);
+        dialog.Window!.RequestFeature(WindowFeatures.NoTitle);
+        dialog.Window.SetBackgroundDrawable(new ColorDrawable(Color.Transparent));
+        dialog.Window.SetLayout(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent);
+        return dialog;
+    }
+
     public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         this.EnsureBindingContextIsSet(inflater);
@@ -52,9 +65,9 @@ public class DashboardItemDetailDialog : MvxDialogFragment<DashboardItemDetailDi
         if (this.Dialog?.Window == null) 
             throw new InvalidOperationException("Dialog is null");
         this.Dialog.Window.RequestFeature(WindowFeatures.NoTitle);
-        this.Dialog.Window.SetBackgroundDrawable(new ColorDrawable(Color.Transparent));
+        //this.Dialog.Window.SetBackgroundDrawable(new ColorDrawable(Color.Transparent));
         this.Dialog.Window.SetLayout(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent);
-        this.Dialog.Window.SetBackgroundDrawableResource(Android.Resource.Color.Transparent);
+        //this.Dialog.Window.SetBackgroundDrawableResource(Android.Resource.Color.Transparent);
         this.Dialog.SetCancelable(true);
         this.Dialog.SetCanceledOnTouchOutside(true);
 
