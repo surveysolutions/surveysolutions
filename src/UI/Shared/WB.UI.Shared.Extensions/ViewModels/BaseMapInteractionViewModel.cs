@@ -91,6 +91,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
                 if (defaultBaseMap?.BaseLayers.Count > 0 && defaultBaseMap?.BaseLayers[0]?.FullExtent != null)
                     this.Map.MaxExtent = defaultBaseMap.BaseLayers[0].FullExtent;
+                
+                await this.Map.LoadAsync().ConfigureAwait(false);
 
             }
             catch (Exception e)
@@ -214,26 +216,20 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         }
 
-        public override async void ViewCreated()
+        public override void ViewCreated()
         {
             base.ViewCreated();
-
-            await this.MapControlCreatedAsync();
+            Task.Run( async() => await this.MapControlCreatedAsync());
         }
 
         public async Task MapControlCreatedAsync()
         {
-            await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(async () =>
-            {
-                await this.Map.LoadAsync().ConfigureAwait(false);
-            }).ConfigureAwait(false);
-            
-            var mapToDisplay = GetSelectedMap(this.AvailableMaps);
-            var selectedMapToLoad = mapToDisplay?.MapName;
-
             if (this.Map.LoadStatus != LoadStatus.FailedToLoad)
             {
                 this.FirstLoad = true;
+                
+                var mapToDisplay = GetSelectedMap(this.AvailableMaps);
+                var selectedMapToLoad = mapToDisplay?.MapName;
                 await UpdateBaseMap(selectedMapToLoad).ConfigureAwait(false);
                 await OnMapLoaded().ConfigureAwait(false);
             }
