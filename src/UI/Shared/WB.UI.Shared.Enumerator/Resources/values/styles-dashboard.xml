@@ -174,7 +174,7 @@
     <item name="android:fontFamily">sans-serif-medium</item>
     <item name="android:textStyle">normal</item>
     <item name="android:padding">@dimen/Interview_Group_button_padding</item>
-    <item name="android:drawableLeft">@drawable/gps_marker</item>
+    <item name="android:drawableLeft">@drawable/navigation_icon</item>
   </style>
 
   <style name="Dashboard_InterviewItem_CreateButton">
