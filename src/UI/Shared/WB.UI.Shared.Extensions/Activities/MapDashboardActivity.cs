@@ -126,10 +126,11 @@ namespace WB.UI.Shared.Extensions.Activities
         }
 
         private static bool isRecalculating = false;
+        private static bool isRecalculatingAllowed = true;
         
         private static void RecalculateCarouselHeight(ViewPager2 viewPager)
         {
-            if (isRecalculating)
+            if (isRecalculating || !isRecalculatingAllowed)
                 return;
             isRecalculating = true;
             
@@ -178,6 +179,7 @@ namespace WB.UI.Shared.Extensions.Activities
                 
             if (e.Event.Action == MotionEventActions.Move)
             {
+                isRecalculatingAllowed = false;
                 var maxHeight = (int)viewPager.Resources!.GetDimension(Resource.Dimension.carousel_current_item_max_height);
                 if (viewPager?.LayoutParameters != null && viewPager.LayoutParameters.Height < maxHeight)
                 {
@@ -187,6 +189,7 @@ namespace WB.UI.Shared.Extensions.Activities
             }
             else
             {
+                isRecalculatingAllowed = true;
                 RecalculateCarouselHeight(viewPager);
             }
         }
