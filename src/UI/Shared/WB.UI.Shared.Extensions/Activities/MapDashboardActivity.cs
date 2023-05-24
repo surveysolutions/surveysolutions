@@ -133,9 +133,9 @@ namespace WB.UI.Shared.Extensions.Activities
         {
             var viewPager = (ViewPager2)sender;
             var view = viewPager.FindViewWithTag("position-" + viewPager.CurrentItem);
-            var cardView = view.FindViewById<CardView>(Resource.Id.dashboardItem);
+            var cardView = view?.FindViewById<CardView>(Resource.Id.dashboardItem);
 
-            viewPager?.Post(() =>
+            cardView?.Post(() =>
             {
                 var wMeasureSpec = View.MeasureSpec.MakeMeasureSpec(cardView.Width, MeasureSpecMode.Exactly);
                 var hMeasureSpec = View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified);
@@ -153,18 +153,32 @@ namespace WB.UI.Shared.Extensions.Activities
         {
             public bool OnTouch(View sender, MotionEvent e)
             {
-                if (e.Action != MotionEventActions.Move)
+                if (e.Action != MotionEventActions.Move && e.Action != MotionEventActions.Up)
                     return false;
                 
                 var viewPager = (ViewPager2)sender.Parent;
-                //var view = viewPager.FindViewWithTag("position-" + viewPager.CurrentItem);
-                var maxHeight = (int)viewPager.Resources!.GetDimension(Resource.Dimension.carousel_current_item_max_height);
-                viewPager?.Post(() =>
+                var view = viewPager?.FindViewWithTag("position-" + viewPager.CurrentItem);
+                var cardView = view?.FindViewById<CardView>(Resource.Id.dashboardItem);
+                
+                int height;
+                if (e.Action == MotionEventActions.Move)
+                    height = (int)viewPager.Resources!.GetDimension(Resource.Dimension.carousel_current_item_max_height);
+                else
                 {
-                    if (viewPager?.LayoutParameters != null && viewPager.LayoutParameters.Height != maxHeight)
+                    var wMeasureSpec = View.MeasureSpec.MakeMeasureSpec(cardView.Width, MeasureSpecMode.Exactly);
+                    var hMeasureSpec = View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified);
+                    cardView.Measure(wMeasureSpec, hMeasureSpec);
+                    height = cardView.MeasuredHeight;
+                }
+                
+                cardView?.Post(() =>
+                {
+                    if (viewPager?.LayoutParameters != null && viewPager.LayoutParameters.Height != height)
                     {
-                        viewPager.LayoutParameters.Height = maxHeight;
+                        viewPager.LayoutParameters.Height = height;
                         viewPager.RequestLayout();
+                        view.RequestLayout();
+                        cardView.RequestLayout();
                     }
                 });
 
@@ -213,6 +227,8 @@ namespace WB.UI.Shared.Extensions.Activities
                     {
                         viewPager.LayoutParameters.Height = cardView.MeasuredHeight;
                         viewPager.RequestLayout();
+                        view.RequestLayout();
+                        cardView.RequestLayout();
                     }
                 });
             }

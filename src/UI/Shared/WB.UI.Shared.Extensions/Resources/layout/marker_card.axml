@@ -7,14 +7,24 @@
         android:layout_height="match_parent"
         android:alpha="0"
         >
+   <!-- <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintHeight_max="@dimen/carousel_current_item_max_height"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:orientation="vertical">-->
+        
             <ScrollView
+                    android:id="@+id/marker_card_scroll"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:layout_constrainedHeight="true"
                     app:layout_constraintHeight_max="@dimen/carousel_current_item_max_height"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:fillViewport="true">
-                <include layout="@layout/dashboard_card" />
+                 <include layout="@layout/dashboard_card" />
             </ScrollView>
-    
+   <!-- </LinearLayout>-->
+
 </androidx.constraintlayout.widget.ConstraintLayout>
