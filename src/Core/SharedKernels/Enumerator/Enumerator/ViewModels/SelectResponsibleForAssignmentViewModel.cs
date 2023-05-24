@@ -115,7 +115,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             this.assignmentsStorage.Store(assignment);
 
-            this.messenger.Publish(new DashboardChangedMsg(this));
+            this.messenger.Publish(new DashboardChangedMsg(this) { AssignmentId = assignmentId });
             this.auditLogService.Write(new AssignResponsibleToAssignmentAuditLogEntity(assignmentId, responsible.Id, responsible.Login));
         }
 

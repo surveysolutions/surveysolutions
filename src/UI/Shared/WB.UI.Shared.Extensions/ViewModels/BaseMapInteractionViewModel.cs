@@ -216,10 +216,10 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         }
 
-        public override void ViewCreated()
+        public override async void ViewCreated()
         {
             base.ViewCreated();
-            Task.Run( async() => await this.MapControlCreatedAsync());
+            await this.MapControlCreatedAsync();
         }
 
         public async Task MapControlCreatedAsync()

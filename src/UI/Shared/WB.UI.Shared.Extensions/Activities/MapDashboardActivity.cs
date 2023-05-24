@@ -146,7 +146,7 @@ namespace WB.UI.Shared.Extensions.Activities
                     var maxHeight = (int)viewPager.Resources!.GetDimension(Resource.Dimension.carousel_current_item_max_height);
                     var height = Math.Min(cardView.MeasuredHeight, maxHeight);
 
-                    if (viewPager?.LayoutParameters != null && viewPager.LayoutParameters.Height != height)
+                    if (viewPager.LayoutParameters != null && viewPager.LayoutParameters.Height != height)
                     {
                         viewPager.LayoutParameters.Height = height;
                         viewPager.RequestLayout();

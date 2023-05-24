@@ -72,7 +72,7 @@ public class RejectInterviewDialogViewModel: DoActionDialogViewModel<RejectInter
                 
             this.auditLogService.Write(logEntity);
 
-            this.messenger.Publish(new DashboardChangedMsg(this));
+            this.messenger.Publish(new DashboardChangedMsg(this) { InterviewId = interviewId });
         }
         finally
         {
