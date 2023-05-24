@@ -40,7 +40,7 @@ namespace WB.UI.Shared.Extensions.Activities
         private IDisposable onDrawerOpenedSubscription;
         private IDisposable onMapViewMapTappedSubscription;
         private ViewPager2.OnPageChangeCallback onPageChangeCallback;
-        private View.IOnTouchListener onTouchListener;
+
         public Toolbar Toolbar { get; private set; }
 
         private void Cancel()
@@ -85,18 +85,13 @@ namespace WB.UI.Shared.Extensions.Activities
             viewPager.SystemUiVisibilityChange += ViewPagerOnSystemUiVisibilityChange;
             viewPager.ScrollChange += ViewPagerOnScrollChange;
             viewPager.LayoutChange += ViewPagerOnLayoutChange;
-            //viewPager.Click += ViewPagerOnClick;
+            viewPager.OffscreenPageLimit = 1;
 
-            RecyclerView recyclerView = (RecyclerView)viewPager.GetChildAt(0);
-            onTouchListener = new CarouselOnTouchListener();
-            recyclerView.SetOnTouchListener(onTouchListener);
-            // recyclerView.LayoutParameters = (new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent,
-            //     ViewGroup.LayoutParams.WrapContent));
-            // recyclerView.ClearOnChildAttachStateChangeListeners();
+            var recyclerView = (RecyclerView)viewPager.GetChildAt(0);
+            recyclerView.Touch += RecyclerViewOnTouch;
 
             var adapter = new CarouselViewAdapter((IMvxAndroidBindingContext)base.BindingContext);
             adapter.ItemTemplateSelector = CreateCarouselTemplateSelector();
-            //adapter.ItemTemplateSelector = new MvxDefaultTemplateSelector(Resource.Layout.marker_card);
             adapter.ItemsSource = ViewModel.AvailableMarkers;
             viewPager.Adapter = adapter;
 
@@ -105,9 +100,6 @@ namespace WB.UI.Shared.Extensions.Activities
                 .For(v => v.ItemsSource)
                 .To(vm => vm.AvailableMarkers);
             bindingSet.Apply();
-
-
-            viewPager.OffscreenPageLimit = 1;
 
             var pageTransformer = new CarouselIPageTransformer();
             viewPager.SetPageTransformer(pageTransformer);
@@ -145,28 +137,26 @@ namespace WB.UI.Shared.Extensions.Activities
             {
                 var view = viewPager.FindViewWithTag("position-" + viewPager.CurrentItem);
                 var cardView = view?.FindViewById<CardView>(Resource.Id.dashboardItem);
-                var wMeasureSpec = View.MeasureSpec.MakeMeasureSpec(cardView.Width, MeasureSpecMode.Exactly);
-                var hMeasureSpec = View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified);
-                cardView.Measure(wMeasureSpec, hMeasureSpec);
-                var maxHeight = (int)viewPager.Resources!.GetDimension(Resource.Dimension.carousel_current_item_max_height);
-                var height = Math.Min(cardView.MeasuredHeight, maxHeight);
 
-                if (viewPager?.LayoutParameters != null && viewPager.LayoutParameters.Height != height)
+                if (cardView != null)
                 {
-                    viewPager.LayoutParameters.Height = height;
-                    viewPager.RequestLayout();
-                    view.RequestLayout();
-                    cardView.RequestLayout();
+                    var wMeasureSpec = View.MeasureSpec.MakeMeasureSpec(cardView.Width, MeasureSpecMode.Exactly);
+                    var hMeasureSpec = View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified);
+                    cardView.Measure(wMeasureSpec, hMeasureSpec);
+                    var maxHeight = (int)viewPager.Resources!.GetDimension(Resource.Dimension.carousel_current_item_max_height);
+                    var height = Math.Min(cardView.MeasuredHeight, maxHeight);
+
+                    if (viewPager?.LayoutParameters != null && viewPager.LayoutParameters.Height != height)
+                    {
+                        viewPager.LayoutParameters.Height = height;
+                        viewPager.RequestLayout();
+                        view.RequestLayout();
+                        cardView.RequestLayout();
+                    }
                 }
 
                 isRecalculating = false;
             });
-        }
-
-        private void ViewPagerOnClick(object sender, EventArgs e)
-        {
-            var viewPager = (ViewPager2)sender;
-            RecalculateCarouselHeight(viewPager);
         }
 
         private void ViewPagerOnLayoutChange(object sender, View.LayoutChangeEventArgs e)
@@ -174,41 +164,32 @@ namespace WB.UI.Shared.Extensions.Activities
             var viewPager = (ViewPager2)sender;
             RecalculateCarouselHeight(viewPager);
         }
-
-        private class CarouselOnTouchListener : Java.Lang.Object, View.IOnTouchListener
+        
+        private void RecyclerViewOnTouch(object sender, View.TouchEventArgs e)
         {
-            public bool OnTouch(View sender, MotionEvent e)
+            e.Handled = false;
+            
+            if (e.Event == null)
+                return;
+            if (e.Event.Action != MotionEventActions.Move && e.Event.Action != MotionEventActions.Up)
+                return;
+                
+            var viewPager = (ViewPager2)((View)sender).Parent;
+                
+            if (e.Event.Action == MotionEventActions.Move)
             {
-                if (e.Action != MotionEventActions.Move && e.Action != MotionEventActions.Up)
-                    return false;
-                
-                var viewPager = (ViewPager2)sender.Parent;
-                
-                if (e.Action == MotionEventActions.Move)
+                var maxHeight = (int)viewPager.Resources!.GetDimension(Resource.Dimension.carousel_current_item_max_height);
+                if (viewPager?.LayoutParameters != null && viewPager.LayoutParameters.Height < maxHeight)
                 {
-                    var view = viewPager?.FindViewWithTag("position-" + viewPager.CurrentItem);
-                    var cardView = view?.FindViewById<CardView>(Resource.Id.dashboardItem);
-                    var maxHeight = (int)viewPager.Resources!.GetDimension(Resource.Dimension.carousel_current_item_max_height);
-                    // cardView?.Post(() =>
-                    // {
-                        if (viewPager?.LayoutParameters != null && viewPager.LayoutParameters.Height != maxHeight)
-                        {
-                            viewPager.LayoutParameters.Height = maxHeight;
-                            viewPager.RequestLayout();
-                            view.RequestLayout();
-                            cardView.RequestLayout();
-                        }
-                    // });
+                    viewPager.LayoutParameters.Height = maxHeight;
+                    viewPager.RequestLayout();
                 }
-                else
-                {
-                    RecalculateCarouselHeight(viewPager);
-                }
-                
-                return false;
+            }
+            else
+            {
+                RecalculateCarouselHeight(viewPager);
             }
         }
-    
 
         private class CarouselOnPageChangeCallback : ViewPager2.OnPageChangeCallback
         {
@@ -266,13 +247,18 @@ namespace WB.UI.Shared.Extensions.Activities
             var viewPager = this.FindViewById<ViewPager2>(Resource.Id.carousel_view_pager);
             if (viewPager != null)
             {
+                viewPager.UnregisterOnPageChangeCallback(onPageChangeCallback);
+                viewPager.SystemUiVisibilityChange -= ViewPagerOnSystemUiVisibilityChange;
+                viewPager.ScrollChange -= ViewPagerOnScrollChange;
                 viewPager.LayoutChange -= ViewPagerOnLayoutChange;
+                
+                RecyclerView recyclerView = (RecyclerView)viewPager.GetChildAt(0);
+                recyclerView.Touch -= RecyclerViewOnTouch;
             }
             
             onDrawerOpenedSubscription?.Dispose();
             onMapViewMapTappedSubscription?.Dispose();
             onPageChangeCallback?.Dispose();
-            onTouchListener?.Dispose();
 
             base.OnDestroy();
         }
