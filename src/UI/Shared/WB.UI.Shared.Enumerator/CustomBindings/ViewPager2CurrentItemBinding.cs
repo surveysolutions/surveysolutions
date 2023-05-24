@@ -18,9 +18,10 @@ public class ViewPager2CurrentItemBinding : BaseBinding<ViewPager2, int?>
     {
         if (value.HasValue && control.CurrentItem != value.Value)
         {
+            var smoothScroll = control.Visibility == ViewStates.Visible;
             control.Post(() =>
             {
-                control.SetCurrentItem(value.Value, true);
+                control.SetCurrentItem(value.Value, smoothScroll);
             });
         }
     }

@@ -718,8 +718,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 {
                     if (identifyResults.Graphics[0].Geometry is MapPoint projectedLocation)
                     {
-                        ShowMarkersDetails = true;
                         NavigateToCardByMarker(identifyResults, projectedLocation);
+                        ShowMarkersDetails = true;
                     }
                 }
                 else

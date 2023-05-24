@@ -25,6 +25,7 @@ using WB.UI.Shared.Enumerator.Activities.Callbacks;
 using WB.UI.Shared.Enumerator.Activities.Dashboard;
 using WB.UI.Shared.Extensions.Activities.Carousel;
 using WB.UI.Shared.Extensions.ViewModels;
+using Math = Java.Lang.Math;
 using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
 
 namespace WB.UI.Shared.Extensions.Activities
@@ -68,13 +69,25 @@ namespace WB.UI.Shared.Extensions.Activities
                     nameof(this.drawerLayout.DrawerOpened),
                     OnDrawerLayoutOnDrawerOpened);
 
+            ConfigureCarousel();
+
+            this.ViewModel.MapView = this.FindViewById<MapView>(Resource.Id.map_view);
+            onMapViewMapTappedSubscription = this.ViewModel.MapView.WeakSubscribe<MapView, GeoViewInputEventArgs>(
+                nameof(this.ViewModel.MapView.GeoViewTapped),
+                this.ViewModel.OnMapViewTapped);
+        }
+
+        private void ConfigureCarousel()
+        {
             var viewPager = this.FindViewById<ViewPager2>(Resource.Id.carousel_view_pager);
             onPageChangeCallback = new CarouselOnPageChangeCallback(viewPager);
             viewPager.RegisterOnPageChangeCallback(onPageChangeCallback);
-            //viewPager.LayoutChange += ViewPagerOnLayoutChange;
+            viewPager.SystemUiVisibilityChange += ViewPagerOnSystemUiVisibilityChange;
+            viewPager.ScrollChange += ViewPagerOnScrollChange;
+            viewPager.LayoutChange += ViewPagerOnLayoutChange;
             //viewPager.Click += ViewPagerOnClick;
-            
-            RecyclerView recyclerView = (RecyclerView) viewPager.GetChildAt(0);
+
+            RecyclerView recyclerView = (RecyclerView)viewPager.GetChildAt(0);
             onTouchListener = new CarouselOnTouchListener();
             recyclerView.SetOnTouchListener(onTouchListener);
             // recyclerView.LayoutParameters = (new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent,
@@ -103,50 +116,63 @@ namespace WB.UI.Shared.Extensions.Activities
                 Resource.Dimension.carousel_current_item_horizontal_margin
             );
             viewPager.AddItemDecoration(itemDecoration);
+        }
 
-            this.ViewModel.MapView = this.FindViewById<MapView>(Resource.Id.map_view);
-            onMapViewMapTappedSubscription = this.ViewModel.MapView.WeakSubscribe<MapView, GeoViewInputEventArgs>(
-                nameof(this.ViewModel.MapView.GeoViewTapped),
-                this.ViewModel.OnMapViewTapped);
+        private void ViewPagerOnScrollChange(object sender, View.ScrollChangeEventArgs e)
+        {
+            var viewPager = (ViewPager2)sender;
+            RecalculateCarouselHeight(viewPager);
+        }
+
+        private void ViewPagerOnSystemUiVisibilityChange(object sender, View.SystemUiVisibilityChangeEventArgs e)
+        {
+            if (e.Visibility == StatusBarVisibility.Hidden)
+                return;
+            
+            var viewPager = (ViewPager2)sender;
+            RecalculateCarouselHeight(viewPager);
+        }
+
+        private static bool isRecalculating = false;
+        
+        private static void RecalculateCarouselHeight(ViewPager2 viewPager)
+        {
+            if (isRecalculating)
+                return;
+            isRecalculating = true;
+            
+            viewPager?.Post(() =>
+            {
+                var view = viewPager.FindViewWithTag("position-" + viewPager.CurrentItem);
+                var cardView = view?.FindViewById<CardView>(Resource.Id.dashboardItem);
+                var wMeasureSpec = View.MeasureSpec.MakeMeasureSpec(cardView.Width, MeasureSpecMode.Exactly);
+                var hMeasureSpec = View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified);
+                cardView.Measure(wMeasureSpec, hMeasureSpec);
+                var maxHeight = (int)viewPager.Resources!.GetDimension(Resource.Dimension.carousel_current_item_max_height);
+                var height = Math.Min(cardView.MeasuredHeight, maxHeight);
+
+                if (viewPager?.LayoutParameters != null && viewPager.LayoutParameters.Height != height)
+                {
+                    viewPager.LayoutParameters.Height = height;
+                    viewPager.RequestLayout();
+                    view.RequestLayout();
+                    cardView.RequestLayout();
+                }
+
+                isRecalculating = false;
+            });
         }
 
         private void ViewPagerOnClick(object sender, EventArgs e)
         {
             var viewPager = (ViewPager2)sender;
-            var view = viewPager.FindViewWithTag("position-" + viewPager.CurrentItem);
-
-            view?.Post(() =>
-            {
-                var wMeasureSpec = View.MeasureSpec.MakeMeasureSpec(view.Width, MeasureSpecMode.Exactly);
-                var hMeasureSpec = View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified);
-                view.Measure(wMeasureSpec, hMeasureSpec);
-
-                if (viewPager?.LayoutParameters != null && viewPager.LayoutParameters.Height != view.MeasuredHeight)
-                {
-                    viewPager.LayoutParameters.Height = view.MeasuredHeight;
-                    viewPager.RequestLayout();
-                }
-            });
+            RecalculateCarouselHeight(viewPager);
         }
 
         private void ViewPagerOnLayoutChange(object sender, View.LayoutChangeEventArgs e)
         {
             var viewPager = (ViewPager2)sender;
-            var view = viewPager.FindViewWithTag("position-" + viewPager.CurrentItem);
-            var cardView = view?.FindViewById<CardView>(Resource.Id.dashboardItem);
-
-            cardView?.Post(() =>
-            {
-                var wMeasureSpec = View.MeasureSpec.MakeMeasureSpec(cardView.Width, MeasureSpecMode.Exactly);
-                var hMeasureSpec = View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified);
-                cardView.Measure(wMeasureSpec, hMeasureSpec);
-
-                if (viewPager?.LayoutParameters != null && viewPager.LayoutParameters.Height != cardView.MeasuredHeight)
-                {
-                    viewPager.LayoutParameters.Height = cardView.MeasuredHeight;
-                    viewPager.RequestLayout();
-                }
-            });
+            RecalculateCarouselHeight(viewPager);
         }
 
         private class CarouselOnTouchListener : Java.Lang.Object, View.IOnTouchListener
@@ -157,31 +183,28 @@ namespace WB.UI.Shared.Extensions.Activities
                     return false;
                 
                 var viewPager = (ViewPager2)sender.Parent;
-                var view = viewPager?.FindViewWithTag("position-" + viewPager.CurrentItem);
-                var cardView = view?.FindViewById<CardView>(Resource.Id.dashboardItem);
                 
-                int height;
                 if (e.Action == MotionEventActions.Move)
-                    height = (int)viewPager.Resources!.GetDimension(Resource.Dimension.carousel_current_item_max_height);
+                {
+                    var view = viewPager?.FindViewWithTag("position-" + viewPager.CurrentItem);
+                    var cardView = view?.FindViewById<CardView>(Resource.Id.dashboardItem);
+                    var maxHeight = (int)viewPager.Resources!.GetDimension(Resource.Dimension.carousel_current_item_max_height);
+                    // cardView?.Post(() =>
+                    // {
+                        if (viewPager?.LayoutParameters != null && viewPager.LayoutParameters.Height != maxHeight)
+                        {
+                            viewPager.LayoutParameters.Height = maxHeight;
+                            viewPager.RequestLayout();
+                            view.RequestLayout();
+                            cardView.RequestLayout();
+                        }
+                    // });
+                }
                 else
                 {
-                    var wMeasureSpec = View.MeasureSpec.MakeMeasureSpec(cardView.Width, MeasureSpecMode.Exactly);
-                    var hMeasureSpec = View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified);
-                    cardView.Measure(wMeasureSpec, hMeasureSpec);
-                    height = cardView.MeasuredHeight;
+                    RecalculateCarouselHeight(viewPager);
                 }
                 
-                cardView?.Post(() =>
-                {
-                    if (viewPager?.LayoutParameters != null && viewPager.LayoutParameters.Height != height)
-                    {
-                        viewPager.LayoutParameters.Height = height;
-                        viewPager.RequestLayout();
-                        view.RequestLayout();
-                        cardView.RequestLayout();
-                    }
-                });
-
                 return false;
             }
         }
@@ -213,24 +236,7 @@ namespace WB.UI.Shared.Extensions.Activities
 
                 prevPosition = position;
                 
-                
-                var view = viewPager.FindViewWithTag("position-" + position);
-                var cardView = view?.FindViewById<CardView>(Resource.Id.dashboardItem);
-                
-                cardView?.Post(() =>
-                {
-                    var wMeasureSpec = View.MeasureSpec.MakeMeasureSpec(cardView.Width, MeasureSpecMode.Exactly);
-                    var hMeasureSpec = View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified);
-                    cardView.Measure(wMeasureSpec, hMeasureSpec);
-
-                    if (viewPager?.LayoutParameters != null && viewPager.LayoutParameters.Height != cardView.MeasuredHeight)
-                    {
-                        viewPager.LayoutParameters.Height = cardView.MeasuredHeight;
-                        viewPager.RequestLayout();
-                        view.RequestLayout();
-                        cardView.RequestLayout();
-                    }
-                });
+                RecalculateCarouselHeight(viewPager);
             }
             
             protected override void Dispose(bool disposing)
