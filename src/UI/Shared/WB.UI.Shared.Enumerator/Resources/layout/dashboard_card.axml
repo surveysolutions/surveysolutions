@@ -171,7 +171,6 @@
         app:MvxBind="Visible HasExtraAction;
                 Text ExtraAction.Label;                               
                 Click ExtraAction.Command;"
-
         app:layout_constraintBaseline_toBaselineOf="@+id/main_action"
         app:layout_constraintLeft_toRightOf="@+id/main_action" />
 
@@ -179,8 +178,7 @@
           android:id="@+id/show_location"
           style="@style/Dashboard_Location"
           app:MvxBind="Visible HasSecondaryAction;
-            Click SecondaryAction.Command;"
-
+                Click SecondaryAction.Command;"
           app:layout_constraintBaseline_toBaselineOf="@+id/main_action"
           app:layout_constraintRight_toRightOf="parent" />
 
