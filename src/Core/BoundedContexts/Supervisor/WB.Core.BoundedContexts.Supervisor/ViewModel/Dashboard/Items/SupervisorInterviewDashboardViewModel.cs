@@ -56,9 +56,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
                 ActionType = ActionType.Context,
                 Command = new MvxAsyncCommand(this.AssignInterviewAsync, 
                     () => this.isInterviewReadyToLoad && (
-                        interview.Status == InterviewStatus.Created
-                        || interview.Status == InterviewStatus.SupervisorAssigned
-                        || interview.Status == InterviewStatus.InterviewerAssigned
+                        interview.Status == InterviewStatus.InterviewerAssigned
                         || interview.Status == InterviewStatus.RejectedBySupervisor)),
                 Label = UIResources.Supervisor_Complete_Assign_btn
             });
@@ -68,7 +66,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
                 ActionType = ActionType.Context,
                 Command = new MvxAsyncCommand(this.ApproveInterviewAsync, 
                     () => this.isInterviewReadyToLoad && (
-                        interview.Status == InterviewStatus.Created
+                        interview.Status == InterviewStatus.Completed
                         || interview.Status == InterviewStatus.RejectedByHeadquarters
                         || interview.Status == InterviewStatus.RejectedBySupervisor)),
                 Label = UIResources.Supervisor_Complete_Approve_btn
@@ -79,7 +77,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
                 ActionType = ActionType.Context,
                 Command = new MvxAsyncCommand(this.RejectInterviewAsync, 
                     () => this.isInterviewReadyToLoad && (
-                        interview.Status == InterviewStatus.Created
+                        interview.Status == InterviewStatus.Completed
                         || interview.Status == InterviewStatus.RejectedByHeadquarters)),
                 Label = UIResources.Supervisor_Complete_Reject_btn
             });
