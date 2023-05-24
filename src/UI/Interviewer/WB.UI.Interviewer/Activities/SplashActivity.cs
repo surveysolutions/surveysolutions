@@ -10,7 +10,7 @@ namespace WB.UI.Interviewer.Activities
         MainLauncher = true, 
         ScreenOrientation = ScreenOrientation.Portrait, 
         Theme = "@style/AppTheme")]
-    public class SplashActivity : MvxStartActivity
+    public class SplashActivity : MvxSplashScreenActivity//EnumeratorSplashScreenAppCompatActivity<Setup, InterviewerMvxApplication>
     {
         public SplashActivity() : base(Resource.Layout.splash)
         {
