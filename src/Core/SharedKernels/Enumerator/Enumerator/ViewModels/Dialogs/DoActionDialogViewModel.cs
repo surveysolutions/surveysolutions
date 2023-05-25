@@ -14,7 +14,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dialogs;
 
-public abstract class DoActionDialogViewModel<T> : MvxViewModel<T> where T : DoActionDialogArgs
+public abstract class DoActionDialogViewModel<T> : MvxViewModel<T> where T : IDoActionDialogArgs
 {
     protected readonly IMvxNavigationService MvxNavigationService;
     protected readonly IPrincipal Principal;

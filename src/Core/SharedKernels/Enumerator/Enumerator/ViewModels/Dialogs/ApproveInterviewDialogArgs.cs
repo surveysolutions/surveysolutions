@@ -2,7 +2,7 @@
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dialogs;
 
-public class ApproveInterviewDialogArgs : DoActionDialogArgs
+public class ApproveInterviewDialogArgs : IDoActionDialogArgs
 {
     public Guid InterviewId { get; }
 

@@ -1,6 +1,6 @@
 ﻿namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dialogs;
 
-public class AssignAssignmentDialogArgs : DoActionDialogArgs
+public class AssignAssignmentDialogArgs : IDoActionDialogArgs
 {
     public int AssignmentId { get; }
 
