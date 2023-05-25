@@ -218,6 +218,11 @@ namespace WB.UI.Shared.Extensions.ViewModels
         public override async void ViewCreated()
         {
             base.ViewCreated();
+
+            // because MapControlCreatedAsync we use MapView and Map properties in MapControlCreatedAsync, need wait to init its
+            if (InitializeTask?.Task != null)
+                await InitializeTask.Task.ConfigureAwait(false);
+            
             await this.MapControlCreatedAsync();
         }
 
