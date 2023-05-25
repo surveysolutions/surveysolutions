@@ -93,7 +93,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     this.Map.MaxExtent = defaultBaseMap.BaseLayers[0].FullExtent;
                 
                 await this.Map.LoadAsync().ConfigureAwait(false);
-
             }
             catch (Exception e)
             {
@@ -224,7 +223,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         public async Task MapControlCreatedAsync()
         {
-            if (this.Map.LoadStatus != LoadStatus.FailedToLoad)
+            if (this.Map?.LoadStatus != LoadStatus.FailedToLoad)
             {
                 this.FirstLoad = true;
                 
