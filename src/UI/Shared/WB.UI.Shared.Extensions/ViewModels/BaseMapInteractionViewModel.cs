@@ -219,7 +219,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             base.ViewCreated();
 
-            // because MapControlCreatedAsync we use MapView and Map properties in MapControlCreatedAsync, need wait to init its
+            // we use MapView and Map properties in MapControlCreatedAsync, need wait to init its
             if (InitializeTask?.Task != null)
                 await InitializeTask.Task.ConfigureAwait(false);
             
