@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 
 <resources>
-    <dimen name="carousel_current_item_max_height">350dp</dimen>
+    <dimen name="carousel_current_item_max_height">250dp</dimen>
 </resources>
