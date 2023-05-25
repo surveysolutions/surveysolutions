@@ -222,31 +222,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                 Label = EnumeratorUIResources.Dashboard_ShowLocation
             });
         }
-
-        private void ReleaseUnmanagedResources()
-        {
-            // release unmanaged resources here
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            ReleaseUnmanagedResources();
-            if (disposing)
-            {
-                // release managed resources here
-            }
-        }
-
         public void Dispose()
         {
             Actions.CollectionChanged -= CollectionChanged;
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        ~ExpandableQuestionsDashboardItemViewModel()
-        {
-            Dispose(false);
         }
     }
 }

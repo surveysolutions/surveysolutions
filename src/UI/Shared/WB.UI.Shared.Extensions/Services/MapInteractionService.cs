@@ -50,20 +50,18 @@ namespace WB.UI.Shared.Extensions.Services
 
         public async Task OpenInterviewerMapDashboardAsync()
         {
-            await this.permissions.AssureHasPermissionOrThrow<Permissions.LocationWhenInUse>().ConfigureAwait(false);
             await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
 
             await this.viewModelNavigationService.NavigateToAsync<InterviewerMapDashboardViewModel, MapDashboardViewModelArgs>(
-                new MapDashboardViewModelArgs()).ConfigureAwait(false);
+                new MapDashboardViewModelArgs(), finishActivityOnSuccess: true).ConfigureAwait(false);
         }
 
         public async Task OpenSupervisorMapDashboardAsync()
         {
-            await this.permissions.AssureHasPermissionOrThrow<Permissions.LocationWhenInUse>().ConfigureAwait(false);
             await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
 
             await this.viewModelNavigationService.NavigateToAsync<SupervisorMapDashboardViewModel, MapDashboardViewModelArgs>(
-                new MapDashboardViewModelArgs()).ConfigureAwait(false);
+                new MapDashboardViewModelArgs(), finishActivityOnSuccess: true).ConfigureAwait(false);
         }
 
         public void SetLicenseKey(string key)

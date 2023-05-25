@@ -485,6 +485,9 @@
   <data name="MissingPermissions_Storage" xml:space="preserve">
     <value>Приложению необходимо разрешение на использование хранилища для ответа на данный вопрос</value>
   </data>
+  <data name="MissingPermissions_MapsLocation" xml:space="preserve">
+    <value>Приложению необходимо разрешение на использование gps координат. Если вы не видите окна с запросом разрешения, то идите в настройки и разрешите приложению исполтзовать геопозицию.</value>
+  </data>
   <data name="Multimedia_PickFromGallery" xml:space="preserve">
     <value>Выбрать из галереи</value>
   </data>
@@ -788,7 +791,15 @@
   </data>
   <data name="Interviewer_Reassign_Comment" xml:space="preserve">
     <value>Оставьте комментарий для нового ответственного</value>
-    <comment>Комментарий:</comment>
+  </data>
+  <data name="Interviewer_Comment" xml:space="preserve">
+    <value>Оставьте комментарий</value>
+  </data>
+  <data name="Interviewer_Reassign_AlreadyReceivedInterview" xml:space="preserve">
+    <value>Интервьювер {0} уже получил это интервью {1}. Вы хотите переназначить его?</value>
+  </data>
+  <data name="Interviewer_Reassign_AlreadyReceivedAssignment" xml:space="preserve">
+    <value>Интервьювер {0} уже получил это задание {1}. Вы хотите переназначить его?</value>
   </data>
   <data name="ErrorMessage_PermissionForUnkownSourcesRequired" xml:space="preserve">
     <value>У приложения не хватает прав для обновления. Пожалуйста разрешите этому приложению "Установку неизвестных приложений" в настройках</value>

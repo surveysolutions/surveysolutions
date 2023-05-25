@@ -98,7 +98,6 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             this.viewPager.Adapter = null;
 
             this.viewPager.PageSelected -= this.ViewPager_PageSelected;
-
             this.ViewModel.StartedInterviews.PropertyChanged -= this.StartedInterviewsOnPropertyChanged;
             this.ViewModel.RejectedInterviews.PropertyChanged -= this.RejectedInterviewsOnPropertyChanged;
             this.ViewModel.CompletedInterviews.PropertyChanged -= this.CompletedInterviewsOnPropertyChanged;

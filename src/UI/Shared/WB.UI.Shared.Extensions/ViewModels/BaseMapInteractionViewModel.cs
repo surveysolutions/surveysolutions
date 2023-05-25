@@ -15,8 +15,12 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Shared.Extensions.Services;
+using Xamarin.Essentials;
+using Location = Esri.ArcGISRuntime.Location.Location;
+using Map = Esri.ArcGISRuntime.Mapping.Map;
 
 namespace WB.UI.Shared.Extensions.ViewModels
 {
@@ -31,6 +35,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         private readonly IEnumeratorSettings enumeratorSettings;
         private readonly IMapUtilityService mapUtilityService;
         protected readonly IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher;
+        private readonly IPermissionsService permissionsService;
 
         protected BaseMapInteractionViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
@@ -39,7 +44,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
             ILogger logger,
             IEnumeratorSettings enumeratorSettings,
             IMapUtilityService mapUtilityService,
-            IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher) 
+            IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher,
+            IPermissionsService permissionsService) 
             : base(principal, viewModelNavigationService)
         {
             this.UserInteractionService = userInteractionService;
@@ -49,6 +55,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             this.enumeratorSettings = enumeratorSettings;
             this.mapUtilityService = mapUtilityService;
             this.mainThreadAsyncDispatcher = mainThreadAsyncDispatcher;
+            this.permissionsService = permissionsService;
         }
 
         public abstract Task OnMapLoaded();
@@ -84,7 +91,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
                 if (defaultBaseMap?.BaseLayers.Count > 0 && defaultBaseMap?.BaseLayers[0]?.FullExtent != null)
                     this.Map.MaxExtent = defaultBaseMap.BaseLayers[0].FullExtent;
-
+                
+                await this.Map.LoadAsync().ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -111,9 +119,15 @@ namespace WB.UI.Shared.Extensions.ViewModels
         public IMvxAsyncCommand ShowFullMapCommand => new MvxAsyncCommand(async () =>
         {
             if (this.Map?.Basemap?.BaseLayers.Count > 0 && this.Map?.Basemap?.BaseLayers[0]?.FullExtent != null)
+            {
                 await MapView.SetViewpointGeometryAsync(this.Map.Basemap.BaseLayers[0].FullExtent);
+
+                ShowedFullMap();
+            }
         });
-        
+
+        protected virtual void ShowedFullMap() { }
+
         public IMvxAsyncCommand SwitchLocatorCommand => new MvxAsyncCommand(async () =>
         {
             if (!IsLocationServiceSwitchEnabled)
@@ -123,6 +137,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
             //Esri case 02209395
             try
             {
+                await this.permissionsService.AssureHasPermissionOrThrow<Permissions.LocationWhenInUse>()
+                    .ConfigureAwait(false);
+
                 IsLocationServiceSwitchEnabled = false;
 
                 if (!this.MapView.LocationDisplay.IsEnabled)
@@ -131,11 +148,16 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 //try to stop service first to avoid crash
                 await this.MapView.LocationDisplay.DataSource.StopAsync();
 
-                this.MapView.LocationDisplay.DataSource.StatusChanged += DataSourceOnStatusChanged; 
+                this.MapView.LocationDisplay.DataSource.StatusChanged += DataSourceOnStatusChanged;
 
                 await this.MapView.LocationDisplay.DataSource.StartAsync();
                 this.MapView.LocationDisplay.IsEnabled = true;
                 this.MapView.LocationDisplay.LocationChanged += LocationDisplayOnLocationChanged;
+            }
+            catch (MissingPermissionsException mp) when (mp.PermissionType == typeof(Permissions.LocationWhenInUse))
+            {
+                this.UserInteractionService.ShowToast(UIResources.MissingPermissions_MapsLocation);
+                return;
             }
             catch (Exception exc)
             {
@@ -193,16 +215,25 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         }
 
+        public override async void ViewCreated()
+        {
+            base.ViewCreated();
+
+            // we use MapView and Map properties in MapControlCreatedAsync, need wait to init its
+            if (InitializeTask?.Task != null)
+                await InitializeTask.Task.ConfigureAwait(false);
+            
+            await this.MapControlCreatedAsync();
+        }
+
         public async Task MapControlCreatedAsync()
         {
-            await this.Map.LoadAsync().ConfigureAwait(false);
-            
-            var mapToDisplay = GetSelectedMap(this.AvailableMaps);
-            var selectedMapToLoad = mapToDisplay.MapName;
-            this.FirstLoad = true;
-
-            if (this.Map.LoadStatus != LoadStatus.FailedToLoad)
+            if (this.Map?.LoadStatus != LoadStatus.FailedToLoad)
             {
+                this.FirstLoad = true;
+                
+                var mapToDisplay = GetSelectedMap(this.AvailableMaps);
+                var selectedMapToLoad = mapToDisplay?.MapName;
                 await UpdateBaseMap(selectedMapToLoad).ConfigureAwait(false);
                 await OnMapLoaded().ConfigureAwait(false);
             }
@@ -238,6 +269,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         public async Task UpdateBaseMap(string selectedMapToLoad)
         {
+            logger.Debug($"UpdateBaseMap was called with map: {selectedMapToLoad}" );
+            
             var existingMap = this.AvailableMaps.FirstOrDefault(x => x.MapName == selectedMapToLoad);
             if (existingMap == null) return;
 
@@ -248,6 +281,10 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 
                 this.SelectedMap = selectedMapToLoad;
                 this.Map.Basemap = baseMap;
+            }
+            else
+            {
+                
             }
 
             if (this.Map.LoadStatus == LoadStatus.Loaded 
@@ -262,6 +299,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 
                 if (this.MapView?.VisibleArea != null)
                 {
+                    logger.Debug("projecting areas" );
                     await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() =>
                     {
                         var projectedArea =

@@ -11,7 +11,10 @@
     <RelativeLayout
         android:id="@+id/main_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
       <LinearLayout
           android:id="@+id/area_map_view_container"
           android:layout_width="match_parent"
@@ -121,6 +124,7 @@
       <Button
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
+            android:elevation="0dp"
             style="@style/Area_Screen_Button_Bordered"
             local:MvxBind="Click LoadShapefile;Text Localization('AreaMap_ShowBoundaries'); Visible And(Not(IsPanelVisible), GreaterThan(AvailableShapefiles.Count, 0), Not(ShapeFileLoaded));"
             android:layout_marginLeft="@dimen/area_editor_common_margin_right"
@@ -128,30 +132,35 @@
       <Button
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
+            android:elevation="0dp"
             style="@style/Area_Screen_Button_Bordered"
             local:MvxBind="Click HideShapefile;Text Localization('AreaMap_HideBoundaries'); Visible And(Not(IsPanelVisible), ShapeFileLoaded);"
             android:layout_marginLeft="@dimen/area_editor_common_margin_right"
             android:layout_marginTop="@dimen/area_editor_undo_margin_top" />
       <ImageButton
           style="@style/Area_CompassButton"
-          android:layout_alignParentBottom="true"
+          android:layout_alignParentTop="true"
+          android:layout_alignParentRight="true"
           local:MvxBind="Click RotateMapToNorth; Visible Not(IsPanelVisible);"
-          android:layout_marginBottom="@dimen/area_editor_compass_margin_bottom"
-          android:layout_marginLeft="@dimen/area_editor_common_margin_left" />
+          android:layout_marginTop="@dimen/area_editor_compass_margin_bottom"
+          android:layout_marginRight="@dimen/area_editor_common_margin_left" />
       <ImageButton
           style="@style/Area_ZoomMapInButton"
-          android:layout_alignParentBottom="true"
+          android:layout_alignParentTop="true"
+          android:layout_alignParentRight="true"
           local:MvxBind="Click ZoomMapIn; Visible Not(IsPanelVisible);"
-          android:layout_marginBottom="@dimen/area_editor_zoom_in_margin_bottom"
-          android:layout_marginLeft="@dimen/area_editor_common_margin_left" />
+          android:layout_marginTop="@dimen/area_editor_zoom_in_margin_bottom"
+          android:layout_marginRight="@dimen/area_editor_common_margin_left" />
       <ImageButton
           style="@style/Area_ZoomMapOutButton"
-          android:layout_alignParentBottom="true"
+          android:layout_alignParentTop="true"
+          android:layout_alignParentRight="true"
           local:MvxBind="Click ZoomMapOut; Visible Not(IsPanelVisible);"
-          android:layout_marginBottom="@dimen/area_editor_zoom_out_margin_bottom"
-          android:layout_marginLeft="@dimen/area_editor_common_margin_left" />
+          android:layout_marginTop="@dimen/area_editor_zoom_out_margin_bottom"
+          android:layout_marginRight="@dimen/area_editor_common_margin_left" />
 
         <LinearLayout
+                android:id="@+id/area_warning"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="@dimen/area_editor_lower_panel_margin_bottom"
                 android:layout_width="match_parent"
@@ -159,7 +168,6 @@
                 android:orientation="vertical"
                 local:MvxBind="Visible Not(IsPanelVisible);">
             <LinearLayout
-                    android:id="@+id/area_warning"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.75"
@@ -182,7 +190,18 @@
                         local:MvxBind="Text Warning;"/>
             </LinearLayout>            
         </LinearLayout>
-        
+
+      <androidx.viewpager2.widget.ViewPager2
+              android:id="@+id/carousel_view_pager"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:elevation="1dp"
+              android:translationZ="1dp"
+              android:layout_above="@+id/area_warning"
+              android:orientation="horizontal"
+              local:MvxBind="Visible ShowMarkersDetails; CurrentItem ActiveMarkerIndex;"
+              />
+      
     </RelativeLayout>
   </LinearLayout>
   <LinearLayout 

@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             {
                 yield return dashboardItem;
 
-                if (dashboardItem is SupervisorDashboardInterviewViewModel interviewDashboardItem &&
+                if (dashboardItem is SupervisorInterviewDashboardViewModel interviewDashboardItem &&
                     interviewDashboardItem.InterviewId == lastVisitedInterviewId)
                 {
                     this.HighLightedItemIndex = interviewIndex;

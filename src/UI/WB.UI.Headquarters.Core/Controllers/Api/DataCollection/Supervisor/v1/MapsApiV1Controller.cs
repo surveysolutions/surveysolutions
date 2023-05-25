@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.Code;
 
@@ -14,7 +16,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
     [Route("api/supervisor/v1/maps")]
     public class MapsApiV1Controller : MapsControllerBase
     {
-        public MapsApiV1Controller(IMapStorageService mapRepository, IAuthorizedUser authorizedUser) : base(mapRepository, authorizedUser)
+        public MapsApiV1Controller(IMapStorageService mapRepository, IAuthorizedUser authorizedUser,
+            IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor) 
+            : base(mapRepository, authorizedUser, mapPlainStorageAccessor)
         {
         }
 
