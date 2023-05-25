@@ -88,11 +88,11 @@ namespace WB.UI.Supervisor.Activities.Dashboard
             }
 
             var item = navigationView.Menu.FindItem(id);
-
+            if (item == null) return;
+            
             if (viewModelPropertyName != null)
             {
                 item.SetActionView(Resource.Layout.dashboard_sidebar_counter);
-                
                 var textView = (TextView) item.ActionView;
                 var viewModelPropertyInfo = ViewModel.GetType().GetProperty(viewModelPropertyName);
 
@@ -101,7 +101,7 @@ namespace WB.UI.Supervisor.Activities.Dashboard
                 ViewModel.PropertyChanged += (sender, args) =>
                 {
                     if (args.PropertyName == viewModelPropertyName)
-                    { 
+                    {
                         SetLabelText(textView, viewModelPropertyInfo);
                     }
                 };
