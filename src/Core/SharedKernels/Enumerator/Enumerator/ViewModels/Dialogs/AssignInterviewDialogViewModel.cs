@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Humanizer;
@@ -11,7 +10,6 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -21,14 +19,13 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dialogs;
 
-public class AssignInterviewDialogViewModel: DoActionDialogViewModel<AssignInterviewDialogArgs>
+public class AssignInterviewDialogViewModel: ActionDialogViewModel<AssignInterviewDialogArgs>
 {
     private readonly IStatefulInterviewRepository statefulInterviewRepository;
     private readonly ICommandService commandService;
     private readonly IPrincipal principal;
     private readonly IAuditLogService auditLogService;
     private readonly IMvxMessenger messenger;
-    private readonly IPlainStorage<InterviewerDocument> usersRepository;
 
     public AssignInterviewDialogViewModel(IMvxNavigationService mvxMvxNavigationService,
         IStatefulInterviewRepository statefulInterviewRepository,
@@ -39,14 +36,13 @@ public class AssignInterviewDialogViewModel: DoActionDialogViewModel<AssignInter
         IPlainStorage<InterviewerDocument> usersRepository,
         IPlainStorage<InterviewView> interviewStorage, 
         IPlainStorage<AssignmentDocument, int> assignmentsStorage
-        ) : base(mvxMvxNavigationService, principal, interviewStorage, assignmentsStorage)
+        ) : base(mvxMvxNavigationService, principal, interviewStorage, assignmentsStorage, usersRepository)
     {
         this.statefulInterviewRepository = statefulInterviewRepository;
         this.commandService = commandService;
         this.principal = principal;
         this.auditLogService = auditLogService;
         this.messenger = messenger;
-        this.usersRepository = usersRepository;
     }
 
     public override string DialogTitle => UIResources.Supervisor_Complete_Assign_btn;
@@ -65,7 +61,7 @@ public class AssignInterviewDialogViewModel: DoActionDialogViewModel<AssignInter
         var needShowConfirm = interviewView.ReceivedByInterviewerAtUtc.HasValue;
         if (needShowConfirm)
         {
-            var responsible = usersRepository.GetById(interviewView.ResponsibleId.FormatGuid());
+            var responsible = UsersRepository.GetById(interviewView.ResponsibleId.FormatGuid());
             var timeSpan = DateTime.UtcNow - interviewView.ReceivedByInterviewerAtUtc.Value;
             ConfirmText = string.Format(UIResources.Interviewer_Reassign_AlreadyReceivedAssignment,
                 responsible.UserName,
@@ -74,7 +70,7 @@ public class AssignInterviewDialogViewModel: DoActionDialogViewModel<AssignInter
         }
     }
 
-    protected override Task DoApplyAsync()
+    protected override Task ApplyAsync()
     {
         if (!this.CanApply) 
             return Task.CompletedTask;
@@ -106,23 +102,13 @@ public class AssignInterviewDialogViewModel: DoActionDialogViewModel<AssignInter
         return Task.CompletedTask;
     }
 
-    protected override IEnumerable<InterviewerDocument> GetInterviewers(AssignInterviewDialogArgs parameter, out bool needAddSupervisorToResponsibles)
+    protected override Guid? GetCurrentEntityResponsible(AssignInterviewDialogArgs parameter)
     {
         var interviewId = parameter.InterviewId;
         var interview = this.statefulInterviewRepository.GetOrThrow(interviewId.FormatGuid());
-        var responsibleId = interview.CurrentResponsibleId;
-
-        var interviewersViewModels = this.usersRepository.LoadAll()
-            .Where(x => x.InterviewerId != responsibleId
-                        && !x.IsLockedByHeadquarters
-                        && !x.IsLockedBySupervisor);
-            
-        var userIdentity = principal.CurrentUserIdentity;
-        needAddSupervisorToResponsibles = userIdentity.UserId != responsibleId;
-        
-        return interviewersViewModels;
+        return interview.CurrentResponsibleId;
     }
-    
+
     protected override void ResponsibleSelected(ResponsibleToSelectViewModel responsible)
     {
         base.ResponsibleSelected(responsible);

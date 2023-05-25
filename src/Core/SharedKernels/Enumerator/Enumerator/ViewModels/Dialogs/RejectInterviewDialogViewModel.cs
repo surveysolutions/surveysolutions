@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using MvvmCross.Plugin.Messenger;
@@ -17,13 +16,12 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dialogs;
 
-public class RejectInterviewDialogViewModel: DoActionDialogViewModel<RejectInterviewDialogArgs>
+public class RejectInterviewDialogViewModel: ActionDialogViewModel<RejectInterviewDialogArgs>
 {
     private readonly IStatefulInterviewRepository statefulInterviewRepository;
     private readonly ICommandService commandService;
     private readonly IAuditLogService auditLogService;
     private readonly IMvxMessenger messenger;
-    private readonly IPlainStorage<InterviewerDocument> usersRepository;
 
     public RejectInterviewDialogViewModel(IMvxNavigationService mvxMvxNavigationService,
         IStatefulInterviewRepository statefulInterviewRepository,
@@ -34,22 +32,22 @@ public class RejectInterviewDialogViewModel: DoActionDialogViewModel<RejectInter
         IPlainStorage<InterviewerDocument> usersRepository,
         IPlainStorage<InterviewView> interviewStorage, 
         IPlainStorage<AssignmentDocument, int> assignmentsStorage
-        ) : base(mvxMvxNavigationService, principal, interviewStorage, assignmentsStorage)
+        ) : base(mvxMvxNavigationService, principal, interviewStorage, assignmentsStorage, usersRepository)
     {
         this.statefulInterviewRepository = statefulInterviewRepository;
         this.commandService = commandService;
         this.auditLogService = auditLogService;
         this.messenger = messenger;
-        this.usersRepository = usersRepository;
     }
 
     public override string DialogTitle => UIResources.Supervisor_Complete_Reject_btn;
     public override string ApplyTitle => UIResources.Supervisor_Complete_Reject_btn;
 
     public override bool ShowResponsibles => true;
+    public override bool NeedAddSupervisorToResponsibles => false;
     public override bool CanApply => true;
 
-    protected override Task DoApplyAsync()
+    protected override Task ApplyAsync()
     {
         try
         {
@@ -80,20 +78,5 @@ public class RejectInterviewDialogViewModel: DoActionDialogViewModel<RejectInter
         }
         
         return Task.CompletedTask;
-    }
-
-    protected override IEnumerable<InterviewerDocument> GetInterviewers(RejectInterviewDialogArgs parameter, out bool needAddSupervisorToResponsibles)
-    {
-        needAddSupervisorToResponsibles = false;
-        
-        var interviewId = parameter.InterviewId;
-        var interview = this.statefulInterviewRepository.GetOrThrow(interviewId.FormatGuid());
-
-        var interviewersViewModels = this.usersRepository.LoadAll()
-            .Where(x => x.InterviewerId != interview.CurrentResponsibleId 
-                        && !x.IsLockedByHeadquarters 
-                        && !x.IsLockedBySupervisor);
-
-        return interviewersViewModels;
     }
 }

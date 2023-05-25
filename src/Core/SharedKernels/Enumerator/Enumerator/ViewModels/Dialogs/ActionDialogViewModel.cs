@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
@@ -14,13 +15,14 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dialogs;
 
-public abstract class DoActionDialogViewModel<T> : MvxViewModel<T> where T : IDoActionDialogArgs
+public abstract class ActionDialogViewModel<T> : MvxViewModel<T> where T : IActionDialogArgs
 {
     protected readonly IMvxNavigationService MvxNavigationService;
     protected readonly IPrincipal Principal;
     protected readonly IPlainStorage<InterviewView> InterviewStorage;
     protected readonly IPlainStorage<AssignmentDocument, int> AssignmentsStorage;
-    
+    protected readonly IPlainStorage<InterviewerDocument> UsersRepository;
+
     private string dialogTitle;
     private string commentHint = UIResources.Interviewer_Comment;
     private string commentHelperText;
@@ -36,15 +38,17 @@ public abstract class DoActionDialogViewModel<T> : MvxViewModel<T> where T : IDo
 
     protected T CreateParameter;
 
-    protected DoActionDialogViewModel(IMvxNavigationService mvxMvxNavigationService, 
+    protected ActionDialogViewModel(IMvxNavigationService mvxMvxNavigationService, 
         IPrincipal principal,
         IPlainStorage<InterviewView> interviewStorage, 
-        IPlainStorage<AssignmentDocument, int> assignmentsStorage)
+        IPlainStorage<AssignmentDocument, int> assignmentsStorage,
+        IPlainStorage<InterviewerDocument> usersRepository)
     {
         this.MvxNavigationService = mvxMvxNavigationService;
         this.Principal = principal;
         this.InterviewStorage = interviewStorage;
         this.AssignmentsStorage = assignmentsStorage;
+        this.UsersRepository = usersRepository;
     }
 
     public virtual string DialogTitle
@@ -77,7 +81,9 @@ public abstract class DoActionDialogViewModel<T> : MvxViewModel<T> where T : IDo
         protected set => SetProperty(ref showResponsibles, value);
     }
     
-    private MvxObservableCollection<ResponsibleToSelectViewModel> responsibleItems;
+    public virtual bool NeedAddSupervisorToResponsibles { get; protected set; }
+    
+    private MvxObservableCollection<ResponsibleToSelectViewModel> responsibleItems = new();
     public MvxObservableCollection<ResponsibleToSelectViewModel> ResponsibleItems
     {
         get => this.responsibleItems;
@@ -132,8 +138,8 @@ public abstract class DoActionDialogViewModel<T> : MvxViewModel<T> where T : IDo
         protected set => SetProperty(ref confirmText, value);
     }
 
-    public IMvxAsyncCommand ApplyCommand => applyCommand ??= new MvxAsyncCommand(this.DoApplyAsync, () => this.CanApply);
-    protected abstract Task DoApplyAsync();
+    public IMvxAsyncCommand ApplyCommand => applyCommand ??= new MvxAsyncCommand(this.ApplyAsync, () => this.CanApply);
+    protected abstract Task ApplyAsync();
 
     public IMvxCommand CancelCommand => new MvxCommand(this.Cancel);
     protected void Cancel() => this.MvxNavigationService.Close(this);
@@ -144,17 +150,26 @@ public abstract class DoActionDialogViewModel<T> : MvxViewModel<T> where T : IDo
     {
         this.CreateParameter = parameter;
 
+        SetupResponsibles(parameter);
+    }
+
+    protected virtual void SetupResponsibles(T parameter)
+    {
+        if (!ShowResponsibles)
+            return;
+        
+        NeedAddSupervisorToResponsibles = Principal.CurrentUserIdentity.UserId != GetCurrentEntityResponsible(parameter);
         var responsiblesViewModels = GetResponsiblesViewModels(parameter);
         this.ResponsibleItems = new MvxObservableCollection<ResponsibleToSelectViewModel>(responsiblesViewModels);
     }
 
     protected IEnumerable<ResponsibleToSelectViewModel> GetResponsiblesViewModels(T parameter)
     {
-        var interviewers = GetInterviewers(parameter, out bool needAddSupervisorToResponsibles);
+        var interviewers = GetInterviewers(parameter);
         var interviewerViewModels = interviewers.Select(ToInterviewerToSelectViewModel)
             .OrderBy(x => $"{x.FullName}{(string.IsNullOrEmpty(x.FullName) ? "" : " - ")}{x.Login}");
 
-        if (!needAddSupervisorToResponsibles)
+        if (!NeedAddSupervisorToResponsibles)
             return interviewerViewModels;
         
         var supervisorViewModel = GetSupervisorViewModel();
@@ -164,6 +179,8 @@ public abstract class DoActionDialogViewModel<T> : MvxViewModel<T> where T : IDo
 
         return responsibles;
     }
+    
+    protected virtual Guid? GetCurrentEntityResponsible(T parameter) => null;
 
     private ResponsibleToSelectViewModel GetSupervisorViewModel()
     {
@@ -192,7 +209,17 @@ public abstract class DoActionDialogViewModel<T> : MvxViewModel<T> where T : IDo
         };
     }
     
-    protected abstract IEnumerable<InterviewerDocument> GetInterviewers(T parameter, out bool needAddSupervisorToResponsibles);
+    protected virtual IEnumerable<InterviewerDocument> GetInterviewers(T parameter)
+    {
+        var responsibleId = GetCurrentEntityResponsible(parameter);
+
+        var interviewersViewModels = this.UsersRepository.LoadAll()
+            .Where(x => x.InterviewerId != responsibleId
+                        && !x.IsLockedByHeadquarters
+                        && !x.IsLockedBySupervisor);
+            
+        return interviewersViewModels;
+    }
 
     private ResponsibleToSelectViewModel ToInterviewerToSelectViewModel(InterviewerDocument interviewer)
     {

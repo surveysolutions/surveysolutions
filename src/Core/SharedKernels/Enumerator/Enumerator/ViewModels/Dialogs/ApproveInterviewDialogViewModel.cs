@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Main.Core.Entities.SubEntities;
+﻿using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using MvvmCross.Plugin.Messenger;
 using WB.Core.GenericSubdomains.Portable;
@@ -17,7 +14,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dialogs;
 
-public class ApproveInterviewDialogViewModel : DoActionDialogViewModel<ApproveInterviewDialogArgs>
+public class ApproveInterviewDialogViewModel : ActionDialogViewModel<ApproveInterviewDialogArgs>
 {
     private readonly IStatefulInterviewRepository statefulInterviewRepository;
     private readonly ICommandService commandService;
@@ -31,8 +28,9 @@ public class ApproveInterviewDialogViewModel : DoActionDialogViewModel<ApproveIn
         IAuditLogService auditLogService,
         IMvxMessenger messenger,
         IPlainStorage<InterviewView> interviewStorage, 
-        IPlainStorage<AssignmentDocument, int> assignmentsStorage
-        ) : base(mvxMvxNavigationService, principal, interviewStorage, assignmentsStorage)
+        IPlainStorage<AssignmentDocument, int> assignmentsStorage,
+        IPlainStorage<InterviewerDocument> usersRepository
+        ) : base(mvxMvxNavigationService, principal, interviewStorage, assignmentsStorage, usersRepository)
     {
         this.statefulInterviewRepository = statefulInterviewRepository;
         this.commandService = commandService;
@@ -47,7 +45,7 @@ public class ApproveInterviewDialogViewModel : DoActionDialogViewModel<ApproveIn
 
     public override bool CanApply => true;
 
-    protected override Task DoApplyAsync()
+    protected override Task ApplyAsync()
     {
         try
         {
@@ -69,11 +67,5 @@ public class ApproveInterviewDialogViewModel : DoActionDialogViewModel<ApproveIn
         }
         
         return Task.CompletedTask;
-    }
-
-    protected override IEnumerable<InterviewerDocument> GetInterviewers(ApproveInterviewDialogArgs parameter, out bool needAddSupervisorToResponsibles)
-    {
-        needAddSupervisorToResponsibles = false;
-        return Enumerable.Empty<InterviewerDocument>();
     }
 }
