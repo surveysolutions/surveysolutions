@@ -124,6 +124,7 @@
       <Button
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
+            android:elevation="0dp"
             style="@style/Area_Screen_Button_Bordered"
             local:MvxBind="Click LoadShapefile;Text Localization('AreaMap_ShowBoundaries'); Visible And(Not(IsPanelVisible), GreaterThan(AvailableShapefiles.Count, 0), Not(ShapeFileLoaded));"
             android:layout_marginLeft="@dimen/area_editor_common_margin_right"
@@ -131,6 +132,7 @@
       <Button
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
+            android:elevation="0dp"
             style="@style/Area_Screen_Button_Bordered"
             local:MvxBind="Click HideShapefile;Text Localization('AreaMap_HideBoundaries'); Visible And(Not(IsPanelVisible), ShapeFileLoaded);"
             android:layout_marginLeft="@dimen/area_editor_common_margin_right"
@@ -193,6 +195,8 @@
               android:id="@+id/carousel_view_pager"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              android:elevation="1dp"
+              android:translationZ="1dp"
               android:layout_above="@+id/area_warning"
               android:orientation="horizontal"
               local:MvxBind="Visible ShowMarkersDetails; CurrentItem ActiveMarkerIndex;"
