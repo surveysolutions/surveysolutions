@@ -247,6 +247,11 @@ namespace WB.UI.Shared.Extensions.Activities
 
         protected override void OnDestroy()
         {
+            base.OnDestroy();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
             var viewPager = this.FindViewById<ViewPager2>(Resource.Id.carousel_view_pager);
             if (viewPager != null)
             {
@@ -262,8 +267,8 @@ namespace WB.UI.Shared.Extensions.Activities
             onDrawerOpenedSubscription?.Dispose();
             onMapViewMapTappedSubscription?.Dispose();
             onPageChangeCallback?.Dispose();
-
-            base.OnDestroy();
+            
+            base.Dispose(disposing);
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
