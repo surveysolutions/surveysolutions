@@ -465,6 +465,18 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 newDashboardItemWithEvents.OnItemUpdated += Markers_OnItemUpdated;
             if (newDashboardItem is InterviewDashboardItemViewModel newInterview)
                 newInterview.OnItemRemoved += Markers_InterviewItemRemoved;
+            
+            string markerId = dashboardItem.Id;
+            var markerGraphic = graphicsOverlay.Graphics.FirstOrDefault(g => g.Attributes[MarkerId]?.ToString() == markerId);
+            if (markerGraphic != null)
+            {
+                var indexOf = AvailableMarkers.IndexOf(newDashboardItem);
+                var isActive = ActiveMarkerIndex == indexOf;
+                if (isActive)
+                    SetFocusedMarkerStyle(newDashboardItem);
+                else
+                    SetCommonMarkerStyle(newDashboardItem);
+            }
         }
 
         protected void Markers_InterviewItemRemoved(object sender, EventArgs e)
@@ -757,28 +769,16 @@ namespace WB.UI.Shared.Extensions.ViewModels
             if (newPosition == oldPosition)
                 return;
 
-            void SetMarkerStyle(IMarkerViewModel marker, int zIndex, double markerSize)
-            {
-                var graphic = graphicsOverlay.Graphics.FirstOrDefault(g => g.Attributes[MarkerId]?.ToString() == marker.Id);
-                if (graphic != null)
-                {
-                    graphic.ZIndex = zIndex;
-                    graphic.Symbol = (marker.Type == MarkerType.Assignment)
-                        ? GetAssignmentMarkerSymbol((IAssignmentMarkerViewModel)marker, markerSize)
-                        : GetInterviewMarkerSymbol((IInterviewMarkerViewModel)marker, markerSize);
-                }
-            }
-
             if (oldPosition.HasValue && AvailableMarkers.Count > oldPosition.Value)
             {
                 var marker = AvailableMarkers[oldPosition.Value];
-                SetMarkerStyle(marker, 0, 1);
+                SetCommonMarkerStyle(marker);
             }
 
             if (newPosition.HasValue && AvailableMarkers.Count > newPosition.Value)
             {
                 var marker = AvailableMarkers[newPosition.Value];
-                SetMarkerStyle(marker, 100, 1.5);
+                SetFocusedMarkerStyle(marker);
 
                 var projectedArea = GeometryEngine.Project(this.MapView.VisibleArea, SpatialReferences.Wgs84);
                 var mapPoint = new MapPoint(marker.Longitude, marker.Latitude, SpatialReferences.Wgs84);
@@ -787,6 +787,20 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         }
 
+        void SetFocusedMarkerStyle(IMarkerViewModel marker) => SetMarkerStyle(marker, 100, 1.5);
+        void SetCommonMarkerStyle(IMarkerViewModel marker) => SetMarkerStyle(marker, 0, 1);
+
+        void SetMarkerStyle(IMarkerViewModel marker, int zIndex, double markerSize)
+        {
+            var graphic = graphicsOverlay.Graphics.FirstOrDefault(g => g.Attributes[MarkerId]?.ToString() == marker.Id);
+            if (graphic != null)
+            {
+                graphic.ZIndex = zIndex;
+                graphic.Symbol = (marker.Type == MarkerType.Assignment)
+                    ? GetAssignmentMarkerSymbol((IAssignmentMarkerViewModel)marker, markerSize)
+                    : GetInterviewMarkerSymbol((IInterviewMarkerViewModel)marker, markerSize);
+            }
+        }
         public IMvxAsyncCommand<MapDescription> SwitchMapCommand => new MvxAsyncCommand<MapDescription>(async (mapDescription) =>
         {
             IsPanelVisible = false;
