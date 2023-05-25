@@ -1808,7 +1808,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application needs to have a permission to use location. Retry enabled location and allow access. If you don&apos;t see permissions popup then go to Settings and allow application to use location..
+        ///   Looks up a localized string similar to Application needs to have a permission to use location. If you don&apos;t see permissions popup then go to Settings and allow application to use location..
         /// </summary>
         public static string MissingPermissions_MapsLocation {
             get {
