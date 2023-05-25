@@ -18,9 +18,10 @@ public class ViewPager2CurrentItemBinding : BaseBinding<ViewPager2, int?>
     {
         if (value.HasValue && control.CurrentItem != value.Value)
         {
+            var smoothScroll = control.Visibility == ViewStates.Visible;
             control.Post(() =>
             {
-                control.SetCurrentItem(value.Value, true);
+                control.SetCurrentItem(value.Value, smoothScroll);
             });
         }
     }
@@ -33,7 +34,7 @@ public class ViewPager2CurrentItemBinding : BaseBinding<ViewPager2, int?>
         if (target == null)
             return;
 
-        onPageChangeCallback = new OnPageChangeCallback(target, index =>
+        onPageChangeCallback = new OnPageChangeCallback(index =>
         {
             this.FireValueChanged(index);
         });
@@ -42,13 +43,10 @@ public class ViewPager2CurrentItemBinding : BaseBinding<ViewPager2, int?>
     
     private class OnPageChangeCallback : ViewPager2.OnPageChangeCallback
     {
-        private ViewPager2 viewPager;
         private Action<int> action;
-        private int? prevPosition;
 
-        public OnPageChangeCallback(ViewPager2 viewPager, Action<int> action)
+        public OnPageChangeCallback(Action<int> action)
         {
-            this.viewPager = viewPager;
             this.action = action;
         }
 
@@ -56,28 +54,15 @@ public class ViewPager2CurrentItemBinding : BaseBinding<ViewPager2, int?>
         {
             action?.Invoke(position);
             base.OnPageSelected(position);
-
-            
-            if (prevPosition.HasValue && prevPosition != position)
-            {
-                var recyclerView = viewPager.GetChildAt(0) as RecyclerView;
-                var adapter = recyclerView?.GetAdapter() as MvxRecyclerAdapter;
-                var dashboardItem = adapter?.GetItem(prevPosition.Value) as IDashboardItem;
-                if (dashboardItem is { IsExpanded: true })
                 {
-                    dashboardItem.IsExpanded = false;
                     
                     // var minHeight = viewPager.Resources.GetDimension(Resource.Dimension.carousel_current_item_min_height);
                     // viewPager.LayoutParameters.Height = minHeight;
                 }
-            }
-
-            prevPosition = position;
         }
 
         protected override void Dispose(bool disposing)
         {
-            viewPager = null;
             action = null;
             base.Dispose(disposing);
         }

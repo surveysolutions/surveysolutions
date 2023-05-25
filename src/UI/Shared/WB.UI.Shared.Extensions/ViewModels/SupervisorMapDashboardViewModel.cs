@@ -4,6 +4,7 @@ using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -90,7 +91,25 @@ public class SupervisorMapDashboardViewModel : MapDashboardViewModel
     public override void ViewAppeared()
     {
         base.ViewAppeared();
-        messengerSubscription = messenger.Subscribe<DashboardChangedMsg>(async msg => await RefreshCounters(false), MvxReference.Strong);
+        messengerSubscription = messenger.Subscribe<DashboardChangedMsg>(async msg =>
+        {
+            if (msg.InterviewId.HasValue)
+            {
+                var markerId = msg.InterviewId.Value.FormatGuid();
+                var markerViewModel = AvailableMarkers.FirstOrDefault(m => m.Id == markerId);
+                UpdateMarker(markerViewModel);
+            }
+            else if (msg.AssignmentId.HasValue)
+            {
+                var markerId = msg.AssignmentId.Value.ToString();
+                var markerViewModel = AvailableMarkers.FirstOrDefault(m => m.Id == markerId);
+                UpdateMarker(markerViewModel);
+            }
+            else
+            {
+                await RefreshCounters(false);
+            }
+        }, MvxReference.Strong);
     }
 
     public override void ViewDisappeared()

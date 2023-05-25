@@ -124,6 +124,7 @@
       <Button
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
+            android:elevation="0dp"
             style="@style/Area_Screen_Button_Bordered"
             local:MvxBind="Click LoadShapefile;Text Localization('AreaMap_ShowBoundaries'); Visible And(Not(IsPanelVisible), GreaterThan(AvailableShapefiles.Count, 0), Not(ShapeFileLoaded));"
             android:layout_marginLeft="@dimen/area_editor_common_margin_right"
@@ -131,6 +132,7 @@
       <Button
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
+            android:elevation="0dp"
             style="@style/Area_Screen_Button_Bordered"
             local:MvxBind="Click HideShapefile;Text Localization('AreaMap_HideBoundaries'); Visible And(Not(IsPanelVisible), ShapeFileLoaded);"
             android:layout_marginLeft="@dimen/area_editor_common_margin_right"
@@ -158,6 +160,7 @@
           android:layout_marginRight="@dimen/area_editor_common_margin_left" />
 
         <LinearLayout
+                android:id="@+id/area_warning"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="@dimen/area_editor_lower_panel_margin_bottom"
                 android:layout_width="match_parent"
@@ -165,7 +168,6 @@
                 android:orientation="vertical"
                 local:MvxBind="Visible Not(IsPanelVisible);">
             <LinearLayout
-                    android:id="@+id/area_warning"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.75"
@@ -194,8 +196,9 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:background="@android:color/transparent"
-              android:layout_alignParentBottom="true"
-              android:layout_marginBottom="@dimen/area_editor_lower_carousel_margin_bottom"
+              android:elevation="1dp"
+              android:translationZ="1dp"
+              android:layout_above="@+id/area_warning"
               android:orientation="horizontal"
               local:MvxBind="Visible ShowMarkersDetails; CurrentItem ActiveMarkerIndex;"
               />

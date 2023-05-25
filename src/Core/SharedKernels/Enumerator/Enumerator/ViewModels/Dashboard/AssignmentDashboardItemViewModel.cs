@@ -1,16 +1,11 @@
 ﻿#nullable enable
 using System;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Humanizer;
-using MvvmCross.Commands;
 using NodaTime;
-using NodaTime.Extensions;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -160,16 +155,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             
             RaiseOnItemUpdated();
         }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-            }
-
-            base.Dispose(disposing);
-        }
-
+        
         public string Id => Assignment.Id.ToString();
         public MarkerType Type => MarkerType.Assignment;
         public double Latitude => Assignment.LocationLatitude ?? 0;

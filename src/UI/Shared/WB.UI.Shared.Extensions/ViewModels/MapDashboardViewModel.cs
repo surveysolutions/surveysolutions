@@ -154,7 +154,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             CollectQuestionnaires();
             CollectResponsibles();
             CollectInterviewStatuses();
-            await RefreshMarkers(needShowAllMarkers: true);
+            await RefreshMarkers(setViewToMarkers: true);
         }
 
         public override MapDescription GetSelectedMap(MvxObservableCollection<MapDescription> mapsToSelectFrom)
@@ -257,7 +257,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 return;
             
             SelectedQuestionnaire = questionnaire;
-            await RefreshMarkers(needShowAllMarkers: true);
+            await RefreshMarkers(setViewToMarkers: true);
         }
 
         protected static readonly ResponsibleItem AllResponsibleDefault = new ResponsibleItem(null, UIResources.MapDashboard_AllResponsibles);
@@ -287,7 +287,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 return;
             
             SelectedResponsible = responsible;
-            await RefreshMarkers(needShowAllMarkers: true);
+            await RefreshMarkers(setViewToMarkers: true);
         }
 
         private static readonly StatusItem AllStatusDefault = new StatusItem(null, UIResources.MapDashboard_AllStatuses);
@@ -317,7 +317,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 return;
             
             SelectedStatus = status;
-            await RefreshMarkers(needShowAllMarkers: true);
+            await RefreshMarkers(setViewToMarkers: true);
         }
 
         private async void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -326,17 +326,17 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 e.PropertyName == nameof(ShowAssignments))
             {
                 this.CollectQuestionnaires();
-                await this.RefreshMarkers(needShowAllMarkers: true);
+                await this.RefreshMarkers(setViewToMarkers: true);
             }
         }
 
         private readonly GraphicsOverlay graphicsOverlay = new GraphicsOverlay();
 
-        public IMvxCommand RefreshMarkersCommand => new MvxAsyncCommand(async() => await RefreshMarkers(needShowAllMarkers: true));
+        public IMvxCommand RefreshMarkersCommand => new MvxAsyncCommand(async() => await RefreshMarkers(setViewToMarkers: true));
 
         private readonly object graphicsOverlayLock = new object ();
 
-        protected async Task RefreshMarkers(bool needShowAllMarkers)
+        protected async Task RefreshMarkers(bool setViewToMarkers)
         {
             if (MapView?.Map?.SpatialReference != null)
             {
@@ -414,7 +414,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         });
                     }
 
-                    if (needShowAllMarkers)
+                    if (setViewToMarkers)
                         await SetViewToValues();
                     
                     await CheckMarkersAgainstShapefile();
@@ -429,16 +429,22 @@ namespace WB.UI.Shared.Extensions.ViewModels
         
         protected void Markers_OnItemUpdated(object sender, EventArgs args)
         {
-            IMarkerViewModel newDashboardItem = null;
             IMarkerViewModel dashboardItem = sender as IMarkerViewModel;
+
+            UpdateMarker(dashboardItem);
+        }
+        
+        protected void UpdateMarker(IMarkerViewModel dashboardItem)
+        {
+            IMarkerViewModel newDashboardItem = null;
             
-            if (sender is IAssignmentMarkerViewModel assignment)
+            if (dashboardItem is IAssignmentMarkerViewModel assignment)
             {
                 var assignmentDocument = AssignmentsRepository.GetById(assignment.AssignmentId);
                 newDashboardItem = dashboardViewModelFactory.GetAssignment(assignmentDocument);
             }
 
-            if (sender is IInterviewMarkerViewModel interview)
+            if (dashboardItem is IInterviewMarkerViewModel interview)
             {
                 var interviewView = InterviewViewRepository.GetById(interview.Id);
                 newDashboardItem = dashboardViewModelFactory.GetInterview(interviewView);
@@ -459,6 +465,18 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 newDashboardItemWithEvents.OnItemUpdated += Markers_OnItemUpdated;
             if (newDashboardItem is InterviewDashboardItemViewModel newInterview)
                 newInterview.OnItemRemoved += Markers_InterviewItemRemoved;
+            
+            string markerId = dashboardItem.Id;
+            var markerGraphic = graphicsOverlay.Graphics.FirstOrDefault(g => g.Attributes[MarkerId]?.ToString() == markerId);
+            if (markerGraphic != null)
+            {
+                var indexOf = AvailableMarkers.IndexOf(newDashboardItem);
+                var isActive = ActiveMarkerIndex == indexOf;
+                if (isActive)
+                    SetFocusedMarkerStyle(newDashboardItem);
+                else
+                    SetCommonMarkerStyle(newDashboardItem);
+            }
         }
 
         protected void Markers_InterviewItemRemoved(object sender, EventArgs e)
@@ -718,8 +736,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 {
                     if (identifyResults.Graphics[0].Geometry is MapPoint projectedLocation)
                     {
-                        ShowMarkersDetails = true;
                         NavigateToCardByMarker(identifyResults, projectedLocation);
+                        ShowMarkersDetails = true;
                     }
                 }
                 else
@@ -751,28 +769,16 @@ namespace WB.UI.Shared.Extensions.ViewModels
             if (newPosition == oldPosition)
                 return;
 
-            void SetMarkerStyle(IMarkerViewModel marker, int zIndex, double markerSize)
-            {
-                var graphic = graphicsOverlay.Graphics.FirstOrDefault(g => g.Attributes[MarkerId]?.ToString() == marker.Id);
-                if (graphic != null)
-                {
-                    graphic.ZIndex = zIndex;
-                    graphic.Symbol = (marker.Type == MarkerType.Assignment)
-                        ? GetAssignmentMarkerSymbol((IAssignmentMarkerViewModel)marker, markerSize)
-                        : GetInterviewMarkerSymbol((IInterviewMarkerViewModel)marker, markerSize);
-                }
-            }
-
             if (oldPosition.HasValue && AvailableMarkers.Count > oldPosition.Value)
             {
                 var marker = AvailableMarkers[oldPosition.Value];
-                SetMarkerStyle(marker, 0, 1);
+                SetCommonMarkerStyle(marker);
             }
 
             if (newPosition.HasValue && AvailableMarkers.Count > newPosition.Value)
             {
                 var marker = AvailableMarkers[newPosition.Value];
-                SetMarkerStyle(marker, 100, 1.5);
+                SetFocusedMarkerStyle(marker);
 
                 var projectedArea = GeometryEngine.Project(this.MapView.VisibleArea, SpatialReferences.Wgs84);
                 var mapPoint = new MapPoint(marker.Longitude, marker.Latitude, SpatialReferences.Wgs84);
@@ -781,6 +787,20 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         }
 
+        void SetFocusedMarkerStyle(IMarkerViewModel marker) => SetMarkerStyle(marker, 100, 1.5);
+        void SetCommonMarkerStyle(IMarkerViewModel marker) => SetMarkerStyle(marker, 0, 1);
+
+        void SetMarkerStyle(IMarkerViewModel marker, int zIndex, double markerSize)
+        {
+            var graphic = graphicsOverlay.Graphics.FirstOrDefault(g => g.Attributes[MarkerId]?.ToString() == marker.Id);
+            if (graphic != null)
+            {
+                graphic.ZIndex = zIndex;
+                graphic.Symbol = (marker.Type == MarkerType.Assignment)
+                    ? GetAssignmentMarkerSymbol((IAssignmentMarkerViewModel)marker, markerSize)
+                    : GetInterviewMarkerSymbol((IInterviewMarkerViewModel)marker, markerSize);
+            }
+        }
         public IMvxAsyncCommand<MapDescription> SwitchMapCommand => new MvxAsyncCommand<MapDescription>(async (mapDescription) =>
         {
             IsPanelVisible = false;
