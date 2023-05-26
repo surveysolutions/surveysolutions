@@ -125,6 +125,9 @@
                         $t("MapReport.details") }}</a>
                 </div>
                 <div class="row-fluid tooltip-buttons" style="white-space:nowrap;">
+                    <button class="btn btn-sm btn-success" v-if="model.userRole == 'Supervisor' || model.userRole == 'Headquarter'" click="assignAssignment">{{ 
+                        $t("Common.Assign") }}</button>
+
                     <button class="btn btn-sm btn-success" v-if="model.userRole == 'Interviewer'" click="createInterview">{{
                         $t("Common.Create") }}</button>
                 </div>
@@ -272,6 +275,11 @@ export default {
         },
 
         canAssign() {
+            if  (this.selectedTooltip.assignmentId) {
+                if (this.model.userRole == 'Supervisor' || this.model.userRole == 'Headquarter')
+                    return true
+            }
+
             if (this.model.userRole == 'Supervisor' &&
                 (this.selectedTooltip.status == 'InterviewerAssigned'
                     || this.selectedTooltip.status == 'SupervisorAssigned'
@@ -367,6 +375,13 @@ export default {
         },
 
         async assign() {
+            if (this.selectedTooltip.interviewId)
+                await this.sendAssignInterview()
+            else if (this.selectedTooltip.assignmentId)
+                await this.sendAssignAssignment()
+        },
+
+        async sendAssignInterview() {
             if (this.newResponsibleId.iconClass === 'supervisor')
                 await this.$hq.InterviewsPublicApi.SvAssign(this.selectedTooltip.interviewId, this.newResponsibleId.key)
             else
@@ -381,6 +396,18 @@ export default {
             this.newResponsibleId = newValue
         },
 
+        assignAssignment() {
+            this.newResponsibleId = null
+            this.isReassignReceivedByTablet = false
+            this.$refs.assignModal.modal({ keyboard: false })
+        },
+
+        async sendAssignAssignment() {
+            await this.$hq.Assignments.assignResponsible(this.selectedTooltip.assignmentId, this.newResponsibleId.key)
+            this.$refs.assignModal.hide()
+            this.newResponsibleId = null
+            await this.refreshAssignmentData()
+        },
 
         async approveSvInterview() {
             await this.$hq.InterviewsPublicApi.SvApprove(this.selectedTooltip.interviewId)
@@ -425,6 +452,24 @@ export default {
             }
 
             marker.setProperty('status', this.selectedTooltip.status)
+        },
+
+        async refreshAssignmentData() {
+            const self = this
+            const assignmentId = this.selectedTooltip.assignmentId
+            const marker = this.selectedTooltip.marker
+            const response = await this.api.AssignmentUrl(assignmentId)
+            const data = response.data
+
+            if (data != null) {
+                data['assignmentId'] = assignmentId
+                data['marker'] = marker
+                self.selectedTooltip = data
+
+                Vue.nextTick(function () {
+                    self.infoWindow.setContent($(self.$refs.assignmentTooltip).html())
+                })
+            }
         },
 
         setMapCanvasStyle() {
