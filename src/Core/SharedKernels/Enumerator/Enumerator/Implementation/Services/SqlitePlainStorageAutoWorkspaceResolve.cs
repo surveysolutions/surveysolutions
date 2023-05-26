@@ -28,7 +28,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         private const string NonWorkspacedName = "NonWorkspaced";
         private bool NonWorkspaced;
         
-        public SqlitePlainStorageAutoWorkspaceResolve(ILogger logger, IFileSystemAccessor fileSystemAccessor, SqliteSettings settings, IWorkspaceAccessor workspaceAccessor) 
+        public SqlitePlainStorageAutoWorkspaceResolve(ILogger logger, IFileSystemAccessor fileSystemAccessor, 
+            SqliteSettings settings, IWorkspaceAccessor workspaceAccessor) 
             : base(logger, fileSystemAccessor, settings, workspaceAccessor)
         {
             NonWorkspaced = typeof(TEntity).GetCustomAttribute(typeof(NonWorkspacedAttribute)) != null;
@@ -46,11 +47,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         protected override SQLiteConnectionWithLock GetConnection()
         {
             var workspaceName = GetWorkspaceName();
+            return GetConnectionForWorkspace(workspaceName);
+        }
 
-            return connections.GetOrAdd(workspaceName, valueFactory: (string ws) =>
-            {
-                return base.CreateConnection();
-            });
+        protected SQLiteConnectionWithLock GetConnectionForWorkspace(string workspaceName)
+        {
+            var pathToDatabase = GetPathToDatabase();
+            return connections.GetOrAdd(workspaceName, valueFactory: _ => base.CreateConnection(pathToDatabase));
         }
 
         private string GetWorkspaceName()

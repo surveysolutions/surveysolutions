@@ -1,6 +1,7 @@
 ﻿using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -19,7 +20,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             IPrincipal principal,
             IPasswordHasher passwordHasher,
             IPlainStorage<SupervisorIdentity> supervsorsPlainStorage,
-            IPlainStorage<CompanyLogo> logoStorage,
+            ICompanyLogoStorage logoStorage,
             ISynchronizationService synchronizationService,
             ILogger logger,
             IAuditLogService auditLogService)
@@ -32,6 +33,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         public override string GetUserName()
             => this.supervsorsPlainStorage.FirstOrDefault().Name;
+
+        public override string GetUserLastWorkspace()
+            => this.supervsorsPlainStorage.FirstOrDefault().Workspace;
 
         public override void UpdateLocalUser(string userName, string token, string passwordHash)
         {

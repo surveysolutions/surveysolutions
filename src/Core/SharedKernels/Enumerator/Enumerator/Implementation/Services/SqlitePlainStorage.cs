@@ -48,14 +48,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             if (this.connection != null)
                 return this.connection;
 
-            this.connection = CreateConnection();
+            var pathToDatabase = GetPathToDatabase();
+            this.connection = CreateConnection(pathToDatabase);
             return this.connection;
         }
         
-        protected virtual SQLiteConnectionWithLock CreateConnection()
+        protected SQLiteConnectionWithLock CreateConnection(string pathToDatabase)
         {
-            var pathToDatabase = GetPathToDatabase();
-
             var dbDirectory = fileSystemAccessor.GetDirectory(pathToDatabase);
             if (!fileSystemAccessor.IsDirectoryExists(dbDirectory))
                 fileSystemAccessor.CreateDirectory(dbDirectory);
