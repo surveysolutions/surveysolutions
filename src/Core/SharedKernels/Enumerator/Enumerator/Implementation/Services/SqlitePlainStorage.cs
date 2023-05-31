@@ -52,7 +52,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.connection = CreateConnection(pathToDatabase);
             return this.connection;
         }
-        
+
+        protected virtual SQLiteConnectionWithLock CreateConnection()
+        {
+            var pathToDatabase = GetPathToDatabase();
+            return CreateConnection(pathToDatabase);
+        }
+
         protected SQLiteConnectionWithLock CreateConnection(string pathToDatabase)
         {
             var dbDirectory = fileSystemAccessor.GetDirectory(pathToDatabase);

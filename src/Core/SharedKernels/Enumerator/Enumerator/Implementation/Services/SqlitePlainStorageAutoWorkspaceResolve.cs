@@ -47,7 +47,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         protected override SQLiteConnectionWithLock GetConnection()
         {
             var workspaceName = GetWorkspaceName();
-            return GetConnectionForWorkspace(workspaceName);
+
+            return connections.GetOrAdd(workspaceName, valueFactory: (string ws) =>
+            {
+                return base.CreateConnection();
+            });
         }
 
         protected SQLiteConnectionWithLock GetConnectionForWorkspace(string workspaceName)
