@@ -63,7 +63,13 @@ namespace WB.Enumerator.Native.WebInterview.Models
 
     public class InterviewIntegerQuestion : GenericQuestion
     {
-        public int? Answer { get; set; }
+        private int? answer;
+        public int? Answer
+        {
+            get => answer;
+            set => answer = value;
+        }
+
         public bool IsRosterSize { get; set; }
         public int? AnswerMaxValue { get; set; }
         public bool UseFormatting { get; set; }
@@ -82,7 +88,13 @@ namespace WB.Enumerator.Native.WebInterview.Models
 
     public class InterviewSingleOptionQuestion : CategoricalQuestion
     {
-        public int? Answer { get; set; }
+        
+        private int? answer;
+        public int? Answer
+        {
+            get => answer;
+            set => answer = value;
+        }
         public bool RenderAsCombobox { get; set; }
     }
     

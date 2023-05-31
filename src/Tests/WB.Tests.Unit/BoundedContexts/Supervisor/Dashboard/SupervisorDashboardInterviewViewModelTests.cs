@@ -10,7 +10,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
 {
-    [TestOf(typeof(SupervisorDashboardInterviewViewModel))]
+    [TestOf(typeof(SupervisorInterviewDashboardViewModel))]
     public class SupervisorDashboardInterviewViewModelTests : MvxIoCSupportingTest
     {
         [OneTimeSetUp]

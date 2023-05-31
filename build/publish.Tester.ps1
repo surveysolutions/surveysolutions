@@ -38,7 +38,7 @@ if ($null -ne $androidKeyStore) {
 
 $PathToKeystore = $keyStore
 
-& (GetPathToMSBuild) -restore $AndroidProject -t:SignAndroidPackage `
+dotnet publish -restore $AndroidProject -t:SignAndroidPackage `
     -p:Configuration=$BuildConfiguration `
     -p:AndroidKeyStore=True `
     -p:VersionCode=$VersionCode `

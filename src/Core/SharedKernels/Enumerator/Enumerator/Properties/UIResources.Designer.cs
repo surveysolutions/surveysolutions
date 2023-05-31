@@ -141,7 +141,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error occured on loading. Shapefile cannot be opened.
+        ///   Looks up a localized string similar to Error occured on loading. Shapefile cannot be handled.
         /// </summary>
         public static string AreaMap_ErrorOnShapefileLoading {
             get {
@@ -164,6 +164,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string AreaMap_InitLocation {
             get {
                 return ResourceManager.GetString("AreaMap_InitLocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Some markers fall outside the outlined area.
+        /// </summary>
+        public static string AreaMap_ItemsOutsideDedicatedArea {
+            get {
+                return ResourceManager.GetString("AreaMap_ItemsOutsideDedicatedArea", resourceCulture);
             }
         }
         
@@ -1394,6 +1403,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Leave a comment.
+        /// </summary>
+        public static string Interviewer_Comment {
+            get {
+                return ResourceManager.GetString("Interviewer_Comment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Diagnostics.
         /// </summary>
         public static string Interviewer_Diagnostics {
@@ -1408,6 +1426,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Interviewer_Done {
             get {
                 return ResourceManager.GetString("Interviewer_Done", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewer {0} has already received this assignment {1}. Are you sure you want to reassign it?.
+        /// </summary>
+        public static string Interviewer_Reassign_AlreadyReceivedAssignment {
+            get {
+                return ResourceManager.GetString("Interviewer_Reassign_AlreadyReceivedAssignment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewer {0} has already received this interview {1}. Are you sure you want to reassign it?.
+        /// </summary>
+        public static string Interviewer_Reassign_AlreadyReceivedInterview {
+            get {
+                return ResourceManager.GetString("Interviewer_Reassign_AlreadyReceivedInterview", resourceCulture);
             }
         }
         
@@ -1768,6 +1804,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string MissingPermissions_Camera {
             get {
                 return ResourceManager.GetString("MissingPermissions_Camera", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Application needs to have a permission to use location. If you don&apos;t see permissions popup then go to Settings and allow application to use location..
+        /// </summary>
+        public static string MissingPermissions_MapsLocation {
+            get {
+                return ResourceManager.GetString("MissingPermissions_MapsLocation", resourceCulture);
             }
         }
         

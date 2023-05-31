@@ -5,6 +5,7 @@ using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
@@ -23,13 +24,14 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
             IInterviewerPrincipal principal = null,
             IPasswordHasher passwordHasher = null,
             IOnlineSynchronizationService synchronizationService = null,
-            ILogger logger = null)
+            ILogger logger = null,
+            ICompanyLogoStorage logoStorage = null)
         {
             return new LoginViewModel(
                 viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
                 principal ?? Mock.Of<IInterviewerPrincipal>(),
                 passwordHasher ?? Mock.Of<IPasswordHasher>(),
-                Create.Storage.InMemorySqlitePlainStorage<CompanyLogo>(), 
+                logoStorage ?? Mock.Of<ICompanyLogoStorage>(),
                 synchronizationService ?? Mock.Of<IOnlineSynchronizationService>(),
                 logger ?? Mock.Of<ILogger>(),
                 Mock.Of<IAuditLogService>());

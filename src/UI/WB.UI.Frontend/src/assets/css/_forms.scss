@@ -299,7 +299,7 @@ input.radio-row{
 			border-color: $gray-form;
 			border-left: none;
 			&:hover, &:focus, &:active{
-				background-color: transparent;
+				opacity: 0.5;
 			}
 			&:disabled, &.disabled{
 				background: $gray_form;
@@ -315,7 +315,12 @@ input.radio-row{
 				&:after{
 					top: ($cross-height*0.5 - 4px);
 				}
+                
 			}
+            span.add{
+                $add-height: 16px;
+                @include add($add-height);
+            }
 		}
 	} 
 }

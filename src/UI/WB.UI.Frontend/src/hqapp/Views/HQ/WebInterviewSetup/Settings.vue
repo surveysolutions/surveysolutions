@@ -268,7 +268,7 @@
                                                     border="0"
                                                     cellspacing="0"
                                                     cellpadding="0"
-                                                    style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; box-sizing: border-box; max-width: 600px; background-image: url('../../img/logo.svg'); background-repeat: no-repeat;  background-size: 270px auto;  background-position: 115% 45px;">
+                                                    style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; box-sizing: border-box; max-width: 600px; background-image: url('/img/logo.svg'); background-repeat: no-repeat;  background-size: 270px auto;  background-position: 115% 45px;">
                                                     <tr>
                                                         <td style="border: 6px solid #E5E5E5;  padding: 50px 55px 115px; box-sizing: border-box;">
                                                             <table border="0"
@@ -872,8 +872,8 @@ export default {
 
             return text
                 .replace(/%[A-Za-z0-9_]+%/g, match => this.$t('WebInterviewSettings.AnswerOn', {variable: match.replace(/%/g, '')}))
-                .replace(/%[A-Za-z0-9_]+:barcode%/g, '<img src="../../../img/barcode128.png" />')
-                .replace(/%[A-Za-z0-9_]+:qrcode%/g, '<img src="../../../img/qrcode.png" />')
+                .replace(/%[A-Za-z0-9_]+:barcode%/g, '<img src="/img/barcode128.png" />')
+                .replace(/%[A-Za-z0-9_]+:qrcode%/g, '<img src="/img/qrcode.png" />')
         },
         dummy() {
             return false

@@ -502,11 +502,11 @@ namespace WB.Tests.Abc.TestFactories
             => new WaitingForSupervisorActionViewModel(dashboardItemsAccessor ?? Mock.Of<IDashboardItemsAccessor>(),
                 viewModelFactory ?? Create.Service.SupervisorInterviewViewModelFactory());
 
-        public SupervisorDashboardInterviewViewModel SupervisorDashboardInterviewViewModel(Guid? interviewId = null,
+        public SupervisorInterviewDashboardViewModel SupervisorDashboardInterviewViewModel(Guid? interviewId = null,
             IPrincipal principal = null,
             IPlainStorage<InterviewerDocument> interviewers = null)
         {
-            var viewModel = new SupervisorDashboardInterviewViewModel(
+            var viewModel = new SupervisorInterviewDashboardViewModel(
                 Mock.Of<IServiceLocator>(),
                 Mock.Of<IAuditLogService>(),
                 Mock.Of<IViewModelNavigationService>(),

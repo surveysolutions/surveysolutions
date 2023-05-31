@@ -43,7 +43,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         [TestCase("Environment.Exit(1)", "System.Environment")]
         [TestCase("GC.Collect()", "System.GC")]
         [TestCase("var t = new System.Threading.SemaphoreSlim(0, 3)", "System.Threading.SemaphoreSlim")]
-        public void should_not_allow_usage_of_dangerous_classes(string codeToCheck, string expectedClassName)
+
+        public void should_not_allow_usage_of_dangerous_classess(string codeToCheck, string expectedClassName)
         {
             string code = string.Format(TestClassToCompile, codeToCheck);
             var syntaxTree = SyntaxFactory.ParseSyntaxTree(code);
@@ -77,7 +78,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         const string TestClassToCompile =
             @"  using System;
                 using System.Collections.Generic;
-                using System.Linq;                
+                using System.Linq;
                 using WB.Core.SharedKernels.DataCollection;
                 public class InterviewEvaluator : IInterviewEvaluator
             {{

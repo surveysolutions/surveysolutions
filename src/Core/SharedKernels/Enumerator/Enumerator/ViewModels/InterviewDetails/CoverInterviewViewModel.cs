@@ -178,8 +178,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 })
                 .Where(entity => entity.IsStaticText || 
                                  entity.IsVariable ||
-                                 (entity.QuestionType.HasValue
-                                  && entity.QuestionType.Value != QuestionType.GpsCoordinates))
+                                 entity.QuestionType.HasValue)
                 .Select(entity =>
                 {
                     var entityIdentity = new Identity(entity.EntityId, RosterVector.Empty);
@@ -197,12 +196,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                         : entity.IsVariable
                             ? interview.GetVariableValueAsString(Identity.Create(entity.EntityId, RosterVector.Empty))
                             : string.Empty;
+
+                    GeoLocation geoLocation = null;
+                    if (entity.QuestionType == QuestionType.GpsCoordinates)
+                    {
+                        var gpsQuestion = interview.GetGpsQuestion(Identity.Create(entity.EntityId, RosterVector.Empty));
+                        var gpsAnswer = gpsQuestion.GetAnswer();
+                        geoLocation = gpsAnswer.ToGeoLocation();
+                        value = string.Format(CultureInfo.InvariantCulture, "{0}, {1}", gpsAnswer.Value.Latitude, gpsAnswer.Value.Longitude); 
+                    }
                     
                     return new CoverPrefilledEntity
                     {
                         Identity = entityIdentity,
                         Title = title,
                         Answer = value,
+                        GeoLocation = geoLocation,
                         Attachment = attachmentViewModel
                     };
                 })

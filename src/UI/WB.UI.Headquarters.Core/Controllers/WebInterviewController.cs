@@ -97,7 +97,7 @@ namespace WB.UI.Headquarters.Controllers
             return !(passedInterviews?.Contains(interviewId)).GetValueOrDefault();
         }
 
-        private void RememberCapchaFilled(string interviewId)
+        private void RememberCaptchaFilled(string interviewId)
         {
             var interviews = HttpContext.Session.Get<List<string>>(CaptchaCompletedKey) ?? new List<string>();
             if (!interviews.Contains(interviewId))
@@ -496,7 +496,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (invitation.InterviewId != null)
             {
-                RememberCapchaFilled(invitation.InterviewId);
+                RememberCaptchaFilled(invitation.InterviewId);
                 HttpContext.Session.SaveWebInterviewAccessForCurrentUser(invitation.InterviewId);
                 return this.Redirect(GenerateUrl("Cover", invitation.InterviewId));
             }
@@ -512,7 +512,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     if (invitation.InterviewId != null)
                     {
-                        RememberCapchaFilled(invitation.InterviewId);
+                        RememberCaptchaFilled(invitation.InterviewId);
                         HttpContext.Session.SaveWebInterviewAccessForCurrentUser(invitation.InterviewId);
                     }
 
@@ -526,7 +526,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var interviewId = this.CreateInterview(assignment);
 
-            RememberCapchaFilled(interviewId);
+            RememberCaptchaFilled(interviewId);
 
             if (assignment.InPrivateWebMode())
             {
@@ -697,7 +697,7 @@ namespace WB.UI.Headquarters.Controllers
                 return this.View("Resume", model);
             }
 
-            RememberCapchaFilled(id);
+            RememberCaptchaFilled(id);
             HttpContext.Session.SaveWebInterviewAccessForCurrentUser(id);
 
             if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
@@ -800,7 +800,7 @@ namespace WB.UI.Headquarters.Controllers
                 }
             }
 
-            RememberCapchaFilled(id);
+            RememberCaptchaFilled(id);
             HttpContext.Session.SaveWebInterviewAccessForCurrentUser(id);
 
             if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))

@@ -10,6 +10,7 @@ using Android.Widget;
 using AndroidX.AppCompat.Widget;
 using AndroidX.DrawerLayout.Widget;
 using AndroidX.RecyclerView.Widget;
+using AndroidX.ViewPager2.Widget;
 using Com.Google.Android.Exoplayer2.UI;
 using FFImageLoading.Cross;
 using Google.Android.Material.Button;
@@ -29,9 +30,11 @@ using Serilog;
 using Serilog.Extensions.Logging;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dialogs;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Activities.Dialogs;
 using WB.UI.Shared.Enumerator.Converters;
 using WB.UI.Shared.Enumerator.CustomBindings;
 using WB.UI.Shared.Enumerator.CustomControls;
@@ -94,6 +97,12 @@ namespace WB.UI.Shared.Enumerator
             lookup.Add<OverviewViewModel, OverviewFragment>();
             lookup.Add<OverviewNodeDetailsViewModel, OverviewNodeDetailsFragment>();
             lookup.Add<SelectResponsibleForAssignmentViewModel, SelectResponsibleForAssignmentFragment>();
+            
+            lookup.Add<ApproveInterviewDialogViewModel, DoActionDialogFragment>();
+            lookup.Add<AssignInterviewDialogViewModel,  DoActionDialogFragment>();
+            lookup.Add<AssignAssignmentDialogViewModel, DoActionDialogFragment>();
+            lookup.Add<RejectInterviewDialogViewModel,  DoActionDialogFragment>();
+            
             return lookup;
         }
 
@@ -211,6 +220,7 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<RadioButton>("AssignToInterviewerText", (view) => new AssignToInterviewerTextBinding(view));
             registry.RegisterCustomBindingFactory<EditText>("TextLength", (editText) => new EditTextMaxLengthBinding(editText));
             registry.RegisterCustomBindingFactory<MapView>("SetGpsLocation", view => new ViewSetGpsLocationBinding(view));
+            registry.RegisterCustomBindingFactory<ViewPager2>("CurrentItem", view => new ViewPager2CurrentItemBinding(view));
             
             //MvxAppCompatSetupHelper.FillTargetFactories(registry);
 

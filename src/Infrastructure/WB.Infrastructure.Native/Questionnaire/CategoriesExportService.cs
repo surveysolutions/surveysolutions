@@ -52,30 +52,22 @@ namespace WB.Infrastructure.Native.Questionnaire
                 {
                     currentRowNumber++;
 
-                    worksheet.Cell($"A{currentRowNumber}").Value = row.Id;
-                    worksheet.Cell($"A{currentRowNumber}").Style.Alignment.WrapText = true;
-                    worksheet.Cell($"B{currentRowNumber}").Value = row.Text;
-                    worksheet.Cell($"B{currentRowNumber}").Style.Alignment.WrapText = true;
+                    worksheet.Cell(currentRowNumber, 1).Value = row.Id;
+                    worksheet.Cell(currentRowNumber, 2).Value = row.Text;
 
                     if (isCascading)
                     {
-                        worksheet.Cell($"C{currentRowNumber}").Value = row.ParentId;
-                        worksheet.Cell($"C{currentRowNumber}").Style.Alignment.WrapText = true;
-                        worksheet.Cell($"D{currentRowNumber}").Value = row.AttachmentName;
-                        worksheet.Cell($"D{currentRowNumber}").Style.Alignment.WrapText = true;
-                        worksheet.Column(3).AdjustToContents();
-                        worksheet.Column(4).AdjustToContents();
+                        worksheet.Cell(currentRowNumber, 3).Value = row.ParentId;
+                        worksheet.Cell(currentRowNumber, 4).Value = row.AttachmentName;
                     }
                     else
                     {
-                        worksheet.Cell($"C{currentRowNumber}").Value = row.AttachmentName;
-                        worksheet.Cell($"C{currentRowNumber}").Style.Alignment.WrapText = true;
-                        worksheet.Column(3).AdjustToContents();
+                        worksheet.Cell(currentRowNumber, 3).Value = row.AttachmentName;
                     }
                 }
 
+                worksheet.Cells().Style.Alignment.WrapText = true;
                 worksheet.Protection.AllowElement(XLSheetProtectionElements.FormatColumns);
-
                 using var stream = new MemoryStream();
 
                 excelPackage.SaveAs(stream);

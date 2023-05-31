@@ -13,7 +13,7 @@
         "source.fixAll": true
     },
     "[vue]": {
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+        "editor.defaultFormatter": "Vue.volar"
     },
     "[javascript]": {
         "editor.defaultFormatter": "dbaeumer.vscode-eslint"
@@ -21,5 +21,5 @@
     "editor.detectIndentation": false,
     "vetur.format.defaultFormatter.js": "",
     "vetur.format.defaultFormatter.html": "none",
-    "i18n-ally.localesPaths": [],
+    "i18n-ally.localesPaths": []
 }

@@ -5,6 +5,39 @@
       <ManagedAssemblyToLink Condition="'%(Filename)' == 'System.Private.CoreLib'">
         <IsTrimmable>false</IsTrimmable>
       </ManagedAssemblyToLink>
+      <ManagedAssemblyToLink Condition="'%(Filename)' == 'mscorlib'">
+        <IsTrimmable>false</IsTrimmable>
+      </ManagedAssemblyToLink>
+      <ManagedAssemblyToLink Condition="'%(Filename)' == 'System.Linq'">
+        <IsTrimmable>false</IsTrimmable>
+      </ManagedAssemblyToLink>
+      <ManagedAssemblyToLink Condition="'%(Filename)' == 'System.Linq.Expressions'">
+        <IsTrimmable>false</IsTrimmable>
+      </ManagedAssemblyToLink>
+      <ManagedAssemblyToLink Condition="'%(Filename)' == 'System.Linq.Queryable'">
+        <IsTrimmable>false</IsTrimmable>
+      </ManagedAssemblyToLink>
+      <ManagedAssemblyToLink Condition="'%(Filename)' == 'System.Linq.Parallel'">
+        <IsTrimmable>false</IsTrimmable>
+      </ManagedAssemblyToLink>
+      <ManagedAssemblyToLink Condition="'%(Filename)' == 'System.Runtime'">
+        <IsTrimmable>false</IsTrimmable>
+      </ManagedAssemblyToLink>
+      <ManagedAssemblyToLink Condition="'%(Filename)' == 'System.Runtime.Extensions'">
+        <IsTrimmable>false</IsTrimmable>
+      </ManagedAssemblyToLink>
+      <ManagedAssemblyToLink Condition="'%(Filename)' == 'System.Collections'">
+        <IsTrimmable>false</IsTrimmable>
+      </ManagedAssemblyToLink>
+      <ManagedAssemblyToLink Condition="'%(Filename)' == 'System.Text.RegularExpressions'">
+        <IsTrimmable>false</IsTrimmable>
+      </ManagedAssemblyToLink>
+      <ManagedAssemblyToLink Condition="'%(Filename)' == 'netstandard'">
+        <IsTrimmable>false</IsTrimmable>
+      </ManagedAssemblyToLink>
+      <ManagedAssemblyToLink Condition="'%(Filename)' == 'WB.Core.SharedKernels.DataCollection.Portable'">
+        <IsTrimmable>false</IsTrimmable>
+      </ManagedAssemblyToLink>
     </ItemGroup>
   </Target>
 </Project>

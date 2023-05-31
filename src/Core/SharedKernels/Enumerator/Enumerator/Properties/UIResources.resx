@@ -395,6 +395,15 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Interviewer_Reassign_Comment" xml:space="preserve">
     <value>Leave comment for a new responsible</value>
   </data>
+  <data name="Interviewer_Comment" xml:space="preserve">
+    <value>Leave a comment</value>
+  </data>
+  <data name="Interviewer_Reassign_AlreadyReceivedInterview" xml:space="preserve">
+    <value>Interviewer {0} has already received this interview {1}. Are you sure you want to reassign it?</value>
+  </data>
+  <data name="Interviewer_Reassign_AlreadyReceivedAssignment" xml:space="preserve">
+    <value>Interviewer {0} has already received this assignment {1}. Are you sure you want to reassign it?</value>
+  </data>
   <data name="Interviewer_Done" xml:space="preserve">
     <value>Done</value>
   </data>
@@ -524,6 +533,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="MissingPermissions_Storage" xml:space="preserve">
     <value>Application needs to have a permission to use storage in order to answer this question. Retry answering question and allow access. If you don't see permissions popup then go to Settings and allow application to use storage.</value>
   </data>
+  <data name="MissingPermissions_MapsLocation" xml:space="preserve">
+    <value>Application needs to have a permission to use location. If you don't see permissions popup then go to Settings and allow application to use location.</value>
+  </data>
   <data name="MissingPermissions_Microphone_Global" xml:space="preserve">
     <value>Application needs to have a permission to use microphone. Retry last action and allow access. If you don't see permissions popup then go to Settings and allow application to use microphone.</value>
   </data>
@@ -573,7 +585,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Select boundaries file</value>
   </data>
   <data name="AreaMap_ErrorOnShapefileLoading" xml:space="preserve">
-    <value>Error occured on loading. Shapefile cannot be opened</value>
+    <value>Error occured on loading. Shapefile cannot be handled</value>
   </data>
   <data name="AreaMap_NoMapsFound" xml:space="preserve">
     <value>No maps were found. Please update maps</value>
@@ -608,6 +620,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="AreaMap_OverlapsWithOther" xml:space="preserve">
     <value>and {0} other.</value>
   </data>
+  <data name="AreaMap_ItemsOutsideDedicatedArea" xml:space="preserve">
+    <value>Some markers fall outside the outlined area</value>
+  </data>  
   <data name="AreaMap_PointsFormat" xml:space="preserve">
     <value>Points: {0}</value>
   </data>

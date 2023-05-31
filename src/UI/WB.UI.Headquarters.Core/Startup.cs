@@ -211,13 +211,18 @@ namespace WB.UI.Headquarters
                 externalStoragesSettings = Configuration.GetSection("ExternalStorages").Get<ExternalStoragesSettings>();
             }
 
+            var fileSystemEmailServiceSettings = new FileSystemEmailServiceSettings(false, null, null, null, null, null);
+            if (Configuration.GetSection("FileSystemEmailServiceSettings").Exists())
+            {
+                fileSystemEmailServiceSettings = Configuration.GetSection("FileSystemEmailServiceSettings").Get<FileSystemEmailServiceSettings>();
+            }
+
             return new HeadquartersBoundedContextModule(userPreloadingSettings,
                 sampleImportSettings,
                 synchronizationSettings,
                 new TrackingSettings(trackingSection.WebInterviewPauseResumeGraceTimespan),
                 externalStoragesSettings: externalStoragesSettings,
-                fileSystemEmailServiceSettings:
-                    new FileSystemEmailServiceSettings(false, null, null, null, null, null),
+                fileSystemEmailServiceSettings: fileSystemEmailServiceSettings,
                 syncPackagesJobSetting: new SyncPackagesProcessorBackgroundJobSetting(true, syncPackageSection.SynchronizationInterval, syncPackageSection.SynchronizationBatchCount, syncPackageSection.SynchronizationParallelExecutorsCount)
             );
         }

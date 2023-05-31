@@ -21,12 +21,13 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Markers;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Enumerator.Views.Dashboard;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 {
-    public class InterviewDashboardItemViewModel : ExpandableQuestionsDashboardItemViewModel, IDashboardViewItem
+    public class InterviewDashboardItemViewModel : ExpandableQuestionsDashboardItemViewModel, IDashboardViewItem, IInterviewMarkerViewModel
     {
         private readonly IServiceLocator serviceLocator;
         private readonly IAuditLogService auditLogService;
@@ -170,7 +171,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         {
             this.DetailedIdentifyingData = preffilledQuestions;
             this.IdentifyingData = this.DetailedIdentifyingData.Take(3).ToList();
-            this.HasExpandedView = this.PrefilledQuestions.Count > 0;
+            this.HasExpandedView = this.PrefilledQuestions.Count > 0 
+                                   || CalendarEvent != null 
+                                   || !string.IsNullOrEmpty(Comments);
             this.IsExpanded = false;
         }
 
@@ -386,13 +389,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             set => this.SetProperty(ref this.responsible, value);
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-            }
-
-            base.Dispose(disposing);
-        }
+        public string Id => interview.Id;
+        public MarkerType Type => MarkerType.Interview;
+        public double Latitude => interview.LocationLatitude ?? 0;
+        public double Longitude => interview.LocationLongitude ?? 0;
+        public InterviewStatus InterviewStatus => interview.Status;
     }
 }
