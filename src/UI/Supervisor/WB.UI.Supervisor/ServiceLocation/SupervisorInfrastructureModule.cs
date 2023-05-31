@@ -69,6 +69,7 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.BindAsSingleton<ICalendarEventStorage, CalendarEventStorage>();
             registry.Bind<ICalendarEventRemoval, CalendarEventRemoval>();
             
+            registry.BindAsSingleton<IPlainStorage<CompanyLogo>, CompanyLogoStorage>();
             registry.BindAsSingleton<ICompanyLogoStorage, CompanyLogoStorage>();
             
             registry.BindAsSingleton<IEnumeratorEventStorage, SqliteMultiFilesEventStorage>();
