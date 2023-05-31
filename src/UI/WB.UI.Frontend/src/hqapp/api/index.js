@@ -389,6 +389,14 @@ class AssignmentsApi {
             enabled: isEnabled,
         })
     }
+
+    assignResponsible(assignmentId, responsible) {
+        var url = `${this.base}/${assignmentId}/assign`
+
+        return this.http.patch(url, {
+            responsible: responsible,
+        })
+    }
 }
 
 class WebInterviewSettingsApi {
