@@ -23,19 +23,8 @@ public class CompanyLogoStorage : SqlitePlainStorageAutoWorkspaceResolve<Company
     
     public CompanyLogo? GetCompanyLogoByWorkspace(string keyName, string workspace)
     {
-        return this.GetById(keyName);
-        // return this.GetConnection().Table<CompanyLogo>();
-        //
-        //
-        //
-        // var connect = GetConnection();
-        //
-        // TResult result = default(TResult);
-        // using (connect.Lock())
-        //     connect.RunInTransaction(() => result = function.Invoke(connect.Table<TEntity>()));
-        // return result;
-        
-        
+        var connect = GetConnectionForWorkspace(workspace);
+        return this.RunInTransaction(connect, table => table.Connection.Find<CompanyLogo>(keyName));
     }
     
 }

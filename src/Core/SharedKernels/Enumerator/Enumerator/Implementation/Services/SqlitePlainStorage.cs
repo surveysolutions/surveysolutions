@@ -52,7 +52,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.connection = CreateConnection(pathToDatabase);
             return this.connection;
         }
-        
+
+        protected virtual SQLiteConnectionWithLock CreateConnection()
+        {
+            var pathToDatabase = GetPathToDatabase();
+            return CreateConnection(pathToDatabase);
+        }
+
         protected SQLiteConnectionWithLock CreateConnection(string pathToDatabase)
         {
             var dbDirectory = fileSystemAccessor.GetDirectory(pathToDatabase);
@@ -213,7 +219,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         protected TResult RunInTransaction<TResult>(Func<TableQuery<TEntity>, TResult> function)
         {
             var connect = GetConnection();
-
+            return this.RunInTransaction(connect, function);
+        }
+        
+        protected TResult RunInTransaction<TResult>(SQLiteConnectionWithLock connect, Func<TableQuery<TEntity>, TResult> function)
+        {
             TResult result = default(TResult);
             using (connect.Lock())
                 connect.RunInTransaction(() => result = function.Invoke(connect.Table<TEntity>()));
