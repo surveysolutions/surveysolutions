@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DocumentFormat.OpenXml.Drawing.Charts;
 using Main.Core.Entities.SubEntities;
 using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
@@ -302,7 +303,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         {
             Dictionary<string, bool> usedPasswords =
                 assignments.Where(x => x.Password != AssignmentConstants.PasswordSpecialValue && !String.IsNullOrEmpty(x.Password))
-                    .ToDictionary(import => import.Password, y => false);
+                    .Select(assignment => assignment.Password)
+                    .Distinct()
+                    .ToDictionary(pass => pass, y => false);
             
             List<string> currentBatch = new List<string>();
 
