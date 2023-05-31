@@ -44,6 +44,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return GetInterviewerIdentity()?.Name;
         }
 
+        public string? GetLastWorkspaceOrNull()
+        {
+            return GetInterviewerIdentity()?.Workspace;
+        }
+
         public bool SaveInterviewer(InterviewerIdentity interviewer)
         {
             var user = this.usersStorage.GetById(interviewer.Id);
