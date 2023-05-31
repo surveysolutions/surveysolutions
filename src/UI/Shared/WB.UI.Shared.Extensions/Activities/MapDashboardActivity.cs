@@ -7,6 +7,7 @@ using AndroidX.AppCompat.App;
 using AndroidX.AppCompat.Widget;
 using AndroidX.CardView.Widget;
 using AndroidX.ConstraintLayout.Helper.Widget;
+using AndroidX.ConstraintLayout.Widget;
 using AndroidX.DrawerLayout.Widget;
 using AndroidX.RecyclerView.Widget;
 using AndroidX.ViewPager.Widget;
@@ -152,6 +153,9 @@ namespace WB.UI.Shared.Extensions.Activities
                         viewPager.LayoutParameters.Height = height;
                         viewPager.RequestLayout();
                         view.RequestLayout();
+                        var scrollView = view.FindViewById<ScrollView>(Resource.Id.marker_card_scroll);
+                        ((ConstraintLayout.LayoutParams)scrollView.LayoutParameters).MatchConstraintMaxHeight = maxHeight;
+                        scrollView?.RequestLayout();
                         cardView.RequestLayout();
                     }
                 }
