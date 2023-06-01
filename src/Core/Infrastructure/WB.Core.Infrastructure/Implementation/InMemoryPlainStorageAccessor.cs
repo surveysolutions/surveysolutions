@@ -54,7 +54,7 @@ namespace WB.Core.Infrastructure.Implementation
         {
             foreach (var entity in entities.ToList())
             {
-                this.Store(entity.Item1,entity.Item2);
+                this.Store(entity.Item1, entity.Item2);
             }
         }
 
