@@ -21,7 +21,6 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
@@ -198,19 +197,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                             ? interview.GetVariableValueAsString(Identity.Create(entity.EntityId, RosterVector.Empty))
                             : string.Empty;
 
-                    GpsLocation gpsLocation = null;
+                    GeoLocation geoLocation = null;
                     if (entity.QuestionType == QuestionType.GpsCoordinates)
                     {
                         var gpsQuestion = interview.GetGpsQuestion(Identity.Create(entity.EntityId, RosterVector.Empty));
-                        var gpsQuestionAnswer = gpsQuestion.GetAnswer();
-
-                        if (gpsQuestionAnswer != null)
-                        {
-                            var gpsAnswer = gpsQuestionAnswer.Value;
-                            gpsLocation = new GpsLocation(gpsAnswer.Accuracy, gpsAnswer.Altitude, gpsAnswer.Latitude,
-                                gpsAnswer.Longitude, DateTimeOffset.MinValue);
-                            value = string.Format(CultureInfo.InvariantCulture, "{0}, {1}", gpsAnswer.Latitude, gpsAnswer.Longitude); 
-                        }
+                        var gpsAnswer = gpsQuestion.GetAnswer();
+                        geoLocation = gpsAnswer.ToGeoLocation();
+                        value = string.Format(CultureInfo.InvariantCulture, "{0}, {1}", gpsAnswer.Value.Latitude, gpsAnswer.Value.Longitude); 
                     }
                     
                     return new CoverPrefilledEntity
@@ -218,7 +211,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                         Identity = entityIdentity,
                         Title = title,
                         Answer = value,
-                        GpsLocation = gpsLocation,
+                        GeoLocation = geoLocation,
                         Attachment = attachmentViewModel
                     };
                 })

@@ -9,7 +9,7 @@
               local:MvxBind="Text Answer; Click AnswerClickedCommand" />
     <include layout="@layout/interview__attachment_multimedia" />
     <com.google.android.gms.maps.MapView
-            local:MvxBind="Visible IsGpsAnswered; SetGpsLocation GpsLocation;"
+            local:MvxBind="Visible IsGpsAnswered; SetGpsLocation GeoLocation;"
             android:layout_width="@dimen/Interview_Sidebar_GpsQuestions_max_width"
             android:layout_height="@dimen/Interview_Sidebar_GpsQuestions_max_height"
             style="@style/Interview_Question_GPS_Map"
