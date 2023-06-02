@@ -179,6 +179,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public bool HasErrors { get; private set; }
 
+        public bool IsCoverPageSupported() => GetQuestionnaireOrThrow().IsCoverPageSupported;
         public bool IsCompleted { get; private set; }
 
         public InterviewTreeGroup GetGroup(Identity identity) => this.Tree.GetGroup(identity);
