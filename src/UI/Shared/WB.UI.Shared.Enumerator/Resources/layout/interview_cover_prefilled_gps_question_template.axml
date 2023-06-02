@@ -6,7 +6,7 @@
               style="@style/Interview_Cover_Prefilled_Question">
     <TextView style="@style/Interview_Cover_Question_Title" local:MvxBind="Html Title.PlainText;" />
     <com.google.android.gms.maps.MapView
-            local:MvxBind="Visible IsGpsAnswered; SetGpsLocation GpsLocation;"
+            local:MvxBind="SetGpsLocation GpsLocation;"
             android:layout_width="@dimen/Interview_Sidebar_GpsQuestions_max_width"
             android:layout_height="@dimen/Interview_Sidebar_GpsQuestions_max_height"
             style="@style/Interview_Question_GPS_Map"
