@@ -11,7 +11,7 @@
             android:layout_height="@dimen/Interview_Sidebar_GpsQuestions_max_height"
             style="@style/Interview_Question_GPS_Map"
             map:mapType="hybrid"
-            map:liteMode="true"/>
+            map:liteMode="true" />
     <TextView style="@style/Interview_Cover_GpsQuestion_Answer"
               local:MvxBind="Text Answer; Click AnswerClickedCommand" />
 </LinearLayout>
