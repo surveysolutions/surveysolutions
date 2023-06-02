@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:local="http://schemas.android.com/apk/res-auto"
+              xmlns:map="http://schemas.android.com/tools"
+              android:orientation="vertical"
+              style="@style/Interview_Cover_Prefilled_Question">
+    <TextView style="@style/Interview_Cover_Question_Title" local:MvxBind="Html Title.PlainText;" />
+    <com.google.android.gms.maps.MapView
+            local:MvxBind="Visible IsGpsAnswered; SetGpsLocation GpsLocation;"
+            android:layout_width="@dimen/Interview_Sidebar_GpsQuestions_max_width"
+            android:layout_height="@dimen/Interview_Sidebar_GpsQuestions_max_height"
+            style="@style/Interview_Question_GPS_Map"
+            map:mapType="hybrid"
+            map:liteMode="true"/>
+    <TextView style="@style/Interview_Cover_GpsQuestion_Answer"
+              local:MvxBind="Text Answer; Click AnswerClickedCommand" />
+</LinearLayout>
