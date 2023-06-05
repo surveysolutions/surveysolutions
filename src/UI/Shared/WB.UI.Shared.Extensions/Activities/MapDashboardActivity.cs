@@ -254,8 +254,11 @@ namespace WB.UI.Shared.Extensions.Activities
             base.OnDestroy();
         }
 
+        private bool isDisposed = false;
+        
         protected override void Dispose(bool disposing)
         {
+            if(isDisposed) return;
             var viewPager = this.FindViewById<ViewPager2>(Resource.Id.carousel_view_pager);
             if (viewPager != null)
             {
@@ -273,6 +276,8 @@ namespace WB.UI.Shared.Extensions.Activities
             onPageChangeCallback?.Dispose();
             
             base.Dispose(disposing);
+            
+            isDisposed = true;
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
