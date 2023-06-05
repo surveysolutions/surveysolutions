@@ -93,7 +93,9 @@ namespace WB.UI.Supervisor.Activities.Dashboard
             if (viewModelPropertyName != null)
             {
                 item.SetActionView(Resource.Layout.dashboard_sidebar_counter);
-                var textView = (TextView) item.ActionView;
+                var textView = item.ActionView as TextView;
+                if(textView == null) return;
+                
                 var viewModelPropertyInfo = ViewModel.GetType().GetProperty(viewModelPropertyName);
 
                 SetLabelText(textView, viewModelPropertyInfo);
