@@ -531,7 +531,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             
             var queryParameters = new QueryParameters();
 
-            List<MapPoint> pointsToCheck = new List<MapPoint>();
+            //List<MapPoint> pointsToCheck = new List<MapPoint>();
             foreach (var graphic in graphicsOverlay.Graphics)
             {
                 if (graphic.Geometry != null && graphic.Geometry.GeometryType == GeometryType.Point)
@@ -539,12 +539,23 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     var projectedPoint = graphic.Geometry.Project(LoadedShapefile.SpatialReference);
                     if (projectedPoint is MapPoint mapPoint)
                     {
-                        pointsToCheck.Add(mapPoint);
+                        //pointsToCheck.Add(mapPoint);
+                        queryParameters.Geometry = mapPoint;
+                        queryParameters.SpatialRelationship = SpatialRelationship.Intersects;
+                        //queryParameters.ReturnGeometry = true;
+
+                        var queryResult = await LoadedShapefile.QueryFeaturesAsync(queryParameters);
+                        if (!queryResult.Any())
+                        {
+                            Warning = UIResources.AreaMap_ItemsOutsideDedicatedArea;
+                            IsWarningVisible = true;
+                            return;
+                        }
                     }
                 }
             }
             
-            Multipoint pointsMultipoint = new Multipoint(pointsToCheck, LoadedShapefile.SpatialReference);
+            /*Multipoint pointsMultipoint = new Multipoint(pointsToCheck, LoadedShapefile.SpatialReference);
             queryParameters.Geometry = pointsMultipoint;
             queryParameters.SpatialRelationship = SpatialRelationship.Intersects;
             queryParameters.ReturnGeometry = false;
@@ -554,7 +565,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             {
                 Warning = UIResources.AreaMap_ItemsOutsideDedicatedArea;
                 IsWarningVisible = true;
-            }
+            }*/
         }
 
         protected override async Task SetViewToValues()
