@@ -479,9 +479,12 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         }
 
-        protected void Markers_InterviewItemRemoved(object sender, EventArgs e)
+        protected async void Markers_InterviewItemRemoved(object sender, EventArgs e)
         {
-            var item = (InterviewDashboardItemViewModel)sender;
+            ReloadEntities();
+            await RefreshMarkers(false);
+
+            /*var item = (InterviewDashboardItemViewModel)sender;
             item.OnItemRemoved -= Markers_InterviewItemRemoved;
             item.OnItemUpdated -= Markers_OnItemUpdated;
 
@@ -497,9 +500,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 ReloadEntities();
             }
 
-            Interviews.RemoveAll(i => i.InterviewId == item.InterviewId);
+            //Interviews.RemoveAll(i => i.InterviewId == item.InterviewId);
 
-            AvailableMarkers.RemoveItems(item.ToEnumerable());
+            AvailableMarkers.RemoveItems(item.ToEnumerable());*/
         }
 
         protected override async Task AfterShapefileLoadedHandler()
@@ -544,7 +547,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
             Multipoint pointsMultipoint = new Multipoint(pointsToCheck, LoadedShapefile.SpatialReference);
             queryParameters.Geometry = pointsMultipoint;
             queryParameters.SpatialRelationship = SpatialRelationship.Intersects;
-            
+            queryParameters.ReturnGeometry = false;
+
             var queryResult = await LoadedShapefile.QueryFeaturesAsync(queryParameters);
             if (queryResult.Count() != pointsToCheck.Count())
             {
