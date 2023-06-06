@@ -34,7 +34,7 @@
     "eslint-plugin-vue": "9.9.0",
     "glob-parent": "^6.0.0",
     "globby": "9.2.0",
-    "is-svg": "^4.2.2",
+    "is-svg": "^4.4.0",
     "normalize-url": "^6.1.0",
     "postcss": "^8.3.0",
     "postcss-svgo": "5.1.0",
