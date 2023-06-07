@@ -162,6 +162,9 @@ namespace WB.UI.Shared.Enumerator
             registry.AddOrOverwrite("SynchronizationStatusToTextColor", new SynchronizationStatusToTextColorConverter());
             
             registry.AddOrOverwrite("Visibility", new VisibilityValueConverter());
+            
+            registry.AddOrOverwrite("VisibilityNullable", new VisibilityNullableValueConverter());
+            
             registry.AddOrOverwrite("InvertedVisibility", new InvertedVisibilityValueConverter());
         }
 
