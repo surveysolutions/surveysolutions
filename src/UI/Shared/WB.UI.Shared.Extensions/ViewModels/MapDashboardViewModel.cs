@@ -112,14 +112,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         }
         
-        private bool showMarkersDetails = false;
-        public bool ShowMarkersDetails
-        {
-            get => this.showMarkersDetails;
-            set => this.RaiseAndSetIfChanged(ref this.showMarkersDetails, value);
-        }
-
-
         public abstract bool SupportDifferentResponsible { get; }
 
         public override void Prepare(MapDashboardViewModelArgs parameter)
@@ -392,8 +384,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         }
 
                         ActiveMarkerIndex = null;
-                        
-                    
+
                         this.AvailableMarkers.ToList().ForEach(uiItem =>
                         {
                             if (uiItem is InterviewDashboardItemViewModel interview)
@@ -508,16 +499,12 @@ namespace WB.UI.Shared.Extensions.ViewModels
         protected override async Task AfterShapefileLoadedHandler()
         {
             await CheckMarkersAgainstShapefile();
-
-            ShowMarkersDetails = false;
             ActiveMarkerIndex = null;
         }
 
         protected override void ShowedFullMap()
         {
             base.ShowedFullMap();
-
-            ShowMarkersDetails = false;
             ActiveMarkerIndex = null;
         }
 
@@ -584,9 +571,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
             if (graphicExtent != null)
             {
-                ShowMarkersDetails = false;
                 ActiveMarkerIndex = null;
-                
                 await MapView.SetViewpointAsync(new Viewpoint(graphicExtent), TimeSpan.FromSeconds(4));
             }
         }
@@ -752,12 +737,10 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     if (identifyResults.Graphics[0].Geometry is MapPoint projectedLocation)
                     {
                         NavigateToCardByMarker(identifyResults, projectedLocation);
-                        ShowMarkersDetails = true;
                     }
                 }
                 else
                 {
-                    ShowMarkersDetails = false;
                     ActiveMarkerIndex = null;
                 }
             }
