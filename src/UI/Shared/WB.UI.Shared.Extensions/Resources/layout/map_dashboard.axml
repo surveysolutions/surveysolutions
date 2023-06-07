@@ -199,7 +199,7 @@
               android:translationZ="1dp"
               android:layout_above="@+id/area_warning"
               android:orientation="horizontal"
-              local:MvxBind="Visible ShowMarkersDetails; CurrentItem ActiveMarkerIndex;"
+              local:MvxBind="Visibility VisibilityNullable(ActiveMarkerIndex); CurrentItem ActiveMarkerIndex;"
               />
       
     </RelativeLayout>

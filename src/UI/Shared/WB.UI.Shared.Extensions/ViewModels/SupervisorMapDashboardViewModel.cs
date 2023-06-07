@@ -93,7 +93,6 @@ public class SupervisorMapDashboardViewModel : MapDashboardViewModel
         base.ViewAppeared();
         messengerSubscription = messenger.Subscribe<DashboardChangedMsg>(async msg =>
         {
-            ShowMarkersDetails = false;
             ActiveMarkerIndex = null;
             
             //filters required to be refreshed

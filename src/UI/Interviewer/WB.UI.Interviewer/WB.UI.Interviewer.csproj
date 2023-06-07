@@ -215,12 +215,6 @@
     <PackageReference Include="System.Threading.Tasks.Extensions">
       <Version>4.5.4</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.AndroidX.Arch.Core.Common">
-      <Version>2.2.0.2</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.AndroidX.Arch.Core.Runtime">
-      <Version>2.2.0.2</Version>
-    </PackageReference>
     <PackageReference Include="Xamarin.Android.PhotoView">
       <Version>2.1.4</Version>
     </PackageReference>
