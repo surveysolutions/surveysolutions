@@ -22,12 +22,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public static void CreateDatabase(string connectionString)
         {
-            var masterDbConnectionString = new NpgsqlConnectionStringBuilder(connectionString);
-            var databaseName = masterDbConnectionString.Database;
-            masterDbConnectionString.Database = "postgres"; // System DB name.
+            var masterDbConnectionStringBuilder = new NpgsqlConnectionStringBuilder(connectionString);
+            var databaseName = masterDbConnectionStringBuilder.Database;
+            masterDbConnectionStringBuilder.Database = "postgres"; // System DB name.
 
-            using var @lock = new MigrationLock(masterDbConnectionString.ConnectionString);
-            using var connection = new NpgsqlConnection(masterDbConnectionString.ConnectionString);
+            using var @lock = new MigrationLock(masterDbConnectionStringBuilder);
+            using var connection = new NpgsqlConnection(masterDbConnectionStringBuilder.ConnectionString);
             connection.Open();
             var checkDbExistsCommand = connection.CreateCommand();
             checkDbExistsCommand.CommandText = "SELECT 1 FROM pg_catalog.pg_database WHERE lower(datname) = lower(:dbName);";
