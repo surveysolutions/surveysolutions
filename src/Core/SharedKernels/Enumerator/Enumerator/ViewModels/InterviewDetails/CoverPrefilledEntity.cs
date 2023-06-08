@@ -1,9 +1,9 @@
 using System;
-using Main.Core.Entities.SubEntities;
 using MvvmCross;
 using MvvmCross.Commands;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
@@ -14,12 +14,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public DynamicTextViewModel Title { get; set; }
         public string Answer { get; set; }
         public AttachmentViewModel Attachment { get; set; }
-        public GeoLocation GeoLocation { get; set; }
+        public GpsLocation GpsLocation { get; set; }
         public bool IsGpsAnswered
         {
             get
             {
-                if (GeoLocation == null)
+                if (GpsLocation == null)
                     return false;
 
                 var settings = Mvx.IoCProvider.Resolve<IEnumeratorSettings>();
@@ -35,10 +35,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void AnswerClickedHandler()
         {
-            if (GeoLocation != null)
+            if (GpsLocation != null)
             {
                 var externalAppLauncher = Mvx.IoCProvider.Resolve<IExternalAppLauncher>();
-                externalAppLauncher.LaunchMapsWithTargetLocation(this.GeoLocation.Latitude, this.GeoLocation.Longitude);
+                externalAppLauncher.LaunchMapsWithTargetLocation(this.GpsLocation.Latitude, this.GpsLocation.Longitude);
             }
         }
 

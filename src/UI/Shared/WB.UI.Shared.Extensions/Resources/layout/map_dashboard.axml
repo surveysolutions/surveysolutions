@@ -199,9 +199,8 @@
               android:translationZ="1dp"
               android:layout_above="@+id/area_warning"
               android:orientation="horizontal"
-              local:MvxBind="Visible ShowMarkersDetails; CurrentItem ActiveMarkerIndex;"
+              local:MvxBind="Visible And(IsNullableHavingValue(ActiveMarkerIndex), Not(IsPanelVisible)); CurrentItem ActiveMarkerIndex;"
               />
-      
     </RelativeLayout>
   </LinearLayout>
   <LinearLayout 

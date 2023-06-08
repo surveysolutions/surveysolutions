@@ -39,6 +39,8 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         {
             map.Clear();
 
+            map.MapType = GoogleMap.MapTypeHybrid; // set in code because ignore set in axml  
+
             var latLng = new LatLng(value.Latitude, value.Longitude);
 
             MarkerOptions marker = new MarkerOptions();

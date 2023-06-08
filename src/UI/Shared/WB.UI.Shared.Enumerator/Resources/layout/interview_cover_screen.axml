@@ -56,11 +56,11 @@
       
         <LinearLayout style="@style/Interview_Cover_Prefilled_Answers_Block" android:orientation="vertical"
                       local:MvxBind="Visible And(HasPrefilledEntities, Not(IsEditMode))">
-            <MvxLinearLayout
+            <MvxRecyclerView
                       android:orientation="vertical"
                       style="@style/Interview_Cover_Prefilled_Answers"
                       local:MvxBind="ItemsSource PrefilledReadOnlyEntities"
-                      local:MvxItemTemplate="@layout/interview_cover_prefilled_question_template" />
+                      local:MvxTemplateSelector ="WB.UI.Shared.Enumerator.CustomControls.CoverInterviewTemplateSelector, WB.UI.Shared.Enumerator" />
         </LinearLayout>
         
         <MvxRecyclerView

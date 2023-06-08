@@ -112,14 +112,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         }
         
-        private bool showMarkersDetails = false;
-        public bool ShowMarkersDetails
-        {
-            get => this.showMarkersDetails;
-            set => this.RaiseAndSetIfChanged(ref this.showMarkersDetails, value);
-        }
-
-
         public abstract bool SupportDifferentResponsible { get; }
 
         public override void Prepare(MapDashboardViewModelArgs parameter)
@@ -392,8 +384,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         }
 
                         ActiveMarkerIndex = null;
-                        
-                    
+
                         this.AvailableMarkers.ToList().ForEach(uiItem =>
                         {
                             if (uiItem is InterviewDashboardItemViewModel interview)
@@ -479,9 +470,12 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         }
 
-        protected void Markers_InterviewItemRemoved(object sender, EventArgs e)
+        protected async void Markers_InterviewItemRemoved(object sender, EventArgs e)
         {
-            var item = (InterviewDashboardItemViewModel)sender;
+            ReloadEntities();
+            await RefreshMarkers(false);
+
+            /*var item = (InterviewDashboardItemViewModel)sender;
             item.OnItemRemoved -= Markers_InterviewItemRemoved;
             item.OnItemUpdated -= Markers_OnItemUpdated;
 
@@ -497,24 +491,20 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 ReloadEntities();
             }
 
-            Interviews.RemoveAll(i => i.InterviewId == item.InterviewId);
+            //Interviews.RemoveAll(i => i.InterviewId == item.InterviewId);
 
-            AvailableMarkers.RemoveItems(item.ToEnumerable());
+            AvailableMarkers.RemoveItems(item.ToEnumerable());*/
         }
 
         protected override async Task AfterShapefileLoadedHandler()
         {
             await CheckMarkersAgainstShapefile();
-
-            ShowMarkersDetails = false;
             ActiveMarkerIndex = null;
         }
 
         protected override void ShowedFullMap()
         {
             base.ShowedFullMap();
-
-            ShowMarkersDetails = false;
             ActiveMarkerIndex = null;
         }
 
@@ -528,7 +518,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             
             var queryParameters = new QueryParameters();
 
-            List<MapPoint> pointsToCheck = new List<MapPoint>();
+            //List<MapPoint> pointsToCheck = new List<MapPoint>();
             foreach (var graphic in graphicsOverlay.Graphics)
             {
                 if (graphic.Geometry != null && graphic.Geometry.GeometryType == GeometryType.Point)
@@ -536,21 +526,33 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     var projectedPoint = graphic.Geometry.Project(LoadedShapefile.SpatialReference);
                     if (projectedPoint is MapPoint mapPoint)
                     {
-                        pointsToCheck.Add(mapPoint);
+                        //pointsToCheck.Add(mapPoint);
+                        queryParameters.Geometry = mapPoint;
+                        queryParameters.SpatialRelationship = SpatialRelationship.Intersects;
+                        //queryParameters.ReturnGeometry = true;
+
+                        var queryResult = await LoadedShapefile.QueryFeaturesAsync(queryParameters);
+                        if (!queryResult.Any())
+                        {
+                            Warning = UIResources.AreaMap_ItemsOutsideDedicatedArea;
+                            IsWarningVisible = true;
+                            return;
+                        }
                     }
                 }
             }
             
-            Multipoint pointsMultipoint = new Multipoint(pointsToCheck, LoadedShapefile.SpatialReference);
+            /*Multipoint pointsMultipoint = new Multipoint(pointsToCheck, LoadedShapefile.SpatialReference);
             queryParameters.Geometry = pointsMultipoint;
             queryParameters.SpatialRelationship = SpatialRelationship.Intersects;
-            
+            queryParameters.ReturnGeometry = false;
+
             var queryResult = await LoadedShapefile.QueryFeaturesAsync(queryParameters);
             if (queryResult.Count() != pointsToCheck.Count())
             {
                 Warning = UIResources.AreaMap_ItemsOutsideDedicatedArea;
                 IsWarningVisible = true;
-            }
+            }*/
         }
 
         protected override async Task SetViewToValues()
@@ -569,9 +571,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
             if (graphicExtent != null)
             {
-                ShowMarkersDetails = false;
                 ActiveMarkerIndex = null;
-                
                 await MapView.SetViewpointAsync(new Viewpoint(graphicExtent), TimeSpan.FromSeconds(4));
             }
         }
@@ -737,12 +737,10 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     if (identifyResults.Graphics[0].Geometry is MapPoint projectedLocation)
                     {
                         NavigateToCardByMarker(identifyResults, projectedLocation);
-                        ShowMarkersDetails = true;
                     }
                 }
                 else
                 {
-                    ShowMarkersDetails = false;
                     ActiveMarkerIndex = null;
                 }
             }

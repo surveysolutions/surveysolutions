@@ -93,22 +93,11 @@ public class SupervisorMapDashboardViewModel : MapDashboardViewModel
         base.ViewAppeared();
         messengerSubscription = messenger.Subscribe<DashboardChangedMsg>(async msg =>
         {
-            if (msg.InterviewId.HasValue)
-            {
-                var markerId = msg.InterviewId.Value.FormatGuid();
-                var markerViewModel = AvailableMarkers.FirstOrDefault(m => m.Id == markerId);
-                UpdateMarker(markerViewModel);
-            }
-            else if (msg.AssignmentId.HasValue)
-            {
-                var markerId = msg.AssignmentId.Value.ToString();
-                var markerViewModel = AvailableMarkers.FirstOrDefault(m => m.Id == markerId);
-                UpdateMarker(markerViewModel);
-            }
-            else
-            {
-                await RefreshCounters(false);
-            }
+            ActiveMarkerIndex = null;
+            
+            //filters required to be refreshed
+            await RefreshCounters(false);
+            
         }, MvxReference.Strong);
     }
 

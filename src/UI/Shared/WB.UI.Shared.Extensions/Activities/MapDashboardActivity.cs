@@ -249,38 +249,31 @@ namespace WB.UI.Shared.Extensions.Activities
             this.HideKeyboard(drawerLayout.WindowToken);
         }
 
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-        }
-
         protected override void Dispose(bool disposing)
         {
-            var viewPager = this.FindViewById<ViewPager2>(Resource.Id.carousel_view_pager);
-            if (viewPager != null)
+            if (disposing)
             {
-                viewPager.UnregisterOnPageChangeCallback(onPageChangeCallback);
-                viewPager.SystemUiVisibilityChange -= ViewPagerOnSystemUiVisibilityChange;
-                viewPager.ScrollChange -= ViewPagerOnScrollChange;
-                viewPager.LayoutChange -= ViewPagerOnLayoutChange;
-                
-                RecyclerView recyclerView = (RecyclerView)viewPager.GetChildAt(0);
-                recyclerView.Touch -= RecyclerViewOnTouch;
+                if (drawerLayout != null)
+                    drawerLayout.DrawerOpened -= OnDrawerLayoutOnDrawerOpened;
+
+                var viewPager = this.FindViewById<ViewPager2>(Resource.Id.carousel_view_pager);
+                if (viewPager != null)
+                {
+                    viewPager.UnregisterOnPageChangeCallback(onPageChangeCallback);
+                    viewPager.SystemUiVisibilityChange -= ViewPagerOnSystemUiVisibilityChange;
+                    viewPager.ScrollChange -= ViewPagerOnScrollChange;
+                    viewPager.LayoutChange -= ViewPagerOnLayoutChange;
+
+                    RecyclerView recyclerView = (RecyclerView) viewPager.GetChildAt(0);
+                    recyclerView.Touch -= RecyclerViewOnTouch;
+                }
+
+                onDrawerOpenedSubscription?.Dispose();
+                onMapViewMapTappedSubscription?.Dispose();
+                onPageChangeCallback?.Dispose();
             }
-            
-            onDrawerOpenedSubscription?.Dispose();
-            onMapViewMapTappedSubscription?.Dispose();
-            onPageChangeCallback?.Dispose();
-            
+
             base.Dispose(disposing);
-        }
-
-        public override bool OnCreateOptionsMenu(IMenu menu)
-        {
-            //this.MenuInflater.Inflate(Resource.Menu.map_dashboard, menu);
-            //menu.LocalizeMenuItem(Resource.Id.menu_dashboard, UIResources.MenuItem_Title_Dashboard);
-
-            return base.OnCreateOptionsMenu(menu);
         }
 
         public override bool OnOptionsItemSelected(IMenuItem item)

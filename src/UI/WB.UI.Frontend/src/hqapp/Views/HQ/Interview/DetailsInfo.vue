@@ -1,4 +1,3 @@
-
 <template>
     <div class="panel panel-details"
         :class="{ 'contains-action-buttons': showRejectButton || showUnapproveButton || showApproveButton, 'contains-tranlation' : canChangeLanguage}">
@@ -159,7 +158,8 @@
             slot="modals"
             :title="showUnapproveButton ? $t('Pages.ApproveRejectPartialView_UnapproveLabel') : $t('Pages.ApproveRejectPartialView_RejectLAbel')"
             :disableOk="(interviewerShouldbeSelected || rejectToNewResponsible) && newResponsibleId == null"
-            :okTitle="showUnapproveButton ? $t('Common.Unapprove') : $t('Common.Reject')">
+            :okTitle="showUnapproveButton ? $t('Common.Unapprove') : $t('Common.Reject')"
+            :okClass="btn-danger">
             <form v-if="!showUnapproveButton"
                 onsubmit="return false;">
                 <div class="form-group">
@@ -352,4 +352,3 @@ export default {
     },
 }
 </script>
-

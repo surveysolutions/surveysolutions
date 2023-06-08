@@ -145,6 +145,7 @@ namespace WB.UI.Shared.Enumerator
             registry.AddOrOverwrite("QuestionCornerOptionBackground", new QuestionCornerOptionBackgroundConverter());
             registry.AddOrOverwrite("QuestionOptionBackground", new QuestionOptionBackgroundConverter());
             registry.AddOrOverwrite("IsStringNotEmpty", new IsStringNotEmptyConverter());
+            registry.AddOrOverwrite("IsNullableHavingValue", new IsNullableHavingValueConverter());
             registry.AddOrOverwrite("SectionStyleBackground", new SectionStyleBackgroundConverter());
             registry.AddOrOverwrite("VisibleOrInvisible", new VisibleOrInvisibleValueConverter());
             registry.AddOrOverwrite("AudioNoiseTypeToShape", new AudioNoiseTypeToShapeConverter());
@@ -162,6 +163,9 @@ namespace WB.UI.Shared.Enumerator
             registry.AddOrOverwrite("SynchronizationStatusToTextColor", new SynchronizationStatusToTextColorConverter());
             
             registry.AddOrOverwrite("Visibility", new VisibilityValueConverter());
+            
+            registry.AddOrOverwrite("VisibilityNullable", new VisibilityNullableValueConverter());
+            
             registry.AddOrOverwrite("InvertedVisibility", new InvertedVisibilityValueConverter());
         }
 

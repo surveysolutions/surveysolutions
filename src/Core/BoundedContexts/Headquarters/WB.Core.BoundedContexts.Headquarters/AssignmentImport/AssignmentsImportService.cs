@@ -302,7 +302,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         {
             Dictionary<string, bool> usedPasswords =
                 assignments.Where(x => x.Password != AssignmentConstants.PasswordSpecialValue && !String.IsNullOrEmpty(x.Password))
-                    .ToDictionary(import => import.Password, y => false);
+                    .Select(assignment => assignment.Password)
+                    .Distinct()
+                    .ToDictionary(pass => pass, y => false);
             
             List<string> currentBatch = new List<string>();
 
@@ -350,7 +352,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             IQuestionnaire questionnaire, List<string> protectedVariables = null)
             => assignmentRows
                 .GroupBy(assignmentRow => assignmentRow.InterviewIdValue?.Value ??
-                                          /*for single/anvanced preloading with main file only without interview ids*/
+                                          /*for single/advanced preloading with main file only without interview ids*/
                                           Guid.NewGuid().ToString())
                 .Select(x => ConvertToAssignmentToImport(x.ToList(), questionnaire, protectedVariables))
                 .ToList();
@@ -474,7 +476,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 }
             }
 
-            // remove roster size answer from parent file if we have calulated by roster files roster size answer
+            // remove roster size answer from parent file if we have calculated by roster files roster size answer
             foreach (var sourceRosterSizeAnswer in sourceRosterSizeAnswers.Where(x => calculatedRosterSizeAnswers.Any(y => y.Identity == x.Identity)))
                 assignment.Answers.Remove(sourceRosterSizeAnswer);
 
@@ -592,13 +594,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 case AssignmentCategoricalSingleAnswer categoricalSingleAnswer when !isLinkedToQuestion && !isLinkedToRoster && categoricalSingleAnswer.OptionCode.HasValue:
                     interviewAnswer.Answer = CategoricalFixedSingleOptionAnswer.FromInt(categoricalSingleAnswer.OptionCode.Value);
                     break;
-                case AssignmentDateTimeAnswer dateTimeAnswer when dateTimeAnswer.Answer.HasValue:
+                case AssignmentDateTimeAnswer { Answer: not null } dateTimeAnswer:
                     interviewAnswer.Answer = DateTimeAnswer.FromDateTime(dateTimeAnswer.Answer.Value);
                     break;
-                case AssignmentIntegerAnswer integerAnswer when integerAnswer.Answer.HasValue:
+                case AssignmentIntegerAnswer { Answer: not null } integerAnswer:
                     interviewAnswer.Answer = NumericIntegerAnswer.FromInt(integerAnswer.Answer.Value);
                     break;
-                case AssignmentDoubleAnswer doubleAnswer when doubleAnswer.Answer.HasValue:
+                case AssignmentDoubleAnswer { Answer: not null } doubleAnswer:
                     interviewAnswer.Answer = NumericRealAnswer.FromDouble(doubleAnswer.Answer.Value);
                     break;
                 case AssignmentGpsAnswer gpsAnswer:

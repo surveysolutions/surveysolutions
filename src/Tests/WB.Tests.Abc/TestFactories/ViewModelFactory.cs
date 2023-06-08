@@ -358,8 +358,8 @@ namespace WB.Tests.Abc.TestFactories
                 .Returns((Func<SideBarSectionViewModel>) SideBarSectionViewModel);
 
             Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<SideBarCoverSectionViewModel>())
-                .Returns(() => new SideBarCoverSectionViewModel( Create.ViewModel.DynamicTextViewModel(
+                .Setup(locator => locator.GetInstance<SideBarVirtualCoverSectionViewModel>())
+                .Returns(() => new SideBarVirtualCoverSectionViewModel( Create.ViewModel.DynamicTextViewModel(
                         liteEventRegistry,
                         interviewRepository: interviewsRepository,
                         questionnaireRepository), Mock.Of<CoverStateViewModel>()));
