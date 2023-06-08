@@ -472,10 +472,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         protected async void Markers_InterviewItemRemoved(object sender, EventArgs e)
         {
-            ReloadEntities();
-            await RefreshMarkers(false);
-
-            /*var item = (InterviewDashboardItemViewModel)sender;
+            var item = (InterviewDashboardItemViewModel)sender;
             item.OnItemRemoved -= Markers_InterviewItemRemoved;
             item.OnItemUpdated -= Markers_OnItemUpdated;
 
@@ -487,13 +484,10 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     .OfType<AssignmentDashboardItemViewModel>()
                     .FirstOrDefault(x => x.AssignmentId == item.AssignmentId.Value)
                     ?.DecreaseInterviewsCount();
-
-                ReloadEntities();
             }
 
-            //Interviews.RemoveAll(i => i.InterviewId == item.InterviewId);
-
-            AvailableMarkers.RemoveItems(item.ToEnumerable());*/
+            ReloadEntities();
+            await RefreshMarkers(false);
         }
 
         protected override async Task AfterShapefileLoadedHandler()
