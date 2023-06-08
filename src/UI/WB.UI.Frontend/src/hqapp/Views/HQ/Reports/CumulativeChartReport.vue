@@ -1,46 +1,30 @@
 <template>
-    <HqLayout
-        :hasFilter="true"
-        :title="$t('Reports.CumulativeInterviewChart')"
+    <HqLayout :hasFilter="true" :title="$t('Reports.CumulativeInterviewChart')"
         :subtitle="$t('Reports.CumulativeInterviewChartSubtitle')">
         <Filters slot="filters">
             <FilterBlock :title="$t('Common.Questionnaire')">
-                <Typeahead
-                    control-id="questionnaireId"
-                    :placeholder="$t('Common.AllQuestionnaires')"
-                    :value="selectedQuestionnaire"
-                    :values="model.templates"
-                    v-on:selected="selectQuestionnaire"/>
+                <Typeahead control-id="questionnaireId" :placeholder="$t('Common.AllQuestionnaires')"
+                    :value="selectedQuestionnaire" :values="model.templates" v-on:selected="selectQuestionnaire" />
             </FilterBlock>
 
             <FilterBlock :title="$t('Common.QuestionnaireVersion')">
-                <Typeahead
-                    control-id="questionnaireVersion"
-                    :placeholder="$t('Common.AllVersions')"
-                    :value="selectedVersion"
-                    :values="selectedQuestionnaire == null ? null : selectedQuestionnaire.versions"
-                    v-on:selected="selectQuestionnaireVersion"
-                    :disabled="selectedQuestionnaire == null"/>
+                <Typeahead control-id="questionnaireVersion" :placeholder="$t('Common.AllVersions')"
+                    :value="selectedVersion" :values="selectedQuestionnaire == null ? null : selectedQuestionnaire.versions"
+                    v-on:selected="selectQuestionnaireVersion" :disabled="selectedQuestionnaire == null" />
             </FilterBlock>
 
             <FilterBlock :title="$t('Reports.DatesRange')">
-                <DatePicker :config="datePickerConfig"
-                    :value="selectedDateRange"></DatePicker>
+                <DatePicker :config="datePickerConfig" :value="selectedDateRange"></DatePicker>
             </FilterBlock>
 
             <FilterBlock :title="$t('Reports.QuickRanges')">
-                <ul class="list-group small">
-                    <li
-                        class="list-group-item pointer"
-                        v-for="range in quickRanges"
-                        :key="range.title"
-                        :class="{ 'list-group-item-success': isSelectedRange(range)}"
-                        @click="quickRange(range)">{{ range.title }}</li>
+                <ul class="list-group small input-group">
+                    <li class="list-group-item pointer" v-for="range in quickRanges" :key="range.title"
+                        :class="{ 'list-group-item-success': isSelectedRange(range) }" @click="quickRange(range)">{{
+                            range.title }}</li>
                 </ul>
-                <Checkbox
-                    name="relativeRange"
-                    :label="$t('Reports.RangeRelativeToData')"
-                    v-model="relativeToData"></Checkbox>
+                <Checkbox name="relativeRange" :label="$t('Reports.RangeRelativeToData')" v-model="relativeToData">
+                </Checkbox>
             </FilterBlock>
         </Filters>
         <div class="clearfix">
@@ -50,22 +34,15 @@
                 </h2>
             </div>
         </div>
-        <LineChart
-            ref="chart"
-            id="interviewChart"
-            :options="{
-                title: {
-                    display: true,
-                    text: this.chartTitle
-                }
-            }"
-            @ready="chartUpdated"
-            @mounted="refreshData"></LineChart>
+        <LineChart ref="chart" id="interviewChart" :options="{
+            title: {
+                display: true,
+                text: this.chartTitle
+            }
+        }" @ready="chartUpdated" @mounted="refreshData"></LineChart>
         <div v-if="base64Encoded != null && hasData">
-            <a
-                id="link"
-                :download="$t('Reports.CumulativeInterviewChart') + ' (' + chartTitle  + ').png'"
-                @click="downloadAsImage()">{{$t("Reports.SaveAsImage")}}</a>
+            <a id="link" :download="$t('Reports.CumulativeInterviewChart') + ' (' + chartTitle + ').png'"
+                @click="downloadAsImage()">{{ $t("Reports.SaveAsImage") }}</a>
         </div>
     </HqLayout>
 </template>
@@ -73,13 +50,13 @@
 <script>
 import routeSync from '~/shared/routeSync'
 import moment from 'moment'
-import {forEach, findIndex, assign, sortBy, find} from 'lodash'
+import { forEach, findIndex, assign, sortBy, find } from 'lodash'
 
 const LineChart = () => import('./CumulativeChart')
 
 export default {
     mixins: [routeSync],
-    components: {LineChart},
+    components: { LineChart },
 
     data() {
         return {
@@ -91,11 +68,11 @@ export default {
             chart: null,
             relativeToData: false,
             dataSetInfo: [
-                {status: 'Completed',              label: this.$t('Strings.InterviewStatus_Completed'),              backgroundColor: '#86B828'},
-                {status: 'RejectedBySupervisor',   label: this.$t('Strings.InterviewStatus_RejectedBySupervisor'),   backgroundColor: '#FFF200'},
-                {status: 'ApprovedBySupervisor',   label: this.$t('Strings.InterviewStatus_ApprovedBySupervisor'),   backgroundColor: '#13A388'},
-                {status: 'RejectedByHeadquarters', label: this.$t('Strings.InterviewStatus_RejectedByHeadquarters'), backgroundColor: '#E06B5C'},
-                {status: 'ApprovedByHeadquarters', label: this.$t('Strings.InterviewStatus_ApprovedByHeadquarters'), backgroundColor: '#00647F'},
+                { status: 'Completed', label: this.$t('Strings.InterviewStatus_Completed'), backgroundColor: '#86B828' },
+                { status: 'RejectedBySupervisor', label: this.$t('Strings.InterviewStatus_RejectedBySupervisor'), backgroundColor: '#FFF200' },
+                { status: 'ApprovedBySupervisor', label: this.$t('Strings.InterviewStatus_ApprovedBySupervisor'), backgroundColor: '#13A388' },
+                { status: 'RejectedByHeadquarters', label: this.$t('Strings.InterviewStatus_RejectedByHeadquarters'), backgroundColor: '#E06B5C' },
+                { status: 'ApprovedByHeadquarters', label: this.$t('Strings.InterviewStatus_ApprovedByHeadquarters'), backgroundColor: '#00647F' },
             ]
         }
     },
@@ -106,13 +83,11 @@ export default {
         },
 
         chartTitle() {
-            return `${
-                this.selectedQuestionnaire == null
+            return `${this.selectedQuestionnaire == null
                     ? this.$t('Common.AllQuestionnaires')
                     : this.selectedQuestionnaire.value
-            }, ${
-                this.selectedVersion == null ? this.$t('Common.AllVersions').toLowerCase() : this.selectedVersion.value
-            }`
+                }, ${this.selectedVersion == null ? this.$t('Common.AllVersions').toLowerCase() : this.selectedVersion.value
+                }`
         },
 
         queryString() {
@@ -159,7 +134,7 @@ export default {
                     const end = selectedDates.length > 1 ? selectedDates[1] : null
 
                     if (start != null && end != null) {
-                        this.selectDateRange({from: start, to: end})
+                        this.selectDateRange({ from: start, to: end })
                     }
                 },
             }
@@ -204,17 +179,17 @@ export default {
                 },
                 {
                     id: 'last7Days',
-                    title: this.$t('Reports.LastNDays', {days: 7}),
+                    title: this.$t('Reports.LastNDays', { days: 7 }),
                     range: [moment(now).subtract(7, 'days'), moment(now)],
                 },
                 {
                     id: 'last30Days',
-                    title: this.$t('Reports.LastNDays', {days: 30}),
+                    title: this.$t('Reports.LastNDays', { days: 30 }),
                     range: [moment(now).subtract(30, 'days'), moment(now)],
                 },
                 {
                     id: 'last90Days',
-                    title: this.$t('Reports.LastNDays', {days: 90}),
+                    title: this.$t('Reports.LastNDays', { days: 90 }),
                     range: [moment(now).subtract(90, 'days'), moment(now)],
                 },
                 {
@@ -275,7 +250,7 @@ export default {
             })
         },
 
-        quickRange({range}) {
+        quickRange({ range }) {
             this.selectDateRange({
                 from: range[0],
                 to: range[1],
@@ -305,7 +280,7 @@ export default {
                     const datasets = []
 
                     forEach(response.data.dataSets, set => {
-                        const infoIndex = findIndex(this.dataSetInfo, {status: set.status})
+                        const infoIndex = findIndex(this.dataSetInfo, { status: set.status })
                         const info = this.dataSetInfo[infoIndex]
 
                         datasets.push(
@@ -345,7 +320,7 @@ export default {
                 .finally(() => self.$store.dispatch('hideProgress'))
         },
         downloadAsImage() {
-            this.download(this.base64Encoded, this.$t('Reports.CumulativeInterviewChart') + ' (' + this.chartTitle  + ').png', 'image/png')
+            this.download(this.base64Encoded, this.$t('Reports.CumulativeInterviewChart') + ' (' + this.chartTitle + ').png', 'image/png')
         },
         download(data, strFileName, strMimeType) {
             var self = window, // this script is only for browsers anyway...
@@ -354,7 +329,7 @@ export default {
                 payload = data,
                 url = !strFileName && !strMimeType && payload,
                 anchor = document.createElement('a'),
-                toString = function(a) {
+                toString = function (a) {
                     return String(a)
                 },
                 myBlob = self.Blob || self.MozBlob || self.WebKitBlob || toString,
@@ -382,10 +357,10 @@ export default {
                     var ajax = new XMLHttpRequest()
                     ajax.open('GET', url, true)
                     ajax.responseType = 'blob'
-                    ajax.onload = function(e) {
+                    ajax.onload = function (e) {
                         this.download(e.target.response, fileName, defaultMime)
                     }
-                    setTimeout(function() {
+                    setTimeout(function () {
                         ajax.send()
                     }, 0) // allows setting custom ajax headers using the return:
                     return ajax
@@ -404,7 +379,7 @@ export default {
                 }
             } //end if dataURL passed?
 
-            blob = payload instanceof myBlob ? payload : new myBlob([payload], {type: mimeType})
+            blob = payload instanceof myBlob ? payload : new myBlob([payload], { type: mimeType })
 
             function dataUrlToBlob(strUrl) {
                 var parts = strUrl.split(/[:;,]/),
@@ -417,7 +392,7 @@ export default {
 
                 for (i; i < mx; ++i) uiArr[i] = binData.charCodeAt(i)
 
-                return new myBlob([uiArr], {type: type})
+                return new myBlob([uiArr], { type: type })
             }
 
             function saver(url, winMode) {
@@ -429,11 +404,11 @@ export default {
                     anchor.innerHTML = 'downloading...'
                     anchor.style.display = 'none'
                     document.body.appendChild(anchor)
-                    setTimeout(function() {
+                    setTimeout(function () {
                         anchor.click()
                         document.body.removeChild(anchor)
                         if (winMode === true) {
-                            setTimeout(function() {
+                            setTimeout(function () {
                                 self.URL.revokeObjectURL(anchor.href)
                             }, 250)
                         }
@@ -466,7 +441,7 @@ export default {
                     url = 'data:' + url.replace(/^data:([\w/\-+]+)/, defaultMime)
                 }
                 f.src = url
-                setTimeout(function() {
+                setTimeout(function () {
                     document.body.removeChild(f)
                 }, 333)
             } //end saver
@@ -491,7 +466,7 @@ export default {
 
                 // Blob but not URL support:
                 reader = new FileReader()
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     saver(this.result)
                 }
                 reader.readAsDataURL(blob)

@@ -49,8 +49,8 @@ namespace WB.Services.Export.Tests.Questionnaire.ExportStructureFactoryTests
         [NUnit.Framework.Test] public void should_create_header_with_1_column () =>
             questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterSizeQuestionId }].HeaderItems[questionInsideRoster1Id].ColumnHeaders.Count.Should().Be(1);
 
-        [NUnit.Framework.Test] public void should_create_header_with_5_columns_at_first_level () =>
-          questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].HeaderItems[rosterSizeQuestionId].ColumnHeaders.Count.Should().Be(maxAnswerCount);
+        [NUnit.Framework.Test] public void should_create_header_with_10_columns_at_first_level () =>
+          questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].HeaderItems[rosterSizeQuestionId].ColumnHeaders.Count.Should().Be(maxAnswerCount*2);
 
         private static QuestionnaireExportStructure questionnaireExportStructure;
         private static Guid questionInsideRoster1Id = Guid.Parse("CCF000AAA111EE2DD2EE111AAA000FFF");

@@ -49,7 +49,8 @@
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/pager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+        >
         </androidx.viewpager.widget.ViewPager>
         <LinearLayout style="@style/Interview_GroupWithDivider"
                       local:MvxBind="Enabled Not(Or(Synchronization.IsSynchronizationInProgress, IsInProgress, Synchronization.HasUserAnotherDevice));

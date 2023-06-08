@@ -222,7 +222,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
         private string GetClientGroupIdentity(Identity identity, IStatefulInterview interview)
         {
-            if(this.IsQuestionPrefield(identity, interview))
+            if(this.IsQuestionPrefield(identity, interview) && !interview.IsCoverPageSupported())
             {
                 return WebInterview.GetConnectedClientPrefilledSectionKey(interview.Id);
             }

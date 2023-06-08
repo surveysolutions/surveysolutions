@@ -28,7 +28,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         private const string NonWorkspacedName = "NonWorkspaced";
         private bool NonWorkspaced;
         
-        public SqlitePlainStorageAutoWorkspaceResolve(ILogger logger, IFileSystemAccessor fileSystemAccessor, SqliteSettings settings, IWorkspaceAccessor workspaceAccessor) 
+        public SqlitePlainStorageAutoWorkspaceResolve(ILogger logger, IFileSystemAccessor fileSystemAccessor, 
+            SqliteSettings settings, IWorkspaceAccessor workspaceAccessor) 
             : base(logger, fileSystemAccessor, settings, workspaceAccessor)
         {
             NonWorkspaced = typeof(TEntity).GetCustomAttribute(typeof(NonWorkspacedAttribute)) != null;
@@ -53,6 +54,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             });
         }
 
+        protected SQLiteConnectionWithLock GetConnectionForWorkspace(string workspaceName)
+        {
+            var pathToDatabase = GetPathToDatabase(workspaceName);
+            return connections.GetOrAdd(workspaceName, valueFactory: _ => base.CreateConnection(pathToDatabase));
+        }
+
         private string GetWorkspaceName()
         {
             return NonWorkspaced
@@ -62,15 +69,24 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         protected override string GetPathToDatabase()
         {
+            return GetPathToDatabase(null);
+        }
+
+        protected string GetPathToDatabase(string workspaceName)
+        {
             string pathToDatabase = 
                 NonWorkspaced ?
-                settings.PathToDatabaseDirectory:
-                fileSystemAccessor.CombinePath(settings.PathToRootDirectory, GetWorkspaceName(), settings.DataDirectoryName);
+                    settings.PathToDatabaseDirectory:
+                    fileSystemAccessor.CombinePath(settings.PathToRootDirectory,
+                        string.IsNullOrEmpty(workspaceName)
+                            ? GetWorkspaceName()
+                            : workspaceName, 
+                        settings.DataDirectoryName);
             
             pathToDatabase = fileSystemAccessor.CombinePath(pathToDatabase, typeof(TEntity).Name + "-data.sqlite3");
             return pathToDatabase;
         }
-
+        
         public override void Dispose()
         {
             foreach (var connectionWithLock in connections)

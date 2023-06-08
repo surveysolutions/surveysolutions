@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:local="http://schemas.android.com/apk/res-auto"
-              android:orientation ="vertical"
+              android:orientation="vertical"
               style="@style/Interview_Cover_Prefilled_Question">
     <TextView style="@style/Interview_Cover_Question_Title" local:MvxBind="Html Title.PlainText;" />
-    <TextView style="@style/Interview_Cover_Question_Answer" local:MvxBind="Text Answer;" />
-    <include layout="@layout/interview__attachment_multimedia" />
+    <TextView style="@style/Interview_Cover_Question_Answer" local:MvxBind="Text Answer" />
 </LinearLayout>

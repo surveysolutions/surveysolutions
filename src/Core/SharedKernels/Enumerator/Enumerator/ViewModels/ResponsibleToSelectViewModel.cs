@@ -7,10 +7,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     public class ResponsibleToSelectViewModel : MvxNotifyPropertyChanged
     {
-        private readonly SelectResponsibleForAssignmentViewModel parent;
-        public ResponsibleToSelectViewModel(SelectResponsibleForAssignmentViewModel parent)
+        private readonly Action<ResponsibleToSelectViewModel> selectedAction;
+        public ResponsibleToSelectViewModel(Action<ResponsibleToSelectViewModel> selectedAction)
         {
-            this.parent = parent;
+            this.selectedAction = selectedAction;
         }
 
         public Guid Id { get; set; }
@@ -31,6 +31,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public IMvxCommand SelectCommand => new MvxCommand(Select);
         public UserRoles Role { get; set; }
 
-        private void Select() => this.parent.SelectResponsibleCommand.Execute(this);
+        private void Select() => this.selectedAction?.Invoke(this);
     }
 }

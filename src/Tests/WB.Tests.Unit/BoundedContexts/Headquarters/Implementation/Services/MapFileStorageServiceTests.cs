@@ -103,7 +103,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Implementation.Services
 
             var authorizedUser = Mock.Of<IAuthorizedUser>(
                 u => u.IsSupervisor == true &&
-                     u.Id == Id.gB
+                     u.Id == Id.gB && u.UserName == "supervisor"
             );
 
             var users = Create.Storage.UserRepository(user, userFromHisTeam);

@@ -23,7 +23,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         UserView? GetUser(UserViewInputModel input);
         UserViewLite? GetUser(Guid id);
 
-        ResponsibleView GetAllResponsibles(int pageSize, string searchBy, bool showLocked = false, bool showArchived = false);
+        ResponsibleView GetAllResponsibles(int pageSize, string searchBy, bool showLocked = false, 
+            bool showArchived = false, bool excludeHeadquarters = false);
         
         Guid[] GetInterviewersIds(string searchBy, bool archived, int? apkBuildVersion, Guid? supervisorId, InterviewerFacet facet = InterviewerFacet.None);
 

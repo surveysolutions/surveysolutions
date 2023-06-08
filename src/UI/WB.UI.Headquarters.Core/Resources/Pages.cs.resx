@@ -1204,7 +1204,7 @@
     <value>Importováno</value>
   </data>
   <data name="MapDetails_InterviewerName" xml:space="preserve">
-    <value>Jméno tazatele</value>
+      <value>Uživatelské jméno</value>
   </data>
   <data name="MapDetails_MapDisclaimer" xml:space="preserve">
     <value>Tento náhled zobrazuje načtenou mapu překrytou na mapě světa</value>

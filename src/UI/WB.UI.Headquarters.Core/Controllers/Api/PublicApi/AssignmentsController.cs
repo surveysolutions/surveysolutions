@@ -318,7 +318,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Route("{id:int}/assign")]
         [Consumes(MediaTypeNames.Application.Json)]
         [Produces(MediaTypeNames.Application.Json)]
-        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
         public async Task<ActionResult<AssignmentDetails>> Assign(int id,
             [FromBody, BindRequired] AssignmentAssignRequest assigneeRequest)
         {
@@ -349,6 +349,20 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             {
                 unitOfWork.DiscardChanges();
                 return StatusCode(e.StatusCode, e.Message);
+            }
+
+            if (User.IsInRole(UserRoles.Supervisor))
+            {
+                var currentUserId = User.UserId();
+                bool isResponsibleInTeam = responsibleUser.IsInRole(UserRoles.Interviewer) &&
+                                           responsibleUser.WorkspaceProfile.SupervisorId == currentUserId;
+                bool isAssignToSelf = responsibleUser.IsInRole(UserRoles.Supervisor) &&
+                                      responsibleUser.Id == currentUserId;
+
+                if (!isResponsibleInTeam && !isAssignToSelf)
+                {
+                    return StatusCode((int)HttpStatusCode.NotAcceptable, $@"Don't allow assign to responsible: {assigneeRequest?.Responsible}");
+                }
             }
 
             commandService.Execute(new ReassignAssignment(assignment.PublicKey, authorizedUser.Id, responsibleUser.Id,

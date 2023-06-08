@@ -8,7 +8,7 @@ namespace WB.UI.Shared.Extensions.Activities;
     Theme = "@style/AppTheme",
     ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize,
     Exported = false)]
-public class InterviewerMapDashboardActivity : MapDashboardActivity<InterviewerMapDashboardViewModel>
+public class InterviewerMapDashboardActivity: MapDashboardActivity<InterviewerMapDashboardViewModel>
 {
     
 }

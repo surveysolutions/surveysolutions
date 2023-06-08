@@ -21,6 +21,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
@@ -178,8 +179,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 })
                 .Where(entity => entity.IsStaticText || 
                                  entity.IsVariable ||
-                                 (entity.QuestionType.HasValue
-                                  && entity.QuestionType.Value != QuestionType.GpsCoordinates))
+                                 entity.QuestionType.HasValue)
                 .Select(entity =>
                 {
                     var entityIdentity = new Identity(entity.EntityId, RosterVector.Empty);
@@ -197,12 +197,28 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                         : entity.IsVariable
                             ? interview.GetVariableValueAsString(Identity.Create(entity.EntityId, RosterVector.Empty))
                             : string.Empty;
+
+                    GpsLocation gpsLocation = null;
+                    if (entity.QuestionType == QuestionType.GpsCoordinates)
+                    {
+                        var gpsQuestion = interview.GetGpsQuestion(Identity.Create(entity.EntityId, RosterVector.Empty));
+                        var gpsQuestionAnswer = gpsQuestion.GetAnswer();
+
+                        if (gpsQuestionAnswer != null)
+                        {
+                            var gpsAnswer = gpsQuestionAnswer.Value;
+                            gpsLocation = new GpsLocation(gpsAnswer.Accuracy, gpsAnswer.Altitude, gpsAnswer.Latitude,
+                                gpsAnswer.Longitude, DateTimeOffset.MinValue);
+                            value = string.Format(CultureInfo.InvariantCulture, "{0}, {1}", gpsAnswer.Latitude, gpsAnswer.Longitude); 
+                        }
+                    }
                     
                     return new CoverPrefilledEntity
                     {
                         Identity = entityIdentity,
                         Title = title,
                         Answer = value,
+                        GpsLocation = gpsLocation,
                         Attachment = attachmentViewModel
                     };
                 })

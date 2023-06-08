@@ -41,7 +41,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                     if(variable == null)
                         return new string[]{ ExportFormatSettings.MissingNumericQuestionValue};
                     var val = Convert.ToDouble(variable);
-                    if(double.IsNaN(val)|| double.IsInfinity(val))
+                    if(double.IsNaN(val) || double.IsInfinity(val))
                         return new string[] { ExportFormatSettings.MissingNumericQuestionValue };
 
                     return new string[] {val.ToString(CultureInfo.InvariantCulture)};
@@ -126,7 +126,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                         }
                             break;
                     }
-                    return BuildAnswerListForQuestionByHeader(question.AsObject(), header);
+                    return BuildMultiOptionAnswerForQuestionByHeader(question.AsObject(), header);
                 }
                 case QuestionType.SingleOption:
                 {
@@ -137,7 +137,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                         : new[] {this.ConvertAnswerToStringValue(question.AsInt, header)};
                 }
                 case QuestionType.TextList:
-                    return this.BuildAnswerListForQuestionByHeader(question.AsObject(), header);
+                    return this.BuildAnswerListForTextListQuestionByHeader(question.AsObject(), header);
                 default:
                     return Array.Empty<string>();
             }
@@ -164,7 +164,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             }).ToArray();
         }
 
-        private IEnumerable<object>? TryCastToEnumerable(object? value)
+        private IEnumerable<object>? CastToEnumerable(object? value)
         {
             switch (value)
             {
@@ -187,7 +187,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             if (answer == null)
                 return ExportFormatSettings.MissingStringQuestionValue;
 
-            var arrayOfObject = this.TryCastToEnumerable(answer)?.ToArray();
+            var arrayOfObject = this.CastToEnumerable(answer)?.ToArray();
 
             if (arrayOfObject != null && arrayOfObject.Any())
             {
@@ -197,7 +197,7 @@ namespace WB.Services.Export.CsvExport.Exporters
 
                     if (shrinkedArrayOfAnswers.Length == 1)
                     {
-                        var arrayOfAnswers = this.TryCastToEnumerable(shrinkedArrayOfAnswers[0])?.ToArray();
+                        var arrayOfAnswers = this.CastToEnumerable(shrinkedArrayOfAnswers[0])?.ToArray();
 
                         return arrayOfAnswers != null
                             ? string.Join(ExportFormatSettings.DefaultDelimiter, arrayOfAnswers.Select(x => this.ConvertAnswerToString(x, header.QuestionType, header.QuestionSubType)).ToArray())
@@ -212,22 +212,39 @@ namespace WB.Services.Export.CsvExport.Exporters
             return this.ConvertAnswerToString(answer, header.QuestionType, header.QuestionSubType);
         }
 
-        private string[] BuildAnswerListForQuestionByHeader(object? answer, ExportedQuestionHeaderItem header)
+        private string[] BuildMultiOptionAnswerForQuestionByHeader(object? answer, ExportedQuestionHeaderItem header)
+        {
+            return header.ColumnHeaders.Count == 1 
+                ? new string[] { this.ConvertAnswerToStringValue(answer, header) } 
+                : new string[header.ColumnHeaders.Count];
+        }
+        
+        private string[] BuildAnswerListForTextListQuestionByHeader(object? answer, ExportedQuestionHeaderItem header)
         {
             if (header.ColumnHeaders.Count == 1)
                 return new string[] { this.ConvertAnswerToStringValue(answer, header) };
 
             var result = new string[header.ColumnHeaders.Count];
+            
+            var answers = answer as InterviewTextListAnswer[] ?? Array.Empty<InterviewTextListAnswer>();
 
-            var answersAsEnumerable = this.TryCastToEnumerable(answer);
-            var answers = answersAsEnumerable?.ToArray() ?? new object?[] { answer };
-
-            if (header.QuestionType != QuestionType.MultyOption)
+            for (int i = 0; i < result.Length; i++)
             {
-                this.PutAnswersAsStringValuesIntoResultArray(answers, header, result);
+                int itemIndex = i / 2;
+                
+                if (i % 2 == 0)
+                {
+                    result[i] = answers.Length > itemIndex 
+                        ? this.ConvertAnswerToStringValue(answers[itemIndex].Answer, header) 
+                        : ExportFormatSettings.MissingStringQuestionValue;
+                }
+                else
+                {
+                    result[i] = answers.Length > itemIndex 
+                        ? this.ConvertAnswerToStringValue((int) answers[itemIndex].Value, header) 
+                        : ExportFormatSettings.MissingNumericQuestionValue;
+                }
             }
-
-
             return result;
         }
 
@@ -295,14 +312,6 @@ namespace WB.Services.Export.CsvExport.Exporters
                     int checkedOptionIndex = Array.IndexOf(answers!, header.ColumnValues[i]);
                     yield return checkedOptionIndex > -1 ? (checkedOptionIndex + 1).ToString(ExportCulture) : "0";
                 }
-            }
-        }
-
-        private void PutAnswersAsStringValuesIntoResultArray(object?[] answers, ExportedQuestionHeaderItem header, string[] result)
-        {
-            for (int i = 0; i < result.Length; i++)
-            {
-                result[i] = answers.Length > i ? this.ConvertAnswerToStringValue(answers[i], header) : ExportFormatSettings.MissingStringQuestionValue;
             }
         }
 

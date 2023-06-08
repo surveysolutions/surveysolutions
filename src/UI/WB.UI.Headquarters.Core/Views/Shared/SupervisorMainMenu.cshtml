@@ -34,7 +34,16 @@
 
     @Html.MainMenuItem(workspace, "Index", "Interviews", MainMenu.Interviews, MenuItem.Interviews)
     @Html.MainMenuItem(workspace, "Interviewers", "Users", MainMenu.TeamAndRoles, MenuItem.Interviewers)
-    @Html.MainMenuItem(workspace, "Index", "Assignments", MainMenu.Assignments, MenuItem.Assignments)
+    
+    <li class="dropdown  @(page == MenuItem.Assignments || page == MenuItem.Maps ? "active" : "")">
+            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.SurveySetup">
+                @MainMenu.SurveySetup <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                @Html.MainMenuItem("Index", "Assignments", @MainMenu.Assignments, MenuItem.Assignments)
+                @Html.MainMenuItem("Index", "Maps", @MainMenu.Maps, MenuItem.Maps)
+            </ul>
+    </li>
 
 </ul>
 <ul class="nav navbar-nav navbar-right" role="menu">

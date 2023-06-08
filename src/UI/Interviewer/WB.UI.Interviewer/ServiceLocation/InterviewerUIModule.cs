@@ -21,6 +21,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Markers;
 using WB.UI.Interviewer.Implementations.Services;
 using WB.UI.Interviewer.Services;
 using WB.UI.Shared.Enumerator.CustomServices;
@@ -37,6 +38,7 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<ISideBarSectionViewModelsFactory, SideBarSectionViewModelFactory>();
             registry.Bind<IViewModelNavigationService, ViewModelNavigationService>();
             registry.Bind<ITabletDiagnosticService, TabletDiagnosticService>();
+            registry.Bind<IDashboardViewModelFactory, InterviewerDashboardViewModelFactory>();
 
             registry.Bind<INetworkService, AndroidNetworkService>();
             registry.BindInPerLifetimeScope<IHttpClientFactory, AndroidHttpClientFactory>();

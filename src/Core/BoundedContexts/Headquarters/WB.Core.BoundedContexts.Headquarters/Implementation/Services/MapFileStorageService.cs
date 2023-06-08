@@ -505,13 +505,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             if (this.authorizedUser.IsSupervisor)
             {
                 bool isTeamInterviewer = this.userStorage.Users
-                    .Any(x => x.UserName.ToLower() == lowerCasedUserName && x.WorkspaceProfile.SupervisorId == this.authorizedUser.Id);
-                if (!isTeamInterviewer)
+                    .Any(x => x.UserName.ToLower() == lowerCasedUserName 
+                              && x.WorkspaceProfile.SupervisorId == this.authorizedUser.Id);
+
+                bool isSelf =  !string.IsNullOrEmpty(this.authorizedUser.UserName) 
+                               && this.authorizedUser.UserName.ToLower() == lowerCasedUserName;
+                
+                if (!isTeamInterviewer && !isSelf)
                 {
-                    throw new UserNotFoundException("Map can be assigned only to existing non archived interviewer.");
+                    throw new UserNotFoundException("User is not from the team.");
                 }
             }
-
+            
             var map = this.mapPlainStorageAccessor.GetById(mapName);
 
             if (map == null)
@@ -525,7 +530,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 this.userMapsStorage.Remove(mapUsers);
             else
             {
-                throw new InvalidOperationException("Map is not assigned to specified interviewer.");
+                throw new InvalidOperationException("Map is not assigned to specified user.");
             }
             return map;
         }
@@ -668,16 +673,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             var userMap = this.userMapsStorage
                 .Query(x => x.FirstOrDefault(um => um.Map.FileName == id && um.UserName == userName));
 
-            if (userMap != null)
+            if (userMap == null)
             {
-                throw new InvalidOperationException("Provided map already assigned to specified user.");
+                userMapsStorage.Store(new UserMap
+                {
+                    UserName = userName,
+                    Map = map
+                }, null);
             }
-
-            userMapsStorage.Store(new UserMap
-            {
-                UserName = userName,
-                Map = map
-            }, null);
 
             return this.mapPlainStorageAccessor.GetById(id);
         }

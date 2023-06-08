@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -23,14 +24,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private readonly ILogger logger;
         private readonly IAuditLogService auditLogService;
         private readonly IPasswordHasher passwordHasher;
-        private readonly IPlainStorage<CompanyLogo> logoStorage;
+        private readonly ICompanyLogoStorage logoStorage;
         private readonly ISynchronizationService synchronizationService;
 
         protected EnumeratorLoginViewModel(
             IViewModelNavigationService viewModelNavigationService,
             IPrincipal principal,
             IPasswordHasher passwordHasher,
-            IPlainStorage<CompanyLogo> logoStorage,
+            ICompanyLogoStorage logoStorage,
             ISynchronizationService synchronizationService,
             ILogger logger,
             IAuditLogService auditLogService)
@@ -100,6 +101,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public abstract bool HasUser();
         public abstract string GetUserName();
+        public abstract string GetUserLastWorkspace();
         public abstract void UpdateLocalUser(string userName, string token, string passwordHash);
 
         public override async Task Initialize()
@@ -108,7 +110,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             if (!this.HasUser()) return;
 
-            var companyLogo = this.logoStorage.GetById(CompanyLogo.StorageKey);
+            var companyLogo = this.logoStorage.GetCompanyLogoByWorkspace(CompanyLogo.StorageKey, GetUserLastWorkspace());
             this.CustomLogo = companyLogo?.File;
             this.IsUserValid = true;
             this.UserName = this.GetUserName();

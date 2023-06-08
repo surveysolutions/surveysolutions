@@ -179,11 +179,14 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
 
             protected override void Dispose(bool disposing)
             {
+                if (disposing)
+                {
+                    this.onClick = null;
+                    this.variable = null;
+                    this.interviewEntity = null;
+                }
+                
                 base.Dispose(disposing);
-
-                this.onClick = null;
-                this.variable = null;
-                this.interviewEntity = null;
             }
         }
     }

@@ -80,6 +80,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAudi
                 case AuditLogEntityType.RejectInterview:
                     var rejectInterviewAuditLogEntity = record.GetEntity<RejectInterviewAuditLogEntity>();
                     return InterviewerAuditRecord.RejectInterview.FormatString(rejectInterviewAuditLogEntity.InterviewKey);
+                case AuditLogEntityType.RejectInterviewToInterviewer:
+                    var rejectInterviewToInterviewerAuditLogEntity = record.GetEntity<RejectInterviewToInterviewerAuditLogEntity>();
+                    return InterviewerAuditRecord.RejectInterviewToInterviewer.FormatString(rejectInterviewToInterviewerAuditLogEntity.InterviewKey, rejectInterviewToInterviewerAuditLogEntity.InterviewerName);
                 case AuditLogEntityType.DeleteInterview:
                     var deleteInterviewAuditLogEntity = record.GetEntity<DeleteInterviewAuditLogEntity>();
                     return InterviewerAuditRecord.DeleteInterview.FormatString(deleteInterviewAuditLogEntity.InterviewKey);

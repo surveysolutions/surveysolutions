@@ -36,7 +36,9 @@ namespace WB.UI.Supervisor.Activities.Dashboard
             LocalizeMenuItem(Resource.Id.dashboard_waiting_decision, SupervisorDashboard.WaitingForAction, nameof(ViewModel.WaitingForDecisionCount));
             LocalizeMenuItem(Resource.Id.dashboard_outbox, SupervisorDashboard.Outbox, nameof(ViewModel.OutboxItemsCount));
             LocalizeMenuItem(Resource.Id.dashboard_sent, SupervisorDashboard.SentToInterviewer, nameof(ViewModel.SentToInterviewerCount));
-
+            
+            ViewModel.MvxNavigationService.DidNavigate += MenuFragment_AfterNavigate;
+            
             return view;
         }
 
@@ -44,13 +46,6 @@ namespace WB.UI.Supervisor.Activities.Dashboard
         {
             ViewModel.MvxNavigationService.DidNavigate -= MenuFragment_AfterNavigate;
             base.OnDestroyView();
-        }
-
-        public override void OnViewModelSet()
-        {
-            base.OnViewModelSet();
-
-            ViewModel.MvxNavigationService.DidNavigate += MenuFragment_AfterNavigate;
         }
 
         private void MenuFragment_AfterNavigate(object sender, MvvmCross.Navigation.EventArguments.IMvxNavigateEventArgs e)
@@ -93,12 +88,14 @@ namespace WB.UI.Supervisor.Activities.Dashboard
             }
 
             var item = navigationView.Menu.FindItem(id);
-
+            if (item == null) return;
+            
             if (viewModelPropertyName != null)
             {
                 item.SetActionView(Resource.Layout.dashboard_sidebar_counter);
+                var textView = item.ActionView as TextView;
+                if(textView == null) return;
                 
-                var textView = (TextView) item.ActionView;
                 var viewModelPropertyInfo = ViewModel.GetType().GetProperty(viewModelPropertyName);
 
                 SetLabelText(textView, viewModelPropertyInfo);
@@ -106,7 +103,7 @@ namespace WB.UI.Supervisor.Activities.Dashboard
                 ViewModel.PropertyChanged += (sender, args) =>
                 {
                     if (args.PropertyName == viewModelPropertyName)
-                    { 
+                    {
                         SetLabelText(textView, viewModelPropertyInfo);
                     }
                 };

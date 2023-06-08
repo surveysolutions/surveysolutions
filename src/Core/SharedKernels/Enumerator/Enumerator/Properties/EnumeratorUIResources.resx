@@ -464,8 +464,7 @@ for further instructions</value>
     <value>{0} interviews deleted</value>
   </data>
   <data name="Login_FinishInstallation_Message" xml:space="preserve">
-    <value>This tablet has not been setup yet. 
-You need internet connection to proceed with setting up the user and domain.</value>
+    <value>This tablet has not been setup yet. You need internet connection to continue.</value>
   </data>
   <data name="Troubleshooting_Backup" xml:space="preserve">
     <value>Create backup</value>

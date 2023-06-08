@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var questionnaire = Create.Entity.PlainQuestionnaire(
                 Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.NumericIntegerQuestion(variable: variableOfIntegerQuestion)));
 
-            var preloadedFile = Create.Entity.PreloadedFile(rows: new PreloadingRow[0]);
+            var preloadedFile = Create.Entity.PreloadedFile(rows: Array.Empty<PreloadingRow>());
 
             var service = Create.Service.AssignmentsImportService();
 
@@ -111,7 +111,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_answer_on_integer_question_should_be_saved_assignemnt_with_specified_integer_answer()
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_answer_on_integer_question_should_be_saved_assignment_with_specified_integer_answer()
         {
             //arrange 
             var integerQuestionId =  Guid.Parse("11111111111111111111111111111111");
@@ -145,7 +145,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_answer_on_double_question_should_be_saved_assignemnt_with_specified_double_answer()
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_answer_on_double_question_should_be_saved_assignment_with_specified_double_answer()
         {
             //arrange 
             var doubleQuestionId = Guid.Parse("22222222222222222222222222222222");
@@ -179,7 +179,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_answer_on_text_question_should_be_saved_assignemnt_with_specified_text_answer()
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_answer_on_text_question_should_be_saved_assignment_with_specified_text_answer()
         {
             //arrange 
             var textQuestionId = Guid.Parse("33333333333333333333333333333333");
@@ -214,7 +214,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_answer_on_qrbarcode_question_should_be_saved_assignemnt_with_specified_qrbarcode_answer()
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_answer_on_qrcode_question_should_be_saved_assignment_with_specified_qrcode_answer()
         {
             //arrange 
             var qrBarcodeQuestionId = Guid.Parse("44444444444444444444444444444444");
@@ -249,7 +249,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_answer_on_datetime_question_should_be_saved_assignemnt_with_specified_datetime_answer()
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_answer_on_datetime_question_should_be_saved_assignment_with_specified_datetime_answer()
         {
             //arrange 
             var dateTimeQuestionId = Guid.Parse("55555555555555555555555555555555");
@@ -283,7 +283,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_answer_on_datetime_question_in_user_defined_format_should_be_saved_assignemnt_with_specified_datetime_answer()
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_answer_on_datetime_question_in_user_defined_format_should_be_saved_assignment_with_specified_datetime_answer()
         {
             //arrange 
             var dateTimeQuestionId = Guid.Parse("55555555555555555555555555555555");
@@ -317,7 +317,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_answer_on_list_question_should_be_saved_assignemnt_with_specified_list_answers()
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_answer_on_list_question_with_codes_should_be_saved_assignment_with_specified_list_answers()
         {
             //arrange 
             var listQuestionId = Guid.Parse("66666666666666666666666666666666");
@@ -330,7 +330,54 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var preloadedFile = Create.Entity.PreloadedFile(rows: new[]
             {
                 Create.Entity.PreloadingRow(Create.Entity.PreloadingCompositeValue(listQuestion,
-                    Create.Entity.PreloadingValue("0", "john"), 
+                    Create.Entity.PreloadingValue("0", "john"),
+                    Create.Entity.PreloadingValue("0c", "1"),
+                    Create.Entity.PreloadingValue("1", "jack"),
+                    Create.Entity.PreloadingValue("1c", "2"),
+                    Create.Entity.PreloadingValue("2", "mike"),
+                    Create.Entity.PreloadingValue("2c", "4")))
+            });
+
+            var importAssignmentsRepository = Create.Storage.InMemoryPlainStorage<AssignmentToImport>();
+
+            var service = Create.Service.AssignmentsImportService(
+                importAssignmentsRepository: importAssignmentsRepository);
+
+            //act
+            var errors = service.VerifySimpleAndSaveIfNoErrors(preloadedFile, Guid.Empty, questionnaire);
+
+            //assert
+            Assert.That(errors, Is.Empty);
+
+            var savedAssignments = importAssignmentsRepository.Query(x => x.ToArray());
+
+            Assert.That(savedAssignments, Has.One.Items);
+            Assert.That(savedAssignments[0].Answers, Has.One.Items);
+            Assert.That(savedAssignments[0].Answers[0].Answer, Is.TypeOf<TextListAnswer>());
+            Assert.That(((TextListAnswer) savedAssignments[0].Answers[0].Answer).Rows,
+                Is.EquivalentTo(new[]
+                {
+                    new TextListAnswerRow(0, "john"),
+                    new TextListAnswerRow(1, "jack"),
+                    new TextListAnswerRow(2, "mike")
+                }));
+        }
+        
+        [Test]
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_answer_on_list_question_without_codes_should_be_saved_assignment_with_specified_list_answers()
+        {
+            //arrange 
+            var listQuestionId = Guid.Parse("66666666666666666666666666666666");
+            var listQuestion = "list";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.TextListQuestion(listQuestionId, variable: listQuestion)));
+
+            var preloadedFile = Create.Entity.PreloadedFile(rows: new[]
+            {
+                Create.Entity.PreloadingRow(Create.Entity.PreloadingCompositeValue(listQuestion,
+                    Create.Entity.PreloadingValue("0", "john"),
                     Create.Entity.PreloadingValue("1", "jack"),
                     Create.Entity.PreloadingValue("2", "mike")))
             });
@@ -361,7 +408,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_answer_on_gps_question_should_be_saved_assignemnt_with_specified_gps_answer()
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_answer_on_gps_question_should_be_saved_assignment_with_specified_gps_answer()
         {
             //arrange 
             (Guid Id, string name) gps1 = (Id.g1, "gps1");
@@ -427,7 +474,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_answer_on_yesno_question_should_be_saved_assignemnt_with_specified_yesno_answers()
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_answer_on_yes_no_question_should_be_saved_assignment_with_specified_yesno_answers()
         {
             //arrange 
             var yesNoQuestionId = Guid.Parse("88888888888888888888888888888888");
@@ -470,7 +517,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_answer_on_ordered_yesno_question_should_be_saved_assignemnt_with_specified_ordered_yesno_answers()
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_answer_on_ordered_yes_no_question_should_be_saved_assignment_with_specified_ordered_yesno_answers()
         {
             //arrange 
             var yesNoQuestionId = Guid.Parse("88888888888888888888888888888888");
@@ -517,7 +564,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_answer_on_categorical_single_question_should_be_saved_assignemnt_with_specified_categorical_single_answer()
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_answer_on_categorical_single_question_should_be_saved_assignment_with_specified_categorical_single_answer()
         {
             //arrange 
             var categoricalSingleQuestionId = Guid.Parse("10101010101010101010101010101010");
@@ -552,7 +599,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_answer_on_categorical_multi_question_should_be_saved_assignemnt_with_specified_categorical_multi_answers()
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_answer_on_categorical_multi_question_should_be_saved_assignment_with_specified_categorical_multi_answers()
         {
             //arrange 
             var categoricalMultiQuestionId = Guid.Parse("99999999999999999999999999999999");
@@ -592,7 +639,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_answer_on_ordered_categorical_multi_question_should_be_saved_assignemnt_with_specified_ordered_categorical_multi_answers()
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_answer_on_ordered_categorical_multi_question_should_be_saved_assignment_with_specified_ordered_categorical_multi_answers()
         {
             //arrange 
             var categoricalMultiQuestionId = Guid.Parse("99999999999999999999999999999999");
@@ -632,7 +679,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_empty_answer_on_text_question_should_be_saved_assignemnt_with_0_answers()
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_empty_answer_on_text_question_should_be_saved_assignment_with_0_answers()
         {
             //arrange 
             var questionId = Guid.Parse("10101010101010101010101010101010");
@@ -663,7 +710,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_empty_answer_on_integer_question_should_be_saved_assignemnt_with_0_answers()
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_empty_answer_on_integer_question_should_be_saved_assignment_with_0_answers()
         {
             //arrange 
             var questionId = Guid.Parse("10101010101010101010101010101010");
@@ -694,7 +741,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_empty_answer_on_double_question_should_be_saved_assignemnt_with_0_answers()
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_empty_answer_on_double_question_should_be_saved_assignment_with_0_answers()
         {
             //arrange 
             var questionId = Guid.Parse("10101010101010101010101010101010");
@@ -725,7 +772,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_empty_answer_on_qrbarcode_question_should_be_saved_assignemnt_with_0_answers()
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_empty_answer_on_qrcode_question_should_be_saved_assignment_with_0_answers()
         {
             //arrange 
             var questionId = Guid.Parse("10101010101010101010101010101010");
@@ -756,7 +803,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_empty_answer_on_categorical_signle_question_should_be_saved_assignemnt_with_0_answers()
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_empty_answer_on_categorical_single_question_should_be_saved_assignment_with_0_answers()
         {
             //arrange 
             var questionId = Guid.Parse("10101010101010101010101010101010");
@@ -788,7 +835,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_empty_answer_on_datetime_question_should_be_saved_assignemnt_with_0_answers()
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_empty_answer_on_datetime_question_should_be_saved_assignment_with_0_answers()
         {
             //arrange 
             var questionId = Guid.Parse("10101010101010101010101010101010");
@@ -819,7 +866,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_empty_answer_on_gps_question_should_be_saved_assignemnt_with_0_answers()
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_empty_answer_on_gps_question_should_be_saved_assignment_with_0_answers()
         {
             //arrange 
             var questionId = Guid.Parse("10101010101010101010101010101010");
@@ -855,7 +902,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_empty_answer_on_list_question_should_be_saved_assignemnt_with_0_answers()
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_empty_answer_on_list_question_should_be_saved_assignment_with_0_answers()
         {
             //arrange 
             var questionId = Guid.Parse("10101010101010101010101010101010");
@@ -889,7 +936,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_empty_answer_on_yesno_question_should_be_saved_assignemnt_with_0_answers()
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_empty_answer_on_yes_no_question_should_be_saved_assignment_with_0_answers()
         {
             //arrange 
             var questionId = Guid.Parse("10101010101010101010101010101010");
@@ -923,7 +970,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_empty_answer_on_categorical_multi_question_should_be_saved_assignemnt_with_0_answers()
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_empty_answer_on_categorical_multi_question_should_be_saved_assignment_with_0_answers()
         {
             //arrange 
             var questionId = Guid.Parse("10101010101010101010101010101010");
@@ -1022,7 +1069,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_answer_on_linked_to_question_categorical_signle_question_should_be_saved_assignemnt_with_0_answers()
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_answer_on_linked_to_question_categorical_single_question_should_be_saved_assignment_with_0_answers()
         {
             //arrange 
             var questionId = Guid.Parse("10101010101010101010101010101010");
@@ -1049,7 +1096,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_answer_on_linked_to_roster_categorical_signle_question_should_be_saved_assignemnt_with_0_answers()
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_answer_on_linked_to_roster_categorical_single_question_should_be_saved_assignment_with_0_answers()
         {
             //arrange 
             var questionId = Guid.Parse("10101010101010101010101010101010");
@@ -1232,7 +1279,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_responsible_supervisorr_should_return_empty_errors_and_save_assignment_assigner_to_supervisor()
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_responsible_supervisor_should_return_empty_errors_and_save_assignment_assigner_to_supervisor()
         {
             //arrange 
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion()));
@@ -1270,7 +1317,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         [TestCase("1")]
         [TestCase("7")]
         [TestCase("999")]
-        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_without_web_mode_flag_should_be_saved_assignemnt_with_false_flag(string quantity)
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_without_web_mode_flag_should_be_saved_assignment_with_false_flag(string quantity)
         {
             //arrange 
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion()));
@@ -1353,6 +1400,37 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             Assert.That(savedAssignments, Has.One.Items);
             Assert.That(savedAssignments[0].Comments, Is.EqualTo(comment));
+        }
+        
+        [TestCase("1")]
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_password_duplicates(string quantity)
+        { 
+            //arrange 
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion()));
+            var preloadedFile = Create.Entity.PreloadedFile(rows: new[]
+            {
+                Create.Entity.PreloadingRow(
+                    Create.Entity.PreloadingValue("_quantity", quantity),
+                    Create.Entity.PreloadingValue("_webmode", "1"),
+                    Create.Entity.PreloadingValue("_password", "PASSWORD1"),
+                    Create.Entity.PreloadingValue("_email", "aa@aa.aa")),
+                Create.Entity.PreloadingRow(
+                    Create.Entity.PreloadingValue("_quantity", quantity),
+                    Create.Entity.PreloadingValue("_webmode", "1"),
+                    Create.Entity.PreloadingValue("_password", "PASSWORD1"),
+                    Create.Entity.PreloadingValue("_email", "aa@aa.aa"))
+            });
+
+            var importAssignmentsRepository = new Mock<IPlainStorageAccessor<AssignmentToImport>>();
+            var service = Create.Service.AssignmentsImportService(importAssignmentsRepository: importAssignmentsRepository.Object);
+
+            //act
+            var errors = service.VerifySimpleAndSaveIfNoErrors(preloadedFile, Guid.Empty, questionnaire);
+
+            //assert
+            Assert.That(errors, Is.Empty);
+            importAssignmentsRepository.Verify(x => x.Store(It.Is<IEnumerable<Tuple<AssignmentToImport, object>>>(y =>
+                y.Count() == 2 && y.All(z => z.Item1.Answers.Count == 0))), Times.Once);
         }
     }
 }

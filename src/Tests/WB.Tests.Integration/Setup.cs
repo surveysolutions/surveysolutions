@@ -86,8 +86,8 @@ namespace WB.Tests.Integration
                 .Returns(sideBarSectionViewModel);
 
             Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<SideBarCoverSectionViewModel>())
-                .Returns(()=>new SideBarCoverSectionViewModel( Create.ViewModel.DynamicTextViewModel(
+                .Setup(locator => locator.GetInstance<SideBarVirtualCoverSectionViewModel>())
+                .Returns(()=>new SideBarVirtualCoverSectionViewModel( Create.ViewModel.DynamicTextViewModel(
                         liteEventRegistry,
                         interviewRepository: interviewsRepository), Mock.Of<CoverStateViewModel>()));
 

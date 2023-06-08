@@ -7,7 +7,7 @@
                 </li>
             </ol>
             <h1>{{$t("Pages.MapList_UserMapsTitle")}}</h1>
-            <p>
+            <p >
                 <a :href="$config.model.userMapLinkingUrl">{{$t('Pages.MapList_UserLinking')}}</a>
             </p>
         </div>

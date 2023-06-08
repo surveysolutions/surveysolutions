@@ -92,8 +92,6 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         protected override void Dispose(bool disposing)
         {
-            base.Dispose(disposing);
-
             if (disposing)
             {
                 recyclerView?.Dispose();
@@ -104,6 +102,8 @@ namespace WB.UI.Shared.Enumerator.Activities
                 layoutManager  = null;
                 adapter = null;
             }
+            
+            base.Dispose(disposing);
         }
     }
 }
