@@ -139,12 +139,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
         
+        private bool isDisposed = false;
         public void Dispose()
         {
+            if(isDisposed) return;
+            
             this.liteEventRegistry.Unsubscribe(this);
             this.Items.ToArray().ForEach(ie => ie.DisposeIfDisposable());
             this.createdEntities.ToArray().ForEach(ie => ie.DisposeIfDisposable());
             this.Name.Dispose();
+            
+            isDisposed = true;
         }
 
         public async Task HandleAsync(GroupsDisabled @event)

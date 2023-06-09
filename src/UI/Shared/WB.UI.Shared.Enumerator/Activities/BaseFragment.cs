@@ -20,10 +20,10 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         public override void OnDestroy()
         {
-            base.OnDestroy();
-            
             this.BindingContext?.ClearAllBindings();
             this.ViewModel?.DisposeIfDisposable();
+            
+            base.OnDestroy();
         }
     }
 }
