@@ -19,6 +19,8 @@ namespace WB.UI.Shared.Enumerator.Activities
             var listOfInterviewQuestionsAndGroups = this.FindViewById<MvxRecyclerView>(Resource.Id.interviewEntitiesList);
             var layoutManager = new LinearLayoutManager(this);
             
+            listOfInterviewQuestionsAndGroups?.SetItemAnimator(null);
+            
             listOfInterviewQuestionsAndGroups.SetLayoutManager(layoutManager);
             listOfInterviewQuestionsAndGroups.HasFixedSize = true;
             listOfInterviewQuestionsAndGroups.Adapter = new InterviewEntityAdapter((IMvxAndroidBindingContext)this.BindingContext);
