@@ -23,7 +23,9 @@ namespace WB.UI.Shared.Enumerator.Activities
             
             listOfInterviewQuestionsAndGroups.SetLayoutManager(layoutManager);
             listOfInterviewQuestionsAndGroups.HasFixedSize = true;
-            listOfInterviewQuestionsAndGroups.Adapter = new InterviewEntityAdapter((IMvxAndroidBindingContext)this.BindingContext);
+            var adapter = new InterviewEntityAdapter((IMvxAndroidBindingContext)this.BindingContext);
+            adapter.HasStableIds = true;
+            listOfInterviewQuestionsAndGroups.Adapter = adapter;
         }
     }
 }

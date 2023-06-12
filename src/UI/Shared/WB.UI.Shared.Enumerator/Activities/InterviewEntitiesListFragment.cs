@@ -32,6 +32,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             recyclerView?.SetItemAnimator(null);
 
             this.adapter = new InterviewEntityAdapter((IMvxAndroidBindingContext)this.BindingContext);
+            this.adapter.HasStableIds = true;
             this.recyclerView.Adapter = this.adapter;
 
             return view;
