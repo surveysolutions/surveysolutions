@@ -16,9 +16,4 @@ public class CarouselViewAdapter : RecyclerViewAdapter
         holder.ItemView.Tag = "position-" + position;
         base.OnBindViewHolder(holder, position, payloads);
     }
-
-    protected override void OnItemViewClick(object sender, EventArgs e)
-    {
-        base.OnItemViewClick(sender, e);
-    }
 }

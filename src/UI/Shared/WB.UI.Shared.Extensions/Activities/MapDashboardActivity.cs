@@ -49,10 +49,14 @@ namespace WB.UI.Shared.Extensions.Activities
             this.Finish();
         }
 
+        private static int carouselCurrentItemMaxHeight; 
+
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
 
+            carouselCurrentItemMaxHeight = (int)this.Resources.GetDimension(Resource.Dimension.carousel_current_item_max_height);
+            
             this.Toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             this.Toolbar.Title = "";
             this.SetSupportActionBar(this.Toolbar);
@@ -102,7 +106,7 @@ namespace WB.UI.Shared.Extensions.Activities
                 .To(vm => vm.AvailableMarkers);
             bindingSet.Apply();
 
-            var pageTransformer = new CarouselIPageTransformer();
+            var pageTransformer = new CarouselIPageTransformer(this);
             viewPager.SetPageTransformer(pageTransformer);
             var itemDecoration = new HorizontalMarginItemDecoration(
                 this,
@@ -131,36 +135,34 @@ namespace WB.UI.Shared.Extensions.Activities
         
         private static void RecalculateCarouselHeight(ViewPager2 viewPager)
         {
-            if (isRecalculating || !isRecalculatingAllowed)
-                return;
-            isRecalculating = true;
+            if (!isRecalculatingAllowed || isRecalculating) return;
             
+            isRecalculating = true;
             viewPager?.Post(() =>
-            {
-                var view = viewPager.FindViewWithTag("position-" + viewPager.CurrentItem);
-                var cardView = view?.FindViewById<CardView>(Resource.Id.dashboardItem);
-
-                if (cardView != null)
                 {
-                    var wMeasureSpec = View.MeasureSpec.MakeMeasureSpec(cardView.Width, MeasureSpecMode.Exactly);
-                    var hMeasureSpec = View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified);
-                    cardView.Measure(wMeasureSpec, hMeasureSpec);
-                    var maxHeight = (int)viewPager.Resources!.GetDimension(Resource.Dimension.carousel_current_item_max_height);
-                    var height = Math.Min(cardView.MeasuredHeight, maxHeight);
+                    var view = viewPager.FindViewWithTag("position-" + viewPager.CurrentItem);
+                    var cardView = view?.FindViewById<CardView>(Resource.Id.dashboardItem);
 
-                    if (viewPager.LayoutParameters != null && viewPager.LayoutParameters.Height != height)
+                    if (cardView != null)
                     {
-                        viewPager.LayoutParameters.Height = height;
-                        viewPager.RequestLayout();
-                        view.RequestLayout();
-                        var scrollView = view.FindViewById<ScrollView>(Resource.Id.marker_card_scroll);
-                        ((ConstraintLayout.LayoutParams)scrollView.LayoutParameters).MatchConstraintMaxHeight = maxHeight;
-                        scrollView?.RequestLayout();
-                        cardView.RequestLayout();
+                        var wMeasureSpec = View.MeasureSpec.MakeMeasureSpec(cardView.Width, MeasureSpecMode.Exactly);
+                        var hMeasureSpec = View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified);
+                        cardView.Measure(wMeasureSpec, hMeasureSpec);
+                        var height = Math.Min(cardView.MeasuredHeight, carouselCurrentItemMaxHeight);
+                        if (viewPager.LayoutParameters != null && viewPager.LayoutParameters.Height != height)
+                        {
+                            viewPager.LayoutParameters.Height = height + 5;
+                            viewPager.RequestLayout();
+                            view.RequestLayout();
+                            var scrollView = view.FindViewById<ScrollView>(Resource.Id.marker_card_scroll);
+                            ((ConstraintLayout.LayoutParams)scrollView.LayoutParameters).MatchConstraintMaxHeight =
+                                carouselCurrentItemMaxHeight;
+                            scrollView?.RequestLayout();
+                            cardView.RequestLayout();
+                        }
                     }
-                }
-
-                isRecalculating = false;
+                    
+                    isRecalculating = false;
             });
         }
 
@@ -184,10 +186,9 @@ namespace WB.UI.Shared.Extensions.Activities
             if (e.Event.Action == MotionEventActions.Move)
             {
                 isRecalculatingAllowed = false;
-                var maxHeight = (int)viewPager.Resources!.GetDimension(Resource.Dimension.carousel_current_item_max_height);
-                if (viewPager?.LayoutParameters != null && viewPager.LayoutParameters.Height < maxHeight)
+                if (viewPager?.LayoutParameters != null && viewPager.LayoutParameters.Height < carouselCurrentItemMaxHeight)
                 {
-                    viewPager.LayoutParameters.Height = maxHeight;
+                    viewPager.LayoutParameters.Height = carouselCurrentItemMaxHeight;
                     viewPager.RequestLayout();
                 }
             }
@@ -211,7 +212,6 @@ namespace WB.UI.Shared.Extensions.Activities
             public override void OnPageSelected(int position)
             {
                 base.OnPageSelected(position);
-
                 
                 if (prevPosition.HasValue && prevPosition != position)
                 {
