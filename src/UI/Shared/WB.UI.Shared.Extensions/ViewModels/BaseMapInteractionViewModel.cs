@@ -144,13 +144,16 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
                 if (!this.MapView.LocationDisplay.IsEnabled)
                     this.MapView.LocationDisplay.AutoPanMode = LocationDisplayAutoPanMode.Off;
+                
+                var locationDisplayDataSource = this.MapView.LocationDisplay.DataSource;
+                if (locationDisplayDataSource != null)
+                {
+                    //try to stop service first to avoid crash
+                    await locationDisplayDataSource.StopAsync();
+                    locationDisplayDataSource.StatusChanged += DataSourceOnStatusChanged;
+                    await locationDisplayDataSource.StartAsync();
+                }
 
-                //try to stop service first to avoid crash
-                await this.MapView.LocationDisplay.DataSource.StopAsync();
-
-                this.MapView.LocationDisplay.DataSource.StatusChanged += DataSourceOnStatusChanged;
-
-                await this.MapView.LocationDisplay.DataSource.StartAsync();
                 this.MapView.LocationDisplay.IsEnabled = true;
                 this.MapView.LocationDisplay.LocationChanged += LocationDisplayOnLocationChanged;
             }
@@ -324,18 +327,12 @@ namespace WB.UI.Shared.Extensions.ViewModels
             set => this.RaiseAndSetIfChanged(ref this.map, value);
         }
 
-        private MapView mapView;
         private bool isDisposed;
         private bool shapeFileLoaded;
         
         protected ShapefileFeatureTable LoadedShapefile;
-        
 
-        public MapView MapView
-        {
-            get { return mapView; }
-            set => mapView = value;
-        }
+        public MapView MapView { get; set; }
 
         public IMvxAsyncCommand RotateMapToNorth => new MvxAsyncCommand(async () =>
         {

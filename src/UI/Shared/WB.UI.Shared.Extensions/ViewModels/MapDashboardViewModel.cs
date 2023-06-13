@@ -145,7 +145,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         public override void ViewAppeared()
         {
             base.ViewAppeared();
-            this.MapView.RefreshDrawableState();
+            this.MapView?.RefreshDrawableState();
         }
 
         public override MapDescription GetSelectedMap(MvxObservableCollection<MapDescription> mapsToSelectFrom)
