@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-using Esri.ArcGISRuntime.Symbology;
-using MvvmCross.Base;
+﻿using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -11,9 +9,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.Markers;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Shared.Extensions.Services;
 
-
 namespace WB.UI.Shared.Extensions.ViewModels;
-
 public class InterviewerMapDashboardViewModel : MapDashboardViewModel
 {
     protected override InterviewStatus[] InterviewStatuses { get; } = 
@@ -43,4 +39,5 @@ public class InterviewerMapDashboardViewModel : MapDashboardViewModel
     }
 
     public override bool SupportDifferentResponsible => false;
+    
 }
