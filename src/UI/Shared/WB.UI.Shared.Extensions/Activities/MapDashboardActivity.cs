@@ -128,31 +128,35 @@ namespace WB.UI.Shared.Extensions.Activities
             
             viewPager?.Post(() =>
                 {
-                    var view = viewPager.FindViewWithTag("position-" + viewPager.CurrentItem);
-                    var cardView = view?.FindViewById<CardView>(Resource.Id.dashboardItem);
-
-                    if (cardView != null)
+                    try
                     {
-                        var wMeasureSpec = View.MeasureSpec.MakeMeasureSpec(cardView.Width, MeasureSpecMode.Exactly);
-                        var hMeasureSpec = View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified);
-                        cardView.Measure(wMeasureSpec, hMeasureSpec);
-                        var height = Math.Min(cardView.MeasuredHeight, carouselCurrentItemMaxHeight);
-                        if (viewPager.LayoutParameters != null && viewPager.LayoutParameters.Height != height)
+                        var view = viewPager.FindViewWithTag("position-" + viewPager.CurrentItem);
+                        var cardView = view?.FindViewById<CardView>(Resource.Id.dashboardItem);
+
+                        if (cardView != null)
                         {
-                            viewPager.LayoutParameters.Height = height;
-                            viewPager.RequestLayout();
-                            view.RequestLayout();
-                            
-                            var scrollView = view.FindViewById<ScrollView>(Resource.Id.marker_card_scroll);
-                            ((ConstraintLayout.LayoutParams)scrollView.LayoutParameters).MatchConstraintMaxHeight =
-                                height;
-                            scrollView?.RequestLayout();
-                            cardView.RequestLayout();
+                            var wMeasureSpec = View.MeasureSpec.MakeMeasureSpec(cardView.Width, MeasureSpecMode.Exactly);
+                            var hMeasureSpec = View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified);
+                            cardView.Measure(wMeasureSpec, hMeasureSpec);
+                            var height = Math.Min(cardView.MeasuredHeight, carouselCurrentItemMaxHeight);
+                            if (viewPager.LayoutParameters != null && viewPager.LayoutParameters.Height != height)
+                            {
+                                viewPager.LayoutParameters.Height = height;
+                                viewPager.RequestLayout();
+                                view.RequestLayout();
+                                var scrollView = view.FindViewById<ScrollView>(Resource.Id.marker_card_scroll);
+                                ((ConstraintLayout.LayoutParams)scrollView.LayoutParameters).MatchConstraintMaxHeight =
+                                    height;
+                                scrollView?.RequestLayout();
+                                cardView.RequestLayout();
+                            }
                         }
                     }
-                    
-                    isRecalculating = false;
-            });
+                    finally
+                    {
+                        isRecalculating = false;
+                    }
+                });
         }
 
         private void ViewPagerOnLayoutChange(object sender, View.LayoutChangeEventArgs e)
@@ -198,9 +202,9 @@ namespace WB.UI.Shared.Extensions.Activities
                 this.viewPager = viewPager;
             }
 
-            public override void OnPageSelected(int position)
+            public override void OnPageScrolled(int position, float positionOffset, int positionOffsetPixels)
             {
-                base.OnPageSelected(position);
+                base.OnPageScrolled(position, positionOffset, positionOffsetPixels);
                 
                 if (prevPosition.HasValue && prevPosition != position)
                 {
@@ -215,7 +219,7 @@ namespace WB.UI.Shared.Extensions.Activities
                 
                 RecalculateCarouselHeight(viewPager);
             }
-            
+
             protected override void Dispose(bool disposing)
             {
                 viewPager = null;
