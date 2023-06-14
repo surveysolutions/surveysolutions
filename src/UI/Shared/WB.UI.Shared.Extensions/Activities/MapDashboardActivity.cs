@@ -124,8 +124,8 @@ namespace WB.UI.Shared.Extensions.Activities
         private static void RecalculateCarouselHeight(ViewPager2 viewPager)
         {
             if (!isRecalculatingAllowed || isRecalculating) return;
-            
             isRecalculating = true;
+            
             viewPager?.Post(() =>
                 {
                     var view = viewPager.FindViewWithTag("position-" + viewPager.CurrentItem);
@@ -139,12 +139,13 @@ namespace WB.UI.Shared.Extensions.Activities
                         var height = Math.Min(cardView.MeasuredHeight, carouselCurrentItemMaxHeight);
                         if (viewPager.LayoutParameters != null && viewPager.LayoutParameters.Height != height)
                         {
-                            viewPager.LayoutParameters.Height = height + 5;
+                            viewPager.LayoutParameters.Height = height;
                             viewPager.RequestLayout();
                             view.RequestLayout();
+                            
                             var scrollView = view.FindViewById<ScrollView>(Resource.Id.marker_card_scroll);
                             ((ConstraintLayout.LayoutParams)scrollView.LayoutParameters).MatchConstraintMaxHeight =
-                                carouselCurrentItemMaxHeight;
+                                height;
                             scrollView?.RequestLayout();
                             cardView.RequestLayout();
                         }
