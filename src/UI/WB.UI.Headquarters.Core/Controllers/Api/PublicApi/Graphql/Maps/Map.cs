@@ -11,12 +11,20 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
     {
         protected override void Configure(IObjectTypeDescriptor<MapBrowseItem> descriptor)
         {
+            descriptor.BindFieldsExplicitly();
             descriptor.Name("Map");
-            descriptor.Ignore(x => x.FileName);
+            
+            //descriptor.Ignore(x => x.FileName);
+            //descriptor.Ignore(m => m.HasGeoJson);
+            //descriptor.Ignore(m => m.GeoJson);
+            //descriptor.Ignore(m => m.IsPreviewGeoJson);
+            //descriptor.Ignore(m => m.DuplicateLabels);
+
             descriptor.Field(x => x.Id)
                 .Type<NonNullType<StringType>>()
                 .Name("fileName")
                 .Description("Map file name");
+            
             descriptor.Field(x => x.Size).Description("Size of map in bytes");
             descriptor.Field(x => x.ImportDate)
                 .Type<DateTimeType>()
@@ -50,10 +58,16 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
                     return mapUsers.ToList();
                 })
                 .Type<ListType<UserMapObjectType>>();
-            descriptor.Ignore(m => m.HasGeoJson);
-            descriptor.Ignore(m => m.GeoJson);
-            descriptor.Ignore(m => m.IsPreviewGeoJson);
-            descriptor.Ignore(m => m.DuplicateLabels);
+            descriptor.Field(x => x.XMaxVal).Type<NonNullType<FloatType>>();
+            descriptor.Field(x => x.YMaxVal).Type<NonNullType<FloatType>>();
+            descriptor.Field(x => x.XMinVal).Type<NonNullType<FloatType>>();
+            descriptor.Field(x => x.YMinVal).Type<NonNullType<FloatType>>();
+            
+            descriptor.Field(x => x.Wkid).Type<NonNullType<IntType>>();
+            descriptor.Field(x => x.MaxScale).Type<NonNullType<FloatType>>();
+            descriptor.Field(x => x.MinScale).Type<NonNullType<FloatType>>();
+            descriptor.Field(x => x.ShapeType).Type<StringType>();
+            descriptor.Field(x => x.ShapesCount).Type<IntType>();
         }
     }
 }
