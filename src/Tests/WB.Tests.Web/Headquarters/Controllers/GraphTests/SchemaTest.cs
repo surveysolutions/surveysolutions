@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using ApprovalTests.Reporters.TestFrameworks;
-using HotChocolate.Execution;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql;

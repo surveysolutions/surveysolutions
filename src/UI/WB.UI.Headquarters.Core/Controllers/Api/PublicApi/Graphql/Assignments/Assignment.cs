@@ -17,11 +17,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Assignments
             
             descriptor.Field(x => x.Archived);
             descriptor.Field(x => x.CreatedAtUtc).Type<NonNullType<DateTimeType>>();
-            descriptor.Field(x => x.Email);
+            descriptor.Field(x => x.Email).Type<StringType>();
             descriptor.Field(x => x.Id).Type<NonNullType<IdType>>();
             descriptor.Field(x => x.InterviewsNeeded);
             descriptor.Field(x => x.ReceivedByTabletAtUtc)
                 .Description("Will return `null` when assignment is not received by tablet");
+            
             descriptor.Field(x => x.ResponsibleId).Type<NonNullType<UuidType>>();
             descriptor.Field(x => x.WebMode).Type<NonNullType<BooleanType>>();
 
@@ -30,12 +31,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Assignments
                 .Type<CalendarEventObjectType>()
                 .Resolver(context =>
                 {
-                    var assinmentId = context.Parent<Core.BoundedContexts.Headquarters.Assignments.Assignment>().Id;
+                    var assignmentId = context.Parent<Core.BoundedContexts.Headquarters.Assignments.Assignment>().Id;
                     var unitOfWork = context.Service<IUnitOfWork>();
                   
                     var calendarEvent = unitOfWork.Session
                         .Query<CalendarEvent>()
-                        .FirstOrDefault(x => x.AssignmentId== assinmentId 
+                        .FirstOrDefault(x => x.AssignmentId == assignmentId 
                                              && x.CompletedAtUtc == null
                                              && x.DeletedAtUtc == null);
                     return calendarEvent;

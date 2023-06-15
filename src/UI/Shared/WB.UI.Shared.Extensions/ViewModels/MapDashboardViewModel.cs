@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
-using Android.Graphics;
-using System.Drawing;
+﻿using System.ComponentModel;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
-using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
@@ -147,6 +140,12 @@ namespace WB.UI.Shared.Extensions.ViewModels
             CollectResponsibles();
             CollectInterviewStatuses();
             await RefreshMarkers(setViewToMarkers: true);
+        }
+
+        public override void ViewAppeared()
+        {
+            base.ViewAppeared();
+            this.MapView?.RefreshDrawableState();
         }
 
         public override MapDescription GetSelectedMap(MvxObservableCollection<MapDescription> mapsToSelectFrom)
