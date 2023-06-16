@@ -105,7 +105,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MAPS AVAILABLE ON DEVICE.
+        ///   Looks up a localized string similar to AVAILABLE MAPS.
         /// </summary>
         public static string AreaMap_Available_Maps_Title {
             get {

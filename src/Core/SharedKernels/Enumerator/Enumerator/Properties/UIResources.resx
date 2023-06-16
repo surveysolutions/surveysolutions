@@ -639,7 +639,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>ACTIVE MAP:</value>
   </data>
   <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
-    <value>MAPS AVAILABLE ON DEVICE</value>
+      <value>AVAILABLE MAPS</value>
   </data>
   <data name="AreaMap_LoadShapefile" xml:space="preserve">
     <value>Load shapefile</value>

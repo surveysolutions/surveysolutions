@@ -372,7 +372,7 @@ Vous pouvez créer ou modifier vos questionnaires dans au site Designer de Surve
     <value>Carte active :</value>
   </data>
   <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
-    <value>Cartes disponibles sur l'appareil</value>
+      <value>Cartes disponibles</value>
   </data>
   <data name="AreaMap_Cancel" xml:space="preserve">
     <value>Annuler</value>

@@ -370,7 +370,7 @@
     <value>MAPA ACTIVO:</value>
   </data>
   <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
-    <value>MAPAS DISPONIBLES EN EL DISPOSITIVO</value>
+      <value>MAPAS DISPONIBLES</value>
   </data>
   <data name="AreaMap_Cancel" xml:space="preserve">
     <value>Cancelar</value>

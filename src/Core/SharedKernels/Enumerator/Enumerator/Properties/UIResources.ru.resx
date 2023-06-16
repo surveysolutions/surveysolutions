@@ -561,7 +561,7 @@
     <value>АКТИВНАЯ КАРТА:</value>
   </data>
   <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
-    <value>ДОСТУПНЫЕ НА УСТРОЙСТВЕ КАРТЫ</value>
+      <value>ДОСТУПНЫЕ КАРТЫ</value>
   </data>
   <data name="AreaMap_LoadShapefile" xml:space="preserve">
     <value>Загрузить шейп-файл</value>
