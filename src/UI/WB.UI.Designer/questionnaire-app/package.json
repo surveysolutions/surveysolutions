@@ -43,7 +43,7 @@
     "ssri": "^8.0.1",
     "svgo": "2.8.0",
     "trim-newlines": "4.0.2",
-    "vite": "^4.0.4",
+    "vite": "^4.1.5",
     "vite-plugin-vuetify": "^1.0.2",
     "xmldoc": "1.2.0"
   },
