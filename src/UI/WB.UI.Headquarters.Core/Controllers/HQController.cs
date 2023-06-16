@@ -76,7 +76,10 @@ namespace WB.UI.Headquarters.Controllers
         [ExtraHeaderPermissions(HeaderPermissionType.Esri,HeaderPermissionType.Google)]
         public IActionResult TakeNewAssignment(string id)
         {
-            if (this.prototypeService.GetPrototypeType(Guid.Parse(id)) != PrototypeType.Permanent)
+            if(!Guid.TryParse(id, out Guid parsedId))
+                return NotFound();
+            
+            if (this.prototypeService.GetPrototypeType(parsedId) != PrototypeType.Permanent)
                 return NotFound();
 
             return this.View(new

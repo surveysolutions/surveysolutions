@@ -9,7 +9,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
         {
             descriptor.BindFieldsExplicitly();
             descriptor.Name("UserMap");
-            descriptor.Field(x => x.UserName).Description("Name of the user assigned to map");
+            
+            descriptor.Field(x => x.UserName)
+                .Type<StringType>()
+                .Description("Name of the user assigned to map");
         }
     }
 }

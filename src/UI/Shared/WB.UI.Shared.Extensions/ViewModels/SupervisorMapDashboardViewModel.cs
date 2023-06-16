@@ -1,10 +1,6 @@
-﻿using System.Drawing;
-using Esri.ArcGISRuntime.Symbology;
-using MvvmCross;
-using MvvmCross.Base;
+﻿using MvvmCross.Base;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -17,9 +13,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Shared.Extensions.Entities;
 using WB.UI.Shared.Extensions.Services;
 
-
 namespace WB.UI.Shared.Extensions.ViewModels;
-
 public class SupervisorMapDashboardViewModel : MapDashboardViewModel
 {
     private readonly IPlainStorage<InterviewerDocument> usersRepository;

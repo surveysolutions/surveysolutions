@@ -45,7 +45,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
 
         private static IRequestExecutorBuilder GetExecutorBuilder(IServiceCollection services)
         {
-            services.AddHttpResultSerializer<CompositeSerializer>();
+            services.AddHttpResponseFormatter<CompositeFormatter>();
 
             return services
                 .AddGraphQLServer()

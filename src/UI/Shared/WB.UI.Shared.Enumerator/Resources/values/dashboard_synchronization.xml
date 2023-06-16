@@ -29,6 +29,9 @@
   <style name="Dashboard_Synchronization_Lock_Text" parent="Dashboard_Synchronization_Statistics_Text">
     <item name="android:layout_width">@dimen/Dashboard_Synchronization_Statistics_Width</item>
     <item name="android:layout_alignParentBottom">true</item>
+    <item name="android:layout_alignParentLeft">true</item>
+    <item name="android:layout_marginRight">@dimen/Dashboard_Synchronization_Lock_marginRight</item>
+      
   </style>
 
   <style name="Dashboard_Synchronization_Cancel_Text" parent="Dashboard_Synchronization_Statistics_Text">
