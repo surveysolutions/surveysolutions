@@ -91,7 +91,7 @@
     "sass": "^1.49.7",
     "stats-webpack-plugin": "^0.7.0",
     "terser": "^5.16.3",
-    "vite": "4.2.1",
+    "vite": "^4.3.9",
     "vite-plugin-clean": "^1.0.0",
     "vite-plugin-env-compatible": "^1.1.1",
     "vite-plugin-mpa-plus": "^0.5.4",
