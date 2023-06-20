@@ -15,10 +15,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class ExoPlayerBinding : BaseBinding<StyledPlayerView, string>
     {
-        public ExoPlayerBinding(StyledPlayerView view) : base(view)
-        {
-            
-        }
+        public ExoPlayerBinding(StyledPlayerView view) : base(view) { }
 
         public override MvxBindingMode DefaultMode => MvxBindingMode.OneWay;
 
@@ -26,19 +23,19 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         {
             if (isDisposing)
             {
-                var player = Target?.Player;
-                if (player != null)
+                try
                 {
-                    try
+                    var player = Target?.Player;
+                    if (player != null)
                     {
                         player.Stop();
                         player.Release();
                         player.Dispose();
+                        
+                        Target.Player = null;
                     }
-                    catch (ObjectDisposedException) { }
-                    
-                    Target.Player = null;
                 }
+                catch (ObjectDisposedException) {}
             }
             
             base.Dispose(isDisposing);
@@ -138,10 +135,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
     public class ExoPlayerAudioAttachmentBinding : ExoPlayerBinding
     {
-        public ExoPlayerAudioAttachmentBinding(StyledPlayerView view) : base(view)
-        {
-
-        }
+        public ExoPlayerAudioAttachmentBinding(StyledPlayerView view) : base(view) { }
 
         protected override void SetValueToView(StyledPlayerView view, string value)
         {
