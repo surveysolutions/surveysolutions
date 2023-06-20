@@ -46,12 +46,11 @@
       <FrameLayout android:layout_width="match_parent"
                    android:layout_height="match_parent">
 
-        <androidx.viewpager.widget.ViewPager
+        <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/pager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-        >
-        </androidx.viewpager.widget.ViewPager>
+            android:layout_height="match_parent">
+        </androidx.viewpager2.widget.ViewPager2>
         <LinearLayout style="@style/Interview_GroupWithDivider"
                       local:MvxBind="Enabled Not(Or(Synchronization.IsSynchronizationInProgress, IsInProgress, Synchronization.HasUserAnotherDevice));
                                  Clickable Or(Synchronization.IsSynchronizationInProgress, IsInProgress, Synchronization.HasUserAnotherDevice);"
