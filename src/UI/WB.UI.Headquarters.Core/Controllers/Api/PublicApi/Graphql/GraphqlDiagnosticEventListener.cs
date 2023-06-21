@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
 {
-    public class GraphqlDiagnosticEventListener : DiagnosticEventListener
+    public class GraphqlDiagnosticEventListener : ExecutionDiagnosticEventListener
     {
         private readonly ILogger logger;
         public GraphqlDiagnosticEventListener(ILogger<GraphqlDiagnosticEventListener> logger)

@@ -9,7 +9,6 @@ using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
-using it = Moq.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
 {
@@ -36,7 +35,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
                     && storage.GetQuestionnaireOrThrow(QuestionnaireIdentity.Parse(questionnaireId), It.IsAny<string>()) == plainQuestionnaire);
 
             var interviewViewStorage = Mock.Of<IPlainStorage<InterviewView>>(writer =>
-            writer.GetById(it.IsAny<string>()) == dashboardItem);
+            writer.GetById(It.IsAny<string>()) == dashboardItem);
 
             Mock.Get(interviewViewStorage)
                 .Setup(storage => storage.Store(it.IsAny<InterviewView>()))
