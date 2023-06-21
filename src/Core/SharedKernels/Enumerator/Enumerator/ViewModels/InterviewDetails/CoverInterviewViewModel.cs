@@ -3,19 +3,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using MvvmCross;
 using MvvmCross.Base;
-using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -26,7 +20,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public class CoverInterviewViewModel : MvxViewModel, IDisposable
+    public class CoverInterviewViewModel : BaseViewModel
     {
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -235,7 +229,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private bool isDisposed = false;
         private List<IInterviewEntityViewModel> prefilledEntities;
 
-        public void Dispose()
+        public override void Dispose()
         {
             if (isDisposed)
                 return;
@@ -269,6 +263,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             NextGroupNavigationViewModel?.Dispose();
             
             Name?.Dispose();
+            
+            base.Dispose();
         }
     }
 }

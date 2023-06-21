@@ -95,7 +95,7 @@ namespace WB.UI.Interviewer.ViewModel
             return base.GetDefaultScreenToNavigate(interview, questionnaire);
         }
 
-        protected override MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
+        protected override BaseViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
         {
             switch (this.NavigationState.CurrentScreenType)
             {

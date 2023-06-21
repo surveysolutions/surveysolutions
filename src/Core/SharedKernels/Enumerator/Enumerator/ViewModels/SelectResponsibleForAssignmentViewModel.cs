@@ -20,9 +20,8 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
-    public class SelectResponsibleForAssignmentViewModel : MvxViewModel<SelectResponsibleForAssignmentArgs>
+    public class SelectResponsibleForAssignmentViewModel : BaseViewModel<SelectResponsibleForAssignmentArgs>
     {
-        private readonly IMvxNavigationService mvxNavigationService;
         private readonly IPlainStorage<InterviewerDocument> usersRepository;
         private readonly IPrincipal principal;
         private readonly IAuditLogService auditLogService;
@@ -41,9 +40,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             IViewModelNavigationService navigationService,
             IStatefulInterviewRepository statefulInterviewRepository,
             IPlainStorage<InterviewView> interviewStorage,
-            IPlainStorage<AssignmentDocument, int> assignmentsStorage)
+            IViewModelNavigationService viewModelNavigationService,
+            IPlainStorage<AssignmentDocument, int> assignmentsStorage):base(principal, viewModelNavigationService)
         {
-            this.mvxNavigationService = Mvx.IoCProvider.Resolve<IMvxNavigationService>();
             this.usersRepository = usersRepository;
             this.principal = principal;
             this.auditLogService = auditLogService;
@@ -71,7 +70,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         private IMvxAsyncCommand reassignCommand;
         public IMvxAsyncCommand ReassignCommand => reassignCommand ??= new MvxAsyncCommand(this.ReassignAsync, () => this.CanReassign);
-        public IMvxCommand CancelCommand => new MvxCommand(this.Cancel);
+        public IMvxAsyncCommand CancelCommand => new MvxAsyncCommand(async () => await this.Cancel());
         public IMvxCommand SelectResponsibleCommand => new MvxCommand<ResponsibleToSelectViewModel>(this.SelectResponsible);
 
         private MvxObservableCollection<ResponsibleToSelectViewModel> uiItems;
@@ -81,7 +80,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             private set => this.RaiseAndSetIfChanged(ref this.uiItems, value);
         }
 
-        private void Cancel() => this.mvxNavigationService.Close(this);
+        private async Task Cancel() => await ViewModelNavigationService.Close(this);
 
         private async Task ReassignAsync()
         {
@@ -100,7 +99,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
             finally
             {
-                this.Cancel();
+                await this.Cancel();
             }
         }
 

@@ -22,7 +22,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
-    public class AnonymousQuestionnairesViewModel : BaseViewModel, IDisposable
+    public class AnonymousQuestionnairesViewModel : BaseViewModel
     {
         private const int CountRowsInHistory = 10;
 
@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IQRBarcodeScanService qrBarcodeScanService;
         private readonly IQuestionnaireStorage questionnaireRepository;
 
-        private QuestionnaireDownloadViewModel QuestionnaireDownloader { get; }
+        private readonly QuestionnaireDownloadViewModel questionnaireDownloader;
 
         public AnonymousQuestionnairesViewModel(
             ITesterPrincipal principal,
@@ -50,7 +50,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             QuestionnaireDownloadViewModel questionnaireDownloader,
             IQRBarcodeScanService qrBarcodeScanService,
             IQuestionnaireStorage questionnaireRepository)
-            : base(principal, viewModelNavigationService, false)
         {
             this.principal = principal;
             this.userInteractionService = userInteractionService;
@@ -58,7 +57,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.logger = logger;
             this.qrBarcodeScanService = qrBarcodeScanService;
             this.questionnaireRepository = questionnaireRepository;
-            this.QuestionnaireDownloader = questionnaireDownloader;
+            this.questionnaireDownloader = questionnaireDownloader;
+            this.viewModelNavigationService = viewModelNavigationService;
         }
 
         public override async Task Initialize()
@@ -202,7 +202,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             this.CancelLoadServerQuestionnaires();
 
-            return this.ViewModelNavigationService.SignOutAndNavigateToLoginAsync();
+            return this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
         }
 
 
@@ -217,7 +217,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             try
             {
-                await this.QuestionnaireDownloader
+                await this.questionnaireDownloader
                     .LoadQuestionnaireAsync(questionnaireListItem.Id, questionnaireListItem.Title, progress,
                         this.tokenSource.Token);
             }
@@ -281,6 +281,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         }
 
         private IMvxAsyncCommand openCommand;
+        private readonly IViewModelNavigationService viewModelNavigationService;
 
         public IMvxAsyncCommand OpenCommand
         {
@@ -304,9 +305,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         {
                             this.tokenSource = new CancellationTokenSource();
                             var progress = new Progress<string>();
-                            var questionnaireIdentity = await this.QuestionnaireDownloader.DownloadQuestionnaireWithAllDependenciesAsync(qId.FormatGuid(), idFromUrl, progress, tokenSource.Token);
+                            var questionnaireIdentity = await this.questionnaireDownloader.DownloadQuestionnaireWithAllDependenciesAsync(qId.FormatGuid(), idFromUrl, progress, tokenSource.Token);
                             SaveAnonymousQuestionnaireListItem(questionnaireIdentity);
-                            await this.QuestionnaireDownloader.CreateAndOpenInterview(questionnaireIdentity, progress);
+                            await this.questionnaireDownloader.CreateAndOpenInterview(questionnaireIdentity, progress);
                         }
                     }
                 }
@@ -346,9 +347,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             SearchByLocalQuestionnaires(SearchText);
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             tokenSource?.Dispose();
+            base.Dispose();
         }
     }
 }

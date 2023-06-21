@@ -4,7 +4,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
-    public abstract class ProgressViewModel : BaseViewModel
+    public abstract class ProgressViewModel : BaseAuthenticatedViewModel
     {
         protected ProgressViewModel(IPrincipal principal, 
             IViewModelNavigationService viewModelNavigationService) 
@@ -52,9 +52,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             set => SetProperty(ref this.isIndeterminate, value);
         }
 
-        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToDashboardAsync());
+        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => 
+            await this.ViewModelNavigationService.NavigateToDashboardAsync());
 
-        public IMvxCommand SignOutCommand => new MvxAsyncCommand(this.ViewModelNavigationService.SignOutAndNavigateToLoginAsync);
+        public IMvxCommand SignOutCommand => 
+            new MvxAsyncCommand(this.ViewModelNavigationService.SignOutAndNavigateToLoginAsync);
 
         public IMvxCommand CancelLoadingCommand => new MvxCommand(this.CancelLoading);
 

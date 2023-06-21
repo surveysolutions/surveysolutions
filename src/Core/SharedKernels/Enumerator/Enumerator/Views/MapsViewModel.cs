@@ -13,7 +13,7 @@ using Xamarin.Essentials;
 
 namespace WB.Core.SharedKernels.Enumerator.Views
 {
-    public class MapsViewModel : BaseViewModel
+    public class MapsViewModel : BaseAuthenticatedViewModel
     {
         private readonly IMapService mapService;
         private readonly IPermissionsService permissions;
@@ -49,7 +49,8 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             await this.ViewModelNavigationService.SignOutAndNavigateToLoginAsync();
         }
 
-        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToDashboardAsync());
+        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => 
+            await this.ViewModelNavigationService.NavigateToDashboardAsync());
 
         private MvxObservableCollection<MapItem> uiItems = new MvxObservableCollection<MapItem>();
         public MvxObservableCollection<MapItem> Maps
@@ -63,9 +64,8 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         {
             get
             {
-                return mapSynchronizationCommand ??
-                       (mapSynchronizationCommand = new MvxAsyncCommand(this.RunMapSyncAsync,
-                           () => !this.Synchronization.IsSynchronizationInProgress));
+                return mapSynchronizationCommand ??= new MvxAsyncCommand(this.RunMapSyncAsync,
+                    () => !this.Synchronization.IsSynchronizationInProgress);
             }
         }
 

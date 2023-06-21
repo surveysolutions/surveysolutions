@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
-using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -14,9 +13,8 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
-    public class AttachmentViewModel : MvxViewModel,
-        IAsyncViewModelEventHandler<VariablesChanged>,
-        IDisposable
+    public class AttachmentViewModel : BaseViewModel,
+        IAsyncViewModelEventHandler<VariablesChanged>
     {
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -193,6 +191,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Audio = null;
             this.ContentPath = null;
             this.Image = null;
+            
             base.ViewDestroy(viewFinishing);
         }
 
@@ -201,12 +200,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await BindAttachment();
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             this.eventRegistry.Unsubscribe(this);
-
-            //this.Video?.Dispose();
-            //this.Audio?.Dispose();
+            base.Dispose();
         }
     }
 }

@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             this.Dispose();
         }
 
-        protected override MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
+        protected override BaseViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
         {
             switch (this.NavigationState.CurrentScreenType)
             {

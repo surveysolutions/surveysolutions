@@ -11,9 +11,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class QuestionStateViewModel<TAnswerEvent>: MvxNotifyPropertyChanged,
         IViewModelEventHandler<TAnswerEvent>,
-        IQuestionStateViewModel,
-        IDisposable
-        where TAnswerEvent : QuestionAnswered
+        IQuestionStateViewModel where TAnswerEvent : QuestionAnswered
     {
         public QuestionHeaderViewModel Header { get; private set; }
         public virtual ValidityViewModel Validity { get; private set; }
@@ -61,7 +59,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             
             this.Validity.Init(interviewId, entityIdentity, navigationState);
             this.Warnings.Init(interviewId, entityIdentity, navigationState);
-            this.Comments.Init(interviewId, entityIdentity, navigationState);
+            this.Comments.Init(interviewId, entityIdentity);
             this.Enablement.Init(interviewId, entityIdentity);
             this.Enablement.EntityEnabled += this.EnablementOnEntityEnabled;
             this.Header.Init(interviewId, entityIdentity, this.Enablement, navigationState);

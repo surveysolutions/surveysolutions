@@ -40,7 +40,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public virtual void Dispose()
         {
+        }
+        
+        public override void ViewDestroy(bool viewFinishing = true)
+        {
+            if(viewFinishing)
+                Dispose();
             
+            base.ViewDestroy(viewFinishing);
         }
     }
 }
