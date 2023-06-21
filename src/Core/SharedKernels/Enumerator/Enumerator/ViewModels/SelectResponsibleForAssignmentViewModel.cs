@@ -26,7 +26,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private readonly IPrincipal principal;
         private readonly IAuditLogService auditLogService;
         private readonly ICommandService commandService;
-        private readonly IViewModelNavigationService navigationService;
         private readonly IMvxMessenger messenger;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IPlainStorage<InterviewView> interviewStorage;
@@ -37,17 +36,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             IPrincipal principal,
             IAuditLogService auditLogService,
             ICommandService commandService,
-            IViewModelNavigationService navigationService,
             IStatefulInterviewRepository statefulInterviewRepository,
             IPlainStorage<InterviewView> interviewStorage,
             IViewModelNavigationService viewModelNavigationService,
-            IPlainStorage<AssignmentDocument, int> assignmentsStorage):base(principal, viewModelNavigationService)
+            IPlainStorage<AssignmentDocument, int> assignmentsStorage) 
+            : base(principal, viewModelNavigationService)
         {
             this.usersRepository = usersRepository;
             this.principal = principal;
             this.auditLogService = auditLogService;
             this.commandService = commandService;
-            this.navigationService = navigationService;
             this.messenger = Mvx.IoCProvider.GetSingleton<IMvxMessenger>();
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.interviewStorage = interviewStorage;
@@ -131,7 +129,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.auditLogService.Write(new AssignResponsibleToInterviewAuditLogEntity(interviewId,
                 interview.GetInterviewKey().ToString(), responsible.Id, responsible.Login));
 
-            await this.navigationService.NavigateToDashboardAsync(interviewId.FormatGuid());
+            await ViewModelNavigationService.NavigateToDashboardAsync(interviewId.FormatGuid());
         }
 
         private void SelectResponsible(ResponsibleToSelectViewModel responsible)

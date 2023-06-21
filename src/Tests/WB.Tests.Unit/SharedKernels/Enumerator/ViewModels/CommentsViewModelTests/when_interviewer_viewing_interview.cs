@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CommentsViewModelTes
             interview.CommentAnswer(interviewerId, questionId, RosterVector.Empty, DateTimeOffset.Now, "IN comment");
 
             var viewModel = CreateCommentsViewModel(interview, principal);
-            viewModel.Init(interview.Id.FormatGuid(), Create.Identity(questionId), Create.Other.NavigationState());
+            viewModel.Init(interview.Id.FormatGuid(), Create.Identity(questionId));
 
             Assert.That(viewModel, Has.Property(nameof(CommentsViewModel.ResolveCommentsButtonVisible)).False);
         }

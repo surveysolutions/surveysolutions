@@ -380,7 +380,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
                 principal: principal ?? Create.Service.Principal(Guid.NewGuid()),
                 auditLogService: auditLogService ?? Mock.Of<IAuditLogService>(),
                 commandService: commandService ?? Mock.Of<ICommandService>(),
-                navigationService: navigationService ?? Mock.Of<IViewModelNavigationService>(),
+                viewModelNavigationService: navigationService ?? Mock.Of<IViewModelNavigationService>(),
                 statefulInterviewRepository: statefulInterviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 interviewStorage: interviewStorage ?? Create.Storage.SqliteInmemoryStorage<InterviewView>(),
                 assignmentsStorage: assignmentsStorage ?? Create.Storage.SqliteInmemoryStorage<AssignmentDocument, int>());
