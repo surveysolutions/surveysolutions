@@ -77,7 +77,7 @@
                     <a v-bind:href="api.GetInterviewDetailsUrl(selectedTooltip.interviewId)" target="_blank">{{
                         $t("MapReport.details") }}</a>
                 </div>
-                <div class="row-fluid tooltip-buttons" style="white-space:nowrap;">
+                <div class="row-fluid tooltip-buttons" style="white-space:nowrap;" v-if="!model.isObserving">
                     <button class="btn btn-sm btn-success"
                         v-if="model.userRole == 'Interviewer' && (selectedTooltip.status == 'InterviewerAssigned' || selectedTooltip.status == 'RejectedBySupervisor')"
                         click="openInterview">{{ $t("Common.Open") }}</button>
@@ -125,8 +125,9 @@
                         $t("MapReport.details") }}</a>
                 </div>
                 <div class="row-fluid tooltip-buttons" style="white-space:nowrap;">
-                    <button class="btn btn-sm btn-success" v-if="model.userRole == 'Supervisor' || model.userRole == 'Headquarter'" click="assignAssignment">{{ 
-                        $t("Common.Assign") }}</button>
+                    <button class="btn btn-sm btn-success"
+                        v-if="model.userRole == 'Supervisor' || model.userRole == 'Headquarter'" click="assignAssignment">{{
+                            $t("Common.Assign") }}</button>
 
                     <button class="btn btn-sm btn-success" v-if="model.userRole == 'Interviewer'" click="createInterview">{{
                         $t("Common.Create") }}</button>
@@ -275,7 +276,7 @@ export default {
         },
 
         canAssign() {
-            if  (this.selectedTooltip.assignmentId) {
+            if (this.selectedTooltip.assignmentId) {
                 if (this.model.userRole == 'Supervisor' || this.model.userRole == 'Headquarter')
                     return true
             }
