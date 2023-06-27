@@ -82,6 +82,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
                 var ffmpegOutput = Infrastructure.Native.Utils.ConsoleCommand.Read(pathToFfmpeg
                     , $"-hide_banner -i {fullPathForSourceFile} -y -c:a aac -b:a 64k {fullPathForDestFile}");
+                
                 var match = Regex.Match(ffmpegOutput, @"Duration: (\d\d):(\d\d):((\d\d)(\.\d\d)?)");
                 var hours = Int32.Parse(match.Groups[1].Value);
                 var minutes = Int32.Parse(match.Groups[2].Value);

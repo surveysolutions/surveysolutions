@@ -44,15 +44,19 @@ namespace WB.Infrastructure.Native.Utils
         public static string Read(string name, string args = null, string workingDirectory = null, Action<string> outputDataReceived = null)
         {
             using var process = new Process();
-            process.StartInfo = new ProcessStartInfo(name, args)
+            var startInfo = new ProcessStartInfo(name, args)
             {
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 WorkingDirectory = workingDirectory
             };
+
+            startInfo.
+            process.StartInfo = startInfo;
             process.OutputDataReceived += (sender, e) => outputDataReceived?.Invoke(e.Data);
 
             var runProcess = process.RunAsync(true);
+            
             var readOutput = process.StandardOutput.ReadToEndAsync();
             var readError = process.StandardError.ReadToEndAsync();
 
@@ -80,7 +84,13 @@ namespace WB.Infrastructure.Native.Utils
             process.Exited += (s, e) => tcs.SetResult(null);
             process.EnableRaisingEvents = true;
             
-            process.EchoAndStart(noEcho);
+            if (!noEcho)
+            {
+                var message = $"{(process.StartInfo.WorkingDirectory == "" ? "" : $"Working directory: {process.StartInfo.WorkingDirectory}{Environment.NewLine}")}{process.StartInfo.FileName} {process.StartInfo.Arguments}";
+                Console.Error.WriteLine(message);
+            }
+
+            process.Start();
 
             cancellationToken.Register(() =>
             {
@@ -89,17 +99,6 @@ namespace WB.Infrastructure.Native.Utils
             });
 
             return tcs.Task;
-        }
-
-        private static void EchoAndStart(this Process process, bool noEcho)
-        {
-            if (!noEcho)
-            {
-                var message = $"{(process.StartInfo.WorkingDirectory == "" ? "" : $"Working directory: {process.StartInfo.WorkingDirectory}{Environment.NewLine}")}{process.StartInfo.FileName} {process.StartInfo.Arguments}";
-                Console.Error.WriteLine(message);
-            }
-
-            process.Start();
         }
     }
 
