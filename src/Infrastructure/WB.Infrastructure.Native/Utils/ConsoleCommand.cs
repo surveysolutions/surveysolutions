@@ -51,7 +51,6 @@ namespace WB.Infrastructure.Native.Utils
                 WorkingDirectory = workingDirectory
             };
 
-            startInfo.
             process.StartInfo = startInfo;
             process.OutputDataReceived += (sender, e) => outputDataReceived?.Invoke(e.Data);
 
