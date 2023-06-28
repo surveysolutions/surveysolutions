@@ -48,7 +48,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             if (workspace == null)
                 throw new MissingWorkspaceException("Cannot execute report against missing workspace");
 
-            if (!order.IsSortedByOneOfTheProperties(typeof(DeviceInterviewersReportLine)))
+            var orderValidated = order.ValidateAndGetOrderOrNull(typeof(DeviceInterviewersReportLine));
+            if (orderValidated == null)
             {
                 throw new ArgumentException(@"Invalid order by column passed", nameof(order));
             }
@@ -56,7 +57,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             var targetInterviewerVersion = await interviewerVersionReader.InterviewerBuildNumber();
 
             var sql = GetSqlTexts(input.SupervisorId.HasValue ? ReportByInterviewers : ReportBySupervisors);
-            var fullQuery = string.Format(sql, order.ToSqlOrderBy());
+            var fullQuery = string.Format(sql, orderValidated);
 
             var connection = unitOfWork.Session.Connection;
             var rows = await connection.QueryAsync<DeviceInterviewersReportLine>(fullQuery, new

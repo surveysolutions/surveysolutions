@@ -129,6 +129,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult GlobalNoticeSettings([FromBody] GlobalNoticeModel message)
         {
             if (!ModelState.IsValid) return this.BadRequest();
@@ -163,6 +164,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult InterviewerSettings([FromBody] InterviewerSettingsModel message)
         {
             if (!ModelState.IsValid)
@@ -190,6 +192,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult InterviewerGeographyQuestionAccuracyInMeters([FromBody] InterviewerGeographyQuestionAccuracyInMetersModel message)
         {
             if (!ModelState.IsValid)
@@ -204,6 +207,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult InterviewerGeographyQuestionPeriodInSeconds([FromBody] InterviewerGeographyQuestionPeriodInSecondsModel message)
         {
             if (!ModelState.IsValid)
@@ -229,6 +233,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult WebInterviewSettings([FromBody] WebInterviewSettingsModel message)
         {
             if (!ModelState.IsValid) return this.BadRequest();
@@ -255,6 +260,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult ProfileSettings([FromBody] ProfileSettingsModel message)
         {
             if (!ModelState.IsValid) return this.BadRequest();
@@ -270,6 +276,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult UpdateEmailProviderSettings([FromBody] EmailProviderSettings settings)
         {
             if (RegionEndpoint.EnumerableAllRegions.All(r => r.SystemName != settings.AwsRegion))
@@ -293,6 +300,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> SendTestEmail([FromBody] TestEmailModel model)
         {
             var settings = this.emailProviderSettingsStorage.GetById(AppSetting.EmailProviderSettings);

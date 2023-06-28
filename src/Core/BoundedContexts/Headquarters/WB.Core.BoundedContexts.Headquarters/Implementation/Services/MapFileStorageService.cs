@@ -245,16 +245,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     {
                         try
                         {
-                            var tempFile = this.fileSystemAccessor.CombinePath(mapsDirectory, mapFile.Name);
-
+                            var tempFile = Path.Combine(mapsDirectory, mapFile.Name);
                             var fullPath = Path.GetFullPath(tempFile);
 
                             var valueGdalHome = this.geospatialConfig.Value.GdalHome;
                             this.logger.LogInformation("Reading info from {FileName} with gdalinfo located in {GdalHome}", 
                                 fullPath, valueGdalHome);
+                            
                             var startInfo = 
-                                ConsoleCommand.Read(this.fileSystemAccessor.CombinePath(valueGdalHome, 
-                                    "gdalinfo"),
+                                ConsoleCommand.Read(Path.Combine(valueGdalHome, "gdalinfo"),
                                     $"\"{fullPath}\" -json");
                             var deserialized = JsonConvert.DeserializeObject<GdalInfoOuput>(startInfo);
 

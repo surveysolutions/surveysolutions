@@ -41,7 +41,8 @@ namespace WB.Infrastructure.Native.Utils
         /// <param name="args">The arguments to pass to the command.</param>
         /// <param name="workingDirectory"></param>
         /// <returns>A <see cref="string"/> representing the contents of standard output (stdout).</returns>
-        public static string Read(string name, string args = null, string workingDirectory = null, Action<string> outputDataReceived = null)
+        public static string Read(string name, string args = null, string workingDirectory = null, 
+            Action<string> outputDataReceived = null, CancellationToken cancellationToken = default)
         {
             using var process = new Process();
             var startInfo = new ProcessStartInfo(name, args)
@@ -54,16 +55,26 @@ namespace WB.Infrastructure.Native.Utils
             process.StartInfo = startInfo;
             process.OutputDataReceived += (sender, e) => outputDataReceived?.Invoke(e.Data);
 
-            var runProcess = process.RunAsync(true);
+            var tcs = new TaskCompletionSource<object>(cancellationToken);
+            process.Exited += (s, e) => tcs.SetResult(null);
+            process.EnableRaisingEvents = true;
             
-            var readOutput = process.StandardOutput.ReadToEndAsync();
-            var readError = process.StandardError.ReadToEndAsync();
+            process.Start();
 
-            Task.WaitAll(runProcess, readOutput);
+            cancellationToken.Register(() =>
+            {
+                process.CloseMainWindow();
+                process.Kill();                
+            });
+            
+            var readOutput = process.StandardOutput.ReadToEndAsync(cancellationToken);
+            var readError = process.StandardError.ReadToEndAsync(cancellationToken);
+
+            Task.WaitAll(tcs.Task, readOutput);
 
             if (process.ExitCode != 0)
             {
-                var errorOutput = process.StandardError.ReadToEndAsync();
+                var errorOutput = process.StandardError.ReadToEndAsync(cancellationToken);
                 Task.WaitAll(errorOutput);
                 throw new NonZeroExitCodeException(process.ExitCode, readError.Result);
             }
@@ -76,41 +87,5 @@ namespace WB.Infrastructure.Native.Utils
 
             return result;
         }
-        
-        public static Task RunAsync(this Process process, bool noEcho, CancellationToken cancellationToken = default)
-        {
-            var tcs = new TaskCompletionSource<object>(cancellationToken);
-            process.Exited += (s, e) => tcs.SetResult(null);
-            process.EnableRaisingEvents = true;
-            
-            if (!noEcho)
-            {
-                var message = $"{(process.StartInfo.WorkingDirectory == "" ? "" : $"Working directory: {process.StartInfo.WorkingDirectory}{Environment.NewLine}")}{process.StartInfo.FileName} {process.StartInfo.Arguments}";
-                Console.Error.WriteLine(message);
-            }
-
-            process.Start();
-
-            cancellationToken.Register(() =>
-            {
-                process.CloseMainWindow();
-                process.Kill();                
-            });
-
-            return tcs.Task;
-        }
     }
-
-   public class NonZeroExitCodeException : Exception
-   {
-       public int ProcessExitCode { get; }
-       public string ErrorOutput { get; }
-
-       public NonZeroExitCodeException(in int processExitCode, string errorOutput = null)
-       {
-           ProcessExitCode = processExitCode;
-           ErrorOutput = errorOutput;
-       }
-       
-   }
 }
