@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             var questionId = @event.Payload.QuestionId;
             var rosterVector = NormalizeRosterVector(RosterVector.Convert(@event.Payload.RosterVector));
 
-            var answer = state.GpsAnswers.FirstOrDefault(x => x.QuestionId == questionId && x.RosterVector == rosterVector);
+            var answer = state.GpsAnswersForDenofmalizer.FirstOrDefault(x => x.QuestionId == questionId && x.RosterVector == rosterVector);
                 
             if (answer != null)
             {
@@ -41,24 +41,28 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 answer.Longitude = @event.Payload.Longitude;
                 answer.Timestamp = @event.Payload.Timestamp;
                 answer.IsEnabled = true;
+                
+                var itemToDelete = state.GpsAnswersToRemove.FirstOrDefault(x => x.QuestionId == questionId && x.RosterVector == rosterVector);
+                if(itemToDelete != null)
+                    state.GpsAnswersToRemove.Remove(itemToDelete);
             }
             else
             {
-                var answerToRestore = state.GpsAnswersToRemove.FirstOrDefault(x => x.QuestionId == questionId && x.RosterVector == rosterVector);
+                /*var answerToRestore = state.GpsAnswersToRemove.FirstOrDefault(x => x.QuestionId == questionId && x.RosterVector == rosterVector);
 
                 if (answerToRestore != null)
                 {
-                    state.GpsAnswersToRemove.Remove(answerToRestore);
-                    
                     answerToRestore.Latitude = @event.Payload.Latitude;
                     answerToRestore.Longitude = @event.Payload.Longitude;
                     answerToRestore.Timestamp = @event.Payload.Timestamp;
                     answerToRestore.IsEnabled = true;
                     answerToRestore.InterviewSummary = state;
+                    
                     state.GpsAnswers.Add(answerToRestore);
+                    state.GpsAnswersToRemove.Remove(answerToRestore);
                 }
-                else
-                    state.GpsAnswers.Add(new InterviewGps
+                else*/
+                    state.GpsAnswersForDenofmalizer.Add(new InterviewGps
                     {
                         QuestionId = @event.Payload.QuestionId,
                         RosterVector = rosterVector,
@@ -82,12 +86,12 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 .Select(x => (x.Id, NormalizeRosterVector(x.RosterVector)))
                 .ToHashSet();
 
-            var toRemove = state.GpsAnswers.Where(g => questionIdentities.Contains((g.QuestionId, g.RosterVector))).ToList();
+            var toRemove = state.GpsAnswersForDenofmalizer.Where(g => questionIdentities.Contains((g.QuestionId, g.RosterVector))).ToList();
 
             foreach (var remove in toRemove)
             {
                 state.GpsAnswersToRemove.Add(remove);
-                state.GpsAnswers.Remove(remove);
+                //state.GpsAnswers.Remove(remove);
             }
             return state;
         }
@@ -101,7 +105,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 .Select(x => (x.Id, NormalizeRosterVector(x.RosterVector)))
                 .ToHashSet();
 
-            foreach (var answer in state.GpsAnswers.Where(g =>
+            foreach (var answer in state.GpsAnswersForDenofmalizer.Where(g =>
                 questionIdentities.Contains((g.QuestionId, g.RosterVector))))
             {
                 answer.IsEnabled = true;
@@ -124,7 +128,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 .Select(x => (x.Id, NormalizeRosterVector(x.RosterVector)))
                 .ToHashSet();
 
-            foreach (var answer in state.GpsAnswers.Where(g =>
+            foreach (var answer in state.GpsAnswersForDenofmalizer.Where(g =>
                 questionIdentities.Contains((g.QuestionId, g.RosterVector))))
             {
                 answer.IsEnabled = false;
@@ -139,7 +143,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 .Select(x => $"{x.GroupId}{NormalizeRosterVector(x.GetIdentity().RosterVector)}")
                 .ToList();
 
-            var questionsInRosters = state.GpsAnswers.Where(x => !string.IsNullOrEmpty(x.RosterVector))
+            var questionsInRosters = state.GpsAnswersForDenofmalizer.Where(x => !string.IsNullOrEmpty(x.RosterVector))
                 .ToList();
             
             if (questionsInRosters.Count > 0)
@@ -163,7 +167,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                         if (storedAnswer.identityToRemove == removedRosterInstance)
                         {
                             state.GpsAnswersToRemove.Add(storedAnswer.entity);
-                            state.GpsAnswers.Remove(storedAnswer.entity);
+                            //state.GpsAnswers.Remove(storedAnswer.entity);
                         }
                     }
                 }

@@ -136,13 +136,35 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual IList<InterviewCommentedStatus> InterviewCommentedStatuses { get; set; }
 
         public virtual ISet<TimeSpanBetweenStatuses> TimeSpansBetweenStatuses { get; set; }
-        public virtual ISet<InterviewGps> GpsAnswers { get; protected set; }
+
+        private ISet<InterviewGps> gpsAnswers;
+        public virtual ISet<InterviewGps> GpsAnswers
+        {
+            get
+            {
+                if (GpsAnswersToRemove == null || !GpsAnswersToRemove.Any()) return gpsAnswers;
+                foreach (var answer in GpsAnswersToRemove)
+                {
+                    gpsAnswers.Remove(answer);
+                }
+                GpsAnswersToRemove.Clear();
+
+                return gpsAnswers;
+            }
+            protected set => gpsAnswers = value;
+        }
+
+        public virtual ISet<InterviewGps> GpsAnswersForDenofmalizer
+        {
+            get => gpsAnswers;
+        }
+
         public virtual ISet<InterviewStatisticsReportRow> StatisticsReport { get; set; } = new HashSet<InterviewStatisticsReportRow>();
 
         private IDictionary<(int entityId, string rosterVector), InterviewStatisticsReportRow> statisticsReportCache;
+        
 
-        public virtual IDictionary<(int entityId, string rosterVector), InterviewStatisticsReportRow>
-            StatisticsReportCache
+        public virtual IDictionary<(int entityId, string rosterVector), InterviewStatisticsReportRow>  StatisticsReportCache
         {
             get => statisticsReportCache ??= StatisticsReport.ToDictionary(s => (s.EntityId, s.RosterVector));
             set => statisticsReportCache = value;
