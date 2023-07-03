@@ -124,7 +124,7 @@
                     <a v-bind:href="api.GetAssignmentDetailsUrl(selectedTooltip.assignmentId)" target="_blank">{{
                         $t("MapReport.details") }}</a>
                 </div>
-                <div class="row-fluid tooltip-buttons" style="white-space:nowrap;">
+                <div class="row-fluid tooltip-buttons" style="white-space:nowrap;" v-if="!model.isObserving">
                     <button class="btn btn-sm btn-success"
                         v-if="model.userRole == 'Supervisor' || model.userRole == 'Headquarter'" click="assignAssignment">{{
                             $t("Common.Assign") }}</button>
