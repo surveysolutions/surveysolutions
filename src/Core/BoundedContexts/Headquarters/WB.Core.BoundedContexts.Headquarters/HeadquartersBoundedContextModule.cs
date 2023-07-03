@@ -349,7 +349,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IWorkspacesService, WorkspacesService>();
             registry.Bind<IWorkspacesCache, WorkspacesCache>();
             registry.Bind<IWorkspacesUsersCache, WorkspacesUsersCache>();
-            registry.BindInPerLifetimeScope<IMemoryCacheSource, WorkspaceAwareMemoryCache>();
+            registry.BindAsSingleton<IMemoryCacheSource, WorkspaceAwareMemoryCache>();
             registry.BindToMethod(ctx =>
             {
                 var cacheSource = ctx.Resolve<IMemoryCacheSource>();
