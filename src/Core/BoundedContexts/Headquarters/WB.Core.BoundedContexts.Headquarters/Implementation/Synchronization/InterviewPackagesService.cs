@@ -130,6 +130,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                 )
             );
         }
+        
+        public bool HasBrokenPackageWithUnknownType(Guid interviewId)
+        {
+            var undefined = InterviewDomainExceptionType.Undefined.ToString();
+            return this.brokenInterviewPackageStorage.Query(_ =>
+                _.Any(p => 
+                    (p.ExceptionType == UnknownExceptionType || p.ExceptionType == undefined)
+                    && p.InterviewId == interviewId
+                )
+            );
+        }
 
         public IReadOnlyCollection<int> GetTopBrokenPackageIdsAllowedToReprocess(int count)
         {

@@ -10,6 +10,8 @@ namespace WB.Enumerator.Native.WebInterview
 
         bool IsNeedShowBrokenPackageNotificationForInterview(Guid interviewId);
 
+        bool HasBrokenPackageWithUnknownType(Guid interviewId);
+
         IReadOnlyCollection<int> GetTopBrokenPackageIdsAllowedToReprocess(int count);
 
         void ReprocessSelectedBrokenPackages(int[] packageIds);
