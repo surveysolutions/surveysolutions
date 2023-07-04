@@ -775,7 +775,8 @@ namespace WB.Tests.Abc.TestFactories
                 interviewPackageStorage: interviewPackageStorage ?? Mock.Of<IPlainStorageAccessor<InterviewPackage>>(),
                 brokenInterviewPackageStorage: brokenInterviewPackageStorage ?? Mock.Of<IPlainStorageAccessor<BrokenInterviewPackage>>(),
                 packagesTracker: new TestPlainStorage<ReceivedPackageLogEntry>(),
-                inScopeExecutor: inScopeExecutor ?? Create.Service.InScopeExecutor(Create.Service.ServiceLocatorService()));
+                inScopeExecutor: inScopeExecutor ?? Create.Service.InScopeExecutor(Create.Service.ServiceLocatorService()),
+                aggregateRootCache: Mock.Of<IAggregateRootCache>());
         }
 
         public ImportDataVerifier ImportDataVerifier(IFileSystemAccessor fileSystem = null,
