@@ -41,6 +41,27 @@ namespace WB.Services.Export.Tests.WithDatabase
         [OneTimeTearDown]
         public async Task TearDown()
         {
+            await DropSchema();
+            await DropDatabase();
+        }
+
+        private static async Task DropDatabase()
+        {
+            var connectionStringBuilder = new NpgsqlConnectionStringBuilder(TestConfig.GetConnectionString());
+            var dbName = connectionStringBuilder.Database; 
+            connectionStringBuilder.Database = "postgres";
+            
+            await using var dbRemove = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
+            await dbRemove.OpenAsync();
+            var dropDbCommandText =
+                string.Format(
+                    @"SELECT pg_terminate_backend (pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = '{0}'; DROP DATABASE {0};",
+                    dbName);
+            await dbRemove.ExecuteAsync(dropDbCommandText);
+        }
+
+        private static async Task DropSchema()
+        {
             await using var db = new NpgsqlConnection(TestConfig.GetConnectionString());
             await db.OpenAsync();
             await db.ExecuteAsync($"DROP SCHEMA if exists " + TenantName + " CASCADE");
