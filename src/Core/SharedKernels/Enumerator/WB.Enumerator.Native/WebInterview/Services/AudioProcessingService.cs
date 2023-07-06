@@ -21,7 +21,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
         private readonly IOptions<FileStorageConfig> fileStorageConfig;
         const string pathInAppDataForFfmpeg = "FFmpeg";
         private const string MimeType = @"audio/m4a";
-        private Task audioProcessor;
+        private readonly Task audioProcessor;
 
         public AudioProcessingService(ILogger<AudioProcessingService> logger,
              IOptions<FileStorageConfig> fileStorageConfig)
@@ -82,7 +82,9 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
                 var ffmpegOutput = Infrastructure.Native.Utils.ConsoleCommand.Read(pathToFfmpeg
                     , $"-hide_banner -i {fullPathForSourceFile} -y -c:a aac -b:a 64k {fullPathForDestFile}");
-                var match = Regex.Match(ffmpegOutput, @"Duration: (\d\d):(\d\d):((\d\d)(\.\d\d)?)");
+                
+                var match = Regex.Match(ffmpegOutput, @"Duration: (\d\d):(\d\d):((\d\d)(\.\d\d)?)", 
+                    RegexOptions.None,TimeSpan.FromMilliseconds(3000));
                 var hours = Int32.Parse(match.Groups[1].Value);
                 var minutes = Int32.Parse(match.Groups[2].Value);
                 var seconds = Int32.Parse(match.Groups[4].Value);
@@ -173,7 +175,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
         private readonly Gauge audioFilesInQueue =new Gauge(@"wb_audio_queue_files_count", @"Number of audio files in queue");
         private readonly Counter audioFilesProcessed = new Counter(@"wb_audio_files_total", @"Total count of processed audio files");
         private readonly Counter audtioFilesProcessingTime = new Counter(@"wb_audio_files_processing_seconds", @"Total processing time");
-        private string TempFilesFolder;
+        private readonly string TempFilesFolder;
     }
 
     public class AudioFileInformation
