@@ -44,21 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             }
             else
             {
-                var answerToRestore = state.GpsAnswersToRemove.FirstOrDefault(x => x.QuestionId == questionId && x.RosterVector == rosterVector);
-
-                if (answerToRestore != null)
-                {
-                    state.GpsAnswersToRemove.Remove(answerToRestore);
-                    
-                    answerToRestore.Latitude = @event.Payload.Latitude;
-                    answerToRestore.Longitude = @event.Payload.Longitude;
-                    answerToRestore.Timestamp = @event.Payload.Timestamp;
-                    answerToRestore.IsEnabled = true;
-                    answerToRestore.InterviewSummary = state;
-                    state.GpsAnswers.Add(answerToRestore);
-                }
-                else
-                    state.GpsAnswers.Add(new InterviewGps
+                state.GpsAnswers.Add(new InterviewGps
                     {
                         QuestionId = @event.Payload.QuestionId,
                         RosterVector = rosterVector,
@@ -67,7 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                         Timestamp = @event.Payload.Timestamp,
                         IsEnabled = true,
                         InterviewSummary = state
-                    });
+                });
             }
 
             return state;
@@ -86,7 +72,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
             foreach (var remove in toRemove)
             {
-                state.GpsAnswersToRemove.Add(remove);
                 state.GpsAnswers.Remove(remove);
             }
             return state;
@@ -162,7 +147,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     {
                         if (storedAnswer.identityToRemove == removedRosterInstance)
                         {
-                            state.GpsAnswersToRemove.Add(storedAnswer.entity);
                             state.GpsAnswers.Remove(storedAnswer.entity);
                         }
                     }
@@ -180,6 +164,5 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 .Where(x => questionnaire.GetQuestionType(x.Id) == QuestionType.GpsCoordinates)
                 .ToList();
         }
-
     }
 }

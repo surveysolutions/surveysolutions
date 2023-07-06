@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.PlainStorage;
@@ -40,14 +41,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
         private readonly ILogger logger;
         private readonly IInScopeExecutor inScopeExecutor;
         private readonly SyncSettings syncSettings;
-        
+        private readonly IAggregateRootCache aggregateRootCache;
+
         public InterviewPackagesService(
             IPlainStorageAccessor<InterviewPackage> interviewPackageStorage,
             IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackageStorage,
             IPlainStorageAccessor<ReceivedPackageLogEntry> packagesTracker,
             ILogger logger,
             IInScopeExecutor inScopeExecutor,
-            SyncSettings syncSettings)
+            SyncSettings syncSettings,
+            IAggregateRootCache aggregateRootCache)
         {
             this.interviewPackageStorage = interviewPackageStorage;
             this.brokenInterviewPackageStorage = brokenInterviewPackageStorage;
@@ -55,6 +58,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             this.logger = logger;
             this.inScopeExecutor = inScopeExecutor;
             this.syncSettings = syncSettings;
+            this.aggregateRootCache = aggregateRootCache;
         }
 
         public void StoreOrProcessPackage(InterviewPackage interviewPackage)
@@ -127,6 +131,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                         p.ReprocessAttemptsCount > 2 
                         || _.Count(d => d.InterviewId == interviewId && (d.ExceptionType == UnknownExceptionType || d.ExceptionType == undefined)) > 1
                     )
+                )
+            );
+        }
+        
+        public bool HasBrokenPackageWithUnknownType(Guid interviewId)
+        {
+            var undefined = InterviewDomainExceptionType.Undefined.ToString();
+            return this.brokenInterviewPackageStorage.Query(_ =>
+                _.Any(p => 
+                    (p.ExceptionType == UnknownExceptionType || p.ExceptionType == undefined)
+                    && p.InterviewId == interviewId
                 )
             );
         }
@@ -286,6 +301,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                 this.logger.Error(
                     $"Interview events by {interview.InterviewId} processing failed. Package status {interview.InterviewStatus}. Reason: '{exception.Message}'",
                     exception);
+                
+                // clear interview cache
+                aggregateRootCache.Evict(interview.InterviewId);
 
                 // don't save package for partial synchronization
                 if (interview.InterviewStatus != InterviewStatus.Completed && interview.InterviewStatus != InterviewStatus.ApprovedBySupervisor)
