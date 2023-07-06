@@ -53,10 +53,7 @@ namespace WB.Services.Export.Tests.WithDatabase
             
             await using var dbRemove = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
             await dbRemove.OpenAsync();
-            var dropDbCommandText =
-                string.Format(
-                    @"SELECT pg_terminate_backend (pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = '{0}'; DROP DATABASE {0};",
-                    dbName);
+            var dropDbCommandText = $@"DROP DATABASE {dbName} WITH (FORCE);";
             await dbRemove.ExecuteAsync(dropDbCommandText);
         }
 
