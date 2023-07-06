@@ -136,8 +136,9 @@ namespace WB.UI.Interviewer.Activities.Dashboard
 
             var tabLayout = this.FindViewById<TabLayout>(Resource.Id.tabs);
 
-            new TabLayoutMediator(tabLayout, this.viewPager, 
-                new TabConfigurationStrategy(fragmentStateAdapter)).Attach();
+            tabConfigurationStrategy = new TabConfigurationStrategy(fragmentStateAdapter);
+            tabLayoutMediator = new TabLayoutMediator(tabLayout, this.viewPager, tabConfigurationStrategy);
+            tabLayoutMediator.Attach();
 
             OpenRequestedTab();
         }
@@ -265,6 +266,8 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         }
 
         private IMenu dashboardMenu;
+        private TabConfigurationStrategy tabConfigurationStrategy;
+        private TabLayoutMediator tabLayoutMediator;
 
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
@@ -394,6 +397,15 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             {
                 this.viewPager?.UnregisterOnPageChangeCallback(onPageChangeCallback);
                 this.ViewModel.OnOfflineSynchronizationStarted = null;
+                
+                this.tabLayoutMediator?.Dispose();
+                this.tabLayoutMediator = null;
+                
+                tabConfigurationStrategy?.Dispose();
+                tabConfigurationStrategy = null;
+                
+                onPageChangeCallback?.Dispose();
+                onPageChangeCallback = null;
             }
 
             base.Dispose(disposing);

@@ -21,13 +21,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         public override void OnDestroy()
         {
             this.BindingContext?.ClearAllBindings();
-
-            if ((base.ViewModel as TViewModel) == null)
-            {
-            }
-
             this.ViewModel?.DisposeIfDisposable();
-            
             base.OnDestroy();
         }
     }
