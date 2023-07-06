@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
             writer.GetById(It.IsAny<string>()) == dashboardItem);
 
             Mock.Get(interviewViewStorage)
-                .Setup(storage => storage.Store(it.IsAny<InterviewView>()))
+                .Setup(storage => storage.Store(It.IsAny<InterviewView>()))
                 .Callback<InterviewView>((view) => dashboardItem = view);
 
             denormalizer = Create.Service.DashboardDenormalizer(interviewViewRepository: interviewViewStorage,
