@@ -101,7 +101,7 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
                 connection.Open();
                 using (var sqlCommand = connection.CreateCommand())
                 {
-                    sqlCommand.CommandText = string.Format(@"SELECT pg_terminate_backend (pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = '{0}'; DROP DATABASE {0};", dbToDelete); ;
+                    sqlCommand.CommandText = $@"DROP DATABASE {dbToDelete} WITH (FORCE);";
                     sqlCommand.ExecuteNonQuery();
                 }
             }

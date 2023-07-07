@@ -7,9 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Content Include="appsettings.json">
+        <Content Include="appsettings.json" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        </Content>
+        <Content Include="appsettings.*.json" CopyToPublishDirectory="Never">
+            <DependentUpon>appsettings.json</DependentUpon>
         </Content>
     </ItemGroup>
 
