@@ -20,13 +20,12 @@ public class SupervisorMapDashboardViewModel : MapDashboardViewModel
 
     protected override InterviewStatus[] InterviewStatuses { get; } =
     {
-        InterviewStatus.Created,
+        InterviewStatus.Completed,
         InterviewStatus.InterviewerAssigned,
         InterviewStatus.Restarted,
-        InterviewStatus.RejectedBySupervisor,
-        InterviewStatus.Completed,
-        InterviewStatus.SupervisorAssigned,
         InterviewStatus.RejectedByHeadquarters,
+        InterviewStatus.RejectedBySupervisor,
+        InterviewStatus.SupervisorAssigned,
     };
 
     public SupervisorMapDashboardViewModel(IPrincipal principal, 
