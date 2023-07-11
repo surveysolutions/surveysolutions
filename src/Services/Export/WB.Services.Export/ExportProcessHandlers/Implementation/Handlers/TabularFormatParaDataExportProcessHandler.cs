@@ -163,7 +163,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
                     writer.WriteField(record.Action);
                     writer.WriteField(record.OriginatorName);
                     writer.WriteField(ExportHelper.GetParadataRole(record.OriginatorRole));
-                    writer.WriteField(record.Timestamp?.ToString("s", CultureInfo.InvariantCulture) ?? "");
+                    writer.WriteField(record.Timestamp?.ToString("yyyy-MM-ddTHH:mm:ss.ms", CultureInfo.InvariantCulture) ?? "");
                     writer.WriteField(record.Offset != null ? record.Offset.Value.ToString() : "");
                     writer.WriteField(String.Join("||", record.Parameters.Values.Select(v => v.RemoveNewLine())));
 
