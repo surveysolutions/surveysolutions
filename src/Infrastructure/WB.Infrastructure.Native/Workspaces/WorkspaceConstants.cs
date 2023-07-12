@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using NHibernate.Criterion;
+
 namespace WB.Infrastructure.Native.Workspaces
 {
     public static class WorkspaceConstants
@@ -13,10 +16,24 @@ namespace WB.Infrastructure.Native.Workspaces
             return name == WorkspaceNames.AdminWorkspaceName
                    || name == WorkspaceNames.UsersWorkspaceName;
         }
+        
         public static class WorkspaceNames
         {
             public static readonly string UsersWorkspaceName = "users";
             public static readonly string AdminWorkspaceName = "administration";
         }
+
+        public static readonly HashSet<string> NotAllowedNames = new HashSet<string>()
+        {
+            "api",
+            "apidocs",
+            "graphql",
+        };
+        
+        public static bool IsNotAllowedName(string name)
+        {
+            var lowerCaseName = name.Lower();
+            return IsSystemDefinedWorkspace(name) || NotAllowedNames.Contains(lowerCaseName);
+        }   
     }
 }

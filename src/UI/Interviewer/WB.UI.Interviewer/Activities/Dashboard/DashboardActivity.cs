@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using Android.App;
+﻿using System.ComponentModel;
 using Android.Content;
 using Android.Gms.Nearby;
-using Android.OS;
-using Android.Runtime;
 using Android.Views;
-using AndroidX.AppCompat.Widget;
-using AndroidX.ViewPager.Widget;
+using AndroidX.ViewPager2.Widget;
 using Google.Android.Material.Snackbar;
 using Google.Android.Material.Tabs;
 using MvvmCross;
@@ -18,13 +12,12 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
+using WB.UI.Interviewer.CustomControls;
 using WB.UI.Shared.Enumerator.Activities;
-using WB.UI.Shared.Enumerator.Activities.Callbacks;
 using WB.UI.Shared.Enumerator.Activities.Dashboard;
 using WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Notifications;
-using MvxFragmentStatePagerAdapter = WB.UI.Interviewer.CustomControls.MvxFragmentStatePagerAdapter;
 using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
 
 namespace WB.UI.Interviewer.Activities.Dashboard
@@ -45,8 +38,10 @@ namespace WB.UI.Interviewer.Activities.Dashboard
 
         public ServiceBinder<SyncBgService> Binder { get; set; }
 
-        private MvxFragmentStatePagerAdapter fragmentStatePagerAdapter;
-        private ViewPager viewPager;
+        private MvxFragmentStateAdapter fragmentStateAdapter;
+        private ViewPager2 viewPager;
+        
+        private OnPageChangeCallback onPageChangeCallback;
 
         protected override void OnPause()
         {
@@ -90,14 +85,14 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         {
         }
 
-
         private void RemoveFragments()
         {
-            this.fragmentStatePagerAdapter.RemoveAllFragments();
-            this.fragmentStatePagerAdapter = null;
+            this.fragmentStateAdapter.RemoveAllFragments();
+            this.fragmentStateAdapter = null;
             this.viewPager.Adapter = null;
 
-            this.viewPager.PageSelected -= this.ViewPager_PageSelected;
+            this.viewPager.UnregisterOnPageChangeCallback(onPageChangeCallback);
+            
             this.ViewModel.StartedInterviews.PropertyChanged -= this.StartedInterviewsOnPropertyChanged;
             this.ViewModel.RejectedInterviews.PropertyChanged -= this.RejectedInterviewsOnPropertyChanged;
             this.ViewModel.CompletedInterviews.PropertyChanged -= this.CompletedInterviewsOnPropertyChanged;
@@ -107,11 +102,17 @@ namespace WB.UI.Interviewer.Activities.Dashboard
 
         private void CreateFragments()
         {
-            this.viewPager = this.FindViewById<ViewPager>(Resource.Id.pager);
+            this.viewPager = this.FindViewById<ViewPager2>(Resource.Id.pager);
 
-            this.fragmentStatePagerAdapter = new MvxFragmentStatePagerAdapter(this, this.SupportFragmentManager);
-            this.viewPager.Adapter = this.fragmentStatePagerAdapter;
-            this.viewPager.PageSelected += this.ViewPager_PageSelected;
+            this.fragmentStateAdapter = new MvxFragmentStateAdapter(this, this.SupportFragmentManager, this.Lifecycle);
+            this.viewPager.Adapter = this.fragmentStateAdapter;
+
+            onPageChangeCallback = new OnPageChangeCallback(index =>
+            {
+                UpdateTypeOfInterviewsViewModelProperty(index);
+            });
+
+            this.viewPager.RegisterOnPageChangeCallback(onPageChangeCallback);
 
             this.ViewModel.StartedInterviews.PropertyChanged += this.StartedInterviewsOnPropertyChanged;
             this.ViewModel.RejectedInterviews.PropertyChanged += this.RejectedInterviewsOnPropertyChanged;
@@ -119,7 +120,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             this.ViewModel.WorkspaceListUpdated += this.WorkspaceListUpdated;
             this.ViewModel.WebInterviews.PropertyChanged += this.WebInterviewInterviewsOnPropertyChanged;
 
-            this.fragmentStatePagerAdapter.InsertFragment(typeof(QuestionnairesFragment), this.ViewModel.CreateNew,
+            this.fragmentStateAdapter.InsertFragment(typeof(QuestionnairesFragment), this.ViewModel.CreateNew,
                 nameof(InterviewTabPanel.Title));
 
             var itemsCountPropertyCountName = nameof(ListViewModel.ItemsCount);
@@ -134,17 +135,58 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                 new PropertyChangedEventArgs(itemsCountPropertyCountName));
 
             var tabLayout = this.FindViewById<TabLayout>(Resource.Id.tabs);
-            tabLayout.SetupWithViewPager(this.viewPager);
+
+            tabConfigurationStrategy = new TabConfigurationStrategy(fragmentStateAdapter);
+            tabLayoutMediator = new TabLayoutMediator(tabLayout, this.viewPager, tabConfigurationStrategy);
+            tabLayoutMediator.Attach();
 
             OpenRequestedTab();
         }
 
+        public class TabConfigurationStrategy : Java.Lang.Object, TabLayoutMediator.ITabConfigurationStrategy
+        {
+            private readonly MvxFragmentStateAdapter fragmentStateAdapter;
+
+            public TabConfigurationStrategy(MvxFragmentStateAdapter fragmentStateAdapter)
+            {
+                this.fragmentStateAdapter = fragmentStateAdapter;
+            }
+
+            public void OnConfigureTab(TabLayout.Tab tab, int position)
+            {
+                var fragment = (MvxFragment)fragmentStateAdapter.CreateFragment(position);
+                    InterviewTabPanel viewModel = (InterviewTabPanel)fragment.ViewModel;
+                    tab.SetText(viewModel.Title);
+            }
+        }
+        
+        private class OnPageChangeCallback : ViewPager2.OnPageChangeCallback
+        {
+            private Action<int> action;
+
+            public OnPageChangeCallback(Action<int> action)
+            {
+                this.action = action;
+            }
+
+            public override void OnPageSelected(int position)
+            {
+                action?.Invoke(position);
+                base.OnPageSelected(position);
+            }
+
+            protected override void Dispose(bool disposing)
+            {
+                action = null;
+                base.Dispose(disposing);
+            }
+        }
 
         private void OpenRequestedTab()
         {
-            for (int i = 0; i < this.fragmentStatePagerAdapter.Count; i++)
+            for (int i = 0; i < this.fragmentStateAdapter.ItemCount; i++)
             {
-                var fragment = (MvxFragment)fragmentStatePagerAdapter.GetItem(i);
+                var fragment = (MvxFragment)fragmentStateAdapter.CreateFragment(i);
                 InterviewTabPanel viewModel = (InterviewTabPanel)fragment.ViewModel;
                 if (viewModel.InterviewStatus == this.ViewModel.TypeOfInterviews)
                 {
@@ -170,17 +212,16 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         {
             if (propertyName != nameof(ListViewModel.ItemsCount)) return;
 
-            if (!this.fragmentStatePagerAdapter.HasFragmentForViewModel(listViewModel) && listViewModel.ItemsCount > 0)
+            if (!this.fragmentStateAdapter.HasFragmentForViewModel(listViewModel) && listViewModel.ItemsCount > 0)
             {
-                this.fragmentStatePagerAdapter.InsertFragment(typeof(TFragmentType), listViewModel,
+                this.fragmentStateAdapter.InsertFragment(typeof(TFragmentType), listViewModel,
                     nameof(InterviewTabPanel.Title), position);
             }
 
-            if (this.fragmentStatePagerAdapter.HasFragmentForViewModel(listViewModel) && listViewModel.ItemsCount == 0)
+            if (this.fragmentStateAdapter.HasFragmentForViewModel(listViewModel) && listViewModel.ItemsCount == 0)
             {
-                this.fragmentStatePagerAdapter.RemoveFragmentByViewModel(listViewModel);
+                this.fragmentStateAdapter.RemoveFragmentByViewModel(listViewModel);
             }
-
 
             var viewPagerCurrentItem = viewPager.CurrentItem;
             if (viewPagerCurrentItem > 0)
@@ -191,7 +232,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
 
         private void UpdateTypeOfInterviewsViewModelProperty(int tabPosition)
         {
-            var fragment = (MvvmCross.Platforms.Android.Views.Fragments.MvxFragment)this.fragmentStatePagerAdapter.GetItem(tabPosition);
+            var fragment = (MvvmCross.Platforms.Android.Views.Fragments.MvxFragment)this.fragmentStateAdapter.CreateFragment(tabPosition);
             var viewModel = (ListViewModel)fragment.ViewModel;
             this.ViewModel.TypeOfInterviews = viewModel.InterviewStatus;
         }
@@ -201,11 +242,6 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             base.OnStart();
             this.BindService(new Intent(this, typeof(SyncBgService)),
                 new SyncServiceConnection<SyncBgService>(this), Bind.AutoCreate);
-        }
-
-        private void ViewPager_PageSelected(object sender, ViewPager.PageSelectedEventArgs e)
-        {
-            UpdateTypeOfInterviewsViewModelProperty(e.Position);
         }
 
         protected override void OnViewModelSet()
@@ -230,6 +266,8 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         }
 
         private IMenu dashboardMenu;
+        private TabConfigurationStrategy tabConfigurationStrategy;
+        private TabLayoutMediator tabLayoutMediator;
 
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
@@ -357,10 +395,17 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         {
             if (disposing)
             {
-                //if(this.communicator.)
-                //this.GoogleApiClnt?.Dispose();
-                //this.GoogleApiClnt = null;
+                this.viewPager?.UnregisterOnPageChangeCallback(onPageChangeCallback);
                 this.ViewModel.OnOfflineSynchronizationStarted = null;
+                
+                this.tabLayoutMediator?.Dispose();
+                this.tabLayoutMediator = null;
+                
+                tabConfigurationStrategy?.Dispose();
+                tabConfigurationStrategy = null;
+                
+                onPageChangeCallback?.Dispose();
+                onPageChangeCallback = null;
             }
 
             base.Dispose(disposing);
