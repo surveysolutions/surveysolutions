@@ -22,7 +22,6 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             this.BindingContext?.ClearAllBindings();
             this.ViewModel?.DisposeIfDisposable();
-            
             base.OnDestroy();
         }
     }
