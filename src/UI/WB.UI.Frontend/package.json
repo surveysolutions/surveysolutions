@@ -14,7 +14,7 @@
     "@apollo/client": "3.7.9",
     "@googlemaps/markerclusterer": "^2.0.15",
     "@microsoft/signalr": "^7.0.7",
-    "@toast-ui/vue-editor": "^2.5.2",
+    "@toast-ui/vue-editor": "^2.5.4",
     "ag-grid-community": "^25.3.0",
     "ag-grid-vue": "^25.3.0",
     "append-query": "^2.1.1",
