@@ -42,6 +42,9 @@ Vue.directive('linkToRoute', {
                         var toPath = vnode.context.$router.options.base == '/'
                             ? to
                             : to.replace(vnode.context.$router.options.base, '')
+                        if (!toPath.startsWith('/')) 
+                            toPath = '/' + toPath
+
                         vnode.context.$router.push({ path: toPath })
                     }
                 }
