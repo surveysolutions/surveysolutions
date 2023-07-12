@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using MvvmCross;
 using MvvmCross.Commands;
-using MvvmCross.Navigation;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
@@ -68,7 +67,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         private IMvxAsyncCommand reassignCommand;
         public IMvxAsyncCommand ReassignCommand => reassignCommand ??= new MvxAsyncCommand(this.ReassignAsync, () => this.CanReassign);
-        public IMvxAsyncCommand CancelCommand => new MvxAsyncCommand(async () => await this.Cancel());
+        public IMvxAsyncCommand CancelCommand => new MvxAsyncCommand(async () => await this.CancelAsync());
         public IMvxCommand SelectResponsibleCommand => new MvxCommand<ResponsibleToSelectViewModel>(this.SelectResponsible);
 
         private MvxObservableCollection<ResponsibleToSelectViewModel> uiItems;
@@ -78,7 +77,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             private set => this.RaiseAndSetIfChanged(ref this.uiItems, value);
         }
 
-        private async Task Cancel() => await ViewModelNavigationService.Close(this);
+        private async Task CancelAsync() => await ViewModelNavigationService.Close(this);
 
         private async Task ReassignAsync()
         {
@@ -97,7 +96,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
             finally
             {
-                await this.Cancel();
+                await this.CancelAsync();
             }
         }
 
