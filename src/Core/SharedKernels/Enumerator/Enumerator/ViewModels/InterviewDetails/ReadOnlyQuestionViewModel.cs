@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Globalization;
 using Main.Core.Entities.SubEntities;
+using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
@@ -18,18 +20,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IQuestionnaireStorage questionnaireRepository;
 
+        public IQuestionStateViewModel QuestionState { get; }
+        
         public ReadOnlyQuestionViewModel(
             IStatefulInterviewRepository interviewRepository,
             IQuestionnaireStorage questionnaireRepository,
-            DynamicTextViewModel dynamicTextViewModel,
-            ValidityViewModel validityViewModel, 
-            WarningsViewModel warningsViewModel)
+            QuestionStateViewModelBase questionStateViewModelBase)
         {
             this.interviewRepository = interviewRepository;
             this.questionnaireRepository = questionnaireRepository;
-            this.Title = dynamicTextViewModel;
-            this.Warnings = warningsViewModel;
-            this.Validity = validityViewModel;
+            this.QuestionState = questionStateViewModelBase;
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -39,9 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var interview = this.interviewRepository.Get(interviewId);
 
             this.Identity = entityIdentity;
-            this.Title.Init(interviewId, entityIdentity);
-            this.Validity.Init(interviewId, entityIdentity, navigationState);
-            this.Warnings.Init(interviewId, entityIdentity, navigationState);
+            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
 
             var question = interview.GetQuestion(entityIdentity);
             if (question.IsAnswered())
@@ -54,17 +52,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        public DynamicTextViewModel Title { get; private set; }
-        public virtual ValidityViewModel Validity { get; private set; }
-        public virtual WarningsViewModel Warnings { get; }
-
         public string Answer { get; private set; }
 
         public void Dispose()
         {
-            Title?.Dispose();
-            Validity?.Dispose();
-            Warnings?.Dispose();
+            QuestionState?.Dispose();
         }
     }
 }
