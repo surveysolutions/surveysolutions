@@ -13,7 +13,7 @@ using Xamarin.Essentials;
 
 namespace WB.Core.SharedKernels.Enumerator.Views
 {
-    public class MapsViewModel : BaseAuthenticatedViewModel
+    public class MapsViewModel : BasePrincipalViewModel
     {
         private readonly IMapService mapService;
         private readonly IPermissionsService permissions;

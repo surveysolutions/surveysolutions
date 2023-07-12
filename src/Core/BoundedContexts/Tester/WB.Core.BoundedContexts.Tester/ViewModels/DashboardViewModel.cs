@@ -19,7 +19,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
-    public class DashboardViewModel : BaseAuthenticatedViewModel
+    public class DashboardViewModel : BasePrincipalViewModel
     {
         private CancellationTokenSource tokenSource;
         private readonly ITesterPrincipal principal;

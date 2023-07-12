@@ -20,7 +20,7 @@ using WB.Core.SharedKernels.Enumerator.Views.Dashboard;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
-    public class SearchViewModel : BaseAuthenticatedViewModel
+    public class SearchViewModel : BasePrincipalViewModel
     {
         private readonly IInterviewViewModelFactory viewModelFactory;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;

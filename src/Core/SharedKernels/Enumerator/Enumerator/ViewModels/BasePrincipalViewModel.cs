@@ -4,13 +4,13 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
-    public abstract class BaseAuthenticatedViewModel : BaseViewModel
+    public abstract class BasePrincipalViewModel : BaseViewModel
     {
         protected readonly IPrincipal Principal;
         protected readonly IViewModelNavigationService ViewModelNavigationService;
         private readonly bool isAuthenticationRequired;
 
-        protected BaseAuthenticatedViewModel(IPrincipal principal, 
+        protected BasePrincipalViewModel(IPrincipal principal, 
             IViewModelNavigationService viewModelNavigationService, 
             bool isAuthenticationRequired = true)
         {

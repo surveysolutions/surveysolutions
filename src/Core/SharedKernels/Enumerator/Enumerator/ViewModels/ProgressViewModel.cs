@@ -4,7 +4,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
-    public abstract class ProgressViewModel : BaseAuthenticatedViewModel
+    public abstract class ProgressViewModel : BasePrincipalViewModel
     {
         protected ProgressViewModel(IPrincipal principal, 
             IViewModelNavigationService viewModelNavigationService) 

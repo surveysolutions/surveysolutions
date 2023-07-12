@@ -13,7 +13,7 @@ using WB.UI.Tester.Infrastructure.Internals.Security;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
-    public class LoginViewModel : BaseAuthenticatedViewModel
+    public class LoginViewModel : BasePrincipalViewModel
     {
         private readonly IDesignerApiService designerApiService;
         private readonly IUserInteractionService userInteractionService;
