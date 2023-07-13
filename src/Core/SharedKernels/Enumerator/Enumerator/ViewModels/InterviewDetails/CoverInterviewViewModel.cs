@@ -68,10 +68,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public bool HasPrefilledEntities { get; set; }
 
-        public bool IsEditMode { get; set; }
-        
-        public IReadOnlyCollection<CoverPrefilledEntity> PrefilledReadOnlyEntities { get; set; }
-
         private CompositeCollection<ICompositeEntity> prefilledEditableEntities;
         public CompositeCollection<ICompositeEntity> PrefilledEditableEntities
         {
@@ -107,20 +103,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.QuestionnaireTitle = questionnaire.Title;
             
             var prefilledEntitiesFromQuestionnaire = questionnaire.GetPrefilledEntities();
-            IsEditMode = interview.HasEditableIdentifyingQuestions;
 
-            if (IsEditMode)
-            {
-                this.PrefilledReadOnlyEntities = Array.Empty<CoverPrefilledEntity>();
-                this.PrefilledEditableEntities = GetEditablePrefilledData(interviewId, navigationState);
-            }
-            else
-            {
-                this.PrefilledReadOnlyEntities = GetReadOnlyPrefilledData(interviewId, navigationState, prefilledEntitiesFromQuestionnaire, questionnaire, interview);
-                this.PrefilledEditableEntities = new CompositeCollection<ICompositeEntity>();
-            }
+            this.PrefilledEditableEntities = GetEditablePrefilledData(interviewId, navigationState);
 
-            this.HasPrefilledEntities = this.PrefilledReadOnlyEntities.Any() || this.PrefilledEditableEntities.Any();
+            this.HasPrefilledEntities = this.PrefilledEditableEntities.Any();
 
             var interviewKey = interview.GetInterviewKey()?.ToString();
             this.InterviewKey = string.IsNullOrEmpty(interviewKey) ? null : string.Format(UIResources.InterviewKey, interviewKey);
@@ -235,12 +221,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 return;
 
             isDisposed = true;
-
-            if (PrefilledReadOnlyEntities != null)
-            {
-                var prefilledQuestionsLocal = PrefilledReadOnlyEntities.ToArray();
-                prefilledQuestionsLocal.ForEach(viewModel => viewModel?.Dispose());
-            }
 
             if (prefilledEntities != null)
             {

@@ -54,15 +54,6 @@
       
         <View style="@style/Interview_Entity_Divider" />
       
-        <LinearLayout style="@style/Interview_Cover_Prefilled_Answers_Block" android:orientation="vertical"
-                      local:MvxBind="Visible And(HasPrefilledEntities, Not(IsEditMode))">
-            <MvxRecyclerView
-                      android:orientation="vertical"
-                      style="@style/Interview_Cover_Prefilled_Answers"
-                      local:MvxBind="ItemsSource PrefilledReadOnlyEntities"
-                      local:MvxTemplateSelector ="WB.UI.Shared.Enumerator.CustomControls.CoverInterviewTemplateSelector, WB.UI.Shared.Enumerator" />
-        </LinearLayout>
-        
         <MvxRecyclerView
                 style="@style/PrefilledQuestions_List"
                 android:id="@+id/interviewEntitiesList"
@@ -74,7 +65,7 @@
                 android:fastScrollEnabled="true"
                 android:nestedScrollingEnabled="false"
                 local:MvxTemplateSelector ="WB.UI.Shared.Enumerator.CustomControls.InterviewTemplateSelector, WB.UI.Shared.Enumerator"
-                local:MvxBind="ItemsSource PrefilledEditableEntities; Visible And(HasPrefilledEntities, IsEditMode)" />
+                local:MvxBind="ItemsSource PrefilledEditableEntities; Visible HasPrefilledEntities" />
 
         <LinearLayout style="@style/Interview_Entity" 
                       android:orientation="vertical"
