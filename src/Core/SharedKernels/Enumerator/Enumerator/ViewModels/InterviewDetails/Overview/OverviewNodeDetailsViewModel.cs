@@ -9,32 +9,28 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
 {
-    public class OverviewNodeDetailsViewModel : MvxViewModel<OverviewNodeDetailsViewModelArgs>,
-        IDisposable
+    public class OverviewNodeDetailsViewModel : BaseViewModel<OverviewNodeDetailsViewModelArgs>
     {
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IDynamicTextViewModelFactory dynamicTextViewModelFactory;
-        private readonly NavigationState navigationState;
-        private readonly IMvxNavigationService mvxNavigationService;
-
         private string interviewId;
         private Identity identity;
 
         public OverviewNodeDetailsViewModel(IStatefulInterviewRepository interviewRepository,
             IDynamicTextViewModelFactory dynamicTextViewModelFactory,
             CommentsViewModel comments,
-            NavigationState navigationState,
-            IMvxNavigationService mvxNavigationService)
+            IPrincipal principal,
+            IViewModelNavigationService navigationState): base(principal, navigationState)
         {
             Comments = comments;
             this.interviewRepository = interviewRepository;
             this.dynamicTextViewModelFactory = dynamicTextViewModelFactory;
-            this.navigationState = navigationState;
-            this.mvxNavigationService = mvxNavigationService;
         }
 
         public override void Prepare(OverviewNodeDetailsViewModelArgs parameter)
@@ -51,7 +47,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
 
             this.Errors = interview.GetFailedValidationMessages(identity, UIResources.Error).Select(ConvertToSafeHtml).ToList();
             this.Warnings = interview.GetFailedWarningMessages(identity, UIResources.Error).Select(ConvertToSafeHtml).ToList();
-            this.Comments.Init(this.interviewId, identity, navigationState);
+            this.Comments.Init(this.interviewId, identity);
             this.Comments.HasComments = this.Comments.Comments.Count > 0;
         }
 
@@ -72,12 +68,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
 
         public List<string> Warnings { get; set; }
         
-        public IMvxCommand CancelCommand => new MvxCommand(this.Cancel);
-        private void Cancel() => this.mvxNavigationService.Close(this);
+        public IMvxAsyncCommand CancelCommand => new MvxAsyncCommand(this.Cancel);
+        private async Task Cancel() => await ViewModelNavigationService.Close(this);
         
-        public void Dispose()
+        public override void Dispose()
         {
             Comments.Dispose();
+            base.Dispose();
         }
     }
 

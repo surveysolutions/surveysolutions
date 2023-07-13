@@ -4,9 +4,9 @@ using MvvmCross.ViewModels;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public class InterviewStageViewModel : MvxViewModel, IDisposable
+    public class InterviewStageViewModel : BaseViewModel
     {
-        public InterviewStageViewModel(MvxViewModel stage, NavigationDirection direction)
+        public InterviewStageViewModel(BaseViewModel stage, NavigationDirection direction)
         {
             this.Stage = stage;
             this.Direction = direction;
@@ -14,6 +14,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public MvxViewModel Stage { get; }
         public NavigationDirection Direction { get; }
-        public void Dispose() => this.Stage.DisposeIfDisposable();
+
+        public override void Dispose()
+        {
+            this.Stage.DisposeIfDisposable();
+            base.Dispose();
+        } 
     }
 }

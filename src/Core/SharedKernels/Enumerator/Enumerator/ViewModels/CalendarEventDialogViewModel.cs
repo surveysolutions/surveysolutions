@@ -18,25 +18,8 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
-    public class CalendarEventViewModelArgs
+    public class CalendarEventDialogViewModel : BaseViewModel<CalendarEventViewModelArgs>
     {
-        public CalendarEventViewModelArgs(Guid? interviewId, string? interviewKey, int assignmentId, Action? okCallback)
-        {
-            InterviewId = interviewId;
-            InterviewKey = interviewKey;
-            AssignmentId = assignmentId;
-            OkCallback = okCallback;
-        }
-
-        public Guid? InterviewId { get; set; }
-        public string? InterviewKey { get; set; }
-        public int AssignmentId { get; set; }
-        public Action? OkCallback { get; set; }
-    }
-
-    public class CalendarEventDialogViewModel : MvxViewModel<CalendarEventViewModelArgs>
-    {
-        private readonly IMvxNavigationService navigationService;
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
         private readonly ICalendarEventStorage calendarEventStorage;
@@ -53,9 +36,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             IPrincipal principal,
             ICalendarEventStorage calendarEventStorage,
             IUserInteractionService userInteractionService,
-            IStringFormat stringFormat)
+            IViewModelNavigationService mvxNavigationService,
+            IStringFormat stringFormat): base(principal, mvxNavigationService)
         {
-            this.navigationService = Mvx.IoCProvider.Resolve<IMvxNavigationService>();
             this.commandService = commandService;
             this.principal = principal;
             this.calendarEventStorage = calendarEventStorage;
@@ -123,12 +106,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         }
 
         public IMvxAsyncCommand CloseCommand =>
-            new MvxAsyncCommand(async () => await this.navigationService.Close(this));
+            new MvxAsyncCommand(async () => await ViewModelNavigationService.Close(this));
         public IMvxAsyncCommand OkCommand =>
             new MvxAsyncCommand(async () =>
             {
                 SaveCalendarEvent();
-                await this.navigationService.Close(this);
+                await ViewModelNavigationService.Close(this);
             });
 
         public IMvxAsyncCommand EditDate => new MvxAsyncCommand(async () =>

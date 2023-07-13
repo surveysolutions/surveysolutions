@@ -4,8 +4,6 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Tests.Abc;
 
-using it = Moq.It;
-
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronization
 {
     internal class when_creating_new_AnsweredQuestionSynchronizationDto_for_InterviewTextListAnswers : InterviewTestsContext

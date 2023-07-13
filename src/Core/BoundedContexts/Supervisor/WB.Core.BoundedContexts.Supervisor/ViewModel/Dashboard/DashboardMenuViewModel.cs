@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 {
-    public class DashboardMenuViewModel : MvxViewModel
+    public class DashboardMenuViewModel : BaseViewModel
     {
         public IMvxNavigationService MvxNavigationService { get; }
         private readonly IMvxMessenger messenger;

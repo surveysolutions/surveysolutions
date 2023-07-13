@@ -20,7 +20,7 @@ using WB.Core.SharedKernels.Enumerator.Views.Dashboard;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
-    public class SearchViewModel : BaseViewModel, IDisposable
+    public class SearchViewModel : BasePrincipalViewModel
     {
         private readonly IInterviewViewModelFactory viewModelFactory;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
@@ -48,8 +48,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.mainThreadAsyncDispatcher = mainThreadAsyncDispatcher;
 
             var messenger = Mvx.IoCProvider.GetSingleton<IMvxMessenger>();
-            startingLongOperationMessageSubscriptionToken = messenger.Subscribe<StartingLongOperationMessage>(this.DashboardItemOnStartingLongOperation);
-            stopLongOperationMessageSubscriptionToken = messenger.Subscribe<StopingLongOperationMessage>(this.DashboardItemOnStopLongOperation);
+            startingLongOperationMessageSubscriptionToken = 
+                messenger.Subscribe<StartingLongOperationMessage>(this.DashboardItemOnStartingLongOperation);
+            stopLongOperationMessageSubscriptionToken = 
+                messenger.Subscribe<StopingLongOperationMessage>(this.DashboardItemOnStopLongOperation);
         }
 
         public bool IsNeedFocus { get; set; } = true;
@@ -89,7 +91,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public bool IsInProgressItemsLoading => this.IsInProgressItemsLoadingCount > 0;
 
-        public IMvxCommand ClearSearchCommand => new MvxCommand(() => SearchText = string.Empty, () => !IsInProgressLongOperation);
+        public IMvxCommand ClearSearchCommand => new MvxCommand(
+            () => SearchText = string.Empty, 
+            () => !IsInProgressLongOperation);
         public IMvxCommand ExitSearchCommand => new MvxAsyncCommand(() => ViewModelNavigationService.NavigateToDashboardAsync());
         public IMvxCommand<string> SearchCommand => new MvxCommand<string>(async text => await SearchAsync(text));
 
@@ -110,25 +114,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         private List<InterviewView> interviews;
         private List<InterviewView> GetInterviewItems()
-            => interviews ?? (interviews = this.interviewViewRepository.LoadAll().ToList());
+            => interviews ??= this.interviewViewRepository.LoadAll().ToList();
 
         private ILookup<Guid, PrefilledQuestionView> identifyingQuestionsField;
         private ILookup<Guid, PrefilledQuestionView> GetIdentifyingQuestions()
-            => identifyingQuestionsField 
-               ?? (identifyingQuestionsField = this.identifyingQuestionsRepo.LoadAll().ToLookup(d => d.InterviewId));
+            => identifyingQuestionsField ??= this.identifyingQuestionsRepo.LoadAll().ToLookup(d => d.InterviewId);
 
         private IReadOnlyCollection<AssignmentDocument> assignments;
         private IReadOnlyCollection<AssignmentDocument> GetAssignmentItems()
-            => assignments 
-               ?? (assignments = this.assignmentsRepository.LoadAll()
-                       .Where(assignment =>
-                           !assignment.Quantity.HasValue 
-                           || !assignment.CreatedInterviewsCount.HasValue
-                           || assignment.Quantity.Value - assignment.CreatedInterviewsCount.Value > 0
-                       )
-                       .ToReadOnlyCollection()
-                       .SortAssignments()
-               );
+            => assignments ??= this.assignmentsRepository.LoadAll()
+                .Where(assignment =>
+                    !assignment.Quantity.HasValue 
+                    || !assignment.CreatedInterviewsCount.HasValue
+                    || assignment.Quantity.Value - assignment.CreatedInterviewsCount.Value > 0
+                )
+                .ToReadOnlyCollection()
+                .SortAssignments();
 
         private MvxObservableCollection<IDashboardItem> uiItems = new MvxObservableCollection<IDashboardItem>();
         public MvxObservableCollection<IDashboardItem> UiItems
@@ -308,17 +309,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             IsInProgressLongOperation = false;
         }
 
-
-        public void Dispose()
+        private bool isDisposed = false;
+        
+        public override void Dispose()
         {
+            if(isDisposed)  return;
+            isDisposed = true;
+            
             startingLongOperationMessageSubscriptionToken.Dispose();
             stopLongOperationMessageSubscriptionToken.Dispose();
 
-            this.UiItems?.OfType<InterviewDashboardItemViewModel>().ForEach(i => i.OnItemRemoved -= InterviewItemRemoved);
+            this.UiItems?.OfType<InterviewDashboardItemViewModel>()
+                .ForEach(i => i.OnItemRemoved -= InterviewItemRemoved);
 
             interviews = null;
             identifyingQuestionsField = null;
             assignments = null;
+            
+            base.Dispose();
         }
     }
 }

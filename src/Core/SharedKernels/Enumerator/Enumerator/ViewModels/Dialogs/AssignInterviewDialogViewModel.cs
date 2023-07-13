@@ -70,10 +70,10 @@ public class AssignInterviewDialogViewModel: ActionDialogViewModel<AssignIntervi
         }
     }
 
-    protected override Task ApplyAsync()
+    protected override async Task ApplyAsync()
     {
         if (!this.CanApply) 
-            return Task.CompletedTask;
+            return;
         this.CanApply = false;
 
         var responsible = this.ResponsibleItems.Single(x => x.IsSelected);
@@ -87,7 +87,7 @@ public class AssignInterviewDialogViewModel: ActionDialogViewModel<AssignIntervi
                 ? new AssignSupervisorCommand(interviewId, this.principal.CurrentUserIdentity.UserId, responsible.Id)
                 : new AssignInterviewerCommand(interviewId, this.principal.CurrentUserIdentity.UserId, responsible.Id);
 
-            this.commandService.Execute(command);
+            await this.commandService.ExecuteAsync(command);
 
             this.auditLogService.Write(new AssignResponsibleToInterviewAuditLogEntity(interviewId,
                 interview.GetInterviewKey().ToString(), responsible.Id, responsible.Login));
@@ -96,10 +96,8 @@ public class AssignInterviewDialogViewModel: ActionDialogViewModel<AssignIntervi
         }
         finally
         {
-            this.Cancel();
+            await this.Cancel();
         }
-        
-        return Task.CompletedTask;
     }
 
     protected override Guid? GetCurrentEntityResponsible(AssignInterviewDialogArgs parameter)
