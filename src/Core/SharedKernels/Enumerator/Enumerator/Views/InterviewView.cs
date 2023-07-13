@@ -50,5 +50,6 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public string CalendarEventTimezoneId { get; set; }
         public string CalendarEventComment { get; set; }
         public InterviewMode? Mode { get; set; }
+        public string InterviewComment { get; set; }
     }
 }

@@ -173,7 +173,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 logger.Warn("Interview has unexpected status", e);
             }
 
-            this.lastCompletionComments.Remove(interviewId);
             await this.CloseInterviewAfterComplete(this.RequestWebInterview);
         }
 
