@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Jobs
 
             var dbWorkspace = workspaces.GetById(data.WorkspaceName);
 
-            if (dbWorkspace != null)
+            if (dbWorkspace.RemovedAtUtc == null)
             {
                 logger.LogError("Cannot delete schema for existing workspace");
                 return;

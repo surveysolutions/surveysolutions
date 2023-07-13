@@ -93,7 +93,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
         private IQueryable<Workspace> Filter(WorkspacesListFilter filter, IQueryable<Workspace> source)
         {
-            IQueryable<Workspace> result = source.OrderBy(x => x.Name);
+            IQueryable<Workspace> result = source
+                .Where(x => x.RemovedAtUtc == null)
+                .OrderBy(x => x.Name);
 
             if (!this.authorizedUser.IsAdministrator)
             {
@@ -126,7 +128,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         public ActionResult<WorkspaceApiView> Details(string name)
         {
             var workspace = this.workspaces.GetById(name);
-            if (workspace == null || !this.authorizedUser.Workspaces.Contains(name))
+            if (workspace == null || workspace.RemovedAtUtc != null || !this.authorizedUser.Workspaces.Contains(name))
             {
                 return NotFound();
             }
@@ -183,7 +185,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             {
                 var existing = this.workspaces.GetById(name);
 
-                if (existing == null)
+                if (existing == null || existing.RemovedAtUtc != null)
                 {
                     return NotFound();
                 }
@@ -220,7 +222,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         public ActionResult Disable(string name)
         {
             var workspace = this.workspaces.GetById(name);
-            if (workspace == null)
+            if (workspace == null || workspace.RemovedAtUtc != null)
             {
                 return NotFound();
             }
@@ -265,7 +267,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         public ActionResult Enable(string name)
         {
             var workspace = this.workspaces.GetById(name);
-            if (workspace == null)
+            if (workspace == null || workspace.RemovedAtUtc != null)
             {
                 return NotFound();
             }

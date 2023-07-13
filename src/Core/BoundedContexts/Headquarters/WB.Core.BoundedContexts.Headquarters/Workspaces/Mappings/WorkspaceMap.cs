@@ -16,6 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings
 
             Property(x => x.DisplayName, ptp => ptp.Column("display_name"));
             Property(x => x.DisabledAtUtc, ptp => ptp.Column("disabled_at_utc"));
+            Property(x => x.RemovedAtUtc, ptp => ptp.Column("removed_at_utc"));
             
             Schema(WorkspaceConstants.SchemaName);
             

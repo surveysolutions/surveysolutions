@@ -579,7 +579,7 @@ namespace WB.UI.Headquarters.Controllers
                 this.ModelState.AddModelError(nameof(CreateUserModel.UserName), FieldsAndValidations.UserName_Taken);
 
             var workspace = await workspaces.GetByIdAsync(model.Workspace);
-            if (workspace == null)
+            if (workspace == null || workspace.RemovedAtUtc != null)
                 this.ModelState.AddModelError(nameof(CreateUserModel.Workspace), FieldsAndValidations.WorkspaceMissing);
 
             HqUser supervisor = null;

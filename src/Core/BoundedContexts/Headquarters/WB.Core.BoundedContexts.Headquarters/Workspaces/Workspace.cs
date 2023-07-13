@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using WB.Core.SharedKernels.DataCollection.Scenarios;
 using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Workspaces
@@ -31,6 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
         
         public virtual ISet<WorkspacesUsers> Users { get; set; } = new HashSet<WorkspacesUsers>();
         public virtual DateTime? DisabledAtUtc { get; protected set; }
+        public virtual DateTime? RemovedAtUtc { get; protected set; }
 
         protected bool Equals(Workspace other)
         {
@@ -72,5 +74,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
         {
             return this.DisabledAtUtc != null;
         }
+
+        public virtual void Remove() => this.RemovedAtUtc = DateTime.UtcNow;
     }
 }

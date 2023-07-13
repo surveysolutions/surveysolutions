@@ -72,14 +72,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
         public List<WorkspaceContext> GetEnabledWorkspaces()
         {
             return workspaces.Query(_ => _
-                .Where(x => x.DisabledAtUtc == null)
+                .Where(x => x.DisabledAtUtc == null && x.RemovedAtUtc == null)
                 .Select(workspace => workspace.AsContext())
                 .ToList());
         }
 
         public List<WorkspaceContext> GetAllWorkspaces()
         {
-            return workspaces.Query(_ => _.Select(w => w.AsContext()).ToList());
+            return workspaces.Query(_ => _
+                .Where(w => w.RemovedAtUtc == null)
+                .Select(w => w.AsContext()
+            ).ToList());
         }
 
         public async Task AssignWorkspacesAsync(HqUser user, List<AssignUserWorkspace> workspacesList)
@@ -167,7 +170,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
             logger.LogWarning("Deleting workspace {name} from workspaces table", workspace.Name);
 
             this.workspaceUsers.Remove(w => w.Where(x => x.Workspace.Name == workspace.Name));
-            this.workspaces.Remove(workspace.Name);
+
+            var w = this.workspaces.GetById(workspace.Name);
+            w.Remove();
+            this.workspaces.Store(w, workspace.Name);
 
             logger.LogWarning("Deleting interviewers and supervisors in workspace {name}", workspace.Name);
         }
