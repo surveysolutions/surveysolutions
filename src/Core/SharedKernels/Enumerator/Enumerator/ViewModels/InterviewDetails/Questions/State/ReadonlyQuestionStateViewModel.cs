@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.Validity.Init(interviewId, entityIdentity, navigationState);
             this.Warnings.Init(interviewId, entityIdentity, navigationState);
-            this.Comments.Init(interviewId, entityIdentity, navigationState);
+            this.Comments.Init(interviewId, entityIdentity);
             this.Enablement.Init(interviewId, entityIdentity);
             this.Header.Init(interviewId, entityIdentity, this.Enablement, navigationState);
 
