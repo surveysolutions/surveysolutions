@@ -45,7 +45,7 @@ public class ApproveInterviewDialogViewModel : ActionDialogViewModel<ApproveInte
 
     public override bool CanApply => true;
 
-    protected override Task ApplyAsync()
+    protected override async Task ApplyAsync()
     {
         try
         {
@@ -54,7 +54,7 @@ public class ApproveInterviewDialogViewModel : ActionDialogViewModel<ApproveInte
 
             var command = new ApproveInterviewCommand(interviewId, this.Principal.CurrentUserIdentity.UserId, Comments);
 
-            this.commandService.Execute(command);
+            await this.commandService.ExecuteAsync(command);
 
             this.auditLogService.Write(new ApproveInterviewAuditLogEntity(interviewId,
                 interview.GetInterviewKey().ToString()));
@@ -63,9 +63,7 @@ public class ApproveInterviewDialogViewModel : ActionDialogViewModel<ApproveInte
         }
         finally
         {
-            this.Cancel();
+            await this.Cancel();
         }
-        
-        return Task.CompletedTask;
     }
 }

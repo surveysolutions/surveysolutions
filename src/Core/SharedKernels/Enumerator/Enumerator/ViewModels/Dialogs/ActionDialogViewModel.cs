@@ -141,8 +141,8 @@ public abstract class ActionDialogViewModel<T> : MvxViewModel<T> where T : IActi
     public IMvxAsyncCommand ApplyCommand => applyCommand ??= new MvxAsyncCommand(this.ApplyAsync, () => this.CanApply);
     protected abstract Task ApplyAsync();
 
-    public IMvxCommand CancelCommand => new MvxCommand(this.Cancel);
-    protected void Cancel() => this.MvxNavigationService.Close(this);
+    public IMvxAsyncCommand CancelCommand => new MvxAsyncCommand(this.Cancel);
+    protected async Task Cancel() => await this.MvxNavigationService.Close(this);
     
     public IMvxCommand SelectResponsibleCommand => new MvxCommand<ResponsibleToSelectViewModel>(this.SelectResponsible);
 

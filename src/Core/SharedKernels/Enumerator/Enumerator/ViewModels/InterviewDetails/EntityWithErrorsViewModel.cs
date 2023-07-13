@@ -3,7 +3,7 @@ using MvvmCross.ViewModels;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public abstract class ListEntityViewModel : MvxViewModel
+    public abstract class ListEntityViewModel : BaseViewModel
     {
         public abstract void Init(NavigationIdentity entityIdentity, string entityTitle, NavigationState navigationState);
     }
@@ -24,7 +24,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private NavigationIdentity entityIdentity;
 
-        public IMvxCommand NavigateToSectionCommand => new MvxAsyncCommand(async ()=> await this.navigationState.NavigateTo(this.entityIdentity));
+        public IMvxCommand NavigateToSectionCommand => 
+            new MvxAsyncCommand(async ()=> await this.navigationState.NavigateTo(this.entityIdentity));
     }
 
     public class EntityWithCommentsViewModel : EntityWithErrorsViewModel

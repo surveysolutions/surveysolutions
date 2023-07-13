@@ -208,7 +208,6 @@
                                         </div>
                                     </div>
 
-
                                     <div class="preview email-block-unit">
                                         <div class="browser-mockup">
                                             <div class="email-example">
@@ -579,6 +578,8 @@ export default {
                 var customText = self.$config.model.definedTexts[key]
                 var defaultText = value
                 var message = customText == undefined || isNil(customText) || customText === '' ? defaultText : customText
+
+                message = escape(message)
                 return {
                     value: key,
                     text: message,
@@ -590,11 +591,6 @@ export default {
             maped[obj.value] = obj
             return maped
         }, {})
-
-        self.$validator.reset('$welcomePage')
-        self.$validator.reset('$resumePage')
-        self.$validator.reset('$finishPage')
-        self.$validator.reset('$completePage')
     },
 
     methods: {
@@ -659,42 +655,6 @@ export default {
         },
         isEditModePageTextEditMode(type) {
             return this.webInterviewPageMessages[type].isEditMode
-        },
-        async savePageTextEditMode(scope, titleType, messageType, buttonText) {
-            var self = this
-            var validationResult = await this.$validator.validateAll(scope)
-            if (validationResult) {
-                var editTitleText = this.webInterviewPageMessages[titleType]
-                var editDescriptionText = this.webInterviewPageMessages[messageType]
-                self.$store.dispatch('showProgress')
-                await this.$hq.WebInterviewSettings.updatePageMessage(self.questionnaireId, titleType, editTitleText.text, messageType, editDescriptionText.text, buttonText, buttonText !== undefined ? this.webInterviewPageMessages[buttonText].text : undefined)
-                    .then(function (response) {
-                        editTitleText.cancelText = editTitleText.text
-                        editDescriptionText.cancelText = editDescriptionText.text
-
-                        if (buttonText !== undefined)
-                            self.webInterviewPageMessages[buttonText].cancelText = self.webInterviewPageMessages[buttonText].text
-                        self.$validator.reset(scope)
-                    })
-                    .catch(function (error) {
-                        Vue.config.errorHandler(error, self)
-                    })
-                    .then(function () {
-                        self.$store.dispatch('hideProgress')
-                    })
-            }
-        },
-        cancelPageTextEditMode(scope, titleType, messageType, buttonText) {
-            var editTitleText = this.webInterviewPageMessages[titleType]
-            var editDescriptionText = this.webInterviewPageMessages[messageType]
-            editTitleText.text = editTitleText.cancelText
-            editDescriptionText.text = editDescriptionText.cancelText
-
-            if (buttonText !== undefined) {
-                var editButtonText = this.webInterviewPageMessages[buttonText]
-                editButtonText.text = editButtonText.cancelText
-            }
-            this.$validator.reset(scope)
         },
         async startWebInterview() {
             var self = this

@@ -28,17 +28,14 @@ export default {
     },
 
     methods: {
-
         isDirty(formName) {
             const form = this.fields[formName]
             const keys = Object.keys((this.fields || {})[formName] || {})
             return keys.some(key => form[key].dirty || form[key].changed)
         },
-
         dummy() {
             return false
         },
-
         previewHtml(text) {
             var html = marked(this.previewText(text))
             return html

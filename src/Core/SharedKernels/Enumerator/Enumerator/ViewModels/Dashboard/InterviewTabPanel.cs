@@ -4,7 +4,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 {
-    public abstract class InterviewTabPanel : MvxViewModel
+    public abstract class InterviewTabPanel : BaseViewModel
     {
         public abstract GroupStatus InterviewStatus { get; }
 

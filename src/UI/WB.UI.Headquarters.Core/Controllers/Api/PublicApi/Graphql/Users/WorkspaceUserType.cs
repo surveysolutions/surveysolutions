@@ -13,7 +13,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
             ConfigureUserFields(descriptor);
             
             descriptor.Field("supervisorId").Type<UuidType>()
-                .Resolver(r => r.Parent<HqUser>().WorkspaceProfile?.SupervisorId);
+                .Resolve(r => r.Parent<HqUser>().WorkspaceProfile?.SupervisorId);
         }
     }
 }
