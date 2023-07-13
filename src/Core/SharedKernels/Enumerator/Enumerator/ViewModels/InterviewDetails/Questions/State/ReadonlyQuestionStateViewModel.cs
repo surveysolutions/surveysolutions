@@ -9,9 +9,8 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
-    public class QuestionStateViewModelBase: MvxNotifyPropertyChanged,
-        IQuestionStateViewModel,
-        IDisposable
+    public class ReadonlyQuestionStateViewModel: MvxNotifyPropertyChanged,
+        IQuestionStateViewModel
     {
         public QuestionHeaderViewModel Header { get; private set; }
         public virtual ValidityViewModel Validity { get; private set; }
@@ -19,9 +18,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public EnablementViewModel Enablement { get; private set; }
         public CommentsViewModel Comments { get; private set; }
 
-        protected QuestionStateViewModelBase() { }
+        protected ReadonlyQuestionStateViewModel() { }
 
-        public QuestionStateViewModelBase(
+        public ReadonlyQuestionStateViewModel(
             ValidityViewModel validityViewModel, 
             QuestionHeaderViewModel questionHeaderViewModel,
             EnablementViewModel enablementViewModel,
@@ -56,14 +55,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public virtual void Dispose()
+        public void Dispose()
         {
-            this.Header.ShowComments -= this.ShowCommentsCommand;
-            Comments.Dispose();
-            Header.Dispose();
-            Validity.Dispose();
-            Warnings.Dispose();
-            Enablement.Dispose();
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            Header?.Dispose();
+            Validity?.Dispose();
+            Warnings?.Dispose();
+            Enablement?.Dispose();
+            Comments?.Dispose();
         }
     }
 }

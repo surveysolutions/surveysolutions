@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public ReadOnlyQuestionViewModel(
             IStatefulInterviewRepository interviewRepository,
             IQuestionnaireStorage questionnaireRepository,
-            QuestionStateViewModelBase questionStateViewModelBase)
+            ReadonlyQuestionStateViewModel questionStateViewModelBase)
         {
             this.interviewRepository = interviewRepository;
             this.questionnaireRepository = questionnaireRepository;
@@ -55,6 +55,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public string Answer { get; private set; }
 
         public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
         {
             QuestionState?.Dispose();
         }

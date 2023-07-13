@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
-    public class QuestionStateViewModel<TAnswerEvent>: QuestionStateViewModelBase,
+    public class QuestionStateViewModel<TAnswerEvent>: ReadonlyQuestionStateViewModel,
         IViewModelEventHandler<TAnswerEvent>
         where TAnswerEvent : QuestionAnswered
     {
