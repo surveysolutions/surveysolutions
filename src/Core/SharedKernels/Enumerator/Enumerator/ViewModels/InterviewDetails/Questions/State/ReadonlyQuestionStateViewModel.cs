@@ -62,11 +62,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         protected virtual void Dispose(bool disposing)
         {
-            Header?.Dispose();
-            Validity?.Dispose();
-            Warnings?.Dispose();
-            Enablement?.Dispose();
-            Comments?.Dispose();
+            if (disposing)
+            {
+                Header?.Dispose();
+                Validity?.Dispose();
+                Warnings?.Dispose();
+                Enablement?.Dispose();
+                Comments?.Dispose();
+            }
         }
     }
 }

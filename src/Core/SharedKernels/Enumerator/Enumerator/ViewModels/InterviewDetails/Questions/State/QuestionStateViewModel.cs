@@ -86,14 +86,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.IsAnswered = interview.WasAnswered(this.questionIdentity);
         }
 
-        public override void Dispose()
+
+        protected override void Dispose(bool disposing)
         {
-            base.Dispose();
-            
-            this.liteEventRegistry.Unsubscribe(this);
-            this.Enablement.EntityEnabled -= this.EnablementOnEntityEnabled;
-            this.answersRemovedNotifier.AnswerRemoved -= this.AnswerRemoved;
-            this.answersRemovedNotifier.Dispose();
+            base.Dispose(disposing);
+
+            if (disposing)
+            {
+                this.liteEventRegistry.Unsubscribe(this);
+                this.Enablement.EntityEnabled -= this.EnablementOnEntityEnabled;
+                this.answersRemovedNotifier.AnswerRemoved -= this.AnswerRemoved;
+                this.answersRemovedNotifier.Dispose();
+            }
         }
     }
 }
