@@ -159,6 +159,15 @@
   <data name="Observers" xml:space="preserve">
     <value>Наблюдатели </value>
   </data>
+  <data name="EmailProviders" xml:space="preserve">
+    <value>Настройка рассылки</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="WorkspaceSettings" xml:space="preserve">
+    <value>Настройки рабочей области</value>
+  </data>  
   <data name="Quantity" xml:space="preserve">
     <value>Количество</value>
   </data>

@@ -960,7 +960,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bulk Email Services.
+        ///   Looks up a localized string similar to Email Providers.
         /// </summary>
         public static string EmailProvidersTitle {
             get {

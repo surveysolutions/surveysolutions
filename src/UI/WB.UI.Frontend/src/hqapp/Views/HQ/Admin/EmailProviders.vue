@@ -1,6 +1,6 @@
 <template>
     <HqLayout :fixedWidth="true" tag="email-providers-page" :title="$t('Pages.EmailProvidersTitle')">
-        <template slot="headers">
+        <!-- <template slot="headers">
             <ol class="breadcrumb">
                 <li>
                     <a :href="this.$hq.basePath + 'Workspaces'">{{ $t('MainMenu.Workspaces') }} -
@@ -14,7 +14,7 @@
             <div>
                 <p>{{ $t('Settings.EmailProvider_PageDesc') }}</p>
             </div>
-        </template>
+        </template> -->
         <div class="mb-30">
             <div class="col-md-12">
                 <form class="form-container" data-vv-scope="settings">
