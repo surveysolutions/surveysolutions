@@ -272,6 +272,12 @@
                 }
             }
         }
+        &.roster-table {
+            .ag-header-cell-label {
+                justify-content: center;
+                text-align: center;
+            }
+        }
     }
 
     .cell-wrap-text {
