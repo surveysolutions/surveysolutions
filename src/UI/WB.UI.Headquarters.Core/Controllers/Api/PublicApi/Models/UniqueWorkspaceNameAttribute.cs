@@ -11,11 +11,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Models
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var plainStorageAccessor = validationContext.GetService<IPlainStorageAccessor<Workspace>>();
+            var plainStorageAccessor = validationContext.GetService<IWorkspacesStorage>();
             if (plainStorageAccessor == null)
                 throw new InvalidOperationException("Workspace accessor was not resolved");
-            
-            var suchNameStoredInDatabase = plainStorageAccessor.Query(_ => _.Any(x => x.Name == value as string));
+
+            var suchNameStoredInDatabase = plainStorageAccessor.HasWorkspaceWithName(value as string);
 
             return !suchNameStoredInDatabase ? ValidationResult.Success : new ValidationResult(ErrorMessageString);
         }

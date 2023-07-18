@@ -17,6 +17,7 @@ using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
+using WB.Core.BoundedContexts.Headquarters.Workspaces.Impl;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -39,7 +40,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage;
         private UrlEncoder urlEncoder;
         private IOptions<HeadquartersConfig> options;
-        private readonly IPlainStorageAccessor<Workspace> workspaces;
+        private readonly IWorkspacesStorage workspaces;
         private readonly ITokenProvider tokenProvider;
         
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
@@ -52,7 +53,7 @@ namespace WB.UI.Headquarters.Controllers
             IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage,
             UrlEncoder urlEncoder,
             IOptions<HeadquartersConfig> options,
-            IPlainStorageAccessor<Workspace> workspaces,
+            IWorkspacesStorage workspaces,
             ITokenProvider tokenProvider)
         {
             this.authorizedUser = authorizedUser;
