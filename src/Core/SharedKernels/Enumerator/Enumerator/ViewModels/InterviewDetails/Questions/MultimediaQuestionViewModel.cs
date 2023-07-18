@@ -129,7 +129,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task RequestAnswerAsync()
         {
-            var pictureFileName = this.GetPictureFileName(this.Answer);
+            var pictureFileName = this.GetPictureFileName();
 
             if (this.IsSignature)
             {
