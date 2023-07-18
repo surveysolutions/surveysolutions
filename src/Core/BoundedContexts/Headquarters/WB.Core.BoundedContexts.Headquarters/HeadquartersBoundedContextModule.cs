@@ -347,6 +347,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IWorkspaceContextAccessor, WorkspaceContextAccessor>();
             registry.Bind<IWorkspaceContextSetter, WorkspaceContextSetter>();
             registry.Bind<IWorkspacesService, WorkspacesService>();
+            registry.Bind<IWorkspacesStorage, WorkspacesStorage>();
             registry.Bind<IWorkspacesCache, WorkspacesCache>();
             registry.Bind<IWorkspacesUsersCache, WorkspacesUsersCache>();
             registry.BindAsSingleton<IMemoryCacheSource, WorkspaceAwareMemoryCache>();
