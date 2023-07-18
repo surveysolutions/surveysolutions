@@ -1,19 +1,8 @@
 <template>
-    <div class="question table-view scroller"
-        :id="hash"
-        v-if="rowData.length > 0">
-        <ag-grid-vue
-            ref="tableRoster"
-            class="ag-theme-customStyles"
-            domLayout="autoHeight"
-            rowHeight="40"
-            headerHeight="50"
-            :defaultColDef="defaultColDef"
-            :columnDefs="columnDefs"
-            :rowData="rowData"
-            :grid-options="gridOptions"
-            @grid-ready="onGridReady"
-            @column-resized="autosizeHeaders"
+    <div class="question table-view scroller" :id="hash" v-if="rowData.length > 0">
+        <ag-grid-vue ref="tableRoster" class="ag-theme-customStyles roster-table" domLayout="autoHeight" rowHeight="40"
+            headerHeight="50" :defaultColDef="defaultColDef" :columnDefs="columnDefs" :rowData="rowData"
+            :grid-options="gridOptions" @grid-ready="onGridReady" @column-resized="autosizeHeaders"
             @cell-editing-stopped="endCellEditting"></ag-grid-vue>
     </div>
 </template>
@@ -94,15 +83,15 @@ export default {
         gridOptions() {
             return {
                 stopEditingWhenGridLosesFocus: true,
-                suppressMovableColumns:true,
-                singleClickEdit:true,
+                suppressMovableColumns: true,
+                singleClickEdit: true,
                 context: {
                     componentParent: this,
                 },
             }
         },
     },
-    methods : {
+    methods: {
         initQuestionAsColumns() {
             var self = this
             var columnsFromQuestions = map(
@@ -140,9 +129,9 @@ export default {
                 autoHeight: true,
                 pinned: true,
                 editable: false,
-                cellStyle: {minHeight: '40px'},
+                cellStyle: { minHeight: '40px' },
                 cellRendererFramework: 'TableRoster_RosterTitle',
-                cellRendererParams: { },
+                cellRendererParams: {},
             })
             this.columnDefs = columnsFromQuestions
         },
@@ -163,8 +152,8 @@ export default {
                     self.$me.questions.forEach(question => {
                         var questionIdentity = question.id + instance.rosterVector
                         instanceAsRow[question.id] = {
-                            identity : questionIdentity,
-                            type     : question.entityType,
+                            identity: questionIdentity,
+                            type: question.entityType,
                         }
                     })
 
@@ -202,8 +191,7 @@ export default {
         },
 
         setTableRosterHeight() {
-            if(this.$refs.tableRoster != undefined)
-            {
+            if (this.$refs.tableRoster != undefined) {
                 if (this.$me.instances.length > 20) {
                     this.gridApi.setDomLayout('normal')
                     this.$refs.tableRoster.$el.style.height = '1024px'
@@ -215,15 +203,15 @@ export default {
             }
         },
 
-        doScroll: debounce(function() {
-            if(this.$store.getters.scrollState == this.id){
+        doScroll: debounce(function () {
+            if (this.$store.getters.scrollState == this.id) {
                 window.scroll({ top: this.$el.offsetTop, behavior: 'smooth' })
                 this.$store.dispatch('resetScroll')
             }
         }, 200),
 
         scroll() {
-            if(this.$store && this.$store.state.route.hash === '#' + this.id) {
+            if (this.$store && this.$store.state.route.hash === '#' + this.id) {
                 this.doScroll()
             }
         },
