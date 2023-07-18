@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -132,6 +133,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
                                              !question.CascadeFromQuestionId.HasValue))
                 ?.ToCategoricalOption();
 
-        public static string GetPictureFileName(string variableName, RosterVector rosterVector) => $"{variableName}__{rosterVector}.jpg";
+        public static string GetPictureFileName(string variableName, RosterVector rosterVector, string extension = ".jpg") 
+            => $"{variableName}__{rosterVector}{extension}";
     }
 }
