@@ -2,10 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
     style="@style/Interview_QuestionWithDivider"
-    local:MvxBind="HideKeyboardOnClick .">
+    local:MvxBind="HideKeyboardOnClick .; LongClick QuestionState.ShowCommentEditorCommand">
     <TextView
         style="@style/Interview_Question_Title"
-        local:MvxBind="Html Title.HtmlText;" />
+        local:MvxBind="Html QuestionState.Header.Title.HtmlText;" />
     <LinearLayout
         style="@style/Interview_Readonly_Question_Layout">
         <ImageView
@@ -19,12 +19,17 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         local:MvxTemplate="@layout/interview_question__validation"
-        local:MvxBind="DataContext Validity" />
+        local:MvxBind="DataContext QuestionState.Validity" />
     <MvxFrameControl
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         local:MvxTemplate="@layout/interview_question__warnings"
-        local:MvxBind="DataContext Warnings" />
+        local:MvxBind="DataContext QuestionState.Warnings" />
+    <MvxFrameControl
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        local:MvxTemplate="@layout/interview_question__comments"
+        local:MvxBind="DataContext QuestionState.Comments" />
 
     <View style="@style/Readonly_Devider_Spacer"  />
     <View style="@style/Interview_Entity_Divider" />
