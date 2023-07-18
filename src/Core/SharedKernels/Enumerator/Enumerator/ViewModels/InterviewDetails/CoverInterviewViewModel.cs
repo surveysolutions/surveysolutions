@@ -102,8 +102,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.InterviewState.Init(interviewId, null);
             this.QuestionnaireTitle = questionnaire.Title;
             
-            var prefilledEntitiesFromQuestionnaire = questionnaire.GetPrefilledEntities();
-
             this.PrefilledEditableEntities = GetEditablePrefilledData(interviewId, navigationState);
 
             this.HasPrefilledEntities = this.PrefilledEditableEntities.Any();
@@ -145,66 +143,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             return this.compositeCollectionInflationService.GetInflatedCompositeCollection(prefilledEntities);
         }
         
-        private List<CoverPrefilledEntity> GetReadOnlyPrefilledData(string interviewId, NavigationState navigationState, ReadOnlyCollection<Guid> prefilledEntitiesFromQuestionnaire, IQuestionnaire questionnaire, IStatefulInterview interview)
-        {
-            return prefilledEntitiesFromQuestionnaire
-                .Select(entityId => new
-                {
-                    EntityId = entityId,
-                    IsStaticText = questionnaire.IsStaticText(entityId),
-                    IsVariable = questionnaire.IsVariable(entityId),
-                    QuestionType = questionnaire.IsQuestion(entityId) 
-                        ? questionnaire.GetQuestionType(entityId)
-                        : (QuestionType?)null,
-                })
-                .Where(entity => entity.IsStaticText || 
-                                 entity.IsVariable ||
-                                 entity.QuestionType.HasValue)
-                .Select(entity =>
-                {
-                    var entityIdentity = new Identity(entity.EntityId, RosterVector.Empty);
-                    AttachmentViewModel attachmentViewModel = null;
-                    if (entity.IsStaticText)
-                    {
-                        attachmentViewModel = this.interviewViewModelFactory.GetNew<AttachmentViewModel>();
-                        attachmentViewModel.Init(interviewId, entityIdentity, navigationState);
-                    }
-
-
-                    var title = this.CreatePrefilledTitle(questionnaire, interviewId, entityIdentity);
-                    var value = entity.QuestionType.HasValue
-                        ? interview.GetAnswerAsString(Identity.Create(entity.EntityId, RosterVector.Empty), CultureInfo.CurrentCulture)
-                        : entity.IsVariable
-                            ? interview.GetVariableValueAsString(Identity.Create(entity.EntityId, RosterVector.Empty))
-                            : string.Empty;
-
-                    GpsLocation gpsLocation = null;
-                    if (entity.QuestionType == QuestionType.GpsCoordinates)
-                    {
-                        var gpsQuestion = interview.GetGpsQuestion(Identity.Create(entity.EntityId, RosterVector.Empty));
-                        var gpsQuestionAnswer = gpsQuestion.GetAnswer();
-
-                        if (gpsQuestionAnswer != null)
-                        {
-                            var gpsAnswer = gpsQuestionAnswer.Value;
-                            gpsLocation = new GpsLocation(gpsAnswer.Accuracy, gpsAnswer.Altitude, gpsAnswer.Latitude,
-                                gpsAnswer.Longitude, DateTimeOffset.MinValue);
-                            value = string.Format(CultureInfo.InvariantCulture, "{0}, {1}", gpsAnswer.Latitude, gpsAnswer.Longitude); 
-                        }
-                    }
-                    
-                    return new CoverPrefilledEntity
-                    {
-                        Identity = entityIdentity,
-                        Title = title,
-                        Answer = value,
-                        GpsLocation = gpsLocation,
-                        Attachment = attachmentViewModel
-                    };
-                })
-                .ToList();
-        }
-
         private DynamicTextViewModel CreatePrefilledTitle(IQuestionnaire questionnaire, string interviewId, Identity entityIdentity)
         {
             var title = this.dynamicTextViewModelFactory.CreateDynamicTextViewModel();
