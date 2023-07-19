@@ -26,7 +26,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IStatefulInterviewRepository interviewRepository;
         protected readonly IPrincipal principal;
         private readonly IEntitiesListViewModelFactory entitiesListViewModelFactory;
-        private readonly IDynamicTextViewModelFactory dynamicTextViewModelFactory;
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly ICompositeCollectionInflationService compositeCollectionInflationService;
 
@@ -40,7 +39,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IQuestionnaireStorage questionnaireRepository, 
             IStatefulInterviewRepository interviewRepository, 
             IEntitiesListViewModelFactory entitiesListViewModelFactory, 
-            IDynamicTextViewModelFactory dynamicTextViewModelFactory,
             IInterviewViewModelFactory interviewViewModelFactory,
             ICompositeCollectionInflationService compositeCollectionInflationService,
             GroupNavigationViewModel nextGroupNavigationViewModel)
@@ -52,7 +50,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.entitiesListViewModelFactory = entitiesListViewModelFactory;
-            this.dynamicTextViewModelFactory = dynamicTextViewModelFactory;
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.compositeCollectionInflationService = compositeCollectionInflationService;
             this.NextGroupNavigationViewModel = nextGroupNavigationViewModel;
