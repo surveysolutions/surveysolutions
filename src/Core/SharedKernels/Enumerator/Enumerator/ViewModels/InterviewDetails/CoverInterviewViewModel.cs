@@ -26,7 +26,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IStatefulInterviewRepository interviewRepository;
         protected readonly IPrincipal principal;
         private readonly IEntitiesListViewModelFactory entitiesListViewModelFactory;
-        private readonly IDynamicTextViewModelFactory dynamicTextViewModelFactory;
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly ICompositeCollectionInflationService compositeCollectionInflationService;
 
@@ -40,7 +39,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IQuestionnaireStorage questionnaireRepository, 
             IStatefulInterviewRepository interviewRepository, 
             IEntitiesListViewModelFactory entitiesListViewModelFactory, 
-            IDynamicTextViewModelFactory dynamicTextViewModelFactory,
             IInterviewViewModelFactory interviewViewModelFactory,
             ICompositeCollectionInflationService compositeCollectionInflationService,
             GroupNavigationViewModel nextGroupNavigationViewModel)
@@ -52,7 +50,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.entitiesListViewModelFactory = entitiesListViewModelFactory;
-            this.dynamicTextViewModelFactory = dynamicTextViewModelFactory;
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.compositeCollectionInflationService = compositeCollectionInflationService;
             this.NextGroupNavigationViewModel = nextGroupNavigationViewModel;
@@ -67,10 +64,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public string SupervisorNote { get; set; }
 
         public bool HasPrefilledEntities { get; set; }
-
-        public bool IsEditMode { get; set; }
-        
-        public IReadOnlyCollection<CoverPrefilledEntity> PrefilledReadOnlyEntities { get; set; }
 
         private CompositeCollection<ICompositeEntity> prefilledEditableEntities;
         public CompositeCollection<ICompositeEntity> PrefilledEditableEntities
@@ -106,21 +99,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.InterviewState.Init(interviewId, null);
             this.QuestionnaireTitle = questionnaire.Title;
             
-            var prefilledEntitiesFromQuestionnaire = questionnaire.GetPrefilledEntities();
-            IsEditMode = interview.HasEditableIdentifyingQuestions;
+            this.PrefilledEditableEntities = GetEditablePrefilledData(interviewId, navigationState);
 
-            if (IsEditMode)
-            {
-                this.PrefilledReadOnlyEntities = Array.Empty<CoverPrefilledEntity>();
-                this.PrefilledEditableEntities = GetEditablePrefilledData(interviewId, navigationState);
-            }
-            else
-            {
-                this.PrefilledReadOnlyEntities = GetReadOnlyPrefilledData(interviewId, navigationState, prefilledEntitiesFromQuestionnaire, questionnaire, interview);
-                this.PrefilledEditableEntities = new CompositeCollection<ICompositeEntity>();
-            }
-
-            this.HasPrefilledEntities = this.PrefilledReadOnlyEntities.Any() || this.PrefilledEditableEntities.Any();
+            this.HasPrefilledEntities = this.PrefilledEditableEntities.Any();
 
             var interviewKey = interview.GetInterviewKey()?.ToString();
             this.InterviewKey = string.IsNullOrEmpty(interviewKey) ? null : string.Format(UIResources.InterviewKey, interviewKey);
@@ -159,73 +140,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             return this.compositeCollectionInflationService.GetInflatedCompositeCollection(prefilledEntities);
         }
         
-        private List<CoverPrefilledEntity> GetReadOnlyPrefilledData(string interviewId, NavigationState navigationState, ReadOnlyCollection<Guid> prefilledEntitiesFromQuestionnaire, IQuestionnaire questionnaire, IStatefulInterview interview)
-        {
-            return prefilledEntitiesFromQuestionnaire
-                .Select(entityId => new
-                {
-                    EntityId = entityId,
-                    IsStaticText = questionnaire.IsStaticText(entityId),
-                    IsVariable = questionnaire.IsVariable(entityId),
-                    QuestionType = questionnaire.IsQuestion(entityId) 
-                        ? questionnaire.GetQuestionType(entityId)
-                        : (QuestionType?)null,
-                })
-                .Where(entity => entity.IsStaticText || 
-                                 entity.IsVariable ||
-                                 entity.QuestionType.HasValue)
-                .Select(entity =>
-                {
-                    var entityIdentity = new Identity(entity.EntityId, RosterVector.Empty);
-                    AttachmentViewModel attachmentViewModel = null;
-                    if (entity.IsStaticText)
-                    {
-                        attachmentViewModel = this.interviewViewModelFactory.GetNew<AttachmentViewModel>();
-                        attachmentViewModel.Init(interviewId, entityIdentity, navigationState);
-                    }
-
-
-                    var title = this.CreatePrefilledTitle(questionnaire, interviewId, entityIdentity);
-                    var value = entity.QuestionType.HasValue
-                        ? interview.GetAnswerAsString(Identity.Create(entity.EntityId, RosterVector.Empty), CultureInfo.CurrentCulture)
-                        : entity.IsVariable
-                            ? interview.GetVariableValueAsString(Identity.Create(entity.EntityId, RosterVector.Empty))
-                            : string.Empty;
-
-                    GpsLocation gpsLocation = null;
-                    if (entity.QuestionType == QuestionType.GpsCoordinates)
-                    {
-                        var gpsQuestion = interview.GetGpsQuestion(Identity.Create(entity.EntityId, RosterVector.Empty));
-                        var gpsQuestionAnswer = gpsQuestion.GetAnswer();
-
-                        if (gpsQuestionAnswer != null)
-                        {
-                            var gpsAnswer = gpsQuestionAnswer.Value;
-                            gpsLocation = new GpsLocation(gpsAnswer.Accuracy, gpsAnswer.Altitude, gpsAnswer.Latitude,
-                                gpsAnswer.Longitude, DateTimeOffset.MinValue);
-                            value = string.Format(CultureInfo.InvariantCulture, "{0}, {1}", gpsAnswer.Latitude, gpsAnswer.Longitude); 
-                        }
-                    }
-                    
-                    return new CoverPrefilledEntity
-                    {
-                        Identity = entityIdentity,
-                        Title = title,
-                        Answer = value,
-                        GpsLocation = gpsLocation,
-                        Attachment = attachmentViewModel
-                    };
-                })
-                .ToList();
-        }
-
-        private DynamicTextViewModel CreatePrefilledTitle(IQuestionnaire questionnaire, string interviewId, Identity entityIdentity)
-        {
-            var title = this.dynamicTextViewModelFactory.CreateDynamicTextViewModel();
-            title.Init(interviewId, entityIdentity);
-            return title;
-        }
-
         private bool isDisposed = false;
         private List<IInterviewEntityViewModel> prefilledEntities;
 
@@ -235,12 +149,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 return;
 
             isDisposed = true;
-
-            if (PrefilledReadOnlyEntities != null)
-            {
-                var prefilledQuestionsLocal = PrefilledReadOnlyEntities.ToArray();
-                prefilledQuestionsLocal.ForEach(viewModel => viewModel?.Dispose());
-            }
 
             if (prefilledEntities != null)
             {
