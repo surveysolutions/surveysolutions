@@ -69,11 +69,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     interview.Id
                 );
             }
-
-            if (string.IsNullOrEmpty(this.Comment))
-            {
-                this.Comment = interview.InterviewerCompleteComment;
-            }
         }
         
         protected override Task CloseInterviewAfterComplete(bool switchInterviewToCawiMode)
