@@ -207,7 +207,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
 
             foreach (Identity node in nodes)
             {
-                if (questionnaire.IsQuestion(node.Id))
+                if (questionnaire.IsQuestion(node.Id) && questionnaire.GetQuestionScope(node.Id) != QuestionScope.Hidden)
                 {
                     var row = table?.AddRow() ?? throw new ArgumentException("Table should be created before");
                     var question = interview.GetQuestion(node);
