@@ -93,16 +93,16 @@ type HeadquartersMutation {
 }
 
 type HeadquartersQuery {
-  assignments("Workspace name" workspace: String! = "primary" skip: Int take: Int where: AssignmentsFilter): IPagedConnectionOfAssignment @authorize(apply: VALIDATION)
-  interviews("Workspace name" workspace: String! = "primary" skip: Int take: Int where: InterviewsFilter order: [InterviewSort!]): IPagedConnectionOfInterview @authorize(apply: VALIDATION)
-  maps("Workspace name" workspace: String! = "primary" skip: Int take: Int where: MapsFilter order: [MapsSort!]): IPagedConnectionOfMap @authorize(apply: VALIDATION)
+  assignments("Workspace name" workspace: String! = "primary" skip: Int take: Int where: AssignmentsFilter): IPagedConnectionOfAssignment @authorize
+  interviews("Workspace name" workspace: String! = "primary" skip: Int take: Int where: InterviewsFilter order: [InterviewSort!]): IPagedConnectionOfInterview @authorize
+  maps("Workspace name" workspace: String! = "primary" skip: Int take: Int where: MapsFilter order: [MapsSort!]): IPagedConnectionOfMap @authorize
   "Gets questionnaire details"
-  questionnaires("Workspace name" workspace: String! = "primary" skip: Int take: Int "Questionnaire id" id: UUID "Questionnaire version" version: Long): IPagedConnectionOfQuestionnaire @authorize(apply: VALIDATION)
-  questions("Workspace name" workspace: String! = "primary" "Questionnaire id" id: UUID! "Questionnaire version" version: Long! "Questionnaire language" language: String where: QuestionFilter): [Entity] @authorize(apply: VALIDATION)
-  questionnaireItems("Workspace name" workspace: String! = "primary" "Questionnaire id" id: UUID! "Questionnaire version" version: Long! "Questionnaire language" language: String where: QuestionnaireItemsFilter): [QuestionnaireItem] @authorize(apply: VALIDATION)
-  viewer: Viewer @authorize(apply: VALIDATION)
+  questionnaires("Workspace name" workspace: String! = "primary" skip: Int take: Int "Questionnaire id" id: UUID "Questionnaire version" version: Long): IPagedConnectionOfQuestionnaire @authorize
+  questions("Workspace name" workspace: String! = "primary" "Questionnaire id" id: UUID! "Questionnaire version" version: Long! "Questionnaire language" language: String where: QuestionFilter): [Entity] @authorize
+  questionnaireItems("Workspace name" workspace: String! = "primary" "Questionnaire id" id: UUID! "Questionnaire version" version: Long! "Questionnaire language" language: String where: QuestionnaireItemsFilter): [QuestionnaireItem] @authorize
+  viewer: Viewer @authorize
   users(skip: Int take: Int order: [UsersSortInput!] where: UsersFilterInput): Users @authorize(roles: [ "Administrator" ])
-  mapReport("Workspace name" workspace: String! = "primary" "Questionnaire id" questionnaireId: UUID! "Questionnaire version" questionnaireVersion: Long "Variable name for question" variable: String "Zoom level" zoom: Int! "Visible area width" clientMapWidth: Int! "East coordinate" east: Float! "West coordinate" west: Float! "North coordinate" north: Float! "South coordinate" south: Float! where: MapReportFilter): MapReportHolder @authorize(apply: VALIDATION)
+  mapReport("Workspace name" workspace: String! = "primary" "Questionnaire id" questionnaireId: UUID! "Questionnaire version" questionnaireVersion: Long "Variable name for question" variable: String "Zoom level" zoom: Int! "Visible area width" clientMapWidth: Int! "East coordinate" east: Float! "West coordinate" west: Float! "North coordinate" north: Float! "South coordinate" south: Float! where: MapReportFilter): MapReportHolder @authorize
 }
 
 type IPagedConnectionOfAssignment {
