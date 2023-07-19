@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
+using WB.Core.BoundedContexts.Headquarters.Workspaces.Impl;
 using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Enumerator.Native.WebInterview;
@@ -31,7 +32,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
     [PublicApiJson]
     public class WorkspacesPublicApiController : ControllerBase
     {
-        private readonly IPlainStorageAccessor<Workspace> workspaces;
+        private readonly IWorkspacesStorage workspaces;
         private readonly IMapper mapper;
         private readonly IWorkspacesService workspacesService;
         private readonly IWorkspacesCache workspacesCache;
@@ -42,7 +43,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly ISystemLog systemLog;
         private readonly IInScopeExecutor<IWebInterviewInvoker> webInterviewNotification;
 
-        public WorkspacesPublicApiController(IPlainStorageAccessor<Workspace> workspaces,
+        public WorkspacesPublicApiController(IWorkspacesStorage workspaces,
             IMapper mapper,
             IWorkspacesService workspacesService,
             IWorkspacesCache workspacesCache,
@@ -73,46 +74,28 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
         public WorkspacesApiView Index([FromQuery] WorkspacesListFilter filter)
         {
-            IEnumerable<WorkspaceApiView> result =
-                this.workspaces.Query(_ =>
-                        Filter(filter, _)
-                            .Skip(filter.Start)
-                            .Take(filter.Length)
-                            .ToList())
-                    .Select(x => mapper.Map<Workspace, WorkspaceApiView>(x));
-            int totalCount = this.workspaces.Query(_ => Filter(filter, _).Count());
+            var result = workspaces.FilterWorkspaces(new WorkspacesFilter()
+            {
+                UserId = filter.UserId,
+                IncludeDisabled = filter.IncludeDisabled,
+                Offset = filter.Start,
+                Limit = filter.Length,
+            });
 
             return new WorkspacesApiView
             (
                 filter.Start,
                 filter.Length,
-                totalCount,
-                result
+                result.TotalCount,
+                result.Workspaces.Select(w => new WorkspaceApiView()
+                {
+                    Name = w.Name,
+                    DisplayName = w.DisplayName,
+                    DisabledAtUtc = w.DisabledAtUtc
+                })
             );
         }
 
-        private IQueryable<Workspace> Filter(WorkspacesListFilter filter, IQueryable<Workspace> source)
-        {
-            IQueryable<Workspace> result = source.OrderBy(x => x.Name);
-
-            if (!this.authorizedUser.IsAdministrator)
-            {
-                var userWorkspaces = this.authorizedUser.Workspaces.ToList();
-                result = result.Where(x => userWorkspaces.Contains(x.Name));
-            }
-
-            if (!string.IsNullOrEmpty(filter.UserId))
-            {
-                result = result.Where(x => x.Users.Any(u => u.User.Id.ToString() == filter.UserId));
-            }
-
-            if (!filter.IncludeDisabled)
-            {
-                result = result.Where(x => x.DisabledAtUtc == null);
-            }
-
-            return result;
-        }
 
         /// <summary>
         /// Get single workspace details
@@ -126,7 +109,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         public ActionResult<WorkspaceApiView> Details(string name)
         {
             var workspace = this.workspaces.GetById(name);
-            if (workspace == null || !this.authorizedUser.Workspaces.Contains(name))
+            if (workspace == null || workspace.RemovedAtUtc != null || !this.authorizedUser.Workspaces.Contains(name))
             {
                 return NotFound();
             }
@@ -150,7 +133,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             {
                 var workspace = new Workspace(request.Name, request.DisplayName);
 
-                this.workspaces.Store(workspace, null);
+                this.workspaces.Store(workspace);
                 await this.workspacesService.Generate(workspace.Name,
                     DbUpgradeSettings.FromFirstMigration<M202011201421_InitSingleWorkspace>());
                 this.workspacesCache.InvalidateCache();
@@ -183,7 +166,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             {
                 var existing = this.workspaces.GetById(name);
 
-                if (existing == null)
+                if (existing == null || existing.RemovedAtUtc != null)
                 {
                     return NotFound();
                 }
@@ -220,7 +203,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         public ActionResult Disable(string name)
         {
             var workspace = this.workspaces.GetById(name);
-            if (workspace == null)
+            if (workspace == null || workspace.RemovedAtUtc != null)
             {
                 return NotFound();
             }
@@ -265,7 +248,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         public ActionResult Enable(string name)
         {
             var workspace = this.workspaces.GetById(name);
-            if (workspace == null)
+            if (workspace == null || workspace.RemovedAtUtc != null)
             {
                 return NotFound();
             }
