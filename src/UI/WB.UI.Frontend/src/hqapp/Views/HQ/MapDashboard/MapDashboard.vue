@@ -78,18 +78,18 @@
                         $t("MapReport.details") }}</a>
                 </div>
                 <div class="row-fluid tooltip-buttons" style="white-space:nowrap;" v-if="!model.isObserving">
-                    <button class="btn btn-sm btn-success"
+                    <button class="btn btn-sm btn-primary"
                         v-if="model.userRole == 'Interviewer' && (selectedTooltip.status == 'InterviewerAssigned' || selectedTooltip.status == 'RejectedBySupervisor')"
                         click="openInterview">{{ $t("Common.Open") }}</button>
-                    <button class="btn btn-sm btn-success" v-if="canAssign" click="assignInterview">{{ $t("Common.Assign")
+                    <button class="btn btn-sm btn-primary" v-if="canAssign" click="assignInterview">{{ $t("Common.Assign")
                     }}</button>
-                    <button class="btn btn-sm btn-success"
+                    <button class="btn btn-sm btn-primary"
                         v-if="model.userRole == 'Supervisor' && (selectedTooltip.status == 'Completed' || selectedTooltip.status == 'RejectedByHeadquarters')"
                         click="approveSvInterview">{{ $t("Common.Approve") }}</button>
                     <button class="btn btn-sm reject"
                         v-if="model.userRole == 'Supervisor' && (selectedTooltip.status == 'Completed' || selectedTooltip.status == 'RejectedByHeadquarters')"
                         click="rejectSvInterview">{{ $t("Common.Reject") }}</button>
-                    <button class="btn btn-sm btn-success"
+                    <button class="btn btn-sm btn-primary"
                         v-if="model.userRole == 'Headquarter' && (selectedTooltip.status == 'Completed' || selectedTooltip.status == 'ApprovedBySupervisor')"
                         click="approveHqInterview">{{ $t("Common.Approve") }}</button>
                     <button class="btn btn-sm reject"
@@ -125,11 +125,11 @@
                         $t("MapReport.details") }}</a>
                 </div>
                 <div class="row-fluid tooltip-buttons" style="white-space:nowrap;" v-if="!model.isObserving">
-                    <button class="btn btn-sm btn-success"
+                    <button class="btn btn-sm btn-primary"
                         v-if="model.userRole == 'Supervisor' || model.userRole == 'Headquarter'" click="assignAssignment">{{
                             $t("Common.Assign") }}</button>
 
-                    <button class="btn btn-sm btn-success" v-if="model.userRole == 'Interviewer'" click="createInterview">{{
+                    <button class="btn btn-sm btn-primary" v-if="model.userRole == 'Interviewer'" click="createInterview">{{
                         $t("Common.Create") }}</button>
                 </div>
             </div>
