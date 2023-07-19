@@ -143,13 +143,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             return this.compositeCollectionInflationService.GetInflatedCompositeCollection(prefilledEntities);
         }
         
-        private DynamicTextViewModel CreatePrefilledTitle(IQuestionnaire questionnaire, string interviewId, Identity entityIdentity)
-        {
-            var title = this.dynamicTextViewModelFactory.CreateDynamicTextViewModel();
-            title.Init(interviewId, entityIdentity);
-            return title;
-        }
-
         private bool isDisposed = false;
         private List<IInterviewEntityViewModel> prefilledEntities;
 
