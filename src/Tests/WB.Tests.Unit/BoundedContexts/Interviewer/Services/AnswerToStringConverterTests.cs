@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Globalization;
 using Main.Core.Entities.SubEntities;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Moq;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -107,7 +105,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
             var answer = NumericRealAnswer.FromDouble(Double.NaN) as AbstractAnswer;
 
             // act
-            var stringAnswer = converter.Convert(answer?.ToString(), Id.g1, questionnaire);
+            var stringAnswer = converter.Convert(answer, Id.g1, questionnaire);
 
             // assert
             Assert.That(stringAnswer, Is.EqualTo("NaN"));

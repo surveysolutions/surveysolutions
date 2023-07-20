@@ -37,7 +37,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     return NumericQuestion(answerTyped, questionId, questionnaire);
 
                 case QuestionType.GpsCoordinates:
-                    var gps = (GeoPosition) answer;
+                    var gps = answer is string gpsAnswerAsString
+                        ? GeoPosition.FromString(gpsAnswerAsString)
+                        : (GeoPosition) answer;
                     return GpsQuestion(gps.Latitude, gps.Longitude);
             }
         
