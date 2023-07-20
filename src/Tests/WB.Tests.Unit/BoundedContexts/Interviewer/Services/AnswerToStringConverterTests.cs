@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Globalization;
 using Main.Core.Entities.SubEntities;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Moq;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Tests.Abc;
 
@@ -91,6 +94,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
             // assert
             Assert.That(exception, Is.Not.Null);
         }
+        
         [Test]
         [SetCulture("fr-FR")]
         public void should_not_use_local_user_culture_of_decimal_question_for_numeric_question()
