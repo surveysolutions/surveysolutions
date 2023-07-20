@@ -91,5 +91,22 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
             // assert
             Assert.That(exception, Is.Not.Null);
         }
+        [Test]
+        [SetCulture("fr-FR")]
+        public void should_not_use_local_user_culture_of_decimal_question_for_numeric_question()
+        {
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.NumericRealQuestion(Id.g1, preFilled: true))
+            );
+            var converter = Create.Service.AnswerToStringConverter();
+            var answer = NumericRealAnswer.FromDouble(Double.NaN) as AbstractAnswer;
+
+            // act
+            var stringAnswer = converter.Convert(answer?.ToString(), Id.g1, questionnaire);
+
+            // assert
+            Assert.That(stringAnswer, Is.EqualTo("NaN"));
+        }
     }
 }
