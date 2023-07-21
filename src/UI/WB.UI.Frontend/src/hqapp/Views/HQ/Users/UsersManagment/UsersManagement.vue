@@ -1,161 +1,92 @@
 <template>
-    <HqLayout
-        :hasFilter="true">
-        <div slot="headers">
-            <div class="topic-with-button">
-                <h1 v-html="$t('Users.UsersTitle')"></h1>
-                <a class="btn btn-success"
-                    v-if="model.canAddUsers"
-                    :href="this.$config.model.createUrl">
-                    {{ $t('Users.AddUser') }}
-                </a>
-                <a class="btn btn-success"
-                    style="margin-left:10px"
-                    v-if="model.canAddUsers"
-                    :href="this.$hq.basePath + 'Upload'">
-                    {{ $t('Users.UploadUsers') }}
-                </a>
-            </div>
+    <HqLayout :hasFilter="true">
+        <div slot="headers" class="topic-with-button">
+            <h1 v-html="$t('Users.UsersTitle')"></h1>
+            <a class="btn btn-success" v-if="model.canAddUsers" :href="this.$config.model.createUrl">
+                {{ $t('Users.AddUser') }}
+            </a>
+            <a class="btn btn-success" style="margin-left:10px" v-if="model.canAddUsers"
+                :href="this.$hq.basePath + 'Upload'">
+                {{ $t('Users.UploadUsers') }}
+            </a>
+            <div class="search-pusher"></div>
         </div>
 
         <Filters slot="filters">
             <FilterBlock :title="$t('Pages.UsersManage_WorkspacesFilterTitle')">
-                <Typeahead
-                    control-id="workspaceSelector"
-                    :placeholder="$t('Pages.UsersManage_WorkspacesFilterPlaceholder')"
-                    :value="selectedWorkspace"
-                    :ajax-params="{ includeDisabled: true }"
-                    :fetch-url="this.$config.model.workspacesUrl"
-                    v-on:selected="onWorkspaceSelected" />
+                <Typeahead control-id="workspaceSelector" :placeholder="$t('Pages.UsersManage_WorkspacesFilterPlaceholder')"
+                    :value="selectedWorkspace" :ajax-params="{ includeDisabled: true }"
+                    :fetch-url="this.$config.model.workspacesUrl" v-on:selected="onWorkspaceSelected" />
             </FilterBlock>
 
-            <FilterBlock :title="$t('Pages.AccountManage_Role')"
-                v-if="this.$config.model.roles.length > 0">
-                <Typeahead
-                    no-search
-                    control-id="roleSelector"
-                    :placeholder="$t('Pages.UsersManage_RoleFilterPlaceholder')"
-                    :value="selectedRole"
-                    :values="this.$config.model.roles"
-                    v-on:selected="onRoleSelected" />
+            <FilterBlock :title="$t('Pages.AccountManage_Role')" v-if="this.$config.model.roles.length > 0">
+                <Typeahead no-search control-id="roleSelector" :placeholder="$t('Pages.UsersManage_RoleFilterPlaceholder')"
+                    :value="selectedRole" :values="this.$config.model.roles" v-on:selected="onRoleSelected" />
             </FilterBlock>
 
-            <FilterBlock :title="$t('Pages.UsersManage_TeamFilter')"
-                v-if="this.selectedWorkspace">
-                <Typeahead
-                    control-id="teamSelector"
-                    :placeholder="$t('Pages.UsersManage_TeamFilterPlaceHolder')"
-                    :value="selectedTeam"
-                    :fetch-url="supervisorsUri"
-                    v-on:selected="onTeamSelected" />
+            <FilterBlock :title="$t('Pages.UsersManage_TeamFilter')" v-if="this.selectedWorkspace">
+                <Typeahead control-id="teamSelector" :placeholder="$t('Pages.UsersManage_TeamFilterPlaceHolder')"
+                    :value="selectedTeam" :fetch-url="supervisorsUri" v-on:selected="onTeamSelected" />
             </FilterBlock>
 
-            <FilterBlock :title="$t('Pages.AccountManage_ShowUsers')"
-                v-if="this.$config.model.filters.length > 0">
-                <Typeahead
-                    no-search
-                    control-id="filterSelector"
-                    :placeholder="$t('Pages.UsersManage_ShowUsersFilterPlaceholder')"
-                    :values="this.$config.model.filters"
-                    :value="selectedFilter"
-                    v-on:selected="onFilterSelected"/>
+            <FilterBlock :title="$t('Pages.AccountManage_ShowUsers')" v-if="this.$config.model.filters.length > 0">
+                <Typeahead no-search control-id="filterSelector"
+                    :placeholder="$t('Pages.UsersManage_ShowUsersFilterPlaceholder')" :values="this.$config.model.filters"
+                    :value="selectedFilter" v-on:selected="onFilterSelected" />
             </FilterBlock>
 
             <FilterBlock :title="$t('Pages.Interviewers_ArchiveStatusTitle')">
-                <Typeahead
-                    ref="archiveStatusControl"
-                    control-id="archiveStatus"
-                    no-clear
-                    :noPaging="false"
-                    data-vv-name="archive"
-                    data-vv-as="archive"
-                    :value="selectedArchive"
-                    :values="this.$config.model.archiveStatuses"
-                    :selectedKey="this.query.archive"
-                    :selectFirst="true"
-                    v-on:selected="onArchiveStatusSelected"/>
+                <Typeahead ref="archiveStatusControl" control-id="archiveStatus" no-clear :noPaging="false"
+                    data-vv-name="archive" data-vv-as="archive" :value="selectedArchive"
+                    :values="this.$config.model.archiveStatuses" :selectedKey="this.query.archive" :selectFirst="true"
+                    v-on:selected="onArchiveStatusSelected" />
             </FilterBlock>
 
         </Filters>
 
-        <DataTables
-            ref="table"
-            data-suso="usermanagement-list"
-            :tableOptions="tableOptions"
-            :addParamsToRequest="addParamsToRequest"
-            :selectable="canManageUsers"
-            @selectedRowsChanged="rows => selectedRows = rows"
-            mutliRowSelect
-            :selectableId="'userId'"
-            :noPaging="false">
-            <div
-                class="panel panel-table"
-                v-if="selectedRows.length > 0"
-                id="pnlInterviewContextActions">
+        <DataTables ref="table" data-suso="usermanagement-list" :tableOptions="tableOptions"
+            :addParamsToRequest="addParamsToRequest" :selectable="canManageUsers"
+            @selectedRowsChanged="rows => selectedRows = rows" mutliRowSelect :selectableId="'userId'" :noPaging="false">
+            <div class="panel panel-table" v-if="selectedRows.length > 0" id="pnlInterviewContextActions">
                 <div class="panel-body">
-                    <input
-                        class="double-checkbox-white"
-                        id="q1az"
-                        type="checkbox"
-                        checked
-                        disabled="disabled"/>
+                    <input class="double-checkbox-white" id="q1az" type="checkbox" checked disabled="disabled" />
                     <label for="q1az">
                         <span class="tick"></span>
                         {{ selectedRows.length + " " + $t("Pages.UserManagement_UsersSelected") }}
                     </label>
-                    <button
-                        class="btn btn-lg btn-success"
-                        :disabled="filteredToAdd.length == 0"
-                        @click="addToWorkspace">{{ $t("Pages.UserManagement_AddToWorkspace") }}</button>
-                    <button
-                        class="btn btn-lg btn-success"
-                        :disabled="filteredToAdd.length == 0"
-                        @click="removeFromWorkspace">{{ $t("Pages.UserManagement_RemoveFromWorkspace")}}</button>
-                    <button
-                        type="button"
-                        v-if="isVisibleArchive"
-                        class="btn btn-default btn-danger"
+                    <button class="btn btn-lg btn-success" :disabled="filteredToAdd.length == 0" @click="addToWorkspace">{{
+                        $t("Pages.UserManagement_AddToWorkspace") }}</button>
+                    <button class="btn btn-lg btn-success" :disabled="filteredToAdd.length == 0"
+                        @click="removeFromWorkspace">{{ $t("Pages.UserManagement_RemoveFromWorkspace") }}</button>
+                    <button type="button" v-if="isVisibleArchive" class="btn btn-default btn-danger"
                         @click="archiveUsers">{{ $t("Pages.Interviewers_Archive") }}</button>
-                    <button
-                        type="button"
-                        v-if="isVisibleUnarchive"
-                        class="btn btn-default btn-success"
+                    <button type="button" v-if="isVisibleUnarchive" class="btn btn-default btn-success"
                         @click="unarchiveUsers">{{ $t("Pages.Interviewers_Unarchive") }}</button>
-                    <button
-                        type="button"
-                        class="btn btn-default btn-warning last-btn"
-                        v-if="isAnyInterviewerSelected && selectedWorkspace"
-                        @click="moveToAnotherTeam">{{ $t("Pages.Interviewers_MoveToAnotherTeam") }}</button>
+                    <button type="button" class="btn btn-default btn-warning last-btn"
+                        v-if="isAnyInterviewerSelected && selectedWorkspace" @click="moveToAnotherTeam">{{
+                            $t("Pages.Interviewers_MoveToAnotherTeam") }}</button>
                 </div>
             </div>
         </DataTables>
 
-        <WorkspaceManager ref="manageWorkspaces"
-            @addWorkspacesSelected="addWorkspacesSelected"
-            @removeWorkspacesSelected="removeWorkspacesSelected"  />
+        <WorkspaceManager ref="manageWorkspaces" @addWorkspacesSelected="addWorkspacesSelected"
+            @removeWorkspacesSelected="removeWorkspacesSelected" />
 
-        <AddInterviewerToWorkspace ref="addInterviewerToWorkspace"
-            @addInterviewerWorkspace="addInterviewerWorkspace" />
+        <AddInterviewerToWorkspace ref="addInterviewerToWorkspace" @addInterviewerWorkspace="addInterviewerWorkspace" />
 
-        <Confirm
-            ref="confirmArchive"
-            id="confirmArchive"
-            slot="modals">
-            {{$t('Pages.Users_ArchiveUsersConfirmMessage')}}
+        <Confirm ref="confirmArchive" id="confirmArchive" slot="modals">
+            {{ $t('Pages.Users_ArchiveUsersConfirmMessage') }}
             <br />
-            {{$t('Pages.Users_UsersConfirm')}}
+            {{ $t('Pages.Users_UsersConfirm') }}
         </Confirm>
-        <Confirm ref="confirmUnarchive"
-            id="confirmUnarchive"
-            slot="modals">
-            {{$t('Pages.Users_UnarchiveUsersWarning')}}
+        <Confirm ref="confirmUnarchive" id="confirmUnarchive" slot="modals">
+            {{ $t('Pages.Users_UnarchiveUsersWarning') }}
             <br />
-            {{$t('Pages.Users_UsersConfirm')}}
+            {{ $t('Pages.Users_UsersConfirm') }}
         </Confirm>
 
-        <InterviewersMoveToOtherTeam
-            ref="interviewersMoveToOtherTeam"
-            @moveInterviewersCompleted="loadData"></InterviewersMoveToOtherTeam>
+        <InterviewersMoveToOtherTeam ref="interviewersMoveToOtherTeam" @moveInterviewersCompleted="loadData">
+        </InterviewersMoveToOtherTeam>
 
     </HqLayout>
 </template>
@@ -168,7 +99,7 @@ import WorkspaceManager from './WorkspaceManager.vue'
 import AddInterviewerToWorkspace from './AddInterviewerToWorkspace'
 import InterviewersMoveToOtherTeam from './InterviewersMoveToOtherTeam'
 
-var arrayFilter = function(array, predicate) {
+var arrayFilter = function (array, predicate) {
     array = array || []
     var result = []
     for (var i = 0, j = array.length; i < j; i++) if (predicate == null || predicate(array[i], i)) result.push(array[i])
@@ -239,21 +170,21 @@ export default {
                     }
                 })
 
-                if(this.queryString.workspace){
+                if (this.queryString.workspace) {
                     this.selectedWorkspace = find(this.workspaces, { key: this.queryString.workspace })
                 }
 
-                if(this.queryString.team) {
-                    this.selectedTeam = { key: this.queryString.team, value: this.queryString.teamName}
+                if (this.queryString.team) {
+                    this.selectedTeam = { key: this.queryString.team, value: this.queryString.teamName }
                 }
             })
 
-        if(this.queryString.role) {
-            this.selectedRole = find(this.$config.model.roles, { key: this.queryString.role})
+        if (this.queryString.role) {
+            this.selectedRole = find(this.$config.model.roles, { key: this.queryString.role })
         }
 
-        if(this.queryString.filter) {
-            this.selectedFilter = find(this.$config.model.filters, { key: this.queryString.filter})
+        if (this.queryString.filter) {
+            this.selectedFilter = find(this.$config.model.filters, { key: this.queryString.filter })
         } else {
             this.selectedFilter = null
         }
@@ -287,7 +218,7 @@ export default {
             let defaultOrder = this.canManageUsers ? [[1, 'asc']] : [[0, 'asc']]
             return {
                 deferLoading: 0,
-                rowId: function(row) {
+                rowId: function (row) {
                     return `row_${row.userId}`
                 },
                 columns: [
@@ -296,7 +227,7 @@ export default {
                         name: 'UserName',
                         title: this.$t('Pages.Interviewers_UserNameTitle'),
                         className: 'nowrap suso-username',
-                        render: function(data, type, row) {
+                        render: function (data, type, row) {
                             var tdHtml = !row.isArchived
                                 ? `<a href='${self.getUserProfileLink(row)}'>${data}</a>`
                                 : data
@@ -321,12 +252,12 @@ export default {
                         className: 'suso-workspaces',
                         sortable: false,
                         render(data, type, row) {
-                            return map(row.workspaces, function(w) {
+                            return map(row.workspaces, function (w) {
                                 let supervisorName = ''
-                                if(w.supervisor) {
+                                if (w.supervisor) {
                                     supervisorName = ` (<span class="supervisor">${w.supervisor}</span>)`
                                 }
-                                if(w.disabled)
+                                if (w.disabled)
                                     return `<strike>${$('<div>').text(w.displayName).html()}${supervisorName}</strike>`
                                 else
                                     return $('<div>').text(w.displayName).html() + supervisorName
@@ -347,7 +278,7 @@ export default {
                         className: 'suso-email',
                         title: this.$t('Assignments.Email'),
                         defaultContent: '',
-                        render: function(data, type, row) {
+                        render: function (data, type, row) {
                             return data ? '<a href=\'mailto:' + data + '\'>' + data + '</a>' : ''
                         },
                     },
@@ -368,7 +299,7 @@ export default {
                 responsive: false,
                 order: defaultOrder,
                 sDom: 'rf<"table-with-scroll"t>ip',
-                createdRow: function(row, data) {
+                createdRow: function (row, data) {
                     if (data.isLocked) {
                         var jqCell = $(row.cells[1])
                         jqCell.addClass('locked-user')
@@ -406,7 +337,7 @@ export default {
             }).length > 0
         },
 
-        isAnyInterviewerOrSupervisorSelected(){
+        isAnyInterviewerOrSupervisorSelected() {
             return this.getFilteredItems(item => {
                 return item.role == 'Interviewer' || item.role == 'Supervisor'
             }).length > 0
@@ -436,7 +367,7 @@ export default {
         },
 
         removeFromWorkspace() {
-            var wsMap = { }
+            var wsMap = {}
 
             this.getFilteredItems().forEach(user => {
                 user.workspaces.forEach(ws => wsMap[ws.name] = true)
@@ -467,7 +398,7 @@ export default {
         getFilteredItems(filterPredicat) {
             if (this.$refs.table == undefined) return []
 
-            var selectedItems = this.$refs.table.table.rows({selected: true}).data()
+            var selectedItems = this.$refs.table.table.rows({ selected: true }).data()
 
             if (this.selectedRows.length > 0 && selectedItems.length !== 0 && selectedItems[0] != null)
                 return arrayFilter(selectedItems, filterPredicat)
@@ -476,23 +407,23 @@ export default {
         },
 
         addParamsToRequest(requestData) {
-            if(this.selectedWorkspace) {
+            if (this.selectedWorkspace) {
                 requestData.workspaceName = this.selectedWorkspace.key
             }
 
-            if(this.selectedRole) {
+            if (this.selectedRole) {
                 requestData.role = this.selectedRole.key
             }
 
-            if(this.selectedFilter) {
+            if (this.selectedFilter) {
                 requestData.filter = this.selectedFilter.key
             }
 
-            if(this.selectedArchive) {
+            if (this.selectedArchive) {
                 requestData.archive = this.selectedArchive.key
             }
 
-            if(this.selectedTeam) {
+            if (this.selectedTeam) {
                 requestData.teamId = this.selectedTeam.key
             }
         },
@@ -520,7 +451,7 @@ export default {
             })
         },
 
-        onTeamSelected(team){
+        onTeamSelected(team) {
             this.selectedTeam = team
             this.onChange(query => {
                 query.team = team == null ? null : team.key
@@ -550,7 +481,7 @@ export default {
                 userIds: this.selectedRows,
             })
 
-            if(!response.data.isSuccess)
+            if (!response.data.isSuccess)
                 toastr.warning(response.data.domainException)
 
             this.loadData()
