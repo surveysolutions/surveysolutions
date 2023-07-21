@@ -1,17 +1,5 @@
 <template>
     <HqLayout :hasFilter="false">
-        <!-- <template slot="headers">
-            <ol class="breadcrumb">
-                <li>
-                    <a :href=" this.$hq.basePath + 'Workspaces'">{{$t('MainMenu.Workspaces')}} - {{this.$hq.basePath.replaceAll('/', '')}}</a>
-                </li>
-                <li>
-                    <a :href=" this.$hq.basePath + 'Settings'">{{$t('Common.Settings')}}</a>
-                </li>
-            </ol>
-
-        </template> -->
-
         <div class="row extra-margin-bottom contain-input" data-suso="settings-page">
             <div class="col-sm-7">
                 <h2>{{ $t('Settings.ExportEncryption_Title') }}</h2>
@@ -54,8 +42,8 @@
             </div>
             <div class="col-sm-7">
                 <div class="block-filter action-block">
-                    <button type="button" class="btn btn-danger"
-                        @click="removeExportCache">{{ $t('Settings.RemoveExportCache') }}</button>
+                    <button type="button" class="btn btn-danger" @click="removeExportCache">{{
+                        $t('Settings.RemoveExportCache') }}</button>
                 </div>
             </div>
         </div>
@@ -246,8 +234,8 @@
                     </div>
                 </div>
                 <div class="block-filter">
-                    <button :disabled="files.length == 0" type="submit"
-                        class="btn btn-success">{{ $t('Common.Save') }}</button>
+                    <button :disabled="files.length == 0" type="submit" class="btn btn-success">{{ $t('Common.Save')
+                    }}</button>
                 </div>
             </form>
             <div class="col-sm-7">
@@ -255,7 +243,7 @@
                     <figure class="logo-wrapper">
                         <figcaption>{{ $t('Settings.CurrentLogo') }}:</figcaption>
                         <img class="logo extra-margin-bottom" ref="logoImage" :src="$config.model.logoUrl"
-                            @error="logoError" />
+                            @error="logoError" alt="logo image" />
                     </figure>
                 </div>
                 <div class="block-filter action-block">
@@ -269,16 +257,6 @@
             </div>
         </div>
     </HqLayout>
-    <!-- <script type="text/html" id="confirm-regenerate-password">
-            <h3>
-                @Settings.RegeneratePasswordConfirm
-            </h3>
-        </script>
-        <script type="text/html" id="confirm-note-clearing">
-            <h3>
-                @Settings.GlobalNoteClearingConfirm
-            </h3>
-    </script>-->
 </template>
 
 <style scoped>
