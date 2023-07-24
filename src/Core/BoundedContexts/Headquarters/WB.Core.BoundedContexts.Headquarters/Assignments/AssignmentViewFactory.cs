@@ -14,6 +14,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Assignment;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Fetching;
@@ -164,11 +165,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
             List<AssignmentIdentifyingQuestionRow> identifyingColumnText =
                 assignment.IdentifyingData
-                          .Where(x => questionnaire.GetQuestionType(x.Identity.Id) != QuestionType.GpsCoordinates)
-                          .Select(x => new AssignmentIdentifyingQuestionRow(questionnaire.GetQuestionTitle(x.Identity.Id).RemoveHtmlTags(),
-                                    x.AnswerAsString,
-                                    x.Identity,
-                                    questionnaire.GetQuestionVariableName(x.Identity.Id)))
+                          .Select(x =>
+                          {
+                              var answerAsString = x.AnswerAsString;
+                              if (questionnaire.GetQuestionType(x.Identity.Id) == QuestionType.GpsCoordinates)
+                              {
+                                  var answer = assignment.Answers.FirstOrDefault(a => a.Identity == x.Identity);
+                                  if (answer is { Answer: GpsAnswer gpsAnswer } && gpsAnswer.Value != null)
+                                  {
+                                      answerAsString = $"{gpsAnswer.Value.Latitude} {gpsAnswer.Value.Longitude}";
+                                  }
+                              }
+                              return new AssignmentIdentifyingQuestionRow(
+                                  questionnaire.GetQuestionTitle(x.Identity.Id).RemoveHtmlTags(),
+                                  answerAsString,
+                                  x.Identity,
+                                  questionnaire.GetQuestionVariableName(x.Identity.Id));
+                          })
                           .ToList();
             return identifyingColumnText;
         }
