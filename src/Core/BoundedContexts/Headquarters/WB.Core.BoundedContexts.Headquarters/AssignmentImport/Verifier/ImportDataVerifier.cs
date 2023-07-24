@@ -286,7 +286,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private IEnumerable<Func<string, PreloadedFileInfo, IQuestionnaire, IEnumerable<PanelImportVerificationError>>> SampleFileVerifiers => new[]
         {
             Errors(OptionalGpsPropertyAndMissingLatitudeAndLongitude, "PL0030", messages.PL0030_GpsFieldsRequired),
-            Errors(DuplicatedColumns, "PL0031", messages.PL0031_ColumnNameDuplicatesFound)
+            Errors(DuplicatedColumns, "PL0031", messages.PL0031_ColumnNameDuplicatesFound),
         };
 
         private IEnumerable<Func<string, PreloadedFileInfo, IQuestionnaire, IEnumerable<PanelImportVerificationError>>> FileVerifiers => SampleFileVerifiers.Union(new[]
@@ -301,6 +301,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Error(OrphanNestedRoster, "PL0008", messages.PL0008_OrphanRosterRecord),
             Error(OrphanFirstLevelRoster, "PL0008", messages.PL0008_OrphanRosterRecord),
             Error(DuplicatedRosterInstances, "PL0006", messages.PL0006_IdDublication),
+            Error(DuplicatedIdentifiers, "PL0006", messages.PL0006_IdDublication),
             Error(InconsistentNumericRosterInstanceCodes, "PL0053", messages.PL0053_InconsistentNumericRosterInstanceCodes)
         };
 
@@ -347,7 +348,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Error<AssignmentQuantity>(WebmodeSizeOneHasNoEmailOrPassword, "PL0060", messages.PL0060_WebmodeSizeOneHasNoEmailOrPassword),
             Error<AssignmentWebMode>(WebmodeSizeOneHasNoEmailOrPassword, "PL0060", messages.PL0060_WebmodeSizeOneHasNoEmailOrPassword),
             Error<AssignmentResponsible>(WebModeOnlyForInterviewer, "PL0062", messages.PL0062_WebModeOnlyForInterviewer),
-            ErrorsByNotPermittedQuestions
+            ErrorsByNotPermittedQuestions,
         };
 
         private IEnumerable<PanelImportVerificationError> ErrorsByNotPermittedQuestions(PreloadingAssignmentRow row, BaseAssignmentValue value, IQuestionnaire questionnaire)
@@ -604,6 +605,35 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 }
             }
         }
+        
+        private IEnumerable<InterviewImportReference> DuplicatedIdentifiers(List<PreloadingAssignmentRow> allRowsByAllFiles, IQuestionnaire questionnaire)
+        {
+            var rowsByFiles = allRowsByAllFiles
+                .Where(x => x.RosterInstanceCodes.Length == 0 && !string.IsNullOrWhiteSpace(x.InterviewIdValue.Value))
+                .GroupBy(x => x.FileName);
+            foreach (var rowsByFile in rowsByFiles)
+            {
+                var interviewsWithSameId = rowsByFile
+                    .Select(x => new {interviewid = x.InterviewIdValue.Value, row = x})
+                    .GroupBy(x => new {x.interviewid })
+                    .Where(x => x.Count() > 1);
+
+                foreach (var interviewWithSameId in interviewsWithSameId)
+                {
+                    var interviewIdValueColumn = interviewWithSameId.First().row.InterviewIdValue.Column;
+
+                    foreach (var duplicatedRosterInstanceRow in interviewWithSameId)
+                    {
+                        yield return new InterviewImportReference(interviewIdValueColumn,
+                            duplicatedRosterInstanceRow.row.Row, PreloadedDataVerificationReferenceType.Cell,
+                            interviewWithSameId.Key.interviewid,
+                            rowsByFile.Key);
+                    }
+                }
+            }
+        }
+
+        
 
         private bool NoInterviewId(AssignmentInterviewId answer)
             => string.IsNullOrWhiteSpace(answer.Value);

@@ -81,6 +81,14 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             if (hasErrors) yield break;
 
+            foreach (var rosterError in this.verifier.VerifyRosters(assignmentRows, questionnaire))
+            {
+                hasErrors = true;
+                yield return rosterError;
+            }
+            
+            if (hasErrors) yield break;
+
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version);
 
             var assignmentToImports = ConcatRosters(assignmentRows, questionnaire);
