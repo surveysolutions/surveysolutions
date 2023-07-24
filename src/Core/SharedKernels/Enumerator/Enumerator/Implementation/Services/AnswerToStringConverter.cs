@@ -17,6 +17,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             if (!questionnaire.IsPrefilled(questionId)) 
                 throw new NotSupportedException("Only identifying question can be converted to string");
 
+            if (answer == null)
+                return null;
+
             var questionType = questionnaire.GetQuestionType(questionId);
 
             switch (questionType)
@@ -26,24 +29,24 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 
                 case QuestionType.DateTime:
                     DateTime dateTimeAnswer = (DateTime) answer;
-                    return DateTimeQuestion(dateTimeAnswer, questionId, questionnaire);
+                    return FormatDateTimeAnswer(dateTimeAnswer, questionId, questionnaire);
 
                 case QuestionType.SingleOption:
                     var singleAnswer = System.Convert.ToDecimal(answer, CultureInfo.InvariantCulture);
-                    return SingleOptionQuestion(singleAnswer, questionId, questionnaire);
+                    return FormatSingleOptionAnswer(singleAnswer, questionId, questionnaire);
 
                 case QuestionType.Numeric:
                     decimal answerTyped = System.Convert.ToDecimal(answer, CultureInfo.CurrentCulture);
-                    return NumericQuestion(answerTyped, questionId, questionnaire);
+                    return FormatNumericAnswer(answerTyped, questionId, questionnaire);
 
                 case QuestionType.GpsCoordinates:
                     var gps = answer is string gpsAnswerAsString
                         ? GeoPosition.FromString(gpsAnswerAsString)
                         : (GeoPosition) answer;
-                    return GpsQuestion(gps.Latitude, gps.Longitude);
+                    return FormatGpsAnswer(gps.Latitude, gps.Longitude);
             }
         
-            throw new Exception("Unsupported question type: " + questionType);
+            throw new InvalidOperationException("Unsupported question type: " + questionType);
         }
         
         public string Convert(AbstractAnswer answer, Guid questionId, IQuestionnaire questionnaire)
@@ -59,51 +62,51 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 case TextAnswer textAnswer: 
                     return textAnswer.Value;
                 case DateTimeAnswer dateTimeAnswer: 
-                    return DateTimeQuestion(dateTimeAnswer.Value, questionId, questionnaire);
+                    return FormatDateTimeAnswer(dateTimeAnswer.Value, questionId, questionnaire);
                 case NumericIntegerAnswer numericIntegerAnswer:
-                    return NumericIntegerQuestion(numericIntegerAnswer.Value, questionId, questionnaire);
+                    return FormatNumericIntegerAnswer(numericIntegerAnswer.Value, questionId, questionnaire);
                 case NumericRealAnswer numericRealAnswer: 
-                    return NumericRealQuestion(numericRealAnswer.Value, questionId, questionnaire);
+                    return FormatNumericRealAnswer(numericRealAnswer.Value, questionId, questionnaire);
                 case GpsAnswer gpsAnswer:
-                    return GpsQuestion(gpsAnswer.Value.Latitude, gpsAnswer.Value.Longitude);
+                    return FormatGpsAnswer(gpsAnswer.Value.Latitude, gpsAnswer.Value.Longitude);
                 case CategoricalFixedSingleOptionAnswer singleOptionAnswer:
-                    return SingleOptionQuestion(singleOptionAnswer.SelectedValue, questionId, questionnaire);
+                    return FormatSingleOptionAnswer(singleOptionAnswer.SelectedValue, questionId, questionnaire);
             }
 
-            throw new Exception("Unsupported answer type: " + answer.GetType());
+            throw new InvalidOperationException("Unsupported answer type: " + answer.GetType());
         }
 
         
-        private string DateTimeQuestion(DateTime dateTime, Guid questionId, IQuestionnaire questionnaire) 
+        private string FormatDateTimeAnswer(DateTime dateTime, Guid questionId, IQuestionnaire questionnaire) 
         {
             var isTimestamp = questionnaire.IsTimestampQuestion(questionId);
             return isTimestamp
                 ? dateTime.ToString(DateTimeFormat.DateWithTimeFormat)
                 : dateTime.ToString(DateTimeFormat.DateFormat);
         }
-        private string NumericIntegerQuestion(int answer, Guid questionId, IQuestionnaire questionnaire) 
+        private string FormatNumericIntegerAnswer(int answer, Guid questionId, IQuestionnaire questionnaire) 
         {
             return questionnaire.ShouldUseFormatting(questionId)
                 ? answer.FormatInt()
                 : answer.ToString(CultureInfo.CurrentCulture);    
         }
-        private string NumericRealQuestion(double answer, Guid questionId, IQuestionnaire questionnaire) 
+        private string FormatNumericRealAnswer(double answer, Guid questionId, IQuestionnaire questionnaire) 
         {
             return questionnaire.ShouldUseFormatting(questionId)
                 ? answer.FormatDouble()
                 : answer.ToString(CultureInfo.CurrentCulture);    
         }
-        private string NumericQuestion(decimal answer, Guid questionId, IQuestionnaire questionnaire) 
+        private string FormatNumericAnswer(decimal answer, Guid questionId, IQuestionnaire questionnaire) 
         {
             return questionnaire.ShouldUseFormatting(questionId)
                 ? answer.FormatDecimal()
                 : answer.ToString(CultureInfo.CurrentCulture);        
         }
-        private string GpsQuestion(double latitude, double longitude)
+        private string FormatGpsAnswer(double latitude, double longitude)
         {
             return $"{latitude}, {longitude}";
         }
-        private string SingleOptionQuestion(decimal answer, Guid questionId, IQuestionnaire questionnaire) 
+        private string FormatSingleOptionAnswer(decimal answer, Guid questionId, IQuestionnaire questionnaire) 
         {
             string GetCategoricalOptionText(decimal option) => questionnaire.GetAnswerOptionTitle(questionId, option, null);
             return AnswerUtils.AnswerToString(answer, GetCategoricalOptionText);
