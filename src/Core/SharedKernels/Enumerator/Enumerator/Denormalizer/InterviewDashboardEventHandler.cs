@@ -404,7 +404,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
 
             var questionnaireIdentity = QuestionnaireIdentity.Parse(interviewView.QuestionnaireId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, interviewView.Language);
-            if (questionnaire.IsPrefilled(questionId))
+            if (questionnaire.IsIdentifying(questionId))
                 return;
 
             var questionScope = questionnaire.GetQuestionScope(questionId);
@@ -429,7 +429,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
             var questionnaireIdentity = QuestionnaireIdentity.Parse(interviewView.QuestionnaireId);
 
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, interviewView.Language);
-            if (!questionnaire.IsPrefilled(questionId))
+            if (!questionnaire.IsIdentifying(questionId))
                 return;
             
             if (questionId == interviewView.LocationQuestionId)
@@ -638,7 +638,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
             foreach (var changedVariable in evnt.Payload.ChangedVariables)
             {
                 var variableId = changedVariable.Identity.Id;
-                if (!questionnaire.IsPrefilled(variableId))
+                if (!questionnaire.IsIdentifying(variableId))
                     return;
 
                 var newPrefilledQuestionToStore = GetPrefilledVariable(variableId, questionnaire, changedVariable.NewValue, interviewId);
@@ -653,7 +653,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
 
         private string VariableToString(object value, Guid variableId, IQuestionnaire questionnaire)
         {
-            if(!questionnaire.IsPrefilled(variableId)) 
+            if(!questionnaire.IsIdentifying(variableId)) 
                 throw new NotSupportedException("Only identifying variables can be converted to string");
 
             return value == null 

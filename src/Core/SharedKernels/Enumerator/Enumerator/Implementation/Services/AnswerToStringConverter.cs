@@ -14,7 +14,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
     {
         public string Convert(object answer, Guid questionId, IQuestionnaire questionnaire)
         {
-            if (!questionnaire.IsPrefilled(questionId)) 
+            if (!questionnaire.IsIdentifying(questionId)) 
                 throw new NotSupportedException("Only identifying question can be converted to string");
 
             if (answer == null)
@@ -51,7 +51,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         
         public string Convert(AbstractAnswer answer, Guid questionId, IQuestionnaire questionnaire)
         {
-            if (!questionnaire.IsPrefilled(questionId)) 
+            if (!questionnaire.IsIdentifying(questionId)) 
                 throw new NotSupportedException("Only identifying question can be converted to string");
 
             if (answer == null)

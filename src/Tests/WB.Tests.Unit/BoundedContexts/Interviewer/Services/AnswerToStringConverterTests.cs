@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
                    q => q.GetQuestionType(questionId) == questionType
                 && q.GetAnswerOptionTitle(questionId, 1, null) == "title1"
                 && q.GetAnswerOptionTitle(questionId, 2, null) == "title2"
-                && q.IsPrefilled(questionId) == true);
+                && q.IsIdentifying(questionId) == true);
 
             var converter = Create.Service.AnswerToStringConverter();
 

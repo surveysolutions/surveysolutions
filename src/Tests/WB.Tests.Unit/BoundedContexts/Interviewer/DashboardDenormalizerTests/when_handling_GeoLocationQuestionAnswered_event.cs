@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
                 .Setup(storage => storage.Store(It.IsAny<InterviewView>()))
                 .Callback<InterviewView>((view) => dashboardItem = view);
 
-            var questionnaire = Mock.Of<IQuestionnaire>(q => q.IsPrefilled(gpsQuestionId) == true);
+            var questionnaire = Mock.Of<IQuestionnaire>(q => q.IsIdentifying(gpsQuestionId) == true);
             var plainQuestionnaireRepository = Mock.Of<IQuestionnaireStorage>(r =>
                 r.GetQuestionnaire(questionnaireIdentity, Moq.It.IsAny<string>()) == questionnaire);
 

@@ -154,7 +154,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             }
             
             var variable = interview.GetVariable(interviewerEntityIdentity);
-            if (variable != null && questionnaire.IsPrefilled(interviewerEntityIdentity.Id))
+            if (variable != null && questionnaire.IsIdentifying(interviewerEntityIdentity.Id))
             {
                 return new OverviewVariableViewModel(variable, interview)
                 {
