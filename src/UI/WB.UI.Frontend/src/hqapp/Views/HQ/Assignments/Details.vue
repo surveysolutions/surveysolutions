@@ -102,7 +102,7 @@
                                                 <span>{{ question.title }}</span>
                                             </h4>
                                             <div class="answer">
-                                                <div>{{question.answer}}</div>
+                                                <div v-html="question.answer"></div>
                                             </div>
                                         </div>
                                     </div>
