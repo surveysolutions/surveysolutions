@@ -159,7 +159,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Email providers.
+        ///   Looks up a localized string similar to Email Providers.
         /// </summary>
         public static string EmailProviders {
             get {
@@ -456,7 +456,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Workspace settings.
+        ///   Looks up a localized string similar to Workspace Settings.
         /// </summary>
         public static string WorkspaceSettings {
             get {

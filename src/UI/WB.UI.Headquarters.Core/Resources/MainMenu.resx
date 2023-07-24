@@ -163,10 +163,10 @@
     <value>Settings</value>
   </data>
   <data name="WorkspaceSettings" xml:space="preserve">
-    <value>Workspace settings</value>
+    <value>Workspace Settings</value>
   </data>
   <data name="EmailProviders" xml:space="preserve">
-    <value>Email providers</value>
+    <value>Email Providers</value>
   </data>    
   <data name="Quantity" xml:space="preserve">
     <value>Quantity</value>

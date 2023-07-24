@@ -160,13 +160,13 @@
     <value>Наблюдатели </value>
   </data>
   <data name="EmailProviders" xml:space="preserve">
-    <value>Настройка рассылки</value>
+    <value>Настройка Рассылки</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Настройки</value>
   </data>
   <data name="WorkspaceSettings" xml:space="preserve">
-    <value>Настройки рабочей области</value>
+    <value>Настройки Рабочей Области</value>
   </data>  
   <data name="Quantity" xml:space="preserve">
     <value>Количество</value>
