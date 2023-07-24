@@ -609,7 +609,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private IEnumerable<InterviewImportReference> DuplicatedIdentifiers(List<PreloadingAssignmentRow> allRowsByAllFiles, IQuestionnaire questionnaire)
         {
             var rowsByFiles = allRowsByAllFiles
-                .Where(x => x.RosterInstanceCodes.Length == 0 && !string.IsNullOrWhiteSpace(x.InterviewIdValue.Value))
+                .Where(x => x.RosterInstanceCodes.Length == 0 && !string.IsNullOrWhiteSpace(x.InterviewIdValue?.Value))
                 .GroupBy(x => x.FileName);
             foreach (var rowsByFile in rowsByFiles)
             {
