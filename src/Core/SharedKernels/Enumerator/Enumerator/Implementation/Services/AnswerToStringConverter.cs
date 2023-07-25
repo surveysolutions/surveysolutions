@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -28,15 +29,38 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     return (string)answer;
                 
                 case QuestionType.DateTime:
-                    DateTime dateTimeAnswer = (DateTime) answer;
+                    DateTime dateTimeAnswer = answer is string dataTimeAnswerAsString
+                        ? DateTime.Parse(dataTimeAnswerAsString)
+                        : (DateTime) answer;
                     return FormatDateTimeAnswer(dateTimeAnswer, questionId, questionnaire);
 
+                case QuestionType.MultyOption:
+                    if (answer.GetType().IsArray)
+                    {
+                        answer = (answer as object[])
+                            .Select(x => System.Convert.ToDecimal((object) x, CultureInfo.InvariantCulture))
+                            .ToArray();
+                    }
+                    else 
+                    {
+                        var multiAnswer = ((string) answer).Split(',');
+                        answer = multiAnswer
+                            .Select(x => System.Convert.ToDecimal(x, CultureInfo.InvariantCulture))
+                            .ToArray();
+                    }
+
+                    string GetCategoricalOptionText(decimal option) => 
+                        questionnaire.GetAnswerOptionTitle(questionId, option, null);
+                    return AnswerUtils.AnswerToString(answer, GetCategoricalOptionText);
+                
                 case QuestionType.SingleOption:
                     var singleAnswer = System.Convert.ToDecimal(answer, CultureInfo.InvariantCulture);
                     return FormatSingleOptionAnswer(singleAnswer, questionId, questionnaire);
 
                 case QuestionType.Numeric:
-                    decimal answerTyped = System.Convert.ToDecimal(answer, CultureInfo.CurrentCulture);
+                    decimal answerTyped = answer is string numericAnswerAsString
+                        ? decimal.Parse(numericAnswerAsString, CultureInfo.InvariantCulture)
+                        : System.Convert.ToDecimal(answer, CultureInfo.CurrentCulture);
                     return FormatNumericAnswer(answerTyped, questionId, questionnaire);
 
                 case QuestionType.GpsCoordinates:
