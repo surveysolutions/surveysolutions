@@ -1142,7 +1142,8 @@ namespace WB.Tests.Abc.TestFactories
             string linkedFilter = null,
             string optionsFilter = null,
             bool showAsList = false,
-            Guid? categoryId = null)
+            Guid? categoryId = null,
+            bool isPrefilled = false)
             => new SingleQuestion
             {
                 PublicKey = id ?? Guid.NewGuid(),
@@ -1162,6 +1163,7 @@ namespace WB.Tests.Abc.TestFactories
                 },
                 ShowAsList = showAsList,
                 CategoriesId = categoryId,
+                Featured = isPrefilled,
             };
 
         public StaticText StaticText(

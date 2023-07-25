@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
@@ -21,6 +23,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
         [TestCase("123256", QuestionType.Numeric, "123256")]
         [TestCase("2", QuestionType.SingleOption, "title2")]
         [TestCase("1,2[3]4", QuestionType.GpsCoordinates, "1, 2")]
+        [TestCase(null, QuestionType.Numeric, null)]
+        [TestCase(null, (QuestionType)777 /* any type */, null)]
         public void when_get_answer_it_should_stored_to_correct_string(object answer, QuestionType questionType, string result)
         {
             Guid questionId = Guid.NewGuid();
@@ -94,21 +98,148 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
         }
         
         [Test]
-        [SetCulture("fr-FR")]
-        public void should_not_use_local_user_culture_of_decimal_question_for_numeric_question()
+        [SetCulture("ua-UA")]
+        public void should_not_use_local_user_culture_of_decimal_question()
         {
             var questionnaire = Create.Entity.PlainQuestionnaire(
                 Create.Entity.QuestionnaireDocumentWithOneChapter(
-                    Create.Entity.NumericRealQuestion(Id.g1, preFilled: true))
+                    Create.Entity.NumericRealQuestion(Id.g1, preFilled: true),
+                    Create.Entity.NumericRealQuestion(Id.g2, useFomatting: true, preFilled: true))
             );
             var converter = Create.Service.AnswerToStringConverter();
             var answer = NumericRealAnswer.FromDouble(Double.NaN) as AbstractAnswer;
+            var answer2 = NumericRealAnswer.FromDouble(7777777.77777) as AbstractAnswer;
+
+            // act
+            var stringAnswer1 = converter.GetUiStringAnswerForIdentifyingQuestionOrThrow(answer, Id.g1, questionnaire);
+            var stringAnswer2 = converter.GetUiStringAnswerForIdentifyingQuestionOrThrow(answer2, Id.g1, questionnaire);
+            var stringAnswer3 = converter.GetUiStringAnswerForIdentifyingQuestionOrThrow(answer2, Id.g2, questionnaire);
+
+            // assert
+            Assert.That(stringAnswer1, Is.EqualTo("NaN"));
+            Assert.That(stringAnswer2, Is.EqualTo("7777777.77777"));
+            Assert.That(stringAnswer3, Is.EqualTo("7,777,777.77777"));
+        }
+        
+        [Test]
+        [SetCulture("fr-FR")]
+        public void should_not_use_local_user_culture_of_text_question()
+        {
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.TextQuestion(Id.g1, preFilled: true))
+            );
+            var converter = Create.Service.AnswerToStringConverter();
+            var answer = TextAnswer.FromString("answer") as AbstractAnswer;
 
             // act
             var stringAnswer = converter.GetUiStringAnswerForIdentifyingQuestionOrThrow(answer, Id.g1, questionnaire);
 
             // assert
-            Assert.That(stringAnswer, Is.EqualTo("NaN"));
+            Assert.That(stringAnswer, Is.EqualTo("answer"));
+        }
+        
+        [Test]
+        [SetCulture("UA-UA")]
+        public void should_not_use_local_user_culture_of_integer_question()
+        {
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.NumericIntegerQuestion(Id.g1, useFormatting: true, isPrefilled: true),
+                    Create.Entity.NumericIntegerQuestion(Id.g2, useFormatting: false, isPrefilled: true)
+                    )
+            );
+            var converter = Create.Service.AnswerToStringConverter();
+            var answer = NumericIntegerAnswer.FromInt(7777777) as AbstractAnswer;
+
+            // act
+            var stringAnswer = converter.GetUiStringAnswerForIdentifyingQuestionOrThrow(answer, Id.g1, questionnaire);
+            var stringAnswer2 = converter.GetUiStringAnswerForIdentifyingQuestionOrThrow(answer, Id.g2, questionnaire);
+
+            // assert
+            Assert.That(stringAnswer, Is.EqualTo("7,777,777"));
+            Assert.That(stringAnswer2, Is.EqualTo("7777777"));
+        }
+        
+        [Test]
+        [SetCulture("fr-FR")]
+        public void should_not_use_local_user_culture_of_single_question()
+        {
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.SingleQuestion(Id.g1, isPrefilled: true, options: new List<Answer>()
+                    {
+                        new Answer() { AnswerCode = 777, AnswerText = "option 777"}
+                    }))
+            );
+            var converter = Create.Service.AnswerToStringConverter();
+            var answer = CategoricalFixedSingleOptionAnswer.FromInt(777) as AbstractAnswer;
+
+            // act
+            var stringAnswer = converter.GetUiStringAnswerForIdentifyingQuestionOrThrow(answer, Id.g1, questionnaire);
+
+            // assert
+            Assert.That(stringAnswer, Is.EqualTo("option 777"));
+        }
+        
+        [Test]
+        [SetCulture("fr-FR")]
+        public void should_not_use_local_user_culture_of_gps_question()
+        {
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.GpsCoordinateQuestion(Id.g1, isPrefilled: true))
+            );
+            var converter = Create.Service.AnswerToStringConverter();
+            var answer = GpsAnswer.FromGeoPosition(new GeoPosition(1, 2, 3, 4, DateTimeOffset.Now)) as AbstractAnswer;
+
+            // act
+            var stringAnswer = converter.GetUiStringAnswerForIdentifyingQuestionOrThrow(answer, Id.g1, questionnaire);
+
+            // assert
+            Assert.That(stringAnswer, Is.EqualTo("1, 2"));
+        }
+
+        [Test]
+        [SetCulture("fr-FR")]
+        public void should_not_use_local_user_culture_of_datetime_question()
+        {
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.DateTimeQuestion(Id.g1, isTimestamp: true, preFilled: true),
+                    Create.Entity.DateTimeQuestion(Id.g2, isTimestamp: false, preFilled: true)
+                    )
+            );
+            var converter = Create.Service.AnswerToStringConverter();
+            var answer = DateTimeAnswer.FromDateTime(new DateTime(2023, 7, 25, 13, 24, 33, DateTimeKind.Utc)) as AbstractAnswer;
+
+            // act
+            var stringAnswer = converter.GetUiStringAnswerForIdentifyingQuestionOrThrow(answer, Id.g1, questionnaire);
+            var stringAnswer2 = converter.GetUiStringAnswerForIdentifyingQuestionOrThrow(answer, Id.g2, questionnaire);
+
+            // assert
+            Assert.That(stringAnswer, Is.EqualTo("2023-07-25 13:24:33"));
+            Assert.That(stringAnswer2, Is.EqualTo("2023-07-25"));
+        }
+        
+        [Test]
+        [SetCulture("fr-FR")]
+        public void should_not_use_local_user_culture_of_null_answer_for_question()
+        {
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.DateTimeQuestion(Id.g1, isTimestamp: true, preFilled: true),
+                    Create.Entity.DateTimeQuestion(Id.g2, isTimestamp: false, preFilled: true)
+                    )
+            );
+            var converter = Create.Service.AnswerToStringConverter();
+            AbstractAnswer answer = null;
+
+            // act
+            var stringAnswer = converter.GetUiStringAnswerForIdentifyingQuestionOrThrow(answer, Id.g1, questionnaire);
+
+            // assert
+            Assert.That(stringAnswer, Is.Null);
         }
     }
 }
