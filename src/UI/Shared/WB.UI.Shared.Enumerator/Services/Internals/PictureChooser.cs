@@ -62,7 +62,7 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             return await photo.OpenReadAsync();
         }
 
-        public async Task<Stream> ChoosePictureGallery()
+        public async Task<ChoosePictureResult> ChoosePictureGallery()
         {
             await this.media.Initialize().ConfigureAwait(false);
 
@@ -78,7 +78,9 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
                 throw new MissingPermissionsException(e.Message, e);
             }
 
-            return photo == null ? null : await photo.OpenReadAsync();
+            return photo == null 
+                ? null 
+                : new ChoosePictureResult(photo.FileName, await photo.OpenReadAsync());
         }
     }
 }

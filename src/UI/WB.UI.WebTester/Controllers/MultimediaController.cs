@@ -139,7 +139,8 @@ namespace WB.UI.WebTester.Controllers
                 var fileContent = ms.ToArray();
                 this.imageProcessingService.Validate(fileContent);
 
-                fileName = GetPictureFileName(question.VariableName, questionIdentity.RosterVector);
+                var extension = Path.GetExtension(file.FileName);
+                fileName = GetPictureFileName(question.VariableName, questionIdentity.RosterVector, extension);
 
                 var responsibleId = interview.CurrentResponsibleId;
 
@@ -159,6 +160,7 @@ namespace WB.UI.WebTester.Controllers
             return this.Json("ok");
         }
 
-        private string GetPictureFileName(string variableName, RosterVector rosterVector) => AnswerUtils.GetPictureFileName(variableName, rosterVector);
+        private string GetPictureFileName(string variableName, RosterVector rosterVector, string extension) 
+            => AnswerUtils.GetPictureFileName(variableName, rosterVector, extension);
     }
 }

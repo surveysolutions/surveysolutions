@@ -8,6 +8,7 @@ import cleanPlugin from 'vite-plugin-clean';
 import LocalizationPlugin  from './tools/vite-plugin-localization'
 import inject from '@rollup/plugin-inject';
 import vitePluginRequire from "vite-plugin-require";
+//import eslintPlugin from 'vite-plugin-eslint';
 
 const ViteFilemanager = require('filemanager-plugin').ViteFilemanager;
 
@@ -210,6 +211,7 @@ export default defineConfig({
 	mpaPlugin({
 		pages: pages
 	})
+	//eslintPlugin()
   ],
   build: {
 	//minify: false,

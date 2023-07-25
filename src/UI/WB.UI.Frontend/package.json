@@ -8,7 +8,9 @@
     "dev": "vite --mode development",
     "test": "jest",
     "hot": "vite build --mode development --watch",
-    "preinstall": "npx npm-force-resolutions"
+    "preinstall": "npx npm-force-resolutions",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
+    "format": "prettier .  --write"
   },
   "dependencies": {
     "@apollo/client": "3.7.9",
@@ -79,6 +81,7 @@
     "core-js": "^3.28.0",
     "cross-env": "^6.0.3",
     "eslint": "^8.32.0",
+    "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-vue": "^9.0.1",
     "filemanager-plugin": "^2.8.2",
     "graphql-tag": "^2.12.6",
@@ -86,6 +89,7 @@
     "jsonfile": "^6.1.0",
     "mini-css-extract-plugin": "^2.7.2",
     "npm-force-resolutions": "0.0.6",
+    "prettier": "3.0.0",
     "rimraf": "3.0.2",
     "rollup": "3.20.2",
     "sass": "^1.49.7",
@@ -94,6 +98,7 @@
     "vite": "4.2.3",
     "vite-plugin-clean": "^1.0.0",
     "vite-plugin-env-compatible": "^1.1.1",
+    "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-mpa-plus": "^0.5.4",
     "vue-property-decorator": "^8.2.2",
     "webpack-build-notifier": "^2.2.1",
