@@ -98,7 +98,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
         }
         
         [Test]
-        [SetCulture("pr-PR")]
         [TestCase(Double.NaN, "NaN", "NaN")]
         [TestCase(7777777.77777, "7777777.77777", "7,777,777.77777")]
         public void should_not_use_local_user_culture_of_decimal_question(double value, string result, string formatingResult)
@@ -139,7 +138,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
         }
         
         [Test]
-        [SetCulture("pr-PR")]
         public void should_not_use_local_user_culture_of_integer_question()
         {
             var questionnaire = Create.Entity.PlainQuestionnaire(
