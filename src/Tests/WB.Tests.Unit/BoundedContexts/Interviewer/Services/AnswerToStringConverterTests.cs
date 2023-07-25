@@ -98,8 +98,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
         }
         
         [Test]
-        [SetCulture("ua-UA")]
-        public void should_not_use_local_user_culture_of_decimal_question()
+        [SetCulture("pr-PR")]
+        [TestCase(Double.NaN, "NaN", "NaN")]
+        [TestCase(7777777.77777, "7777777.77777", "7,777,777.77777")]
+        public void should_not_use_local_user_culture_of_decimal_question(double value, string result, string formatingResult)
         {
             var questionnaire = Create.Entity.PlainQuestionnaire(
                 Create.Entity.QuestionnaireDocumentWithOneChapter(
@@ -107,18 +109,15 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
                     Create.Entity.NumericRealQuestion(Id.g2, useFomatting: true, preFilled: true))
             );
             var converter = Create.Service.AnswerToStringConverter();
-            var answer = NumericRealAnswer.FromDouble(Double.NaN) as AbstractAnswer;
-            var answer2 = NumericRealAnswer.FromDouble(7777777.77777) as AbstractAnswer;
+            var answer = NumericRealAnswer.FromDouble(value) as AbstractAnswer;
 
             // act
             var stringAnswer1 = converter.GetUiStringAnswerForIdentifyingQuestionOrThrow(answer, Id.g1, questionnaire);
-            var stringAnswer2 = converter.GetUiStringAnswerForIdentifyingQuestionOrThrow(answer2, Id.g1, questionnaire);
-            var stringAnswer3 = converter.GetUiStringAnswerForIdentifyingQuestionOrThrow(answer2, Id.g2, questionnaire);
+            var stringAnswer2 = converter.GetUiStringAnswerForIdentifyingQuestionOrThrow(answer, Id.g2, questionnaire);
 
             // assert
-            Assert.That(stringAnswer1, Is.EqualTo("NaN"));
-            Assert.That(stringAnswer2, Is.EqualTo("7777777.77777"));
-            Assert.That(stringAnswer3, Is.EqualTo("7,777,777.77777"));
+            Assert.That(stringAnswer1, Is.EqualTo(result)); 
+            Assert.That(stringAnswer2, Is.EqualTo(formatingResult));
         }
         
         [Test]
@@ -140,7 +139,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
         }
         
         [Test]
-        [SetCulture("UA-UA")]
+        [SetCulture("pr-PR")]
         public void should_not_use_local_user_culture_of_integer_question()
         {
             var questionnaire = Create.Entity.PlainQuestionnaire(
