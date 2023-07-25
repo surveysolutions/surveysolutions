@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
 
         public void Write(Paragraph paragraph)
         {
-            var isPrefilled = questionnaire.IsPrefilled(variable.Identity.Id);
+            var isPrefilled = questionnaire.IsIdentifying(variable.Identity.Id);
             paragraph.Style = PdfStyles.VariableTitle;
             var title = questionnaire.GetVariableLabel(variable.Identity.Id);
             paragraph.AddWrapFormattedText(title.RemoveHtmlTags(), PdfStyles.VariableTitle);

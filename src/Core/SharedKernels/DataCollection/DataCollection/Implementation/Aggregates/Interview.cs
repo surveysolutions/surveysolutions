@@ -1283,7 +1283,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         new InterviewQuestionInvariants(answer.Identity, questionnaire,
                             changedInterviewTree, questionOptionsRepository));
 
-                    if (commandAssignmentId.HasValue && questionnaire.IsPrefilled(answer.Identity.Id))
+                    if (commandAssignmentId.HasValue && questionnaire.IsIdentifying(answer.Identity.Id))
                     {
                         interviewTreeQuestion.MarkAsReadonly();
                     }

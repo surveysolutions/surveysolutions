@@ -81,7 +81,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 if (isIdentifying && questionnaire.GetQuestionType(answer.Identity.Id) != QuestionType.GpsCoordinates)
                 {
                     var abstractAnswer = this.answerSerializer.Deserialize<AbstractAnswer>(answer.SerializedAnswer);
-                    var answerAsString = this.answerToStringConverter.Convert(abstractAnswer?.ToString(), answer.Identity.Id, questionnaire);
+                    var answerAsString = this.answerToStringConverter.GetUiStringAnswerForIdentifyingQuestionOrThrow(abstractAnswer, answer.Identity.Id, questionnaire);
                     assignmentAnswer.AnswerAsString = answerAsString;
 
                     identifyingAnswers.Add(assignmentAnswer);

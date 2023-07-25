@@ -65,7 +65,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 }
 
 
-                if ((questionnaire.IsVariable(identity.Id) || questionnaire.IsQuestion(identity.Id) || questionnaire.IsStaticText(identity.Id)) && questionnaire.IsPrefilled(identity.Id))
+                if ((questionnaire.IsVariable(identity.Id) || questionnaire.IsQuestion(identity.Id) || questionnaire.IsStaticText(identity.Id)) && questionnaire.IsIdentifying(identity.Id))
                 {
                     entitiesToRefresh.Add((WebInterview.GetConnectedClientPrefilledSectionKey(interview.Id), identity));
                 }
@@ -88,7 +88,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     {
                         if (questionnaire.HasVariable(currentEntity.Id))
                         {
-                            if (questionnaire.IsPrefilled(currentEntity.Id))
+                            if (questionnaire.IsIdentifying(currentEntity.Id))
                             {
                                 entitiesToRefresh.Add((
                                     WebInterview.GetConnectedClientSectionKey(parent, interview.Id),

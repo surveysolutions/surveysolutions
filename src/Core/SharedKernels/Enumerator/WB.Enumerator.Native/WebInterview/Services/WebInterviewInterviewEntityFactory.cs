@@ -595,7 +595,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
             if (callerQuestionnaire.IsVariable(entityId))
             {
-                var isPrefilled = callerQuestionnaire.IsPrefilled(entityId);
+                var isPrefilled = callerQuestionnaire.IsIdentifying(entityId);
                 return isPrefilled
                     ? InterviewEntityType.Variable
                     : InterviewEntityType.Unsupported;

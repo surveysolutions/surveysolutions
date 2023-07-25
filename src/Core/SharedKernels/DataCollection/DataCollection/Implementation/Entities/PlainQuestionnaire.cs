@@ -1037,7 +1037,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     .ToReadOnlyCollection());
 
 
-        public bool IsPrefilled(Guid entityId)
+        public bool IsIdentifying(Guid entityId)
         {
             var entity = GetEntityOrThrow(entityId);
             if (IsCoverPageSupported)
