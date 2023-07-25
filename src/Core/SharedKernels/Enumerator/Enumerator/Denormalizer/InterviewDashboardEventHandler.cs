@@ -306,7 +306,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
 
         private PrefilledQuestionView GetAnswerOnPrefilledQuestion(Guid prefilledQuestion, IQuestionnaire questionnaire, object answer, Guid interviewId)
         {
-            string stringAnswer = this.answerToStringConverter.Convert(answer, prefilledQuestion, questionnaire);
+            string stringAnswer = this.answerToStringConverter.GetUiStringAnswerForIdentifyingQuestionOrThrow(answer, prefilledQuestion, questionnaire);
 
             return new PrefilledQuestionView
             {

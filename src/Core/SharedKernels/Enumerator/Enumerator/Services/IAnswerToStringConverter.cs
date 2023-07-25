@@ -6,7 +6,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
 {
     public interface IAnswerToStringConverter
     {
-        string Convert(object answer, Guid questionId, IQuestionnaire questionnaire);
-        string Convert(AbstractAnswer answer, Guid questionId, IQuestionnaire questionnaire);
+        string GetUiStringAnswerForIdentifyingQuestionOrThrow(object answer, Guid questionId, IQuestionnaire questionnaire);
+        string GetUiStringAnswerForIdentifyingQuestionOrThrow(AbstractAnswer answer, Guid questionId, IQuestionnaire questionnaire);
     }
 }

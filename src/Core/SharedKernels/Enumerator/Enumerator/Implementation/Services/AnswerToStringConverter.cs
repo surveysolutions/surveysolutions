@@ -12,7 +12,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     public class AnswerToStringConverter : IAnswerToStringConverter
     {
-        public string Convert(object answer, Guid questionId, IQuestionnaire questionnaire)
+        public string GetUiStringAnswerForIdentifyingQuestionOrThrow(object answer, Guid questionId, IQuestionnaire questionnaire)
         {
             if (!questionnaire.IsIdentifying(questionId)) 
                 throw new NotSupportedException("Only identifying question can be converted to string");
@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             throw new InvalidOperationException("Unsupported question type: " + questionType);
         }
         
-        public string Convert(AbstractAnswer answer, Guid questionId, IQuestionnaire questionnaire)
+        public string GetUiStringAnswerForIdentifyingQuestionOrThrow(AbstractAnswer answer, Guid questionId, IQuestionnaire questionnaire)
         {
             if (!questionnaire.IsIdentifying(questionId)) 
                 throw new NotSupportedException("Only identifying question can be converted to string");

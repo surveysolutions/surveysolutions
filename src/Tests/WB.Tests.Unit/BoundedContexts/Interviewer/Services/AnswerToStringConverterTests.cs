@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
             var converter = Create.Service.AnswerToStringConverter();
 
             // act
-            var stringAnswer = converter.Convert(answer, questionId, questionnaire);
+            var stringAnswer = converter.GetUiStringAnswerForIdentifyingQuestionOrThrow(answer, questionId, questionnaire);
 
             // assert
             Assert.That(stringAnswer, Is.EqualTo(result));
@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
             var converter = Create.Service.AnswerToStringConverter();
 
             // act
-            var stringAnswer = converter.Convert(dt, Id.g1, questionnaire);
+            var stringAnswer = converter.GetUiStringAnswerForIdentifyingQuestionOrThrow(dt, Id.g1, questionnaire);
 
             // assert
             Assert.That(stringAnswer, Is.EqualTo("2010-04-15"));
@@ -70,7 +70,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
             var converter = Create.Service.AnswerToStringConverter();
 
             // act
-            var stringAnswer = converter.Convert(dt, Id.g1, questionnaire);
+            var stringAnswer = converter.GetUiStringAnswerForIdentifyingQuestionOrThrow(dt, Id.g1, questionnaire);
 
             // assert
             Assert.That(stringAnswer, Is.EqualTo(dt.ToString(DateTimeFormat.DateWithTimeFormat)));
@@ -87,7 +87,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
             var converter = Create.Service.AnswerToStringConverter();
 
             // act
-            var exception = Assert.Catch<NotSupportedException>(() => converter.Convert(dt, Id.g1, questionnaire));
+            var exception = Assert.Catch<NotSupportedException>(() => converter.GetUiStringAnswerForIdentifyingQuestionOrThrow(dt, Id.g1, questionnaire));
 
             // assert
             Assert.That(exception, Is.Not.Null);
@@ -105,7 +105,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
             var answer = NumericRealAnswer.FromDouble(Double.NaN) as AbstractAnswer;
 
             // act
-            var stringAnswer = converter.Convert(answer, Id.g1, questionnaire);
+            var stringAnswer = converter.GetUiStringAnswerForIdentifyingQuestionOrThrow(answer, Id.g1, questionnaire);
 
             // assert
             Assert.That(stringAnswer, Is.EqualTo("NaN"));
