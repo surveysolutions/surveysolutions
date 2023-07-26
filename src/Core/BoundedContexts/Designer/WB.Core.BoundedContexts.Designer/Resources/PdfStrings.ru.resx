@@ -144,6 +144,9 @@
   <data name="CreatedBy" xml:space="preserve">
     <value>Опросник создан: {0}</value>
   </data>
+  <data name="OwnedBy" xml:space="preserve">
+    <value>Опросник принадлежит {0}</value>
+  </data>
   <data name="EnablementCondition" xml:space="preserve">
     <value>Условие включения:</value>
   </data>
