@@ -14,7 +14,10 @@ using NetTopologySuite.Dissolve;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
-using NetTopologySuite.IO.Streams;
+using NetTopologySuite.IO.Esri;
+using NetTopologySuite.IO.Esri.Dbf;
+using NetTopologySuite.IO.Esri.Shapefiles.Readers;
+using NetTopologySuite.IO.Esri.Shp.Readers;
 using NetTopologySuite.Operation.Union;
 using NetTopologySuite.Simplify;
 using Newtonsoft.Json;
@@ -33,7 +36,6 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Utils;
-using IStreamProvider = NetTopologySuite.IO.Streams.IStreamProvider;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
@@ -313,57 +315,43 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 {
                     try
                     {
-                        var shapeFile = fileSystemAccessor.CombinePath(mapsDirectory, mapName);
+                        var shapeFilePath = fileSystemAccessor.CombinePath(mapsDirectory, mapName);
 
-                        var streamProviderRegistry = new ShapefileStreamProviderRegistry(shapeFile,
-                            validateDataPath: true,
-                            validateIndexPath: true, validateShapePath: true);
-                        
-                        var dbfReader = new DbaseFileReader(streamProviderRegistry);
-                        var readHeader = dbfReader.GetHeader();
-                        ThrowIdInvalidFileData(mapFile.Name + ".dbf", dbfReader);
-
-                        var geometryFactory = GeometryFactory.Default;
-                        var shpReader = new ShapefileReader(streamProviderRegistry, geometryFactory);
-                        var shapeType = shpReader.Header.ShapeType;
-                        var shapeHandler = Shapefile.GetShapeHandler(shapeType);
-                        if (shapeHandler == null)
-                            throw new ArgumentException($"Can't read {mapFile.Name}.shp file. Unsupported shape type {shapeType}");
-                        
-                        ThrowIdInvalidFileData(mapFile.Name + ".shp", shpReader);
-                            
+                        using var shapefileReader = Shapefile.OpenRead(shapeFilePath);
+                       
                         int? labelIndexOf = null;
 
-                        for (int i = 0; i < readHeader.NumFields; i++)
+                        for (int i = 0; i < shapefileReader.Fields.Count; i++)
                         {
-                            if (readHeader.Fields[i].Name == LabelFieldName)
+                            if (shapefileReader.Fields[i].Name == LabelFieldName)
                             {
                                 labelIndexOf = i + 1;
                                 break;
                             }
                         }
 
-                        var headerBounds = shpReader.Header.Bounds;
+                        var projection = shapefileReader.Projection;
+
+                        var headerBounds = shapefileReader.BoundingBox;
                         item.XMinVal = headerBounds.MinX;
                         item.YMinVal = headerBounds.MinY;
                         item.XMaxVal = headerBounds.MaxX;
                         item.YMaxVal = headerBounds.MaxY;
-                        item.ShapeType = shapeType.ToString();
-                        item.Wkid = 4326; //geographic coordinates Wgs84
-                        item.ShapesCount = readHeader.NumRecords;
+                        item.ShapeType = shapefileReader.ShapeType.ToString();
+                        item.Wkid = 4326;  //geographic coordinates Wgs84
+                        item.ShapesCount = shapefileReader.RecordCount;
                         
                         FeatureCollection fc = new FeatureCollection();
                         HashSet<string> checkOnUnique = new HashSet<string>();
                         Dictionary<string, int> duplicateLabels = new Dictionary<string, int>();
 
-                        using var rd = new ShapefileDataReader(streamProviderRegistry, geometryFactory);
-                        while (rd.Read())
+                        while (shapefileReader.Read(out bool deleted, out var readFeature))
                         {
                             AttributesTable attribs = new AttributesTable();
 
                             if (labelIndexOf.HasValue)
                             {
-                                var labelValue = rd.GetValue(labelIndexOf.Value).ToString();
+                                var labelValue = readFeature.Attributes[LabelFieldName].ToString();
 
                                 if (!string.IsNullOrWhiteSpace(labelValue))
                                 {
@@ -377,7 +365,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                                 }
                             }
 
-                            IFeature feature = new Feature(rd.Geometry, attribs);
+                            IFeature feature = new Feature(readFeature.Geometry, attribs);
                             fc.Add(feature);
                         }
 
@@ -402,8 +390,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             UnaryUnionOp c = new UnaryUnionOp(fc.Select(f => f.Geometry).ToArray());
                             var geometryCollection = c.Union();
                             //DouglasPeuckerSimplifier simplifier = new DouglasPeuckerSimplifier(geometryCollection);
-                            TopologyPreservingSimplifier simplifier =
-                                new TopologyPreservingSimplifier(geometryCollection);
+                            TopologyPreservingSimplifier simplifier = new TopologyPreservingSimplifier(geometryCollection);
                             var simplifierGeometry = simplifier.GetResultGeometry();
 
                             FeatureCollection unionFc = new FeatureCollection();
