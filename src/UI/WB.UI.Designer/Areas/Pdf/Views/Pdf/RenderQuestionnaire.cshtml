@@ -28,7 +28,7 @@
 			{
 				<ul>
 					<li>@string.Format(PdfStrings.GeneratedBy, questionnaire.Requested.By), <span>@questionnaire.Requested.On?.AddMinutes(-questionnaire.TimezoneOffsetMinutes).FormatDate()</span></li>
-					<li>@string.Format(PdfStrings.CreatedBy, questionnaire.Created.By), <span>@questionnaire.Created.On?.AddMinutes(-questionnaire.TimezoneOffsetMinutes).FormatDate()</span></li>
+					<li>@string.Format(PdfStrings.OwnedBy, questionnaire.Created.By), <span>@questionnaire.Created.On?.AddMinutes(-questionnaire.TimezoneOffsetMinutes).FormatDate()</span></li>
 					@if (questionnaire.LastModified != null)
 					{
 						<li>@string.Format(PdfStrings.LastModifiedBy, questionnaire.LastModified.By), <span>@questionnaire.LastModified.On?.AddMinutes(-questionnaire.TimezoneOffsetMinutes).FormatDate()</span></li>
