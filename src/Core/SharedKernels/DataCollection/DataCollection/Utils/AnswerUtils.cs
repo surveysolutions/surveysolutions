@@ -35,13 +35,14 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
 
             if (answer is decimal decimalAnswer)
             {
-                if(getCategoricalAnswerOptionText == null)
-                    return decimalAnswer.ToString(CultureInfo.InvariantCulture);
-                var optionText = getCategoricalAnswerOptionText(decimalAnswer);
-
-                return String.IsNullOrEmpty(optionText)
-                    ? decimalAnswer.ToString(CultureInfo.InvariantCulture)
-                    : optionText;
+                if (getCategoricalAnswerOptionText != null)
+                {
+                    var optionText = getCategoricalAnswerOptionText(decimalAnswer);
+                    if (!string.IsNullOrEmpty(optionText))
+                        return optionText;
+                }
+                    
+                return decimalAnswer.ToString(CultureInfo.InvariantCulture);
             }
 
             if (answer is decimal[] multiDecimalAnswer)
