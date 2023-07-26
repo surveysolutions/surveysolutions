@@ -188,7 +188,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             {
                 var fragment = (MvxFragment)fragmentStateAdapter.CreateFragment(i);
                 InterviewTabPanel viewModel = (InterviewTabPanel)fragment.ViewModel;
-                if (viewModel.InterviewStatus == this.ViewModel.TypeOfInterviews)
+                if (viewModel.DashboardType == this.ViewModel.TypeOfInterviews)
                 {
                     this.viewPager.SetCurrentItem(i, false);
                     break;
@@ -234,7 +234,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         {
             var fragment = (MvvmCross.Platforms.Android.Views.Fragments.MvxFragment)this.fragmentStateAdapter.CreateFragment(tabPosition);
             var viewModel = (ListViewModel)fragment.ViewModel;
-            this.ViewModel.TypeOfInterviews = viewModel.InterviewStatus;
+            this.ViewModel.TypeOfInterviews = viewModel.DashboardType;
         }
 
         protected override void OnStart()
