@@ -45,6 +45,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <EmbeddedResource Include="..\..\..\..\Core\Infrastructure\WB.Core.Infrastructure\Resources\Modules.es.resx">
+      <Link>Resources\Modules.es.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\Infrastructure\WB.Core.Infrastructure\Resources\Modules.resx">
       <Link>Resources\Modules.resx</Link>
     </EmbeddedResource>

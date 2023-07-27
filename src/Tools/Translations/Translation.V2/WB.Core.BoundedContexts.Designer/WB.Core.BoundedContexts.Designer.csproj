@@ -53,6 +53,9 @@
     <Compile Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.ru.Designer.cs">
       <Link>Resources\ExceptionMessages.ru.Designer.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ImportExportVerificationMessages.Designer.cs">
+      <Link>Resources\ImportExportVerificationMessages.Designer.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\KindOfData.Designer.cs">
       <Link>Resources\KindOfData.Designer.cs</Link>
     </Compile>
@@ -137,6 +140,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.zh.resx">
       <Link>Resources\ExceptionMessages.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ImportExportVerificationMessages.resx">
+      <Link>Resources\ImportExportVerificationMessages.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ImportExportVerificationMessages.ru.resx">
+      <Link>Resources\ImportExportVerificationMessages.ru.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\KindOfData.ar.resx">
       <Link>Resources\KindOfData.ar.resx</Link>

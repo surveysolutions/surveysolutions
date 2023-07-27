@@ -291,6 +291,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireHistoryResources.zh.resx">
       <Link>Resources\QuestionnaireHistoryResources.zh.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\UnderConstruction.es.resx">
+      <Link>Resources\UnderConstruction.es.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\UnderConstruction.resx">
       <Link>Resources\UnderConstruction.resx</Link>
     </EmbeddedResource>

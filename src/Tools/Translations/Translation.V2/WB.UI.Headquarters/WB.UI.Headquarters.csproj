@@ -192,6 +192,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Archived.ar.resx">
       <Link>Resources\Archived.ar.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Archived.cs.resx">
+      <Link>Resources\Archived.cs.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Archived.es.resx">
       <Link>Resources\Archived.es.resx</Link>
     </EmbeddedResource>
@@ -221,6 +224,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Assignments.ar.resx">
       <Link>Resources\Assignments.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Assignments.cs.resx">
+      <Link>Resources\Assignments.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Assignments.es.resx">
       <Link>Resources\Assignments.es.resx</Link>
@@ -252,6 +258,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\AuditLog.ar.resx">
       <Link>Resources\AuditLog.ar.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\AuditLog.cs.resx">
+      <Link>Resources\AuditLog.cs.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\AuditLog.es.resx">
       <Link>Resources\AuditLog.es.resx</Link>
     </EmbeddedResource>
@@ -275,6 +284,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\BatchUpload.ar.resx">
       <Link>Resources\BatchUpload.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\BatchUpload.cs.resx">
+      <Link>Resources\BatchUpload.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\BatchUpload.es.resx">
       <Link>Resources\BatchUpload.es.resx</Link>
@@ -302,6 +314,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Common.ar.resx">
       <Link>Resources\Common.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Common.cs.resx">
+      <Link>Resources\Common.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Common.es.resx">
       <Link>Resources\Common.es.resx</Link>
@@ -333,6 +348,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Dashboard.ar.resx">
       <Link>Resources\Dashboard.ar.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Dashboard.cs.resx">
+      <Link>Resources\Dashboard.cs.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Dashboard.es.resx">
       <Link>Resources\Dashboard.es.resx</Link>
     </EmbeddedResource>
@@ -363,6 +381,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\DataTables.ar.resx">
       <Link>Resources\DataTables.ar.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\DataTables.cs.resx">
+      <Link>Resources\DataTables.cs.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\DataTables.es.resx">
       <Link>Resources\DataTables.es.resx</Link>
     </EmbeddedResource>
@@ -389,6 +410,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Details.ar.resx">
       <Link>Resources\Details.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Details.cs.resx">
+      <Link>Resources\Details.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Details.es.resx">
       <Link>Resources\Details.es.resx</Link>
@@ -417,6 +441,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\DevicesInterviewers.ar.resx">
       <Link>Resources\DevicesInterviewers.ar.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\DevicesInterviewers.cs.resx">
+      <Link>Resources\DevicesInterviewers.cs.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\DevicesInterviewers.es.resx">
       <Link>Resources\DevicesInterviewers.es.resx</Link>
     </EmbeddedResource>
@@ -441,6 +468,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\DevicesInterviewers.zh.resx">
       <Link>Resources\DevicesInterviewers.zh.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Diagnostics.cs.resx">
+      <Link>Resources\Diagnostics.cs.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Diagnostics.resx">
       <Link>Resources\Diagnostics.resx</Link>
     </EmbeddedResource>
@@ -452,6 +482,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\EnumNames.ar.resx">
       <Link>Resources\EnumNames.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\EnumNames.cs.resx">
+      <Link>Resources\EnumNames.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\EnumNames.es.resx">
       <Link>Resources\EnumNames.es.resx</Link>
@@ -483,6 +516,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\FieldsAndValidations.ar.resx">
       <Link>Resources\FieldsAndValidations.ar.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\FieldsAndValidations.cs.resx">
+      <Link>Resources\FieldsAndValidations.cs.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\FieldsAndValidations.es.resx">
       <Link>Resources\FieldsAndValidations.es.resx</Link>
     </EmbeddedResource>
@@ -512,6 +548,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\HQ.ar.resx">
       <Link>Resources\HQ.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\HQ.cs.resx">
+      <Link>Resources\HQ.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\HQ.es.resx">
       <Link>Resources\HQ.es.resx</Link>
@@ -543,6 +582,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\ImportQuestionnaire.ar.resx">
       <Link>Resources\ImportQuestionnaire.ar.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\ImportQuestionnaire.cs.resx">
+      <Link>Resources\ImportQuestionnaire.cs.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\ImportQuestionnaire.es.resx">
       <Link>Resources\ImportQuestionnaire.es.resx</Link>
     </EmbeddedResource>
@@ -569,6 +611,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Interviews.ar.resx">
       <Link>Resources\Interviews.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Interviews.cs.resx">
+      <Link>Resources\Interviews.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Interviews.es.resx">
       <Link>Resources\Interviews.es.resx</Link>
@@ -600,6 +645,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\LoginToDesigner.ar.resx">
       <Link>Resources\LoginToDesigner.ar.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\LoginToDesigner.cs.resx">
+      <Link>Resources\LoginToDesigner.cs.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\LoginToDesigner.es.resx">
       <Link>Resources\LoginToDesigner.es.resx</Link>
     </EmbeddedResource>
@@ -629,6 +677,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\MainMenu.ar.resx">
       <Link>Resources\MainMenu.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\MainMenu.cs.resx">
+      <Link>Resources\MainMenu.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\MainMenu.es.resx">
       <Link>Resources\MainMenu.es.resx</Link>
@@ -660,6 +711,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\MapReport.ar.resx">
       <Link>Resources\MapReport.ar.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\MapReport.cs.resx">
+      <Link>Resources\MapReport.cs.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\MapReport.es.resx">
       <Link>Resources\MapReport.es.resx</Link>
     </EmbeddedResource>
@@ -690,6 +744,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Maps.ar.resx">
       <Link>Resources\Maps.ar.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Maps.cs.resx">
+      <Link>Resources\Maps.cs.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Maps.es.resx">
       <Link>Resources\Maps.es.resx</Link>
     </EmbeddedResource>
@@ -713,6 +770,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\OutdatedBrowser.ar.resx">
       <Link>Resources\OutdatedBrowser.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\OutdatedBrowser.cs.resx">
+      <Link>Resources\OutdatedBrowser.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\OutdatedBrowser.es.resx">
       <Link>Resources\OutdatedBrowser.es.resx</Link>
@@ -740,6 +800,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Pages.ar.resx">
       <Link>Resources\Pages.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Pages.cs.resx">
+      <Link>Resources\Pages.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Pages.es.resx">
       <Link>Resources\Pages.es.resx</Link>
@@ -771,6 +834,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\PeriodicStatusReport.ar.resx">
       <Link>Resources\PeriodicStatusReport.ar.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\PeriodicStatusReport.cs.resx">
+      <Link>Resources\PeriodicStatusReport.cs.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\PeriodicStatusReport.es.resx">
       <Link>Resources\PeriodicStatusReport.es.resx</Link>
     </EmbeddedResource>
@@ -801,6 +867,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\QuestionnaireClonning.ar.resx">
       <Link>Resources\QuestionnaireClonning.ar.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\QuestionnaireClonning.cs.resx">
+      <Link>Resources\QuestionnaireClonning.cs.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\QuestionnaireClonning.es.resx">
       <Link>Resources\QuestionnaireClonning.es.resx</Link>
     </EmbeddedResource>
@@ -828,6 +897,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\QuestionnaireImport.ar.resx">
       <Link>Resources\QuestionnaireImport.ar.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\QuestionnaireImport.cs.resx">
+      <Link>Resources\QuestionnaireImport.cs.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\QuestionnaireImport.es.resx">
       <Link>Resources\QuestionnaireImport.es.resx</Link>
     </EmbeddedResource>
@@ -854,6 +926,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Reports.ar.resx">
       <Link>Resources\Reports.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Reports.cs.resx">
+      <Link>Resources\Reports.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Reports.es.resx">
       <Link>Resources\Reports.es.resx</Link>
@@ -885,6 +960,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\ReviewInterview.ar.resx">
       <Link>Resources\ReviewInterview.ar.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\ReviewInterview.cs.resx">
+      <Link>Resources\ReviewInterview.cs.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\ReviewInterview.es.resx">
       <Link>Resources\ReviewInterview.es.resx</Link>
     </EmbeddedResource>
@@ -906,6 +984,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\ReviewInterview.zh.resx">
       <Link>Resources\ReviewInterview.zh.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Roles.cs.resx">
+      <Link>Resources\Roles.cs.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Roles.resx">
       <Link>Resources\Roles.resx</Link>
     </EmbeddedResource>
@@ -917,6 +998,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Settings.ar.resx">
       <Link>Resources\Settings.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Settings.cs.resx">
+      <Link>Resources\Settings.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Settings.es.resx">
       <Link>Resources\Settings.es.resx</Link>
@@ -948,6 +1032,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\SyncLogMessages.ar.resx">
       <Link>Resources\SyncLogMessages.ar.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\SyncLogMessages.cs.resx">
+      <Link>Resources\SyncLogMessages.cs.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\SyncLogMessages.es.resx">
       <Link>Resources\SyncLogMessages.es.resx</Link>
     </EmbeddedResource>
@@ -975,6 +1062,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\SyncLogMessages.zh.resx">
       <Link>Resources\SyncLogMessages.zh.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\TabletLogs.cs.resx">
+      <Link>Resources\TabletLogs.cs.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\TabletLogs.resx">
       <Link>Resources\TabletLogs.resx</Link>
     </EmbeddedResource>
@@ -986,6 +1076,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\TabletSyncMessages.ar.resx">
       <Link>Resources\TabletSyncMessages.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\TabletSyncMessages.cs.resx">
+      <Link>Resources\TabletSyncMessages.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\TabletSyncMessages.es.resx">
       <Link>Resources\TabletSyncMessages.es.resx</Link>
@@ -1017,6 +1110,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Troubleshooting.ar.resx">
       <Link>Resources\Troubleshooting.ar.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Troubleshooting.cs.resx">
+      <Link>Resources\Troubleshooting.cs.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Troubleshooting.es.resx">
       <Link>Resources\Troubleshooting.es.resx</Link>
     </EmbeddedResource>
@@ -1041,6 +1137,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Troubleshooting.zh.resx">
       <Link>Resources\Troubleshooting.zh.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UnderConstruction.cs.resx">
+      <Link>Resources\UnderConstruction.cs.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UnderConstruction.resx">
       <Link>Resources\UnderConstruction.resx</Link>
     </EmbeddedResource>
@@ -1055,6 +1154,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UnderConstruction.zh.resx">
       <Link>Resources\UnderConstruction.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UploadUsers.cs.resx">
+      <Link>Resources\UploadUsers.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UploadUsers.fr.resx">
       <Link>Resources\UploadUsers.fr.resx</Link>
@@ -1076,6 +1178,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UserPreloadingVerificationMessages.ar.resx">
       <Link>Resources\UserPreloadingVerificationMessages.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UserPreloadingVerificationMessages.cs.resx">
+      <Link>Resources\UserPreloadingVerificationMessages.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\UserPreloadingVerificationMessages.es.resx">
       <Link>Resources\UserPreloadingVerificationMessages.es.resx</Link>
@@ -1100,6 +1205,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Users.ar.resx">
       <Link>Resources\Users.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Users.cs.resx">
+      <Link>Resources\Users.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Users.es.resx">
       <Link>Resources\Users.es.resx</Link>
@@ -1128,6 +1236,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Users.zh.resx">
       <Link>Resources\Users.zh.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewSettings.cs.resx">
+      <Link>Resources\WebInterviewSettings.cs.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewSettings.resx">
       <Link>Resources\WebInterviewSettings.resx</Link>
     </EmbeddedResource>
@@ -1139,6 +1250,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewSetup.ar.resx">
       <Link>Resources\WebInterviewSetup.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewSetup.cs.resx">
+      <Link>Resources\WebInterviewSetup.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewSetup.es.resx">
       <Link>Resources\WebInterviewSetup.es.resx</Link>
@@ -1167,6 +1281,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewUI.ar.resx">
       <Link>Resources\WebInterviewUI.ar.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewUI.cs.resx">
+      <Link>Resources\WebInterviewUI.cs.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewUI.es.resx">
       <Link>Resources\WebInterviewUI.es.resx</Link>
     </EmbeddedResource>
@@ -1193,6 +1310,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\WebInterviewUI.zh.resx">
       <Link>Resources\WebInterviewUI.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Workspaces.cs.resx">
+      <Link>Resources\Workspaces.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Headquarters.Core\Resources\Workspaces.resx">
       <Link>Resources\Workspaces.resx</Link>

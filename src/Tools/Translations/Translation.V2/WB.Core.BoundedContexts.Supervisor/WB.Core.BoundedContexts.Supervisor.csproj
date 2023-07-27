@@ -59,6 +59,12 @@
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\InterviewDetails.ar.resx">
       <Link>InterviewDetails.ar.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\InterviewDetails.cs.resx">
+      <Link>InterviewDetails.cs.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\InterviewDetails.es.resx">
+      <Link>InterviewDetails.es.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\InterviewDetails.resx">
       <Link>InterviewDetails.resx</Link>
     </EmbeddedResource>
@@ -70,6 +76,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\InterviewMessages.ar.resx">
       <Link>InterviewMessages.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\InterviewMessages.cs.resx">
+      <Link>InterviewMessages.cs.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\InterviewMessages.es.resx">
+      <Link>InterviewMessages.es.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\InterviewMessages.resx">
       <Link>InterviewMessages.resx</Link>
@@ -83,6 +95,12 @@
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\SupervisorDashboard.ar.resx">
       <Link>SupervisorDashboard.ar.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\SupervisorDashboard.cs.resx">
+      <Link>SupervisorDashboard.cs.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\SupervisorDashboard.es.resx">
+      <Link>SupervisorDashboard.es.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\SupervisorDashboard.resx">
       <Link>SupervisorDashboard.resx</Link>
     </EmbeddedResource>
@@ -94,6 +112,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\SupervisorUIResources.ar.resx">
       <Link>SupervisorUIResources.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\SupervisorUIResources.cs.resx">
+      <Link>SupervisorUIResources.cs.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\SupervisorUIResources.es.resx">
+      <Link>SupervisorUIResources.es.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\SupervisorUIResources.resx">
       <Link>SupervisorUIResources.resx</Link>
