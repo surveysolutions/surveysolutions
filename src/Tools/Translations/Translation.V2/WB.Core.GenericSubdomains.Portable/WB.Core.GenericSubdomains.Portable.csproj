@@ -59,6 +59,9 @@
     <EmbeddedResource Include="..\..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\Properties\Resources.ru.resx">
       <Link>Resources.ru.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\Properties\Resources.uk.resx">
+      <Link>Resources.uk.resx</Link>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

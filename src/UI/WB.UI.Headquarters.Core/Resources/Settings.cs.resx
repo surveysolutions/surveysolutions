@@ -333,4 +333,37 @@
   <data name="WebInterviewEmailNotifications_Title" xml:space="preserve">
     <value>Nastavení webového rozhovoru</value>
   </data>
+  <data name="ClearExportCache_Description" xml:space="preserve">
+    <value>Tato operace vymaže všechna data exportu mezipaměti. Další export bude trvat déle.</value>
+  </data>
+  <data name="ClearExportCache_Title" xml:space="preserve">
+    <value>Vymazat mezipaměť exportu</value>
+  </data>
+  <data name="GeographyQuestionAccuracyInMetersDescription" xml:space="preserve">
+    <value>Nastavení přesnosti v metrech pro zeměpisnou otázku</value>
+  </data>
+  <data name="GeographyQuestionPeriodInSecondsDescription" xml:space="preserve">
+    <value>Nastavte období v sekundách pro zeměpisnou otázku</value>
+  </data>
+  <data name="InterviewerGeographyQuestionAccuracyInMeters" xml:space="preserve">
+    <value>Přesnost zeměpisných otázek</value>
+  </data>
+  <data name="InterviewerGeographyQuestionPeriodInSeconds" xml:space="preserve">
+    <value>Období zeměpisných otázek</value>
+  </data>
+  <data name="RemoveExportCache" xml:space="preserve">
+    <value>Vymazat mezipaměť</value>
+  </data>
+  <data name="RemoveExportCache_Warning" xml:space="preserve">
+    <value>Varování! Jedná se o nevratné jednání</value>
+  </data>
+  <data name="RemoveExportCacheConfirm" xml:space="preserve">
+    <value>Opravdu chcete vymazat exportní mezipaměť? Všechny vygenerované exportní soubory budou ze serveru odstraněny a NEBUDOU k dispozici ke stažení.</value>
+  </data>
+  <data name="RemoveExportCacheFail" xml:space="preserve">
+    <value>Vymazání mezipaměti chyb</value>
+  </data>
+  <data name="RemoveExportCacheSuccess" xml:space="preserve">
+    <value>Mezipaměť byla úspěšně odstraněna</value>
+  </data>
 </root>

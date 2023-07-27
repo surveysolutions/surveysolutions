@@ -81,6 +81,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\Captcha.sq.resx">
       <Link>Resources\Captcha.sq.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\Captcha.uk.resx">
+      <Link>Resources\Captcha.uk.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\Captcha.zh.resx">
       <Link>Resources\Captcha.zh.resx</Link>
     </EmbeddedResource>
@@ -114,6 +117,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\ErrorMessages.sq.resx">
       <Link>Resources\ErrorMessages.sq.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\ErrorMessages.uk.resx">
+      <Link>Resources\ErrorMessages.uk.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\ErrorMessages.zh.resx">
       <Link>Resources\ErrorMessages.zh.resx</Link>
     </EmbeddedResource>
@@ -131,6 +137,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\UnderConstruction.sq.resx">
       <Link>Resources\UnderConstruction.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\UnderConstruction.uk.resx">
+      <Link>Resources\UnderConstruction.uk.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\UnderConstruction.zh.resx">
       <Link>Resources\UnderConstruction.zh.resx</Link>

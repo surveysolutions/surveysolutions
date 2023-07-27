@@ -325,4 +325,22 @@
   <data name="НasErrors" xml:space="preserve">
     <value>Obsahuje Chyby</value>
   </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Jasný</value>
+  </data>
+  <data name="Disable" xml:space="preserve">
+    <value>Vypnout</value>
+  </data>
+  <data name="Enable" xml:space="preserve">
+    <value>Zapnout</value>
+  </data>
+  <data name="LinkedUsers" xml:space="preserve">
+    <value>Propojení uživatelé</value>
+  </data>
+  <data name="LinkUser" xml:space="preserve">
+    <value>Uživatel</value>
+  </data>
+  <data name="Properties" xml:space="preserve">
+    <value>Vlastnosti</value>
+  </data>
 </root>

@@ -282,4 +282,7 @@
   <data name="WorkspaceRequired" xml:space="preserve">
     <value>Je vyžadována úloha</value>
   </data>
+  <data name="AllowRelinkTablet" xml:space="preserve">
+    <value>Povolit opětovné propojení s jiným zařízením se ztrátou dat na původním zařízení.</value>
+  </data>
 </root>

@@ -1,0 +1,379 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AssignmentLimitReached" xml:space="preserve">
+    <value>Ми збираємо всі інтерв'ю в цьому опитуванні.</value>
+  </data>
+  <data name="Complete" xml:space="preserve">
+    <value>Повний</value>
+  </data>
+  <data name="CompleteInterview" xml:space="preserve">
+    <value>Повне інтерв'ю</value>
+  </data>
+  <data name="CompletionText" xml:space="preserve">
+    <value>Це інтерв'ю завершено</value>
+  </data>
+  <data name="DiscardAndStart" xml:space="preserve">
+    <value>Відкрити</value>
+  </data>
+  <data name="DownloadAnswers" xml:space="preserve">
+    <value>Завантажити стенограму інтерв'ю</value>
+  </data>
+  <data name="DownloadAnswersHint" xml:space="preserve">
+    <value>Завантажити відповіді на інтерв'ю у форматі pdf</value>
+  </data>
+  <data name="Email_InvitationTemplate_Message" xml:space="preserve">
+    <value>Ласкаво просимо до %SURVEYNAME%!
+
+Щоб взяти участь в опитуванні, натисніть на наступне посилання: %SURVEYLINK% та введіть свій пароль: %ПАРОЛЬ%
+ 
+Дякуємо за співпрацю!</value>
+  </data>
+  <data name="Email_InvitationTemplate_Subject" xml:space="preserve">
+    <value>Запрошення взяти участь в %SURVEYNAME%</value>
+  </data>
+  <data name="Email_NoResponse_Message" xml:space="preserve">
+    <value>Ви отримуєте це нагадування, тому що не почали відповідати на %SURVEYNAME%!
+ 
+Щоб взяти участь в опитуванні, натисніть на наступне посилання: %SURVEYLINK% та введіть свій пароль: %ПАРОЛЬ%
+ 
+Дякуємо за співпрацю!</value>
+  </data>
+  <data name="Email_NoResponse_Subject" xml:space="preserve">
+    <value>Нагадуємо, не забудьте взяти участь у %SURVEYNAME%</value>
+  </data>
+  <data name="Email_PartialResponse_Message" xml:space="preserve">
+    <value>Ви отримуєте це нагадування, тому що ви почали відповідати на %SURVEYNAME%, але не завершили процес.
+ 
+Щоб продовжити опитування, натисніть на наступне посилання: %SURVEYLINK% і введіть свій пароль: %PASSWORD%.
+ 
+Будь ласка, дайте відповідь на всі відповідні запитання та натисніть кнопку «ЗАВЕРШИТИ», щоб надіслати свої відповіді.
+ 
+Дякуємо за співпрацю!</value>
+  </data>
+  <data name="Email_PartialResponse_Subject" xml:space="preserve">
+    <value>Нагадуємо, будь ласка, заповніть Вашу відповідь на %SURVEYNAME%</value>
+  </data>
+  <data name="Email_RejectEmail_Message" xml:space="preserve">
+    <value>Дякуємо, що взяли участь у %SURVEYNAME%!
+ 
+Під час обробки вашої відповіді наші співробітники виявили деякі проблеми, які вас просять розглянути.
+ 
+Щоб продовжити опитування, натисніть на наступне посилання: %SURVEYLINK% та введіть свій пароль: %PASSWORD%.
+ 
+Ми будемо вдячні, якщо ви спробуєте вирішити всі питання, зазначені у вашій відповіді, і натиснете кнопку "ЗАВЕРШИТИ", щоб надіслати свої відповіді.
+ 
+Дякуємо за співпрацю!</value>
+  </data>
+  <data name="Email_RejectEmail_Subject" xml:space="preserve">
+    <value>Ваша дія обов'язкова в %SURVEYNAME%</value>
+  </data>
+  <data name="EnterPasswordText" xml:space="preserve">
+    <value>Це посилання захищене паролем, який був розповсюджений разом із посиланням. Будь ласка, введіть його тут</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Помилка</value>
+  </data>
+  <data name="Error_CookiesTurnedOff" xml:space="preserve">
+    <value>Файли cookie не ввімкнено у вашому браузері. Будь ласка, увімкніть файли cookie в налаштуваннях вашого браузера, щоб продовжити</value>
+  </data>
+  <data name="Error_Forbidden" xml:space="preserve">
+    <value>Заборонений</value>
+  </data>
+  <data name="Error_InterviewExpired" xml:space="preserve">
+    <value>Термін дії посилання закінчився</value>
+  </data>
+  <data name="Error_NoActionsNeeded" xml:space="preserve">
+    <value>Інформація про це інтерв'ю була записана. Ніяких подальших дій робити не потрібно</value>
+  </data>
+  <data name="Error_NotFound" xml:space="preserve">
+    <value>Співбесіда не знайдена або немає необхідності в новому інтерв'ю</value>
+  </data>
+  <data name="Error_UserNotAuthorised" xml:space="preserve">
+    <value>Користувач не авторизований</value>
+  </data>
+  <data name="Filters_Answered" xml:space="preserve">
+    <value>Відповіли</value>
+  </data>
+  <data name="Filters_ClearSelection" xml:space="preserve">
+    <value>Скинути всі фільтри</value>
+  </data>
+  <data name="Filters_Flagged" xml:space="preserve">
+    <value>Позначені</value>
+  </data>
+  <data name="Filters_ForInterviewer" xml:space="preserve">
+    <value>Для інтерв'юера</value>
+  </data>
+  <data name="Filters_ForSupervisor" xml:space="preserve">
+    <value>Для наукового керівника</value>
+  </data>
+  <data name="Filters_Invalid" xml:space="preserve">
+    <value>Інвалід</value>
+  </data>
+  <data name="Filters_NotAnswered" xml:space="preserve">
+    <value>Не відповіли</value>
+  </data>
+  <data name="Filters_NotFlagged" xml:space="preserve">
+    <value>Без прапора</value>
+  </data>
+  <data name="Filters_Title" xml:space="preserve">
+    <value>Фільтрувати запитання</value>
+  </data>
+  <data name="Filters_Valid" xml:space="preserve">
+    <value>Дійсний</value>
+  </data>
+  <data name="Filters_WithComments" xml:space="preserve">
+    <value>З коментарями</value>
+  </data>
+  <data name="FinishInterviewText" xml:space="preserve">
+    <value>Це інтерв'ю завершено</value>
+  </data>
+  <data name="HasPreviousStartedInterview" xml:space="preserve">
+    <value>Ви почали співбесіду</value>
+  </data>
+  <data name="InProgressText" xml:space="preserve">
+    <value>У розробці</value>
+  </data>
+  <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve">
+    <value>{{value}} відповіді</value>
+  </data>
+  <data name="Interview_Group_AnsweredQuestions_One" xml:space="preserve">
+    <value>одна відповідь</value>
+  </data>
+  <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve">
+    <value>Помилки {{value}}</value>
+  </data>
+  <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve">
+    <value>одна помилка</value>
+  </data>
+  <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
+    <value>Розділ завершено: {{value}}</value>
+  </data>
+  <data name="Interview_Group_Status_NotStarted" xml:space="preserve">
+    <value>Розділ не розпочато</value>
+  </data>
+  <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve">
+    <value>Розділ розпочато: {{value}}</value>
+  </data>
+  <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve">
+    <value>{{value}} підрозділи</value>
+  </data>
+  <data name="Interview_Group_Subgroups_One" xml:space="preserve">
+    <value>Один підрозділ</value>
+  </data>
+  <data name="Interview_Group_Subgroups_Zero" xml:space="preserve">
+    <value>без підрозділів</value>
+  </data>
+  <data name="InterviewCompletionDateFormatText" xml:space="preserve">
+    <value>Дата завершення співбесіди: </value>
+  </data>
+  <data name="InterviewIdFormatText" xml:space="preserve">
+    <value>ID інтерв'ю: {0}</value>
+  </data>
+  <data name="InterviewNotFound" xml:space="preserve">
+    <value>Інтерв'ю не знайдено.</value>
+  </data>
+  <data name="InterviewReceivedByInterviewer" xml:space="preserve">
+    <value>Не вдається змінити інтерв'ю, отримане за допомогою пристрою</value>
+  </data>
+  <data name="InterviewSizeLimitReached" xml:space="preserve">
+    <value>Інтерв'ю містить загальну кількість екземплярів та питань, що перевищують системні ліміти.</value>
+  </data>
+  <data name="InterviewStartDateFormatText" xml:space="preserve">
+    <value>Дата початку співбесіди: </value>
+  </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>Неправильний пароль</value>
+  </data>
+  <data name="InvitationSmallText" xml:space="preserve">
+    <value>Процес співбесіди вимагає підключення до Інтернету. Додаткове програмне забезпечення не потрібне.</value>
+  </data>
+  <data name="InvitationText" xml:space="preserve">
+    <value>Вас запрошують взяти участь в опитуванні: "%QUESTIONNAIRE%"</value>
+  </data>
+  <data name="LinkToWebInterviewExample" xml:space="preserve">
+    <value>Приклад посилання на цільову сторінку веб-інтерв'ю</value>
+  </data>
+  <data name="NoteForSupervisor" xml:space="preserve">
+    <value>Примітка для наукового керівника</value>
+  </data>
+  <data name="NotStartedText" xml:space="preserve">
+    <value>Не виконано</value>
+  </data>
+  <data name="Original_Language" xml:space="preserve">
+    <value>Оригінальний</value>
+  </data>
+  <data name="OrStartInterview" xml:space="preserve">
+    <value>Або ви можете почати нову співбесіду</value>
+  </data>
+  <data name="PictureQuestionNotAPicture" xml:space="preserve">
+    <value>Приймаються лише файли зображень</value>
+  </data>
+  <data name="PleaseFillCaptcha" xml:space="preserve">
+    <value>Будь ласка, заповніть поле капчі</value>
+  </data>
+  <data name="PoweredBy" xml:space="preserve">
+    <value>Наданий</value>
+  </data>
+  <data name="QuestionnaireNameFormat" xml:space="preserve">
+    <value>{0} (вірш {1})</value>
+  </data>
+  <data name="RefreshPage" xml:space="preserve">
+    <value>Оновити сторінку</value>
+  </data>
+  <data name="Resume_InvitationSmallText" xml:space="preserve">
+    <value>Процес співбесіди вимагає підключення до Інтернету, додаткове програмне забезпечення не потрібне</value>
+  </data>
+  <data name="Resume_InvitationText" xml:space="preserve">
+    <value>Перейти до інтерв'ю можна в наступному опитуванні: "%АНКЕТА%"</value>
+  </data>
+  <data name="Resume_WelcomeText" xml:space="preserve">
+    <value>Привіт і ласкаво просимо до веб-опитування Survey Solutions</value>
+  </data>
+  <data name="ResumeInterview" xml:space="preserve">
+    <value>Резюме співбесіди</value>
+  </data>
+  <data name="ServerUnderLoad" xml:space="preserve">
+    <value>На жаль, занадто багато людей одночасно відвідують цей веб-сайт. Ми працюємо над цією проблемою. Повторіть спробу пізніше.</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Почати нову співбесіду</value>
+  </data>
+  <data name="StartedInterviewText" xml:space="preserve">
+    <value>Це інтерв'ю не завершено</value>
+  </data>
+  <data name="StartPageTitle" xml:space="preserve">
+    <value>Веб-опитування</value>
+  </data>
+  <data name="SurveyFormatText" xml:space="preserve">
+    <value>Опитування: "%АНКЕТА%"</value>
+  </data>
+  <data name="ToInterview" xml:space="preserve">
+    <value>На співбесіду</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Попередження</value>
+  </data>
+  <data name="WebSurvey" xml:space="preserve">
+    <value>Веб-опитування Рішення для опитувань</value>
+  </data>
+  <data name="WelcomeText" xml:space="preserve">
+    <value>Привіт і ласкаво просимо до веб-опитування Survey Solutions</value>
+  </data>
+</root>

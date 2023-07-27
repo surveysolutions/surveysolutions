@@ -74,6 +74,9 @@
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\InterviewDetails.ru.resx">
       <Link>InterviewDetails.ru.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\InterviewDetails.uk.resx">
+      <Link>InterviewDetails.uk.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\InterviewMessages.ar.resx">
       <Link>InterviewMessages.ar.resx</Link>
     </EmbeddedResource>
@@ -91,6 +94,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\InterviewMessages.ru.resx">
       <Link>InterviewMessages.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\InterviewMessages.uk.resx">
+      <Link>InterviewMessages.uk.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\SupervisorDashboard.ar.resx">
       <Link>SupervisorDashboard.ar.resx</Link>
@@ -110,6 +116,9 @@
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\SupervisorDashboard.ru.resx">
       <Link>SupervisorDashboard.ru.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\SupervisorDashboard.uk.resx">
+      <Link>SupervisorDashboard.uk.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\SupervisorUIResources.ar.resx">
       <Link>SupervisorUIResources.ar.resx</Link>
     </EmbeddedResource>
@@ -127,6 +136,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\SupervisorUIResources.ru.resx">
       <Link>SupervisorUIResources.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Properties\SupervisorUIResources.uk.resx">
+      <Link>SupervisorUIResources.uk.resx</Link>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

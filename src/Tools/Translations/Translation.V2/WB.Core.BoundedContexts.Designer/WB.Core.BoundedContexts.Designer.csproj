@@ -84,6 +84,9 @@
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Common.ar.resx">
       <Link>Resources\Common.ar.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Common.cs.resx">
+      <Link>Resources\Common.cs.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Common.fr.resx">
       <Link>Resources\Common.fr.resx</Link>
     </EmbeddedResource>
@@ -99,11 +102,17 @@
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Common.sq.resx">
       <Link>Resources\Common.sq.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Common.uk.resx">
+      <Link>Resources\Common.uk.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Common.zh.resx">
       <Link>Resources\Common.zh.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Country.ar.resx">
       <Link>Resources\Country.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Country.cs.resx">
+      <Link>Resources\Country.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Country.resx">
       <Link>Resources\Country.resx</Link>
@@ -114,11 +123,17 @@
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Country.ru.resx">
       <Link>Resources\Country.ru.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Country.uk.resx">
+      <Link>Resources\Country.uk.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Country.zh.resx">
       <Link>Resources\Country.zh.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.ar.resx">
       <Link>Resources\ExceptionMessages.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.cs.resx">
+      <Link>Resources\ExceptionMessages.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.es.resx">
       <Link>Resources\ExceptionMessages.es.resx</Link>
@@ -138,8 +153,14 @@
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.sq.resx">
       <Link>Resources\ExceptionMessages.sq.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.uk.resx">
+      <Link>Resources\ExceptionMessages.uk.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.zh.resx">
       <Link>Resources\ExceptionMessages.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ImportExportVerificationMessages.cs.resx">
+      <Link>Resources\ImportExportVerificationMessages.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ImportExportVerificationMessages.resx">
       <Link>Resources\ImportExportVerificationMessages.resx</Link>
@@ -147,8 +168,14 @@
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ImportExportVerificationMessages.ru.resx">
       <Link>Resources\ImportExportVerificationMessages.ru.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ImportExportVerificationMessages.uk.resx">
+      <Link>Resources\ImportExportVerificationMessages.uk.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\KindOfData.ar.resx">
       <Link>Resources\KindOfData.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\KindOfData.cs.resx">
+      <Link>Resources\KindOfData.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\KindOfData.resx">
       <Link>Resources\KindOfData.resx</Link>
@@ -162,11 +189,17 @@
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\KindOfData.sq.resx">
       <Link>Resources\KindOfData.sq.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\KindOfData.uk.resx">
+      <Link>Resources\KindOfData.uk.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\KindOfData.zh.resx">
       <Link>Resources\KindOfData.zh.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ModeOfDataCollection.ar.resx">
       <Link>Resources\ModeOfDataCollection.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ModeOfDataCollection.cs.resx">
+      <Link>Resources\ModeOfDataCollection.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ModeOfDataCollection.resx">
       <Link>Resources\ModeOfDataCollection.resx</Link>
@@ -177,8 +210,14 @@
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ModeOfDataCollection.ru.resx">
       <Link>Resources\ModeOfDataCollection.ru.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ModeOfDataCollection.uk.resx">
+      <Link>Resources\ModeOfDataCollection.uk.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.ar.resx">
       <Link>Resources\PdfStrings.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.cs.resx">
+      <Link>Resources\PdfStrings.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.es.resx">
       <Link>Resources\PdfStrings.es.resx</Link>
@@ -198,11 +237,17 @@
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.sq.resx">
       <Link>Resources\PdfStrings.sq.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.uk.resx">
+      <Link>Resources\PdfStrings.uk.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.zh.resx">
       <Link>Resources\PdfStrings.zh.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\QuestionnaireEditor.ar.resx">
       <Link>Resources\QuestionnaireEditor.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\QuestionnaireEditor.cs.resx">
+      <Link>Resources\QuestionnaireEditor.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\QuestionnaireEditor.es.resx">
       <Link>Resources\QuestionnaireEditor.es.resx</Link>
@@ -222,11 +267,17 @@
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\QuestionnaireEditor.sq.resx">
       <Link>Resources\QuestionnaireEditor.sq.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\QuestionnaireEditor.uk.resx">
+      <Link>Resources\QuestionnaireEditor.uk.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\QuestionnaireEditor.zh.resx">
       <Link>Resources\QuestionnaireEditor.zh.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Roster.ar.resx">
       <Link>Resources\Roster.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Roster.cs.resx">
+      <Link>Resources\Roster.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Roster.es.resx">
       <Link>Resources\Roster.es.resx</Link>
@@ -246,11 +297,17 @@
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Roster.sq.resx">
       <Link>Resources\Roster.sq.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Roster.uk.resx">
+      <Link>Resources\Roster.uk.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Roster.zh.resx">
       <Link>Resources\Roster.zh.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\StudyType.ar.resx">
       <Link>Resources\StudyType.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\StudyType.cs.resx">
+      <Link>Resources\StudyType.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\StudyType.resx">
       <Link>Resources\StudyType.resx</Link>
@@ -264,11 +321,17 @@
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\StudyType.sq.resx">
       <Link>Resources\StudyType.sq.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\StudyType.uk.resx">
+      <Link>Resources\StudyType.uk.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\StudyType.zh.resx">
       <Link>Resources\StudyType.zh.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.ar.resx">
       <Link>Resources\VerificationMessages.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.cs.resx">
+      <Link>Resources\VerificationMessages.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.es.resx">
       <Link>Resources\VerificationMessages.es.resx</Link>
@@ -287,6 +350,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.sq.resx">
       <Link>Resources\VerificationMessages.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.uk.resx">
+      <Link>Resources\VerificationMessages.uk.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.zh.resx">
       <Link>Resources\VerificationMessages.zh.resx</Link>
