@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -8,27 +7,17 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using DotSpatial.Projections;
-using GeoAPI.CoordinateSystems;
-using GeoAPI.CoordinateSystems.Transformations;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using NetTopologySuite.Dissolve;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
-using NetTopologySuite.Geometries.Implementation;
 using NetTopologySuite.IO;
 using NetTopologySuite.IO.Esri;
-using NetTopologySuite.IO.Esri.Dbf;
-using NetTopologySuite.IO.Esri.Shapefiles.Readers;
-using NetTopologySuite.IO.Esri.Shp.Readers;
 using NetTopologySuite.Operation.Union;
 using NetTopologySuite.Simplify;
 using Newtonsoft.Json;
 using NHibernate.Linq;
-using ProjNet.Converters.WellKnownText;
-using ProjNet.CoordinateSystems;
-using ProjNet.CoordinateSystems.Transformations;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -36,7 +25,6 @@ using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
@@ -351,18 +339,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         var sourceProjectionInfo = ProjectionInfo.FromEsriString(projection);
                         if (!sourceProjectionInfo.IsLatLon)
                         {
-                            
-                            // var target = KnownCoordinateSystems.Geographic.Projected.UtmWgs1984;
                             var target = KnownCoordinateSystems.Geographic.World.WGS1984;
                             coordinateTransformationFilter = new CoordinateTransformationFilter(sourceProjectionInfo, target);
-
-                            
-                            // ICoordinateSystem projCoordinateSystem = CoordinateSystemWktReader.Parse(projection, shapefileReader.Encoding) as ICoordinateSystem;
-                            // IGeographicCoordinateSystem targetCoordinateSystem = GeographicCoordinateSystem.WGS84;
-                            //
-                            // CoordinateTransformationFactory coordinateTransformationFactory = new CoordinateTransformationFactory();
-                            // var coordinateTransformation = coordinateTransformationFactory.CreateFromCoordinateSystems(projCoordinateSystem, targetCoordinateSystem);
-                            //coordinateTransformationFilter = new CoordinateTransformationFilter(coordinateTransformation);
 
                             var minHeaderCoordinate = coordinateTransformationFilter.Transform(headerBounds.MinX, headerBounds.MinY);
                             item.XMinVal = minHeaderCoordinate.X;
@@ -370,30 +348,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             var maxHeaderCoordinate = coordinateTransformationFilter.Transform(headerBounds.MaxX, headerBounds.MaxY);
                             item.XMaxVal = maxHeaderCoordinate.X;
                             item.YMaxVal = maxHeaderCoordinate.Y;
-                            
-                            
-                            
-                            
-                            //double[] toPoint = coordinateTransformation.MathTransform.Transform(shapefileReader.Geometry.Coordinates);
-                            //
-                            // new GeometryFactory(new PrecisionModel())
-                            // WKTReader wktReader = new WKTReader(GeometryFactory.Default);
-                            // var geometry = wktReader.Read(projection);
-                            // var wgs1984 = KnownCoordinateSystems.Projected.UtmWgs1984;
-                            // shapefileReader.
-                            //new DotSpatial.Projections.DatumTransformStage()
-                            //FeatureSet
-                            //
                         }
-                        
-                       
-                        //NetTopologySuite.CoordinateSystems.Transformations.GeometryTransform.Projections.DotSpatialMathTransform
-                        
-                        var coordinateSystemCategory = new DotSpatial.Projections.CoordinateSystemCategory();
-                        //coordinateSystemCategory.GetProjection()
-                        //DotSpatial.Projections.KnownCoordinateSystems.Projected.UtmWgs1984;
-
-                        
                         
                         FeatureCollection fc = new FeatureCollection();
                         HashSet<string> checkOnUnique = new HashSet<string>();
@@ -480,45 +435,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             
             geometry.Apply(coordinateTransformation);
             return geometry;
-        }
-
-        private class CoordinateTransformationFilter : ICoordinateFilter
-        {
-            private readonly ProjectionInfo source;
-            private readonly ProjectionInfo target;
-
-            public CoordinateTransformationFilter(ProjectionInfo source, ProjectionInfo target)
-            {
-                this.source = source;
-                this.target = target;
-            }
-            // private readonly ICoordinateTransformation coordinateTransformation;
-            //
-            // public CoordinateTransformationFilter(ICoordinateTransformation coordinateTransformation)
-            // {
-            //     this.coordinateTransformation = coordinateTransformation;
-            // }
-
-            public void Filter(Coordinate coord)
-            {
-                var coordinate = new double[] { coord.X, coord.Y };
-                Reproject.ReprojectPoints(coordinate, new double[] { coord.Z }, source, target, 0, 1);
-                coord.X = coordinate[0];
-                coord.Y = coordinate[1];
-                // var coordinate = new GeoAPI.Geometries.Coordinate(coord.X, coord.Y, coord.Z);
-                //
-                // var transform = coordinateTransformation.MathTransform.Transform(coordinate);
-                // coord.X = transform.X;
-                // coord.Y = transform.Y;
-                // coord.Z = transform.Z;
-            }
-            
-            public Coordinate Transform(double x, double y)
-            {
-                var coordinate = new double[] { x, y };
-                Reproject.ReprojectPoints(coordinate, Array.Empty<double>(), source, target, 0, 1);
-                return new Coordinate(coordinate[0], coordinate[1]);
-            }
         }
 
         private static string GetGeoJson(FeatureCollection fc)
