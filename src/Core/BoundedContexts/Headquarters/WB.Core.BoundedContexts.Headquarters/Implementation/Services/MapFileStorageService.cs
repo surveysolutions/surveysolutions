@@ -348,24 +348,32 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         
                         CoordinateTransformationFilter coordinateTransformationFilter = null;
                         var projection = shapefileReader.Projection;
-                        var projectionInfo = ProjectionInfo.FromEsriString(projection);
-                        if (!projectionInfo.IsLatLon)
+                        var sourceProjectionInfo = ProjectionInfo.FromEsriString(projection);
+                        if (!sourceProjectionInfo.IsLatLon)
                         {
-                            ICoordinateSystem projCoordinateSystem = CoordinateSystemWktReader.Parse(projection, shapefileReader.Encoding) as ICoordinateSystem;
-                            IGeographicCoordinateSystem targetCoordinateSystem = GeographicCoordinateSystem.WGS84;
                             
-                            CoordinateTransformationFactory coordinateTransformationFactory = new CoordinateTransformationFactory();
-                            var coordinateTransformation = coordinateTransformationFactory.CreateFromCoordinateSystems(projCoordinateSystem, targetCoordinateSystem);
-                            coordinateTransformationFilter = new CoordinateTransformationFilter(coordinateTransformation);
+                            // var target = KnownCoordinateSystems.Geographic.Projected.UtmWgs1984;
+                            var target = KnownCoordinateSystems.Geographic.World.WGS1984;
+                            coordinateTransformationFilter = new CoordinateTransformationFilter(sourceProjectionInfo, target);
 
-                            var minHeaderCoordinate = coordinateTransformation.MathTransform.Transform(
-                                new GeoAPI.Geometries.Coordinate(headerBounds.MinX, headerBounds.MinY));
+                            
+                            // ICoordinateSystem projCoordinateSystem = CoordinateSystemWktReader.Parse(projection, shapefileReader.Encoding) as ICoordinateSystem;
+                            // IGeographicCoordinateSystem targetCoordinateSystem = GeographicCoordinateSystem.WGS84;
+                            //
+                            // CoordinateTransformationFactory coordinateTransformationFactory = new CoordinateTransformationFactory();
+                            // var coordinateTransformation = coordinateTransformationFactory.CreateFromCoordinateSystems(projCoordinateSystem, targetCoordinateSystem);
+                            //coordinateTransformationFilter = new CoordinateTransformationFilter(coordinateTransformation);
+
+                            var minHeaderCoordinate = coordinateTransformationFilter.Transform(headerBounds.MinX, headerBounds.MinY);
                             item.XMinVal = minHeaderCoordinate.X;
                             item.YMinVal = minHeaderCoordinate.Y;
-                            var maxHeaderCoordinate = coordinateTransformation.MathTransform.Transform(
-                                new GeoAPI.Geometries.Coordinate(headerBounds.MaxX, headerBounds.MaxY));
+                            var maxHeaderCoordinate = coordinateTransformationFilter.Transform(headerBounds.MaxX, headerBounds.MaxY);
                             item.XMaxVal = maxHeaderCoordinate.X;
                             item.YMaxVal = maxHeaderCoordinate.Y;
+                            
+                            
+                            
+                            
                             //double[] toPoint = coordinateTransformation.MathTransform.Transform(shapefileReader.Geometry.Coordinates);
                             //
                             // new GeometryFactory(new PrecisionModel())
@@ -375,7 +383,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             // shapefileReader.
                             //new DotSpatial.Projections.DatumTransformStage()
                             //FeatureSet
-                            //Reproject.ReprojectPoints();
+                            //
                         }
                         
                        
@@ -476,20 +484,40 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         private class CoordinateTransformationFilter : ICoordinateFilter
         {
-            private readonly ICoordinateTransformation coordinateTransformation;
+            private readonly ProjectionInfo source;
+            private readonly ProjectionInfo target;
 
-            public CoordinateTransformationFilter(ICoordinateTransformation coordinateTransformation)
+            public CoordinateTransformationFilter(ProjectionInfo source, ProjectionInfo target)
             {
-                this.coordinateTransformation = coordinateTransformation;
+                this.source = source;
+                this.target = target;
             }
+            // private readonly ICoordinateTransformation coordinateTransformation;
+            //
+            // public CoordinateTransformationFilter(ICoordinateTransformation coordinateTransformation)
+            // {
+            //     this.coordinateTransformation = coordinateTransformation;
+            // }
 
             public void Filter(Coordinate coord)
             {
-                var coordinate = new GeoAPI.Geometries.Coordinate(coord.X, coord.Y, coord.Z);
-                var transform = coordinateTransformation.MathTransform.Transform(coordinate);
-                coord.X = transform.X;
-                coord.Y = transform.Y;
-                coord.Z = transform.Z;
+                var coordinate = new double[] { coord.X, coord.Y };
+                Reproject.ReprojectPoints(coordinate, new double[] { coord.Z }, source, target, 0, 1);
+                coord.X = coordinate[0];
+                coord.Y = coordinate[1];
+                // var coordinate = new GeoAPI.Geometries.Coordinate(coord.X, coord.Y, coord.Z);
+                //
+                // var transform = coordinateTransformation.MathTransform.Transform(coordinate);
+                // coord.X = transform.X;
+                // coord.Y = transform.Y;
+                // coord.Z = transform.Z;
+            }
+            
+            public Coordinate Transform(double x, double y)
+            {
+                var coordinate = new double[] { x, y };
+                Reproject.ReprojectPoints(coordinate, Array.Empty<double>(), source, target, 0, 1);
+                return new Coordinate(coordinate[0], coordinate[1]);
             }
         }
 
