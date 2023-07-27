@@ -7,12 +7,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using DotSpatial.Projections;
+using GeoAPI.CoordinateSystems;
+using GeoAPI.CoordinateSystems.Transformations;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NetTopologySuite.Dissolve;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
+using NetTopologySuite.Geometries.Implementation;
 using NetTopologySuite.IO;
 using NetTopologySuite.IO.Esri;
 using NetTopologySuite.IO.Esri.Dbf;
@@ -22,6 +26,9 @@ using NetTopologySuite.Operation.Union;
 using NetTopologySuite.Simplify;
 using Newtonsoft.Json;
 using NHibernate.Linq;
+using ProjNet.Converters.WellKnownText;
+using ProjNet.CoordinateSystems;
+using ProjNet.CoordinateSystems.Transformations;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -319,6 +326,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                         using var shapefileReader = Shapefile.OpenRead(shapeFilePath);
                        
+                        var headerBounds = shapefileReader.BoundingBox;
+                        item.XMinVal = headerBounds.MinX;
+                        item.YMinVal = headerBounds.MinY;
+                        item.XMaxVal = headerBounds.MaxX;
+                        item.YMaxVal = headerBounds.MaxY;
+                        item.ShapeType = shapefileReader.ShapeType.ToString();
+                        item.Wkid = 4326;  //geographic coordinates Wgs84
+                        item.ShapesCount = shapefileReader.RecordCount;
+                        
                         int? labelIndexOf = null;
 
                         for (int i = 0; i < shapefileReader.Fields.Count; i++)
@@ -329,17 +345,47 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                                 break;
                             }
                         }
-
+                        
+                        CoordinateTransformationFilter coordinateTransformationFilter = null;
                         var projection = shapefileReader.Projection;
+                        var projectionInfo = ProjectionInfo.FromEsriString(projection);
+                        if (!projectionInfo.IsLatLon)
+                        {
+                            ICoordinateSystem projCoordinateSystem = CoordinateSystemWktReader.Parse(projection, shapefileReader.Encoding) as ICoordinateSystem;
+                            IGeographicCoordinateSystem targetCoordinateSystem = GeographicCoordinateSystem.WGS84;
+                            
+                            CoordinateTransformationFactory coordinateTransformationFactory = new CoordinateTransformationFactory();
+                            var coordinateTransformation = coordinateTransformationFactory.CreateFromCoordinateSystems(projCoordinateSystem, targetCoordinateSystem);
+                            coordinateTransformationFilter = new CoordinateTransformationFilter(coordinateTransformation);
 
-                        var headerBounds = shapefileReader.BoundingBox;
-                        item.XMinVal = headerBounds.MinX;
-                        item.YMinVal = headerBounds.MinY;
-                        item.XMaxVal = headerBounds.MaxX;
-                        item.YMaxVal = headerBounds.MaxY;
-                        item.ShapeType = shapefileReader.ShapeType.ToString();
-                        item.Wkid = 4326;  //geographic coordinates Wgs84
-                        item.ShapesCount = shapefileReader.RecordCount;
+                            var minHeaderCoordinate = coordinateTransformation.MathTransform.Transform(
+                                new GeoAPI.Geometries.Coordinate(headerBounds.MinX, headerBounds.MinY));
+                            item.XMinVal = minHeaderCoordinate.X;
+                            item.YMinVal = minHeaderCoordinate.Y;
+                            var maxHeaderCoordinate = coordinateTransformation.MathTransform.Transform(
+                                new GeoAPI.Geometries.Coordinate(headerBounds.MaxX, headerBounds.MaxY));
+                            item.XMaxVal = maxHeaderCoordinate.X;
+                            item.YMaxVal = maxHeaderCoordinate.Y;
+                            //double[] toPoint = coordinateTransformation.MathTransform.Transform(shapefileReader.Geometry.Coordinates);
+                            //
+                            // new GeometryFactory(new PrecisionModel())
+                            // WKTReader wktReader = new WKTReader(GeometryFactory.Default);
+                            // var geometry = wktReader.Read(projection);
+                            // var wgs1984 = KnownCoordinateSystems.Projected.UtmWgs1984;
+                            // shapefileReader.
+                            //new DotSpatial.Projections.DatumTransformStage()
+                            //FeatureSet
+                            //Reproject.ReprojectPoints();
+                        }
+                        
+                       
+                        //NetTopologySuite.CoordinateSystems.Transformations.GeometryTransform.Projections.DotSpatialMathTransform
+                        
+                        var coordinateSystemCategory = new DotSpatial.Projections.CoordinateSystemCategory();
+                        //coordinateSystemCategory.GetProjection()
+                        //DotSpatial.Projections.KnownCoordinateSystems.Projected.UtmWgs1984;
+
+                        
                         
                         FeatureCollection fc = new FeatureCollection();
                         HashSet<string> checkOnUnique = new HashSet<string>();
@@ -365,7 +411,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                                 }
                             }
 
-                            IFeature feature = new Feature(readFeature.Geometry, attribs);
+                            var featureGeometry = Transform(readFeature.Geometry, coordinateTransformationFilter);
+                            IFeature feature = new Feature(featureGeometry, attribs);
                             fc.Add(feature);
                         }
 
@@ -418,22 +465,31 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             return item;
         }
 
-        private void ThrowIdInvalidFileData(string mapFile, IEnumerable reader)
+        private Geometry Transform(Geometry geometry, CoordinateTransformationFilter coordinateTransformation)
         {
-            IEnumerator enumerator = null;
+            if (coordinateTransformation == null)
+                return geometry;
+            
+            geometry.Apply(coordinateTransformation);
+            return geometry;
+        }
 
-            try
+        private class CoordinateTransformationFilter : ICoordinateFilter
+        {
+            private readonly ICoordinateTransformation coordinateTransformation;
+
+            public CoordinateTransformationFilter(ICoordinateTransformation coordinateTransformation)
             {
-                enumerator = reader.GetEnumerator();
+                this.coordinateTransformation = coordinateTransformation;
             }
-            catch (Exception ex)
+
+            public void Filter(Coordinate coord)
             {
-                logger.LogError(ex, "Can't read {MapName} file", mapFile);
-                throw new ArgumentException($"Can't read {mapFile} file. File is corrupt.", ex);
-            }
-            finally
-            {
-                (enumerator as IDisposable)?.Dispose();
+                var coordinate = new GeoAPI.Geometries.Coordinate(coord.X, coord.Y, coord.Z);
+                var transform = coordinateTransformation.MathTransform.Transform(coordinate);
+                coord.X = transform.X;
+                coord.Y = transform.Y;
+                coord.Z = transform.Z;
             }
         }
 
