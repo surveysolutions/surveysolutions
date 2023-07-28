@@ -130,8 +130,8 @@
     <value>Ви можете затверджувати інтерв'ю лише з такими статусами: {{status1}}, {{status2}} та {{status3}}.</value>
   </data>
   <data name="ApproveConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; інтерв'ю (інтерв'ю) буде схвалено.&lt;/h3&gt;
-&lt;b&gt;Примітка!&lt;/b&gt; Інтерв'ю можна затверджувати лише з таким статусом: {{status1}}, {{status2}} та &lt;i&gt;{#3&lt;/i&gt;&lt;i&gt;}&lt;/i&gt;&lt;i&gt;&lt;/i&gt;.</value>
+      <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; інтерв'ю (інтерв'ю) буде схвалено.&lt;/h3&gt;
+&lt;b&gt;Примітка!&lt;/b&gt; Інтерв'ю можна затверджувати лише з таким статусом: &lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}}&lt;/i&gt; та &lt;i&gt;{{status3}} &lt;/i&gt;.</value>
   </data>
   <data name="ApproveReceivedWarning" xml:space="preserve">
     <value>Поточні відповідальні інтерв'юери не будуть повідомлені про схвалення інтерв'ю (інтерв'ю) до наступної синхронізації. Якщо вони вже почали працювати над співбесідою, всі дані, які вони ввели до наступної синхронізації, будуть ВІДКИНУТІ!</value>
