@@ -2316,15 +2316,6 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show strings.
-        /// </summary>
-        public static string QuestionShowStrings {
-            get {
-                return ResourceManager.GetString("QuestionShowStrings", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to search results.
         /// </summary>
         public static string QuestionsSearchEntities {
@@ -2546,15 +2537,6 @@ namespace WB.UI.Designer.Resources {
         public static string RosterName {
             get {
                 return ResourceManager.GetString("RosterName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Show strings.
-        /// </summary>
-        public static string RosterShowStrings {
-            get {
-                return ResourceManager.GetString("RosterShowStrings", resourceCulture);
             }
         }
         

@@ -537,9 +537,6 @@
   <data name="QuestionScope" xml:space="preserve">
     <value>Champ de la question</value>
   </data>
-  <data name="QuestionShowStrings" xml:space="preserve">
-    <value>Afficher les chaînes</value>
-  </data>
   <data name="QuestionText" xml:space="preserve">
     <value>Question de type texte</value>
   </data>
@@ -572,9 +569,6 @@
   </data>
   <data name="RosterName" xml:space="preserve">
     <value>Nom du roster</value>
-  </data>
-  <data name="RosterShowStrings" xml:space="preserve">
-    <value>Afficher les chaînes</value>
   </data>
   <data name="RosterSource" xml:space="preserve">
     <value>Source de Roster</value>

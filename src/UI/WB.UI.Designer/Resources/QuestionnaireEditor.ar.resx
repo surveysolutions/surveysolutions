@@ -522,9 +522,6 @@
   <data name="QuestionScope" xml:space="preserve">
     <value>نطاق السؤال</value>
   </data>
-  <data name="QuestionShowStrings" xml:space="preserve">
-    <value>اظهار السلاسل</value>
-  </data>
   <data name="QuestionText" xml:space="preserve">
     <value>نص السؤال</value>
   </data>
@@ -560,9 +557,6 @@
   </data>
   <data name="RosterName" xml:space="preserve">
     <value>اسم القائمة</value>
-  </data>
-  <data name="RosterShowStrings" xml:space="preserve">
-    <value>اظهار السلاسل</value>
   </data>
   <data name="RosterSource" xml:space="preserve">
     <value>مصدر القائمة</value>

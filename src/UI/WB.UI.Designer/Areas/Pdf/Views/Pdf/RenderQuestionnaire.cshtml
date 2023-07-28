@@ -18,7 +18,7 @@
 	@*is passed as get param along with other on pdf generation and exceeds 2K limit for unicode*@
 	<title>@*@(questionnaire.Title.Length < 70 ? questionnaire.Title : questionnaire.Title.Substring(0, 70))*@</title>
 	<!-- pdf:css -->
-	<style>@Html.Raw(System.IO.File.ReadAllText("wwwroot/css/pdf.css"))</style>
+	<style>@Html.Raw(System.IO.File.ReadAllText("wwwroot/css/pdf-8eddc640ea.css"))</style>
 	<!-- endinject -->
 </head>
 <body>

@@ -673,9 +673,6 @@
   <data name="RosterName" xml:space="preserve">
     <value>Roster name</value>
   </data>
-  <data name="RosterShowStrings" xml:space="preserve">
-    <value>Show strings</value>
-  </data>
   <data name="RosterSource" xml:space="preserve">
     <value>Roster source</value>
   </data>
@@ -868,9 +865,6 @@
   </data>
   <data name="QuestionPattern" xml:space="preserve">
     <value>Pattern</value>
-  </data>
-  <data name="QuestionShowStrings" xml:space="preserve">
-    <value>Show strings</value>
   </data>
   <data name="QuestionUploadOptions" xml:space="preserve">
     <value>Upload new categories</value>

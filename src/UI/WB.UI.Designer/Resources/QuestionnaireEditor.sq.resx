@@ -675,9 +675,6 @@
   <data name="QuestionShowListLimit" xml:space="preserve">
     <value>Nëse nuk është më shumë se</value>
   </data>
-  <data name="QuestionShowStrings" xml:space="preserve">
-    <value>Shfaq vargjet</value>
-  </data>
   <data name="QuestionsSearchEntities" xml:space="preserve">
     <value>kërko rezultatet</value>
   </data>
@@ -722,9 +719,6 @@
   </data>
   <data name="RosterName" xml:space="preserve">
     <value>Emërtimi i rosterit</value>
-  </data>
-  <data name="RosterShowStrings" xml:space="preserve">
-    <value>Shfaq vargjet</value>
   </data>
   <data name="RosterSource" xml:space="preserve">
     <value>Burimi i rosterit</value>
