@@ -198,7 +198,7 @@
     <value>Повторно зв'язати</value>
   </data>
   <data name="Interviewer_RelinkDevice_RelinkMessage" xml:space="preserve">
-    <value>Якщо ви повторно зв'яжите цей пристрою&lt;br&gt;всі дані на старом пристрої буде втрачено</value>
+    <value>Якщо ви прив'яжете обліковий запис із цим пристроєм&lt;br&gt;дані на старому пристрої будуть втрачені</value>
   </data>
   <data name="Interviewer_TryOnlineLogin" xml:space="preserve">
     <value>Спробуйте увійти онлайн</value>
