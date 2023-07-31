@@ -320,7 +320,9 @@ namespace WB.UI.Designer
                     new CultureInfo("ar"),
                     new CultureInfo("zh"),
                     new CultureInfo("sq"),
-                    new CultureInfo("ro")
+                    new CultureInfo("ro"),
+                    new CultureInfo("cs"),
+                    new CultureInfo("uk"),
                 };
             });
 

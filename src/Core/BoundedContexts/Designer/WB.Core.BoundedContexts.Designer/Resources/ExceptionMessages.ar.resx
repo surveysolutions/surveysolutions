@@ -300,4 +300,112 @@
   <data name="VariableWithIdWasNotFound" xml:space="preserve">
     <value>متغير المعرف {0} غير موجود في الاستبيان {1}</value>
   </data>
+  <data name="Attachments_uploaded_file_image_is_too_big" xml:space="preserve">
+    <value>أبعاد الصورة كبيرة جدا</value>
+  </data>
+  <data name="CantEditCoverPageInOldQuestionnaire" xml:space="preserve">
+    <value>إنه قسم الغلاف للقراءة فقط. لا يمكنك تحرير أو إعادة ترتيب الأسئلة فيه.</value>
+  </data>
+  <data name="CantRemoveCoverPageInQuestionnaire" xml:space="preserve">
+    <value>لا يمكن إزالة قسم الغلاف من الاستبيان</value>
+  </data>
+  <data name="CategoriesCantBeExtracted" xml:space="preserve">
+    <value>فشل استخراج الفئات من الملف الذي تم تحميله</value>
+  </data>
+  <data name="Column" xml:space="preserve">
+    <value>عمود</value>
+  </data>
+  <data name="CoverPageCanContainsOnlyQuestionsAndStaticTextsAndVariables" xml:space="preserve">
+    <value>يمكن أن يحتوي قسم الغلاف على أسئلة ونصوص ثابتة ومتغيرات فقط</value>
+  </data>
+  <data name="CoverPageMustBeFirstInQuestionnaire" xml:space="preserve">
+    <value>يجب أن يكون قسم الغلاف هو القسم الأول في الاستبيان</value>
+  </data>
+  <data name="Excel_Categories_Duplicated" xml:space="preserve">
+    <value>الفئات المكررة في صفوف: {0}</value>
+  </data>
+  <data name="Excel_Categories_Empty_ParentId" xml:space="preserve">
+    <value>لا تحتوي بعض الفئات على معرف أحد الوالدين</value>
+  </data>
+  <data name="Excel_Categories_Empty_Text" xml:space="preserve">
+    <value>[{0}] عنوان فارغ</value>
+  </data>
+  <data name="Excel_Categories_Empty_Value" xml:space="preserve">
+    <value>[{0}] قيمة فارغة</value>
+  </data>
+  <data name="Excel_Categories_Int_Invalid" xml:space="preserve">
+    <value>[{0}] قيمة رقمية غير صالحة</value>
+  </data>
+  <data name="Excel_Categories_Less_2_Options" xml:space="preserve">
+    <value>يجب أن تحتوي مجموعة الفئات على فئات 2 على الأقل</value>
+  </data>
+  <data name="Excel_Categories_More_Than_Limit" xml:space="preserve">
+    <value>تحتوي مجموعة الفئات على أكثر من {0} فئة</value>
+  </data>
+  <data name="Excel_Categories_Text_More_Than_250" xml:space="preserve">
+    <value>[{0}] يجب أن يكون نص الفئة أقل من 250 حرفا</value>
+  </data>
+  <data name="Excel_NoCategories" xml:space="preserve">
+    <value>لا توجد فئات في الملف</value>
+  </data>
+  <data name="HeaderWasNotFound" xml:space="preserve">
+    <value>لم يتم العثور على الرأس في الملف</value>
+  </data>
+  <data name="ImportOptions_AttachmentNameTooLong" xml:space="preserve">
+    <value>اسم المرفق طويل جدا. يجب أن يكون اسم المرفق أقل من {0}</value>
+  </data>
+  <data name="ImportOptions_DuplicateByTitleAndParentIds" xml:space="preserve">
+    <value>الفئة المكررة "{0}" مع القيمة الأصل "{1}"</value>
+  </data>
+  <data name="ImportOptions_DuplicatedParentValues" xml:space="preserve">
+    <value>يحتوي السؤال الرئيسي "{0}" على {1} فئات ذات قيمة "{2}"</value>
+  </data>
+  <data name="ImportOptions_EmptyValue" xml:space="preserve">
+    <value>قيمة فارغة</value>
+  </data>
+  <data name="ImportOptions_MissingRequiredColumns" xml:space="preserve">
+    <value>بعض الأعمدة مفقودة. تأكد من تحميل ملف يحتوي على الأعمدة المطلوبة</value>
+  </data>
+  <data name="ImportOptions_NotNumber" xml:space="preserve">
+    <value>قيمة عدد صحيح 32 بت غير صالحة '{0}'. يجب أن تكون القيمة بين -2147483647 و 2147483647</value>
+  </data>
+  <data name="ImportOptions_ParentValueNotFound" xml:space="preserve">
+    <value>لا يحتوي السؤال الرئيسي على فئة ذات قيمة "{0}"</value>
+  </data>
+  <data name="ImportOptions_Tab_Or_Excel_Only" xml:space="preserve">
+    <value>يتم قبول القيم المفصولة بعلامات جدولة فقط (* .tab و * .txt و * .tsv) أو ملفات Excel (* .xslx و * .xls و * .ods)</value>
+  </data>
+  <data name="ImportOptions_TitleTooLong" xml:space="preserve">
+    <value>العنوان طويل جدا. يجب أن يكون طول العنوان أقل من {0}</value>
+  </data>
+  <data name="ImportOptions_ValueIsNotUnique" xml:space="preserve">
+    <value>الفئة المكررة "{0}" ذات القيمة "{1}"</value>
+  </data>
+  <data name="InvalidUserInfo" xml:space="preserve">
+    <value>معلومات المستخدم غير صالحة.</value>
+  </data>
+  <data name="NoParentCascadingOptions" xml:space="preserve">
+    <value>لم يتم العثور على فئات للسؤال المتتالي للأصل "{0}"</value>
+  </data>
+  <data name="ProvidedFileHasErrors" xml:space="preserve">
+    <value>تم العثور على أخطاء في الملف المقدم</value>
+  </data>
+  <data name="Questionnaire_CategoriesWereNotFound" xml:space="preserve">
+    <value>لم يتم العثور على الفئات</value>
+  </data>
+  <data name="QuestionnaireAlreadySupportedCover" xml:space="preserve">
+    <value>الاستبيان يدعم بالفعل التغطية</value>
+  </data>
+  <data name="QuestionnaireSuportedNewCover" xml:space="preserve">
+    <value>الاستبيان يدعم بالفعل صفحة الغلاف.</value>
+  </data>
+  <data name="RequiredHeaderWasNotFound" xml:space="preserve">
+    <value>لم يتم العثور على {0} الرأس في ملف Excel</value>
+  </data>
+  <data name="Row" xml:space="preserve">
+    <value>صف</value>
+  </data>
+  <data name="SubsectionCantHaveMoreThan_DirectChildren" xml:space="preserve">
+    <value>لا يمكن أن يحتوي القسم أو القسم الفرعي على أكثر من {0} عناصر فرعية مباشرة</value>
+  </data>
 </root>

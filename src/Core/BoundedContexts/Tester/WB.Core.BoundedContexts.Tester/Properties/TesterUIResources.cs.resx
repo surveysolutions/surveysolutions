@@ -222,4 +222,22 @@
   <data name="ReloadInterviewErrorMessage" xml:space="preserve">
     <value>Údaje z rozhovoru nelze použít na novou verzi dotazníku. Bude otevřen prázdný rozhovor</value>
   </data>
+  <data name="AnonymousQuestionnaires_Error_Confirm" xml:space="preserve">
+    <value>Dotazník nelze otevřít. Odebrat ze seznamu?</value>
+  </data>
+  <data name="AnonymousQuestionnaires_Error_NotFound" xml:space="preserve">
+    <value>Dotazník nelze otevřít. Dotazník nebyl nalezen.</value>
+  </data>
+  <data name="AnonymousQuestionnaires_Open" xml:space="preserve">
+    <value>Otevřený</value>
+  </data>
+  <data name="AnonymousQuestionnaires_QuestionnaireUrl" xml:space="preserve">
+    <value>Adresa URL anonymního dotazníku</value>
+  </data>
+  <data name="MenuItem_Title_AnonymousQuestionnaires" xml:space="preserve">
+    <value>Anonymní dotazníky</value>
+  </data>
+  <data name="MenuItem_Title_Login" xml:space="preserve">
+    <value>Přihlášení do systému</value>
+  </data>
 </root>

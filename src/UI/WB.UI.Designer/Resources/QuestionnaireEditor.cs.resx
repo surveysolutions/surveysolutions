@@ -1,0 +1,1590 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccessSettings" xml:space="preserve">
+    <value>Přístup</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Přidat</value>
+  </data>
+  <data name="AddEnablingCondition" xml:space="preserve">
+    <value>Přidat povolovací podmínku</value>
+  </data>
+  <data name="AddFilter" xml:space="preserve">
+    <value>Přidat filtr</value>
+  </data>
+  <data name="AddNewSection" xml:space="preserve">
+    <value>Přidat nový oddíl</value>
+  </data>
+  <data name="AddQuestion" xml:space="preserve">
+    <value>Přidat otázku</value>
+  </data>
+  <data name="AddRoster" xml:space="preserve">
+    <value>Přidat soupisku</value>
+  </data>
+  <data name="AddStaticText" xml:space="preserve">
+    <value>Přidání statického textu</value>
+  </data>
+  <data name="AddSubsection" xml:space="preserve">
+    <value>Přidat podsekci</value>
+  </data>
+  <data name="AddValidationRule" xml:space="preserve">
+    <value>Přidat nové ověřovací pravidlo</value>
+  </data>
+  <data name="AddVariable" xml:space="preserve">
+    <value>Přidat proměnnou</value>
+  </data>
+  <data name="AllClassifications" xml:space="preserve">
+    <value>Všechny klasifikace</value>
+  </data>
+  <data name="AllFolders" xml:space="preserve">
+    <value>Všechny složky</value>
+  </data>
+  <data name="AnonymousLink" xml:space="preserve">
+    <value>Anonymní odkaz:</value>
+  </data>
+  <data name="AnonymousQuestionnaireDescriptionSettings" xml:space="preserve">
+    <value>Uživatelé, kteří mají tento odkaz, budou moci tento dotazník otevřít</value>
+  </data>
+  <data name="AnonymousQuestionnaireGeneratedDate" xml:space="preserve">
+    <value>vygenerovaný odkaz: {{datetime}}</value>
+  </data>
+  <data name="AnonymousQuestionnaireSettings" xml:space="preserve">
+    <value>Sdílení odkazů</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>Opravdu?</value>
+  </data>
+  <data name="AttachmentDimensionsAreTooBig" xml:space="preserve">
+    <value>Rozměry jsou příliš velké</value>
+  </data>
+  <data name="AttachmentName" xml:space="preserve">
+    <value>Název přílohy</value>
+  </data>
+  <data name="AttachmentPreview" xml:space="preserve">
+    <value>Náhled přílohy</value>
+  </data>
+  <data name="Backup" xml:space="preserve">
+    <value>Zálohování</value>
+  </data>
+  <data name="BindToReusableCategories" xml:space="preserve">
+    <value>Vazba na opakovaně použitelné kategorie</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Zrušit</value>
+  </data>
+  <data name="CascadingOptionsWindowTitle" xml:space="preserve">
+    <value>Úprava kaskádových kategorií</value>
+  </data>
+  <data name="CategoriesObtained" xml:space="preserve">
+    <value>Získané {0} řádku ze souboru kategorií</value>
+  </data>
+  <data name="CategoriesObtained_plural" xml:space="preserve">
+    <value>Získané {0} řádků ze souboru kategorií</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Změnit heslo</value>
+  </data>
+  <data name="ChooseLanguageTitle" xml:space="preserve">
+    <value>Zvolte prosím překlad</value>
+  </data>
+  <data name="ClassificationAdd" xml:space="preserve">
+    <value>Přidat klasifikaci</value>
+  </data>
+  <data name="ClassificationAddGroup" xml:space="preserve">
+    <value>Přidat skupinu</value>
+  </data>
+  <data name="ClassificationGroupBreadcrumbs" xml:space="preserve">
+    <value>Skupiny</value>
+  </data>
+  <data name="ClassificationGroupTitle" xml:space="preserve">
+    <value>Název skupiny</value>
+  </data>
+  <data name="ClassificationShowCategories" xml:space="preserve">
+    <value>Zobrazit kategorie</value>
+  </data>
+  <data name="ClassificationsSearchEntities" xml:space="preserve">
+    <value>klasifikace</value>
+  </data>
+  <data name="ClassificationsStringOptionsEditorPlaceholder" xml:space="preserve">
+    <value>Zadejte kategorie</value>
+  </data>
+  <data name="ClassificationsTitle" xml:space="preserve">
+    <value>Otázka banka. Klasifikace</value>
+  </data>
+  <data name="ClassificationTitle" xml:space="preserve">
+    <value>Název klasifikace</value>
+  </data>
+  <data name="ClickHere" xml:space="preserve">
+    <value>klikněte zde</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Zavřít</value>
+  </data>
+  <data name="CollaboratorsDescriptionSettings" xml:space="preserve">
+    <value>K tomuto dotazníku mají přístup následující uživatelé</value>
+  </data>
+  <data name="CollaboratorsSettings" xml:space="preserve">
+    <value>Kolaboranti</value>
+  </data>
+  <data name="CommentEditorResolve" xml:space="preserve">
+    <value>Vyřešit</value>
+  </data>
+  <data name="CommunicationError" xml:space="preserve">
+    <value>Chyba sítě</value>
+  </data>
+  <data name="CompilationErrorsCounter" xml:space="preserve">
+    <value>Byla nalezena chyba {{count}}</value>
+  </data>
+  <data name="CompilationErrorsCounter_plural" xml:space="preserve">
+    <value>Nalezeny chyby {{count}}</value>
+  </data>
+  <data name="CompilationLabel" xml:space="preserve">
+    <value>Kompilace:</value>
+  </data>
+  <data name="CompilationWarningsCounter" xml:space="preserve">
+    <value>Bylo nalezeno varování {{count}}</value>
+  </data>
+  <data name="CompilationWarningsCounter_plural" xml:space="preserve">
+    <value>Nalezena upozornění {{count}}</value>
+  </data>
+  <data name="Compile" xml:space="preserve">
+    <value>Kompilovat</value>
+  </data>
+  <data name="ConditionMightBeBroken" xml:space="preserve">
+    <value>Stav nebo kaskádové závislé položky mohou být poškozeny</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Kopírovat</value>
+  </data>
+  <data name="CopyLink" xml:space="preserve">
+    <value>Kopírovat odkaz</value>
+  </data>
+  <data name="CopyTo" xml:space="preserve">
+    <value>Kopírovat do</value>
+  </data>
+  <data name="CustomRosterTitle" xml:space="preserve">
+    <value>Vlastní název</value>
+  </data>
+  <data name="DataChangesReverted" xml:space="preserve">
+    <value>Změny dat vráceny zpět</value>
+  </data>
+  <data name="DefaultNewRoster" xml:space="preserve">
+    <value>Nová soupiska</value>
+  </data>
+  <data name="DefaultNewSection" xml:space="preserve">
+    <value>Nová sekce</value>
+  </data>
+  <data name="DefaultNewStaticText" xml:space="preserve">
+    <value>Nový statický text</value>
+  </data>
+  <data name="DefaultNewSubsection" xml:space="preserve">
+    <value>Nová podsekce</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Vymazat</value>
+  </data>
+  <data name="DeleteCommentConfirm" xml:space="preserve">
+    <value>Opravdu chcete odstranit komentář?</value>
+  </data>
+  <data name="DeleteConfirmCategories" xml:space="preserve">
+    <value>Opravdu chcete odstranit sadu kategorií "{{trimmedTitle}}"? Zdroj kategorií pro kategorické otázky na něm závislé bude změněn na uživatelem definované kategorie</value>
+  </data>
+  <data name="DeleteConfirmQuestion" xml:space="preserve">
+    <value>Opravdu chcete odstranit "{{trimmedTitle}}"?</value>
+  </data>
+  <data name="DeleteItemCofirm" xml:space="preserve">
+    <value>Opravdu chcete odstranit tuto položku?</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Stáhnout</value>
+  </data>
+  <data name="DownloadPdf" xml:space="preserve">
+    <value>Stáhnout PDF</value>
+  </data>
+  <data name="EditItem" xml:space="preserve">
+    <value>Upravit položku</value>
+  </data>
+  <data name="EditorAddComment" xml:space="preserve">
+    <value>Přidat komentář</value>
+  </data>
+  <data name="EditorHideComment" xml:space="preserve">
+    <value>Skrýt komentáře</value>
+  </data>
+  <data name="EditorShowComments" xml:space="preserve">
+    <value>Zobrazit komentáře ({{count}})</value>
+  </data>
+  <data name="EmptySectionLine1" xml:space="preserve">
+    <value>Tato sekce je prázdná.</value>
+  </data>
+  <data name="EmptySectionLine2" xml:space="preserve">
+    <value>Můžete začít pomocí tlačítek {{-addQuestionBtn}} a {{-addSubsectionBtn}}</value>
+  </data>
+  <data name="EmptySectionLine3" xml:space="preserve">
+    <value>v horní části tohoto bloku nebo spravovat sekce pomocí {{-panel}} levého panelu</value>
+  </data>
+  <data name="EmptySectionLine4" xml:space="preserve">
+    <value>Název dotazníku, proměnná, spolupráce a další možnosti</value>
+  </data>
+  <data name="EmptySectionLine5" xml:space="preserve">
+    <value>najdete na panelu {{-settingsBtn}} (v pravém horním rohu)</value>
+  </data>
+  <data name="EnablingCondition" xml:space="preserve">
+    <value>Podmínka povolení</value>
+  </data>
+  <data name="EnteredMoreThanAllowed" xml:space="preserve">
+    <value>Zadali jste více než maximální povolené {{max}}</value>
+  </data>
+  <data name="EntityComment" xml:space="preserve">
+    <value>Nový komentář</value>
+  </data>
+  <data name="EntryWasNotFound" xml:space="preserve">
+    <value>Položka nebyla nalezena v dotazníku, vyberte prosím jiný.</value>
+  </data>
+  <data name="ErrorMessage" xml:space="preserve">
+    <value>Chybová zpráva nebo upozornění</value>
+  </data>
+  <data name="ErrorsCounter" xml:space="preserve">
+    <value>Chyba {{count}}</value>
+  </data>
+  <data name="ErrorsCounter_plural" xml:space="preserve">
+    <value>Chyby {{count}}</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>Vývoz</value>
+  </data>
+  <data name="FileUploaded" xml:space="preserve">
+    <value>Soubor byl nahrán</value>
+  </data>
+  <data name="Filter" xml:space="preserve">
+    <value>Filtr</value>
+  </data>
+  <data name="FindReplaceBackToSearch" xml:space="preserve">
+    <value>Zpět na vyhledávání</value>
+  </data>
+  <data name="FindReplaceDone" xml:space="preserve">
+    <value>Hotový</value>
+  </data>
+  <data name="FindReplaceFindAll" xml:space="preserve">
+    <value>Najít vše</value>
+  </data>
+  <data name="FindReplaceFindWhat" xml:space="preserve">
+    <value>Najdi co:</value>
+  </data>
+  <data name="FindReplaceInAll" xml:space="preserve">
+    <value>Všichni</value>
+  </data>
+  <data name="FindReplaceInAllFound" xml:space="preserve">
+    <value>v {{count}} nalezené entitě?</value>
+  </data>
+  <data name="FindReplaceInAllFound_plural" xml:space="preserve">
+    <value>v {{count}} nalezených entitách?</value>
+  </data>
+  <data name="FindReplaceMatchCase" xml:space="preserve">
+    <value>Případ zápasu</value>
+  </data>
+  <data name="FindReplaceMatchingLines" xml:space="preserve">
+    <value>Odpovídající řádky: {{count}}</value>
+  </data>
+  <data name="FindReplaceMatchWord" xml:space="preserve">
+    <value>Shoda celého slova</value>
+  </data>
+  <data name="FindReplaceNext" xml:space="preserve">
+    <value>Další</value>
+  </data>
+  <data name="FindReplacePrevious" xml:space="preserve">
+    <value>Předchozí</value>
+  </data>
+  <data name="FindReplaceReplaceAll" xml:space="preserve">
+    <value>Nahradit vše ({{count}})</value>
+  </data>
+  <data name="FindReplaceReplaceAllConfirm" xml:space="preserve">
+    <value>Nahradit vše </value>
+  </data>
+  <data name="FindReplaceReplaceAllConfirmWith" xml:space="preserve">
+    <value>s</value>
+  </data>
+  <data name="FindReplaceReplaceWith" xml:space="preserve">
+    <value>Nahraďte za:</value>
+  </data>
+  <data name="FindReplaceTitle" xml:space="preserve">
+    <value>Najít a nahradit</value>
+  </data>
+  <data name="FindReplaceUseRegex" xml:space="preserve">
+    <value>Použít regulární výraz</value>
+  </data>
+  <data name="FindReplaceWereReplaced" xml:space="preserve">
+    <value>byly nahrazeny</value>
+  </data>
+  <data name="FindReplaceСonfirm" xml:space="preserve">
+    <value>Potvrďte akci.</value>
+  </data>
+  <data name="FlatRoster" xml:space="preserve">
+    <value>Plochý režim</value>
+  </data>
+  <data name="Forum" xml:space="preserve">
+    <value>Fórum</value>
+  </data>
+  <data name="GeneratePdf" xml:space="preserve">
+    <value>Generovat pdf</value>
+  </data>
+  <data name="GeographyInputModeAutomatic" xml:space="preserve">
+    <value>Automatický</value>
+  </data>
+  <data name="GeographyInputModeManual" xml:space="preserve">
+    <value>Manuál</value>
+  </data>
+  <data name="GeographyInputModeSemiautomatic" xml:space="preserve">
+    <value>Poloautomatický</value>
+  </data>
+  <data name="GeometryInputMode" xml:space="preserve">
+    <value>Vstupní režim</value>
+  </data>
+  <data name="GeometryOverlapDetection" xml:space="preserve">
+    <value>Detekce překrytí</value>
+  </data>
+  <data name="GeometryType" xml:space="preserve">
+    <value>Typ geometrie</value>
+  </data>
+  <data name="GroupTitle" xml:space="preserve">
+    <value>Titul</value>
+  </data>
+  <data name="HellowMessageBtn" xml:space="preserve">
+    <value>Ahoj, {{currentUserName}}</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Pomoc</value>
+  </data>
+  <data name="HelpAttachmentName" xml:space="preserve">
+    <value>Název souboru přílohy, který se zobrazí.</value>
+  </data>
+  <data name="HelpCombobox" xml:space="preserve">
+    <value>Pole se seznamem je kombinace rozevíracího seznamu a jednořádkového textového pole. Kategorie lze vybrat buď zadáním hodnoty nebo její části, nebo výběrem hodnoty ze seznamu</value>
+  </data>
+  <data name="HelpConditionExpression" xml:space="preserve">
+    <value>Logický výraz, který aktivuje (deaktivuje) aktuální položku v závislosti na odpovědích na ostatní otázky.</value>
+  </data>
+  <data name="HelpCoverPage" xml:space="preserve">
+    <value>První část každého dotazníku obsahuje identifikační otázky, které jsou také zobrazeny na řídicích panelech tazatelů a supervizorů.</value>
+  </data>
+  <data name="HelpDefaultDate" xml:space="preserve">
+    <value>Toto datum se zobrazí jako počáteční datum pro výběr na tabletu</value>
+  </data>
+  <data name="HelpDoNotExport" xml:space="preserve">
+    <value>Označením této proměnné ji vyloučíte z exportu</value>
+  </data>
+  <data name="HelpExpression" xml:space="preserve">
+    <value>Logický výraz, který se vypočítá v závislosti na odpovědích na ostatní otázky.</value>
+  </data>
+  <data name="HelpFixedTitles" xml:space="preserve">
+    <value>Počet položek určuje velikost soupisky. Každý prvek seznamu odpovídá názvu řádku soupisky. Každý prvek seznamu by měl být umístěn na samostatném řádku.</value>
+  </data>
+  <data name="HelpHideIfDisabled" xml:space="preserve">
+    <value>Ve výchozím nastavení je zakázaná položka zobrazena šedě. Zaškrtnutím této možnosti skryjete zakázanou otázku nebo sekci na tabletu.</value>
+  </data>
+  <data name="HelpHideInstructions" xml:space="preserve">
+    <value>Ve výchozím nastavení se na tabletu zobrazí text pokynů. Zaškrtnutím této možnosti se zobrazí pouze první řádek pokynů. Klepnutím na tento řádek se zobrazí celý text.</value>
+  </data>
+  <data name="HelpInstruction" xml:space="preserve">
+    <value>Text pokynů, který bude připojen k otázce.</value>
+  </data>
+  <data name="HelpIsTimestamp" xml:space="preserve">
+    <value>Tato volba umožňuje uživateli orazítkovat aktuální čas na tabletu</value>
+  </data>
+  <data name="HelpMask" xml:space="preserve">
+    <value>Formátovaný záznam pro alfanumerické hodnoty: telefonní čísla, ID kódy atd. Příklady:"~" - Představuje alfa znak (A-Z,a-z), "#" - Představuje číselný znak (0-9), "*" - Představuje alfanumerický znak (A-Z,a-z,0-9). "##/##/####" - datum, "(###) ###-####" - telefonní číslo, "AA####" - číslo letu provozované American AirLines nebo "~*-###-~###"</value>
+  </data>
+  <data name="HelpNewComment" xml:space="preserve">
+    <value>Přidat komentář</value>
+  </data>
+  <data name="HelpOptionTitle" xml:space="preserve">
+    <value>Textový štítek pro kategorii (viditelný pro tazatele)</value>
+  </data>
+  <data name="HelpOptionValue" xml:space="preserve">
+    <value>Číselný celočíselný kód kategorie (není viditelný pro tazatele)</value>
+  </data>
+  <data name="HelpOverlapDetection" xml:space="preserve">
+    <value>Zobrazení a zvýraznění překrývání této odpovědi na otázky s odpověďmi na stejné otázky v instancích sourozenecké sourozenecké soupisky</value>
+  </data>
+  <data name="HelpQuestionnaireVarible" xml:space="preserve">
+    <value>Proměnná dotazníku se používá jako předpona při vytváření názvů pro exportní soubory. Názvy proměnných a ID soupisek mohou mít délku od {{minLength}} do {{maxLength}} znaků a musí obsahovat pouze následující znaky: a-z, A-Z, _ nebo 0-9. První znak nemůže být 0-9 nebo _ a poslední nemůže být _.</value>
+  </data>
+  <data name="HelpRosterDisplayMode" xml:space="preserve">
+    <value>Podsekce - otázky soupisky jsou zobrazeny za tlačítky odpovídajícími instancím soupisky.
+Ploché - otázky soupisky jsou zobrazeny ve stejné úrovni oddělené záhlavími odpovídajícími instancím soupisek.
+Tabulka - otázky soupisky jsou zobrazeny ve stejné úrovni jako řádky a sloupce tabulky. 
+Matice - kategorická otázka soupisky je zobrazena jako matice. 
+Zobrazení tabulky a matice jsou podporována pouze ve webovém průzkumu, tablet přejde zpět do režimu "Podsekce".</value>
+  </data>
+  <data name="HelpSourceQuestion" xml:space="preserve">
+    <value>Zdrojová otázka (odpověď generuje počet řádků)</value>
+  </data>
+  <data name="HelpTitles" xml:space="preserve">
+    <value>Názvy řádků.</value>
+  </data>
+  <data name="HelpUseFormatting" xml:space="preserve">
+    <value>Po zaškrtnutí bude číselné pole na tabletu formátováno jako: d,ddd,ddd.dd, "d" představuje číslice (0-9), ","(čárka) je oddělovač tisíců a "." (tečka) je desetinný symbol.  Oddělovač tisíců a symbol desetinné čárky se mohou lišit u tablet s různými kulturami.</value>
+  </data>
+  <data name="HelpValidationExpression" xml:space="preserve">
+    <value>Logický výraz, který potvrzuje odpověď na aktuální otázku. Může obsahovat hodnoty jiných otázek.</value>
+  </data>
+  <data name="HelpValidationMessage" xml:space="preserve">
+    <value>Chybová zpráva nebo upozornění se zobrazí, když je podmínka ověření vyhodnocena jako "False" nebo dojde k chybě během vyhodnocování výrazu.</value>
+  </data>
+  <data name="HelpVariableDescription" xml:space="preserve">
+    <value>Text, který se zobrazí vedle proměnné pro účely testování</value>
+  </data>
+  <data name="HelpVariableLabel" xml:space="preserve">
+    <value>Text o délce {{maxLength}} znaků, který bude připojen k exportované proměnné.</value>
+  </data>
+  <data name="HelpVariableName" xml:space="preserve">
+    <value>Názvy proměnných a ID soupisek mohou mít délku od {{minLength}} do {{maxLength}} znaků a musí obsahovat pouze následující znaky: a-z, A-Z, _ nebo 0-9. První znak nemůže být 0-9 nebo _ a poslední nemůže být _.</value>
+  </data>
+  <data name="HelpVirtualCoverPage" xml:space="preserve">
+    <value>Obálka je virtuální sekce, která zobrazuje všechny identifikační otázky.
+ Otázky nelze v této sekci měnit</value>
+  </data>
+  <data name="HideIfDisabled" xml:space="preserve">
+    <value>Skrýt, pokud je zakázáno</value>
+  </data>
+  <data name="HideIfDisabledNested" xml:space="preserve">
+    <value>Vnořeno z dotazníku</value>
+  </data>
+  <data name="HideParentValues" xml:space="preserve">
+    <value>Skrýt nadřazené hodnoty</value>
+  </data>
+  <data name="HideResolvedComments" xml:space="preserve">
+    <value>Skrýt vyřešené komentáře</value>
+  </data>
+  <data name="History" xml:space="preserve">
+    <value>Historie</value>
+  </data>
+  <data name="HotkeysCloseCategories" xml:space="preserve">
+    <value>Zavřít panel kategorií</value>
+  </data>
+  <data name="HotkeysCloseComments" xml:space="preserve">
+    <value>Zavřít panel poznámek</value>
+  </data>
+  <data name="HotkeysCloseLookup" xml:space="preserve">
+    <value>Zavřít panel vyhledávacích tabulek</value>
+  </data>
+  <data name="HotkeysCloseMacros" xml:space="preserve">
+    <value>Zavřít panel maker</value>
+  </data>
+  <data name="HotkeysCloseMetadata" xml:space="preserve">
+    <value>Zavřít panel metadat</value>
+  </data>
+  <data name="HotkeysCloseScenarios" xml:space="preserve">
+    <value>Panel Zavřít scénáře</value>
+  </data>
+  <data name="HotkeysCloseTranslations" xml:space="preserve">
+    <value>Zavřít panel překladů</value>
+  </data>
+  <data name="HotkeysFocusTitle" xml:space="preserve">
+    <value>Pole názvu fokusu v editoru</value>
+  </data>
+  <data name="HotkeysFocusTree" xml:space="preserve">
+    <value>Strom dotazníků zaměření</value>
+  </data>
+  <data name="HotkeysHideAttachments" xml:space="preserve">
+    <value>Panel Zavřít přílohy</value>
+  </data>
+  <data name="HotkeysHideSections" xml:space="preserve">
+    <value>Zavřít sekce</value>
+  </data>
+  <data name="HotkeysNavigateToPrevSibling" xml:space="preserve">
+    <value>Přechod na předchozího sourozence</value>
+  </data>
+  <data name="HotkeysNavigateToSibling" xml:space="preserve">
+    <value>Přechod na dalšího sourozence</value>
+  </data>
+  <data name="HotkeysOpenItem" xml:space="preserve">
+    <value>Otevřít položku v editoru</value>
+  </data>
+  <data name="HotkeysOpenSection" xml:space="preserve">
+    <value>Otevřít sekci</value>
+  </data>
+  <data name="HotkeysPrint" xml:space="preserve">
+    <value>Tisknout</value>
+  </data>
+  <data name="HotkeysSearch" xml:space="preserve">
+    <value>Vyhledávání podsekcí a otázek v sekci</value>
+  </data>
+  <data name="HotkeysShortcuts" xml:space="preserve">
+    <value>Klávesové zkratky</value>
+  </data>
+  <data name="HotkeysShowHideHelp" xml:space="preserve">
+    <value>Zobrazit / skrýt toto menu nápovědy</value>
+  </data>
+  <data name="IncorrectRosterTitle" xml:space="preserve">
+    <value>Nesprávná otázka názvu soupisky</value>
+  </data>
+  <data name="Initializing" xml:space="preserve">
+    <value>Spouštějící</value>
+  </data>
+  <data name="IsSignature" xml:space="preserve">
+    <value>Použijte podložku podpisu</value>
+  </data>
+  <data name="IsWarning" xml:space="preserve">
+    <value>Varování</value>
+  </data>
+  <data name="JumpToEdit" xml:space="preserve">
+    <value>Přeskočit na úpravy</value>
+  </data>
+  <data name="LogOut" xml:space="preserve">
+    <value>Odhlášení ze systému</value>
+  </data>
+  <data name="MakeOwnerConfirmationMessage" xml:space="preserve">
+    <value>Pokud převedete vlastnictví, bude nový vlastník upozorněn. Je možné, že již nebudete moci změnit nastavení vlastnictví a nový vlastník vám také může odebrat přístup.</value>
+  </data>
+  <data name="MarkAsDefault" xml:space="preserve">
+    <value>Označit jako výchozí jazyk</value>
+  </data>
+  <data name="MaxCommentLengthErrorMessage" xml:space="preserve">
+    <value>Komentář nesmí obsahovat více než {1} znaků</value>
+  </data>
+  <data name="MigrateToNewCover" xml:space="preserve">
+    <value>Vygenerovat kryt</value>
+  </data>
+  <data name="ModalConfirm" xml:space="preserve">
+    <value>Potvrzení</value>
+  </data>
+  <data name="ModalInfo" xml:space="preserve">
+    <value>Informace</value>
+  </data>
+  <data name="MoveTo" xml:space="preserve">
+    <value>Přesunout do</value>
+  </data>
+  <data name="MoveToAnotherSubSection" xml:space="preserve">
+    <value>Přesunutí do jiné sekce:</value>
+  </data>
+  <data name="MultipleDependencies" xml:space="preserve">
+    <value>Jedna nebo více otázek/podsekcí závisí na</value>
+  </data>
+  <data name="MyClassifications" xml:space="preserve">
+    <value>Moje klasifikace</value>
+  </data>
+  <data name="NewItem" xml:space="preserve">
+    <value>Nová položka</value>
+  </data>
+  <data name="NoPermissions" xml:space="preserve">
+    <value>Nemáte oprávnění ke změně tohoto dotazníku</value>
+  </data>
+  <data name="NotAnImage" xml:space="preserve">
+    <value>Zvolený soubor není obrázek</value>
+  </data>
+  <data name="NothingFound" xml:space="preserve">
+    <value>Nic nenalezeno</value>
+  </data>
+  <data name="NotSupportedAttachment" xml:space="preserve">
+    <value>Vybraný soubor není podporován jako příloha</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="OnlyFirstOptionsWillBeTakenConfirmation" xml:space="preserve">
+    <value>Pouze první {{count}} kategorie budou brány pro otázku "{{trimmedTitle}}"?</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Otevřený</value>
+  </data>
+  <data name="OptionsCascadingListError" xml:space="preserve">
+    <value>
+Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... ParentValue/Value[... Název přílohy]". 'Value' a 'ParentValue' musí být celé číslo. 'Název' musí být alfanumerický řetězec. "Název přílohy" je volitelný. Žádné prázdné řádky nejsou povoleny.</value>
+  </data>
+  <data name="OptionsCloseWindow" xml:space="preserve">
+    <value>Zavřít okno?</value>
+  </data>
+  <data name="OptionsListError" xml:space="preserve">
+    <value>Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Hodnota[... Název přílohy]". "Hodnota" musí být celé číslo. 'Název' musí být alfanumerický řetězec. "Název přílohy" je volitelný. Žádné prázdné řádky nejsou povoleny.</value>
+  </data>
+  <data name="OptionsSizeLimit" xml:space="preserve">
+    <value>Maximální povolený počet {max_rows} řádků</value>
+  </data>
+  <data name="OptionsUploadApply" xml:space="preserve">
+    <value>Použití změn</value>
+  </data>
+  <data name="OptionsUploadLimit" xml:space="preserve">
+    <value>Žádné kategorie. Zvolte soubor oddělený tabulátory. Soubor může obsahovat až {limit} kategorií.</value>
+  </data>
+  <data name="OptionsUploadParent" xml:space="preserve">
+    <value>Nadřazená hodnota</value>
+  </data>
+  <data name="OptionsUploadRevert" xml:space="preserve">
+    <value>Vrácení změn</value>
+  </data>
+  <data name="OptionsUploadTitle" xml:space="preserve">
+    <value>Titul</value>
+  </data>
+  <data name="OptionsUploadValue" xml:space="preserve">
+    <value>Hodnota</value>
+  </data>
+  <data name="OptionsWindowTitle" xml:space="preserve">
+    <value>Upravit kategorie</value>
+  </data>
+  <data name="Paste" xml:space="preserve">
+    <value>Pasta</value>
+  </data>
+  <data name="PasteAfter" xml:space="preserve">
+    <value>Vložit za</value>
+  </data>
+  <data name="PleaseWait" xml:space="preserve">
+    <value>Počkejte prosím...</value>
+  </data>
+  <data name="Preview" xml:space="preserve">
+    <value>Náhled revize #{{revision}}</value>
+  </data>
+  <data name="PublicAccessDescriptionSettings" xml:space="preserve">
+    <value>Veřejné dotazníky jsou viditelné všem uživatelům s účtem v tomto systému v režimu pouze pro čtení.</value>
+  </data>
+  <data name="PublicAccessSettings" xml:space="preserve">
+    <value>Veřejný přístup</value>
+  </data>
+  <data name="PublicAccessSettingsOff" xml:space="preserve">
+    <value>Vypnutí veřejného přístupu.</value>
+  </data>
+  <data name="PublicAccessSettingsOn" xml:space="preserve">
+    <value>Zapnutí veřejného přístupu.</value>
+  </data>
+  <data name="PublicAccessSettingsStatusOff" xml:space="preserve">
+    <value>Dotazník není v současné době sdílen jako veřejný.</value>
+  </data>
+  <data name="PublicAccessSettingsStatusOn" xml:space="preserve">
+    <value>Dotazník je v současné době sdílen jako veřejný.</value>
+  </data>
+  <data name="QuestionAddClassification" xml:space="preserve">
+    <value>Vyhledat klasifikaci</value>
+  </data>
+  <data name="QuestionAddInstruction" xml:space="preserve">
+    <value>Přidat instrukce tazatele</value>
+  </data>
+  <data name="QuestionAddOption" xml:space="preserve">
+    <value>Přidat kategorii</value>
+  </data>
+  <data name="QuestionAddSpecialValues" xml:space="preserve">
+    <value>Přidat zvláštní hodnotu</value>
+  </data>
+  <data name="QuestionCascading" xml:space="preserve">
+    <value>Kaskádový kombinovaný box</value>
+  </data>
+  <data name="QuestionCheckboxes" xml:space="preserve">
+    <value>Zaškrtávací políčka</value>
+  </data>
+  <data name="QuestionClickReload" xml:space="preserve">
+    <value>Klikněte na Načíst znovu</value>
+  </data>
+  <data name="QuestionComboBox" xml:space="preserve">
+    <value>Seznamem</value>
+  </data>
+  <data name="QuestionCurrentTime" xml:space="preserve">
+    <value>Aktuální časové razítko(datum a čas)</value>
+  </data>
+  <data name="QuestionDecimalPlaces" xml:space="preserve">
+    <value>Počet desetinných míst</value>
+  </data>
+  <data name="QuestionDefaultDate" xml:space="preserve">
+    <value>Výchozí datum</value>
+  </data>
+  <data name="QuestionDisplayMode" xml:space="preserve">
+    <value>Režim zobrazení</value>
+  </data>
+  <data name="QuestionFilter" xml:space="preserve">
+    <value>Filtr</value>
+  </data>
+  <data name="QuestionGpsNavigation" xml:space="preserve">
+    <value>Tato otázka bude považována za otázku GPS navigace pro tazatele</value>
+  </data>
+  <data name="QuestionHideInstruction" xml:space="preserve">
+    <value>Skrýt instrukce</value>
+  </data>
+  <data name="QuestionInstruction" xml:space="preserve">
+    <value>Instrukce</value>
+  </data>
+  <data name="QuestionInteger" xml:space="preserve">
+    <value>Celé číslo</value>
+  </data>
+  <data name="QuestionIsLinked" xml:space="preserve">
+    <value>Je propojen</value>
+  </data>
+  <data name="QuestionLinkedDescr" xml:space="preserve">
+    <value>Vázat na otázku seznamu nebo otázku ze skupiny soupisek</value>
+  </data>
+  <data name="QuestionMaxListCount" xml:space="preserve">
+    <value>Maximální počet prvků seznamu</value>
+  </data>
+  <data name="QuestionMaxNumberOfAnswers" xml:space="preserve">
+    <value>Maximální počet odpovědí</value>
+  </data>
+  <data name="QuestionMustBeBound" xml:space="preserve">
+    <value>Tuto otázku musíte svázat</value>
+  </data>
+  <data name="QuestionnaireSettings" xml:space="preserve">
+    <value>Nastavení dotazníku</value>
+  </data>
+  <data name="QuestionnaireSummary" xml:space="preserve">
+    <value>({{questionsCount}}Q, {{groupsCount}}S, {{rostersCount}}R)</value>
+  </data>
+  <data name="QuestionOneToFiftyAllowed" xml:space="preserve">
+    <value>Celá čísla mezi 1 a 50 jsou povolena</value>
+  </data>
+  <data name="QuestionOnlyInts" xml:space="preserve">
+    <value>Povolena jsou pouze celá čísla</value>
+  </data>
+  <data name="QuestionOpenEditorConfirm" xml:space="preserve">
+    <value>Chcete-li otevřít editor, musí být uloženy všechny neuložené změny. Měli bychom je nyní zachránit??</value>
+  </data>
+  <data name="QuestionOpenEditorSaved" xml:space="preserve">
+    <value>Byla úspěšně uložena. Otevře se okno pro nahrání souboru.</value>
+  </data>
+  <data name="QuestionOptionsCut" xml:space="preserve">
+    <value>Otázka byla označena jako "Combo box" nebo "Cascading combo box" při nahrávání podrobností o otázce a obsahovala příliš mnoho kategorií, jejich počet byl snížen až na {{count}}</value>
+  </data>
+  <data name="QuestionOrdered" xml:space="preserve">
+    <value>Záznam pořadí odpovědí</value>
+  </data>
+  <data name="QuestionPattern" xml:space="preserve">
+    <value>Vzor</value>
+  </data>
+  <data name="QuestionQuestionType" xml:space="preserve">
+    <value>Typ otázky</value>
+  </data>
+  <data name="QuestionRadioButtonList" xml:space="preserve">
+    <value>Seznam přepínačů</value>
+  </data>
+  <data name="QuestionScope" xml:space="preserve">
+    <value>Rozsah otázek</value>
+  </data>
+  <data name="QuestionShowListLimit" xml:space="preserve">
+    <value>Pokud ne více než</value>
+  </data>
+  <data name="QuestionShowStrings" xml:space="preserve">
+    <value>Zobrazit řetězce</value>
+  </data>
+  <data name="QuestionsSearchEntities" xml:space="preserve">
+    <value>Výsledky hledání</value>
+  </data>
+  <data name="QuestionsSearchTitle" xml:space="preserve">
+    <value>Banka otázek</value>
+  </data>
+  <data name="QuestionText" xml:space="preserve">
+    <value>Text otázky</value>
+  </data>
+  <data name="QuestionToUpdateOptions" xml:space="preserve">
+    <value>Aktualizace kategorií</value>
+  </data>
+  <data name="QuestionUploadOptions" xml:space="preserve">
+    <value>Nahrát nové kategorie</value>
+  </data>
+  <data name="QuestionUseSeparator" xml:space="preserve">
+    <value>Použijte oddělovač 1000</value>
+  </data>
+  <data name="QuestionVariableLabel" xml:space="preserve">
+    <value>Variabilní štítek</value>
+  </data>
+  <data name="QuestionVariableName" xml:space="preserve">
+    <value>Název proměnné</value>
+  </data>
+  <data name="QuestionYesNoMode" xml:space="preserve">
+    <value>Tlačítka Ano/Ne</value>
+  </data>
+  <data name="ReadOnly" xml:space="preserve">
+    <value>Jen pro čtení</value>
+  </data>
+  <data name="ReadOnlyQuestion" xml:space="preserve">
+    <value>Je to otázka pouze pro čtení. Nelze jej upravovat.</value>
+  </data>
+  <data name="Recompile" xml:space="preserve">
+    <value>Překompilovat</value>
+  </data>
+  <data name="RegenerateQuestionnaireSharingLink" xml:space="preserve">
+    <value>Znovu vygenerovat odkaz</value>
+  </data>
+  <data name="ReplaceOptionsConfirmation" xml:space="preserve">
+    <value>Opravdu chcete nahradit existující kategorie pro otázku "{{trimmedTitle}}"?</value>
+  </data>
+  <data name="RequestFailedUnexpectedly" xml:space="preserve">
+    <value>Požadavek se neočekávaně nezdařil.</value>
+  </data>
+  <data name="RequiredField" xml:space="preserve">
+    <value>Povinné pole</value>
+  </data>
+  <data name="RetryExportPDF" xml:space="preserve">
+    <value>Opakujte export ve formátu PDF</value>
+  </data>
+  <data name="ReusableCategories" xml:space="preserve">
+    <value>Opakovaně použitelné kategorie</value>
+  </data>
+  <data name="RosterAddItem" xml:space="preserve">
+    <value>Přidat položku</value>
+  </data>
+  <data name="RosterDisplayMode" xml:space="preserve">
+    <value>Režim zobrazení:</value>
+  </data>
+  <data name="RosterDisplayMode_Flat" xml:space="preserve">
+    <value>Byt</value>
+  </data>
+  <data name="RosterDisplayMode_Matrix" xml:space="preserve">
+    <value>Matice</value>
+  </data>
+  <data name="RosterDisplayMode_SubSection" xml:space="preserve">
+    <value>Pododdíl</value>
+  </data>
+  <data name="RosterDisplayMode_Table" xml:space="preserve">
+    <value>Stůl</value>
+  </data>
+  <data name="RosterName" xml:space="preserve">
+    <value>Název soupisky</value>
+  </data>
+  <data name="RosterShowStrings" xml:space="preserve">
+    <value>Zobrazit řetězce</value>
+  </data>
+  <data name="RosterSource" xml:space="preserve">
+    <value>Zdroj soupisky</value>
+  </data>
+  <data name="RosterSourceFixed" xml:space="preserve">
+    <value>Pevná sada položek:</value>
+  </data>
+  <data name="RosterSourceNumericQuestion" xml:space="preserve">
+    <value>Zdrojová otázka pro počet řádků:</value>
+  </data>
+  <data name="RosterSourceNumericTitles" xml:space="preserve">
+    <value>Zdrojová otázka pro názvy řádků:</value>
+  </data>
+  <data name="RosterSourceQuestion" xml:space="preserve">
+    <value>Zdrojová otázka (odpověď určuje počet i název řádků soupisky):</value>
+  </data>
+  <data name="RostersQuestion" xml:space="preserve">
+    <value>Vypsat otázku nebo otázku ze skupiny soupisek</value>
+  </data>
+  <data name="RosterVariableName" xml:space="preserve">
+    <value>ID soupisky</value>
+  </data>
+  <data name="RowAdded" xml:space="preserve">
+    <value>Přidán řádek</value>
+  </data>
+  <data name="Run" xml:space="preserve">
+    <value>Běžet</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Uložit</value>
+  </data>
+  <data name="SaveAs" xml:space="preserve">
+    <value>Uložit jako</value>
+  </data>
+  <data name="SavedAtTimestamp" xml:space="preserve">
+    <value>uloženo v {{dateTime, H:mm}}</value>
+  </data>
+  <data name="ScenarioDetails" xml:space="preserve">
+    <value>Scénář</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Hledání</value>
+  </data>
+  <data name="SearchClassification" xml:space="preserve">
+    <value>Klasifikace vyhledávání</value>
+  </data>
+  <data name="SearchForQuestion" xml:space="preserve">
+    <value>Vyhledat dotaz</value>
+  </data>
+  <data name="SearchQuestionPlaceholder" xml:space="preserve">
+    <value>Vyhledat dotaz</value>
+  </data>
+  <data name="SectionVariableName" xml:space="preserve">
+    <value>Název proměnné</value>
+  </data>
+  <data name="SelectCategories" xml:space="preserve">
+    <value>Vyberte kategorie</value>
+  </data>
+  <data name="SelectCountry" xml:space="preserve">
+    <value>Vybrat zemi</value>
+  </data>
+  <data name="SelectedInvalidItem" xml:space="preserve">
+    <value>Vybraná neplatná položka. Opravte to.</value>
+  </data>
+  <data name="SelectItemFromTheList" xml:space="preserve">
+    <value>Vyberte položku ze seznamu</value>
+  </data>
+  <data name="SelectKindOfData" xml:space="preserve">
+    <value>Vyberte druh dat</value>
+  </data>
+  <data name="SelectModeOfDataCollection" xml:space="preserve">
+    <value>Vyberte způsob shromažďování dat</value>
+  </data>
+  <data name="SelectParentQuestion" xml:space="preserve">
+    <value>Vyberte rodičovskou otázku</value>
+  </data>
+  <data name="SelectParentQuestionError" xml:space="preserve">
+    <value>Musíte vybrat rodičovskou otázku</value>
+  </data>
+  <data name="SelectQuestion" xml:space="preserve">
+    <value>Vyberte otázku</value>
+  </data>
+  <data name="SelectStudyType" xml:space="preserve">
+    <value>Vyberte typ studie</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Nastavení</value>
+  </data>
+  <data name="SettingsAccessibleToEveryone" xml:space="preserve">
+    <value>Přístupné v režimu jen pro čtení komukoli s odkazem</value>
+  </data>
+  <data name="SettingsAnonymous" xml:space="preserve">
+    <value>Anonymní</value>
+  </data>
+  <data name="SettingsCan" xml:space="preserve">
+    <value>Konev </value>
+  </data>
+  <data name="SettingsHideIfDisabled" xml:space="preserve">
+    <value>Skrýt prvek, když je zakázán</value>
+  </data>
+  <data name="SettingsInvite" xml:space="preserve">
+    <value>Pozvat</value>
+  </data>
+  <data name="SettingsInviteCollaborators" xml:space="preserve">
+    <value>Pozvěte další uživatele přihlášením nebo registrovaným e-mailem</value>
+  </data>
+  <data name="SettingsMakeOwner" xml:space="preserve">
+    <value>Učinit vlastníka</value>
+  </data>
+  <data name="SettingsOwner" xml:space="preserve">
+    <value>vlastník</value>
+  </data>
+  <data name="SettingsPrivate" xml:space="preserve">
+    <value>Soukromý</value>
+  </data>
+  <data name="SettingsProvideExistingEmail" xml:space="preserve">
+    <value>Poskytnutí e-mailu nebo přihlášení stávajícího uživatele</value>
+  </data>
+  <data name="SettingsProvideValidEmail" xml:space="preserve">
+    <value>Zadejte platný e-mail</value>
+  </data>
+  <data name="SettingsPublic" xml:space="preserve">
+    <value>Veřejný</value>
+  </data>
+  <data name="SettingsQuestionnaireName" xml:space="preserve">
+    <value>Název dotazníku</value>
+  </data>
+  <data name="SettingsQuestionnaireSharing" xml:space="preserve">
+    <value>Vyplnit tento dotazník</value>
+  </data>
+  <data name="SettingsQuestionnaireVariable" xml:space="preserve">
+    <value>Proměnná dotazníku</value>
+  </data>
+  <data name="SettingsRevokeAccess" xml:space="preserve">
+    <value>Odvolání přístupu</value>
+  </data>
+  <data name="SettingsShareEdit" xml:space="preserve">
+    <value>Upravit</value>
+  </data>
+  <data name="SettingsShareView" xml:space="preserve">
+    <value>Pohled</value>
+  </data>
+  <data name="SettingsStatusAllowAnonymousAccess" xml:space="preserve">
+    <value>Anonymní sdílení je aktuálně zapnuto.</value>
+  </data>
+  <data name="SettingsStatusDontAllowAnonymousAccess" xml:space="preserve">
+    <value>Anonymní sdílení je momentálně vypnuté.</value>
+  </data>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>Nastavení</value>
+  </data>
+  <data name="SettingsTurnOffAnonymousAccess" xml:space="preserve">
+    <value>Vypnutí anonymního sdílení.</value>
+  </data>
+  <data name="SettingsTurnOnAnonymousAccess" xml:space="preserve">
+    <value>Zapnutí anonymního sdílení.</value>
+  </data>
+  <data name="SettingsVisibleToEveryone" xml:space="preserve">
+    <value>viditelné pro všechny v režimu jen pro čtení</value>
+  </data>
+  <data name="SettingsVisibleToOwner" xml:space="preserve">
+    <value>viditelné pouze pro vlastníka</value>
+  </data>
+  <data name="SettingsWhoHasAccess" xml:space="preserve">
+    <value>Kdo má přístup</value>
+  </data>
+  <data name="ShowAsList" xml:space="preserve">
+    <value>Zobrazit jako seznam kategorií</value>
+  </data>
+  <data name="ShowList" xml:space="preserve">
+    <value>Zobrazit seznam</value>
+  </data>
+  <data name="ShowParentValues" xml:space="preserve">
+    <value>Zobrazit nadřazené hodnoty</value>
+  </data>
+  <data name="SideBarAddMacro" xml:space="preserve">
+    <value>přidat nové makro</value>
+  </data>
+  <data name="SideBarAttachmentDetailsFormat" xml:space="preserve">
+    <value>formát: {{- type}}</value>
+  </data>
+  <data name="SideBarAttachmentDetailsResolution" xml:space="preserve">
+    <value>{{width}} × {{height}}px</value>
+  </data>
+  <data name="SideBarAttachmentDetailsSize" xml:space="preserve">
+    <value>Velikost: {{size}}</value>
+  </data>
+  <data name="SideBarAttachmentName" xml:space="preserve">
+    <value>Název přílohy</value>
+  </data>
+  <data name="SideBarAttachmentNoName" xml:space="preserve">
+    <value>Příloha bez názvu</value>
+  </data>
+  <data name="SideBarAttachmentsCounter" xml:space="preserve">
+    <value>{{count}} Příloha souboru (celkem {{bytes}})</value>
+  </data>
+  <data name="SideBarAttachmentsCounter_plural" xml:space="preserve">
+    <value>{{count}} Přílohy souborů (celkem {{bytes}})</value>
+  </data>
+  <data name="SideBarAttachmentsEmptyLine1" xml:space="preserve">
+    <value>Tato karta slouží k nahrání multimediálních souborů, na které může být odkazováno v dotazníku.</value>
+  </data>
+  <data name="SideBarAttachmentsEmptyLine2" xml:space="preserve">
+    <value>Chcete-li se vyhnout pomalé synchronizaci, doporučujeme kombinovat velikost všech připojených souborů nepřesahující 2MB. Pro podporované typy souborů, formáty a rozměry</value>
+  </data>
+  <data name="SideBarAttachmentsEmptyLine3" xml:space="preserve">
+    <value>Chcete-li odkazovat na přílohu v dotazníku, přidejte statický textový prvek a zadejte přílohu {{-name}} v její vlastnosti attachment</value>
+  </data>
+  <data name="SideBarAttachmentsEstimate" xml:space="preserve">
+    <value>Odhadovaná doba načítání: {{timeString}} na {{downloadSpeed}}Kb/s (EDGE)</value>
+  </data>
+  <data name="SideBarAttachmentsTitle" xml:space="preserve">
+    <value>Přílohy</value>
+  </data>
+  <data name="SideBarAttachmentsUpload" xml:space="preserve">
+    <value>Nahrát nový</value>
+  </data>
+  <data name="SideBarAttachmentUploaded" xml:space="preserve">
+    <value>Nahráno: {{-lastUpdate, MMMM DD[,] YYYY [at] k:mm}}</value>
+  </data>
+  <data name="SideBarCategoriesAddNew" xml:space="preserve">
+    <value>Přidat novou kategorii</value>
+  </data>
+  <data name="SideBarCategoriesCounter" xml:space="preserve">
+    <value>{{count}} Kategorie</value>
+  </data>
+  <data name="SideBarCategoriesEmptyLine1" xml:space="preserve">
+    <value>Tato karta slouží ke správě opakovaně použitelných kategorií.</value>
+  </data>
+  <data name="SideBarCategoriesEmptyLine2" xml:space="preserve">
+    <value>Můžete stahovat a aktualizovat kategorie.</value>
+  </data>
+  <data name="SideBarCategoriesEmptyLine3" xml:space="preserve">
+    <value>bude přidán do seznamu opakovaně použitelných kategorií pro všechny typy kategorických otázek</value>
+  </data>
+  <data name="SideBarCategoriesName" xml:space="preserve">
+    <value>Název kategorií</value>
+  </data>
+  <data name="SideBarCategoriesNoName" xml:space="preserve">
+    <value>Kategorie bez názvu</value>
+  </data>
+  <data name="SideBarCategoriesTitle" xml:space="preserve">
+    <value>Kategorie</value>
+  </data>
+  <data name="SideBarCategoriesUploadNew" xml:space="preserve">
+    <value>Nahrát nové kategorie</value>
+  </data>
+  <data name="SideBarCommentsCounter" xml:space="preserve">
+    <value>{{count}} Vlákno komentářů:</value>
+  </data>
+  <data name="SideBarCommentsCounter_plural" xml:space="preserve">
+    <value>{{count}} Vlákna komentářů:</value>
+  </data>
+  <data name="SideBarCommentsTitle" xml:space="preserve">
+    <value>Komentáře</value>
+  </data>
+  <data name="SideBarDownload" xml:space="preserve">
+    <value>Stáhnout:</value>
+  </data>
+  <data name="SideBarEditCategories" xml:space="preserve">
+    <value>Upravit kategorie</value>
+  </data>
+  <data name="SideBarEmptyCommentsLine" xml:space="preserve">
+    <value>Komentáře uvidíte zde</value>
+  </data>
+  <data name="SideBarLookupEmptyLine1" xml:space="preserve">
+    <value>Tato karta slouží k definování vyhledávacích tabulek.</value>
+  </data>
+  <data name="SideBarLookupEmptyLine2" xml:space="preserve">
+    <value>Vyhledávací tabulka poskytuje referenční informace, které mohou být dotazovány klíčem a použity v povolovacích podmínkách a ověřovacích výrazech.</value>
+  </data>
+  <data name="SideBarLookupEmptyLine3" xml:space="preserve">
+    <value>Vyhledávací tabulka se skládá z názvu a vyhledávacího souboru, který může obsahovat více sloupců číselných hodnot oddělených tabulátory.</value>
+  </data>
+  <data name="SideBarLookupTableAdd" xml:space="preserve">
+    <value>PŘIDAT NOVOU vyhledávací tabulku</value>
+  </data>
+  <data name="SideBarLookupTableDropFile" xml:space="preserve">
+    <value>Drop soubor zde</value>
+  </data>
+  <data name="SideBarLookupTableFileName" xml:space="preserve">
+    <value>Název souboru</value>
+  </data>
+  <data name="SideBarLookupTableName" xml:space="preserve">
+    <value>Název tabulky</value>
+  </data>
+  <data name="SideBarLookupTableNoName" xml:space="preserve">
+    <value>Vyhledávací tabulka bez názvu</value>
+  </data>
+  <data name="SideBarLookupTablesCounter" xml:space="preserve">
+    <value>{{count}} Vyhledávací tabulka:</value>
+  </data>
+  <data name="SideBarLookupTablesCounter_plural" xml:space="preserve">
+    <value>{{count}} Vyhledávací tabulky:</value>
+  </data>
+  <data name="SideBarLookupTableSelectFile" xml:space="preserve">
+    <value>Vybrat soubor</value>
+  </data>
+  <data name="SideBarLookupTableUpdateFile" xml:space="preserve">
+    <value>Aktualizovaný soubor</value>
+  </data>
+  <data name="SideBarLookupTitle" xml:space="preserve">
+    <value>Vyhledávací tabulky</value>
+  </data>
+  <data name="SideBarMacroContent" xml:space="preserve">
+    <value>obsah</value>
+  </data>
+  <data name="SideBarMacroCounter" xml:space="preserve">
+    <value>{{count}} Makro:</value>
+  </data>
+  <data name="SideBarMacroCounter_plural" xml:space="preserve">
+    <value>{{count}} Makra:</value>
+  </data>
+  <data name="SideBarMacroDescription" xml:space="preserve">
+    <value>popis</value>
+  </data>
+  <data name="SideBarMacroEmptyLine1" xml:space="preserve">
+    <value>Tato karta slouží k definování náhrad maker.</value>
+  </data>
+  <data name="SideBarMacroEmptyLine2" xml:space="preserve">
+    <value>Makro je pojmenovaný výraz, který lze použít v povolovacích podmínkách a ověřovacích výrazech. Makro se skládá z názvu a obsahu.</value>
+  </data>
+  <data name="SideBarMacroEmptyLine3" xml:space="preserve">
+    <value>lze použít ve výrazu k odkazování na makro.</value>
+  </data>
+  <data name="SideBarMacroHideDescription" xml:space="preserve">
+    <value>Skrýt popis</value>
+  </data>
+  <data name="SideBarMacroName" xml:space="preserve">
+    <value>Název makra</value>
+  </data>
+  <data name="SideBarMacroNoName" xml:space="preserve">
+    <value>Makro bez názvu</value>
+  </data>
+  <data name="SideBarMacroShowDescription" xml:space="preserve">
+    <value>přidat popis</value>
+  </data>
+  <data name="SideBarMacroTitle" xml:space="preserve">
+    <value>Makra</value>
+  </data>
+  <data name="SideBarMetadataAdditionalInfo" xml:space="preserve">
+    <value>Další informace</value>
+  </data>
+  <data name="SideBarMetadataAgreeToMakeThisQuestionnairePublic" xml:space="preserve">
+    <value>Souhlasíte se zveřejněním tohoto dotazníku</value>
+  </data>
+  <data name="SideBarMetadataBasicInfo" xml:space="preserve">
+    <value>Základní informace</value>
+  </data>
+  <data name="SideBarMetadataConsultants" xml:space="preserve">
+    <value>Konzultanti:</value>
+  </data>
+  <data name="SideBarMetadataCountry" xml:space="preserve">
+    <value>Země:</value>
+  </data>
+  <data name="SideBarMetadataCoverage" xml:space="preserve">
+    <value>Pokrytí:</value>
+  </data>
+  <data name="SideBarMetadataFunding" xml:space="preserve">
+    <value>Financování:</value>
+  </data>
+  <data name="SideBarMetadataHeader" xml:space="preserve">
+    <value>Popis dotazníku a informace o průzkumu</value>
+  </data>
+  <data name="SideBarMetadataKeywords" xml:space="preserve">
+    <value>Klíčová slova:</value>
+  </data>
+  <data name="SideBarMetadataKindOfData" xml:space="preserve">
+    <value>Druh údajů:</value>
+  </data>
+  <data name="SideBarMetadataLanguages" xml:space="preserve">
+    <value>Jazyky:</value>
+  </data>
+  <data name="SideBarMetadataModeOfDataCollection" xml:space="preserve">
+    <value>Způsob shromažďování údajů:</value>
+  </data>
+  <data name="SideBarMetadataNotes" xml:space="preserve">
+    <value>Poznámky:</value>
+  </data>
+  <data name="SideBarMetadataPrimaryInvestigator" xml:space="preserve">
+    <value>Hlavní vyšetřovatel:</value>
+  </data>
+  <data name="SideBarMetadataQuestionnaireAccess" xml:space="preserve">
+    <value>Přístup k dotazníku</value>
+  </data>
+  <data name="SideBarMetadataStudyTypes" xml:space="preserve">
+    <value>Typy studií:</value>
+  </data>
+  <data name="SideBarMetadataSubtitle" xml:space="preserve">
+    <value>Podtitul:</value>
+  </data>
+  <data name="SideBarMetadataSurveyDataInfo" xml:space="preserve">
+    <value>Informace o datech zaměření</value>
+  </data>
+  <data name="SideBarMetadataSurveyInfo" xml:space="preserve">
+    <value>Informace o průzkumu</value>
+  </data>
+  <data name="SideBarMetadataTitle" xml:space="preserve">
+    <value>Název dotazníku</value>
+  </data>
+  <data name="SideBarMetadataUnitOfAlalysis" xml:space="preserve">
+    <value>Analytická jednotka:</value>
+  </data>
+  <data name="SideBarMetadataUniverse" xml:space="preserve">
+    <value>Vesmír:</value>
+  </data>
+  <data name="SideBarMetadataVersionIdentificator" xml:space="preserve">
+    <value>Identifikátor verze:</value>
+  </data>
+  <data name="SideBarMetadataVersionNotes" xml:space="preserve">
+    <value>Poznámky k verzi:</value>
+  </data>
+  <data name="SideBarMetadataYear" xml:space="preserve">
+    <value>Rok:</value>
+  </data>
+  <data name="SideBarScenarioCounter" xml:space="preserve">
+    <value>{{count}} Scénář:</value>
+  </data>
+  <data name="SideBarScenarioCounter_plural" xml:space="preserve">
+    <value>{{count}} Scénáře:</value>
+  </data>
+  <data name="SideBarScenarioEmptyLine1" xml:space="preserve">
+    <value>Tato karta slouží k zobrazení scénářů.</value>
+  </data>
+  <data name="SideBarScenarioEmptyLine2" xml:space="preserve">
+    <value>Scénář je snímek stavu testeru, který můžete uložit na testeru kliknutím na tlačítko "Uložit scénář".</value>
+  </data>
+  <data name="SideBarScenarioName" xml:space="preserve">
+    <value>Název scénáře</value>
+  </data>
+  <data name="SideBarScenarioTitle" xml:space="preserve">
+    <value>Scénáře</value>
+  </data>
+  <data name="SideBarSectionsCounter" xml:space="preserve">
+    <value>{{count}} Oddíl:</value>
+  </data>
+  <data name="SideBarSectionsCounter_plural" xml:space="preserve">
+    <value>{{count}} Sekce:</value>
+  </data>
+  <data name="SideBarSectionsTitle" xml:space="preserve">
+    <value>Sekce</value>
+  </data>
+  <data name="SideBarTab" xml:space="preserve">
+    <value>Tabulátor</value>
+  </data>
+  <data name="SideBarTranslationDownloadXlsx" xml:space="preserve">
+    <value>Stáhnout xlsx</value>
+  </data>
+  <data name="SideBarTranslationGetTemplate" xml:space="preserve">
+    <value>Získat šablonu pro </value>
+  </data>
+  <data name="SideBarTranslationGetTemplateLinkTextCsv" xml:space="preserve">
+    <value>Karta (txt)</value>
+  </data>
+  <data name="SideBarTranslationGetTemplateLinkTextXlsx" xml:space="preserve">
+    <value>Aplikace Excel (xlsx)</value>
+  </data>
+  <data name="SideBarTranslationName" xml:space="preserve">
+    <value>Název překladu</value>
+  </data>
+  <data name="SideBarTranslationNoName" xml:space="preserve">
+    <value>Překlad bez názvu</value>
+  </data>
+  <data name="SideBarTranslationsCounter" xml:space="preserve">
+    <value>{{count}} Překlad</value>
+  </data>
+  <data name="SideBarTranslationsCounter_plural" xml:space="preserve">
+    <value>{{count}} Překlady</value>
+  </data>
+  <data name="SideBarTranslationsEmptyLine1" xml:space="preserve">
+    <value>Tato karta slouží ke správě překladů dotazníků.</value>
+  </data>
+  <data name="SideBarTranslationsEmptyLine2" xml:space="preserve">
+    <value>Můžete si stáhnout a aktualizovat překlady do různých jazyků.</value>
+  </data>
+  <data name="SideBarTranslationsEmptyLine3" xml:space="preserve">
+    <value>Překlad bude použit na původní texty a přepíše hodnoty. Některé texty můžete nechat prázdné a použít výchozí původní překlady.</value>
+  </data>
+  <data name="SideBarTranslationsTitle" xml:space="preserve">
+    <value>Překlady</value>
+  </data>
+  <data name="SideBarTranslationsUploadNew" xml:space="preserve">
+    <value>Nahrát nový překlad</value>
+  </data>
+  <data name="SideBarXlsx" xml:space="preserve">
+    <value>Xlsx</value>
+  </data>
+  <data name="SourceOfCategories" xml:space="preserve">
+    <value>Zdroj kategorií</value>
+  </data>
+  <data name="StaticText" xml:space="preserve">
+    <value>Statický text</value>
+  </data>
+  <data name="StaticTextAttachmentName" xml:space="preserve">
+    <value>Název přílohy</value>
+  </data>
+  <data name="StringsView" xml:space="preserve">
+    <value>Textové zobrazení</value>
+  </data>
+  <data name="TableView" xml:space="preserve">
+    <value>Tabulkové zobrazení</value>
+  </data>
+  <data name="Test" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="ToggleDropdown" xml:space="preserve">
+    <value>Rozevírací nabídka Přepnout</value>
+  </data>
+  <data name="ToggleSearch" xml:space="preserve">
+    <value>Přepnout vyhledávání</value>
+  </data>
+  <data name="Translation_Original" xml:space="preserve">
+    <value>Původní</value>
+  </data>
+  <data name="TranslationsObtained" xml:space="preserve">
+    <value>Získané {0} řádku z překladového souboru</value>
+  </data>
+  <data name="TranslationsObtained_plural" xml:space="preserve">
+    <value>Získané {0} řádků z překladového souboru</value>
+  </data>
+  <data name="TreeAddQuestion" xml:space="preserve">
+    <value>Přidat otázku</value>
+  </data>
+  <data name="TreeAddQuestionAfter" xml:space="preserve">
+    <value>Přidat otázku po</value>
+  </data>
+  <data name="TreeAddRoster" xml:space="preserve">
+    <value>Přidat soupisku</value>
+  </data>
+  <data name="TreeAddRosterAfter" xml:space="preserve">
+    <value>Přidat soupisku po</value>
+  </data>
+  <data name="TreeAddSection" xml:space="preserve">
+    <value>Přidat podsekci</value>
+  </data>
+  <data name="TreeAddSectionAfter" xml:space="preserve">
+    <value>Přidat pododdíl za</value>
+  </data>
+  <data name="TreeAddStaticText" xml:space="preserve">
+    <value>Přidání statického textu</value>
+  </data>
+  <data name="TreeAddStaticTextAfter" xml:space="preserve">
+    <value>Přidání statického textu za</value>
+  </data>
+  <data name="TreeAddVariable" xml:space="preserve">
+    <value>Přidat proměnnou</value>
+  </data>
+  <data name="TreeAddVariableAfter" xml:space="preserve">
+    <value>Přidat proměnnou za</value>
+  </data>
+  <data name="TreeRoster" xml:space="preserve">
+    <value>rozpis služeb:</value>
+  </data>
+  <data name="UnMarkAsDefault" xml:space="preserve">
+    <value>Nepoužívat jako výchozí</value>
+  </data>
+  <data name="UnsavedChangesLeave" xml:space="preserve">
+    <value>Pokud opustíte tuto stránku, ztratíte neuložené změny</value>
+  </data>
+  <data name="UnsavedChangesReload" xml:space="preserve">
+    <value>Pokud tuto stránku znovu načtete, ztratíte neuložené změny</value>
+  </data>
+  <data name="UntitledGroupOrRoster" xml:space="preserve">
+    <value>Nepojmenovaná podsekce nebo soupiska</value>
+  </data>
+  <data name="UntitledQuestion" xml:space="preserve">
+    <value>Otázka bez názvu</value>
+  </data>
+  <data name="UntitledRoster" xml:space="preserve">
+    <value>Soupiska bez názvu</value>
+  </data>
+  <data name="UntitledSection" xml:space="preserve">
+    <value>Oddíl bez názvu</value>
+  </data>
+  <data name="UntitledStaticText" xml:space="preserve">
+    <value>Statický text bez názvu</value>
+  </data>
+  <data name="UntitledVariable" xml:space="preserve">
+    <value>Proměnná bez názvu</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Aktualizace</value>
+  </data>
+  <data name="Upload" xml:space="preserve">
+    <value>Upload</value>
+  </data>
+  <data name="UserDefinedCategories" xml:space="preserve">
+    <value>Uživatelem definované kategorie</value>
+  </data>
+  <data name="ValidationCondition" xml:space="preserve">
+    <value>Podmínka ověření</value>
+  </data>
+  <data name="ValidationIntValue" xml:space="preserve">
+    <value>Hodnota je příliš velká</value>
+  </data>
+  <data name="VariableExpression" xml:space="preserve">
+    <value>Výraz</value>
+  </data>
+  <data name="VariableLabel" xml:space="preserve">
+    <value>Variabilní štítek</value>
+  </data>
+  <data name="VariableName" xml:space="preserve">
+    <value>Jméno</value>
+  </data>
+  <data name="VariableNoExport" xml:space="preserve">
+    <value>Neexportovat</value>
+  </data>
+  <data name="VariableType" xml:space="preserve">
+    <value>Typ proměnné</value>
+  </data>
+  <data name="VariableVariableName" xml:space="preserve">
+    <value>Název proměnné</value>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>Pohled</value>
+  </data>
+  <data name="ViewResolvedCommentsCounter" xml:space="preserve">
+    <value>Zobrazit všechny {{count}} vyřešené komentáře</value>
+  </data>
+  <data name="ViewResolvedCommentsCounter_plural" xml:space="preserve">
+    <value>Zobrazit všechny {{count}} vyřešené komentáře</value>
+  </data>
+  <data name="VirtualCoverPage" xml:space="preserve">
+    <value>Virtuální titulní strana</value>
+  </data>
+  <data name="WarningsCounter" xml:space="preserve">
+    <value>{{count}} upozornění</value>
+  </data>
+  <data name="WarningsCounter_plural" xml:space="preserve">
+    <value>{{count}} upozornění</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Ano</value>
+  </data>
+</root>

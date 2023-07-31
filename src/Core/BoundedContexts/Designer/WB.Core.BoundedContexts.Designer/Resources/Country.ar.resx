@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -58,4 +58,754 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ABW" xml:space="preserve">
+    <value>أروبا</value>
+  </data>
+  <data name="AFG" xml:space="preserve">
+    <value>أفغانستان</value>
+  </data>
+  <data name="AFR" xml:space="preserve">
+    <value>أفريقيا</value>
+  </data>
+  <data name="AGO" xml:space="preserve">
+    <value>أنغولا</value>
+  </data>
+  <data name="AIA" xml:space="preserve">
+    <value>أنغويلا</value>
+  </data>
+  <data name="ALB" xml:space="preserve">
+    <value>ألبانيا</value>
+  </data>
+  <data name="AND" xml:space="preserve">
+    <value>أندورا</value>
+  </data>
+  <data name="ANT" xml:space="preserve">
+    <value>نيث جزر الأنتيل</value>
+  </data>
+  <data name="ARE" xml:space="preserve">
+    <value>الإمارات العربية المتحدة</value>
+  </data>
+  <data name="ARG" xml:space="preserve">
+    <value>الأرجنتين</value>
+  </data>
+  <data name="ARM" xml:space="preserve">
+    <value>أرمينيا</value>
+  </data>
+  <data name="ASM" xml:space="preserve">
+    <value>ساموا الأمريكية</value>
+  </data>
+  <data name="ATA" xml:space="preserve">
+    <value>أنتاركتيكا</value>
+  </data>
+  <data name="ATF" xml:space="preserve">
+    <value>الفرنسية S.T.</value>
+  </data>
+  <data name="ATG" xml:space="preserve">
+    <value>أنتيغوا وبربودا</value>
+  </data>
+  <data name="AUS" xml:space="preserve">
+    <value>أستراليا</value>
+  </data>
+  <data name="AUT" xml:space="preserve">
+    <value>النمسا</value>
+  </data>
+  <data name="AZE" xml:space="preserve">
+    <value>أذربيجان</value>
+  </data>
+  <data name="BDI" xml:space="preserve">
+    <value>بوروندي</value>
+  </data>
+  <data name="BEL" xml:space="preserve">
+    <value>بلجيكا</value>
+  </data>
+  <data name="BEN" xml:space="preserve">
+    <value>بنن</value>
+  </data>
+  <data name="BFA" xml:space="preserve">
+    <value>بوركينا فاسو</value>
+  </data>
+  <data name="BGD" xml:space="preserve">
+    <value>بنغلاديش</value>
+  </data>
+  <data name="BGR" xml:space="preserve">
+    <value>بلغاريا</value>
+  </data>
+  <data name="BHR" xml:space="preserve">
+    <value>البحرين</value>
+  </data>
+  <data name="BHS" xml:space="preserve">
+    <value>جزر البهاما, ال</value>
+  </data>
+  <data name="BIH" xml:space="preserve">
+    <value>البوسنة والهرسك</value>
+  </data>
+  <data name="BLR" xml:space="preserve">
+    <value>بيلاروسيا</value>
+  </data>
+  <data name="BLZ" xml:space="preserve">
+    <value>بيلز</value>
+  </data>
+  <data name="BMU" xml:space="preserve">
+    <value>برمودا</value>
+  </data>
+  <data name="BOL" xml:space="preserve">
+    <value>بوليفيا</value>
+  </data>
+  <data name="BRA" xml:space="preserve">
+    <value>البرازيل</value>
+  </data>
+  <data name="BRB" xml:space="preserve">
+    <value>بربادوس</value>
+  </data>
+  <data name="BRN" xml:space="preserve">
+    <value>بروناي</value>
+  </data>
+  <data name="BTN" xml:space="preserve">
+    <value>بوتان</value>
+  </data>
+  <data name="BVT" xml:space="preserve">
+    <value>جزيرة بوفيت</value>
+  </data>
+  <data name="BWA" xml:space="preserve">
+    <value>بوتسوانا</value>
+  </data>
+  <data name="CAF" xml:space="preserve">
+    <value>جمهورية أفريقيا الوسطى</value>
+  </data>
+  <data name="CAN" xml:space="preserve">
+    <value>كندا</value>
+  </data>
+  <data name="CCK" xml:space="preserve">
+    <value>جزيرة كوكوس.</value>
+  </data>
+  <data name="CHE" xml:space="preserve">
+    <value>سويسرا</value>
+  </data>
+  <data name="CHL" xml:space="preserve">
+    <value>شيلي</value>
+  </data>
+  <data name="CHN" xml:space="preserve">
+    <value>الصين</value>
+  </data>
+  <data name="CIV" xml:space="preserve">
+    <value>كوت ديفوار</value>
+  </data>
+  <data name="CMR" xml:space="preserve">
+    <value>الكاميرون</value>
+  </data>
+  <data name="COD" xml:space="preserve">
+    <value>جمهورية الكونغو الديمقراطية.</value>
+  </data>
+  <data name="COG" xml:space="preserve">
+    <value>جمهورية الكونغو.</value>
+  </data>
+  <data name="COK" xml:space="preserve">
+    <value>جزيرة كوك</value>
+  </data>
+  <data name="COL" xml:space="preserve">
+    <value>كولومبيا</value>
+  </data>
+  <data name="COM" xml:space="preserve">
+    <value>جزر القمر</value>
+  </data>
+  <data name="CPV" xml:space="preserve">
+    <value>جمهورية كابو فيردي</value>
+  </data>
+  <data name="CRI" xml:space="preserve">
+    <value>كوستاريكا</value>
+  </data>
+  <data name="CUB" xml:space="preserve">
+    <value>كوبا</value>
+  </data>
+  <data name="CXR" xml:space="preserve">
+    <value>جزيرة كريسماس</value>
+  </data>
+  <data name="CYM" xml:space="preserve">
+    <value>جزر كايمان</value>
+  </data>
+  <data name="CYP" xml:space="preserve">
+    <value>قبرص</value>
+  </data>
+  <data name="CZE" xml:space="preserve">
+    <value>جمهورية التشيك</value>
+  </data>
+  <data name="DEU" xml:space="preserve">
+    <value>ألمانيا</value>
+  </data>
+  <data name="DJI" xml:space="preserve">
+    <value>جيبوتي</value>
+  </data>
+  <data name="DMA" xml:space="preserve">
+    <value>دومينيكا</value>
+  </data>
+  <data name="DNK" xml:space="preserve">
+    <value>الدانمارك</value>
+  </data>
+  <data name="DOM" xml:space="preserve">
+    <value>جمهورية الدومينيكان</value>
+  </data>
+  <data name="DZA" xml:space="preserve">
+    <value>الجزائر</value>
+  </data>
+  <data name="ECA" xml:space="preserve">
+    <value>أوروبا وآسيا الوسطى</value>
+  </data>
+  <data name="ECU" xml:space="preserve">
+    <value>الإكوادور</value>
+  </data>
+  <data name="EGY" xml:space="preserve">
+    <value>مصر, جمهورية عربية.</value>
+  </data>
+  <data name="ERI" xml:space="preserve">
+    <value>إريتريا</value>
+  </data>
+  <data name="ESH" xml:space="preserve">
+    <value>غرب. الصحراء</value>
+  </data>
+  <data name="ESP" xml:space="preserve">
+    <value>إسبانيا</value>
+  </data>
+  <data name="EST" xml:space="preserve">
+    <value>إستونيا</value>
+  </data>
+  <data name="ETH" xml:space="preserve">
+    <value>إثيوبيا</value>
+  </data>
+  <data name="FIN" xml:space="preserve">
+    <value>فنلندا</value>
+  </data>
+  <data name="FJI" xml:space="preserve">
+    <value>فيجي</value>
+  </data>
+  <data name="FLK" xml:space="preserve">
+    <value>جزيرة فوكلاند.</value>
+  </data>
+  <data name="FRA" xml:space="preserve">
+    <value>فرنسا</value>
+  </data>
+  <data name="FRO" xml:space="preserve">
+    <value>جزيرة فارو.</value>
+  </data>
+  <data name="FSM" xml:space="preserve">
+    <value>ميكرونيزيا</value>
+  </data>
+  <data name="FXX" xml:space="preserve">
+    <value>فرنسا, متروب.</value>
+  </data>
+  <data name="GAB" xml:space="preserve">
+    <value>غابون</value>
+  </data>
+  <data name="GBR" xml:space="preserve">
+    <value>المملكة المتحدة</value>
+  </data>
+  <data name="GEO" xml:space="preserve">
+    <value>جورجيا</value>
+  </data>
+  <data name="GHA" xml:space="preserve">
+    <value>غانا</value>
+  </data>
+  <data name="GIB" xml:space="preserve">
+    <value>جبل طارق</value>
+  </data>
+  <data name="GIN" xml:space="preserve">
+    <value>غينيا</value>
+  </data>
+  <data name="GLP" xml:space="preserve">
+    <value>غواديلوب</value>
+  </data>
+  <data name="GMB" xml:space="preserve">
+    <value>غامبيا, ال</value>
+  </data>
+  <data name="GNB" xml:space="preserve">
+    <value>غينيا بيساو</value>
+  </data>
+  <data name="GNQ" xml:space="preserve">
+    <value>غينيا الاستوائية</value>
+  </data>
+  <data name="GRC" xml:space="preserve">
+    <value>اليونان</value>
+  </data>
+  <data name="GRD" xml:space="preserve">
+    <value>غرينادا</value>
+  </data>
+  <data name="GRL" xml:space="preserve">
+    <value>غرينلاند</value>
+  </data>
+  <data name="GTM" xml:space="preserve">
+    <value>جواتيمالا</value>
+  </data>
+  <data name="GUF" xml:space="preserve">
+    <value>غيانا الفرنسية</value>
+  </data>
+  <data name="GUM" xml:space="preserve">
+    <value>غوام</value>
+  </data>
+  <data name="GUY" xml:space="preserve">
+    <value>غيانا</value>
+  </data>
+  <data name="HKG" xml:space="preserve">
+    <value>منطقة هونغ كونغ الإدارية الخاصة، الصين</value>
+  </data>
+  <data name="HMD" xml:space="preserve">
+    <value>هيرد / ماكدونالد إيسلد</value>
+  </data>
+  <data name="HND" xml:space="preserve">
+    <value>هندوراس</value>
+  </data>
+  <data name="HRV" xml:space="preserve">
+    <value>كرواتيا</value>
+  </data>
+  <data name="HTI" xml:space="preserve">
+    <value>هايتي</value>
+  </data>
+  <data name="HUN" xml:space="preserve">
+    <value>المجر</value>
+  </data>
+  <data name="IDN" xml:space="preserve">
+    <value>إندونيسيا</value>
+  </data>
+  <data name="IND" xml:space="preserve">
+    <value>الهند</value>
+  </data>
+  <data name="IOT" xml:space="preserve">
+    <value>إقليم المحيط الهندي البريطاني</value>
+  </data>
+  <data name="IRL" xml:space="preserve">
+    <value>أيرلندا</value>
+  </data>
+  <data name="IRN" xml:space="preserve">
+    <value>إيران, الجمهورية الإسلامية.</value>
+  </data>
+  <data name="IRQ" xml:space="preserve">
+    <value>العراق</value>
+  </data>
+  <data name="ISL" xml:space="preserve">
+    <value>أيسلندا</value>
+  </data>
+  <data name="ISR" xml:space="preserve">
+    <value>إسرائيل</value>
+  </data>
+  <data name="ITA" xml:space="preserve">
+    <value>إيطاليا</value>
+  </data>
+  <data name="JAM" xml:space="preserve">
+    <value>جامايكا</value>
+  </data>
+  <data name="JER" xml:space="preserve">
+    <value>القدس</value>
+  </data>
+  <data name="JOR" xml:space="preserve">
+    <value>الأردن</value>
+  </data>
+  <data name="JPN" xml:space="preserve">
+    <value>اليابان</value>
+  </data>
+  <data name="KAZ" xml:space="preserve">
+    <value>كازاخستان</value>
+  </data>
+  <data name="KEN" xml:space="preserve">
+    <value>كينيا</value>
+  </data>
+  <data name="KGZ" xml:space="preserve">
+    <value>جمهورية قيرغيزستان</value>
+  </data>
+  <data name="KHM" xml:space="preserve">
+    <value>كمبوديا</value>
+  </data>
+  <data name="KIR" xml:space="preserve">
+    <value>كيريباس</value>
+  </data>
+  <data name="KNA" xml:space="preserve">
+    <value>سانت كيتس ونيفيس</value>
+  </data>
+  <data name="KOR" xml:space="preserve">
+    <value>كوريا ، جمهورية كوريا.</value>
+  </data>
+  <data name="KSV" xml:space="preserve">
+    <value>كوسوفو</value>
+  </data>
+  <data name="KWT" xml:space="preserve">
+    <value>الكويت</value>
+  </data>
+  <data name="LAC" xml:space="preserve">
+    <value>أمريكا اللاتينية ومنطقة البحر الكاريبي</value>
+  </data>
+  <data name="LAO" xml:space="preserve">
+    <value>جمهورية لاو الديمقراطية الشعبية</value>
+  </data>
+  <data name="LBN" xml:space="preserve">
+    <value>لبنان</value>
+  </data>
+  <data name="LBR" xml:space="preserve">
+    <value>ليبيريا</value>
+  </data>
+  <data name="LBY" xml:space="preserve">
+    <value>ليبيا</value>
+  </data>
+  <data name="LCA" xml:space="preserve">
+    <value>سانت لوسيا</value>
+  </data>
+  <data name="LIE" xml:space="preserve">
+    <value>ليشتنشتاين</value>
+  </data>
+  <data name="LKA" xml:space="preserve">
+    <value>سريلانكا</value>
+  </data>
+  <data name="LSO" xml:space="preserve">
+    <value>ليسوتو</value>
+  </data>
+  <data name="LTU" xml:space="preserve">
+    <value>لتوانيا</value>
+  </data>
+  <data name="LUX" xml:space="preserve">
+    <value>لوكسمبورج</value>
+  </data>
+  <data name="LVA" xml:space="preserve">
+    <value>لاتفيا</value>
+  </data>
+  <data name="MAC" xml:space="preserve">
+    <value>ماكاو</value>
+  </data>
+  <data name="MAR" xml:space="preserve">
+    <value>المغرب</value>
+  </data>
+  <data name="MCO" xml:space="preserve">
+    <value>موناكو</value>
+  </data>
+  <data name="MDA" xml:space="preserve">
+    <value>مولدافيا</value>
+  </data>
+  <data name="MDG" xml:space="preserve">
+    <value>مدغشقر</value>
+  </data>
+  <data name="MDV" xml:space="preserve">
+    <value>ملديف</value>
+  </data>
+  <data name="MEX" xml:space="preserve">
+    <value>المكسيك</value>
+  </data>
+  <data name="MHL" xml:space="preserve">
+    <value>مارشال إيسلد.</value>
+  </data>
+  <data name="MKD" xml:space="preserve">
+    <value>مقدونيا, جمهورية مقدونيا اليوغوسلافية السابقة</value>
+  </data>
+  <data name="MLI" xml:space="preserve">
+    <value>مالي</value>
+  </data>
+  <data name="MLT" xml:space="preserve">
+    <value>مالطا</value>
+  </data>
+  <data name="MMR" xml:space="preserve">
+    <value>ميانمار</value>
+  </data>
+  <data name="MNE" xml:space="preserve">
+    <value>الجبل الأسود</value>
+  </data>
+  <data name="MNG" xml:space="preserve">
+    <value>منغوليا</value>
+  </data>
+  <data name="MNP" xml:space="preserve">
+    <value>ن. ماريانا إيسلد.</value>
+  </data>
+  <data name="MOZ" xml:space="preserve">
+    <value>موزمبيق</value>
+  </data>
+  <data name="MRT" xml:space="preserve">
+    <value>موريتانيا</value>
+  </data>
+  <data name="MSR" xml:space="preserve">
+    <value>مونتسيرات</value>
+  </data>
+  <data name="MTQ" xml:space="preserve">
+    <value>مارتينيك</value>
+  </data>
+  <data name="MUS" xml:space="preserve">
+    <value>موريشيوس</value>
+  </data>
+  <data name="MWI" xml:space="preserve">
+    <value>ملاوي</value>
+  </data>
+  <data name="MYS" xml:space="preserve">
+    <value>ماليزيا</value>
+  </data>
+  <data name="MYT" xml:space="preserve">
+    <value>مايوت</value>
+  </data>
+  <data name="NAM" xml:space="preserve">
+    <value>ناميبيا</value>
+  </data>
+  <data name="NCL" xml:space="preserve">
+    <value>كاليدونيا الجديدة</value>
+  </data>
+  <data name="NER" xml:space="preserve">
+    <value>النيجر</value>
+  </data>
+  <data name="NFK" xml:space="preserve">
+    <value>جزيرة نورفولك.</value>
+  </data>
+  <data name="NGA" xml:space="preserve">
+    <value>نيجيريا</value>
+  </data>
+  <data name="NIC" xml:space="preserve">
+    <value>نيكاراجوا</value>
+  </data>
+  <data name="NIU" xml:space="preserve">
+    <value>نيوي</value>
+  </data>
+  <data name="NLD" xml:space="preserve">
+    <value>هولندا</value>
+  </data>
+  <data name="NOR" xml:space="preserve">
+    <value>النرويج</value>
+  </data>
+  <data name="NPL" xml:space="preserve">
+    <value>نيبال</value>
+  </data>
+  <data name="NRU" xml:space="preserve">
+    <value>ناورو</value>
+  </data>
+  <data name="NZL" xml:space="preserve">
+    <value>نيوزيلندا</value>
+  </data>
+  <data name="OMN" xml:space="preserve">
+    <value>عُمان</value>
+  </data>
+  <data name="PAK" xml:space="preserve">
+    <value>باكستان</value>
+  </data>
+  <data name="PAN" xml:space="preserve">
+    <value>بنما</value>
+  </data>
+  <data name="PCN" xml:space="preserve">
+    <value>جزيرة بيتكيرن</value>
+  </data>
+  <data name="PER" xml:space="preserve">
+    <value>بيرو</value>
+  </data>
+  <data name="PHL" xml:space="preserve">
+    <value>الفلبين</value>
+  </data>
+  <data name="PLW" xml:space="preserve">
+    <value>بالاو</value>
+  </data>
+  <data name="PNG" xml:space="preserve">
+    <value>بابوا غينيا الجديدة</value>
+  </data>
+  <data name="POL" xml:space="preserve">
+    <value>بولندا</value>
+  </data>
+  <data name="PRI" xml:space="preserve">
+    <value>بويرتوريكو</value>
+  </data>
+  <data name="PRK" xml:space="preserve">
+    <value>كوريا ، ديموقراطية.</value>
+  </data>
+  <data name="PRT" xml:space="preserve">
+    <value>البرتغال</value>
+  </data>
+  <data name="PRY" xml:space="preserve">
+    <value>باراجواي</value>
+  </data>
+  <data name="PSE" xml:space="preserve">
+    <value>الضفة الغربية وقطاع غزة</value>
+  </data>
+  <data name="PYF" xml:space="preserve">
+    <value>بولينيزيا الفرنسية</value>
+  </data>
+  <data name="QAT" xml:space="preserve">
+    <value>قطر</value>
+  </data>
+  <data name="ROM" xml:space="preserve">
+    <value>رومانيا</value>
+  </data>
+  <data name="RUS" xml:space="preserve">
+    <value>الاتحاد الروسي</value>
+  </data>
+  <data name="RWA" xml:space="preserve">
+    <value>رواندا</value>
+  </data>
+  <data name="SAU" xml:space="preserve">
+    <value>المملكة العربية السعودية</value>
+  </data>
+  <data name="SCG" xml:space="preserve">
+    <value>صربيا والجبل الأسود</value>
+  </data>
+  <data name="SDN" xml:space="preserve">
+    <value>السودان</value>
+  </data>
+  <data name="SEN" xml:space="preserve">
+    <value>السنغال</value>
+  </data>
+  <data name="SGP" xml:space="preserve">
+    <value>سنغافورة</value>
+  </data>
+  <data name="SGS" xml:space="preserve">
+    <value>جورجيا س. ساندويتش إيسلد.</value>
+  </data>
+  <data name="SHN" xml:space="preserve">
+    <value>سانت هيلانة</value>
+  </data>
+  <data name="SJM" xml:space="preserve">
+    <value>جزر سفالبارد وجان ماين</value>
+  </data>
+  <data name="SLB" xml:space="preserve">
+    <value>جزر سليمان</value>
+  </data>
+  <data name="SLE" xml:space="preserve">
+    <value>سيراليون</value>
+  </data>
+  <data name="SLV" xml:space="preserve">
+    <value>السلفادور</value>
+  </data>
+  <data name="SMR" xml:space="preserve">
+    <value>سان مارينو</value>
+  </data>
+  <data name="SOM" xml:space="preserve">
+    <value>الصومال</value>
+  </data>
+  <data name="SPM" xml:space="preserve">
+    <value>سانت بيير وميكلون</value>
+  </data>
+  <data name="SRB" xml:space="preserve">
+    <value>صربيا</value>
+  </data>
+  <data name="SSD" xml:space="preserve">
+    <value>جنوب السودان</value>
+  </data>
+  <data name="STP" xml:space="preserve">
+    <value>ساو تومي وبرينسيبي</value>
+  </data>
+  <data name="SUR" xml:space="preserve">
+    <value>سورينام</value>
+  </data>
+  <data name="SVK" xml:space="preserve">
+    <value>سلوفاكيا</value>
+  </data>
+  <data name="SVN" xml:space="preserve">
+    <value>سلوفينيا</value>
+  </data>
+  <data name="SWE" xml:space="preserve">
+    <value>السويد</value>
+  </data>
+  <data name="SWZ" xml:space="preserve">
+    <value>سوازيلند</value>
+  </data>
+  <data name="SYC" xml:space="preserve">
+    <value>سيشيل</value>
+  </data>
+  <data name="SYR" xml:space="preserve">
+    <value>الجمهورية العربية السورية</value>
+  </data>
+  <data name="TCA" xml:space="preserve">
+    <value>جزر تركس وكايكوس</value>
+  </data>
+  <data name="TCD" xml:space="preserve">
+    <value>تشاد</value>
+  </data>
+  <data name="TGO" xml:space="preserve">
+    <value>توغو</value>
+  </data>
+  <data name="THA" xml:space="preserve">
+    <value>تايلاند</value>
+  </data>
+  <data name="TJK" xml:space="preserve">
+    <value>طاجيكستان</value>
+  </data>
+  <data name="TKL" xml:space="preserve">
+    <value>توكيلاو</value>
+  </data>
+  <data name="TKM" xml:space="preserve">
+    <value>تركمانستان</value>
+  </data>
+  <data name="TLS" xml:space="preserve">
+    <value>تيمور الشرقية</value>
+  </data>
+  <data name="TON" xml:space="preserve">
+    <value>تونغا</value>
+  </data>
+  <data name="TTO" xml:space="preserve">
+    <value>ترنداد وتوباجو</value>
+  </data>
+  <data name="TUN" xml:space="preserve">
+    <value>تونس</value>
+  </data>
+  <data name="TUR" xml:space="preserve">
+    <value>تركيا</value>
+  </data>
+  <data name="TUV" xml:space="preserve">
+    <value>توفالو</value>
+  </data>
+  <data name="TWN" xml:space="preserve">
+    <value>تايوان</value>
+  </data>
+  <data name="TZA" xml:space="preserve">
+    <value>تنزانيا</value>
+  </data>
+  <data name="UGA" xml:space="preserve">
+    <value>أوغندا</value>
+  </data>
+  <data name="UKR" xml:space="preserve">
+    <value>أوكرانيا</value>
+  </data>
+  <data name="UMI" xml:space="preserve">
+    <value>جزر الولايات المتحدة الصغيرة النائية</value>
+  </data>
+  <data name="URY" xml:space="preserve">
+    <value>اوروجواي</value>
+  </data>
+  <data name="USA" xml:space="preserve">
+    <value>الولايات المتحدة الأمريكية</value>
+  </data>
+  <data name="UZB" xml:space="preserve">
+    <value>أوزبكستان</value>
+  </data>
+  <data name="VAT" xml:space="preserve">
+    <value>الكرسي الرسولي</value>
+  </data>
+  <data name="VCT" xml:space="preserve">
+    <value>سانت فنسنت جزر غرينادين</value>
+  </data>
+  <data name="VEN" xml:space="preserve">
+    <value>فنزويلا, RB</value>
+  </data>
+  <data name="VGB" xml:space="preserve">
+    <value>جزر فيرجن البريطانية</value>
+  </data>
+  <data name="VGB1" xml:space="preserve">
+    <value>جزيرة العذراء. (بريطاني)</value>
+  </data>
+  <data name="VIR" xml:space="preserve">
+    <value>جزر فيرجن الأمريكية.</value>
+  </data>
+  <data name="VNM" xml:space="preserve">
+    <value>فيتنام</value>
+  </data>
+  <data name="VUT" xml:space="preserve">
+    <value>فانواتو</value>
+  </data>
+  <data name="WBG" xml:space="preserve">
+    <value>الضفة الغربية وقطاع غزة</value>
+  </data>
+  <data name="WLD" xml:space="preserve">
+    <value>عالم</value>
+  </data>
+  <data name="WLF" xml:space="preserve">
+    <value>واليس وفوتونا</value>
+  </data>
+  <data name="WSM" xml:space="preserve">
+    <value>ساموا</value>
+  </data>
+  <data name="YEM" xml:space="preserve">
+    <value>اليمن, جمهورية اليمن.</value>
+  </data>
+  <data name="ZAF" xml:space="preserve">
+    <value>جنوب أفريقيا</value>
+  </data>
+  <data name="ZMB" xml:space="preserve">
+    <value>زامبيا</value>
+  </data>
+  <data name="ZWE" xml:space="preserve">
+    <value>زيمبابوي</value>
+  </data>
 </root>
