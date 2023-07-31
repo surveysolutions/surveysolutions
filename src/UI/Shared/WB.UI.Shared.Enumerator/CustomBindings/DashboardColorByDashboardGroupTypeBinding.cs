@@ -28,7 +28,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                 case DashboardGroupType.CompletedInterviews:
                     SetBackgroundColor(target, Resource.Color.interviewHeaderCompleted);
                     break;
-                case DashboardGroupType.Unknown:
+                case DashboardGroupType.None:
                     SetBackgroundColor(target, Resource.Color.interviewHeaderDisabled);
                     break;
 

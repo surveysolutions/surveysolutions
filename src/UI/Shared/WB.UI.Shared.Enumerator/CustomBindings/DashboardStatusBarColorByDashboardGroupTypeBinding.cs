@@ -29,7 +29,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                     SetBackgroundColor(target, Resource.Color.interviewStatusBarCompleted);
                     break;
                 
-                case DashboardGroupType.Unknown:
+                case DashboardGroupType.None:
                     SetBackgroundColor(target, Resource.Color.interviewStatusBarDisabled);
                     break;
 
