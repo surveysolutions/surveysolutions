@@ -1,0 +1,528 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Action" xml:space="preserve">
+    <value>Дія</value>
+  </data>
+  <data name="Action_Archived" xml:space="preserve">
+    <value>Архівовані</value>
+  </data>
+  <data name="Action_AudioRecordingChanged" xml:space="preserve">
+    <value>Змінено запис звуку</value>
+  </data>
+  <data name="Action_AudioRecordingChanged_False" xml:space="preserve">
+    <value>Запис звуку вимкнено</value>
+  </data>
+  <data name="Action_AudioRecordingChanged_True" xml:space="preserve">
+    <value>Запис звуку ввімкнено</value>
+  </data>
+  <data name="Action_Created" xml:space="preserve">
+    <value>Створений</value>
+  </data>
+  <data name="Action_Created_Comment" xml:space="preserve">
+    <value>Коментар: {{comment}}</value>
+  </data>
+  <data name="Action_Created_Responsible" xml:space="preserve">
+    <value>Призначено {{responsible}}</value>
+  </data>
+  <data name="Action_Deleted" xml:space="preserve">
+    <value>Видалені</value>
+  </data>
+  <data name="Action_QuantityChanged" xml:space="preserve">
+    <value>Розмір змінено</value>
+  </data>
+  <data name="Action_QuantityChanged_To" xml:space="preserve">
+    <value>Розмір змінено на {{quantity}}</value>
+  </data>
+  <data name="Action_QuantityChanged_To_Unlimited" xml:space="preserve">
+    <value>Розмір змінено на Необмежений</value>
+  </data>
+  <data name="Action_Reassigned" xml:space="preserve">
+    <value>Перепризначення</value>
+  </data>
+  <data name="Action_Reassigned_To" xml:space="preserve">
+    <value>Перепризначено на {{newResponsible}}</value>
+  </data>
+  <data name="Action_Reassigned_To_Comment" xml:space="preserve">
+    <value>Коментар: {{comment}}</value>
+  </data>
+  <data name="Action_ReceivedByTablet" xml:space="preserve">
+    <value>Отримано планшетом</value>
+  </data>
+  <data name="Action_UnArchived" xml:space="preserve">
+    <value>Не архівовано</value>
+  </data>
+  <data name="Action_UpgradedFrom" xml:space="preserve">
+    <value>Оновлено з призначення {{id}}</value>
+  </data>
+  <data name="Action_WebModeChanged" xml:space="preserve">
+    <value>Змінено веб-режим</value>
+  </data>
+  <data name="Action_WebModeChanged_False" xml:space="preserve">
+    <value>Веб-режим вимкнено</value>
+  </data>
+  <data name="Action_WebModeChanged_True" xml:space="preserve">
+    <value>Веб-режим увімкнено</value>
+  </data>
+  <data name="Activated" xml:space="preserve">
+    <value>Активована</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>Активний</value>
+  </data>
+  <data name="Actor" xml:space="preserve">
+    <value>Від</value>
+  </data>
+  <data name="AllAssignments" xml:space="preserve">
+    <value>Всі призначення</value>
+  </data>
+  <data name="Archive" xml:space="preserve">
+    <value>Архів</value>
+  </data>
+  <data name="Archived" xml:space="preserve">
+    <value>Архівовані</value>
+  </data>
+  <data name="AssignmentCloseWebMode" xml:space="preserve">
+    <value>Призначення {{id}} не можна закрити, оскільки ввімкнено веб-режим</value>
+  </data>
+  <data name="AssignmentHistory" xml:space="preserve">
+    <value>Історія</value>
+  </data>
+  <data name="AssignmentId" xml:space="preserve">
+    <value>Ідентифікатор призначення</value>
+  </data>
+  <data name="AssignmentInfo" xml:space="preserve">
+    <value>Детальна інформація про завдання</value>
+  </data>
+  <data name="AssignmentsHeader" xml:space="preserve">
+    <value>Завдання</value>
+  </data>
+  <data name="AssignmentSizeInWebMode" xml:space="preserve">
+    <value>Розмір не можна змінити для призначення у веб-режимі.</value>
+  </data>
+  <data name="AssignmentsSelected" xml:space="preserve">
+    <value>{{count}} Вибране призначення</value>
+  </data>
+  <data name="AssignmentsSelected_other" xml:space="preserve">
+    <value>{{count}} Вибрані призначення</value>
+  </data>
+  <data name="AssignTo" xml:space="preserve">
+    <value>Призначити</value>
+  </data>
+  <data name="AudioRecordingEnable" xml:space="preserve">
+    <value>Увімкнення запису звуку</value>
+  </data>
+  <data name="AudioRecordingExplanation" xml:space="preserve">
+    <value>Додаток «Інтерв'юер» запише аудіо інтерв'ю, коли ввімкнено аудіоаудит. Врахуйте, що обсяг синхронізаційних даних буде значно більшим.</value>
+  </data>
+  <data name="CawiActivated" xml:space="preserve">
+    <value>Активовано CAWI</value>
+  </data>
+  <data name="CawiModeEnable" xml:space="preserve">
+    <value>Увімкнення режиму CAWI</value>
+  </data>
+  <data name="ChangeAudioRecordingModalTitle" xml:space="preserve">
+    <value>Налаштування аудіозапису для призначення {{id}}</value>
+  </data>
+  <data name="ChangeModeModalTitle" xml:space="preserve">
+    <value>Змінити режим призначення {{assignmentId}}</value>
+  </data>
+  <data name="ChangeSizeModalTitle" xml:space="preserve">
+    <value>Розмір редагування для збірки {{assignmentId}}</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Закрити</value>
+  </data>
+  <data name="Comments" xml:space="preserve">
+    <value>Коментар</value>
+  </data>
+  <data name="Count" xml:space="preserve">
+    <value>Зібрані</value>
+  </data>
+  <data name="CreateAssignment_AnswersInstruction" xml:space="preserve">
+    <value>Заповніть усі або деякі поля для визначення</value>
+  </data>
+  <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
+    <value>Виберіть відповідального (штаб-квартиру, керівника або інтерв'юера) для цього завдання</value>
+  </data>
+  <data name="CreateAssignmentWebModeExplanation" xml:space="preserve">
+    <value>Це призначення використовуватиметься у веб-режимі</value>
+  </data>
+  <data name="CreatedAt" xml:space="preserve">
+    <value>Створено на</value>
+  </data>
+  <data name="CreateInterview" xml:space="preserve">
+    <value>Почати нову співбесіду</value>
+  </data>
+  <data name="CreatingNewAssignment" xml:space="preserve">
+    <value>Створити нове завдання для анкети {{questionnaire}}</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Дата</value>
+  </data>
+  <data name="DateFromPast" xml:space="preserve">
+    <value>Вибрана дата залишилася в минулому</value>
+  </data>
+  <data name="Details_Column" xml:space="preserve">
+    <value>Деталі</value>
+  </data>
+  <data name="DetailsComments" xml:space="preserve">
+    <value>Коментар</value>
+  </data>
+  <data name="DuplicatePasswordByWebModeWithQuantity1" xml:space="preserve">
+    <value>Пароль за призначенням для веб-режиму з кількістю 1 повинен бути унікальним</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Електронна пошта</value>
+  </data>
+  <data name="EmailExplanation" xml:space="preserve">
+    <value>Електронна пошта буде використовуватися для зв'язку з одержувачем завдання</value>
+  </data>
+  <data name="EnterComments" xml:space="preserve">
+    <value>Введіть свій коментар тут</value>
+  </data>
+  <data name="EnterEmail" xml:space="preserve">
+    <value>Введіть Email</value>
+  </data>
+  <data name="EnterPassword" xml:space="preserve">
+    <value>Введіть пароль</value>
+  </data>
+  <data name="ErrorToCreateAssignment" xml:space="preserve">
+    <value>Не вдалося створити призначення. </value>
+  </data>
+  <data name="IdentifyingQuestions" xml:space="preserve">
+    <value>Визначення питань</value>
+  </data>
+  <data name="InterviewsNeeded" xml:space="preserve">
+    <value>Необхідні інтерв'ю</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>Електронна пошта недійсна</value>
+  </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>Пароль недійсний</value>
+  </data>
+  <data name="InvalidSize" xml:space="preserve">
+    <value>Поле «Розмір» має бути -1 або більше.</value>
+  </data>
+  <data name="InvalidSizeMessage" xml:space="preserve">
+    <value>Розмір недійсний</value>
+  </data>
+  <data name="InvalidSizeWithEmail" xml:space="preserve">
+    <value>Для завдань з наданою електронною поштою дозволено розмір 1</value>
+  </data>
+  <data name="IsAudioRecordingEnabled" xml:space="preserve">
+    <value>Аудіозапис</value>
+  </data>
+  <data name="LinkToWebInterviewExample" xml:space="preserve">
+    <value>Перехід до зразка посилання "Веб-інтерв'ю"</value>
+  </data>
+  <data name="ModeExplanation" xml:space="preserve">
+    <value>Режим CAWI дозволяє збирати дані від респондентів безпосередньо</value>
+  </data>
+  <data name="MultipleAssignmentsClose" xml:space="preserve">
+    <value>{{count}} вибрані завдання будуть закриті. Розмір буде встановлено для кількості зібраних інтерв'ю.</value>
+  </data>
+  <data name="NewAssignment" xml:space="preserve">
+    <value>Нове призначення</value>
+  </data>
+  <data name="NoComment" xml:space="preserve">
+    <value>(без коментарів)</value>
+  </data>
+  <data name="NumberOfAssignmentsAffected" xml:space="preserve">
+    <value>{{count}} Призначення буде змінено</value>
+  </data>
+  <data name="NumberOfAssignmentsAffected_other" xml:space="preserve">
+    <value>{{count}} Призначення будуть змінені</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Пароль</value>
+  </data>
+  <data name="PasswordExplanation" xml:space="preserve">
+    <value>Пароль буде використовуватися для захисту збірки</value>
+  </data>
+  <data name="PasswordInstructions" xml:space="preserve">
+    <value>Принаймні 6 цифр і великих літер або один символ "?" для створення пароля</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Анкета</value>
+  </data>
+  <data name="QuestionnaireVersion" xml:space="preserve">
+    <value>ver. {{version}}</value>
+  </data>
+  <data name="ReceivedByTablet" xml:space="preserve">
+    <value>Отримано планшетом</value>
+  </data>
+  <data name="ReceivedByTablet_All" xml:space="preserve">
+    <value>Показати всі</value>
+  </data>
+  <data name="ReceivedByTablet_NotReceived" xml:space="preserve">
+    <value>Не отримано планшетом</value>
+  </data>
+  <data name="ReceivedByTablet_Received" xml:space="preserve">
+    <value>Отримано планшетом</value>
+  </data>
+  <data name="ResponsibleRequired" xml:space="preserve">
+    <value>Відповідальний обов'язковий</value>
+  </data>
+  <data name="SelectQuestionnaire" xml:space="preserve">
+    <value>Виберіть наявну анкету для оновлення призначень</value>
+  </data>
+  <data name="SelectQuestionnaireToUpgradeFrom" xml:space="preserve">
+    <value>Виберіть анкету для оновлення</value>
+  </data>
+  <data name="SelectResponsible" xml:space="preserve">
+    <value>Оберіть відповідального</value>
+  </data>
+  <data name="ShowArchived" xml:space="preserve">
+    <value>Архівний статус</value>
+  </data>
+  <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
+    <value>Розмір обраного завдання {{id}} буде змінено з {{quantity}} на {{collected}} (кількість зібраних інтерв'ю)</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>Очікуваний</value>
+  </data>
+  <data name="SizeExplanation" xml:space="preserve">
+    <value>Вкажіть максимальну кількість співбесід, які потрібно згенерувати для цього завдання. Дозволені значення: -1 — для «Необмежене призначення», 0 — для «Порожнє призначення», числа — для розміру призначення</value>
+  </data>
+  <data name="SizeForWebMode" xml:space="preserve">
+    <value>У збірці розміром 1 для веб-режиму повинна бути вказана електронна адреса або пароль</value>
+  </data>
+  <data name="SizeInstructions" xml:space="preserve">
+    <value>Має бути номер, -1 для необмежених, 1, якщо вказано email</value>
+  </data>
+  <data name="StartWebInterview" xml:space="preserve">
+    <value>Почати веб-інтерв'ю</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Зупинити</value>
+  </data>
+  <data name="Tooltip_Filter_ArchivedStatus" xml:space="preserve">
+    <value>Індикатор активності призначення або архівування.</value>
+  </data>
+  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
+    <value>Виберіть анкету, щоб переглянути пов'язані з нею завдання. Виберіть "Усі анкети", щоб переглянути завдання, пов'язані з будь-якою анкетою.</value>
+  </data>
+  <data name="Tooltip_Filter_QuestionnaireVersion" xml:space="preserve">
+    <value>Виберіть версію анкети, щоб переглянути пов'язані з нею завдання. Виберіть "Усі версії", щоб переглянути завдання, пов'язані з будь-якою версією обраної анкети.</value>
+  </data>
+  <data name="Tooltip_Filter_Received" xml:space="preserve">
+    <value>Показник того, отримано завдання чи ні</value>
+  </data>
+  <data name="Tooltip_Filter_Responsible" xml:space="preserve">
+    <value>Користувач несе відповідальність. Клацніть поле, щоб вибрати ім'я користувача, вибравши його безпосередньо або ввівши текст, щоб додатково відфільтрувати список імен користувачів.</value>
+  </data>
+  <data name="Tooltip_Table_Count" xml:space="preserve">
+    <value>Кількість співбесід, поданих на даний момент для виконання цього завдання. Можливо, було створено більше інтерв'ю, але не синхронізовано. Натисніть на будь-яку клітинку, щоб переглянути пов'язані інтерв'ю. Натисніть на значок сортування, щоб відсортувати за кількістю.</value>
+  </data>
+  <data name="Tooltip_Table_CreatedAt" xml:space="preserve">
+    <value>Коли призначення було створено спочатку. Натисніть на іконку сортування, щоб сортувати за часом.</value>
+  </data>
+  <data name="Tooltip_Table_Email" xml:space="preserve">
+    <value>Електронна пошта для сповіщень</value>
+  </data>
+  <data name="Tooltip_Table_IdentifyingQuestions" xml:space="preserve">
+    <value>Інформація, яка ідентифікує кожне завдання. Це відповіді на запитання, позначені в Конструкторі.</value>
+  </data>
+  <data name="Tooltip_Table_InterviewsNeeded" xml:space="preserve">
+    <value>Кількість співбесід, необхідних для виконання цього завдання.</value>
+  </data>
+  <data name="Tooltip_Table_IsAudioRecordingEnabled" xml:space="preserve">
+    <value>Запис процесу співбесіди</value>
+  </data>
+  <data name="Tooltip_Table_Password" xml:space="preserve">
+    <value>Пароль для обмеження доступу</value>
+  </data>
+  <data name="Tooltip_Table_Responsible" xml:space="preserve">
+    <value>Користувач, який наразі відповідає за призначення. Натисніть значок сортування, щоб відсортувати ім'я користувача.</value>
+  </data>
+  <data name="Tooltip_Table_Size" xml:space="preserve">
+    <value>Максимальна кількість співбесід, які можуть бути проведені для виконання даного завдання. Натисніть на будь-яку клітинку, щоб змінити це число. Натисніть на іконку сортування, щоб відсортувати за розміром.</value>
+  </data>
+  <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">
+    <value>Коли призначення було востаннє оновлено. Натисніть на іконку сортування, щоб сортувати за часом.</value>
+  </data>
+  <data name="Tooltip_Table_WebMode" xml:space="preserve">
+    <value>Режим призначення</value>
+  </data>
+  <data name="Unarchive" xml:space="preserve">
+    <value>Розархівувати</value>
+  </data>
+  <data name="Unlimited" xml:space="preserve">
+    <value>Необмежений</value>
+  </data>
+  <data name="UpdatedAt" xml:space="preserve">
+    <value>Оновлено</value>
+  </data>
+  <data name="UpgradeBtn" xml:space="preserve">
+    <value>Оновлення</value>
+  </data>
+  <data name="UpgradeCancelled" xml:space="preserve">
+    <value>Оновлення зупинено</value>
+  </data>
+  <data name="UpgradeDescription" xml:space="preserve">
+    <value>Після оновлення призначень усі невиконані призначення буде оновлено.</value>
+  </data>
+  <data name="UpgradeDownloadFailed" xml:space="preserve">
+    <value>Завантажити список</value>
+  </data>
+  <data name="UpgradeError" xml:space="preserve">
+    <value>Сталася помилка. Повторіть спробу пізніше.</value>
+  </data>
+  <data name="UpgradePreparation" xml:space="preserve">
+    <value>Очікування завершення інших оновлень </value>
+  </data>
+  <data name="UpgradeProgressDone" xml:space="preserve">
+    <value>Зробити</value>
+  </data>
+  <data name="UpgradeProgressDoneCount" xml:space="preserve">
+    <value>Успішно оновлено: {{processed}}</value>
+  </data>
+  <data name="UpgradeProgressDoneTitle" xml:space="preserve">
+    <value>Оновлення з {{from}} до {{to}} завершено</value>
+  </data>
+  <data name="UpgradeProgressErrorCount" xml:space="preserve">
+    <value>Не оновлено: {{count}}</value>
+  </data>
+  <data name="UpgradeProgressErrors" xml:space="preserve">
+    <value>З помилками {{errorCount}}</value>
+  </data>
+  <data name="UpgradeProgressNumbers" xml:space="preserve">
+    <value>Оновлення {{processed}} з {{totalCount}}</value>
+  </data>
+  <data name="UpgradeProgressTitle" xml:space="preserve">
+    <value>Оновлення призначень з {{from}} до {{to}}</value>
+  </data>
+  <data name="WebMode" xml:space="preserve">
+    <value>Режим</value>
+  </data>
+  <data name="WebModeEnabledWarning" xml:space="preserve">
+    <value>Завдання не може бути завершено. У ньому ввімкнено веб-режим, а в анкеті вимкнено режим веб-збору</value>
+  </data>
+  <data name="WebModeNonInterviewer" xml:space="preserve">
+    <value>Всі завдання для веб-інтерв'ю повинні бути зроблені інтерв'юеру</value>
+  </data>
+  <data name="WebModeReassignToNonInterviewer" xml:space="preserve">
+    <value>Ви перепризначаєте веб-завдання користувачеві, який не є ІНТЕРВ'ЮЕРОМ. Якщо ви вже надіслали посилання на це завдання, респонденти не зможуть відповісти на ваше опитування, доки завдання не буде повернуто користувачеві в ролі ІНТЕРВ'ЮЕРА.</value>
+  </data>
+  <data name="WebModeReassignToNonInterviewer_other" xml:space="preserve">
+    <value>Ви перепризначаєте веб-завдання користувачеві, який не є ІНТЕРВ'ЮЕРОМ. Якщо ви вже розіслали посилання на ці завдання, респонденти не зможуть відповісти на ваше опитування, доки завдання не будуть повернуті користувачеві в ролі ІНТЕРВ'ЮЕРА.</value>
+  </data>
+</root>

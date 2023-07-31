@@ -120,4 +120,387 @@
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
     <value>Ви дійсно бажаєте видалити рядок {{rosterTitle}} з пов'язаних списків?</value>
   </data>
+  <data name="AnswerIsInvalid" xml:space="preserve">
+    <value>Відповідь недійсна</value>
+  </data>
+  <data name="AnswerWasNotSaved" xml:space="preserve">
+    <value>Відповідь не збережено</value>
+  </data>
+  <data name="AreaRecord" xml:space="preserve">
+    <value>Редагувати область</value>
+  </data>
+  <data name="AssignmentLimitError" xml:space="preserve">
+    <value>Ви не можете створити більше інтерв'ю з цього завдання</value>
+  </data>
+  <data name="AudioClickRecord" xml:space="preserve">
+    <value>Клацніть, щоб записати аудіо</value>
+  </data>
+  <data name="AudioInitializationFailed" xml:space="preserve">
+    <value>Помилка ініціалізації звуку</value>
+  </data>
+  <data name="AudioRecording" xml:space="preserve">
+    <value>Аудіозапис</value>
+  </data>
+  <data name="AudioRecordingDuration" xml:space="preserve">
+    <value>{{humanizedLength}} ({{formattedLength}}) аудіозапису</value>
+  </data>
+  <data name="AudioRecordNew" xml:space="preserve">
+    <value>Запис нового</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Скасувати</value>
+  </data>
+  <data name="ClickToAnswer" xml:space="preserve">
+    <value>Натисніть, щоб відповісти</value>
+  </data>
+  <data name="CloseInterviewMessage" xml:space="preserve">
+    <value>&lt;p&gt;Web Interview підтримує лише одну активну вкладку з інтерв'ю.&lt;/p&gt;&lt;p&gt;Будь ласка, оновіть цю сторінку, щоб продовжити користуватися цією вкладкою, або закрийте її.&lt;/p&gt;</value>
+  </data>
+  <data name="CloseInterviewTitle" xml:space="preserve">
+    <value>Це інтерв'ю відкривається в іншій вкладці або браузері</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Коментар</value>
+  </data>
+  <data name="CommentAdd" xml:space="preserve">
+    <value>Додати коментар</value>
+  </data>
+  <data name="CommentAdmin" xml:space="preserve">
+    <value>Коментар адміністратора</value>
+  </data>
+  <data name="CommentEnter" xml:space="preserve">
+    <value>Введіть свій коментар</value>
+  </data>
+  <data name="CommentHeadquarters" xml:space="preserve">
+    <value>Коментар штаб-квартири</value>
+  </data>
+  <data name="CommentHide" xml:space="preserve">
+    <value>Сховати коментар</value>
+  </data>
+  <data name="CommentInterviewer" xml:space="preserve">
+    <value>Коментар інтерв'юера</value>
+  </data>
+  <data name="CommentOnPreviousAnswer" xml:space="preserve">
+    <value>Про попередню відповідь</value>
+  </data>
+  <data name="CommentPost" xml:space="preserve">
+    <value>Пост</value>
+  </data>
+  <data name="CommentPosting" xml:space="preserve">
+    <value>Розміщення...</value>
+  </data>
+  <data name="CommentSupervisor" xml:space="preserve">
+    <value>Коментар наукового керівника</value>
+  </data>
+  <data name="CommentYours" xml:space="preserve">
+    <value>Ваш коментар</value>
+  </data>
+  <data name="Complete" xml:space="preserve">
+    <value>Повний</value>
+  </data>
+  <data name="CompleteAbout" xml:space="preserve">
+    <value>Ви збираєтеся завершити це інтерв'ю</value>
+  </data>
+  <data name="CompleteErrors" xml:space="preserve">
+    <value>Питання з помилками:</value>
+  </data>
+  <data name="CompleteFirstErrors" xml:space="preserve">
+    <value>Перші {{count}} сутності з помилками:</value>
+  </data>
+  <data name="CompleteNoteToSupervisor" xml:space="preserve">
+    <value>Примітка для наукового керівника</value>
+  </data>
+  <data name="CompleteQuestionsAnswered" xml:space="preserve">
+    <value>Відповіли</value>
+  </data>
+  <data name="CompleteQuestionsStatus" xml:space="preserve">
+    <value>Статус питань:</value>
+  </data>
+  <data name="CompleteQuestionsUnanswered" xml:space="preserve">
+    <value>Без відповіді</value>
+  </data>
+  <data name="ConfirmRosterRemove" xml:space="preserve">
+    <value>Ви дійсно хочете видалити пов'язаний список?</value>
+  </data>
+  <data name="ConnectionLostMessage" xml:space="preserve">
+    <value>Будь ласка, оновіть сторінку, щоб відновити з'єднання, і продовжуйте це інтерв'ю.</value>
+  </data>
+  <data name="ConnectionLostTitle" xml:space="preserve">
+    <value>Зв'язок із сервером втрачено.</value>
+  </data>
+  <data name="Cover" xml:space="preserve">
+    <value>Кришка</value>
+  </data>
+  <data name="CoverBrokenPackegeText" xml:space="preserve">
+    <value>Увага! Це інтерв'ю має спотворені дані, доступна &lt;br /&gt;
+ лише попередня версія інтерв'ю. &lt;br /&gt;
+Зверніться по допомогу до служби підтримки.</value>
+  </data>
+  <data name="CoverBrokenPackegeTitle" xml:space="preserve">
+    <value>Помилка: це інтерв'ю зіпсовано</value>
+  </data>
+  <data name="CoverComments" xml:space="preserve">
+    <value>Питання з коментарями:</value>
+  </data>
+  <data name="CoverFirstComments" xml:space="preserve">
+    <value>Перші {{count}} сутності з коментарями:</value>
+  </data>
+  <data name="CoverSupervisorNote" xml:space="preserve">
+    <value>Примітка наукового керівника:</value>
+  </data>
+  <data name="DecimalCannotParse" xml:space="preserve">
+    <value>Введене значення не можна проаналізувати як десяткове значення</value>
+  </data>
+  <data name="DecimalEnter" xml:space="preserve">
+    <value>Введення десяткового розряду</value>
+  </data>
+  <data name="DecimalTooBig" xml:space="preserve">
+    <value>Введене значення завелике. Дозволено менше 15 цифр</value>
+  </data>
+  <data name="Disconnected" xml:space="preserve">
+    <value>Відключено</value>
+  </data>
+  <data name="Done" xml:space="preserve">
+    <value>Зробити</value>
+  </data>
+  <data name="EmailLink_EmailResumeLink" xml:space="preserve">
+    <value>Посилання на резюме електронною поштою</value>
+  </data>
+  <data name="EmailLink_Header" xml:space="preserve">
+    <value>Введіть адресу електронної пошти</value>
+  </data>
+  <data name="EmailLink_InvalidEmail" xml:space="preserve">
+    <value>{{email}} – недійсна адреса електронної пошти</value>
+  </data>
+  <data name="EmailLink_Message" xml:space="preserve">
+    <value>Ми надішлемо вам повідомлення з посиланням для відновлення співбесіди, якщо вам знадобиться продовжити пізніше.</value>
+  </data>
+  <data name="EmailLink_Placeholder" xml:space="preserve">
+    <value>Введіть email</value>
+  </data>
+  <data name="EmailLink_ResumeAnyTime" xml:space="preserve">
+    <value>Ви можете скасувати зараз і продовжити співбесіду. І ви можете надіслати його пізніше, натиснувши пункт "Надіслати посилання на відновлення електронною поштою" у верхньому меню.</value>
+  </data>
+  <data name="EnterDate" xml:space="preserve">
+    <value>Дата введення</value>
+  </data>
+  <data name="EnterPassword" xml:space="preserve">
+    <value>Введіть пароль</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Помилка</value>
+  </data>
+  <data name="Error_other" xml:space="preserve">
+    <value>Помилки</value>
+  </data>
+  <data name="GPSError" xml:space="preserve">
+    <value>Позиція не може бути визначена через невідому помилку (Код: {{strErrorCode}}).</value>
+  </data>
+  <data name="GPSNotAvailable" xml:space="preserve">
+    <value>Ваш браузер не підтримує отримання геолокації</value>
+  </data>
+  <data name="GPSPermissionDenied" xml:space="preserve">
+    <value>Цей веб-сайт не має дозволу на використання API геолокації</value>
+  </data>
+  <data name="GPSPositionUnavailable" xml:space="preserve">
+    <value>Поточну позицію визначити не вдалося.</value>
+  </data>
+  <data name="GPSRecord" xml:space="preserve">
+    <value>Запис GPS</value>
+  </data>
+  <data name="GPSTimeout" xml:space="preserve">
+    <value>Поточна позиція не може бути визначена протягом зазначеного тайм-ауту.</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Допомога</value>
+  </data>
+  <data name="HideResolved" xml:space="preserve">
+    <value>Приховати вирішене</value>
+  </data>
+  <data name="Instruction" xml:space="preserve">
+    <value>Інструкція</value>
+  </data>
+  <data name="InstructionShow" xml:space="preserve">
+    <value>Показати інструкцію</value>
+  </data>
+  <data name="Interview_Overview_AdditionalInformation" xml:space="preserve">
+    <value>Додаткова інформація про запитання</value>
+  </data>
+  <data name="Interview_Overview_NotAnswered" xml:space="preserve">
+    <value>Не відповіли</value>
+  </data>
+  <data name="Interview_Overview_NoValue" xml:space="preserve">
+    <value>Немає значення</value>
+  </data>
+  <data name="InterviewReceivedCantModify" xml:space="preserve">
+    <value>Інтерв'ю отримано інтерв'юером і не може бути змінено</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Завантаження...</value>
+  </data>
+  <data name="LoadingQuestionnaire" xml:space="preserve">
+    <value>Завантаження анкети. Будь ласка, зачекай...</value>
+  </data>
+  <data name="LoadingWait" xml:space="preserve">
+    <value>Завантаження, будь ласка, зачекайте</value>
+  </data>
+  <data name="MaxAnswersCountSelected" xml:space="preserve">
+    <value>Зроблено максимальну кількість виборів ({{value}}) у цьому питанні</value>
+  </data>
+  <data name="MultimediaNotSupported" xml:space="preserve">
+    <value>Відтворення мультимедіа не підтримується вашим браузером. Ви можете завантажити його замість цього.</value>
+  </data>
+  <data name="Network" xml:space="preserve">
+    <value>Мережа</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Ні</value>
+  </data>
+  <data name="NoQuestionnaireAccess" xml:space="preserve">
+    <value>У Вас немає доступу до анкети</value>
+  </data>
+  <data name="NoResultsFound" xml:space="preserve">
+    <value>Результатів не знайдено</value>
+  </data>
+  <data name="NotCalculated" xml:space="preserve">
+    <value>Не обчислюється</value>
+  </data>
+  <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
+    <value>Введене значення не може бути меншим за захищену відповідь</value>
+  </data>
+  <data name="NumberCannotParse" xml:space="preserve">
+    <value>Введене значення не можна проаналізувати як ціле значення</value>
+  </data>
+  <data name="NumberEnter" xml:space="preserve">
+    <value>Введіть номер</value>
+  </data>
+  <data name="NumberRosterError" xml:space="preserve">
+    <value>Відповідь '{{answer}}' є неправильною, оскільки питання використовується як розмір списку, а вказана відповідь негативна</value>
+  </data>
+  <data name="NumberRosterRemoveConfirm" xml:space="preserve">
+    <value>Ви дійсно хочете видалити рядки {{amountOfRostersToRemove}} з кожного пов'язаного списку?</value>
+  </data>
+  <data name="NumberRosterUpperBound" xml:space="preserve">
+    <value>Відповідь '{{answer}}' неправильна, оскільки відповідь більша за верхню межу списку {{answerMaxValue}}.</value>
+  </data>
+  <data name="OptionsAvailableAfterAnswer" xml:space="preserve">
+    <value>Категорії будуть доступні після відповіді на запитання, на яке є посилання</value>
+  </data>
+  <data name="PhotoIsNotImage" xml:space="preserve">
+    <value>Завантажувати можна лише файли зображень</value>
+  </data>
+  <data name="PhotoTooBig" xml:space="preserve">
+    <value>Зображення завелике для завантаження. Будь ласка, оберіть зображення до 30 Мб</value>
+  </data>
+  <data name="PhotoUpload" xml:space="preserve">
+    <value>Завантажити фото</value>
+  </data>
+  <data name="PickLocation" xml:space="preserve">
+    <value>Вибрати з карти</value>
+  </data>
+  <data name="Progress" xml:space="preserve">
+    <value>Прогрес</value>
+  </data>
+  <data name="ProgressText" xml:space="preserve">
+    <value>{{progress}}% завершено</value>
+  </data>
+  <data name="QuestionUnsupported" xml:space="preserve">
+    <value>Тип запитання, що не підтримується</value>
+  </data>
+  <data name="RecordCurrentTime" xml:space="preserve">
+    <value>Запис поточного часу</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Перезавантажити</value>
+  </data>
+  <data name="ReloadQuestionnaire" xml:space="preserve">
+    <value>Перезавантажити анкету</value>
+  </data>
+  <data name="Resolve" xml:space="preserve">
+    <value>Вирішити</value>
+  </data>
+  <data name="ResolveHint" xml:space="preserve">
+    <value>Вирішені коментарі за замовчуванням приховані, але можуть бути переглянуті всіма учасниками інтерв'ю</value>
+  </data>
+  <data name="SaveScenario" xml:space="preserve">
+    <value>Зберегти сценарій</value>
+  </data>
+  <data name="SaveScenarioDesignerLogin" xml:space="preserve">
+    <value>Завершився сеанс роботи з програмою-конструктором. Увійдіть у програму Designer, щоб мати можливість зберігати.</value>
+  </data>
+  <data name="SaveScenarioGoToDesigner" xml:space="preserve">
+    <value>Відкрити конструктор</value>
+  </data>
+  <data name="SaveScenarioName" xml:space="preserve">
+    <value>Ім'я</value>
+  </data>
+  <data name="SaveScenarioOptions" xml:space="preserve">
+    <value>Вибір сценарію для заміни</value>
+  </data>
+  <data name="SaveScenarioOptions_ReplaceExisting" xml:space="preserve">
+    <value>Замінити існуючі</value>
+  </data>
+  <data name="SaveScenarioOptions_SaveNew" xml:space="preserve">
+    <value>Зберегти новий</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Шукати</value>
+  </data>
+  <data name="SessionTimeoutMessage" xml:space="preserve">
+    <value>Будь ласка, оновіть сторінку, щоб продовжити це інтерв'ю.</value>
+  </data>
+  <data name="SessionTimeoutMessageTitle" xml:space="preserve">
+    <value>Час вашого сеансу закінчився, оскільки ви не виконували жодних дій протягом 15 хвилин.</value>
+  </data>
+  <data name="SessionTimeoutTitle" xml:space="preserve">
+    <value>Час очікування сеансу вичерпано</value>
+  </data>
+  <data name="ShowOnMap" xml:space="preserve">
+    <value>Показати на карті</value>
+  </data>
+  <data name="ShowResolved" xml:space="preserve">
+    <value>Показати вирішену</value>
+  </data>
+  <data name="SlowConnection" xml:space="preserve">
+    <value>Повільне підключення до мережі</value>
+  </data>
+  <data name="SwitchingLanguage" xml:space="preserve">
+    <value>Перемикання мови. Будь ласка, зачекай...</value>
+  </data>
+  <data name="SwitchToWebMode" xml:space="preserve">
+    <value>Переключення інтерв'ю у веб-режим</value>
+  </data>
+  <data name="SwitchToWebMode_LinkDescription" xml:space="preserve">
+    <value>Наступне посилання може бути використано для продовження цього інтерв'ю</value>
+  </data>
+  <data name="TextEnter" xml:space="preserve">
+    <value>Введіть текст</value>
+  </data>
+  <data name="TextEnterMasked" xml:space="preserve">
+    <value>Введіть текст {{userFriendlyMask}}</value>
+  </data>
+  <data name="TextEnterNewItem" xml:space="preserve">
+    <value>Ввести новий елемент</value>
+  </data>
+  <data name="TextRequired" xml:space="preserve">
+    <value>Будь ласка, заповніть всі необхідні значення</value>
+  </data>
+  <data name="ToggleNavigation" xml:space="preserve">
+    <value>Включити навігацію</value>
+  </data>
+  <data name="WarningsHeader" xml:space="preserve">
+    <value>Попередження</value>
+  </data>
+  <data name="WebInterview" xml:space="preserve">
+    <value>Веб-інтерв'ю</value>
+  </data>
+  <data name="WebTesterSessionOver" xml:space="preserve">
+    <value>Сеанс тестування завершено</value>
+  </data>
+  <data name="WebTesterSessionOverMessage" xml:space="preserve">
+    <value>Будь ласка, закрийте цю сторінку. Ви можете відкрити новий, повернувшись на сайт конструктора</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Так</value>
+  </data>
 </root>

@@ -56,6 +56,9 @@
     <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.ar.resx">
       <Link>EnumeratorUIResources.ar.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.cs.resx">
+      <Link>EnumeratorUIResources.cs.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.es.resx">
       <Link>EnumeratorUIResources.es.resx</Link>
     </EmbeddedResource>
@@ -100,6 +103,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.ar.resx">
       <Link>UIResources.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.cs.resx">
+      <Link>UIResources.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.es.resx">
       <Link>UIResources.es.resx</Link>

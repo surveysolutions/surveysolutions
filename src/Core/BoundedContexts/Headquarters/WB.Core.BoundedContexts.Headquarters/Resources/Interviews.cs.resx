@@ -118,15 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ImportInterviews_FailedToImportInterview_NoSupervisor" xml:space="preserve">
-    <value>Chyba při importu rozhovoru s technickými údaji {0}. Chybí zodpovědný Garant</value>
+    <value>Chyba při importu rozhovoru s identifikačními otázkami {0}. Chybí odpovědný supervizor</value>
   </data>
   <data name="ImportInterviews_GenericError" xml:space="preserve">
-    <value>Chyba při importu vyplněných dotazníků: {0}. Zodpovědný uživatel: {1}, výjimka: {2}</value>
+    <value>Chyba při importu úkolu s odpověďmi: {0}. Příslušný výbor: {1}, Výjimka: {2}</value>
   </data>
   <data name="ImportInterviews_IncorrectDatafile" xml:space="preserve">
     <value>Datový soubor je nesprávný</value>
   </data>
   <data name="ImportInterviews_QuestionaireNotFound" xml:space="preserve">
-    <value>Typ dotazníku nebyl nalezen</value>
+    <value>Dotazník nebyl nalezen</value>
   </data>
 </root>

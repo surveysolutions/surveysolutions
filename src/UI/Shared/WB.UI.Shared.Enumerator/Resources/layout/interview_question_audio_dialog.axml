@@ -48,25 +48,35 @@
           android:layout_width="@dimen/Interview_Audio_Dialog_Visualizer_Min_Width"
           android:layout_height="@dimen/Interview_Audio_Dialog_Visualizer_Min_Width"
           local:MvxBind="SizeByNoiseLevel NoiseLevel; BackgroundStyle AudioNoiseTypeToShape(NoiseType)" />  
-      </RelativeLayout>
-        
+      </RelativeLayout>        
     </TableRow>
+    <TableRow>
+          <LinearLayout style="@style/FullWidthWrappingLayout">
+              <TextView
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"                      
+                      style="@style/Text_Roboto_24"
+                      local:MvxBind="Text Duration;"/>
+          </LinearLayout>          
+    </TableRow>
+      
   </TableLayout>
   <LinearLayout style="@style/FullWidthWrappingLayout">
-    <TextView
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:layout_weight="1"
-      style="@style/Text_Roboto_24"
-      local:MvxBind="Text Duration;"/>
-
-    <Button style="@style/Link_Button"
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            style="@style/Widget.App.NegativeButton"
             android:id="@+id/btn_AudioDialog_Cancel"
             local:MvxBind="Click CancelCommand; Text Localization('Interviewer_RelinkDevice_Cancel');" />
     <Button
-      style="@style/Done_Button"
-      android:id="@+id/btn_AudioDialog_Done"
-      local:MvxBind="Click DoneCommand; Text Localization('Interviewer_Done');" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            style="@style/Widget.App.Button"
+            android:id="@+id/btn_AudioDialog_Done"
+            local:MvxBind="Click DoneCommand; Text Localization('Interviewer_Done');" />
   </LinearLayout>
+    
 </LinearLayout>
 </LinearLayout>
