@@ -1107,7 +1107,7 @@ export default {
                 }
             })
 
-            var washingtonCoordinates = new google.maps.LatLng(
+            let washingtonCoordinates = new google.maps.LatLng(
                 38.895111,
                 -77.036667
             )

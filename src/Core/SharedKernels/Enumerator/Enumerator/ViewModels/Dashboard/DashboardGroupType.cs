@@ -1,7 +1,7 @@
 ﻿namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 public enum DashboardGroupType
 {
-    Unknown = 0,
+    None = 0,
     Assignments = 1,
     InProgressInterviews = 2,
     CompletedInterviews = 3,
