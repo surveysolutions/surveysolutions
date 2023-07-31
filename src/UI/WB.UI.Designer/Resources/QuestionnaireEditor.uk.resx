@@ -869,10 +869,7 @@ Flat - питання списку відображаються на одном�
   </data>
   <data name="QuestionShowListLimit" xml:space="preserve">
     <value>Якщо не більше</value>
-  </data>
-  <data name="QuestionShowStrings" xml:space="preserve">
-    <value>Відображення рядків</value>
-  </data>
+  </data>  
   <data name="QuestionsSearchEntities" xml:space="preserve">
     <value>результати пошуку</value>
   </data>
@@ -947,9 +944,6 @@ Flat - питання списку відображаються на одном�
   </data>
   <data name="RosterName" xml:space="preserve">
     <value>Назва реєстру</value>
-  </data>
-  <data name="RosterShowStrings" xml:space="preserve">
-    <value>Відображення рядків</value>
   </data>
   <data name="RosterSource" xml:space="preserve">
     <value>Джерело списку</value>

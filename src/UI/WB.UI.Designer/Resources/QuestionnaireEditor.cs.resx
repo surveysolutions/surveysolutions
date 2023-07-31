@@ -873,9 +873,6 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
   <data name="QuestionShowListLimit" xml:space="preserve">
     <value>Pokud ne více než</value>
   </data>
-  <data name="QuestionShowStrings" xml:space="preserve">
-    <value>Zobrazit řetězce</value>
-  </data>
   <data name="QuestionsSearchEntities" xml:space="preserve">
     <value>Výsledky hledání</value>
   </data>
@@ -950,10 +947,7 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
   </data>
   <data name="RosterName" xml:space="preserve">
     <value>Název soupisky</value>
-  </data>
-  <data name="RosterShowStrings" xml:space="preserve">
-    <value>Zobrazit řetězce</value>
-  </data>
+  </data>  
   <data name="RosterSource" xml:space="preserve">
     <value>Zdroj soupisky</value>
   </data>
