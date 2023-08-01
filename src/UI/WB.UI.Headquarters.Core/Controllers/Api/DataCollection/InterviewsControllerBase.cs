@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
@@ -45,6 +46,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         protected readonly IJsonAllTypesSerializer synchronizationSerializer;
         protected readonly IHeadquartersEventStore eventStore;
         protected readonly IInterviewInformationFactory interviewsFactory;
+        private readonly IUserToDeviceService userToDeviceService;
 
         protected InterviewsControllerBase(IImageFileStorage imageFileStorage,
             IAudioFileStorage audioFileStorage,
@@ -56,6 +58,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             IJsonAllTypesSerializer synchronizationSerializer,
             IHeadquartersEventStore eventStore,
             IAudioAuditFileStorage audioAuditFileStorage,
+            IUserToDeviceService userToDeviceService,
             IWebHostEnvironment webHostEnvironment)
         {
             this.imageFileStorage = imageFileStorage;
@@ -69,6 +72,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             this.eventStore = eventStore;
             this.audioAuditFileStorage = audioAuditFileStorage;
             this.webHostEnvironment = webHostEnvironment;
+            this.userToDeviceService = userToDeviceService;
         }
 
         public virtual ActionResult<List<InterviewApiView>> Get()
@@ -118,7 +122,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 
         public virtual IActionResult LogInterviewAsSuccessfullyHandled(Guid id)
         {
-            this.commandService.Execute(new MarkInterviewAsReceivedByInterviewer(id, this.authorizedUser.Id));
+            var deviceId = userToDeviceService.GetLinkedDeviceId(this.authorizedUser.Id);
+            
+            this.commandService.Execute(new MarkInterviewAsReceivedByInterviewer(id, deviceId, this.authorizedUser.Id));
             return StatusCode(StatusCodes.Status204NoContent);
         }
 

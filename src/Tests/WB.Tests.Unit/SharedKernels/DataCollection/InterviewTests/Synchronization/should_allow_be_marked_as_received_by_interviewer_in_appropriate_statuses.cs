@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
             interview.Apply(Create.Event.InterviewStatusChanged(targetStatus));
 
             // Act
-            TestDelegate act = () => interview.MarkInterviewAsReceivedByInterviwer(Id.g1, DateTimeOffset.UtcNow);
+            TestDelegate act = () => interview.MarkInterviewAsReceivedByInterviewer(Id.g1, DateTimeOffset.UtcNow);
 
             // Assert
             Assert.That(act, Throws.Nothing);
@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
             interview.Apply(Create.Event.InterviewStatusChanged(targetStatus));
 
             // Act
-            TestDelegate act = () => interview.MarkInterviewAsReceivedByInterviwer(Id.g1, DateTimeOffset.UtcNow);
+            TestDelegate act = () => interview.MarkInterviewAsReceivedByInterviewer(Id.g1, DateTimeOffset.UtcNow);
 
             // Assert
             Assert.That(act, Throws.Exception.InstanceOf<InterviewException>());
