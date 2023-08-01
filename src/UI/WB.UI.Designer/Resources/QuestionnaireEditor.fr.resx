@@ -660,9 +660,6 @@
   <data name="SettingsWhoHasAccess" xml:space="preserve">
     <value>Qui a accès:</value>
   </data>
-  <data name="ShowList" xml:space="preserve">
-    <value>Montrer la liste</value>
-  </data>
   <data name="SideBarAddMacro" xml:space="preserve">
     <value>ajouter une nouvelle macro</value>
   </data>

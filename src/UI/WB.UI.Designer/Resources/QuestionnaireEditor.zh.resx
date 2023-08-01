@@ -762,9 +762,6 @@
   <data name="SettingsWhoHasAccess" xml:space="preserve">
     <value>拥有访问权限的人：</value>
   </data>
-  <data name="ShowList" xml:space="preserve">
-    <value>显示列表</value>
-  </data>
   <data name="SideBarAddMacro" xml:space="preserve">
     <value>添加新的宏</value>
   </data>

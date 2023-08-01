@@ -3045,15 +3045,6 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show list.
-        /// </summary>
-        public static string ShowList {
-            get {
-                return ResourceManager.GetString("ShowList", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Show Parent values.
         /// </summary>
         public static string ShowParentValues {

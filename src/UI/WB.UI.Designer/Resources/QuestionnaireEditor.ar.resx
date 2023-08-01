@@ -654,9 +654,6 @@
   <data name="SettingsWhoHasAccess" xml:space="preserve">
     <value>من يمكنه الدخول</value>
   </data>
-  <data name="ShowList" xml:space="preserve">
-    <value>اظهار القائمة</value>
-  </data>
   <data name="SideBarAttachmentDetailsFormat" xml:space="preserve">
     <value>الشكل: {{- type}}</value>
   </data>

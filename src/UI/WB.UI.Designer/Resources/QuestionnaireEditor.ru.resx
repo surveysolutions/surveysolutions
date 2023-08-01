@@ -580,9 +580,6 @@
   <data name="SettingsWhoHasAccess" xml:space="preserve">
     <value>У кого есть доступ:</value>
   </data>
-  <data name="ShowList" xml:space="preserve">
-    <value>Показать список</value>
-  </data>
   <data name="ValidationCondition" xml:space="preserve">
     <value>Проверка</value>
   </data>

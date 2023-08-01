@@ -760,9 +760,6 @@
   <data name="SettingsWhoHasAccess" xml:space="preserve">
     <value>who has access</value>
   </data>
-  <data name="ShowList" xml:space="preserve">
-    <value>Show list</value>
-  </data>
   <data name="ValidationCondition" xml:space="preserve">
     <value>Validation condition</value>
   </data>

@@ -1116,9 +1116,6 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
   <data name="ShowAsList" xml:space="preserve">
     <value>Zobrazit jako seznam kategorií</value>
   </data>
-  <data name="ShowList" xml:space="preserve">
-    <value>Zobrazit seznam</value>
-  </data>
   <data name="ShowParentValues" xml:space="preserve">
     <value>Zobrazit nadřazené hodnoty</value>
   </data>

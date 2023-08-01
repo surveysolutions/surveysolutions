@@ -849,9 +849,6 @@
   <data name="ShowAsList" xml:space="preserve">
     <value>Shfaq listën e kategorive</value>
   </data>
-  <data name="ShowList" xml:space="preserve">
-    <value>Shfaq listën</value>
-  </data>
   <data name="SideBarAddMacro" xml:space="preserve">
     <value>shto Makro të re</value>
   </data>

@@ -977,9 +977,6 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
   <data name="ShowAsList" xml:space="preserve">
     <value>Afișează ca listă de categorii</value>
   </data>
-  <data name="ShowList" xml:space="preserve">
-    <value>Afișează lista</value>
-  </data>
   <data name="SideBarAddMacro" xml:space="preserve">
     <value>adăugați o funcție de tip macrocomandă nouă</value>
   </data>

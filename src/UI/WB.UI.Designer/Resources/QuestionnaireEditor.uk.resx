@@ -1113,9 +1113,6 @@ Flat - питання списку відображаються на одном�
   <data name="ShowAsList" xml:space="preserve">
     <value>Показати як список категорій</value>
   </data>
-  <data name="ShowList" xml:space="preserve">
-    <value>Показати список</value>
-  </data>
   <data name="ShowParentValues" xml:space="preserve">
     <value>Відображення батьківських значень</value>
   </data>
