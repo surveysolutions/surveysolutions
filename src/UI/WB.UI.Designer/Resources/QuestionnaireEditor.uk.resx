@@ -721,7 +721,7 @@
     <value>Застосувати зміни</value>
   </data>
   <data name="OptionsUploadLimit" xml:space="preserve">
-    <value>Без категорій. Виберіть файл, розділений табуляцією. Файл може містити до {ліміт} категорій.</value>
+      <value>Без категорій. Виберіть файл, розділений табуляцією. Файл може містити до {limit} категорій.</value>
   </data>
   <data name="OptionsUploadParent" xml:space="preserve">
     <value>Батьківське значення</value>
@@ -1579,7 +1579,7 @@
     <value>Віртуальна титульна сторінка</value>
   </data>
   <data name="WarningsCounter" xml:space="preserve">
-      <value>{{coun}} попередження</value>
+      <value>{{count}} попередження</value>
   </data>
   <data name="WarningsCounter_plural" xml:space="preserve">
     <value>{{count}} попередження</value>
