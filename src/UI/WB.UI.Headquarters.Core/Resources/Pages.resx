@@ -1324,6 +1324,9 @@
   <data name="MapDetails_Size" xml:space="preserve">
     <value>Size(MB)</value>
   </data>
+  <data name="MapDetails_EmptyMapData" xml:space="preserve">
+    <value>Preview data is missing for this map</value>
+  </data>
   <data name="MapDetails_MinScale" xml:space="preserve">
     <value>Min Scale</value>
   </data>

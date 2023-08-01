@@ -3219,6 +3219,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Preview data is missing for this map.
+        /// </summary>
+        public static string MapDetails_EmptyMapData {
+            get {
+                return ResourceManager.GetString("MapDetails_EmptyMapData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This preview shows the uploaded shapefile superimposed on the satellite image base layer..
         /// </summary>
         public static string MapDetails_FullShapefilesDisclaimer {
