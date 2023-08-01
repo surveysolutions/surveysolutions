@@ -466,7 +466,7 @@
     <value>Назва</value>
   </data>
   <data name="HellowMessageBtn" xml:space="preserve">
-    <value>Привіт.</value>
+      <value>Привіт, {{currentUserName}}</value>
   </data>
   <data name="Help" xml:space="preserve">
     <value>Допоможіть!</value>
@@ -1579,7 +1579,7 @@
     <value>Віртуальна титульна сторінка</value>
   </data>
   <data name="WarningsCounter" xml:space="preserve">
-    <value>{Попередження</value>
+      <value>{{coun}} попередження</value>
   </data>
   <data name="WarningsCounter_plural" xml:space="preserve">
     <value>{{count}} попередження</value>

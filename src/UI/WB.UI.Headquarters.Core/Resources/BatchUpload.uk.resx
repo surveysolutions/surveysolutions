@@ -357,7 +357,7 @@
     <value>Імпорт інтерв'ю для {0}</value>
   </data>
   <data name="ImportProgressFormat" xml:space="preserve">
-    <value>{з "Острова".</value>
+      <value>{{createdCount}} з {{totalCount}}</value>
   </data>
   <data name="ImportSample" xml:space="preserve">
     <value>Зразок імпорту</value>
