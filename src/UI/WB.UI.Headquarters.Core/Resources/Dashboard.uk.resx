@@ -124,7 +124,7 @@
     <value>Всі дані</value>
   </data>
   <data name="AllDataSpss" xml:space="preserve">
-    <value>Всі дані SPSS</value>
+    <value>Всі дані Spss</value>
   </data>
   <data name="AllDataStata" xml:space="preserve">
     <value>Всі дані Stata</value>
@@ -133,7 +133,7 @@
     <value>Затверджені дані</value>
   </data>
   <data name="ApprovedDataSpss" xml:space="preserve">
-    <value>Затверджені дані SPSS</value>
+    <value>Затверджені дані Spss</value>
   </data>
   <data name="ApprovedDataStata" xml:space="preserve">
     <value>Затверджені дані Stata</value>
@@ -142,7 +142,7 @@
     <value>Двійкові дані</value>
   </data>
   <data name="CloneQuestionnaire" xml:space="preserve">
-    <value>Анкета клонів</value>
+    <value>Клонована анкета</value>
   </data>
   <data name="CreateUser" xml:space="preserve">
     <value>Створити користувача</value>
@@ -163,7 +163,7 @@
     <value>Деталі</value>
   </data>
   <data name="DownloadLinks" xml:space="preserve">
-    <value>Завантажити веб-посилання</value>
+    <value>Посилання для завантаження</value>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Редагувати</value>
@@ -181,31 +181,31 @@
     <value>Імпортовано на</value>
   </data>
   <data name="ImportedBy" xml:space="preserve">
-    <value>Імпорт</value>
+    <value>Імпортовано компанією</value>
   </data>
   <data name="ImportedByText" xml:space="preserve">
-    <value>{{role}} користувач {{name}}</value>
+    <value>{{role}} user {{name}}</value>
   </data>
   <data name="ImportTemplate" xml:space="preserve">
-    <value>Опитувальник імпорту</value>
+    <value>Імпортна анкета</value>
   </data>
   <data name="LastEntryDate" xml:space="preserve">
-    <value>Змінено</value>
+    <value>Змінено на</value>
   </data>
   <data name="MapDashboard" xml:space="preserve">
-    <value>Приладна дошка карти</value>
+    <value>Панель управління картою</value>
   </data>
   <data name="Maps" xml:space="preserve">
     <value>Карти</value>
   </data>
   <data name="NewAssignment" xml:space="preserve">
-    <value>Нове призначення</value>
+    <value>Нове завдання</value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Анкета</value>
   </data>
   <data name="QuestionnaireDeleteWarn" xml:space="preserve">
-    <value>{{receivedInterviews}} інтерв'ю та {{receivedAssignments}} завдання для нових інтерв'ю були отримані інтерв'юерами/керівниками, які працюють відключено. Після підтвердження видалення опитування сервер більше не прийматиме інформацію на основі цих інтерв'ю/завдань, і вони зникнуть при наступній синхронізації без можливості відновлення, навіть якщо міститимуть знову введену/відредаговану інформацію. Ви несете відповідальність за попередження/повідомлення інтерв'юерів, щоб вони більше не заповнювали ці інтерв'ю/завдання, оскільки вони не будуть повідомлені автоматично. Ви хочете продовжити?</value>
+    <value>{{receivedInterviews}} інтерв'ю та {{receivedAssignments}} завдань для нових інтерв'ю були отримані інтерв'юерами/супервайзерами, які працюють без зв'язку. Після того, як ви підтвердите видалення опитування, сервер більше не прийматиме інформацію, засновану на цих інтерв'ю/завданнях, і вони зникнуть при наступній синхронізації без можливості відновлення, навіть якщо містять нову введену/відредаговану інформацію. Ви несете відповідальність за попередження/повідомлення інтерв'юерів про те, щоб вони більше не заповнювали ці інтерв'ю/завдання, оскільки вони не будуть повідомлені автоматично. Ви хочете продовжити?</value>
   </data>
   <data name="QuestionnairePreview" xml:space="preserve">
     <value>Попередній перегляд анкети</value>
@@ -214,22 +214,22 @@
     <value>Анкети</value>
   </data>
   <data name="RecordAudio" xml:space="preserve">
-    <value>Запис аудіо</value>
+    <value>Записати аудіо</value>
   </data>
   <data name="RecordAudioTitle" xml:space="preserve">
-    <value>Додаток «Інтерв'юер» запише аудіо інтерв'ю, коли ввімкнено аудіоаудит. Врахуйте, що обсяг синхронізаційних даних буде значно більшим.</value>
+    <value>Додаток Interviewer записуватиме аудіо інтерв'ю, якщо увімкнено аудіоаудит. Зверніть увагу, що обсяг даних синхронізації буде значно більшим.</value>
   </data>
   <data name="SendInvitations" xml:space="preserve">
-    <value>Надіслати запрошення</value>
+    <value>Надсилайте запрошення</value>
   </data>
   <data name="ShowOnDesigner" xml:space="preserve">
-    <value>Показати на конструкторі</value>
+    <value>Показати на Дизайнері</value>
   </data>
   <data name="SurveySetupIntroMessage1" xml:space="preserve">
-    <value>Натисніть кнопку «Імпортувати анкету», щоб завантажити анкету від дизайнера</value>
+    <value>Натисніть кнопку "Імпортувати анкету", щоб завантажити анкету з Конструктора</value>
   </data>
   <data name="SurveySetupIntroMessage2" xml:space="preserve">
-    <value>Натисніть на анкету зі списку, щоб створити завдання на співбесіду</value>
+    <value>Натисніть на анкету зі списку, щоб створити завдання для інтерв'ю</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Назва</value>
@@ -238,10 +238,10 @@
     <value>Будь ласка, введіть '{{questionnaireTitle}}' для підтвердження</value>
   </data>
   <data name="UpgradeAssignments" xml:space="preserve">
-    <value>Призначення оновлення</value>
+    <value>Завдання на оновлення</value>
   </data>
   <data name="UploadAssignments" xml:space="preserve">
-    <value>Завантаження завдань</value>
+    <value>Завантажити завдання</value>
   </data>
   <data name="UsersManagement" xml:space="preserve">
     <value>Керування користувачами</value>

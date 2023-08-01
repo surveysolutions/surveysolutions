@@ -118,18 +118,18 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="RosterTitle" xml:space="preserve">
-    <value>Склад: {0}</value>
+    <value>Ростер: {0}</value>
   </data>
   <data name="RosterType_Fixed" xml:space="preserve">
-    <value>Фіксований набір предметів</value>
+    <value>Фіксований набір елементів</value>
   </data>
   <data name="RosterType_List" xml:space="preserve">
-    <value>Список питань</value>
+    <value>Перелічіть питання</value>
   </data>
   <data name="RosterType_Multi" xml:space="preserve">
-    <value>Запитання з множинним вибором</value>
+    <value>Питання з множинним вибором</value>
   </data>
   <data name="RosterType_Numeric" xml:space="preserve">
-    <value>Числове запитання</value>
+    <value>Числове питання</value>
   </data>
 </root>

@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AssignmentLimitReached" xml:space="preserve">
-    <value>Ми збираємо всі інтерв'ю в цьому опитуванні.</value>
+    <value>Ми збираємо всі інтерв'ю в цьому дослідженні.</value>
   </data>
   <data name="Complete" xml:space="preserve">
-    <value>Повний</value>
+    <value>Завершено</value>
   </data>
   <data name="CompleteInterview" xml:space="preserve">
     <value>Повне інтерв'ю</value>
@@ -130,7 +130,7 @@
     <value>Це інтерв'ю завершено</value>
   </data>
   <data name="DiscardAndStart" xml:space="preserve">
-    <value>Відкрити</value>
+    <value>Відчиняй!</value>
   </data>
   <data name="DownloadAnswers" xml:space="preserve">
     <value>Завантажити стенограму інтерв'ю</value>
@@ -141,99 +141,99 @@
   <data name="Email_InvitationTemplate_Message" xml:space="preserve">
     <value>Ласкаво просимо до %SURVEYNAME%!
 
-Щоб взяти участь в опитуванні, натисніть на наступне посилання: %SURVEYLINK% та введіть свій пароль: %ПАРОЛЬ%
+Щоб пройти опитування, перейдіть за наступним посиланням: %SURVEYLINK% та введіть свій пароль: %PASSWORD%
  
 Дякуємо за співпрацю!</value>
   </data>
   <data name="Email_InvitationTemplate_Subject" xml:space="preserve">
-    <value>Запрошення взяти участь в %SURVEYNAME%</value>
+    <value>Запрошення взяти участь в опитуванні %SURVEYNAME%.</value>
   </data>
   <data name="Email_NoResponse_Message" xml:space="preserve">
-    <value>Ви отримуєте це нагадування, тому що не почали відповідати на %SURVEYNAME%!
+    <value>Ви отримуєте це нагадування, тому що ви ще не почали відповідати на %SURVEYNAME%!
  
-Щоб взяти участь в опитуванні, натисніть на наступне посилання: %SURVEYLINK% та введіть свій пароль: %ПАРОЛЬ%
+Щоб пройти опитування, перейдіть за наступним посиланням: %SURVEYLINK% та введіть свій пароль: %PASSWORD%
  
 Дякуємо за співпрацю!</value>
   </data>
   <data name="Email_NoResponse_Subject" xml:space="preserve">
-    <value>Нагадуємо, не забудьте взяти участь у %SURVEYNAME%</value>
+    <value>Нагадуємо, що не забудьте взяти участь в опитуванні %SURVEYNAME%.</value>
   </data>
   <data name="Email_PartialResponse_Message" xml:space="preserve">
-    <value>Ви отримуєте це нагадування, тому що ви почали відповідати на %SURVEYNAME%, але не завершили процес.
+    <value>Ви отримуєте це нагадування, оскільки ви почали відповідати на запитання %SURVEYNAME%, але не завершили процес.
  
-Щоб продовжити опитування, натисніть на наступне посилання: %SURVEYLINK% і введіть свій пароль: %PASSWORD%.
+Щоб продовжити опитування, перейдіть за наступним посиланням: %SURVEYLINK% та введіть свій пароль: %PASSWORD%.
  
-Будь ласка, дайте відповідь на всі відповідні запитання та натисніть кнопку «ЗАВЕРШИТИ», щоб надіслати свої відповіді.
+Пожалуйста, дайте відповідь на всі відповідні запитання та натисніть кнопку "ЗАВЕРШИТИ", щоб надіслати свої відповіді.
  
-Дякуємо за співпрацю!</value>
+Дякуємо за вашу співпрацю!</value>
   </data>
   <data name="Email_PartialResponse_Subject" xml:space="preserve">
-    <value>Нагадуємо, будь ласка, заповніть Вашу відповідь на %SURVEYNAME%</value>
+    <value>Нагадуємо, будь ласка, заповніть відповідь на %SURVEYNAME%.</value>
   </data>
   <data name="Email_RejectEmail_Message" xml:space="preserve">
-    <value>Дякуємо, що взяли участь у %SURVEYNAME%!
+    <value>Дякуємо за участь в опитуванні %SURVEYNAME%!
  
-Під час обробки вашої відповіді наші співробітники виявили деякі проблеми, які вас просять розглянути.
+Під час обробки Вашої відповіді наші співробітники виявили деякі проблеми, на які ми просимо Вас звернути увагу.
  
-Щоб продовжити опитування, натисніть на наступне посилання: %SURVEYLINK% та введіть свій пароль: %PASSWORD%.
+Щоб продовжити опитування, перейдіть за наступним посиланням: %SURVEYLINK% та введіть пароль: %PASSWORD%.
  
-Ми будемо вдячні, якщо ви спробуєте вирішити всі питання, зазначені у вашій відповіді, і натиснете кнопку "ЗАВЕРШИТИ", щоб надіслати свої відповіді.
+Будемо вдячні, якщо Ви спробуєте відповісти на всі питання, зазначені у Вашій відповіді, та натиснете кнопку "ЗАВЕРШИТИ" для відправки Вашої відповіді.
  
-Дякуємо за співпрацю!</value>
+Дякуємо за Вашу співпрацю!</value>
   </data>
   <data name="Email_RejectEmail_Subject" xml:space="preserve">
-    <value>Ваша дія обов'язкова в %SURVEYNAME%</value>
+    <value>Ваша дія потрібна в %SURVEYNAME%.</value>
   </data>
   <data name="EnterPasswordText" xml:space="preserve">
-    <value>Це посилання захищене паролем, який був розповсюджений разом із посиланням. Будь ласка, введіть його тут</value>
+    <value>Це посилання захищене паролем, який розповсюджується разом з посиланням. Будь ласка, введіть його тут</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Помилка</value>
+    <value>Помилка.</value>
   </data>
   <data name="Error_CookiesTurnedOff" xml:space="preserve">
-    <value>Файли cookie не ввімкнено у вашому браузері. Будь ласка, увімкніть файли cookie в налаштуваннях вашого браузера, щоб продовжити</value>
+    <value>У вашому браузері не ввімкнені файли cookie. Будь ласка, увімкніть файли cookie у налаштуваннях вашого браузера, щоб продовжити</value>
   </data>
   <data name="Error_Forbidden" xml:space="preserve">
-    <value>Заборонений</value>
+    <value>Заборонено.</value>
   </data>
   <data name="Error_InterviewExpired" xml:space="preserve">
     <value>Термін дії посилання закінчився</value>
   </data>
   <data name="Error_NoActionsNeeded" xml:space="preserve">
-    <value>Інформація про це інтерв'ю була записана. Ніяких подальших дій робити не потрібно</value>
+    <value>Інформація про це інтерв'ю була зафіксована. Ніяких подальших дій не потрібно</value>
   </data>
   <data name="Error_NotFound" xml:space="preserve">
-    <value>Співбесіда не знайдена або немає необхідності в новому інтерв'ю</value>
+    <value>Інтерв'ю не знайдено або немає потреби в новому інтерв'ю</value>
   </data>
   <data name="Error_UserNotAuthorised" xml:space="preserve">
     <value>Користувач не авторизований</value>
   </data>
   <data name="Filters_Answered" xml:space="preserve">
-    <value>Відповіли</value>
+    <value>Відповідаю.</value>
   </data>
   <data name="Filters_ClearSelection" xml:space="preserve">
     <value>Скинути всі фільтри</value>
   </data>
   <data name="Filters_Flagged" xml:space="preserve">
-    <value>Позначені</value>
+    <value>Позначено.</value>
   </data>
   <data name="Filters_ForInterviewer" xml:space="preserve">
     <value>Для інтерв'юера</value>
   </data>
   <data name="Filters_ForSupervisor" xml:space="preserve">
-    <value>Для наукового керівника</value>
+    <value>Для керівника</value>
   </data>
   <data name="Filters_Invalid" xml:space="preserve">
-    <value>Інвалід</value>
+    <value>Недійсний</value>
   </data>
   <data name="Filters_NotAnswered" xml:space="preserve">
     <value>Не відповіли</value>
   </data>
   <data name="Filters_NotFlagged" xml:space="preserve">
-    <value>Без прапора</value>
+    <value>Прапора немає.</value>
   </data>
   <data name="Filters_Title" xml:space="preserve">
-    <value>Фільтрувати запитання</value>
+    <value>Фільтрувати питання</value>
   </data>
   <data name="Filters_Valid" xml:space="preserve">
     <value>Дійсний</value>
@@ -245,10 +245,10 @@
     <value>Це інтерв'ю завершено</value>
   </data>
   <data name="HasPreviousStartedInterview" xml:space="preserve">
-    <value>Ви почали співбесіду</value>
+    <value>Ви розпочали співбесіду</value>
   </data>
   <data name="InProgressText" xml:space="preserve">
-    <value>У розробці</value>
+    <value>У процесі виконання</value>
   </data>
   <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve">
     <value>{{value}} відповіді</value>
@@ -257,7 +257,7 @@
     <value>одна відповідь</value>
   </data>
   <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve">
-    <value>Помилки {{value}}</value>
+    <value>{{value}} помилки</value>
   </data>
   <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve">
     <value>одна помилка</value>
@@ -266,7 +266,7 @@
     <value>Розділ завершено: {{value}}</value>
   </data>
   <data name="Interview_Group_Status_NotStarted" xml:space="preserve">
-    <value>Розділ не розпочато</value>
+    <value>Розділ не запущено</value>
   </data>
   <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve">
     <value>Розділ розпочато: {{value}}</value>
@@ -275,25 +275,25 @@
     <value>{{value}} підрозділи</value>
   </data>
   <data name="Interview_Group_Subgroups_One" xml:space="preserve">
-    <value>Один підрозділ</value>
+    <value>один підрозділ</value>
   </data>
   <data name="Interview_Group_Subgroups_Zero" xml:space="preserve">
-    <value>без підрозділів</value>
+    <value>немає підрозділів</value>
   </data>
   <data name="InterviewCompletionDateFormatText" xml:space="preserve">
     <value>Дата завершення співбесіди: </value>
   </data>
   <data name="InterviewIdFormatText" xml:space="preserve">
-    <value>ID інтерв'ю: {0}</value>
+    <value>Ідентифікатор допиту: {0}</value>
   </data>
   <data name="InterviewNotFound" xml:space="preserve">
     <value>Інтерв'ю не знайдено.</value>
   </data>
   <data name="InterviewReceivedByInterviewer" xml:space="preserve">
-    <value>Не вдається змінити інтерв'ю, отримане за допомогою пристрою</value>
+    <value>Неможливо змінити інтерв'ю, отримане пристроєм</value>
   </data>
   <data name="InterviewSizeLimitReached" xml:space="preserve">
-    <value>Інтерв'ю містить загальну кількість екземплярів та питань, що перевищують системні ліміти.</value>
+    <value>Інтерв'ю містить загальну кількість екземплярів реєстру та запитань, що перевищують ліміти системи.</value>
   </data>
   <data name="InterviewStartDateFormatText" xml:space="preserve">
     <value>Дата початку співбесіди: </value>
@@ -302,22 +302,22 @@
     <value>Неправильний пароль</value>
   </data>
   <data name="InvitationSmallText" xml:space="preserve">
-    <value>Процес співбесіди вимагає підключення до Інтернету. Додаткове програмне забезпечення не потрібне.</value>
+    <value>Для проходження співбесіди потрібне підключення до Інтернету. Додаткове програмне забезпечення не потрібне.</value>
   </data>
   <data name="InvitationText" xml:space="preserve">
-    <value>Вас запрошують взяти участь в опитуванні: "%QUESTIONNAIRE%"</value>
+    <value>Вам було запропоновано взяти участь у наступному опитуванні: "%АНКЕТА%"</value>
   </data>
   <data name="LinkToWebInterviewExample" xml:space="preserve">
-    <value>Приклад посилання на цільову сторінку веб-інтерв'ю</value>
+    <value>Посилання на приклад цільової сторінки веб-інтерв'ю</value>
   </data>
   <data name="NoteForSupervisor" xml:space="preserve">
-    <value>Примітка для наукового керівника</value>
+    <value>Примітка для керівника</value>
   </data>
   <data name="NotStartedText" xml:space="preserve">
-    <value>Не виконано</value>
+    <value>Не розпочато</value>
   </data>
   <data name="Original_Language" xml:space="preserve">
-    <value>Оригінальний</value>
+    <value>Оригінал</value>
   </data>
   <data name="OrStartInterview" xml:space="preserve">
     <value>Або ви можете почати нову співбесіду</value>
@@ -326,13 +326,13 @@
     <value>Приймаються лише файли зображень</value>
   </data>
   <data name="PleaseFillCaptcha" xml:space="preserve">
-    <value>Будь ласка, заповніть поле капчі</value>
+    <value>Будь ласка, заповніть поле captcha</value>
   </data>
   <data name="PoweredBy" xml:space="preserve">
-    <value>Наданий</value>
+    <value>За підтримки</value>
   </data>
   <data name="QuestionnaireNameFormat" xml:space="preserve">
-    <value>{0} (вірш {1})</value>
+    <value>{0} (ver. {1})</value>
   </data>
   <data name="RefreshPage" xml:space="preserve">
     <value>Оновити сторінку</value>
@@ -341,37 +341,37 @@
     <value>Процес співбесіди вимагає підключення до Інтернету, додаткове програмне забезпечення не потрібне</value>
   </data>
   <data name="Resume_InvitationText" xml:space="preserve">
-    <value>Перейти до інтерв'ю можна в наступному опитуванні: "%АНКЕТА%"</value>
+    <value>Ви можете перейти до інтерв'ю в наступному опитуванні: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="Resume_WelcomeText" xml:space="preserve">
     <value>Привіт і ласкаво просимо до веб-опитування Survey Solutions</value>
   </data>
   <data name="ResumeInterview" xml:space="preserve">
-    <value>Резюме співбесіди</value>
+    <value>Співбесіда з резюме</value>
   </data>
   <data name="ServerUnderLoad" xml:space="preserve">
-    <value>На жаль, занадто багато людей одночасно відвідують цей веб-сайт. Ми працюємо над цією проблемою. Повторіть спробу пізніше.</value>
+    <value>Вибачте, занадто багато людей одночасно отримують доступ до цього веб-сайту. Ми працюємо над цією проблемою. Будь ласка, спробуйте пізніше.</value>
   </data>
   <data name="Start" xml:space="preserve">
-    <value>Почати нову співбесіду</value>
+    <value>Почніть нове інтерв'ю</value>
   </data>
   <data name="StartedInterviewText" xml:space="preserve">
-    <value>Це інтерв'ю не завершено</value>
+    <value>Це інтерв'ю не було завершено</value>
   </data>
   <data name="StartPageTitle" xml:space="preserve">
     <value>Веб-опитування</value>
   </data>
   <data name="SurveyFormatText" xml:space="preserve">
-    <value>Опитування: "%АНКЕТА%"</value>
+    <value>Опитування: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="ToInterview" xml:space="preserve">
-    <value>На співбесіду</value>
+    <value>Пройти співбесіду</value>
   </data>
   <data name="Warning" xml:space="preserve">
     <value>Попередження</value>
   </data>
   <data name="WebSurvey" xml:space="preserve">
-    <value>Веб-опитування Рішення для опитувань</value>
+    <value>Веб-опитування Survey Solutions</value>
   </data>
   <data name="WelcomeText" xml:space="preserve">
     <value>Привіт і ласкаво просимо до веб-опитування Survey Solutions</value>

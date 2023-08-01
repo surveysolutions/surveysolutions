@@ -118,22 +118,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AdministrativeRecords" xml:space="preserve">
-    <value>Адміністративні записи</value>
+    <value>Адміністративна документація</value>
   </data>
   <data name="AgriculturalCensus" xml:space="preserve">
-    <value>Сільгоспперепис</value>
+    <value>Сільськогосподарський перепис</value>
   </data>
   <data name="AgriculturalSurvey" xml:space="preserve">
-    <value>Обстеження сільського господарства</value>
+    <value>Сільськогосподарське обстеження</value>
   </data>
   <data name="ChildLaborSurvey" xml:space="preserve">
     <value>Дослідження дитячої праці</value>
   </data>
   <data name="CoreWelfareIndicatorsQuestionnaire" xml:space="preserve">
-    <value>Анкета основних показників добробуту</value>
+    <value>Опитувальник основних індикаторів добробуту</value>
   </data>
   <data name="DemographicAndHealthSurvey" xml:space="preserve">
-    <value>Демографічне та медичне обстеження</value>
+    <value>Демографічне та медичне дослідження</value>
   </data>
   <data name="EnterpriseCensus" xml:space="preserve">
     <value>Перепис підприємств</value>
@@ -148,19 +148,19 @@
     <value>Опитування домогосподарств</value>
   </data>
   <data name="InformalSectorSurvey" xml:space="preserve">
-    <value>Дослідження неформального сектору</value>
+    <value>Опитування неформального сектору</value>
   </data>
   <data name="IntegratedSurvey" xml:space="preserve">
-    <value>Комплексне опитування</value>
+    <value>Інтегроване опитування</value>
   </data>
   <data name="LaborForceSurvey" xml:space="preserve">
     <value>Обстеження робочої сили</value>
   </data>
   <data name="LivingStandardsMeasurementStudy" xml:space="preserve">
-    <value>Дослідження вимірювання життєвого рівня</value>
+    <value>Дослідження з вимірювання рівня життя</value>
   </data>
   <data name="MultipleIndicatorClusterSurvey" xml:space="preserve">
-    <value>Багатоіндикаторне кластерне опитування</value>
+    <value>Мультиіндикаторне кластерне дослідження</value>
   </data>
   <data name="PopulationAndHousingCensus" xml:space="preserve">
     <value>Перепис населення та житлового фонду</value>
@@ -175,18 +175,18 @@
     <value>Зразок кадру</value>
   </data>
   <data name="ServiceProvisionAssessments" xml:space="preserve">
-    <value>Оцінка надання послуг</value>
+    <value>Оцінювання надання послуг</value>
   </data>
   <data name="SocioEconomicMonitoringSurvey" xml:space="preserve">
-    <value>Соціально-економічне / Моніторингове опитування</value>
+    <value>Соціально-економічне / моніторингове дослідження</value>
   </data>
   <data name="StatisticalInfoAndMonitoringProg" xml:space="preserve">
-    <value>Статистична інформація та моніторингова прога.</value>
+    <value>Статистична інформація та моніторингові програми.</value>
   </data>
   <data name="WorldFertilitySurvey" xml:space="preserve">
-    <value>Всесвітнє дослідження народжуваності</value>
+    <value>Світовий огляд народжуваності</value>
   </data>
   <data name="WorldHealthSurvey" xml:space="preserve">
-    <value>Всесвітнє обстеження охорони здоров'я</value>
+    <value>Всесвітній огляд охорони здоров'я</value>
   </data>
 </root>

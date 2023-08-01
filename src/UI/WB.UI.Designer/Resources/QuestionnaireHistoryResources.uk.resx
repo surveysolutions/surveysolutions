@@ -133,7 +133,7 @@
     <value>Категорії {0} видалено</value>
   </data>
   <data name="Categories_Update" xml:space="preserve">
-    <value>Категорії {0} оновлені</value>
+    <value>Категорії {0} оновлено</value>
   </data>
   <data name="Change" xml:space="preserve">
     <value>Зміна</value>
@@ -148,49 +148,49 @@
     <value>Редагувати</value>
   </data>
   <data name="ExtractAtRevision" xml:space="preserve">
-    <value>Витяг при доопрацюванні</value>
+    <value>Витяг на стадії доопрацювання</value>
   </data>
   <data name="LeaveComment" xml:space="preserve">
     <value>Залишити коментар</value>
   </data>
   <data name="LookupTable_Add" xml:space="preserve">
-    <value>Таблиця підстановки {0} додано</value>
+    <value>Додано таблицю пошуку {0}</value>
   </data>
   <data name="LookupTable_Delete" xml:space="preserve">
-    <value>Таблицю підстановки {0} видалено</value>
+    <value>Видалено таблицю пошуку {0}</value>
   </data>
   <data name="LookupTable_Update" xml:space="preserve">
-    <value>Оновлено таблицю підстановки {0}</value>
+    <value>Оновлена таблиця пошуку {0}</value>
   </data>
   <data name="Macro_Add" xml:space="preserve">
-    <value>Додано {0} макросів</value>
+    <value>Додано макрос {0}</value>
   </data>
   <data name="Macro_Delete" xml:space="preserve">
     <value>Макрос {0} видалено</value>
   </data>
   <data name="Macro_Update" xml:space="preserve">
-    <value>Макрос {0} оновлено</value>
+    <value>Оновлено макрос {0}</value>
   </data>
   <data name="Metadata_Update" xml:space="preserve">
-    <value>Метадані анкети {0} оновлено</value>
+    <value>Оновлені метадані анкети {0}</value>
   </data>
   <data name="MigratedNewCoverSupport" xml:space="preserve">
-    <value>Титульна сторінка згенерована</value>
+    <value>Згенеровано титульну сторінку</value>
   </data>
   <data name="NoTitle" xml:space="preserve">
     <value>Без назви</value>
   </data>
   <data name="Person_Add" xml:space="preserve">
-    <value>Користувачі, які {0} електронної пошти, додані до спільних осіб</value>
+    <value>Користувача з email {0} додано до спільних контактів</value>
   </data>
   <data name="Person_Delete" xml:space="preserve">
-    <value>Користувач, електронна пошта якого {0} видалена зі спільних осіб</value>
+    <value>Користувача з email {0} видалено зі спільних сторінок</value>
   </data>
   <data name="Question_Add" xml:space="preserve">
-    <value>Питання {0} додано</value>
+    <value>Додано запитання {0}</value>
   </data>
   <data name="Question_Clone" xml:space="preserve">
-    <value>Питання {0} клоноване з питання {1}</value>
+    <value>Питання {0} клоновано з питання {1}</value>
   </data>
   <data name="Question_Delete" xml:space="preserve">
     <value>Питання {0} видалено</value>
@@ -205,76 +205,76 @@
     <value>Питання {0} оновлено</value>
   </data>
   <data name="Questionnaire_Add" xml:space="preserve">
-    <value>Анкета {0} створена</value>
+    <value>Опитувальник {0} створено</value>
   </data>
   <data name="Questionnaire_Clone" xml:space="preserve">
-    <value>Анкета {0} клонована з анкети {1}</value>
+    <value>Опитувальник {0} клоновано з опитувальника {1}</value>
   </data>
   <data name="Questionnaire_Delete" xml:space="preserve">
-    <value>Анкета {0} видалена</value>
+    <value>Анкету {0} видалено</value>
   </data>
   <data name="Questionnaire_Import" xml:space="preserve">
-    <value>Анкета {0} імпорт</value>
+    <value>Опитувальник {0} імпортовано</value>
   </data>
   <data name="Questionnaire_ImportToHq" xml:space="preserve">
-    <value>Імпортована анкета до штаб-квартири ({0}) за {2} {1}</value>
+    <value>Імпорт анкети до штаб-квартири ({0}) як {2} на {1}</value>
   </data>
   <data name="Questionnaire_Move" xml:space="preserve">
-    <value>Право власності на анкету переходить до користувача з email "{0}"</value>
+    <value>Право власності на анкету передано користувачеві з email "{0}"</value>
   </data>
   <data name="Questionnaire_Replace" xml:space="preserve">
-    <value>Анкета {0} замінена</value>
+    <value>Опитувальник {0} замінено</value>
   </data>
   <data name="Questionnaire_Update" xml:space="preserve">
-    <value>Анкета {0} оновлена</value>
+    <value>Оновлена анкета {0}</value>
   </data>
   <data name="QuestionnaireChangeHistory" xml:space="preserve">
     <value>Історія змін анкети</value>
   </data>
   <data name="ResetQuestionnaireToThis" xml:space="preserve">
-    <value>Скинути анкету до версії на {0}?</value>
+    <value>Відновити анкету до версії {0}?</value>
   </data>
   <data name="Revert" xml:space="preserve">
-    <value>Повернутися</value>
+    <value>Повернути назад.</value>
   </data>
   <data name="reverted" xml:space="preserve">
-    <value>Анкету "{0}" скасовано</value>
+    <value>Опитувальник "{0}" повернуто</value>
   </data>
   <data name="reverted_to" xml:space="preserve">
-    <value>Анкета «{0}» повернута до версії з {1}</value>
+    <value>Опитувальник "{0}" повернуто до версії з {1}</value>
   </data>
   <data name="RevertToThisVersion" xml:space="preserve">
     <value>Повернутися до цієї версії</value>
   </data>
   <data name="Roster_Add" xml:space="preserve">
-    <value>Додано список {0}</value>
+    <value>Список {0} додано</value>
   </data>
   <data name="Roster_Clone" xml:space="preserve">
-    <value>Список {0} клонований зі списку {1}</value>
+    <value>Список {0} клоновано з списку {1}</value>
   </data>
   <data name="Roster_Delete" xml:space="preserve">
-    <value>Список {0} видалено</value>
+    <value>Ростер {0} видалено</value>
   </data>
   <data name="Roster_Move_To_Roster" xml:space="preserve">
-    <value>Склад {0} переміщено до списку {1}</value>
+    <value>Список {0} переміщено до списку {1}</value>
   </data>
   <data name="Roster_Move_To_Section" xml:space="preserve">
     <value>Список {0} перенесено до розділу {1}</value>
   </data>
   <data name="Roster_RosterBecameAGroup" xml:space="preserve">
-    <value>Список {0} став підрозділом</value>
+    <value>Реєстр {0} став підрозділом</value>
   </data>
   <data name="Roster_Update" xml:space="preserve">
-    <value>Список {0} оновлено</value>
+    <value>Оновлений список {0}</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Рятувати</value>
+    <value>Зберегти</value>
   </data>
   <data name="Section_Add" xml:space="preserve">
     <value>Додано розділ {0}</value>
   </data>
   <data name="Section_Clone" xml:space="preserve">
-    <value>Розділ {0} клоновано з розділу {1}</value>
+    <value>Секцію {0} клоновано з секції {1}</value>
   </data>
   <data name="Section_Delete" xml:space="preserve">
     <value>Розділ {0} видалено</value>
@@ -283,22 +283,22 @@
     <value>Підрозділ {0} став реєстром</value>
   </data>
   <data name="Section_Move_To_Roster" xml:space="preserve">
-    <value>Розділ {0} переміщено до списку {1}</value>
+    <value>Розділ {0} перенесено до списку {1}</value>
   </data>
   <data name="Section_Move_To_Section" xml:space="preserve">
-    <value>Розділ {0} перенесено до розділу {1}</value>
+    <value>Розділ {0} переміщено до розділу {1}</value>
   </data>
   <data name="Section_Update" xml:space="preserve">
-    <value>Оновлено розділ {0}</value>
+    <value>Розділ {0} оновлено</value>
   </data>
   <data name="StaticText_Add" xml:space="preserve">
-    <value>Додано {0} статичний текст</value>
+    <value>Додано статичний текст {0}</value>
   </data>
   <data name="StaticText_Clone" xml:space="preserve">
-    <value>Статичний текст {0} клонований зі статичних текстових {1}</value>
+    <value>Статичний текст {0} клоновано зі статичного тексту {1}</value>
   </data>
   <data name="StaticText_Delete" xml:space="preserve">
-    <value>Статичний текст {0} видалено</value>
+    <value>Видалено статичний текст {0}</value>
   </data>
   <data name="StaticText_Move_To_Roster" xml:space="preserve">
     <value>Статичний текст {0} переміщено до списку {1}</value>
@@ -307,34 +307,34 @@
     <value>Статичний текст {0} переміщено до розділу {1}</value>
   </data>
   <data name="StaticText_Update" xml:space="preserve">
-    <value>Статичний текст {0} оновлено</value>
+    <value>Оновлено статичний текст {0}</value>
   </data>
   <data name="TextsReplaced" xml:space="preserve">
-    <value>Всі «{0}» були замінені на «{1}». {2} записів, яких це стосувалося</value>
+    <value>Усі '{0}' було замінено на '{1}'. {2} записів, яких торкнулося</value>
   </data>
   <data name="ThisListDoesNotContainAnyRecords" xml:space="preserve">
-    <value>Цей список не містить жодних записів</value>
+    <value>Цей список не містить жодного запису</value>
   </data>
   <data name="Timestamp" xml:space="preserve">
-    <value>Позначка часу</value>
+    <value>Відмітка часу</value>
   </data>
   <data name="Translation_DefaultTranslationSet" xml:space="preserve">
-    <value>За умовчанням для перекладу встановлено значення {0}</value>
+    <value>Переклад за замовчуванням встановлено на {0}</value>
   </data>
   <data name="Translation_Delete" xml:space="preserve">
     <value>Переклад {0} видалено</value>
   </data>
   <data name="Translation_Original" xml:space="preserve">
-    <value>Оригінальний</value>
+    <value>Оригінал</value>
   </data>
   <data name="Translation_Update" xml:space="preserve">
     <value>Переклад {0} оновлено</value>
   </data>
   <data name="UnknownUserName" xml:space="preserve">
-    <value>&lt;&lt;UNKNOWN&gt;&gt;</value>
+    <value>&lt;&lt;НЕВІДОМО.</value>
   </data>
   <data name="UserName" xml:space="preserve">
-    <value>Ім'я_користувача</value>
+    <value>Ім'я користувача</value>
   </data>
   <data name="Variable_Add" xml:space="preserve">
     <value>Додано змінну {0}</value>
@@ -343,15 +343,15 @@
     <value>Змінна {0} скопійована зі змінної {1}</value>
   </data>
   <data name="Variable_Delete" xml:space="preserve">
-    <value>Змінна {0} видалена</value>
+    <value>Змінну {0} видалено</value>
   </data>
   <data name="Variable_Move_To_Roster" xml:space="preserve">
-    <value>Змінна {0} переміщена до списку {1}</value>
+    <value>Змінну {0} переміщено до списку {1}</value>
   </data>
   <data name="Variable_Move_To_Section" xml:space="preserve">
-    <value>Змінна {0} перенесена в розділ {1}</value>
+    <value>Змінну {0} переміщено до секції {1}</value>
   </data>
   <data name="Variable_Update" xml:space="preserve">
-    <value>Змінна {0} оновлена</value>
+    <value>Оновлено змінну {0}</value>
   </data>
 </root>

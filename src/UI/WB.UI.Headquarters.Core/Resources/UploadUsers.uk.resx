@@ -118,31 +118,31 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AllAccountsCreated" xml:space="preserve">
-    <value>Всі облікові записи {{total}} успішно створені:</value>
+    <value>Всі {{total}} акаунти успішно створено:</value>
   </data>
   <data name="AssignedTo" xml:space="preserve">
-    <value>Керівник</value>
+    <value>Наглядач</value>
   </data>
   <data name="AssignedToDescription" xml:space="preserve">
-    <value>Обов'язковий для інтерв'юерів, містить ім'я користувача супервайзера, за яким ця особа буде закріплена</value>
+    <value>необхідний для інтерв'юерів, містить ім'я користувача супервайзера, якому буде призначена ця особа</value>
   </data>
   <data name="BackToImport" xml:space="preserve">
-    <value>Назад до імпорту користувача</value>
+    <value>Повернутися до імпорту користувачів</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Скасувати</value>
   </data>
   <data name="Column" xml:space="preserve">
-    <value>Стовпець</value>
+    <value>колонка</value>
   </data>
   <data name="CompleteDescription" xml:space="preserve">
-    <value>Ви можете зробити завдання для цих команд з розділу "анкети", завдання також можуть бути створені в пакетному режимі</value>
+    <value>Ви можете створити завдання для цих команд з розділу "анкети", завдання також можуть бути створені в пакетному режимі</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Створіть набір користувачів, завантаживши файл з усією необхідною інформацією. Набір може містити як супервайзерів, так і інтерв'юерів, як варіант, можна створити</value>
+    <value>Створіть набір користувачів, завантаживши файл з усією необхідною інформацією. Набір може містити як супервайзерів, так і інтерв'юерів, або ж ви можете створити</value>
   </data>
   <data name="DownloadTemplateLink" xml:space="preserve">
-    <value>Завантажити шаблон .tab для завантаження користувачем</value>
+    <value>Завантажити шаблон .tab для завантаження користувача</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>Електронна пошта</value>
@@ -154,22 +154,22 @@
     <value>Повне ім'я</value>
   </data>
   <data name="ImportingUserInfo" xml:space="preserve">
-    <value>Імпорт відомостей про користувача з</value>
+    <value>Імпорт інформації про користувача з</value>
   </data>
   <data name="InterviewersAndSupervisorsCount" xml:space="preserve">
-    <value>{{supervisorsCount}} супервайзери та інтерв'юери {{interviewersCount}}</value>
+    <value>{{supervisorsCount}} супервайзерів та {{interviewersCount}} інтерв'юерів</value>
   </data>
   <data name="Line" xml:space="preserve">
     <value>лінія</value>
   </data>
   <data name="ManualInterviewerCreateLink" xml:space="preserve">
-    <value>Інтерв'юера</value>
+    <value>інтерв'юер</value>
   </data>
   <data name="ManualSupervisorCreateLink" xml:space="preserve">
-    <value>Керівник</value>
+    <value>керівник</value>
   </data>
   <data name="NoCreatedUsers" xml:space="preserve">
-    <value>Облікових записів користувачів не створено</value>
+    <value>Облікові записи користувачів не створювалися</value>
   </data>
   <data name="OptionalInformation" xml:space="preserve">
     <value>Необов'язкова особиста інформація</value>
@@ -184,7 +184,7 @@
     <value>пароль повинен містити принаймні одну цифру, один символ верхнього регістру та один символ нижнього регістру</value>
   </data>
   <data name="Phone" xml:space="preserve">
-    <value>Контактний телефон</value>
+    <value>Номер телефону</value>
   </data>
   <data name="Profile" xml:space="preserve">
     <value>профіль вручну</value>
@@ -196,7 +196,7 @@
     <value>Дані, необхідні для створення інтерв'юерів та супервайзерів</value>
   </data>
   <data name="ReUploadTabFile" xml:space="preserve">
-    <value>Повторне завантаження файлу .tab</value>
+    <value>Перезавантажте файл .tab</value>
   </data>
   <data name="Role" xml:space="preserve">
     <value>Роль</value>
@@ -205,22 +205,22 @@
     <value>Виберіть робочу область</value>
   </data>
   <data name="SelectWorkspaceDescription" xml:space="preserve">
-    <value>Якщо в пакетному файлі не призначено жодного робочого середовища, використовуйте це робоче середовище за замовчуванням</value>
+    <value>Якщо у пакетному файлі не призначено робочу область, використовуйте її за замовчуванням</value>
   </data>
   <data name="TimeDetermination" xml:space="preserve">
     <value>визначення часу</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Створення кількох користувачів шляхом пакетного завантаження</value>
+    <value>Створення кількох користувачів за допомогою пакетного завантаження</value>
   </data>
   <data name="UploadBtn" xml:space="preserve">
-    <value>Завантажити файл .tab</value>
+    <value>Завантажте файл .tab</value>
   </data>
   <data name="Uploading" xml:space="preserve">
     <value>Імпорт {{importedUsersCount}} з {{totalUsersToImportCount}}</value>
   </data>
   <data name="UploadInProgress" xml:space="preserve">
-    <value>Попередження: триває ще одне пакетне завантаження "{{userName}}".</value>
+    <value>Увага: Виконується ще одне пакетне завантаження від "{{userName}}".</value>
   </data>
   <data name="UploadInProgressDescription" xml:space="preserve">
     <value>Ви зможете розпочати свій, коли поточний буде завершено.</value>
@@ -229,12 +229,12 @@
     <value>Логін</value>
   </data>
   <data name="UserNameDescription" xml:space="preserve">
-    <value>Ім'я користувача має містити від 3 до 15 символів і містити лише літери, цифри та символ підкреслення</value>
+    <value>ім'я користувача, має бути від 3 до 15 символів і містити лише літери, цифри та символ підкреслення</value>
   </data>
   <data name="VerificationFailed" xml:space="preserve">
-    <value>Не вдалося підтвердити</value>
+    <value>Не вдалося виконати перевірку</value>
   </data>
   <data name="Workspace" xml:space="preserve">
-    <value>Робочої області</value>
+    <value>Робочий простір</value>
   </data>
 </root>

@@ -121,37 +121,37 @@
     <value>Додаткові налаштування</value>
   </data>
   <data name="AfterXDay" xml:space="preserve">
-    <value>Після {{count}} дня</value>
+    <value>Через {{count}} день</value>
   </data>
   <data name="AfterXDay_other" xml:space="preserve">
     <value>Через {{count}} днів</value>
   </data>
   <data name="AfterXWeek" xml:space="preserve">
-    <value>Після тижня {{count}}</value>
+    <value>Через {{count}} тиждень</value>
   </data>
   <data name="AfterXWeek_other" xml:space="preserve">
-    <value>Через {{count}} тижні</value>
+    <value>Через {{count}} тижнів</value>
   </data>
   <data name="AnswerOn" xml:space="preserve">
-    <value>відповідь на {{variable}}</value>
+    <value>відповісти на {{variable}}</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Скасувати</value>
   </data>
   <data name="Complete" xml:space="preserve">
-    <value>Повний</value>
+    <value>Завершено</value>
   </data>
   <data name="CompleteEmailMessage" xml:space="preserve">
-    <value>Повний</value>
+    <value>Завершено</value>
   </data>
   <data name="CompletePage" xml:space="preserve">
-    <value>Повний</value>
+    <value>Завершено</value>
   </data>
   <data name="CustomizeDisplayedText" xml:space="preserve">
-    <value>Налаштуйте відображуваний текст для респондентів</value>
+    <value>Налаштуйте текст, що відображається для респондентів</value>
   </data>
   <data name="CustomizeEmailsText" xml:space="preserve">
-    <value>Налаштуйте текст електронних листів</value>
+    <value>Налаштуйте текст імейлів</value>
   </data>
   <data name="Description" xml:space="preserve">
     <value>Опис:</value>
@@ -160,34 +160,34 @@
     <value>Опис для пароля:</value>
   </data>
   <data name="DoNotSend" xml:space="preserve">
-    <value>Не надсилати</value>
+    <value>Не надсилайте</value>
   </data>
   <data name="EmailMessage" xml:space="preserve">
     <value>Повідомлення:</value>
   </data>
   <data name="EmailSubject" xml:space="preserve">
-    <value>Суб'єкт:</value>
+    <value>Тема:</value>
   </data>
   <data name="EmailTemplateDescription" xml:space="preserve">
-    <value>Ви можете використовувати %SURVEYNAME% заповнювача в тексті як назву опитування</value>
+    <value>Ви можете використовувати в тексті заповнювач %SURVEYNAME% як назву опитування</value>
   </data>
   <data name="ExampleFinishPage" xml:space="preserve">
-    <value>Приклад сторінки завершення</value>
+    <value>Приклад фінішної сторінки</value>
   </data>
   <data name="ExampleInvitationEmailMessage" xml:space="preserve">
-    <value>Приклад повідомлення електронної пошти із запрошенням</value>
+    <value>Приклад електронного листа із запрошенням</value>
   </data>
   <data name="ExampleRejectEmailMessage" xml:space="preserve">
-    <value>Приклад повідомлення «Відхилити електронний лист»</value>
+    <value>Приклад повідомлення про відхилення</value>
   </data>
   <data name="ExampleReminderEmailMessage" xml:space="preserve">
-    <value>Приклад повідомлення електронної пошти з нагадуванням</value>
+    <value>Приклад нагадування електронною поштою</value>
   </data>
   <data name="ExampleResumePage" xml:space="preserve">
     <value>Приклад сторінки резюме</value>
   </data>
   <data name="ExampleWelcomePage" xml:space="preserve">
-    <value>Приклад сторінки привітання</value>
+    <value>Приклад вітальної сторінки</value>
   </data>
   <data name="FieldRequired" xml:space="preserve">
     <value>Поле обов'язкове для заповнення.</value>
@@ -196,13 +196,13 @@
     <value>Завершити сторінку</value>
   </data>
   <data name="InterviewDataInsertBarcodeDescription" xml:space="preserve">
-    <value>%question_variable:Barcode% - відобразити відповідь як штрих-код 128</value>
+    <value>%змінна_питання:штрихкод% - відобразити відповідь у вигляді штрихкоду Code 128</value>
   </data>
   <data name="InterviewDataInsertInTextDescription" xml:space="preserve">
-    <value>У цьому шаблоні електронної пошти ви можете використовувати %question_variable% заповнювача в тексті як відповідь на запитання в інтерв'ю. Питання має бути з анкети верхнього рівня (не всередині списків).</value>
+    <value>У цьому шаблоні ви можете використовувати %question_variable% у тексті як відповідь на питання в інтерв'ю. Питання має бути з верхнього рівня анкети (не всередині списків).</value>
   </data>
   <data name="InterviewDataInsertQrCodeDescription" xml:space="preserve">
-    <value>%question_variable:qrcode% - відобразити відповідь у вигляді QR-коду</value>
+    <value>%змінна_питання:qrcode% - відобразити відповідь у вигляді QR-коду</value>
   </data>
   <data name="Invitation" xml:space="preserve">
     <value>Запрошення</value>
@@ -211,19 +211,19 @@
     <value>Запрошення</value>
   </data>
   <data name="LinkToInterviewPage" xml:space="preserve">
-    <value>Веб-інтерв'ю Лендінг</value>
+    <value>Лендінг для веб-інтерв'ю</value>
   </data>
   <data name="MainText" xml:space="preserve">
     <value>Основний текст:</value>
   </data>
   <data name="NoteToSupervisor" xml:space="preserve">
-    <value>Примітка для наукового керівника</value>
+    <value>Примітка для керівника</value>
   </data>
   <data name="Reject" xml:space="preserve">
-    <value>Відкидати</value>
+    <value>Відхилити</value>
   </data>
   <data name="RejectEmailMessage" xml:space="preserve">
-    <value>Відкидати</value>
+    <value>Відхилити</value>
   </data>
   <data name="Reminder" xml:space="preserve">
     <value>Нагадування</value>
@@ -247,22 +247,22 @@
     <value>Сторінка резюме</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>рятувати</value>
+    <value>зберегти</value>
   </data>
   <data name="SendWithNoResponse" xml:space="preserve">
-    <value>Надсилання нагадування користувачам, які не мають відповіді</value>
+    <value>Надіслати нагадування людям, які не відповіли</value>
   </data>
   <data name="SendWithPartialResponse" xml:space="preserve">
-    <value>Надсилання нагадування користувачам із частковою відповіддю</value>
+    <value>Надіслати нагадування людям з частковою відповіддю</value>
   </data>
   <data name="ShownPasswordIsRequired" xml:space="preserve">
-    <value>Відображається, лише якщо потрібен пароль і встановлено</value>
+    <value>Відображається, тільки якщо пароль потрібен і встановлений</value>
   </data>
   <data name="StartInterviewButton" xml:space="preserve">
-    <value>Кнопка "Почати співбесіду"</value>
+    <value>Кнопка "Почати інтерв'ю</value>
   </data>
   <data name="StartNew" xml:space="preserve">
-    <value>Почати нову співбесіду</value>
+    <value>Почніть нове інтерв'ю</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Назва:</value>
@@ -271,6 +271,6 @@
     <value>Налаштування веб-інтерв'ю для </value>
   </data>
   <data name="WelcomePage" xml:space="preserve">
-    <value>Сторінка привітання</value>
+    <value>Вітальна сторінка</value>
   </data>
 </root>

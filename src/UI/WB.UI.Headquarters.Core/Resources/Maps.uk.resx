@@ -121,13 +121,13 @@
     <value>Файл {0}.dbf відсутній для {0}.shp</value>
   </data>
   <data name="FileLoadingNotTsvError" xml:space="preserve">
-    <value>Сталася помилка. Файл не є вкладкою .tab</value>
+    <value>Виникла помилка. Файл не є .tab</value>
   </data>
   <data name="Levels" xml:space="preserve">
-    <value>Рівнів</value>
+    <value>Рівні</value>
   </data>
   <data name="MapEngineIsNotInitialized" xml:space="preserve">
-    <value>Компонент Maps не був ініціалізований. Будь ласка, зв'яжіться з системним адміністратором.</value>
+    <value>Не ініціалізовано компонент Maps. Зверніться до системного адміністратора.</value>
   </data>
   <data name="MapFileNameHasInvalidChars" xml:space="preserve">
     <value>Ім'я файлу {0} містить неприпустимі символи.</value>
@@ -136,37 +136,37 @@
     <value>Ім'я файлу {0} містить символи, відмінні від UTF-8.</value>
   </data>
   <data name="MapFileSizeLimit" xml:space="preserve">
-    <value>Розмір файлу {0} перевищує допустимий розмір {1}</value>
+    <value>Розмір файлу {0} перевищує допустимий ліміт {1}</value>
   </data>
   <data name="MapLoadingInvalidFile" xml:space="preserve">
-    <value>Файл "{0}" містить дані, які система не може обробити. Помилка: {1}</value>
+    <value>Файл '{0}' містить дані, які система не може обробити. Помилка: {1}</value>
   </data>
   <data name="MapLoadingInvalidFilesError" xml:space="preserve">
-    <value>Сталася помилка. Наступні файли були проігноровані:</value>
+    <value>Виникла помилка. Було проігноровано такі файли:</value>
   </data>
   <data name="MapLoadingNoMapsInArchive" xml:space="preserve">
-    <value>Сталася помилка. Архів не містить файлів карт</value>
+    <value>Виникла помилка. Архів не містить файлів мап</value>
   </data>
   <data name="MapLoadingNotZipError" xml:space="preserve">
-    <value>Сталася помилка. Файл не є .zip архівом</value>
+    <value>Виникла помилка. Файл не є архівом .zip</value>
   </data>
   <data name="MapLoadingUnsupportedFilesInArchive" xml:space="preserve">
-    <value>Сталася помилка. Архів містить не картографічні файли </value>
+    <value>Виникла помилка. Архів містить не картографічні файли </value>
   </data>
   <data name="MapOverlapsWith" xml:space="preserve">
-    <value>Накладається на:</value>
+    <value>Перетинається з:</value>
   </data>
   <data name="MapOverlapsWithOther" xml:space="preserve">
     <value>та {0} інше.</value>
   </data>
   <data name="MappingsLoadingError" xml:space="preserve">
-    <value>Сталася помилка при завантаженні посилань на карту.</value>
+    <value>Виникла помилка при завантаженні посилань на мапу.</value>
   </data>
   <data name="MapsLoadingError" xml:space="preserve">
-    <value>Сталася помилка при завантаженні карти.</value>
+    <value>Виникла помилка при завантаженні карти.</value>
   </data>
   <data name="MaxScale" xml:space="preserve">
-    <value>Максимальна шкала</value>
+    <value>Макс Скейл</value>
   </data>
   <data name="MinScale" xml:space="preserve">
     <value>Мінімальна шкала</value>
@@ -181,15 +181,15 @@
     <value>Файл {0}.shx відсутній для {0}.shp</value>
   </data>
   <data name="Size" xml:space="preserve">
-    <value>Розмір (MB)</value>
+    <value>Розмір (МБ)</value>
   </data>
   <data name="UpdateDate" xml:space="preserve">
     <value>Імпортовано на</value>
   </data>
   <data name="UploadMappingsSummaryFormat" xml:space="preserve">
-    <value>посилання на {0} карти оброблено з {1} недійсними</value>
+    <value>посилання для {0} мап було оброблено з {1} недійсними</value>
   </data>
   <data name="UploadMapsSummaryFormat" xml:space="preserve">
-    <value>{0} карт оброблено {1} недійсними файлами карт</value>
+    <value>{0} карт було оброблено з {1} недійсними файлами карт</value>
   </data>
 </root>

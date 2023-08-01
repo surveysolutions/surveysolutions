@@ -118,54 +118,54 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Aria_SortAscending" xml:space="preserve">
-    <value>: активувати, щоб сортувати стовпець за зростанням</value>
+    <value>: активувати для сортування стовпця за зростанням</value>
   </data>
   <data name="Aria_SortDescending" xml:space="preserve">
-    <value>: активувати, щоб сортувати стовпець за спаданням</value>
+    <value>: активувати для сортування стовпця за спаданням</value>
   </data>
   <data name="EmptyTable" xml:space="preserve">
     <value>У таблиці немає даних</value>
   </data>
   <data name="Info" xml:space="preserve">
-    <value>Від _START_ до _END_ записів _TOTAL_</value>
+    <value>Відображення від _ПОЧАТКУ_ до _КІНЦЯ_ _ВСЬОГО_ записів</value>
   </data>
   <data name="InfoEmpty" xml:space="preserve">
-    <value>Показані записи від 0 до 0 з 0</value>
+    <value>Показано від 0 до 0 з 0 записів</value>
   </data>
   <data name="InfoFiltered" xml:space="preserve">
-    <value>(відфільтровано з _MAX_ підсумкових записів)</value>
+    <value>(відфільтровано з _MAX_ всіх записів)</value>
   </data>
   <data name="InfoThousands" xml:space="preserve">
     <value>,</value>
   </data>
   <data name="LengthMenu" xml:space="preserve">
-    <value>Показати записи _MENU_</value>
+    <value>Показати _MENU_ пункти</value>
   </data>
   <data name="LoadingRecords" xml:space="preserve">
     <value>Завантаження...</value>
   </data>
   <data name="Paginate_First" xml:space="preserve">
-    <value>Перший</value>
+    <value>По-перше.</value>
   </data>
   <data name="Paginate_Last" xml:space="preserve">
     <value>Останній</value>
   </data>
   <data name="Paginate_Next" xml:space="preserve">
-    <value>Наступний</value>
+    <value>Далі</value>
   </data>
   <data name="Paginate_Previous" xml:space="preserve">
-    <value>Попередній</value>
+    <value>Попередні</value>
   </data>
   <data name="Processing" xml:space="preserve">
-    <value>Обробки...</value>
+    <value>Обробка...</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>Шукати:</value>
+    <value>Пошук:</value>
   </data>
   <data name="SearchPlaceholder" xml:space="preserve">
-    <value>Шукати...</value>
+    <value>Пошук...</value>
   </data>
   <data name="ZeroRecords" xml:space="preserve">
-    <value>Збігів записів не знайдено</value>
+    <value>Відповідних записів не знайдено</value>
   </data>
 </root>

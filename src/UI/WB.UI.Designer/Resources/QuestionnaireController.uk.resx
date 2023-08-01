@@ -121,22 +121,22 @@
     <value>Дія</value>
   </data>
   <data name="Assign" xml:space="preserve">
-    <value>Призначати</value>
+    <value>Призначити</value>
   </data>
   <data name="AssignFolder" xml:space="preserve">
-    <value>Призначення папки</value>
+    <value>Призначити папку</value>
   </data>
   <data name="AssignFolderText" xml:space="preserve">
     <value>Будь ласка, призначте папку для анкети "{0}"</value>
   </data>
   <data name="Assigning" xml:space="preserve">
-    <value>Призначення</value>
+    <value>Присвоєння</value>
   </data>
   <data name="BackToList" xml:space="preserve">
     <value>Повернутися до списку</value>
   </data>
   <data name="Backup" xml:space="preserve">
-    <value>Резервна копія</value>
+    <value>Резервне копіювання.</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Скасувати</value>
@@ -145,7 +145,7 @@
     <value>Скасувати пошук</value>
   </data>
   <data name="ChooseLanguage" xml:space="preserve">
-    <value>Оберіть переклад</value>
+    <value>Виберіть переклад</value>
   </data>
   <data name="ChooseLanguageTitle" xml:space="preserve">
     <value>Будь ласка, оберіть переклад</value>
@@ -157,19 +157,19 @@
     <value>Закрити</value>
   </data>
   <data name="Confirmation" xml:space="preserve">
-    <value>Підтвердження</value>
+    <value>підтвердження</value>
   </data>
   <data name="ControlPanel" xml:space="preserve">
-    <value>Панель управління</value>
+    <value>Панель керування</value>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Копіювати</value>
+    <value>Зрозумів.</value>
   </data>
   <data name="CopyQuestionnaire" xml:space="preserve">
-    <value>Копіювати анкету</value>
+    <value>Копія анкети</value>
   </data>
   <data name="Create" xml:space="preserve">
-    <value>Творити</value>
+    <value>Створити</value>
   </data>
   <data name="CreatedBy" xml:space="preserve">
     <value>Створено</value>
@@ -184,7 +184,7 @@
     <value>Створити нову анкету</value>
   </data>
   <data name="CreateSubFolder" xml:space="preserve">
-    <value>Створити вкладену папку</value>
+    <value>Створити підпапку</value>
   </data>
   <data name="CreatingHtml" xml:space="preserve">
     <value>Створення Html для "{0}"</value>
@@ -193,7 +193,7 @@
     <value>Видалити</value>
   </data>
   <data name="DeleteConfirmationText" xml:space="preserve">
-    <value>Ви дійсно хочете видалити «{0}» анкету?</value>
+    <value>Ви дійсно хочете видалити анкету "{0}"?</value>
   </data>
   <data name="DeleteFolderConfirmation" xml:space="preserve">
     <value>Ви дійсно хочете видалити папку {0} ?</value>
@@ -208,61 +208,61 @@
     <value>Завантажити PDF</value>
   </data>
   <data name="EmptyList" xml:space="preserve">
-    <value>Цей список не містить жодних записів</value>
+    <value>Цей список не містить жодного запису</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Помилка</value>
+    <value>Помилка.</value>
   </data>
   <data name="ErrorDescription" xml:space="preserve">
     <value>Під час обробки вашого запиту сталася помилка</value>
   </data>
   <data name="ExcelOrTabFilesOnly" xml:space="preserve">
-    <value>Приймаються лише файли значень Excel або значень, розділених символами табуляції</value>
+    <value>Приймаються лише файли значень у форматі Excel або з розділеними табуляціями</value>
   </data>
   <data name="ExportAsHtml" xml:space="preserve">
-    <value>Експорт як HTML</value>
+    <value>Експорт як Html</value>
   </data>
   <data name="ExportAsPDF" xml:space="preserve">
     <value>Експорт у форматі PDF</value>
   </data>
   <data name="FoldersDescription" xml:space="preserve">
-    <value>Ви можете налаштувати структуру папок для сторінки публічних анкет. Для цього натисніть на папку правою кнопкою миші, а потім скористайтеся однією з операцій:
-- "Створити вкладену папку" використовуйте для створення підпапки 
-- "Перейменувати", щоб перейменувати ім'я папки
-&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;- "Видалити", щоб видалити папку з вкладеними папками</value>
+    <value>Ви можете налаштувати структуру папок для сторінки публічних анкет. Для цього клацніть на папці правою кнопкою миші і скористайтеся однією з операцій:
+&lt;br/&gt;- "Створити підпапку" для створення підпапки
+&lt;br/&gt;- "Перейменувати" для перейменування назви папки
+&lt;br/&gt;- "Видалити" для видалення папки з вкладеними папками</value>
   </data>
   <data name="FoldersManagement" xml:space="preserve">
     <value>Керування папками</value>
   </data>
   <data name="Forbidden" xml:space="preserve">
-    <value>У вас немає дозволу на редагування цієї анкети</value>
+    <value>Ви не маєте дозволу на редагування цієї анкети</value>
   </data>
   <data name="ForbiddenDelete" xml:space="preserve">
-    <value>У вас немає дозволу на видалення цієї анкети.</value>
+    <value>Ви не маєте права видаляти цю анкету.</value>
   </data>
   <data name="ForbiddenRevert" xml:space="preserve">
-    <value>У вас немає дозволу на відновлення роботи цієї анкети.</value>
+    <value>Ви не маєте дозволу на відновлення роботи для цієї анкети.</value>
   </data>
   <data name="GeneratePdf" xml:space="preserve">
-    <value>Створити pdf</value>
+    <value>Згенерувати pdf</value>
   </data>
   <data name="GeneratingPdf" xml:space="preserve">
     <value>Створення pdf для "{0}"</value>
   </data>
   <data name="GetHtml" xml:space="preserve">
-    <value>Експорт HTML</value>
+    <value>Експорт Html</value>
   </data>
   <data name="Hello" xml:space="preserve">
     <value>Привіт, {0}</value>
   </data>
   <data name="Initializing" xml:space="preserve">
-    <value>Ініціалізації</value>
+    <value>Ініціалізація</value>
   </data>
   <data name="LastModified" xml:space="preserve">
-    <value>Змінено</value>
+    <value>Змінено на</value>
   </data>
   <data name="Location" xml:space="preserve">
-    <value>Мі́сце:  </value>
+    <value>Місцезнаходження:  </value>
   </data>
   <data name="ManageUsers" xml:space="preserve">
     <value>Керування користувачами</value>
@@ -277,13 +277,13 @@
     <value>Інтернет-браузер не підтримується. Будь ласка, використовуйте інший браузер.</value>
   </data>
   <data name="NotSupportedBrowserUsedDescr" xml:space="preserve">
-    <value>Використовується браузер Internet Explorer, який не підтримується. Деякі функції можуть не працювати належним чином.</value>
+    <value>Ви використовуєте браузер Internet Explorer, який не підтримується. Деякі функції можуть не працювати належним чином.</value>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>Відкривати</value>
+    <value>Відкрито</value>
   </data>
   <data name="PublicQuestionnaires" xml:space="preserve">
-    <value>Публічні анкети</value>
+    <value>Публічні опитування</value>
   </data>
   <data name="QuestionnaireTitle" xml:space="preserve">
     <value>Назва анкети</value>
@@ -301,22 +301,22 @@
     <value>Відновити документ анкети (старий)</value>
   </data>
   <data name="RetryExportPDF" xml:space="preserve">
-    <value>Повторна спроба експорту у форматі PDF</value>
+    <value>Повторіть спробу експорту в PDF</value>
   </data>
   <data name="SaveAs" xml:space="preserve">
     <value>Зберегти як</value>
   </data>
   <data name="SelectTabFile" xml:space="preserve">
-    <value>Виберіть файл значень, розділених вкладками, для завантаження, будь ласка</value>
+    <value>Виберіть файл значень з розділеними табуляціями для завантаження, будь ласка</value>
   </data>
   <data name="SharedQuestionnaires" xml:space="preserve">
-    <value>Анкети, якими я поділився</value>
+    <value>Анкети, якими поділилися зі мною</value>
   </data>
   <data name="SuccessDeleteMessage" xml:space="preserve">
-    <value>Анкета "{0}" успішно видалена</value>
+    <value>Анкету "{0}" успішно видалено</value>
   </data>
   <data name="TabFilesOnly" xml:space="preserve">
-    <value>Приймаються лише файли значень, розділених символами табуляції</value>
+    <value>Приймаються лише файли значень, розділені табуляцією</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Назва</value>

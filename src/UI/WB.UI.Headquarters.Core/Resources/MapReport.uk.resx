@@ -118,22 +118,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Assignment" xml:space="preserve">
-    <value>Призначення</value>
+    <value>Завдання</value>
   </data>
   <data name="details" xml:space="preserve">
-    <value>Деталі</value>
+    <value>деталі</value>
   </data>
   <data name="MapReportTitle" xml:space="preserve">
-    <value>Звіт по карті</value>
+    <value>Звіт про мапу</value>
   </data>
   <data name="NoGpsQuestionsByQuestionnaire" xml:space="preserve">
-    <value>В обраній анкеті немає питань типу GPS</value>
+    <value>У вибраній анкеті немає запитань типу GPS</value>
   </data>
   <data name="NotAllMarkers" xml:space="preserve">
-    <value>Не всі маркери завантажено для поточного рівня масштабування. Будь ласка, збільште масштаб і перезавантажте маркери.</value>
+    <value>Не всі маркери були завантажені для поточного рівня масштабування. Будь ласка, збільште масштаб і перезавантажте маркери.</value>
   </data>
   <data name="ReloadMarkers" xml:space="preserve">
-    <value>Перезавантаження маркерів</value>
+    <value>Маркери перезавантаження</value>
   </data>
   <data name="ViewInterviewContent" xml:space="preserve">
     <value>Переглянути деталі інтерв'ю</value>

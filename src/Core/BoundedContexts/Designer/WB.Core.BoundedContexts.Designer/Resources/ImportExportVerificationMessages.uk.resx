@@ -118,24 +118,24 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="QM0001" xml:space="preserve">
-    <value>Джерело для пов'язаного питання повинно мати ім'я змінної</value>
+    <value>Джерело для пов'язаного запитання повинно мати ім'я змінної</value>
   </data>
   <data name="QM0002" xml:space="preserve">
-    <value>Джерело зв'язаного списку повинно мати ім'я змінної</value>
+    <value>Джерело для зв'язаного списку повинно мати ім'я змінної</value>
   </data>
   <data name="QM0003" xml:space="preserve">
     <value>Джерело для каскадного питання повинно мати ім'я змінної</value>
   </data>
   <data name="QM0004" xml:space="preserve">
-    <value>Запитання тригера списку повинно мати ім'я змінної</value>
+    <value>Тригерне питання реєстру повинно мати ім'я змінної</value>
   </data>
   <data name="QM0005" xml:space="preserve">
-    <value>Вихідне питання для імен рядків повинно мати ім'я змінної</value>
+    <value>Вихідне питання для назв рядків повинно мати ім'я змінної</value>
   </data>
   <data name="QM0006" xml:space="preserve">
-    <value>Кожна сутність повинна мати унікальний ідентифікатор, але знайдені дублікати</value>
+    <value>Кожна сутність повинна мати унікальний ідентифікатор, але знайдено дублікати</value>
   </data>
   <data name="QM0007" xml:space="preserve">
-    <value>Ім'я змінної має бути унікальним, але знайдені дублікати</value>
+    <value>Ім'я змінної має бути унікальним, але знайдено дублікати</value>
   </data>
 </root>

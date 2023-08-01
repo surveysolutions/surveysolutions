@@ -118,9 +118,9 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ExcessiveRequestAttemptsDetected" xml:space="preserve">
-    <value>Виявлено надмірні спроби запиту.</value>
+    <value>Виявлено надмірну кількість спроб запитів.</value>
   </data>
   <data name="TryLater" xml:space="preserve">
-    <value>Повторіть спробу пізніше</value>
+    <value>Будь ласка, спробуйте пізніше</value>
   </data>
 </root>

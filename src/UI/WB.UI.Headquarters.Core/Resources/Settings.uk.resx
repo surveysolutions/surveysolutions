@@ -118,40 +118,40 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AllowInterviewerUpdateProfile" xml:space="preserve">
-    <value>Редагування профілю перелічувача</value>
+    <value>Редагування профілю реєстратора</value>
   </data>
   <data name="AllowInterviewerUpdateProfileDesc" xml:space="preserve">
-    <value>Дозвольте нумераторам оновлювати свою контактну інформацію в профілі облікового запису</value>
+    <value>Дозволити реєстраторам оновлювати свою контактну інформацію в профілі облікового запису</value>
   </data>
   <data name="AllowWebInterviewEmailNotifications" xml:space="preserve">
-    <value>Сповіщення електронною поштою про веб-інтерв'ю</value>
+    <value>Сповіщення про веб-інтерв'ю на електронну пошту</value>
   </data>
   <data name="AllowWebInterviewEmailNotificationsDesc" xml:space="preserve">
-    <value>Дозвольте респондентам веб-інтерв'ю запитувати електронні листи з посиланнями для відновлення розпочатих інтерв'ю (ефективно, якщо налаштовано масового постачальника послуг електронної пошти)</value>
+    <value>Дозвольте респондентам веб-інтерв'ю запитувати електронні листи з посиланнями для продовження розпочатих інтерв'ю (ефективно, якщо налаштований постачальник послуг масової розсилки електронної пошти)</value>
   </data>
   <data name="AutoUpdateDescription" xml:space="preserve">
-    <value>Якщо перевірено, то тільки остання версія програми інтерв'юера/супервайзера може синхронізуватися зі штаб-квартирою</value>
+    <value>Якщо позначено, то лише остання версія програми Interviewer/Supervisor може синхронізуватися зі штаб-квартирою</value>
   </data>
   <data name="ChangeStateConfirm" xml:space="preserve">
-    <value>Дійсно бажаєте змінити параметри захисту експортних файлів? Всі файли даних експорту будуть захищені паролем.</value>
+    <value>Ви впевнені, що хочете змінити налаштування безпеки файлів експорту? Всі експортовані файли даних будуть захищені паролем.</value>
   </data>
   <data name="ChangeStateDisabledConfirm" xml:space="preserve">
-    <value>Дійсно бажаєте змінити параметри захисту експортних файлів? Експортовані файли даних більше не будуть захищені паролем.</value>
+    <value>Ви впевнені, що хочете змінити налаштування безпеки файлів експорту? Експортовані файли даних більше не будуть захищені паролем.</value>
   </data>
   <data name="ClearExportCache_Description" xml:space="preserve">
-    <value>Ця операція очистить всі дані кешу експорту. Наступний експорт займе більше часу.</value>
+    <value>Ця операція очистить весь експортний кеш. Наступний експорт займе більше часу.</value>
   </data>
   <data name="ClearExportCache_Title" xml:space="preserve">
-    <value>Очищення кешу експорту</value>
+    <value>Очистити кеш експорту</value>
   </data>
   <data name="CurrentLogo" xml:space="preserve">
     <value>Поточний логотип</value>
   </data>
   <data name="DeviceNotifications" xml:space="preserve">
-    <value>Увімкнення сповіщень на пристрої</value>
+    <value>Увімкнути сповіщення на пристрої</value>
   </data>
   <data name="DeviceNotificationsDescription" xml:space="preserve">
-    <value>Коли пристрої ввімкнено, вони повідомлятимуть власників про зміни та дії, які потрібно вжити</value>
+    <value>Якщо увімкнено, пристрої сповіщатимуть власників про зміни та дії, які необхідно виконати</value>
   </data>
   <data name="EmailProvider_Address" xml:space="preserve">
     <value>Поштова адреса відправника</value>
@@ -160,10 +160,10 @@
     <value>Поточна поштова адреса відправника.</value>
   </data>
   <data name="EmailProvider_Amazon" xml:space="preserve">
-    <value>Простий сервіс електронної пошти Amazon (SES)</value>
+    <value>Amazon Simple Email Service (SES)</value>
   </data>
   <data name="EmailProvider_AmazonDescription" xml:space="preserve">
-    <value>Налаштуйте параметри для доступу до Amazon SES нижче. Доступна додаткова інформація про використання Amazon SES з Survey Solutions </value>
+    <value>Налаштуйте параметри для доступу до Amazon SES нижче. Додаткові відомості про використання Amazon SES з Survey Solutions доступні </value>
   </data>
   <data name="EmailProvider_AwsAccessKeyId" xml:space="preserve">
     <value>Ідентифікатор ключа доступу</value>
@@ -172,10 +172,10 @@
     <value>Ідентифікатор облікового запису AWS можна знайти в консолі керування AWS</value>
   </data>
   <data name="EmailProvider_AwsRegion" xml:space="preserve">
-    <value>Область</value>
+    <value>Регіон</value>
   </data>
   <data name="EmailProvider_AwsRegion_Unknown" xml:space="preserve">
-    <value>Вибраний невідомий регіон. Будь ласка, перевірте це.</value>
+    <value>Вибрано невідомий регіон. Будь ласка, перевірте його.</value>
   </data>
   <data name="EmailProvider_AwsRegionHelp" xml:space="preserve">
     <value>Регіон для консолі керування AWS</value>
@@ -184,28 +184,28 @@
     <value>Секретний ключ доступу</value>
   </data>
   <data name="EmailProvider_AwsSecretAccessKeyHelp" xml:space="preserve">
-    <value>Знайдено в Облікові дані безпеки в AWS Management Console</value>
+    <value>Знайдено у розділі Облікові дані безпеки в консолі керування AWS</value>
   </data>
   <data name="EmailProvider_GeneralError" xml:space="preserve">
-    <value>Сталася загальна помилка</value>
+    <value>Виникла загальна помилка</value>
   </data>
   <data name="EmailProvider_HelpLinkText" xml:space="preserve">
-    <value>Тут</value>
+    <value>тут.</value>
   </data>
   <data name="EmailProvider_None" xml:space="preserve">
-    <value>Ніхто</value>
+    <value>Ні.</value>
   </data>
   <data name="EmailProvider_NoneDescription" xml:space="preserve">
-    <value>Запрошення на веб-інтерв'ю респондентам не надсилаються компанією Survey Solutions.</value>
+    <value>Повідомлення із запрошеннями на веб-інтерв'ю не надсилаються Survey Solutions респондентам.</value>
   </data>
   <data name="EmailProvider_PageDesc" xml:space="preserve">
-    <value>Налаштуйте постачальника послуг масової електронної розсилки. Налаштуйте спосіб надсилання запрошень на веб-інтерв'ю.</value>
+    <value>Налаштуйте постачальника послуг масової розсилки. Налаштуйте спосіб надсилання запрошень на веб-інтерв'ю.</value>
   </data>
   <data name="EmailProvider_ReplyAddress" xml:space="preserve">
     <value>Адреса для відповіді</value>
   </data>
   <data name="EmailProvider_ReplyAddressHelp" xml:space="preserve">
-    <value>Адреса електронної пошти, на яку можуть надсилатися відповіді від запрошених користувачів (за промовчанням використовується адреса електронної пошти відправника).</value>
+    <value>Адреса електронної пошти, на яку можна надсилати відповіді від запрошених (за замовчуванням - адреса відправника).</value>
   </data>
   <data name="EmailProvider_SenderAddress" xml:space="preserve">
     <value>Адреса електронної пошти відправника</value>
@@ -214,16 +214,16 @@
     <value>Інформація про відправника</value>
   </data>
   <data name="EmailProvider_SenderHelp" xml:space="preserve">
-    <value>Адреса електронної пошти відправника, яка з'явиться в полі ВІД вхідних повідомлень.</value>
+    <value>Адреса електронної пошти відправника, яка буде відображатися в полі FROM вхідних повідомлень.</value>
   </data>
   <data name="EmailProvider_SenderName" xml:space="preserve">
     <value>Ім'я відправника</value>
   </data>
   <data name="EmailProvider_SenderNameHelp" xml:space="preserve">
-    <value>Ім'я відправника, який відображатиметься в полі ВІД вхідних повідомлень.</value>
+    <value>Ім'я відправника, яке буде відображатися в полі FROM вхідних повідомлень.</value>
   </data>
   <data name="EmailProvider_Sendgrid" xml:space="preserve">
-    <value>Служба доставки електронної пошти SendGrid</value>
+    <value>Сервіс доставки електронної пошти SendGrid</value>
   </data>
   <data name="EmailProvider_SendGridApiKey" xml:space="preserve">
     <value>Ключ API</value>
@@ -232,124 +232,124 @@
     <value>Ви можете знайти його на сторінці API Keys в пункті меню налаштувань SendGrid</value>
   </data>
   <data name="EmailProvider_SendgridDescription" xml:space="preserve">
-    <value>Налаштуйте параметри для доступу до SendGrid нижче. Доступна додаткова інформація про використання SendGrid з рішеннями для опитування </value>
+    <value>Налаштуйте параметри для доступу до SendGrid нижче. Додаткові відомості про використання SendGrid з рішеннями для проведення опитувань доступні </value>
   </data>
   <data name="EmailProvider_SendTestEmail" xml:space="preserve">
-    <value>Надіслати електронний лист</value>
+    <value>Надіслати електронну пошту</value>
   </data>
   <data name="EmailProvider_SendTestEmailHeader" xml:space="preserve">
-    <value>Надіслати тестовий електронний лист</value>
+    <value>Надіслати тестовий лист</value>
   </data>
   <data name="EmailProvider_SendTestEmailMessage" xml:space="preserve">
-    <value>Надішліть собі тестове повідомлення електронної пошти, щоб переконатися, що служба масової розсилки працює, і попередньо переглянути, що отримають респонденти.</value>
+    <value>Надішліть собі тестовий імейл, щоб переконатися, що служба масових розсилок працює, і отримати попередній перегляд того, що отримають респонденти.</value>
   </data>
   <data name="EmailProvider_SendTestEmailResult" xml:space="preserve">
-    <value>Приклад електронного листа-запрошення успішно відправлено</value>
+    <value>Приклад успішно відправленого листа із запрошенням</value>
   </data>
   <data name="EmailProvider_ServiceProvideHeader" xml:space="preserve">
-    <value>Укажіть постачальника послуг масової розсилки</value>
+    <value>Вкажіть постачальника послуг масової розсилки</value>
   </data>
   <data name="EmailProvider_SettingsSavedSuccessfully" xml:space="preserve">
-    <value>Конфігурацію служби електронної пошти успішно збережено.</value>
+    <value>Конфігурацію поштового сервісу успішно збережено.</value>
   </data>
   <data name="EmailProvider_TestEmailAddress" xml:space="preserve">
     <value>Адреса електронної пошти</value>
   </data>
   <data name="EnableEncryption" xml:space="preserve">
-    <value>Увімкнення шифрування</value>
+    <value>Увімкнути шифрування</value>
   </data>
   <data name="ExportEncryption_Description" xml:space="preserve">
-    <value>Поставте прапорець "Увімкнути шифрування", щоб захистити архіви даних експорту, зашифрувавши їх за допомогою наданого пароля. Змініть пароль, натиснувши кнопку з круговою стрілкою. Після шифрування лише люди, які знають пароль, можуть відкрити експортовані дані.</value>
+    <value>Встановіть прапорець "Увімкнути шифрування", щоб захистити архіви експортованих даних, зашифрувавши їх за допомогою вказаного пароля. Змініть пароль, натиснувши кнопку з круговою стрілкою. Після шифрування тільки люди, які знають пароль, зможуть відкрити експортовані дані.</value>
   </data>
   <data name="ExportEncryption_Title" xml:space="preserve">
-    <value>Експорт шифрування</value>
+    <value>Шифрування експорту</value>
   </data>
   <data name="ExportEncryptionSettings" xml:space="preserve">
-    <value>Експорт параметрів шифрування</value>
+    <value>Експорт налаштувань шифрування</value>
   </data>
   <data name="GeographyQuestionAccuracyInMetersDescription" xml:space="preserve">
-    <value>Встановіть точність у метрах для питання географії</value>
+    <value>Встановити точність у метрах для питання з географії</value>
   </data>
   <data name="GeographyQuestionPeriodInSecondsDescription" xml:space="preserve">
-    <value>Встановіть період у секундах для питання географії</value>
+    <value>Встановити період у секундах для питання з географії</value>
   </data>
   <data name="GlobalNoteClearingConfirm" xml:space="preserve">
-    <value>Ви дійсно хочете видалити глобальну нотатку?</value>
+    <value>Ви впевнені, що хочете видалити глобальну нотатку?</value>
   </data>
   <data name="GlobalNoteSaved" xml:space="preserve">
     <value>Примітка збережена</value>
   </data>
   <data name="GlobalNoteSettings" xml:space="preserve">
-    <value>Глобальна нота</value>
+    <value>Глобальна нотатка</value>
   </data>
   <data name="GlobalNoteSettings_Description" xml:space="preserve">
-    <value>Вкажіть текст у полі "Глобальна нотатка", який відображатиметься у верхній частині кожного екрана сервера.</value>
+    <value>Вкажіть текст у полі "Глобальна примітка", який буде показано у верхній частині кожного екрана на сервері.</value>
   </data>
   <data name="GlobalNotice" xml:space="preserve">
-    <value>Глобальна нота</value>
+    <value>Глобальна нотатка</value>
   </data>
   <data name="InterviewerAutoUpdate" xml:space="preserve">
-    <value>Увімкнення автоматичних оновлень</value>
+    <value>Увімкнути автоматичні оновлення</value>
   </data>
   <data name="InterviewerAutoUpdateDisabled" xml:space="preserve">
-    <value>Автоматичні оновлення додатків Android відключені</value>
+    <value>Автоматичне оновлення Android-додатків вимкнено</value>
   </data>
   <data name="InterviewerAutoUpdateEnabled" xml:space="preserve">
-    <value>Увімкнено автоматичне оновлення додатків Android</value>
+    <value>Увімкнено автоматичне оновлення програм для Android</value>
   </data>
   <data name="InterviewerGeographyQuestionAccuracyInMeters" xml:space="preserve">
-    <value>Географія питання точності</value>
+    <value>Точність географічного питання</value>
   </data>
   <data name="InterviewerGeographyQuestionPeriodInSeconds" xml:space="preserve">
-    <value>Географія періоду запитань</value>
+    <value>Період запитань з географії</value>
   </data>
   <data name="InterviewerPartialSynchronization" xml:space="preserve">
-    <value>Увімкнення часткової синхронізації</value>
+    <value>Увімкнути часткову синхронізацію</value>
   </data>
   <data name="Logo" xml:space="preserve">
     <value>Логотип компанії</value>
   </data>
   <data name="LogoNotUpdated" xml:space="preserve">
-    <value>Логотип компанії не оновлювався. Будь ласка, надайте дійсне зображення</value>
+    <value>Логотип компанії не оновлено. Будь ласка, надайте дійсне зображення</value>
   </data>
   <data name="LogoSettings" xml:space="preserve">
     <value>Логотип компанії</value>
   </data>
   <data name="LogoSettings_Description" xml:space="preserve">
-    <value>Логотип компанії - це зображення, яке з'являється на сторінці входу на сервер і на сторінці входу в додаток Interviewer.</value>
+    <value>Логотип компанії - це зображення, яке відображається на сторінці входу на сервер і на сторінці входу в додаток Interviewer.</value>
   </data>
   <data name="LogoSettings_Description1" xml:space="preserve">
-    <value>Натисніть кнопку «Вибрати файл», щоб завантажити зображення з вашого комп'ютера на сервер для використання в якості зображення логотипу. Потім натисніть кнопку «Зберегти».</value>
+    <value>Натисніть кнопку "Вибрати файл", щоб завантажити зображення з вашого комп'ютера на сервер для використання в якості логотипу. Потім натисніть кнопку "Зберегти.</value>
   </data>
   <data name="LogoUpdated" xml:space="preserve">
-    <value>Оновлено логотип компанії</value>
+    <value>Оновлений логотип компанії</value>
   </data>
   <data name="MobileAppSettings_Description" xml:space="preserve">
-    <value>Деякі специфічні налаштування за версією програми Interviewer/Supervisor для Android</value>
+    <value>Деякі специфічні налаштування для андроїд-версії програми Interviewer/Supervisor</value>
   </data>
   <data name="MobileAppSettings_Title" xml:space="preserve">
-    <value>Налаштування програми інтерв'юера/супервайзера</value>
+    <value>Налаштування програми для інтерв'юера/супервайзера</value>
   </data>
   <data name="PartialSynchronizationDescription" xml:space="preserve">
-    <value>Якщо увімкнено, планшети інтерв'юерів надсилатимуть відповіді на незавершені співбесіди до штаб-квартири</value>
+    <value>Якщо увімкнено, планшети інтерв'юерів надсилатимуть відповіді на незавершені інтерв'ю до штаб-квартири</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>Пароль</value>
   </data>
   <data name="RegeneratePasswordConfirm" xml:space="preserve">
-    <value>Дійсно створити новий пароль? Новий пароль буде застосовано до всіх експортованих файлів даних, створених відтепер.</value>
+    <value>Ви впевнені, що хочете створити новий пароль? Новий пароль буде застосовано до всіх експортованих файлів даних, створених відтепер.</value>
   </data>
   <data name="RemoveExportCache" xml:space="preserve">
-    <value>Очищення кешу</value>
+    <value>Очистити кеш</value>
   </data>
   <data name="RemoveExportCache_Warning" xml:space="preserve">
-    <value>Попередження! Це незворотна дія</value>
+    <value>Обережно! Це незворотна дія</value>
   </data>
   <data name="RemoveExportCacheConfirm" xml:space="preserve">
-    <value>Ви дійсно хочете очистити кеш експорту? Всі створені файли експорту будуть видалені з сервера і НЕ будуть доступні для завантаження.</value>
+    <value>Ви впевнені, що хочете очистити кеш експорту? Всі згенеровані експортні файли будуть видалені з сервера і НЕ будуть доступні для завантаження.</value>
   </data>
   <data name="RemoveExportCacheFail" xml:space="preserve">
-    <value>Очищення кешу помилок</value>
+    <value>Очистити кеш помилок</value>
   </data>
   <data name="RemoveExportCacheSuccess" xml:space="preserve">
     <value>Кеш успішно видалено</value>
@@ -358,7 +358,7 @@
     <value>Видалити логотип</value>
   </data>
   <data name="Settings_Title" xml:space="preserve">
-    <value>Параметри</value>
+    <value>Налаштування</value>
   </data>
   <data name="UserProfileSettings_Title" xml:space="preserve">
     <value>Налаштування профілю користувача</value>

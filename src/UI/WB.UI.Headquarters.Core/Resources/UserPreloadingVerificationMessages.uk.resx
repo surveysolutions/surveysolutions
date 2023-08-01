@@ -118,31 +118,31 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="PLU0001" xml:space="preserve">
-    <value>Логін не унікальний</value>
+    <value>Логін не є унікальним</value>
   </data>
   <data name="PLU0001Description" xml:space="preserve">
-    <value>Користувач "{0}" вже існує</value>
+    <value>Користувач '{0}' вже існує</value>
   </data>
   <data name="PLU0002" xml:space="preserve">
-    <value>Дублювати</value>
+    <value>Дублікат</value>
   </data>
   <data name="PLU0002Description" xml:space="preserve">
-    <value>Є дублікати користувачів з логіном "{0}" у файлі</value>
+    <value>У файлі є дублікати користувачів з логіном '{0}'</value>
   </data>
   <data name="PLU0003" xml:space="preserve">
-    <value>Неправильна команда</value>
+    <value>Не та команда.</value>
   </data>
   <data name="PLU0003Description" xml:space="preserve">
-    <value>User '{0}' заархівований і належить іншій команді</value>
+    <value>Користувач '{0}' заархівований і належить до іншої команди</value>
   </data>
   <data name="PLU0003Recomendation" xml:space="preserve">
     <value>Заархівований користувач не може бути використаний повторно, оскільки він належить іншій команді</value>
   </data>
   <data name="PLU0004" xml:space="preserve">
-    <value>Неправильна роль</value>
+    <value>Не та роль</value>
   </data>
   <data name="PLU0004Description" xml:space="preserve">
-    <value>Користувач "{0}" архівується та має іншу роль</value>
+    <value>Користувач '{0}' архівується і має іншу роль</value>
   </data>
   <data name="PLU0004Recomendation" xml:space="preserve">
     <value>Заархівований користувач не може бути використаний повторно, оскільки він існує в іншій ролі</value>
@@ -151,58 +151,58 @@
     <value>Неправильний формат входу</value>
   </data>
   <data name="PLU0005Description" xml:space="preserve">
-    <value>Логін "{0}" у неправильному форматі</value>
+    <value>Логін '{0}' має неправильний формат</value>
   </data>
   <data name="PLU0005Recomendation" xml:space="preserve">
-    <value>Ім'я для входу має бути довжиною від 3 до 15 символів і може містити лише літери, цифри та символ підкреслення. Літери повинні бути тільки з латинського (англійського) алфавіту: 'A'..' Z' або 'a'..' z'. Інші літери (кирилиця, арабська тощо) недійсні для використання в логінах.</value>
+    <value>Ім'я користувача має містити від 3 до 15 символів і може містити лише літери, цифри та символ підкреслення. Літери повинні бути тільки з латинського (англійського) алфавіту: 'A'...Z' або 'a'...z'. Інші літери (кирилиця, арабські тощо) не приймаються для використання в логінах.</value>
   </data>
   <data name="PLU0006" xml:space="preserve">
     <value>Неправильний формат пароля</value>
   </data>
   <data name="PLU0006Description" xml:space="preserve">
-    <value>Пароль "{0}" у неправильному форматі</value>
+    <value>Пароль '{0}' має неправильний формат</value>
   </data>
   <data name="PLU0006Recomendation" xml:space="preserve">
-    <value>Він повинен містити принаймні одну цифру, один символ верхнього та один символ нижнього регістру. Довжина повинна бути від 10 до 100 символів</value>
+    <value>Він повинен містити принаймні одну цифру, один символ верхнього регістру та один символ нижнього регістру. Довжина має бути від 10 до 100 символів</value>
   </data>
   <data name="PLU0007" xml:space="preserve">
     <value>Неправильний формат електронної пошти</value>
   </data>
   <data name="PLU0007Description" xml:space="preserve">
-    <value>Email "{0}" у неправильному форматі</value>
+    <value>Email '{0}' має неправильний формат</value>
   </data>
   <data name="PLU0008" xml:space="preserve">
     <value>Неправильний формат номера телефону</value>
   </data>
   <data name="PLU0008Description" xml:space="preserve">
-    <value>Номер телефону "{0}" у неправильному форматі</value>
+    <value>Номер телефону '{0}' має неправильний формат</value>
   </data>
   <data name="PLU0009" xml:space="preserve">
-    <value>Неприпустима роль</value>
+    <value>Неправильна роль</value>
   </data>
   <data name="PLU0009Description" xml:space="preserve">
-    <value>Роль "{0}" недійсна</value>
+    <value>Роль '{0}' є недійсною</value>
   </data>
   <data name="PLU0009Recomendation" xml:space="preserve">
-    <value>Допускаються тільки «керівник» або «інтерв'юер»</value>
+    <value>Допускаються тільки "супервайзер" або "інтерв'юер"</value>
   </data>
   <data name="PLU0010" xml:space="preserve">
     <value>Помилка залежності</value>
   </data>
   <data name="PLU0010Description" xml:space="preserve">
-    <value>"{0}" керівника не знайдено в робочій області</value>
+    <value>Керівника '{0}' не знайдено в робочому просторі</value>
   </data>
   <data name="PLU0011" xml:space="preserve">
     <value>Помилка залежності</value>
   </data>
   <data name="PLU0011Description" xml:space="preserve">
-    <value>Графа супервайзера повинна бути порожньою для ролі супервайзера</value>
+    <value>Колонка "Керівник" повинна бути порожньою для ролі керівника</value>
   </data>
   <data name="PLU0012" xml:space="preserve">
     <value>Неправильна довжина повного імені</value>
   </data>
   <data name="PLU0012Description" xml:space="preserve">
-    <value>Повне ім'я "{0}" у неправильному форматі</value>
+    <value>Повне ім'я '{0}' має неправильний формат</value>
   </data>
   <data name="PLU0012Recomendation" xml:space="preserve">
     <value>Він не повинен містити більше 100 символів</value>
@@ -211,7 +211,7 @@
     <value>Неправильна довжина номера телефону</value>
   </data>
   <data name="PLU0013Description" xml:space="preserve">
-    <value>Номер телефону "{0}" у неправильному форматі</value>
+    <value>Номер телефону '{0}' має неправильний формат</value>
   </data>
   <data name="PLU0013Recomendation" xml:space="preserve">
     <value>Він не повинен містити більше 15 символів</value>
@@ -220,61 +220,61 @@
     <value>Неправильний формат повного імені</value>
   </data>
   <data name="PLU0014Description" xml:space="preserve">
-    <value>Повне ім'я "{0}" містить неприпустимі символи</value>
+    <value>Повне ім'я '{0}' містить неприпустимі символи</value>
   </data>
   <data name="PLU0014Recomendation" xml:space="preserve">
     <value>Допускаються лише літери, крапки, пробіли та апострофи</value>
   </data>
   <data name="PLU0015" xml:space="preserve">
-    <value>Пароль закороткий</value>
+    <value>Занадто короткий пароль</value>
   </data>
   <data name="PLU0015Description" xml:space="preserve">
-    <value>Пароль "{0}" занадто короткий</value>
+    <value>Пароль '{0}' занадто короткий</value>
   </data>
   <data name="PLU0015Recomendation" xml:space="preserve">
-    <value>Пароль повинен складатися принаймні з 10 символів</value>
+    <value>Пароль повинен мати довжину не менше 10 символів</value>
   </data>
   <data name="PLU0016" xml:space="preserve">
     <value>Простий пароль</value>
   </data>
   <data name="PLU0016Description" xml:space="preserve">
-    <value>Пароль '{0}' не містить буквено-цифрових символів</value>
+    <value>Пароль '{0}' не містить неалфавітно-цифрових символів</value>
   </data>
   <data name="PLU0016Recomendation" xml:space="preserve">
-    <value>Додавання принаймні одного символу, відмінного від алфавітно-цифрового символу</value>
+    <value>Додайте принаймні один не буквено-цифровий символ</value>
   </data>
   <data name="PLU0017" xml:space="preserve">
     <value>Простий пароль</value>
   </data>
   <data name="PLU0017Description" xml:space="preserve">
-    <value>Пароль "{0}" не містить цифри</value>
+    <value>Пароль '{0}' не містить цифри</value>
   </data>
   <data name="PLU0017Recomendation" xml:space="preserve">
-    <value>Додавання принаймні однієї цифри ("0"–9").</value>
+    <value>Додайте принаймні одну цифру ('0'-'9').</value>
   </data>
   <data name="PLU0018" xml:space="preserve">
     <value>Простий пароль</value>
   </data>
   <data name="PLU0018Description" xml:space="preserve">
-    <value>Пароль "{0}" не містить символів нижнього регістру</value>
+    <value>Пароль '{0}' не містить символів нижнього регістру</value>
   </data>
   <data name="PLU0018Recomendation" xml:space="preserve">
-    <value>Додавання принаймні одного символу нижнього регістру ("a"-z").</value>
+    <value>Додайте принаймні один малий символ ('a'-'z').</value>
   </data>
   <data name="PLU0019" xml:space="preserve">
     <value>Простий пароль</value>
   </data>
   <data name="PLU0019Description" xml:space="preserve">
-    <value>Пароль "{0}" не містить символів верхнього регістру</value>
+    <value>Пароль '{0}' не містить символів верхнього регістру</value>
   </data>
   <data name="PLU0019Recomendation" xml:space="preserve">
-    <value>Додайте принаймні один верхній регістр ("A" - "Z").</value>
+    <value>Додайте принаймні одну велику літеру ('A'-'Z').</value>
   </data>
   <data name="PLU0020" xml:space="preserve">
     <value>Простий пароль</value>
   </data>
   <data name="PLU0020Description" xml:space="preserve">
-    <value>Пароль "{0}" містить недостатньо унікальних символів</value>
+    <value>Пароль '{0}' не містить достатньо унікальних символів</value>
   </data>
   <data name="PLU0020Recomendation" xml:space="preserve">
     <value>Додавання різних символів.</value>
@@ -283,7 +283,7 @@
     <value>Потрібен пароль</value>
   </data>
   <data name="PLU0021Description" xml:space="preserve">
-    <value>Необхідно вказати пароль </value>
+    <value>Потрібен пароль </value>
   </data>
   <data name="PLU0021Recomendation" xml:space="preserve">
     <value>Додати пароль</value>
@@ -292,9 +292,9 @@
     <value>Робочу область не знайдено</value>
   </data>
   <data name="PLU0022Description" xml:space="preserve">
-    <value>Робоче середовище має існувати та вмикатися</value>
+    <value>Робоча область повинна існувати і бути активована</value>
   </data>
   <data name="PLU0022Recomendation" xml:space="preserve">
-    <value>Перевірка імені робочої області</value>
+    <value>Перевірте назву робочого простору</value>
   </data>
 </root>

@@ -124,7 +124,7 @@
     <value>CATI</value>
   </data>
   <data name="FaceToFace" xml:space="preserve">
-    <value>Віч</value>
+    <value>Віч-на-віч</value>
   </data>
   <data name="FocusGroup" xml:space="preserve">
     <value>Фокус-група</value>
@@ -136,6 +136,6 @@
     <value>Пошта</value>
   </data>
   <data name="Other" xml:space="preserve">
-    <value>Інший</value>
+    <value>Інше</value>
   </data>
 </root>

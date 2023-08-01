@@ -124,7 +124,7 @@
     <value>Не затверджено штаб-квартирою</value>
   </data>
   <data name="AllInterviewersExceptAssignedToInterviewer" xml:space="preserve">
-    <value>Не призначено інтерв'юеру</value>
+    <value>Не закріплено за інтерв'юером</value>
   </data>
   <data name="AllPeriods" xml:space="preserve">
     <value>Всі періоди</value>
@@ -133,100 +133,100 @@
     <value>Всі анкети</value>
   </data>
   <data name="AllTeams" xml:space="preserve">
-    <value>Всі команди</value>
+    <value>Усім командам</value>
   </data>
   <data name="AnyHeadquarters" xml:space="preserve">
-    <value>будь-який штаб-квартира</value>
+    <value>будь-яка штаб-квартира</value>
   </data>
   <data name="Assignments" xml:space="preserve">
     <value>Завдання</value>
   </data>
   <data name="Average" xml:space="preserve">
-    <value>Середній</value>
+    <value>Середній показник</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Скасувати</value>
   </data>
   <data name="CommandTransformator_ParseQuestionError" xml:space="preserve">
-    <value>Не вдається розібрати відповідь на запитання</value>
+    <value>Неможливо проаналізувати відповідь на запитання</value>
   </data>
   <data name="ControlPanelController_RepeatLastInterviewStatus" xml:space="preserve">
-    <value>Статус, установлений командою підтримки Survey Solutions</value>
+    <value>Статус, встановлений службою підтримки Survey Solutions</value>
   </data>
   <data name="Days" xml:space="preserve">
     <value>Дні</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Помилка</value>
+    <value>Помилка.</value>
   </data>
   <data name="HQ_AccountController_AccountPasswordChangedSuccessfully" xml:space="preserve">
     <value>Пароль облікового запису успішно оновлено</value>
   </data>
   <data name="HQ_AccountController_AccountPasswordChangedSuccessfullyFormat" xml:space="preserve">
-    <value>Пароль до облікового запису &lt;b&gt;{0}&lt;/b&gt; успішно оновлено</value>
+    <value>Пароль для облікового запису &lt;b&gt;{0}&lt;/b&gt; успішно оновлено</value>
   </data>
   <data name="HQ_AccountController_AccountUpdatedSuccessfully" xml:space="preserve">
-    <value>Інформація про обліковий запис успішно оновлюється</value>
+    <value>Інформацію про обліковий запис успішно оновлено</value>
   </data>
   <data name="HQ_AccountController_AccountUpdatedSuccessfullyFormat" xml:space="preserve">
-    <value>Інформація про &lt;b&gt;{0}&lt;/b&gt; успішно оновлюється</value>
+    <value>Інформацію про &lt;b&gt;{0}&lt;/b&gt; успішно оновлено</value>
   </data>
   <data name="HQ_Views_Api_Token_Description" xml:space="preserve">
-    <value>Токен API використовується для здійснення викликів API в систему</value>
+    <value>API-токен використовується для виконання API-викликів до системи</value>
   </data>
   <data name="HQ_Views_Api_Token_Generate_Description" xml:space="preserve">
     <value>Будь ласка, збережіть токен зараз. Ви зможете побачити його лише один раз!</value>
   </data>
   <data name="HQ_Views_Api_Token_Issued" xml:space="preserve">
-    <value>Включений</value>
+    <value>увімкнено</value>
   </data>
   <data name="HQ_Views_Api_Token_Not_Issued" xml:space="preserve">
-    <value>Вимкнуто</value>
+    <value>з обмеженими можливостями</value>
   </data>
   <data name="HQ_Views_ApiTokens_Title" xml:space="preserve">
     <value>Доступ до API</value>
   </data>
   <data name="HQ_Views_DisableTwoFactorAuth_Title" xml:space="preserve">
-    <value>Відключення двофакторної аутентифікації</value>
+    <value>Вимкнути двофакторну автентифікацію</value>
   </data>
   <data name="HQ_Views_EnableAuthenticator_Title" xml:space="preserve">
-    <value>Налаштування програми-автентифікатора</value>
+    <value>Налаштуйте додаток-автентифікатор</value>
   </data>
   <data name="HQ_Views_Manage_Title" xml:space="preserve">
     <value>Керування обліковим записом</value>
   </data>
   <data name="HQ_Views_ResetAuthenticator_Title" xml:space="preserve">
-    <value>Скидання ключа автентифікатора</value>
+    <value>Скинути ключ автентифікатора</value>
   </data>
   <data name="HQ_Views_ResetRecoveryCodes_Title" xml:space="preserve">
-    <value>Скидання кодів відновлення</value>
+    <value>Скинути коди відновлення</value>
   </data>
   <data name="HQ_Views_ShowRecoveryCodes_Title" xml:space="preserve">
     <value>Коди відновлення</value>
   </data>
   <data name="HQ_Views_TwoFactorAuthentication_Description" xml:space="preserve">
-    <value>Двофакторна автентифікація – це розширена функція безпеки, яка ускладнює хакерам вхід у ваш обліковий запис лише за допомогою вкраденого пароля.</value>
+    <value>Двофакторна автентифікація - це вдосконалена функція безпеки, яка ускладнює хакеру вхід до вашого облікового запису за допомогою викраденого пароля.</value>
   </data>
   <data name="HQ_Views_TwoFactorAuthentication_Disable2fa_Description" xml:space="preserve">
     <value>Вимкніть двофакторну автентифікацію, залишивши обліковий запис захищеним лише паролем.</value>
   </data>
   <data name="HQ_Views_TwoFactorAuthentication_Disabled" xml:space="preserve">
-    <value>Вимкнуто</value>
+    <value>з обмеженими можливостями</value>
   </data>
   <data name="HQ_Views_TwoFactorAuthentication_Enabled" xml:space="preserve">
-    <value>Включений</value>
+    <value>увімкнено</value>
   </data>
   <data name="HQ_Views_TwoFactorAuthentication_ResetAuthenticator_Description" xml:space="preserve">
-    <value>Скиньте до нового секретного коду, якщо будь-який із ваших пристроїв, що використовуються для двофакторної аутентифікації, втрачено або вкрадено.</value>
+    <value>Скиньте новий секретний код, якщо будь-який з ваших пристроїв, що використовується для двофакторної автентифікації, загублено або викрадено.</value>
   </data>
   <data name="HQ_Views_TwoFactorAuthentication_ResetRecoveryCodes_Description" xml:space="preserve">
-    <value>Анулюйте всі невикористані коди відновлення та створіть 10 нових.</value>
+    <value>Анулюйте всі невикористані коди відновлення та згенеруйте 10 нових.</value>
   </data>
   <data name="HQ_Views_TwoFactorAuthentication_SetupAuthenticator_Description" xml:space="preserve">
-    <value>Налаштуйте новий пристрій для двофакторної аутентифікації. Ви можете налаштувати кілька пристроїв одночасно.</value>
+    <value>Налаштуйте новий пристрій для двофакторної автентифікації. Ви можете налаштувати кілька пристроїв одночасно.</value>
   </data>
   <data name="HQ_Views_TwoFactorAuthentication_Title" xml:space="preserve">
-    <value>Двофакторна аутентифікація</value>
+    <value>Двофакторна автентифікація</value>
   </data>
   <data name="Interviews" xml:space="preserve">
     <value>Інтерв'ю</value>
@@ -235,43 +235,43 @@
     <value>Затверджено штаб-квартирою</value>
   </data>
   <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
-    <value>Затверджено науковим керівником</value>
+    <value>Затверджено керівником</value>
   </data>
   <data name="InterviewStatus_Completed" xml:space="preserve">
     <value>Завершено</value>
   </data>
   <data name="InterviewStatus_Created" xml:space="preserve">
-    <value>Створений</value>
+    <value>Створено</value>
   </data>
   <data name="InterviewStatus_Deleted" xml:space="preserve">
-    <value>Видалені</value>
+    <value>Видалено</value>
   </data>
   <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
     <value>Призначено інтерв'юера</value>
   </data>
   <data name="InterviewStatus_ReadyForInterview" xml:space="preserve">
-    <value>Готові до співбесіди</value>
+    <value>Готовність до співбесіди</value>
   </data>
   <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
     <value>Відхилено штаб-квартирою</value>
   </data>
   <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
-    <value>Відхилено науковим керівником</value>
+    <value>Відхилено Супервайзером</value>
   </data>
   <data name="InterviewStatus_Restarted" xml:space="preserve">
-    <value>Перезавантаження</value>
+    <value>Перезавантажено.</value>
   </data>
   <data name="InterviewStatus_Restored" xml:space="preserve">
-    <value>Відновлений</value>
+    <value>Відновлено</value>
   </data>
   <data name="InterviewStatus_SentToCapi" xml:space="preserve">
     <value>Відправлено до Капі</value>
   </data>
   <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
-    <value>Призначений науковий керівник</value>
+    <value>Призначено куратора</value>
   </data>
   <data name="NoPermissionsToExecute" xml:space="preserve">
-    <value>Користувач не має права виконувати надану дію</value>
+    <value>Користувач не має права виконувати запропоновані дії</value>
   </data>
   <data name="ObserverNotAllowed" xml:space="preserve">
     <value>Спостерігач не має права виконувати цю дію</value>
@@ -286,13 +286,13 @@
     <value>Команди</value>
   </data>
   <data name="Total" xml:space="preserve">
-    <value>Підсумок</value>
+    <value>Всього</value>
   </data>
   <data name="UnexpectedErrorOccurred" xml:space="preserve">
-    <value>Сталася неочікувана помилка</value>
+    <value>Виникла непередбачувана помилка</value>
   </data>
   <data name="ViewHelpers_Invalid_property" xml:space="preserve">
-    <value>Неприпустиме майно</value>
+    <value>Неправильна властивість</value>
   </data>
   <data name="WithErrors" xml:space="preserve">
     <value>З помилками</value>
