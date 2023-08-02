@@ -6,7 +6,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 {
     public abstract class InterviewTabPanel : BaseViewModel
     {
-        public abstract GroupStatus InterviewStatus { get; }
+        public abstract DashboardGroupType DashboardType { get; }
 
         private string title;
         public string Title
