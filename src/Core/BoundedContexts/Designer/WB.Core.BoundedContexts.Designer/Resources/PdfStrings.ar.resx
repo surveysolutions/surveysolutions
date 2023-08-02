@@ -303,4 +303,133 @@
   <data name="Variable" xml:space="preserve">
     <value>متغير</value>
   </data>
+  <data name="Appendix_SpecialValues" xml:space="preserve">
+    <value>الملحق {0} {1} القيم الخاصة</value>
+  </data>
+  <data name="GeographyInputMode" xml:space="preserve">
+    <value>وضع الإدخال</value>
+  </data>
+  <data name="GeographyType" xml:space="preserve">
+    <value>نوع الجغرافيا</value>
+  </data>
+  <data name="GeometryOverlapDetection" xml:space="preserve">
+    <value>كشف التداخل</value>
+  </data>
+  <data name="InRosterSourceOfCategories" xml:space="preserve">
+    <value>في القائمة</value>
+  </data>
+  <data name="MetadataAgreeToMakeThisQuestionnairePublic" xml:space="preserve">
+    <value>الموافقة على جعل هذا الاستبيان عاما</value>
+  </data>
+  <data name="MetadataConsultants" xml:space="preserve">
+    <value>الاستشاريين</value>
+  </data>
+  <data name="MetadataCountry" xml:space="preserve">
+    <value>بلد</value>
+  </data>
+  <data name="MetadataCoverage" xml:space="preserve">
+    <value>تغطيه</value>
+  </data>
+  <data name="MetadataFunding" xml:space="preserve">
+    <value>التمويل</value>
+  </data>
+  <data name="MetadataKeywords" xml:space="preserve">
+    <value>الكلمات الرئيسيه</value>
+  </data>
+  <data name="MetadataKindOfData" xml:space="preserve">
+    <value>نوع البيانات</value>
+  </data>
+  <data name="MetadataLanguages" xml:space="preserve">
+    <value>اللغات</value>
+  </data>
+  <data name="MetadataModeOfDataCollection" xml:space="preserve">
+    <value>طريقة جمع البيانات</value>
+  </data>
+  <data name="MetadataNotes" xml:space="preserve">
+    <value>تلاحظ</value>
+  </data>
+  <data name="MetadataPrimaryInvestigator" xml:space="preserve">
+    <value>باحث رئيسي</value>
+  </data>
+  <data name="MetadataSectionSubTitle" xml:space="preserve">
+    <value>وصف الاستبيان</value>
+  </data>
+  <data name="MetadataSectionTitle" xml:space="preserve">
+    <value>معلومات تحديد الاستطلاع</value>
+  </data>
+  <data name="MetadataStudyType" xml:space="preserve">
+    <value>نوع الدراسة</value>
+  </data>
+  <data name="MetadataSubtitle" xml:space="preserve">
+    <value>عنوان فرعي</value>
+  </data>
+  <data name="MetadataTitle" xml:space="preserve">
+    <value>عنوان</value>
+  </data>
+  <data name="MetadataUnitOfAlalysis" xml:space="preserve">
+    <value>وحدة التحليل</value>
+  </data>
+  <data name="MetadataUniverse" xml:space="preserve">
+    <value>عالم</value>
+  </data>
+  <data name="MetadataVersionIdentificator" xml:space="preserve">
+    <value>محدد الإصدار</value>
+  </data>
+  <data name="MetadataVersionNotes" xml:space="preserve">
+    <value>ملاحظات الإصدار</value>
+  </data>
+  <data name="MetadataYear" xml:space="preserve">
+    <value>سنة</value>
+  </data>
+  <data name="Off" xml:space="preserve">
+    <value>قباله</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>على</value>
+  </data>
+  <data name="OwnedBy" xml:space="preserve">
+    <value>استبيان مملوك من قبل {0}</value>
+  </data>
+  <data name="QuestionInRosterSourceOfCategories" xml:space="preserve">
+    <value>سؤال</value>
+  </data>
+  <data name="QuestionType_Area_Multipoint" xml:space="preserve">
+    <value>نقاط متعددة</value>
+  </data>
+  <data name="QuestionType_Area_Point" xml:space="preserve">
+    <value>نقطة</value>
+  </data>
+  <data name="QuestionType_Area_Polygon" xml:space="preserve">
+    <value>مضلع</value>
+  </data>
+  <data name="QuestionType_Area_Polyline" xml:space="preserve">
+    <value>بوليلاين</value>
+  </data>
+  <data name="RosterSourceOfCategories" xml:space="preserve">
+    <value>جدول</value>
+  </data>
+  <data name="SideBarMetadataAdditionalInfo" xml:space="preserve">
+    <value>معلومات إضافية</value>
+  </data>
+  <data name="SideBarMetadataBasicInfo" xml:space="preserve">
+    <value>المعلومات الأساسية</value>
+  </data>
+  <data name="SideBarMetadataSurveyDataInfo" xml:space="preserve">
+    <value>معلومات بيانات المسح</value>
+  </data>
+  <data name="SideBarMetadataSurveyInfo" xml:space="preserve">
+    <value>معلومات المسح</value>
+  </data>
+  <data name="SourceOfCategories" xml:space="preserve">
+    <value>مصدر الفئات:</value>
+  </data>
+  <data name="SpecialValues" xml:space="preserve">
+    <value>قيم خاصة</value>
+  </data>
+  <data name="TextListSourceOfCategories" xml:space="preserve">
+    <value>سؤال قائمة النص</value>
+  </data>
+  <data name="VariableExcludedFromExport" xml:space="preserve">
+    <value>يتم استبعاد هذا المتغير من البيانات المصدرة</value>
+  </data>
 </root>

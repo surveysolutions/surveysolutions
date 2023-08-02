@@ -117,4 +117,62 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="SendToSupervisor_BluetoothError" xml:space="preserve">
+    <value>Додаток Interviewer не може визначити стан Bluetooth (наприклад, увімкнений/вимкнений, підключений/відключений). Спочатку перезавантажте пристрої інтерв'юера та супервізора. Потім спробуйте синхронізувати ще раз.</value>
+  </data>
+  <data name="SendToSupervisor_CheckSupervisorDevice" xml:space="preserve">
+    <value>Переконайтеся, що на пристрої супервізора увімкнені WiFi і Bluetooth, а ви перебуваєте в безпосередній близькості від нього</value>
+  </data>
+  <data name="SendToSupervisor_ConnectionFailed" xml:space="preserve">
+    <value>Переконайтеся, що обидва пристрої знаходяться в безпосередній близькості; на обох пристроях повинні бути ввімкнені WIFI і Bluetooth; на пристрої супервізора повинна бути відкрита програма Supervisor</value>
+  </data>
+  <data name="SendToSupervisor_DeviceConnectionAccepted" xml:space="preserve">
+    <value>Підключено до пристрою супервізора</value>
+  </data>
+  <data name="SendToSupervisor_DeviceConnectionAccepting" xml:space="preserve">
+    <value>Очікування дозволу на підключення від супервізора</value>
+  </data>
+  <data name="SendToSupervisor_DeviceFound" xml:space="preserve">
+    <value>Пристрій супервізора знайдено. Запит на підключення</value>
+  </data>
+  <data name="SendToSupervisor_LookingForSupervisor" xml:space="preserve">
+    <value>Шукаємо пристрій супервізора</value>
+  </data>
+  <data name="SendToSupervisor_MovingToSupervisorDevice" xml:space="preserve">
+    <value>Переміщення всіх завершених інтерв'ю на пристрій керівника</value>
+  </data>
+  <data name="SendToSupervisor_MovingToSupervisorFormat" xml:space="preserve">
+    <value>Переміщення всіх завершених інтерв'ю до '{0}'</value>
+  </data>
+  <data name="SendToSupervisor_Note" xml:space="preserve">
+    <value>Примітка: Ця дія займе більше часу, ніж зазвичай, не вимикайте цей пристрій</value>
+  </data>
+  <data name="SendToSupervisor_Retry" xml:space="preserve">
+    <value>Спробуйте ще раз.</value>
+  </data>
+  <data name="SendToSupervisor_SomeInterviewsOnSupervisor" xml:space="preserve">
+    <value>Деякі інтерв'ю зараз на іншому пристрої</value>
+  </data>
+  <data name="SendToSupervisor_SupervisorNotFound" xml:space="preserve">
+    <value>Передачу не розпочато.
+Пристрій супервізора не вдається знайти"</value>
+  </data>
+  <data name="SendToSupervisor_SupervisorTerminateTransfering" xml:space="preserve">
+    <value>Передачу було перервано на другому пристрої.</value>
+  </data>
+  <data name="SendToSupervisor_SyncCompleted" xml:space="preserve">
+    <value>Перенесення завершено. Всі завершені інтерв'ю тепер на іншому пристрої</value>
+  </data>
+  <data name="SendToSupervisor_SyncCompletedWithErrorsFormat" xml:space="preserve">
+    <value>Передачу завершено. {0} інтерв'ю не вдалося синхронізувати</value>
+  </data>
+  <data name="SendToSupervisor_TransferInProgress" xml:space="preserve">
+    <value>Передача в процесі</value>
+  </data>
+  <data name="SendToSupervisor_TransferWasAborted" xml:space="preserve">
+    <value>Переказ було скасовано</value>
+  </data>
+  <data name="Synchronization_UpdateApp" xml:space="preserve">
+    <value>Оновлення</value>
+  </data>
 </root>

@@ -252,4 +252,7 @@
   <data name="WebMode" xml:space="preserve">
     <value>Režim</value>
   </data>
+  <data name="QuestionnairePreview" xml:space="preserve">
+    <value>Náhled dotazníku</value>
+  </data>
 </root>

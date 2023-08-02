@@ -500,4 +500,7 @@ Požádejte o pomoc svého Garanta.</value>
   <data name="WebTesterSessionOverMessage" xml:space="preserve">
     <value>Zavřete prosím tuto stránku. Můžete otevřít novou návratem na webovou stránku Designer</value>
   </data>
+  <data name="AssignmentLimitError" xml:space="preserve">
+    <value>Z tohoto úkolu nelze vytvořit více rozhovorů</value>
+  </data>
 </root>

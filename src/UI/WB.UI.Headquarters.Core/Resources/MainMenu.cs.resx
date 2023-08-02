@@ -228,4 +228,28 @@
   <data name="Workspaces" xml:space="preserve">
     <value>Úlohy</value>
   </data>
+  <data name="AuditLog" xml:space="preserve">
+    <value>Protokol auditu</value>
+  </data>
+  <data name="DeviceLogs" xml:space="preserve">
+    <value>Protokoly zařízení</value>
+  </data>
+  <data name="Diagnostics" xml:space="preserve">
+    <value>Diagnostika</value>
+  </data>
+  <data name="EmailProviders" xml:space="preserve">
+    <value>Poskytovatelé e-mailu</value>
+  </data>
+  <data name="InterviewPackages" xml:space="preserve">
+    <value>Balíčky pohovorů</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Nastavení</value>
+  </data>
+  <data name="TabletInfos" xml:space="preserve">
+    <value>Informace o tabletu</value>
+  </data>
+  <data name="WorkspaceSettings" xml:space="preserve">
+    <value>Nastavení pracovního prostoru</value>
+  </data>
 </root>

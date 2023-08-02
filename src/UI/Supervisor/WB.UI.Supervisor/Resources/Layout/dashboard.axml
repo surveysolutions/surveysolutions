@@ -8,7 +8,7 @@
     android:clickable="true"
     android:focusableInTouchMode="true"
     local:MvxBind="Lock Synchronization.IsSynchronizationInProgress;
-                   StatusBarColorByInterviewStatus TypeOfInterviews;">
+                   StatusBarColorByDashboardGroupType TypeOfInterviews;">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/overview_coordinator_layout"
@@ -28,7 +28,7 @@
                 local:layout_scrollFlags="enterAlways|scroll"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 local:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                local:MvxBind="ColorByInterviewStatus TypeOfInterviews; Title DashboardTitle">
+                local:MvxBind="ColorByDashboardGroupType TypeOfInterviews; Title DashboardTitle">
             </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.AppBarLayout>

@@ -625,4 +625,214 @@
   <data name="WB0270_SectionContainsTooManyQuestions" xml:space="preserve">
     <value>يجب ألا يحتوي القسم على أكثر من {0} من الأسئلة.</value>
   </data>
+  <data name="WB0010_MacroHasInvalidName" xml:space="preserve">
+    <value>يحتوي الماكرو على اسم غير صالح.</value>
+  </data>
+  <data name="WB0014_MacroHasEmptyName" xml:space="preserve">
+    <value>لا يمكن أن يكون للماكرو اسم فارغ.</value>
+  </data>
+  <data name="WB0020_NameForMacrosIsNotUnique" xml:space="preserve">
+    <value>ماكرو آخر بنفس الاسم موجود بالفعل.</value>
+  </data>
+  <data name="WB0053_LinkedQuestionReferencesNotExistingRoster" xml:space="preserve">
+    <value>يجب أن تكون القائمة التي هي مصدر الارتباط موجودة.</value>
+  </data>
+  <data name="WB0057_LinksAreProhibitedOnNavigationElements" xml:space="preserve">
+    <value>الروابط محظورة على عناصر التنقل: الأقسام والأقسام الفرعية والقوائم</value>
+  </data>
+  <data name="WB0063_CategoricalLinkedQuestionUsedInValidationExpression" xml:space="preserve">
+    <value>لا يمكن استخدام السؤال المرتبط القاطع في حالة التحقق من الصحة #{0}.</value>
+  </data>
+  <data name="WB0084_CascadingOptionsShouldHaveParent" xml:space="preserve">
+    <value>يجب أن تشير الفئات في سؤال مربع التحرير والسرد المتتالي التابع إلى الخيار الموجود فقط في السؤال الأصل.</value>
+  </data>
+  <data name="WB0091_CascadingChildQuestionShouldNotContainCondition" xml:space="preserve">
+    <value>يجب ألا يحتوي سؤال مربع التحرير والسرد المتتالي التابع على شرط تمكين. </value>
+  </data>
+  <data name="WB0092_CascadingChildQuesionShouldNotContainValidation" xml:space="preserve">
+    <value>يجب ألا يحتوي سؤال مربع التحرير والسرد المتتالي التابع على شرط التحقق من الصحة.</value>
+  </data>
+  <data name="WB0098_QuestionnaireHasSizeMoreThan5MB" xml:space="preserve">
+    <value>حجم الاستبيان هو تقريبا {0:0.##}MB وهو كبير جدا بحيث لا يعمل بشكل صحيح مع حلول الاستطلاع. حاول تقليل كمية البيانات حتى تصبح أقل من {1} ميغابايت على الأقل.</value>
+  </data>
+  <data name="WB0118_ExpressionReferencingForbiddenDateTimeProperies" xml:space="preserve">
+    <value>التعبير الذي يشير إلى خصائص التاريخ والوقت المحظورة: {0} ، {1} ، {2}. ضع في اعتبارك استخدام سؤال الوقت الحالي بدلا من ذلك.</value>
+  </data>
+  <data name="WB0131_SpecialValuesHasNonIntegerOptionsValues" xml:space="preserve">
+    <value>تدعم القيم الخاصة القيم الصحيحة فقط في النطاق من {0} إلى {1}.</value>
+  </data>
+  <data name="WB0132_SpecialValuesHasOptionsWithLongTexts" xml:space="preserve">
+    <value>عنوان القيمة الخاصة فارغ أو طويل جدا. يجب أن يتراوح طول العنوان من {0} إلى {1} حرفا.</value>
+  </data>
+  <data name="WB0133_SpecialValuesMustBeUniqueForNumericlQuestion" xml:space="preserve">
+    <value>يجب أن تكون القيم الخاصة فريدة من نوعها.</value>
+  </data>
+  <data name="WB0134_SpecialValuesCountMoreThanMaxOptionCount" xml:space="preserve">
+    <value>يحتوي على أكثر من {0} قيم خاصة.</value>
+  </data>
+  <data name="WB0135_SpecialValuesForRosterSizeQuestionsCantBeMoreThanRosterLimit" xml:space="preserve">
+    <value>يحتوي السؤال على قيمة خاصة، وهي كبيرة جدا ولا يمكن استخدامها في هذا السؤال لأنها تحدد حجم القائمة.</value>
+  </data>
+  <data name="WB0136_SpecialValuesHaveOptionsWithEmptyValue" xml:space="preserve">
+    <value>السؤال له قيمة (قيم) خاصة مع قيمة فارغة.</value>
+  </data>
+  <data name="WB0137_SpecialValuesTitlesMustBeUnique" xml:space="preserve">
+    <value>يجب أن تكون عناوين القيم الخاصة فريدة.</value>
+  </data>
+  <data name="WB0138_SpecialValuesAttachmentsMustBeUniqueForNumericQuestion" xml:space="preserve">
+    <value>يجب أن يكون اسم مرفق القيم الخاصة فريدا.</value>
+  </data>
+  <data name="WB0139_SpecialValuesAttachmentsReferAbsentAttachment" xml:space="preserve">
+    <value>يشير مرفق القيم الخاصة إلى مرفق غير موجود.</value>
+  </data>
+  <data name="WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options" xml:space="preserve">
+    <value>عدة أسئلة متتالية غير مشروطة ذات تحديد واحد مع {0} فئات. ضع في اعتبارك سؤالا واحدا متعدد الخيارات.</value>
+  </data>
+  <data name="WB0230_NonconsecutiveCascadings" xml:space="preserve">
+    <value>أسئلة متتالية غير متتالية. ضع في اعتبارك وضع الأسئلة المتتالية واحدة تلو الأخرى.</value>
+  </data>
+  <data name="WB0233_NestedRosterDegree3OrMore" xml:space="preserve">
+    <value>قائمة متداخلة بثلاث درجات أو أكثر من التعشيش. حاول تجنب مثل هذه الهياكل المعقدة التي قد تؤدي إلى مشاكل في جمع البيانات.</value>
+  </data>
+  <data name="WB0261_RosterStructureTooExplosive" xml:space="preserve">
+    <value>يحتوي الاستبيان على قوائم بإجمالي عدد حالات القائمة التي {0} تتجاوز حدود النظام {1}</value>
+  </data>
+  <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
+    <value>وصلت القائمة إلى الحد الأقصى للحجم. تقليل حجم القائمة أو تقليل التداخل.</value>
+  </data>
+  <data name="WB0271_MacroHasEmptyContent" xml:space="preserve">
+    <value>لا يمكن أن يكون الماكرو فارغا.</value>
+  </data>
+  <data name="WB0272_ConditionUsingForbiddenClasses" xml:space="preserve">
+    <value>شرط التمكين يستخدم النوع المحظور.</value>
+  </data>
+  <data name="WB0273_ValidationConditionUsingForbiddenClasses" xml:space="preserve">
+    <value>شرط التحقق من الصحة يستخدم النوع المحظور.</value>
+  </data>
+  <data name="WB0274_VariableUsingForbiddenClasses" xml:space="preserve">
+    <value>المتغير يستخدم النوع المحظور.</value>
+  </data>
+  <data name="WB0275_FilterExpressionIsUsingForbiddenClasses" xml:space="preserve">
+    <value>يستخدم تعبير عامل التصفية النوع المحظور.</value>
+  </data>
+  <data name="WB0276_RownameIsNotSupported" xml:space="preserve">
+    <value>@rowname متغير غير مدعوم بعد الآن.</value>
+  </data>
+  <data name="WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore" xml:space="preserve">
+    <value>يجب ألا يحتوي عنوان الاستبيان على حرفين أو أكثر من أحرف الشرطة السفلية المتتالية.</value>
+  </data>
+  <data name="WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+    <value>يسمح بالوضع العادي فقط للقوائم التي لا تحتوي على أكثر من {0} سؤال أو نصوص ثابتة.</value>
+  </data>
+  <data name="WB0279_PlainModeGroupContainsNestedGroup" xml:space="preserve">
+    <value>لا يسمح الوضع العادي باستخدام القوائم المتداخلة.</value>
+  </data>
+  <data name="WB0280_TextContainsLinkToUnknownQuestionOrGroup" xml:space="preserve">
+    <value>يحتوي النص على رابط لسؤال غير معروف أو قسم فرعي أو قائمة أو مرفق pdf.</value>
+  </data>
+  <data name="WB0281_QuestionnaireExceededEntitiesLimit" xml:space="preserve">
+    <value>تجاوز إجمالي عدد العناصر ({0}) حد النظام ({1}). ضع في اعتبارك تقليل عدد الأسئلة أو النصوص الثابتة أو المتغيرات أو العناصر الموجودة في القوائم الثابتة.</value>
+  </data>
+  <data name="WB0282_IdentifyingQuestionInSectionWithCondition" xml:space="preserve">
+    <value>لا يمكن وضع سؤال التعريف داخل القسم بشرط التمكين.</value>
+  </data>
+  <data name="WB0282_TableRosterContainsNestedGroup" xml:space="preserve">
+    <value>لا يسمح وضع كشف الجدول باستخدام المجموعات والقوائم المتداخلة.</value>
+  </data>
+  <data name="WB0283_TableRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+    <value>يسمح بوضع الجدول فقط للقوائم التي لا تحتوي على أكثر من {0} سؤال.</value>
+  </data>
+  <data name="WB0284_TableRosterCantContainsSupervisorQuestions" xml:space="preserve">
+    <value>لا تسمح قائمة الجدول باستخدام أسئلة المشرف.</value>
+  </data>
+  <data name="WB0285_TableRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
+    <value>تسمح قائمة الجدول باستخدام الأسئلة النصية والرقمية فقط.</value>
+  </data>
+  <data name="WB0286_TableAndMatixRosterWorksOnlyInWebMode" xml:space="preserve">
+    <value>يعمل وضع قائمة الجدول أو المصفوفة فقط في استطلاع الويب ، على الأجهزة اللوحية سيكون وضع "القسم الفرعي".</value>
+  </data>
+  <data name="WB0288_ValueAndTitleNumbersIsNotEquals" xml:space="preserve">
+    <value>{1} التسمية للرمز {0} هو رقم مختلف عن القيمة التي يتم تسميتها.</value>
+  </data>
+  <data name="WB0289" xml:space="preserve">
+    <value>يجب ألا يزيد اسم الفئات عن {0} حرفا.</value>
+  </data>
+  <data name="WB0290" xml:space="preserve">
+    <value>يجب ألا ينتهي اسم الفئات بشرطة سفلية</value>
+  </data>
+  <data name="WB0291" xml:space="preserve">
+    <value>يجب ألا يحتوي اسم الفئات على حرفين أو أكثر من أحرف الشرطة السفلية المتتالية.</value>
+  </data>
+  <data name="WB0292" xml:space="preserve">
+    <value>يجب ألا يكون اسم الفئات فارغا.</value>
+  </data>
+  <data name="WB0293" xml:space="preserve">
+    <value>لا يمكن أن يكون اسم الفئات كلمة محجوزة.</value>
+  </data>
+  <data name="WB0294" xml:space="preserve">
+    <value>يجب أن يحتوي اسم الفئات على أحرف وأرقام وحرف شرطة سفلية فقط</value>
+  </data>
+  <data name="WB0295" xml:space="preserve">
+    <value>يجب ألا يبدأ اسم الفئات برقم أو شرطة سفلية</value>
+  </data>
+  <data name="WB0296" xml:space="preserve">
+    <value>الأسئلة لها نفس الفئات. استخدم الفئات القابلة لإعادة الاستخدام بدلا من ذلك</value>
+  </data>
+  <data name="WB0297_MatrixRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
+    <value>تسمح قائمة المصفوفة باستخدام الأسئلة الفئوية البسيطة فقط: لا يسمح بأوضاع التحرير والسرد أو المتتالية أو نعم / لا.</value>
+  </data>
+  <data name="WB0298_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+    <value>يسمح بوضع المصفوفة فقط للقوائم التي لا تحتوي على أكثر من {0} سؤال (أسئلة).</value>
+  </data>
+  <data name="WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions" xml:space="preserve">
+    <value>يجب ألا تحتوي قائمة المصفوفة على مشرف أو أسئلة محددة.</value>
+  </data>
+  <data name="WB0301_MatrixRosterHasToContainNoLinkedQuestions" xml:space="preserve">
+    <value>يجب ألا تحتوي قائمة المصفوفة على أسئلة مرتبطة.</value>
+  </data>
+  <data name="WB0302" xml:space="preserve">
+    <value>لا يمكن للاستبدال الإشارة إلى عناصر من نفس مستوى القائمة.</value>
+  </data>
+  <data name="WB0305_DuplicatedCategoryIdParentIdPair" xml:space="preserve">
+    <value>لا يمكن أن تحتوي الفئة القابلة لإعادة الاستخدام على صف بنفس قيم Id و ParentId</value>
+  </data>
+  <data name="WB0306_DuplicatedCategoryParentIdText" xml:space="preserve">
+    <value>لا يمكن أن تحتوي الفئة القابلة لإعادة الاستخدام على صف بنفس قيم ParentId و Text</value>
+  </data>
+  <data name="WB0307_QuestionReferancedToIncorrectCategories" xml:space="preserve">
+    <value>مراجع السؤال فئة غير موجودة قابلة لإعادة الاستخدام.</value>
+  </data>
+  <data name="WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes" xml:space="preserve">
+    <value>يمكن أن يكون تحديد الأسئلة الأنواع المسموح بها فقط (النص ، الرقمي ، التاريخ والوقت ، إحداثيات GpsCoordinates ، SingleOption)</value>
+  </data>
+  <data name="WB0309_IdentityQuestionsMustHaveVariableLabel" xml:space="preserve">
+    <value>يجب أن تحتوي الأسئلة في قسم Сover على تسمية متغيرة.</value>
+  </data>
+  <data name="WB0311_IdentityVariablesMustHaveLabel" xml:space="preserve">
+    <value>يجب أن تحتوي المتغيرات في قسم Сover على تسمية.</value>
+  </data>
+  <data name="WB0312" xml:space="preserve">
+    <value>يجب أن تحتوي الفئات على خيارين على الأقل</value>
+  </data>
+  <data name="WB0313_QuestionOptionReferenceToNonExistentAttachment" xml:space="preserve">
+    <value>يشير خيار السؤال إلى مرفق غير موجود</value>
+  </data>
+  <data name="WB0314_NonUniqueAttachment" xml:space="preserve">
+    <value>يحتوي السؤال على خيارات متعددة تشير إلى نفس المرفق</value>
+  </data>
+  <data name="WB0315_AttachmentHasInvalidName" xml:space="preserve">
+    <value>يجب أن يحتوي اسم المرفق على أحرف وأرقام وحرف شرطة سفلية فقط. يبدأ بحرف ، لا توجد شرطة سفلية متتالية ، لا ينتهي بشرطة سفلية وليس كلمة محجوزة. ليست فارغة وأقل من 32 حرفا.</value>
+  </data>
+  <data name="WB0316_QuestionnaireWithOldCoverPage" xml:space="preserve">
+    <value>استبيان بالشكل القديم. يرجى استخدام رابط "إنشاء غلاف" في قسم الغلاف.</value>
+  </data>
+  <data name="WB0390_OnlyStringVariableAllowedAsAttachmentName" xml:space="preserve">
+    <value>يمكن استخدام نوع متغير السلسلة فقط كمصدر لاسم المرفق</value>
+  </data>
+  <data name="WB0391" xml:space="preserve">
+    <value>لا يمكن للنص الثابت الرجوع إلى متغير له نطاق قائمة أعمق ثم نفسه</value>
+  </data>
+  <data name="WB3010_LinkToHiddenQuestionNotAllowed" xml:space="preserve">
+    <value>لا يسمح بالارتباط بالسؤال المخفي</value>
+  </data>
 </root>

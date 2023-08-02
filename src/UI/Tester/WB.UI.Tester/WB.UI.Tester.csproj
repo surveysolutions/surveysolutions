@@ -156,6 +156,9 @@
     <PackageReference Include="Humanizer.Core.ru">
       <Version>2.14.1</Version>
     </PackageReference>
+    <PackageReference Include="Humanizer.Core.uk">
+      <Version>2.14.1</Version>
+    </PackageReference>
     <PackageReference Include="Humanizer.Core.zh-CN">
       <Version>2.14.1</Version>
     </PackageReference>

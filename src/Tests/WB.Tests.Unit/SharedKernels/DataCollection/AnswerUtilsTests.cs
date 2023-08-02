@@ -115,5 +115,21 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             Assert.That(option.Value, Is.EqualTo(expectedOption.AnswerCode));
             Assert.That(option.ParentValue, Is.EqualTo(expectedOption.ParentCode));
         }
+
+        [Test]
+        public void when_AnswerToString_for_big_decimal_value_should_return_regular_format_string()
+        {
+            decimal number1 = 12345678901234567890m;
+            Assert.That(AnswerUtils.AnswerToString(number1), Is.EqualTo("12345678901234567890"));
+
+            decimal number2 = 12345678901234567890123456789m;
+            Assert.That(AnswerUtils.AnswerToString(number2), Is.EqualTo("12345678901234567890123456789"));
+
+            decimal number3 = 12345678901234567890.123456789m;
+            Assert.That(AnswerUtils.AnswerToString(number3), Is.EqualTo("12345678901234567890.123456789"));
+
+            decimal number4 = 0.1234567890123456789012345678m;
+            Assert.That(AnswerUtils.AnswerToString(number4), Is.EqualTo("0.1234567890123456789012345678"));
+        }
     }
 }
