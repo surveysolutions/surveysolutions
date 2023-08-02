@@ -87,10 +87,23 @@ export default {
 
             const image = new Image()
             const self = this
-            image.onload = () => {
-                if (image.width) {
-                    self.cleanValidity()
 
+            image.onerror = () => {
+                self.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.PhotoIsNotImage') )
+            }
+
+            image.onload = () => {
+                self.cleanValidity()
+
+                if ('naturalHeight' in this) {
+                    if (this.naturalHeight + this.naturalWidth === 0) {
+                        self.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.PhotoIsNotImage') )
+                        return;
+                    }
+                } else if (this.width + this.height == 0) {
+                    self.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.PhotoIsNotImage') )
+                    return;
+                } else {
                     self.$store.dispatch('answerMultimediaQuestion', {
                         identity: self.id,
                         file: self.$refs.uploader.files[0],
@@ -103,10 +116,7 @@ export default {
                     }
 
                     reader.readAsDataURL(file)
-                } else {
-                    // Only image files are allowed to upload
-                    self.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.PhotoIsNotImage') )
-                }
+                } 
             }
 
             image.src = URL.createObjectURL(file)
