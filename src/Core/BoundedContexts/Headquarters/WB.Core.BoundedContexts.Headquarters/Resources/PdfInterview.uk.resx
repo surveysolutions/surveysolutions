@@ -121,7 +121,7 @@
     <value>Площа</value>
   </data>
   <data name="AreaQestion_AreaMeter" xml:space="preserve">
-    <value>Метрів</value>
+    <value>метрів</value>
   </data>
   <data name="AreaQestion_AreaUnitMeter" xml:space="preserve">
     <value>квадратних метрів</value>
@@ -130,7 +130,7 @@
     <value>Довжина</value>
   </data>
   <data name="AreaQestion_Points" xml:space="preserve">
-    <value>Очок</value>
+    <value>Бали</value>
   </data>
   <data name="AreaQestion_RequestedAccuracy" xml:space="preserve">
     <value>Точність</value>
@@ -145,19 +145,19 @@
     <value>Співбесіда завершена</value>
   </data>
   <data name="Cover" xml:space="preserve">
-    <value>Кришка</value>
+    <value>Обкладинка</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Помилка</value>
+    <value>Помилка.</value>
   </data>
   <data name="Generated" xml:space="preserve">
-    <value>Створено</value>
+    <value>Згенеровано</value>
   </data>
   <data name="GeneratedAt" xml:space="preserve">
     <value>на {0}</value>
   </data>
   <data name="GeneratedBy" xml:space="preserve">
-    <value>Створено {0}</value>
+    <value>Згенеровано {0}</value>
   </data>
   <data name="InterviewKey" xml:space="preserve">
     <value>Ключ до інтерв'ю</value>
@@ -175,7 +175,7 @@
     <value>{0} розділи</value>
   </data>
   <data name="InterviewStatisticsUnanswered" xml:space="preserve">
-    <value>{0} питань без відповідей</value>
+    <value>{0} немає відповідей на запитання</value>
   </data>
   <data name="InterviewStatisticsWarnings" xml:space="preserve">
     <value>{0} попередження</value>
@@ -187,22 +187,22 @@
     <value>Обсяг інтерв'ю</value>
   </data>
   <data name="No" xml:space="preserve">
-    <value>Ні</value>
+    <value>Ні.</value>
   </data>
   <data name="NotAnswered" xml:space="preserve">
     <value>Не відповіли</value>
   </data>
   <data name="NotCalculated" xml:space="preserve">
-    <value>Немає значення</value>
+    <value>Не має значення</value>
   </data>
   <data name="PageOf" xml:space="preserve">
-    <value> від </value>
+    <value> з </value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Анкета</value>
   </data>
   <data name="Started" xml:space="preserve">
-    <value>Співбесіду розпочато</value>
+    <value>Розпочато співбесіду</value>
   </data>
   <data name="SurveySolutions" xml:space="preserve">
     <value>Рішення для опитувань</value>
@@ -217,25 +217,25 @@
     <value>ApiUser</value>
   </data>
   <data name="UserRoles_Headquarter" xml:space="preserve">
-    <value>Штаб</value>
+    <value>Штаб-квартира</value>
   </data>
   <data name="UserRoles_Interviewer" xml:space="preserve">
-    <value>Інтерв'юера</value>
+    <value>Інтерв'юер</value>
   </data>
   <data name="UserRoles_Observer" xml:space="preserve">
     <value>Спостерігач</value>
   </data>
   <data name="UserRoles_Supervisor" xml:space="preserve">
-    <value>Керівник</value>
+    <value>Наглядач</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>Версія {0}</value>
+    <value>version {0}</value>
   </data>
   <data name="Warning" xml:space="preserve">
     <value>Попередження</value>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>Так</value>
+    <value>Так.</value>
   </data>
   <data name="YesNo" xml:space="preserve">
     <value>Так / Ні</value>

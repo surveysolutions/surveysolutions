@@ -118,26 +118,26 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Confirm_Approve_Synchronized_Interview_Message" xml:space="preserve">
-    <value>Поточний відповідальний інтерв'юер не буде повідомлений про схвалення інтерв'ю до наступної синхронізації. Якщо інтерв'юер вже почав працювати над інтерв'ю, всі дані, які інтерв'юер ввів перед наступною синхронізацією, будуть ВІДКИНУТІ!</value>
+    <value>Поточний відповідальний інтерв'юер не отримає повідомлення про затвердження інтерв'ю до наступної синхронізації. Якщо інтерв'юер вже почав працювати над інтерв'ю, всі дані, які він вніс до наступної синхронізації, будуть ВИДАЛЕНІ!</value>
   </data>
   <data name="OfflineSync_NoDevicesDetectedFormat" xml:space="preserve">
-    <value>Надсилальні пристрої не виявлено.
-Ідентифікатор вашого пристрою - "{0}"</value>
+    <value>Пристроїв-відправників не виявлено.
+Ідентифікатор вашого пристрою '{0}'</value>
   </data>
   <data name="OfflineSync_ReceivingInterviews" xml:space="preserve">
-    <value>Отримання співбесіди</value>
+    <value>Отримання інтерв'ю</value>
   </data>
   <data name="OfflineSync_ReceivingInterviewsFromDevices" xml:space="preserve">
     <value>Отримання інтерв'ю з пристрою інтерв'юера</value>
   </data>
   <data name="OfflineSync_WaitingInterviewers" xml:space="preserve">
-    <value>Очікування дій від пристроїв інтерв'юера</value>
+    <value>Очікування дій від пристроїв Interviewer</value>
   </data>
   <data name="Synchronization_Download_Interviewer_Apps" xml:space="preserve">
-    <value>Завантаження оновлень для програми інтерв'юера</value>
+    <value>Завантаження оновлень для програми для інтерв'юерів</value>
   </data>
   <data name="Synchronization_Download_Interviewer_Apps_Format" xml:space="preserve">
-    <value>Завантаження оновлень. {0} {1} завантажено</value>
+    <value>Завантаження оновлень. {0} з {1} завантажено</value>
   </data>
   <data name="Synchronization_Synchronize_HQ" xml:space="preserve">
     <value>Синхронізація зі штаб-квартирою</value>
@@ -146,7 +146,7 @@
     <value>Синхронізація з інтерв'юерами</value>
   </data>
   <data name="Synchronization_UploadBrokenInterviewPackages" xml:space="preserve">
-    <value>Завантаження зламаних пакетів інтерв'ю</value>
+    <value>Завантаження розбитих пакетів інтерв'ю</value>
   </data>
   <data name="Synchronization_UploadExceptions" xml:space="preserve">
     <value>Завантаження повідомлень про помилки інтерв'юера</value>
@@ -155,6 +155,6 @@
     <value>Завантаження статистики синхронізації інтерв'юерів</value>
   </data>
   <data name="Synchronization_UploadStatisticsStats" xml:space="preserve">
-    <value>Завантажено {0} {1}</value>
+    <value>Завантажено {0} з {1}</value>
   </data>
 </root>

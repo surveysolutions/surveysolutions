@@ -124,10 +124,10 @@
     <value>Не вдається відкрити анкету.</value>
   </data>
   <data name="FixErrorsOnDesigner" xml:space="preserve">
-    <value>Будь ласка, виправте це в Designer.</value>
+    <value>Будь ласка, виправте це в Дизайнері.</value>
   </data>
   <data name="Legal" xml:space="preserve">
-    <value>Юридичних</value>
+    <value>Юридичний</value>
   </data>
   <data name="PageNotFound" xml:space="preserve">
     <value>Не знайдено</value>

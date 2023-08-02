@@ -118,22 +118,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AnonymousQuestionnaires_Error_Confirm" xml:space="preserve">
-    <value>Не вдається відкрити анкету. Видалити його зі списку?</value>
+    <value>Не вдається відкрити анкету. Видалити зі списку?</value>
   </data>
   <data name="AnonymousQuestionnaires_Error_NotFound" xml:space="preserve">
-    <value>Не вдається відкрити анкету. Анкету знайти не вдається.</value>
+    <value>Не вдається відкрити анкету. Опитувальник не може бути знайдений.</value>
   </data>
   <data name="AnonymousQuestionnaires_Open" xml:space="preserve">
-    <value>Відкривати</value>
+    <value>Відкрито</value>
   </data>
   <data name="AnonymousQuestionnaires_QuestionnaireUrl" xml:space="preserve">
-    <value>URL-адреса анонімної анкети</value>
+    <value>Анонімне заповнення анкети</value>
   </data>
   <data name="Dashboard_HaveNotBeenUpdated" xml:space="preserve">
-    <value>Список не оновлено</value>
+    <value>список не оновлювався</value>
   </data>
   <data name="Dashboard_LastUpdated" xml:space="preserve">
-    <value>Список оновлено {0}</value>
+    <value>список оновлено {0}</value>
   </data>
   <data name="ImportQuestionnaire_CheckConnectionToServer" xml:space="preserve">
     <value>Підключення до сервера</value>
@@ -142,28 +142,28 @@
     <value>Створення інтерв'ю</value>
   </data>
   <data name="ImportQuestionnaire_DownloadProgress" xml:space="preserve">
-    <value>Завантаження анкети - {0}%</value>
+    <value>Завантаження анкети - {0}%.</value>
   </data>
   <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
-    <value>Не вдається відкрити анкету "{0}". Ваш обліковий запис користувача Designer не авторизовано. Будь ласка, перевірте логін та пароль.</value>
+    <value>Не вдається відкрити анкету "{0}". Ваш обліковий запис користувача Designer не авторизований. Будь ласка, перевірте логін і пароль.</value>
   </data>
   <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
-    <value>Не вдається відкрити анкету "{0}". Анкету знайти не вдалося. Будь ласка, оновіть перелік анкет.</value>
+    <value>Не вдається відкрити анкету "{0}". Опитувальник не знайдено. Будь ласка, оновіть список анкет.</value>
   </data>
   <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
-    <value>Не вдається відкрити анкету "{0}". В анкеті є помилки. Будь ласка, виправте це в Designer.</value>
+    <value>Не вдається відкрити анкету "{0}". Опитувальник містить помилки. Будь ласка, виправте це в Дизайнері.</value>
   </data>
   <data name="ImportQuestionnaire_StoreQuestionnaire" xml:space="preserve">
-    <value>Збереження анкети до локального сховища</value>
+    <value>Збереження анкети в локальному сховищі</value>
   </data>
   <data name="ImportQuestionnaireAttachments_DownloadProgress" xml:space="preserve">
-    <value>Завантаження вкладень анкет - {0}%</value>
+    <value>Завантаження вкладень до анкети - {0}%.</value>
   </data>
   <data name="Login_Error_EmptyName" xml:space="preserve">
     <value>Будь ласка, введіть правильний логін</value>
   </data>
   <data name="Login_Error_NotFound" xml:space="preserve">
-    <value>Веб-додаток Designer наразі недоступний. Перевірте налаштування підключення або повторіть спробу пізніше</value>
+    <value>Веб-додаток "Дизайнер" зараз недоступний. Перевірте налаштування з'єднання або спробуйте пізніше</value>
   </data>
   <data name="MenuItem_Title_AnonymousQuestionnaires" xml:space="preserve">
     <value>Анонімні анкети</value>
@@ -175,7 +175,7 @@
     <value>Мова</value>
   </data>
   <data name="MenuItem_Title_Language_Original" xml:space="preserve">
-    <value>Оригінальний</value>
+    <value>Оригінал</value>
   </data>
   <data name="MenuItem_Title_Login" xml:space="preserve">
     <value>Логін</value>
@@ -184,49 +184,49 @@
     <value>Перезавантажити анкету</value>
   </data>
   <data name="MenuItem_Title_Settings" xml:space="preserve">
-    <value>Параметри</value>
+    <value>Налаштування</value>
   </data>
   <data name="MenuItem_Title_SignOut" xml:space="preserve">
-    <value>Вийти</value>
+    <value>Вийдіть з системи.</value>
   </data>
   <data name="Prefs_AcceptUnsignedSummary" xml:space="preserve">
-    <value>Відключення перевірки сертифіката SSL</value>
+    <value>Вимкнути перевірку SSL-сертифіката</value>
   </data>
   <data name="Prefs_AcceptUnsignedTitle" xml:space="preserve">
-    <value>Приймайте всі сертифікати SSL</value>
+    <value>Приймати всі SSL-сертифікати</value>
   </data>
   <data name="Prefs_ConnectionSettings" xml:space="preserve">
     <value>Налаштування підключення</value>
   </data>
   <data name="Prefs_DesignerEndPointSummary" xml:space="preserve">
-    <value>URL-адреса, яка використовується для зв'язку з дизайнерською програмою</value>
+    <value>URL-адреса, яка використовується для зв'язку з додатком-конструктором</value>
   </data>
   <data name="Prefs_DesignerEndPointTitle" xml:space="preserve">
     <value>URL-адреса дизайнера</value>
   </data>
   <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
-    <value>Кількість секунд очікування координат</value>
+    <value>Кількість секунд для очікування координат</value>
   </data>
   <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
-    <value>GPS Отримати тайм-аут</value>
+    <value>Тайм-аут прийому GPS</value>
   </data>
   <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
     <value>Кількість секунд очікування відповіді сервера</value>
   </data>
   <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
-    <value>Час очікування відповіді сервера</value>
+    <value>Таймаут відповіді сервера</value>
   </data>
   <data name="Prefs_ShowAnswerTime" xml:space="preserve">
-    <value>Відображення витраченого часу на відповідь</value>
+    <value>Показувати час, що минув за відповідь</value>
   </data>
   <data name="Prefs_ShowAnswerTimeSummary" xml:space="preserve">
-    <value>Заходи включення, перевірки та часу поширення реєстру. Отримання даних GPS або час зйомки зображень не включено.</value>
+    <value>Час увімкнення, валідації та розповсюдження реєстру. Час отримання GPS-даних або фотографування не враховується.</value>
   </data>
   <data name="Prefs_ShowVariables" xml:space="preserve">
     <value>Показати змінні</value>
   </data>
   <data name="Prefs_ShowVariablesSummary_Checked" xml:space="preserve">
-    <value>Змінні показані в інтерв'ю зі значенням і описом</value>
+    <value>Змінні показані в інтерв'ю зі значенням та описом</value>
   </data>
   <data name="Prefs_ShowVariablesSummary_UnChecked" xml:space="preserve">
     <value>Змінні приховані</value>
@@ -238,6 +238,6 @@
     <value>Версія програми</value>
   </data>
   <data name="ReloadInterviewErrorMessage" xml:space="preserve">
-    <value>Дані інтерв'ю не можуть бути застосовані до нової версії анкети. Відкриємо порожнє інтерв'ю</value>
+    <value>Дані інтерв'ю не можуть бути застосовані до нової версії анкети. Ми відкриємо порожнє інтерв'ю</value>
   </data>
 </root>

@@ -118,19 +118,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AccountInfoUpdated" xml:space="preserve">
-    <value>Інформація про обліковий запис успішно оновлюється</value>
+    <value>Інформацію про обліковий запис успішно оновлено</value>
   </data>
   <data name="AllRights" xml:space="preserve">
     <value>Всі права захищені.</value>
   </data>
   <data name="AppDescription" xml:space="preserve">
-    <value>Спільний інструмент для створення опитувальників для платформи CAPI/CAWI Світового банку.</value>
+    <value>Інструмент для створення опитувальників для платформи Світового банку CAPI/CAWI.</value>
   </data>
   <data name="AppName" xml:space="preserve">
-    <value>Дизайнер анкет</value>
+    <value>Конструктор анкет</value>
   </data>
   <data name="BackToLogin" xml:space="preserve">
-    <value>Назад до Log in</value>
+    <value>Повернутися до входу</value>
   </data>
   <data name="Change" xml:space="preserve">
     <value>Зміна</value>
@@ -142,10 +142,10 @@
     <value>Група Світового банку</value>
   </data>
   <data name="CompleteRegistrationInstruction" xml:space="preserve">
-    <value>Щоб завершити процес реєстрації, знайдіть у папці "Вхідні" електронний лист із подальшими інструкціями</value>
+    <value>Щоб завершити процес реєстрації, знайдіть у своїй поштовій скриньці лист з подальшими інструкціями</value>
   </data>
   <data name="ConfirmPassword" xml:space="preserve">
-    <value>Підтвердіть пароль</value>
+    <value>Підтвердити пароль</value>
   </data>
   <data name="CurrentPassword" xml:space="preserve">
     <value>Поточний пароль</value>
@@ -157,10 +157,10 @@
     <value>Електронна пошта</value>
   </data>
   <data name="EmailChangeShouldBeConfirmed" xml:space="preserve">
-    <value>Будь ласка, дотримуйтесь інструкцій, надісланих на вказану електронну адресу ({0}), щоб підтвердити зміну електронної пошти.</value>
+    <value>Будь ласка, дотримуйтесь інструкцій, надісланих на вказаний email ({0}), щоб підтвердити зміну електронної пошти.</value>
   </data>
   <data name="ExternalLoginRemoved" xml:space="preserve">
-    <value>Зовнішній логін видалено.</value>
+    <value>Видалено зовнішній логін.</value>
   </data>
   <data name="ForgotPassword" xml:space="preserve">
     <value>Забули пароль?</value>
@@ -172,37 +172,37 @@
     <value>Повне ім'я</value>
   </data>
   <data name="Help" xml:space="preserve">
-    <value>Допомога</value>
+    <value>Допоможіть!</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
-    <value>Вказана адреса електронної пошти недійсна. Будь ласка, перевірте значення та спробуйте ще раз.</value>
+    <value>Вказана адреса електронної пошти є недійсною. Будь ласка, перевірте значення і спробуйте ще раз.</value>
   </data>
   <data name="InvalidPassword" xml:space="preserve">
-    <value>Наданий пароль недійсний. Будь ласка, введіть дійсне значення пароля.</value>
+    <value>Наданий пароль є недійсним. Будь ласка, введіть правильний пароль.</value>
   </data>
   <data name="InvalidResetPasswordLink" xml:space="preserve">
-    <value>Посилання для скидання пароля недійсне або термін його дії минув. Спробуйте ще раз</value>
+    <value>Ваше посилання для скидання пароля недійсне або застаріле. Будь ласка, спробуйте ще раз</value>
   </data>
   <data name="InvalidRetrievalAnswer" xml:space="preserve">
-    <value>Надана відповідь на отримання пароля є недійсною. Будь ласка, перевірте значення та спробуйте ще раз.</value>
+    <value>Надана відповідь на запит пароля є недійсною. Будь ласка, перевірте значення і спробуйте ще раз.</value>
   </data>
   <data name="InvalidRetrievalQuestion" xml:space="preserve">
-    <value>Надане запитання щодо відновлення пароля є недійсним. Будь ласка, перевірте значення та спробуйте ще раз.</value>
+    <value>Надане питання для відновлення пароля є недійсним. Будь ласка, перевірте значення і спробуйте ще раз.</value>
   </data>
   <data name="InvalidUserName" xml:space="preserve">
-    <value>Указане ім'я користувача неприпустиме. Будь ласка, перевірте значення та спробуйте ще раз.</value>
+    <value>Введене ім'я користувача є недійсним. Будь ласка, перевірте значення і спробуйте ще раз.</value>
   </data>
   <data name="Legal" xml:space="preserve">
-    <value>Юридичних</value>
+    <value>Юридичний</value>
   </data>
   <data name="LockedOut" xml:space="preserve">
-    <value>Заблоковано</value>
+    <value>Заблоковано.</value>
   </data>
   <data name="LockedOutText" xml:space="preserve">
-    <value>Ваш обліковий запис заблоковано. Зв'язатися з адміністратором, щоб розблокувати обліковий запис</value>
+    <value>Ваш обліковий запис заблоковано. Зверніться до адміністратора для розблокування облікового запису</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Ввійти</value>
+    <value>Увійдіть в систему</value>
   </data>
   <data name="LoginMessage" xml:space="preserve">
     <value>Будь ласка, увійдіть або</value>
@@ -214,7 +214,7 @@
     <value>Логін або електронна пошта</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>Вийти</value>
+    <value>Вийдіть з системи</value>
   </data>
   <data name="LogoutText" xml:space="preserve">
     <value>Ви успішно вийшли з програми.</value>
@@ -223,7 +223,7 @@
     <value>Керування обліковим записом</value>
   </data>
   <data name="MembershipProviderError" xml:space="preserve">
-    <value>Постачальник автентифікації повернув повідомлення про помилку. Будь ласка, підтвердьте свій запис і спробуйте ще раз. Якщо проблема не зникне, зверніться до системного адміністратора.</value>
+    <value>Постачальник автентифікації повернув помилку. Будь ласка, перевірте свої дані та спробуйте ще раз. Якщо проблема не зникне, зверніться до системного адміністратора.</value>
   </data>
   <data name="OutdatedBrowserMessage" xml:space="preserve">
     <value>Ви використовуєте застарілий браузер</value>
@@ -241,16 +241,16 @@
     <value>Скидання пароля</value>
   </data>
   <data name="PasswordResetDescription" xml:space="preserve">
-    <value>Введіть логін або email і ми надішлемо вам посилання для скидання пароля</value>
+    <value>Введіть логін або електронну пошту, і ми надішлемо вам посилання для відновлення пароля</value>
   </data>
   <data name="PasswordSet" xml:space="preserve">
     <value>Ваш пароль встановлено.</value>
   </data>
   <data name="PasswordWatermark" xml:space="preserve">
-    <value>Новий пароль (мінімум 10 символів, цифр І літер)</value>
+    <value>Новий пароль (мінімум 10 символів, цифри та літери)</value>
   </data>
   <data name="PendingEmailUpdate" xml:space="preserve">
-    <value>Очікує на оновлення для {0}</value>
+    <value>Очікує оновлення до {0}</value>
   </data>
   <data name="Register" xml:space="preserve">
     <value>Зареєструватися</value>
@@ -259,10 +259,10 @@
     <value>Помилка реєстрації</value>
   </data>
   <data name="RegistrationErrorDescription" xml:space="preserve">
-    <value>Сталася помилка підтвердження вашої електронної пошти. Спробуйте ще раз.</value>
+    <value>Виникла помилка при підтвердженні вашої електронної пошти. Будь ласка, спробуйте ще раз.</value>
   </data>
   <data name="RepeatPassword" xml:space="preserve">
-    <value>Повторіть пароль</value>
+    <value>Повторити пароль</value>
   </data>
   <data name="Restore" xml:space="preserve">
     <value>Відновити</value>
@@ -274,22 +274,22 @@
     <value>Залишайтеся в системі протягом дня</value>
   </data>
   <data name="TesterApp" xml:space="preserve">
-    <value>Встановіть тестувальник опитувань Survey Solutions на планшет з ОС Android, щоб тестувати анкети, розроблені за допомогою конструктора.</value>
+    <value>Встановіть Survey Solutions Questionnaire Tester на планшет на Android, щоб тестувати опитувальники, які ви розробляєте в Конструкторі.</value>
   </data>
   <data name="TesterAppImageDescription" xml:space="preserve">
-    <value>Завантажити в Google Play</value>
+    <value>Отримайте його в Google Play</value>
   </data>
   <data name="ThankYou" xml:space="preserve">
-    <value>Дякую</value>
+    <value>Дякую.</value>
   </data>
   <data name="UnknownError" xml:space="preserve">
-    <value>Сталася невідома помилка. Будь ласка, підтвердьте свій запис і спробуйте ще раз. Якщо проблема не зникне, зверніться до системного адміністратора.</value>
+    <value>Виникла невідома помилка. Будь ласка, перевірте свій запис і спробуйте ще раз. Якщо проблема не зникне, зверніться до системного адміністратора.</value>
   </data>
   <data name="UpgradeYourBrowser" xml:space="preserve">
-    <value>Будь ласка, &lt;a href="http://browsehappy.com/"&gt;оновіть свій браузер&lt;/a&gt;, щоб використовувати дизайнерську програму.</value>
+    <value>Будь ласка, &lt;a href="http://browsehappy.com/"&gt;оновіть ваш браузер&lt;/a&gt;, щоб скористатися додатком конструктора.</value>
   </data>
   <data name="UserCreationRequestCanceled" xml:space="preserve">
-    <value>Запит на створення користувача скасовано. Будь ласка, підтвердьте свій запис і спробуйте ще раз. Якщо проблема не зникне, зверніться до системного адміністратора.</value>
+    <value>Запит на створення користувача було скасовано. Будь ласка, перевірте свій запис і спробуйте ще раз. Якщо проблема не зникне, зверніться до системного адміністратора.</value>
   </data>
   <data name="UserNameExists" xml:space="preserve">
     <value>Ім'я користувача вже існує. Будь ласка, введіть інше ім'я користувача.</value>
@@ -298,6 +298,6 @@
     <value>Ім'я користувача для цієї адреси електронної пошти вже існує. Будь ласка, введіть іншу адресу електронної пошти.</value>
   </data>
   <data name="Welcome" xml:space="preserve">
-    <value>Ласкаво просимо до рішень для опитувань</value>
+    <value>Ласкаво просимо до Survey Solutions</value>
   </data>
 </root>

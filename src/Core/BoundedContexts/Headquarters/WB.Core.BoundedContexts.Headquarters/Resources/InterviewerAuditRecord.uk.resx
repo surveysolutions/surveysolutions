@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApproveInterview" xml:space="preserve">
-    <value>Співбесіда {0} затверджена</value>
+    <value>Співбесіду {0} схвалено</value>
   </data>
   <data name="AssignResponsibleToAssignment" xml:space="preserve">
-    <value>Призначте відповідальний {0} призначенню #{1}</value>
+    <value>Призначити відповідального {0} за завдання #{1}</value>
   </data>
   <data name="AssignResponsibleToInterview" xml:space="preserve">
-    <value>Призначте відповідального {0} на співбесіду {1}</value>
+    <value>Призначити відповідального {0} за проведення інтерв'ю {1}</value>
   </data>
   <data name="CloseInterview" xml:space="preserve">
     <value>Співбесіда {0} закрита</value>
@@ -133,7 +133,7 @@
     <value>Співбесіда {0} завершена</value>
   </data>
   <data name="CreateInterviewFromAssignment" xml:space="preserve">
-    <value>Співбесіда {0} створена з завдання {1}</value>
+    <value>Інтерв'ю {0}, створене з завдання {1}</value>
   </data>
   <data name="DeleteInterview" xml:space="preserve">
     <value>Інтерв'ю {0} видалено</value>
@@ -142,28 +142,28 @@
     <value>Детальний журнал дій</value>
   </data>
   <data name="DownloadTabLog" xml:space="preserve">
-    <value>Завантажити повний вхід у форматі вкладки</value>
+    <value>Завантажити повний журнал у форматі Tab</value>
   </data>
   <data name="FinishInstallation" xml:space="preserve">
-    <value>Монтаж завершено</value>
+    <value>Встановлення завершено</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Користувач {0} авторизований додаток</value>
+    <value>Користувач {0} увійшов до програми</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>Вихід користувача {0} із програми</value>
+    <value>Користувач {0} вийшов з програми</value>
   </data>
   <data name="OpenApplication" xml:space="preserve">
-    <value>Заявка відкрита</value>
+    <value>Додаток відкрито</value>
   </data>
   <data name="OpenInterview" xml:space="preserve">
-    <value>Розпочато {0} інтерв'ю</value>
+    <value>Співбесіда {0} відкрита</value>
   </data>
   <data name="PageTitle" xml:space="preserve">
     <value>Журнал дій</value>
   </data>
   <data name="RecordsMissing" xml:space="preserve">
-    <value>Записів поки немає</value>
+    <value>Поки що немає записів</value>
   </data>
   <data name="RejectInterview" xml:space="preserve">
     <value>Інтерв'ю {0} відхилено</value>
@@ -172,16 +172,16 @@
     <value>Інтерв'ю {0} відхилено інтерв'юеру {1}</value>
   </data>
   <data name="Relink" xml:space="preserve">
-    <value>Користувач відновив зв'язок із новим планшетом</value>
+    <value>Користувача переприв'язано до нового планшета</value>
   </data>
   <data name="RestartInterview" xml:space="preserve">
-    <value>Співбесіду {0} відновлено</value>
+    <value>Інтерв'ю {0} перезапущено</value>
   </data>
   <data name="ShowPrevious7Days" xml:space="preserve">
     <value>Показати попередні 7 активних днів</value>
   </data>
   <data name="SwitchInterviewMode" xml:space="preserve">
-    <value>Співбесіда {0} перейшла в режим {1}</value>
+    <value>Інтерв'ю {0} переведено в режим {1}</value>
   </data>
   <data name="SynchronizationCanceled" xml:space="preserve">
     <value>Синхронізацію скасовано</value>
@@ -190,37 +190,37 @@
     <value>Синхронізацію завершено:</value>
   </data>
   <data name="SynchronizationCompleted_AssignmentsDownloaded" xml:space="preserve">
-    <value>{0} завантажено нові завдання</value>
+    <value>{0} завантажено нові призначення</value>
   </data>
   <data name="SynchronizationCompleted_AssignmentsRemoved" xml:space="preserve">
-    <value>{0} вилучено призначення</value>
+    <value>{0} присвоєння вилучено</value>
   </data>
   <data name="SynchronizationCompleted_InterviewsDownloaded" xml:space="preserve">
-    <value>{0} нових інтерв'ю (інтерв'ю) завантажено</value>
+    <value>{0} завантажено нові інтерв'ю</value>
   </data>
   <data name="SynchronizationCompleted_InterviewsPartialDownloaded" xml:space="preserve">
-    <value>{0} інтерв'ю(ів), оновлених зі штаб-квартири</value>
+    <value>{0} інтерв'ю(и) оновлено зі штаб-квартири</value>
   </data>
   <data name="SynchronizationCompleted_InterviewsPartialUploaded" xml:space="preserve">
-    <value>{0} інтерв'ю(ів) частково завантажено</value>
+    <value>{0} інтерв'ю завантажено частково</value>
   </data>
   <data name="SynchronizationCompleted_InterviewsRejected" xml:space="preserve">
-    <value>{0} інтерв'ю (інтерв'ю) відхилено</value>
+    <value>{0} інтерв'ю відхилено</value>
   </data>
   <data name="SynchronizationCompleted_InterviewsRemoved" xml:space="preserve">
-    <value>{0} інтерв'ю (інтерв'ю) видалено</value>
+    <value>{0} інтерв'ю видалено</value>
   </data>
   <data name="SynchronizationCompleted_InterviewsUploaded" xml:space="preserve">
-    <value>{0} Завантажено інтерв'ю (інтерв'ю)</value>
+    <value>{0} завантажено інтерв'ю</value>
   </data>
   <data name="SynchronizationCompleted_NothingToSync" xml:space="preserve">
-    <value>Нічого для синхронізації</value>
+    <value>нічого синхронізувати</value>
   </data>
   <data name="SynchronizationCompleted_ReopenedInterviewsAfterComments" xml:space="preserve">
-    <value>{0} інтерв'ю (інтерв'ю) були відновлені після отримання коментарів</value>
+    <value>{0} інтерв'ю було перевідкрито після отримання коментарів</value>
   </data>
   <data name="SynchronizationFailed" xml:space="preserve">
-    <value>Помилка синхронізації</value>
+    <value>Не вдалося синхронізувати.</value>
   </data>
   <data name="SynchronizationStarted" xml:space="preserve">
     <value>Синхронізацію розпочато ({0})</value>

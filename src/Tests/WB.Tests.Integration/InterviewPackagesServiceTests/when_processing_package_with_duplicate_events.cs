@@ -93,7 +93,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                 .Returns(Mock.Of<IInterviewUniqueKeyGenerator>);
 
             var duplicate1 = Create.Event.InterviewReceivedBySupervisor(DateTimeOffset.UtcNow.AddMinutes(-5)).ToCommittedEvent(eventId: Id.g7);
-            var duplicate2 = Create.Event.InterviewReceivedByInterviewer(DateTimeOffset.UtcNow).ToCommittedEvent(eventId: Id.g8);
+            var duplicate2 = Create.Event.InterviewReceivedByInterviewer(null, DateTimeOffset.UtcNow).ToCommittedEvent(eventId: Id.g8);
 
             var hqEvents = new CommittedEvent[]
             {

@@ -118,15 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Clone" xml:space="preserve">
-    <value>Копіювати</value>
+    <value>Зрозумів.</value>
   </data>
   <data name="CloneQuestionnaireTitle" xml:space="preserve">
-    <value>Копіювати анкету</value>
+    <value>Копія анкети</value>
   </data>
   <data name="ToCloneQuestionnaire" xml:space="preserve">
-    <value>Копіювати анкету</value>
+    <value>Копія анкети</value>
   </data>
   <data name="UnexpectedError" xml:space="preserve">
-    <value>Сталася неочікувана помилка. Вибачте за тимчасові незручності. Будь ласка, зв'яжіться з support@mysurvey.solutions або спробуйте пізніше.</value>
+    <value>Виникла непередбачувана помилка. Вибачте за незручності. Будь ласка, зв'яжіться з support@mysurvey.solutions або спробуйте пізніше.</value>
   </data>
 </root>

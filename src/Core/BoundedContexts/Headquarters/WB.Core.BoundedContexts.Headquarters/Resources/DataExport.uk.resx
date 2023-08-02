@@ -127,13 +127,13 @@
     <value>Затверджено статусом штаб-квартири</value>
   </data>
   <data name="ApprovedBySupervisor" xml:space="preserve">
-    <value>Затверджено статусом наукового керівника</value>
+    <value>Затверджено статусом Супервайзера</value>
   </data>
   <data name="BinaryData" xml:space="preserve">
     <value>Двійкові дані</value>
   </data>
   <data name="BinaryDescription" xml:space="preserve">
-    <value>Архів із двійковими даними (наприклад, зображеннями, аудіо)</value>
+    <value>Архів з бінарними даними (наприклад, зображеннями, аудіо)</value>
   </data>
   <data name="Bytes" xml:space="preserve">
     <value>МБ</value>
@@ -142,55 +142,55 @@
     <value>Завершено</value>
   </data>
   <data name="Compressing" xml:space="preserve">
-    <value>Стиснення</value>
+    <value>Стискання</value>
   </data>
   <data name="ConfirmStop" xml:space="preserve">
-    <value>Ви впевнені, що хочете зупинитися</value>
+    <value>Ви впевнені, що хочете припинити</value>
   </data>
   <data name="DataDestination" xml:space="preserve">
-    <value>Призначення експорту файлу</value>
+    <value>Місце призначення файлу експорту</value>
   </data>
   <data name="DataDestination_Dropbox" xml:space="preserve">
-    <value>Завантажити в Dropbox</value>
+    <value>Завантажити на Dropbox</value>
   </data>
   <data name="DataDestination_GoogleDrive" xml:space="preserve">
     <value>Завантажити на Google Диск</value>
   </data>
   <data name="DataDestination_OneDrive" xml:space="preserve">
-    <value>Передавання в службу OneDrive</value>
+    <value>Завантаження до OneDrive</value>
   </data>
   <data name="DataDestination_Zip" xml:space="preserve">
     <value>Завантажити</value>
   </data>
   <data name="DataExport_CompletedOn" xml:space="preserve">
-    <value>Завершено {{date}}</value>
+    <value>Завершено на {{date}}</value>
   </data>
   <data name="DataExport_Destination" xml:space="preserve">
     <value>Пункт призначення: {{dest}}</value>
   </data>
   <data name="DataExport_Destination_Dropbox" xml:space="preserve">
-    <value>Файл експорту буде завантажено в Dropbox</value>
+    <value>Файл експорту буде завантажено до Dropbox</value>
   </data>
   <data name="DataExport_Destination_File" xml:space="preserve">
-    <value>Експортувати файл буде доступний для завантаження</value>
+    <value>Експортний файл буде доступний для завантаження</value>
   </data>
   <data name="DataExport_Destination_GoogleDrive" xml:space="preserve">
-    <value>Файл експорту буде завантажено на Google Диск</value>
+    <value>Експортний файл буде завантажено на Google Диск</value>
   </data>
   <data name="DataExport_Destination_OneDrive" xml:space="preserve">
-    <value>Файл експорту буде передано до OneDrive</value>
+    <value>Файл експорту буде завантажено до OneDrive</value>
   </data>
   <data name="DataExport_FileLastUpdate" xml:space="preserve">
     <value>Останнє оновлення: {{date}}</value>
   </data>
   <data name="DataExport_FileSize" xml:space="preserve">
-    <value>Розмір файлу: {{size}} MB</value>
+    <value>Розмір файлу: {{size}} МБ</value>
   </data>
   <data name="DataExport_FileWasRegenerated" xml:space="preserve">
-    <value>Файл було згенеровано повторно</value>
+    <value>Файл було регенеровано</value>
   </data>
   <data name="DataExport_Header" xml:space="preserve">
-    <value>Вибір типу та формату даних для експорту</value>
+    <value>Виберіть тип і формат даних для експорту</value>
   </data>
   <data name="DataExport_InQueue" xml:space="preserve">
     <value>У черзі:</value>
@@ -205,10 +205,10 @@
     <value>{{title}} (ver. {{version}})</value>
   </data>
   <data name="DataExport_QueuedOn" xml:space="preserve">
-    <value>У черзі {{date}}</value>
+    <value>В черзі на {{date}}</value>
   </data>
   <data name="DataExport_Regenerate" xml:space="preserve">
-    <value>Відновити</value>
+    <value>Регенерувати</value>
   </data>
   <data name="DataExport_RegenerateDesc" xml:space="preserve">
     <value>Експорт черги з тими самими параметрами</value>
@@ -220,13 +220,13 @@
     <value>Експорт даних</value>
   </data>
   <data name="DataExportApi" xml:space="preserve">
-    <value>API експорту даних</value>
+    <value>API для експорту даних</value>
   </data>
   <data name="DataExportApiDesc" xml:space="preserve">
-    <value>Ви можете налаштувати автоматичний експорт зібраних даних інтерв'ю за допомогою нашого набору інструментів API для отримання додаткової інформації та використання інструкцій:</value>
+    <value>Ви можете налаштувати автоматичний експорт зібраних даних інтерв'ю за допомогою нашого інструментарію API для отримання додаткової інформації та інструкцій з використання:</value>
   </data>
   <data name="DataExportApiInfoPage" xml:space="preserve">
-    <value>Довідник з API експорту даних</value>
+    <value>Посилання на API експорту даних</value>
   </data>
   <data name="DataFormat" xml:space="preserve">
     <value>Формат даних</value>
@@ -244,25 +244,25 @@
     <value>Тип даних</value>
   </data>
   <data name="DataType_Binary" xml:space="preserve">
-    <value>Двійкові дані. Архів із двійковими даними (наприклад, зображеннями, аудіо)</value>
+    <value>Бінарні дані. Архів з бінарними даними (наприклад, зображеннями, аудіо)</value>
   </data>
   <data name="DataType_Ddi" xml:space="preserve">
-    <value>DDI. Ініціатива з документації даних XML-дані</value>
+    <value>DDI. Ініціатива документування даних XML-даних</value>
   </data>
   <data name="DataType_MainSurveyData" xml:space="preserve">
     <value>Основні дані опитування. Zip-архів з основними даними інтерв'ю</value>
   </data>
   <data name="DataType_Paradata" xml:space="preserve">
-    <value>Парадані. Метадані про процес інтерв'ю (події та хронометраж)</value>
+    <value>Параметри. Метадані про процес інтерв'ю (події та час)</value>
   </data>
   <data name="DataWasNotGenerated" xml:space="preserve">
-    <value>Не генерується</value>
+    <value>Не згенеровано</value>
   </data>
   <data name="DDI" xml:space="preserve">
-    <value>DDI</value>
+    <value>Д.Д.І.</value>
   </data>
   <data name="DDIDescription" xml:space="preserve">
-    <value>Ініціатива з документації даних XML-дані</value>
+    <value>XML-дані Ініціативи з документування даних</value>
   </data>
   <data name="Download" xml:space="preserve">
     <value>Завантажити</value>
@@ -274,22 +274,22 @@
     <value>Завдання експорту було скасовано користувачем.</value>
   </data>
   <data name="Error_NotEnoughExternalStorageSpace" xml:space="preserve">
-    <value>Недостатньо місця для вибраного хмарного сховища. Будь ласка, звільніть місце та перезапустіть роботу або виберіть іншого постачальника.</value>
+    <value>У вибраному хмарному сховищі недостатньо місця. Будь ласка, звільніть місце та перезапустіть завдання або оберіть іншого провайдера.</value>
   </data>
   <data name="Error_Unhandled" xml:space="preserve">
-    <value>Під час експорту сталася несподівана помилка. Просимо вибачення за тимчасові незручності. Будь ласка, зв'яжіться зі службою підтримки support@mysurvey.solutions з лог-файлами *.log, які зберігаються в папці програми. Додаткова інформація з цього питання доступна на сторінці підтримки: https://support.mysurvey.solutions/headquarters/config/standalone-server-errors/.</value>
+    <value>Під час експорту сталася непередбачувана помилка. Приносимо вибачення за незручності. Будь ласка, зверніться до служби підтримки support@mysurvey.solutions з файлами журналів *.log, які зберігаються в папці програми. Додаткова інформація з цього питання доступна на сторінці підтримки: https://support.mysurvey.solutions/headquarters/config/standalone-server-errors/.</value>
   </data>
   <data name="ErrorThereAreRunningProcesses" xml:space="preserve">
-    <value>Параметри експорту змінити не можна, оскільки процес експорту вже запущено.</value>
+    <value>Ви не можете змінити налаштування експорту, оскільки процес експорту вже запущено.</value>
   </data>
   <data name="export" xml:space="preserve">
-    <value>Процес експорту</value>
+    <value>процес експорту</value>
   </data>
   <data name="ExportBtn" xml:space="preserve">
     <value>Експорт</value>
   </data>
   <data name="ExportExplanation" xml:space="preserve">
-    <value>Натискання кнопки «Створити» створює архів даних інтерв'ю, доступних на сервері на той момент. Час створення архіву та розмір архіву наведені в таблиці. Останній згенерований архів даних можна завантажити, натиснувши кнопку Завантажити. Натисніть кнопку Згенерувати ще раз, щоб створити новий архів.</value>
+    <value>При натисканні кнопки Створити створюється архів даних інтерв'ю, доступних на сервері на той момент. Час створення архіву та розмір архіву показано в таблиці. Останній створений архів даних можна завантажити, натиснувши кнопку Завантажити. Натисніть кнопку Створити ще раз, щоб створити новий архів.</value>
   </data>
   <data name="ExportRange" xml:space="preserve">
     <value>Асортимент експорту:</value>
@@ -298,40 +298,40 @@
     <value>Розмір файлу</value>
   </data>
   <data name="FilterTitle" xml:space="preserve">
-    <value>Фільтрування інтерв'ю для експорту</value>
+    <value>Фільтруйте інтерв'ю для експорту</value>
   </data>
   <data name="Format" xml:space="preserve">
     <value>Формат</value>
   </data>
   <data name="FormatTitle" xml:space="preserve">
-    <value>Формат</value>
+    <value>формат</value>
   </data>
   <data name="FromDate" xml:space="preserve">
     <value>Від</value>
   </data>
   <data name="Generate" xml:space="preserve">
-    <value>Генерувати</value>
+    <value>Згенерувати</value>
   </data>
   <data name="GeneratedDataSets" xml:space="preserve">
-    <value>Раніше створені набори експорту</value>
+    <value>Раніше сформовані набори для експорту</value>
   </data>
   <data name="GeneratedDataSets_Desc" xml:space="preserve">
-    <value>Дані експортуються в zip-архів, що містить файли даних зазначеного вмісту та типу. Нижче наведено список раніше експортованих файлів даних.</value>
+    <value>Дані експортуються у вигляді zip-архіву, що містить файли даних заданого змісту та типу. Нижче наведено список раніше експортованих файлів даних.</value>
   </data>
   <data name="Generating" xml:space="preserve">
-    <value>Генерації</value>
+    <value>Генерування</value>
   </data>
   <data name="GoogleDrive" xml:space="preserve">
     <value>Google Диск</value>
   </data>
   <data name="InterviewerAssigned" xml:space="preserve">
-    <value>Присвоєний інтерв'юеру статус</value>
+    <value>Інтерв'юеру присвоєно статус</value>
   </data>
   <data name="ItemsInQueue" xml:space="preserve">
     <value>Елементи в черзі на експорт:</value>
   </data>
   <data name="LastGeneratedTitle" xml:space="preserve">
-    <value>Створено на</value>
+    <value>Згенеровано на</value>
   </data>
   <data name="LastUpdateDate" xml:space="preserve">
     <value>Дата останнього оновлення</value>
@@ -355,10 +355,10 @@
     <value>OneDrive</value>
   </data>
   <data name="ParaData" xml:space="preserve">
-    <value>Парадані</value>
+    <value>Парадата</value>
   </data>
   <data name="ParadataDescription" xml:space="preserve">
-    <value>Метадані про процес інтерв'ю (події та хронометраж)</value>
+    <value>Метадані про процес інтерв'ю (події та час)</value>
   </data>
   <data name="Preparing" xml:space="preserve">
     <value>Підготовка</value>
@@ -367,25 +367,25 @@
     <value>Прогрес</value>
   </data>
   <data name="QuestionnaireInformation" xml:space="preserve">
-    <value>Анкетна інформація</value>
+    <value>Інформація для заповнення анкети</value>
   </data>
   <data name="QuestionnaireInformation_Exclude" xml:space="preserve">
-    <value>Виключити мета-інформацію про анкету</value>
+    <value>Виключити метаінформацію про анкету</value>
   </data>
   <data name="QuestionnaireInformation_Include" xml:space="preserve">
-    <value>Включити мета-інформацію про анкету</value>
+    <value>Включіть метаінформацію про опитувальник</value>
   </data>
   <data name="QuestionnaireTranslation" xml:space="preserve">
     <value>Переклад</value>
   </data>
   <data name="QueuedTitle" xml:space="preserve">
-    <value>Черги</value>
+    <value>У черзі.</value>
   </data>
   <data name="SaveBinaryDataTo" xml:space="preserve">
-    <value>Збережіть двійкові дані в:</value>
+    <value>Збережіть двійкові дані у:</value>
   </data>
   <data name="StartDate" xml:space="preserve">
-    <value>Початок</value>
+    <value>Дата початку</value>
   </data>
   <data name="StatusOfExportTitle" xml:space="preserve">
     <value>Статус експортованих інтерв'ю</value>
@@ -394,7 +394,7 @@
     <value>Шаблон опитування</value>
   </data>
   <data name="SurveyTemplateTitle" xml:space="preserve">
-    <value>(версія) Анкета опитування</value>
+    <value>(версія) Опитувальник для опитування</value>
   </data>
   <data name="TabularFormat" xml:space="preserve">
     <value>Табличний формат</value>
@@ -412,6 +412,6 @@
     <value>Zip-архів з основними даними інтерв'ю</value>
   </data>
   <data name="ZipFile" xml:space="preserve">
-    <value>ZIP-файл</value>
+    <value>Zip-файл</value>
   </data>
 </root>

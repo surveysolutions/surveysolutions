@@ -139,7 +139,7 @@
     <value>Андорра</value>
   </data>
   <data name="ANT" xml:space="preserve">
-    <value>Антильські острови</value>
+    <value>Північні Антильські острови</value>
   </data>
   <data name="ARE" xml:space="preserve">
     <value>Об'єднані Арабські Емірати</value>
@@ -154,10 +154,10 @@
     <value>Американське Самоа</value>
   </data>
   <data name="ATA" xml:space="preserve">
-    <value>Антарктика</value>
+    <value>Антартика</value>
   </data>
   <data name="ATF" xml:space="preserve">
-    <value>Французька С.Т.</value>
+    <value>Французький S.T..</value>
   </data>
   <data name="ATG" xml:space="preserve">
     <value>Антигуа і Барбуда</value>
@@ -193,7 +193,7 @@
     <value>Бахрейн</value>
   </data>
   <data name="BHS" xml:space="preserve">
-    <value>Багамські острови</value>
+    <value>Багамські острови, The</value>
   </data>
   <data name="BIH" xml:space="preserve">
     <value>Боснія і Герцеговина</value>
@@ -253,10 +253,10 @@
     <value>Камерун</value>
   </data>
   <data name="COD" xml:space="preserve">
-    <value>Конго, Dem. Rep.</value>
+    <value>Конго, Дем. Респ..</value>
   </data>
   <data name="COG" xml:space="preserve">
-    <value>Конго, Респ.</value>
+    <value>Конго, Республіка.</value>
   </data>
   <data name="COK" xml:space="preserve">
     <value>Острів Кука</value>
@@ -265,7 +265,7 @@
     <value>Колумбія</value>
   </data>
   <data name="COM" xml:space="preserve">
-    <value>Коморські Острови</value>
+    <value>Коморські острови</value>
   </data>
   <data name="CPV" xml:space="preserve">
     <value>Республіка Кабо-Верде</value>
@@ -349,13 +349,13 @@
     <value>Мікронезія</value>
   </data>
   <data name="FXX" xml:space="preserve">
-    <value>Франція, Metrop.</value>
+    <value>Франція, Метрополь.</value>
   </data>
   <data name="GAB" xml:space="preserve">
     <value>Габон</value>
   </data>
   <data name="GBR" xml:space="preserve">
-    <value>Великобританія</value>
+    <value>Сполучене Королівство</value>
   </data>
   <data name="GEO" xml:space="preserve">
     <value>Грузія</value>
@@ -373,7 +373,7 @@
     <value>Гваделупа</value>
   </data>
   <data name="GMB" xml:space="preserve">
-    <value>Гамбія,</value>
+    <value>Гамбія, Гамбія</value>
   </data>
   <data name="GNB" xml:space="preserve">
     <value>Гвінея-Бісау</value>
@@ -388,7 +388,7 @@
     <value>Гренада</value>
   </data>
   <data name="GRL" xml:space="preserve">
-    <value>Ґренландія</value>
+    <value>Гренландія</value>
   </data>
   <data name="GTM" xml:space="preserve">
     <value>Гватемала</value>
@@ -400,13 +400,13 @@
     <value>Гуам</value>
   </data>
   <data name="GUY" xml:space="preserve">
-    <value>Гаяна</value>
+    <value>Гайана</value>
   </data>
   <data name="HKG" xml:space="preserve">
     <value>САР Гонконг, Китай</value>
   </data>
   <data name="HMD" xml:space="preserve">
-    <value>Херд / Макдональд Айлд</value>
+    <value>Чув / McDonald Isld</value>
   </data>
   <data name="HND" xml:space="preserve">
     <value>Гондурас</value>
@@ -433,7 +433,7 @@
     <value>Ірландія</value>
   </data>
   <data name="IRN" xml:space="preserve">
-    <value>Іран, Ісламська республіка.</value>
+    <value>Іран, Ісламська Республіка.</value>
   </data>
   <data name="IRQ" xml:space="preserve">
     <value>Ірак</value>
@@ -478,7 +478,7 @@
     <value>Сент-Кітс і Невіс</value>
   </data>
   <data name="KOR" xml:space="preserve">
-    <value>Корея, респ.</value>
+    <value>Корея, Респ..</value>
   </data>
   <data name="KSV" xml:space="preserve">
     <value>Косово</value>
@@ -487,10 +487,10 @@
     <value>Кувейт</value>
   </data>
   <data name="LAC" xml:space="preserve">
-    <value>Латинська Америка, Карибський басейн</value>
+    <value>Латинська Америка та Карибський басейн</value>
   </data>
   <data name="LAO" xml:space="preserve">
-    <value>Лаоська НДР</value>
+    <value>Лаосська Народно-Демократична Республіка</value>
   </data>
   <data name="LBN" xml:space="preserve">
     <value>Ліван</value>
@@ -544,10 +544,10 @@
     <value>Мексика</value>
   </data>
   <data name="MHL" xml:space="preserve">
-    <value>Маршалл Айлд.</value>
+    <value>Маршалл Іслд.</value>
   </data>
   <data name="MKD" xml:space="preserve">
-    <value>Македонія, FYR</value>
+    <value>Македонія, колишня Югославська Республіка Македонія</value>
   </data>
   <data name="MLI" xml:space="preserve">
     <value>Малі</value>
@@ -565,7 +565,7 @@
     <value>Монголія</value>
   </data>
   <data name="MNP" xml:space="preserve">
-    <value>Н. Маріана Ісльд.</value>
+    <value>N. Mariana Isld.</value>
   </data>
   <data name="MOZ" xml:space="preserve">
     <value>Мозамбік</value>
@@ -601,13 +601,13 @@
     <value>Нігер</value>
   </data>
   <data name="NFK" xml:space="preserve">
-    <value>Норфолкський острів.</value>
+    <value>Острів Норфолк.</value>
   </data>
   <data name="NGA" xml:space="preserve">
     <value>Нігерія</value>
   </data>
   <data name="NIC" xml:space="preserve">
-    <value>Нікараґуа</value>
+    <value>Нікарагуа</value>
   </data>
   <data name="NIU" xml:space="preserve">
     <value>Ніуе</value>
@@ -655,10 +655,10 @@
     <value>Польща</value>
   </data>
   <data name="PRI" xml:space="preserve">
-    <value>Пуерто-Рико</value>
+    <value>Пуерто-Ріко</value>
   </data>
   <data name="PRK" xml:space="preserve">
-    <value>Корея, Dem. Rep.</value>
+    <value>Корея, Дем. Республіка Корея, Дем..</value>
   </data>
   <data name="PRT" xml:space="preserve">
     <value>Португалія</value>
@@ -667,7 +667,7 @@
     <value>Парагвай</value>
   </data>
   <data name="PSE" xml:space="preserve">
-    <value>Західний берег річки Йордан і сектор Газа</value>
+    <value>Західний берег і Газа</value>
   </data>
   <data name="PYF" xml:space="preserve">
     <value>Французька Полінезія</value>
@@ -697,19 +697,19 @@
     <value>Сенегал</value>
   </data>
   <data name="SGP" xml:space="preserve">
-    <value>Сінґапур</value>
+    <value>Сінгапур</value>
   </data>
   <data name="SGS" xml:space="preserve">
-    <value>С. Джорджія С. Сандвіч Айлд.</value>
+    <value>S. Джорджія С. Сендвіч Ілд.</value>
   </data>
   <data name="SHN" xml:space="preserve">
-    <value>Святої Єлени</value>
+    <value>Свята Єлена</value>
   </data>
   <data name="SJM" xml:space="preserve">
-    <value>Шпіцберген і Ян-Маєн</value>
+    <value>Шпіцберген та острови Ян-Майєн</value>
   </data>
   <data name="SLB" xml:space="preserve">
-    <value>Соломонові Острови</value>
+    <value>Соломонові острови</value>
   </data>
   <data name="SLE" xml:space="preserve">
     <value>Сьєрра-Леоне</value>
@@ -751,16 +751,16 @@
     <value>Свазіленд</value>
   </data>
   <data name="SYC" xml:space="preserve">
-    <value>Сейшельські Острови</value>
+    <value>Сейшельські острови</value>
   </data>
   <data name="SYR" xml:space="preserve">
     <value>Сирійська Арабська Республіка</value>
   </data>
   <data name="TCA" xml:space="preserve">
-    <value>Теркс і Кайкос</value>
+    <value>Острови Теркс і Кайкос</value>
   </data>
   <data name="TCD" xml:space="preserve">
-    <value>Чад</value>
+    <value>Чад.</value>
   </data>
   <data name="TGO" xml:space="preserve">
     <value>Того</value>
@@ -811,10 +811,10 @@
     <value>Малі віддалені острови США</value>
   </data>
   <data name="URY" xml:space="preserve">
-    <value>Уруґвай</value>
+    <value>Уругвай</value>
   </data>
   <data name="USA" xml:space="preserve">
-    <value>США</value>
+    <value>Сполучені Штати</value>
   </data>
   <data name="UZB" xml:space="preserve">
     <value>Узбекистан</value>
@@ -823,7 +823,7 @@
     <value>Святий Престол</value>
   </data>
   <data name="VCT" xml:space="preserve">
-    <value>Сент-Вінсент Гренадіни</value>
+    <value>Сент-Вінсент і Гренадіни</value>
   </data>
   <data name="VEN" xml:space="preserve">
     <value>Венесуела, РБ</value>
@@ -832,19 +832,19 @@
     <value>Британські Віргінські острови</value>
   </data>
   <data name="VGB1" xml:space="preserve">
-    <value>Віргінський острів. (Британська)</value>
+    <value>Віргінські острови. (Брит.)</value>
   </data>
   <data name="VIR" xml:space="preserve">
     <value>Віргінські острови, США.</value>
   </data>
   <data name="VNM" xml:space="preserve">
-    <value>Вʼєтнам</value>
+    <value>В'єтнам</value>
   </data>
   <data name="VUT" xml:space="preserve">
     <value>Вануату</value>
   </data>
   <data name="WBG" xml:space="preserve">
-    <value>Westbank і сектор Газа</value>
+    <value>Західний берег і Газа</value>
   </data>
   <data name="WLD" xml:space="preserve">
     <value>Світ</value>
@@ -856,10 +856,10 @@
     <value>Самоа</value>
   </data>
   <data name="YEM" xml:space="preserve">
-    <value>Ємен, респ.</value>
+    <value>Ємен, Республіка.</value>
   </data>
   <data name="ZAF" xml:space="preserve">
-    <value>Південно-Африканська Республіка</value>
+    <value>Південна Африка</value>
   </data>
   <data name="ZMB" xml:space="preserve">
     <value>Замбія</value>

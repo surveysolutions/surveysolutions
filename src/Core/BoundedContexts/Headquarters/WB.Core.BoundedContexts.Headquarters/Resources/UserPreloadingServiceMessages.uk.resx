@@ -118,21 +118,21 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CannotParseIncomingFile" xml:space="preserve">
-    <value>Якщо файл містить помилку в рядку {0} і його неможливо проаналізувати</value>
+    <value>Наданий файл має помилку в рядку {0} і не може бути розібраний</value>
   </data>
   <data name="FileColumnsCantBeMappedFormat" xml:space="preserve">
-    <value>Файл "{0}" містить такі стовпці, які не можна зіставити з жодною властивістю користувача (наприклад, повне ім'я, номер телефону тощо): {1}</value>
+    <value>Файл '{0}' містить наступні стовпці, які не можуть бути зіставлені з будь-якою властивістю користувача (наприклад, повне ім'я, номер телефону і т.д.) : {1}</value>
   </data>
   <data name="FileColumnsMissingFormat" xml:space="preserve">
-    <value>Файл '{0}' не містить обов'язкових стовпців: {1}</value>
+    <value>Файл '{0}' не містить необхідних стовпців: {1}</value>
   </data>
   <data name="FileDoesNotContainAnyData" xml:space="preserve">
-    <value>Файл "{0}" не містить жодних даних користувача</value>
+    <value>Файл '{0}' не містить даних користувача</value>
   </data>
   <data name="HasUsersToImport" xml:space="preserve">
-    <value>Будь ласка, дочекайтеся завершення попереднього імпорту користувачів</value>
+    <value>Будь ласка, зачекайте, поки завершиться попередній імпорт користувачів</value>
   </data>
   <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
-    <value>Максимальна допустима кількість записів - {0}</value>
+    <value>Максимально допустима кількість записів {0}</value>
   </data>
 </root>

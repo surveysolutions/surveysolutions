@@ -234,8 +234,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                     case AssignmentDeleted _:
                         historyItem.Action = AssignmentHistoryAction.Deleted;
                         break;
-                    case AssignmentReceivedByTablet _:
+                    case AssignmentReceivedByTablet a:
                         historyItem.Action = AssignmentHistoryAction.ReceivedByTablet;
+                        historyItem.AdditionalData = new
+                        {
+                            a.DeviceId
+                        };
                         break;
                     case AssignmentUnarchived _:
                         historyItem.Action = AssignmentHistoryAction.UnArchived;

@@ -121,43 +121,43 @@
     <value>Захищені паролем архіви не підтримуються</value>
   </data>
   <data name="PL0002_MoreThenOneLevel" xml:space="preserve">
-    <value>[PL0002] Н/Д. Зверніться до служби підтримки за адресою support@mysurvey.solutions</value>
+    <value>[PL0002] N/A. Зверніться до служби підтримки за адресою support@mysurvey.solutions</value>
   </data>
   <data name="PL0003_ColumnWasntMappedOnQuestion" xml:space="preserve">
-    <value>Стовпчик не може бути зіставлений з жодним питанням в анкеті.</value>
+    <value>Стовпчик не може бути прив'язаний до жодного питання в анкеті.</value>
   </data>
   <data name="PL0004_FileWasntMappedRoster" xml:space="preserve">
-    <value>Файл не можна зіставити з жодним списком в анкеті.</value>
+    <value>Файл не може бути прив'язаний до жодного реєстру в анкеті.</value>
   </data>
   <data name="PL0006_IdDublication" xml:space="preserve">
-    <value>Знайдено повторювані значення ідентифікатора.</value>
+    <value>Знайдено дублікати значень ідентифікатора.</value>
   </data>
   <data name="PL0007_ServiceColumnIsAbsent" xml:space="preserve">
-    <value>Відсутній один або кілька батьківських стовпців Id.</value>
+    <value>Відсутній один або декілька стовпців батьківського ідентифікатора.</value>
   </data>
   <data name="PL0008_OrphanRosterRecord" xml:space="preserve">
-    <value>Запис списку не має батьківського елемента.</value>
+    <value>Запис у реєстрі не має батька.</value>
   </data>
   <data name="PL0009_RosterIdIsInconsistantWithRosterSizeQuestion" xml:space="preserve">
-    <value>Ідентифікатор списку не відповідає розміру списку.</value>
+    <value>Ідентифікатор реєстру не відповідає розміру реєстру.</value>
   </data>
   <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
-    <value>Значення питання не допускається.</value>
+    <value>Значення питання не дозволено.</value>
   </data>
   <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
-    <value>Неприпустиме значення дати або часу, введене в запитання про дату.</value>
+    <value>Неправильне значення дати або часу, введене в запитанні про дату.</value>
   </data>
   <data name="PL0017_ExpectedGpsNotParsed" xml:space="preserve">
-    <value>Неприпустиме значення GPS.</value>
+    <value>Неправильне значення GPS.</value>
   </data>
   <data name="PL0018_ExpectedIntNotParsed" xml:space="preserve">
     <value>Допускаються лише цілі значення.</value>
   </data>
   <data name="PL0019_ExpectedDecimalNotParsed" xml:space="preserve">
-    <value>Допускаються тільки реальні цінності.</value>
+    <value>Допускаються тільки реальні значення.</value>
   </data>
   <data name="PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative" xml:space="preserve">
-    <value>Запитання розміру списку не може мати від'ємних значень.</value>
+    <value>Питання про розмір реєстру не може мати від'ємних значень.</value>
   </data>
   <data name="PL0024_DataWasNotFound" xml:space="preserve">
     <value>Дані попереднього завантаження не знайдено.</value>
@@ -166,49 +166,49 @@
     <value>Відповідальний не існує для 1 або більше спостережень.</value>
   </data>
   <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
-    <value>Відповідальним вважається заблокований користувач за 1 або більше спостережень.</value>
+    <value>Відповідальний - заблокований користувач за 1 або більше спостережень.</value>
   </data>
   <data name="PL0028_UserIsNotHQOrSupervisorOrInterviewer" xml:space="preserve">
-    <value>Користувач не є штаб-квартирою, керівником або інтерв'юером для 1 або більше спостережень.</value>
+    <value>Користувач не є штаб-квартирою, супервайзером або інтерв'юером для 1 або більше спостережень.</value>
   </data>
   <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
-    <value>Відповідь на запитання щодо розміру списку не може перевищувати {0}.</value>
+    <value>Відповідь на питання про розмір списку не може бути більшою за {0}.</value>
   </data>
   <data name="PL0030_GpsFieldsRequired" xml:space="preserve">
-    <value>Запитання GPS вимагають окремих стовпців для широти та довготи</value>
+    <value>GPS-питання вимагають окремих стовпчиків для широти та довготи</value>
   </data>
   <data name="PL0030_GpsMandatoryFilds" xml:space="preserve">
-    <value>Питання GPS вимагає встановлення широти та довготи.</value>
+    <value>GPS-питання вимагає встановлення широти та довготи.</value>
   </data>
   <data name="PL0031_ColumnNameDuplicatesFound" xml:space="preserve">
-    <value>Два або більше стовпців мають однакове ім'я.</value>
+    <value>Два або більше стовпців мають однакові назви.</value>
   </data>
   <data name="PL0032_LatitudeMustBeGeaterThenN90AndLessThen90" xml:space="preserve">
     <value>Широта повинна бути більше -90° і менше 90°.</value>
   </data>
   <data name="PL0033_LongitudeMustBeGeaterThenN180AndLessThen180" xml:space="preserve">
-    <value>Довгота повинна бути більше -180° і менше 180°.</value>
+    <value>Довгота повинна бути більше -180° і менше 180°..</value>
   </data>
   <data name="PL0034_CommaSymbolIsNotAllowedInNumericAnswer" xml:space="preserve">
-    <value>Неприпустимий десятковий роздільник. Символ "" не допускається в числових відповідях. Будь ласка, використовуйте замість цього символ ".".</value>
+    <value>Неправильний десятковий роздільник. Символ "," не допускається у числових відповідях. Будь ласка, використовуйте "." замість нього.</value>
   </data>
   <data name="PL0035_QuantityNotParsed" xml:space="preserve">
     <value>Допускаються лише цілі значення.</value>
   </data>
   <data name="PL0036_QuantityShouldBeGreaterThanMinus1" xml:space="preserve">
-    <value>Кількість має бути більше або дорівнювати -1.</value>
+    <value>Кількість повинна бути більшою або дорівнювати -1.</value>
   </data>
   <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
-    <value>Файл з даними рівня анкети відсутній.</value>
+    <value>Відсутній файл з даними на рівні анкети.</value>
   </data>
   <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
-    <value>Кількість варіантів відповідей до запитання з множинним вибором не може перевищувати максимальну кількість дозволених відповідей.</value>
+    <value>Кількість варіантів відповідей на питання з множинним вибором не може перевищувати максимально допустиму кількість відповідей.</value>
   </data>
   <data name="PL0042_IdIsEmpty" xml:space="preserve">
-    <value>Стовпець ідентифікатора не має значення.</value>
+    <value>Стовпець Id не має значення.</value>
   </data>
   <data name="PL0047_ProtectedVariables_MissingColumn" xml:space="preserve">
-    <value>Обов'язковий стовпець {0} відсутній.</value>
+    <value>Відсутній необхідний стовпець {0}.</value>
   </data>
   <data name="PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire" xml:space="preserve">
     <value>Захищена змінна не знайдена в наданій анкеті.</value>
@@ -217,42 +217,42 @@
     <value>Тип змінної не може бути захищений.</value>
   </data>
   <data name="PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1" xml:space="preserve">
-    <value>Від'ємне значення не допускається для запитання з категоричним множинним вибором.</value>
+    <value>Від'ємне значення не допускається для категоричного питання з декількома варіантами відповідей.</value>
   </data>
   <data name="PL0052_ColumnByTextListRosterSizeAnswerNotFound" xml:space="preserve">
-    <value>Список повинен містити стовпець для відповідей текстового списку</value>
+    <value>Список повинен мати стовпчик для текстових відповідей</value>
   </data>
   <data name="PL0053_InconsistentNumericRosterInstanceCodes" xml:space="preserve">
-    <value>Неузгоджений код списку для числового списку. Послідовність кодів реєстру повинна бути 0, 1, ... Підрахунок екземплярів зі списку</value>
+    <value>Неузгодженість коду реєстру для числового реєстру. Послідовність кодів реєстру повинна бути 0, 1, ... для підрахунку екземплярів реєстру</value>
   </data>
   <data name="PL0054_MaxInterviewsCountByAssignmentExeeded" xml:space="preserve">
-    <value>Максимальна кількість не повинна перевищувати {0}.</value>
+    <value>Максимальна кількість не повинна перевищувати {0}..</value>
   </data>
   <data name="PL0055_InvalidEmail" xml:space="preserve">
-    <value>Email недійсний</value>
+    <value>Електронна пошта не дійсна</value>
   </data>
   <data name="PL0056_InvalidPassword" xml:space="preserve">
-    <value>Невірний пароль. Принаймні 6 цифр і великих літер або один символ "?" для створення пароля</value>
+    <value>Невірний пароль. Щонайменше 6 цифр і великих літер або один символ '?' для генерації пароля</value>
   </data>
   <data name="PL0057_IncosistentQuantityAndEmail" xml:space="preserve">
-    <value>Для завдань з наданою електронною поштою допустима кількість дорівнює 1</value>
+    <value>Для завдань із вказаною електронною поштою дозволена кількість - 1</value>
   </data>
   <data name="PL0058_IncosistentWebmodeAndEmail" xml:space="preserve">
-    <value>Веб-режим повинен бути активований для завдань, що мають електронну пошту</value>
+    <value>Веб-режим має бути увімкнений для завдань, що мають електронну пошту</value>
   </data>
   <data name="PL0059_IncosistentWebmodeAndPassword" xml:space="preserve">
-    <value>Веб-режим повинен бути активований для призначень, що мають пароль</value>
+    <value>Веб-режим має бути активований для призначень з паролем</value>
   </data>
   <data name="PL0060_WebmodeSizeOneHasNoEmailOrPassword" xml:space="preserve">
-    <value>Призначення розміром 1 для веб-режиму повинно мати або електронну адресу, або пароль</value>
+    <value>Призначення з розміром 1 для веб-режиму повинно мати або електронну пошту, або пароль</value>
   </data>
   <data name="PL0061_DuplicatePasswordWithQuantity1" xml:space="preserve">
-    <value>Пароль не унікальний. Пароль за призначенням для веб-режиму з кількістю 1 повинен бути унікальним</value>
+    <value>Пароль не є унікальним. Пароль за призначенням для веб-режиму з кількістю 1 повинен бути унікальним</value>
   </data>
   <data name="PL0062_WebModeOnlyForInterviewer" xml:space="preserve">
-    <value>Всі завдання для веб-інтерв'ю повинні бути зроблені інтерв'юеру</value>
+    <value>Всі завдання для веб-інтерв'ю повинні бути надані інтерв'юеру</value>
   </data>
   <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
-    <value>Відповідь на питання з іменем змінної {0} не може бути попередньо завантажена, оскільки вона не підтримується. Зверніться до наступної статті підтримки https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type, щоб дізнатися більше про те, що можна попередньо завантажити в поточній версії.</value>
+    <value>Відповідь на питання зі змінною з іменем {0} не може бути попередньо завантажена, оскільки вона має непідтримуваний тип. Зверніться до наступної статті підтримки https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type для отримання детальної інформації про те, що можна попередньо завантажити у поточній версії.</value>
   </data>
 </root>

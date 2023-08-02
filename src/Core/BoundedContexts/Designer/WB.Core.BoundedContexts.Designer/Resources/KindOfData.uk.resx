@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="adm" xml:space="preserve">
-    <value>Дані адміністративного обліку [adm]</value>
+    <value>Дані адміністративного обліку [adm].</value>
   </data>
   <data name="agg" xml:space="preserve">
     <value>Агреговані дані [agg]</value>
   </data>
   <data name="cen" xml:space="preserve">
-    <value>Дані перепису/перерахування [cen]</value>
+    <value>Дані перепису/підрахунку населення [cen].</value>
   </data>
   <data name="cli" xml:space="preserve">
     <value>Клінічні дані [cli]</value>
@@ -136,10 +136,10 @@
     <value>Дані спостережень/рейтинги [obs]</value>
   </data>
   <data name="pro" xml:space="preserve">
-    <value>Дані, створені процесом [pro]</value>
+    <value>Дані, отримані в процесі [pro]</value>
   </data>
   <data name="ssd" xml:space="preserve">
-    <value>Вибіркові дані опитування [ssd]</value>
+    <value>Дані вибіркового опитування [ssd]</value>
   </data>
   <data name="tbd" xml:space="preserve">
     <value>Щоденники бюджету часу [tbd]</value>

@@ -121,85 +121,87 @@
     <value>Розширений режим завантаження даних</value>
   </data>
   <data name="AdvancedModeDescription" xml:space="preserve">
-    <value>Для того, щоб попередньо завантажити дані в більшу кількість розділів і змінних, ви можете підготувати набір .tab файлів, які відповідають структурі вашої анкети і помістити в .zip архів. Будь ласка, використовуйте архів шаблонів нижче. Ви можете розмістити тільки ті файли і стовпці, які ви хочете завантажити. Будь-які стовпці, залишені відсутніми або з заголовками, що не відповідають існуючій змінній в анкеті, будуть проігноровані.</value>
+    <value>Для того, щоб попередньо завантажити дані до більшої кількості розділів і змінних, ви можете підготувати набір .tab файлів, які відповідають структурі вашої анкети, і помістити їх в .zip архів. Будь ласка, використовуйте архів шаблону нижче. Ви можете завантажити лише ті файли та колонки, які бажаєте. Будь-які стовпці, які будуть відсутні або з назвами, що не відповідають існуючим змінним в опитувальнику, будуть проігноровані.</value>
   </data>
   <data name="All" xml:space="preserve">
-    <value>Увесь</value>
+    <value>Усе.</value>
   </data>
   <data name="AreYouSureYouWantToDeleteFormat" xml:space="preserve">
-    <value>Ви дійсно хочете видалити цей файл ?</value>
+    <value>Ви впевнені, що хочете видалити цей файл ?</value>
   </data>
   <data name="AssignedToMultipleEnumerators" xml:space="preserve">
-    <value>Призначається {0} інтерв'юерам</value>
+    <value>Призначено {0} інтерв'юерам</value>
   </data>
   <data name="AssignedToMultipleSupervisors" xml:space="preserve">
-    <value>Призначається до {0} керівників</value>
+    <value>Призначено {0} супервайзерам</value>
   </data>
   <data name="AssignedToSingleEnumerator" xml:space="preserve">
-    <value>Призначається 1 інтерв'юеру</value>
+    <value>Закріплено за 1 інтерв'юером</value>
   </data>
   <data name="AssignedToSingleSupervisor" xml:space="preserve">
-    <value>Призначається 1 науковому керівнику</value>
+    <value>Закріплено за 1 супервайзером</value>
   </data>
   <data name="AssignmentsAreNotCreated" xml:space="preserve">
-    <value>Призначення не створювалися</value>
+    <value>Не було створено жодного завдання</value>
   </data>
   <data name="BackToImport" xml:space="preserve">
-    <value>Назад до імпорту</value>
+    <value>Повернутися до імпорту</value>
   </data>
   <data name="BatchColumnsTitle" xml:space="preserve">
-    <value>За бажанням можна вказати наступні колонки в основному файлі рівня інтерв'ю:</value>
+    <value>За бажанням ви можете вказати наступні стовпці в основному файлі рівня інтерв'ю:</value>
   </data>
   <data name="BatchDescription" xml:space="preserve">
-    <value>Завантажте zip-архів з одним або декількома файлами, розділеними вкладками, що відповідають основному рівню інтерв'ю та підлеглим спискам. Дозволяє попередньо завантажувати змінні на будь-якому рівні інтерв'ю.&lt;br/&gt;
-Усі файли даних повинні містити змінні interview__id з унікальним рядком або числовим ідентифікатором інтерв'ю. Зв'язки у списках та вкладених списках створюються так само, як і в експортованих даних.&lt;br/&gt;
+    <value>Завантажте zip-архів з одним або кількома файлами, розділеними на вкладки, що відповідають головному рівню інтерв'ю та підпорядкованим реєстрам. Дозволяє попередньо завантажувати змінні на будь-якому рівні інтерв'ю.&lt;br/&gt;
+Усі файли даних повинні містити змінну interview__id з унікальним рядковим або числовим ідентифікатором інтерв'ю. Зв'язки всередині списків та вкладених списків встановлюються так само, як і в експортованих даних.&lt;br/&gt;§1§Зв'язки всередині списків та вкладених списків встановлюються так само, як і в експортованих даних.
 </value>
   </data>
   <data name="BatchFileVerificationFailed" xml:space="preserve">
     <value>Не вдалося перевірити завантажений файл</value>
   </data>
   <data name="BatchTitle" xml:space="preserve">
-    <value>Ідентифікація та збір даних (архів)</value>
+    <value>Виявлення та збір даних (архів)</value>
   </data>
   <data name="BatchUpload_Title" xml:space="preserve">
     <value>Пакетне завантаження</value>
   </data>
   <data name="BreadCrumbs_CreatingMultipleInterviews" xml:space="preserve">
-    <value>Створення кількох призначень</value>
+    <value>створення декількох призначень</value>
   </data>
   <data name="BrowseTeams" xml:space="preserve">
-    <value>Перегляд команд</value>
+    <value>Переглянути команди</value>
   </data>
   <data name="Cell" xml:space="preserve">
-    <value>Клітина</value>
+    <value>Cell</value>
   </data>
   <data name="Code" xml:space="preserve">
     <value>Код</value>
   </data>
   <data name="Column" xml:space="preserve">
-    <value>Стовпець</value>
+    <value>Колонка</value>
   </data>
   <data name="ColumnsDescription" xml:space="preserve">
-    <value>&lt;b&gt;_responsible&lt;/b&gt; - ім'я користувача штаб-квартири, супервайзера або інтерв'юера, який буде відповідати за завдання;&lt;br/&gt;
-&lt;b&gt;_quantity&lt;/b&gt; - дієздатність завдання;&lt;br/&gt;§1&lt;b&gt;§_email&lt;/b&gt; - електронна пошта респондента (тільки для веб-інтерв'ю);&lt;br/&gt;§2&lt;b&gt;§_password&lt;/b&gt; - пароль для початку співбесіди (тільки для веб-інтерв'ю);&lt;br/&gt;
-&lt;b&gt;_webmode&lt;/b&gt; - режим для призначення (1 для CAWI, 0 або бланк для CAPI);&lt;br/&gt;
-&lt;b&gt;_record_audio&lt;/b&gt; - аудіозапис включена для інтерв'ю (1 - включено, 0 - відключено, порожнє - отримати це значення з анкети);&lt;br/&gt;
-&lt;b&gt;_comment&lt;/b&gt; - коментарі до виконання завдання</value>
+    <value>&lt;b&gt;_responsible&lt;/b&gt; - ім'я користувача штабу, супервайзера або інтерв'юера, який відповідатиме за завдання;&lt;br/&gt;
+&lt;b&gt;_quantity&lt;/b&gt; - обсяг завдання;&lt;br/&gt;
+&lt;b&gt;_email&lt;/b&gt; - електронна пошта респондента (тільки для веб-інтерв'ю);&lt;br/&gt;
+&lt;b&gt;_password&lt;/b&gt; - пароль для початку інтерв'ю (тільки для веб-інтерв'ю);&lt;br/&gt;
+&lt;b&gt;_webmode&lt;/b&gt; - режим для завдання (1 для CAWI, 0 або пусте для CAPI);&lt;br/&gt;
+&lt;b&gt;_record_audio&lt;/b&gt; - чи ввімкнено аудіозапис для інтерв'ю (1 - ввімкнено, 0 - вимкнено, пусте - отримати це значення з анкети);&lt;br/&gt;
+&lt;b&gt;_comment&lt;/b&gt; - коментарі до завдання</value>
   </data>
   <data name="CreateAssignments" xml:space="preserve">
-    <value>Створення збірок</value>
+    <value>Створюйте завдання</value>
   </data>
   <data name="CreateInterviews" xml:space="preserve">
     <value>Створюйте інтерв'ю</value>
   </data>
   <data name="CreateSample" xml:space="preserve">
-    <value>Створюйте інтерв'ю на основі цих даних</value>
+    <value>Створіть інтерв'ю на основі цих даних</value>
   </data>
   <data name="CreateUsers" xml:space="preserve">
     <value>Створення користувачів</value>
   </data>
   <data name="CreatingMultipleAssignments" xml:space="preserve">
-    <value>Створення кількох призначень</value>
+    <value>Створення декількох призначень</value>
   </data>
   <data name="CreatingMultipleInterviews" xml:space="preserve">
     <value>Створення декількох інтерв'ю</value>
@@ -214,13 +216,13 @@
     <value>Знайдено дані для {0} інтерв'ю</value>
   </data>
   <data name="DataForSingleAssignmentFound" xml:space="preserve">
-    <value>Знайдено дані для 1 збірки</value>
+    <value>Знайдено дані для 1 завдання</value>
   </data>
   <data name="DataForSingleInterviewFound" xml:space="preserve">
-    <value>Знайдено дані за 1 інтерв'ю</value>
+    <value>Знайдено дані для 1 інтерв'ю</value>
   </data>
   <data name="DataIsValid" xml:space="preserve">
-    <value>Дані дійсні</value>
+    <value>Дані є дійсними</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Видалити</value>
@@ -229,10 +231,10 @@
     <value>Деталі</value>
   </data>
   <data name="DownloadDescListRequiredPreffiledData" xml:space="preserve">
-    <value>Змінні, позначені як ідентифіковані в конструкторі. Завантажити</value>
+    <value>Змінні, позначені як ідентифікатори в Дизайнері. Завантажте файл</value>
   </data>
   <data name="DownloadInvalidAssignments" xml:space="preserve">
-    <value>Завантаження недійсних призначень</value>
+    <value>Завантажити недійсні завдання</value>
   </data>
   <data name="DownloadInvalidInterviews" xml:space="preserve">
     <value>Завантажити недійсні інтерв'ю</value>
@@ -247,10 +249,10 @@
     <value>Завантажити .zip шаблон для цієї анкети</value>
   </data>
   <data name="EmptySupervisorDescription" xml:space="preserve">
-    <value>Якщо імена користувачів не вказані в стовпці "_responsible", вам потрібно буде призначити супервайзера для всіх призначень на подальшому кроці.</value>
+    <value>Якщо імена користувачів не вказані в колонці "_відповідальний", вам потрібно буде призначити керівника для всіх завдань на наступному кроці.</value>
   </data>
   <data name="EstimatedTime" xml:space="preserve">
-    <value>Розрахунковий час</value>
+    <value>Орієнтовний час</value>
   </data>
   <data name="File" xml:space="preserve">
     <value>Файл</value>
@@ -259,7 +261,7 @@
     <value>Ім'я файлу</value>
   </data>
   <data name="FileNotParsed" xml:space="preserve">
-    <value>Файл не проаналізовано. Дозволені лише файли з розділювальними знаками табуляції.</value>
+    <value>Файл не було розібрано. Допускаються лише файли, розділені табуляцією.</value>
   </data>
   <data name="FileSize" xml:space="preserve">
     <value>Розмір файлу</value>
@@ -268,16 +270,16 @@
     <value>Розмір файлу не може перевищувати 300 МБ.</value>
   </data>
   <data name="FileTypeDescription" xml:space="preserve">
-    <value>Зберегти файл у кодуванні UTF8 для підтримки текстів для певної мови.</value>
+    <value>Збережіть файл у кодуванні UTF8 для текстів, що підтримують певні мови.</value>
   </data>
   <data name="Finished" xml:space="preserve">
-    <value>Закінчили</value>
+    <value>Готово.</value>
   </data>
   <data name="FinishedWithError" xml:space="preserve">
-    <value>Завершено з помилками</value>
+    <value>Завершено з помилкою (помилками)</value>
   </data>
   <data name="FinishedWithErrorMessage" xml:space="preserve">
-    <value>Завершено з помилками. Причина:</value>
+    <value>Завершено з помилкою(ами). Причина:</value>
   </data>
   <data name="FormatNotSupported" xml:space="preserve">
     <value>Формат файлу не підтримується. Дані всередині файлу будуть проігноровані</value>
@@ -286,22 +288,22 @@
     <value>Приховані питання</value>
   </data>
   <data name="HideListPrefilledData" xml:space="preserve">
-    <value>Приховати список обов'язкових ідентифікаційних даних</value>
+    <value>Приховати список необхідних ідентифікаційних даних</value>
   </data>
   <data name="IdentifyingQuestions" xml:space="preserve">
-    <value>виявлення питань</value>
+    <value>Визначальні питання</value>
   </data>
   <data name="Import_Verification_1_AssignmentVerified" xml:space="preserve">
-    <value>1 завдання успішно перевірено</value>
+    <value>1 завдання перевірено успішно</value>
   </data>
   <data name="Import_Verification_1_Error" xml:space="preserve">
     <value>1 помилка</value>
   </data>
   <data name="Import_Verification_AssignmentsVerified" xml:space="preserve">
-    <value>{{count}} Завдання успішно перевірено</value>
+    <value>{{count}} призначення перевірено успішно</value>
   </data>
   <data name="Import_Verification_Errors" xml:space="preserve">
-    <value>Помилки {{count}}</value>
+    <value>{{count}} помилки</value>
   </data>
   <data name="Import_VerificationOfAssignmentData" xml:space="preserve">
     <value>Перевірка даних про призначення</value>
@@ -313,13 +315,13 @@
     <value>Перевірка файлу даних</value>
   </data>
   <data name="Import_VerificationOfDataFile_Progress" xml:space="preserve">
-    <value>Крок {{verifiedCount}} з {{totalCount}}</value>
+    <value>крок {{verifiedCount}} від {{totalCount}}</value>
   </data>
   <data name="Import_VerificationOfDataFile_Succeeded" xml:space="preserve">
     <value>Перевірка файлу даних пройшла успішно</value>
   </data>
   <data name="ImportAssignments_PageTitle" xml:space="preserve">
-    <value>Створення декількох збірок за допомогою пакетного завантаження</value>
+    <value>Створення кількох призначень за допомогою пакетного завантаження</value>
   </data>
   <data name="ImportAssignmentsFor" xml:space="preserve">
     <value>Імпорт призначень для {{title}}</value>
@@ -331,16 +333,16 @@
     <value>Імпорт</value>
   </data>
   <data name="ImportInProgress" xml:space="preserve">
-    <value>Запущено інший процес імпорту призначень. Одночасно дозволяється імпортувати лише одне призначення. Дочекайтеся завершення процесу та завантажте новий зразок файлу. Перейдіть за посиланням, щоб отримати більш детальну інформацію про хід іншого процесу імпортування.</value>
+    <value>Запущено інший процес імпортування призначення. Одночасно дозволено лише один процес імпорту завдань. Зачекайте, поки процес завершиться, і завантажте новий файл-зразок. Якщо ви хочете отримати докладнішу інформацію про хід іншого процесу імпорту, перейдіть за посиланням.</value>
   </data>
   <data name="ImportInterviews_ChooseFile" xml:space="preserve">
     <value>Виберіть файл для завантаження</value>
   </data>
   <data name="ImportInterviews_Done" xml:space="preserve">
-    <value>Зробити:</value>
+    <value>Зроблено.:</value>
   </data>
   <data name="ImportInterviews_NoneFailed" xml:space="preserve">
-    <value>Жоден з них не зазнав невдачі</value>
+    <value>Жоден не провалився.</value>
   </data>
   <data name="ImportInterviews_PageTitle" xml:space="preserve">
     <value>Створення декількох інтерв'ю з пакетним завантаженням</value>
@@ -355,16 +357,16 @@
     <value>Імпорт інтерв'ю для {0}</value>
   </data>
   <data name="ImportProgressFormat" xml:space="preserve">
-    <value>{{createdCount}} з {{totalCount}}</value>
+      <value>{{createdCount}} з {{totalCount}}</value>
   </data>
   <data name="ImportSample" xml:space="preserve">
     <value>Зразок імпорту</value>
   </data>
   <data name="ImportStatus" xml:space="preserve">
-    <value>Стан імпорту</value>
+    <value>Статус імпорту</value>
   </data>
   <data name="InterviewsAreNotCreated" xml:space="preserve">
-    <value>Інтерв'ю не було створено</value>
+    <value>Не було створено жодного інтерв'ю</value>
   </data>
   <data name="InterviewsImport_ImportingProgressPageTitle" xml:space="preserve">
     <value>Імпорт призначень</value>
@@ -373,13 +375,13 @@
     <value>знаходиться в процесі перевірки, перевірено</value>
   </data>
   <data name="IsInvalid" xml:space="preserve">
-    <value>є недійсним. Будь ласка, виправте помилки нижче та завантажте ще раз.</value>
+    <value>є недійсним. Будь ласка, виправте помилку(и) нижче і завантажте знову.</value>
   </data>
   <data name="LastUpdateDate" xml:space="preserve">
     <value>Остання дата оновлення</value>
   </data>
   <data name="ManualModeDescription" xml:space="preserve">
-    <value>Ви можете створювати окремі завдання, ввівши всі необхідні дані в {{url}}</value>
+    <value>Ви можете створювати індивідуальні завдання, ввівши всі необхідні дані в {{url}}.</value>
   </data>
   <data name="ManualModeLinkTitle" xml:space="preserve">
     <value>ручний режим</value>
@@ -388,16 +390,16 @@
     <value>Повідомлення</value>
   </data>
   <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve">
-    <value>Не вдалося створити {{count}} призначення</value>
+    <value>{{count}} не вдалося створити призначення</value>
   </data>
   <data name="MultipleAssignmentsCreated" xml:space="preserve">
-    <value>Створено {{count}} завдань</value>
+    <value>{{count}} створено призначення</value>
   </data>
   <data name="MultipleErrorsWereFound" xml:space="preserve">
-    <value>Знайдено помилок {{count}}</value>
+    <value>{{count}} знайдено помилки</value>
   </data>
   <data name="MultipleInterviewFailedToBeCreated" xml:space="preserve">
-    <value>{0} інтерв'ю так і не вдалося створити</value>
+    <value>{0} інтерв'ю не вдалося створити</value>
   </data>
   <data name="MultipleInterviewsCreated" xml:space="preserve">
     <value>{0} створено інтерв'ю</value>
@@ -412,34 +414,34 @@
     <value>Будь ласка, зачекайте, файл</value>
   </data>
   <data name="PrefilledQuestionsRequired" xml:space="preserve">
-    <value>Файл не містить стовпців для необхідних ідентифікаційних питань: &lt;br/&gt; &lt;br/&gt; &lt;b&gt;{0}&lt;/b&gt;</value>
+    <value>Файл не містить стовпця(ів) для необхідних ідентифікаційних запитань: &lt;br/&gt; &lt;br/&gt; &lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
   <data name="PrefilledRequiredData" xml:space="preserve">
-    <value>Обов'язкові ідентифікаційні дані</value>
+    <value>Необхідні ідентифікаційні дані</value>
   </data>
   <data name="Prerequisite_FileOpen" xml:space="preserve">
-    <value>Завантажений файл не можна відкрити. Будь ласка, перевірте, чи він у правильному форматі.</value>
+    <value>Завантажений файл не відкривається. Будь ласка, перевірте, чи він має правильний формат.</value>
   </data>
   <data name="Prerequisite_Questionnaire" xml:space="preserve">
-    <value>Анкету не можна використовувати для попереднього завантаження</value>
+    <value>Анкета не може бути використана для попереднього завантаження</value>
   </data>
   <data name="Prerequisite_TabOrTxtFile" xml:space="preserve">
-    <value>Для завантаження дозволено лише файли .tab і .txt.</value>
+    <value>До завантаження допускаються лише файли у форматі .tab та .txt.</value>
   </data>
   <data name="Prerequisite_UnsupportedFiles" xml:space="preserve">
-    <value>Не підтримуються такі файли: {0}.</value>
+    <value>Наступні файли не підтримуються: {0}.</value>
   </data>
   <data name="Prerequisite_ZipFile" xml:space="preserve">
-    <value>До завантаження дозволено лише .zip файли.</value>
+    <value>До завантаження допускаються лише файли у форматі .zip.</value>
   </data>
   <data name="Processing" xml:space="preserve">
-    <value>Обробки...</value>
+    <value>Обробка...</value>
   </data>
   <data name="ReadyForUserCreation" xml:space="preserve">
     <value>Готовий до створення користувачем</value>
   </data>
   <data name="ReadyForValidation" xml:space="preserve">
-    <value>Готовий до перевірки</value>
+    <value>Готовність до валідації</value>
   </data>
   <data name="RecordsCount" xml:space="preserve">
     <value>Кількість записів</value>
@@ -448,19 +450,19 @@
     <value>Оновити</value>
   </data>
   <data name="RequiredField" xml:space="preserve">
-    <value>Це поле є обов'язковим</value>
+    <value>Це поле є обов'язковим для заповнення</value>
   </data>
   <data name="ResponsibleSupervisorWillBeAssigned" xml:space="preserve">
     <value>Відповідальний користувач буде призначений автоматично</value>
   </data>
   <data name="RosterSizeQuestions" xml:space="preserve">
-    <value>Запитання щодо джерел списку</value>
+    <value>Запитання до реєстру джерел</value>
   </data>
   <data name="Row" xml:space="preserve">
-    <value>Рядок</value>
+    <value>Гребіть!</value>
   </data>
   <data name="RunningInterviewImportProcess" xml:space="preserve">
-    <value>Перехід до запущеного процесу імпорту призначення</value>
+    <value>Перейдіть до запуску процесу імпорту призначень</value>
   </data>
   <data name="SampleCreationCompleted" xml:space="preserve">
     <value>Створення інтерв'ю успішно завершено.</value>
@@ -469,34 +471,34 @@
     <value>Результат створення інтерв'ю</value>
   </data>
   <data name="SampleImportWithErrors" xml:space="preserve">
-    <value>Імпорт співбесіди завершено з помилками</value>
+    <value>Імпорт інтерв'ю виконано з помилками</value>
   </data>
   <data name="SampleSuccess" xml:space="preserve">
-    <value>Імпорт співбесіди успішно завершено</value>
+    <value>Імпорт інтерв'ю успішно завершено</value>
   </data>
   <data name="Select_Responsible" xml:space="preserve">
-    <value>Виберіть відповідальний за замовчуванням (обов'язково)</value>
+    <value>Виберіть відповідального за замовчуванням (обов'язково)</value>
   </data>
   <data name="Select_Responsible_Description" xml:space="preserve">
-    <value>Якщо жоден відповідальний не призначений у пакетному файлі, використовуйте цей обліковий запис штаб-квартири/керівника/інтерв'юера:</value>
+    <value>Якщо у пакетному файлі не призначено відповідального, використовуйте цей обліковий запис штабу/супервайзера/інтерв'юера:</value>
   </data>
   <data name="SelectResponsibleToAssign" xml:space="preserve">
-    <value>Виберіть відповідального за дану партію</value>
+    <value>Виберіть відповідального за цю партію</value>
   </data>
   <data name="SimpleColumnsTitle" xml:space="preserve">
-    <value>За бажанням можна вказати такі стовпці::</value>
+    <value>За бажанням можна вказати наступні стовпці:</value>
   </data>
   <data name="SimpleDescription" xml:space="preserve">
-    <value>Вкладка завантаження розділена файлом зі значеннями для питань лише на рівні інтерв'ю. Включіть значення для визначення питань та інших питань на основному рівні інтерв'ю. Не дозволяє попереднє завантаження значень всередині списків.</value>
+    <value>Завантажте окремий файл, розділений вкладками, зі значеннями лише для запитань на рівні інтерв'ю. Включіть значення для ідентифікаційних запитань та інших запитань на рівні основного інтерв'ю. Не дозволяє попередньо завантажувати значення всередині списків.</value>
   </data>
   <data name="SimpleTitle" xml:space="preserve">
-    <value>Лише ідентифікаційні дані</value>
+    <value>Тільки ідентифікаційні дані</value>
   </data>
   <data name="SingleAssignmentCreated" xml:space="preserve">
     <value>Створено 1 завдання</value>
   </data>
   <data name="SingleAssignmentFailedToBeCreated" xml:space="preserve">
-    <value>1 завдання не створено</value>
+    <value>1 завдання не вдалося створити</value>
   </data>
   <data name="SingleErrorFound" xml:space="preserve">
     <value>Знайдено 1 помилку</value>
@@ -505,13 +507,13 @@
     <value>Створено 1 інтерв'ю</value>
   </data>
   <data name="SingleInterviewFailedToBeCreated" xml:space="preserve">
-    <value>1 інтерв'ю створити не вдалося</value>
+    <value>1 інтерв'ю не вдалося створити</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Статус</value>
   </data>
   <data name="SupervisorMustBeSelected" xml:space="preserve">
-    <value>Керівник або інтерв'юер повинні бути обрані</value>
+    <value>Необхідно обрати керівника або інтерв'юера</value>
   </data>
   <data name="Upload" xml:space="preserve">
     <value>Завантажити</value>
@@ -521,37 +523,37 @@
   </data>
   <data name="UploadDescription" xml:space="preserve">
     <value>Завантажте файл з ідентифікаційними даними для створення нових завдань.
-Вкажіть імена користувачів для штаб-квартири, керівників або інтерв'юерів для виконання пакетних завдань.</value>
+Вкажіть імена користувачів для штаб-квартири, супервайзерів або інтерв'юерів для створення пакетних завдань.</value>
   </data>
   <data name="Uploaded" xml:space="preserve">
-    <value>Завантажені</value>
+    <value>Завантажено</value>
   </data>
   <data name="UploadNewData" xml:space="preserve">
-    <value>Завантаження нових даних</value>
+    <value>Завантажити нові дані</value>
   </data>
   <data name="UploadNewFile" xml:space="preserve">
-    <value>Передавання нового файлу</value>
+    <value>Завантажити новий файл</value>
   </data>
   <data name="UploadSample" xml:space="preserve">
     <value>Завантажити зразок</value>
   </data>
   <data name="UploadSampleDescription" xml:space="preserve">
-    <value>Щоб завантажити зразок для інтерв'ю, будь ласка, підготуйте файл (розміром до 300 МБ) зі значеннями, розділеними табуляцією (файл .tab), що відповідає шаблону нижче, що містить значення тих змінних з вашої анкети, які були позначені як ідентифікаційні.</value>
+    <value>Для завантаження вибірки для інтерв'ю, будь ласка, підготуйте файл (розміром до 300 МБ) зі значеннями, розділеними табуляцією (файл .tab), відповідно до наведеного нижче шаблону, що містить значення тих змінних з Вашої анкети, які були позначені як ідентифікаційні..</value>
   </data>
   <data name="UploadTabFile" xml:space="preserve">
-    <value>Завантажити файл .tab</value>
+    <value>Завантажте файл .tab</value>
   </data>
   <data name="UploadUsers" xml:space="preserve">
     <value>Пакетне завантаження користувача</value>
   </data>
   <data name="UploadUsers_NotAllowedExtension" xml:space="preserve">
-    <value>До завантаження допускаються лише файли з розширеннями {0} та {1}.</value>
+    <value>До завантаження допускаються лише файли з розширеннями {0} та {1}..</value>
   </data>
   <data name="UploadUsers_Title" xml:space="preserve">
     <value>Список файлів з попередньо завантаженими користувачами</value>
   </data>
   <data name="UploadUsersDescription" xml:space="preserve">
-    <value>Підготуйте файл зі значеннями, розділеними символами табуляції (файл .tab), що відповідає наведеному нижче шаблону. Стовпці, позначені (*), обов'язкові для заповнення. У стовпці "Роль" дозволено лише "Керівник" або "Інтерв'юер".</value>
+    <value>Підготуйте файл зі значеннями, розділеними табуляцією (.tab файл) відповідно до шаблону нижче. Стовпчики, позначені (*), є обов'язковими для заповнення. У колонці "роль" допускаються лише "Керівник" або "Інтерв'юер.</value>
   </data>
   <data name="UploadZipFile" xml:space="preserve">
     <value>Завантажити .zip файл</value>
@@ -560,34 +562,34 @@
     <value>Пакетне завантаження користувача</value>
   </data>
   <data name="UserPreloadingProcessIsMissing" xml:space="preserve">
-    <value>Процес попереднього завантаження користувача відсутній</value>
+    <value>Відсутній процес попереднього завантаження користувача</value>
   </data>
   <data name="UsersHaveBeenCreated" xml:space="preserve">
-    <value>Створено користувача (користувачів)</value>
+    <value>створено користувача(ів)</value>
   </data>
   <data name="Validated" xml:space="preserve">
-    <value>Перевірені</value>
+    <value>Підтверджено</value>
   </data>
   <data name="Validating" xml:space="preserve">
     <value>Перевірка</value>
   </data>
   <data name="ValidationFinishedWithError" xml:space="preserve">
-    <value>Перевірені</value>
+    <value>Підтверджено</value>
   </data>
   <data name="VerificationCompleted" xml:space="preserve">
-    <value>Верифікацію завершено</value>
+    <value>Перевірку завершено</value>
   </data>
   <data name="Verify" xml:space="preserve">
-    <value>Перевірити</value>
+    <value>Підтвердити</value>
   </data>
   <data name="VerifyPanelData" xml:space="preserve">
     <value>Перевірка даних панелі</value>
   </data>
   <data name="VerifySampleData" xml:space="preserve">
-    <value>Перевірка даних</value>
+    <value>Перевірити дані</value>
   </data>
   <data name="ViewListPrefilledData" xml:space="preserve">
-    <value>Перегляд списку обов'язкових ідентифікаційних даних</value>
+    <value>Переглянути список необхідних ідентифікаційних даних</value>
   </data>
   <data name="ViewListPreloadedData" xml:space="preserve">
     <value>Перегляд списку попередньо завантажених значень</value>

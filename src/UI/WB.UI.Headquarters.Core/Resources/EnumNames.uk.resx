@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="InterviewerFacet_None" xml:space="preserve">
-    <value>Ніхто</value>
+    <value>Ні.</value>
   </data>
   <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
     <value>Затверджено штаб-квартирою</value>
   </data>
   <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
-    <value>Затверджено науковим керівником</value>
+    <value>Затверджено керівником</value>
   </data>
   <data name="InterviewStatus_Completed" xml:space="preserve">
     <value>Завершено</value>
@@ -142,7 +142,7 @@
     <value>Відхилено</value>
   </data>
   <data name="MenuItem_Started" xml:space="preserve">
-    <value>Почав</value>
+    <value>Розпочато.</value>
   </data>
   <data name="UserRoles_Administrator" xml:space="preserve">
     <value>Адміністратор</value>
@@ -151,34 +151,34 @@
     <value>ApiUser</value>
   </data>
   <data name="UserRoles_Headquarter" xml:space="preserve">
-    <value>Штаб</value>
+    <value>Штаб-квартира</value>
   </data>
   <data name="UserRoles_Interviewer" xml:space="preserve">
-    <value>Інтерв'юера</value>
+    <value>Інтерв'юер</value>
   </data>
   <data name="UserRoles_Observer" xml:space="preserve">
     <value>Спостерігач</value>
   </data>
   <data name="UserRoles_Supervisor" xml:space="preserve">
-    <value>Керівник</value>
+    <value>Наглядач</value>
   </data>
   <data name="WebInterviewUserMessages_CompleteButton" xml:space="preserve">
-    <value>Повний</value>
+    <value>Завершено</value>
   </data>
   <data name="WebInterviewUserMessages_CompleteNoteToSupervisor" xml:space="preserve">
-    <value>Примітка для наукового керівника</value>
+    <value>Примітка для керівника</value>
   </data>
   <data name="WebInterviewUserMessages_FinishInterview" xml:space="preserve">
-    <value>Завершення тексту</value>
+    <value>Фінішний текст</value>
   </data>
   <data name="WebInterviewUserMessages_Invitation" xml:space="preserve">
-    <value>Вітальне запрошення</value>
+    <value>Привітання Запрошення</value>
   </data>
   <data name="WebInterviewUserMessages_LinkInvitation" xml:space="preserve">
     <value>Запрошення</value>
   </data>
   <data name="WebInterviewUserMessages_LinkWelcome" xml:space="preserve">
-    <value>Вітальний заголовок</value>
+    <value>Привітальний заголовок</value>
   </data>
   <data name="WebInterviewUserMessages_ResumeButton" xml:space="preserve">
     <value>Резюме</value>
@@ -190,15 +190,15 @@
     <value>Заголовок резюме</value>
   </data>
   <data name="WebInterviewUserMessages_StartNewButton" xml:space="preserve">
-    <value>Почати нову співбесіду</value>
+    <value>Почніть нове інтерв'ю</value>
   </data>
   <data name="WebInterviewUserMessages_SurveyName" xml:space="preserve">
     <value>Назва опитування</value>
   </data>
   <data name="WebInterviewUserMessages_WebSurveyHeader" xml:space="preserve">
-    <value>Заголовок завершення</value>
+    <value>Фінішний заголовок</value>
   </data>
   <data name="WebInterviewUserMessages_WelcomeText" xml:space="preserve">
-    <value>Вітальний заголовок</value>
+    <value>Привітальний заголовок</value>
   </data>
 </root>

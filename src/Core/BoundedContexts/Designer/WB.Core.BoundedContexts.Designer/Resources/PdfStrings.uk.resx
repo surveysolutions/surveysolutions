@@ -118,61 +118,61 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Appendix_Conditions" xml:space="preserve">
-    <value>Додаток {0} {1} сприятливих умов</value>
+    <value>Додаток {0} {1} сприятливі умови</value>
   </data>
   <data name="Appendix_Instructions" xml:space="preserve">
     <value>Додаток {0} {1} інструкції</value>
   </data>
   <data name="Appendix_OptionFilters" xml:space="preserve">
-    <value>Додаток {0} {1} категорій фільтри</value>
+    <value>Додаток {0} {1} фільтри категорій</value>
   </data>
   <data name="Appendix_Options" xml:space="preserve">
-    <value>Додатки {0} {1} категорії</value>
+    <value>Додаток {0} {1} категорії</value>
   </data>
   <data name="Appendix_SpecialValues" xml:space="preserve">
     <value>Додаток {0} {1} спеціальні значення</value>
   </data>
   <data name="Appendix_Validations" xml:space="preserve">
-    <value>Додаток {0} {1} умови валідації та повідомлення</value>
+    <value>Додаток {0} {1} Умови перевірки та повідомлення</value>
   </data>
   <data name="Appendix_Variables" xml:space="preserve">
     <value>Додаток {0} {1} змінні</value>
   </data>
   <data name="AppendixLink" xml:space="preserve">
-    <value>І {0} інші символи [{1}]</value>
+    <value>І {0} інші символи [{1}].</value>
   </data>
   <data name="CreatedBy" xml:space="preserve">
     <value>Анкета створена {0}</value>
   </data>
   <data name="EnablementCondition" xml:space="preserve">
-    <value>Умова включення:</value>
+    <value>Умова ввімкнення:</value>
   </data>
   <data name="GeneratedBy" xml:space="preserve">
-    <value>Створено {0}</value>
+    <value>Згенеровано {0}</value>
   </data>
   <data name="GeographyInputMode" xml:space="preserve">
     <value>Режим введення</value>
   </data>
   <data name="GeographyType" xml:space="preserve">
-    <value>Тип географії</value>
+    <value>Географічний тип</value>
   </data>
   <data name="GeometryOverlapDetection" xml:space="preserve">
     <value>Виявлення перекриття</value>
   </data>
   <data name="InRosterSourceOfCategories" xml:space="preserve">
-    <value>у списку</value>
+    <value>в реєстрі</value>
   </data>
   <data name="LastEdited" xml:space="preserve">
-    <value>{0} останнє редагування {1}</value>
+    <value>{0} востаннє відредаговано {1}</value>
   </data>
   <data name="LastModifiedBy" xml:space="preserve">
-    <value>Останнє оновлення: {0}</value>
+    <value>Останнє редагування: {0}</value>
   </data>
   <data name="Legend" xml:space="preserve">
-    <value>Міф</value>
+    <value>Легенда</value>
   </data>
   <data name="MetadataAgreeToMakeThisQuestionnairePublic" xml:space="preserve">
-    <value>Погодьтеся оприлюднити цю анкету</value>
+    <value>Згоду на оприлюднення цієї анкети</value>
   </data>
   <data name="MetadataConsultants" xml:space="preserve">
     <value>Консультанти</value>
@@ -190,37 +190,37 @@
     <value>Ключові слова</value>
   </data>
   <data name="MetadataKindOfData" xml:space="preserve">
-    <value>Вид даних</value>
+    <value>Тип даних</value>
   </data>
   <data name="MetadataLanguages" xml:space="preserve">
     <value>Мови</value>
   </data>
   <data name="MetadataModeOfDataCollection" xml:space="preserve">
-    <value>Режим збору даних</value>
+    <value>Спосіб збору даних</value>
   </data>
   <data name="MetadataNotes" xml:space="preserve">
-    <value>Нотатки</value>
+    <value>Примітки</value>
   </data>
   <data name="MetadataPrimaryInvestigator" xml:space="preserve">
-    <value>Первинний інспектор</value>
+    <value>Основний слідчий</value>
   </data>
   <data name="MetadataSectionSubTitle" xml:space="preserve">
     <value>опис анкети</value>
   </data>
   <data name="MetadataSectionTitle" xml:space="preserve">
-    <value>Ідентифікаційна інформація опитування</value>
+    <value>Ідентифікаційні дані опитування</value>
   </data>
   <data name="MetadataStudyType" xml:space="preserve">
     <value>Тип навчання</value>
   </data>
   <data name="MetadataSubtitle" xml:space="preserve">
-    <value>Субтитрів</value>
+    <value>Субтитри</value>
   </data>
   <data name="MetadataTitle" xml:space="preserve">
     <value>Назва</value>
   </data>
   <data name="MetadataUnitOfAlalysis" xml:space="preserve">
-    <value>одиниця аналізу</value>
+    <value>Одиниця аналізу</value>
   </data>
   <data name="MetadataUniverse" xml:space="preserve">
     <value>Всесвіт</value>
@@ -238,40 +238,40 @@
     <value>{0} (ніколи не редагувався)</value>
   </data>
   <data name="NotShared" xml:space="preserve">
-    <value>Не надається нікому</value>
+    <value>Ні з ким не ділитися</value>
   </data>
   <data name="Off" xml:space="preserve">
     <value>ВИМКНЕНО</value>
   </data>
   <data name="On" xml:space="preserve">
-    <value>НА</value>
+    <value>УВІМКНЕНО</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>Категорії:</value>
   </data>
   <data name="OwnedBy" xml:space="preserve">
-    <value>Анкета, що належить компанії {0}</value>
+    <value>Анкета належить {0}</value>
   </data>
   <data name="PdfLegend" xml:space="preserve">
     <value>Легенда та структура інформації в цьому файлі</value>
   </data>
   <data name="QuestionInRosterSourceOfCategories" xml:space="preserve">
-    <value>Питання</value>
+    <value>Запитання</value>
   </data>
   <data name="QuestionScope_Hidden" xml:space="preserve">
-    <value>Приховані</value>
+    <value>прихований</value>
   </data>
   <data name="QuestionScope_Identifying" xml:space="preserve">
-    <value>Визначення</value>
+    <value>визначення</value>
   </data>
   <data name="QuestionScope_Supervisor" xml:space="preserve">
-    <value>Керівник</value>
+    <value>керівник</value>
   </data>
   <data name="QuestionType_Area" xml:space="preserve">
     <value>географія: </value>
   </data>
   <data name="QuestionType_Area_Multipoint" xml:space="preserve">
-    <value>Багатоточковий</value>
+    <value>багатоточковий</value>
   </data>
   <data name="QuestionType_Area_Point" xml:space="preserve">
     <value>точка</value>
@@ -280,22 +280,22 @@
     <value>багатокутник</value>
   </data>
   <data name="QuestionType_Area_Polyline" xml:space="preserve">
-    <value>Полілайн</value>
+    <value>полілінія</value>
   </data>
   <data name="QuestionType_Audio" xml:space="preserve">
-    <value>Аудіо</value>
+    <value>аудіо</value>
   </data>
   <data name="QuestionType_Barcode" xml:space="preserve">
-    <value>Штрих-код</value>
+    <value>штрих-код</value>
   </data>
   <data name="QuestionType_Cascading" xml:space="preserve">
-    <value>Каскадні</value>
+    <value>каскадний</value>
   </data>
   <data name="QuestionType_Combobox" xml:space="preserve">
-    <value>поле зі списком</value>
+    <value>комбо-бокс</value>
   </data>
   <data name="QuestionType_CurrentTime" xml:space="preserve">
-    <value>Дата: поточний час</value>
+    <value>дата: поточний час</value>
   </data>
   <data name="QuestionType_Date" xml:space="preserve">
     <value>дата</value>
@@ -307,67 +307,67 @@
     <value>GPS</value>
   </data>
   <data name="QuestionType_Integer" xml:space="preserve">
-    <value>Ціле число</value>
+    <value>ціле число</value>
   </data>
   <data name="QuestionType_Linked" xml:space="preserve">
-    <value>Пов'язаний</value>
+    <value>пов'язаний</value>
   </data>
   <data name="QuestionType_List" xml:space="preserve">
     <value>список</value>
   </data>
   <data name="QuestionType_MultiSelect" xml:space="preserve">
-    <value>Множинний вибір</value>
+    <value>мультивибір</value>
   </data>
   <data name="QuestionType_Numeric" xml:space="preserve">
-    <value>Числові:</value>
+    <value>числовий:</value>
   </data>
   <data name="QuestionType_Ordered" xml:space="preserve">
-    <value>Наказав</value>
+    <value>замовлено</value>
   </data>
   <data name="QuestionType_Picture" xml:space="preserve">
-    <value>Малюнок</value>
+    <value>картина</value>
   </data>
   <data name="QuestionType_SingleSelect" xml:space="preserve">
-    <value>одиночний вибір</value>
+    <value>однократний вибір</value>
   </data>
   <data name="QuestionType_Text" xml:space="preserve">
-    <value>Текст</value>
+    <value>текст</value>
   </data>
   <data name="QuestionType_YesNo" xml:space="preserve">
-    <value>Так/Ні</value>
+    <value>так/ні</value>
   </data>
   <data name="Roster" xml:space="preserve">
-    <value>Реєстру:</value>
+    <value>Реєстр:</value>
   </data>
   <data name="Roster_GeneretedByFixedList" xml:space="preserve">
-    <value>сформовано фіксованим списком</value>
+    <value>згенеровано за фіксованим списком</value>
   </data>
   <data name="Roster_GeneretedByQuestion" xml:space="preserve">
-    <value>походить від {0} питання {1}</value>
+    <value>згенерований {0} питанням {1}</value>
   </data>
   <data name="RosterSourceOfCategories" xml:space="preserve">
-    <value>Реєстру</value>
+    <value>Реєстр</value>
   </data>
   <data name="RosterType_List" xml:space="preserve">
     <value>список</value>
   </data>
   <data name="RosterType_Multi" xml:space="preserve">
-    <value>Множинний вибір</value>
+    <value>мультивибір</value>
   </data>
   <data name="RosterType_Numeric" xml:space="preserve">
-    <value>Числові</value>
+    <value>числовий</value>
   </data>
   <data name="Scope" xml:space="preserve">
-    <value>Область застосування: {0}</value>
+    <value>Масштаб: {0}</value>
   </data>
   <data name="SharedWith" xml:space="preserve">
-    <value>Поділився з:</value>
+    <value>Поділіться з:</value>
   </data>
   <data name="SideBarMetadataAdditionalInfo" xml:space="preserve">
     <value>Додаткова інформація</value>
   </data>
   <data name="SideBarMetadataBasicInfo" xml:space="preserve">
-    <value>Основні відомості</value>
+    <value>Основна інформація</value>
   </data>
   <data name="SideBarMetadataSurveyDataInfo" xml:space="preserve">
     <value>Інформація про дані опитування</value>
@@ -379,13 +379,13 @@
     <value>Джерело категорій:</value>
   </data>
   <data name="SpecialValues" xml:space="preserve">
-    <value>особливі цінності</value>
+    <value>Спеціальні значення</value>
   </data>
   <data name="Stat_NoQuestions" xml:space="preserve">
-    <value>Немає питань</value>
+    <value>Ніяких питань</value>
   </data>
   <data name="Stat_NoRosters" xml:space="preserve">
-    <value>Немає списків</value>
+    <value>Ніяких списків</value>
   </data>
   <data name="Stat_NoSubsections" xml:space="preserve">
     <value>Без підрозділів</value>
@@ -394,13 +394,13 @@
     <value>Питання: {0}</value>
   </data>
   <data name="Stat_QuestionsWithConditions" xml:space="preserve">
-    <value>Питання з увімкненими умовами: {0}</value>
+    <value>Питання з умовами, що дозволяють: {0}</value>
   </data>
   <data name="Stat_QuestionsWithValidation" xml:space="preserve">
-    <value>Питання з умовами валідації:{0}</value>
+    <value>Питання з умовами перевірки:{0}</value>
   </data>
   <data name="Stat_Rosters" xml:space="preserve">
-    <value>Склади: {0}</value>
+    <value>Ростери: {0}</value>
   </data>
   <data name="Stat_Sections" xml:space="preserve">
     <value>Секції: {0}</value>
@@ -418,18 +418,18 @@
     <value>Статичний текст</value>
   </data>
   <data name="TextListSourceOfCategories" xml:space="preserve">
-    <value>Запитання щодо списку тексту</value>
+    <value>Питання до текстового списку</value>
   </data>
   <data name="ValidationCondition" xml:space="preserve">
-    <value>Умова перевірки:</value>
+    <value>Умова валідації:</value>
   </data>
   <data name="ValidationMessage" xml:space="preserve">
-    <value>Повідомлення про перевірку:</value>
+    <value>Повідомлення про підтвердження:</value>
   </data>
   <data name="Variable" xml:space="preserve">
-    <value>Змінної</value>
+    <value>Змінна</value>
   </data>
   <data name="VariableExcludedFromExport" xml:space="preserve">
-    <value>Ця змінна виключена з експортованих даних</value>
+    <value>Ця змінна виключається з експортованих даних</value>
   </data>
 </root>

@@ -121,12 +121,12 @@
     <value>Введіть текст, який ви бачите вище</value>
   </data>
   <data name="InvalidCaptcha" xml:space="preserve">
-    <value>Неприпустима капча</value>
+    <value>Неправильна капча</value>
   </data>
   <data name="Required" xml:space="preserve">
     <value>Обов'язкове поле</value>
   </data>
   <data name="TryAnother" xml:space="preserve">
-    <value>Спробуйте інший</value>
+    <value>Спробуй іншу.</value>
   </data>
 </root>

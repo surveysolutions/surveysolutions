@@ -118,15 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="UserDoesNotExist" xml:space="preserve">
-    <value>Не вдалося оновити відомості про користувача, оскільки поточного користувача не існує</value>
+    <value>Не вдалося оновити інформацію про користувача, оскільки поточний користувач не існує</value>
   </data>
   <data name="UserNameIsTakenByArchivedUsersFormat" xml:space="preserve">
-    <value>Ім'я користувача "{0}" вже зайнято заархівованим користувачем. Виберіть інше ім'я користувача.</value>
+    <value>Ім'я користувача '{0}' вже зайнято заархівованим користувачем. Будь ласка, виберіть інше ім'я користувача.</value>
   </data>
   <data name="UserNameIsTakenFormat" xml:space="preserve">
-    <value>Ім'я користувача "{0}" вже зайнято. Будь ласка, виберіть інше ім'я користувача.</value>
+    <value>Ім'я користувача '{0}' вже зайнято. Будь ласка, виберіть інше ім'я користувача.</value>
   </data>
   <data name="YouCantUnarchiveInterviewerUntilSupervisorIsArchivedFormat" xml:space="preserve">
-    <value>Ви не можете розархівувати {0} інтерв'юера, поки керівник не буде розархівований</value>
+    <value>Ви не можете розархівувати інтерв'юера {0}, поки не буде розархівовано супервайзера</value>
   </data>
 </root>

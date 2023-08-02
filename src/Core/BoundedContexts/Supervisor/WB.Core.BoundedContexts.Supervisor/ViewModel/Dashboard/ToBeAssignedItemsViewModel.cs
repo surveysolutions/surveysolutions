@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 
         public string TabTitle => SupervisorDashboard.ToBeAssigned;
 
-        public override GroupStatus InterviewStatus => GroupStatus.NotStarted;
+        public override DashboardGroupType DashboardType => DashboardGroupType.InProgressInterviews;
 
         protected override IEnumerable<IDashboardItem> GetUiItems()
         {

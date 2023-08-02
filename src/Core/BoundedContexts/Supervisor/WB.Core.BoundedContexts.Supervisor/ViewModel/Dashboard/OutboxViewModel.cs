@@ -36,8 +36,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             this.Title = SupervisorDashboard.Outbox;
         }
 
-        public override GroupStatus InterviewStatus => GroupStatus.Completed;
-
+        public override DashboardGroupType DashboardType => DashboardGroupType.CompletedInterviews;
+        
         protected override IEnumerable<IDashboardItem> GetUiItems()
         {
             var subtitle = viewModelFactory.GetNew<DashboardSubTitleViewModel>();

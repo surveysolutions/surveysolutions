@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AccountBlocked" xml:space="preserve">
-    <value>Ваш обліковий запис заблоковано. Зв'язатися з адміністратором для розблокування облікового запису.</value>
+    <value>Ваш обліковий запис заблоковано. Зверніться до адміністратора для розблокування облікового запису.</value>
   </data>
   <data name="ApplicationUpdateRequired" xml:space="preserve">
     <value>Потрібне оновлення програми.</value>
@@ -127,61 +127,61 @@
     <value>Не вдалося відкрити анкету. Ваша версія {0}. Будь ласка, оновіть.</value>
   </data>
   <data name="ConfirmAccount" xml:space="preserve">
-    <value>Будь ласка, спочатку підтвердьте свій обліковий запис. Ми надіслали {0} посилання для підтвердження. Не зрозумів?</value>
+    <value>Будь ласка, спочатку підтвердіть свій обліковий запис. Ми надіслали посилання для підтвердження на {0}. Не отримали його?</value>
   </data>
   <data name="Email_required" xml:space="preserve">
-    <value>Необхідно вказати адресу електронної пошти</value>
+    <value>Обов'язкова наявність електронної пошти</value>
   </data>
   <data name="EmailOrLogin_required" xml:space="preserve">
-    <value>Логін або Email обов'язкові</value>
+    <value>Необхідно ввести логін або електронну пошту</value>
   </data>
   <data name="EmptyTranslationFile" xml:space="preserve">
     <value>Вибраний файл перекладу порожній</value>
   </data>
   <data name="EmptyUserNameOrPassword" xml:space="preserve">
-    <value>Ім'я користувача або пароль пусті.</value>
+    <value>Ім'я користувача або пароль порожні.</value>
   </data>
   <data name="FullNameMaxLengthError" xml:space="preserve">
     <value>Повне ім'я не може містити більше {1} символів</value>
   </data>
   <data name="IncorrectUserNameOrPassword" xml:space="preserve">
-    <value>Логін або пароль вказані неправильно. Спробуйте ще раз.</value>
+    <value>Логін або пароль невірні. Будь ласка, спробуйте ще раз.</value>
   </data>
   <data name="InvalidEmailAddress" xml:space="preserve">
-    <value>Недійсна електронна адреса</value>
+    <value>Невірна адреса електронної пошти</value>
   </data>
   <data name="Maintenance" xml:space="preserve">
-    <value>Зараз сервер знаходиться в режимі обслуговування. Вибачте за тимчасові незручності. Будь ласка, спробуйте пізніше.</value>
+    <value>Сервер знаходиться в режимі технічного обслуговування. Вибачте за незручності. Будь ласка, спробуйте пізніше.</value>
   </data>
   <data name="NoAccessToQuestionnaire" xml:space="preserve">
     <value>Користувач не має дозволу на доступ до запитуваної анкети.</value>
   </data>
   <data name="NoQuestionnaireIdToValidatePremissions" xml:space="preserve">
-    <value>Ідентифікатор анкети не надано для підтвердження дозволів</value>
+    <value>Ідентифікатор анкети не був наданий для перевірки дозволів</value>
   </data>
   <data name="NotSupportedQuestionnaireVersion" xml:space="preserve">
-    <value>Не вдалося імпортувати анкету. Ваша анкета «{0}» має {1} версію. Додаток штаб-квартири підтримує лише до версії {2}.</value>
+    <value>Не вдалося імпортувати анкету. Ваша анкета "{0}" має версію {1}. Додаток штаб-квартири підтримує лише версію {2}..</value>
   </data>
   <data name="OldClientPleaseUpdate" xml:space="preserve">
-    <value>У вас застаріла версія програми Штаб-квартира. Зверніться до адміністратора сервера, щоб надіслати запит на оновлення.</value>
+    <value>У вас застаріла версія програми для штаб-квартири. Будь ласка, зверніться до адміністратора вашого сервера, щоб отримати оновлення.</value>
   </data>
   <data name="OldPassword_required" xml:space="preserve">
-    <value>Необхідно вказати поточний пароль</value>
+    <value>Потрібен поточний пароль</value>
   </data>
   <data name="Password_must_be_at_least_characters_long" xml:space="preserve">
-    <value>Пароль повинен складатися принаймні з {2} символів.</value>
+    <value>Пароль повинен мати довжину не менше {2} символів.</value>
   </data>
   <data name="Password_must_contain_at_least_one_number_one_upper_case_character_and_one_lower_case_character" xml:space="preserve">
-    <value>Пароль повинен містити принаймні одну цифру, один символ верхнього та одного нижнього регістру.</value>
+    <value>Пароль повинен містити принаймні одну цифру, один символ верхнього регістру та один символ нижнього регістру.</value>
   </data>
   <data name="Password_required" xml:space="preserve">
-    <value>Необхідно вказати пароль</value>
+    <value>Потрібен пароль</value>
   </data>
   <data name="PasswordResetNotAllowed" xml:space="preserve">
     <value>Скидання пароля заборонено</value>
   </data>
   <data name="Questionnaire_verification_failed" xml:space="preserve">
-    <value>У вашій анкеті є помилки. Будь ласка, перевірте анкету на Дизайнер.</value>
+    <value>Ваша анкета містить помилки. Будь ласка, перевірте анкету на Designer.</value>
   </data>
   <data name="QuestionnaireTitle_MaxLength" xml:space="preserve">
     <value>Назва анкети не може містити більше {1} символів.</value>
@@ -190,84 +190,84 @@
     <value>Назва анкети обов'язкова</value>
   </data>
   <data name="QuestionnaireTitle_rules" xml:space="preserve">
-    <value>У назві анкети можуть використовуватися тільки такі символи: А. З а.. z 0..9 ( ) \ / _ - і пробіл, і не повинен мати двох і більше послідовних символів підкреслення.</value>
+    <value>У назві анкети можна використовувати лише наступні символи: A..Z a..z 0..9 ( ) \ / _ - і пробіл, і не повинен містити двох і більше символів підкреслення підряд.</value>
   </data>
   <data name="QuestionnaireVariable_MaxLength" xml:space="preserve">
-    <value>Імена змінних та ідентифікатори списку можуть містити від 1 до {1} символів</value>
+    <value>Імена змінних та ідентифікатори ростерів можуть мати довжину від 1 до {1} символів</value>
   </data>
   <data name="QuestionnaireVariable_required" xml:space="preserve">
-    <value>Необхідна змінна анкети</value>
+    <value>Змінна анкети є обов'язковою</value>
   </data>
   <data name="QuestionnaireVariable_rules" xml:space="preserve">
-    <value>Змінна анкети використовується як префікс при формуванні імен файлів експорту. Імена змінних та ідентифікатори списку повинні містити лише такі символи: a–z, A–Z, _ або 0–9. Перший символ не може бути 0-9 або _, а останній не може бути _.</value>
+    <value>Змінна анкети використовується як префікс при формуванні імен для експортних файлів. Назви змінних та ідентифікатори реєстру повинні містити лише такі символи: a-z, A-Z, _ або 0-9. Першим символом не може бути 0-9 або _, а останнім - _..</value>
   </data>
   <data name="RequestAnotherEmail" xml:space="preserve">
-    <value>Запросити ще один.</value>
+    <value>Попросіть ще один.</value>
   </data>
   <data name="RestorePassword_EmailSentInstructions" xml:space="preserve">
-    <value>На ваш обліковий запис електронної пошти надіслано повідомлення. Будь ласка, дотримуйтесь інструкцій в електронному листі, щоб відновити пароль.</value>
+    <value>На вашу електронну скриньку було надіслано повідомлення. Будь ласка, дотримуйтесь інструкцій в листі, щоб відновити пароль.</value>
   </data>
   <data name="ServerError" xml:space="preserve">
-    <value>Сталася помилка сервера. Звертайтеся до support@mysurvey.solutions.</value>
+    <value>Виникла помилка сервера. Будь ласка, зверніться за адресою support@mysurvey.solutions.</value>
   </data>
   <data name="TemplateNotFound" xml:space="preserve">
-    <value>Анкету з id={0} знайти неможливо. Будь ласка, перевірте список доступних анкет або зв'яжіться з колегою, який поділився з вами посиланням на анкету.</value>
+    <value>Опитувальник з id={0} не знайдено. Будь ласка, перевірте список доступних опитувальників або зверніться до колеги, який поділився з вами посиланням на опитувальник.</value>
   </data>
   <data name="The_current_password_is_incorrect_or_the_new_password_is_invalid" xml:space="preserve">
-    <value>Комбінація поточного/нового пароля недійсна, введіть її ще раз.</value>
+    <value>Поточна/нова комбінація паролів є недійсною, будь ласка, введіть ще раз.</value>
   </data>
   <data name="The_password_and_confirmation_password_do_not_match" xml:space="preserve">
     <value>Пароль і пароль підтвердження не збігаються.</value>
   </data>
   <data name="The_user_name_or_password_provided_is_incorrect" xml:space="preserve">
-    <value>Указане ім'я користувача або пароль неправильні. Будь ласка, введіть ще раз.</value>
+    <value>Введене ім'я користувача або пароль є невірним. Будь ласка, введіть ще раз.</value>
   </data>
   <data name="Unexpected_error_occurred_Please_try_again_later" xml:space="preserve">
-    <value>Сталася неочікувана помилка. Спробуйте змінити Designer пізніше.</value>
+    <value>Виникла непередбачувана помилка. Будь ласка, спробуйте звернутися до Designer пізніше.</value>
   </data>
   <data name="UnhandledExceptionDuringUpdateUserInfo" xml:space="preserve">
-    <value>Не вдалося оновити відомості про користувача. Будь ласка, спробуйте пізніше.</value>
+    <value>Не вдалося оновити інформацію про користувача. Будь ласка, повторіть спробу пізніше.</value>
   </data>
   <data name="User_already_confirmed_in_system" xml:space="preserve">
-    <value>Користувач {0} вже підтверджений в системі. Будь ласка, введіть логін і пароль, щоб почати користуватися Конструктором.</value>
+    <value>Користувач {0} вже підтверджений в системі. Будь ласка, введіть логін і пароль, щоб почати користуватися Дизайнером.</value>
   </data>
   <data name="User_does_not_exist" xml:space="preserve">
-    <value>Користувача {0} не існує. Будь ласка, введіть дійсне ім'я користувача або електронну адресу.</value>
+    <value>Користувача {0} не існує. Будь ласка, введіть дійсне ім'я користувача або email.</value>
   </data>
   <data name="User_does_not_exist_Please_enter_a_valid_user_name" xml:space="preserve">
-    <value>Користувача {0} не існує. Будь ласка, введіть дійсне ім'я користувача або електронну адресу.</value>
+    <value>Користувача {0} не існує. Будь ласка, введіть дійсне ім'я користувача або email.</value>
   </data>
   <data name="User_name_needs_to_be_between_3_and_15_characters" xml:space="preserve">
-    <value>Ім'я для входу має бути довжиною від 3 до 15 символів і може містити лише літери, цифри та символ підкреслення. Літери повинні бути тільки з латинського (англійського) алфавіту: 'A'..' Z' або 'a'..' z'. Інші літери (кирилиця, арабська тощо) недійсні для використання в логінах.</value>
+    <value>Ім'я користувача має містити від 3 до 15 символів і може містити лише літери, цифри та символ підкреслення. Літери повинні бути тільки з латинського (англійського) алфавіту: 'A'...Z' або 'a'...z'. Інші літери (кирилиця, арабські тощо) не приймаються для використання в логінах.</value>
   </data>
   <data name="User_Not_authorized" xml:space="preserve">
-    <value>Користувач не авторизований. Будь ласка, перевірте логін та пароль.</value>
+    <value>Користувач не авторизований. Будь ласка, перевірте свій логін і пароль.</value>
   </data>
   <data name="UserLockedOut" xml:space="preserve">
-    <value>Ваш обліковий запис заблоковано. Будь ласка, зв'яжіться з support@mysurvey.solutions, щоб розблокувати його.</value>
+    <value>Ваш обліковий запис заблоковано. Будь ласка, зверніться до support@mysurvey.solutions, щоб розблокувати його.</value>
   </data>
   <data name="UserName_required" xml:space="preserve">
-    <value>Вхід обов'язковий</value>
+    <value>Потрібен логін</value>
   </data>
   <data name="UserNeedToContactSupportFormat" xml:space="preserve">
-    <value>Ви не маєте права виконувати цю дію. Зверніться до служби підтримки. IP:{0}</value>
+    <value>Ви не маєте повноважень для виконання цієї дії. Зверніться до служби підтримки. IP:{0}</value>
   </data>
   <data name="UserNotApproved" xml:space="preserve">
-    <value>Ваш обліковий запис не схвалено. Будь ласка, спочатку підтвердьте свій обліковий запис. Ми надіслали {0} посилання для підтвердження.</value>
+    <value>Ваш обліковий запис не підтверджено. Будь ласка, спочатку підтвердіть свій обліковий запис. Ми надіслали посилання для підтвердження на {0}.</value>
   </data>
   <data name="VersionParameterIsIncorrect" xml:space="preserve">
-    <value>Виникла проблема з версією вашої анкети. Звертайтеся до support@mysurvey.solutions.</value>
+    <value>Виникла проблема з версією вашої анкети. Будь ласка, зверніться за адресою support@mysurvey.solutions.</value>
   </data>
   <data name="You_did_not_type_the_verification_word_correctly" xml:space="preserve">
-    <value>Перевірочне слово неправильне. Спробуйте ще раз.</value>
+    <value>Неправильно введено перевірочне слово. Будь ласка, спробуйте ще раз.</value>
   </data>
   <data name="Your_email_is_verified" xml:space="preserve">
-    <value>Дизайнер успішно підтвердив вашу електронну пошту.</value>
+    <value>Дизайнер успішно підтвердив ваш email.</value>
   </data>
   <data name="Your_password_successfully_changed" xml:space="preserve">
-    <value>Ви успішно змінили пароль.</value>
+    <value>Ви успішно змінили свій пароль.</value>
   </data>
   <data name="YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate" xml:space="preserve">
-    <value>Ваша анкета «{0}» містить новий функціонал: {1}. Нові функції не підтримуються вашою інсталяцією. Будь ласка, оновіть.</value>
+    <value>Ваша анкета "{0}" містить нову функцію: {1}. Нова(і) функція(ї) не підтримується вашою інсталяцією. Будь ласка, оновіть.</value>
   </data>
 </root>

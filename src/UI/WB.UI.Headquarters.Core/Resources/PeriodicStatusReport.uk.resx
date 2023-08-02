@@ -118,49 +118,49 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Average" xml:space="preserve">
-    <value>Середній</value>
+    <value>Середній показник</value>
   </data>
   <data name="AverageCaseAssignmentDuration" xml:space="preserve">
-    <value>Середня тривалість призначення справи</value>
+    <value>Середня тривалість розгляду справи</value>
   </data>
   <data name="AverageCaseAssignmentDurationDescription" xml:space="preserve">
-    <value>Середній час від моменту призначення інтерв'ю інтерв'юеру до моменту натискання кнопки повного заповнення на планшеті.</value>
+    <value>Середній час від моменту призначення інтерв'ю інтерв'юеру до моменту натискання кнопки завершення на планшеті.</value>
   </data>
   <data name="AverageHQProcessingTime" xml:space="preserve">
-    <value>Середній час обробки головного офісу</value>
+    <value>Середній час обробки в штаб-квартирі</value>
   </data>
   <data name="AverageHQProcessingTimeDescription" xml:space="preserve">
-    <value>Середній час від моменту, коли керівник затверджує співбесіду, до моменту, коли це інтерв'ю схвалюється або відхиляється штаб-квартирою.</value>
+    <value>Середній час від моменту, коли керівник схвалює співбесіду, до моменту, коли співбесіду схвалює або відхиляє штаб-квартира.</value>
   </data>
   <data name="AverageInterviewDuration" xml:space="preserve">
     <value>Середня тривалість інтерв'ю</value>
   </data>
   <data name="AverageInterviewDurationDescription" xml:space="preserve">
-    <value>Середній час, протягом якого інтерв'ю було представлено на екрані інтерв'юера до завершення на одного інтерв'юера.</value>
+    <value>Середній час, протягом якого інтерв'ю було представлено на екрані інтерв'юера до завершення, на одного інтерв'юера.</value>
   </data>
   <data name="AverageInterviewDurationForSupervisors" xml:space="preserve">
-    <value>Середній час, протягом якого інтерв'ю було представлено на екрані інтерв'юера до завершення на одного керівника.</value>
+    <value>Середній час, протягом якого інтерв'ю було представлено на екрані інтерв'юера до завершення, на одного супервізора.</value>
   </data>
   <data name="AverageOverallCaseProcessingTime" xml:space="preserve">
     <value>Середній загальний час розгляду справи</value>
   </data>
   <data name="AverageOverallCaseProcessingTimeDescription" xml:space="preserve">
-    <value>Середній час від моменту першого призначення співбесіди до моменту, коли штаб-квартира затверджує це інтерв'ю.</value>
+    <value>Середній час від моменту першого призначення співбесіди до моменту затвердження співбесіди штаб-квартирою.</value>
   </data>
   <data name="AverageSupervisorProcessingTime" xml:space="preserve">
-    <value>Середній час обробки супервайзера</value>
+    <value>Середній час обробки супервайзером</value>
   </data>
   <data name="AverageSupervisorProcessingTimeDescription" xml:space="preserve">
-    <value>Середній час від моменту, коли інтерв'юер натискає кнопку Завершити, до моменту, коли керівник або приймає, або відхиляє це інтерв'ю. </value>
+    <value>Середній час від моменту, коли інтерв'юер натискає кнопку "Завершити", до моменту, коли керівник приймає або відхиляє співбесіду. </value>
   </data>
   <data name="BackToSupervisors" xml:space="preserve">
-    <value>Повернутися до наукових керівників</value>
+    <value>Повертаючись до супервайзерів</value>
   </data>
   <data name="BackToTeams" xml:space="preserve">
-    <value>Повернутися до команд</value>
+    <value>Повертаємося до команд</value>
   </data>
   <data name="By" xml:space="preserve">
-    <value>Від</value>
+    <value>By</value>
   </data>
   <data name="Day" xml:space="preserve">
     <value>Дні</value>
@@ -169,13 +169,13 @@
     <value>Від</value>
   </data>
   <data name="InterviewActions" xml:space="preserve">
-    <value>Дії на співбесіді</value>
+    <value>Дії під час інтерв'ю</value>
   </data>
   <data name="InThe" xml:space="preserve">
-    <value>у розділі</value>
+    <value>в</value>
   </data>
   <data name="InTheSupervisorTeamFormat" xml:space="preserve">
-    <value>У {0} команді</value>
+    <value>в команді {0}</value>
   </data>
   <data name="LastDateToShowLabel" xml:space="preserve">
     <value>Починаючи з</value>
@@ -184,46 +184,46 @@
     <value>Місяці</value>
   </data>
   <data name="NumberOfCompletedInterviews" xml:space="preserve">
-    <value>Кількість завершених співбесід</value>
+    <value>Кількість завершених інтерв'ю</value>
   </data>
   <data name="NumberOfCompletedInterviewsDescriptionPerInterviewer" xml:space="preserve">
-    <value>Кількість пройдених інтерв'ю інтерв'юером. Відхилені, а потім завершені співбесіди зараховуються як окремі події завершення.</value>
+    <value>Кількість завершених інтерв'ю інтерв'юером. Відхилені, а потім завершені інтерв'ю рахуються як окремі події завершення.</value>
   </data>
   <data name="NumberOfCompletedInterviewsDescriptionPerTeam" xml:space="preserve">
-    <value>Кількість пройдених співбесід по команді. Відхилені, а потім завершені співбесіди зараховуються як окремі події завершення.</value>
+    <value>Кількість завершених інтерв'ю по командах. Відхилені, а потім завершені інтерв'ю вважаються окремими подіями завершення.</value>
   </data>
   <data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
-    <value>Кількість співбесід, затверджених штабом</value>
+    <value>Кількість інтерв'ю, затверджених штаб-квартирою</value>
   </data>
   <data name="NumberOfInterviewsApprovedByHQDescription" xml:space="preserve">
-    <value>Кількість співбесід, зібраних {0}, затверджених штабом.</value>
+    <value>Кількість інтерв'ю, зібраних {0}, затверджених штаб-квартирою.</value>
   </data>
   <data name="NumberOfInterviewTransactionsByHQ" xml:space="preserve">
-    <value>Кількість транзакцій на співбесіди за штаб-квартирою</value>
+    <value>Кількість транзакцій інтерв'ю по штаб-квартирі</value>
   </data>
   <data name="NumberOfInterviewTransactionsByHQDescription" xml:space="preserve">
-    <value>Кількість погоджень та відмов штаб-квартирою на співбесідах, зібраних {0}.</value>
+    <value>Кількість схвалень та відмов від штаб-квартири за результатами співбесід, зібраних {0}.</value>
   </data>
   <data name="NumberOfInterviewTransactionsBySupervisor" xml:space="preserve">
-    <value>Кількість транзакцій співбесіди супервайзером</value>
+    <value>Кількість транзакцій інтерв'ю за супервізором</value>
   </data>
   <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerInterviewer" xml:space="preserve">
-    <value>Кількість схвалень та відхилень науковим керівником на співбесідах, зібраних інтерв'юером</value>
+    <value>Кількість схвалень та відхилень інтерв'ю супервайзером, зібраних інтерв'юером</value>
   </data>
   <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerTeam" xml:space="preserve">
-    <value>Кількість погоджень та відхилень керівником на співбесідах, зібраних {0}.</value>
+    <value>Кількість схвалень та відмов від керівника на співбесідах, зібраних {0}.</value>
   </data>
   <data name="OverTheLast" xml:space="preserve">
-    <value>Над попереднім</value>
+    <value>За попередній</value>
   </data>
   <data name="Period" xml:space="preserve">
-    <value>Період</value>
+    <value>Крапка</value>
   </data>
   <data name="PeriodCount" xml:space="preserve">
-    <value>Кількість періодів</value>
+    <value>Підрахунок періодів</value>
   </data>
   <data name="PeriodUnit" xml:space="preserve">
-    <value>Одиниця періоду</value>
+    <value>Одиниця виміру періоду</value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Анкета</value>
@@ -238,7 +238,7 @@
     <value>Середній час проходження співбесіди</value>
   </data>
   <data name="Total" xml:space="preserve">
-    <value>Підсумок</value>
+    <value>Всього</value>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Тип</value>
@@ -247,6 +247,6 @@
     <value>вер.</value>
   </data>
   <data name="Week" xml:space="preserve">
-    <value>Тижнів</value>
+    <value>Тижні</value>
   </data>
 </root>
