@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AssignmentLimitReached" xml:space="preserve">
-    <value>Вичерпано ліміт призначень</value>
+    <value>Вичерпано ліміт завдань</value>
   </data>
   <data name="AssignmentResponsibleNotFound" xml:space="preserve">
     <value>Відповідального не знайдено</value>
@@ -133,7 +133,7 @@
     <value>Анкету видалено</value>
   </data>
   <data name="UserDontHavePermissionsToAnswer" xml:space="preserve">
-    <value>Тільки керівник, відповідальний за це завдання, може відповідати на запитання керівника</value>
+    <value>Тільки супервізор, відповідальний за це завдання, може відповідати на запитання для супервізора</value>
   </data>
   <data name="WebModeAssignmentShouldBeOnInterviewer" xml:space="preserve">
     <value>Завдання для веб-інтерв'ю повинно мати відповідального інтерв'юера</value>

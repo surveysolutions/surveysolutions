@@ -124,7 +124,7 @@
     <value>Додати користувача API</value>
   </data>
   <data name="AddHeadquarters" xml:space="preserve">
-    <value>Додати штаб-квартиру</value>
+    <value>Додати хедквотера</value>
   </data>
   <data name="AddInterviewer" xml:space="preserve">
     <value>Додати інтерв'юера</value>
@@ -133,7 +133,7 @@
     <value>Додати спостерігача</value>
   </data>
   <data name="AddSupervisor" xml:space="preserve">
-    <value>Додати керівника</value>
+    <value>Додати супервізора</value>
   </data>
   <data name="AddUser" xml:space="preserve">
     <value>Додати користувача</value>
@@ -151,7 +151,7 @@
     <value>Користувачі API ({{count}})</value>
   </data>
   <data name="ArchivedSupervisors" xml:space="preserve">
-    <value>Архівовані супервайзери</value>
+    <value>Архівовані Супервізори</value>
   </data>
   <data name="ArchivingStatusTitle" xml:space="preserve">
     <value>Статус архівування</value>
@@ -178,7 +178,7 @@
     <value>Створити спостерігача</value>
   </data>
   <data name="CreateSupervisor" xml:space="preserve">
-    <value>Створити супервайзера</value>
+    <value>Створити Супервізора</value>
   </data>
   <data name="CreationDate" xml:space="preserve">
     <value>Обліковий запис створено на</value>
@@ -214,13 +214,13 @@
     <value>Дата створення облікового запису головного офісу</value>
   </data>
   <data name="Headquarters" xml:space="preserve">
-    <value>Штаб-квартира</value>
+    <value>Хедквотерс</value>
   </data>
   <data name="HeadquartersCountDescription" xml:space="preserve">
-    <value>Штаб-квартира ({{count}})</value>
+    <value>Хедквотерс ({{count}})</value>
   </data>
   <data name="HeadquartersEmail" xml:space="preserve">
-    <value>Електронна пошта штаб-квартири</value>
+    <value>Електронна пошта Headquarters</value>
   </data>
   <data name="ImpersonateAsUser" xml:space="preserve">
     <value>Перегляд від імені цього користувача в режимі тільки для читання</value>
@@ -238,7 +238,7 @@
     <value>Інтерв'юери ({{count}})</value>
   </data>
   <data name="Locked" xml:space="preserve">
-    <value>Закрито.</value>
+    <value>Заблоковано</value>
   </data>
   <data name="NotLinkedToDevice" xml:space="preserve">
     <value>Не прив'язано до пристрою</value>
@@ -277,25 +277,25 @@
     <value>Скинути пароль користувача</value>
   </data>
   <data name="Supervisor" xml:space="preserve">
-    <value>Наглядач</value>
+    <value>Супервізор</value>
   </data>
   <data name="SupervisorAccountCreationDate" xml:space="preserve">
     <value>Дата створення облікового запису супервізора</value>
   </data>
   <data name="SupervisorEmail" xml:space="preserve">
-    <value>Електронна пошта керівника</value>
+    <value>Електронна пошта супервізора</value>
   </data>
   <data name="Supervisors" xml:space="preserve">
-    <value>Супервайзери</value>
+    <value>Супервізори</value>
   </data>
   <data name="Supervisors_Edit" xml:space="preserve">
     <value>Керівник редагування</value>
   </data>
   <data name="SupervisorsCountDescription" xml:space="preserve">
-    <value>Керівники ({{count}})</value>
+    <value>Супервізори ({{count}})</value>
   </data>
   <data name="SupervisorsInTeam" xml:space="preserve">
-    <value>супервайзерів у вашій команді</value>
+    <value>супервізорів у вашій команді</value>
   </data>
   <data name="TotalInterviewers" xml:space="preserve">
     <value>Всього інтерв'юерів</value>

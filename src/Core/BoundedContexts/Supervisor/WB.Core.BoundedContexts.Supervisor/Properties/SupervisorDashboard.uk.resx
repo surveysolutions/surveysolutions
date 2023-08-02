@@ -130,21 +130,21 @@
     <value>Надіслано інтерв'юеру</value>
   </data>
   <data name="SentToInterviewerSubtitle" xml:space="preserve">
-    <value>Завдання та інтерв'ю, які є на пристроях інтерв'юера</value>
+    <value>Завдання та інтерв'ю на пристроях інтерв'юера</value>
   </data>
   <data name="ToBeAssigned" xml:space="preserve">
-    <value>Завдання для призначення</value>
+    <value>Завдання для завдання</value>
   </data>
   <data name="ToBeAssignedListSubtitle" xml:space="preserve">
     <value>Завдання, які слід доручити членам вашої команди</value>
   </data>
   <data name="WaitingForAction" xml:space="preserve">
-    <value>Чекаємо на ваші дії</value>
+    <value>Очікує на ваші дії</value>
   </data>
   <data name="WaitingForSupervisorActionSubtitle" xml:space="preserve">
-    <value>Співбесіди, які потребують ваших дій для вирішення</value>
+    <value>Інтерв'ю, які потребують ваших дій</value>
   </data>
   <data name="YourTeam" xml:space="preserve">
-    <value>Твоя команда</value>
+    <value>Ваша команда</value>
   </data>
 </root>

@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="broken_packages_check" xml:space="preserve">
-    <value>Перевірка пошкоджених пакунків</value>
+    <value>Перевірка пошкоджених пакетів</value>
   </data>
   <data name="Connectivity" xml:space="preserve">
-    <value>Підключення до веб-розетки</value>
+    <value>Підключення до Web socket</value>
   </data>
   <data name="database_connection_check" xml:space="preserve">
     <value>Перевірка підключення до бази даних</value>
@@ -133,10 +133,10 @@
     <value>Помилка підключення до бази даних: {0}</value>
   </data>
   <data name="designer_check" xml:space="preserve">
-    <value>Перевірка дизайнерського з'єднання</value>
+    <value>Перевірка з'єднання з Designer</value>
   </data>
   <data name="designer_connectivity_check_Degraded" xml:space="preserve">
-    <value>Немає зв'язку з дизайнером за адресою {0}</value>
+    <value>Немає з'єднання з Designer за адресою {0}</value>
   </data>
   <data name="designer_service_check_Healthy" xml:space="preserve">
     <value>Дизайнер на {0} відповів версією: v{1}</value>
@@ -148,25 +148,25 @@
     <value>Служба експорту не працює</value>
   </data>
   <data name="embedded_export_service_check_Healty" xml:space="preserve">
-    <value>Сервіс експорту працює</value>
+    <value>Export Service працює</value>
   </data>
   <data name="export_service_check" xml:space="preserve">
     <value>Перевірка служби експорту</value>
   </data>
   <data name="export_service_check_Healthy" xml:space="preserve">
-    <value>Служба експорту за адресою {0} відповіла версією: v{1}</value>
+    <value>Export Service за адресою {0} відповів версією: v{1}</value>
   </data>
   <data name="export_service_connectivity_check" xml:space="preserve">
-    <value>Перевірка підключення до служби експорту</value>
+    <value>Перевірка підключення до Export Service</value>
   </data>
   <data name="export_service_connectivity_check_Degraded" xml:space="preserve">
-    <value>Немає зв'язку зі службою експорту в {0}</value>
+    <value>Немає зв'язку з Export Service в {0}</value>
   </data>
   <data name="export_service_connectivity_check_Healthy" xml:space="preserve">
-    <value>Служба експорту за адресою {0} відповіла зі статусом {1}.</value>
+    <value>Export Service за адресою {0} відповів зі статусом {1}.</value>
   </data>
   <data name="export_service_connectivity_check_Unhealthy" xml:space="preserve">
-    <value>Служба експорту за адресою {0} відповіла зі статусом {1}.</value>
+    <value>Export Service за адресою {0} відповів зі статусом {1}.</value>
   </data>
   <data name="HealthCheckStatus" xml:space="preserve">
     <value>Стан здоров'я: {{status}}</value>
@@ -175,10 +175,10 @@
     <value>Перевірка конфігурації BaseUrl</value>
   </data>
   <data name="hq_baseurl_check_Degraded" xml:space="preserve">
-    <value>Адреса Headquarters, сконфігурована за допомогою Headquarters:BaseUrl: {0}, відрізняється від поточної URL-адреси в адресному рядку браузера. Це може спричинити проблеми з посиланнями на електронну пошту та функціоналом служби експорту</value>
+    <value>Адреса Headquarters, сконфігурована за допомогою Headquarters:BaseUrl: {0}, відрізняється від поточної URL-адреси в полі браузера. Це може спричинити проблеми з посиланнями на електронну пошту та функціоналом служби експорту</value>
   </data>
   <data name="hq_baseurl_check_Healthy" xml:space="preserve">
-    <value>Штаб-квартира, сконфігурована з Headquarters:BaseUrl: {0}, збігається з поточною адресою в адресному рядку браузера.</value>
+    <value>Headquarters сконфігурована з Headquarters:BaseUrl: {0}, збігається з поточною адресою в полі браузера.</value>
   </data>
   <data name="ServerMetrics" xml:space="preserve">
     <value>Метрики сервера</value>
@@ -187,16 +187,16 @@
     <value>Перевірка прав доступу до тимчасових папок</value>
   </data>
   <data name="temp_folder_permissions_Degraded_without_permissions" xml:space="preserve">
-    <value>Програма не має привілеїв на перевірку прав доступу до тимчасової папки {0}</value>
+    <value>Додаток не має привілеїв на перевірку прав доступу до тимчасової папки {0}</value>
   </data>
   <data name="temp_folder_permissions_Healthy" xml:space="preserve">
     <value>Успішний доступ до тимчасової папки</value>
   </data>
   <data name="temp_folder_permissions_Unhealty_can_not_check" xml:space="preserve">
-    <value>Не вдається перевірити права доступу до тимчасової теки {0}. Помилка: {1}</value>
+    <value>Не вдається перевірити права доступу до тимчасової папки {0}. Помилка: {1}</value>
   </data>
   <data name="temp_folder_permissions_Unhealty_without_permissions" xml:space="preserve">
-    <value>Програма не може записувати тимчасові файли: {0}</value>
+    <value>Додаток не може записувати тимчасові файли: {0}</value>
   </data>
   <data name="temp_folder_permissions_Windows_check" xml:space="preserve">
     <value>Система не Windows</value>
@@ -205,7 +205,7 @@
     <value>Виявлено {0} неочікувані несправні пакунки</value>
   </data>
   <data name="WaitForHealthcheck" xml:space="preserve">
-    <value>Чекаємо на результати перевірки стану здоров'я</value>
+    <value>Чекаємо на результати перевірки стану</value>
   </data>
   <data name="WaitingForMetrics" xml:space="preserve">
     <value>Розрахунок метрик</value>

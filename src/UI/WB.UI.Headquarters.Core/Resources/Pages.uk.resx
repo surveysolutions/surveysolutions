@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AccessDenied_Title" xml:space="preserve">
-    <value>У доступі відмовлено.</value>
+    <value>У доступі відмовлено</value>
   </data>
   <data name="AccountManage_ApiTokens" xml:space="preserve">
     <value>Токени API</value>
@@ -169,7 +169,7 @@
     <value>Панель керування</value>
   </data>
   <data name="Admin_InterviewPackages_Broken" xml:space="preserve">
-    <value>Зламався.</value>
+    <value>Зламаних</value>
   </data>
   <data name="Admin_InterviewPackages_Exception" xml:space="preserve">
     <value>Виняток</value>
@@ -196,7 +196,7 @@
     <value>Розмір</value>
   </data>
   <data name="Admin_InterviewPackages_Period" xml:space="preserve">
-    <value>Крапка</value>
+    <value>Період</value>
   </data>
   <data name="Admin_InterviewPackages_ProcessingDate" xml:space="preserve">
     <value>Дата обробки</value>
@@ -214,13 +214,13 @@
     <value>Відхилено</value>
   </data>
   <data name="Admin_InterviewPackages_Reprocess" xml:space="preserve">
-    <value>Переробити</value>
+    <value>Перепрацювати</value>
   </data>
   <data name="Admin_InterviewPackages_ReprocessSelectedConfirmation" xml:space="preserve">
     <value>Ви впевнені, що хочете обробити вибрані несправні пакунки?</value>
   </data>
   <data name="Admin_InterviewPackages_SelectedPackagesCount" xml:space="preserve">
-    <value>{{count}} вибрано пакунок(и)</value>
+    <value>{{count}} вибрано пакетів</value>
   </data>
   <data name="Admin_InterviewPackages_SelectExceptionType" xml:space="preserve">
     <value>Виберіть тип винятку</value>
@@ -268,7 +268,7 @@
     <value>Затверджено штаб-квартирою</value>
   </data>
   <data name="ApprovedByupervisor" xml:space="preserve">
-    <value>Затверджено керівником</value>
+    <value>Затверджено супервізором</value>
   </data>
   <data name="ApproveRejectPartialView_ApproveAction" xml:space="preserve">
     <value>Схвалити</value>
@@ -277,7 +277,7 @@
     <value>Затвердити співбесіду</value>
   </data>
   <data name="ApproveRejectPartialView_ApproveReceivedConfirm" xml:space="preserve">
-    <value>Подати заявку на співбесіду, яку інтерв'юер вже отримав</value>
+    <value>Подати заявку на інтерв'ю, яку інтерв'юер вже отримав</value>
   </data>
   <data name="ApproveRejectPartialView_ApproveReceivedWarning" xml:space="preserve">
     <value>Поточний відповідальний інтерв'юер не отримає повідомлення про затвердження інтерв'ю до наступної синхронізації. Якщо інтерв'юер вже почав працювати над інтерв'ю, всі дані, які він вніс до наступної синхронізації, будуть ВИДАЛЕНІ!</value>
@@ -292,10 +292,10 @@
     <value>Відхилити співбесіду</value>
   </data>
   <data name="ApproveRejectPartialView_UnapproveAction" xml:space="preserve">
-    <value>Відхилити</value>
+    <value>Відізвати схвалення</value>
   </data>
   <data name="ApproveRejectPartialView_UnapproveLabel" xml:space="preserve">
-    <value>Не схвалити співбесіду</value>
+    <value>Відізвати схвалення інтерв'ю</value>
   </data>
   <data name="AppUpdates" xml:space="preserve">
     <value>Інформація про Apk</value>
@@ -313,7 +313,7 @@
     <value>Довжина</value>
   </data>
   <data name="AreaQestion_Points" xml:space="preserve">
-    <value>Бали</value>
+    <value>Точки</value>
   </data>
   <data name="AreaQuestion_RequestedAccuracy" xml:space="preserve">
     <value>Точність</value>
@@ -325,7 +325,7 @@
     <value>Завдання</value>
   </data>
   <data name="Attention" xml:space="preserve">
-    <value>Увага!!</value>
+    <value>Увага!</value>
   </data>
   <data name="AuthenticatorCode" xml:space="preserve">
     <value>Код аутентифікатора</value>
@@ -385,16 +385,16 @@
     <value>Ця дія вимикає тільки 2FA</value>
   </data>
   <data name="Disable2faLine2" xml:space="preserve">
-    <value>Вимкнення 2FA не змінює ключі, що використовуються в програмах-автентифікаторах.</value>
+    <value>Вимкнення 2FA не змінює ключі, що використовуються в додатоках-автентифікаторах.</value>
   </data>
   <data name="DownloadPage_Instructions" xml:space="preserve">
-    <value>Інструкція з монтажу</value>
+    <value>Інструкція з інсталяції</value>
   </data>
   <data name="DownloadPage_PageTitle" xml:space="preserve">
     <value>Завантажити додаток Interviewer</value>
   </data>
   <data name="DownloadPage_Title" xml:space="preserve">
-    <value>Технологія комп'ютеризованого особистого інтерв'ю, розроблена Світовим банком.</value>
+    <value>Технологія комп'ютеризованого інтерв'ю, розроблена Світовим Банком.</value>
   </data>
   <data name="DownloadPage_Version" xml:space="preserve">
     <value>Версія</value>
@@ -430,10 +430,10 @@
     <value>або Google Authenticator для</value>
   </data>
   <data name="EnableAuthenticatorLine4" xml:space="preserve">
-    <value>Відскануйте QR-код або введіть спільний ключ у вашому додатку двофакторного автентифікатора. Пробіли та регістр не мають значення.</value>
+    <value>Відскануйте QR-код або введіть ключ у вашому додатку двофакторного автентифікатора. Пробіли та регістр не мають значення.</value>
   </data>
   <data name="EnableAuthenticatorLine5" xml:space="preserve">
-    <value>Після того, як ви відскануєте QR-код або введете спільний ключ вище, ваш додаток двофакторної автентифікації надасть вам код підтвердження. Введіть його нижче та натисніть "Підтвердити.</value>
+    <value>Після того, як ви відскануєте QR-код або введете ключ вище, ваш додаток двофакторної автентифікації надасть вам код підтвердження. Введіть його нижче та натисніть "Підтвердити".</value>
   </data>
   <data name="EnableAuthenticatorSharedKey" xml:space="preserve">
     <value>Спільний ключ:</value>
@@ -445,7 +445,7 @@
     <value>Помилка.</value>
   </data>
   <data name="ErrorIndex_Title" xml:space="preserve">
-    <value>Помилка.</value>
+    <value>Помилка</value>
   </data>
   <data name="Exceptions" xml:space="preserve">
     <value>Винятки</value>
@@ -463,7 +463,7 @@
     <value>Відкриті змінні</value>
   </data>
   <data name="ExposedVariables_ChangeMessage" xml:space="preserve">
-    <value>Ви змінюєте набір відкритих змінних. Це займе деякий час, щоб оновити звіти.</value>
+    <value>Ви змінюєте набір змінних для запитів. Це займе деякий час, щоб оновити звіти.</value>
   </data>
   <data name="ExposedVariables_RemoveMessage" xml:space="preserve">
     <value>Якщо ви хочете видалити змінну зі списку?</value>
@@ -472,7 +472,7 @@
     <value>Відобразити заголовок</value>
   </data>
   <data name="ExposedVariables_VariableLabel" xml:space="preserve">
-    <value>Етикетка</value>
+    <value>Лейбл</value>
   </data>
   <data name="ExposedVariables_VariableName" xml:space="preserve">
     <value>Ім'я змінної</value>
@@ -487,10 +487,10 @@
     <value>Режим інтерв'ю</value>
   </data>
   <data name="Filters_InterviewModePlaceHolder" xml:space="preserve">
-    <value>Всі режими співбесіди</value>
+    <value>Всі режими інтерв'ю</value>
   </data>
   <data name="Filters_None" xml:space="preserve">
-    <value>Ні.</value>
+    <value>Немає</value>
   </data>
   <data name="Filters_Shapefiles" xml:space="preserve">
     <value>Шейпфайли</value>
@@ -499,7 +499,7 @@
     <value>Фільтри</value>
   </data>
   <data name="Forbidden_Title" xml:space="preserve">
-    <value>Заборонено.</value>
+    <value>Заборонено</value>
   </data>
   <data name="GenerateRecoveryCodes" xml:space="preserve">
     <value>Згенеруйте коди відновлення</value>
@@ -508,19 +508,19 @@
     <value>згенерувати новий набір кодів відновлення</value>
   </data>
   <data name="GetEsriExtraDescription" xml:space="preserve">
-    <value>Підтримка карт ESRI є експериментальною функцією. Використовуйте її лише в тому випадку, якщо вам потрібна розширена функціональність ГІС ESRI. Включення цієї функції значно збільшить розмір програми та час завантаження. </value>
+    <value>Підтримка карт ESRI є експериментальною функцією. Використовуйте її лише в тому випадку, якщо вам потрібна розширена функціональність GIS ESRI. Включення цієї функції значно збільшить розмір додатку та час завантаження. </value>
   </data>
   <data name="GetInterviewerApp" xml:space="preserve">
-    <value>Завантажити додаток для інтерв'юерів</value>
+    <value>Завантажити додаток INTERVIEWER</value>
   </data>
   <data name="GetLatestApp" xml:space="preserve">
     <value>Завантажте останню версію програми для інтерв'юерів</value>
   </data>
   <data name="GetLatestAppDescription" xml:space="preserve">
-    <value>Завантажте та встановіть цю версію програми Interviewer для опитувань, які не використовують ГІС ESRI. Цей apk не містить ESRI SDK, тому він значно менший за розміром і швидше завантажується порівняно з версією з SDK.</value>
+    <value>Завантажте та встановіть цю версію додатку Interviewer для опитувань, які не використовують GIS ESRI. Цей apk не містить ESRI SDK, тому він значно менший за розміром і швидше завантажується порівняно з версією з SDK.</value>
   </data>
   <data name="GetLatestAppExtendedDescription" xml:space="preserve">
-    <value>Завантажуйте та встановлюйте цю версію програми для інтерв'юерів, тільки якщо ви використовуєте розширені функції ГІС ESRI. Цей apk містить великий ESRI SDK, має великий розмір і може зайняти багато часу для завантаження.</value>
+    <value>Завантажуйте та встановлюйте цю версію додатку для інтерв'юерів, тільки якщо ви використовуєте розширені функції GIS ESRI. Цей apk містить великий ESRI SDK, має великий розмір і може зайняти багато часу для завантаження.</value>
   </data>
   <data name="GetLatestSupervisorApp" xml:space="preserve">
     <value>Завантажте останню версію програми Supervisor</value>
@@ -544,7 +544,7 @@
     <value>Будь ласка, зачекайте.</value>
   </data>
   <data name="GlobalSettings_NotifyMarkersLimitReachedText" xml:space="preserve">
-    <value>Для цього рівня масштабування було досягнуто певної кількості точок. Будь ласка, збільште рівень та оновіть точки.</value>
+    <value>Для цього рівня масштабування було досягнуто певної кількості точок. Будь ласка, збільште масштаб та оновіть точки.</value>
   </data>
   <data name="GlobalSettings_NotifyMarkersLimitReachedTitle" xml:space="preserve">
     <value>Не всі пункти були завантажені</value>
@@ -553,7 +553,7 @@
     <value>Ця анкета не містить GPS-координат для відображення на карті обраної змінної.</value>
   </data>
   <data name="GlobalSettings_NotifyNoMarkersDialogTitle" xml:space="preserve">
-    <value>Маркери не були додані</value>
+    <value>Немає маркерів</value>
   </data>
   <data name="GlobalSettings_TurningAudioAuditOn" xml:space="preserve">
     <value>Коли аудіоаудит увімкнено, обсяг даних синхронізації буде значно більшим. Ви хочете продовжити?</value>
@@ -580,7 +580,7 @@
     <value>Приховати фільтр</value>
   </data>
   <data name="HistoryOfStatuses_AssignedTo" xml:space="preserve">
-    <value>Призначено для</value>
+    <value>Призначено на</value>
   </data>
   <data name="HistoryOfStatuses_By" xml:space="preserve">
     <value>By</value>
@@ -595,10 +595,10 @@
     <value>Змінено на</value>
   </data>
   <data name="HistoryOfStatuses_State" xml:space="preserve">
-    <value>Держава</value>
+    <value>Статус</value>
   </data>
   <data name="HistoryOfStatuses_Title" xml:space="preserve">
-    <value>Історія статусів співбесіди</value>
+    <value>Історія статусів інтерв'ю</value>
   </data>
   <data name="HistoryOfStatuses_ViewInterview" xml:space="preserve">
     <value>Переглянути інтерв'ю</value>
@@ -607,13 +607,13 @@
     <value>Головна</value>
   </data>
   <data name="HQ_LockWarning" xml:space="preserve">
-    <value>Заблокована штаб-квартира (прапорець встановлений) не може увійти та виконувати будь-які дії на сервері.</value>
+    <value>Заблокований хедквотер (прапорець встановлений) не може увійти та виконувати будь-які дії на сервері.</value>
   </data>
   <data name="Index_cshtml_Execute_Do_you_want_to_continue_" xml:space="preserve">
     <value>Ви хочете продовжити?</value>
   </data>
   <data name="InstallationInstruction" xml:space="preserve">
-    <value>Інструкція з монтажу</value>
+    <value>Інструкція з інсталяції</value>
   </data>
   <data name="InterviewController_RepeatLastStatus" xml:space="preserve">
     <value>Статус, встановлений службою підтримки Survey Solutions</value>
@@ -628,37 +628,37 @@
     <value>всі</value>
   </data>
   <data name="InterviewDetails_AnsweredButtonLabel" xml:space="preserve">
-    <value>відповів</value>
+    <value>мають відповідь</value>
   </data>
   <data name="InterviewDetails_CommentedButtonLabel" xml:space="preserve">
-    <value>прокоментував</value>
+    <value>прокоментовані</value>
   </data>
   <data name="InterviewDetails_DefaultTranslation" xml:space="preserve">
     <value>оригінал</value>
   </data>
   <data name="InterviewDetails_EnabledButtonLabel" xml:space="preserve">
-    <value>увімкнено</value>
+    <value>увімкнені</value>
   </data>
   <data name="InterviewDetails_FlaggedButtonLabel" xml:space="preserve">
-    <value>позначений прапором</value>
+    <value>позначені</value>
   </data>
   <data name="InterviewDetails_GroupsLabel" xml:space="preserve">
     <value>Групи</value>
   </data>
   <data name="InterviewDetails_HiddenButtonLabel" xml:space="preserve">
-    <value>прихований</value>
+    <value>приховані</value>
   </data>
   <data name="InterviewDetails_HideGroupsLAbel" xml:space="preserve">
     <value>Приховати групи</value>
   </data>
   <data name="InterviewDetails_InvalidButtonLabel" xml:space="preserve">
-    <value>недійсний</value>
+    <value>З помилками</value>
   </data>
   <data name="InterviewDetails_MoreDetails" xml:space="preserve">
     <value>Деталі</value>
   </data>
   <data name="InterviewDetails_NoItems" xml:space="preserve">
-    <value>Немає товарів, що задовольняють обраному фільтру</value>
+    <value>Немає елементів, що задовольняють обраному фільтру</value>
   </data>
   <data name="InterviewDetails_PendingPackageLabel" xml:space="preserve">
     <value>Інтерв'ю має в черзі пакети синхронізації, що очікують на розгляд</value>
@@ -673,7 +673,7 @@
     <value>Статус</value>
   </data>
   <data name="InterviewDetails_SupervisorsButtonLabel" xml:space="preserve">
-    <value>керівника</value>
+    <value>супервізора</value>
   </data>
   <data name="InterviewDetails_TranslationLabel" xml:space="preserve">
     <value>Мова</value>
@@ -700,7 +700,7 @@
     <value>Не вдалося оновити інформацію про користувача, оскільки поточний користувач не існує</value>
   </data>
   <data name="InterviewerCreate_CreateIn" xml:space="preserve">
-    <value>Створіть інтерв'юера в</value>
+    <value>Створити інтерв'юера в</value>
   </data>
   <data name="InterviewerCreate_Team" xml:space="preserve">
     <value>команда</value>
@@ -721,19 +721,19 @@
     <value>Інтерв'юер: {0}</value>
   </data>
   <data name="InterviewerHq_DiscardConfirm" xml:space="preserve">
-    <value>Ви впевнені, що хочете видалити дані інтерв'ю??</value>
+    <value>Ви впевнені, що хочете видалити дані інтерв'ю?</value>
   </data>
   <data name="InterviewerHq_DiscardInterview" xml:space="preserve">
     <value>Викинути</value>
   </data>
   <data name="InterviewerHq_OpenInterview" xml:space="preserve">
-    <value>Відкрито</value>
+    <value>Відкрити</value>
   </data>
   <data name="InterviewerHq_RestartConfirm" xml:space="preserve">
-    <value>Будь ласка, надайте коментар, якщо це необхідно для повторного проведення співбесіди</value>
+    <value>Будь ласка, надайте коментар, якщо це необхідно для повторного проведення інтерв'ю</value>
   </data>
   <data name="InterviewerHq_RestartInterview" xml:space="preserve">
-    <value>Відчиняй!</value>
+    <value>Знову відкрити</value>
   </data>
   <data name="InterviewerIsArchived" xml:space="preserve">
     <value>Інтерв'юер занесений до архіву</value>
@@ -742,10 +742,10 @@
     <value>Версія для Android</value>
   </data>
   <data name="InterviewerProfile_Approved" xml:space="preserve">
-    <value>проведені співбесіди (завершені та затверджені штаб-квартирою)</value>
+    <value>проведені інтерв'ю (завершені та затверджені хедквотером)</value>
   </data>
   <data name="InterviewerProfile_AssignedToFormat" xml:space="preserve">
-    <value>{{interviewer}} (керівник: {{supervisor}})</value>
+    <value>{{interviewer}} (супервізор: {{supervisor}})</value>
   </data>
   <data name="InterviewerProfile_AverageSyncSpeed" xml:space="preserve">
     <value>Середня швидкість синхронізації</value>
@@ -763,7 +763,7 @@
     <value>{{percent}}%, джерело живлення: {{power}}, економія заряду батареї - {{powerSaver}}.</value>
   </data>
   <data name="InterviewerProfile_ConnectionMobileFormat" xml:space="preserve">
-    <value>Друкуй: {{networkType}} {{networkSubType}}, Оператор: {{operator}}</value>
+    <value>Тип: {{networkType}} {{networkSubType}}, Оператор: {{operator}}</value>
   </data>
   <data name="InterviewerProfile_ConnectionSpeed" xml:space="preserve">
     <value>Швидкість з'єднання</value>
@@ -772,7 +772,7 @@
     <value>Тип підключення</value>
   </data>
   <data name="InterviewerProfile_ConnectionWifiFormat" xml:space="preserve">
-    <value>Друкуй: {{networkType}}</value>
+    <value>Тип: {{networkType}}</value>
   </data>
   <data name="InterviewerProfile_DataStatsFormat" xml:space="preserve">
     <value>{{uploaded}} завантажено, {{downloaded}} завантажено</value>
@@ -826,7 +826,7 @@
     <value>Редагувати особисту інформацію</value>
   </data>
   <data name="InterviewerProfile_InterviewerAppVersion" xml:space="preserve">
-    <value>Версія програми для інтерв'юерів</value>
+    <value>Версія додатку для інтерв'юерів</value>
   </data>
   <data name="InterviewerProfile_InterviewerCanBeUpdated" xml:space="preserve">
     <value>Може бути оновлено</value>
@@ -877,13 +877,13 @@
     <value>Номер телефону: {{phone}}</value>
   </data>
   <data name="InterviewerProfile_QrCodeAlt" xml:space="preserve">
-    <value>Qr-код, що спрощує налаштування програми для інтерв'юерів</value>
+    <value>QR-код, що спрощує налаштування додатку для інтерв'юерів</value>
   </data>
   <data name="InterviewerProfile_Rejected" xml:space="preserve">
     <value>знову відхилено на пристрої</value>
   </data>
   <data name="InterviewerProfile_Relinked" xml:space="preserve">
-    <value>Пов'язано</value>
+    <value>Переприв'язан</value>
   </data>
   <data name="InterviewerProfile_ServerDate" xml:space="preserve">
     <value>Час сервера на початку синхронізації</value>
@@ -940,7 +940,7 @@
     <value>Заповнені інтерв'ю, отримані від інтерв'юера</value>
   </data>
   <data name="InterviewerProfile_WaitingForApproval" xml:space="preserve">
-    <value>очікування схвалення</value>
+    <value>очікують на схвалення</value>
   </data>
   <data name="Interviewers_ActiveUsers" xml:space="preserve">
     <value>Активні інтерв'юери</value>
@@ -991,10 +991,10 @@
     <value>Ніколи не підключався</value>
   </data>
   <data name="Interviewers_InterviewersToMove" xml:space="preserve">
-    <value>Інтерв'юер(и) {{interviewers}} буде переведений(і) до команди супервайзера {{supervisor}}..</value>
+    <value>Інтерв'юер(и) {{interviewers}} буде переведений(і) до команди Супервізора {{supervisor}}..</value>
   </data>
   <data name="Interviewers_InterviewersToStay" xml:space="preserve">
-    <value>Інтерв'юер(и) {{interviewers}} знаходиться в команді супервайзера {{supervisor}} і ніяких дій виконуватися не буде.</value>
+    <value>Інтерв'юер(и) {{interviewers}} знаходиться в команді супервізора {{supervisor}} і ніяких дій виконуватися не буде.</value>
   </data>
   <data name="Interviewers_InterviewerVersion" xml:space="preserve">
     <value>Версія програми</value>
@@ -1009,7 +1009,7 @@
     <value>Дата останнього входу інтерв'юера на сайт</value>
   </data>
   <data name="Interviewers_MoveAllToNewTeam" xml:space="preserve">
-    <value>Перемістити інтерв'юера(ів) з їхніми завданнями та інтерв'ю до команди супервайзера {{supervisor}}..</value>
+    <value>Перемістити інтерв'юера(ів) з їхніми завданнями та інтерв'ю до команди супервізора {{supervisor}}..</value>
   </data>
   <data name="Interviewers_MoveInterviewerPopupTitle" xml:space="preserve">
     <value>Виберіть команду, куди перемістити {{names}}</value>
@@ -1018,7 +1018,7 @@
     <value>Перейдіть до іншої команди</value>
   </data>
   <data name="Interviewers_MoveWebAssigment" xml:space="preserve">
-    <value>Ви переводите інтерв'юера, який отримував завдання на проведення веб-інтерв'ю, в іншу команду. Ці завдання будуть призначені початковому керівнику. Якщо ви вже розіслали посилання на ці завдання, респонденти не зможуть відповісти на ваше опитування, поки завдання не буде перепризначено користувачеві з роллю ІНТЕРВ'ЮЕР.</value>
+    <value>Ви переводите інтерв'юера, який отримував завдання на проведення веб-інтерв'ю, в іншу команду. Ці завдання будуть призначені початковому супервізору. Якщо ви вже розіслали посилання на ці завдання, респонденти не зможуть відповісти на ваше анкети, поки завдання не буде перепризначено користувачеві з роллю ІНТЕРВ'ЮЕР.</value>
   </data>
   <data name="Interviewers_MovingCompleted" xml:space="preserve">
     <value>Переміщення користувачів завершено</value>
@@ -1027,7 +1027,7 @@
     <value>Переїзд триває</value>
   </data>
   <data name="Interviewers_NamesFormatLessThanLimit" xml:space="preserve">
-    <value>і {{names}} та {{lastname}}</value>
+    <value>{{names}} та {{lastname}}</value>
   </data>
   <data name="Interviewers_NamesFormatMoreThanLimit" xml:space="preserve">
     <value>{{names}} і {{more}} більше</value>
@@ -1039,19 +1039,19 @@
     <value>Ніколи не підключався</value>
   </data>
   <data name="Interviewers_OutdatedOption" xml:space="preserve">
-    <value>Застаріла.</value>
+    <value>Застарілі</value>
   </data>
   <data name="Interviewers_ReassignToOriginalSupervisor" xml:space="preserve">
-    <value>Призначити попереднього супервайзера відповідальним за поточні завдання та інтерв'ю переведеного(их) інтерв'юера(ів).</value>
+    <value>Призначити попереднього Супервізора відповідальним за поточні завдання та інтерв'ю переведеного(их) інтерв'юера(ів).</value>
   </data>
   <data name="Interviewers_Selected" xml:space="preserve">
     <value>обрано інтерв'юера(ів)</value>
   </data>
   <data name="Interviewers_SupervisorTitle" xml:space="preserve">
-    <value>Наглядач</value>
+    <value>Супервізор</value>
   </data>
   <data name="Interviewers_SupervisorTooltip" xml:space="preserve">
-    <value>Ім'я логіна керівника інтерв'юера</value>
+    <value>Ім'я супервізора для інтерв'юера</value>
   </data>
   <data name="Interviewers_Title" xml:space="preserve">
     <value>Інтерв'юери</value>
@@ -1078,7 +1078,7 @@
     <value>Огляд інтерв'ю</value>
   </data>
   <data name="InterviewPackages" xml:space="preserve">
-    <value>Пакети для співбесіди</value>
+    <value>Пакети інтерв'ю</value>
   </data>
   <data name="Interviews_Selected" xml:space="preserve">
     <value>відібрані інтерв'ю</value>
@@ -1090,7 +1090,7 @@
     <value>Фільтр</value>
   </data>
   <data name="Layout_Legal" xml:space="preserve">
-    <value>Юридичний</value>
+    <value>Юридична інформація</value>
   </data>
   <data name="Layout_RightsReserved" xml:space="preserve">
     <value>Всі права захищені.</value>
@@ -1126,7 +1126,7 @@
     <value>Вхід був невдалим. Будь ласка, виправте помилки та спробуйте ще раз.</value>
   </data>
   <data name="Maintenance_Description" xml:space="preserve">
-    <value>Наразі програма оновлюється до новішої версії. Це ручна операція і може зайняти значний проміжок часу. Вибачте за незручності. Після завершення процесу ви будете автоматично перенаправлені на запитувану вами сторінку.</value>
+    <value>Наразі додаток оновлюється до новішої версії. Це ручна операція і може зайняти значний проміжок часу. Вибачте за незручності. Після завершення процесу ви будете автоматично перенаправлені на запитувану вами сторінку.</value>
   </data>
   <data name="Maintenance_RebuildDescription" xml:space="preserve">
     <value>Зараз додаток перезавантажується, і це може зайняти до 10 хвилин або більше. Вибачте за незручності. Після завершення процесу ви будете автоматично перенаправлені на запитувану вами сторінку.</value>
@@ -1186,7 +1186,7 @@
     <value>Карта</value>
   </data>
   <data name="MapDetails_MaxScale" xml:space="preserve">
-    <value>Макс Скейл</value>
+    <value>Максимальний масштаб</value>
   </data>
   <data name="MapDetails_MinScale" xml:space="preserve">
     <value>Мінімальна шкала</value>
@@ -1195,10 +1195,10 @@
     <value>Виберіть користувача</value>
   </data>
   <data name="MapDetails_ShapesCount" xml:space="preserve">
-    <value>Форми мають значення</value>
+    <value>Кількість шейпів</value>
   </data>
   <data name="MapDetails_ShapeType" xml:space="preserve">
-    <value>Тип форми</value>
+    <value>Тип шейпа</value>
   </data>
   <data name="MapDetails_SimplifiedShapefilesDisclaimer" xml:space="preserve">
     <value>Цей попередній перегляд показує зменшену версію завантаженого шейп-файлу, накладену на базовий шар супутникового знімка. Оригінальний завантажений шейп-файл не відображається в цьому попередньому перегляді через його великий розмір.</value>
@@ -1207,19 +1207,19 @@
     <value>Розмір (МБ)</value>
   </data>
   <data name="MapDetails_Unlink" xml:space="preserve">
-    <value>Роз'єднати зв'язок.</value>
+    <value>Відв'язати</value>
   </data>
   <data name="MapDetails_UploadedBy" xml:space="preserve">
-    <value>Завантажив</value>
+    <value>Завантажено</value>
   </data>
   <data name="MapLinking_Description" xml:space="preserve">
     <value>Завантажити файл, що містить листування між картами та користувачами</value>
   </data>
   <data name="MapLinking_DescriptionTitle" xml:space="preserve">
-    <value>Керування посиланнями на карту користувача</value>
+    <value>Керування зв'язків карт і користувачів</value>
   </data>
   <data name="MapLinking_DownloadExisting" xml:space="preserve">
-    <value>Завантажити існуючі посилання</value>
+    <value>Завантажити існуючі зв'язки</value>
   </data>
   <data name="MapLinking_UploadDescription" xml:space="preserve">
     <value>Це дозволить вам створити відповідність між картою та користувачем.</value>
@@ -1234,7 +1234,7 @@
     <value>Завантажте .tab-файл з файловими зв'язками</value>
   </data>
   <data name="MapLinking_UploadFileDescription1" xml:space="preserve">
-    <value> Неправильні імена та імена користувачів будуть проігноровані.</value>
+    <value>Неправильні імена та імена користувачів будуть проігноровані.</value>
   </data>
   <data name="MapList_DeleteMap" xml:space="preserve">
     <value>Видалити мапу</value>
@@ -1279,7 +1279,7 @@
     <value>Ви впевнені, що хочете відв'язати користувача від карти?</value>
   </data>
   <data name="MapUserLink_DiscardConfirm1" xml:space="preserve">
-    <value>Якщо це останній користувач у команді, прив'язаний до мапи, то керівник команди втратить доступ до мапи..</value>
+    <value>Якщо це останній користувач у команді, прив'язаний до мапи, то супервізор команди втратить доступ до мапи.</value>
   </data>
   <data name="NoResults" xml:space="preserve">
     <value>Не знайдено жодного результату</value>
@@ -1300,7 +1300,7 @@
     <value>Ідентифікатор пристрою</value>
   </data>
   <data name="PackagesInfo_Header" xml:space="preserve">
-    <value>Інформаційні пакети для планшетів</value>
+    <value>Інформаційні пакети з планшетів</value>
   </data>
   <data name="PackagesInfo_Size" xml:space="preserve">
     <value>Розмір (байт)</value>
@@ -1327,7 +1327,7 @@
     <value>Створення користувача API</value>
   </data>
   <data name="Profile_ApiUserEditFormat" xml:space="preserve">
-    <value>Редагування профілю користувача API: &lt;strong&gt;{0}&lt;/strong&gt;&lt;/strong&gt;.</value>
+    <value>Редагування профілю користувача API: &lt;strong&gt;{0}&lt;/strong&gt;.</value>
   </data>
   <data name="Profile_ApiUsersList" xml:space="preserve">
     <value>Користувачі API</value>
@@ -1336,19 +1336,19 @@
     <value>Користувача API &lt;b&gt;{0}&lt;/b&gt; успішно створено</value>
   </data>
   <data name="Profile_HeadquartersCreate" xml:space="preserve">
-    <value>Створити штаб</value>
+    <value>Створити хедквотера</value>
   </data>
   <data name="Profile_HeadquartersEditFormat" xml:space="preserve">
-    <value>Редагувати профіль штабу: &lt;strong&gt;{0}&lt;/strong&gt;&lt;/strong&gt;.</value>
+    <value>Редагувати профіль штабу: &lt;strong&gt;{0}&lt;/strong&gt;.</value>
   </data>
   <data name="Profile_HeadquartersList" xml:space="preserve">
-    <value>Штаб-квартира</value>
+    <value>Хедквотери</value>
   </data>
   <data name="Profile_InterviewerCreate" xml:space="preserve">
     <value>Створіть профіль інтерв'юера</value>
   </data>
   <data name="Profile_InterviewerEditFormat" xml:space="preserve">
-    <value>Редагувати профіль інтерв'юера: &lt;strong&gt;{0}&lt;/strong&gt;&lt;/strong&gt;.</value>
+    <value>Редагувати профіль інтерв'юера: &lt;strong&gt;{0}&lt;/strong&gt;.</value>
   </data>
   <data name="Profile_InterviewerProfile" xml:space="preserve">
     <value>Профіль інтерв'юера</value>
@@ -1369,19 +1369,19 @@
     <value>Спостерігачі</value>
   </data>
   <data name="Profile_SupervisorCreate" xml:space="preserve">
-    <value>Створити супервайзера</value>
+    <value>Створити супервізора</value>
   </data>
   <data name="Profile_SupervisorEditFormat" xml:space="preserve">
-    <value>Редагування профілю керівника: &lt;strong&gt;{0}&lt;/strong&gt;.</value>
+    <value>Редагування профілю супервізора: &lt;strong&gt;{0}&lt;/strong&gt;.</value>
   </data>
   <data name="Profile_SupervisorsList" xml:space="preserve">
-    <value>Супервайзери</value>
+    <value>Супервізори</value>
   </data>
   <data name="PublicSection" xml:space="preserve">
-    <value>Особиста інформація (необов'язково) &lt;br&gt; буде видима лише користувачам штаб-квартири</value>
+    <value>Особиста інформація (необов'язково) &lt;br&gt; буде видима лише користувачам Headquarters</value>
   </data>
   <data name="Questionnaire_Exposed_Variables" xml:space="preserve">
-    <value>Змінні, що піддаються впливу в анкеті</value>
+    <value>Змінні, що використовуються для звітів</value>
   </data>
   <data name="Questionnaire_Info" xml:space="preserve">
     <value>Деталі анкети</value>
@@ -1399,7 +1399,7 @@
     <value>Кількість секцій</value>
   </data>
   <data name="Questionnaire_Stats" xml:space="preserve">
-    <value>Інформація для заповнення анкети</value>
+    <value>Статистика по анкеті</value>
   </data>
   <data name="Questionnaire_SubSectionsCount" xml:space="preserve">
     <value>Кількість підрозділів</value>
@@ -1411,7 +1411,7 @@
     <value>{{name}} (ver. {{version}})</value>
   </data>
   <data name="QuestionnaireNameVersionFirst" xml:space="preserve">
-    <value>(ver. {1}) {0} </value>
+    <value>(вер. {1}) {0} </value>
   </data>
   <data name="RecoveryCode" xml:space="preserve">
     <value>Код відновлення</value>
@@ -1420,13 +1420,13 @@
     <value>Якщо ви втратите свій пристрій і не матимете кодів відновлення, ви втратите доступ до свого облікового запису.</value>
   </data>
   <data name="RecoveryCodesDescriptionLine1" xml:space="preserve">
-    <value>Генерація нових кодів відновлення не змінює ключі, що використовуються в програмах автентифікації.</value>
+    <value>Генерація нових кодів відновлення не змінює ключі, що використовуються в додатках автентифікації.</value>
   </data>
   <data name="RecoveryCodesInfo" xml:space="preserve">
     <value>Зберігайте ці коди в безпечному місці.</value>
   </data>
   <data name="RecoveryCodesLeft" xml:space="preserve">
-    <value>Залишилися коди відновлення:</value>
+    <value>Залишилося кодов відновлення:</value>
   </data>
   <data name="RecoveryCodesYouCan" xml:space="preserve">
     <value>Ти можеш</value>
@@ -1438,16 +1438,16 @@
     <value>Відхилено штаб-квартирою</value>
   </data>
   <data name="RejectedBySupervisor" xml:space="preserve">
-    <value>Відхилено керівником</value>
+    <value>Відхилено супервізором</value>
   </data>
   <data name="ResetAuthenticator" xml:space="preserve">
     <value>Скинути автентифікатор</value>
   </data>
   <data name="ResetAuthenticatorLine1" xml:space="preserve">
-    <value>Якщо ви скинете ключ автентифікатора, ваш додаток автентифікатора не дозволить вам увійти до системи, доки ви не переналаштуєте його..</value>
+    <value>Якщо ви скинете ключ автентифікатора, ваш додаток автентифікатора не дозволить вам увійти до системи, доки ви не переналаштуєте його.</value>
   </data>
   <data name="ResetAuthenticatorLine2" xml:space="preserve">
-    <value>Цей процес вимкне двофакторну автентифікацію, доки ви не підтвердите свій додаток-автентифікатор. Якщо ви не завершите налаштування програми-автентифікатора, ваш акаунт залишиться без двофакторної автентифікації.</value>
+    <value>Цей процес вимкне двофакторну автентифікацію, доки ви не підтвердите свій додаток-автентифікатор. Якщо ви не завершите налаштування додатку-автентифікатора, ваш акаунт залишиться без двофакторної автентифікації.</value>
   </data>
   <data name="ResetRecoveryCodes" xml:space="preserve">
     <value>Скинути коди відновлення</value>
@@ -1468,29 +1468,29 @@
     <value>Статус</value>
   </data>
   <data name="StatusDuration" xml:space="preserve">
-    <value>Статус Тривалість</value>
+    <value>Тривалість статусів</value>
   </data>
   <data name="StatusDurationDescription" xml:space="preserve">
-    <value>Кількість днів, протягом яких завдання та співбесіди залишалися в поточному статусі</value>
+    <value>Кількість днів, протягом яких завдання та інтерв'ю залишалися в поточному статусі</value>
   </data>
   <data name="Supervisor_CreateText" xml:space="preserve">
     <value>Ця дія створить окремого користувача з правами супервізора,
- &lt;br&gt;для створення кількох користувачів ви можете скористатися &lt;a href="{{link}}" target="_blank"&gt;груповим створенням користувачів&lt;/a&gt;.</value>
+&lt;br&gt;для створення кількох користувачів ви можете скористатися &lt;a href="{{link}}" target="_blank"&gt;груповим створенням користувачів&lt;/a&gt;.</value>
   </data>
   <data name="Supervisor_LockWarning" xml:space="preserve">
     <value>Заблокований супервізор (прапорець встановлений) не може увійти та виконувати будь-які дії на сервері.</value>
   </data>
   <data name="SupervisorAssigned" xml:space="preserve">
-    <value>Призначено куратора</value>
+    <value>Призначено супервізора</value>
   </data>
   <data name="Supervisors_ActiveUsers" xml:space="preserve">
-    <value>Активні супервайзери</value>
+    <value>Активні супервізори</value>
   </data>
   <data name="Supervisors_Archive" xml:space="preserve">
     <value>Архів</value>
   </data>
   <data name="Supervisors_ArchivedUsers" xml:space="preserve">
-    <value>Архівовані супервайзери</value>
+    <value>Архівовані супервізори</value>
   </data>
   <data name="Supervisors_ArchiveStatusTitle" xml:space="preserve">
     <value>Стан архіву</value>
@@ -1499,7 +1499,7 @@
     <value>Якщо інтерв'юер завершив інтерв'ю на своєму планшеті, то дані будуть втрачені.</value>
   </data>
   <data name="Supervisors_Selected" xml:space="preserve">
-    <value>обрано керівника(ів)</value>
+    <value>обрано супервізора(ів)</value>
   </data>
   <data name="Supervisors_Unarchive" xml:space="preserve">
     <value>Розархівувати</value>
@@ -1511,7 +1511,7 @@
     <value>Створено на клієнті</value>
   </data>
   <data name="Survey_HasErrorsTitle" xml:space="preserve">
-    <value>Нas Errors</value>
+    <value>Має помилки</value>
   </data>
   <data name="Survey_Header" xml:space="preserve">
     <value>Інтерв'ю</value>
@@ -1535,7 +1535,7 @@
     <value>Статус</value>
   </data>
   <data name="SurveysAndStatuses_HeadquartersDescription" xml:space="preserve">
-    <value>Показує кількість інтерв'ю в кожному статусі (стовпці) для кожного інструменту опитування (рядки)</value>
+    <value>Показує кількість інтерв'ю в кожному статусі (стовпці) для кожного інструменту анкети (рядки)</value>
   </data>
   <data name="SurveysAndStatuses_InterviewerStatisticsFormat" xml:space="preserve">
     <value>{0} інтерв'ю</value>
@@ -1547,7 +1547,7 @@
     <value>Опитування та статуси</value>
   </data>
   <data name="SurveysAndStatuses_SupervisorDescription" xml:space="preserve">
-    <value>Звіт "Опитування та статуси" показує кількість інтерв'ю в кожному статусі для опитувань, в яких бере участь цей супервайзер</value>
+    <value>Звіт "опитування та статуси" показує кількість інтерв'ю в кожному статусі для опитувань, в яких бере участь цей Супервізор</value>
   </data>
   <data name="SurveysAndStatuses_SupervisorTitle" xml:space="preserve">
     <value>Супервайзер (команди)</value>
@@ -1556,7 +1556,7 @@
     <value>Затверджено штаб-квартирою</value>
   </data>
   <data name="SurveysStatuses_ApprovedBySupervisor" xml:space="preserve">
-    <value>Затверджено керівником</value>
+    <value>Затверджено супервізором</value>
   </data>
   <data name="SurveysStatuses_Completed" xml:space="preserve">
     <value>Завершено</value>
@@ -1568,10 +1568,10 @@
     <value>Відхилено штаб-квартирою</value>
   </data>
   <data name="SurveysStatuses_RejectedBySupervisor" xml:space="preserve">
-    <value>Відхилено керівником</value>
+    <value>Відхилено супервізором</value>
   </data>
   <data name="SurveysStatuses_SupervisorAssigned" xml:space="preserve">
-    <value>Призначено куратора</value>
+    <value>Супервізор призначен</value>
   </data>
   <data name="SurveysStatuses_SurveyName" xml:space="preserve">
     <value>Назва опитування</value>
@@ -1583,7 +1583,7 @@
     <value>Опитування та статуси</value>
   </data>
   <data name="SurveysStatuses_Total" xml:space="preserve">
-    <value>Всього</value>
+    <value>Взагалі</value>
   </data>
   <data name="SurveyStatisticsDescription" xml:space="preserve">
     <value>У звіті представлені основні статистичні дані, односторонні та двосторонні таблиці, розраховані на основі даних опитування</value>
@@ -1601,7 +1601,7 @@
     <value>Шаблон</value>
   </data>
   <data name="Total" xml:space="preserve">
-    <value>Всього</value>
+    <value>Взагалі</value>
   </data>
   <data name="Unarchive" xml:space="preserve">
     <value>Розархівувати</value>
@@ -1610,22 +1610,22 @@
     <value>Розблокувати</value>
   </data>
   <data name="Update" xml:space="preserve">
-    <value>Оновлення</value>
+    <value>Оновити</value>
   </data>
   <data name="UpgradeAssignmentsTitle" xml:space="preserve">
-    <value>Завдання на оновлення</value>
+    <value>Оновити завдання</value>
   </data>
   <data name="Upload_Upload" xml:space="preserve">
     <value>Завантажити</value>
   </data>
   <data name="User_CreateText_UserBatchUploadLinkText" xml:space="preserve">
-    <value>створення користувацьких партій</value>
+    <value>загрузка групи користувачів</value>
   </data>
   <data name="User_CreateText1" xml:space="preserve">
     <value>Ця дія створить окремого користувача,</value>
   </data>
   <data name="User_CreateText2" xml:space="preserve">
-    <value>Для створення декількох інтерв'юерів та супервайзерів ви можете використовувати {{link}}</value>
+    <value>Для створення декількох інтерв'юерів та Супервізорів ви можете використовувати {{link}}</value>
   </data>
   <data name="UserManagement_AddToWorkspace" xml:space="preserve">
     <value>Додати до робочих просторів</value>
@@ -1637,13 +1637,13 @@
     <value>Видалити з робочих просторів</value>
   </data>
   <data name="UserManagement_SubtitleAdd" xml:space="preserve">
-    <value>Виберіть робочі області, які потрібно додати вибраним користувачам</value>
+    <value>Виберіть робочі простори, які потрібно додати вибраним користувачам</value>
   </data>
   <data name="UserManagement_SubtitleAddInterviewer" xml:space="preserve">
-    <value>Виберіть робочу область і керівника, для якого потрібно створити інтерв'юера</value>
+    <value>Виберіть робочий простір і супервізора, для якого потрібно створити інтерв'юера</value>
   </data>
   <data name="UserManagement_SubtitleRemove" xml:space="preserve">
-    <value>Виберіть робочі області, які потрібно видалити у вибраних користувачів</value>
+    <value>Виберіть робочі простори, які потрібно видалити у вибраних користувачів</value>
   </data>
   <data name="UserManagement_UsersSelected" xml:space="preserve">
     <value>Вибрано користувача(ів)</value>
@@ -1661,13 +1661,13 @@
     <value>Архівні користувачі</value>
   </data>
   <data name="Users_ArchiveUsersConfirmMessage" xml:space="preserve">
-    <value>Ви будете архівувати супервайзерів та інтерв'юерів у їхніх командах. Інтерв'юери, призначені заархівованому супервайзеру, також будуть заархівовані у всіх робочих просторах. Якщо інтерв'юери мають несинхронізовані дані на планшетах, вони будуть видалені.</value>
+    <value>Ви будете архівувати Супервізорів та інтерв'юерів у їхніх командах. Інтерв'юери, призначені заархівованому Супервізору, також будуть заархівовані у всіх робочих просторах. Якщо інтерв'юери мають несинхронізовані дані на планшетах, вони будуть видалені.</value>
   </data>
   <data name="Users_Headquarters_Instruction1" xml:space="preserve">
-    <value>Натисніть кнопку Додати штаб, щоб створити нового користувача штабу.</value>
+    <value>Натисніть кнопку Додати Хедквотера, щоб створити нового користувача хедвотера.</value>
   </data>
   <data name="Users_Headquarters_Instruction2" xml:space="preserve">
-    <value>Натисніть на ім'я користувача, щоб змінити профіль існуючого користувача штаб-квартири. </value>
+    <value>Натисніть на ім'я користувача, щоб змінити профіль існуючого користувача хедквотера.</value>
   </data>
   <data name="Users_Interviewers_Instruction1" xml:space="preserve">
     <value>Натисніть кнопку Додати інтерв'юера, щоб створити нового інтерв'юера.</value>
@@ -1682,7 +1682,7 @@
     <value>Натисніть на Ім'я користувача, щоб змінити профіль існуючого користувача Спостерігача. </value>
   </data>
   <data name="Users_Supervisors_Instruction1" xml:space="preserve">
-    <value>Натисніть кнопку Додати супервайзера, щоб створити нового супервайзера.</value>
+    <value>Натисніть кнопку Додати супервізора, щоб створити нового супервізора.</value>
   </data>
   <data name="Users_Supervisors_Instruction2" xml:space="preserve">
     <value>Натисніть на ім'я користувача, щоб змінити профіль існуючого супервізора. </value>
@@ -1700,10 +1700,10 @@
     <value>Всі користувачі</value>
   </data>
   <data name="UsersManage_SupervisorFilterPlaceholder" xml:space="preserve">
-    <value>Виберіть керівника</value>
+    <value>Виберіть супервізора</value>
   </data>
   <data name="UsersManage_SupervisorFilterTitle" xml:space="preserve">
-    <value>Супервайзер (до його команди будуть додані інтерв'юери)</value>
+    <value>Супервізор (до його команди будуть додані інтерв'юери)</value>
   </data>
   <data name="UsersManage_TeamFilter" xml:space="preserve">
     <value>Команда</value>
@@ -1712,7 +1712,7 @@
     <value>Команда</value>
   </data>
   <data name="UsersManage_WorkspacesFilterPlaceholder" xml:space="preserve">
-    <value>Всі робочі місця</value>
+    <value>Всі робочі простори</value>
   </data>
   <data name="UsersManage_WorkspacesFilterTitle" xml:space="preserve">
     <value>Робочий простір</value>
@@ -1724,9 +1724,9 @@
     <value>Папка, яка містить веб-сайт, має занадто довге ім'я шляху до неї. Будь ласка, перемістіть веб-сайт до іншої папки з коротшою назвою.</value>
   </data>
   <data name="YesNoQuestion_No" xml:space="preserve">
-    <value>Ні.</value>
+    <value>Ні</value>
   </data>
   <data name="YesNoQuestion_Yes" xml:space="preserve">
-    <value>Так.</value>
+    <value>Так</value>
   </data>
 </root>

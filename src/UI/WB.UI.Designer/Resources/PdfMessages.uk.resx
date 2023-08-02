@@ -119,7 +119,7 @@
   </resheader>
   <data name="FailedToGenerate" xml:space="preserve">
     <value>Не вдалося згенерувати PDF.
-Перезавантажте сторінку і спробуйте ще раз або зверніться до support@mysurvey.solutions</value>
+Перезавантажте сторінку і спробуйте ще раз або зверніться до администратора</value>
   </data>
   <data name="Generate" xml:space="preserve">
     <value>PDF документ створено {0} хвилин(и) тому.
@@ -138,6 +138,6 @@
 Зачекайте, будь ласка...</value>
   </data>
   <data name="Retry" xml:space="preserve">
-    <value>Повернення експорту у форматі PDF.</value>
+    <value>Повторна спроба експорту у форматі PDF.</value>
   </data>
 </root>

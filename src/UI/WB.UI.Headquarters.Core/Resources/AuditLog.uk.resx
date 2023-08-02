@@ -127,7 +127,7 @@
     <value>Журнал</value>
   </data>
   <data name="LogDate" xml:space="preserve">
-    <value>Дата реєстрації</value>
+    <value>Дата події</value>
   </data>
   <data name="PageTitle" xml:space="preserve">
     <value>Журнал аудиту</value>

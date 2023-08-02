@@ -124,10 +124,10 @@
     <value>Всі права захищені.</value>
   </data>
   <data name="AppDescription" xml:space="preserve">
-    <value>Інструмент для створення опитувальників для платформи Світового банку CAPI/CAWI.</value>
+    <value>Інструмент для створення анкет для CAPI/CAWI платформи Світового банку.</value>
   </data>
   <data name="AppName" xml:space="preserve">
-    <value>Конструктор анкет</value>
+    <value>Designer анкет</value>
   </data>
   <data name="BackToLogin" xml:space="preserve">
     <value>Повернутися до входу</value>
@@ -142,7 +142,7 @@
     <value>Група Світового банку</value>
   </data>
   <data name="CompleteRegistrationInstruction" xml:space="preserve">
-    <value>Щоб завершити процес реєстрації, знайдіть у своїй поштовій скриньці лист з подальшими інструкціями</value>
+    <value>Щоб завершити процес регістрації, знайдіть у своїй поштовій скриньці лист з подальшими інструкціями</value>
   </data>
   <data name="ConfirmPassword" xml:space="preserve">
     <value>Підтвердити пароль</value>
@@ -172,7 +172,7 @@
     <value>Повне ім'я</value>
   </data>
   <data name="Help" xml:space="preserve">
-    <value>Допоможіть!</value>
+    <value>Допомога</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>Вказана адреса електронної пошти є недійсною. Будь ласка, перевірте значення і спробуйте ще раз.</value>
@@ -193,16 +193,16 @@
     <value>Введене ім'я користувача є недійсним. Будь ласка, перевірте значення і спробуйте ще раз.</value>
   </data>
   <data name="Legal" xml:space="preserve">
-    <value>Юридичний</value>
+    <value>Юридична інформація</value>
   </data>
   <data name="LockedOut" xml:space="preserve">
-    <value>Заблоковано.</value>
+    <value>Заблоковано</value>
   </data>
   <data name="LockedOutText" xml:space="preserve">
     <value>Ваш обліковий запис заблоковано. Зверніться до адміністратора для розблокування облікового запису</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Увійдіть в систему</value>
+    <value>Увійти</value>
   </data>
   <data name="LoginMessage" xml:space="preserve">
     <value>Будь ласка, увійдіть або</value>
@@ -214,7 +214,7 @@
     <value>Логін або електронна пошта</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>Вийдіть з системи</value>
+    <value>Вийти</value>
   </data>
   <data name="LogoutText" xml:space="preserve">
     <value>Ви успішно вийшли з програми.</value>
@@ -274,19 +274,19 @@
     <value>Залишайтеся в системі протягом дня</value>
   </data>
   <data name="TesterApp" xml:space="preserve">
-    <value>Встановіть Survey Solutions Questionnaire Tester на планшет на Android, щоб тестувати опитувальники, які ви розробляєте в Конструкторі.</value>
+    <value>Встановіть Survey Solutions Questionnaire Tester на планшет на Android, щоб тестувати анкети, які ви розробляєте в Designer.</value>
   </data>
   <data name="TesterAppImageDescription" xml:space="preserve">
     <value>Отримайте його в Google Play</value>
   </data>
   <data name="ThankYou" xml:space="preserve">
-    <value>Дякую.</value>
+    <value>Дякуюємо</value>
   </data>
   <data name="UnknownError" xml:space="preserve">
     <value>Виникла невідома помилка. Будь ласка, перевірте свій запис і спробуйте ще раз. Якщо проблема не зникне, зверніться до системного адміністратора.</value>
   </data>
   <data name="UpgradeYourBrowser" xml:space="preserve">
-    <value>Будь ласка, &lt;a href="http://browsehappy.com/"&gt;оновіть ваш браузер&lt;/a&gt;, щоб скористатися додатком конструктора.</value>
+    <value>Будь ласка, &lt;a href="http://browsehappy.com/"&gt;оновіть ваш браузер&lt;/a&gt;, щоб скористатися додатком Designer.</value>
   </data>
   <data name="UserCreationRequestCanceled" xml:space="preserve">
     <value>Запит на створення користувача було скасовано. Будь ласка, перевірте свій запис і спробуйте ще раз. Якщо проблема не зникне, зверніться до системного адміністратора.</value>

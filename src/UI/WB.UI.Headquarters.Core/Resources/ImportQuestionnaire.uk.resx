@@ -124,7 +124,7 @@
     <value>Запитувана анкета не знайдена. Будь ласка, оновіть список анкет</value>
   </data>
   <data name="SignedInBlock" xml:space="preserve">
-    <value>Ви ввійшли в Designer як {{user}}..</value>
+    <value>Ви ввійшли в Designer як {{user}}.</value>
   </data>
   <data name="SignOut" xml:space="preserve">
     <value>вийти з системи.</value>

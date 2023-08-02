@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AllowRelinkTablet" xml:space="preserve">
-    <value>Дозволяє переприєднання до іншого пристрою з втратою даних на оригінальному пристрої.</value>
+    <value>Дозволяє переприв'язання до іншого пристрою з втратою даних на оригінальному пристрої.</value>
   </data>
   <data name="BatchUploadModel_FileName" xml:space="preserve">
     <value>Файл CSV</value>
@@ -160,13 +160,13 @@
     <value>Адреса електронної пошти</value>
   </data>
   <data name="InvalidUser" xml:space="preserve">
-    <value>Неправильний користувач</value>
+    <value>Невірний користувач</value>
   </data>
   <data name="IsLockedBySupervisorFieldName" xml:space="preserve">
     <value>Заблоковано супервізором</value>
   </data>
   <data name="IsLockedFieldName" xml:space="preserve">
-    <value>Заблоковано адміністратором або штаб-квартирою</value>
+    <value>Заблоковано адміністратором або хедквотером</value>
   </data>
   <data name="LogOnModel_Password" xml:space="preserve">
     <value>Пароль</value>
@@ -241,13 +241,13 @@
     <value>Потрібен пароль</value>
   </data>
   <data name="RequiredSupervisorErrorMessage" xml:space="preserve">
-    <value>Потрібен супервайзер</value>
+    <value>Потрібен супервізор</value>
   </data>
   <data name="RequiredUserNameErrorMessage" xml:space="preserve">
     <value>Ім'я користувача обов'язкове</value>
   </data>
   <data name="SupervisorFieldName" xml:space="preserve">
-    <value>Наглядач</value>
+    <value>Супервізор</value>
   </data>
   <data name="TroubleshootModel_InterviewId_ErrorMessage" xml:space="preserve">
     <value>Будь ласка, введіть дійсний GUID у наступному форматі xxxxxxxx-xxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxxx</value>
@@ -262,7 +262,7 @@
     <value>Будь ласка, виберіть файл</value>
   </data>
   <data name="UserIsLockedByHq" xml:space="preserve">
-    <value>Користувач заблокований штаб-квартирою</value>
+    <value>Користувач заблокований Headquarter</value>
   </data>
   <data name="UserName_Taken" xml:space="preserve">
     <value>Будь ласка, оберіть інше ім'я користувача</value>

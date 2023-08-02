@@ -130,7 +130,7 @@
     <value>У файлі є дублікати користувачів з логіном '{0}'</value>
   </data>
   <data name="PLU0003" xml:space="preserve">
-    <value>Не та команда.</value>
+    <value>Неправильна команда</value>
   </data>
   <data name="PLU0003Description" xml:space="preserve">
     <value>Користувач '{0}' заархівований і належить до іншої команди</value>
@@ -139,7 +139,7 @@
     <value>Заархівований користувач не може бути використаний повторно, оскільки він належить іншій команді</value>
   </data>
   <data name="PLU0004" xml:space="preserve">
-    <value>Не та роль</value>
+    <value>Неправильна роль</value>
   </data>
   <data name="PLU0004Description" xml:space="preserve">
     <value>Користувач '{0}' архівується і має іншу роль</value>
@@ -154,7 +154,7 @@
     <value>Логін '{0}' має неправильний формат</value>
   </data>
   <data name="PLU0005Recomendation" xml:space="preserve">
-    <value>Ім'я користувача має містити від 3 до 15 символів і може містити лише літери, цифри та символ підкреслення. Літери повинні бути тільки з латинського (англійського) алфавіту: 'A'...Z' або 'a'...z'. Інші літери (кирилиця, арабські тощо) не приймаються для використання в логінах.</value>
+    <value>Ім'я користувача має містити від 3 до 15 символів і може містити лише літери, цифри та символ підкреслення. Літери повинні бути тільки з латинського (англійського) алфавіту: 'A'...'Z' або 'a'...'z'. Інші літери (кирилиця, арабські тощо) не приймаються для використання в логінах.</value>
   </data>
   <data name="PLU0006" xml:space="preserve">
     <value>Неправильний формат пароля</value>
@@ -184,19 +184,19 @@
     <value>Роль '{0}' є недійсною</value>
   </data>
   <data name="PLU0009Recomendation" xml:space="preserve">
-    <value>Допускаються тільки "супервайзер" або "інтерв'юер"</value>
+    <value>Допускаються тільки "supervisor" або "interviewer"</value>
   </data>
   <data name="PLU0010" xml:space="preserve">
     <value>Помилка залежності</value>
   </data>
   <data name="PLU0010Description" xml:space="preserve">
-    <value>Керівника '{0}' не знайдено в робочому просторі</value>
+    <value>Cупервізора '{0}' не знайдено в робочому просторі</value>
   </data>
   <data name="PLU0011" xml:space="preserve">
     <value>Помилка залежності</value>
   </data>
   <data name="PLU0011Description" xml:space="preserve">
-    <value>Колонка "Керівник" повинна бути порожньою для ролі керівника</value>
+    <value>Колонка "supervisor" повинна бути порожньою для ролі супервізора</value>
   </data>
   <data name="PLU0012" xml:space="preserve">
     <value>Неправильна довжина повного імені</value>
@@ -292,7 +292,7 @@
     <value>Робочу область не знайдено</value>
   </data>
   <data name="PLU0022Description" xml:space="preserve">
-    <value>Робоча область повинна існувати і бути активована</value>
+    <value>Робочий простір повинен існувати і бути активован</value>
   </data>
   <data name="PLU0022Recomendation" xml:space="preserve">
     <value>Перевірте назву робочого простору</value>

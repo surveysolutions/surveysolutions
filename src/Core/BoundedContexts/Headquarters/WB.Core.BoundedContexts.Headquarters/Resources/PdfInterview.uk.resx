@@ -130,7 +130,7 @@
     <value>Довжина</value>
   </data>
   <data name="AreaQestion_Points" xml:space="preserve">
-    <value>Бали</value>
+    <value>Точки</value>
   </data>
   <data name="AreaQestion_RequestedAccuracy" xml:space="preserve">
     <value>Точність</value>
@@ -148,7 +148,7 @@
     <value>Обкладинка</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Помилка.</value>
+    <value>Помилка</value>
   </data>
   <data name="Generated" xml:space="preserve">
     <value>Згенеровано</value>
@@ -193,16 +193,16 @@
     <value>Не відповіли</value>
   </data>
   <data name="NotCalculated" xml:space="preserve">
-    <value>Не має значення</value>
+    <value>Немає значення</value>
   </data>
   <data name="PageOf" xml:space="preserve">
-    <value> з </value>
+    <value>з </value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Анкета</value>
   </data>
   <data name="Started" xml:space="preserve">
-    <value>Розпочато співбесіду</value>
+    <value>Розпочато інтерв'ю</value>
   </data>
   <data name="SurveySolutions" xml:space="preserve">
     <value>Рішення для опитувань</value>
@@ -217,7 +217,7 @@
     <value>ApiUser</value>
   </data>
   <data name="UserRoles_Headquarter" xml:space="preserve">
-    <value>Штаб-квартира</value>
+    <value>Хедквортер</value>
   </data>
   <data name="UserRoles_Interviewer" xml:space="preserve">
     <value>Інтерв'юер</value>
@@ -226,16 +226,16 @@
     <value>Спостерігач</value>
   </data>
   <data name="UserRoles_Supervisor" xml:space="preserve">
-    <value>Наглядач</value>
+    <value>Супервізор</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>version {0}</value>
+    <value>версія {0}</value>
   </data>
   <data name="Warning" xml:space="preserve">
     <value>Попередження</value>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>Так.</value>
+    <value>Так</value>
   </data>
   <data name="YesNo" xml:space="preserve">
     <value>Так / Ні</value>

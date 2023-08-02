@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AttachmentIdIsMissing" xml:space="preserve">
-    <value>Відсутній вкладення з ідентифікатором {0}</value>
+    <value>Відсутні вкладення з ідентифікатором {0}</value>
   </data>
   <data name="Attachments_Unsupported_content" xml:space="preserve">
     <value>Завантажений вміст не підтримується</value>
@@ -130,7 +130,7 @@
     <value>Завантажений файл не є зображенням</value>
   </data>
   <data name="CantEditCoverPageInOldQuestionnaire" xml:space="preserve">
-    <value>Обкладинка призначена лише для читання. Ви не можете редагувати або змінювати порядок запитань у ньому.</value>
+    <value>Обкладинка призначена лише для читання. Ви не можете редагувати або змінювати порядок запитань у цьому розділі.</value>
   </data>
   <data name="CantMoveSubsectionInWrongPosition" xml:space="preserve">
     <value>Ви не можете перейти до підрозділу {0}, оскільки позиція {1} є неприйнятною.</value>
@@ -154,7 +154,7 @@
     <value>Категорії в каскадному запитанні не можуть мати нечислове значення в колонці ParentValue.</value>
   </data>
   <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
-    <value>Існує принаймні один дубль пар "Назва" та "Батьківське значення". Список не повинен містити дублікатів.</value>
+    <value>Існує принаймні один дублікат пар "Назва" та "Батьківське значення". Список не повинен містити дублікатів.</value>
   </data>
   <data name="CategoriesCantBeExtracted" xml:space="preserve">
     <value>Не вдалося витягти категорії із завантаженого файлу</value>
@@ -169,7 +169,7 @@
     <value>Обкладинка може містити лише питання, статичні тексти та змінні</value>
   </data>
   <data name="CoverPageMustBeFirstInQuestionnaire" xml:space="preserve">
-    <value>Титульний розділ повинен бути першим розділом в анкеті</value>
+    <value>Обкладинка повинна бути першим розділом в анкеті</value>
   </data>
   <data name="Excel_Categories_Duplicated" xml:space="preserve">
     <value>Повторювані категорії в рядках: {0}</value>
@@ -244,7 +244,7 @@
     <value>Невірна інформація про користувача.</value>
   </data>
   <data name="InvalidValueOfFixedTitle" xml:space="preserve">
-    <value>Для фіксованих назв списків обов'язковими є непорожні значення</value>
+    <value>Для фіксованих назв ростерів обов'язковими є непорожні значення</value>
   </data>
   <data name="ItemWithIdExistsAlready" xml:space="preserve">
     <value>Один або декілька пунктів анкети з однаковим ідентифікатором {0} вже існують.</value>
@@ -274,13 +274,13 @@
     <value>Порожні або невірні заголовки не допускаються</value>
   </data>
   <data name="LookupTables_rowcode_column_is_mandatory" xml:space="preserve">
-    <value>Відсутній обов'язковий стовпчик коду рядка</value>
+    <value>Відсутній обов'язковий стовпчик коду рядка (rowcode)</value>
   </data>
   <data name="LookupTables_rowcode_value_cannot_be_parsed" xml:space="preserve">
     <value>Значення {0} не може бути оброблено як довге ціле число. Стовпець {1}, рядок {2}.</value>
   </data>
   <data name="LookupTables_rowcode_values_must_be_unique" xml:space="preserve">
-    <value>Значення коду рядка повинні бути унікальними</value>
+    <value>Значення коду рядка (rowcode) повинні бути унікальними</value>
   </data>
   <data name="LookupTables_too_many_columns" xml:space="preserve">
     <value>У завантаженому файлі занадто багато стовпців. Максимальна кількість стовпців {0}</value>
@@ -310,7 +310,7 @@
     <value>Старий ідентифікатор вкладення порожній і файл відсутній для вкладення {0} в анкеті {1}</value>
   </data>
   <data name="OnlyQuestionnaireDocumentsAreSupported" xml:space="preserve">
-    <value>Наразі підтримуються лише документи типу ОпитувальникДокумент</value>
+    <value>Наразі підтримуються лише документи типу QuestionnaireDocument</value>
   </data>
   <data name="OptionValuesShouldBeNumbers" xml:space="preserve">
     <value>Значення категорії повинно містити лише цифрові символи</value>
@@ -319,25 +319,25 @@
     <value>Знайдено помилки у наданому файлі</value>
   </data>
   <data name="QuestionCannotBeFound" xml:space="preserve">
-    <value>Питання з відкритим ключем {0} не знайдено.</value>
+    <value>Питання з публічним ключем {0} не знайдено.</value>
   </data>
   <data name="QuestionIsNotCombobox" xml:space="preserve">
-    <value>Питання {0} не є комбінованим вікном</value>
+    <value>Питання {0} не є комбінованим</value>
   </data>
   <data name="Questionnaire_CategoriesWereNotFound" xml:space="preserve">
     <value>Категорії не знайдено</value>
   </data>
   <data name="QuestionnaireAlreadySupportedCover" xml:space="preserve">
-    <value>Опитувальник вже підтримує обкладинку</value>
+    <value>В анкетивже є обкладинка</value>
   </data>
   <data name="QuestionnaireCantBeFound" xml:space="preserve">
     <value>Елемент анкети з ідентифікатором {0} не знайдено.</value>
   </data>
   <data name="QuestionnaireRevisionCantBeFound" xml:space="preserve">
-    <value>Опитувальник {0} версії {1} не знайдено</value>
+    <value>Анкета{0} версії {1} не знайдено</value>
   </data>
   <data name="QuestionnaireSuportedNewCover" xml:space="preserve">
-    <value>Опитувальник вже підтримує титульну сторінку.</value>
+    <value>В анкетивже є обкладинка</value>
   </data>
   <data name="QuestionnaireTitleIsEmpty" xml:space="preserve">
     <value>Назва анкети не може бути порожньою або містити лише пробіли.</value>
@@ -352,22 +352,22 @@
     <value>Список не може бути вставлений сюди.</value>
   </data>
   <data name="Row" xml:space="preserve">
-    <value>Ряд</value>
+    <value>Рядок</value>
   </data>
   <data name="SectionCantHaveMoreThan_Items" xml:space="preserve">
-    <value>Секція не може мати більше {0} дочірніх елементів</value>
+    <value>Розділ не може мати більше {0} дочірніх елементів</value>
   </data>
   <data name="StaticTextCantBePaste" xml:space="preserve">
     <value>Тут не можна вставляти статичний текст.</value>
   </data>
   <data name="SubSectionCantBeFound" xml:space="preserve">
-    <value>Підрозділ з відкритим ключем {0} не знайдено.</value>
+    <value>Підрозділ з публічним ключем {0} не знайдено.</value>
   </data>
   <data name="SubsectionCantHaveMoreThan_DirectChildren" xml:space="preserve">
     <value>Розділ або підрозділ не може мати більше {0} прямих дочірніх елементів</value>
   </data>
   <data name="SubSectionDepthLimit" xml:space="preserve">
-    <value>Глибина підрозділу або списку не може бути більшою за {0}..</value>
+    <value>Глибина підрозділу або списку не може бути більшою за {0}.</value>
   </data>
   <data name="TranlationExcelFileHasErrors" xml:space="preserve">
     <value>Знайдено помилки у файлі Excel</value>
@@ -400,7 +400,7 @@
     <value>Користувач {0} є власником цієї анкети. Будь ласка, введіть інший email.</value>
   </data>
   <data name="ValueOfFixedTitleCantBeParsed" xml:space="preserve">
-    <value>Виправлений набір елементів ростера, значення яких має містити лише числові символи</value>
+    <value>Фіксований ростер має містити лише числові коди елементів.</value>
   </data>
   <data name="VariableCantBePaste" xml:space="preserve">
     <value>Змінна не може бути вставлена сюди.</value>

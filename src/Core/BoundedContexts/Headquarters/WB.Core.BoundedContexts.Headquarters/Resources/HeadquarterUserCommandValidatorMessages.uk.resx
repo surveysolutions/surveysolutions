@@ -127,6 +127,6 @@
     <value>Ім'я користувача '{0}' вже зайнято. Будь ласка, виберіть інше ім'я користувача.</value>
   </data>
   <data name="YouCantUnarchiveInterviewerUntilSupervisorIsArchivedFormat" xml:space="preserve">
-    <value>Ви не можете розархівувати інтерв'юера {0}, поки не буде розархівовано супервайзера</value>
+    <value>Ви не можете розархівувати інтерв'юера {0}, поки не буде розархівовано супервізора</value>
   </data>
 </root>

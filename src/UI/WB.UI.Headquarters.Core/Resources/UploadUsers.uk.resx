@@ -121,10 +121,10 @@
     <value>Всі {{total}} акаунти успішно створено:</value>
   </data>
   <data name="AssignedTo" xml:space="preserve">
-    <value>Наглядач</value>
+    <value>Супервізор</value>
   </data>
   <data name="AssignedToDescription" xml:space="preserve">
-    <value>необхідний для інтерв'юерів, містить ім'я користувача супервайзера, якому буде призначена ця особа</value>
+    <value>необхідний для інтерв'юерів, містить ім'я користувача Супервізора, якому буде призначена ця особа</value>
   </data>
   <data name="BackToImport" xml:space="preserve">
     <value>Повернутися до імпорту користувачів</value>
@@ -139,7 +139,7 @@
     <value>Ви можете створити завдання для цих команд з розділу "анкети", завдання також можуть бути створені в пакетному режимі</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Створіть набір користувачів, завантаживши файл з усією необхідною інформацією. Набір може містити як супервайзерів, так і інтерв'юерів, або ж ви можете створити</value>
+    <value>Створіть набір користувачів, завантаживши файл з усією необхідною інформацією. Набір може містити як Супервізорів, так і інтерв'юерів, або ж ви можете створити</value>
   </data>
   <data name="DownloadTemplateLink" xml:space="preserve">
     <value>Завантажити шаблон .tab для завантаження користувача</value>
@@ -157,7 +157,7 @@
     <value>Імпорт інформації про користувача з</value>
   </data>
   <data name="InterviewersAndSupervisorsCount" xml:space="preserve">
-    <value>{{supervisorsCount}} супервайзерів та {{interviewersCount}} інтерв'юерів</value>
+    <value>{{supervisorsCount}} Супервізорів та {{interviewersCount}} інтерв'юерів</value>
   </data>
   <data name="Line" xml:space="preserve">
     <value>лінія</value>
@@ -166,7 +166,7 @@
     <value>інтерв'юер</value>
   </data>
   <data name="ManualSupervisorCreateLink" xml:space="preserve">
-    <value>керівник</value>
+    <value>супервізор</value>
   </data>
   <data name="NoCreatedUsers" xml:space="preserve">
     <value>Облікові записи користувачів не створювалися</value>
@@ -205,13 +205,13 @@
     <value>Виберіть робочу область</value>
   </data>
   <data name="SelectWorkspaceDescription" xml:space="preserve">
-    <value>Якщо у пакетному файлі не призначено робочу область, використовуйте її за замовчуванням</value>
+    <value>Якщо у пакетному файлі не призначено робочий простір, використовуйте цій за замовчуванням</value>
   </data>
   <data name="TimeDetermination" xml:space="preserve">
     <value>визначення часу</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Створення кількох користувачів за допомогою пакетного завантаження</value>
+    <value>Створення декількох користувачів за допомогою пакетного завантаження</value>
   </data>
   <data name="UploadBtn" xml:space="preserve">
     <value>Завантажте файл .tab</value>

@@ -118,6 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="LimitIsReachedErrorMessageFormat" xml:space="preserve">
-    <value>Створено більше інтерв'ю, ніж дозволено. Встановлений ліміт для цього опитування становить {0}. Зверніться до команди Survey Solutions, якщо вам потрібно створити більше інтерв'ю.</value>
+    <value>Створено більше інтерв'ю, ніж дозволено. Встановлений ліміт для цього анкети становить {0}. Зверніться до команди Survey Solutions, якщо вам потрібно створити більше інтерв'ю.</value>
   </data>
 </root>

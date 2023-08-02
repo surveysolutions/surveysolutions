@@ -118,58 +118,58 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApkRequested" xml:space="preserve">
-    <value>Запитано новий файл заявки</value>
+    <value>Запитано новий файл додатку</value>
   </data>
   <data name="AssignmentReceivedByTablet" xml:space="preserve">
     <value>Присвоєння &lt;b&gt;{0}&lt;/b&gt;, отримане та збережене пристроєм</value>
   </data>
   <data name="CalendarEventsListFormat" xml:space="preserve">
-    <value>Завантажити список подій календаря ({0}). &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt; &lt;/ul&gt;</value>
+    <value>Завантажити список подій календаря ({0}). &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;</value>
   </data>
   <data name="CanSynchronize" xml:space="preserve">
-    <value>Почніть синхронізацію</value>
+    <value>Почати синхронізацію</value>
   </data>
   <data name="CensusQuestionnaire" xml:space="preserve">
     <value>&lt;li&gt;&lt;b&gt;{0}&lt;/b&gt; [{1}]&lt;/li&gt;</value>
   </data>
   <data name="CheckIsPackageDuplicatedFormat" xml:space="preserve">
-    <value>Перевірте, чи не повторилося інтерв'ю. Інтерв'ю: &lt;pre&gt;{0}&lt;/pre&gt;</value>
+    <value>Перевірка, чи не повторилося інтерв'ю. Інтерв'ю: &lt;pre&gt;{0}&lt;/pre&gt;</value>
   </data>
   <data name="CheckObsoleteInterviews" xml:space="preserve">
-    <value>Перевірити наявність застарілих інтерв'ю. Запит: &lt;pre&gt;{0}&lt;/pre&gt;</value>
+    <value>Перевірка наявність застарілих інтерв'ю. Запит: &lt;pre&gt;{0}&lt;/pre&gt;</value>
   </data>
   <data name="DeleteInterviewPackage" xml:space="preserve">
-    <value>&lt;li&gt;Видалити інтерв'ю: &lt;a href="{3}"&gt;{0}&lt;/a&gt;, Пакет: {1}, Індекс сортування: {2}&lt;/li&gt;&lt;/li&gt;</value>
+    <value>&lt;li&gt;Видалити інтерв'ю: &lt;a href="{3}"&gt;{0}&lt;/a&gt;, Пакет: {1}, Індекс сортування: {2}&lt;/li&gt;</value>
   </data>
   <data name="DeviceCanBeAssignedToInterviewer" xml:space="preserve">
     <value>Пристрій можна призначити інтерв'юеру</value>
   </data>
   <data name="DeviceRelinkRequired" xml:space="preserve">
-    <value>&lt;font color="orange"&gt;Посилання обов'язкове&lt;/font&gt;</value>
+    <value>&lt;font color="orange"&gt;Потрібна переприв'язка&lt;/font&gt;</value>
   </data>
   <data name="DeviceUpdateRequired" xml:space="preserve">
-    <value>&lt;font color="red"&gt;Потрібне оновлення. Версія рушія інтерв'юера - &lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;&lt;/font</value>
+    <value>&lt;font color="red"&gt;Потрібне оновлення. Версія інтерв'юера - &lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
   </data>
   <data name="DownloadReusableCategories" xml:space="preserve">
-    <value>Завантаження категорії {0} багаторазового використання</value>
+    <value>Завантаження категорії багаторазового використання {0}</value>
   </data>
   <data name="EmptyDevice" xml:space="preserve">
     <value>&lt;b&gt;[ПОРОЖНІЙ ПРИСТРІЙ]&lt;/b&gt;</value>
   </data>
   <data name="ExtendedApkRequested" xml:space="preserve">
-    <value>Запитано новий розширений файл заявки</value>
+    <value>Запитано новий розширений файл додатка</value>
   </data>
   <data name="ExtendedPatchRequestedFormat" xml:space="preserve">
-    <value>Запитується файл виправлення для розширеної версії {0}</value>
+    <value>Запитується файл покращення для розширеної версії {0}</value>
   </data>
   <data name="FailToChangePassword" xml:space="preserve">
     <value>Користувачеві не вдалося змінити пароль</value>
   </data>
   <data name="GetAssignmentFormat" xml:space="preserve">
-    <value>Завантажити завдання ({0})&lt;/br&gt;&gt;.</value>
+    <value>Завантаження завдання ({0})&lt;/br&gt;</value>
   </data>
   <data name="GetAssignmentsFormat" xml:space="preserve">
-    <value>Завантажити список завдань ({0}). &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt; &lt;ul&gt;</value>
+    <value>Завантаження списку завдань ({0}). &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;</value>
   </data>
   <data name="GetAttachmentContent" xml:space="preserve">
     <value>Завантажити вміст вкладення: {0}</value>
@@ -178,25 +178,25 @@
     <value>Завантажити пакет подій календаря: {0}</value>
   </data>
   <data name="GetCensusQuestionnaires" xml:space="preserve">
-    <value>Завантажити список переписних листів: &lt;br/&gt; &lt;ul&gt;{0}&lt;/ul&gt;</value>
+    <value>Завантажиння списку переписних листів: &lt;br/&gt; &lt;ul&gt;{0}&lt;/ul&gt;</value>
   </data>
   <data name="GetInterview" xml:space="preserve">
     <value>Завантажити інтерв'ю: &lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
   <data name="GetInterviewer" xml:space="preserve">
-    <value>Завантажити інформацію про інтерв'юера. &lt;br/&gt;Супервайзер: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+    <value>Завантаження інформації про інтерв'юера. &lt;br/&gt;Супервізар: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
   </data>
   <data name="GetInterviewPackage" xml:space="preserve">
-    <value>Завантажити пакет для інтерв'ю: &lt;b&gt;{0}&lt;/b&gt;</value>
+    <value>Завантаження пакету для інтерв'ю: &lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
   <data name="GetInterviewPackages" xml:space="preserve">
-    <value>Завантажити список пакетів для співбесіди. &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt; Останній пакет синхронізації: &lt;b&gt;{0}&lt;/b&gt;</value>
+    <value>Завантажити список пакетів для інтерв'ю. &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt; Останній пакет синхронізації: &lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
   <data name="GetInterviewPackageV3" xml:space="preserve">
     <value>&lt;b&gt;V3&lt;/b&gt; Завантажити пакет інтерв'ю: {0}</value>
   </data>
   <data name="GetInterviewPatch" xml:space="preserve">
-    <value>Завантажте зміни до інтерв'ю зі штаб-квартири: {0}</value>
+    <value>Завантажте зміни до інтерв'ю зі Хедквотеру: {0}</value>
   </data>
   <data name="GetInterviews" xml:space="preserve">
     <value>Завантажити список інтерв'ю. &lt;/br&gt; &lt;ul&gt; {0} &lt;/ul&gt;</value>
@@ -241,13 +241,13 @@
     <value>Немає карт для завантаження</value>
   </data>
   <data name="NoNewInterviewPackagesToDownload" xml:space="preserve">
-    <value>Нові пакети для співбесіди не завантажуються</value>
+    <value>Нема нових пакетів для інтерв'ю для завантаження</value>
   </data>
   <data name="PasswordChanged" xml:space="preserve">
     <value>Змінено пароль та отримано AuthToken</value>
   </data>
   <data name="PatchRequestedFormat" xml:space="preserve">
-    <value>Запитується файл виправлення для версії {0}</value>
+    <value>Запитується файл розширення для версії {0}</value>
   </data>
   <data name="PostCalendarEventPackage" xml:space="preserve">
     <value>Завантажити подію календаря: {0}</value>
@@ -262,15 +262,15 @@
     <value>&lt;font color="green"&gt;Збірка анкет &lt;b&gt;{0}&lt;/b&gt; [{1}] успішно оброблена&lt;/font&gt;</value>
   </data>
   <data name="QuestionnaireProcessed" xml:space="preserve">
-    <value>&lt;font color="green"&gt;Опитувальник &lt;b&gt;{0}&lt;/b&gt; [{1}] успішно оброблено&lt;/font&gt;</value>
+    <value>&lt;font color="green"&gt;Анкета&lt;b&gt;{0}&lt;/b&gt; [{1}] успішно оброблена&lt;/font&gt;</value>
   </data>
   <data name="SupervisorApkRequested" xml:space="preserve">
-    <value>Запитується новий файл заявки на отримання статусу куратора</value>
+    <value>Запитується новий файл додатка супервізора</value>
   </data>
   <data name="SupervisorPatchRequestedFormat" xml:space="preserve">
-    <value>Запитується файл виправлення супервізора для версії {0}</value>
+    <value>Запитується файл розщирення супервізора для версії {0}</value>
   </data>
   <data name="UpdateInterviewPackage" xml:space="preserve">
-    <value>&lt;li&gt;Оновити інтерв'ю: &lt;a href="{3}"&gt;{0}&lt;/a&gt;, Package: {1}, Sort index: {2}&lt;/li&gt;&lt;/li&gt;</value>
+    <value>&lt;li&gt;Оновити інтерв'ю: &lt;a href="{3}"&gt;{0}&lt;/a&gt;, Package: {1}, Sort index: {2}&lt;/li&gt;</value>
   </data>
 </root>

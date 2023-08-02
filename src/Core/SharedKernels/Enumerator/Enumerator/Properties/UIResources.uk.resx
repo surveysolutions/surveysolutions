@@ -121,9 +121,9 @@
     <value>Скасувати</value>
   </data>
   <data name="Dashboard_EmptyQuestionnairesList" xml:space="preserve">
-    <value>Ще немає опитувальників
+    <value>Ще немає анкет
 
-Ви можете створювати або редагувати свої опитувальники в Конструкторі рішень для опитувань</value>
+Ви можете створювати або редагувати свої анкети в Survey Solutions Designer</value>
   </data>
   <data name="Dashboard_EmptySearchResult" xml:space="preserve">
     <value>Анкет не знайдено</value>
@@ -132,10 +132,10 @@
     <value>{0:dd MMM HH:mm}</value>
   </data>
   <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
-    <value>О, Боже.</value>
+    <value>Мої</value>
   </data>
   <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
-    <value>Громадськість</value>
+    <value>Публічні</value>
   </data>
   <data name="Dashboard_ToolbarText" xml:space="preserve">
     <value>Анкети</value>
@@ -147,19 +147,19 @@
     <value>Кінцева точка синхронізації</value>
   </data>
   <data name="EndpointText" xml:space="preserve">
-    <value>Кінцева точка веб-сервісу:</value>
+    <value>Адреса веб-сервісу:</value>
   </data>
   <data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
     <value>Ваш обліковий запис заблоковано. Будь ласка, зверніться до служби підтримки за адресою support@mysurvey.solutions.</value>
   </data>
   <data name="ErrorMessage_AccountIsNotApprovedOnServer" xml:space="preserve">
-    <value>Ваш обліковий запис не підтверджено. Будь ласка, підтвердіть свій обліковий запис спочатку.</value>
+    <value>Ваш обліковий запис не підтверджено. Будь ласка, спочатку, підтвердіть свій обліковий запис.</value>
   </data>
   <data name="ErrorMessage_InternalServerError" xml:space="preserve">
     <value>Помилка сервера. Будь ласка, зверніться до служби підтримки за адресою support@mysurvey.solutions</value>
   </data>
   <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
-    <value>Надана URL-адреса конструктора рішень для опитувань є невірною. Перевірте налаштування.</value>
+    <value>Надана URL-адреса Survey Solutions Designer є невірною. Перевірте налаштування.</value>
   </data>
   <data name="ErrorMessage_Maintenance" xml:space="preserve">
     <value>Сайт Survey Solutions Designer зараз знаходиться в режимі технічного обслуговування. Вибачте за незручності</value>
@@ -168,7 +168,7 @@
     <value>Тайм-аут під час підключення до веб-сайту Survey Solutions Designer. Перевірте підключення до Інтернету.</value>
   </data>
   <data name="ErrorMessage_ServiceUnavailable" xml:space="preserve">
-    <value>Немає зв'язку з Дизайнером рішень для опитувань. Переконайтеся, що веб-сайт доступний.</value>
+    <value>Немає зв'язку з Survey Solutions Designer. Переконайтеся, що веб-сайт доступний.</value>
   </data>
   <data name="ErrorMessage_Unauthorized" xml:space="preserve">
     <value>Ваш логін або пароль невірні</value>
@@ -180,13 +180,13 @@
     <value>Натисніть, щоб ввести текст</value>
   </data>
   <data name="GpsQuestion_Timeout" xml:space="preserve">
-    <value>GPS не вдалося визначити ваше місцезнаходження. Щоб усунути несправність, спробуйте виконати такі дії: переконайтеся, що ви перебуваєте на відкритому повітрі, переконайтеся, що ваш GPS увімкнено, або змініть налаштування тайм-ауту GPS</value>
+    <value>GPS не вдалося визначити ваше місцезнаходження. Щоб усунути помилку, спробуйте виконати такі дії: переконайтеся, що ви перебуваєте на відкритому повітрі, переконайтеся, що ваш GPS увімкнено, або змініть налаштування тайм-ауту GPS</value>
   </data>
   <data name="IntegerQuestion_Hint" xml:space="preserve">
     <value>Натисніть, щоб ввести номер</value>
   </data>
   <data name="Interviewer_ApplicationName" xml:space="preserve">
-    <value>Рішення для опитувань Інтерв'юер</value>
+    <value>Survey Solutions Interviewer</value>
   </data>
   <data name="Interviewer_RelinkDevice_Cancel" xml:space="preserve">
     <value>Скасувати</value>
@@ -195,7 +195,7 @@
     <value>Ви вже призначені на інший пристрій</value>
   </data>
   <data name="Interviewer_RelinkDevice_RelinkButtonText" xml:space="preserve">
-    <value>Повторне посилання</value>
+    <value>Повторне прив’язування</value>
   </data>
   <data name="Interviewer_RelinkDevice_RelinkMessage" xml:space="preserve">
     <value>Якщо ви переприв'яжетеся до цього пристрою &lt;br/&gt; всі дані на старому пристрої буде втрачено</value>
@@ -207,28 +207,28 @@
     <value>Ваш коментар</value>
   </data>
   <data name="Interview_Complete_Answered" xml:space="preserve">
-    <value>Відповідаю.</value>
+    <value>Відповідь надано</value>
   </data>
   <data name="Interview_Complete_Button" xml:space="preserve">
     <value>Завершено</value>
   </data>
   <data name="Interview_Complete_Consequences_Instrunction" xml:space="preserve">
-    <value>Після того, як ви закінчите співбесіду, вона буде позначена як завершена і буде завантажена супервізору під час наступної синхронізації</value>
+    <value>Після того, як ви закінчите інтерв'ю, вона буде позначена як завершена і буде завантажена супервізору під час наступної синхронізації</value>
   </data>
   <data name="Interview_Complete_Errors" xml:space="preserve">
     <value>Помилка(и)</value>
   </data>
   <data name="Interview_Complete_No" xml:space="preserve">
-    <value>Ні.</value>
+    <value>Ні</value>
   </data>
   <data name="Interview_Complete_Note_For_Supervisor" xml:space="preserve">
-    <value>Примітка для керівника</value>
+    <value>Примітка для супервізора</value>
   </data>
   <data name="Interview_Complete_Questions_Status" xml:space="preserve">
     <value>Статус питання</value>
   </data>
   <data name="Interview_Complete_Screen_Description" xml:space="preserve">
-    <value>Ви наближаєтесь до завершення інтерв'ю</value>
+    <value>Ви наближаєтесь до завершення цього інтерв'ю</value>
   </data>
   <data name="Interview_Complete_Screen_Title" xml:space="preserve">
     <value>Завершено</value>
@@ -252,10 +252,10 @@
     <value>Розділ завершено: {0}</value>
   </data>
   <data name="Interview_Group_Status_NotStarted" xml:space="preserve">
-    <value>Розділ не запущено</value>
+    <value>Розділ не почато</value>
   </data>
   <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve">
-    <value>Розділ розпочато: {0}</value>
+    <value>Розділів розпочато: {0}</value>
   </data>
   <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve">
     <value>{0} підрозділи</value>
@@ -291,25 +291,25 @@
     <value>Натисніть, щоб зчитати штрих-код</value>
   </data>
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
-    <value>Ви впевнені, що хочете видалити пов'язаний реєстр '{0}' з кожного пов'язаного реєстру?</value>
+    <value>Ви впевнені, що хочете видалити пов'язаний ростер '{0}' з кожного пов'язаного ростеру?</value>
   </data>
   <data name="Interview_Question_Cascading_NoMatchingValue" xml:space="preserve">
-    <value>Відповідь "{0}" не допускається для цього питання</value>
+    <value>Відповідь "{0}" не дозволені для цього питання</value>
   </data>
   <data name="Interview_Question_Filter_MatchError" xml:space="preserve">
-    <value>Відповідь "{0}" не допускається для цього питання</value>
+    <value>Відповідь "{0}" не дозволені для цього питання</value>
   </data>
   <data name="Interview_Question_Integer_EmptyValueError" xml:space="preserve">
     <value>Порожнє значення не може бути збережено</value>
   </data>
   <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
-    <value>Відповідь '{0}' є неправильною, оскільки питання є питанням джерела реєстру, а вказана відповідь є негативною</value>
+    <value>Відповідь '{0}' є неправильною, оскільки питання є питанням джерела ростеру, а вказана відповідь – від'ємне число</value>
   </data>
   <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
     <value>Введене значення не може бути оброблено як ціле число</value>
   </data>
   <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
-    <value>Відповідь '{0}' є неправильною, оскільки відповідь більша за верхню межу реєстру '{1}'..</value>
+    <value>Відповідь '{0}' некорректна, оскільки відповідь більша за верхню межу ростеру '{1}'..</value>
   </data>
   <data name="Interview_Question_List_Empty_Values_Are_Not_Allowed" xml:space="preserve">
     <value>Порожні значення не допускаються</value>
@@ -327,10 +327,10 @@
     <value>Увійдіть в систему</value>
   </data>
   <data name="LoginTitleText" xml:space="preserve">
-    <value>Тестувальник рішень для опитувань</value>
+    <value>Survey Solutions Tester</value>
   </data>
   <data name="No" xml:space="preserve">
-    <value>Ні.</value>
+    <value>Ні</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
     <value>Пароль</value>
@@ -339,22 +339,22 @@
     <value>Сервіси Google Play недоступні</value>
   </data>
   <data name="PlayServicesLocationWatcher_Location_Client_not_started" xml:space="preserve">
-    <value>Розташування Клієнт не запущено</value>
+    <value>Location Client не запущено</value>
   </data>
   <data name="PlayServicesLocationWatcher_You_cannot_start_MvxLocation_service_more_than_once" xml:space="preserve">
     <value>Ви не можете запустити сервіс MvxLocation більше одного разу</value>
   </data>
   <data name="PrefilledQuestions_StartInterview" xml:space="preserve">
-    <value>СТАРТ</value>
+    <value>ПОЧАТИ</value>
   </data>
   <data name="RealQuestion_Hint" xml:space="preserve">
-    <value>Натисніть, щоб ввести десятковий дріб</value>
+    <value>Натисніть, щоб ввести десяткове число</value>
   </data>
   <data name="StaySignedInText" xml:space="preserve">
-    <value>Залишайтеся в системі</value>
+    <value>Залишатися в системі</value>
   </data>
   <data name="Synchronization_UserLinkedToAnotherDevice_Description" xml:space="preserve">
-    <value>Ви не маєте жодних призначень на цьому пристрої. Надішліть інформацію про планшет, очистіть дані програми та увійдіть під іншим обліковим записом</value>
+    <value>Ви не маєте жодних завдань на цьому пристрої. Надішліть інформацію про планшет, очистіть дані додатку та увійдіть під іншим обліковим записом</value>
   </data>
   <data name="TextListQuestion_Hint" xml:space="preserve">
     <value>Натисніть, щоб ввести новий елемент</value>
@@ -372,16 +372,16 @@
     <value>Відповідь не збережено</value>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>Так.</value>
+    <value>Так</value>
   </data>
   <data name="Interview_CompleteScreen_ButtonText" xml:space="preserve">
-    <value>На весь екран</value>
+    <value>На екран завершення</value>
   </data>
   <data name="Interviewer_Diagnostics" xml:space="preserve">
     <value>Діагностика</value>
   </data>
   <data name="Interviewer_Done" xml:space="preserve">
-    <value>Зроблено.</value>
+    <value>Зроблено</value>
     <comment>Зберегти</comment>
   </data>
   <data name="Interviewer_AudioRecording" xml:space="preserve">
@@ -396,7 +396,7 @@
     <value>{0} аудіозапису</value>
   </data>
   <data name="Interview_Questions_Audio_RecordNew" xml:space="preserve">
-    <value>Запис новий</value>
+    <value>Записати новий</value>
     <comment>Перезаписати</comment>
   </data>
   <data name="Audio_Io_Exception_Message" xml:space="preserve">
@@ -404,7 +404,7 @@
     <comment>Не вдалося записати аудіофайл. Переконайтеся, що в пристрої є вільний простір у внутрішньому сховищі</comment>
   </data>
   <data name="Audio_Unhandled_Exception_Message" xml:space="preserve">
-    <value>Несподіване виключення під час запуску аудіозапису</value>
+    <value>Несподіване виключення під час початку аудіозапису</value>
     <comment>Непередбачена помилка під час початку запису</comment>
   </data>
   <data name="Dashboard_SharedWithMeLinkText" xml:space="preserve">
@@ -412,7 +412,7 @@
     <comment>Загальні зі мною</comment>
   </data>
   <data name="MissingPermissions_Microphone" xml:space="preserve">
-    <value>Щоб відповісти на це запитання, програма повинна мати дозвіл на використання мікрофону. Повторіть спробу відповісти на питання і дозвольте доступ. Якщо ви не бачите спливаюче вікно дозволів, перейдіть до Налаштувань і дозвольте програмі використовувати мікрофон.</value>
+    <value>Додаток повинен мати дозвіл на використання мікрофону. Повторіть спробу відповісти на питання і дозвольте доступ. Якщо ви не бачите спливаюче вікно дозволів, перейдіть до Налаштувань і дозвольте програмі використовувати мікрофон.</value>
   </data>
   <data name="MissingPermissions_Microphone_Global" xml:space="preserve">
       <value>Додаток повинен мати дозвіл на використання мікрофона. Повторіть останню дію і дозвольте доступ. Якщо ви не бачите спливаюче вікно з дозволами, перейдіть до налаштувань і дозвольте програмі використовувати мікрофон.</value>
@@ -427,13 +427,13 @@
     <value>Відповідь прийнято. На обробку пішло {0} часу</value>
   </data>
   <data name="AnswerRecordedMsgDismiss" xml:space="preserve">
-    <value>Звільнити.</value>
+    <value>Відхилити</value>
   </data>
   <data name="AreaMap_Active_Map_Title" xml:space="preserve">
     <value>АКТИВНА КАРТА:</value>
   </data>
   <data name="AreaMap_AreaFormat" xml:space="preserve">
-    <value>Площа: {0:0.00} m2</value>
+    <value>Площа: {0:0.00} м2</value>
   </data>
   <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
     <value>ДОСТУПНІ КАРТИ</value>
@@ -469,7 +469,7 @@
     <value>Місцезнаходження</value>
   </data>
   <data name="AreaMap_LocationDataSourceFailed" xml:space="preserve">
-    <value>Не вдається визначити місцезнаходження. Щоб усунути несправність, спробуйте виконати такі дії: переконайтеся, що ви перебуваєте на відкритому повітрі, переконайтеся, що ваш GPS увімкнено, або змініть налаштування тайм-ауту GPS</value>
+    <value>Не вдається визначити місцезнаходження. Щоб усунути помилку, спробуйте виконати такі дії: переконайтеся, що ви перебуваєте на відкритому повітрі, переконайтеся, що ваш GPS увімкнено, або змініть налаштування тайм-ауту GPS</value>
   </data>
   <data name="AreaMap_LocationOutOfBoundaries" xml:space="preserve">
     <value>Ваше місцезнаходження знаходиться за межами карти.</value>
@@ -496,7 +496,7 @@
     <value>Периметр: {0:0.00} м</value>
   </data>
   <data name="AreaMap_PointsFormat" xml:space="preserve">
-    <value>Очки: {0}</value>
+    <value>Точки: {0}</value>
   </data>
   <data name="AreaMap_Save" xml:space="preserve">
     <value>Зберегти</value>
@@ -505,13 +505,13 @@
     <value>Ви збираєтеся зберегти не зовсім точний результат. Ви хочете продовжити?</value>
   </data>
   <data name="AreaMap_SelectShapefile" xml:space="preserve">
-    <value>Виберіть файл меж</value>
+    <value>Оберіть файл кордонів</value>
   </data>
   <data name="AreaMap_ShowBoundaries" xml:space="preserve">
     <value>Показати межі</value>
   </data>
   <data name="AreaMap_Start_Measurement" xml:space="preserve">
-    <value>Старт</value>
+    <value>Почати</value>
   </data>
   <data name="AreaMap_Undo" xml:space="preserve">
     <value>Відмінити</value>
@@ -538,10 +538,10 @@
     <value>Ваш пристрій не підтримує цю функцію</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Помилка.</value>
+    <value>Помилка</value>
   </data>
   <data name="ErrorMessage_PermissionForUnkownSourcesRequired" xml:space="preserve">
-    <value>Додатку не надано дозволу на самооновлення. Будь ласка, увімкніть опцію "Дозволити з цього джерела" в меню налаштувань "Інформація про програму.</value>
+    <value>Додатку не надано дозволу на самооновлення. Будь ласка, увімкніть опцію "Дозволити з цього джерела" в меню налаштувань "Інформація про програму".</value>
   </data>
   <data name="GpsQuestion_MissingPermissions" xml:space="preserve">
     <value>Додаток не має достатніх дозволів для виконання запитуваної дії. Повторіть спробу відповісти на питання і дозвольте доступ. Якщо ви не бачите спливаюче вікно з дозволами, перейдіть до Налаштувань і дозвольте програмі використовувати місцезнаходження пристрою.</value>
@@ -550,7 +550,7 @@
     <value>На попередню відповідь</value>
   </data>
   <data name="Interview_Comment_Resolve" xml:space="preserve">
-    <value>Вирішуй.</value>
+    <value>Вирішити</value>
   </data>
   <data name="Interview_Complete_Entities_With_Errors" xml:space="preserve">
     <value>Сутності з помилками:</value>
@@ -577,10 +577,10 @@
     <value>Обкладинка</value>
   </data>
   <data name="Interview_Cover_Supervisor_Comments_does_not_exists" xml:space="preserve">
-    <value>Немає зауважень від керівника</value>
+    <value>Немає зауважень від супервізора</value>
   </data>
   <data name="Interview_Cover_Supervisor_Note" xml:space="preserve">
-    <value>Примітка керівника:</value>
+    <value>Примітка супервізора:</value>
   </data>
   <data name="Interview_Headquarters_Comment_Caption" xml:space="preserve">
     <value>Коментар штаб-квартири</value>
@@ -619,13 +619,13 @@
     <value>Попередження(я)</value>
   </data>
   <data name="Interview_Question_HideResolvedComments" xml:space="preserve">
-    <value>Приховати вирішено</value>
+    <value>Приховати вирішені</value>
   </data>
   <data name="Interview_Question_NumberRosterRemoveConfirm" xml:space="preserve">
-    <value>Ви впевнені, що хочете видалити {0} рядків з кожного пов'язаного списку?</value>
+    <value>Ви впевнені, що хочете видалити {0} рядків з кожного пов'язаного ростеру?</value>
   </data>
   <data name="Interview_Question_ShowResolvedComments" xml:space="preserve">
-    <value>Показати вирішено</value>
+    <value>Показати вирішені</value>
   </data>
   <data name="Interview_Question_Text_Empty" xml:space="preserve">
     <value>Відповідь не повинна бути порожньою</value>
@@ -634,10 +634,10 @@
     <value>Натисніть, щоб відповісти</value>
   </data>
   <data name="Interview_Questions_Integer_ProtectedValue" xml:space="preserve">
-    <value>Нова відповідь на захищене питання має бути більшою або рівною {0}.</value>
+    <value>Нова відповідь на захищене питання має бути більшою або рівною {0}</value>
   </data>
   <data name="Interview_Questions_RemoveRowFromRosterListMessage" xml:space="preserve">
-    <value>Ви впевнені, що хочете видалити пов'язані списки?</value>
+    <value>Ви впевнені, що хочете видалити пов'язані ростери?</value>
   </data>
   <data name="Interview_Questions_Timestamp_SaveAnswer" xml:space="preserve">
     <value>Натисніть, щоб записати поточний час</value>
@@ -646,16 +646,16 @@
     <value>Показати PDF </value>
   </data>
   <data name="Interview_SignatureClear" xml:space="preserve">
-    <value>Чисто</value>
+    <value>Очистити</value>
   </data>
   <data name="Interview_SignatureSignHere" xml:space="preserve">
     <value>Підпишіться тут</value>
   </data>
   <data name="Interview_Supervisor_Comment_Caption" xml:space="preserve">
-    <value>Коментар керівника</value>
+    <value>Коментар супервізора</value>
   </data>
   <data name="Interview_TakeSignature" xml:space="preserve">
-    <value>Підпис магазину</value>
+    <value>Зберегти підпис</value>
   </data>
   <data name="Interviewer_Comment" xml:space="preserve">
     <value>Залишити коментар</value>
@@ -670,22 +670,22 @@
     <value>Залиште коментар для нового відповідального</value>
   </data>
   <data name="InterviewKey" xml:space="preserve">
-    <value>Ключ для інтерв'ю: {0}</value>
+    <value>Ключ до інтерв'ю: {0}</value>
   </data>
   <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
     <value>Затверджено штаб-квартирою</value>
   </data>
   <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
-    <value>Затверджено керівником</value>
+    <value>Затверджені супервізором</value>
   </data>
   <data name="InterviewStatus_Completed" xml:space="preserve">
     <value>Завершено</value>
   </data>
   <data name="InterviewStatus_Created" xml:space="preserve">
-    <value>Створено</value>
+    <value>Створені</value>
   </data>
   <data name="InterviewStatus_Deleted" xml:space="preserve">
-    <value>Видалено</value>
+    <value>Видалені</value>
   </data>
   <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
     <value>Призначено інтерв'юера</value>
@@ -694,16 +694,16 @@
     <value>Відхилено штаб-квартирою</value>
   </data>
   <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
-    <value>Відхилено Супервайзером</value>
+    <value>Відхилені Супервізором</value>
   </data>
   <data name="InterviewStatus_Restarted" xml:space="preserve">
-    <value>Перезавантажено.</value>
+    <value>Перезапущені</value>
   </data>
   <data name="InterviewStatus_Restored" xml:space="preserve">
-    <value>Відновлено</value>
+    <value>Відновлені</value>
   </data>
   <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
-    <value>Призначено куратора</value>
+    <value>Призначені супервізору</value>
   </data>
   <data name="InvalidTimeMessage" xml:space="preserve">
     <value>Важливо, щоб налаштування годинника було точним. Ваш годинник показує, що поточна дата встановлена неправильно. Відрегулюйте годинник, встановивши правильну дату/час, перш ніж продовжувати роботу.</value>
@@ -748,10 +748,10 @@
     <value>Вихід з редактора мап</value>
   </data>
   <data name="MenuItem_Title_AreaCancelEdit" xml:space="preserve">
-    <value>Зачистити все.</value>
+    <value>Очистити всі</value>
   </data>
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
-    <value>Приладова панель</value>
+    <value>Панель керування</value>
   </data>
   <data name="Messages_WaitPendingOperation" xml:space="preserve">
     <value>Будь ласка, дочекайтеся завершення поточної операції</value>
@@ -760,13 +760,13 @@
     <value>Додаток не має достатніх дозволів для виконання запитуваної дії</value>
   </data>
   <data name="MissingPermissions_Camera" xml:space="preserve">
-    <value>Щоб відповісти на це запитання, програма повинна мати дозвіл на використання камери. Повторіть спробу відповісти на питання і дозвольте доступ. Якщо ви не бачите спливаюче вікно з дозволами, перейдіть до Налаштувань і дозвольте програмі використовувати камеру.</value>
+    <value>Додаток повинен мати дозвіл на використання камери. Повторіть спробу відповісти на питання і дозвольте доступ. Якщо ви не бачите спливаюче вікно з дозволами, перейдіть до Налаштувань і дозвольте програмі використовувати камеру.</value>
   </data>
   <data name="MissingPermissions_MapsLocation" xml:space="preserve">
     <value>Додаток повинен мати дозвіл на використання місцезнаходження. Якщо ви не бачите спливаюче вікно з дозволами, перейдіть до Налаштувань і дозвольте програмі використовувати місцезнаходження.</value>
   </data>
   <data name="MissingPermissions_Storage" xml:space="preserve">
-    <value>Щоб відповісти на це питання, програма повинна мати дозвіл на використання сховища. Повторіть спробу відповісти на питання і дозвольте доступ. Якщо ви не бачите спливаюче вікно з дозволами, перейдіть до Налаштувань і дозвольте програмі використовувати сховище.</value>
+    <value>Додаток повинен мати дозвіл на використання сховища. Повторіть спробу відповісти на питання і дозвольте доступ. Якщо ви не бачите спливаюче вікно з дозволами, перейдіть до Налаштувань і дозвольте програмі використовувати сховище.</value>
   </data>
   <data name="Multimedia_PickFromGallery" xml:space="preserve">
     <value>Виберіть з галереї</value>
@@ -787,13 +787,13 @@
     <value>Навігаційний додаток не знайдено</value>
   </data>
   <data name="Notifications_SummaryTitle" xml:space="preserve">
-    <value>{0} сповіщення</value>
+    <value>{0} сповіщень</value>
   </data>
   <data name="OfflineSync_Abort" xml:space="preserve">
-    <value>Перервати.</value>
+    <value>Перервати</value>
   </data>
   <data name="OfflineSync_BackToDashboard" xml:space="preserve">
-    <value>Повернутися до інформаційної панелі</value>
+    <value>Повернутися до панелі керування</value>
   </data>
   <data name="OfflineSync_Cancel" xml:space="preserve">
     <value>Скасувати</value>
@@ -808,13 +808,13 @@
     <value>Швидкість: {0}, Час, що залишився: {1}</value>
   </data>
   <data name="OfflineSync_Retry" xml:space="preserve">
-    <value>Спробуйте ще раз.</value>
+    <value>Спробуйте ще раз</value>
   </data>
   <data name="OfflineSync_Supervisor_Title" xml:space="preserve">
     <value>Синхронізація завдань та інтерв'ю</value>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>Гаразд.</value>
+    <value>Так</value>
   </data>
   <data name="OldPasswordHint" xml:space="preserve">
     <value>Поточний пароль</value>
@@ -823,7 +823,7 @@
     <value>Пароль повинен бути однаковим</value>
   </data>
   <data name="Prefs_DownloadUpdatesForInterviewerApp" xml:space="preserve">
-    <value>Завантажити оновлення для програми Interviewer</value>
+    <value>Завантажити оновлення для додатку Interviewer</value>
   </data>
   <data name="Prefs_DownloadUpdatesForInterviewerAppSummary" xml:space="preserve">
     <value>Якщо інтерв'юери не мають доступу до інтернету, цю функцію слід увімкнути, оскільки вона дає змогу оновлювати їхні додатки під час офлайн-синхронізації з додатком Supervisor</value>
@@ -844,10 +844,10 @@
     <value>Планшет буде вібрувати, якщо відповідь не пройшла перевірку</value>
   </data>
   <data name="Prefs_VibrateOnErrorTitle" xml:space="preserve">
-    <value>Вібрує, коли дається невірна відповідь</value>
+    <value>Вібрувати, коли дається невірна відповідь</value>
   </data>
   <data name="Supervisor_ApplicationName" xml:space="preserve">
-    <value>Супервайзер рішень для опитувань</value>
+    <value>Survey Solutions Supervisor</value>
   </data>
   <data name="Supervisor_Complete_Approve_btn" xml:space="preserve">
     <value>Схвалити</value>
@@ -862,10 +862,10 @@
     <value>Знайдено пристрій для інтерв'юера ({0})</value>
   </data>
   <data name="Validity_InterviewSizeLimitReached" xml:space="preserve">
-    <value>Це інтерв'ю містить більше даних, ніж дозволяє система. Якщо можливо, видаліть непотрібні рядки реєстру та/або не відповідайте на запитання.</value>
+    <value>Це інтерв'ю містить більше даних, ніж дозволяє система. Якщо можливо, видаліть непотрібні рядки ростеру та/або змініть відповідь на запитання.</value>
   </data>
   <data name="Validity_QuestionDoesntExist" xml:space="preserve">
-    <value>Поточний список більше не існує. Будь ласка, перейдіть до наступного доступного розділу або списку за допомогою меню навігації.</value>
+    <value>Поточний список більше не існує. Будь ласка, перейдіть до наступного доступного розділу або ростеру за допомогою меню навігації.</value>
   </data>
   <data name="VariableEmptyValue" xml:space="preserve">
     <value>&lt;порожньо&gt;</value>

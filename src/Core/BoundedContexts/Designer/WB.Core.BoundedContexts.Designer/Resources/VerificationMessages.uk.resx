@@ -136,13 +136,13 @@
     <value>Лише одне GPS-питання могло бути позначене як ідентифікаційне</value>
   </data>
   <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
-    <value>Неможливо зв'язати багатоваріантні питання з вибором "так/ні</value>
+    <value>Багатоваріантні питання з вибором "так/ні" не можуть бути пов'язаними</value>
   </data>
   <data name="WB0008_SubstitutionsInVariableLableAreProhibited" xml:space="preserve">
-    <value>Не допускається використання підстановок у мітці змінної</value>
+    <value>Не допускається використання підстановок у лейблі змінної</value>
   </data>
   <data name="WB0009_RosterSizeQuestionIsMissing" xml:space="preserve">
-    <value>Питання про розмір реєстру відсутнє.</value>
+    <value>Питання про розмір ростеру відсутнє.</value>
   </data>
   <data name="WB0010_MacroHasInvalidName" xml:space="preserve">
     <value>Макрос має невірну назву.</value>
@@ -151,16 +151,16 @@
     <value>Пов'язане питання посилається на неіснуюче питання.</value>
   </data>
   <data name="WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType" xml:space="preserve">
-    <value>Пов'язане запитання посилається на тип запитання, який не підтримується.</value>
+    <value>Пов'язане питання посилається на тип питання, який не підтримується.</value>
   </data>
   <data name="WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup" xml:space="preserve">
-    <value>Пов'язане питання посилається на питання, якого немає в реєстрі.</value>
+    <value>Пов'язане питання посилається на питання, якого немає в ростері.</value>
   </data>
   <data name="WB0014_MacroHasEmptyName" xml:space="preserve">
     <value>Макрос не може мати порожню назву.</value>
   </data>
   <data name="WB0015_QuestionWithTitleSubstitutionCantBePrefilled" xml:space="preserve">
-    <value>Питання з підміною назви або інструкції не може бути позначене як ідентифікаційне.</value>
+    <value>Питання з підстановкою у назві або інструкції не може бути позначене як ідентифікаційне.</value>
   </data>
   <data name="WB0017_SubstitutionReferencesNotExistingQuestionOrVariable" xml:space="preserve">
     <value>Підстановка посилається на неіснуюче запитання або змінну.</value>
@@ -169,7 +169,7 @@
     <value>Підстановка посилається на елемент, який не підтримується в підстановках.</value>
   </data>
   <data name="WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel" xml:space="preserve">
-    <value>Заміна не може посилатися на елементи з глибшого рівня реєстру.</value>
+    <value>Підстановка не може посилатися на елементи з глибшого рівня ростеру.</value>
   </data>
   <data name="WB0020_NameForMacrosIsNotUnique" xml:space="preserve">
     <value>Інший макрос з такою ж назвою вже існує.</value>
@@ -181,7 +181,7 @@
     <value>Питання такого типу не можуть бути ідентифікаційними.</value>
   </data>
   <data name="WB0023_RosterSizeSourceQuestionTypeIsIncorrect" xml:space="preserve">
-    <value>Неправильно вказано розмір джерела. Можна використовувати лише числові, категоріальні з множинним вибором або текстові списки.</value>
+    <value>Неправильно вказане питання-джерело розміру ростра. Можна використовувати лише питання числового типу, категоріальні з множинним вибором, або текстові списки.</value>
   </data>
   <data name="WB0024_LookupHasInvalidName" xml:space="preserve">
     <value>Таблиця пошуку має невірне ім'я.</value>
@@ -190,7 +190,7 @@
     <value>Таблиця пошуку не може мати порожню назву.</value>
   </data>
   <data name="WB0026_ItemsWithTheSameNamesFound" xml:space="preserve">
-    <value>Знайдено товарів з такою ж назвою.</value>
+    <value>Знайдено елементи з такою ж назвою.</value>
   </data>
   <data name="WB0027_VariableExpresssionHasIncorrectSyntax" xml:space="preserve">
     <value>Вираз має синтаксичну помилку.</value>
@@ -202,7 +202,7 @@
     <value>Питання з фільтром варіантів відповідей не може бути ідентифікаційним.</value>
   </data>
   <data name="WB0030_PrefilledQuestionCantBeInsideOfRoster" xml:space="preserve">
-    <value>Ідентифікаційні питання не можуть бути всередині реєстру.</value>
+    <value>Ідентифікаційні питання не можуть бути всередині ростеру.</value>
   </data>
   <data name="WB0031_LookupTableHasInvalidHeaders" xml:space="preserve">
     <value>У таблиці пошуку невірні заголовки стовпців.</value>
@@ -211,31 +211,31 @@
     <value>Список з вихідним питанням не може мати фіксованого набору елементів.</value>
   </data>
   <data name="WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion" xml:space="preserve">
-    <value>Виправлено набір елементів, які не можуть мати питання до джерела списку.</value>
+    <value>Ростер з фіксованим набіром елементів, які не може мати питання джерела ростеру.</value>
   </data>
   <data name="WB0034_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterTitleQuestion" xml:space="preserve">
-    <value>Виправлено набір позицій, для яких у списку не може бути питання до заголовка списку.</value>
+    <value>Ростер з фіксованим набіром елементів не може мати питання заголовка ростеру.</value>
   </data>
   <data name="WB0035_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion" xml:space="preserve">
-    <value>У реєстрі з джерелом запитань для назв рядків невірно вказано джерело запитань.</value>
+    <value>У ростері з запитанєм джерелом для назв рядків невірно вказано джерело ростеру.</value>
   </data>
   <data name="WB0036_ListAndMultiRostersCantHaveRosterTitleQuestion" xml:space="preserve">
-    <value>Список не може мати заголовка списку, якщо вихідне питання списку є категоричним питанням з декількома варіантами відповідей або питанням зі списком.</value>
+    <value>Ростер не може мати питання-заголовка, якщо тригiрне питання ростру є категоріальним питанням з декількома варіантами відповідей або питанням зі списком.</value>
   </data>
   <data name="WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles" xml:space="preserve">
-    <value>Фіксований набір позицій у списку не може мати порожніх заголовків або менше двох позицій.</value>
+    <value>Ростр з фіксованим набором позицій не може мати порожніх заголовків або менше двох позицій.</value>
   </data>
   <data name="WB0038_RosterFixedTitlesHaveMoreThan200Items" xml:space="preserve">
-    <value>Фіксований набір елементів не може мати більше {0} рядків.</value>
+    <value>Ростр з фіксованим набором елементів не може мати більше {0} рядків.</value>
   </data>
   <data name="WB0039_TextListQuestionCannotBePrefilled" xml:space="preserve">
-    <value>Питання зі списку не може бути ідентифікаційним.</value>
+    <value>Питання типу список не може бути ідентифікаційним.</value>
   </data>
   <data name="WB0040_TextListQuestionCannotBeFilledBySupervisor" xml:space="preserve">
-    <value>Питання зі списку не може бути заповнене науковим керівником.</value>
+    <value>Питання типу список не може бути заповнене супервізором.</value>
   </data>
   <data name="WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues" xml:space="preserve">
-    <value>Фіксований набір елементів ростеру, значення яких мають бути унікальними.</value>
+    <value>Ростр з фіксованим набором елементів, повинен мати унікальні значення.</value>
   </data>
   <data name="WB0042_TextListQuestionMaxAnswerInRange1And200" xml:space="preserve">
     <value>Максимальна кількість елементів списку повинна знаходитись в діапазоні [{1}, {0}]..</value>
@@ -250,7 +250,7 @@
     <value>Питання має категорії з порожніми значеннями.</value>
   </data>
   <data name="WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel" xml:space="preserve">
-    <value>Умова, що дозволяє, не може посилатися на питання з більш глибокого рівня реєстру.</value>
+    <value>Умова включення не може посилатися на питання з більш глибокого рівня ростеру.</value>
   </data>
   <data name="WB0047_LookupTableNotUniqueRowcodeValues" xml:space="preserve">
     <value>Таблиця пошуку має не унікальні значення кодів рядків</value>
@@ -265,7 +265,7 @@
     <value>Питання зі штрих-кодом не може бути ідентифікаційним.</value>
   </data>
   <data name="WB0051_GroupsCustomConditionExpressionReferencesChildQuestion" xml:space="preserve">
-    <value>Підрозділи не можуть містити умов, що дозволяють, які посилаються на питання про дитину.</value>
+    <value>Підрозділи не можуть містити умов включення, які посилаються на дочірнє питання.</value>
   </data>
   <data name="WB0052_LookupNameIsKeyword" xml:space="preserve">
     <value>Ім'я таблиці пошуку не може бути зарезервованим словом.</value>
@@ -274,7 +274,7 @@
     <value>Реєстр, який є джерелом посилання, повинен існувати.</value>
   </data>
   <data name="WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster" xml:space="preserve">
-    <value>Рівень реєстру повинен бути глибшим або таким самим, як і в питанні про розмір реєстру.</value>
+    <value>Рівень ростеру повинен бути глибшим або таким самим, як і в питанні про розмір ростеру.</value>
   </data>
   <data name="WB0055_RosterHasRosterLevelMoreThan4" xml:space="preserve">
     <value>Ростер може мати не більше {0} батьківських ростерів.</value>
@@ -286,40 +286,40 @@
     <value>Заборонені посилання на елементи навігації: розділи, підрозділи, списки</value>
   </data>
   <data name="WB0058_QuestionHasVariableNameReservedForServiceNeeds" xml:space="preserve">
-    <value>Ім'я змінної або ідентифікатор реєстру не може бути зарезервованим словом.</value>
+    <value>Ім'я змінної або ідентифікатор ростеру не може бути зарезервованим словом.</value>
   </data>
   <data name="WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster" xml:space="preserve">
-    <value>Якщо елемент використовує підстановку %rostertitle%, його потрібно помістити всередину ростера.</value>
+    <value>Якщо елемент використовує підстановку %rostertitle%, він повинен знаходитися всередині ростера.</value>
   </data>
   <data name="WB0060_CategoricalQuestionHasLessThan2Options" xml:space="preserve">
     <value>Питання має менше {0} категорій.</value>
   </data>
   <data name="WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2" xml:space="preserve">
-    <value>Питання має максимально допустимі відповіді менше {0}.</value>
+    <value>Питання має максимально допустиму кількість відповідей менше ніж {0}.</value>
   </data>
   <data name="WB0062_OptionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
-    <value>Вираз фільтрації опції має синтаксичну помилку.</value>
+    <value>Вираз фільтрації опцій має синтаксичну помилку.</value>
   </data>
   <data name="WB0063_CategoricalLinkedQuestionUsedInValidationExpression" xml:space="preserve">
-    <value>Категоричне зв'язане питання не можна використовувати в умові перевірки #{0}.</value>
+    <value>Категоріальне зв'язане питання не можна використовувати в умові перевірки #{0}.</value>
   </data>
   <data name="WB0064_CategoricalLinkedQuestionUsedInEnablementCondition" xml:space="preserve">
-    <value>Категоричне зв'язане питання не може бути використане у спонукальній умові.</value>
+    <value>Категоріальне зв'язане питання не може бути використане в умові включення.</value>
   </data>
   <data name="WB0065_NameForAttachmentIsNotUnique" xml:space="preserve">
-    <value>Інший вкладення з такою ж назвою вже існує.</value>
+    <value>Інше вкладення з такою ж назвою вже існує.</value>
   </data>
   <data name="WB0066_QuestionTypeIsNotAllowed" xml:space="preserve">
     <value>Питання такого типу не підтримуються.</value>
   </data>
   <data name="WB0067_VariableNameIsEmpty" xml:space="preserve">
-    <value>Дійсна змінна або ім'я ідентифікатора реєстру не повинно бути порожнім.</value>
+    <value>Дійсна змінна або ім'я ідентифікатора ростеру не повинно бути порожнім.</value>
   </data>
   <data name="WB0068_RosterHasMoreThanAllowedChildElements" xml:space="preserve">
     <value>Ростер не може мати більше {0} дочірніх елементів</value>
   </data>
   <data name="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" xml:space="preserve">
-    <value>Реєстр має ідентифікатор, що дорівнює назві анкети.</value>
+    <value>Ростер має ідентифікатор, що дорівнює назві анкети.</value>
   </data>
   <data name="WB0071_StaticTextIsEmpty" xml:space="preserve">
     <value>Статичний текст не може бути порожнім.</value>
@@ -343,61 +343,61 @@
     <value>Питання має невірне ім'я змінної.</value>
   </data>
   <data name="WB0078_MultimediaQuestionIsInterviewersOnly" xml:space="preserve">
-    <value>Питання з картинками можуть ставити тільки інтерв'юери.</value>
+    <value>Питання з зображенням можуть бути тільки для інтерв'юерів.</value>
   </data>
   <data name="WB0079_MultimediaShouldNotHaveValidationExpression" xml:space="preserve">
     <value>Питання з зображенням не може мати умови перевірки.</value>
   </data>
   <data name="WB0080_LongRosterCannotHaveNestedRosters" xml:space="preserve">
-    <value>Список з більш ніж {0} рядків не може мати вкладених списків</value>
+    <value>Ростер з більш ніж {0} рядків не може мати вкладених ростерів</value>
   </data>
   <data name="WB0081_LongRosterCannotBeNested" xml:space="preserve">
-    <value>Список з більш ніж {0} рядків не може бути вкладеним</value>
+    <value>Ростер з більш ніж {0} рядків не може бути вкладеним</value>
   </data>
   <data name="WB0082_RosterSizeMultiOptionQuestionShouldBeLimited" xml:space="preserve">
-    <value>Вихідне питання з множинним вибором списку повинно мати максимальну кількість варіантів відповідей.</value>
+    <value>Якщо джерело ростра це питання з множинним вибором, то воно повинно мати максимальну кількість варіантів відповідей.</value>
   </data>
   <data name="WB0083_QuestionCannotBeUsedAsRosterTitle" xml:space="preserve">
-    <value>Питання з поточним типом не може бути використано як заголовок списку.</value>
+    <value>Питання з поточним типом не може бути використано як заголовок ростера.</value>
   </data>
   <data name="WB0084_CascadingOptionsShouldHaveParent" xml:space="preserve">
-    <value>Категорії в дочірньому питанні з каскадним випадаючим списком повинні посилатися лише на наявні варіанти в батьківському питанні.</value>
+    <value>Категорії в дочірніх питаннях каскадного комбінованого питання повинні посилатися лише на наявні варіанти в батьківському питанні.</value>
   </data>
   <data name="WB0085_CascadingQuestionWrongParentLevel" xml:space="preserve">
-    <value>Питання має бути глибшим або на тому ж рівні, що й батьківське питання.</value>
+    <value>Питання має бути глибше ніж або на тому ж рівні, що й батьківське питання.</value>
   </data>
   <data name="WB0086_ParentCascadingQuestionShouldExist" xml:space="preserve">
-    <value>Відсутні посилання на каскадні комбіновані запитання або не підтримується тип запитання.</value>
+    <value>Дочірнє питання каскадного комбінованого питання посилається на неіснуюче або непідтримуємий тип запитання.</value>
   </data>
   <data name="WB0087_CascadingQuestionHasCicularReference" xml:space="preserve">
-    <value>Циклічні посилання в каскадних питаннях з комбінованими блоками не допускаються.</value>
+    <value>Циклічні посилання в дочірніх питаннях каскадного комбінованого питання не допускаються.</value>
   </data>
   <data name="WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers" xml:space="preserve">
-    <value>Каскадне питання з комбінованим вікном повинно мати менше {0} категорій.</value>
+    <value>Дочірнє питання каскадного комбінованого питання повинно мати менше {0} категорій.</value>
   </data>
   <data name="WB0089_CascadingQuestionOptionWithParentShouldBeUnique" xml:space="preserve">
-    <value>Каскадне питання з комбінованим вікном повинно мати унікальне значення та список батьківських значень категорій.</value>
+    <value>Дочірнє питання каскадного комбінованого питання повинно мати унікальне значення та список батьківських значень категорій.</value>
   </data>
   <data name="WB0090_LinkedQuestionIsInterviewersOnly" xml:space="preserve">
-    <value>Пов'язати питання можуть тільки інтерв'юери.</value>
+    <value>Пов'язане питання можуть бути тільки для інтерв'юера.</value>
   </data>
   <data name="WB0091_CascadingChildQuestionShouldNotContainCondition" xml:space="preserve">
-    <value>Дочірнє питання з каскадним випадаючим списком не повинно містити умови, що дозволяє. </value>
+    <value>Дочірнє питання каскадного комбінованого питання не повинно містити умови включення.</value>
   </data>
   <data name="WB0092_CascadingChildQuesionShouldNotContainValidation" xml:space="preserve">
-    <value>Дочірнє питання каскадного комбінованого поля не повинно містити умови перевірки.</value>
+    <value>Дочірнє питання каскадного комбінованого питання не повинно містити умови перевірки.</value>
   </data>
   <data name="WB0093_RosterSizeListOptionQuestionShouldBeLimit" xml:space="preserve">
-    <value>Питання списку джерел повинно мати максимальну кількість елементів.</value>
+    <value>Питання джерело для ростера повинно мати максимальну кількість елементів.</value>
   </data>
   <data name="WB0094_ConditionExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
-    <value>Умова, що дозволяє, має довжину більше {0} символів.</value>
+    <value>Умова дозволу має довжину більше {0} символів.</value>
   </data>
   <data name="WB0095_StaticTextRefersAbsentAttachment" xml:space="preserve">
-    <value>Статичний текст означає відсутність вкладеного файлу</value>
+    <value>Статичний текст посилається на відсутній вкладений файл</value>
   </data>
   <data name="WB0096_GeneralCompilationError" xml:space="preserve">
-    <value>Виникла помилка при складанні анкети.</value>
+    <value>Виникла помилка при перевіркі анкети.</value>
   </data>
   <data name="WB0097_QuestionnaireTitleHasInvalidCharacters" xml:space="preserve">
     <value>У назві анкети можна використовувати лише наступні символи: A..Z a..z 0..9 ( ) \ / _ - і пробіл.</value>
@@ -406,7 +406,7 @@
     <value>Розмір анкети становить приблизно {0:0.##}МБ і є занадто великим для коректної роботи з Survey Solutions. Спробуйте зменшити обсяг даних, поки він не стане принаймні меншим за {1}МБ.</value>
   </data>
   <data name="WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200" xml:space="preserve">
-    <value>Максимальна кількість відповідей на питання про розмір списку не може бути більшою за {0}.</value>
+    <value>Максимальна кількість відповідей на питання про розмір ростера не може бути більшою за {0}.</value>
   </data>
   <data name="WB0101_GroupHasLevelDepthMoreThan10" xml:space="preserve">
     <value>Підрозділ може мати не більше {0} батьківських підрозділів.</value>
@@ -415,13 +415,13 @@
     <value>Наступні елементи анкети (питання/група/статичний текст/тощо) використовують один і той самий внутрішній ідентифікатор. Будь ласка, видаліть один з них.</value>
   </data>
   <data name="WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster" xml:space="preserve">
-    <value>Реєстр, який є джерелом посилання, є реєстром, а не підрозділом.</value>
+    <value>Ростер, який є джерелом посилання, є ростером, а не підрозділом.</value>
   </data>
   <data name="WB0104_ValidationConditionIsTooLong" xml:space="preserve">
     <value>Умова перевірки #{0} занадто довга. Вона має бути не довшою за {1} символів.</value>
   </data>
   <data name="WB0105_ValidationMessageIsTooLong" xml:space="preserve">
-    <value>Повідомлення про помилку валідації #{0} занадто довге. Він має бути не довшим за {1} символів.</value>
+    <value>Повідомлення про помилку валідації #{0} занадто довге. Вона має бути не довшою за {1} символів.</value>
   </data>
   <data name="WB0106_ValidationConditionIsEmpty" xml:space="preserve">
     <value>Умова перевірки #{0} пуста.</value>
@@ -460,7 +460,7 @@
     <value>Пов'язане зі списком питання не підтримує фільтр категорій</value>
   </data>
   <data name="WB0118_ExpressionReferencingForbiddenDateTimeProperies" xml:space="preserve">
-    <value>Вираз, що посилається на заборонені властивості DateTime: {0}, {1}, {2}. Розглянемо варіант використання питання поточного часу.</value>
+    <value>Вираз, що посилається на заборонені властивості DateTime: {0}, {1}, {2}. Розгляньте варіант використання питання поточного часу.</value>
   </data>
   <data name="WB0119_QuestionnaireTitleTooLong" xml:space="preserve">
     <value>Назва анкети не може містити більше {0} символів.</value>
@@ -472,10 +472,10 @@
     <value>Ім'я або ідентифікатор цього елемента не повинен бути довшим за {0} символів.</value>
   </data>
   <data name="WB0122_VariableNameHasSpecialCharacters" xml:space="preserve">
-    <value>Допустиме ім'я змінної або ідентифікатора реєстру повинно містити лише літери, цифри та символ підкреслення</value>
+    <value>Допустиме ім'я змінної або ідентифікатора ростеру повинно містити лише літери, цифри та символ підкреслення</value>
   </data>
   <data name="WB0123_VariableNameStartWithDigitOrUnderscore" xml:space="preserve">
-    <value>Ім'я змінної або ідентифікатор реєстру не повинен починатися з цифри або підкреслення</value>
+    <value>Ім'я змінної або ідентифікатор ростеру не повинен починатися з цифри або підкреслення</value>
   </data>
   <data name="WB0124_VariableNameEndWithUnderscore" xml:space="preserve">
     <value>Ім'я змінної або ідентифікатор ростера не повинні закінчуватися символом підкреслення</value>
@@ -484,7 +484,7 @@
     <value>Ім'я змінної або ідентифікатор ростера не повинні містити два і більше символів підкреслення підряд.</value>
   </data>
   <data name="WB0126_VarialbeNameNotUnique" xml:space="preserve">
-    <value>Ім'я змінної або ідентифікатор реєстру має бути унікальним у межах опитувальника.</value>
+    <value>Ім'я змінної або ідентифікатор ростеру має бути унікальним у межах анкетаа.</value>
   </data>
   <data name="WB0127_CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
     <value>Існує принаймні один дубль пар "Назва" та "Батьківське значення". Список не повинен містити дублікатів.</value>
@@ -496,13 +496,13 @@
     <value>Назва категорії порожня або занадто довга. Довжина назви повинна бути в діапазоні від {0} до {1} символів.</value>
   </data>
   <data name="WB0130_SubsectionOrRosterReferenceChildrendInCondition" xml:space="preserve">
-    <value>Ви не можете використовувати дочірні сутності в стані увімкнення для розділів, підрозділів та списків.</value>
+    <value>Ви не можете використовувати дочірні сутності в умовах увімкнення для розділів, підрозділів та ростерів.</value>
   </data>
   <data name="WB0131_SpecialValuesHasNonIntegerOptionsValues" xml:space="preserve">
     <value>Спеціальні значення підтримують лише цілі значення в діапазоні від {0} до {1}..</value>
   </data>
   <data name="WB0132_SpecialValuesHasOptionsWithLongTexts" xml:space="preserve">
-    <value>Спеціальне значення title порожнє або занадто довге. Довжина title має бути в діапазоні від {0} до {1} символів.</value>
+    <value>Назва спеціального значення є порожнє або занадто довге. Довжина назви має бути в діапазоні від {0} до {1} символів.</value>
   </data>
   <data name="WB0133_SpecialValuesMustBeUniqueForNumericlQuestion" xml:space="preserve">
     <value>Спеціальні значення повинні бути унікальними.</value>
@@ -520,13 +520,13 @@
     <value>Назви спеціальних значень повинні бути унікальними.</value>
   </data>
   <data name="WB0138_SpecialValuesAttachmentsMustBeUniqueForNumericQuestion" xml:space="preserve">
-    <value>Спеціальні значення Назва вкладення має бути унікальною.</value>
+    <value>Назва вкладення спеціального значення має бути унікальною.</value>
   </data>
   <data name="WB0139_SpecialValuesAttachmentsReferAbsentAttachment" xml:space="preserve">
-    <value>Вкладення зі спеціальними значеннями відноситься до неіснуючого вкладення.</value>
+    <value>Вкладення до спеціального значення посилається на неіснуюче вкладення.</value>
   </data>
   <data name="WB0200_LargeNumberOfRostersIsCreated" xml:space="preserve">
-    <value>Створюється велика кількість реєстрів. Експорт цих структур у файли даних може бути проблематичним. Розгляньте можливість зменшення кількості реєстрів.</value>
+    <value>Створюється велика кількість ростерів. Експорт цих структур у файли даних може бути проблематичним. Розгляньте можливість зменшення кількості ростерів.</value>
   </data>
   <data name="WB0201_LargeNumberOfQuestionsInGroup" xml:space="preserve">
     <value>Розділ або список містить більше {0} запитань, розгляньте можливість розбиття на підрозділи.</value>
@@ -541,10 +541,10 @@
     <value>Ростер порожній. Видаліть його, якщо він не потрібен.</value>
   </data>
   <data name="WB0205_TooManyQuestions" xml:space="preserve">
-    <value>Опитувальник містить більше {0} запитань. Його може бути складно адмініструвати.</value>
+    <value>Анкета містить більше {0} запитань. Його може бути складно адмініструвати.</value>
   </data>
   <data name="WB0206_FewSectionsManyQuestions" xml:space="preserve">
-    <value>Опитувальник містить більше {0} запитань, але лише один або два розділи. Згрупуйте питання за розділами, щоб спростити навігацію та підвищити ефективність.</value>
+    <value>Анкета містить більше {0} запитань, але лише один або два розділи. Згрупуйте питання за розділами, щоб спростити навігацію та підвищити ефективність.</value>
   </data>
   <data name="WB0207_FixedRosterContains3OrLessItems" xml:space="preserve">
     <value>Фіксований список містить {0} або менше елементів. Розгляньте можливість використання підрозділів та серії запитань. Ростери ускладнюють структуру експортованих даних.</value>
@@ -556,10 +556,10 @@
     <value>Умова включення є довгою. Можливо, за допомогою вбудованих функцій (наприклад, InList()) можна зробити коротші, більш читабельні умови..</value>
   </data>
   <data name="WB0210_CategoricalQuestionHasManyOptions" xml:space="preserve">
-    <value>Питання з одним вибором має занадто багато категорій, розгляньте можливість заміни на комбіноване поле.</value>
+    <value>Питання з одним вибором має занадто багато категорій, розгляньте можливість заміни на комбіноване питання.</value>
   </data>
   <data name="WB0211_QuestionnaireHasNoGpsQuestion" xml:space="preserve">
-    <value>Опитувальник не містить GPS питань. Подумайте над тим, щоб додати питання про GPS.</value>
+    <value>Анкета не містить GPS питань. Подумайте над тим, щоб додати питання про GPS.</value>
   </data>
   <data name="WB0212_LongValidationCondition" xml:space="preserve">
     <value>Умова перевірки #{0} є довгою. Можливо, за допомогою вбудованих функцій (наприклад, InList()) можна створити коротші, більш читабельні умови..</value>
@@ -583,7 +583,7 @@
     <value>Послідовні запитання містять однакові умови ввімкнення. Подумайте над тим, щоб розмістити їх у підрозділі та призначити умову для підрозділу.</value>
   </data>
   <data name="WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options" xml:space="preserve">
-    <value>Кілька послідовних безумовних запитань з одним вибором з категоріями {0}. Розглянемо одне питання з множинним вибором.</value>
+    <value>Кілька послідовних безумовних запитань з одним вибором з категоріями {0}. Розгляньте одне питання з множинним вибором.</value>
   </data>
   <data name="WB0220_RowIndexInMultiOptionBasedRoster" xml:space="preserve">
     <value>Використання @{0} з багатоваріантним списком може бути нестабільним. Розглянемо можливість використання @{1} замість цього.</value>
@@ -592,13 +592,13 @@
     <value>Питання про поточний час не знайдено. Подумайте про те, щоб записати дату інтерв'ю в анкеті.</value>
   </data>
   <data name="WB0222_SingleOptionPrefilled" xml:space="preserve">
-    <value>Запитання з одним вибором позначено як ідентифікаційне. Розглянемо використання текстового запитання.</value>
+    <value>Запитання з одним вибором позначено як ідентифікаційне. Розгляньте використання текстового запитання.</value>
   </data>
   <data name="WB0223_SectionWithLessThan5Questions" xml:space="preserve">
     <value>Розділ містить менше п'яти запитань. Розгляньте можливість об'єднання з іншими розділами.</value>
   </data>
   <data name="WB0224_TooManySubsectionsAtOneLevel" xml:space="preserve">
-    <value>Забагато підрозділів на одному рівні. Розглянемо ієрархічну структуру.</value>
+    <value>Забагато підрозділів на одному рівні. Розгляньте ієрархічну структуру.</value>
   </data>
   <data name="WB0225_ComboBoxWithLessThan10Elements" xml:space="preserve">
     <value>Випадаюче меню (комбіноване поле) містить менше 10 елементів. Розгляньте можливість переходу до стандартного представлення з одним вибором.</value>
@@ -607,7 +607,7 @@
     <value>Каскадні комбіновані запитання мають одне й те саме батьківське запитання.</value>
   </data>
   <data name="WB0227_NotShared" xml:space="preserve">
-    <value>Анкета ще не була переглянута. Подумайте про те, щоб поділитися нею з іншим користувачем для зворотного зв'язку.</value>
+    <value>Анкета ще не була перевірена. Розгляньте можливість поділитися нею з іншим користувачем для зворотного зв'язку.</value>
   </data>
   <data name="WB0228_OmittedOptions" xml:space="preserve">
     <value>Категоричне питання має непослідовні коди категорій. Перевірте наявність пропущених категорій.</value>
@@ -622,10 +622,10 @@
     <value>Питання з декількома варіантами відповідей містить занадто багато (&gt;{0}) категорій. На планшетах буде важко орієнтуватися. Якщо можливо, розгляньте можливість розбиття на два питання з декількома варіантами відповідей.</value>
   </data>
   <data name="WB0232_FiveOrMoreQuestionsWithSameEnabling" xml:space="preserve">
-    <value>П'ять або більше запитань мають однакові умови. Об'єднайте запитання в групу та застосуйте одну умову для групи, щоб підвищити ефективність опитування.</value>
+    <value>П'ять або більше запитань мають однакові умови. Об'єднайте запитання в групу та застосуйте одну умову для групи, щоб підвищити ефективність анкети.</value>
   </data>
   <data name="WB0233_NestedRosterDegree3OrMore" xml:space="preserve">
-    <value>Вкладений реєстр з трьома або більше ступенями вкладеності. Намагайтеся уникати таких складних структур, які можуть призвести до проблем зі збором даних.</value>
+    <value>Вкладений ростер з трьома або більше ступенями вкладеності. Намагайтеся уникати таких складних структур, які можуть призвести до проблем зі збором даних.</value>
   </data>
   <data name="WB0234_RosterInRosterWithSameSourceQuestion" xml:space="preserve">
     <value>Підпорядковані рівні у вкладеному списку ґрунтуються на тому самому батьківському запитанні. Спробуйте переглянути, такі списки можуть призвести до проблем зі збором даних.</value>
@@ -637,16 +637,16 @@
     <value>Однакова довга умова перевірки використовується в декількох питаннях. Ви можете створити булеву змінну, щоб спростити керування кодом.</value>
   </data>
   <data name="WB0237_BitwiseAnd" xml:space="preserve">
-    <value> використовується у виразах. Переконайтеся, що ви розумієте різницю між операторами та . У більшості випадків слід використовувати .</value>
+    <value>&amp; використовується у виразах. Переконайтеся, що ви розумієте різницю між операторами &amp; та &amp;&amp;. У більшості випадків слід використовувати &amp;&amp;.</value>
   </data>
   <data name="WB0238_BitwiseOr" xml:space="preserve">
     <value>| використовується у виразах. Переконайтеся, що ви розумієте різницю між операторами | та ||. У більшості випадків використовуйте ||.</value>
   </data>
   <data name="WB0250_ValidationConditionRefersToAFutureQuestion" xml:space="preserve">
-    <value>Умова перевірки #{0} відноситься до майбутнього питання. Розглянемо зворотний порядок.</value>
+    <value>Умова перевірки #{0} відноситься до майбутнього питання. Розгляньте зворотний порядок.</value>
   </data>
   <data name="WB0251_EnablementConditionRefersToAFutureQuestion" xml:space="preserve">
-    <value>Умова увімкнення відноситься до майбутнього питання. Подумайте про зміну порядку.</value>
+    <value>Умова увімкнення відноситься до майбутнього питання. Розгляньте зміну порядку.</value>
   </data>
   <data name="WB0253_TooFewVariableLabelsAreDefined" xml:space="preserve">
     <value>Визначено занадто мало міток змінних. Додайте мітки змінних, щоб покращити зручність використання експортованих даних та забезпечити введення метаданих для формату Ініціативи з документування даних (DDI).</value>
@@ -670,7 +670,7 @@
     <value>Текст питання занадто довгий. Він повинен бути не довшим за {0} символів.</value>
   </data>
   <data name="WB0260_GroupTitleIsTooLong" xml:space="preserve">
-    <value>Назва занадто довга. Він має бути не довшим за {0} символів.</value>
+    <value>Назва занадто довга. Віна має бути не довша за {0} символів.</value>
   </data>
   <data name="WB0261_RosterStructureTooExplosive" xml:space="preserve">
     <value>Анкета містить списки, загальна кількість екземплярів яких {0} перевищує ліміт системи {1}.</value>
@@ -703,10 +703,10 @@
     <value>Макрос не може бути порожнім.</value>
   </data>
   <data name="WB0272_ConditionUsingForbiddenClasses" xml:space="preserve">
-    <value>Умова, що дозволяє використання забороненого типу.</value>
+    <value>Умова включення використовує заборонений тип.</value>
   </data>
   <data name="WB0273_ValidationConditionUsingForbiddenClasses" xml:space="preserve">
-    <value>Умова перевірки - використання забороненого типу.</value>
+    <value>Умова перевірки використовує заборонений тип.</value>
   </data>
   <data name="WB0274_VariableUsingForbiddenClasses" xml:space="preserve">
     <value>Змінна використовує заборонений тип.</value>
@@ -721,13 +721,13 @@
     <value>Назва анкети не повинна містити двох і більше символів підкреслення підряд.</value>
   </data>
   <data name="WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
-    <value>Простий режим дозволено лише для списків, що містять не більше {0} запитань або статичних текстів.</value>
+    <value>Простий режим дозволено лише для ростерів, що містять не більше {0} запитань або статичних текстів.</value>
   </data>
   <data name="WB0279_PlainModeGroupContainsNestedGroup" xml:space="preserve">
-    <value>Простий режим не дозволяє використовувати вкладені списки.</value>
+    <value>Простий режим не дозволяє використовувати вкладені ростери.</value>
   </data>
   <data name="WB0280_TextContainsLinkToUnknownQuestionOrGroup" xml:space="preserve">
-    <value>Текст містить посилання на невідоме питання, підрозділ, список або pdf-додаток.</value>
+    <value>Текст містить посилання на невідоме питання, підрозділ, ростер або pdf-додаток.</value>
   </data>
   <data name="WB0281_QuestionnaireExceededEntitiesLimit" xml:space="preserve">
     <value>Загальна кількість елементів ({0}) перевищила ліміт системи ({1}). Подумайте про зменшення кількості запитань, статичних текстів, змінних або елементів у фіксованих списках.</value>
@@ -739,16 +739,16 @@
     <value>Режим табличного списку не дозволяє використовувати вкладені групи та списки.</value>
   </data>
   <data name="WB0283_TableRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
-    <value>Табличний режим дозволений лише для списків, що містять не більше {0} запитань.</value>
+    <value>Табличний режим дозволений лише для ростерів, що містять не більше {0} запитань.</value>
   </data>
   <data name="WB0284_TableRosterCantContainsSupervisorQuestions" xml:space="preserve">
-    <value>Ростер столу не дозволяє використовувати запитання супервізора.</value>
+    <value>Табличний ростер не дозволяє використовувати запитання супервізора.</value>
   </data>
   <data name="WB0285_TableRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
-    <value>Табличний реєстр дозволяє використовувати тільки текстові та числові запитання.</value>
+    <value>Табличний ростер дозволяє використовувати тільки текстові та числові запитання.</value>
   </data>
   <data name="WB0286_TableAndMatixRosterWorksOnlyInWebMode" xml:space="preserve">
-    <value>Режим табличного або матричного списку працює лише у веб-опитуванні, на планшетах це буде режим "підрозділу.</value>
+    <value>Режим табличного або матричного ростера працює лише у веб-опитуванні, на планшетах це буде режим "підрозділу".</value>
   </data>
   <data name="WB0288_ValueAndTitleNumbersIsNotEquals" xml:space="preserve">
     <value>Мітка {1} для коду {0} є числом, відмінним від значення, що маркується.</value>
@@ -778,34 +778,34 @@
     <value>Питання мають однакові категорії. Замість цього використовуйте багаторазові категорії</value>
   </data>
   <data name="WB0297_MatrixRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
-    <value>Матричний список дозволяє використовувати лише прості категоричні запитання: комбіновані, каскадні або так/ні не допускаються.</value>
+    <value>Матричний ростер дозволяє використовувати лише прості категоричні запитання: комбіновані, каскадні або так/ні не допускаються.</value>
   </data>
   <data name="WB0298_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
-    <value>Матричний режим дозволено лише для списків, що містять не більше {0} запитань.</value>
+    <value>Матричний режим дозволено лише для ростерів, що містять не більше {0} запитань.</value>
   </data>
   <data name="WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions" xml:space="preserve">
-    <value>Матричний список не повинен містити керівника або ідентифікаційних питань.</value>
+    <value>Матричний ростер не повинен містити ідентифікаційних питань або питань для супервізора.</value>
   </data>
   <data name="WB0301_MatrixRosterHasToContainNoLinkedQuestions" xml:space="preserve">
-    <value>Матриця не повинна містити пов'язаних питань.</value>
+    <value>Матричний ростер не повинен містити пов'язаних питань.</value>
   </data>
   <data name="WB0302" xml:space="preserve">
-    <value>Заміна не може посилатися на елементи того самого рівня списку.</value>
+    <value>Підстановка не може посилатися на елементи того самого рівня ростера.</value>
   </data>
   <data name="WB0305_DuplicatedCategoryIdParentIdPair" xml:space="preserve">
-    <value>Багаторазова категорія не може мати рядків з однаковими значеннями Id та ParentId</value>
+    <value>Категорія багаторазового використання не може мати рядків з однаковими значеннями Id та ParentId</value>
   </data>
   <data name="WB0306_DuplicatedCategoryParentIdText" xml:space="preserve">
-    <value>Багаторазова категорія не може мати рядків з однаковими значеннями ParentId та Text</value>
+    <value>Категорія багаторазового використання не може мати рядків з однаковими значеннями ParentId та Text</value>
   </data>
   <data name="WB0307_QuestionReferancedToIncorrectCategories" xml:space="preserve">
-    <value>Посилання на питання неіснуючої багаторазової категорії.</value>
+    <value>Посилання на питання неіснуючої категорії багаторазового використання.</value>
   </data>
   <data name="WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes" xml:space="preserve">
     <value>Ідентифікаційні питання можуть мати лише дозволені типи (Текст, Числове, Дата, Час, GpsКоординати, ОдинОпція)</value>
   </data>
   <data name="WB0309_IdentityQuestionsMustHaveVariableLabel" xml:space="preserve">
-    <value>Питання в розділі Обкладинка повинні мати змінну мітку.</value>
+    <value>Питання в розділі Обкладинка повинні мати мітку.</value>
   </data>
   <data name="WB0311_IdentityVariablesMustHaveLabel" xml:space="preserve">
     <value>Змінні в розділі Сover повинні мати мітку.</value>
@@ -814,10 +814,10 @@
     <value>Категорії повинні мати принаймні два варіанти</value>
   </data>
   <data name="WB0313_QuestionOptionReferenceToNonExistentAttachment" xml:space="preserve">
-    <value>Варіант запитання стосується неіснуючого додатку</value>
+    <value>Варіант відповіді запитання посилається на неіснуючий додаток</value>
   </data>
   <data name="WB0314_NonUniqueAttachment" xml:space="preserve">
-    <value>Питання містить кілька варіантів відповідей, які стосуються одного й того самого вкладення</value>
+    <value>Питання містить кілька варіантів відповідей, які посилається на одне й теж саме вкладення</value>
   </data>
   <data name="WB0315_AttachmentHasInvalidName" xml:space="preserve">
     <value>Назва вкладення повинна містити лише літери, цифри та символ підкреслення. Починається з літери, не містить підкреслень підряд, не закінчується підкресленням і не є зарезервованим словом. Не повинно бути порожнім і містити менше 32 символів.</value>
@@ -826,7 +826,7 @@
     <value>Анкета у старому форматі. Будь ласка, скористайтеся посиланням "Згенерувати обкладинку" в розділі Обкладинка.</value>
   </data>
   <data name="WB0390_OnlyStringVariableAllowedAsAttachmentName" xml:space="preserve">
-    <value>Як джерело імені вкладення може бути використаний лише тип рядкової змінної</value>
+    <value>Для джерела імені вкладення може бути використаний лише змінна рядкового типу</value>
   </data>
   <data name="WB0391" xml:space="preserve">
     <value>Статичний текст не може посилатися на змінну, яка має глибшу область видимості, ніж він сам</value>

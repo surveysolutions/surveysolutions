@@ -160,7 +160,7 @@
     <value>Виявлення перекриття</value>
   </data>
   <data name="InRosterSourceOfCategories" xml:space="preserve">
-    <value>в реєстрі</value>
+    <value>в ростері</value>
   </data>
   <data name="LastEdited" xml:space="preserve">
     <value>{0} востаннє відредаговано {1}</value>
@@ -172,7 +172,7 @@
     <value>Легенда</value>
   </data>
   <data name="MetadataAgreeToMakeThisQuestionnairePublic" xml:space="preserve">
-    <value>Згоду на оприлюднення цієї анкети</value>
+    <value>Згоден зробити цю анкету публічною</value>
   </data>
   <data name="MetadataConsultants" xml:space="preserve">
     <value>Консультанти</value>
@@ -202,19 +202,19 @@
     <value>Примітки</value>
   </data>
   <data name="MetadataPrimaryInvestigator" xml:space="preserve">
-    <value>Основний слідчий</value>
+    <value>Основний дослідник</value>
   </data>
   <data name="MetadataSectionSubTitle" xml:space="preserve">
     <value>опис анкети</value>
   </data>
   <data name="MetadataSectionTitle" xml:space="preserve">
-    <value>Ідентифікаційні дані опитування</value>
+    <value>Ідентифікаційні дані дослідження</value>
   </data>
   <data name="MetadataStudyType" xml:space="preserve">
     <value>Тип навчання</value>
   </data>
   <data name="MetadataSubtitle" xml:space="preserve">
-    <value>Субтитри</value>
+    <value>Підзаголовок</value>
   </data>
   <data name="MetadataTitle" xml:space="preserve">
     <value>Назва</value>
@@ -238,7 +238,7 @@
     <value>{0} (ніколи не редагувався)</value>
   </data>
   <data name="NotShared" xml:space="preserve">
-    <value>Ні з ким не ділитися</value>
+    <value>Ні з ким не розділено</value>
   </data>
   <data name="Off" xml:space="preserve">
     <value>ВИМКНЕНО</value>
@@ -259,13 +259,13 @@
     <value>Запитання</value>
   </data>
   <data name="QuestionScope_Hidden" xml:space="preserve">
-    <value>прихований</value>
+    <value>прихованe</value>
   </data>
   <data name="QuestionScope_Identifying" xml:space="preserve">
-    <value>визначення</value>
+    <value>ідентифікуюче</value>
   </data>
   <data name="QuestionScope_Supervisor" xml:space="preserve">
-    <value>керівник</value>
+    <value>супервізору</value>
   </data>
   <data name="QuestionType_Area" xml:space="preserve">
     <value>географія: </value>
@@ -322,10 +322,10 @@
     <value>числовий:</value>
   </data>
   <data name="QuestionType_Ordered" xml:space="preserve">
-    <value>замовлено</value>
+    <value>впорядкований</value>
   </data>
   <data name="QuestionType_Picture" xml:space="preserve">
-    <value>картина</value>
+    <value>зображення</value>
   </data>
   <data name="QuestionType_SingleSelect" xml:space="preserve">
     <value>однократний вибір</value>
@@ -337,7 +337,7 @@
     <value>так/ні</value>
   </data>
   <data name="Roster" xml:space="preserve">
-    <value>Реєстр:</value>
+    <value>ростер:</value>
   </data>
   <data name="Roster_GeneretedByFixedList" xml:space="preserve">
     <value>згенеровано за фіксованим списком</value>
@@ -346,7 +346,7 @@
     <value>згенерований {0} питанням {1}</value>
   </data>
   <data name="RosterSourceOfCategories" xml:space="preserve">
-    <value>Реєстр</value>
+    <value>ростер</value>
   </data>
   <data name="RosterType_List" xml:space="preserve">
     <value>список</value>
@@ -382,10 +382,10 @@
     <value>Спеціальні значення</value>
   </data>
   <data name="Stat_NoQuestions" xml:space="preserve">
-    <value>Ніяких питань</value>
+    <value>Жодних питань</value>
   </data>
   <data name="Stat_NoRosters" xml:space="preserve">
-    <value>Ніяких списків</value>
+    <value>Жодних ростерів</value>
   </data>
   <data name="Stat_NoSubsections" xml:space="preserve">
     <value>Без підрозділів</value>
@@ -394,10 +394,10 @@
     <value>Питання: {0}</value>
   </data>
   <data name="Stat_QuestionsWithConditions" xml:space="preserve">
-    <value>Питання з умовами, що дозволяють: {0}</value>
+    <value>Питання з умовами включення: {0}</value>
   </data>
   <data name="Stat_QuestionsWithValidation" xml:space="preserve">
-    <value>Питання з умовами перевірки:{0}</value>
+    <value>Питання з умовами валідації:{0}</value>
   </data>
   <data name="Stat_Rosters" xml:space="preserve">
     <value>Ростери: {0}</value>
@@ -418,18 +418,18 @@
     <value>Статичний текст</value>
   </data>
   <data name="TextListSourceOfCategories" xml:space="preserve">
-    <value>Питання до текстового списку</value>
+    <value>Питання текстовий список</value>
   </data>
   <data name="ValidationCondition" xml:space="preserve">
     <value>Умова валідації:</value>
   </data>
   <data name="ValidationMessage" xml:space="preserve">
-    <value>Повідомлення про підтвердження:</value>
+    <value>Повідомлення валідації:</value>
   </data>
   <data name="Variable" xml:space="preserve">
     <value>Змінна</value>
   </data>
   <data name="VariableExcludedFromExport" xml:space="preserve">
-    <value>Ця змінна виключається з експортованих даних</value>
+    <value>Ця змінна не включається до експортованих даних</value>
   </data>
 </root>

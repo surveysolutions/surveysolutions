@@ -124,13 +124,13 @@
     <value>Середня тривалість розгляду справи</value>
   </data>
   <data name="AverageCaseAssignmentDurationDescription" xml:space="preserve">
-    <value>Середній час від моменту призначення інтерв'ю інтерв'юеру до моменту натискання кнопки завершення на планшеті.</value>
+    <value>Середній час від моменту завдання інтерв'ю інтерв'юеру до моменту натискання кнопки завершення на планшеті.</value>
   </data>
   <data name="AverageHQProcessingTime" xml:space="preserve">
-    <value>Середній час обробки в штаб-квартирі</value>
+    <value>Середній час обробки у Хедквотері</value>
   </data>
   <data name="AverageHQProcessingTimeDescription" xml:space="preserve">
-    <value>Середній час від моменту, коли керівник схвалює співбесіду, до моменту, коли співбесіду схвалює або відхиляє штаб-квартира.</value>
+    <value>Середній час від моменту, коли керівник схвалює інтерв'ю, до моменту, коли інтерв'ю схвалює або відхиляє хедвотер.</value>
   </data>
   <data name="AverageInterviewDuration" xml:space="preserve">
     <value>Середня тривалість інтерв'ю</value>
@@ -145,19 +145,19 @@
     <value>Середній загальний час розгляду справи</value>
   </data>
   <data name="AverageOverallCaseProcessingTimeDescription" xml:space="preserve">
-    <value>Середній час від моменту першого призначення співбесіди до моменту затвердження співбесіди штаб-квартирою.</value>
+    <value>Середній час від моменту першого завдання інтерв'ю до моменту затвердження інтерв'ю хедквотером.</value>
   </data>
   <data name="AverageSupervisorProcessingTime" xml:space="preserve">
-    <value>Середній час обробки супервайзером</value>
+    <value>Середній час обробки супервізором</value>
   </data>
   <data name="AverageSupervisorProcessingTimeDescription" xml:space="preserve">
-    <value>Середній час від моменту, коли інтерв'юер натискає кнопку "Завершити", до моменту, коли керівник приймає або відхиляє співбесіду. </value>
+    <value>Середній час від моменту, коли інтерв'юер натискає кнопку "Завершити", до моменту, коли керівник приймає або відхиляє інтерв'ю. </value>
   </data>
   <data name="BackToSupervisors" xml:space="preserve">
-    <value>Повертаючись до супервайзерів</value>
+    <value>Повернутися до Супервізорів</value>
   </data>
   <data name="BackToTeams" xml:space="preserve">
-    <value>Повертаємося до команд</value>
+    <value>Повернутися до команд</value>
   </data>
   <data name="By" xml:space="preserve">
     <value>By</value>
@@ -193,34 +193,34 @@
     <value>Кількість завершених інтерв'ю по командах. Відхилені, а потім завершені інтерв'ю вважаються окремими подіями завершення.</value>
   </data>
   <data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
-    <value>Кількість інтерв'ю, затверджених штаб-квартирою</value>
+    <value>Кількість інтерв'ю, затверджених хедквотером</value>
   </data>
   <data name="NumberOfInterviewsApprovedByHQDescription" xml:space="preserve">
-    <value>Кількість інтерв'ю, зібраних {0}, затверджених штаб-квартирою.</value>
+    <value>Кількість інтерв'ю, зібраних {0}, затверджених хедквотером.</value>
   </data>
   <data name="NumberOfInterviewTransactionsByHQ" xml:space="preserve">
-    <value>Кількість транзакцій інтерв'ю по штаб-квартирі</value>
+    <value>Кількість транзакцій інтерв'ю по хедквотеру</value>
   </data>
   <data name="NumberOfInterviewTransactionsByHQDescription" xml:space="preserve">
-    <value>Кількість схвалень та відмов від штаб-квартири за результатами співбесід, зібраних {0}.</value>
+    <value>Кількість схвалень та відмов від хедквотера за результатами співбесід, зібраних {0}.</value>
   </data>
   <data name="NumberOfInterviewTransactionsBySupervisor" xml:space="preserve">
     <value>Кількість транзакцій інтерв'ю за супервізором</value>
   </data>
   <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerInterviewer" xml:space="preserve">
-    <value>Кількість схвалень та відхилень інтерв'ю супервайзером, зібраних інтерв'юером</value>
+    <value>Кількість схвалень та відхилень інтерв'ю Супервізором, зібраних інтерв'юером</value>
   </data>
   <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerTeam" xml:space="preserve">
-    <value>Кількість схвалень та відмов від керівника на співбесідах, зібраних {0}.</value>
+    <value>Кількість схвалень та відмов від супервізора на співбесідах, зібраних {0}.</value>
   </data>
   <data name="OverTheLast" xml:space="preserve">
     <value>За попередній</value>
   </data>
   <data name="Period" xml:space="preserve">
-    <value>Крапка</value>
+    <value>Період</value>
   </data>
   <data name="PeriodCount" xml:space="preserve">
-    <value>Підрахунок періодів</value>
+    <value>Кількість періодів</value>
   </data>
   <data name="PeriodUnit" xml:space="preserve">
     <value>Одиниця виміру періоду</value>

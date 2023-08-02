@@ -121,13 +121,13 @@
     <value>Не вдається відкрити анкету. Видалити зі списку?</value>
   </data>
   <data name="AnonymousQuestionnaires_Error_NotFound" xml:space="preserve">
-    <value>Не вдається відкрити анкету. Опитувальник не може бути знайдений.</value>
+    <value>Не вдається відкрити анкету. Анекта не знайдена.</value>
   </data>
   <data name="AnonymousQuestionnaires_Open" xml:space="preserve">
-    <value>Відкрито</value>
+    <value>Відкрити</value>
   </data>
   <data name="AnonymousQuestionnaires_QuestionnaireUrl" xml:space="preserve">
-    <value>Анонімне заповнення анкети</value>
+    <value>Анонімна URL-адреса анкети</value>
   </data>
   <data name="Dashboard_HaveNotBeenUpdated" xml:space="preserve">
     <value>список не оновлювався</value>
@@ -145,13 +145,13 @@
     <value>Завантаження анкети - {0}%.</value>
   </data>
   <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
-    <value>Не вдається відкрити анкету "{0}". Ваш обліковий запис користувача Designer не авторизований. Будь ласка, перевірте логін і пароль.</value>
+    <value>Не вдається відкрити анкету "{0}". Ваш обліковий запис користувача веб-додатку Designer не авторизований. Будь ласка, перевірте логін і пароль.</value>
   </data>
   <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
-    <value>Не вдається відкрити анкету "{0}". Опитувальник не знайдено. Будь ласка, оновіть список анкет.</value>
+    <value>Не вдається відкрити анкету "{0}". Анкета не знайдена. Будь ласка, оновіть список анкет.</value>
   </data>
   <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
-    <value>Не вдається відкрити анкету "{0}". Опитувальник містить помилки. Будь ласка, виправте це в Дизайнері.</value>
+    <value>Не вдається відкрити анкету "{0}". Анкета містить помилки. Будь ласка, виправте це в веб-додатку Designer.</value>
   </data>
   <data name="ImportQuestionnaire_StoreQuestionnaire" xml:space="preserve">
     <value>Збереження анкети в локальному сховищі</value>
@@ -163,7 +163,7 @@
     <value>Будь ласка, введіть правильний логін</value>
   </data>
   <data name="Login_Error_NotFound" xml:space="preserve">
-    <value>Веб-додаток "Дизайнер" зараз недоступний. Перевірте налаштування з'єднання або спробуйте пізніше</value>
+    <value>Веб-додаток Designer зараз недоступний. Перевірте налаштування з'єднання або спробуйте пізніше</value>
   </data>
   <data name="MenuItem_Title_AnonymousQuestionnaires" xml:space="preserve">
     <value>Анонімні анкети</value>
@@ -187,7 +187,7 @@
     <value>Налаштування</value>
   </data>
   <data name="MenuItem_Title_SignOut" xml:space="preserve">
-    <value>Вийдіть з системи.</value>
+    <value>Вийти з аккаунта</value>
   </data>
   <data name="Prefs_AcceptUnsignedSummary" xml:space="preserve">
     <value>Вимкнути перевірку SSL-сертифіката</value>
@@ -199,7 +199,7 @@
     <value>Налаштування підключення</value>
   </data>
   <data name="Prefs_DesignerEndPointSummary" xml:space="preserve">
-    <value>URL-адреса, яка використовується для зв'язку з додатком-конструктором</value>
+    <value>URL-адреса, яка використовується для зв'язку з веб-додатком Designer</value>
   </data>
   <data name="Prefs_DesignerEndPointTitle" xml:space="preserve">
     <value>URL-адреса дизайнера</value>
@@ -220,7 +220,7 @@
     <value>Показувати час, що минув за відповідь</value>
   </data>
   <data name="Prefs_ShowAnswerTimeSummary" xml:space="preserve">
-    <value>Час увімкнення, валідації та розповсюдження реєстру. Час отримання GPS-даних або фотографування не враховується.</value>
+    <value>Час увімкнення, перевірки та розмноження ростеру. Час отримання GPS-даних або фотографування не враховується.</value>
   </data>
   <data name="Prefs_ShowVariables" xml:space="preserve">
     <value>Показати змінні</value>
