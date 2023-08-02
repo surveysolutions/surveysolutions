@@ -872,10 +872,7 @@
   </data>
   <data name="QuestionShowListLimit" xml:space="preserve">
     <value>Якщо не більше</value>
-  </data>
-  <data name="QuestionShowStrings" xml:space="preserve">
-    <value>Показати рядки</value>
-  </data>
+  </data>  
   <data name="QuestionsSearchEntities" xml:space="preserve">
     <value>результати пошуку</value>
   </data>
@@ -950,9 +947,6 @@
   </data>
   <data name="RosterName" xml:space="preserve">
     <value>Ім'я в реєстрі</value>
-  </data>
-  <data name="RosterShowStrings" xml:space="preserve">
-    <value>Показати рядки</value>
   </data>
   <data name="RosterSource" xml:space="preserve">
     <value>Джерело реєстру</value>
@@ -1121,9 +1115,6 @@
   </data>
   <data name="ShowAsList" xml:space="preserve">
     <value>Показати як список категорій</value>
-  </data>
-  <data name="ShowList" xml:space="preserve">
-    <value>Показати список</value>
   </data>
   <data name="ShowParentValues" xml:space="preserve">
     <value>Показати батьківські значення</value>
