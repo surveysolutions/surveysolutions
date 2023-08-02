@@ -5,8 +5,10 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class InterviewReceivedByInterviewer : InterviewPassiveEvent
     {
-        public InterviewReceivedByInterviewer(DateTimeOffset originDate) : base(originDate)
+        public string DeviceId { get; set; }
+        public InterviewReceivedByInterviewer(string deviceId, DateTimeOffset originDate) : base(originDate)
         {
+            this.DeviceId = deviceId;
         }
     }
 }
