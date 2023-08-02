@@ -50,6 +50,9 @@
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.ar.resx">
       <Link>InterviewerUIResources.ar.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.cs.resx">
+      <Link>InterviewerUIResources.cs.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.es.resx">
       <Link>InterviewerUIResources.es.resx</Link>
     </EmbeddedResource>

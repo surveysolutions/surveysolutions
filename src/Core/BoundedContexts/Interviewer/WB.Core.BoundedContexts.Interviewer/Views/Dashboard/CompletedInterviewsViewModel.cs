@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
     public class CompletedInterviewsViewModel : BaseInterviewsViewModel
     {
-        public override GroupStatus InterviewStatus => GroupStatus.Completed;
+        public override DashboardGroupType DashboardType => DashboardGroupType.CompletedInterviews;
         public override string TabTitle => EnumeratorUIResources.Dashboard_CompletedLinkText;
         public override string TabDescription => EnumeratorUIResources.Dashboard_CompletedTabText;
         

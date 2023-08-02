@@ -319,6 +319,9 @@ export default {
                                 } else {
                                     return self.$t('Assignments.Action_WebModeChanged_False')
                                 }
+                            case 'AssignmentReceivedByTablet':
+                                return data.DeviceId
+                                    
                         }
                         return ''
                     },

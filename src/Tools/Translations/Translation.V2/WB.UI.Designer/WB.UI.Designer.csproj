@@ -78,6 +78,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\AccountResources.ar.resx">
       <Link>Resources\AccountResources.ar.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\AccountResources.cs.resx">
+      <Link>Resources\AccountResources.cs.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\AccountResources.es.resx">
       <Link>Resources\AccountResources.es.resx</Link>
     </EmbeddedResource>
@@ -96,11 +99,17 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\AccountResources.sq.resx">
       <Link>Resources\AccountResources.sq.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\AccountResources.uk.resx">
+      <Link>Resources\AccountResources.uk.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\AccountResources.zh.resx">
       <Link>Resources\AccountResources.zh.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\ErrorMessages.ar.resx">
       <Link>Resources\ErrorMessages.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\ErrorMessages.cs.resx">
+      <Link>Resources\ErrorMessages.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\ErrorMessages.es.resx">
       <Link>Resources\ErrorMessages.es.resx</Link>
@@ -120,11 +129,17 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\ErrorMessages.sq.resx">
       <Link>Resources\ErrorMessages.sq.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\ErrorMessages.uk.resx">
+      <Link>Resources\ErrorMessages.uk.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\ErrorMessages.zh.resx">
       <Link>Resources\ErrorMessages.zh.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\FindReplaceResources.ar.resx">
       <Link>Resources\FindReplaceResources.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\FindReplaceResources.cs.resx">
+      <Link>Resources\FindReplaceResources.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\FindReplaceResources.es.resx">
       <Link>Resources\FindReplaceResources.es.resx</Link>
@@ -144,11 +159,17 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\FindReplaceResources.sq.resx">
       <Link>Resources\FindReplaceResources.sq.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\FindReplaceResources.uk.resx">
+      <Link>Resources\FindReplaceResources.uk.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\FindReplaceResources.zh.resx">
       <Link>Resources\FindReplaceResources.zh.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\NotificationResources.ar.resx">
       <Link>Resources\NotificationResources.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\NotificationResources.cs.resx">
+      <Link>Resources\NotificationResources.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\NotificationResources.es.resx">
       <Link>Resources\NotificationResources.es.resx</Link>
@@ -168,11 +189,17 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\NotificationResources.sq.resx">
       <Link>Resources\NotificationResources.sq.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\NotificationResources.uk.resx">
+      <Link>Resources\NotificationResources.uk.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\NotificationResources.zh.resx">
       <Link>Resources\NotificationResources.zh.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\Paging.ar.resx">
       <Link>Resources\Paging.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\Paging.cs.resx">
+      <Link>Resources\Paging.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\Paging.es.resx">
       <Link>Resources\Paging.es.resx</Link>
@@ -192,11 +219,17 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\Paging.sq.resx">
       <Link>Resources\Paging.sq.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\Paging.uk.resx">
+      <Link>Resources\Paging.uk.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\Paging.zh.resx">
       <Link>Resources\Paging.zh.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\PdfMessages.ar.resx">
       <Link>Resources\PdfMessages.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\PdfMessages.cs.resx">
+      <Link>Resources\PdfMessages.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\PdfMessages.es.resx">
       <Link>Resources\PdfMessages.es.resx</Link>
@@ -216,11 +249,17 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\PdfMessages.sq.resx">
       <Link>Resources\PdfMessages.sq.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\PdfMessages.uk.resx">
+      <Link>Resources\PdfMessages.uk.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\PdfMessages.zh.resx">
       <Link>Resources\PdfMessages.zh.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireController.ar.resx">
       <Link>Resources\QuestionnaireController.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireController.cs.resx">
+      <Link>Resources\QuestionnaireController.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireController.es.resx">
       <Link>Resources\QuestionnaireController.es.resx</Link>
@@ -240,11 +279,17 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireController.sq.resx">
       <Link>Resources\QuestionnaireController.sq.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireController.uk.resx">
+      <Link>Resources\QuestionnaireController.uk.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireController.zh.resx">
       <Link>Resources\QuestionnaireController.zh.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireEditor.ar.resx">
       <Link>Resources\QuestionnaireEditor.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireEditor.cs.resx">
+      <Link>Resources\QuestionnaireEditor.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireEditor.es.resx">
       <Link>Resources\QuestionnaireEditor.es.resx</Link>
@@ -264,11 +309,17 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireEditor.sq.resx">
       <Link>Resources\QuestionnaireEditor.sq.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireEditor.uk.resx">
+      <Link>Resources\QuestionnaireEditor.uk.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireEditor.zh.resx">
       <Link>Resources\QuestionnaireEditor.zh.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireHistoryResources.ar.resx">
       <Link>Resources\QuestionnaireHistoryResources.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireHistoryResources.cs.resx">
+      <Link>Resources\QuestionnaireHistoryResources.cs.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireHistoryResources.es.resx">
       <Link>Resources\QuestionnaireHistoryResources.es.resx</Link>
@@ -288,8 +339,17 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireHistoryResources.sq.resx">
       <Link>Resources\QuestionnaireHistoryResources.sq.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireHistoryResources.uk.resx">
+      <Link>Resources\QuestionnaireHistoryResources.uk.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireHistoryResources.zh.resx">
       <Link>Resources\QuestionnaireHistoryResources.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\UnderConstruction.cs.resx">
+      <Link>Resources\UnderConstruction.cs.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\UnderConstruction.es.resx">
+      <Link>Resources\UnderConstruction.es.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\UnderConstruction.resx">
       <Link>Resources\UnderConstruction.resx</Link>
@@ -302,6 +362,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\UnderConstruction.sq.resx">
       <Link>Resources\UnderConstruction.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\UnderConstruction.uk.resx">
+      <Link>Resources\UnderConstruction.uk.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.Designer\Resources\UnderConstruction.zh.resx">
       <Link>Resources\UnderConstruction.zh.resx</Link>

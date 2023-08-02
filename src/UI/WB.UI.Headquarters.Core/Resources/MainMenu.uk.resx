@@ -1,0 +1,255 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Administration" xml:space="preserve">
+    <value>Адміністратор</value>
+  </data>
+  <data name="ApiUsers" xml:space="preserve">
+    <value>Користувачі API</value>
+  </data>
+  <data name="Assignments" xml:space="preserve">
+    <value>Завдання</value>
+  </data>
+  <data name="AuditLog" xml:space="preserve">
+    <value>Журнал аудиту</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Завершено</value>
+  </data>
+  <data name="CreateNew" xml:space="preserve">
+    <value>Створити новий</value>
+  </data>
+  <data name="CumulativeChart" xml:space="preserve">
+    <value>Кумулятивний графік інтерв'ю</value>
+  </data>
+  <data name="DataExport" xml:space="preserve">
+    <value>Експорт даних</value>
+  </data>
+  <data name="DeviceLogs" xml:space="preserve">
+    <value>Журнали пристроїв</value>
+  </data>
+  <data name="DevicesInterviewers" xml:space="preserve">
+    <value>Пристрої/інтерв'юери</value>
+  </data>
+  <data name="Diagnostics" xml:space="preserve">
+    <value>Діагностика</value>
+  </data>
+  <data name="EmailProviders" xml:space="preserve">
+    <value>Провайдери електронної пошти</value>
+  </data>
+  <data name="Headquarters" xml:space="preserve">
+    <value>Штаб-квартира</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Допоможіть!</value>
+  </data>
+  <data name="Interviewers" xml:space="preserve">
+    <value>Інтерв'юери</value>
+  </data>
+  <data name="InterviewPackages" xml:space="preserve">
+    <value>Пакети інтерв'ю</value>
+  </data>
+  <data name="Interviews" xml:space="preserve">
+    <value>Інтерв'ю</value>
+  </data>
+  <data name="MapDashboard" xml:space="preserve">
+    <value>Панель управління картою</value>
+  </data>
+  <data name="MapReport" xml:space="preserve">
+    <value>Звіт про мапу</value>
+  </data>
+  <data name="Maps" xml:space="preserve">
+    <value>Карти</value>
+  </data>
+  <data name="Observers" xml:space="preserve">
+    <value>Спостерігачі</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Кількість</value>
+  </data>
+  <data name="Questionnaires" xml:space="preserve">
+    <value>Анкети</value>
+  </data>
+  <data name="QueueSizeTitle" xml:space="preserve">
+    <value>Кількість синхронізованих, але ще не оброблених інтерв'ю</value>
+  </data>
+  <data name="Rejected" xml:space="preserve">
+    <value>Відхилено</value>
+  </data>
+  <data name="Reports" xml:space="preserve">
+    <value>Звіти</value>
+  </data>
+  <data name="ServerAdministration" xml:space="preserve">
+    <value>Адміністрація</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Налаштування</value>
+  </data>
+  <data name="Speed" xml:space="preserve">
+    <value>Швидкість</value>
+  </data>
+  <data name="Started" xml:space="preserve">
+    <value>Розпочато.</value>
+  </data>
+  <data name="StatusDuration" xml:space="preserve">
+    <value>Статус Тривалість</value>
+  </data>
+  <data name="Supervisors" xml:space="preserve">
+    <value>Супервайзери</value>
+  </data>
+  <data name="SurveysAndStatuses" xml:space="preserve">
+    <value>Опитування та статуси</value>
+  </data>
+  <data name="SurveySetup" xml:space="preserve">
+    <value>Налаштування опитування</value>
+  </data>
+  <data name="SurveyStatistics" xml:space="preserve">
+    <value>Статистика опитування</value>
+  </data>
+  <data name="TabletInfos" xml:space="preserve">
+    <value>Інформація про планшети</value>
+  </data>
+  <data name="TeamAndRoles" xml:space="preserve">
+    <value>Команда та ролі</value>
+  </data>
+  <data name="TeamMembersAndStatuses" xml:space="preserve">
+    <value>Члени команди та статуси</value>
+  </data>
+  <data name="TeamsAndRoles" xml:space="preserve">
+    <value>Команди та ролі</value>
+  </data>
+  <data name="TeamsAndStatuses" xml:space="preserve">
+    <value>Команди та статуси</value>
+  </data>
+  <data name="Troubleshooting" xml:space="preserve">
+    <value>Усунення несправностей</value>
+  </data>
+  <data name="UserBatchUpload" xml:space="preserve">
+    <value>Пакетне завантаження користувача</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Користувачі</value>
+  </data>
+  <data name="Workspaces" xml:space="preserve">
+    <value>Робочі місця</value>
+  </data>
+  <data name="WorkspaceSettings" xml:space="preserve">
+    <value>Налаштування робочого простору</value>
+  </data>
+</root>

@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -39,7 +40,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             var authorizedUser = new Mock<IAuthorizedUser>();
 
-            var controller = new AssignmentsApiV2Controller(authorizedUser.Object, assignmentService, Mock.Of<ICommandService>());
+            var controller = new AssignmentsApiV2Controller(authorizedUser.Object, assignmentService,
+                Mock.Of<IUserToDeviceService>(),
+                Mock.Of<ICommandService>());
 
             var assignments = await controller.GetAssignmentsAsync(new CancellationToken());
 

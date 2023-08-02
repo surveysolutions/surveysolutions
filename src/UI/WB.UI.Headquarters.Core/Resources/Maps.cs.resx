@@ -168,4 +168,28 @@
   <data name="UploadMapsSummaryFormat" xml:space="preserve">
     <value>{0} map bylo zpracováno s {1} neplatných mapových souborů</value>
   </data>
+  <data name="DbfIsMissingInArchive" xml:space="preserve">
+    <value>Soubor {0}.dbf chybí pro {0}.shp</value>
+  </data>
+  <data name="MapFileNameHasInvalidChars" xml:space="preserve">
+    <value>Název souboru {0} obsahuje neplatné znaky.</value>
+  </data>
+  <data name="MapFileNameHasNonUtf8Chars" xml:space="preserve">
+    <value>Název souboru {0} obsahuje znaky jiné než UTF-8.</value>
+  </data>
+  <data name="MapFileSizeLimit" xml:space="preserve">
+    <value>Velikost souboru {0} je větší, než je použitelné omezení {1}</value>
+  </data>
+  <data name="MapOverlapsWith" xml:space="preserve">
+    <value>Překrývá se s:</value>
+  </data>
+  <data name="MapOverlapsWithOther" xml:space="preserve">
+    <value>a {0} další.</value>
+  </data>
+  <data name="ShpIsMissingInArchive" xml:space="preserve">
+    <value>Soubor {0}.shp chybí pro {0}</value>
+  </data>
+  <data name="ShxIsMissingInArchive" xml:space="preserve">
+    <value>Soubor {0}.shx chybí pro {0}.shp</value>
+  </data>
 </root>

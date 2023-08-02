@@ -1,0 +1,240 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AllAccountsCreated" xml:space="preserve">
+    <value>Всі {{total}} акаунти успішно створено:</value>
+  </data>
+  <data name="AssignedTo" xml:space="preserve">
+    <value>Наглядач</value>
+  </data>
+  <data name="AssignedToDescription" xml:space="preserve">
+    <value>необхідний для інтерв'юерів, містить ім'я користувача супервайзера, якому буде призначена ця особа</value>
+  </data>
+  <data name="BackToImport" xml:space="preserve">
+    <value>Повернутися до імпорту користувачів</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Скасувати</value>
+  </data>
+  <data name="Column" xml:space="preserve">
+    <value>колонка</value>
+  </data>
+  <data name="CompleteDescription" xml:space="preserve">
+    <value>Ви можете створити завдання для цих команд з розділу "анкети", завдання також можуть бути створені в пакетному режимі</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Створіть набір користувачів, завантаживши файл з усією необхідною інформацією. Набір може містити як супервайзерів, так і інтерв'юерів, або ж ви можете створити</value>
+  </data>
+  <data name="DownloadTemplateLink" xml:space="preserve">
+    <value>Завантажити шаблон .tab для завантаження користувача</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Електронна пошта</value>
+  </data>
+  <data name="EstimatedTime" xml:space="preserve">
+    <value>Приблизно {{estimatedTime}} ліворуч</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Повне ім'я</value>
+  </data>
+  <data name="ImportingUserInfo" xml:space="preserve">
+    <value>Імпорт інформації про користувача з</value>
+  </data>
+  <data name="InterviewersAndSupervisorsCount" xml:space="preserve">
+    <value>{{supervisorsCount}} супервайзерів та {{interviewersCount}} інтерв'юерів</value>
+  </data>
+  <data name="Line" xml:space="preserve">
+    <value>лінія</value>
+  </data>
+  <data name="ManualInterviewerCreateLink" xml:space="preserve">
+    <value>інтерв'юер</value>
+  </data>
+  <data name="ManualSupervisorCreateLink" xml:space="preserve">
+    <value>керівник</value>
+  </data>
+  <data name="NoCreatedUsers" xml:space="preserve">
+    <value>Облікові записи користувачів не створювалися</value>
+  </data>
+  <data name="OptionalInformation" xml:space="preserve">
+    <value>Необов'язкова особиста інформація</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>або</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Пароль</value>
+  </data>
+  <data name="PasswordDescription" xml:space="preserve">
+    <value>пароль повинен містити принаймні одну цифру, один символ верхнього регістру та один символ нижнього регістру</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Номер телефону</value>
+  </data>
+  <data name="Profile" xml:space="preserve">
+    <value>профіль вручну</value>
+  </data>
+  <data name="Questionnaires" xml:space="preserve">
+    <value>Анкети</value>
+  </data>
+  <data name="RequiredData" xml:space="preserve">
+    <value>Дані, необхідні для створення інтерв'юерів та супервайзерів</value>
+  </data>
+  <data name="ReUploadTabFile" xml:space="preserve">
+    <value>Перезавантажте файл .tab</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>Роль</value>
+  </data>
+  <data name="SelectWorkspace" xml:space="preserve">
+    <value>Виберіть робочу область</value>
+  </data>
+  <data name="SelectWorkspaceDescription" xml:space="preserve">
+    <value>Якщо у пакетному файлі не призначено робочу область, використовуйте її за замовчуванням</value>
+  </data>
+  <data name="TimeDetermination" xml:space="preserve">
+    <value>визначення часу</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Створення кількох користувачів за допомогою пакетного завантаження</value>
+  </data>
+  <data name="UploadBtn" xml:space="preserve">
+    <value>Завантажте файл .tab</value>
+  </data>
+  <data name="Uploading" xml:space="preserve">
+    <value>Імпорт {{importedUsersCount}} з {{totalUsersToImportCount}}</value>
+  </data>
+  <data name="UploadInProgress" xml:space="preserve">
+    <value>Увага: Виконується ще одне пакетне завантаження від "{{userName}}".</value>
+  </data>
+  <data name="UploadInProgressDescription" xml:space="preserve">
+    <value>Ви зможете розпочати свій, коли поточний буде завершено.</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>Логін</value>
+  </data>
+  <data name="UserNameDescription" xml:space="preserve">
+    <value>ім'я користувача, має бути від 3 до 15 символів і містити лише літери, цифри та символ підкреслення</value>
+  </data>
+  <data name="VerificationFailed" xml:space="preserve">
+    <value>Не вдалося виконати перевірку</value>
+  </data>
+  <data name="Workspace" xml:space="preserve">
+    <value>Робочий простір</value>
+  </data>
+</root>

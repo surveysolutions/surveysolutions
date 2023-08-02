@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             set => SetProperty(ref dashboardTitle, value);
         }
 
-        public GroupStatus TypeOfInterviews
+        public DashboardGroupType TypeOfInterviews
         {
             get => typeOfInterviews;
             set => SetProperty(ref typeOfInterviews, value);
@@ -95,13 +95,13 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             if (args.ViewModel is InterviewTabPanel interviewTabPanel)
             {
                 DashboardTitle = interviewTabPanel.Title;
-                TypeOfInterviews = interviewTabPanel.InterviewStatus;
+                TypeOfInterviews = interviewTabPanel.DashboardType;
             }
         }
 
         private readonly MvxSubscriptionToken messengerSubscribtion;
         private string dashboardTitle;
-        private GroupStatus typeOfInterviews;
+        private DashboardGroupType typeOfInterviews;
 
         public override void Prepare(DashboardViewModelArgs parameter)
         {
