@@ -124,16 +124,16 @@
     <value>Показати координати</value>
   </data>
   <data name="ChooseResponsibleInterviewer" xml:space="preserve">
-    <value>Будь ласка, виберіть особу, відповідальну за завдання.</value>
+    <value>Будь ласка, оберіть особу, відповідальну за виконання завдання.</value>
   </data>
   <data name="Duration" xml:space="preserve">
     <value>Тривалість</value>
   </data>
   <data name="FlagTitleFlagged" xml:space="preserve">
-    <value>Позначені</value>
+    <value>Позначено.</value>
   </data>
   <data name="FlagTitleUnflagged" xml:space="preserve">
-    <value>Не позначено</value>
+    <value>Не відмічено.</value>
   </data>
   <data name="InterviewMode" xml:space="preserve">
     <value>Режим</value>
@@ -145,7 +145,7 @@
     <value>Не відповіли</value>
   </data>
   <data name="NoSearchResults" xml:space="preserve">
-    <value>Товарів не знайдено</value>
+    <value>Не знайдено жодного товару</value>
   </data>
   <data name="Overview" xml:space="preserve">
     <value>Огляд</value>
@@ -157,10 +157,10 @@
     <value>Відповідальний</value>
   </data>
   <data name="SearchResult_Count" xml:space="preserve">
-    <value>Знайдено елемент {{ count }}:</value>
+    <value>{{ count }} товар знайдено:</value>
   </data>
   <data name="SearchResult_Count_other" xml:space="preserve">
-    <value>Знайдено елементів {{ count }}:</value>
+    <value>{{ count }} товарів знайдено:</value>
   </data>
   <data name="ShowQuestionnaireDetails" xml:space="preserve">
     <value>Показати деталі анкети</value>
@@ -169,6 +169,6 @@
     <value>Статус: {{ name }}</value>
   </data>
   <data name="YouCanChangeResponsibleInterviewer" xml:space="preserve">
-    <value>Ви можете змінити відповідального за співбесіду на відхилення. Будь ласка, оберіть відповідального інтерв'юера</value>
+    <value>Ви можете змінити відповідального за співбесіду при відхиленні. Будь ласка, оберіть відповідального інтерв'юера</value>
   </data>
 </root>

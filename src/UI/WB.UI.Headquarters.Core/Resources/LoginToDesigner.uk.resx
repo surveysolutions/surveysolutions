@@ -118,30 +118,30 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AccessForbidden" xml:space="preserve">
-    <value>Сервер не зареєстрований в Конструкторі анкет. Надішліть запит на реєстрацію сервера, розміщеного на власному хостингу, на порталі Survey Solutions https://mysurvey.solutions/NewServerRequest </value>
+    <value>Сервер не зареєстрований у Questionnaire Designer. Будь ласка, надішліть запит на реєстрацію сервера на порталі Survey Solutions https://mysurvey.solutions/NewServerRequest </value>
   </data>
   <data name="DesignerAppDescription" xml:space="preserve">
-    <value>Це безкоштовний інструмент для створення анкет для платформи CAPI Світового банку. Його можна знайти за адресою</value>
+    <value>Це безкоштовний інструмент для створення опитувальників для платформи CAPI Світового банку. Його можна знайти за посиланням</value>
   </data>
   <data name="InvalidCredentials" xml:space="preserve">
-    <value>Користувач не авторизований. Будь ласка, перевірте свій логін та пароль, і ваш обліковий запис не заблоковано.</value>
+    <value>Користувач не авторизований. Будь ласка, перевірте свій логін і пароль, чи не заблоковано ваш обліковий запис.</value>
   </data>
   <data name="LoginWatermark" xml:space="preserve">
     <value>Логін або електронна пошта</value>
   </data>
   <data name="PageHeader" xml:space="preserve">
-    <value>Використання облікових даних розробника рішень для опитувань для доступу до анкет.</value>
+    <value>Використовуйте свої облікові дані Survey Solutions Designer, щоб отримати доступ до опитувальників.</value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Анкета</value>
   </data>
   <data name="SessionExpired" xml:space="preserve">
-    <value>Сесія закінчилася, будь ласка, увійдіть ще раз</value>
+    <value>Сесія закінчилася, будь ласка, увійдіть знову</value>
   </data>
   <data name="UnableToImportNewQuestionnaire" xml:space="preserve">
     <value>Не вдається імпортувати нову анкету:</value>
   </data>
   <data name="UserDesignerCredentials" xml:space="preserve">
-    <value>Будь ласка, увійдіть за допомогою облікових даних, які ви зазвичай використовуєте для доступу до своїх анкет на сайті дизайнера та в додатку Tester</value>
+    <value>Будь ласка, увійдіть за допомогою облікових даних, які ви зазвичай використовуєте для доступу до своїх анкет на сайті конструктора та в додатку тестувальника</value>
   </data>
 </root>

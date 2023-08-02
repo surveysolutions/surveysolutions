@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="COLUMN_ANDROID_4_4_OR_LOWER" xml:space="preserve">
-    <value>ANDROID 4.4 АБО СТАРІШОЇ ВЕРСІЇ</value>
+    <value>АНДРОЇД 4.4 АБО НОВІШОЇ ВЕРСІЇ</value>
   </data>
   <data name="COLUMN_APPROVED_BY_HQ" xml:space="preserve">
     <value>ЗАТВЕРДЖЕНО ШТАБ-КВАРТИРОЮ</value>
   </data>
   <data name="COLUMN_APPROVED_BY_SUPERVISOR" xml:space="preserve">
-    <value>ЗАТВЕРДЖЕНО НАУКОВИМ КЕРІВНИКОМ</value>
+    <value>СХВАЛЕНО КЕРІВНИКОМ</value>
   </data>
   <data name="COLUMN_AVERAGE" xml:space="preserve">
     <value>СЕРЕДНІЙ</value>
@@ -142,13 +142,13 @@
     <value>МЕНШЕ 100 МБ ВІЛЬНОГО МІСЦЯ</value>
   </data>
   <data name="COLUMN_NEVER_SYNCHED" xml:space="preserve">
-    <value>НІКОЛИ НЕ СИНХРОНІЗУЄТЬСЯ</value>
+    <value>НІКОЛИ НЕ СИНХРОНІЗОВАНІ</value>
   </data>
   <data name="COLUMN_NEVER_UPLOADED" xml:space="preserve">
-    <value>НІКОЛИ НЕ НАДСИЛАВ</value>
+    <value>НІКОЛИ НЕ ВІДПРАВЛЯЄТЬСЯ</value>
   </data>
   <data name="COLUMN_NO_ASSIGNMENTS_RECEIVED" xml:space="preserve">
-    <value>ТАК НЕ ОТРИМАНО</value>
+    <value>НІКОЛИ НЕ ОТРИМУВАЛИ</value>
   </data>
   <data name="COLUMN_OLD_VERSION" xml:space="preserve">
     <value>СТАРИЙ ДОДАТОК ДЛЯ ІНТЕРВ'ЮЕРІВ</value>
@@ -160,13 +160,13 @@
     <value>ВІДХИЛЕНО ШТАБ-КВАРТИРОЮ</value>
   </data>
   <data name="COLUMN_REJECTED_BY_SUPERVISOR" xml:space="preserve">
-    <value>ВІДХИЛЕНО НАУКОВИМ КЕРІВНИКОМ</value>
+    <value>ВІДХИЛЕНО КЕРІВНИКОМ</value>
   </data>
   <data name="COLUMN_SUPERVISOR_ASSIGNED" xml:space="preserve">
-    <value>ПРИЗНАЧЕНИЙ КЕРІВНИК</value>
+    <value>ПРИЗНАЧЕНО КУРАТОРА</value>
   </data>
   <data name="COLUMN_TABLET_REASSIGNED" xml:space="preserve">
-    <value>ПЕРЕПРИЗНАЧЕННЯ ПЛАНШЕТА</value>
+    <value>ПЛАНШЕТ ПЕРЕПРИЗНАЧЕНО</value>
   </data>
   <data name="COLUMN_TEAM_MEMBER" xml:space="preserve">
     <value>ЧЛЕН КОМАНДИ</value>
@@ -181,15 +181,15 @@
     <value>ВЕРСІЯ АНКЕТИ</value>
   </data>
   <data name="COLUMN_TOTAL" xml:space="preserve">
-    <value>ПІДСУМОК</value>
+    <value>ВСЬОГО</value>
   </data>
   <data name="COLUMN_WRONG_TIME_ON_TABLET" xml:space="preserve">
     <value>НЕПРАВИЛЬНИЙ ЧАС НА ПЛАНШЕТІ</value>
   </data>
   <data name="TimeLeft" xml:space="preserve">
-    <value>Залишився час</value>
+    <value>Залишився час.</value>
   </data>
   <data name="TOTAL" xml:space="preserve">
-    <value>Підсумок</value>
+    <value>Всього</value>
   </data>
 </root>

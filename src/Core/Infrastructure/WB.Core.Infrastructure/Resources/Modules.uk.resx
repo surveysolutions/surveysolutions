@@ -118,21 +118,21 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ErrorConnectingToDatabase" xml:space="preserve">
-    <value>Додаток не може підключитися до бази даних за допомогою наданого рядка підключення. Перевірте лог-файл програми для отримання детальної інформації</value>
+    <value>Програма не може з'єднатися з базою даних, використовуючи наданий рядок з'єднання. Перевірте файл журналу програми для отримання детальної інформації</value>
   </data>
   <data name="ErrorDatabaseUnauthorized" xml:space="preserve">
-    <value>Додаток не авторизований для підключення до бази даних. Перевірте лог-файл програми для отримання детальної інформації</value>
+    <value>Програма не має дозволу на підключення до бази даних. Перевірте файл журналу програми для отримання детальної інформації</value>
   </data>
   <data name="ErrorDuringRunningMigrations" xml:space="preserve">
-    <value>Помилка під час міграції бази даних. Перевірте лог-файл програми для отримання детальної інформації</value>
+    <value>Помилка під час міграції бази даних. Перевірте файл журналу програми для отримання детальної інформації</value>
   </data>
   <data name="ErrorDuringSiteInitialization" xml:space="preserve">
-    <value>Помилка при ініціалізації сайту. Перевірте лог-файл програми для отримання детальної інформації</value>
+    <value>Помилка під час ініціалізації сайту. Перевірте файл журналу програми для отримання детальної інформації</value>
   </data>
   <data name="InitializingDb" xml:space="preserve">
-    <value>Ініціалізація бази даних</value>
+    <value>База даних ініціалізується</value>
   </data>
   <data name="MigrateDb" xml:space="preserve">
-    <value>Триває перенесення бази даних</value>
+    <value>Міграція бази даних триває</value>
   </data>
 </root>

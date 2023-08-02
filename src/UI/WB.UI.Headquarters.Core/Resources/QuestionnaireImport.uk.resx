@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BeforeSignInToDesigner" xml:space="preserve">
-    <value>Перед входом, будь ласка, переконайтеся, що веб-сайт "Дизайнер" доступний</value>
+    <value>Перед входом, будь ласка, переконайтеся, що веб-сайт "Конструктор" доступний</value>
   </data>
   <data name="Chapters" xml:space="preserve">
     <value>Розділи</value>
@@ -127,31 +127,31 @@
     <value>Створено на</value>
   </data>
   <data name="DesignerQuestionnaires" xml:space="preserve">
-    <value>Анкети дизайнерів</value>
+    <value>Анкети для дизайнерів</value>
   </data>
   <data name="Gropus" xml:space="preserve">
     <value>Підрозділи</value>
   </data>
   <data name="ImportAsNewVersion" xml:space="preserve">
-    <value>Створення нової версії (#{{version}})</value>
+    <value>Створити нову версію (#{{version}})</value>
   </data>
   <data name="Importing" xml:space="preserve">
-    <value>Імпорт {{percent}}%</value>
+    <value>Імпорт {{percent}}%%</value>
   </data>
   <data name="ImportModePageTitle" xml:space="preserve">
-    <value>Опитувальник імпорту:</value>
+    <value>Анкета для імпорту:</value>
   </data>
   <data name="ImportModeTitle" xml:space="preserve">
-    <value>Режим імпорту анкети</value>
+    <value>Режим імпорту анкет</value>
   </data>
   <data name="LastModifiedAt" xml:space="preserve">
-    <value>Дата останньої зміни</value>
+    <value>Востаннє змінено на</value>
   </data>
   <data name="ListOfMyQuestionnaires" xml:space="preserve">
-    <value>Список моїх анкет</value>
+    <value>список моїх анкет</value>
   </data>
   <data name="LoginToDesignerError" xml:space="preserve">
-    <value>Не вдалося підключитися до конструктора. Будь ласка, перевірте, чи доступний Designer, і спробуйте &lt;a href='{0}'&gt;ще раз&lt;/a&gt;</value>
+    <value>Не вдалося підключитися до Designer. Перевірте, чи доступний Designer, і спробуйте &lt;a href='{0}'&gt;ще раз&lt;/a&gt;.</value>
   </data>
   <data name="MyQuestionnairesTitle" xml:space="preserve">
     <value>Дизайнер: Мої анкети</value>
@@ -169,21 +169,21 @@
     <value>{{count}} з них з умовами</value>
   </data>
   <data name="RegularImportSubTitle" xml:space="preserve">
-    <value>Це дозволить створювати індивідуальні завдання, які можуть містити ідентифікаційні дані. Лише ці завдання відображатимуться на пристроях інтерв'юерів.</value>
+    <value>Це дозволить вам створювати індивідуальні завдання, які можуть містити ідентифікаційні дані. На пристроях інтерв'юерів відображатимуться лише ті завдання, які.</value>
   </data>
   <data name="RegularImportTitle" xml:space="preserve">
     <value>Імпорт</value>
   </data>
   <data name="Rosters" xml:space="preserve">
-    <value>Реєстри</value>
+    <value>Ростова.</value>
   </data>
   <data name="SignInToDesigner" xml:space="preserve">
-    <value>Будь ласка, увійдіть до Designer</value>
+    <value>Будь ласка, увійдіть до Дизайнера</value>
   </data>
   <data name="SignInToDesignerTitle" xml:space="preserve">
-    <value>Увійти в Конструктор</value>
+    <value>Увійдіть до Дизайнера</value>
   </data>
   <data name="UpgradeAssignments" xml:space="preserve">
-    <value>Призначення оновлення</value>
+    <value>Завдання на оновлення</value>
   </data>
 </root>

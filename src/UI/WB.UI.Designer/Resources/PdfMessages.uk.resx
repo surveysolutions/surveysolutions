@@ -118,15 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FailedToGenerate" xml:space="preserve">
-    <value>Не вдалося створити PDF.
-Будь ласка, оновіть сторінку та спробуйте ще раз або зв'яжіться з support@mysurvey.solutions</value>
+    <value>Не вдалося згенерувати PDF.
+Перезавантажте сторінку і спробуйте ще раз або зверніться до support@mysurvey.solutions</value>
   </data>
   <data name="Generate" xml:space="preserve">
-    <value>PDF-документ, створений {0} хвилин тому.
+    <value>PDF документ створено {0} хвилин(и) тому.
 Розмір: {1}Kb</value>
   </data>
   <data name="GenerateLessMinute" xml:space="preserve">
-    <value>PDF-документ, створений менше хвилини тому.
+    <value>PDF документ створено менше хвилини тому.
 Розмір: {0}Kb</value>
   </data>
   <data name="GeneratingSuccess" xml:space="preserve">
@@ -134,10 +134,10 @@
 Розмір: {0}Kb</value>
   </data>
   <data name="PreparingToGenerate" xml:space="preserve">
-    <value>Підготовка до створення PDF.
-Будь ласка, зачекайте...</value>
+    <value>Підготовка до створення PDF-файлу.
+Зачекайте, будь ласка...</value>
   </data>
   <data name="Retry" xml:space="preserve">
-    <value>Скасування експорту у форматі PDF.</value>
+    <value>Повернення експорту у форматі PDF.</value>
   </data>
 </root>

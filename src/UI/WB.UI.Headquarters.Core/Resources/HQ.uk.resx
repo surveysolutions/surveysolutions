@@ -124,33 +124,33 @@
     <value>Інтерв'ю успішно створено.</value>
   </data>
   <data name="NoPermission" xml:space="preserve">
-    <value>Не вдалося оновити відомості про користувача, оскільки у вас немає дозволу на виконання цієї операції.</value>
+    <value>Не вдалося оновити інформацію про користувача, оскільки у вас немає дозволу на цю операцію.</value>
   </data>
   <data name="ObserverCreatedFormat" xml:space="preserve">
-    <value>Успішно створено &lt;b&gt;{0}&lt;/b&gt; користувача Observer.</value>
+    <value>Користувача-спостерігача &lt;b&gt;{0}&lt;/b&gt; успішно створено.</value>
   </data>
   <data name="QuestionnaireClonedAndRenamedFormat" xml:space="preserve">
-    <value>Анкета «{0}» успішно скопійована з новою назвою «{1}».</value>
+    <value>Опитування '{0}' успішно скопійовано з новою назвою '{1}'.</value>
   </data>
   <data name="QuestionnaireClonedFormat" xml:space="preserve">
-    <value>Анкета «{0}» успішно скопійована.</value>
+    <value>Опитувальник '{0}' успішно скопійовано.</value>
   </data>
   <data name="QuestionnaireNotFoundFormat" xml:space="preserve">
-    <value>Анкету з ідентифікаційним {0} та версією {1} знайти не вдається.</value>
+    <value>Опитувальник з ідентифікатором {0} та версією {1} не знайдено.</value>
   </data>
   <data name="SuccessfullyCreatedFormat" xml:space="preserve">
-    <value>Успішно створено &lt;b&gt;{0}&lt;/b&gt; наукового керівника.</value>
+    <value>Супервізор &lt;b&gt;{0}&lt;/b&gt; успішно створено.</value>
   </data>
   <data name="SupervisorNotFound" xml:space="preserve">
-    <value>Міг би створити інтерв'юера. Обраного супервайора не існує</value>
+    <value>Може створити інтерв'юера. Вибраного керівника не існує</value>
   </data>
   <data name="UserNotExists" xml:space="preserve">
-    <value>Не вдалося оновити відомості про користувача, оскільки користувача не існує</value>
+    <value>Не вдалося оновити інформацію про користувача, оскільки він не існує</value>
   </data>
   <data name="UserWasCreatedFormat" xml:space="preserve">
-    <value>Успішно створено {0} користувача штаб-квартири.</value>
+    <value>Успішно створено користувача Headquarters {0}..</value>
   </data>
   <data name="UserWasUpdatedFormat" xml:space="preserve">
-    <value>Інформація про &lt;b&gt;{0}&lt;/b&gt; успішно оновлюється</value>
+    <value>Інформацію про &lt;b&gt;{0}&lt;/b&gt; успішно оновлено</value>
   </data>
 </root>

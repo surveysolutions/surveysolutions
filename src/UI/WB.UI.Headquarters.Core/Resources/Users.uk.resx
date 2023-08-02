@@ -124,7 +124,7 @@
     <value>Додати користувача API</value>
   </data>
   <data name="AddHeadquarters" xml:space="preserve">
-    <value>Додати головний офіс</value>
+    <value>Додати штаб-квартиру</value>
   </data>
   <data name="AddInterviewer" xml:space="preserve">
     <value>Додати інтерв'юера</value>
@@ -133,13 +133,13 @@
     <value>Додати спостерігача</value>
   </data>
   <data name="AddSupervisor" xml:space="preserve">
-    <value>Додавання супервайзера</value>
+    <value>Додати керівника</value>
   </data>
   <data name="AddUser" xml:space="preserve">
     <value>Додати користувача</value>
   </data>
   <data name="Admin" xml:space="preserve">
-    <value>Адміністратора</value>
+    <value>Адміністратор</value>
   </data>
   <data name="ApiTokenTitle" xml:space="preserve">
     <value>Токен API користувача</value>
@@ -151,43 +151,43 @@
     <value>Користувачі API ({{count}})</value>
   </data>
   <data name="ArchivedSupervisors" xml:space="preserve">
-    <value>Архівні керівники</value>
+    <value>Архівовані супервайзери</value>
   </data>
   <data name="ArchivingStatusTitle" xml:space="preserve">
-    <value>Стан архівування</value>
+    <value>Статус архівування</value>
   </data>
   <data name="ClickToReturn" xml:space="preserve">
     <value>Натисніть, щоб повернутися до свого облікового запису.</value>
   </data>
   <data name="CreateAdmin" xml:space="preserve">
-    <value>Для завершення встановлення, будь ласка, створіть нового користувача адміністратора</value>
+    <value>Для завершення встановлення, будь ласка, створіть нового користувача Адміністратор</value>
   </data>
   <data name="CreateAdministrator" xml:space="preserve">
     <value>Створити адміністратора</value>
   </data>
   <data name="CreateAndTryLogin" xml:space="preserve">
-    <value>Створіть і спробуйте увійти</value>
+    <value>Створіть та спробуйте увійти</value>
   </data>
   <data name="CreateAPIUser" xml:space="preserve">
-    <value>Створити користувача API</value>
+    <value>Створення користувача API</value>
   </data>
   <data name="CreateHeadquarters" xml:space="preserve">
     <value>Створити штаб-квартиру</value>
   </data>
   <data name="CreateObserver" xml:space="preserve">
-    <value>Створити спостерігач</value>
+    <value>Створити спостерігача</value>
   </data>
   <data name="CreateSupervisor" xml:space="preserve">
-    <value>Створення супервайзера</value>
+    <value>Створити супервайзера</value>
   </data>
   <data name="CreationDate" xml:space="preserve">
-    <value>Обліковий запис, створений на</value>
+    <value>Обліковий запис створено на</value>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Редагувати</value>
   </data>
   <data name="EditFormat" xml:space="preserve">
-    <value>Редагування: {0}</value>
+    <value>Редагувати: {0}</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>Електронна пошта</value>
@@ -202,58 +202,58 @@
     <value>Заблоковані користувачі</value>
   </data>
   <data name="Filter_WithDisabledWorkspaces" xml:space="preserve">
-    <value>Лише для вимкнутих робочих областей</value>
+    <value>Тільки з відключеними робочими місцями</value>
   </data>
   <data name="Filter_WithMissingWorkspace" xml:space="preserve">
-    <value>Відсутні робочі області</value>
+    <value>Відсутні робочі місця</value>
   </data>
   <data name="FinishInstallation" xml:space="preserve">
-    <value>завершити монтаж</value>
+    <value>Закінчити монтаж</value>
   </data>
   <data name="HeadquarterAccountCreationDate" xml:space="preserve">
     <value>Дата створення облікового запису головного офісу</value>
   </data>
   <data name="Headquarters" xml:space="preserve">
-    <value>Штаб</value>
+    <value>Штаб-квартира</value>
   </data>
   <data name="HeadquartersCountDescription" xml:space="preserve">
-    <value>Головний офіс ({{count}})</value>
+    <value>Штаб-квартира ({{count}})</value>
   </data>
   <data name="HeadquartersEmail" xml:space="preserve">
-    <value>Електронна пошта головного офісу</value>
+    <value>Електронна пошта штаб-квартири</value>
   </data>
   <data name="ImpersonateAsUser" xml:space="preserve">
-    <value>Перегляд як цього користувача в режимі лише для читання</value>
+    <value>Перегляд від імені цього користувача в режимі тільки для читання</value>
   </data>
   <data name="Interviewer" xml:space="preserve">
-    <value>Інтерв'юера</value>
+    <value>Інтерв'юер</value>
   </data>
   <data name="InterviewerIssues" xml:space="preserve">
-    <value>питання інтерв'юера</value>
+    <value>Проблеми з інтерв'юером</value>
   </data>
   <data name="Interviewers" xml:space="preserve">
-    <value>Інтерв'юерів</value>
+    <value>Інтерв'юери</value>
   </data>
   <data name="InterviewersCountDescription" xml:space="preserve">
     <value>Інтерв'юери ({{count}})</value>
   </data>
   <data name="Locked" xml:space="preserve">
-    <value>Заблокований</value>
+    <value>Закрито.</value>
   </data>
   <data name="NotLinkedToDevice" xml:space="preserve">
-    <value>Не пов'язано з пристроєм</value>
+    <value>Не прив'язано до пристрою</value>
   </data>
   <data name="NotLinkedToDeviceTitle" xml:space="preserve">
-    <value>Кількість інтерв'юерів, які ще не синхронізували свої планшети з сервером</value>
+    <value>Кількість інтерв'юерів, які ще не змогли успішно синхронізувати свої планшети з сервером</value>
   </data>
   <data name="NumberOfInterviewersInTeam" xml:space="preserve">
-    <value>Кількість інтерв'юерів в команді</value>
+    <value>Кількість інтерв'юерів у команді</value>
   </data>
   <data name="Observer" xml:space="preserve">
     <value>Спостерігач</value>
   </data>
   <data name="ObserverDisclaimerFormat" xml:space="preserve">
-    <value>Це вміст, який &lt;b&gt;{0}&lt;/b&gt; бачить.</value>
+    <value>Це вміст, який бачить &lt;b&gt;{0}&lt;/b&gt;.</value>
   </data>
   <data name="Observers" xml:space="preserve">
     <value>Спостерігачі</value>
@@ -265,7 +265,7 @@
     <value>Електронна пошта спостерігача</value>
   </data>
   <data name="PasswordChanged" xml:space="preserve">
-    <value>Пароль для користувача {0} змінено</value>
+    <value>Змінено пароль користувача {0}</value>
   </data>
   <data name="Remove" xml:space="preserve">
     <value>Видалити</value>
@@ -274,45 +274,45 @@
     <value>Скинути пароль</value>
   </data>
   <data name="ResetPasswordTitle" xml:space="preserve">
-    <value>Скидання пароля користувача</value>
+    <value>Скинути пароль користувача</value>
   </data>
   <data name="Supervisor" xml:space="preserve">
-    <value>Керівник</value>
+    <value>Наглядач</value>
   </data>
   <data name="SupervisorAccountCreationDate" xml:space="preserve">
     <value>Дата створення облікового запису супервізора</value>
   </data>
   <data name="SupervisorEmail" xml:space="preserve">
-    <value>Електронна пошта наукового керівника</value>
+    <value>Електронна пошта керівника</value>
   </data>
   <data name="Supervisors" xml:space="preserve">
-    <value>Керівники</value>
+    <value>Супервайзери</value>
   </data>
   <data name="Supervisors_Edit" xml:space="preserve">
     <value>Керівник редагування</value>
   </data>
   <data name="SupervisorsCountDescription" xml:space="preserve">
-    <value>Наукові керівники ({{count}})</value>
+    <value>Керівники ({{count}})</value>
   </data>
   <data name="SupervisorsInTeam" xml:space="preserve">
-    <value>супервайзери у вашій команді</value>
+    <value>супервайзерів у вашій команді</value>
   </data>
   <data name="TotalInterviewers" xml:space="preserve">
     <value>Всього інтерв'юерів</value>
   </data>
   <data name="TryLater" xml:space="preserve">
-    <value>Повторіть спробу пізніше</value>
+    <value>Будь ласка, спробуйте пізніше</value>
   </data>
   <data name="UploadUsers" xml:space="preserve">
-    <value>Завантаження користувачів</value>
+    <value>Завантажити користувачів</value>
   </data>
   <data name="UserName" xml:space="preserve">
-    <value>Ім'я для входу</value>
+    <value>Ім'я користувача</value>
   </data>
   <data name="UserNotFound" xml:space="preserve">
     <value>Користувача не знайдено</value>
   </data>
   <data name="UsersTitle" xml:space="preserve">
-    <value>Користувачів</value>
+    <value>Користувачі</value>
   </data>
 </root>

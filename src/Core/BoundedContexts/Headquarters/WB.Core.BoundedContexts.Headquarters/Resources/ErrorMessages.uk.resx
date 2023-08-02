@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApiUserIsNotAllowedToSignIn" xml:space="preserve">
-    <value>Користувачеві API заборонено входити за допомогою інтерфейсу користувача</value>
+    <value>Користувачеві Api заборонено входити через інтерфейс користувача</value>
   </data>
   <data name="IncorrectUserNameOrPassword" xml:space="preserve">
     <value>Неправильне ім'я користувача або пароль.</value>
@@ -130,27 +130,27 @@
     <value>Введено невірний код відновлення.</value>
   </data>
   <data name="PleaseFillCaptcha" xml:space="preserve">
-    <value>Будь ласка, заповніть поле капчі</value>
+    <value>Будь ласка, заповніть поле captcha</value>
   </data>
   <data name="Questionnaire_verification_failed" xml:space="preserve">
-    <value>Анкета «{0}» має помилки складання. Будь ласка, виправте їх у конструкторі.</value>
+    <value>Опитувальник "{0}" має помилки компіляції. Будь ласка, виправте їх у Дизайнері.</value>
   </data>
   <data name="QuestionnaireAlreadyImporting" xml:space="preserve">
-    <value>Ще одна анкета імпортується до штаб-квартири.</value>
+    <value>Ще одна анкета зараз імпортується до штаб-квартири.</value>
   </data>
   <data name="RequestTimeout" xml:space="preserve">
-    <value>Тайм-аут під час спроби підключитися до конструктора. Будь ласка, перевірте підключення до Інтернету.</value>
+    <value>Таймаут при спробі підключення до Designer. Будь ласка, перевірте підключення до Інтернету.</value>
   </data>
   <data name="ServerError" xml:space="preserve">
-    <value>Сталася внутрішня помилка сервера. Будь ласка, зв'яжіться зі службою підтримки клієнтів Survey Solutions за адресою support@mysurvey.solutions.</value>
+    <value>Виникла внутрішня помилка сервера. Зверніться до служби підтримки Survey Solutions за адресою support@mysurvey.solutions.</value>
   </data>
   <data name="ServiceUnavailable" xml:space="preserve">
-    <value>Конструктор недоступний.  Переконайтеся, що конструктор не перебуває в режимі обслуговування</value>
+    <value>Конструктор недоступний.  Будь ласка, переконайтеся, що конструктор не перебуває в режимі технічного обслуговування</value>
   </data>
   <data name="SiteAccessNotAllowed" xml:space="preserve">
-    <value>У вас немає дозволу на доступ до цього сайту. Зверніться до адміністратора.</value>
+    <value>Ви не маєте дозволу на доступ до цього сайту. Зверніться до адміністратора.</value>
   </data>
   <data name="TemplateNotFound" xml:space="preserve">
-    <value>Анкету «{0}» знайти неможливо. Будь ласка, оновіть перелік анкет.</value>
+    <value>Опитувальник "{0}" не знайдено. Будь ласка, оновіть список анкет.</value>
   </data>
 </root>

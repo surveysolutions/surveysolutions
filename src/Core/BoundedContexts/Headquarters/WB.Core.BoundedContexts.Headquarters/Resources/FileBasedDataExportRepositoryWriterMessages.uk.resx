@@ -121,25 +121,25 @@
     <value>Адміністратор</value>
   </data>
   <data name="ApiUser" xml:space="preserve">
-    <value>Користувач API</value>
+    <value>Користувач Api</value>
   </data>
   <data name="FileContentIsMissingForFileNameAndInterviewFormat" xml:space="preserve">
-    <value>Вміст файлу відсутній для імені файлу {0} інтерв'ю {1}</value>
+    <value>Вміст файлу відсутній для імені файлу {0} interview {1}</value>
   </data>
   <data name="Headquarter" xml:space="preserve">
-    <value>Штаб</value>
+    <value>Штаб-квартира</value>
   </data>
   <data name="Interviewer" xml:space="preserve">
-    <value>Інтерв'юера</value>
+    <value>Інтерв'юер</value>
   </data>
   <data name="InterviewWithIdIsAbsentFormat" xml:space="preserve">
-    <value>Інтерв'ю з id "{0}" відсутнє</value>
+    <value>Інтерв'ю з id '{0}' відсутнє</value>
   </data>
   <data name="Supervisor" xml:space="preserve">
-    <value>Керівник</value>
+    <value>Наглядач</value>
   </data>
   <data name="UnknownRole" xml:space="preserve">
-    <value>&lt;НЕВІДОМА РОЛЬ&gt;</value>
+    <value>&lt;НЕВІДОМА РОЛЬ</value>
   </data>
   <data name="UnknownUser" xml:space="preserve">
     <value>&lt;НЕВІДОМИЙ КОРИСТУВАЧ&gt;</value>

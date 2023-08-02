@@ -118,22 +118,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="PageHeader" xml:space="preserve">
-    <value>Вибір анкети для імпорту</value>
+    <value>Виберіть анкету для імпорту</value>
   </data>
   <data name="QuestionnaireCannotBeFound" xml:space="preserve">
-    <value>Запитувана анкета не може бути знайдена. Будь ласка, оновіть перелік анкет</value>
+    <value>Запитувана анкета не знайдена. Будь ласка, оновіть список анкет</value>
   </data>
   <data name="SignedInBlock" xml:space="preserve">
-    <value>Ви ввійшли в Designer як {{user}}.</value>
+    <value>Ви ввійшли в Designer як {{user}}..</value>
   </data>
   <data name="SignOut" xml:space="preserve">
-    <value>вийти</value>
+    <value>вийти з системи.</value>
   </data>
   <data name="Table_CreatedBy" xml:space="preserve">
     <value>Створено</value>
   </data>
   <data name="Table_LastModified" xml:space="preserve">
-    <value>Остання зміна</value>
+    <value>Востаннє змінено</value>
   </data>
   <data name="Table_Title" xml:space="preserve">
     <value>назва</value>

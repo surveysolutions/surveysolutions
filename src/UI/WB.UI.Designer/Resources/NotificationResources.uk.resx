@@ -118,25 +118,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AnonymousSharingEmail" xml:space="preserve">
-    <value>Привіт {0}, &lt;br/&gt;&lt;br/&gt; Ви увімкнули доступ лише для читання до своєї анкети «{1}» для анонімних користувачів за наступним посиланням: </value>
+    <value>Привіт {0}, &lt;br/&gt;&lt;br/&gt; Ви увімкнули доступ тільки для читання до вашої анкети "{1}" для анонімних користувачів за наступним посиланням: </value>
   </data>
   <data name="CompleteRegistration" xml:space="preserve">
-    <value>Завершити реєстрацію</value>
+    <value>повна реєстрація</value>
   </data>
   <data name="ConfirmationEmail" xml:space="preserve">
-    <value>Привіт {0}, 
- 
-&lt;br/&gt;Щоб завершити процес реєстрації, &lt;br/&gt;натисніть на це посилання:</value>
+    <value>Привіт {0}, &lt;br/&gt;
+&lt;br/&gt; 
+Щоб завершити процес реєстрації, натисніть на це посилання:</value>
   </data>
   <data name="EmailChange" xml:space="preserve">
-    <value>Привіт {0}, 
-Щоб підтвердити зміну електронної пошти, &lt;br/&gt; &lt;br/&gt;скористайтеся наступним посиланням: </value>
+    <value>Привіт {0}, &lt;br/&gt; &lt;br/&gt;
+Щоб підтвердити зміну електронної пошти, будь ласка, скористайтеся наступним посиланням: </value>
   </data>
   <data name="EmailChangeLink" xml:space="preserve">
-    <value>Підтвердити</value>
+    <value>підтвердити</value>
   </data>
   <data name="EmailSendInfo" xml:space="preserve">
-    <value>Це повідомлення автоматично надіслано засобом конструктора рішень для опитувань.</value>
+    <value>Це повідомлення було автоматично надіслано інструментом Конструктор рішень для опитувань.</value>
   </data>
   <data name="MailNotifier_NotifyOwnerAboutShareChange_view" xml:space="preserve">
     <value>вид</value>
@@ -145,51 +145,51 @@
     <value>редагувати</value>
   </data>
   <data name="MailNotifier_NotifyTargetPersonAboutShareChange_link" xml:space="preserve">
-    <value>Посилання</value>
+    <value>посилання</value>
   </data>
   <data name="MailNotifier_NotifyTargetPersonAboutShareChange_user" xml:space="preserve">
     <value>користувач</value>
   </data>
   <data name="OwnerShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited__2__to__3__your_questionnaire__" xml:space="preserve">
-    <value>Привіт {0}, &lt;br&gt; {1} запросив {2} {3} вашу анкету: </value>
+    <value>Привіт {0}, &lt;br&gt; {1} запросив {2} на {3} вашу анкету: </value>
   </data>
   <data name="OwnerStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_revoked_access_for__2__to_your_questionnaire___3_" xml:space="preserve">
     <value>Привіт {0}, &lt;br&gt; {1} відкликав доступ {2} до вашої анкети: {3}</value>
   </data>
   <data name="ResetPassword" xml:space="preserve">
-    <value>Скинути пароль</value>
+    <value>скинути пароль</value>
   </data>
   <data name="ResetPasswordEmail" xml:space="preserve">
-    <value>Привіт {0}, Щоб завершити процес скидання пароля, &lt;br/&gt;&lt;br/&gt; натисніть на це посилання:</value>
+    <value>Привіт {0}, &lt;br/&gt;&lt;br/&gt; Щоб завершити процес зміни пароля, натисніть на це посилання:</value>
   </data>
   <data name="SystemMailer_AnonymousSharingEmail_Subject" xml:space="preserve">
     <value>Анонімне посилання для обміну</value>
   </data>
   <data name="SystemMailer_ConfirmationEmail_Complete_Registration_Process" xml:space="preserve">
-    <value>Завершіть процес реєстрації</value>
+    <value>Завершити процес реєстрації</value>
   </data>
   <data name="SystemMailer_GetOwnerShareNotificationEmail_Your_questionnaire_sharing_notification" xml:space="preserve">
-    <value>Сповіщення про надсилання анкети</value>
+    <value>Повідомлення про поширення вашої анкети</value>
   </data>
   <data name="SystemMailer_GetOwnerStopShareNotificationEmail_Your_questionnaire_stop_sharing_notification" xml:space="preserve">
-    <value>Сповіщення про припинення спільного доступу до анкети</value>
+    <value>Повідомлення про те, що ваша анкета перестала бути доступною</value>
   </data>
   <data name="SystemMailer_GetShareNotificationEmail_Questionnaire_sharing_notification" xml:space="preserve">
-    <value>Сповіщення про обмін анкетами</value>
+    <value>Повідомлення про поширення анкети</value>
   </data>
   <data name="SystemMailer_GetStopShareNotificationEmail_Questionnaire_stop_sharing_notification" xml:space="preserve">
-    <value>Сповіщення про припинення спільного доступу до анкети</value>
+    <value>Повідомлення про припинення поширення анкети</value>
   </data>
   <data name="SystemMailer_ResetPasswordEmail_Complete_Password_Reset" xml:space="preserve">
     <value>Повне скидання пароля</value>
   </data>
   <data name="TargetPersonShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited_you_to__2__the_following_questionnaire_" xml:space="preserve">
-    <value>Привіт {0}, &lt;br&gt; {1} запросив вас {2} наступну анкету:</value>
+    <value>Привіт {0}, &lt;br&gt; {1} запросив вас на {2} наступну анкету:</value>
   </data>
   <data name="TargetPersonStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_stopped_to_share_with_you_questionnaire___2_" xml:space="preserve">
     <value>Привіт {0}, &lt;br&gt; {1} зупинився, щоб поділитися з вами анкетою: {2}</value>
   </data>
   <data name="TranfserOwnershipNotification" xml:space="preserve">
-    <value>Привіт {0}, &lt;br&gt; {1} передала Вам право власності на {2} анкети</value>
+    <value>Доброго дня {0}, &lt;br&gt; {1} передав Вам право власності на анкету {2}</value>
   </data>
 </root>

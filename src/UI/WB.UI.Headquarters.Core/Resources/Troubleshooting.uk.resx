@@ -121,16 +121,16 @@
     <value>Вкажіть ключ інтерв'ю або ідентифікатор інтерв'ю для пошуку.</value>
   </data>
   <data name="InterviewDataIsMissingTitle" xml:space="preserve">
-    <value>Інтерв'юер стверджує, що інтерв'ю було завершено та синхронізовано, але я не бачу даних для цього інтерв'ю на сервері</value>
+    <value>Інтерв'юер стверджує, що інтерв'ю було завершено і синхронізовано, але я не бачу даних про це інтерв'ю на сервері</value>
   </data>
   <data name="MissingCensusInterviews_Filters_Dates" xml:space="preserve">
-    <value>Пошук інтерв'ю, синхронізованих між двома датами</value>
+    <value>Пошукові інтерв'ю, синхронізовані між двома датами</value>
   </data>
   <data name="MissingCensusInterviews_Filters_DatesPlaceholder" xml:space="preserve">
     <value>Виберіть дати</value>
   </data>
   <data name="MissingCensusInterviews_Filters_Interviewer" xml:space="preserve">
-    <value>Інтерв'юера</value>
+    <value>Інтерв'юер</value>
   </data>
   <data name="MissingCensusInterviews_Filters_InterviewerPlaceholder" xml:space="preserve">
     <value>Виберіть інтерв'юера</value>
@@ -139,41 +139,41 @@
     <value>Анкета</value>
   </data>
   <data name="MissingCensusInterviews_Filters_QuestionnairePlaceholder" xml:space="preserve">
-    <value>Обрати анкету</value>
+    <value>Виберіть анкету</value>
   </data>
   <data name="MissingCensusInterviews_Filters_Search" xml:space="preserve">
-    <value>Шукати</value>
+    <value>Пошук</value>
   </data>
   <data name="MissingCensusInterviews_FiltersTitle" xml:space="preserve">
-    <value>Умови фільтрування</value>
+    <value>Умови фільтрації</value>
   </data>
   <data name="MissingCensusInterviews_Instructions" xml:space="preserve">
-    <value>Щоб знайти співбесіду, будь ласка, вкажіть назву анкети.&lt;br/&gt;
-Виберіть інтерв'юера та часові рамки, щоб звузити результат пошуку</value>
+    <value>Щоб знайти інтерв'ю, будь ласка, вкажіть назву анкети.&lt;br/&gt;
+Виберіть інтерв'юера та часові рамки, щоб звузити результати пошуку</value>
   </data>
   <data name="MissingCensusInterviews_MoreThanOneInterviewsFound_Message_Format" xml:space="preserve">
     <value>{0} інтерв'ю задовольняють умовам фільтрації</value>
   </data>
   <data name="MissingCensusInterviews_NothingFound_Message" xml:space="preserve">
-    <value>Жодне інтерв'ю не задовольняє умовам фільтра</value>
+    <value>Жодне інтерв'ю не відповідає умовам фільтрації</value>
   </data>
   <data name="MissingCensusInterviews_OneInterviewFound_Message" xml:space="preserve">
-    <value>Одне інтерв'ю задовольняє умовам фільтра</value>
+    <value>Одне інтерв'ю задовольняє умовам фільтрації</value>
   </data>
   <data name="MissingCensusInterviews_PageHeader" xml:space="preserve">
-    <value>Пошук конкретної співбесіди</value>
+    <value>Визначення місця проведення конкретного інтерв'ю</value>
   </data>
   <data name="MissingCensusInterviewsDescription" xml:space="preserve">
-    <value>Вкажіть ім'я для входу інтерв'юера, назву анкети та діапазон дат</value>
+    <value>Вкажіть логін інтерв'юера, назву анкети та діапазон дат</value>
   </data>
   <data name="MissingCensusInterviewsTitle" xml:space="preserve">
-    <value>Мені потрібно знайти співбесіду</value>
+    <value>Мені потрібно знайти місце для співбесіди</value>
   </data>
   <data name="NoData_Description" xml:space="preserve">
     <value>Вкажіть ключ інтерв'ю (XX-XX-XX-XX) або ідентифікатор інтерв'ю для пошуку.</value>
   </data>
   <data name="NoData_Filters_InterviewKey" xml:space="preserve">
-    <value>Ключ інтерв'ю або ідентифікатор інтерв'ю</value>
+    <value>Ключ до інтерв'ю або ідентифікатор інтерв'ю</value>
   </data>
   <data name="NoData_Filters_InterviewKeyPlaceholder" xml:space="preserve">
     <value>Введіть ключ або ідентифікатор інтерв'ю</value>
@@ -182,10 +182,10 @@
     <value>Я не бачу даних для синхронізованого інтерв'ю на сервері</value>
   </data>
   <data name="SupportSite" xml:space="preserve">
-    <value>Натисніть посилання на проблему, яку потрібно вирішити. Щоб дізнатися про проблеми, не перелічені нижче, відвідайте сайт Survey Solutions &lt;a href="{0}" target="_blank"&gt;support site&lt;/a&gt;.</value>
+    <value>Клацніть на посилання проблеми, яку ви хочете вирішити. Для вирішення проблем, не перелічених нижче, відвідайте сайт підтримки Survey Solutions &lt;a href="{0}" target="_blank"&gt;сайт підтримки&lt;/a&gt;..</value>
   </data>
   <data name="TableTitle_Enumerator" xml:space="preserve">
-    <value>Перераховувач</value>
+    <value>Переписувач</value>
   </data>
   <data name="TableTitle_InterviewId" xml:space="preserve">
     <value>Ідентифікатор інтерв'ю</value>
@@ -197,6 +197,6 @@
     <value>Статус</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Виправлення неполадок</value>
+    <value>Усунення несправностей</value>
   </data>
 </root>

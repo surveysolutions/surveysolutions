@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Administration" xml:space="preserve">
-    <value>Адміністратора</value>
+    <value>Адміністратор</value>
   </data>
   <data name="ApiUsers" xml:space="preserve">
     <value>Користувачі API</value>
@@ -136,7 +136,7 @@
     <value>Створити новий</value>
   </data>
   <data name="CumulativeChart" xml:space="preserve">
-    <value>Графік сукупного інтерв'ю</value>
+    <value>Кумулятивний графік інтерв'ю</value>
   </data>
   <data name="DataExport" xml:space="preserve">
     <value>Експорт даних</value>
@@ -151,16 +151,16 @@
     <value>Діагностика</value>
   </data>
   <data name="EmailProviders" xml:space="preserve">
-    <value>Постачальники послуг електронної пошти</value>
+    <value>Провайдери електронної пошти</value>
   </data>
   <data name="Headquarters" xml:space="preserve">
-    <value>Штаб</value>
+    <value>Штаб-квартира</value>
   </data>
   <data name="Help" xml:space="preserve">
-    <value>Допомога</value>
+    <value>Допоможіть!</value>
   </data>
   <data name="Interviewers" xml:space="preserve">
-    <value>Інтерв'юерів</value>
+    <value>Інтерв'юери</value>
   </data>
   <data name="InterviewPackages" xml:space="preserve">
     <value>Пакети інтерв'ю</value>
@@ -169,10 +169,10 @@
     <value>Інтерв'ю</value>
   </data>
   <data name="MapDashboard" xml:space="preserve">
-    <value>Приладна дошка карти</value>
+    <value>Панель управління картою</value>
   </data>
   <data name="MapReport" xml:space="preserve">
-    <value>Звіт по карті</value>
+    <value>Звіт про мапу</value>
   </data>
   <data name="Maps" xml:space="preserve">
     <value>Карти</value>
@@ -199,19 +199,19 @@
     <value>Адміністрація</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Параметри</value>
+    <value>Налаштування</value>
   </data>
   <data name="Speed" xml:space="preserve">
     <value>Швидкість</value>
   </data>
   <data name="Started" xml:space="preserve">
-    <value>Почав</value>
+    <value>Розпочато.</value>
   </data>
   <data name="StatusDuration" xml:space="preserve">
-    <value>Тривалість статусу</value>
+    <value>Статус Тривалість</value>
   </data>
   <data name="Supervisors" xml:space="preserve">
-    <value>Керівники</value>
+    <value>Супервайзери</value>
   </data>
   <data name="SurveysAndStatuses" xml:space="preserve">
     <value>Опитування та статуси</value>
@@ -223,7 +223,7 @@
     <value>Статистика опитування</value>
   </data>
   <data name="TabletInfos" xml:space="preserve">
-    <value>Інформація про планшет</value>
+    <value>Інформація про планшети</value>
   </data>
   <data name="TeamAndRoles" xml:space="preserve">
     <value>Команда та ролі</value>
@@ -238,18 +238,18 @@
     <value>Команди та статуси</value>
   </data>
   <data name="Troubleshooting" xml:space="preserve">
-    <value>Виправлення неполадок</value>
+    <value>Усунення несправностей</value>
   </data>
   <data name="UserBatchUpload" xml:space="preserve">
     <value>Пакетне завантаження користувача</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>Користувачів</value>
+    <value>Користувачі</value>
   </data>
   <data name="Workspaces" xml:space="preserve">
-    <value>Робочі області</value>
+    <value>Робочі місця</value>
   </data>
   <data name="WorkspaceSettings" xml:space="preserve">
-    <value>Настройки робочої області</value>
+    <value>Налаштування робочого простору</value>
   </data>
 </root>

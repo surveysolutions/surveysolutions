@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Interviewers" xml:space="preserve">
-    <value>Інтерв'юерів</value>
+    <value>Інтерв'юери</value>
   </data>
   <data name="LowStorage" xml:space="preserve">
     <value>Менше 100 МБ вільного місця</value>
@@ -127,13 +127,13 @@
     <value>Ніколи не підключався</value>
   </data>
   <data name="NeverUploaded" xml:space="preserve">
-    <value>Ніколи не завантажено</value>
+    <value>Не завантажено</value>
   </data>
   <data name="NoAssignments" xml:space="preserve">
-    <value>Призначення не отримано</value>
+    <value>Не отримано жодного завдання</value>
   </data>
   <data name="OldAndroidVersion" xml:space="preserve">
-    <value>Android 4.4 або старішої версії</value>
+    <value>Android 4.4 або новішої версії</value>
   </data>
   <data name="OldInterviewerVersion" xml:space="preserve">
     <value>Стара версія</value>

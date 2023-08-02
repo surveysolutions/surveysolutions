@@ -118,22 +118,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AssignmentLimitReached" xml:space="preserve">
-    <value>Ліміт призначень досягнуто</value>
+    <value>Вичерпано ліміт призначень</value>
   </data>
   <data name="AssignmentResponsibleNotFound" xml:space="preserve">
-    <value>Відповідальний не знайдено</value>
+    <value>Відповідального не знайдено</value>
   </data>
   <data name="QuestionnaireNameUniqueFormat" xml:space="preserve">
-    <value>Анкета «{0}» вже існує. Будь ласка, виберіть інше ім'я.</value>
+    <value>Анкета '{0}' вже існує. Будь ласка, виберіть інше ім'я.</value>
   </data>
   <data name="QuestionnaireVariableUniqueFormat" xml:space="preserve">
-    <value>Ви вже імпортували іншу анкету зі змінною анкети «{0}» від Designer. Якщо ви все ще хочете імпортувати цей конкретний файл, будь ласка, надайте йому іншу змінну анкети в Designer.</value>
+    <value>Ви вже імпортували з Дизайнера іншу анкету зі змінною анкети '{0}'. Якщо ви все ще хочете імпортувати саме цю анкету, будь ласка, надайте їй іншу змінну анкети в Дизайнері.</value>
   </data>
   <data name="QuestionnaireWasDeleted" xml:space="preserve">
     <value>Анкету видалено</value>
   </data>
   <data name="UserDontHavePermissionsToAnswer" xml:space="preserve">
-    <value>Тільки науковий керівник, відповідальний за це завдання, може відповісти на питання наукового керівника</value>
+    <value>Тільки керівник, відповідальний за це завдання, може відповідати на запитання керівника</value>
   </data>
   <data name="WebModeAssignmentShouldBeOnInterviewer" xml:space="preserve">
     <value>Завдання для веб-інтерв'ю повинно мати відповідального інтерв'юера</value>

@@ -118,22 +118,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AllowRelinkTablet" xml:space="preserve">
-    <value>Дозволити повторне приєднання до іншого пристрою з втратою даних на вихідному пристрої.</value>
+    <value>Дозволяє переприєднання до іншого пристрою з втратою даних на оригінальному пристрої.</value>
   </data>
   <data name="BatchUploadModel_FileName" xml:space="preserve">
-    <value>CSV файл</value>
+    <value>Файл CSV</value>
   </data>
   <data name="BatchUploadModel_Required" xml:space="preserve">
-    <value>Необхідно вибрати файл для завантаження</value>
+    <value>Ви повинні вибрати файл для завантаження</value>
   </data>
   <data name="BatchUploadModel_ValidationErrorMessage" xml:space="preserve">
-    <value>Виберіть файл</value>
+    <value>Будь ласка, виберіть файл</value>
   </data>
   <data name="CannotUpdate_CurrentUserDoesNotExists" xml:space="preserve">
-    <value>Не вдалося оновити відомості про користувача, оскільки поточного користувача не існує</value>
+    <value>Не вдалося оновити інформацію про користувача, оскільки поточний користувач не існує</value>
   </data>
   <data name="CannotUpdate_CurrentUserIsArchived" xml:space="preserve">
-    <value>Не вдалося оновити відомості про користувача, оскільки поточний користувач заархівовано</value>
+    <value>Не вдалося оновити інформацію про користувача, оскільки поточного користувача заархівовано</value>
   </data>
   <data name="CloneQuestionnaireModel_NewTitle_Error_Required" xml:space="preserve">
     <value>Назва анкети обов'язкова</value>
@@ -148,25 +148,25 @@
     <value>Пароль і пароль підтвердження не збігаються</value>
   </data>
   <data name="ConfirmPasswordFieldName" xml:space="preserve">
-    <value>Підтвердіть пароль</value>
+    <value>Підтвердити пароль</value>
   </data>
   <data name="ConfirmPasswordRequired" xml:space="preserve">
-    <value>Необхідно підтвердити пароль</value>
+    <value>Потрібно підтвердити пароль</value>
   </data>
   <data name="EmailErrorMessage" xml:space="preserve">
-    <value>Неприпустима адреса електронної пошти</value>
+    <value>Невірна адреса електронної пошти</value>
   </data>
   <data name="EmailFieldName" xml:space="preserve">
     <value>Адреса електронної пошти</value>
   </data>
   <data name="InvalidUser" xml:space="preserve">
-    <value>Недійсний користувач</value>
+    <value>Неправильний користувач</value>
   </data>
   <data name="IsLockedBySupervisorFieldName" xml:space="preserve">
-    <value>Заблоковано керівником</value>
+    <value>Заблоковано супервізором</value>
   </data>
   <data name="IsLockedFieldName" xml:space="preserve">
-    <value>Заблоковано адміністратором або головним офісом</value>
+    <value>Заблоковано адміністратором або штаб-квартирою</value>
   </data>
   <data name="LogOnModel_Password" xml:space="preserve">
     <value>Пароль</value>
@@ -175,49 +175,49 @@
     <value>Ім'я користувача</value>
   </data>
   <data name="MandatoryField" xml:space="preserve">
-    <value>Це поле є обов'язковим</value>
+    <value>Це поле є обов'язковим для заповнення</value>
   </data>
   <data name="NewPasswordFieldName" xml:space="preserve">
     <value>Новий пароль</value>
   </data>
   <data name="OldPasswordErrorMessage" xml:space="preserve">
-    <value>Щоб змінити пароль, укажіть дійсний наявний пароль</value>
+    <value>Для зміни пароля введіть дійсний існуючий пароль</value>
   </data>
   <data name="OldPasswordFieldName" xml:space="preserve">
     <value>Старий пароль</value>
   </data>
   <data name="PasswordChangeRequired" xml:space="preserve">
-    <value>Ваш пароль скинуто. Ви повинні змінити його, щоб отримати доступ до сайту.</value>
+    <value>Ваш пароль було скинуто. Ви повинні змінити його, щоб отримати доступ до сайту.</value>
   </data>
   <data name="PasswordErrorMessage" xml:space="preserve">
-    <value>Пароль повинен містити принаймні одну цифру, один символ верхнього та одного символу нижнього регістру</value>
+    <value>Пароль повинен містити принаймні одну цифру, один символ верхнього регістру та один символ нижнього регістру</value>
   </data>
   <data name="PasswordFieldName" xml:space="preserve">
     <value>Пароль</value>
   </data>
   <data name="PasswordLengthMessage" xml:space="preserve">
-    <value>Пароль повинен складатися принаймні з {2} символів</value>
+    <value>Пароль повинен мати довжину не менше {2} символів</value>
   </data>
   <data name="PasswordRequiresDigit" xml:space="preserve">
-    <value>Паролі повинні містити принаймні одну цифру ("0'-9").</value>
+    <value>Паролі повинні містити принаймні одну цифру ('0'-'9').</value>
   </data>
   <data name="PasswordRequiresLower" xml:space="preserve">
-    <value>Паролі повинні містити принаймні одну малу літеру ("a"-z").</value>
+    <value>Пароль повинен містити принаймні одну малу літеру ('a'-'z').</value>
   </data>
   <data name="PasswordRequiresNonAlphanumeric" xml:space="preserve">
-    <value>Паролі повинні містити принаймні один символ, відмінний від букв і цифр.</value>
+    <value>Паролі повинні містити хоча б один не буквено-цифровий символ.</value>
   </data>
   <data name="PasswordRequiresUniqueChars" xml:space="preserve">
-    <value>Паролі повинні містити принаймні {0} різних символів.</value>
+    <value>Паролі повинні містити щонайменше {0} різних символів.</value>
   </data>
   <data name="PasswordRequiresUpper" xml:space="preserve">
-    <value>Паролі повинні містити принаймні один великий регістр ("A"-Z").</value>
+    <value>Паролі повинні містити хоча б одну велику літеру ('A'-'Z').</value>
   </data>
   <data name="PasswordTooShort" xml:space="preserve">
-    <value>Паролі повинні складатися не менше {0} символів.</value>
+    <value>Пароль повинен містити не менше {0} символів.</value>
   </data>
   <data name="PersonNameAllowedCharactersErrorMessage" xml:space="preserve">
-    <value>Ім'я особи містить неприпустимі символи. Допускаються лише літери, крапки, пробіли та апострофи</value>
+    <value>Ім'я особи містить недопустимі символи. Допустимі лише літери, крапки, пробіли та апострофи</value>
   </data>
   <data name="PersonNameErrorMessage" xml:space="preserve">
     <value>Ім'я особи не може містити більше {1} символів</value>
@@ -229,46 +229,46 @@
     <value>Номер телефону не може містити більше {1} символів</value>
   </data>
   <data name="PhoneErrorMessage" xml:space="preserve">
-    <value>Недійсний номер телефону</value>
+    <value>Неправильний номер телефону</value>
   </data>
   <data name="PhoneNumberFieldName" xml:space="preserve">
-    <value>Контактний телефон</value>
+    <value>Номер телефону</value>
   </data>
   <data name="RequiredEmailErrorMessage" xml:space="preserve">
-    <value>Необхідно вказати адресу електронної пошти</value>
+    <value>Обов'язкова наявність електронної пошти</value>
   </data>
   <data name="RequiredPasswordErrorMessage" xml:space="preserve">
-    <value>Необхідно вказати пароль</value>
+    <value>Потрібен пароль</value>
   </data>
   <data name="RequiredSupervisorErrorMessage" xml:space="preserve">
-    <value>Керівник обов'язковий</value>
+    <value>Потрібен супервайзер</value>
   </data>
   <data name="RequiredUserNameErrorMessage" xml:space="preserve">
     <value>Ім'я користувача обов'язкове</value>
   </data>
   <data name="SupervisorFieldName" xml:space="preserve">
-    <value>Керівник</value>
+    <value>Наглядач</value>
   </data>
   <data name="TroubleshootModel_InterviewId_ErrorMessage" xml:space="preserve">
-    <value>Введіть дійсний ідентифікатор GUID у такому форматі: xxxxx-xx-xx-xx-xx.</value>
+    <value>Будь ласка, введіть дійсний GUID у наступному форматі xxxxxxxx-xxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxxx</value>
   </data>
   <data name="UserBatchUploadModel_File_CSV_File" xml:space="preserve">
-    <value>CSV файл</value>
+    <value>Файл CSV</value>
   </data>
   <data name="UserBatchUploadModel_Required_ErrorMessage" xml:space="preserve">
-    <value>Необхідно вибрати файл для завантаження</value>
+    <value>Ви повинні вибрати файл для завантаження</value>
   </data>
   <data name="UserBatchUploadModel_Validation_ErrorMessage" xml:space="preserve">
     <value>Будь ласка, виберіть файл</value>
   </data>
   <data name="UserIsLockedByHq" xml:space="preserve">
-    <value>Користувач заблокований головним офісом</value>
+    <value>Користувач заблокований штаб-квартирою</value>
   </data>
   <data name="UserName_Taken" xml:space="preserve">
-    <value>Будь ласка, виберіть інше ім'я користувача</value>
+    <value>Будь ласка, оберіть інше ім'я користувача</value>
   </data>
   <data name="UserNameErrorMessage" xml:space="preserve">
-    <value>Ім'я для входу має бути довжиною від 3 до 15 символів і може містити лише літери, цифри та символ підкреслення. Літери повинні бути тільки з латинського (англійського) алфавіту: 'A'..' Z' або 'a'..' z'. Інші літери (кирилиця, арабська тощо) недійсні для використання в логінах.</value>
+    <value>Ім'я користувача має містити від 3 до 15 символів і може містити лише літери, цифри та символ підкреслення. Літери повинні бути тільки з латинського (англійського) алфавіту: 'A'...Z' або 'a'...z'. Інші літери (кирилиця, арабські тощо) не приймаються для використання в логінах.</value>
   </data>
   <data name="UserNameFieldName" xml:space="preserve">
     <value>Ім'я користувача</value>
@@ -283,6 +283,6 @@
     <value>Робочу область не знайдено</value>
   </data>
   <data name="WorkspaceRequired" xml:space="preserve">
-    <value>Робоча область обов'язкова</value>
+    <value>Потрібен робочий простір</value>
   </data>
 </root>
