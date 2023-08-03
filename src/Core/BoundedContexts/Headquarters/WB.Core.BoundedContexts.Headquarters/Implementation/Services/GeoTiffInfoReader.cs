@@ -1,35 +1,27 @@
 ﻿using System.IO;
+using BitMiracle.LibTiff.Classic;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 
-public class GeoTiffInfoReader
+public static class GeoTiffInfoReader
 {
-    public bool IsGeoTIFF(string geoTiffFilePath)
+    public static bool IsGeoTIFF(string geoTiffFilePath)
     {
-        byte[] geotiffBytes = File.ReadAllBytes(geoTiffFilePath);
-        return IsGeoTIFF(geotiffBytes);
+        using Tiff tiff = Tiff.Open(geoTiffFilePath, "r");
+        return IsGeoTiff(tiff);
     }
     
-    public bool IsGeoTIFF(byte[] geotiffBytes)
+    public static bool IsGeoTIFF(byte[] geotiffBytes)
     {
-        if (geotiffBytes.Length < 4)
-            return false;
+        using MemoryStream ms = new MemoryStream(geotiffBytes);
+        using Tiff tiff = Tiff.ClientOpen("in-memory", "r", ms, new TiffStream());
+        return IsGeoTiff(tiff);
+    }
 
-        // Check the file signature to verify if it is a GeoTIFF file.
-        if (geotiffBytes[0] == 0x49 && // I
-            geotiffBytes[1] == 0x49 && // I
-            geotiffBytes[2] == 0x2A)   // *
-        {
-            return true;
-        }
-
-        if (geotiffBytes[0] == 0x4D && // M
-            geotiffBytes[1] == 0x4D && // M
-            geotiffBytes[2] == 0x2A)   // *
-        {
-            return true;
-        }
-
-        return false;
+    private static bool IsGeoTiff(Tiff tiff)
+    {
+        var geoKeyDirectoryTag = tiff?.GetField(TiffTag.GEOTIFF_GEOKEYDIRECTORYTAG);
+        tiff?.Close();
+        return geoKeyDirectoryTag != null;
     }
 }

@@ -287,8 +287,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             }
                             else
                             {
-                                GeoTiffInfoReader geoTiffInfoReader = new GeoTiffInfoReader();
-                                var isGeoTiff = geoTiffInfoReader.IsGeoTIFF(fullPath);
+                                var isGeoTiff = GeoTiffInfoReader.IsGeoTIFF(fullPath);
                                 if (!isGeoTiff)
                                     throw new InvalidOperationException(".tif file is not recognized as map");    
                             }
