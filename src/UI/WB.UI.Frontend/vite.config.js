@@ -139,9 +139,7 @@ for (var attr in pages) {
 export default defineConfig(({ mode }) => {
 
 const isDevMode = mode === 'development';
-console.log("mode: " + mode)
 const isProdMode = !isDevMode
-console.log("isDevMode: " + isDevMode)
 
 return {
 	  css: {
@@ -247,7 +245,7 @@ return {
 			  },
 			  chunkFileNames: (chunkInfo) => { 
 				  if (isDevMode) 
-					  return chunkInfo.name.endsWith('.js') ? 'js/[name]' : 'js/[name].js' 
+				    return chunkInfo.name.endsWith('.js') ? 'js/[name]' : 'js/[name].js' 
 				  return 'js/[name]-[hash].js' 
 			  },
 			  entryFileNames: (chunkInfo) => { 
@@ -260,10 +258,11 @@ return {
 					return 'vendor';
 				}
 
-				if (isDevMode) {
+				/*if (isDevMode) {
 					var filename = id.replace(/^.*[\\\/]/, '')
-					return filename;
-				}
+					if (!filename.endsWith('.css'))
+					  return filename;
+				}*/
 			  },
 		  },
 		},
