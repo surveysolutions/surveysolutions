@@ -127,7 +127,7 @@
     <value>Вміст файлу відсутній для імені файлу {0} interview {1}</value>
   </data>
   <data name="Headquarter" xml:space="preserve">
-    <value>Штаб-квартира</value>
+    <value>Headquarters</value>
   </data>
   <data name="Interviewer" xml:space="preserve">
     <value>Інтерв'юер</value>
@@ -136,10 +136,10 @@
     <value>Інтерв'ю з id '{0}' відсутнє</value>
   </data>
   <data name="Supervisor" xml:space="preserve">
-    <value>Наглядач</value>
+    <value>Супервізор</value>
   </data>
   <data name="UnknownRole" xml:space="preserve">
-    <value>&lt;НЕВІДОМА РОЛЬ</value>
+    <value>&lt;НЕВІДОМА РОЛЬ&gt;</value>
   </data>
   <data name="UnknownUser" xml:space="preserve">
     <value>&lt;НЕВІДОМИЙ КОРИСТУВАЧ&gt;</value>

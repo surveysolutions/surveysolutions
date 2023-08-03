@@ -124,7 +124,7 @@
     <value>ЗАТВЕРДЖЕНО ШТАБ-КВАРТИРОЮ</value>
   </data>
   <data name="COLUMN_APPROVED_BY_SUPERVISOR" xml:space="preserve">
-    <value>СХВАЛЕНО КЕРІВНИКОМ</value>
+    <value>СХВАЛЕНО супервізором</value>
   </data>
   <data name="COLUMN_AVERAGE" xml:space="preserve">
     <value>СЕРЕДНІЙ</value>
@@ -160,10 +160,10 @@
     <value>ВІДХИЛЕНО ШТАБ-КВАРТИРОЮ</value>
   </data>
   <data name="COLUMN_REJECTED_BY_SUPERVISOR" xml:space="preserve">
-    <value>ВІДХИЛЕНО КЕРІВНИКОМ</value>
+    <value>ВІДХИЛЕНО супервізором</value>
   </data>
   <data name="COLUMN_SUPERVISOR_ASSIGNED" xml:space="preserve">
-    <value>ПРИЗНАЧЕНО КУРАТОРА</value>
+    <value>ПРИЗНАЧЕНО супервізора</value>
   </data>
   <data name="COLUMN_TABLET_REASSIGNED" xml:space="preserve">
     <value>ПЛАНШЕТ ПЕРЕПРИЗНАЧЕНО</value>
@@ -187,7 +187,7 @@
     <value>НЕПРАВИЛЬНИЙ ЧАС НА ПЛАНШЕТІ</value>
   </data>
   <data name="TimeLeft" xml:space="preserve">
-    <value>Залишився час.</value>
+    <value>Час, що залишився</value>
   </data>
   <data name="TOTAL" xml:space="preserve">
     <value>Всього</value>

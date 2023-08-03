@@ -127,7 +127,7 @@
     <value>Ніколи не підключався</value>
   </data>
   <data name="NeverUploaded" xml:space="preserve">
-    <value>Не завантажено</value>
+    <value>Ніколи не було завантажено</value>
   </data>
   <data name="NoAssignments" xml:space="preserve">
     <value>Не отримано жодного завдання</value>

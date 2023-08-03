@@ -130,10 +130,10 @@
     <value>Тривалість</value>
   </data>
   <data name="FlagTitleFlagged" xml:space="preserve">
-    <value>Позначено.</value>
+    <value>Позначений</value>
   </data>
   <data name="FlagTitleUnflagged" xml:space="preserve">
-    <value>Не відмічено.</value>
+    <value>Немає позначки</value>
   </data>
   <data name="InterviewMode" xml:space="preserve">
     <value>Режим</value>
@@ -157,10 +157,10 @@
     <value>Відповідальний</value>
   </data>
   <data name="SearchResult_Count" xml:space="preserve">
-    <value>{{ count }} товар знайдено:</value>
+    <value>{{ count }} елемент знайдено:</value>
   </data>
   <data name="SearchResult_Count_other" xml:space="preserve">
-    <value>{{ count }} товарів знайдено:</value>
+    <value>{{ count }} елементів знайдено:</value>
   </data>
   <data name="ShowQuestionnaireDetails" xml:space="preserve">
     <value>Показати деталі анкети</value>
@@ -169,6 +169,6 @@
     <value>Статус: {{ name }}</value>
   </data>
   <data name="YouCanChangeResponsibleInterviewer" xml:space="preserve">
-    <value>Ви можете змінити відповідального за співбесіду при відхиленні. Будь ласка, оберіть відповідального інтерв'юера</value>
+    <value>Ви можете змінити відповідального за інтерв'ю при відхиленні. Будь ласка, оберіть відповідального інтерв'юера</value>
   </data>
 </root>

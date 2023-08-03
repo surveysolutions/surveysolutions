@@ -118,19 +118,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Complete" xml:space="preserve">
-    <value>Завершено</value>
+    <value>Завершити</value>
   </data>
   <data name="FinishInterviewText" xml:space="preserve">
     <value>Це інтерв'ю завершено</value>
   </data>
   <data name="InterviewReceivedByInterviewer" xml:space="preserve">
-    <value>Неможливо змінити інтерв'ю, отримане пристроєм</value>
+    <value>Неможливо змінити інтерв'ю, що було отримане пристроєм</value>
   </data>
   <data name="InvitationText" xml:space="preserve">
-    <value>Вам було запропоновано взяти участь у наступному опитуванні: "%АНКЕТА%"</value>
+    <value>Вам було запропоновано взяти участь у наступному опитуванні: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="LinkInvitation" xml:space="preserve">
-    <value>Вам було запропоновано взяти участь у наступному опитуванні: "%АНКЕТА%". Ваше інтерв'ю ще не готове.</value>
+    <value>Вам було запропоновано взяти участь у наступному опитуванні: "%QUESTIONNAIRE%". Ваше інтерв'ю ще не готове.</value>
   </data>
   <data name="LinkToInterviewPage" xml:space="preserve">
     <value>Веб-інтерв'ю</value>
@@ -139,7 +139,7 @@
     <value>Привіт і ласкаво просимо до веб-опитування Survey Solutions</value>
   </data>
   <data name="NoteForSupervisor" xml:space="preserve">
-    <value>Примітка для керівника</value>
+    <value>Примітка для супервізора</value>
   </data>
   <data name="Resume_InvitationText" xml:space="preserve">
     <value>Ви можете перейти до інтерв'ю в наступному опитуванні: "%QUESTIONNAIRE%"</value>
@@ -148,16 +148,16 @@
     <value>Привіт і ласкаво просимо до веб-опитування Survey Solutions</value>
   </data>
   <data name="ResumeInterview" xml:space="preserve">
-    <value>Співбесіда з резюме</value>
+    <value>Продовжити інтерв'ю</value>
   </data>
   <data name="StartNewInterview" xml:space="preserve">
-    <value>Почніть нове інтерв'ю</value>
+    <value>Почати нове інтерв'ю</value>
   </data>
   <data name="SurveyFormatText" xml:space="preserve">
     <value>Опитування: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="WebSurvey" xml:space="preserve">
-    <value>Веб-опитування Survey Solutions</value>
+    <value>Веб-анкети Survey Solutions</value>
   </data>
   <data name="WelcomeText" xml:space="preserve">
     <value>Привіт і ласкаво просимо до веб-опитування Survey Solutions</value>

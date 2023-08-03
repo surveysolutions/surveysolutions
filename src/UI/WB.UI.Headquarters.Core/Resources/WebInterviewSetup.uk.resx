@@ -124,7 +124,7 @@
     <value>Прикріпити стенограму в форматі Pdf</value>
   </data>
   <data name="BackToQuestionnaires" xml:space="preserve">
-    <value>Повернутися до Налаштування опитування</value>
+    <value>Повернутися до Налаштування анкети</value>
   </data>
   <data name="CustomMessageTooLong" xml:space="preserve">
     <value>Користувацьке повідомлення не повинно містити більше {0} символів (включаючи html)</value>
@@ -133,7 +133,7 @@
     <value>Використовуйте власний текст</value>
   </data>
   <data name="Done" xml:space="preserve">
-    <value>Зроблено.</value>
+    <value>Зроблено</value>
   </data>
   <data name="DownloadTitle" xml:space="preserve">
     <value>Завантажити ({{count}})</value>
@@ -151,7 +151,7 @@
     <value>Ви можете змінити ці налаштування на сторінці &lt;a href="{{url}}"&gt;'Постачальники послуг електронної пошти'&lt;/a&gt;..</value>
   </data>
   <data name="Invitations_ChangeEmailSettingsNotAdmin" xml:space="preserve">
-    <value>Попросіть вашого користувача-адміністратора змінити ці налаштування на сторінці "Постачальники послуг електронної пошти.</value>
+    <value>Попросіть вашого адміністратора змінити ці налаштування на сторінці "Постачальники послуг електронної пошти".</value>
   </data>
   <data name="Invitations_EmailIsNotSetUp" xml:space="preserve">
     <value>Постачальника послуг електронної пошти не налаштовано.</value>
@@ -172,10 +172,10 @@
     <value>Запрошення не можуть бути надіслані.</value>
   </data>
   <data name="Invitations_SuccessfulSetup" xml:space="preserve">
-    <value>Запущено веб-опитування та налаштовано провайдера електронної пошти. Система готова до відправки запрошень.</value>
+    <value>Запущено веб-анкети та налаштовано провайдера електронної пошти. Система готова до відправки запрошень.</value>
   </data>
   <data name="Invitations_SurveyIsNotStarted" xml:space="preserve">
-    <value>Веб-опитування не запущено. Налаштування та &lt;a href="{{url}}"&gt;запуск веб-опитування&lt;/a&gt; перед надсиланням запрошень.</value>
+    <value>Веб-анкети не запущено. Налаштування та &lt;a href="{{url}}"&gt;запуск веб-анкети&lt;/a&gt; перед надсиланням запрошень.</value>
   </data>
   <data name="Invitations_ToSend" xml:space="preserve">
     <value>{{count}} запрошення для відправки.</value>
@@ -217,7 +217,7 @@
     <value>Налаштування веб-інтерв'ю</value>
   </data>
   <data name="WebInterviewSetup_SendInvitationsTitle" xml:space="preserve">
-    <value>Надсилайте запрошення</value>
+    <value>Надіслати запрошення</value>
   </data>
   <data name="WebInterviewSetup_Title" xml:space="preserve">
     <value>Налаштування веб-інтерв'ю</value>
@@ -229,7 +229,7 @@
     <value>Завершено</value>
   </data>
   <data name="WebInterviewUserMessages_CompleteNoteToSupervisor_Descr" xml:space="preserve">
-    <value>Примітка для керівника</value>
+    <value>Примітка для супервізора</value>
   </data>
   <data name="WebInterviewUserMessages_FinishInterview_Descr" xml:space="preserve">
     <value>Текст відображається на останній сторінці після завершення інтерв'ю</value>
@@ -247,16 +247,16 @@
     <value>Резюме</value>
   </data>
   <data name="WebInterviewUserMessages_ResumeInvitation_Descr" xml:space="preserve">
-    <value>Текст, який буде показано користувачеві, що повернувся, при відновленні опитування. %QUESTIONNAIRE% замінюється на назву опитування</value>
+    <value>Текст, який буде показано користувачеві, що повернувся, при відновленні анкети. %QUESTIONNAIRE% замінюється на назву анкети</value>
   </data>
   <data name="WebInterviewUserMessages_ResumeWelcome_Descr" xml:space="preserve">
-    <value>Текст заголовка, який показується користувачеві, що повертається, перед продовженням співбесіди</value>
+    <value>Текст заголовка, який показується користувачеві, що повертається, перед продовженням інтерв'ю</value>
   </data>
   <data name="WebInterviewUserMessages_StartNewButton_Descr" xml:space="preserve">
-    <value>Почніть нове інтерв'ю</value>
+    <value>Почати нове інтерв'ю</value>
   </data>
   <data name="WebInterviewUserMessages_SurveyName_Descr" xml:space="preserve">
-    <value>Назва проведеного опитування. %QUESTIONNAIRE% замінюється на назву опитування</value>
+    <value>Назва проведеного анкети. %QUESTIONNAIRE% замінюється на назву анкети</value>
   </data>
   <data name="WebInterviewUserMessages_WebSurveyHeader_Descr" xml:space="preserve">
     <value>Текст заголовка відображається після завершення інтерв'ю</value>

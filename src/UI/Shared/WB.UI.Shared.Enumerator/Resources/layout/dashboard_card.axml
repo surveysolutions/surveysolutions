@@ -128,7 +128,9 @@
 
       <TextView
         android:id="@+id/comments"
-        app:MvxBind="Visible And(Comments, Not(IsExpanded)); Text Comments;"
+        app:MvxBind="Visible And(Comments, Not(IsExpanded)); 
+                     Text Comments;
+                     TextColor InterviewStatusToColor(Status);"
         style="@style/Dashboard_InterviewItem_SubTitle"
         android:maxLines="1"
         app:layout_constraintLeft_toLeftOf="@+id/title"
@@ -137,7 +139,9 @@
 
       <TextView
               android:id="@+id/commentsFull"
-              app:MvxBind="Visible And(Comments, IsExpanded); Text Comments;"
+              app:MvxBind="Visible And(Comments, IsExpanded); 
+                           Text Comments;
+                           TextColor InterviewStatusToColor(Status);"
               style="@style/Dashboard_InterviewItem_SubTitle"
               app:layout_constraintLeft_toLeftOf="@+id/title"
               app:layout_constraintRight_toRightOf="@+id/right_guideline"

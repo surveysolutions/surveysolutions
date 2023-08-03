@@ -182,6 +182,10 @@
                 commandService.updateTranslation($state.params.questionnaireId, translation).then(function () {
                     dataBind(translation.checkpoint, translation);
                     translation.form.$setPristine();
+                    $rootScope.$broadcast('translationChanged', { 
+                        newTranslationId: translation.translationId, 
+                        oldTranslationId: translation.oldTranslationId
+                    }) 
                 });
             };
 
@@ -209,6 +213,7 @@
                     if (confirmResult === 'ok') {
                         commandService.deleteTranslation($state.params.questionnaireId, translation.translationId).then(function () {
                             $scope.translations.splice(index, 1);
+                            $rootScope.$broadcast('translationRemoved', { translationId: translation.translationId })
                         });
                     }
                 });

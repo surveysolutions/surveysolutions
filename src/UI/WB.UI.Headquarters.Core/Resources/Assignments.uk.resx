@@ -136,7 +136,7 @@
     <value>Створено</value>
   </data>
   <data name="Action_Created_Comment" xml:space="preserve">
-    <value>Прокоментуйте: {{comment}}</value>
+    <value>Коментар: {{comment}}</value>
   </data>
   <data name="Action_Created_Responsible" xml:space="preserve">
     <value>Призначено на {{responsible}}</value>
@@ -160,13 +160,13 @@
     <value>Перепризначено на {{newResponsible}}</value>
   </data>
   <data name="Action_Reassigned_To_Comment" xml:space="preserve">
-    <value>Прокоментуйте: {{comment}}</value>
+    <value>Коментар: {{comment}}</value>
   </data>
   <data name="Action_ReceivedByTablet" xml:space="preserve">
     <value>Отримано на планшет</value>
   </data>
   <data name="Action_UnArchived" xml:space="preserve">
-    <value>Неархівований</value>
+    <value>Розархівовано</value>
   </data>
   <data name="Action_UpgradedFrom" xml:space="preserve">
     <value>Оновлено з призначення {{id}}</value>
@@ -199,7 +199,7 @@
     <value>Архівовано</value>
   </data>
   <data name="AssignmentCloseWebMode" xml:space="preserve">
-    <value>Призначення {{id}} не можна закрити, оскільки для нього увімкнено веб-режим</value>
+    <value>Завдання {{id}} не можна закрити, оскільки воно у веб-режимі</value>
   </data>
   <data name="AssignmentHistory" xml:space="preserve">
     <value>Історія</value>
@@ -208,19 +208,19 @@
     <value>Ідентифікатор призначення</value>
   </data>
   <data name="AssignmentInfo" xml:space="preserve">
-    <value>Детальна інформація про призначення</value>
+    <value>Детальна інформація про завдання</value>
   </data>
   <data name="AssignmentsHeader" xml:space="preserve">
     <value>Завдання</value>
   </data>
   <data name="AssignmentSizeInWebMode" xml:space="preserve">
-    <value>Розмір не може бути змінений для веб-режиму Призначення.</value>
+    <value>Розмір не може бути змінений для завдання у веб-режимі.</value>
   </data>
   <data name="AssignmentsSelected" xml:space="preserve">
     <value>{{count}} Вибрано завдання</value>
   </data>
   <data name="AssignmentsSelected_other" xml:space="preserve">
-    <value>{{count}} Вибрано завдання</value>
+    <value>{{count}} Вибрано завдань</value>
   </data>
   <data name="AssignTo" xml:space="preserve">
     <value>Призначити на</value>
@@ -241,10 +241,10 @@
     <value>Налаштування аудіозапису для призначення {{id}}</value>
   </data>
   <data name="ChangeModeModalTitle" xml:space="preserve">
-    <value>Змінити режим для призначення {{assignmentId}}</value>
+    <value>Змінити режим для завдання{{assignmentId}}</value>
   </data>
   <data name="ChangeSizeModalTitle" xml:space="preserve">
-    <value>Редагувати розмір для присвоєння {{assignmentId}}</value>
+    <value>Редагувати розмір для завдання {{assignmentId}}</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Закрити</value>
@@ -259,16 +259,16 @@
     <value>Заповніть всі або деякі ідентифікаційні поля</value>
   </data>
   <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
-    <value>Виберіть відповідального (головний офіс, супервайзер або інтерв'юер) за це завдання</value>
+    <value>Виберіть відповідального (хедквотер, Супервізор або інтерв'юер) за це завдання</value>
   </data>
   <data name="CreateAssignmentWebModeExplanation" xml:space="preserve">
-    <value>Це призначення буде використовуватися у веб-режимі</value>
+    <value>Це завдання буде у веб-режимі</value>
   </data>
   <data name="CreatedAt" xml:space="preserve">
     <value>Створено на</value>
   </data>
   <data name="CreateInterview" xml:space="preserve">
-    <value>Почніть нове інтерв'ю</value>
+    <value>Почати нове інтерв'ю</value>
   </data>
   <data name="CreatingNewAssignment" xml:space="preserve">
     <value>Створити нове завдання для анкети {{questionnaire}}</value>
@@ -304,13 +304,13 @@
     <value>Введіть пароль</value>
   </data>
   <data name="ErrorToCreateAssignment" xml:space="preserve">
-    <value>Неможливо створити призначення. </value>
+    <value>Неможливо створити завдання. </value>
   </data>
   <data name="IdentifyingQuestions" xml:space="preserve">
-    <value>Визначальні питання</value>
+    <value>Ідентифікаційні питання</value>
   </data>
   <data name="InterviewsNeeded" xml:space="preserve">
-    <value>Необхідно пройти співбесіду</value>
+    <value>Необхідно пройти інтерв'ю</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>Електронна пошта невірна</value>
@@ -325,7 +325,7 @@
     <value>Розмір невірний</value>
   </data>
   <data name="InvalidSizeWithEmail" xml:space="preserve">
-    <value>Для завдань з вказаною електронною адресою дозволений розмір - 1</value>
+    <value>Для завдань з вказаною електронною адресою дозволений розмір 1</value>
   </data>
   <data name="IsAudioRecordingEnabled" xml:space="preserve">
     <value>Аудіозапис</value>
@@ -355,7 +355,7 @@
     <value>Пароль</value>
   </data>
   <data name="PasswordExplanation" xml:space="preserve">
-    <value>Для захисту призначення буде використано пароль</value>
+    <value>Для захисту завдання буде використано пароль</value>
   </data>
   <data name="PasswordInstructions" xml:space="preserve">
     <value>Щонайменше 6 цифр і великих літер або один символ '?' для генерації пароля</value>
@@ -364,7 +364,7 @@
     <value>Анкета</value>
   </data>
   <data name="QuestionnaireVersion" xml:space="preserve">
-    <value>Так. {{version}}</value>
+    <value>вер. {{version}}</value>
   </data>
   <data name="ReceivedByTablet" xml:space="preserve">
     <value>Отримано на планшет</value>
@@ -385,7 +385,7 @@
     <value>Виберіть існуючу анкету, з якої ви хочете оновити завдання</value>
   </data>
   <data name="SelectQuestionnaireToUpgradeFrom" xml:space="preserve">
-    <value>Виберіть опитувальник, з якого хочете оновитися</value>
+    <value>Виберіть анкету, з якої хочете оновитися</value>
   </data>
   <data name="SelectResponsible" xml:space="preserve">
     <value>Оберіть відповідального</value>
@@ -409,10 +409,10 @@
     <value>Повинно бути числом, -1 для необмеженої кількості, 1, якщо вказана електронна пошта</value>
   </data>
   <data name="StartWebInterview" xml:space="preserve">
-    <value>Почніть веб-інтерв'ю</value>
+    <value>Почати веб-інтерв'ю</value>
   </data>
   <data name="Stop" xml:space="preserve">
-    <value>Стоп!</value>
+    <value>Стоп</value>
   </data>
   <data name="Tooltip_Filter_ArchivedStatus" xml:space="preserve">
     <value>Індикатор того, чи є завдання активним або заархівованим.</value>
@@ -454,7 +454,7 @@
     <value>Користувач, який наразі відповідає за завдання. Натисніть на іконку сортування, щоб відсортувати ім'я користувача.</value>
   </data>
   <data name="Tooltip_Table_Size" xml:space="preserve">
-    <value>Максимальна кількість інтерв'ю, які можуть бути проведені для цього завдання. Клацніть на будь-яку клітинку, щоб змінити це число. Натисніть на іконку сортування, щоб відсортувати за розміром.</value>
+    <value>Максимальна кількість інтерв'ю, які можуть бути проведені для цього завдання. Натисніть на будь-яку клітинку, щоб змінити це число. Натисніть на іконку сортування, щоб відсортувати за розміром.</value>
   </data>
   <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">
     <value>Коли завдання було востаннє оновлено. Натисніть на іконку сортування, щоб відсортувати за часом.</value>
@@ -469,7 +469,7 @@
     <value>Необмежена</value>
   </data>
   <data name="UpdatedAt" xml:space="preserve">
-    <value>Оновлено на</value>
+    <value>Оновлено</value>
   </data>
   <data name="UpgradeBtn" xml:space="preserve">
     <value>Оновлення</value>
@@ -478,19 +478,19 @@
     <value>Оновлення зупинено</value>
   </data>
   <data name="UpgradeDescription" xml:space="preserve">
-    <value>Коли завдання підвищується, всі невиконані завдання будуть підвищені..</value>
+    <value>Коли завдання підвищується, всі невиконані завдання будуть оновлені.</value>
   </data>
   <data name="UpgradeDownloadFailed" xml:space="preserve">
     <value>Список завантажень</value>
   </data>
   <data name="UpgradeError" xml:space="preserve">
-    <value>Виникла помилка. Спробуйте пізніше..</value>
+    <value>Виникла помилка. Спробуйте пізніше.</value>
   </data>
   <data name="UpgradePreparation" xml:space="preserve">
     <value>Чекаємо на завершення інших оновлень </value>
   </data>
   <data name="UpgradeProgressDone" xml:space="preserve">
-    <value>Зроблено.</value>
+    <value>Зроблено</value>
   </data>
   <data name="UpgradeProgressDoneCount" xml:space="preserve">
     <value>Успішно оновлено: {{processed}}</value>
@@ -499,7 +499,7 @@
     <value>Оновлення з {{from}} до {{to}} завершено</value>
   </data>
   <data name="UpgradeProgressErrorCount" xml:space="preserve">
-    <value>Не модернізований: {{count}}</value>
+    <value>Не оновлено: {{count}}</value>
   </data>
   <data name="UpgradeProgressErrors" xml:space="preserve">
     <value>З помилками {{errorCount}}</value>
@@ -508,21 +508,21 @@
     <value>Оновлення {{processed}} з {{totalCount}}</value>
   </data>
   <data name="UpgradeProgressTitle" xml:space="preserve">
-    <value>Оновлення призначень з {{from}} на {{to}}</value>
+    <value>Оновлення завдань з {{from}} по {{to}}</value>
   </data>
   <data name="WebMode" xml:space="preserve">
     <value>Режим</value>
   </data>
   <data name="WebModeEnabledWarning" xml:space="preserve">
-    <value>Завдання не може бути завершено. Увімкнено веб-режим, тоді як в опитувальнику вимкнено режим веб-збору</value>
+    <value>Завдання не може бути завершено. Увімкнено веб-режим, тоді як в анкетивимкнено режим веб-збору</value>
   </data>
   <data name="WebModeNonInterviewer" xml:space="preserve">
     <value>Всі завдання для веб-інтерв'ю повинні бути надані інтерв'юеру</value>
   </data>
   <data name="WebModeReassignToNonInterviewer" xml:space="preserve">
-    <value>Ви перепризначаєте веб-завдання користувачеві, який не є ІНТЕРВ'ЮЕРОМ. Якщо ви вже надіслали посилання на це завдання, респонденти не зможуть відповісти на ваше опитування, доки завдання не буде повернуто користувачеві з роллю ІНТЕРВ'ЮЕР.</value>
+    <value>Ви перепризначаєте веб-завдання користувачеві, який не є ІНТЕРВ'ЮЕРОМ. Якщо ви вже надіслали посилання на це завдання, респонденти не зможуть відповісти на ваші анкети, доки завдання не буде повернуто користувачеві з роллю ІНТЕРВ'ЮЕР.</value>
   </data>
   <data name="WebModeReassignToNonInterviewer_other" xml:space="preserve">
-    <value>Ви перепризначаєте веб-завдання користувачеві, який не є ІНТЕРВ'ЮЕРОМ. Якщо ви вже розіслали посилання на ці завдання, респонденти не зможуть відповісти на ваше опитування, доки завдання не будуть повернуті користувачеві з роллю ІНТЕРВ'ЮЕР.</value>
+    <value>Ви перепризначаєте веб-завдання користувачеві, який не є ІНТЕРВ'ЮЕРОМ. Якщо ви вже розіслали посилання на ці завдання, респонденти не зможуть відповісти на ваші анкети, доки завдання не будуть повернуті користувачеві з роллю ІНТЕРВ'ЮЕР.</value>
   </data>
 </root>

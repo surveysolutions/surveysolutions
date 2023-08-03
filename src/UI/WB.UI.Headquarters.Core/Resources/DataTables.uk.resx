@@ -127,7 +127,7 @@
     <value>У таблиці немає даних</value>
   </data>
   <data name="Info" xml:space="preserve">
-    <value>Відображення від _ПОЧАТКУ_ до _КІНЦЯ_ _ВСЬОГО_ записів</value>
+    <value>Показано від _START_ до _END_ з _TOTAL_ записів</value>
   </data>
   <data name="InfoEmpty" xml:space="preserve">
     <value>Показано від 0 до 0 з 0 записів</value>
@@ -145,7 +145,7 @@
     <value>Завантаження...</value>
   </data>
   <data name="Paginate_First" xml:space="preserve">
-    <value>По-перше.</value>
+    <value>На першу</value>
   </data>
   <data name="Paginate_Last" xml:space="preserve">
     <value>Останній</value>
@@ -154,7 +154,7 @@
     <value>Далі</value>
   </data>
   <data name="Paginate_Previous" xml:space="preserve">
-    <value>Попередні</value>
+    <value>Попередня</value>
   </data>
   <data name="Processing" xml:space="preserve">
     <value>Обробка...</value>

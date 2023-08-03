@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AddNew" xml:space="preserve">
-    <value>Створити новий</value>
+    <value>Зробити новий</value>
   </data>
   <data name="AgreeToDelete" xml:space="preserve">
-    <value>Я розумію, що цю операцію не можна повернути назад</value>
+    <value>Я розумію, що ця операція не може бути скасована</value>
   </data>
   <data name="AssignedWorkspaces" xml:space="preserve">
     <value>Виберіть робочі області, до яких користувач має доступ</value>
@@ -130,37 +130,35 @@
     <value>Не можна змінити після створення</value>
   </data>
   <data name="CantDeleteExplanation" xml:space="preserve">
-    <value>Робочу область не можна видалити. З цим робочим простором пов'язана принаймні одна анкета. Видаляти можна тільки робочі області без анкет.</value>
+    <value>Робочий простір не можна видалити. З цим робочим простором пов'язана хоча б одна анкета. Видаляти можна тільки робочі області без анкет.</value>
   </data>
   <data name="CreateWorkspace" xml:space="preserve">
     <value>Створення робочого простору</value>
   </data>
   <data name="CurrentWorkspace" xml:space="preserve">
-    <value>Поточний робочий простір</value>
+    <value>Поточна робочий простір</value>
   </data>
   <data name="DeleteExplanation" xml:space="preserve">
-    <value>Ви впевнені, що хочете видалити робочу область &lt;strong&gt;{{name}}&lt;/strong&gt;?
-Усі облікові записи користувачів, підключені до цієї робочої області, буде видалено з неї. Програми Survey Solutions Interviewer і Supervisor, встановлені на планшетах цих користувачів, більше не зможуть взаємодіяти з цією робочою областю, а дані, зібрані в цій робочій області, буде втрачено. 
-
-Наступні дані, пов'язані з цією робочою областю, будуть видалені:</value>
+    <value>Ви впевнені, що хочете видалити робочий простір &lt;strong&gt;{{name}}&lt;/strong&gt;?
+Усі облікові записи користувачів, підключені до цієї робочої області, буде видалено з неї. Програми Survey Solutions Interviewer і Supervisor, встановлені на планшетах цих користувачів, більше не зможуть взаємодіяти з цією робочою областю, а дані, зібрані в цій робочій області, будуть втрачені. Наступні дані, пов'язані з цією робочою областю, буде видалено:</value>
   </data>
   <data name="DeleteWorkspacePopupTitle" xml:space="preserve">
-    <value>Видалити робочу область "{{name}}"</value>
+    <value>Видалити робочий простір "{{name}}"</value>
   </data>
   <data name="Disable" xml:space="preserve">
     <value>Вимкнути</value>
   </data>
   <data name="DisableExplanation" xml:space="preserve">
-    <value>Вимкнення робочої області зупинить доступ до неї для всіх користувачів. Це зупинить усі процеси збору даних, які можуть бути в процесі.</value>
+    <value>Вимкнення робочого простору зупинить доступ до нього для всіх користувачів. Це також зупинить збір даних, який може бути у процесі.</value>
   </data>
   <data name="DisableWorkspacePopupTitle" xml:space="preserve">
-    <value>Підтвердіть вимкнення "{{name}}"</value>
+    <value>Підтвердити вимкнення "{{name}}"</value>
   </data>
   <data name="DisplayName" xml:space="preserve">
-    <value>Відображати ім'я</value>
+    <value>Ім'я для відображення</value>
   </data>
   <data name="DisplayNameHelpText" xml:space="preserve">
-    <value>Використовується для відображення робочого простору в меню. Намагайтеся вибирати коротші назви</value>
+    <value>Використовується для відображення робочого простору у меню. Намагайтеся вибирати коротші імена</value>
   </data>
   <data name="DisplayNameRequired" xml:space="preserve">
     <value>Потрібне ім'я для відображення</value>
@@ -169,7 +167,7 @@
     <value>Редагувати</value>
   </data>
   <data name="EditWorkspace" xml:space="preserve">
-    <value>Редагування робочої області "{{name}}"</value>
+    <value>Редагувати робочу область "{{name}}"</value>
   </data>
   <data name="Enable" xml:space="preserve">
     <value>Увімкнути</value>
@@ -178,48 +176,48 @@
     <value>Інтерв'юери: {{count}}</value>
   </data>
   <data name="InvalidName" xml:space="preserve">
-    <value>Допускаються тільки цифри та малі літери</value>
+    <value>Дозволені лише цифри та малі літери</value>
   </data>
   <data name="MapsCount" xml:space="preserve">
-    <value>Завантажив карти: {{count}}</value>
+    <value>Завантажені карти: {{count}}</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Ім'я</value>
   </data>
   <data name="NameRequired" xml:space="preserve">
-    <value>Ім'я обов'язкове</value>
+    <value>Ім'я є обов'язковим</value>
   </data>
   <data name="NameShouldBeUnique" xml:space="preserve">
-    <value>Ім'я має бути унікальним</value>
+    <value>Назва має бути унікальною</value>
   </data>
   <data name="NameShouldNotBeOneOfForbidden" xml:space="preserve">
-    <value>Вказання назви робочого простору не допускається</value>
+    <value>Надана назва робочого простору не допускається</value>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>Відкрито</value>
+    <value>Відкрити</value>
   </data>
   <data name="SupervisorsCount" xml:space="preserve">
-    <value>Наглядачі: {{count}}</value>
+    <value>Супервізори: {{count}}</value>
   </data>
   <data name="UserWorkspacesTab" xml:space="preserve">
-    <value>Робочі місця</value>
+    <value>Робочі простори</value>
   </data>
   <data name="WorkspaceAccessDisabledReason" xml:space="preserve">
     <value>Ваш обліковий запис знаходиться в робочій області, відключеній системним адміністратором, і, як наслідок, ви не можете користуватися функціоналом цього сайту. Якщо ви вважаєте, що це помилка, зверніться до адміністратора вашого сервера.</value>
   </data>
   <data name="WorkspaceCantBeRemoved" xml:space="preserve">
-    <value>Робочий простір не може бути видалений, оскільки користувач призначив роботу. Перепризначити всі завдання (включаючи архівні), незавершені інтерв'ю, а для Супервайзера перемістити всіх членів команди в іншу команду. Інтерв'ю: {0}, Завдання: {1}, Члени команди: {2}</value>
+    <value>Робочий простір не може бути видалений, оскільки користувач призначив роботу. Перепризначте всі завдання (включаючи архівні), незавершені інтерв'ю, а для Супервізора перемістіть всіх членів команди в іншу команду. Інтерв'ю: {0}, Завдання: {1}, Члени команди: {2}</value>
   </data>
   <data name="WorkspaceDisabledReason" xml:space="preserve">
-    <value>Робоча область відключена, доступ до неї неможливий. Якщо ви вважаєте, що це помилка, зверніться до адміністратора вашого сервера.</value>
+    <value>Робочий простір вимкнено, доступ до нього неможливий. Якщо ви вважаєте, що це помилка, зверніться до адміністратора вашого сервера.</value>
   </data>
   <data name="WorkspaceSettings" xml:space="preserve">
     <value>Налаштування</value>
   </data>
   <data name="WorkspacesSubtitle" xml:space="preserve">
-    <value>Кожна робоча зона містить окремі анкети, інтерв'ю та завдання.</value>
+    <value>Кожна робоча область має окремі анкети, інтерв'ю та завдання.</value>
   </data>
   <data name="WorkspacesUpdated" xml:space="preserve">
-    <value>Оновлений список робочих місць</value>
+    <value>Оновлений список робочих просторів</value>
   </data>
 </root>

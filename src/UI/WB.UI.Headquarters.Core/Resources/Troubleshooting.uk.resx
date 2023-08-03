@@ -124,7 +124,7 @@
     <value>Інтерв'юер стверджує, що інтерв'ю було завершено і синхронізовано, але я не бачу даних про це інтерв'ю на сервері</value>
   </data>
   <data name="MissingCensusInterviews_Filters_Dates" xml:space="preserve">
-    <value>Пошукові інтерв'ю, синхронізовані між двома датами</value>
+    <value>Пошукайте інтерв'ю, синхронізовані між двома датами</value>
   </data>
   <data name="MissingCensusInterviews_Filters_DatesPlaceholder" xml:space="preserve">
     <value>Виберіть дати</value>
@@ -161,13 +161,13 @@
     <value>Одне інтерв'ю задовольняє умовам фільтрації</value>
   </data>
   <data name="MissingCensusInterviews_PageHeader" xml:space="preserve">
-    <value>Визначення місця проведення конкретного інтерв'ю</value>
+    <value>Знаходження конкретного інтерв'ю</value>
   </data>
   <data name="MissingCensusInterviewsDescription" xml:space="preserve">
     <value>Вкажіть логін інтерв'юера, назву анкети та діапазон дат</value>
   </data>
   <data name="MissingCensusInterviewsTitle" xml:space="preserve">
-    <value>Мені потрібно знайти місце для співбесіди</value>
+    <value>Мені потрібно знайти місце для інтерв'ю</value>
   </data>
   <data name="NoData_Description" xml:space="preserve">
     <value>Вкажіть ключ інтерв'ю (XX-XX-XX-XX) або ідентифікатор інтерв'ю для пошуку.</value>
@@ -182,7 +182,7 @@
     <value>Я не бачу даних для синхронізованого інтерв'ю на сервері</value>
   </data>
   <data name="SupportSite" xml:space="preserve">
-    <value>Клацніть на посилання проблеми, яку ви хочете вирішити. Для вирішення проблем, не перелічених нижче, відвідайте сайт підтримки Survey Solutions &lt;a href="{0}" target="_blank"&gt;сайт підтримки&lt;/a&gt;..</value>
+    <value>Клацніть на посилання проблеми, яку ви хочете вирішити. Для вирішення проблем, не перелічених нижче, відвідайте сайт підтримки Survey Solutions &lt;a href="{0}" target="_blank"&gt;сайт підтримки&lt;/a&gt;.</value>
   </data>
   <data name="TableTitle_Enumerator" xml:space="preserve">
     <value>Переписувач</value>
@@ -197,6 +197,6 @@
     <value>Статус</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Усунення несправностей</value>
+    <value>Вирішення проблем</value>
   </data>
 </root>

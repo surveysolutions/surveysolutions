@@ -130,13 +130,13 @@
     <value>Будь ласка, призначте папку для анкети "{0}"</value>
   </data>
   <data name="Assigning" xml:space="preserve">
-    <value>Присвоєння</value>
+    <value>Призначення</value>
   </data>
   <data name="BackToList" xml:space="preserve">
     <value>Повернутися до списку</value>
   </data>
   <data name="Backup" xml:space="preserve">
-    <value>Резервне копіювання.</value>
+    <value>Резервне копіювання</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Скасувати</value>
@@ -163,7 +163,7 @@
     <value>Панель керування</value>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Зрозумів.</value>
+    <value>Скопіювати</value>
   </data>
   <data name="CopyQuestionnaire" xml:space="preserve">
     <value>Копія анкети</value>
@@ -211,13 +211,13 @@
     <value>Цей список не містить жодного запису</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Помилка.</value>
+    <value>Помилка</value>
   </data>
   <data name="ErrorDescription" xml:space="preserve">
     <value>Під час обробки вашого запиту сталася помилка</value>
   </data>
   <data name="ExcelOrTabFilesOnly" xml:space="preserve">
-    <value>Приймаються лише файли значень у форматі Excel або з розділеними табуляціями</value>
+    <value>Приймаються лише файли значень у форматі Excel або з табуляціями</value>
   </data>
   <data name="ExportAsHtml" xml:space="preserve">
     <value>Експорт як Html</value>
@@ -238,7 +238,7 @@
     <value>Ви не маєте дозволу на редагування цієї анкети</value>
   </data>
   <data name="ForbiddenDelete" xml:space="preserve">
-    <value>Ви не маєте права видаляти цю анкету.</value>
+    <value>Ви не маєте дозволу видаляти цю анкету.</value>
   </data>
   <data name="ForbiddenRevert" xml:space="preserve">
     <value>Ви не маєте дозволу на відновлення роботи для цієї анкети.</value>
@@ -259,10 +259,10 @@
     <value>Ініціалізація</value>
   </data>
   <data name="LastModified" xml:space="preserve">
-    <value>Змінено на</value>
+    <value>Змінено о</value>
   </data>
   <data name="Location" xml:space="preserve">
-    <value>Місцезнаходження:  </value>
+    <value>Місцезнаходження: </value>
   </data>
   <data name="ManageUsers" xml:space="preserve">
     <value>Керування користувачами</value>
@@ -280,10 +280,10 @@
     <value>Ви використовуєте браузер Internet Explorer, який не підтримується. Деякі функції можуть не працювати належним чином.</value>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>Відкрито</value>
+    <value>Відкрити</value>
   </data>
   <data name="PublicQuestionnaires" xml:space="preserve">
-    <value>Публічні опитування</value>
+    <value>Публічні анкети</value>
   </data>
   <data name="QuestionnaireTitle" xml:space="preserve">
     <value>Назва анкети</value>
@@ -301,16 +301,16 @@
     <value>Відновити документ анкети (старий)</value>
   </data>
   <data name="RetryExportPDF" xml:space="preserve">
-    <value>Повторіть спробу експорту в PDF</value>
+    <value>Повторити спробу експорту в PDF</value>
   </data>
   <data name="SaveAs" xml:space="preserve">
     <value>Зберегти як</value>
   </data>
   <data name="SelectTabFile" xml:space="preserve">
-    <value>Виберіть файл значень з розділеними табуляціями для завантаження, будь ласка</value>
+    <value>Виберіть файл значень з табуляціями для завантаження, будь ласка</value>
   </data>
   <data name="SharedQuestionnaires" xml:space="preserve">
-    <value>Анкети, якими поділилися зі мною</value>
+    <value>Анкети у спільному доступі зі мною</value>
   </data>
   <data name="SuccessDeleteMessage" xml:space="preserve">
     <value>Анкету "{0}" успішно видалено</value>

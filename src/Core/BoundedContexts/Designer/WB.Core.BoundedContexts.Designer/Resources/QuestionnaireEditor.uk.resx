@@ -124,7 +124,7 @@
     <value>Багатоточковий</value>
   </data>
   <data name="GeometryTypePoint" xml:space="preserve">
-    <value>Точка.</value>
+    <value>Точка</value>
   </data>
   <data name="GeometryTypePolygon" xml:space="preserve">
     <value>Полігон</value>
@@ -136,16 +136,16 @@
     <value>Новий розділ</value>
   </data>
   <data name="QuestionScopeHidden" xml:space="preserve">
-    <value>Приховано</value>
+    <value>Приховане</value>
   </data>
   <data name="QuestionScopeIdentifying" xml:space="preserve">
-    <value>Ідентифікація</value>
+    <value>Ідентифікуюче</value>
   </data>
   <data name="QuestionScopeInterviewer" xml:space="preserve">
-    <value>Інтерв'юер</value>
+    <value>Інтерв'юеру</value>
   </data>
   <data name="QuestionScopeSupervisor" xml:space="preserve">
-    <value>Наглядач</value>
+    <value>Супервізору</value>
   </data>
   <data name="QuestionTypeArea" xml:space="preserve">
     <value>Площа</value>
@@ -169,7 +169,7 @@
     <value>Список</value>
   </data>
   <data name="QuestionTypeMultiSelect" xml:space="preserve">
-    <value>Категорично: Мульти-вибір</value>
+    <value>Категоричне: мульти-вибір</value>
   </data>
   <data name="QuestionTypeNumeric" xml:space="preserve">
     <value>Числовий</value>

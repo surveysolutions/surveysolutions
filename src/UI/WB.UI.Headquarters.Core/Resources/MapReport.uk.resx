@@ -124,7 +124,7 @@
     <value>деталі</value>
   </data>
   <data name="MapReportTitle" xml:space="preserve">
-    <value>Звіт про мапу</value>
+    <value>Звіт на мапі</value>
   </data>
   <data name="NoGpsQuestionsByQuestionnaire" xml:space="preserve">
     <value>У вибраній анкеті немає запитань типу GPS</value>
@@ -133,7 +133,7 @@
     <value>Не всі маркери були завантажені для поточного рівня масштабування. Будь ласка, збільште масштаб і перезавантажте маркери.</value>
   </data>
   <data name="ReloadMarkers" xml:space="preserve">
-    <value>Маркери перезавантаження</value>
+    <value>Перезавантажити маркери</value>
   </data>
   <data name="ViewInterviewContent" xml:space="preserve">
     <value>Переглянути деталі інтерв'ю</value>

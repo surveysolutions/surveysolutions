@@ -127,28 +127,28 @@
     <value>Не вдалося оновити інформацію про користувача, оскільки у вас немає дозволу на цю операцію.</value>
   </data>
   <data name="ObserverCreatedFormat" xml:space="preserve">
-    <value>Користувача-спостерігача &lt;b&gt;{0}&lt;/b&gt; успішно створено.</value>
+    <value>Спостерігач &lt;b&gt;{0}&lt;/b&gt; успішно створений.</value>
   </data>
   <data name="QuestionnaireClonedAndRenamedFormat" xml:space="preserve">
-    <value>Опитування '{0}' успішно скопійовано з новою назвою '{1}'.</value>
+    <value>Анкети '{0}' успішно скопійовано з новою назвою '{1}'.</value>
   </data>
   <data name="QuestionnaireClonedFormat" xml:space="preserve">
-    <value>Опитувальник '{0}' успішно скопійовано.</value>
+    <value>Анкета '{0}' успішно скопійовано.</value>
   </data>
   <data name="QuestionnaireNotFoundFormat" xml:space="preserve">
-    <value>Опитувальник з ідентифікатором {0} та версією {1} не знайдено.</value>
+    <value>Анкета з ідентифікатором {0} та версією {1} не знайдено.</value>
   </data>
   <data name="SuccessfullyCreatedFormat" xml:space="preserve">
     <value>Супервізор &lt;b&gt;{0}&lt;/b&gt; успішно створено.</value>
   </data>
   <data name="SupervisorNotFound" xml:space="preserve">
-    <value>Може створити інтерв'юера. Вибраного керівника не існує</value>
+    <value>Може створити інтерв'юера. Вибраного супервізора не існує</value>
   </data>
   <data name="UserNotExists" xml:space="preserve">
     <value>Не вдалося оновити інформацію про користувача, оскільки він не існує</value>
   </data>
   <data name="UserWasCreatedFormat" xml:space="preserve">
-    <value>Успішно створено користувача Headquarters {0}..</value>
+    <value>Успішно створено користувача Headquarters {0}.</value>
   </data>
   <data name="UserWasUpdatedFormat" xml:space="preserve">
     <value>Інформацію про &lt;b&gt;{0}&lt;/b&gt; успішно оновлено</value>

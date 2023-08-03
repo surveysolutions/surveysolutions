@@ -121,13 +121,13 @@
     <value>Активні інтерв'юери</value>
   </data>
   <data name="ActiveSupervisors" xml:space="preserve">
-    <value>Активні супервайзери</value>
+    <value>Активні супервізори</value>
   </data>
   <data name="ArchivedInterviewers" xml:space="preserve">
     <value>архівні інтерв'юери</value>
   </data>
   <data name="ArchivedSupervisors" xml:space="preserve">
-    <value>Архівовані супервайзери</value>
+    <value>Архівовані супервізори</value>
   </data>
   <data name="CreationDate" xml:space="preserve">
     <value>Дата створення</value>
@@ -151,6 +151,6 @@
     <value>Інтерв'ю з інтерв'юером(ами) будуть розархівовані.</value>
   </data>
   <data name="UnarchiveSupervisorWarning" xml:space="preserve">
-    <value>Супервайзер(и) будуть розархівовані.</value>
+    <value>Супервізор(и) будуть розархівовані.</value>
   </data>
 </root>

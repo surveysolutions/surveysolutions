@@ -124,7 +124,7 @@
     <value>Фіксований набір елементів</value>
   </data>
   <data name="RosterType_List" xml:space="preserve">
-    <value>Перелічіть питання</value>
+    <value>Питання список</value>
   </data>
   <data name="RosterType_Multi" xml:space="preserve">
     <value>Питання з множинним вибором</value>

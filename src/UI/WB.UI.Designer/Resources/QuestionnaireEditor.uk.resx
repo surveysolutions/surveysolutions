@@ -169,7 +169,7 @@
     <value>Обмін посиланнями</value>
   </data>
   <data name="AreYouSure" xml:space="preserve">
-    <value>Ти впевнений.?</value>
+    <value>Ви впевнені?</value>
   </data>
   <data name="AttachmentDimensionsAreTooBig" xml:space="preserve">
     <value>Розміри занадто великі</value>
@@ -229,7 +229,7 @@
     <value>Банк запитань. Класифікації</value>
   </data>
   <data name="ClassificationTitle" xml:space="preserve">
-    <value>Класифікаційна назва</value>
+    <value>Назва класифікації</value>
   </data>
   <data name="ClickHere" xml:space="preserve">
     <value>натисніть тут</value>
@@ -244,25 +244,25 @@
     <value>Співробітники</value>
   </data>
   <data name="CommentEditorResolve" xml:space="preserve">
-    <value>Вирішуй.</value>
+    <value>Вирішити</value>
   </data>
   <data name="CommunicationError" xml:space="preserve">
     <value>Помилка мережі</value>
   </data>
   <data name="CompilationErrorsCounter" xml:space="preserve">
-    <value>{{count}} знайдено помилку</value>
+    <value>знайдено {{count}} помилку</value>
   </data>
   <data name="CompilationErrorsCounter_plural" xml:space="preserve">
-    <value>{{count}} знайдено помилки</value>
+    <value>знайдено {{count}} помилок</value>
   </data>
   <data name="CompilationLabel" xml:space="preserve">
     <value>Компіляція:</value>
   </data>
   <data name="CompilationWarningsCounter" xml:space="preserve">
-    <value>{{count}} знайдено попередження</value>
+    <value>знайдено {{count}} попередження</value>
   </data>
   <data name="CompilationWarningsCounter_plural" xml:space="preserve">
-    <value>{{count}} знайдено попереджень</value>
+    <value>знайдено {{count}} попереджень</value>
   </data>
   <data name="Compile" xml:space="preserve">
     <value>Скомпілювати</value>
@@ -271,7 +271,7 @@
     <value>Умова або каскадні залежні елементи можуть бути порушені</value>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Зрозумів.</value>
+    <value>Скопіювати</value>
   </data>
   <data name="CopyLink" xml:space="preserve">
     <value>Скопіювати посилання</value>
@@ -280,7 +280,7 @@
     <value>Скопіювати на</value>
   </data>
   <data name="CustomRosterTitle" xml:space="preserve">
-    <value>Власна назва</value>
+    <value>Спеціальна назва</value>
   </data>
   <data name="DataChangesReverted" xml:space="preserve">
     <value>Зміни даних скасовано</value>
@@ -346,7 +346,7 @@
     <value>можна знайти на панелі {{-settingsBtn}} (верхній правий кут)</value>
   </data>
   <data name="EnablingCondition" xml:space="preserve">
-    <value>Умова, що дозволяє</value>
+    <value>Умова включення</value>
   </data>
   <data name="EnteredMoreThanAllowed" xml:space="preserve">
     <value>Ви ввели більше, ніж дозволено {{max}}</value>
@@ -382,34 +382,34 @@
     <value>Зроблено.</value>
   </data>
   <data name="FindReplaceFindAll" xml:space="preserve">
-    <value>Знайти все</value>
+    <value>Знайти всі</value>
   </data>
   <data name="FindReplaceFindWhat" xml:space="preserve">
     <value>Знайти що:</value>
   </data>
   <data name="FindReplaceInAll" xml:space="preserve">
-    <value>Усе.</value>
+    <value>Усі</value>
   </data>
   <data name="FindReplaceInAllFound" xml:space="preserve">
     <value>в {{count}} знайдена сутність?</value>
   </data>
   <data name="FindReplaceInAllFound_plural" xml:space="preserve">
-    <value>в {{count}} знайдено сутностей?</value>
+    <value>в {{count}} знайдених сутностей?</value>
   </data>
   <data name="FindReplaceMatchCase" xml:space="preserve">
-    <value>Відповідний регістр</value>
+    <value>Відповідно регістру</value>
   </data>
   <data name="FindReplaceMatchingLines" xml:space="preserve">
-    <value>Збігаються лінії: {{count}}</value>
+    <value>Збігаються рядкі: {{count}}</value>
   </data>
   <data name="FindReplaceMatchWord" xml:space="preserve">
-    <value>Зіставлення цілого слова</value>
+    <value>Збіг цілого слова</value>
   </data>
   <data name="FindReplaceNext" xml:space="preserve">
     <value>Далі</value>
   </data>
   <data name="FindReplacePrevious" xml:space="preserve">
-    <value>Попередні</value>
+    <value>Назад</value>
   </data>
   <data name="FindReplaceReplaceAll" xml:space="preserve">
     <value>Замінити все ({{count}})</value>
@@ -427,7 +427,7 @@
     <value>Знайти та замінити</value>
   </data>
   <data name="FindReplaceUseRegex" xml:space="preserve">
-    <value>Використовуйте регулярний вираз</value>
+    <value>Застосувати регулярний вираз</value>
   </data>
   <data name="FindReplaceWereReplaced" xml:space="preserve">
     <value>були замінені на</value>
@@ -442,16 +442,16 @@
     <value>Форум</value>
   </data>
   <data name="GeneratePdf" xml:space="preserve">
-    <value>Згенерувати pdf</value>
+    <value>Згенерувати PDF</value>
   </data>
   <data name="GeographyInputModeAutomatic" xml:space="preserve">
-    <value>Автоматично</value>
+    <value>Автоматичне</value>
   </data>
   <data name="GeographyInputModeManual" xml:space="preserve">
-    <value>Посібник</value>
+    <value>Ручне</value>
   </data>
   <data name="GeographyInputModeSemiautomatic" xml:space="preserve">
-    <value>Напівавтомат</value>
+    <value>Напівавтоматичне</value>
   </data>
   <data name="GeometryInputMode" xml:space="preserve">
     <value>Режим введення</value>
@@ -469,7 +469,7 @@
       <value>Привіт, {{currentUserName}}</value>
   </data>
   <data name="Help" xml:space="preserve">
-    <value>Допоможіть!</value>
+    <value>Допомога</value>
   </data>
   <data name="HelpAttachmentName" xml:space="preserve">
     <value>Ім'я вкладеного файлу, який буде відображено.</value>
@@ -496,19 +496,19 @@
     <value>Кількість елементів визначає розмір списку. Кожен елемент списку відповідає заголовку рядка списку. Кожен елемент списку повинен бути розміщений в окремому рядку.</value>
   </data>
   <data name="HelpHideIfDisabled" xml:space="preserve">
-    <value>За замовчуванням, вимкнений елемент позначено сірим кольором. Увімкнувши цю опцію, ви приховаєте вимкнене запитання або розділ на планшеті.</value>
+    <value>За замовчуванням, вимкнений елемент позначено сірим кольором. Увімкнувши цю опцію, ви приховаєте вимкнене запитання або розділ.</value>
   </data>
   <data name="HelpHideInstructions" xml:space="preserve">
-    <value>За замовчуванням на планшеті відображається текст інструкції. Якщо позначити цю опцію, буде показано лише перший рядок інструкції. Якщо натиснути на цей рядок, буде показано повний текст.</value>
+    <value>За замовчуванням відображається текст інструкції. Якщо позначити цю опцію, буде показано лише перший рядок інструкції. Якщо натиснути на цей рядок, буде показано повний текст.</value>
   </data>
   <data name="HelpInstruction" xml:space="preserve">
     <value>Текст інструкції, який буде прикріплений до запитання.</value>
   </data>
   <data name="HelpIsTimestamp" xml:space="preserve">
-    <value>Ця опція дозволяє користувачеві проставляти поточний час на планшеті</value>
+    <value>Ця опція дозволяє користувачеві проставляти поточний час</value>
   </data>
   <data name="HelpMask" xml:space="preserve">
-    <value>Форматований запис для алфавітно-цифрових значень: номери телефонів, ідентифікаційні коди тощо. Приклади: "~" - буквений символ (A-Z,a-z), "#" - цифровий символ (0-9), "*" - буквено-цифровий символ (A-Z,a-z,0-9). "##/##/####" - дата, "(###) ###-####" - номер телефону, "AA####" - номер рейсу American AirLines або "~*-###-~###"</value>
+    <value>Форматований запис для алфавітно-цифрових значень: номери телефонів, ідентифікаційні коди тощо. Приклади: "~" - буквений символ (A-Z,a-z), "#" - цифровий символ (0-9), "*" - буквено-цифровий символ (A-Z,a-z,0-9). "##/##/####" - дата, "(###) ###-####" - номер телефону, "AA####" - номер рейсу American Airlines або "~*-###-~###"</value>
   </data>
   <data name="HelpNewComment" xml:space="preserve">
     <value>Додати коментар</value>
@@ -520,15 +520,15 @@
     <value>Числовий цілочисельний код категорії (невидимий для інтерв'юера)</value>
   </data>
   <data name="HelpOverlapDetection" xml:space="preserve">
-    <value>Відображати та виділяти збіги відповідей на це запитання з відповідями на ті самі запитання в екземплярах реєстру братів і сестер</value>
+    <value>Відображати та виділяти збіги відповідей на це запитання з відповідями на ті самі запитання в екземплярах ростеру братів і сестер</value>
   </data>
   <data name="HelpQuestionnaireVarible" xml:space="preserve">
-    <value>Змінна анкети використовується як префікс при формуванні імен для експортних файлів. Імена змінних та ідентифікатори реєстру можуть мати довжину від {{minLength}} до {{maxLength}} символів і повинні містити лише такі символи: a-z, A-Z, _ або 0-9. Перший символ не може бути 0-9 або _, а останній не може бути _..</value>
+    <value>Змінна анкети використовується як префікс при формуванні імен для експортних файлів. Імена змінних та ідентифікатори ростеру можуть мати довжину від {{minLength}} до {{maxLength}} символів і повинні містити лише такі символи: a-z, A-Z, _ або 0-9. Перший символ не може бути 0-9 або _, а останній не може бути _..</value>
   </data>
   <data name="HelpRosterDisplayMode" xml:space="preserve">
-    <value>Підрозділ - питання реєстру відображаються за кнопками, що відповідають екземплярам реєстру.
-Розділ - питання реєстру відображаються на одному рівні, розділені заголовками, що відповідають екземплярам реєстру.
-Таблиця - питання реєстру відображаються на одному рівні, як рядки і стовпці таблиці. 
+    <value>Підрозділ - питання ростеру відображаються за кнопками, що відповідають екземплярам ростеру.
+Розділ - питання ростеру відображаються на одному рівні, розділені заголовками, що відповідають екземплярам ростеру.
+Таблиця - питання ростеру відображаються на одному рівні, як рядки і стовпці таблиці. 
 Матриця - категоричне питання списку відображається у вигляді матриці. 
 Табличний і матричний режими підтримуються тільки у веб-опитуванні, планшет повертається в режим "Підрозділ.</value>
   </data>
@@ -539,7 +539,7 @@
     <value>Назви рядків.</value>
   </data>
   <data name="HelpUseFormatting" xml:space="preserve">
-    <value>Якщо ця опція встановлена, числове поле на планшеті буде відформатовано як: d,ddd,ddd.dd, де "d" - це цифри (0-9), "," (кома) - роздільник тисяч, а "." (крапка) - символ десяткової крапки.  Роздільник тисяч і символ десяткової крапки можуть відрізнятися для планшетів з різними культурами.</value>
+    <value>Якщо ця опція встановлена, числове поле на планшеті буде відформатовано як: d,ddd,ddd.dd, де "d" - це цифри (0-9), "," (кома) - роздільник тисяч, а "." (крапка) - символ десяткової крапки. Роздільник тисяч і символ десяткової крапки можуть відрізнятися для планшетів з різними культурами.</value>
   </data>
   <data name="HelpValidationExpression" xml:space="preserve">
     <value>Логічний вираз, який підтверджує відповідь на поточне запитання. Може включати значення інших запитань.</value>
@@ -554,11 +554,11 @@
     <value>Текст довжиною до {{maxLength}} символів, який буде приєднано до експортованої змінної.</value>
   </data>
   <data name="HelpVariableName" xml:space="preserve">
-    <value>Імена змінних та ідентифікатори списків можуть мати довжину від {{minLength}} до {{maxLength}} символів і повинні містити лише такі символи: a-z, A-Z, _ або 0-9. Перший символ не може бути 0-9 або _, а останній не може бути _..</value>
+    <value>Імена змінних та ідентифікатори ростерів можуть мати довжину від {{minLength}} до {{maxLength}} символів і повинні містити лише такі символи: a-z, A-Z, _ або 0-9. Перший символ не може бути 0-9 або _, а останній не може бути _..</value>
   </data>
   <data name="HelpVirtualCoverPage" xml:space="preserve">
     <value>Обкладинка - це віртуальний розділ, який показує всі ідентифікаційні питання.
- Питання не можуть бути змінені в цьому розділі</value>
+Питання не можуть бути змінені в цьому розділі</value>
   </data>
   <data name="HideIfDisabled" xml:space="preserve">
     <value>Приховати, якщо вимкнено</value>
@@ -597,22 +597,22 @@
     <value>Закрити панель перекладів</value>
   </data>
   <data name="HotkeysFocusTitle" xml:space="preserve">
-    <value>Сфокусувати поле заголовка в редакторі</value>
+    <value>Сфокусуйте поле заголовка в редакторі</value>
   </data>
   <data name="HotkeysFocusTree" xml:space="preserve">
-    <value>Дерево фокус-опитувальників</value>
+    <value>Сфокусуйте дерево анкет</value>
   </data>
   <data name="HotkeysHideAttachments" xml:space="preserve">
-    <value>Закрийте панель вкладень</value>
+    <value>Закрити панель вкладень</value>
   </data>
   <data name="HotkeysHideSections" xml:space="preserve">
     <value>Закрити розділи</value>
   </data>
   <data name="HotkeysNavigateToPrevSibling" xml:space="preserve">
-    <value>Перейти до попереднього брата або сестри</value>
+    <value>Перейти до попереднього сусіда</value>
   </data>
   <data name="HotkeysNavigateToSibling" xml:space="preserve">
-    <value>Перейти до наступного брата або сестри</value>
+    <value>Перейти до наступного сусіда</value>
   </data>
   <data name="HotkeysOpenItem" xml:space="preserve">
     <value>Відкрити елемент у редакторі</value>
@@ -621,7 +621,7 @@
     <value>Відкрити розділ</value>
   </data>
   <data name="HotkeysPrint" xml:space="preserve">
-    <value>Друк</value>
+    <value>Друкувати</value>
   </data>
   <data name="HotkeysSearch" xml:space="preserve">
     <value>Пошук підрозділів та запитань у розділі</value>
@@ -633,7 +633,7 @@
     <value>Показати / приховати це меню довідки</value>
   </data>
   <data name="IncorrectRosterTitle" xml:space="preserve">
-    <value>Некоректне запитання щодо назви реєстру</value>
+    <value>Некоректне запитання щодо назви ростеру</value>
   </data>
   <data name="Initializing" xml:space="preserve">
     <value>Ініціалізація</value>
@@ -648,7 +648,7 @@
     <value>Перейти до редагування</value>
   </data>
   <data name="LogOut" xml:space="preserve">
-    <value>Вийдіть з системи</value>
+    <value>Вийти з системи</value>
   </data>
   <data name="MakeOwnerConfirmationMessage" xml:space="preserve">
     <value>Якщо ви передасте право власності, новий власник отримає відповідне повідомлення. Можливо, ви більше не зможете змінювати налаштування прав власності, а новий власник також може забрати ваш доступ.</value>
@@ -669,10 +669,10 @@
     <value>Інформація</value>
   </data>
   <data name="MoveTo" xml:space="preserve">
-    <value>Перейдіть до</value>
+    <value>Перенести до</value>
   </data>
   <data name="MoveToAnotherSubSection" xml:space="preserve">
-    <value>Перейдіть до іншого розділу:</value>
+    <value>Перенести до іншого розділу:</value>
   </data>
   <data name="MultipleDependencies" xml:space="preserve">
     <value>Одне або декілька питань/підрозділів залежать від</value>
@@ -681,32 +681,31 @@
     <value>Мої класифікації</value>
   </data>
   <data name="NewItem" xml:space="preserve">
-    <value>Новий пункт</value>
+    <value>Новий елемент</value>
   </data>
   <data name="NoPermissions" xml:space="preserve">
-    <value>Ви не маєте прав на зміну цієї анкети</value>
+    <value>Ви не маєте дозволу на зміну цієї анкети</value>
   </data>
   <data name="NotAnImage" xml:space="preserve">
     <value>Вибраний файл не є зображенням</value>
   </data>
   <data name="NothingFound" xml:space="preserve">
-    <value>Нічого не знайдено.</value>
+    <value>Нічого не знайдено</value>
   </data>
   <data name="NotSupportedAttachment" xml:space="preserve">
     <value>Вибраний файл не підтримується як вкладення</value>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>ГАРАЗД.</value>
+    <value>Гаразд</value>
   </data>
   <data name="OnlyFirstOptionsWillBeTakenConfirmation" xml:space="preserve">
     <value>Для питання "{{trimmedTitle}}" будуть взяті тільки перші категорії {{count}}.?</value>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>Відкрито</value>
+    <value>Відкрити</value>
   </data>
   <data name="OptionsCascadingListError" xml:space="preserve">
-    <value>
-Ви ввели невірні дані. Кожен рядок повинен відповідати формату: "Заголовок...Батьківське значення/Значення[...Назва вкладення]". "Значення" і "Батьківське значення" повинні бути цілими числами. "Назва" має бути буквено-цифровим рядком. "Ім'я вкладення" не є обов'язковим. Порожні рядки не допускаються.</value>
+    <value>Ви ввели невірні дані. Кожен рядок повинен відповідати формату: "Заголовок...Батьківське значення/Значення[...Назва вкладення]". "Значення" і "Батьківське значення" повинні бути цілими числами. "Назва" має бути буквено-цифровим рядком. "Ім'я вкладення" не є обов'язковим. Порожні рядки не допускаються.</value>
   </data>
   <data name="OptionsCloseWindow" xml:space="preserve">
     <value>Закрити вікно?</value>
@@ -751,7 +750,7 @@
     <value>Попередній перегляд зміни #{{revision}}</value>
   </data>
   <data name="PublicAccessDescriptionSettings" xml:space="preserve">
-    <value>Публічні анкети доступні всім користувачам, які мають обліковий запис у цій системі, в режимі "тільки для читання.</value>
+    <value>Публічні анкети доступні всім користувачам, які мають обліковий запис у цій системі, в режимі тільки для читання.</value>
   </data>
   <data name="PublicAccessSettings" xml:space="preserve">
     <value>Публічний доступ</value>
@@ -763,10 +762,10 @@
     <value>Увімкніть публічний доступ.</value>
   </data>
   <data name="PublicAccessSettingsStatusOff" xml:space="preserve">
-    <value>Опитувальник наразі не є публічним.</value>
+    <value>Анкета наразі не є публічною.</value>
   </data>
   <data name="PublicAccessSettingsStatusOn" xml:space="preserve">
-    <value>Опитувальник наразі доступний як загальнодоступний.</value>
+    <value>Анкета наразі доступна як загальнодоступна.</value>
   </data>
   <data name="QuestionAddClassification" xml:space="preserve">
     <value>Пошук класифікації</value>
@@ -781,7 +780,7 @@
     <value>Додайте особливу цінність</value>
   </data>
   <data name="QuestionCascading" xml:space="preserve">
-    <value>Каскадний комбо-бокс</value>
+    <value>Каскаднє комбіноване запитання</value>
   </data>
   <data name="QuestionCheckboxes" xml:space="preserve">
     <value>Прапорці</value>
@@ -790,7 +789,7 @@
     <value>натисніть перезавантажити</value>
   </data>
   <data name="QuestionComboBox" xml:space="preserve">
-    <value>Комбінований ящик</value>
+    <value>Комбіноване запитання</value>
   </data>
   <data name="QuestionCurrentTime" xml:space="preserve">
     <value>Поточна мітка часу (дата, час)</value>
@@ -820,10 +819,10 @@
     <value>Ціле число</value>
   </data>
   <data name="QuestionIsLinked" xml:space="preserve">
-    <value>пов'язано</value>
+    <value>пов'язане</value>
   </data>
   <data name="QuestionLinkedDescr" xml:space="preserve">
-    <value>Прив'язати до питання зі списку або питання з групи реєстру</value>
+    <value>Прив'язати до питання зі списку або питання з групи ростеру</value>
   </data>
   <data name="QuestionMaxListCount" xml:space="preserve">
     <value>Максимальна кількість елементів списку</value>
@@ -853,7 +852,7 @@
     <value>Файл успішно збережено. Відкриється вікно для завантаження файлу.</value>
   </data>
   <data name="QuestionOptionsCut" xml:space="preserve">
-    <value>Питання було позначене як "Комбіноване поле" або "Каскадне комбіноване поле" під час завантаження даних про питання і містило занадто багато категорій, їх кількість було зменшено до {{count}}.</value>
+    <value>Питання було позначене як "Комбіноване запитання" або "Каскадне комбіноване запитання" під час завантаження даних про питання і містило занадто багато категорій, їх кількість було зменшено до {{count}}.</value>
   </data>
   <data name="QuestionOrdered" xml:space="preserve">
     <value>Записати порядок відповідей</value>
@@ -872,9 +871,6 @@
   </data>
   <data name="QuestionShowListLimit" xml:space="preserve">
     <value>Якщо не більше</value>
-  </data>
-  <data name="QuestionShowStrings" xml:space="preserve">
-    <value>Показати рядки</value>
   </data>
   <data name="QuestionsSearchEntities" xml:space="preserve">
     <value>результати пошуку</value>
@@ -895,7 +891,7 @@
     <value>Використовуйте сепаратор 1000</value>
   </data>
   <data name="QuestionVariableLabel" xml:space="preserve">
-    <value>Змінна мітка</value>
+    <value>Мітка змінної</value>
   </data>
   <data name="QuestionVariableName" xml:space="preserve">
     <value>Ім'я змінної</value>
@@ -916,7 +912,7 @@
     <value>Відновити посилання</value>
   </data>
   <data name="ReplaceOptionsConfirmation" xml:space="preserve">
-    <value>Ви впевнені, що хочете замінити існуючі категорії для питання "{{trimmedTitle}}"??</value>
+    <value>Ви впевнені, що хочете замінити існуючі категорії для питання "{{trimmedTitle}}"?</value>
   </data>
   <data name="RequestFailedUnexpectedly" xml:space="preserve">
     <value>Запит несподівано завершився невдало.</value>
@@ -925,7 +921,7 @@
     <value>Обов'язкове поле</value>
   </data>
   <data name="RetryExportPDF" xml:space="preserve">
-    <value>Повторіть спробу експорту в PDF</value>
+    <value>Повторити спробу експорту в PDF</value>
   </data>
   <data name="ReusableCategories" xml:space="preserve">
     <value>Багаторазові категорії</value>
@@ -949,13 +945,10 @@
     <value>Таблиця</value>
   </data>
   <data name="RosterName" xml:space="preserve">
-    <value>Ім'я в реєстрі</value>
-  </data>
-  <data name="RosterShowStrings" xml:space="preserve">
-    <value>Показати рядки</value>
+    <value>Ім'я в ростері</value>
   </data>
   <data name="RosterSource" xml:space="preserve">
-    <value>Джерело реєстру</value>
+    <value>Джерело ростеру</value>
   </data>
   <data name="RosterSourceFixed" xml:space="preserve">
     <value>Фіксований набір елементів:</value>
@@ -967,19 +960,19 @@
     <value>Вихідне питання для назв рядків:</value>
   </data>
   <data name="RosterSourceQuestion" xml:space="preserve">
-    <value>Вихідне питання (відповідь визначає як кількість, так і назву рядків реєстру):</value>
+    <value>Вихідне питання (відповідь визначає як кількість, так і назву рядків ростеру):</value>
   </data>
   <data name="RostersQuestion" xml:space="preserve">
-    <value>Перелічіть питання або питання з групи реєстру</value>
+    <value>Перелічіть питання або питання з ростеру</value>
   </data>
   <data name="RosterVariableName" xml:space="preserve">
-    <value>Ідентифікатор реєстру</value>
+    <value>Ідентифікатор ростеру</value>
   </data>
   <data name="RowAdded" xml:space="preserve">
     <value>Додано рядок</value>
   </data>
   <data name="Run" xml:space="preserve">
-    <value>Біжи!</value>
+    <value>Запустити</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Зберегти</value>
@@ -1048,7 +1041,7 @@
     <value>Анонім</value>
   </data>
   <data name="SettingsCan" xml:space="preserve">
-    <value>Можеш </value>
+    <value>Може</value>
   </data>
   <data name="SettingsHideIfDisabled" xml:space="preserve">
     <value>Приховати елемент, коли його вимкнено</value>
@@ -1057,25 +1050,25 @@
     <value>Запросити</value>
   </data>
   <data name="SettingsInviteCollaborators" xml:space="preserve">
-    <value>Запросіть більше користувачів під своїм логіном або зареєстрованою електронною поштою</value>
+    <value>Запросіть більше користувачів по логіну або заростерованою електронною поштою</value>
   </data>
   <data name="SettingsMakeOwner" xml:space="preserve">
-    <value>Власник марки</value>
+    <value>Зробити власником</value>
   </data>
   <data name="SettingsOwner" xml:space="preserve">
     <value>власник</value>
   </data>
   <data name="SettingsPrivate" xml:space="preserve">
-    <value>Рядовий</value>
+    <value>Приватний</value>
   </data>
   <data name="SettingsProvideExistingEmail" xml:space="preserve">
     <value>Вкажіть електронну пошту або логін існуючого користувача</value>
   </data>
   <data name="SettingsProvideValidEmail" xml:space="preserve">
-    <value>Вкажіть дійсну адресу електронної пошти</value>
+    <value>Вкажіть адресу електронної пошти</value>
   </data>
   <data name="SettingsPublic" xml:space="preserve">
-    <value>Громадськість</value>
+    <value>Публічний</value>
   </data>
   <data name="SettingsQuestionnaireName" xml:space="preserve">
     <value>Назва анкети</value>
@@ -1111,7 +1104,7 @@
     <value>Увімкніть анонімний обмін.</value>
   </data>
   <data name="SettingsVisibleToEveryone" xml:space="preserve">
-    <value>видимий для всіх у режимі "тільки для читання</value>
+    <value>видимий для всіх у режимі "тільки для читання"</value>
   </data>
   <data name="SettingsVisibleToOwner" xml:space="preserve">
     <value>відображається тільки для власника</value>
@@ -1122,9 +1115,6 @@
   <data name="ShowAsList" xml:space="preserve">
     <value>Показати як список категорій</value>
   </data>
-  <data name="ShowList" xml:space="preserve">
-    <value>Показати список</value>
-  </data>
   <data name="ShowParentValues" xml:space="preserve">
     <value>Показати батьківські значення</value>
   </data>
@@ -1132,13 +1122,13 @@
     <value>додати новий макрос</value>
   </data>
   <data name="SideBarAttachmentDetailsFormat" xml:space="preserve">
-    <value>формату: {{- type}}</value>
+    <value>формат: {{- type}}</value>
   </data>
   <data name="SideBarAttachmentDetailsResolution" xml:space="preserve">
     <value>{{width}} × {{height}}px</value>
   </data>
   <data name="SideBarAttachmentDetailsSize" xml:space="preserve">
-    <value>size: {{size}}</value>
+    <value>розмір: {{size}}</value>
   </data>
   <data name="SideBarAttachmentName" xml:space="preserve">
     <value>назва вкладення</value>
@@ -1168,7 +1158,7 @@
     <value>Вкладення</value>
   </data>
   <data name="SideBarAttachmentsUpload" xml:space="preserve">
-    <value>Завантажити нове</value>
+    <value>Завантажити нову</value>
   </data>
   <data name="SideBarAttachmentUploaded" xml:space="preserve">
     <value>завантажено: {{-lastUpdate, MMMM DD[,] YYYY [at] k:mm}}</value>
@@ -1231,7 +1221,7 @@
     <value>ДОДАТИ НОВУ таблицю пошуку</value>
   </data>
   <data name="SideBarLookupTableDropFile" xml:space="preserve">
-    <value>Скиньте файл сюди</value>
+    <value>Киньте файл сюди</value>
   </data>
   <data name="SideBarLookupTableFileName" xml:space="preserve">
     <value>ім'я файлу</value>
@@ -1240,7 +1230,7 @@
     <value>назва таблиці</value>
   </data>
   <data name="SideBarLookupTableNoName" xml:space="preserve">
-    <value>таблиця пошуку без імені</value>
+    <value>таблиця пошуку без назви</value>
   </data>
   <data name="SideBarLookupTablesCounter" xml:space="preserve">
     <value>{{count}} Таблиця пошуку:</value>
@@ -1273,7 +1263,7 @@
     <value>Використовуйте цю вкладку для визначення макропідстановок.</value>
   </data>
   <data name="SideBarMacroEmptyLine2" xml:space="preserve">
-    <value>Макрос - це іменований вираз, який можна використовувати в умовах дозволу та виразах перевірки. Макрос складається з імені та вмісту.</value>
+    <value>Макрос - це іменований вираз, який можна використовувати в умовах дозволу та виразах валідації. Макрос складається з імені та вмісту.</value>
   </data>
   <data name="SideBarMacroEmptyLine3" xml:space="preserve">
     <value>можна використовувати у виразі для посилання на макрос.</value>
@@ -1333,7 +1323,7 @@
     <value>Примітки:</value>
   </data>
   <data name="SideBarMetadataPrimaryInvestigator" xml:space="preserve">
-    <value>Основний слідчий:</value>
+    <value>Головний дослідник:</value>
   </data>
   <data name="SideBarMetadataQuestionnaireAccess" xml:space="preserve">
     <value>Доступ до анкети</value>
@@ -1342,7 +1332,7 @@
     <value>Типи навчання:</value>
   </data>
   <data name="SideBarMetadataSubtitle" xml:space="preserve">
-    <value>Субтитри:</value>
+    <value>Підзаголовок:</value>
   </data>
   <data name="SideBarMetadataSurveyDataInfo" xml:space="preserve">
     <value>Інформація про дані опитування</value>
@@ -1378,7 +1368,7 @@
     <value>Використовуйте цю вкладку для перегляду сценаріїв.</value>
   </data>
   <data name="SideBarScenarioEmptyLine2" xml:space="preserve">
-    <value>Сценарій - це знімок стану тестера, ви можете зберегти його на тесті, натиснувши кнопку "Зберегти сценарій".</value>
+    <value>Сценарій - це знімок стану тестера, ви можете зберегти його на Web-Tester, натиснувши кнопку "Зберегти сценарій".</value>
   </data>
   <data name="SideBarScenarioName" xml:space="preserve">
     <value>назва сценарію</value>
@@ -1396,7 +1386,7 @@
     <value>Розділи</value>
   </data>
   <data name="SideBarTab" xml:space="preserve">
-    <value>Вкладка</value>
+    <value>Табуляція</value>
   </data>
   <data name="SideBarTranslationDownloadXlsx" xml:space="preserve">
     <value>Завантажити xlsx</value>
@@ -1483,7 +1473,7 @@
     <value>Додати список</value>
   </data>
   <data name="TreeAddRosterAfter" xml:space="preserve">
-    <value>Додайте список після</value>
+    <value>Додайте ростер після</value>
   </data>
   <data name="TreeAddSection" xml:space="preserve">
     <value>Додати підрозділ</value>
@@ -1504,7 +1494,7 @@
     <value>Додати змінну після</value>
   </data>
   <data name="TreeRoster" xml:space="preserve">
-    <value>список:</value>
+    <value>ростер:</value>
   </data>
   <data name="UnMarkAsDefault" xml:space="preserve">
     <value>Не використовувати за замовчуванням</value>
@@ -1534,7 +1524,7 @@
     <value>Змінна без назви</value>
   </data>
   <data name="Update" xml:space="preserve">
-    <value>Оновлення</value>
+    <value>Оновити</value>
   </data>
   <data name="Upload" xml:space="preserve">
     <value>Завантажити</value>
@@ -1579,12 +1569,12 @@
     <value>Віртуальна титульна сторінка</value>
   </data>
   <data name="WarningsCounter" xml:space="preserve">
-      <value>{{count}} попередження</value>
+      <value>{{count}} попереджень</value>
   </data>
   <data name="WarningsCounter_plural" xml:space="preserve">
     <value>{{count}} попередження</value>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>Так.</value>
+    <value>Так</value>
   </data>
 </root>

@@ -124,13 +124,13 @@
     <value>Затверджено штаб-квартирою</value>
   </data>
   <data name="ApprovedBySupervisor" xml:space="preserve">
-    <value>Затверджено керівником</value>
+    <value>Затверджено супервізором</value>
   </data>
   <data name="AssignReceivedConfirm" xml:space="preserve">
-    <value>Я зрозумів це інтерв'ю, вже отримане на планшет</value>
+    <value>Я зрозумію, що це інтерв'ю вже отримане на планшет</value>
   </data>
   <data name="AssignReceivedWarning" xml:space="preserve">
-    <value>Поточний відповідальний інтерв'юер не отримає повідомлення про перепризначення до наступної синхронізації. Якщо він вже почав працювати над інтерв'ю, всі дані, які він вніс до наступної синхронізації, будуть ВИДАЛЕНІ!</value>
+    <value>Поточний відповідальний інтерв'юер не отримає повідомлення про перезавдання до наступної синхронізації. Якщо він вже почав працювати над інтерв'ю, всі дані, які він вніс до наступної синхронізації, будуть ВИДАЛЕНІ!</value>
   </data>
   <data name="Average" xml:space="preserve">
     <value>Середній показник</value>
@@ -148,10 +148,10 @@
     <value>Дата завершення</value>
   </data>
   <data name="ConditionQuestion" xml:space="preserve">
-    <value>Питання про умову</value>
+    <value>Питання з умовою</value>
   </data>
   <data name="Count" xml:space="preserve">
-    <value>Граф.</value>
+    <value>Кількість</value>
   </data>
   <data name="CumulativeInterviewChart" xml:space="preserve">
     <value>Кумулятивний графік інтерв'ю</value>
@@ -196,7 +196,7 @@
     <value>Завантажуються дані карти</value>
   </data>
   <data name="Max" xml:space="preserve">
-    <value>Максе.</value>
+    <value>Max</value>
   </data>
   <data name="Median" xml:space="preserve">
     <value>Медіана</value>
@@ -226,13 +226,13 @@
     <value>Запитання</value>
   </data>
   <data name="QuestionLabel" xml:space="preserve">
-    <value>Етикетка запитання</value>
+    <value>Лейбл запитання</value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Анкета</value>
   </data>
   <data name="QuestionnaireCompatibilityIssues_UnknownAnswer" xml:space="preserve">
-    <value>Існують проблеми сумісності між версіями опитувальника. Відповіді в попередніх версіях опитувальника, які більше не існують в останній версії опитувальника, були проігноровані.</value>
+    <value>Існують проблеми сумісності між версіями анкети. Відповіді в попередніх версіях анкети, які більше не існують в останній версії анкетаа, були проігноровані.</value>
   </data>
   <data name="QuestionText" xml:space="preserve">
     <value>Текст запитання</value>
@@ -247,13 +247,13 @@
     <value>Відхилено штаб-квартирою</value>
   </data>
   <data name="RejectedBySupervisor" xml:space="preserve">
-    <value>Відхилено керівником</value>
+    <value>Відхилено супервізором</value>
   </data>
   <data name="Report_Average_case_assignment_duration" xml:space="preserve">
-    <value>Середня тривалість розгляду справи</value>
+    <value>Середня тривалість розгляду</value>
   </data>
   <data name="Report_Average_HQ_processing_time" xml:space="preserve">
-    <value>Середній час обробки в штаб-квартирі</value>
+    <value>Середній час обробки в хедкотері</value>
   </data>
   <data name="Report_Average_Interview_Duration" xml:space="preserve">
     <value>Середня тривалість інтерв'ю</value>
@@ -262,7 +262,7 @@
     <value>Середній загальний час розгляду справи</value>
   </data>
   <data name="Report_Average_supervisor_processing_time" xml:space="preserve">
-    <value>Середній час обробки супервайзером</value>
+    <value>Середній час обробки супервізором</value>
   </data>
   <data name="Report_Days_by_Interview_Status" xml:space="preserve">
     <value>Дні за статусом інтерв'ю</value>
@@ -274,13 +274,13 @@
     <value>Кількість завершених інтерв'ю</value>
   </data>
   <data name="Report_Number_of_interview_transactions_by_HQ" xml:space="preserve">
-    <value>Кількість транзакцій інтерв'ю по штаб-квартирі</value>
+    <value>Кількість транзакцій інтерв'ю по хедквотеру</value>
   </data>
   <data name="Report_Number_of_interview_transactions_by_Supervisor" xml:space="preserve">
     <value>Кількість транзакцій інтерв'ю за супервізором</value>
   </data>
   <data name="Report_Number_of_interviews_approved_by_HQ" xml:space="preserve">
-    <value>Кількість інтерв'ю, затверджених штаб-квартирою</value>
+    <value>Кількість інтерв'ю, затверджених хедквотером</value>
   </data>
   <data name="Report_Quantity_By_Interviewers" xml:space="preserve">
     <value>Кількість за інтерв'юерами</value>
@@ -292,16 +292,16 @@
     <value>Швидкість переходу між статусами інтерв'юерів</value>
   </data>
   <data name="Report_Speed_Between_Statuses_By_Supervisors" xml:space="preserve">
-    <value>Швидкість переходу між статусами за керівниками</value>
+    <value>Швидкість переходу між статусами за супервізорами</value>
   </data>
   <data name="Report_Speed_By_Interviewers" xml:space="preserve">
     <value>Швидкість інтерв'юерів</value>
   </data>
   <data name="Report_Speed_By_Supervisors" xml:space="preserve">
-    <value>Швидкість за керівниками</value>
+    <value>Швидкість за супервізорами</value>
   </data>
   <data name="Report_Status_Duration" xml:space="preserve">
-    <value>Статус Тривалість</value>
+    <value>Тривалість в статусах</value>
   </data>
   <data name="Report_Supervisors_And_Statuses" xml:space="preserve">
     <value>Керівники та статуси</value>
@@ -316,7 +316,7 @@
     <value>Команди та статуси</value>
   </data>
   <data name="Restarted" xml:space="preserve">
-    <value>Перезавантажено.</value>
+    <value>Почато знов</value>
   </data>
   <data name="SaveAsImage" xml:space="preserve">
     <value>Зберегти як зображення</value>
@@ -334,13 +334,13 @@
     <value>Сума</value>
   </data>
   <data name="Supervisor" xml:space="preserve">
-    <value>Наглядач</value>
+    <value>Супервізор</value>
   </data>
   <data name="SupervisorAssigned" xml:space="preserve">
-    <value>Призначено куратора</value>
+    <value>Призначено супервізора</value>
   </data>
   <data name="SupervisorsAndSurveys" xml:space="preserve">
-    <value>Супервайзери та опитування</value>
+    <value>Супервізори та анкети</value>
   </data>
   <data name="SurveyName" xml:space="preserve">
     <value>Назва анкети</value>

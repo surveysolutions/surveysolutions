@@ -522,9 +522,6 @@
   <data name="QuestionScope" xml:space="preserve">
     <value>نطاق السؤال</value>
   </data>
-  <data name="QuestionShowStrings" xml:space="preserve">
-    <value>اظهار السلاسل</value>
-  </data>
   <data name="QuestionText" xml:space="preserve">
     <value>نص السؤال</value>
   </data>
@@ -560,9 +557,6 @@
   </data>
   <data name="RosterName" xml:space="preserve">
     <value>اسم القائمة</value>
-  </data>
-  <data name="RosterShowStrings" xml:space="preserve">
-    <value>اظهار السلاسل</value>
   </data>
   <data name="RosterSource" xml:space="preserve">
     <value>مصدر القائمة</value>
@@ -659,9 +653,6 @@
   </data>
   <data name="SettingsWhoHasAccess" xml:space="preserve">
     <value>من يمكنه الدخول</value>
-  </data>
-  <data name="ShowList" xml:space="preserve">
-    <value>اظهار القائمة</value>
   </data>
   <data name="SideBarAttachmentDetailsFormat" xml:space="preserve">
     <value>الشكل: {{- type}}</value>

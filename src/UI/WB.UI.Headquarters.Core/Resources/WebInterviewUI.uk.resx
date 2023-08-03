@@ -130,7 +130,7 @@
     <value>Область редагування</value>
   </data>
   <data name="AssignmentLimitError" xml:space="preserve">
-    <value>Ви не можете створити більше інтерв'ю з цим завданням</value>
+    <value>Ви не можете створити більше інтерв'ю по цьому завданню</value>
   </data>
   <data name="AudioClickRecord" xml:space="preserve">
     <value>Натисніть, щоб записати аудіо</value>
@@ -190,7 +190,7 @@
     <value>Публікація...</value>
   </data>
   <data name="CommentSupervisor" xml:space="preserve">
-    <value>Коментар керівника</value>
+    <value>Коментар супервізора</value>
   </data>
   <data name="CommentYours" xml:space="preserve">
     <value>Ваш коментар</value>
@@ -205,22 +205,22 @@
     <value>Питання з помилками:</value>
   </data>
   <data name="CompleteFirstErrors" xml:space="preserve">
-    <value>Перші {{count}} сутностей з помилками:</value>
+    <value>Перші {{count}} елементів з помилками:</value>
   </data>
   <data name="CompleteNoteToSupervisor" xml:space="preserve">
-    <value>Примітка для керівника</value>
+    <value>Примітка для супервізора</value>
   </data>
   <data name="CompleteQuestionsAnswered" xml:space="preserve">
-    <value>Відповідаю.</value>
+    <value>З відповіддю</value>
   </data>
   <data name="CompleteQuestionsStatus" xml:space="preserve">
-    <value>Статус питання:</value>
+    <value>Статус питаннь:</value>
   </data>
   <data name="CompleteQuestionsUnanswered" xml:space="preserve">
     <value>Без відповіді</value>
   </data>
   <data name="ConfirmRosterRemove" xml:space="preserve">
-    <value>Ви впевнені, що хочете видалити пов'язаний реєстр?</value>
+    <value>Ви впевнені, що хочете видалити пов'язаний ростер?</value>
   </data>
   <data name="ConnectionLostMessage" xml:space="preserve">
     <value>Будь ласка, перезавантажте сторінку, щоб відновити з'єднання і продовжити інтерв'ю.</value>
@@ -234,7 +234,7 @@
   <data name="CoverBrokenPackegeText" xml:space="preserve">
     <value>Увага! Це інтерв'ю має пошкоджені дані, &lt;br /&gt;
 доступна лише попередня версія інтерв'ю. &lt;br /&gt;
-Контактна підтримка для отримання допомоги.</value>
+Зв'яжіться з адміністратором щоб отримати допомогу.</value>
   </data>
   <data name="CoverBrokenPackegeTitle" xml:space="preserve">
     <value>Помилка: Це інтерв'ю пошкоджено</value>
@@ -246,7 +246,7 @@
     <value>Перші {{count}} сутності з коментарями:</value>
   </data>
   <data name="CoverSupervisorNote" xml:space="preserve">
-    <value>Примітка керівника:</value>
+    <value>Примітка супервізора:</value>
   </data>
   <data name="DecimalCannotParse" xml:space="preserve">
     <value>Введене значення не може бути розбите на десяткові числа</value>
@@ -273,13 +273,13 @@
     <value>{{email}} - невірна адреса електронної пошти</value>
   </data>
   <data name="EmailLink_Message" xml:space="preserve">
-    <value>Ми надішлемо вам повідомлення з посиланням для продовження співбесіди, якщо вам потрібно буде продовжити пізніше.</value>
+    <value>Ми надішлемо вам повідомлення з посиланням для продовження інтерв'ю, якщо вам потрібно буде продовжити пізніше.</value>
   </data>
   <data name="EmailLink_Placeholder" xml:space="preserve">
     <value>Введіть електронну пошту</value>
   </data>
   <data name="EmailLink_ResumeAnyTime" xml:space="preserve">
-    <value>Ви можете скасувати зараз і пройти співбесіду. Ви можете надіслати резюме пізніше, натиснувши на пункт "Надіслати резюме на електронну пошту" у верхньому меню.</value>
+    <value>Ви можете скасувати зараз і продовжити інтерв'ю. Ви можете надіслати пізніше, натиснувши на пункт "Надіслати посилання для продовження на електронну пошту" у верхньому меню.</value>
   </data>
   <data name="EnterDate" xml:space="preserve">
     <value>Введіть дату</value>
@@ -288,13 +288,13 @@
     <value>Введіть пароль</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Помилка.</value>
+    <value>Помилка</value>
   </data>
   <data name="Error_other" xml:space="preserve">
     <value>Помилки</value>
   </data>
   <data name="GPSError" xml:space="preserve">
-    <value>Позицію не вдалося визначити через невідому помилку (Код: {{strErrorCode}}).</value>
+    <value>Місцезнаходження не вдалося визначити через невідому помилку (Код: {{strErrorCode}}).</value>
   </data>
   <data name="GPSNotAvailable" xml:space="preserve">
     <value>Ваш браузер не підтримує отримання геолокації</value>
@@ -309,13 +309,13 @@
     <value>Запис GPS</value>
   </data>
   <data name="GPSTimeout" xml:space="preserve">
-    <value>Не вдалося визначити поточну позицію за вказаний проміжок часу.</value>
+    <value>Не вдалося визначити місцезнаходження за вказаний проміжок часу.</value>
   </data>
   <data name="Help" xml:space="preserve">
-    <value>Допоможіть!</value>
+    <value>Допомога</value>
   </data>
   <data name="HideResolved" xml:space="preserve">
-    <value>Приховати вирішено</value>
+    <value>Приховати вирішені</value>
   </data>
   <data name="Instruction" xml:space="preserve">
     <value>Інструкція</value>
@@ -354,7 +354,7 @@
     <value>Мережа</value>
   </data>
   <data name="No" xml:space="preserve">
-    <value>Ні.</value>
+    <value>Ні</value>
   </data>
   <data name="NoQuestionnaireAccess" xml:space="preserve">
     <value>У вас немає доступу до анкети</value>
@@ -381,7 +381,7 @@
     <value>Ви впевнені, що хочете видалити {{amountOfRostersToRemove}} рядок(и) з кожного пов'язаного списку?</value>
   </data>
   <data name="NumberRosterUpperBound" xml:space="preserve">
-    <value>Відповідь '{{answer}}' є неправильною, оскільки відповідь більша за верхню межу реєстру {{answerMaxValue}}..</value>
+    <value>Відповідь '{{answer}}' є неправильною, оскільки відповідь більша за верхню межу ростеру {{answerMaxValue}}..</value>
   </data>
   <data name="OptionsAvailableAfterAnswer" xml:space="preserve">
     <value>Категорії будуть доступні після відповіді на відповідне запитання</value>
@@ -417,7 +417,7 @@
     <value>Перезавантажити анкету</value>
   </data>
   <data name="Resolve" xml:space="preserve">
-    <value>Вирішуй.</value>
+    <value>Вирішити</value>
   </data>
   <data name="ResolveHint" xml:space="preserve">
     <value>Вирішені коментарі за замовчуванням приховані, але можуть бути переглянуті всіма учасниками інтерв'ю</value>
@@ -426,10 +426,10 @@
     <value>Зберегти сценарій</value>
   </data>
   <data name="SaveScenarioDesignerLogin" xml:space="preserve">
-    <value>Сесія в додатку "Конструктор" закінчилася. Увійдіть у додаток Designer, щоб мати змогу зберегти.</value>
+    <value>Сесія в додатку "Designer" закінчилася. Увійдіть у додаток Designer, щоб мати змогу зберегти.</value>
   </data>
   <data name="SaveScenarioGoToDesigner" xml:space="preserve">
-    <value>Відкритий конструктор</value>
+    <value>Відкритий Designer</value>
   </data>
   <data name="SaveScenarioName" xml:space="preserve">
     <value>Ім'я</value>
@@ -459,7 +459,7 @@
     <value>Показати на карті</value>
   </data>
   <data name="ShowResolved" xml:space="preserve">
-    <value>Показати вирішено</value>
+    <value>Показати вирішені</value>
   </data>
   <data name="SlowConnection" xml:space="preserve">
     <value>Мережеве з'єднання повільне</value>
@@ -486,7 +486,7 @@
     <value>Будь ласка, заповніть всі необхідні значення</value>
   </data>
   <data name="ToggleNavigation" xml:space="preserve">
-    <value>Перейдіть до навігації</value>
+    <value>Перемкніть навігацію</value>
   </data>
   <data name="WarningsHeader" xml:space="preserve">
     <value>Попередження</value>
@@ -501,6 +501,6 @@
     <value>Будь ласка, закрийте цю сторінку. Ви можете відкрити нову, повернувшись на сайт дизайнера</value>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>Так.</value>
+    <value>Так</value>
   </data>
 </root>

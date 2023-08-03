@@ -13,6 +13,7 @@ import vitePluginRequire from "vite-plugin-require";
 const ViteFilemanager = require('filemanager-plugin').ViteFilemanager;
 
 
+
 const baseDir = path.relative(__dirname, "./");
 //const baseDir = path.resolve(__dirname, "./");
 const join = path.join.bind(path, baseDir);
@@ -33,7 +34,6 @@ const locales = {
 }
 
 const isPack = process.argv.indexOf("--package") >= 0;
-console.log("isPackage:  " + isPack)
 
 const hqDist = !isPack ? hqFolder : join("dist", "package", "hq")
 const webTesterDist = !isPack ? webTesterFolder : join("dist", "package", "webtester")
@@ -136,113 +136,136 @@ for (var attr in pages) {
 }
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  resolve: {
-    alias: [
-      {
-        find: '@',
-        replacement: path.resolve(__dirname, 'src')
-      },
-      {
-        find: 'moment$',
-        replacement: path.resolve(__dirname, 'moment/moment.js')
-      },
-      {
-        find: '~',
-        replacement: path.resolve(__dirname, 'src')
-      }
-    ],
-    extensions: [
-      '.mjs',
-      '.js',
-      '.ts',
-      '.jsx',
-      '.tsx',
-      '.json',
-      '.vue'
-    ]
-  },
-  transpile: [
-        'autonumeric',
-        'vue-page-title',
-        '@googlemaps/markerclusterer'
-  ],
-  optimizeDeps: {
-    include: ['jquery'],
-  },
-  plugins: [
-    vue({ jsx: true }),
-    vitePluginRequire(),
-    viteCommonjs(),
-    envCompatible(),
-    cleanPlugin({
-      targetFiles: fileTargets.map(target => target.destination)
-    }),
-    ViteFilemanager({
-      customHooks: [
-        {
-          hookName: 'options',
-          commands: {
-			del: {
-               items: ['./dist']
-            },
-            copy: { items: pagesSources },
-          }
-        },
-        {
-          hookName: 'closeBundle',
-          commands: {
-            copy: { items: pagesTargets.concat(fileTargets) },
-          }
-        }
-      ],
-    
-      options: {
-        parallel: 1,
-        log: 'all'
-        //log: 'error'
-      }
-    }),
-	LocalizationPlugin({
-      patterns: resxFiles,
-      destination: "./.resources",
-      locales: locales
-    }),
-	mpaPlugin({
-		pages: pages
-	})
-	//eslintPlugin()
-  ],
-  build: {
-	//minify: false,
-    rollupOptions: {
-		maxParallelFileOps: 2,
-		cache: false,
-		plugins: [
-			inject({
-				$: 'jquery',
-				jQuery: 'jquery',
-			})
+export default defineConfig(({ mode }) => {
+
+const isDevMode = mode === 'development';
+const isProdMode = !isDevMode
+
+return {
+	  css: {
+		devSourcemap: isDevMode,
+	  },
+	  resolve: {
+		alias: [
+		  {
+			find: '@',
+			replacement: path.resolve(__dirname, 'src')
+		  },
+		  {
+			find: 'moment$',
+			replacement: path.resolve(__dirname, 'moment/moment.js')
+		  },
+		  {
+			find: '~',
+			replacement: path.resolve(__dirname, 'src')
+		  }
 		],
-      output: {
-		  assetFileNames: (assetInfo) => {
-			  let extType = assetInfo.name.split('.').at(1);
-			  if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
-				extType = 'img';
+		extensions: [
+		  '.mjs',
+		  '.js',
+		  '.ts',
+		  '.jsx',
+		  '.tsx',
+		  '.json',
+		  '.vue'
+		]
+	  },
+	  transpile: [
+			'autonumeric',
+			'vue-page-title',
+			'@googlemaps/markerclusterer'
+	  ],
+	  optimizeDeps: {
+		include: ['jquery'],
+	  },
+	  plugins: [
+		vue({ jsx: true }),
+		vitePluginRequire(),
+		viteCommonjs(),
+		envCompatible(),
+		cleanPlugin({
+		  targetFiles: fileTargets.map(target => target.destination)
+		}),
+		ViteFilemanager({
+		  customHooks: [
+			{
+			  hookName: 'options',
+			  commands: {
+				del: {
+				   items: ['./dist']
+				},
+				copy: { items: pagesSources },
 			  }
-			  if (/ttf|woff|woff2|eot/i.test(extType)) {
-				extType = 'fonts';
+			},
+			{
+			  hookName: 'closeBundle',
+			  commands: {
+				copy: { items: pagesTargets.concat(fileTargets) },
 			  }
-			  return `${extType}/[name]-[hash][extname]`;
+			}
+		  ],
+		
+		  options: {
+			parallel: 1,
+			//log: 'all'
+			log: 'error'
+		  }
+		}),
+		LocalizationPlugin({
+		  patterns: resxFiles,
+		  destination: "./.resources",
+		  locales: locales
+		}),
+		mpaPlugin({
+			pages: pages
+		})
+		//eslintPlugin()
+	  ],
+	  build: {
+		minify: isProdMode,
+		rollupOptions: {
+			maxParallelFileOps: 2,
+			cache: false,
+			plugins: [
+				inject({
+					$: 'jquery',
+					jQuery: 'jquery',
+				})
+			],
+		  output: {
+			  assetFileNames: (assetInfo) => {
+				  let extType = assetInfo.name.split('.').at(1);
+				  if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
+					extType = 'img';
+				  }
+				  if (/ttf|woff|woff2|eot/i.test(extType)) {
+					extType = 'fonts';
+				  }
+				  return `${extType}/[name]-[hash][extname]`;
+			  },
+			  chunkFileNames: (chunkInfo) => { 
+				  if (isDevMode) 
+				    return chunkInfo.name.endsWith('.js') ? 'js/[name]' : 'js/[name].js' 
+				  return 'js/[name]-[hash].js' 
+			  },
+			  entryFileNames: (chunkInfo) => { 
+				  if (isDevMode) 
+					  return 'js/[name].js' 
+				  return 'js/[name]-[hash].js' 
+			  },
+			  manualChunks: (id) => {
+				if (id.includes('node_modules')) {
+					return 'vendor';
+				}
+
+				/*if (isDevMode) {
+					var filename = id.replace(/^.*[\\\/]/, '')
+					if (!filename.endsWith('.css'))
+					  return filename;
+				}*/
+			  },
 		  },
-		  chunkFileNames: 'js/[name]-[hash].js',
-          entryFileNames: 'js/[name]-[hash].js',
-		  manualChunks: (id) => {
-			if (id.includes('node_modules')) {
-				return 'vendor';
-		    }
-		  },
-      },
-    },
-  },
+		},
+	  },
+	}
 })

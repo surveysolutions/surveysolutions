@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AllowInterviewerUpdateProfile" xml:space="preserve">
-    <value>Редагування профілю реєстратора</value>
+    <value>Редагування профілю інтерів'ювера</value>
   </data>
   <data name="AllowInterviewerUpdateProfileDesc" xml:space="preserve">
-    <value>Дозволити реєстраторам оновлювати свою контактну інформацію в профілі облікового запису</value>
+    <value>Дозволити інтерв'юверам оновлювати свою контактну інформацію в профілі облікового запису</value>
   </data>
   <data name="AllowWebInterviewEmailNotifications" xml:space="preserve">
     <value>Сповіщення про веб-інтерв'ю на електронну пошту</value>
@@ -130,7 +130,7 @@
     <value>Дозвольте респондентам веб-інтерв'ю запитувати електронні листи з посиланнями для продовження розпочатих інтерв'ю (ефективно, якщо налаштований постачальник послуг масової розсилки електронної пошти)</value>
   </data>
   <data name="AutoUpdateDescription" xml:space="preserve">
-    <value>Якщо позначено, то лише остання версія програми Interviewer/Supervisor може синхронізуватися зі штаб-квартирою</value>
+    <value>Якщо позначено, то лише остання версія додатку Інтерв'юер/Супервизор може синхронізуватися з Хедквотером</value>
   </data>
   <data name="ChangeStateConfirm" xml:space="preserve">
     <value>Ви впевнені, що хочете змінити налаштування безпеки файлів експорту? Всі експортовані файли даних будуть захищені паролем.</value>
@@ -190,10 +190,10 @@
     <value>Виникла загальна помилка</value>
   </data>
   <data name="EmailProvider_HelpLinkText" xml:space="preserve">
-    <value>тут.</value>
+    <value>тут</value>
   </data>
   <data name="EmailProvider_None" xml:space="preserve">
-    <value>Ні.</value>
+    <value>Ні</value>
   </data>
   <data name="EmailProvider_NoneDescription" xml:space="preserve">
     <value>Повідомлення із запрошеннями на веб-інтерв'ю не надсилаються Survey Solutions респондентам.</value>
@@ -235,13 +235,13 @@
     <value>Налаштуйте параметри для доступу до SendGrid нижче. Додаткові відомості про використання SendGrid з рішеннями для проведення опитувань доступні </value>
   </data>
   <data name="EmailProvider_SendTestEmail" xml:space="preserve">
-    <value>Надіслати електронну пошту</value>
+    <value>Надіслати електронну лист</value>
   </data>
   <data name="EmailProvider_SendTestEmailHeader" xml:space="preserve">
     <value>Надіслати тестовий лист</value>
   </data>
   <data name="EmailProvider_SendTestEmailMessage" xml:space="preserve">
-    <value>Надішліть собі тестовий імейл, щоб переконатися, що служба масових розсилок працює, і отримати попередній перегляд того, що отримають респонденти.</value>
+    <value>Надішліть собі тестовий лист, щоб переконатися, що служба масових розсилок працює, і отримати попередній перегляд того, що отримають респонденти.</value>
   </data>
   <data name="EmailProvider_SendTestEmailResult" xml:space="preserve">
     <value>Приклад успішно відправленого листа із запрошенням</value>
@@ -265,7 +265,7 @@
     <value>Шифрування експорту</value>
   </data>
   <data name="ExportEncryptionSettings" xml:space="preserve">
-    <value>Експорт налаштувань шифрування</value>
+    <value>Налаштування шифрування експорту </value>
   </data>
   <data name="GeographyQuestionAccuracyInMetersDescription" xml:space="preserve">
     <value>Встановити точність у метрах для питання з географії</value>
@@ -283,7 +283,7 @@
     <value>Глобальна нотатка</value>
   </data>
   <data name="GlobalNoteSettings_Description" xml:space="preserve">
-    <value>Вкажіть текст у полі "Глобальна примітка", який буде показано у верхній частині кожного екрана на сервері.</value>
+    <value>Вкажіть текст у полі "Глобальна нотатка", який буде показано у верхній частині кожного екрана на сервері.</value>
   </data>
   <data name="GlobalNotice" xml:space="preserve">
     <value>Глобальна нотатка</value>
@@ -295,13 +295,13 @@
     <value>Автоматичне оновлення Android-додатків вимкнено</value>
   </data>
   <data name="InterviewerAutoUpdateEnabled" xml:space="preserve">
-    <value>Увімкнено автоматичне оновлення програм для Android</value>
+    <value>Увімкнено автоматичне оновлення додатків для Android</value>
   </data>
   <data name="InterviewerGeographyQuestionAccuracyInMeters" xml:space="preserve">
     <value>Точність географічного питання</value>
   </data>
   <data name="InterviewerGeographyQuestionPeriodInSeconds" xml:space="preserve">
-    <value>Період запитань з географії</value>
+    <value>Періодичність для запитань з географії</value>
   </data>
   <data name="InterviewerPartialSynchronization" xml:space="preserve">
     <value>Увімкнути часткову синхронізацію</value>
@@ -319,19 +319,19 @@
     <value>Логотип компанії - це зображення, яке відображається на сторінці входу на сервер і на сторінці входу в додаток Interviewer.</value>
   </data>
   <data name="LogoSettings_Description1" xml:space="preserve">
-    <value>Натисніть кнопку "Вибрати файл", щоб завантажити зображення з вашого комп'ютера на сервер для використання в якості логотипу. Потім натисніть кнопку "Зберегти.</value>
+    <value>Натисніть кнопку "Вибрати файл", щоб завантажити зображення з вашого комп'ютера на сервер для використання в якості логотипу. Потім натисніть кнопку "Зберегти".</value>
   </data>
   <data name="LogoUpdated" xml:space="preserve">
     <value>Оновлений логотип компанії</value>
   </data>
   <data name="MobileAppSettings_Description" xml:space="preserve">
-    <value>Деякі специфічні налаштування для андроїд-версії програми Interviewer/Supervisor</value>
+    <value>Деякі специфічні налаштування для андроїд-версії додатку Інтерв'юер/Супервізор</value>
   </data>
   <data name="MobileAppSettings_Title" xml:space="preserve">
-    <value>Налаштування програми для інтерв'юера/супервайзера</value>
+    <value>Налаштування додатку для нтерв'юера/Супервізора</value>
   </data>
   <data name="PartialSynchronizationDescription" xml:space="preserve">
-    <value>Якщо увімкнено, планшети інтерв'юерів надсилатимуть відповіді на незавершені інтерв'ю до штаб-квартири</value>
+    <value>Якщо увімкнено, планшети інтерв'юерів надсилатимуть відповіді на незавершені інтерв'ю до Хедквотеру</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>Пароль</value>
@@ -349,7 +349,7 @@
     <value>Ви впевнені, що хочете очистити кеш експорту? Всі згенеровані експортні файли будуть видалені з сервера і НЕ будуть доступні для завантаження.</value>
   </data>
   <data name="RemoveExportCacheFail" xml:space="preserve">
-    <value>Очистити кеш помилок</value>
+    <value>Помилка очистки кешу</value>
   </data>
   <data name="RemoveExportCacheSuccess" xml:space="preserve">
     <value>Кеш успішно видалено</value>

@@ -130,7 +130,7 @@
     <value>Дослідження дитячої праці</value>
   </data>
   <data name="CoreWelfareIndicatorsQuestionnaire" xml:space="preserve">
-    <value>Опитувальник основних індикаторів добробуту</value>
+    <value>Анкетаосновних індикаторів добробуту</value>
   </data>
   <data name="DemographicAndHealthSurvey" xml:space="preserve">
     <value>Демографічне та медичне дослідження</value>
@@ -148,10 +148,10 @@
     <value>Опитування домогосподарств</value>
   </data>
   <data name="InformalSectorSurvey" xml:space="preserve">
-    <value>Опитування неформального сектору</value>
+    <value>Дослідження неформального сектору</value>
   </data>
   <data name="IntegratedSurvey" xml:space="preserve">
-    <value>Інтегроване опитування</value>
+    <value>Інтегроване дослідження</value>
   </data>
   <data name="LaborForceSurvey" xml:space="preserve">
     <value>Обстеження робочої сили</value>
@@ -181,12 +181,12 @@
     <value>Соціально-економічне / моніторингове дослідження</value>
   </data>
   <data name="StatisticalInfoAndMonitoringProg" xml:space="preserve">
-    <value>Статистична інформація та моніторингові програми.</value>
+    <value>Статистична інформація та моніторингова програма</value>
   </data>
   <data name="WorldFertilitySurvey" xml:space="preserve">
-    <value>Світовий огляд народжуваності</value>
+    <value>Світовий дослідження народжуваності</value>
   </data>
   <data name="WorldHealthSurvey" xml:space="preserve">
-    <value>Всесвітній огляд охорони здоров'я</value>
+    <value>Всесвітнє дослідження охорони здоров'я</value>
   </data>
 </root>
