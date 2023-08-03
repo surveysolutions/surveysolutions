@@ -54,8 +54,22 @@
                 function (Map, MapView, Graphic, Geometry, Polygon, Extent, FeatureLayer, GeoJSONLayer, Field, 
                     LabelClass, SimpleLineSymbol, SimpleFillSymbol, SimpleMarkerSymbol, webMercatorUtils, SimpleRenderer, on, dom) {
 
+                    var isPoint = 'Point' === '@Model.ShapeType'
+                    
+                    var ymin = @Model.YMinVal
+                    var ymax = @Model.YMaxVal
+                    var xmin = @Model.XMinVal
+                    var xmax = @Model.XMaxVal
+                    
+                    if (isPoint) {
+                        ymin -= 0.001
+                        ymax += 0.001
+                        xmin -= 0.001
+                        xmax += 0.001
+                    }
+                
                     var startExtent = new Extent({
-                        "xmin":@Model.XMinVal,"ymin":@Model.YMinVal,"xmax":@Model.XMaxVal,"ymax":@Model.YMaxVal,
+                        "xmin": xmin,"ymin": ymin,"xmax": xmax,"ymax": ymax,
                         "spatialReference":{"wkid":@Model.Wkid}
                     });
 
