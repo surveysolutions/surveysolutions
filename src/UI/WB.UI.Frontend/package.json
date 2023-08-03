@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vite preview",
     "build": "vite build",
-    "dev": "vite --mode development",
+    "dev": "vite build --mode development",
     "test": "jest",
     "hot": "vite build --mode development --watch",
     "preinstall": "npx npm-force-resolutions",
