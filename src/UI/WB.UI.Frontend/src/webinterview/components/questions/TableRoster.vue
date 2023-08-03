@@ -1,9 +1,23 @@
 <template>
-    <div class="question table-view scroller" :id="hash" v-if="rowData.length > 0">
-        <ag-grid-vue ref="tableRoster" class="ag-theme-customStyles roster-table" domLayout="autoHeight" rowHeight="40"
-            headerHeight="50" :defaultColDef="defaultColDef" :columnDefs="columnDefs" :rowData="rowData"
-            :grid-options="gridOptions" @grid-ready="onGridReady" @column-resized="autosizeHeaders"
-            @cell-editing-stopped="endCellEditting"></ag-grid-vue>
+    <div
+        class="question table-view scroller"
+        :id="hash"
+        v-if="rowData.length > 0"
+    >
+        <ag-grid-vue
+            ref="tableRoster"
+            class="ag-theme-customStyles roster-table"
+            domLayout="autoHeight"
+            rowHeight="40"
+            headerHeight="50"
+            :defaultColDef="defaultColDef"
+            :columnDefs="columnDefs"
+            :rowData="rowData"
+            :grid-options="gridOptions"
+            @grid-ready="onGridReady"
+            @column-resized="autosizeHeaders"
+            @cell-editing-stopped="endCellEditting"
+        ></ag-grid-vue>
     </div>
 </template>
 
@@ -52,7 +66,7 @@ export default {
 
         this.defaultColDef = {
             width: 180, // set every column width
-            height: 76,
+            //height: 76,
             resizable: true,
             editable: true, // make every column editable
             autoHeight: true,
@@ -82,7 +96,7 @@ export default {
     computed: {
         gridOptions() {
             return {
-                stopEditingWhenGridLosesFocus: true,
+                stopEditingWhenCellsLoseFocus: true,
                 suppressMovableColumns: true,
                 singleClickEdit: true,
                 context: {
@@ -99,29 +113,29 @@ export default {
                 (question, key) => {
                     return {
                         headerName: question.title,
-                        headerComponentFramework: 'TableRoster_QuestionTitle',
+                        headerComponent: 'TableRoster_QuestionTitle',
                         headerComponentParams: {
                             title: question.title,
                             instruction: question.instruction,
                             questionId: question.id,
                         },
                         field: question.id,
-                        cellRendererFramework: 'TableRoster_ViewAnswer',
+                        cellRenderer: 'TableRoster_ViewAnswer',
                         cellRendererParams: {
                             id: question.id,
                             question: question,
                         },
-                        cellEditorFramework: 'TableRoster_QuestionEditor',
+                        cellEditor: 'TableRoster_QuestionEditor',
                         cellEditorParams: {
                             id: question.id,
                             value: question,
                         },
                     }
-                }
+                },
             )
             columnsFromQuestions.unshift({
                 headerName: this.$me.title,
-                headerComponentFramework: 'TableRoster_Title',
+                headerComponent: 'TableRoster_Title',
                 headerComponentParams: {
                     title: this.$me.title,
                 },
@@ -130,7 +144,7 @@ export default {
                 pinned: true,
                 editable: false,
                 cellStyle: { minHeight: '40px' },
-                cellRendererFramework: 'TableRoster_RosterTitle',
+                cellRenderer: 'TableRoster_RosterTitle',
                 cellRendererParams: {},
             })
             this.columnDefs = columnsFromQuestions
@@ -149,8 +163,9 @@ export default {
                             rowIndex: key,
                         },
                     }
-                    self.$me.questions.forEach(question => {
-                        var questionIdentity = question.id + instance.rosterVector
+                    self.$me.questions.forEach((question) => {
+                        var questionIdentity =
+                            question.id + instance.rosterVector
                         instanceAsRow[question.id] = {
                             identity: questionIdentity,
                             type: question.entityType,
@@ -158,7 +173,7 @@ export default {
                     })
 
                     return instanceAsRow
-                }
+                },
             )
             this.rowData = rosterInstancesWithQuestionsAsRows
         },
@@ -175,7 +190,10 @@ export default {
             if (event.finished !== false) {
                 const MIN_HEIGHT = 16
                 event.api.setHeaderHeight(MIN_HEIGHT)
-                const headerCells = this.$refs.tableRoster.$el.getElementsByClassName('ag-header-cell-label')
+                const headerCells =
+                    this.$refs.tableRoster.$el.getElementsByClassName(
+                        'ag-header-cell-label',
+                    )
                 let minHeight = MIN_HEIGHT
                 for (let index = 0; index < headerCells.length; index++) {
                     const cell = headerCells[index]
@@ -195,8 +213,7 @@ export default {
                 if (this.$me.instances.length > 20) {
                     this.gridApi.setDomLayout('normal')
                     this.$refs.tableRoster.$el.style.height = '1024px'
-                }
-                else {
+                } else {
                     this.gridApi.setDomLayout('autoHeight')
                     this.$refs.tableRoster.$el.style.height = ''
                 }
