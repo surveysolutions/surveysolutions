@@ -187,7 +187,6 @@ export default {
         },
 
         autosizeHeaders(event) {
-            return
             if (event.finished !== false) {
                 const MIN_HEIGHT = 16
                 event.api.setHeaderHeight(MIN_HEIGHT)
