@@ -246,44 +246,52 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             var fullPath = Path.GetFullPath(tempFile);
 
                             var valueGdalHome = this.geospatialConfig.Value.GdalHome;
-                            this.logger.LogInformation("Reading info from {FileName} with gdalinfo located in {GdalHome}", 
-                                fullPath, valueGdalHome);
-                            
-                            var startInfo = 
-                                ConsoleCommand.Read(Path.Combine(valueGdalHome, "gdalinfo"),
-                                    $"\"{fullPath}\" -json");
-                            var deserialized = JsonConvert.DeserializeObject<GdalInfoOuput>(startInfo);
 
-                            if (deserialized?.Wgs84Extent != null)
+                            if (!string.IsNullOrWhiteSpace(valueGdalHome))
                             {
-                                double xMin = double.MaxValue;
-                                double xMax = double.MinValue;
-                                double yMin = double.MaxValue;
-                                double yMax = double.MinValue;
+                                this.logger.LogInformation("Reading info from {FileName} with gdalinfo located in {GdalHome}", 
+                                    fullPath, valueGdalHome);
+                            
+                                var startInfo = ConsoleCommand.Read(Path.Combine(valueGdalHome, "gdalinfo"), $"\"{fullPath}\" -json");
+                                var deserialized = JsonConvert.DeserializeObject<GdalInfoOuput>(startInfo);
 
-                                foreach (double[][] poli in deserialized.Wgs84Extent.Coordinates)
+                                if (deserialized?.Wgs84Extent != null)
                                 {
-                                    foreach (double[] coord in poli)
-                                    {
-                                        xMin = Math.Min(xMin, coord[0]);
-                                        xMax = Math.Max(xMax, coord[0]);
+                                    double xMin = double.MaxValue;
+                                    double xMax = double.MinValue;
+                                    double yMin = double.MaxValue;
+                                    double yMax = double.MinValue;
 
-                                        yMin = Math.Min(yMin, coord[1]);
-                                        yMax = Math.Max(yMax, coord[1]);
+                                    foreach (double[][] poli in deserialized.Wgs84Extent.Coordinates)
+                                    {
+                                        foreach (double[] coord in poli)
+                                        {
+                                            xMin = Math.Min(xMin, coord[0]);
+                                            xMax = Math.Max(xMax, coord[0]);
+
+                                            yMin = Math.Min(yMin, coord[1]);
+                                            yMax = Math.Max(yMax, coord[1]);
+                                        }
                                     }
 
+                                    item.XMinVal = xMin;
+                                    item.YMinVal = yMin;
+
+                                    item.XMaxVal = xMax;
+                                    item.YMaxVal = yMax;
+
+                                    item.Wkid = WGS84Wkid; //geographic coordinates Wgs84
                                 }
-
-                                item.XMinVal = xMin;
-                                item.YMinVal = yMin;
-
-                                item.XMaxVal = xMax;
-                                item.YMaxVal = yMax;
-
-                                item.Wkid = WGS84Wkid; //geographic coordinates Wgs84
+                                else
+                                    throw new InvalidOperationException(".tif file is not recognized as map");
                             }
                             else
-                                throw new InvalidOperationException(".tif file is not recognized as map");
+                            {
+                                var isGeoTiff = GeoTiffInfoReader.IsGeoTIFF(fullPath);
+                                if (!isGeoTiff)
+                                    throw new InvalidOperationException(".tif file is not recognized as map");    
+                            }
+                            
                         }
                         catch (Win32Exception e)
                         {
