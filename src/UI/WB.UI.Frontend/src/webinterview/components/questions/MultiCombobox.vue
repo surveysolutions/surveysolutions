@@ -25,18 +25,20 @@
                         v-if="row.attachmentName" />
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" v-if="!allAnswersGiven">
                     <div class="field"
                         :class="{answered: $me.isAnswered}">
                         <wb-typeahead :questionId="$me.id"
-                            @input="appendCompboboxItem"
-                            :disabled="!$me.acceptAnswer || allAnswersGiven"
+                            @input="appendCompboboxItem"                            
                             :optionsSource="optionsSource"
                             :watermark="!$me.acceptAnswer && !$me.isAnswered ? $t('Details.NoAnswer') : null"/>
                     </div>
                 </div>
                 <wb-lock />
             </div>
+        </div>
+        <div v-if="allAnswersGiven" class="information-block text-info">
+            <h6>{{ $t("WebInterviewUI.MaxAnswersCountSelected", { value: $me.maxSelectedAnswersCount }) }}</h6>
         </div>
     </wb-question>
 </template>
