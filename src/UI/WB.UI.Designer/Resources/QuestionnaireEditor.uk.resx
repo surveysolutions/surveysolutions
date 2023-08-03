@@ -720,7 +720,7 @@
     <value>Застосувати зміни</value>
   </data>
   <data name="OptionsUploadLimit" xml:space="preserve">
-      <value>Без категорій. Виберіть файл, розділений табуляцією. Файл може містити до {ліміт} категорій.</value>
+      <value>Без категорій. Виберіть файл, розділений табуляцією. Файл може містити до {limit} категорій.</value>
   </data>
   <data name="OptionsUploadParent" xml:space="preserve">
     <value>Батьківське значення</value>
