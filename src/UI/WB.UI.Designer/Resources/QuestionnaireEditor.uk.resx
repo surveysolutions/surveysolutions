@@ -1577,13 +1577,4 @@
   <data name="Yes" xml:space="preserve">
     <value>Так</value>
   </data>
-  <data name="QuestionShowStrings" xml:space="preserve">
-    <value>Показати рядки</value>
-  </data>
-  <data name="RosterShowStrings" xml:space="preserve">
-    <value>Показати рядки</value>
-  </data>
-  <data name="ShowList" xml:space="preserve">
-    <value>Показати список</value>
-  </data>
 </root>
