@@ -154,10 +154,10 @@
     <value>Провайдери електронної пошти</value>
   </data>
   <data name="Headquarters" xml:space="preserve">
-    <value>Штаб-квартира</value>
+    <value>Headquarters</value>
   </data>
   <data name="Help" xml:space="preserve">
-    <value>Допоможіть!</value>
+    <value>Допомога</value>
   </data>
   <data name="Interviewers" xml:space="preserve">
     <value>Інтерв'юери</value>
@@ -169,10 +169,10 @@
     <value>Інтерв'ю</value>
   </data>
   <data name="MapDashboard" xml:space="preserve">
-    <value>Панель управління картою</value>
+    <value>Панель управління на мапі</value>
   </data>
   <data name="MapReport" xml:space="preserve">
-    <value>Звіт про мапу</value>
+    <value>Звіт на мапі</value>
   </data>
   <data name="Maps" xml:space="preserve">
     <value>Карти</value>
@@ -205,13 +205,13 @@
     <value>Швидкість</value>
   </data>
   <data name="Started" xml:space="preserve">
-    <value>Розпочато.</value>
+    <value>Розпочаті</value>
   </data>
   <data name="StatusDuration" xml:space="preserve">
     <value>Статус Тривалість</value>
   </data>
   <data name="Supervisors" xml:space="preserve">
-    <value>Супервайзери</value>
+    <value>Супервайзори</value>
   </data>
   <data name="SurveysAndStatuses" xml:space="preserve">
     <value>Опитування та статуси</value>
@@ -238,7 +238,7 @@
     <value>Команди та статуси</value>
   </data>
   <data name="Troubleshooting" xml:space="preserve">
-    <value>Усунення несправностей</value>
+    <value>Вирішення проблем</value>
   </data>
   <data name="UserBatchUpload" xml:space="preserve">
     <value>Пакетне завантаження користувача</value>
@@ -247,7 +247,7 @@
     <value>Користувачі</value>
   </data>
   <data name="Workspaces" xml:space="preserve">
-    <value>Робочі місця</value>
+    <value>Робочі простори</value>
   </data>
   <data name="WorkspaceSettings" xml:space="preserve">
     <value>Налаштування робочого простору</value>

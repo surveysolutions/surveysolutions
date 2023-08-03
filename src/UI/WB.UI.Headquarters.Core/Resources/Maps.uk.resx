@@ -163,10 +163,10 @@
     <value>Виникла помилка при завантаженні посилань на мапу.</value>
   </data>
   <data name="MapsLoadingError" xml:space="preserve">
-    <value>Виникла помилка при завантаженні карти.</value>
+    <value>Виникла помилка при завантаженні мапи.</value>
   </data>
   <data name="MaxScale" xml:space="preserve">
-    <value>Макс Скейл</value>
+    <value>Максимальний масштаб</value>
   </data>
   <data name="MinScale" xml:space="preserve">
     <value>Мінімальна шкала</value>

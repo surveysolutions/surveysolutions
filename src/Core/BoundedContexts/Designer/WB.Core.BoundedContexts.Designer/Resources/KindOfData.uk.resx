@@ -139,7 +139,7 @@
     <value>Дані, отримані в процесі [pro]</value>
   </data>
   <data name="ssd" xml:space="preserve">
-    <value>Дані вибіркового опитування [ssd]</value>
+    <value>Дані вибіркового дослідження [ssd]</value>
   </data>
   <data name="tbd" xml:space="preserve">
     <value>Щоденники бюджету часу [tbd]</value>

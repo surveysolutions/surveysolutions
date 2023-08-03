@@ -68,7 +68,7 @@
     <value>Всі завдання</value>
   </data>
   <data name="AllGpsQuestions" xml:space="preserve">
-    <value>Всі питання щодо GPS</value>
+    <value>Всі GPS питання</value>
   </data>
   <data name="AllQuestionnaires" xml:space="preserve">
     <value>Всі анкети</value>
@@ -80,7 +80,7 @@
     <value>Всі статуси</value>
   </data>
   <data name="AllSupervisors" xml:space="preserve">
-    <value>Всі керівники</value>
+    <value>Всі супервізори</value>
   </data>
   <data name="AllVersions" xml:space="preserve">
     <value>Всі версії</value>
@@ -89,10 +89,10 @@
     <value>Всі права захищені</value>
   </data>
   <data name="Any" xml:space="preserve">
-    <value>Будь-який</value>
+    <value>Будь-які</value>
   </data>
   <data name="Apply" xml:space="preserve">
-    <value>Подати заявку</value>
+    <value>Застосувати</value>
   </data>
   <data name="Approve" xml:space="preserve">
     <value>Схвалити</value>
@@ -113,7 +113,7 @@
     <value>Журнал аудиту</value>
   </data>
   <data name="CalendarEvent" xml:space="preserve">
-    <value>Подія в календарі</value>
+    <value>Календарна подія</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Скасувати</value>
@@ -128,16 +128,16 @@
     <value>Перехід на CAPI</value>
   </data>
   <data name="ChangeToCAPIConfirmHQ" xml:space="preserve">
-    <value>Вибраний {{count}} режим інтерв'ю буде змінено на CAPI</value>
+    <value>Вибрано {{count}} інтерв'ю режим яких буде змінено на CAPI</value>
   </data>
   <data name="ChangeToCAWI" xml:space="preserve">
     <value>Перехід на CAWI</value>
   </data>
   <data name="ChangeToCAWIConfirmHQ" xml:space="preserve">
-    <value>Вибраний {{count}} режим інтерв'ю буде змінено на CAWI</value>
+    <value>Вибрано {{count}} інтерв'ю режим яких буде змінено на CAWI</value>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Чисто</value>
+    <value>Очистити</value>
   </data>
   <data name="Confirm" xml:space="preserve">
     <value>Підтвердити</value>
@@ -164,7 +164,7 @@
     <value>Завантажити додаток Supervisor</value>
   </data>
   <data name="EditCalendarEvent" xml:space="preserve">
-    <value>Редагувати подію календаря</value>
+    <value>Редагувати календарну подію</value>
   </data>
   <data name="EmailProviders" xml:space="preserve">
     <value>Провайдери електронної пошти</value>
@@ -194,10 +194,10 @@
     <value>Інтерв'ю</value>
   </data>
   <data name="LastUpdate" xml:space="preserve">
-    <value>Оновлено на</value>
+    <value>Оновлено</value>
   </data>
   <data name="Legal" xml:space="preserve">
-    <value>Юридичний</value>
+    <value>Юридична інформація</value>
   </data>
   <data name="LinkedUsers" xml:space="preserve">
     <value>Пов'язані користувачі</value>
@@ -212,7 +212,7 @@
     <value>Вийти з системи</value>
   </data>
   <data name="MapDashboard" xml:space="preserve">
-    <value>Панель управління картою</value>
+    <value>Панель управління на карті</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Ім'я</value>
@@ -221,31 +221,31 @@
     <value>Доступна нова версія:</value>
   </data>
   <data name="No" xml:space="preserve">
-    <value>Ні.</value>
+    <value>Ні</value>
   </data>
   <data name="NoResultsFound" xml:space="preserve">
     <value>Не знайдено жодного результату</value>
   </data>
   <data name="NotEquals" xml:space="preserve">
-    <value>Не рівні</value>
+    <value>Не дорівнює</value>
   </data>
   <data name="NothingSelected" xml:space="preserve">
     <value>Нічого не вибрано</value>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>Гаразд.</value>
+    <value>Гаразд</value>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>Відкрито</value>
+    <value>Відкрити</value>
   </data>
   <data name="OpenAssignment" xml:space="preserve">
-    <value>Відкрите завдання</value>
+    <value>Відкрити завдання</value>
   </data>
   <data name="OpenResponsiblesProfile" xml:space="preserve">
     <value>Відкрити профіль відповідального</value>
   </data>
   <data name="PrefilledQuestions" xml:space="preserve">
-    <value>Визначальні питання</value>
+    <value>Ідентифікаційні питання</value>
   </data>
   <data name="Processing" xml:space="preserve">
     <value>Обробка...</value>
@@ -275,7 +275,7 @@
     <value>Видалити</value>
   </data>
   <data name="Reset" xml:space="preserve">
-    <value>Перезавантаження</value>
+    <value>Перезавантажити</value>
   </data>
   <data name="Responsible" xml:space="preserve">
     <value>Відповідальний</value>
@@ -296,7 +296,7 @@
     <value>Виберіть варіант</value>
   </data>
   <data name="SelectQuestionnaire" xml:space="preserve">
-    <value>Виберіть анкету</value>
+    <value>Вибрати анкету</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Налаштування</value>
@@ -308,7 +308,7 @@
     <value>Показати історію статусів</value>
   </data>
   <data name="SignIn" xml:space="preserve">
-    <value>Увійдіть в систему</value>
+    <value>Увійти до системи</value>
   </data>
   <data name="StartsWith" xml:space="preserve">
     <value>Починається з</value>
@@ -338,9 +338,9 @@
     <value>Переглянути деталі завдання</value>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>Так.</value>
+    <value>Так</value>
   </data>
   <data name="НasErrors" xml:space="preserve">
-    <value>Нas Errors</value>
+    <value>Мають помилки</value>
   </data>
 </root>

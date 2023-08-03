@@ -169,7 +169,7 @@
     <value>Тема:</value>
   </data>
   <data name="EmailTemplateDescription" xml:space="preserve">
-    <value>Ви можете використовувати в тексті заповнювач %SURVEYNAME% як назву опитування</value>
+    <value>Ви можете використовувати в тексті заповнювач %SURVEYNAME% як назву анкети</value>
   </data>
   <data name="ExampleFinishPage" xml:space="preserve">
     <value>Приклад фінішної сторінки</value>
@@ -199,7 +199,7 @@
     <value>%змінна_питання:штрихкод% - відобразити відповідь у вигляді штрихкоду Code 128</value>
   </data>
   <data name="InterviewDataInsertInTextDescription" xml:space="preserve">
-    <value>У цьому шаблоні ви можете використовувати %question_variable% у тексті як відповідь на питання в інтерв'ю. Питання має бути з верхнього рівня анкети (не всередині списків).</value>
+    <value>У цьому шаблоні ви можете використовувати %question_variable% у тексті як відповідь на питання в інтерв'ю. Питання має бути з верхнього рівня анкети (не всередині ростерів).</value>
   </data>
   <data name="InterviewDataInsertQrCodeDescription" xml:space="preserve">
     <value>%змінна_питання:qrcode% - відобразити відповідь у вигляді QR-коду</value>
@@ -217,7 +217,7 @@
     <value>Основний текст:</value>
   </data>
   <data name="NoteToSupervisor" xml:space="preserve">
-    <value>Примітка для керівника</value>
+    <value>Примітка для супервізора</value>
   </data>
   <data name="Reject" xml:space="preserve">
     <value>Відхилити</value>
@@ -259,10 +259,10 @@
     <value>Відображається, тільки якщо пароль потрібен і встановлений</value>
   </data>
   <data name="StartInterviewButton" xml:space="preserve">
-    <value>Кнопка "Почати інтерв'ю</value>
+    <value>Кнопка Почати інтерв'ю</value>
   </data>
   <data name="StartNew" xml:space="preserve">
-    <value>Почніть нове інтерв'ю</value>
+    <value>Почати нове інтерв'ю</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Назва:</value>

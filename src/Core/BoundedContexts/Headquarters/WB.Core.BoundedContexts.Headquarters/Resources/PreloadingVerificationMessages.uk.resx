@@ -121,13 +121,13 @@
     <value>Захищені паролем архіви не підтримуються</value>
   </data>
   <data name="PL0002_MoreThenOneLevel" xml:space="preserve">
-    <value>[PL0002] N/A. Зверніться до служби підтримки за адресою support@mysurvey.solutions</value>
+    <value>[PL0002] N/A. Зверніться до служби підтримки вашого сервера</value>
   </data>
   <data name="PL0003_ColumnWasntMappedOnQuestion" xml:space="preserve">
     <value>Стовпчик не може бути прив'язаний до жодного питання в анкеті.</value>
   </data>
   <data name="PL0004_FileWasntMappedRoster" xml:space="preserve">
-    <value>Файл не може бути прив'язаний до жодного реєстру в анкеті.</value>
+    <value>Файл не може бути прив'язаний до жодного ростеру в анкеті.</value>
   </data>
   <data name="PL0006_IdDublication" xml:space="preserve">
     <value>Знайдено дублікати значень ідентифікатора.</value>
@@ -136,10 +136,10 @@
     <value>Відсутній один або декілька стовпців батьківського ідентифікатора.</value>
   </data>
   <data name="PL0008_OrphanRosterRecord" xml:space="preserve">
-    <value>Запис у реєстрі не має батька.</value>
+    <value>Запис у ростері не має батька.</value>
   </data>
   <data name="PL0009_RosterIdIsInconsistantWithRosterSizeQuestion" xml:space="preserve">
-    <value>Ідентифікатор реєстру не відповідає розміру реєстру.</value>
+    <value>Ідентифікатор ростеру не відповідає розміру ростеру.</value>
   </data>
   <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
     <value>Значення питання не дозволено.</value>
@@ -157,7 +157,7 @@
     <value>Допускаються тільки реальні значення.</value>
   </data>
   <data name="PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative" xml:space="preserve">
-    <value>Питання про розмір реєстру не може мати від'ємних значень.</value>
+    <value>Питання про розмір ростеру не може мати від'ємних значень.</value>
   </data>
   <data name="PL0024_DataWasNotFound" xml:space="preserve">
     <value>Дані попереднього завантаження не знайдено.</value>
@@ -169,7 +169,7 @@
     <value>Відповідальний - заблокований користувач за 1 або більше спостережень.</value>
   </data>
   <data name="PL0028_UserIsNotHQOrSupervisorOrInterviewer" xml:space="preserve">
-    <value>Користувач не є штаб-квартирою, супервайзером або інтерв'юером для 1 або більше спостережень.</value>
+    <value>Користувач не є хедквотером, супервізором або інтерв'юером для 1 або більше спостережень.</value>
   </data>
   <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
     <value>Відповідь на питання про розмір списку не може бути більшою за {0}.</value>
@@ -187,7 +187,7 @@
     <value>Широта повинна бути більше -90° і менше 90°.</value>
   </data>
   <data name="PL0033_LongitudeMustBeGeaterThenN180AndLessThen180" xml:space="preserve">
-    <value>Довгота повинна бути більше -180° і менше 180°..</value>
+    <value>Довгота повинна бути більше -180° і менше 180°.</value>
   </data>
   <data name="PL0034_CommaSymbolIsNotAllowedInNumericAnswer" xml:space="preserve">
     <value>Неправильний десятковий роздільник. Символ "," не допускається у числових відповідях. Будь ласка, використовуйте "." замість нього.</value>
@@ -199,7 +199,7 @@
     <value>Кількість повинна бути більшою або дорівнювати -1.</value>
   </data>
   <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
-    <value>Відсутній файл з даними на рівні анкети.</value>
+    <value>Відсутній файл з даними на верхньому рівні анкети.</value>
   </data>
   <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
     <value>Кількість варіантів відповідей на питання з множинним вибором не може перевищувати максимально допустиму кількість відповідей.</value>
@@ -220,10 +220,10 @@
     <value>Від'ємне значення не допускається для категоричного питання з декількома варіантами відповідей.</value>
   </data>
   <data name="PL0052_ColumnByTextListRosterSizeAnswerNotFound" xml:space="preserve">
-    <value>Список повинен мати стовпчик для текстових відповідей</value>
+    <value>Ростер зі списку повинен мати стовпчик для текстових відповідей</value>
   </data>
   <data name="PL0053_InconsistentNumericRosterInstanceCodes" xml:space="preserve">
-    <value>Неузгодженість коду реєстру для числового реєстру. Послідовність кодів реєстру повинна бути 0, 1, ... для підрахунку екземплярів реєстру</value>
+    <value>Неузгодженість коду ростеру для числового ростеру. Послідовність кодів ростеру повинна бути 0, 1, ... для підрахунку екземплярів ростеру</value>
   </data>
   <data name="PL0054_MaxInterviewsCountByAssignmentExeeded" xml:space="preserve">
     <value>Максимальна кількість не повинна перевищувати {0}..</value>
@@ -241,18 +241,18 @@
     <value>Веб-режим має бути увімкнений для завдань, що мають електронну пошту</value>
   </data>
   <data name="PL0059_IncosistentWebmodeAndPassword" xml:space="preserve">
-    <value>Веб-режим має бути активований для призначень з паролем</value>
+    <value>Веб-режим має бути активований для завдань з паролем</value>
   </data>
   <data name="PL0060_WebmodeSizeOneHasNoEmailOrPassword" xml:space="preserve">
-    <value>Призначення з розміром 1 для веб-режиму повинно мати або електронну пошту, або пароль</value>
+    <value>Завдання з розміром 1 для веб-режиму повинно мати або електронну пошту, або пароль</value>
   </data>
   <data name="PL0061_DuplicatePasswordWithQuantity1" xml:space="preserve">
-    <value>Пароль не є унікальним. Пароль за призначенням для веб-режиму з кількістю 1 повинен бути унікальним</value>
+    <value>Пароль не є унікальним. Пароль за завданням для веб-режиму з кількістю 1 повинен бути унікальним</value>
   </data>
   <data name="PL0062_WebModeOnlyForInterviewer" xml:space="preserve">
     <value>Всі завдання для веб-інтерв'ю повинні бути надані інтерв'юеру</value>
   </data>
   <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
-    <value>Відповідь на питання зі змінною з іменем {0} не може бути попередньо завантажена, оскільки вона має непідтримуваний тип. Зверніться до наступної статті підтримки https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type для отримання детальної інформації про те, що можна попередньо завантажити у поточній версії.</value>
+    <value>Відповідь на питання з іменем {0} не може бути попередньо завантажена, оскільки вона має непідтримуваний тип. Зверніться до наступної статті підтримки https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type для отримання детальної інформації про те, що можна попередньо завантажити у поточній версії.</value>
   </data>
 </root>

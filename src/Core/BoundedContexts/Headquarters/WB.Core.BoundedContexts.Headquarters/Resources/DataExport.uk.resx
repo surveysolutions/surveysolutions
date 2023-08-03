@@ -127,7 +127,7 @@
     <value>Затверджено статусом штаб-квартири</value>
   </data>
   <data name="ApprovedBySupervisor" xml:space="preserve">
-    <value>Затверджено статусом Супервайзера</value>
+    <value>Статус Затверджено супервізором</value>
   </data>
   <data name="BinaryData" xml:space="preserve">
     <value>Двійкові дані</value>
@@ -148,7 +148,7 @@
     <value>Ви впевнені, що хочете припинити</value>
   </data>
   <data name="DataDestination" xml:space="preserve">
-    <value>Місце призначення файлу експорту</value>
+    <value>Місце завданняфайлу експорту</value>
   </data>
   <data name="DataDestination_Dropbox" xml:space="preserve">
     <value>Завантажити на Dropbox</value>
@@ -187,7 +187,7 @@
     <value>Розмір файлу: {{size}} МБ</value>
   </data>
   <data name="DataExport_FileWasRegenerated" xml:space="preserve">
-    <value>Файл було регенеровано</value>
+    <value>Файл було перегенеровано</value>
   </data>
   <data name="DataExport_Header" xml:space="preserve">
     <value>Виберіть тип і формат даних для експорту</value>
@@ -205,10 +205,10 @@
     <value>{{title}} (ver. {{version}})</value>
   </data>
   <data name="DataExport_QueuedOn" xml:space="preserve">
-    <value>В черзі на {{date}}</value>
+    <value>В черзі з {{date}}</value>
   </data>
   <data name="DataExport_Regenerate" xml:space="preserve">
-    <value>Регенерувати</value>
+    <value>Перегенерувати</value>
   </data>
   <data name="DataExport_RegenerateDesc" xml:space="preserve">
     <value>Експорт черги з тими самими параметрами</value>
@@ -253,13 +253,13 @@
     <value>Основні дані опитування. Zip-архів з основними даними інтерв'ю</value>
   </data>
   <data name="DataType_Paradata" xml:space="preserve">
-    <value>Параметри. Метадані про процес інтерв'ю (події та час)</value>
+    <value>Парадата. Метадані про процес інтерв'ю (події та час)</value>
   </data>
   <data name="DataWasNotGenerated" xml:space="preserve">
     <value>Не згенеровано</value>
   </data>
   <data name="DDI" xml:space="preserve">
-    <value>Д.Д.І.</value>
+    <value>DDI</value>
   </data>
   <data name="DDIDescription" xml:space="preserve">
     <value>XML-дані Ініціативи з документування даних</value>
@@ -277,7 +277,7 @@
     <value>У вибраному хмарному сховищі недостатньо місця. Будь ласка, звільніть місце та перезапустіть завдання або оберіть іншого провайдера.</value>
   </data>
   <data name="Error_Unhandled" xml:space="preserve">
-    <value>Під час експорту сталася непередбачувана помилка. Приносимо вибачення за незручності. Будь ласка, зверніться до служби підтримки support@mysurvey.solutions з файлами журналів *.log, які зберігаються в папці програми. Додаткова інформація з цього питання доступна на сторінці підтримки: https://support.mysurvey.solutions/headquarters/config/standalone-server-errors/.</value>
+    <value>Під час експорту сталася непередбачувана помилка. Приносимо вибачення за незручності. Будь ласка, зверніться до вашого адміністратора з файлами журналів *.log, які зберігаються в папці додатку. Додаткова інформація з цього питання доступна на сторінці підтримки: https://support.mysurvey.solutions/headquarters/config/standalone-server-errors/.</value>
   </data>
   <data name="ErrorThereAreRunningProcesses" xml:space="preserve">
     <value>Ви не можете змінити налаштування експорту, оскільки процес експорту вже запущено.</value>
@@ -367,19 +367,19 @@
     <value>Прогрес</value>
   </data>
   <data name="QuestionnaireInformation" xml:space="preserve">
-    <value>Інформація для заповнення анкети</value>
+    <value>Інформація про анкету</value>
   </data>
   <data name="QuestionnaireInformation_Exclude" xml:space="preserve">
     <value>Виключити метаінформацію про анкету</value>
   </data>
   <data name="QuestionnaireInformation_Include" xml:space="preserve">
-    <value>Включіть метаінформацію про опитувальник</value>
+    <value>Включіть метаінформацію про анкету</value>
   </data>
   <data name="QuestionnaireTranslation" xml:space="preserve">
     <value>Переклад</value>
   </data>
   <data name="QueuedTitle" xml:space="preserve">
-    <value>У черзі.</value>
+    <value>У черзі</value>
   </data>
   <data name="SaveBinaryDataTo" xml:space="preserve">
     <value>Збережіть двійкові дані у:</value>
@@ -394,7 +394,7 @@
     <value>Шаблон опитування</value>
   </data>
   <data name="SurveyTemplateTitle" xml:space="preserve">
-    <value>(версія) Опитувальник для опитування</value>
+    <value>(версія) Анкета для опитування</value>
   </data>
   <data name="TabularFormat" xml:space="preserve">
     <value>Табличний формат</value>

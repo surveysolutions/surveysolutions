@@ -124,7 +124,7 @@
     <value>Користувач для інтерфейсу прикладного програмування</value>
   </data>
   <data name="Headquarter" xml:space="preserve">
-    <value>Штаб-квартира</value>
+    <value>Хедквотер</value>
   </data>
   <data name="Interviewer" xml:space="preserve">
     <value>Інтерв'юер</value>
@@ -133,6 +133,6 @@
     <value>Спостерігач</value>
   </data>
   <data name="Supervisor" xml:space="preserve">
-    <value>Наглядач</value>
+    <value>Супервізор</value>
   </data>
 </root>

@@ -133,24 +133,24 @@
     <value>Будь ласка, заповніть поле captcha</value>
   </data>
   <data name="Questionnaire_verification_failed" xml:space="preserve">
-    <value>Опитувальник "{0}" має помилки компіляції. Будь ласка, виправте їх у Дизайнері.</value>
+    <value>Анкета"{0}" має помилки компіляції. Будь ласка, виправте їх у Дизайнері.</value>
   </data>
   <data name="QuestionnaireAlreadyImporting" xml:space="preserve">
-    <value>Ще одна анкета зараз імпортується до штаб-квартири.</value>
+    <value>Інша анкета зараз імпортується до Headquarters.</value>
   </data>
   <data name="RequestTimeout" xml:space="preserve">
     <value>Таймаут при спробі підключення до Designer. Будь ласка, перевірте підключення до Інтернету.</value>
   </data>
   <data name="ServerError" xml:space="preserve">
-    <value>Виникла внутрішня помилка сервера. Зверніться до служби підтримки Survey Solutions за адресою support@mysurvey.solutions.</value>
+    <value>Виникла внутрішня помилка сервера. Зверніться до вашого адміністратора.</value>
   </data>
   <data name="ServiceUnavailable" xml:space="preserve">
-    <value>Конструктор недоступний.  Будь ласка, переконайтеся, що конструктор не перебуває в режимі технічного обслуговування</value>
+    <value>Designer недоступний. Будь ласка, переконайтеся, що Designer не перебуває в режимі технічного обслуговування</value>
   </data>
   <data name="SiteAccessNotAllowed" xml:space="preserve">
     <value>Ви не маєте дозволу на доступ до цього сайту. Зверніться до адміністратора.</value>
   </data>
   <data name="TemplateNotFound" xml:space="preserve">
-    <value>Опитувальник "{0}" не знайдено. Будь ласка, оновіть список анкет.</value>
+    <value>Анкету "{0}" не знайдено. Будь ласка, оновіть список анкет.</value>
   </data>
 </root>

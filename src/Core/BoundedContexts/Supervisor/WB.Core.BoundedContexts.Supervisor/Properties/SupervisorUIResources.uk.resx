@@ -131,10 +131,10 @@
     <value>Отримання інтерв'ю з пристрою інтерв'юера</value>
   </data>
   <data name="OfflineSync_WaitingInterviewers" xml:space="preserve">
-    <value>Очікування дій від пристроїв Interviewer</value>
+    <value>Очікування дій від пристроїв інтерв'юерів</value>
   </data>
   <data name="Synchronization_Download_Interviewer_Apps" xml:space="preserve">
-    <value>Завантаження оновлень для програми для інтерв'юерів</value>
+    <value>Завантаження оновлень для додатку Interviewer</value>
   </data>
   <data name="Synchronization_Download_Interviewer_Apps_Format" xml:space="preserve">
     <value>Завантаження оновлень. {0} з {1} завантажено</value>
@@ -146,7 +146,7 @@
     <value>Синхронізація з інтерв'юерами</value>
   </data>
   <data name="Synchronization_UploadBrokenInterviewPackages" xml:space="preserve">
-    <value>Завантаження розбитих пакетів інтерв'ю</value>
+    <value>Завантаження пошкоджених пакетів інтерв'ю</value>
   </data>
   <data name="Synchronization_UploadExceptions" xml:space="preserve">
     <value>Завантаження повідомлень про помилки інтерв'юера</value>

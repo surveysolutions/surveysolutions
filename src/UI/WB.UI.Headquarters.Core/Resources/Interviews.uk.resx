@@ -121,33 +121,33 @@
     <value>Динамічний фільтр</value>
   </data>
   <data name="ApproveConfirmMessage" xml:space="preserve">
-    <value>{{count}} співбесіду буде схвалено.</value>
+    <value>{{count}} інтерв'ю буде затверджено.</value>
   </data>
   <data name="ApproveConfirmMessage_other" xml:space="preserve">
-    <value>{{count}} співбесіди будуть затверджені.</value>
+    <value>{{count}} інтерв'ю будуть затверджені.</value>
   </data>
   <data name="ApproveConfirmMessage_Statuses" xml:space="preserve">
     <value>Ви можете затвердити інтерв'ю лише з такими статусами: {{status1}}, {{status2}} та {{status3}}..</value>
   </data>
   <data name="ApproveConfirmMessageHQ" xml:space="preserve">
       <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; інтерв'ю буде затверджено.&lt;/h3&gt;
-&lt;b&gt;Примітка!&lt;/b&gt; Ви можете затвердити інтерв'ю лише з таким статусом: &lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}}&lt;/i&gt; та &lt;i&gt;{{status3}}&lt;/i&gt;.</value>
+&lt;b&gt;Примітка!&lt;/b&gt; Ви можете затвердити інтерв'ю лише з такими статусами: &lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}}&lt;/i&gt; та &lt;i&gt;{{status3}}&lt;/i&gt;.</value>
   </data>
   <data name="ApproveReceivedWarning" xml:space="preserve">
     <value>Поточні відповідальні інтерв'юери не будуть повідомлені про затвердження інтерв'ю до наступної синхронізації. Якщо вони вже почали працювати над інтерв'ю, всі дані, які вони ввели до наступної синхронізації, будуть ВИДАЛЕНІ!</value>
   </data>
   <data name="AssignConfirmMessage" xml:space="preserve">
-      <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; інтерв'ю, вибрані для перепризначення.&lt;/h3&gt;
-&lt;b&gt;Примітка!&lt;/b&gt; Ви можете перепризначити інтерв'ю лише з такими статусами: &lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}} (тільки на іншого інтерв'юера)&lt;/i&gt; і &lt;i&gt;{{status3}}&lt;/i&gt;.</value>
+      <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; інтерв'ю, вибрані для перезавдання.&lt;/h3&gt;
+&lt;b&gt;Примітка!&lt;/b&gt; Ви можете перепризначити інтерв'ю лише з такими статусами: &lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}} (тільки на іншого інтерв'юера)&lt;/i&gt; та &lt;i&gt;{{status3}}&lt;/i&gt;.</value>
   </data>
   <data name="Assignment" xml:space="preserve">
     <value>Ідентифікатор призначення</value>
   </data>
   <data name="AssignReceivedConfirm" xml:space="preserve">
-    <value>Подайте заявку на {{count}} інтерв'ю, які Інтерв'юер вже отримав</value>
+    <value>Подайте заявку на {{count}} інтерв'ю, які Interviewer вже отримав</value>
   </data>
   <data name="AssignReceivedWarning" xml:space="preserve">
-    <value>Поточні відповідальні інтерв'юери не будуть повідомлені про перепризначення до наступної синхронізації. Якщо вони вже почали працювати над інтерв'ю, всі дані, які вони ввели до наступної синхронізації, будуть ВИДАЛЕНІ!</value>
+    <value>Поточні відповідальні інтерв'юери не будуть повідомлені про перезавданнядо наступної синхронізації. Якщо вони вже почали працювати над інтерв'ю, всі дані, які вони ввели до наступної синхронізації, будуть ВИДАЛЕНІ!</value>
   </data>
   <data name="AssignToOtherTeamConfirmMessage" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; буде призначено інтерв'ю.&lt;/h3&gt;
@@ -157,13 +157,13 @@
     <value>Виберіть ідентифікаційні питання для використання у фільтрі</value>
   </data>
   <data name="ChooseResponsible" xml:space="preserve">
-    <value>Будь ласка, оберіть куратора або інтерв'юера.</value>
+    <value>Будь ласка, оберіть супервізора або інтерв'юера.</value>
   </data>
   <data name="ChooseResponsibleInterviewer" xml:space="preserve">
     <value>Будь ласка, оберіть інтерв'юера.</value>
   </data>
   <data name="ChooseResponsibleSupervisor" xml:space="preserve">
-    <value>Будь ласка, оберіть куратора.</value>
+    <value>Будь ласка, оберіть супервізора.</value>
   </data>
   <data name="ClientKeyTitle" xml:space="preserve">
     <value>Ключ, який був згенерований на пристрої, але був змінений через зіткнення з існуючим інтерв'ю на сервері</value>
@@ -203,7 +203,7 @@
     <value>Дані відсутні</value>
   </data>
   <data name="Errors" xml:space="preserve">
-    <value>Помилки рахуються</value>
+    <value>Лічильник помилок</value>
   </data>
   <data name="FiltersByQuestions" xml:space="preserve">
     <value>Фільтри за питаннями</value>
@@ -215,10 +215,10 @@
     <value>Примітка!</value>
   </data>
   <data name="QuestionsFilterNotAvailable" xml:space="preserve">
-    <value>Фільтри за питаннями доступні лише у разі вибору певної версії опитувальника</value>
+    <value>Фільтри за питаннями доступні лише у разі вибору певної версії анкетаа</value>
   </data>
   <data name="QuestionsSelector" xml:space="preserve">
-    <value>Селектор запитань</value>
+    <value>Вибір запитань</value>
   </data>
   <data name="RejectConfirmMessage" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; інтерв'ю буде відхилено.&lt;/h3&gt;
@@ -229,10 +229,10 @@
 &lt;b&gt;Примітка!&lt;/b&gt; Ви можете відхилити інтерв'ю лише з таким статусом: &lt;i&gt;{{status1}}&lt;/i&gt; та &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
   </data>
   <data name="RejectToNewResponsible" xml:space="preserve">
-    <value>Відкидайте та обирайте нових відповідальних</value>
+    <value>Відхилити та обирати нового відповідального</value>
   </data>
   <data name="RejectToOriginal" xml:space="preserve">
-    <value>Відхилення до оригіналу відповідального</value>
+    <value>Відхилити до оригіналу відповідального</value>
   </data>
   <data name="SwitchToCawiReceivedWarning" xml:space="preserve">
     <value>Поточні відповідальні інтерв'юери не будуть повідомлені про зміну режиму інтерв'ю до наступної синхронізації. Якщо вони вже почали працювати над інтерв'ю, всі дані, які вони ввели до наступної синхронізації, будуть ВИДАЛЕНІ!</value>
@@ -262,13 +262,13 @@
     <value>Інформація, яка ідентифікує кожне завдання. Це відповіді на запитання, позначені як ідентифікаційні в Designer.</value>
   </data>
   <data name="Tooltip_Table_InterviewKey" xml:space="preserve">
-    <value>Короткий ідентифікатор справи, який з'являється у всій системі - в штаб-квартирі, у супервізора та інтерв'юера. Розгляньте можливість використання цього ідентифікатора під час спілкування з польовою командою замість великого набору ідентифікаційних запитань.</value>
+    <value>Короткий ідентифікатор елемента, який з'являється у всій системі - в Headquarters, Supervisor та Interviewer. Розгляньте можливість використання цього ідентифікатора під час спілкування з польовою командою замість великого набору ідентифікаційних запитань.</value>
   </data>
   <data name="Tooltip_Table_LastUpdate" xml:space="preserve">
     <value>Коли зміни до інтерв'ю востаннє були опубліковані на сервері. Натисніть на іконку сортування, щоб відсортувати за часом.</value>
   </data>
   <data name="Tooltip_Table_NotAnsweredCount" xml:space="preserve">
-    <value>Кількість запитань без відповіді. Включає запитання керівника, ідентифікаційні запитання та запитання інтерв'юера. Може містити нулі для інтерв'ю, які були завершені до релізу 20.09.</value>
+    <value>Кількість запитань без відповіді. Включає запитання супервізора, ідентифікаційні запитання та запитання інтерв'юера. Може містити нулі для інтерв'ю, які були завершені до релізу 20.09.</value>
   </data>
   <data name="Tooltip_Table_ReceivedByInterviewer" xml:space="preserve">
     <value>Індикатор того, чи було завантажено інтерв'ю на планшет інтерв'юера. Натисніть на іконку сортування, щоб відсортувати за отриманням інтерв'ю інтерв'юером.</value>
@@ -277,10 +277,10 @@
     <value>Користувач, який наразі відповідає за завдання. Натисніть на іконку сортування, щоб відсортувати ім'я користувача.</value>
   </data>
   <data name="Tooltip_Table_Status" xml:space="preserve">
-    <value>Статус інтерв'ю в робочому процесі опитування. Натисніть на іконку сортування, щоб відсортувати за статусом.</value>
+    <value>Статус інтерв'ю в робочому процесі. Натисніть на іконку сортування, щоб відсортувати за статусом.</value>
   </data>
   <data name="UnapproveConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; інтерв'ю буде відхилено.&lt;/h3&gt;
-&lt;b&gt;Зверніть увагу!&lt;/b&gt; Ви можете відхилити інтерв'ю лише з таким статусом: &lt;i&gt;{{status1}}&lt;/i&gt;.</value>
+    <value>&lt;h3&gt;&lt;b&gt;Буде відізвано підтвердження для {{count}}&lt;/b&gt; інтерв'ю.&lt;/h3&gt;
+&lt;b&gt;Зверніть увагу!&lt;/b&gt; Ви можете відізвати підтвердження інтерв'ю лише з таким статусом: &lt;i&gt;{{status1}}&lt;/i&gt;.</value>
   </data>
 </root>

@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApproveInterview" xml:space="preserve">
-    <value>Співбесіду {0} схвалено</value>
+    <value>інтерв'ю {0} схвалено</value>
   </data>
   <data name="AssignResponsibleToAssignment" xml:space="preserve">
     <value>Призначити відповідального {0} за завдання #{1}</value>
@@ -148,10 +148,10 @@
     <value>Встановлення завершено</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Користувач {0} увійшов до програми</value>
+    <value>Користувач {0} увійшов до додатку</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>Користувач {0} вийшов з програми</value>
+    <value>Користувач {0} вийшов з додатку</value>
   </data>
   <data name="OpenApplication" xml:space="preserve">
     <value>Додаток відкрито</value>
@@ -190,16 +190,16 @@
     <value>Синхронізацію завершено:</value>
   </data>
   <data name="SynchronizationCompleted_AssignmentsDownloaded" xml:space="preserve">
-    <value>{0} завантажено нові призначення</value>
+    <value>{0} завантажено нові завдання</value>
   </data>
   <data name="SynchronizationCompleted_AssignmentsRemoved" xml:space="preserve">
-    <value>{0} присвоєння вилучено</value>
+    <value>{0} завдання вилучено</value>
   </data>
   <data name="SynchronizationCompleted_InterviewsDownloaded" xml:space="preserve">
     <value>{0} завантажено нові інтерв'ю</value>
   </data>
   <data name="SynchronizationCompleted_InterviewsPartialDownloaded" xml:space="preserve">
-    <value>{0} інтерв'ю(и) оновлено зі штаб-квартири</value>
+    <value>{0} інтерв'ю(и) оновлено зі Headquarters</value>
   </data>
   <data name="SynchronizationCompleted_InterviewsPartialUploaded" xml:space="preserve">
     <value>{0} інтерв'ю завантажено частково</value>
@@ -220,7 +220,7 @@
     <value>{0} інтерв'ю було перевідкрито після отримання коментарів</value>
   </data>
   <data name="SynchronizationFailed" xml:space="preserve">
-    <value>Не вдалося синхронізувати.</value>
+    <value>Не вдалося синхронізувати</value>
   </data>
   <data name="SynchronizationStarted" xml:space="preserve">
     <value>Синхронізацію розпочато ({0})</value>
