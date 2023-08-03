@@ -10,8 +10,9 @@
             </div>
             <i v-html="$t('Workspaces.WorkspacesSubtitle')">
             </i>
+            <div class="search-pusher"></div>
         </div>
-        <DataTables ref="table" data-suso="workspaces-list" :tableOptions="tableOptions" noSelect noSearch :noPaging="false"
+        <DataTables ref="table" data-suso="workspaces-list" :tableOptions="tableOptions" noSelect :noPaging="false"
             :contextMenuItems="contextMenuItems" :supportContextMenu="this.$config.model.canManage">
         </DataTables>
         <ModalFrame ref="createWorkspaceModal" :title="$t('Workspaces.CreateWorkspace')">
