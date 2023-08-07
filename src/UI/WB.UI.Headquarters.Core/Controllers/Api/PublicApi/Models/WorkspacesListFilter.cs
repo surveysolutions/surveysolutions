@@ -1,8 +1,9 @@
 using System;
+using WB.UI.Headquarters.Models.Api;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Models
 {
-    public class WorkspacesListFilter
+    public class WorkspacesListFilter : DataTableRequest
     {
         public int Start { get; set; } = 0;
 

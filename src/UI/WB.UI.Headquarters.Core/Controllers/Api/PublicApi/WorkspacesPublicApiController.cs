@@ -80,6 +80,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 IncludeDisabled = filter.IncludeDisabled,
                 Offset = filter.Start,
                 Limit = filter.Length,
+                Query = filter.Search?.Value
             });
 
             return new WorkspacesApiView
