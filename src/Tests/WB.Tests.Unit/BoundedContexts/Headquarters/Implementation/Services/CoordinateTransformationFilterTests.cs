@@ -10,13 +10,13 @@ public class CoordinateTransformationFilterTests
     [Test]
     public void when_transform_coordinate()
     {
-        var source = KnownCoordinateSystems.Projected.Europe.EuropeLambertConformalConic;
+        var source = KnownCoordinateSystems.Projected.World.Mercatorworld;
         var target = KnownCoordinateSystems.Geographic.World.WGS1984;
         var filter = new CoordinateTransformationFilter(source, target);
 
         var coordinate = filter.Transform(7.777, 9.999);
         
-        Assert.That(coordinate.X, Is.EqualTo(10.000076153041633d));
-        Assert.That(coordinate.Y, Is.EqualTo(30.000085223751409d));
+        Assert.That(coordinate.X, Is.EqualTo(6.9861979645975182E-05d));
+        Assert.That(coordinate.Y, Is.EqualTo(9.0427876878547455E-05d));
     }
 }
