@@ -281,7 +281,7 @@
                     </button>
 
                     <button
-                        class="btn btn-sm btn-primary"
+                        class="btn btn-sm btn-assignment"
                         v-if="model.userRole == 'Interviewer'"
                         click="createInterview"
                     >
