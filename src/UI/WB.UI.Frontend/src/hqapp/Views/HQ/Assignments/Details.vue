@@ -319,7 +319,7 @@ export default {
                                 } else {
                                     return self.$t('Assignments.Action_WebModeChanged_False')
                                 }
-                            case 'AssignmentReceivedByTablet':
+                            case 'ReceivedByTablet':
                                 return data.DeviceId
                                     
                         }
