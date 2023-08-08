@@ -95,6 +95,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         CategoricalOption GetOptionForQuestionByOptionValueFromStructure(Guid questionId, decimal optionValue, int? parentQuestionValue);
 
         string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue, int? answerParentValue);
+        
+        string GetAnswerOptionAttachment(Guid questionId, decimal answerOptionValue, int? answerParentValue);
 
         int? GetMaxSelectedAnswerOptions(Guid questionId);
 
