@@ -474,7 +474,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         }
 
         public string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue, int? answerParentValue) => this.GetAnswerOption(questionId, answerOptionValue, answerParentValue).Title;
-        public string GetAnswerOptionAttachment(Guid questionId, decimal answerOptionValue, int? answerParentValue) => this.GetAnswerOption(questionId, answerOptionValue, answerParentValue).AttachmentName;
+        public string GetAnswerOptionAttachment(Guid questionId, decimal answerOptionValue, int? answerParentValue) => this.GetAnswerOption(questionId, answerOptionValue, answerParentValue)?.AttachmentName;
         
         private CategoricalOption GetAnswerOption(Guid questionId, decimal answerOptionValue, int? answerParentValue)
             => this.cacheOfAnswerOptions.GetOrAdd(questionId, x => new ConcurrentDictionary<string, CategoricalOption>())
