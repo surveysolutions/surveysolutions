@@ -209,7 +209,8 @@ namespace WB.Services.Export.Tests
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 assignmentsActionsExporter ?? Mock.Of<IAssignmentActionsExporter>(),
                 Mock.Of<IQuestionnaireBackupExporter>(),
-                Mock.Of<IDdiMetadataFactory>());
+                Mock.Of<IDdiMetadataFactory>(),
+                Mock.Of<ITenantApi<IHeadquartersApi>>());
         }
 
         public static CommentsExporter CommentsExporter()

@@ -3,11 +3,13 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.Ddi;
+using WB.Services.Export.ExportProcessHandlers.Implementation;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
@@ -35,6 +37,7 @@ namespace WB.Services.Export.CsvExport.Implementation
         private readonly IAssignmentActionsExporter assignmentActionsExporter;
         private readonly IInterviewsExporter interviewsExporter;
         private readonly IDdiMetadataFactory ddiMetadataFactory;
+        private readonly ITenantApi<IHeadquartersApi> tenantApi;
 
         public TabularFormatExportService(
             ILogger<TabularFormatExportService> logger,
@@ -50,7 +53,8 @@ namespace WB.Services.Export.CsvExport.Implementation
             IFileSystemAccessor fileSystemAccessor,
             IAssignmentActionsExporter assignmentActionsExporter,
             IQuestionnaireBackupExporter questionnaireBackupExporter, 
-            IDdiMetadataFactory ddiMetadataFactory)
+            IDdiMetadataFactory ddiMetadataFactory,
+            ITenantApi<IHeadquartersApi> tenantApi)
         {
             this.logger = logger;
             this.interviewsToExportSource = interviewsToExportSource;
@@ -66,6 +70,7 @@ namespace WB.Services.Export.CsvExport.Implementation
             this.assignmentActionsExporter = assignmentActionsExporter;
             this.questionnaireBackupExporter = questionnaireBackupExporter;
             this.ddiMetadataFactory = ddiMetadataFactory;
+            this.tenantApi = tenantApi;
         }
 
         public async Task ExportInterviewsInTabularFormatAsync(
@@ -149,7 +154,13 @@ namespace WB.Services.Export.CsvExport.Implementation
             );
         }
         
-        public async Task GenerateDescriptionFileAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string basePath, string dataFilesExtension, CancellationToken cancellationToken)
+        public Task GenerateShortDescriptionFileAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string basePath, string dataFilesExtension, CancellationToken cancellationToken) => 
+            WriteDescriptionFileAsync(tenant, questionnaireId, basePath, dataFilesExtension, true, cancellationToken);
+
+        public Task GenerateDescriptionFileAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string basePath, string dataFilesExtension, CancellationToken cancellationToken) => 
+            WriteDescriptionFileAsync(tenant, questionnaireId, basePath, dataFilesExtension, false, cancellationToken);
+
+        private async Task WriteDescriptionFileAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string basePath, string dataFilesExtension, bool isCaptionOnly, CancellationToken cancellationToken)
         {
             var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(questionnaireId, token: cancellationToken);
             if (questionnaire == null)
@@ -166,19 +177,42 @@ namespace WB.Services.Export.CsvExport.Implementation
             descriptionBuilder.AppendLine($"The data in this download were collected using the Survey Solutions questionnaire \"{questionnaire.Title}\". ");
             descriptionBuilder.AppendLine($"You can open the questionnaire in the Survey Solutions Designer online by that link: {questionnaireUrl}");
 
-            foreach (var level in questionnaireExportStructure.HeaderToLevelMap.Values)
+            if (!isCaptionOnly)
             {
-                string fileName = $"{level.LevelName}{dataFilesExtension}";
-                var variables = level.HeaderItems.Values.Select(question => question.VariableName);
+                foreach (var level in questionnaireExportStructure.HeaderToLevelMap.Values)
+                {
+                    string fileName = $"{level.LevelName}{dataFilesExtension}";
+                    var variables = level.HeaderItems.Values.Select(question => question.VariableName);
 
-                descriptionBuilder.AppendLine();
-                descriptionBuilder.AppendLine(fileName);
-                descriptionBuilder.AppendLine(string.Join(", ", variables));
+                    descriptionBuilder.AppendLine();
+                    descriptionBuilder.AppendLine(fileName);
+                    descriptionBuilder.AppendLine(string.Join(", ", variables));
+                }
             }
 
             this.fileSystemAccessor.WriteAllText(
                 Path.Combine(basePath, "export__readme.txt"),
                 descriptionBuilder.ToString());
+        }
+        
+        public async Task GenerateInformationFileAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string directoryPath,
+            string tabDataFileExtension, CancellationToken cancellationToken)
+        {
+            var headquartersApi = tenantApi.For(tenant);
+            var serverVersion = await headquartersApi.GetServerVersionAsync();
+
+            var info = new ExportInfo()
+            {
+                HeadquartersVersion = serverVersion,
+                ExportServiceVersion = productVersion.ToString(),
+                QuestionnaireId = questionnaireId.Id,
+            };
+
+            var serialize = JsonSerializer.Serialize(info);
+
+            this.fileSystemAccessor.WriteAllText(
+                Path.Combine(directoryPath, "export__info.ini"),
+                serialize);
         }
     }
 }
