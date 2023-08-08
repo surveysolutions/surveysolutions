@@ -60,8 +60,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
                 settings.QuestionnaireId, state.ExportTempFolder,
                 ExportFileSettings.TabDataFileExtension, cancellationToken);
             await this.tabularFormatExportService.GenerateInformationFileAsync(settings.Tenant,
-                settings.QuestionnaireId, state.ExportTempFolder,
-                ExportFileSettings.IniFileExtension, cancellationToken);
+                settings.QuestionnaireId, state.ExportTempFolder, cancellationToken);
             
             
             var interviewsToExport = this.interviewsToExportSource.GetInterviewsToExport(settings.QuestionnaireId,

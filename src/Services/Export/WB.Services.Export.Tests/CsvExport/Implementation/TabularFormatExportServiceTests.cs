@@ -131,6 +131,38 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
             Assert.That(lines[1], Is.EqualTo($"The data in this download were collected using the Survey Solutions questionnaire \"{questionnaireDocument.Title}\". "));
             Assert.That(lines[2], Is.EqualTo($"You can open the questionnaire in the Survey Solutions Designer online by that link: https://designer.mysurvey.solutions/questionnaire/details/11111111111111111111111111111111$1"));
         }
+        
+        [Test]
+        public async Task When_generating_information_file_Then_should_save_all_data()
+        {
+            // arrange
+            string exportVersion = "17.4.2.5984";
+            string hqVersion = "14.54.27.5832";
+            
+            string description = null;
+            var fileSystemAccessor = new Mock<IFileSystemAccessor>();
+            fileSystemAccessor
+                .Setup(accessor => accessor.WriteAllText(@"x:/export__info.ini", It.IsAny<string>()))
+                .Callback<string, string>((file, content) => description = content);
+
+            var productVersion = Mock.Of<IProductVersion>(p => p.ToString() == exportVersion);
+            var headquartersApi = Mock.Of<IHeadquartersApi>(api => api.GetServerVersionAsync() == Task.FromResult(hqVersion));
+            
+            var exportService = Create.ReadSideToTabularFormatExportService(
+                fileSystemAccessor: fileSystemAccessor.Object,
+                productVersion: productVersion,
+                headquartersApi: headquartersApi);
+
+            // act
+            await exportService.GenerateInformationFileAsync(Create.Tenant(), new QuestionnaireId("id"), @"x:/", new CancellationToken());
+
+            // assert
+            Assert.That(description, Is.Not.Empty);
+            var lines = description.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
+            Assert.That(lines[1].Trim(), Is.EqualTo("\"HeadquartersVersion\": \"14.54.27.5832\","));
+            Assert.That(lines[2].Trim(), Is.EqualTo("\"ExportServiceVersion\": \"17.4.2.5984\","));
+            Assert.That(lines[3].Trim(), Is.EqualTo("\"QuestionnaireId\": \"id\""));
+        }
 
         protected static HeaderStructureForLevel CreateHeaderStructureForLevel(
             string levelName = "table name", string[] referenceNames = null, ValueVector<Guid> levelScopeVector = null,

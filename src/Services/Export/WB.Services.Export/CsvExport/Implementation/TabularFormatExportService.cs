@@ -196,7 +196,7 @@ namespace WB.Services.Export.CsvExport.Implementation
         }
         
         public async Task GenerateInformationFileAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string directoryPath,
-            string tabDataFileExtension, CancellationToken cancellationToken)
+            CancellationToken cancellationToken)
         {
             var headquartersApi = tenantApi.For(tenant);
             var serverVersion = await headquartersApi.GetServerVersionAsync();
@@ -208,7 +208,10 @@ namespace WB.Services.Export.CsvExport.Implementation
                 QuestionnaireId = questionnaireId.Id,
             };
 
-            var serialize = JsonSerializer.Serialize(info);
+            var serialize = JsonSerializer.Serialize(info, new JsonSerializerOptions(JsonSerializerOptions.Default)
+            {
+                WriteIndented = true
+            });
 
             this.fileSystemAccessor.WriteAllText(
                 Path.Combine(directoryPath, "export__info.ini"),
