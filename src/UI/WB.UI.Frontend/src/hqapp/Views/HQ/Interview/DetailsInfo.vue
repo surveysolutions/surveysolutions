@@ -1,6 +1,6 @@
 <template>
     <div class="panel panel-details"
-        :class="{ 'contains-action-buttons': showRejectButton || showUnapproveButton || showApproveButton, 'contains-tranlation' : canChangeLanguage}">
+        :class="{ 'contains-action-buttons': showRejectButton || showUnapproveButton || showApproveButton || showMoreButton, 'contains-tranlation' : canChangeLanguage}">
         <div class="panel-body clearfix">
             <div class="about-questionnaire clearfix">
                 <div class="about-questionnaire-details clearfix">
@@ -81,7 +81,6 @@
                 <div class="buttons-container">
                     <SwitchLanguage v-if="canChangeLanguage"
                         :disabled="changeLanguageDisabled"/>
-
                     <button id="btn_approve"
                         type="button"
                         class="btn btn-success marl"
@@ -105,6 +104,28 @@
                         @click="reject">
                         {{$t("Pages.ApproveRejectPartialView_UnapproveAction")}}
                     </button>
+
+                    <div class="dropdown aside-menu"
+                        v-if="showMoreButton">
+                        <button
+                            type="button"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                            class="btn btn-link">
+                            <span></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#"
+                                @click="reject">
+                                    {{ $t('DataExport.DataExport_Regenerate') }}
+                                <br />
+                                <small>{{ $t('DataExport.DataExport_RegenerateDesc') }}</small>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -342,6 +363,9 @@ export default {
         },
         webLink(){
             return this.$config.model.webInterviewUrl ?? ''
+        },
+        showMoreButton(){
+            return true
         },
     },
 
