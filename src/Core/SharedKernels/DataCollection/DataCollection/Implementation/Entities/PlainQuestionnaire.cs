@@ -474,6 +474,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         }
 
         public string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue, int? answerParentValue) => this.GetAnswerOption(questionId, answerOptionValue, answerParentValue).Title;
+        public string GetAnswerOptionAttachment(Guid questionId, decimal answerOptionValue, int? answerParentValue) => this.GetAnswerOption(questionId, answerOptionValue, answerParentValue)?.AttachmentName;
         
         private CategoricalOption GetAnswerOption(Guid questionId, decimal answerOptionValue, int? answerParentValue)
             => this.cacheOfAnswerOptions.GetOrAdd(questionId, x => new ConcurrentDictionary<string, CategoricalOption>())
@@ -2035,9 +2036,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public string GetAttachmentNameForEntity(Guid entityId)
         {
             var staticText = this.GetStaticTextImpl(entityId);
-            if(staticText == null) 
-                throw new QuestionnaireException($"Static text {entityId} was not found in questionnaire");
-            return staticText.AttachmentName;
+            if (staticText != null) 
+                return staticText.AttachmentName;
+            
+            throw new QuestionnaireException($"Static text {entityId} was not found in questionnaire");
         }
         
         public IEnumerable<Guid> GetStaticTextsThatUseVariableAsAttachment(Guid variableId)
