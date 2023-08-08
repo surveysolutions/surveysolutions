@@ -630,4 +630,9 @@ a.disabled {
     color: $white;
     background-color: $assignment-color;
     border-color: $assignment-color;
+    &:hover,
+    &:focus,
+    &:active{
+        color: $white;        
+    }
 }
