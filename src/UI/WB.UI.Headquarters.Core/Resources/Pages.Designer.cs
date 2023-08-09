@@ -672,6 +672,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assignment {0}.
+        /// </summary>
+        public static string AssignmentDetails_PageTitle {
+            get {
+                return ResourceManager.GetString("AssignmentDetails_PageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assignments.
         /// </summary>
         public static string Assignments_PageTitle {

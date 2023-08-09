@@ -1113,6 +1113,9 @@
   <data name="Assignments_PageTitle" xml:space="preserve">
     <value>Assignments</value>
   </data>
+  <data name="AssignmentDetails_PageTitle" xml:space="preserve">
+    <value>Assignment {0}</value>
+  </data>  
   <data name="QuestionnaireNameVersionFirst" xml:space="preserve">
     <value>(ver. {1}) {0} </value>
     <comment>{0} - Questionnaire name, {1} - Questionnaire version</comment>
