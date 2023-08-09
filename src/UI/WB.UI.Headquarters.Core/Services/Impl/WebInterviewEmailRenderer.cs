@@ -47,18 +47,18 @@ namespace WB.UI.Headquarters.Services.Impl
 
         public Task<string> RenderHtmlEmail(EmailParams emailParams)
         {
-            return this.viewRenderService.RenderToStringAsync("/Views/WebEmails/EmailHtml.cshtml", emailParams, options.Value.BaseUrl);
+            return this.viewRenderService.RenderToStringAsync("/Views/WebEmails/EmailHtml.cshtml", emailParams, options.Value.BaseUrl, options.Value.BaseAppUrl);
         }
 
         public Task<string> RenderTextEmail(EmailParams emailParams)
         {
-            return this.viewRenderService.RenderToStringAsync("/Views/WebEmails/EmailText.cshtml", emailParams, options.Value.BaseUrl);
+            return this.viewRenderService.RenderToStringAsync("/Views/WebEmails/EmailText.cshtml", emailParams, options.Value.BaseUrl, options.Value.BaseAppUrl);
         }
 
         private async Task<PersonalizedWebInterviewEmail> RenderEmailWithControllerContext(EmailParams emailParams)
         {
-            string html = await this.viewRenderService.RenderToStringAsync("/Views/WebEmails/EmailHtml.cshtml", emailParams, options.Value.BaseUrl);
-            string text = await this.viewRenderService.RenderToStringAsync("/Views/WebEmails/EmailText.cshtml", emailParams, options.Value.BaseUrl);
+            string html = await this.viewRenderService.RenderToStringAsync("/Views/WebEmails/EmailHtml.cshtml", emailParams, options.Value.BaseUrl, options.Value.BaseAppUrl);
+            string text = await this.viewRenderService.RenderToStringAsync("/Views/WebEmails/EmailText.cshtml", emailParams, options.Value.BaseUrl, options.Value.BaseAppUrl);
             return new PersonalizedWebInterviewEmail(emailParams.Subject, html, text);
         }
     }

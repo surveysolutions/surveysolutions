@@ -12,6 +12,7 @@ namespace WB.UI.Shared.Enumerator.Converters
             switch (status)
             {
                 case DashboardInterviewStatus.Assignment:
+                    return Resource.Color.dashboard_assignment_create;
                 case DashboardInterviewStatus.New:
                     return Resource.Color.group_started;
 

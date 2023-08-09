@@ -456,6 +456,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Questionnaire owned by {0}.
+        /// </summary>
+        public static string OwnedBy {
+            get {
+                return ResourceManager.GetString("OwnedBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Legend and structure of information in this file.
         /// </summary>
         public static string PdfLegend {

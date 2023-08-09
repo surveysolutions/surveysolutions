@@ -8,6 +8,7 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
         StartedInvalid = 4,
         Completed = 5,
         CompletedInvalid = 6,
+        
         WebInterview = 7
     }
 }

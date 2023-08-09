@@ -301,7 +301,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var isLinkedToRoster = questionnaire.IsQuestionLinkedToRoster(questionIdentity.Id);
             var isLinkedToListQuestion = questionnaire.IsLinkedToListQuestion(questionIdentity.Id);
             var isTimestampQuestion = questionnaire.IsTimestampQuestion(questionIdentity.Id);
-            var isPrefilled = questionnaire.IsPrefilled(questionIdentity.Id);
+            var isPrefilled = questionnaire.IsIdentifying(questionIdentity.Id);
 
             var questionScope = questionnaire.GetQuestionScope(questionIdentity.Id);
 

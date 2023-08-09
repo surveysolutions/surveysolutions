@@ -5,7 +5,7 @@ using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.CalendarEvents;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Mutations
 {
-    [ExtendObjectType(Name = "HeadquartersMutations")]
+    [ExtendObjectType("HeadquartersMutations")]
     public class CalendarEventsMutationExtension : ObjectTypeExtension
     {
         protected override void Configure(IObjectTypeDescriptor descriptor)

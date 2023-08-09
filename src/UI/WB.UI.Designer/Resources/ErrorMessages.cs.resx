@@ -1,0 +1,273 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccountBlocked" xml:space="preserve">
+    <value>Váš účet je zablokován. Požádejte správce o odblokování účtu.</value>
+  </data>
+  <data name="ApplicationUpdateRequired" xml:space="preserve">
+    <value>Je vyžadována aktualizace aplikace.</value>
+  </data>
+  <data name="ClientVersionIsNotSupported" xml:space="preserve">
+    <value>Otevření dotazníku se nezdařilo. Vaše verze je {0}. Aktualizujte prosím.</value>
+  </data>
+  <data name="ConfirmAccount" xml:space="preserve">
+    <value>Nejprve prosím potvrďte svůj účet. Odeslali jsme {0} potvrzovací odkaz. Nedostal jsem to?</value>
+  </data>
+  <data name="Email_required" xml:space="preserve">
+    <value>E-mail je povinný</value>
+  </data>
+  <data name="EmailOrLogin_required" xml:space="preserve">
+    <value>Je vyžadováno přihlášení nebo e-mail</value>
+  </data>
+  <data name="EmptyTranslationFile" xml:space="preserve">
+    <value>Vybraný překladový soubor je prázdný</value>
+  </data>
+  <data name="EmptyUserNameOrPassword" xml:space="preserve">
+    <value>Uživatelské jméno nebo heslo je prázdné.</value>
+  </data>
+  <data name="FullNameMaxLengthError" xml:space="preserve">
+    <value>Celé jméno nesmí obsahovat více než {1} znaků</value>
+  </data>
+  <data name="IncorrectUserNameOrPassword" xml:space="preserve">
+    <value>Přihlašovací jméno nebo heslo je nesprávné. Zkuste to prosím znovu.</value>
+  </data>
+  <data name="InvalidEmailAddress" xml:space="preserve">
+    <value>Není platná e-mailová adresa</value>
+  </data>
+  <data name="Maintenance" xml:space="preserve">
+    <value>Server je nyní v režimu údržby. Omlouváme se za nepříjemnosti. Prosím, zkuste to znovu později.</value>
+  </data>
+  <data name="NoAccessToQuestionnaire" xml:space="preserve">
+    <value>Uživatel nemá oprávnění k přístupu k požadovanému dotazníku.</value>
+  </data>
+  <data name="NoQuestionnaireIdToValidatePremissions" xml:space="preserve">
+    <value>ID dotazníku nebylo zadáno k ověření oprávnění</value>
+  </data>
+  <data name="NotSupportedQuestionnaireVersion" xml:space="preserve">
+    <value>Import dotazníku se nezdařil. Váš dotazník "{0}" má {1} verzi. Aplikace Headquarters podporuje pouze do verze {2}.</value>
+  </data>
+  <data name="OldClientPleaseUpdate" xml:space="preserve">
+    <value>Máte zastaralou verzi aplikace Centrála. Požádejte o aktualizaci správce serveru.</value>
+  </data>
+  <data name="OldPassword_required" xml:space="preserve">
+    <value>Je vyžadováno aktuální heslo</value>
+  </data>
+  <data name="Password_must_be_at_least_characters_long" xml:space="preserve">
+    <value>Heslo musí mít délku alespoň {2} znaků.</value>
+  </data>
+  <data name="Password_must_contain_at_least_one_number_one_upper_case_character_and_one_lower_case_character" xml:space="preserve">
+    <value>Heslo musí obsahovat alespoň jednu číslici, jedno velké písmeno a jedno malé písmeno.</value>
+  </data>
+  <data name="Password_required" xml:space="preserve">
+    <value>Heslo je povinné</value>
+  </data>
+  <data name="PasswordResetNotAllowed" xml:space="preserve">
+    <value>Resetování hesla není povoleno</value>
+  </data>
+  <data name="Questionnaire_verification_failed" xml:space="preserve">
+    <value>Váš dotazník obsahuje chyby. Ověřte prosím dotazník na Designer.</value>
+  </data>
+  <data name="QuestionnaireTitle_MaxLength" xml:space="preserve">
+    <value>Název dotazníku nesmí obsahovat více než {1} symbolů.</value>
+  </data>
+  <data name="QuestionnaireTitle_required" xml:space="preserve">
+    <value>Název dotazníku je povinný</value>
+  </data>
+  <data name="QuestionnaireTitle_rules" xml:space="preserve">
+    <value>V názvu dotazníku mohou být použity pouze následující znaky: A.. Z a.. z 0..9 ( ) \ / _ - a mezera a neměla by mít dva a více po sobě jdoucích znaků podtržítka.</value>
+  </data>
+  <data name="QuestionnaireVariable_MaxLength" xml:space="preserve">
+    <value>Názvy proměnných a ID soupisek mohou mít délku od 1 do {1} znaků</value>
+  </data>
+  <data name="QuestionnaireVariable_required" xml:space="preserve">
+    <value>Proměnná dotazníku je povinná</value>
+  </data>
+  <data name="QuestionnaireVariable_rules" xml:space="preserve">
+    <value>Proměnná dotazníku se používá jako předpona při vytváření názvů pro exportní soubory. Názvy proměnných a ID soupisek musí obsahovat pouze následující znaky: a-z, A-Z, _ nebo 0-9. První znak nemůže být 0-9 nebo _ a poslední nemůže být _.</value>
+  </data>
+  <data name="RequestAnotherEmail" xml:space="preserve">
+    <value>Požádejte o další.</value>
+  </data>
+  <data name="RestorePassword_EmailSentInstructions" xml:space="preserve">
+    <value>Na váš e-mailový účet byla odeslána zpráva. Postupujte podle pokynů v e-mailu pro obnovení hesla.</value>
+  </data>
+  <data name="ServerError" xml:space="preserve">
+    <value>Došlo k chybě serveru. Kontaktujte prosím support@mysurvey.solutions.</value>
+  </data>
+  <data name="TemplateNotFound" xml:space="preserve">
+    <value>Dotazník s id={0} nebyl nalezen. Podívejte se prosím na seznam dostupných dotazníků nebo se obraťte na kolegu, který s vámi odkaz na dotazník sdílel.</value>
+  </data>
+  <data name="The_current_password_is_incorrect_or_the_new_password_is_invalid" xml:space="preserve">
+    <value>Kombinace aktuální/nové heslo je neplatná, zadejte ji prosím znovu.</value>
+  </data>
+  <data name="The_password_and_confirmation_password_do_not_match" xml:space="preserve">
+    <value>Heslo a heslo pro potvrzení se neshodují.</value>
+  </data>
+  <data name="The_user_name_or_password_provided_is_incorrect" xml:space="preserve">
+    <value>Zadané uživatelské jméno nebo heslo je nesprávné. Prosím, zadejte znovu.</value>
+  </data>
+  <data name="Unexpected_error_occurred_Please_try_again_later" xml:space="preserve">
+    <value>Došlo k neočekávané chybě. Zkuste aplikaci Designer zopakovat později.</value>
+  </data>
+  <data name="UnhandledExceptionDuringUpdateUserInfo" xml:space="preserve">
+    <value>Informace o uživateli nelze aktualizovat. Prosím, zkuste to znovu později.</value>
+  </data>
+  <data name="User_already_confirmed_in_system" xml:space="preserve">
+    <value>Uživatelská {0} již potvrzena v systému. Zadejte své přihlašovací jméno a heslo a začněte používat Designer.</value>
+  </data>
+  <data name="User_does_not_exist" xml:space="preserve">
+    <value>Uživatelská {0} neexistuje. Zadejte platné uživatelské jméno nebo e-mail.</value>
+  </data>
+  <data name="User_does_not_exist_Please_enter_a_valid_user_name" xml:space="preserve">
+    <value>Uživatelská {0} neexistuje. Zadejte platné uživatelské jméno nebo e-mail.</value>
+  </data>
+  <data name="User_name_needs_to_be_between_3_and_15_characters" xml:space="preserve">
+    <value>Přihlašovací jméno musí mít délku 3 až 15 znaků a může obsahovat pouze písmena, číslice a symbol podtržítka. Písmena musí být pouze z latinské (anglické) abecedy: "A". Z' nebo 'a'." z'. Ostatní písmena (cyrilice, arabština atd.) nejsou platná pro použití v přihlašovacích jménech.</value>
+  </data>
+  <data name="User_Not_authorized" xml:space="preserve">
+    <value>Uživatel není oprávněn. Zkontrolujte prosím své přihlašovací jméno a heslo.</value>
+  </data>
+  <data name="UserLockedOut" xml:space="preserve">
+    <value>Váš účet je uzamčen. Chcete-li jej odemknout, kontaktujte společnost support@mysurvey.solutions.</value>
+  </data>
+  <data name="UserName_required" xml:space="preserve">
+    <value>Je vyžadováno přihlášení</value>
+  </data>
+  <data name="UserNeedToContactSupportFormat" xml:space="preserve">
+    <value>Nejste oprávněni tuto akci provést. Kontaktujte prosím podporu. IP:{0}</value>
+  </data>
+  <data name="UserNotApproved" xml:space="preserve">
+    <value>Váš účet není schválen. Nejprve prosím potvrďte svůj účet. Odeslali jsme potvrzovací odkaz {0}.</value>
+  </data>
+  <data name="VersionParameterIsIncorrect" xml:space="preserve">
+    <value>Došlo k potížím s verzí dotazníku. Kontaktujte prosím support@mysurvey.solutions.</value>
+  </data>
+  <data name="You_did_not_type_the_verification_word_correctly" xml:space="preserve">
+    <value>Ověřovací slovo je nesprávné. Zkuste to prosím znovu.</value>
+  </data>
+  <data name="Your_email_is_verified" xml:space="preserve">
+    <value>Návrhář úspěšně ověřil váš e-mail.</value>
+  </data>
+  <data name="Your_password_successfully_changed" xml:space="preserve">
+    <value>Úspěšně jste změnili heslo.</value>
+  </data>
+  <data name="YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate" xml:space="preserve">
+    <value>Váš dotazník "{0}" obsahuje nové funkce: {1}. Instalace nepodporuje nové funkce. Aktualizujte prosím.</value>
+  </data>
+</root>

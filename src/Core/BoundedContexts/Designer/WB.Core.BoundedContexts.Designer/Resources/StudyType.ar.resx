@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -58,4 +58,76 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AdministrativeRecords" xml:space="preserve">
+    <value>السجلات الإدارية</value>
+  </data>
+  <data name="AgriculturalCensus" xml:space="preserve">
+    <value>التعداد الزراعي</value>
+  </data>
+  <data name="AgriculturalSurvey" xml:space="preserve">
+    <value>المسح الزراعي</value>
+  </data>
+  <data name="ChildLaborSurvey" xml:space="preserve">
+    <value>مسح عمالة الأطفال</value>
+  </data>
+  <data name="CoreWelfareIndicatorsQuestionnaire" xml:space="preserve">
+    <value>استبيان مؤشرات الرفاهية الأساسية</value>
+  </data>
+  <data name="DemographicAndHealthSurvey" xml:space="preserve">
+    <value>المسح الديموغرافي والصحي</value>
+  </data>
+  <data name="EnterpriseCensus" xml:space="preserve">
+    <value>تعداد المؤسسات</value>
+  </data>
+  <data name="EnterpriseSurvey" xml:space="preserve">
+    <value>مسح المؤسسة</value>
+  </data>
+  <data name="HouseholdHealthSurvey" xml:space="preserve">
+    <value>مسح صحة الأسرة</value>
+  </data>
+  <data name="HouseholdSurvey" xml:space="preserve">
+    <value>مسح الأسر المعيشية</value>
+  </data>
+  <data name="InformalSectorSurvey" xml:space="preserve">
+    <value>مسح القطاع غير الرسمي</value>
+  </data>
+  <data name="IntegratedSurvey" xml:space="preserve">
+    <value>المسح المتكامل</value>
+  </data>
+  <data name="LaborForceSurvey" xml:space="preserve">
+    <value>مسح القوى العاملة</value>
+  </data>
+  <data name="LivingStandardsMeasurementStudy" xml:space="preserve">
+    <value>دراسة قياس مستويات المعيشة</value>
+  </data>
+  <data name="MultipleIndicatorClusterSurvey" xml:space="preserve">
+    <value>مسح عنقودي متعدد المؤشرات</value>
+  </data>
+  <data name="PopulationAndHousingCensus" xml:space="preserve">
+    <value>التعداد العام للسكان والمساكن</value>
+  </data>
+  <data name="PriceSurvey" xml:space="preserve">
+    <value>مسح الأسعار</value>
+  </data>
+  <data name="PrioritySurvey" xml:space="preserve">
+    <value>استقصاء الأولويات</value>
+  </data>
+  <data name="SampleFrame" xml:space="preserve">
+    <value>إطار العينة</value>
+  </data>
+  <data name="ServiceProvisionAssessments" xml:space="preserve">
+    <value>تقييم تقديم الخدمة</value>
+  </data>
+  <data name="SocioEconomicMonitoringSurvey" xml:space="preserve">
+    <value>المسح الاجتماعي والاقتصادي / الرصد</value>
+  </data>
+  <data name="StatisticalInfoAndMonitoringProg" xml:space="preserve">
+    <value>برنامج المعلومات الإحصائية والرصد.</value>
+  </data>
+  <data name="WorldFertilitySurvey" xml:space="preserve">
+    <value>الدراسة الاستقصائية العالمية للخصوبة</value>
+  </data>
+  <data name="WorldHealthSurvey" xml:space="preserve">
+    <value>المسح الصحي العالمي</value>
+  </data>
 </root>

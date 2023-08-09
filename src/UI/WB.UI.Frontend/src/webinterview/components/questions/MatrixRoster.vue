@@ -1,14 +1,13 @@
 <template>
-    <div class="question table-view scroller"
+    <div
+        class="question table-view scroller"
         :id="hash"
-        v-if="rowData.length > 0">
+        v-if="rowData.length > 0"
+    >
         <div class="question-editor">
-            <h5 v-dateTimeFormatting
-                v-html="title"></h5>
-            <div class="information-block instruction"
-                v-if="instructions">
-                <p v-dateTimeFormatting
-                    v-html="instructions"></p>
+            <h5 v-dateTimeFormatting v-html="title"></h5>
+            <div class="information-block instruction" v-if="instructions">
+                <p v-dateTimeFormatting v-html="instructions"></p>
             </div>
         </div>
         <ag-grid-vue
@@ -22,7 +21,8 @@
             :rowData="rowData"
             :grid-options="gridOptions"
             @grid-ready="onGridReady"
-            @column-resized="autosizeHeaders"></ag-grid-vue>
+            @column-resized="autosizeHeaders"
+        ></ag-grid-vue>
     </div>
 </template>
 
@@ -67,12 +67,16 @@ export default {
 
     beforeMount() {
         this.countOfInstances = this.$me.instances.length
-        this.title = this.$me.questions.length > 0 ? this.$me.questions[0].title : null
-        this.instructions = this.$me.questions.length > 0 ? this.$me.questions[0].instruction : null
+        this.title =
+            this.$me.questions.length > 0 ? this.$me.questions[0].title : null
+        this.instructions =
+            this.$me.questions.length > 0
+                ? this.$me.questions[0].instruction
+                : null
 
         this.defaultColDef = {
             width: 180, // set every column width
-            height: 76,
+            //height: 76,
             resizable: true,
             editable: false, // make every column editable
             autoHeight: true,
@@ -95,7 +99,10 @@ export default {
             }
         },
         ['$me.questions']() {
-            this.instructions = this.$me.questions.length > 0 ? this.$me.questions[0].instruction : null
+            this.instructions =
+                this.$me.questions.length > 0
+                    ? this.$me.questions[0].instruction
+                    : null
         },
         ['$me.title']() {
             this.title = this.$me.title
@@ -109,16 +116,16 @@ export default {
     computed: {
         gridOptions() {
             return {
-                suppressClickEdit:true,
-                suppressCellSelection:true,
-                suppressMovableColumns:true,
+                suppressClickEdit: true,
+                suppressCellFocus: true,
+                suppressMovableColumns: true,
                 context: {
                     componentParent: this,
                 },
             }
         },
     },
-    methods : {
+    methods: {
         initQuestionAsColumns() {
             var self = this
             var columnsFromQuestions = map(
@@ -126,39 +133,39 @@ export default {
                 (question, key) => {
                     return {
                         headerName: question.title,
-                        headerComponentFramework: 'MatrixRoster_QuestionTitle',
+                        headerComponent: 'MatrixRoster_QuestionTitle',
                         headerComponentParams: {
                             //title: question.title,
                             instruction: question.instruction,
                             question: question,
-                            attachmentImageLoadedCallback: () => self.attachmentImageLoaded(),
+                            attachmentImageLoadedCallback: () =>
+                                self.attachmentImageLoaded(),
                         },
-                        width:question.options.length * 180,
-
+                        width: question.options.length * 180,
                         field: question.id,
-                        cellRendererFramework: 'MatrixRoster_QuestionEditor',
+                        cellRenderer: 'MatrixRoster_QuestionEditor',
                         cellRendererParams: {
                             id: question.id,
                             question: question,
                             value: question,
                         },
-                        //cellEditorFramework: 'MatrixRoster_QuestionEditor',
+                        //cellEditor: 'MatrixRoster_QuestionEditor',
                         //cellEditorParams: {
                         //    id: question.id,
                         //    value: question,
                         //},
                     }
-                }
+                },
             )
             columnsFromQuestions.unshift({
-                headerName: '',//this.$me.title,
+                headerName: '', //this.$me.title,
                 field: 'rosterTitle',
                 autoHeight: true,
                 pinned: true,
                 editable: false,
-                cellStyle: {minHeight: '40px'},
-                cellRendererFramework: 'MatrixRoster_RosterTitle',
-                cellRendererParams: { },
+                cellStyle: { minHeight: '40px' },
+                cellRenderer: 'MatrixRoster_RosterTitle',
+                cellRendererParams: {},
             })
             this.columnDefs = columnsFromQuestions
         },
@@ -176,16 +183,17 @@ export default {
                             rowIndex: key,
                         },
                     }
-                    self.$me.questions.forEach(question => {
-                        var questionIdentity = question.id + instance.rosterVector
+                    self.$me.questions.forEach((question) => {
+                        var questionIdentity =
+                            question.id + instance.rosterVector
                         instanceAsRow[question.id] = {
-                            identity : questionIdentity,
-                            type     : question.entityType,
+                            identity: questionIdentity,
+                            type: question.entityType,
                         }
                     })
 
                     return instanceAsRow
-                }
+                },
             )
             this.rowData = rosterInstancesWithQuestionsAsRows
         },
@@ -199,11 +207,17 @@ export default {
         },
 
         autosizeHeaders(event) {
-            if (this.gridApi && event && (event === true || event.finished !== false)) {
+            if (
+                this.gridApi &&
+                event &&
+                (event === true || event.finished !== false)
+            ) {
                 const self = this
                 const MIN_HEIGHT = 16
                 this.gridApi.setHeaderHeight(MIN_HEIGHT)
-                const headerCells = $(this.$refs.matrixRoster.$el).find('.ag-header-cell-label')
+                const headerCells = $(this.$refs.matrixRoster.$el).find(
+                    '.ag-header-cell-label',
+                )
                 let minHeight = MIN_HEIGHT
                 for (let index = 0; index < headerCells.length; index++) {
                     const cell = headerCells[index]
@@ -219,28 +233,26 @@ export default {
         },
 
         setTableRosterHeight() {
-            if(this.$refs.tableRoster != undefined)
-            {
+            if (this.$refs.tableRoster != undefined) {
                 if (this.$me.instances.length > 30) {
                     this.gridApi.setDomLayout('normal')
                     this.$refs.matrixRoster.$el.style.height = '1536px'
-                }
-                else {
+                } else {
                     this.gridApi.setDomLayout('autoHeight')
                     this.$refs.matrixRoster.$el.style.height = ''
                 }
             }
         },
 
-        doScroll: debounce(function() {
-            if(this.$store.getters.scrollState == '#' + this.id){
+        doScroll: debounce(function () {
+            if (this.$store.getters.scrollState == '#' + this.id) {
                 window.scroll({ top: this.$el.offsetTop, behavior: 'smooth' })
                 this.$store.dispatch('resetScroll')
             }
         }, 200),
 
         scroll() {
-            if(this.$store && this.$store.state.route.hash === '#' + this.id) {
+            if (this.$store && this.$store.state.route.hash === '#' + this.id) {
                 this.doScroll()
             }
         },

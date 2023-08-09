@@ -277,10 +277,9 @@ namespace WB.UI.Headquarters.Controllers
             return this.Redirect("~/");
         }
 
-        [Authorize(Roles = "Headquarter, Supervisor")]
         public async Task<ActionResult> ReturnToObserver()
         {
-            if (!this.authorizedUser.IsObserver)
+            if (!this.authorizedUser.IsObserver || !this.authorizedUser.IsObserving)
                 return NotFound();
 
             var observerName = User.FindFirst(AuthorizedUser.ObserverClaimType)?.Value;

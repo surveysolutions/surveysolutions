@@ -1,0 +1,330 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Action" xml:space="preserve">
+    <value>Akce</value>
+  </data>
+  <data name="Assign" xml:space="preserve">
+    <value>Přiřadit</value>
+  </data>
+  <data name="AssignFolder" xml:space="preserve">
+    <value>Přiřadit složku</value>
+  </data>
+  <data name="AssignFolderText" xml:space="preserve">
+    <value>Přiřaďte prosím složku pro dotazník "{0}"</value>
+  </data>
+  <data name="Assigning" xml:space="preserve">
+    <value>Přiřazování</value>
+  </data>
+  <data name="BackToList" xml:space="preserve">
+    <value>Zpět na výpis</value>
+  </data>
+  <data name="Backup" xml:space="preserve">
+    <value>Zálohování</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Zrušit</value>
+  </data>
+  <data name="CancelSearch" xml:space="preserve">
+    <value>Zrušit vyhledávání</value>
+  </data>
+  <data name="ChooseLanguage" xml:space="preserve">
+    <value>Zvolte překlad</value>
+  </data>
+  <data name="ChooseLanguageTitle" xml:space="preserve">
+    <value>Zvolte prosím překlad</value>
+  </data>
+  <data name="Classifications" xml:space="preserve">
+    <value>Klasifikace</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Zavřít</value>
+  </data>
+  <data name="Confirmation" xml:space="preserve">
+    <value>potvrzení</value>
+  </data>
+  <data name="ControlPanel" xml:space="preserve">
+    <value>Ovládací panel</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Kopírovat</value>
+  </data>
+  <data name="CopyQuestionnaire" xml:space="preserve">
+    <value>Kopírovat dotazník</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Vytvářet</value>
+  </data>
+  <data name="CreatedBy" xml:space="preserve">
+    <value>Vytvořil(a)</value>
+  </data>
+  <data name="CreatedDate" xml:space="preserve">
+    <value>Vytvořeno dne</value>
+  </data>
+  <data name="CreateNew" xml:space="preserve">
+    <value>Vytvořit nový</value>
+  </data>
+  <data name="CreateNewQuestionnaire" xml:space="preserve">
+    <value>Vytvořit nový dotazník</value>
+  </data>
+  <data name="CreateSubFolder" xml:space="preserve">
+    <value>Vytvořit podsložku</value>
+  </data>
+  <data name="CreatingHtml" xml:space="preserve">
+    <value>Vytvoření HTML pro "{0}"</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Vymazat</value>
+  </data>
+  <data name="DeleteConfirmationText" xml:space="preserve">
+    <value>Opravdu chcete smazat dotazník "{0}"?</value>
+  </data>
+  <data name="DeleteFolderConfirmation" xml:space="preserve">
+    <value>Opravdu chcete odstranit složku {0} ?</value>
+  </data>
+  <data name="Deleting" xml:space="preserve">
+    <value>Mazání</value>
+  </data>
+  <data name="Designer" xml:space="preserve">
+    <value>Návrhář</value>
+  </data>
+  <data name="DownloadPdf" xml:space="preserve">
+    <value>Stáhnout PDF</value>
+  </data>
+  <data name="EmptyList" xml:space="preserve">
+    <value>Tento seznam neobsahuje žádné záznamy</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Chyba</value>
+  </data>
+  <data name="ErrorDescription" xml:space="preserve">
+    <value>Při zpracování žádosti došlo k chybě</value>
+  </data>
+  <data name="ExcelOrTabFilesOnly" xml:space="preserve">
+    <value>Jsou přijímány pouze soubory aplikace Excel nebo soubory hodnot oddělených tabulátory</value>
+  </data>
+  <data name="ExportAsHtml" xml:space="preserve">
+    <value>Exportovat jako HTML</value>
+  </data>
+  <data name="ExportAsPDF" xml:space="preserve">
+    <value>Export jako PDF</value>
+  </data>
+  <data name="FoldersDescription" xml:space="preserve">
+    <value>Můžete konfigurovat strukturu složek pro stránku veřejných dotazníků. Za tímto účelem klikněte pravým tlačítkem myši na složku a poté použijte jednu z operací:
+- "Vytvořit podsložku" použijte pro vytvoření podsložky 
+- "Přejmenovat" pro přejmenování názvu složky 
+&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;- "Smazat" pro odstranění složky s podsložkami</value>
+  </data>
+  <data name="FoldersManagement" xml:space="preserve">
+    <value>Správa složek</value>
+  </data>
+  <data name="Forbidden" xml:space="preserve">
+    <value>Nemáte oprávnění k úpravě tohoto dotazníku</value>
+  </data>
+  <data name="ForbiddenDelete" xml:space="preserve">
+    <value>Nemáte oprávnění k odstranění tohoto dotazníku.</value>
+  </data>
+  <data name="ForbiddenRevert" xml:space="preserve">
+    <value>Nemáte oprávnění k obnovení operace pro tento dotazník.</value>
+  </data>
+  <data name="GeneratePdf" xml:space="preserve">
+    <value>Generovat pdf</value>
+  </data>
+  <data name="GeneratingPdf" xml:space="preserve">
+    <value>Generování pdf pro "{0}"</value>
+  </data>
+  <data name="GetHtml" xml:space="preserve">
+    <value>Export Html</value>
+  </data>
+  <data name="Hello" xml:space="preserve">
+    <value>Ahoj, {0}</value>
+  </data>
+  <data name="Initializing" xml:space="preserve">
+    <value>Spouštějící</value>
+  </data>
+  <data name="LastModified" xml:space="preserve">
+    <value>Upraveno dne</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Umístění:  </value>
+  </data>
+  <data name="ManageUsers" xml:space="preserve">
+    <value>Správa uživatelů</value>
+  </data>
+  <data name="MyQuestionnaires" xml:space="preserve">
+    <value>Moje dotazníky</value>
+  </data>
+  <data name="NewFolder" xml:space="preserve">
+    <value>Nová složka</value>
+  </data>
+  <data name="NotSupportedBrowserUsed" xml:space="preserve">
+    <value>Internetový prohlížeč není podporován. Použijte prosím jiný prohlížeč.</value>
+  </data>
+  <data name="NotSupportedBrowserUsedDescr" xml:space="preserve">
+    <value>Používáte prohlížeč Internet Explorer, který není podporován. Některé funkce nemusí fungovat správně.</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Otevřený</value>
+  </data>
+  <data name="PublicQuestionnaires" xml:space="preserve">
+    <value>Veřejné dotazníky</value>
+  </data>
+  <data name="QuestionnaireTitle" xml:space="preserve">
+    <value>Název dotazníku</value>
+  </data>
+  <data name="QuestionnaireTreeFolders" xml:space="preserve">
+    <value>Šanony</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Přejmenovat</value>
+  </data>
+  <data name="RestoreQuestionnaire" xml:space="preserve">
+    <value>Obnovit dotazník</value>
+  </data>
+  <data name="RestoreQuestionnaireDocument" xml:space="preserve">
+    <value>Obnovit dokument dotazníku (starý)</value>
+  </data>
+  <data name="RetryExportPDF" xml:space="preserve">
+    <value>Opakujte export ve formátu PDF</value>
+  </data>
+  <data name="SaveAs" xml:space="preserve">
+    <value>Uložit jako</value>
+  </data>
+  <data name="SelectTabFile" xml:space="preserve">
+    <value>Vyberte soubor hodnot oddělených tabulátory, který chcete nahrát, prosím</value>
+  </data>
+  <data name="SharedQuestionnaires" xml:space="preserve">
+    <value>Dotazníky sdílené se mnou</value>
+  </data>
+  <data name="SuccessDeleteMessage" xml:space="preserve">
+    <value>Dotazník "{0}" byl úspěšně odstraněn</value>
+  </data>
+  <data name="TabFilesOnly" xml:space="preserve">
+    <value>Jsou přijímány pouze soubory hodnot oddělených tabulátory</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Titul</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>Neoznačený</value>
+  </data>
+  <data name="You" xml:space="preserve">
+    <value>ty</value>
+  </data>
+</root>

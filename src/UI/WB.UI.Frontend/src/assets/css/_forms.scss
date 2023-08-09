@@ -705,7 +705,8 @@ textarea.field-to-fill{
 	resize: none;
 	max-height: 500px;
 	display: block;
-	height: 40px;
+	height: 41px;
+    min-height: 41px;
 }
 
 

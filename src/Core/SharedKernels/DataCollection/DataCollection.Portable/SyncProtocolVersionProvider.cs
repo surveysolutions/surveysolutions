@@ -20,7 +20,9 @@
                 26963,  //20.01.3 //options translations issue : KP-13585
                 26948,  //20.01.2 //options translations issue : KP-13585
                 26886,  //20.01.1 //options translations issue : KP-13585
-                26876   //20.01   //options translations issue : KP-13585
+                26876,  //20.01   //options translations issue : KP-13585
+                30864,  //23.04 github  Substitution works differently for Web and tablet interviewers #2559 
+                34292   //23.04 builds  Substitution works differently for Web and tablet interviewers #2559 
             };
         }
     }
@@ -40,6 +42,8 @@
             return new int[]
             {
                 29676,  // 20.05.6 KP-14824 bug with connections on tablets
+                30864,  //23.04 github  Substitution works differently for Web and tablet interviewers #2559 
+                34292   //23.04 builds  Substitution works differently for Web and tablet interviewers #2559 
             };
         }
     }

@@ -4,14 +4,14 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    local:MvxBind="StatusBarColorByInterviewStatus TypeOfInterviews;">
+    local:MvxBind="StatusBarColorByDashboardGroupType TypeOfInterviews;">
 
   <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        local:MvxBind="ColorByInterviewStatus TypeOfInterviews;">
+        local:MvxBind="ColorByDashboardGroupType TypeOfInterviews;">
     <androidx.appcompat.widget.Toolbar
       android:id="@+id/toolbar"
       android:layout_width="match_parent"
@@ -19,14 +19,14 @@
       android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
       local:popupTheme="@style/ThemeOverlay.AppCompat.Light"
       local:layout_scrollFlags="scroll|enterAlways"
-      local:MvxBind="ColorByInterviewStatus TypeOfInterviews; Title DashboardTitle">
+      local:MvxBind="ColorByDashboardGroupType TypeOfInterviews; Title DashboardTitle">
     </androidx.appcompat.widget.Toolbar>
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/TabLayoutStyle"
-        local:MvxBind="ColorByInterviewStatus TypeOfInterviews;"/>
+        local:MvxBind="ColorByDashboardGroupType TypeOfInterviews;"/>
   </com.google.android.material.appbar.AppBarLayout>
 
   <FrameLayout android:layout_width="match_parent"
@@ -46,11 +46,11 @@
       <FrameLayout android:layout_width="match_parent"
                    android:layout_height="match_parent">
 
-        <androidx.viewpager.widget.ViewPager
+        <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        </androidx.viewpager.widget.ViewPager>
+        </androidx.viewpager2.widget.ViewPager2>
         <LinearLayout style="@style/Interview_GroupWithDivider"
                       local:MvxBind="Enabled Not(Or(Synchronization.IsSynchronizationInProgress, IsInProgress, Synchronization.HasUserAnotherDevice));
                                  Clickable Or(Synchronization.IsSynchronizationInProgress, IsInProgress, Synchronization.HasUserAnotherDevice);"

@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
             // Act
             var waitingForSupervisorAction = accessor.GetSentToInterviewerItems();
 
-            var items = waitingForSupervisorAction.Cast<SupervisorDashboardInterviewViewModel>().ToList();
+            var items = waitingForSupervisorAction.Cast<SupervisorInterviewDashboardViewModel>().ToList();
 
             Assert.That(items, Has.Count.EqualTo(1));
             items.Should().ContainSingle(i => i.InterviewId == Id.g1, $"Should contain interview in {InterviewStatus.RejectedBySupervisor} status and responsible supervisor");
@@ -73,7 +73,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
             IEnumerable<IDashboardItem> waitingForSupervisorAction = accessor.WaitingForSupervisorAction();
 
 
-            var items = waitingForSupervisorAction.Cast<SupervisorDashboardInterviewViewModel>().ToList();
+            var items = waitingForSupervisorAction.Cast<SupervisorInterviewDashboardViewModel>().ToList();
 
             Assert.That(items, Has.Count.EqualTo(5));
             items.Should().ContainSingle(i => i.InterviewId == Id.g1, $"Should contain interview in {InterviewStatus.RejectedBySupervisor} status and responsible supervisor");
@@ -113,7 +113,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
             var repositoryCount = accessor.OutboxCount();
             Assert.AreEqual(itemsCount, repositoryCount);
 
-            var items = outbox.Cast<SupervisorDashboardInterviewViewModel>().ToList();
+            var items = outbox.Cast<SupervisorInterviewDashboardViewModel>().ToList();
 
             Assert.That(items, Has.Count.EqualTo(4));
             items.Should().ContainSingle(i => i.InterviewId == Id.g1, $"Should contain interview in {InterviewStatus.ApprovedBySupervisor} status ");
@@ -184,8 +184,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
             )
         {
             var viewModelFactory = new Mock<IInterviewViewModelFactory>();
-            viewModelFactory.Setup(x => x.GetNew<SupervisorDashboardInterviewViewModel>())
-                .Returns(() => new SupervisorDashboardInterviewViewModel(Mock.Of<IServiceLocator>(),
+            viewModelFactory.Setup(x => x.GetNew<SupervisorInterviewDashboardViewModel>())
+                .Returns(() => new SupervisorInterviewDashboardViewModel(Mock.Of<IServiceLocator>(),
                     Mock.Of<IAuditLogService>(),
                     Mock.Of<IViewModelNavigationService>(),
                     Create.Other.SupervisorPrincipal(),

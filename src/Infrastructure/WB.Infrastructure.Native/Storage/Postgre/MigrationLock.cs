@@ -10,9 +10,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         private readonly NpgsqlConnection db;
         private readonly NpgsqlTransaction tr;
 
-        public MigrationLock(string connectionString, bool isGlobal = true)
+        public MigrationLock(NpgsqlConnectionStringBuilder connectionStringBuilder, bool isGlobal = true)
         {
-            this.db = new NpgsqlConnection(connectionString);
+            this.db = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
             this.db.Open();
             this.tr = db.BeginTransaction();
             

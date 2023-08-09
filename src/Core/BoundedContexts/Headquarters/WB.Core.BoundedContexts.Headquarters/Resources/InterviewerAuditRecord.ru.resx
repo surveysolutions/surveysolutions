@@ -132,6 +132,9 @@
   <data name="RejectInterview" xml:space="preserve">
     <value>Интервью {0} отклонено</value>
   </data>
+  <data name="RejectInterviewToInterviewer" xml:space="preserve">
+    <value>Интервью {0} отклонено на интервьювера {1}</value>
+  </data>
   <data name="CreateInterviewFromAssignment" xml:space="preserve">
     <value>Интервью {0} создано для задания {1}</value>
   </data>

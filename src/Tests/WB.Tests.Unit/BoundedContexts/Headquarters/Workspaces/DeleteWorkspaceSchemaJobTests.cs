@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Workspaces
     public class DeleteWorkspaceSchemaJobTests
     {
         private Mock<IUnitOfWork> unitOfWork;
-        private IPlainStorageAccessor<Workspace> workspaces;
+        private IWorkspacesStorage workspaces;
         private Mock<ILogger<DeleteWorkspaceSchemaJob>> logger;
         private DeleteWorkspaceSchemaJob Subject;
         private DeleteWorkspaceJobData jobData;
@@ -25,7 +25,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Workspaces
         public void Setup()
         {
             this.unitOfWork = new Mock<IUnitOfWork>();
-            this.workspaces = Create.Storage.InMemoryPlainStorage<Workspace>();
+            var inMemoryPlainStorage = Create.Storage.InMemoryPlainStorage<Workspace>();
+            this.workspaces = Create.Service.WorkspacesStorage(inMemoryPlainStorage);
             logger = new Mock<ILogger<DeleteWorkspaceSchemaJob>>();
             jobData = new DeleteWorkspaceJobData(new WorkspaceContext("test", "test"));
             Subject = new DeleteWorkspaceSchemaJob(this.unitOfWork.Object, workspaces, logger.Object);
@@ -35,7 +36,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Workspaces
         public async Task should_not_delete_schema_if_there_is_working_workspace()
         {
             var workspace = Create.Entity.Workspace("test");
-            this.workspaces.Store(workspace, workspace.Name);
+            this.workspaces.Store(workspace);
 
             await Subject.Execute(new DeleteWorkspaceJobData(), Mock.Of<IJobExecutionContext>());
 
@@ -46,7 +47,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Workspaces
         public async Task should_not_delete_schema_if_schemaName_with_wrong_prefix()
         {
             var workspace = Create.Entity.Workspace("test");
-            this.workspaces.Store(workspace, workspace.Name);
+            this.workspaces.Store(workspace);
 
             jobData.WorkspaceSchema = "public";
 

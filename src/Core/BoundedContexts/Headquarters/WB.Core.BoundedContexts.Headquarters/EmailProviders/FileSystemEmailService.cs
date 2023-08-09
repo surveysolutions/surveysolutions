@@ -31,7 +31,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
     public class FileSystemEmailService : IEmailService
     {
         private readonly FileSystemEmailServiceSettings settings;
-        private readonly IApplicationPathResolver pathResolver;
 
         public class FileSystemSenderInformation : ISenderInformation
         {
@@ -41,11 +40,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             public string Address { get; set; }
         }
 
-        public FileSystemEmailService(FileSystemEmailServiceSettings settings,
-            IApplicationPathResolver pathResolver)
+        public FileSystemEmailService(FileSystemEmailServiceSettings settings)
         {
             this.settings = settings;
-            this.pathResolver = pathResolver;
         }
 
         public Task<string> SendEmailAsync(string to, string subject, string htmlBody, string textBody, List<EmailAttachment> attachments)
@@ -53,9 +50,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             if (string.IsNullOrWhiteSpace(settings.EmailFolder))
                 throw new ArgumentException();
 
-            var directory = settings.EmailFolder.StartsWith("~")
-                ? pathResolver.MapPath(settings.EmailFolder)
-                : Path.GetFullPath(settings.EmailFolder);
+            var directory = Path.GetFullPath(settings.EmailFolder);
 
             if (!Directory.Exists(directory))
                 Directory.CreateDirectory(directory);

@@ -960,7 +960,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bulk Email Services.
+        ///   Looks up a localized string similar to Email Providers.
         /// </summary>
         public static string EmailProvidersTitle {
             get {
@@ -3215,6 +3215,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string MapDetails_DuplicateLabelsWarning {
             get {
                 return ResourceManager.GetString("MapDetails_DuplicateLabelsWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preview data is missing for this map.
+        /// </summary>
+        public static string MapDetails_EmptyMapData {
+            get {
+                return ResourceManager.GetString("MapDetails_EmptyMapData", resourceCulture);
             }
         }
         

@@ -1231,6 +1231,9 @@
   <data name="MapDetails_Size" xml:space="preserve">
     <value>Размер(МБ)</value>
   </data>
+  <data name="MapDetails_EmptyMapData" xml:space="preserve">
+    <value>Данные для предпросмотра этой карты отсутствуют</value>
+  </data>
   <data name="MapDetails_MinScale" xml:space="preserve">
     <value>Минимальный масштаб</value>
   </data>

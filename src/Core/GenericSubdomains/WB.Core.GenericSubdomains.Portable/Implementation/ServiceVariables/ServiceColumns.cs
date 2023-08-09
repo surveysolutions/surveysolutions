@@ -25,6 +25,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables
         public static readonly string InterviewId = $"interview{ColumnDelimiter}id";
         public static readonly string InterviewStatus = $"interview{ColumnDelimiter}status";
         public static readonly string ProtectedVariableNameColumn = $"variable{ColumnDelimiter}name";
+        public static readonly string AssignmentId = $"assignment{ColumnDelimiter}id";
 
         public static readonly string IdSuffixFormat = $"{{0}}{ColumnDelimiter}id";
 
@@ -47,6 +48,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables
             { ServiceVariableType.InterviewKey,  new ServiceVariable(ServiceVariableType.InterviewKey, Key, 1)},
             { ServiceVariableType.HasAnyError,  new ServiceVariable(ServiceVariableType.HasAnyError, HasAnyError, 2)},
             { ServiceVariableType.InterviewStatus,  new ServiceVariable(ServiceVariableType.InterviewStatus, InterviewStatus, 3)},
+            { ServiceVariableType.AssignmentId,  new ServiceVariable(ServiceVariableType.AssignmentId, AssignmentId, 4)},
         };
 
         public static readonly string[] AllSystemVariables = SystemVariables.Values

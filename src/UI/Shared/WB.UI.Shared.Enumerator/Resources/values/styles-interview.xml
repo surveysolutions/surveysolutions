@@ -88,6 +88,11 @@
     <item name="android:layout_height">wrap_content</item>
   </style>
 
+  <style name ="Interview_Cover_GpsQuestion_Answer" parent="Interview_Cover_Question_Answer">
+    <item name="android:textColor">@color/btn_default</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+  </style>
+
   <style name ="Interview_Cover_Supervisor_Note" parent="Interview_Entity">
   </style>
 

@@ -228,9 +228,9 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             var questionnaireDocument =
                 Create.QuestionnaireDocument(children: Create.Variable(id: variableId, type: variableType));
 
-            var QuestionnaireExportStructureFactory = Create.InterviewsExporter();
+            var questionnaireExportStructureFactory = Create.InterviewsExporter();
 
-            var result = QuestionnaireExportStructureFactory.CreateInterviewDataExportView(Create.QuestionnaireExportStructure(questionnaireDocument),
+            var result = questionnaireExportStructureFactory.CreateInterviewDataExportView(Create.QuestionnaireExportStructure(questionnaireDocument),
                 interviewData, questionnaireDocument);
 
             result.Levels[0].Records[0].Answers.First().Should().BeEquivalentTo(new[] { exportResult });
@@ -281,7 +281,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         }
 
         [Test]
-        public void when_creating_interview_export_view_by_interview_with_1_answerd_questions_and_1_unananswered__should_answered_question_be_not_empty()
+        public void when_creating_interview_export_view_by_interview_with_1_answered_questions_and_1_unanswered__should_answered_question_be_not_empty()
         {
             var answeredQuestionId = Guid.Parse("10000000000000000000000000000000");
             var unansweredQuestionId = Guid.Parse("11111111111111111111111111111111");
@@ -297,10 +297,10 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             var interviewData =
                 CreateInterviewData(Create.InterviewEntity(identity: Create.Identity(answeredQuestionId), asString: "answer"));
 
-            var expoter = Create.InterviewsExporter();
+            var exporter = Create.InterviewsExporter();
 
             // act 
-            var result = expoter.CreateInterviewDataExportView(Create.QuestionnaireExportStructure(questionnaireDocument), interviewData, questionnaireDocument);
+            var result = exporter.CreateInterviewDataExportView(Create.QuestionnaireExportStructure(questionnaireDocument), interviewData, questionnaireDocument);
 
             // Assert
             result.Levels[0].Records.Length.Should().Be(1);
@@ -310,7 +310,28 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         }
 
         [Test]
-        public void when_creating_interview_export_view_by_interview_with_1_answerd_gps_question__should_create_record__with_one_gps_question_which_contains_composite_answer()
+        public void when_creating_interview_export_view_by_interview_with_1_unanswered_list_question__should_produce_400_columns()
+        {
+            var answeredQuestionId = Guid.Parse("10000000000000000000000000000000");
+            
+            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(
+                Create.TextListQuestion(questionId: answeredQuestionId, variable: "q1"));
+            
+            var interviewData =
+                CreateInterviewData(Create.InterviewEntity(identity: Create.Identity(answeredQuestionId), asString: "answer"));
+
+            var exporter = Create.InterviewsExporter();
+
+            // act 
+            var result = exporter.CreateInterviewDataExportView(Create.QuestionnaireExportStructure(questionnaireDocument), interviewData, questionnaireDocument);
+
+            // Assert
+            result.Levels[0].Records.Length.Should().Be(1);
+            result.Levels[0].Records[0].Answers[0].Length.Should().Be(400);
+        }
+        
+        [Test]
+        public void when_creating_interview_export_view_by_interview_with_1_answered_gps_question__should_create_record__with_one_gps_question_which_contains_composite_answer()
         {
             var gpsQuestionId = Guid.Parse("10000000000000000000000000000000");
 
@@ -331,7 +352,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         }
 
         [Test]
-        public void when_creating_interview_export_view_by_interview_with_1_answerd_text_question_which_contains_unreadable_symbol__should_create_record_with_one_text_question_which_answered_and_doesnt_contain_the_unreadable_symbol()
+        public void when_creating_interview_export_view_by_interview_with_1_answered_text_question_which_contains_unreadable_symbol__should_create_record_with_one_text_question_which_answered_and_doesnt_contain_the_unreadable_symbol()
         {
             string text = "231 Pietermaritz St\u263APietermaritzburg\u263A3201";
             var textQuestionId = Guid.Parse("10000000000000000000000000000000");
@@ -527,7 +548,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         public void when_interview_has_multi_linked_question_to_question_inside_nested_roster_and_nested_roster_triggered_by_numeric_question_should_roster_codes_by_numeric_question_started_from_0()
         {
             // arrange
-            var multyOptionLinkedQuestionId = Guid.Parse("d7127d06-5668-4fa3-b255-8a2a0aaaa020");
+            var multiOptionLinkedQuestionId = Guid.Parse("d7127d06-5668-4fa3-b255-8a2a0aaaa020");
             var rosterSizeQuestionId = Guid.Parse("AE111111111111111111111111111111");
             var linkedSourceQuestionId = Guid.NewGuid();
 
@@ -542,7 +563,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
                             Create.TextQuestion(id: linkedSourceQuestionId, variable: "varTxt")
                         })
                     }),
-                Create.MultyOptionsQuestion(id: multyOptionLinkedQuestionId,
+                Create.MultyOptionsQuestion(id: multiOptionLinkedQuestionId,
                     variable: "mult",
                     linkedToQuestionId: linkedSourceQuestionId));
 
@@ -550,7 +571,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
 
             var exporter = Create.InterviewsExporter();
 
-            var interviewData = CreateInterviewData(Create.InterviewEntity(identity: Create.Identity(multyOptionLinkedQuestionId),
+            var interviewData = CreateInterviewData(Create.InterviewEntity(identity: Create.Identity(multiOptionLinkedQuestionId),
                 asIntMatrix: new[] { new[] { 5, 0 } }));
             // act
             var result = exporter.CreateInterviewDataExportView(exportStructure, interviewData, questionnaireDocument);
@@ -599,7 +620,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             Assert.That(exportedQuestion[0], Is.EqualTo("5,0"));
         }
 
-        public static InterviewDataExportLevelView GetLevel(InterviewDataExportView interviewDataExportView, Guid[] levelVector)
+        protected static InterviewDataExportLevelView GetLevel(InterviewDataExportView interviewDataExportView, Guid[] levelVector)
         {
             return interviewDataExportView.Levels.FirstOrDefault(l => l.LevelVector.SequenceEqual(levelVector));
         }
@@ -615,7 +636,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             return interviewData;
         }
 
-        protected InterviewData CreateInterviewData(Guid variableId, object topLevelVariable)
+        private InterviewData CreateInterviewData(Guid variableId, object topLevelVariable)
         {
             var interviewData = new InterviewData { InterviewId = Guid.NewGuid() };
             interviewData.Levels.Add("#", new InterviewLevel(new ValueVector<Guid>(), new int[0]));
@@ -623,7 +644,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             return interviewData;
         }
 
-        protected static InterviewData CreateInterviewDataWith2PropagatedLevels(Guid rosterId, Guid nestedRosterId, Guid questionInsideRosterGroupId)
+        public static InterviewData CreateInterviewDataWith2PropagatedLevels(Guid rosterId, Guid nestedRosterId, Guid questionInsideRosterGroupId)
         {
             InterviewData interview = CreateInterviewData();
             for (int i = 0; i < 2; i++)
@@ -659,5 +680,4 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             return interviewData;
         }
     }
-
 }

@@ -36,8 +36,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             this.Title = SupervisorDashboard.Outbox;
         }
 
-        public override GroupStatus InterviewStatus => GroupStatus.Completed;
-
+        public override DashboardGroupType DashboardType => DashboardGroupType.CompletedInterviews;
+        
         protected override IEnumerable<IDashboardItem> GetUiItems()
         {
             var subtitle = viewModelFactory.GetNew<DashboardSubTitleViewModel>();
@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             {
                 yield return dashboardItem;
 
-                if (dashboardItem is SupervisorDashboardInterviewViewModel interviewDashboardItem &&
+                if (dashboardItem is SupervisorInterviewDashboardViewModel interviewDashboardItem &&
                     interviewDashboardItem.InterviewId == lastVisitedInterviewId)
                 {
                     this.HighLightedItemIndex = interviewIndex;

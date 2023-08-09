@@ -165,7 +165,7 @@ namespace WB.Infrastructure.Native.Questionnaire
             var xlColumn = worksheet.Column(i);
             xlColumn.Style.Protection.Locked = true;
             xlColumn.Style.Alignment.WrapText = true;
-            xlColumn.AdjustToContents();
+            //xlColumn.AdjustToContents();
         }
 
         private IEnumerable<TranslationRow> GetTranslatedTexts(QuestionnaireDocument questionnaire, ITranslation translation, ICategories categoriesService)

@@ -43,7 +43,7 @@
                 <button class="btn btn-link" ng-if="activeQuestion.type != 'Numeric'" ng-hide="activeQuestion.optionsCount >= MAX_OPTIONS_COUNT" ng-click="addOption()" ng-i18next="QuestionAddOption"></button>
                 <button class="btn btn-link" ng-click="showAddClassificationModal()" ng-i18next="QuestionAddClassification"></button>
 
-                <button class="btn btn-link pull-right" ng-click="showOptionsInTextarea()" ng-i18next="QuestionShowStrings"></button>
+                <button class="btn btn-link pull-right" ng-click="showOptionsInTextarea()" ng-i18next="StringsView"></button>
             </p>
         </div>
     <div ng-if="!activeQuestion.useListAsOptionsEditor">
@@ -55,7 +55,7 @@
                       max-options-count
                       msd-elastic></textarea>
             <p class="help-block">
-                <input class="btn btn-link" type="button" ng-i18next="[value]ShowList" value="Show list" ng-click="showOptionsInList()" ng-disabled="!questionForm.stringifiedOptions.$valid" />
+                <input class="btn btn-link" type="button" ng-i18next="[value]TableView" value="Show list" ng-click="showOptionsInList()" ng-disabled="!questionForm.stringifiedOptions.$valid" />
             </p>
             <p class="help-block ng-cloak" ng-show="questionForm.stringifiedOptions.$error.matchOptionsPattern" ng-i18next="OptionsListError">
             </p>

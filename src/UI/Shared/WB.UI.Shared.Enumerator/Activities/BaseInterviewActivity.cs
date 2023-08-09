@@ -1,13 +1,10 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using Android.Content.Res;
-using Android.OS;
 using Android.Views;
 using AndroidX.AppCompat.App;
 using AndroidX.DrawerLayout.Widget;
 using AndroidX.RecyclerView.Widget;
 using MvvmCross;
-using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.WeakSubscription;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -16,7 +13,6 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
-using WB.UI.Shared.Enumerator.Activities.Callbacks;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
@@ -152,7 +148,6 @@ namespace WB.UI.Shared.Enumerator.Activities
                 list?.SetItemAnimator(null);
             }
         }
-        
 
         protected void Navigate(string navigateTo)
         {

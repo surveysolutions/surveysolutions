@@ -1,0 +1,837 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WB0001_NoQuestions" xml:space="preserve">
+    <value>Dotazník musí obsahovat alespoň jednu otázku.</value>
+  </data>
+  <data name="WB0002_CustomValidationExpressionHasIncorrectSyntax" xml:space="preserve">
+    <value>Podmínka ověření obsahuje chybu syntaxe.</value>
+  </data>
+  <data name="WB0003_CustomEnablementConditionHasIncorrectSyntax" xml:space="preserve">
+    <value>Podmínka povolení obsahuje chybu syntaxe.</value>
+  </data>
+  <data name="WB0004_VariableHasEmptyExpression" xml:space="preserve">
+    <value>Proměnná nesmí mít prázdný výraz.</value>
+  </data>
+  <data name="WB0005_VariableExpressionHasLengthMoreThan10000Characters" xml:space="preserve">
+    <value>Variabilní výraz má délku delší než {0} znaků.</value>
+  </data>
+  <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
+    <value>Pouze jedna otázka GPS může být označena jako identifikační</value>
+  </data>
+  <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
+    <value>Vícenásobný výběr ano/ne otázku nelze propojit</value>
+  </data>
+  <data name="WB0008_SubstitutionsInVariableLableAreProhibited" xml:space="preserve">
+    <value>Není dovoleno používat substituce v variabilním štítku</value>
+  </data>
+  <data name="WB0009_RosterSizeQuestionIsMissing" xml:space="preserve">
+    <value>Chybí otázka velikosti soupisky.</value>
+  </data>
+  <data name="WB0010_MacroHasInvalidName" xml:space="preserve">
+    <value>Makro má neplatný název.</value>
+  </data>
+  <data name="WB0011_LinkedQuestionReferencesNotExistingQuestion" xml:space="preserve">
+    <value>Propojená otázka odkazuje na neexistující otázku.</value>
+  </data>
+  <data name="WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType" xml:space="preserve">
+    <value>Propojená otázka odkazuje na typ otázky, který není podporován.</value>
+  </data>
+  <data name="WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup" xml:space="preserve">
+    <value>Odkazovaná otázka odkazuje na otázku, která není v soupisce.</value>
+  </data>
+  <data name="WB0014_MacroHasEmptyName" xml:space="preserve">
+    <value>Makro nemůže mít prázdný název.</value>
+  </data>
+  <data name="WB0015_QuestionWithTitleSubstitutionCantBePrefilled" xml:space="preserve">
+    <value>Otázku se záměnou názvu nebo pokynu nelze označit jako identifikující.</value>
+  </data>
+  <data name="WB0017_SubstitutionReferencesNotExistingQuestionOrVariable" xml:space="preserve">
+    <value>Substituce odkazuje na neexistující otázku nebo proměnnou.</value>
+  </data>
+  <data name="WB0018_SubstitutionReferencesUnsupportedEntity" xml:space="preserve">
+    <value>Nahrazení odkazuje na položku, která není podporována v náhradách.</value>
+  </data>
+  <data name="WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel" xml:space="preserve">
+    <value>Střídání nemůže odkazovat na položky z hlubší úrovně soupisky.</value>
+  </data>
+  <data name="WB0020_NameForMacrosIsNotUnique" xml:space="preserve">
+    <value>Jiné makro se stejným názvem již existuje.</value>
+  </data>
+  <data name="WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount" xml:space="preserve">
+    <value>Maximální počet odpovědí je větší než počet možností odpovědí.</value>
+  </data>
+  <data name="WB0022_PrefilledQuestionsOfIllegalType" xml:space="preserve">
+    <value>Otázka tohoto typu nemůže být identifikovatelná.</value>
+  </data>
+  <data name="WB0023_RosterSizeSourceQuestionTypeIsIncorrect" xml:space="preserve">
+    <value>Otázka zdroje velikosti soupisky je nesprávná. Lze použít pouze číselné, kategorické s vícenásobným výběrem nebo otázky s textovým seznamem.</value>
+  </data>
+  <data name="WB0024_LookupHasInvalidName" xml:space="preserve">
+    <value>Vyhledávací tabulka má neplatný název.</value>
+  </data>
+  <data name="WB0025_LookupHasEmptyName" xml:space="preserve">
+    <value>Vyhledávací tabulka nemůže mít prázdný název.</value>
+  </data>
+  <data name="WB0026_ItemsWithTheSameNamesFound" xml:space="preserve">
+    <value>Nalezeny položky se stejným názvem.</value>
+  </data>
+  <data name="WB0027_VariableExpresssionHasIncorrectSyntax" xml:space="preserve">
+    <value>Výraz má chybu syntaxe.</value>
+  </data>
+  <data name="WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters" xml:space="preserve">
+    <value>Výraz filtru je delší než {0} znaků.</value>
+  </data>
+  <data name="WB0029_QuestionWithOptionsFilterCannotBePrefilled" xml:space="preserve">
+    <value>Filtr otázek s možností odpovědi nemůže být identifikován.</value>
+  </data>
+  <data name="WB0030_PrefilledQuestionCantBeInsideOfRoster" xml:space="preserve">
+    <value>Identifikační otázky nemohou být v soupisce.</value>
+  </data>
+  <data name="WB0031_LookupTableHasInvalidHeaders" xml:space="preserve">
+    <value>Vyhledávací tabulka obsahuje neplatná záhlaví sloupců.</value>
+  </data>
+  <data name="WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles" xml:space="preserve">
+    <value>Seznam se zdrojovou otázkou nemůže mít pevnou sadu položek.</value>
+  </data>
+  <data name="WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion" xml:space="preserve">
+    <value>Pevná sada položek soupiska nemůže mít otázku zdroje soupisky.</value>
+  </data>
+  <data name="WB0034_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterTitleQuestion" xml:space="preserve">
+    <value>Pevná sada položek soupiska nemůže mít otázku názvu soupisky.</value>
+  </data>
+  <data name="WB0035_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion" xml:space="preserve">
+    <value>Seznam s otázkou Zdroj seznamu má neplatný zdrojový dotaz pro názvy řádků.</value>
+  </data>
+  <data name="WB0036_ListAndMultiRostersCantHaveRosterTitleQuestion" xml:space="preserve">
+    <value>Soupiska nemůže mít otázku týkající se názvu soupisky, pokud je otázka zdroje soupisky kategorická otázka s vícenásobným výběrem nebo seznamem.</value>
+  </data>
+  <data name="WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles" xml:space="preserve">
+    <value>Seznam položek s pevnou sadou nemůže mít prázdné názvy nebo méně než dvě položky.</value>
+  </data>
+  <data name="WB0038_RosterFixedTitlesHaveMoreThan200Items" xml:space="preserve">
+    <value>Seznam položek s pevnou sadou nemůže mít více než {0} řádků.</value>
+  </data>
+  <data name="WB0039_TextListQuestionCannotBePrefilled" xml:space="preserve">
+    <value>Otázka seznamu nemůže být identifikovatelná.</value>
+  </data>
+  <data name="WB0040_TextListQuestionCannotBeFilledBySupervisor" xml:space="preserve">
+    <value>Otázka seznamu nemůže být vyplněna školitelem.</value>
+  </data>
+  <data name="WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues" xml:space="preserve">
+    <value>Pevné hodnoty seznamu položek musí být jedinečné.</value>
+  </data>
+  <data name="WB0042_TextListQuestionMaxAnswerInRange1And200" xml:space="preserve">
+    <value>Maximální počet prvků seznamu musí být v rozsahu [{1}, {0}].</value>
+  </data>
+  <data name="WB0043_LookupTableMoreThan11Columns" xml:space="preserve">
+    <value>Vyhledávací tabulka obsahuje příliš mnoho sloupců</value>
+  </data>
+  <data name="WB0044_LookupTableMoreThan15000Rows" xml:space="preserve">
+    <value>Vyhledávací tabulka obsahuje příliš mnoho řádků</value>
+  </data>
+  <data name="WB0045_QuestionHasOptionsWithEmptyValue" xml:space="preserve">
+    <value>Otázka má kategorie s prázdnými hodnotami.</value>
+  </data>
+  <data name="WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel" xml:space="preserve">
+    <value>Povolovací podmínka nemůže odkazovat na otázku z hlubší úrovně soupisky.</value>
+  </data>
+  <data name="WB0047_LookupTableNotUniqueRowcodeValues" xml:space="preserve">
+    <value>Vyhledávací tabulka nemá jedinečné hodnoty kódu řádku</value>
+  </data>
+  <data name="WB0048_LookupHasEmptyContent" xml:space="preserve">
+    <value>Vyhledávací tabulka nemůže být prázdná</value>
+  </data>
+  <data name="WB0049_QRBarcodeQuestionIsSupervisorQuestion" xml:space="preserve">
+    <value>Otázku čárového kódu nemůže vyplnit vedoucí.</value>
+  </data>
+  <data name="WB0050_QRBarcodeQuestionIsPreFilledQuestion" xml:space="preserve">
+    <value>Otázka čárového kódu nemůže být identifikovatelná.</value>
+  </data>
+  <data name="WB0051_GroupsCustomConditionExpressionReferencesChildQuestion" xml:space="preserve">
+    <value>Pododdíly nemohou mít povolení podmínky odkazující na podřízenou otázku.</value>
+  </data>
+  <data name="WB0052_LookupNameIsKeyword" xml:space="preserve">
+    <value>Název vyhledávací tabulky nemůže být vyhrazené slovo.</value>
+  </data>
+  <data name="WB0053_LinkedQuestionReferencesNotExistingRoster" xml:space="preserve">
+    <value>Soupiska, která je zdrojem odkazu, by měla existovat.</value>
+  </data>
+  <data name="WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster" xml:space="preserve">
+    <value>Soupiska by měla mít hlubší nebo stejnou úroveň soupisky jako je otázka velikosti soupisky.</value>
+  </data>
+  <data name="WB0055_RosterHasRosterLevelMoreThan4" xml:space="preserve">
+    <value>Soupiska nesmí mít více než {0} soupisky rodičů.</value>
+  </data>
+  <data name="WB0056_EntityShouldNotHaveCircularReferences" xml:space="preserve">
+    <value>Cyklické odkazy nejsou povoleny.</value>
+  </data>
+  <data name="WB0057_LinksAreProhibitedOnNavigationElements" xml:space="preserve">
+    <value>Odkazy jsou zakázány na navigačních prvcích: sekce, podsekce, soupisky</value>
+  </data>
+  <data name="WB0058_QuestionHasVariableNameReservedForServiceNeeds" xml:space="preserve">
+    <value>Název proměnné nebo ID soupisky nemůže být vyhrazené slovo.</value>
+  </data>
+  <data name="WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster" xml:space="preserve">
+    <value>Pokud položka používá náhradu %rostertitle%, musí být umístěna uvnitř soupisky.</value>
+  </data>
+  <data name="WB0060_CategoricalQuestionHasLessThan2Options" xml:space="preserve">
+    <value>Otázka má méně než {0} kategorií.</value>
+  </data>
+  <data name="WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2" xml:space="preserve">
+    <value>Otázka má maximální povolené odpovědi menší než {0}.</value>
+  </data>
+  <data name="WB0062_OptionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
+    <value>Výraz filtru možností obsahuje chybu syntaxe.</value>
+  </data>
+  <data name="WB0063_CategoricalLinkedQuestionUsedInValidationExpression" xml:space="preserve">
+    <value>Kategoricky propojenou otázku nelze použít v ověřovací podmínce #{0}.</value>
+  </data>
+  <data name="WB0064_CategoricalLinkedQuestionUsedInEnablementCondition" xml:space="preserve">
+    <value>Kategoricky propojenou otázku nelze použít v potvrzovací podmínce.</value>
+  </data>
+  <data name="WB0065_NameForAttachmentIsNotUnique" xml:space="preserve">
+    <value>Jiná příloha se stejným názvem již existuje.</value>
+  </data>
+  <data name="WB0066_QuestionTypeIsNotAllowed" xml:space="preserve">
+    <value>Otázka tohoto typu není podporována.</value>
+  </data>
+  <data name="WB0067_VariableNameIsEmpty" xml:space="preserve">
+    <value>Platný název proměnné nebo ID soupisky by neměl být prázdný.</value>
+  </data>
+  <data name="WB0068_RosterHasMoreThanAllowedChildElements" xml:space="preserve">
+    <value>Seznam nesmí obsahovat více než {0} podřízených prvků</value>
+  </data>
+  <data name="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" xml:space="preserve">
+    <value>Soupiska má ID soupisky rovnající se názvu dotazníku.</value>
+  </data>
+  <data name="WB0071_StaticTextIsEmpty" xml:space="preserve">
+    <value>Statický text nemůže být prázdný.</value>
+  </data>
+  <data name="WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion" xml:space="preserve">
+    <value>Názvy kategorií musí být jedinečné.</value>
+  </data>
+  <data name="WB0073_OptionValuesMustBeUniqueForCategoricalQuestion" xml:space="preserve">
+    <value>Hodnoty kategorií musí být jedinečné.</value>
+  </data>
+  <data name="WB0074_CategoricalQuestionHasOptionsAndIsLinked" xml:space="preserve">
+    <value>Kategorická otázka nemůže mít kategorie a být spojena s jinou otázkou.</value>
+  </data>
+  <data name="WB0075_FilteredComboboxContainsMoreThan5000Options" xml:space="preserve">
+    <value>Obsahuje více než {0} kategorií.</value>
+  </data>
+  <data name="WB0076_CategoricalOptionsCountMoreThan200" xml:space="preserve">
+    <value>Obsahuje více než {0} kategorií.</value>
+  </data>
+  <data name="WB0077_QuestionHasInvalidVariableName" xml:space="preserve">
+    <value>Otázka má neplatný název proměnné.</value>
+  </data>
+  <data name="WB0078_MultimediaQuestionIsInterviewersOnly" xml:space="preserve">
+    <value>Obrázková otázka může být pouze tazatele.</value>
+  </data>
+  <data name="WB0079_MultimediaShouldNotHaveValidationExpression" xml:space="preserve">
+    <value>Obrázková otázka nemůže mít podmínku ověření.</value>
+  </data>
+  <data name="WB0080_LongRosterCannotHaveNestedRosters" xml:space="preserve">
+    <value>Soupiska s více než {0} řádky nemůže mít vnořené soupisky</value>
+  </data>
+  <data name="WB0081_LongRosterCannotBeNested" xml:space="preserve">
+    <value>Seznam s více než {0} řádky nelze vnořovat</value>
+  </data>
+  <data name="WB0082_RosterSizeMultiOptionQuestionShouldBeLimited" xml:space="preserve">
+    <value>Otázka s vícenásobným výběrem soupisky by měla mít nastaven maximální počet odpovědí.</value>
+  </data>
+  <data name="WB0083_QuestionCannotBeUsedAsRosterTitle" xml:space="preserve">
+    <value>Otázku s aktuálním typem nelze použít jako název soupisky.</value>
+  </data>
+  <data name="WB0084_CascadingOptionsShouldHaveParent" xml:space="preserve">
+    <value>Kategorie v podřízené kaskádové otázce se seznamem by měly odkazovat pouze na existující možnost v nadřazené otázce.</value>
+  </data>
+  <data name="WB0085_CascadingQuestionWrongParentLevel" xml:space="preserve">
+    <value>Otázka by měla mít hlubší nebo stejnou úroveň jako její nadřazená otázka.</value>
+  </data>
+  <data name="WB0086_ParentCascadingQuestionShouldExist" xml:space="preserve">
+    <value>Kaskádové pole se seznamem Odkazy na otázky chybějící nebo nepodporovaný typ otázky.</value>
+  </data>
+  <data name="WB0087_CascadingQuestionHasCicularReference" xml:space="preserve">
+    <value>Cyklické odkazy v kaskádovém poli se seznamem nejsou povoleny.</value>
+  </data>
+  <data name="WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers" xml:space="preserve">
+    <value>Kaskádová otázka se seznamem by měla mít méně než {0} kategorií.</value>
+  </data>
+  <data name="WB0089_CascadingQuestionOptionWithParentShouldBeUnique" xml:space="preserve">
+    <value>Kaskádová otázka se seznamem by měla mít jedinečnou hodnotu a nadřazený seznam kategorií.</value>
+  </data>
+  <data name="WB0090_LinkedQuestionIsInterviewersOnly" xml:space="preserve">
+    <value>Odkazovaná otázka může být pouze tazatele.</value>
+  </data>
+  <data name="WB0091_CascadingChildQuestionShouldNotContainCondition" xml:space="preserve">
+    <value>Podřízená kaskádová otázka se seznamem by neměla obsahovat aktivační podmínku. </value>
+  </data>
+  <data name="WB0092_CascadingChildQuesionShouldNotContainValidation" xml:space="preserve">
+    <value>Podřízená otázka se seznamem CSS by neměla obsahovat podmínku ověření.</value>
+  </data>
+  <data name="WB0093_RosterSizeListOptionQuestionShouldBeLimit" xml:space="preserve">
+    <value>Otázka seznamu zdrojů soupisky by měla mít nastaven maximální počet prvků.</value>
+  </data>
+  <data name="WB0094_ConditionExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
+    <value>Potvrzovací podmínka má délku delší než {0} znaků.</value>
+  </data>
+  <data name="WB0095_StaticTextRefersAbsentAttachment" xml:space="preserve">
+    <value>Statický text odkazuje na chybějící přílohu</value>
+  </data>
+  <data name="WB0096_GeneralCompilationError" xml:space="preserve">
+    <value>Při vyplňování dotazníku došlo k chybě.</value>
+  </data>
+  <data name="WB0097_QuestionnaireTitleHasInvalidCharacters" xml:space="preserve">
+    <value>V názvu dotazníku mohou být použity pouze následující znaky: A.. Z a.. z 0..9 ( ) \ / _ - a prostor.</value>
+  </data>
+  <data name="WB0098_QuestionnaireHasSizeMoreThan5MB" xml:space="preserve">
+    <value>Velikost dotazníku je přibližně {0:0.##}MB a je příliš velký pro správnou práci s řešením průzkumu. Pokuste se snížit množství dat, dokud nebude alespoň menší než {1}MB.</value>
+  </data>
+  <data name="WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200" xml:space="preserve">
+    <value>Maximální počet odpovědí na otázku velikosti soupisky nesmí být větší než {0}.</value>
+  </data>
+  <data name="WB0101_GroupHasLevelDepthMoreThan10" xml:space="preserve">
+    <value>Podsekce nesmí mít více než {0} nadřazené podsekce.</value>
+  </data>
+  <data name="WB0102_QuestionnaireEntitiesShareSameInternalId" xml:space="preserve">
+    <value>Následující položky dotazníku (otázka/skupina/statický text/atd.) používají stejné interní ID. Smažte prosím jeden z nich.</value>
+  </data>
+  <data name="WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster" xml:space="preserve">
+    <value>Soupiska, která je zdrojem odkazu, je soupiska, nikoli podsekce.</value>
+  </data>
+  <data name="WB0104_ValidationConditionIsTooLong" xml:space="preserve">
+    <value>Podmínka ověření #{0} je příliš dlouhá. Neměla by být delší než {1} znaků.</value>
+  </data>
+  <data name="WB0105_ValidationMessageIsTooLong" xml:space="preserve">
+    <value>Chybová zpráva ověření #{0} je příliš dlouhá. Neměla by být delší než {1} znaků.</value>
+  </data>
+  <data name="WB0106_ValidationConditionIsEmpty" xml:space="preserve">
+    <value>Podmínka ověření #{0} je prázdná.</value>
+  </data>
+  <data name="WB0107_ValidationMessageIsEmpty" xml:space="preserve">
+    <value>Chybová zpráva ověření #{0} je prázdná.</value>
+  </data>
+  <data name="WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
+    <value>Výraz filtru propojených otázek je delší než {0} znaků.</value>
+  </data>
+  <data name="WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion" xml:space="preserve">
+    <value>Otázku nelze použít ve vlastním výrazu filtru.</value>
+  </data>
+  <data name="WB0110_LinkedQuestionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
+    <value>Výraz filtru má chybu syntaxe.</value>
+  </data>
+  <data name="WB0111_AttachmentHasEmptyContent" xml:space="preserve">
+    <value>Příloha nemůže být prázdná</value>
+  </data>
+  <data name="WB0112_VariableHasInvalidName" xml:space="preserve">
+    <value>Proměnná má neplatný název.</value>
+  </data>
+  <data name="WB0113_VariableHasEmptyVariableName" xml:space="preserve">
+    <value>Proměnná nemůže mít prázdný název.</value>
+  </data>
+  <data name="WB0114_CategoricalQuestionSupportsOnlyIntegerPositiveValues" xml:space="preserve">
+    <value>Kategorická otázka podporuje pouze celočíselné hodnoty v rozsahu od {0} do {1}</value>
+  </data>
+  <data name="WB0115_FixRosterSupportsOnlyIntegerTitleValues" xml:space="preserve">
+    <value>Pevné soupisky podporují pouze celočíselné hodnoty.</value>
+  </data>
+  <data name="WB0116_LinkedQuestionReferenceTextListQuestionFromWrongScope" xml:space="preserve">
+    <value>Odkazovaná otázka odkazuje na otázku seznamu z nesprávné úrovně.</value>
+  </data>
+  <data name="WB0117_LinkedToTextListQuestionDoesNotSupportFilters" xml:space="preserve">
+    <value>Otázka propojená se seznamem nepodporuje filtr kategorií</value>
+  </data>
+  <data name="WB0118_ExpressionReferencingForbiddenDateTimeProperies" xml:space="preserve">
+    <value>Výraz odkazující na zakázané vlastnosti DateTime: {0}, {1} {2}. Zvažte místo toho použití otázky týkající se aktuálního času.</value>
+  </data>
+  <data name="WB0119_QuestionnaireTitleTooLong" xml:space="preserve">
+    <value>Název dotazníku nesmí obsahovat více než {0} symbolů.</value>
+  </data>
+  <data name="WB0120_GroupTitleIsEmpty" xml:space="preserve">
+    <value>Názvy oddílů a pododdílů nesmí být prázdné nebo obsahovat pouze prázdné znaky.</value>
+  </data>
+  <data name="WB0121_VariableNameTooLong" xml:space="preserve">
+    <value>Název nebo ID tohoto prvku by neměly být delší než {0} znaků.</value>
+  </data>
+  <data name="WB0122_VariableNameHasSpecialCharacters" xml:space="preserve">
+    <value>Platný název proměnné nebo ID soupisky by měl obsahovat pouze písmena, číslice a podtržítko</value>
+  </data>
+  <data name="WB0123_VariableNameStartWithDigitOrUnderscore" xml:space="preserve">
+    <value>Název proměnné nebo ID soupisky by neměly začínat číslicí nebo podtržítkem</value>
+  </data>
+  <data name="WB0124_VariableNameEndWithUnderscore" xml:space="preserve">
+    <value>Název proměnné nebo ID soupisky by nemělo končit podtržítkem</value>
+  </data>
+  <data name="WB0125_VariableNameHasConsecutiveUnderscores" xml:space="preserve">
+    <value>Název proměnné nebo ID soupisky by neměly obsahovat dva nebo více po sobě jdoucích podtržítka.</value>
+  </data>
+  <data name="WB0126_VarialbeNameNotUnique" xml:space="preserve">
+    <value>Název proměnné nebo ID soupisky by měly být jedinečné v rozsahu dotazníku.</value>
+  </data>
+  <data name="WB0127_CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
+    <value>Existuje alespoň jeden duplikát párů "Title" a "Parent Value". Seznam by neměl obsahovat žádné duplicitní položky.</value>
+  </data>
+  <data name="WB0128_CountOfDecimalPlacesIsNotInRange" xml:space="preserve">
+    <value>Počet desetinných míst není v rozsahu od {0} do {1}.</value>
+  </data>
+  <data name="WB0129_AnswerTitleIsTooLong" xml:space="preserve">
+    <value>Název kategorie je prázdný nebo příliš dlouhý. Délka názvu by se měla pohybovat v rozmezí od {0} do {1} znaků.</value>
+  </data>
+  <data name="WB0130_SubsectionOrRosterReferenceChildrendInCondition" xml:space="preserve">
+    <value>Podřízené entity nelze použít v podmínce povolení pro oddíly, podsekce a rozpisy.</value>
+  </data>
+  <data name="WB0131_SpecialValuesHasNonIntegerOptionsValues" xml:space="preserve">
+    <value>Speciální hodnoty podporují pouze celočíselné hodnoty v rozsahu od {0} do {1}.</value>
+  </data>
+  <data name="WB0132_SpecialValuesHasOptionsWithLongTexts" xml:space="preserve">
+    <value>Název speciální hodnoty je prázdný nebo příliš dlouhý. Délka názvu by se měla pohybovat v rozmezí od {0} do {1} znaků.</value>
+  </data>
+  <data name="WB0133_SpecialValuesMustBeUniqueForNumericlQuestion" xml:space="preserve">
+    <value>Speciální hodnoty musí být jedinečné.</value>
+  </data>
+  <data name="WB0134_SpecialValuesCountMoreThanMaxOptionCount" xml:space="preserve">
+    <value>Obsahuje více než {0} speciálních hodnot.</value>
+  </data>
+  <data name="WB0135_SpecialValuesForRosterSizeQuestionsCantBeMoreThanRosterLimit" xml:space="preserve">
+    <value>Otázka obsahuje speciální hodnotu, která je příliš velká a nelze ji použít v této otázce, protože určuje velikost soupisky.</value>
+  </data>
+  <data name="WB0136_SpecialValuesHaveOptionsWithEmptyValue" xml:space="preserve">
+    <value>Otázka má speciální hodnotu (hodnoty) s prázdnou hodnotou.</value>
+  </data>
+  <data name="WB0137_SpecialValuesTitlesMustBeUnique" xml:space="preserve">
+    <value>Názvy speciálních hodnot musí být jedinečné.</value>
+  </data>
+  <data name="WB0138_SpecialValuesAttachmentsMustBeUniqueForNumericQuestion" xml:space="preserve">
+    <value>Název přílohy se speciálními hodnotami musí být jedinečný.</value>
+  </data>
+  <data name="WB0139_SpecialValuesAttachmentsReferAbsentAttachment" xml:space="preserve">
+    <value>Attachment se speciálními hodnotami se vztahuje k neexistující připoutanosti.</value>
+  </data>
+  <data name="WB0200_LargeNumberOfRostersIsCreated" xml:space="preserve">
+    <value>Vzniká velké množství soupisek. Export těchto struktur do datových souborů může být problematický. Zvažte snížení počtu soupisek.</value>
+  </data>
+  <data name="WB0201_LargeNumberOfQuestionsInGroup" xml:space="preserve">
+    <value>Sekce nebo soupiska obsahuje více než {0} otázek, zvažte rozdělení do podsekcí.</value>
+  </data>
+  <data name="WB0202_GroupWithoutQuestions" xml:space="preserve">
+    <value>Sekce neobsahuje žádné otázky. Zvažte odebrání prázdného oddílu.</value>
+  </data>
+  <data name="WB0203_RosterHasSingleQuestion" xml:space="preserve">
+    <value>Soupiska obsahuje pouze jednu otázku. Zvažte seskupení s jinými soupiskami. U pevného seznamu zvažte prezentaci jako sadu nezávislých otázek.</value>
+  </data>
+  <data name="WB0204_EmptyRoster" xml:space="preserve">
+    <value>Soupiska je prázdná. Odstraňte jej, pokud není potřeba.</value>
+  </data>
+  <data name="WB0205_TooManyQuestions" xml:space="preserve">
+    <value>Dotazník má více než {0} otázek. Může být obtížné ji podat.</value>
+  </data>
+  <data name="WB0206_FewSectionsManyQuestions" xml:space="preserve">
+    <value>Dotazník obsahuje více než {0} otázek, ale pouze jednu nebo dvě části. Seskupení otázek do sekcí pro zjednodušení navigace a zlepšení výkonu.</value>
+  </data>
+  <data name="WB0207_FixedRosterContains3OrLessItems" xml:space="preserve">
+    <value>Pevná soupiska obsahuje {0} nebo méně položek. Zvažte použití pododdílů a řady otázek. Soupisky komplikují strukturu exportovaných dat.</value>
+  </data>
+  <data name="WB0208_MoreThan50PercentsQuestionsWithoutValidationConditions" xml:space="preserve">
+    <value>Více než {0} % otázek neobsahuje žádné podmínky validace. Přidání ověřovacích podmínek pro zlepšení kvality dat.</value>
+  </data>
+  <data name="WB0209_LongEnablementCondition" xml:space="preserve">
+    <value>Podmínka povolení je dlouhá. Mohlo by být možné mít kratší, čitelnější podmínky s vestavěnými funkcemi (tj. InList()).</value>
+  </data>
+  <data name="WB0210_CategoricalQuestionHasManyOptions" xml:space="preserve">
+    <value>Otázka s jednou volbou má příliš mnoho kategorií, zvažte změnu na pole se seznamem.</value>
+  </data>
+  <data name="WB0211_QuestionnaireHasNoGpsQuestion" xml:space="preserve">
+    <value>Dotazník neobsahuje žádné GPS otázky. Zvažte přidání otázky GPS.</value>
+  </data>
+  <data name="WB0212_LongValidationCondition" xml:space="preserve">
+    <value>Podmínka ověření #{0} je dlouhá. Mohlo by být možné mít kratší, čitelnější podmínky s vestavěnými funkcemi (tj. InList()).</value>
+  </data>
+  <data name="WB0213_AttachmentSizeIsMoreThan5Mb" xml:space="preserve">
+    <value>Velikost přílohy je větší než {0}Mb</value>
+  </data>
+  <data name="WB0214_TotalAttachmentsSizeIsMoreThan50Mb" xml:space="preserve">
+    <value>Celková velikost příloh je větší než {0}Mb</value>
+  </data>
+  <data name="WB0215_UnusedAttachments" xml:space="preserve">
+    <value>Dotazník obsahuje nepoužité přílohy</value>
+  </data>
+  <data name="WB0216_NoPrefilledQuestions" xml:space="preserve">
+    <value>Nejsou definovány žádné identifikační otázky. Definujte alespoň jednu identifikační otázku.</value>
+  </data>
+  <data name="WB0217_VariableLableMoreThan120Characters" xml:space="preserve">
+    <value>Variabilní popisek je příliš dlouhý (více než {0} znaků) a při exportu souboru SPSS bude zkrácen.</value>
+  </data>
+  <data name="WB0218_ConsecutiveQuestionsWithIdenticalEnablementConditions" xml:space="preserve">
+    <value>Po sobě jdoucí otázky obsahují stejné podmínky povolení. Zvažte umístění do podsekce a přiřaďte podsekci podmínku.</value>
+  </data>
+  <data name="WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options" xml:space="preserve">
+    <value>Více po sobě jdoucích nepodmíněných otázek s jedním výběrem s {0} kategoriemi. Zvažte jednu otázku s výběrem odpovědí.</value>
+  </data>
+  <data name="WB0220_RowIndexInMultiOptionBasedRoster" xml:space="preserve">
+    <value>Použití @{0} se seznamem s výběrem z více možností může být nestabilní. Zvažte místo toho použití @{1}.</value>
+  </data>
+  <data name="WB0221_NoCurrentTimeQuestions" xml:space="preserve">
+    <value>Nebyla nalezena žádná aktuální časová otázka. Zvažte zaznamenání data pohovoru do dotazníku.</value>
+  </data>
+  <data name="WB0222_SingleOptionPrefilled" xml:space="preserve">
+    <value>Otázka s jedním výběrem je označena jako identifikační. Zvažte použití textové otázky.</value>
+  </data>
+  <data name="WB0223_SectionWithLessThan5Questions" xml:space="preserve">
+    <value>Oddíl obsahuje méně než pět otázek. Zvažte spojení s dalšími sekcemi.</value>
+  </data>
+  <data name="WB0224_TooManySubsectionsAtOneLevel" xml:space="preserve">
+    <value>Příliš mnoho podsekcí na jedné úrovni. Zvažte hierarchické rozložení.</value>
+  </data>
+  <data name="WB0225_ComboBoxWithLessThan10Elements" xml:space="preserve">
+    <value>Rozbalovací nabídka (pole se seznamem) obsahuje méně než 10 prvků. Zvažte přechod na standardní reprezentaci s jednou volbou.</value>
+  </data>
+  <data name="WB0226_SameCascadingParentQuestion" xml:space="preserve">
+    <value>Kaskádové otázky se seznamem mají stejnou nadřazenou otázku.</value>
+  </data>
+  <data name="WB0227_NotShared" xml:space="preserve">
+    <value>Dotazník nebyl přezkoumán. Zvažte sdílení s jiným uživatelem za účelem získání zpětné vazby.</value>
+  </data>
+  <data name="WB0228_OmittedOptions" xml:space="preserve">
+    <value>Kategorická otázka má nesouvislé kódy kategorií. Kontrola vynechaných kategorií.</value>
+  </data>
+  <data name="WB0229_SupervisorQuestionInValidation" xml:space="preserve">
+    <value>Při validaci se používá otázka supervizora. Zkontrolujte účty podmínek, zda supervizor neodpovídá, nebo dejte pokyn nadřízeným, aby vždy reagovali.</value>
+  </data>
+  <data name="WB0230_NonconsecutiveCascadings" xml:space="preserve">
+    <value>Nenavazující kaskádové otázky. Zvažte položení kaskádových otázek jednu po druhé.</value>
+  </data>
+  <data name="WB0231_MultiOptionWithMoreThan20Options" xml:space="preserve">
+    <value>Otázka s vícenásobným výběrem obsahuje příliš mnoho (&gt;{0}) kategorií. Bude obtížné se orientovat na tabletách. Pokud je to možné, zvažte rozdělení na dvě otázky s výběrem odpovědí.</value>
+  </data>
+  <data name="WB0232_FiveOrMoreQuestionsWithSameEnabling" xml:space="preserve">
+    <value>Pět nebo více otázek má stejnou podmínku. Umístěte otázky do skupiny a aplikujte na skupinu jednu základní podmínku, abyste zlepšili efektivitu dotazníku.</value>
+  </data>
+  <data name="WB0233_NestedRosterDegree3OrMore" xml:space="preserve">
+    <value>Vnořená soupiska se třemi nebo více stupni hnízdění. Zkuste se vyhnout tak složitým strukturám, které by mohly vést k problémům při sběru dat.</value>
+  </data>
+  <data name="WB0234_RosterInRosterWithSameSourceQuestion" xml:space="preserve">
+    <value>Podřízené úrovně ve vnořené soupisce jsou založeny na stejné nadřazené otázce. Zkuste revidovat, takové soupisky by mohly vést k problémům při sběru dat.</value>
+  </data>
+  <data name="WB0235_FewQuestionsWithSameLongEnablement" xml:space="preserve">
+    <value>Stejná podmínka dlouhého povolení je použita v několika otázkách. Můžete chtít vytvořit logickou proměnnou pro zjednodušení správy kódu.</value>
+  </data>
+  <data name="WB0236_FewQuestionsWithSameLongValidation" xml:space="preserve">
+    <value>Stejná dlouhá podmínka ověření se používá v několika otázkách. Můžete chtít vytvořit logickou proměnnou pro zjednodušení správy kódu.</value>
+  </data>
+  <data name="WB0237_BitwiseAnd" xml:space="preserve">
+    <value>&amp; se používá ve výrazu. Ujistěte se, že rozumíte rozdílu mezi operátory &amp; a &amp;&amp; operátory. Ve většině případů použijte &amp;&amp;.</value>
+  </data>
+  <data name="WB0238_BitwiseOr" xml:space="preserve">
+    <value>| se používá ve výrazu. Ujistěte se, že rozumíte rozdílu mezi | a || operátoři. Ve většině případů použijte ||.</value>
+  </data>
+  <data name="WB0250_ValidationConditionRefersToAFutureQuestion" xml:space="preserve">
+    <value>Podmínka ověření #{0} odkazuje na budoucí otázku. Zvažte obrácení pořadí.</value>
+  </data>
+  <data name="WB0251_EnablementConditionRefersToAFutureQuestion" xml:space="preserve">
+    <value>Podmínka povolení se týká budoucí otázky. Zvažte obrácení pořadí.</value>
+  </data>
+  <data name="WB0253_TooFewVariableLabelsAreDefined" xml:space="preserve">
+    <value>Je definováno příliš málo popisků proměnných. Přidání popisků proměnných pro zlepšení použitelnosti exportovaných dat a poskytnutí vstupu do metadat pro formát DDI (Data Documentation Initiative).</value>
+  </data>
+  <data name="WB0254_UseFunctionIsValidEmailToValidateEmailAddress" xml:space="preserve">
+    <value>Použijte funkci IsValidEmail() k ověření e-mailové adresy.</value>
+  </data>
+  <data name="WB0255_QuestionIsTooShort" xml:space="preserve">
+    <value>Otázka je příliš krátká. To může být neúplná otázka.</value>
+  </data>
+  <data name="WB0256_TranslationNameIsInvalid" xml:space="preserve">
+    <value>Název překladu je neplatný</value>
+  </data>
+  <data name="WB0257_TranslationHasEmptyContent" xml:space="preserve">
+    <value>Překlad má prázdný obsah</value>
+  </data>
+  <data name="WB0258_TranslationsHaveDuplicatedNames" xml:space="preserve">
+    <value>Překlady mají duplicitní názvy</value>
+  </data>
+  <data name="WB0259_QuestionTitleIsTooLong" xml:space="preserve">
+    <value>Text otázky je příliš dlouhý. Neměla by být delší než {0} znaků.</value>
+  </data>
+  <data name="WB0260_GroupTitleIsTooLong" xml:space="preserve">
+    <value>Název je příliš dlouhý. Neměla by být delší než {0} znaků.</value>
+  </data>
+  <data name="WB0261_RosterStructureTooExplosive" xml:space="preserve">
+    <value>Dotazník obsahuje soupisky s celkovým počtem instancí soupisek, {0} překračují systémové limity {1}</value>
+  </data>
+  <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
+    <value>Soupiska dosáhla limitu velikosti. Zmenšení velikosti soupisky nebo zmenšení vnoření.</value>
+  </data>
+  <data name="WB0264_GpsQuestion" xml:space="preserve">
+    <value>Máte otázku GPS. Tablety musí podporovat geolokaci, která má být použita s tímto dotazníkem.</value>
+  </data>
+  <data name="WB0265_MoreThan30PercentQuestionsAreText" xml:space="preserve">
+    <value>Více než {0} % otázek jsou textové otázky. Textové otázky jsou na tabletech obtížně zodpověditelné. Zvažte místo toho použití otázek s jednou nebo více možnostmi.</value>
+  </data>
+  <data name="WB0266_SameTitle" xml:space="preserve">
+    <value>Duplicitní otázky. (Otázky mají stejný název.)</value>
+  </data>
+  <data name="WB0267_QRBarcodeQuestion" xml:space="preserve">
+    <value>Máte otázku s čárovým kódem. Tablety musí podporovat automatické zaostřování, aby mohly být použity s tímto dotazníkem.</value>
+  </data>
+  <data name="WB0268_DoesNotSupportSubstitution" xml:space="preserve">
+    <value>Pokoušíte se použít nahrazení nepodporované entity.</value>
+  </data>
+  <data name="WB0269_QuestionTitleIsEmpty" xml:space="preserve">
+    <value>Otázka nemůže mít prázdný název.</value>
+  </data>
+  <data name="WB0270_SectionContainsTooManyQuestions" xml:space="preserve">
+    <value>Oddíl by neměl obsahovat více než {0} otázek.</value>
+  </data>
+  <data name="WB0271_MacroHasEmptyContent" xml:space="preserve">
+    <value>Makro nemůže být prázdné.</value>
+  </data>
+  <data name="WB0272_ConditionUsingForbiddenClasses" xml:space="preserve">
+    <value>Povolovací podmínka používá zakázaný typ.</value>
+  </data>
+  <data name="WB0273_ValidationConditionUsingForbiddenClasses" xml:space="preserve">
+    <value>Podmínka ověření používá zakázaný typ.</value>
+  </data>
+  <data name="WB0274_VariableUsingForbiddenClasses" xml:space="preserve">
+    <value>Proměnná používá zakázaný typ.</value>
+  </data>
+  <data name="WB0275_FilterExpressionIsUsingForbiddenClasses" xml:space="preserve">
+    <value>Výraz filtru používá zakázaný typ.</value>
+  </data>
+  <data name="WB0276_RownameIsNotSupported" xml:space="preserve">
+    <value>@rowname proměnná již není podporována.</value>
+  </data>
+  <data name="WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore" xml:space="preserve">
+    <value>Název dotazníku by neměl obsahovat dva nebo více po sobě jdoucích podtržítek.</value>
+  </data>
+  <data name="WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+    <value>Prostý režim povolen pouze pro soupisky s maximálně {0} otázkami nebo statickými texty.</value>
+  </data>
+  <data name="WB0279_PlainModeGroupContainsNestedGroup" xml:space="preserve">
+    <value>Prostý režim neumožňuje použití vnořených soupisek.</value>
+  </data>
+  <data name="WB0280_TextContainsLinkToUnknownQuestionOrGroup" xml:space="preserve">
+    <value>Text obsahuje odkaz na neznámou otázku, podsekci, soupisku nebo přílohu pdf.</value>
+  </data>
+  <data name="WB0281_QuestionnaireExceededEntitiesLimit" xml:space="preserve">
+    <value>Celkový počet prvků ({0}) překročil systémový limit ({1}). Zvažte snížení počtu otázek, statických textů, proměnných nebo položek v pevných rozpisech.</value>
+  </data>
+  <data name="WB0282_IdentifyingQuestionInSectionWithCondition" xml:space="preserve">
+    <value>Identifikační otázku nelze umístit do sekce s potvrzovací podmínkou.</value>
+  </data>
+  <data name="WB0282_TableRosterContainsNestedGroup" xml:space="preserve">
+    <value>Režim soupisky stolů neumožňuje použití vnořených skupin a soupisek.</value>
+  </data>
+  <data name="WB0283_TableRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+    <value>Režim stolu povolen pouze pro soupisky s nejvýše {0} otázkami.</value>
+  </data>
+  <data name="WB0284_TableRosterCantContainsSupervisorQuestions" xml:space="preserve">
+    <value>Seznam tabulek neumožňuje používat otázky nadřízeného.</value>
+  </data>
+  <data name="WB0285_TableRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
+    <value>Seznam tabulek umožňuje používat pouze textové a číselné otázky.</value>
+  </data>
+  <data name="WB0286_TableAndMatixRosterWorksOnlyInWebMode" xml:space="preserve">
+    <value>Tabulkový nebo maticový režim soupisek funguje pouze ve webovém průzkumu, na tabletech to bude režim "podsekce".</value>
+  </data>
+  <data name="WB0288_ValueAndTitleNumbersIsNotEquals" xml:space="preserve">
+    <value>Popisek {1} pro kód {0} je číslo odlišné od hodnoty popisované.</value>
+  </data>
+  <data name="WB0289" xml:space="preserve">
+    <value>Název kategorií by neměl být delší než {0} znaků.</value>
+  </data>
+  <data name="WB0290" xml:space="preserve">
+    <value>Název kategorií by neměl končit podtržítkem</value>
+  </data>
+  <data name="WB0291" xml:space="preserve">
+    <value>Název kategorií by neměl obsahovat dva nebo více po sobě jdoucích podtržítek.</value>
+  </data>
+  <data name="WB0292" xml:space="preserve">
+    <value>Název kategorií by neměl být prázdný.</value>
+  </data>
+  <data name="WB0293" xml:space="preserve">
+    <value>Název kategorie nesmí být vyhrazeným slovem.</value>
+  </data>
+  <data name="WB0294" xml:space="preserve">
+    <value>Název kategorie by měl obsahovat pouze písmena, číslice a podtržítko</value>
+  </data>
+  <data name="WB0295" xml:space="preserve">
+    <value>Název kategorií by neměl začínat číslicí nebo podtržítkem</value>
+  </data>
+  <data name="WB0296" xml:space="preserve">
+    <value>Otázky mají stejné kategorie. Místo toho použijte opakovaně použitelné kategorie</value>
+  </data>
+  <data name="WB0297_MatrixRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
+    <value>Maticový seznam umožňuje používat pouze jednoduché kategorické otázky: combobox, kaskádový nebo ano/ne režimy nejsou povoleny.</value>
+  </data>
+  <data name="WB0298_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+    <value>Režim matice povolen pouze pro soupisky s nejvýše {0} otázkami.</value>
+  </data>
+  <data name="WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions" xml:space="preserve">
+    <value>Seznam matic nesmí obsahovat žádného nadřízeného nebo identifikační otázky.</value>
+  </data>
+  <data name="WB0301_MatrixRosterHasToContainNoLinkedQuestions" xml:space="preserve">
+    <value>Soupiska Matrixu nesmí obsahovat žádné související otázky.</value>
+  </data>
+  <data name="WB0302" xml:space="preserve">
+    <value>Střídání nemůže odkazovat na položky ze stejné úrovně soupisky.</value>
+  </data>
+  <data name="WB0305_DuplicatedCategoryIdParentIdPair" xml:space="preserve">
+    <value>Opakovaně použitelná kategorie nemůže mít řádek se stejnými hodnotami Id a ParentId</value>
+  </data>
+  <data name="WB0306_DuplicatedCategoryParentIdText" xml:space="preserve">
+    <value>Opakovaně použitelná kategorie nemůže mít řádek se stejnými hodnotami ParentId a Text</value>
+  </data>
+  <data name="WB0307_QuestionReferancedToIncorrectCategories" xml:space="preserve">
+    <value>Odkazy na otázky neexistující opakovaně použitelná kategorie.</value>
+  </data>
+  <data name="WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes" xml:space="preserve">
+    <value>Identifikační otázky mohou mít povolené pouze typy (Text, Numeric, DateTime, GpsCoordinates, SingleOption)</value>
+  </data>
+  <data name="WB0309_IdentityQuestionsMustHaveVariableLabel" xml:space="preserve">
+    <value>Otázky v sekci Сover musí mít variabilní popisek.</value>
+  </data>
+  <data name="WB0311_IdentityVariablesMustHaveLabel" xml:space="preserve">
+    <value>Proměnné v sekci Сover musí mít popisek.</value>
+  </data>
+  <data name="WB0312" xml:space="preserve">
+    <value>Kategorie musí mít alespoň dvě možnosti</value>
+  </data>
+  <data name="WB0313_QuestionOptionReferenceToNonExistentAttachment" xml:space="preserve">
+    <value>Možnost otázky se týká neexistující přílohy</value>
+  </data>
+  <data name="WB0314_NonUniqueAttachment" xml:space="preserve">
+    <value>Otázka obsahuje více možností, které odkazují na stejnou přílohu</value>
+  </data>
+  <data name="WB0315_AttachmentHasInvalidName" xml:space="preserve">
+    <value>Název přílohy by měl obsahovat pouze písmena, číslice a podtržítko. Začíná písmenem, bez po sobě jdoucích podtržítek, nekončí podtržítkem a není to vyhrazené slovo. Není prázdný a je kratší než 32 znaků.</value>
+  </data>
+  <data name="WB0316_QuestionnaireWithOldCoverPage" xml:space="preserve">
+    <value>Dotazník ve starém formátu. Použijte prosím odkaz "Generovat obálku" v sekci Obálka.</value>
+  </data>
+  <data name="WB0390_OnlyStringVariableAllowedAsAttachmentName" xml:space="preserve">
+    <value>Jako zdroj názvu přílohy lze použít pouze typ řetězcové proměnné</value>
+  </data>
+  <data name="WB0391" xml:space="preserve">
+    <value>Statický text nemůže odkazovat na proměnnou, která má větší rozsah seznamu než sama</value>
+  </data>
+  <data name="WB3010_LinkToHiddenQuestionNotAllowed" xml:space="preserve">
+    <value>Odkaz na skrytou otázku není povolen</value>
+  </data>
+</root>

@@ -132,6 +132,9 @@
   <data name="RejectInterview" xml:space="preserve">
     <value>Interview {0} rejected</value>
   </data>
+  <data name="RejectInterviewToInterviewer" xml:space="preserve">
+    <value>Interview {0} rejected to interviewer {1}</value>
+  </data>
   <data name="CreateInterviewFromAssignment" xml:space="preserve">
     <value>Interview {0} created from assignment {1}</value>
   </data>

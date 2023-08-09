@@ -44,8 +44,6 @@ namespace WB.UI.Shared.Extensions.Activities
             this.SetSupportActionBar(toolbar);
             
             this.ViewModel.OnAreaEditCompleted = OnAreaEditCompleted;
-            
-            System.Threading.Tasks.Task.Run(() => this.ViewModel.MapControlCreatedAsync());
         }
 
         protected override bool BackButtonCustomAction => true;
@@ -72,8 +70,11 @@ namespace WB.UI.Shared.Extensions.Activities
 
         protected override void Dispose(bool disposing)
         {
-            this.ViewModel.OnAreaEditCompleted = null;
-            
+            if (disposing)
+            {
+                this.ViewModel.OnAreaEditCompleted = null;
+            }
+
             base.Dispose(disposing);
         }
     }

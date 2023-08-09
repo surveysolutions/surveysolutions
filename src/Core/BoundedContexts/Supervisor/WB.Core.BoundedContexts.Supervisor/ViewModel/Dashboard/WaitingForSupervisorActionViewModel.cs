@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             this.Title = SupervisorDashboard.WaitingForAction;
         }
 
-        public override GroupStatus InterviewStatus => GroupStatus.Started;
+        public override DashboardGroupType DashboardType => DashboardGroupType.InProgressInterviews;
 
         protected override IEnumerable<IDashboardItem> GetUiItems()
         {
@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             {
                 yield return dashboardItem;
 
-                if (dashboardItem is SupervisorDashboardInterviewViewModel interviewDashboardItem &&
+                if (dashboardItem is SupervisorInterviewDashboardViewModel interviewDashboardItem &&
                     interviewDashboardItem.InterviewId == lastVisitedInterviewId)
                 {
                     this.HighLightedItemIndex = interviewIndex;

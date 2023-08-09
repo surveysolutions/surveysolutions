@@ -26,6 +26,18 @@
             margin: 0 auto; 
             margin-top: -300px;
         }
+        #emptyData{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-top: -50px;
+            margin-left: -150px;
+            width: 300px;
+            color: red;
+            font-weight: bold;
+            background-color: white;
+            text-align: center;
+        }
     </style>
     
         <link rel="stylesheet" href="https://js.arcgis.com/4.22/esri/css/main.css">
@@ -54,8 +66,26 @@
                 function (Map, MapView, Graphic, Geometry, Polygon, Extent, FeatureLayer, GeoJSONLayer, Field, 
                     LabelClass, SimpleLineSymbol, SimpleFillSymbol, SimpleMarkerSymbol, webMercatorUtils, SimpleRenderer, on, dom) {
 
+                    var isPoint = 'Point' === '@Model.ShapeType'
+                    
+                    var ymin = @Model.YMinVal
+                    var ymax = @Model.YMaxVal
+                    var xmin = @Model.XMinVal
+                    var xmax = @Model.XMaxVal
+                    
+                    var isDataEmpty = ymin === 0 && ymax === 0 && xmin === 0 && xmax === 0
+                    if (isDataEmpty)
+                        dom.byId("emptyData").style.display = 'block'
+                    
+                    if (isPoint) {
+                        ymin -= 0.001
+                        ymax += 0.001
+                        xmin -= 0.001
+                        xmax += 0.001
+                    }
+                
                     var startExtent = new Extent({
-                        "xmin":@Model.XMinVal,"ymin":@Model.YMinVal,"xmax":@Model.XMaxVal,"ymax":@Model.YMaxVal,
+                        "xmin": xmin,"ymin": ymin,"xmax": xmax,"ymax": ymax,
                         "spatialReference":{"wkid":@Model.Wkid}
                     });
 
@@ -67,16 +97,14 @@
                         extent: startExtent,
                     });
                     
-                    var polygon = Polygon.fromExtent(startExtent);
-                    
-                    
                     var view = new MapView({
                         spatialReference: {"wkid":102100},
                         container: "viewDiv",
                         map: map
                     });
                     
-                    view.extent = startExtent;
+                    if (!isDataEmpty)
+                        view.extent = startExtent;
 
                     var loading = dom.byId("loadingImg")
 
@@ -146,6 +174,8 @@
                     else {
                         var fillSymbol = new SimpleFillSymbol({ outline: { color: [255, 255, 255], width: 1 } });
                     
+                        var polygon = Polygon.fromExtent(startExtent);
+                                            
                         var polygonGraphic = new Graphic({
                             geometry: polygon,
                             symbol: fillSymbol
@@ -168,5 +198,6 @@
     <div id="viewDiv">
     </div>
     <img id="loadingImg" alt="@Common.Loading" src="/img/loader.gif" />
+    <div id="emptyData" style="display: none">@Pages.MapDetails_EmptyMapData</div>
 </body>
 </html>

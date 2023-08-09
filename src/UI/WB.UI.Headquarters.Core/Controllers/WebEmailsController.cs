@@ -25,6 +25,7 @@ namespace WB.UI.Headquarters.Controllers
                 emailParams.Id = id;
 
             this.ViewData["webRoot"] = this.options.Value.BaseUrl;
+            this.ViewData["webAppRoot"] = this.options.Value.BaseAppUrl;
 
             return View("EmailHtml", emailParams);
         }

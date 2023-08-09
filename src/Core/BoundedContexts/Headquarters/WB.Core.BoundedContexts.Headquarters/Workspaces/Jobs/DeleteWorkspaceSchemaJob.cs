@@ -19,12 +19,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Jobs
     public class DeleteWorkspaceSchemaJob : IJob<DeleteWorkspaceJobData>
     {
         private readonly IUnitOfWork unitOfWork;
-        private readonly IPlainStorageAccessor<Workspace> workspaces;
+        private readonly IWorkspacesStorage workspaces;
         private readonly ILogger<DeleteWorkspaceSchemaJob> logger;
 
         public DeleteWorkspaceSchemaJob(
             IUnitOfWork unitOfWork,
-            IPlainStorageAccessor<Workspace> workspaces,
+            IWorkspacesStorage workspaces,
             ILogger<DeleteWorkspaceSchemaJob> logger)
         {
             this.unitOfWork = unitOfWork;
@@ -46,9 +46,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Jobs
                 return;
             }
 
-            var dbWorkspace = workspaces.GetById(data.WorkspaceName);
+            var dbWorkspace = await workspaces.GetByIdAsync(data.WorkspaceName);
 
-            if (dbWorkspace != null)
+            if (dbWorkspace?.RemovedAtUtc == null)
             {
                 logger.LogError("Cannot delete schema for existing workspace");
                 return;

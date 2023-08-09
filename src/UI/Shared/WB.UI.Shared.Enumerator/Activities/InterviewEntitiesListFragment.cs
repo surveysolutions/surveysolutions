@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using Android.OS;
-using Android.Runtime;
+﻿using Android.Runtime;
 using Android.Views;
 using Android.Views.InputMethods;
 using AndroidX.RecyclerView.Widget;
@@ -32,8 +29,10 @@ namespace WB.UI.Shared.Enumerator.Activities
 
             this.layoutManager = new LinearLayoutManager(this.Context);
             this.recyclerView.SetLayoutManager(this.layoutManager);
+            recyclerView?.SetItemAnimator(null);
 
             this.adapter = new InterviewEntityAdapter((IMvxAndroidBindingContext)this.BindingContext);
+            //this.adapter.HasStableIds = true;
             this.recyclerView.Adapter = this.adapter;
 
             return view;
@@ -80,7 +79,6 @@ namespace WB.UI.Shared.Enumerator.Activities
                 this.layoutManager?.ScrollToPositionWithOffset(itemIndex, 200);
             }
         }
-
         public override void OnDetach()
         {
             base.OnDetach();
@@ -96,8 +94,6 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         protected override void Dispose(bool disposing)
         {
-            base.Dispose(disposing);
-
             if (disposing)
             {
                 recyclerView?.Dispose();
@@ -108,6 +104,8 @@ namespace WB.UI.Shared.Enumerator.Activities
                 layoutManager  = null;
                 adapter = null;
             }
+            
+            base.Dispose(disposing);
         }
     }
 }

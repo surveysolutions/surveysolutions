@@ -224,6 +224,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 await this.SaveUserToLocalStorageAsync(restCredentials, userPassword, cancellationTokenSource.Token);
 
                 this.Principal.SignIn(restCredentials.Login, userPassword, true);
+                this.Password = null;
 
                 this.auditLogService.WriteApplicationLevelRecord(new FinishInstallationAuditLogEntity(this.Endpoint));
                 this.auditLogService.WriteApplicationLevelRecord(new LoginAuditLogEntity(this.UserName));

@@ -1283,7 +1283,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         new InterviewQuestionInvariants(answer.Identity, questionnaire,
                             changedInterviewTree, questionOptionsRepository));
 
-                    if (commandAssignmentId.HasValue && questionnaire.IsPrefilled(answer.Identity.Id))
+                    if (commandAssignmentId.HasValue && questionnaire.IsIdentifying(answer.Identity.Id))
                     {
                         interviewTreeQuestion.MarkAsReadonly();
                     }
@@ -1488,14 +1488,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewHardDeleted(userId, originDate));
         }
 
-        public void MarkInterviewAsReceivedByInterviwer(Guid userId, DateTimeOffset originDate)
+        public void MarkInterviewAsReceivedByInterviewer(Guid userId,string deviceId, DateTimeOffset originDate)
         {
             InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
 
             propertiesInvariants.ThrowIfInterviewHardDeleted();
             propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.RejectedBySupervisor, InterviewStatus.RejectedByHeadquarters, InterviewStatus.InterviewerAssigned, InterviewStatus.SupervisorAssigned);
 
-            this.ApplyEvent(new InterviewReceivedByInterviewer(originDate));
+            this.ApplyEvent(new InterviewReceivedByInterviewer(deviceId, originDate));
         }
 
         public void Restore(Guid userId, DateTimeOffset originDate)

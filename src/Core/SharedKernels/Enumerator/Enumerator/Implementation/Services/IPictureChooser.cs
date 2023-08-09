@@ -6,6 +6,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
     public interface IPictureChooser
     {
         Task<Stream> TakePicture();
-        Task<Stream> ChoosePictureGallery();
+        Task<ChoosePictureResult> ChoosePictureGallery();
     }
 }

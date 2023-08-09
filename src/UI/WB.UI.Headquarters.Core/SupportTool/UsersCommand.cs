@@ -102,7 +102,7 @@ namespace WB.UI.Headquarters.SupportTool
                         return;
                     }
                     
-                    var workspaces = locator.GetInstance<IPlainStorageAccessor<Workspace>>();
+                    var workspaces = locator.GetInstance<IWorkspacesStorage>();
                     var workspaceObj = await workspaces.GetByIdAsync(workspaceName);
                     user.Workspaces.Add(new WorkspacesUsers(workspaceObj, user, supervisorUser));
 

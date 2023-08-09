@@ -40,7 +40,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 DatabaseManagement.InitDatabase(connectionString,
                     this.connectionSettings.PrimaryWorkspaceSchemaName);
 
-                await using var migrationLock = new MigrationLock(connectionString);
+                await using var migrationLock = new MigrationLock(connectionStringBuilder);
 
                 status.Message = Modules.MigrateDb;
 

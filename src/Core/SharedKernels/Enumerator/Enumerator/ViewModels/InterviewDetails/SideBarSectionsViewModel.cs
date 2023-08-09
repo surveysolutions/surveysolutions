@@ -78,7 +78,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var predefItems = new List<ISideBarItem>();
             
             if (needAddVirtualCoverPage)
-                predefItems.Add(this.modelsFactory.BuildCoverItem(this.navigationState));
+                predefItems.Add(this.modelsFactory.BuildVirtualCoverItem(this.navigationState));
             predefItems.Add(this.modelsFactory.BuildOverviewItem(this.navigationState, this.interviewId));
             predefItems.Add(this.modelsFactory.BuildCompleteItem(this.navigationState, this.interviewId));
 

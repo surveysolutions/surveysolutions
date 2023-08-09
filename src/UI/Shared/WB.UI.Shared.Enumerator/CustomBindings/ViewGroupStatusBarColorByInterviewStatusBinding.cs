@@ -1,5 +1,4 @@
-﻿using Android.App;
-using Android.Graphics;
+﻿using Android.Graphics;
 using Android.Views;
 using AndroidX.Core.Content;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;

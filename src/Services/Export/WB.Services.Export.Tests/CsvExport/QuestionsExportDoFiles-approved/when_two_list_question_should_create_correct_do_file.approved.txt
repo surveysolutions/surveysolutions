@@ -17,30 +17,60 @@ label variable interview__status `"Status of the interview"'
 
 label variable textListQuestion1__0 `"questionText #1:0"'
 
+label variable textListQuestion1__0c `"questionText #1:0c"'
+
 label variable textListQuestion1__1 `"questionText #1:1"'
+
+label variable textListQuestion1__1c `"questionText #1:1c"'
 
 label variable textListQuestion1__2 `"questionText #1:2"'
 
+label variable textListQuestion1__2c `"questionText #1:2c"'
+
 label variable textListQuestion1__3 `"questionText #1:3"'
+
+label variable textListQuestion1__3c `"questionText #1:3c"'
 
 label variable textListQuestion1__4 `"questionText #1:4"'
 
+label variable textListQuestion1__4c `"questionText #1:4c"'
+
 label variable textListQuestion1__5 `"questionText #1:5"'
+
+label variable textListQuestion1__5c `"questionText #1:5c"'
 
 label variable textListQuestion1__6 `"questionText #1:6"'
 
+label variable textListQuestion1__6c `"questionText #1:6c"'
+
 label variable textListQuestion1__7 `"questionText #1:7"'
+
+label variable textListQuestion1__7c `"questionText #1:7c"'
 
 label variable textListQuestion1__8 `"questionText #1:8"'
 
+label variable textListQuestion1__8c `"questionText #1:8c"'
+
 label variable textListQuestion1__9 `"questionText #1:9"'
+
+label variable textListQuestion1__9c `"questionText #1:9c"'
 
 label variable textListQuestion2__0 `"variable Label #22:0"'
 
+label variable textListQuestion2__0c `"variable Label #22:0c"'
+
 label variable textListQuestion2__1 `"variable Label #22:1"'
+
+label variable textListQuestion2__1c `"variable Label #22:1c"'
 
 label variable textListQuestion2__2 `"variable Label #22:2"'
 
+label variable textListQuestion2__2c `"variable Label #22:2c"'
+
 label variable textListQuestion2__3 `"variable Label #22:3"'
 
+label variable textListQuestion2__3c `"variable Label #22:3c"'
+
 label variable textListQuestion2__4 `"variable Label #22:4"'
+
+label variable textListQuestion2__4c `"variable Label #22:4c"'

@@ -115,7 +115,7 @@ export default {
                     source: 'client',
                 })
             }
-        }, 2000)
+        }, 6000)
     },
 
     sendNewComment({ commit }, { identity, comment }) {

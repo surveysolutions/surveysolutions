@@ -1,28 +1,24 @@
 ﻿#nullable enable
 using System;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Humanizer;
-using MvvmCross.Commands;
 using NodaTime;
-using NodaTime.Extensions;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Markers;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Enumerator.Views.Dashboard;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 {
-    public abstract class AssignmentDashboardItemViewModel : ExpandableQuestionsDashboardItemViewModel
+    public abstract class AssignmentDashboardItemViewModel : ExpandableQuestionsDashboardItemViewModel, IAssignmentMarkerViewModel
     {
         protected readonly IServiceLocator serviceLocator;
         protected AssignmentDocument Assignment = null!;
@@ -101,7 +97,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         {
             DetailedIdentifyingData = Assignment.IdentifyingAnswers.Select(ToIdentifyingQuestion).ToList();
             IdentifyingData = DetailedIdentifyingData.Take(count: 3).ToList();
-            HasExpandedView = DetailedIdentifyingData.Count > 0;
+            HasExpandedView = DetailedIdentifyingData.Count > 0 
+                              || CalendarEvent != null 
+                              || !string.IsNullOrEmpty(Comments);
             IsExpanded = false;
         }
 
@@ -157,14 +155,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             
             RaiseOnItemUpdated();
         }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-            }
-
-            base.Dispose(disposing);
-        }
+        
+        public string Id => Assignment.Id.ToString();
+        public MarkerType Type => MarkerType.Assignment;
+        public double Latitude => Assignment.LocationLatitude ?? 0;
+        public double Longitude => Assignment.LocationLongitude ?? 0;
     }
 }

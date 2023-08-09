@@ -69,7 +69,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
             bool doesContainField = false;
             try
             {
-                doesContainField = ctx.Field.Arguments.ContainsField("workspace");
+                doesContainField = ctx.Selection.Field.Arguments.ContainsField("workspace");
                 if (!doesContainField)
                     return false;
 
