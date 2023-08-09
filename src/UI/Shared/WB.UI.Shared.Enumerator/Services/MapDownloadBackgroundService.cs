@@ -20,9 +20,9 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public void SyncMaps()
         {
-            if (!this.isSyncRunning)
+             if (!this.isSyncRunning)
              {
-                var synchronizationProcess = Mvx.Resolve<IMapSyncProvider>();
+                var synchronizationProcess = Mvx.IoCProvider!.Resolve<IMapSyncProvider>();
                 this.CurrentProgress = new MapSyncProgressStatus(new Progress<SyncProgressInfo>(), new CancellationTokenSource());
 
                 this.thread = new Thread(() =>
@@ -39,7 +39,7 @@ namespace WB.UI.Shared.Enumerator.Services
                         }
                         catch (Exception e)
                         {
-                            Mvx.Resolve<ILoggerProvider>().GetFor<MapDownloadBackgroundService>()
+                            Mvx.IoCProvider!.Resolve<ILoggerProvider>()!.GetFor<MapDownloadBackgroundService>()
                                 .Error(">!>Failed to sync maps", e);
                         }
                         finally
@@ -51,7 +51,7 @@ namespace WB.UI.Shared.Enumerator.Services
                 });
                 
                 this.thread.Start();
-            }
+             }
         }
 
         public MapSyncProgressStatus CurrentProgress { get; private set; }

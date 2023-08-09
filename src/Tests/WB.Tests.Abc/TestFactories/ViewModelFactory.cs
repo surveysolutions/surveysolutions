@@ -187,7 +187,8 @@ namespace WB.Tests.Abc.TestFactories
             questionState ?? Stub<QuestionStateViewModel<SingleOptionLinkedQuestionAnswered>>.WithNotEmptyValues,
             Mock.Of<QuestionInstructionViewModel>(),
             answering ?? Mock.Of<AnsweringViewModel>(),
-            Create.ViewModel.ThrottlingViewModel());
+            Create.ViewModel.ThrottlingViewModel(),
+            Mock.Of<IMvxMainThreadAsyncDispatcher>());
 
         public TextQuestionViewModel TextQuestionViewModel(
             IViewModelEventRegistry eventRegistry = null,
