@@ -18,17 +18,13 @@ namespace WB.UI.Shared.Enumerator.Activities
     [Register(nameof(CalendarEventDialog))]
     public class CalendarEventDialog : MvxDialogFragment<CalendarEventDialogViewModel>
     {
-        private readonly IMvxAndroidCurrentTopActivity topActivity;
-
-        public CalendarEventDialog(IMvxAndroidCurrentTopActivity topActivity)
+        public CalendarEventDialog()
         {
-            this.topActivity = topActivity;
         }
 
-        protected CalendarEventDialog(IntPtr javaReference, JniHandleOwnership transfer, IMvxAndroidCurrentTopActivity topActivity)
+        protected CalendarEventDialog(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
         {
-            this.topActivity = topActivity;
         }
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -65,7 +61,7 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         private void HideKeyboard()
         {
-            var activity = topActivity.Activity;
+            var activity = Mvx.IoCProvider!.Resolve<IMvxAndroidCurrentTopActivity>()!.Activity;
 
             activity.RemoveFocusFromEditText();
             if(View!= null)
