@@ -133,7 +133,7 @@ namespace WB.UI.Shared.Enumerator
         {
             base.FillValueConverters(registry);
             
-            Mvx.CallbackWhenRegistered<IMvxValueCombinerRegistry>(combinerRegistry => 
+            Mvx.IoCProvider.CallbackWhenRegistered<IMvxValueCombinerRegistry>(combinerRegistry => 
                 combinerRegistry.AddOrOverwriteFrom(Assembly.GetAssembly(typeof(LayoutBackgroundStyleValueCombiner))));
 
             registry.AddOrOverwrite("EnumToString", new EnumToStringConverter());
