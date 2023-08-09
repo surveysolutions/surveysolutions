@@ -231,7 +231,7 @@ namespace Main.Core.Documents
             this.LastEntryDate = DateTime.UtcNow;
         }
 
-        public T? Find<T>(Guid publicKey) where T : class, IComposite?
+        public T? Find<T>(Guid publicKey) where T : class, IComposite
         {
             foreach (IComposite child in this.Children)
             {
