@@ -766,7 +766,7 @@
     <value>Desenlazando usuario del mapa</value>
   </data>
   <data name="MapDetails_InterviewerName" xml:space="preserve">
-    <value>Nombre del entrevistador</value>
+      <value>Nombre de usuario</value>
   </data>
   <data name="NoResults" xml:space="preserve">
     <value>No se encontraron resultados</value>

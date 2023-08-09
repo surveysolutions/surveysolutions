@@ -16,7 +16,7 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             local:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             local:layout_scrollFlags="scroll|enterAlways"
-            local:MvxBind="ColorByInterviewStatus TypeOfInterviews;">
+            local:MvxBind="ColorByDashboardGroupType TypeOfInterviews;">
             <TextView
                 style="@style/ToolbarTitle"
                 local:MvxBind="Text DashboardTitle;" />

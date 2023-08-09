@@ -15,14 +15,17 @@ namespace WB.Core.GenericSubdomains.Portable
             return string.Format("{{\"Direction\": \"{0}\", \"Field\": \"{1}\" }}", this.Direction, this.Field);
         }
 
-        public string ToSqlOrderBy()
+        public string ValidateAndGetOrderOrNull(Type target)
         {
-            return $"{Field} {Direction}";
-        }
-
-        public virtual bool IsSortedByOneOfTheProperties(Type target)
-        {
-            return target.GetRuntimeProperties().Any(x => x.Name == Field);
+            var property = target.GetRuntimeProperties().FirstOrDefault(x => x.Name == Field);
+            
+            if(property == null)
+                return null;
+         
+            var columnName = property.Name;
+            var stringifiedOrder = this.Direction == OrderDirection.Asc ? string.Empty : OrderDirection.Desc.ToString();
+            
+            return $"{columnName} {stringifiedOrder}";
         }
     }
 }

@@ -153,6 +153,9 @@ export default {
                         window.location.href = '/'
                 },
                 error => {
+                    if(error.response && error.response.status === 403)
+                        window.location.reload()
+
                     self.processModelState(error.response.data, self)
                 }
             )

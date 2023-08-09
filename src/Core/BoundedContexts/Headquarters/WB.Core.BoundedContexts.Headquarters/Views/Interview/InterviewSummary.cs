@@ -25,11 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.TimeSpansBetweenStatuses = new HashSet<TimeSpanBetweenStatuses>();
             this.Comments = new HashSet<InterviewComment>();
             this.GpsAnswers = new HashSet<InterviewGps>();
-
-            this.GpsAnswersToRemove = new HashSet<InterviewGps>();
         }
-
-        public virtual HashSet<InterviewGps> GpsAnswersToRemove { get; set; }
 
         public InterviewSummary(IQuestionnaire questionnaire) : this()
         {

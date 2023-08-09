@@ -10,6 +10,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Infrastructure
         bool DoesIdentityExist();
 
         string? GetExistingIdentityNameOrNull();
+        
+        string? GetLastWorkspaceOrNull();
 
         bool SaveInterviewer(InterviewerIdentity interviewer);
 

@@ -19,6 +19,8 @@ namespace WB.UI.Shared.Extensions.Services
     {
         Task<Basemap> GetBaseMap(MapDescription existingMap);
         Task<FeatureLayer> GetShapefileAsFeatureLayer(string fullPathToShapefile);
+        
+        Task<FeatureLayer> GetShapefileAsFeatureLayer(ShapefileFeatureTable shapefile);
     }
 
     public class MapUtilityService : IMapUtilityService
@@ -129,13 +131,10 @@ namespace WB.UI.Shared.Extensions.Services
             return null;
         }
 
-        public async Task<FeatureLayer> GetShapefileAsFeatureLayer(string fullPathToShapefile)
+        public async Task<FeatureLayer> GetShapefileAsFeatureLayer(ShapefileFeatureTable myShapefile)
         {
-            // Open the shapefile
-            ShapefileFeatureTable myShapefile = await ShapefileFeatureTable.OpenAsync(fullPathToShapefile);
             // Create a feature layer to display the shapefile
             FeatureLayer newFeatureLayer = new FeatureLayer(myShapefile);
-
             await newFeatureLayer.LoadAsync();
 
             // Create a StringBuilder to create the label definition JSON string
@@ -180,6 +179,14 @@ namespace WB.UI.Shared.Extensions.Services
             newFeatureLayer.Renderer = alternateRenderer;
 
             return newFeatureLayer;
+        }
+
+        public async Task<FeatureLayer> GetShapefileAsFeatureLayer(string fullPathToShapefile)
+        {
+            // Open the shapefile
+            ShapefileFeatureTable myShapefile = await ShapefileFeatureTable.OpenAsync(fullPathToShapefile);
+            
+            return await GetShapefileAsFeatureLayer(myShapefile);
         }
         
         private Symbol CreateSymbolForRenderer(GeometryType rendererType, Color color)

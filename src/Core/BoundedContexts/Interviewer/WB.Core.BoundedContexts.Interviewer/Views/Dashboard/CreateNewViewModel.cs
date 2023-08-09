@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
     public class CreateNewViewModel : ListViewModel
     {
-        public override GroupStatus InterviewStatus => GroupStatus.Disabled;
+        public override DashboardGroupType DashboardType => DashboardGroupType.Assignments;
 
         private readonly IPlainStorage<QuestionnaireView> questionnaireViewRepository;
         private readonly IInterviewViewModelFactory viewModelFactory;

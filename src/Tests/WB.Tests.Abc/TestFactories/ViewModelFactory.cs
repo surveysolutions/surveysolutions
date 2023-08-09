@@ -358,8 +358,8 @@ namespace WB.Tests.Abc.TestFactories
                 .Returns((Func<SideBarSectionViewModel>) SideBarSectionViewModel);
 
             Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<SideBarCoverSectionViewModel>())
-                .Returns(() => new SideBarCoverSectionViewModel( Create.ViewModel.DynamicTextViewModel(
+                .Setup(locator => locator.GetInstance<SideBarVirtualCoverSectionViewModel>())
+                .Returns(() => new SideBarVirtualCoverSectionViewModel( Create.ViewModel.DynamicTextViewModel(
                         liteEventRegistry,
                         interviewRepository: interviewsRepository,
                         questionnaireRepository), Mock.Of<CoverStateViewModel>()));
@@ -502,11 +502,11 @@ namespace WB.Tests.Abc.TestFactories
             => new WaitingForSupervisorActionViewModel(dashboardItemsAccessor ?? Mock.Of<IDashboardItemsAccessor>(),
                 viewModelFactory ?? Create.Service.SupervisorInterviewViewModelFactory());
 
-        public SupervisorDashboardInterviewViewModel SupervisorDashboardInterviewViewModel(Guid? interviewId = null,
+        public SupervisorInterviewDashboardViewModel SupervisorDashboardInterviewViewModel(Guid? interviewId = null,
             IPrincipal principal = null,
             IPlainStorage<InterviewerDocument> interviewers = null)
         {
-            var viewModel = new SupervisorDashboardInterviewViewModel(
+            var viewModel = new SupervisorInterviewDashboardViewModel(
                 Mock.Of<IServiceLocator>(),
                 Mock.Of<IAuditLogService>(),
                 Mock.Of<IViewModelNavigationService>(),

@@ -1,0 +1,411 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AttachmentIdIsMissing" xml:space="preserve">
+    <value>Відсутні вкладення з ідентифікатором {0}</value>
+  </data>
+  <data name="Attachments_Unsupported_content" xml:space="preserve">
+    <value>Завантажений вміст не підтримується</value>
+  </data>
+  <data name="Attachments_uploaded_file_image_is_too_big" xml:space="preserve">
+    <value>Розміри зображення занадто великі</value>
+  </data>
+  <data name="Attachments_uploaded_file_is_not_image" xml:space="preserve">
+    <value>Завантажений файл не є зображенням</value>
+  </data>
+  <data name="CantEditCoverPageInOldQuestionnaire" xml:space="preserve">
+    <value>Обкладинка призначена лише для читання. Ви не можете редагувати або змінювати порядок запитань у цьому розділі.</value>
+  </data>
+  <data name="CantMoveSubsectionInWrongPosition" xml:space="preserve">
+    <value>Ви не можете перейти до підрозділу {0}, оскільки позиція {1} є неприйнятною.</value>
+  </data>
+  <data name="CantPasteQuestion" xml:space="preserve">
+    <value>Питання не може бути вставлене сюди.</value>
+  </data>
+  <data name="CantRemoveCoverPageInQuestionnaire" xml:space="preserve">
+    <value>Обкладинку не можна видалити з анкети</value>
+  </data>
+  <data name="CantRemoveLastSectionInQuestionnaire" xml:space="preserve">
+    <value>Останній існуючий розділ не може бути видалений з анкети</value>
+  </data>
+  <data name="CantRemoveUserFromTheList" xml:space="preserve">
+    <value>Не вдалося видалити користувача, оскільки його не існує у списку спільного доступу</value>
+  </data>
+  <data name="CategoricalCascadingOptionsCantContainsEmptyParentValueField" xml:space="preserve">
+    <value>Категорії в каскадному запитанні не можуть мати порожній стовпець ParentValue.</value>
+  </data>
+  <data name="CategoricalCascadingOptionsCantContainsNotDecimalParentValueField" xml:space="preserve">
+    <value>Категорії в каскадному запитанні не можуть мати нечислове значення в колонці ParentValue.</value>
+  </data>
+  <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
+    <value>Існує принаймні один дублікат пар "Назва" та "Батьківське значення". Список не повинен містити дублікатів.</value>
+  </data>
+  <data name="CategoriesCantBeExtracted" xml:space="preserve">
+    <value>Не вдалося витягти категорії із завантаженого файлу</value>
+  </data>
+  <data name="Column" xml:space="preserve">
+    <value>колонка</value>
+  </data>
+  <data name="ComboboxCannotBeFound" xml:space="preserve">
+    <value>Комбіноване питання з відкритим ключем {0} не знайдено</value>
+  </data>
+  <data name="CoverPageCanContainsOnlyQuestionsAndStaticTextsAndVariables" xml:space="preserve">
+    <value>Обкладинка може містити лише питання, статичні тексти та змінні</value>
+  </data>
+  <data name="CoverPageMustBeFirstInQuestionnaire" xml:space="preserve">
+    <value>Обкладинка повинна бути першим розділом в анкеті</value>
+  </data>
+  <data name="Excel_Categories_Duplicated" xml:space="preserve">
+    <value>Повторювані категорії в рядках: {0}</value>
+  </data>
+  <data name="Excel_Categories_Empty_ParentId" xml:space="preserve">
+    <value>Деякі категорії не мають батьківського ідентифікатора</value>
+  </data>
+  <data name="Excel_Categories_Empty_Text" xml:space="preserve">
+    <value>[{0}] Порожній заголовок</value>
+  </data>
+  <data name="Excel_Categories_Empty_Value" xml:space="preserve">
+    <value>[{0}] Порожнє значення</value>
+  </data>
+  <data name="Excel_Categories_Int_Invalid" xml:space="preserve">
+    <value>[{0}] Неправильне числове значення</value>
+  </data>
+  <data name="Excel_Categories_Less_2_Options" xml:space="preserve">
+    <value>Набір категорій повинен мати щонайменше 2 категорії</value>
+  </data>
+  <data name="Excel_Categories_More_Than_Limit" xml:space="preserve">
+    <value>Набір категорій має більше {0} категорій</value>
+  </data>
+  <data name="Excel_Categories_Text_More_Than_250" xml:space="preserve">
+    <value>[{0}] Текст категорії не повинен перевищувати 250 символів</value>
+  </data>
+  <data name="Excel_NoCategories" xml:space="preserve">
+    <value>У файлі немає категорій</value>
+  </data>
+  <data name="FailedToAddGroup" xml:space="preserve">
+    <value>Невдала спроба додати групу {0} до групи {1}. Але група {1} не існує в документі {2}</value>
+  </data>
+  <data name="HeaderWasNotFound" xml:space="preserve">
+    <value>Заголовок не знайдено у файлі</value>
+  </data>
+  <data name="ImportOfDeletedQuestionnaire" xml:space="preserve">
+    <value>Спроба імпортувати шаблон видаленої анкети</value>
+  </data>
+  <data name="ImportOptions_AttachmentNameTooLong" xml:space="preserve">
+    <value>Занадто довга назва вкладення. Ім'я вкладення має бути меншим за {0}</value>
+  </data>
+  <data name="ImportOptions_DuplicateByTitleAndParentIds" xml:space="preserve">
+    <value>Продубльована категорія '{0}' з батьківським значенням '{1}'</value>
+  </data>
+  <data name="ImportOptions_DuplicatedParentValues" xml:space="preserve">
+    <value>Батьківське питання '{0}' має {1} категорій зі значенням '{2}'</value>
+  </data>
+  <data name="ImportOptions_EmptyValue" xml:space="preserve">
+    <value>Порожнє значення</value>
+  </data>
+  <data name="ImportOptions_MissingRequiredColumns" xml:space="preserve">
+    <value>Деякі стовпці відсутні. Переконайтеся, що ви завантажили файл з необхідними стовпчиками</value>
+  </data>
+  <data name="ImportOptions_NotNumber" xml:space="preserve">
+    <value>Невірне 32-бітове ціле значення '{0}'. Значення має бути в діапазоні від -2147483647 до 2147483647</value>
+  </data>
+  <data name="ImportOptions_ParentValueNotFound" xml:space="preserve">
+    <value>Батьківське питання не має категорії зі значенням '{0}'</value>
+  </data>
+  <data name="ImportOptions_Tab_Or_Excel_Only" xml:space="preserve">
+    <value>Приймаються лише значення, розділені табуляцією (*.tab, *.txt, *.tsv) або файли Excel (*.xslx, *.xls, *.ods)</value>
+  </data>
+  <data name="ImportOptions_TitleTooLong" xml:space="preserve">
+    <value>Заголовок занадто довгий. Довжина заголовка повинна бути менше {0}</value>
+  </data>
+  <data name="ImportOptions_ValueIsNotUnique" xml:space="preserve">
+    <value>Продубльовано категорію '{0}' зі значенням '{1}'</value>
+  </data>
+  <data name="InvalidFixedTitle" xml:space="preserve">
+    <value>Неправильний список назв</value>
+  </data>
+  <data name="InvalidUserInfo" xml:space="preserve">
+    <value>Невірна інформація про користувача.</value>
+  </data>
+  <data name="InvalidValueOfFixedTitle" xml:space="preserve">
+    <value>Для фіксованих назв ростерів обов'язковими є непорожні значення</value>
+  </data>
+  <data name="ItemWithIdExistsAlready" xml:space="preserve">
+    <value>Один або декілька пунктів анкети з однаковим ідентифікатором {0} вже існують.</value>
+  </data>
+  <data name="LookupTableAlreadyExist" xml:space="preserve">
+    <value>Таблиця пошуку з таким ідентифікатором вже існує.</value>
+  </data>
+  <data name="LookupTableHasEmptyContent" xml:space="preserve">
+    <value>Таблиця пошуку з ідентифікатором {0} не має вмісту</value>
+  </data>
+  <data name="LookupTableIsAbsent" xml:space="preserve">
+    <value>Таблиця пошуку з таким ідентифікатором відсутня.</value>
+  </data>
+  <data name="LookupTableIsMissing" xml:space="preserve">
+    <value>Відсутня таблиця пошуку з ідентифікатором {0}</value>
+  </data>
+  <data name="LookupTables_cant_has_empty_content" xml:space="preserve">
+    <value>Файл без даних не може бути завантажений</value>
+  </data>
+  <data name="LookupTables_data_value_cannot_be_parsed" xml:space="preserve">
+    <value>Значення {0} не може бути розібрано як десяткове число. Стовпець {1}, рядок {2}.</value>
+  </data>
+  <data name="LookupTables_duplicating_headers_are_not_allowed" xml:space="preserve">
+    <value>Не допускаються однойменні заголовки</value>
+  </data>
+  <data name="LookupTables_empty_or_invalid_header_are_not_allowed" xml:space="preserve">
+    <value>Порожні або невірні заголовки не допускаються</value>
+  </data>
+  <data name="LookupTables_rowcode_column_is_mandatory" xml:space="preserve">
+    <value>Відсутній обов'язковий стовпчик коду рядка (rowcode)</value>
+  </data>
+  <data name="LookupTables_rowcode_value_cannot_be_parsed" xml:space="preserve">
+    <value>Значення {0} не може бути оброблено як довге ціле число. Стовпець {1}, рядок {2}.</value>
+  </data>
+  <data name="LookupTables_rowcode_values_must_be_unique" xml:space="preserve">
+    <value>Значення коду рядка (rowcode) повинні бути унікальними</value>
+  </data>
+  <data name="LookupTables_too_many_columns" xml:space="preserve">
+    <value>У завантаженому файлі занадто багато стовпців. Максимальна кількість стовпців {0}</value>
+  </data>
+  <data name="LookupTables_too_many_rows" xml:space="preserve">
+    <value>Таблиця пошуку містить {1} рядків, що перевищує обмеження на кількість рядків у таблиці пошуку ({0} рядків).</value>
+  </data>
+  <data name="MacroAlreadyExist" xml:space="preserve">
+    <value>Макрос вже існує.</value>
+  </data>
+  <data name="MacroIsAbsent" xml:space="preserve">
+    <value>Макрос відсутній.</value>
+  </data>
+  <data name="MoreThanOneQuestionWithSameId" xml:space="preserve">
+    <value>Одне або декілька запитань з однаковим ідентифікатором {0} вже існують:{1}{2}.</value>
+  </data>
+  <data name="MoreThanOneSubSectionWithSameId" xml:space="preserve">
+    <value>Один або декілька підрозділів з однаковим ідентифікатором {0} вже існують:{1}{2}.</value>
+  </data>
+  <data name="NoParentCascadingOptions" xml:space="preserve">
+    <value>Не знайдено категорій для батьківського каскадного питання '{0}'</value>
+  </data>
+  <data name="NoPremissionsToEditQuestionnaire" xml:space="preserve">
+    <value>Ви не маєте прав на зміну цієї анкети</value>
+  </data>
+  <data name="OldAttachmentIdIsEmpty" xml:space="preserve">
+    <value>Старий ідентифікатор вкладення порожній і файл відсутній для вкладення {0} в анкеті {1}</value>
+  </data>
+  <data name="OnlyQuestionnaireDocumentsAreSupported" xml:space="preserve">
+    <value>Наразі підтримуються лише документи типу QuestionnaireDocument</value>
+  </data>
+  <data name="OptionValuesShouldBeNumbers" xml:space="preserve">
+    <value>Значення категорії повинно містити лише цифрові символи</value>
+  </data>
+  <data name="ProvidedFileHasErrors" xml:space="preserve">
+    <value>Знайдено помилки у наданому файлі</value>
+  </data>
+  <data name="QuestionCannotBeFound" xml:space="preserve">
+    <value>Питання з публічним ключем {0} не знайдено.</value>
+  </data>
+  <data name="QuestionIsNotCombobox" xml:space="preserve">
+    <value>Питання {0} не є комбінованим</value>
+  </data>
+  <data name="Questionnaire_CategoriesWereNotFound" xml:space="preserve">
+    <value>Категорії не знайдено</value>
+  </data>
+  <data name="QuestionnaireAlreadySupportedCover" xml:space="preserve">
+    <value>В анкетивже є обкладинка</value>
+  </data>
+  <data name="QuestionnaireCantBeFound" xml:space="preserve">
+    <value>Елемент анкети з ідентифікатором {0} не знайдено.</value>
+  </data>
+  <data name="QuestionnaireRevisionCantBeFound" xml:space="preserve">
+    <value>Анкета{0} версії {1} не знайдено</value>
+  </data>
+  <data name="QuestionnaireSuportedNewCover" xml:space="preserve">
+    <value>В анкетивже є обкладинка</value>
+  </data>
+  <data name="QuestionnaireTitleIsEmpty" xml:space="preserve">
+    <value>Назва анкети не може бути порожньою або містити лише пробіли.</value>
+  </data>
+  <data name="QuestionTypeIsNotSupported" xml:space="preserve">
+    <value>Тип питання не підтримується: {0}</value>
+  </data>
+  <data name="RequiredHeaderWasNotFound" xml:space="preserve">
+    <value>Заголовок {0} не знайдено у файлі Excel</value>
+  </data>
+  <data name="RosterCantBePaste" xml:space="preserve">
+    <value>Список не може бути вставлений сюди.</value>
+  </data>
+  <data name="Row" xml:space="preserve">
+    <value>Рядок</value>
+  </data>
+  <data name="SectionCantHaveMoreThan_Items" xml:space="preserve">
+    <value>Розділ не може мати більше {0} дочірніх елементів</value>
+  </data>
+  <data name="StaticTextCantBePaste" xml:space="preserve">
+    <value>Тут не можна вставляти статичний текст.</value>
+  </data>
+  <data name="SubSectionCantBeFound" xml:space="preserve">
+    <value>Підрозділ з публічним ключем {0} не знайдено.</value>
+  </data>
+  <data name="SubsectionCantHaveMoreThan_DirectChildren" xml:space="preserve">
+    <value>Розділ або підрозділ не може мати більше {0} прямих дочірніх елементів</value>
+  </data>
+  <data name="SubSectionDepthLimit" xml:space="preserve">
+    <value>Глибина підрозділу або списку не може бути більшою за {0}.</value>
+  </data>
+  <data name="TranlationExcelFileHasErrors" xml:space="preserve">
+    <value>Знайдено помилки у файлі Excel</value>
+  </data>
+  <data name="TranslationCel_A_lIsInvalid" xml:space="preserve">
+    <value>{0} має недійсний ідентифікатор за адресою [{1}].</value>
+  </data>
+  <data name="TranslationCellIndexIsInvalid" xml:space="preserve">
+    <value>{0} має невірний індекс в [{1}]]</value>
+  </data>
+  <data name="TranslationCellTypeIsInvalid" xml:space="preserve">
+    <value>{0} має неприпустимий тип [{1}]</value>
+  </data>
+  <data name="TranslationFileIsEmpty" xml:space="preserve">
+    <value>Файл Excel порожній - не містить жодного робочого аркуша</value>
+  </data>
+  <data name="TranslationsCantBeExtracted" xml:space="preserve">
+    <value>Не вдалося витягти переклад із завантаженого файлу</value>
+  </data>
+  <data name="TranslationWorksheetIsMissing" xml:space="preserve">
+    <value>Аркуш з перекладами не знайдено</value>
+  </data>
+  <data name="UnknownTypeCantBePaste" xml:space="preserve">
+    <value>Невідомий тип елемента. Не вдалося вставити.</value>
+  </data>
+  <data name="UserIsInTheList" xml:space="preserve">
+    <value>Користувач {0} вже існує у списку спільного доступу.</value>
+  </data>
+  <data name="UserIsOwner" xml:space="preserve">
+    <value>Користувач {0} є власником цієї анкети. Будь ласка, введіть інший email.</value>
+  </data>
+  <data name="ValueOfFixedTitleCantBeParsed" xml:space="preserve">
+    <value>Фіксований ростер має містити лише числові коди елементів.</value>
+  </data>
+  <data name="VariableCantBePaste" xml:space="preserve">
+    <value>Змінна не може бути вставлена сюди.</value>
+  </data>
+  <data name="VariableWithIdWasNotFound" xml:space="preserve">
+    <value>Змінну з ідентифікатором {0} не було знайдено в анкеті {1}</value>
+  </data>
+</root>

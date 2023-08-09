@@ -43,18 +43,25 @@ namespace WB.UI.Shared.Extensions.Services
         public async Task<AreaEditResult> EditAreaAsync(EditAreaArgs args)
         {
             await this.permissions.AssureHasPermissionOrThrow<Permissions.LocationWhenInUse>().ConfigureAwait(false);
-            await this.permissions.AssureHasPermissionOrThrow<Permissions.StorageWrite>().ConfigureAwait(false);
+            await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
 
             return await this.EditAreaImplAsync(args);
         }
 
-        public async Task OpenMapDashboardAsync()
+        public async Task OpenInterviewerMapDashboardAsync()
         {
-            await this.permissions.AssureHasPermissionOrThrow<Permissions.LocationWhenInUse>().ConfigureAwait(false);
-            await this.permissions.AssureHasPermissionOrThrow<Permissions.StorageWrite>().ConfigureAwait(false);
+            await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
 
-            await this.viewModelNavigationService.NavigateToAsync<MapDashboardViewModel, MapDashboardViewModelArgs>(
-                new MapDashboardViewModelArgs()).ConfigureAwait(false);
+            await this.viewModelNavigationService.NavigateToAsync<InterviewerMapDashboardViewModel, MapDashboardViewModelArgs>(
+                new MapDashboardViewModelArgs(), finishActivityOnSuccess: true).ConfigureAwait(false);
+        }
+
+        public async Task OpenSupervisorMapDashboardAsync()
+        {
+            await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
+
+            await this.viewModelNavigationService.NavigateToAsync<SupervisorMapDashboardViewModel, MapDashboardViewModelArgs>(
+                new MapDashboardViewModelArgs(), finishActivityOnSuccess: true).ConfigureAwait(false);
         }
 
         public void SetLicenseKey(string key)

@@ -133,7 +133,7 @@
     <value>Oblast: {0:0.00} m2</value>
   </data>
   <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
-    <value>NA ZAŘÍZENÍ JSOU DOSTUPNÉ MAPY</value>
+      <value>DOSTUPNÉ MAPY</value>
   </data>
   <data name="AreaMap_Cancel" xml:space="preserve">
     <value>Zrušit</value>
@@ -781,5 +781,95 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
   </data>
   <data name="EndpointText" xml:space="preserve">
     <value>Koncový bod webových služeb:</value>
+  </data>
+  <data name="AreaMap_HideBoundaries" xml:space="preserve">
+    <value>Skrytí hranic</value>
+  </data>
+  <data name="AreaMap_InitLocation" xml:space="preserve">
+    <value>Zahajující...</value>
+  </data>
+  <data name="AreaMap_ItemsOutsideDedicatedArea" xml:space="preserve">
+    <value>Některé značky spadají mimo vyznačenou oblast</value>
+  </data>
+  <data name="AreaMap_OverlapsWith" xml:space="preserve">
+    <value>Překrývá se s:</value>
+  </data>
+  <data name="AreaMap_OverlapsWithOther" xml:space="preserve">
+    <value>a {0} další.</value>
+  </data>
+  <data name="AreaMap_Save_With_Warning_Confirm" xml:space="preserve">
+    <value>Chystáte se uložit ne přesný výsledek. Chcete pokračovat?</value>
+  </data>
+  <data name="AreaMap_SelectShapefile" xml:space="preserve">
+    <value>Vybrat soubor hranic</value>
+  </data>
+  <data name="AreaMap_ShowBoundaries" xml:space="preserve">
+    <value>Zobrazit hranice</value>
+  </data>
+  <data name="AreaMap_Start_Measurement" xml:space="preserve">
+    <value>Začínat</value>
+  </data>
+  <data name="Interviewer_Comment" xml:space="preserve">
+    <value>Zanechat komentář</value>
+  </data>
+  <data name="Interviewer_Reassign_AlreadyReceivedAssignment" xml:space="preserve">
+    <value>Tazatel {0} již tento úkol obdržel {1}. Opravdu chcete změnit přiřazení?</value>
+  </data>
+  <data name="Interviewer_Reassign_AlreadyReceivedInterview" xml:space="preserve">
+    <value>Tazatel {0} již tento rozhovor obdržel {1}. Opravdu chcete změnit přiřazení?</value>
+  </data>
+  <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
+    <value>Schváleno ústředím</value>
+  </data>
+  <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
+    <value>Schváleno supervizorem</value>
+  </data>
+  <data name="InterviewStatus_Completed" xml:space="preserve">
+    <value>Hotový</value>
+  </data>
+  <data name="InterviewStatus_Created" xml:space="preserve">
+    <value>Vytvořil</value>
+  </data>
+  <data name="InterviewStatus_Deleted" xml:space="preserve">
+    <value>Smazaný</value>
+  </data>
+  <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
+    <value>Přidělen tazatel</value>
+  </data>
+  <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
+    <value>Zamítnuto ústředím</value>
+  </data>
+  <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
+    <value>Zamítnuto supervizorem</value>
+  </data>
+  <data name="InterviewStatus_Restarted" xml:space="preserve">
+    <value>Restartovaný</value>
+  </data>
+  <data name="InterviewStatus_Restored" xml:space="preserve">
+    <value>Obnovený</value>
+  </data>
+  <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
+    <value>Přidělený školitel</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Nakládka...</value>
+  </data>
+  <data name="MapDashboard_AllResponsibles" xml:space="preserve">
+    <value>Všichni zodpovědní</value>
+  </data>
+  <data name="MapDashboard_AllStatuses" xml:space="preserve">
+    <value>Všechny stavy</value>
+  </data>
+  <data name="MapDashboard_ResponsibleTitle" xml:space="preserve">
+    <value>Zodpovědný</value>
+  </data>
+  <data name="MapDashboard_StatusTitle" xml:space="preserve">
+    <value>Stav</value>
+  </data>
+  <data name="MissingPermissions_MapsLocation" xml:space="preserve">
+    <value>Aplikace musí mít oprávnění k použití polohy. Pokud nevidíte vyskakovací okno oprávnění, přejděte na Nastavení a povolte aplikaci používat polohu.</value>
+  </data>
+  <data name="NoMapsApplication" xml:space="preserve">
+    <value>Navigační aplikace nebyla nalezena.</value>
   </data>
 </root>

@@ -116,6 +116,7 @@ export default {
             job.isInitializing = false
             job.beginDate = formatDate(job.beginDate)
             job.endDate = formatDate(job.endDate)
+            job.createdDate = formatDate(job.createdDate)
             job.lastUpdateDate = formatDate(job.lastUpdateDate)
             job.interviewStatus = job.interviewStatus || 'AllStatuses'
             job.dataFileLastUpdateDate = formatDate(job.dataFileLastUpdateDate)

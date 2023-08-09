@@ -11,6 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
     public sealed class AssignmentPasswordGenerator : RandomStringGenerator, IAssignmentPasswordGenerator
     {
+        private const int DefaultPasswordLength = 6;
         private readonly IQueryableReadSideRepositoryReader<Assignment, Guid> assignments;
         private readonly IPlainStorageAccessor<AssignmentToImport> importAssignments;
 
@@ -24,10 +25,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public string GenerateUnique(int length)
         {
-            var passwords = Enumerable.Range(1, 20).Select(_ => GetRandomString(length, Encode_32_Chars)).ToArray();
+            var passwords = Enumerable.Range(1, 20)
+                .Select(_ => GetRandomString(length, Encode_32_Chars))
+                .Distinct()
+                .ToArray();
 
-            List<string> usedPasswordsInAssignments = this.assignments.Query(_ => _.Where(x => passwords.Contains(x.Password)).Select(x => x.Password).ToList());
-            List<string> usedPasswordsInAssignmentsToImport = this.importAssignments.Query(_ => _.Where(x => passwords.Contains(x.Password)).Select(x => x.Password).ToList());
+            List<string> usedPasswordsInAssignments = this.assignments.Query(_ => _
+                .Where(x => passwords.Contains(x.Password))
+                .Select(x => x.Password)
+                .ToList());
+            List<string> usedPasswordsInAssignmentsToImport = this.importAssignments.Query(_ => _
+                .Where(x => passwords.Contains(x.Password))
+                .Select(x => x.Password)
+                .ToList());
 
             var availableTokens = passwords
                 .Except(usedPasswordsInAssignments)
@@ -45,8 +55,32 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public string GetPassword(string password)
         {
             if (password == AssignmentConstants.PasswordSpecialValue)
-                return this.GenerateUnique(6);
+                return this.GenerateUnique(DefaultPasswordLength);
             return password;
+        }
+
+        public List<string> GeneratePasswordBatch(Dictionary<string, bool> alreadyUsed, int upperBound = 300)
+        {
+            var passwords = Enumerable.Range(1, upperBound)
+                .Select(_ => GetRandomString(DefaultPasswordLength, Encode_32_Chars))
+                .Distinct()
+                .ToArray();
+            
+            List<string> usedPasswordsInAssignments = this.assignments.Query(_ => _
+                .Where(x => passwords.Contains(x.Password))
+                .Select(x => x.Password)
+                .ToList());
+            List<string> usedPasswordsInAssignmentsToImport = this.importAssignments.Query(_ => _
+                .Where(x => passwords.Contains(x.Password))
+                .Select(x => x.Password)
+                .ToList());
+            
+            var availableTokens = passwords
+                .Except(usedPasswordsInAssignments)
+                .Except(usedPasswordsInAssignmentsToImport)
+                .ToList();
+
+            return availableTokens.Where(x => !alreadyUsed.ContainsKey(x)).Select(x=>x).ToList();
         }
     }
 
@@ -54,5 +88,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
     {
         string GenerateUnique(int length);
         string GetPassword(string password);
+        
+        List<string> GeneratePasswordBatch(Dictionary<string, bool> alreadyUsed, int upperBound = 300);
     }
 }

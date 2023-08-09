@@ -316,6 +316,9 @@
     <value>Заголовок {0} не был найден в excel файле</value>
     <comment>Заголовок {0} не был найден в excel файле</comment>
   </data>
+  <data name="HeaderWasNotFound" xml:space="preserve">
+    <value>Заголовок не был найден в файле</value>
+  </data>
   <data name="Column" xml:space="preserve">
     <value>столбец</value>
   </data>

@@ -9,11 +9,11 @@ namespace WB.Core.SharedKernels.Enumerator.Repositories
     {
         Task StoreAsync(AttachmentContent attachmentContent);
         AttachmentContentMetadata GetMetadata(string attachmentContentId);
-        bool Exists(string attachmentContentId);
-        byte[] GetContent(string attachmentContentId);
-        byte[] GetPreviewContent(string attachmentContentId);
-        string GetFileCacheLocation(string attachmentContentId);
-        void Remove(string attachmentContentId);
+        Task<bool> ExistsAsync(string attachmentContentId);
+        Task<byte[]> GetContentAsync(string attachmentContentId);
+        Task<byte[]> GetPreviewContentAsync(string attachmentContentId);
+        Task<string> GetFileCacheLocationAsync(string attachmentContentId);
+        Task RemoveAsync(string attachmentContentId);
         Task<IEnumerable<string>> EnumerateCacheAsync();
     }
 }

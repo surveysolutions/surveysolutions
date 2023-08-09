@@ -713,7 +713,7 @@ namespace WB.Tests.Abc.TestFactories
                     Mock.Of<IOptions<IdentityOptions>>(x => x.Value == new IdentityOptions {Password = defaultPasswordOptions} )),
                 authorizedUser ?? Stub<IAuthorizedUser>.WithNotEmptyValues,
                 sessionProvider ?? Stub<IUnitOfWork>.WithNotEmptyValues,
-                workspacesService ?? Create.Service.WorkspacesService(Mock.Of<IPlainStorageAccessor<Workspace>>()));
+                workspacesService ?? Create.Service.WorkspacesService(Mock.Of<IWorkspacesStorage>()));
         }
 
         public ICsvReader CsvReader<T>(string[] headers, params T[] rows)
@@ -775,7 +775,8 @@ namespace WB.Tests.Abc.TestFactories
                 interviewPackageStorage: interviewPackageStorage ?? Mock.Of<IPlainStorageAccessor<InterviewPackage>>(),
                 brokenInterviewPackageStorage: brokenInterviewPackageStorage ?? Mock.Of<IPlainStorageAccessor<BrokenInterviewPackage>>(),
                 packagesTracker: new TestPlainStorage<ReceivedPackageLogEntry>(),
-                inScopeExecutor: inScopeExecutor ?? Create.Service.InScopeExecutor(Create.Service.ServiceLocatorService()));
+                inScopeExecutor: inScopeExecutor ?? Create.Service.InScopeExecutor(Create.Service.ServiceLocatorService()),
+                aggregateRootCache: Mock.Of<IAggregateRootCache>());
         }
 
         public ImportDataVerifier ImportDataVerifier(IFileSystemAccessor fileSystem = null,
@@ -1034,7 +1035,7 @@ namespace WB.Tests.Abc.TestFactories
                 attachmentContentMetadataRepository ?? Mock.Of<IPlainStorage<AttachmentContentMetadata>>(),
                 attachmentContentDataRepository ?? Mock.Of<IPlainStorage<AttachmentContentData>>(),
                 attachmentPreviewContentData ?? Mock.Of<IPlainStorage<AttachmentPreviewContentData>>(),
-                pathUtils ?? Mock.Of<IPathUtils>(p => p.GetRootDirectory() == @"c:\tmp"),
+                pathUtils ?? Mock.Of<IPathUtils>(p => p.GetRootDirectoryAsync() == Task.FromResult(@"c:\tmp")),
                 Mock.Of<IPermissionsService>(),
                 files ?? Mock.Of<IFileSystemAccessor>(),
                 imageHelper ?? Mock.Of<IImageHelper>());
@@ -1397,21 +1398,26 @@ namespace WB.Tests.Abc.TestFactories
                 interviewerInterviewsFactory ?? Mock.Of<IInterviewInformationFactory>());
         }
 
-        public WorkspacesService WorkspacesService(IPlainStorageAccessor<Workspace> workspaces,
+        public WorkspacesService WorkspacesService(IWorkspacesStorage workspaces,
             IServiceLocator serviceLocator = null)
         {
             return new WorkspacesService(
                 new UnitOfWorkConnectionSettings(),
                 Mock.Of<Microsoft.Extensions.Logging.ILoggerProvider>(),
                 Mock.Of<IAuthorizedUser>(),
-                workspaces,
                 new TestPlainStorage<WorkspacesUsers>(),
                 Mock.Of<IUserRepository>(),
                 Mock.Of<ILogger<WorkspacesService>>(),
                 Mock.Of<ISystemLog>(),
                 Mock.Of<IWorkspacesUsersCache>(),
-                new NoScopeInScopeExecutor(serviceLocator ?? Create.Service.ServiceLocatorService())
+                new NoScopeInScopeExecutor(serviceLocator ?? Create.Service.ServiceLocatorService()),
+                workspaces
             );
+        }
+
+        public IWorkspacesStorage WorkspacesStorage(IPlainStorageAccessor<Workspace> workspaces)
+        {
+            return new WorkspacesStorage(workspaces, Mock.Of<IAuthorizedUser>());
         }
     }
 

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -20,8 +21,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         private readonly IAssignmentsService assignmentsService;
 
         public AssignmentsApiV1Controller(IAuthorizedUser authorizedUser, IAssignmentsService assignmentsService,
+            IUserToDeviceService userToDeviceService,
             ICommandService commandService) 
-            : base(authorizedUser, assignmentsService, commandService)
+            : base(authorizedUser, assignmentsService, userToDeviceService, commandService)
         {
             this.assignmentsService = assignmentsService;
         }

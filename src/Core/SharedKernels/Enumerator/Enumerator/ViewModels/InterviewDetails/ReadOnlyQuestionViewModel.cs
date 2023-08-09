@@ -1,9 +1,15 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using Main.Core.Entities.SubEntities;
+using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
@@ -18,18 +24,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IQuestionnaireStorage questionnaireRepository;
 
+        public AttachmentViewModel Attachment { get; }
+        public IQuestionStateViewModel QuestionState { get; }
+        
         public ReadOnlyQuestionViewModel(
             IStatefulInterviewRepository interviewRepository,
             IQuestionnaireStorage questionnaireRepository,
-            DynamicTextViewModel dynamicTextViewModel,
-            ValidityViewModel validityViewModel, 
-            WarningsViewModel warningsViewModel)
+            AttachmentViewModel attachmentViewModel,
+            ReadonlyQuestionStateViewModel questionStateViewModelBase)
         {
             this.interviewRepository = interviewRepository;
             this.questionnaireRepository = questionnaireRepository;
-            this.Title = dynamicTextViewModel;
-            this.Warnings = warningsViewModel;
-            this.Validity = validityViewModel;
+            this.QuestionState = questionStateViewModelBase;
+            this.Attachment = attachmentViewModel;
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -39,9 +46,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var interview = this.interviewRepository.Get(interviewId);
 
             this.Identity = entityIdentity;
-            this.Title.Init(interviewId, entityIdentity);
-            this.Validity.Init(interviewId, entityIdentity, navigationState);
-            this.Warnings.Init(interviewId, entityIdentity, navigationState);
+            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
 
             var question = interview.GetQuestion(entityIdentity);
             if (question.IsAnswered())
@@ -51,20 +56,46 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 this.Answer = questionType == QuestionType.GpsCoordinates
                     ? $"{question.GetAsInterviewTreeGpsQuestion().GetAnswer().Value.Latitude}, {question.GetAsInterviewTreeGpsQuestion().GetAnswer().Value.Longitude}"
                     : question.GetAnswerAsString(CultureInfo.CurrentUICulture);
+                
+                InitAttachment(interviewId, entityIdentity, question, questionnaire);
             }
         }
 
-        public DynamicTextViewModel Title { get; private set; }
-        public virtual ValidityViewModel Validity { get; private set; }
-        public virtual WarningsViewModel Warnings { get; }
+        private void InitAttachment(string interviewId, Identity entityIdentity, InterviewTreeQuestion question,
+            IQuestionnaire questionnaire)
+        {
+            decimal? optionValue = null;
+            int? parentValue = null;
+
+            if (question.IsInteger)
+                optionValue = question.GetAsInterviewTreeIntegerQuestion().GetAnswer().Value;
+            if (question.IsDouble)
+                optionValue = Convert.ToDecimal(question.GetAsInterviewTreeDoubleQuestion().GetAnswer()?.Value);
+            if (question.IsSingleFixedOption || question.IsCascading)
+            {
+                if (question.InterviewQuestion is InterviewTreeCascadingQuestion cascading)
+                    parentValue = cascading.GetCascadingParentQuestion()?.GetAnswer()?.SelectedValue;
+
+                optionValue = question.GetAsInterviewTreeSingleOptionQuestion().GetAnswer()?.SelectedValue;
+            }
+
+            if (optionValue.HasValue)
+            {
+                var attachmentName = questionnaire.GetAnswerOptionAttachment(entityIdentity.Id, optionValue.Value, parentValue);
+                this.Attachment.InitAsStatic(interviewId, attachmentName);
+            }
+        }
 
         public string Answer { get; private set; }
 
         public void Dispose()
         {
-            Title?.Dispose();
-            Validity?.Dispose();
-            Warnings?.Dispose();
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            QuestionState?.Dispose();
         }
     }
 }

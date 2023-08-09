@@ -17,7 +17,10 @@
                             formTitle
                         }}</v-toolbar-title>
                     </v-toolbar>
-                    <v-tabs v-model="tab" fixed-tabs grow>
+                    <v-tabs v-model="tab" 
+                            color="primary"
+                            fixed-tabs 
+                            grow>
                         <v-tab value="table" :disabled="!stringsIsValid">{{
                             $t('QuestionnaireEditor.TableView')
                         }}</v-tab>

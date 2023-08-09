@@ -1,52 +1,37 @@
 <template>
-    <HqLayout :hasFilter="false"
-        :title="$t('Pages.MapList_Title')">
+    <HqLayout :hasFilter="false" :title="$t('Pages.MapList_Title')">
         <div slot="headers">
-            <div class="topic-with-button" >
-                <h1>{{$t('Pages.MapList_Title')}}</h1>
-                <label class="btn btn-success btn-file"
-                    v-if="actionsAlowed">
-                    {{$t('Pages.MapList_Upload')}}
-                    <input accept=".zip"
-                        ref="uploader"
-                        id="File"
-                        name="File"
-                        @change="onFileChange"
-                        type="file"
-                        value="" />
+            <div class="topic-with-button">
+                <h1>{{ $t('Pages.MapList_Title') }}</h1>
+                <label class="btn btn-success btn-file" v-if="actionsAlowed">
+                    {{ $t('Pages.MapList_Upload') }}
+                    <input accept=".zip" ref="uploader" id="File" name="File" @change="onFileChange" type="file" value="" />
                 </label>
             </div>
-            <div ref="status" >
-                <p>{{statusMessage}}</p>
+            <div ref="status">
+                <p>{{ statusMessage }}</p>
             </div>
-            <div ref="errors"
-                class="alert alert-danger">
-                <div v-for="error in errorList"
-                    :key="error">
-                    {{error}}
+            <div ref="errors" class="alert alert-danger">
+                <div v-for="error in errorList" :key="error">
+                    {{ error }}
                 </div>
             </div>
-            <ol class="list-unstyled">
-                <li>{{$t('Pages.MapList_UploadDescription')}} </li>
-                <li>{{$t('Pages.MapList_UploadDescriptionExtra')}}</li>
+            <ol class="list-unstyled" v-if="!isSupervisor">
+                <li>{{ $t('Pages.MapList_UploadDescription') }} </li>
+                <li>{{ $t('Pages.MapList_UploadDescriptionExtra') }}</li>
             </ol>
-            <p>
-                <a :href="$config.model.userMapsUrl">{{$t('Pages.MapList_UserMapsLink')}}</a>
+            <p v-if="!isSupervisor">
+                <a :href="$config.model.userMapsUrl">{{ $t('Pages.MapList_UserMapsLink') }}</a>
             </p>
-            <p>
-                <a :href="$config.model.userMapLinkingUrl">{{$t('Pages.MapList_UserLinking')}}</a>
+            <p v-if="!isSupervisor">
+                <a :href="$config.model.userMapLinkingUrl">{{ $t('Pages.MapList_UserLinking') }}</a>
             </p>
         </div>
-        <DataTables ref="table"
-            :tableOptions="tableOptions"
-            :contextMenuItems="contextMenuItems">
+        <DataTables ref="table" :tableOptions="tableOptions" :contextMenuItems="contextMenuItems"
+            :supportContextMenu="actionsAlowed">
         </DataTables>
 
-        <Confirm ref="confirmDiscard"
-            id="discardConfirm"
-            :okTitle="$t('Common.Delete')"
-            okClass="btn-danger"
-            slot="modals">
+        <Confirm ref="confirmDiscard" id="discardConfirm" :okTitle="$t('Common.Delete')" okClass="btn-danger" slot="modals">
             {{ deleteDialogBody }}
         </Confirm>
     </HqLayout>
@@ -54,7 +39,7 @@
 
 <script>
 
-import {DateFormats, humanFileSize} from '~/shared/helpers'
+import { DateFormats, humanFileSize } from '~/shared/helpers'
 import moment from 'moment'
 import * as toastr from 'toastr'
 import gql from 'graphql-tag'
@@ -71,7 +56,7 @@ const query = gql`query MapsList($workspace: String!, $order: [MapsSort!], $skip
 }`
 
 export default {
-    data: function(){
+    data: function () {
         return {
             statusMessage: '',
             errorList: [],
@@ -82,9 +67,9 @@ export default {
         this.reload()
     },
     methods: {
-        updateStatus(newMessage, errors){
+        updateStatus(newMessage, errors) {
             this.statusMessage = this.$t('Pages.Map_Status') + ': ' + newMessage
-            if(errors != null){
+            if (errors != null) {
                 this.errorList = errors
             }
             else
@@ -99,7 +84,7 @@ export default {
             if (this.$refs.table)
                 this.$refs.table.reload()
         },
-        onFileChange(e){
+        onFileChange(e) {
             const files = e.target.files || e.dataTransfer.files
 
             if (!files.length) {
@@ -116,9 +101,9 @@ export default {
             const fd = new FormData()
             var fileToUpload = this.$refs.uploader.files[0]
 
-            var filesize = ((fileToUpload.size/1024)/1024).toFixed(4)
+            var filesize = ((fileToUpload.size / 1024) / 1024).toFixed(4)
 
-            if(filesize >= 1024){
+            if (filesize >= 1024) {
                 statusupdater(uploadingFileTooBig)
                 return
             }
@@ -138,14 +123,14 @@ export default {
                 processData: false,
                 contentType: false,
                 type: 'POST',
-                success: function(data) {
-                    if(!data.isSuccess)
+                success: function (data) {
+                    if (!data.isSuccess)
                         statusupdater(uploadingErrorMessage, data.errors)
                     else
                         statusupdater(uploadingSuccess)
                     reloader()
                 },
-                error : function(err){
+                error: function (err) {
                     statusupdater(uploadingErrorMessage)
                 },
             })
@@ -196,7 +181,10 @@ export default {
             return this.$config.model
         },
         actionsAlowed() {
-            return !this.config.isObserver && !this.config.isObserving
+            return !this.config.isObserver && !this.config.isObserving && !this.config.isSupervisor
+        },
+        isSupervisor() {
+            return this.config.isSupervisor
         },
         tableOptions() {
             var self = this
@@ -208,6 +196,9 @@ export default {
                         name: 'FileName',
                         class: 'title',
                         title: this.$t('Pages.MapList_MapName'),
+                        render(data) {
+                            return `<a href="${self.$hq.basePath}Maps/Details?mapname=${encodeURIComponent(data)}">${data}</a>`
+                        }
                     },
                     {
                         data: 'fileName',
@@ -242,7 +233,7 @@ export default {
                     },
                 ],
                 pageLength: 20,
-                ajax (data, callback, settings) {
+                ajax(data, callback, settings) {
                     const order = {}
                     const order_col = data.order[0]
                     const column = data.columns[order_col.column]
@@ -262,13 +253,14 @@ export default {
 
                     const search = data.search.value
 
-                    if(search && search != '') {
-                        where.and.push({ or: [
-                            { fileName : {startsWith : search }}],
+                    if (search && search != '') {
+                        where.and.push({
+                            or: [
+                                { fileName: { startsWith: search } }],
                         })
                     }
 
-                    if(where.and.length > 0) {
+                    if (where.and.length > 0) {
                         variables.where = where
                     }
 

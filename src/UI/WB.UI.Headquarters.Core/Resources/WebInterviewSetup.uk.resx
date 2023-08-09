@@ -1,0 +1,267 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AllowSwitchToCawiForInterviewer" xml:space="preserve">
+    <value>Дозволити інтерв'юеру перейти в режим CAWI</value>
+  </data>
+  <data name="AttachAnswersToCompleteEmail" xml:space="preserve">
+    <value>Прикріпити стенограму в форматі Pdf</value>
+  </data>
+  <data name="BackToQuestionnaires" xml:space="preserve">
+    <value>Повернутися до Налаштування анкети</value>
+  </data>
+  <data name="CustomMessageTooLong" xml:space="preserve">
+    <value>Користувацьке повідомлення не повинно містити більше {0} символів (включаючи html)</value>
+  </data>
+  <data name="CustomText" xml:space="preserve">
+    <value>Використовуйте власний текст</value>
+  </data>
+  <data name="Done" xml:space="preserve">
+    <value>Зроблено</value>
+  </data>
+  <data name="DownloadTitle" xml:space="preserve">
+    <value>Завантажити ({{count}})</value>
+  </data>
+  <data name="EmailOnComplete" xml:space="preserve">
+    <value>Після проходження веб-інтерв'ю надішліть електронного листа</value>
+  </data>
+  <data name="ExportAssignmentsTitle" xml:space="preserve">
+    <value>Ви можете завантажити список створених завдань, які призначаються інтерв'юеру для доставки веб-посилань респондентам</value>
+  </data>
+  <data name="Invitations" xml:space="preserve">
+    <value>Запрошення</value>
+  </data>
+  <data name="Invitations_ChangeEmailSettingsAdmin" xml:space="preserve">
+    <value>Ви можете змінити ці налаштування на сторінці &lt;a href="{{url}}"&gt;'Постачальники послуг електронної пошти'&lt;/a&gt;..</value>
+  </data>
+  <data name="Invitations_ChangeEmailSettingsNotAdmin" xml:space="preserve">
+    <value>Попросіть вашого адміністратора змінити ці налаштування на сторінці "Постачальники послуг електронної пошти".</value>
+  </data>
+  <data name="Invitations_EmailIsNotSetUp" xml:space="preserve">
+    <value>Постачальника послуг електронної пошти не налаштовано.</value>
+  </data>
+  <data name="Invitations_NothingSent" xml:space="preserve">
+    <value>Запрошення ще не надіслано.</value>
+  </data>
+  <data name="Invitations_NothingToSend" xml:space="preserve">
+    <value>Наразі запрошення не надсилаються.</value>
+  </data>
+  <data name="Invitations_SendAction" xml:space="preserve">
+    <value>Надіслати {{count}} запрошень</value>
+  </data>
+  <data name="Invitations_Sent" xml:space="preserve">
+    <value>{{count}} запрошення вже надіслані.</value>
+  </data>
+  <data name="Invitations_SetupError" xml:space="preserve">
+    <value>Запрошення не можуть бути надіслані.</value>
+  </data>
+  <data name="Invitations_SuccessfulSetup" xml:space="preserve">
+    <value>Запущено веб-анкети та налаштовано провайдера електронної пошти. Система готова до відправки запрошень.</value>
+  </data>
+  <data name="Invitations_SurveyIsNotStarted" xml:space="preserve">
+    <value>Веб-анкети не запущено. Налаштування та &lt;a href="{{url}}"&gt;запуск веб-анкети&lt;/a&gt; перед надсиланням запрошень.</value>
+  </data>
+  <data name="Invitations_ToSend" xml:space="preserve">
+    <value>{{count}} запрошення для відправки.</value>
+  </data>
+  <data name="Invitations_TotalInvitations" xml:space="preserve">
+    <value>{{count}} всього запрошень.</value>
+  </data>
+  <data name="SaveAll" xml:space="preserve">
+    <value>Зберегти все.</value>
+  </data>
+  <data name="SelectInterviwer" xml:space="preserve">
+    <value>Виберіть інтерв'юера</value>
+  </data>
+  <data name="SingleResponse" xml:space="preserve">
+    <value>Обмеження на одне інтерв'ю з одним респондентом</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Старт</value>
+  </data>
+  <data name="Started_Title" xml:space="preserve">
+    <value>Розпочато веб-інтерв'ю</value>
+  </data>
+  <data name="StartInfo" xml:space="preserve">
+    <value>Початок веб-інтерв'ю для {{name}}</value>
+  </data>
+  <data name="StopWebInterview" xml:space="preserve">
+    <value>Зупинити веб-інтерв'ю</value>
+  </data>
+  <data name="TextCustomize" xml:space="preserve">
+    <value>Текст, що надсилається респондентам, можна налаштувати</value>
+  </data>
+  <data name="TextsUpdated" xml:space="preserve">
+    <value>Оновлені тексти</value>
+  </data>
+  <data name="UseCaptcha" xml:space="preserve">
+    <value>Використовуйте CAPTCHA перед початком співбесіди</value>
+  </data>
+  <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
+    <value>Налаштування веб-інтерв'ю</value>
+  </data>
+  <data name="WebInterviewSetup_SendInvitationsTitle" xml:space="preserve">
+    <value>Надіслати запрошення</value>
+  </data>
+  <data name="WebInterviewSetup_Title" xml:space="preserve">
+    <value>Налаштування веб-інтерв'ю</value>
+  </data>
+  <data name="WebInterviewStarted" xml:space="preserve">
+    <value>Розпочато веб-інтерв'ю для {{name}}</value>
+  </data>
+  <data name="WebInterviewUserMessages_CompleteButton_Descr" xml:space="preserve">
+    <value>Завершено</value>
+  </data>
+  <data name="WebInterviewUserMessages_CompleteNoteToSupervisor_Descr" xml:space="preserve">
+    <value>Примітка для супервізора</value>
+  </data>
+  <data name="WebInterviewUserMessages_FinishInterview_Descr" xml:space="preserve">
+    <value>Текст відображається на останній сторінці після завершення інтерв'ю</value>
+  </data>
+  <data name="WebInterviewUserMessages_Invitation_Descr" xml:space="preserve">
+    <value>Текст запрошення відображається на першій сторінці. %QUESTIONNAIRE% замінюється на назву анкети</value>
+  </data>
+  <data name="WebInterviewUserMessages_LinkInvitation_Descr" xml:space="preserve">
+    <value>Текст, який показується користувачеві, коли він переходить за посиланням на інтерв'ю, яке ще не синхронізоване з сервером</value>
+  </data>
+  <data name="WebInterviewUserMessages_LinkWelcome_Descr" xml:space="preserve">
+    <value>Привітальний текст заголовка на цільовій сторінці з посиланням на веб-інтерв'ю</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeButton_Descr" xml:space="preserve">
+    <value>Резюме</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeInvitation_Descr" xml:space="preserve">
+    <value>Текст, який буде показано користувачеві, що повернувся, при відновленні анкети. %QUESTIONNAIRE% замінюється на назву анкети</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeWelcome_Descr" xml:space="preserve">
+    <value>Текст заголовка, який показується користувачеві, що повертається, перед продовженням інтерв'ю</value>
+  </data>
+  <data name="WebInterviewUserMessages_StartNewButton_Descr" xml:space="preserve">
+    <value>Почати нове інтерв'ю</value>
+  </data>
+  <data name="WebInterviewUserMessages_SurveyName_Descr" xml:space="preserve">
+    <value>Назва проведеного анкети. %QUESTIONNAIRE% замінюється на назву анкети</value>
+  </data>
+  <data name="WebInterviewUserMessages_WebSurveyHeader_Descr" xml:space="preserve">
+    <value>Текст заголовка відображається після завершення інтерв'ю</value>
+  </data>
+  <data name="WebInterviewUserMessages_WelcomeText_Descr" xml:space="preserve">
+    <value>Привітальний текст заголовка на першій сторінці</value>
+  </data>
+</root>

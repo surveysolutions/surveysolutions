@@ -256,6 +256,7 @@ namespace WB.Services.Export.Jobs
                 DataExportProcessId = dataExportProcessDetails.NaturalId,
                 BeginDate = status.BeginDate ?? status.CreatedDate,
                 EndDate = status.EndDate,
+                CreatedDate = status.CreatedDate,
                 JobStatus = status.JobStatus,
                 LastUpdateDate = status.LastUpdateDate,
                 Progress = status.ProgressInPercents,

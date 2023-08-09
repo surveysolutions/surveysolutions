@@ -61,7 +61,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            local:passwordToggleEnabled="true"
+                            local:endIconMode="password_toggle"
                             local:hintEnabled="true"
                             local:errorEnabled="true"
                             local:MvxBind="Hint Localization('PasswordHint'); Error PasswordError">

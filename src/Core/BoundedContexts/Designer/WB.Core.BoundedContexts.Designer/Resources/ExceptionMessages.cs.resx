@@ -1,0 +1,411 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AttachmentIdIsMissing" xml:space="preserve">
+    <value>Chybějící příloha s ID {0}</value>
+  </data>
+  <data name="Attachments_Unsupported_content" xml:space="preserve">
+    <value>Nahraný obsah není podporován</value>
+  </data>
+  <data name="Attachments_uploaded_file_image_is_too_big" xml:space="preserve">
+    <value>Rozměry obrazu jsou příliš velké</value>
+  </data>
+  <data name="Attachments_uploaded_file_is_not_image" xml:space="preserve">
+    <value>Nahraný soubor není obrázek</value>
+  </data>
+  <data name="CantEditCoverPageInOldQuestionnaire" xml:space="preserve">
+    <value>Je to sekce Cover pouze pro čtení. Nemůžete v něm upravovat ani měnit pořadí otázek.</value>
+  </data>
+  <data name="CantMoveSubsectionInWrongPosition" xml:space="preserve">
+    <value>Nemůžete se přesunout do pododdílu {0}, protože to {1} není přijatelné.</value>
+  </data>
+  <data name="CantPasteQuestion" xml:space="preserve">
+    <value>Otázku sem nelze vložit.</value>
+  </data>
+  <data name="CantRemoveCoverPageInQuestionnaire" xml:space="preserve">
+    <value>Titulní část nelze z dotazníku odstranit</value>
+  </data>
+  <data name="CantRemoveLastSectionInQuestionnaire" xml:space="preserve">
+    <value>Poslední existující oddíl nelze z dotazníku odebrat</value>
+  </data>
+  <data name="CantRemoveUserFromTheList" xml:space="preserve">
+    <value>Nelze odebrat uživatele, protože neexistuje v seznamu sdílených položek</value>
+  </data>
+  <data name="CategoricalCascadingOptionsCantContainsEmptyParentValueField" xml:space="preserve">
+    <value>Kategorie v kaskádové otázce nemohou mít prázdný sloupec ParentValue.</value>
+  </data>
+  <data name="CategoricalCascadingOptionsCantContainsNotDecimalParentValueField" xml:space="preserve">
+    <value>Kategorie v kaskádové otázce nemohou mít číselnou hodnotu ve sloupci ParentValue.</value>
+  </data>
+  <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
+    <value>Existuje alespoň jeden duplikát párů "Title" a "Parent Value". Seznam by neměl obsahovat žádné duplicitní položky.</value>
+  </data>
+  <data name="CategoriesCantBeExtracted" xml:space="preserve">
+    <value>Nepodařilo se extrahovat kategorie z nahraného souboru</value>
+  </data>
+  <data name="Column" xml:space="preserve">
+    <value>sloupec</value>
+  </data>
+  <data name="ComboboxCannotBeFound" xml:space="preserve">
+    <value>Otázka se seznamem s veřejným klíčem{0} nelze najít</value>
+  </data>
+  <data name="CoverPageCanContainsOnlyQuestionsAndStaticTextsAndVariables" xml:space="preserve">
+    <value>Titulní část může obsahovat pouze otázky, statické texty a proměnné</value>
+  </data>
+  <data name="CoverPageMustBeFirstInQuestionnaire" xml:space="preserve">
+    <value>Krycí oddíl musí být první oddíl v dotazníku</value>
+  </data>
+  <data name="Excel_Categories_Duplicated" xml:space="preserve">
+    <value>Duplicitní kategorie v řádcích: {0}</value>
+  </data>
+  <data name="Excel_Categories_Empty_ParentId" xml:space="preserve">
+    <value>Některé kategorie nemají rodičovské ID</value>
+  </data>
+  <data name="Excel_Categories_Empty_Text" xml:space="preserve">
+    <value>[{0}] Prázdný název</value>
+  </data>
+  <data name="Excel_Categories_Empty_Value" xml:space="preserve">
+    <value>[{0}] Prázdná hodnota</value>
+  </data>
+  <data name="Excel_Categories_Int_Invalid" xml:space="preserve">
+    <value>[{0}] Neplatná číselná hodnota</value>
+  </data>
+  <data name="Excel_Categories_Less_2_Options" xml:space="preserve">
+    <value>Kategorie by měly mít alespoň 2 kategorie</value>
+  </data>
+  <data name="Excel_Categories_More_Than_Limit" xml:space="preserve">
+    <value>Sada kategorií má více než {0} kategorií</value>
+  </data>
+  <data name="Excel_Categories_Text_More_Than_250" xml:space="preserve">
+    <value>[{0}] Text kategorie by měl mít méně než 250 znaků</value>
+  </data>
+  <data name="Excel_NoCategories" xml:space="preserve">
+    <value>Žádné kategorie v souboru</value>
+  </data>
+  <data name="FailedToAddGroup" xml:space="preserve">
+    <value>Neúspěšný pokus o přidání {0} skupiny do {1} skupiny. Ale skupinové {1} v dokumentu {2} neexistuje</value>
+  </data>
+  <data name="HeaderWasNotFound" xml:space="preserve">
+    <value>Záhlaví nebylo v souboru nalezeno</value>
+  </data>
+  <data name="ImportOfDeletedQuestionnaire" xml:space="preserve">
+    <value>Pokus o import šablony smazaného dotazníku</value>
+  </data>
+  <data name="ImportOptions_AttachmentNameTooLong" xml:space="preserve">
+    <value>Název přílohy je příliš dlouhý. Název přílohy by měl být menší než {0}</value>
+  </data>
+  <data name="ImportOptions_DuplicateByTitleAndParentIds" xml:space="preserve">
+    <value>Duplicitní kategorie "{0}" s nadřazenou hodnotou "{1}"</value>
+  </data>
+  <data name="ImportOptions_DuplicatedParentValues" xml:space="preserve">
+    <value>Nadřazená otázka "{0}" má {1} kategorií s hodnotou "{2}"</value>
+  </data>
+  <data name="ImportOptions_EmptyValue" xml:space="preserve">
+    <value>Prázdná hodnota</value>
+  </data>
+  <data name="ImportOptions_MissingRequiredColumns" xml:space="preserve">
+    <value>Některé sloupce chybí. Ujistěte se, že jste nahráli soubor s požadovanými sloupci</value>
+  </data>
+  <data name="ImportOptions_NotNumber" xml:space="preserve">
+    <value>Neplatná 32bitová celočíselná hodnota '{0}'. Hodnota by měla být mezi -2147483647 a 2147483647</value>
+  </data>
+  <data name="ImportOptions_ParentValueNotFound" xml:space="preserve">
+    <value>Nadřazená otázka nemá kategorii s hodnotou '{0}'</value>
+  </data>
+  <data name="ImportOptions_Tab_Or_Excel_Only" xml:space="preserve">
+    <value>Akceptovány jsou pouze soubory hodnot oddělených tabulátory (*.tab, *.txt, *.tsv) nebo excel (*.xslx, *.xls, *.ods)</value>
+  </data>
+  <data name="ImportOptions_TitleTooLong" xml:space="preserve">
+    <value>Název je příliš dlouhý. Délka názvu by měla být kratší než {0}</value>
+  </data>
+  <data name="ImportOptions_ValueIsNotUnique" xml:space="preserve">
+    <value>Duplicitní kategorie "{0}" s hodnotou "{1}"</value>
+  </data>
+  <data name="InvalidFixedTitle" xml:space="preserve">
+    <value>Neplatný seznam názvů</value>
+  </data>
+  <data name="InvalidUserInfo" xml:space="preserve">
+    <value>Neplatné informace o uživateli.</value>
+  </data>
+  <data name="InvalidValueOfFixedTitle" xml:space="preserve">
+    <value>Neprázdné hodnoty pro pevné názvy soupisek jsou povinné</value>
+  </data>
+  <data name="ItemWithIdExistsAlready" xml:space="preserve">
+    <value>Jedna nebo více položek dotazníku se stejným ID {0} již existuje.</value>
+  </data>
+  <data name="LookupTableAlreadyExist" xml:space="preserve">
+    <value>Vyhledávací tabulka s takovým ID již existuje.</value>
+  </data>
+  <data name="LookupTableHasEmptyContent" xml:space="preserve">
+    <value>Vyhledávací tabulka s id {0} nemá obsah</value>
+  </data>
+  <data name="LookupTableIsAbsent" xml:space="preserve">
+    <value>Vyhledávací tabulka s takovým ID chybí.</value>
+  </data>
+  <data name="LookupTableIsMissing" xml:space="preserve">
+    <value>Chybí vyhledávací tabulka s id {0}</value>
+  </data>
+  <data name="LookupTables_cant_has_empty_content" xml:space="preserve">
+    <value>Soubor bez dat nelze načíst</value>
+  </data>
+  <data name="LookupTables_data_value_cannot_be_parsed" xml:space="preserve">
+    <value>Hodnotu {0} nelze analyzovat jako desetinné číslo. Sloupec {1}, řádek {2}.</value>
+  </data>
+  <data name="LookupTables_duplicating_headers_are_not_allowed" xml:space="preserve">
+    <value>Záhlaví se stejným názvem nejsou povolena</value>
+  </data>
+  <data name="LookupTables_empty_or_invalid_header_are_not_allowed" xml:space="preserve">
+    <value>Prázdná nebo neplatná záhlaví nejsou povolena</value>
+  </data>
+  <data name="LookupTables_rowcode_column_is_mandatory" xml:space="preserve">
+    <value>Chybí povinný sloupec kódu řádku</value>
+  </data>
+  <data name="LookupTables_rowcode_value_cannot_be_parsed" xml:space="preserve">
+    <value>Hodnotu {0} nelze analyzovat jako dlouhé celé číslo. Sloupec {1}, řádek {2}.</value>
+  </data>
+  <data name="LookupTables_rowcode_values_must_be_unique" xml:space="preserve">
+    <value>Hodnoty kódu řádku musí být jedinečné</value>
+  </data>
+  <data name="LookupTables_too_many_columns" xml:space="preserve">
+    <value>Příliš mnoho sloupců v nahraném souboru. Maximální počet sloupců je {0}</value>
+  </data>
+  <data name="LookupTables_too_many_rows" xml:space="preserve">
+    <value>Vyhledávací tabulka obsahuje {1} řádků, což překračuje limit počtu řádků ve vyhledávací tabulce ({0} řádků).</value>
+  </data>
+  <data name="MacroAlreadyExist" xml:space="preserve">
+    <value>Makro již existuje.</value>
+  </data>
+  <data name="MacroIsAbsent" xml:space="preserve">
+    <value>Makro chybí.</value>
+  </data>
+  <data name="MoreThanOneQuestionWithSameId" xml:space="preserve">
+    <value>Jedna nebo více otázek se stejným ID {0} již existuje:{1}{2}.</value>
+  </data>
+  <data name="MoreThanOneSubSectionWithSameId" xml:space="preserve">
+    <value>Jedna nebo více podsekcí se stejným ID {0} již existuje:{1}{2}.</value>
+  </data>
+  <data name="NoParentCascadingOptions" xml:space="preserve">
+    <value>Nebyly nalezeny žádné kategorie pro nadřazenou kaskádovou otázku "{0}"</value>
+  </data>
+  <data name="NoPremissionsToEditQuestionnaire" xml:space="preserve">
+    <value>Nemáte oprávnění ke změně tohoto dotazníku</value>
+  </data>
+  <data name="OldAttachmentIdIsEmpty" xml:space="preserve">
+    <value>Staré ID přílohy je prázdné a soubor chybí pro {0} přílohy v {1} dotazníku</value>
+  </data>
+  <data name="OnlyQuestionnaireDocumentsAreSupported" xml:space="preserve">
+    <value>Prozatím jsou podporovány pouze QuestionnaireDocuments</value>
+  </data>
+  <data name="OptionValuesShouldBeNumbers" xml:space="preserve">
+    <value>Hodnota kategorie by měla obsahovat pouze číselné znaky</value>
+  </data>
+  <data name="ProvidedFileHasErrors" xml:space="preserve">
+    <value>Nalezené chyby v poskytnutém souboru</value>
+  </data>
+  <data name="QuestionCannotBeFound" xml:space="preserve">
+    <value>Otázka s veřejným klíčem {0} nelze nalézt.</value>
+  </data>
+  <data name="QuestionIsNotCombobox" xml:space="preserve">
+    <value>Otázka {0} není pole se seznamem</value>
+  </data>
+  <data name="Questionnaire_CategoriesWereNotFound" xml:space="preserve">
+    <value>Kategorie nebyly nalezeny</value>
+  </data>
+  <data name="QuestionnaireAlreadySupportedCover" xml:space="preserve">
+    <value>Dotazník již podporuje krytí</value>
+  </data>
+  <data name="QuestionnaireCantBeFound" xml:space="preserve">
+    <value>Položka dotazníku s ID {0} nebyla nalezena.</value>
+  </data>
+  <data name="QuestionnaireRevisionCantBeFound" xml:space="preserve">
+    <value>Dotazník {0} verze {1} nelze nalézt</value>
+  </data>
+  <data name="QuestionnaireSuportedNewCover" xml:space="preserve">
+    <value>Dotazník již podporuje titulní stránku.</value>
+  </data>
+  <data name="QuestionnaireTitleIsEmpty" xml:space="preserve">
+    <value>Název dotazníku nesmí být prázdný nebo obsahovat pouze prázdné znaky.</value>
+  </data>
+  <data name="QuestionTypeIsNotSupported" xml:space="preserve">
+    <value>Typ otázky není podporován: {0}</value>
+  </data>
+  <data name="RequiredHeaderWasNotFound" xml:space="preserve">
+    <value>Záhlaví {0} nebylo nalezeno v souboru aplikace Excel</value>
+  </data>
+  <data name="RosterCantBePaste" xml:space="preserve">
+    <value>Soupisku sem nelze vložit.</value>
+  </data>
+  <data name="Row" xml:space="preserve">
+    <value>veslovat</value>
+  </data>
+  <data name="SectionCantHaveMoreThan_Items" xml:space="preserve">
+    <value>Oddíl nemůže obsahovat více než {0} podřízených položek</value>
+  </data>
+  <data name="StaticTextCantBePaste" xml:space="preserve">
+    <value>Statický text sem nelze vložit.</value>
+  </data>
+  <data name="SubSectionCantBeFound" xml:space="preserve">
+    <value>Podsekce s veřejným klíčem{0} nelze nalézt.</value>
+  </data>
+  <data name="SubsectionCantHaveMoreThan_DirectChildren" xml:space="preserve">
+    <value>Oddíl nebo pododdíl nesmí mít více než {0} přímých podřízených položek</value>
+  </data>
+  <data name="SubSectionDepthLimit" xml:space="preserve">
+    <value>Hloubka podsekce nebo soupisky nesmí být vyšší než {0}.</value>
+  </data>
+  <data name="TranlationExcelFileHasErrors" xml:space="preserve">
+    <value>Nalezené chyby v souboru aplikace Excel</value>
+  </data>
+  <data name="TranslationCel_A_lIsInvalid" xml:space="preserve">
+    <value>{0} má neplatné ID na [{1}]</value>
+  </data>
+  <data name="TranslationCellIndexIsInvalid" xml:space="preserve">
+    <value>{0} má neplatný index na [{1}]</value>
+  </data>
+  <data name="TranslationCellTypeIsInvalid" xml:space="preserve">
+    <value>{0} má neplatný typ [{1}]</value>
+  </data>
+  <data name="TranslationFileIsEmpty" xml:space="preserve">
+    <value>Soubor aplikace Excel je prázdný - neobsahuje žádné listy</value>
+  </data>
+  <data name="TranslationsCantBeExtracted" xml:space="preserve">
+    <value>Nepodařilo se extrahovat překlady z nahraného souboru</value>
+  </data>
+  <data name="TranslationWorksheetIsMissing" xml:space="preserve">
+    <value>Pracovní list s překlady nebyl nalezen</value>
+  </data>
+  <data name="UnknownTypeCantBePaste" xml:space="preserve">
+    <value>Neznámý typ položky. Vložení se nezdařilo.</value>
+  </data>
+  <data name="UserIsInTheList" xml:space="preserve">
+    <value>Uživatelská {0} již existuje v seznamu sdílených položek.</value>
+  </data>
+  <data name="UserIsOwner" xml:space="preserve">
+    <value>Uživatel {0} je vlastníkem tohoto dotazníku. Zadejte prosím další e-mail.</value>
+  </data>
+  <data name="ValueOfFixedTitleCantBeParsed" xml:space="preserve">
+    <value>Pevná hodnota seznamu položek by měla obsahovat pouze číselné znaky</value>
+  </data>
+  <data name="VariableCantBePaste" xml:space="preserve">
+    <value>Proměnnou zde nelze vložit.</value>
+  </data>
+  <data name="VariableWithIdWasNotFound" xml:space="preserve">
+    <value>Proměnná s id {0} nebyla nalezena v dotazníku {1}</value>
+  </data>
+</root>

@@ -55,7 +55,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             dbContext.Assignments.Add(new Assignment.Assignment()
             {
                 Id = AssignmentId,
-                QuestionnaireId = QuestionnaireId
+                QuestionnaireId = questionnaireId
             });
             dbContext.SaveChanges();
 
@@ -243,7 +243,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         [Test]
         public async Task should_be_able_to_export_all()
         {
-            await actionsExporter.ExportAllAsync(tenant, new QuestionnaireId(QuestionnaireId), "", new ExportProgress(),
+            await actionsExporter.ExportAllAsync(tenant, new QuestionnaireId(questionnaireId), "", new ExportProgress(),
                 CancellationToken.None);
             Assert.That(fileData[1],
                 Is.EqualTo(new[]
@@ -253,7 +253,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
                 }));
         }
 
-        private static int AssignmentId = 77;
+        private const int AssignmentId = 77;
         private static readonly Guid headquarters = Id.g1;
         private static readonly Guid supervisor = Id.g2;
         private static readonly Guid interviewer = Id.g3;
@@ -263,6 +263,6 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         private static string fileName = "1.tab";
         private static readonly List<string[]> fileData = new List<string[]>();
         private static readonly TenantInfo tenant = Create.Tenant();
-        private string QuestionnaireId = Id.gA.ToString("N") + "$56";
+        private readonly string questionnaireId = Id.gA.ToString("N") + "$56";
     }
 }

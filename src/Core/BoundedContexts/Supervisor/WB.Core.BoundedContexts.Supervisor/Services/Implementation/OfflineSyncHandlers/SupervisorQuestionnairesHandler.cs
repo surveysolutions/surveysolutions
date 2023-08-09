@@ -60,12 +60,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             requestHandler.RegisterHandler<GetQuestionnairesWebModeRequest, GetQuestionnairesWebModeResponse>(GetQuestionnairesWebMode);
         }
 
-        private Task<GetAttachmentContentResponse> GetAttachmentContent(GetAttachmentContentRequest request)
+        private async Task<GetAttachmentContentResponse> GetAttachmentContent(GetAttachmentContentRequest request)
         {
-            var content = this.attachmentContentStorage.GetContent(request.ContentId);
+            var content = await this.attachmentContentStorage.GetContentAsync(request.ContentId);
             var meta = this.attachmentContentStorage.GetMetadata(request.ContentId);
 
-            return Task.FromResult(new GetAttachmentContentResponse
+            return new GetAttachmentContentResponse
             {
                 Content = new AttachmentContent
                 {
@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                     Id = meta.Id,
                     Size = meta.Size
                 }
-            });
+            };
         }
 
         private Task<GetAttachmentContentsResponse> GetAttachmentContents(GetAttachmentContentsRequest request)

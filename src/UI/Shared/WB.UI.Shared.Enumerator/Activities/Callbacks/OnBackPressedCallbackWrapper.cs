@@ -5,17 +5,16 @@ namespace WB.UI.Shared.Enumerator.Activities.Callbacks;
 
 public class OnBackPressedCallbackWrapper : OnBackPressedCallback
 {
-    private WeakReference<Action> action;
+    private Action action;
 
     public OnBackPressedCallbackWrapper(Action action) : base(true)
     {
-        this.action = new WeakReference<Action>(action);
+        this.action = action;
     }
     
     public override void HandleOnBackPressed()
     {
-        if (action.TryGetTarget(out var weakAction))
-            weakAction.Invoke();
+        action.Invoke();
     }
 
     protected override void Dispose(bool disposing)

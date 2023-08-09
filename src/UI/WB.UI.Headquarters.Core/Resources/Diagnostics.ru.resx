@@ -144,6 +144,9 @@
   <data name="database_connection_check" xml:space="preserve">
     <value>Проверка соединения с базой данных</value>
   </data>
+    <data name="designer_check" xml:space="preserve">
+    <value>Проверка связи с Дизайнером</value>
+  </data>
   <data name="temp_folder_permissions" xml:space="preserve">
     <value>Проверка на доступность записи во временную папку</value>
   </data>
@@ -198,7 +201,13 @@
   <data name="embedded_export_service_check_Degraded">
     <value>Встроенный служба Экспорта не работает</value>
   </data>
-  <data name="Connectivity" xml:space="preserve">
+  <data name="designer_connectivity_check_Degraded" xml:space="preserve">
+    <value>Нет связи с Дизайнером по адресу {0}</value>
+  </data>
+    <data name="designer_service_check_Healthy" xml:space="preserve">
+    <value>Дизайнер по адресу {0} ответил с версией: v{1}</value>
+  </data>
+    <data name="Connectivity" xml:space="preserve">
       <value>Соединение WebSocket</value>
   </data>
 </root>

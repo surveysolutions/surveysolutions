@@ -261,5 +261,44 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(errors[0].References.ElementAt(0).Row, Is.EqualTo(2));
             Assert.That(errors[0].References.ElementAt(0).Content, Is.EqualTo("2"));
         }
+        
+        [Test]
+        public void when_verify_assignments_with_duplicated_interview_id_in_main_file_should_return_PL0006_error()
+        {
+            // arrange
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
+                {
+                    Create.Entity.TextQuestion(variable: "txt")
+                }));
+
+            
+            var allRowsByAllFiles = new List<PreloadingAssignmentRow>()
+            {
+                Create.Entity.PreloadingAssignmentRow("main", 1, "interview1", "Questionnaire"),
+                Create.Entity.PreloadingAssignmentRow("main", 2, "interview2", "Questionnaire"),
+                Create.Entity.PreloadingAssignmentRow("main", 3, "interview1", "Questionnaire"),
+            };
+
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyRosters(allRowsByAllFiles, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors.Length, Is.EqualTo(1));
+            Assert.That(errors[0].Code, Is.EqualTo("PL0006"));
+            Assert.That(errors[0].References.Count(), Is.EqualTo(2));
+
+            Assert.That(errors[0].References.ElementAt(0).Content, Is.EqualTo("interview1"));
+            Assert.That(errors[0].References.ElementAt(0).Row, Is.EqualTo(1));
+            Assert.That(errors[0].References.ElementAt(0).Column, Is.EqualTo(ServiceColumns.InterviewId));
+            Assert.That(errors[0].References.ElementAt(0).DataFile, Is.EqualTo("main"));
+
+            Assert.That(errors[0].References.ElementAt(1).Content, Is.EqualTo("interview1"));
+            Assert.That(errors[0].References.ElementAt(1).Row, Is.EqualTo(3));
+            Assert.That(errors[0].References.ElementAt(1).Column, Is.EqualTo(ServiceColumns.InterviewId));
+            Assert.That(errors[0].References.ElementAt(1).DataFile, Is.EqualTo("main"));
+        }
     }
 }

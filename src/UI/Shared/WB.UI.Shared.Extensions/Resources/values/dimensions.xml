@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<resources>
+    <dimen name="area_editor_list_item_margin_top">15dp</dimen>
+    <dimen name="area_editor_cancel_margin_right">15dp</dimen>
+    <dimen name="area_editor_toolbar_margin_left">20dp</dimen>
+    <dimen name="area_editor_common_margin_top">30dp</dimen>
+    <dimen name="area_editor_common_margin_right">30dp</dimen>
+    <dimen name="area_editor_common_margin_left">20dp</dimen>
+    <dimen name="area_editor_lower_panel_margin_bottom">25dp</dimen>
+    <dimen name="area_editor_lower_carousel_margin_bottom">50dp</dimen>
+    <dimen name="area_editor_undo_margin_top">80dp</dimen>
+    <dimen name="area_editor_zoom_out_margin_bottom">280dp</dimen>
+    <dimen name="area_editor_zoom_in_margin_bottom">220dp</dimen>
+    <dimen name="area_editor_compass_margin_bottom">160dp</dimen>
+    
+    <dimen name="button_corners_radius">6dp</dimen>
+
+    <dimen name="area_editor_text_size_regular">16dp</dimen>
+    <dimen name="area_editor_text_size_large">18dp</dimen>
+
+    <dimen name="area_editor_padding_regular">18dp</dimen>
+
+    <dimen name="carousel_next_item_visible">26dp</dimen>
+    <dimen name="carousel_current_item_horizontal_margin">42dp</dimen>
+    <dimen name="carousel_current_item_min_height">240dp</dimen>
+    <dimen name="carousel_current_item_max_height">500dp</dimen>
+</resources>

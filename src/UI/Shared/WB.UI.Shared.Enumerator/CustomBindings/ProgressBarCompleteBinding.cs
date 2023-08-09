@@ -25,15 +25,22 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (value == view.Max)
                 SetProgressBarColor(view, Resource.Color.loading_progress_color_complete);
             else
-                SetProgressBarColor(view, Resource.Color.loading_progress_color);
+                SetProgressBarColor(view, null);
         }
 
-        private void SetProgressBarColor(ProgressBar view, int colorId)
+        private void SetProgressBarColor(ProgressBar view, int? colorId)
         {
 #pragma warning disable CA1416
-            var color = ContextCompat.GetColor(view.Context, colorId);
-            var currentDrawable = view.CurrentDrawable;
-            currentDrawable.SetColorFilter(new Color(color), PorterDuff.Mode.SrcIn);
+            if (colorId.HasValue)
+            {
+                var color = ContextCompat.GetColor(view.Context, colorId.Value);
+                var currentDrawable = view.CurrentDrawable;
+                currentDrawable.SetColorFilter(new Color(color), PorterDuff.Mode.SrcIn);
+            }
+            else
+            {
+                view.CurrentDrawable.SetColorFilter(null);
+            }
 #pragma warning restore CA1416
         }
 

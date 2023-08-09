@@ -2,12 +2,10 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using MvvmCross;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -75,6 +73,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.rostersInGroup = questionnaire.GetAllUnderlyingChildRosters(this.SectionIdentity.Id).ToArray();
             this.subSectionsWithEnablement = questionnaire.GetSubSectionsWithEnablementCondition(this.SectionIdentity.Id).ToArray();
 
+            this.coverPageSectionId = questionnaire.CoverPageSectionId;
+            
             groupStateViewModel.Init(interviewId, sectionIdentity);
 
             var interviewTreeGroup = interview.GetGroup(this.SectionIdentity);
@@ -91,7 +91,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.NavigationState.ScreenChanged += this.OnScreenChanged;
 
             this.UpdateHasChildren();
-            this.UpdateSelection(navigationState.CurrentGroup);
+            this.UpdateSelection(navigationState.CurrentGroup, navigationState.CurrentScreenType);
 
             this.answerNotifier.Init(this.interviewId);
             this.answerNotifier.QuestionAnswered += this.QuestionAnswered;
@@ -108,7 +108,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void OnScreenChanged(ScreenChangedEventArgs eventArgs)
         {
-            this.UpdateSelection(eventArgs.TargetGroup);
+            this.UpdateSelection(eventArgs.TargetGroup, eventArgs.TargetStage);
         }
 
         public string Tag { get; private set; }
@@ -143,6 +143,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         }
 
         private bool expanded;
+        private Guid coverPageSectionId;
+
         public bool Expanded
         {
             get => this.expanded;
@@ -169,16 +171,26 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             return this.NavigationState.NavigateTo(NavigationIdentity.CreateForGroup(this.SectionIdentity));
         }
 
-        private void UpdateSelection(Identity targetGroup)
+        private void UpdateSelection(Identity targetGroup, ScreenType screenType)
         {
-            if (targetGroup == null || this.SectionIdentity == null)
+            if (this.SectionIdentity == null)
                 return;
+
+            if (targetGroup == null && screenType == ScreenType.Cover) //cover page
+            {
+                this.IsCurrent = this.SectionIdentity.Id == coverPageSectionId;
+                this.IsSelected = this.IsCurrent;
+            }
+            else
+            {
+                this.IsCurrent = this.SectionIdentity.Equals(targetGroup);
+                this.IsSelected = this.IsCurrent 
+                                  || (this.statefulInterviewRepository.GetOrThrow(this.interviewId)
+                                          .GetGroup(targetGroup)?.Parents?
+                                          .Any(x => x.Identity == this.SectionIdentity) ?? false);
+                
+            }
             
-            this.IsCurrent = this.SectionIdentity.Equals(targetGroup);
-            this.IsSelected = this.IsCurrent 
-                              || (this.statefulInterviewRepository.GetOrThrow(this.interviewId)
-                                  .GetGroup(targetGroup)?
-                                  .Parents?.Any(x => x.Identity == this.SectionIdentity) ?? false);
             this.Expanded = this.IsSelected;
         }
 

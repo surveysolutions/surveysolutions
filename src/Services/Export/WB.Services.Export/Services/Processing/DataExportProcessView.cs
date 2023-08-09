@@ -11,6 +11,7 @@ namespace WB.Services.Export.Services.Processing
         public DateTime BeginDate { get; set; }
         public DateTime? EndDate { get; set; }
         public DateTime LastUpdateDate { get; set; }
+        public DateTime CreatedDate { get; set; }
         public int Progress { get; set; }
         public DataExportType Type { get; set; }
         public DataExportFormat Format { get; set; }

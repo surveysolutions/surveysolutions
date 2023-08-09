@@ -141,7 +141,7 @@
   <data name="SearchResult_Count" xml:space="preserve">
     <value>{{ count }}العنصر الذي تم العثور عليه:</value>
   </data>
-  <data name="SearchResult_Count_plural" xml:space="preserve">
+  <data name="SearchResult_Count_other" xml:space="preserve">
     <value>{{ count }}العناصر التي تم العثور عليها:</value>
   </data>
   <data name="Status" xml:space="preserve">

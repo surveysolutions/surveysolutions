@@ -102,7 +102,7 @@
                                                 <span>{{ question.title }}</span>
                                             </h4>
                                             <div class="answer">
-                                                <div>{{question.answer}}</div>
+                                                <div v-html="question.answer"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -319,6 +319,9 @@ export default {
                                 } else {
                                     return self.$t('Assignments.Action_WebModeChanged_False')
                                 }
+                            case 'ReceivedByTablet':
+                                return data.DeviceId
+                                    
                         }
                         return ''
                     },

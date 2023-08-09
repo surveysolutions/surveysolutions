@@ -243,6 +243,9 @@
   <data name="GpsQuestion_Timeout" xml:space="preserve">
     <value>Не удается получить вашу гео позицию. Выйдите на открытое пространство или увеличте значение таймаута в настройках.</value>
   </data>
+  <data name="NoMapsApplication" xml:space="preserve">
+    <value>Не найдено приложение карт</value>
+  </data>
   <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
     <value>Указан неверный адрес Survey Solutions Designer. Проверьте настройки.</value>
   </data>
@@ -482,6 +485,9 @@
   <data name="MissingPermissions_Storage" xml:space="preserve">
     <value>Приложению необходимо разрешение на использование хранилища для ответа на данный вопрос</value>
   </data>
+  <data name="MissingPermissions_MapsLocation" xml:space="preserve">
+    <value>Приложению необходимо разрешение на использование gps координат. Если вы не видите окна с запросом разрешения, то идите в настройки и разрешите приложению исполтзовать геопозицию.</value>
+  </data>
   <data name="Multimedia_PickFromGallery" xml:space="preserve">
     <value>Выбрать из галереи</value>
   </data>
@@ -536,6 +542,9 @@
   <data name="AreaMap_OverlapsWithOther" xml:space="preserve">
     <value>и {0} других.</value>
   </data>
+  <data name="AreaMap_ItemsOutsideDedicatedArea" xml:space="preserve">
+    <value>Маркеры вне указанной зоны</value>
+  </data>
   <data name="AreaMap_Cancel" xml:space="preserve">
     <value>Отмена</value>
   </data>
@@ -552,7 +561,7 @@
     <value>АКТИВНАЯ КАРТА:</value>
   </data>
   <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
-    <value>ДОСТУПНЫЕ НА УСТРОЙСТВЕ КАРТЫ</value>
+      <value>ДОСТУПНЫЕ КАРТЫ</value>
   </data>
   <data name="AreaMap_LoadShapefile" xml:space="preserve">
     <value>Загрузить шейп-файл</value>
@@ -575,8 +584,20 @@
   <data name="MapDashboard_AllQuestionnaires" xml:space="preserve">
     <value>Все опросники</value>
   </data>
+  <data name="MapDashboard_AllResponsibles" xml:space="preserve">
+    <value>Все пользователи</value>
+  </data>
+  <data name="MapDashboard_AllStatuses" xml:space="preserve">
+    <value>Все статусы</value>
+  </data>
   <data name="MapDashboard_QuestionnaireTitle" xml:space="preserve">
     <value>Опросник</value>
+  </data>
+  <data name="MapDashboard_ResponsibleTitle" xml:space="preserve">
+    <value>Ответственный</value>
+  </data>
+  <data name="MapDashboard_StatusTitle" xml:space="preserve">
+    <value>Статус</value>
   </data>
   <data name="MapDashboard_FiltersTitle" xml:space="preserve">
     <value>Фильтры</value>
@@ -770,7 +791,15 @@
   </data>
   <data name="Interviewer_Reassign_Comment" xml:space="preserve">
     <value>Оставьте комментарий для нового ответственного</value>
-    <comment>Комментарий:</comment>
+  </data>
+  <data name="Interviewer_Comment" xml:space="preserve">
+    <value>Оставьте комментарий</value>
+  </data>
+  <data name="Interviewer_Reassign_AlreadyReceivedInterview" xml:space="preserve">
+    <value>Интервьювер {0} уже получил это интервью {1}. Вы хотите переназначить его?</value>
+  </data>
+  <data name="Interviewer_Reassign_AlreadyReceivedAssignment" xml:space="preserve">
+    <value>Интервьювер {0} уже получил это задание {1}. Вы хотите переназначить его?</value>
   </data>
   <data name="ErrorMessage_PermissionForUnkownSourcesRequired" xml:space="preserve">
     <value>У приложения не хватает прав для обновления. Пожалуйста разрешите этому приложению "Установку неизвестных приложений" в настройках</value>
@@ -813,5 +842,38 @@
   </data>
   <data name="AreaMap_InitLocation" xml:space="preserve">
     <value>Запуск...</value>
+  </data>
+  <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
+    <value>Утверждено Хедквотером</value>
+  </data>
+  <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
+    <value>Утверждено Супервизором</value>
+  </data>
+  <data name="InterviewStatus_Completed" xml:space="preserve">
+    <value>Завершено</value>
+  </data>
+  <data name="InterviewStatus_Created" xml:space="preserve">
+    <value>Создано</value>
+  </data>
+  <data name="InterviewStatus_Deleted" xml:space="preserve">
+    <value>Удалено</value>
+  </data>
+  <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
+    <value>Интервьюер назначен</value>
+  </data>
+  <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
+    <value>Отклонено Хедквотером</value>
+  </data>
+  <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
+    <value>Отклонено Супервизором</value>
+  </data>
+  <data name="InterviewStatus_Restarted" xml:space="preserve">
+    <value>Перезапущено</value>
+  </data>
+  <data name="InterviewStatus_Restored" xml:space="preserve">
+    <value>Восстановлено</value>
+  </data>
+  <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
+    <value>Супервизор назначен</value>
   </data>
 </root>

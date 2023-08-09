@@ -60,7 +60,8 @@
                     <textarea class="field-to-fill"
                         id="comment-for-supervisor"
                         :placeholder="$t('WebInterviewUI.TextEnter')"
-                        v-model="comment"></textarea>
+                        v-model="comment"
+                        maxlength="750"></textarea>
                     <button type="submit"
                         class="btn btn-link btn-clear">
                         <span></span>

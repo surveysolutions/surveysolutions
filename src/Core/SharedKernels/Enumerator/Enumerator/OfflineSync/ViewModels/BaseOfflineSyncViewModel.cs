@@ -57,11 +57,18 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
 
                 if (!ShouldStartAdvertising)
                     return;
+                
+                var isAllowedBluetooth = await TryBluetoothPermission();
+                if (!isAllowedBluetooth)
+                    return;
 
+                var isAllowedNearby = await TryNearbyWifiDevicesPermission();
+                if (!isAllowedNearby)
+                    return;
+                
                 var isAllowedGetLocation = await TryRequestLocationPermission();
                 if (!isAllowedGetLocation)
                     return;
-
 
                 await this.OnStartDiscovery();
             }
@@ -71,6 +78,25 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
             }
         }
 
+        protected async Task<bool> TryBluetoothPermission()
+        {
+            try
+            {
+                await permissions.AssureHasBluetoothPermissionOrThrow().ConfigureAwait(false);
+            }
+            catch (MissingPermissionsException)
+            {
+                ShouldStartAdvertising = false;
+                this.OnConnectionError(EnumeratorUIResources.BluetoothPermissionRequired,
+                    ConnectionStatusCode.MissingPermissionBluetoothAdvertise);
+                return false;
+            }
+
+            return true;
+        }
+        
+        protected abstract Task<bool> TryNearbyWifiDevicesPermission();
+        
         private async Task<bool> TryRequestLocationPermission()
         {
             try

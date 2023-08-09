@@ -15,6 +15,9 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void SetValueToView(TextView control, ResponsibleToSelectViewModel value)
         {
+            if (value == null)
+                return;
+            
             var fullNameFormatted = string.IsNullOrEmpty(value.FullName) ? "" : $"{value.FullName} - ";
 
             var text = $"{fullNameFormatted}{value.Login} - {value.InterviewsCount}";

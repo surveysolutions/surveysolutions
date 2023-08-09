@@ -105,7 +105,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MAPS AVAILABLE ON DEVICE.
+        ///   Looks up a localized string similar to AVAILABLE MAPS.
         /// </summary>
         public static string AreaMap_Available_Maps_Title {
             get {
@@ -141,7 +141,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error occured on loading. Shapefile cannot be opened.
+        ///   Looks up a localized string similar to Error occured on loading. Shapefile cannot be handled.
         /// </summary>
         public static string AreaMap_ErrorOnShapefileLoading {
             get {
@@ -164,6 +164,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string AreaMap_InitLocation {
             get {
                 return ResourceManager.GetString("AreaMap_InitLocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Some markers fall outside the outlined area.
+        /// </summary>
+        public static string AreaMap_ItemsOutsideDedicatedArea {
+            get {
+                return ResourceManager.GetString("AreaMap_ItemsOutsideDedicatedArea", resourceCulture);
             }
         }
         
@@ -1394,6 +1403,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Leave a comment.
+        /// </summary>
+        public static string Interviewer_Comment {
+            get {
+                return ResourceManager.GetString("Interviewer_Comment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Diagnostics.
         /// </summary>
         public static string Interviewer_Diagnostics {
@@ -1408,6 +1426,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Interviewer_Done {
             get {
                 return ResourceManager.GetString("Interviewer_Done", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewer {0} has already received this assignment {1}. Are you sure you want to reassign it?.
+        /// </summary>
+        public static string Interviewer_Reassign_AlreadyReceivedAssignment {
+            get {
+                return ResourceManager.GetString("Interviewer_Reassign_AlreadyReceivedAssignment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewer {0} has already received this interview {1}. Are you sure you want to reassign it?.
+        /// </summary>
+        public static string Interviewer_Reassign_AlreadyReceivedInterview {
+            get {
+                return ResourceManager.GetString("Interviewer_Reassign_AlreadyReceivedInterview", resourceCulture);
             }
         }
         
@@ -1475,6 +1511,105 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Approved by Headquarters.
+        /// </summary>
+        public static string InterviewStatus_ApprovedByHeadquarters {
+            get {
+                return ResourceManager.GetString("InterviewStatus_ApprovedByHeadquarters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Approved by Supervisor.
+        /// </summary>
+        public static string InterviewStatus_ApprovedBySupervisor {
+            get {
+                return ResourceManager.GetString("InterviewStatus_ApprovedBySupervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Completed.
+        /// </summary>
+        public static string InterviewStatus_Completed {
+            get {
+                return ResourceManager.GetString("InterviewStatus_Completed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created.
+        /// </summary>
+        public static string InterviewStatus_Created {
+            get {
+                return ResourceManager.GetString("InterviewStatus_Created", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deleted.
+        /// </summary>
+        public static string InterviewStatus_Deleted {
+            get {
+                return ResourceManager.GetString("InterviewStatus_Deleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewer assigned.
+        /// </summary>
+        public static string InterviewStatus_InterviewerAssigned {
+            get {
+                return ResourceManager.GetString("InterviewStatus_InterviewerAssigned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rejected by Headquarters.
+        /// </summary>
+        public static string InterviewStatus_RejectedByHeadquarters {
+            get {
+                return ResourceManager.GetString("InterviewStatus_RejectedByHeadquarters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rejected by Supervisor.
+        /// </summary>
+        public static string InterviewStatus_RejectedBySupervisor {
+            get {
+                return ResourceManager.GetString("InterviewStatus_RejectedBySupervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restarted.
+        /// </summary>
+        public static string InterviewStatus_Restarted {
+            get {
+                return ResourceManager.GetString("InterviewStatus_Restarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restored.
+        /// </summary>
+        public static string InterviewStatus_Restored {
+            get {
+                return ResourceManager.GetString("InterviewStatus_Restored", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supervisor assigned.
+        /// </summary>
+        public static string InterviewStatus_SupervisorAssigned {
+            get {
+                return ResourceManager.GetString("InterviewStatus_SupervisorAssigned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to It is important that the clock setting is accurate. Your clock indicates that current date is set incorrect. Adjust the clock by setting the correct date/time before continuing your work..
         /// </summary>
         public static string InvalidTimeMessage {
@@ -1529,6 +1664,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All responsibles.
+        /// </summary>
+        public static string MapDashboard_AllResponsibles {
+            get {
+                return ResourceManager.GetString("MapDashboard_AllResponsibles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All statuses.
+        /// </summary>
+        public static string MapDashboard_AllStatuses {
+            get {
+                return ResourceManager.GetString("MapDashboard_AllStatuses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assignments.
         /// </summary>
         public static string MapDashboard_Assignments {
@@ -1570,6 +1723,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string MapDashboard_QuestionnaireTitle {
             get {
                 return ResourceManager.GetString("MapDashboard_QuestionnaireTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Responsible.
+        /// </summary>
+        public static string MapDashboard_ResponsibleTitle {
+            get {
+                return ResourceManager.GetString("MapDashboard_ResponsibleTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status.
+        /// </summary>
+        public static string MapDashboard_StatusTitle {
+            get {
+                return ResourceManager.GetString("MapDashboard_StatusTitle", resourceCulture);
             }
         }
         
@@ -1633,6 +1804,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string MissingPermissions_Camera {
             get {
                 return ResourceManager.GetString("MissingPermissions_Camera", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Application needs to have a permission to use location. If you don&apos;t see permissions popup then go to Settings and allow application to use location..
+        /// </summary>
+        public static string MissingPermissions_MapsLocation {
+            get {
+                return ResourceManager.GetString("MissingPermissions_MapsLocation", resourceCulture);
             }
         }
         
@@ -1723,6 +1903,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string NoComment {
             get {
                 return ResourceManager.GetString("NoComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Navigation application was not found.
+        /// </summary>
+        public static string NoMapsApplication {
+            get {
+                return ResourceManager.GetString("NoMapsApplication", resourceCulture);
             }
         }
         

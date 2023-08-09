@@ -769,6 +769,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         [TestCase("interview__key")]
         [TestCase("has__errors")]
         [TestCase("interview__status")]
+        [TestCase("assignment__id")]
         public void when_verify_columns_and_file_has_system_variable_column_should_return_empty_errors(string systemVariable)
         {
             // arrange

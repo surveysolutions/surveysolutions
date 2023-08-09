@@ -24,7 +24,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public abstract class BaseInterviewViewModel : SingleInterviewViewModel, IDisposable
+    public abstract class BaseInterviewViewModel : SingleInterviewViewModel
     {
         private readonly IQuestionnaireStorage questionnaireRepository;
         protected readonly IStatefulInterviewRepository interviewRepository;
@@ -273,7 +273,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        protected virtual MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
+        protected virtual BaseViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
         {
             switch (this.NavigationState.CurrentScreenType)
             {

@@ -82,7 +82,7 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
 
                 var attachmentId = questionnaire.GetAttachmentIdByName(entityVariable);
                 if (attachmentId.HasValue)
-                    NavigateToAttachment(sourceEntity, attachmentId, questionnaire);
+                    await NavigateToAttachmentAsync(sourceEntity, attachmentId, questionnaire);
                 else
                     await NavigateToQuestionOrRosterOrSection(entityVariable, sourceEntity, questionnaire, interview);
             }
@@ -132,7 +132,7 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
             {
                 await sourceEntity.NavigationState.NavigateTo(new NavigationIdentity
                 {
-                    TargetScreen = questionnaire.IsPrefilled(questionId.Value)
+                    TargetScreen = questionnaire.IsIdentifying(questionId.Value)
                         ? ScreenType.Cover
                         : ScreenType.Group,
                     TargetGroup = interview.GetParentGroup(nearestInterviewEntity),
@@ -150,7 +150,7 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
             }
         }
 
-        private void NavigateToAttachment(IInterviewEntity sourceEntity, Guid? attachmentId, IQuestionnaire questionnaire)
+        private async Task NavigateToAttachmentAsync(IInterviewEntity sourceEntity, Guid? attachmentId, IQuestionnaire questionnaire)
         {
             var attachmentContentStorage = ServiceLocator.Current.GetInstance<IAttachmentContentStorage>();
             var attachment = questionnaire.GetAttachmentById(attachmentId.Value);
@@ -159,7 +159,7 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
             if (!attachmentContentMetadata.ContentType.StartsWith("application/pdf", StringComparison.OrdinalIgnoreCase)) return;
 
             var pdfService = ServiceLocator.Current.GetInstance<IInterviewPdfService>();
-            pdfService.OpenAttachment(sourceEntity.InterviewId, attachmentId.Value);
+            await pdfService.OpenAttachmentAsync(sourceEntity.InterviewId, attachmentId.Value);
         }
 
         private class NavigateToEntitySpan : ClickableSpan
@@ -179,11 +179,14 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
 
             protected override void Dispose(bool disposing)
             {
+                if (disposing)
+                {
+                    this.onClick = null;
+                    this.variable = null;
+                    this.interviewEntity = null;
+                }
+                
                 base.Dispose(disposing);
-
-                this.onClick = null;
-                this.variable = null;
-                this.interviewEntity = null;
             }
         }
     }

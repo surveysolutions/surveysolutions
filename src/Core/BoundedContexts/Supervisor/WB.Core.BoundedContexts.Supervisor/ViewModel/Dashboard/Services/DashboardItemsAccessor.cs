@@ -83,7 +83,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
             }
         }
 
-        private SupervisorDashboardInterviewViewModel ConvertInterviewToViewModel(InterviewView interviewView)
+        private SupervisorInterviewDashboardViewModel ConvertInterviewToViewModel(InterviewView interviewView)
         {
             var prefilledQuestions = this.identifyingQuestionsRepo
                 .Where(x => x.InterviewId == interviewView.InterviewId)
@@ -91,7 +91,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
                 .Select(fi => new PrefilledQuestion {Answer = fi.Answer?.Trim(), Question = fi.QuestionText})
                 .ToList();
 
-            var dashboardItem = this.viewModelFactory.GetNew<SupervisorDashboardInterviewViewModel>();
+            var dashboardItem = this.viewModelFactory.GetNew<SupervisorInterviewDashboardViewModel>();
             dashboardItem.Init(interviewView, prefilledQuestions);
             return dashboardItem;
         }

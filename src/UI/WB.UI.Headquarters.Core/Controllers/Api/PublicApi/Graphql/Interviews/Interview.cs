@@ -27,7 +27,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Name("actionFlags");
             
             descriptor.Field(x => x.AssignmentId)
-                .Type<NonNullType<IntType>>()
+                .Type<IntType>()
                 .Description("Identifier for the assignment to which this interview belongs");
             
             descriptor.Field(x => x.SummaryId)

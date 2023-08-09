@@ -23,8 +23,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private readonly IKeywordsProvider keywordsProvider;
         private readonly IAttachmentService attachmentService;
         
-        public const string QuestionnaireTitleRegularExpression = @"^[\w, \-\(\)\/\\]*$";
-        private static readonly Regex QuestionnaireNameRegex = new Regex(QuestionnaireTitleRegularExpression);
+        private const string QuestionnaireTitleRegularExpression = @"^[\w, \-\(\)\/\\]*$";
+        private static readonly Regex QuestionnaireNameRegex = 
+            new Regex(QuestionnaireTitleRegularExpression, RegexOptions.Compiled, TimeSpan.FromMilliseconds(1000));
 
         public QuestionnaireVerifications(ISubstitutionService substitutionService, IKeywordsProvider keywordsProvider,
             IAttachmentService attachmentService)

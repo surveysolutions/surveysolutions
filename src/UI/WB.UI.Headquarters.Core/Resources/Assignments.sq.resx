@@ -219,7 +219,7 @@
   <data name="AssignmentsSelected" xml:space="preserve">
     <value>{{count}} Detyra e përzgjedhur </value>
   </data>
-  <data name="AssignmentsSelected_plural" xml:space="preserve">
+  <data name="AssignmentsSelected_other" xml:space="preserve">
     <value>{{count}} Detyrat e përzgjedhura</value>
   </data>
   <data name="AssignTo" xml:space="preserve">
@@ -327,7 +327,7 @@
   <data name="NumberOfAssignmentsAffected" xml:space="preserve">
     <value>{{count}} Detyra do të ndryshohet </value>
   </data>
-  <data name="NumberOfAssignmentsAffected_plural" xml:space="preserve">
+  <data name="NumberOfAssignmentsAffected_other" xml:space="preserve">
     <value>{{count}} Detyrat do të ndryshohen </value>
   </data>
   <data name="Password" xml:space="preserve">

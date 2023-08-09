@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
     {
         private HqUser[] Users = null;
         private AssignWorkspacesToUserModelHandler Subject;
-        private IPlainStorageAccessor<Workspace> workspaces;
+        private IWorkspacesStorage workspaces;
         private ModelStateDictionary modelState = null;
         private Mock<IWorkspacesService> workspacesService;
         private List<Workspace> assignedWorkspaces = null;
@@ -34,8 +34,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
         {
             Users = null;
             assignedWorkspaces = null;
-            
-            this.workspaces = Create.Storage.InMemoryPlainStorage<Workspace>();
+
+            var inMemoryPlainStorage = Create.Storage.InMemoryPlainStorage<Workspace>();
+            this.workspaces = Create.Service.WorkspacesStorage(inMemoryPlainStorage);
             
             var userRepo = new Mock<IUserRepository>();
             userRepo.Setup(r => r.Users).Returns(() => Users.AsQueryable().GetNhQueryable());
@@ -55,7 +56,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
             workspacesService.Setup(w => w.GetAllWorkspaces())
                 .Returns(() =>
                 {
-                    var query = workspaces.Query(q =>
+                    var query = inMemoryPlainStorage.Query(q =>
                             q.Select(w => new WorkspaceContext(w.Name, w.DisplayName, w.DisabledAtUtc)));
                     return query.ToList();
                 });
@@ -279,7 +280,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
         {
             foreach (var workspace in workspaces)
             {
-                this.workspaces.Store(workspace, workspace.Name);
+                this.workspaces.Store(workspace);
             }
         }
     }

@@ -41,11 +41,10 @@
             <LinearLayout android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
                           android:orientation="vertical">
-
                 <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Login_Password_Editor"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        local:passwordToggleEnabled="true"
+                        android:layout_height="wrap_content"                        
                         local:hintEnabled="true"
                         local:errorEnabled="true"
                         local:endIconMode="custom"
@@ -61,6 +60,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
                 
                 <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Login_Password_Editor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         local:hintEnabled="true"
@@ -73,6 +73,7 @@
                             local:MvxBind="Text UserName;"/>
                 </com.google.android.material.textfield.TextInputLayout>
                 <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Login_Password_Editor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         local:endIconMode="password_toggle"

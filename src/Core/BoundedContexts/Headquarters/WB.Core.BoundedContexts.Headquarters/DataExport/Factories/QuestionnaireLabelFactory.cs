@@ -33,6 +33,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
                 variableLabels.Add(new DataExportVariable(ServiceColumns.InterviewRandom, "Random number in the range 0..1 associated with interview", null, levelVariableValueLabel, ExportValueType.Unknown));
                 variableLabels.Add(new DataExportVariable(ServiceColumns.HasAnyError, "Errors count in the interview", null, levelVariableValueLabel, ExportValueType.Unknown));
                 variableLabels.Add(new DataExportVariable(ServiceColumns.InterviewStatus, "Status of the interview", null, levelVariableValueLabel, ExportValueType.Unknown));
+                variableLabels.Add(new DataExportVariable(ServiceColumns.AssignmentId, "Unique identifier of the assignment", null, levelVariableValueLabel, ExportValueType.Unknown));
             }
             else
             {

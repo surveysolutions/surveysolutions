@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
+using WB.Core.BoundedContexts.Headquarters.Workspaces.Impl;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Enumerator.Native.WebInterview;
@@ -36,7 +37,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly IUnitOfWork unitOfWork;
         private readonly ISystemLog systemLog;
         private readonly IWorkspaceContextAccessor workspaceContextAccessor;
-        private readonly IPlainStorageAccessor<Workspace> workspaces;
+        private readonly IWorkspacesStorage workspaces;
 
         private const int MaxPageSize = 100;
 
@@ -47,7 +48,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             IUnitOfWork unitOfWork,
             ISystemLog systemLog,
             IWorkspaceContextAccessor workspaceContextAccessor,
-            IPlainStorageAccessor<Workspace> workspaces)
+            IWorkspacesStorage workspaces)
         {
             this.usersFactory = usersFactory;
             this.archiveService = archiveService;

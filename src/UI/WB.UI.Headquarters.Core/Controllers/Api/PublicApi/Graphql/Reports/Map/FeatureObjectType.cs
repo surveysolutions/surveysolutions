@@ -15,6 +15,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Reports.Map
                 .Type<NonNullType<EnumType<GeoJSONObjectType>>>()
                 .Description("Type of the feature");
             descriptor.Field(x => x.Id)
+                .Type<StringType>()
                 .Description("Id of the feature");
             descriptor.Field(x => x.Geometry)
                 .Type<AnyType>()

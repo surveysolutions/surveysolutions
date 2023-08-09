@@ -159,6 +159,15 @@
   <data name="Observers" xml:space="preserve">
     <value>Observers</value>
   </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="WorkspaceSettings" xml:space="preserve">
+    <value>Workspace Settings</value>
+  </data>
+  <data name="EmailProviders" xml:space="preserve">
+    <value>Email Providers</value>
+  </data>    
   <data name="Quantity" xml:space="preserve">
     <value>Quantity</value>
   </data>

@@ -1,10 +1,12 @@
 ﻿using System.Threading.Tasks;
 using Android.Media;
+using MvvmCross.Base;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using Xamarin.Essentials;
 using Stream = System.IO.Stream;
 
@@ -14,17 +16,17 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
     {
         private readonly IMedia media;
         private readonly IPermissionsService permissions;
+        private readonly IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher;
 
-        public PictureChooser(IMedia media, IPermissionsService permissions)
+        public PictureChooser(IMedia media, IPermissionsService permissions, IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher)
         {
             this.media = media;
             this.permissions = permissions;
+            this.mainThreadAsyncDispatcher = mainThreadAsyncDispatcher;
         }
 
         public async Task<Stream> TakePicture()
         {
-            await this.permissions.AssureHasPermissionOrThrow<Permissions.StorageWrite>().ConfigureAwait(false);
-            await this.permissions.AssureHasPermissionOrThrow<Permissions.Camera>().ConfigureAwait(false);
             await this.media.Initialize().ConfigureAwait(false);
             var storeCameraMediaOptions = new StoreCameraMediaOptions()
             {
@@ -33,7 +35,18 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
                 MaxWidthHeight = 1024
             };
 
-            var photo = await MediaPicker.CapturePhotoAsync().ConfigureAwait(false);
+            FileResult photo = null;
+            try
+            {
+                await this.permissions.AssureHasPermissionOrThrow<Permissions.Camera>();
+                await this.permissions.AssureHasExternalStoragePermissionOrThrow();
+                photo = await MediaPicker.CapturePhotoAsync().ConfigureAwait(false);
+            }
+            catch (PermissionException e)
+            {
+                throw new MissingPermissionsException(e.Message, e);
+            }
+
             if (photo == null)
                 return null;
             
@@ -49,14 +62,25 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             return await photo.OpenReadAsync();
         }
 
-        public async Task<Stream> ChoosePictureGallery()
+        public async Task<ChoosePictureResult> ChoosePictureGallery()
         {
-            await this.permissions.AssureHasPermissionOrThrow<Permissions.StorageWrite>().ConfigureAwait(false);
-            await this.permissions.AssureHasPermissionOrThrow<Permissions.Camera>().ConfigureAwait(false);
             await this.media.Initialize().ConfigureAwait(false);
 
-            var photo = await MediaPicker.PickPhotoAsync().ConfigureAwait(false);
-            return photo == null ? null : await photo.OpenReadAsync();
+            FileResult photo = null;
+            
+            try
+            {
+                await this.permissions.AssureHasExternalStoragePermissionOrThrow();
+                photo = await MediaPicker.PickPhotoAsync().ConfigureAwait(false);
+            }
+            catch (PermissionException e)
+            {
+                throw new MissingPermissionsException(e.Message, e);
+            }
+
+            return photo == null 
+                ? null 
+                : new ChoosePictureResult(photo.FileName, await photo.OpenReadAsync());
         }
     }
 }

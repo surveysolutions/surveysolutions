@@ -513,4 +513,10 @@
   <data name="Action_UpgradedFrom" xml:space="preserve">
     <value>Обновлён с задания {{id}}</value>
   </data>
+  <data name="Tooltip_Table_Password" xml:space="preserve">
+      <value>Пароль для ограничения доступа</value>
+  </data>
+  <data name="Tooltip_Table_Email" xml:space="preserve">
+      <value>Адрес электронной почты для уведомлений</value>
+  </data>
 </root>

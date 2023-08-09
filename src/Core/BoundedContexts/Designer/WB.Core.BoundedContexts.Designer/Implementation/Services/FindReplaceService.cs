@@ -149,7 +149,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             string encodedSearchPattern = useRegex ? searchFor : Regex.Escape(searchFor);
             string pattern = matchWholeWord ? $@"\b{encodedSearchPattern}\b" : encodedSearchPattern;
 
-            Regex searchRegex = new Regex(pattern, options);
+            Regex searchRegex = new Regex(pattern, options, TimeSpan.FromSeconds(10));
             return searchRegex;
         }
 

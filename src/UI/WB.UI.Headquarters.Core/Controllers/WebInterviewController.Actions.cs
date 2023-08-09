@@ -117,7 +117,8 @@ namespace WB.UI.Headquarters.Controllers
 
                 this.imageProcessingService.Validate(ms.ToArray());
 
-                filename = AnswerUtils.GetPictureFileName(question.VariableName, questionIdentity.RosterVector);
+                var extension = Path.GetExtension(file.FileName);
+                filename = AnswerUtils.GetPictureFileName(question.VariableName, questionIdentity.RosterVector, extension);
                 var responsibleId = interview.CurrentResponsibleId;
 
                 this.imageFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray(), file.ContentType);

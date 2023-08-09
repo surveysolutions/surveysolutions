@@ -344,6 +344,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Route("{id:guid}/assign")]
         [Consumes(MediaTypeNames.Application.Json)]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
+        [ObservingNotAllowed]
         public ActionResult Assign(Guid id, [FromBody, BindRequired] AssignChangeApiModel request)
         {
             if (!ModelState.IsValid)
@@ -375,6 +376,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPatch]
         [Route("{id:guid}/approve")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
+        [ObservingNotAllowed]
         public ActionResult Approve(Guid id, string? comment = null)
         {
             var questionnaireIdentity = this.GetQuestionnaireIdForInterview(id);
@@ -410,6 +412,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPatch]
         [Route("{id:guid}/reject")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
+        [ObservingNotAllowed]
         public ActionResult Reject(Guid id, string? comment = null, Guid? responsibleId = null)
         {
             var questionnaireIdentity = this.GetQuestionnaireIdForInterview(id);
@@ -455,6 +458,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPatch]
         [Route("{id:guid}/hqapprove")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter)]
+        [ObservingNotAllowed]
         public ActionResult HQApprove(Guid id, string? comment = null)
         {
             var q = this.GetQuestionnaireIdForInterview(id);
@@ -476,6 +480,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPatch]
         [Route("{id:guid}/hqreject")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter)]
+        [ObservingNotAllowed]
         public ActionResult HQReject(Guid id, string? comment = null, Guid? responsibleId = null)
         {
             var q = this.GetQuestionnaireIdForInterview(id);
@@ -509,6 +514,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPatch]
         [Route("{id:guid}/hqunapprove")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter)]
+        [ObservingNotAllowed]
         public ActionResult HQUnapprove(Guid id, string? comment = null)
         {
             var q = this.GetQuestionnaireIdForInterview(id);
@@ -528,7 +534,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPatch]
         [Route("{id:guid}/assignsupervisor")]
         [Consumes(MediaTypeNames.Application.Json)]
-        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter)]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
+        [ObservingNotAllowed]
         public ActionResult PostAssignSupervisor(Guid id, [FromBody, BindRequired]  AssignChangeApiModel request)
         {
             if (!ModelState.IsValid)
@@ -546,6 +553,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (!userInfo.Roles.Contains(UserRoles.Supervisor))
                 return StatusCode(StatusCodes.Status406NotAcceptable, "User is not a supervisor.");
             
+            if (authorizedUser.IsSupervisor && authorizedUser.Id != userInfo.PublicKey)
+                return StatusCode(StatusCodes.Status406NotAcceptable, "Supervisor can assign interview only to himself");
+            
             return this.TryExecuteCommand(new AssignSupervisorCommand(id, this.authorizedUser.Id, userInfo.PublicKey));
         }
 
@@ -559,6 +569,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpDelete]
         [Route("{id:guid}")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
+        [ObservingNotAllowed]
         public ActionResult Delete(Guid id)
         {
             var q = this.GetQuestionnaireIdForInterview(id);

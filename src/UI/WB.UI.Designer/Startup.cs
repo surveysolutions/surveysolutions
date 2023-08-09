@@ -191,7 +191,7 @@ namespace WB.UI.Designer
                     
                     Uri uri = new Uri(baseUrl);
                     var webTesterOrigin = uri.Scheme + Uri.SchemeDelimiter + uri.Host;
-                    if (Regex.IsMatch(baseUrl, ":\\d+"))
+                    if (Regex.IsMatch(baseUrl, ":\\d+", RegexOptions.None, TimeSpan.FromMilliseconds(1000)))
                     {
                         webTesterOrigin += ":" + uri.Port;
                     }
@@ -320,7 +320,9 @@ namespace WB.UI.Designer
                     new CultureInfo("ar"),
                     new CultureInfo("zh"),
                     new CultureInfo("sq"),
-                    new CultureInfo("ro")
+                    new CultureInfo("ro"),
+                    new CultureInfo("cs"),
+                    new CultureInfo("uk"),
                 };
             });
 

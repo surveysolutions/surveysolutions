@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -35,10 +36,11 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v3
             IJsonAllTypesSerializer synchronizationSerializer,
             IHeadquartersEventStore eventStore,
             IAudioAuditFileStorage audioAuditFileStorage,
-            IWebHostEnvironment webHostEnvironment) :
-            base(imageFileStorage,
-                audioFileStorage, authorizedUser, interviewsFactory, packagesService, commandService, metaBuilder,
-                synchronizationSerializer, eventStore, audioAuditFileStorage, webHostEnvironment)
+            IUserToDeviceService userToDeviceService,
+            IWebHostEnvironment webHostEnvironment) 
+            : base(imageFileStorage, audioFileStorage, authorizedUser, interviewsFactory, packagesService, 
+                commandService, metaBuilder, synchronizationSerializer, eventStore, audioAuditFileStorage, 
+                userToDeviceService, webHostEnvironment)
         {
         }
 
@@ -65,7 +67,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v3
         [HttpPost]
         [Route("{id:guid}")]
         [WriteToSyncLog(SynchronizationLogType.PostInterviewV3)]
-        public IActionResult Post([FromBody]InterviewPackageApiView package) => base.PostV3(package);
+        public ActionResult<InterviewUploadResult> Post([FromBody]InterviewPackageApiView package) => base.PostV3(package);
 
         [HttpPost]
         [Route("CheckObsoleteInterviews")]

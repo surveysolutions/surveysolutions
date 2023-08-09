@@ -24,8 +24,7 @@
                             v-else
                             ref="inputTextArea"
                             autocomplete="off"
-                            rows="1"
-                            :min-height="41"
+                            rows="1"                            
                             :maxlength="$me.maxLength"
                             class="field-to-fill"
                             :placeholder="noAnswerWatermark"

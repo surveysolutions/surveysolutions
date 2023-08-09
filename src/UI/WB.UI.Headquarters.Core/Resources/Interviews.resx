@@ -256,7 +256,7 @@
   <data name="DynamicFilterNotAvailable" xml:space="preserve">
     <value>No data available</value>
   </data>
-  <data name="ApproveConfirmMessage_plural" xml:space="preserve">
+  <data name="ApproveConfirmMessage_other" xml:space="preserve">
       <value>{{count}} interviews will be approved.</value>
   </data>
   <data name="Note" xml:space="preserve">

@@ -5,21 +5,19 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dialogs;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
 {
     public class SupervisorAssignmentDashboardItemViewModel : AssignmentDashboardItemViewModel
     {
-        private readonly IAuditLogService auditLogService;
         private readonly IViewModelNavigationService navigationService;
 
         public SupervisorAssignmentDashboardItemViewModel(IServiceLocator serviceLocator, 
-            IAuditLogService auditLogService,
             IViewModelNavigationService navigationService) 
             : base(serviceLocator)
         {
-            this.auditLogService = auditLogService;
             this.navigationService = navigationService;
         }
 
@@ -44,7 +42,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
         }
 
         private Task SelectInterviewerAsync() =>
-            this.navigationService.NavigateToAsync<SelectResponsibleForAssignmentViewModel, SelectResponsibleForAssignmentArgs>(
-                    new SelectResponsibleForAssignmentArgs(Assignment.Id));
+            navigationService.NavigateToAsync<AssignAssignmentDialogViewModel, AssignAssignmentDialogArgs>(
+                new AssignAssignmentDialogArgs(Assignment.Id));
     }
 }

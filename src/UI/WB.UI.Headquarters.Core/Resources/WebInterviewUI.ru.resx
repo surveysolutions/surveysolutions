@@ -288,7 +288,7 @@
   <data name="Error" xml:space="preserve">
     <value>Ошибка</value>
   </data>
-  <data name="Error_plural" xml:space="preserve">
+  <data name="Error_other" xml:space="preserve">
     <value>Ошибок</value>
   </data>
   <data name="CoverFirstComments" xml:space="preserve">

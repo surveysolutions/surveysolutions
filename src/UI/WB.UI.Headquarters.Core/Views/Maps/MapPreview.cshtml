@@ -26,11 +26,23 @@
             margin: 0 auto; 
             margin-top: -300px;
         }
+        #emptyData{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-top: -50px;
+            margin-left: -150px;
+            width: 300px;
+            color: red;
+            font-weight: bold;
+            background-color: white;
+            text-align: center;
+        }
     </style>
     
         <link rel="stylesheet" href="https://js.arcgis.com/4.22/esri/css/main.css">
         <script src="https://js.arcgis.com/4.22/"></script>
-        <script>
+    <script>
             require([
                     "esri/Map",
                     "esri/views/MapView",
@@ -44,15 +56,36 @@
                     "esri/layers/support/LabelClass",
                     "esri/symbols/SimpleLineSymbol",
                     "esri/symbols/SimpleFillSymbol",
+                    "esri/symbols/SimpleMarkerSymbol",
                     "esri/geometry/support/webMercatorUtils",
+                    "esri/renderers/SimpleRenderer",
                     "dojo/on",
                     "dojo/dom",
                     "dojo/domReady!"
                 ],
-                function (Map, MapView, Graphic, Geometry, Polygon, Extent, FeatureLayer, GeoJSONLayer, Field, LabelClass, SimpleLineSymbol, SimpleFillSymbol, webMercatorUtils, on, dom) {
+                function (Map, MapView, Graphic, Geometry, Polygon, Extent, FeatureLayer, GeoJSONLayer, Field, 
+                    LabelClass, SimpleLineSymbol, SimpleFillSymbol, SimpleMarkerSymbol, webMercatorUtils, SimpleRenderer, on, dom) {
 
+                    var isPoint = 'Point' === '@Model.ShapeType'
+                    
+                    var ymin = @Model.YMinVal
+                    var ymax = @Model.YMaxVal
+                    var xmin = @Model.XMinVal
+                    var xmax = @Model.XMaxVal
+                    
+                    var isDataEmpty = ymin === 0 && ymax === 0 && xmin === 0 && xmax === 0
+                    if (isDataEmpty)
+                        dom.byId("emptyData").style.display = 'block'
+                    
+                    if (isPoint) {
+                        ymin -= 0.001
+                        ymax += 0.001
+                        xmin -= 0.001
+                        xmax += 0.001
+                    }
+                
                     var startExtent = new Extent({
-                        "xmin":@Model.XMinVal,"ymin":@Model.YMinVal,"xmax":@Model.XMaxVal,"ymax":@Model.YMaxVal,
+                        "xmin": xmin,"ymin": ymin,"xmax": xmax,"ymax": ymax,
                         "spatialReference":{"wkid":@Model.Wkid}
                     });
 
@@ -64,22 +97,14 @@
                         extent: startExtent,
                     });
                     
-                    var polygon = Polygon.fromExtent(startExtent);
-                    
-                    var fillSymbol = new SimpleFillSymbol({
-                        outline: {
-                            color: [255, 255, 255],
-                            width: 1
-                        }
-                    });
-
                     var view = new MapView({
                         spatialReference: {"wkid":102100},
                         container: "viewDiv",
                         map: map
                     });
                     
-                    view.extent = startExtent;
+                    if (!isDataEmpty)
+                        view.extent = startExtent;
 
                     var loading = dom.byId("loadingImg")
 
@@ -100,11 +125,9 @@
                         var geojsonurl = "@Url.Action("MapPreviewJson", "Maps", new { mapName = Model.FileName })"
                         const geojsonlayer = new GeoJSONLayer({
                             url: geojsonurl,
-                            //geometryType: "polygon",
                             labelingInfo : labelClass,
                             labelsVisible: true,
-                          });
-                        
+                            });                                
           
                         function layerviewCreate(evt) {
                             loading.style.display = 'block'
@@ -115,11 +138,44 @@
                             });
                         }
                         
-                        on(geojsonlayer, "layerview-create", layerviewCreate);
+                        on(geojsonlayer, "layerview-create", layerviewCreate);                        
+                        geojsonlayer.load().then(() => {
+                          if (geojsonlayer.geometryType === "point") {
+                                geojsonlayer.renderer = new SimpleRenderer({
+                                                        symbol: new SimpleMarkerSymbol({
+                                                          style: "circle",
+                                                          color: "red",
+                                                          size: "10px",
+                                                        }),
+                                                      });
+                          } else if (geojsonlayer.geometryType === "polyline") {
+                                geojsonlayer.renderer = new SimpleRenderer({
+                                                        symbol: new SimpleLineSymbol({
+                                                          style: "solid",
+                                                          color: "red",
+                                                          width: "2px",
+                                                        }),
+                                                      });
+                          } else if (geojsonlayer.geometryType === "polygon") {
+                                geojsonlayer.renderer = new SimpleRenderer({
+                                                        symbol: new SimpleFillSymbol({                                                          
+                                                          
+                                                          outline: {
+                                                            color: "red",
+                                                            width: "2px",
+                                                          },
+                                                        }),
+                                                      });
+                                                      }
+                        });
                         
                         map.add(geojsonlayer);
                     }
                     else {
+                        var fillSymbol = new SimpleFillSymbol({ outline: { color: [255, 255, 255], width: 1 } });
+                    
+                        var polygon = Polygon.fromExtent(startExtent);
+                                            
                         var polygonGraphic = new Graphic({
                             geometry: polygon,
                             symbol: fillSymbol
@@ -142,5 +198,6 @@
     <div id="viewDiv">
     </div>
     <img id="loadingImg" alt="@Common.Loading" src="/img/loader.gif" />
+    <div id="emptyData" style="display: none">@Pages.MapDetails_EmptyMapData</div>
 </body>
 </html>

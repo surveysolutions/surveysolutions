@@ -30,11 +30,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             "System.GC"
         };
 
-        private static readonly HashSet<string> ForbiddenNamespaces = new HashSet<string>()
-        {
-            "System.Threading"
-        };
-
         public IEnumerable<string> FindForbiddenClassesUsage(SyntaxTree syntaxTree, CSharpCompilation compilation)
         {
             var allUsedTypes = FindUsedTypes(syntaxTree, compilation);
@@ -69,16 +64,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                             foundForbiddenTypes.Add(symbol);
                             yield return symbol;
                         }
-                    }
-                }
-
-                if (namedTypeSymbol.Kind == SymbolKind.NamedType 
-                    && ForbiddenNamespaces.Contains(containingNamespace))
-                {
-                    if (!foundForbiddenTypes.Contains(symbol))
-                    {
-                        foundForbiddenTypes.Add(symbol);
-                        yield return symbol;
                     }
                 }
             }

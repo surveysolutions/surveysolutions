@@ -123,7 +123,7 @@
   <data name="SearchResult_Count" xml:space="preserve">
     <value>{{ count }} nalezená položka:</value>
   </data>
-  <data name="SearchResult_Count_plural" xml:space="preserve">
+  <data name="SearchResult_Count_other" xml:space="preserve">
     <value>Počet nalezených položek - {{ count }}:</value>
   </data>
   <data name="Area_ShowCoordinates" xml:space="preserve">
@@ -167,5 +167,8 @@
   </data>
   <data name="YouCanChangeResponsibleInterviewer" xml:space="preserve">
     <value>Pokud rozhovor vracíte, můžete změnit zodpovědnost za rozhovor. Vyberte zodpovědného tazatele</value>
+  </data>
+  <data name="Area_Coordinates" xml:space="preserve">
+    <value>Souřadnice</value>
   </data>
 </root>

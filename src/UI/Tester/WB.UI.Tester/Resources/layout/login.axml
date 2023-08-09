@@ -57,7 +57,7 @@
             <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="@dimen/Login_Element_width"
                     android:layout_height="wrap_content"
-                    local:passwordToggleEnabled="true"
+                    local:endIconMode="password_toggle"
                     local:hintEnabled="true"
                     local:MvxBind="Hint Localization('PasswordHint');">
                 <com.google.android.material.textfield.TextInputEditText

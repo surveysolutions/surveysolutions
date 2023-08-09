@@ -116,7 +116,7 @@ export function safeStore(storeConfig, fieldToSafe = ['actions', 'mutations']) {
     }
 
     storeConfig.actions.UNHANDLED_ERROR = (ctx, error) => {
-        console.error(name, error)
+        console.error("Error on execution: %s", (error || {}).message)
         toastErr(error, error.message)
     }
 

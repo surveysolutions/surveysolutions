@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -12,7 +13,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
 {
     public static class AnswerUtils
     {
-        public static int TextAnswerMaxLength => 500;
+        public static int TextAnswerMaxLength => 750;
 
         public static string AnswerToString(object answer, Func<decimal, string> getCategoricalAnswerOptionText = null, bool isTimestamp = false)
         {
@@ -34,13 +35,14 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
 
             if (answer is decimal decimalAnswer)
             {
-                if(getCategoricalAnswerOptionText == null)
-                    return decimalAnswer.ToString(CultureInfo.InvariantCulture);
-                var optionText = getCategoricalAnswerOptionText(decimalAnswer);
-
-                return String.IsNullOrEmpty(optionText)
-                    ? decimalAnswer.ToString(CultureInfo.InvariantCulture)
-                    : optionText;
+                if (getCategoricalAnswerOptionText != null)
+                {
+                    var optionText = getCategoricalAnswerOptionText(decimalAnswer);
+                    if (!string.IsNullOrEmpty(optionText))
+                        return optionText;
+                }
+                    
+                return decimalAnswer.ToString(CultureInfo.InvariantCulture);
             }
 
             if (answer is decimal[] multiDecimalAnswer)
@@ -132,6 +134,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
                                              !question.CascadeFromQuestionId.HasValue))
                 ?.ToCategoricalOption();
 
-        public static string GetPictureFileName(string variableName, RosterVector rosterVector) => $"{variableName}__{rosterVector}.jpg";
+        public static string GetPictureFileName(string variableName, RosterVector rosterVector, string extension = ".jpg") 
+            => $"{variableName}__{rosterVector}{extension}";
     }
 }

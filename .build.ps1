@@ -114,7 +114,7 @@ function Set-AndroidXmlResourceValue {
         [string] $keyValue
     )    
 
-    $filePath = "$([System.IO.Path]::GetDirectoryName((Resolve-Path $project)))/Resources/values/settings.xml"
+    $filePath = "$([System.IO.Path]::GetDirectoryName((Resolve-Path $project)))/Resources/Values/settings.xml"
     "Updating app resource key in $filePath" | Out-Host
 
     $doc = [System.Xml.Linq.XDocument]::Load($filePath);
@@ -183,7 +183,7 @@ function Get-DockerTags($name, $registry = $dockerRegistry) {
 }
 
 function Invoke-Android($CapiProject, $apk, $withMaps, $appCenterKey) {
-    Set-Alias MSBuild (Resolve-MSBuild)
+    # Set-Alias MSBuild (Resolve-MSBuild)
 
     Set-AndroidXmlResourceValue $CapiProject "appcenter_key" $AppCenterKey
     Set-AndroidXmlResourceValue $CapiProject "google_maps_api_key" $GoogleMapKey
@@ -219,16 +219,29 @@ function Invoke-Android($CapiProject, $apk, $withMaps, $appCenterKey) {
     )
     
     $params -join ', ' | Out-Host
-    exec { msbuild $params }
+    exec { dotnet publish $params }
 }
 
 #endregion
 task frontend {
 	"Starting frontend task" | Out-Host
+	Write-Build 10 "Starting frontend task"
+	
     $nodever = (node --version).replace("v", "").split(".")[0]
-    if ($nodever -ge 17) {
-        $env:NODE_OPTIONS="--openssl-legacy-provider"
-    }
+    
+	$env:NODE_OPTIONS="--max-old-space-size=6144 --openssl-legacy-provider"	
+	
+	try {
+        Write-Build 10 "Calculating memory"
+		$memoryUsed = node -e 'console.log(v8.getHeapStatistics().heap_size_limit/(1024*1024))'		
+		Write-Build 10 "Memory: $memoryUsed"
+    } 
+	catch {}
+    
+	exec {
+		node -e 'console.log(v8.getHeapStatistics().heap_size_limit/(1024*1024))'
+	}	
+	
     exec { 
         Set-Location ./src/UI/WB.UI.Frontend
         npm ci

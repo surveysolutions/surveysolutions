@@ -25,7 +25,7 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    local:MvxBind="Visible ShowLocationOnMap">
+                    local:MvxBind="Visible And(ShowLocationOnMap, IsEditMode)">
                     <include
                         layout="@layout/interview_question__remove_button_recorded" />
                 </LinearLayout>
@@ -41,12 +41,12 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    local:MvxBind="Visible Not(ShowLocationOnMap)">
+                    local:MvxBind="Visible And(IsEditMode, Not(ShowLocationOnMap))">
                     <include
                         layout="@layout/interview_question__remove_button_recorded" />
                 </LinearLayout>
             </TableRow>
-            <TableRow>
+            <TableRow local:MvxBind="Visible IsEditMode">
                 <FrameLayout
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content">

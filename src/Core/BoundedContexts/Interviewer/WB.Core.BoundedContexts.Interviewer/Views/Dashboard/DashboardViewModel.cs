@@ -24,6 +24,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Messages;
 using WB.Core.SharedKernels.Enumerator.Views;
 
@@ -212,7 +213,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             try
             {
                 this.Synchronization.CancelSynchronizationCommand.Execute();
-                await mapInteractionService.OpenMapDashboardAsync();
+                await mapInteractionService.OpenInterviewerMapDashboardAsync();
                 this.Dispose();
             }
             catch (MissingPermissionsException e)
@@ -235,11 +236,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             set => SetProperty(ref this.isInProgress, value);
         }
 
-        private GroupStatus typeOfInterviews;
+        private DashboardGroupType typeOfInterviews;
         private bool synchronizationWithHqEnabled;
         private readonly IDisposable syncSubscription;
 
-        public GroupStatus TypeOfInterviews
+        public DashboardGroupType TypeOfInterviews
         {
             get => this.typeOfInterviews;
             set => SetProperty(ref this.typeOfInterviews, value);
@@ -289,7 +290,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             if (!lastVisitedInterviewId.HasValue)
             {
-                this.TypeOfInterviews = this.CreateNew.InterviewStatus;
+                this.TypeOfInterviews = this.CreateNew.DashboardType;
                 return;
             }
 
@@ -298,14 +299,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             this.TypeOfInterviews = (interviewView.Mode, interviewView.Status) switch
             {
-                (InterviewMode.CAPI, InterviewStatus.RejectedBySupervisor) => this.RejectedInterviews.InterviewStatus,
-                (InterviewMode.CAPI, InterviewStatus.Completed) => this.CompletedInterviews.InterviewStatus,
-                (InterviewMode.CAPI, InterviewStatus.InterviewerAssigned) => this.StartedInterviews.InterviewStatus,
-                (InterviewMode.CAPI, InterviewStatus.Restarted) => this.StartedInterviews.InterviewStatus,
-                (InterviewMode.CAWI, InterviewStatus.InterviewerAssigned) => this.WebInterviews.InterviewStatus,
-                (InterviewMode.CAWI, InterviewStatus.Completed) => this.WebInterviews.InterviewStatus,
-                (InterviewMode.CAWI, InterviewStatus.RejectedBySupervisor) => this.WebInterviews.InterviewStatus,
-                (InterviewMode.CAWI, InterviewStatus.Restarted) => this.WebInterviews.InterviewStatus,
+                (InterviewMode.CAPI, InterviewStatus.RejectedBySupervisor) => this.RejectedInterviews.DashboardType,
+                (InterviewMode.CAPI, InterviewStatus.Completed) => this.CompletedInterviews.DashboardType,
+                (InterviewMode.CAPI, InterviewStatus.InterviewerAssigned) => this.StartedInterviews.DashboardType,
+                (InterviewMode.CAPI, InterviewStatus.Restarted) => this.StartedInterviews.DashboardType,
+                (InterviewMode.CAWI, InterviewStatus.InterviewerAssigned) => this.WebInterviews.DashboardType,
+                (InterviewMode.CAWI, InterviewStatus.Completed) => this.WebInterviews.DashboardType,
+                (InterviewMode.CAWI, InterviewStatus.RejectedBySupervisor) => this.WebInterviews.DashboardType,
+                (InterviewMode.CAWI, InterviewStatus.Restarted) => this.WebInterviews.DashboardType,
                 _ => this.TypeOfInterviews
             };
         }
@@ -430,6 +431,23 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.OnOfflineSynchronizationStarted?.Invoke();
         }
 
+        protected override async Task<bool> TryNearbyWifiDevicesPermission()
+        {
+            try
+            {
+                await permissions.AssureHasNearbyWifiDevicesPermissionOrThrow().ConfigureAwait(false);
+            }
+            catch (MissingPermissionsException)
+            {
+                ShouldStartAdvertising = false;
+                this.OnConnectionError(EnumeratorUIResources.NearbyPermissionRequired,
+                    ConnectionStatusCode.MissingPermissionNearbyWifiDevices);
+                return false;
+            }
+
+            return true;
+        }
+
         protected override async Task OnStartDiscovery()
         {
             var discoveryStatus = await this.nearbyConnection.StartDiscoveryAsync(
@@ -449,6 +467,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                     this.ShowSynchronizationError(InterviewerUIResources.SendToSupervisor_BluetoothError);
                     break;
                 case ConnectionStatusCode.MissingPermissionAccessCoarseLocation:
+                case ConnectionStatusCode.MissingPermissionBluetoothAdvertise:
                 case ConnectionStatusCode.StatusEndpointUnknown:
                     this.ShowSynchronizationError(errorMessage);
                     break;

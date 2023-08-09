@@ -308,7 +308,7 @@ Požádejte o pomoc svého Garanta.</value>
   <data name="EnterPassword" xml:space="preserve">
     <value>Zadejte heslo</value>
   </data>
-  <data name="Error_plural" xml:space="preserve">
+  <data name="Error_other" xml:space="preserve">
     <value>Chyby</value>
   </data>
   <data name="GPSError" xml:space="preserve">
@@ -499,5 +499,8 @@ Požádejte o pomoc svého Garanta.</value>
   </data>
   <data name="WebTesterSessionOverMessage" xml:space="preserve">
     <value>Zavřete prosím tuto stránku. Můžete otevřít novou návratem na webovou stránku Designer</value>
+  </data>
+  <data name="AssignmentLimitError" xml:space="preserve">
+    <value>Z tohoto úkolu nelze vytvořit více rozhovorů</value>
   </data>
 </root>

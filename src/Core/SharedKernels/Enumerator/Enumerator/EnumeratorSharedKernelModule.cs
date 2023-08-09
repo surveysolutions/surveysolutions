@@ -118,7 +118,7 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<SideBarCompleteSectionViewModel>();
             registry.Bind<SideBarOverviewViewModel>();
             registry.Bind<OverviewViewModel>();
-            registry.Bind<SideBarCoverSectionViewModel>();
+            registry.Bind<SideBarVirtualCoverSectionViewModel>();
             registry.Bind<SideBarSectionViewModel>();
             registry.Bind<SideBarSectionsViewModel>();
             registry.Bind<StaticTextStateViewModel>();

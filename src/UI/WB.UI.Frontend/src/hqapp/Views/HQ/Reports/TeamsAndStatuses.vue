@@ -45,7 +45,6 @@
 </template>
 <script>
 import {formatNumber} from './helpers'
-import {ok} from 'assert'
 import {assign, isNumber, isUndefined} from 'lodash'
 export default {
     data() {

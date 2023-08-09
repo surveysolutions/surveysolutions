@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 var interview = this.interviewRepository.GetOrThrow(interviewId.FormatGuid());
                 var questionnaire = questionnaireStorage.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
                 var attachment = questionnaire.GetAttachmentById(this.attachmentId.Value);
-                this.Answer = this.attachmentContentStorage.GetContent(attachment.ContentId);
+                this.Answer = await this.attachmentContentStorage.GetContentAsync(attachment.ContentId);
             }
 
             if (this.Answer == null)

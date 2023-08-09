@@ -81,19 +81,20 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
          GetLevel(result, new[] { rosterSizeQuestionId }).Records[1].GetPlainAnswers().First().First().Should().Be(someAnswer);
 
         [NUnit.Framework.Test] public void should_have_one_question_on_top_level () =>
-            GetLevel(result, new Guid[0]).Records[0].GetPlainAnswers().Count().Should().Be(1);
+            GetLevel(result, Array.Empty<Guid>()).Records[0].GetPlainAnswers().Count().Should().Be(1);
 
-        [NUnit.Framework.Test] public void should_have_five_columns_for_question_on_top_level () =>
-            GetLevel(result, new Guid[0]).Records[0].GetPlainAnswers().First().Length.Should().Be(5);
+        [NUnit.Framework.Test] public void should_have_ten_columns_for_question_on_top_level () =>
+            GetLevel(result, Array.Empty<Guid>()).Records[0].GetPlainAnswers().First().Length.Should().Be(10);
 
         [NUnit.Framework.Test] public void should_have_first_column_with_value_a1_for_question_on_top_level () =>
-            GetLevel(result, new Guid[0]).Records[0].GetPlainAnswers().First().First().Should().Be("a1");
+            GetLevel(result, Array.Empty<Guid>()).Records[0].GetPlainAnswers().First().First().Should().Be("a1");
 
-        [NUnit.Framework.Test] public void should_have_second_column_with_value_a1_for_question_on_top_level () =>
-            GetLevel(result, new Guid[0]).Records[0].GetPlainAnswers().First().Skip(1).First().Should().Be("a2");
+        [NUnit.Framework.Test] public void should_have_third_column_with_value_a1_for_question_on_top_level () =>
+            GetLevel(result, Array.Empty<Guid>()).Records[0].GetPlainAnswers().First().Skip(2).First().Should().Be("a2");
 
         [NUnit.Framework.Test] public void should_have_all_other_columns_with_missing_values_for_question_on_top_level () =>
-           GetLevel(result, new Guid[0]).Records[0].GetPlainAnswers().First().Skip(2).Any(a => a != ExportFormatSettings.MissingStringQuestionValue).Should().BeFalse();
+           GetLevel(result, Array.Empty<Guid>()).Records[0].GetPlainAnswers()
+               .First().Skip(4).Any(a => a != ExportFormatSettings.MissingStringQuestionValue && a != ExportFormatSettings.MissingNumericQuestionValue).Should().BeFalse();
 
         private static InterviewData CreateInterviewDataWith2PropagatedLevels()
         {

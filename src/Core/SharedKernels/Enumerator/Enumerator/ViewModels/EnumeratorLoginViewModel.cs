@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -23,25 +24,28 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private readonly ILogger logger;
         private readonly IAuditLogService auditLogService;
         private readonly IPasswordHasher passwordHasher;
-        private readonly IPlainStorage<CompanyLogo> logoStorage;
+        private readonly ICompanyLogoStorage logoStorage;
         private readonly ISynchronizationService synchronizationService;
 
         protected EnumeratorLoginViewModel(
             IViewModelNavigationService viewModelNavigationService,
             IPrincipal principal,
             IPasswordHasher passwordHasher,
-            IPlainStorage<CompanyLogo> logoStorage,
+            ICompanyLogoStorage logoStorage,
             ISynchronizationService synchronizationService,
             ILogger logger,
             IAuditLogService auditLogService)
-            : base(principal, viewModelNavigationService, false)
         {
             this.passwordHasher = passwordHasher;
             this.logoStorage = logoStorage;
             this.synchronizationService = synchronizationService;
             this.logger = logger;
             this.auditLogService = auditLogService;
+            this.viewModelNavigationService = viewModelNavigationService;
+            this.Principal = principal;
         }
+
+        private IPrincipal Principal { get; set; }
 
         public string UserName { get; set; }
 
@@ -87,6 +91,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         private bool isInProgress;
         private string passwordError;
+        private readonly IViewModelNavigationService viewModelNavigationService;
 
         public bool IsInProgress
         {
@@ -96,10 +101,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public IMvxAsyncCommand SignInCommand => new MvxAsyncCommand(this.SignIn);
         public IMvxAsyncCommand OnlineSignInCommand => new MvxAsyncCommand(this.RemoteSignInAsync);
-        public IMvxAsyncCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
+        public IMvxAsyncCommand NavigateToDiagnosticsPageCommand => 
+            new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
 
         public abstract bool HasUser();
         public abstract string GetUserName();
+        public abstract string GetUserLastWorkspace();
         public abstract void UpdateLocalUser(string userName, string token, string passwordHash);
 
         public override async Task Initialize()
@@ -108,7 +115,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             if (!this.HasUser()) return;
 
-            var companyLogo = this.logoStorage.GetById(CompanyLogo.StorageKey);
+            var companyLogo = this.logoStorage.GetCompanyLogoByWorkspace(CompanyLogo.StorageKey, GetUserLastWorkspace());
             this.CustomLogo = companyLogo?.File;
             this.IsUserValid = true;
             this.UserName = this.GetUserName();
@@ -118,7 +125,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             if (this.HasUser()) return;
 
-            await this.ViewModelNavigationService.NavigateToFinishInstallationAsync();
+            await this.viewModelNavigationService.NavigateToFinishInstallationAsync();
         }
 
         public byte[] CustomLogo { get; private set; }
@@ -142,8 +149,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
 
             this.Password = string.Empty;
-            await this.ViewModelNavigationService.NavigateToDashboardAsync();
-            await this.ViewModelNavigationService.Close(this);
+            await this.viewModelNavigationService.NavigateToDashboardAsync();
+            await this.viewModelNavigationService.Close(this);
         }
 
         private async Task RemoteSignInAsync()

@@ -1,7 +1,4 @@
-using System;
-using System.Linq;
 using Android.Views;
-using Android.Widget;
 using AndroidX.Transitions;
 using MvvmCross.DroidX.RecyclerView;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
@@ -47,6 +44,7 @@ namespace WB.UI.Shared.Enumerator.Activities.Dashboard
                     MenuHandle.Dispose();
                 }
             }
+            base.Dispose(disposing);
         }
 
         public void CardClick(object o, EventArgs eventArgs)

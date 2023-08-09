@@ -71,7 +71,7 @@ namespace WB.Tests.Unit.Designer.Services
             var service = Create.CategoricalOptionsImportService(questionnaire, categoriesService);
 
             // act
-            var result = service.ImportOptions("1\tStreet 1\t1\r\n2\tStreet 2\t2".GenerateStream(), questionnaireId.FormatGuid(), questionId, CategoriesFileType.Tsv);
+            var result = service.ImportOptions("value\ttitle\tparentvalue\r\n1\tStreet 1\t1\r\n2\tStreet 2\t2".GenerateStream(), questionnaireId.FormatGuid(), questionId, CategoriesFileType.Tsv);
 
             Assert.That(result.Succeeded, Is.True);
             Assert.That(result.ImportedOptions.Count(), Is.EqualTo(2));
@@ -103,7 +103,7 @@ namespace WB.Tests.Unit.Designer.Services
             var service = Create.CategoricalOptionsImportService(questionnaire);
 
             // act
-            var result = service.ImportOptions("1\tStreet 1\t1\r\n2\tStreet 2\t2".GenerateStream(), questionnaireId.FormatGuid(), questionId, CategoriesFileType.Tsv);
+            var result = service.ImportOptions("value\ttitle\tparentvalue\r\n1\tStreet 1\t1\r\n2\tStreet 2\t2".GenerateStream(), questionnaireId.FormatGuid(), questionId, CategoriesFileType.Tsv);
 
             Assert.That(result.Succeeded, Is.True);
             Assert.That(result.ImportedOptions.Count(), Is.EqualTo(2));

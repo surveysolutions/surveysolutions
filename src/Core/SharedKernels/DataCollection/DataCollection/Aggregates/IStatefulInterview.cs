@@ -28,6 +28,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         string Language { get; }
 
+        bool IsCoverPageSupported();
+
         bool HasErrors { get; }
         bool IsCompleted { get; }
 

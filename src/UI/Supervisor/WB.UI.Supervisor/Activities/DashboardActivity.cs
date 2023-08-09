@@ -119,6 +119,7 @@ namespace WB.UI.Supervisor.Activities
             SetMenuItemIcon(menu, Resource.Id.menu_search, Resource.Drawable.dashboard_search_icon);
             SetMenuItemIcon(menu, Resource.Id.menu_sync_with_hq, Resource.Drawable.synchronize_icon);
             SetMenuItemIcon(menu, Resource.Id.menu_sync_offline, Resource.Drawable.receive_interviews_icon);
+            SetMenuItemIcon(menu, Resource.Id.menu_map_dashboard, Resource.Drawable.map_icon);
 
             menu.LocalizeMenuItem(Resource.Id.menu_search, EnumeratorUIResources.MenuItem_Title_Search);
             menu.LocalizeMenuItem(Resource.Id.menu_sync_with_hq, SupervisorUIResources.Synchronization_Synchronize_HQ);
@@ -127,7 +128,15 @@ namespace WB.UI.Supervisor.Activities
             menu.LocalizeMenuItem(Resource.Id.menu_settings, EnumeratorUIResources.MenuItem_Title_Settings);
             menu.LocalizeMenuItem(Resource.Id.menu_diagnostics, EnumeratorUIResources.MenuItem_Title_Diagnostics);
             menu.LocalizeMenuItem(Resource.Id.menu_maps, EnumeratorUIResources.MenuItem_Title_Maps);
-            return true;
+            menu.LocalizeMenuItem(Resource.Id.menu_map_dashboard, EnumeratorUIResources.MenuItem_Title_Map_Dashboard);
+            
+            if (!ViewModel.DoesSupportMaps)
+            {
+                var mapDashboardMenu = menu.FindItem(Resource.Id.menu_map_dashboard);
+                mapDashboardMenu.SetVisible(false);
+            }
+            
+            return base.OnCreateOptionsMenu(menu);
         }
 
         public override bool OnOptionsItemSelected(IMenuItem item)
@@ -155,6 +164,9 @@ namespace WB.UI.Supervisor.Activities
                     break;
                 case Resource.Id.menu_sync_offline:
                     this.ViewModel.NavigateToOfflineSyncCommand.Execute();
+                    break;
+                case Resource.Id.menu_map_dashboard:
+                    this.ViewModel.NavigateToMapDashboardCommand.Execute();
                     break;
             }
 

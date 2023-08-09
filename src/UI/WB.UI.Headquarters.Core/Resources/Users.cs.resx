@@ -312,4 +312,7 @@
   <data name="UsersTitle" xml:space="preserve">
     <value>Uživatelé</value>
   </data>
+  <data name="ApiTokenTitle" xml:space="preserve">
+    <value>Token uživatelského rozhraní API</value>
+  </data>
 </root>

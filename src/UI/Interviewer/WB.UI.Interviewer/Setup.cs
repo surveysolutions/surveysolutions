@@ -77,7 +77,7 @@ namespace WB.UI.Interviewer
                 {typeof(CalendarEventDialogViewModel), typeof(CalendarEventDialog)}
 #if !EXCLUDEEXTENSIONS
                 ,{typeof (Shared.Extensions.ViewModels.GeographyEditorViewModel), typeof (Shared.Extensions.Activities.GeographyEditorActivity)}
-                ,{typeof (Shared.Extensions.ViewModels.MapDashboardViewModel), typeof (Shared.Extensions.Activities.MapDashboardActivity)}
+                ,{typeof (Shared.Extensions.ViewModels.InterviewerMapDashboardViewModel), typeof (Shared.Extensions.Activities.InterviewerMapDashboardActivity)}
 #endif
             });
 

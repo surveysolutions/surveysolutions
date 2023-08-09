@@ -6,7 +6,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
-    public class DiagnosticsViewModel : BaseViewModel
+    public class DiagnosticsViewModel : BasePrincipalViewModel
     {
         private readonly ITabletDiagnosticService tabletDiagnosticService;
         private readonly SendLogsViewModel logsViewModel;

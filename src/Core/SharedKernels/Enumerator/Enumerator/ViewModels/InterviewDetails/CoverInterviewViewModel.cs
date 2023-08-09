@@ -3,35 +3,29 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using MvvmCross;
 using MvvmCross.Base;
-using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public class CoverInterviewViewModel : MvxViewModel, IDisposable
+    public class CoverInterviewViewModel : BaseViewModel
     {
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         protected readonly IPrincipal principal;
         private readonly IEntitiesListViewModelFactory entitiesListViewModelFactory;
-        private readonly IDynamicTextViewModelFactory dynamicTextViewModelFactory;
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly ICompositeCollectionInflationService compositeCollectionInflationService;
 
@@ -45,7 +39,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IQuestionnaireStorage questionnaireRepository, 
             IStatefulInterviewRepository interviewRepository, 
             IEntitiesListViewModelFactory entitiesListViewModelFactory, 
-            IDynamicTextViewModelFactory dynamicTextViewModelFactory,
             IInterviewViewModelFactory interviewViewModelFactory,
             ICompositeCollectionInflationService compositeCollectionInflationService,
             GroupNavigationViewModel nextGroupNavigationViewModel)
@@ -57,7 +50,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.entitiesListViewModelFactory = entitiesListViewModelFactory;
-            this.dynamicTextViewModelFactory = dynamicTextViewModelFactory;
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.compositeCollectionInflationService = compositeCollectionInflationService;
             this.NextGroupNavigationViewModel = nextGroupNavigationViewModel;
@@ -72,10 +64,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public string SupervisorNote { get; set; }
 
         public bool HasPrefilledEntities { get; set; }
-
-        public bool IsEditMode { get; set; }
-        
-        public IReadOnlyCollection<CoverPrefilledEntity> PrefilledReadOnlyEntities { get; set; }
 
         private CompositeCollection<ICompositeEntity> prefilledEditableEntities;
         public CompositeCollection<ICompositeEntity> PrefilledEditableEntities
@@ -111,21 +99,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.InterviewState.Init(interviewId, null);
             this.QuestionnaireTitle = questionnaire.Title;
             
-            var prefilledEntitiesFromQuestionnaire = questionnaire.GetPrefilledEntities();
-            IsEditMode = interview.HasEditableIdentifyingQuestions;
+            this.PrefilledEditableEntities = GetEditablePrefilledData(interviewId, navigationState);
 
-            if (IsEditMode)
-            {
-                this.PrefilledReadOnlyEntities = Array.Empty<CoverPrefilledEntity>();
-                this.PrefilledEditableEntities = GetEditablePrefilledData(interviewId, navigationState);
-            }
-            else
-            {
-                this.PrefilledReadOnlyEntities = GetReadOnlyPrefilledData(interviewId, navigationState, prefilledEntitiesFromQuestionnaire, questionnaire, interview);
-                this.PrefilledEditableEntities = new CompositeCollection<ICompositeEntity>();
-            }
-
-            this.HasPrefilledEntities = this.PrefilledReadOnlyEntities.Any() || this.PrefilledEditableEntities.Any();
+            this.HasPrefilledEntities = this.PrefilledEditableEntities.Any();
 
             var interviewKey = interview.GetInterviewKey()?.ToString();
             this.InterviewKey = string.IsNullOrEmpty(interviewKey) ? null : string.Format(UIResources.InterviewKey, interviewKey);
@@ -164,73 +140,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             return this.compositeCollectionInflationService.GetInflatedCompositeCollection(prefilledEntities);
         }
         
-        private List<CoverPrefilledEntity> GetReadOnlyPrefilledData(string interviewId, NavigationState navigationState, ReadOnlyCollection<Guid> prefilledEntitiesFromQuestionnaire, IQuestionnaire questionnaire, IStatefulInterview interview)
-        {
-            return prefilledEntitiesFromQuestionnaire
-                .Select(entityId => new
-                {
-                    EntityId = entityId,
-                    IsStaticText = questionnaire.IsStaticText(entityId),
-                    IsVariable = questionnaire.IsVariable(entityId),
-                    QuestionType = questionnaire.IsQuestion(entityId) 
-                        ? questionnaire.GetQuestionType(entityId)
-                        : (QuestionType?)null,
-                })
-                .Where(entity => entity.IsStaticText || 
-                                 entity.IsVariable ||
-                                 (entity.QuestionType.HasValue
-                                  && entity.QuestionType.Value != QuestionType.GpsCoordinates))
-                .Select(entity =>
-                {
-                    var entityIdentity = new Identity(entity.EntityId, RosterVector.Empty);
-                    AttachmentViewModel attachmentViewModel = null;
-                    if (entity.IsStaticText)
-                    {
-                        attachmentViewModel = this.interviewViewModelFactory.GetNew<AttachmentViewModel>();
-                        attachmentViewModel.Init(interviewId, entityIdentity, navigationState);
-                    }
-
-
-                    var title = this.CreatePrefilledTitle(questionnaire, interviewId, entityIdentity);
-                    var value = entity.QuestionType.HasValue
-                        ? interview.GetAnswerAsString(Identity.Create(entity.EntityId, RosterVector.Empty), CultureInfo.CurrentCulture)
-                        : entity.IsVariable
-                            ? interview.GetVariableValueAsString(Identity.Create(entity.EntityId, RosterVector.Empty))
-                            : string.Empty;
-                    
-                    return new CoverPrefilledEntity
-                    {
-                        Identity = entityIdentity,
-                        Title = title,
-                        Answer = value,
-                        Attachment = attachmentViewModel
-                    };
-                })
-                .ToList();
-        }
-
-        private DynamicTextViewModel CreatePrefilledTitle(IQuestionnaire questionnaire, string interviewId, Identity entityIdentity)
-        {
-            var title = this.dynamicTextViewModelFactory.CreateDynamicTextViewModel();
-            title.Init(interviewId, entityIdentity);
-            return title;
-        }
-
         private bool isDisposed = false;
         private List<IInterviewEntityViewModel> prefilledEntities;
 
-        public void Dispose()
+        public override void Dispose()
         {
             if (isDisposed)
                 return;
 
             isDisposed = true;
-
-            if (PrefilledReadOnlyEntities != null)
-            {
-                var prefilledQuestionsLocal = PrefilledReadOnlyEntities.ToArray();
-                prefilledQuestionsLocal.ForEach(viewModel => viewModel?.Dispose());
-            }
 
             if (prefilledEntities != null)
             {
@@ -253,6 +171,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             NextGroupNavigationViewModel?.Dispose();
             
             Name?.Dispose();
+            
+            base.Dispose();
         }
     }
 }

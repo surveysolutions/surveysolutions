@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AssignmentDashboardI
         AssignmentDashboardItemViewModel CreateViewModel()
         {
             return new SupervisorAssignmentDashboardItemViewModel(Mock.Of<IServiceLocator>(),
-                Mock.Of<IAuditLogService>(), Mock.Of<IViewModelNavigationService>());
+                Mock.Of<IViewModelNavigationService>());
         }
     }
 }

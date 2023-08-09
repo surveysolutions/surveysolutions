@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Main.Core.Documents;
 using Moq;
 using MvvmCross.Tests;
@@ -23,7 +24,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
         private IInterviewerQuestionnaireAccessor interviewerQuestionnaireAccessor;
 
         [Test]
-        public void when_no_questionnaires_use_attchament_it_should_be_removed()
+        public async Task when_no_questionnaires_use_attchament_it_should_be_removed()
         {
             var contentId = "meta";
             metadataStorage.Store(new AttachmentContentMetadata { Id = contentId, ContentType = "application/json", Size = 4 });
@@ -32,7 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
             var service = this.CreateAttachmentsCleanupService(metadataStorage: metadataStorage,
                 contentStorage: contentStorage, questionnairesAccessor: interviewerQuestionnaireAccessor);
 
-            service.RemovedOrphanedAttachments();
+            await service.RemovedOrphanedAttachmentsAsync();
 
             var dbMetaAfterRemoval = metadataStorage.GetById(contentId);
             var dbDataAfterRemoval = contentStorage.GetById(contentId);
@@ -56,7 +57,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
         }
 
         [Test]
-        public void when_questionnaire_uses_attachment_it_should_not_be_removed()
+        public async Task when_questionnaire_uses_attachment_it_should_not_be_removed()
         {
             var questionnaire = Create.Entity.QuestionnaireDocumentWithAttachments(null, Create.Entity.Attachment("meta"));
 
@@ -74,7 +75,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
                 contentStorage: contentStorage,
                 questionnairesAccessor: interviewerQuestionnaireAccessor);
 
-            service.RemovedOrphanedAttachments();
+            await service.RemovedOrphanedAttachmentsAsync();
 
             var dbMetaAfterRemoval = metadataStorage.GetById(contentId);
             var dbDataAfterRemoval = contentStorage.GetById(contentId);
@@ -84,7 +85,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
         }
 
         [Test]
-        public void when_questionnaire_has_stored_file_it_should_be_removed()
+        public async Task when_questionnaire_has_stored_file_it_should_be_removed()
         {
             var contentId = "meta";
             var contentFile = contentId + ".attachment";
@@ -102,7 +103,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
                 fileSystemAccessor.Object);
 
             // act
-            service.RemovedOrphanedAttachments();
+            await service.RemovedOrphanedAttachmentsAsync();
 
             // assert
             fileSystemAccessor.Verify(fs => fs.DeleteFile(It.Is<string>(f => f.EndsWith(contentFile))), Times.Once);

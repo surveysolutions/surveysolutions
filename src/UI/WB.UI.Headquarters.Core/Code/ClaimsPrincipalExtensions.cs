@@ -1,5 +1,6 @@
 using System;
 using System.Security.Claims;
+using Main.Core.Entities.SubEntities;
 
 namespace WB.UI.Headquarters.Code
 {
@@ -18,6 +19,11 @@ namespace WB.UI.Headquarters.Code
         public static string UserName(this ClaimsPrincipal principal)
         {
             return principal.FindFirstValue(ClaimTypes.Name);
+        }
+
+        public static bool IsInRole(this ClaimsPrincipal principal, UserRoles role)
+        {
+            return principal.IsInRole(role.ToString());
         }
     }
 }

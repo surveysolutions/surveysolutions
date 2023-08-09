@@ -5,9 +5,12 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 {
     public class MarkInterviewAsReceivedByInterviewer : InterviewCommand
     {
-        public MarkInterviewAsReceivedByInterviewer(Guid interviewId, Guid userId)
+        public string DeviceId { get; set; }
+        
+        public MarkInterviewAsReceivedByInterviewer(Guid interviewId, string deviceId, Guid userId)
             : base(interviewId, userId)
         {
+            this.DeviceId = deviceId;
         }
     }
 }
