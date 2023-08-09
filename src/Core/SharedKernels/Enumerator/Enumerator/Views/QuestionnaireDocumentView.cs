@@ -14,8 +14,8 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         [Ignore]
         public QuestionnaireDocument QuestionnaireDocument
         {
-            get => Mvx.Resolve<IJsonAllTypesSerializer>().Deserialize<QuestionnaireDocument>(Document);
-            set => Document = Mvx.Resolve<IJsonAllTypesSerializer>().SerializeToByteArray(value);
+            get => Mvx.IoCProvider.Resolve<IJsonAllTypesSerializer>().Deserialize<QuestionnaireDocument>(Document);
+            set => Document = Mvx.IoCProvider.Resolve<IJsonAllTypesSerializer>().SerializeToByteArray(value);
         }
 
         public byte[] Document { get; set; }

@@ -61,8 +61,7 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         private void HideKeyboard()
         {
-            IMvxAndroidCurrentTopActivity topActivity = Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>();
-            var activity = topActivity.Activity;
+            var activity = Mvx.IoCProvider!.Resolve<IMvxAndroidCurrentTopActivity>()!.Activity;
 
             activity.RemoveFocusFromEditText();
             if(View!= null)

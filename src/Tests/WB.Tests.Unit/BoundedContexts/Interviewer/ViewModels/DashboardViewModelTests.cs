@@ -91,7 +91,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                     workspaceService: Mock.Of<IWorkspaceService>(),
                     onlineSynchronizationService: Mock.Of<IOnlineSynchronizationService>(),
                     memoryCacheSource: Mock.Of<IWorkspaceMemoryCacheSource>(),
-                    webInterviews: DashboardWebInterviewsViewModel());
+                    webInterviews: DashboardWebInterviewsViewModel(),
+                    messenger: Mock.Of<IMvxMessenger>());
         }
 
         private static ISynchronizationCompleteSource SyncCompleteSource = new SynchronizationCompleteSource();

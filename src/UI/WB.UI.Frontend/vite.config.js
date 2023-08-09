@@ -241,6 +241,8 @@ return {
 				  if (/ttf|woff|woff2|eot/i.test(extType)) {
 					extType = 'fonts';
 				  }
+                  if (isDevMode) 
+					  return `${extType}/[name][extname]` 
 				  return `${extType}/[name]-[hash][extname]`;
 			  },
 			  chunkFileNames: (chunkInfo) => { 
