@@ -208,14 +208,14 @@ namespace WB.Services.Export.CsvExport.Implementation
                 QuestionnaireId = questionnaireId.Id,
             };
 
-            var serialize = JsonSerializer.Serialize(info, new JsonSerializerOptions(JsonSerializerOptions.Default)
+            var serializedExportInfo = JsonSerializer.Serialize(info, new JsonSerializerOptions(JsonSerializerOptions.Default)
             {
                 WriteIndented = true
             });
 
             this.fileSystemAccessor.WriteAllText(
-                Path.Combine(directoryPath, "export__info.ini"),
-                serialize);
+                Path.Combine(directoryPath, "export__info.json"),
+                serializedExportInfo);
         }
     }
 }

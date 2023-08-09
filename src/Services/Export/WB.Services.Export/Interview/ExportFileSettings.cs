@@ -7,7 +7,7 @@
         public static string GetDDIFileName(string name) => $"{name}{DDIMetaDataFileExtension}";
 
         public const string DataFileExtension = TabDataFileExtension;
-        public const string IniFileExtension = ".ini";
+
         public const string TabDataFileExtension = ".tab";
         public const string SpssDataFileExtension = ".sav";
         public const string StataDataFileExtension = ".dta";
