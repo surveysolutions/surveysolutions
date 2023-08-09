@@ -63,7 +63,7 @@
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="7.0.10" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="7.0.0" />
-    <PackageReference Include="MimeKitLite" Version="2.11.0" />
+    <PackageReference Include="MimeKitLite" Version="4.1.0.1" />
     <PackageReference Include="NetTopologySuite.IO.Esri.Shapefile" Version="1.0.0" />
     <PackageReference Include="NetTopologySuite.IO.GeoJSON" Version="3.0.0" />
     <PackageReference Include="NewId" Version="4.0.1" />
