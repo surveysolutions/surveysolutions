@@ -61,7 +61,7 @@
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="Npgsql" Version="7.0.4" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
-        <PackageReference Include="Refit" Version="6.3.2" />
+        <PackageReference Include="Refit" Version="7.0.0" />
         <PackageReference Include="prometheus-net" Version="4.1.1" />
         <PackageReference Include="Scrutor" Version="4.2.2" />
         <PackageReference Include="System.Diagnostics.Tracing" Version="4.3.0" />

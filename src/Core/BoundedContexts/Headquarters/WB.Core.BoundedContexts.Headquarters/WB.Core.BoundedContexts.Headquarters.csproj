@@ -73,7 +73,7 @@
     <PackageReference Include="PasswordGenerator" Version="2.1.0" />
     <PackageReference Include="Polly" Version="7.2.4" />
     <PackageReference Include="Quartz" Version="3.6.2" />
-    <PackageReference Include="refit" Version="6.3.2" />
+    <PackageReference Include="refit" Version="7.0.0" />
     <PackageReference Include="Sendgrid" Version="9.28.1" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
     <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.3" />
