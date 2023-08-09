@@ -49,7 +49,7 @@
     <PackageReference Include="Humanizer.Core" Version="2.14.1" />
     <PackageReference Include="Iesi.Collections" Version="4.0.5" />
     <PackageReference Include="JsonDiffPatch.Net" Version="2.3.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.10" />
     <PackageReference Include="Moq" Version="4.20.2" />
     <PackageReference Include="MvvmCross.Plugin.Messenger" Version="9.1.1" />
     <PackageReference Include="MvvmCross.Tests" Version="9.1.1" />
@@ -66,7 +66,7 @@
     </PackageReference>
     <PackageReference Include="Quartz" Version="3.6.2" />
     <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.0" />
     <PackageReference Include="ReflectionMagic" Version="4.1.0" />
 
   </ItemGroup>
