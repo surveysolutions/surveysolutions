@@ -188,7 +188,7 @@ namespace WB.Tests.Abc.TestFactories
             Mock.Of<QuestionInstructionViewModel>(),
             answering ?? Mock.Of<AnsweringViewModel>(),
             Create.ViewModel.ThrottlingViewModel(),
-            Mock.Of<IMvxMainThreadAsyncDispatcher>());
+            Create.Fake.MvxMainThreadDispatcher1());
 
         public TextQuestionViewModel TextQuestionViewModel(
             IViewModelEventRegistry eventRegistry = null,
