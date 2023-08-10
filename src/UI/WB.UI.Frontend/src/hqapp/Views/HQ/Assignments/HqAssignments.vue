@@ -435,6 +435,7 @@ export default {
                     data: 'receivedByTabletAtUtc',
                     name: 'ReceivedByTabletAtUtc',
                     title: this.$t('Assignments.ReceivedByTablet'),
+                    tooltip: this.$t('Assignments.Tooltip_Table_ReceivedByTablet'),
                     searchable: false,
                     render(data) {
                         if (data)

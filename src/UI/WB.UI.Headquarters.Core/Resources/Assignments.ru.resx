@@ -217,6 +217,9 @@
   <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">
     <value>Дата последнего изменения задания (например, последнего изменения размера). Кликните по иконке сортировки для упорядочивания по времени изменения.</value>
   </data>
+  <data name="Tooltip_Table_ReceivedByTablet" xml:space="preserve">
+    <value>Дата скачивания задания на устройство пользователя. Кликните по иконке сортировки для упорядочивания по времени скачивания задания на устройство пользователя.</value>
+  </data>
   <data name="InvalidSize" xml:space="preserve">
     <value>Количество заданий должно быть -1 или больше</value>
   </data>
