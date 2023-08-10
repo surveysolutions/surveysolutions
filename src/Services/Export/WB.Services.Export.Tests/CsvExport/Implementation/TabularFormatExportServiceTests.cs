@@ -142,7 +142,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
             string description = null;
             var fileSystemAccessor = new Mock<IFileSystemAccessor>();
             fileSystemAccessor
-                .Setup(accessor => accessor.WriteAllText(@"x:/export__info.ini", It.IsAny<string>()))
+                .Setup(accessor => accessor.WriteAllText(@"x:/export__info.json", It.IsAny<string>()))
                 .Callback<string, string>((file, content) => description = content);
 
             var productVersion = Mock.Of<IProductVersion>(p => p.ToString() == exportVersion);
