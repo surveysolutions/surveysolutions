@@ -369,6 +369,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
             {
                 var result = this.autoMapper.Map<InterviewTreeVariable, InterviewVariable>(variable);
                 result.Title = questionnaire.GetVariableLabel(identity.Id);
+                result.Name = questionnaire.GetVariableName(identity.Id);
                 return result;
             }
 
