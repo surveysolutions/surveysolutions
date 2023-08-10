@@ -200,6 +200,7 @@ namespace WB.UI.Headquarters.Controllers
                         ? Url.Action("InterviewersCombobox", "Teams")
                         : Url.Action("ResponsiblesCombobox", "Teams"),
                     Assignments = Url.Action("Get", "AssignmentsApi"),
+                    AssignmentsApi = Url.Content("~/api/v1/assignments")
                 }
             };
             return View("Details", model);

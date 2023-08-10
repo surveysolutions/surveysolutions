@@ -87,6 +87,13 @@
                                                 }}
                                             </a>
                                         </li>
+                                        <li v-if="isHeadquarters && isArchived">
+                                            <a href="#" @click="unarchiveSelected">
+                                                {{
+                                                    $t("Assignments.Unarchive")
+                                                }}
+                                            </a>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -95,12 +102,6 @@
                 </div>
 
                 <!--  -->
-
-                <div class="col-sm-6" style="padding-top: 30px;">
-                    <h3>{{ $t('Assignments.AssignmentHistory') }}</h3>
-                    <DataTables ref="assignmentHistoryTable" :tableOptions="tableOptions" noSearch :noPaging="false"
-                        :wrapperClass="{ 'table-wrapper': true }"></DataTables>
-                </div>
 
                 <div class="col-sm-6" style="padding-top: 30px;">
                     <h3>
@@ -125,7 +126,6 @@
                                 <td>
                                     <a v-bind:href="interviewsUrl">
                                         {{ model.interviewsProvided }}
-                                        <span class="glyphicon glyphicon-link" />
                                     </a>
                                 </td>
                             </tr>
@@ -163,7 +163,8 @@
                                         )
                                     }}
                                 </td>
-                                <td>{{ isAudioRecordingEnabled }}</td>
+                                <td class="pointer editable" @click="audioRecordingChange">{{ isAudioRecordingEnabled }}
+                                </td>
                             </tr>
                             <tr>
                                 <td class="text-nowrap">
@@ -199,6 +200,11 @@
                     </table>
                 </div>
 
+                <div class="col-sm-6" style="padding-top: 30px;">
+                    <h3>{{ $t('Assignments.AssignmentHistory') }}</h3>
+                    <DataTables ref="assignmentHistoryTable" :tableOptions="tableOptions" noSearch :noPaging="false"
+                        :wrapperClass="{ 'table-wrapper': true }"></DataTables>
+                </div>
 
                 <ModalFrame ref="assignModal" :title="$t('Common.Assign')">
                     <form onsubmit="return false;">
@@ -228,6 +234,34 @@
                     </div>
                 </ModalFrame>
 
+                <ModalFrame ref="closeModal" :title="$t('Pages.ConfirmationNeededTitle')">
+                    <p>{{ singleCloseMessage }}</p>
+
+                    <div slot="actions">
+                        <button type="button" class="btn btn-primary" :disabled="isWebModeAssignmentSelected"
+                            @click="close">{{
+                                $t("Assignments.Close") }}</button>
+                        <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+                    </div>
+                </ModalFrame>
+
+
+                <ModalFrame ref="editAudioEnabledModal"
+                    :title="$t('Assignments.ChangeAudioRecordingModalTitle', { id: model.id })">
+                    <p>{{ $t("Assignments.AudioRecordingExplanation") }}</p>
+                    <form onsubmit="return false;">
+                        <div class="form-group">
+                            <Checkbox :label="$t('Assignments.AudioRecordingEnable')" name="audioRecordingEnabled"
+                                v-model="editedAudioRecordingEnabled" />
+                        </div>
+                    </form>
+                    <div slot="actions">
+                        <button type="button" class="btn btn-primary" @click="upateAudioRecording"
+                            :disabled="!showSelectors">{{ $t("Common.Save") }}</button>
+                        <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+                    </div>
+                </ModalFrame>
+
 
             </div>
         </div>
@@ -240,7 +274,7 @@ import { DateFormats, convertToLocal } from '~/shared/helpers'
 import { RoleNames } from '~/shared/constants'
 
 import moment from 'moment-timezone'
-import { escape } from 'lodash'
+import { escape, assign } from 'lodash'
 
 import '@/assets/css/markup-web-interview.scss'
 import '@/assets/css/markup-interview-review.scss'
@@ -250,9 +284,31 @@ export default {
         return {
             newResponsibleId: null,
             reassignComment: null,
+
+            editedAudioRecordingEnabled: null
         }
     },
     methods: {
+        audioRecordingChange() {
+
+            if (this.model.isHeadquarters && !this.model.isArchived) {
+
+                this.editedAudioRecordingEnabled = null
+                this.$hq.Assignments.audioSettings(this.model.id).then(data => {
+                    this.editedAudioRecordingEnabled = data.Enabled
+                    this.$refs.editAudioEnabledModal.modal('show')
+                })
+            }
+
+        },
+
+        upateAudioRecording() {
+            this.$hq.Assignments.setAudioSettings(this.model.id, this.editedAudioRecordingEnabled).then(() => {
+                this.$refs.editAudioEnabledModal.hide()
+                window.location.reload(true)
+            })
+        },
+
         assignSelected() {
             this.$refs.assignModal.modal({
                 keyboard: false,
@@ -269,7 +325,49 @@ export default {
             this.$refs.assignModal.hide()
             this.newResponsibleId = null
             this.reassignComment = null
-            //this.reloadTable()
+
+            window.location.reload(true)
+        },
+
+        closeSelected() {
+            this.$refs.closeModal.modal({
+                keyboard: false,
+            })
+        },
+        async close() {
+            const self = this
+
+            const url = `${self.config.api.assignmentsApi}/${self.model.id}/close`
+            self.$http.post(url).catch(error => {
+                if (error.isAxiosError && error.response.status === 409) {
+                    const msg = this.$t('Assignments.AssignmentCloseWebMode', {
+                        id: self.model.id,
+                    })
+
+                    toastr.warning(msg)
+                }
+            })
+            this.$refs.closeModal.hide()
+
+            window.location.reload(true);
+        },
+
+        async archiveSelected() {
+            await this.$http({
+                method: 'delete',
+                url: this.config.api.assignments,
+                data: this.model.id,
+            })
+
+            window.location.reload(true);
+        },
+
+        async unarchiveSelected() {
+            await this.$http.post(
+                this.config.api.assignments + '/Unarchive',
+                this.selectedRows)
+
+            window.location.reload(true);
         },
 
         newResponsibleSelected(newValue) {
@@ -278,25 +376,34 @@ export default {
     },
 
     computed: {
+
+        singleCloseMessage() {
+            if (this.isWebModeAssignmentSelected) {
+                return this.$t('Assignments.AssignmentCloseWebMode', {
+                    id: this.model.id,
+                })
+            }
+
+            const result = this.$t('Assignments.SingleAssignmentCloseConfirm', {
+                id: this.model.id,
+                quantity: this.model.quantity,
+                collected: this.model.interviewsCount,
+            })
+            return result
+        },
+
+        isWebModeAssignmentSelected() { return this.isWebMode },
+
         showWebModeReassignWarning() {
             if (!this.newResponsibleId) return false
 
-            return isWebMode && this.newResponsibleId.iconClass !== RoleNames.INTERVIEWER.toLowerCase()
+            return this.isWebMode && this.newResponsibleId.iconClass !== RoleNames.INTERVIEWER.toLowerCase()
         },
 
-        isWebMode() { return false },
-        closeSelected() { },
-        archiveSelected() { },
-
-        isHeadquarters() {
-            return true
-        },
-        isArchived() {
-            return false
-        },
-        showMoreButton() {
-            return true
-        },
+        isWebMode() { return this.model.webMode },
+        isHeadquarters() { return this.model.isHeadquarters },
+        isArchived() { return this.model.isArchived },
+        showMoreButton() { return true },
 
         config() {
             return this.$config.model
@@ -352,7 +459,7 @@ export default {
         },
         quantity() {
             return this.model.quantity == null
-                ? this.$t('Assignments.Unlimited')
+                ? "-1 (" + this.$t('Assignments.Unlimited') + ")"
                 : this.model.quantity
         },
         calendarEventTime() {
