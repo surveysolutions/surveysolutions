@@ -2250,7 +2250,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 : optionTitle;
         }
 
-        public IEnumerable<Identity> GetUnderlyingInterviewerEntities(Identity sectionId = null)
+        public IEnumerable<Identity> GetUnderlyingInterviewerEntities(Identity sectionId = null, bool includeVariables = false)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             var targetList = sectionId != null
@@ -2262,7 +2262,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 ? targetList
                 : targetList.Except(x =>
                 (questionnaire.IsQuestion(x.Identity.Id) && !questionnaire.IsInterviewerQuestion(x.Identity.Id))
-                || questionnaire.IsVariable(x.Identity.Id)
+                || (!includeVariables && questionnaire.IsVariable(x.Identity.Id))
             );
 
             return result.Select(x => x.Identity);

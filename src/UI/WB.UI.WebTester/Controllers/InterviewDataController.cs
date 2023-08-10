@@ -18,6 +18,8 @@ namespace WB.UI.WebTester.Controllers
         {
         }
 
+        protected override bool IncludeVariables => true;
+
         [HttpGet]
         [Route("getLanguageInfo")]
         public override LanguageInfo GetLanguageInfo(Guid interviewId) => base.GetLanguageInfo(interviewId);

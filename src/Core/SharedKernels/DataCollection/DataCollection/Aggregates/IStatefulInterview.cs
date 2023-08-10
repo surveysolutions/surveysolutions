@@ -179,7 +179,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         string GetLinkedOptionTitle(Identity linkedQuestionIdentity, RosterVector option);
         
-        IEnumerable<Identity> GetUnderlyingInterviewerEntities(Identity sectionId = null);
+        IEnumerable<Identity> GetUnderlyingInterviewerEntities(Identity sectionId = null, bool includeVariables = false);
 
         IEnumerable<Identity> GetUnderlyingEntitiesForReview(Identity sectionId);
 
