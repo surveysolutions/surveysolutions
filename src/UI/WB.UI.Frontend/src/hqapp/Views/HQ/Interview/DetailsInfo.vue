@@ -172,51 +172,6 @@
                 </button>
             </div>
         </ModalFrame>
-
-        <ModalFrame ref="assignModal" :title="$t('Common.Assign')">
-            <form onsubmit="return false;">
-                <div class="form-group" v-if="getFilteredToAssign().length > 0">
-                    <label class="control-label" for="newResponsibleId">{{ $t("Assignments.SelectResponsible") }}</label>
-                    <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
-                        :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
-                        :fetch-url="config.api.responsible"></Typeahead>
-                </div>
-                <div id="pnlAssignToOtherTeamConfirmMessage">
-                    <p v-html="this.config.isSupervisor ? $t('Interviews.AssignConfirmMessage', {
-                        count: this.getFilteredToAssign().length,
-                        status1: 'Supervisor assigned',
-                        status2: 'Interviewer assigned',
-                        status3: 'Rejected by Supervisor'
-                    })
-                        : $t('Interviews.AssignToOtherTeamConfirmMessage', {
-                            count: this.getFilteredToAssign().length,
-                            status1: 'Approved by Supervisor',
-                            status2: 'Approved by Headquarters'
-                        })"></p>
-                </div>
-
-                <div v-if="CountReceivedByInterviewerItems() > 0">
-                    <br />
-                    <input type="checkbox" id="reassignReceivedByInterviewer" v-model="isReassignReceivedByInterviewer"
-                        class="checkbox-filter" />
-                    <label for="reassignReceivedByInterviewer" style="font-weight: normal">
-                        <span class="tick"></span>
-                        {{ $t("Interviews.AssignReceivedConfirm", CountReceivedByInterviewerItems()) }}
-                    </label>
-                    <br />
-                    <span v-if="isReassignReceivedByInterviewer" class="text-danger">
-                        {{ $t("Interviews.AssignReceivedWarning") }}
-                    </span>
-                </div>
-            </form>
-            <div slot="actions">
-                <button type="button" class="btn btn-primary" role="confirm" @click="assign"
-                    :disabled="!newResponsibleId || getFilteredToAssign().length == 0">{{ $t("Common.Assign") }}</button>
-                <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">{{ $t("Common.Cancel")
-                }}</button>
-            </div>
-        </ModalFrame>
-
     </div>
 </template>
 
@@ -241,7 +196,6 @@ export default {
     },
     methods: {
         assignSelected() { },
-
         approve() {
             this.$refs.confirmApprove.promt(ok => {
                 if (ok) {
