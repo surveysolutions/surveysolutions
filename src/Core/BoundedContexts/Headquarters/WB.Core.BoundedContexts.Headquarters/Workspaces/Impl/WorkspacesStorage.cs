@@ -68,7 +68,8 @@ public class WorkspacesStorage : IWorkspacesStorage
                 {
                     Name = x.Name,
                     DisplayName = x.DisplayName,
-                    DisabledAtUtc = x.DisabledAtUtc
+                    DisabledAtUtc = x.DisabledAtUtc,
+                    CreatedAtUtc = x.CreatedAtUtc
                 }).ToList();
         int totalCount = this.workspaces.Query(_ => Filter(filter, _).Count());
 
