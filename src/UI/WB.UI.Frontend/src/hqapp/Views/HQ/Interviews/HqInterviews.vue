@@ -454,6 +454,7 @@ export default {
                     data: 'key',
                     name: 'Key',
                     title: this.$t('Common.InterviewKey'),
+                    tooltip: this.$t('Interviews.Tooltip_Table_InterviewKey'),
                     orderable: true,
                     searchable: true,
                     responsivePriority: 2,
@@ -472,6 +473,7 @@ export default {
                 {
                     data: 'identifyingData',
                     title: this.$t('Assignments.IdentifyingQuestions'),
+                    tooltip: this.$t('Interviews.Tooltip_Table_IdentifyingQuestions'),
                     className: 'prefield-column first-identifying last-identifying sorting_disabled visible',
                     orderable: false,
                     searchable: false,
@@ -493,6 +495,7 @@ export default {
                     data: 'responsibleName',
                     name: 'ResponsibleName',
                     title: this.$t('Common.Responsible'),
+                    tooltip: this.$t('Interviews.Tooltip_Table_Responsible'),
                     orderable: true,
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'responsible')
@@ -503,6 +506,7 @@ export default {
                     data: 'updateDateUtc',
                     name: 'UpdateDateUtc',
                     title: this.$t('Assignments.UpdatedAt'),
+                    tooltip: this.$t('Interviews.Tooltip_Table_LastUpdate'),
                     className: 'date last-update',
                     searchable: false,
                     render(data) {
@@ -521,6 +525,7 @@ export default {
                     name: 'ErrorsCount',
                     class: 'type-numeric',
                     title: this.$t('Interviews.Errors'),
+                    tooltip: this.$t('Interviews.Tooltip_Table_ErrorsCount'),
                     orderable: true,
                     render(data) {
                         return data > 0 ? '<span style=\'color:red;\'>' + data + '</span>' : '0'
@@ -534,6 +539,7 @@ export default {
                     name: 'NotAnsweredCount',
                     class: 'type-numeric',
                     title: this.$t('Interviews.NotAnsweredCount'),
+                    tooltip: this.$t('Interviews.Tooltip_Table_NotAnsweredCount'),
                     orderable: true,
                     render(data) {
                         return data === null ? `<span class="text-muted">${self.$t('Common.Unknown')}</span>` : data
@@ -547,6 +553,7 @@ export default {
                     data: 'interviewMode',
                     name: 'InterviewMode',
                     title: this.$t('Common.InterviewMode'),
+                    tooltip: this.$t('Interviews.Tooltip_Table_InterviewMode'),
                     orderable: false,
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'mode')
@@ -563,6 +570,7 @@ export default {
                     data: 'status',
                     name: 'Status',
                     title: this.$t('Common.Status'),
+                    tooltip: this.$t('Interviews.Tooltip_Table_Status'),
                     orderable: true,
                     render(data) {
                         return find(self.statuses, s => s.key == data).value
@@ -576,6 +584,7 @@ export default {
                     data: 'receivedByInterviewerAtUtc',
                     name: 'ReceivedByInterviewerAtUtc',
                     title: this.$t('Common.ReceivedByInterviewer'),
+                    tooltip: this.$t('Interviews.Tooltip_Table_ReceivedByInterviewer'),
                     render(data) {
                         if (data)
                             return moment
@@ -593,6 +602,7 @@ export default {
                     data: 'assignmentId',
                     name: 'AssignmentId',
                     title: this.$t('Common.Assignment'),
+                    tooltip: this.$t('Interviews.Tooltip_Table_Assignment'),
                     orderable: true,
                     searchable: false,
                     createdCell(td, cellData, rowData, row, col) {
