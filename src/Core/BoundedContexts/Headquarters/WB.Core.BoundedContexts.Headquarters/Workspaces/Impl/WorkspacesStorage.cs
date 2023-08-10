@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Infrastructure.Native.Utils;
 using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl;
@@ -89,9 +90,12 @@ public class WorkspacesStorage : IWorkspacesStorage
 
     private IQueryable<Workspace> Filter(WorkspacesFilter filter, IQueryable<Workspace> source)
     {
+        string orderBy = string.IsNullOrWhiteSpace(filter.SortOrder)
+            ? nameof(Workspace.DisplayName)
+            : filter.SortOrder + $", {nameof(Workspace.DisplayName)} Asc";
         IQueryable<Workspace> result = source
             .Where(w => w.RemovedAtUtc == null)
-            .OrderBy(x => x.DisplayName);
+            .OrderUsingSortExpression(orderBy);
 
         if (!this.authorizedUser.IsAdministrator)
         {

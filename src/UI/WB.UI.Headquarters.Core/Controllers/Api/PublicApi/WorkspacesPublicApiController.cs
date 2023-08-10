@@ -81,7 +81,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 IncludeDisabled = filter.IncludeDisabled,
                 Offset = filter.Start,
                 Limit = filter.Length,
-                Query = filter.Search?.Value
+                Query = filter.Search?.Value,
+                SortOrder = filter.GetSortOrder(),
             });
 
             return new WorkspacesApiView

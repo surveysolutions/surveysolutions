@@ -365,7 +365,7 @@ export default {
                         },
                     },
                     {
-                        data: 'createdAtUtc',
+                        data: 'CreatedAtUtc',
                         name: 'CreatedAtUtc',
                         title: this.$t('Workspaces.CreatedAt'),
                         tooltip: this.$t('Workspaces.Tooltip_Table_CreatedAt'),
@@ -396,7 +396,7 @@ export default {
                     contentType: 'application/json',
                 },
                 responsive: false,
-                order: [[0, 'asc']],
+                order: [[1, 'asc']],
                 sDom: 'rf<"table-with-scroll"t>ip',
             }
         },
