@@ -73,10 +73,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IWorkspaceService workspaceService,
             IOnlineSynchronizationService onlineSynchronizationService,
             IWorkspaceMemoryCacheSource memoryCacheSource,
-            WebInterviewsViewModel webInterviews ) : base(principal, viewModelNavigationService, permissionsService,
+            WebInterviewsViewModel webInterviews,
+            IMvxMessenger messenger) : base(principal, viewModelNavigationService, permissionsService,
             nearbyConnection)
         {
-            this.messenger = Mvx.IoCProvider.GetSingleton<IMvxMessenger>();
+            this.messenger = messenger;
             this.principal = principal;
             this.interviewerSettings = interviewerSettings;
             this.interviewsRepository = interviewsRepository;

@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
+using WB.Services.Export.CsvExport;
 using WB.Services.Export.ExportProcessHandlers;
 using WB.Services.Export.ExportProcessHandlers.Implementation.Handlers;
 using WB.Services.Export.Infrastructure;
@@ -37,7 +38,8 @@ namespace WB.Services.Export.Tests.ExportProcessHandlersTests
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 interviewsToExportSource ?? Mock.Of<IInterviewsToExportSource> (),
                 csvWriter ?? Mock.Of<ICsvWriter> (),
-                logger ?? Mock.Of<ILogger<TabularFormatParaDataExportProcessHandler>>());
+                logger ?? Mock.Of<ILogger<TabularFormatParaDataExportProcessHandler>>(),
+                Mock.Of<ITabularFormatExportService>());
         }
     }
 
