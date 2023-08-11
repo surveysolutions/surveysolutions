@@ -319,7 +319,7 @@ export default {
             await this.$http.post(this.config.api.assignments + '/Assign', {
                 responsibleId: this.newResponsibleId.key,
                 comments: this.reassignComment,
-                ids: this.selectedRows,
+                ids: [this.model.id],
             })
 
             this.$refs.assignModal.hide()
@@ -356,7 +356,7 @@ export default {
             await this.$http({
                 method: 'delete',
                 url: this.config.api.assignments,
-                data: this.model.id,
+                data: [this.model.id],
             })
 
             window.location.reload(true);
@@ -365,7 +365,7 @@ export default {
         async unarchiveSelected() {
             await this.$http.post(
                 this.config.api.assignments + '/Unarchive',
-                this.selectedRows)
+                [this.model.id])
 
             window.location.reload(true);
         },
@@ -377,6 +377,9 @@ export default {
 
     computed: {
 
+        showSelectors() {
+            return !this.config.isObserver && !this.config.isObserving
+        },
         singleCloseMessage() {
             if (this.isWebModeAssignmentSelected) {
                 return this.$t('Assignments.AssignmentCloseWebMode', {

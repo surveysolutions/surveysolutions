@@ -158,6 +158,8 @@ namespace WB.UI.Headquarters.Controllers
                 InterviewsProvided = assignment.InterviewSummaries.Count,
                 IsAudioRecordingEnabled = assignment.AudioRecording,
                 IsCompleted = assignment.IsCompleted,
+                IsObserver = this.currentUser.IsObserver,
+                IsObserving = this.currentUser.IsObserving,
                 Password = assignment.Password,
                 ProtectedVariables = assignment.ProtectedVariables,
                 Quantity = assignment.Quantity,
