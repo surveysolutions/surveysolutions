@@ -188,7 +188,7 @@
                                 <td class="text-nowrap">
                                     {{ this.$t('Assignments.WebMode') }}
                                 </td>
-                                <td>{{ isWebMode }}</td>
+                                <td>{{ mode }}</td>
                             </tr>
                             <tr>
                                 <td class="text-nowrap">
@@ -432,7 +432,7 @@ export default {
                     .format(DateFormats.dateTimeInList)
                 : this.$t('Common.No')
         },
-        isWebMode() {
+        mode() {
             return this.model.webMode === false
                 ? this.$t('Common.Capi')
                 : this.$t('Common.Cawi')
