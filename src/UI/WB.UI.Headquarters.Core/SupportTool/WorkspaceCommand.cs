@@ -68,7 +68,7 @@ namespace WB.UI.Headquarters.SupportTool
                 scope.ServiceProvider.GetRequiredService<IWorkspacesStorage>();
 
             var service = scope.ServiceProvider.GetRequiredService<IWorkspacesService>();
-            var workspace = new Workspace(name.ToLower(), title);
+            var workspace = new Workspace(name.ToLower(), title, DateTime.UtcNow);
 
             workspaces.Store(workspace);
             await service.Generate(workspace.Name,

@@ -1,4 +1,5 @@
 #nullable enable
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -80,7 +81,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 IncludeDisabled = filter.IncludeDisabled,
                 Offset = filter.Start,
                 Limit = filter.Length,
-                Query = filter.Search?.Value
+                Query = filter.Search?.Value,
+                SortOrder = filter.GetSortOrder(),
             });
 
             return new WorkspacesApiView
@@ -92,7 +94,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 {
                     Name = w.Name,
                     DisplayName = w.DisplayName,
-                    DisabledAtUtc = w.DisabledAtUtc
+                    DisabledAtUtc = w.DisabledAtUtc,
+                    CreatedAtUtc = w.CreatedAtUtc,
                 })
             );
         }
@@ -132,7 +135,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         {
             if (ModelState.IsValid)
             {
-                var workspace = new Workspace(request.Name, request.DisplayName);
+                var workspace = new Workspace(request.Name, request.DisplayName, DateTime.UtcNow);
 
                 this.workspaces.Store(workspace);
                 await this.workspacesService.Generate(workspace.Name,
