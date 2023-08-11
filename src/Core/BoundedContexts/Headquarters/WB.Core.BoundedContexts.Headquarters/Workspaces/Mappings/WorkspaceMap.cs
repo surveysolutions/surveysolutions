@@ -22,6 +22,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings
                 ptp.Type<UtcDateTimeType>();
                 ptp.Column("removed_at_utc");
             });
+            Property(x => x.CreatedAtUtc, ptp =>
+            {
+                ptp.Type<UtcDateTimeType>();
+                ptp.NotNullable(false);
+                ptp.Column("created_at_utc");
+            });
             
             Schema(WorkspaceConstants.SchemaName);
             

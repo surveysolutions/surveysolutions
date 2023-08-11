@@ -7,4 +7,5 @@ public class WorkspaceFilterResultItem
     public string Name { get; set; }
     public string DisplayName { get; set; }
     public DateTime? DisabledAtUtc { get; set; }
+    public DateTime? CreatedAtUtc { get; set; }
 }
