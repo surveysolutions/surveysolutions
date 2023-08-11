@@ -7,4 +7,5 @@ public class WorkspacesFilter
     public int Offset { get; set; }
     public int Limit { get; set; } = 10;
     public string UserId { get; set; }
+    public string SortOrder { get; set; }
 }

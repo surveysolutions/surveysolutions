@@ -1313,7 +1313,7 @@ namespace WB.Tests.Abc.TestFactories
 
             foreach (var workspace in workspaces)
             {
-                var ws = new Workspace(workspace, workspace);
+                var ws = new Workspace(workspace, workspace, DateTime.UtcNow);
                 user.Workspaces.Add(new WorkspacesUsers(ws, user, supervisorId != null ? new HqUser{Id = supervisorId.Value}: null));
             }
             
@@ -2635,7 +2635,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public Workspace Workspace(string name = null, bool? disabled = false)
         {
-            var ws  = new Workspace(name ?? Guid.NewGuid().FormatGuid(), (name ?? "") + " Display name1");
+            var ws  = new Workspace(name ?? Guid.NewGuid().FormatGuid(), (name ?? "") + " Display name1", DateTime.UtcNow);
             
             if(disabled == true)
                 ws.Disable();

@@ -16,21 +16,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
             DisplayName = string.Empty;
         }
 
-        public Workspace(string name, string displayName)
+        public Workspace(string name, string displayName, DateTime? createdAtUtc)
         {
             Name = name;
             DisplayName = displayName;
+            CreatedAtUtc = createdAtUtc;
         }
 
         public virtual string Name { get; set; }
         
         public virtual string DisplayName { get; set; }
         
-        public static Workspace Default { get; } = new Workspace(WorkspaceConstants.DefaultWorkspaceName, "Default Space");
-        public static Workspace Admin { get; } = new Workspace(WorkspaceConstants.WorkspaceNames.AdminWorkspaceName, "Server Administration"); 
-        public static Workspace UsersWorkspace { get; } = new Workspace(WorkspaceConstants.WorkspaceNames.UsersWorkspaceName, "User"); 
+        public static Workspace Default { get; } = new Workspace(WorkspaceConstants.DefaultWorkspaceName, "Default Space", null);
+        public static Workspace Admin { get; } = new Workspace(WorkspaceConstants.WorkspaceNames.AdminWorkspaceName, "Server Administration", null); 
+        public static Workspace UsersWorkspace { get; } = new Workspace(WorkspaceConstants.WorkspaceNames.UsersWorkspaceName, "User", null); 
         
         public virtual ISet<WorkspacesUsers> Users { get; set; } = new HashSet<WorkspacesUsers>();
+        public virtual DateTime? CreatedAtUtc { get; protected set; }
         public virtual DateTime? DisabledAtUtc { get; protected set; }
         public virtual DateTime? RemovedAtUtc { get; protected set; }
 

@@ -13,5 +13,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Models
         
         [DataMember]
         public DateTime? DisabledAtUtc { get; set; }
+
+        [DataMember]
+        public DateTime? CreatedAtUtc { get; set; }
     }
 }
