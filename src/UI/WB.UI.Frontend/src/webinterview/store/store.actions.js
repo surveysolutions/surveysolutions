@@ -236,7 +236,8 @@ export default {
             try {
                 commit('SET_LOADING_PROGRESS', true)
 
-                const section = await Vue.$api.interview.get('getFullSectionInfo', { sectionId: id })
+                const showVariables = rootState.webinterview.showVariables || false
+                const section = await Vue.$api.interview.get('getFullSectionInfo', { sectionId: id, includeVariables: showVariables })
 
                 commit('SET_SECTION_DATA', section.entities)
                 commit('SET_ENTITIES_DETAILS', {
@@ -328,5 +329,9 @@ export default {
         const interviewId = rootState.route.params.interviewId
         commit('CURRENT_SECTION', { interviewId: interviewId, sectionId: to })
         return Vue.$api.hub.changeSection(to, from)
+    },
+
+    setShowVariables({ commit, rootState }, { value }) {
+        commit('SHOW_VARIABLES', { value: value })
     },
 }

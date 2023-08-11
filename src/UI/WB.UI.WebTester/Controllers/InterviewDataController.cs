@@ -18,7 +18,14 @@ namespace WB.UI.WebTester.Controllers
         {
         }
 
-        protected override bool IncludeVariables => true;
+        protected override bool IncludeVariables
+        {
+            get
+            {
+                var includeVariables = this.HttpContext.Request.Query["includeVariables"].ToString();
+                return includeVariables == "true";
+            }
+        }
 
         [HttpGet]
         [Route("getLanguageInfo")]
