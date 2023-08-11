@@ -44,9 +44,71 @@
                                     </button>
                                     <ul class="dropdown-menu">
                                         <li>
-                                            <a href="#" @click="assignSelected">
+                                            <a
+                                                :href="model.takeNewInterviewUrl + '/' + model.questionnaireId + '$' + model.version">
                                                 {{
-                                                    $t("Common.Assign")
+                                                    $t('Dashboard.NewAssignment')
+                                                }}
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a
+                                                :href="model.batchUploadUrl + '/' + model.questionnaireId + '$' + model.version">
+                                                {{
+                                                    $t('Dashboard.UploadAssignments')
+                                                }}
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a
+                                                :href="this.$config.model.migrateAssignmentsUrl + '/' + model.questionnaireId + '?version=' + model.version">
+                                                {{
+                                                    $t('Dashboard.UpgradeAssignments')
+                                                }}
+                                            </a>
+                                        </li>
+
+                                        <li v-if="!model.isObserver">
+                                            <a
+                                                :href="this.$config.model.webInterviewUrl + '/' + model.questionnaireId + '$' + model.version">
+                                                {{
+                                                    $t('Dashboard.WebInterviewSetup')
+                                                }}
+                                            </a>
+                                        </li>
+
+                                        <li v-if="!model.isObserver">
+                                            <a
+                                                :href="this.$config.model.downloadLinksUrl + '/' + model.questionnaireId + '$' + model.version">
+                                                {{
+                                                    $t('Dashboard.DownloadLinks')
+                                                }}
+                                            </a>
+                                        </li>
+
+                                        <li v-if="!model.isObserver">
+                                            <a
+                                                :href="this.$config.model.sendInvitationsUrl + '/' + model.questionnaireId + '$' + model.version">
+                                                {{
+                                                    $t('Dashboard.SendInvitations')
+                                                }}
+                                            </a>
+                                        </li>
+
+                                        <li v-if="model.isAdmin">
+                                            <a
+                                                :href="this.$config.model.cloneQuestionnaireUrl + '/' + model.questionnaireId + '?version=' + model.version">
+                                                {{
+                                                    $t('Dashboard.CloneQuestionnaire')
+                                                }}
+                                            </a>
+                                        </li>
+
+                                        <li v-if="model.isAdmin">
+                                            <a
+                                                :href="this.$config.model.exportQuestionnaireUrl + '/' + model.questionnaireId + '?version=' + model.version">
+                                                {{
+                                                    $t('Dashboard.ExportQuestionnaire')
                                                 }}
                                             </a>
                                         </li>
