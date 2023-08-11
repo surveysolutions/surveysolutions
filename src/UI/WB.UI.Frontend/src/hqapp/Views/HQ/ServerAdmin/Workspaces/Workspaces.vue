@@ -373,7 +373,7 @@ export default {
                         searchable: false,
                         render(data) {
                             if (data)
-                                return moment.utc(data).local().format(DateFormats.dateTimeInList)
+                                return moment.utc(data).local().format(DateFormats.dateTime)
                             return ''
                         },
                     },
