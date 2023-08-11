@@ -90,13 +90,45 @@
                             <span></span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li>
+                            <li v-if="canBeReassigned">
                                 <a href="#" @click="assignSelected">
                                     {{
                                         $t("Common.Assign")
                                     }}
                                 </a>
                             </li>
+
+                            <li>
+                                <a href="#" @click="cahngeToCawiSelected">
+                                    {{
+                                        $t("Common.ChangeToCAWI")
+                                    }}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" @click="changeToCapiSelected">
+                                    {{
+                                        $t("Common.ChangeToCAPI")
+                                    }}
+                                </a>
+                            </li>
+
+                            <li v-if="canBeUnapproved">
+                                <a href="#" @click="unapproveSelected">
+                                    {{
+                                        $t("Common.Unapprove")
+                                    }}
+                                </a>
+                            </li>
+
+                            <li v-if="canBeDeleted">
+                                <a href="#" @click="deleteSelected">
+                                    {{
+                                        $t("Common.Delete")
+                                    }}
+                                </a>
+                            </li>
+
                         </ul>
                     </div>
                 </div>
@@ -196,6 +228,11 @@ export default {
     },
     methods: {
         assignSelected() { },
+        unapproveSelected() { },
+        cahngeToCawiSelected() { },
+        cahngeToCapiSelected() { },
+        deleteSelected() { },
+
         approve() {
             this.$refs.confirmApprove.promt(ok => {
                 if (ok) {
@@ -238,6 +275,9 @@ export default {
     },
 
     computed: {
+        canBeReassigned() { return this.model.canBeReassigned },
+        canBeUnapproved() { return !this.model.isSupervisor && this.model.canBeUnapprovedByHQ },
+        canBeDeleted() { return !this.model.isSupervisor && this.model.canBeDeleted },
         responsibleRole() {
             return this.$config.model.responsibleRole.toLowerCase()
         },

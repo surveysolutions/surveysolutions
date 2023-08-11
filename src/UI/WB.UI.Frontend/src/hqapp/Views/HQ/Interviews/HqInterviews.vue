@@ -69,7 +69,7 @@
                         <span class="tick"></span>
                         {{ selectedRows.length + " " + $t("Pages.Interviews_Selected") }}
                     </label>
-                    <button class="btn btn-lg btn-success" v-if="selectedRows.length"
+                    <button class="btn btn-lg btn-primary" v-if="selectedRows.length"
                         :disabled="getFilteredToAssign().length == 0" @click="assignInterview">{{ $t("Common.Assign")
                         }}</button>
                     <button class="btn btn-lg btn-success" v-if="selectedRows.length"
@@ -253,7 +253,8 @@
         <ModalFrame ref="statusHistory" :title="$t('Pages.HistoryOfStatuses_Title')">
             <div class="action-container">
                 <p>
-                    <a class="interview-id title-row" @click="viewInterview" href="javascript:void(0)">{{ interviewKey }}</a>
+                    <a class="interview-id title-row" @click="viewInterview" href="javascript:void(0)">{{ interviewKey
+                    }}</a>
                     by
                     <span :class="responsibleClass" v-html="responsibleLink"></span>
                 </p>

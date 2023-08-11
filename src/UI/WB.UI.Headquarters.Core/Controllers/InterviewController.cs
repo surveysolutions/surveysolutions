@@ -151,7 +151,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 WebInterviewUrl = webInterviewLinkProvider.WebInterviewRequestLink((interviewSummary.AssignmentId ?? 0).ToString(), id.ToString()),
                 AssignmentDetailsUrl = interviewSummary.AssignmentId.HasValue 
                     ? Url.Action("Index", "Assignments", new { id = interviewSummary.AssignmentId.Value })
-                    : "javascript:void(0);"
+                    : "javascript:void(0);",
+                
+                IsSupervisor = this.authorizedUser.IsSupervisor,
+                CanBeReassigned = interviewSummary.Status == InterviewStatus.SupervisorAssigned
+                                  || interviewSummary.Status == InterviewStatus.InterviewerAssigned
+                                  || interviewSummary.Status == InterviewStatus.Completed
+                                  || interviewSummary.Status == InterviewStatus.RejectedBySupervisor
+                                  || interviewSummary.Status == InterviewStatus.RejectedByHeadquarters,
+                
+                CanBeUnapprovedByHQ = interviewSummary.Status == InterviewStatus.ApprovedByHeadquarters,
+                CanBeDeleted = (interviewSummary.Status == InterviewStatus.Created
+                                || interviewSummary.Status == InterviewStatus.SupervisorAssigned
+                                || interviewSummary.Status == InterviewStatus.InterviewerAssigned
+                                || interviewSummary.Status == InterviewStatus.SentToCapi)
+                               && !interviewSummary.ReceivedByInterviewerAtUtc.HasValue
+                               && !interviewSummary.WasCompleted)
+                
             });
         }
 
@@ -308,6 +324,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public InterviewMode InterviewMode { get; set; }
         public string WebInterviewUrl { get; set; }
         public string AssignmentDetailsUrl { get; set; }
+        public bool CanBeReassigned { get; set; }
+        public bool IsSupervisor { get; set; }
+        public bool CanBeUnapprovedByHQ { get; set; }
+        public bool CanBeDeleted { get; set; }
     }
 
     public class CalendarEventView
