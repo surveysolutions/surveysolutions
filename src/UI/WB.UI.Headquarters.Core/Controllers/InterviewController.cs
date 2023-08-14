@@ -166,7 +166,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                                 || interviewSummary.Status == InterviewStatus.InterviewerAssigned
                                 || interviewSummary.Status == InterviewStatus.SentToCapi)
                                && !interviewSummary.ReceivedByInterviewerAtUtc.HasValue
-                               && !interviewSummary.WasCompleted)
+                               && !interviewSummary.WasCompleted,
                 
             });
         }
