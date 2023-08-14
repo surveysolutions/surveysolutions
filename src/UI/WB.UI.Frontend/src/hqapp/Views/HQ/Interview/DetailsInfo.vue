@@ -98,14 +98,14 @@
                                 </a>
                             </li>
 
-                            <li>
+                            <li v-if="canChangeToCawi">
                                 <a href="#" @click="cahngeToCawiSelected">
                                     {{
                                         $t("Common.ChangeToCAWI")
                                     }}
                                 </a>
                             </li>
-                            <li>
+                            <li v-if="canChangeToCapi">
                                 <a href="#" @click="changeToCapiSelected">
                                     {{
                                         $t("Common.ChangeToCAPI")
@@ -204,6 +204,76 @@
                 </button>
             </div>
         </ModalFrame>
+
+        <ModalFrame ref="deleteModal" :title="$t('Common.Delete')">
+            <div class="action-container">
+                <p
+                    v-html="$t('Interviews.DeleteConfirmMessageHQ', { count: 1, status1: 'Supervisor assigned', status2: 'Interviewer assigned' })">
+                </p>
+            </div>
+            <div slot="actions">
+                <button type="button" class="btn btn-primary" role="confirm" @click="deleteInterviews">{{
+                    $t("Common.Delete") }}</button>
+                <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">{{ $t("Common.Cancel")
+                }}</button>
+            </div>
+        </ModalFrame>
+
+
+        <ModalFrame ref="assignModal" :title="$t('Common.Assign')">
+            <form onsubmit="return false;">
+                <div class="form-group">
+                    <label class="control-label" for="newResponsibleId">{{ $t("Assignments.SelectResponsible") }}</label>
+                    <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
+                        :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
+                        :fetch-url="config.api.responsible"></Typeahead>
+                </div>
+                <div id="pnlAssignToOtherTeamConfirmMessage">
+                    <p v-html="this.config.isSupervisor ? $t('Interviews.AssignConfirmMessage', {
+                        count: 1,
+                        status1: 'Supervisor assigned',
+                        status2: 'Interviewer assigned',
+                        status3: 'Rejected by Supervisor'
+                    })
+                        : $t('Interviews.AssignToOtherTeamConfirmMessage', {
+                            count: 1,
+                            status1: 'Approved by Supervisor',
+                            status2: 'Approved by Headquarters'
+                        })"></p>
+                </div>
+
+                <div v-if="this.config.isReceivedByInterviewerAtUtc">
+                    <br />
+                    <input type="checkbox" id="reassignReceivedByInterviewer" v-model="isReassignReceivedByInterviewer"
+                        class="checkbox-filter" />
+                    <label for="reassignReceivedByInterviewer" style="font-weight: normal">
+                        <span class="tick"></span>
+                        {{ $t("Interviews.AssignReceivedConfirm", 1) }}
+                    </label>
+                    <br />
+                    <span v-if="isReassignReceivedByInterviewer" class="text-danger">
+                        {{ $t("Interviews.AssignReceivedWarning") }}
+                    </span>
+                </div>
+            </form>
+            <div slot="actions">
+                <button type="button" class="btn btn-primary" role="confirm" @click="assign"
+                    :disabled="!newResponsibleId">{{ $t("Common.Assign") }}</button>
+                <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">{{ $t("Common.Cancel")
+                }}</button>
+            </div>
+        </ModalFrame>
+
+
+        <ChangeToCapi ref="modalChangeToCAWI" :modalId="'switchToCawi_id'" :title="$t('Common.ChangeToCAWI')"
+            :confirmMessage="$t('Common.ChangeToCAWIConfirmHQ', { count: 1 })" :filteredCount="1"
+            :receivedByInterviewerItemsCount="isReceivedByInterviewerAtUtc ? 1 : 0" @confirm="changeInterviewModeToCawi" />
+
+        <ChangeToCapi ref="modalChangeToCAPI" :modalId="'switchToCapi_id'" :title="$t('Common.ChangeToCAPI')"
+            :confirmMessage="$t('Common.ChangeToCAPIConfirmHQ', {
+                count: 1
+            })" :filteredCount="1" :receivedByInterviewerItemsCount="isReceivedByInterviewerAtUtc ? 1 : 0"
+            @confirm="changeInterviewModeToCapi" />
     </div>
 </template>
 
@@ -214,6 +284,12 @@ import OverviewModal from './OverviewModal'
 import Vue from 'vue'
 import { DateFormats, convertToLocal } from '~/shared/helpers'
 import moment from 'moment-timezone'
+import ChangeToCapi from '../Interviews/ChangeModeModal.vue'
+
+import {
+    lowerCase, find, filter, flatten, map,
+    join, assign, isNaN, isNumber, toNumber, isEqual
+} from 'lodash'
 
 export default {
     data() {
@@ -224,14 +300,128 @@ export default {
             newResponsibleId: null,
             rejectToNewResponsible: false,
             doApproveReceivedByInterviewer: false,
+            isReassignReceivedByInterviewer: false,
         }
     },
     methods: {
-        assignSelected() { },
-        unapproveSelected() { },
-        cahngeToCawiSelected() { },
-        changeToCapiSelected() { },
-        deleteSelected() { },
+        assignSelected() {
+            this.newResponsibleId = null
+            this.$refs.assignModal.modal({ keyboard: false })
+        },
+        unapproveSelected() {
+            this.$refs.unapproveModal.modal({ keyboard: false })
+        },
+        cahngeToCawiSelected() {
+            this.$refs.modalChangeToCAWI.modal({ keyboard: false })
+        },
+        changeToCapiSelected() {
+            this.$refs.modalChangeToCAPI.modal({ keyboard: false })
+        },
+        deleteSelected() {
+            this.$refs.deleteModal.modal({ keyboard: false })
+        },
+
+        assign() {
+            const self = this
+
+            var filteredItems = [{ id: this.$config.model.id, receivedByInterviewerAtUtc: this.$config.model.receivedByInterviewerAtUtc }]
+
+            if (!this.isReassignReceivedByInterviewer) {
+                filteredItems = this.arrayFilter(filteredItems, function (item) {
+                    return item.receivedByInterviewerAtUtc === null
+                })
+            }
+
+            if (filteredItems.length == 0) {
+                this.$refs.assignModal.hide()
+                return
+            }
+
+            var commands = this.arrayMap(
+                map(filteredItems, interview => {
+                    return interview.id
+                }),
+                function (rowId) {
+                    var item = {
+                        InterviewId: rowId,
+                        InterviewerId:
+                            self.newResponsibleId.iconClass === 'interviewer' ? self.newResponsibleId.key : null,
+                        SupervisorId:
+                            self.newResponsibleId.iconClass === 'supervisor' ? self.newResponsibleId.key : null,
+                    }
+                    return JSON.stringify(item)
+                }
+            )
+
+            var command = {
+                type: self.$config.model.isSupervisor && self.newResponsibleId.iconClass === 'interviewer'
+                    ? 'AssignInterviewerCommand'
+                    : 'AssignResponsibleCommand',
+                commands: commands,
+            }
+
+            this.executeCommand(
+                command,
+                function () { },
+                function () {
+                    self.$refs.assignModal.hide()
+                    self.newResponsibleId = null
+                    window.location.reload(true)
+                }
+            )
+        },
+
+
+        unapproveInterviews() {
+            const self = this
+            var filteredItems = [{ id: this.$config.model.id }]
+
+            if (filteredItems.length == 0) {
+                this.$refs.unapproveModal.hide()
+                return
+            }
+
+            var command = this.getCommand(
+                'UnapproveByHeadquarterCommand',
+                map(filteredItems, interview => {
+                    return interview.id
+                })
+            )
+
+            this.executeCommand(
+                command,
+                function () { },
+                function () {
+                    self.$refs.unapproveModal.hide()
+                    window.location.reload(true)
+                }
+            )
+        },
+
+        deleteInterviews() {
+            const self = this
+            var filteredItems = [{ id: this.$config.model.id }]
+            if (filteredItems.length == 0) {
+                this.$refs.deleteModal.hide()
+                return
+            }
+
+            var command = this.getCommand(
+                'DeleteInterviewCommand',
+                map(filteredItems, interview => {
+                    return interview.id
+                })
+            )
+
+            this.executeCommand(
+                command,
+                function () { },
+                function () {
+                    self.$refs.deleteModal.hide()
+                    window.location.reload(true)
+                }
+            )
+        },
 
         approve() {
             this.$refs.confirmApprove.promt(ok => {
@@ -272,14 +462,99 @@ export default {
         hideModeDetails() {
             $(this.$refs.modeDetails).modal('hide')
         },
+
+        newResponsibleSelected(newValue) {
+            this.newResponsibleId = newValue
+        },
+
+        changeInterviewModeToCawi(confirmReceivedByInterviewer) {
+            this.changeInterviewMode([{ id: this.$config.model.id, receivedByInterviewerAtUtc: this.$config.model.receivedByInterviewerAtUtc }], 'CAWI', confirmReceivedByInterviewer)
+        },
+        changeInterviewModeToCapi(confirmReceivedByInterviewer) {
+            this.changeInterviewMode([{ id: this.$config.model.id, receivedByInterviewerAtUtc: this.$config.model.receivedByInterviewerAtUtc }], 'CAPI', confirmReceivedByInterviewer)
+        },
+
+        changeInterviewMode(filteredItems, mode, confirmReceivedByInterviewer) {
+            const self = this
+
+            if (!confirmReceivedByInterviewer) {
+                filteredItems = this.arrayFilter(filteredItems, function (item) {
+                    return item.receivedByInterviewerAtUtc === null
+                })
+            }
+
+            if (filteredItems.length == 0) {
+                return
+            }
+
+            const commands = map(filteredItems, i => {
+                return JSON.stringify({
+                    InterviewId: i.id,
+                    Mode: mode,
+                })
+            })
+
+            const command = {
+                type: 'ChangeInterviewModeCommand',
+                commands,
+            }
+
+            this.executeCommand(
+                command,
+                function () { },
+                function () {
+                    window.location.reload(true)
+                }
+            )
+        },
+
+
+        executeCommand(command, onSuccess, onDone) {
+            var url = this.config.commandsUrl
+            var requestHeaders = {}
+
+            $.ajax({
+                cache: false,
+                type: 'post',
+                headers: requestHeaders,
+                url: url,
+                data: command,
+                dataType: 'json',
+            })
+                .done(function (data) {
+                    if (onSuccess !== undefined) onSuccess(data)
+                })
+                .fail(function (jqXhr, textStatus, errorThrown) {
+                    if (jqXhr.status === 401) {
+                        location.reload()
+                    }
+                    //display error
+                })
+                .always(function () {
+                    if (onDone !== undefined) onDone()
+                })
+        },
+
+
     },
 
     computed: {
-        canBeReassigned() { return this.$config.model.canBeReassigned },
-        canBeUnapproved() { return !this.$config.model.isSupervisor && this.$config.model.canBeUnapprovedByHQ },
-        canBeDeleted() { return !this.$config.model.isSupervisor && this.$config.model.canBeDeleted },
+        config() {
+            return this.$config.model
+        },
+
+        canBeReassigned() { return !this.$config.model.isObserving && this.$config.model.canBeReassigned },
+        canBeUnapproved() { return !this.$config.model.isObserving && !this.$config.model.isSupervisor && this.$config.model.canBeUnapprovedByHQ },
+        canBeDeleted() { return !this.$config.model.isObserving && !this.$config.model.isSupervisor && this.$config.model.canBeDeleted },
+        canChangeToCapi() { return !this.$config.model.isObserving && this.$config.model.canChangeToCapi },
+        canChangeToCawi() { return !this.$config.model.isObserving && this.$config.model.canChangeToCawi },
+
         responsibleRole() {
             return this.$config.model.responsibleRole.toLowerCase()
+        },
+
+        isReceivedByInterviewerAtUtc() {
+            return this.$config.receivedByInterviewerAtUtc != null
         },
         interviewerShouldbeSelected() {
             return this.$config.model.approveReject.interviewerShouldbeSelected

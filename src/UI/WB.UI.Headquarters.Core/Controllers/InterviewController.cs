@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Humanizer;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,13 +13,11 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Filters;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
@@ -130,6 +127,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return View("Review", new InterviewReviewModel(this.GetApproveReject(interviewSummary))
             {
                 Id = id.FormatGuid(),
+                CommandsUrl = Url.Action("ExecuteCommands", "CommandApi"),
                 CoverPageId = questionnaire.IsCoverPageSupported ? questionnaire.CoverPageSectionId.FormatGuid() : String.Empty,
                 Key = interviewSummary.Key,
                 LastUpdatedAtUtc = interviewSummary.UpdateDate,
@@ -154,6 +152,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     : "javascript:void(0);",
                 
                 IsSupervisor = this.authorizedUser.IsSupervisor,
+                IsObserving = this.authorizedUser.IsObserving,
+                ReceivedByInterviewerAtUtc = interviewSummary.ReceivedByInterviewerAtUtc, 
                 CanBeReassigned = interviewSummary.Status == InterviewStatus.SupervisorAssigned
                                   || interviewSummary.Status == InterviewStatus.InterviewerAssigned
                                   || interviewSummary.Status == InterviewStatus.Completed
@@ -168,6 +168,28 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                                && !interviewSummary.ReceivedByInterviewerAtUtc.HasValue
                                && !interviewSummary.WasCompleted,
                 
+                CanChangeToCapi = !authorizedUser.IsInterviewer 
+                                  && interviewSummary.InterviewMode != InterviewMode.CAPI
+                                  && (interviewSummary.Status == InterviewStatus.Created 
+                                      || interviewSummary.Status == InterviewStatus.SupervisorAssigned
+                                      || interviewSummary.Status == InterviewStatus.InterviewerAssigned
+                                      || interviewSummary.Status == InterviewStatus.RejectedBySupervisor
+                                      || interviewSummary.Status == InterviewStatus.Restarted),
+                
+                CanChangeToCawi = !authorizedUser.IsInterviewer 
+                                  && interviewSummary.InterviewMode != InterviewMode.CAWI
+                                  &&(interviewSummary.Status == InterviewStatus.Created
+                                      || interviewSummary.Status == InterviewStatus.SupervisorAssigned
+                                      || interviewSummary.Status == InterviewStatus.InterviewerAssigned
+                                      || interviewSummary.Status == InterviewStatus.RejectedBySupervisor
+                                      || interviewSummary.Status == InterviewStatus.Restarted),
+                
+                Api = new
+                {
+                    Responsible = this.authorizedUser.IsSupervisor
+                        ? Url.Action("InterviewersCombobox", "Teams")
+                        : Url.Action("ResponsiblesCombobox", "Teams"),
+                }
             });
         }
 
@@ -328,6 +350,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public bool IsSupervisor { get; set; }
         public bool CanBeUnapprovedByHQ { get; set; }
         public bool CanBeDeleted { get; set; }
+        public bool IsObserving { get; set; }
+        public bool CanChangeToCapi { get; set; }
+        public bool CanChangeToCawi { get; set; }
+        public DateTime? ReceivedByInterviewerAtUtc { get; set; }
+        public string CommandsUrl { get; set; }
+        public object Api { get; set; }
     }
 
     public class CalendarEventView
