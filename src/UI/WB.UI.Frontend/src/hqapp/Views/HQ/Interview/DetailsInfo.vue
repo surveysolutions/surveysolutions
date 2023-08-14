@@ -230,7 +230,7 @@ export default {
         assignSelected() { },
         unapproveSelected() { },
         cahngeToCawiSelected() { },
-        cahngeToCapiSelected() { },
+        changeToCapiSelected() { },
         deleteSelected() { },
 
         approve() {
@@ -275,9 +275,9 @@ export default {
     },
 
     computed: {
-        canBeReassigned() { return this.model.canBeReassigned },
-        canBeUnapproved() { return !this.model.isSupervisor && this.model.canBeUnapprovedByHQ },
-        canBeDeleted() { return !this.model.isSupervisor && this.model.canBeDeleted },
+        canBeReassigned() { return this.$config.model.canBeReassigned },
+        canBeUnapproved() { return !this.$config.model.isSupervisor && this.$config.model.canBeUnapprovedByHQ },
+        canBeDeleted() { return !this.$config.model.isSupervisor && this.$config.model.canBeDeleted },
         responsibleRole() {
             return this.$config.model.responsibleRole.toLowerCase()
         },
