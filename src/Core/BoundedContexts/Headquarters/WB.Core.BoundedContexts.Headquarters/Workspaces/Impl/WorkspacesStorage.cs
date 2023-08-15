@@ -111,7 +111,8 @@ public class WorkspacesStorage : IWorkspacesStorage
         if (!string.IsNullOrEmpty(filter.Query))
         {
             var lowerCaseQuery = filter.Query.ToLower();
-            result = result.Where(w => w.DisplayName.ToLower().Contains(lowerCaseQuery));
+            result = result.Where(w => w.DisplayName.ToLower().Contains(lowerCaseQuery) 
+                                       || w.Name.ToLower().Contains(lowerCaseQuery));
         }
 
         if (!filter.IncludeDisabled)

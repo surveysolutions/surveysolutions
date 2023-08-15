@@ -369,6 +369,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
             {
                 var result = this.autoMapper.Map<InterviewTreeVariable, InterviewVariable>(variable);
                 result.Title = questionnaire.GetVariableLabel(identity.Id);
+                result.Name = questionnaire.GetVariableName(identity.Id);
                 return result;
             }
 
@@ -438,7 +439,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                                 Id = questionId.FormatGuid(),
                                 Title = CreateTitleWithSubstitutionsAndMarkdownAndNavLinks(qIdentity, questionnaire.GetQuestionTitle(questionId)),
                                 Instruction = CreateTitleWithSubstitutionsAndMarkdownAndNavLinks(qIdentity, questionnaire.GetQuestionInstruction(questionId)),
-                                EntityType = GetEntityType(qIdentity, questionnaire, callerInterview, isReviewMode).ToString(),
+                                EntityType = GetEntityType(qIdentity, questionnaire, callerInterview, isReviewMode, includeVariables: false).ToString(),
                                 Options = questionnaire.IsMatrixRoster(identity.Id)
                                     ? questionnaire.GetOptionsForQuestion(questionId, null, null, new int[0]).ToArray()
                                     : null
@@ -589,12 +590,15 @@ namespace WB.Enumerator.Native.WebInterview.Services
         }
 
         public InterviewEntityType GetEntityType(Identity identity, IQuestionnaire callerQuestionnaire,
-            IStatefulInterview interview, bool isReviewMode)
+            IStatefulInterview interview, bool isReviewMode, bool includeVariables)
         {
             var entityId = identity.Id;
 
             if (callerQuestionnaire.IsVariable(entityId))
             {
+                if (includeVariables)
+                    return InterviewEntityType.Variable;
+                
                 var isPrefilled = callerQuestionnaire.IsIdentifying(entityId);
                 return isPrefilled
                     ? InterviewEntityType.Variable
