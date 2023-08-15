@@ -625,6 +625,7 @@ export default {
         SwitchLanguage,
         StatusesHistory,
         OverviewModal,
+        ChangeToCapi
     },
 }
 </script>
