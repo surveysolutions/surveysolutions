@@ -92,6 +92,22 @@
                             :title="$t('WebInterviewUI.EmailLink_EmailResumeLink')">{{$t('WebInterviewUI.EmailLink_EmailResumeLink')}}</a>
                     </li>
                     <li v-if="this.$config.inWebTesterMode">
+                        <button v-if="includeVariables"
+                            type="button"
+                            class="btn btn-default btn-link btn-icon"
+                            @click="hideVariables"
+                            :title="$t('WebInterviewUI.HideVariables')">
+                            <span class="glyphicon glyphicon-check"></span>
+                        </button>
+                        <button v-if="!includeVariables"
+                            type="button"
+                            class="btn btn-default btn-link btn-icon"
+                            @click="showVariables"
+                            :title="$t('WebInterviewUI.ShowVariables')">
+                            <span class="glyphicon glyphicon-unchecked"></span>
+                        </button>
+                    </li>
+                    <li v-if="this.$config.inWebTesterMode">
                         <button
                             type="button"
                             class="btn btn-default btn-link btn-icon"
@@ -324,6 +340,9 @@ export default {
         getScenarioUrl() {
             return this.$config.getScenarioUrl
         },
+        includeVariables() {
+            return this.$store.state.webinterview.showVariables || false;
+        },
     },
     methods: {
         hideScenarioSave() {
@@ -389,6 +408,14 @@ export default {
         },
         reloadQuestionnaire() {
             window.location = this.$config.reloadQuestionnaireUrl
+        },
+        showVariables() {
+            this.$store.dispatch('setShowVariables', { value: true })
+            this.$store.dispatch('fetchSectionEntities')
+        },
+        hideVariables() {
+            this.$store.dispatch('setShowVariables', { value: false })
+            this.$store.dispatch('fetchSectionEntities')
         },
         async showSaveScenario() {
             this.scenarioSaving = true

@@ -88,12 +88,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     {
                         if (questionnaire.HasVariable(currentEntity.Id))
                         {
-                            if (questionnaire.IsIdentifying(currentEntity.Id))
-                            {
-                                entitiesToRefresh.Add((
-                                    WebInterview.GetConnectedClientSectionKey(parent, interview.Id),
-                                    currentEntity));
-                            }
+                            entitiesToRefresh.Add((WebInterview.GetConnectedClientSectionKey(parent, interview.Id),currentEntity));
 
                             IEnumerable<Guid> affectedStaticTexts =
                                 questionnaire.GetStaticTextsThatUseVariableAsAttachment(currentEntity.Id);
