@@ -6,35 +6,51 @@
                     <div class="panel-body clearfix">
                         <div class="about-questionnaire clearfix">
                             <div class="about-questionnaire-details clearfix">
-                                <ul class="main-info-column list-unstyled pull-left">
+                                <ul
+                                    class="main-info-column list-unstyled pull-left"
+                                >
                                     <li id="detailsInfo_interviewKeyListItem">
                                         {{ $t('Assignments.AssignmentId') }}:
                                         {{ model.id }}
                                     </li>
-                                    <li id="detailsInfo_qusetionnaireTitleListItem" class="questionnaire-title">
+                                    <li
+                                        id="detailsInfo_qusetionnaireTitleListItem"
+                                        class="questionnaire-title"
+                                    >
                                         [ver.{{ model.questionnaire.version }}]
                                         {{ model.questionnaire.title }}
                                     </li>
                                 </ul>
                                 <ul class="list-unstyled pull-left table-info">
                                     <li id="detailsInfo_lastUpdatedListItem">
-                                        <span class="data-label">{{
-                                            this.$t(
-                                                'Assignments.CreatedAt',
-                                            )
-                                        }}:</span>
+                                        <span class="data-label"
+                                            >{{
+                                                this.$t(
+                                                    'Assignments.CreatedAt',
+                                                )
+                                            }}:</span
+                                        >
                                         <span class="data">{{
                                             createdDate
                                         }}</span>
                                     </li>
                                     <li id="detailsInfo_responsibleListItem">
-                                        <span class="data-label">{{
-                                            this.$t('Details.Responsible')
-                                        }}:
+                                        <span class="data-label"
+                                            >{{
+                                                this.$t('Details.Responsible')
+                                            }}:
                                         </span>
-                                        <span v-if="isInterviewerResponsible" class="data">
-                                            <a v-bind:href="interviewerProfileUrl" class="interviewer">{{
-                                                model.responsible.name }}</a>
+                                        <span
+                                            v-if="isInterviewerResponsible"
+                                            class="data"
+                                        >
+                                            <a
+                                                v-bind:href="
+                                                    interviewerProfileUrl
+                                                "
+                                                class="interviewer"
+                                                >{{ model.responsible.name }}</a
+                                            >
                                         </span>
                                         <span v-else class="data supervisor">{{
                                             model.responsible.name
@@ -43,15 +59,34 @@
                                 </ul>
                                 <ul class="list-unstyled pull-left table-info">
                                     <li id="detailsInfo_lastUpdatedListItem">
-                                        <span class="data-label">{{
-                                            this.$t('Details.LastUpdated')
-                                        }}:</span>
-                                        <span class="data">{{ updatedDate }}</span>
+                                        <span class="data-label"
+                                            >{{
+                                                this.$t('Details.LastUpdated')
+                                            }}:</span
+                                        >
+                                        <span class="data">{{
+                                            updatedDate
+                                        }}</span>
                                     </li>
                                     <li>
-                                        <span class="data-label">{{ $t("Common.CalendarEvent") }}:</span>
-                                        <span class="data" data-toggle="tooltip" v-if="calendarEventComment != null"
-                                            :title="((calendarEventComment == null || calendarEventComment == '') ? this.$t('Assignments.NoComment') : calendarEventComment)">
+                                        <span class="data-label"
+                                            >{{
+                                                $t('Common.CalendarEvent')
+                                            }}:</span
+                                        >
+                                        <span
+                                            class="data"
+                                            data-toggle="tooltip"
+                                            v-if="calendarEventComment != null"
+                                            :title="
+                                                calendarEventComment == null ||
+                                                calendarEventComment == ''
+                                                    ? this.$t(
+                                                          'Assignments.NoComment',
+                                                      )
+                                                    : calendarEventComment
+                                            "
+                                        >
                                             {{ calendarEventTime }}
                                         </span>
                                     </li>
@@ -60,37 +95,53 @@
                         </div>
                         <div class="questionnaire-details-actions clearfix">
                             <div class="buttons-container">
-                                <div class="dropdown aside-menu" v-if="showMoreButton">
-                                    <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                        class="btn btn-link">
+                                <div
+                                    class="dropdown aside-menu"
+                                    :disabled="config.isObserving"
+                                    v-if="showMoreButton"
+                                >
+                                    <button
+                                        type="button"
+                                        data-toggle="dropdown"
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                        class="btn btn-link"
+                                        :disabled="config.isObserving"
+                                    >
                                         <span></span>
                                     </button>
-                                    <ul class="dropdown-menu">
+                                    <ul
+                                        class="dropdown-menu context-menu-list context-menu-root"
+                                    >
                                         <li v-if="!isArchived">
                                             <a href="#" @click="assignSelected">
-                                                {{
-                                                    $t("Common.Assign")
-                                                }}
+                                                {{ $t('Common.Assign') }}
                                             </a>
                                         </li>
-                                        <li v-if="isHeadquarters && !isArchived">
+                                        <li
+                                            v-if="isHeadquarters && !isArchived"
+                                        >
                                             <a href="#" @click="closeSelected">
-                                                {{
-                                                    $t("Assignments.Close")
-                                                }}
+                                                {{ $t('Assignments.Close') }}
                                             </a>
                                         </li>
-                                        <li v-if="isHeadquarters && !isArchived">
-                                            <a href="#" @click="archiveSelected">
-                                                {{
-                                                    $t("Assignments.Archive")
-                                                }}
+                                        <li
+                                            v-if="isHeadquarters && !isArchived"
+                                        >
+                                            <a
+                                                href="#"
+                                                @click="archiveSelected"
+                                            >
+                                                {{ $t('Assignments.Archive') }}
                                             </a>
                                         </li>
                                         <li v-if="isHeadquarters && isArchived">
-                                            <a href="#" @click="unarchiveSelected">
+                                            <a
+                                                href="#"
+                                                @click="unarchiveSelected"
+                                            >
                                                 {{
-                                                    $t("Assignments.Unarchive")
+                                                    $t('Assignments.Unarchive')
                                                 }}
                                             </a>
                                         </li>
@@ -103,13 +154,24 @@
 
                 <!--  -->
 
-                <div class="col-sm-6" style="padding-top: 30px;">
+                <div class="col-sm-6" style="padding-top: 30px">
                     <h3>
                         {{ $t('Assignments.AssignmentInfo') }}
-                        <a v-if="model.webMode && model.invitationToken" :href="webInterviewUrl" target="_blank">
-                            <span :title="$t('Assignments.StartWebInterview')" class="glyphicon glyphicon-link" />
+                        <a
+                            v-if="model.webMode && model.invitationToken"
+                            :href="webInterviewUrl"
+                            target="_blank"
+                        >
+                            <span
+                                :title="$t('Assignments.StartWebInterview')"
+                                class="glyphicon glyphicon-link"
+                            />
                         </a>
-                        <span v-if="this.model.isArchived" class="label label-default">{{ $t('Common.Archived') }}</span>
+                        <span
+                            v-if="this.model.isArchived"
+                            class="label label-default"
+                            >{{ $t('Common.Archived') }}</span
+                        >
                     </h3>
                     <table class="table table-striped table-bordered">
                         <tbody>
@@ -140,8 +202,11 @@
                                     {{ $t('Assignments.IdentifyingQuestions') }}
                                 </td>
                                 <td>
-                                    <div v-bind:key="question.id" v-for="question in model.identifyingData"
-                                        class="overview-item">
+                                    <div
+                                        v-bind:key="question.id"
+                                        v-for="question in model.identifyingData"
+                                        class="overview-item"
+                                    >
                                         <div class="item-content">
                                             <h4>
                                                 <span>{{
@@ -149,7 +214,9 @@
                                                 }}</span>
                                             </h4>
                                             <div class="answer">
-                                                <div v-html="question.answer"></div>
+                                                <div
+                                                    v-html="question.answer"
+                                                ></div>
                                             </div>
                                         </div>
                                     </div>
@@ -163,7 +230,11 @@
                                         )
                                     }}
                                 </td>
-                                <td class="pointer editable" @click="audioRecordingChange">{{ isAudioRecordingEnabled }}
+                                <td
+                                    class="pointer editable"
+                                    @click="audioRecordingChange"
+                                >
+                                    {{ isAudioRecordingEnabled }}
                                 </td>
                             </tr>
                             <tr>
@@ -200,69 +271,147 @@
                     </table>
                 </div>
 
-                <div class="col-sm-6" style="padding-top: 30px;">
+                <div class="col-sm-6" style="padding-top: 30px">
                     <h3>{{ $t('Assignments.AssignmentHistory') }}</h3>
-                    <DataTables ref="assignmentHistoryTable" :tableOptions="tableOptions" noSearch :noPaging="false"
-                        :wrapperClass="{ 'table-wrapper': true }"></DataTables>
+                    <DataTables
+                        ref="assignmentHistoryTable"
+                        :tableOptions="tableOptions"
+                        noSearch
+                        :noPaging="false"
+                        :wrapperClass="{ 'table-wrapper': true }"
+                    ></DataTables>
                 </div>
 
                 <ModalFrame ref="assignModal" :title="$t('Common.Assign')">
                     <form onsubmit="return false;">
-                        <div class="form-group" :class="{ 'has-warning': showWebModeReassignWarning }">
-                            <label class="control-label" for="newResponsibleId">{{ $t("Assignments.SelectResponsible")
-                            }}</label>
-                            <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
-                                :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
-                                :fetch-url="config.api.responsible"></Typeahead>
-                            <span class="help-block" v-if="showWebModeReassignWarning">
-                                {{ $t('Assignments.WebModeReassignToNonInterviewer', { count: 1 }) }}
+                        <div
+                            class="form-group"
+                            :class="{
+                                'has-warning': showWebModeReassignWarning,
+                            }"
+                        >
+                            <label
+                                class="control-label"
+                                for="newResponsibleId"
+                                >{{
+                                    $t('Assignments.SelectResponsible')
+                                }}</label
+                            >
+                            <Typeahead
+                                control-id="newResponsibleId"
+                                :placeholder="$t('Common.Responsible')"
+                                :value="newResponsibleId"
+                                :ajax-params="{}"
+                                @selected="newResponsibleSelected"
+                                :fetch-url="config.api.responsible"
+                            ></Typeahead>
+                            <span
+                                class="help-block"
+                                v-if="showWebModeReassignWarning"
+                            >
+                                {{
+                                    $t(
+                                        'Assignments.WebModeReassignToNonInterviewer',
+                                        { count: 1 },
+                                    )
+                                }}
                             </span>
                         </div>
                         <div class="form-group">
                             <label class="control-label" for="commentsId">
-                                {{ $t("Assignments.Comments") }}
+                                {{ $t('Assignments.Comments') }}
                             </label>
-                            <textarea control-id="commentsId" v-model="reassignComment"
-                                :placeholder="$t('Assignments.EnterComments')" name="comments" rows="6" maxlength="500"
-                                class="form-control" />
+                            <textarea
+                                control-id="commentsId"
+                                v-model="reassignComment"
+                                :placeholder="$t('Assignments.EnterComments')"
+                                name="comments"
+                                rows="6"
+                                maxlength="500"
+                                class="form-control"
+                            />
                         </div>
                     </form>
                     <div slot="actions">
-                        <button type="button" class="btn btn-primary" @click="assign" :disabled="!newResponsibleId">{{
-                            $t("Common.Assign") }}</button>
-                        <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+                        <button
+                            type="button"
+                            class="btn btn-primary"
+                            @click="assign"
+                            :disabled="!newResponsibleId"
+                        >
+                            {{ $t('Common.Assign') }}
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-link"
+                            data-dismiss="modal"
+                        >
+                            {{ $t('Common.Cancel') }}
+                        </button>
                     </div>
                 </ModalFrame>
 
-                <ModalFrame ref="closeModal" :title="$t('Pages.ConfirmationNeededTitle')">
+                <ModalFrame
+                    ref="closeModal"
+                    :title="$t('Pages.ConfirmationNeededTitle')"
+                >
                     <p>{{ singleCloseMessage }}</p>
 
                     <div slot="actions">
-                        <button type="button" class="btn btn-primary" :disabled="isWebModeAssignmentSelected"
-                            @click="close">{{
-                                $t("Assignments.Close") }}</button>
-                        <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+                        <button
+                            type="button"
+                            class="btn btn-primary"
+                            :disabled="isWebModeAssignmentSelected"
+                            @click="close"
+                        >
+                            {{ $t('Assignments.Close') }}
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-link"
+                            data-dismiss="modal"
+                        >
+                            {{ $t('Common.Cancel') }}
+                        </button>
                     </div>
                 </ModalFrame>
 
-
-                <ModalFrame ref="editAudioEnabledModal"
-                    :title="$t('Assignments.ChangeAudioRecordingModalTitle', { id: model.id })">
-                    <p>{{ $t("Assignments.AudioRecordingExplanation") }}</p>
+                <ModalFrame
+                    ref="editAudioEnabledModal"
+                    :title="
+                        $t('Assignments.ChangeAudioRecordingModalTitle', {
+                            id: model.id,
+                        })
+                    "
+                >
+                    <p>{{ $t('Assignments.AudioRecordingExplanation') }}</p>
                     <form onsubmit="return false;">
                         <div class="form-group">
-                            <Checkbox :label="$t('Assignments.AudioRecordingEnable')" name="audioRecordingEnabled"
-                                v-model="editedAudioRecordingEnabled" />
+                            <Checkbox
+                                :label="$t('Assignments.AudioRecordingEnable')"
+                                name="audioRecordingEnabled"
+                                v-model="editedAudioRecordingEnabled"
+                            />
                         </div>
                     </form>
                     <div slot="actions">
-                        <button type="button" class="btn btn-primary" @click="upateAudioRecording"
-                            :disabled="!showSelectors">{{ $t("Common.Save") }}</button>
-                        <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+                        <button
+                            type="button"
+                            class="btn btn-primary"
+                            @click="upateAudioRecording"
+                            :disabled="!showSelectors"
+                        >
+                            {{ $t('Common.Save') }}
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-link"
+                            data-dismiss="modal"
+                        >
+                            {{ $t('Common.Cancel') }}
+                        </button>
                     </div>
                 </ModalFrame>
-
-
             </div>
         </div>
     </main>
@@ -285,25 +434,27 @@ export default {
             newResponsibleId: null,
             reassignComment: null,
 
-            editedAudioRecordingEnabled: null
+            editedAudioRecordingEnabled: null,
         }
     },
     methods: {
         audioRecordingChange() {
-
             if (this.model.isHeadquarters && !this.model.isArchived) {
-
                 this.editedAudioRecordingEnabled = null
-                this.$hq.Assignments.audioSettings(this.model.id).then(data => {
-                    this.editedAudioRecordingEnabled = data.Enabled
-                    this.$refs.editAudioEnabledModal.modal('show')
-                })
+                this.$hq.Assignments.audioSettings(this.model.id).then(
+                    (data) => {
+                        this.editedAudioRecordingEnabled = data.Enabled
+                        this.$refs.editAudioEnabledModal.modal('show')
+                    },
+                )
             }
-
         },
 
         upateAudioRecording() {
-            this.$hq.Assignments.setAudioSettings(this.model.id, this.editedAudioRecordingEnabled).then(() => {
+            this.$hq.Assignments.setAudioSettings(
+                this.model.id,
+                this.editedAudioRecordingEnabled,
+            ).then(() => {
                 this.$refs.editAudioEnabledModal.hide()
                 window.location.reload(true)
             })
@@ -338,7 +489,7 @@ export default {
             const self = this
 
             const url = `${self.config.api.assignmentsApi}/${self.model.id}/close`
-            self.$http.post(url).catch(error => {
+            self.$http.post(url).catch((error) => {
                 if (error.isAxiosError && error.response.status === 409) {
                     const msg = this.$t('Assignments.AssignmentCloseWebMode', {
                         id: self.model.id,
@@ -349,7 +500,7 @@ export default {
             })
             this.$refs.closeModal.hide()
 
-            window.location.reload(true);
+            window.location.reload(true)
         },
 
         async archiveSelected() {
@@ -359,15 +510,15 @@ export default {
                 data: [this.model.id],
             })
 
-            window.location.reload(true);
+            window.location.reload(true)
         },
 
         async unarchiveSelected() {
-            await this.$http.post(
-                this.config.api.assignments + '/Unarchive',
-                [this.model.id])
+            await this.$http.post(this.config.api.assignments + '/Unarchive', [
+                this.model.id,
+            ])
 
-            window.location.reload(true);
+            window.location.reload(true)
         },
 
         newResponsibleSelected(newValue) {
@@ -376,7 +527,6 @@ export default {
     },
 
     computed: {
-
         showSelectors() {
             return !this.config.isObserver && !this.config.isObserving
         },
@@ -395,18 +545,32 @@ export default {
             return result
         },
 
-        isWebModeAssignmentSelected() { return this.isWebMode },
+        isWebModeAssignmentSelected() {
+            return this.isWebMode
+        },
 
         showWebModeReassignWarning() {
             if (!this.newResponsibleId) return false
 
-            return this.isWebMode && this.newResponsibleId.iconClass !== RoleNames.INTERVIEWER.toLowerCase()
+            return (
+                this.isWebMode &&
+                this.newResponsibleId.iconClass !==
+                    RoleNames.INTERVIEWER.toLowerCase()
+            )
         },
 
-        isWebMode() { return this.model.webMode },
-        isHeadquarters() { return this.model.isHeadquarters },
-        isArchived() { return this.model.isArchived },
-        showMoreButton() { return true },
+        isWebMode() {
+            return this.model.webMode
+        },
+        isHeadquarters() {
+            return this.model.isHeadquarters
+        },
+        isArchived() {
+            return this.model.isArchived
+        },
+        showMoreButton() {
+            return true
+        },
 
         config() {
             return this.$config.model
@@ -430,9 +594,9 @@ export default {
         isReceivedByTablet() {
             return this.model.receivedByTabletAtUtc != null
                 ? moment
-                    .utc(this.model.receivedByTabletAtUtc)
-                    .local()
-                    .format(DateFormats.dateTimeInList)
+                      .utc(this.model.receivedByTabletAtUtc)
+                      .local()
+                      .format(DateFormats.dateTimeInList)
                 : this.$t('Common.No')
         },
         mode() {
@@ -462,15 +626,15 @@ export default {
         },
         quantity() {
             return this.model.quantity == null
-                ? "-1 (" + this.$t('Assignments.Unlimited') + ")"
+                ? '-1 (' + this.$t('Assignments.Unlimited') + ')'
                 : this.model.quantity
         },
         calendarEventTime() {
             return this.model.calendarEvent != null
                 ? convertToLocal(
-                    this.model.calendarEvent.startUtc,
-                    this.model.calendarEvent.startTimezone,
-                )
+                      this.model.calendarEvent.startUtc,
+                      this.model.calendarEvent.startTimezone,
+                  )
                 : ''
         },
         calendarEventComment() {
@@ -480,9 +644,9 @@ export default {
                 this.model.calendarEvent.comment == ''
                 ? this.$t('Assignments.NoComment')
                 : escape(this.model.calendarEvent.comment).replaceAll(
-                    '\n',
-                    '<br/>',
-                )
+                      '\n',
+                      '<br/>',
+                  )
         },
 
         tableOptions() {

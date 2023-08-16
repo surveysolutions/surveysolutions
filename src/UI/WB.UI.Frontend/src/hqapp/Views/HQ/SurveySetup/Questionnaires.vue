@@ -1,37 +1,77 @@
 <template>
-    <HqLayout :title="$config.model.title" :hasFilter="false" :topicButton="$t('Dashboard.ImportTemplate')"
-        :topicButtonRef="!$config.model.isObserver ? $config.model.importQuestionnaireUrl : ''">
+    <HqLayout
+        :title="$config.model.title"
+        :hasFilter="false"
+        :topicButton="$t('Dashboard.ImportTemplate')"
+        :topicButtonRef="
+            !$config.model.isObserver
+                ? $config.model.importQuestionnaireUrl
+                : ''
+        "
+    >
         <ol class="list-unstyled" slot="subtitle">
             <li>{{ this.$t('Dashboard.SurveySetupIntroMessage1') }}</li>
             <li>{{ this.$t('Dashboard.SurveySetupIntroMessage2') }}</li>
         </ol>
 
-        <DataTables ref="table" multiorder :tableOptions="tableOptions" :contextMenuItems="contextMenuItems"></DataTables>
+        <DataTables
+            ref="table"
+            multiorder
+            :tableOptions="tableOptions"
+            :contextMenuItems="contextMenuItems"
+        ></DataTables>
 
-        <ModalFrame ref="deleteQuestionnaireModal" :title="$t('Pages.ConfirmationNeededTitle')">
+        <ModalFrame
+            ref="deleteQuestionnaireModal"
+            :title="$t('Pages.ConfirmationNeededTitle')"
+        >
             <form onsubmit="return false;">
-                <p style="color: red;"> {{ $t("Pages.GlobalSettings_DeleteQuestionnaireWarning") }}</p>
-                <p>{{ $t("Pages.GlobalSettings_DeleteQuestionnaireConfirmation") }}</p>
+                <p style="color: red">
+                    {{ $t('Pages.GlobalSettings_DeleteQuestionnaireWarning') }}
+                </p>
+                <p>
+                    {{
+                        $t(
+                            'Pages.GlobalSettings_DeleteQuestionnaireConfirmation',
+                        )
+                    }}
+                </p>
                 <p class="text-danger" v-if="this.deletionWarnMsg">
                     {{ deletionWarnMsg }}
                 </p>
                 <div class="form-group">
-                    <div style="overflow-x:auto;">
-                        <label style="white-space: pre;" class="control-label" for="deleteConfirmInput">
+                    <div style="overflow-x: auto">
+                        <label
+                            style="white-space: pre"
+                            class="control-label"
+                            for="deleteConfirmInput"
+                        >
                             {{ deletionApproveLabel }}
                         </label>
                     </div>
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control" id="deleteConfirmInput" v-model="deletionQuestionnaireName" />
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="deleteConfirmInput"
+                        v-model="deletionQuestionnaireName"
+                    />
                 </div>
             </form>
             <div slot="actions">
-                <button type="button" class="btn btn-danger" :disabled="deleteBtnDisabled" @click="deleteQuestionnaire">{{
-                    $t("Common.Delete") }}</button>
-                <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+                <button
+                    type="button"
+                    class="btn btn-danger"
+                    :disabled="deleteBtnDisabled"
+                    @click="deleteQuestionnaire"
+                >
+                    {{ $t('Common.Delete') }}
+                </button>
+                <button type="button" class="btn btn-link" data-dismiss="modal">
+                    {{ $t('Common.Cancel') }}
+                </button>
             </div>
-
         </ModalFrame>
     </HqLayout>
 </template>
@@ -41,21 +81,21 @@ import moment from 'moment'
 import gql from 'graphql-tag'
 import parseInt from 'lodash'
 
-const interviewsQuestionnaireDeletionQuery = gql`query interviewsList($workspace: String!, $where: InterviewsFilter) {
-  interviews(
-      workspace: $workspace 
-      where: $where) {
-    filteredCount
-  }
-}`
+const interviewsQuestionnaireDeletionQuery = gql`
+    query interviewsList($workspace: String!, $where: InterviewsFilter) {
+        interviews(workspace: $workspace, where: $where) {
+            filteredCount
+        }
+    }
+`
 
-const assignmentsQuestionnaireDeletionQuery = gql`query assignmentsList($workspace: String!, $where: AssignmentsFilter) {
-  assignments(
-       workspace: $workspace 
-       where: $where) {
-    filteredCount
-  }
-}`
+const assignmentsQuestionnaireDeletionQuery = gql`
+    query assignmentsList($workspace: String!, $where: AssignmentsFilter) {
+        assignments(workspace: $workspace, where: $where) {
+            filteredCount
+        }
+    }
+`
 
 export default {
     data() {
@@ -79,7 +119,11 @@ export default {
                     window.location.href =
                         this.$config.model.questionnaireDetailsUrl +
                         '/' +
-                        encodeURI(selectedRow.questionnaireId + '$' + selectedRow.version)
+                        encodeURI(
+                            selectedRow.questionnaireId +
+                                '$' +
+                                selectedRow.version,
+                        )
                 },
             })
 
@@ -88,13 +132,19 @@ export default {
                     items.push({
                         name: this.$t('Dashboard.NewAssignment'),
                         callback: () => {
-                            window.location.href = this.$config.model.takeNewInterviewUrl + '/' + selectedRow.id
+                            window.location.href =
+                                this.$config.model.takeNewInterviewUrl +
+                                '/' +
+                                selectedRow.id
                         },
                     })
                     items.push({
                         name: this.$t('Dashboard.UploadAssignments'),
                         callback: () => {
-                            window.location.href = this.$config.model.batchUploadUrl + '/' + selectedRow.id
+                            window.location.href =
+                                this.$config.model.batchUploadUrl +
+                                '/' +
+                                selectedRow.id
                         },
                     })
                     items.push({
@@ -119,8 +169,14 @@ export default {
                     items.push({
                         name: this.$t('Dashboard.WebInterviewSetup'),
                         callback: (_, opt) => {
-                            const questionnaireId = selectedRow.questionnaireId + '$' + selectedRow.version
-                            window.location.href = this.$config.model.webInterviewUrl + '/' + encodeURI(questionnaireId)
+                            const questionnaireId =
+                                selectedRow.questionnaireId +
+                                '$' +
+                                selectedRow.version
+                            window.location.href =
+                                this.$config.model.webInterviewUrl +
+                                '/' +
+                                encodeURI(questionnaireId)
                         },
                     })
                 }
@@ -128,9 +184,14 @@ export default {
                     items.push({
                         name: this.$t('Dashboard.DownloadLinks'),
                         callback: (_, opt) => {
-                            var questionnaireId = selectedRow.questionnaireId + '$' + selectedRow.version
+                            var questionnaireId =
+                                selectedRow.questionnaireId +
+                                '$' +
+                                selectedRow.version
                             window.location.href =
-                                this.$config.model.downloadLinksUrl + '/' + encodeURI(questionnaireId)
+                                this.$config.model.downloadLinksUrl +
+                                '/' +
+                                encodeURI(questionnaireId)
                         },
                     })
                 }
@@ -138,9 +199,14 @@ export default {
                     items.push({
                         name: this.$t('Dashboard.SendInvitations'),
                         callback: (_, opt) => {
-                            var questionnaireId = selectedRow.questionnaireId + '$' + selectedRow.version
+                            var questionnaireId =
+                                selectedRow.questionnaireId +
+                                '$' +
+                                selectedRow.version
                             window.location.href =
-                                this.$config.model.sendInvitationsUrl + '/' + encodeURI(questionnaireId)
+                                this.$config.model.sendInvitationsUrl +
+                                '/' +
+                                encodeURI(questionnaireId)
                         },
                     })
                 }
@@ -160,7 +226,7 @@ export default {
                     disabled: rowData.isDisabled,
                 })
                 items.push({
-                    name: this.$t('Dashboard.ExportQuestionnaire'),
+                    name: this.$t('Dashboard.SaveQuestionnaire'),
                     callback: (_, opt) => {
                         window.location.href =
                             this.$config.model.exportQuestionnaireUrl +
@@ -176,8 +242,10 @@ export default {
                     name: this.$t('Dashboard.DeleteQuestionnaire'),
                     className: 'error-text',
                     callback: async () => {
-                        this.deletedQuestionnaireId.questionnaireId = selectedRow.questionnaireId
-                        this.deletedQuestionnaireId.version = selectedRow.version
+                        this.deletedQuestionnaireId.questionnaireId =
+                            selectedRow.questionnaireId
+                        this.deletedQuestionnaireId.version =
+                            selectedRow.version
                         this.deletedQuestionnaireId.title = selectedRow.title
 
                         this.deletionWarnMsg = ''
@@ -190,28 +258,25 @@ export default {
                             variables: {
                                 where: {
                                     and: [
-                                        { questionnaireId: { eq: questionnaireGuid.replaceAll('-', '') } },
-                                        { questionnaireVersion: { eq: parseInt(selectedRow.version) } },
-                                        { receivedByInterviewerAtUtc: { neq: null } }]
-                                },
-                                workspace: this.$store.getters.workspace,
-                            },
-                            fetchPolicy: 'network-only',
-                        })
-
-                        const assignmentsQueryResult = await this.$apollo.query({
-                            query: assignmentsQuestionnaireDeletionQuery,
-                            variables: {
-                                where: {
-                                    and: [
                                         {
                                             questionnaireId: {
-                                                id: { eq: questionnaireGuid.replaceAll('-', '') },
-                                                version: { eq: parseInt(selectedRow.version) },
+                                                eq: questionnaireGuid.replaceAll(
+                                                    '-',
+                                                    '',
+                                                ),
                                             },
                                         },
                                         {
-                                            receivedByTabletAtUtc: { neq: null }
+                                            questionnaireVersion: {
+                                                eq: parseInt(
+                                                    selectedRow.version,
+                                                ),
+                                            },
+                                        },
+                                        {
+                                            receivedByInterviewerAtUtc: {
+                                                neq: null,
+                                            },
                                         },
                                     ],
                                 },
@@ -220,11 +285,51 @@ export default {
                             fetchPolicy: 'network-only',
                         })
 
-                        const receivedInterviews = interviewsQueryResult.data.interviews.filteredCount
-                        const receivedAssignments = assignmentsQueryResult.data.assignments.filteredCount
+                        const assignmentsQueryResult = await this.$apollo.query(
+                            {
+                                query: assignmentsQuestionnaireDeletionQuery,
+                                variables: {
+                                    where: {
+                                        and: [
+                                            {
+                                                questionnaireId: {
+                                                    id: {
+                                                        eq: questionnaireGuid.replaceAll(
+                                                            '-',
+                                                            '',
+                                                        ),
+                                                    },
+                                                    version: {
+                                                        eq: parseInt(
+                                                            selectedRow.version,
+                                                        ),
+                                                    },
+                                                },
+                                            },
+                                            {
+                                                receivedByTabletAtUtc: {
+                                                    neq: null,
+                                                },
+                                            },
+                                        ],
+                                    },
+                                    workspace: this.$store.getters.workspace,
+                                },
+                                fetchPolicy: 'network-only',
+                            },
+                        )
+
+                        const receivedInterviews =
+                            interviewsQueryResult.data.interviews.filteredCount
+                        const receivedAssignments =
+                            assignmentsQueryResult.data.assignments
+                                .filteredCount
 
                         if (receivedInterviews > 0 || receivedAssignments > 0) {
-                            this.deletionWarnMsg = this.$t('Dashboard.QuestionnaireDeleteWarn', { receivedInterviews, receivedAssignments })
+                            this.deletionWarnMsg = this.$t(
+                                'Dashboard.QuestionnaireDeleteWarn',
+                                { receivedInterviews, receivedAssignments },
+                            )
                         }
                     },
                 })
@@ -235,7 +340,10 @@ export default {
         async deleteQuestionnaire() {
             if (this.deletedQuestionnaireId) {
                 const response = await this.$hq
-                    .Questionnaire(this.deletedQuestionnaireId.questionnaireId, this.deletedQuestionnaireId.version)
+                    .Questionnaire(
+                        this.deletedQuestionnaireId.questionnaireId,
+                        this.deletedQuestionnaireId.version,
+                    )
                     .Delete()
                 if (response.status == 200) {
                     this.$refs.deleteQuestionnaireModal.modal('hide')
@@ -252,7 +360,7 @@ export default {
             var self = this
             return {
                 deferLoading: 0,
-                rowId: row => {
+                rowId: (row) => {
                     return `q${row.id}_${row.version}`
                 },
                 columns: [
@@ -275,7 +383,9 @@ export default {
                         class: 'date',
                         title: this.$t('Dashboard.ImportDate'),
                         render: function (data, type, row) {
-                            return new moment.utc(data).local().format(DateFormats.dateTimeInList)
+                            return new moment.utc(data)
+                                .local()
+                                .format(DateFormats.dateTimeInList)
                         },
                         width: '120px',
                     },
@@ -285,7 +395,9 @@ export default {
                         class: 'date',
                         title: this.$t('Dashboard.LastEntryDate'),
                         render: function (data, type, row) {
-                            return new moment.utc(data).local().format(DateFormats.dateTimeInList)
+                            return new moment.utc(data)
+                                .local()
+                                .format(DateFormats.dateTimeInList)
                         },
                         width: '120px',
                     },
@@ -295,7 +407,9 @@ export default {
                         class: 'date',
                         title: this.$t('Dashboard.CreationDate'),
                         render: function (data, type, row) {
-                            return new moment.utc(data).local().format(DateFormats.dateTimeInList)
+                            return new moment.utc(data)
+                                .local()
+                                .format(DateFormats.dateTimeInList)
                         },
                         width: '120px',
                     },
@@ -306,7 +420,9 @@ export default {
                         orderable: false,
                         title: this.$t('Dashboard.WebMode'),
                         render: function (data, type, row) {
-                            return data === true ? self.$t('Common.Cawi') : self.$t('Common.Capi')
+                            return data === true
+                                ? self.$t('Common.Cawi')
+                                : self.$t('Common.Capi')
                         },
                         width: '60px',
                     },
@@ -324,11 +440,16 @@ export default {
             }
         },
         deletionApproveLabel() {
-            const rt = this.$t('Dashboard.TypeQuestionnaireName', { questionnaireTitle: this.deletedQuestionnaireId.title })
+            const rt = this.$t('Dashboard.TypeQuestionnaireName', {
+                questionnaireTitle: this.deletedQuestionnaireId.title,
+            })
             return rt
         },
         deleteBtnDisabled() {
-            return this.deletedQuestionnaireId.title !== this.deletionQuestionnaireName
+            return (
+                this.deletedQuestionnaireId.title !==
+                this.deletionQuestionnaireName
+            )
         },
     },
 }

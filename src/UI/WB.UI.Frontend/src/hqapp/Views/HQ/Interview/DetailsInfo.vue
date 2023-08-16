@@ -188,19 +188,30 @@
                         }}
                     </button>
 
-                    <div class="dropdown aside-menu" v-if="showMoreButton">
+                    <div
+                        class="dropdown aside-menu"
+                        :disabled="config.isObserving"
+                        v-if="showMoreButton"
+                    >
                         <button
                             type="button"
                             data-toggle="dropdown"
                             aria-haspopup="true"
                             aria-expanded="false"
                             class="btn btn-link"
+                            :disabled="config.isObserving"
                         >
                             <span></span>
                         </button>
-                        <ul class="dropdown-menu">
+                        <ul
+                            class="dropdown-menu context-menu-list context-menu-root"
+                        >
                             <li v-if="canBeReassigned">
-                                <a href="#" @click="assignSelected">
+                                <a
+                                    href="#"
+                                    class="primary-text"
+                                    @click="assignSelected"
+                                >
                                     {{ $t('Common.Assign') }}
                                 </a>
                             </li>
@@ -215,10 +226,21 @@
                                     {{ $t('Common.ChangeToCAPI') }}
                                 </a>
                             </li>
-                            <li v-if="canBeDeleted">
-                                <a href="#" @click="deleteSelected">
+                            <li
+                                class="context-menu-separator context-menu-not-selectable"
+                            ></li>
+                            <li>
+                                <a
+                                    v-if="canBeDeleted"
+                                    href="#"
+                                    class="error-tex"
+                                    @click="deleteSelected"
+                                >
                                     {{ $t('Common.Delete') }}
                                 </a>
+                                <span v-else style="color: #bbb">{{
+                                    $t('Common.Delete')
+                                }}</span>
                             </li>
                         </ul>
                     </div>
@@ -580,6 +602,13 @@ export default {
             this.$refs.deleteModal.modal({ keyboard: false })
         },
 
+        arrayFilter: function (array, predicate) {
+            array = array || []
+            var result = []
+            for (var i = 0, j = array.length; i < j; i++)
+                if (predicate(array[i], i)) result.push(array[i])
+            return result
+        },
         assign() {
             const self = this
 
