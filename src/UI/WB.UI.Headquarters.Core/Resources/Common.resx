@@ -264,6 +264,9 @@
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
   <data name="NewVersionAvailable" xml:space="preserve">
     <value>New Version Available:</value>
   </data>
@@ -389,5 +392,14 @@
   </data>
   <data name="Disable" xml:space="preserve">
     <value>Disable</value>
-  </data>    
+  </data>
+  <data name="Properties" xml:space="preserve">
+      <value>Properties</value>
+  </data>
+  <data name="LinkedUsers" xml:space="preserve">
+      <value>Linked users</value>
+  </data>
+  <data name="LinkUser" xml:space="preserve">
+      <value>User</value>
+  </data>
 </root>

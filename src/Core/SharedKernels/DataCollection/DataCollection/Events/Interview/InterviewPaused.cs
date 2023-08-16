@@ -8,14 +8,11 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         public InterviewPaused(Guid userId, DateTimeOffset originDate) 
             : base(userId, originDate)
         {
-            if (originDate != default(DateTimeOffset))
-            {
-                this.LocalTime = originDate.LocalDateTime;
-                this.UtcTime = originDate.UtcDateTime;
-            }
         }
 
+        [Obsolete("Please use OriginDate property")]
         public DateTime? LocalTime { get; set; }
+        [Obsolete("Please use OriginDate property")]
         public DateTime? UtcTime { get; set; }
     }
 }

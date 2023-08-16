@@ -269,8 +269,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
             this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
 
-            this.Tree.GetQuestion(questionIdentity).SetAnswer(AreaAnswer.FromArea(new Area(@event.Geometry, @event.MapName, @event.NumberOfPoints, @event.AreaSize,
-                @event.Length, @event.Coordinates, @event.DistanceToEditor)), @event.OriginDate ?? @event.AnswerTimeUtc);
+            this.Tree.GetQuestion(questionIdentity).SetAnswer(AreaAnswer.FromArea(
+                new Area(@event.Geometry, @event.MapName, @event.NumberOfPoints, @event.AreaSize, @event.Length, 
+                    @event.Coordinates, @event.DistanceToEditor, @event.RequestedAccuracy, @event.RequestedFrequency)), 
+                @event.OriginDate ?? @event.AnswerTimeUtc);
         }
 
         protected virtual void Apply(AudioQuestionAnswered @event)
@@ -959,7 +961,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         public void AnswerGeoLocationQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTimeOffset originDate, double latitude, double longitude,
-            double accuracy, double altitude, DateTimeOffset timestamp)
+            double? accuracy, double? altitude, DateTimeOffset timestamp)
         {
             new InterviewPropertiesInvariants(this.properties)
                 .RequireAnswerCanBeChanged();
@@ -1015,7 +1017,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var changedInterviewTree = GetChangedTree();
 
-            var answer = new Area(command.Geometry, command.MapName, command.NumberOfPoints, command.Area, command.Length, command.Coordinates, command.DistanceToEditor);
+            var answer = new Area(command.Geometry, command.MapName, command.NumberOfPoints, 
+                command.Area, command.Length, command.Coordinates, command.DistanceToEditor, 
+                command.RequestedAccuracy, command.RequestedFrequency);
             changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(AreaAnswer.FromArea(answer), command.OriginDate);
 
             this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity, command.OriginDate);
@@ -1279,7 +1283,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         new InterviewQuestionInvariants(answer.Identity, questionnaire,
                             changedInterviewTree, questionOptionsRepository));
 
-                    if (commandAssignmentId.HasValue && questionnaire.IsPrefilled(answer.Identity.Id))
+                    if (commandAssignmentId.HasValue && questionnaire.IsIdentifying(answer.Identity.Id))
                     {
                         interviewTreeQuestion.MarkAsReadonly();
                     }
@@ -1484,14 +1488,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewHardDeleted(userId, originDate));
         }
 
-        public void MarkInterviewAsReceivedByInterviwer(Guid userId, DateTimeOffset originDate)
+        public void MarkInterviewAsReceivedByInterviewer(Guid userId,string deviceId, DateTimeOffset originDate)
         {
             InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
 
             propertiesInvariants.ThrowIfInterviewHardDeleted();
             propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.RejectedBySupervisor, InterviewStatus.RejectedByHeadquarters, InterviewStatus.InterviewerAssigned, InterviewStatus.SupervisorAssigned);
 
-            this.ApplyEvent(new InterviewReceivedByInterviewer(originDate));
+            this.ApplyEvent(new InterviewReceivedByInterviewer(deviceId, originDate));
         }
 
         public void Restore(Guid userId, DateTimeOffset originDate)
@@ -2141,8 +2145,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 {
                     var answer = changedQuestion.GetAsInterviewTreeAreaQuestion().GetAnswer().Value;
                     this.ApplyEvent(new AreaQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, now, answer.Geometry, answer.MapName, answer.AreaSize, answer.Length,
-                        answer.Coordinates, answer.DistanceToEditor, answer.NumberOfPoints));
+                        changedQuestion.Identity.RosterVector, now, answer.Geometry, answer.MapName, 
+                        answer.AreaSize, answer.Length, answer.Coordinates, answer.DistanceToEditor, 
+                        answer.NumberOfPoints, answer.RequestedAccuracy ,answer.RequestedFrequency));
                 }
 
                 else if (changedQuestion.IsAudio)
@@ -2158,10 +2163,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ApplyRemoveAnswerEvents(InterviewTreeQuestionDiff[] diffByQuestions, Guid userId, DateTimeOffset originDate)
         {
-            var questionIdentittiesWithRemovedAnswer = diffByQuestions.Select(x => x.SourceNode.Identity).ToArray();
+            var questionIdentitiesWithRemovedAnswer = diffByQuestions.Select(x => x.SourceNode.Identity).ToArray();
 
-            if (questionIdentittiesWithRemovedAnswer.Any())
-                this.ApplyEvent(new AnswersRemoved(userId, questionIdentittiesWithRemovedAnswer, originDate));
+            if (questionIdentitiesWithRemovedAnswer.Any())
+                this.ApplyEvent(new AnswersRemoved(userId, questionIdentitiesWithRemovedAnswer, originDate));
         }
 
         private void ApplyRosterEvents(InterviewTreeRosterDiff[] diff, DateTimeOffset originDate)
@@ -2245,7 +2250,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 : optionTitle;
         }
 
-        public IEnumerable<Identity> GetUnderlyingInterviewerEntities(Identity sectionId = null)
+        public IEnumerable<Identity> GetUnderlyingInterviewerEntities(Identity sectionId = null, bool includeVariables = false)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             var targetList = sectionId != null
@@ -2257,7 +2262,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 ? targetList
                 : targetList.Except(x =>
                 (questionnaire.IsQuestion(x.Identity.Id) && !questionnaire.IsInterviewerQuestion(x.Identity.Id))
-                || questionnaire.IsVariable(x.Identity.Id)
+                || (!includeVariables && questionnaire.IsVariable(x.Identity.Id))
             );
 
             return result.Select(x => x.Identity);

@@ -1,4 +1,6 @@
-﻿namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
+﻿using System.Threading.Tasks;
+
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
 {
     public interface IExportSettings
     {

@@ -14,6 +14,7 @@ using WB.Services.Export.InterviewDataStorage.EfMappings;
 using WB.Services.Infrastructure.Storage;
 using WB.Services.Infrastructure.Tenant;
 using Microsoft.Extensions.Logging;
+using WB.Services.Export.InterviewDataStorage.Services;
 
 namespace WB.Services.Export.Infrastructure
 {
@@ -31,10 +32,15 @@ namespace WB.Services.Export.Infrastructure
 
         private readonly Lazy<string> connectionString;
 
-        private const long ContextSchemaVersion = 5;
+
+        private const long ContextSchemaVersion = 7;
 
         private readonly IOptions<DbConnectionSettings> connectionSettings;
         private readonly ILogger<TenantDbContext>? logger;
+        
+        // there is no single table in DB to acquire lock on,
+        // so using some pretty random value for advisory lock
+        public const long SchemaChangesLock = -12312312312;
 
         public TenantDbContext(ITenantContext tenantContext,
             IOptions<DbConnectionSettings> connectionSettings,
@@ -55,11 +61,12 @@ namespace WB.Services.Export.Infrastructure
                     if (tenantContext.Tenant == null)
                         throw new ArgumentException($"{nameof(TenantDbContext)} cannot be resolved outside of configured ITenantContext");
 
-                var connectionStringBuilder = new NpgsqlConnectionStringBuilder(connectionSettings.Value.DefaultConnection)
-                {
-                    Enlist = false,
-                    SearchPath = tenantContext.Tenant.SchemaName()
-                };
+                    var connectionStringBuilder =
+                        new NpgsqlConnectionStringBuilder(connectionSettings.Value.DefaultConnection)
+                        {
+                            Enlist = false,
+                            SearchPath = tenantContext.Tenant.SchemaName()
+                        };
 
                     return connectionStringBuilder.ToString();
                 });
@@ -122,27 +129,37 @@ namespace WB.Services.Export.Infrastructure
 
         private async Task CheckSchemaVersionAndMigrate(CancellationToken cancellationToken)
         {
-            if (await DoesSchemaExist(cancellationToken))
+            if (await DoesSchemaVersionTableExists(cancellationToken))
             {
                 long schemaVersion = 0;
-                try
-                {
-                    schemaVersion = SchemaVersion.AsLong;
-                }
-                catch (PostgresException postgressException)
-                {
-                    //if relation doesn't exist or incorrect for old schema
-                    //ignoring and dropping schema
-                    logger?.LogWarning("Version Check failed. {messageText}", postgressException.MessageText);
-                }
-
+                schemaVersion = SchemaVersion.AsLong;
+                
                 if (schemaVersion < ContextSchemaVersion)
                 {
                     await DropTenantSchemaAsync(this.TenantContext.Tenant.Name, cancellationToken);
                 }
             }
 
+            var s = this.Database.GetConnectionString();
             await this.Database.MigrateAsync(cancellationToken: cancellationToken);
+        }
+
+        private async Task<bool> DoesSchemaVersionTableExists(CancellationToken cancellationToken)
+        {
+            await using var db = new NpgsqlConnection(connectionSettings.Value.DefaultConnection);
+
+            await db.OpenAsync(cancellationToken);
+            var name = TenantContext.Tenant.SchemaName();
+            var exists = await db.QueryFirstAsync<bool>(
+                @"SELECT EXISTS (SELECT FROM information_schema.tables 
+                    WHERE  table_schema = @schemaName
+                    AND    table_name   = @tableName)",
+                new
+                {
+                    schemaName = name,
+                    tableName = "metadata"
+                });
+            return exists;
         }
 
         private async Task SetContextSchema(CancellationToken cancellationToken)
@@ -162,8 +179,9 @@ namespace WB.Services.Export.Infrastructure
             string? schema = null;
             if (!this.TenantContext.Tenant.Id.Equals(TenantId.None))
             {
-                modelBuilder.HasDefaultSchema(TenantContext.Tenant.SchemaName());
-                schema = TenantContext.Tenant.SchemaName();
+                var schemaName = TenantContext.Tenant.SchemaName();
+                modelBuilder.HasDefaultSchema(schemaName);
+                schema = schemaName;
             }
 
             modelBuilder.ApplyConfiguration(new InterviewReferenceEntityTypeConfiguration(schema));
@@ -180,66 +198,66 @@ namespace WB.Services.Export.Infrastructure
             await using var db = new NpgsqlConnection(connectionSettings.Value.DefaultConnection);
             await db.OpenAsync(cancellationToken);
 
-            //logger.LogInformation("Start drop tenant scheme: {tenant}", tenant);
+            logger?.LogInformation("Start drop tenant schema: {Tenant}", tenant);
 
-            var schemas = (await db.QueryAsync<string>(
-                "select nspname from pg_catalog.pg_namespace n " +
-                "join pg_catalog.pg_description d on d.objoid = n.oid " +
-                "where d.description = @tenant",
-                new
-                {
-                    tenant
-                })).ToList();
-
-            foreach (var schema in schemas)
+            try
             {
-                var tables = await db.QueryAsync<string>(
-                    "select tablename from pg_tables where schemaname= @schema",
-                    new { schema });
+                await db.QueryAsync($"select pg_advisory_lock ({SchemaChangesLock})");
+                
+                var schemas = (await db.QueryAsync<string>(
+                    "select nspname from pg_catalog.pg_namespace n " +
+                    "join pg_catalog.pg_description d on d.objoid = n.oid " +
+                    "where d.description = @tenant",
+                    new
+                    {
+                        tenant
+                    })).ToList();
 
-                foreach (var table in tables)
-                {
-                    tablesToDelete.Add($@"""{schema}"".""{table}""");
-                }
-            }
-
-            foreach (var tables in tablesToDelete.Batch(10))
-            {
-                await using var tr = await db.BeginTransactionAsync(cancellationToken);
-                foreach (var table in tables)
-                {
-                    await db.ExecuteAsync($@"drop table if exists {table}");
-                    //logger.LogInformation("Dropped {table}", table);
-                }
-
-                await tr.CommitAsync(cancellationToken);
-            }
-
-            await using (var tr = await db.BeginTransactionAsync(cancellationToken))
-            {
                 foreach (var schema in schemas)
                 {
-                    await db.ExecuteAsync($@"drop schema if exists ""{schema}""");
-                    //logger.LogInformation("Dropped schema {schema}.", schema);
+                    var tables = await db.QueryAsync<string>(
+                        "select tablename from pg_tables where schemaname= @schema",
+                        new { schema });
+
+                    foreach (var table in tables)
+                    {
+                        tablesToDelete.Add($@"""{schema}"".""{table}""");
+                    }
                 }
 
-                await tr.CommitAsync(cancellationToken);
-            }
-        }
+                // move metadata tables in end of list, to remove last
+                var metadataTable = $@".""metadata""";
+                tablesToDelete = tablesToDelete.Where(tableName => !tableName.EndsWith(metadataTable))
+                    .Concat(tablesToDelete.Where(tableName => tableName.EndsWith(metadataTable)))
+                    .ToList();
 
-        private async Task<bool> DoesSchemaExist(CancellationToken cancellationToken)
-        {
-            await using var db = new NpgsqlConnection(connectionSettings.Value.DefaultConnection);
-
-            await db.OpenAsync(cancellationToken);
-            var name = TenantContext.Tenant.SchemaName();
-            var exists = await db.QueryFirstAsync<bool>(
-                "SELECT EXISTS(SELECT 1 FROM pg_namespace WHERE nspname = @name);",
-                new
+                foreach (var tables in tablesToDelete.Batch(10))
                 {
-                    name
-                });
-            return exists;
+                    await using var tr = await db.BeginTransactionAsync(cancellationToken);
+                    foreach (var table in tables)
+                    {
+                        await db.ExecuteAsync($@"drop table if exists {table}");
+                        logger?.LogInformation("Dropped {Table}", table);
+                    }
+
+                    await tr.CommitAsync(cancellationToken);
+                }
+
+                await using (var tr = await db.BeginTransactionAsync(cancellationToken))
+                {
+                    foreach (var schema in schemas)
+                    {
+                        await db.ExecuteAsync($@"drop schema if exists ""{schema}""");
+                        logger?.LogInformation("Dropped schema {Schema}", schema);
+                    }
+
+                    await tr.CommitAsync(cancellationToken);
+                }
+            }
+            finally
+            {
+                await db.QueryAsync($"select pg_advisory_unlock ({SchemaChangesLock})");
+            }
         }
 
         public async Task EnsureMigrated(CancellationToken cancellationToken)

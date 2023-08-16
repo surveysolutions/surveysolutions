@@ -128,7 +128,7 @@ namespace WB.UI.Designer.Code.ImportExport
                 var json = this.translationsService.GetTranslationsJson(questionnaireDocument, translation.Id);
                 var fileName = translation.Id.FormatGuid() + ".json";
                 zipStream.PutTextFileEntry($"Translations/{fileName}", json);
-                questionnaire.Translations.Items.Single(t => t.Name == translation.Name).FileName = fileName;
+                questionnaire.Translations.Items.Single(t => t.Id == translation.Id).FileName = fileName;
             }
 
             foreach (var categories in questionnaireDocument.Categories)
@@ -136,7 +136,7 @@ namespace WB.UI.Designer.Code.ImportExport
                 var json = this.categoriesService.GetCategoriesJson(questionnaireDocument.PublicKey, categories.Id);
                 var fileName = categories.Id.FormatGuid() + ".json";
                 zipStream.PutTextFileEntry($"Categories/{fileName}", json);
-                questionnaire.Categories.Single(c => c.Name == categories.Name).FileName = fileName;
+                questionnaire.Categories.Single(c => c.Id == categories.Id).FileName = fileName;
             }
 
             var questionnaireJson = questionnaireSerializer.Serialize(questionnaire);

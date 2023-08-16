@@ -44,16 +44,16 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         public override void SubscribeToEvents()
         {
             base.SubscribeToEvents();
-
-            if (this.EditText == null)
+            var editText = EditText;
+            if (editText == null)
                 return;
 
-            focusChangeSubscription = this.EditText.WeakSubscribe<EditText, View.FocusChangeEventArgs>(
-                nameof(this.EditText.FocusChange),
+            focusChangeSubscription = editText.WeakSubscribe<EditText, EditText.FocusChangeEventArgs>(
+                nameof(editText.FocusChange),
                 this.HandleFocusChange);
 
-            editorActionSubscription = this.EditText.WeakSubscribe<EditText, TextView.EditorActionEventArgs>(
-                nameof(this.EditText.EditorAction),
+            editorActionSubscription = editText.WeakSubscribe<EditText, TextView.EditorActionEventArgs>(
+                nameof(editText.EditorAction),
                 this.HandleEditorAction);
         }
 

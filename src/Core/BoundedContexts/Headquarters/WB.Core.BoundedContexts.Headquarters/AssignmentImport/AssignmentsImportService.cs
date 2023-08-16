@@ -81,6 +81,14 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             if (hasErrors) yield break;
 
+            foreach (var rosterError in this.verifier.VerifyRosters(assignmentRows, questionnaire))
+            {
+                hasErrors = true;
+                yield return rosterError;
+            }
+            
+            if (hasErrors) yield break;
+
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version);
 
             var assignmentToImports = ConcatRosters(assignmentRows, questionnaire);
@@ -300,24 +308,59 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         private void SaveAssignments(IList<AssignmentToImport> assignments)
         {
-            this.importAssignmentsRepository.Store(assignments.Select(x =>
-                new Tuple<AssignmentToImport, object>(GetAssignmentWithoutEmptyAnswersAndFillPasswords(x), x.Id)));
+            Dictionary<string, bool> usedPasswords =
+                assignments.Where(x => x.Password != AssignmentConstants.PasswordSpecialValue && !String.IsNullOrEmpty(x.Password))
+                    .Select(assignment => assignment.Password)
+                    .Distinct()
+                    .ToDictionary(pass => pass, y => false);
+            
+            List<string> currentBatch = new List<string>();
+
+            var itemsToStore = assignments.Select(x =>
+                new Tuple<AssignmentToImport, object>(GetAssignmentWithoutEmptyAnswersAndFillPasswords(x, GetPasswordOrGenerate(usedPasswords, currentBatch, x.Password)), x.Id));
+            
+            this.importAssignmentsRepository.Store(itemsToStore);
+        }
+
+        private string GetPasswordOrGenerate(Dictionary<string, bool> usedPasswords, List<string> currentBatch, string argPassword)
+        {
+            if (argPassword != AssignmentConstants.PasswordSpecialValue)
+            {
+                return argPassword;
+            }
+            
+            while (currentBatch.Count == 0)
+            {
+                currentBatch.AddRange(passwordGenerator.GeneratePasswordBatch(usedPasswords));
+            }
+            
+            var currentPass = currentBatch[0];
+            
+            usedPasswords.Add(currentPass, false);
+            currentBatch.RemoveAt(0);
+
+            return currentPass;
+        }
+
+        private AssignmentToImport GetAssignmentWithoutEmptyAnswersAndFillPasswords(
+            AssignmentToImport assignmentToImport, string newPassword)
+        {
+            assignmentToImport.Answers = assignmentToImport.Answers.Where(x => x.Answer != null).ToList();
+            assignmentToImport.Password = newPassword;
+            return assignmentToImport;
         }
 
         private AssignmentToImport GetAssignmentWithoutEmptyAnswersAndFillPasswords(AssignmentToImport assignmentToImport)
         {
-            assignmentToImport.Answers = assignmentToImport.Answers.Where(x => x.Answer != null).ToList();
-
-            assignmentToImport.Password = passwordGenerator.GetPassword(assignmentToImport.Password);
-
-            return assignmentToImport;
+            return GetAssignmentWithoutEmptyAnswersAndFillPasswords(assignmentToImport, 
+                passwordGenerator.GetPassword(assignmentToImport.Password));
         }
 
         private List<AssignmentToImport> ConcatRosters(List<PreloadingAssignmentRow> assignmentRows,
             IQuestionnaire questionnaire, List<string> protectedVariables = null)
             => assignmentRows
                 .GroupBy(assignmentRow => assignmentRow.InterviewIdValue?.Value ??
-                                          /*for single/anvanced preloading with main file only without interview ids*/
+                                          /*for single/advanced preloading with main file only without interview ids*/
                                           Guid.NewGuid().ToString())
                 .Select(x => ConvertToAssignmentToImport(x.ToList(), questionnaire, protectedVariables))
                 .ToList();
@@ -441,7 +484,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 }
             }
 
-            // remove roster size answer from parent file if we have calulated by roster files roster size answer
+            // remove roster size answer from parent file if we have calculated by roster files roster size answer
             foreach (var sourceRosterSizeAnswer in sourceRosterSizeAnswers.Where(x => calculatedRosterSizeAnswers.Any(y => y.Identity == x.Identity)))
                 assignment.Answers.Remove(sourceRosterSizeAnswer);
 
@@ -559,13 +602,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 case AssignmentCategoricalSingleAnswer categoricalSingleAnswer when !isLinkedToQuestion && !isLinkedToRoster && categoricalSingleAnswer.OptionCode.HasValue:
                     interviewAnswer.Answer = CategoricalFixedSingleOptionAnswer.FromInt(categoricalSingleAnswer.OptionCode.Value);
                     break;
-                case AssignmentDateTimeAnswer dateTimeAnswer when dateTimeAnswer.Answer.HasValue:
+                case AssignmentDateTimeAnswer { Answer: not null } dateTimeAnswer:
                     interviewAnswer.Answer = DateTimeAnswer.FromDateTime(dateTimeAnswer.Answer.Value);
                     break;
-                case AssignmentIntegerAnswer integerAnswer when integerAnswer.Answer.HasValue:
+                case AssignmentIntegerAnswer { Answer: not null } integerAnswer:
                     interviewAnswer.Answer = NumericIntegerAnswer.FromInt(integerAnswer.Answer.Value);
                     break;
-                case AssignmentDoubleAnswer doubleAnswer when doubleAnswer.Answer.HasValue:
+                case AssignmentDoubleAnswer { Answer: not null } doubleAnswer:
                     interviewAnswer.Answer = NumericRealAnswer.FromDouble(doubleAnswer.Answer.Value);
                     break;
                 case AssignmentGpsAnswer gpsAnswer:

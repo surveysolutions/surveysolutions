@@ -138,7 +138,7 @@
   <data name="AssignmentsSelected" xml:space="preserve">
     <value>{{count}}个任务被选中</value>
   </data>
-  <data name="AssignmentsSelected_plural" xml:space="preserve">
+  <data name="AssignmentsSelected_other" xml:space="preserve">
     <value>{{count}}个任务被选中</value>
   </data>
   <data name="ChangeSizeModalTitle" xml:space="preserve">
@@ -168,7 +168,7 @@
   <data name="NumberOfAssignmentsAffected" xml:space="preserve">
     <value>{{count}}个任务将被修改</value>
   </data>
-  <data name="NumberOfAssignmentsAffected_plural" xml:space="preserve">
+  <data name="NumberOfAssignmentsAffected_other" xml:space="preserve">
     <value>{{count}}个任务将被修改</value>
   </data>
   <data name="SelectResponsible" xml:space="preserve">

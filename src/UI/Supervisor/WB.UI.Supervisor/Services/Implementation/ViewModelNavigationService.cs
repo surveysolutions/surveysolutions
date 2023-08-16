@@ -87,7 +87,7 @@ namespace WB.UI.Supervisor.Services.Implementation
             throw new System.NotImplementedException();
         }
 
-        public override Task NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity)
+        public override Task<bool> NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity)
         {
             this.log.Trace("Navigating to SupervisorInterviewViewModel");
             return NavigationService.Navigate<SupervisorInterviewViewModel, InterviewViewModelArgs>(
@@ -98,7 +98,6 @@ namespace WB.UI.Supervisor.Services.Implementation
                 });
         }
 
-        protected override void FinishActivity() => TopActivity.Activity.Finish();
         protected override void NavigateToSettingsImpl() =>
             TopActivity.Activity.StartActivity(new Intent(TopActivity.Activity, typeof(PrefsActivity)));
     }

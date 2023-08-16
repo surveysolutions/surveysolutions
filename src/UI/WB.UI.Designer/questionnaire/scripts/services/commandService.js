@@ -75,8 +75,9 @@
                 return Upload.upload({
                     url: urlCommands + '/attachment',
                     data: { file: _.isNull(attachment.file) ? "" : attachment.file, fileName: fileName, "command": JSON.stringify(command) }
-                }).then(function () {
+                }).then(function (response) {
                     blockUI.stop();
+                    return response;
                 }, function () {
                     blockUI.stop();
                 });
@@ -185,8 +186,9 @@
 
                     return response;
 
-                }).catch(function () {
+                }).catch(function (err) {
                     blockUI.stop();
+                    throw err;
                 });
             };
 
@@ -283,7 +285,9 @@
                         instructions: question.instructions,
                         hideInstructions: question.hideInstructions,
                         optionsFilterExpression: question.optionsFilterExpression,
-                        geometryType: question.geometryType
+                        geometryType: question.geometryType,
+                        geometryInputMode: question.geometryInputMode,
+                        geometryOverlapDetection: question.geometryOverlapDetection
                     }
                 };
 

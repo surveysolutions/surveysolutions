@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -24,12 +25,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 		//this value determines a number of suggestions shown in combo-box
         protected const int SuggestionsMaxCount = 50;
         protected readonly FilteredOptionsViewModel filteredOptionsViewModel;
-
+        protected readonly IInterviewViewModelFactory viewModelFactory;
         protected readonly IPrincipal principal;
         protected readonly IStatefulInterviewRepository interviewRepository;
         private readonly IViewModelEventRegistry eventRegistry;
 
-        protected readonly CategoricalComboboxAutocompleteViewModel comboboxViewModel;
+        protected CategoricalComboboxAutocompleteViewModel comboboxViewModel;
         protected CovariantObservableCollection<ICompositeEntity> comboboxCollection = new CovariantObservableCollection<ICompositeEntity>();
 
         protected BaseComboboxQuestionViewModel(
@@ -39,7 +40,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionInstructionViewModel instructionViewModel,
             IStatefulInterviewRepository interviewRepository,
             IViewModelEventRegistry eventRegistry,
-            FilteredOptionsViewModel filteredOptionsViewModel)
+            FilteredOptionsViewModel filteredOptionsViewModel,
+            IInterviewViewModelFactory viewModelFactory)
         {
             this.principal = principal;
             this.interviewRepository = interviewRepository;
@@ -49,13 +51,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Answering = answering;
             this.InstructionViewModel = instructionViewModel;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
+            this.viewModelFactory = viewModelFactory;
 
             this.optionsTopBorderViewModel = new OptionBorderViewModel(this.QuestionState, true);
             this.optionsBottomBorderViewModel = new OptionBorderViewModel(this.QuestionState, false);
-            
-            this.comboboxViewModel = 
-                new CategoricalComboboxAutocompleteViewModel(questionStateViewModel, filteredOptionsViewModel, 
-                    true);
         }
 
         protected string interviewId;
@@ -92,6 +91,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             comboboxCollection.Add(comboboxViewModel);
 
+            this.ChangeAttachment(Answer);
+
             this.eventRegistry.Subscribe(this, interviewId);
         }
 
@@ -126,6 +127,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await this.QuestionState.Validity.ExecutedWithoutExceptions();
 
                 this.Answer = optionValue;
+
+                ChangeAttachment(optionValue);
             }
             catch (InterviewException ex)
             {
@@ -134,7 +137,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        
+        protected abstract void ChangeAttachment(int? optionValue);
+
+
         protected async Task ComboboxInstantViewModel_OnItemSelected(object sender, int selectedOptionCode)
         {
             await SaveAnswerAsync(selectedOptionCode);
@@ -161,6 +166,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         this.Identity));
 
                 await this.QuestionState.Validity.ExecutedWithoutExceptions();
+
+                ChangeAttachment(null);
             }
             catch (InterviewException exception)
             {

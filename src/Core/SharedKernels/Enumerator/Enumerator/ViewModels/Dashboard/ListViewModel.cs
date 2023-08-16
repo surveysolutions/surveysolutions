@@ -8,7 +8,7 @@ using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 {
-    public abstract class ListViewModel : InterviewTabPanel
+    public abstract class ListViewModel : InterviewTabPanel //, IDisposable
     {
         public bool IsItemsLoaded { get; protected set; }
         public event EventHandler OnItemsLoaded;
@@ -33,25 +33,26 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
             try
             {
-                var newItems = await Task.Run(this.GetUiItems).ConfigureAwait(false);
-
-                this.UiItems.ToList().ForEach(uiItem =>
-                {
-                    if (uiItem is IDashboardItemWithEvents withEvents)
-                        withEvents.OnItemUpdated -= ListViewModel_OnItemUpdated;
-                    uiItem.DisposeIfDisposable();
-                });
-
                 await this.InvokeOnMainThreadAsync(() =>
                 {
+                    var newItems = this.GetUiItems();
+                    
+                    this.UiItems.ToList().ForEach(uiItem =>
+                    {
+                        if (uiItem is IDashboardItemWithEvents withEvents)
+                            withEvents.OnItemUpdated -= ListViewModel_OnItemUpdated;
+                        uiItem.DisposeIfDisposable();
+                    });
+                    
                     this.UiItems.ReplaceWith(newItems);
 
+                    this.UiItems.ToList().ForEach(item =>
+                    {
+                        if (item is IDashboardItemWithEvents withEvents)
+                            withEvents.OnItemUpdated += ListViewModel_OnItemUpdated;
+                    });
                 }, false).ConfigureAwait(false);
-                this.UiItems.ToList().ForEach(item =>
-                {
-                    if (item is IDashboardItemWithEvents withEvents)
-                        withEvents.OnItemUpdated += ListViewModel_OnItemUpdated;
-                });
+                
             }
             finally
             {
@@ -83,10 +84,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         public override void ViewAppeared()
         {
             base.ViewAppeared();
+            this.UiItems.ToList()
+                    .Select(i => i as IDashboardItemWithEvents)
+                    .ForEach(i => i?.RefreshDataTime());
+        }
 
+        /*public void Dispose()
+        {
             this.UiItems.ToList()
                 .Select(i => i as IDashboardItemWithEvents)
-                .ForEach(i => i?.RefreshDataTime());
-        }
+                .Where(i => i != null)
+                .ForEach(i =>
+                {
+                    i.OnItemUpdated -= ListViewModel_OnItemUpdated;
+                    i.DisposeIfDisposable();
+                });
+        }*/
     }
 }

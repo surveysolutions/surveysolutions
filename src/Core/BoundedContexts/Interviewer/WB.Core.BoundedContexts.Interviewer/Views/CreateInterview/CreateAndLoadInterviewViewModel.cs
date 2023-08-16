@@ -83,7 +83,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
             if (InterviewId == Guid.Empty) throw new ArgumentException(nameof(InterviewId));
 
             var assignmentDocument = assignmentsRepository.GetById(AssignmentId);
-            QuestionnaireTitle = assignmentDocument.Title;
+            QuestionnaireTitle = assignmentDocument?.Title;
 
             return Task.CompletedTask;
         }

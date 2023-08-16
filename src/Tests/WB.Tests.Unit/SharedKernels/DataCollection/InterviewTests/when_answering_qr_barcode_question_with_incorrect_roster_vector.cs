@@ -36,11 +36,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         [Test] 
         public void should_throw_exception_with_message () =>
-            exception.Message.Should().Equals("Roster information for question is incorrect. No questions found for roster vector");
+            exception.Message.Should().Be("Roster information for question is incorrect. No questions found for roster vector");
 
         [Test] 
         public void should_throw_exception_question_is_missing_type () =>
-            ((InterviewException)exception).ExceptionType.Should().Equals(InterviewDomainExceptionType.QuestionIsMissing);
+            ((InterviewException)exception).ExceptionType.Should().Be(InterviewDomainExceptionType.QuestionIsMissing);
 
         private static Exception exception;
         private static Interview interview;

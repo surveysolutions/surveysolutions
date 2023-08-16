@@ -50,7 +50,7 @@
                             v-bind:href="getUrl('ChangePassword')">{{$t('Pages.AccountManage_ChangePassword')}}</a>
                     </li>
                     <li class="nav-item"
-                        v-if="!forceChangePassword"
+                        v-if="userInfo.canSetupTwoFactorAuthentication && !forceChangePassword"
                         v-bind:class="{'active': currentTab=='two-factor'}">
                         <a class="nav-link"
                             id="two-factor"
@@ -101,6 +101,12 @@ export default {
         },
     },
     computed:{
+        model() {
+            return this.$config.model
+        },
+        userInfo() {
+            return this.model.userInfo
+        },
         isAdmin() {
             return this.role == 'Administrator'
         },

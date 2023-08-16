@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Extensions.Configuration;
 
 namespace WB.Services.Export.Tests
 {
@@ -7,7 +8,11 @@ namespace WB.Services.Export.Tests
         public static string GetConnectionString()
         {
             return Environment.GetEnvironmentVariable("TEST_DB") ??
-                   "Server=127.0.0.1;Port=5432;User Id=postgres;Password=P@$$w0rd;Database=export_service_tests;";
+                   new ConfigurationBuilder()
+                       .AddJsonFile($@"appsettings.json", true)
+                       .AddJsonFile($"appsettings.{Environment.MachineName}.json", true)
+                       .Build()
+                       .GetConnectionString("DefaultConnection");
         }
     }
 }

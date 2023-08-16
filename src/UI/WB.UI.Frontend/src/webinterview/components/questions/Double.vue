@@ -49,6 +49,9 @@
                                 {{option.title}}
                             </label>
                             <wb-remove-answer :on-remove="removeAnswer" />
+                            <wb-attachment :attachmentName="option.attachmentName"
+                                :interviewId="interviewId"
+                                v-if="option.attachmentName" />
                         </div>
                     </div>
                 </template>

@@ -12,12 +12,12 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
     public class CategoriesVerifications : AbstractVerifier, IPartialVerifier
     {
         private readonly IKeywordsProvider keywordsProvider;
-        private readonly ICategoriesService categoriesService;
+        private readonly IReusableCategoriesService reusableCategoriesService;
 
-        public CategoriesVerifications(IKeywordsProvider keywordsProvider, ICategoriesService categoriesService)
+        public CategoriesVerifications(IKeywordsProvider keywordsProvider, IReusableCategoriesService reusableCategoriesService)
         {
             this.keywordsProvider = keywordsProvider;
-            this.categoriesService = categoriesService;
+            this.reusableCategoriesService = reusableCategoriesService;
         }
 
         private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new[]
@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private bool HasDuplicatedPair_Id_ParentId(Categories category, MultiLanguageQuestionnaireDocument questionnaire)
         {
             var duplicated = 
-                from row in this.categoriesService.GetCategoriesById(questionnaire.PublicKey, category.Id)
+                from row in this.reusableCategoriesService.GetCategoriesById(questionnaire.PublicKey, category.Id)
                 group row by new { row.Id, row.ParentId}
                 into g
                 where g.Count() > 1
@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private bool HasDuplicatedPair_ParentId_Text(Categories category, MultiLanguageQuestionnaireDocument questionnaire)
         {
             var duplicated = 
-                from row in this.categoriesService.GetCategoriesById(questionnaire.PublicKey, category.Id)
+                from row in this.reusableCategoriesService.GetCategoriesById(questionnaire.PublicKey, category.Id)
                 group row by new { row.Text, row.ParentId}
                 into g
                 where g.Count() > 1
@@ -64,7 +64,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         
         private bool MustHaveTwoOptionsMinimum(Categories category, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            var items = this.categoriesService.GetCategoriesById(questionnaire.PublicKey, category.Id);
+            var items = this.reusableCategoriesService.GetCategoriesById(questionnaire.PublicKey, category.Id);
             return items.Count() < 2;
         }
 

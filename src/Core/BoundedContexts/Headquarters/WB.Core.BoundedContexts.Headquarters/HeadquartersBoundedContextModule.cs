@@ -94,6 +94,7 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
+using WB.Core.SharedKernels.Questionnaire.ReusableCategories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 using WB.Core.Synchronization.MetaInfo;
@@ -264,6 +265,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<QuestionnaireStateForAssignmentValidator>();
             registry.Bind<QuestionnaireStateForCalendarEventValidator>();
             registry.Bind<QuestionnaireStateForInterviewValidator>();
+            registry.Bind<AssignmentLimitInterviewValidator>();
 
             registry.Bind<IInterviewPackagesService, IInterviewBrokenPackagesService, InterviewPackagesService>();
             registry.Bind<ICalendarEventPackageService, CalendarEventPackageService>();
@@ -274,7 +276,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.Bind<ITranslationStorage, TranslationStorage>();
             registry.Bind<ITranslationsExportService, TranslationsExportService>();
-            registry.Bind<ICategoriesExportService, CategoriesExportService >();
+            registry.Bind<ICategoriesExportService, CategoriesExportService>();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
             registry.Bind<IQuestionnaireStorage, HqQuestionnaireStorage>(); 
            
@@ -345,6 +347,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IWorkspaceContextAccessor, WorkspaceContextAccessor>();
             registry.Bind<IWorkspaceContextSetter, WorkspaceContextSetter>();
             registry.Bind<IWorkspacesService, WorkspacesService>();
+            registry.Bind<IWorkspacesStorage, WorkspacesStorage>();
             registry.Bind<IWorkspacesCache, WorkspacesCache>();
             registry.Bind<IWorkspacesUsersCache, WorkspacesUsersCache>();
             registry.BindAsSingleton<IMemoryCacheSource, WorkspaceAwareMemoryCache>();
@@ -468,7 +471,7 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .Handles<HqRejectInterviewToSupervisorCommand>(command => command.InterviewId, (command, aggregate) => aggregate.HqRejectInterviewToSupervisor(command.UserId, command.SupervisorId, command.Comment, command.OriginDate))
                 .Handles<HqRejectInterviewToInterviewerCommand>(command => command.InterviewId, (command, aggregate) => aggregate.HqRejectInterviewToInterviewer(command.UserId, command.InterviewerId, command.SupervisorId, command.Comment, command.OriginDate))
                 .Handles<UnapproveByHeadquartersCommand>(command => command.InterviewId, (command, aggregate) => aggregate.UnapproveByHeadquarters(command.UserId, command.Comment, command.OriginDate))
-                .Handles<MarkInterviewAsReceivedByInterviewer>(command => command.InterviewId, (command, aggregate) => aggregate.MarkInterviewAsReceivedByInterviwer(command.UserId, command.OriginDate))
+                .Handles<MarkInterviewAsReceivedByInterviewer>(command => command.InterviewId, (command, aggregate) => aggregate. MarkInterviewAsReceivedByInterviewer(command.UserId, command.DeviceId, command.OriginDate))
                 .Handles<ReevaluateInterview>(command => command.InterviewId, (command, aggregate) => aggregate.ReevaluateInterview(command.UserId, command.OriginDate))
                 .Handles<RepeatLastInterviewStatus>(command => command.InterviewId, aggregate => aggregate.RepeatLastInterviewStatus)
                 .Handles<RejectInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Reject(command.UserId, command.Comment, command.OriginDate))
@@ -512,6 +515,7 @@ namespace WB.Core.BoundedContexts.Headquarters
                     .SkipValidationFor<ApproveInterviewCommand>()
                     .SkipValidationFor<HqApproveInterviewCommand>()
                     .SkipValidationFor<ChangeInterviewModeCommand>()
+                .ValidatedBy<AssignmentLimitInterviewValidator>()
                 .ValidatedBy<QuestionnaireStateForInterviewValidator>()
                     .SkipValidationFor<HardDeleteInterview>()
             

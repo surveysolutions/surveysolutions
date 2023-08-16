@@ -86,7 +86,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
             if (nearestInterviewEntity == null) return null;
 
             if (questionId.HasValue)
-                return questionnaire.IsPrefilled(questionId.Value) && !questionnaire.IsCoverPageSupported
+                return questionnaire.IsIdentifying(questionId.Value) && !questionnaire.IsCoverPageSupported
                     ? GenerateInterviewUrl("Cover", interview.Id, virtualDirectoryName)
                     : GenerateInterviewUrl("Section", interview.Id, virtualDirectoryName, interview.GetParentGroup(nearestInterviewEntity), nearestInterviewEntity);
 
@@ -114,8 +114,10 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     nearestInterviewEntity = entitiesInTheSameOrDeeperRoster.FirstOrDefault();
                 else
                 {
-                    var sourceEntityParentRosterVectors =
-                        interview.GetParentGroups(sourceEntity).Select(x => x.RosterVector).ToArray();
+                    var parentGroups = interview.GetParentGroups(sourceEntity);
+                    if (parentGroups == null)
+                        return interviewEntities.FirstOrDefault();
+                    var sourceEntityParentRosterVectors = parentGroups.Select(x => x.RosterVector).ToArray();
 
                     nearestInterviewEntity = interviewEntities.FirstOrDefault(x =>
                                                  x.Id == (questionOrRosterId) &&

@@ -77,7 +77,7 @@ namespace WB.UI.Interviewer
                 {typeof(CalendarEventDialogViewModel), typeof(CalendarEventDialog)}
 #if !EXCLUDEEXTENSIONS
                 ,{typeof (Shared.Extensions.ViewModels.GeographyEditorViewModel), typeof (Shared.Extensions.Activities.GeographyEditorActivity)}
-                ,{typeof (Shared.Extensions.ViewModels.MapDashboardViewModel), typeof (Shared.Extensions.Activities.MapDashboardActivity)}
+                ,{typeof (Shared.Extensions.ViewModels.InterviewerMapDashboardViewModel), typeof (Shared.Extensions.Activities.InterviewerMapDashboardActivity)}
 #endif
             });
 
@@ -118,7 +118,13 @@ namespace WB.UI.Interviewer
             string arcgisruntimeKey = ApplicationContext.Resources.GetString(Resource.String.arcgisruntime_key);
             if (!string.IsNullOrEmpty(arcgisruntimeKey))
             {
-                ServiceLocator.Current.GetInstance<IMapInteractionService>().Init(arcgisruntimeKey);
+                ServiceLocator.Current.GetInstance<IMapInteractionService>().SetLicenseKey(arcgisruntimeKey);
+            }
+            
+            string arcgisruntimeApiKey = ApplicationContext.Resources.GetString(Resource.String.arcgisruntime_api_key);
+            if (!string.IsNullOrEmpty(arcgisruntimeApiKey))
+            {
+                ServiceLocator.Current.GetInstance<IMapInteractionService>().SetApiKey(arcgisruntimeApiKey);
             }
             
             var status = new UnderConstructionInfo();

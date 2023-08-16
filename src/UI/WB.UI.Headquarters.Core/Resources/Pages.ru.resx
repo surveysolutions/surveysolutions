@@ -1027,6 +1027,9 @@
   <data name="Interviewer_LockWarning" xml:space="preserve">
     <value>Заблокированный интервьюер (галочка отмечена) не сможет соединиться с сервером со своего планшета и отправить собранные данные </value>
   </data>
+  <data name="Tablet_RelinkMessage" xml:space="preserve">
+    <value>Одно устройство может быть привязано к аккаунту</value>
+  </data>
   <data name="Supervisor_LockWarning" xml:space="preserve">
     <value>Заблокированный супервизор (галочка отмечена) не сможет войти на сайт и совершить какие-либо действия</value>
   </data>
@@ -1108,7 +1111,7 @@
     <value>Вы уверены в том,что хотите удалить интервью?</value>
   </data>
   <data name="Map_DiscardConfirm" xml:space="preserve">
-    <value>Вы уверены, что хотите удалить карту?</value>
+    <value>Вы уверены, что хотите удалить карту "{{map}}"?</value>
   </data>
   <data name="MapUserLink_DiscardConfirm" xml:space="preserve">
     <value>Вы уверены, что хотите отменить назначение на пользователя?</value>
@@ -1157,6 +1160,12 @@
   <data name="Filters_Assignment" xml:space="preserve">
     <value>Задания</value>
   </data>
+  <data name="Filters_Shapefiles" xml:space="preserve">
+    <value>Шейп-файлы</value>
+  </data>
+  <data name="Filters_None" xml:space="preserve">
+    <value>Не выбрано</value>
+  </data>
   <data name="Interviewers_InterviewerNeverConnected" xml:space="preserve">
     <value>Никогда не соединялись</value>
   </data>
@@ -1196,7 +1205,7 @@
     <value>Отменить назначение на пользователя</value>
   </data>
   <data name="MapDetails_InterviewerName" xml:space="preserve">
-    <value>Имя интервьюера</value>
+    <value>Имя пользователя</value>
   </data>
   <data name="MapDetails_MapDisclaimer" xml:space="preserve">
     <value>Загруженная карта нанесена на карту мира</value>
@@ -1221,6 +1230,9 @@
   </data>
   <data name="MapDetails_Size" xml:space="preserve">
     <value>Размер(МБ)</value>
+  </data>
+  <data name="MapDetails_EmptyMapData" xml:space="preserve">
+    <value>Данные для предпросмотра этой карты отсутствуют</value>
   </data>
   <data name="MapDetails_MinScale" xml:space="preserve">
     <value>Минимальный масштаб</value>
@@ -1295,7 +1307,7 @@
     <value>Статус</value>
   </data>
   <data name="Map_NoUsers" xml:space="preserve">
-    <value>Карта не назначена ни на одного интервьювера</value>
+    <value>Карта не назначена ни на одного пользователя</value>
   </data>
   <data name="Map_Uploaded" xml:space="preserve">
     <value>Файл загружен. Обработка.</value>
@@ -1380,6 +1392,12 @@
     <value>Кол-во точек</value>
     <comment>Кол-во точек</comment>
   </data>
+  <data name="AreaQuestion_RequestedAccuracy" xml:space="preserve">
+    <value>Точность</value>
+  </data>
+  <data name="AreaQuestion_RequestedFrequency" xml:space="preserve">
+    <value>Частота</value>
+  </data>
   <data name="InterviewOverview" xml:space="preserve">
     <value>Обзор интервью</value>
   </data>
@@ -1446,6 +1464,9 @@
   </data>
   <data name="Configuration" xml:space="preserve">
     <value>Настройки</value>
+  </data>
+  <data name="MapDetails_SelectUser" xml:space="preserve">
+    <value>Выберите пользователя</value>
   </data>
   <data name="InterviewPackages" xml:space="preserve">
     <value>Интервью пакеты</value>
@@ -1773,4 +1794,11 @@
   <data name="Profile_IssueApiToken" xml:space="preserve">
       <value>Выдать</value>
   </data>
+  <data name="MapUserLink_DiscardConfirm1" xml:space="preserve">
+      <value>Если это последний пользователь в команде, то Супервизор потеряет доступ к карте.</value>
+  </data>
+  <data name="MapDetails_Unlink" xml:space="preserve">
+    <value>Отвязать</value>
+  </data>
+
 </root>

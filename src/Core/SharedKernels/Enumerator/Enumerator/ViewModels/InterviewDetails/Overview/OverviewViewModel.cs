@@ -9,12 +9,13 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Interview.Overview;
 using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
 {
-    public class OverviewViewModel : MvxViewModel, IDisposable
+    public class OverviewViewModel : BaseViewModel
     {
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IImageFileStorage fileStorage;
@@ -25,6 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
         private readonly IDynamicTextViewModelFactory dynamicTextViewModelFactory;
         private readonly DynamicTextViewModel nameViewModel;
         private readonly IQuestionnaireStorage questionnaireRepository;
+        private readonly IInterviewViewModelFactory interviewViewModelFactory;
 
         public OverviewViewModel(IStatefulInterviewRepository interviewRepository,
             IImageFileStorage fileStorage,
@@ -34,7 +36,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             IUserInteractionService userInteractionService,
             IDynamicTextViewModelFactory dynamicTextViewModelFactory,
             DynamicTextViewModel nameViewModel,
-            IQuestionnaireStorage questionnaireRepository)
+            IQuestionnaireStorage questionnaireRepository,
+            IInterviewViewModelFactory interviewViewModelFactory)
         {
             this.interviewRepository = interviewRepository;
             this.fileStorage = fileStorage;
@@ -45,6 +48,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             this.dynamicTextViewModelFactory = dynamicTextViewModelFactory;
             this.nameViewModel = nameViewModel;
             this.questionnaireRepository = questionnaireRepository;
+            this.interviewViewModelFactory = interviewViewModelFactory;
         }
 
         public void Configure(string interviewId, NavigationState navigationState)
@@ -95,6 +99,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
                     return new OverviewAudioQuestionViewModel(question, audioFileStorage, audioService, userInteractionService, interview);
                 }
 
+                if (question.IsSingleFixedOption || question.IsCascading)
+                {
+                    return new OverviewSingleCategoricalQuestionViewModel(question, interview, userInteractionService,
+                        questionnaire, interviewViewModelFactory);
+                }
+
+                if (question.IsMultiFixedOption || question.IsYesNo)
+                {
+                    return new OverviewMultiCategoricalQuestionViewModel(question, interview, userInteractionService,
+                        interviewViewModelFactory, questionnaire);
+                }
+                
+                if (question.IsInteger || question.IsDouble)
+                {
+                    return new OverviewNumericQuestionViewModel(question, interview,userInteractionService,
+                        questionnaire, interviewViewModelFactory);
+                }
+
                 return new OverviewQuestionViewModel(question, interview,userInteractionService);
             }
 
@@ -132,7 +154,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             }
             
             var variable = interview.GetVariable(interviewerEntityIdentity);
-            if (variable != null && questionnaire.IsPrefilled(interviewerEntityIdentity.Id))
+            if (variable != null && questionnaire.IsIdentifying(interviewerEntityIdentity.Id))
             {
                 return new OverviewVariableViewModel(variable, interview)
                 {
@@ -148,7 +170,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
 
         public DynamicTextViewModel Name { get; private set; }
 
-        public void Dispose()
+        public override void Dispose()
         {
             audioService?.Dispose();
             nameViewModel?.Dispose();
@@ -158,6 +180,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             {
                 item?.Dispose();
             }
+            
+            base.Dispose();
         }
     }
 }

@@ -5,6 +5,8 @@ using AndroidX.AppCompat.Widget;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Activities.Callbacks;
+using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
 
 namespace WB.UI.Interviewer.Activities
 {
@@ -20,8 +22,9 @@ namespace WB.UI.Interviewer.Activities
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             this.SetSupportActionBar(toolbar);
         }
-
-        public override void OnBackPressed()
+        
+        protected override bool BackButtonCustomAction => true;
+        protected override void BackButtonPressed()
         {
             if (IsSupportMenu)
             {

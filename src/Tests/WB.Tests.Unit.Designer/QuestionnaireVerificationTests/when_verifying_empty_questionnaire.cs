@@ -10,7 +10,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
     internal class when_verifying_empty_questionnaire : QuestionnaireVerifierTestsContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            questionnaire = CreateQuestionnaireDocument();
+            questionnaire = CreateQuestionnaireDocumentWithoutChildren();
             questionnaire.AddChapter(questionnaire.CoverPageSectionId);
 
             verifier = CreateQuestionnaireVerifier();

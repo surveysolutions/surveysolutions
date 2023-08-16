@@ -1,9 +1,12 @@
 using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Main.Core.Documents;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
@@ -68,6 +71,13 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 Mock.Of<IInvitationService>(),
                 Mock.Of<IWebInterviewLinkProvider>(),
                 scopeExecutor);
+            this.controller.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext()
+                {
+                    User = new ClaimsPrincipal()
+                }
+            };
         }
 
         private void PrepareMocks()

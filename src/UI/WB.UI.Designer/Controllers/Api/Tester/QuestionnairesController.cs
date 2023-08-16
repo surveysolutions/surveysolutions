@@ -79,10 +79,6 @@ namespace WB.UI.Designer.Controllers.Api.Tester
             string resultAssembly;
             try
             {
-                questionnaireView = new QuestionnaireView(questionnaireView.Source.Clone(), questionnaireView.SharedPersons);
-                questionnaireView.Source.Id = id.QuestionnaireId.FormatGuid();
-                questionnaireView.Source.PublicKey = id.QuestionnaireId;
-                
                 var verificationResult = 
                     this.questionnaireVerifier.CompileAndVerify(questionnaireView,
                       versionToCompileAssembly,
@@ -96,8 +92,8 @@ namespace WB.UI.Designer.Controllers.Api.Tester
                 return StatusCode(StatusCodes.Status412PreconditionFailed);
             }
 
-            var questionnaire = questionnaireView.Source.Clone();
-            var readOnlyQuestionnaireDocument = new ReadOnlyQuestionnaireDocumentWithCache(questionnaireView.Source);
+            var questionnaire = questionnaireView.GetClientReadyClone();
+            var readOnlyQuestionnaireDocument = new ReadOnlyQuestionnaireDocumentWithCache(questionnaire);
             questionnaire.ExpressionsPlayOrder = this.expressionsPlayOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
             questionnaire.DependencyGraph = this.expressionsPlayOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument);
             questionnaire.ValidationDependencyGraph = this.expressionsPlayOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument).ToDictionary(x => x.Key, x => x.Value.ToArray());

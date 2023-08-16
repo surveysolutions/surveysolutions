@@ -8,8 +8,13 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class SingleOptionQuestionOptionViewModel : MvxNotifyPropertyChanged,
-        ICompositeEntity
+        ICompositeEntity, IDisposable
     {
+        public SingleOptionQuestionOptionViewModel(AttachmentViewModel attachment)
+        {
+            Attachment = attachment;
+        }
+
         public event Func<object, EventArgs, Task> BeforeSelected;
         public event Func<object, EventArgs, Task> AnswerRemoved;
 
@@ -21,6 +26,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             get => this.title;
             set => this.RaiseAndSetIfChanged(ref this.title, value);
         }
+
+        public AttachmentViewModel Attachment { get; }
 
         private bool selected;
 
@@ -57,6 +64,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var handler = this.AnswerRemoved;
             handler?.Invoke(this, EventArgs.Empty);
         }
+        
+        public void Dispose()
+        {
+            if(IsDisposed) return;
+            IsDisposed = true;
+            
+            Attachment?.ViewDestroy();
+            Attachment?.Dispose();
+        }
+
+        private bool IsDisposed = false;
     }
 
     public class SingleOptionQuestionOptionViewModelEqualityComparer : IEqualityComparer<SingleOptionQuestionOptionViewModel>

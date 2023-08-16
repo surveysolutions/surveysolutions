@@ -100,7 +100,8 @@ namespace WB.UI.WebTester.Services.Implementation
                     {
                         Id = x.Id,
                         ParentId = x.ParentId,
-                        Text = x.Text
+                        Text = x.Text,
+                        AttachmentName = x.AttachmentName,
                     }).ToList());
                 });
 
@@ -119,10 +120,13 @@ namespace WB.UI.WebTester.Services.Implementation
                     TranslationId = x.TranslationId
                 }));
             }
+            
+            var settings = await webTesterApi.GetQuestionnaireSettingsAsync(designerToken.ToString());
 
             this.appdomainsPerInterviewManager.SetupForInterview(designerToken,
                 questionnaireIdentity,
-                questionnaire.Assembly);
+                questionnaire.Assembly,
+                settings);
 
             return questionnaireIdentity;
         }

@@ -12,5 +12,6 @@ namespace WB.Infrastructure.Native.Questionnaire
         public virtual int? ParentValue { get; set; }
         public virtual string Text { get; set; }
         public virtual int SortIndex { get; set; }
+        public virtual string AttachmentName { get; set; }
     }
 }

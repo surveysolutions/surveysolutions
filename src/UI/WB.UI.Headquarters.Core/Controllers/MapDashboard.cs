@@ -35,6 +35,9 @@ namespace WB.UI.Headquarters.Controllers
             public string Questionnaires { get; set; }
             public string Responsible { get; set; }
             public string UserRole { get; set; }
+            public string Shapefiles { get; set; }
+            public string ShapefileJson { get; set; }
+            public bool IsObserving { get; set; }
         }
 
         [ExtraHeaderPermissions(HeaderPermissionType.Google)]
@@ -58,6 +61,9 @@ namespace WB.UI.Headquarters.Controllers
                     ? Url.Action("InterviewersCombobox", "Teams")
                     : Url.Action("ResponsiblesCombobox", "Teams"),
                 UserRole = userRole.ToString(),
+                Shapefiles = Url.Action("Shapefiles", "MapDashboardApi"),
+                ShapefileJson = Url.Action("ShapefileInfo", "MapDashboardApi"),
+                IsObserving = this.authorizedUser.IsObserving,
             };
             return this.View(model);
         }

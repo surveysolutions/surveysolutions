@@ -139,46 +139,46 @@
     <value>Proměnné označené jako Identifikace v Designer. Stáhnout</value>
   </data>
   <data name="DownloadInvalidAssignments" xml:space="preserve">
-    <value>Stažení neplatných přiřazení</value>
+    <value>Stáhnout neplatné dotazníky</value>
   </data>
   <data name="DownloadInvalidInterviews" xml:space="preserve">
-    <value>Stažení neplatných dotazníků</value>
+    <value>Stažení neplatných rozhovorů</value>
   </data>
   <data name="DownloadTabTemplate" xml:space="preserve">
-    <value>Stáhněte si šablonu .tab pro tento dotazník</value>
+    <value>Stáhněte si šablonu .tab pro tento typ dotazníku</value>
   </data>
   <data name="DownloadTemplateArchive" xml:space="preserve">
-    <value>Stáhněte si šablonu .zip pro tento dotazník</value>
+    <value>Stáhněte si šablonu .zip pro tento typ dotazníku</value>
   </data>
   <data name="Import_Verification_AssignmentsVerified" xml:space="preserve">
-    <value>{{count}} přiřazení položek se podařilo úspěšně</value>
+    <value>Úspěšně ověřených dotazníků - {{count}}</value>
   </data>
   <data name="Import_Verification_Errors" xml:space="preserve">
-    <value>{{count}} chyb</value>
+    <value>Chyb - {{count}}</value>
   </data>
   <data name="ImportAssignments_PageTitle" xml:space="preserve">
-    <value>Vytvoření přirazení více požadavků pomocí dávkového nahrávání</value>
+    <value>Vytvoření více dotazníků pomocí dávkového nahrávání</value>
   </data>
   <data name="ImportInProgress" xml:space="preserve">
-    <value>Právě probíhá přiřazení požadavků. Není možné další přiřazení. Počkejte, až se proces dokončí, a poté nahrajte nový soubor. Chcete-li získat podrobnější informace o průběhu dalšího přiřazení, klikněte na odkaz.</value>
+    <value>Právě probíhá import dotazníku. Pouze jeden takovýto proces může probíhat najendou. Počkejte, až se proces dokončí, a poté nahrajte nový soubor. Chcete-li získat podrobnější informace o průběhu dalšího importu dotazníku, klikněte na odkaz.</value>
   </data>
   <data name="ImportInterviews_ChooseFile" xml:space="preserve">
     <value>Vyberte soubor k nahrání</value>
   </data>
   <data name="ImportInterviews_PageTitle" xml:space="preserve">
-    <value>Vytvoření více dotazníků pomocí dávkového nahrávání</value>
+    <value>Vytvoření více rozhovorů pomocí dávkového nahrávání</value>
   </data>
   <data name="IsInvalid" xml:space="preserve">
     <value>Je neplatný. Opravte prosím níže uvedené chyby a nahrání opakujte.</value>
   </data>
   <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve">
-    <value>{{count}} přiřazení položek se nepodařilo vytvořit</value>
+    <value>Neúspěšně vytvořených dotazníků - {{count}}</value>
   </data>
   <data name="MultipleAssignmentsCreated" xml:space="preserve">
-    <value>{{count}} vytvořených položek k přiřazení</value>
+    <value>Počet vytvořených dotazníků - {{count}}</value>
   </data>
   <data name="MultipleErrorsWereFound" xml:space="preserve">
-    <value>{{count}} nalezeno chyb</value>
+    <value>Nalezených chyb - {{count}}</value>
   </data>
   <data name="Prerequisite_FileOpen" xml:space="preserve">
     <value>Nahraný soubor nelze otevřít. Zkontrolujte prosím, zda je ve správném formátu.</value>
@@ -196,10 +196,10 @@
     <value>Vytvoření bylo úspěšně dokončeno.</value>
   </data>
   <data name="SampleImportWithErrors" xml:space="preserve">
-    <value>Import byl dokončen s chybami.</value>
+    <value>Import rozhovoru byl dokončen s chybami.</value>
   </data>
   <data name="SampleSuccess" xml:space="preserve">
-    <value>Import byl úspěšně dokončen.</value>
+    <value>Import rozhovoru byl úspěšně dokončen.</value>
   </data>
   <data name="Upload" xml:space="preserve">
     <value>Nahrát</value>
@@ -208,8 +208,8 @@
     <value>Nahrát datum</value>
   </data>
   <data name="UploadDescription" xml:space="preserve">
-    <value>Nahrajte soubor s identifikačními údaji a vytvořte nové přiřazení.
-Zadejte uživatelská jména pro ústředí, garanty nebo tazatele, kteří budou dávkově přiřazovat.</value>
+    <value>Nahrajte soubor s technickými daty k vytvoření nového dotazníku.
+Zadejte uživatelská jména pro Ústředí, Garanty nebo tazatele pro vytvoření dotazníků v dávkách.</value>
   </data>
   <data name="Uploaded" xml:space="preserve">
     <value>Nahráno</value>
@@ -224,7 +224,7 @@ Zadejte uživatelská jména pro ústředí, garanty nebo tazatele, kteří budo
     <value>Nahrát výběr</value>
   </data>
   <data name="UploadSampleDescription" xml:space="preserve">
-    <value>Chcete-li nahrát výběr, připravte si soubor (velikosti až 300 MB) s hodnotami oddělenými tabulátory (soubor .tab) odpovídající níže uvedené šabloně. Musí obsahovat identifikační údaje (primární klíče).</value>
+    <value>Chcete-li nahrát výběr z rozhovoru, připravte si soubor (velikosti až 300 MB) s hodnotami oddělenými tabulátory (soubor .tab) odpovídající níže uvedené šabloně. Musí obsahovat technické údaje (primární klíče).</value>
   </data>
   <data name="UploadTabFile" xml:space="preserve">
     <value>Nahrát soubor .tab</value>
@@ -243,5 +243,354 @@ Zadejte uživatelská jména pro ústředí, garanty nebo tazatele, kteří budo
   </data>
   <data name="VerificationCompleted" xml:space="preserve">
     <value>Verifikace dokončena</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteFormat" xml:space="preserve">
+    <value>Opravdu chcete tento soubor smazat?</value>
+  </data>
+  <data name="AssignedToMultipleEnumerators" xml:space="preserve">
+    <value>Přiřazeno {0} tazatelům</value>
+  </data>
+  <data name="AssignedToMultipleSupervisors" xml:space="preserve">
+    <value>Přiřazeno {0} Garantům</value>
+  </data>
+  <data name="AssignedToSingleEnumerator" xml:space="preserve">
+    <value>Přiřazeno 1 tazateli</value>
+  </data>
+  <data name="AssignedToSingleSupervisor" xml:space="preserve">
+    <value>Přiřazeno 1 Garantovi</value>
+  </data>
+  <data name="AssignmentsAreNotCreated" xml:space="preserve">
+    <value>Nebyly vytvořeny žádné dotazníky</value>
+  </data>
+  <data name="BackToImport" xml:space="preserve">
+    <value>Zpět na Import</value>
+  </data>
+  <data name="BatchColumnsTitle" xml:space="preserve">
+    <value>Volitelně můžete zadat následující sloupce v hlavním souboru na úrovni rozhovoru:</value>
+  </data>
+  <data name="BatchDescription" xml:space="preserve">
+    <value>Nahrajte archiv zip s jedním nebo více soubory oddělenými tabulátorem odpovídajícími úrovni hlavního rozhovoru a podřízeným seznamům (rosterům). Umožňuje předběžné načítání proměnných na jakékoli úrovni rozhovoru.&lt;br/&gt;
+Všechny datové soubory musí obsahovat proměnnou interview__id s jedinečným řetězcem nebo číselným identifikátorem rozhovoru. Odkazy v rámci seznamů a vnořených seznamů jsou vytvořeny stejným způsobem jako v exportovaných datech.&lt;br/&gt;</value>
+  </data>
+  <data name="BatchTitle" xml:space="preserve">
+    <value>Identifikace a sběr dat (archiv)</value>
+  </data>
+  <data name="BreadCrumbs_CreatingMultipleInterviews" xml:space="preserve">
+    <value>vytváření více dotazníků</value>
+  </data>
+  <data name="BrowseTeams" xml:space="preserve">
+    <value>Procházet týmy</value>
+  </data>
+  <data name="Cell" xml:space="preserve">
+    <value>Buňka</value>
+  </data>
+  <data name="Code" xml:space="preserve">
+    <value>Kód</value>
+  </data>
+  <data name="Column" xml:space="preserve">
+    <value>Sloupec</value>
+  </data>
+  <data name="ColumnsDescription" xml:space="preserve">
+    <value>&lt;b&gt;_responsible&lt;/b&gt; - uživatelské jméno Ústředí, Garanta nebo tazatele, který bude za dotazník zodpovědný;&lt;br/&gt;
+&lt;b&gt;_quantity&lt;/b&gt; - kapacita dotazníku;&lt;br/&gt;
+&lt;b &gt;_email&lt;/b&gt; - e-mail respondenta (pouze pro webové dotazníky);&lt;br/&gt;
+&lt;b&gt;_password&lt;/b&gt; - heslo pro zahájení rozhovoru (pouze pro webové dotazníky);&lt;br/&gt;
+&lt; b&gt;_webmode&lt;/b&gt; - režim pro dotazníky (1 pro CAWI, 0 nebo nic pro CAPI);&lt;br/&gt;
+&lt;b&gt;_record_audio&lt;/b&gt; - zvukové nahrávky jsou povoleny pro rozhovory (1 - povoleno, 0 - zakázáno , nic – získat tuto hodnotu z dotazníku);&lt;br/&gt;
+&lt;b&gt;_comment&lt;/b&gt; – poznámky k dotazníkům</value>
+  </data>
+  <data name="CreateAssignments" xml:space="preserve">
+    <value>Vytvořit dotazník</value>
+  </data>
+  <data name="CreateInterviews" xml:space="preserve">
+    <value>Vytvořit rozhovory</value>
+  </data>
+  <data name="CreateSample" xml:space="preserve">
+    <value>Vytvořit rozhovory z těchto dat</value>
+  </data>
+  <data name="CreateUsers" xml:space="preserve">
+    <value>Vytvořit uživatele</value>
+  </data>
+  <data name="CreatingMultipleAssignments" xml:space="preserve">
+    <value>Vytváření více dotazníků</value>
+  </data>
+  <data name="CreatingMultipleInterviews" xml:space="preserve">
+    <value>Vytvořit více rozhovorů</value>
+  </data>
+  <data name="CreatingUsers" xml:space="preserve">
+    <value>Vytváření uživatelů</value>
+  </data>
+  <data name="DataForMultipleAssignmentsFound" xml:space="preserve">
+    <value>Byla nalezena data pro {0} dotazníků</value>
+  </data>
+  <data name="DataForMultipleInterviewsFound" xml:space="preserve">
+    <value>Nalezena data pro {0} rozhovorů</value>
+  </data>
+  <data name="DataForSingleAssignmentFound" xml:space="preserve">
+    <value>Byla nalezena data pro 1 dotazník</value>
+  </data>
+  <data name="DataForSingleInterviewFound" xml:space="preserve">
+    <value>Nalezena data pro 1 rozhovor</value>
+  </data>
+  <data name="DataIsValid" xml:space="preserve">
+    <value>Údaje jsou platné</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Podrobnosti</value>
+  </data>
+  <data name="DownloadLinkTitleListRequiredPreffiledData" xml:space="preserve">
+    <value>šablona .tab.</value>
+  </data>
+  <data name="EmptySupervisorDescription" xml:space="preserve">
+    <value>Pokud nejsou ve sloupci "_responsible" uvedena uživatelská jména, budete muset v pozdějším kroku přiřadit všechny dotazníky Garantovi.</value>
+  </data>
+  <data name="EstimatedTime" xml:space="preserve">
+    <value>Předpokládaný čas</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Soubor</value>
+  </data>
+  <data name="FileName" xml:space="preserve">
+    <value>Název souboru</value>
+  </data>
+  <data name="FileNotParsed" xml:space="preserve">
+    <value>Soubor nebyl analyzován. Jsou povoleny pouze soubory oddělené tabulátory.</value>
+  </data>
+  <data name="FileSize" xml:space="preserve">
+    <value>Velikost souboru</value>
+  </data>
+  <data name="FileSizeLimit" xml:space="preserve">
+    <value>Velikost souboru nesmí přesáhnout 300 MB.</value>
+  </data>
+  <data name="FileTypeDescription" xml:space="preserve">
+    <value>Uložte soubor v kódování UTF8 pro podporu textů specifických pro určitý jazyk.</value>
+  </data>
+  <data name="Finished" xml:space="preserve">
+    <value>Hotovo</value>
+  </data>
+  <data name="FinishedWithError" xml:space="preserve">
+    <value>Dokončeno s chybami</value>
+  </data>
+  <data name="FinishedWithErrorMessage" xml:space="preserve">
+    <value>Dokončeno s chybami. Důvod:</value>
+  </data>
+  <data name="FormatNotSupported" xml:space="preserve">
+    <value>Formát souboru není podporován. Data v souboru budou ignorována</value>
+  </data>
+  <data name="HiddenQuestions" xml:space="preserve">
+    <value>Skryté otázky</value>
+  </data>
+  <data name="HideListPrefilledData" xml:space="preserve">
+    <value>Skrýt seznam požadovaných identifikačních údajů</value>
+  </data>
+  <data name="IdentifyingQuestions" xml:space="preserve">
+    <value>Technické údaje</value>
+  </data>
+  <data name="Import_Verification_1_AssignmentVerified" xml:space="preserve">
+    <value>1 dotazník úspěšně ověřen</value>
+  </data>
+  <data name="Import_Verification_1_Error" xml:space="preserve">
+    <value>1 chyba</value>
+  </data>
+  <data name="Import_VerificationOfAssignmentData" xml:space="preserve">
+    <value>Ověření dat dotazníku</value>
+  </data>
+  <data name="Import_VerificationOfAssignments_ForQuestionnaire" xml:space="preserve">
+    <value>Ověření dotazníku, typu {{title}}</value>
+  </data>
+  <data name="Import_VerificationOfDataFile" xml:space="preserve">
+    <value>Ověření datového souboru</value>
+  </data>
+  <data name="Import_VerificationOfDataFile_Progress" xml:space="preserve">
+    <value>krok {{verifiedCount}} z {{totalCount}}</value>
+  </data>
+  <data name="Import_VerificationOfDataFile_Succeeded" xml:space="preserve">
+    <value>Ověření datového souboru proběhlo úspěšně</value>
+  </data>
+  <data name="ImportAssignmentsFor" xml:space="preserve">
+    <value>Import dotazník pro {{title}}</value>
+  </data>
+  <data name="ImportFrom" xml:space="preserve">
+    <value>Import informací z {{fileName}} pro {{title}}</value>
+  </data>
+  <data name="Importing" xml:space="preserve">
+    <value>Importuje se</value>
+  </data>
+  <data name="ImportInterviews_Done" xml:space="preserve">
+    <value>Hotovo:</value>
+  </data>
+  <data name="ImportInterviews_NoneFailed" xml:space="preserve">
+    <value>Nic neselhalo</value>
+  </data>
+  <data name="ImportInterviews_SelectButtonText" xml:space="preserve">
+    <value>Vybrat</value>
+  </data>
+  <data name="ImportInterviews_SelectResponsible" xml:space="preserve">
+    <value>Vyberte zodpovědné uživatele</value>
+  </data>
+  <data name="ImportInterviewsFor" xml:space="preserve">
+    <value>Import rozhovorů pro {0}</value>
+  </data>
+  <data name="ImportProgressFormat" xml:space="preserve">
+    <value>{{createdCount}} z {{totalCount}}</value>
+  </data>
+  <data name="ImportSample" xml:space="preserve">
+    <value>Import vzorku</value>
+  </data>
+  <data name="ImportStatus" xml:space="preserve">
+    <value>Stav importu</value>
+  </data>
+  <data name="InterviewsAreNotCreated" xml:space="preserve">
+    <value>Nebyly vytvořeny žádné rozhovory</value>
+  </data>
+  <data name="InterviewsImport_ImportingProgressPageTitle" xml:space="preserve">
+    <value>Import dotazníků</value>
+  </data>
+  <data name="InVerificationProcess" xml:space="preserve">
+    <value>je v procesu ověřování, ověřeno</value>
+  </data>
+  <data name="LastUpdateDate" xml:space="preserve">
+    <value>Poslední datum aktualizace</value>
+  </data>
+  <data name="ManualModeDescription" xml:space="preserve">
+    <value>Můžete vytvářet jednotlivé dotazníky zadáním všech požadovaných údajů v {{url}}</value>
+  </data>
+  <data name="ManualModeLinkTitle" xml:space="preserve">
+    <value>manuální režim</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>Zpráva</value>
+  </data>
+  <data name="MultipleInterviewFailedToBeCreated" xml:space="preserve">
+    <value>Neúspěšně vytvořených rozhovorů - {0}</value>
+  </data>
+  <data name="MultipleInterviewsCreated" xml:space="preserve">
+    <value>Vytvořených rozhovorů - {0}</value>
+  </data>
+  <data name="NumberInterviewCreated" xml:space="preserve">
+    <value>Rozhovor(y) vytvořen(y)</value>
+  </data>
+  <data name="OutOf" xml:space="preserve">
+    <value>mimo</value>
+  </data>
+  <data name="PleaseWait" xml:space="preserve">
+    <value>Počkejte prosím, soubor</value>
+  </data>
+  <data name="PrefilledQuestionsRequired" xml:space="preserve">
+    <value>Soubor neobsahuje sloupce pro požadované technické údaje: &lt;br/&gt; &lt;br/&gt; &lt;b&gt;{0}&lt;/b&gt;</value>
+  </data>
+  <data name="PrefilledRequiredData" xml:space="preserve">
+    <value>Povinné identifikační údaje</value>
+  </data>
+  <data name="Prerequisite_Questionnaire" xml:space="preserve">
+    <value>Typ dotazníku nelze použít pro předběžné načítání</value>
+  </data>
+  <data name="Prerequisite_UnsupportedFiles" xml:space="preserve">
+    <value>Následující soubory nejsou podporovány: {0}.</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Zpracovává se...</value>
+  </data>
+  <data name="ReadyForUserCreation" xml:space="preserve">
+    <value>Připraveno k vytvoření uživatele</value>
+  </data>
+  <data name="ReadyForValidation" xml:space="preserve">
+    <value>Připraveno k ověření</value>
+  </data>
+  <data name="RecordsCount" xml:space="preserve">
+    <value>Počet záznamů</value>
+  </data>
+  <data name="RequiredField" xml:space="preserve">
+    <value>Toto pole je povinné</value>
+  </data>
+  <data name="ResponsibleSupervisorWillBeAssigned" xml:space="preserve">
+    <value>Zodpovědný uživatel bude přiřazen automaticky</value>
+  </data>
+  <data name="RosterSizeQuestions" xml:space="preserve">
+    <value>Otázky týkající se zdroje seznamu (rosteru)</value>
+  </data>
+  <data name="Row" xml:space="preserve">
+    <value>Řádek</value>
+  </data>
+  <data name="RunningInterviewImportProcess" xml:space="preserve">
+    <value>Přejděte ke spuštěnému procesu importu dotazníku</value>
+  </data>
+  <data name="SampleCreationResult" xml:space="preserve">
+    <value>Výsledek vytvoření rozhovoru</value>
+  </data>
+  <data name="Select_Responsible" xml:space="preserve">
+    <value>Vyberte výchozího zodpovědného uživatele (povinné)</value>
+  </data>
+  <data name="Select_Responsible_Description" xml:space="preserve">
+    <value>Pokud k dávkovém souboru není přiřazený žádný zodpovědný uživatel, použijte tento účet Ústředí/Garanta/tazatele:</value>
+  </data>
+  <data name="SelectResponsibleToAssign" xml:space="preserve">
+    <value>Vyberte zodpovědného uživatele za tuto dávku</value>
+  </data>
+  <data name="SimpleColumnsTitle" xml:space="preserve">
+    <value>Volitelně lze zadat následující sloupce:</value>
+  </data>
+  <data name="SimpleDescription" xml:space="preserve">
+    <value>Nahrajte soubor oddělený tabulátorem s hodnotami pouze pro otázky na úrovni rozhovoru. Zahrňte hodnoty pro technické údaje a další otázky na úrovni hlavního rozhovoru. Neumožňuje předběžné načítání hodnot uvnitř seznamů.</value>
+  </data>
+  <data name="SimpleTitle" xml:space="preserve">
+    <value>Pouze identifikační údaje</value>
+  </data>
+  <data name="SingleAssignmentCreated" xml:space="preserve">
+    <value>1 dotazník vytvořen</value>
+  </data>
+  <data name="SingleAssignmentFailedToBeCreated" xml:space="preserve">
+    <value>Vytvoření 1 dotazníku selhalo</value>
+  </data>
+  <data name="SingleErrorFound" xml:space="preserve">
+    <value>1 chyba nalezena</value>
+  </data>
+  <data name="SingleInterviewCreated" xml:space="preserve">
+    <value>1 rozhovor vytvořen</value>
+  </data>
+  <data name="SingleInterviewFailedToBeCreated" xml:space="preserve">
+    <value>Vytvoření 1 rozhovoru selhalo</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="SupervisorMustBeSelected" xml:space="preserve">
+    <value>Musí být vybrán Garant nebo tazatel</value>
+  </data>
+  <data name="UploadUsers_Title" xml:space="preserve">
+    <value>Seznam souborů s předinstalovanými uživateli</value>
+  </data>
+  <data name="UploadUsersDescription" xml:space="preserve">
+    <value>Připravte soubor s hodnotami oddělenými tabulátory (soubor .tab) odpovídající níže uvedené šabloně. Sloupce označené (*) jsou povinné. Ve sloupci 'role' jsou povoleny pouze 'Garant' nebo 'tazatel'.</value>
+  </data>
+  <data name="UserPreloadingProcessIsMissing" xml:space="preserve">
+    <value>Chybí proces předběžného načítání uživatelů</value>
+  </data>
+  <data name="UsersHaveBeenCreated" xml:space="preserve">
+    <value>uživatelé byli vytvořeni</value>
+  </data>
+  <data name="Validated" xml:space="preserve">
+    <value>Ověřeno</value>
+  </data>
+  <data name="Validating" xml:space="preserve">
+    <value>Ověřování</value>
+  </data>
+  <data name="ValidationFinishedWithError" xml:space="preserve">
+    <value>Ověřeno</value>
+  </data>
+  <data name="Verify" xml:space="preserve">
+    <value>Ověřit</value>
+  </data>
+  <data name="VerifyPanelData" xml:space="preserve">
+    <value>Ověřte data panelu</value>
+  </data>
+  <data name="VerifySampleData" xml:space="preserve">
+    <value>Ověřit data</value>
+  </data>
+  <data name="ViewListPrefilledData" xml:space="preserve">
+    <value>Zobrazit seznam požadovaných identifikačních údajů</value>
+  </data>
+  <data name="ViewListPreloadedData" xml:space="preserve">
+    <value>Zobrazit seznam předem načtených hodnot</value>
   </data>
 </root>

@@ -1,0 +1,300 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="PLU0001" xml:space="preserve">
+    <value>Логін не є унікальним</value>
+  </data>
+  <data name="PLU0001Description" xml:space="preserve">
+    <value>Користувач '{0}' вже існує</value>
+  </data>
+  <data name="PLU0002" xml:space="preserve">
+    <value>Дублікат</value>
+  </data>
+  <data name="PLU0002Description" xml:space="preserve">
+    <value>У файлі є дублікати користувачів з логіном '{0}'</value>
+  </data>
+  <data name="PLU0003" xml:space="preserve">
+    <value>Неправильна команда</value>
+  </data>
+  <data name="PLU0003Description" xml:space="preserve">
+    <value>Користувач '{0}' заархівований і належить до іншої команди</value>
+  </data>
+  <data name="PLU0003Recomendation" xml:space="preserve">
+    <value>Заархівований користувач не може бути використаний повторно, оскільки він належить іншій команді</value>
+  </data>
+  <data name="PLU0004" xml:space="preserve">
+    <value>Неправильна роль</value>
+  </data>
+  <data name="PLU0004Description" xml:space="preserve">
+    <value>Користувач '{0}' архівується і має іншу роль</value>
+  </data>
+  <data name="PLU0004Recomendation" xml:space="preserve">
+    <value>Заархівований користувач не може бути використаний повторно, оскільки він існує в іншій ролі</value>
+  </data>
+  <data name="PLU0005" xml:space="preserve">
+    <value>Неправильний формат входу</value>
+  </data>
+  <data name="PLU0005Description" xml:space="preserve">
+    <value>Логін '{0}' має неправильний формат</value>
+  </data>
+  <data name="PLU0005Recomendation" xml:space="preserve">
+    <value>Ім'я користувача має містити від 3 до 15 символів і може містити лише літери, цифри та символ підкреслення. Літери повинні бути тільки з латинського (англійського) алфавіту: 'A'...'Z' або 'a'...'z'. Інші літери (кирилиця, арабські тощо) не приймаються для використання в логінах.</value>
+  </data>
+  <data name="PLU0006" xml:space="preserve">
+    <value>Неправильний формат пароля</value>
+  </data>
+  <data name="PLU0006Description" xml:space="preserve">
+    <value>Пароль '{0}' має неправильний формат</value>
+  </data>
+  <data name="PLU0006Recomendation" xml:space="preserve">
+    <value>Він повинен містити принаймні одну цифру, один символ верхнього регістру та один символ нижнього регістру. Довжина має бути від 10 до 100 символів</value>
+  </data>
+  <data name="PLU0007" xml:space="preserve">
+    <value>Неправильний формат електронної пошти</value>
+  </data>
+  <data name="PLU0007Description" xml:space="preserve">
+    <value>Email '{0}' має неправильний формат</value>
+  </data>
+  <data name="PLU0008" xml:space="preserve">
+    <value>Неправильний формат номера телефону</value>
+  </data>
+  <data name="PLU0008Description" xml:space="preserve">
+    <value>Номер телефону '{0}' має неправильний формат</value>
+  </data>
+  <data name="PLU0009" xml:space="preserve">
+    <value>Неправильна роль</value>
+  </data>
+  <data name="PLU0009Description" xml:space="preserve">
+    <value>Роль '{0}' є недійсною</value>
+  </data>
+  <data name="PLU0009Recomendation" xml:space="preserve">
+    <value>Допускаються тільки "supervisor" або "interviewer"</value>
+  </data>
+  <data name="PLU0010" xml:space="preserve">
+    <value>Помилка залежності</value>
+  </data>
+  <data name="PLU0010Description" xml:space="preserve">
+    <value>Cупервізора '{0}' не знайдено в робочому просторі</value>
+  </data>
+  <data name="PLU0011" xml:space="preserve">
+    <value>Помилка залежності</value>
+  </data>
+  <data name="PLU0011Description" xml:space="preserve">
+    <value>Колонка "supervisor" повинна бути порожньою для ролі супервізора</value>
+  </data>
+  <data name="PLU0012" xml:space="preserve">
+    <value>Неправильна довжина повного імені</value>
+  </data>
+  <data name="PLU0012Description" xml:space="preserve">
+    <value>Повне ім'я '{0}' має неправильний формат</value>
+  </data>
+  <data name="PLU0012Recomendation" xml:space="preserve">
+    <value>Він не повинен містити більше 100 символів</value>
+  </data>
+  <data name="PLU0013" xml:space="preserve">
+    <value>Неправильна довжина номера телефону</value>
+  </data>
+  <data name="PLU0013Description" xml:space="preserve">
+    <value>Номер телефону '{0}' має неправильний формат</value>
+  </data>
+  <data name="PLU0013Recomendation" xml:space="preserve">
+    <value>Він не повинен містити більше 15 символів</value>
+  </data>
+  <data name="PLU0014" xml:space="preserve">
+    <value>Неправильний формат повного імені</value>
+  </data>
+  <data name="PLU0014Description" xml:space="preserve">
+    <value>Повне ім'я '{0}' містить неприпустимі символи</value>
+  </data>
+  <data name="PLU0014Recomendation" xml:space="preserve">
+    <value>Допускаються лише літери, крапки, пробіли та апострофи</value>
+  </data>
+  <data name="PLU0015" xml:space="preserve">
+    <value>Занадто короткий пароль</value>
+  </data>
+  <data name="PLU0015Description" xml:space="preserve">
+    <value>Пароль '{0}' занадто короткий</value>
+  </data>
+  <data name="PLU0015Recomendation" xml:space="preserve">
+    <value>Пароль повинен мати довжину не менше 10 символів</value>
+  </data>
+  <data name="PLU0016" xml:space="preserve">
+    <value>Простий пароль</value>
+  </data>
+  <data name="PLU0016Description" xml:space="preserve">
+    <value>Пароль '{0}' не містить неалфавітно-цифрових символів</value>
+  </data>
+  <data name="PLU0016Recomendation" xml:space="preserve">
+    <value>Додайте принаймні один не буквено-цифровий символ</value>
+  </data>
+  <data name="PLU0017" xml:space="preserve">
+    <value>Простий пароль</value>
+  </data>
+  <data name="PLU0017Description" xml:space="preserve">
+    <value>Пароль '{0}' не містить цифри</value>
+  </data>
+  <data name="PLU0017Recomendation" xml:space="preserve">
+    <value>Додайте принаймні одну цифру ('0'-'9').</value>
+  </data>
+  <data name="PLU0018" xml:space="preserve">
+    <value>Простий пароль</value>
+  </data>
+  <data name="PLU0018Description" xml:space="preserve">
+    <value>Пароль '{0}' не містить символів нижнього регістру</value>
+  </data>
+  <data name="PLU0018Recomendation" xml:space="preserve">
+    <value>Додайте принаймні один малий символ ('a'-'z').</value>
+  </data>
+  <data name="PLU0019" xml:space="preserve">
+    <value>Простий пароль</value>
+  </data>
+  <data name="PLU0019Description" xml:space="preserve">
+    <value>Пароль '{0}' не містить символів верхнього регістру</value>
+  </data>
+  <data name="PLU0019Recomendation" xml:space="preserve">
+    <value>Додайте принаймні одну велику літеру ('A'-'Z').</value>
+  </data>
+  <data name="PLU0020" xml:space="preserve">
+    <value>Простий пароль</value>
+  </data>
+  <data name="PLU0020Description" xml:space="preserve">
+    <value>Пароль '{0}' не містить достатньо унікальних символів</value>
+  </data>
+  <data name="PLU0020Recomendation" xml:space="preserve">
+    <value>Додавання різних символів.</value>
+  </data>
+  <data name="PLU0021" xml:space="preserve">
+    <value>Потрібен пароль</value>
+  </data>
+  <data name="PLU0021Description" xml:space="preserve">
+    <value>Потрібен пароль </value>
+  </data>
+  <data name="PLU0021Recomendation" xml:space="preserve">
+    <value>Додати пароль</value>
+  </data>
+  <data name="PLU0022" xml:space="preserve">
+    <value>Робочу область не знайдено</value>
+  </data>
+  <data name="PLU0022Description" xml:space="preserve">
+    <value>Робочий простір повинен існувати і бути активован</value>
+  </data>
+  <data name="PLU0022Recomendation" xml:space="preserve">
+    <value>Перевірте назву робочого простору</value>
+  </data>
+</root>

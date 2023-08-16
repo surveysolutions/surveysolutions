@@ -7,6 +7,8 @@ using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection
@@ -346,7 +348,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             Assert.That(substitutionText.Text, Is.EqualTo(markdownText + HttpUtility.HtmlEncode(specSymbolsForMarkdownEngine)));
         }
         
-         [Test]
+        [Test]
         public void When_ReplaceSubstitutions_for_table_roster_title_referencing_question_inside()
         {
             //arrange
@@ -382,6 +384,64 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             //assert
             Assert.That(substitutionText.HasSubstitutions, Is.True);
             Assert.That(substitutionText.Text, Is.EqualTo("title: Bob"));
+        }
+        
+        [Test]
+        public void When_ReplaceSubstitutions_for_roster_title_referencing_rostertitle_and_variables()
+        {
+            //arrange
+            var rosterTitle = "test %rostertitle%, var0: %var0%, var1: %var1%";
+            var questionnaireDocument = Create.Entity.QuestionnaireDocument(children: new IComposite[]
+            {
+                Create.Entity.Roster(Id.g1, displayMode: RosterDisplayMode.Table, variable: "r1", 
+                    title: rosterTitle,
+                    enablementCondition: "@rowcode > 1",
+                    fixedRosterTitles: new FixedRosterTitle[]
+                    {
+                        Create.Entity.FixedTitle(1, "First roster"),
+                        Create.Entity.FixedTitle(2, "Second roster"),
+                    },
+                    children: new IComposite[]
+                {
+                    Create.Entity.TextQuestion(Id.g2, variable:"name"),
+                    Create.Entity.Variable(Id.g3, VariableType.LongInteger, "var0", "@rowcode"),
+                }),
+                Create.Entity.Variable(Id.g4, VariableType.LongInteger, "var1", "777"),
+            });
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+
+            var sourceTreeMainSection = Create.Entity.InterviewTreeSection(children: new IInterviewTreeNode[]
+            {
+                Create.Entity.InterviewTreeRoster(Create.Entity.Identity(Id.g1, new decimal[] { 1 }), rosterTitle: "First roster", isDisabled: true, children: new IInterviewTreeNode[]
+                {
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Id.g2, new decimal[] { 1 }), questionType: QuestionType.Text, isDisabled: true),
+                    Create.Entity.InterviewTreeVariable(Create.Entity.Identity(Id.g3, new decimal[] { 1 }), isDisabled: true)
+                }),
+                Create.Entity.InterviewTreeRoster(Create.Entity.Identity(Id.g1, new decimal[] { 2 }), rosterTitle: "Second roster", isDisabled: true, children: new IInterviewTreeNode[]
+                {
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Id.g2, new decimal[] { 2 }), questionType: QuestionType.Text, answer: "Text"),
+                    Create.Entity.InterviewTreeVariable(Create.Entity.Identity(Id.g3, new decimal[] { 2 }), value: 2)
+                }),
+                Create.Entity.InterviewTreeVariable(Create.Entity.Identity(Id.g4), value: 777)
+            });
+            var tree = Create.Entity.InterviewTree(sections: sourceTreeMainSection);
+
+            var substitutionTextFactory = Create.Service.SubstitutionTextFactory();
+            var substitutionText1 = substitutionTextFactory.CreateText(Create.Entity.Identity(Id.g1, new decimal[] { 1 }),
+                rosterTitle, questionnaire);
+            var substitutionText2 = substitutionTextFactory.CreateText(Create.Entity.Identity(Id.g1, new decimal[] { 2 }),
+                rosterTitle, questionnaire);
+
+            //act
+            substitutionText1.ReplaceSubstitutions(tree);
+            substitutionText2.ReplaceSubstitutions(tree);
+
+            //assert
+            Assert.That(substitutionText1.HasSubstitutions, Is.True);
+            Assert.That(substitutionText1.Text, Is.EqualTo("test First roster, var0: [...], var1: 777"));
+            Assert.That(substitutionText2.HasSubstitutions, Is.True);
+            Assert.That(substitutionText2.Text, Is.EqualTo("test Second roster, var0: 2, var1: 777"));
         }
     }
 }

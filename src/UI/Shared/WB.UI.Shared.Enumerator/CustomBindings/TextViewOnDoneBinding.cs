@@ -47,7 +47,6 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         public override void SubscribeToEvents()
         {
             var textView = this.Target;
-
             if (textView == null)
                 return;
 

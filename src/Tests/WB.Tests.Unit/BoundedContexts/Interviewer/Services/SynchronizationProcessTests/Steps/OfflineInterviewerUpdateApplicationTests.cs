@@ -3,8 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using Plugin.Permissions;
-using Plugin.Permissions.Abstractions;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Synchronization;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -13,6 +11,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using Xamarin.Essentials;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests.Steps
 {
@@ -47,17 +46,14 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             var navigationService = new Mock<IViewModelNavigationService>();
             var fileSystemService = new Mock<IFileSystemAccessor>();
-            var permissions = new Mock<IPermissionsService>();
             var step = CreateOfflineInterviewerUpdateApplication(interviewerSettings: settings,
                 synchronizationService: mockOfSynchronizationService.Object,
                 navigationService: navigationService.Object,
-                fileSystemAccessor: fileSystemService.Object,
-                permissions: permissions.Object);
+                fileSystemAccessor: fileSystemService.Object);
             // act
             await step.ExecuteAsync();
             // assert
 
-            permissions.Verify(x => x.AssureHasPermissionOrThrow<StoragePermission>(), Times.Once);
             mockOfSynchronizationService.Verify(x => x.GetApplicationAsync(It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()), Times.Once);
             fileSystemService.Verify(x => x.WriteAllBytes(It.IsAny<string>(), It.IsAny<byte[]>()), Times.Once);
             navigationService.Verify(x => x.InstallNewApp(It.IsAny<string>()), Times.Once);
@@ -68,7 +64,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             ISynchronizationService synchronizationService = null,
             IInterviewerSettings interviewerSettings = null,
             IFileSystemAccessor fileSystemAccessor = null,
-            IPermissionsService permissions = null,
             IViewModelNavigationService navigationService = null)
         {
             var step = new OfflineInterviewerUpdateApplication(
@@ -77,7 +72,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 logger: Mock.Of<ILogger>(),
                 interviewerSettings: interviewerSettings ?? Mock.Of<IInterviewerSettings>(),
                 fileSystemAccessor: fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
-                permissions: permissions ?? Mock.Of<IPermissionsService>(),
                 navigationService: navigationService ?? Mock.Of<IViewModelNavigationService>(),
                 pathUtils: Mock.Of<IPathUtils>());
             step.Context = new EnumeratorSynchonizationContext {Progress = new Progress<SyncProgressInfo>()};

@@ -243,6 +243,28 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             Assert.That(storedQuestions, Has.Count.EqualTo(0));
         }
 
+        [Test]
+        public void should_be_able_to_read_identified_answers_in_correct_sort_order()
+        {
+            var document = Create.Entity.AssignmentDocument(1)
+                .WithAnswer(Create.Entity.Identity(Id.g1), "answer1")
+                .WithAnswer(Create.Entity.Identity(Id.g2), "answer2")
+                .WithAnswer(Create.Entity.Identity(Id.g3), "answer3", identifying: true, sortOrder: 2)
+                .WithAnswer(Create.Entity.Identity(Id.g4), "answer4")
+                .WithAnswer(Create.Entity.Identity(Id.g5), "answer5", identifying: true, sortOrder: 1)
+                .Build();
+
+            this.storage.Store(document);
+
+            var assignments = this.storage.LoadAll();
+
+            Assert.That(assignments, Has.Count.EqualTo(1));
+            var identifyingAnswers = assignments.First().IdentifyingAnswers;
+            Assert.That(identifyingAnswers, Has.Count.EqualTo(2));
+            Assert.That(identifyingAnswers[0].Identity.Id, Is.EqualTo(Id.g5));
+            Assert.That(identifyingAnswers[1].Identity.Id, Is.EqualTo(Id.g3));
+        }
+
         private static void AssertThatStoredAssignmentIsEqualToDocument(AssignmentDocument stored, AssignmentDocument document)
         {
             void AssertEqualAnswers(List<AssignmentDocument.AssignmentAnswer> source, List<AssignmentDocument.AssignmentAnswer> target)

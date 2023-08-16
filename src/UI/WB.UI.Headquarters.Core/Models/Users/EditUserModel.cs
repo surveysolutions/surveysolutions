@@ -26,5 +26,6 @@ namespace WB.UI.Headquarters.Models.Users
 
         public bool IsLockedByHeadquarters { get; set; }
         public bool IsLockedBySupervisor { get; set; }
+        public bool IsRelinkAllowed { get; set; }
     }
 }

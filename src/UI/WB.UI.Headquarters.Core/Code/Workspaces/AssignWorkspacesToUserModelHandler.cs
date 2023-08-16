@@ -8,20 +8,21 @@ using MediatR;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
+using WB.Core.BoundedContexts.Headquarters.Workspaces.Impl;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Models;
 
 namespace WB.UI.Headquarters.Code.Workspaces
 {
-    public class AssignWorkspacesToUserModelHandler : IRequestHandler<AssignWorkspacesToUserModelRequest>
+    public class AssignWorkspacesToUserModelHandler : IRequestHandler<AssignWorkspacesToUserModelRequest, Unit>
     {
-        private readonly IPlainStorageAccessor<Workspace> workspaces;
+        private readonly IWorkspacesStorage workspaces;
         private readonly IUserRepository users;
         private readonly IWorkspacesService workspacesService;
         private readonly IWorkspacesUsersCache workspacesUsers;
         private readonly IAuthorizedUser authorizedUser;
 
-        public AssignWorkspacesToUserModelHandler(IPlainStorageAccessor<Workspace> workspaces,
+        public AssignWorkspacesToUserModelHandler(IWorkspacesStorage workspaces,
             IUserRepository users,
             IWorkspacesService workspacesService,
             IWorkspacesUsersCache workspacesUsers,

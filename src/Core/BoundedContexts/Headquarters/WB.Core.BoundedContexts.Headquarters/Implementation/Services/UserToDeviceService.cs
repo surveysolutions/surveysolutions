@@ -27,7 +27,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             var user = await userRepository.FindByIdAsync(authorizedUserId);
             if (!user.IsInRole(UserRoles.Interviewer) && !user.IsInRole(UserRoles.Supervisor))
             {
-                throw new InvalidOperationException("Only IN or SV can be linked to device");
+                throw new InvalidOperationException("Only interviewer or supervisor can be linked to device");
+            }
+
+            if (user.Profile != null
+                && !string.IsNullOrWhiteSpace(user.Profile.DeviceId)
+                && user.Profile.DeviceRegistrationDate.HasValue
+                && !user.Profile.IsRelinkAllowed())
+            {
+                throw new InvalidOperationException("You must have approval from supervisor or headquarters to relink device");
             }
 
             if(user.WorkspaceProfile == null)
@@ -35,6 +43,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             user.Profile.DeviceId = deviceId;
             user.Profile.DeviceRegistrationDate = DateTime.UtcNow;
+            user.Profile.ResetAllowRelinkFlag();
         }
     }
 }

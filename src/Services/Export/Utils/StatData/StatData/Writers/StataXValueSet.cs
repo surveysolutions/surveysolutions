@@ -41,7 +41,7 @@ namespace StatData.Writers
                             Value = data.GetDctCode(v, i)
                         });
                 }
-                catch (OverflowException e)
+                catch (OverflowException)
                 {
                     // if an overflow occured, we ignore this label
                 }

@@ -36,9 +36,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             IEnumeratorSettings enumeratorSettings, 
             IServiceLocator serviceLocator,
             IDeviceInformationService deviceInformationService,
-            IAssignmentDocumentsStorage assignmentsStorage) 
+            IAssignmentDocumentsStorage assignmentsStorage,
+            IPermissionsService permissionsService) 
             : base(mapService, synchronizationService, logger, httpStatistician, principal, 
-                interviewViewRepository, auditLogService, enumeratorSettings, userInteractionService, deviceInformationService, serviceLocator, assignmentsStorage)
+                interviewViewRepository, auditLogService, enumeratorSettings, userInteractionService, deviceInformationService, serviceLocator, assignmentsStorage, permissionsService)
         {
             this.supervisorPlainStorage = supervisorPlainStorage;
             this.passwordHasher = passwordHasher;

@@ -174,7 +174,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
         }
 
         [Test]
-        public void When_section_enabled_Then_new_view_model_should_be_added_with_specified_index()
+        public async Task When_section_enabled_Then_new_view_model_should_be_added_with_specified_index()
         {
             //arrange
             var section1Id = Guid.Parse("11111111111111111111111111111112");
@@ -198,7 +198,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 
             //act
             interview.Apply(Create.Event.GroupsEnabled(disabledSectionId, RosterVector.Empty));
-            viewModel.Handle(Create.Event.GroupsEnabled(disabledSectionId, RosterVector.Empty));
+            await viewModel.HandleAsync(Create.Event.GroupsEnabled(disabledSectionId, RosterVector.Empty));
             //assert
             var addedDisabledSectionViewModel = viewModel.AllVisibleSections.Except(viewModelsWithoutDisabled).Single();
 
@@ -314,7 +314,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             IEnumerable<ISideBarItem> result = viewModel.AllVisibleSections.ToArray();
 
             //assert
-            Assert.That(result.First().GetType(), Is.EqualTo(typeof(SideBarCoverSectionViewModel)));
+            Assert.That(result.First().GetType(), Is.EqualTo(typeof(SideBarVirtualCoverSectionViewModel)));
         }
 
         [Test]
@@ -345,7 +345,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             IEnumerable<ISideBarItem> result = viewModel.AllVisibleSections.ToArray();
 
             //assert
-            Assert.That(result.Any(item => item.GetType() == typeof(SideBarCoverSectionViewModel)), Is.False);
+            Assert.That(result.Any(item => item.GetType() == typeof(SideBarVirtualCoverSectionViewModel)), Is.False);
             var cover = result.OfType<SideBarSectionViewModel>().First();
             Assert.That(cover.SectionIdentity.Id, Is.EqualTo(Id.g1));
             Assert.That(cover.Title.PlainText, Is.EqualTo("custom cover"));
@@ -377,7 +377,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             IEnumerable<ISideBarItem> result = viewModel.AllVisibleSections.ToArray();
 
             //assert
-            Assert.That(result.Any(item => item.GetType() == typeof(SideBarCoverSectionViewModel)), Is.False);
+            Assert.That(result.Any(item => item.GetType() == typeof(SideBarVirtualCoverSectionViewModel)), Is.False);
             Assert.That(result.OfType<SideBarSectionViewModel>()
                 .Any(item => item.SectionIdentity.Id == QuestionnaireDocument.CoverPageSectionId), 
                 Is.False

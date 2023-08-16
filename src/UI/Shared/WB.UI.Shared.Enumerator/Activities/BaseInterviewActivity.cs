@@ -1,13 +1,10 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using Android.Content.Res;
-using Android.OS;
 using Android.Views;
 using AndroidX.AppCompat.App;
 using AndroidX.DrawerLayout.Widget;
 using AndroidX.RecyclerView.Widget;
 using MvvmCross;
-using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.WeakSubscription;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -43,6 +40,16 @@ namespace WB.UI.Shared.Enumerator.Activities
                 nameof(this.drawerLayout.DrawerOpened),
                 OnDrawerLayoutOnDrawerOpened)  ;
         }
+        
+        protected override bool BackButtonCustomAction => true;
+        protected override void BackButtonPressed()
+        {
+            this.ViewModel.NavigateToPreviousViewModel(() =>
+            {
+                this.ViewModel.NavigateBack();
+                ReleaseActivity();
+            });
+        }
 
         private void OnDrawerLayoutOnDrawerOpened(object sender, DrawerLayout.DrawerOpenedEventArgs args)
         {
@@ -57,15 +64,6 @@ namespace WB.UI.Shared.Enumerator.Activities
             this.sectionChangeSubscriptionToken = messenger.Subscribe<SectionChangeMessage>(this.OnSectionChange);
             this.interviewCompleteActivityToken = messenger.Subscribe<InterviewCompletedMessage>(this.OnInterviewCompleteActivity);
             base.OnStart();
-        }
-
-        public override void OnBackPressed()
-        {
-            this.ViewModel.NavigateToPreviousViewModel(() =>
-            {
-                this.ViewModel.NavigateBack();
-                ReleaseActivity();
-            });
         }
 
         public override bool OnOptionsItemSelected(IMenuItem item)
@@ -150,7 +148,6 @@ namespace WB.UI.Shared.Enumerator.Activities
                 list?.SetItemAnimator(null);
             }
         }
-        
 
         protected void Navigate(string navigateTo)
         {

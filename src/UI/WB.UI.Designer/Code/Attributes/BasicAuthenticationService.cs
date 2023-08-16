@@ -28,6 +28,9 @@ namespace WB.UI.Designer.Code.Attributes
             var user = await this.userManager.FindByNameAsync(credentials.Username)
                        ?? await this.userManager.FindByEmailAsync(credentials.Username);
 
+            if(user?.UserName == null)
+                throw new UnauthorizedException(ErrorMessages.User_Not_authorized, StatusCodes.Status401Unauthorized);
+            
             if (!await this.Authorize(user, credentials.Username, credentials.Password))
             {
                 throw new UnauthorizedException(ErrorMessages.User_Not_authorized, StatusCodes.Status401Unauthorized);
@@ -52,7 +55,8 @@ namespace WB.UI.Designer.Code.Attributes
             identity.AddClaims(roles.Select(x => new Claim(ClaimTypes.Role, x)));
 
             var email = await userManager.GetEmailAsync(user);
-            identity.AddClaim(new Claim(ClaimTypes.Email, email));
+            if(email != null)
+                identity.AddClaim(new Claim(ClaimTypes.Email, email));
 
             var principal = new ClaimsPrincipal(identity);
             return principal;

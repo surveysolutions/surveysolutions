@@ -185,7 +185,7 @@
     <value>Read Only</value>
   </data>
   <data name="ReadOnlyQuestion" xml:space="preserve">
-    <value>It is readonly question. You can not edit it.</value>
+    <value>It is readonly question. You cannot edit it.</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Save</value>
@@ -313,11 +313,23 @@
   <data name="SideBarTranslationDownloadXlsx" xml:space="preserve">
     <value>Download xlsx</value>
   </data>
+  <data name="SideBarDownload" xml:space="preserve">
+    <value>Download:</value>
+  </data>
+  <data name="SideBarXlsx" xml:space="preserve">
+    <value>Xlsx</value>
+  </data>
+  <data name="SideBarTab" xml:space="preserve">
+    <value>Tab</value>
+  </data>
   <data name="SideBarTranslationGetTemplate" xml:space="preserve">
     <value>Get Template for </value>
   </data>
   <data name="SideBarTranslationGetTemplateLinkTextXlsx" xml:space="preserve">
     <value>Excel (xlsx)</value>
+  </data>
+  <data name="SideBarTranslationGetTemplateLinkTextCsv" xml:space="preserve">
+    <value>Tab (txt)</value>
   </data>
   <data name="SideBarTranslationName" xml:space="preserve">
     <value>translation name</value>
@@ -602,7 +614,7 @@
     <value>Error or warning message</value>
   </data>
   <data name="OptionsListError" xml:space="preserve">
-    <value>You entered an invalid input. Each line should follow the format: "Title...Value". 'Value' must be an integer number. Title must be an alpha-numeric string. No empty lines are allowed.</value>
+    <value>You entered an invalid input. Each line should follow the format: 'Title...Value[...Attachment name]'. 'Value' must be an integer number. 'Title' must be an alpha-numeric string. 'Attachment name' is optional. No empty lines are allowed.</value>
   </data>
   <data name="QuestionAddInstruction" xml:space="preserve">
     <value>Add Interviewer Instruction</value>
@@ -661,9 +673,6 @@
   <data name="RosterName" xml:space="preserve">
     <value>Roster name</value>
   </data>
-  <data name="RosterShowStrings" xml:space="preserve">
-    <value>Show strings</value>
-  </data>
   <data name="RosterSource" xml:space="preserve">
     <value>Roster source</value>
   </data>
@@ -687,6 +696,9 @@
   </data>
   <data name="SelectQuestion" xml:space="preserve">
     <value>Select question</value>
+  </data>
+  <data name="AddFilter" xml:space="preserve">
+    <value>Add filter</value>
   </data>
   <data name="SettingsCan" xml:space="preserve">
     <value>Can </value>
@@ -747,9 +759,6 @@
   </data>
   <data name="SettingsWhoHasAccess" xml:space="preserve">
     <value>who has access</value>
-  </data>
-  <data name="ShowList" xml:space="preserve">
-    <value>Show list</value>
   </data>
   <data name="ValidationCondition" xml:space="preserve">
     <value>Validation condition</value>
@@ -818,6 +827,12 @@
   <data name="GeometryType" xml:space="preserve">
     <value>Geometry type</value>
   </data>
+  <data name="GeometryInputMode" xml:space="preserve">
+    <value>Input mode</value>
+  </data>
+  <data name="GeometryOverlapDetection" xml:space="preserve">
+    <value>Overlap detection</value>
+  </data>
   <data name="QuestionDecimalPlaces" xml:space="preserve">
     <value>Number of decimal places</value>
   </data>
@@ -848,9 +863,6 @@
   <data name="QuestionPattern" xml:space="preserve">
     <value>Pattern</value>
   </data>
-  <data name="QuestionShowStrings" xml:space="preserve">
-    <value>Show strings</value>
-  </data>
   <data name="QuestionUploadOptions" xml:space="preserve">
     <value>Upload new categories</value>
   </data>
@@ -859,6 +871,15 @@
   </data>
   <data name="QuestionYesNoMode" xml:space="preserve">
     <value>Yes/No buttons</value>
+  </data>
+  <data name="GeographyInputModeManual" xml:space="preserve">
+    <value>Manual</value>
+  </data>
+    <data name="GeographyInputModeAutomatic" xml:space="preserve">
+    <value>Automatic</value>
+  </data>
+    <data name="GeographyInputModeSemiautomatic" xml:space="preserve">
+    <value>Semiautomatic</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Search</value>
@@ -1000,7 +1021,7 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
     <value>A logical expression that validates an answer to the current question. Might include values of other questions.</value>
   </data>
   <data name="HelpValidationMessage" xml:space="preserve">
-    <value>Error or warning message is shown when validation condition evaluates to "False" or error occurres during expression evaluation.</value>
+    <value>Error or warning message is shown when validation condition evaluates to "False" or error occurs during expression evaluation.</value>
   </data>
   <data name="HelpVariableDescription" xml:space="preserve">
     <value>Text that will be shown next to a variable for testing purposes</value>
@@ -1020,7 +1041,6 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   <data name="HelpVirtualCoverPage" xml:space="preserve">
     <value>Cover is virtual section that shows all identifying questions.
     Questions cannot be changed in this section</value>
-
   </data>
   <data name="ConditionMightBeBroken" xml:space="preserve">
     <value>Condition or cascading depended items might be broken</value>
@@ -1034,12 +1054,18 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   <data name="HotkeysCloseMetadata" xml:space="preserve">
     <value>Close metadata panel</value>
   </data>
+  <data name="HotkeysCloseScenarios" xml:space="preserve">
+    <value>Close scenarios panel</value>
+  </data>
   <data name="HotkeysCloseTranslations" xml:space="preserve">
     <value>Close translations panel</value>
   </data>
   <data name="HotkeysCloseCategories" xml:space="preserve">
     <value>Close categories panel</value>
   </data>
+  <data name="HotkeysCloseComments" xml:space="preserve">
+    <value>Close comments panel</value>
+  </data>    
   <data name="HotkeysFocusTitle" xml:space="preserve">
     <value>Focus title field in editor</value>
   </data>
@@ -1144,6 +1170,9 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   </data>
   <data name="OptionsUploadValue" xml:space="preserve">
     <value>Value</value>
+  </data>
+  <data name="AttachmentName" xml:space="preserve">
+    <value>Attachment name</value>
   </data>
   <data name="OptionsUploadParent" xml:space="preserve">
     <value>Parent value</value>
@@ -1349,6 +1378,9 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   <data name="NotSupportedAttachment" xml:space="preserve">
     <value>Selected file is not supported as attachment</value>
   </data>
+  <data name="AttachmentDimensionsAreTooBig" xml:space="preserve">
+    <value>Dimensions are too big</value>
+  </data>
   <data name="SettingsHideIfDisabled" xml:space="preserve">
     <value>Hide element when it is disabled</value>
   </data>
@@ -1490,6 +1522,9 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   <data name="HelpOptionTitle" xml:space="preserve">
     <value>Text label for the category (visible to the interviewer)</value>
   </data>
+  <data name="HelpOverlapDetection" xml:space="preserve">
+    <value>Display and highlight the overlaps of this question answer with answers to the same questions in sibling roster instances</value>
+  </data>
   <data name="NewItem" xml:space="preserve">
     <value>New item</value>
   </data>
@@ -1521,7 +1556,7 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
     <value>Data changes reverted</value>
   </data>
   <data name="OptionsSizeLimit" xml:space="preserve">
-    <value>Maximum {{ max }} rows allowed</value>
+    <value>Maximum {max_rows} rows allowed</value>
   </data>
   <data name="CommunicationError" xml:space="preserve">
     <value>Network error</value>
@@ -1534,12 +1569,15 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   </data>
   <data name="OptionsCascadingListError" xml:space="preserve">
     <value>
-You entered an invalid input. Each line should follow the format: "Title...ParentValue/Value". 'Value' and 'ParentValue' must be an integer number. Title must be an alpha-numeric string. No empty lines are allowed.</value>
+You entered an invalid input. Each line should follow the format: "Title...ParentValue/Value[...Attachment name]". 'Value' and 'ParentValue' must be an integer number. 'Title' must be an alpha-numeric string. 'Attachment name' is optional. No empty lines are allowed.</value>
   </data>
   <data name="ShowParentValues" xml:space="preserve">
     <value>Show Parent values</value>
   </data>
   <data name="HideParentValues" xml:space="preserve">
     <value>Hide Parent values</value>
+  </data>
+  <data name="AddEnablingCondition" xml:space="preserve">
+    <value>Add enabling condition</value>
   </data>
 </root>

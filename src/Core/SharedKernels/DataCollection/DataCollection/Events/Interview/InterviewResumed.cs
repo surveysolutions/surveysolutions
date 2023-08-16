@@ -9,16 +9,13 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
             : base(userId, originDate)
         {
             DeviceType = deviceType;
-            if (originDate != default)
-            {
-                this.LocalTime = originDate.LocalDateTime;
-                this.UtcTime = originDate.UtcDateTime;
-            }
         }
 
         public AgentDeviceType DeviceType { get; set; }
 
+        [Obsolete("Please use OriginDate property")]
         public DateTime? LocalTime { get; set; }
+        [Obsolete("Please use OriginDate property")]
         public DateTime? UtcTime { get; set; }
     }
 }

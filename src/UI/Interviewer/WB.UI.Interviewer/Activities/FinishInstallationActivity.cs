@@ -8,6 +8,8 @@ using Java.Interop;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Activities.Callbacks;
+using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
 
 namespace WB.UI.Interviewer.Activities
 {
@@ -28,13 +30,15 @@ namespace WB.UI.Interviewer.Activities
             this.SetSupportActionBar(toolbar);
         }
 
-        public override void OnBackPressed()
-        {
+        protected override bool BackButtonCustomAction => true;
+        protected override void BackButtonPressed()
+        {                
             if (this.ViewModel.IsInProgress)
             {
                 this.ViewModel.CancelInProgressTask();
             }
         }
+
 
         public override bool OnCreateOptionsMenu(IMenu menu)
         {

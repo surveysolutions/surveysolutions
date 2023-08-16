@@ -35,7 +35,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 
         public void BecauseOf() => foundQuestions = Create.Entity.PlainQuestionnaire(questionnaire, 1).GetCascadingQuestionsThatDependUponQuestion(parentSingleOptionQuestionId);
 
-        [NUnit.Framework.Test] public void should_find_expected_dependant_questions () => foundQuestions.Should().BeEquivalentTo(childCascadedComboboxId, grandChildCascadedComboboxId);
+        [NUnit.Framework.Test] public void should_find_expected_dependant_questions () => foundQuestions.Should()
+            .BeEquivalentTo(new[]{ childCascadedComboboxId, grandChildCascadedComboboxId });
 
         static Guid parentSingleOptionQuestionId;
         static Guid childCascadedComboboxId;

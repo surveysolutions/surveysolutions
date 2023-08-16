@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -54,7 +55,8 @@ namespace WB.UI.Headquarters.HealthChecks
             catch (Exception e)
             {
                 return HealthCheckResult.Degraded(
-                    Diagnostics.export_service_connectivity_check_Degraded.FormatString(uri), e);
+                    Diagnostics.export_service_connectivity_check_Degraded.FormatString(uri), 
+                    exception: new Exception(e.Message));
             }
         }
     }

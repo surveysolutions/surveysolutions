@@ -27,8 +27,9 @@ namespace WB.Tests.Web.Headquarters.AuthenticationTests
             
                 var userStoreMock = new Mock<IUserStore<HqUser>>();
                 userStoreMock.Setup(u => u.FindByIdAsync(userId.FormatGuid(), It.IsAny<CancellationToken>()))
-                    .Returns(Task.FromResult(user));
-                userStoreMock.Setup(u => u.UpdateAsync(user, It.IsAny<CancellationToken>()))
+                    .Returns(Task.FromResult(user)!);
+                
+                userStoreMock.Setup(u => u.UpdateAsync(It.IsAny<HqUser>(), It.IsAny<CancellationToken>()))
                     .Returns(Task.FromResult(new IdentityResult()));
 
                 userStoreMock.As<IUserPasswordStore<HqUser>>();

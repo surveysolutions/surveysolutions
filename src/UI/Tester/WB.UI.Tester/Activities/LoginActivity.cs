@@ -1,11 +1,10 @@
-using Android.App;
 using Android.Content;
-using Android.OS;
 using Android.Views;
-using AndroidX.AppCompat.Widget;
 using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Activities.Callbacks;
+using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
 
 namespace WB.UI.Tester.Activities
 {
@@ -23,7 +22,8 @@ namespace WB.UI.Tester.Activities
             this.SetSupportActionBar(toolbar);
         }
 
-        public override void OnBackPressed()
+        protected override bool BackButtonCustomAction => true;
+        protected override void BackButtonPressed()
         {
         }
 

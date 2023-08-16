@@ -345,7 +345,7 @@
     <value>Error</value>
     <comment>Plural form: Zero items</comment>
   </data>
-  <data name="Error_plural" xml:space="preserve">
+  <data name="Error_other" xml:space="preserve">
     <value>Errors</value>
     <comment>Plural form: plural</comment>
   </data>
@@ -456,6 +456,12 @@ Contact support for assistance.</value>
   <data name="EmailLink_EmailResumeLink" xml:space="preserve">
     <value>Email resume link</value>
   </data>
+  <data name="HideVariables" xml:space="preserve">
+    <value>Hide variables</value>
+  </data>
+  <data name="ShowVariables" xml:space="preserve">
+    <value>Show variables</value>
+  </data>
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
     <value>Are you sure you want to remove related roster '{{rosterTitle}}'?</value>
   </data>
@@ -510,5 +516,8 @@ Contact support for assistance.</value>
   </data>
   <data name="SwitchToWebMode_LinkDescription" xml:space="preserve">
     <value>The following link could be used to continue this interview</value>
+  </data>
+  <data name="AssignmentLimitError" xml:space="preserve">
+    <value>You cannot create more interviews from this assignment</value>
   </data>
 </root>

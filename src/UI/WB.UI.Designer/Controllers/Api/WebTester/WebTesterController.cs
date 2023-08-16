@@ -3,8 +3,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -70,6 +72,25 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
                 LastUpdateDate = questionnaireView.Source.LastEntryDate
             });
         }
+        
+        [Route("{token:Guid}/settings")]
+        [HttpGet]
+        public IActionResult Settings(string token)
+        {
+            var questionnaireId = this.webTesterService.GetQuestionnaire(token);
+            if (questionnaireId == null)
+            {
+                return NotFound();
+            }
+            
+            var anonymousQuestionnaire = this.designerDbContext.AnonymousQuestionnaires.FirstOrDefault(a =>
+                a.AnonymousQuestionnaireId == questionnaireId && a.IsActive == true);
+
+            return Ok(new QuestionnaireSettings
+            {
+                IsAnonymousMode = anonymousQuestionnaire == null
+            });
+        }
 
         [Route("{token:Guid}/questionnaire")]
         [HttpGet]
@@ -81,6 +102,9 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             try
             {
                 var composeQuestionnaire = this.questionnairePackageComposer.ComposeQuestionnaire(questionnaireId.Value);
+                if(composeQuestionnaire == null)
+                    if (questionnaireId == null) return NotFound();
+                
                 return Ok(this.serializer.Serialize(composeQuestionnaire));
             }
             catch (ComposeException )
@@ -179,7 +203,8 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
                     CategoriesId = x.CategoriesId,
                     Id = x.Value,
                     ParentId = x.ParentId,
-                    Text = x.Text
+                    Text = x.Text,
+                    AttachmentName = x.AttachmentName
                 })
                 .ToArray();
 

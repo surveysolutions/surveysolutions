@@ -70,7 +70,8 @@
     <color name="dashboard_approved_by_supervisor">#0fb8be</color>
     <color name="dashboard_rejected_by_headquarter">#651800</color>
     <color name="dashboard_interview_title">#404040</color>
-
+    <color name="dashboard_assignment_create">#A371F7</color>
+    
     <color name="dashboard_interview_delimeter">#ebebeb</color>
     <color name="dashboard_interview_background">#FFFFFF</color>
     <color name="dashboard_new_tab">#6D6D6D</color>
@@ -79,7 +80,7 @@
     <color name="dashboard_border">#ECECEC</color>
     <color name="dashboard_border_shadow">#C2C2C2</color>
 
-    <color name="dashboard_new_interview_status">#E9E9E9</color>
+    <color name="dashboard_new_interview_status">#A371F7</color>
     <color name="dashboard_main_color">#404040</color>
 
     <color name="dashboard_interview_subtitle">#9e9e9e</color>
@@ -117,6 +118,7 @@
     <color name="interviewStatusBarInProgress">#246EAD</color>
     <color name="interviewStatusBarErrors">#e64a19</color>
     <color name="interviewStatusBarDisabled">#474747</color>
+    <color name="assignmentsStatusBar">#A371F7</color>
 
     <color name="complete_screen_title_text">#747474</color>
     <color name="complete_screen_statistics_border">#dadada</color>
@@ -158,11 +160,13 @@
     <color name="exo_player_seek_scrubber">@color/colorAccent</color>
     <color name="exo_player_seek_played">#2a81cb</color>
     <color name="exo_player_seek_unplayed">#2a81cb</color>
+    <color name="exo_player_background">@android:color/white</color>
 
     <color name="loading_title">#000000</color>
     <color name="loading_background">#EEEEEE</color>
     <color name="loading_progress_color">#2D9CDB</color>
     <color name="loading_progress_background">#C4C4C4</color>
+    <color name="loading_progress_color_complete">#1f9500</color>
     <color name="loading_indeterminate_progress_gradient_start">#C4C4C4</color>
     <color name="loading_indeterminate_progress_gradient_center">#FFFFFF</color>
 

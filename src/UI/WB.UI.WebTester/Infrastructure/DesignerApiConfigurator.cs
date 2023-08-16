@@ -8,11 +8,12 @@ namespace WB.UI.WebTester.Infrastructure
 {
     public class DesignerApiConfigurator : IHttpClientConfigurator<IDesignerWebTesterApi>
     {
-        private string designerAddress;
+        private readonly string designerAddress;
 
         public DesignerApiConfigurator(IConfiguration configuration)
         {
-            this.designerAddress = configuration["DesignerAddress"].TrimEnd('/');
+            var designerAddress = configuration["DesignerAddress"];
+            this.designerAddress = designerAddress != null ? designerAddress.TrimEnd('/') : String.Empty;
         }
 
         public void ConfigureHttpClient(HttpClient hc)

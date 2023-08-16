@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Services;
+using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
 
 namespace WB.UI.Interviewer.Activities
 {
@@ -55,7 +56,6 @@ namespace WB.UI.Interviewer.Activities
             menu.LocalizeMenuItem(Resource.Id.menu_diagnostics, EnumeratorUIResources.MenuItem_Title_Diagnostics);
             menu.LocalizeMenuItem(Resource.Id.menu_signout, EnumeratorUIResources.MenuItem_Title_SignOut);
             menu.LocalizeMenuItem(Resource.Id.menu_dashboard, EnumeratorUIResources.MenuItem_Title_Dashboard);
-            menu.LocalizeMenuItem(Resource.Id.menu_map_dashboard, EnumeratorUIResources.MenuItem_Title_Map_Dashboard);
 
             return base.OnCreateOptionsMenu(menu);
         }

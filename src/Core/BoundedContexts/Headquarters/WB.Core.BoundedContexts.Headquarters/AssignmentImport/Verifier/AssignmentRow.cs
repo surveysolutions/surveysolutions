@@ -114,6 +114,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var textListAnswers = this.Values
                 .OfType<AssignmentTextAnswer>()
                 .Where(x => !string.IsNullOrWhiteSpace(x.Value))
+                .Where(x=> !x.VariableName.EndsWith('c'))
                 .Select(x => new Tuple<int, string>(Convert.ToInt32(x.VariableName), x.Value))
                 .OrderBy(x => x.Item1)
                 .ToArray();

@@ -55,7 +55,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             dbContext.Assignments.Add(new Assignment.Assignment()
             {
                 Id = AssignmentId,
-                QuestionnaireId = QuestionnaireId
+                QuestionnaireId = questionnaireId
             });
             dbContext.SaveChanges();
 
@@ -64,13 +64,31 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
                 .Setup(x => x.WriteData(It.IsAny<string>(), It.IsAny<IEnumerable<string[]>>(), It.IsAny<string>()))
                 .Callback<string, IEnumerable<string[]>, string>((f, data, d) => { fileData.AddRange(data); });
 
+            var headquartersUser = new WB.Services.Export.User.User()
+            {
+                Id = headquarters,
+                UserName = "headquarters",
+                Roles = new []{UserRoles.Headquarter}
+            };
+            
+            var supervisorUser = new WB.Services.Export.User.User()
+            {
+                Id = supervisor,
+                UserName = "supervisor",
+                Roles = new []{UserRoles.Supervisor}
+            };
+            
+            var interviewerUser = new WB.Services.Export.User.User()
+            {
+                Id = interviewer,
+                UserName = "interviewer",
+                Roles = new []{UserRoles.Interviewer}
+            };
+            
             var userStorage = Mock.Of<IUserStorage>(s =>
-                s.GetUserNameAsync(headquarters) == Task.FromResult("headquarters")
-                && s.GetUserNameAsync(supervisor) == Task.FromResult("supervisor")
-                && s.GetUserNameAsync(interviewer) == Task.FromResult("interviewer")
-                && s.GetUserRoleAsync(headquarters) == Task.FromResult(UserRoles.Headquarter)
-                && s.GetUserRoleAsync(supervisor) == Task.FromResult(UserRoles.Supervisor)
-                && s.GetUserRoleAsync(interviewer) == Task.FromResult(UserRoles.Interviewer)
+                s.GetUserAsync(headquarters) == Task.FromResult(headquartersUser)
+                && s.GetUserAsync(supervisor) == Task.FromResult(supervisorUser)
+                && s.GetUserAsync(interviewer) == Task.FromResult(interviewerUser)
             );
 
             actionsExporter = Create.AssignmentActionsExporter(csvWriter: csvWriterMock.Object,
@@ -225,7 +243,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         [Test]
         public async Task should_be_able_to_export_all()
         {
-            await actionsExporter.ExportAllAsync(tenant, new QuestionnaireId(QuestionnaireId), "", new ExportProgress(),
+            await actionsExporter.ExportAllAsync(tenant, new QuestionnaireId(questionnaireId), "", new ExportProgress(),
                 CancellationToken.None);
             Assert.That(fileData[1],
                 Is.EqualTo(new[]
@@ -235,7 +253,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
                 }));
         }
 
-        private static int AssignmentId = 77;
+        private const int AssignmentId = 77;
         private static readonly Guid headquarters = Id.g1;
         private static readonly Guid supervisor = Id.g2;
         private static readonly Guid interviewer = Id.g3;
@@ -245,6 +263,6 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         private static string fileName = "1.tab";
         private static readonly List<string[]> fileData = new List<string[]>();
         private static readonly TenantInfo tenant = Create.Tenant();
-        private string QuestionnaireId = Id.gA.ToString("N") + "$56";
+        private readonly string questionnaireId = Id.gA.ToString("N") + "$56";
     }
 }

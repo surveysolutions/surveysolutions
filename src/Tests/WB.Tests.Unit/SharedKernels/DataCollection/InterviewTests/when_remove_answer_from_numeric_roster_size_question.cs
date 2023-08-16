@@ -49,7 +49,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
            interview.RemoveAnswer(questionWhichIncreasesRosterSizeId, new decimal[0], userId, DateTime.Now);
 
         [NUnit.Framework.Test] public void should_raise_AnswerRemoved_event_for_first_row () =>
-            eventContext.GetEvent<AnswersRemoved>().Questions.Should().BeEquivalentTo(Create.Entity.Identity(questionWhichIncreasesRosterSizeId, RosterVector.Empty));
+            eventContext.GetEvent<AnswersRemoved>().Questions.Should()
+                .BeEquivalentTo(new[]{
+                    Create.Entity.Identity(questionWhichIncreasesRosterSizeId, RosterVector.Empty)});
 
         [NUnit.Framework.Test] public void should_not_raise_RosterInstancesAdded_event () =>
             eventContext.ShouldNotContainEvent<RosterInstancesAdded>();

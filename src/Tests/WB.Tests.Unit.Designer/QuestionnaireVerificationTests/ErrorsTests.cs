@@ -165,6 +165,14 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                     Create.TextQuestion(Id1, variable: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                 })
                 .ExpectError("WB0121");
+        
+        [Test]
+        public void geography_question_variable_name_is_too_long()
+            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.Question(Id1, variable: "aaaaaaaa9aaaaaaaaaaaaaaaaaa", questionType:QuestionType.Area)
+                })
+                .ExpectError("WB0121");
        
         [TestCase("variable_", "WB0124")]
         [TestCase("vari__able", "WB0125")]

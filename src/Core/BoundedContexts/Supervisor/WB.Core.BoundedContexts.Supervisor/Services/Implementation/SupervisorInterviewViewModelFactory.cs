@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
 
         public override IDashboardItem GetDashboardInterview(InterviewView interviewView, List<PrefilledQuestion> details)
         {
-            var result = GetNew<SupervisorDashboardInterviewViewModel>();
+            var result = GetNew<SupervisorInterviewDashboardViewModel>();
             result.Init(interviewView, details);
             return result;
         }

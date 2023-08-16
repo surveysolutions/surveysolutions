@@ -9,12 +9,9 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
             : base(userId, originDate)
         {
             this.Comment = comment;
-
-            if (originDate != default(DateTimeOffset))
-                this.CompleteTime = originDate.UtcDateTime;
-            
         }
 
+        [Obsolete("Please use OriginDate property")]
         public DateTime? CompleteTime { get; set; }
         public string Comment { get; private set; }
     }

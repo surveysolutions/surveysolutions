@@ -47,6 +47,8 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             this.changeStatusFactory = changeStatusFactory;
             this.interviewBrokenPackagesService = interviewBrokenPackagesService;
         }
+        
+        protected override bool IncludeVariables => false;
 
         protected override bool IsReviewMode() =>
             this.authorizedUser.CanConductInterviewReview() && this.Request.Headers.ContainsKey(@"review");

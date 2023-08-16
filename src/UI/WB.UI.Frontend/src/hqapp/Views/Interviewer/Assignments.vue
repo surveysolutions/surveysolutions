@@ -139,6 +139,7 @@ export default {
             return [
                 {
                     name: this.$t('Assignments.CreateInterview'),
+                    className: 'assignment-create',
                     callback: () => this.$store.dispatch('createInterview', rowData.id),
                 },
                 {

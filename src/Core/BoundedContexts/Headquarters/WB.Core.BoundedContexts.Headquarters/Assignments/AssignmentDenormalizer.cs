@@ -3,6 +3,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -48,17 +49,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 @event.Payload.WebMode,
                 @event.Payload.Comment,
                 @event.Payload.UpgradedFromId);
+
+            state.Answers = @event.Payload.Answers;
+            state.ProtectedVariables = @event.Payload.ProtectedVariables.ToList();
+            
             var questionnaire = questionnaireStorage.GetQuestionnaireOrThrow(state.QuestionnaireId, null);
             var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToImmutableHashSet();
 
             var identifyingAnswers = @event.Payload.Answers
+                .SortByDependencies(questionnaire)
                 .Where(x => identifyingQuestionIds.Contains(x.Identity.Id))
                 .Select(a => IdentifyingAnswer.Create(state, questionnaire, a.Answer.ToString(), a.Identity))
                 .ToList();
 
             state.IdentifyingData = identifyingAnswers;
-            state.Answers = @event.Payload.Answers;
-            state.ProtectedVariables = @event.Payload.ProtectedVariables.ToList();
 
             state.CreatedAtUtc = @event.Payload.OriginDate.UtcDateTime;
             state.UpdatedAtUtc = @event.Payload.OriginDate.UtcDateTime;

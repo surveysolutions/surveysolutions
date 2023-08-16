@@ -10,12 +10,12 @@ namespace WB.UI.Shared.Web.Services
     {
         static ImageProcessingService()
         {
-            SixLabors.ImageSharp.Configuration.Default.MemoryAllocator = ArrayPoolMemoryAllocator.CreateWithMinimalPooling();
+            SixLabors.ImageSharp.Configuration.Default.MemoryAllocator = MemoryAllocator.Default;
         }
 
         public void Validate(byte[] source)
         {
-            using var _ = Image.Load(source, out var format);
+            using var _ = Image.Load(source);
         }
 
         public byte[] ResizeImage(byte[] source, int height, int width)

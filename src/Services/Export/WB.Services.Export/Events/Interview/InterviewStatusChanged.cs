@@ -19,9 +19,6 @@ namespace WB.Services.Export.Events.Interview
             this.PreviousStatus = previousStatus;
             this.Status = status;
             this.Comment = comment;
-
-            if (originDate != default(DateTimeOffset))
-                this.UtcTime = originDate.UtcDateTime;
         }
     }
 

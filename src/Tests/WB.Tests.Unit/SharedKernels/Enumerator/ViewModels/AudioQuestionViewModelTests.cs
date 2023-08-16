@@ -58,7 +58,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
                 permissions: permissions ?? Substitute.For<IPermissionsService>(),
                 audioDialog: audioDialog ?? Substitute.For<IAudioDialog>(),
                 audioFileStorage: audioFileStorage ?? Substitute.For<IAudioFileStorage>(),
-                audioService: audioService ?? Substitute.For<IAudioService>());
+                audioService: audioService ?? Substitute.For<IAudioService>(),
+                Create.Fake.MvxMainThreadAsyncDispatcher());
         }
         [Test]
         public void when_answered_disabled_qustion_should_answer_not_be_saved()

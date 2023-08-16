@@ -34,11 +34,11 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 }),
                 assembly : "assembly"
             );
-            downloadedQuestionnaire.Document.Id = selectedQuestionnaire.Id;
+            downloadedQuestionnaire.Document.PublicKey = Guid.Parse(selectedQuestionnaire.Id);
 
-            mockOfAttachmentContentStorage.Setup(_ => _.Exists("1")).Returns(false);
-            mockOfAttachmentContentStorage.Setup(_ => _.Exists("2")).Returns(false);
-            mockOfAttachmentContentStorage.Setup(_ => _.Exists("5")).Returns(true);
+            mockOfAttachmentContentStorage.Setup(_ => _.ExistsAsync("1")).Returns(Task.FromResult(false));
+            mockOfAttachmentContentStorage.Setup(_ => _.ExistsAsync("2")).Returns(Task.FromResult(false));
+            mockOfAttachmentContentStorage.Setup(_ => _.ExistsAsync("5")).Returns(Task.FromResult(true));
             mockOfAttachmentContentStorage.Setup(x =>
                     x.StoreAsync(It.IsAny<WB.Core.SharedKernels.Questionnaire.Api.AttachmentContent>()))
                 .Returns(Task.CompletedTask);

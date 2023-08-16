@@ -163,7 +163,8 @@ namespace WB.Services.Export.CsvExport.Exporters
         {
             try
             {
-                return await userStorage.GetUserNameAsync(userId);
+                var user = await userStorage.GetUserAsync(userId);
+                return user == null ? "<UNKNOWN USER>" : user.UserName;
             }
             catch(ApiException e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
@@ -175,8 +176,11 @@ namespace WB.Services.Export.CsvExport.Exporters
         {
             try
             {
-                var userRole = await userStorage.GetUserRoleAsync(userId);
-                return ExportHelper.GetUserRoleDisplayValue(userRole);
+                var user = await userStorage.GetUserAsync(userId);
+                return user == null 
+                    ? "<UNKNOWN ROLE>" 
+                    : ExportHelper.GetUserRoleDisplayValue(user.Roles.Single());
+
             }
             catch (ApiException e) when (e.StatusCode == HttpStatusCode.NotFound)
             {

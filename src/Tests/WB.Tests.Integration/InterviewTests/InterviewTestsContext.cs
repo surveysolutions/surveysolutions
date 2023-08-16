@@ -11,6 +11,7 @@ using Moq;
 using MvvmCross.Tests;
 using Ncqrs.Eventing;
 using Ncqrs.Spec;
+using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
@@ -189,6 +190,19 @@ namespace WB.Tests.Integration.InterviewTests
             IEnumerable<object> events = null,
             IQuestionOptionsRepository optionsRepository = null)
         {
+            return SetupInterviewWithExpressionStorage(assemblyLoadContext,
+                new QuestionnaireCodeGenerationPackage(questionnaireDocument, null),
+                events,
+                optionsRepository);
+        }
+
+        protected static Interview SetupInterviewWithExpressionStorage(
+            AssemblyLoadContext assemblyLoadContext,
+            QuestionnaireCodeGenerationPackage package,
+            IEnumerable<object> events = null,
+            IQuestionOptionsRepository optionsRepository = null)
+        {
+            var questionnaireDocument = package.QuestionnaireDocument.Questionnaire;
             Guid questionnaireId = questionnaireDocument.PublicKey;
             questionnaireDocument.IsUsingExpressionStorage = true;
             var playOrderProvider = IntegrationCreate.ExpressionsPlayOrderProvider();
@@ -205,7 +219,7 @@ namespace WB.Tests.Integration.InterviewTests
             
             SetUp.InstanceToMockedServiceLocator(questionnaireRepository);
 
-            IInterviewExpressionStorage state = GetLatestExpressionStorage(assemblyLoadContext, questionnaireDocument);
+            IInterviewExpressionStorage state = GetInterviewExpressionStorage(assemblyLoadContext, package);
             questionnaire.ExpressionStorageType = state.GetType();
             var statePrototypeProvider = Mock.Of<IInterviewExpressionStorageProvider>(a => a.GetExpressionStorage(It.IsAny<QuestionnaireIdentity>()) == state);
 
@@ -219,6 +233,11 @@ namespace WB.Tests.Integration.InterviewTests
         protected static Interview SetupInterview(AssemblyLoadContext assemblyLoadContext, QuestionnaireDocument questionnaireDocument, IQuestionOptionsRepository optionsRepository = null)
         {
             return SetupInterviewWithExpressionStorage(assemblyLoadContext, questionnaireDocument, null, optionsRepository);
+        }
+
+        protected static Interview SetupInterview(AssemblyLoadContext assemblyLoadContext, QuestionnaireCodeGenerationPackage package, IQuestionOptionsRepository optionsRepository = null)
+        {
+            return SetupInterviewWithExpressionStorage(assemblyLoadContext, package, null, optionsRepository);
         }
 
         protected static Interview SetupInterview(
@@ -275,15 +294,21 @@ namespace WB.Tests.Integration.InterviewTests
             return (T) firstTypedEvent?.Payload;
         }
 
-        protected static Assembly CompileAssembly(AssemblyLoadContext assemblyLoadContext, QuestionnaireDocument questionnaireDocument, int engineVersion)
+        protected static Assembly CompileAssembly(AssemblyLoadContext assemblyLoadContext,
+            QuestionnaireDocument questionnaireDocument, int engineVersion)
+        {
+            var package = new QuestionnaireCodeGenerationPackage(questionnaireDocument, null);
+            return CompileAssembly(assemblyLoadContext, package, engineVersion);
+        }
+
+        protected static Assembly CompileAssembly(AssemblyLoadContext assemblyLoadContext, QuestionnaireCodeGenerationPackage package, int engineVersion)
         {
             var expressionProcessorGenerator =
                 new QuestionnaireExpressionProcessorGenerator(
                     new RoslynCompiler(),
                     IntegrationCreate.CodeGeneratorV2(),
                     new DynamicCompilerSettingsProvider());
-
-            var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, engineVersion, out var resultAssembly);
+            var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(package, engineVersion, out var resultAssembly);
 
             var filePath = Path.GetTempFileName();
 
@@ -299,9 +324,15 @@ namespace WB.Tests.Integration.InterviewTests
             return compiledAssembly;
         }
 
-        public static IInterviewExpressionStorage GetInterviewExpressionStorage(AssemblyLoadContext assemblyLoadContext, QuestionnaireDocument questionnaireDocument)
+        public static IInterviewExpressionStorage GetInterviewExpressionStorage(AssemblyLoadContext assemblyLoadContext,
+            QuestionnaireDocument questionnaireDocument)
         {
-            var compiledAssembly = CompileAssembly(assemblyLoadContext, questionnaireDocument, 21);
+            return GetInterviewExpressionStorage(assemblyLoadContext,
+                new QuestionnaireCodeGenerationPackage(questionnaireDocument, null));
+        }
+        public static IInterviewExpressionStorage GetInterviewExpressionStorage(AssemblyLoadContext assemblyLoadContext, QuestionnaireCodeGenerationPackage package)
+        {
+            var compiledAssembly = CompileAssembly(assemblyLoadContext, package, 21);
 
             Type interviewExpressionStorageType =
                 compiledAssembly.GetTypes()

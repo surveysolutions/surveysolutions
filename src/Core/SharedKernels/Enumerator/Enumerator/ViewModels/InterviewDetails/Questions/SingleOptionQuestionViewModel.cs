@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -31,6 +32,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly QuestionInstructionViewModel instructionViewModel;
         private readonly IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher;
         private readonly ThrottlingViewModel throttlingModel;
+        private readonly IInterviewViewModelFactory viewModelFactory;
 
         public SingleOptionQuestionViewModel(
             IPrincipal principal,
@@ -41,7 +43,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             AnsweringViewModel answering,
             FilteredOptionsViewModel filteredOptionsViewModel,
             QuestionInstructionViewModel instructionViewModel,
-            ThrottlingViewModel throttlingModel)
+            ThrottlingViewModel throttlingModel,
+            IInterviewViewModelFactory viewModelFactory)
         {
             if (principal == null) throw new ArgumentNullException(nameof(principal));
             if (questionnaireRepository == null) throw new ArgumentNullException(nameof(questionnaireRepository));
@@ -56,9 +59,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.instructionViewModel = instructionViewModel;
             this.mvxMainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
             this.throttlingModel = throttlingModel;
+            this.viewModelFactory = viewModelFactory;
             this.Options = new CovariantObservableCollection<SingleOptionQuestionOptionViewModel>();
-
-            
         }
 
         private Identity questionIdentity;
@@ -89,7 +91,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.filteredOptionsViewModel.Init(interviewId, entityIdentity);
 
             this.throttlingModel.Init(SaveAnswer);
-            
+
             this.questionIdentity = entityIdentity;
             var interview = this.interviewRepository.Get(interviewId);
             this.interviewId = interview.Id;
@@ -200,13 +202,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private SingleOptionQuestionOptionViewModel ToViewModel(CategoricalOption model, bool isSelected)
         {
-            var optionViewModel = new SingleOptionQuestionOptionViewModel
-            {
-                Value = model.Value,
-                Title = model.Title,
-                Selected = isSelected,
-                QuestionState = this.questionState,
-            };
+            var optionViewModel = viewModelFactory.GetNew<SingleOptionQuestionOptionViewModel>();
+            optionViewModel.Value = model.Value;
+            optionViewModel.Title = model.Title;
+            optionViewModel.Selected = isSelected;
+            optionViewModel.QuestionState = this.QuestionState;
+
+            optionViewModel.Attachment.InitAsStatic(interviewId.FormatGuid(), model.AttachmentName);
             optionViewModel.BeforeSelected += this.OptionSelected;
             optionViewModel.AnswerRemoved += this.RemoveAnswer;
 

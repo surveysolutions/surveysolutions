@@ -10,7 +10,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
     internal class when_questionnaire_has_101_questions_and_3_sections : QuestionnaireVerifierTestsContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            questionnaire = Create.QuestionnaireDocument(children: new IComposite[]
+            questionnaire = Create.QuestionnaireDocumentWithoutChildren(children: new IComposite[]
             {
                 Create.Section(),
                 Create.Section(),

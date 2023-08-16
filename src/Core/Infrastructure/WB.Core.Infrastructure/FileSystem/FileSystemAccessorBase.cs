@@ -31,7 +31,7 @@ namespace WB.Core.Infrastructure.FileSystem
 
         public bool IsHashValid(byte[] fileContent, byte[] hash)
         {
-            using (var crypto = new MD5CryptoServiceProvider())
+            using (var crypto = MD5.Create())
             {
                 var contentHash = crypto.ComputeHash(fileContent);
 
@@ -41,7 +41,7 @@ namespace WB.Core.Infrastructure.FileSystem
 
         public byte[] ReadHash(Stream stream)
         {
-            using var crypto = new MD5CryptoServiceProvider();
+            using var crypto = MD5.Create();
             var hash = crypto.ComputeHash(stream);
             return hash;
         }
@@ -76,7 +76,7 @@ namespace WB.Core.Infrastructure.FileSystem
                     {
                         if (!File.Exists(hashFile))
                         {
-                            using var crypto = new MD5CryptoServiceProvider();
+                            using var crypto = MD5.Create();
                             var hash = crypto.ComputeHash(File.ReadAllBytes(pathToFile));
 
                             fileHash = new FileHash

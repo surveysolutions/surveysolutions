@@ -26,6 +26,7 @@ using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Enumerator.Services.MapSynchronization;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Markers;
 using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
@@ -39,6 +40,7 @@ namespace WB.UI.Supervisor.ServiceLocation
         public void Load(IIocRegistry registry)
         {
             registry.Bind<ISideBarSectionViewModelsFactory, SupervisorSideBarSectionViewModelFactory>();
+            registry.Bind<IDashboardViewModelFactory, SupervisorDashboardViewModelFactory>();
             
             registry.Bind<IViewModelNavigationService, ViewModelNavigationService>();
             registry.Bind<ITabletDiagnosticService, TabletDiagnosticService>();
@@ -82,6 +84,7 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.Bind<ICheckVersionUriProvider, CheckForExtendedVersionUriProvider>();
 #else
             registry.Bind<WB.UI.Shared.Extensions.ViewModels.GeographyEditorViewModel>();
+            registry.Bind<WB.UI.Shared.Extensions.ViewModels.SupervisorMapDashboardViewModel>();
             registry.Bind<ICheckVersionUriProvider, CheckForExtendedVersionUriProvider>();
             registry.Bind<IMapInteractionService,  WB.UI.Shared.Extensions.Services.MapInteractionService>();
             registry.Bind<WB.UI.Shared.Extensions.Services.IMapUtilityService, WB.UI.Shared.Extensions.Services.MapUtilityService>();
@@ -104,6 +107,7 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.Bind<IHandleCommunicationMessage, SupervisorSynchronizeHandler>();
             registry.Bind<IHandleCommunicationMessage, InterviewerUpdateHandler>();
             registry.Bind<IHandleCommunicationMessage, SupervisorCalendarEventsHandler>();
+            registry.Bind<IHandleCommunicationMessage, SupervisorInterviewerSettingsHandler>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

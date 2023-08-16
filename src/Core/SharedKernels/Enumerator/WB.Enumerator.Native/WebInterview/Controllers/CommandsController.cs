@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview.Models;
 
@@ -220,6 +221,10 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             try
             {
                 commandService.Execute(command);
+            }
+            catch (InterviewException ie) when (ie.ExceptionType == InterviewDomainExceptionType.AssignmentLimitReached)
+            {
+                webInterviewNotificationService.ReloadInterview(command.InterviewId);
             }
             catch (Exception e)
             {

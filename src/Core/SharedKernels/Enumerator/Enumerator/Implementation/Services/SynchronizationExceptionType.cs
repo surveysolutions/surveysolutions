@@ -25,5 +25,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         WorkspaceDisabled,
         ShouldChangePassword,
         WorkspaceAccessDisabledReason,
+        RelinkError,
     }
 }

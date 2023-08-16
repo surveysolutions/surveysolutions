@@ -1,0 +1,300 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="PLU0001" xml:space="preserve">
+    <value>Přihlášení není jedinečné</value>
+  </data>
+  <data name="PLU0001Description" xml:space="preserve">
+    <value>Uživatel '{0}' již existuje</value>
+  </data>
+  <data name="PLU0002" xml:space="preserve">
+    <value>Duplikovat</value>
+  </data>
+  <data name="PLU0002Description" xml:space="preserve">
+    <value>V souboru jsou duplicitní uživatelé s přihlašovacím jménem '{0}'</value>
+  </data>
+  <data name="PLU0003" xml:space="preserve">
+    <value>Špatný tým</value>
+  </data>
+  <data name="PLU0003Description" xml:space="preserve">
+    <value>Uživatel '{0}' je neaktivní a patří jinému týmu</value>
+  </data>
+  <data name="PLU0003Recomendation" xml:space="preserve">
+    <value>Deaktivovaného uživatele nelze znovu použít, protože patří jinému týmu</value>
+  </data>
+  <data name="PLU0004" xml:space="preserve">
+    <value>Špatná role</value>
+  </data>
+  <data name="PLU0004Description" xml:space="preserve">
+    <value>Uživatel '{0}' je neaktivní a má jinou roli</value>
+  </data>
+  <data name="PLU0004Recomendation" xml:space="preserve">
+    <value>Neaktivního uživatele nelze znovu použít, protože existuje v jiné roli</value>
+  </data>
+  <data name="PLU0005" xml:space="preserve">
+    <value>Nesprávný formát přihlášení</value>
+  </data>
+  <data name="PLU0005Description" xml:space="preserve">
+    <value>Přihlašovací jméno '{0}' je ve špatném formátu</value>
+  </data>
+  <data name="PLU0005Recomendation" xml:space="preserve">
+    <value>Přihlašovací jméno musí mít 3 až 15 znaků a může obsahovat pouze písmena, číslice a podtržítko. Písmena musí být pouze z (anglické) abecedy: 'A'..'Z' nebo 'a'..'z'. Jiná písmena (cyrilice, arabština atd.) nejsou platná pro použití v přihlašovacích jménech.</value>
+  </data>
+  <data name="PLU0006" xml:space="preserve">
+    <value>Nesprávný formát hesla</value>
+  </data>
+  <data name="PLU0006Description" xml:space="preserve">
+    <value>Heslo '{0}' je ve špatném formátu</value>
+  </data>
+  <data name="PLU0006Recomendation" xml:space="preserve">
+    <value>Musí obsahovat alespoň jedno číslo, jedno velké písmeno a jedno malé písmeno. Délka by měla být mezi 10 a 100 znaky</value>
+  </data>
+  <data name="PLU0007" xml:space="preserve">
+    <value>Nesprávný formát e-mailu</value>
+  </data>
+  <data name="PLU0007Description" xml:space="preserve">
+    <value>E-mail '{0}' má nesprávný formát</value>
+  </data>
+  <data name="PLU0008" xml:space="preserve">
+    <value>Nesprávný formát telefonního čísla</value>
+  </data>
+  <data name="PLU0008Description" xml:space="preserve">
+    <value>Telefonní číslo '{0}' má nesprávný formát</value>
+  </data>
+  <data name="PLU0009" xml:space="preserve">
+    <value>Neplatná role</value>
+  </data>
+  <data name="PLU0009Description" xml:space="preserve">
+    <value>Role '{0}' je neplatná</value>
+  </data>
+  <data name="PLU0009Recomendation" xml:space="preserve">
+    <value>Povolen je pouze "Garant“ nebo "tazatel“</value>
+  </data>
+  <data name="PLU0010" xml:space="preserve">
+    <value>Chyba závislosti</value>
+  </data>
+  <data name="PLU0010Description" xml:space="preserve">
+    <value>Garant '{0}' nebyl v úloze nalezen</value>
+  </data>
+  <data name="PLU0011" xml:space="preserve">
+    <value>Chyba závislosti</value>
+  </data>
+  <data name="PLU0011Description" xml:space="preserve">
+    <value>Sloupec Garant by měl být prázdný pro roli Garanta</value>
+  </data>
+  <data name="PLU0012" xml:space="preserve">
+    <value>Špatná délka jména tazatele</value>
+  </data>
+  <data name="PLU0012Description" xml:space="preserve">
+    <value>Celé jméno '{0}' je ve špatném formátu</value>
+  </data>
+  <data name="PLU0012Recomendation" xml:space="preserve">
+    <value>Nemělo by obsahovat více než 100 znaků</value>
+  </data>
+  <data name="PLU0013" xml:space="preserve">
+    <value>Špatná délka telefonního čísla</value>
+  </data>
+  <data name="PLU0013Description" xml:space="preserve">
+    <value>Telefonní číslo '{0}' má nesprávný formát</value>
+  </data>
+  <data name="PLU0013Recomendation" xml:space="preserve">
+    <value>Nemělo by obsahovat více než 15 znaků</value>
+  </data>
+  <data name="PLU0014" xml:space="preserve">
+    <value>Nesprávný formát jména tazatele</value>
+  </data>
+  <data name="PLU0014Description" xml:space="preserve">
+    <value>Celé jméno '{0}' obsahuje neplatné znaky</value>
+  </data>
+  <data name="PLU0014Recomendation" xml:space="preserve">
+    <value>Jsou povolena pouze písmena, tečky, mezery a polmčky</value>
+  </data>
+  <data name="PLU0015" xml:space="preserve">
+    <value>Heslo je příliš krátké</value>
+  </data>
+  <data name="PLU0015Description" xml:space="preserve">
+    <value>Heslo '{0}' je příliš krátké</value>
+  </data>
+  <data name="PLU0015Recomendation" xml:space="preserve">
+    <value>Heslo musí mít alespoň 10 znaků</value>
+  </data>
+  <data name="PLU0016" xml:space="preserve">
+    <value>Jednoduché heslo</value>
+  </data>
+  <data name="PLU0016Description" xml:space="preserve">
+    <value>Heslo '{0}' neobsahuje nealfanumerický znak</value>
+  </data>
+  <data name="PLU0016Recomendation" xml:space="preserve">
+    <value>Přidejte alespoň jeden speciální symbol </value>
+  </data>
+  <data name="PLU0017" xml:space="preserve">
+    <value>Jednoduché heslo</value>
+  </data>
+  <data name="PLU0017Description" xml:space="preserve">
+    <value>Heslo '{0}' neobsahuje číslici</value>
+  </data>
+  <data name="PLU0017Recomendation" xml:space="preserve">
+    <value>Přidejte alespoň jednu číslici ('0'-'9').</value>
+  </data>
+  <data name="PLU0018" xml:space="preserve">
+    <value>Jednoduché heslo</value>
+  </data>
+  <data name="PLU0018Description" xml:space="preserve">
+    <value>Heslo '{0}' neobsahuje malá písmena</value>
+  </data>
+  <data name="PLU0018Recomendation" xml:space="preserve">
+    <value>Přidejte alespoň jedno malé písmeno ('a'-'z').</value>
+  </data>
+  <data name="PLU0019" xml:space="preserve">
+    <value>Jednoduché heslo</value>
+  </data>
+  <data name="PLU0019Description" xml:space="preserve">
+    <value>Heslo '{0}' neobsahuje velká písmena</value>
+  </data>
+  <data name="PLU0019Recomendation" xml:space="preserve">
+    <value>Přidejte alespoň jedno velké písmeno ('A'-'Z').</value>
+  </data>
+  <data name="PLU0020" xml:space="preserve">
+    <value>Jednoduché heslo</value>
+  </data>
+  <data name="PLU0020Description" xml:space="preserve">
+    <value>Heslo '{0}' neobsahuje dostatek jedinečných znaků</value>
+  </data>
+  <data name="PLU0020Recomendation" xml:space="preserve">
+    <value>Přidejte jiné znaky.</value>
+  </data>
+  <data name="PLU0021" xml:space="preserve">
+    <value>Je vyžadováno heslo</value>
+  </data>
+  <data name="PLU0021Description" xml:space="preserve">
+    <value>Heslo je vyžadováno</value>
+  </data>
+  <data name="PLU0021Recomendation" xml:space="preserve">
+    <value>Přidat heslo</value>
+  </data>
+  <data name="PLU0022" xml:space="preserve">
+    <value>Úloha nenalezena</value>
+  </data>
+  <data name="PLU0022Description" xml:space="preserve">
+    <value>Úloha musí existovat a být povolena</value>
+  </data>
+  <data name="PLU0022Recomendation" xml:space="preserve">
+    <value>Zkontrolujte název úlohy</value>
+  </data>
+</root>

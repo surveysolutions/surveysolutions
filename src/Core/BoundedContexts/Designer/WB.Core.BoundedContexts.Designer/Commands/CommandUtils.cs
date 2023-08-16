@@ -1,5 +1,5 @@
 ﻿using System;
-using Ganss.XSS;
+using Ganss.Xss;
 
 namespace WB.Core.BoundedContexts.Designer.Commands
 {

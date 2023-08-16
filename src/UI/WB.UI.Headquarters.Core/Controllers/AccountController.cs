@@ -103,9 +103,11 @@ namespace WB.UI.Headquarters.Controllers
             returnUrl = !string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl)
                 ? returnUrl
                 : null;
-            model.RequireCaptcha = this.captchaService.ShouldShowCaptcha(model.UserName);
-
-            if (model.RequireCaptcha && !await this.captchaProvider.IsCaptchaValid(Request))
+            
+            var isCaptchaRequired = this.captchaService.ShouldShowCaptcha(model.UserName);
+            model.RequireCaptcha = isCaptchaRequired;
+            
+            if (isCaptchaRequired && !await this.captchaProvider.IsCaptchaValid(Request))
             {
                 this.ModelState.AddModelError("InvalidCaptcha", ErrorMessages.PleaseFillCaptcha);
                 return this.View(model);
@@ -186,7 +188,7 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var user = await signInManager.GetTwoFactorAuthenticationUserAsync();
-            if (user == null)
+            if (user == null || user.IsLocked)
             {
                 return RedirectToAction("LogOn", new { ReturnUrl = returnUrl, RememberMe = true });
             }
@@ -238,7 +240,7 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var user = await signInManager.GetTwoFactorAuthenticationUserAsync();
-            if (user == null)
+            if (user == null || user.IsLocked)
             {
                 return RedirectToAction("LogOn", new { ReturnUrl = returnUrl, RememberMe = true });
             }
@@ -262,7 +264,9 @@ namespace WB.UI.Headquarters.Controllers
                 return View(model);
             }
 
-
+            //count this try as a failing one 
+            await userManager.AccessFailedAsync(user);
+            
             this.ModelState.AddModelError("InvalidCredentials", ErrorMessages.InvalidRecoveryCode);
             return View(model);
         }
@@ -273,10 +277,9 @@ namespace WB.UI.Headquarters.Controllers
             return this.Redirect("~/");
         }
 
-        [Authorize(Roles = "Headquarter, Supervisor")]
         public async Task<ActionResult> ReturnToObserver()
         {
-            if (!this.authorizedUser.IsObserver)
+            if (!this.authorizedUser.IsObserver || !this.authorizedUser.IsObserving)
                 return NotFound();
 
             var observerName = User.FindFirst(AuthorizedUser.ObserverClaimType)?.Value;

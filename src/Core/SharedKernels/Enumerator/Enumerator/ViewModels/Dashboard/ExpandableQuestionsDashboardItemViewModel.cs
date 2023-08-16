@@ -29,8 +29,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         public event EventHandler OnItemUpdated;
         public virtual void RefreshDataTime()
         {
-            RaisePropertyChanged(nameof(SubTitle));
+            RefreshSubtitle();
             RaisePropertyChanged(nameof(CalendarEvent));
+        }
+
+        protected virtual void RefreshSubtitle()
+        {
         }
 
         protected void RaiseOnItemUpdated() => OnItemUpdated?.Invoke(this, EventArgs.Empty);
@@ -124,7 +128,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             }
         }
 
-        public virtual string SubTitle
+        public string SubTitle
         {
             get => subTitle;
             set
@@ -185,12 +189,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             return zonedDateTime;
         }
 
-        protected string FormatDateTimeString(string formatString, DateTimeOffset dateTimeOffset, string timeZoneId)
-        {
-            var zonedDateTime = GetZonedDateTime(dateTimeOffset, timeZoneId);
-            return FormatDateTimeString(formatString, zonedDateTime.ToDateTimeUtc());
-        }
-        
         protected string FormatDateTimeString(string formatString, DateTime? utcDateTime)
         {
             if (!utcDateTime.HasValue)
@@ -224,31 +222,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                 Label = EnumeratorUIResources.Dashboard_ShowLocation
             });
         }
-
-        private void ReleaseUnmanagedResources()
-        {
-            // release unmanaged resources here
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            ReleaseUnmanagedResources();
-            if (disposing)
-            {
-                // release managed resources here
-            }
-        }
-
         public void Dispose()
         {
             Actions.CollectionChanged -= CollectionChanged;
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        ~ExpandableQuestionsDashboardItemViewModel()
-        {
-            Dispose(false);
         }
     }
 }

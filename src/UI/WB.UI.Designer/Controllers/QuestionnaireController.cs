@@ -84,7 +84,7 @@ namespace WB.UI.Designer.Controllers
         private readonly IQuestionnaireInfoViewFactory questionnaireInfoViewFactory;
         private readonly ICategoricalOptionsImportService categoricalOptionsImportService;
         private readonly DesignerDbContext dbContext;
-        private readonly ICategoriesService categoriesService;
+        private readonly IReusableCategoriesService reusableCategoriesService;
         private readonly IEmailSender emailSender;
         private readonly IViewRenderService viewRenderService;
         private readonly UserManager<DesignerIdentityUser> users;
@@ -102,7 +102,7 @@ namespace WB.UI.Designer.Controllers
             ICategoricalOptionsImportService categoricalOptionsImportService,
             ICommandService commandService,
             DesignerDbContext dbContext,
-            ICategoriesService categoriesService,
+            IReusableCategoriesService reusableCategoriesService,
             IEmailSender emailSender,
             IViewRenderService viewRenderService,
             UserManager<DesignerIdentityUser> users)
@@ -117,7 +117,7 @@ namespace WB.UI.Designer.Controllers
             this.categoricalOptionsImportService = categoricalOptionsImportService;
             this.commandService = commandService;
             this.dbContext = dbContext;
-            this.categoriesService = categoriesService;
+            this.reusableCategoriesService = reusableCategoriesService;
             this.emailSender = emailSender;
             this.viewRenderService = viewRenderService;
             this.users = users;
@@ -148,6 +148,10 @@ namespace WB.UI.Designer.Controllers
         {
             if(id == null)
                 return this.RedirectToAction("Index", "QuestionnaireList");
+
+            var questionnaire = questionnaireViewFactory.Load(id);
+            if (questionnaire == null || questionnaire.Source.IsDeleted)
+                return NotFound();
 
             if (ShouldRedirectToOriginalId(id))
             {
@@ -185,7 +189,7 @@ namespace WB.UI.Designer.Controllers
             if (questionnaireListItem == null)
                 return false;
 
-            if (questionnaireListItem.CreatedBy == userId)
+            if (questionnaireListItem.OwnerId == userId)
                 return true;
 
             if (questionnaireListItem.IsPublic)
@@ -336,7 +340,7 @@ namespace WB.UI.Designer.Controllers
         {
             var historyReferenceId = commandId;
 
-            bool hasAccess = this.User.IsAdmin() || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, this.User.GetId());
+            bool hasAccess = this.User.IsAdmin() || this.questionnaireViewFactory.HasUserChangeAccessToQuestionnaire(id, this.User.GetId());
             if (!hasAccess)
             {
                 this.Error(Resources.QuestionnaireController.ForbiddenRevert);
@@ -356,7 +360,7 @@ namespace WB.UI.Designer.Controllers
         public async Task<ActionResult<bool>> SaveComment(Guid id, Guid historyItemId, string comment)
         {
             bool hasAccess = this.User.IsAdmin() 
-                || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, this.User.GetId());
+                || this.questionnaireViewFactory.HasUserChangeAccessToQuestionnaire(id, this.User.GetId());
 
             if (!hasAccess)
                 return false;
@@ -526,6 +530,10 @@ namespace WB.UI.Designer.Controllers
 
         private async Task SendAnonymousSharingEmailAsync(Guid id, Guid anonymousQuestionnaireId)
         {
+            var user = await this.users.GetUserAsync(User);
+            if(user?.Email == null)
+                return;
+            
             var questionnaireView = GetQuestionnaireView(id);
             if (questionnaireView == null)
                 throw new ArgumentException($"Questionnaire not found {id}");
@@ -540,7 +548,7 @@ namespace WB.UI.Designer.Controllers
 
             var messageBody = await viewRenderService.RenderToStringAsync("Emails/AnonymousSharingEmail", model);
 
-            var user = await this.users.GetUserAsync(User);
+            
             await emailSender.SendEmailAsync(user.Email,
                 NotificationResources.SystemMailer_AnonymousSharingEmail_Subject,
                 messageBody);

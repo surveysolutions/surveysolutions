@@ -72,7 +72,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         [NUnit.Framework.Test] public void should_set_2_affected_roster_ids_in_RosterRowsTitleChanged_events () =>
             eventContext.GetEvents<RosterInstancesTitleChanged>().SelectMany(@event => @event.ChangedInstances.Select(r => r.RosterInstance.GroupId)).ToArray()
-                .Should().BeEquivalentTo(rosterAId, rosterBId);
+                .Should().BeEquivalentTo(new []{rosterAId, rosterBId});
 
         [NUnit.Framework.Test] public void should_set_empty_outer_roster_vector_to_all_RosterRowTitleChanged_events () =>
             eventContext.GetEvents<RosterInstancesTitleChanged>()

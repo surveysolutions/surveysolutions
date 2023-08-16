@@ -269,6 +269,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
                 To = exportProcess.ToDate,
                 StartDate = exportProcess.BeginDate,
                 CompleteDate = exportProcess.EndDate,
+                CreateDate = exportProcess.CreatedDate,
                 TranslationId = exportProcess.TranslationId,
                 ExportStatus = (ExportStatus) exportProcess.JobStatus,
                 Progress = exportProcess.Progress,
@@ -358,6 +359,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
             /// Export process completed date
             /// </summary>
             public DateTime? CompleteDate { get; set; }
+            /// <summary>
+            /// Export process stated date
+            /// </summary>
+            public DateTime? CreateDate { get; set; }
             /// <summary>
             /// Progress of export in percents
             /// </summary>

@@ -59,7 +59,7 @@ namespace WB.UI.Shared.Web.Captcha
 <img src='data:image/jpeg;base64, {Convert.ToBase64String(imageBytes)}' />
 <br />
 <label for='{InputName}'>{Resources.Captcha.EnterText}</label>
-<input autocomplete='off' autocorrect='off' data-val='true' id='{InputName}' name='{InputName}' type='text' value='' />";
+<input autocomplete='off' autocorrect='off' data-val='true' id='{InputName}' name='{InputName}' type='text' value='' class='form-control' />";
             
             return new HtmlString(htmlContent);
         }

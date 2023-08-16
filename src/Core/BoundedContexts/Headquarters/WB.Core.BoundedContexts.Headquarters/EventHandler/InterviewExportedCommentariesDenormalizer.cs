@@ -53,7 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             this.StoreCommentForStatusChange(summary, evnt.Payload.UserId,
              InterviewExportedAction.Completed, evnt.Payload.Comment,
-             evnt.Payload.CompleteTime ?? evnt.EventTimeStamp);
+             evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.CompleteTime ?? evnt.EventTimeStamp);
             return summary;
         }
 
@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             this.StoreCommentForStatusChange(summary, evnt.Payload.UserId,
              InterviewExportedAction.Restarted, evnt.Payload.Comment,
-             evnt.Payload.RestartTime ?? evnt.EventTimeStamp);
+             evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.RestartTime ?? evnt.EventTimeStamp);
             return summary;
         }
 
@@ -69,7 +69,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             this.StoreCommentForStatusChange(summary, evnt.Payload.UserId,
              InterviewExportedAction.ApprovedBySupervisor, evnt.Payload.Comment,
-             evnt.Payload.ApproveTime ?? evnt.EventTimeStamp);
+             evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.ApproveTime ?? evnt.EventTimeStamp);
             return summary;
         }
 
@@ -77,7 +77,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             this.StoreCommentForStatusChange(summary, evnt.Payload.UserId,
                 InterviewExportedAction.RejectedBySupervisor, evnt.Payload.Comment,
-                evnt.Payload.RejectTime ?? evnt.EventTimeStamp);
+                evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.RejectTime ?? evnt.EventTimeStamp);
             return summary;
         }
 

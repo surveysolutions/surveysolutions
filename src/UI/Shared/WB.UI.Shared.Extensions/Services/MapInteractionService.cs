@@ -1,13 +1,12 @@
 using System;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime;
-using Plugin.Permissions;
-using Plugin.Permissions.Abstractions;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.UI.Shared.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.UI.Shared.Extensions.Activities;
 using WB.UI.Shared.Extensions.Entities;
 using WB.UI.Shared.Extensions.ViewModels;
+using Xamarin.Essentials;
 using AreaEditResult = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.AreaEditResult;
 
 namespace WB.UI.Shared.Extensions.Services
@@ -31,74 +30,96 @@ namespace WB.UI.Shared.Extensions.Services
             #endregion Properties
         }
 
-        private readonly IPermissions permissions;
+        private readonly IPermissionsService permissions;
         private readonly IViewModelNavigationService viewModelNavigationService;
 
-        public MapInteractionService(IPermissions permissions,
+        public MapInteractionService(IPermissionsService permissions,
             IViewModelNavigationService viewModelNavigationService)
         {
             this.permissions = permissions;
             this.viewModelNavigationService = viewModelNavigationService;
         }
 
-        public async Task<AreaEditResult> EditAreaAsync(WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Area area, WB.Core.SharedKernels.Questionnaire.Documents.GeometryType? geometryType)
+        public async Task<AreaEditResult> EditAreaAsync(EditAreaArgs args)
         {
-            await this.permissions.AssureHasPermissionOrThrow<LocationPermission>().ConfigureAwait(false);
-            await this.permissions.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
+            await this.permissions.AssureHasPermissionOrThrow<Permissions.LocationWhenInUse>().ConfigureAwait(false);
+            await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
 
-            return await this.EditAreaImplAsync(area, geometryType);
+            return await this.EditAreaImplAsync(args);
         }
 
-        public async Task OpenMapDashboardAsync()
+        public async Task OpenInterviewerMapDashboardAsync()
         {
-            await this.permissions.AssureHasPermissionOrThrow<LocationPermission>().ConfigureAwait(false);
-            await this.permissions.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
+            await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
 
-            await this.viewModelNavigationService.NavigateToAsync<MapDashboardViewModel, MapDashboardViewModelArgs>(
-                new MapDashboardViewModelArgs()).ConfigureAwait(false);
+            await this.viewModelNavigationService.NavigateToAsync<InterviewerMapDashboardViewModel, MapDashboardViewModelArgs>(
+                new MapDashboardViewModelArgs(), finishActivityOnSuccess: true).ConfigureAwait(false);
         }
 
-        public void Init(string key)
+        public async Task OpenSupervisorMapDashboardAsync()
+        {
+            await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
+
+            await this.viewModelNavigationService.NavigateToAsync<SupervisorMapDashboardViewModel, MapDashboardViewModelArgs>(
+                new MapDashboardViewModelArgs(), finishActivityOnSuccess: true).ConfigureAwait(false);
+        }
+
+        public void SetLicenseKey(string key)
         {
             ArcGISRuntimeEnvironment.SetLicense(key);
         }
 
+        public void SetApiKey(string key)
+        {
+            ArcGISRuntimeEnvironment.ApiKey = key;
+        }
+
         public bool DoesSupportMaps => true;
 
-        private async Task<AreaEditResult> EditAreaImplAsync(WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Area area, WB.Core.SharedKernels.Questionnaire.Documents.GeometryType? geometryType)
+        private Task<AreaEditResult> EditAreaImplAsync(EditAreaArgs args)
         {
-            bool activityCreated = await this.viewModelNavigationService.NavigateToAsync<GeographyEditorViewModel, GeographyEditorViewModelArgs>(
-                new GeographyEditorViewModelArgs
-                {
-                    Geometry = area?.Geometry,
-                    MapName = area?.MapName,
-                    RequestedGeometryType = geometryType
-                }).ConfigureAwait(false);
-
-            if (activityCreated)
+            var task = Task.Factory.StartNew(() =>
             {
-                var tcs = new TaskCompletionSource<AreaEditResult>();
+                var waitScanResetEvent = new System.Threading.ManualResetEvent(false);
                 
+                this.viewModelNavigationService.NavigateToAsync<GeographyEditorViewModel, GeographyEditorViewModelArgs>(
+                    new GeographyEditorViewModelArgs
+                    {
+                        Geometry = args.Area?.Geometry,
+                        MapNameForGivenAnswer = args.Area?.MapName,
+                        RequestedGeometryType = args.GeometryType,
+                        RequestedGeometryInputMode = args.RequestedGeometryInputMode,
+                        RequestedAccuracy = args.RequestedAccuracy,
+                        RequestedFrequency = args.RequestedFrequency,
+                        GeographyNeighbors = args.GeographyNeighbors,
+                        Title = args.Title,
+                    }).ConfigureAwait(false);
+
+                AreaEditResult areaResult = null;
                 GeographyEditorActivity.OnAreaEditCompleted = (AreaEditorResult editResult) =>
                 {
-                    tcs.TrySetResult(editResult == null
-                        ? null
-                        : new AreaEditResult
-                        {
-                            Geometry = editResult.Geometry,
-                            MapName = editResult.MapName,
-                            Area = editResult.Area,
-                            Length = editResult.Length,
-                            Coordinates = editResult.Coordinates,
-                            DistanceToEditor = editResult.DistanceToEditor,
-                            Preview = editResult.Preview,
-                            NumberOfPoints = editResult.NumberOfPoints
-                        });
+                    areaResult = editResult == null
+                            ? null
+                            : new AreaEditResult
+                            {
+                                Geometry = editResult.Geometry,
+                                MapName = editResult.MapName,
+                                Area = editResult.Area,
+                                Length = editResult.Length,
+                                Coordinates = editResult.Coordinates,
+                                DistanceToEditor = editResult.DistanceToEditor,
+                                Preview = editResult.Preview,
+                                NumberOfPoints = editResult.NumberOfPoints,
+                                RequestedAccuracy = args.RequestedAccuracy,
+                                RequestedFrequency = args.RequestedFrequency
+                            };
+                        waitScanResetEvent.Set();
                 };
-                return await tcs.Task;
-            }
+                waitScanResetEvent.WaitOne();
+                return areaResult;
+            });
 
-            return await Task.FromResult<AreaEditResult>(null);
+            return task;
         }
     }
 }

@@ -1,15 +1,19 @@
 ﻿#nullable enable
 
+using System;
 using System.Linq;
 using Humanizer;
 using Microsoft.Extensions.Options;
 using MigraDocCore.DocumentObjectModel;
 using MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Shapes;
 using WB.Core.BoundedContexts.Headquarters.Configs;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Infrastructure.Native.Sanitizer;
 using PdfInterviewRes = WB.Core.BoundedContexts.Headquarters.Resources.PdfInterview;
 
@@ -22,18 +26,21 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
         private readonly IQuestionnaire questionnaire;
         private readonly IImageFileStorage imageFileStorage;
         private readonly IOptions<GoogleMapsConfig> googleMapsConfig;
+        private readonly IAttachmentContentService attachmentContentService;
 
         public QuestionPdfWriter(InterviewTreeQuestion question,
             IStatefulInterview interview,
             IQuestionnaire questionnaire,
             IImageFileStorage imageFileStorage,
-            IOptions<GoogleMapsConfig> googleMapsConfig)
+            IOptions<GoogleMapsConfig> googleMapsConfig,
+            IAttachmentContentService attachmentContentService)
         {
             this.question = question;
             this.interview = interview;
             this.questionnaire = questionnaire;
             this.imageFileStorage = imageFileStorage;
             this.googleMapsConfig = googleMapsConfig;
+            this.attachmentContentService = attachmentContentService;
         }
 
         public void Write(Paragraph paragraph)
@@ -90,6 +97,48 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
                 {
                     var areaQuestion = question.GetAsInterviewTreeAreaQuestion();
                     var areaAnswer = areaQuestion.GetAnswer().Value;
+
+                    var geometryMode = questionnaire.GetQuestionGeometryMode(question.Identity.Id) ?? GeometryInputMode.Manual;
+                    var geometryType = questionnaire.GetQuestionGeometryType(question.Identity.Id) ?? GeometryType.Polygon;
+
+                    if (geometryType == GeometryType.Polygon)
+                    {
+                        paragraph.AddWrapFormattedText(PdfInterviewRes.AreaQestion_Area, PdfStyles.QuestionTitle);
+                        paragraph.AddTab();
+                        paragraph.AddWrapFormattedText(areaAnswer.AreaSize.FormatDouble(2), answerStyle, textColor);
+                        paragraph.AddWrapFormattedText(" " + PdfInterviewRes.AreaQestion_AreaUnitMeter, PdfStyles.QuestionTitle, textColor);
+                        paragraph.AddLineBreak();
+                    }
+                    if (geometryType is GeometryType.Polygon or GeometryType.Polyline)
+                    {
+                        paragraph.AddWrapFormattedText(PdfInterviewRes.AreaQestion_Length, PdfStyles.QuestionTitle);
+                        paragraph.AddTab();
+                        paragraph.AddWrapFormattedText(areaAnswer.Length.FormatDouble(2), answerStyle, textColor);
+                        paragraph.AddWrapFormattedText(" " + PdfInterviewRes.AreaQestion_AreaMeter, PdfStyles.QuestionTitle, textColor);
+                        paragraph.AddLineBreak();
+                    }
+                    if (areaAnswer.NumberOfPoints.HasValue) // points
+                    {
+                        paragraph.AddWrapFormattedText(PdfInterviewRes.AreaQestion_Points, PdfStyles.QuestionTitle);
+                        paragraph.AddTab();
+                        paragraph.AddWrapFormattedText(areaAnswer.NumberOfPoints.Value.ToString(), answerStyle, textColor);
+                        paragraph.AddLineBreak();
+                    }
+                    if (geometryMode != GeometryInputMode.Manual)
+                    {
+                        paragraph.AddWrapFormattedText(PdfInterviewRes.AreaQestion_RequestedAccuracy, PdfStyles.QuestionTitle);
+                        paragraph.AddTab();
+                        paragraph.AddWrapFormattedText(areaAnswer.RequestedAccuracy.FormatDouble(2), answerStyle, textColor);
+                        paragraph.AddLineBreak();
+                    }
+                    if (geometryMode == GeometryInputMode.Automatic)
+                    {
+                        paragraph.AddWrapFormattedText(PdfInterviewRes.AreaQestion_RequestedFrequency, PdfStyles.QuestionTitle);
+                        paragraph.AddTab();
+                        paragraph.AddWrapFormattedText(areaAnswer.RequestedFrequency.FormatDouble(2), answerStyle, textColor);
+                        paragraph.AddLineBreak();
+                    }
+
                     paragraph.AddWrapFormattedText(areaAnswer.ToString(), answerStyle, textColor);
                 }
                 else if (question.IsGps)
@@ -117,6 +166,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
                                 paragraph.AddWrapFormattedText($"#{index++} ", PdfStyles.YesNoTitle);
                             paragraph.AddWrapFormattedText($"{optionAnswer}: ", PdfStyles.YesNoTitle);
                             paragraph.AddWrapFormattedText(option.Title, answerStyle, textColor);
+                            WriteOptionAttachmentIfNeed(paragraph, option);
                             paragraph.AddLineBreak();
                         }
                     }
@@ -132,6 +182,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
                         if (order)
                             paragraph.AddWrapFormattedText($"#{index++}: ", PdfStyles.YesNoTitle);
                         paragraph.AddWrapFormattedText(option.Title, answerStyle, textColor);
+                        WriteOptionAttachmentIfNeed(paragraph, option);
                         paragraph.AddLineBreak();
                     }
                 }
@@ -182,6 +233,57 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
                         }
                     }
                 }
+                else if (question.IsSingleFixedOption)
+                {
+                    var singleOptionQuestion = question.GetAsInterviewTreeSingleOptionQuestion();
+                    var selectedValue = singleOptionQuestion.GetAnswer().SelectedValue;
+                    var option = questionnaire.GetOptionForQuestionByOptionValue(question.Identity.Id, selectedValue, null);
+                    paragraph.AddWrapFormattedText(option.Title, PdfStyles.QuestionAnswer, textColor);
+                    WriteOptionAttachmentIfNeed(paragraph, option);
+                    paragraph.AddLineBreak();
+                }
+                else if (question.IsCascading)
+                {
+                    var cascadingQuestion = question.GetAsInterviewTreeCascadingQuestion();
+                    var selectedValue = cascadingQuestion.GetAnswer().SelectedValue;
+                    var parentValue = cascadingQuestion.GetCascadingParentQuestion().GetAnswer().SelectedValue;
+                    var option = questionnaire.GetOptionForQuestionByOptionValue(question.Identity.Id, selectedValue, parentValue);
+                    paragraph.AddWrapFormattedText(option.Title, PdfStyles.QuestionAnswer, textColor);
+                    WriteOptionAttachmentIfNeed(paragraph, option);
+                    paragraph.AddLineBreak();
+                }
+                else if (question.IsInteger)
+                {
+                    paragraph.AddWrapFormattedText(question.GetAnswerAsString(), PdfStyles.QuestionAnswer, textColor);
+                    
+                    var answerValue = question.GetAsInterviewTreeIntegerQuestion().GetAnswer()?.Value;
+                    if (!answerValue.HasValue) return;
+                    
+                    var specialValue = questionnaire.GetOptionForQuestionByOptionValue(question.Identity.Id, answerValue.Value, null);
+                    if (specialValue == null) return;
+                        
+                    WriteOptionAttachmentIfNeed(paragraph, specialValue);
+                    paragraph.AddLineBreak();
+                }
+                else if (question.IsDouble)
+                {
+                    paragraph.AddWrapFormattedText(question.GetAnswerAsString(), PdfStyles.QuestionAnswer, textColor);
+                    
+                    var answerValue = question.GetAsInterviewTreeDoubleQuestion().GetAnswer()?.Value;
+                    if (!answerValue.HasValue || Math.Truncate(answerValue.Value) != answerValue.Value) return;
+                    
+                    try
+                    {
+                        var specialValue = questionnaire.GetOptionForQuestionByOptionValue(question.Identity.Id, Convert.ToInt32(answerValue.Value), null);
+                        if (specialValue == null) return;
+                            
+                        WriteOptionAttachmentIfNeed(paragraph, specialValue);
+                        paragraph.AddLineBreak();
+                    }
+                    catch (OverflowException)
+                    {
+                    }
+                }
                 else
                 {
                     paragraph.AddWrapFormattedText(question.GetAnswerAsString(), PdfStyles.QuestionAnswer, textColor);
@@ -191,6 +293,16 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
             {
                 var nonAnswerStyle = isPrefilled ? PdfStyles.IdentifyerQuestionNotAnswered : PdfStyles.QuestionNotAnswered;
                 paragraph.AddWrapFormattedText(PdfInterviewRes.NotAnswered, nonAnswerStyle);
+            }
+        }
+
+        private void WriteOptionAttachmentIfNeed(Paragraph paragraph, CategoricalOption option)
+        {
+            if (!string.IsNullOrEmpty(option.AttachmentName))
+            {
+                var attachmentId = questionnaire.GetAttachmentIdByName(option.AttachmentName);
+                new AttachmentPdfWriter(attachmentId, interview, questionnaire, attachmentContentService)
+                    .Write(paragraph);
             }
         }
 

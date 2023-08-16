@@ -24,9 +24,13 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             var sut = fixture.Create<AssignmentViewFactory>();
 
-            var result = sut.Load(new AssignmentsInputModel());
+            var result = sut.Load(new AssignmentsInputModel()
+            {
+                Offset = 0,
+                Limit = 20,
+            });
 
-            Assert.That(result.Page, Is.EqualTo(1));
+            Assert.That(result.Page, Is.EqualTo(0));
             Assert.That(result.PageSize, Is.EqualTo(20));
         }
 
@@ -49,6 +53,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             var result = sut.Load(new AssignmentsInputModel
             {
+                Offset = 0,
+                Limit = 20,
+
                 QuestionnaireId = Id.gA
             });
 
@@ -74,6 +81,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             var result = sut.Load(new AssignmentsInputModel
             {
+                Offset = 0,
+                Limit = 20,
+
                 Orders = new []
                 {
                     new OrderRequestItem { Direction = OrderDirection.Desc, Field = "QuestionnaireTitle" } 
@@ -104,7 +114,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             var result = sut.Load(new AssignmentsInputModel
             {
-                ReceivedByTablet = AssignmentReceivedState.Received
+                ReceivedByTablet = AssignmentReceivedState.Received,
+                Offset = 0,
+                Limit = 20,
             });
 
             Assert.That(result.Items.First(), Has.Property(nameof(AssignmentRow.Id)).EqualTo(1));

@@ -28,6 +28,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         string Language { get; }
 
+        bool IsCoverPageSupported();
+
         bool HasErrors { get; }
         bool IsCompleted { get; }
 
@@ -177,7 +179,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         string GetLinkedOptionTitle(Identity linkedQuestionIdentity, RosterVector option);
         
-        IEnumerable<Identity> GetUnderlyingInterviewerEntities(Identity sectionId = null);
+        IEnumerable<Identity> GetUnderlyingInterviewerEntities(Identity sectionId = null, bool includeVariables = false);
 
         IEnumerable<Identity> GetUnderlyingEntitiesForReview(Identity sectionId);
 
@@ -207,6 +209,9 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         Guid? GetAttachmentForEntity(Identity entityId);
 
+        string GetAttachmentForEntityOption(Identity entityId, int optionValue, int? parentValue);
+
         InterviewSimpleStatus GetInterviewSimpleStatus(bool includingSupervisorEntities);
+        IEnumerable<Identity> GetNeighboringQuestionIdentities(Identity identity);
     }
 }

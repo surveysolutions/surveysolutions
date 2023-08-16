@@ -231,6 +231,9 @@
   <data name="Cancel" xml:space="preserve">
     <value>Отмена</value>
   </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Очистить</value>
+  </data>
   <data name="Logoff" xml:space="preserve">
     <value>Выход из системы</value>
   </data>
@@ -397,5 +400,14 @@
   </data>
   <data name="Disable" xml:space="preserve">
     <value>Выключить</value>
+  </data>
+  <data name="Properties" xml:space="preserve">
+      <value>Свойства</value>
+  </data>
+  <data name="LinkedUsers" xml:space="preserve">
+      <value>Пользователи</value>
+  </data>
+  <data name="LinkUser" xml:space="preserve">
+      <value>Пользователь</value>
   </data>
 </root>

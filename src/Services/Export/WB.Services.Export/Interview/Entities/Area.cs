@@ -4,10 +4,13 @@ namespace WB.Services.Export.Interview.Entities
 {
     public class Area
     {
+        public static string[] PropertyNames { get; } = new[] { "area", "len", "num", "racc", "rfrq" };
+
         public Area() { }
 
         public Area(string geometry, string mapName, int? numberOfPoints, double? areaSize,
-            double? length, string coordinates, double? distanceToEditor)
+            double? length, string coordinates, double? distanceToEditor, double? requestedAccuracy,
+            double? requestedFrequency)
         {
             this.Geometry = geometry;
             this.MapName = mapName;
@@ -16,6 +19,8 @@ namespace WB.Services.Export.Interview.Entities
             this.DistanceToEditor = distanceToEditor;
             this.Coordinates = coordinates;
             this.NumberOfPoints = numberOfPoints;
+            this.RequestedAccuracy = requestedAccuracy;
+            this.RequestedFrequency = requestedFrequency;
         }
 
         public string Geometry { set; get; } = String.Empty;
@@ -27,6 +32,8 @@ namespace WB.Services.Export.Interview.Entities
         public double? DistanceToEditor { set; get; }
 
         public int? NumberOfPoints { set; get; }
+        public double? RequestedAccuracy { set; get; }
+        public double? RequestedFrequency { set; get; }
 
         public override string ToString()
         {
@@ -42,9 +49,14 @@ namespace WB.Services.Export.Interview.Entities
         }
 
         protected bool Equals(Area other)
-            => string.Equals(Geometry, other.Geometry) && string.Equals(MapName, other.MapName) &&
-               AreaSize.Equals(other.AreaSize) && Length.Equals(other.Length) &&
-               string.Equals(Coordinates, other.Coordinates) && DistanceToEditor.Equals(other.DistanceToEditor);
+            => string.Equals(Geometry, other.Geometry) 
+               && string.Equals(MapName, other.MapName) 
+               && AreaSize.Equals(other.AreaSize) 
+               && Length.Equals(other.Length) 
+               && string.Equals(Coordinates, other.Coordinates) 
+               && DistanceToEditor.Equals(other.DistanceToEditor)
+               && RequestedAccuracy.Equals(other.RequestedAccuracy)
+               && RequestedFrequency.Equals(other.RequestedFrequency);
 
         public override int GetHashCode()
         {
@@ -54,6 +66,8 @@ namespace WB.Services.Export.Interview.Entities
                 hashCode = (hashCode * 397) ^ (MapName != null ? MapName.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ AreaSize.GetHashCode();
                 hashCode = (hashCode * 397) ^ Length.GetHashCode();
+                hashCode = (hashCode * 397) ^ RequestedAccuracy.GetHashCode();
+                hashCode = (hashCode * 397) ^ RequestedFrequency.GetHashCode();
                 hashCode = (hashCode * 397) ^ (Coordinates != null ? Coordinates.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ DistanceToEditor.GetHashCode();
                 return hashCode;

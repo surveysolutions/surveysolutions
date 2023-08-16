@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
                     new Tuple<decimal, string>(5, "option 5"),
                 });
 
-            viewModel.Handle(Create.Event.RosterInstancesRemoved(rosterId, new [] { Create.Entity.RosterVector(1)}));
+            await viewModel.HandleAsync(Create.Event.RosterInstancesRemoved(rosterId, new [] { Create.Entity.RosterVector(1)}));
 
             Assert.That(viewModel.RosterInstances.Select(x => x.Identity).ToArray(),
                 Is.EquivalentTo(new[] {Identity.Create(rosterId, Create.Entity.RosterVector(5))}));

@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Main.Core.Documents;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Emit;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 
@@ -24,13 +26,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.codeGeneratorV2 = codeGeneratorV2;
         }
 
-        public GenerationResult GenerateProcessorStateAssembly(QuestionnaireDocument questionnaire, int targetVersion, out string generatedAssembly)
+        public GenerationResult GenerateProcessorStateAssembly(QuestionnaireCodeGenerationPackage package, int targetVersion, out string generatedAssembly)
         {
-            var generatedEvaluator = this.GenerateProcessorStateClasses(questionnaire, targetVersion);
+            var generatedEvaluator = this.GenerateProcessorStateClasses(package, targetVersion);
             List<MetadataReference> referencedPortableAssemblies = this.compilerSettingsProvider.GetAssembliesToReference();
 
             EmitResult emitedResult = this.codeCompiler.TryGenerateAssemblyAsStringAndEmitResult(
-                questionnaire.PublicKey, 
+                package.QuestionnaireDocument.PublicKey, 
                 generatedEvaluator, 
                 referencedPortableAssemblies,
                 out generatedAssembly);
@@ -38,9 +40,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return new GenerationResult(emitedResult.Success, emitedResult.Diagnostics);
         }
 
-        public Dictionary<string, string> GenerateProcessorStateClasses(QuestionnaireDocument questionnaire, int targetVersion, bool inSingleFile = false)
+        public Dictionary<string, string> GenerateProcessorStateClasses(QuestionnaireCodeGenerationPackage package, int targetVersion, bool inSingleFile = false)
         {
-            return this.codeGeneratorV2.Generate(questionnaire, targetVersion, inSingleFile);
+            return this.codeGeneratorV2.Generate(package, targetVersion, inSingleFile);
         }
     }
 }

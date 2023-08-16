@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             var controller = CreateQuestionnaireController(
                 categoricalOptionsImportService: Create.CategoricalOptionsImportService(questionnaire));
 
-            var stream = GenerateStreamFromString("1\tStreet 1\t2");
+            var stream = GenerateStreamFromString("1\tStreet 1\t2\r\n2\tStreet 2\t2");
 
             stream.Position = 0;
             var postedFile = Mock.Of<IFormFile>(pf => pf.OpenReadStream() == stream && pf.FileName == "data.csv");

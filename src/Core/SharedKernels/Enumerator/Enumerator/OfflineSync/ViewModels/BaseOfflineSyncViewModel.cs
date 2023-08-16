@@ -3,7 +3,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
-using Plugin.Permissions;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -11,6 +10,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using Xamarin.Essentials;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
 {
@@ -57,11 +57,18 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
 
                 if (!ShouldStartAdvertising)
                     return;
+                
+                var isAllowedBluetooth = await TryBluetoothPermission();
+                if (!isAllowedBluetooth)
+                    return;
 
+                var isAllowedNearby = await TryNearbyWifiDevicesPermission();
+                if (!isAllowedNearby)
+                    return;
+                
                 var isAllowedGetLocation = await TryRequestLocationPermission();
                 if (!isAllowedGetLocation)
                     return;
-
 
                 await this.OnStartDiscovery();
             }
@@ -71,11 +78,30 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
             }
         }
 
+        protected async Task<bool> TryBluetoothPermission()
+        {
+            try
+            {
+                await permissions.AssureHasBluetoothPermissionOrThrow().ConfigureAwait(false);
+            }
+            catch (MissingPermissionsException)
+            {
+                ShouldStartAdvertising = false;
+                this.OnConnectionError(EnumeratorUIResources.BluetoothPermissionRequired,
+                    ConnectionStatusCode.MissingPermissionBluetoothAdvertise);
+                return false;
+            }
+
+            return true;
+        }
+        
+        protected abstract Task<bool> TryNearbyWifiDevicesPermission();
+        
         private async Task<bool> TryRequestLocationPermission()
         {
             try
             {
-                await this.permissions.AssureHasPermissionOrThrow<LocationPermission>().ConfigureAwait(false);
+                await this.permissions.AssureHasPermissionOrThrow<Permissions.LocationWhenInUse>().ConfigureAwait(false);
             }
             catch (MissingPermissionsException)
             {

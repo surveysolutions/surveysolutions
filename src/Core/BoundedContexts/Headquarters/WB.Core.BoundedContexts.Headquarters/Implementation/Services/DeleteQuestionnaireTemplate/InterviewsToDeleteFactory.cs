@@ -69,6 +69,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             var query = sessionFactory.Session.CreateSQLQuery(queryText);
             query.SetParameter("questionnaireId", questionnaireIdentity.QuestionnaireId);
             query.SetParameter("questionnaireVersion", questionnaireIdentity.Version);
+            query.SetTimeout(300);
             await query.ExecuteUpdateAsync();
         }
 

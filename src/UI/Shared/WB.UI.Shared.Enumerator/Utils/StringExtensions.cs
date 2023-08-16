@@ -9,7 +9,9 @@ namespace WB.UI.Shared.Enumerator.Utils
             ISpanned charSequence;
             if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.N)
             {
+#pragma warning disable CA1416 // Validate platform compatibility
                 charSequence = Html.FromHtml(str, FromHtmlOptions.ModeLegacy);
+#pragma warning restore CA1416 // Validate platform compatibility
             }
             else
             {

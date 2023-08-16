@@ -27,15 +27,16 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         {
             base.SubscribeToEvents();
 
-            if (this.Target == null)
+            var textView = Target;
+            if (textView == null)
                 return;
 
-            subscription = this.Target.WeakSubscribe<TextView, View.TouchEventArgs>(
-                nameof(this.Target.Touch),
+            subscription = textView.WeakSubscribe<TextView, TextView.TouchEventArgs>(
+                nameof(textView.Touch),
                 OnTouch);
         }
 
-        private void OnTouch(object sender, Android.Views.View.TouchEventArgs e)
+        private void OnTouch(object sender, TextView.TouchEventArgs e)
         {
             if (e.Event?.Action == MotionEventActions.Down)
             {

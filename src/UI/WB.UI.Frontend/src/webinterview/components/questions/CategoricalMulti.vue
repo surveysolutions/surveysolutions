@@ -36,6 +36,10 @@
                         {{ getAnswerOrder(option.value) }}
                     </div>
                     <div class="lock"></div>
+                    <wb-attachment :attachmentName="option.attachmentName"
+                        :interviewId="interviewId"
+                        v-if="option.attachmentName" />
+
                 </div>
                 <button
                     type="button"

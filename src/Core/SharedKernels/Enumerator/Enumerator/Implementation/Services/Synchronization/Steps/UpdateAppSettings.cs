@@ -10,14 +10,5 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             int sortOrder) : base(sortOrder, synchronizationService, logger)
         {
         }
-
-        public override async Task ExecuteAsync()
-        {
-            var notificationsSetting = await this.synchronizationService.AreNotificationsEnabledAsync(Context.CancellationToken);
-            UpdateNotificationsSetting(notificationsSetting);
-
-        }
-
-        protected abstract void UpdateNotificationsSetting(bool notificationsEnabled);
     }
 }

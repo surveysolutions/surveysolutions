@@ -1,8 +1,10 @@
 ﻿using Android.Views;
 using AndroidX.RecyclerView.Widget;
+using Com.Google.Android.Exoplayer2.UI;
 using MvvmCross.DroidX.RecyclerView;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using WB.UI.Shared.Enumerator.Activities;
+using Object = Java.Lang.Object;
 
 namespace WB.UI.Shared.Enumerator.CustomControls
 {
@@ -17,6 +19,30 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         //on destroy activity 
         public InterviewEntityAdapter(System.IntPtr pointer, Android.Runtime.JniHandleOwnership ownership)
             :base(pointer, ownership) { }
+
+        public override void OnViewRecycled(Object holder)
+        {
+            if (holder is RecyclerView.ViewHolder { ItemView: ViewGroup viewGroup })
+            {
+                TryReleasePlayer(viewGroup, Resource.Id.audio_player_view);
+                TryReleasePlayer(viewGroup, Resource.Id.video_player_view);
+            }
+            
+            base.OnViewRecycled(holder);
+        }
+
+        private void TryReleasePlayer(ViewGroup viewGroup, int playerId)
+        {
+            var playerView = viewGroup.FindViewById<StyledPlayerView>(playerId);
+            var player = playerView?.Player;
+            if (player != null)
+            {
+                player.Stop();
+                player.Release();
+                player.Dispose();
+                playerView.Player = null;
+            }
+        }
 
         public override void OnViewDetachedFromWindow(Java.Lang.Object holder)
         {

@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             });
             
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress(string.Empty, settings.SenderAddress));
+            message.From.Add(new MailboxAddress(settings.SenderName ?? string.Empty, settings.SenderAddress));
             message.To.Add(new MailboxAddress(string.Empty, to));
             message.Subject = subject;
             

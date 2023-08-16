@@ -10,7 +10,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
     internal class when_verifying_questionnaire_with_one_question : QuestionnaireVerifierTestsContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            questionnaire = CreateQuestionnaireDocument();
+            questionnaire = CreateQuestionnaireDocumentWithoutChildren();
             questionnaire.AddChapter(questionnaire.CoverPageSectionId);
             questionnaire.Add(Create.TextQuestion(preFilled: true, label: "label"), questionnaire.CoverPageSectionId);
 

@@ -1,9 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Android.Content;
-using MvvmCross.Navigation;
-using MvvmCross.Platforms.Android;
-using MvvmCross.Plugin.Messenger;
+using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -11,7 +9,6 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
-using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Tester.Activities;
 
@@ -30,11 +27,18 @@ namespace WB.UI.Tester.Implementation.Services
                 userInterfaceStateService,
                 principal, log)
         {
+            this.testerPrincipal = principal as ITesterPrincipal;
         }
 
+        private readonly ITesterPrincipal testerPrincipal; 
+
+        private bool IsRealUserAuthenticated => testerPrincipal.IsAuthenticated && !testerPrincipal.IsFakeIdentity;
+        
         public override async Task<bool> NavigateToDashboardAsync(string interviewId = null)
         {
-            return await NavigationService.Navigate<DashboardViewModel>();
+            return IsRealUserAuthenticated 
+                ? await NavigationService.Navigate<DashboardViewModel>()
+                : await NavigationService.Navigate<AnonymousQuestionnairesViewModel>();
         }
 
         public override void NavigateToSplashScreen()
@@ -55,7 +59,7 @@ namespace WB.UI.Tester.Implementation.Services
         public override Task NavigateToMapsAsync()
         => throw new NotImplementedException();
 
-        public override Task NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity)
+        public override Task<bool> NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity)
             => NavigationService.Navigate<InterviewViewModel, InterviewViewModelArgs>(new InterviewViewModelArgs
             {
                 InterviewId = interviewId,
@@ -68,7 +72,6 @@ namespace WB.UI.Tester.Implementation.Services
         }
 
         public override Task NavigateToLoginAsync() => this.NavigateToAsync<LoginViewModel>();
-        protected override void FinishActivity() => TopActivity.Activity.Finish();
         protected override void NavigateToSettingsImpl() =>
             TopActivity.Activity.StartActivity(new Intent(TopActivity.Activity, typeof(PrefsActivity)));
     }

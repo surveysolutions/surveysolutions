@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+
 
 namespace WB.UI.Designer.HealthChecks
 {
@@ -24,11 +24,11 @@ namespace WB.UI.Designer.HealthChecks
                 string fontName = "Noto Sans";
                 float fontSize = 12;
 
-                using Font fontTester = new Font(
+                using var fontTester = new System.Drawing.Font(
                     fontName,
                     fontSize,
-                    FontStyle.Regular,
-                    GraphicsUnit.Pixel);
+                    System.Drawing.FontStyle.Regular,
+                    System.Drawing.GraphicsUnit.Pixel);
 
                 if (fontTester.Name !!= fontName)
                 {

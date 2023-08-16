@@ -118,24 +118,135 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AverageCaseAssignmentDurationDescription" xml:space="preserve">
-    <value>Průměrná doba od začátku přiřazení dotazníků tazateli do uzamknutí dotazníku na tabletu.</value>
+    <value>Průměrná doba od počátečního přiřazení rozhovoru tazateli do uzamknutí dotazníku na tabletu.</value>
   </data>
   <data name="AverageInterviewDuration" xml:space="preserve">
     <value>Průměrná délka rozhovoru</value>
   </data>
   <data name="AverageInterviewDurationForSupervisors" xml:space="preserve">
-    <value>Průměrná doba od uzamknutí dotazníku tazatelem do chvíle, kdy garant tento pohovor přijal nebo odmítnul.</value>
+    <value>Průměrná doba rozhovoru od otevření po uzamknutí (aktivní stav).</value>
   </data>
   <data name="Month" xml:space="preserve">
-      <value>onths</value>
+      <value>Měsíce</value>
   </data>
   <data name="NumberOfCompletedInterviews" xml:space="preserve">
-    <value>Počet hotových dotazníků</value>
+    <value>Počet dokončených rozhovorů</value>
   </data>
   <data name="NumberOfCompletedInterviewsDescriptionPerInterviewer" xml:space="preserve">
-    <value>Počet dotazníků od tohoto tazatele. Odmítnuté a poté dokončené rozhovory se počítají samostatně.</value>
+    <value>U každého tazatele je uveden počet dokončených rozhovorů. Vrácené a poté dokončené rozhovory se počítají samostatně.</value>
   </data>
   <data name="NumberOfCompletedInterviewsDescriptionPerTeam" xml:space="preserve">
-    <value>Počet dotazníků od všech Vašich tazatelů. Odmítnuté a poté dokončené rozhovory se počítají samostatně.</value>
+    <value>Počet rozhovorů od všech Vašich tazatelů. Vrácené a poté dokončené rozhovory se počítají samostatně.</value>
+  </data>
+  <data name="Average" xml:space="preserve">
+    <value>Průměr</value>
+  </data>
+  <data name="AverageCaseAssignmentDuration" xml:space="preserve">
+    <value>Průměrná doba trvání dotazníku</value>
+  </data>
+  <data name="AverageHQProcessingTime" xml:space="preserve">
+    <value>Průměrná doba zpracování Ústředím</value>
+  </data>
+  <data name="AverageHQProcessingTimeDescription" xml:space="preserve">
+    <value>Průměrná doba od chvíle, kdy Garant schválí rozhovor, do okamžiku, kdy je tento rozhovor schválen nebo vrácen Ústředím.</value>
+  </data>
+  <data name="AverageInterviewDurationDescription" xml:space="preserve">
+    <value>Průměrná doba (na 1 tazatele), po kterou byl rozhovor prezentován na obrazovce tazatele před dokončením.</value>
+  </data>
+  <data name="AverageOverallCaseProcessingTime" xml:space="preserve">
+    <value>Průměrná celková doba zpracování případu</value>
+  </data>
+  <data name="AverageOverallCaseProcessingTimeDescription" xml:space="preserve">
+    <value>Průměrná doba od počátečního přidělení rozhovoru do okamžiku, kdy Ústředí tento rozhovor schválí.</value>
+  </data>
+  <data name="AverageSupervisorProcessingTime" xml:space="preserve">
+    <value>Průměrná doba zpracování Garantem</value>
+  </data>
+  <data name="AverageSupervisorProcessingTimeDescription" xml:space="preserve">
+    <value>Průměrná doba od okamžiku, kdy tazatel stiskne tlačítko Dokončit, do okamžiku, kdy Garant rozhovor buď schválí nebo vrátí.</value>
+  </data>
+  <data name="BackToSupervisors" xml:space="preserve">
+    <value>Zpět ke Garatnům</value>
+  </data>
+  <data name="BackToTeams" xml:space="preserve">
+    <value>Zpět k týmům</value>
+  </data>
+  <data name="By" xml:space="preserve">
+    <value>Zadáno</value>
+  </data>
+  <data name="Day" xml:space="preserve">
+    <value>Počet dní</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>Z</value>
+  </data>
+  <data name="InterviewActions" xml:space="preserve">
+    <value>Akce rozhovoru</value>
+  </data>
+  <data name="InThe" xml:space="preserve">
+    <value>v</value>
+  </data>
+  <data name="InTheSupervisorTeamFormat" xml:space="preserve">
+    <value>v týmu {0}</value>
+  </data>
+  <data name="LastDateToShowLabel" xml:space="preserve">
+    <value>Ode dne</value>
+  </data>
+  <data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
+    <value>Počet rozhovorů schválených Ústředím</value>
+  </data>
+  <data name="NumberOfInterviewsApprovedByHQDescription" xml:space="preserve">
+    <value>Počet rozhovorů shromážděných uživatelem {0} schválených Ústředím.</value>
+  </data>
+  <data name="NumberOfInterviewTransactionsByHQ" xml:space="preserve">
+    <value>Počet rozhovorů schválených/vrácených Ústředím</value>
+  </data>
+  <data name="NumberOfInterviewTransactionsByHQDescription" xml:space="preserve">
+    <value>Počet schválení a zamítnutí podle Ústředí u rozhovorů shromážděných {0}.</value>
+  </data>
+  <data name="NumberOfInterviewTransactionsBySupervisor" xml:space="preserve">
+    <value>Počet rozhovorů schválených/vrácených Garantem</value>
+  </data>
+  <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerInterviewer" xml:space="preserve">
+    <value>Počet schválení a zamítnutí Garanta u rozhovorů shromážděných tazatelem.</value>
+  </data>
+  <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerTeam" xml:space="preserve">
+    <value>Počet schválení a zamítnutí Garanta u rozhovorů shromážděných {0}.</value>
+  </data>
+  <data name="OverTheLast" xml:space="preserve">
+    <value>Poslední(ch)</value>
+  </data>
+  <data name="Period" xml:space="preserve">
+    <value>Doba</value>
+  </data>
+  <data name="PeriodCount" xml:space="preserve">
+    <value>Počítané období</value>
+  </data>
+  <data name="PeriodUnit" xml:space="preserve">
+    <value>Období</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Typ dotazníku</value>
+  </data>
+  <data name="Team" xml:space="preserve">
+    <value>Tým</value>
+  </data>
+  <data name="TeamMember" xml:space="preserve">
+    <value>Tazatel</value>
+  </data>
+  <data name="TimeSpentToCompleteInterviewInHours" xml:space="preserve">
+    <value>Průměrný čas na dokončení rozhovoru</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>Celkem</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Typ</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>ver.</value>
+  </data>
+  <data name="Week" xml:space="preserve">
+    <value>Týdny</value>
   </data>
 </root>

@@ -75,7 +75,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         [NUnit.Framework.Test] public void should_set_2nd_and_4th_options_as_roster_instance_ids_in_instances_in_RosterInstancesAdded_event () =>
             eventContext.GetEvent<RosterInstancesAdded>().Instances.Select(instance => instance.RosterInstanceId).ToArray()
-                .Should().BeEquivalentTo(option2, option4);
+                .Should().BeEquivalentTo(new[]{option2, option4});
 
         [NUnit.Framework.Test] public void should_set_sort_index_to_1_in_RosterInstancesAdded_instance_with_roster_instance_id_equal_to_2nd_option () =>
             eventContext.GetEvent<RosterInstancesAdded>().Instances.Single(instance => instance.RosterInstanceId == option2)

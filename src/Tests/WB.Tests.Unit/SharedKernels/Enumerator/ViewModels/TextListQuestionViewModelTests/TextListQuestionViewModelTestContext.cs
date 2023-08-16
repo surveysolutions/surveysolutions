@@ -47,7 +47,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
                 questionStateViewModel ?? Mock.Of<QuestionStateViewModel<TextListQuestionAnswered>>(),
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
                 answering ?? Mock.Of<AnsweringViewModel>(),
-                instructionViewModel: Mock.Of<QuestionInstructionViewModel>());
+                instructionViewModel: Mock.Of<QuestionInstructionViewModel>(),
+                Create.Fake.MvxMainThreadDispatcher());
         }
     }
 }

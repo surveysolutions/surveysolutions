@@ -5,7 +5,9 @@
             <li v-for="breadcrumb in entities"
                 :key="breadcrumb.target">
                 <a href="javascript:void(0)"
-                    @click="navigate(breadcrumb)">{{ breadcrumb.title}} <span v-if="breadcrumb.isRoster && !breadcrumb.hasCustomRosterTitle"> - <i>{{getRosterTitle(breadcrumb.rosterTitle)}}</i></span> </a>
+                    @click="navigate(breadcrumb)">
+                    <span v-html="breadcrumb.title"></span><span v-if="breadcrumb.isRoster && !breadcrumb.hasCustomRosterTitle"> - <i>{{getRosterTitle(breadcrumb.rosterTitle)}}</i></span>
+                </a>
             </li>
         </ol>
         <h3 v-html="title"></h3>

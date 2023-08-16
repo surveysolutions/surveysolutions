@@ -255,6 +255,9 @@
                 </div>
             </div>
         </div>
+        <portal-target name="body"
+            multiple >
+        </portal-target>
         <IdleTimeoutService />
         <signalr @connected="connected"
             mode="takeNew"
@@ -557,7 +560,7 @@ export default {
     },
 
     components: {
-        signalr: () => import(/* webpackChunkName: "core-signalr" */ '~/webinterview/components/signalr/core.signalr'),
+        signalr: () => import('~/webinterview/components/signalr/core.signalr'),
     },
 
     beforeMount() {

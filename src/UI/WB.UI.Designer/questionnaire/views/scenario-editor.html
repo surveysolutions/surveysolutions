@@ -1,7 +1,8 @@
 <div class="modal-header blue-strip handle">
     <button type="button" class="close" aria-hidden="true" ng-click="$close()"></button>
-    <h3 class="modal-title" ng-i18next>
-        ScenarioDetails
+    <h3 class="modal-title">
+        <span ng-i18next="ScenarioDetails"></span>:
+        <span style="overflow: hidden;">{{scenario.title}}</span>
     </h3>
 </div>
 <div class="modal-body">

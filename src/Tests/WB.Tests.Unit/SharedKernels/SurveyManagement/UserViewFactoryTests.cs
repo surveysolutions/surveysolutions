@@ -57,5 +57,56 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement
             Assert.That(responsibles.Single(x=>x.UserName == "archivedint").IsLockedBySupervisor, Is.True);
             Assert.That(responsibles.Single(x=>x.UserName == "lockedint").IsLockedBySupervisor, Is.True);
         }
+        
+        [Test]
+        public void when_GetTeamResponsibles_with_equals_rule_should_return_one_interviewer_with_requested_name()
+        {
+            // arrange
+            var supervisorId = Id.g1;
+
+            var readerWithUsers = CreateQueryableReadSideRepositoryReaderWithUsers(new[]
+            {
+                Create.Entity.HqUser(Id.g1, userName: "intsv", role: UserRoles.Interviewer, supervisorId: supervisorId),
+                Create.Entity.HqUser(Id.g1, userName: "svint", role: UserRoles.Interviewer, supervisorId: supervisorId),
+                Create.Entity.HqUser(Id.g1, userName: "int",    role: UserRoles.Interviewer, lockedBySupervisor: true, supervisorId: supervisorId),
+                Create.Entity.HqUser(Id.g1, userName: "asvinta",  role: UserRoles.Interviewer, lockedBySupervisor: true, supervisorId: supervisorId),
+            });
+
+            var teamFactory = CreateInterviewersViewFactory(readerWithUsers);
+
+            // act
+            var usersView = teamFactory.GetTeamResponsibles(10, "int", supervisorId, true, false, filterRule: QueryFilterRule.Equals);
+            var responsibles = usersView.Users.ToList();
+
+            // assert
+            Assert.That(responsibles, Has.Exactly(1).Items);
+            Assert.That(responsibles.Single().UserName, Is.EqualTo("int"));
+        }
+
+        [Test]
+        public void when_GetTeamResponsibles_with_contains_rule_should_return_all_interviewer_with_include_text_in_name()
+        {
+            // arrange
+            var supervisorId = Id.g1;
+
+            var readerWithUsers = CreateQueryableReadSideRepositoryReaderWithUsers(new[]
+            {
+                Create.Entity.HqUser(Id.g1, userName: "intsv", role: UserRoles.Interviewer, supervisorId: supervisorId),
+                Create.Entity.HqUser(Id.g1, userName: "svint", role: UserRoles.Interviewer, supervisorId: supervisorId),
+                Create.Entity.HqUser(Id.g1, userName: "asvina", role: UserRoles.Interviewer, lockedBySupervisor: true, supervisorId: supervisorId),
+                Create.Entity.HqUser(Id.g1, userName: "int",   role: UserRoles.Interviewer, lockedBySupervisor: true, supervisorId: supervisorId),
+            });
+
+            var teamFactory = CreateInterviewersViewFactory(readerWithUsers);
+
+            // act
+            var usersView = teamFactory.GetTeamResponsibles(10, "int", supervisorId, true, false, filterRule: QueryFilterRule.Contains);
+            var responsibles = usersView.Users.ToList();
+
+            // assert
+            Assert.That(responsibles, Has.Exactly(3).Items);
+            Assert.That(responsibles.Select(x => x.UserName),
+                Is.EquivalentTo(new[] {"intsv", "svint", "int"}));
+        }
     }
 }

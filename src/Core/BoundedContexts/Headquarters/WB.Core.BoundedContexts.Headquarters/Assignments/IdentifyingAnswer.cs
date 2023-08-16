@@ -1,8 +1,10 @@
 using System;
+using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
@@ -36,7 +38,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                     throw new ArgumentException($@"Incorrect answer type for SingleOption question: '{result.VariableName}' => '{answer}'", nameof(answer));
                 }
 
-                result.AnswerAsString = questionnaire.GetAnswerOptionTitle(result.Identity.Id, singleOptionAnswer, null);
+                var parentId = questionnaire.GetCascadingQuestionParentId(result.Identity.Id);
+                int? parentValue = null;
+                if (parentId.HasValue)
+                {
+                    var parentIdentity = new Identity(parentId.Value, result.Identity.RosterVector);
+                    var parentAnswer = assignment.Answers.FirstOrDefault(a => a.Identity == parentIdentity);
+                    if (parentAnswer?.Answer is CategoricalFixedSingleOptionAnswer singleAnswer)
+                        parentValue = singleAnswer.SelectedValue;
+                }
+
+                result.AnswerAsString = questionnaire.GetAnswerOptionTitle(result.Identity.Id, singleOptionAnswer, parentValue);
             }
 
             if (questionType == QuestionType.DateTime)

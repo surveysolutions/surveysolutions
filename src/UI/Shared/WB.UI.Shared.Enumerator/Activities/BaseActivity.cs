@@ -10,7 +10,7 @@ using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
 using NLog;
 using Plugin.CurrentActivity;
-using Plugin.Permissions;
+using WB.UI.Shared.Enumerator.Activities.Callbacks;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Utils;
 
@@ -19,9 +19,9 @@ namespace WB.UI.Shared.Enumerator.Activities
     [MvxActivityPresentation]
     public abstract class BaseActivity<TViewModel> : MvvmCross.Platforms.Android.Views.MvxActivity<TViewModel> where TViewModel : class, IMvxViewModel
     {
-        
         protected abstract int ViewResourceId { get; }
         private Logger log;
+        private OnBackPressedCallbackWrapper backPressedCallbackWrapper;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -30,6 +30,12 @@ namespace WB.UI.Shared.Enumerator.Activities
             base.OnCreate(bundle);
             Xamarin.Essentials.Platform.Init(this, bundle);
             CrossCurrentActivity.Current.Init(this, bundle);
+
+            if (BackButtonCustomAction)
+            {
+                backPressedCallbackWrapper = new OnBackPressedCallbackWrapper(BackButtonPressed);
+                OnBackPressedDispatcher.AddCallback(this, backPressedCallbackWrapper);
+            }
         }
         
         protected override void OnStart()
@@ -50,8 +56,9 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             log.Trace($"OnRequestPermissionsResult permissions {string.Join(',', permissions)} grantResults {string.Join(',', grantResults)}");
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-            PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+#pragma warning disable CA1416 // Validate platform compatibility
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+#pragma warning restore CA1416 // Validate platform compatibility
         }
 
         protected override void OnPause()
@@ -78,13 +85,24 @@ namespace WB.UI.Shared.Enumerator.Activities
             base.OnLowMemory();
         }
 
+        protected virtual bool BackButtonCustomAction => false;
+
+        protected virtual void BackButtonPressed()
+        {
+            
+        }
+
         protected override void OnDestroy()
         {
+            backPressedCallbackWrapper?.Remove();
+            backPressedCallbackWrapper?.Dispose();
+            backPressedCallbackWrapper = null;
+
             TryWriteMemoryInformationToLog($"Destroyed Activity {this.GetType().Name}");
             base.OnDestroy();
             
-            this.ViewModel.DisposeIfDisposable();
             this.BindingContext.ClearAllBindings();
+            //this.ViewModel.DisposeIfDisposable();
             
             //cleanup cache to remove disposed viewmodel
             if (Mvx.IoCProvider.TryResolve<IMvxSingleViewModelCache>(out var cache))

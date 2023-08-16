@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -16,12 +18,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class CategoricalMultiLinkedToListViewModel : 
         CategoricalMultiViewModelBase<int, int>,
-        IViewModelEventHandler<TextListQuestionAnswered>,
+        IAsyncViewModelEventHandler<TextListQuestionAnswered>,
         IAsyncViewModelEventHandler<LinkedToListOptionsChanged>,
         IAsyncViewModelEventHandler<MultipleOptionsQuestionAnswered>,
         IAsyncViewModelEventHandler<QuestionsEnabled>,
         IAsyncViewModelEventHandler<QuestionsDisabled>
     {
+        private readonly IInterviewViewModelFactory interviewViewModelFactory;
         private int[] selectedOptionsToSave;
         private Guid linkedToQuestionId;
 
@@ -29,10 +32,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionStateViewModel<MultipleOptionsQuestionAnswered> questionStateViewModel,
             IQuestionnaireStorage questionnaireRepository, IViewModelEventRegistry eventRegistry,
             IStatefulInterviewRepository interviewRepository, IPrincipal principal, AnsweringViewModel answering,
-            QuestionInstructionViewModel instructionViewModel, ThrottlingViewModel throttlingModel) : base(
+            QuestionInstructionViewModel instructionViewModel, ThrottlingViewModel throttlingModel,
+            IInterviewViewModelFactory interviewViewModelFactory,
+            IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher) 
+            : base(
             questionStateViewModel, questionnaireRepository, eventRegistry, interviewRepository, principal, answering,
-            instructionViewModel, throttlingModel)
+            instructionViewModel, throttlingModel, mainThreadAsyncDispatcher)
         {
+            this.interviewViewModelFactory = interviewViewModelFactory;
             this.Options = new CovariantObservableCollection<CategoricalMultiOptionViewModel<int>>();
         }
 
@@ -68,8 +75,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             foreach (var optionCode in filteredOptions)
             {
-                var vm = new CategoricalMultiOptionViewModel<int>();
-                base.InitViewModel(listOptions.First(x => x.Value == optionCode).Text, optionCode, interview, vm);
+                var vm = interviewViewModelFactory.GetNew<CategoricalMultiOptionViewModel<int>>();
+                base.InitViewModel(listOptions.First(x => x.Value == optionCode).Text, optionCode, interview, vm, null);
 
                 yield return vm;
             }
@@ -78,12 +85,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected override bool IsInterviewAnswer(int interviewAnswer, int optionValue)
             => interviewAnswer == optionValue;
 
-        public void Handle(TextListQuestionAnswered @event)
+        public async Task HandleAsync(TextListQuestionAnswered @event)
         {
             if (@event.QuestionId != this.linkedToQuestionId)
                 return;
 
-            this.InvokeOnMainThread(() =>
+            await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 foreach (var answer in @event.Answers)
                 {

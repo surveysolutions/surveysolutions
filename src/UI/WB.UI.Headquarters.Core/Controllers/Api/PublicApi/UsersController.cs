@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
+using WB.Core.BoundedContexts.Headquarters.Workspaces.Impl;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Enumerator.Native.WebInterview;
@@ -36,7 +37,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly IUnitOfWork unitOfWork;
         private readonly ISystemLog systemLog;
         private readonly IWorkspaceContextAccessor workspaceContextAccessor;
-        private readonly IPlainStorageAccessor<Workspace> workspaces;
+        private readonly IWorkspacesStorage workspaces;
 
         private const int MaxPageSize = 100;
 
@@ -47,7 +48,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             IUnitOfWork unitOfWork,
             ISystemLog systemLog,
             IWorkspaceContextAccessor workspaceContextAccessor,
-            IPlainStorageAccessor<Workspace> workspaces)
+            IWorkspacesStorage workspaces)
         {
             this.usersFactory = usersFactory;
             this.archiveService = archiveService;
@@ -317,6 +318,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (!Enum.IsDefined(typeof(UserRoles), (UserRoles)model.Role))
             {
                 ModelState.AddModelError(nameof(model.Role), "Trying to create user with unknown role");
+                return ValidationProblem();
             }
             
             var result = new UserCreationResult();
@@ -324,8 +326,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             if (createdUserRole == UserRoles.Administrator)
             {
-                ModelState.AddModelError(nameof(model.Role), "Administrator user can not be created with api");
+                ModelState.AddModelError(nameof(model.Role), "Administrator user cannot be created with api");
             }
+            
+            var workspaceContext = workspaceContextAccessor.CurrentWorkspace();
+            if (workspaceContext == null)
+                throw new ArgumentException("Workspace context must exists");
 
             if (ModelState.IsValid)
             {
@@ -333,6 +339,25 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 {
                     ModelState.AddModelError(nameof(model.Supervisor), "Supervisor name is required for interviewer creation");
                     return ValidationProblem();
+                }
+
+                var workspace = await workspaces.GetByIdAsync(workspaceContext.Name);
+                
+                HqUser? supervisor = null;
+                if (createdUserRole == UserRoles.Interviewer)
+                {
+                    supervisor = await userManager.FindByNameAsync(model.Supervisor);
+                    if (supervisor == null)
+                    {
+                        ModelState.AddModelError(nameof(model.Supervisor), "Supervisor was not found");
+                        return ValidationProblem();
+                    }
+
+                    if (supervisor.Workspaces.FirstOrDefault(w => w.Workspace.Name == workspace.Name) == null)
+                    {
+                        ModelState.AddModelError(nameof(model.Supervisor), $"Workspace {workspace.Name} is not assigned to Supervisor");
+                        return ValidationProblem();
+                    }
                 }
 
                 var createdUser = new HqUser
@@ -346,16 +371,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     PasswordChangeRequired = model.Role != Roles.ApiUser
                 };
 
-                HqUser? supervisor = null;
-
-                if (createdUserRole == UserRoles.Interviewer)
-                    supervisor = await userManager.FindByNameAsync(model.Supervisor);
-
-                var workspaceContext = workspaceContextAccessor.CurrentWorkspace();
-                if (workspaceContext == null)
-                    throw new ArgumentException("Workspace context must exists");
-                
-                var workspace = await workspaces.GetByIdAsync(workspaceContext.Name);
                 var workspacesUser = new WorkspacesUsers(workspace, createdUser, supervisor);
                 createdUser.Workspaces.Add(workspacesUser);
 

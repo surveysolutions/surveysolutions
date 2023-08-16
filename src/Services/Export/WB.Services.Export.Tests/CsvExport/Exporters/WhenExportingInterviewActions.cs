@@ -236,7 +236,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         private static string questionnaireId = "questionnaire";
         private static Guid interviewId = Guid.Parse("22222222222222222222222222222222");
         private static string fileName = "1.tab";
-        private static List<string[]> fileData = new List<string[]>();
+        private static List<string[]> fileData = new();
         private static readonly QuestionnaireId questionnaireIdentity = new QuestionnaireId(questionnaireId);
         private static TenantInfo tenant = Create.Tenant();
     }

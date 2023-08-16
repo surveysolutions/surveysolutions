@@ -36,7 +36,7 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
 
         private HttpMessageHandler CreateMessageHandler()
         {
-            var messageHandler = new AndroidClientHandler
+            var messageHandler = new AndroidMessageHandler
             {
                 ConnectTimeout = restServiceSettings.Timeout,
                 AutomaticDecompression = DecompressionMethods.None,

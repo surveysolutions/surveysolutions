@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Options;
-using WB.UI.Shared.Web.Services;
+﻿using WB.UI.Shared.Web.Services;
 
 namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {
@@ -12,10 +11,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             this.pathService = pathService;
         }
 
-        string WebInterviewStartPath(Invitation invitation)
+        private string WebInterviewStartPath(Invitation invitation)
             => $"~/WebInterview/{invitation.Token}/Start";
 
-        string WebInterviewContinuePath(Invitation invitation)
+        private string WebInterviewContinuePath(Invitation invitation)
             => $"~/WebInterview/Continue/{invitation.Token}";
 
         public string WebInterviewStartLink(Invitation invitation)
@@ -31,6 +30,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         public string WebInterviewRequestLink(string assignmentId, string guid)
         {
             return pathService.GetAbsolutePath($"~/webinterview/link/{assignmentId}/{guid}");
+        }
+
+        public string GetViewInBrowserLink(string modelId)
+        {
+            return pathService.GetAbsolutePath($"~/WebEmails/Html/{modelId}");
         }
     }
 }

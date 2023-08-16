@@ -118,6 +118,78 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="COLUMN_TOTAL" xml:space="preserve">
-    <value>CELKEM</value>
+    <value>TOTÁLNÍ</value>
+  </data>
+  <data name="COLUMN_ANDROID_4_4_OR_LOWER" xml:space="preserve">
+    <value>ANDROID 4.4 NEBO NIŽŠÍ</value>
+  </data>
+  <data name="COLUMN_APPROVED_BY_HQ" xml:space="preserve">
+    <value>SCHVÁLENO HQ</value>
+  </data>
+  <data name="COLUMN_APPROVED_BY_SUPERVISOR" xml:space="preserve">
+    <value>SCHVÁLENO DOHLÍŽITELEM</value>
+  </data>
+  <data name="COLUMN_AVERAGE" xml:space="preserve">
+    <value>PRŮMĚRNÝ</value>
+  </data>
+  <data name="COLUMN_COMPLETED" xml:space="preserve">
+    <value>HOTOVÝ</value>
+  </data>
+  <data name="COLUMN_DAYS" xml:space="preserve">
+    <value>DNY</value>
+  </data>
+  <data name="COLUMN_INTERVIEWER_ASSIGNED" xml:space="preserve">
+    <value>PŘIDĚLEN TAZATEL</value>
+  </data>
+  <data name="COLUMN_LESS_THAN_100MB_FREE_SPACE" xml:space="preserve">
+    <value>MÉNĚ NEŽ 100 MB VOLNÉHO MÍSTA</value>
+  </data>
+  <data name="COLUMN_NEVER_SYNCHED" xml:space="preserve">
+    <value>NIKDY NESYNCHRONIZOVÁNO</value>
+  </data>
+  <data name="COLUMN_NEVER_UPLOADED" xml:space="preserve">
+    <value>NIKDY ODESLÁNO</value>
+  </data>
+  <data name="COLUMN_NO_ASSIGNMENTS_RECEIVED" xml:space="preserve">
+    <value>NIKDY NEOBDRŽEL</value>
+  </data>
+  <data name="COLUMN_OLD_VERSION" xml:space="preserve">
+    <value>STARÁ APLIKACE PRO ROZHOVORY</value>
+  </data>
+  <data name="COLUMN_QUESTIONNAIRE_TEMPLATE" xml:space="preserve">
+    <value>NÁZEV DOTAZNÍKU</value>
+  </data>
+  <data name="COLUMN_REJECTED_BY_HQ" xml:space="preserve">
+    <value>ODMÍTNUTO HQ</value>
+  </data>
+  <data name="COLUMN_REJECTED_BY_SUPERVISOR" xml:space="preserve">
+    <value>ZAMÍTNUTO ŠKOLITELEM</value>
+  </data>
+  <data name="COLUMN_SUPERVISOR_ASSIGNED" xml:space="preserve">
+    <value>PŘIDĚLENÝ ŠKOLITEL</value>
+  </data>
+  <data name="COLUMN_TABLET_REASSIGNED" xml:space="preserve">
+    <value>ZMĚNA PŘIŘAZENÍ TABLETU</value>
+  </data>
+  <data name="COLUMN_TEAM_MEMBER" xml:space="preserve">
+    <value>ČLEN TÝMU</value>
+  </data>
+  <data name="COLUMN_TEAM_SIZE" xml:space="preserve">
+    <value>VELIKOST TÝMU</value>
+  </data>
+  <data name="COLUMN_TEAMS" xml:space="preserve">
+    <value>TÝMY</value>
+  </data>
+  <data name="COLUMN_TEMPLATE_VERSION" xml:space="preserve">
+    <value>VERZE DOTAZNÍKU</value>
+  </data>
+  <data name="COLUMN_WRONG_TIME_ON_TABLET" xml:space="preserve">
+    <value>ŠPATNÝ ČAS NA TABLETU</value>
+  </data>
+  <data name="TimeLeft" xml:space="preserve">
+    <value>Zbývající čas</value>
+  </data>
+  <data name="TOTAL" xml:space="preserve">
+    <value>Totální</value>
   </data>
 </root>

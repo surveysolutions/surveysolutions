@@ -8,7 +8,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Models
     {
         [Required(ErrorMessageResourceType = typeof(Workspaces), 
             ErrorMessageResourceName = nameof(Workspaces.NameRequired))]
-        [MaxLength(12)]
+        [MaxLength(12)] // if need change then need change TenantName in export
         [RegularExpression("^[-0-9,a-z]+$", ErrorMessageResourceType = typeof(Workspaces), 
             ErrorMessageResourceName = nameof(Workspaces.InvalidName))]
         [UniqueWorkspaceName(ErrorMessageResourceType = typeof(Workspaces), ErrorMessageResourceName = nameof(Workspaces.NameShouldBeUnique))]

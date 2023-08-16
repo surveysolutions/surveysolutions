@@ -121,6 +121,36 @@
     <value>Chcete pokračovat?</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Jméno</value>
+    <value>Název</value>
+  </data>
+  <data name="ActiveInterviewers" xml:space="preserve">
+    <value>Aktivní tazatelé</value>
+  </data>
+  <data name="ActiveSupervisors" xml:space="preserve">
+    <value>Aktivní Garanti</value>
+  </data>
+  <data name="ArchivedInterviewers" xml:space="preserve">
+    <value>Neaktivní tazatelé</value>
+  </data>
+  <data name="ArchivedSupervisors" xml:space="preserve">
+    <value>Neaktivní Garanti</value>
+  </data>
+  <data name="CreationDate" xml:space="preserve">
+    <value>Datum vytvoření</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="Interviewers" xml:space="preserve">
+    <value>Tazatelé</value>
+  </data>
+  <data name="Unarchive" xml:space="preserve">
+    <value>Obnovit účet</value>
+  </data>
+  <data name="UnarchiveInterviewerWarning" xml:space="preserve">
+    <value>Tazatel(é) budou znovu aktivováni.</value>
+  </data>
+  <data name="UnarchiveSupervisorWarning" xml:space="preserve">
+    <value>Garant/i budou zaktivováni</value>
   </data>
 </root>

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ClosedXML.Excel;
+using ClosedXML.Graphics;
+using SixLabors.Fonts;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 
@@ -12,18 +14,22 @@ namespace WB.Infrastructure.Native.Questionnaire
     {
         public List<CategoriesItem> ExtractCategoriesFromExcelFile(Stream xmlFile)
         {
+            //non windows fonts
+            var firstFont = SystemFonts.Collection.Families.First();
+            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(firstFont.Name) };
+            
             var categories = new List<CategoriesItem>();
-            using XLWorkbook package = new XLWorkbook(xmlFile);
+            using XLWorkbook package = new XLWorkbook(xmlFile, loadOptions);
             var worksheet = package.Worksheets.First();
             var headers = GetHeaders(worksheet);
 
             var rowsCount = worksheet.LastRowUsed().RowNumber();
 
             if (headers.IdIndex == null)
-                throw new InvalidOperationException("Header (id) was not found.");
+                throw new InvalidOperationException("Header (value) was not found.");
 
             if (headers.TextIndex == null)
-                throw new InvalidOperationException("Header (text) was not found.");
+                throw new InvalidOperationException("Header (title) was not found.");
 
             if (rowsCount == 1)
                 throw new InvalidOperationException("Categories were not found.");
@@ -46,14 +52,16 @@ namespace WB.Infrastructure.Native.Questionnaire
             {
                 new Tuple<string, string>(worksheet.Cell("A1").GetString(), "A"),
                 new Tuple<string, string>(worksheet.Cell("B1").GetString(), "B"),
-                new Tuple<string, string>(worksheet.Cell("C1").GetString(), "C")
+                new Tuple<string, string>(worksheet.Cell("C1").GetString(), "C"),
+                new Tuple<string, string>(worksheet.Cell("D1").GetString(), "D"),
             }.Where(kv => kv.Item1 != null).ToDictionary(k => k.Item1.Trim(), v => v.Item2);
 
             return new CategoriesHeaderMap()
             {
-                IdIndex = headers.GetOrNull("id"),
-                ParentIdIndex = headers.GetOrNull("parentid"),
-                TextIndex = headers.GetOrNull("text"),
+                IdIndex = headers.GetOrNull("value") ?? headers.GetOrNull("id"),
+                ParentIdIndex = headers.GetOrNull("parentvalue") ?? headers.GetOrNull("parentid"),
+                TextIndex = headers.GetOrNull("title") ?? headers.GetOrNull("text"),
+                AttachmentNameIndex = headers.GetOrNull("attachmentname"),
             };
         }
 
@@ -70,6 +78,7 @@ namespace WB.Infrastructure.Native.Questionnaire
                 Id = int.Parse(id),
                 Text = worksheet.Cell($"{headers.TextIndex}{rowNumber}").GetString(),
                 ParentId = string.IsNullOrEmpty(parentId) ? (int?)null : int.Parse(parentId),
+                AttachmentName = worksheet.Cell($"{headers.AttachmentNameIndex}{rowNumber}").GetString(),
             };
         }
 
@@ -78,6 +87,7 @@ namespace WB.Infrastructure.Native.Questionnaire
             public string IdIndex { get; set; }
             public string ParentIdIndex { get; set; }
             public string TextIndex { get; set; }
+            public string AttachmentNameIndex { get; set; }
         }
     }
 }

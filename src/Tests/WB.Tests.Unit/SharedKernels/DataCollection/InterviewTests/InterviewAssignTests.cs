@@ -83,7 +83,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var interview = SetupInterview();
             interview.Apply(Create.Event.SupervisorAssigned(supervisorId, supervisorId));
             interview.Apply(Create.Event.InterviewerAssigned(supervisorId, interviewerId, DateTime.UtcNow.AddHours(-1)));
-            interview.Apply(Create.Event.InteviewCompleted());
+            interview.Apply(Create.Event.InterviewCompleted());
             interview.Apply(Create.Event.InterviewApproved(supervisorId));
             interview.Apply(Create.Event.InterviewRejectedByHQ(headquarterId));
             interview.Apply(Create.Event.InterviewRejected(supervisorId));
@@ -106,7 +106,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var interview = SetupInterview();
             interview.Apply(Create.Event.SupervisorAssigned(supervisorId, supervisorId));
             interview.Apply(Create.Event.InterviewerAssigned(supervisorId, interviewerId, DateTime.UtcNow.AddHours(-1)));
-            interview.Apply(Create.Event.InteviewCompleted());
+            interview.Apply(Create.Event.InterviewCompleted());
             interview.Apply(Create.Event.InterviewApproved(supervisorId));
             interview.Apply(Create.Event.InterviewRejectedByHQ(headquarterId));
             interview.Apply(Create.Event.InterviewRejected(supervisorId));
@@ -129,7 +129,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var interview = SetupInterview();
             interview.Apply(Create.Event.SupervisorAssigned(supervisorId, supervisorId));
             interview.Apply(Create.Event.InterviewerAssigned(supervisorId, interviewerId, DateTime.UtcNow.AddHours(-1)));
-            interview.Apply(Create.Event.InteviewCompleted());
+            interview.Apply(Create.Event.InterviewCompleted());
             interview.Apply(Create.Event.InterviewApproved(supervisorId));
             interview.Apply(Create.Event.InterviewRejectedByHQ(headquarterId));
             interview.Apply(Create.Event.InterviewStatusChanged(InterviewStatus.RejectedByHeadquarters));
@@ -152,7 +152,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var interview = SetupInterview();
             interview.Apply(Create.Event.SupervisorAssigned(supervisorId, supervisorId));
             interview.Apply(Create.Event.InterviewerAssigned(supervisorId, interviewerId, DateTime.UtcNow.AddHours(-1)));
-            interview.Apply(Create.Event.InteviewCompleted());
+            interview.Apply(Create.Event.InterviewCompleted());
             interview.Apply(Create.Event.InterviewStatusChanged(InterviewStatus.Completed));
             SetupEventContext();
 
@@ -191,7 +191,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var interview = SetupInterview();
             interview.Apply(Create.Event.SupervisorAssigned(supervisorId, supervisorId));
             interview.Apply(Create.Event.InterviewerAssigned(supervisorId, interviewerId, DateTime.UtcNow.AddHours(-1)));
-            interview.Apply(Create.Event.InteviewCompleted());
+            interview.Apply(Create.Event.InterviewCompleted());
             interview.Apply(Create.Event.InterviewStatusChanged(InterviewStatus.InterviewerAssigned));
 
             SetupEventContext();
@@ -213,7 +213,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var interview = SetupInterview();
             interview.Apply(Create.Event.SupervisorAssigned(supervisorId, supervisorId));
             interview.Apply(Create.Event.InterviewerAssigned(supervisorId, interviewerId, DateTime.UtcNow.AddHours(-1)));
-            interview.Apply(Create.Event.InteviewCompleted());
+            interview.Apply(Create.Event.InterviewCompleted());
             interview.Apply(Create.Event.InterviewRejected(supervisorId, null, DateTime.UtcNow));
             interview.Apply(Create.Event.InterviewStatusChanged(InterviewStatus.InterviewerAssigned));
 
@@ -255,7 +255,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview.Apply(Create.Event.SupervisorAssigned(supervisorId, supervisorId));
             interview.Apply(Create.Event.InterviewerAssigned(supervisorId, interviewerId, DateTime.UtcNow.AddHours(-1)));
             interview.Apply(Create.Event.InterviewStatusChanged(InterviewStatus.InterviewerAssigned));
-            interview.Apply(Create.Event.InteviewCompleted());
+            interview.Apply(Create.Event.InterviewCompleted());
             interview.Apply(Create.Event.InterviewStatusChanged(InterviewStatus.Completed));
             SetupEventContext();
 
@@ -276,7 +276,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview.Apply(Create.Event.SupervisorAssigned(supervisorId, supervisorId));
             interview.Apply(Create.Event.InterviewerAssigned(supervisorId, interviewerId, DateTime.UtcNow.AddHours(-1)));
             interview.Apply(Create.Event.InterviewStatusChanged(InterviewStatus.InterviewerAssigned));
-            interview.Apply(Create.Event.InteviewCompleted());
+            interview.Apply(Create.Event.InterviewCompleted());
             interview.Apply(Create.Event.InterviewStatusChanged(InterviewStatus.Completed));
             SetupEventContext();
 
@@ -332,7 +332,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var interview = SetupInterview();
             interview.Apply(Create.Event.SupervisorAssigned(supervisorId, supervisorId));
             interview.Apply(Create.Event.InterviewerAssigned(supervisorId, interviewerId, DateTime.UtcNow.AddHours(-1)));
-            interview.Apply(Create.Event.InteviewCompleted());
+            interview.Apply(Create.Event.InterviewCompleted());
             interview.Apply(Create.Event.InterviewRejected(supervisorId));
             interview.Apply(Create.Event.InterviewStatusChanged(InterviewStatus.RejectedBySupervisor));
             SetupEventContext();
@@ -368,7 +368,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var interview = SetupInterview();
             interview.Apply(Create.Event.SupervisorAssigned(supervisorId, supervisorId));
             interview.Apply(Create.Event.InterviewerAssigned(supervisorId, interviewerId, DateTime.UtcNow.AddHours(-1)));
-            interview.Apply(Create.Event.InteviewCompleted());
+            interview.Apply(Create.Event.InterviewCompleted());
             interview.Apply(Create.Event.InterviewApproved(supervisorId));
             interview.Apply(Create.Event.InterviewRejectedByHQ(headquarterId));
             interview.Apply(Create.Event.InterviewStatusChanged(InterviewStatus.RejectedByHeadquarters));

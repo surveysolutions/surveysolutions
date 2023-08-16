@@ -760,7 +760,7 @@
     <value>المستوردة على</value>
   </data>
   <data name="MapDetails_InterviewerName" xml:space="preserve">
-    <value>اسم الباحث</value>
+      <value>اسم المستخدم</value>
   </data>
   <data name="MapDetails_MapDisclaimer" xml:space="preserve">
     <value>تظهر هذه النظرة العامة المحملة على خريطة العالم</value>

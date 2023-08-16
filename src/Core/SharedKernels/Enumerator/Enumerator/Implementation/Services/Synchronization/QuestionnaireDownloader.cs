@@ -58,7 +58,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
                 foreach (var contentId in contentIds)
                 {
-                    var isExistContent = this.attachmentContentStorage.Exists(contentId);
+                    var isExistContent = await this.attachmentContentStorage.ExistsAsync(contentId);
                     if (!isExistContent)
                     {
                         var attachmentContent = await this.synchronizationService.GetAttachmentContentAsync(contentId,

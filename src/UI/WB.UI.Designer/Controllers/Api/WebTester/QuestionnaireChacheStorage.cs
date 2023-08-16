@@ -9,7 +9,7 @@ namespace WB.UI.Designer.Api.WebTester
     {
         void Remove(string cacheKey);
         
-        Questionnaire GetOrCreate(string cacheKey, Guid questionnaireId, Func<Guid, Questionnaire> factory);
+        Questionnaire? GetOrCreate(string cacheKey, Guid questionnaireId, Func<Guid, Questionnaire> factory);
     }
 
     public class QuestionnaireCacheStorage : IQuestionnaireCacheStorage
@@ -24,7 +24,7 @@ namespace WB.UI.Designer.Api.WebTester
         private const string CachePrefix = "qcs::";
 
 
-        public Questionnaire GetOrCreate(string cacheKey, Guid questionnaireId, Func<Guid, Questionnaire> factory)
+        public Questionnaire? GetOrCreate(string cacheKey, Guid questionnaireId, Func<Guid, Questionnaire> factory)
         {
             return memoryCache.GetOrCreate(GetKey(cacheKey), cache =>
             {

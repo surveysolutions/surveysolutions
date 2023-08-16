@@ -130,7 +130,7 @@
     <value>Пользователь не авторизован. Проверьте своё имя пользователя и пароль.</value>
   </data>
   <data name="OldClientPleaseUpdate" xml:space="preserve">
-    <value>У вас устаревшая версия приложения Headquarters. Чтобы запросить обновление, обратитесь в службу поддержки support@mysurvey.solutions.</value>
+    <value>У вас устаревшая версия приложения Headquarters. Чтобы запросить обновление, обратитесь к вашему администратору.</value>
   </data>
   <data name="VersionParameterIsIncorrect" xml:space="preserve">
     <value>Возникла проблема с версией вашего опросника. Пожалуйста, обратитесь в службу технической поддержки support@mysurvey.solutions.</value>

@@ -170,9 +170,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             if (responsibleId.HasValue)
             {
-                gpsQuery = gpsQuery.Where(x => 
-                    x.InterviewSummary.ResponsibleId == responsibleId.Value
-                    || x.InterviewSummary.SupervisorId == responsibleId.Value);
+                if (authorizedUser.IsSupervisor)
+                {
+                    gpsQuery = gpsQuery.Where(x => 
+                        x.InterviewSummary.ResponsibleId == responsibleId.Value);
+                }
+                else
+                {
+                    gpsQuery = gpsQuery.Where(x => 
+                        x.InterviewSummary.ResponsibleId == responsibleId.Value
+                        || x.InterviewSummary.SupervisorId == responsibleId.Value);
+                }
             }
 
             if (authorizedUser.IsInterviewer)

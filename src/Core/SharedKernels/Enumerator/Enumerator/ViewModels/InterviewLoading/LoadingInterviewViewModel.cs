@@ -20,7 +20,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
 {
-    public class LoadingInterviewViewModel : ProgressViewModel, IMvxViewModel<LoadingViewModelArg>, IDisposable
+    public class LoadingInterviewViewModel : ProgressViewModel, IMvxViewModel<LoadingViewModelArg>
     {
         private readonly IPlainStorage<InterviewView> interviewsRepository;
         private readonly IJsonAllTypesSerializer serializer;
@@ -71,7 +71,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             if (InterviewId == Guid.Empty) throw new ArgumentException(nameof(InterviewId));
 
             var interview = this.interviewsRepository.GetById(this.InterviewId.FormatGuid());
-            this.QuestionnaireTitle = interview.QuestionnaireTitle;
+            this.QuestionnaireTitle = interview?.QuestionnaireTitle;
 
             return Task.CompletedTask;
         }
@@ -199,9 +199,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             }
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             loadingCancellationTokenSource?.Dispose();
+            base.Dispose();
         }
     }
 }

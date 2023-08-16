@@ -123,7 +123,10 @@
   <data name="Attachments_uploaded_file_is_not_image" xml:space="preserve">
     <value>Загруженный файл не является изображением</value>
   </data>
-  <data name="CantMoveSubsectionInWrongPosition" xml:space="preserve">
+  <data name="Attachments_uploaded_file_image_is_too_big" xml:space="preserve">
+    <value>Размеры изображения слишком велики</value>
+  </data>
+    <data name="CantMoveSubsectionInWrongPosition" xml:space="preserve">
     <value>Недопустимо перемещение подсекции  {0} в позицию {1}.</value>
   </data>
   <data name="ComboboxCannotBeFound" xml:space="preserve">
@@ -313,6 +316,9 @@
     <value>Заголовок {0} не был найден в excel файле</value>
     <comment>Заголовок {0} не был найден в excel файле</comment>
   </data>
+  <data name="HeaderWasNotFound" xml:space="preserve">
+    <value>Заголовок не был найден в файле</value>
+  </data>
   <data name="Column" xml:space="preserve">
     <value>столбец</value>
   </data>
@@ -340,6 +346,9 @@
   <data name="ImportOptions_TitleTooLong" xml:space="preserve">
     <value>Название слишком длинное. Название должно быть не больше {0} символов</value>
   </data>
+  <data name="ImportOptions_AttachmentNameTooLong" xml:space="preserve">
+    <value>Имя файла слишком длинное. Имя должно быть не больше {0} символов</value>
+  </data>    
   <data name="ImportOptions_ValueIsNotUnique" xml:space="preserve">
     <value>Дубликат категории '{0}' со значением '{1}'</value>
   </data>

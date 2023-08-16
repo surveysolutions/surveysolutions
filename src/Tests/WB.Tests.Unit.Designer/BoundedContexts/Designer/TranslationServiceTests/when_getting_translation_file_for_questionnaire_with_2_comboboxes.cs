@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ClosedXML.Excel;
+using ClosedXML.Graphics;
 using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using SixLabors.Fonts;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
@@ -46,20 +50,24 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             translationsStorage.TranslationInstances.AddRange(storedTranslations);
             translationsStorage.SaveChanges();
 
-            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            questionnaires.SetReturnsDefault(questionnaire);
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
 
             service = Create.TranslationsService(translationsStorage, questionnaires.Object);
             BecauseOf();
         }
 
-        private void BecauseOf() => translationFile = service.GetAsExcelFile(questionnaireId, translationId);
+        private void BecauseOf() => translationFile = service.GetAsExcelFile(new QuestionnaireRevision(questionnaireId), translationId);
 
 
         [NUnit.Framework.Test]
         public void should_exported_excel_file_has_3_specified_worksheets()
         {
-            using var excelWorkbook = new XLWorkbook(new MemoryStream(translationFile.ContentAsExcelFile));
+            //non windows fonts
+            var firstFont = SystemFonts.Collection.Families.First();
+            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(firstFont.Name) };
+            
+            using var excelWorkbook = new XLWorkbook(new MemoryStream(translationFile.ContentAsExcelFile), loadOptions);
             var worksheetNames = excelWorkbook.Worksheets.Select(x => x.Name).ToList();
 
             worksheetNames.Should().BeEquivalentTo("Translations", "@@_singlequestionwithdiffinlast", "@@_singlequestionwithdiffinl_03");

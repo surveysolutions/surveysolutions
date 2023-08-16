@@ -38,6 +38,13 @@ export function convertToText(items, isCascading) {
                                 : option.parentValue || '') + '/';
                     stringifiedOptions +=
                         option.value === 0 ? '0' : option.value || '';
+
+                    if (
+                        option.attachmentName != null &&
+                        option.attachmentName != ''
+                    ) {
+                        stringifiedOptions += '...' + option.attachmentName;
+                    }
                     stringifiedOptions += '\n';
                 }
 
@@ -60,11 +67,10 @@ export function convertToText(items, isCascading) {
 
 export function convertToTable(stringified, isCascading) {
     const regex = isCascading
-        ? /(.+?)[….\s]+([-+]?\d+)\/([-+]?\d+)\s*/
-        : /(.+?)[….\s]+([-+]?\d+)\s*$/;
+        ? /(.+?)(\.)+([-+]?\d+)\/([-+]?\d+)((\.\.\.)(.+?))?\s*$/
+        : /(.+?)(\.)+([-+]?\d+)((\.\.\.)(.+?))?\s*$/;
 
     var optionsStringList = (stringified || '').split('\n');
-
     optionsStringList = optionsStringList.filter(function(line) {
         return line.trim() != null && line.trim() != '';
     });
@@ -75,22 +81,27 @@ export function convertToTable(stringified, isCascading) {
             return {};
         }
         if (isCascading) {
+            let attachmentC = matches.length > 6 ? matches[7] : '';
             if (matches.length > 3) {
                 return {
-                    value: matches[3] * 1,
-                    parentValue: matches[2] * 1,
-                    title: matches[1]
+                    value: matches[4] * 1,
+                    parentValue: matches[3] * 1,
+                    title: matches[1],
+                    attachmentName: attachmentC
                 };
             } else
                 return {
                     value: matches[2] * 1,
                     title: matches[1]
                 };
-        } else
+        } else {
+            let attachment = matches.length > 5 ? matches[6] : '';
             return {
-                value: matches[2] * 1,
-                title: matches[1]
+                value: matches[3] * 1,
+                title: matches[1],
+                attachmentName: attachment
             };
+        }
     });
 
     return options;
@@ -101,8 +112,8 @@ export function validateText(value, isCascading) {
     var options = (value || '').split(/\r\n|\r|\n/);
 
     const regex = isCascading
-        ? /(.+?)[….\s]+([-+]?\d+)\/([-+]?\d+)$/
-        : /(.+?)[….\s]+([-+]?\d+)$/;
+        ? /(.+?)(\.)+([-+]?\d+)\/([-+]?\d+)((\.\.\.)(.+?))?$/
+        : /(.+?)(\.)+([-+]?\d+)((\.\.\.)(.+?))?$/;
 
     const diff = [];
     for (var i = 0; i < options.length; i++) {

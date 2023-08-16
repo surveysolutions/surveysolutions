@@ -211,13 +211,18 @@ namespace WB.UI.Headquarters
                 externalStoragesSettings = Configuration.GetSection("ExternalStorages").Get<ExternalStoragesSettings>();
             }
 
+            var fileSystemEmailServiceSettings = new FileSystemEmailServiceSettings(false, null, null, null, null, null);
+            if (Configuration.GetSection("FileSystemEmailServiceSettings").Exists())
+            {
+                fileSystemEmailServiceSettings = Configuration.GetSection("FileSystemEmailServiceSettings").Get<FileSystemEmailServiceSettings>();
+            }
+
             return new HeadquartersBoundedContextModule(userPreloadingSettings,
                 sampleImportSettings,
                 synchronizationSettings,
                 new TrackingSettings(trackingSection.WebInterviewPauseResumeGraceTimespan),
                 externalStoragesSettings: externalStoragesSettings,
-                fileSystemEmailServiceSettings:
-                    new FileSystemEmailServiceSettings(false, null, null, null, null, null),
+                fileSystemEmailServiceSettings: fileSystemEmailServiceSettings,
                 syncPackagesJobSetting: new SyncPackagesProcessorBackgroundJobSetting(true, syncPackageSection.SynchronizationInterval, syncPackageSection.SynchronizationBatchCount, syncPackageSection.SynchronizationParallelExecutorsCount)
             );
         }
@@ -376,7 +381,12 @@ namespace WB.UI.Headquarters
             services.AddQuartzIntegration(Configuration,
                 DbUpgradeSettings.FromFirstMigration<M201905151013_AddQuartzTables>());
 
-            services.AddMediatR(typeof(Startup), typeof(HeadquartersBoundedContextModule));
+            services.AddMediatR(cfg =>
+                cfg.RegisterServicesFromAssembly(typeof(Startup).Assembly));
+            
+            services.AddMediatR(cfg =>
+                cfg.RegisterServicesFromAssembly(typeof(HeadquartersBoundedContextModule).Assembly));
+
         }
 
         private static void AddCompression(IServiceCollection services)
@@ -444,7 +454,8 @@ namespace WB.UI.Headquarters
                     new CultureInfo("id"),
                     new CultureInfo("pt"),
                     new CultureInfo("zh"),
-                    new CultureInfo("ro")
+                    new CultureInfo("ro"),
+                    new CultureInfo("uk"),
                 };
             });
 
@@ -479,7 +490,10 @@ namespace WB.UI.Headquarters
             app.UseSwagger();
             app.UseSession();
             app.UseResponseCompression();
-            app.UseRequestDecompression();
+
+            //resolve ambiguity
+            RequestDecompressionApplicationBuilderExtensions.UseRequestDecompression(app);
+            //app.UseRequestDecompression();
 
             app.UseHqSwaggerUI();
 

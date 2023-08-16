@@ -18,6 +18,20 @@ angular.module('designerApp')
                 rostersCount: 0
             };
 
+            $scope.$on("translationChanged", function(scope, e) {
+                var newId = e.newTranslationId;
+                var oldId = e.oldTranslationId;
+                var translation = _.find($scope.questionnaire.translations, { translationId: oldId })
+                if (translation)
+                    translation.translationId = newId
+            });
+            $scope.$on("translationRemoved", function(scope, e) {
+                var id = e.translationId;
+                $scope.questionnaire.translations = _.filter($scope.questionnaire.translations, function (item) {
+                    return item.translationId != id;
+                });
+            });
+
             var openCompilationPage = 'ctrl+shift+b';
             var focusTreePane = 'shift+alt+x';
             var focusEditorPane = 'shift+alt+e';
@@ -89,7 +103,7 @@ angular.module('designerApp')
             if (hotkeys.get(openChaptersPane) !== false) {
                 hotkeys.del(openChaptersPane);
             }
-            hotkeys.add(openChaptersPane, $i18next.t('OpenSection'), function (event) {
+            hotkeys.add(openChaptersPane, $i18next.t('HotkeysOpenSection'), function (event) {
                 event.preventDefault();
                 $scope.$broadcast("openChaptersList", "");
             });
@@ -144,7 +158,7 @@ angular.module('designerApp')
             };
 
             var scenarioEditorShown = false;
-            $scope.showScenarioEditor = function(scenarioId) {
+            $scope.showScenarioEditor = function(scenarioId, scenarioTitle) {
                 if (!scenarioEditorShown) {
                     var modalInstance = $uibModal.open({
                         templateUrl: 'views/scenario-editor.html',
@@ -154,7 +168,8 @@ angular.module('designerApp')
                         controller: 'scenarioEditorCtrl',
                         resolve: {
                             isReadOnlyForUser: $scope.questionnaire.isReadOnlyForUser || false,
-                            scenarioId: scenarioId
+                            scenarioId: scenarioId,
+                            scenarioTitle: function(){ return scenarioTitle }
                         }
                     });
                     scenarioEditorShown = true;
@@ -608,7 +623,7 @@ angular.module('designerApp')
                 setCommonAceOptions(editor);
             };
 
-            $scope.aceLoadedForOtionFilter = $scope.aceLoaded = function (editor) {
+            $scope.aceLoadedForOptionFilter = $scope.aceLoaded = function (editor) {
                 $scope.aceLoaded(editor, "linkedOptionsFilter");
             }
             $scope.aceLoaded = function (editor, editorType) {
@@ -622,12 +637,18 @@ angular.module('designerApp')
                     enableLiveAutocompletion: true
                 });
                 $scope.aceEditorUpdateMode(editor, editorType);
+                editor.getSession().setUseWrapMode(true);
                 
-                $rootScope.$on('variablesChanged', function () {
+                const unbindEventHandler = $rootScope.$on('variablesChanged', function () {
                     $scope.aceEditorUpdateMode(editor, editorType);
                 });
 
                 setCommonAceOptions(editor);
+
+                // remove subscription on delete editor element
+                $(editor.container).on('$destroy', function () {
+                    unbindEventHandler();
+                });
             };
 
             $scope.getVariablesNames = function () {

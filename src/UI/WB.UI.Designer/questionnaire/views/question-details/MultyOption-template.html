@@ -1,11 +1,4 @@
-﻿<div class="row" ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked && !activeQuestion.isLinkedToReusableCategories">
-    <div class="col-xs-12">
-        <div class="well well-sm" ng-if="activeQuestion.wereOptionsTruncated" ng-i18next="({count: 200})QuestionOptionsCut"></div>
-        <ng-include src="'views/question-details/OptionsEditor-template.html'"></ng-include>
-        <p></p>
-    </div>
-</div>
-<div class="row">
+﻿<div class="row">
     <div class="col-xs-12">
         <label class="wb-label" for="cb-categorical-kind" ng-i18next="QuestionDisplayMode"></label>
     </div>
@@ -54,11 +47,17 @@
                     </li>
                     <li role="presentation">
                         <a role="menuitem" tabindex="-1" ng-i18next="RostersQuestion" ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.yesNoView" ng-click="setIsLinkedQuestion()"></a>
-                    </li>
-                    </li>
+                    </li>                    
                 </ul>
             </div>
         </div>
+        <p></p>
+    </div>
+</div>
+<div class="row" ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked && !activeQuestion.isLinkedToReusableCategories">
+    <div class="col-xs-12">
+        <div class="well well-sm" ng-if="activeQuestion.wereOptionsTruncated" ng-i18next="({count: 200})QuestionOptionsCut"></div>
+        <ng-include src="'views/question-details/OptionsEditor-template.html'"></ng-include>
         <p></p>
     </div>
 </div>
@@ -100,7 +99,7 @@
 <div class="row" ng-if="activeQuestion.isFilteredCombobox && !activeQuestion.isLinkedToReusableCategories">
     <div class="col-xs-12">
         <a href="javascript:void(0);"
-           class="btn btn-link"
+           class="btn btn-link upload-categories-button"
            ng-click="editFilteredComboboxOptions()" ng-i18next="QuestionUploadOptions">
         </a>
         <a href="javascript:void(0);"
@@ -124,7 +123,7 @@
 </div>
 <div class="row table-holder">
     <div class="col-xs-5">
-        <div class="checkbox checkbox-in-column" ng-if="!activeQuestion.isFilteredCombobox">
+        <div class="checkbox checkbox-in-column">
             <input id="cb-is-ordered" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.areAnswersOrdered" />
             <label for="cb-is-ordered"><span></span>{{'QuestionOrdered' | i18next}}</label>
         </div>

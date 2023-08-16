@@ -33,7 +33,5 @@ namespace Ncqrs.Eventing.Storage
         Task<int> TotalEventsCountAsync(Guid aggregateRootId);
         Guid? GetLastEventId(Guid interviewId, params string[] excludeTypeNames);
         IEnumerable<CommittedEvent> ReadAfter(Guid aggregateRootId, Guid eventId);
-
-        IEnumerable<CommittedEvent> Read(Guid aggregateRootId, params string[] typeNames);
     }
 }

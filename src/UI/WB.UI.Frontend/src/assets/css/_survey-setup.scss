@@ -192,7 +192,18 @@
 	padding: 30px;
 	padding-bottom: 0;
 	align-items: center;
-	&:before {
+	.email-example-table{
+        font-family: Arial, Helvetica, sans-serif; 
+        font-size: 14px; 
+        box-sizing: border-box; 
+        max-width: 600px; 
+        background-image: url("../img/logo.svg");
+        background-repeat: no-repeat; 
+        background-size: 270px auto; 
+        background-position: 115% 45px;        
+    }
+    
+    &:before {
 		display: block;
 		position: absolute;
 		content: '';
@@ -203,8 +214,8 @@
 		border-radius: 50%;
 		background-color: #f44;
 		box-shadow: 0 0 0 2px #f44, 1.5em 0 0 2px #9b3, 3em 0 0 2px #fb5;
-	  }
-	  &:after {
+	}
+	&:after {
 		display: block;
 		position: absolute;
 		content: '';

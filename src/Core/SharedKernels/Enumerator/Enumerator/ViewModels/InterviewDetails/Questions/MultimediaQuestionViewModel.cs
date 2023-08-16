@@ -3,9 +3,8 @@ using System.IO;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
-using Plugin.Permissions;
-using Plugin.Permissions.Abstractions;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -18,6 +17,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using Xamarin.Essentials;
 using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
@@ -52,7 +52,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IViewModelNavigationService viewModelNavigationService,
             QuestionStateViewModel<PictureQuestionAnswered> questionStateViewModel,
             QuestionInstructionViewModel instructionViewModel,
-            AnsweringViewModel answering)
+            AnsweringViewModel answering,
+            IFileSystemAccessor fileSystemAccessor
+            )
         {
             this.userId = principal.CurrentUserIdentity.UserId;
             this.interviewRepository = interviewRepository;
@@ -62,6 +64,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.pictureChooser = pictureChooser;
             this.userInteractionService = userInteractionService;
             this.questionState = questionStateViewModel;
+            this.fileSystemAccessor = fileSystemAccessor;
             this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
             this.viewModelNavigationService = viewModelNavigationService;
@@ -69,6 +72,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public AnsweringViewModel Answering { get; }
 
+        public string AnswerFileName { get; set; }
         public byte[] Answer
         {
             get => this.answer;
@@ -91,7 +95,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     new PhotoViewViewModelArgs
                     {
                         InterviewId = this.interviewId,
-                        FileName = this.GetPictureFileName()
+                        FileName = this.AnswerFileName
                     });
             }
         });
@@ -99,6 +103,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public QuestionInstructionViewModel InstructionViewModel { get; }
 
         private readonly QuestionStateViewModel<PictureQuestionAnswered> questionState;
+        private readonly IFileSystemAccessor fileSystemAccessor;
         public bool IsSignature { get; private set; }
         public IQuestionStateViewModel QuestionState => this.questionState;
 
@@ -121,6 +126,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 var multimediaAnswer = multimediaQuestion.GetAnswer();
                 this.Answer =  this.imageFileStorage.GetInterviewBinaryData(this.interviewId, multimediaAnswer.FileName);
+                this.AnswerFileName = multimediaAnswer.FileName;
             }
 
             this.eventRegistry.Subscribe(this, interviewId);
@@ -173,7 +179,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     }
                     else if (choosen == UIResources.Multimedia_PickFromGallery)
                     {
-                        pictureStream = await this.pictureChooser.ChoosePictureGallery();
+                        var choosePictureResult = await this.pictureChooser.ChoosePictureGallery();
+                        if (choosePictureResult != null)
+                        {
+                            var extension = fileSystemAccessor.GetFileExtension(choosePictureResult.FileName);
+                            pictureFileName = this.GetPictureFileName(extension);
+                            pictureStream = choosePictureResult.Stream;
+                        }
                     }
 
                     if (pictureStream != null)
@@ -195,6 +207,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                                 this.Answer =
                                     await this.imageFileStorage.GetInterviewBinaryDataAsync(this.interviewId,
                                         pictureFileName);
+                                this.AnswerFileName = pictureFileName;
                                 await this.QuestionState.Validity.ExecutedWithoutExceptions();
                             }
                             catch (InterviewException ex)
@@ -205,12 +218,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         }
                     }
                 }
-                catch (MissingPermissionsException e) when (e.PermissionType == typeof(CameraPermission))
+                catch (MissingPermissionsException e) when (e.PermissionType == typeof(Permissions.Camera))
                 {
                     await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
                         .MissingPermissions_Camera);
                 }
-                catch (MissingPermissionsException e) when (e.PermissionType == typeof(StoragePermission))
+                catch (MissingPermissionsException e) when (e.PermissionType == typeof(Permissions.StorageWrite))
                 {
                     await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
                         .MissingPermissions_Storage);
@@ -226,8 +239,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             try
             {
-                var pictureFileName = this.GetPictureFileName();
-                await this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
+                await this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, this.AnswerFileName);
 
                 await this.Answering.SendQuestionCommandAsync(
                     new RemoveAnswerCommand(this.interviewId,
@@ -247,8 +259,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 if (this.questionIdentity.Equals(question.Id, question.RosterVector))
                 {
+                    this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, this.AnswerFileName);
                     this.Answer = null;
-                    this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, this.GetPictureFileName());
+                    this.AnswerFileName = null;
                 }
             }
         }
@@ -264,7 +277,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private string GetSignaturePointsFileName() => $"{this.variableName}__{this.questionIdentity.RosterVector}__signature.json";
-        private string GetPictureFileName() => AnswerUtils.GetPictureFileName(this.variableName, this.questionIdentity.RosterVector);
+        private string GetPictureFileName(string extension = ".jpg") => AnswerUtils.GetPictureFileName(this.variableName, this.questionIdentity.RosterVector, extension);
 
         public void Dispose()
         {

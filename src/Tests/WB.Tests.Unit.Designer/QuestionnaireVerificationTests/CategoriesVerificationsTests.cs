@@ -63,14 +63,14 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 Name = "name"
             });
 
-            var categoriesService = Mock.Of<ICategoriesService>(x =>
+            var categoriesService = Mock.Of<IReusableCategoriesService>(x =>
                 x.GetCategoriesById(It.IsAny<Guid>(), categoriesId) == new List<CategoriesItem>()
                 {
                     new CategoriesItem {Id = 1, ParentId = 2, Text = "child 2"},
                     new CategoriesItem {Id = 1, ParentId = 2, Text = "child 3"}
                 }.AsQueryable());
 
-            var verifier = CreateQuestionnaireVerifier(categoriesService: categoriesService);
+            var verifier = CreateQuestionnaireVerifier(reusableCategoriesService: categoriesService);
 
             // act
             var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
@@ -116,14 +116,14 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 Name = "name"
             });
 
-            var categoriesService = Mock.Of<ICategoriesService>(x =>
+            var categoriesService = Mock.Of<IReusableCategoriesService>(x =>
                 x.GetCategoriesById(It.IsAny<Guid>(), categoriesId) == new List<CategoriesItem>()
                 {
                     new CategoriesItem {Id = 1, ParentId = 2, Text = "child 2"},
                     new CategoriesItem {Id = 3, ParentId = 2, Text = "child 2"}
                 }.AsQueryable());
 
-            var verifier = CreateQuestionnaireVerifier(categoriesService: categoriesService);
+            var verifier = CreateQuestionnaireVerifier(reusableCategoriesService: categoriesService);
 
             // act
             var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
@@ -157,10 +157,10 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 Name = "name"
             });
 
-            var categoriesService = Mock.Of<ICategoriesService>(x =>
+            var categoriesService = Mock.Of<IReusableCategoriesService>(x =>
                 x.GetCategoriesById(It.IsAny<Guid>(), categoriesId) == new List<CategoriesItem>().AsQueryable());
 
-            var verifier = CreateQuestionnaireVerifier(categoriesService: categoriesService);
+            var verifier = CreateQuestionnaireVerifier(reusableCategoriesService: categoriesService);
 
             // act
             var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));

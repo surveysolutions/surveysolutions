@@ -121,37 +121,37 @@
     <value>Probíhá stahování opakovaně použitelné kategorie {0}</value>
   </data>
   <data name="GetAssignmentFormat" xml:space="preserve">
-    <value>Stáhnout přidělení ({0})&lt;/br&gt;</value>
+    <value>Stáhnout dotazník ({0})&lt;/br&gt;</value>
   </data>
   <data name="GetAssignmentsFormat" xml:space="preserve">
-    <value>Seznam přiřazení ke stažení ({0}). &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;</value>
+    <value>Stáhnout seznam dotazníků ({0}). &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;</value>
   </data>
   <data name="GetAttachmentContent" xml:space="preserve">
     <value>Stáhněte si obsah přílohy: {0}</value>
   </data>
   <data name="GetCensusQuestionnaires" xml:space="preserve">
-    <value>Seznam úplných dotazníků ke stažení: &lt;br/&gt; &lt;ul&gt;{0}&lt;/ul&gt;</value>
+    <value>Seznam úplných typů dotazníků ke stažení: &lt;br/&gt; &lt;ul&gt;{0}&lt;/ul&gt;</value>
   </data>
   <data name="GetInterview" xml:space="preserve">
-    <value>Stáhněte si dotazník: &lt;b&gt;{0}&lt;/b&gt;</value>
+    <value>Stáhněte si rozhovor: &lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
   <data name="GetInterviewer" xml:space="preserve">
     <value>Stáhněte si informace od tazatele. &lt;br/&gt;Garant: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
   </data>
   <data name="GetInterviewPackage" xml:space="preserve">
-    <value>Stáhněte si balíček s dotazníky: &lt;b&gt;{0}&lt;/b&gt;</value>
+    <value>Stáhněte si balíček s rozhovory: &lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
   <data name="GetInterviewPackages" xml:space="preserve">
-    <value>Balíček dotazníků ke stažení. &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;Balíček z poslední synchronizace: &lt;b&gt;{0}&lt;/b&gt;</value>
+    <value>Stáhnout balíček rozhovorů. &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;Balíček z poslední synchronizace: &lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
   <data name="GetInterviewPackageV3" xml:space="preserve">
-    <value>&lt;b&gt;V3&lt;/b&gt; Stažen balíček s dotazníky: {0}</value>
+    <value>&lt;b&gt;V3&lt;/b&gt; Stáhnout balíček s rozhovory: {0}</value>
   </data>
   <data name="GetInterviewPatch" xml:space="preserve">
-    <value>Stáhněte si změny dotazníku z ústředí: {0}</value>
+    <value>Stáhněte si změny dotazníku z Ústředí: {0}</value>
   </data>
   <data name="GetInterviews" xml:space="preserve">
-    <value>Seznam dotazníků ke stažení. &lt;/br&gt; &lt;ul&gt; {0} &lt;/ul&gt;</value>
+    <value>Seznam rozhovorů ke stažení. &lt;/br&gt; &lt;ul&gt; {0} &lt;/ul&gt;</value>
   </data>
   <data name="GetMap" xml:space="preserve">
     <value>Staženo map: {0}</value>
@@ -160,16 +160,16 @@
     <value>Mapy ke stažení. &lt;/br&gt; &lt;ul&gt; {0} &lt;/ul&gt;</value>
   </data>
   <data name="GetQuestionnaire" xml:space="preserve">
-    <value>Dotazník ke stažení: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+    <value>Typ dotazníku ke stažení: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
   </data>
   <data name="GetQuestionnaireAssembly" xml:space="preserve">
-    <value>Dotazníkové sestavy ke stažení: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+    <value>Sestavy typů dotazníků ke stažení: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
   </data>
   <data name="GetQuestionnaireAttachments" xml:space="preserve">
-    <value>Přílohy dotazníku ke stažení: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+    <value>Přílohy typu dotazníků ke stažení: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
   </data>
   <data name="GetTranslations" xml:space="preserve">
-    <value>Stáhněte si překlad dotazníku &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+    <value>Stáhněte si překlad typu dotazníku &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
   </data>
   <data name="NoMapsForUser" xml:space="preserve">
     <value>Žádné mapy ke stažení</value>
@@ -178,9 +178,99 @@
     <value>Žádné nové balíčky dotazníků ke stažení</value>
   </data>
   <data name="PostPackage" xml:space="preserve">
-    <value>Nahrát dotazník: {0}</value>
+    <value>Nahrát rozhovor: {0}</value>
   </data>
   <data name="PostPackageV3" xml:space="preserve">
-    <value>&lt;b&gt;V3&lt;/b&gt; Nahrajte dotazník: {0}</value>
+    <value>&lt;b&gt;V3&lt;/b&gt; Nahrát rozhovor: {0}</value>
+  </data>
+  <data name="ApkRequested" xml:space="preserve">
+    <value>Požadován nový soubor aplikace</value>
+  </data>
+  <data name="AssignmentReceivedByTablet" xml:space="preserve">
+    <value>Dotazník &lt;b&gt;{0}&lt;/b&gt; stažen a uložen do tabletu</value>
+  </data>
+  <data name="CalendarEventsListFormat" xml:space="preserve">
+    <value>Stáhnout kalendář schůzek ({0}). &lt;/br&gt; &lt;ul&gt; {1}&lt;/ul&gt;</value>
+  </data>
+  <data name="CanSynchronize" xml:space="preserve">
+    <value>Spustit synchronizaci</value>
+  </data>
+  <data name="CensusQuestionnaire" xml:space="preserve">
+    <value>&lt;li&gt;&lt;b&gt;{0}&lt;/b&gt; [{1}]&lt;/li&gt;</value>
+  </data>
+  <data name="CheckIsPackageDuplicatedFormat" xml:space="preserve">
+    <value>Zkontrolujte duplicitní rozhovor. Rozhovor: &lt;pre&gt;{0}&lt;/pre&gt;</value>
+  </data>
+  <data name="CheckObsoleteInterviews" xml:space="preserve">
+    <value>Zkontrolujte starší rozhovory. Požadavek: &lt;pre&gt;{0}&lt;/pre&gt;</value>
+  </data>
+  <data name="DeleteInterviewPackage" xml:space="preserve">
+    <value>&lt;li&gt;Smazat rozhovor: &lt;a href="{3}"&gt;{0}&lt;/a&gt;, Balíček: {1}, Index řazení: {2}&lt;/li&gt;</value>
+  </data>
+  <data name="DeviceCanBeAssignedToInterviewer" xml:space="preserve">
+    <value>Zařízení lze přiřadit tazateli</value>
+  </data>
+  <data name="DeviceRelinkRequired" xml:space="preserve">
+    <value>&lt;font color="orange"&gt;Vyžadováno opětovné propojení&lt;/font&gt;</value>
+  </data>
+  <data name="DeviceUpdateRequired" xml:space="preserve">
+    <value>&lt;font color="red"&gt;Je vyžadována aktualizace. Verze nástroje pro tazatele – &lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
+  </data>
+  <data name="EmptyDevice" xml:space="preserve">
+    <value>&lt;b&gt;[PRÁZDNÉ ZAŘÍZENÍ]&lt;/b&gt;</value>
+  </data>
+  <data name="ExtendedApkRequested" xml:space="preserve">
+    <value>Požadován nový soubor rozšířené aplikace</value>
+  </data>
+  <data name="ExtendedPatchRequestedFormat" xml:space="preserve">
+    <value>Vyžádaný opravný soubor pro rozšířenou verzi {0}</value>
+  </data>
+  <data name="FailToChangePassword" xml:space="preserve">
+    <value>Uživateli se nepodařilo změnit heslo</value>
+  </data>
+  <data name="GetCalendarEventPackage" xml:space="preserve">
+    <value>Stáhnout kalendář schůzek: {0}</value>
+  </data>
+  <data name="InterviewerFailedToLogin" xml:space="preserve">
+    <value>Tazateli se nepodařilo přihlásit</value>
+  </data>
+  <data name="InterviewerHasDevice" xml:space="preserve">
+    <value>Tazatel již má zařízení</value>
+  </data>
+  <data name="InterviewerLoggedIn" xml:space="preserve">
+    <value>Tazatel se přihlásil a získal "AuthToken"</value>
+  </data>
+  <data name="InterviewPackageProcessed" xml:space="preserve">
+    <value>&lt;font color="green"'&gt;Balíček s rozhovory &lt;b&gt;{0}&lt;/b&gt; úspěšně zpracován&lt;/font&gt;</value>
+  </data>
+  <data name="InterviewProcessed" xml:space="preserve">
+    <value>&lt;font color="green"'&gt;Rozhovor &lt;b&gt;{0}&lt;/b&gt; úspěšně zpracován&lt;/font&gt;</value>
+  </data>
+  <data name="LinkToDevice" xml:space="preserve">
+    <value>Propojit tazatele se zařízením</value>
+  </data>
+  <data name="PasswordChanged" xml:space="preserve">
+    <value>Heslo bylo změněno a získán "AuthToken"</value>
+  </data>
+  <data name="PatchRequestedFormat" xml:space="preserve">
+    <value>Vyžádaný opravný soubor pro verzi {0}</value>
+  </data>
+  <data name="PostCalendarEventPackage" xml:space="preserve">
+    <value>Nahrát schůzku do kalendáře: {0}</value>
+  </data>
+  <data name="QuestionnaireAssemblyProcessed" xml:space="preserve">
+    <value>&lt;font color="green"'&gt;Sestavení typu dotazníku &lt;b&gt;{0}&lt;/b&gt; [{1}] úspěšně zpracováno&lt;/font&gt;</value>
+  </data>
+  <data name="QuestionnaireProcessed" xml:space="preserve">
+    <value>&lt;font color="green"'&gt;typ dotazníku &lt;b&gt;{0}&lt;/b&gt; [{1}] úspěšně zpracován&lt;/font&gt;</value>
+  </data>
+  <data name="SupervisorApkRequested" xml:space="preserve">
+    <value>Požadován nový soubor aplikace Garant</value>
+  </data>
+  <data name="SupervisorPatchRequestedFormat" xml:space="preserve">
+    <value>Opravný soubor Garanta je vyžadován pro verzi {0}</value>
+  </data>
+  <data name="UpdateInterviewPackage" xml:space="preserve">
+    <value>&lt;li&gt;Upravit rozhovor: &lt;a href="{3}"&gt;{0}&lt;/a&gt;, Balíček: {1}, Index řazení: {2}&lt;/li&gt;</value>
   </data>
 </root>

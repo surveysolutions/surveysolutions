@@ -179,6 +179,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public bool HasErrors { get; private set; }
 
+        public bool IsCoverPageSupported() => GetQuestionnaireOrThrow().IsCoverPageSupported;
         public bool IsCompleted { get; private set; }
 
         public InterviewTreeGroup GetGroup(Identity identity) => this.Tree.GetGroup(identity);
@@ -896,6 +897,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return questionnaire.GetAttachmentIdByName(attachmentName);
         }
 
+        public string GetAttachmentForEntityOption(Identity entityId, int optionValue, int? parentValue)
+        {
+            var questionnaire = this.GetQuestionnaireOrThrow(this.Language);
+            var categoricalOption = questionnaire.GetOptionForQuestionByOptionValue(entityId.Id, optionValue, parentValue);
+            return categoricalOption?.AttachmentName;
+        }
+
         public InterviewSimpleStatus GetInterviewSimpleStatus(bool includingSupervisorEntities)
         {
             int invalidEntities = includingSupervisorEntities
@@ -925,6 +933,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 ActiveQuestionCount = activeQuestionsCount,
                 AnsweredQuestionsCount = answeredQuestionsCount
             };
+        }
+
+        public IEnumerable<Identity> GetNeighboringQuestionIdentities(Identity identity)
+        {
+            return FindEntity(identity.Id).Where(id => id != identity);
         }
 
         private GroupStatus GetGroupStatus(SimpleGroupStatus simpleStatus, int questionsCount, int answeredQuestionsCount)

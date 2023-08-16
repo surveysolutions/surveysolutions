@@ -22,6 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
             var idAddress = string.Format(messageFormat, headers.IdIndex);
             var parentIdAddress = string.Format(messageFormat, headers.ParentIdIndex);
             var textAddress = string.Format(messageFormat, headers.TextIndex);
+            var attachmentNameAddress = string.Format(messageFormat, headers.AttachmentNameIndex);
 
             if (string.IsNullOrEmpty(categoriesRow.Id))
                 return new ImportValidationError

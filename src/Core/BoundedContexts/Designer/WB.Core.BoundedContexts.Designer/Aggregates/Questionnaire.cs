@@ -103,7 +103,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
         private readonly IDesignerTranslationService translationService;
-        private readonly ICategoriesService categoriesService;
+        private readonly IReusableCategoriesService reusableCategoriesService;
         private readonly IFindReplaceService findReplaceService;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
         private int affectedByReplaceEntries;
@@ -116,7 +116,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             IAttachmentService attachmentService,
             IDesignerTranslationService translationService,
             IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService,
-            ICategoriesService categoriesService,
+            IReusableCategoriesService reusableCategoriesService,
             IFindReplaceService findReplaceService)
         {
             this.clock = clock;
@@ -124,7 +124,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.attachmentService = attachmentService;
             this.translationService = translationService;
             this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
-            this.categoriesService = categoriesService;
+            this.reusableCategoriesService = reusableCategoriesService;
             this.findReplaceService = findReplaceService;
         }
 
@@ -195,7 +195,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
 
             foreach (var categories in clonedDocument.Categories)
-                this.categoriesService.CloneCategories(document.PublicKey, categories.Id, clonedDocument.PublicKey, categories.Id);
+                this.reusableCategoriesService.CloneCategories(document.PublicKey, categories.Id, clonedDocument.PublicKey, categories.Id);
 
             this.innerDocument = clonedDocument;
         }
@@ -851,6 +851,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ? this.GetQuestion(command.QuestionId)?.Answers.ToArray()
                 : ConvertOptionsToAnswers(command.Options);
 
+            if (command.CategoriesId.HasValue)
+                answers = Array.Empty<Answer>();
+            
             var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
             IQuestion newQuestion = CreateQuestion(
                 command.QuestionId,
@@ -920,6 +923,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ExtractLinkedQuestionValues(command.LinkedToEntityId, out linkedQuestionId, out linkedRosterId);
 
+            if (command.CategoriesId.HasValue)
+                answers = Array.Empty<Answer>();
+            
             var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
             IQuestion newQuestion = CreateQuestion(command.QuestionId,
                 QuestionType.SingleOption,
@@ -1524,7 +1530,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        public void RemoveSharedPerson(Guid personId, string email, Guid responsibleId)
+        public void RemoveSharedPerson(Guid personId, Guid responsibleId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsToUnsharePersonForQuestionnaire(personId, responsibleId);
 
@@ -1541,7 +1547,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerIsNotOwnerOfQuestionnaire(ownerId);
 
-            this.RemoveSharedPerson(newOwnerId, newOwnerEmail, ownerId);
+            this.RemoveSharedPerson(newOwnerId, ownerId);
             
             this.QuestionnaireDocument.CreatedBy = newOwnerId;
 
@@ -1654,8 +1660,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             if (targetToPasteIn.PublicKey == this.Id)
                 throw new QuestionnaireException(string.Format(ExceptionMessages.VariableCantBePaste));
-            if (IsCoverPage(targetToPasteIn.PublicKey))
-                throw new QuestionnaireException(string.Format(ExceptionMessages.VariableCantBePaste));
 
             var variable = (Variable) entityToInsertAsVariable.Clone();
             variable.PublicKey = pasteItemId;
@@ -1677,7 +1681,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var clonedGroup = entityToInsertAsGroup.Clone();
             var targetIsCoverPage = IsCoverPage(targetToPasteIn.PublicKey);
             var elementsToCopy = targetIsCoverPage
-                ? clonedGroup.Children.Where(el => el is IQuestion || el is StaticText)
+                ? clonedGroup.Children.Where(el => el is IQuestion or StaticText or Variable)
                 : clonedGroup.TreeToEnumerable(x => x.Children);
             elementsToCopy.ForEach(c =>
             {
@@ -2125,7 +2129,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             AnswerText = option.Title,
             ParentCode = option.ParentValue,
             ParentValue = option.ParentValue?.ToString(),
-            AnswerValue = option.Value.ToString()
+            AnswerValue = option.Value.ToString(),
+            AttachmentName = option.AttachmentName,
         };
 
         private static Answer[]? ConvertOptionsToAnswers(Option[]? options) 
@@ -2135,7 +2140,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             AnswerValue = option.Value,
             AnswerText = option.Title,
-            ParentValue = option.ParentValue
+            ParentValue = option.ParentValue,
+            AttachmentName = option.AttachmentName
         };
 
         private IQuestion? GetQuestion(Guid questionId)

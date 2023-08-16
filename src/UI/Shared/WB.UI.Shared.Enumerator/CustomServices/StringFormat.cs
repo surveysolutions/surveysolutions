@@ -10,15 +10,11 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 {
     public class StringFormat : IStringFormat
     {
-        private readonly IMvxAndroidCurrentTopActivity mvxCurrentTopActivity;
-
-        public StringFormat()
-        {
-            this.mvxCurrentTopActivity = Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>();
-        }
-
         public string ShortTime(DateTimeOffset dateTime)
         {
+            var mvxCurrentTopActivity = Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>();
+            if (mvxCurrentTopActivity == null) return null;
+            
             var timeFormat = DateFormat.GetTimeFormat(mvxCurrentTopActivity.Activity);
             var date = ToJavaDate(dateTime);
             var timeString = timeFormat?.Format(date);
@@ -28,6 +24,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         public string ShortDateTime(DateTimeOffset dateTime)
         {
             var time = ShortTime(dateTime);
+            if (time == null) return string.Empty;
+            
             var date = dateTime.ToString("MMM dd, ", CultureInfo.CurrentUICulture);
             return date + time;
         }

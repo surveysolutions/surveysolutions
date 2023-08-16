@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection
@@ -56,7 +57,18 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         
         public virtual async Task<IActionResult> LinkCurrentResponsibleToDevice(string id, int version)
         {
-            await this.userToDeviceService.LinkDeviceToUserAsync(this.authorizedUser.Id, id);
+            try
+            {
+                await this.userToDeviceService.LinkDeviceToUserAsync(this.authorizedUser.Id, id);
+            }
+            catch (InvalidOperationException e)
+            {
+                return this.StatusCode(StatusCodes.Status403Forbidden, new ServerError()
+                {
+                    Code = ServerErrorCodes.RelinkError,
+                    Message = e.Message
+                });
+            }
 
             return this.Ok();
         }

@@ -24,6 +24,9 @@ namespace WB.UI.Designer.Controllers
 {
     public partial class QuestionnaireController
     {
+        private string[] excelExtensions = new[] { ".xlsx", ".ods", ".xls" };
+        private string[] tsvExtensions = new[] { ".txt", ".tab", ".tsv", ".csv" };
+
         public ActionResult<EditOptionsViewModel> GetCategoryOptions(QuestionnaireRevision id, Guid categoriesId)
         {
             var categoriesView = this.questionnaireInfoFactory.GetCategoriesView(id, categoriesId);
@@ -31,15 +34,19 @@ namespace WB.UI.Designer.Controllers
             if (categoriesView == null)
                 return NotFound();
 
+            var questionnaireId = id.OriginalQuestionnaireId ?? id.QuestionnaireId;
             var categories =
-                this.categoriesService.GetCategoriesById(id.QuestionnaireId, categoriesId).
+                this.reusableCategoriesService.GetCategoriesById(questionnaireId, categoriesId).
                     Select(
                         option => new QuestionnaireCategoricalOption
                         {
                             Value = option.Id,
                             ParentValue = option.ParentId != null ? (int)option.ParentId.Value : (int?)null,
-                            Title = option.Text
+                            Title = option.Text,
+                            AttachmentName = option.AttachmentName
                         });
+
+            var isReadonly = IsReadOnly(id);
 
             return new EditOptionsViewModel
             (
@@ -48,8 +55,25 @@ namespace WB.UI.Designer.Controllers
                 categoriesName: categoriesView.Name,
                 options: categories.ToList(),
                 isCascading: false,
-                isCategories: true
+                isCategories: true,
+                isReadonly: isReadonly
             );
+        }
+
+        private bool IsReadOnly(QuestionnaireRevision questionnaireRevision)
+        {
+            if (questionnaireRevision.Revision != null)
+                return true;
+            
+            if (questionnaireRevision.OriginalQuestionnaireId.HasValue)
+                return true;
+
+            var userId = User.GetIdOrNull();
+            if (!userId.HasValue)
+                return true;
+
+            var hasUserAccessToEdit = questionnaireViewFactory.HasUserChangeAccessToQuestionnaire(questionnaireRevision.OriginalQuestionnaireId ?? questionnaireRevision.QuestionnaireId, userId.Value);
+            return !hasUserAccessToEdit;
         }
 
         public EditOptionsViewModel GetOptions(QuestionnaireRevision id, Guid questionId, bool isCascading)
@@ -62,9 +86,12 @@ namespace WB.UI.Designer.Controllers
                               {
                                   Value = option.Value != null ? (int)option.Value : throw new InvalidOperationException("Option Value must be not null."),
                                   ParentValue = option.ParentValue != null ? (int)option.ParentValue.Value : (int?)null,
-                                  Title = option.Title
+                                  Title = option.Title,
+                                  AttachmentName = option.AttachmentName
                               })
                 : new QuestionnaireCategoricalOption[0];
+            
+            var isReadonly = IsReadOnly(id);
 
             return new EditOptionsViewModel
             (
@@ -72,7 +99,8 @@ namespace WB.UI.Designer.Controllers
                 questionId: questionId,
                 questionTitle: editQuestionView?.Title,
                 options: options.ToList(),
-                isCascading: isCascading
+                isCascading: isCascading,
+                isReadonly: isReadonly
             )
             {
                 CascadeFromQuestionId = editQuestionView?.CascadeFromQuestionId
@@ -100,10 +128,27 @@ namespace WB.UI.Designer.Controllers
                 };
             }
 
+            var extension = this.fileSystemAccessor.GetFileExtension(csvFile.FileName);
+
+            if (!excelExtensions.Union(tsvExtensions).Contains(extension))
+            {
+                return new EditOptionsResponse
+                {
+                    Errors = new List<string>()
+                    {
+                        ExceptionMessages.ImportOptions_Tab_Or_Excel_Only
+                    }
+                };
+            }
+
+            var fileType = excelExtensions.Contains(extension)
+                ? CategoriesFileType.Excel
+                : CategoriesFileType.Tsv;
+            
             try
             {
                 var importResult = this.categoricalOptionsImportService.ImportOptions(
-                    csvFile.OpenReadStream(), id.ToString(), questionId);
+                    csvFile.OpenReadStream(), id.ToString(), questionId, fileType);
 
                 if (importResult.Succeeded)
                 {
@@ -113,16 +158,25 @@ namespace WB.UI.Designer.Controllers
                         {
                             ParentValue = c.ParentValue,
                             Title = c.Title,
-                            Value = c.Value
+                            Value = c.Value,
+                            AttachmentName = c.AttachmentName
                         }).ToArray()
                     };
                 }
-                else
-                    errors.AddRange(importResult.Errors);
+                
+                errors.AddRange(importResult.Errors);
+            }
+            catch (InvalidFileException e)
+            {
+                var sb = new StringBuilder();
+                sb.AppendLine(e.Message);
+                e.FoundErrors?.ForEach(x => sb.AppendLine(x.Message));
+
+                errors.Add(sb.ToString());
             }
             catch (Exception e)
             {
-                errors.Add(Resources.QuestionnaireController.TabFilesOnly);
+                errors.Add(Resources.QuestionnaireController.ExcelOrTabFilesOnly);
                 this.logger.LogError(e, e.Message);
             }
 
@@ -157,9 +211,6 @@ namespace WB.UI.Designer.Controllers
             {
                 var extension = this.fileSystemAccessor.GetFileExtension(csvFile.FileName);
 
-                var excelExtensions = new[] { ".xlsx", ".ods", ".xls" };
-                var tsvExtensions = new[] { ".txt", ".tab", ".tsv" };
-
                 if (!excelExtensions.Union(tsvExtensions).Contains(extension))
                 {
                     return new EditOptionsResponse
@@ -175,7 +226,7 @@ namespace WB.UI.Designer.Controllers
                     ? CategoriesFileType.Excel
                     : CategoriesFileType.Tsv;
 
-                var rows = this.categoriesService.GetRowsFromFile(csvFile.OpenReadStream(), fileType);
+                var rows = this.reusableCategoriesService.GetRowsFromFile(csvFile.OpenReadStream(), fileType);
 
                 return new EditOptionsResponse
                 {
@@ -186,7 +237,8 @@ namespace WB.UI.Designer.Controllers
                             Value = int.Parse(x.Id!),
                             ParentValue = string.IsNullOrEmpty(x.ParentId)
                                 ? (int?)null
-                                : int.Parse(x.ParentId)
+                                : int.Parse(x.ParentId),
+                            AttachmentName = x.AttachmentName
                         })
                         .ToArray()
                 };
@@ -205,7 +257,7 @@ namespace WB.UI.Designer.Controllers
             }
             catch (Exception e)
             {
-                errors.Add(Resources.QuestionnaireController.TabFilesOnly);
+                errors.Add(Resources.QuestionnaireController.ExcelOrTabFilesOnly);
                 this.logger.LogError(e, e.Message);
             }
 
@@ -218,6 +270,8 @@ namespace WB.UI.Designer.Controllers
             public int Value { set; get; }
             public int? ParentValue { set; get; }
             public string Title { set; get; } = String.Empty;
+
+            public string? AttachmentName { get; set; }
         }
 
         public class UpdateCategoriesModel
@@ -247,13 +301,14 @@ namespace WB.UI.Designer.Controllers
                 //remove double parse
                 try
                 {
-                    this.categoriesService.Store(questionnaireId,
+                    this.reusableCategoriesService.Store(questionnaireId,
                         categoriesId, categoriesModel.Categories.Select((x, i) => new CategoriesRow()
                         {
                             Id = x.Value.ToString(),
                             Text = x.Title,
                             ParentId = x.ParentValue == null ? "" : x.ParentValue.ToString(),
-                            RowId = i
+                            RowId = i,
+                            AttachmentName = x.AttachmentName
                         }).ToList());
                 }
                 catch (Exception e)
@@ -290,7 +345,8 @@ namespace WB.UI.Designer.Controllers
                 {
                     Value = x.Value,
                     ParentValue = x.ParentValue,
-                    Title = x.Title
+                    Title = x.Title,
+                    AttachmentName = x.AttachmentName
                 }).ToArray();
 
                 var command = isCascading
@@ -345,7 +401,7 @@ namespace WB.UI.Designer.Controllers
             return commandResult;
         }
 
-        public IActionResult ExportLookupTable(Guid id, Guid lookupTableId)
+        public IActionResult ExportLookupTable(QuestionnaireRevision id, Guid lookupTableId)
         {
             var lookupTableContentFile = this.lookupTableService.GetLookupTableContentFile(id, lookupTableId);
             if (lookupTableContentFile == null)
@@ -354,11 +410,17 @@ namespace WB.UI.Designer.Controllers
             return File(lookupTableContentFile.Content, "text/csv", lookupTableContentFile.FileName);
         }
 
-        public IActionResult ExportOptions(QuestionnaireRevision id, Guid entityId, bool isCategory, bool isCascading)
+        public IActionResult ExportOptions(QuestionnaireRevision id, string type, Guid entityId, bool isCategory, bool isCascading)
         {
+            var fileType = type == "xlsx" ? CategoriesFileType.Excel : CategoriesFileType.Tsv;
+            var contentType = fileType == CategoriesFileType.Excel
+                ? @"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                : "text/csv";
+            var fileExtension = fileType == CategoriesFileType.Excel ? "xlsx" : "txt";
+            
             if (isCategory)
             {
-                var categoriesFile = this.categoriesService.GetAsExcelFile(id.QuestionnaireId, entityId);
+                var categoriesFile = this.reusableCategoriesService.GetAsFile(id, entityId, fileType, hqImport: false);
 
                 if (categoriesFile?.Content == null) return NotFound();
 
@@ -368,18 +430,17 @@ namespace WB.UI.Designer.Controllers
 
                 var filename = this.fileSystemAccessor.MakeValidFileName($"[{categoriesName}]{categoriesFile.QuestionnaireTitle}");
 
-                return File(categoriesFile.Content,
-                    @"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{filename}.xlsx");
+                return File(categoriesFile.Content, contentType, $"{filename}.{fileExtension}");
             }
 
             var editQuestionView = this.questionnaireInfoFactory.GetQuestionEditView(id, entityId);
 
             var title = editQuestionView?.Title ?? "";
-            var fileDownloadName = this.fileSystemAccessor.MakeValidFileName($"Options-in-question-{title}.txt");
+            var fileDownloadName = this.fileSystemAccessor.MakeValidFileName($"Options-in-question-{title}.{fileExtension}");
 
-            var export = this.categoricalOptionsImportService.ExportOptions(id.QuestionnaireId.FormatGuid(), entityId);
+            var export = this.categoricalOptionsImportService.ExportOptions(id.QuestionnaireId.FormatGuid(), entityId, fileType, isCascading);
 
-            return File(export, "text/csv", fileDownloadName);
+            return File(export, contentType, fileDownloadName);
         }
 
         public class EditOptionsViewModel
@@ -391,10 +452,12 @@ namespace WB.UI.Designer.Controllers
                 string? questionTitle = null,
                 bool? isCascading = null,
                 bool? isCategories = null,
-                string? categoriesName = null)
+                string? categoriesName = null,
+                bool? isReadonly = true)
             {
                 if (questionId == null && categoriesId == null)
-                    throw new InvalidOperationException($"{nameof(categoriesId)} or {nameof(questionId)} should not be empty");
+                    throw new InvalidOperationException(
+                        $"{nameof(categoriesId)} or {nameof(questionId)} should not be empty");
 
                 QuestionnaireId = questionnaireId;
                 if (questionId != null)
@@ -409,6 +472,7 @@ namespace WB.UI.Designer.Controllers
                 QuestionTitle = questionTitle;
                 IsCascading = isCascading ?? false;
                 IsCategories = isCategories ?? false;
+                IsReadonly = isReadonly ?? true;
             }
 
             public string QuestionnaireId { get; set; }
@@ -423,6 +487,7 @@ namespace WB.UI.Designer.Controllers
 
             public bool IsCategories { get; set; }
             public string? CascadeFromQuestionId { get; set; }
+            public bool IsReadonly { get; set; }
         }
     }
 }

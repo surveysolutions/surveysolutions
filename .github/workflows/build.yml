@@ -11,6 +11,8 @@ on:
 
 env:
   REGISTRY: ghcr.io
+  NODE_VERSION: 18
+  DOTNET_VERSION: '7.0.x'
 
 jobs:
   prepare:
@@ -21,7 +23,7 @@ jobs:
       environment: ${{ steps.vars.outputs.environment }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Define build number and version strings
         id: vars
         run: |
@@ -43,11 +45,11 @@ jobs:
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Setup dotnet
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: '6.0.x'
+          dotnet-version: ${{ env.DOTNET_VERSION }}
       - name: Headquarters unit tests
         run: dotnet test src/Tests/WB.Tests.Unit
       - name: Headquarters web tests
@@ -79,11 +81,11 @@ jobs:
           - 5432:5432
  
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Setup dotnet
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: '6.0.x'
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Create db connection string
         run: echo "DB_CONN=Server=postgres;Port=${{ job.services.postgres.ports[5432] }};User Id=${{ env.PG_USER }};Password=${{ env.PG_PASSWORD }};" >> $GITHUB_ENV
@@ -113,19 +115,23 @@ jobs:
         New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" `
           -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: actions/setup-java@v2
       with:
         distribution: 'microsoft'
         java-version: '11'
 
-    - name: Setup .NET Core SDK 6.0.x
-      uses: actions/setup-dotnet@v1
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '6.0.x'
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Install android workload
+      run: dotnet workload install android
+
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.0.3
-
+      
     - name: Build
       env:
         APP_CENTER_INTERVIEWER_DEV: ${{ secrets.APPCENTER_INTERVIEWER_KEY }}
@@ -140,6 +146,7 @@ jobs:
         -KeystorePassword "${{ secrets.INTERVIEWER_KEYSTORE_PASSWORD }}" `
         -GoogleMapKey "${{ secrets.GOOGLEMAPS_KEY }}" `
         -ArcGisKey "${{ secrets.ARCGIS_KEY }}"
+        -ArcGisApiKey "${{ secrets.ARCGIS_API_KEY }}"
        
     - name: Publish
       uses: actions/upload-artifact@v2
@@ -161,7 +168,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Log in to the GitHub Container Registry
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
@@ -191,7 +198,8 @@ jobs:
           ./.build.ps1 ${{ matrix.task }} `
             -BuildNumber ${{ needs.prepare.outputs.build_number }} `
             -dockerRegistry ${{ env.REGISTRY }}/${{ github.repository }} `
-            -apkFolder "artifacts"
+            -apkFolder "artifacts" `
+            -nodeVersion "${{ env.NODE_VERSION }}"
 
   installer:
     needs: [prepare, mobile]
@@ -205,15 +213,20 @@ jobs:
           New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" `
             -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force
 
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: ${{ env.NODE_VERSION }}
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Setup WIX
         run: |
-          Invoke-WebRequest -Uri https://wixtoolset.org/downloads/v3.14.0.5722/wix314-binaries.zip -OutFile wix314-binaries.zip
+          Invoke-WebRequest -Uri https://wixtoolset.org/downloads/v3.14.0.6526/wix314-binaries.zip -OutFile wix314-binaries.zip
           Expand-Archive -Path wix314-binaries.zip -DestinationPath installer/wix314-binaries
 
       - name: Download mobile artifacts
@@ -229,6 +242,12 @@ jobs:
           New-Item -ItemType directory -Path certificate
           Set-Content -Path certificate\certificate.txt -Value '${{ secrets.CODESIGNING_CERTIFICATE }}'
           certutil -decode certificate\certificate.txt certificate\certificate.pfx
+
+      - name: Cache Frontend node modules
+        uses: actions/cache@v3
+        with:
+          path: src/UI/WB.UI.Frontend/node_modules
+          key: frontend-cache-node-modules-${{ hashFiles('src/UI/WB.UI.Frontend/package-lock.json') }}
 
       - name: Build Headquarters
         run: ./.build.ps1 PackageHqOffline -BuildNumber ${{ needs.prepare.outputs.build_number }}

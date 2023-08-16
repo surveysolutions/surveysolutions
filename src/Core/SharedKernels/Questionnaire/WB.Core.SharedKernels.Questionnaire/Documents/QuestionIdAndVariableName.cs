@@ -14,9 +14,9 @@ namespace Main.Core.Entities.SubEntities
         public Guid Id;
         public string VariableName;
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
-            return obj is QuestionIdAndVariableName && this == (QuestionIdAndVariableName) obj;
+            return obj is QuestionIdAndVariableName questionIdAndVariableName && this == questionIdAndVariableName;
         }
 
         public override int GetHashCode()

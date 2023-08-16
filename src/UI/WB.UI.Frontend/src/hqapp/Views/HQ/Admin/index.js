@@ -4,7 +4,7 @@ import Settings from './Settings'
 import Vue from 'vue'
 import AuditLog from './AuditLog'
 import TabletInfos from './TabletInfos'
-const InterviewPackages = () => import( /*  webpackChunkName: "controlpanel" */ './InterviewPackages')
+const InterviewPackages = () => import('./InterviewPackages')
 
 export default class AdminComponent {
     constructor(rootStore) {

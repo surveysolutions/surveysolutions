@@ -48,9 +48,11 @@ namespace WB.Tests.Web.TestFactories
                     new DynamicCompilerSettingsProvider());
 
             var latestSupportedVersion = new DesignerEngineVersionService(Mock.Of<IAttachmentService>(),
-                Mock.Of<IDesignerTranslationService>()).LatestSupportedVersion;
+                Mock.Of<IDesignerTranslationService>(),
+                Mock.Of<IReusableCategoriesService>()).LatestSupportedVersion;
+            var package = new QuestionnaireCodeGenerationPackage(questionnaireDocument, null);
             var emitResult = 
-                expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument,  
+                expressionProcessorGenerator.GenerateProcessorStateAssembly(package,  
                     latestSupportedVersion, 
                     out var resultAssembly);
 
@@ -65,7 +67,6 @@ namespace WB.Tests.Web.TestFactories
         {
             return new CodeGenerationModelsFactory(
                 DefaultMacrosSubstitutionService(),
-                new LookupTableService(new TestInMemoryKeyValueStorage<LookupTableContent>(), null),
                 new QuestionTypeToCSharpTypeMapper());
         }
 

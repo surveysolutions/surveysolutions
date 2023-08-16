@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                  xmlns:local="http://schemas.android.com/apk/res-auto"
-                 style="@style/Interview_Previous_Group_Navigation_Layout"
+                 style="@style/Interview_Previous_Group_Navigation_Layout"                 
                  local:MvxBind="HideKeyboardOnClick .">
-  <Button style="@style/Interview_Group_Navigation_Button"
-    local:MvxBind="
-      HideKeyboardOnClick .; 
-      Click NavigateCommand; 
-      ButtonGroupStyle NavigateToGroupState.Status; 
-      Enabled IsEnabled; 
-      Html SpannableGroupTitle(Title.PlainText, RosterInstanceTitle);
-      Tag 'next-section' "/>
+    <Button
+        style="@style/Interview_Group_Navigation_Button"
+        local:MvxBind="
+          HideKeyboardOnClick .; 
+          Click NavigateCommand; 
+          ButtonGroupStyle NavigateToGroupState.Status; 
+          Enabled IsEnabled; 
+          Html SpannableGroupTitle(Title.PlainText, RosterInstanceTitle);
+          Tag 'next-section' " />
 </LinearLayout>

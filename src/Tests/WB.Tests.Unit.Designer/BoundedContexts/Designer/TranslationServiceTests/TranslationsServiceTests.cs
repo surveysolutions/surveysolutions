@@ -3,13 +3,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ClosedXML.Excel;
+using ClosedXML.Graphics;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
+using SixLabors.Fonts;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -45,8 +50,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                 Create.Group(groupId: Guid.Parse("11111111111111111111111111111111"), title:"Section Text"),
             });
 
-            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            questionnaires.SetReturnsDefault(questionnaire);
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
 
             var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
 
@@ -100,8 +105,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                     })
             });
 
-            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            questionnaires.SetReturnsDefault(questionnaire);
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
 
             var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
 
@@ -163,8 +168,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                 Create.Group(groupId: sectionId, title:"Section Text")
             });
 
-            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            questionnaires.SetReturnsDefault(questionnaire);
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
 
             var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
 
@@ -199,8 +204,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                 Create.Group(groupId: sectionId, title:"Section Text")
             });
 
-            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            questionnaires.SetReturnsDefault(questionnaire);
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
 
             var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
 
@@ -235,8 +240,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                 Create.Group(groupId: sectionId, title:"Section Text")
             });
 
-            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            questionnaires.SetReturnsDefault(questionnaire);
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
 
             var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
 
@@ -278,10 +283,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                 new Categories{ Id = categoriesId, Name = categoriesName}
             };
 
-            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            questionnaires.SetReturnsDefault(questionnaire);
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
 
-            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
+            var categories = new Mock<IReusableCategoriesService>();
+            categories.Setup(x => x.GetCategoriesById(questionnaire.PublicKey, categoriesId))
+                .Returns(new List<CategoriesItem>(){new CategoriesItem(){Id = 1, Text = "test"}}.AsQueryable);
+            
+            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object, reusableCategoriesService: categories.Object);
 
             //act
             var exception = Assert.Throws<InvalidFileException>(() => service.Store(questionnaireId, translationId, fileStream));
@@ -321,10 +330,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                 new Categories{ Id = categoriesId, Name = categoriesName}
             };
 
-            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            questionnaires.SetReturnsDefault(questionnaire);
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
 
-            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
+            var categories = new Mock<IReusableCategoriesService>();
+            categories.Setup(x => x.GetCategoriesById(questionnaire.PublicKey, categoriesId))
+                .Returns(new List<CategoriesItem>(){new CategoriesItem(){Id = 1, Text = "test"}}.AsQueryable);
+            
+            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object, reusableCategoriesService: categories.Object);
 
             //act
             var exception = Assert.Throws<InvalidFileException>(() => service.Store(questionnaireId, translationId, fileStream));
@@ -364,10 +377,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                 new Categories{ Id = categoriesId, Name = categoriesName}
             };
 
-            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            questionnaires.SetReturnsDefault(questionnaire);
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
 
-            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
+            var categories = new Mock<IReusableCategoriesService>();
+            categories.Setup(x => x.GetCategoriesById(questionnaire.PublicKey, categoriesId))
+                .Returns(new List<CategoriesItem>(){new CategoriesItem(){Id = 1, Text = "test"}}.AsQueryable);
+            
+            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object, reusableCategoriesService: categories.Object);
 
             //act
             var exception = Assert.Throws<InvalidFileException>(() => service.Store(questionnaireId, translationId, fileStream));
@@ -406,10 +423,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                 new Categories{ Id = categoriesId, Name = categoriesName}
             };
 
-            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            questionnaires.SetReturnsDefault(questionnaire);
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
 
-            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
+            var cat = new Mock<IReusableCategoriesService>();
+            cat.Setup(x => x.GetCategoriesById(questionnaire.PublicKey, categoriesId))
+                .Returns(new List<CategoriesItem>(){new CategoriesItem(){Id = 1, Text = "test"}}.AsQueryable);
+            
+            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object, reusableCategoriesService: cat.Object);
 
             //act
             service.Store(questionnaireId, translationId, fileStream);
@@ -467,8 +488,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             var plainStorageAccessor = Create.InMemoryDbContext();
 
             var questionnaire = Create.QuestionnaireDocument(questionnaireId, Create.Group(sectionId));
-            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            questionnaires.SetReturnsDefault(questionnaire);
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
 
             var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
 
@@ -521,8 +542,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
             var questionnaire = Create.QuestionnaireDocument(questionnaireId, Create.Group(sectionId));
             questionnaire.Categories.Add(Create.Categories(name: categoriesName));
-            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            questionnaires.SetReturnsDefault(questionnaire);
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
 
             var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
 
@@ -557,7 +578,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
         private static byte[] CreateExcel(Dictionary<string,string[][]>  datas)
         {
-            using XLWorkbook package = new XLWorkbook();
+            //non windows fonts
+            var firstFont = SystemFonts.Collection.Families.First();
+            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(firstFont.Name) };
+            
+            using XLWorkbook package = new XLWorkbook(loadOptions);
 
             foreach (var data in datas)
             {

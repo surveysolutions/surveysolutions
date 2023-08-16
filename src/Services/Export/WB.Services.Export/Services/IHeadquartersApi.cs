@@ -66,5 +66,8 @@ namespace WB.Services.Export.Services
 
         [Get("/api/export/v1/questionnaire/{id}/backup")]
         Task<HttpContent> GetBackupAsync([AliasAs("id")] QuestionnaireId questionnaireId);
+
+        [Get("/.version")]
+        Task<string> GetServerVersionAsync();
     }
 }

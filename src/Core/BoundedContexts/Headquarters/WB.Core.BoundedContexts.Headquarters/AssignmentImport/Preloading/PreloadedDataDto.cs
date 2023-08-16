@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading
@@ -40,5 +41,32 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading
             .OrderBy(x => x.Depth)
             .Select(x => x.Answers)
             .ToArray();
+
+        public static IEnumerable<InterviewAnswer> SortByDependencies(this IEnumerable<InterviewAnswer> answers, IQuestionnaire questionnaire)
+        {
+            var playOrder = questionnaire.GetExpressionsPlayOrder();
+            if (playOrder.Count == 0)
+                return answers;
+
+            var answersDictionary = answers
+                .GroupBy(answer => answer.Identity.Id)
+                .ToDictionary(a => a.Key, v => v.ToList());
+            List<InterviewAnswer> result = new();
+            foreach (var id in playOrder)
+            {
+                if (answersDictionary.TryGetValue(id, out var listAnswer))
+                {
+                    result.AddRange(listAnswer);
+                    answersDictionary.Remove(id);
+                }
+            }
+
+            foreach (var listAnswerWithoutPlayOrder in answersDictionary.Values)
+            {
+                result.AddRange(listAnswerWithoutPlayOrder);
+            }
+
+            return result;
+        }
     }
 }

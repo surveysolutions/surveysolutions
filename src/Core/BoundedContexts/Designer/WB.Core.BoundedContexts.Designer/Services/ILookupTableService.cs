@@ -10,7 +10,6 @@ namespace WB.Core.BoundedContexts.Designer.Services
         void SaveLookupTableContent(Guid questionnaireId, Guid lookupTableId, string fileContent);
         void DeleteAllByQuestionnaireId(Guid questionnaireId);
         LookupTableContent? GetLookupTableContent(Guid questionnaireId, Guid lookupTableId);
-        LookupTableContentFile? GetLookupTableContentFile(Guid questionnaireId, Guid lookupTableId);
         LookupTableContentFile? GetLookupTableContentFile(QuestionnaireRevision questionnaireId, Guid lookupTableId);
         Dictionary<Guid, string> GetQuestionnairesLookupTables(Guid questionnaireId);
         Dictionary<Guid, string> GetQuestionnairesLookupTables(QuestionnaireRevision questionnaireId);

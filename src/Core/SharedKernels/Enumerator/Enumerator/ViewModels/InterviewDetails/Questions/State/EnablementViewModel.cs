@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.InteropServices;
+using System.Threading.Tasks;
+using MvvmCross;
+using MvvmCross.Base;
 using MvvmCross.ViewModels;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -12,17 +15,18 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
     public class EnablementViewModel : MvxNotifyPropertyChanged,
-        IViewModelEventHandler<GroupsEnabled>,
-        IViewModelEventHandler<GroupsDisabled>,
-        IViewModelEventHandler<QuestionsEnabled>,
-        IViewModelEventHandler<QuestionsDisabled>, 
-        IViewModelEventHandler<StaticTextsDisabled>,
-        IViewModelEventHandler<StaticTextsEnabled>,
+        IAsyncViewModelEventHandler<GroupsEnabled>,
+        IAsyncViewModelEventHandler<GroupsDisabled>,
+        IAsyncViewModelEventHandler<QuestionsEnabled>,
+        IAsyncViewModelEventHandler<QuestionsDisabled>,
+        IAsyncViewModelEventHandler<StaticTextsDisabled>,
+        IAsyncViewModelEventHandler<StaticTextsEnabled>,
         IDisposable
     {
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IViewModelEventRegistry eventRegistry;
         private readonly IQuestionnaireStorage questionnaireRepository;
+        private readonly IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher;
 
         public event EventHandler EntityEnabled;
         public event EventHandler EntityDisabled;
@@ -35,6 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.interviewRepository = interviewRepository ?? throw new ArgumentNullException(nameof(interviewRepository));
             this.eventRegistry = eventRegistry ?? throw new ArgumentNullException(nameof(eventRegistry));
             this.questionnaireRepository = questionnaireRepository ?? throw new ArgumentNullException(nameof(questionnaireRepository));
+            this.mvxMainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
         }
 
         private string InterviewId { get; set; }
@@ -56,7 +61,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.eventRegistry.Subscribe(this, interviewId);
             initiated = true;
 
-            this.UpdateSelfFromModel();
+            this.UpdateSelfFromModel().WaitAndUnwrapException(); 
         }
 
         public void AddPropertyChangedHandler(PropertyChangedEventHandler handler)
@@ -79,9 +84,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private void UpdateSelfFromModel()
+        private async Task UpdateSelfFromModel()
         {
-            this.Enabled = GetEnablementFromInterview();
+            await this.mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+            {
+                this.Enabled = GetEnablementFromInterview();
+            });   
         }
 
         public bool GetEnablementFromInterview()
@@ -96,38 +104,38 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             return interview.IsEnabled(this.entityIdentity);
         }
 
-        public void Handle(GroupsEnabled @event)
+        public async Task HandleAsync(GroupsEnabled @event)
         {
             if (@event.Groups.Contains(this.entityIdentity))
             {
-                this.UpdateSelfFromModel();
+                await this.UpdateSelfFromModel();
                 this.OnEnabled();
             }
         }
 
-        public void Handle(GroupsDisabled @event)
+        public async Task HandleAsync(GroupsDisabled @event)
         {
             if (@event.Groups.Contains(this.entityIdentity))
             {
-                this.UpdateSelfFromModel();
+                await this.UpdateSelfFromModel();
                 this.OnOnDisabled();
             }
         }
 
-        public void Handle(QuestionsEnabled @event)
+        public async Task HandleAsync(QuestionsEnabled @event)
         {
             if (@event.Questions.Contains(this.entityIdentity))
             {
-                this.UpdateSelfFromModel();
+                await this.UpdateSelfFromModel();
                 this.OnEnabled();
             }
         }
 
-        public void Handle(QuestionsDisabled @event)
+        public async Task HandleAsync(QuestionsDisabled @event)
         {
             if (@event.Questions.Contains(this.entityIdentity))
             {
-                this.UpdateSelfFromModel();
+                await this.UpdateSelfFromModel();
                 this.OnOnDisabled();
             }
         }
@@ -139,20 +147,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 propertyChangedHandlers.ForEach(handler => this.PropertyChanged -= handler);
         }
 
-        public void Handle(StaticTextsDisabled @event)
+        public async Task HandleAsync(StaticTextsDisabled @event)
         {
             if (@event.StaticTexts.Contains(this.entityIdentity))
             {
-                this.UpdateSelfFromModel();
+                await this.UpdateSelfFromModel();
                 this.OnOnDisabled();
             }
         }
 
-        public void Handle(StaticTextsEnabled @event)
+        public async Task HandleAsync(StaticTextsEnabled @event)
         {
             if (@event.StaticTexts.Contains(this.entityIdentity))
             {
-                this.UpdateSelfFromModel();
+                await this.UpdateSelfFromModel();
                 this.OnEnabled();
             }
         }

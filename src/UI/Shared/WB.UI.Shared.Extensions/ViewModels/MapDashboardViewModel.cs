@@ -1,22 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
-using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -24,38 +17,45 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Markers;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Shared.Extensions.Entities;
+using WB.UI.Shared.Extensions.Extensions;
 using WB.UI.Shared.Extensions.Services;
+using Color = System.Drawing.Color;
 
 namespace WB.UI.Shared.Extensions.ViewModels
 {
-    public class MapDashboardViewModel: BaseMapInteractionViewModel<MapDashboardViewModelArgs>
+    public abstract class MapDashboardViewModel: BaseMapInteractionViewModel<MapDashboardViewModelArgs>
     {
-        private readonly ILogger logger;
-        private readonly IAssignmentDocumentsStorage assignmentsRepository;
-        private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IPlainStorage<InterviewView> interviewViewRepository;
+        const string MarkerId = "marker_id";
 
-        public MapDashboardViewModel(IPrincipal principal, 
+        protected readonly IAssignmentDocumentsStorage AssignmentsRepository;
+        protected readonly IPlainStorage<InterviewView> InterviewViewRepository;
+        private readonly IDashboardViewModelFactory dashboardViewModelFactory;
+
+        protected MapDashboardViewModel(IPrincipal principal, 
             IViewModelNavigationService viewModelNavigationService,
             IUserInteractionService userInteractionService,
             IMapService mapService,
-            IFileSystemAccessor fileSystemAccessor,
             IAssignmentDocumentsStorage assignmentsRepository,
             IPlainStorage<InterviewView> interviewViewRepository,
             IEnumeratorSettings enumeratorSettings,
             ILogger logger,
-            IMapUtilityService mapUtilityService) 
+            IMapUtilityService mapUtilityService,
+            IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher,
+            IDashboardViewModelFactory dashboardViewModelFactory, 
+            IPermissionsService permissionsService) 
             : base(principal, viewModelNavigationService, mapService, userInteractionService, logger, 
-                fileSystemAccessor, enumeratorSettings, mapUtilityService)
+                   enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher, permissionsService)
         {
-            this.logger = logger;
-            this.fileSystemAccessor = fileSystemAccessor;
-            this.assignmentsRepository = assignmentsRepository;
-            this.interviewViewRepository = interviewViewRepository;
-            this.mainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
+            this.AssignmentsRepository = assignmentsRepository;
+            this.InterviewViewRepository = interviewViewRepository;
+            this.dashboardViewModelFactory = dashboardViewModelFactory;
         }
+        
+        protected abstract InterviewStatus[] InterviewStatuses { get; }
 
         private GraphicsOverlayCollection graphicsOverlays = new GraphicsOverlayCollection();
         public GraphicsOverlayCollection GraphicsOverlays
@@ -84,33 +84,68 @@ namespace WB.UI.Shared.Extensions.ViewModels
             set => this.RaiseAndSetIfChanged(ref this.showAssignments, value);
         }
 
+        private MvxObservableCollection<IMarkerViewModel> availableMarkers = new MvxObservableCollection<IMarkerViewModel>();
+        public MvxObservableCollection<IMarkerViewModel> AvailableMarkers
+        {
+            get => this.availableMarkers;
+            set => this.RaiseAndSetIfChanged(ref this.availableMarkers, value);
+        }
+
+        private int? activeMarkerIndex;
+        public int? ActiveMarkerIndex
+        {
+            get => this.activeMarkerIndex;
+            set
+            {
+                if (activeMarkerIndex != value)
+                {
+                    NavigateToMarkerByCard(value, activeMarkerIndex);
+                }
+                this.RaiseAndSetIfChanged(ref this.activeMarkerIndex, value);
+            }
+        }
         
+        public abstract bool SupportDifferentResponsible { get; }
 
         public override void Prepare(MapDashboardViewModelArgs parameter)
         {
         }
 
-        public override async Task Initialize()
+        protected void ReloadEntities()
         {
-            await base.Initialize();
-
-            Assignments = this.assignmentsRepository
+            Assignments = this.AssignmentsRepository
                 .LoadAll()
                 .Where(x => x.LocationLatitude != null && (!x.Quantity.HasValue || (x.Quantity - (x.CreatedInterviewsCount ?? 0) > 0)))
                 .ToList();
 
-            Interviews = this.interviewViewRepository
+            Interviews = this.InterviewViewRepository
                 .Where(x => x.LocationLatitude != null).ToList();
+        }
 
+            
+        public override async Task Initialize()
+        {
+            await base.Initialize();
+
+            ReloadEntities();
+            
             this.GraphicsOverlays.Add(graphicsOverlay);
 
             PropertyChanged += OnPropertyChanged;
         }
 
-        public override Task OnMapLoaded()
+        public override async Task OnMapLoaded()
         {
             CollectQuestionnaires();
-            return RefreshMarkers();
+            CollectResponsibles();
+            CollectInterviewStatuses();
+            await RefreshMarkers(setViewToMarkers: true);
+        }
+
+        public override void ViewAppeared()
+        {
+            base.ViewAppeared();
+            this.MapView?.RefreshDrawableState();
         }
 
         public override MapDescription GetSelectedMap(MvxObservableCollection<MapDescription> mapsToSelectFrom)
@@ -138,7 +173,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
             if (ShowAssignments)
             {
-                result.AddRange(Assignments.Select(ToQuestionnaryItem));
+                result.AddRange(Assignments.Select(ToQuestionnaireItem));
             }
 
             var questionnairesList = new List<QuestionnaireItem> {AllQuestionnaireDefault};
@@ -152,11 +187,27 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
             Questionnaires = new MvxObservableCollection<QuestionnaireItem>(questionnairesList);
 
-            if(SelectedQuestionnaire != AllQuestionnaireDefault)
+            if (SelectedQuestionnaire != AllQuestionnaireDefault)
                 SelectedQuestionnaire = AllQuestionnaireDefault;
         }
+        
+        protected virtual void CollectResponsibles()
+        {
+        }
 
-        private QuestionnaireItem ToQuestionnaryItem(AssignmentDocument assignmentDocument)
+        private void CollectInterviewStatuses()
+        {
+            var statusItems = new List<StatusItem> { AllStatusDefault };
+
+            InterviewStatuses.ForEach(s => statusItems.Add(new StatusItem(s, s.ToLocalizeString())));
+
+            Statuses = new MvxObservableCollection<StatusItem>(statusItems);
+
+            if (SelectedStatus != AllStatusDefault)
+                SelectedStatus = AllStatusDefault;
+        }
+
+        private QuestionnaireItem ToQuestionnaireItem(AssignmentDocument assignmentDocument)
         {
             return new QuestionnaireItem(
                 QuestionnaireIdentity.Parse(assignmentDocument.QuestionnaireId).QuestionnaireId.FormatGuid(),
@@ -192,8 +243,72 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         private async void OnQuestionnaireSelectedCommand(QuestionnaireItem questionnaire)
         {
+            if (SelectedQuestionnaire.Title == questionnaire.Title && 
+                SelectedQuestionnaire.QuestionnaireId == questionnaire.QuestionnaireId)
+                return;
+            
             SelectedQuestionnaire = questionnaire;
-            await RefreshMarkers();
+            await RefreshMarkers(setViewToMarkers: true);
+        }
+
+        protected static readonly ResponsibleItem AllResponsibleDefault = new ResponsibleItem(null, UIResources.MapDashboard_AllResponsibles);
+
+        private MvxObservableCollection<ResponsibleItem> responsibles = new MvxObservableCollection<ResponsibleItem>();
+        public MvxObservableCollection<ResponsibleItem> Responsibles
+        {
+            get => this.responsibles;
+            set => this.RaiseAndSetIfChanged(ref this.responsibles, value);
+        }
+
+        private ResponsibleItem selectedResponsible = AllResponsibleDefault;
+        public ResponsibleItem SelectedResponsible
+        {
+            get => this.selectedResponsible;
+            set => this.RaiseAndSetIfChanged(ref this.selectedResponsible, value);
+        }
+
+        private MvxCommand<ResponsibleItem> responsibleSelectedCommand;
+        public MvxCommand<ResponsibleItem> ResponsibleSelectedCommand => 
+            responsibleSelectedCommand ??= new MvxCommand<ResponsibleItem>(OnResponsibleSelectedCommand);
+
+        private async void OnResponsibleSelectedCommand(ResponsibleItem responsible)
+        {
+            if (SelectedResponsible.Title == responsible.Title && 
+                SelectedResponsible.ResponsibleId == responsible.ResponsibleId)
+                return;
+            
+            SelectedResponsible = responsible;
+            await RefreshMarkers(setViewToMarkers: true);
+        }
+
+        private static readonly StatusItem AllStatusDefault = new StatusItem(null, UIResources.MapDashboard_AllStatuses);
+
+        private MvxObservableCollection<StatusItem> statuses = new MvxObservableCollection<StatusItem>();
+        public MvxObservableCollection<StatusItem> Statuses
+        {
+            get => this.statuses;
+            set => this.RaiseAndSetIfChanged(ref this.statuses, value);
+        }
+
+        private StatusItem selectedStatus = AllStatusDefault;
+        public StatusItem SelectedStatus
+        {
+            get => this.selectedStatus;
+            set => this.RaiseAndSetIfChanged(ref this.selectedStatus, value);
+        }
+
+        private MvxCommand<StatusItem> statusSelectedCommand;
+        public MvxCommand<StatusItem> StatusSelectedCommand => 
+            statusSelectedCommand ??= new MvxCommand<StatusItem>(OnStatusSelectedCommand);
+
+        private async void OnStatusSelectedCommand(StatusItem status)
+        {
+            if (SelectedStatus.Title == status.Title && 
+                SelectedStatus.Status == status.Status)
+                return;
+            
+            SelectedStatus = status;
+            await RefreshMarkers(setViewToMarkers: true);
         }
 
         private async void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -202,21 +317,21 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 e.PropertyName == nameof(ShowAssignments))
             {
                 this.CollectQuestionnaires();
-                await this.RefreshMarkers();
+                await this.RefreshMarkers(setViewToMarkers: true);
             }
         }
 
         private readonly GraphicsOverlay graphicsOverlay = new GraphicsOverlay();
 
-        public IMvxCommand RefreshMarkersCommand => new MvxAsyncCommand(async() => await RefreshMarkers());
+        public IMvxCommand RefreshMarkersCommand => new MvxAsyncCommand(async() => await RefreshMarkers(setViewToMarkers: true));
 
         private readonly object graphicsOverlayLock = new object ();
 
-        private async Task RefreshMarkers()
+        protected async Task RefreshMarkers(bool setViewToMarkers)
         {
-            if (MapView != null)
+            if (MapView?.Map?.SpatialReference != null)
             {
-                await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() => { MapView.DismissCallout(); });
+                await this.mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() => { MapView.DismissCallout(); });
 
                 try
                 {
@@ -224,28 +339,75 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     {
                         graphicsOverlay.Graphics.Clear();
 
+                        List<IMarkerViewModel> markers = new List<IMarkerViewModel>();
+                        
                         if (ShowAssignments)
                         {
-                            var assignmentsMarkers = GetAssignmentsMarkers();
-                            if (assignmentsMarkers.Count > 0)
+                            var filteredAssignments = FilteredAssignments();
+                            var assignmentMarkers = filteredAssignments.Select(GetAssignmentMarkerViewModel).ToArray();
+                            markers.AddRange(assignmentMarkers);
+                            var assignmentsGraphics = GetAssignmentsMarkers(assignmentMarkers);
+                            if (assignmentsGraphics.Count > 0)
                             {
-                                graphicsOverlay.Graphics.AddRange(assignmentsMarkers);
+                                graphicsOverlay.Graphics.AddRange(assignmentsGraphics);
                             }
                         }
 
                         if (ShowInterviews)
                         {
-                            var interviewsMarkers = GetInterviewsMarkers();
-                            if (interviewsMarkers.Count > 0)
+                            var filteredInterviews = FilteredInterviews();
+                            var interviewMarkers = filteredInterviews.Select(GetInterviewMarkerViewModel).ToArray();
+                            markers.AddRange(interviewMarkers);
+                            var interviewsGraphics = GetInterviewsMarkers(interviewMarkers);
+                            if (interviewsGraphics.Count > 0)
                             {
-                                graphicsOverlay.Graphics.AddRange(interviewsMarkers);
+                                graphicsOverlay.Graphics.AddRange(interviewsGraphics);
                             }
                         }
+
+                        if (markers.Count > 0)
+                        {
+                            double startLat = -90;
+                            double startLng = 90;
+                            foreach (var marker in markers)
+                            {
+                                if (startLat < marker.Latitude)
+                                    startLat = marker.Latitude;
+                                if (startLng > marker.Longitude)
+                                    startLng = marker.Longitude;
+                            }
+                        
+                            markers = markers
+                                .OrderBy(m => GeometryHelper.GetDistance(startLat, startLng, m.Latitude, m.Longitude))
+                                .ToList();
+                        }
+
+                        ActiveMarkerIndex = null;
+
+                        this.AvailableMarkers.ToList().ForEach(uiItem =>
+                        {
+                            if (uiItem is InterviewDashboardItemViewModel interview)
+                                interview.OnItemRemoved -= Markers_InterviewItemRemoved;
+                            if (uiItem is IDashboardItemWithEvents withEvents)
+                                withEvents.OnItemUpdated -= Markers_OnItemUpdated;
+                            uiItem.DisposeIfDisposable();
+                        });
+                    
+                        AvailableMarkers.ReplaceWith(markers);
+
+                        this.AvailableMarkers.ToList().ForEach(item =>
+                        {
+                            if (item is InterviewDashboardItemViewModel interview)
+                                interview.OnItemRemoved += Markers_InterviewItemRemoved;
+                            if (item is IDashboardItemWithEvents withEvents)
+                                withEvents.OnItemUpdated += Markers_OnItemUpdated;
+                        });
                     }
 
-                    //MapView.Map.MinScale = 591657527.591555;
-                    //MapView.Map.MaxScale = 0;
-                    await SetViewExtentToItems();
+                    if (setViewToMarkers)
+                        await SetViewToValues();
+                    
+                    await CheckMarkersAgainstShapefile();
                 }
                 catch (Exception e)
                 {
@@ -254,155 +416,298 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 }
             }
         }
+        
+        protected void Markers_OnItemUpdated(object sender, EventArgs args)
+        {
+            IMarkerViewModel dashboardItem = sender as IMarkerViewModel;
 
-        private async Task SetViewExtentToItems()
+            UpdateMarker(dashboardItem);
+        }
+        
+        protected void UpdateMarker(IMarkerViewModel dashboardItem)
+        {
+            IMarkerViewModel newDashboardItem = null;
+            
+            if (dashboardItem is IAssignmentMarkerViewModel assignment)
+            {
+                var assignmentDocument = AssignmentsRepository.GetById(assignment.AssignmentId);
+                newDashboardItem = dashboardViewModelFactory.GetAssignment(assignmentDocument);
+            }
+
+            if (dashboardItem is IInterviewMarkerViewModel interview)
+            {
+                var interviewView = InterviewViewRepository.GetById(interview.Id);
+                newDashboardItem = dashboardViewModelFactory.GetInterview(interviewView);
+            }
+            
+            if (newDashboardItem != null)
+            {
+                var indexOf = AvailableMarkers.IndexOf(dashboardItem);
+                AvailableMarkers[indexOf] = newDashboardItem;
+            }
+
+            if (dashboardItem is IDashboardItemWithEvents dashboardItemWithEvents)
+                dashboardItemWithEvents.OnItemUpdated -= Markers_OnItemUpdated;
+            if (dashboardItem is InterviewDashboardItemViewModel oldInterview)
+                oldInterview.OnItemRemoved -= Markers_InterviewItemRemoved;
+
+            if (newDashboardItem is IDashboardItemWithEvents newDashboardItemWithEvents)
+                newDashboardItemWithEvents.OnItemUpdated += Markers_OnItemUpdated;
+            if (newDashboardItem is InterviewDashboardItemViewModel newInterview)
+                newInterview.OnItemRemoved += Markers_InterviewItemRemoved;
+            
+            string markerId = dashboardItem.Id;
+            var markerGraphic = graphicsOverlay.Graphics.FirstOrDefault(g => g.Attributes[MarkerId]?.ToString() == markerId);
+            if (markerGraphic != null)
+            {
+                var indexOf = AvailableMarkers.IndexOf(newDashboardItem);
+                var isActive = ActiveMarkerIndex == indexOf;
+                if (isActive)
+                    SetFocusedMarkerStyle(newDashboardItem);
+                else
+                    SetCommonMarkerStyle(newDashboardItem);
+            }
+        }
+
+        protected async void Markers_InterviewItemRemoved(object sender, EventArgs e)
+        {
+            var item = (InterviewDashboardItemViewModel)sender;
+            item.OnItemRemoved -= Markers_InterviewItemRemoved;
+            item.OnItemUpdated -= Markers_OnItemUpdated;
+
+            if (item.AssignmentId.HasValue)
+            {
+                AssignmentsRepository.DecreaseInterviewsCount(item.AssignmentId.Value);
+
+                this.AvailableMarkers
+                    .OfType<AssignmentDashboardItemViewModel>()
+                    .FirstOrDefault(x => x.AssignmentId == item.AssignmentId.Value)
+                    ?.DecreaseInterviewsCount();
+            }
+
+            ReloadEntities();
+            await RefreshMarkers(false);
+        }
+
+        protected override async Task AfterShapefileLoadedHandler()
+        {
+            await CheckMarkersAgainstShapefile();
+            ActiveMarkerIndex = null;
+        }
+
+        protected override void ShowedFullMap()
+        {
+            base.ShowedFullMap();
+            ActiveMarkerIndex = null;
+        }
+
+        protected async Task CheckMarkersAgainstShapefile()
+        {
+            IsWarningVisible = false;
+
+            if (!ShapeFileLoaded 
+                || graphicsOverlay.Graphics.Count <= 0 
+                || LoadedShapefile?.SpatialReference == null) return;
+            
+            var queryParameters = new QueryParameters();
+
+            //List<MapPoint> pointsToCheck = new List<MapPoint>();
+            foreach (var graphic in graphicsOverlay.Graphics)
+            {
+                if (graphic.Geometry != null && graphic.Geometry.GeometryType == GeometryType.Point)
+                { 
+                    var projectedPoint = graphic.Geometry.Project(LoadedShapefile.SpatialReference);
+                    if (projectedPoint is MapPoint mapPoint)
+                    {
+                        //pointsToCheck.Add(mapPoint);
+                        queryParameters.Geometry = mapPoint;
+                        queryParameters.SpatialRelationship = SpatialRelationship.Intersects;
+                        //queryParameters.ReturnGeometry = true;
+
+                        var queryResult = await LoadedShapefile.QueryFeaturesAsync(queryParameters);
+                        if (!queryResult.Any())
+                        {
+                            Warning = UIResources.AreaMap_ItemsOutsideDedicatedArea;
+                            IsWarningVisible = true;
+                            return;
+                        }
+                    }
+                }
+            }
+            
+            /*Multipoint pointsMultipoint = new Multipoint(pointsToCheck, LoadedShapefile.SpatialReference);
+            queryParameters.Geometry = pointsMultipoint;
+            queryParameters.SpatialRelationship = SpatialRelationship.Intersects;
+            queryParameters.ReturnGeometry = false;
+
+            var queryResult = await LoadedShapefile.QueryFeaturesAsync(queryParameters);
+            if (queryResult.Count() != pointsToCheck.Count())
+            {
+                Warning = UIResources.AreaMap_ItemsOutsideDedicatedArea;
+                IsWarningVisible = true;
+            }*/
+        }
+
+        protected override async Task SetViewToValues()
         {
             Envelope graphicExtent = null;
-            if (graphicsOverlay.Graphics.Count > 0)
+            var geometries = graphicsOverlay.Graphics
+                .Where(graphic => graphic.Geometry != null && !graphic.Geometry.IsEmpty)
+                .Select(graphic => graphic.Geometry)
+                .ToList();
+            if (geometries.Count > 0)
             {
-                EnvelopeBuilder eb = new EnvelopeBuilder(GeometryEngine.CombineExtents(
-                    graphicsOverlay.Graphics.Select(graphic => graphic.Geometry)));
+                EnvelopeBuilder eb = new EnvelopeBuilder(GeometryEngine.CombineExtents(geometries));
                 eb.Expand(1.2);
                 graphicExtent = eb.Extent;
             }
 
             if (graphicExtent != null)
             {
+                ActiveMarkerIndex = null;
                 await MapView.SetViewpointAsync(new Viewpoint(graphicExtent), TimeSpan.FromSeconds(4));
             }
         }
 
-        private List<Graphic> GetInterviewsMarkers()
+        private List<Graphic> GetInterviewsMarkers(IEnumerable<IInterviewMarkerViewModel> interviews)
         {
-            var markers = new List<Graphic>();
+            var markersGraphics = new List<Graphic>();
 
-            var filteredInterviews = 
-                    string.IsNullOrEmpty(SelectedQuestionnaire?.QuestionnaireId) 
-                        ? Interviews 
-                        : Interviews
-                            .Where(x => x.QuestionnaireId.StartsWith(SelectedQuestionnaire.QuestionnaireId))
-                            .ToList();
-
-            foreach (var interview in filteredInterviews)
+            foreach (var interview in interviews)
             {
-                var questionnaireIdentity = QuestionnaireIdentity.Parse(interview.QuestionnaireId);
-                var title = string.Format(EnumeratorUIResources.DashboardItem_Title, interview.QuestionnaireTitle,
-                    questionnaireIdentity.Version);
-
-                Color markerColor;
-
-                switch (interview.Status)
-                {
-                    case InterviewStatus.Created:
-                    case InterviewStatus.InterviewerAssigned:
-                    case InterviewStatus.Restarted:    
-                        markerColor = Color.FromArgb(0x2a, 0x81, 0xcb);
-                        break;
-                    case InterviewStatus.Completed:
-                        markerColor = Color.FromArgb(0x1f,0x95,0x00);
-                        break;
-                    case InterviewStatus.RejectedBySupervisor:
-                        markerColor = Color.FromArgb(0xe4,0x51,0x2b);
-                        break;
-                    default:
-                        markerColor = Color.Yellow;
-                        break;
-                }
-
-                markers.Add(new Graphic(
+                markersGraphics.Add(new Graphic(
                     (MapPoint)GeometryEngine.Project(
                         new MapPoint(
-                            interview.LocationLongitude.Value,
-                            interview.LocationLatitude.Value,
+                            interview.Longitude,
+                            interview.Latitude,
                             SpatialReferences.Wgs84),
                         Map.SpatialReference),
                     new[]
                     {
-                        new KeyValuePair<string, object>("id", ""),
-                        new KeyValuePair<string, object>("interviewId", interview.Id),
-                        new KeyValuePair<string, object>("interviewKey", interview.InterviewKey),
-                        new KeyValuePair<string, object>("title", title),
-                        new KeyValuePair<string, object>("sub_title", "")
+                        new KeyValuePair<string, object>(MarkerId, interview.Id),
                     },
-                    new CompositeSymbol(new[]
-                    {
-                        new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.White, 22), //for contrast
-                        new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, markerColor, 16)
-                    })));
+                    GetInterviewMarkerSymbol(interview)));
             }
 
-            return markers;
+            return markersGraphics;
+        }
+
+        private List<InterviewView> FilteredInterviews()
+        {
+            var filteredInterviews = Interviews;
+
+            if (!string.IsNullOrEmpty(SelectedQuestionnaire?.QuestionnaireId))
+                filteredInterviews = filteredInterviews
+                    .Where(x => x.QuestionnaireId.StartsWith(SelectedQuestionnaire.QuestionnaireId))
+                    .ToList();
+
+            if (SelectedResponsible?.ResponsibleId.HasValue ?? false)
+                filteredInterviews = filteredInterviews
+                    .Where(x => x.ResponsibleId == SelectedResponsible.ResponsibleId)
+                    .ToList();
+
+            if (SelectedStatus?.Status != null)
+                filteredInterviews = filteredInterviews
+                    .Where(x => x.Status == SelectedStatus.Status)
+                    .ToList();
+            return filteredInterviews;
+        }
+
+        protected IInterviewMarkerViewModel GetInterviewMarkerViewModel(InterviewView interview)
+        {
+            return dashboardViewModelFactory.GetInterview(interview);
+        }
+
+        protected virtual Symbol GetInterviewMarkerSymbol(IInterviewMarkerViewModel interview, double size = 1)
+        {
+            Color markerColor;
+
+            switch (interview.InterviewStatus)
+            {
+                case InterviewStatus.Created:
+                case InterviewStatus.InterviewerAssigned:
+                case InterviewStatus.Restarted:    
+                    markerColor = Color.FromArgb(24, 118, 207);
+                    break;
+                case InterviewStatus.ApprovedBySupervisor:
+                    markerColor = Color.FromArgb(13,185,188);
+                    break;
+                case InterviewStatus.Completed:
+                    markerColor = Color.FromArgb(54,141,54);
+                    break;
+                case InterviewStatus.RejectedBySupervisor:
+                    markerColor = Color.FromArgb(227,74,21);
+                    break;
+                case InterviewStatus.RejectedByHeadquarters:
+                    markerColor = Color.FromArgb(100,25,0);
+                    break;
+                default:
+                    markerColor = Color.FromArgb(163, 113, 247);
+                    break;
+            }
+
+            return new CompositeSymbol(new[]
+            {
+                new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.White, 22 * size), //for contrast
+                new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, markerColor, 16 * size)
+            });
         }
 
 
         private List<AssignmentDocument> Assignments = new List<AssignmentDocument>();
         private List<InterviewView> Interviews = new List<InterviewView>();
 
-        private List<Graphic> GetAssignmentsMarkers()
+        private List<Graphic> GetAssignmentsMarkers(IEnumerable<IAssignmentMarkerViewModel> assignments)
         {
-            var markers = new List<Graphic>();
+            var markersGraphic = new List<Graphic>();
 
-            var filteredAssignments = 
-                    string.IsNullOrEmpty(SelectedQuestionnaire?.QuestionnaireId) 
-                        ? Assignments 
-                        : Assignments
-                            .Where(x => x.QuestionnaireId.StartsWith(SelectedQuestionnaire.QuestionnaireId))
-                            .ToList();
-
-            foreach (var assignment in filteredAssignments)
+            foreach (var assignment in assignments)
             {
-                var questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
-                var title = string.Format(EnumeratorUIResources.DashboardItem_Title, assignment.Title,
-                    questionnaireIdentity.Version);
-
-                var interviewsByAssignmentCount = assignment.CreatedInterviewsCount ?? 0;
-                var interviewsLeftByAssignmentCount = assignment.Quantity.GetValueOrDefault() - interviewsByAssignmentCount;
-
-                string subTitle = "";
-
-                if (assignment.Quantity.HasValue)
-                {
-                    if (interviewsLeftByAssignmentCount == 1)
-                    {
-                        subTitle = EnumeratorUIResources.Dashboard_AssignmentCard_SubTitleSingleInterivew;
-                    }
-                    else
-                    {
-                        subTitle = string.Format(EnumeratorUIResources.Dashboard_AssignmentCard_SubTitleCountdownFormat,
-                            interviewsLeftByAssignmentCount, assignment.Quantity);
-                    }
-                }
-                else
-                {
-                    subTitle = string.Format(EnumeratorUIResources.Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat,
-                        assignment.Quantity.GetValueOrDefault());
-                }
-
-                bool canCreateInterview =
-                    !assignment.Quantity.HasValue || Math.Max(val1: 0, val2: interviewsLeftByAssignmentCount) > 0;
-
-                markers.Add(new Graphic(
+                markersGraphic.Add(new Graphic(
                     (MapPoint)GeometryEngine.Project(
                         new MapPoint(
-                            assignment.LocationLongitude.Value,
-                            assignment.LocationLatitude.Value,
+                            assignment.Longitude,
+                            assignment.Latitude,
                             SpatialReferences.Wgs84),
                         Map.SpatialReference),
                     new[]
                     {
-                        new KeyValuePair<string, object>("id", assignment.Id),
-                        new KeyValuePair<string, object>("title", title),
-                        new KeyValuePair<string, object>("sub_title", subTitle),
-                        new KeyValuePair<string, object>("can_create", canCreateInterview)
+                        new KeyValuePair<string, object>(MarkerId, assignment.Id),
                     },
-                    new CompositeSymbol(new[]
-                    {
-                        new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, Color.White, 22), //for contrast
-                        new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, Color.FromArgb(0x2a,0x81,0xcb), 16)
-                    })));
+                    GetAssignmentMarkerSymbol(assignment)));
             }
 
-            return markers;
+            return markersGraphic;
+        }
+
+        private List<AssignmentDocument> FilteredAssignments()
+        {
+            var filteredAssignments = Assignments;
+
+            if (!string.IsNullOrEmpty(SelectedQuestionnaire?.QuestionnaireId))
+                filteredAssignments = filteredAssignments
+                    .Where(x => x.QuestionnaireId.StartsWith(SelectedQuestionnaire.QuestionnaireId))
+                    .ToList();
+
+            if (SelectedResponsible?.ResponsibleId.HasValue ?? false)
+                filteredAssignments = filteredAssignments
+                    .Where(x => x.ResponsibleId == SelectedResponsible.ResponsibleId)
+                    .ToList();
+            return filteredAssignments;
+        }
+
+        protected virtual CompositeSymbol GetAssignmentMarkerSymbol(IAssignmentMarkerViewModel assignment, double size = 1)
+        {
+            return new CompositeSymbol(new[]
+            {
+                new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, Color.White, 22 * size), //for contrast
+                new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, Color.FromArgb(163, 113, 247), 16 * size)
+            });
+        }
+
+        protected IAssignmentMarkerViewModel GetAssignmentMarkerViewModel(AssignmentDocument assignment)
+        {
+            return dashboardViewModelFactory.GetAssignment(assignment);
         }
 
         public async void OnMapViewTapped(object sender, GeoViewInputEventArgs e)
@@ -424,49 +729,12 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 {
                     if (identifyResults.Graphics[0].Geometry is MapPoint projectedLocation)
                     {
-                        string id = identifyResults.Graphics[0].Attributes["id"].ToString();
-                        string title = identifyResults.Graphics[0].Attributes["title"] as string;
-                        string subTitle = identifyResults.Graphics[0].Attributes["sub_title"] as string;
-
-                        if (string.IsNullOrEmpty(id))
-                        {
-                            string interviewId = identifyResults.Graphics[0].Attributes["interviewId"].ToString();
-                            string interviewKey = identifyResults.Graphics[0].Attributes["interviewKey"].ToString();
-
-                            CalloutDefinition myCalloutDefinition =
-                                new CalloutDefinition(interviewKey, $"{title}\r\n{subTitle}")
-                                {
-                                    ButtonImage = await new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle,
-                                            Color.Blue, 25).CreateSwatchAsync(96)
-                                };
-
-                            myCalloutDefinition.OnButtonClick += OnInterviewButtonClick;
-                            myCalloutDefinition.Tag = interviewId;
-                            
-                            MapView.ShowCalloutAt(projectedLocation, myCalloutDefinition);
-                        }
-                        else
-                        {
-                            var assignmentInfo = identifyResults.Graphics[0].Attributes;
-                            bool canCreate = (bool)assignmentInfo["can_create"];
-
-                            CalloutDefinition myCalloutDefinition =
-                                new CalloutDefinition("#" + id, $"{title}\r\n{subTitle}");
-                            if (canCreate)
-                            {
-                                myCalloutDefinition.ButtonImage =
-                                    await new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, Color.Blue, 25)
-                                        .CreateSwatchAsync(96);
-                                myCalloutDefinition.OnButtonClick += tag => OnAssignmentButtonClick(assignmentInfo, tag);
-                                myCalloutDefinition.Tag = id;
-                            }
-                            MapView.ShowCalloutAt(projectedLocation, myCalloutDefinition);
-                        }
+                        NavigateToCardByMarker(identifyResults, projectedLocation);
                     }
                 }
                 else
                 {
-                    MapView.DismissCallout();
+                    ActiveMarkerIndex = null;
                 }
             }
             catch (Exception ex)
@@ -475,48 +743,59 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         }
 
-        private async void OnInterviewButtonClick(object calloutTag)
+        protected void NavigateToCardByMarker(IdentifyGraphicsOverlayResult identifyResults,
+            MapPoint projectedLocation)
         {
-            if (calloutTag is string interviewId)
+            var markerId = identifyResults.Graphics[0].Attributes[MarkerId].ToString();
+            var markerViewModel = AvailableMarkers.FirstOrDefault(m => m.Id == markerId);
+            if (markerViewModel != null)
             {
-                var interview = interviewViewRepository.GetById(interviewId);
-                if (interview != null && interview.Status == InterviewStatus.Completed)
-                {
-                    var isReopen = await userInteractionService.ConfirmAsync(
-                        EnumeratorUIResources.Dashboard_Reinitialize_Interview_Message,
-                        okButton: UIResources.Yes,
-                        cancelButton: UIResources.No);
-
-                    if (!isReopen)
-                    {
-                        return;
-                    }
-                }
-
-                await ViewModelNavigationService.NavigateToInterviewAsync(interviewId, null);
+                var markerIndex = AvailableMarkers.IndexOf(markerViewModel);
+                ActiveMarkerIndex = markerIndex < 0 ? null : markerIndex;
             }
         }
 
-        private void OnAssignmentButtonClick(IDictionary<string, object> assignmentInfo, object calloutTag)
+        protected void NavigateToMarkerByCard(int? newPosition, int? oldPosition)
         {
-            bool isCreating = assignmentInfo.ContainsKey("creating");
-            if (isCreating)
+            if (newPosition == oldPosition)
                 return;
-            
-            assignmentInfo["creating"] = true;
-            if(calloutTag != null && (Int32.TryParse(calloutTag as string, out int assignmentId)))
+
+            if (oldPosition.HasValue && AvailableMarkers.Count > oldPosition.Value)
             {
-                //create interview from assignment
-                ViewModelNavigationService.NavigateToCreateAndLoadInterview(assignmentId);
+                var marker = AvailableMarkers[oldPosition.Value];
+                SetCommonMarkerStyle(marker);
+            }
+
+            if (newPosition.HasValue && AvailableMarkers.Count > newPosition.Value)
+            {
+                var marker = AvailableMarkers[newPosition.Value];
+                SetFocusedMarkerStyle(marker);
+
+                var projectedArea = GeometryEngine.Project(this.MapView.VisibleArea, SpatialReferences.Wgs84);
+                var mapPoint = new MapPoint(marker.Longitude, marker.Latitude, SpatialReferences.Wgs84);
+                if (projectedArea != null && !GeometryEngine.Contains(projectedArea, mapPoint))
+                    this.MapView.SetViewpointCenterAsync(marker.Latitude, marker.Longitude);
             }
         }
 
+        void SetFocusedMarkerStyle(IMarkerViewModel marker) => SetMarkerStyle(marker, 100, 1.5);
+        void SetCommonMarkerStyle(IMarkerViewModel marker) => SetMarkerStyle(marker, 0, 1);
+
+        void SetMarkerStyle(IMarkerViewModel marker, int zIndex, double markerSize)
+        {
+            var graphic = graphicsOverlay.Graphics.FirstOrDefault(g => g.Attributes[MarkerId]?.ToString() == marker.Id);
+            if (graphic != null)
+            {
+                graphic.ZIndex = zIndex;
+                graphic.Symbol = (marker.Type == MarkerType.Assignment)
+                    ? GetAssignmentMarkerSymbol((IAssignmentMarkerViewModel)marker, markerSize)
+                    : GetInterviewMarkerSymbol((IInterviewMarkerViewModel)marker, markerSize);
+            }
+        }
         public IMvxAsyncCommand<MapDescription> SwitchMapCommand => new MvxAsyncCommand<MapDescription>(async (mapDescription) =>
         {
-            this.SelectedMap = mapDescription.MapName;
             IsPanelVisible = false;
-
-            await this.UpdateBaseMap();
+            await this.UpdateBaseMap(mapDescription.MapName);
         });
 
         public IMvxCommand SwitchPanelCommand => new MvxCommand(() =>
@@ -530,31 +809,28 @@ namespace WB.UI.Shared.Extensions.ViewModels
             get => this.isPanelVisible;
             set => this.RaiseAndSetIfChanged(ref this.isPanelVisible, value);
         }
-
-        public IMvxAsyncCommand ShowFullMapCommand => new MvxAsyncCommand(async () =>
-        {
-            if (this.Map?.Basemap?.BaseLayers.Count > 0 && this.Map?.Basemap?.BaseLayers[0]?.FullExtent != null)
-                await MapView.SetViewpointGeometryAsync(this.Map.Basemap.BaseLayers[0].FullExtent);
-        });
-
-        public IMvxAsyncCommand ShowAllItemsCommand => new MvxAsyncCommand(async () =>
-        {
-            await SetViewExtentToItems();
-        });
-
-        private MvxObservableCollection<MapDescription> availableMaps = new MvxObservableCollection<MapDescription>();
-        private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
         
-
-        public IMvxCommand NavigateToDashboardCommand => 
+        private MvxObservableCollection<MapDescription> availableMaps = new MvxObservableCollection<MapDescription>();
+        
+        public IMvxAsyncCommand NavigateToDashboardCommand => 
             new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToDashboardAsync());
         
         public override void Dispose()
         {
-            base.Dispose();
-
             if (MapView != null)
                 MapView.GeoViewTapped -= OnMapViewTapped;
+
+            this.AvailableMarkers.ToList().ForEach(item =>
+            {
+                if (item is IDashboardItemWithEvents withEvents)
+                    withEvents.OnItemUpdated -= Markers_OnItemUpdated;
+                if (item is InterviewDashboardItemViewModel interview)
+                    interview.OnItemRemoved -= Markers_InterviewItemRemoved;
+
+                item?.DisposeIfDisposable();
+            });
+            
+            base.Dispose();
         }
     }
 

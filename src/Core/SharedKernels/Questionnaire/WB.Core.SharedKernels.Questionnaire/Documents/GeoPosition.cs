@@ -8,15 +8,15 @@ namespace Main.Core.Entities.SubEntities
     {
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public double Accuracy { get; set; }
-        public double Altitude { get; set; }
+        public double? Accuracy { get; set; }
+        public double? Altitude { get; set; }
         public DateTimeOffset Timestamp { get; set; }
 
         public GeoPosition()
         {
         }
 
-        public GeoPosition(double latitude, double longitude, double accuracy, double altitude,
+        public GeoPosition(double latitude, double longitude, double? accuracy, double? altitude,
             DateTimeOffset timestamp)
         {
             this.Latitude = latitude;
@@ -56,13 +56,13 @@ namespace Main.Core.Entities.SubEntities
 
         public static string[] PropertyNames { get; } = new[] {"Latitude", "Longitude", "Accuracy", "Altitude", "Timestamp"};
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             GeoPosition? geoPosition = obj as GeoPosition;
             return geoPosition != null && this.Equals(geoPosition);
         }
 
-        public bool Equals(GeoPosition other)
+        public bool Equals(GeoPosition? other)
         {
             if (other == null)
                 return false;

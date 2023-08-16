@@ -9,6 +9,8 @@
         android:id="@+id/menu_sync_offline"
         local:showAsAction="ifRoom"/>
 
+    <item android:id="@+id/menu_map_dashboard"
+          local:showAsAction="ifRoom" />
     <item
         android:id="@+id/menu_search"
         local:showAsAction="ifRoom"/>

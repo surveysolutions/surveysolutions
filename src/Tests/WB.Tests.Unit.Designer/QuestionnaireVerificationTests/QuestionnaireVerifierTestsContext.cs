@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             IAttachmentService attachmentService = null,
             ITopologicalSorter<Guid> topologicalSorter = null,
             IQuestionnaireTranslator questionnaireTranslator = null,
-            ICategoriesService categoriesService = null)
+            IReusableCategoriesService reusableCategoriesService = null)
             => Create.QuestionnaireVerifier(
                 expressionProcessor: expressionProcessor,
                 substitutionService: substitutionService,
@@ -40,11 +40,16 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 attachmentService: attachmentService,
                 topologicalSorter: topologicalSorter,
                 questionnaireTranslator: questionnaireTranslator,
-                categoriesService: categoriesService);
+                reusableCategoriesService: reusableCategoriesService);
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument(params IComposite[] questionnaireChildren)
         {
             return Create.QuestionnaireDocument(children: questionnaireChildren);
+        }
+
+        protected static QuestionnaireDocument CreateQuestionnaireDocumentWithoutChildren(params IComposite[] questionnaireChildren)
+        {
+            return Create.QuestionnaireDocumentWithoutChildren(children: questionnaireChildren);
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)

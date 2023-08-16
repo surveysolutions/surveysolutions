@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -39,6 +40,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerInterviewsControllerT
                 synchronizationSerializer: synchronizationSerializer ?? Mock.Of<IJsonAllTypesSerializer>(),
                 eventStore: Mock.Of<IHeadquartersEventStore>(),
                 audioAuditFileStorage: audioAuditFileStorage ?? Mock.Of<IAudioAuditFileStorage>(),
+                userToDeviceService: Mock.Of<IUserToDeviceService>(),
                 webHostEnvironment: Mock.Of<IWebHostEnvironment>());
 
             var httpContext = new DefaultHttpContext(); // or mock a `HttpContext`

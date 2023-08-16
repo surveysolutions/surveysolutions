@@ -31,6 +31,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             this.Property(x => x.ParentValue);
             this.Property(x => x.Text, ptp => ptp.NotNullable(true));
             this.Property(x => x.Value, ptp => ptp.NotNullable(true));
+            
+            this.Property(x => x.AttachmentName);
         }
     }
 }

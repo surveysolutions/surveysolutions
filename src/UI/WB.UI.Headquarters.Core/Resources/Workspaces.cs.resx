@@ -118,12 +118,108 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AddNew" xml:space="preserve">
-    <value>Vytvořit nový</value>
+    <value>Vyberte z nabídky nových dotazníků</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Jméno</value>
+    <value>Název</value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>Otevřít</value>
+  </data>
+  <data name="AgreeToDelete" xml:space="preserve">
+    <value>Rozumím, že tuto operaci nelze vrátit zpět</value>
+  </data>
+  <data name="AssignedWorkspaces" xml:space="preserve">
+    <value>Vyberte úlohy, ke kterým má uživatel přístup</value>
+  </data>
+  <data name="CanNotBeChanged" xml:space="preserve">
+    <value>Po vytvoření nelze změnit</value>
+  </data>
+  <data name="CantDeleteExplanation" xml:space="preserve">
+    <value>Úlohu nelze smazat. S touto úlohou je spojen alespoň jeden typ dotazníku. Smazat lze pouze úlohy bez typů dotazníků.</value>
+  </data>
+  <data name="CreateWorkspace" xml:space="preserve">
+    <value>Vytvoření úlohy</value>
+  </data>
+  <data name="CurrentWorkspace" xml:space="preserve">
+    <value>Aktuální úloha</value>
+  </data>
+  <data name="DeleteExplanation" xml:space="preserve">
+    <value>Opravdu chcete smazat úlohu &lt;strong&gt;{{name}}&lt;/strong&gt;?
+Všechny uživatelské účty připojené k této úloze z ní budou odstraněny. Aplikace Tazatel a Garant nainstalované na tabletech těchto uživatelů již nebudou moci komunikovat s touto úlohou a data shromážděná v této úloze budou ztracena.
+
+Následující data spojená s touto úlohou budou smazána:</value>
+  </data>
+  <data name="DeleteWorkspacePopupTitle" xml:space="preserve">
+    <value>Smazat úlohu „{{name}}“</value>
+  </data>
+  <data name="Disable" xml:space="preserve">
+    <value>Zakázat</value>
+  </data>
+  <data name="DisableExplanation" xml:space="preserve">
+    <value>Deaktivace úlohy k ní zastaví přístup všem uživatelům. Zastaví veškerý sběr dat, který by mohl probíhat.</value>
+  </data>
+  <data name="DisableWorkspacePopupTitle" xml:space="preserve">
+    <value>Potvrďte deaktivaci „{{name}}“</value>
+  </data>
+  <data name="DisplayName" xml:space="preserve">
+    <value>Zobrazit název</value>
+  </data>
+  <data name="DisplayNameHelpText" xml:space="preserve">
+    <value>Slouží k zobrazení úloh v nabídkách. Zkuste zvolit kratší názvy</value>
+  </data>
+  <data name="DisplayNameRequired" xml:space="preserve">
+    <value>Zobrazování názvu je povinné</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Upravit</value>
+  </data>
+  <data name="EditWorkspace" xml:space="preserve">
+    <value>Upravit úlohu „{{name}}“</value>
+  </data>
+  <data name="Enable" xml:space="preserve">
+    <value>Povolit</value>
+  </data>
+  <data name="InterviewersCount" xml:space="preserve">
+    <value>Počet tazatelů: {{count}}</value>
+  </data>
+  <data name="InvalidName" xml:space="preserve">
+    <value>Jsou povoleny pouze číslice a malá písmena</value>
+  </data>
+  <data name="MapsCount" xml:space="preserve">
+    <value>Nahrané mapy: {{count}}</value>
+  </data>
+  <data name="NameRequired" xml:space="preserve">
+    <value>Názeb je povinný</value>
+  </data>
+  <data name="NameShouldBeUnique" xml:space="preserve">
+    <value>Název by měl být jedinečný</value>
+  </data>
+  <data name="NameShouldNotBeOneOfForbidden" xml:space="preserve">
+    <value>Zadaný název úlohy není povolen</value>
+  </data>
+  <data name="SupervisorsCount" xml:space="preserve">
+    <value>Garanti: {{count}}</value>
+  </data>
+  <data name="UserWorkspacesTab" xml:space="preserve">
+    <value>Úlohy</value>
+  </data>
+  <data name="WorkspaceAccessDisabledReason" xml:space="preserve">
+    <value>Váš účet je v úloze deaktivován administrátorem systému a v důsledku toho nemůžete používat funkce tohoto webu. Pokud se domníváte, že se jedná o chybu, obraťte se na svého garanta.</value>
+  </data>
+  <data name="WorkspaceCantBeRemoved" xml:space="preserve">
+    <value>Úlohu nelze odebrat, protože uživatel má přiřazenou práci. Znovu přidělte všechny dotazníky (včetně deaktivovaných) nedokončené rozhovory a pro Garanta přesuňte všechny tazatele do jiného týmu. Rozhovory: {0}, Dotazníky: {1}, Tazatelé: {2}</value>
+  </data>
+  <data name="WorkspaceDisabledReason" xml:space="preserve">
+    <value>Úloha je deaktivována a nelze k ní získat přístup. Pokud se domníváte, že se jedná o chybu, kontaktujte Administrátora.</value>
+  </data>
+  <data name="WorkspaceSettings" xml:space="preserve">
+    <value>Nastavení</value>
+  </data>
+  <data name="WorkspacesSubtitle" xml:space="preserve">
+    <value>Každá úloha má izolované typy dotazníky, typy dotazníků a rozhovory.</value>
+  </data>
+  <data name="WorkspacesUpdated" xml:space="preserve">
+    <value>Seznam úloh aktualizován</value>
   </data>
 </root>

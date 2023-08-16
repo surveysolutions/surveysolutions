@@ -35,10 +35,6 @@ namespace WB.Services.Export.InterviewDataStorage.Services
             this.logger = logger;
         }
 
-        // there is no single table in DB to acquire lock on,
-        // so using some pretty random value for advisory lock
-        private const long SchemaGenerationLock = -12312312312;
-
         public void CreateQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument)
         {
             try
@@ -47,7 +43,7 @@ namespace WB.Services.Export.InterviewDataStorage.Services
                 // can and already happen if HQ query info on export status
                 // while export job start running
                 // Lock will be released on transaction commit at the end of current export processing batch
-                this.dbContext.AcquireXactLock(SchemaGenerationLock);
+                this.dbContext.AcquireXactLock(TenantDbContext.SchemaChangesLock);
                 
                 var connection = dbContext.Database.GetDbConnection();
 
@@ -76,7 +72,7 @@ namespace WB.Services.Export.InterviewDataStorage.Services
         {
             try
             {
-                this.dbContext.AcquireXactLock(SchemaGenerationLock);
+                this.dbContext.AcquireXactLock(TenantDbContext.SchemaChangesLock);
                 var db = dbContext.Database.GetDbConnection();
                 foreach (var storedGroup in questionnaireDocument.DatabaseStructure.GetAllLevelTables())
                 {

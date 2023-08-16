@@ -6,6 +6,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -21,11 +22,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IPrincipal principal,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering,
-            QuestionInstructionViewModel instructionViewModel) :
+            QuestionInstructionViewModel instructionViewModel,
+            IInterviewViewModelFactory viewModelFactory,
+            AttachmentViewModel attachmentViewModel) :
             base(principal: principal, questionStateViewModel: questionStateViewModel, answering: answering,
                 instructionViewModel: instructionViewModel, interviewRepository: interviewRepository, 
-                eventRegistry: eventRegistry, filteredOptionsViewModel)
+                eventRegistry: eventRegistry, filteredOptionsViewModel, viewModelFactory)
         {
+            this.comboboxViewModel = new CategoricalComboboxAutocompleteWithAttachmentViewModel(questionStateViewModel, filteredOptionsViewModel, true, attachmentViewModel);
         }
 
         public override void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -33,6 +37,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             base.Init(interviewId, entityIdentity, navigationState);
 
             this.filteredOptionsViewModel.OptionsChanged += FilteredOptionsViewModelOnOptionsChanged;
+        }
+
+        protected override void ChangeAttachment(int? optionValue)
+        {
+            string attachmentName = null;
+            if (optionValue.HasValue)
+            {
+                var interview = this.interviewRepository.GetOrThrow(this.interviewId);
+                attachmentName = interview.GetAttachmentForEntityOption(Identity, optionValue.Value, null);
+            }
+
+            var comboWithAttachment = (CategoricalComboboxAutocompleteWithAttachmentViewModel)this.comboboxViewModel;
+            comboWithAttachment.Attachment.InitAsStatic(interviewId, attachmentName);
         }
 
         private async Task FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
@@ -45,6 +62,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             base.Dispose();
             this.filteredOptionsViewModel.OptionsChanged -= FilteredOptionsViewModelOnOptionsChanged;
             this.filteredOptionsViewModel.Dispose();
+            
+            this.comboboxViewModel.Dispose();
         }
         
         public override IObservableCollection<ICompositeEntity> Children

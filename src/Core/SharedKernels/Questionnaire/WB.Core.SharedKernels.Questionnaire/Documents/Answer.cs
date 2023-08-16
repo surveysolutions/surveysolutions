@@ -15,6 +15,8 @@ namespace Main.Core.Entities.SubEntities
         public decimal? AnswerCode { get; set; }
 
         public decimal? ParentCode { get; set; }
+        
+        public string? AttachmentName { get; set; }
 
         public Answer Clone()
         {
@@ -42,14 +44,15 @@ namespace Main.Core.Entities.SubEntities
 
         public bool HasValue() => AnswerCode.HasValue || !string.IsNullOrEmpty(AnswerValue);
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
-            return obj is Answer answer &&
-                   AnswerText == answer.AnswerText &&
-                   EqualityComparer<decimal?>.Default.Equals(
+            return obj is Answer answer 
+                   && EqualityComparer<decimal?>.Default.Equals(
                        HasValue() ? GetParsedValue() : null, 
-                       answer.HasValue() ? answer.GetParsedValue() : null) &&
-                   EqualityComparer<decimal?>.Default.Equals(GetParsedParentValue(), answer.GetParsedParentValue());
+                       answer.HasValue() ? answer.GetParsedValue() : null) 
+                   && EqualityComparer<decimal?>.Default.Equals(GetParsedParentValue(), answer.GetParsedParentValue()) 
+                   && AnswerText == answer.AnswerText 
+                   && AttachmentName == answer.AttachmentName;
         }
 
         public override int GetHashCode()
@@ -57,7 +60,15 @@ namespace Main.Core.Entities.SubEntities
             var hashCode = 1711232258;
             hashCode = hashCode * -1521134295 + EqualityComparer<string?>.Default.GetHashCode(AnswerText);
             hashCode = hashCode * -1521134295 + EqualityComparer<decimal?>.Default.GetHashCode(GetParsedValue());
-            hashCode = hashCode * -1521134295 + EqualityComparer<decimal?>.Default.GetHashCode(GetParsedParentValue());
+            
+            var parsedParentValue = GetParsedParentValue();
+            if (parsedParentValue.HasValue)
+                hashCode = hashCode * -1521134295 + EqualityComparer<decimal?>.Default.GetHashCode(parsedParentValue);
+            
+            var attachmentName = AttachmentName;
+            if (attachmentName != null)
+                hashCode = hashCode * -1521134295 + EqualityComparer<string?>.Default.GetHashCode(attachmentName);
+            
             return hashCode;
         }
     }

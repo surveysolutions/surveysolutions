@@ -162,6 +162,14 @@
                             & .panel-default{
                                 @include paccordion($cummulativePadding);
                                 $cummulativePadding: $cummulativePadding + $padding;
+                                & .panel-default{
+                                    @include paccordion($cummulativePadding);
+                                    $cummulativePadding: $cummulativePadding + $padding;
+                                    & .panel-default{
+                                        @include paccordion($cummulativePadding);
+                                        $cummulativePadding: $cummulativePadding + $padding;
+                                    }
+                                }
                             } 
                         } 
                     } 
@@ -213,6 +221,36 @@
     &:hover, &:focus, &:active{
         &:before, &:after{
             background-color: darken($gray_light, 30%);
+        }
+    }
+}
+@mixin add($width: 14px){
+    $height: 2px; 
+    background-color: transparent;
+    @include square($width);
+    position: relative;
+    margin: 0;
+    @include opacity(0.5);
+    display: block;
+    @include box-sizing(content-box);
+    
+    &:before, &:after{
+        display: block;
+        content: "";
+        @include size($width, $height);
+        background-color: $white;
+        @include rotate(90deg);
+        position: relative;
+        top: ($width - $height)*0.5;
+        @include transition(background, 0.2s);
+    }
+    &:after{
+        @include rotate(0deg);
+        top: ($width*0.5 - $height - 1px);
+    }
+    &:hover, &:focus, &:active{
+        &:before, &:after{
+            background-color: darken($white, 30%);
         }
     }
 }

@@ -21,6 +21,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Tests.Unit.Designer.Services;
 using WB.UI.Designer.Code;
@@ -42,7 +43,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
         {
             var questionnaireController = new QuestionnaireController(
                 questionnaireViewFactory ?? Mock.Of<IQuestionnaireViewFactory>(),
-                Mock.Of<IFileSystemAccessor>(),
+                new FileSystemIOAccessor(),
                 logger ?? Mock.Of<ILogger<QuestionnaireController>>(),
                 questionnaireInfoFactory ?? Mock.Of<IQuestionnaireInfoFactory>(),                
                 Mock.Of<IQuestionnaireChangeHistoryFactory>(),
@@ -52,7 +53,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 categoricalOptionsImportService ?? Mock.Of<ICategoricalOptionsImportService>(),
                 commandService ?? Mock.Of<ICommandService>(),
                 dbContext ?? Create.InMemoryDbContext(),
-                categoriesService: Mock.Of<ICategoriesService>(),
+                reusableCategoriesService: Mock.Of<IReusableCategoriesService>(),
                 Mock.Of<IEmailSender>(),
                 Mock.Of<IViewRenderService>(),
                 null!);
@@ -70,9 +71,10 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 
         protected static Stream GenerateStreamFromString(string s)
         {
+            var dataWithHeader = "value\ttitle\tparentvalue\r\n" + s;
             MemoryStream stream = new MemoryStream();
             StreamWriter writer = new StreamWriter(stream);
-            writer.Write(s);
+            writer.Write(dataWithHeader);
             writer.Flush();
             stream.Position = 0;
             return stream;

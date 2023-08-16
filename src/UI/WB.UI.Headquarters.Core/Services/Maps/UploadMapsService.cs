@@ -19,6 +19,7 @@ class UploadMapsService : IUploadMapsService
     private readonly ILogger<UploadMapsService> logger;
     private readonly IArchiveUtils archiveUtils;
     private readonly IMapStorageService mapStorageService;
+    private readonly IMapFilesValidator mapFilesValidator;
 
     private const string TempFolderName = "TempMapsData";
 
@@ -29,7 +30,8 @@ class UploadMapsService : IUploadMapsService
         ILogger<UploadMapsService> logger,
         IArchiveUtils archiveUtils,
         IMapStorageService mapStorageService,
-        IOptions<FileStorageConfig> fileStorageConfig
+        IOptions<FileStorageConfig> fileStorageConfig,
+        IMapFilesValidator mapFilesValidator
         )
     {
         this.fileSystemAccessor = fileSystemAccessor;
@@ -37,7 +39,8 @@ class UploadMapsService : IUploadMapsService
         this.logger = logger;
         this.archiveUtils = archiveUtils;
         this.mapStorageService = mapStorageService;
-        
+        this.mapFilesValidator = mapFilesValidator;
+
         this.path = fileSystemAccessor.CombinePath(fileStorageConfig.Value.TempData, TempFolderName);
         if (!fileSystemAccessor.IsDirectoryExists(this.path))
             fileSystemAccessor.CreateDirectory(this.path);
@@ -63,7 +66,6 @@ class UploadMapsService : IUploadMapsService
                 return result;
             }
             
-            MapFilesValidator mapFilesValidator = new MapFilesValidator();
             var validatorErrors = mapFilesValidator.Verify(analyzeResult).ToList();
             if (validatorErrors.Any())
             {

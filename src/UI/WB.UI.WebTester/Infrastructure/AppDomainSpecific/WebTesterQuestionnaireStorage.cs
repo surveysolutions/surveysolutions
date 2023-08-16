@@ -7,6 +7,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Questionnaire;
+using WB.UI.WebTester.Infrastructure.AppDomainSpecific;
 
 namespace WB.UI.WebTester.Infrastructure
 {
@@ -25,8 +26,8 @@ namespace WB.UI.WebTester.Infrastructure
             this.categoriesFillerIntoQuestionnaire = categoriesFillerIntoQuestionnaire;
         }
 
-        private readonly ConcurrentDictionary<string, PlainQuestionnaire> plainQuestionnairesCache 
-            = new ConcurrentDictionary<string, PlainQuestionnaire>();
+        private readonly ConcurrentDictionary<string, WebTesterPlainQuestionnaire> plainQuestionnairesCache 
+            = new ConcurrentDictionary<string, WebTesterPlainQuestionnaire>();
 
         private readonly IQuestionOptionsRepository questionOptionsRepository;
         private readonly ISubstitutionService substitutionService;
@@ -34,7 +35,7 @@ namespace WB.UI.WebTester.Infrastructure
 
         public IQuestionnaire? GetQuestionnaire(QuestionnaireIdentity identity, string? language)
         {
-            if (this.plainQuestionnairesCache.TryGetValue(identity.ToString(), out PlainQuestionnaire? q))
+            if (this.plainQuestionnairesCache.TryGetValue(identity.ToString(), out WebTesterPlainQuestionnaire? q))
             {
                 if (language == null)
                 {
@@ -59,12 +60,12 @@ namespace WB.UI.WebTester.Infrastructure
                     questionnaireDocument);
 
             this.plainQuestionnairesCache[questionnaireIdentity.ToString()] = 
-                 new PlainQuestionnaire(questionnaireMergedWithCategories, version, questionOptionsRepository, substitutionService);
+                 new WebTesterPlainQuestionnaire(questionnaireMergedWithCategories, version, questionOptionsRepository, substitutionService);
         }
 
         public QuestionnaireDocument? GetQuestionnaireDocument(QuestionnaireIdentity identity)
         {
-            if (this.plainQuestionnairesCache.TryGetValue(identity.ToString(), out PlainQuestionnaire? q))
+            if (this.plainQuestionnairesCache.TryGetValue(identity.ToString(), out WebTesterPlainQuestionnaire? q))
             {
                 return q.QuestionnaireDocument;
             }

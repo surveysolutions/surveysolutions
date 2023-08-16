@@ -28,8 +28,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         protected const int MaxQuestionsCountInSubSection = 200;
         protected const int MinCountOfDecimalPlaces = 1;
         protected const int MaxCountOfDecimalPlaces = 15;
-        public const int MaxTitleLength = 500;
-        protected const int MaxValidationMessageLength = 250;
+        public const int MaxTitleLength = 2000;
+        protected const int MaxValidationMessageLength = 2000;
         public const int MaxOptionLength = 250;
         protected const int MaxNestedSubsectionsCount = 10;
         protected const int MaxRosterSizeAnswer = 200;
@@ -46,6 +46,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         public const int DefaultVariableLengthLimit = 32;
         protected const int DefaultRestrictedVariableLengthLimit = 20;
         protected const int RosterVariableNameLimit = 28;
+        protected const int GeographyVariableNameLimit = 26;
 
         protected const int MaxRosterPropagationLimit = 10000;
         protected const int QuestionnaireTotalEntitiesLimit = Constants.MaxTotalRosterPropagationLimit;

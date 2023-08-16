@@ -29,9 +29,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             return sideBarItem;
         }
 
-        public ISideBarItem BuildCoverItem(NavigationState navigationState)
+        public ISideBarItem BuildVirtualCoverItem(NavigationState navigationState)
         {
-            var sideBarItem = this.serviceLocator.GetInstance<SideBarCoverSectionViewModel>();
+            var sideBarItem = this.serviceLocator.GetInstance<SideBarVirtualCoverSectionViewModel>();
             sideBarItem.Init(navigationState);
             return sideBarItem;
         }

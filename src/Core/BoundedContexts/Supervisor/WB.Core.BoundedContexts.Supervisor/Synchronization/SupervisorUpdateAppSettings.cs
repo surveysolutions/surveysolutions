@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps;
@@ -20,9 +21,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
             this.supervisorSettings = interviewerSettings ?? throw new ArgumentNullException(nameof(interviewerSettings));
         }
 
-        protected override void UpdateNotificationsSetting(bool notificationsEnabled)
+        public override async Task ExecuteAsync()
         {
-            supervisorSettings.SetNotifications(notificationsEnabled);
+            var tabletSettings = await this.synchronizationService.GetTabletSettings(Context.CancellationToken);
+            supervisorSettings.SetWebInterviewUrlTemplate(tabletSettings.WebInterviewUrlTemplate);
+            supervisorSettings.SetGeographyQuestionAccuracyInMeters(tabletSettings.GeographyQuestionAccuracyInMeters);
+            supervisorSettings.SetGeographyQuestionPeriodInSeconds(tabletSettings.GeographyQuestionPeriodInSeconds);
+            supervisorSettings.SetNotifications(tabletSettings.NotificationsEnabled);
         }
     }
 }

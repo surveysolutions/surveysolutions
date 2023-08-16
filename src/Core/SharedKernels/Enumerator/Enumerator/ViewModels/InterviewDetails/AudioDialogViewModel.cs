@@ -6,7 +6,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public class AudioDialogViewModel : MvxViewModel
+    public class AudioDialogViewModel : BaseViewModel
     {
         public ICommand DoneCommand => new MvxCommand(this.Done);
         public ICommand CancelCommand => new MvxCommand(this.Cancel);

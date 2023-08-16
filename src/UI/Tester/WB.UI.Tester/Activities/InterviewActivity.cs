@@ -67,7 +67,7 @@ namespace WB.UI.Tester.Activities
         {
             var onCreateOptionsMenu = base.OnCreateOptionsMenu(menu);
 
-            var isAuthenticated = this.ViewModel.IsAuthenticated;
+            var isAuthenticated = this.ViewModel.IsRealUserAuthenticated;
             menu.VisibleMenuItem(Resource.Id.interview_login, !isAuthenticated);
             menu.VisibleMenuItem(Resource.Id.interview_signout, isAuthenticated);
             menu.VisibleMenuItem(Resource.Id.interview_anonymous_questionnaire, !isAuthenticated);

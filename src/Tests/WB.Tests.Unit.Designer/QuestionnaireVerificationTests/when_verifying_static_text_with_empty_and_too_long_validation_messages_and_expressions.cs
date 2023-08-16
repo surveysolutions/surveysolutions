@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                     Create.ValidationCondition(message: "Message 2", expression: string.Empty),
                     Create.ValidationCondition(message: string.Empty, expression: "Expression 3"),
                     Create.ValidationCondition(message: "Message 4", expression: "Expression 4 very long" + Enumerable.Range(1, 1000).Select(_ => " very long").Aggregate(string.Empty, (current, delta) => current + delta)),
-                    Create.ValidationCondition(expression: "Expression 5", message: "Message 5 very long very very long very very long very very long very very long very very long very very long very very long very very long very very long very very long very very long very very long very very long very very long very very long very very long very very long very very long"),
+                    Create.ValidationCondition(expression: "Expression 5", message: Enumerable.Range(1, 2002).Select(_ => "Ї").Aggregate(string.Empty, (current, delta) => current + delta)),
                 })
             });
 

@@ -126,6 +126,8 @@ namespace WB.Enumerator.Native.WebInterview
                         return Enumerator.Native.Resources.WebInterview.InterviewReceivedByInterviewer;
                     case InterviewDomainExceptionType.InterviewSizeLimitReached:
                         return Enumerator.Native.Resources.WebInterview.InterviewSizeLimitReached;
+                    case InterviewDomainExceptionType.AssignmentLimitReached:
+                        return Enumerator.Native.Resources.WebInterview.AssignmentLimitReached;
                 }
             }
 

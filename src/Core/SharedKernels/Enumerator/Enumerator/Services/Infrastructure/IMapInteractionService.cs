@@ -1,15 +1,15 @@
 ﻿using System.Threading.Tasks;
-using WB.Core.SharedKernels.Questionnaire.Documents;
-using Area = WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Area;
 
 namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
 {
     public interface IMapInteractionService
     {
-        Task<AreaEditResult> EditAreaAsync(Area area, GeometryType? geometryType);
-        Task OpenMapDashboardAsync();
+        Task<AreaEditResult> EditAreaAsync(EditAreaArgs args);
+        Task OpenInterviewerMapDashboardAsync();
+        Task OpenSupervisorMapDashboardAsync();
 
-        public void Init(string key);
+        public void SetLicenseKey(string key);
+        public void SetApiKey(string key);
         
         bool DoesSupportMaps { get; }
     }

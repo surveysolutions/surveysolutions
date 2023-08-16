@@ -52,10 +52,10 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         }
 
         [NUnit.Framework.Test] public void should_linked_question_have_one_answer () =>
-           GetLevel(result, new Guid[0]).Records[0].GetPlainAnswers().First().Length.Should().Be(1);
+           GetLevel(result, Array.Empty<Guid>()).Records[0].GetPlainAnswers().First().Length.Should().Be(1);
 
         [NUnit.Framework.Test] public void should_linked_question_have_first_answer_be_equal_to_0 () =>
-           GetLevel(result, new Guid[0]).Records[0].GetPlainAnswers().First().First().Should().Be("1,4");
+           GetLevel(result, Array.Empty<Guid>()).Records[0].GetPlainAnswers().First().First().Should().Be("1,4");
 
         private static InterviewDataExportView result;
         private static Guid rosterId;

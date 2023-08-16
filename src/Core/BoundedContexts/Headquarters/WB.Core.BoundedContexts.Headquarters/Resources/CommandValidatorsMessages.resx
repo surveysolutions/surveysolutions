@@ -135,4 +135,7 @@
  <data name="QuestionnaireWasDeleted" xml:space="preserve">
     <value>Questionnaire was deleted</value>
   </data>
+ <data name="AssignmentLimitReached" xml:space="preserve">
+    <value>Assignment limit was reached</value>
+  </data>
 </root>

@@ -121,6 +121,48 @@
     <value>Synchronizace se nezdařila. Aplikace Tazatel není kompatibilní. Odinstalujte aplikaci a stáhněte si novou verzi aplikace Tazatel</value>
   </data>
   <data name="OldInterviewerNeedsCleanup" xml:space="preserve">
-    <value>Synchronizace částečně selhala. Hotové dotazníky byly odeslány na server, ale není možné dostávat nové dotazníky. Přejděte do nastavení systému Android -&gt; Aplikace -&gt; Tazatel a stiskněte tlačítko Vymazat data. Poté proveďte synchronizaci od začátku.</value>
+    <value>Synchronizace částečně selhala. Hotové rozhovory byly odeslány na server, ale není možné dostávat nové dotazníky. Přejděte do nastavení systému Android -&gt; Aplikace -&gt; Tazatel a stiskněte tlačítko Vymazat data. Poté proveďte synchronizaci od začátku.</value>
+  </data>
+  <data name="AndroidDeviceIdWasNotProvided" xml:space="preserve">
+    <value>Synchronizace se nezdařila. ID zařízení Android nebylo poskytnuto. Kontaktujte prosím programátora.</value>
+  </data>
+  <data name="FileWasNotFound" xml:space="preserve">
+    <value>Synchronizace se nezdařila. Soubor s nejnovější verzí nebyl nalezen. Kontaktujte prosím programátora.</value>
+  </data>
+  <data name="IncorrectFilesCount" xml:space="preserve">
+    <value>Synchronizace se nezdařila. Nesprávný počet souborů. Kontaktujte prosím programátora.</value>
+  </data>
+  <data name="IncorrectMediaType" xml:space="preserve">
+    <value>Synchronizace se nezdařila. Nesprávný typ média. Kontaktujte prosím programátora.</value>
+  </data>
+  <data name="InterviewerApplicationShouldBeUpdated" xml:space="preserve">
+    <value>Synchronizace se nezdařila. Vaše aplikace není kompatibilní, aktualizujte si aplikaci Tazatel.</value>
+  </data>
+  <data name="InvalidDeviceIdentifier" xml:space="preserve">
+    <value>Neplatný identifikátor zařízení. Něco se stalo s instalací klientské aplikace, odešlete prosím informace o tabletu.</value>
+  </data>
+  <data name="InvalidSequenceIdentifier" xml:space="preserve">
+    <value>Synchronizace se nezdařila. Neplatný identifikátor sekvence. Něco se stalo s instalací aplikace klienta, stiskněte tlačítko „Odeslat informace o tabletu“.</value>
+  </data>
+  <data name="InvalidUserFormat" xml:space="preserve">
+    <value>Synchronizace se nezdařila. Uživatel nemá oprávnění. Zkontrolujte prosím své přihlašovací jméno/heslo pro {0}.</value>
+  </data>
+  <data name="InvalidUserRole" xml:space="preserve">
+    <value>Váš účet nemá roli povolující tuto operaci.</value>
+  </data>
+  <data name="Maintenance" xml:space="preserve">
+    <value>Server je nyní v režimu údržby. Omluváme se za nepříjemnost. Prosím zkuste to znovu později.</value>
+  </data>
+  <data name="NoClientIdentifier" xml:space="preserve">
+    <value>Synchronizace se nezdařila. Přeinstalujte aplikaci. Chybí identifikátor instalace. Kontaktujte prosím programátora.</value>
+  </data>
+  <data name="ServerError" xml:space="preserve">
+    <value>Synchronizace se nezdařila. Došlo k interní chybě serveru. Kontaktujte prosím programátora.</value>
+  </data>
+  <data name="Sync_package_with_id__0__was_not_found_on_serverFormat" xml:space="preserve">
+    <value>Synchronizace se nezdařila. Synchronizační balíček s ID '{0}' nebyl na serveru nalezen. Kontaktujte prosím programátora.</value>
+  </data>
+  <data name="WrongAndroidDeviceIdWasProvided" xml:space="preserve">
+    <value>Synchronizace se nezdařila. Bylo zadáno nesprávné ID zařízení Android. Kontaktujte prosím programátora.</value>
   </data>
 </root>

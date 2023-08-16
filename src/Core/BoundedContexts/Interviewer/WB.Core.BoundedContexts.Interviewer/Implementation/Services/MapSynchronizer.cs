@@ -34,9 +34,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IUserInteractionService userInteractionService,
             IServiceLocator serviceLocator,
             IDeviceInformationService deviceInformationService,
-            IAssignmentDocumentsStorage assignmentsStorage)
+            IAssignmentDocumentsStorage assignmentsStorage,
+            IPermissionsService permissionsService)
             : base(mapService, synchronizationService, logger, httpStatistician,
-                principal, interviewViewRepository, auditLogService, enumeratorSettings, userInteractionService, deviceInformationService, serviceLocator, assignmentsStorage)
+                principal, interviewViewRepository, auditLogService, enumeratorSettings, userInteractionService, deviceInformationService, serviceLocator, assignmentsStorage, permissionsService)
         {
             this.passwordHasher = passwordHasher;
             this.interviewerPrincipal = principal;
@@ -45,7 +46,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         protected override void UpdatePasswordOfResponsible(RestCredentials credentials)
         {
             var localInterviewer = this.interviewerPrincipal.GetInterviewerByName(credentials.Login);
-
+            if (localInterviewer == null)
+                throw new NullReferenceException($"Interviewer with {credentials.Login} not found");
             localInterviewer.PasswordHash = this.passwordHasher.Hash(credentials.Password);
             localInterviewer.Token = credentials.Token;
 

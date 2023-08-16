@@ -7,9 +7,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using WB.Services.Export.CsvExport;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
+using WB.Services.Export.Models;
 using WB.Services.Export.Services;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Infrastructure;
@@ -24,6 +26,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IInterviewsToExportSource interviewsToExportSource;
         private readonly ILogger<TabularFormatParaDataExportProcessHandler> logger;
+        private readonly ITabularFormatExportService tabularFormatExportService;
 
         public TabularFormatParaDataExportProcessHandler(
             IOptions<ExportServiceSettings> interviewDataExportSettings,
@@ -31,7 +34,8 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
             IFileSystemAccessor fileSystemAccessor,
             IInterviewsToExportSource interviewsToExportSource,
             ICsvWriter csvWriter,
-            ILogger<TabularFormatParaDataExportProcessHandler> logger)
+            ILogger<TabularFormatParaDataExportProcessHandler> logger,
+            ITabularFormatExportService tabularFormatExportService)
         {
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.tenantApi = tenantApi;
@@ -39,11 +43,12 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
             this.interviewsToExportSource = interviewsToExportSource;
             this.csvWriter = csvWriter;
             this.logger = logger;
+            this.tabularFormatExportService = tabularFormatExportService;
         }
 
         public DataExportFormat Format => DataExportFormat.Paradata;
 
-        public Task ExportDataAsync(ExportState state, CancellationToken cancellationToken)
+        public async Task ExportDataAsync(ExportState state, CancellationToken cancellationToken)
         {
             var settings = state.Settings;
 
@@ -51,6 +56,13 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
             var api = this.tenantApi.For(settings.Tenant);
             if(api == null) throw new InvalidOperationException("Api must be not null.");
 
+            await this.tabularFormatExportService.GenerateShortDescriptionFileAsync(settings.Tenant,
+                settings.QuestionnaireId, state.ExportTempFolder,
+                ExportFileSettings.TabDataFileExtension, cancellationToken);
+            await this.tabularFormatExportService.GenerateInformationFileAsync(settings.Tenant,
+                settings.QuestionnaireId, state.ExportTempFolder, cancellationToken);
+            
+            
             var interviewsToExport = this.interviewsToExportSource.GetInterviewsToExport(settings.QuestionnaireId,
                 settings.Status, settings.FromDate, settings.ToDate);
             
@@ -114,8 +126,6 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
             WriteDoFile(state.ExportTempFolder);
 
             logger.LogInformation("Completed paradata export for {settings}", settings);
-
-            return Task.CompletedTask;
         }
 
         private void WriteDoFile(string tempFolder)
@@ -163,7 +173,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
                     writer.WriteField(record.Action);
                     writer.WriteField(record.OriginatorName);
                     writer.WriteField(ExportHelper.GetParadataRole(record.OriginatorRole));
-                    writer.WriteField(record.Timestamp?.ToString("s", CultureInfo.InvariantCulture) ?? "");
+                    writer.WriteField(record.Timestamp?.ToString("yyyy-MM-ddTHH:mm:ss.fff", CultureInfo.InvariantCulture) ?? "");
                     writer.WriteField(record.Offset != null ? record.Offset.Value.ToString() : "");
                     writer.WriteField(String.Join("||", record.Parameters.Values.Select(v => v.RemoveNewLine())));
 

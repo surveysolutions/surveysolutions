@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using AngleSharp.Dom.Events;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Caching.Memory;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -224,7 +225,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewCreated> @event)
         {
             return this.CreateInterviewSummary(@event.Payload.UserId, @event.Payload.QuestionnaireId,
-                @event.Payload.QuestionnaireVersion, @event.EventSourceId, @event.EventTimeStamp, false, @event.Payload.AssignmentId, @event.Payload.CreationTime);
+                @event.Payload.QuestionnaireVersion, @event.EventSourceId, @event.EventTimeStamp, false, @event.Payload.AssignmentId, @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.CreationTime);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewFromPreloadedDataCreated> @event)
@@ -308,13 +309,13 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<MultipleOptionsQuestionAnswered> @event)
         {
-            return this.AnswerFeaturedQuestionWithOptions(state, @event.Payload.QuestionId, @event.EventTimeStamp, @event.Payload.AnswerTimeUtc, @event.Payload.SelectedValues);
+            return this.AnswerFeaturedQuestionWithOptions(state, @event.Payload.QuestionId, @event.EventTimeStamp, @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc, @event.Payload.SelectedValues);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<SingleOptionQuestionAnswered> @event)
         {
             return this.AnswerFeaturedQuestionWithOptions(state, @event.Payload.QuestionId, @event.EventTimeStamp,
-                @event.Payload.AnswerTimeUtc,
+                @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc,
                 @event.Payload.SelectedValue);
         }
 
@@ -490,13 +491,14 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
             {
+                var resumeDateUtc = @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.UtcTime;
                 if (!state.LastResumeEventUtcTimestamp.HasValue)
                 {
-                    state.LastResumeEventUtcTimestamp = @event.Payload.UtcTime;
+                    state.LastResumeEventUtcTimestamp = resumeDateUtc;
                 }
-                else if (state.LastResumeEventUtcTimestamp > @event.Payload.UtcTime)
+                else if (state.LastResumeEventUtcTimestamp > resumeDateUtc)
                 {
-                    state.LastResumeEventUtcTimestamp = @event.Payload.UtcTime;
+                    state.LastResumeEventUtcTimestamp = resumeDateUtc;
                 }
             });
         }
@@ -536,7 +538,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<AreaQuestionAnswered> @event)
         {
             var area = new Area(@event.Payload.Geometry, @event.Payload.MapName, @event.Payload.NumberOfPoints,
-                @event.Payload.AreaSize, @event.Payload.Length, @event.Payload.Coordinates, @event.Payload.DistanceToEditor);
+                @event.Payload.AreaSize, @event.Payload.Length, @event.Payload.Coordinates, 
+                @event.Payload.DistanceToEditor, @event.Payload.RequestedAccuracy, @event.Payload.RequestedFrequency);
             return this.AnswerQuestion(state, @event.Payload.QuestionId, area, @event.EventTimeStamp, @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc.Value);
         }
 

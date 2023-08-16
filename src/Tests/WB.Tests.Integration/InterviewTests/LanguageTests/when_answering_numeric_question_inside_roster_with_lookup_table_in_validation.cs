@@ -1,10 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Moq;
 using Ncqrs.Spec;
+using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -36,11 +39,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     IntegrationCreate.LookupTableRow(2, new decimal?[] { 1, 10}),
                     IntegrationCreate.LookupTableRow(3, new decimal?[] { 1, 10})
                 );
-
-                var lookupTableServiceMock = new Mock<ILookupTableService>();
-                lookupTableServiceMock.SetReturnsDefault(lookupTableContent);
-
-                SetUp.InstanceToMockedServiceLocator<ILookupTableService>(lookupTableServiceMock.Object);
+                Dictionary<Guid, LookupTableContent> lookupTableContents = new() { { lookupId, lookupTableContent } };
 
                 var assetsTitles = new[]
                 {
@@ -59,7 +58,8 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 
                 questionnaire.LookupTables.Add(lookupId, Create.Entity.LookupTable("price"));
 
-                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaire);
+                var package = new QuestionnaireCodeGenerationPackage(questionnaire, lookupTableContents);
+                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, package);
 
                 using (var eventContext = new EventContext())
                 {

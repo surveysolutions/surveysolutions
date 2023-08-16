@@ -288,7 +288,7 @@
   <data name="Error" xml:space="preserve">
     <value>Ошибка</value>
   </data>
-  <data name="Error_plural" xml:space="preserve">
+  <data name="Error_other" xml:space="preserve">
     <value>Ошибок</value>
   </data>
   <data name="CoverFirstComments" xml:space="preserve">
@@ -443,6 +443,12 @@ Oбратитесь в тех. поддержку за помощью</value>
   <data name="EmailLink_EmailResumeLink" xml:space="preserve">
     <value>Отправить ссылку для продолжения</value>
   </data>
+  <data name="HideVariables" xml:space="preserve">
+    <value>Спрятать переменные</value>
+  </data>
+  <data name="ShowVariables" xml:space="preserve">
+    <value>Показать переменные</value>
+  </data>
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
     <value>Вы уверены, что хотите удалить строку '{{rosterTitle}}' у зависимых списков?</value>
   </data>
@@ -499,5 +505,8 @@ Oбратитесь в тех. поддержку за помощью</value>
   </data>
   <data name="SwitchToWebMode_LinkDescription" xml:space="preserve">
     <value>Следующая ссылка может быть использована, чтобы продолжить интервью</value>
+  </data>
+  <data name="AssignmentLimitError" xml:space="preserve">
+    <value>Вы не можите создать интервью из этого задания</value>
   </data>
 </root>

@@ -7,5 +7,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         public decimal? Value { get; set; }
         public decimal? ParentValue { get; set; }
         public string Title { get; set; } = String.Empty;
+        
+        public string? AttachmentName { get; set; }
     }
 }

@@ -20,19 +20,7 @@ namespace WB.Services.Export.User
             this.tenantContext = tenantContext;
         }
 
-        public async Task<string> GetUserNameAsync(Guid userId)
-        {
-            var user = await GetUserAsync(userId);
-            return user.UserName;
-        }
-
-        public async Task<UserRoles> GetUserRoleAsync(Guid userId)
-        {
-            var user = await GetUserAsync(userId);
-            return user.Roles.Single();
-        }
-
-        private Task<User> GetUserAsync(Guid userId)
+        public Task<User?> GetUserAsync(Guid userId)
         {
             return memoryCache.GetOrCreateAsync(userId,
                 async entry =>

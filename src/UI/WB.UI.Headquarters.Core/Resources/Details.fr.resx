@@ -150,7 +150,7 @@
   <data name="SearchResult_Count" xml:space="preserve">
     <value>{{ count }} élément trouvé:</value>
   </data>
-  <data name="SearchResult_Count_plural" xml:space="preserve">
+  <data name="SearchResult_Count_other" xml:space="preserve">
     <value>{{ count }} éléments trouvés:</value>
   </data>
   <data name="Status" xml:space="preserve">

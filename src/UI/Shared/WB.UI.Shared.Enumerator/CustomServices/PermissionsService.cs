@@ -4,37 +4,74 @@ using Android.Content;
 using Android.OS;
 using AndroidX.Core.App;
 using MvvmCross;
+using MvvmCross.Base;
 using MvvmCross.Platforms.Android;
 using MvvmCross.Plugin.Messenger;
-using Plugin.Permissions;
-using Plugin.Permissions.Abstractions;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Utils;
+using WB.UI.Shared.Enumerator.PermissionsCustom;
 using WB.UI.Shared.Enumerator.Services;
+using Xamarin.Essentials;
 
 namespace WB.UI.Shared.Enumerator.CustomServices
 {
     public class PermissionsService : IPermissionsService
     {
-        private readonly IPermissions permissions;
-        private MvxSubscriptionToken token;
+        private readonly IMvxMainThreadAsyncDispatcher asyncDispatcher;
+        private readonly IMvxAndroidCurrentTopActivity currentTopActivity;
 
-        public PermissionsService(IPermissions permissions)
+        public PermissionsService(IMvxMainThreadAsyncDispatcher asyncDispatcher)
         {
-            this.permissions = permissions;
+            this.asyncDispatcher = asyncDispatcher;
+            this.currentTopActivity = Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>();
         }
 
-        public async Task AssureHasPermissionOrThrow<T>() where T : BasePermission, new() 
-            => await this.permissions.AssureHasPermissionOrThrow<T>();
+        private MvxSubscriptionToken token;
+
+        public async Task AssureHasPermissionOrThrow<T>() where T : Permissions.BasePermission, new()
+        {
+            if (Build.VERSION.SdkInt < BuildVersionCodes.M) return;
+            if (await Permissions.CheckStatusAsync<T>().ConfigureAwait(false) == PermissionStatus.Granted) return;
+
+            if (asyncDispatcher.IsOnMainThread)
+            {
+                await RequestPermission<T>();
+            }
+            else
+            {
+                var completion = new TaskCompletionSource<bool>();
+                await asyncDispatcher.ExecuteOnMainThreadAsync(async () =>
+                {
+                    try
+                    {
+                        await RequestPermission<T>();
+                        completion.SetResult(true);
+                    }
+                    catch (Exception e)
+                    {
+                        completion.SetException(e);
+                    }
+                }, maskExceptions: false);
+                await completion.Task;
+            }
+        }
+
+        private static async Task RequestPermission<T>() where T : Permissions.BasePermission, new()
+        {
+            var permissionsRequest = await Permissions.RequestAsync<T>().ConfigureAwait(false);
+            if (permissionsRequest != PermissionStatus.Granted)
+                throw new MissingPermissionsException(UIResources.MissingPermission, typeof(T));
+        }
 
         public Task EnsureHasPermissionToInstallFromUnknownSourcesAsync()
         {
             // Check if application has permission to do package installations
+#pragma warning disable CA1416 // Validate platform compatibility
             if (Build.VERSION.SdkInt >= BuildVersionCodes.O && !Application.Context.PackageManager.CanRequestPackageInstalls())
             {
-                IMvxAndroidCurrentTopActivity topActivity = Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>();
                 // if not - open settings menu for current application
-                var addFlags = ShareCompat.IntentBuilder.From(topActivity.Activity)
+                var addFlags = ShareCompat.IntentBuilder.From(this.currentTopActivity.Activity)
                     .Intent
                     .SetAction(Android.Provider.Settings.ActionManageUnknownAppSources)
                     .SetData(Android.Net.Uri.Parse("package:" + Application.Context.PackageName))
@@ -72,10 +109,77 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
                 return tcs.Task;
             }
+#pragma warning restore CA1416 // Validate platform compatibility
 
             // we have all permissions to install application, proceed with next actions
             return Task.FromResult(true);
         }
 
+        public async Task<PermissionStatus> CheckPermissionStatusAsync<T>() where T : Permissions.BasePermission, new()
+        {
+            if (Build.VERSION.SdkInt < BuildVersionCodes.M) return PermissionStatus.Unknown;
+            return await Permissions.CheckStatusAsync<T>().ConfigureAwait(false);
+        }
+
+        public Task AssureHasExternalStoragePermissionOrThrow()
+        {
+            if (Build.VERSION.SdkInt < BuildVersionCodes.R)
+            {
+                return this.AssureHasPermissionOrThrow<Permissions.StorageWrite>();
+            }
+
+            var status = Android.OS.Environment.IsExternalStorageManager;
+            if (status)
+                return Task.FromResult(true);
+            
+            var askManageFiles = ShareCompat.IntentBuilder.From(this.currentTopActivity.Activity)
+                .Intent
+                .SetAction(Android.Provider.Settings.ActionManageAppAllFilesAccessPermission)
+                .SetData(Android.Net.Uri.Parse("package:" + Application.Context.PackageName))
+                .AddFlags(ActivityFlags.NewTask);
+            Application.Context.StartActivity(askManageFiles);
+
+            var tcs = new TaskCompletionSource<bool>();
+                
+            var messenger = Mvx.IoCProvider.GetSingleton<IMvxMessenger>();
+
+            this.token = messenger.Subscribe<ApplicationResumeMessage>(m =>
+            {
+                try
+                {
+                    var newStatus =  Android.OS.Environment.IsExternalStorageManager;
+                    if (newStatus)
+                    {
+                        tcs.SetResult(true);
+                    }
+                    else
+                    {
+                        tcs.SetException(new MissingPermissionsException(UIResources.MissingPermission, 
+                            Android.Provider.Settings.ActionManageAppAllFilesAccessPermission.GetType()));
+                    }
+                }
+                finally
+                {
+                    // cleaning up subscription token
+                    messenger.Unsubscribe<ApplicationResumeMessage>(token);
+                }
+            });
+
+            return tcs.Task;
+        }
+
+        public Task AssureHasBluetoothPermissionOrThrow()
+        {
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.S)
+                return AssureHasPermissionOrThrow<BluetoothPermission>();
+            return Task.CompletedTask;
+        }
+
+        public Task AssureHasNearbyWifiDevicesPermissionOrThrow()
+        {
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.Tiramisu)
+                return AssureHasPermissionOrThrow<NearbyWifiDevicesPermission>();
+            return Task.CompletedTask;
+        }
     }
 }

@@ -33,10 +33,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             enabledSubgroupsIds = statefulInterview.GetEnabledSubgroupsAndRosters(selectedGroupIdentity).ToArray();
 
         [NUnit.Framework.Test] public void should_contains_3_identities () =>
-            enabledSubgroupsIds.Should().BeEquivalentTo(
+            enabledSubgroupsIds.Should().BeEquivalentTo(new []{
                 Create.Identity(rosterId, rosterInstance2Id),
                 Create.Identity(rosterId, rosterInstance1Id), 
-                Create.Identity(groupId, RosterVector.Empty));
+                Create.Identity(groupId, RosterVector.Empty)});
 
         static StatefulInterview statefulInterview;
         static readonly Identity selectedGroupIdentity = Create.Identity(Guid.Parse("11111111111111111111111111111111"), RosterVector.Empty);

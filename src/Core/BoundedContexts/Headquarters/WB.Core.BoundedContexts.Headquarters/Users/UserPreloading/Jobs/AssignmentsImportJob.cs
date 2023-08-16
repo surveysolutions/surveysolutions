@@ -52,6 +52,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
 
                 var allAssignmentIds = assignmentsImportService.GetAllAssignmentIdsToImport();
                 
+                importProcessStatus = assignmentsImportService.GetImportStatus();
                 if (importProcessStatus.ProcessStatus != AssignmentsImportProcessStatus.Import)
                     return;
 

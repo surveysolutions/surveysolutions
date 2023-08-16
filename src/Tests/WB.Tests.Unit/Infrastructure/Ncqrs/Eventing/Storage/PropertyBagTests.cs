@@ -48,7 +48,8 @@ namespace Ncqrs.Tests.Eventing.Storage
             var bag = new PropertyBag("testing");
             bag.AddPropertyValue(thePropName, thePropValue);
 
-            bag.Properties.Count(p => p.Key == thePropName && (String)p.Value == thePropValue).Should().Equals(1);
+            bag.Properties.Count(p => p.Key == thePropName && (String)p.Value == thePropValue)
+                .Should().Be(1);
         }
 
         [Test]

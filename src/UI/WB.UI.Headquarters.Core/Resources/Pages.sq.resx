@@ -868,7 +868,7 @@
     <value>Duke u rindezur...</value>
   </data>
   <data name="Map_DiscardConfirm" xml:space="preserve">
-    <value>Jeni të sigurt që doni ta fshini hartën?</value>
+    <value>Jeni të sigurt që doni ta fshini hartën "{{map}}"?</value>
   </data>
   <data name="Map_Status" xml:space="preserve">
     <value>Statusi</value>
@@ -895,7 +895,7 @@
     <value>Importuar në</value>
   </data>
   <data name="MapDetails_InterviewerName" xml:space="preserve">
-    <value>Emri i intervistuesit</value>
+      <value>Emri i përdoruesit</value>
   </data>
   <data name="MapDetails_MapDisclaimer" xml:space="preserve">
     <value>Kjo pamje paraprake shfaq hartën e ngarkuar të mbivendosur në hartën e botës</value>

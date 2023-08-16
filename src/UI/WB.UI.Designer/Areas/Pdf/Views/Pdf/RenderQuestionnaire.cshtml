@@ -18,7 +18,7 @@
 	@*is passed as get param along with other on pdf generation and exceeds 2K limit for unicode*@
 	<title>@*@(questionnaire.Title.Length < 70 ? questionnaire.Title : questionnaire.Title.Substring(0, 70))*@</title>
 	<!-- pdf:css -->
-	<link rel='stylesheet' href='@Html.ContentAbsolute("~/css/pdf.css")'>
+	<style>@Html.Raw(System.IO.File.ReadAllText("wwwroot/css/pdf.css"))</style>
 	<!-- endinject -->
 </head>
 <body>
@@ -28,7 +28,7 @@
 			{
 				<ul>
 					<li>@string.Format(PdfStrings.GeneratedBy, questionnaire.Requested.By), <span>@questionnaire.Requested.On?.AddMinutes(-questionnaire.TimezoneOffsetMinutes).FormatDate()</span></li>
-					<li>@string.Format(PdfStrings.CreatedBy, questionnaire.Created.By), <span>@questionnaire.Created.On?.AddMinutes(-questionnaire.TimezoneOffsetMinutes).FormatDate()</span></li>
+					<li>@string.Format(PdfStrings.OwnedBy, questionnaire.Created.By), <span>@questionnaire.Created.On?.AddMinutes(-questionnaire.TimezoneOffsetMinutes).FormatDate()</span></li>
 					@if (questionnaire.LastModified != null)
 					{
 						<li>@string.Format(PdfStrings.LastModifiedBy, questionnaire.LastModified.By), <span>@questionnaire.LastModified.On?.AddMinutes(-questionnaire.TimezoneOffsetMinutes).FormatDate()</span></li>
@@ -76,7 +76,10 @@
 		</div>
 		<div class="column_header">
 			<a href="https://mysurvey.solutions/" target="_blank" class="logo">
+				@*
 				<img src="@Html.ContentAbsolute("~/images/suso-logo-dark.svg")" alt="Survey Solutions" />
+				*@
+				<img src="@Html.EmbedImageContent("images/suso-logo-dark.svg")" alt="Survey Solutions" />
 			</a>
 		</div>
 
@@ -175,7 +178,7 @@
 				{
 				<dt>&nbsp;</dt>
 				<dd>
-					<a href="#optoins_filters_appendix" class="section_name appendix">@Pdf.Format(PdfStrings.Appendix_OptionFilters, questionnaire.OptionsFilterAppendixIndex, "&#8212;")</a>
+					<a href="#options_filters_appendix" class="section_name appendix">@Pdf.Format(PdfStrings.Appendix_OptionFilters, questionnaire.OptionsFilterAppendixIndex, "&#8212;")</a>
 				</dd>
 				}
 				@if (!questionnaire.IsSpecialValuesAppendixEmpty)
@@ -460,7 +463,9 @@
                                 @PdfStrings.Options
                                 @for (var j = 0; j < categories.Items.Count; j++)
                                 {
-                                    <span><span>@categories.Items[j].Id:</span>@(categories.Items[j].Text)@(j < categories.Items.Count - 1 ? "," : "")</span>
+                                    @(categories.Items[j].Id + ":" + categories.Items[j].Text)
+                                    @(string.IsNullOrWhiteSpace(categories.Items[j].AttachmentName) ? "" : ": " +  categories.Items[j].AttachmentName)
+                                    @(j < categories.Items.Count - 1 ? ", " : "")
                                 }
                             </p>
                         </div>
@@ -478,7 +483,9 @@
                                 @PdfStrings.Options
                                 @for (var j = 0; j < question.Answers.Count; j++)
                                 {
-                                    <span><span>@question.Answers[j].AnswerValue:</span>@(question.Answers[j].AnswerText)@(j < question.Answers.Count - 1 ? "," : "")</span>
+                                    @(question.Answers[j].AnswerValue + ":" + question.Answers[j].AnswerText)
+                                    @(string.IsNullOrWhiteSpace(question.Answers[j].AttachmentName)? "" : ": " + question.Answers[j].AttachmentName)
+                                    @(j < question.Answers.Count - 1 ? ", " : "")
                                 }
                             </p>
                         </div>
@@ -516,7 +523,7 @@
 	@if (!questionnaire.IsOptionsFilterAppendixEmpty)
 	{
 	<article class="appendix_section">
-		<h2 id="optoins_filters_appendix">@Pdf.Format(PdfStrings.Appendix_OptionFilters, questionnaire.OptionsFilterAppendixIndex, "&#8212;")</h2>
+		<h2 id="options_filters_appendix">@Pdf.Format(PdfStrings.Appendix_OptionFilters, questionnaire.OptionsFilterAppendixIndex, "&#8212;")</h2>
 		<ul class="container">
 			@for (var i = 0; i < questionnaire.QuestionsWithLongOptionsFilterExpression.Count; i++)
 			{
@@ -555,7 +562,8 @@
 							@(PdfStrings.SpecialValues):
 							@for(var j = 0; j < question.Answers.Count; j ++)
 							{
-								<span><span>@question.Answers[j].AnswerValue:</span>@(question.Answers[j].AnswerText)@(j < question.Answers.Count -1 ? ",":"")</span>
+							    @(question.Answers[j].AnswerValue + ":" +question.Answers[j].AnswerText)
+							    @(j < question.Answers.Count -1 ? ", ":"")
 							}
 						</p>
 					</div>
@@ -569,8 +577,12 @@
 		<h2 id="legend_appendix">@PdfStrings.Legend</h2>
 		<section>
 			<h3>@PdfStrings.PdfLegend</h3>
+			@*
 			<img src="@Html.ContentAbsolute("~/images/pdf-question-legend.png")" />
 			<img src="@Html.ContentAbsolute("~/images/pdf-roster-legend.png")" />
+			*@
+			<img src="@Html.EmbedImageContent("images/pdf-question-legend.png")" />
+			<img src="@Html.EmbedImageContent("images/pdf-roster-legend.png")" />
 		</section>
 	</article>
 </body>

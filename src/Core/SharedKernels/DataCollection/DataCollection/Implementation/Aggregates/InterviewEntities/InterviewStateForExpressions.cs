@@ -113,11 +113,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 case InterviewQuestionType.Audio:
                     var audioAnswer = question.GetAsInterviewTreeAudioQuestion().GetAnswer();
                     if (audioAnswer == null) return default(T);
-                    return audioAnswer.ToAudioAnswerForContions().To<T>(); //AudioAnswerForConditions
+                    return audioAnswer.ToAudioAnswerForConditions().To<T>(); //AudioAnswerForConditions
                 case InterviewQuestionType.Area:
                     var areaAnswer = question.GetAsInterviewTreeAreaQuestion().GetAnswer();
                     if(areaAnswer == null) return default(T);
-                    return areaAnswer.ToGeorgaphy().To<T>(); //Area
+                    return areaAnswer.ToGeography().To<T>(); //Area
                 default:
                     return default(T);
             }

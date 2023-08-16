@@ -74,6 +74,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                        
             var input = new AssignmentsInputModel
             {
+                Limit = request.PageSize,
+                Offset = (request.PageIndex - 1) * request.PageSize,
                 Page = request.PageIndex,
                 PageSize = request.PageSize,
                 Order = request.GetSortOrder(),

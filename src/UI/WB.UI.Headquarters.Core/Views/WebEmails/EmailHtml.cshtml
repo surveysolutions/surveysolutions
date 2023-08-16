@@ -1,6 +1,6 @@
-﻿@using Microsoft.AspNetCore.Routing
+﻿@using WB.Core.BoundedContexts.Headquarters.Invitations
 @model WB.Core.BoundedContexts.Headquarters.Invitations.EmailParams
-@inject LinkGenerator linkGenerator
+@inject IWebInterviewLinkProvider webInterviewLinkProvider
 @{
     Uri webRoot = new Uri((string) ViewData["webRoot"]);
 }
@@ -57,7 +57,7 @@
     </style>
 </head>
 <body style="margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; box-sizing: border-box;">
-    <table class="em-table" align="center" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px; background-image: url('@("~/img/logo.svg".Replace("~", ViewData["webRoot"].ToString())))'); background-repeat: no-repeat;  background-size: 270px auto;  background-position: 115% 45px;">
+    <table class="em-table" align="center" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px; background-image: url('@("~/img/logo.svg".Replace("~", ViewData["webAppRoot"]?.ToString()))'); background-repeat: no-repeat;  background-size: 270px auto;  background-position: 115% 45px;">
         <tr>
             <td style="border: 6px solid #E5E5E5;  padding: 50px 55px 115px; box-sizing: border-box;">
                 <table border="0" width="100%" cellpadding="0" cellspacing="0">
@@ -103,7 +103,7 @@
                             <ul>
                                 @if (Model.Id != null)
                                 {
-                                    <li><a href="@(new Uri(webRoot, linkGenerator.GetPathByAction("Html", "WebEmails", new {id = Model.Id})))" style="color: #808080; text-decoration: none; padding: 0 10px;">View email in browser</a></li>
+                                    <li><a href="@webInterviewLinkProvider.GetViewInBrowserLink(Model.Id)" style="color: #808080; text-decoration: none; padding: 0 10px;">View email in browser</a></li>
                                 }
                             </ul>
                         </td>

@@ -22,8 +22,10 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
-    public class AnonymousQuestionnairesViewModel : BaseViewModel, IDisposable
+    public class AnonymousQuestionnairesViewModel : BaseViewModel
     {
+        private const int CountRowsInHistory = 10;
+
         private CancellationTokenSource tokenSource;
 
         private readonly ITesterPrincipal principal;
@@ -37,7 +39,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IQRBarcodeScanService qrBarcodeScanService;
         private readonly IQuestionnaireStorage questionnaireRepository;
 
-        private QuestionnaireDownloadViewModel QuestionnaireDownloader { get; }
+        private readonly QuestionnaireDownloadViewModel questionnaireDownloader;
 
         public AnonymousQuestionnairesViewModel(
             ITesterPrincipal principal,
@@ -48,7 +50,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             QuestionnaireDownloadViewModel questionnaireDownloader,
             IQRBarcodeScanService qrBarcodeScanService,
             IQuestionnaireStorage questionnaireRepository)
-            : base(principal, viewModelNavigationService, false)
         {
             this.principal = principal;
             this.userInteractionService = userInteractionService;
@@ -56,7 +57,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.logger = logger;
             this.qrBarcodeScanService = qrBarcodeScanService;
             this.questionnaireRepository = questionnaireRepository;
-            this.QuestionnaireDownloader = questionnaireDownloader;
+            this.questionnaireDownloader = questionnaireDownloader;
+            this.viewModelNavigationService = viewModelNavigationService;
         }
 
         public override async Task Initialize()
@@ -64,13 +66,16 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             await base.Initialize().ConfigureAwait(false);
 
             this.localQuestionnaires = this.questionnaireListStorage.LoadAll();
-
             if (localQuestionnaires.Any())
                 this.SearchByLocalQuestionnaires();
-
-            this.ShowEmptyQuestionnaireListText = true;
+            
             this.IsSearchVisible = false;
+        }
 
+        public override void ViewAppearing()
+        {
+            base.ViewAppearing();
+            
             if (principal.IsFakeIdentity)
                 principal.RemoveFakeIdentity();
         }
@@ -94,7 +99,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             {
                 Id = item.Id,
                 Title = item.Title,
-                LastEntryDate = item.LastEntryDate,
+                LastEntryDate = DateTime.SpecifyKind(item.LoadDateUtc, DateTimeKind.Utc).ToLocalTime(),
                 SearchTerm = searchTerm,
                 IsPublic = true,
                 Type = QuestionnairesType.SharedWithMe,
@@ -120,13 +125,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             set => this.SetProperty(ref this.questionnaires, value);
         }
 
-        private bool showEmptyQuestionnaireListText;
-
-        public bool ShowEmptyQuestionnaireListText
-        {
-            get => this.showEmptyQuestionnaireListText;
-            set => this.SetProperty(ref this.showEmptyQuestionnaireListText, value);
-        }
 
         private bool isInProgress;
 
@@ -204,7 +202,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             this.CancelLoadServerQuestionnaires();
 
-            return this.ViewModelNavigationService.SignOutAndNavigateToLoginAsync();
+            return this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
         }
 
 
@@ -219,7 +217,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             try
             {
-                await this.QuestionnaireDownloader
+                await this.questionnaireDownloader
                     .LoadQuestionnaireAsync(questionnaireListItem.Id, questionnaireListItem.Title, progress,
                         this.tokenSource.Token);
             }
@@ -283,6 +281,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         }
 
         private IMvxAsyncCommand openCommand;
+        private readonly IViewModelNavigationService viewModelNavigationService;
 
         public IMvxAsyncCommand OpenCommand
         {
@@ -306,10 +305,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         {
                             this.tokenSource = new CancellationTokenSource();
                             var progress = new Progress<string>();
-                            var questionnaireIdentity = await this.QuestionnaireDownloader
-                                .LoadQuestionnaireAsync(qId.FormatGuid(), idFromUrl, progress, this.tokenSource.Token);
-
+                            var questionnaireIdentity = await this.questionnaireDownloader.DownloadQuestionnaireWithAllDependenciesAsync(qId.FormatGuid(), idFromUrl, progress, tokenSource.Token);
                             SaveAnonymousQuestionnaireListItem(questionnaireIdentity);
+                            await this.questionnaireDownloader.CreateAndOpenInterview(questionnaireIdentity, progress);
                         }
                     }
                 }
@@ -333,24 +331,26 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 Id = questionnaireDocument.Id,
                 LastEntryDate = questionnaireDocument.LastEntryDate,
                 Title = questionnaireDocument.Title,
+                LoadDateUtc = DateTime.UtcNow, 
             });
             var items = questionnaireListStorage.LoadAll();
-            if (items.Count > 10)
+            if (items.Count > CountRowsInHistory)
             {
                 var itemsToRemove = items
-                    .OrderByDescending(i => i.LastEntryDate)
-                    .Skip(10);
+                    .OrderByDescending(i => i.LoadDateUtc)
+                    .Skip(CountRowsInHistory);
                 questionnaireListStorage.Remove(itemsToRemove);
             }
+
+            this.localQuestionnaires = items.OrderByDescending(i => i.LoadDateUtc)
+                .Take(CountRowsInHistory).ToReadOnlyCollection();
+            SearchByLocalQuestionnaires(SearchText);
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
-            if (principal.IsFakeIdentity)
-                principal.UseFakeIdentity();
-
             tokenSource?.Dispose();
-            questionnaireListStorage?.Dispose();
+            base.Dispose();
         }
     }
 }

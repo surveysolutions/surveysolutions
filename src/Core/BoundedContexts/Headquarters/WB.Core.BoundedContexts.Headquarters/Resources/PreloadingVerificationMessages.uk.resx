@@ -1,0 +1,258 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ArchiveWithPasswordNotSupported" xml:space="preserve">
+    <value>Захищені паролем архіви не підтримуються</value>
+  </data>
+  <data name="PL0002_MoreThenOneLevel" xml:space="preserve">
+    <value>[PL0002] N/A. Зверніться до служби підтримки вашого сервера</value>
+  </data>
+  <data name="PL0003_ColumnWasntMappedOnQuestion" xml:space="preserve">
+    <value>Стовпчик не може бути прив'язаний до жодного питання в анкеті.</value>
+  </data>
+  <data name="PL0004_FileWasntMappedRoster" xml:space="preserve">
+    <value>Файл не може бути прив'язаний до жодного ростеру в анкеті.</value>
+  </data>
+  <data name="PL0006_IdDublication" xml:space="preserve">
+    <value>Знайдено дублікати значень ідентифікатора.</value>
+  </data>
+  <data name="PL0007_ServiceColumnIsAbsent" xml:space="preserve">
+    <value>Відсутній один або декілька стовпців батьківського ідентифікатора.</value>
+  </data>
+  <data name="PL0008_OrphanRosterRecord" xml:space="preserve">
+    <value>Запис у ростері не має батька.</value>
+  </data>
+  <data name="PL0009_RosterIdIsInconsistantWithRosterSizeQuestion" xml:space="preserve">
+    <value>Ідентифікатор ростеру не відповідає розміру ростеру.</value>
+  </data>
+  <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
+    <value>Значення питання не дозволено.</value>
+  </data>
+  <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
+    <value>Неправильне значення дати або часу, введене в запитанні про дату.</value>
+  </data>
+  <data name="PL0017_ExpectedGpsNotParsed" xml:space="preserve">
+    <value>Неправильне значення GPS.</value>
+  </data>
+  <data name="PL0018_ExpectedIntNotParsed" xml:space="preserve">
+    <value>Допускаються лише цілі значення.</value>
+  </data>
+  <data name="PL0019_ExpectedDecimalNotParsed" xml:space="preserve">
+    <value>Допускаються тільки реальні значення.</value>
+  </data>
+  <data name="PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative" xml:space="preserve">
+    <value>Питання про розмір ростеру не може мати від'ємних значень.</value>
+  </data>
+  <data name="PL0024_DataWasNotFound" xml:space="preserve">
+    <value>Дані попереднього завантаження не знайдено.</value>
+  </data>
+  <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
+    <value>Відповідальний не існує для 1 або більше спостережень.</value>
+  </data>
+  <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
+    <value>Відповідальний - заблокований користувач за 1 або більше спостережень.</value>
+  </data>
+  <data name="PL0028_UserIsNotHQOrSupervisorOrInterviewer" xml:space="preserve">
+    <value>Користувач не є хедквотером, супервізором або інтерв'юером для 1 або більше спостережень.</value>
+  </data>
+  <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
+    <value>Відповідь на питання про розмір списку не може бути більшою за {0}.</value>
+  </data>
+  <data name="PL0030_GpsFieldsRequired" xml:space="preserve">
+    <value>GPS-питання вимагають окремих стовпчиків для широти та довготи</value>
+  </data>
+  <data name="PL0030_GpsMandatoryFilds" xml:space="preserve">
+    <value>GPS-питання вимагає встановлення широти та довготи.</value>
+  </data>
+  <data name="PL0031_ColumnNameDuplicatesFound" xml:space="preserve">
+    <value>Два або більше стовпців мають однакові назви.</value>
+  </data>
+  <data name="PL0032_LatitudeMustBeGeaterThenN90AndLessThen90" xml:space="preserve">
+    <value>Широта повинна бути більше -90° і менше 90°.</value>
+  </data>
+  <data name="PL0033_LongitudeMustBeGeaterThenN180AndLessThen180" xml:space="preserve">
+    <value>Довгота повинна бути більше -180° і менше 180°.</value>
+  </data>
+  <data name="PL0034_CommaSymbolIsNotAllowedInNumericAnswer" xml:space="preserve">
+    <value>Неправильний десятковий роздільник. Символ "," не допускається у числових відповідях. Будь ласка, використовуйте "." замість нього.</value>
+  </data>
+  <data name="PL0035_QuantityNotParsed" xml:space="preserve">
+    <value>Допускаються лише цілі значення.</value>
+  </data>
+  <data name="PL0036_QuantityShouldBeGreaterThanMinus1" xml:space="preserve">
+    <value>Кількість повинна бути більшою або дорівнювати -1.</value>
+  </data>
+  <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
+    <value>Відсутній файл з даними на верхньому рівні анкети.</value>
+  </data>
+  <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
+    <value>Кількість варіантів відповідей на питання з множинним вибором не може перевищувати максимально допустиму кількість відповідей.</value>
+  </data>
+  <data name="PL0042_IdIsEmpty" xml:space="preserve">
+    <value>Стовпець Id не має значення.</value>
+  </data>
+  <data name="PL0047_ProtectedVariables_MissingColumn" xml:space="preserve">
+    <value>Відсутній необхідний стовпець {0}.</value>
+  </data>
+  <data name="PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire" xml:space="preserve">
+    <value>Захищена змінна не знайдена в наданій анкеті.</value>
+  </data>
+  <data name="PL0049_ProtectedVariables_VariableNotSupportsProtection" xml:space="preserve">
+    <value>Тип змінної не може бути захищений.</value>
+  </data>
+  <data name="PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1" xml:space="preserve">
+    <value>Від'ємне значення не допускається для категоричного питання з декількома варіантами відповідей.</value>
+  </data>
+  <data name="PL0052_ColumnByTextListRosterSizeAnswerNotFound" xml:space="preserve">
+    <value>Ростер зі списку повинен мати стовпчик для текстових відповідей</value>
+  </data>
+  <data name="PL0053_InconsistentNumericRosterInstanceCodes" xml:space="preserve">
+    <value>Неузгодженість коду ростеру для числового ростеру. Послідовність кодів ростеру повинна бути 0, 1, ... для підрахунку екземплярів ростеру</value>
+  </data>
+  <data name="PL0054_MaxInterviewsCountByAssignmentExeeded" xml:space="preserve">
+    <value>Максимальна кількість не повинна перевищувати {0}..</value>
+  </data>
+  <data name="PL0055_InvalidEmail" xml:space="preserve">
+    <value>Електронна пошта не дійсна</value>
+  </data>
+  <data name="PL0056_InvalidPassword" xml:space="preserve">
+    <value>Невірний пароль. Щонайменше 6 цифр і великих літер або один символ '?' для генерації пароля</value>
+  </data>
+  <data name="PL0057_IncosistentQuantityAndEmail" xml:space="preserve">
+    <value>Для завдань із вказаною електронною поштою дозволена кількість - 1</value>
+  </data>
+  <data name="PL0058_IncosistentWebmodeAndEmail" xml:space="preserve">
+    <value>Веб-режим має бути увімкнений для завдань, що мають електронну пошту</value>
+  </data>
+  <data name="PL0059_IncosistentWebmodeAndPassword" xml:space="preserve">
+    <value>Веб-режим має бути активований для завдань з паролем</value>
+  </data>
+  <data name="PL0060_WebmodeSizeOneHasNoEmailOrPassword" xml:space="preserve">
+    <value>Завдання з розміром 1 для веб-режиму повинно мати або електронну пошту, або пароль</value>
+  </data>
+  <data name="PL0061_DuplicatePasswordWithQuantity1" xml:space="preserve">
+    <value>Пароль не є унікальним. Пароль за завданням для веб-режиму з кількістю 1 повинен бути унікальним</value>
+  </data>
+  <data name="PL0062_WebModeOnlyForInterviewer" xml:space="preserve">
+    <value>Всі завдання для веб-інтерв'ю повинні бути надані інтерв'юеру</value>
+  </data>
+  <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
+    <value>Відповідь на питання з іменем {0} не може бути попередньо завантажена, оскільки вона має непідтримуваний тип. Зверніться до наступної статті підтримки https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type для отримання детальної інформації про те, що можна попередньо завантажити у поточній версії.</value>
+  </data>
+</root>

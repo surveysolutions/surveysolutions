@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -58,4 +58,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="adm" xml:space="preserve">
+    <value>بيانات السجلات الإدارية [adm]</value>
+  </data>
+  <data name="agg" xml:space="preserve">
+    <value>البيانات المجمعة [agg]</value>
+  </data>
+  <data name="cen" xml:space="preserve">
+    <value>بيانات التعداد/التعداد [cen]</value>
+  </data>
+  <data name="cli" xml:space="preserve">
+    <value>البيانات السريرية [cli]</value>
+  </data>
+  <data name="evn" xml:space="preserve">
+    <value>بيانات الحدث / المعاملة [evn]</value>
+  </data>
+  <data name="obs" xml:space="preserve">
+    <value>بيانات / تصنيفات المراقبة [obs]</value>
+  </data>
+  <data name="pro" xml:space="preserve">
+    <value>البيانات المنتجة من قبل العمليات [pro]</value>
+  </data>
+  <data name="ssd" xml:space="preserve">
+    <value>عينة من بيانات المسح [ssd]</value>
+  </data>
+  <data name="tbd" xml:space="preserve">
+    <value>يوميات ميزانية الوقت [يحدد لاحقا]</value>
+  </data>
 </root>

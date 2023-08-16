@@ -92,7 +92,9 @@ namespace WB.UI.WebTester
             {
                 var configuration = sp.Get<IConfiguration>();
                 var fileStorageConfig = configuration.GetSection("FileStorage").Get<FileStorageConfig>();
-
+                if (fileStorageConfig == null)
+                    throw new InvalidOperationException("FileStorage is not set");
+                
                 return Options.Create(fileStorageConfig);
             });
 

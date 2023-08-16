@@ -10,7 +10,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 
         public int? AssignmentId { get; }
         public bool UsesExpressionStorage { get; }
-        public DateTime? CreationTime { get; }
+        public DateTime? CreationTime => OriginDate?.UtcDateTime;
         public bool? IsAudioRecordingEnabled { get; set; }
 
         public InterviewCreated(Guid userId, Guid questionnaireId, long questionnaireVersion, 
@@ -23,9 +23,6 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
             this.AssignmentId = assignmentId;
             this.IsAudioRecordingEnabled = isAudioRecordingEnabled;
             this.UsesExpressionStorage = usesExpressionStorage;
-
-            if (originDate != default(DateTimeOffset))
-                this.CreationTime = originDate.UtcDateTime;
         }
     }
 }

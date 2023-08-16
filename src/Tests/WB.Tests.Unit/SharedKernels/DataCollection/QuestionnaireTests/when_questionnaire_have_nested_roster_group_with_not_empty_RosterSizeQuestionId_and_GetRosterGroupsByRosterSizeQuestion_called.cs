@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             rosterGroups.Should().NotBeEmpty();
 
         [NUnit.Framework.Test] public void should_rosterGroups_have_only_1_roster_group () =>
-            rosterGroups.Should().BeEquivalentTo(rosterGroupId);
+            rosterGroups.Should().BeEquivalentTo(new []{rosterGroupId});
 
         private static IEnumerable<Guid> rosterGroups;
         private static QuestionnaireDocument questionnaireDocument;

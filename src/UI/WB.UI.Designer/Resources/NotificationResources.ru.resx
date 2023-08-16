@@ -136,7 +136,10 @@
     <value>завершение регистрации</value>
   </data>
   <data name="AnonymousSharingEmail" xml:space="preserve">
-    <value>Здравствуйте, {0}, &lt;br/&gt;&lt;br/&gt; Вы предоставили доступ к опроснику '{1}' по анонимной ссылке:</value>
+    <value>Здравствуйте, {0}, &lt;br/&gt;&lt;br/&gt; Вы предоставили доступ для чтения к вашему опроснику '{1}' по анонимной ссылке:</value>
+  </data>
+  <data name="EmailSendInfo" xml:space="preserve">
+    <value>Это письмо было автоматически отправленно Survey Solutions Designer.</value>
   </data>
   <data name="ResetPasswordEmail" xml:space="preserve">
     <value>Здравствуйте, {0}, &lt;br/&gt; &lt;br/&gt; Чтобы завершить процесс сброса пароля, нажмите на эту ссылку:</value>

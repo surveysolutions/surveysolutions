@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:local="http://schemas.android.com/apk/res-auto"
-  style="@style/Interview_QuestionWithDivider"
-  local:MvxBind="HideKeyboardOnClick .; LongClick QuestionState.ShowCommentEditorCommand">
+              style="@style/Interview_QuestionWithDivider"
+              local:MvxBind="HideKeyboardOnClick .; LongClick QuestionState.ShowCommentEditorCommand">
     <LinearLayout style="@style/Interview_Question_Answer"
                   local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false));">
 
@@ -10,20 +10,22 @@
                          android:layout_height="wrap_content"
                          android:stretchColumns="0"
                          local:MvxBind="Visible QuestionState.IsAnswered">
-
                 <TableRow>
-                    <TextView style="@style/Interview_Question_RecordedAnswer"
-                              local:MvxBind="Text PointsText; Tag Format('Answer_{0}', Identity); " />
+                    <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                        <TextView style="@style/Interview_Question_RecordedAnswer"
+                                  android:layout_marginBottom="8dp"
+                                  local:MvxBind="Text PointsText; Tag Format('Answer_{0}', Identity); " />
+                        <TextView style="@style/Interview_Question_RecordedAnswer"
+                                  android:layout_marginBottom="8dp"
+                                  local:MvxBind="Text AreaText; Tag Format('Answer_{0}', Identity); Visible HasArea"/>
+                        <TextView style="@style/Interview_Question_RecordedAnswer"
+                                  local:MvxBind="Text LengthText; Tag Format('Answer_{0}', Identity); Visible HasLength"/>
+                    </LinearLayout>
+
                     <include layout="@layout/interview_question__remove_button_recorded" />
-                </TableRow>
-
-                <TableRow>
-                    <TextView style="@style/Interview_Question_RecordedAnswer"
-                            local:MvxBind="Text AreaText; Tag Format('Answer_{0}', Identity); Visible HasArea" />
-                </TableRow>
-                <TableRow>
-                    <TextView style="@style/Interview_Question_RecordedAnswer"
-                              local:MvxBind="Text LengthText; Tag Format('Answer_{0}', Identity); Visible HasLength" />
                 </TableRow>
 
             </TableLayout>

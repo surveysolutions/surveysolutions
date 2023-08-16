@@ -4,7 +4,7 @@
         <slot />
         <button slot="actions"
             type="button"
-            class="btn btn-primary"
+            :class="ok_class"
             :disabled="disableOk"
             @click="confirm">
             {{ ok_title }}
@@ -35,6 +35,10 @@ export default {
             type: String,
             required: false,
         },
+        okClass: {
+            type: String,
+            required: false,
+        },
     },
 
     data() {
@@ -49,6 +53,9 @@ export default {
         },
         ok_title() {
             return this.okTitle || this.$t('Common.Ok')
+        },
+        ok_class() {
+            return 'btn btn-primary ' + (this.okClass || '')
         },
     },
 

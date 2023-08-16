@@ -35,7 +35,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
 
             return new RosterViewModel(interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 interviewViewModelFactory ?? viewModelFactory.Object,
-                eventRegistry ?? Create.Service.LiteEventRegistry());
+                eventRegistry ?? Create.Service.LiteEventRegistry(),
+                Create.Fake.MvxMainThreadDispatcher());
         }
     }
 }

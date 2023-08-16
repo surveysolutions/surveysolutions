@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ClosedXML.Excel;
+using ClosedXML.Graphics;
 using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Moq;
 using NUnit.Framework;
+using SixLabors.Fonts;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Tests.Abc;
 using TranslationInstance = WB.Core.BoundedContexts.Designer.Translations.TranslationInstance;
@@ -35,21 +38,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                     translationIndex: "42")
             };
 
-            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(
+            QuestionnaireDocument questionnaire = Create.OldQuestionnaireDocumentWithOneChapter(
                 children: new IComposite[]
                 {
                     Create.FixedRoster(rosterId: rosterId,
                         title: "non translated title",
                         fixedRosterTitles: new[] {Create.FixedRosterTitle(42, "invariant option title")}
                        )
-                });
+                },questionnaireId:questionnaireId);
 
             var translationsStorage = Create.InMemoryDbContext();
             translationsStorage.TranslationInstances.AddRange(storedTranslations);
             translationsStorage.SaveChanges();
 
-            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            questionnaires.SetReturnsDefault(questionnaire);
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
 
             service = Create.TranslationsService(translationsStorage, questionnaires.Object);
             BecauseOf();
@@ -57,8 +60,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
         private void BecauseOf()
         {
-            excelFile = service.GetAsExcelFile(questionnaireId, translationId);
-            workbook = new XLWorkbook(new MemoryStream(excelFile.ContentAsExcelFile));
+            //non windows fonts
+            var firstFont = SystemFonts.Collection.Families.First();
+            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(firstFont.Name) };
+            
+            excelFile = service.GetAsExcelFile(new QuestionnaireRevision(questionnaireId), translationId);
+            workbook = new XLWorkbook(new MemoryStream(excelFile.ContentAsExcelFile), loadOptions);
             cells = workbook.Worksheets.First();
         }
 
@@ -73,10 +80,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         {
             var questionTitleRow = 4;
             ((TranslationType)Enum.Parse(typeof(TranslationType), cells.Cell(questionTitleRow, translationTypeColumn).GetString())).Should().Be(TranslationType.Title);
-            cells.Cell(questionTitleRow, translationIndexColumn).Value?.ToString().Should().BeEmpty();
-            cells.Cell(questionTitleRow, questionnaireEntityIdColumn).Value?.ToString().Should().Be(rosterId.FormatGuid());
-            cells.Cell(questionTitleRow, originalTextColumn).Value?.ToString().Should().Be("non translated title");
-            cells.Cell(questionTitleRow, translactionColumn).Value?.ToString().Should().BeEmpty();
+            cells.Cell(questionTitleRow, translationIndexColumn).Value.ToString().Should().BeEmpty();
+            cells.Cell(questionTitleRow, questionnaireEntityIdColumn).Value.ToString().Should().Be(rosterId.FormatGuid());
+            cells.Cell(questionTitleRow, originalTextColumn).Value.ToString().Should().Be("non translated title");
+            cells.Cell(questionTitleRow, translactionColumn).Value.ToString().Should().BeEmpty();
         }
 
         [NUnit.Framework.Test]
@@ -84,10 +91,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         {
             var questionTitleRow = 5;
             ((TranslationType)Enum.Parse(typeof(TranslationType), cells.Cell(questionTitleRow, translationTypeColumn).GetString())).Should().Be(TranslationType.FixedRosterTitle);
-            cells.Cell(questionTitleRow, translationIndexColumn).Value?.ToString().Should().Be("42");
-            cells.Cell(questionTitleRow, questionnaireEntityIdColumn).Value?.ToString().Should().Be(rosterId.FormatGuid());
-            cells.Cell(questionTitleRow, originalTextColumn).Value?.ToString().Should().Be("invariant option title");
-            cells.Cell(questionTitleRow, translactionColumn).Value?.ToString().Should().Be("fixed roster item 1");
+            cells.Cell(questionTitleRow, translationIndexColumn).Value.ToString().Should().Be("42");
+            cells.Cell(questionTitleRow, questionnaireEntityIdColumn).Value.ToString().Should().Be(rosterId.FormatGuid());
+            cells.Cell(questionTitleRow, originalTextColumn).Value.ToString().Should().Be("invariant option title");
+            cells.Cell(questionTitleRow, translactionColumn).Value.ToString().Should().Be("fixed roster item 1");
         }
 
         Guid rosterId;

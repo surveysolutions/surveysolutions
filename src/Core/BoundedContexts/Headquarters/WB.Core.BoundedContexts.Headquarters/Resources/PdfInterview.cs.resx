@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Comments" xml:space="preserve">
-    <value>Poznámky</value>
+    <value>Komentáře</value>
   </data>
   <data name="Completed" xml:space="preserve">
-    <value>Rozhovor byl dokončen</value>
+    <value>Pohovor dokončen</value>
   </data>
   <data name="Error" xml:space="preserve">
     <value>Chyba</value>
@@ -130,27 +130,114 @@
     <value>Ne</value>
   </data>
   <data name="UserRoles_Administrator" xml:space="preserve">
-    <value>Administrátor</value>
+    <value>Správce</value>
   </data>
   <data name="UserRoles_Headquarter" xml:space="preserve">
-    <value>Ústředí</value>
+    <value>Centrála</value>
   </data>
   <data name="UserRoles_Interviewer" xml:space="preserve">
-    <value>Tazatel </value>
+    <value>Tazatel</value>
   </data>
   <data name="UserRoles_Supervisor" xml:space="preserve">
-    <value>Garant</value>
+    <value>Vedoucí</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>verze {0}</value>
+    <value>Verze {0}</value>
   </data>
   <data name="Warning" xml:space="preserve">
-    <value>Upozornění</value>
+    <value>Varování</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Ano</value>
   </data>
   <data name="YesNo" xml:space="preserve">
     <value>Ano / Ne</value>
+  </data>
+  <data name="Cover" xml:space="preserve">
+    <value>Krýt</value>
+  </data>
+  <data name="Generated" xml:space="preserve">
+    <value>Generovaný</value>
+  </data>
+  <data name="GeneratedAt" xml:space="preserve">
+    <value>na {0}</value>
+  </data>
+  <data name="GeneratedBy" xml:space="preserve">
+    <value>Generováno {0}</value>
+  </data>
+  <data name="InterviewKey" xml:space="preserve">
+    <value>Klíč pro pohovor</value>
+  </data>
+  <data name="InterviewStatisticsAnswered" xml:space="preserve">
+    <value>{0} zodpovězených otázek</value>
+  </data>
+  <data name="InterviewStatisticsCommented" xml:space="preserve">
+    <value>{0} otázky s komentáři</value>
+  </data>
+  <data name="InterviewStatisticsErrors" xml:space="preserve">
+    <value>{0} chyby</value>
+  </data>
+  <data name="InterviewStatisticsSections" xml:space="preserve">
+    <value>{0} sekcí</value>
+  </data>
+  <data name="InterviewStatisticsUnanswered" xml:space="preserve">
+    <value>{0} nezodpovězené otázky</value>
+  </data>
+  <data name="InterviewStatisticsWarnings" xml:space="preserve">
+    <value>{0} varování</value>
+  </data>
+  <data name="InterviewTranscript" xml:space="preserve">
+    <value>Přepis rozhovoru</value>
+  </data>
+  <data name="InterviewVolume" xml:space="preserve">
+    <value>Objem rozhovoru</value>
+  </data>
+  <data name="NotAnswered" xml:space="preserve">
+    <value>Nezodpovězeno</value>
+  </data>
+  <data name="NotCalculated" xml:space="preserve">
+    <value>Žádná hodnota</value>
+  </data>
+  <data name="PageOf" xml:space="preserve">
+    <value> z </value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Dotazník</value>
+  </data>
+  <data name="Started" xml:space="preserve">
+    <value>Rozhovor zahájen</value>
+  </data>
+  <data name="SurveySolutions" xml:space="preserve">
+    <value>Řešení průzkumu</value>
+  </data>
+  <data name="TableOfContent" xml:space="preserve">
+    <value>Obsah</value>
+  </data>
+  <data name="UserRoles_ApiUser" xml:space="preserve">
+    <value>ApiUser</value>
+  </data>
+  <data name="UserRoles_Observer" xml:space="preserve">
+    <value>Pozorovatel</value>
+  </data>
+  <data name="AreaQestion_Area" xml:space="preserve">
+    <value>Oblast</value>
+  </data>
+  <data name="AreaQestion_AreaMeter" xml:space="preserve">
+    <value>metry</value>
+  </data>
+  <data name="AreaQestion_AreaUnitMeter" xml:space="preserve">
+    <value>metrů čtverečních</value>
+  </data>
+  <data name="AreaQestion_Length" xml:space="preserve">
+    <value>Délka</value>
+  </data>
+  <data name="AreaQestion_Points" xml:space="preserve">
+    <value>Výhybka</value>
+  </data>
+  <data name="AreaQestion_RequestedAccuracy" xml:space="preserve">
+    <value>Přesnost</value>
+  </data>
+  <data name="AreaQestion_RequestedFrequency" xml:space="preserve">
+    <value>Frekvence</value>
   </data>
 </root>

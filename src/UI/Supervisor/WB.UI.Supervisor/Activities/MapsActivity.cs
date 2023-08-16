@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Services;
+using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
 
 namespace WB.UI.Supervisor.Activities
 {

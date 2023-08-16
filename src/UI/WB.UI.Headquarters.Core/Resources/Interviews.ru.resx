@@ -246,7 +246,10 @@
   <data name="Tooltip_Table_NotAnsweredCount" xml:space="preserve">
     <value>Количество вопросов без ответа. Включает вопросы супервизора, идентифицирующие и интервьюера. Моржет содержать пустые значения для интервью завершенных до версии 20.09.</value>
   </data>
-    <data name="NotAnsweredCount" xml:space="preserve">
+  <data name="Tooltip_Table_InterviewMode" xml:space="preserve">
+    <value>Показывают текущий статус (CAPI или CAWI) для каждого интервью</value>
+  </data>
+  <data name="NotAnsweredCount" xml:space="preserve">
     <value>Не отвечено</value>
   </data>
   <data name="Note" xml:space="preserve">

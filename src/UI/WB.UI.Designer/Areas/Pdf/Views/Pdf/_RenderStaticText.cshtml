@@ -51,7 +51,10 @@
         @if (questionnaire.StaticTextHasAttachedImage(staticText))
         {
             <figure>
+                @*
                 <img src="@Html.ContentAbsolute($"~/attachments/thumbnail/{questionnaire.GetAttachmentId(staticText)}/{questionnaire.Settings.AttachmentSize}")" alt="" />
+                *@
+                <img src="@Html.EmbedAttachmentImage(questionnaire.GetAttachmentId(staticText), questionnaire.Settings.AttachmentSize)" alt="" />
             </figure>
         }
     </div>

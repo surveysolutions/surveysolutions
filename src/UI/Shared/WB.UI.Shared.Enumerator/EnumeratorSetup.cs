@@ -10,6 +10,7 @@ using Android.Widget;
 using AndroidX.AppCompat.Widget;
 using AndroidX.DrawerLayout.Widget;
 using AndroidX.RecyclerView.Widget;
+using AndroidX.ViewPager2.Widget;
 using Com.Google.Android.Exoplayer2.UI;
 using FFImageLoading.Cross;
 using Google.Android.Material.Button;
@@ -29,9 +30,11 @@ using Serilog;
 using Serilog.Extensions.Logging;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dialogs;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Activities.Dialogs;
 using WB.UI.Shared.Enumerator.Converters;
 using WB.UI.Shared.Enumerator.CustomBindings;
 using WB.UI.Shared.Enumerator.CustomControls;
@@ -94,6 +97,12 @@ namespace WB.UI.Shared.Enumerator
             lookup.Add<OverviewViewModel, OverviewFragment>();
             lookup.Add<OverviewNodeDetailsViewModel, OverviewNodeDetailsFragment>();
             lookup.Add<SelectResponsibleForAssignmentViewModel, SelectResponsibleForAssignmentFragment>();
+            
+            lookup.Add<ApproveInterviewDialogViewModel, DoActionDialogFragment>();
+            lookup.Add<AssignInterviewDialogViewModel,  DoActionDialogFragment>();
+            lookup.Add<AssignAssignmentDialogViewModel, DoActionDialogFragment>();
+            lookup.Add<RejectInterviewDialogViewModel,  DoActionDialogFragment>();
+            
             return lookup;
         }
 
@@ -124,7 +133,7 @@ namespace WB.UI.Shared.Enumerator
         {
             base.FillValueConverters(registry);
             
-            Mvx.CallbackWhenRegistered<IMvxValueCombinerRegistry>(combinerRegistry => 
+            Mvx.IoCProvider.CallbackWhenRegistered<IMvxValueCombinerRegistry>(combinerRegistry => 
                 combinerRegistry.AddOrOverwriteFrom(Assembly.GetAssembly(typeof(LayoutBackgroundStyleValueCombiner))));
 
             registry.AddOrOverwrite("EnumToString", new EnumToStringConverter());
@@ -136,6 +145,7 @@ namespace WB.UI.Shared.Enumerator
             registry.AddOrOverwrite("QuestionCornerOptionBackground", new QuestionCornerOptionBackgroundConverter());
             registry.AddOrOverwrite("QuestionOptionBackground", new QuestionOptionBackgroundConverter());
             registry.AddOrOverwrite("IsStringNotEmpty", new IsStringNotEmptyConverter());
+            registry.AddOrOverwrite("IsNullableHavingValue", new IsNullableHavingValueConverter());
             registry.AddOrOverwrite("SectionStyleBackground", new SectionStyleBackgroundConverter());
             registry.AddOrOverwrite("VisibleOrInvisible", new VisibleOrInvisibleValueConverter());
             registry.AddOrOverwrite("AudioNoiseTypeToShape", new AudioNoiseTypeToShapeConverter());
@@ -151,6 +161,12 @@ namespace WB.UI.Shared.Enumerator
             registry.AddOrOverwrite("ValidationStyleBackground", new TextEditValidationStyleBackgroundConverter());
             registry.AddOrOverwrite("IsSynchronizationFailOrCanceled", new IsSynchronizationFailOrCanceledConverter());
             registry.AddOrOverwrite("SynchronizationStatusToTextColor", new SynchronizationStatusToTextColorConverter());
+            
+            registry.AddOrOverwrite("Visibility", new VisibilityValueConverter());
+            
+            registry.AddOrOverwrite("VisibilityNullable", new VisibilityNullableValueConverter());
+            
+            registry.AddOrOverwrite("InvertedVisibility", new InvertedVisibilityValueConverter());
         }
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
@@ -167,6 +183,7 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<EditText>("FocusValueChanged", (editText) => new EditTextFocusValueChangedBinding(editText));
             registry.RegisterCustomBindingFactory<EditText>("SetFocus", (editText) => new EditTextSetFocusBinding(editText));
             registry.RegisterCustomBindingFactory<ProgressBar>("ShowProgress", (view) => new ProgressBarIndeterminateBinding(view));
+            registry.RegisterCustomBindingFactory<ProgressBar>("ProgressBarComplete", (view) => new ProgressBarCompleteBinding(view));
             registry.RegisterCustomBindingFactory<ProgressBar>("Progress", (view) => new ProgressBarProgressBinding(view));
             registry.RegisterCustomBindingFactory<ProgressBar>("IndeterminateMode", (view) => new ProgressBarIndeterminateModeBinding(view));
             registry.RegisterCustomBindingFactory<View>("BackgroundStyle", (view) => new ViewBackgroundDrawableBinding(view));
@@ -174,13 +191,16 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<View>("BackgroundColor", textView => new ViewBackgroundColorBinding(textView));
             registry.RegisterCustomBindingFactory<EditText>("DateChange", editText => new EditTextDateBinding(editText));
             registry.RegisterCustomBindingFactory<Button>("ButtonGroupStyle", button => new ButtonGroupStyleBinding(button));
+            registry.RegisterCustomBindingFactory<Button>("ButtonHasWarningOrSuccess", button => new ButtonHasWarningOrSuccessBinding(button));
             registry.RegisterCustomBindingFactory<MaterialButton>("ToParentButtonGroupStyle", button => new ToParentButtonGroupStyleButtonBinding(button));
             registry.RegisterCustomBindingFactory<MaterialButton>("ButtonToQuestionState", button => new MaterialButtonToQuestionStateBinding(button));
             registry.RegisterCustomBindingFactory<TextView>("GroupStatus", textView => new TextViewGroupStatusBinding(textView));
             registry.RegisterCustomBindingFactory<View>("HideKeyboardOnClick", view => new ViewHideKeyboardOnClickBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("OnDone", view => new TextViewOnDoneBinding(view));
             registry.RegisterCustomBindingFactory<ViewGroup>("ColorByInterviewStatus", view => new ViewGroupColorByInterviewStatusBinding(view));
+            registry.RegisterCustomBindingFactory<ViewGroup>("ColorByDashboardGroupType", view => new DashboardColorByDashboardGroupTypeBinding(view));
             registry.RegisterCustomBindingFactory<ViewGroup>("StatusBarColorByInterviewStatus", view => new ViewGroupStatusBarColorByInterviewStatusBinding(view));
+            registry.RegisterCustomBindingFactory<ViewGroup>("StatusBarColorByDashboardGroupType", view => new DashboardStatusBarColorByDashboardGroupTypeBinding(view));
             registry.RegisterCustomBindingFactory<View>("Transparent", view => new ViewTransparentBinding(view));
             registry.RegisterCustomBindingFactory<View>("PaddingLeft", view => new ViewPaddingLeftBinding(view));
             registry.RegisterCustomBindingFactory<View>("Activated", view => new ViewActivatedBinding(view));
@@ -189,9 +209,10 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<EditText>("TextChanged", (editText) => new EditTextChangedBinding(editText));
             registry.RegisterCustomBindingFactory<FrameLayout>("CurrentScreen", (frameLayout) => new FrameLayoutCurrentScreenBinding(frameLayout));
             registry.RegisterCustomBindingFactory<ImageView>("BitmapWithFallback", (img) => new ImageViewBitmapWithFallbackBinding(img));
+            registry.RegisterCustomBindingFactory<ImageView>("MarginsBitmapWithFallback", (img) => new ImageViewMarginsBitmapWithFallbackBinding(img));
             registry.RegisterCustomBindingFactory<ImageView>("QRCode", img => new ImageViewQRCodeBinding(img));
-            registry.RegisterCustomBindingFactory<PlayerView>("Video", player => new ExoPlayerBinding(player));
-            registry.RegisterCustomBindingFactory<PlayerView>("Audio", player => new ExoPlayerAudioAttachmentBinding(player));
+            registry.RegisterCustomBindingFactory<StyledPlayerView>("Video", player => new ExoPlayerBinding(player));
+            registry.RegisterCustomBindingFactory<StyledPlayerView>("Audio", player => new ExoPlayerAudioAttachmentBinding(player));
             registry.RegisterCustomBindingFactory<View>("SizeByNoiseLevel", (view) => new AudioSizeByNoiseLevelBinding(view));
             registry.RegisterCustomBindingFactory<View>("Tag", (img) => new ViewTagBinding(img));
             registry.RegisterCustomBindingFactory<SignaturePadView>("Signature", (view) => new SignatureBinding(view));
@@ -205,6 +226,7 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<RadioButton>("AssignToInterviewerText", (view) => new AssignToInterviewerTextBinding(view));
             registry.RegisterCustomBindingFactory<EditText>("TextLength", (editText) => new EditTextMaxLengthBinding(editText));
             registry.RegisterCustomBindingFactory<MapView>("SetGpsLocation", view => new ViewSetGpsLocationBinding(view));
+            registry.RegisterCustomBindingFactory<ViewPager2>("CurrentItem", view => new ViewPager2CurrentItemBinding(view));
             
             //MvxAppCompatSetupHelper.FillTargetFactories(registry);
 

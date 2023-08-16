@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             rootSectionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             questionnaire = Create.Questionnaire(
                 responsible,
-                Create.QuestionnaireDocument(Guid.NewGuid(), Create.Group(groupId: rootSectionId, title: "last section")));
+                Create.QuestionnaireDocumentWithoutChildren(Guid.NewGuid(), children: Create.Group(groupId: rootSectionId, title: "last section")));
             BecauseOf();
         }
 

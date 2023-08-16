@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    style="@style/FullWidthWrappingLayout"
+    android:background="@drawable/dialog_rounded"
+    android:orientation="vertical"
+    android:paddingBottom="10dp"
+    android:paddingTop="20dp"
+    android:paddingLeft="25dp"
+    android:paddingRight="25dp"
+    android:minWidth="400dp"
+    local:MvxBind="HideKeyboardOnClick .">
+
+    <FrameLayout
+        style="@style/VerticalFullWidthWrappingLayout">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Text_Roboto_24"
+            local:MvxBind="Text DialogTitle;"/>
+        <ImageButton
+                style="@style/Interview_Question_RemoveAnswer"
+                android:duplicateParentState="true"
+                android:layout_gravity="top|right"
+                local:MvxBind="HideKeyboardOnClick .;Click CancelCommand;"
+                local:srcCompat="@drawable/delete_button"/>
+    </FrameLayout>
+    <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            local:MvxBind="Hint CommentHint;">
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/LoginPage_login"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:lines="3"
+                android:gravity="top|left"
+                android:maxLength="500"
+                android:scrollHorizontally="false"
+                android:scrollbars="vertical"
+                android:inputType="textMultiLine"
+                local:MvxBind="Text Comments" />
+    </com.google.android.material.textfield.TextInputLayout>
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:textColor="@drawable/question_option_text_color"
+            local:MvxBind="Visible ShowResponsibles; Text ResponsiblesTitle"
+            />
+    <LinearLayout
+        style="@style/FullWidthWrappingLayout"
+        android:layout_weight="2"
+        local:MvxBind="Visible ShowResponsibles;">
+        <MvxRecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/Interview_Assign_To_Interviewer_List_Max_Width"
+                android:scrollbars="vertical"
+                local:MvxItemTemplate="@layout/interview_select_responsible_item"
+                local:MvxBind="ItemsSource ResponsibleItems;" />
+    </LinearLayout>
+    <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:textColor="@drawable/question_option_text_color"
+            local:MvxBind="
+                  Visible ShowConfirm;
+                  Text ConfirmText; 
+                  Checked IsConfirmed;"/>
+    <LinearLayout
+            style="@style/FullWidthWrappingLayout"
+            android:layout_marginTop="10dp">
+        <Button
+                style="@style/Button_Primary"
+                local:MvxBind="HideKeyboardOnClick .;Click ApplyCommand; Enabled CanApply; Text ApplyTitle;" />
+        <Button
+                style="@style/Button_Link"
+                android:paddingLeft="10dp"
+                local:MvxBind="HideKeyboardOnClick .;Click CancelCommand; Text CancelTitle;" />
+    </LinearLayout>
+</LinearLayout>
+

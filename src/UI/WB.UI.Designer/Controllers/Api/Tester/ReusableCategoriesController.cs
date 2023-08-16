@@ -17,12 +17,12 @@ namespace WB.UI.Designer.Controllers.Api.Tester
     public class ReusableCategoriesController : ControllerBase
     {
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
-        private readonly ICategoriesService categoriesService;
+        private readonly IReusableCategoriesService reusableCategoriesService;
 
-        public ReusableCategoriesController(IQuestionnaireViewFactory questionnaireViewFactory, ICategoriesService categoriesService)
+        public ReusableCategoriesController(IQuestionnaireViewFactory questionnaireViewFactory, IReusableCategoriesService reusableCategoriesService)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
-            this.categoriesService = categoriesService;
+            this.reusableCategoriesService = reusableCategoriesService;
         }
 
         [QuestionnairePermissions]
@@ -45,7 +45,7 @@ namespace WB.UI.Designer.Controllers.Api.Tester
                 return new ReusableCategoriesDto
                 {
                     Id = categoriesId,
-                    Options = this.categoriesService
+                    Options = this.reusableCategoriesService
                         .GetCategoriesById(questionnaireId, categoriesId).ToList()
                 };
             }));

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Linq;
+using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Responsible;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.ComponentModels;
 using WB.UI.Headquarters.Models.User;
 
@@ -18,6 +20,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         private const string DEFAULTEMPTYQUERY = "";
         private const bool DEFAULT_SHOW_LOCKED = false;
         private const bool DEFAULT_SHOW_ARCHIVED = false;
+        private const bool DEFAULT_EXCLUDE_HEADQUARTERS = false;
 
         private readonly IAuthorizedUser authorizedUser;
         private readonly ITeamViewFactory teamViewFactory;
@@ -60,33 +63,31 @@ namespace WB.UI.Headquarters.Controllers.Api
                 supervisorId: this.authorizedUser.Id);
 
         [HttpGet]
-        [Authorize(Roles = "Supervisor")]
-        public UsersView Interviewers(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
-            => this.userViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query,
-                    supervisorId: this.authorizedUser.Id);
-
-        [HttpGet]
-        [Authorize(Roles = "Administrator, Headquarter")]
-        public UsersView AllInterviewers(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
-            => this.userViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query, supervisorId: null);
-
-
-        [HttpGet]
         [Authorize]
-        public ResponsibleComboboxModel InterviewersCombobox(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE, bool showLocked = DEFAULT_SHOW_LOCKED, bool showArchived = DEFAULT_SHOW_ARCHIVED)
+        public ResponsibleComboboxModel InterviewersCombobox(string query = DEFAULTEMPTYQUERY, 
+            int pageSize = DEFAULTPAGESIZE, 
+            bool showLocked = DEFAULT_SHOW_LOCKED, 
+            bool showArchived = DEFAULT_SHOW_ARCHIVED,
+            bool onlyEqual = false)
         {
             bool? isNeedShowActiveAndArchivedInterviewers = showArchived ? (bool?) null : false;
             var supervisorId = this.authorizedUser.IsSupervisor ? this.authorizedUser.Id : (Guid?)null;
-            var users = this.userViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query, supervisorId: supervisorId, showLocked: showLocked, archived: isNeedShowActiveAndArchivedInterviewers);
+            var filterRule = onlyEqual ? QueryFilterRule.Equals : QueryFilterRule.Contains; 
+            var users = this.userViewFactory.GetTeamResponsibles(pageSize: pageSize, searchBy: query, supervisorId: supervisorId, showLocked: showLocked, archived: isNeedShowActiveAndArchivedInterviewers, filterRule);
             var options = users.Users.Select(x => new ResponsibleComboboxOptionModel(x.UserId.FormatGuid(), x.UserName, x.IconClass)).ToArray();
             return new ResponsibleComboboxModel(options, users.TotalCountByQuery);
         }
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
-        public ResponsibleComboboxModel ResponsiblesCombobox(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE, bool showLocked = DEFAULT_SHOW_LOCKED, bool showArchived = DEFAULT_SHOW_ARCHIVED)
+        public ResponsibleComboboxModel ResponsiblesCombobox(string query = DEFAULTEMPTYQUERY, 
+            int pageSize = DEFAULTPAGESIZE, 
+            bool showLocked = DEFAULT_SHOW_LOCKED, 
+            bool showArchived = DEFAULT_SHOW_ARCHIVED,
+            bool excludeHeadquarters = DEFAULT_EXCLUDE_HEADQUARTERS)
         {
-            var users = this.userViewFactory.GetAllResponsibles(pageSize: pageSize, searchBy: query, showLocked: showLocked, showArchived: showArchived);
+            var users = this.userViewFactory.GetAllResponsibles(pageSize: pageSize, searchBy: query, 
+                showLocked: showLocked, showArchived: showArchived, excludeHeadquarters: excludeHeadquarters);
             var options = users.Users.Select(x => new ResponsibleComboboxOptionModel(x.ResponsibleId.FormatGuid(), x.UserName, x.IconClass)).ToArray();
             return new ResponsibleComboboxModel(options, users.TotalCountByQuery);
         }

@@ -11,4 +11,5 @@
     <color name="toolbar_background_color">#AA575757</color>
     <color name="drawer_panel_color">#FFFFFF</color>
     <color name="dark_text_color">#000000</color>
+    <color name="lower_panel_background_color">#A6FFFFFF</color>
 </resources>

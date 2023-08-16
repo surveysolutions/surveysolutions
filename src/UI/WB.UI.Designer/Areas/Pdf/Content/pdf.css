@@ -387,6 +387,13 @@ article {
   line-height: 18px;
   vertical-align: top;
 }
+.option .option-attachment-name {
+    width: 20%;
+    display: inline-block;
+    margin-left: 5px;
+    line-height: 18px;
+    vertical-align: top;
+}
 input[type=date] {
   outline: 0;
   font-size: 16px;

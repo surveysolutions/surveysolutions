@@ -22,7 +22,7 @@ namespace WB.Infrastructure.Native.Storage
         protected MainCoreAssemblyRedirectSerializationBaseBinder()
         {
             if(initTypeError != null)
-                throw new InvalidOperationException($"Assembly contains more then one type with the same name. Duplicate type: {initTypeError.Name}");
+                throw new InvalidOperationException($"Assembly contains more then one type with the same name. Or with null FullName. Duplicate type: {initTypeError.Name}");
         }
 
         protected static Type? initTypeError = null;
@@ -33,7 +33,7 @@ namespace WB.Infrastructure.Native.Storage
 
             foreach (var type in assembly.GetTypes().Where(t => t.IsPublic))
             {
-                if (TypesMap.ContainsKey(type.Name))
+                if (TypesMap.ContainsKey(type.Name) || type.FullName == null)
                 {
                     initTypeError = type;
                     return;

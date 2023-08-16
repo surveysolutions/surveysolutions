@@ -20,15 +20,15 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
     public class QuestionVerifications : AbstractVerifier, IPartialVerifier
     {
         private readonly ISubstitutionService substitutionService;
-        private readonly ICategoriesService categoriesService;
+        private readonly IReusableCategoriesService reusableCategoriesService;
 
         private readonly Dictionary<(Guid questionnaire, Guid category), List<CategoriesItem>> categoriesCache
             = new Dictionary<(Guid questionnaire, Guid category), List<CategoriesItem>>();
 
-        public QuestionVerifications(ISubstitutionService substitutionService, ICategoriesService categoriesService)
+        public QuestionVerifications(ISubstitutionService substitutionService, IReusableCategoriesService reusableCategoriesService)
         {
             this.substitutionService = substitutionService;
-            this.categoriesService = categoriesService;
+            this.reusableCategoriesService = reusableCategoriesService;
         }
 
         private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new[]
@@ -46,9 +46,13 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<INumericQuestion>("WB0128", CountOfDecimalPlacesIsInRange1_15, string.Format(VerificationMessages.WB0128_CountOfDecimalPlacesIsNotInRange, MinCountOfDecimalPlaces, MaxCountOfDecimalPlaces)),
             Error<INumericQuestion>("WB0131", SpecialValuesHasNonIntegerOptionsValues, string.Format(VerificationMessages.WB0131_SpecialValuesHasNonIntegerOptionsValues, int.MinValue, int.MaxValue)),
             Error<INumericQuestion>("WB0132", SpecialValuesHasOptionsWithLongTexts, string.Format(VerificationMessages.WB0132_SpecialValuesHasOptionsWithLongTexts, 1, MaxOptionLength)),
-            Error<INumericQuestion>("WB0133", SpecialValuesMustBeUniqueForNumericlQuestion, VerificationMessages.WB0133_SpecialValuesMustBeUniqueForNumericlQuestion),
+            Error<INumericQuestion>("WB0133", SpecialValuesMustBeUniqueForNumericQuestion, VerificationMessages.WB0133_SpecialValuesMustBeUniqueForNumericlQuestion),
             Error<INumericQuestion>("WB0134", SpecialValuesCountMoreThanMaxOptionCount, string.Format(VerificationMessages.WB0134_SpecialValuesCountMoreThanMaxOptionCount, MaxOptionsCountInCategoricalOptionQuestion)),
             Error<INumericQuestion>("WB0135", SpecialValuesForRosterSizeQuestionsCantBeMoreThanRosterLimit, VerificationMessages.WB0135_SpecialValuesForRosterSizeQuestionsCantBeMoreThanRosterLimit),
+            
+            Error<INumericQuestion>("WB0138", SpecialValuesAttachmentsMustBeUniqueForNumericQuestion, VerificationMessages.WB0138_SpecialValuesAttachmentsMustBeUniqueForNumericQuestion),
+            Error<INumericQuestion>("WB0139", SpecialValuesAttachmentsReferAbsentAttachment, VerificationMessages.WB0139_SpecialValuesAttachmentsReferAbsentAttachment),
+
             Error<ITextListQuestion>("WB0039", TextListQuestionCannotBePrefilled, VerificationMessages.WB0039_TextListQuestionCannotBePrefilled),
             Error<ITextListQuestion>("WB0040", TextListQuestionCannotBeFilledBySupervisor, VerificationMessages.WB0040_TextListQuestionCannotBeFilledBySupervisor),
             Error<ITextListQuestion>("WB0042", TextListQuestionMaxAnswerNotInRange1And200, string.Format(VerificationMessages.WB0042_TextListQuestionMaxAnswerInRange1And200,Constants.MaxLongRosterRowCount, Constants.MinLongRosterRowCount)),
@@ -65,6 +69,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<ICategoricalQuestion>("WB0073", OptionValuesMustBeUniqueForCategoricalQuestion, VerificationMessages.WB0073_OptionValuesMustBeUniqueForCategoricalQuestion),
             Error<ICategoricalQuestion>("WB0076", CategoricalOptionsCountMoreThanMaxOptionCount, string.Format(VerificationMessages.WB0076_CategoricalOptionsCountMoreThan200, MaxOptionsCountInCategoricalOptionQuestion)),
             Error<ICategoricalQuestion>("WB0307", QuestionMustHaveLinkToExistedReusableCategories, VerificationMessages.WB0307_QuestionReferancedToIncorrectCategories),
+            Error<ICategoricalQuestion>("WB0313", QuestionOptionRefersAbsentAttachment, VerificationMessages.WB0313_QuestionOptionReferenceToNonExistentAttachment),
+            Error<ICategoricalQuestion>("WB0314", QuestionOptionsReferNonUniqueAttachment, VerificationMessages.WB0314_NonUniqueAttachment),
             Error<IMultyOptionsQuestion>("WB0007", MultiOptionQuestionYesNoQuestionCantBeLinked, VerificationMessages.WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked),
             Error<IMultyOptionsQuestion>("WB0061", CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2, string.Format(VerificationMessages.WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2, MinOptionsCount)),
             Error<IMultyOptionsQuestion>("WB0021", CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount, VerificationMessages.WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount),
@@ -73,12 +79,12 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<IQuestion, IComposite>("WB0084", CascadingComboboxOptionsHasNoParentOptions, VerificationMessages.WB0084_CascadingOptionsShouldHaveParent),
             Error<IQuestion, IComposite>("WB0085", ParentShouldNotHaveDeeperRosterLevelThanCascadingQuestion, VerificationMessages.WB0085_CascadingQuestionWrongParentLevel),
             Error<IQuestion>("WB0282", IdentifyingQuestionInSectionWithEnablingCondition, VerificationMessages.WB0282_IdentifyingQuestionInSectionWithCondition),
+            Error<IQuestion>("WB0045", QuestionHasOptionsWithEmptyValue, VerificationMessages.WB0045_QuestionHasOptionsWithEmptyValue),
+            Error<SingleQuestion, SingleQuestion>("WB0087", CascadingHasCircularReference, VerificationMessages.WB0087_CascadingQuestionHasCicularReference),
             ErrorForTranslation<IQuestion>("WB0072", OptionTitlesMustBeUniqueForCategoricalQuestion, VerificationMessages.WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion),
-            ErrorForTranslation<IQuestion>("WB0045", QuestionHasOptionsWithEmptyValue, VerificationMessages.WB0045_QuestionHasOptionsWithEmptyValue),
             ErrorForTranslation<IQuestion>("WB0259", QuestionTitleIsTooLong, string.Format(VerificationMessages.WB0259_QuestionTitleIsTooLong, MaxTitleLength)),
             ErrorForTranslation<INumericQuestion>("WB0136", QuestionHasSpecialValuesWithEmptyValue, VerificationMessages.WB0136_SpecialValuesHaveOptionsWithEmptyValue),
             ErrorForTranslation<INumericQuestion>("WB0137", SpecialValueTitlesMustBeUnique, VerificationMessages.WB0137_SpecialValuesTitlesMustBeUnique),
-            Error<SingleQuestion, SingleQuestion>("WB0087", CascadingHasCircularReference, VerificationMessages.WB0087_CascadingQuestionHasCicularReference),
             ErrorForTranslation<IComposite, ValidationCondition>("WB0105", GetValidationConditionsOrEmpty, ValidationMessageIsTooLong, index => string.Format(VerificationMessages.WB0105_ValidationMessageIsTooLong, index, MaxValidationMessageLength)),
             ErrorsByQuestionsFromMatrixRostersThatHaveSubstitutionsToRosterQuestionsFromSelfOrDeeperRosterLevel,
             Error<IQuestion>("WB0309", IdentityQuestionsMustHaveVariableLabel, VerificationMessages.WB0309_IdentityQuestionsMustHaveVariableLabel),
@@ -113,6 +119,69 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             WarningForCollection(QuestionsHasSameCategories, "WB0296", VerificationMessages.WB0296)
         };
 
+        private bool QuestionOptionsReferNonUniqueAttachment(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (question is ICategoricalQuestion categoriesQuestion && categoriesQuestion.CategoriesId.HasValue)
+            {
+                var categories = GetCategoriesItem(questionnaire.PublicKey, categoriesQuestion.CategoriesId.Value);
+
+                return categories
+                    .Where(x => !string.IsNullOrWhiteSpace(x.AttachmentName))
+                    .GroupBy(x => new {x.AttachmentName, x.ParentId})
+                    .Any(x => x.Count() > 1);
+            }
+            else
+            {
+                if (question.Answers == null)
+                    return false;
+                
+                var duplicates = question.Answers
+                    .Where(x => !string.IsNullOrWhiteSpace(x.AttachmentName))
+                    .GroupBy(x => new {x.AttachmentName, x.ParentCode})
+                    .Where(x => x.Count() > 1);
+
+                return duplicates.Any();
+            }
+        }
+
+        private bool QuestionOptionRefersAbsentAttachment(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (question is ICategoricalQuestion categoriesQuestion && categoriesQuestion.CategoriesId.HasValue)
+            {
+                var categories = GetCategoriesItem(questionnaire.PublicKey, categoriesQuestion.CategoriesId.Value);
+
+                var allAttachmentsRefs = categories
+                    .Where(x => !string.IsNullOrWhiteSpace(x.AttachmentName))
+                    .Select(x => x.AttachmentName).Distinct();
+
+                if (allAttachmentsRefs.Any(x => questionnaire.Attachments.All(y => 
+                        string.Compare(x, y.Name, StringComparison.OrdinalIgnoreCase) != 0)))
+                    return true;
+            }
+            else
+            {
+                if (question.Answers == null)
+                    return false;
+                
+                var allAttachmentsRefs = question.Answers
+                    .Where(x => !string.IsNullOrWhiteSpace(x.AttachmentName))
+                    .Select(x => x.AttachmentName).Distinct();
+
+                if (allAttachmentsRefs.Any(x => 
+                        questionnaire.Attachments.All(y => 
+                            string.Compare(x, y.Name, StringComparison.OrdinalIgnoreCase) != 0)))
+                    return true;
+            }
+
+            return false;
+        }
+        
+        private bool SpecialValuesAttachmentsMustBeUniqueForNumericQuestion(INumericQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+            => QuestionOptionsReferNonUniqueAttachment(question, questionnaire);
+
+        private bool SpecialValuesAttachmentsReferAbsentAttachment(INumericQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+            => QuestionOptionRefersAbsentAttachment(question, questionnaire);
+        
         private bool IdentifyingQuestionInSectionWithEnablingCondition(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (!Prefilled(question)) return false;
@@ -332,7 +401,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         }
 
         private static bool ValidationMessageIsTooLong(IComposite question, ValidationCondition validationCondition, MultiLanguageQuestionnaireDocument questionnaire)
-            => validationCondition.Message?.Length > 250;
+            => validationCondition.Message?.Length > MaxValidationMessageLength;
 
         private static IEnumerable<QuestionnaireVerificationMessage> WarningByValueAndTitleNumbersIsNotEqualsInCategoricalQuestions(MultiLanguageQuestionnaireDocument document)
         {
@@ -531,7 +600,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return OptionsHasLongText(question.Answers);
         }
 
-        private bool SpecialValuesMustBeUniqueForNumericlQuestion(INumericQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        private bool SpecialValuesMustBeUniqueForNumericQuestion(INumericQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
             => OptionsHaveUniqueValues(question, questionnaire.PublicKey);
 
         private static bool SpecialValuesCountMoreThanMaxOptionCount(INumericQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
@@ -574,7 +643,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         }
 
         private static bool QuestionTitleIsTooLong(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
-            => question.QuestionText?.Length > 500;
+            => question.QuestionText?.Length > MaxTitleLength;
 
         private static bool QuestionWithOptionsFilterCannotBePrefilled(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
@@ -1205,7 +1274,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 return items;
             }
 
-            items = this.categoriesService.GetCategoriesById(questionnaire, category).ToList();
+            items = this.reusableCategoriesService.GetCategoriesById(questionnaire, category).ToList();
             categoriesCache.Add((questionnaire, category), items);
             return items;
         }

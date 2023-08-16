@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument()
         {
-            return Create.QuestionnaireDocument(children: new IComposite[]
+            return Create.QuestionnaireDocumentWithoutChildren(children: new IComposite[]
             {
                 Create.Group(g1Id, title: "Group 1", children: new IComposite[]
                 {

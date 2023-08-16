@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
+using NUnit.Framework;
 using WB.Services.Export.Assignment;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.CsvExport.Implementation;
@@ -182,11 +183,13 @@ namespace WB.Services.Export.Tests
             return Mock.Of<IOptions<ExportServiceSettings>>(x => x.Value == new ExportServiceSettings());
         }
 
-        public static TabularFormatExportService ReadSideToTabularFormatExportService(
-            QuestionnaireExportStructure questionnaireExportStructure,
+        public static TabularFormatExportService  ReadSideToTabularFormatExportService(
+            QuestionnaireExportStructure questionnaireExportStructure = null,
             IFileSystemAccessor fileSystemAccessor = null,
             IQuestionnaireStorage questionnaireStorage = null,
-            IAssignmentActionsExporter assignmentsActionsExporter = null)
+            IAssignmentActionsExporter assignmentsActionsExporter = null,
+            IProductVersion productVersion = null,
+            IHeadquartersApi headquartersApi = null)
         {
             var defaultQuestionnaireStorage = new Mock<IQuestionnaireStorage>();
             var questionnaireDocument = Create.QuestionnaireDocument(Guid.Parse("11111111111111111111111111111111"), 555);
@@ -195,6 +198,8 @@ namespace WB.Services.Export.Tests
             
             var defaultInterviewsSource = new Mock<IInterviewsToExportSource>();
             defaultInterviewsSource.SetReturnsDefault(new List<InterviewToExport>());
+
+            headquartersApi = headquartersApi ?? Mock.Of<IHeadquartersApi>();
         
             return new TabularFormatExportService(Mock.Of<ILogger<TabularFormatExportService>>(),
                 defaultInterviewsSource.Object,
@@ -204,12 +209,13 @@ namespace WB.Services.Export.Tests
                 Mock.Of<IInterviewActionsExporter>(),
                 Mock.Of<IQuestionnaireExportStructureFactory>(x => x.GetQuestionnaireExportStructureAsync(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireId>(), It.IsAny<Guid?>()) == Task.FromResult(questionnaireExportStructure)),
                 questionnaireStorage ?? defaultQuestionnaireStorage.Object,
-                Mock.Of<IProductVersion>(),
+                productVersion ?? Mock.Of<IProductVersion>(),
                 Mock.Of<IPdfExporter>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 assignmentsActionsExporter ?? Mock.Of<IAssignmentActionsExporter>(),
                 Mock.Of<IQuestionnaireBackupExporter>(),
-                Mock.Of<IDdiMetadataFactory>());
+                Mock.Of<IDdiMetadataFactory>(),
+                Mock.Of<ITenantApi<IHeadquartersApi>>(api => api.For(It.IsAny<TenantInfo>()) == headquartersApi));
         }
 
         public static CommentsExporter CommentsExporter()
@@ -285,6 +291,21 @@ namespace WB.Services.Export.Tests
         {
             public string File { get; set; }
             public List<string[]> Data { get; set; }
+        }
+
+        public static AreaQuestion AreaQuestion(Guid? id = null,
+            string variable = "area_question",
+            string questionText = null,
+            IEnumerable<ValidationCondition> validationConditions = null)
+        {
+            return new AreaQuestion
+            {
+                QuestionText = questionText ?? "text",
+                QuestionType = QuestionType.Area,
+                PublicKey = id ?? Guid.NewGuid(),
+                VariableName = variable,
+                ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>()
+            };
         }
 
         public static NumericQuestion NumericIntegerQuestion(Guid? id = null,
@@ -442,9 +463,14 @@ namespace WB.Services.Export.Tests
             return questionnaireDocumentWithOneChapter;
         }
 
-        public static List<HeaderColumn> ColumnHeaders(string[] columnNames)
+        public static List<HeaderColumn> ColumnHeaders(string[] columnNames, ExportValueType exportType = ExportValueType.String)
         {
-            return columnNames?.Select(x => new HeaderColumn() { Name = x, Title = x }).ToList() ?? new List<HeaderColumn>();
+            return columnNames?.Select(x => ColumnHeader(x, exportType)).ToList() ?? new List<HeaderColumn>();
+        }
+        
+        public static HeaderColumn ColumnHeader(string columnName, ExportValueType exportType = ExportValueType.String)
+        {
+            return new HeaderColumn() { Name = columnName, Title = columnName, ExportType = exportType};
         }
 
         public static TextListQuestion TextListQuestion(Guid? questionId = null,

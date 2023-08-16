@@ -42,11 +42,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
             try
             {
                 var importProcess = assignmentsImportService.GetImportStatus();
-
                 if (importProcess?.ProcessStatus != AssignmentsImportProcessStatus.Verification) return;
 
                 var allAssignmentIds = assignmentsImportService.GetAllAssignmentIdsToVerify();
 
+                importProcess = assignmentsImportService.GetImportStatus();
                 if (importProcess?.ProcessStatus != AssignmentsImportProcessStatus.Verification) return;
 
                 this.logger.Debug("Assignments verification job: Started");

@@ -108,6 +108,7 @@
     <item name="android:layout_marginLeft">@dimen/Interview_Readonly_Question_Layout_margin_left</item>
     <item name="android:layout_marginRight">@dimen/Interview_Readonly_Question_Layout_margin_right</item>
     <item name="android:layout_marginTop">@dimen/Interview_Question_Answer_margin_top</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Question_Answer_margin_top</item>
   </style>
     
     <style name="Readonly_Devider_Spacer">
@@ -238,6 +239,16 @@
     
     <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
     <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
+  </style>
+
+  <style name="Interview_Question_Answer_Option_Attachment">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    
+    <item name="android:gravity">center_horizontal</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Question_Answer_Option_margin_vertical</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Question_Answer_Option_margin_vertical</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Question_Answer_Option_margin_vertical</item>
   </style>
 
   <style name="Interview_Question_Answer_Option_Corner" parent="Interview_Question_Answer_Option_Background">
@@ -535,6 +546,7 @@
   </style>
 
   <style name="Interview_Previous_Group_Navigation_Layout">
+    <item name="android:orientation">vertical</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>

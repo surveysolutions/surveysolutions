@@ -12,7 +12,9 @@
     <dimen name="Theme_SeekBar_padding">16dip</dimen>
     <dimen name="Theme_Button_min_height">48dip</dimen>
     <dimen name="Theme_Button_min_width">64dip</dimen>
-
+    <dimen name="Theme_Icon_min_size">56dip</dimen>
+    
+    
     <dimen name="ListStyle_Divider_height">1dp</dimen>
 
     <dimen name="Toolbar_margin_horizontal">25dp</dimen>
@@ -54,6 +56,8 @@
     <dimen name="exo_player_text_size">16sp</dimen>
     <dimen name="exo_player_seek_height">26dp</dimen>
     <dimen name="exo_player_button_size">48dp</dimen>
+    <dimen name="exo_player_play_button_size">32dp</dimen>
+    <dimen name="exo_player_play_button_margin_top">8dp</dimen>
     
     <dimen name="calendar_event_dialog_padding">10dp</dimen>
     <dimen name="calendar_event_dialog_margin">3dp</dimen>

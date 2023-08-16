@@ -51,7 +51,7 @@ namespace WB.UI.Headquarters.Models.Api
         /// <summary>
         /// How many rows per page 
         /// </summary>
-        public int Length { get; set; }
+        public int Length { get; set; } = 10;
 
         /// <summary>
         /// order of output

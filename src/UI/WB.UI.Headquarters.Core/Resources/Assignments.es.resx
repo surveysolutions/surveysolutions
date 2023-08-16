@@ -297,7 +297,7 @@
   <data name="AssignmentSizeInWebMode" xml:space="preserve">
     <value>El tamaño no se puede cambiar para una asignación en modo web.</value>
   </data>
-  <data name="AssignmentsSelected_plural" xml:space="preserve">
+  <data name="AssignmentsSelected_other" xml:space="preserve">
     <value>{{count}} Asignación(es) seleccionada(s)</value>
   </data>
   <data name="AssignTo" xml:space="preserve">
@@ -378,7 +378,7 @@
   <data name="NewAssignment" xml:space="preserve">
     <value>Nueva asignación</value>
   </data>
-  <data name="NumberOfAssignmentsAffected_plural" xml:space="preserve">
+  <data name="NumberOfAssignmentsAffected_other" xml:space="preserve">
     <value>{{count}} Asignaciones serán cambiadas</value>
   </data>
   <data name="Password" xml:space="preserve">
@@ -486,7 +486,7 @@
   <data name="WebModeReassignToNonInterviewer" xml:space="preserve">
     <value>Está realizando una asignación web a un usuario que no es ENTREVISTADOR. Si ya envió el enlace para esta tarea, los encuestados no podrán responder a su encuesta hasta que la tarea se devuelva a un usuario con la función ENTREVISTADOR.</value>
   </data>
-  <data name="WebModeReassignToNonInterviewer_plural" xml:space="preserve">
+  <data name="WebModeReassignToNonInterviewer_other" xml:space="preserve">
     <value>Está reasignando asignaciones web a un usuario que no es ENTREVISTADOR. Si ya envió los enlaces para estas asignaciones, los encuestados no podrán responder a su encuesta hasta que las asignaciones se devuelvan a un usuario en el rol ENTREVISTADOR.</value>
   </data>
 </root>

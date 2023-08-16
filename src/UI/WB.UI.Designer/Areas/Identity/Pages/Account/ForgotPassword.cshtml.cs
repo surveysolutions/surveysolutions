@@ -41,7 +41,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (Input!= null && ModelState.IsValid)
+            if (Input?.Email != null && ModelState.IsValid)
             {
                 var user = await userManager.FindByNameAsync(Input.Email)
                     ?? await userManager.FindByEmailAsync(Input.Email);
@@ -68,11 +68,14 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                 emailModel.ConfirmationLink = callbackUrl;
                 emailModel.UserName = !string.IsNullOrEmpty(existingFullName?.Value) ? existingFullName?.Value : user.UserName;
                 string body = await this.viewRenderingService.RenderToStringAsync("Emails/ResetPasswordEmail", emailModel);
-                
-                await emailSender.SendEmailAsync(
-                    user.Email,
-                    AccountResources.PasswordReset,
-                    body);
+
+                if (user.Email != null)
+                {
+                    await emailSender.SendEmailAsync(
+                        user.Email,
+                        AccountResources.PasswordReset,
+                        body);
+                }
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }

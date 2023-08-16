@@ -74,7 +74,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
             result.QuestionsEnabledEventCount.Should().Be(0);
 
         [NUnit.Framework.Test] public void should_raise_QuestionsDisabled_event_with_question_C_only () =>
-            result.QuestionsDisabledQuestionIds.Should().BeEquivalentTo(Guid.Parse("cccccccccccccccccccccccccccccccc"));
+            result.QuestionsDisabledQuestionIds.Should().BeEquivalentTo(new []{ Guid.Parse("cccccccccccccccccccccccccccccccc")});
 
         private static AppDomainContext appDomainContext;
         private static InvokeResult result;

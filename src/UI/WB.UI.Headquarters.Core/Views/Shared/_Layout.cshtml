@@ -1,4 +1,4 @@
-@using WB.UI.Shared.Web.Extensions
+﻿@using WB.UI.Shared.Web.Extensions
 @using System.Globalization
 <!DOCTYPE html>
 <html lang="@CultureInfo.CurrentUICulture.Name">
@@ -8,17 +8,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @Html.GenerateFavicon(Url.Static("/img/identity/favicon-hq"))
     <title>@ViewBag.Title</title>
-    <partial name="GlobalSettings" />
+    <partial name="GlobalSettings" ></partial>
     <locale component="hq"></locale>
     @RenderSection("scripts", false)
-<link href="/js/chunk-common.js" rel="preload" as="script"><link href="/js/chunk-vendors.js" rel="preload" as="script"><link href="/js/hq_vue.js" rel="preload" as="script"></head>
+  <script type="module" crossorigin src="/js/markup.js"></script>
+  <script type="module" crossorigin src="/js/vendor.js"></script>
+  <script type="module" crossorigin src="/js/index.js"></script>
+  <script type="module" crossorigin src="/js/compatibility.js"></script>
+  <script type="module" crossorigin src="/js/main.js"></script>
+  <link rel="stylesheet" href="/css/markup.css">
+  <link rel="stylesheet" href="/css/vendor.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/markup-specific.css">
+</head>
 <body class='wide-navbar'>
     <header>
-        <partial name="NavigationBar" />
+        <partial name="NavigationBar" ></partial>
     </header>
-    <partial name="NoticeBar"/>
+    <partial name="NoticeBar"></partial>
     @RenderBody()
-    <partial name="Footer" />
-    <partial name="_Clickjacking"/>
-<script type="text/javascript" src="/js/chunk-vendors.js"></script><script type="text/javascript" src="/js/chunk-common.js"></script><script type="text/javascript" src="/js/hq_vue.js"></script></body>
+    <partial name="Footer" ></partial>
+    <partial name="_Clickjacking"></partial>
+
+</body>
 </html>

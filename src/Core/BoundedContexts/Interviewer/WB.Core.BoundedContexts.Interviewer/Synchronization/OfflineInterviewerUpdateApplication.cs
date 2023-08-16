@@ -4,8 +4,6 @@ using System.Diagnostics;
 using System.Net;
 using System.Threading.Tasks;
 using Humanizer;
-using Plugin.Permissions;
-using Plugin.Permissions.Abstractions;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -17,6 +15,7 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
+using Xamarin.Essentials;
 
 namespace WB.Core.BoundedContexts.Interviewer.Synchronization
 {
@@ -24,7 +23,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
     {
         private readonly IInterviewerSettings interviewerSettings;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IPermissionsService permissions;
         private readonly IViewModelNavigationService navigationService;
         private readonly IPathUtils pathUtils;
 
@@ -33,13 +31,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
             ILogger logger, 
             IInterviewerSettings interviewerSettings,
             IFileSystemAccessor fileSystemAccessor,
-            IPermissionsService permissions,
             IViewModelNavigationService navigationService,
             IPathUtils pathUtils) : base(sortOrder, synchronizationService, logger)
         {
             this.interviewerSettings = interviewerSettings ?? throw new ArgumentNullException(nameof(interviewerSettings));
             this.fileSystemAccessor = fileSystemAccessor;
-            this.permissions = permissions;
             this.navigationService = navigationService;
             this.pathUtils = pathUtils;
         }
@@ -63,8 +59,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
 
             if (versionFromServer.HasValue && versionFromServer > interviewerSettings.GetApplicationVersionCode())
             {
-                await this.permissions.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
-
                 try
                 {
                     var apkBytes = await this.synchronizationService.GetApplicationAsync(
@@ -100,8 +94,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
 
                     if (apkBytes != null)
                     {
+                        var rootDirectory = await this.pathUtils.GetRootDirectoryAsync();
                         var pathToNewApk = this.fileSystemAccessor.CombinePath(
-                            this.pathUtils.GetRootDirectory(), "interviewer.apk");
+                            rootDirectory, "interviewer.apk");
 
                         this.fileSystemAccessor.WriteAllBytes(pathToNewApk, apkBytes);
 

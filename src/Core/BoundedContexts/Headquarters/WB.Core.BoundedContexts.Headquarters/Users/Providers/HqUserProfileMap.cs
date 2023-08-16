@@ -20,11 +20,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Providers
 
             Property(x => x.DeviceId);
             Property(x => x.DeviceRegistrationDate);
-            //Property(x => x.SupervisorId);
             Property(x => x.DeviceAppVersion);
             Property(x => x.StorageFreeInBytes);
             Property(x => x.DeviceAppBuildVersion);
-
+            Property(x => x.AllowRelinkDate);
         }
     }
 }

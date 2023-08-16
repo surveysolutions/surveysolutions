@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using PasswordGenerator;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
@@ -10,8 +11,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
     public class ExportSettings : IExportSettings
     {
         private readonly IPlainKeyValueStorage<ExportEncryptionSettings> appSettingsStorage;
-        private readonly IMemoryCache settingCache; 
-        
+        private readonly IMemoryCache settingCache;
+
         public ExportSettings(
             IPlainKeyValueStorage<ExportEncryptionSettings> appSettingsStorage,
             IMemoryCache memoryCache)

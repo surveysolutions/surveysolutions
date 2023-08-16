@@ -30,7 +30,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             }
         }
         
-        public override void OnViewCreated(View view, Bundle savedInstanceState)
+        public override void OnViewCreated(View view, Bundle? savedInstanceState)
         {
             base.OnViewCreated(view, savedInstanceState);
 
@@ -39,20 +39,18 @@ namespace WB.UI.Shared.Enumerator.Activities
             var nestedScrollView = view.FindViewById<NestedScrollView>(Resource.Id.tv_coverNestedScrollView);
             nestedScrollView?.Post(new InnerRunnable(() =>
             {
-                View? entityControl = nestedScrollView.FindViewWithTag($"tv_Title_{ViewModel.ScrollToIdentity}");
-                if (entityControl != null)
+                var entityControl = nestedScrollView.FindViewWithTag($"tv_Title_{ViewModel.ScrollToIdentity}");
+                if (entityControl == null) return;
+                
+                if (entityControl.Parent is View parent)
                 {
-                    View? parent = (View?) entityControl.Parent;
-                    if (parent != null)
                     {
-                        {
-                            var topOffset = entityControl.Top + parent.Top;
-                            nestedScrollView.ScrollTo(0, topOffset);
-                        }
+                        var topOffset = entityControl.Top + parent.Top;
+                        nestedScrollView.ScrollTo(0, topOffset);
                     }
-
-                    this.ViewModel.ScrollToIdentity = null;
                 }
+
+                this.ViewModel.ScrollToIdentity = null;
             }));
         }
     }

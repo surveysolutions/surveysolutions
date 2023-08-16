@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using HotChocolate.Types;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
@@ -9,12 +11,20 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
     {
         protected override void Configure(IObjectTypeDescriptor<MapBrowseItem> descriptor)
         {
+            descriptor.BindFieldsExplicitly();
             descriptor.Name("Map");
-            descriptor.Ignore(x => x.FileName);
+            
+            //descriptor.Ignore(x => x.FileName);
+            //descriptor.Ignore(m => m.HasGeoJson);
+            //descriptor.Ignore(m => m.GeoJson);
+            //descriptor.Ignore(m => m.IsPreviewGeoJson);
+            //descriptor.Ignore(m => m.DuplicateLabels);
+
             descriptor.Field(x => x.Id)
                 .Type<NonNullType<StringType>>()
                 .Name("fileName")
                 .Description("Map file name");
+            
             descriptor.Field(x => x.Size).Description("Size of map in bytes");
             descriptor.Field(x => x.ImportDate)
                 .Type<DateTimeType>()
@@ -29,16 +39,35 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
                 .Resolve(context =>
                 {
                     var mapId = context.Parent<MapBrowseItem>().Id;
+                    var user = context.Service<IAuthorizedUser>();
+                    var unitOfWork = context.Service<IUnitOfWork>();
 
-                    return context.Service<IUnitOfWork>().Session.Query<UserMap>()
-                        .Where(a => mapId == a.Map.Id)
-                        .ToList();
+                    var mapUsers = unitOfWork.Session.Query<UserMap>()
+                        .Where(a => mapId == a.Map.Id);
+                    
+                    if (user.IsSupervisor)
+                    {
+                        //limit by team
+                        var team = unitOfWork.Session.Query<HqUser>()
+                            .Where(x => x.WorkspaceProfile.SupervisorId == user.Id || x.Id == user.Id)
+                            .Select(x=> x.UserName);
+                        
+                        mapUsers = mapUsers.Where(z => team.Contains(z.UserName));
+                    }
+
+                    return mapUsers.ToList();
                 })
                 .Type<ListType<UserMapObjectType>>();
-            descriptor.Ignore(m => m.HasGeoJson);
-            descriptor.Ignore(m => m.GeoJson);
-            descriptor.Ignore(m => m.IsPreviewGeoJson);
-            descriptor.Ignore(m => m.DuplicateLabels);
+            descriptor.Field(x => x.XMaxVal).Type<NonNullType<FloatType>>();
+            descriptor.Field(x => x.YMaxVal).Type<NonNullType<FloatType>>();
+            descriptor.Field(x => x.XMinVal).Type<NonNullType<FloatType>>();
+            descriptor.Field(x => x.YMinVal).Type<NonNullType<FloatType>>();
+            
+            descriptor.Field(x => x.Wkid).Type<NonNullType<IntType>>();
+            descriptor.Field(x => x.MaxScale).Type<NonNullType<FloatType>>();
+            descriptor.Field(x => x.MinScale).Type<NonNullType<FloatType>>();
+            descriptor.Field(x => x.ShapeType).Type<StringType>();
+            descriptor.Field(x => x.ShapesCount).Type<IntType>();
         }
     }
 }

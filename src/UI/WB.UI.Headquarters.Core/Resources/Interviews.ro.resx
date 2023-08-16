@@ -220,7 +220,7 @@
   <data name="ApproveConfirmMessage_Statuses" xml:space="preserve">
       <value>Puteți aproba doar interviuri cu următoarele stări: {{status1}}, {{status2}}, {{status3}}.</value>
   </data>
-  <data name="ApproveConfirmMessage_plural" xml:space="preserve">
+  <data name="ApproveConfirmMessage_other" xml:space="preserve">
     <value>{{count}} interviuri vor fi aprobate.</value>
   </data>
   <data name="AssignReceivedWarning" xml:space="preserve">

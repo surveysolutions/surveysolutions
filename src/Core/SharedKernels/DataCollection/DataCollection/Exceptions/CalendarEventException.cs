@@ -26,7 +26,6 @@ namespace WB.Core.SharedKernels.DataCollection.Exceptions
             ExceptionType = (CalendarEventDomainExceptionType)info.GetInt32(nameof(ExceptionType));
         }
 
-        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue(nameof(ExceptionType), (int)this.ExceptionType);

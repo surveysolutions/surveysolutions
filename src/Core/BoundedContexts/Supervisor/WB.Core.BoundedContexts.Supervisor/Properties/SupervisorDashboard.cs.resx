@@ -118,31 +118,31 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CollectedInterviews" xml:space="preserve">
-    <value>Přiřazené dotazníky</value>
+    <value>Shromážděné rozhovory</value>
   </data>
   <data name="Outbox" xml:space="preserve">
     <value>Odeslané</value>
   </data>
   <data name="OutboxSubtitle" xml:space="preserve">
-    <value>Přiřazené dotazníky budou odeslány z vašeho zařízení během příští synchronizace</value>
+    <value>Dotazníky a rozhovory budou odeslány z Vašeho tabletu během příští synchronizace</value>
   </data>
   <data name="SentToInterviewer" xml:space="preserve">
-    <value>Na odeslání</value>
+    <value>Rozpracované u tazatele</value>
   </data>
   <data name="SentToInterviewerSubtitle" xml:space="preserve">
-    <value>Přiřazené dotazníky, které jsou na tazatelském zařízení</value>
+    <value>Dotazníky a rozhovory, které jsou u tazetele v tabletu</value>
   </data>
   <data name="ToBeAssigned" xml:space="preserve">
-    <value>K přiřazení</value>
+    <value>Dotazníky k přiřazení</value>
   </data>
   <data name="ToBeAssignedListSubtitle" xml:space="preserve">
     <value>Dotazníky, které je potřeba přiřadit Vašim tazatelům</value>
   </data>
   <data name="WaitingForAction" xml:space="preserve">
-    <value>Ke schválení</value>
+    <value>Dokončeno - ke schválení</value>
   </data>
   <data name="WaitingForSupervisorActionSubtitle" xml:space="preserve">
-    <value>Dotazníky, které čekají na schválení</value>
+    <value>Rozhovory, které čekají na schválení</value>
   </data>
   <data name="YourTeam" xml:space="preserve">
     <value>Vaše skupina</value>

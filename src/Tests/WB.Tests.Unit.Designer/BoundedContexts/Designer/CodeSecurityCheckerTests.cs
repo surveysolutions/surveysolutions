@@ -42,17 +42,35 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         [TestCase("Activator.CreateInstance(typeof(AccessViolationException))", "System.Activator")]
         [TestCase("Environment.Exit(1)", "System.Environment")]
         [TestCase("GC.Collect()", "System.GC")]
-        public void should_not_allow_usage_of_dangerous_classess(string codeToCheck, string expectedClassName)
+        [TestCase("var t = new System.Threading.SemaphoreSlim(0, 3)", "System.Threading.SemaphoreSlim")]
+        [TestCase("num2_float.Value.ToString(\"N\", new System.Globalization.CultureInfo(\"hi-IN\"))", "System.Globalization.CultureInfo")]
+        public void should_not_allow_usage_of_dangerous_classes(string codeToCheck, string expectedClassName)
         {
             string code = string.Format(TestClassToCompile, codeToCheck);
             var syntaxTree = SyntaxFactory.ParseSyntaxTree(code);
             var codeSecurityChecker = GetCodeSecurityChecker();
             var compilation = CreateCompilation(syntaxTree.ToEnumerable());
-            // Act
+            
+            // act
             var forbiddenClassesUsed = codeSecurityChecker.FindForbiddenClassesUsage(syntaxTree, compilation).ToList();
 
             Assert.That(forbiddenClassesUsed, Has.Count.EqualTo(1));
             Assert.That(forbiddenClassesUsed[0], Is.EqualTo(expectedClassName));
+        }
+        
+        [TestCase("new System.Assembly")]
+        [TestCase("new System.List()")]
+        public void should_allow_usage_of_same_classes(string codeToCheck)
+        {
+            string code = string.Format(TestClassToCompile, codeToCheck);
+            var syntaxTree = SyntaxFactory.ParseSyntaxTree(code);
+            var codeSecurityChecker = GetCodeSecurityChecker();
+            var compilation = CreateCompilation(syntaxTree.ToEnumerable());
+            
+            // act
+            var forbiddenClassesUsed = codeSecurityChecker.FindForbiddenClassesUsage(syntaxTree, compilation).ToList();
+
+            Assert.That(forbiddenClassesUsed, Has.Count.EqualTo(0));
         }
 
         private static CodeSecurityChecker GetCodeSecurityChecker()

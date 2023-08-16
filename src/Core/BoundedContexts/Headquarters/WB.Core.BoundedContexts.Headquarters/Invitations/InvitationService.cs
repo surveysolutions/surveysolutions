@@ -162,6 +162,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             var noResponseInvitationsWithoutReminders = invitationStorage.Query(_ => _
                 .Where(FilteredByQuestionnaire(questionnaireIdentity))
                 .Where(NotCompletedAssignment())
+                .Where(NotArchived())
                 .Where(HasNoInterview())
                 .Where(NoReminderAndInvitationIsExpired(thresholdDate))
                 .Select(x => x.Id)
@@ -170,6 +171,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             var noResponseInvitationsWithReminders = invitationStorage.Query(_ => _
                 .Where(FilteredByQuestionnaire(questionnaireIdentity))
                 .Where(NotCompletedAssignment())
+                .Where(NotArchived())
                 .Where(HasNoInterview())
                 .Where(LastReminderIsExpired(thresholdDate))
                 .Select(x => x.Id)
@@ -334,7 +336,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         public Invitation GetInvitationByAssignmentId(int assignmentId)
         {
-            return invitationStorage.Query(_ => _.SingleOrDefault(x => x.AssignmentId == assignmentId));
+            return invitationStorage.Query(_ => _
+                .OrderBy(x => x.Id)
+                .FirstOrDefault(x => x.AssignmentId == assignmentId));
         }
 
         public void InterviewWasCreated(int invitationId, string interviewId)

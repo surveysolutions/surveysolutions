@@ -18,9 +18,9 @@ namespace WB.Services.Export.Questionnaire
         {
             Dictionary<ValueVector<Guid>, RosterScopeDescription> result = new Dictionary<ValueVector<Guid>, RosterScopeDescription>();
 
-            var groupsByRosterSizeSourceLookup = this.document.Find<Group>().Where(g => g.IsRoster).ToLookup(r => r.RosterSizeSource);
+            var groupsByRosterSizeSourceLookup = this.document.FindInDepth<Group>().Where(g => g.IsRoster).ToLookup(r => r.RosterSizeSource);
             var groupsMappedOnPropagatableQuestion = this.GetAllRosterScopesGroupedByRosterId(groupsByRosterSizeSourceLookup);
-            var questionsByPublicKeyDictionary = this.document.Find<Question>().ToDictionary(q => q.PublicKey);
+            var questionsByPublicKeyDictionary = this.document.FindInDepth<Question>().ToDictionary(q => q.PublicKey);
             var rosterGroups = groupsByRosterSizeSourceLookup[RosterSizeSourceType.Question].ToLookup(@group => @group.RosterSizeQuestionId);
             var rosterSizeQuestions = this.document.Find<Question>(question => rosterGroups[question.PublicKey].Any()).ToList();
             
@@ -40,7 +40,8 @@ namespace WB.Services.Export.Questionnaire
                                 .Where(group => this.GetScopeOfQuestionnaireItem(groupsMappedOnPropagatableQuestion, group)
                                     .SequenceEqual(scopeVectorsOfTrigger.Key)));
 
-                    var rosterDescription = new RosterScopeDescription(scopeVectorsOfTrigger.Key, rosterSizeQuestion.VariableName,
+                    var rosterSizeVariableName = document.GetExportVariableName(rosterSizeQuestion.PublicKey);
+                    var rosterDescription = new RosterScopeDescription(scopeVectorsOfTrigger.Key, rosterSizeVariableName,
                         this.GetRosterScopeTypeByQuestionType(rosterSizeQuestion.QuestionType), rosterIdWithTitleQuestionIds);
 
                     result.Add(new ValueVector<Guid>(scopeVectorsOfTrigger.Key), rosterDescription);

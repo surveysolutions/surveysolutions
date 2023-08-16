@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             var mockOfAction = new Mock<Action>();
             var viewModel = Create.ViewModel.YesNoQuestionOptionViewModel(userInteractionService);
 
-            viewModel.Init(Create.ViewModel.QuestionState<YesNoQuestionAnswered>(), "title", 1, false, mockOfAction.Object);
+            viewModel.Init(Create.ViewModel.QuestionState<YesNoQuestionAnswered>(), "title", 1, false, mockOfAction.Object, null);
             viewModel.MakeRosterSize();
 
             viewModel.Checked = true;
@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             var mockOfAction = new Mock<Action>();
             var viewModel = Create.ViewModel.YesNoQuestionOptionViewModel(userInteractionService);
 
-            viewModel.Init(Create.ViewModel.QuestionState<YesNoQuestionAnswered>(), "title", 1, false, mockOfAction.Object);
+            viewModel.Init(Create.ViewModel.QuestionState<YesNoQuestionAnswered>(), "title", 1, false, mockOfAction.Object, null);
             viewModel.MakeRosterSize();
 
             viewModel.Checked = true;
@@ -71,7 +71,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             var mockOfAction = new Mock<Action>();
             var viewModel = Create.ViewModel.YesNoQuestionOptionViewModel(userInteractionService);
 
-            viewModel.Init(Create.ViewModel.QuestionState<YesNoQuestionAnswered>(), "title", 1, false, mockOfAction.Object);
+            viewModel.Init(Create.ViewModel.QuestionState<YesNoQuestionAnswered>(), "title", 1, false, mockOfAction.Object, null);
             viewModel.MakeRosterSize();
 
             viewModel.Checked = true;
@@ -96,7 +96,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             var mockOfAction = new Mock<Action>();
             var viewModel = Create.ViewModel.YesNoQuestionOptionViewModel(userInteractionService);
 
-            viewModel.Init(Create.ViewModel.QuestionState<YesNoQuestionAnswered>(), "title", 1, false, mockOfAction.Object);
+            viewModel.Init(Create.ViewModel.QuestionState<YesNoQuestionAnswered>(), "title", 1, false, mockOfAction.Object, null);
             viewModel.MakeRosterSize();
 
             viewModel.Checked = true;
@@ -120,7 +120,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             var mockOfAction = new Mock<Action>();
             var viewModel = Create.ViewModel.YesNoQuestionOptionViewModel(userInteractionService);
 
-            viewModel.Init(Create.ViewModel.QuestionState<YesNoQuestionAnswered>(), "title", 1, false, mockOfAction.Object);
+            viewModel.Init(Create.ViewModel.QuestionState<YesNoQuestionAnswered>(), "title", 1, false, mockOfAction.Object, null);
             viewModel.MakeRosterSize();
 
             viewModel.Checked = true;

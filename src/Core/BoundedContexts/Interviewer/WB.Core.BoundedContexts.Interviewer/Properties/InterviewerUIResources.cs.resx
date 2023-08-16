@@ -118,59 +118,59 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="SendToSupervisor_BluetoothError" xml:space="preserve">
-    <value>Aplikace Tazatel nemůže určit stav Bluetooth (např. zapnuto / vypnuto, připojeno / odpojeno). Restartujte tazatelské i garantské zařízení. Potom zkuste synchronizaci znovu.</value>
+    <value>Aplikace Interviewer nemůže určit stav Bluetooth (např. zapnuto/vypnuto, připojeno/odpojeno). Nejprve restartujte zařízení Interviewer i Supervisor. Potom zkuste synchronizaci zopakovat.</value>
   </data>
   <data name="SendToSupervisor_CheckSupervisorDevice" xml:space="preserve">
-    <value>Zkontrolujte, zda je v zařízení garanta zapnut WiFi a Bluetooth a zda jste v těsné blízkosti</value>
+    <value>Zkontrolujte, zda je v zařízení supervizora zapnutá síť Wi-Fi a Bluetooth a zda jste v těsné blízkosti</value>
   </data>
   <data name="SendToSupervisor_ConnectionFailed" xml:space="preserve">
-    <value>Jsou tazatelské a garantské zařízení v těsné blízkosti; WiFi a Bluetooth by měly být povoleny na obou zařízeních; Aplikace Garant by měla být otevřena na garantském zařízení</value>
+    <value>Ujistěte se, že obě zařízení jsou v těsné blízkosti; Na obou zařízeních by měly být povoleny WIFI a Bluetooth; Aplikace supervizora by měla být otevřena na zařízení supervizora</value>
   </data>
   <data name="SendToSupervisor_DeviceConnectionAccepted" xml:space="preserve">
-    <value>Připojeno ke garantskému zařízení</value>
+    <value>Připojeno k zařízení supervizora</value>
   </data>
   <data name="SendToSupervisor_DeviceConnectionAccepting" xml:space="preserve">
-    <value>Počkejte na schválení připojení garantem</value>
+    <value>Čekání na schválení připojení od nadřízeného</value>
   </data>
   <data name="SendToSupervisor_DeviceFound" xml:space="preserve">
-    <value>Bylo nalezeno garantské zařízení. Žádost o připojení</value>
+    <value>Zařízení supervizora bylo nalezeno. Žádost o připojení</value>
   </data>
   <data name="SendToSupervisor_LookingForSupervisor" xml:space="preserve">
-    <value>Hledá se garantské zařízení</value>
+    <value>Hledám zařízení supervizora</value>
   </data>
   <data name="SendToSupervisor_MovingToSupervisorDevice" xml:space="preserve">
-    <value>Poslání všech uzamčených dotazníků garantovi</value>
+    <value>Přesunutí všech dokončených pohovorů na zařízení supervizora</value>
   </data>
   <data name="SendToSupervisor_MovingToSupervisorFormat" xml:space="preserve">
-    <value>Poslání všech uzamčených dotazníků '{0}'</value>
+    <value>Přesunutí všech dokončených pohovorů do kategorie "{0}"</value>
   </data>
   <data name="SendToSupervisor_Note" xml:space="preserve">
-    <value>Poznámka: Tato akce bude trvat déle než obvykle, nevypínejte toto zařízení</value>
+    <value>Poznámka: Tato akce bude trvat déle než obvykle, neotáčejte toto zařízení</value>
   </data>
   <data name="SendToSupervisor_Retry" xml:space="preserve">
-    <value>Opakovat</value>
+    <value>Zkusit ještě jednou</value>
   </data>
   <data name="SendToSupervisor_SomeInterviewsOnSupervisor" xml:space="preserve">
-    <value>Některé dotazníky jsou nyní na jiném zařízení</value>
+    <value>Některé pohovory jsou nyní na jiném zařízení</value>
   </data>
   <data name="SendToSupervisor_SupervisorNotFound" xml:space="preserve">
-    <value>Přenos dat nebyl zahájen.
-Garantské zařízení nelze nalézt"</value>
+    <value>Přenos nebyl zahájen.
+Zařízení supervizora nelze lokalizovat"</value>
   </data>
   <data name="SendToSupervisor_SupervisorTerminateTransfering" xml:space="preserve">
-    <value>Přenos dat byl přerušen na druhém zařízení.</value>
+    <value>Přenos byl přerušen na druhém zařízení.</value>
   </data>
   <data name="SendToSupervisor_SyncCompleted" xml:space="preserve">
-    <value>Přenos dat je dokončen. Všechny dokončené rozhovory jsou přesunuty na jiné zařízení</value>
+    <value>Přenos je dokončen. Všechny dokončené pohovory jsou nyní na jiném zařízení</value>
   </data>
   <data name="SendToSupervisor_SyncCompletedWithErrorsFormat" xml:space="preserve">
-    <value>Přenos dat je dokončen. Nepodařilo se synchronizovat {0} rozhovorů</value>
+    <value>Přenos je dokončen. {0} rozhovorů se nepodařilo synchronizovat</value>
   </data>
   <data name="SendToSupervisor_TransferInProgress" xml:space="preserve">
-    <value>Probíhá přenos dat</value>
+    <value>Probíhá přenos</value>
   </data>
   <data name="SendToSupervisor_TransferWasAborted" xml:space="preserve">
-    <value>Přenos dat byl přerušen</value>
+    <value>Převod byl přerušen</value>
   </data>
   <data name="Synchronization_UpdateApp" xml:space="preserve">
     <value>Aktualizace</value>

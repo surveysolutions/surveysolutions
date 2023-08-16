@@ -26,6 +26,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
         private readonly IWebInterviewInterviewEntityFactory interviewEntityFactory;
+        
+        protected abstract bool IncludeVariables { get; }
 
         public InterviewDataController(IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository statefulInterviewRepository,
@@ -119,7 +121,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         private IdentifyingEntity GetIdentifyingEntity(Guid entityId, IStatefulInterview interview, IQuestionnaire questionnaire)
         {
             var entityIdentity = new Identity(entityId, RosterVector.Empty);
-            var entityType = this.interviewEntityFactory.GetEntityType(entityIdentity, questionnaire, interview, IsReviewMode());
+            var entityType = this.interviewEntityFactory.GetEntityType(entityIdentity, questionnaire, interview, IsReviewMode(), IncludeVariables);
 
             if (entityType == InterviewEntityType.Variable)
             {
@@ -185,7 +187,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 .Select(x => new InterviewEntityWithType
                 {
                     Identity = Identity.Create(x, RosterVector.Empty).ToString(),
-                    EntityType = this.interviewEntityFactory.GetEntityType(new Identity(x, RosterVector.Empty), questionnaire, interview, IsReviewMode()).ToString()
+                    EntityType = this.interviewEntityFactory.GetEntityType(new Identity(x, RosterVector.Empty), questionnaire, interview, IsReviewMode(), IncludeVariables).ToString()
                 })
                 .ToArray();
 
@@ -226,8 +228,16 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             if (statefulInterview == null) return null;
 
             var questionnaire = this.GetCallerQuestionnaire(statefulInterview.QuestionnaireIdentity);
-
             var sectionIdentity = Identity.Parse(sectionId);
+
+            if (questionnaire.IsCoverPage(sectionIdentity.Id))
+            {
+                return questionnaire
+                    .GetPrefilledEntities()
+                    .Select(x => this.GetIdentifyingEntity(x, statefulInterview, questionnaire))
+                    .Concat(ActionButtonsDefinition)
+                    .ToArray();
+            }
 
             var ids = GetGroupEntitiesIds(sectionIdentity);
 
@@ -235,7 +245,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             {
                 return IsReviewMode()
                     ? statefulInterview.GetUnderlyingEntitiesForReview(identity)
-                    : statefulInterview.GetUnderlyingInterviewerEntities(identity);
+                    : statefulInterview.GetUnderlyingInterviewerEntities(identity, IncludeVariables);
             }
 
             List<Identity> groupIds = new List<Identity>();
@@ -263,9 +273,9 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 .Select(x => new InterviewEntityWithType
                 {
                     Identity = x.ToString(),
-                    EntityType = this.interviewEntityFactory.GetEntityType(x, questionnaire, statefulInterview, IsReviewMode()).ToString()
+                    EntityType = this.interviewEntityFactory.GetEntityType(x, questionnaire, statefulInterview, IsReviewMode(), IncludeVariables).ToString()
                 })
-                .Union(ActionButtonsDefinition)
+                .Concat(ActionButtonsDefinition)
                 .ToArray();
 
             return entities;
@@ -325,7 +335,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
                 return NewButtonState(new ButtonState
                 {
-                    Title = firstSection.Title.Text,
+                    Title = firstSection.Title.BrowserReadyText,
                     Type = ButtonType.Start
                 }, firstSection);
             }
@@ -340,7 +350,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
                 return NewButtonState(new ButtonState
                 {
-                    Title = parentGroup.Title.Text,
+                    Title = parentGroup.Title.BrowserReadyText,
                     RosterTitle = callerQuestionnaire.HasCustomRosterTitle(parent.Id) ? null : parentRoster?.RosterTitle,
                     Type = ButtonType.Parent
                 }, parentGroup);
@@ -361,7 +371,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
             return NewButtonState(new ButtonState
             {
-                Title = statefulInterview.GetGroup(nextSectionId).Title.Text,
+                Title = statefulInterview.GetGroup(nextSectionId).Title.BrowserReadyText,
                 Type = ButtonType.Next
             }, statefulInterview.GetGroup(nextSectionId));
         }
@@ -395,7 +405,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                     var treeGroup = statefulInterview.GetGroup(itemIdentity);
                     var breadCrumb = new Breadcrumb
                     {
-                        Title = treeGroup.Title.Text,
+                        Title = treeGroup.Title.BrowserReadyText,
                         RosterTitle = (treeGroup as InterviewTreeRoster)?.RosterTitle,
                         Target = itemIdentity.ToString(),
                         IsRoster = true,
@@ -415,7 +425,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
                     var breadCrumb = new Breadcrumb
                     {
-                        Title = statefulInterview.GetGroup(itemIdentity).Title.Text,
+                        Title = statefulInterview.GetGroup(itemIdentity).Title.BrowserReadyText,
                         Target = itemIdentity.ToString()
                     };
 
@@ -444,7 +454,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
             var info = new BreadcrumbInfo
             {
-                Title = currentTreeGroup.Title.Text,
+                Title = currentTreeGroup.Title.BrowserReadyText,
                 RosterTitle = (currentTreeGroupAsRoster)?.RosterTitle,
                 Breadcrumbs = breadCrumbs.ToArray(),
                 Status = this.interviewEntityFactory.CalculateSimpleStatus(currentTreeGroup, IsReviewMode(), statefulInterview, questionnaire),
@@ -536,7 +546,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 : null;
 
             var topFilteredOptionsForQuestion = statefulInterview.GetTopFilteredOptionsForQuestion(questionIdentity, parentCascadingQuestionAnswer, filter, count, excludedOptionIds);
-            return topFilteredOptionsForQuestion.Select(x => new DropdownItem(x.Value, x.Title)).ToArray();
+            return topFilteredOptionsForQuestion.Select(x => new DropdownItem(x.Value, x.Title, x.AttachmentName)).ToArray();
         }
 
         public virtual CompleteInfo GetCompleteInfo(Guid interviewId)

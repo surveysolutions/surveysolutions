@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Moq;
@@ -83,7 +84,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
         }
 
         [Test]
-        public void When_getting_inflated_composite_collection_with_1_enabled_question_and_1_disabled_Then_collection_should_not_contains_composite_items_of_disabled_question()
+        public async Task When_getting_inflated_composite_collection_with_1_enabled_question_and_1_disabled_Then_collection_should_not_contains_composite_items_of_disabled_question()
         {
             //Arrange
             var disabledQuestionIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
@@ -122,7 +123,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
 
             var questionDisabledEvent = Create.Event.QuestionsDisabled(new[] {disabledQuestionIdentity}); 
             statefulInterview.Apply(questionDisabledEvent);
-            disabledQuestionViewModel.QuestionState.Enablement.Handle(questionDisabledEvent);
+            await disabledQuestionViewModel.QuestionState.Enablement.HandleAsync(questionDisabledEvent);
 
             //Assert
             Assert.That(inflatedViewModels, !Contains.Item(disabledQuestionViewModel.QuestionState.Validity));
@@ -133,7 +134,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
         }
 
         [Test]
-        public void When_getting_inflated_composite_collection_with_disabled_question_and_hideifdisabled_is_true_Then_collection_should_not_contains_title_and_composite_items_of_disabled_question()
+        public async Task When_getting_inflated_composite_collection_with_disabled_question_and_hideifdisabled_is_true_Then_collection_should_not_contains_title_and_composite_items_of_disabled_question()
         {
             //Arrange
             var disabledQuestionIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
@@ -165,7 +166,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
 
             var questionDisabledEvent = Create.Event.QuestionsDisabled(new[] { disabledQuestionIdentity });
             statefulInterview.Apply(questionDisabledEvent);
-            disabledQuestionViewModel.QuestionState.Enablement.Handle(questionDisabledEvent);
+            await disabledQuestionViewModel.QuestionState.Enablement.HandleAsync(questionDisabledEvent);
 
             //Assert
             Assert.That(inflatedViewModels, !Contains.Item(disabledQuestionViewModel.QuestionState.Header));
@@ -177,7 +178,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
         }
 
         [Test]
-        public void when_getting_inflated_composite_collection_with_1_valid_question_and_1_invalid_Then_collection_should_contains_validity_view_models_for_valid_and_invalid_questions()
+        public async Task when_getting_inflated_composite_collection_with_1_valid_question_and_1_invalid_Then_collection_should_contains_validity_view_models_for_valid_and_invalid_questions()
         {
             //Arrange
             var invalidQuestionIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
@@ -217,7 +218,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
             var questionInvalidEvent = Create.Event.AnswersDeclaredInvalid(new[] { invalidQuestionIdentity });
             statefulInterview.Apply(questionInvalidEvent);
             statefulInterview.Apply(Create.Event.TextQuestionAnswered(invalidQuestionIdentity.Id, invalidQuestionIdentity.RosterVector, "some answer"));
-            invalidQuestionViewModel.QuestionState.Validity.HandleAsync(questionInvalidEvent);
+            await invalidQuestionViewModel.QuestionState.Validity.HandleAsync(questionInvalidEvent);
 
             //Assert
             Assert.That(inflatedViewModels, Contains.Item(invalidQuestionViewModel.QuestionState.Validity));

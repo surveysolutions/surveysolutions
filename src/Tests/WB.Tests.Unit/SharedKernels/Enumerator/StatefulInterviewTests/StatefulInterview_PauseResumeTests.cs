@@ -76,7 +76,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             interview.Pause(Create.Command.PauseInterview(Id.gA, pauseDate));
             
             // Assert
-            events.ShouldContainEvent<InterviewPaused>(x => x.UtcTime == pauseDate.UtcDateTime);
+            events.ShouldContainEvent<InterviewPaused>(x => x.OriginDate.Value.UtcDateTime == pauseDate.UtcDateTime);
         }
         
         [Test]
@@ -95,8 +95,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             
             // Assert
             var expectedCloseSessionDate = dateTimeOffset.UtcDateTime.AddMinutes(15);
-            events.ShouldContainEvent<InterviewPaused>(x => x.UtcTime == expectedCloseSessionDate);
-            events.ShouldContainEvent<InterviewResumed>(x => x.UtcTime == dateTimeOffset5SecondsAfter.UtcDateTime);
+            events.ShouldContainEvent<InterviewPaused>(x => x.OriginDate.Value.UtcDateTime == expectedCloseSessionDate);
+            events.ShouldContainEvent<InterviewResumed>(x => x.OriginDate.Value.UtcDateTime == dateTimeOffset5SecondsAfter.UtcDateTime);
         }
 
         [Test]
@@ -125,8 +125,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             // Assert
             DateTime expectedPauseDate = lastAnswerDate.UtcDateTime;
             
-            events.ShouldContainEvent<InterviewPaused>(x => x.UtcTime == expectedPauseDate);
-            events.ShouldContainEvent<InterviewResumed>(x => x.UtcTime == secondResume.UtcDateTime);
+            events.ShouldContainEvent<InterviewPaused>(x => x.OriginDate.Value.UtcDateTime == expectedPauseDate);
+            events.ShouldContainEvent<InterviewResumed>(x => x.OriginDate.Value.UtcDateTime == secondResume.UtcDateTime);
         }
 
         [Test]
@@ -147,7 +147,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             
             // Assert
             Assert.That(events.Events.Count(), Is.EqualTo(1));
-            events.ShouldContainEvent<InterviewResumed>(x => x.UtcTime == resumeDate1.UtcDateTime);
+            events.ShouldContainEvent<InterviewResumed>(x => x.OriginDate.Value.UtcDateTime == resumeDate1.UtcDateTime);
         }
 
         [Test]

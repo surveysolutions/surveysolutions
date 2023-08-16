@@ -18,7 +18,6 @@ namespace Main.Core.Entities.SubEntities
             this.PublicKey = publicKey;
             this.Text = text;
             this.AttachmentName = attachmentName ?? string.Empty;
-
             this.HideIfDisabled = hideIfDisabled;
             this.ConditionExpression = conditionExpression;
             this.ValidationConditions = validationConditions ?? new List<ValidationCondition>();

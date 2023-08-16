@@ -63,7 +63,13 @@ namespace WB.Enumerator.Native.WebInterview.Models
 
     public class InterviewIntegerQuestion : GenericQuestion
     {
-        public int? Answer { get; set; }
+        private int? answer;
+        public int? Answer
+        {
+            get => answer;
+            set => answer = value;
+        }
+
         public bool IsRosterSize { get; set; }
         public int? AnswerMaxValue { get; set; }
         public bool UseFormatting { get; set; }
@@ -82,7 +88,13 @@ namespace WB.Enumerator.Native.WebInterview.Models
 
     public class InterviewSingleOptionQuestion : CategoricalQuestion
     {
-        public int? Answer { get; set; }
+        
+        private int? answer;
+        public int? Answer
+        {
+            get => answer;
+            set => answer = value;
+        }
         public bool RenderAsCombobox { get; set; }
     }
     
@@ -108,6 +120,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public string DisplayUrl { get; set; }
         public GeometryType? Type { get; set; }
         public InterviewGeometryAnswer Answer { get; set; }
+        public GeometryInputMode? Mode { get; set; }
     }
 
     public class InterviewGeometryAnswer
@@ -115,6 +128,9 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public GeoLocation[] SelectedPoints { get; set; }
         public double? Area { get; set; }
         public double? Length { get; set; }
+        public double? RequestedAccuracy { set; get; }
+        
+        public double? RequestedFrequency { set; get; }
     }
 
     public class InterviewDateQuestion : GenericQuestion
@@ -232,6 +248,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
     {
         public string Id { get; set; }
         public string Title { get; set; }
+        public string Name { get; set; }
         public bool IsDisabled { get; set; }
         public bool HideIfDisabled { get; set; }
     }
@@ -320,15 +337,18 @@ namespace WB.Enumerator.Native.WebInterview.Models
 
     public class DropdownItem
     {
-        public DropdownItem(int value, string title)
+        public DropdownItem(int value, string title, string attachmentName)
         {
             this.Value = value;
             this.Title = title;
+            this.AttachmentName = attachmentName;
         }
 
         public int Value { get; set; }
 
         public string Title { get; set; }
+        
+        public string AttachmentName { get; set; }
     }
 
     /// <summary>

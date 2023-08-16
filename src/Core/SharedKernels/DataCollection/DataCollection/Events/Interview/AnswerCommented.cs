@@ -5,6 +5,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class AnswerCommented : QuestionActiveEvent
     {
+        [Obsolete("Please use OriginDate property")]
         public DateTime? CommentTime { get; set; }
 
         public string Comment { get; private set; }

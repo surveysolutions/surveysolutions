@@ -123,7 +123,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             if (isInstructions)
             {
-                this.HtmlText = (interview.GetBrowserReadyInstructionsHtml(this.identity) ?? "").Replace(Environment.NewLine, "<br/>");
+                this.HtmlText = (interview.GetBrowserReadyInstructionsHtml(this.identity) ?? "");
+                    //.Replace(Environment.NewLine, "<br/>");
             }
             else
             {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
-using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -14,59 +13,98 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
-    public class AttachmentViewModel : MvxViewModel,
-        IAsyncViewModelEventHandler<VariablesChanged>,
-        IDisposable
+    public class AttachmentViewModel : BaseViewModel,
+        IAsyncViewModelEventHandler<VariablesChanged>
     {
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IViewModelEventRegistry eventRegistry;
         private readonly IAttachmentContentStorage attachmentContentStorage;
-        private readonly Func<IMediaAttachment> attachmentFactory;
         private readonly IInterviewPdfService pdfService;
+        private readonly IViewModelNavigationService viewModelNavigationService;
 
         private AttachmentContentMetadata attachmentContentMetadata;
-        private NavigationState navigationState;
+        private string interviewId;
         private Guid? attachmentId;
         public Identity Identity { get; private set; }
 
-        public string Tag => "attachment_" + Identity.ToString();
+        public string Tag => "attachment_" + Identity;
 
         private const string ImageMimeType = "image/";
         private const string VideoMimeType = "video/";
         private const string AudioMimeType = "audio/";
         private const string PdfMimeType = "application/pdf";
 
+        private bool supportPreview = false;
+
         public AttachmentViewModel(
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             IViewModelEventRegistry eventRegistry,
             IAttachmentContentStorage attachmentContentStorage,
-            Func<IMediaAttachment> attachmentFactory,
-            IInterviewPdfService pdfService)
+            IInterviewPdfService pdfService,
+            IViewModelNavigationService viewModelNavigationService)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.eventRegistry = eventRegistry;
             this.attachmentContentStorage = attachmentContentStorage;
-            this.attachmentFactory = attachmentFactory;
             this.pdfService = pdfService;
+            this.viewModelNavigationService = viewModelNavigationService;
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
-            this.navigationState = navigationState ?? throw new ArgumentNullException(nameof(navigationState));
+            this.interviewId = interviewId ?? throw new ArgumentNullException(nameof(interviewId));
             this.Identity = entityIdentity ?? throw new ArgumentNullException(nameof(entityIdentity));
 
             this.eventRegistry.Subscribe(this, interviewId);
             BindAttachment().WaitAndUnwrapException();
+            this.supportPreview = true;
         }
 
-        private async Task BindAttachment()
+        public void InitAsStatic(string interviewId, string attachmentName, bool supportPreview = true)
         {
-            var interview = this.interviewRepository.GetOrThrow(navigationState.InterviewId);
+            if (attachmentName == null)
+            {
+                this.BindNoAttachment().WaitAndUnwrapException();
+                return;
+            }
+
+            this.interviewId = interviewId ?? throw new ArgumentNullException(nameof(interviewId));
+            
+            BindAttachment(attachmentName).WaitAndUnwrapException();
+            this.supportPreview = supportPreview;
+        }
+
+        public IMvxAsyncCommand ShowPhotoView => new MvxAsyncCommand(async () =>
+        {
+            await this.viewModelNavigationService.NavigateToAsync<PhotoViewViewModel, PhotoViewViewModelArgs>(
+                new PhotoViewViewModelArgs
+                {
+                    InterviewId = Guid.Parse(this.interviewId),
+                    AttachmentId = this.attachmentId
+                });
+        }, () => this.supportPreview);
+
+
+        private Task BindAttachment(string attachmentName)
+        {
+            var interview = this.interviewRepository.GetOrThrow(interviewId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
+            var newAttachment = questionnaire.GetAttachmentIdByName(attachmentName);
+            return BindAttachment(newAttachment);
+        }
+
+        private Task BindAttachment()
+        {
+            var interview = this.interviewRepository.GetOrThrow(interviewId);
             var newAttachment = interview.GetAttachmentForEntity(Identity);
+            return BindAttachment(newAttachment);
+        }
+
+        private async Task BindAttachment(Guid? newAttachment)
+        {
             if (newAttachment == null)
             {
                 await BindNoAttachment();
@@ -76,38 +114,29 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (this.attachmentId != newAttachment)
             {
                 this.attachmentId = newAttachment;
-                IQuestionnaire questionnaire =
-                    this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+                var interview = this.interviewRepository.GetOrThrow(interviewId);
+                IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
                 var attachment = questionnaire.GetAttachmentById(this.attachmentId.Value);
                 
                 this.attachmentContentMetadata = this.attachmentContentStorage.GetMetadata(attachment.ContentId);
 
                 if (IsImage)
                 {
-                    this.Image = this.attachmentContentStorage.GetContent(attachment.ContentId);
+                    this.Image = await this.attachmentContentStorage.GetPreviewContentAsync(attachment.ContentId);
                 }
 
-                var backingFile = this.attachmentContentStorage.GetFileCacheLocation(attachment.ContentId);
+                var backingFile = await this.attachmentContentStorage.GetFileCacheLocationAsync(attachment.ContentId);
                 if (!string.IsNullOrWhiteSpace(backingFile))
                 {
-                    if (IsVideo || IsAudio)
+                    if (IsVideo)
                     {
-                        var media = this.attachmentFactory();
-                        media.ContentPath = backingFile;
-
-                        if (IsVideo)
-                        {
-                            this.Video = media;
-                        }
-
-                        if (IsAudio)
-                        {
-                            this.Audio = media;
-                        }
-
+                        this.Video = backingFile;
                     }
-
-                    if (IsPdf)
+                    else if (IsAudio)
+                    {
+                        this.Audio = backingFile;
+                    }
+                    else if (IsPdf)
                     {
                         this.ContentPath = backingFile;
                     }
@@ -124,8 +153,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await RaiseAllPropertiesChanged();
         }
 
-        public IMediaAttachment Audio { get; private set; }
-        public IMediaAttachment Video { get; private set; }
+        public string Audio { get; private set; }
+        public string Video { get; private set; }
         public byte[] Image { get; private set; }
 
         public string ContentPath { get; set; }
@@ -146,19 +175,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                              && this.attachmentContentMetadata.ContentType.StartsWith(PdfMimeType,
                                  StringComparison.OrdinalIgnoreCase);
 
-        public IMvxCommand ShowPdf => new MvxCommand(OpenPdf);
+        public IMvxAsyncCommand ShowPdf => new MvxAsyncCommand(OpenPdfAsync);
 
-        private void OpenPdf()
+        private async Task OpenPdfAsync()
         {
-            var interviewId = this.navigationState.InterviewId;
-            pdfService.Open(interviewId, this.Identity);
+            if (this.attachmentId.HasValue)
+                await pdfService.OpenAttachmentAsync(interviewId, this.attachmentId.Value);
+            else
+                await pdfService.OpenAsync(interviewId, this.Identity);
         }
 
         public override void ViewDestroy(bool viewFinishing = true)
         {
-            this.Video?.Release();
-            this.Audio?.Release();
+            this.Video = null;
+            this.Audio = null;
             this.ContentPath = null;
+            this.Image = null;
+            
             base.ViewDestroy(viewFinishing);
         }
 
@@ -167,9 +200,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await BindAttachment();
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             this.eventRegistry.Unsubscribe(this);
+            base.Dispose();
         }
     }
 }

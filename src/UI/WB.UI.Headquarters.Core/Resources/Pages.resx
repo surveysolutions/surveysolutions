@@ -575,7 +575,7 @@
     <value>Failed synchronizations attempt</value>
   </data>
   <data name="InterviewerProfile_Sync_Activity_All_Assignments_Desc" xml:space="preserve">
-    <value>Number of unfinished or unsynchronized assignments on device every given moment</value>
+    <value>Number of unfinished or not synchronized assignments on device every given moment</value>
   </data>
   <data name="InterviewerProfile_Sync_Activity_Title" xml:space="preserve">
     <value>Recent synchronization activity</value>
@@ -974,8 +974,6 @@
   </data>
   <data name="Users_ArchiveUsersConfirmMessage" xml:space="preserve">
     <value>You will archive supervisors and interviewers within theirs team. Interviewers assigned to archived supervisor will be also archived in all workspaces. If interviewers have any non synchronized data on tablets it will be deleted.</value>
-
-
   </data>
   <data name="Supervisors_Selected" xml:space="preserve">
     <value>supervisor(s) selected</value>
@@ -1125,6 +1123,9 @@
   <data name="Interviewer_LockWarning" xml:space="preserve">
     <value>Locked interviewers cannot connect their tablets with the server and send interviews.</value>
   </data>
+  <data name="Tablet_RelinkMessage" xml:space="preserve">
+    <value>A single device is linked to this account.</value>
+  </data>
   <data name="Supervisor_LockWarning" xml:space="preserve">
     <value>Locked supervisor (box checked) cannot login and perform any actions on the server.</value>
   </data>
@@ -1197,6 +1198,12 @@
   <data name="AreaQestion_Points" xml:space="preserve">
     <value>Points</value>
   </data>
+  <data name="AreaQuestion_RequestedAccuracy" xml:space="preserve">
+    <value>Accuracy</value>
+  </data>
+  <data name="AreaQuestion_RequestedFrequency" xml:space="preserve">
+    <value>Frequency</value>
+  </data>
   <data name="AreaQestion_AreaUnitMeter" xml:space="preserve">
     <value>square meters</value>
   </data>
@@ -1225,10 +1232,10 @@
     <value>Are You sure that You want to discard interview data?</value>
   </data>
   <data name="Map_DiscardConfirm" xml:space="preserve">
-    <value>Are You sure You want to delete the map?</value>
+    <value>Are you sure you want to delete the map "{{map}}"?</value>
   </data>
   <data name="MapUserLink_DiscardConfirm" xml:space="preserve">
-    <value>Are You sure You want to delink user from the map?</value>
+    <value>Are you sure you want to unlink user from the map?</value>
   </data>
   <data name="CautionTitle" xml:space="preserve">
     <value>Caution:</value>
@@ -1241,6 +1248,12 @@
   </data>
   <data name="Filters_Assignment" xml:space="preserve">
     <value>Assignment</value>
+  </data>
+  <data name="Filters_Shapefiles" xml:space="preserve">
+    <value>Shapefiles</value>
+  </data>
+  <data name="Filters_None" xml:space="preserve">
+    <value>None</value>
   </data>
   <data name="InterviewersAndDevicesTitle" xml:space="preserve">
     <value>Devices/Interviewers</value>
@@ -1276,10 +1289,13 @@
     <value>Do you want to delete map?</value>
   </data>
   <data name="MapDetails_InterviewerName" xml:space="preserve">
-    <value>Interviewer name</value>
+    <value>User name</value>
   </data>
   <data name="MapDetails_DelinkUser" xml:space="preserve">
-    <value>Delink User from map</value>
+    <value>Unlink user from map</value>
+  </data>
+  <data name="MapDetails_Unlink" xml:space="preserve">
+    <value>Unlink</value>
   </data>
   <data name="MapDetails_MapDisclaimer" xml:space="preserve">
     <value>This preview shows the loaded map superimposed on the world map.</value>
@@ -1302,8 +1318,14 @@
   <data name="MapDetails_UploadedBy" xml:space="preserve">
     <value>Uploaded by</value>
   </data>
+  <data name="MapDetails_SelectUser" xml:space="preserve">
+    <value>Select user</value>
+  </data>
   <data name="MapDetails_Size" xml:space="preserve">
     <value>Size(MB)</value>
+  </data>
+  <data name="MapDetails_EmptyMapData" xml:space="preserve">
+    <value>Preview data is missing for this map</value>
   </data>
   <data name="MapDetails_MinScale" xml:space="preserve">
     <value>Min Scale</value>
@@ -1378,7 +1400,7 @@
     <value>Status</value>
   </data>
   <data name="Map_NoUsers" xml:space="preserve">
-    <value>The map is not assigned to any interviewer</value>
+    <value>The map is not assigned to any user</value>
   </data>
   <data name="Map_Uploaded" xml:space="preserve">
     <value>File was uploaded. Processing.</value>
@@ -1463,7 +1485,7 @@
     <value>Email providers settings</value>
   </data>
   <data name="EmailProvidersTitle" xml:space="preserve">
-    <value>Bulk Email Services</value>
+    <value>Email Providers</value>
   </data>
   <data name="InterviewerProfile_QrCodeAlt" xml:space="preserve">
     <value>Qr code that simplifies interviewer application setup</value>
@@ -1711,5 +1733,8 @@
   </data>
   <data name="Profile_IssueApiToken" xml:space="preserve">
       <value>Issue</value>
+  </data>
+  <data name="MapUserLink_DiscardConfirm1" xml:space="preserve">
+      <value>If this is the last user in the team linked to the map then the team's supervisor will lose access to the map.</value>
   </data>
 </root>

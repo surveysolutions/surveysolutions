@@ -43,6 +43,19 @@
                     </span>
                 </p>
 
+                <p v-if="isFailed"
+                    class="text-danger">
+                    <span>{{data.error}}</span>
+                </p>
+
+                <p class="font-regular" v-if="data.jobStatus =='Completed'">
+                    <span class="font-bold"> {{ $t('DataExport.DataExport_InQueue') }} </span>
+                    <span>{{ getInQueueTime(data) }} </span>
+
+                    <span class="font-bold"> {{ $t('DataExport.DataExport_ProducedIn') }} </span>
+                    <span> {{ getProducedTime(data) }} </span>                    
+                </p>
+
                 <div class="d-flex ai-center"
                     v-if="data.isRunning">
                     <span class="success-text status">{{data.processStatus}}</span>
@@ -72,16 +85,12 @@
                     <div v-if="data.hasFile"
                         class="file-info">
                         {{ $t('DataExport.DataExport_FileLastUpdate', { date: data.dataFileLastUpdateDate }) }}
-                        <br />
+                        <br />                        
                         {{ $t('DataExport.DataExport_FileSize', { size: data.fileSize }) }}
-                    </div>
+                    </div>                    
                     <div
                         v-if="!data.hasFile && !isFailed"
                         class="file-info">{{ $t('DataExport.DataExport_FileWasRegenerated') }}</div>
-                    <div v-if="isFailed"
-                        class="text-danger">
-                        {{data.error}}
-                    </div>
                 </div>
             </div>
         </div>
@@ -141,6 +150,7 @@
 <script>
 import Vue from 'vue'
 import modal from '@/shared/modal'
+import moment from 'moment'
 
 export default {
     props: {
@@ -208,6 +218,29 @@ export default {
                 }
             })
         },
+        
+        getProducedTime(data){
+            if(data == undefined || data.endDate == undefined || data.beginDate == undefined)
+                return 'unknown';
+
+            return this.formatDiff(data.beginDate, data.endDate)            
+        },
+        getInQueueTime(data){
+            if(data == undefined || data.createdDate == undefined || data.beginDate == undefined)
+                return 'unknown';
+
+            return this.formatDiff(data.beginDate, data.createdDate);
+        },
+        formatDiff(start, end)
+        {
+            if(start == undefined || end == undefined)
+                return 'unknown';
+
+            let diff = moment(end).diff(moment(start));
+            let duration = moment.duration(diff);
+            
+            return duration.humanize({m: 60, h: 24, d: 7, w: 4});
+        }
     },
 }
 </script>

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
@@ -21,8 +20,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class CategoricalYesNoViewModel : CategoricalMultiViewModelBase<decimal, AnsweredYesNoOption>,
         IAsyncViewModelEventHandler<YesNoQuestionAnswered>
     {
-        private readonly IUserInteractionService userInteraction;
         private readonly FilteredOptionsViewModel filteredOptionsViewModel;
+        private readonly IInterviewViewModelFactory interviewViewModelFactory;
 
         private bool isRosterSizeQuestion;
         private AnsweredYesNoOption[] selectedOptionsToSave;
@@ -31,12 +30,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IQuestionnaireStorage questionnaireRepository, IViewModelEventRegistry eventRegistry,
             IStatefulInterviewRepository interviewRepository, IPrincipal principal, IUserInteractionService userInteraction,
             AnsweringViewModel answering, QuestionInstructionViewModel instructionViewModel, ThrottlingViewModel throttlingModel,
-            FilteredOptionsViewModel filteredOptionsViewModel)
+            FilteredOptionsViewModel filteredOptionsViewModel, IInterviewViewModelFactory interviewViewModelFactory,
+            IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher)
             : base(questionStateViewModel, questionnaireRepository, eventRegistry, interviewRepository, principal,
-                answering, instructionViewModel, throttlingModel)
+                answering, instructionViewModel, throttlingModel, mainThreadAsyncDispatcher)
         {
-            this.userInteraction = userInteraction;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
+            this.interviewViewModelFactory = interviewViewModelFactory;
             this.Options = new CovariantObservableCollection<CategoricalMultiOptionViewModel<decimal>>();
         }
 
@@ -84,8 +84,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             foreach (var categoricalOption in this.filteredOptionsViewModel.GetOptions())
             {
-                var vm = new CategoricalYesNoOptionViewModel(this.userInteraction);
-                base.InitViewModel(categoricalOption.Title, categoricalOption.Value, interview, vm, interview.IsAnswerProtected(this.Identity, categoricalOption.Value));
+                var vm = interviewViewModelFactory.GetNew<CategoricalYesNoOptionViewModel>();
+                base.InitViewModel(categoricalOption.Title, categoricalOption.Value, interview, vm,
+                    categoricalOption.AttachmentName,
+                    interview.IsAnswerProtected(this.Identity, categoricalOption.Value));
 
                 if (isRosterSizeQuestion) vm.MakeRosterSize();
 

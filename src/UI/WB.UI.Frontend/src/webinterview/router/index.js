@@ -9,7 +9,7 @@ import Section from '../components/Section'
 import SideBar from '../components/Sidebar'
 import Splash from '../components/Splash'
 
-const Interview = () => import(/* webpackChunkName: "interview" */'~/webinterview/components/Interview.vue')
+const Interview = () => import('~/webinterview/components/Interview.vue')
 
 function NewRouter(store) {
 

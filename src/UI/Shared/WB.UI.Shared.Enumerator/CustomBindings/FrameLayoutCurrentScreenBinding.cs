@@ -5,6 +5,7 @@ using MvvmCross;
 using MvvmCross.Views;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using FragmentTransaction=AndroidX.Fragment.App.FragmentTransaction;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {

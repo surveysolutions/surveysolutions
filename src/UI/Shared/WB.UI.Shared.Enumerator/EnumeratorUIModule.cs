@@ -7,12 +7,8 @@ using Ncqrs.Eventing.Storage;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
-using Plugin.Geolocator;
-using Plugin.Geolocator.Abstractions;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
-using Plugin.Permissions;
-using Plugin.Permissions.Abstractions;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -35,9 +31,7 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.UI.Shared.Enumerator.Activities;
-using WB.UI.Shared.Enumerator.CustomBindings.Models;
 using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation;
 using WB.UI.Shared.Enumerator.Services;
@@ -61,6 +55,7 @@ namespace WB.UI.Shared.Enumerator
             registry.Bind<IUserInterfaceStateService, UserInterfaceStateService>();
             registry.Bind<IExternalAppLauncher, ExternalAppLauncher>();
             registry.Bind<IPermissionsService, PermissionsService>();
+            registry.Bind<IImageHelper, BitmapHelper>();
             registry.Bind<IVirbationService, VibrationService>();
             registry.Bind<IMvxViewModelTypeFinder, MvxViewModelViewTypeFinder>();
             registry.Bind<MvxViewModelViewTypeFinder>();
@@ -86,9 +81,7 @@ namespace WB.UI.Shared.Enumerator
             registry.BindAsSingleton<IPasswordHasher, DevicePasswordHasher>();
             registry.BindAsSingleton<IHttpStatistician, HttpStatistician>();
 
-            registry.BindToMethod<IGeolocator>(() => CrossGeolocator.Current);
             registry.BindToMethod<IMedia>(() => CrossMedia.Current);
-            registry.BindToMethod<IPermissions>(() => CrossPermissions.Current);
 
             registry.Bind<InterviewEntitiesListFragment>();
             registry.Bind<CompleteInterviewFragment>();
@@ -106,7 +99,6 @@ namespace WB.UI.Shared.Enumerator
             registry.BindAsSingleton<IGoogleApiClientFactory, GoogleApiClientFactory>();
             registry.BindAsSingleton<INearbyConnectionClient, NearbyConnectionClient>();
 
-            registry.BindToMethod<IMediaAttachment>(() => new MediaAttachment());
             // SecureStorage is singleton because very very long getting secret keys
             registry.BindAsSingleton<ISecureStorage, SecureStorage>();
 

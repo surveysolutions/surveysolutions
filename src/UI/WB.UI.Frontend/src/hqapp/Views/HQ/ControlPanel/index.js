@@ -1,6 +1,6 @@
-const ControlPanelLayout = () => import( /*  webpackChunkName: "controlpanel" */ './ControlPanelLayout')
-const AppUpdates = () => import( /*  webpackChunkName: "controlpanel" */ './AppUpdates')
-const ReevaluateInterview = () => import( /*  webpackChunkName: "controlpanel" */ './ReevaluateInterview')
+const ControlPanelLayout = () => import('./ControlPanelLayout')
+const AppUpdates = () => import('./AppUpdates')
+const ReevaluateInterview = () => import('./ReevaluateInterview')
 
 export default class MapComponent {
     get routes() {
@@ -11,7 +11,7 @@ export default class MapComponent {
                 children: [
                     {
                         path: 'Configuration',
-                        component: () => import(/* webpackChunkName: "controlpanel" */'./Configuration'),
+                        component: () => import('./Configuration'),
                     },
                     {
                         path: 'AppUpdates',

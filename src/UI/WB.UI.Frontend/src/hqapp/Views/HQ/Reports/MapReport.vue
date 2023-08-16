@@ -181,7 +181,7 @@ const mapStyles = [
     },
 ]
 
-const query = gql`query mapReport($workspace: String!, $questionnaireId: Uuid!, $questionnaireVersion: Long, 
+const query = gql`query mapReport($workspace: String!, $questionnaireId: UUID!, $questionnaireVersion: Long, 
 $variable: String, $zoom: Int!, $clientMapWidth: Int!, $north: Float!, $south: Float!, $east: Float!, $west: Float!, $where: MapReportFilter) {
   mapReport(workspace: $workspace, questionnaireId:$questionnaireId, questionnaireVersion: $questionnaireVersion, 
   variable: $variable, zoom:$zoom , clientMapWidth: $clientMapWidth ,north: $north, south: $south, east: $east, west:$west, where:$where) {

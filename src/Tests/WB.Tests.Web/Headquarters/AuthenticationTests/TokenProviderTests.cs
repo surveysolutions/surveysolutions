@@ -175,7 +175,7 @@ namespace WB.Tests.Web.Headquarters.AuthenticationTests
                     Issuer = "Survey.Solutions",
                     IsBearerEnabled = true,
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(
-                            Encoding.ASCII.GetBytes("test+password+for+signing")),
+                            Encoding.ASCII.GetBytes("test+password+for+signing+and+more+chats")),
                         SecurityAlgorithms.HmacSha256)
                 }));
 

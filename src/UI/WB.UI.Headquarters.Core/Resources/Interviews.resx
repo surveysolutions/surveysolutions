@@ -232,6 +232,9 @@
   <data name="Tooltip_Table_NotAnsweredCount" xml:space="preserve">
     <value>Number of questions without answer. Includes supervisor, identifying and interviewer questions. Can contain nulls for interviews that were completed prior to 20.09 release.</value>
   </data>
+  <data name="Tooltip_Table_InterviewMode" xml:space="preserve">
+    <value>Show current status (CAPI or CAWI) of each interview</value>
+  </data>
     <data name="NotAnsweredCount" xml:space="preserve">
     <value>Not answered</value>
   </data>
@@ -256,7 +259,7 @@
   <data name="DynamicFilterNotAvailable" xml:space="preserve">
     <value>No data available</value>
   </data>
-  <data name="ApproveConfirmMessage_plural" xml:space="preserve">
+  <data name="ApproveConfirmMessage_other" xml:space="preserve">
       <value>{{count}} interviews will be approved.</value>
   </data>
   <data name="Note" xml:space="preserve">

@@ -13,7 +13,8 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public bool? LastSyncSucceeded { get; set; }
         public bool? DashboardViewsUpdated { get; set; }
         public string LastOpenedMapName { get; set; }
-
         public string WebInterviewUriTemplate { get; set; }
+        public int? GeographyQuestionAccuracyInMeters { get; set; }
+        public int? GeographyQuestionPeriodInSeconds { get; set; }
     }
 }

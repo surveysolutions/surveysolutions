@@ -123,7 +123,6 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 reusableCategoriesFillerIntoQuestionnaire.Object,
                 Create.Storage.NewMemoryCache());
 
-            document.Id = document.PublicKey.FormatGuid();
             questionnaireStorageLocal.StoreQuestionnaire(document.PublicKey, questionnaireVersion, document);
 
             return questionnaireStorageLocal;

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿#nullable enable
+using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -23,11 +25,13 @@ namespace WB.Services.Scheduler
     {
         public static void UseJobService(this IServiceCollection services, IConfiguration configuration, string section = "job")
         {
-            var jobSettingsSection = configuration?.GetSection(section);
-            var connectionName = jobSettingsSection?[nameof(JobSettings.ConnectionName)];
-
+            var jobSettingsSection = configuration.GetSection(section);
+            var connectionName = jobSettingsSection[nameof(JobSettings.ConnectionName)];
             if (string.IsNullOrWhiteSpace(connectionName))
                 connectionName = new JobSettings().ConnectionName;
+            
+            var connectionString = configuration.GetConnectionString(connectionName);
+            if (string.IsNullOrEmpty(connectionString)) throw new InvalidOperationException("Connection string was not found");
 
             services.AddHostedService<BackgroundExportService>();
 
@@ -43,8 +47,7 @@ namespace WB.Services.Scheduler
             services.AddProgressReporter();
             services.AddTransient<IJobContextMigrator, JobContextMigrator>();
             services.AddDbContext<JobContext>(ops =>
-                ops
-                    .UseNpgsql(configuration.GetConnectionString(connectionName)));
+                ops.UseNpgsql(connectionString));
 
             services.Configure<JobSettings>(jobSettingsSection);
 
@@ -56,7 +59,8 @@ namespace WB.Services.Scheduler
         public static void AddProgressReporter(this IServiceCollection services)
         {
             services.AddSingleton<Services.IJobProgressReporter, JobProgressReporterBackgroundService>();
-            services.AddHostedService(sl=> sl.GetService<Services.IJobProgressReporter>() as JobProgressReporterBackgroundService);
+            services.AddHostedService(sl=> sl.GetService<Services.IJobProgressReporter>() as JobProgressReporterBackgroundService 
+                                           ?? throw new InvalidOperationException($"Invalid service for {nameof(JobProgressReporterBackgroundService)}"));
 
             services.AddTransient<IJobProgressReportWriter, JobProgressReportWriter>();
         }

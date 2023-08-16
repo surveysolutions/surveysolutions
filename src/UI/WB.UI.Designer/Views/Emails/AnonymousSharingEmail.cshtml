@@ -2,9 +2,9 @@
 @model WB.UI.Designer.Models.AnonymousSharingEmailModel
 
 @Html.Raw(string.Format(NotificationResources.AnonymousSharingEmail, Model.UserName, Model.Questionnaire))
-
-<br/>
-<br/>
 <a href="@Model.SharingLink">
     @Model.SharingLink
 </a>
+<br/>
+<br/>
+@NotificationResources.EmailSendInfo

@@ -74,7 +74,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private string interviewId;
         public Identity Identity { get; private set; }
 
-        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public void Init(string interviewId, Identity entityIdentity)
         {
             this.interviewId = interviewId ?? throw new ArgumentNullException(nameof(interviewId));
             this.Identity = entityIdentity ?? throw new ArgumentNullException(nameof(entityIdentity));

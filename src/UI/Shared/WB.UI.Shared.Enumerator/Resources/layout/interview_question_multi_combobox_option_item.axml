@@ -2,19 +2,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:local="http://schemas.android.com/apk/res-auto"
               style="@style/Interview_Question_Answer_Option_Background"
-              android:orientation="horizontal"
+              android:orientation="vertical"
               local:MvxBind="BackgroundStyle QuestionOptionBackground(LayoutOptionBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false, IsProtected, true));
                              LongClick QuestionState.ShowCommentEditorCommand">
 
-    <TextView style="@style/Interview_Question_Answer_Text_Editor"
-              local:MvxBind="Text Title; Tag ItemTag" />
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal">
 
-    <ImageButton style="@style/Interview_Question_OptionRemoveAnswer"
-                 local:MvxBind="Visible Not(IsProtected); HideKeyboardOnClick .; Click RemoveAnswerCommand;"
-                 local:srcCompat="@drawable/delete_button" />
+        <TextView style="@style/Interview_Question_Answer_Text_Editor"
+                  local:MvxBind="Text Title; Tag ItemTag" />
 
-    <ImageView style="@style/Interview_Question_ProtectedAnswerIcon"
-               local:MvxBind="Visible IsProtected"
-               local:srcCompat="@drawable/lock_icon" />
+        <ImageButton style="@style/Interview_Question_OptionRemoveAnswer"
+                     local:MvxBind="Visible Not(IsProtected); HideKeyboardOnClick .; Click RemoveAnswerCommand;"
+                     local:srcCompat="@drawable/delete_button" />
+
+        <ImageView style="@style/Interview_Question_ProtectedAnswerIcon"
+                   local:MvxBind="Visible IsProtected"
+                   local:srcCompat="@drawable/lock_icon" />
+    </LinearLayout>
+
+    <include layout="@layout/interview_question__attachment" />
+
 </LinearLayout>
 

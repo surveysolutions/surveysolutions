@@ -10,7 +10,7 @@ const rev = require("gulp-rev");
 const gulpInject = require("gulp-inject")
 const terser = require("gulp-terser");
 const config = require("./config.json");
-const ngAnnotate = require("gulp-ng-annotate");
+const ngAnnotate = require("gulp-ng-annotate-patched");
 const minified = require("./plugins/preferminified");
 const changed = require("./plugins/changed");
 
@@ -60,8 +60,8 @@ const inject = () =>
     transform(filepath, file) {
       
       if (filepath.endsWith(".css") && filepath.indexOf("pdf") > 0) {
-        const href= filepath = '@Html.ContentAbsolute("' + filepath + '")'
-        return "<link rel='stylesheet' href='" + href + "'>"
+        const cssContent= filepath = '@Html.Raw(System.IO.File.ReadAllText("wwwroot' + filepath.replace('~', '') + '"))'
+        return "<style>" + cssContent + "</style>"
       }
 
       return gulpInject.transform.apply(gulpInject.transform,arguments);

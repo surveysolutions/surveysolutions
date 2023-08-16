@@ -8,7 +8,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         Task<string> BackupAsync();
         Task<string> BackupAsync(string backupToFolderPath);
         Task RestoreAsync(string backupFilePath);
-        Task<RestorePackageInfo> GetRestorePackageInfo(string restoreFolder);
+        RestorePackageInfo GetRestorePackageInfo(string restoreFolder);
         Task SendBackupAsync(string filePath, CancellationToken token);
         Task SendLogsAsync(CancellationToken token);
     }

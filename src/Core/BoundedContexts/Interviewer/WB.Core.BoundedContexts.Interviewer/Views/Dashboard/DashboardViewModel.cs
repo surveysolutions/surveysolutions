@@ -24,6 +24,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Messages;
 using WB.Core.SharedKernels.Enumerator.Views;
 
@@ -72,10 +73,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IWorkspaceService workspaceService,
             IOnlineSynchronizationService onlineSynchronizationService,
             IWorkspaceMemoryCacheSource memoryCacheSource,
-            WebInterviewsViewModel webInterviews ) : base(principal, viewModelNavigationService, permissionsService,
+            WebInterviewsViewModel webInterviews,
+            IMvxMessenger messenger) : base(principal, viewModelNavigationService, permissionsService,
             nearbyConnection)
         {
-            this.messenger = Mvx.IoCProvider.GetSingleton<IMvxMessenger>();
+            this.messenger = messenger;
             this.principal = principal;
             this.interviewerSettings = interviewerSettings;
             this.interviewsRepository = interviewsRepository;
@@ -144,7 +146,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             base.ViewAppeared();
 
             SubscribeOnMessages();
-
             this.SynchronizationWithHqEnabled = this.interviewerSettings.AllowSyncWithHq;
 
             DashboardNotifications.CheckTabletTimeAndWarn();
@@ -188,20 +189,33 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
         }
 
-        public IMvxCommand SignOutCommand => new MvxAsyncCommand(this.SignOut);
+        public IMvxAsyncCommand SignOutCommand => new MvxAsyncCommand(async () =>
+        {
+            await this.SignOut();
+        });
 
-        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.NavigateToDiagnostics);
+        public IMvxAsyncCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(async () =>
+        {
+            this.Synchronization.CancelSynchronizationCommand.Execute();
+            await this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>();
+            this.Dispose();
+        });
 
-        public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(this.NavigateToMaps);
+        public IMvxAsyncCommand NavigateToMapsCommand => new MvxAsyncCommand(async() =>
+        {
+            await this.NavigateToMaps();
+        });
 
-        public IMvxCommand NavigateToMapDashboardCommand =>
+        public IMvxAsyncCommand NavigateToMapDashboardCommand =>
             new MvxAsyncCommand(async () => await NavigateToMapDashboard(), () => !string.IsNullOrEmpty(this.principal.CurrentUserIdentity.Workspace));
 
         private async Task NavigateToMapDashboard()
         {
             try
             {
-               await mapInteractionService.OpenMapDashboardAsync();
+                this.Synchronization.CancelSynchronizationCommand.Execute();
+                await mapInteractionService.OpenInterviewerMapDashboardAsync();
+                this.Dispose();
             }
             catch (MissingPermissionsException e)
             {
@@ -209,10 +223,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
         }
 
-        private Task NavigateToMaps()
+        private async Task NavigateToMaps()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
-            return this.ViewModelNavigationService.NavigateToAsync<MapsViewModel>();
+            await this.ViewModelNavigationService.NavigateToAsync<MapsViewModel>();
+            this.Dispose();
         }
 
         private bool isInProgress;
@@ -222,11 +237,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             set => SetProperty(ref this.isInProgress, value);
         }
 
-        private GroupStatus typeOfInterviews;
+        private DashboardGroupType typeOfInterviews;
         private bool synchronizationWithHqEnabled;
         private readonly IDisposable syncSubscription;
 
-        public GroupStatus TypeOfInterviews
+        public DashboardGroupType TypeOfInterviews
         {
             get => this.typeOfInterviews;
             set => SetProperty(ref this.typeOfInterviews, value);
@@ -243,14 +258,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             => EnumeratorUIResources.Dashboard_Title.FormatString(this.NumberOfAssignedInterviews.ToString(),
                 Principal.CurrentUserIdentity.Name);
 
-        private async void OnInterviewRemoved(object sender, InterviewRemovedArgs e)
+        private async void OnInterviewRemoved(object? sender, InterviewRemovedArgs e)
         {
             await this.RaisePropertyChanged(() => this.DashboardTitle);
             this.CreateNew.UpdateAssignment(e.AssignmentId);
             await this.CreateNew.LoadAsync(this.Synchronization);
         }
 
-        private void OnItemsLoaded(object sender, EventArgs e) =>
+        private void OnItemsLoaded(object? sender, EventArgs e) =>
             this.IsInProgress = !(this.StartedInterviews.IsItemsLoaded
                                   && this.RejectedInterviews.IsItemsLoaded
                                   && this.CompletedInterviews.IsItemsLoaded
@@ -276,7 +291,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             if (!lastVisitedInterviewId.HasValue)
             {
-                this.TypeOfInterviews = this.CreateNew.InterviewStatus;
+                this.TypeOfInterviews = this.CreateNew.DashboardType;
                 return;
             }
 
@@ -285,14 +300,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             this.TypeOfInterviews = (interviewView.Mode, interviewView.Status) switch
             {
-                (InterviewMode.CAPI, InterviewStatus.RejectedBySupervisor) => this.RejectedInterviews.InterviewStatus,
-                (InterviewMode.CAPI, InterviewStatus.Completed) => this.CompletedInterviews.InterviewStatus,
-                (InterviewMode.CAPI, InterviewStatus.InterviewerAssigned) => this.StartedInterviews.InterviewStatus,
-                (InterviewMode.CAPI, InterviewStatus.Restarted) => this.StartedInterviews.InterviewStatus,
-                (InterviewMode.CAWI, InterviewStatus.InterviewerAssigned) => this.WebInterviews.InterviewStatus,
-                (InterviewMode.CAWI, InterviewStatus.Completed) => this.WebInterviews.InterviewStatus,
-                (InterviewMode.CAWI, InterviewStatus.RejectedBySupervisor) => this.WebInterviews.InterviewStatus,
-                (InterviewMode.CAWI, InterviewStatus.Restarted) => this.WebInterviews.InterviewStatus,
+                (InterviewMode.CAPI, InterviewStatus.RejectedBySupervisor) => this.RejectedInterviews.DashboardType,
+                (InterviewMode.CAPI, InterviewStatus.Completed) => this.CompletedInterviews.DashboardType,
+                (InterviewMode.CAPI, InterviewStatus.InterviewerAssigned) => this.StartedInterviews.DashboardType,
+                (InterviewMode.CAPI, InterviewStatus.Restarted) => this.StartedInterviews.DashboardType,
+                (InterviewMode.CAWI, InterviewStatus.InterviewerAssigned) => this.WebInterviews.DashboardType,
+                (InterviewMode.CAWI, InterviewStatus.Completed) => this.WebInterviews.DashboardType,
+                (InterviewMode.CAWI, InterviewStatus.RejectedBySupervisor) => this.WebInterviews.DashboardType,
+                (InterviewMode.CAWI, InterviewStatus.Restarted) => this.WebInterviews.DashboardType,
                 _ => this.TypeOfInterviews
             };
         }
@@ -309,18 +324,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.Synchronization.Synchronize();
         }
 
-        private Task NavigateToDiagnostics()
-        {
-            this.Synchronization.CancelSynchronizationCommand.Execute();
-            return this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>();
-        }
-
-        private Task SignOut()
+        private async Task SignOut()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
             var userName = this.Principal.CurrentUserIdentity.Name;
             this.auditLogService.Write(new LogoutAuditLogEntity(userName));
-            return this.ViewModelNavigationService.SignOutAndNavigateToLoginAsync();
+            await this.ViewModelNavigationService.SignOutAndNavigateToLoginAsync();
+            this.Dispose();
         }
 
         private void DashboardItemOnStartingLongOperation(StartingLongOperationMessage message)
@@ -333,12 +343,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IsInProgress = false;
         }
 
+        private bool isDisposed = false;
+        
         public override void Dispose()
         {
-            base.Dispose();
+            if (isDisposed) return;
+            isDisposed = true;
 
             UnsubscribeFromMessages();
-
             syncSubscription.Dispose();
 
             this.StartedInterviews.OnInterviewRemoved -= this.OnInterviewRemoved;
@@ -351,6 +363,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.CreateNew.OnItemsLoaded -= this.OnItemsLoaded;
             this.Synchronization.OnCancel -= this.Synchronization_OnCancel;
             this.Synchronization.OnProgressChanged -= this.Synchronization_OnProgressChanged;
+            
+            base.Dispose();
         }
 
         protected override void InitFromBundle(IMvxBundle parameters)
@@ -377,14 +391,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         protected override void SaveStateToBundle(IMvxBundle bundle)
         {
             base.SaveStateToBundle(bundle);
-            if (this.LastVisitedInterviewId != null)
+            if (this.LastVisitedInterviewId.HasValue)
             {
-                bundle.Data[nameof(LastVisitedInterviewId)] = this.LastVisitedInterviewId.ToString();
+                bundle.Data[nameof(LastVisitedInterviewId)] = this.LastVisitedInterviewId.Value.ToString();
             }
         }
 
         public IMvxAsyncCommand ShowSearchCommand =>
-            new MvxAsyncCommand(ViewModelNavigationService.NavigateToAsync<SearchViewModel>);
+            new MvxAsyncCommand(async()=>
+            {
+                this.Synchronization.CancelSynchronizationCommand.Execute();
+                await ViewModelNavigationService.NavigateToAsync<SearchViewModel>();
+                this.Dispose();
+            });
 
         #region Offline synchronization
 
@@ -413,6 +432,23 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.OnOfflineSynchronizationStarted?.Invoke();
         }
 
+        protected override async Task<bool> TryNearbyWifiDevicesPermission()
+        {
+            try
+            {
+                await permissions.AssureHasNearbyWifiDevicesPermissionOrThrow().ConfigureAwait(false);
+            }
+            catch (MissingPermissionsException)
+            {
+                ShouldStartAdvertising = false;
+                this.OnConnectionError(EnumeratorUIResources.NearbyPermissionRequired,
+                    ConnectionStatusCode.MissingPermissionNearbyWifiDevices);
+                return false;
+            }
+
+            return true;
+        }
+
         protected override async Task OnStartDiscovery()
         {
             var discoveryStatus = await this.nearbyConnection.StartDiscoveryAsync(
@@ -432,6 +468,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                     this.ShowSynchronizationError(InterviewerUIResources.SendToSupervisor_BluetoothError);
                     break;
                 case ConnectionStatusCode.MissingPermissionAccessCoarseLocation:
+                case ConnectionStatusCode.MissingPermissionBluetoothAdvertise:
                 case ConnectionStatusCode.StatusEndpointUnknown:
                     this.ShowSynchronizationError(errorMessage);
                     break;
@@ -485,12 +522,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.Synchronization.IsSynchronizationInProgress = false;
         }
 
-        private void Synchronization_OnCancel(object sender, EventArgs e)
+        private void Synchronization_OnCancel(object? sender, EventArgs e)
         {
             this.nearbyConnection.StopAll();
         }
 
-        private async void Synchronization_OnProgressChanged(object sender, SharedKernels.Enumerator.Services.Synchronization.SyncProgressInfo e)
+        private async void Synchronization_OnProgressChanged(object? sender, SharedKernels.Enumerator.Services.Synchronization.SyncProgressInfo e)
         {
             if (e.Status == SynchronizationStatus.Fail
                 || e.Status == SynchronizationStatus.Canceled
@@ -524,7 +561,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             return workspaceService.GetAll();
         }
 
-        public void ChangeWorkspace(string workspaceName)
+        public async Task ChangeWorkspace(string workspaceName)
         {
             var workspaceView = workspaceService.GetByName(workspaceName);
             if (workspaceView?.SupervisorId == null)
@@ -537,7 +574,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             
             memoryCacheSource.ClearAll();
 
-            ViewModelNavigationService.NavigateToDashboardAsync();
+            await ViewModelNavigationService.NavigateToDashboardAsync();
+            this.Dispose();
         }
 
         public event EventHandler? WorkspaceListUpdated;
@@ -567,6 +605,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 if (interviewerApiView.Workspaces.All(w => CurrentWorkspace != w.Name))
                 {
                     await ViewModelNavigationService.NavigateToDashboardAsync();
+                    this.Dispose();
                     return;
                 }
                 

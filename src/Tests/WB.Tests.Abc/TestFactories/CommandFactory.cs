@@ -214,7 +214,9 @@ namespace WB.Tests.Abc.TestFactories
                 coordinates:"",
                 length:0,
                 distanceToEditor:0,
-                numberOfPoints:0);
+                numberOfPoints:0,
+                requestedAccuracy: null,
+                requestedFrequency: null);
 
         public DeleteQuestionnaire DeleteQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? responsibleId)
         {
@@ -260,7 +262,8 @@ namespace WB.Tests.Abc.TestFactories
             Guid? interviewerId = null,
             InterviewKey interviewKey = null,
             int? assignmentId = null,
-            List<string> protectedAnswers = null)
+            List<string> protectedAnswers = null,
+            InterviewMode interviewMode = InterviewMode.CAPI)
         {
             return new CreateInterview(
                 interviewId, 
@@ -273,7 +276,7 @@ namespace WB.Tests.Abc.TestFactories
                 interviewKey, 
                 assignmentId,
                 false,
-                InterviewMode.CAPI);
+                interviewMode);
         }
 
         public CreateInterview CreateInterview(Guid? questionnaireId = null,
@@ -304,7 +307,8 @@ namespace WB.Tests.Abc.TestFactories
             InterviewKey interviewKey = null,
             int? assignmentId = null,
             List<InterviewAnswer> answers = null,
-            List<string> protectedAnswers = null
+            List<string> protectedAnswers = null,
+            InterviewMode interviewMode = InterviewMode.CAPI
             )
         {
             return this.CreateInterview(interviewId ?? Guid.NewGuid(),
@@ -316,7 +320,8 @@ namespace WB.Tests.Abc.TestFactories
                 userId,
                 interviewKey, 
                 assignmentId,
-                protectedAnswers);
+                protectedAnswers,
+                interviewMode);
         }
 
         public AssignResponsibleCommand AssignResponsibleCommand(Guid? interviewId = null, 
@@ -403,9 +408,13 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new DeleteAssignment(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), questionnaireIdentity ?? new QuestionnaireIdentity());
         }
-        public MarkAssignmentAsReceivedByTablet MarkAssignmentAsReceivedByTablet(Guid? assignmentId = null, Guid? userId = null, QuestionnaireIdentity questionnaireIdentity = null)
+        public MarkAssignmentAsReceivedByTablet MarkAssignmentAsReceivedByTablet(Guid? assignmentId = null, 
+            Guid? userId = null, string deviceId = null, QuestionnaireIdentity questionnaireIdentity = null)
         {
-            return new MarkAssignmentAsReceivedByTablet(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), questionnaireIdentity ?? new QuestionnaireIdentity());
+            return new MarkAssignmentAsReceivedByTablet(assignmentId ?? Guid.NewGuid(), 
+                userId ?? Guid.NewGuid(), 
+                deviceId,
+                questionnaireIdentity ?? new QuestionnaireIdentity());
         }
         public ReassignAssignment ReassignAssignment(Guid? assignmentId = null, Guid? userId = null, Guid? responsibleId = null, string comment = null, QuestionnaireIdentity questionnaireIdentity = null)
         {

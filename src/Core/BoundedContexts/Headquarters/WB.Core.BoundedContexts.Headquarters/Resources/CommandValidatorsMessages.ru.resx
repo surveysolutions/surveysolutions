@@ -135,4 +135,7 @@
   <data name="QuestionnaireWasDeleted" xml:space="preserve">
       <value>Опросник удален</value>
   </data>
+  <data name="AssignmentLimitReached" xml:space="preserve">
+    <value>Лимит количества интервью для назначения достигнут</value>
+  </data>
 </root>

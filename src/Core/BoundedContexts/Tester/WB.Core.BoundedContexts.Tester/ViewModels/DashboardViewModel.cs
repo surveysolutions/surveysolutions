@@ -19,7 +19,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
-    public class DashboardViewModel : BaseViewModel
+    public class DashboardViewModel : BasePrincipalViewModel
     {
         private CancellationTokenSource tokenSource;
         private readonly ITesterPrincipal principal;
@@ -60,7 +60,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         public override async Task Initialize()
         {
             await base.Initialize().ConfigureAwait(false);
-
+            
             this.localQuestionnaires = this.questionnaireListStorage.LoadAll();
             
             if (!localQuestionnaires.Any())
@@ -249,10 +249,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private Task SignOut()
         {
             this.CancelLoadServerQuestionnaires();
-            
             return this.ViewModelNavigationService.SignOutAndNavigateToLoginAsync();
         }
-
 
         private async Task LoadQuestionnaireAsync(QuestionnaireListItemViewModel questionnaireListItem)
         {

@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             nestedRosters.Should().NotBeEmpty();
 
         [NUnit.Framework.Test] public void should_rosterGroups_have_only_1_roster_group () =>
-            nestedRosters.Should().BeEquivalentTo(nestedRosterId);
+            nestedRosters.Should().BeEquivalentTo(new []{nestedRosterId});
 
         private static IEnumerable<Guid> nestedRosters;
         private static QuestionnaireDocument questionnaireDocument;

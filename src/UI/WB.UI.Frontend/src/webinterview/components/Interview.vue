@@ -24,7 +24,7 @@ export default {
     },
 
     components: {
-        signalr: () => import(/* webpackChunkName: "core-signalr" */ './signalr/core.signalr'),
+        signalr: () => import('./signalr/core.signalr'),
     },
 
     beforeMount() {

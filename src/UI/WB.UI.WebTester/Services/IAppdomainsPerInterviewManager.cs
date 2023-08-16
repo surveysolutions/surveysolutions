@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Ncqrs.Eventing;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.Questionnaire.Api;
 
 namespace WB.UI.WebTester.Services
 {
@@ -10,7 +11,8 @@ namespace WB.UI.WebTester.Services
     {
         void SetupForInterview(Guid interviewId,
             QuestionnaireIdentity questionnaireIdentity,
-            string supportingAssembly);
+            string supportingAssembly,
+            QuestionnaireSettings settings);
 
         void TearDown(Guid interviewId);
 

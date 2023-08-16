@@ -29,11 +29,11 @@ namespace WB.UI.Designer.Services.Restore
         private readonly IAttachmentService attachmentService;
         private readonly ITranslationsService translationsService;
         private readonly DesignerDbContext dbContext;
-        private readonly ICategoriesService categoriesService;
+        private readonly IReusableCategoriesService reusableCategoriesService;
         private readonly IImportExportQuestionnaireMapper importExportQuestionnaireMapper;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
 
-        public QuestionnaireRestoreService(ILogger<QuestionnaireRestoreService> logger, ISerializer serializer, ICommandService commandService, ILookupTableService lookupTableService, IAttachmentService attachmentService, ITranslationsService translationsService, DesignerDbContext dbContext, ICategoriesService categoriesService, IImportExportQuestionnaireMapper importExportQuestionnaireMapper, IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage)
+        public QuestionnaireRestoreService(ILogger<QuestionnaireRestoreService> logger, ISerializer serializer, ICommandService commandService, ILookupTableService lookupTableService, IAttachmentService attachmentService, ITranslationsService translationsService, DesignerDbContext dbContext, IReusableCategoriesService reusableCategoriesService, IImportExportQuestionnaireMapper importExportQuestionnaireMapper, IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage)
         {
             this.logger = logger;
             this.serializer = serializer;
@@ -42,7 +42,7 @@ namespace WB.UI.Designer.Services.Restore
             this.attachmentService = attachmentService;
             this.translationsService = translationsService;
             this.dbContext = dbContext;
-            this.categoriesService = categoriesService;
+            this.reusableCategoriesService = reusableCategoriesService;
             this.importExportQuestionnaireMapper = importExportQuestionnaireMapper;
             this.questionnaireStorage = questionnaireStorage;
         }
@@ -94,7 +94,7 @@ namespace WB.UI.Designer.Services.Restore
                             questionnaireDocument.PublicKey = Guid.NewGuid();
 
                         this.translationsService.DeleteAllByQuestionnaireId(questionnaireDocument.PublicKey);
-                        this.categoriesService.DeleteAllByQuestionnaireId(questionnaireDocument.PublicKey);
+                        this.reusableCategoriesService.DeleteAllByQuestionnaireId(questionnaireDocument.PublicKey);
 
                         state.Success.AppendLine($"[{zipEntry.FileName}]");
                         state.Success.AppendLine($"    Restored questionnaire document '{questionnaireDocument.Title}' with id '{questionnaireDocument.PublicKey.FormatGuid()}'.");
@@ -224,7 +224,7 @@ namespace WB.UI.Designer.Services.Restore
                     var collectionsIdString = Path.GetFileNameWithoutExtension(zipEntryPathChunks[1]);
                     var collectionsId = Guid.Parse(collectionsIdString);
 
-                    this.categoriesService.Store(questionnaireId, collectionsId, zipStream, CategoriesFileType.Excel);
+                    this.reusableCategoriesService.Store(questionnaireId, collectionsId, zipStream, CategoriesFileType.Excel);
 
                     state.Success.AppendLine($"[{zipEntry.FileName}].");
                     state.Success.AppendLine($"    Restored categories '{collectionsId}' for questionnaire '{questionnaireId.FormatGuid()}'.");

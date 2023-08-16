@@ -59,8 +59,11 @@ namespace WB.UI.Designer.Api.Portal
 
             var account = await this.accountRepository.FindByNameAsync(userId);
 
+            if (account == null)
+                return NotFound();
+            
             var questionnaires = questionnaireHelper.GetQuestionnaires(
-                viewerId: account.Id,
+                viewer: account,
                 isAdmin: false, 
                 type: QuestionnairesType.My | QuestionnairesType.Shared, 
                 folderId: null, 

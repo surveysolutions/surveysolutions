@@ -37,7 +37,7 @@ namespace WB.Services.Scheduler.Tests
         protected Mock<IOptions<JobSettings>> jobSettingsMock;
         protected string SchemaName;
 
-        protected IServiceCollection NewServiceCollection()
+        protected virtual IServiceCollection NewServiceCollection()
         {
             var services = new ServiceCollection()
                 .AddDbContext<JobContext>(ops =>
@@ -57,13 +57,14 @@ namespace WB.Services.Scheduler.Tests
 
         protected IConfiguration Configuration => new ConfigurationBuilder()
             .AddJsonFile($@"appsettings.json", true)
+            .AddJsonFile($"appsettings.{Environment.MachineName}.json", true)
             .Build();
 
     }
 
     public abstract class with_scheduler_database : with_service_collection
     {
-        protected IServiceCollection NewServiceCollection()
+        protected override IServiceCollection NewServiceCollection()
         {
             var services = new ServiceCollection()
                 .AddDbContext<JobContext>(ops =>

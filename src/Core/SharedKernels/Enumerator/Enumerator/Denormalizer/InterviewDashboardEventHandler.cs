@@ -306,7 +306,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
 
         private PrefilledQuestionView GetAnswerOnPrefilledQuestion(Guid prefilledQuestion, IQuestionnaire questionnaire, object answer, Guid interviewId)
         {
-            string stringAnswer = this.answerToStringConverter.Convert(answer, prefilledQuestion, questionnaire);
+            string stringAnswer = this.answerToStringConverter.GetUiStringAnswerForIdentifyingQuestionOrThrow(answer, prefilledQuestion, questionnaire);
 
             return new PrefilledQuestionView
             {
@@ -354,20 +354,20 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
 
             if (evnt.Payload.Status == InterviewStatus.Completed)
             {
-                interviewView.CompletedDateTime = evnt.Payload.UtcTime ?? evnt.EventTimeStamp;
+                interviewView.CompletedDateTime = evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.UtcTime ?? evnt.EventTimeStamp;
             }
 
             if (evnt.Payload.Status == InterviewStatus.RejectedBySupervisor ||
                 evnt.Payload.Status == InterviewStatus.RejectedByHeadquarters)
             {
-                interviewView.RejectedDateTime = evnt.Payload.UtcTime ?? evnt.EventTimeStamp;
+                interviewView.RejectedDateTime = evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.UtcTime ?? evnt.EventTimeStamp;
                 interviewView.LastInterviewerOrSupervisorComment = evnt.Payload.Comment;
                 interviewView.CanBeDeleted = false;
             }
 
             if (evnt.Payload.Status == InterviewStatus.ApprovedBySupervisor)
             {
-                interviewView.ApprovedDateTimeUtc = evnt.Payload.UtcTime;
+                interviewView.ApprovedDateTimeUtc = evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.UtcTime;
             }
             
             interviewView.ReceivedByInterviewerAtUtc = null;
@@ -404,7 +404,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
 
             var questionnaireIdentity = QuestionnaireIdentity.Parse(interviewView.QuestionnaireId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, interviewView.Language);
-            if (questionnaire.IsPrefilled(questionId))
+            if (questionnaire.IsIdentifying(questionId))
                 return;
 
             var questionScope = questionnaire.GetQuestionScope(questionId);
@@ -429,7 +429,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
             var questionnaireIdentity = QuestionnaireIdentity.Parse(interviewView.QuestionnaireId);
 
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, interviewView.Language);
-            if (!questionnaire.IsPrefilled(questionId))
+            if (!questionnaire.IsIdentifying(questionId))
                 return;
             
             if (questionId == interviewView.LocationQuestionId)
@@ -562,8 +562,10 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
 
         public void Handle(IPublishedEvent<AreaQuestionAnswered> evnt)
         {
-            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, new Area(evnt.Payload.Geometry, evnt.Payload.MapName, evnt.Payload.NumberOfPoints,
-                evnt.Payload.AreaSize, evnt.Payload.Length, evnt.Payload.Coordinates, evnt.Payload.DistanceToEditor),
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, 
+                new Area(evnt.Payload.Geometry, evnt.Payload.MapName, evnt.Payload.NumberOfPoints,
+                evnt.Payload.AreaSize, evnt.Payload.Length, evnt.Payload.Coordinates, evnt.Payload.DistanceToEditor, 
+                evnt.Payload.RequestedAccuracy, evnt.Payload.RequestedFrequency),
                 evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.AnswerTimeUtc.Value);
         }
 
@@ -594,7 +596,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                 interviewView.ResponsibleId = @event.Payload.InterviewerId.Value;
             }
 
-            interviewView.InterviewerAssignedDateTime = @event.Payload.AssignTime;
+            interviewView.InterviewerAssignedDateTime = @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AssignTime;
             interviewView.ReceivedByInterviewerAtUtc = null;
 
             this.interviewViewRepository.Store(interviewView);
@@ -607,7 +609,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                 return;
 
             interviewView.ResponsibleId = @event.Payload.SupervisorId;
-            interviewView.InterviewerAssignedDateTime = @event.Payload.AssignTime;
+            interviewView.InterviewerAssignedDateTime = @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AssignTime;
             this.interviewViewRepository.Store(interviewView);
         }
 
@@ -636,7 +638,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
             foreach (var changedVariable in evnt.Payload.ChangedVariables)
             {
                 var variableId = changedVariable.Identity.Id;
-                if (!questionnaire.IsPrefilled(variableId))
+                if (!questionnaire.IsIdentifying(variableId))
                     return;
 
                 var newPrefilledQuestionToStore = GetPrefilledVariable(variableId, questionnaire, changedVariable.NewValue, interviewId);
@@ -651,7 +653,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
 
         private string VariableToString(object value, Guid variableId, IQuestionnaire questionnaire)
         {
-            if(!questionnaire.IsPrefilled(variableId)) 
+            if(!questionnaire.IsIdentifying(variableId)) 
                 throw new NotSupportedException("Only identifying variables can be converted to string");
 
             return value == null 

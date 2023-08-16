@@ -53,6 +53,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
             synchronizationService
                 .Setup(s => s.GetSyncInfoPackageResponse(interviewId, It.IsAny<InterviewSyncInfoPackage>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(new SyncInfoPackageResponse()));
+            
+            synchronizationService
+                .Setup(s => s.UploadInterviewAsync(interviewId, It.IsAny<InterviewPackageApiView>(), 
+                    It.IsAny<IProgress<TransferProgress>>() , It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(new InterviewUploadResult() { ReceivedInterviewId = interviewId }));
 
             var eventStore = Create.Storage.InMemorySqliteMultiFilesEventStorage();
             eventStore.Store(new UncommittedEventStream(null, new []{ 
@@ -105,12 +110,17 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
             synchronizationService
                 .Setup(s => s.GetSyncInfoPackageResponse(interviewId, It.IsAny<InterviewSyncInfoPackage>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(new SyncInfoPackageResponse()));
+            
+            synchronizationService
+                .Setup(s => s.UploadInterviewAsync(interviewId, It.IsAny<InterviewPackageApiView>(), 
+                    It.IsAny<IProgress<TransferProgress>>() , It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(new InterviewUploadResult() { ReceivedInterviewId = interviewId }));
 
             var eventStore = Create.Storage.InMemorySqliteMultiFilesEventStorage();
             eventStore.Store(new UncommittedEventStream(null, new[]{
                 Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:1, payload: Create.Event.InterviewCreated(Guid.NewGuid(), 1)),
                 Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:2, payload: Create.Event.InterviewerAssigned(Guid.NewGuid(), interviewId)),
-                Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:3, payload: Create.Event.InteviewCompleted())
+                Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:3, payload: Create.Event.InterviewCompleted())
                 }));
 
 
@@ -155,6 +165,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
                 .Setup(s => s.GetInterviewUploadState(interviewId, It.IsAny<EventStreamSignatureTag>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(remoteInterviewUploadState));
 
+            synchronizationService
+                .Setup(s => s.UploadInterviewAsync(interviewId, It.IsAny<InterviewPackageApiView>(), 
+                    It.IsAny<IProgress<TransferProgress>>() , It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(new InterviewUploadResult() { ReceivedInterviewId = interviewId }));
+
             var eventStore = Mock.Of<IEnumeratorEventStorage>(s =>
                 s.HasEventsWithoutHqFlag(interviewId) == true);
             var eventsContainer = Create.Entity.InterviewPackageContainer(interviewId,
@@ -182,7 +197,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
 
 
         [Test]
-        public async Task when_localy_interview_has_new_events()
+        public async Task when_locally_interview_has_new_events()
         {
             var interviewId = Id.g1;
             var responsibleId = Id.g2;
@@ -216,7 +231,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
         }
 
         [Test]
-        public async Task when_localy_interview_has_not_new_events()
+        public async Task when_locally_interview_has_not_new_events()
         {
             var interviewId = Id.g1;
             var responsibleId = Id.g2;
@@ -259,7 +274,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
             eventStore.Store(new UncommittedEventStream(null, new []{ 
                 Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:1, payload: Create.Event.InterviewCreated(Guid.NewGuid(), 1)),
                 Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:2, payload: Create.Event.InterviewerAssigned(Guid.NewGuid(), interviewId)),
-                Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:3, payload: Create.Event.InteviewCompleted()),
+                Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:3, payload: Create.Event.InterviewCompleted()),
             }));
             eventStore.MarkAllEventsAsReceivedByHq(interviewId);
 
@@ -271,6 +286,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
             synchronizationService
                 .Setup(s => s.GetSyncInfoPackageResponse(interviewId, It.IsAny<InterviewSyncInfoPackage>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(new SyncInfoPackageResponse() { HasInterview = false }));
+
+            synchronizationService
+                .Setup(s => s.UploadInterviewAsync(interviewId, It.IsAny<InterviewPackageApiView>(), 
+                    It.IsAny<IProgress<TransferProgress>>() , It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(new InterviewUploadResult() { ReceivedInterviewId = interviewId }));
 
             var interviewFactory = Create.Service.InterviewerInterviewAccessor(localInterviewStorage, eventStore,
                 prefilledQuestions: Create.Storage.InMemorySqlitePlainStorage<PrefilledQuestionView>(),
@@ -312,7 +332,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
             eventStore.Store(new UncommittedEventStream(null, new []{ 
                 Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:1, payload: Create.Event.InterviewCreated(Guid.NewGuid(), 1)),
                 Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:2, payload: Create.Event.InterviewerAssigned(Guid.NewGuid(), interviewId)),
-                Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:3, payload: Create.Event.InteviewCompleted()),
+                Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:3, payload: Create.Event.InterviewCompleted()),
             }));
             eventStore.MarkAllEventsAsReceivedByHq(interviewId);
 
@@ -324,6 +344,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
             synchronizationService
                 .Setup(s => s.GetSyncInfoPackageResponse(interviewId, It.IsAny<InterviewSyncInfoPackage>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(new SyncInfoPackageResponse() { HasInterview = true, NeedSendFullStream = true }));
+            
+            synchronizationService
+                .Setup(s => s.UploadInterviewAsync(interviewId, It.IsAny<InterviewPackageApiView>(), 
+                    It.IsAny<IProgress<TransferProgress>>() , It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(new InterviewUploadResult() { ReceivedInterviewId = interviewId }));
 
             var interviewFactory = Create.Service.InterviewerInterviewAccessor(localInterviewStorage, eventStore,
                 prefilledQuestions: Create.Storage.InMemorySqlitePlainStorage<PrefilledQuestionView>(),
@@ -365,7 +390,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
             eventStore.Store(new UncommittedEventStream(null, new []{ 
                 Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:1, payload: Create.Event.InterviewCreated(Guid.NewGuid(), 1)),
                 Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:2, payload: Create.Event.InterviewerAssigned(Guid.NewGuid(), interviewId)),
-                Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:3, payload: Create.Event.InteviewCompleted()),
+                Create.Event.UncommittedEvent(eventSourceId: interviewId, eventSequence:3, payload: Create.Event.InterviewCompleted()),
             }));
             eventStore.MarkAllEventsAsReceivedByHq(interviewId);
 

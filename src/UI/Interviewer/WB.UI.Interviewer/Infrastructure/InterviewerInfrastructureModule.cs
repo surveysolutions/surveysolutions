@@ -66,7 +66,7 @@ namespace WB.UI.Interviewer.Infrastructure
             registry.BindAsSingleton<IAssignmentDocumentsStorage, AssignmentDocumentsStorage>();
             registry.Bind<IAudioAuditService, AudioAuditService>();
             
-            registry.Bind<IEnumeratorEventStorage, SqliteMultiFilesEventStorage>();
+            registry.BindAsSingleton<IEnumeratorEventStorage, SqliteMultiFilesEventStorage>();
             registry.BindToRegisteredInterface<IEventStore, IEnumeratorEventStorage>();
 
             registry.BindToConstant(() => new SqliteSettings
@@ -84,12 +84,15 @@ namespace WB.UI.Interviewer.Infrastructure
             registry.BindAsSingleton<IPlainStorage<InterviewerIdentity>, SqlitePlainStorage<InterviewerIdentity>>();
             registry.BindAsSingleton<IPlainStorage<WorkspaceView>, SqlitePlainStorage<WorkspaceView>>();
             registry.BindAsSingleton<IPlainStorage<PrefilledQuestionView>, PrefilledQuestionsRepository>();
+            registry.BindAsSingleton<IPlainStorage<CompanyLogo>, CompanyLogoStorage>();
 
             registry.Bind<INotificationsCollector, InterviewerNotificationsCollector>();
             registry.Bind<IInAppNotificationsCollector, InterviewerInAppNotificationsCollector>();
             
             registry.BindAsSingleton<ICalendarEventStorage, CalendarEventStorage>();
             registry.Bind<ICalendarEventRemoval, CalendarEventRemoval>();
+            
+            registry.BindAsSingleton<ICompanyLogoStorage, CompanyLogoStorage>();
         }
     }
 }

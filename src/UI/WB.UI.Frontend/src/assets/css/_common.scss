@@ -151,6 +151,11 @@ h5, .h5{
 			padding: 8px;
 			margin-bottom: 10px;
 		}
+        .search-pusher{
+            float: right;
+            width: 320px;            
+            height: 42px;
+        }
 	}
 	p{
 		font-family: "RobotoRegular";
@@ -241,6 +246,10 @@ h5, .h5{
 	color: $gray_light;}
 .primary-text{
 	color: $blue !important;
+}
+
+.assignment-create{
+	color: $assignment-color !important;
 }
 .gray-uppercase{
 	font: 12px/14px $trebuchet !important;

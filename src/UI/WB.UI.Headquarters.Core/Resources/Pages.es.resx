@@ -766,7 +766,7 @@
     <value>Desenlazando usuario del mapa</value>
   </data>
   <data name="MapDetails_InterviewerName" xml:space="preserve">
-    <value>Nombre del entrevistador</value>
+      <value>Nombre de usuario</value>
   </data>
   <data name="NoResults" xml:space="preserve">
     <value>No se encontraron resultados</value>
@@ -1355,9 +1355,6 @@
   </data>
   <data name="LogOn_TwoFactor" xml:space="preserve">
     <value>Su inicio de sesión está protegido con una aplicación de autenticación. Ingrese su código de autenticación a continuación.</value>
-  </data>
-  <data name="Map_DiscardConfirm" xml:space="preserve">
-    <value>Are You sure You want to delete the map?</value>
   </data>
   <data name="Map_Status" xml:space="preserve">
     <value>Estado</value>

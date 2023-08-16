@@ -71,6 +71,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     cb.RegisterType<AssignmentDocumentsStorage>().As<IAssignmentDocumentsStorage>().SingleInstance();
                     cb.RegisterType<CalendarEventStorage>().As<ICalendarEventStorage>().SingleInstance();
                     cb.RegisterType<EnumeratorDenormalizerRegistry>().As<IDenormalizerRegistry>().SingleInstance();
+                    cb.RegisterType<SqliteMultiFilesEventStorage>().As<IEnumeratorEventStorage>().SingleInstance();
                     cb.RegisterType<InterviewDashboardEventHandler>().SingleInstance();
                     cb.RegisterType<CalendarEventEventHandler>().SingleInstance();
                 });

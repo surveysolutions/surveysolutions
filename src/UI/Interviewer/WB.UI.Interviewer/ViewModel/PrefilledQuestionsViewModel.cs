@@ -1,6 +1,7 @@
 using System;
 using MvvmCross.Commands;
 using System.Threading.Tasks;
+using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.CommandBus;
@@ -17,6 +18,7 @@ namespace WB.UI.Interviewer.ViewModel
     {
         private readonly IAudioAuditService audioAuditService;
         private readonly IUserInteractionService userInteractionService;
+        private readonly IMvxMainThreadAsyncDispatcher asyncDispatcher;
 
         public PrefilledQuestionsViewModel(
             IInterviewViewModelFactory interviewViewModelFactory,
@@ -30,7 +32,8 @@ namespace WB.UI.Interviewer.ViewModel
             ICompositeCollectionInflationService compositeCollectionInflationService,
             VibrationViewModel vibrationViewModel,
             IAudioAuditService audioAuditService,
-            IUserInteractionService userInteractionService)
+            IUserInteractionService userInteractionService,
+            IMvxMainThreadAsyncDispatcher asyncDispatcher)
             : base(
                 interviewViewModelFactory,
                 questionnaireRepository,
@@ -45,6 +48,7 @@ namespace WB.UI.Interviewer.ViewModel
         {
             this.audioAuditService = audioAuditService;
             this.userInteractionService = userInteractionService;
+            this.asyncDispatcher = asyncDispatcher;
         }
 
         public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToPrefilledQuestionsAsync(this.InterviewId));
@@ -83,11 +87,11 @@ namespace WB.UI.Interviewer.ViewModel
             if (IsAudioRecordingEnabled == true && !isAuditStarting)
             {
                 isAuditStarting = true;
-                Task.Run(async () =>
+                asyncDispatcher.ExecuteOnMainThreadAsync(async () =>
                 {
                     try
                     {
-                        await audioAuditService.StartAudioRecordingAsync(interviewId);
+                        await audioAuditService.StartAudioRecordingAsync(interviewId).ConfigureAwait(false);
                         isAuditStarting = false;
                     }
                     catch (MissingPermissionsException e)

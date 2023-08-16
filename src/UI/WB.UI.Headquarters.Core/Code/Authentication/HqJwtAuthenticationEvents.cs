@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Code.Authentication
     {
         private readonly IInScopeExecutor<IUserRepository> userRepository;
         private readonly IUserClaimsPrincipalFactory<HqUser> claimFactory;
-        private bool isUserLocked;
+        
         private readonly ITokenProvider tokenProvider;
         private const string FailureMessage = "Invalid user";
 
@@ -66,7 +66,6 @@ namespace WB.UI.Headquarters.Code.Authentication
                     
                     if (hqUser.IsArchivedOrLocked)
                     {
-                        this.isUserLocked = true;
                         context.Fail("User is locked");
                         return Task.CompletedTask;
                     }
@@ -90,7 +89,7 @@ namespace WB.UI.Headquarters.Code.Authentication
                     return Task.CompletedTask;
                 });
             }
-            catch (Exception e)
+            catch
             {
                 context.Fail(FailureMessage);
             }

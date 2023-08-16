@@ -63,7 +63,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
 
         [Test]
         public void should_count_number_of_groups_in_questionnaire
-            () => view.GroupsCount.Should().Be(1);
+            () => view.GroupsCount.Should().Be(2);
 
         [Test]
         public void should_count_number_of_roster_in_questionnaire

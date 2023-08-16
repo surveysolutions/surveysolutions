@@ -77,6 +77,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             public int Id { get; set; }
             public int? ParentId { get; set; }
             public string Text { get; set; } = String.Empty;
+            public string? AttachmentName { get; set; }
         }
 
         private readonly QuestionnaireDocument questionnaire;
@@ -123,6 +124,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public List<Categories> CategoriesList { get; internal set; } = new List<Categories>();
 
         public string Title => this.questionnaire.Title;
+        public string Id => this.questionnaire.PublicKey.FormatGuid();
         public QuestionnaireMetaInfo Metadata { get; internal set; }
         public List<Guid> SectionIds { get; }
         public IEnumerable<ModificationStatisticsByUser> SharedPersons { get; set; } = new List<ModificationStatisticsByUser>();
@@ -138,13 +140,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         public T FindOrThrow<T>(Guid publicKey) where T : class, IComposite
         {
-            return this.AllItems.First(x => x is T && x.PublicKey == publicKey) as T 
+            return this.AllItems.FirstOrDefault(x => x is T && x.PublicKey == publicKey) as T 
                    ?? throw new InvalidOperationException("Entity was not found");
         }
 
         public T? FindOrNull<T>(Guid publicKey) where T : class, IComposite
         {
-            return this.AllItems.First(x => x is T && x.PublicKey == publicKey) as T
+            return this.AllItems.FirstOrDefault(x => x is T && x.PublicKey == publicKey) as T
                    ?? null;
         }
 
@@ -260,7 +262,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         {
             var roster = this.FindOrThrow<Group>(rosterId);
             return roster?.RosterSizeQuestionId != null
-                ? this.FindOrThrow<IQuestion>(roster.RosterSizeQuestionId.Value)?.StataExportCaption
+                ? this.FindOrNull<IQuestion>(roster.RosterSizeQuestionId.Value)?.StataExportCaption
                 : string.Empty;
         }
 
@@ -354,7 +356,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 case QuestionType.Multimedia:
                     return PdfStrings.QuestionType_Picture;
                 case QuestionType.Area:
-                    return PdfStrings.QuestionType_Area;
+                    var type = question.Properties?.GeometryType ?? GeometryType.Polygon;
+                    string displayTypeName = type switch
+                    {
+                        GeometryType.Polygon => PdfStrings.QuestionType_Area_Polygon,
+                        GeometryType.Polyline => PdfStrings.QuestionType_Area_Polyline,
+                        GeometryType.Multipoint => PdfStrings.QuestionType_Area_Multipoint,
+                        GeometryType.Point => PdfStrings.QuestionType_Area_Point,
+                        _ => throw new ArgumentOutOfRangeException(nameof(type), "Unexpected value")
+                    };
+                    return $"{PdfStrings.QuestionType_Area} {displayTypeName}";
                 case QuestionType.Audio:
                     return PdfStrings.QuestionType_Audio;
                 default:

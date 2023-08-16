@@ -132,7 +132,7 @@ export default {
 
     apollo: {
         questionnaireItems:{
-            query :gql`query questionnaireItems($workspace: String!, $id: Uuid!, $version: Long!) {
+            query :gql`query questionnaireItems($workspace: String!, $id: UUID!, $version: Long!) {
                 questionnaireItems(workspace: $workspace, id: $id, version: $version, where: { or: [{identifying: {eq: true}}, {includedInReportingAtUtc: {neq: null}}]}) {
                     title, label, type, variable, entityType, variableType, identifying
                     options { title, value, parentValue }

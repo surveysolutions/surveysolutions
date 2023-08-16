@@ -34,7 +34,7 @@ namespace StatData.Core
                 {
                     if (s1[k] != s2[k]) return false;
                 }
-                catch(Exception exception)
+                catch
                 {
                     return false;
                 }

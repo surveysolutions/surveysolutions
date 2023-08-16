@@ -44,10 +44,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
           invalidEntitiesInInterview.Count().Should().Be(3);
 
         [NUnit.Framework.Test] public void should_contain_only_invalid_enabled_elements () =>
-            invalidEntitiesInInterview.Should().BeEquivalentTo(
+            invalidEntitiesInInterview.Should().BeEquivalentTo(new[]{
                 Create.Entity.Identity(staticText1Id),
                 Create.Entity.Identity(staticText2Id),
-                Create.Entity.Identity(questionId));
+                Create.Entity.Identity(questionId)});
 
         private static StatefulInterview interview;
         private static readonly Guid staticText1Id = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

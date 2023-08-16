@@ -44,7 +44,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
 
         [NUnit.Framework.Test] public void should_fill_options_from_linked_question () => questionViewModel.Options.Count.Should().Be(2);
 
-        [NUnit.Framework.Test] public void should_add_linked_question_roster_vectors_as_values_for_answers () => questionViewModel.Options.First().Value.Should().BeEquivalentTo(1m);
+        [NUnit.Framework.Test] public void should_add_linked_question_roster_vectors_as_values_for_answers () => 
+            questionViewModel.Options.First().Value.Should().BeEquivalentTo(new[]{ 1m });
 
         [NUnit.Framework.Test] public void should_use_question_answer_as_title () => questionViewModel.Options.Second().Title.Should().Be("answer 2");
 

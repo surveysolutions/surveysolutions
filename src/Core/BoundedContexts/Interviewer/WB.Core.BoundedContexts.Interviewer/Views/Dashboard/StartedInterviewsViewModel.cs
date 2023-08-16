@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
     public class StartedInterviewsViewModel : BaseInterviewsViewModel
     {
-        public override GroupStatus InterviewStatus => GroupStatus.Started;
+        public override DashboardGroupType DashboardType => DashboardGroupType.InProgressInterviews;
         public override string TabTitle => EnumeratorUIResources.Dashboard_StartedLinkText;
         public override string TabDescription => EnumeratorUIResources.Dashboard_StartedTabText;
         
@@ -42,14 +42,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             interviewDashboardItem.OnItemRemoved += this.InterviewDashboardItem_OnItemRemoved;
         }
 
-        private void InterviewDashboardItem_OnItemRemoved(object sender, EventArgs e)
+        private async void InterviewDashboardItem_OnItemRemoved(object? sender, EventArgs e)
         {
+            if (sender == null) return;
             var dashboardItem = (InterviewDashboardItemViewModel)sender;
 
             this.ItemsCount--;
             this.UpdateTitle();
 
-            this.UiItems.Remove(dashboardItem);
+            await this.InvokeOnMainThreadAsync(() =>
+            {
+                this.UiItems.Remove(dashboardItem);
+
+            }, false).ConfigureAwait(false);
 
             if (this.OnInterviewRemoved != null)
             {

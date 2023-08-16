@@ -295,7 +295,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool IsText => this.InterviewQuestion.InterviewQuestionType == InterviewQuestionType.Text;
         public bool IsTextList => this.InterviewQuestion.InterviewQuestionType == InterviewQuestionType.TextList;
 
-        public bool IsNumericInteger => this.InterviewQuestion.InterviewQuestionType == InterviewQuestionType.Integer;
         public bool IsYesNo => this.InterviewQuestion.InterviewQuestionType == InterviewQuestionType.YesNo;
         public bool IsDateTime => this.InterviewQuestion.InterviewQuestionType == InterviewQuestionType.DateTime;
         public bool IsGps => this.InterviewQuestion.InterviewQuestionType == InterviewQuestionType.Gps;
@@ -761,7 +760,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             if (this.IsMultiFixedOption) this.GetAsInterviewTreeMultiOptionQuestion().ProtectAnswer();
             else if (this.IsTextList) this.GetAsInterviewTreeTextListQuestion().ProtectAnswer();
-            else if (this.IsNumericInteger) this.GetAsInterviewTreeIntegerQuestion().ProtectAnswer();
+            else if (this.IsInteger) this.GetAsInterviewTreeIntegerQuestion().ProtectAnswer();
             else if (this.IsYesNo) this.GetAsInterviewTreeYesNoQuestion().ProtectAnswers();
             else 
                 throw new InvalidOperationException($"Can't protect answers for question of type {InterviewQuestionType}");

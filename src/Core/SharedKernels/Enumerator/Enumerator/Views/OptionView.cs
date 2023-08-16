@@ -32,5 +32,6 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public decimal? ParentValue { get; set; }
 
         public int SortOrder { get; set; }
+        public string AttachmentName { get; set; }
     }
 }

@@ -118,9 +118,85 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="InterviewDataIsMissingTitle" xml:space="preserve">
-    <value>Dotazník od tazatele byl dokončen a synchronizován, ale na serveru nejsou uložena žádná data pro tento rozhovor</value>
+    <value>Rozhovor od tazatele byl dokončen a synchronizován, ale na serveru nejsou uložena žádná data pro tento rozhovor</value>
   </data>
   <data name="MissingCensusInterviews_Filters_Search" xml:space="preserve">
-    <value>Hledat</value>
+    <value>Vyhledat</value>
+  </data>
+  <data name="InterviewDataIsMissingDescription" xml:space="preserve">
+    <value>Zadejte ID rozhovoru nebo ID dotazníku, který chcete vyhledat.</value>
+  </data>
+  <data name="MissingCensusInterviews_Filters_Dates" xml:space="preserve">
+    <value>Vyhledat rozhovory synchronizované mezi dvěma daty</value>
+  </data>
+  <data name="MissingCensusInterviews_Filters_DatesPlaceholder" xml:space="preserve">
+    <value>Vyberte data</value>
+  </data>
+  <data name="MissingCensusInterviews_Filters_Interviewer" xml:space="preserve">
+    <value>Tazatel</value>
+  </data>
+  <data name="MissingCensusInterviews_Filters_InterviewerPlaceholder" xml:space="preserve">
+    <value>Vyberte tazatele</value>
+  </data>
+  <data name="MissingCensusInterviews_Filters_Questionnaire" xml:space="preserve">
+    <value>Typ dotazníku</value>
+  </data>
+  <data name="MissingCensusInterviews_Filters_QuestionnairePlaceholder" xml:space="preserve">
+    <value>Vybrat typ dotazníku</value>
+  </data>
+  <data name="MissingCensusInterviews_FiltersTitle" xml:space="preserve">
+    <value>Filtr podmínky</value>
+  </data>
+  <data name="MissingCensusInterviews_Instructions" xml:space="preserve">
+    <value>Chcete-li najít rozhovor, uveďte název typu dotazníku.&lt;br/&gt;
+Vyberte tazatele a časový rámec pro zúžení výsledků vyhledávání</value>
+  </data>
+  <data name="MissingCensusInterviews_MoreThanOneInterviewsFound_Message_Format" xml:space="preserve">
+    <value>Rozhovorů, co vyhovuje podmínkám filtru - {0}</value>
+  </data>
+  <data name="MissingCensusInterviews_NothingFound_Message" xml:space="preserve">
+    <value>Žádné rozhovory nesplňují podmínky filtru</value>
+  </data>
+  <data name="MissingCensusInterviews_OneInterviewFound_Message" xml:space="preserve">
+    <value>Jeden rozhovor splňuje podmínky filtru</value>
+  </data>
+  <data name="MissingCensusInterviews_PageHeader" xml:space="preserve">
+    <value>Vyhledávání konkrétního rozhovoru</value>
+  </data>
+  <data name="MissingCensusInterviewsDescription" xml:space="preserve">
+    <value>Zadejte přihlašovací jméno tazatele, název typu dotazníku a časové rozmezí</value>
+  </data>
+  <data name="MissingCensusInterviewsTitle" xml:space="preserve">
+    <value>Potřebuji najít rozhovor</value>
+  </data>
+  <data name="NoData_Description" xml:space="preserve">
+    <value>Zadejte ID rozhovoru (XX-XX-XX-XX) nebo ID dotazníku, který chcete vyhledat.</value>
+  </data>
+  <data name="NoData_Filters_InterviewKey" xml:space="preserve">
+    <value>ID rozhovoru nebo ID dotazníku</value>
+  </data>
+  <data name="NoData_Filters_InterviewKeyPlaceholder" xml:space="preserve">
+    <value>Zadejte ID rozhovoru nebo ID dotazníku</value>
+  </data>
+  <data name="NoData_Title" xml:space="preserve">
+    <value>Na serveru se nenachází žádná data pro synchronizovaný rozhovor</value>
+  </data>
+  <data name="SupportSite" xml:space="preserve">
+    <value>Klikněte na odkaz problému, který chcete vyřešit. U problémů, které nejsou uvedeny níže, navštivte &lt;a href="{0}" target="_blank"&gt;...&lt;/a&gt;.</value>
+  </data>
+  <data name="TableTitle_Enumerator" xml:space="preserve">
+    <value>Sčítač</value>
+  </data>
+  <data name="TableTitle_InterviewId" xml:space="preserve">
+    <value>ID rozhovoru</value>
+  </data>
+  <data name="TableTitle_LastUpdate" xml:space="preserve">
+    <value>Poslední aktualizace</value>
+  </data>
+  <data name="TableTitle_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Odstraňování problémů</value>
   </data>
 </root>

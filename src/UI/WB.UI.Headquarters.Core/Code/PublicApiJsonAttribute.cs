@@ -31,7 +31,7 @@ namespace WB.UI.Headquarters.Code
                 objectResult.Formatters.Add(new NewtonsoftJsonOutputFormatter(
                     PublicApiSerializerSettings,
                     ctx.HttpContext.RequestServices.GetRequiredService<ArrayPool<char>>(),
-                    ctx.HttpContext.RequestServices.GetRequiredService<IOptions<MvcOptions>>().Value));
+                    ctx.HttpContext.RequestServices.GetRequiredService<IOptions<MvcOptions>>().Value, null));
             }
         }
     }

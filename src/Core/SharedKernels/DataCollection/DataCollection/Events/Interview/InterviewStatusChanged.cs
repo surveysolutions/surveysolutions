@@ -9,6 +9,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         public  InterviewStatus? PreviousStatus { get; private set; }
         public InterviewStatus Status { get; private set; }
         public string Comment { get; private set; }
+        [Obsolete("Please use OriginDate property")]
         public DateTime? UtcTime { get; set; }
 
         public InterviewStatusChanged(InterviewStatus status, string comment, DateTimeOffset originDate, 
@@ -17,9 +18,6 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
             this.PreviousStatus = previousStatus;
             this.Status = status;
             this.Comment = comment;
-
-            if (originDate != default(DateTimeOffset))
-                this.UtcTime = originDate.UtcDateTime;
         }
     }
 }

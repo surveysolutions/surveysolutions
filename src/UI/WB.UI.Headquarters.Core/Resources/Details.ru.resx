@@ -120,6 +120,9 @@
   <data name="Area_ShowCoordinates" xml:space="preserve">
     <value>Показать координаты</value>
   </data>
+  <data name="Area_Coordinates" xml:space="preserve">
+    <value>Координаты</value>
+  </data>
   <data name="ChooseResponsibleInterviewer" xml:space="preserve">
     <value>Ответственный не назначен. Выберите интервьюера</value>
   </data>

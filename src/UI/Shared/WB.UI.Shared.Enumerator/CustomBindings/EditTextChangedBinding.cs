@@ -34,7 +34,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             }
         }
 
-        public override Type TargetType => typeof(IMvxCommand);
+        public override Type TargetValueType => typeof(IMvxCommand);
 
         protected override void Dispose(bool isDisposing)
         {

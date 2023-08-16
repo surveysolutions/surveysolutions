@@ -88,6 +88,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
                     .Select(DecryptedAnswer)
                     .ToList();
 
+                assignment.IdentifyingAnswers = assignment.Answers
+                    .Where(a => a.IsIdentifying && a.Identity.Id != assignment.LocationQuestionId)
+                    .OrderBy(a => a.SortOrder)
+                    .ToList();
+
                 return assignment;
             });
         }
@@ -191,6 +196,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
                     {
                         assignment.IdentifyingAnswers = answersLookup[assignment.Id]
                             .Where(answer => answer.Identity.Id != assignment.LocationQuestionId)
+                            .OrderBy(answer => answer.SortOrder)
                             .ToList();
                         
                         yield return assignment;

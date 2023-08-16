@@ -1,9 +1,23 @@
 ﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Models
 @using WB.UI.Headquarters.Services
 @using WB.Core.BoundedContexts.Headquarters.Resources
+@using WB.Infrastructure.Native.Workspaces
+@inject IWorkspaceContextAccessor workspaceContext
+
 @{
     var page = ViewBag.ActivePage ?? MenuItem.Logon;
 }
+
+@{
+    var workspace = workspaceContext.CurrentWorkspace();
+    var isSystemWorkspace = workspace?.IsSystemDefinedWorkspace() ?? false;
+    if (isSystemWorkspace)
+    {
+        var workspaces = (IEnumerable<WorkspaceContext>)ViewData["UserWorkspacesList"];
+        workspace = workspaces.FirstOrDefault();
+    }
+}
+
 <ul class="nav navbar-nav" role="menu">
     <li class="dropdown @(page == MenuItem.Teams || page == MenuItem.Headquarters ? "active" : "")">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.TeamsAndRoles">
@@ -25,7 +39,7 @@
     <li class="dropdown">
         <a href="javascript:void(0);" class="dropdown-toggle toggle-sized" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" title="@User.Identity.Name">@User.Identity.Name<span class="caret"></span></a>
         <ul class="dropdown-menu">
-            @Html.MainMenuItem("Manage", "Users", Strings.SurverManagement_MainMenu_ManageAccount, MenuItem.ManageAccount)
+            @Html.MainMenuItem(workspace, "Manage", "Users", Strings.SurverManagement_MainMenu_ManageAccount, MenuItem.ManageAccount)
             <li>
                 <a href="/Account/LogOff">@Common.Logoff</a>
             </li>

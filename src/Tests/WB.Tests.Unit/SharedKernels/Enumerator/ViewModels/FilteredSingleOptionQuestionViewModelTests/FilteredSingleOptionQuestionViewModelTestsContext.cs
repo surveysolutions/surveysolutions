@@ -7,7 +7,9 @@ using MvvmCross.Base;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.Tests;
 using MvvmCross.Views;
+using NHibernate.Cfg.MappingSchema;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -42,6 +44,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             FilteredOptionsViewModel filteredOptionsViewModel = null,
             IQuestionnaireStorage questionnaireStorage = null)
         {
+            var serviceLocator = new Mock<IServiceLocator>();
+            serviceLocator.Setup(s => s.GetInstance<SingleOptionQuestionOptionViewModel>())
+                .Returns(() => Create.ViewModel.SingleOptionQuestionOptionViewModel());
+
             return new FilteredSingleOptionQuestionViewModel(
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 Mock.Of<IViewModelEventRegistry>(),
@@ -49,7 +55,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
                 principal ?? Mock.Of<IPrincipal>(),
                 questionStateViewModel ?? Mock.Of<QuestionStateViewModel<SingleOptionQuestionAnswered>>(),
                 answering ?? Mock.Of<AnsweringViewModel>(),
-                Mock.Of<QuestionInstructionViewModel>());
+                Mock.Of<QuestionInstructionViewModel>(),
+                Create.Service.InterviewViewModelFactory(serviceLocator: serviceLocator.Object),
+                Create.ViewModel.AttachmentViewModel());
         }
         
         protected static ReadOnlyCollection<CategoricalOption> Options = new List<CategoricalOption>

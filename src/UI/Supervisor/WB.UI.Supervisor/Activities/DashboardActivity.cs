@@ -14,8 +14,10 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Activities.Callbacks;
 using WB.UI.Shared.Enumerator.Activities.Dashboard;
 using WB.UI.Shared.Enumerator.Services;
+using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
 
 namespace WB.UI.Supervisor.Activities
 {
@@ -42,7 +44,7 @@ namespace WB.UI.Supervisor.Activities
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             this.SetSupportActionBar(toolbar);
             SupportActionBar.SetDefaultDisplayHomeAsUpEnabled(false);
-
+            
             this.DrawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
             this.drawerToggle = new ActionBarDrawerToggle(this, DrawerLayout, toolbar, 0, 0);
             DrawerLayout.AddDrawerListener(drawerToggle);
@@ -67,6 +69,11 @@ namespace WB.UI.Supervisor.Activities
             }
             
             this.ViewModel.WorkspaceListUpdated += this.WorkspaceListUpdated;
+        }
+
+        protected override bool BackButtonCustomAction => true;
+        protected override void BackButtonPressed()
+        {
         }
 
         protected override void OnDestroy()
@@ -100,7 +107,6 @@ namespace WB.UI.Supervisor.Activities
             this.ViewModel.Synchronization.SyncBgService = this;
         }
 
-        public override void OnBackPressed() { }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
@@ -113,6 +119,7 @@ namespace WB.UI.Supervisor.Activities
             SetMenuItemIcon(menu, Resource.Id.menu_search, Resource.Drawable.dashboard_search_icon);
             SetMenuItemIcon(menu, Resource.Id.menu_sync_with_hq, Resource.Drawable.synchronize_icon);
             SetMenuItemIcon(menu, Resource.Id.menu_sync_offline, Resource.Drawable.receive_interviews_icon);
+            SetMenuItemIcon(menu, Resource.Id.menu_map_dashboard, Resource.Drawable.map_icon);
 
             menu.LocalizeMenuItem(Resource.Id.menu_search, EnumeratorUIResources.MenuItem_Title_Search);
             menu.LocalizeMenuItem(Resource.Id.menu_sync_with_hq, SupervisorUIResources.Synchronization_Synchronize_HQ);
@@ -121,7 +128,15 @@ namespace WB.UI.Supervisor.Activities
             menu.LocalizeMenuItem(Resource.Id.menu_settings, EnumeratorUIResources.MenuItem_Title_Settings);
             menu.LocalizeMenuItem(Resource.Id.menu_diagnostics, EnumeratorUIResources.MenuItem_Title_Diagnostics);
             menu.LocalizeMenuItem(Resource.Id.menu_maps, EnumeratorUIResources.MenuItem_Title_Maps);
-            return true;
+            menu.LocalizeMenuItem(Resource.Id.menu_map_dashboard, EnumeratorUIResources.MenuItem_Title_Map_Dashboard);
+            
+            if (!ViewModel.DoesSupportMaps)
+            {
+                var mapDashboardMenu = menu.FindItem(Resource.Id.menu_map_dashboard);
+                mapDashboardMenu.SetVisible(false);
+            }
+            
+            return base.OnCreateOptionsMenu(menu);
         }
 
         public override bool OnOptionsItemSelected(IMenuItem item)
@@ -149,6 +164,9 @@ namespace WB.UI.Supervisor.Activities
                     break;
                 case Resource.Id.menu_sync_offline:
                     this.ViewModel.NavigateToOfflineSyncCommand.Execute();
+                    break;
+                case Resource.Id.menu_map_dashboard:
+                    this.ViewModel.NavigateToMapDashboardCommand.Execute();
                     break;
             }
 

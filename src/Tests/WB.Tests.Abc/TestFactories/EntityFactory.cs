@@ -94,6 +94,7 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 using WB.Infrastructure.Native.Questionnaire;
+using WB.Infrastructure.Native.Questionnaire.Impl;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Workspaces;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
@@ -702,7 +703,8 @@ namespace WB.Tests.Abc.TestFactories
             bool useFomatting = false,
             IEnumerable<ValidationCondition> validationConditions = null,
             int? countOfDecimalPlaces = null,
-            IEnumerable<Answer> specialValues = null)
+            IEnumerable<Answer> specialValues = null, 
+            bool preFilled = false)
             => new NumericQuestion
             {
                 PublicKey = id ?? Guid.NewGuid(),
@@ -713,7 +715,8 @@ namespace WB.Tests.Abc.TestFactories
                 ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 ValidationExpression = validationExpression,
                 CountOfDecimalPlaces = countOfDecimalPlaces,
-                Answers = new List<Answer>(specialValues ?? new Answer[] { })
+                Answers = new List<Answer>(specialValues ?? new Answer[] { }),
+                Featured = preFilled,
             };
 
         public Answer Option(string value = null, string text = null, string parentValue = null, Guid? id = null)
@@ -842,6 +845,24 @@ namespace WB.Tests.Abc.TestFactories
             Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>())
         }.WithEntityMap();
         
+        public QuestionnaireDocument QuestionnaireDocumentWithCover(Guid? id = null,
+            Guid? coverId = null,
+            params IComposite[] children)
+        {
+            var document = new QuestionnaireDocument
+            {
+                HideIfDisabled = true,
+                PublicKey = id ?? Guid.NewGuid(),
+                Title = "<Untitled>",
+                Children = children?.ToReadOnlyCollection() ??
+                                                     new ReadOnlyCollection<IComposite>(new List<IComposite>())
+            }.WithEntityMap();
+            var cover = document.Children.First();
+            ((Group)cover).PublicKey = coverId ?? Guid.NewGuid();
+            document.CoverPageSectionId = cover.PublicKey;
+            return document;
+        }
+
         public QuestionnaireDocument QuestionnaireDocumentWithHideIfDisabled(Guid? id = null, bool hideIfDisabled = true, params IComposite[] children) => new QuestionnaireDocument
         {
             HideIfDisabled = hideIfDisabled,
@@ -1121,7 +1142,8 @@ namespace WB.Tests.Abc.TestFactories
             string linkedFilter = null,
             string optionsFilter = null,
             bool showAsList = false,
-            Guid? categoryId = null)
+            Guid? categoryId = null,
+            bool isPrefilled = false)
             => new SingleQuestion
             {
                 PublicKey = id ?? Guid.NewGuid(),
@@ -1141,6 +1163,7 @@ namespace WB.Tests.Abc.TestFactories
                 },
                 ShowAsList = showAsList,
                 CategoriesId = categoryId,
+                Featured = isPrefilled,
             };
 
         public StaticText StaticText(
@@ -1290,7 +1313,7 @@ namespace WB.Tests.Abc.TestFactories
 
             foreach (var workspace in workspaces)
             {
-                var ws = new Workspace(workspace, workspace);
+                var ws = new Workspace(workspace, workspace, DateTime.UtcNow);
                 user.Workspaces.Add(new WorkspacesUsers(ws, user, supervisorId != null ? new HqUser{Id = supervisorId.Value}: null));
             }
             
@@ -1856,7 +1879,7 @@ namespace WB.Tests.Abc.TestFactories
                 _entity = entity;
             }
 
-            public AssignmentDocumentBuilder WithAnswer(Identity identity, string answer, bool identifying = false, string serializedAnswer = null)
+            public AssignmentDocumentBuilder WithAnswer(Identity identity, string answer, bool identifying = false, string serializedAnswer = null, int? sortOrder = null)
             {
                 this._entity.Answers = this._entity.Answers ?? new List<AssignmentDocument.AssignmentAnswer>();
                 this._entity.IdentifyingAnswers = this._entity.IdentifyingAnswers ?? new List<AssignmentDocument.AssignmentAnswer>();
@@ -1867,7 +1890,8 @@ namespace WB.Tests.Abc.TestFactories
                     AnswerAsString = answer,
                     IsIdentifying = identifying,
                     SerializedAnswer = serializedAnswer,
-                    Identity = identity
+                    Identity = identity,
+                    SortOrder = sortOrder
                 };
 
                 this._entity.Answers.Add(assignmentAnswer);
@@ -1920,7 +1944,8 @@ namespace WB.Tests.Abc.TestFactories
                 fileSystemAccessor.Object,
                 Mock.Of<IQuestionnaireStorage>(s => s.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()) == questionnaire),
                 new RosterStructureService(),
-                Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>());
+                Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
+                 Mock.Of<IReusableCategoriesStorage>());
             return exportViewFactory.CreateQuestionnaireExportStructure(new QuestionnaireIdentity(Guid.NewGuid(), 1));
         }
 
@@ -2610,7 +2635,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public Workspace Workspace(string name = null, bool? disabled = false)
         {
-            var ws  = new Workspace(name ?? Guid.NewGuid().FormatGuid(), (name ?? "") + " Display name1");
+            var ws  = new Workspace(name ?? Guid.NewGuid().FormatGuid(), (name ?? "") + " Display name1", DateTime.UtcNow);
             
             if(disabled == true)
                 ws.Disable();

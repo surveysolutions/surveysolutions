@@ -16,6 +16,9 @@
             </div>
         </div>
         <IdleTimeoutService />
+        <portal-target name="body"
+            multiple >
+        </portal-target>
         <span id="loadingPixel"
             style="display:none"
             :data-loading="isLoading"></span>
@@ -101,7 +104,7 @@ export default {
         SearchResults,
         Sidebar,
         DetailsInfo,
-        Interview: () => import(/* webpackChunkName: "interview" */'~/webinterview/components/Interview.vue'),
+        Interview: () => import('~/webinterview/components/Interview.vue'),
     },
 
     beforeDestroy() {

@@ -11,12 +11,13 @@
             :rules="textRules"
             :disabled="loading || convert"
             :loading="loading || convert"
+            :readonly="readonly"
             style="font-family: monospace, monospace"
             @change="change"
             @focus="onFocus"
             @blur="onBlur"
         >
-            <template v-slot:message="{ message }">
+            <template #message="{ message }">
                 <div style="white-space: pre-wrap;">{{ message }}</div>
             </template>
         </v-textarea>
@@ -36,7 +37,8 @@ export default {
     props: {
         categories: { type: Array, required: true },
         showParentValue: { type: Boolean, required: true },
-        loading: { type: Boolean, required: true }
+        loading: { type: Boolean, required: true },
+        readonly: { type: Boolean, required: true }
     },
 
     data() {
@@ -77,7 +79,7 @@ export default {
 
         validity(to, from) {
             if (to != from) {
-                this.$emit('valid', to === true);
+                this.$emit('string-valid', to === true);
             }
         }
     },
@@ -94,7 +96,7 @@ export default {
 
             if (this.lineCount > 15000) {
                 return this.$t('QuestionnaireEditor.OptionsSizeLimit', {
-                    max: 15000
+                    max_rows: 15000
                 });
             }
 
@@ -119,9 +121,9 @@ export default {
             return true;
         },
         change(value) {
-            if (this.valid) {
-                const categories = convertToTable(value, this.showParentValue);
-                this.$emit('change', categories);
+            if (this.validate(this.categoriesAsText)) {
+                const categories = convertToTable(this.categoriesAsText, this.showParentValue);
+                this.$emit('changeCategories', categories);
             }
         },
 

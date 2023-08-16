@@ -19,6 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
             builder.Property(e => e.ParentId).HasColumnName("parentid").IsRequired(false);
             builder.Property(e => e.Text).HasColumnName("text");
             builder.Property(e => e.SortIndex).HasColumnName("sortindex");
+            builder.Property(e => e.AttachmentName).HasColumnName("attachment_name");
 
             builder.HasIndex(x => new {x.QuestionnaireId, x.CategoriesId});
         }

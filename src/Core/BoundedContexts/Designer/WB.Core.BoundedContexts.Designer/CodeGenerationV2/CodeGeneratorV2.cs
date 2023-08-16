@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
 
 namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
@@ -38,11 +40,11 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
             return PrivateFieldsPrefix + variableName + IdSuffix;
         }
 
-        public Dictionary<string, string> Generate(QuestionnaireDocument questionnaire, int targetVersion, bool inSingleFile = false)
+        public Dictionary<string, string> Generate(QuestionnaireCodeGenerationPackage package, int targetVersion, bool inSingleFile = false)
         {
-            var readOnlyQuestionnaireDocument = new ReadOnlyQuestionnaireDocumentWithCache(questionnaire);
-            ExpressionStorageModel model = this.modelsFactory.CreateModel(readOnlyQuestionnaireDocument);
-            model.LookupTables = this.modelsFactory.CreateLookupModels(readOnlyQuestionnaireDocument).ToList();
+            var questionnaire = package.QuestionnaireDocument;
+            ExpressionStorageModel model = this.modelsFactory.CreateModel(questionnaire);
+            model.LookupTables = this.modelsFactory.CreateLookupModels(package).ToList();
             model.TargetVersion = targetVersion;
 
             var transformText = new InterviewExpressionStorageTemplate(model).TransformText();

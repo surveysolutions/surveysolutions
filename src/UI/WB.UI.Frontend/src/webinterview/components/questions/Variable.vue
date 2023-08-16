@@ -41,7 +41,7 @@ export default {
             let value = this.$me.value && this.$me.value != ''
                 ? this.$me.value
                 : this.$t('WebInterviewUI.NotCalculated')
-            return this.$me.title + ' - ' + value
+            return (this.$me.title || this.$me.name) + ' - ' + value
         },
     },
     methods : {

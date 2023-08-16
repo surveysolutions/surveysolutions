@@ -35,13 +35,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             {
                 if (throttle.IsRunning && throttle.Elapsed <= TimeSpan.FromSeconds(30)) return;
                 throttle.Restart();
-                var cts = new CancellationTokenSource(TimeSpan.FromSeconds(1));
+                var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
 
                 try
                 {
                     var task = Task.Run(() => Update(cts.Token));//you can pass parameters to the method as well
 
-                    task.Wait(TimeSpan.FromSeconds(2));
+                    task.Wait(TimeSpan.FromSeconds(9));
                 }
                 catch {  /* om om om */}
             }
@@ -77,7 +77,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                         @"SELECT relname AS table_name, c.reltuples AS row_estimate, 
                             pg_total_relation_size(c.oid) AS total_bytes									
                           FROM pg_class c
-                          where relname in ('events', 'interviews', 'interviewsummaries', 'completedemailrecords');");
+                          left join pg_namespace n on n.oid = c.relnamespace
+                          where c.relname in ('events', 'interviews', 'interviewsummaries', 'completedemailrecords')
+                          and n.nspname = @schemaSearchName;",
+                        new { schemaSearchName = workspace.SchemaName });
 
                     foreach (var data in sizesData)
                     {
@@ -87,7 +90,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
                     var workspaceSize = session.Connection.QuerySingle<long>(
                         @$"SELECT sum(pg_relation_size(quote_ident(schemaname) || '.' || quote_ident(tablename)))::bigint
-                           FROM pg_tables where schemaname = '{workspace.SchemaName}'"
+                           FROM pg_tables where schemaname = @schemaSearchName",
+                        new { schemaSearchName = workspace.SchemaName }
                         );
 
                     WorkspaceSize.Labels(workspace.Name).Set(workspaceSize);

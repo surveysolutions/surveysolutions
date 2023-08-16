@@ -294,6 +294,12 @@
   <data name="DataExport_FileSize" xml:space="preserve">
     <value>File size: {{size}} MB</value>
   </data>
+  <data name="DataExport_ProducedIn" xml:space="preserve">
+    <value>Produced in:</value>
+  </data>
+  <data name="DataExport_InQueue" xml:space="preserve">
+    <value>In queue:</value>
+  </data>
   <data name="DataExport_Destination" xml:space="preserve">
     <value>Destination: {{dest}}</value>
   </data>
@@ -373,7 +379,7 @@
     <value>Data export API</value>
   </data>
   <data name="DataExportApiDesc" xml:space="preserve">
-    <value>You can setup automatic export of collected interview data using our API toolset for more information and inctruction use:</value>
+    <value>You can setup automatic export of collected interview data using our API toolset for more information and instruction use:</value>
   </data>
   <data name="DataExportApiInfoPage" xml:space="preserve">
     <value>Data Export API reference</value>

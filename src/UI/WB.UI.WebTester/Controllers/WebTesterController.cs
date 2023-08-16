@@ -10,6 +10,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.UI.WebTester.Infrastructure;
+using WB.UI.WebTester.Infrastructure.AppDomainSpecific;
 using WB.UI.WebTester.Resources;
 using WB.UI.WebTester.Services;
 using WB.UI.WebTester.Services.Implementation;
@@ -121,14 +122,15 @@ namespace WB.UI.WebTester.Controllers
 
             WebTesterStatefulInterview webTesterInterview = (WebTesterStatefulInterview) interview;
 
-            var questionnaire =
-                webTesterInterview.Questionnaire;
+            var questionnaire = (WebTesterPlainQuestionnaire)webTesterInterview.Questionnaire;
 
             var designerUrl = testerConfig.Value.DesignerAddress;
             var reloadQuestionnaireUrl =
                 $"{designerUrl}/WebTesterReload/Index/{interview.QuestionnaireIdentity.QuestionnaireId}?interviewId={id}";
 
-            var saveScenarioDesignerUrl = $"{designerUrl}/api/WebTester/Scenarios/{interview.QuestionnaireIdentity.QuestionnaireId}";
+            var saveScenarioDesignerUrl = questionnaire.CanSaveScenario
+                ? $"{designerUrl}/api/WebTester/Scenarios/{interview.QuestionnaireIdentity.QuestionnaireId}"
+                : null;
                 
             var interviewPageModel = new InterviewPageModel
             {

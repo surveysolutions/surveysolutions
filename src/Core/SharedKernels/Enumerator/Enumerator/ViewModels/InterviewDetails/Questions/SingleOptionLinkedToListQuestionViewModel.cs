@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -39,11 +40,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             FilteredOptionsViewModel filteredOptionsViewModel,
             QuestionInstructionViewModel instructionViewModel,
             AnsweringViewModel answering, 
-            ThrottlingViewModel throttlingModel):  base(principal: principal, questionStateViewModel: questionStateViewModel, answering: answering,
+            ThrottlingViewModel throttlingModel,
+            IInterviewViewModelFactory viewModelFactory) : 
+            base(principal: principal, questionStateViewModel: questionStateViewModel, answering: answering,
             instructionViewModel: instructionViewModel, interviewRepository: interviewRepository,
-            eventRegistry: eventRegistry, filteredOptionsViewModel)
+            eventRegistry: eventRegistry, filteredOptionsViewModel,viewModelFactory)
         {
             if (principal == null) throw new ArgumentNullException(nameof(principal));
+
+            this.comboboxViewModel = new CategoricalComboboxAutocompleteViewModel(questionStateViewModel, filteredOptionsViewModel, true);
 
             this.userId = principal.CurrentUserIdentity.UserId;
             this.mainThreadDispatcher = mainThreadDispatcher ?? Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
@@ -108,6 +113,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var interview = this.interviewRepository.GetOrThrow(interviewId);
             return interview.GetSingleOptionLinkedToListQuestion(this.Identity).GetAnswer()?.SelectedValue;
+        }
+
+        protected override void ChangeAttachment(int? optionValue)
+        {
+            // not supported
         }
 
         public bool RenderAsCombobox { get; private set; }
@@ -387,12 +397,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private SingleOptionQuestionOptionViewModel CreateOptionViewModel(TextListAnswerRow optionValue)
         {
-            var option = new SingleOptionQuestionOptionViewModel
-            {
-                Title = optionValue.Text,
-                Value = optionValue.Value,
-                QuestionState = this.QuestionState
-            };
+            var option = viewModelFactory.GetNew<SingleOptionQuestionOptionViewModel>();
+            option.Value = optionValue.Value;
+            option.Title = optionValue.Text;
+            option.QuestionState = this.QuestionState;
 
             option.BeforeSelected += this.OptionSelected;
             option.AnswerRemoved += this.RemoveAnswer;

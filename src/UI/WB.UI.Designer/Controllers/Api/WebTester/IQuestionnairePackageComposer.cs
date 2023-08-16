@@ -5,6 +5,6 @@ namespace WB.UI.Designer.Api.WebTester
 {
     public interface IQuestionnairePackageComposer
     {
-        Questionnaire ComposeQuestionnaire(Guid questionnaireId);
+        Questionnaire? ComposeQuestionnaire(Guid questionnaireId);
     }
 }

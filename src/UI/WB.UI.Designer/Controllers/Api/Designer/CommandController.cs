@@ -31,6 +31,7 @@ using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
@@ -60,7 +61,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
         private readonly IDesignerTranslationService translationsService;
-        private readonly ICategoriesService categoriesService;
+        private readonly IReusableCategoriesService reusableCategoriesService;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
         // Get the default form options so that we can use them to set the default limits for
@@ -75,7 +76,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             ILookupTableService lookupTableService,
             IAttachmentService attachmentService,
             IDesignerTranslationService translationsService,
-            ICategoriesService categoriesService,
+            IReusableCategoriesService reusableCategoriesService,
             IFileSystemAccessor fileSystemAccessor)
         {
             this.logger = logger;
@@ -85,7 +86,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             this.lookupTableService = lookupTableService;
             this.attachmentService = attachmentService;
             this.translationsService = translationsService;
-            this.categoriesService = categoriesService;
+            this.reusableCategoriesService = reusableCategoriesService;
             this.fileSystemAccessor = fileSystemAccessor;
         }
 
@@ -199,7 +200,9 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
                 if (string.IsNullOrWhiteSpace(fileStreamContent) && updateLookupTableCommand.OldLookupTableId.HasValue)
                 {
-                    var lookupContent = this.lookupTableService.GetLookupTableContentFile(updateLookupTableCommand.QuestionnaireId, updateLookupTableCommand.OldLookupTableId.Value);
+                    var lookupContent = this.lookupTableService.GetLookupTableContentFile(
+                        new QuestionnaireRevision(updateLookupTableCommand.QuestionnaireId), 
+                        updateLookupTableCommand.OldLookupTableId.Value);
 
                     if (lookupContent != null)
                     {
@@ -372,7 +375,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                         ? CategoriesFileType.Excel
                         : CategoriesFileType.Tsv;
 
-                    this.categoriesService.Store(command.QuestionnaireId, command.CategoriesId, model.File.OpenReadStream(), fileType);
+                    this.reusableCategoriesService.Store(command.QuestionnaireId, command.CategoriesId, model.File.OpenReadStream(), fileType);
                 }
             }
             catch (FormatException e)
@@ -402,7 +405,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
             await dbContext.SaveChangesAsync();
 
-            var storedCategoriesCount = this.categoriesService.GetCategoriesById(command.QuestionnaireId, command.CategoriesId).Count();
+            var storedCategoriesCount = this.reusableCategoriesService.GetCategoriesById(command.QuestionnaireId, command.CategoriesId).Count();
 
             var resultMessage = storedCategoriesCount == 1
                 ? string.Format(QuestionnaireEditor.CategoriesObtained, storedCategoriesCount)

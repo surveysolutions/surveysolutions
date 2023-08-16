@@ -124,7 +124,7 @@
     <value>Zrušit</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Vytvořte skupinu uživatelů nahráním souboru se všemi potřebnými informacemi. Skupina může obsahovat jak supervizory, tak tazatele nebo vytvořit novou.</value>
+    <value>Vytvořte skupinu uživatelů nahráním souboru se všemi potřebnými informacemi. Skupina může obsahovat jak Garanty, tak tazatele nebo můžete vytvořit</value>
   </data>
   <data name="DownloadTemplateLink" xml:space="preserve">
     <value>Stáhněte si šablonu .tab pro nahrávání uživatelem</value>
@@ -136,7 +136,7 @@
     <value>nebo</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Helo</value>
+    <value>Heslo</value>
   </data>
   <data name="ReUploadTabFile" xml:space="preserve">
     <value>Znovu nahrát soubor .tab</value>
@@ -148,9 +148,93 @@
     <value>Nahrát soubor .tab</value>
   </data>
   <data name="UploadInProgress" xml:space="preserve">
-    <value>Upozornění: Probíhá hromadné nahrávání od „{{userName}}“.</value>
+    <value>Upozornění: Probíhá hromadné nahrávání od  "{{userName}}".</value>
   </data>
   <data name="UploadInProgressDescription" xml:space="preserve">
-    <value>Až bude toto dokončeno, bude možné začít novou.</value>
+    <value>Až bude toto dokončeno, přijde řada na Vás.</value>
+  </data>
+  <data name="AllAccountsCreated" xml:space="preserve">
+    <value>Všechny účty ({{total}}) byly úspěšně vytvořeny:</value>
+  </data>
+  <data name="AssignedToDescription" xml:space="preserve">
+    <value>vyžadováno pro tazatele, obsahuje uživatelské jméno Garanta, ​​kterému bude tato osoba přiřazena</value>
+  </data>
+  <data name="BackToImport" xml:space="preserve">
+    <value>Zpět k importu uživatele</value>
+  </data>
+  <data name="Column" xml:space="preserve">
+    <value>sloupec</value>
+  </data>
+  <data name="CompleteDescription" xml:space="preserve">
+    <value>Pro tyto týmy můžete zadávat dotazníky ze sekce 'typy dotazníků', dotazníky lze vytvářet i v dávkovém režimu</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="EstimatedTime" xml:space="preserve">
+    <value>Zbývá přibližně {{estimatedTime}}</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Celé jméno</value>
+  </data>
+  <data name="ImportingUserInfo" xml:space="preserve">
+    <value>Import uživatelských informací z</value>
+  </data>
+  <data name="InterviewersAndSupervisorsCount" xml:space="preserve">
+    <value>{{supervisorsCount}} Garantů a {{interviewersCount}} tazatelů</value>
+  </data>
+  <data name="Line" xml:space="preserve">
+    <value>čára</value>
+  </data>
+  <data name="ManualInterviewerCreateLink" xml:space="preserve">
+    <value>tazatel</value>
+  </data>
+  <data name="NoCreatedUsers" xml:space="preserve">
+    <value>Nebyly vytvořeny žádné uživatelské účty</value>
+  </data>
+  <data name="OptionalInformation" xml:space="preserve">
+    <value>Nepovinné osobní údaje</value>
+  </data>
+  <data name="PasswordDescription" xml:space="preserve">
+    <value>heslo musí obsahovat alespoň jedno číslo, jedno velké písmeno a jedno malé písmeno</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Telefonní číslo</value>
+  </data>
+  <data name="Profile" xml:space="preserve">
+    <value>profilovat manuálně</value>
+  </data>
+  <data name="Questionnaires" xml:space="preserve">
+    <value>Typy dotazníků</value>
+  </data>
+  <data name="RequiredData" xml:space="preserve">
+    <value>Data potřebná k vytvoření tazatelů a Garantů</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="SelectWorkspace" xml:space="preserve">
+    <value>Vybrat Úlohu</value>
+  </data>
+  <data name="SelectWorkspaceDescription" xml:space="preserve">
+    <value>Pokud není v dávkovém souboru přiřazena žádná úloha, použijte tuto úlohu jako výchozí</value>
+  </data>
+  <data name="TimeDetermination" xml:space="preserve">
+    <value>určení času</value>
+  </data>
+  <data name="Uploading" xml:space="preserve">
+    <value>Import {{importedUsersCount}} z {{totalUsersToImportCount}}</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>Přihlásit se</value>
+  </data>
+  <data name="UserNameDescription" xml:space="preserve">
+    <value>uživatelské jméno, mělo by mít 3 až 15 znaků a obsahovat pouze písmena, číslice a podtržítko</value>
+  </data>
+  <data name="VerificationFailed" xml:space="preserve">
+    <value>Ověření se nezdařilo</value>
+  </data>
+  <data name="Workspace" xml:space="preserve">
+    <value>Úloha</value>
   </data>
 </root>

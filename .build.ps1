@@ -20,7 +20,9 @@ param(
     [switch] $noDockerPush,
     [switch] $signapk ,
     [string] $apkFolder = "artifacts", # where should docker build look for apk artifacts
-    [string] $runtime = "win-x64"
+    [string] $runtime = "win-x64",
+    [String] $nodeVersion = '16',
+	[string] $ArcGisApiKey = $NULL
 )
 
 #region Bootstrap
@@ -112,7 +114,7 @@ function Set-AndroidXmlResourceValue {
         [string] $keyValue
     )    
 
-    $filePath = "$([System.IO.Path]::GetDirectoryName((Resolve-Path $project)))/Resources/values/settings.xml"
+    $filePath = "$([System.IO.Path]::GetDirectoryName((Resolve-Path $project)))/Resources/Values/settings.xml"
     "Updating app resource key in $filePath" | Out-Host
 
     $doc = [System.Xml.Linq.XDocument]::Load($filePath);
@@ -133,6 +135,7 @@ function Build-Docker($dockerfile, $tags, $arguments = @()) {
         '--build-arg', "VERSION=$version", 
         "--build-arg", "INFO_VERSION=$infoVersion"
         "--build-arg", "APK_FILES=$apkFolder"
+        "--build-arg", " NODE=$nodeVersion"
         "--file", $dockerfile
         "--iidfile", "$output\headquarters.id"
         "--label", "org.opencontainers.image.revision=$RevisionId"
@@ -180,11 +183,12 @@ function Get-DockerTags($name, $registry = $dockerRegistry) {
 }
 
 function Invoke-Android($CapiProject, $apk, $withMaps, $appCenterKey) {
-    Set-Alias MSBuild (Resolve-MSBuild)
+    # Set-Alias MSBuild (Resolve-MSBuild)
 
     Set-AndroidXmlResourceValue $CapiProject "appcenter_key" $AppCenterKey
     Set-AndroidXmlResourceValue $CapiProject "google_maps_api_key" $GoogleMapKey
     Set-AndroidXmlResourceValue $CapiProject "arcgisruntime_key" $ArcGisKey
+    Set-AndroidXmlResourceValue $CapiProject "arcgisruntime_api_key" $ArcGisApiKey
 
     $keyStore = [System.IO.Path]::GetTempFileName()
     if ($signapk) {
@@ -215,24 +219,40 @@ function Invoke-Android($CapiProject, $apk, $withMaps, $appCenterKey) {
     )
     
     $params -join ', ' | Out-Host
-    exec { msbuild $params }
+    exec { dotnet publish $params }
 }
 
 #endregion
 task frontend {
+	"Starting frontend task" | Out-Host
+	Write-Build 10 "Starting frontend task"
+	
     $nodever = (node --version).replace("v", "").split(".")[0]
-    if ($nodever -ge 17) {
-        $env:NODE_OPTIONS="--openssl-legacy-provider"
-    }
+    
+	$env:NODE_OPTIONS="--max-old-space-size=6144 --openssl-legacy-provider"	
+	
+	try {
+        Write-Build 10 "Calculating memory"
+		$memoryUsed = node -e 'console.log(v8.getHeapStatistics().heap_size_limit/(1024*1024))'		
+		Write-Build 10 "Memory: $memoryUsed"
+    } 
+	catch {}
+    
+	exec {
+		node -e 'console.log(v8.getHeapStatistics().heap_size_limit/(1024*1024))'
+	}	
+	
     exec { 
         Set-Location ./src/UI/WB.UI.Frontend
         npm ci
         npm run build
     }
+	"Finishing frontend task" | Out-Host
 }
 
-task PackageHq {
-    exec {
+task PackageHq frontend, {
+	"Starting HQ build task" | Out-Host
+  exec {
         dotnet publish @(
             "./src/UI/WB.UI.Headquarters.Core",
             "-c", "Release",
@@ -246,6 +266,7 @@ task PackageHq {
         )
     }
     Compress $tmp/hq $output/WB.UI.Headquarters.zip
+	"Finishing HQ build task" | Out-Host
 }
 
 task PackageHqOffline frontend, {
@@ -257,10 +278,10 @@ task PackageHqOffline frontend, {
         dotnet publish @(
             "./src/Services/Export/WB.Services.Export.Host",
             "-c", "Release",
-            "--no-self-contained",
             "-p:Version=$VERSION",
             "-p:InformationalVersion=$infoVersion",
-            "-o", "./src/UI/WB.UI.Headquarters.Core/Export.Service"
+            "-o", "./src/UI/WB.UI.Headquarters.Core/Export.Service",
+            "--no-self-contained"
             if ($runtime) {
                 "-r", $runtime
             }
@@ -270,14 +291,13 @@ task PackageHqOffline frontend, {
     exec {
         dotnet publish @(
             "./src/UI/WB.UI.Headquarters.Core",
-            "/p:SelfContained=False",
-            "/p:AspNetCoreHostingModel=outofprocess",
-            "/p:IncludeAllContentForSelfExtract=true",
+			"/p:AspNetCoreHostingModel=outofprocess",
             "-p:Version=$VERSION",
             "-p:InformationalVersion=$infoVersion",
             "-c", "Release",
             "-o", "$tmp/hq-offline",
-            "--no-self-contained"
+            "--no-self-contained",
+            "/p:IncludeAllContentForSelfExtract=true"
             if ($runtime) {
                 "/p:PublishSingleFile=true",
                 "-r", $runtime
@@ -286,7 +306,15 @@ task PackageHqOffline frontend, {
     }
 
     New-Item -Type Directory $tmp/hq-prepare -ErrorAction SilentlyContinue | Out-Null
-    copy-item $tmp/hq-offline/WB.UI.Headquarters.exe $tmp/hq-prepare
+    if (Test-Path $tmp/hq-offline/WB.UI.Headquarters.exe) { # Windows target
+        copy-item $tmp/hq-offline/WB.UI.Headquarters.exe $tmp/hq-prepare
+    }
+    elseif (Test-Path $tmp/hq-offline/WB.UI.Headquarters) {
+        copy-item $tmp/hq-offline/WB.UI.Headquarters $tmp/hq-prepare
+    }
+    else {
+        Write-Error "No executable was found"
+    }
     copy-item $tmp/hq-offline/web.config $tmp/hq-prepare/Web.config
     copy-item $tmp/hq-offline/appsettings.ini $tmp/hq-prepare
 

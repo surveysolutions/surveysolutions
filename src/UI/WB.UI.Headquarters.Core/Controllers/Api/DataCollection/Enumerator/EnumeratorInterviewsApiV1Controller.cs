@@ -24,7 +24,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Enumerator
         [Route("{interviewId}/getSyncInfoPackage")]
         public SyncInfoPackageResponse GetSyncInfoPackage(Guid interviewId, InterviewSyncInfoPackage package)
         {
-            var hqEvents = eventStore.Read(interviewId).ToList();
+            var hqEvents = eventStore.Read(interviewId, 0).ToList();
             if (hqEvents.Count == 0)
                 return new SyncInfoPackageResponse() { HasInterview = false, NeedSendFullStream = true };
 

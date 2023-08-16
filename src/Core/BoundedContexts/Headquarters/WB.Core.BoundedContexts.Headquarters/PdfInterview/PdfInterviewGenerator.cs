@@ -161,7 +161,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
                 if (questionnaire.IsQuestion(node.Id))
                 {
                     var question = interview.GetQuestion(node);
-                    new QuestionPdfWriter(question, interview, questionnaire, imageFileStorage, googleMapsConfig)
+                    new QuestionPdfWriter(question, interview, questionnaire, imageFileStorage, googleMapsConfig, attachmentContentService)
                         .Write(section.AddParagraph());
                     if (question.FailedErrors != null && question.FailedErrors.Any())
                         new ErrorsPdfWriter(question).Write(section.AddParagraph());
@@ -209,27 +209,30 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
             {
                 if (questionnaire.IsQuestion(node.Id))
                 {
-                    var row = table?.AddRow() ?? throw new ArgumentException("Table should be created before");
-                    var question = interview.GetQuestion(node);
-                    if (question.AnswerTime.HasValue)
+                    if (questionnaire.GetQuestionScope(node.Id) != QuestionScope.Hidden)
                     {
-                        if (question.AnswerTime != null && prevDateTime?.Date != question.AnswerTime.Value.Date)
-                            WriteQuestionDate(row[0].AddParagraph(), question);
-                        WriteQuestionTime(row[1].AddParagraph(), question);
-                        prevDateTime = question.AnswerTime;
+                        var row = table?.AddRow() ?? throw new ArgumentException("Table should be created before");
+                        var question = interview.GetQuestion(node);
+                        if (question.AnswerTime.HasValue)
+                        {
+                            if (question.AnswerTime != null && prevDateTime?.Date != question.AnswerTime.Value.Date)
+                                WriteQuestionDate(row[0].AddParagraph(), question);
+                            WriteQuestionTime(row[1].AddParagraph(), question);
+                            prevDateTime = question.AnswerTime;
+                        }
+
+                        new QuestionPdfWriter(question, interview, questionnaire, imageFileStorage, googleMapsConfig, attachmentContentService)
+                            .Write(row[2].AddParagraph());
+
+                        if (question.FailedErrors != null && question.FailedErrors.Any())
+                            new ErrorsPdfWriter(question).Write(row[2].AddParagraph());
+                        if (question.FailedWarnings != null && question.FailedWarnings.Any())
+                            new WarningsPdfWriter(question).Write(row[2].AddParagraph());
+                        if (question.AnswerComments != null && question.AnswerComments.Any())
+                            new CommentsPdfWriter(question).Write(row[2].AddParagraph());
+                        row[2].AddParagraph();
                     }
 
-                    new QuestionPdfWriter(question, interview, questionnaire, imageFileStorage, googleMapsConfig)
-                        .Write(row[2].AddParagraph());
-
-                    if (question.FailedErrors != null && question.FailedErrors.Any())
-                        new ErrorsPdfWriter(question).Write(row[2].AddParagraph());
-                    if (question.FailedWarnings != null && question.FailedWarnings.Any())
-                        new WarningsPdfWriter(question).Write(row[2].AddParagraph());
-                    if (question.AnswerComments != null && question.AnswerComments.Any())
-                        new CommentsPdfWriter(question).Write(row[2].AddParagraph());
-                    row[2].AddParagraph();
-                    
                     continue;
                 }
 

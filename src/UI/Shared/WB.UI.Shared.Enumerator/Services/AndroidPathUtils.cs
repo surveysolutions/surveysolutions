@@ -7,6 +7,13 @@ namespace WB.UI.Shared.Enumerator.Services
 {
     public class AndroidPathUtils : IPathUtils
     {
+        private readonly IPermissionsService permissionsService;
+
+        public AndroidPathUtils(IPermissionsService permissionsService)
+        {
+            this.permissionsService = permissionsService;
+        }
+
         public static string GetAndCreatePathToSubfolder(string workspace, string subFolderName)
         {
             var pathToSubfolderInLocalDirectory = Path.Combine(GetPathToInternalDirectory(), workspace, subFolderName);
@@ -45,8 +52,13 @@ namespace WB.UI.Shared.Enumerator.Services
             return Path.Combine(GetPathToExternalDirectory(), "Supervisor", subFolderName);
         }
 
-        public string GetRootDirectory() => Build.VERSION.SdkInt < BuildVersionCodes.N
-            ? GetPathToExternalDirectory()
-            : GetPathToInternalDirectory();
+        public async Task<string> GetRootDirectoryAsync()
+        {
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.N)
+                return GetPathToInternalDirectory();
+
+            await permissionsService.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
+            return GetPathToExternalDirectory();
+        }
     }
 }

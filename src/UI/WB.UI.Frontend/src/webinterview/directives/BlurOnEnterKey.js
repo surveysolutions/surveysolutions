@@ -1,4 +1,3 @@
-import * as $ from 'jquery'
 import Vue from 'vue'
 
 Vue.directive('blurOnEnterKey', (el) => {

@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
             // arrange
             var mockOfExternalAction = new Mock<Action>();
             var viewModel = Create.ViewModel.CategoricalMultiOptionViewModel();
-            viewModel.Init(Create.ViewModel.QuestionState<MultipleOptionsQuestionAnswered>(), "", 1, false, mockOfExternalAction.Object);
+            viewModel.Init(Create.ViewModel.QuestionState<MultipleOptionsQuestionAnswered>(), "", 1, false, mockOfExternalAction.Object, null);
             // act
             viewModel.Checked = true;
             viewModel.CheckAnswerCommand.Execute();
@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
             // arrange
             var mockOfExternalAction = new Mock<Action>();
             var viewModel = Create.ViewModel.CategoricalMultiOptionViewModel();
-            viewModel.Init(Create.ViewModel.QuestionState<MultipleOptionsQuestionAnswered>(), "", 1, false, mockOfExternalAction.Object);
+            viewModel.Init(Create.ViewModel.QuestionState<MultipleOptionsQuestionAnswered>(), "", 1, false, mockOfExternalAction.Object, null);
             // act
             viewModel.Checked = true;
             viewModel.CheckAnswerCommand.Execute();
@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
             // arrange
             var mockOfExternalAction = new Mock<Action>();
             var viewModel = Create.ViewModel.CategoricalMultiOptionViewModel();
-            viewModel.Init(Create.ViewModel.QuestionState<MultipleOptionsQuestionAnswered>(), "", 1, false, mockOfExternalAction.Object);
+            viewModel.Init(Create.ViewModel.QuestionState<MultipleOptionsQuestionAnswered>(), "", 1, false, mockOfExternalAction.Object, null);
             viewModel.MakeRosterSize();
             viewModel.Checked = true;
             // act
@@ -66,7 +66,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
             var mockOfExternalAction = new Mock<Action>();
             var userInteraction = Mock.Of<IUserInteractionService>(x => x.HasPendingUserInteractions == true);
             var viewModel = Create.ViewModel.CategoricalMultiOptionViewModel(userInteraction);
-            viewModel.Init(Create.ViewModel.QuestionState<MultipleOptionsQuestionAnswered>(), "", 1, false, mockOfExternalAction.Object);
+            viewModel.Init(Create.ViewModel.QuestionState<MultipleOptionsQuestionAnswered>(), "", 1, false, mockOfExternalAction.Object, null);
             viewModel.Checked = true;
             viewModel.MakeRosterSize();
             // act
@@ -86,7 +86,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
                 x.ConfirmAsync(Moq.It.IsAny<string>(), "", null, null, true) == Task.FromResult(true));
 
             var viewModel = Create.ViewModel.CategoricalMultiOptionViewModel(userInteraction);
-            viewModel.Init(Create.ViewModel.QuestionState<MultipleOptionsQuestionAnswered>(), "", 1, false, mockOfExternalAction.Object);
+            viewModel.Init(Create.ViewModel.QuestionState<MultipleOptionsQuestionAnswered>(), "", 1, false, mockOfExternalAction.Object, null);
             viewModel.Checked = true;
             viewModel.MakeRosterSize();
             
@@ -107,7 +107,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
                 x.ConfirmAsync(Moq.It.IsAny<string>(), "", null, null, true) == Task.FromResult(false));
 
             var viewModel = Create.ViewModel.CategoricalMultiOptionViewModel(userInteraction);
-            viewModel.Init(Create.ViewModel.QuestionState<MultipleOptionsQuestionAnswered>(), "", 1, false, mockOfExternalAction.Object);
+            viewModel.Init(Create.ViewModel.QuestionState<MultipleOptionsQuestionAnswered>(), "", 1, false, mockOfExternalAction.Object, null);
             viewModel.Checked = true;
             viewModel.MakeRosterSize();
             
@@ -136,7 +136,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
                 x.ConfirmAsync(Moq.It.IsAny<string>(), "", null, null, true) == delayedTask);
 
             var viewModel = Create.ViewModel.CategoricalMultiOptionViewModel(userInteraction);
-            viewModel.Init(Create.ViewModel.QuestionState<MultipleOptionsQuestionAnswered>(), "", 1, false, mockOfExternalAction.Object);
+            viewModel.Init(Create.ViewModel.QuestionState<MultipleOptionsQuestionAnswered>(), "", 1, false, mockOfExternalAction.Object, null);
             viewModel.Checked = true;
             viewModel.MakeRosterSize();
             viewModel.Checked = false;

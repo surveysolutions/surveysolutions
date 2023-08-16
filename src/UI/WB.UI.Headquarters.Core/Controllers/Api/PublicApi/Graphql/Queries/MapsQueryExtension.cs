@@ -12,7 +12,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Queries
         {
             descriptor.Name("HeadquartersQuery");
             
-            descriptor.Field<MapsResolver>(x => x.GetMaps(default!))
+            descriptor.Field<MapsResolver>(x => x.GetMaps(default!, default!))
                 .Authorize()
                 .HasWorkspace()
                 .UseSimplePaging<Map, MapBrowseItem>()

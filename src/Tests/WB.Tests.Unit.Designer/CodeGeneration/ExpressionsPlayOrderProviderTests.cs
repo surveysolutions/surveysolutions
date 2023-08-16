@@ -23,9 +23,12 @@ namespace WB.Tests.Unit.Designer.CodeGeneration
             var intQuestionId = Guid.NewGuid();
             var chapterId = Guid.NewGuid();
 
-            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(chapterId,
-                Create.NumericIntegerQuestion(intQuestionId, variable: "i", enablementCondition: "v > 5"),
-                Create.Variable(variableId, variableName: "v", expression: "i"));
+            var questionnaireDocument = Create.QuestionnaireDocumentWithoutChildren(
+                children: Create.Section(sectionId: chapterId, children: new IComposite[]
+                {
+                    Create.NumericIntegerQuestion(intQuestionId, variable: "i", enablementCondition: "v > 5"),
+                    Create.Variable(variableId, variableName: "v", expression: "i"),
+                }));
 
             var expressionProcessor = Create.RoslynExpressionProcessor();
             var expressionsPlayOrderProvider = Create.ExpressionsPlayOrderProvider(expressionProcessor);
@@ -44,10 +47,13 @@ namespace WB.Tests.Unit.Designer.CodeGeneration
             var textQuestionId = Guid.NewGuid();
             var chapterId = Guid.NewGuid();
 
-            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(chapterId,
-                Create.NumericIntegerQuestion(intQuestionId, variable: "i", enablementCondition: "v > 5"),
-                Create.Variable(variableId, variableName: "v", expression: "i"),
-                Create.TextQuestion(textQuestionId, enablementCondition: "v < 10"));
+            var questionnaireDocument = Create.QuestionnaireDocumentWithoutChildren(
+                children: Create.Section(sectionId: chapterId, children: new IComposite[]
+                {
+                    Create.NumericIntegerQuestion(intQuestionId, variable: "i", enablementCondition: "v > 5"),
+                    Create.Variable(variableId, variableName: "v", expression: "i"),
+                    Create.TextQuestion(textQuestionId, enablementCondition: "v < 10"),
+                }));
 
             var expressionProcessor = Create.RoslynExpressionProcessor();
             var expressionsPlayOrderProvider = Create.ExpressionsPlayOrderProvider(expressionProcessor);
@@ -66,10 +72,13 @@ namespace WB.Tests.Unit.Designer.CodeGeneration
             var textQuestionId = Guid.NewGuid();
             var chapterId = Guid.NewGuid();
 
-            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(chapterId,
-                Create.NumericIntegerQuestion(intQuestionId, variable: "i"),
-                Create.NumericRealQuestion(realNumericQuestion, variable: "r"),
-                Create.TextQuestion(textQuestionId));
+            var questionnaireDocument = Create.QuestionnaireDocumentWithoutChildren(
+                children: Create.Section(sectionId: chapterId, children: new IComposite[]
+                {
+                    Create.NumericIntegerQuestion(intQuestionId, variable: "i"),
+                    Create.NumericRealQuestion(realNumericQuestion, variable: "r"),
+                    Create.TextQuestion(textQuestionId),
+                }));
 
             var expressionProcessor = Create.RoslynExpressionProcessor();
             var expressionsPlayOrderProvider = Create.ExpressionsPlayOrderProvider(expressionProcessor);

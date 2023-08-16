@@ -44,14 +44,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionStateViewModel,
             QuestionInstructionViewModel instructionViewModel,
             AnsweringViewModel answering, 
-            ThrottlingViewModel throttlingModel)
+            ThrottlingViewModel throttlingModel,
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher)
         {
             if (principal == null) throw new ArgumentNullException(nameof(principal));
             this.userId = principal.CurrentUserIdentity.UserId;
             this.interviewRepository = interviewRepository ?? throw new ArgumentNullException(nameof(interviewRepository));
             this.eventRegistry = eventRegistry ?? throw new ArgumentNullException(nameof(eventRegistry));
-            this.mainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
-
+            
+            this.mainThreadDispatcher = mainThreadDispatcher;
             this.questionState = questionStateViewModel;
             this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
@@ -122,7 +123,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.eventRegistry.Subscribe(this, interviewId);
         }
 
-        private void CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             if (this.optionsTopBorderViewModel != null)
             {
@@ -160,7 +161,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 yield return this.CreateOptionViewModel(linkedOption, linkedQuestion.GetAnswer()?.SelectedValue, interview);
         }
 
-        private async void OptionSelected(object sender, EventArgs eventArgs) => await this.OptionSelectedAsync(sender);
+        private async void OptionSelected(object? sender, EventArgs eventArgs) => await this.OptionSelectedAsync(sender);
 
         private async Task SaveAnswer()
         {
@@ -210,8 +211,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private decimal[]? selectedOptionToSave = null;
 
-        internal async Task OptionSelectedAsync(object sender)
+        internal async Task OptionSelectedAsync(object? sender)
         {
+            if (sender == null) return;
             var selectedOption = (SingleOptionLinkedQuestionOptionViewModel) sender;
             this.selectedOptionToSave = selectedOption.RosterVector;
 
@@ -227,7 +229,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 : null;
         }
 
-        private async void RemoveAnswer(object sender, EventArgs e)
+        private async void RemoveAnswer(object? sender, EventArgs e)
         {
             try
             {

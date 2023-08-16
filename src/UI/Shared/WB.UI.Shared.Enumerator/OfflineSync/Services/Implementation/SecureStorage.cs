@@ -35,7 +35,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
                     }
                 }
             }
-            catch (FileNotFoundException)
+            catch (Java.IO.FileNotFoundException)
             {
                 this.LoadEmptyKeyStore(null);
             }

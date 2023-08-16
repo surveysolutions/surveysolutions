@@ -22,17 +22,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
 
         public override async Task ExecuteAsync()
         {
-            await base.ExecuteAsync();
-
             var tabletSettings = await this.synchronizationService.GetTabletSettings(Context.CancellationToken);
             interviewerSettings.SetPartialSynchronizationEnabled(tabletSettings.PartialSynchronizationEnabled);
             interviewerSettings.SetWebInterviewUrlTemplate(tabletSettings.WebInterviewUrlTemplate);
-        }
-
-
-        protected override void UpdateNotificationsSetting(bool notificationsEnabled)
-        {
-            interviewerSettings.SetNotifications(notificationsEnabled);
+            interviewerSettings.SetGeographyQuestionAccuracyInMeters(tabletSettings.GeographyQuestionAccuracyInMeters);
+            interviewerSettings.SetGeographyQuestionPeriodInSeconds(tabletSettings.GeographyQuestionPeriodInSeconds);
+            interviewerSettings.SetNotifications(tabletSettings.NotificationsEnabled);
         }
     }
 }

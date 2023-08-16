@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -10,7 +11,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     public interface IAttachmentsCleanupService
     {
-        void RemovedOrphanedAttachments();
+        Task RemovedOrphanedAttachmentsAsync();
     }
 
     public class AttachmentsCleanupService : IAttachmentsCleanupService
@@ -35,7 +36,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.attachmentContentStorage = attachmentContentStorage;
         }
 
-        public virtual void RemovedOrphanedAttachments()
+        public virtual async Task RemovedOrphanedAttachmentsAsync()
         {
             var contentMetadatas = this.attachmentContentMetadataRepository.LoadAll();
 
@@ -50,7 +51,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             {
                 if(!contentIdLookup.Contains(attachmentContentMetadata.Id))
                 {
-                    this.attachmentContentStorage.Remove(attachmentContentMetadata.Id);
+                    await this.attachmentContentStorage.RemoveAsync(attachmentContentMetadata.Id);
                     this.logger.Info($"Removed attachment with Id {attachmentContentMetadata.Id}");
                 }
             }

@@ -156,7 +156,7 @@
   <data name="SearchResult_Count" xml:space="preserve">
     <value>{{ count }} item encontrados:</value>
   </data>
-  <data name="SearchResult_Count_plural" xml:space="preserve">
+  <data name="SearchResult_Count_other" xml:space="preserve">
     <value>{{ count }} items encontrados:</value>
   </data>
   <data name="ShowQuestionnaireDetails" xml:space="preserve">

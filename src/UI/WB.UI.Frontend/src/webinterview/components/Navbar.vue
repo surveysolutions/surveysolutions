@@ -92,6 +92,22 @@
                             :title="$t('WebInterviewUI.EmailLink_EmailResumeLink')">{{$t('WebInterviewUI.EmailLink_EmailResumeLink')}}</a>
                     </li>
                     <li v-if="this.$config.inWebTesterMode">
+                        <button v-if="includeVariables"
+                            type="button"
+                            class="btn btn-default btn-link btn-icon"
+                            @click="hideVariables"
+                            :title="$t('WebInterviewUI.HideVariables')">
+                            <span class="glyphicon glyphicon-check"></span>
+                        </button>
+                        <button v-if="!includeVariables"
+                            type="button"
+                            class="btn btn-default btn-link btn-icon"
+                            @click="showVariables"
+                            :title="$t('WebInterviewUI.ShowVariables')">
+                            <span class="glyphicon glyphicon-unchecked"></span>
+                        </button>
+                    </li>
+                    <li v-if="this.$config.inWebTesterMode">
                         <button
                             type="button"
                             class="btn btn-default btn-link btn-icon"
@@ -230,6 +246,7 @@
 <script lang="js">
 import modal from '@/shared/modal'
 import axios from 'axios'
+import * as toastr from 'toastr'
 import Vue from 'vue'
 import { filter } from 'lodash'
 
@@ -323,6 +340,9 @@ export default {
         getScenarioUrl() {
             return this.$config.getScenarioUrl
         },
+        includeVariables() {
+            return this.$store.state.webinterview.showVariables || false;
+        },
     },
     methods: {
         hideScenarioSave() {
@@ -366,8 +386,11 @@ export default {
                 email: email,
             }).then(function(response){
                 self.showEmailPersonalLink = false
-            }) .catch(function (error) {
-                Vue.config.errorHandler(error, self)
+                if(response && response.data === 'fail')
+                    toastr.error('Email was not sent')
+            }).catch(function (error) {
+                if(error && error.response)
+                    Vue.config.errorHandler(error, self)
             })
         },
         validateEmail(email) {
@@ -385,6 +408,14 @@ export default {
         },
         reloadQuestionnaire() {
             window.location = this.$config.reloadQuestionnaireUrl
+        },
+        showVariables() {
+            this.$store.dispatch('setShowVariables', { value: true })
+            this.$store.dispatch('fetchSectionEntities')
+        },
+        hideVariables() {
+            this.$store.dispatch('setShowVariables', { value: false })
+            this.$store.dispatch('fetchSectionEntities')
         },
         async showSaveScenario() {
             this.scenarioSaving = true

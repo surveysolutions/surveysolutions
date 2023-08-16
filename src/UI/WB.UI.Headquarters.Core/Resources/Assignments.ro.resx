@@ -135,7 +135,7 @@
   <data name="AssignmentsSelected" xml:space="preserve">
     <value>{{count}} Interviu alocat selectat</value>
   </data>
-  <data name="AssignmentsSelected_plural" xml:space="preserve">
+  <data name="AssignmentsSelected_other" xml:space="preserve">
     <value>{{count}} Interviuri alocate selectate</value>
   </data>
   <data name="ChangeSizeModalTitle" xml:space="preserve">
@@ -165,7 +165,7 @@
   <data name="NumberOfAssignmentsAffected" xml:space="preserve">
     <value>{{count}} sarcină va fi schimbată</value>
   </data>
-  <data name="NumberOfAssignmentsAffected_plural" xml:space="preserve">
+  <data name="NumberOfAssignmentsAffected_other" xml:space="preserve">
     <value>{{count}} sarcini vor fi schimbate</value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
@@ -483,7 +483,7 @@
   <data name="WebModeReassignToNonInterviewer" xml:space="preserve">
     <value>Reatribuiți sarcina web unui utilizator care nu este ANCHETATOR. Dacă ați trimis deja linkul pentru această sarcină, respondenții nu vor putea răspunde la sondajul dvs. până când sarcina nu va fi returnată unui utilizator în rolul ANCHETATOR.</value>
   </data>
-  <data name="WebModeReassignToNonInterviewer_plural" xml:space="preserve">
+  <data name="WebModeReassignToNonInterviewer_other" xml:space="preserve">
     <value>Reatribuiți sarcini web unui utilizator care nu este ANCHETATOR. Dacă ați trimis deja linkurile pentru aceste sarcini, respondenții nu vor putea răspunde la sondajul dvs. până când sarcinile nu vor fi returnate unui utilizator în rolul ANCHETATOR.</value>
   </data>
   <data name="Action_Reassigned_To_Comment" xml:space="preserve">

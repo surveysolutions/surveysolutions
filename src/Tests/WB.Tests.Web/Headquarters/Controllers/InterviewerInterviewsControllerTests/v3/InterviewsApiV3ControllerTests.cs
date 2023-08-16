@@ -8,6 +8,7 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -60,6 +61,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerInterviewsControllerT
             IMetaInfoBuilder metaBuilder = null,
             IJsonAllTypesSerializer synchronizationSerializer = null,
             IHeadquartersEventStore eventStore = null,
+            IUserToDeviceService userToDeviceService = null,
             IWebHostEnvironment webHostEnvironment = null,
             string userAgent = null)
         {
@@ -83,6 +85,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerInterviewsControllerT
                 synchronizationSerializer: synchronizationSerializer ?? Mock.Of<IJsonAllTypesSerializer>(),
                 eventStore: eventStore ?? Mock.Of<IHeadquartersEventStore>(),
                 audioAuditFileStorage: audioAuditFileStorage ?? Mock.Of<IAudioAuditFileStorage>(),
+                userToDeviceService ?? Mock.Of<IUserToDeviceService>(),
                 webHostEnvironment: webHostEnvironment ?? Mock.Of<IWebHostEnvironment>());
             controller.ControllerContext = controllerContext;
             return controller;

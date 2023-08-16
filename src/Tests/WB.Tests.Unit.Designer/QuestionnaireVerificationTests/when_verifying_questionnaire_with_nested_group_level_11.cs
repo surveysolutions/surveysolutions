@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         static readonly Guid rosterGroupId = Guid.Parse("10000000000000000000000000000000");
 
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            questionnaire = CreateQuestionnaireDocument(
+            questionnaire = CreateQuestionnaireDocumentWithoutChildren(
                 new Group
                 {
                     PublicKey = Guid.NewGuid(),

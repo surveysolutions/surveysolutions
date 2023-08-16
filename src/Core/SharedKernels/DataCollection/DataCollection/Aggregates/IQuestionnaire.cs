@@ -95,6 +95,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         CategoricalOption GetOptionForQuestionByOptionValueFromStructure(Guid questionId, decimal optionValue, int? parentQuestionValue);
 
         string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue, int? answerParentValue);
+        
+        string GetAnswerOptionAttachment(Guid questionId, decimal answerOptionValue, int? answerParentValue);
 
         int? GetMaxSelectedAnswerOptions(Guid questionId);
 
@@ -252,7 +254,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IReadOnlyList<Guid> GetSubSectionsWithEnablementCondition(Guid groupId);
 
-        bool IsPrefilled(Guid entityId);
+        bool IsIdentifying(Guid entityId);
         bool ShouldBeHiddenIfDisabled(Guid entityId);
 
         string GetValidationMessage(Guid questionId, int conditionIndex);
@@ -321,6 +323,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         string ApplyMarkDownTransformation(string text);
 
         GeometryType? GetQuestionGeometryType(Guid questionId);
+        GeometryInputMode? GetQuestionGeometryMode(Guid questionId);
         int GetEntityIdMapValue(Guid entityId);
         bool IsCoverPage(Guid identityId);
         bool IsCoverPageSupported { get; }
@@ -329,5 +332,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Guid> GetStaticTextsThatUseVariableAsAttachment(Guid variableId);
         Guid GetEntityReferencedByLinkedQuestion(Guid linkedQuestionId);
         bool IsInsideRoster(Guid entityId);
+        bool IsNeighboringSupport(Guid entityId);
     }
 }

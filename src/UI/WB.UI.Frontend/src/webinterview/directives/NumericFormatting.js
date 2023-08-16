@@ -9,6 +9,7 @@ const defaults = {
     unformatOnHover: false,
     unformatOnSubmit: false,
     watchExternalChanges: true,
+    modifyValueOnWheel: false,
 }
 
 Vue.directive('numericFormatting', {

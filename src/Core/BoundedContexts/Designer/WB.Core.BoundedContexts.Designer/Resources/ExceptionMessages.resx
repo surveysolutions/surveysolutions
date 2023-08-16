@@ -159,6 +159,9 @@
   <data name="Attachments_uploaded_file_is_not_image" xml:space="preserve">
     <value>Uploaded file is not an image</value>
   </data>
+  <data name="Attachments_uploaded_file_image_is_too_big" xml:space="preserve">
+    <value>Image dimensions are too big</value>
+  </data>
   <data name="Attachments_Unsupported_content" xml:space="preserve">
     <value>Uploaded content is not supported</value>
   </data>
@@ -214,7 +217,7 @@
     <value>Last existing section cannot be removed from questionnaire</value>
   </data>
   <data name="CantRemoveCoverPageInQuestionnaire" xml:space="preserve">
-    <value>Cover section can not be removed from questionnaire</value>
+    <value>Cover section cannot be removed from questionnaire</value>
   </data>
   <data name="CoverPageMustBeFirstInQuestionnaire" xml:space="preserve">
     <value>Cover section must be first section in questionnaire</value>
@@ -223,7 +226,7 @@
     <value>Cover section can contain only questions, static texts and variables</value>
   </data>
   <data name="CantEditCoverPageInOldQuestionnaire" xml:space="preserve">
-    <value>It is readonly Cover section. You can not edit or re-order questions in it.</value>
+    <value>It is readonly Cover section. You cannot edit or re-order questions in it.</value>
   </data>
   <data name="CantRemoveUserFromTheList" xml:space="preserve">
     <value>Couldn't remove user, because it doesn't exist in share list</value>
@@ -330,6 +333,9 @@
   <data name="RequiredHeaderWasNotFound" xml:space="preserve">
     <value>Header {0} was not found in excel file</value>
   </data>
+  <data name="HeaderWasNotFound" xml:space="preserve">
+    <value>Header was not found in file</value>
+  </data>
     <data name="NoParentCascadingOptions" xml:space="preserve">
     <value>No categories for parent cascading question '{0}' found</value>
   </data>
@@ -360,6 +366,9 @@
   <data name="ImportOptions_TitleTooLong" xml:space="preserve">
     <value>Title is too long. Title length should be less than {0}</value>
   </data>
+  <data name="ImportOptions_AttachmentNameTooLong" xml:space="preserve">
+    <value>Attachment name is too long. Attachment name should be less than {0}</value>
+  </data>
   <data name="ImportOptions_ValueIsNotUnique" xml:space="preserve">
     <value>Duplicated category '{0}' with value '{1}'</value>
   </data>
@@ -367,7 +376,7 @@
     <value>[{0}] Invalid numeric value</value>
   </data>
   <data name="Excel_Categories_Empty_Text" xml:space="preserve">
-    <value>[{0}] Empty text</value>
+    <value>[{0}] Empty title</value>
   </data>
   <data name="Excel_Categories_Empty_Value" xml:space="preserve">
     <value>[{0}] Empty value</value>

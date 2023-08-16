@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NetTopologySuite.Geometries;
-using NetTopologySuite.IO;
-using NetTopologySuite.IO.Streams;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
@@ -19,6 +17,7 @@ using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Enumerator.Native.WebInterview;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Implementation.Maps;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Headquarters.Resources;
@@ -27,7 +26,7 @@ using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.UI.Headquarters.Controllers.Api
 {
-    [Authorize(Roles = "Administrator, Headquarter")]
+    [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter)]
     [Route("api/[controller]/[action]")]
     public class MapsApiController : ControllerBase
     {

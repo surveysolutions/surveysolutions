@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Data;
+using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Rasters;
 using Esri.ArcGISRuntime.Symbology;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.Enumerator.Implementation.Utils;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
 
@@ -19,6 +19,8 @@ namespace WB.UI.Shared.Extensions.Services
     {
         Task<Basemap> GetBaseMap(MapDescription existingMap);
         Task<FeatureLayer> GetShapefileAsFeatureLayer(string fullPathToShapefile);
+        
+        Task<FeatureLayer> GetShapefileAsFeatureLayer(ShapefileFeatureTable shapefile);
     }
 
     public class MapUtilityService : IMapUtilityService
@@ -49,7 +51,7 @@ namespace WB.UI.Shared.Extensions.Services
                         if (package.Maps.Count > 0)
                         {
                             {
-                                var basemap = package.Maps.First().Basemap.Clone();
+                                var basemap = package.Maps.First()?.Basemap?.Clone();
                                 return basemap;
                             }
                         }
@@ -101,28 +103,38 @@ namespace WB.UI.Shared.Extensions.Services
         {
             if (existingMap == null) return null;
 
-            switch (existingMap.MapType)
+            if (existingMap.MapType == MapType.LocalFile)
+                return await GetLocalMap(existingMap);
+            
+            //if map is failing to load 
+            //if it's loaded, it's not working to collect data
+            try
             {
-                case MapType.OnlineImagery:
-                    return Basemap.CreateImagery();
-                case MapType.OnlineImageryWithLabels:
-                    return Basemap.CreateImageryWithLabels();
-                case MapType.OnlineOpenStreetMap:
-                    return Basemap.CreateOpenStreetMap();
-                case MapType.LocalFile:
-                    return await GetLocalMap(existingMap);
-                default:
-                    return null;
+                switch (existingMap.MapType)
+                {
+                    case MapType.OnlineImagery:
+                        await new Basemap(BasemapStyle.ArcGISImageryStandard).LoadAsync();
+                        return new Basemap(BasemapStyle.ArcGISImageryStandard);
+                    case MapType.OnlineImageryWithLabels:
+                        await new Basemap(BasemapStyle.ArcGISImagery).LoadAsync();
+                        return new Basemap(BasemapStyle.ArcGISImagery);
+                    case MapType.OnlineOpenStreetMap:
+                        await new Basemap(BasemapStyle.OSMStandard).LoadAsync();
+                        return new Basemap(BasemapStyle.OSMStandard);
+                }
             }
+            catch (Exception e)
+            {
+                logger.Error("Cant load online map " + existingMap.MapType, e);
+            }
+            
+            return null;
         }
 
-        public async Task<FeatureLayer> GetShapefileAsFeatureLayer(string fullPathToShapefile)
+        public async Task<FeatureLayer> GetShapefileAsFeatureLayer(ShapefileFeatureTable myShapefile)
         {
-            // Open the shapefile
-            ShapefileFeatureTable myShapefile = await ShapefileFeatureTable.OpenAsync(fullPathToShapefile);
             // Create a feature layer to display the shapefile
             FeatureLayer newFeatureLayer = new FeatureLayer(myShapefile);
-
             await newFeatureLayer.LoadAsync();
 
             // Create a StringBuilder to create the label definition JSON string
@@ -158,17 +170,38 @@ namespace WB.UI.Shared.Extensions.Services
             // Make sure labeling is enabled for the layer
             newFeatureLayer.LabelsEnabled = true;
 
-            SimpleLineSymbol lineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.Red, 2.0);
-            SimpleFillSymbol fillSymbol = new SimpleFillSymbol(SimpleFillSymbolStyle.Null, Color.White, lineSymbol);
-            
-            var alternateRenderer = new SimpleRenderer(fillSymbol);
-            
+            var symbolForRenderer = CreateSymbolForRenderer(myShapefile.GeometryType, Color.Red);
+            var alternateRenderer = new SimpleRenderer(symbolForRenderer);
+
             RendererSceneProperties myRendererSceneProperties = alternateRenderer.SceneProperties;
             myRendererSceneProperties.ExtrusionMode = ExtrusionMode.Minimum;
 
             newFeatureLayer.Renderer = alternateRenderer;
 
             return newFeatureLayer;
+        }
+
+        public async Task<FeatureLayer> GetShapefileAsFeatureLayer(string fullPathToShapefile)
+        {
+            // Open the shapefile
+            ShapefileFeatureTable myShapefile = await ShapefileFeatureTable.OpenAsync(fullPathToShapefile);
+            
+            return await GetShapefileAsFeatureLayer(myShapefile);
+        }
+        
+        private Symbol CreateSymbolForRenderer(GeometryType rendererType, Color color)
+        {
+            switch (rendererType)
+            {
+                case GeometryType.Point:
+                case GeometryType.Multipoint:
+                    return new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, color, 6);
+                case GeometryType.Polygon:
+                case GeometryType.Polyline:
+                default:
+                    SimpleLineSymbol lineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, color, 2.0);
+                    return new SimpleFillSymbol(SimpleFillSymbolStyle.Null, Color.White, lineSymbol);
+            }
         }
     }
 }

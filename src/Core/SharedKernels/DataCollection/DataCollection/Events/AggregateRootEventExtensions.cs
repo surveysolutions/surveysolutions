@@ -22,11 +22,11 @@ namespace WB.Core.SharedKernels.DataCollection.Events
             if (lastCommonEventId == default)
                 return tabletEvents;
 
-            var filteredSvEvents = hqEvents.SkipWhile(e => e.EventIdentifier != lastCommonEventId).Skip(1).ToArray();
-            if (filteredSvEvents.Any(e => ChangeEventsState.Contains(e.Payload.GetType().Name)))
+            var filteredHqEvents = hqEvents.SkipWhile(e => e.EventIdentifier != lastCommonEventId).Skip(1).ToArray();
+            if (filteredHqEvents.Any(e => ChangeEventsState.Contains(e.Payload.GetType().Name)))
             {
                 throw new InterviewException(
-                    "Found active event on hq/supervisor side. Can not merge streams",
+                    "Found active event on hq/supervisor side. Cannot merge streams",
                     exceptionType: InterviewDomainExceptionType.PackageIsOudated);
             }
 

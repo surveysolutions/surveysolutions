@@ -337,11 +337,23 @@
   <data name="SideBarTranslationDownloadXlsx" xml:space="preserve">
     <value>Скачать xlsx</value>
   </data>
+  <data name="SideBarDownload" xml:space="preserve">
+    <value>Скачать:</value>
+  </data>
+  <data name="SideBarXlsx" xml:space="preserve">
+    <value>Xlsx</value>
+  </data>
+  <data name="SideBarTab" xml:space="preserve">
+    <value>Tab</value>
+  </data>
   <data name="SideBarTranslationGetTemplate" xml:space="preserve">
     <value>Получить шаблон для </value>
   </data>
   <data name="SideBarTranslationGetTemplateLinkTextXlsx" xml:space="preserve">
     <value>Excel (xlsx)</value>
+  </data>
+  <data name="SideBarTranslationGetTemplateLinkTextCsv" xml:space="preserve">
+    <value>Tab (txt)</value>
   </data>
   <data name="SideBarTranslationsTitle" xml:space="preserve">
     <value>Переводы</value>
@@ -484,9 +496,6 @@
   <data name="RosterName" xml:space="preserve">
     <value>Имя ростера</value>
   </data>
-  <data name="RosterShowStrings" xml:space="preserve">
-    <value>Показать строки</value>
-  </data>
   <data name="RosterSource" xml:space="preserve">
     <value>Тип источника ростера</value>
   </data>
@@ -510,6 +519,9 @@
   </data>
   <data name="SelectQuestion" xml:space="preserve">
     <value>Выбрать вопрос</value>
+  </data>
+  <data name="AddFilter" xml:space="preserve">
+    <value>Добавить фильтр</value>
   </data>
   <data name="SettingsCan" xml:space="preserve">
     <value>Может </value>
@@ -567,9 +579,6 @@
   </data>
   <data name="SettingsWhoHasAccess" xml:space="preserve">
     <value>У кого есть доступ:</value>
-  </data>
-  <data name="ShowList" xml:space="preserve">
-    <value>Показать список</value>
   </data>
   <data name="ValidationCondition" xml:space="preserve">
     <value>Проверка</value>
@@ -659,9 +668,6 @@
   <data name="QuestionPattern" xml:space="preserve">
     <value>Маска</value>
   </data>
-  <data name="QuestionShowStrings" xml:space="preserve">
-    <value>Показать строки</value>
-  </data>
   <data name="QuestionUploadOptions" xml:space="preserve">
     <value>Загрузить категории</value>
   </data>
@@ -671,6 +677,15 @@
   <data name="QuestionYesNoMode" xml:space="preserve">
     <value>Да/Нет режим</value>
   </data>
+  <data name="GeographyInputModeManual" xml:space="preserve">
+    <value>Ручной</value>
+  </data>
+    <data name="GeographyInputModeAutomatic" xml:space="preserve">
+    <value>Автоматический</value>
+  </data>
+    <data name="GeographyInputModeSemiautomatic" xml:space="preserve">
+    <value>Полуавстоматический</value>
+  </data>  
   <data name="Search" xml:space="preserve">
     <value>Поиск</value>
   </data>
@@ -912,6 +927,9 @@
   <data name="OptionsUploadValue" xml:space="preserve">
     <value>Значение</value>
   </data>
+  <data name="AttachmentName" xml:space="preserve">
+    <value>Имя файла вложения</value>
+  </data>
   <data name="SideBarMacroNoName" xml:space="preserve">
     <value>Макрос без имени</value>
   </data>
@@ -985,6 +1003,9 @@
     <value>Закрыть панель метаинформации</value>
     <comment>Закрыть панель метаинформации</comment>
   </data>
+  <data name="HotkeysCloseScenarios" xml:space="preserve">
+    <value>Закрыть панель сценариев</value>
+  </data>  
   <data name="SideBarMetadataHeader" xml:space="preserve">
     <value>Описание опросника и данные по обследованию</value>
     <comment>Метаинформация</comment>
@@ -1186,6 +1207,12 @@
     <value>Тип геометрии</value>
     <comment>Тип геометрии</comment>
   </data>
+  <data name="GeometryInputMode" xml:space="preserve">
+    <value>Режим ввода</value>
+  </data>
+  <data name="GeometryOverlapDetection" xml:space="preserve">
+    <value>Отслеживать перекрытия ответов</value>
+  </data>
   <data name="CollaboratorsSettings" xml:space="preserve">
     <value>Совместная работа</value>
   </data>
@@ -1246,6 +1273,9 @@
   <data name="NotSupportedAttachment" xml:space="preserve">
     <value>Выбранный файл не поддерживается во вложениях</value>
   </data>
+  <data name="AttachmentDimensionsAreTooBig" xml:space="preserve">
+    <value>Размер слишком большой</value>
+  </data>  
   <data name="HelpDefaultDate" xml:space="preserve">
     <value>Эта дата будет показана как начальная дата для выбора на планшете</value>
   </data>
@@ -1457,6 +1487,9 @@
   <data name="HotkeysCloseCategories" xml:space="preserve">
     <value>Закрыть панель категорий</value>
   </data>
+  <data name="HotkeysCloseComments" xml:space="preserve">
+    <value>Закрыть панель комментариев</value>
+  </data>  
   <data name="SideBarCategoriesNoName" xml:space="preserve">
     <value>список категорий без имени</value>
   </data>
@@ -1505,6 +1538,9 @@
   <data name="HelpOptionTitle" xml:space="preserve">
     <value>Текстовое название категории (отображается интервьюеру)</value>
   </data>
+  <data name="HelpOverlapDetection" xml:space="preserve">
+    <value>Отображать и выделять перекрытия ответов на этот вопрос в других экземплярах ростера</value>
+  </data>
   <data name="NewItem" xml:space="preserve">
     <value>Новый элемент</value>
   </data>
@@ -1536,7 +1572,7 @@
     <value>Data changes reverted</value>
   </data>
   <data name="OptionsSizeLimit" xml:space="preserve">
-    <value>Максимально допустимо только {{ max }} строк</value>
+    <value>Максимально допустимо только {max_rows} строк</value>
   </data>
   <data name="CommunicationError" xml:space="preserve">
     <value>Ошибка сети</value>
@@ -1557,4 +1593,7 @@
   <data name="HideParentValues" xml:space="preserve">
     <value>Спрятать родительские значения</value>
   </data>
+  <data name="AddEnablingCondition" xml:space="preserve">
+    <value>Добавить условие</value>
+  </data>  
 </root>

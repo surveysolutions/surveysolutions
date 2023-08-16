@@ -1,18 +1,25 @@
 using System;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Main.Core.Entities.Composite;
+using MvvmCross.Base;
+using MvvmCross.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Tests.Abc;
+using MvvmCross.Tests;
 
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnablementViewModelTests
 {
     internal class when_question_enablement_model_updates_it_state_and_question_was_removed_from_interview : EnablementViewModelTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] 
+        public async Task context () 
+        {
+            base.Setup();
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
              {
                 Create.Entity.MultyOptionsQuestion(multiQuestionId, options: new [] { Create.Entity.Option("1")}),
@@ -23,6 +30,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnablementViewModelT
              });
 
             var questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
+            
+            var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
+            Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
+            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
 
             interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
             interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), multiQuestionIdentity.Id, multiQuestionIdentity.RosterVector, DateTime.Now, new [] { 1 });
@@ -31,13 +42,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnablementViewModelT
 
             viewModel = CreateViewModel(questionnaireRepository, interviewRepository);
             viewModel.Init(interview.EventSourceId.FormatGuid(), numericQuestionIdentity);
-            BecauseOf();
+            await BecauseOf();
         }
 
-        public void BecauseOf() 
+        public async Task BecauseOf() 
         {
             interview.RemoveAnswer(multiQuestionIdentity.Id, multiQuestionIdentity.RosterVector, Guid.NewGuid(), DateTime.Now);
-            viewModel.Handle(Create.Event.QuestionsEnabled(multiQuestionIdentity, numericQuestionIdentity));
+            await viewModel.HandleAsync(Create.Event.QuestionsEnabled(multiQuestionIdentity, numericQuestionIdentity));
         }
 
         [NUnit.Framework.Test] public void should_disable_model () => 

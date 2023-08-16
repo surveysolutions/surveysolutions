@@ -116,12 +116,12 @@ namespace WB.Tests.Abc.TestFactories
             => new ImportFromDesigner(responsibleId, questionnaire, allowCensus, assembly, contentVersion, 1, comment);
 
         public InterviewCreated InterviewCreated(Guid? questionnaireId = null, long? questionnaireVersion = null,
-            DateTimeOffset? originDate = null)
+            DateTimeOffset? originDate = null, int? assignmentId = null)
             => new InterviewCreated(
                 userId: Guid.NewGuid(),
                 questionnaireId: questionnaireId ?? Guid.NewGuid(),
                 questionnaireVersion: questionnaireVersion ?? 7,
-                assignmentId: null,
+                assignmentId: assignmentId,
                 isAudioRecordingEnabled:false,
                 originDate: originDate ?? DateTimeOffset.Now,
                 usesExpressionStorage: true);
@@ -145,8 +145,9 @@ namespace WB.Tests.Abc.TestFactories
                 null,
                 originDate ?? DateTimeOffset.Now);
 
-        public InterviewReceivedByInterviewer InterviewReceivedByInterviewer(DateTimeOffset? originDate = null)
-            => new InterviewReceivedByInterviewer(originDate ?? DateTimeOffset.Now);
+        public InterviewReceivedByInterviewer InterviewReceivedByInterviewer(string deviceId = null, 
+            DateTimeOffset? originDate = null)
+            => new InterviewReceivedByInterviewer(deviceId, originDate ?? DateTimeOffset.Now);
 
         public InterviewReceivedBySupervisor InterviewReceivedBySupervisor(DateTimeOffset? originDate = null)
             => new InterviewReceivedBySupervisor(originDate ?? DateTimeOffset.Now);
@@ -157,7 +158,7 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewSynchronized InterviewSynchronized(InterviewSynchronizationDto synchronizationDto, DateTimeOffset? originDate = null)
             => new InterviewSynchronized(synchronizationDto, originDate ?? DateTimeOffset.Now);
 
-        public InterviewCompleted InteviewCompleted(DateTime? completionDate = null)
+        public InterviewCompleted InterviewCompleted(DateTime? completionDate = null)
             => new InterviewCompleted(
                 Guid.NewGuid(),
                 completionDate ?? DateTime.UtcNow,

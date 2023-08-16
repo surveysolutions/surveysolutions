@@ -171,4 +171,16 @@
   <data name="QuestionTypeText" xml:space="preserve">
     <value>Text</value>
   </data>
+  <data name="GeometryTypePolygon" xml:space="preserve">
+    <value>Polygon</value>
+  </data>
+    <data name="GeometryTypePolyline" xml:space="preserve">
+    <value>Polyline</value>
+  </data>
+    <data name="GeometryTypePoint" xml:space="preserve">
+    <value>Point</value>
+  </data>
+    <data name="GeometryTypeMultipoint" xml:space="preserve">
+    <value>Multipoint</value>
+  </data>
 </root>

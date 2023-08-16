@@ -45,7 +45,7 @@ namespace WB.Services.Scheduler.Services.Implementation.HostedServices
                     }
                     catch (Exception e)
                     {
-                        logger.LogError("Exception during progress reporting for jobId: {task}", task.Id, e);
+                        logger.LogError($"Exception during progress reporting for jobId: {task.Id}", e);
                     }
                 }
 

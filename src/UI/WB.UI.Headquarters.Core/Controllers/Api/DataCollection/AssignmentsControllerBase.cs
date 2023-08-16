@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -16,14 +17,17 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         protected readonly IAuthorizedUser authorizedUser;
         private readonly IAssignmentsService assignmentsService;
         private readonly ICommandService commandService;
+        private readonly IUserToDeviceService userToDeviceService;
 
         protected AssignmentsControllerBase(IAuthorizedUser authorizedUser,
             IAssignmentsService assignmentsService,
+            IUserToDeviceService userToDeviceService,
             ICommandService commandService)
         {
             this.authorizedUser = authorizedUser;
             this.assignmentsService = assignmentsService;
             this.commandService = commandService;
+            this.userToDeviceService = userToDeviceService;
         }
 
         public virtual ActionResult<AssignmentApiDocument> GetAssignment(int id)
@@ -80,9 +84,11 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             {
                 return NotFound("Assignment was reassigned");
             }
+            
+            var deviceId = userToDeviceService.GetLinkedDeviceId(this.authorizedUser.Id);
 
             commandService.Execute(
-                new MarkAssignmentAsReceivedByTablet(assignment.PublicKey, authorizedUserId, assignment.QuestionnaireId));
+                new MarkAssignmentAsReceivedByTablet(assignment.PublicKey, authorizedUserId, deviceId, assignment.QuestionnaireId));
 
             return Ok();
         }

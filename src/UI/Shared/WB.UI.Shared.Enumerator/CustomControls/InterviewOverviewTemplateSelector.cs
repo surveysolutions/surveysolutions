@@ -21,6 +21,9 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 {typeof(OverviewMultimediaQuestionViewModel), Resource.Layout.interview_overview_question_multimedia},
                 {typeof(OverviewAudioQuestionViewModel), Resource.Layout.interview_overview_question_audio},
                 {typeof(OverviewVariableViewModel), Resource.Layout.interview_overview_variable},
+                {typeof(OverviewSingleCategoricalQuestionViewModel), Resource.Layout.interview_overview_question_single},
+                {typeof(OverviewMultiCategoricalQuestionViewModel), Resource.Layout.interview_overview_question_multi},
+                {typeof(OverviewNumericQuestionViewModel), Resource.Layout.interview_overview_question_numeric},
             };
         }
 

@@ -32,15 +32,21 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
        
         private readonly IExpressionProcessor expressionProcessor;
 
-        private SelectOption[] GetQuestionScopeOptions(QuestionnaireDocument document)
+        private SelectOption[] GetQuestionScopeOptions(QuestionnaireDocument document, IQuestion question)
         {
             if (document.IsCoverPageSupported)
+            {
+                var parent = question.GetParent();
+                if (parent != null && document.IsCoverPage(parent.PublicKey))
+                    return Array.Empty<SelectOption>();
+                
                 return new[]
                 {
                     new SelectOption {Value = "Interviewer", Text = QuestionnaireEditor.QuestionScopeInterviewer},
                     new SelectOption {Value = "Supervisor", Text = QuestionnaireEditor.QuestionScopeSupervisor},
                     new SelectOption {Value = "Hidden", Text = QuestionnaireEditor.QuestionScopeHidden},
                 };
+            }
 
             return new[]
             {
@@ -88,24 +94,24 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             new SelectOption
             {
                 Value = GeometryType.Polygon.ToString(),
-                Text = "Polygon"
+                Text = QuestionnaireEditor.GeometryTypePolygon
             },
             new SelectOption
             {
                 Value = GeometryType.Polyline.ToString(),
-                Text = "Polyline"
+                Text = QuestionnaireEditor.GeometryTypePolyline
             },
 
             new SelectOption
             {
                 Value = GeometryType.Point.ToString(),
-                Text = "Point"
+                Text = QuestionnaireEditor.GeometryTypePoint
             },
 
             new SelectOption
             {
                 Value = GeometryType.Multipoint.ToString(),
-                Text = "Multipoint"
+                Text = QuestionnaireEditor.GeometryTypeMultipoint
             }
         };
 
@@ -359,7 +365,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 result.SourceOfLinkedEntities = this.GetSourcesOfLinkedQuestionBriefs(questionnaire, questionId);
                 result.SourceOfSingleQuestions = this.GetSourcesOfSingleQuestionBriefs(questionnaire, questionId);
                 result.QuestionTypeOptions = GetQuestionTypeOptions(document, question);
-                result.AllQuestionScopeOptions = GetQuestionScopeOptions(document);
+                result.AllQuestionScopeOptions = GetQuestionScopeOptions(document, question);
                 result.GeometryTypeOptions = GeometryTypeOptions;
                 result.ChapterId = questionnaire.GetParentGroupsIds(question).LastOrDefault();
 
@@ -561,7 +567,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 linkedToEntityId : (question.LinkedToQuestionId ?? question.LinkedToRosterId)?.FormatGuid(),
                 questionTypeOptions : question.Answers
                     .Select(a => new SelectOption() {Text = a.AnswerText, Value = a.AnswerValue}).ToArray(),
-                geometryType : question.Properties?.GeometryType ?? GeometryType.Polygon
+                geometryType : question.Properties?.GeometryType ?? GeometryType.Polygon,
+                geometryInputMode: question.Properties?.GeometryInputMode ?? GeometryInputMode.Manual,
+                geometryOverlapDetection: question.Properties?.GeometryOverlapDetection
             );
             questionView.ValidationConditions.AddRange(question.ValidationConditions);
 
@@ -640,6 +648,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     option.Value = answerValue;
                 }
                 option.ParentValue = string.IsNullOrWhiteSpace(x.ParentValue) || !x.ParentValue.IsDecimal() ? (decimal?)null : Convert.ToDecimal(x.ParentValue);
+                option.AttachmentName = x.AttachmentName;
+                
                 return option;
             }).ToArray()
                    ?? new CategoricalOption[0];

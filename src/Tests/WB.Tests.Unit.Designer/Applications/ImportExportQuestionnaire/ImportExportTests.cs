@@ -52,7 +52,6 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             questionnaireDocument.Title = "test";
             questionnaireDocument.Description = "desc";
             var documentPublicKey = Guid.NewGuid();
-            questionnaireDocument.Id = documentPublicKey.FormatGuid();
             questionnaireDocument.PublicKey = documentPublicKey;
             //questionnaireDocument.Revision = 17;
             //questionnaireDocument.CloseDate = DateTime.Now;
@@ -435,7 +434,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 //linkedToRosterId: Guid.NewGuid(),
                 title: "numeric", 
                 variableLabel: "label", 
-                options: new []{ new Option("1", "option1") }
+                options: new []{ new Option("1", "option1", null, "") }
                 );
             numericQuestion.CountOfDecimalPlaces = 7;
             numericQuestion.UseFormatting = true;

@@ -260,7 +260,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void ExcludeOptions(int[] optionsToExclude) => this.excludedOptions = optionsToExclude ?? Array.Empty<int>();
 
         private bool isDisposed = false;
-        public void Dispose()
+        public virtual void Dispose()
         {
             if (isDisposed)
                 return;

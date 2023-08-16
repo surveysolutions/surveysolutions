@@ -11,6 +11,8 @@
                style="@style/Overview_Question_Title"
                local:MvxBind="Html Title; TextViewNodeStateTextColor State; "/>
     
-    <include layout="@layout/interview_overview__attachment" />
+    <LinearLayout style="@style/Interview_StaticText__Overview_Attachment">
+        <include layout="@layout/interview_overview__attachment" />
+    </LinearLayout>
 
 </LinearLayout>

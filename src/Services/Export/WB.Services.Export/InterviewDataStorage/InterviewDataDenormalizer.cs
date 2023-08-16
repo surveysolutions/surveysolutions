@@ -202,7 +202,8 @@ namespace WB.Services.Export.InterviewDataStorage
         public Task Handle(PublishedEvent<AreaQuestionAnswered> @event, CancellationToken token = default)
         {
             var area = new Area(@event.Event.Geometry, @event.Event.MapName, @event.Event.NumberOfPoints,
-                @event.Event.AreaSize, @event.Event.Length, @event.Event.Coordinates, @event.Event.DistanceToEditor);
+                @event.Event.AreaSize, @event.Event.Length, @event.Event.Coordinates, @event.Event.DistanceToEditor,
+                @event.Event.RequestedAccuracy, @event.Event.RequestedFrequency);
             return UpdateQuestionValue(
                 interviewId: @event.EventSourceId,
                 entityId: @event.Event.QuestionId,

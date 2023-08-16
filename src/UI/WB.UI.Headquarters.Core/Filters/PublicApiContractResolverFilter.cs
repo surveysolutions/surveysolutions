@@ -24,7 +24,7 @@ namespace WB.UI.Headquarters.Filters
                 {
                     ContractResolver = Resolver
                 },
-                ArrayPool<char>.Shared, new MvcOptions());
+                ArrayPool<char>.Shared, new MvcOptions(), null);
             if (ctx.Result is ObjectResult objectResult)
             {
                 objectResult.Formatters.Add(newtonsoftJsonOutputFormatter);

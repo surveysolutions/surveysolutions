@@ -470,7 +470,7 @@ namespace StatData.Writers.Spss
             // R7.22 Long string missing values
             return;
 
-            var sb = new MemoryStream();
+            /*var sb = new MemoryStream();
             for (var v=0; v<NumVars; v++)
             {
                 if (Variables[v].VarType!=0)
@@ -486,7 +486,7 @@ namespace StatData.Writers.Spss
                 }
             }
             sw.WriteInt32(new Int32[] {7, 22, 1, (Int32) sb.Length});
-            sb.WriteTo(sw.BaseStream);
+            sb.WriteTo(sw.BaseStream);*/
         }
 
         internal void WriteT7S3(SpssBinaryWriter sw)

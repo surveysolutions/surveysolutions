@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             var client = new SendGridClient(settings.SendGridApiKey);
             var msg = new SendGridMessage
             {
-                From = new EmailAddress(settings.SenderAddress),
+                From = new EmailAddress(settings.SenderAddress, settings.SenderName),
                 Subject = subject,
                 PlainTextContent = textBody,
                 HtmlContent = htmlBody,
@@ -86,7 +86,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
                 var responseErrors = serializer.Deserialize<SendGridResponseErrors>(body);
                 if (responseErrors != null)
                 {
-                    var errors = responseErrors.Errors!.Select(x => $"{x.Message} For more information go to: {x.Help}").ToArray();
+                    var errors = responseErrors.Errors!
+                        .Select(x => string.IsNullOrWhiteSpace(x.Help)
+                            ? x.Message
+                            : $"{x.Message} For more information go to: {x.Help}")
+                        .ToArray();
                     throw new EmailServiceException(to, response.StatusCode, null, errors);
                 }
             }

@@ -8,15 +8,15 @@ namespace WB.Services.Export.Interview.Entities
     {
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public double Accuracy { get; set; }
-        public double Altitude { get; set; }
+        public double? Accuracy { get; set; }
+        public double? Altitude { get; set; }
         public DateTimeOffset Timestamp { get; set; }
 
         public GeoPosition()
         {
         }
 
-        public GeoPosition(double latitude, double longitude, double accuracy, double altitude,
+        public GeoPosition(double latitude, double longitude, double? accuracy, double? altitude,
             DateTimeOffset timestamp)
         {
             this.Latitude = latitude;

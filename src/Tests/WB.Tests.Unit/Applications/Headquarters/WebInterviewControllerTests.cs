@@ -18,6 +18,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -118,7 +119,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 Mock.Of<IServiceLocator>(),
                 Mock.Of<IAggregateRootPrototypeService>(),
                 Mock.Of<IQuestionnaireStorage>(),
-                Mock.Of<IAggregateRootPrototypePromoterService>(),
+                Mock.Of<IInScopeExecutor>(),
                 memoryCache.Object,
                 calendarEventService: Mock.Of<ICalendarEventService>(),
                 webInterviewConfigProvider: Mock.Of<IWebInterviewConfigProvider>() ,

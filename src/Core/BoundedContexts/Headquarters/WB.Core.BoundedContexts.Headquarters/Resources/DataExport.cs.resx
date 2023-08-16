@@ -118,34 +118,34 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Completed" xml:space="preserve">
-    <value>Dokončeno</value>
+    <value>Hotový</value>
   </data>
   <data name="DataDestination_Dropbox" xml:space="preserve">
-    <value>Nahráno na Dropbox</value>
+    <value>Nahrát do Dropboxu</value>
   </data>
   <data name="DataDestination_GoogleDrive" xml:space="preserve">
-    <value>Nahráno na Google Drive</value>
+    <value>Nahrát na Disk Google</value>
   </data>
   <data name="DataDestination_OneDrive" xml:space="preserve">
-    <value>Nahráno na OneDrive</value>
+    <value>Nahrání na OneDrive</value>
   </data>
   <data name="DataDestination_Zip" xml:space="preserve">
-    <value>Stažení</value>
+    <value>Stáhnout</value>
   </data>
   <data name="DataExport_CompletedOn" xml:space="preserve">
     <value>Dokončeno {{date}}</value>
   </data>
   <data name="DataExport_Destination" xml:space="preserve">
-    <value>Oblast: {{dest}}</value>
+    <value>Cíl: {{dest}}</value>
   </data>
   <data name="DataExport_Destination_Dropbox" xml:space="preserve">
-    <value>Exportovaný soubor se nahraje na Dropbox</value>
+    <value>Exportní soubor bude nahrán do Dropboxu</value>
   </data>
   <data name="DataExport_Destination_File" xml:space="preserve">
-    <value>Exportovaný soubor je připraven ke stažení</value>
+    <value>Exportní soubor bude k dispozici ke stažení</value>
   </data>
   <data name="DataExport_Destination_GoogleDrive" xml:space="preserve">
-    <value>Exportovaný soubor se nahraje na Google Drive</value>
+    <value>Exportní soubor bude nahrán na Disk Google</value>
   </data>
   <data name="DataExport_Destination_OneDrive" xml:space="preserve">
     <value>Exportovaný soubor se nahraje na OneDrive</value>
@@ -157,13 +157,13 @@
     <value>Velikost souboru: {{size}} MB</value>
   </data>
   <data name="DataExport_RegenerateDesc" xml:space="preserve">
-    <value>Export dat</value>
+    <value>Export fronty se stejnými parametry</value>
   </data>
   <data name="DataExport_Title" xml:space="preserve">
     <value>Export dat</value>
   </data>
   <data name="DataExportApi" xml:space="preserve">
-    <value>Export dat API</value>
+    <value>Rozhraní API pro export dat</value>
   </data>
   <data name="DataFormat" xml:space="preserve">
     <value>Formát dat</value>
@@ -172,16 +172,16 @@
     <value>Formát SPSS</value>
   </data>
   <data name="DataFormat_Stata" xml:space="preserve">
-    <value>Formát Stata 14 </value>
+    <value>Formát Stata 14</value>
   </data>
   <data name="DataType" xml:space="preserve">
     <value>Datový typ</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Stažení</value>
+    <value>Stáhnout</value>
   </data>
   <data name="ExportExplanation" xml:space="preserve">
-    <value>Stisknutím tlačítka Generovat vytvoříte datový archiv dotazníků dostupných na serveru. Čas vytvoření a velikost archivu jsou uvedeny v tabulce. Poslední vygenerovaný archiv dat lze stáhnout stisknutím tlačítka Stáhnout. Opětovným stisknutím tlačítka Generovat vytvoříte nový archiv.</value>
+    <value>Stisknutím tlačítka Generovat se vytvoří datový archiv rozhovorů dostupných v daném okamžiku na serveru. Čas vytvoření archivu a velikost archivu jsou uvedeny v tabulce. Poslední vygenerovaný datový archiv si můžete stáhnout stisknutím tlačítka Stáhnout. Opětovným stisknutím tlačítka Generovat vytvoříte nový archiv.</value>
   </data>
   <data name="Format" xml:space="preserve">
     <value>Formát</value>
@@ -190,21 +190,228 @@
     <value>formát</value>
   </data>
   <data name="FromDate" xml:space="preserve">
-    <value>z</value>
+    <value>Od</value>
   </data>
   <data name="GeneratedDataSets_Desc" xml:space="preserve">
-    <value>Počkejte prosím, dokud nebude dokončen předchozí import od uživatelů</value>
+    <value>Data jsou exportována do zip archivu obsahujícího datové soubory zadaného obsahu a typu. Níže je uveden seznam dříve exportovaných datových souborů.</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Jméno</value>
   </data>
   <data name="StatusOfExportTitle" xml:space="preserve">
-    <value>(verze) dotazníku</value>
+    <value>Stav exportovaných rozhovorů</value>
   </data>
   <data name="XMLFileDescription" xml:space="preserve">
-    <value>XML formát</value>
+    <value>Formát XML</value>
   </data>
   <data name="ZipFile" xml:space="preserve">
-    <value>Soubor Zip</value>
+    <value>Soubor ZIP</value>
+  </data>
+  <data name="AddToQueue" xml:space="preserve">
+    <value>Přidat do fronty</value>
+  </data>
+  <data name="AllStatuses" xml:space="preserve">
+    <value>všechny stavy</value>
+  </data>
+  <data name="ApprovedByHeadquarters" xml:space="preserve">
+    <value>Schváleno podle stavu ústředí</value>
+  </data>
+  <data name="ApprovedBySupervisor" xml:space="preserve">
+    <value>Schváleno statusem supervizora</value>
+  </data>
+  <data name="BinaryData" xml:space="preserve">
+    <value>Binární data</value>
+  </data>
+  <data name="BinaryDescription" xml:space="preserve">
+    <value>Archivace s binárními daty (např. obrázky, zvuk)</value>
+  </data>
+  <data name="Bytes" xml:space="preserve">
+    <value>MB</value>
+  </data>
+  <data name="Compressing" xml:space="preserve">
+    <value>Stlačující</value>
+  </data>
+  <data name="ConfirmStop" xml:space="preserve">
+    <value>Opravdu chcete přestat</value>
+  </data>
+  <data name="DataDestination" xml:space="preserve">
+    <value>Cíl exportu souboru</value>
+  </data>
+  <data name="DataExport_FileWasRegenerated" xml:space="preserve">
+    <value>Soubor byl znovu vygenerován</value>
+  </data>
+  <data name="DataExport_Header" xml:space="preserve">
+    <value>Vyberte typ a formát exportovaných dat</value>
+  </data>
+  <data name="DataExport_InterviewsStatus" xml:space="preserve">
+    <value>Rozhovory v {{status}}.</value>
+  </data>
+  <data name="DataExport_QuestionnaireWithVersion" xml:space="preserve">
+    <value>{{title}} (ver. {{version}})</value>
+  </data>
+  <data name="DataExport_QueuedOn" xml:space="preserve">
+    <value>Ve frontě {{date}}</value>
+  </data>
+  <data name="DataExport_Regenerate" xml:space="preserve">
+    <value>Regenerovat</value>
+  </data>
+  <data name="DataExport_ServiceIsNotAvailable" xml:space="preserve">
+    <value>Služba exportu není k dispozici</value>
+  </data>
+  <data name="DataExportApiDesc" xml:space="preserve">
+    <value>Můžete nastavit automatický export shromážděných dat rozhovoru pomocí naší sady nástrojů API pro více informací a použití pokynů:</value>
+  </data>
+  <data name="DataExportApiInfoPage" xml:space="preserve">
+    <value>Referenční informace k rozhraní API pro export dat</value>
+  </data>
+  <data name="DataFormat_Tab" xml:space="preserve">
+    <value>Data oddělená tabulátory</value>
+  </data>
+  <data name="DataType_Binary" xml:space="preserve">
+    <value>Binární data. Archivace s binárními daty (např. obrázky, zvuk)</value>
+  </data>
+  <data name="DataType_Ddi" xml:space="preserve">
+    <value>Údaje XML iniciativy DDI. Data Documentation Initiative</value>
+  </data>
+  <data name="DataType_MainSurveyData" xml:space="preserve">
+    <value>Hlavní údaje průzkumu. Zip archiv s hlavními daty rozhovoru</value>
+  </data>
+  <data name="DataType_Paradata" xml:space="preserve">
+    <value>Paradata. Metadata o průběhu pohovoru (události a načasování)</value>
+  </data>
+  <data name="DataWasNotGenerated" xml:space="preserve">
+    <value>Negenerováno</value>
+  </data>
+  <data name="DDI" xml:space="preserve">
+    <value>DDI</value>
+  </data>
+  <data name="DDIDescription" xml:space="preserve">
+    <value>Data XML iniciativy pro dokumentaci dat</value>
+  </data>
+  <data name="Dropbox" xml:space="preserve">
+    <value>Virtuální schránka</value>
+  </data>
+  <data name="Error_Canceled" xml:space="preserve">
+    <value>Úloha exportu byla zrušena uživatelem.</value>
+  </data>
+  <data name="Error_NotEnoughExternalStorageSpace" xml:space="preserve">
+    <value>Nedostatek místa pro vybrané cloudové úložiště poskytnout. Uvolněte místo a restartujte úlohu nebo vyberte jiného poskytovatele.</value>
+  </data>
+  <data name="Error_Unhandled" xml:space="preserve">
+    <value>Během exportu došlo k neočekávané chybě. Omlouváme se za vzniklé nepříjemnosti. Obraťte se na tým podpory support@mysurvey.solutions se soubory protokolu *.log které jsou uloženy ve složce aplikace. Další informace k tomuto problému jsou k dispozici na stránce podpory: https://support.mysurvey.solutions/headquarters/config/standalone-server-errors/.</value>
+  </data>
+  <data name="ErrorThereAreRunningProcesses" xml:space="preserve">
+    <value>Nastavení exportu nelze změnit, protože proces exportu je již spuštěn.</value>
+  </data>
+  <data name="export" xml:space="preserve">
+    <value>Proces exportu</value>
+  </data>
+  <data name="ExportBtn" xml:space="preserve">
+    <value>Vývoz</value>
+  </data>
+  <data name="ExportRange" xml:space="preserve">
+    <value>Rozsah exportu:</value>
+  </data>
+  <data name="FileSizeTitle" xml:space="preserve">
+    <value>Velikost souboru</value>
+  </data>
+  <data name="FilterTitle" xml:space="preserve">
+    <value>Filtrování rozhovorů pro export</value>
+  </data>
+  <data name="Generate" xml:space="preserve">
+    <value>Generovat</value>
+  </data>
+  <data name="GeneratedDataSets" xml:space="preserve">
+    <value>Dříve vygenerované exportní sady</value>
+  </data>
+  <data name="Generating" xml:space="preserve">
+    <value>Generující</value>
+  </data>
+  <data name="GoogleDrive" xml:space="preserve">
+    <value>Disk Google</value>
+  </data>
+  <data name="InterviewerAssigned" xml:space="preserve">
+    <value>Status přiřazeného tazatele</value>
+  </data>
+  <data name="ItemsInQueue" xml:space="preserve">
+    <value>Položky ve frontě exportu:</value>
+  </data>
+  <data name="LastGeneratedTitle" xml:space="preserve">
+    <value>Vygenerováno dne</value>
+  </data>
+  <data name="LastUpdateDate" xml:space="preserve">
+    <value>Datum poslední aktualizace</value>
+  </data>
+  <data name="MainSurveyDataTitle" xml:space="preserve">
+    <value>Hlavní údaje průzkumu</value>
+  </data>
+  <data name="Metadata" xml:space="preserve">
+    <value>Metadata</value>
+  </data>
+  <data name="NoDataAvailable" xml:space="preserve">
+    <value>Data nejsou k dispozici</value>
+  </data>
+  <data name="NoDataSets" xml:space="preserve">
+    <value>Zatím nejsou vygenerovány žádné datové sady</value>
+  </data>
+  <data name="OneDrive" xml:space="preserve">
+    <value>OneDrive</value>
+  </data>
+  <data name="ParaData" xml:space="preserve">
+    <value>Paradata</value>
+  </data>
+  <data name="ParadataDescription" xml:space="preserve">
+    <value>Metadata o průběhu pohovoru (události a načasování)</value>
+  </data>
+  <data name="Preparing" xml:space="preserve">
+    <value>Připravování</value>
+  </data>
+  <data name="Progress" xml:space="preserve">
+    <value>Pokrok</value>
+  </data>
+  <data name="QuestionnaireInformation" xml:space="preserve">
+    <value>Informace z dotazníku</value>
+  </data>
+  <data name="QuestionnaireInformation_Exclude" xml:space="preserve">
+    <value>Vyloučení meta informací o dotazníku</value>
+  </data>
+  <data name="QuestionnaireInformation_Include" xml:space="preserve">
+    <value>Zahrnout meta informace o dotazníku</value>
+  </data>
+  <data name="QuestionnaireTranslation" xml:space="preserve">
+    <value>Překlad</value>
+  </data>
+  <data name="QueuedTitle" xml:space="preserve">
+    <value>Zařazený do fronty</value>
+  </data>
+  <data name="SaveBinaryDataTo" xml:space="preserve">
+    <value>Uložit binární data do:</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Datum zahájení</value>
+  </data>
+  <data name="SurveyQuestionnaire" xml:space="preserve">
+    <value>Šablona průzkumu</value>
+  </data>
+  <data name="SurveyTemplateTitle" xml:space="preserve">
+    <value>(verze) Dotazník průzkumu</value>
+  </data>
+  <data name="TabularFormat" xml:space="preserve">
+    <value>Tabulkový formát</value>
+  </data>
+  <data name="ToDate" xml:space="preserve">
+    <value>K</value>
+  </data>
+  <data name="Translation_CardLabel" xml:space="preserve">
+    <value>Překlad: {{language}}</value>
+  </data>
+  <data name="ZipArchiveDescription" xml:space="preserve">
+    <value>Zip archiv s hlavními daty rozhovoru</value>
+  </data>
+  <data name="DataExport_InQueue" xml:space="preserve">
+    <value>Ve frontě:</value>
+  </data>
+  <data name="DataExport_ProducedIn" xml:space="preserve">
+    <value>Vyrobeno v:</value>
   </data>
 </root>

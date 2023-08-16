@@ -17,6 +17,7 @@ using DateTimeQuestion = Main.Core.Entities.SubEntities.Question.DateTimeQuestio
 using Group = Main.Core.Entities.SubEntities.Group;
 using Documents = WB.Core.SharedKernels.SurveySolutions.Documents;
 using GeometryType = WB.Core.SharedKernels.Questionnaire.Documents.GeometryType;
+using GeometryInputMode = WB.Core.SharedKernels.Questionnaire.Documents.GeometryInputMode;
 using GpsCoordinateQuestion = Main.Core.Entities.SubEntities.Question.GpsCoordinateQuestion;
 using IQuestion = Main.Core.Entities.SubEntities.IQuestion;
 using IQuestionnaireEntity = WB.Core.BoundedContexts.Designer.ImportExport.Models.IQuestionnaireEntity;
@@ -59,17 +60,21 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                 .ForPath(x => x.Translations.OriginalDisplayName, x => 
                     x.MapFrom(s => s.DefaultLanguageName))
                 .ForPath(x => x.Translations.Items, x => x.MapFrom(t => t.Translations));
+            
+            
             this.CreateMap<Questionnaire, QuestionnaireDocument>()
-                .ForMember(s => s.PublicKey, opt => opt.MapFrom(t => t.Id))
-                .ForMember(s => s.Id, opt => opt.MapFrom(t => t.Id.FormatGuid()))
-                .ForMember(s => s.Children, opt => opt.MapFrom(t =>
-                    Enumerable.Concat<QuestionnaireEntity>((t.CoverPage != null ? t.CoverPage : new CoverPage() { Id = Guid.NewGuid(), Title = "Cover" }).ToEnumerable(), t.Children)))
+                .ConstructUsing((s,ctx) => new QuestionnaireDocument())
+                .ForMember(d => d.PublicKey, opt => opt.MapFrom(s => s.Id))
+                .ForMember(d => d.Id, opt => opt.MapFrom(s => s.Id.FormatGuid()))
+                .ForMember(d => d.Children, opt => opt.MapFrom(s =>
+                    (s.CoverPage ?? new CoverPage() { Id = Guid.NewGuid(), Title = "Cover" }).ToEnumerable().Concat<QuestionnaireEntity>(s.Children)
+                ))
+                
                 .AfterMap((s, d, context) =>
                 {
-                    if (s.CoverPage != null)
-                        d.CoverPageSectionId = d.Children[0].PublicKey;
-                    else
-                        d.CoverPageSectionId = Guid.NewGuid();
+                    d.CoverPageSectionId = s.CoverPage != null 
+                        ? d.Children[0].PublicKey 
+                        : Guid.NewGuid();
                 })
                 .AfterMap((s, d, context) =>
                 {
@@ -157,6 +162,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
 
             this.CreateMap<Group, Models.CoverPage>()
                 .IncludeBase<IComposite, QuestionnaireEntity>();
+            
             this.CreateMap<Models.CoverPage, Group>()
                 .IncludeBase<IQuestionnaireEntity, IComposite>()
                 .ForMember(s => s.PublicKey, opt => opt.MapFrom((s, d, value, context) => 
@@ -165,7 +171,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
 
             this.CreateMap<Documents.FixedRosterTitle, Models.FixedRosterTitle>();
             this.CreateMap<Models.FixedRosterTitle, Documents.FixedRosterTitle>()
-                .ConstructUsing(c => new Documents.FixedRosterTitle(c.Value, c.Title));
+                .ConstructUsing(c => new Documents.FixedRosterTitle(c.Value ?? 0, c.Title));
             
             //this.CreateMap<Main.Core.Entities.SubEntities.RosterDisplayMode, Models.RosterDisplayMode>()
                 //.ConvertUsingEnumMapping(o => o.MapByName())
@@ -225,10 +231,15 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             
             this.CreateMap<AreaQuestion, Models.Question.AreaQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>()
-                .ForMember(s => s.GeometryType, d => d.MapFrom(t => t.Properties != null ? t.Properties.GeometryType : GeometryType.Point));
+                .ForMember(s => s.GeometryType, d => d.MapFrom(t => t.Properties != null ? t.Properties.GeometryType : GeometryType.Point))
+                .ForMember(s => s.GeometryInputMode, d => d.MapFrom(t => t.Properties != null ? t.Properties.GeometryInputMode : GeometryInputMode.Manual))
+                .ForMember(s => s.GeometryOverlapDetection, d=>d.MapFrom(t => t.Properties != null ? t.Properties.GeometryOverlapDetection : false));
+            
             this.CreateMap<Models.Question.AreaQuestion, AreaQuestion>()
                 .IncludeBase<Models.Question.AbstractQuestion, AbstractQuestion>()
-                .AfterMap((s, d) => d.Properties!.GeometryType = (GeometryType?)(s.GeometryType ?? null));
+                .AfterMap((s, d) => d.Properties!.GeometryType = (GeometryType?)(s.GeometryType ?? null))
+                .AfterMap((s, d) => d.Properties!.GeometryInputMode = (GeometryInputMode?)(s.GeometryInputMode ?? null))
+                .AfterMap((s, d) => d.Properties!.GeometryOverlapDetection = s.GeometryOverlapDetection ?? null);
 
             this.CreateMap<AudioQuestion, Models.Question.AudioQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>();
@@ -336,32 +347,44 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                 .ForMember(a => a.ParentCode, opt => 
                     opt.MapFrom(answer => answer.GetParsedParentValue()))
                 .ForMember(a => a.Text, opt => 
-                    opt.MapFrom(answer => answer.AnswerText));
+                    opt.MapFrom(answer => answer.AnswerText))
+                .ForMember(answer=> answer.AttachmentName,opt =>
+                    opt.MapFrom(x=>x.AttachmentName));
             this.CreateMap<Models.Answer, Answer>()
                 .ForMember(a => a.AnswerValue, opt => 
                     opt.MapFrom(x => x.Code.ToString()))
                 .ForMember(a => a.ParentValue, opt => 
                     opt.MapFrom(answer => answer.ParentCode.ToString()))
                 .ForMember(a => a.AnswerText, opt => 
-                    opt.MapFrom(answer => answer.Text));
+                    opt.MapFrom(answer => answer.Text))
+                .ForMember(a => a.AttachmentName, opt => 
+                    opt.MapFrom(answer => answer.AttachmentName));
             
             this.CreateMap<Answer, Models.SpecialValue>()
                 .ForMember(a => a.Code, opt => 
                     opt.MapFrom(x => x.AnswerCode ?? decimal.Parse(x.AnswerValue, NumberStyles.Number, CultureInfo.InvariantCulture)))
                 .ForMember(a => a.Text, opt => 
-                    opt.MapFrom(answer => answer.AnswerText));
+                    opt.MapFrom(answer => answer.AnswerText))
+                .ForMember(a => a.AttachmentName, opt => 
+                    opt.MapFrom(answer => answer.AttachmentName));
             this.CreateMap<Models.SpecialValue, Answer>()
                 .ForMember(a => a.AnswerValue, opt => 
                     opt.MapFrom(x => x.Code.ToString()))
                 .ForMember(a => a.AnswerText, opt => 
-                    opt.MapFrom(answer => answer.Text));
+                    opt.MapFrom(answer => answer.Text))
+                .ForMember(a => a.AttachmentName, opt => 
+                    opt.MapFrom(answer => answer.AttachmentName));
         }
         
         private string? GetVarName(Guid? id, ResolutionContext context)
         {
             if (!id.HasValue)
                 return null;
-            var varName = ((Dictionary<Guid, string>)context.Items[ImportExportQuestionnaireConstants.MapCollectionName])[id.Value];
+
+            var holder =
+                ((Dictionary<Guid, string>) context.Items[ImportExportQuestionnaireConstants.MapCollectionName]);
+            
+            var varName = holder.ContainsKey(id.Value) ? holder[id.Value] : null;
             if (varName?.Trim().IsNullOrEmpty() ?? true)
                 return null;
             return varName;

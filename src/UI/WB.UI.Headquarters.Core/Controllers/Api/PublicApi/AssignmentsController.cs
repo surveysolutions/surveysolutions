@@ -318,7 +318,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Route("{id:int}/assign")]
         [Consumes(MediaTypeNames.Application.Json)]
         [Produces(MediaTypeNames.Application.Json)]
-        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
+        [ObservingNotAllowed]
         public async Task<ActionResult<AssignmentDetails>> Assign(int id,
             [FromBody, BindRequired] AssignmentAssignRequest assigneeRequest)
         {
@@ -349,6 +350,20 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             {
                 unitOfWork.DiscardChanges();
                 return StatusCode(e.StatusCode, e.Message);
+            }
+
+            if (User.IsInRole(UserRoles.Supervisor))
+            {
+                var currentUserId = User.UserId();
+                bool isResponsibleInTeam = responsibleUser.IsInRole(UserRoles.Interviewer) &&
+                                           responsibleUser.WorkspaceProfile.SupervisorId == currentUserId;
+                bool isAssignToSelf = responsibleUser.IsInRole(UserRoles.Supervisor) &&
+                                      responsibleUser.Id == currentUserId;
+
+                if (!isResponsibleInTeam && !isAssignToSelf)
+                {
+                    return StatusCode((int)HttpStatusCode.NotAcceptable, $@"Don't allow assign to responsible: {assigneeRequest?.Responsible}");
+                }
             }
 
             commandService.Execute(new ReassignAssignment(assignment.PublicKey, authorizedUser.Id, responsibleUser.Id,
@@ -532,51 +547,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             return NoContent();
         }
-
-        /*/// <summary>
-        /// Updates assignment mode
-        /// </summary>
-        /// <param name="id">Assignment id</param>
-        /// <response code="200"></response>
-        /// <response code="404">Assignment not found</response>
-        /// <response code="406">Mode cannot be changed</response>
-        [HttpPatch]
-        [Route("{id:int}/changeMode")]
-        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Supervisor, UserRoles.Headquarter, UserRoles.Administrator)]
-        public ActionResult ChangeMode(int id, [FromBody] UpdateModeRequest request)
-        {
-            var assignment = assignmentsStorage.GetAssignment(id);
-            if (assignment == null || assignment.Archived)
-                return NotFound();
-
-            if (assignment.WebMode == request.Enabled)
-                return NoContent();
-
-            if (request.Enabled)
-            {
-                if (!string.IsNullOrEmpty(assignment.Email) && assignment.Quantity != 1)
-                    this.BadRequest(new {Message = "For assignments with provided email allowed quantity is 1"});
-            }
-            else
-            {
-                if ((!string.IsNullOrEmpty(assignment.Email) || !string.IsNullOrEmpty(assignment.Password)))
-                    this.BadRequest(new {Message = "For assignments having Email or Password Web Mode (CAWI) should be activated"});
-            }
-
-            commandService.Execute(
-                new UpdateAssignmentWebMode(assignment.PublicKey, authorizedUser.Id, request.Enabled));
-
-            if (request.Enabled)
-            {
-                var invitation = this.invitationService.GetInvitationByAssignmentId(assignment.Id);
-
-                assignment.WebMode = true;
-                if(invitation == null)
-                    this.invitationService.CreateInvitationForWebInterview(assignment);
-            }
-
-            return NoContent();
-        }*/
 
         /// <summary>
         /// Gets Quantity Settings for provided assignment
@@ -856,30 +826,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             }.ToAssignmentAnswers(questionnaire);
         }
 
-        private class AssignmentAnswer
-        {
-            public static AssignmentAnswer UnknownAssignmentAnswer(AssignmentIdentifyingDataItem source)
-            {
-                return new AssignmentAnswer(source, Identity.Create(Guid.Empty, RosterVector.Empty))
-                {
-                    IsUnknownQuestion = true
-                };
-            }
-
-            public AssignmentAnswer(AssignmentIdentifyingDataItem source, Identity questionIdentity)
-            {
-                Source = source;
-                QuestionIdentity = questionIdentity;
-            }
-
-            public AssignmentIdentifyingDataItem Source { get; }
-            public Identity QuestionIdentity { get; }
-            public string? Variable { get; set; }
-
-            public QuestionType? QuestionType { get; set; }
-
-            public bool IsUnknownQuestion { get; private set; }
-        }
+        
 
         private AssignmentAnswer ToAssignmentAnswer(AssignmentIdentifyingDataItem item, IQuestionnaire questionnaire)
         {
@@ -907,7 +854,27 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 }
             }
 
-            return AssignmentAnswer.UnknownAssignmentAnswer(item);
+            return new AssignmentAnswer(item, Identity.Create(Guid.Empty, RosterVector.Empty))
+            {
+                IsUnknownQuestion = true
+            };
         }
+    }
+    
+    public class AssignmentAnswer
+    {
+        public AssignmentAnswer(AssignmentIdentifyingDataItem source, Identity questionIdentity)
+        {
+            Source = source;
+            QuestionIdentity = questionIdentity;
+        }
+
+        public AssignmentIdentifyingDataItem Source { get; }
+        public Identity QuestionIdentity { get; }
+        public string? Variable { get; set; }
+
+        public QuestionType? QuestionType { get; set; }
+
+        public bool IsUnknownQuestion { get; set; }
     }
 }

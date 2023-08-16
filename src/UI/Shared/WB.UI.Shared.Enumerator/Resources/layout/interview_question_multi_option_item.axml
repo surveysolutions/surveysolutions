@@ -2,23 +2,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
               xmlns:local="http://schemas.android.com/apk/res-auto"
               style="@style/Interview_Question_Answer_Option_Background"
-              android:orientation="horizontal"
+              android:orientation="vertical"
               local:MvxBind="BackgroundStyle QuestionOptionBackground(LayoutOptionBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false, IsProtected, CanBeChecked))">
-  <TextView
-    style="@style/Interview_Question_MultiOptionOrder"
-    local:MvxBind="Text CheckedOrder; Visible CheckedOrder; Tag Format('tv_Order_{0}', ItemTag)"/>
+    <LinearLayout android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+      <TextView
+        style="@style/Interview_Question_MultiOptionOrder"
+        local:MvxBind="Text CheckedOrder; Visible CheckedOrder; Tag Format('tv_Order_{0}', ItemTag)"/>
 
-  <CheckBox 
-    style="@style/Interview_Question_Answer_Option_Input"
-    local:MvxBind="Enabled And(CanBeChecked, Not(IsProtected));
-                   HideKeyboardOnClick .; 
-                   Text Title; 
-                   Checked Checked;
-                   Click CheckAnswerCommand;
-                   Bold Checked;
-                   Tag ItemTag;" />
+      <CheckBox 
+        style="@style/Interview_Question_Answer_Option_Input"
+        local:MvxBind="Enabled And(CanBeChecked, Not(IsProtected));
+                       HideKeyboardOnClick .; 
+                       Text Title; 
+                       Checked Checked;
+                       Click CheckAnswerCommand;
+                       Bold Checked;
+                       Tag ItemTag;" />
 
-    <ImageView style="@style/Interview_Question_ProtectedAnswerIcon"
-               local:MvxBind="Visible IsProtected; Tag Format('iv_Lock_{0}', ItemTag)" 
-               local:srcCompat="@drawable/lock_icon" />
+        <ImageView style="@style/Interview_Question_ProtectedAnswerIcon"
+                   local:MvxBind="Visible IsProtected; Tag Format('iv_Lock_{0}', ItemTag)" 
+                   local:srcCompat="@drawable/lock_icon" />
+    </LinearLayout>
+
+    <include layout="@layout/interview_question__attachment" />
+
 </LinearLayout>

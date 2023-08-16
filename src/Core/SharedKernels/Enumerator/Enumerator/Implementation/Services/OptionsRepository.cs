@@ -32,6 +32,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             public decimal? ParentValue { get; set; }
 
             public string TranslationId { get; set; }
+
+            public string AttachmentName { get; set; }
         }
 
         [DebuggerDisplay("{Value}")]
@@ -89,7 +91,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                             Value = @select.Value,
                             Title = @select.Title,
                             ParentValue = @select.ParentValue,
-                            TranslationId = @select.TranslationId
+                            TranslationId = @select.TranslationId,
+                            AttachmentName = @select.AttachmentName,
                         },
                         take, skip)
                     .ToList();
@@ -123,7 +126,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     {
                         ParentValue = option.ParentValue.HasValue ? Convert.ToInt32(option.ParentValue) : (int?) null,
                         Value = Convert.ToInt32(option.Value),
-                        Title = option.Title
+                        Title = option.Title,
+                        AttachmentName = option.AttachmentName,
                     };
                 }
 
@@ -176,7 +180,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             {
                 ParentValue = categoricalQuestionOption.ParentValue.HasValue ? Convert.ToInt32(categoricalQuestionOption.ParentValue) : (int?)null,
                 Value = Convert.ToInt32(categoricalQuestionOption.Value),
-                Title = categoricalQuestionOption.Title
+                Title = categoricalQuestionOption.Title,
+                AttachmentName = categoricalQuestionOption.AttachmentName,
             };
         }
 
@@ -210,7 +215,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             {
                 ParentValue = categoricalQuestionOption.ParentValue.HasValue ? Convert.ToInt32(categoricalQuestionOption.ParentValue) : (int?)null,
                 Value = Convert.ToInt32(categoricalQuestionOption.Value),
-                Title = categoricalQuestionOption.Title
+                Title = categoricalQuestionOption.Title,
+                AttachmentName = categoricalQuestionOption.AttachmentName,
             };
         }
 
@@ -267,7 +273,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             ParentValue = option.ParentValue.HasValue ? Convert.ToInt32(option.ParentValue) : (int?) null,
             Value = Convert.ToInt32(option.Value),
-            Title = option.Title
+            Title = option.Title,
+            AttachmentName = option.AttachmentName,
         };
 
         public void RemoveOptionsForQuestionnaire(QuestionnaireIdentity questionnaireId)
@@ -305,7 +312,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             {
                 AnswerText = a.Text,
                 ParentValue = a.ParentId.ToString(),
-                AnswerValue = a.Id.ToString()
+                AnswerValue = a.Id.ToString(),
+                AttachmentName = a.AttachmentName,
             }).ToList();
             StoreOptionsImpl(questionnaireIdentity, null, categoryId, answers, translations);
         }
@@ -344,7 +352,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     SearchTitle = option.AnswerText?.ToLower(),
                     SortOrder = index,
                     TranslationId = null,
-                    CategoryId = categoryIdAsString
+                    CategoryId = categoryIdAsString,
+                    AttachmentName = option.AttachmentName,
                 };
 
                 optionsToSave.Add(optionView);
@@ -364,7 +373,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         SearchTitle = y.Value?.ToLower(),
                         SortOrder = ++index,
                         TranslationId = y.TranslationId.FormatGuid(),
-                        CategoryId = categoryIdAsString
+                        CategoryId = categoryIdAsString,
+                        AttachmentName = optionView.AttachmentName,
                     }).ToList();
 
                 optionsToSave.AddRange(translatedOptions);

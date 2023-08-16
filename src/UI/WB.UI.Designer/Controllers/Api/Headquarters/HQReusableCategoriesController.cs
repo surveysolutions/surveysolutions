@@ -13,18 +13,18 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
     [Route("api/hq/categories")]
     public class HQReusableCategoriesController : ControllerBase
     {
-        private readonly ICategoriesService categoriesService;
+        private readonly IReusableCategoriesService reusableCategoriesService;
 
-        public HQReusableCategoriesController(ICategoriesService categoriesService)
+        public HQReusableCategoriesController(IReusableCategoriesService reusableCategoriesService)
         {
-            this.categoriesService = categoriesService;
+            this.reusableCategoriesService = reusableCategoriesService;
         }
 
         [HttpGet]
         [Route("{id}/{categoryId}")]
         public IActionResult Get(Guid id, Guid categoryId)
         {
-            var categories = this.categoriesService.GetCategoriesById(id, categoryId);
+            var categories = this.reusableCategoriesService.GetCategoriesById(id, categoryId);
             if (categories == null) return NotFound();
 
             var result = JsonConvert.SerializeObject(categories, Formatting.None, new JsonSerializerSettings

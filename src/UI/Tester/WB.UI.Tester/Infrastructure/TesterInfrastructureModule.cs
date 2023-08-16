@@ -57,7 +57,8 @@ namespace WB.UI.Tester.Infrastructure
                 PathToDatabaseDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data")
             });
 
-            registry.BindAsSingleton(typeof(IPlainStorage<>), typeof(SqlitePlainStorage<>)); // TODO Move to generic module between IN, T
+            registry.BindAsSingleton(typeof(IPlainStorage<,>), typeof(SqlitePlainStorage<,>)); 
+            registry.BindAsSingleton(typeof(IPlainStorage<>), typeof(SqlitePlainStorage<>));
 
             registry.Bind<ILoggerProvider, NLogLoggerProvider>();
             registry.BindAsSingleton<ILogger, NLogLogger>();

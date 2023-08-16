@@ -2,7 +2,7 @@
 {
     public interface IQRCodeHelper
     {
-        string GetQRCodeAsBase64StringSrc(string relativeUrl, int height, int width, int margin = 0);
+        string GetQRCodeAsBase64StringSrc(string relativeUrl, int height, int width);
         bool SupportQRCodeGeneration();
     }
 }

@@ -519,7 +519,13 @@
   <data name="WB0137_SpecialValuesTitlesMustBeUnique" xml:space="preserve">
     <value>Заголовки специальных значений должны быть уникальны.</value>
   </data>
-  <data name="WB0200_LargeNumberOfRostersIsCreated" xml:space="preserve">
+  <data name="WB0138_SpecialValuesAttachmentsMustBeUniqueForNumericQuestion" xml:space="preserve">
+    <value>Имя вложения для специального значения должно быть уникальным.</value>
+  </data>
+    <data name="WB0139_SpecialValuesAttachmentsReferAbsentAttachment" xml:space="preserve">
+    <value>Специальное значение ссылается на несуществующее вложение.</value>
+  </data>
+    <data name="WB0200_LargeNumberOfRostersIsCreated" xml:space="preserve">
     <value>Создано большое количество ростеров. Экспорт этих структур в файлы данных может быть проблематичным. Подумайте об уменьшении количества ростеров.</value>
   </data>
   <data name="WB0201_LargeNumberOfQuestionsInGroup" xml:space="preserve">
@@ -832,5 +838,17 @@
   </data>
   <data name="WB0311_IdentityVariablesMustHaveLabel" xml:space="preserve">
     <value>Переменные на обложке должны иметь описание</value>
+  </data>
+  <data name="WB0313_QuestionOptionReferenceToNonExistentAttachment" xml:space="preserve">
+      <value>Вопрос содержит категорию, ссылающуюся на несуществующий файл</value>
+  </data>
+  <data name="WB0314_NonUniqueAttachment" xml:space="preserve">
+      <value>Вопрос содержит несколько категорий, ссылающихся на одинаковый файл</value>
+  </data>
+  <data name="WB0315_AttachmentHasInvalidName" xml:space="preserve">
+    <value>Имя файла должно содержать только английские буквы, цифры и символы подчеркивания. Начинаться с буквы, без последовательных символов подчеркивания, не закаечиваться на символ подчеркивания и не быть зарезервированныи словом, пустым или более 32 символов.</value>
+  </data>
+  <data name="WB0316_QuestionnaireWithOldCoverPage" xml:space="preserve">
+    <value>Опросник в старом формате. Используйте ссылку "Сгенерировать обложку" на секции Обложка.</value>
   </data>
 </root>

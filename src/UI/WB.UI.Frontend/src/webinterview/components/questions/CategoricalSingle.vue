@@ -36,8 +36,12 @@
                             <label :for="$me.id + '_' + option.value">
                                 <span class="tick"></span> {{option.title}}
                             </label>
+
                             <wb-remove-answer :id-suffix="`_opt_${option.value}`"/>
                         </div>
+                        <wb-attachment :attachmentName="option.attachmentName"
+                            :interviewId="interviewId"
+                            v-if="option.attachmentName" />
                     </div>
                     <button type="button"
                         class="btn btn-link btn-horizontal-hamburger"

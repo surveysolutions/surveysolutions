@@ -15,10 +15,9 @@ namespace WB.UI.Shared.Enumerator.Settings
             this.telephonyManager.Listen(this, PhoneStateListenerFlags.SignalStrengths);
         }
 
-        [Obsolete]
         public override void OnSignalStrengthsChanged(SignalStrength newSignalStrength)
         {
-            if (newSignalStrength.IsGsm)
+            if (newSignalStrength != null && newSignalStrength.IsGsm)
                 this.SignalStrength = newSignalStrength.GsmSignalStrength;
         }
 

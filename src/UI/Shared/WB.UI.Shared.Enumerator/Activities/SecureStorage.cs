@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using Android.Content;
+﻿using Android.Content;
 using Android.Runtime;
-using Java.IO;
 using Java.Security;
 using Javax.Crypto;
 using MvvmCross;

@@ -11,6 +11,9 @@ import '~/webinterview/components'
 import '~/webinterview/components/questions'
 import '~/webinterview/components/questions/parts'
 import '../parts'
+import '~/webinterview/directives/DateTimeFormatting'
+import '~/webinterview/directives/MaskedText'
+import '~/webinterview/directives/LinkToRoute'
 import { mount, createLocalVue  } from '@vue/test-utils'
 import TextQuestion from '../TextQuestion.vue'
 import Question from '../Question.vue'
@@ -29,10 +32,11 @@ describe('TextQuestion component', () => {
         isLoading : false,
         isDisabled: false,
         isAnswered: true,
-        validity: { isValid: true },
+        validity: { isValid: true, warnings:[] },
         hideIfDisabled: false,
         id: '111',
         answer: 'same test',
+        comments: [],
     }
     webinterview.fetch = { state: {}}
     webinterview.entityDetails = entityDetails

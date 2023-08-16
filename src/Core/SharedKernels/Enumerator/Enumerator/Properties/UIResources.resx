@@ -241,7 +241,7 @@
     <value>Tap to take barcode</value>
   </data>
   <data name="Interview_Questions_Area_SaveAnswer" xml:space="preserve">
-    <value>Tap to edit area</value>
+    <value>Tap to answer</value>
   </data>
   <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
     <value>Section completed: {0}</value>
@@ -307,6 +307,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   </data>
   <data name="GpsQuestion_Timeout" xml:space="preserve">
     <value>GPS was unable to determine your location. To troubleshoot, please try the following: ensure that you are outdoors, confirm that your GPS is enabled, or change your GPS's timeout setting</value>
+  </data>
+  <data name="NoMapsApplication" xml:space="preserve">
+    <value>Navigation application was not found</value>
   </data>
   <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
     <value>Provided Survey Solutions Designer URL is invalid. Check settings.</value>
@@ -391,6 +394,15 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   </data>
   <data name="Interviewer_Reassign_Comment" xml:space="preserve">
     <value>Leave comment for a new responsible</value>
+  </data>
+  <data name="Interviewer_Comment" xml:space="preserve">
+    <value>Leave a comment</value>
+  </data>
+  <data name="Interviewer_Reassign_AlreadyReceivedInterview" xml:space="preserve">
+    <value>Interviewer {0} has already received this interview {1}. Are you sure you want to reassign it?</value>
+  </data>
+  <data name="Interviewer_Reassign_AlreadyReceivedAssignment" xml:space="preserve">
+    <value>Interviewer {0} has already received this assignment {1}. Are you sure you want to reassign it?</value>
   </data>
   <data name="Interviewer_Done" xml:space="preserve">
     <value>Done</value>
@@ -521,6 +533,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="MissingPermissions_Storage" xml:space="preserve">
     <value>Application needs to have a permission to use storage in order to answer this question. Retry answering question and allow access. If you don't see permissions popup then go to Settings and allow application to use storage.</value>
   </data>
+  <data name="MissingPermissions_MapsLocation" xml:space="preserve">
+    <value>Application needs to have a permission to use location. If you don't see permissions popup then go to Settings and allow application to use location.</value>
+  </data>
   <data name="MissingPermissions_Microphone_Global" xml:space="preserve">
     <value>Application needs to have a permission to use microphone. Retry last action and allow access. If you don't see permissions popup then go to Settings and allow application to use microphone.</value>
   </data>
@@ -570,7 +585,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Select boundaries file</value>
   </data>
   <data name="AreaMap_ErrorOnShapefileLoading" xml:space="preserve">
-    <value>Error occured on loading. Shapefile cannot be opened</value>
+    <value>Error occured on loading. Shapefile cannot be handled</value>
   </data>
   <data name="AreaMap_NoMapsFound" xml:space="preserve">
     <value>No maps were found. Please update maps</value>
@@ -599,6 +614,15 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="AreaMap_AreaFormat" xml:space="preserve">
     <value>Area: {0:0.00} m2</value>
   </data>
+  <data name="AreaMap_OverlapsWith" xml:space="preserve">
+    <value>Overlaps with:</value>
+  </data>
+  <data name="AreaMap_OverlapsWithOther" xml:space="preserve">
+    <value>and {0} other.</value>
+  </data>
+  <data name="AreaMap_ItemsOutsideDedicatedArea" xml:space="preserve">
+    <value>Some markers fall outside the outlined area</value>
+  </data>  
   <data name="AreaMap_PointsFormat" xml:space="preserve">
     <value>Points: {0}</value>
   </data>
@@ -615,7 +639,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>ACTIVE MAP:</value>
   </data>
   <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
-    <value>MAPS AVAILABLE ON DEVICE</value>
+      <value>AVAILABLE MAPS</value>
   </data>
   <data name="AreaMap_LoadShapefile" xml:space="preserve">
     <value>Load shapefile</value>
@@ -638,8 +662,20 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="MapDashboard_AllQuestionnaires" xml:space="preserve">
     <value>All questionnaires</value>
   </data>
+  <data name="MapDashboard_AllResponsibles" xml:space="preserve">
+    <value>All responsibles</value>
+  </data>
+  <data name="MapDashboard_AllStatuses" xml:space="preserve">
+    <value>All statuses</value>
+  </data>
   <data name="MapDashboard_QuestionnaireTitle" xml:space="preserve">
     <value>Questionnaire</value>
+  </data>
+  <data name="MapDashboard_ResponsibleTitle" xml:space="preserve">
+    <value>Responsible</value>
+  </data>
+  <data name="MapDashboard_StatusTitle" xml:space="preserve">
+    <value>Status</value>
   </data>
   <data name="MapDashboard_TypeTitle" xml:space="preserve">
     <value>Type</value>
@@ -794,5 +830,47 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   </data>
    <data name="Loading" xml:space="preserve">
     <value>Loading...</value>
+  </data>
+  <data name="AreaMap_Save_With_Warning_Confirm" xml:space="preserve">
+    <value>You are about to save not a precise the result. Do you want to continue?</value>
+  </data>
+  <data name="AreaMap_Start_Measurement" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="AreaMap_InitLocation" xml:space="preserve">
+    <value>Initiating...</value>
+  </data>
+  <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
+    <value>Approved by Headquarters</value>
+  </data>
+  <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
+    <value>Approved by Supervisor</value>
+  </data>
+  <data name="InterviewStatus_Completed" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="InterviewStatus_Created" xml:space="preserve">
+    <value>Created</value>
+  </data>
+  <data name="InterviewStatus_Deleted" xml:space="preserve">
+    <value>Deleted</value>
+  </data>
+  <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
+    <value>Interviewer assigned</value>
+  </data>
+  <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
+    <value>Rejected by Headquarters</value>
+  </data>
+  <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
+    <value>Rejected by Supervisor</value>
+  </data>
+  <data name="InterviewStatus_Restarted" xml:space="preserve">
+    <value>Restarted</value>
+  </data>
+  <data name="InterviewStatus_Restored" xml:space="preserve">
+    <value>Restored</value>
+  </data>
+  <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
+    <value>Supervisor assigned</value>
   </data>
 </root>

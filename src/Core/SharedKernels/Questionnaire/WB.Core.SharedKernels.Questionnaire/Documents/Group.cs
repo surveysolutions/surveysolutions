@@ -133,7 +133,7 @@ namespace Main.Core.Entities.SubEntities
                     .Union(this.Children.SelectMany(q => q.Find(condition)))!;
         }
 
-        public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
+        public T? FirstOrDefault<T>(Func<T, bool> condition) where T : class
         {
             return this.Children.Where(a => a is T arg && condition(arg))
                        .Select(a => a as T).FirstOrDefault()
@@ -159,8 +159,9 @@ namespace Main.Core.Entities.SubEntities
 
         public void RemoveChild(Guid childId)
         {
-            IComposite child = this.children.Find(c => c.PublicKey == childId);
-            this.children.Remove(child);
+            var child = this.children.Find(c => c.PublicKey == childId);
+            if (child != null)
+                this.children.Remove(child);
         }
 
         public void ConnectChildrenWithParent()

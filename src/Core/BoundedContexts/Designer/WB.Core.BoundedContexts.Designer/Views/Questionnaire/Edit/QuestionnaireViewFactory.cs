@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         bool HasUserAccessToQuestionnaire(Guid questionnaireId, Guid? userId);
 
-        bool HasUserAccessToRevertQuestionnaire(Guid questionnaireId, Guid userId);
+        bool HasUserChangeAccessToQuestionnaire(Guid questionnaireId, Guid userId);
         bool HasUserAccessToEditComments(QuestionnaireChangeRecord changeRecord, QuestionnaireDocument questionnaire, Guid userId);
         bool HasUserAccessToEditComments(Guid revisionId, Guid userId);
         bool IsAnonymousQuestionnaire(Guid questionnaireId, out Guid? originQuestionnaireId);
@@ -42,14 +42,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         {
             var doc = GetQuestionnaireDocument(input);
             var sharedPersons = this.GetSharedPersons(input.QuestionnaireId);
-            return doc == null ? null : new QuestionnaireView(doc, sharedPersons);
+            return doc == null ? null : new QuestionnaireView(doc, sharedPersons, input.CompileQuestionnaireId);
         }
 
         public QuestionnaireView? Load(QuestionnaireRevision revision)
         {
             var doc = this.questionnaireStorage.Get(revision);
-            var sharedPersons = this.GetSharedPersons(revision.QuestionnaireId);
-            return doc == null ? null : new QuestionnaireView(doc, sharedPersons);
+            var sharedPersons = this.GetSharedPersons(revision.OriginalQuestionnaireId ?? revision.QuestionnaireId);
+            Guid? compileQuestionnaireId = revision.OriginalQuestionnaireId.HasValue ? revision.QuestionnaireId : null;
+            return doc == null ? null : new QuestionnaireView(doc, sharedPersons, compileQuestionnaireId);
         }
 
         public bool HasUserAccessToQuestionnaire(Guid questionnaireId, Guid? userId)
@@ -87,7 +88,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return false;
         }
 
-        public bool HasUserAccessToRevertQuestionnaire(Guid questionnaireId, Guid userId)
+        public bool HasUserChangeAccessToQuestionnaire(Guid questionnaireId, Guid userId)
         {
             var questionnaire = this.questionnaireStorage.Get(questionnaireId);
             if (questionnaire == null || questionnaire.IsDeleted)

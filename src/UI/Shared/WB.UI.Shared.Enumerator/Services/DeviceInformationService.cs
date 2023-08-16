@@ -8,16 +8,16 @@ using Android.Net;
 using Android.OS;
 using Android.Telephony;
 using Java.Lang;
-using Java.Util;
-using Plugin.Permissions.Abstractions;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Shared.Enumerator.Settings;
+using Xamarin.Essentials;
+using DeviceInfo = WB.Core.SharedKernels.Enumerator.Views.DeviceInfo;
 using Exception = System.Exception;
-using Permission = Plugin.Permissions.Abstractions.Permission;
+using Locale = Java.Util.Locale;
 
 namespace WB.UI.Shared.Enumerator.Services
 {
@@ -26,14 +26,14 @@ namespace WB.UI.Shared.Enumerator.Services
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IDeviceOrientation deviceOrientation;
         private readonly IBattery battery;
-        private readonly IPermissions permissions;
+        private readonly IPermissionsService permissions;
         private readonly ILogger logger;
         private GsmSignalStrengthListener gsmSignalStrengthListener;
 
         public DeviceInformationService(IFileSystemAccessor fileSystemAccessor,
             IDeviceOrientation deviceOrientation,
             IBattery battery,
-            IPermissions permissions,
+            IPermissionsService permissions,
             ILogger logger)
         {
             this.fileSystemAccessor = fileSystemAccessor;
@@ -461,7 +461,7 @@ namespace WB.UI.Shared.Enumerator.Services
 
         private async Task<LocationAddress> GetDeviceLocationAsync()
         {
-            var locationPermissionsStatus = await this.permissions.CheckPermissionStatusAsync(Permission.Location);
+            var locationPermissionsStatus = await this.permissions.CheckPermissionStatusAsync<Permissions.LocationWhenInUse>();
             if (locationPermissionsStatus != PermissionStatus.Granted) return null;
 
             var locationProvider = this.locationManager.GetBestProvider(new Criteria

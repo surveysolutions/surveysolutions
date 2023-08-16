@@ -59,7 +59,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
         
         public bool TryGetWorkspaceName(IMiddlewareContext ctx, out string? workspace)
         {
-            if (ctx.Variables.TryGetVariable("workspace", out string workspaceValue))
+            if (ctx.Variables.TryGetVariable("workspace", out string? workspaceValue))
             {
                 workspace = workspaceValue;
                 return true;
@@ -69,7 +69,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
             bool doesContainField = false;
             try
             {
-                doesContainField = ctx.Field.Arguments.ContainsField("workspace");
+                doesContainField = ctx.Selection.Field.Arguments.ContainsField("workspace");
                 if (!doesContainField)
                     return false;
 

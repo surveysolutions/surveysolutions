@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
@@ -6,6 +7,8 @@ using Main.Core.Entities.Composite;
 using Moq;
 using Ncqrs.Spec;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -44,11 +47,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     IntegrationCreate.LookupTableRow(2, new decimal?[] { 4.2m, 10.2m}),
                     IntegrationCreate.LookupTableRow(3, new decimal?[] { 6.3m, null})
                 );
-
-                var lookupTableServiceMock = new Mock<ILookupTableService>();
-                lookupTableServiceMock.SetReturnsDefault(lookupTableContent);
-
-                SetUp.InstanceToMockedServiceLocator<ILookupTableService>(lookupTableServiceMock.Object);
+                Dictionary<Guid, LookupTableContent> lookupTableContents = new() { { lookupId, lookupTableContent } };
 
                 var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
                 {
@@ -59,8 +58,9 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 });
 
                 questionnaire.LookupTables.Add(lookupId, Create.Entity.LookupTable("price"));
-
-                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaire);
+                var package = new QuestionnaireCodeGenerationPackage(questionnaire, lookupTableContents);
+                
+                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, package);
 
                 var culture = CultureInfo.GetCultureInfo("ru");
                 Thread.CurrentThread.CurrentCulture = culture;
