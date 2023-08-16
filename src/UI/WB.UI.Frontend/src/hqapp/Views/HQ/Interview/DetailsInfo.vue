@@ -215,13 +215,6 @@
                                     {{ $t('Common.ChangeToCAPI') }}
                                 </a>
                             </li>
-
-                            <li v-if="canBeUnapproved">
-                                <a href="#" @click="unapproveSelected">
-                                    {{ $t('Common.Unapprove') }}
-                                </a>
-                            </li>
-
                             <li v-if="canBeDeleted">
                                 <a href="#" @click="deleteSelected">
                                     {{ $t('Common.Delete') }}
@@ -577,9 +570,6 @@ export default {
             this.newResponsibleId = null
             this.$refs.assignModal.modal({ keyboard: false })
         },
-        unapproveSelected() {
-            this.$refs.unapproveModal.modal({ keyboard: false })
-        },
         cahngeToCawiSelected() {
             this.$refs.modalChangeToCAWI.modal({ keyboard: false })
         },
@@ -650,32 +640,6 @@ export default {
                 function () {
                     self.$refs.assignModal.hide()
                     self.newResponsibleId = null
-                    window.location.reload(true)
-                },
-            )
-        },
-
-        unapproveInterviews() {
-            const self = this
-            var filteredItems = [{ id: this.$config.model.id }]
-
-            if (filteredItems.length == 0) {
-                this.$refs.unapproveModal.hide()
-                return
-            }
-
-            var command = this.getCommand(
-                'UnapproveByHeadquarterCommand',
-                map(filteredItems, (interview) => {
-                    return interview.id
-                }),
-            )
-
-            this.executeCommand(
-                command,
-                function () {},
-                function () {
-                    self.$refs.unapproveModal.hide()
                     window.location.reload(true)
                 },
             )
@@ -848,13 +812,6 @@ export default {
             return (
                 !this.$config.model.isObserving &&
                 this.$config.model.canBeReassigned
-            )
-        },
-        canBeUnapproved() {
-            return (
-                !this.$config.model.isObserving &&
-                !this.$config.model.isSupervisor &&
-                this.$config.model.canBeUnapprovedByHQ
             )
         },
         canBeDeleted() {
