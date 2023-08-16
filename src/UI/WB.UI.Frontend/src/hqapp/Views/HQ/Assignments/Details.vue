@@ -390,7 +390,7 @@ export default {
             const result = this.$t('Assignments.SingleAssignmentCloseConfirm', {
                 id: this.model.id,
                 quantity: this.model.quantity,
-                collected: this.model.interviewsCount,
+                collected: this.model.interviewsProvided,
             })
             return result
         },
