@@ -174,6 +174,25 @@
                         >
                     </h3>
                     <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th
+                                    class="sorting_disabled"
+                                    rowspan="1"
+                                    colspan="1"
+                                >
+                                    Property
+                                </th>
+                                <th
+                                    class="sorting_disabled"
+                                    rowspan="1"
+                                    colspan="1"
+                                >
+                                    Value
+                                </th>
+                            </tr>
+                        </thead>
+
                         <tbody>
                             <tr v-if="model.isHeadquarters">
                                 <td class="text-nowrap">
@@ -201,7 +220,7 @@
                                 <td class="text-nowrap">
                                     {{ $t('Assignments.IdentifyingQuestions') }}
                                 </td>
-                                <td>
+                                <td style="word-wrap: break-word">
                                     <div
                                         v-bind:key="question.id"
                                         v-for="question in model.identifyingData"

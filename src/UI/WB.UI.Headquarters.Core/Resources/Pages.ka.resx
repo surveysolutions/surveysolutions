@@ -855,9 +855,6 @@
   <data name="QuestionnaireNameFormat" xml:space="preserve">
       <value>{{name}} (ver. {{version}})</value>
   </data>
-  <data name="QuestionnaireNameVersionFirst" xml:space="preserve">
-    <value>(ver. {1}) {0}</value>
-  </data>
   <data name="RejectedByHeadquarters" xml:space="preserve">
     <value>უარყოფილია სათაო ოფისის მიერ</value>
   </data>

@@ -1117,8 +1117,8 @@
     <value>Assignment {0}</value>
   </data>  
   <data name="QuestionnaireNameVersionFirst" xml:space="preserve">
-    <value>(ver. {1}) {0} </value>
-    <comment>{0} - Questionnaire name, {1} - Questionnaire version</comment>
+      <value>[ver. {{version}}] {{name}} </value>
+      <comment>{{name}} - Questionnaire name, {{version}} - Questionnaire version</comment>
   </data>
   <data name="HQ_LockWarning" xml:space="preserve">
     <value>Locked headquarters (box checked) cannot login and perform any actions on the server.</value>

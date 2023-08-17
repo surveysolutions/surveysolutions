@@ -5,59 +5,32 @@
                 <div class="panel panel-details contains-action-buttons">
                     <div class="panel-body clearfix">
                         <div class="about-questionnaire clearfix">
-                            <div class="about-questionnaire-details clearfix">
-                                <ul
-                                    class="main-info-column list-unstyled pull-left"
-                                >
-                                    <li
-                                        id="detailsInfo_qusetionnaireTitleListItem"
-                                        class="questionnaire-title"
+                            <h1 style="padding-top: 17px">
+                                {{ this.$t('Pages.Questionnaire_Info') }}:
+                                <b>
+                                    {{
+                                        $t(
+                                            'Pages.QuestionnaireNameVersionFirst',
+                                            {
+                                                name: model.title,
+                                                version: model.version,
+                                            },
+                                        )
+                                    }}
+                                    <a
+                                        :href="model.designerUrl"
+                                        target="_blank"
+                                        v-if="model.designerUrl != null"
                                     >
-                                        [ver.{{ model.version }}]
-                                        {{ model.title }}
-                                        <a
-                                            :href="model.designerUrl"
-                                            target="_blank"
-                                            v-if="model.designerUrl != null"
-                                        >
-                                            <span
-                                                :title="
-                                                    $t(
-                                                        'Dashboard.ShowOnDesigner',
-                                                    )
-                                                "
-                                                class="glyphicon glyphicon-link"
-                                            />
-                                        </a>
-                                    </li>
-                                    <li id="detailsInfo_interviewMode">
-                                        <span class="data-label"
-                                            >{{
-                                                this.$t(
-                                                    'Details.InterviewMode',
-                                                )
-                                            }}:
-                                        </span>
-                                        <span>{{
-                                            model.webMode
-                                                ? $t('Common.Cawi')
-                                                : $t('Common.Capi')
-                                        }}</span>
-                                    </li>
-                                </ul>
-                                <ul class="list-unstyled pull-left table-info">
-                                    <li id="detailsInfo_lastUpdatedListItem">
-                                        <span class="data-label"
-                                            >{{
-                                                this.$t('Dashboard.ImportDate')
-                                            }}:</span
-                                        >
-                                        <span class="data">{{
-                                            formatUtcDate(model.importDateUtc)
-                                        }}</span>
-                                    </li>
-                                </ul>
-                            </div>
+                                        <span
+                                            :title="
+                                                $t('Dashboard.ShowOnDesigner')
+                                            "
+                                            class="glyphicon glyphicon-link"
+                                        ></span>
+                                    </a>
+                                </b>
+                            </h1>
                         </div>
                         <div class="questionnaire-details-actions clearfix">
                             <div class="buttons-container">
@@ -258,6 +231,12 @@
                                 </td>
                             </tr>
                             <tr>
+                                <td>{{ $t('Dashboard.ImportDate') }}</td>
+                                <td>
+                                    {{ formatUtcDate(model.importDateUtc) }}
+                                </td>
+                            </tr>
+                            <tr>
                                 <td>{{ $t('Dashboard.LastEntryDate') }}</td>
                                 <td>
                                     {{ formatUtcDate(model.lastEntryDateUtc) }}
@@ -267,6 +246,16 @@
                                 <td>{{ $t('Dashboard.CreationDate') }}</td>
                                 <td>
                                     {{ formatUtcDate(model.creationDateUtc) }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>{{ $t('Dashboard.WebMode') }}</td>
+                                <td>
+                                    {{
+                                        model.webMode
+                                            ? $t('Common.Cawi')
+                                            : $t('Common.Capi')
+                                    }}
                                 </td>
                             </tr>
                             <tr>

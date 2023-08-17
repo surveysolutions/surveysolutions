@@ -244,7 +244,7 @@
     <value>Titulli:</value>
   </data>
   <data name="WebInterviewSetupFor_Title" xml:space="preserve">
-    <value>Konfigurimi i intervistës në internet për</value>
+      <value>Konfigurimi i intervistës në internet: </value>
   </data>
   <data name="WelcomePage" xml:space="preserve">
     <value>Faqen e mirëseardhjes</value>
