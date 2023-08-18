@@ -1,53 +1,84 @@
 <template>
     <HqLayout :fixedWidth="false">
         <div slot="headers">
-            <h1>{{$t('DataExport.DataExport_Title')}}</h1>
+            <h1>{{ $t('DataExport.DataExport_Title') }}</h1>
             <div class="row">
                 <div class="col-lg-5">
-                    <p>{{$t('DataExport.ExportExplanation')}}</p>
+                    <p>{{ $t('DataExport.ExportExplanation') }}</p>
                 </div>
             </div>
         </div>
         <div class="col-md-12">
-            <div class="row"
-                v-if="exportServiceIsUnavailable">
+            <div class="row" v-if="exportServiceIsUnavailable">
                 <div class="col-md-12 mb-30">
-                    {{$t('DataExport.DataExport_ServiceIsNotAvailable')}}
+                    {{ $t('DataExport.DataExport_ServiceIsNotAvailable') }}
                 </div>
             </div>
 
             <div class="row">
-                <div class="export d-flex"
-                    ref="list">
+                <div class="export d-flex" ref="list">
                     <div class="col-md-12">
                         <form v-if="!exportServiceIsUnavailable">
                             <div class="mb-30">
-                                <h3>{{$t('DataExport.FilterTitle')}}</h3>
+                                <h3>{{ $t('DataExport.FilterTitle') }}</h3>
                                 <div class="d-flex mb-20 filter-wrapper">
                                     <div class="filter-column">
                                         <h5>
-                                            {{$t('DataExport.SurveyQuestionnaire')}}
+                                            {{
+                                                $t(
+                                                    'DataExport.SurveyQuestionnaire',
+                                                )
+                                            }}
                                             <span class="text-danger">*</span>
                                         </h5>
                                         <div
                                             class="form-group"
-                                            :class="{ 'has-error': errors.has('questionnaireId') }">
+                                            :class="{
+                                                'has-error':
+                                                    errors.has(
+                                                        'questionnaireId',
+                                                    ),
+                                            }"
+                                        >
                                             <Typeahead
                                                 control-id="questionnaireId"
                                                 :value="questionnaireId"
-                                                :placeholder="$t('Common.AllQuestionnaires')"
-                                                :fetch-url="questionnaireFetchUrl"
+                                                :placeholder="
+                                                    $t(
+                                                        'Common.AllQuestionnaires',
+                                                    )
+                                                "
+                                                :fetch-url="
+                                                    questionnaireFetchUrl
+                                                "
                                                 :selectedKey="pageState.id"
                                                 data-vv-name="questionnaireId"
                                                 data-vv-as="questionnaire"
                                                 v-validate="'required'"
-                                                v-on:selected="questionnaireSelected"/>
-                                            <span
-                                                class="help-block">{{ errors.first('questionnaireId') }}</span>
+                                                v-on:selected="
+                                                    questionnaireSelected
+                                                "
+                                            />
+                                            <span class="help-block">{{
+                                                errors.first('questionnaireId')
+                                            }}</span>
                                         </div>
+                                        <h5>
+                                            {{
+                                                $t(
+                                                    'DataExport.SurveyQuestionnaireVersion',
+                                                )
+                                            }}
+                                            <span class="text-danger">*</span>
+                                        </h5>
                                         <div
                                             class="form-group"
-                                            :class="{ 'has-error': errors.has('questionnaireVersion') }">
+                                            :class="{
+                                                'has-error': errors.has(
+                                                    'questionnaireVersion',
+                                                ),
+                                            }"
+                                        >
                                             <Typeahead
                                                 noClear
                                                 control-id="questionnaireVersion"
@@ -57,15 +88,35 @@
                                                 :selectedKey="pageState.version"
                                                 v-validate="'required'"
                                                 :value="questionnaireVersion"
-                                                :fetch-url="questionnaireVersionFetchUrl"
-                                                v-on:selected="questionnaireVersionSelected"
-                                                :disabled="questionnaireVersionFetchUrl == null"
-                                                :selectFirst="true"/>
-                                            <span
-                                                class="help-block">{{ errors.first('questionnaireVersion') }}</span>
+                                                :fetch-url="
+                                                    questionnaireVersionFetchUrl
+                                                "
+                                                v-on:selected="
+                                                    questionnaireVersionSelected
+                                                "
+                                                :disabled="
+                                                    questionnaireVersionFetchUrl ==
+                                                    null
+                                                "
+                                                :selectFirst="true"
+                                            />
+                                            <span class="help-block">{{
+                                                errors.first(
+                                                    'questionnaireVersion',
+                                                )
+                                            }}</span>
                                         </div>
-                                        <div class="form-group"
-                                            v-if="translations.length > 0">
+                                        <h5 v-if="translations.length > 0">
+                                            {{
+                                                $t(
+                                                    'DataExport.SurveyQuestionnaireTranslation',
+                                                )
+                                            }}
+                                        </h5>
+                                        <div
+                                            class="form-group"
+                                            v-if="translations.length > 0"
+                                        >
                                             <Typeahead
                                                 noClear
                                                 selectFirst
@@ -73,85 +124,125 @@
                                                 ref="questionnaireTranslation"
                                                 data-vv-name="questionnaireTranslation"
                                                 data-vv-as="questionnaire translation"
-                                                :placeholder="$t('DataExport.QuestionnaireTranslation')"
-                                                :selectedKey="pageState.translation"
-                                                :value="questionnaireTranslation"
+                                                :placeholder="
+                                                    $t(
+                                                        'DataExport.QuestionnaireTranslation',
+                                                    )
+                                                "
+                                                :selectedKey="
+                                                    pageState.translation
+                                                "
+                                                :value="
+                                                    questionnaireTranslation
+                                                "
                                                 :values="translations"
-                                                :disabled="questionnaireVersion == null"
-                                                v-on:selected="translationSelected"/>
+                                                :disabled="
+                                                    questionnaireVersion == null
+                                                "
+                                                v-on:selected="
+                                                    translationSelected
+                                                "
+                                            />
                                         </div>
                                     </div>
 
                                     <div class="filter-column">
-                                        <h5>{{$t('DataExport.StatusOfExportTitle')}}</h5>
+                                        <h5>
+                                            {{
+                                                $t(
+                                                    'DataExport.StatusOfExportTitle',
+                                                )
+                                            }}
+                                        </h5>
                                         <Typeahead
                                             control-id="status"
                                             :selectedKey="pageState.status"
                                             data-vv-name="status"
                                             data-vv-as="status"
-                                            :placeholder="$t('Common.AllStatuses')"
+                                            :placeholder="
+                                                $t('Common.AllStatuses')
+                                            "
                                             :value="status"
                                             :values="statuses"
-                                            v-on:selected="statusSelected"/>
+                                            v-on:selected="statusSelected"
+                                        />
                                     </div>
                                 </div>
                             </div>
-                            <div class="mb-30"
-                                v-if="hasBinaryData || questionnaireVersion">
-                                <h3>{{$t('DataExport.DataType')}}</h3>
-                                <div class="radio-btn-row"
-                                    v-if="hasInterviews">
+                            <div
+                                class="mb-30"
+                                v-if="hasBinaryData || questionnaireVersion"
+                            >
+                                <h3>{{ $t('DataExport.DataType') }}</h3>
+                                <div class="radio-btn-row" v-if="hasInterviews">
                                     <input
                                         class="radio-row"
                                         type="radio"
                                         name="dataType"
                                         id="surveyData"
                                         v-model="dataType"
-                                        value="surveyData"/>
-                                    <label for="surveyData"
-                                        class>
+                                        value="surveyData"
+                                    />
+                                    <label for="surveyData" class>
                                         <span class="tick"></span>
-                                        <span
-                                            class="format-data Binary">{{$t('DataExport.DataType_MainSurveyData')}}</span>
+                                        <span class="format-data Binary">{{
+                                            $t(
+                                                'DataExport.DataType_MainSurveyData',
+                                            )
+                                        }}</span>
                                     </label>
                                 </div>
-                                <div class="radio-btn-row"
-                                    v-if="hasInterviews && hasBinaryData">
+                                <div
+                                    class="radio-btn-row"
+                                    v-if="hasInterviews && hasBinaryData"
+                                >
                                     <input
                                         class="radio-row"
                                         type="radio"
                                         name="dataType"
                                         id="binaryData"
                                         v-model="dataType"
-                                        value="binaryData"/>
+                                        value="binaryData"
+                                    />
                                     <label for="binaryData">
                                         <span class="tick"></span>
-                                        <span
-                                            class="format-data Binary">{{$t('DataExport.DataType_Binary')}}</span>
+                                        <span class="format-data Binary">{{
+                                            $t('DataExport.DataType_Binary')
+                                        }}</span>
                                     </label>
                                 </div>
-                                <div class="radio-btn-row"
-                                    v-if="hasInterviews">
+                                <div class="radio-btn-row" v-if="hasInterviews">
                                     <input
                                         class="radio-row"
                                         type="radio"
                                         name="dataType"
                                         id="paraData"
                                         v-model="dataType"
-                                        value="paraData"/>
+                                        value="paraData"
+                                    />
                                     <label for="paraData">
                                         <span class="tick"></span>
-                                        <span
-                                            class="format-data Tabular">{{$t('DataExport.DataType_Paradata')}}</span>
+                                        <span class="format-data Tabular">{{
+                                            $t('DataExport.DataType_Paradata')
+                                        }}</span>
                                     </label>
                                 </div>
                             </div>
 
-
                             <div
                                 class="mb-30"
-                                v-if="dataType == 'surveyData' && questionnaireVersion">
-                                <h3>{{$t('DataExport.QuestionnaireInformation')}}</h3>
+                                v-if="
+                                    dataType == 'surveyData' &&
+                                    questionnaireVersion
+                                "
+                            >
+                                <h3>
+                                    {{
+                                        $t(
+                                            'DataExport.QuestionnaireInformation',
+                                        )
+                                    }}
+                                </h3>
                                 <div class="radio-btn-row">
                                     <input
                                         class="radio-row"
@@ -159,11 +250,15 @@
                                         name="includeMeta"
                                         id="metaInclude"
                                         v-model="includeMeta"
-                                        value="True"/>
+                                        value="True"
+                                    />
                                     <label for="metaInclude">
                                         <span class="tick"></span>
-                                        <span
-                                            class="format-data">{{$t('DataExport.QuestionnaireInformation_Include')}}</span>
+                                        <span class="format-data">{{
+                                            $t(
+                                                'DataExport.QuestionnaireInformation_Include',
+                                            )
+                                        }}</span>
                                     </label>
                                 </div>
                                 <div class="radio-btn-row">
@@ -173,20 +268,27 @@
                                         name="includeMeta"
                                         id="metaExclude"
                                         v-model="includeMeta"
-                                        value="False"/>
-                                    <label for="metaExclude"
-                                        class>
+                                        value="False"
+                                    />
+                                    <label for="metaExclude" class>
                                         <span class="tick"></span>
-                                        <span
-                                            class="format-data no-meta">{{$t('DataExport.QuestionnaireInformation_Exclude')}}</span>
+                                        <span class="format-data no-meta">{{
+                                            $t(
+                                                'DataExport.QuestionnaireInformation_Exclude',
+                                            )
+                                        }}</span>
                                     </label>
                                 </div>
                             </div>
 
                             <div
                                 class="mb-30"
-                                v-if="dataType == 'surveyData' && questionnaireVersion">
-                                <h3>{{$t('DataExport.DataFormat')}}</h3>
+                                v-if="
+                                    dataType == 'surveyData' &&
+                                    questionnaireVersion
+                                "
+                            >
+                                <h3>{{ $t('DataExport.DataFormat') }}</h3>
                                 <div class="radio-btn-row">
                                     <input
                                         class="radio-row"
@@ -194,11 +296,13 @@
                                         name="dataFormat"
                                         id="separated"
                                         v-model="dataFormat"
-                                        value="Tabular"/>
+                                        value="Tabular"
+                                    />
                                     <label for="separated">
                                         <span class="tick"></span>
-                                        <span
-                                            class="format-data Tabular">{{$t('DataExport.DataFormat_Tab')}}</span>
+                                        <span class="format-data Tabular">{{
+                                            $t('DataExport.DataFormat_Tab')
+                                        }}</span>
                                     </label>
                                 </div>
                                 <div class="radio-btn-row">
@@ -208,12 +312,13 @@
                                         name="dataFormat"
                                         id="Stata"
                                         v-model="dataFormat"
-                                        value="Stata"/>
-                                    <label for="Stata"
-                                        class>
+                                        value="Stata"
+                                    />
+                                    <label for="Stata" class>
                                         <span class="tick"></span>
-                                        <span
-                                            class="format-data STATA">{{$t('DataExport.DataFormat_Stata')}}</span>
+                                        <span class="format-data STATA">{{
+                                            $t('DataExport.DataFormat_Stata')
+                                        }}</span>
                                     </label>
                                 </div>
                                 <div class="radio-btn-row">
@@ -223,17 +328,23 @@
                                         name="dataFormat"
                                         id="Spss"
                                         v-model="dataFormat"
-                                        value="Spss"/>
+                                        value="Spss"
+                                    />
                                     <label for="Spss">
                                         <span class="tick"></span>
-                                        <span
-                                            class="format-data SPSS">{{$t('DataExport.DataFormat_Spss')}}</span>
+                                        <span class="format-data SPSS">{{
+                                            $t('DataExport.DataFormat_Spss')
+                                        }}</span>
                                     </label>
                                 </div>
                             </div>
-                            <div class="mb-30"
-                                v-if="canExportExternally && questionnaireVersion">
-                                <h3>{{$t('DataExport.DataDestination')}}</h3>
+                            <div
+                                class="mb-30"
+                                v-if="
+                                    canExportExternally && questionnaireVersion
+                                "
+                            >
+                                <h3>{{ $t('DataExport.DataDestination') }}</h3>
                                 <div class="radio-btn-row">
                                     <input
                                         class="radio-row"
@@ -241,56 +352,85 @@
                                         name="exportDestination"
                                         id="download"
                                         v-model="dataDestination"
-                                        value="zip"/>
+                                        value="zip"
+                                    />
                                     <label for="download">
                                         <span class="tick"></span>
-                                        <span
-                                            class="export-destination">{{$t('DataExport.DataDestination_Zip')}}</span>
+                                        <span class="export-destination">{{
+                                            $t('DataExport.DataDestination_Zip')
+                                        }}</span>
                                     </label>
                                 </div>
-                                <div class="radio-btn-row"
-                                    v-if="isOneDriveSetUp">
+                                <div
+                                    class="radio-btn-row"
+                                    v-if="isOneDriveSetUp"
+                                >
                                     <input
                                         class="radio-row"
                                         type="radio"
                                         name="exportDestination"
                                         id="onedrive"
                                         v-model="dataDestination"
-                                        value="oneDrive"/>
+                                        value="oneDrive"
+                                    />
                                     <label for="onedrive">
                                         <span class="tick"></span>
                                         <span
-                                            class="export-destination OneDrive">{{$t('DataExport.DataDestination_OneDrive')}}</span>
+                                            class="export-destination OneDrive"
+                                            >{{
+                                                $t(
+                                                    'DataExport.DataDestination_OneDrive',
+                                                )
+                                            }}</span
+                                        >
                                     </label>
                                 </div>
-                                <div class="radio-btn-row"
-                                    v-if="isDropboxSetUp">
+                                <div
+                                    class="radio-btn-row"
+                                    v-if="isDropboxSetUp"
+                                >
                                     <input
                                         class="radio-row"
                                         type="radio"
                                         name="exportDestination"
                                         id="dropbox"
                                         v-model="dataDestination"
-                                        value="dropbox"/>
+                                        value="dropbox"
+                                    />
                                     <label for="dropbox">
                                         <span class="tick"></span>
                                         <span
-                                            class="export-destination Dropbox">{{$t('DataExport.DataDestination_Dropbox')}}</span>
+                                            class="export-destination Dropbox"
+                                            >{{
+                                                $t(
+                                                    'DataExport.DataDestination_Dropbox',
+                                                )
+                                            }}</span
+                                        >
                                     </label>
                                 </div>
-                                <div class="radio-btn-row"
-                                    v-if="isGoogleDriveSetUp">
+                                <div
+                                    class="radio-btn-row"
+                                    v-if="isGoogleDriveSetUp"
+                                >
                                     <input
                                         class="radio-row"
                                         type="radio"
                                         name="exportDestination"
                                         id="googleDrive"
                                         v-model="dataDestination"
-                                        value="googleDrive"/>
+                                        value="googleDrive"
+                                    />
                                     <label for="googleDrive">
                                         <span class="tick"></span>
                                         <span
-                                            class="export-destination GoogleDrive">{{$t('DataExport.DataDestination_GoogleDrive')}}</span>
+                                            class="export-destination GoogleDrive"
+                                            >{{
+                                                $t(
+                                                    'DataExport.DataDestination_GoogleDrive',
+                                                )
+                                            }}</span
+                                        >
                                     </label>
                                 </div>
                             </div>
@@ -299,48 +439,61 @@
                                     <button
                                         type="button"
                                         class="btn btn-success"
-                                        @click="queueExport">{{$t('DataExport.AddToQueue')}}</button>
+                                        @click="queueExport"
+                                    >
+                                        {{ $t('DataExport.AddToQueue') }}
+                                    </button>
                                     <button
                                         type="button"
                                         class="btn btn-lg btn-link"
-                                        @click="resetForm">{{$t('Strings.Cancel')}}</button>
+                                        @click="resetForm"
+                                    >
+                                        {{ $t('Strings.Cancel') }}
+                                    </button>
                                 </div>
                             </div>
                         </form>
                     </div>
-                    <div class="col-md-12"
-                        v-if="!exportServiceIsUnavailable">
+                    <div class="col-md-12" v-if="!exportServiceIsUnavailable">
                         <div
                             class="no-sets"
-                            v-if="!exportServiceIsUnavailable && exportResults.length == 0">
-                            <p v-if="exportServiceInitializing">{{$t('Common.Loading')}}</p>
-                            <p v-else>{{$t('DataExport.NoDataSets')}}</p>
+                            v-if="
+                                !exportServiceIsUnavailable &&
+                                exportResults.length == 0
+                            "
+                        >
+                            <p v-if="exportServiceInitializing">
+                                {{ $t('Common.Loading') }}
+                            </p>
+                            <p v-else>{{ $t('DataExport.NoDataSets') }}</p>
                         </div>
                         <div v-else>
                             <h3 class="mb-20">
-                                {{$t('DataExport.GeneratedDataSets')}}
+                                {{ $t('DataExport.GeneratedDataSets') }}
                             </h3>
-                            <p>{{$t('DataExport.GeneratedDataSets_Desc')}}</p>
+                            <p>{{ $t('DataExport.GeneratedDataSets_Desc') }}</p>
                             <ExportProcessCard
                                 v-for="result in exportResults"
                                 v-bind:key="result.id"
-                                :data="result"></ExportProcessCard>
+                                :data="result"
+                            ></ExportProcessCard>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row"
-                v-if="!exportServiceIsUnavailable">
+            <div class="row" v-if="!exportServiceIsUnavailable">
                 <div class="col-lg-5">
                     <h3 class="mb-20">
-                        {{$t('DataExport.DataExportApi')}}
+                        {{ $t('DataExport.DataExportApi') }}
                     </h3>
                     <p>
-                        {{$t('DataExport.DataExportApiDesc')}}
+                        {{ $t('DataExport.DataExportApiDesc') }}
                         <a
                             href="https://support.mysurvey.solutions/headquarters/api/api-for-data-export/"
                             target="_blank"
-                            class="underlined-link">{{$t('DataExport.DataExportApiInfoPage')}}</a>
+                            class="underlined-link"
+                            >{{ $t('DataExport.DataExportApiInfoPage') }}</a
+                        >
                     </p>
                 </div>
             </div>
@@ -352,10 +505,17 @@
 import Vue from 'vue'
 import ExportProcessCard from './ExportProcessCard'
 import gql from 'graphql-tag'
-import { filter, toNumber, map} from 'lodash'
+import { filter, toNumber, map } from 'lodash'
 
-const dataFormatNum = {Tabular: 1, Stata: 2, Spss: 3, Binary: 4, Ddi: 5, Paradata: 6}
-const ExternalStorageType = {dropbox: 1, oneDrive: 2, googleDrive: 3}
+const dataFormatNum = {
+    Tabular: 1,
+    Stata: 2,
+    Spss: 3,
+    Binary: 4,
+    Ddi: 5,
+    Paradata: 6,
+}
+const ExternalStorageType = { dropbox: 1, oneDrive: 2, googleDrive: 3 }
 
 export default {
     data() {
@@ -373,7 +533,9 @@ export default {
             isUpdatingDataAvailability: false,
             hasInterviews: false,
             hasBinaryData: false,
-            externalStoragesSettings: (this.$config.model.externalStoragesSettings || {}).oAuth2 || {},
+            externalStoragesSettings:
+                (this.$config.model.externalStoragesSettings || {}).oAuth2 ||
+                {},
             pageState: {},
             updateInProgress: false,
             jobsLoadingBatchCount: 18,
@@ -382,7 +544,10 @@ export default {
 
     computed: {
         exportResults() {
-            return filter(this.$store.state.export.jobs, j => j.deleted == false)
+            return filter(
+                this.$store.state.export.jobs,
+                (j) => j.deleted == false,
+            )
         },
         exportServiceIsUnavailable() {
             return this.$store.state.export.exportServiceIsUnavailable
@@ -453,21 +618,23 @@ export default {
                     self.dataDestination,
                     self.status,
                     self.questionnaireTranslation,
-                    this.includeMeta
+                    this.includeMeta,
                 )
 
                 self.$store.dispatch('showProgress')
 
                 this.$http
-                    .post(this.$config.model.api.updateSurveyDataUrl, null, {params: exportParams})
-                    .then(function() {
+                    .post(this.$config.model.api.updateSurveyDataUrl, null, {
+                        params: exportParams,
+                    })
+                    .then(function () {
                         self.$validator.reset()
                         self.updateExportStatus()
                     })
-                    .catch(function(error) {
+                    .catch(function (error) {
                         Vue.config.errorHandler(error, self)
                     })
-                    .then(function() {
+                    .then(function () {
                         self.$store.dispatch('hideProgress')
                     })
             } else {
@@ -486,7 +653,7 @@ export default {
                 this.dataDestination,
                 this.status,
                 this.questionnaireTranslation,
-                this.includeMeta
+                this.includeMeta,
             )
 
             var state = {
@@ -500,33 +667,52 @@ export default {
                 type: ExternalStorageType[this.dataDestination],
             }
 
-            let storageSettings = this.externalStoragesSettings[this.dataDestination]
+            let storageSettings =
+                this.externalStoragesSettings[this.dataDestination]
 
             const jsonState = JSON.stringify(state)
 
             var request = {
                 response_type: this.externalStoragesSettings.responseType,
-                redirect_uri: encodeURIComponent(this.externalStoragesSettings.redirectUri),
+                redirect_uri: encodeURIComponent(
+                    this.externalStoragesSettings.redirectUri,
+                ),
                 client_id: storageSettings.clientId,
                 state: window.btoa(
-                    window.location.href + ';' + this.$config.model.api.exportToExternalStorageUrl + ';' + jsonState
+                    window.location.href +
+                        ';' +
+                        this.$config.model.api.exportToExternalStorageUrl +
+                        ';' +
+                        jsonState,
                 ),
                 scope: storageSettings.scope,
             }
 
-            if(this.dataDestination === 'dropbox') {
+            if (this.dataDestination === 'dropbox') {
                 request.token_access_type = 'offline'
             }
 
-            if(this.dataDestination === 'googleDrive') {
+            if (this.dataDestination === 'googleDrive') {
                 request.access_type = 'offline'
                 request.prompt = 'consent'
             }
 
-            window.location = storageSettings.authorizationUri + '?' + decodeURIComponent($.param(request))
+            window.location =
+                storageSettings.authorizationUri +
+                '?' +
+                decodeURIComponent($.param(request))
         },
 
-        getExportParams(questionnaireId, questionnaireVersion, dataType, dataFormat, dataDestination, statusOption, translation, includeMeta) {
+        getExportParams(
+            questionnaireId,
+            questionnaireVersion,
+            dataType,
+            dataFormat,
+            dataDestination,
+            statusOption,
+            translation,
+            includeMeta,
+        ) {
             var format = dataFormatNum.Tabular
 
             switch (dataType) {
@@ -544,8 +730,8 @@ export default {
                     break
             }
 
-            const status = (statusOption || {key: null}).key
-            const tr = (translation || {key: null}).key
+            const status = (statusOption || { key: null }).key
+            const tr = (translation || { key: null }).key
 
             return {
                 id: questionnaireId,
@@ -577,20 +763,30 @@ export default {
             this.translations = []
             this.questionnaireTranslation = null
 
-            if (this.questionnaireVersion)
-                this.updateDataAvalability()
-            else
-                this.resetDataAvalability()
+            if (this.questionnaireVersion) this.updateDataAvalability()
+            else this.resetDataAvalability()
 
-            const query = gql`query questionnaires ($workspace: String!, $id: UUID, $version: Long) {
- questionnaires(workspace: $workspace, id: $id, version: $version) {
-  nodes {
-    defaultLanguageName,
-    translations {
-        id, 
-        name
-    }
-  }}}`
+            const query = gql`
+                query questionnaires(
+                    $workspace: String!
+                    $id: UUID
+                    $version: Long
+                ) {
+                    questionnaires(
+                        workspace: $workspace
+                        id: $id
+                        version: $version
+                    ) {
+                        nodes {
+                            defaultLanguageName
+                            translations {
+                                id
+                                name
+                            }
+                        }
+                    }
+                }
+            `
             if (newValue == null) return
 
             const translationsResponse = await this.$apollo.query({
@@ -603,15 +799,17 @@ export default {
                 fetchPolicy: 'network-only',
             })
             const data = translationsResponse.data.questionnaires.nodes[0]
-            this.translations = map(data.translations, i => {return  {key: i.id, value: i.name } })
-            if(this.translations.length > 0) {
+            this.translations = map(data.translations, (i) => {
+                return { key: i.id, value: i.name }
+            })
+            if (this.translations.length > 0) {
                 this.translations.unshift({
                     key: null,
-                    value: data.defaultLanguageName || this.$t('WebInterview.Original_Language'),
-                }
-                )
+                    value:
+                        data.defaultLanguageName ||
+                        this.$t('WebInterview.Original_Language'),
+                })
             }
-
         },
         resetDataAvalability() {
             this.hasInterviews = null
@@ -629,14 +827,16 @@ export default {
                         version: this.questionnaireVersion.key,
                     },
                 })
-                .then(response => {
+                .then((response) => {
                     this.hasInterviews = response.data.hasInterviews
                     this.hasBinaryData = response.data.hasBinaryData
                     if (this.dataType == null) {
-                        this.dataType = this.hasInterviews ? 'surveyData' : 'ddi'
+                        this.dataType = this.hasInterviews
+                            ? 'surveyData'
+                            : 'ddi'
                     }
                 })
-                .catch(error => {
+                .catch((error) => {
                     Vue.config.errorHandler(error, self)
                 })
                 .then(() => {
@@ -645,6 +845,6 @@ export default {
         },
     },
 
-    components: {ExportProcessCard},
+    components: { ExportProcessCard },
 }
 </script>

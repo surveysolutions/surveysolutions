@@ -330,7 +330,7 @@
     <value>Фильтр интервью для экспорта</value>
   </data>
   <data name="SurveyQuestionnaire" xml:space="preserve">
-    <value>Вопросник обследования</value>
+      <value>Опросник</value>
   </data>
   <data name="DataType_Paradata" xml:space="preserve">
     <value>Параданные. Доступные данные, описывающие процесс сбора (события, времена)</value>
@@ -424,5 +424,11 @@
   </data>
   <data name="Translation_CardLabel" xml:space="preserve">
     <value>Перевод: {{language}}</value>
+  </data>
+  <data name="SurveyQuestionnaireVersion" xml:space="preserve">
+      <value>Версия</value>
+  </data>
+  <data name="SurveyQuestionnaireTranslation" xml:space="preserve">
+      <value>Перевод</value>
   </data>
 </root>
