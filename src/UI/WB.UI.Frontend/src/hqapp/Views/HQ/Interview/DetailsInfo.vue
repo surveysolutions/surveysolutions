@@ -229,18 +229,14 @@
                             <li
                                 class="context-menu-separator context-menu-not-selectable"
                             ></li>
-                            <li>
+                            <li :class="canBeDeleted ? '' : 'disabled'">
                                 <a
-                                    v-if="canBeDeleted"
                                     href="#"
-                                    class="error-tex"
+                                    :class="canBeDeleted ? 'error-tex' : ''"
                                     @click="deleteSelected"
                                 >
                                     {{ $t('Common.Delete') }}
                                 </a>
-                                <span v-else style="color: #bbb">{{
-                                    $t('Common.Delete')
-                                }}</span>
                             </li>
                         </ul>
                     </div>
