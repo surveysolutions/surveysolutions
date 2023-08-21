@@ -34,7 +34,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
         {
             if(context.Controller is UnderConstructionController) return;
 
-            if (context.HttpContext.User.Identity?.IsAuthenticated == true && context.Result is ViewResult view)
+            if (context.HttpContext.User.Identity?.IsAuthenticated == true && context.Result is ViewResult view && view.ViewData != null)
             {
                 view.ViewData["UserWorkspacesList"] = this.authorizedUser.GetEnabledWorkspaces();
 
