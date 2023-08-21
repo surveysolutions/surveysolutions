@@ -348,15 +348,6 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string Assignments {
-            get {
-                return ResourceManager.GetString("Assignments", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Assignments.
         /// </summary>
         public static string AssignmentsHeader {
