@@ -532,7 +532,7 @@
   <data name="Property" xml:space="preserve">
       <value>Property</value>
   </data>
-  <data name=" Value" xml:space="preserve">
+  <data name="Value" xml:space="preserve">
       <value>Value</value>
   </data>
 </root>

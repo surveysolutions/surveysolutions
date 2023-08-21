@@ -60,15 +60,6 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Значение.
-        /// </summary>
-        public static string _Value {
-            get {
-                return ResourceManager.GetString(" Value", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Действие.
         /// </summary>
         public static string Action {
@@ -1244,6 +1235,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string UpgradeProgressTitle {
             get {
                 return ResourceManager.GetString("UpgradeProgressTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Значение.
+        /// </summary>
+        public static string Value {
+            get {
+                return ResourceManager.GetString("Value", resourceCulture);
             }
         }
         
