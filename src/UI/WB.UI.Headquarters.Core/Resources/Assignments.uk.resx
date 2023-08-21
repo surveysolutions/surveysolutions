@@ -525,4 +525,7 @@
   <data name="WebModeReassignToNonInterviewer_other" xml:space="preserve">
     <value>Ви перепризначаєте веб-завдання користувачеві, який не є ІНТЕРВ'ЮЕРОМ. Якщо ви вже розіслали посилання на ці завдання, респонденти не зможуть відповісти на ваші анкети, доки завдання не будуть повернуті користувачеві з роллю ІНТЕРВ'ЮЕР.</value>
   </data>
+  <data name="Property" xml:space="preserve">
+      <value>Властивість</value>
+  </data>
 </root>

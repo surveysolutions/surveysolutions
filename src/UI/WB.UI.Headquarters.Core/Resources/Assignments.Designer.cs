@@ -60,6 +60,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Value.
+        /// </summary>
+        public static string _Value {
+            get {
+                return ResourceManager.GetString(" Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Action.
         /// </summary>
         public static string Action {
@@ -335,6 +344,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string AssignmentInfo {
             get {
                 return ResourceManager.GetString("AssignmentInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string Assignments {
+            get {
+                return ResourceManager.GetString("Assignments", resourceCulture);
             }
         }
         
@@ -785,6 +803,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string PasswordInstructions {
             get {
                 return ResourceManager.GetString("PasswordInstructions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Property.
+        /// </summary>
+        public static string Property {
+            get {
+                return ResourceManager.GetString("Property", resourceCulture);
             }
         }
         

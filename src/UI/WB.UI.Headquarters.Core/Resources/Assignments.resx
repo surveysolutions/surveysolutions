@@ -529,4 +529,13 @@
   <data name="Action_UpgradedFrom" xml:space="preserve">
     <value>Upgraded from assignment {{id}}</value>
   </data>
+  <data name="Assignments" xml:space="preserve">
+      <value />
+  </data>
+  <data name="Property" xml:space="preserve">
+      <value>Property</value>
+  </data>
+  <data name=" Value" xml:space="preserve">
+      <value>Value</value>
+  </data>
 </root>

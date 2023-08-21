@@ -181,14 +181,14 @@
                                     rowspan="1"
                                     colspan="1"
                                 >
-                                    Property
+                                    {{ $t('Assignments.Property') }}
                                 </th>
                                 <th
                                     class="sorting_disabled"
                                     rowspan="1"
                                     colspan="1"
                                 >
-                                    Value
+                                    {{ $t('Assignments.Value') }}
                                 </th>
                             </tr>
                         </thead>
