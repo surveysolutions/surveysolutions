@@ -275,12 +275,12 @@
             <div class="form-group" v-if="receivedByInterviewer">
                 <input
                     type="checkbox"
-                    id="reassignReceivedByInterviewer"
+                    id="approveReceivedByInterviewer"
                     v-model="doApproveReceivedByInterviewer"
                     class="checkbox-filter"
                 />
                 <label
-                    for="reassignReceivedByInterviewer"
+                    for="approveReceivedByInterviewer"
                     style="font-weight: normal"
                 >
                     <span class="tick"></span>
@@ -480,7 +480,7 @@
                     ></p>
                 </div>
 
-                <div v-if="this.$config.model.isReceivedByInterviewerAtUtc">
+                <div v-if="isReceivedByInterviewerAtUtc">
                     <br />
                     <input
                         type="checkbox"
@@ -603,6 +603,13 @@ export default {
         },
         deleteSelected() {
             this.$refs.deleteModal.modal({ keyboard: false })
+        },
+        arrayMap: function (array, mapping) {
+            array = array || []
+            var result = []
+            for (var i = 0, j = array.length; i < j; i++)
+                result.push(mapping(array[i], i))
+            return result
         },
 
         arrayFilter: function (array, predicate) {
@@ -870,7 +877,7 @@ export default {
         },
 
         isReceivedByInterviewerAtUtc() {
-            return this.$config.receivedByInterviewerAtUtc != null
+            return this.$config.model.receivedByInterviewerAtUtc != null
         },
         interviewerShouldbeSelected() {
             return this.$config.model.approveReject.interviewerShouldbeSelected
