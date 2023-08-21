@@ -3966,6 +3966,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [ver. {1}] {0}.
+        /// </summary>
+        public static string QuestionnaireVersionAndName {
+            get {
+                return ResourceManager.GetString("QuestionnaireVersionAndName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Recovery code.
         /// </summary>
         public static string RecoveryCode {

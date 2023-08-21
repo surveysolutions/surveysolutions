@@ -1411,7 +1411,7 @@
     <value>{{name}} (ver. {{version}})</value>
   </data>
   <data name="QuestionnaireNameVersionFirst" xml:space="preserve">
-    <value>(вер. {1}) {0} </value>
+      <value>[вер. {{vesion}}] {{name}} </value>
   </data>
   <data name="RecoveryCode" xml:space="preserve">
     <value>Код відновлення</value>
@@ -1728,5 +1728,8 @@
   </data>
   <data name="YesNoQuestion_Yes" xml:space="preserve">
     <value>Так</value>
+  </data>
+  <data name="QuestionnaireVersionAndName" xml:space="preserve">
+      <value>[вер. {1}] {0} </value>
   </data>
 </root>

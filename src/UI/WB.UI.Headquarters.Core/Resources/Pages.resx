@@ -1740,4 +1740,7 @@
   <data name="MapUserLink_DiscardConfirm1" xml:space="preserve">
       <value>If this is the last user in the team linked to the map then the team's supervisor will lose access to the map.</value>
   </data>
+  <data name="QuestionnaireVersionAndName" xml:space="preserve">
+      <value>[ver. {1}] {0}</value>
+  </data>
 </root>
