@@ -683,9 +683,25 @@ export default {
             )
         },
 
+        getCommand(commandName, Ids, comment) {
+            var commands = this.arrayMap(Ids, function (rowId) {
+                var item = { InterviewId: rowId, Comment: comment }
+                return JSON.stringify(item)
+            })
+
+            var command = {
+                type: commandName,
+                commands: commands,
+            }
+
+            return command
+        },
+
         deleteInterviews() {
             const self = this
-            var filteredItems = [{ id: this.$config.model.id }]
+            var filteredItems = []
+            filteredItems.push({ id: this.$config.model.id })
+
             if (filteredItems.length == 0) {
                 this.$refs.deleteModal.hide()
                 return
@@ -703,7 +719,7 @@ export default {
                 function () {},
                 function () {
                     self.$refs.deleteModal.hide()
-                    window.location.reload(true)
+                    window.location = this.$config.model.interviewsUrl
                 },
             )
         },
