@@ -130,6 +130,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [AntiForgeryFilter]
+        [ObservingNotAllowed]
         [ActivePage(MenuItem.Questionnaires)]
         public IActionResult Settings(string id)
         {
