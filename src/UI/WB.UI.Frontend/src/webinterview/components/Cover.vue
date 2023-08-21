@@ -22,9 +22,6 @@
                     <i v-html="$t('WebInterviewUI.CoverBrokenPackegeText')"></i>
                 </p>
             </div>
-            <div class="container-info">
-                <h2>{{ title }}</h2>
-            </div>
         </div>
 
         <div class="wrapper-info" v-if="hasSupervisorComment">
