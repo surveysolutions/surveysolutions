@@ -227,12 +227,19 @@
                                 </a>
                             </li>
                             <li
+                                v-if="
+                                    canBeReassigned ||
+                                    canChangeToCawi ||
+                                    canChangeToCapi
+                                "
                                 class="context-menu-separator context-menu-not-selectable"
                             ></li>
                             <li :class="canBeDeleted ? '' : 'disabled'">
                                 <a
                                     href="#"
-                                    :class="canBeDeleted ? 'error-tex' : ''"
+                                    :class="
+                                        canBeDeleted ? 'error-text' : 'disabled'
+                                    "
                                     @click="deleteSelected"
                                 >
                                     {{ $t('Common.Delete') }}
@@ -473,7 +480,7 @@
                     ></p>
                 </div>
 
-                <div v-if="this.config.isReceivedByInterviewerAtUtc">
+                <div v-if="this.$config.model.isReceivedByInterviewerAtUtc">
                     <br />
                     <input
                         type="checkbox"
@@ -608,13 +615,12 @@ export default {
         assign() {
             const self = this
 
-            var filteredItems = [
-                {
-                    id: this.$config.model.id,
-                    receivedByInterviewerAtUtc:
-                        this.$config.model.receivedByInterviewerAtUtc,
-                },
-            ]
+            var filteredItems = []
+            filteredItems.push({
+                id: this.$config.model.id,
+                receivedByInterviewerAtUtc:
+                    this.$config.model.receivedByInterviewerAtUtc,
+            })
 
             if (!this.isReassignReceivedByInterviewer) {
                 filteredItems = this.arrayFilter(
