@@ -1411,7 +1411,7 @@
     <value>{{name}} (ver. {{version}})</value>
   </data>
   <data name="QuestionnaireNameVersionFirst" xml:space="preserve">
-      <value>[вер. {{vesion}}] {{name}} </value>
+      <value>[вер. {{version}}] {{name}} </value>
   </data>
   <data name="RecoveryCode" xml:space="preserve">
     <value>Код відновлення</value>
