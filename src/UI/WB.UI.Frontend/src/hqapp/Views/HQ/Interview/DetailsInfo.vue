@@ -426,7 +426,7 @@
             <div slot="actions">
                 <button
                     type="button"
-                    class="btn btn-primary"
+                    class="btn btn-danger"
                     role="confirm"
                     @click="deleteInterviews"
                 >
@@ -559,24 +559,11 @@
 import SwitchLanguage from './SwitchLanguage'
 import StatusesHistory from './StatusesHistory'
 import OverviewModal from './OverviewModal'
-import Vue from 'vue'
 import { DateFormats, convertToLocal } from '~/shared/helpers'
 import moment from 'moment-timezone'
 import ChangeToCapi from '../Interviews/ChangeModeModal.vue'
 
-import {
-    lowerCase,
-    find,
-    filter,
-    flatten,
-    map,
-    join,
-    assign,
-    isNaN,
-    isNumber,
-    toNumber,
-    isEqual,
-} from 'lodash'
+import { map, assign } from 'lodash'
 
 export default {
     data() {
@@ -714,12 +701,13 @@ export default {
                 }),
             )
 
+            this.$store.dispatch('stop')
             this.executeCommand(
                 command,
                 function () {},
                 function () {
                     self.$refs.deleteModal.hide()
-                    window.location = this.$config.model.interviewsUrl
+                    window.location = self.$config.model.interviewsUrl
                 },
             )
         },

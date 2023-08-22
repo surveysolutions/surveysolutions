@@ -308,7 +308,7 @@
             <div slot="actions">
                 <button
                     type="button"
-                    class="btn btn-primary"
+                    class="btn btn-danger"
                     role="confirm"
                     @click="deleteInterviews"
                     :disabled="getFilteredToDelete().length == 0"
