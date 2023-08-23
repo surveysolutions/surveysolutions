@@ -29,7 +29,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Paging
             if (context.Result is IQueryable<TClrType> source)
             {
                 var fieldQuery = pageRequestInfo.HasTotalCount 
-                    ? await context.Field.Resolver.Invoke(context) as IQueryable<TClrType> 
+                    ? await context.Selection.Field.Resolver.Invoke(context) as IQueryable<TClrType> 
                     : null;
                 
                 context.Result = await new PagedConnectionResolver<TClrType, TSchemaType>(fieldQuery, source, pageRequestInfo)

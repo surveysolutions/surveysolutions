@@ -162,6 +162,14 @@
                             & .panel-default{
                                 @include paccordion($cummulativePadding);
                                 $cummulativePadding: $cummulativePadding + $padding;
+                                & .panel-default{
+                                    @include paccordion($cummulativePadding);
+                                    $cummulativePadding: $cummulativePadding + $padding;
+                                    & .panel-default{
+                                        @include paccordion($cummulativePadding);
+                                        $cummulativePadding: $cummulativePadding + $padding;
+                                    }
+                                }
                             } 
                         } 
                     } 

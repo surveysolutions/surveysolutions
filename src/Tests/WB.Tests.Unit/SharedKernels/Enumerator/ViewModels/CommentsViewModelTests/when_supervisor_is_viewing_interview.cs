@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CommentsViewModelTes
         public void should_not_see_resolve_button_for_empty_comments()
         {
             var viewModel = CreateCommentsViewModel(interview, principal);
-            viewModel.Init(interview.Id.FormatGuid(), Create.Identity(questionId), Create.Other.NavigationState());
+            viewModel.Init(interview.Id.FormatGuid(), Create.Identity(questionId));
 
             Assert.That(viewModel, Has.Property(nameof(CommentsViewModel.ResolveCommentsButtonVisible)).False);
         }
@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CommentsViewModelTes
             interview.CommentAnswer(interviewerId, questionId, RosterVector.Empty, DateTimeOffset.Now, "IN comment");
 
             var viewModel = CreateCommentsViewModel(interview, principal);
-            viewModel.Init(interview.Id.FormatGuid(), Create.Identity(questionId), Create.Other.NavigationState());
+            viewModel.Init(interview.Id.FormatGuid(), Create.Identity(questionId));
 
             Assert.That(viewModel, Has.Property(nameof(CommentsViewModel.ResolveCommentsButtonVisible)).True);
         }
@@ -58,7 +58,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CommentsViewModelTes
             interview.ResolveComment(Create.Command.ResolveCommentAnswer(entityId: Create.Identity(questionId)));
 
             var viewModel = CreateCommentsViewModel(interview, principal);
-            viewModel.Init(interview.Id.FormatGuid(), Create.Identity(questionId), Create.Other.NavigationState());
+            viewModel.Init(interview.Id.FormatGuid(), Create.Identity(questionId));
 
             Assert.That(viewModel.Comments, Is.Empty);
             Assert.That(viewModel, Has.Property(nameof(CommentsViewModel.ResolveCommentsButtonVisible)).False, 
@@ -72,7 +72,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CommentsViewModelTes
             interview.ResolveComment(Create.Command.ResolveCommentAnswer(entityId: Create.Identity(questionId)));
 
             var viewModel = CreateCommentsViewModel(interview, principal);
-            viewModel.Init(interview.Id.FormatGuid(), Create.Identity(questionId), Create.Other.NavigationState());
+            viewModel.Init(interview.Id.FormatGuid(), Create.Identity(questionId));
             viewModel.ToggleShowResolvedComments.Execute();
 
             Assert.That(viewModel.Comments, Has.Count.EqualTo(1));
@@ -86,7 +86,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CommentsViewModelTes
             var viewModel = CreateCommentsViewModel(interview, principal);
 
             // Act
-            viewModel.Init(interview.Id.FormatGuid(), Create.Identity(questionId), Create.Other.NavigationState());
+            viewModel.Init(interview.Id.FormatGuid(), Create.Identity(questionId));
 
             // Assert
             Assert.That(viewModel, Has.Property(nameof(CommentsViewModel.ResolveCommentsButtonVisible)).EqualTo(false));

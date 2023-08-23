@@ -12,7 +12,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
     public class WebInterviewsViewModel : BaseInterviewsViewModel
     {
-        public override GroupStatus InterviewStatus => GroupStatus.WebInterview;
+        public override DashboardGroupType DashboardType => DashboardGroupType.WebInterviews;
         public override string TabTitle => EnumeratorUIResources.Dashboard_WebInterviewsLinkText;
         public override string TabDescription => EnumeratorUIResources.Dashboard_WebInterviewTabText;
 

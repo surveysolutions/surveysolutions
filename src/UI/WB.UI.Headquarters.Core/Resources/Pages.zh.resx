@@ -1081,7 +1081,7 @@
     <value>或者</value>
   </data>
   <data name="QuestionnaireNameVersionFirst" xml:space="preserve">
-    <value>(版本：{1}){0}</value>
+      <value>(版本：{{version}}){{name}}</value>
   </data>
   <data name="StatusDuration" xml:space="preserve">
     <value>状态间期</value>

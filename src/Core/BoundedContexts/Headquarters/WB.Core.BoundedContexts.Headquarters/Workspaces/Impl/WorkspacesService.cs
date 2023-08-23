@@ -27,34 +27,34 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
         private readonly UnitOfWorkConnectionSettings connectionSettings;
         private readonly ILoggerProvider loggerProvider;
         private readonly IAuthorizedUser authorizedUser;
-        private readonly IPlainStorageAccessor<Workspace> workspaces;
         private readonly IPlainStorageAccessor<WorkspacesUsers> workspaceUsers;
         private readonly ILogger<WorkspacesService> logger;
         private readonly IUserRepository userRepository;
         private readonly ISystemLog systemLog;
         private readonly IWorkspacesUsersCache usersCache;
         private readonly IInScopeExecutor inScopeExecutor;
+        private readonly IWorkspacesStorage workspacesStorage;
 
         public WorkspacesService(UnitOfWorkConnectionSettings connectionSettings,
             ILoggerProvider loggerProvider,
             IAuthorizedUser authorizedUser,
-            IPlainStorageAccessor<Workspace> workspaces,
             IPlainStorageAccessor<WorkspacesUsers> workspaceUsers,
             IUserRepository userRepository,
             ILogger<WorkspacesService> logger,
             ISystemLog systemLog,
             IWorkspacesUsersCache usersCache,
-            IInScopeExecutor inScopeExecutor)
+            IInScopeExecutor inScopeExecutor,
+            IWorkspacesStorage workspacesStorage)
         {
             this.connectionSettings = connectionSettings;
             this.loggerProvider = loggerProvider;
             this.authorizedUser = authorizedUser;
-            this.workspaces = workspaces;
             this.workspaceUsers = workspaceUsers;
             this.logger = logger;
             this.systemLog = systemLog;
             this.usersCache = usersCache;
             this.inScopeExecutor = inScopeExecutor;
+            this.workspacesStorage = workspacesStorage;
             this.userRepository = userRepository;
         }
 
@@ -69,18 +69,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
                 upgradeSettings, loggerProvider));
         }
 
-        public List<WorkspaceContext> GetEnabledWorkspaces()
-        {
-            return workspaces.Query(_ => _
-                .Where(x => x.DisabledAtUtc == null)
-                .Select(workspace => workspace.AsContext())
-                .ToList());
-        }
-
-        public List<WorkspaceContext> GetAllWorkspaces()
-        {
-            return workspaces.Query(_ => _.Select(w => w.AsContext()).ToList());
-        }
+        public List<WorkspaceContext> GetAllWorkspaces() => workspacesStorage.GetAllWorkspaces();
 
         public async Task AssignWorkspacesAsync(HqUser user, List<AssignUserWorkspace> workspacesList)
         {
@@ -167,14 +156,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
             logger.LogWarning("Deleting workspace {name} from workspaces table", workspace.Name);
 
             this.workspaceUsers.Remove(w => w.Where(x => x.Workspace.Name == workspace.Name));
-            this.workspaces.Remove(workspace.Name);
+
+            workspacesStorage.Delete(workspace.Name);
 
             logger.LogWarning("Deleting interviewers and supervisors in workspace {name}", workspace.Name);
         }
 
         public void AddUserToWorkspace(HqUser user, string workspace, Guid? supervisorId)
         {
-            Workspace workspaceEntity = workspaces.GetById(workspace) ??
+            Workspace workspaceEntity = workspacesStorage.GetById(workspace) ??
                                         throw new ArgumentException(@"Workspace not found", nameof(workspace))
                                         {
                                             Data =
@@ -201,6 +191,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
 
             this.logger.LogInformation("Added {user} to {workspace}", user.UserName, workspace);
         }
+
+        public List<WorkspaceContext> GetEnabledWorkspaces() => workspacesStorage.GetEnabledWorkspaces();
 
         private AssignedWorkInfo GetWorkAssignedToUser(HqUser user, Workspace workspace)
         {

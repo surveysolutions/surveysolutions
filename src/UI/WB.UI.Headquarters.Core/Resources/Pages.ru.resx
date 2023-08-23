@@ -1014,9 +1014,12 @@
   <data name="Assignments_PageTitle" xml:space="preserve">
     <value>Задания</value>
   </data>
+  <data name="AssignmentDetails_PageTitle" xml:space="preserve">
+    <value>Задание {0}</value>
+  </data>
   <data name="QuestionnaireNameVersionFirst" xml:space="preserve">
-    <value>(вер. {1}) {0} </value>
-    <comment>{0} - Questionnaire name, {1} - Questionnaire version</comment>
+      <value>[вер. {{version}}] {{name}} </value>
+      <comment>{0} - Questionnaire name, {1} - Questionnaire version</comment>
   </data>
   <data name="ConfirmationNeededTitle" xml:space="preserve">
     <value>Требуется подтверждение</value>
@@ -1230,6 +1233,9 @@
   </data>
   <data name="MapDetails_Size" xml:space="preserve">
     <value>Размер(МБ)</value>
+  </data>
+  <data name="MapDetails_EmptyMapData" xml:space="preserve">
+    <value>Данные для предпросмотра этой карты отсутствуют</value>
   </data>
   <data name="MapDetails_MinScale" xml:space="preserve">
     <value>Минимальный масштаб</value>
@@ -1797,5 +1803,7 @@
   <data name="MapDetails_Unlink" xml:space="preserve">
     <value>Отвязать</value>
   </data>
-
+  <data name="QuestionnaireVersionAndName" xml:space="preserve">
+      <value>[вер. {1}] {0} </value>
+  </data>
 </root>

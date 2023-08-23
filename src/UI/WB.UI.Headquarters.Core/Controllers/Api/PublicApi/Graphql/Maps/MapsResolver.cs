@@ -48,11 +48,26 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
         {
             if (authorizedUser.IsSupervisor)
             {
-                var teamMember = unitOfWork.Session   
-                    .Query<HqUser>()
-                    .FirstOrDefault(x => x.WorkspaceProfile.SupervisorId == authorizedUser.Id && x.UserName == userName);
+                //limit by team
+                var team = unitOfWork.Session.Query<HqUser>()
+                    .Where(x => x.WorkspaceProfile.SupervisorId == authorizedUser.Id || x.Id == authorizedUser.Id)
+                    .Select(x=> x.UserName);
+                
+                if (authorizedUser.UserName != userName && !team.Contains(userName))
+                {
+                    throw new GraphQLException(new[]
+                    {
+                        ErrorBuilder.New()
+                            .SetMessage("User has no permissions to perform this action")
+                            .SetCode(ErrorCodes.Authentication.NotAuthorized)
+                            .Build()
+                    });
+                }
+                
+                var mapUsers = unitOfWork.Session.Query<UserMap>()
+                    .Where(a => fileName == a.Map.Id);
 
-                if (authorizedUser.UserName != userName && teamMember == null)
+                if (!mapUsers.Any(z => team.Contains(z.UserName)))
                 {
                     throw new GraphQLException(new[]
                     {
@@ -74,11 +89,26 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
         {
             if (authorizedUser.IsSupervisor)
             {
-                var teamMember = unitOfWork.Session   
-                    .Query<HqUser>()
-                    .FirstOrDefault(x => x.WorkspaceProfile.SupervisorId == authorizedUser.Id && x.UserName == userName);
+                //limit by team
+                var team = unitOfWork.Session.Query<HqUser>()
+                    .Where(x => x.WorkspaceProfile.SupervisorId == authorizedUser.Id || x.Id == authorizedUser.Id)
+                    .Select(x=> x.UserName);
+                
+                if (authorizedUser.UserName != userName && !team.Contains(userName))
+                {
+                    throw new GraphQLException(new[]
+                    {
+                        ErrorBuilder.New()
+                            .SetMessage("User has no permissions to perform this action")
+                            .SetCode(ErrorCodes.Authentication.NotAuthorized)
+                            .Build()
+                    });
+                }
+                
+                var mapUsers = unitOfWork.Session.Query<UserMap>()
+                    .Where(a => fileName == a.Map.Id);
 
-                if (authorizedUser.UserName != userName && teamMember == null)
+                if (!mapUsers.Any(z => team.Contains(z.UserName)))
                 {
                     throw new GraphQLException(new[]
                     {

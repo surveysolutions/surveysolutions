@@ -496,9 +496,6 @@
   <data name="RosterName" xml:space="preserve">
     <value>Имя ростера</value>
   </data>
-  <data name="RosterShowStrings" xml:space="preserve">
-    <value>Показать строки</value>
-  </data>
   <data name="RosterSource" xml:space="preserve">
     <value>Тип источника ростера</value>
   </data>
@@ -582,9 +579,6 @@
   </data>
   <data name="SettingsWhoHasAccess" xml:space="preserve">
     <value>У кого есть доступ:</value>
-  </data>
-  <data name="ShowList" xml:space="preserve">
-    <value>Показать список</value>
   </data>
   <data name="ValidationCondition" xml:space="preserve">
     <value>Проверка</value>
@@ -673,9 +667,6 @@
   </data>
   <data name="QuestionPattern" xml:space="preserve">
     <value>Маска</value>
-  </data>
-  <data name="QuestionShowStrings" xml:space="preserve">
-    <value>Показать строки</value>
   </data>
   <data name="QuestionUploadOptions" xml:space="preserve">
     <value>Загрузить категории</value>

@@ -183,6 +183,9 @@
   <data name="ExportQuestionnaire" xml:space="preserve">
     <value>Export questionnaire</value>
   </data>
+  <data name="SaveQuestionnaire" xml:space="preserve">
+    <value>Save questionnaire document</value>
+  </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Questionnaire</value>
   </data>

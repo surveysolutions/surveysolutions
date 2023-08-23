@@ -11,6 +11,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Enumerator.Native.WebInterview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
@@ -20,17 +21,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IInterviewPackagesService incomingSyncPackagesQueue;
         private readonly IHeadquartersEventStore eventStore;
+        private readonly IInterviewBrokenPackagesService brokenPackagesService;
 
         public InterviewerInterviewsFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> reader,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IInterviewPackagesService incomingSyncPackagesQueue,
-            IHeadquartersEventStore eventStore)
+            IHeadquartersEventStore eventStore,
+            IInterviewBrokenPackagesService brokenPackagesService)
         {
             this.reader = reader;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;            
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.eventStore = eventStore;
+            this.brokenPackagesService = brokenPackagesService;
         }
         
         public List<InterviewInformation> GetInProgressInterviewsForInterviewer(Guid interviewerId)
@@ -59,8 +63,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             }).Items.Where(questionnaire => questionnaire.IsDeleted).Select(x => x.Identity().ToString());
 
             var filteredInterviews = inProgressInterviews.Where(
-                    interview => !deletedQuestionnaires.Any(deletedQuestionnaire => deletedQuestionnaire.Equals(interview.QuestionnaireIdentity))
-                                 && !processingPackages.Any(filename => filename.Contains(interview.InterviewId.FormatGuid())))
+                    interview => 
+                        !deletedQuestionnaires.Any(deletedQuestionnaire => deletedQuestionnaire.Equals(interview.QuestionnaireIdentity))
+                        && !processingPackages.Any(filename => filename.Contains(interview.InterviewId.FormatGuid()))
+                        && !brokenPackagesService.HasBrokenPackageWithUnknownType(interview.InterviewId)
+                )
                 .Select(interview => new InterviewInformation
                 {
                     Id = interview.InterviewId,
@@ -153,9 +160,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             }).Items.Where(questionnaire => questionnaire.IsDeleted);
 
             List<InterviewInformation> filteredInterviews = inProgressInterviews.Where(
-                    interview => !deletedQuestionnaires.Any(deletedQuestionnaire => deletedQuestionnaire.QuestionnaireId == interview.QuestionnaireId 
-                                                                                    && deletedQuestionnaire.Version == interview.QuestionnaireVersion)
-                                 && !processingPackages.Any(filename => filename.Contains(interview.InterviewId.FormatGuid())))
+                    interview => 
+                        !deletedQuestionnaires.Any(deletedQuestionnaire => deletedQuestionnaire.QuestionnaireId == interview.QuestionnaireId 
+                        && deletedQuestionnaire.Version == interview.QuestionnaireVersion)
+                        && !processingPackages.Any(filename => filename.Contains(interview.InterviewId.FormatGuid()))
+                        && !brokenPackagesService.HasBrokenPackageWithUnknownType(interview.InterviewId)
+                )
                 .Select(interview => new InterviewInformation
                 {
                     Id = interview.InterviewId,

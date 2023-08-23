@@ -373,4 +373,7 @@ Děkujeme za spolupráci!</value>
   <data name="QuestionnaireNameFormat" xml:space="preserve">
     <value>{0} (ver. {1})</value>
   </data>
+  <data name="AssignmentLimitReached" xml:space="preserve">
+    <value>Shromažďujeme všechny rozhovory v tomto průzkumu.</value>
+  </data>
 </root>

@@ -789,6 +789,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Property.
+        /// </summary>
+        public static string Property {
+            get {
+                return ResourceManager.GetString("Property", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Questionnaire.
         /// </summary>
         public static string Questionnaire {
@@ -888,7 +897,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Size of the selected assignment {{id}} will be changed form {{quantity}} to {{collected}} (number of currently collected interviews).
+        ///   Looks up a localized string similar to Size of the selected assignment {{id}} will be changed from {{quantity}} to {{collected}} (number of currently collected interviews).
         /// </summary>
         public static string SingleAssignmentCloseConfirm {
             get {
@@ -1055,6 +1064,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Tooltip_Table_Password {
             get {
                 return ResourceManager.GetString("Tooltip_Table_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Indicator for whether the assignment has been downloaded onto the tablet. Click on the sort icon to sort by receipt time..
+        /// </summary>
+        public static string Tooltip_Table_ReceivedByTablet {
+            get {
+                return ResourceManager.GetString("Tooltip_Table_ReceivedByTablet", resourceCulture);
             }
         }
         
@@ -1235,6 +1253,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string UpgradeProgressTitle {
             get {
                 return ResourceManager.GetString("UpgradeProgressTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value.
+        /// </summary>
+        public static string Value {
+            get {
+                return ResourceManager.GetString("Value", resourceCulture);
             }
         }
         

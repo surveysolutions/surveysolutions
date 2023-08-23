@@ -761,9 +761,6 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
   <data name="QuestionShowListLimit" xml:space="preserve">
     <value>Dacă nu mai mult de</value>
   </data>
-  <data name="QuestionShowStrings" xml:space="preserve">
-    <value>Afișați datele</value>
-  </data>
   <data name="QuestionsSearchEntities" xml:space="preserve">
     <value>rezultatele cautarii</value>
   </data>
@@ -832,9 +829,6 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
   </data>
   <data name="RosterName" xml:space="preserve">
     <value>Numele listei</value>
-  </data>
-  <data name="RosterShowStrings" xml:space="preserve">
-    <value>Afișați datele</value>
   </data>
   <data name="RosterSource" xml:space="preserve">
     <value>Sursa listei</value>
@@ -982,9 +976,6 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
   </data>
   <data name="ShowAsList" xml:space="preserve">
     <value>Afișează ca listă de categorii</value>
-  </data>
-  <data name="ShowList" xml:space="preserve">
-    <value>Afișează lista</value>
   </data>
   <data name="SideBarAddMacro" xml:space="preserve">
     <value>adăugați o funcție de tip macrocomandă nouă</value>

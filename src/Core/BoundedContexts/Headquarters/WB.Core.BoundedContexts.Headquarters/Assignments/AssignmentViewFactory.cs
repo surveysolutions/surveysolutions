@@ -4,9 +4,11 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
+using Microsoft.Extensions.Options;
 using Ncqrs.Eventing.Storage;
 using NodaTime;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
+using WB.Core.BoundedContexts.Headquarters.Configs;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
@@ -14,6 +16,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Assignment;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Fetching;
@@ -27,6 +30,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         private readonly IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsStorage;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> summaries;
         private readonly IQueryableReadSideRepositoryReader<CalendarEvent> calendarEventsAccessor;
+        private readonly IOptions<GoogleMapsConfig> googleMapsConfig;
         private readonly IWebInterviewConfigProvider WebInterviewConfigProvider;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IHeadquartersEventStore hqEventStore;
@@ -38,7 +42,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             IHeadquartersEventStore hqEventStore,
             IUserViewFactory userViewFactory, 
             IWebInterviewConfigProvider webInterviewConfigProvider, 
-            IQueryableReadSideRepositoryReader<CalendarEvent> calendarEventsAccessor)
+            IQueryableReadSideRepositoryReader<CalendarEvent> calendarEventsAccessor,
+            IOptions<GoogleMapsConfig> googleMapsConfig)
         {
             this.assignmentsStorage = assignmentsStorage;
             this.summaries = summaries;
@@ -47,6 +52,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.userViewFactory = userViewFactory;
             WebInterviewConfigProvider = webInterviewConfigProvider;
             this.calendarEventsAccessor = calendarEventsAccessor;
+            this.googleMapsConfig = googleMapsConfig;
         }
 
         public AssignmentsWithoutIdentifingData Load(AssignmentsInputModel input)
@@ -164,11 +170,29 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
             List<AssignmentIdentifyingQuestionRow> identifyingColumnText =
                 assignment.IdentifyingData
-                          .Where(x => questionnaire.GetQuestionType(x.Identity.Id) != QuestionType.GpsCoordinates)
-                          .Select(x => new AssignmentIdentifyingQuestionRow(questionnaire.GetQuestionTitle(x.Identity.Id).RemoveHtmlTags(),
-                                    x.AnswerAsString,
-                                    x.Identity,
-                                    questionnaire.GetQuestionVariableName(x.Identity.Id)))
+                          .Select(x =>
+                          {
+                              var answerAsString = x.AnswerAsString;
+                              if (questionnaire.GetQuestionType(x.Identity.Id) == QuestionType.GpsCoordinates)
+                              {
+                                  var answer = assignment.Answers.FirstOrDefault(a => a.Identity == x.Identity);
+                                  if (answer is { Answer: GpsAnswer gpsAnswer } && gpsAnswer.Value != null)
+                                  {
+                                      answerAsString = $"{gpsAnswer.Value.Latitude} {gpsAnswer.Value.Longitude}";
+
+                                      if (googleMapsConfig?.Value?.BaseUrl != null)
+                                      {
+                                          var mapsUrl = $"{googleMapsConfig.Value.BaseUrl}/maps/search/?api=1&query={gpsAnswer.Value.Latitude},{gpsAnswer.Value.Longitude}";
+                                          answerAsString = $"<a href='{mapsUrl}'>{answerAsString}</a>";
+                                      }
+                                  }
+                              }
+                              return new AssignmentIdentifyingQuestionRow(
+                                  questionnaire.GetQuestionTitle(x.Identity.Id).RemoveHtmlTags(),
+                                  answerAsString,
+                                  x.Identity,
+                                  questionnaire.GetQuestionVariableName(x.Identity.Id));
+                          })
                           .ToList();
             return identifyingColumnText;
         }
@@ -210,8 +234,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                     case AssignmentDeleted _:
                         historyItem.Action = AssignmentHistoryAction.Deleted;
                         break;
-                    case AssignmentReceivedByTablet _:
+                    case AssignmentReceivedByTablet a:
                         historyItem.Action = AssignmentHistoryAction.ReceivedByTablet;
+                        historyItem.AdditionalData = new
+                        {
+                            a.DeviceId
+                        };
                         break;
                     case AssignmentUnarchived _:
                         historyItem.Action = AssignmentHistoryAction.UnArchived;

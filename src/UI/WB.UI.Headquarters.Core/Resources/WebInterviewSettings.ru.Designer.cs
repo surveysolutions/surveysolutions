@@ -513,7 +513,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Настройка web интервью для .
+        ///   Looks up a localized string similar to Настройка web интервью: .
         /// </summary>
         public static string WebInterviewSetupFor_Title {
             get {

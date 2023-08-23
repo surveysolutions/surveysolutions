@@ -79,7 +79,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
         }
 
         [Test]
-        [SetUICulture("en-US")]
+        [SetCulture("en-US")]
         public void when_creating_gps_overview_node_with_answer()
         {
             // arrange

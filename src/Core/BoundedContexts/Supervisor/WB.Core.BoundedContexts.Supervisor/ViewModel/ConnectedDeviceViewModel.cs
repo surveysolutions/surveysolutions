@@ -5,7 +5,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 {
-    public class ConnectedDeviceViewModel : MvxViewModel
+    public class ConnectedDeviceViewModel : BaseViewModel
     {
         private string interviewerName;
 

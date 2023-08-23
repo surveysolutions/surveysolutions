@@ -37,6 +37,7 @@ namespace WB.UI.Headquarters.Controllers
             public string UserRole { get; set; }
             public string Shapefiles { get; set; }
             public string ShapefileJson { get; set; }
+            public bool IsObserving { get; set; }
         }
 
         [ExtraHeaderPermissions(HeaderPermissionType.Google)]
@@ -62,6 +63,7 @@ namespace WB.UI.Headquarters.Controllers
                 UserRole = userRole.ToString(),
                 Shapefiles = Url.Action("Shapefiles", "MapDashboardApi"),
                 ShapefileJson = Url.Action("ShapefileInfo", "MapDashboardApi"),
+                IsObserving = this.authorizedUser.IsObserving,
             };
             return this.View(model);
         }

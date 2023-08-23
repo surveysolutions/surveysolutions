@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -33,8 +34,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             IMetaInfoBuilder metaBuilder,
             IJsonAllTypesSerializer synchronizationSerializer,
             IHeadquartersEventStore eventStore,
-            IWebHostEnvironment webHostEnvironment) :
-            base(imageFileStorage,
+            IUserToDeviceService userToDeviceService,
+            IWebHostEnvironment webHostEnvironment) 
+            : base(imageFileStorage,
                 audioFileStorage,
                 authorizedUser,
                 interviewsFactory,
@@ -44,6 +46,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
                 synchronizationSerializer,
                 eventStore,
                 audioAuditFileStorage,
+                userToDeviceService,
                 webHostEnvironment)
         {
         }

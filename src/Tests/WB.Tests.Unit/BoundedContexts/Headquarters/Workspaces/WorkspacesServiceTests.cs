@@ -27,9 +27,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Workspaces
             
             var storage =  new TestPlainStorage<Workspace>();
             storage.Store(new []{enabledWorkspace, disabledWorkspace});
+            var workspacesStorage = Create.Service.WorkspacesStorage(storage);
 
             // Act
-            var service = Create.Service.WorkspacesService(storage);
+            var service = Create.Service.WorkspacesService(workspacesStorage);
 
             // Assert
             var list = service.GetEnabledWorkspaces().ToList();
@@ -49,6 +50,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Workspaces
             var enabledWorkspace = Create.Entity.Workspace();
             var storage =  new TestPlainStorage<Workspace>();
             storage.Store(new []{enabledWorkspace});
+            var workspacesStorage = Create.Service.WorkspacesStorage(storage);
 
             var assignmentsService =
                 Mock.Of<IAssignmentsService>(a => a.GetAllAssignmentIds(Id.gA) == new List<Guid>());
@@ -56,8 +58,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Workspaces
             var serviceLocator = Mock.Of<IServiceLocator>(sl => sl.GetInstance<IInterviewInformationFactory>() == interviewFactory &&
                                                                 sl.GetInstance<IAssignmentsService>() == assignmentsService &&
                                                                 sl.GetInstance<IUserViewFactory>() == userViewFactory);
-            var service = Create.Service.WorkspacesService(storage,
-                serviceLocator);
+            var service = Create.Service.WorkspacesService(workspacesStorage, serviceLocator);
 
             // Act
             var hqUser = Create.Entity.HqUser(role: role, userId: Id.gA);

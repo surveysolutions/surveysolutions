@@ -144,6 +144,9 @@
   <data name="CreatedBy" xml:space="preserve">
     <value>Questionnaire created by {0}</value>
   </data>
+  <data name="OwnedBy" xml:space="preserve">
+    <value>Questionnaire owned by {0}</value>
+  </data>
   <data name="EnablementCondition" xml:space="preserve">
     <value>Enablement Condition:</value>
   </data>

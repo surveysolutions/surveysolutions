@@ -139,7 +139,9 @@ namespace WB.UI.Headquarters.Controllers
             
             var calendarEvent = calendarEventService.GetActiveCalendarEventForAssignmentId(assignment.Id);
             
-            return View("Details", new
+            ViewBag.Title = string.Format(Pages.AssignmentDetails_PageTitle, assignment.Id);
+
+            var model = new
             {
                 Archived = assignment.Archived,
                 CreatedAtUtc = assignment.CreatedAtUtc,
@@ -156,6 +158,8 @@ namespace WB.UI.Headquarters.Controllers
                 InterviewsProvided = assignment.InterviewSummaries.Count,
                 IsAudioRecordingEnabled = assignment.AudioRecording,
                 IsCompleted = assignment.IsCompleted,
+                IsObserver = this.currentUser.IsObserver,
+                IsObserving = this.currentUser.IsObserving,
                 Password = assignment.Password,
                 ProtectedVariables = assignment.ProtectedVariables,
                 Quantity = assignment.Quantity,
@@ -191,8 +195,17 @@ namespace WB.UI.Headquarters.Controllers
                     } 
                     : null,
                 LinkToWebInterviewExample = this.webInterviewLinkProvider.WebInterviewRequestLink(
-                    assignment.Id.ToString(), Guid.Empty.ToString())
-            });
+                    assignment.Id.ToString(), Guid.Empty.ToString()),
+                Api = new
+                {
+                    Responsible = this.currentUser.IsSupervisor
+                        ? Url.Action("InterviewersCombobox", "Teams")
+                        : Url.Action("ResponsiblesCombobox", "Teams"),
+                    Assignments = Url.Action("Get", "AssignmentsApi"),
+                    AssignmentsApi = Url.Content("~/api/v1/assignments")
+                }
+            };
+            return View("Details", model);
         }
 
         [HttpGet]

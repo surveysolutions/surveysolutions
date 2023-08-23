@@ -64,6 +64,8 @@ namespace WB.UI.Headquarters.Controllers.Api
         [HttpPost]
         public IActionResult Stop(string id)
         {
+            if (!ModelState.IsValid) return this.BadRequest();
+            
             this.upgradeService.StopProcess(Guid.Parse(id));
             return Ok();
         }

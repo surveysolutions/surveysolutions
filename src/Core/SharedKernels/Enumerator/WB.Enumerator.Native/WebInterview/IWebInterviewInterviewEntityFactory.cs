@@ -16,6 +16,6 @@ namespace WB.Enumerator.Native.WebInterview
         Identity GetUIParent(IStatefulInterview interview, IQuestionnaire questionnaire, Identity identity);
 
         InterviewEntityType GetEntityType(Identity identity, IQuestionnaire callerQuestionnaire,
-            IStatefulInterview interview, bool isReviewMode);
+            IStatefulInterview interview, bool isReviewMode, bool includeVariables);
     }
 }

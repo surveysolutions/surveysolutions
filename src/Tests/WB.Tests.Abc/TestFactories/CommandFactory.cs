@@ -408,9 +408,13 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new DeleteAssignment(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), questionnaireIdentity ?? new QuestionnaireIdentity());
         }
-        public MarkAssignmentAsReceivedByTablet MarkAssignmentAsReceivedByTablet(Guid? assignmentId = null, Guid? userId = null, QuestionnaireIdentity questionnaireIdentity = null)
+        public MarkAssignmentAsReceivedByTablet MarkAssignmentAsReceivedByTablet(Guid? assignmentId = null, 
+            Guid? userId = null, string deviceId = null, QuestionnaireIdentity questionnaireIdentity = null)
         {
-            return new MarkAssignmentAsReceivedByTablet(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), questionnaireIdentity ?? new QuestionnaireIdentity());
+            return new MarkAssignmentAsReceivedByTablet(assignmentId ?? Guid.NewGuid(), 
+                userId ?? Guid.NewGuid(), 
+                deviceId,
+                questionnaireIdentity ?? new QuestionnaireIdentity());
         }
         public ReassignAssignment ReassignAssignment(Guid? assignmentId = null, Guid? userId = null, Guid? responsibleId = null, string comment = null, QuestionnaireIdentity questionnaireIdentity = null)
         {

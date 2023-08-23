@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
-using Android.Graphics;
-using System.Drawing;
+﻿using System.ComponentModel;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
-using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
@@ -147,6 +140,12 @@ namespace WB.UI.Shared.Extensions.ViewModels
             CollectResponsibles();
             CollectInterviewStatuses();
             await RefreshMarkers(setViewToMarkers: true);
+        }
+
+        public override void ViewAppeared()
+        {
+            base.ViewAppeared();
+            this.MapView?.RefreshDrawableState();
         }
 
         public override MapDescription GetSelectedMap(MvxObservableCollection<MapDescription> mapsToSelectFrom)
@@ -643,7 +642,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     markerColor = Color.FromArgb(100,25,0);
                     break;
                 default:
-                    markerColor = Color.FromArgb(255, 255, 0);
+                    markerColor = Color.FromArgb(163, 113, 247);
                     break;
             }
 
@@ -702,7 +701,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             return new CompositeSymbol(new[]
             {
                 new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, Color.White, 22 * size), //for contrast
-                new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, Color.FromArgb(255, 255, 0), 16 * size)
+                new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, Color.FromArgb(163, 113, 247), 16 * size)
             });
         }
 

@@ -18,6 +18,20 @@ angular.module('designerApp')
                 rostersCount: 0
             };
 
+            $scope.$on("translationChanged", function(scope, e) {
+                var newId = e.newTranslationId;
+                var oldId = e.oldTranslationId;
+                var translation = _.find($scope.questionnaire.translations, { translationId: oldId })
+                if (translation)
+                    translation.translationId = newId
+            });
+            $scope.$on("translationRemoved", function(scope, e) {
+                var id = e.translationId;
+                $scope.questionnaire.translations = _.filter($scope.questionnaire.translations, function (item) {
+                    return item.translationId != id;
+                });
+            });
+
             var openCompilationPage = 'ctrl+shift+b';
             var focusTreePane = 'shift+alt+x';
             var focusEditorPane = 'shift+alt+e';

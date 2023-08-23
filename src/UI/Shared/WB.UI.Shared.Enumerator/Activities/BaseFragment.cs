@@ -1,14 +1,11 @@
-﻿using Android.OS;
-using Android.Views;
-using MvvmCross.Base;
-using MvvmCross.Binding.BindingContext;
+﻿using Android.Views;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Views.Fragments;
-using MvvmCross.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
-    public abstract class BaseFragment<TViewModel> : MvxFragment<TViewModel> where TViewModel : MvxViewModel
+    public abstract class BaseFragment<TViewModel> : MvxFragment<TViewModel> where TViewModel : BaseViewModel
     {
         protected abstract int ViewResourceId { get; }
 
@@ -20,10 +17,12 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         public override void OnDestroy()
         {
-            base.OnDestroy();
-            
             this.BindingContext?.ClearAllBindings();
-            this.ViewModel?.DisposeIfDisposable();
+            
+            //will handle it with ViewModel.ViewDestroy 
+            //base.ViewModel?.DisposeIfDisposable();
+            
+            base.OnDestroy();
         }
     }
 }

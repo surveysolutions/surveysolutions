@@ -245,7 +245,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                     {
                         if (i == indexOfRowcodeColumn)
                         {
-                            if (!decimal.TryParse(record[i], out var rowCodeAsDecimal))
+                            if (!decimal.TryParse(record[i], CultureInfo.InvariantCulture, out var rowCodeAsDecimal))
                             {
                                 throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_rowcode_value_cannot_be_parsed, record[i], ROWCODE, rowCurrentRowNumber));
                             }

@@ -578,35 +578,52 @@ class AdminSettings {
     getGlobalNotice() {
         return this.http.get(`${this.base}/GlobalNoticeSettings`)
     }
-    setGlobalNotice(val) {
-        return this.http.post(`${this.base}/GlobalNoticeSettings`, {
-            GlobalNotice: val,
+    setGlobalNotice(newNotice) {
+        return this.http({
+            method: 'post',
+            url: `${this.base}/GlobalNoticeSettings`,
+            headers: {'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie()},
+            data: {GlobalNotice: newNotice}
         })
     }
     getProfileSettings() {
         return this.http.get(`${this.base}/ProfileSettings`)
     }
     setProfileSettings(allowInterviewerUpdateProfile) {
-        return this.http.post(`${this.base}/ProfileSettings`, {
-            allowInterviewerUpdateProfile: allowInterviewerUpdateProfile,
-        })
+        return this.http({
+            method: 'post',
+            url: `${this.base}/ProfileSettings`,
+            headers: {'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie()},
+            data: { allowInterviewerUpdateProfile: allowInterviewerUpdateProfile }
+        })        
     }
     setInterviewerSettings(isInterviewerAutomaticUpdatesEnabled, isDeviceNotificationsEnabled, isPartialSynchronizationEnabled) {
-        return this.http.post(`${this.base}/InterviewerSettings`, {
-            interviewerAutoUpdatesEnabled: isInterviewerAutomaticUpdatesEnabled,
-            notificationsEnabled: isDeviceNotificationsEnabled,
-            partialSynchronizationEnabled: isPartialSynchronizationEnabled,
+        return this.http({
+            method: 'post',
+            url: `${this.base}/InterviewerSettings`,
+            headers: {'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie()},
+            data: {
+                interviewerAutoUpdatesEnabled: isInterviewerAutomaticUpdatesEnabled,
+                notificationsEnabled: isDeviceNotificationsEnabled,
+                partialSynchronizationEnabled: isPartialSynchronizationEnabled,
+            }
         })
     }
     setGeographyQuestionAccuracyInMeters(geographyQuestionAccuracyInMeters) {
-        return this.http.post(`${this.base}/InterviewerGeographyQuestionAccuracyInMeters`, {
-            geographyQuestionAccuracyInMeters: geographyQuestionAccuracyInMeters,
+        return this.http({
+            method: 'post',
+            url: `${this.base}/InterviewerGeographyQuestionAccuracyInMeters`,
+            headers: {'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie()},
+            data: { geographyQuestionAccuracyInMeters: geographyQuestionAccuracyInMeters }
         })
     }
     setGeographyQuestionPeriodInSeconds(geographyQuestionPeriodInSeconds) {
-        return this.http.post(`${this.base}/InterviewerGeographyQuestionPeriodInSeconds`, {
-            geographyQuestionPeriodInSeconds: geographyQuestionPeriodInSeconds,
-        })
+        return this.http({
+            method: 'post',
+            url: `${this.base}/InterviewerGeographyQuestionPeriodInSeconds`,
+            headers: {'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie()},
+            data: { geographyQuestionPeriodInSeconds: geographyQuestionPeriodInSeconds }
+        })        
     }
     getInterviewerSettings() {
         return this.http.get(`${this.base}/InterviewerSettings`)
@@ -615,8 +632,11 @@ class AdminSettings {
         return this.http.get(`${this.base}/WebInterviewSettings`)
     }
     setWebInterviewSettings(allowEmails) {
-        return this.http.post(`${this.base}/WebInterviewSettings`, {
-            allowEmails: allowEmails,
+        return this.http({
+            method: 'post',
+            url: `${this.base}/WebInterviewSettings`,
+            headers: {'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie()},
+            data: {allowEmails: allowEmails}
         })
     }
 }

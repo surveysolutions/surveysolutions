@@ -50,6 +50,7 @@ namespace WB.UI.Headquarters.Controllers
             return adminSettingsModel;
         }
 
+        [AntiForgeryFilter]
         [ActivePage(MenuItem.EmailProviders)]
         public IActionResult EmailProviders()
         {

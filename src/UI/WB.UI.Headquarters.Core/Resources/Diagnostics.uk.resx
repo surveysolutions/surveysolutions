@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="broken_packages_check" xml:space="preserve">
+    <value>Перевірка пошкоджених пакетів</value>
+  </data>
+  <data name="Connectivity" xml:space="preserve">
+    <value>Підключення до Web socket</value>
+  </data>
+  <data name="database_connection_check" xml:space="preserve">
+    <value>Перевірка підключення до бази даних</value>
+  </data>
+  <data name="database_connection_check_Healthy" xml:space="preserve">
+    <value>Успішне підключення до бази даних</value>
+  </data>
+  <data name="database_connection_check_Unhealty" xml:space="preserve">
+    <value>Помилка підключення до бази даних: {0}</value>
+  </data>
+  <data name="designer_check" xml:space="preserve">
+    <value>Перевірка з'єднання з Designer</value>
+  </data>
+  <data name="designer_connectivity_check_Degraded" xml:space="preserve">
+    <value>Немає з'єднання з Designer за адресою {0}</value>
+  </data>
+  <data name="designer_service_check_Healthy" xml:space="preserve">
+    <value>Дизайнер на {0} відповів версією: v{1}</value>
+  </data>
+  <data name="embedded_export_service_check" xml:space="preserve">
+    <value>Вбудований хост служби експорту</value>
+  </data>
+  <data name="embedded_export_service_check_Degraded" xml:space="preserve">
+    <value>Служба експорту не працює</value>
+  </data>
+  <data name="embedded_export_service_check_Healty" xml:space="preserve">
+    <value>Export Service працює</value>
+  </data>
+  <data name="export_service_check" xml:space="preserve">
+    <value>Перевірка служби експорту</value>
+  </data>
+  <data name="export_service_check_Healthy" xml:space="preserve">
+    <value>Export Service за адресою {0} відповів версією: v{1}</value>
+  </data>
+  <data name="export_service_connectivity_check" xml:space="preserve">
+    <value>Перевірка підключення до Export Service</value>
+  </data>
+  <data name="export_service_connectivity_check_Degraded" xml:space="preserve">
+    <value>Немає зв'язку з Export Service в {0}</value>
+  </data>
+  <data name="export_service_connectivity_check_Healthy" xml:space="preserve">
+    <value>Export Service за адресою {0} відповів зі статусом {1}.</value>
+  </data>
+  <data name="export_service_connectivity_check_Unhealthy" xml:space="preserve">
+    <value>Export Service за адресою {0} відповів зі статусом {1}.</value>
+  </data>
+  <data name="HealthCheckStatus" xml:space="preserve">
+    <value>Стан здоров'я: {{status}}</value>
+  </data>
+  <data name="hq_baseurl_check" xml:space="preserve">
+    <value>Перевірка конфігурації BaseUrl</value>
+  </data>
+  <data name="hq_baseurl_check_Degraded" xml:space="preserve">
+    <value>Адреса Headquarters, сконфігурована за допомогою Headquarters:BaseUrl: {0}, відрізняється від поточної URL-адреси в полі браузера. Це може спричинити проблеми з посиланнями на електронну пошту та функціоналом служби експорту</value>
+  </data>
+  <data name="hq_baseurl_check_Healthy" xml:space="preserve">
+    <value>Headquarters сконфігурована з Headquarters:BaseUrl: {0}, збігається з поточною адресою в полі браузера.</value>
+  </data>
+  <data name="ServerMetrics" xml:space="preserve">
+    <value>Метрики сервера</value>
+  </data>
+  <data name="temp_folder_permissions" xml:space="preserve">
+    <value>Перевірка прав доступу до тимчасових папок</value>
+  </data>
+  <data name="temp_folder_permissions_Degraded_without_permissions" xml:space="preserve">
+    <value>Додаток не має привілеїв на перевірку прав доступу до тимчасової папки {0}</value>
+  </data>
+  <data name="temp_folder_permissions_Healthy" xml:space="preserve">
+    <value>Успішний доступ до тимчасової папки</value>
+  </data>
+  <data name="temp_folder_permissions_Unhealty_can_not_check" xml:space="preserve">
+    <value>Не вдається перевірити права доступу до тимчасової папки {0}. Помилка: {1}</value>
+  </data>
+  <data name="temp_folder_permissions_Unhealty_without_permissions" xml:space="preserve">
+    <value>Додаток не може записувати тимчасові файли: {0}</value>
+  </data>
+  <data name="temp_folder_permissions_Windows_check" xml:space="preserve">
+    <value>Система не Windows</value>
+  </data>
+  <data name="UnexpectedBrokenPackages" xml:space="preserve">
+    <value>Виявлено {0} неочікувані несправні пакунки</value>
+  </data>
+  <data name="WaitForHealthcheck" xml:space="preserve">
+    <value>Чекаємо на результати перевірки стану</value>
+  </data>
+  <data name="WaitingForMetrics" xml:space="preserve">
+    <value>Розрахунок метрик</value>
+  </data>
+</root>

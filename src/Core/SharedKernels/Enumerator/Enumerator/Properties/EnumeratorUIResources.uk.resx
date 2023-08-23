@@ -118,160 +118,162 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AccountIsLockedOnServer" xml:space="preserve">
-    <value>Обліковий запис користувача заблоковано. Будь ласка, зв'яжіться з вашим керівником.</value>
+    <value>Ваш обліковий запис заблоковано. Зверніться до свого супервизора.</value>
   </data>
   <data name="AccountIsNotAnInterviewer" xml:space="preserve">
-    <value>Ваш обліковий запис не має роль інтерв'юера</value>
+    <value>Ваш обліковий запис не має ролі інтерв'юера</value>
   </data>
   <data name="AccountIsNotApprovedOnServer" xml:space="preserve">
-    <value>Ваш обліковий запис не підтверджено. Будь ласка, зв'яжіться з вашим керівником.</value>
+    <value>Ваш обліковий запис не підтверджено. Будь ласка, зверніться до свого супервизора.</value>
   </data>
   <data name="ApplicationIncompatibleWithServer" xml:space="preserve">
-    <value>Додаток несумісний із сервером. Оновіть ваш додаток.</value>
+    <value>Ваш додаток не сумісний з сервером. Оновіть свій додаток Interviewer.</value>
   </data>
   <data name="Dashboard_CompletedLinkText" xml:space="preserve">
     <value>Завершено ({0})</value>
   </data>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
-    <value>Нові ({0})</value>
+    <value>Нових ({0})</value>
   </data>
   <data name="Dashboard_NoInterviewsSyncButton" xml:space="preserve">
-    <value>Синхронізуватися</value>
+    <value>Синхронізувати</value>
   </data>
   <data name="Dashboard_NoInterviewsText" xml:space="preserve">
-    <value>Синхронізуйтесь, щоб отримати нові призначення або зв'яжіться з вашим керівникомі, щоб отримати подальші інструкції</value>
+    <value>Синхронізуйтеся, щоб отримати нові завдання
+або зверніться до свого супервізора
+за подальшими інструкціями</value>
   </data>
   <data name="Dashboard_NoInterviewsTitle" xml:space="preserve">
-    <value>У вас немає нових призначень</value>
+    <value>У вас немає нових завдань</value>
   </data>
   <data name="Dashboard_NoNewItemsLinkText" xml:space="preserve">
-    <value>Ніяких нових</value>
+    <value>Нові відсутні</value>
   </data>
   <data name="Dashboard_Reinitialize_Interview_Message" xml:space="preserve">
-    <value>Це інтерв'ю було завершене. Ви бажаєте знову почати інтерв'ю?</value>
+    <value>Це інтерв'ю завершено. Ви хочете відкрити його?</value>
   </data>
   <data name="Dashboard_RejectedLinkText" xml:space="preserve">
-    <value>Відхилені ({0})</value>
+    <value>Відхилено ({0})</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
-    <value>Ви дійсно бажаєте видалити це інтерв'ю {0}?</value>
+    <value>Ви дійсно хочете видалити це інтерв'ю {0}?</value>
   </data>
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
-    <value>Розпочаті ({0})</value>
+    <value>Початі ({0})</value>
   </data>
   <data name="Dashboard_AssignmentsTabTitle" xml:space="preserve">
-    <value>Створити</value>
+    <value>Створити нове</value>
   </data>
   <data name="Dashboard_Title" xml:space="preserve">
-    <value>{0} интервью на {1}</value>
+    <value>{0} інтерв'ю для {1}</value>
   </data>
   <data name="DashboardItem_CensusModeComment" xml:space="preserve">
-    <value>Режим перепису , інтерв'ю створено: {0}</value>
+    <value>Режим перепису, інтерв'ю створено: {0}</value>
   </data>
   <data name="DashboardItem_CompletedOn" xml:space="preserve">
-    <value>Завершено о {0}</value>
+    <value>Завершено: {0}</value>
   </data>
   <data name="DashboardItem_CreatedOn" xml:space="preserve">
-    <value>Створено {0}</value>
+    <value>Створено: {0}</value>
   </data>
   <data name="DashboardItem_NotStarted" xml:space="preserve">
     <value>Не розпочато</value>
   </data>
   <data name="DashboardItem_RejectedOn" xml:space="preserve">
-    <value>Відхилені на {0}</value>
+    <value>Відхилено: {0}</value>
   </data>
   <data name="DashboardItem_StartedOn" xml:space="preserve">
-    <value>Розпочато о {0}</value>
+    <value>Почато: {0}</value>
   </data>
   <data name="DashboardItem_Title" xml:space="preserve">
     <value>{0} (v{1})</value>
   </data>
   <data name="HostUnreachable" xml:space="preserve">
-    <value>Немає доступу в Інтернет до вашого серверу. Перевірте настройки адреси серверу та мережі</value>
+    <value>Немає доступу до інтернету на вашому сервері. Перевірте адресу сервера та (або) налаштування мережі</value>
   </data>
   <data name="InternalServerError" xml:space="preserve">
-    <value>Помилка сервера. Будь ласка, зв'яжіться з адміністратором сервера.</value>
+    <value>Помилка сервера. Зверніться до адміністратора вашого сервера.</value>
   </data>
   <data name="InvalidEndpoint" xml:space="preserve">
-    <value>Адреса веб-сайту є неприпустимою. Переконайтеся, що введено правильну URL-адресу.</value>
+    <value>Адреса веб-сайту супервізора невірна. Перевірте введену URL-адресу.</value>
   </data>
   <data name="Login_FinishInstallation_Message" xml:space="preserve">
-    <value>Це перше завантаження на цьому пристрою. Користувач і домен ще не встановлені.&lt;br&gt;Необхідне підключення до Інтернету для продовження</value>
+    <value>Цей планшет ще не налаштовано. Для продовження потрібне підключення до Інтернету.</value>
   </data>
   <data name="Login_Online_Signin_Explanation_message" xml:space="preserve">
-    <value>Ви може спробувати увійти онлайн, якщо ви забули пароль або його було скинуто</value>
+    <value>Ви можете спробувати увійти в систему онлайн, якщо ви забули свій пароль або він був скинутий</value>
   </data>
   <data name="Login_Online_SignIn_Failed" xml:space="preserve">
-    <value>Проблема аутентифікації на віддаленому сервері. Зверніться до свого супервізора або до штаб-квартири</value>
+    <value>Проблема з автентифікацією на віддаленому сервері. Будь ласка, зверніться до свого супервізора</value>
   </data>
   <data name="Login_WrongPassword" xml:space="preserve">
     <value>Неправильний пароль</value>
   </data>
   <data name="Maintenance" xml:space="preserve">
-    <value>Сайт зараз у режимі супроводу. Вибачте за незручності</value>
+    <value>Сайт Survey Solutions Supervisor знаходиться на технічному обслуговуванні. Вибачте за незручності</value>
   </data>
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
-    <value>Інформаційна панель</value>
+    <value>Панель керування</value>
   </data>
   <data name="MenuItem_Title_Login" xml:space="preserve">
-    <value>Увійти</value>
+    <value>Логін</value>
   </data>
   <data name="MenuItem_Title_Settings" xml:space="preserve">
-    <value>Параметри</value>
+    <value>Налаштування</value>
   </data>
   <data name="MenuItem_Title_SignOut" xml:space="preserve">
-    <value>Вийти</value>
+    <value>Вийти з аккаунта</value>
   </data>
   <data name="NoNetwork" xml:space="preserve">
-    <value>Немає мережи. Перевірте налаштування мережі</value>
+    <value>Немає мережі. Перевірте налаштування мережі</value>
   </data>
   <data name="Prefs_AboutApplication" xml:space="preserve">
     <value>Про додаток</value>
   </data>
   <data name="Prefs_ApplicationVersionTitle" xml:space="preserve">
-    <value>Версія додатка:</value>
+    <value>Версія додатку:</value>
   </data>
   <data name="Prefs_BufferSizeSummary" xml:space="preserve">
-    <value>Кількість байтів для розміру пакету даних</value>
+    <value>Кількість байт для пакету при отриманні/передачі даних від/до додатку Supervisor</value>
   </data>
   <data name="Prefs_BufferSizeTitle" xml:space="preserve">
-    <value>Розмір пакета даних</value>
+    <value>Розмір комунікаційного пакету</value>
   </data>
   <data name="Prefs_ConnectionSettings" xml:space="preserve">
-    <value>Параметри підключення</value>
+    <value>Налаштування підключення</value>
   </data>
   <data name="Prefs_DeviceIdTitle" xml:space="preserve">
     <value>Ідентифікатор пристрою:</value>
   </data>
   <data name="Prefs_EndpointTitle" xml:space="preserve">
-    <value>URL адреса супервізора</value>
+    <value>URL-адреса супервізора</value>
   </data>
   <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
-    <value>Кількість секунд очікування на отримання координат</value>
+    <value>Кількість секунд для очікування координат</value>
   </data>
   <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
-    <value>Час очікування GPS</value>
+    <value>Тайм-аут прийому GPS</value>
   </data>
   <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
-    <value>Кількість секунд очікування на відповідь серверу</value>
+    <value>Кількість секунд очікування відповіді сервера</value>
   </data>
   <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
-    <value>Час очікування відповіді сервера</value>
+    <value>Таймаут відповіді сервера</value>
   </data>
   <data name="Prefs_InterviewSettings" xml:space="preserve">
-    <value>Настройки інтерв'ю</value>
+    <value>Налаштування інтерв'ю</value>
   </data>
   <data name="Prefs_Title" xml:space="preserve">
-    <value>Параметри</value>
+    <value>Налаштування</value>
   </data>
   <data name="RequestCanceledByUser" xml:space="preserve">
     <value>Запит скасовано користувачем</value>
   </data>
   <data name="RequestTimeout" xml:space="preserve">
-    <value>Вичерпано час очікування під час підключення до веб-сайту. Перевірте підключення до Інтернету.</value>
+    <value>Тайм-аут під час підключення до веб-сайту Survey Solutions Supervisor. Перевірте підключення до Інтернету.</value>
   </data>
   <data name="ServiceUnavailable" xml:space="preserve">
-    <value>Немає зв'язку з додатком супервізора. Будь ласка, переконайтеся, що веб-сайт доступний.</value>
+    <value>Немає зв'язку з Survey Solutions Supervisor. Переконайтесь, що веб-сайт доступний.</value>
   </data>
   <data name="Synchronization_Cancel" xml:space="preserve">
     <value>Скасувати</value>
@@ -283,52 +285,52 @@
     <value>Оновлення завдань</value>
   </data>
   <data name="Synchronization_Fail_State_DeletedInterviews_Format" xml:space="preserve">
-    <value>{0} з {1} інтерв'ю було видалено</value>
+    <value>{0} з {1} інтерв'ю видалено</value>
   </data>
   <data name="Synchronization_Fail_State_NewInterviews_Format" xml:space="preserve">
-    <value>{0} з {1} нових інтерв'ю було завантажено</value>
+    <value>{0} з {1} нових інтерв'ю завантажено</value>
   </data>
   <data name="Synchronization_Fail_State_RejectedInterviews_Format" xml:space="preserve">
-    <value>{0} з {1} відхилених інтерв'ю було повернуто</value>
+    <value>{0} з {1} відхилених інтерв'ю повернулися</value>
   </data>
   <data name="Synchronization_Fail_State_UploadedInterviews_Format" xml:space="preserve">
-    <value>{0} з {1} завершених інтерв'ю було завантажено</value>
+    <value>{0} з {1} завершених інтерв'ю завантажено</value>
   </data>
   <data name="Synchronization_Fail_Title" xml:space="preserve">
-    <value>Синхронізація була перервана, будь ласка, спробуйте ще раз</value>
+    <value>Синхронізацію було перервано, спробуйте ще раз</value>
   </data>
   <data name="Synchronization_Fail_UnexpectedException" xml:space="preserve">
-    <value>Неочікуваний виняток</value>
+    <value>Несподіваний виняток</value>
   </data>
   <data name="Synchronization_Interviews" xml:space="preserve">
     <value>інтерв'ю</value>
   </data>
   <data name="Synchronization_LockedAssignments_Text" xml:space="preserve">
-    <value>Призначення заблоковані до завершення синхронізації</value>
+    <value>Завдання заблоковано до завершення синхронізації</value>
   </data>
   <data name="Synchronization_Questionnaires" xml:space="preserve">
-    <value>запитальники</value>
+    <value>анкети</value>
   </data>
   <data name="Synchronization_Success_Description" xml:space="preserve">
-    <value>Всі призначення було оновлено</value>
+    <value>Всі завдання були оновлені</value>
   </data>
   <data name="Synchronization_Success_State_DeletedInterviews_Format" xml:space="preserve">
-    <value>{0} інтерв'ю було видалено</value>
+    <value>{0} інтерв'ю видалено</value>
   </data>
   <data name="Synchronization_Success_State_NewInterviews_Format" xml:space="preserve">
-    <value>{0} нових інтерв'ю було скачано</value>
+    <value>{0} завантажено нових інтерв'ю</value>
   </data>
   <data name="Synchronization_Success_State_RejectedInterviews_Format" xml:space="preserve">
-    <value>{0} відхилених інтерв'ю було повернуто</value>
+    <value>{0} повернуто відхилених інтерв'ю</value>
   </data>
   <data name="Synchronization_Success_State_UploadedInterviews_Format" xml:space="preserve">
-    <value>{0} завершених інтерв'ю було завантажено</value>
+    <value>{0} завантажено завершених інтерв'ю</value>
   </data>
   <data name="Synchronization_Success_Title" xml:space="preserve">
     <value>Синхронізацію успішно завершено</value>
   </data>
   <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
-    <value>Завершені призначення</value>
+    <value>виконані завдання</value>
   </data>
   <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
     <value>{0} з {1} {2} зроблено</value>
@@ -349,39 +351,37 @@
     <value>Помилка автентифікації користувача</value>
   </data>
   <data name="Synchronization_UserLinkedToAnotherDevice_Title" xml:space="preserve">
-    <value>Ваш обліковий запис був зв'язаний з іншим планшетом</value>
+    <value>Ваш обліковий запис було переприв'язано до іншого планшета</value>
   </data>
   <data name="Synchronization_UserPassword_Update_Format" xml:space="preserve">
-    <value>Проблема аутентифікації. Ми не змогли підтвердити ваш обліковий запис ('{0}'). 
-Ваш обліковий запис, можливо має одну з таких проблем: відмінний від введеного пароль, заблокований штаб-квартирою або можливо видалиний. 
-Будь ласка, спробуйте оновлений пароль. Якщо це не вирішить проблему, зверніться до свого супервізора або до штаб-квартири.</value>
+    <value>Проблема з автентифікацією. Не вдалося підтвердити ваші облікові дані '{0}'. Можливо, ваш обліковий запис має інший пароль або заблокований. Будь ласка, введіть пароль ще раз. Якщо проблема не зникає, зверніться до свого супервізора або до хедквотера.</value>
   </data>
   <data name="Troubleshooting_Backup" xml:space="preserve">
     <value>Створити резервну копію</value>
   </data>
   <data name="Troubleshooting_BackupErrorMessage" xml:space="preserve">
-    <value>Щось пішло не так і резервну копію створити не вдалося</value>
+    <value>Щось пішло не так, і резервну копію не вдалося створити</value>
   </data>
   <data name="Troubleshooting_BackupWasSaved" xml:space="preserve">
-    <value>Резервне копіювання було збережено на {0}</value>
+    <value>Резервну копію було збережено до {0}</value>
   </data>
   <data name="Troubleshooting_CurrentVersion_CheckForUpdates" xml:space="preserve">
-    <value>Версія: {0}. Перевірити наявність нової версії</value>
+    <value>Версія: {0}. Перевірте наявність нової версії</value>
   </data>
   <data name="Troubleshooting_InformationPackageIsSuccessfullySent" xml:space="preserve">
     <value>Інформаційний пакет успішно відправлено</value>
   </data>
   <data name="Troubleshooting_InformationPackageSizeWarningFormat" xml:space="preserve">
-    <value>Інформаційний пакет розміру {0} буде надіслано через мережу. Ви впевнені, що ви хочете відправити його?</value>
+    <value>Інформаційний пакет розміром {0} буде надіслано через мережу. Ви впевнені, що хочете відправити його?</value>
   </data>
   <data name="Troubleshooting_NewVerisonExist" xml:space="preserve">
-    <value>Існує нова версія. Ви бажаєте завантажити та оновити додаток?</value>
+    <value>Існує нова версія додатку. Бажаєте завантажити та оновити додаток?</value>
   </data>
   <data name="Troubleshooting_NoNewVersion" xml:space="preserve">
-    <value>Ви маєте останню версію додотку</value>
+    <value>У вас остання версія додатку</value>
   </data>
   <data name="Troubleshooting_Old_AreYouSureYouWantToRestore" xml:space="preserve">
-    <value>Всі поточні дані будуть стерті. Ви дійсно бажаєте продовжити відновлення. Якщо так, будь ласка, потурбуйтесь, що дані для відновлення знаходяться на {0}</value>
+    <value>Всі поточні дані буде видалено. Ви впевнені, що хочете продовжити відновлення. Якщо так, будь ласка, переконайтеся, що дані для відновлення будуть представлені за адресою {0}</value>
   </data>
   <data name="Troubleshooting_Old_CreatingInformationPackage" xml:space="preserve">
     <value>Створення інформаційного пакету</value>
@@ -390,112 +390,112 @@
     <value>Інформаційний пакет</value>
   </data>
   <data name="Troubleshooting_Old_InformationPackageIsSuccessfullySent" xml:space="preserve">
-    <value>Інформаційний пакет успішно відправлено.</value>
+    <value>Інформаційний пакет успішно відправлено</value>
   </data>
   <data name="Troubleshooting_Old_InformationPackageSizeWarningFormat" xml:space="preserve">
-    <value>Інформаційний пакет розміру {0} буде надіслано через мережу. Ви впевнені, що ви хочете відправити його?</value>
+    <value>Інформаційний пакет розміром {0} буде надіслано через мережу. Ви впевнені, що хочете відправити його?</value>
   </data>
   <data name="Troubleshooting_Old_SendingInformationPackage" xml:space="preserve">
-    <value>Відправлення пакета інформації</value>
+    <value>Відправлення інформаційного пакету</value>
   </data>
   <data name="Troubleshooting_Old_SendingOfInformationPackageIsCanceled" xml:space="preserve">
-    <value>Відправлення пакета інформації відмінено. Причина: {0}</value>
+    <value>Відправлення інформаційного пакету було скасовано. Причина: {0}</value>
   </data>
   <data name="Troubleshooting_Old_SendingOfInformationPackageIsCanceling" xml:space="preserve">
-    <value>Скасування операції</value>
+    <value>Скасування</value>
   </data>
   <data name="Troubleshooting_RestorationErrorMessage" xml:space="preserve">
-    <value>Щось пішло не так і таблет не був відновлений</value>
+    <value>Щось пішло не так і планшет не вдалося відновити</value>
   </data>
   <data name="Troubleshooting_Restore" xml:space="preserve">
-    <value>Відновити з резервної копії</value>
+    <value>Відновлення з резервної копії</value>
   </data>
   <data name="Troubleshooting_RestoreConfirmation" xml:space="preserve">
-    <value>Всі поточні дані будуть стерті. Ви дійсно бажаєте відновити? Якщо так, будь ласка, потурбуйтесь, що дані для відновлення знаходяться {0}</value>
+    <value>Всі поточні дані будуть видалені. Ви впевнені, що хочете продовжити відновлення? Якщо так, будь ласка, переконайтеся, що відновлені дані знаходяться за адресою {0}</value>
   </data>
   <data name="Troubleshooting_RestoredSuccessfully" xml:space="preserve">
-    <value>Планшет було відновлено</value>
+    <value>Планшет успішно відновлено</value>
   </data>
   <data name="Troubleshooting_SendingOfInformationPackageErrorMessage" xml:space="preserve">
-    <value>Невдале відправлення пакета інформації</value>
+    <value>Не вдалося надіслати інформаційний пакет.</value>
   </data>
   <data name="Troubleshooting_SendTabletInformation" xml:space="preserve">
-    <value>Відправити інформації з планшету</value>
+    <value>Надіслати інформацію про планшет</value>
   </data>
   <data name="Troubleshooting_Title" xml:space="preserve">
-    <value>Виправлення неполадок</value>
+    <value>Вирішення проблем</value>
   </data>
   <data name="Troubleshooting_Unknown_ErrorMessage" xml:space="preserve">
-    <value>Сталася помилка під час перевірки версії. Будь ласка, перевірте налаштування або повторіть спробу пізніше</value>
+    <value>Виникла помилка при перевірці версії. Будь ласка, перевірте налаштування або спробуйте пізніше</value>
   </data>
   <data name="Unauthorized" xml:space="preserve">
-    <value>Логін або пароль вказано невірно</value>
+    <value>Ваш логін або пароль невірні</value>
   </data>
   <data name="UnexpectedException" xml:space="preserve">
     <value>Неочікувана помилка</value>
   </data>
   <data name="UpgradeRequired" xml:space="preserve">
-    <value>Відбувся реліз нової версії додатка . Будь ласка, оновіть додаток</value>
+    <value>Вийшла нова версія додатку. Будь ласка, оновіть додаток</value>
   </data>
   <data name="Warning" xml:space="preserve">
     <value>Попередження</value>
   </data>
   <data name="DashboardItem_AssignedOn" xml:space="preserve">
-    <value>Призначено {0}</value>
+    <value>Призначено: {0}</value>
   </data>
   <data name="Diagnostics_BackupDate_Title" xml:space="preserve">
-    <value>Дата і час створення резервної копії:</value>
+    <value>Коли Збережено:</value>
   </data>
   <data name="Diagnostics_BackupFileLocation_Title" xml:space="preserve">
-    <value>Шлях до файлу з резервною копією:</value>
+    <value>Розташування файлу резервної копії:</value>
   </data>
   <data name="Diagnostics_BackupReady_Title" xml:space="preserve">
-    <value>Дані збережені</value>
+    <value>Дані збережено</value>
   </data>
   <data name="Diagnostics_BackupScope_Title" xml:space="preserve">
-    <value>Обсяг:</value>
+    <value>Сфера застосування:</value>
   </data>
   <data name="Diagnostics_Backup_Description" xml:space="preserve">
-    <value>Зберегти потрібну інформацію у файл на цьому пристрої</value>
+    <value>Зберегти всю необхідну інформацію у файл на цьому пристрої.</value>
   </data>
   <data name="Diagnostics_Backup_Title" xml:space="preserve">
-    <value>Створити пакет для служби підтримки</value>
+    <value>Сформувати пакет підтримки</value>
   </data>
   <data name="Diagnostics_BandwidthTestConnectionAbsent_Title" xml:space="preserve">
-    <value>&lt;font color="red"&gt;З'єднання з інтернетом відсутнє&lt;/font&gt;</value>
+    <value>&lt;font color="red"&gt;Нема підключення до Інтернету&lt;/font&gt;</value>
   </data>
   <data name="Diagnostics_BandwidthTestConnectionNotOK_Title" xml:space="preserve">
-    <value>З'єднання &lt;font color="red"&gt;погане&lt;/font&gt;</value>
+    <value>З'єднання &lt;font color="red"&gt;не стабільне&lt;/font&gt;</value>
   </data>
   <data name="Diagnostics_BandwidthTestConnectionOK_Title" xml:space="preserve">
-    <value>З'єднання добре</value>
+    <value>З'єднання в нормі</value>
   </data>
   <data name="Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title" xml:space="preserve">
-    <value>&lt;font color="red"&gt;З'єднання з нашим сервером відсутнє&lt;/font&gt;</value>
+    <value>&lt;font color="red"&gt;Немає зв'язку з сервером&lt;/font&gt;</value>
   </data>
   <data name="Diagnostics_BandwidthTestConnectionType_Title" xml:space="preserve">
-    <value>Тип з'єднання:</value>
+    <value>Тип підключення:</value>
   </data>
   <data name="Diagnostics_BandwidthTestNetworkName_Title" xml:space="preserve">
-    <value>Iм'я мережі:</value>
+    <value>Назва мережі:</value>
   </data>
   <data name="Diagnostics_BandwidthTestPing_Title" xml:space="preserve">
     <value>Пінг:</value>
   </data>
   <data name="Diagnostics_CheckVersion_Description" xml:space="preserve">
-    <value>Ми перевіримо наявність нової версії на сервері</value>
+    <value>Ми перевіримо наявність нової версії додатку Interviewer на сервері</value>
   </data>
   <data name="Diagnostics_CheckVersion_Title" xml:space="preserve">
-    <value>Версія: {0}. Перевірити наявність нової версії</value>
+    <value>Версія: {0}. Перевірте наявність нової версії</value>
   </data>
   <data name="Diagnostics_Delete" xml:space="preserve">
     <value>Видалити</value>
   </data>
   <data name="Diagnostics_DownloadingPleaseWait" xml:space="preserve">
-    <value>Відбувається завантаження, будь ласка зачекайте...</value>
+    <value>Завантаження, будь ласка, зачекайте...</value>
   </data>
   <data name="Diagnostics_NewVersionAvaliable_Title" xml:space="preserve">
-    <value>Існує нова версія. Завантажити і оновити додаток?</value>
+    <value>Існує нова версія. Бажаєте завантажити та оновити додаток?</value>
   </data>
   <data name="Diagnostics_NewVersionNumber_Title" xml:space="preserve">
     <value>Номер версії:</value>
@@ -504,43 +504,43 @@
     <value>Ні</value>
   </data>
   <data name="Diagnostics_RestoreReady_Title" xml:space="preserve">
-    <value>Знайдені збережені дані:</value>
+    <value>Знайдено збережені дані:</value>
   </data>
   <data name="Diagnostics_Restore_Description" xml:space="preserve">
-    <value>Відновлення збережених даних приведе до заміни всіх існуючих інтерв'ю на вашому пристрої</value>
+    <value>Відновивши збережені дані, ви заміните всі поточні завданняна цьому пристрої</value>
   </data>
   <data name="Diagnostics_Restore_Title" xml:space="preserve">
-    <value>Відновити дані з резервної копії</value>
+    <value>ВІДНОВИТИ</value>
   </data>
   <data name="Diagnostics_Send" xml:space="preserve">
-    <value>Відправити</value>
+    <value>Надіслати</value>
   </data>
   <data name="Diagnostics_Send_Description" xml:space="preserve">
-    <value>Всі зібрані дані та інформація про додаток будуть зібрані в єдиний архів. Операція може зайняти до 10 хвилин.</value>
+    <value>Всі дані та інтерв'ю будуть зібрані в єдиний архів. Це може зайняти до 10 хвилин.</value>
   </data>
   <data name="Diagnostics_Send_Title" xml:space="preserve">
-    <value>Відправити на сервер інформацію про додаток</value>
+    <value>Надіслати всю інформацію пристрою до Headquarters для вирішення проблем.</value>
   </data>
   <data name="Diagnostics_Share_Description" xml:space="preserve">
-    <value>Інформація буде зібрана в текстовому вигляді. Вона може бути надіслана електронною поштою, за допомогою додатку Google Hangouts або будь-яким іншим додатком з обміну повідомленнями</value>
+    <value>Уся інформація, наведена нижче, буде надана у вигляді звичайного тексту. Вона може бути надіслана електронною поштою, Google Hangouts або будь-який іншим додатком для обміну повідомленнями</value>
   </data>
   <data name="Diagnostics_Share_Title" xml:space="preserve">
-    <value>Передати технічну інформацію</value>
+    <value>Поділитися всією технічною інформацією</value>
   </data>
   <data name="Diagnostics_TabletInformationReady_Title" xml:space="preserve">
-    <value>Архів готовий</value>
+    <value>Архів даних готовий</value>
   </data>
   <data name="Diagnostics_TabletInformationScope_Title" xml:space="preserve">
-    <value>Обсяг:</value>
+    <value>Розмір:</value>
   </data>
   <data name="Diagnostics_TabletInformationWhenGenerated_Title" xml:space="preserve">
-    <value>Дата і час створення:</value>
+    <value>Створено:</value>
   </data>
   <data name="Diagnostics_TestConnection_Description" xml:space="preserve">
-    <value>Перевірка підключення до сервера і його швидкість</value>
+    <value>Перевірити якість та швидкість з'єднання з сервером.</value>
   </data>
   <data name="Diagnostics_TestConnection_Title" xml:space="preserve">
-    <value>Перевірити швидкість з'єднання з сервером</value>
+    <value>Перевірити пропускну здатність каналу до сервера</value>
   </data>
   <data name="Diagnostics_Title" xml:space="preserve">
     <value>Діагностика</value>
@@ -549,36 +549,457 @@
     <value>Оновити</value>
   </data>
   <data name="Diagnostics_YouHaveTheLatestVersionOfApplication" xml:space="preserve">
-    <value>У вас встановлена остання версія додатку.</value>
+    <value>У вас остання версія додатку.</value>
   </data>
   <data name="MenuItem_Title_Diagnostics" xml:space="preserve">
     <value>Діагностика</value>
   </data>
   <data name="Share_to_Title" xml:space="preserve">
-    <value>Передати технічну інформацію за допомогою..</value>
+    <value>Поділіться інформацією з..</value>
   </data>
   <data name="Troubleshooting_RestoreFolderIsEmpty" xml:space="preserve">
-    <value>Папка '{0}' порожня. Будь ласка, покладіть резервну копію, з якої Вы бажаєте відновитись в цю папку.</value>
+    <value>Папка '{0}' порожня. Помістіть резервну копію, яку потрібно відновити, до папки.</value>
   </data>
   <data name="Dashboard_Start" xml:space="preserve">
-    <value>Почати</value>
+    <value>Старт</value>
   </data>
   <data name="Dashboard_CreateNewTabText" xml:space="preserve">
-    <value>Створити нове інтерв'ю використовуючи шаблон</value>
+    <value>Створіть нове інтерв'ю за допомогою шаблонів</value>
   </data>
   <data name="Dashboard_StartedTabText" xml:space="preserve">
-    <value>Інтерв'ю які були розпочаті, але не закінчені 
-Вам потрібно закінчити їх перед відправкою на сервер</value>
+    <value>Інтерв'ю, які були розпочаті, але не завершені
+Вам потрібно завершити їх для синхронізації</value>
   </data>
   <data name="Dashboard_RejectedTabText" xml:space="preserve">
-    <value>Інтерв'ю які були повернуті супервізором
-Вам необхідно прийняти до уваги зауваження супервізора на обкладинці інтерв'ю</value>
+    <value>Інтерв'ю, відхилені супервізором
+Будь ласка, вирішіть проблеми, зазначені на титульній сторінці і надішліть їх назад супервізору.</value>
   </data>
   <data name="Dashboard_CompletedTabText" xml:space="preserve">
-    <value>Закінчені інтерв'ю, будуть завантажені на сервер 
-при наступній синхронізації</value>
+    <value>Завершені інтерв'ю будуть завантажені під час наступної синхронізації</value>
   </data>
   <data name="Dashboard_QuestionnairesTabText" xml:space="preserve">
-    <value>Ви можете створити нове інтерв'ю використовуючи порожній шаблон</value>
+    <value>Ви можете створювати нові інтерв'ю за допомогою завдань</value>
+  </data>
+  <data name="AssignmentsSynchronization" xml:space="preserve">
+    <value>Синхронізація завдань</value>
+  </data>
+  <data name="BluetoothPermissionRequired" xml:space="preserve">
+    <value>Для синхронізації в автономному режимі потрібен дозвіл Bluetooth</value>
+  </data>
+  <data name="Dashboard_AddCalendarEvent" xml:space="preserve">
+    <value>Додати календарну подію</value>
+  </data>
+  <data name="Dashboard_Assign" xml:space="preserve">
+    <value>Призначити</value>
+  </data>
+  <data name="Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat" xml:space="preserve">
+    <value>Збирати: необмежено</value>
+  </data>
+  <data name="Dashboard_AssignmentCard_SubTitleCountdownFormat" xml:space="preserve">
+    <value>Зібрати: {0} інтерв'ю(и)</value>
+  </data>
+  <data name="Dashboard_AssignmentCard_SubTitleSingleInterivew" xml:space="preserve">
+    <value>Завдання на одну співбесіду</value>
+  </data>
+  <data name="Dashboard_CantOpenCawi" xml:space="preserve">
+    <value>Ви не можете відкрити інтерв'ю в режимі CAWI. Воно буде відправлено в Headquarters після синхронізації.</value>
+  </data>
+  <data name="Dashboard_CawiLabel" xml:space="preserve">
+    <value>{0} (CAWI)</value>
+  </data>
+  <data name="Dashboard_CensusAssignment" xml:space="preserve">
+    <value>Перепис населення</value>
+  </data>
+  <data name="Dashboard_Discard" xml:space="preserve">
+    <value>Викинути</value>
+  </data>
+  <data name="Dashboard_EditCalendarEvent" xml:space="preserve">
+    <value>Редагування події календаря</value>
+  </data>
+  <data name="Dashboard_Interview_AssignmentLabelFormat" xml:space="preserve">
+    <value>Завдання #{0}</value>
+  </data>
+  <data name="Dashboard_Interview_QuestionsAnsweredFormat" xml:space="preserve">
+    <value>{0} відповідей на запитання</value>
+  </data>
+  <data name="Dashboard_NeedTextForSearch" xml:space="preserve">
+    <value>Виконайте пошук для відображення результатів</value>
+  </data>
+  <data name="Dashboard_No_InterviewKey" xml:space="preserve">
+    <value>Немає ключа від інтерв'ю</value>
+  </data>
+  <data name="Dashboard_NotFoundSearchResult" xml:space="preserve">
+    <value>Нічого не знайдено</value>
+  </data>
+  <data name="Dashboard_Open" xml:space="preserve">
+    <value>Відкрити</value>
+  </data>
+  <data name="Dashboard_PastDateCalendarEvent" xml:space="preserve">
+    <value>Вибрана дата знаходиться в минулому</value>
+  </data>
+  <data name="Dashboard_PastTimeCalendarEvent" xml:space="preserve">
+    <value>Вибраний час у минулому</value>
+  </data>
+  <data name="Dashboard_RefreshWorkspaces" xml:space="preserve">
+    <value>Оновлення робочих просторів</value>
+  </data>
+  <data name="Dashboard_RefreshWorkspacesError" xml:space="preserve">
+    <value>Помилка при отриманні списку робочих просторів. Зверніться до системного адміністратора. </value>
+  </data>
+  <data name="Dashboard_RefreshWorkspacesFinished" xml:space="preserve">
+    <value>Список робочих просторів оновлено</value>
+  </data>
+  <data name="Dashboard_RemoveCalendarEvent" xml:space="preserve">
+    <value>Видалити календарну подію</value>
+  </data>
+  <data name="Dashboard_Reopen" xml:space="preserve">
+    <value>Відкрити</value>
+  </data>
+  <data name="Dashboard_Search_ExitSearch" xml:space="preserve">
+    <value>Вийти з пошуку</value>
+  </data>
+  <data name="Dashboard_Searching" xml:space="preserve">
+    <value>Шукаю...</value>
+  </data>
+  <data name="Dashboard_SearchResult" xml:space="preserve">
+    <value>{0} елементів знайдено</value>
+  </data>
+  <data name="Dashboard_SearchWatermark" xml:space="preserve">
+    <value>Введіть текст для пошуку</value>
+  </data>
+  <data name="Dashboard_ShowCalendarEvent" xml:space="preserve">
+    <value>Наступний контакт: {0}</value>
+  </data>
+  <data name="Dashboard_ShowLocation" xml:space="preserve">
+    <value>Показати місце знаходження</value>
+  </data>
+  <data name="Dashboard_StartNewInterview" xml:space="preserve">
+    <value>Почати нове інтерв'ю</value>
+  </data>
+  <data name="Dashboard_ViewIssues" xml:space="preserve">
+    <value>Переглянути проблеми</value>
+  </data>
+  <data name="Dashboard_WebInterviewsLinkText" xml:space="preserve">
+    <value>Веб-інтерв'ю ({0})</value>
+  </data>
+  <data name="Dashboard_WebInterviewTabText" xml:space="preserve">
+    <value>Інтерв'ю в режимі веб-інтерв'ю. Буде видалено під час синхронізації, коли веб-інтерв'ю буде завершено респондентом</value>
+  </data>
+  <data name="DashboardItem_ApprovedBySupervisor" xml:space="preserve">
+    <value>Затверджено супервізором: {0}</value>
+  </data>
+  <data name="DashboardItem_AssignmentCreatedComment" xml:space="preserve">
+    <value>Інтерв'ю створено: {0}</value>
+  </data>
+  <data name="DashboardItem_AssignmentLeftComment" xml:space="preserve">
+    <value>{0} інтерв'ю</value>
+  </data>
+  <data name="DashboardItem_QRCode" xml:space="preserve">
+    <value>Показати QR-код</value>
+  </data>
+  <data name="DashboardItem_RejectedByHqOn" xml:space="preserve">
+    <value>Відхилено штаб-квартирою : {0}</value>
+  </data>
+  <data name="DashboardItem_Responsible" xml:space="preserve">
+    <value>Відповідальний: {0}</value>
+  </data>
+  <data name="Diagnostics_SendLogs" xml:space="preserve">
+    <value>Надіслати журнали (trace logs)</value>
+  </data>
+  <data name="Diagnostics_SendLogs_Description" xml:space="preserve">
+    <value>Надіслати детальні журнали до Headquarters для розслідування проблем</value>
+  </data>
+  <data name="Diagnostics_SendLogs_Success" xml:space="preserve">
+    <value>Журнали надсилаються до штаб-квартири</value>
+  </data>
+  <data name="Diagnostics_ServerUrl" xml:space="preserve">
+    <value>URL-адреса сервера: </value>
+  </data>
+  <data name="FailedToCreateInterview" xml:space="preserve">
+    <value>Не вдалося створити інтерв'ю. Причина: {0}</value>
+  </data>
+  <data name="FailedToLoadInterview" xml:space="preserve">
+    <value>Не вдалося відкрити інтерв'ю.</value>
+  </data>
+  <data name="FailedToLoadInterviewDescription" xml:space="preserve">
+    <value>Кейс інтерв'ю недійсний і не може бути відкритий. Зверніться до служби підтримки або спробуйте синхронізувати, щоб оновити кейси.</value>
+  </data>
+  <data name="FinishInstallation_EndpointDiffers" xml:space="preserve">
+    <value>Точка синхронізації '{0}' відрізняється від вказаної у налаштуваннях ('{1}'). Завантажити URL-адресу з налаштувань?</value>
+  </data>
+  <data name="FinishInstallation_QrBarcodeReaderErrorMessage" xml:space="preserve">
+    <value>Під час сканування сталася помилка</value>
+  </data>
+  <data name="HeadquartersVersion" xml:space="preserve">
+    <value>Підтримувана Headquarters версія: {0}</value>
+  </data>
+  <data name="Interview_Creating" xml:space="preserve">
+    <value>Створення інтерв'ю</value>
+  </data>
+  <data name="Interview_Creating_Description" xml:space="preserve">
+    <value>Це може зайняти кілька хвилин, 
+не виходьте з додатку</value>
+  </data>
+  <data name="Interview_Loading" xml:space="preserve">
+    <value>Завантаження даних інтерв'ю</value>
+  </data>
+  <data name="Interview_Loading_Description" xml:space="preserve">
+    <value>Співбесіда розпочнеться найближчим часом</value>
+  </data>
+  <data name="Interview_Loading_With_Percents" xml:space="preserve">
+    <value>Завантаження даних інтерв'ю {0}%</value>
+  </data>
+  <data name="Interview_Progress_Format" xml:space="preserve">
+    <value>Прогрес: {0}/{1}</value>
+  </data>
+  <data name="InterviewerFromDifferentTeam" xml:space="preserve">
+    <value>Інтерв'юер є частиною іншої команди. Будь ласка, синхронізуйте зі штаб-квартирою.</value>
+  </data>
+  <data name="InterviewerVersion" xml:space="preserve">
+    <value>Версія додатку Interviewer: {0}</value>
+  </data>
+  <data name="InvalidEndpointShort" xml:space="preserve">
+    <value>Адреса невірна</value>
+  </data>
+  <data name="LocationPermissionRequired" xml:space="preserve">
+    <value>Для офлайн-синхронізації потрібен дозвіл на отримання місцезнаходження</value>
+  </data>
+  <data name="Maps_NoMapsText" xml:space="preserve">
+    <value>Синхронізуйтеся, щоб отримати мапи
+або зверніться до свого супервізора
+за подальшими інструкціями</value>
+  </data>
+  <data name="Maps_Synchronization_Success_Description" xml:space="preserve">
+    <value>Всі карти були синхронізовані</value>
+  </data>
+  <data name="Maps_Title" xml:space="preserve">
+    <value>Карти</value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server" xml:space="preserve">
+    <value>Перевірка карт на сервері</value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Map_sync_error" xml:space="preserve">
+    <value>Помилка синхронізації карти</value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Map_synchronization_succesfuly_finished" xml:space="preserve">
+    <value>Синхронізацію карт успішно завершено</value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format" xml:space="preserve">
+    <value>Обробка карти {0}, {1} з {2}.
+Завантажено {3}%.</value>
+  </data>
+  <data name="MenuItem_Title_Language" xml:space="preserve">
+    <value>Мова</value>
+  </data>
+  <data name="MenuItem_Title_Language_Original" xml:space="preserve">
+    <value>Оригінал</value>
+  </data>
+  <data name="MenuItem_Title_Map_Dashboard" xml:space="preserve">
+    <value>Панель керування мапою</value>
+  </data>
+  <data name="MenuItem_Title_Maps" xml:space="preserve">
+    <value>Карти</value>
+  </data>
+  <data name="MenuItem_Title_MapsSynchronization" xml:space="preserve">
+    <value>Синхронізація карт</value>
+  </data>
+  <data name="MenuItem_Title_RefreshWorkspaces" xml:space="preserve">
+    <value>Оновлення робочих просторів</value>
+  </data>
+  <data name="MenuItem_Title_Search" xml:space="preserve">
+    <value>Пошук</value>
+  </data>
+  <data name="MenuItem_Title_Workspaces" xml:space="preserve">
+    <value>Робочі простори</value>
+  </data>
+  <data name="NearbyPermissionRequired" xml:space="preserve">
+    <value>Для синхронізації в автономному режимі потрібен дозвіл пристроїв Wi-Fi поблизу</value>
+  </data>
+  <data name="Notifications_CompletedInterviewsText" xml:space="preserve">
+    <value>У вас є {0} завершених інтерв'ю, які потрібно синхронізувати</value>
+  </data>
+  <data name="Notifications_InterviewsTitle" xml:space="preserve">
+    <value>Інтерв'ю</value>
+  </data>
+  <data name="Notifications_ManyCompletedInterviews" xml:space="preserve">
+    <value>Багато завершених інтерв'ю. Будь ласка, синхронізуйте.</value>
+  </data>
+  <data name="Notifications_ManyStartedInterviews" xml:space="preserve">
+    <value>Ви почали занадто багато інтерв'ю. Будь ласка, завершіть їх.</value>
+  </data>
+  <data name="Notifications_RejectedInterviewsText" xml:space="preserve">
+    <value>У вас є {0} відхилених інтерв'ю, які не були оброблені</value>
+  </data>
+  <data name="Notifications_StaleAssignments" xml:space="preserve">
+    <value>Деякі завдання не оновлювалися останні 3 дні.</value>
+  </data>
+  <data name="Notifications_SyncNoRetryTitle" xml:space="preserve">
+    <value>Повторної спроби після невдалої синхронізації не було. Будь ласка, спробуйте ще раз</value>
+  </data>
+  <data name="Notifications_SyncTitle" xml:space="preserve">
+    <value>Синхронізація</value>
+  </data>
+  <data name="Notifications_SyncTooLongAgoText" xml:space="preserve">
+    <value>Синхронізація не виконувалася останнім часом. Будь ласка, виконайте синхронізацію</value>
+  </data>
+  <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
+    <value>У вас несумісна версія додатку Interviewer. Будь ласка, видаліть та інсталюйте її знову з веб-сайту Survey Solutions Headquarters</value>
+  </data>
+  <data name="Prefs_AllowSyncWithHq" xml:space="preserve">
+    <value>Дозволити синхронізацію зі штаб-квартирою</value>
+  </data>
+  <data name="Prefs_AllowSyncWithHq_Summary" xml:space="preserve">
+    <value>Вимкніть це налаштування, якщо ви бажаєте синхронізуватися тільки з мобільним додатком Supervisor. Після першої успішної синхронізації з мобільним додатком Supervisor увімкнути цей параметр знову буде неможливо</value>
+  </data>
+  <data name="Prefs_AllowSyncWithHq_Summary_Disabled" xml:space="preserve">
+    <value>Синхронізація з Headquarters неможлива, якщо була принаймні одна успішна синхронізація з додатком Supervisor</value>
+  </data>
+  <data name="Prefs_EventChunkSizeSummary" xml:space="preserve">
+    <value>Скільки подій можна прочитати одним запитом</value>
+  </data>
+  <data name="Prefs_EventChunkSizeTitle" xml:space="preserve">
+    <value>Розмір фрагмента події</value>
+  </data>
+  <data name="SelectResponsible_CancelButtonText" xml:space="preserve">
+    <value>Скасувати</value>
+  </data>
+  <data name="SelectResponsible_Reassign" xml:space="preserve">
+    <value>Перепризначити</value>
+  </data>
+  <data name="SelectResponsible_ReassignButtonText" xml:space="preserve">
+    <value>Перепризначити</value>
+  </data>
+  <data name="SelectResponsible_ReassignDescription" xml:space="preserve">
+    <value>Виберіть нового відповідального за інтерв'ю.
+Він з'явиться на пристрої інтерв'юера після наступної синхронізації</value>
+  </data>
+  <data name="SupervisorVersion" xml:space="preserve">
+    <value>Версія Supervisor: {0}</value>
+  </data>
+  <data name="Synchronization_Check_Obsolete_Questionnaires" xml:space="preserve">
+    <value>Перевірте наявність застарілих анкет</value>
+  </data>
+  <data name="Synchronization_Check_Obsolete_Questionnaires_Description" xml:space="preserve">
+    <value>Видалення {0} анкети з {1}</value>
+  </data>
+  <data name="Synchronization_CheckForObsolete_Interviews" xml:space="preserve">
+    <value>Перевірте, чи немає застарілих інтерв'ю</value>
+  </data>
+  <data name="Synchronization_CheckNewVersionOfApplication" xml:space="preserve">
+    <value>Перевірка оновлень додатку</value>
+  </data>
+  <data name="Synchronization_Done" xml:space="preserve">
+    <value>Завершено</value>
+  </data>
+  <data name="Synchronization_DoneWithErrors_Title" xml:space="preserve">
+    <value>Синхронізація завершилася з помилками</value>
+  </data>
+  <data name="Synchronization_Download_AttachmentsCleanup" xml:space="preserve">
+    <value>Видалення застарілих вкладень</value>
+  </data>
+  <data name="Synchronization_Download_CalendarEvents_Title" xml:space="preserve">
+    <value>Оновлення подій календаря</value>
+  </data>
+  <data name="Synchronization_DownloadApplication" xml:space="preserve">
+    <value>Завантаження оновлень програми</value>
+  </data>
+  <data name="Synchronization_DownloadApplication_Description" xml:space="preserve">
+    <value>Отримано {0} з {1} на {2} ({3}%)</value>
+  </data>
+  <data name="Synchronization_DownloadingLogo" xml:space="preserve">
+    <value>Завантаження логотипу</value>
+  </data>
+  <data name="Synchronization_Fail_State_FailedToProcess_Format" xml:space="preserve">
+    <value>{0} інтерв'ю не вдалося синхронізувати</value>
+  </data>
+  <data name="Synchronization_Fail_State_InterviewsPartialDownloaded_Format" xml:space="preserve">
+    <value>{0} з {1} часткових інтерв'ю завантажено</value>
+  </data>
+  <data name="Synchronization_LinkToErrors" xml:space="preserve">
+    <value>Більш детальну інформацію про помилки синхронізації можна знайти на &lt;a href="https://support.mysurvey.solutions/interviewer/troubleshooting/synchronization-problems"&gt;сайті підтримки&lt;/a&gt;</value>
+  </data>
+  <data name="Synchronization_Of_AssignmentsFormat" xml:space="preserve">
+    <value>Синхронізація {0} з {1} присвоєнь</value>
+  </data>
+  <data name="Synchronization_Of_Interviewers" xml:space="preserve">
+    <value>Синхронізація інтерв'юерів</value>
+  </data>
+  <data name="Synchronization_Of_InterviewersFormat" xml:space="preserve">
+    <value>Синхронізація {0} з {1} інтерв'юерів</value>
+  </data>
+  <data name="Synchronization_Of_Supervisor_details" xml:space="preserve">
+    <value>Синхронізація даних супервізора</value>
+  </data>
+  <data name="Synchronization_PartialInterviews" xml:space="preserve">
+    <value>зміни в інтерв'ю</value>
+  </data>
+  <data name="Synchronization_PasswordChangeRequired" xml:space="preserve">
+    <value>Ваш пароль було скинуто. Ви повинні змінити його, щоб отримати доступ до сайту.</value>
+  </data>
+  <data name="Synchronization_Receiving_Title_Format" xml:space="preserve">
+    <value>Отримано {0}</value>
+  </data>
+  <data name="Synchronization_ReceivingAuditLog" xml:space="preserve">
+    <value>Отримання аудиторської інформації</value>
+  </data>
+  <data name="Synchronization_SendingApplication_Description" xml:space="preserve">
+    <value>Відправлено {0} з {1} на {2} ({3}%)</value>
+  </data>
+  <data name="Synchronization_Success_State_InterviewsPartialDownloaded_Format" xml:space="preserve">
+    <value>{0} інтерв'ю було оновлено</value>
+  </data>
+  <data name="Synchronization_Success_State_PartialUploadInterviews_Format" xml:space="preserve">
+    <value>{0} завантажено часткових інтерв'ю</value>
+  </data>
+  <data name="Synchronization_SupervisorShouldDoOnlineSync" xml:space="preserve">
+    <value>Супервізор завжди повинен мати останні зміни з Headquarters, тому його слід синхронізувати останнім у команді, перш ніж буде доступна офлайн-синхронізація</value>
+  </data>
+  <data name="Synchronization_SupervisorShouldDoOnlineSync_Title" xml:space="preserve">
+    <value>Потрібно синхронізувати додаток Supervisor.</value>
+  </data>
+  <data name="Synchronization_Update_Interviews_Title" xml:space="preserve">
+    <value>Оновлення локальних інтерв'ю зі змінами з сервера</value>
+  </data>
+  <data name="Synchronization_Upload_CalendarEvents_Text" xml:space="preserve">
+    <value>календарні події</value>
+  </data>
+  <data name="Synchronization_UploadAuditLog" xml:space="preserve">
+    <value>Завантаження аудит інформації</value>
+  </data>
+  <data name="Synchronization_UploadingApplication" xml:space="preserve">
+    <value>Надсилання оновлень додатку</value>
+  </data>
+  <data name="Synchronization_UploadingLogo" xml:space="preserve">
+    <value>Завантаження логотипу</value>
+  </data>
+  <data name="Synchronization_UserDoNotBelongToTeam" xml:space="preserve">
+    <value>Користувач більше не належить до цієї команди Супервізора. Будь ласка, зв'яжіться з вашим хедквотером для отримання детальної інформації.</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherServer_Description" xml:space="preserve">
+    <value>Поточний користувач був створений на іншому екземплярі додатку Headquarters. Змініть URL-адресу кінцевої точки синхронізації на початковий сервер</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherServer_Status" xml:space="preserve">
+    <value>Користувач пов'язаний з іншим сервером</value>
+  </data>
+  <data name="Synchronization_WorkspaceAccessDisabledReason" xml:space="preserve">
+    <value>Ваш обліковий запис більше не активний у робочому просторі. Зверніться до системного адміністратора.</value>
+  </data>
+  <data name="Synchronization_WorkspaceDisabled" xml:space="preserve">
+    <value>Ваш обліковий запис більше не активний на цьому сервері, оскільки робоча область, в якій він визначений, була відключена адміністратором. Будь ласка, зверніться до свого супервізора.</value>
+  </data>
+  <data name="TransferringAssignments" xml:space="preserve">
+    <value>Передача завдань</value>
+  </data>
+  <data name="TransferringCalendarEvents" xml:space="preserve">
+    <value>Перенесення подій календаря</value>
+  </data>
+  <data name="UnacceptableSSLCertificate" xml:space="preserve">
+    <value>Не вдалося перевірити сертифікат для цільової URL-адреси. Будь ласка, перевірте, чи адреса веб-сайту Headquarters є дійсною, а ваш пристрій має правильну поточну дату та час</value>
+  </data>
+  <data name="UpdatingQuestionnaires" xml:space="preserve">
+    <value>Оновлення анкет</value>
+  </data>
+  <data name="YouChangeYouPasswordTryToLoginAgainWithNewPassword" xml:space="preserve">
+    <value>Ви змінили поточний пароль. Спробуйте увійти ще раз з новим паролем.</value>
   </data>
 </root>

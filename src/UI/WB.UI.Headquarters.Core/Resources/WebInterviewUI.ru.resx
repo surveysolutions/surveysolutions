@@ -443,6 +443,12 @@ Oбратитесь в тех. поддержку за помощью</value>
   <data name="EmailLink_EmailResumeLink" xml:space="preserve">
     <value>Отправить ссылку для продолжения</value>
   </data>
+  <data name="HideVariables" xml:space="preserve">
+    <value>Спрятать переменные</value>
+  </data>
+  <data name="ShowVariables" xml:space="preserve">
+    <value>Показать переменные</value>
+  </data>
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
     <value>Вы уверены, что хотите удалить строку '{{rosterTitle}}' у зависимых списков?</value>
   </data>

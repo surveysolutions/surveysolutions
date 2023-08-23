@@ -168,4 +168,7 @@
   <data name="YouCanChangeResponsibleInterviewer" xml:space="preserve">
     <value>Pokud rozhovor vracíte, můžete změnit zodpovědnost za rozhovor. Vyberte zodpovědného tazatele</value>
   </data>
+  <data name="Area_Coordinates" xml:space="preserve">
+    <value>Souřadnice</value>
+  </data>
 </root>
