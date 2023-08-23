@@ -177,7 +177,7 @@ namespace WB.UI.Headquarters.Controllers
                     .Select(x =>
                         new ComboboxOptionModel(
                             new QuestionnaireIdentity(x.TemplateId, x.TemplateVersion).ToString(),
-                            string.Format(Pages.QuestionnaireNameVersionFirst, x.TemplateName, x.TemplateVersion)))
+                            string.Format(Pages.QuestionnaireVersionAndName, x.TemplateName, x.TemplateVersion)))
                     .ToList();
 
             try

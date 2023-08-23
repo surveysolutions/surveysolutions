@@ -418,7 +418,7 @@
     <value>{{count}} selected assignments are going to be closed. Size will be set to currently collected interviews count.</value>
   </data>
   <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
-    <value>Size of the selected assignment {{id}} will be changed form {{quantity}} to {{collected}} (number of currently collected interviews)</value>
+    <value>Size of the selected assignment {{id}} will be changed from {{quantity}} to {{collected}} (number of currently collected interviews)</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Close</value>
@@ -528,5 +528,11 @@
   </data>
   <data name="Action_UpgradedFrom" xml:space="preserve">
     <value>Upgraded from assignment {{id}}</value>
+  </data>
+  <data name="Property" xml:space="preserve">
+      <value>Property</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+      <value>Value</value>
   </data>
 </root>

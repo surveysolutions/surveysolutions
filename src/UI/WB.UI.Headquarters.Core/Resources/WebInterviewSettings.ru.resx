@@ -121,7 +121,7 @@
     <value>Настроики отображаемого текста для пользователей</value>
   </data>
   <data name="WebInterviewSetupFor_Title" xml:space="preserve">
-    <value>Настройка web интервью для </value>
+      <value>Настройка web интервью: </value>
   </data>
   <data name="ExampleWelcomePage" xml:space="preserve">
     <value>Пример приветственной страницы</value>

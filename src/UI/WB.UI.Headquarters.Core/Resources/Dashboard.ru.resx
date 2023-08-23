@@ -207,6 +207,9 @@
     <value>Экспортировать опросник</value>
     <comment>Экспортировать опросник</comment>
   </data>
+  <data name="SaveQuestionnaire" xml:space="preserve">
+    <value>Сохранить документ опросника</value>
+  </data>
   <data name="UpgradeAssignments" xml:space="preserve">
     <value>Обновить задания</value>
   </data>

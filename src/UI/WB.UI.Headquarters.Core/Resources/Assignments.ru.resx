@@ -522,4 +522,10 @@
   <data name="Tooltip_Table_Email" xml:space="preserve">
       <value>Адрес электронной почты для уведомлений</value>
   </data>
+  <data name="Property" xml:space="preserve">
+      <value>Свойство</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+      <value>Значение</value>
+  </data>
 </root>
