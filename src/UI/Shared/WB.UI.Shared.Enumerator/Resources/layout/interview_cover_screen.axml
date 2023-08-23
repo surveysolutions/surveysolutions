@@ -19,11 +19,7 @@
           style="@style/Interview_Cover_Main_Second_Header"
           android:id="@+id/tv_coverAssignmentId"
           local:MvxBind="Text AssignmentId; Visible AssignmentId;" />
-        <TextView
-          style="@style/Interview_Cover_Description_Header"
-          android:id="@+id/tv_coverQuestionnaireTitle"
-          local:MvxBind="Text QuestionnaireTitle;" />
-      
+              
         <LinearLayout android:orientation="vertical" 
                       local:MvxBind="Visibility Visibility(SupervisorNote)"
                       style="@style/Interview_Cover_Supervisor_Note">
