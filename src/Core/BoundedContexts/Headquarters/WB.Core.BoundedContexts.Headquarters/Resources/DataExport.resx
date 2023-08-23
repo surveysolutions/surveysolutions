@@ -322,7 +322,10 @@
     <value>Filter interviews to export</value>
   </data>
   <data name="SurveyQuestionnaire" xml:space="preserve">
-    <value>Survey template</value>
+    <value>Questionnaire</value>
+  </data>
+  <data name="SurveyQuestionnaireVersion" xml:space="preserve">
+    <value>Questionnaire version</value>
   </data>
   <data name="DataType_Paradata" xml:space="preserve">
     <value>Paradata. Metadata on the interview process (events and timing)</value>
@@ -413,5 +416,8 @@
   </data>
   <data name="Translation_CardLabel" xml:space="preserve">
     <value>Translation: {{language}}</value>
+  </data>
+  <data name="SurveyQuestionnaireTranslation" xml:space="preserve">
+      <value>Translation</value>
   </data>
 </root>

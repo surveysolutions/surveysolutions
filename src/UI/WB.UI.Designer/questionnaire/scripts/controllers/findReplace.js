@@ -74,7 +74,7 @@
 
             $scope.onDone = function() {
                 $scope.$close();
-                $state.reload();
+                window.location.reload();
             };
 
             $scope.backToSearch = function() {

@@ -879,11 +879,29 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Survey template.
+        ///   Looks up a localized string similar to Questionnaire.
         /// </summary>
         public static string SurveyQuestionnaire {
             get {
                 return ResourceManager.GetString("SurveyQuestionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Translation.
+        /// </summary>
+        public static string SurveyQuestionnaireTranslation {
+            get {
+                return ResourceManager.GetString("SurveyQuestionnaireTranslation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire version.
+        /// </summary>
+        public static string SurveyQuestionnaireVersion {
+            get {
+                return ResourceManager.GetString("SurveyQuestionnaireVersion", resourceCulture);
             }
         }
         
