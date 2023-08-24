@@ -13,8 +13,8 @@
             </h3>
         </div>
 
-        <div class="wrapper-info error">
-            <div class="container-info" v-if="hasBrokenPackage">
+        <div class="wrapper-info error" v-if="hasBrokenPackage">
+            <div class="container-info">
                 <h4 class="error-text">
                     {{ $t('WebInterviewUI.CoverBrokenPackegeTitle') }}
                 </h4>
