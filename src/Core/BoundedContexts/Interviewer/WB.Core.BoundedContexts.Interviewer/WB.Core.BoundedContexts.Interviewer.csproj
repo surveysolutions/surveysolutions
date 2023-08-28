@@ -21,7 +21,7 @@
     <None Remove="Implementation\Storage\**" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="7.0.1" />
+    <PackageReference Include="Autofac" Version="7.1.0" />
     <PackageReference Include="MvvmCross.Plugin.Json" Version="9.1.1" />
     <PackageReference Include="MvvmCross.Plugin.Messenger" Version="9.1.1" />
     <PackageReference Include="MvvmCross.Plugin.WebBrowser" Version="8.0.2" />
