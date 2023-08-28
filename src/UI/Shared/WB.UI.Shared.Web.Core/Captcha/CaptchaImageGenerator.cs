@@ -99,7 +99,7 @@ namespace WB.UI.Shared.Web.Captcha
                     ctx.DrawText(c.ToString(), font, RandomItemFrom(colors), location);
 
                     // determine next letter position
-                    var fontSize = TextMeasurer.Measure(c.ToString(), new TextOptions(font));
+                    var fontSize = TextMeasurer.MeasureSize(c.ToString(), new TextOptions(font));
                     totalWidth = position + fontSize.Width;
                     position = totalWidth + rnd.Next(-3, 5);
                     totalHeight = Math.Max(totalHeight, fontSize.Height);
@@ -141,7 +141,7 @@ namespace WB.UI.Shared.Web.Captcha
         {
             foreach (var pair in GetRandomPointsAtCircle(width / 2f, width / 2f, height / 2f).Take(width / ReducePoints))
             {
-                ctx.DrawLines(
+                ctx.DrawLine(
                     RandomItemFrom(colors).WithAlpha((float)rnd.NextDouble()), // random color with some transparency
                    (float) NextDoubleBetween(0.2, 3), // random thickness
                    pair.a, pair.b);
@@ -155,7 +155,7 @@ namespace WB.UI.Shared.Web.Captcha
                 var point = new PointF(
                     GetRandomBetween(pair.a.X, pair.b.X),
                     GetRandomBetween(pair.a.Y, pair.b.Y));
-                ctx.DrawLines(
+                ctx.DrawLine(
                     RandomItemFrom(colors).WithAlpha((float)rnd.NextDouble()),  // random color with some transparency
                     (float)NextDoubleBetween(0.2, 2), // random thickness
                     point, point);
