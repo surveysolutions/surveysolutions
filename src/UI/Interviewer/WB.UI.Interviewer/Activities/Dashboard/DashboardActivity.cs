@@ -120,7 +120,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             this.ViewModel.WorkspaceListUpdated += this.WorkspaceListUpdated;
             this.ViewModel.WebInterviews.PropertyChanged += this.WebInterviewInterviewsOnPropertyChanged;
 
-            this.fragmentStateAdapter.InsertFragment(typeof(QuestionnairesFragment), this.ViewModel.CreateNew,
+            this.fragmentStateAdapter.InsertTab(typeof(QuestionnairesFragment), this.ViewModel.CreateNew,
                 nameof(InterviewTabPanel.Title));
 
             var itemsCountPropertyCountName = nameof(ListViewModel.ItemsCount);
@@ -214,13 +214,13 @@ namespace WB.UI.Interviewer.Activities.Dashboard
 
             if (!this.fragmentStateAdapter.HasFragmentForViewModel(listViewModel) && listViewModel.ItemsCount > 0)
             {
-                this.fragmentStateAdapter.InsertFragment(typeof(TFragmentType), listViewModel,
+                this.fragmentStateAdapter.InsertTab(typeof(TFragmentType), listViewModel,
                     nameof(InterviewTabPanel.Title), position);
             }
 
             if (this.fragmentStateAdapter.HasFragmentForViewModel(listViewModel) && listViewModel.ItemsCount == 0)
             {
-                this.fragmentStateAdapter.RemoveFragmentByViewModel(listViewModel);
+                this.fragmentStateAdapter.RemoveTabByViewModel(listViewModel);
             }
 
             var viewPagerCurrentItem = viewPager.CurrentItem;
