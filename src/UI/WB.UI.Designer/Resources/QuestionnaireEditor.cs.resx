@@ -1578,4 +1578,7 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
   <data name="Yes" xml:space="preserve">
     <value>Ano</value>
   </data>
+  <data name="ManageAccount" xml:space="preserve">
+      <value>Spravovat účet</value>
+  </data>
 </root>

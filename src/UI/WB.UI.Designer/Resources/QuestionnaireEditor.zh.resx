@@ -1155,4 +1155,7 @@
       <value>初始的</value>
       <comment>初始的</comment>
   </data>
+  <data name="ManageAccount" xml:space="preserve">
+      <value>管理账号</value>
+  </data>
 </root>
