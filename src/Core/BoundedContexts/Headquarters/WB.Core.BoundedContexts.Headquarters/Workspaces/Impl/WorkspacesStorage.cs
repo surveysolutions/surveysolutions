@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Infrastructure.Native.Utils;
 using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl;
@@ -68,7 +69,8 @@ public class WorkspacesStorage : IWorkspacesStorage
                 {
                     Name = x.Name,
                     DisplayName = x.DisplayName,
-                    DisabledAtUtc = x.DisabledAtUtc
+                    DisabledAtUtc = x.DisabledAtUtc,
+                    CreatedAtUtc = x.CreatedAtUtc
                 }).ToList();
         int totalCount = this.workspaces.Query(_ => Filter(filter, _).Count());
 
@@ -88,9 +90,12 @@ public class WorkspacesStorage : IWorkspacesStorage
 
     private IQueryable<Workspace> Filter(WorkspacesFilter filter, IQueryable<Workspace> source)
     {
+        string orderBy = string.IsNullOrWhiteSpace(filter.SortOrder)
+            ? nameof(Workspace.DisplayName)
+            : filter.SortOrder + $", {nameof(Workspace.DisplayName)} Asc";
         IQueryable<Workspace> result = source
             .Where(w => w.RemovedAtUtc == null)
-            .OrderBy(x => x.DisplayName);
+            .OrderUsingSortExpression(orderBy);
 
         if (!this.authorizedUser.IsAdministrator)
         {
@@ -106,7 +111,8 @@ public class WorkspacesStorage : IWorkspacesStorage
         if (!string.IsNullOrEmpty(filter.Query))
         {
             var lowerCaseQuery = filter.Query.ToLower();
-            result = result.Where(w => w.DisplayName.ToLower().Contains(lowerCaseQuery));
+            result = result.Where(w => w.DisplayName.ToLower().Contains(lowerCaseQuery) 
+                                       || w.Name.ToLower().Contains(lowerCaseQuery));
         }
 
         if (!filter.IncludeDisabled)

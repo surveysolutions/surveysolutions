@@ -1,7 +1,7 @@
 ﻿@using WB.UI.Headquarters.Code
 @model WB.UI.Headquarters.Models.QuestionnaireDetailsModel
 @{
-    ViewBag.Title = string.Format(Pages.QuestionnaireNameVersionFirst, Model.Title, Model.Version);
+    ViewBag.Title = string.Format(Pages.QuestionnaireVersionAndName, Model.Title, Model.Version);
 }
 @section Scripts{
     @Html.RenderHqConfig(Model)

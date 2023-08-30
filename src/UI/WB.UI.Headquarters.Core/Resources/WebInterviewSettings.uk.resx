@@ -268,7 +268,7 @@
     <value>Назва:</value>
   </data>
   <data name="WebInterviewSetupFor_Title" xml:space="preserve">
-    <value>Налаштування веб-інтерв'ю для </value>
+      <value>Налаштування веб-інтерв'ю: </value>
   </data>
   <data name="WelcomePage" xml:space="preserve">
     <value>Вітальна сторінка</value>

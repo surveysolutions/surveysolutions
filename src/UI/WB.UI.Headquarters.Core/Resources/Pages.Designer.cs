@@ -672,6 +672,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assignment {0}.
+        /// </summary>
+        public static string AssignmentDetails_PageTitle {
+            get {
+                return ResourceManager.GetString("AssignmentDetails_PageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assignments.
         /// </summary>
         public static string Assignments_PageTitle {
@@ -3948,11 +3957,20 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to (ver. {1}) {0} .
+        ///   Looks up a localized string similar to [ver. {{version}}] {{name}} .
         /// </summary>
         public static string QuestionnaireNameVersionFirst {
             get {
                 return ResourceManager.GetString("QuestionnaireNameVersionFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [ver. {1}] {0}.
+        /// </summary>
+        public static string QuestionnaireVersionAndName {
+            get {
+                return ResourceManager.GetString("QuestionnaireVersionAndName", resourceCulture);
             }
         }
         

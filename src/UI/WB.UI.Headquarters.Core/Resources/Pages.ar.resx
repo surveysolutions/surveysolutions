@@ -867,9 +867,6 @@
   <data name="PublicSection" xml:space="preserve">
     <value>تفاصيل التعليمات الشخصية (اختياري) &lt;br&gt; سوف تكون مرئية لمستخدمين المقر الرئيسي فقط</value>
   </data>
-  <data name="QuestionnaireNameVersionFirst" xml:space="preserve">
-    <value>(الإصدار. {1}) {0}</value>
-  </data>
   <data name="RejectedByHeadquarters" xml:space="preserve">
     <value>مرفوض من المقر الرئيسي</value>
   </data>

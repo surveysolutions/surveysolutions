@@ -277,8 +277,9 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult UpdateEmailProviderSettings([FromBody] EmailProviderSettings settings)
+        public IActionResult UpdateEmailProviderSettings([FromBody]EmailProviderSettings settings)
         {
+            if (!ModelState.IsValid) return this.BadRequest();
             if (RegionEndpoint.EnumerableAllRegions.All(r => r.SystemName != settings.AwsRegion))
                 return Ok(new {sucess = false, error = Settings.EmailProvider_AwsRegion_Unknown });
             

@@ -284,7 +284,7 @@ namespace WB.Core.Infrastructure.HttpServices.Services
                 userCancellationToken: token, request: null, customHeaders: customHeaders).ConfigureAwait(false); ;
 
             return await this.ReceiveCompressedJsonWithProgressAsync<T>(response: response, token: token ?? default,
-                transferProgress: transferProgress).ConfigureAwait(false); ;
+                transferProgress: transferProgress).ConfigureAwait(false);
         }
 
         public async Task<T> PostAsync<T>(string url,

@@ -510,7 +510,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Web interview setup for .
+        ///   Looks up a localized string similar to Web interview setup: .
         /// </summary>
         public static string WebInterviewSetupFor_Title {
             get {

@@ -34,6 +34,16 @@ namespace WB.UI.Headquarters.Models
 
         public string DefaultLanguageName { get; set; }
         public string ExposedVariablesUrl { get; set; }
+        public string TakeNewInterviewUrl { get; set; }
+        public string BatchUploadUrl { get; set; }
+        public string MigrateAssignmentsUrl { get; set; }
+        public string WebInterviewUrl { get; set; }
+        public bool IsObserver { get; set; }
+        public string DownloadLinksUrl { get; set; }
+        public string SendInvitationsUrl { get; set; }
+        public string CloneQuestionnaireUrl { get; set; }
+        public bool IsAdmin { get; set; }
+        public string ExportQuestionnaireUrl { get; set; }
 
         public class User
         {

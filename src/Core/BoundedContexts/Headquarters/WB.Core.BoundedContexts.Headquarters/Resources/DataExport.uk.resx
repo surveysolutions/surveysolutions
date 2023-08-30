@@ -391,7 +391,7 @@
     <value>Статус експортованих інтерв'ю</value>
   </data>
   <data name="SurveyQuestionnaire" xml:space="preserve">
-    <value>Шаблон опитування</value>
+      <value>Опитування</value>
   </data>
   <data name="SurveyTemplateTitle" xml:space="preserve">
     <value>(версія) Анкета для опитування</value>
@@ -413,5 +413,11 @@
   </data>
   <data name="ZipFile" xml:space="preserve">
     <value>Zip-файл</value>
+  </data>
+  <data name="SurveyQuestionnaireVersion" xml:space="preserve">
+      <value>Версія</value>
+  </data>
+  <data name="SurveyQuestionnaireTranslation" xml:space="preserve">
+      <value>Переклад</value>
   </data>
 </root>

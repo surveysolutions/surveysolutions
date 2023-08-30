@@ -98,6 +98,8 @@
 import Vue from 'vue'
 import * as toastr from 'toastr'
 import DeleteWorkspaceModal from './DeleteWorkspaceModal'
+import moment from 'moment'
+import { DateFormats } from '~/shared/helpers'
 
 export default {
     components: {
@@ -347,7 +349,7 @@ export default {
                         data: 'Name',
                         name: 'Name',
                         title: this.$t('Workspaces.Name'),
-                        sortable: false,
+                        sortable: true,
                         render(data, type, row) {
                             const workspaceUrl = self.workspacePath(data)
                             return `<a href='${workspaceUrl}'>${data}</a>`
@@ -357,9 +359,22 @@ export default {
                         data: 'DisplayName',
                         name: 'DisplayName',
                         title: this.$t('Workspaces.DisplayName'),
-                        sortable: false,
+                        sortable: true,
                         render(data, type, row) {
                             return $('<div>').text(data).html()
+                        },
+                    },
+                    {
+                        data: 'CreatedAtUtc',
+                        name: 'CreatedAtUtc',
+                        title: this.$t('Workspaces.CreatedAt'),
+                        tooltip: this.$t('Workspaces.Tooltip_Table_CreatedAt'),
+                        sortable: true,
+                        searchable: false,
+                        render(data) {
+                            if (data)
+                                return moment.utc(data).local().format(DateFormats.dateTime)
+                            return ''
                         },
                     },
                 ],
@@ -381,7 +396,7 @@ export default {
                     contentType: 'application/json',
                 },
                 responsive: false,
-                order: [[0, 'asc']],
+                order: [[1, 'asc']],
                 sDom: 'rf<"table-with-scroll"t>ip',
             }
         },

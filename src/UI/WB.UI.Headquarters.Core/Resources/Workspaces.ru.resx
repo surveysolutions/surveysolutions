@@ -224,4 +224,10 @@
   <data name="Open" xml:space="preserve">
     <value>Открыть</value>
   </data>
+  <data name="Tooltip_Table_CreatedAt" xml:space="preserve">
+      <value>Дата создания рабочей области. Кликните по иконке сортировки для упорядочивания по времени создания.</value>
+  </data>
+  <data name="CreatedAt" xml:space="preserve">
+      <value>Создан</value>
+  </data>
 </root>

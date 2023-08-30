@@ -771,6 +771,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Свойство.
+        /// </summary>
+        public static string Property {
+            get {
+                return ResourceManager.GetString("Property", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Опросник.
         /// </summary>
         public static string Questionnaire {
@@ -1041,6 +1050,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Дата скачивания задания на устройство пользователя. Кликните по иконке сортировки для упорядочивания по времени скачивания задания на устройство пользователя..
+        /// </summary>
+        public static string Tooltip_Table_ReceivedByTablet {
+            get {
+                return ResourceManager.GetString("Tooltip_Table_ReceivedByTablet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ответственный за задание пользователь. Кликните по иконке сортировки для упорядочивания по имени пользователя..
         /// </summary>
         public static string Tooltip_Table_Responsible {
@@ -1217,6 +1235,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string UpgradeProgressTitle {
             get {
                 return ResourceManager.GetString("UpgradeProgressTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Значение.
+        /// </summary>
+        public static string Value {
+            get {
+                return ResourceManager.GetString("Value", resourceCulture);
             }
         }
         

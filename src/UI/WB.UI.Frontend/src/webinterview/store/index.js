@@ -24,6 +24,7 @@ const store = safeStore({
         interviewCompleted: false,
         interviewShutdown: false,
         interviewCannotBeChanged: false,
+        showVariables: false,
     },
     actions,
     mutations,

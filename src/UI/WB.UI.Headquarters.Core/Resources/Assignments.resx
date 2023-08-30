@@ -240,6 +240,9 @@
   <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">
     <value>When the assignment was last updated. Click on the sort icon to sort by time.</value>
   </data>
+  <data name="Tooltip_Table_ReceivedByTablet" xml:space="preserve">
+    <value>Indicator for whether the assignment has been downloaded onto the tablet. Click on the sort icon to sort by receipt time.</value>
+  </data>
   <data name="InvalidSize" xml:space="preserve">
     <value>The Size field must be -1 or more.</value>
   </data>
@@ -415,7 +418,7 @@
     <value>{{count}} selected assignments are going to be closed. Size will be set to currently collected interviews count.</value>
   </data>
   <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
-    <value>Size of the selected assignment {{id}} will be changed form {{quantity}} to {{collected}} (number of currently collected interviews)</value>
+    <value>Size of the selected assignment {{id}} will be changed from {{quantity}} to {{collected}} (number of currently collected interviews)</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Close</value>
@@ -525,5 +528,11 @@
   </data>
   <data name="Action_UpgradedFrom" xml:space="preserve">
     <value>Upgraded from assignment {{id}}</value>
+  </data>
+  <data name="Property" xml:space="preserve">
+      <value>Property</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+      <value>Value</value>
   </data>
 </root>
