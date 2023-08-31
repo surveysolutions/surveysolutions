@@ -249,7 +249,7 @@
 
         p {
             white-space: pre-wrap;
-			margin: 10px 0;
+            margin: 10px 0;
         }
     }
 
@@ -501,9 +501,10 @@
             }
         }
     }
-    &.text-question{
-	    p{
-		    margin: 10px 0;
+
+    &.text-question {
+        p {
+            margin: 10px 0;
         }
     }
 }
@@ -626,7 +627,7 @@
     font-size: 14px;
     font-weight: bold;
     width: 25px;
-    color: $blue  !important;
+    color: $blue !important;
 }
 
 .yes-no-question .question-unit {
@@ -1339,5 +1340,13 @@
 
     .action-container {
         margin: 0 auto;
+    }
+}
+
+.webtester {
+    .section {
+        .variable {
+            background-color: #FFFFE3;
+        }
     }
 }
