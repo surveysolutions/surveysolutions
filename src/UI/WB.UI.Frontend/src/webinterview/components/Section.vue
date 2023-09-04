@@ -1,6 +1,6 @@
 <template>
     <div id="questionsList"
-        class="unit-section"
+        class="unit-section section"
         :class="sectionClass">
         <SectionLoadingProgress />
         <Breadcrumbs :showHumburger="showHumburger" />
