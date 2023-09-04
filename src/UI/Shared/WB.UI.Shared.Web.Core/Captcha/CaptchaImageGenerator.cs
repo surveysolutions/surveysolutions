@@ -18,7 +18,7 @@ namespace WB.UI.Shared.Web.Captcha
 {
     public class CaptchaImageGenerator
     {
-        string[] fontFamilies = { "Noto Sans" };
+        string[] fontFamilies;
         static readonly Color[] colors = { Color.Red, Color.DarkBlue, Color.Chocolate, Color.DarkCyan, Color.Orange };
         private static readonly FontStyle[] fontStyles = {FontStyle.Bold, FontStyle.Italic, FontStyle.Regular};
 
@@ -26,6 +26,15 @@ namespace WB.UI.Shared.Web.Captcha
         public const int ReducePoints = 15;
 
         readonly Random rnd = new Random();
+
+        public CaptchaImageGenerator()
+        {
+            var notoSans = "Noto Sans";
+            fontFamilies = new[] { notoSans };
+            
+            if (SystemFonts.Collection.Families.Any(f => f.Name != notoSans))
+                fontFamilies = new[] { SystemFonts.Collection.Families.First().Name };
+        }
 
         public void ChangeFonts(params string[] fontFamilies)
         {
@@ -123,12 +132,12 @@ namespace WB.UI.Shared.Web.Captcha
                 // ReSharper disable once AccessToDisposedClosure
                 ctx.DrawImage(imgText, location, 1.0f);
 
-                DrawRandomLines(ctx, width, height);
+                DrawRandomPoints(ctx, width, height);
 
                 ctx.ApplyProcessor(new EdgeDetectorProcessor(EdgeDetectorKernel.LaplacianOfGaussian, false));
                 ctx.Invert();
 
-                DrawRandomPixels(ctx, width, height);
+                DrawRandomLines(ctx, width, height);
                 ctx.ApplyProcessor(new QuantizeProcessor(new WebSafePaletteQuantizer()));
             });
 
@@ -137,7 +146,7 @@ namespace WB.UI.Shared.Web.Captcha
             return ms.ToArray();
         }
 
-        private void DrawRandomPixels(IImageProcessingContext ctx, int width, int height)
+        private void DrawRandomLines(IImageProcessingContext ctx, int width, int height)
         {
             foreach (var pair in GetRandomPointsAtCircle(width / 2f, width / 2f, height / 2f).Take(width / ReducePoints))
             {
@@ -148,17 +157,21 @@ namespace WB.UI.Shared.Web.Captcha
             }
         }
 
-        private void DrawRandomLines(IImageProcessingContext ctx, int width, int height)
+        private void DrawRandomPoints(IImageProcessingContext ctx, int width, int height)
         {
             foreach (var pair in GetRandomPointsAtCircle(width / 2f, width / 2f, height / 2f).Take(width * height / ReduceLines))
             {
                 var point = new PointF(
                     GetRandomBetween(pair.a.X, pair.b.X),
                     GetRandomBetween(pair.a.Y, pair.b.Y));
-                ctx.DrawLine(
-                    RandomItemFrom(colors).WithAlpha((float)rnd.NextDouble()),  // random color with some transparency
-                    (float)NextDoubleBetween(0.2, 2), // random thickness
-                    point, point);
+                ctx.Draw(
+                    new SolidPen(new SolidBrush(RandomItemFrom(colors).WithAlpha((float)rnd.NextDouble())), (float)NextDoubleBetween(0.2, 2)), 
+                    new SixLabors.ImageSharp.Drawing.Star(point, 3, 0.1f, 0.2f));
+                // var point2 = new PointF(point.X + 0.1f, point.Y + 0.1f);
+                // ctx.DrawLine(
+                //     RandomItemFrom(colors).WithAlpha((float)rnd.NextDouble()),  // random color with some transparency
+                //     (float)NextDoubleBetween(0.2, 2), // random thickness
+                //     point, point2);
             }
         }
 
