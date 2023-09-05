@@ -28,6 +28,7 @@
     <None Remove="Views\Reposts\Factories\DevicesInterviewersForSupervisor.sql" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="PdfInterview\images\pdf_logo.png" />
     <EmbeddedResource Include="Views\Reposts\Factories\DevicesInterviewersForSupervisor.sql" />
   </ItemGroup>
   <ItemGroup>
@@ -189,6 +190,5 @@
       <LastGenOutput>WebInterviewResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-
 
 </Project>
