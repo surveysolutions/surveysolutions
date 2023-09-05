@@ -698,7 +698,7 @@
     <value>Показати QR-код</value>
   </data>
   <data name="DashboardItem_RejectedByHqOn" xml:space="preserve">
-    <value>Відхилено штаб-квартирою : {0}</value>
+    <value>Відхилено хедквотером : {0}</value>
   </data>
   <data name="DashboardItem_Responsible" xml:space="preserve">
     <value>Відповідальний: {0}</value>

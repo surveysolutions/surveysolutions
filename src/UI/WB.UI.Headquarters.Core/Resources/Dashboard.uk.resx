@@ -148,7 +148,7 @@
     <value>Створити користувача</value>
   </data>
   <data name="CreationDate" xml:space="preserve">
-    <value>Створено на</value>
+    <value>Створено о</value>
   </data>
   <data name="DeleteMap" xml:space="preserve">
     <value>Видалити карту</value>
@@ -178,7 +178,7 @@
     <value>Історія</value>
   </data>
   <data name="ImportDate" xml:space="preserve">
-    <value>Імпортовано на</value>
+    <value>Імпортовано о</value>
   </data>
   <data name="ImportedBy" xml:space="preserve">
     <value>Імпортовано</value>
@@ -187,10 +187,10 @@
     <value>{{role}} користувач {{name}}</value>
   </data>
   <data name="ImportTemplate" xml:space="preserve">
-    <value>Імпортувати анкета</value>
+    <value>Імпортувати анкету</value>
   </data>
   <data name="LastEntryDate" xml:space="preserve">
-    <value>Змінено</value>
+    <value>Змінено о</value>
   </data>
   <data name="MapDashboard" xml:space="preserve">
     <value>Панель управління на мапі</value>

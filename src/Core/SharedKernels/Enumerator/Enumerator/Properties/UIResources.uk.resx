@@ -294,10 +294,10 @@
     <value>Ви впевнені, що хочете видалити пов'язаний ростер '{0}' з кожного пов'язаного ростеру?</value>
   </data>
   <data name="Interview_Question_Cascading_NoMatchingValue" xml:space="preserve">
-    <value>Відповідь "{0}" не дозволені для цього питання</value>
+    <value>Відповідь "{0}" не дозволена для цього питання</value>
   </data>
   <data name="Interview_Question_Filter_MatchError" xml:space="preserve">
-    <value>Відповідь "{0}" не дозволені для цього питання</value>
+    <value>Відповідь "{0}" не дозволена для цього питання</value>
   </data>
   <data name="Interview_Question_Integer_EmptyValueError" xml:space="preserve">
     <value>Порожнє значення не може бути збережено</value>
@@ -324,7 +324,7 @@
     <value>Ваш логін</value>
   </data>
   <data name="LoginText" xml:space="preserve">
-    <value>Увійдіть в систему</value>
+    <value>Увійти в систему</value>
   </data>
   <data name="LoginTitleText" xml:space="preserve">
     <value>Survey Solutions Tester</value>
@@ -691,7 +691,7 @@
     <value>Призначено інтерв'юера</value>
   </data>
   <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
-    <value>Відхилено штаб-квартирою</value>
+    <value>Відхилено хедквотером</value>
   </data>
   <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
     <value>Відхилені Супервізором</value>

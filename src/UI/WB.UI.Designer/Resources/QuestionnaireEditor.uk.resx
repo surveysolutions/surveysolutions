@@ -696,7 +696,7 @@
     <value>Вибраний файл не підтримується як вкладення</value>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>Гаразд</value>
+    <value>Застосувати</value>
   </data>
   <data name="OnlyFirstOptionsWillBeTakenConfirmation" xml:space="preserve">
     <value>Для питання "{{trimmedTitle}}" будуть взяті тільки перші категорії {{count}}.?</value>
@@ -909,7 +909,7 @@
     <value>Перекомпілювати</value>
   </data>
   <data name="RegenerateQuestionnaireSharingLink" xml:space="preserve">
-    <value>Відновити посилання</value>
+    <value>Перегенерувати посилання</value>
   </data>
   <data name="ReplaceOptionsConfirmation" xml:space="preserve">
     <value>Ви впевнені, що хочете замінити існуючі категорії для питання "{{trimmedTitle}}"?</value>
@@ -1086,7 +1086,7 @@
     <value>Редагувати</value>
   </data>
   <data name="SettingsShareView" xml:space="preserve">
-    <value>Вигляд</value>
+    <value>Перегляд</value>
   </data>
   <data name="SettingsStatusAllowAnonymousAccess" xml:space="preserve">
     <value>Анонімний обмін наразі ввімкнено.</value>
@@ -1101,7 +1101,7 @@
     <value>Вимкнути анонімний обмін.</value>
   </data>
   <data name="SettingsTurnOnAnonymousAccess" xml:space="preserve">
-    <value>Увімкніть анонімний обмін.</value>
+    <value>Увімкнути анонімний обмін.</value>
   </data>
   <data name="SettingsVisibleToEveryone" xml:space="preserve">
     <value>видимий для всіх у режимі "тільки для читання"</value>

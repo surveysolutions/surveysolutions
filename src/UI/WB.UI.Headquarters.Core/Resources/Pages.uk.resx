@@ -289,7 +289,7 @@
     <value>Відхилити</value>
   </data>
   <data name="ApproveRejectPartialView_RejectLAbel" xml:space="preserve">
-    <value>Відхилити співбесіду</value>
+    <value>Відхилити інтервью</value>
   </data>
   <data name="ApproveRejectPartialView_UnapproveAction" xml:space="preserve">
     <value>Відізвати схвалення</value>
@@ -970,7 +970,7 @@
     <value>Підключення до сервера</value>
   </data>
   <data name="Interviewers_CreationDateTitle" xml:space="preserve">
-    <value>Обліковий запис створено на</value>
+    <value>Обліковий запис створено</value>
   </data>
   <data name="Interviewers_CreationDateTooltip" xml:space="preserve">
     <value>Дата створення облікового запису інтерв'юера</value>
@@ -1105,7 +1105,7 @@
     <value>Будь ласка, увійдіть до системи</value>
   </data>
   <data name="LogOn_LogIn" xml:space="preserve">
-    <value>Увійдіть в систему</value>
+    <value>Увійти в систему</value>
   </data>
   <data name="LogOn_LoginWithRecoveryCode" xml:space="preserve">
     <value>Ви надіслали запит на вхід за допомогою коду відновлення.</value>
@@ -1174,7 +1174,7 @@
     <value>Цей попередній перегляд показує завантажений шейп-файл, накладений на базовий шар супутникового знімка.</value>
   </data>
   <data name="MapDetails_ImportedOn" xml:space="preserve">
-    <value>Імпортовано на</value>
+    <value>Імпортовано о</value>
   </data>
   <data name="MapDetails_InterviewerName" xml:space="preserve">
     <value>Ім'я користувача</value>
@@ -1387,13 +1387,13 @@
     <value>Деталі анкети</value>
   </data>
   <data name="Questionnaire_QuestionsCount" xml:space="preserve">
-    <value>Питання</value>
+    <value>Кількість питань</value>
   </data>
   <data name="Questionnaire_QuestionsCountWithCond" xml:space="preserve">
     <value>Запитання з умовами</value>
   </data>
   <data name="Questionnaire_RostersCount" xml:space="preserve">
-    <value>Кількість реєстрів</value>
+    <value>Кількість ростерів</value>
   </data>
   <data name="Questionnaire_SectionsCount" xml:space="preserve">
     <value>Кількість секцій</value>
@@ -1435,7 +1435,7 @@
     <value>Переоцінити співбесіду</value>
   </data>
   <data name="RejectedByHeadquarters" xml:space="preserve">
-    <value>Відхилено штаб-квартирою</value>
+    <value>Відхилено хедквотером</value>
   </data>
   <data name="RejectedBySupervisor" xml:space="preserve">
     <value>Відхилено супервізором</value>
@@ -1565,7 +1565,7 @@
     <value>Призначено інтерв'юера</value>
   </data>
   <data name="SurveysStatuses_RejectedByHQ" xml:space="preserve">
-    <value>Відхилено штаб-квартирою</value>
+    <value>Відхилено хедквотером</value>
   </data>
   <data name="SurveysStatuses_RejectedBySupervisor" xml:space="preserve">
     <value>Відхилено супервізором</value>

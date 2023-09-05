@@ -233,7 +233,7 @@
     <value>Нічого не вибрано</value>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>Гаразд</value>
+    <value>Застосувати</value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>Відкрити</value>
@@ -329,7 +329,7 @@
     <value>Всього</value>
   </data>
   <data name="Unapprove" xml:space="preserve">
-    <value>Відхилити</value>
+    <value>Відмінити підтвердження</value>
   </data>
   <data name="Unknown" xml:space="preserve">
     <value>Невідомо</value>
