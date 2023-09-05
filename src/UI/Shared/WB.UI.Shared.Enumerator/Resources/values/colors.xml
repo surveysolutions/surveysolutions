@@ -171,4 +171,7 @@
     <color name="loading_indeterminate_progress_gradient_center">#FFFFFF</color>
 
     <color name ="notification_icon_background">#1055DB</color>
+    
+    <color name="variable_background">#FFFFE3</color>
+    <color name="variable_background_cover">@android:color/transparent</color>
 </resources>
