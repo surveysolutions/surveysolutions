@@ -1466,4 +1466,7 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
   <data name="ValidationIntValue" xml:space="preserve">
     <value>Valoarea este prea mare</value>
   </data>
+  <data name="ManageAccount" xml:space="preserve">
+      <value>Gestionați contul</value>
+  </data>
 </root>

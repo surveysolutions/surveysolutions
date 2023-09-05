@@ -1409,4 +1409,7 @@
   <data name="Yes" xml:space="preserve">
     <value>Si</value>
   </data>
+  <data name="ManageAccount" xml:space="preserve">
+      <value>Administrar cuenta</value>
+  </data>
 </root>

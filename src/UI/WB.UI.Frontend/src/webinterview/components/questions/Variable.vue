@@ -1,5 +1,5 @@
 <template>
-    <div class="question static-text"
+    <div class="question static-text variable"
         v-if="!$me.isLoading"
         :id="hash">
         <div class="question-editor">
