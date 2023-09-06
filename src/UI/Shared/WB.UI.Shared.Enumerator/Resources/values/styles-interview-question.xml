@@ -2,7 +2,7 @@
 <resources>
   <style name="Interview_QuestionWithDivider" parent="VerticalFullWidthWrappingLayout">
     <item name="android:background">@drawable/question_background</item>
-  </style>
+  </style>  
 
   <style name="Interview_DisabledQuestion">
     <item name="android:layout_width">match_parent</item>

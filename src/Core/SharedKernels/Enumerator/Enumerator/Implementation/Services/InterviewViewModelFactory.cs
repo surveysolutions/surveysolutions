@@ -166,7 +166,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
-            var tasks = questionnaire
+            var entityViewModel = questionnaire
                 .GetPrefilledEntities()
                 .Select(questionId => this.CreateInterviewEntityViewModel(
                     identity: new Identity(questionId, RosterVector.Empty),
@@ -174,7 +174,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     interviewId: interviewId,
                     navigationState: navigationState));
 
-            return tasks;
+            return entityViewModel;
         }
 
         private List<IInterviewEntityViewModel> GenerateViewModels(string interviewId, Identity groupIdentity, NavigationState navigationState)
