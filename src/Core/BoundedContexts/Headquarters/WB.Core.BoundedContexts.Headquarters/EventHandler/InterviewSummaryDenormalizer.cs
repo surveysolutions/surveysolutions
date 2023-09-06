@@ -168,7 +168,23 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 var questionCompositeId = questionnaire.GetEntityIdMapValue(questionId);
                 if (interview.IsEntityIdentifying(questionCompositeId))
                 {
-                    var optionStrings = questionnaire.GetOptionsForQuestion(questionId, null, null, null)
+                    var isCascading = questionnaire.IsQuestionCascading(questionId);
+                    int? parentValue = null;
+                    if (isCascading)
+                    {
+                        var parentId = questionnaire.GetCascadingQuestionParentId(questionId);
+                        if (parentId.HasValue)
+                        {
+                            var parentIntId = questionnaire.GetEntityIdMapValue(parentId.Value);
+                            var parentEntity = interview.IdentifyEntitiesValues.FirstOrDefault(e => e.Entity.Id == parentIntId && e.Identifying == true);
+                            if (parentEntity != null && parentEntity.AnswerCode.HasValue)
+                            {
+                                parentValue = Convert.ToInt32(parentEntity.AnswerCode.Value);
+                            }
+                        }
+                    }
+                    
+                    var optionStrings = questionnaire.GetOptionsForQuestion(questionId, parentValue, null, null)
                         .Where(x => answers.Contains(x.Value)).Select(x => x.Title);
 
                     interview.AnswerFeaturedQuestion(questionCompositeId, string.Join(",", optionStrings), answers.First());
