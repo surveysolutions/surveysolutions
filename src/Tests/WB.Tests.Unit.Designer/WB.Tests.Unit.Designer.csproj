@@ -42,7 +42,7 @@
     <ProjectReference Include="..\..\UI\WB.UI.Designer\WB.UI.Designer.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ApprovalTests" Version="5.8.0" />
+    <PackageReference Include="ApprovalTests" Version="5.9.0" />
     <PackageReference Include="coverlet.collector" Version="6.0.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>

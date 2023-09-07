@@ -20,9 +20,9 @@
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="Bogus" Version="34.0.2" />
-        <PackageReference Include="Dapper" Version="2.0.143" />
+        <PackageReference Include="Dapper" Version="2.0.151" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.1" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
         <PackageReference Include="Moq" Version="4.20.69" />
         <PackageReference Include="Npgsql" Version="7.0.4" />
         <PackageReference Include="NUnit" Version="3.13.3" />
