@@ -18,6 +18,8 @@ namespace WB.UI.Shared.Web.Captcha
 {
     public class CaptchaImageGenerator
     {
+        public bool IsFontFound { get; private set; }
+        
         string[] fontFamilies;
         static readonly Color[] colors = { Color.Red, Color.DarkBlue, Color.Chocolate, Color.DarkCyan, Color.Orange };
         private static readonly FontStyle[] fontStyles = {FontStyle.Bold, FontStyle.Italic, FontStyle.Regular};
@@ -30,14 +32,12 @@ namespace WB.UI.Shared.Web.Captcha
         public CaptchaImageGenerator()
         {
             var notoSans = "Noto Sans";
-            fontFamilies = new[] { notoSans };
-            
-            if (SystemFonts.Collection.Families.Any(f => f.Name != notoSans))
-                fontFamilies = new[] { SystemFonts.Collection.Families.First().Name };
+            SetFonts(notoSans);
         }
 
-        public void ChangeFonts(params string[] fontFamilies)
+        public void SetFonts(params string[] fontFamilies)
         {
+            IsFontFound = fontFamilies.All(font => SystemFonts.Collection.TryGet(font, out var fontFamily));
             this.fontFamilies = fontFamilies;
         }
         
@@ -80,6 +80,9 @@ namespace WB.UI.Shared.Web.Captcha
 
         public byte[] Generate(string code, int width = 300, int height = 70)
         {
+            if (!IsFontFound)
+                return null;
+            
             using var imgText = new Image<Rgba32>(width, height);
 
             var totalWidth = 0f;
