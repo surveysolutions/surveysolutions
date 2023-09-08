@@ -129,4 +129,7 @@
   <data name="TryAnother" xml:space="preserve">
     <value>Попробуйте еще</value>
   </data>
+  <data name="CaptchaError" xml:space="preserve">
+      <value>Ошибка генерации капчи. Обратитесь к вашему системному администратору.</value>
+  </data>
 </root>
