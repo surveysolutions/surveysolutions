@@ -1,5 +1,4 @@
 using Android.Content;
-using Android.Runtime;
 using AndroidX.RecyclerView.Widget;
 using AndroidX.ViewPager2.Adapter;
 using MvvmCross.Platforms.Android.Views.Fragments;
@@ -12,14 +11,22 @@ namespace WB.UI.Interviewer.CustomControls
     {
         private class ViewPagerItem
         {
+            private static long counter;
+            
+            public ViewPagerItem()
+            {
+                this.Id = Interlocked.Increment(ref counter);
+            }
+
+            public long Id { get; set; }
+
             public Type Type { get; set; }
             public MvxViewModel ViewModel { get; set; }
             public string TitlePropertyName { get; set; }
         }
 
-        private long idOffset = 1;
         private Context context;
-        private List<ViewPagerItem> pagerItems = new List<ViewPagerItem>();
+        private List<ViewPagerItem> pagerItems {get; set;} = new List<ViewPagerItem>();
         
         public MvxFragmentStateAdapter(Context context, AndroidX.Fragment.App.FragmentManager fm, 
             AndroidX.Lifecycle.Lifecycle lifecycle)
@@ -38,32 +45,27 @@ namespace WB.UI.Interviewer.CustomControls
                 this.NotifyDataSetChanged();
         }
 
-        public void InsertTab(Type fragType, MvxViewModel model, string titlePropertyName, int position = -1)
+        public void InsertTab(Type fragType, MvxViewModel model, string titlePropertyName, int order)
         {
-            if (position < 0 && this.pagerItems.Count == 0)
-                position = 0;
-            else if ((position < 0 || position > this.pagerItems.Count) && this.pagerItems.Count > 0)
-                position = this.pagerItems.Count;
-
-            this.pagerItems.Insert(position, new ViewPagerItem
+            var positionsToInsert = order > this.pagerItems.Count ? this.pagerItems.Count : order;
+            
+            model.PropertyChanged += this.ViewModel_PropertyChanged;
+            
+            this.pagerItems.Insert(positionsToInsert, new ViewPagerItem
             {
                 Type = fragType,
                 ViewModel = model,
                 TitlePropertyName = titlePropertyName
             });
-            model.PropertyChanged += this.ViewModel_PropertyChanged;
-
-            idOffset++;
-            
-            this.NotifyItemInserted(position);
+            NotifyDataSetChanged();
         }
 
         private void RemoveTab(int position)
         {
             this.pagerItems[position].ViewModel.PropertyChanged -= this.ViewModel_PropertyChanged;
             this.pagerItems.RemoveAt(position);
-
-            this.NotifyItemRemoved(position);
+            
+            NotifyDataSetChanged();
         }
 
         public void RemoveTabByViewModel(MvxViewModel viewModel)
@@ -110,17 +112,12 @@ namespace WB.UI.Interviewer.CustomControls
                 return RecyclerView.NoId;
             }
 
-            return position + idOffset;
+            return pagerItems[position].Id;
         }
 
         public override bool ContainsItem(long itemId)
         {
-            if (itemId < idOffset || itemId >= pagerItems.Count + idOffset)
-            {
-                return false;
-            }
-
-            return true;
+            return pagerItems.Any(x => x.Id == itemId);
         }
 
         protected override void Dispose(bool disposing)

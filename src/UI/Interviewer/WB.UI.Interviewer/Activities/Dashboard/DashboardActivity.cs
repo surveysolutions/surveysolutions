@@ -46,15 +46,15 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         protected override void OnPause()
         {
             base.OnPause();
-            this.RemoveFragments();
+            //this.RemoveFragments();
         }
 
         protected override void OnResume()
         {
             base.OnResume();
-            this.CreateFragments();
 
             this.RestoreGoogleApiConnectionIfNeeded();
+            
             var notificationsPublisher = Mvx.IoCProvider.Resolve<INotificationPublisher>();
             notificationsPublisher.CancelAllNotifications(this);
         }
@@ -66,15 +66,15 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             base.OnCreate(bundle);
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             this.SetSupportActionBar(this.FindViewById<Toolbar>(Resource.Id.toolbar));
+            
+            this.CreateFragments();
 
             var enumeratorSettings = Mvx.IoCProvider.Resolve<IEnumeratorSettings>();
             if (!enumeratorSettings.NotificationsEnabled) return;
-
             var notificationsCollector = Mvx.IoCProvider.Resolve<IInAppNotificationsCollector>();
             List<SimpleNotification> notifications = notificationsCollector.CollectInAppNotifications();
 
             if (notifications.Count <= 0) return;
-
             Snackbar snack = Snackbar.Make(toolbar, notifications[rnd.Next(notifications.Count)].ContentText,
                 5000);
             snack.Show();
@@ -121,7 +121,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             this.ViewModel.WebInterviews.PropertyChanged += this.WebInterviewInterviewsOnPropertyChanged;
 
             this.fragmentStateAdapter.InsertTab(typeof(QuestionnairesFragment), this.ViewModel.CreateNew,
-                nameof(InterviewTabPanel.Title));
+                nameof(InterviewTabPanel.Title), 0);
 
             var itemsCountPropertyCountName = nameof(ListViewModel.ItemsCount);
 
@@ -140,7 +140,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             tabLayoutMediator = new TabLayoutMediator(tabLayout, this.viewPager, tabConfigurationStrategy);
             tabLayoutMediator.Attach();
 
-            OpenRequestedTab();
+            this.viewPager.SetCurrentItem(0, false);
         }
 
         public class TabConfigurationStrategy : Java.Lang.Object, TabLayoutMediator.ITabConfigurationStrategy
@@ -181,21 +181,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                 base.Dispose(disposing);
             }
         }
-
-        private void OpenRequestedTab()
-        {
-            for (int i = 0; i < this.fragmentStateAdapter.ItemCount; i++)
-            {
-                var fragment = (MvxFragment)fragmentStateAdapter.CreateFragment(i);
-                InterviewTabPanel viewModel = (InterviewTabPanel)fragment.ViewModel;
-                if (viewModel.DashboardType == this.ViewModel.TypeOfInterviews)
-                {
-                    this.viewPager.SetCurrentItem(i, false);
-                    break;
-                }
-            }
-        }
-
+        
         private void WebInterviewInterviewsOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
             => this.UpdateFragmentByViewModelPropertyChange<WebInterviewsFragment>((ListViewModel)sender, propertyChangedEventArgs.PropertyName, 4);
 
@@ -208,14 +194,14 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         private void StartedInterviewsOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
             => this.UpdateFragmentByViewModelPropertyChange<StartedInterviewsFragment>((ListViewModel)sender, propertyChangedEventArgs.PropertyName, 1);
 
-        private void UpdateFragmentByViewModelPropertyChange<TFragmentType>(ListViewModel listViewModel, string propertyName, int position)
+        private void UpdateFragmentByViewModelPropertyChange<TFragmentType>(ListViewModel listViewModel, string propertyName, int order)
         {
             if (propertyName != nameof(ListViewModel.ItemsCount)) return;
 
             if (!this.fragmentStateAdapter.HasFragmentForViewModel(listViewModel) && listViewModel.ItemsCount > 0)
             {
                 this.fragmentStateAdapter.InsertTab(typeof(TFragmentType), listViewModel,
-                    nameof(InterviewTabPanel.Title), position);
+                    nameof(InterviewTabPanel.Title), order);
             }
 
             if (this.fragmentStateAdapter.HasFragmentForViewModel(listViewModel) && listViewModel.ItemsCount == 0)

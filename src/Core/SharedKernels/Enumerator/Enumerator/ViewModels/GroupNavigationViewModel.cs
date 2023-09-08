@@ -113,7 +113,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.commandService = commandService;
             this.Title = title;
             this.answerNotifier = answerNotifier;
-            this.mvxMainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>(); ;
+            this.mvxMainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
         }
 
         public virtual void Init(string interviewId, Identity groupIdentity, NavigationState navigationState)
