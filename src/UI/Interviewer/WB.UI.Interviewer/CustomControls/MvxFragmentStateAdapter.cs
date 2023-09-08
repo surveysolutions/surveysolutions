@@ -7,6 +7,7 @@ using Fragment = AndroidX.Fragment.App.Fragment;
 
 namespace WB.UI.Interviewer.CustomControls
 {
+    //Waiting for release of ViewPager2 v 1.1.x
     public class MvxFragmentStateAdapter : FragmentStateAdapter
     {
         private class ViewPagerItem
