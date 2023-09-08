@@ -134,6 +134,10 @@ jobs:
         with:
           dotnet-version: '7.0.x'
 
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '17'    
+
       - name: setup sonar scanner
         run: dotnet tool install --global dotnet-sonarscanner
 
