@@ -199,16 +199,20 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
         private LookupTableContent CreateLookupTableContent(string fileContent)
         {
-            using (var csvReader = new CsvReader(new StringReader(fileContent), this.CreateCsvConfiguration()))
+            using (var csvReader = new CsvParser(new StringReader(fileContent), this.CreateCsvConfiguration()))
             {
                 var rows = new List<LookupTableRow>();
 
-                if (!csvReader.Read() || !csvReader.ReadHeader() || !csvReader.Read())
+                if (!csvReader.Read())
                 {
                     throw new ArgumentException(ExceptionMessages.LookupTables_cant_has_empty_content);
                 }
 
-                var fieldHeaders = csvReader.Context.HeaderRecord.Select(x => x.Trim()).ToArray();
+                var fieldHeaders = csvReader.Record?.Select(x => x.Trim()).ToArray();
+                if (fieldHeaders == null)
+                {
+                    throw new ArgumentException(ExceptionMessages.LookupTables_cant_has_empty_content);
+                }
 
                 var amountOfHeaders = fieldHeaders.Length;
 
@@ -235,11 +239,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                 }
                 int rowCurrentRowNumber = 1;
 
-                do
+                while (csvReader.Read())
                 {
                     var variables = new List<decimal?>();
                     var row = new LookupTableRow();
-                    var record = csvReader.Context.Record;
+                    var record = csvReader.Record;
+                    
+                    if (record == null)
+                        continue;
 
                     for (int i = 0; i < amountOfHeaders; i++)
                     {
@@ -292,7 +299,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                             $"{MAX_ROWS_COUNT:n0}",
                             $"{rowsCount - 1:n0}"));
                     }
-                } while (csvReader.Read());
+                }
 
                 var countOfDistinctRowcodeValues = rows.Select(x => x.RowCode).Distinct().Count();
 
