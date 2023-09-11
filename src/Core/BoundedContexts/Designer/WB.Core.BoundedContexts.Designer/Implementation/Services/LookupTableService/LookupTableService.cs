@@ -239,7 +239,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                 }
                 int rowCurrentRowNumber = 1;
 
-                while (csvReader.Read())
+                if (!csvReader.Read())
+                {
+                    throw new ArgumentException(ExceptionMessages.LookupTables_cant_has_empty_content);
+                }
+                
+                do
                 {
                     var variables = new List<decimal?>();
                     var row = new LookupTableRow();
@@ -299,7 +304,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                             $"{MAX_ROWS_COUNT:n0}",
                             $"{rowsCount - 1:n0}"));
                     }
-                }
+                } while (csvReader.Read());
 
                 var countOfDistinctRowcodeValues = rows.Select(x => x.RowCode).Distinct().Count();
 

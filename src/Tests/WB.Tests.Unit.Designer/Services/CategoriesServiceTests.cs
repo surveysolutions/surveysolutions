@@ -98,7 +98,7 @@ namespace WB.Tests.Unit.Designer.Services
                 foreach (var row in data)
                 {
                     csvWriter.WriteField(row);
-                    csvWriter.WriteField(Environment.NewLine);
+                    csvWriter.NextRecord();
                 }
 
                 sw.Flush();
