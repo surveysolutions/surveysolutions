@@ -919,7 +919,7 @@
     <value>Більш детальну інформацію про помилки синхронізації можна знайти на &lt;a href="https://support.mysurvey.solutions/interviewer/troubleshooting/synchronization-problems"&gt;сайті підтримки&lt;/a&gt;</value>
   </data>
   <data name="Synchronization_Of_AssignmentsFormat" xml:space="preserve">
-    <value>Синхронізація {0} з {1} присвоєнь</value>
+    <value>Синхронізація {0} з {1} завдань</value>
   </data>
   <data name="Synchronization_Of_Interviewers" xml:space="preserve">
     <value>Синхронізація інтерв'юерів</value>
