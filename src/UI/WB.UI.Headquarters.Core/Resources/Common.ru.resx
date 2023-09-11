@@ -121,7 +121,7 @@
     <value>Администратор</value>
   </data>
   <data name="AlRightsReserved" xml:space="preserve">
-    <value>All Rights Reserved</value>
+      <value>Все права защищены</value>
   </data>
   <data name="Any" xml:space="preserve">
     <value>Любой</value>
@@ -130,7 +130,7 @@
     <value>Утвердить</value>
   </data>
   <data name="Assignment" xml:space="preserve">
-    <value>Назначение</value>
+      <value>Задание</value>
   </data>
   <data name="Create" xml:space="preserve">
     <value>Создать</value>
@@ -163,7 +163,7 @@
     <value>Обновлено</value>
   </data>
   <data name="Legal" xml:space="preserve">
-    <value>Legal</value>
+      <value>Юридическая информация</value>
   </data>
   <data name="Loading" xml:space="preserve">
     <value>Загружается, пожалуйста подождите</value>
@@ -261,8 +261,8 @@
     <comment>Назначить</comment>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>Ок</value>
-    <comment>Ок</comment>
+      <value>ОK</value>
+      <comment>Ок</comment>
   </data>
   <data name="Download" xml:space="preserve">
     <value>Скачать</value>
@@ -357,7 +357,7 @@
     <value>Не равно</value>
   </data>
   <data name="Unknown" xml:space="preserve">
-    <value>Не известно</value>
+      <value>Неизвестно</value>
   </data>
   <data name="EditCalendarEvent" xml:space="preserve">
     <value>Редактировать календарь</value>

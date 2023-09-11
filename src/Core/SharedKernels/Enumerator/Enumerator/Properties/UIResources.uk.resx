@@ -121,7 +121,7 @@
     <value>Скасувати</value>
   </data>
   <data name="Dashboard_EmptyQuestionnairesList" xml:space="preserve">
-    <value>Ще немає анкет
+      <value>Ще немає анкет. 
 
 Ви можете створювати або редагувати свої анкети в Survey Solutions Designer</value>
   </data>
@@ -243,7 +243,7 @@
     <value>одна відповідь</value>
   </data>
   <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve">
-    <value>{0} помилки</value>
+      <value>помилок: {0} </value>
   </data>
   <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve">
     <value>одна помилка</value>
@@ -324,7 +324,7 @@
     <value>Ваш логін</value>
   </data>
   <data name="LoginText" xml:space="preserve">
-    <value>Увійти в систему</value>
+      <value>Увійти</value>
   </data>
   <data name="LoginTitleText" xml:space="preserve">
     <value>Survey Solutions Tester</value>
@@ -517,13 +517,13 @@
     <value>Відмінити</value>
   </data>
   <data name="AreaMap_Update_Maps" xml:space="preserve">
-    <value>Оновлення карт</value>
+      <value>Оновити карти</value>
   </data>
   <data name="AreaMap_UpdateFailed" xml:space="preserve">
     <value>Не вдалося оновити</value>
   </data>
   <data name="AreaMap_UpdateMaps" xml:space="preserve">
-    <value>Оновлення карт</value>
+      <value>Оновити карти</value>
   </data>
   <data name="AssignmentN" xml:space="preserve">
     <value>Завдання #{0}</value>
@@ -613,7 +613,7 @@
     <value>Огляд</value>
   </data>
   <data name="Interview_Overview_NotAnswered" xml:space="preserve">
-    <value>Не відповіли</value>
+      <value>Без відповіді</value>
   </data>
   <data name="Interview_Overview_Warnings" xml:space="preserve">
     <value>Попередження(я)</value>

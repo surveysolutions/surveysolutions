@@ -193,7 +193,7 @@
     <value>тут</value>
   </data>
   <data name="EmailProvider_None" xml:space="preserve">
-    <value>Ні</value>
+      <value>Без розсилки</value>
   </data>
   <data name="EmailProvider_NoneDescription" xml:space="preserve">
     <value>Повідомлення із запрошеннями на веб-інтерв'ю не надсилаються Survey Solutions респондентам.</value>
@@ -277,7 +277,7 @@
     <value>Ви впевнені, що хочете видалити глобальну нотатку?</value>
   </data>
   <data name="GlobalNoteSaved" xml:space="preserve">
-    <value>Примітка збережена</value>
+      <value>Нотатка збережена</value>
   </data>
   <data name="GlobalNoteSettings" xml:space="preserve">
     <value>Глобальна нотатка</value>
@@ -313,7 +313,7 @@
     <value>Логотип компанії не оновлено. Будь ласка, надайте дійсне зображення</value>
   </data>
   <data name="LogoSettings" xml:space="preserve">
-    <value>Логотип компанії</value>
+      <value>Налаштування логотипу </value>
   </data>
   <data name="LogoSettings_Description" xml:space="preserve">
     <value>Логотип компанії - це зображення, яке відображається на сторінці входу на сервер і на сторінці входу в додаток Interviewer.</value>

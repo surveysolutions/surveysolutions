@@ -590,7 +590,7 @@
     <value>Данные сохранены</value>
   </data>
   <data name="Diagnostics_BackupScope_Title" xml:space="preserve">
-    <value>Объем:</value>
+      <value>Сфера применения:</value>
   </data>
   <data name="Diagnostics_RestoreReady_Title" xml:space="preserve">
     <value>Сохраненные данные:</value>
@@ -647,7 +647,7 @@
     <value>Открытие</value>
   </data>
   <data name="Interview_Loading_With_Percents" xml:space="preserve">
-    <value>Открытие... {0}%</value>
+      <value>Загрузка данных интервью {0}%</value>
   </data>
   <data name="Synchronization_Fail_State_FailedToProcess_Format" xml:space="preserve">
     <value>{0} интервью не синхронизировано из-за ошибки</value>
@@ -853,7 +853,7 @@
     <value>Синхронизация интервьюеров: {0} из {1}</value>
   </data>
   <data name="MenuItem_Title_MapsSynchronization" xml:space="preserve">
-    <value>Синхронизировать карты</value>
+      <value>Синхронизация карт</value>
   </data>
   <data name="Prefs_AllowSyncWithHq" xml:space="preserve">
     <value>Разрешить синхронизацию с Headquarters</value>

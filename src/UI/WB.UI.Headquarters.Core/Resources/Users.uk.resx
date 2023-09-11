@@ -289,7 +289,7 @@
     <value>Супервізори</value>
   </data>
   <data name="Supervisors_Edit" xml:space="preserve">
-    <value>Керівник редагування</value>
+      <value>Редагування супервізора</value>
   </data>
   <data name="SupervisorsCountDescription" xml:space="preserve">
     <value>Супервізори ({{count}})</value>
