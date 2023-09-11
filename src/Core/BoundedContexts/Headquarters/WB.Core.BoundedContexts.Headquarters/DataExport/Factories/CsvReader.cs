@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
         {
             using var csvReader = new CsvHelper.CsvReader(new StreamReader(csvFileStream), CultureInfo.InvariantCulture);
             csvReader.Configuration.Delimiter = delimiter;
-            csvReader.Configuration.IgnoreQuotes = true;
+            csvReader.Configuration.Mode = CsvMode.NoEscape;
             csvReader.Read();
             csvReader.ReadHeader();
 
@@ -68,7 +68,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
                 MissingFieldFound = null,
                 Delimiter = delimiter,
                 HasHeaderRecord = hasHeaderRow,
-                IgnoreQuotes = true
+                Mode = CsvMode.NoEscape,
             };
 
             if (ignoreCameCase)

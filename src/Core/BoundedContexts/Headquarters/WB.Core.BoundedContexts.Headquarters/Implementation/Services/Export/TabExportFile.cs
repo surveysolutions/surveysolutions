@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
         {
             HasHeaderRecord = false,
             TrimOptions = TrimOptions.Trim,
-            IgnoreQuotes = false,
+            Mode = CsvMode.Escape,
             Delimiter = Delimiter,
         };
 

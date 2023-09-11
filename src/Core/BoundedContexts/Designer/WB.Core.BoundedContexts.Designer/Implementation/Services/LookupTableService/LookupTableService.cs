@@ -324,7 +324,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             {
                 HasHeaderRecord = true,
                 TrimOptions = TrimOptions.Trim,
-                IgnoreQuotes = false,
+                Mode = CsvMode.Escape,
                 Delimiter = DELIMETER,
                 MissingFieldFound = null
             };
