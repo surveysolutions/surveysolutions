@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates
             {
                 HasHeaderRecord = true,
                 TrimOptions = TrimOptions.Trim,
-                Mode = CsvMode.Escape,
+                Mode = CsvMode.RFC4180,
                 Delimiter = "\t",
                 MissingFieldFound = null,
             };

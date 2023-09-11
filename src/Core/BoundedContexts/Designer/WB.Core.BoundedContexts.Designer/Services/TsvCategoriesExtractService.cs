@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
         {
             HasHeaderRecord = true,
             TrimOptions = TrimOptions.Trim,
-            Mode = CsvMode.Escape,
+            Mode = CsvMode.RFC4180,
             Delimiter = "\t"
         };
 

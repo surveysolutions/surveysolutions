@@ -90,7 +90,7 @@ namespace WB.Tests.Unit.Designer.Services
             {
                 HasHeaderRecord = false,
                 TrimOptions = TrimOptions.Trim,
-                Mode = CsvMode.Escape,
+                Mode = CsvMode.RFC4180,
                 Delimiter = "\t"
 
             }, true))

@@ -131,7 +131,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             {
                 HasHeaderRecord = true,
                 TrimOptions = TrimOptions.Trim,
-                Mode = CsvMode.Escape,
+                Mode = CsvMode.RFC4180,
                 Delimiter = "\t",
                 MissingFieldFound = null,
             });
