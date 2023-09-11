@@ -4,6 +4,7 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
@@ -31,9 +32,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             return CreateDenormalizer(users: CreateUsersWriterWith2Users(user1Id, user1Name, user2Id, user2Name));
         }
 
-        public static InterviewSummaryDenormalizer CreateDenormalizer(IUserViewFactory users = null)
+        public static InterviewSummaryDenormalizer CreateDenormalizer(IUserViewFactory users = null, IQuestionnaire questionnaire = null)
         {
-            var doc = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument());
+            var doc = questionnaire ?? Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument());
             return
                 new InterviewSummaryDenormalizer(
                     users: users ?? CreateUsersWriterWith1User(new Guid(), new Guid().ToString()),

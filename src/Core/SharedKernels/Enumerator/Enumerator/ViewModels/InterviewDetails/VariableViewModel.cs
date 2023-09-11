@@ -41,6 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
+            this.NavigationState = navigationState;
             var interview = this.interviewRepository.GetOrThrow(interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
 
@@ -58,6 +59,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public string Label => this.variableLabel;
         public bool HasLabel => !string.IsNullOrEmpty(this.variableLabel);
 
+        private NavigationState NavigationState { get; set; }
+        
+        public bool IsCoverVariable => this.NavigationState.CurrentScreenType == ScreenType.Cover;
+        
         public void Handle(VariablesChanged @event)
         {
             var changedVariable = @event.ChangedVariables.FirstOrDefault(v => v.Identity == this.Identity);

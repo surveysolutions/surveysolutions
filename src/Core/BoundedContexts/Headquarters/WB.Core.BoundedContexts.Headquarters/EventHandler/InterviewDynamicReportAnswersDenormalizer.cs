@@ -307,22 +307,22 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 }
                 
                 identifyingValue.IsEnabled = true;
-                identifyingValue.Value = variable.NewValue.ToString();
+                identifyingValue.Value = variable.NewValue?.ToString();
                 
                 var varType = questionnaire.GetVariableVariableType(variable.Identity.Id);
                 switch (varType)
                 {
                     case VariableType.Boolean:
-                        identifyingValue.ValueBool = Convert.ToBoolean(variable.NewValue);
+                        identifyingValue.ValueBool = variable.NewValue == null ? null : Convert.ToBoolean(variable.NewValue);
                         break;
                     case VariableType.DateTime:
                         identifyingValue.ValueDate = variable.NewValue as DateTime?;
                         break;
                     case VariableType.Double:
-                        identifyingValue.ValueDouble = Convert.ToDouble(variable.NewValue);
+                        identifyingValue.ValueDouble = variable.NewValue == null ? null : Convert.ToDouble(variable.NewValue);
                         break;
                     case VariableType.LongInteger:
-                        identifyingValue.ValueLong = Convert.ToInt64(variable.NewValue);
+                        identifyingValue.ValueLong = variable.NewValue == null ? null : Convert.ToInt64(variable.NewValue);
                         break;
                     case VariableType.String:
                         identifyingValue.Value = variable.NewValue as string;

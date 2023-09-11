@@ -1218,4 +1218,7 @@
   <data name="WarningsCounter_plural" xml:space="preserve">
     <value>{{count}} paralajmërime</value>
   </data>
+  <data name="ManageAccount" xml:space="preserve">
+      <value>Menaxho llogarinë</value>
+  </data>
 </root>

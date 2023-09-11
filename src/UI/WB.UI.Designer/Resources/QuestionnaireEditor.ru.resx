@@ -1595,5 +1595,8 @@
   </data>
   <data name="AddEnablingCondition" xml:space="preserve">
     <value>Добавить условие</value>
-  </data>  
+  </data>
+  <data name="ManageAccount" xml:space="preserve">
+      <value>Управление учётной записью</value>
+  </data>
 </root>
