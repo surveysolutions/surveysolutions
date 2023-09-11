@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
     style="@style/Interview_QuestionWithDivider"
-    local:MvxBind="HideKeyboardOnClick .">
+    local:MvxBind="HideKeyboardOnClick .
+        BackgroundColor IsCoverVariableToColor(IsCoverVariable);">
 
   <TextView
     style="@style/Interview_Question_Title"

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,7 +27,11 @@ namespace WB.UI.Shared.Web.Captcha
         {
             try
             {
-                var inputText = request.Form[InputName][0];
+                var captchaInput = request.Form[InputName];
+                if (!captchaInput.Any())
+                    return Task.FromResult(false);
+                
+                var inputText = captchaInput[0];
                 var token = request.Form[TokenName][0];
 
                 var protector = protectionProvider.CreateProtector("Captcha code protector");
@@ -52,14 +57,23 @@ namespace WB.UI.Shared.Web.Captcha
             var protector = protectionProvider.CreateProtector("Captcha code protector");
            
             var token = protector.Protect(code);
-            var imageBytes = imageGenerator.Generate(code);
+            string htmlContent;
 
-            var htmlContent = $@"
+            if (imageGenerator.IsFontFound)
+            {
+                var imageBytes = imageGenerator.Generate(code);
+
+                htmlContent = $@"
 <input id='{TokenName}' name='{TokenName}' type='hidden' value='{token}'>
 <img src='data:image/jpeg;base64, {Convert.ToBase64String(imageBytes)}' />
 <br />
 <label for='{InputName}'>{Resources.Captcha.EnterText}</label>
 <input autocomplete='off' autocorrect='off' data-val='true' id='{InputName}' name='{InputName}' type='text' value='' class='form-control' />";
+            }
+            else
+            {
+                htmlContent = $@"<span style='color:red'>{Resources.Captcha.CaptchaError}</span>";
+            }
             
             return new HtmlString(htmlContent);
         }

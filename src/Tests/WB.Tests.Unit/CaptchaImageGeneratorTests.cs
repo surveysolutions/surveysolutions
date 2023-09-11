@@ -16,7 +16,7 @@ public class CaptchaImageGeneratorTests
         var firstFont = SystemFonts.Collection.Families.First();
 
         var captchaImageGenerator = new CaptchaImageGenerator();
-        captchaImageGenerator.ChangeFonts(firstFont.Name);
+        captchaImageGenerator.SetFonts(firstFont.Name);
 
         var imageContent = captchaImageGenerator.Generate(code);
         
