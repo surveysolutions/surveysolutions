@@ -121,7 +121,7 @@
     <value>Создайте еще один?</value>
   </data>
   <data name="InterviewWasCreated" xml:space="preserve">
-    <value>пользователей было создано.</value>
+      <value>Интервью успешно создано.</value>
   </data>
   <data name="NoPermission" xml:space="preserve">
     <value>Не удалось обновить данные пользователя, потому что у вас нет разрешения на выполнение этой операции.</value>

@@ -142,13 +142,13 @@
     <value>Супервізор &lt;b&gt;{0}&lt;/b&gt; успішно створено.</value>
   </data>
   <data name="SupervisorNotFound" xml:space="preserve">
-    <value>Може створити інтерв'юера. Вибраного супервізора не існує</value>
+      <value>Не можна створити інтерв'юера. Вибраного супервізора не існує, заархівовано або заблоковано  </value>
   </data>
   <data name="UserNotExists" xml:space="preserve">
     <value>Не вдалося оновити інформацію про користувача, оскільки він не існує</value>
   </data>
   <data name="UserWasCreatedFormat" xml:space="preserve">
-    <value>Успішно створено користувача Headquarters {0}.</value>
+      <value>Успішно створено користувача Хедквотер {0}.</value>
   </data>
   <data name="UserWasUpdatedFormat" xml:space="preserve">
     <value>Інформацію про &lt;b&gt;{0}&lt;/b&gt; успішно оновлено</value>

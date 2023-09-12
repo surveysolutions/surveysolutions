@@ -184,7 +184,7 @@
     <value>Розмір (МБ)</value>
   </data>
   <data name="UpdateDate" xml:space="preserve">
-    <value>Імпортовано на</value>
+    <value>Імпортовано о</value>
   </data>
   <data name="UploadMappingsSummaryFormat" xml:space="preserve">
     <value>посилання для {0} мап було оброблено з {1} недійсними</value>

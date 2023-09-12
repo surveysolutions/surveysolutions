@@ -151,10 +151,10 @@
     <value>Показати користувачів</value>
   </data>
   <data name="AccountManage_Status2fa" xml:space="preserve">
-    <value>Двофакторна автентифікація наразі </value>
+      <value>Двофакторна автентифікація</value>
   </data>
   <data name="AccountManage_StatusApiToken" xml:space="preserve">
-    <value>Доступ до кінцевих точок REST та GraphQL API наразі </value>
+      <value>Доступ до кінцевих точок REST та GraphQL API</value>
   </data>
   <data name="AccountManage_Title" xml:space="preserve">
     <value>Редагувати {0} профіль</value>
@@ -167,9 +167,6 @@
   </data>
   <data name="Admin_ControlPanelLinkTitle" xml:space="preserve">
     <value>Панель керування</value>
-  </data>
-  <data name="Admin_InterviewPackages_Broken" xml:space="preserve">
-    <value>Зламаних</value>
   </data>
   <data name="Admin_InterviewPackages_Exception" xml:space="preserve">
     <value>Виняток</value>
@@ -211,13 +208,13 @@
     <value>Причина</value>
   </data>
   <data name="Admin_InterviewPackages_Rejected" xml:space="preserve">
-    <value>Відхилено</value>
+      <value>Очікувані</value>
   </data>
   <data name="Admin_InterviewPackages_Reprocess" xml:space="preserve">
-    <value>Перепрацювати</value>
+      <value>Переопрацювати</value>
   </data>
   <data name="Admin_InterviewPackages_ReprocessSelectedConfirmation" xml:space="preserve">
-    <value>Ви впевнені, що хочете обробити вибрані несправні пакунки?</value>
+      <value>Ви впевнені, що хочете переопрацювати вибрані неочікувані пакунки?</value>
   </data>
   <data name="Admin_InterviewPackages_SelectedPackagesCount" xml:space="preserve">
     <value>{{count}} вибрано пакетів</value>
@@ -253,7 +250,7 @@
     <value>Потрібен ідентифікатор інтерв'ю</value>
   </data>
   <data name="Admin_Reevaluate_Success" xml:space="preserve">
-    <value>Співбесіда пройшла успішно</value>
+      <value>Переоцінка пройшла успішно</value>
   </data>
   <data name="Admin_ReevaluateInterview_InterviewId" xml:space="preserve">
     <value>Ідентифікатор інтерв'ю</value>
@@ -274,7 +271,7 @@
     <value>Схвалити</value>
   </data>
   <data name="ApproveRejectPartialView_ApproveLabel" xml:space="preserve">
-    <value>Затвердити співбесіду</value>
+      <value>Затвердити інтерв'ю</value>
   </data>
   <data name="ApproveRejectPartialView_ApproveReceivedConfirm" xml:space="preserve">
     <value>Подати заявку на інтерв'ю, яку інтерв'юер вже отримав</value>
@@ -289,7 +286,7 @@
     <value>Відхилити</value>
   </data>
   <data name="ApproveRejectPartialView_RejectLAbel" xml:space="preserve">
-    <value>Відхилити співбесіду</value>
+    <value>Відхилити інтервью</value>
   </data>
   <data name="ApproveRejectPartialView_UnapproveAction" xml:space="preserve">
     <value>Відізвати схвалення</value>
@@ -442,7 +439,7 @@
     <value>Під час обробки вашого запиту сталася помилка.</value>
   </data>
   <data name="Error_Title" xml:space="preserve">
-    <value>Помилка.</value>
+      <value>Помилка</value>
   </data>
   <data name="ErrorIndex_Title" xml:space="preserve">
     <value>Помилка</value>
@@ -451,7 +448,7 @@
     <value>Винятки</value>
   </data>
   <data name="ExcludeEsriTitle" xml:space="preserve">
-    <value>Виключити підтримку карт ESRI</value>
+      <value>Вимкнути підтримку карт ESRI</value>
   </data>
   <data name="Exposed_Variables_AvailableVariablesTitle" xml:space="preserve">
     <value>Доступні змінні</value>
@@ -466,13 +463,13 @@
     <value>Ви змінюєте набір змінних для запитів. Це займе деякий час, щоб оновити звіти.</value>
   </data>
   <data name="ExposedVariables_RemoveMessage" xml:space="preserve">
-    <value>Якщо ви хочете видалити змінну зі списку?</value>
+      <value>Ви хочете видалити змінну зі списку?</value>
   </data>
   <data name="ExposedVariables_VariableDisplayTitle" xml:space="preserve">
     <value>Відобразити заголовок</value>
   </data>
   <data name="ExposedVariables_VariableLabel" xml:space="preserve">
-    <value>Лейбл</value>
+      <value>Мітка</value>
   </data>
   <data name="ExposedVariables_VariableName" xml:space="preserve">
     <value>Ім'я змінної</value>
@@ -490,7 +487,7 @@
     <value>Всі режими інтерв'ю</value>
   </data>
   <data name="Filters_None" xml:space="preserve">
-    <value>Немає</value>
+      <value>Не вибрано</value>
   </data>
   <data name="Filters_Shapefiles" xml:space="preserve">
     <value>Шейпфайли</value>
@@ -583,7 +580,7 @@
     <value>Призначено на</value>
   </data>
   <data name="HistoryOfStatuses_By" xml:space="preserve">
-    <value>By</value>
+      <value>Ким</value>
   </data>
   <data name="HistoryOfStatuses_Comment" xml:space="preserve">
     <value>Коментар</value>
@@ -757,7 +754,7 @@
     <value>вимкнено</value>
   </data>
   <data name="InterviewerProfile_BatteryStatus_SaverIsOn" xml:space="preserve">
-    <value>на</value>
+      <value>увімкнено</value>
   </data>
   <data name="InterviewerProfile_BatteryStatusFormat" xml:space="preserve">
     <value>{{percent}}%, джерело живлення: {{power}}, економія заряду батареї - {{powerSaver}}.</value>
@@ -784,7 +781,7 @@
     <value>Дата призначення пристрою</value>
   </data>
   <data name="InterviewerProfile_DeviceDate" xml:space="preserve">
-    <value>Час планшета на початку синхронізації</value>
+      <value>Час на пристрої на початку синхронізації</value>
   </data>
   <data name="InterviewerProfile_DeviceId" xml:space="preserve">
     <value>Ідентифікатор пристрою</value>
@@ -946,7 +943,7 @@
     <value>Активні інтерв'юери</value>
   </data>
   <data name="Interviewers_Archive" xml:space="preserve">
-    <value>Архів</value>
+      <value>Архівувати</value>
   </data>
   <data name="Interviewers_ArchivedUsers" xml:space="preserve">
     <value>Архів інтерв'юерів</value>
@@ -970,7 +967,7 @@
     <value>Підключення до сервера</value>
   </data>
   <data name="Interviewers_CreationDateTitle" xml:space="preserve">
-    <value>Обліковий запис створено на</value>
+    <value>Обліковий запис створено</value>
   </data>
   <data name="Interviewers_CreationDateTooltip" xml:space="preserve">
     <value>Дата створення облікового запису інтерв'юера</value>
@@ -1024,7 +1021,7 @@
     <value>Переміщення користувачів завершено</value>
   </data>
   <data name="Interviewers_MovingIsInProgress" xml:space="preserve">
-    <value>Переїзд триває</value>
+      <value>Переміщення триває</value>
   </data>
   <data name="Interviewers_NamesFormatLessThanLimit" xml:space="preserve">
     <value>{{names}} та {{lastname}}</value>
@@ -1105,7 +1102,7 @@
     <value>Будь ласка, увійдіть до системи</value>
   </data>
   <data name="LogOn_LogIn" xml:space="preserve">
-    <value>Увійдіть в систему</value>
+    <value>Увійти в систему</value>
   </data>
   <data name="LogOn_LoginWithRecoveryCode" xml:space="preserve">
     <value>Ви надіслали запит на вхід за допомогою коду відновлення.</value>
@@ -1117,7 +1114,7 @@
     <value>Не маєте доступу до свого пристрою-автентифікатора? Ви можете</value>
   </data>
   <data name="LogOn_Title" xml:space="preserve">
-    <value>Увійдіть</value>
+    <value>Увійти</value>
   </data>
   <data name="LogOn_TwoFactor" xml:space="preserve">
     <value>Ваш логін захищений додатком-автентифікатором. Введіть код автентифікатора нижче.</value>
@@ -1174,7 +1171,7 @@
     <value>Цей попередній перегляд показує завантажений шейп-файл, накладений на базовий шар супутникового знімка.</value>
   </data>
   <data name="MapDetails_ImportedOn" xml:space="preserve">
-    <value>Імпортовано на</value>
+    <value>Імпортовано о</value>
   </data>
   <data name="MapDetails_InterviewerName" xml:space="preserve">
     <value>Ім'я користувача</value>
@@ -1255,7 +1252,7 @@
     <value>Файли карт</value>
   </data>
   <data name="MapList_Updated" xml:space="preserve">
-    <value>Оновлено на</value>
+      <value>Оновлено</value>
   </data>
   <data name="MapList_Upload" xml:space="preserve">
     <value>Завантажити .zip файл</value>
@@ -1300,7 +1297,7 @@
     <value>Ідентифікатор пристрою</value>
   </data>
   <data name="PackagesInfo_Header" xml:space="preserve">
-    <value>Інформаційні пакети з планшетів</value>
+      <value>Інформаційні пакети з пристроїв</value>
   </data>
   <data name="PackagesInfo_Size" xml:space="preserve">
     <value>Розмір (байт)</value>
@@ -1357,7 +1354,7 @@
     <value>Інтерв'юери</value>
   </data>
   <data name="Profile_IssueApiToken" xml:space="preserve">
-    <value>Випуск</value>
+      <value>Видати</value>
   </data>
   <data name="Profile_ObserverCreate" xml:space="preserve">
     <value>Створити спостерігача</value>
@@ -1387,13 +1384,13 @@
     <value>Деталі анкети</value>
   </data>
   <data name="Questionnaire_QuestionsCount" xml:space="preserve">
-    <value>Питання</value>
+    <value>Кількість питань</value>
   </data>
   <data name="Questionnaire_QuestionsCountWithCond" xml:space="preserve">
     <value>Запитання з умовами</value>
   </data>
   <data name="Questionnaire_RostersCount" xml:space="preserve">
-    <value>Кількість реєстрів</value>
+    <value>Кількість ростерів</value>
   </data>
   <data name="Questionnaire_SectionsCount" xml:space="preserve">
     <value>Кількість секцій</value>
@@ -1408,7 +1405,7 @@
     <value>Ім'я змінної</value>
   </data>
   <data name="QuestionnaireNameFormat" xml:space="preserve">
-    <value>{{name}} (ver. {{version}})</value>
+      <value>{{name}} (вер. {{version}})</value>
   </data>
   <data name="QuestionnaireNameVersionFirst" xml:space="preserve">
       <value>[вер. {{version}}] {{name}} </value>
@@ -1429,13 +1426,13 @@
     <value>Залишилося кодов відновлення:</value>
   </data>
   <data name="RecoveryCodesYouCan" xml:space="preserve">
-    <value>Ти можеш</value>
+      <value>Ви можете</value>
   </data>
   <data name="ReevaluateInterview" xml:space="preserve">
     <value>Переоцінити співбесіду</value>
   </data>
   <data name="RejectedByHeadquarters" xml:space="preserve">
-    <value>Відхилено штаб-квартирою</value>
+    <value>Відхилено хедквотером</value>
   </data>
   <data name="RejectedBySupervisor" xml:space="preserve">
     <value>Відхилено супервізором</value>
@@ -1487,13 +1484,13 @@
     <value>Активні супервізори</value>
   </data>
   <data name="Supervisors_Archive" xml:space="preserve">
-    <value>Архів</value>
+      <value>Архівувати</value>
   </data>
   <data name="Supervisors_ArchivedUsers" xml:space="preserve">
     <value>Архівовані супервізори</value>
   </data>
   <data name="Supervisors_ArchiveStatusTitle" xml:space="preserve">
-    <value>Стан архіву</value>
+      <value>Стан архівації</value>
   </data>
   <data name="Supervisors_ArchiveSupervisorsConfirmMessage" xml:space="preserve">
     <value>Якщо інтерв'юер завершив інтерв'ю на своєму планшеті, то дані будуть втрачені.</value>
@@ -1565,7 +1562,7 @@
     <value>Призначено інтерв'юера</value>
   </data>
   <data name="SurveysStatuses_RejectedByHQ" xml:space="preserve">
-    <value>Відхилено штаб-квартирою</value>
+    <value>Відхилено хедквотером</value>
   </data>
   <data name="SurveysStatuses_RejectedBySupervisor" xml:space="preserve">
     <value>Відхилено супервізором</value>
@@ -1631,7 +1628,7 @@
     <value>Додати до робочих просторів</value>
   </data>
   <data name="UserManagement_ManageWorkspacesTitle" xml:space="preserve">
-    <value>Керуйте робочими просторами</value>
+      <value>Керування робочими просторами</value>
   </data>
   <data name="UserManagement_RemoveFromWorkspace" xml:space="preserve">
     <value>Видалити з робочих просторів</value>
@@ -1718,7 +1715,7 @@
     <value>Робочий простір</value>
   </data>
   <data name="Verify" xml:space="preserve">
-    <value>Підтвердити</value>
+      <value>Перевірити</value>
   </data>
   <data name="WebsitePathIsTooLong_Title" xml:space="preserve">
     <value>Папка, яка містить веб-сайт, має занадто довге ім'я шляху до неї. Будь ласка, перемістіть веб-сайт до іншої папки з коротшою назвою.</value>
@@ -1731,5 +1728,11 @@
   </data>
   <data name="QuestionnaireVersionAndName" xml:space="preserve">
       <value>[вер. {1}] {0} </value>
+  </data>
+  <data name="Admin_InterviewPackages_Broken" xml:space="preserve">
+      <value>Непередбачені</value>
+  </data>
+  <data name="AssignmentDetails_PageTitle" xml:space="preserve">
+      <value>Завдання {0}</value>
   </data>
 </root>

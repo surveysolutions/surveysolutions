@@ -157,7 +157,7 @@
     <value>НАЗВА АНКЕТИ</value>
   </data>
   <data name="COLUMN_REJECTED_BY_HQ" xml:space="preserve">
-    <value>ВІДХИЛЕНО ШТАБ-КВАРТИРОЮ</value>
+    <value>ВІДХИЛЕНО ХЕДКВОТЕРОМ</value>
   </data>
   <data name="COLUMN_REJECTED_BY_SUPERVISOR" xml:space="preserve">
     <value>ВІДХИЛЕНО супервізором</value>

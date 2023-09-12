@@ -262,7 +262,7 @@
     <value>Ответ "{0}" не соответствует ни с одной опцией</value>
   </data>
   <data name="Dashboard_EmptyQuestionnairesList" xml:space="preserve">
-    <value>Опросники не обнаружены
+      <value>Опросники не обнаружены. 
 
 Вы можете создать или отредактировать свои опросники при помощи сервиса Survey Solutions Designer</value>
   </data>
@@ -711,7 +711,7 @@
     <value>Комментарии</value>
   </data>
   <data name="Interview_Overview_Warnings" xml:space="preserve">
-    <value>Ошибки</value>
+      <value>Предупреждения</value>
   </data>
   <data name="Supervisor_Complete_Approve_btn" xml:space="preserve">
     <value>Утвердить</value>

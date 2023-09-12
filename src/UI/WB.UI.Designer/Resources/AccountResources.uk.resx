@@ -253,7 +253,7 @@
     <value>Очікує оновлення до {0}</value>
   </data>
   <data name="Register" xml:space="preserve">
-    <value>Зареєструватися</value>
+    <value>Зареєструйтесь</value>
   </data>
   <data name="RegistrationError" xml:space="preserve">
     <value>Помилка реєстрації</value>
@@ -271,7 +271,7 @@
     <value>Показати пароль</value>
   </data>
   <data name="StaySignedIn" xml:space="preserve">
-    <value>Залишайтеся в системі протягом дня</value>
+    <value>Залишатися в системі протягом дня</value>
   </data>
   <data name="TesterApp" xml:space="preserve">
     <value>Встановіть Survey Solutions Questionnaire Tester на планшет на Android, щоб тестувати анкети, які ви розробляєте в Designer.</value>

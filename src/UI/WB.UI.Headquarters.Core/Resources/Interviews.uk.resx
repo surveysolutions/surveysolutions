@@ -154,7 +154,7 @@
 &lt;b&gt;Примітка!&lt;/b&gt; Перепризначити можна лише інтерв'ю, які не мають статусів &lt;i&gt;{{status1}}&lt;/i&gt; та &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
   </data>
   <data name="ChooseQuestionsTitle" xml:space="preserve">
-    <value>Виберіть ідентифікаційні питання для використання у фільтрі</value>
+    <value>Оберіть ідентифікаційні питання для використання у фільтрі</value>
   </data>
   <data name="ChooseResponsible" xml:space="preserve">
     <value>Будь ласка, оберіть супервізора або інтерв'юера.</value>

@@ -253,7 +253,7 @@
     <value>Готовність до інтерв'ю</value>
   </data>
   <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
-    <value>Відхилено штаб-квартирою</value>
+    <value>Відхилено хедквотером</value>
   </data>
   <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
     <value>Відхилено супервізором</value>
