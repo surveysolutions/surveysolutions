@@ -29,7 +29,7 @@ namespace WB.UI.Headquarters
             var logger = host.Services.GetRequiredService<ILogger>();
             logger.Warning("HQ application starting. Version {version}", applicationVersion);
             logger.Warning($"Environment. Processor count: {System.Environment.ProcessorCount}");
-            
+            logger.Warning($"Environment. OSVersion: {System.Environment.OSVersion}");
             host.EnablePostgresXmlRepositoryLogging();
             await host.RunAsync();
             return 0;
