@@ -124,7 +124,7 @@
     <value>Розділи</value>
   </data>
   <data name="CreatedAt" xml:space="preserve">
-    <value>Створено на</value>
+    <value>Створено о</value>
   </data>
   <data name="DesignerQuestionnaires" xml:space="preserve">
     <value>Дизайнер анкет</value>
@@ -136,7 +136,7 @@
     <value>Створити нову версію (#{{version}})</value>
   </data>
   <data name="Importing" xml:space="preserve">
-    <value>Імпорт {{percent}}%%</value>
+    <value>Імпорт {{percent}}%</value>
   </data>
   <data name="ImportModePageTitle" xml:space="preserve">
     <value>Анкета для імпорту:</value>
@@ -181,7 +181,7 @@
     <value>Будь ласка, увійдіть до Дизайнера</value>
   </data>
   <data name="SignInToDesignerTitle" xml:space="preserve">
-    <value>Увійдіть до Дизайнера</value>
+    <value>Увійти до Дизайнера</value>
   </data>
   <data name="UpgradeAssignments" xml:space="preserve">
     <value>Оновлення завдання</value>

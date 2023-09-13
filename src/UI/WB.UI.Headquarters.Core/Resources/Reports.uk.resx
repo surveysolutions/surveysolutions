@@ -244,7 +244,7 @@
     <value>Діапазон відносно даних</value>
   </data>
   <data name="RejectedByHQ" xml:space="preserve">
-    <value>Відхилено штаб-квартирою</value>
+    <value>Відхилено хедквотером</value>
   </data>
   <data name="RejectedBySupervisor" xml:space="preserve">
     <value>Відхилено супервізором</value>

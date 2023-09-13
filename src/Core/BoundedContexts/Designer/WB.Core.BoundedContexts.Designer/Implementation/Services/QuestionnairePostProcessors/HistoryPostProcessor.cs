@@ -706,7 +706,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             QuestionnaireChangeReference? movedReference = null;
             if (targetGroupOrRosterId.HasValue)
             {
-                var targetGroupId = targetGroupOrRosterId ?? questionnaireId;
+                var targetGroupId = targetGroupOrRosterId.Value;
                 var isTargetGroupRoster = questionnaire.RosterState.ContainsKey(targetGroupId);
                 var targetGroupTitle = isTargetGroupRoster
                     ? questionnaire.RosterState[targetGroupId]

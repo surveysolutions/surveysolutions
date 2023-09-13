@@ -277,7 +277,7 @@
     <value>Yes</value>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>Ok</value>
+      <value>OK</value>
   </data>
   <data name="Download" xml:space="preserve">
     <value>Download</value>

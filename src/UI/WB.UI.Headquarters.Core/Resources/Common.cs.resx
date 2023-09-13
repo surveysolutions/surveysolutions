@@ -235,9 +235,9 @@
   <data name="NothingSelected" xml:space="preserve">
     <value>Není nic vybráno</value>
   </data>
-  <data name="Ok" xml:space="preserve">
-    <value>Ok</value>
-  </data>
+    <data name="Ok" xml:space="preserve">
+        <value>OK</value>
+    </data>
   <data name="OpenAssignment" xml:space="preserve">
     <value>Otevřít dotazník</value>
   </data>

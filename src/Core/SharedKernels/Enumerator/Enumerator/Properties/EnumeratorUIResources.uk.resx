@@ -561,7 +561,7 @@
     <value>Папка '{0}' порожня. Помістіть резервну копію, яку потрібно відновити, до папки.</value>
   </data>
   <data name="Dashboard_Start" xml:space="preserve">
-    <value>Старт</value>
+      <value>Почати</value>
   </data>
   <data name="Dashboard_CreateNewTabText" xml:space="preserve">
     <value>Створіть нове інтерв'ю за допомогою шаблонів</value>
@@ -593,10 +593,10 @@
     <value>Призначити</value>
   </data>
   <data name="Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat" xml:space="preserve">
-    <value>Збирати: необмежено</value>
+      <value>Необхідно зібрати: необмежено</value>
   </data>
   <data name="Dashboard_AssignmentCard_SubTitleCountdownFormat" xml:space="preserve">
-    <value>Зібрати: {0} інтерв'ю(и)</value>
+      <value>Необхідно зібрати: {0} інтерв'ю(и)</value>
   </data>
   <data name="Dashboard_AssignmentCard_SubTitleSingleInterivew" xml:space="preserve">
     <value>Завдання на одну співбесіду</value>
@@ -611,7 +611,7 @@
     <value>Перепис населення</value>
   </data>
   <data name="Dashboard_Discard" xml:space="preserve">
-    <value>Викинути</value>
+      <value>Видалити</value>
   </data>
   <data name="Dashboard_EditCalendarEvent" xml:space="preserve">
     <value>Редагування події календаря</value>
@@ -659,7 +659,7 @@
     <value>Вийти з пошуку</value>
   </data>
   <data name="Dashboard_Searching" xml:space="preserve">
-    <value>Шукаю...</value>
+      <value>Пошук...</value>
   </data>
   <data name="Dashboard_SearchResult" xml:space="preserve">
     <value>{0} елементів знайдено</value>
@@ -698,7 +698,7 @@
     <value>Показати QR-код</value>
   </data>
   <data name="DashboardItem_RejectedByHqOn" xml:space="preserve">
-    <value>Відхилено штаб-квартирою : {0}</value>
+    <value>Відхилено хедквотером : {0}</value>
   </data>
   <data name="DashboardItem_Responsible" xml:space="preserve">
     <value>Відповідальний: {0}</value>
@@ -710,7 +710,7 @@
     <value>Надіслати детальні журнали до Headquarters для розслідування проблем</value>
   </data>
   <data name="Diagnostics_SendLogs_Success" xml:space="preserve">
-    <value>Журнали надсилаються до штаб-квартири</value>
+      <value>Журнали надіслани до штаб-квартири</value>
   </data>
   <data name="Diagnostics_ServerUrl" xml:space="preserve">
     <value>URL-адреса сервера: </value>
@@ -864,10 +864,10 @@
     <value>Скасувати</value>
   </data>
   <data name="SelectResponsible_Reassign" xml:space="preserve">
-    <value>Перепризначити</value>
+      <value>Призначити</value>
   </data>
   <data name="SelectResponsible_ReassignButtonText" xml:space="preserve">
-    <value>Перепризначити</value>
+      <value>Призначити</value>
   </data>
   <data name="SelectResponsible_ReassignDescription" xml:space="preserve">
     <value>Виберіть нового відповідального за інтерв'ю.
@@ -919,7 +919,7 @@
     <value>Більш детальну інформацію про помилки синхронізації можна знайти на &lt;a href="https://support.mysurvey.solutions/interviewer/troubleshooting/synchronization-problems"&gt;сайті підтримки&lt;/a&gt;</value>
   </data>
   <data name="Synchronization_Of_AssignmentsFormat" xml:space="preserve">
-    <value>Синхронізація {0} з {1} присвоєнь</value>
+    <value>Синхронізація {0} з {1} завдань</value>
   </data>
   <data name="Synchronization_Of_Interviewers" xml:space="preserve">
     <value>Синхронізація інтерв'юерів</value>

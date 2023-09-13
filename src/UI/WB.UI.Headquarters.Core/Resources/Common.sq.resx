@@ -232,7 +232,7 @@
     <value>Nuk u zgjodh asgjë</value>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>Ok</value>
+      <value>OK</value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>I/e hapur</value>
