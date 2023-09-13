@@ -268,7 +268,7 @@
     <value>Titul:</value>
   </data>
   <data name="WebInterviewSetupFor_Title" xml:space="preserve">
-    <value>Nastavení webového rozhovoru pro</value>
+      <value>Nastavení webového rozhovoru: </value>
   </data>
   <data name="WelcomePage" xml:space="preserve">
     <value>Uvítací stránka</value>

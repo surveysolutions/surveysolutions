@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         [NUnit.Framework.OneTimeSetUp] public void context () {
             statusEvents = new List<IEvent>();
             statusEvents.Add(new InterviewerAssigned(interviewId, Guid.NewGuid(), originDate: DateTimeOffset.Now));
-            statusEvents.Add(new InterviewReceivedByInterviewer(originDate: DateTimeOffset.Now));
+            statusEvents.Add(new InterviewReceivedByInterviewer(null, originDate: DateTimeOffset.Now));
             statusEvents.Add(new InterviewCompleted(Guid.NewGuid(), DateTime.Now, "comment"));
             statusEvents.Add(new InterviewRestarted(Guid.NewGuid(), DateTime.Now,"rest"));
             statusEvents.Add(new InterviewReceivedBySupervisor(originDate: DateTimeOffset.Now));

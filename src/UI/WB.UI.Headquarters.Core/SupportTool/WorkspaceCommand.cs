@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
+using WB.Core.BoundedContexts.Headquarters.Workspaces.Impl;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Workspaces;
@@ -63,13 +64,13 @@ namespace WB.UI.Headquarters.SupportTool
             var uow = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
 
             var logger = scope.ServiceProvider.GetRequiredService<ILogger<WorkspacesCommand>>();
-            IPlainStorageAccessor<Workspace> workspaces =
-                scope.ServiceProvider.GetRequiredService<IPlainStorageAccessor<Workspace>>();
+            IWorkspacesStorage workspaces =
+                scope.ServiceProvider.GetRequiredService<IWorkspacesStorage>();
 
             var service = scope.ServiceProvider.GetRequiredService<IWorkspacesService>();
-            var workspace = new Workspace(name.ToLower(), title);
+            var workspace = new Workspace(name.ToLower(), title, DateTime.UtcNow);
 
-            workspaces.Store(workspace, null);
+            workspaces.Store(workspace);
             await service.Generate(workspace.Name,
                 DbUpgradeSettings.FromFirstMigration<M202011201421_InitSingleWorkspace>());
 

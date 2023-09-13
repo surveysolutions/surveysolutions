@@ -1,0 +1,303 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccountInfoUpdated" xml:space="preserve">
+    <value>Informace o účtu byly úspěšně aktualizovány</value>
+  </data>
+  <data name="AllRights" xml:space="preserve">
+    <value>Všechna práva vyhrazena.</value>
+  </data>
+  <data name="AppDescription" xml:space="preserve">
+    <value>Nástroj pro spolupráci při tvorbě dotazníků pro platformu CAPI/CAWI Světové banky.</value>
+  </data>
+  <data name="AppName" xml:space="preserve">
+    <value>Návrhář dotazníků</value>
+  </data>
+  <data name="BackToLogin" xml:space="preserve">
+    <value>Zpět na přihlášení</value>
+  </data>
+  <data name="Change" xml:space="preserve">
+    <value>Vyměnit</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Změnit heslo</value>
+  </data>
+  <data name="CompanyName" xml:space="preserve">
+    <value>Skupina Světové banky</value>
+  </data>
+  <data name="CompleteRegistrationInstruction" xml:space="preserve">
+    <value>Chcete-li dokončit proces registrace, vyhledejte v doručené poště e-mail s dalšími pokyny:</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Potvrdit heslo</value>
+  </data>
+  <data name="CurrentPassword" xml:space="preserve">
+    <value>Aktuální heslo</value>
+  </data>
+  <data name="EditProfile" xml:space="preserve">
+    <value>Upravit profil</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="EmailChangeShouldBeConfirmed" xml:space="preserve">
+    <value>Postupujte podle pokynů zaslaných na zadaný e-mail ({0}) pro potvrzení změny e-mailu.</value>
+  </data>
+  <data name="ExternalLoginRemoved" xml:space="preserve">
+    <value>Externí přihlášení bylo odebráno.</value>
+  </data>
+  <data name="ForgotPassword" xml:space="preserve">
+    <value>Zapomenuté heslo?</value>
+  </data>
+  <data name="Forum" xml:space="preserve">
+    <value>Fórum</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Jméno a příjmení</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Pomoc</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>Zadaná e-mailová adresa je neplatná. Zkontrolujte hodnotu a zkuste to znovu.</value>
+  </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>Zadané heslo je neplatné. Zadejte platnou hodnotu hesla.</value>
+  </data>
+  <data name="InvalidResetPasswordLink" xml:space="preserve">
+    <value>Odkaz na resetování hesla je neplatný nebo vypršela jeho platnost. Zkuste to prosím znovu</value>
+  </data>
+  <data name="InvalidRetrievalAnswer" xml:space="preserve">
+    <value>Zadaná odpověď na získání hesla je neplatná. Zkontrolujte hodnotu a zkuste to znovu.</value>
+  </data>
+  <data name="InvalidRetrievalQuestion" xml:space="preserve">
+    <value>Zadaná otázka pro získání hesla je neplatná. Zkontrolujte hodnotu a zkuste to znovu.</value>
+  </data>
+  <data name="InvalidUserName" xml:space="preserve">
+    <value>Zadané uživatelské jméno je neplatné. Zkontrolujte hodnotu a zkuste to znovu.</value>
+  </data>
+  <data name="Legal" xml:space="preserve">
+    <value>Legální</value>
+  </data>
+  <data name="LockedOut" xml:space="preserve">
+    <value>Uzamčeno</value>
+  </data>
+  <data name="LockedOutText" xml:space="preserve">
+    <value>Váš účet je uzamčen. Požádejte správce o odemknutí účtu</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Přihlásit se</value>
+  </data>
+  <data name="LoginMessage" xml:space="preserve">
+    <value>Přihlaste se nebo</value>
+  </data>
+  <data name="LoginName" xml:space="preserve">
+    <value>Přihlášení do systému</value>
+  </data>
+  <data name="LoginOrEmail" xml:space="preserve">
+    <value>Přihlášení nebo e-mail</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Odhlášení ze systému</value>
+  </data>
+  <data name="LogoutText" xml:space="preserve">
+    <value>Úspěšně jste se odhlásili z aplikace.</value>
+  </data>
+  <data name="ManageAccount" xml:space="preserve">
+    <value>Spravovat účet</value>
+  </data>
+  <data name="MembershipProviderError" xml:space="preserve">
+    <value>Zprostředkovatel ověřování vrátil chybu. Ověřte zadané údaje a zkuste to znovu. Pokud problém přetrvává, obraťte se na správce systému.</value>
+  </data>
+  <data name="OutdatedBrowserMessage" xml:space="preserve">
+    <value>Používáte zastaralý prohlížeč</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Heslo</value>
+  </data>
+  <data name="PasswordChanged" xml:space="preserve">
+    <value>Vaše heslo bylo změněno.</value>
+  </data>
+  <data name="PasswordEmailSent" xml:space="preserve">
+    <value>Zkontrolujte prosím svůj e-mail a obnovte heslo.</value>
+  </data>
+  <data name="PasswordReset" xml:space="preserve">
+    <value>Resetování hesla</value>
+  </data>
+  <data name="PasswordResetDescription" xml:space="preserve">
+    <value>Zadejte přihlašovací jméno nebo e-mail a my vám pošleme odkaz pro obnovení hesla</value>
+  </data>
+  <data name="PasswordSet" xml:space="preserve">
+    <value>Vaše heslo bylo nastaveno.</value>
+  </data>
+  <data name="PasswordWatermark" xml:space="preserve">
+    <value>Nové heslo (min. 10 symbolů, číslic A písmen)</value>
+  </data>
+  <data name="PendingEmailUpdate" xml:space="preserve">
+    <value>Čeká se na aktualizaci na {0}</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Registrace</value>
+  </data>
+  <data name="RegistrationError" xml:space="preserve">
+    <value>Chyba registrace</value>
+  </data>
+  <data name="RegistrationErrorDescription" xml:space="preserve">
+    <value>Došlo k chybě při potvrzování vašeho e-mailu. Zkuste to prosím znovu.</value>
+  </data>
+  <data name="RepeatPassword" xml:space="preserve">
+    <value>Zopakujte heslo</value>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>Obnovit</value>
+  </data>
+  <data name="ShowPassword" xml:space="preserve">
+    <value>Zobrazit heslo</value>
+  </data>
+  <data name="StaySignedIn" xml:space="preserve">
+    <value>Zůstaňte přihlášeni na jeden den</value>
+  </data>
+  <data name="TesterApp" xml:space="preserve">
+    <value>Nainstalujte Survey Solutions Questionnaire Tester na tablet Android a otestujte dotazníky, které vyvíjíte v Designeru.</value>
+  </data>
+  <data name="TesterAppImageDescription" xml:space="preserve">
+    <value>Získat na Google Play</value>
+  </data>
+  <data name="ThankYou" xml:space="preserve">
+    <value>Děkuju</value>
+  </data>
+  <data name="UnknownError" xml:space="preserve">
+    <value>Došlo k neznámé chybě. Ověřte zadané údaje a zkuste to znovu. Pokud problém přetrvává, obraťte se na správce systému.</value>
+  </data>
+  <data name="UpgradeYourBrowser" xml:space="preserve">
+    <value>Prosím &lt;a href="http://browsehappy.com/"&gt;upgrade prohlížeče&lt;/a&gt; na použití návrhářské aplikace.</value>
+  </data>
+  <data name="UserCreationRequestCanceled" xml:space="preserve">
+    <value>Žádost o vytvoření uživatele byla zrušena. Ověřte zadané údaje a zkuste to znovu. Pokud problém přetrvává, obraťte se na správce systému.</value>
+  </data>
+  <data name="UserNameExists" xml:space="preserve">
+    <value>Uživatelské jméno již existuje. Zadejte jiné uživatelské jméno.</value>
+  </data>
+  <data name="UserNameForEmailExists" xml:space="preserve">
+    <value>Uživatelské jméno pro tuto e-mailovou adresu již existuje. Zadejte prosím jinou e-mailovou adresu.</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Vítejte v Survey Solutions</value>
+  </data>
+</root>

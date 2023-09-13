@@ -223,4 +223,10 @@ The following data associated with this workspace will be deleted:</value>
   <data name="Open" xml:space="preserve">
     <value>Open</value>
   </data>
+  <data name="CreatedAt" xml:space="preserve">
+    <value>Created on</value>L
+  </data>
+  <data name="Tooltip_Table_CreatedAt" xml:space="preserve">
+    <value>When the workspace was initially created. Click on the sort icon to sort by time.</value>
+  </data>
 </root>

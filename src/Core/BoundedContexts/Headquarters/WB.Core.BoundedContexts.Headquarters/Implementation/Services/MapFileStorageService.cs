@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -7,14 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using DotSpatial.Projections;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using NetTopologySuite.Dissolve;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
-using NetTopologySuite.IO.Streams;
+using NetTopologySuite.IO.Esri;
 using NetTopologySuite.Operation.Union;
 using NetTopologySuite.Simplify;
 using Newtonsoft.Json;
@@ -26,14 +25,12 @@ using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Utils;
-using IStreamProvider = NetTopologySuite.IO.Streams.IStreamProvider;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
@@ -243,20 +240,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     break;
                 case ".tif":
                     {
-                        try
+                        var tempFile = Path.Combine(mapsDirectory, mapFile.Name);
+                        var fullPath = Path.GetFullPath(tempFile);
+
+                        bool isReaded = TryReadGdalInfomation(fullPath, out var deserialized);
+
+                        if (isReaded)
                         {
-                            var tempFile = Path.Combine(mapsDirectory, mapFile.Name);
-                            var fullPath = Path.GetFullPath(tempFile);
-
-                            var valueGdalHome = this.geospatialConfig.Value.GdalHome;
-                            this.logger.LogInformation("Reading info from {FileName} with gdalinfo located in {GdalHome}", 
-                                fullPath, valueGdalHome);
-                            
-                            var startInfo = 
-                                ConsoleCommand.Read(Path.Combine(valueGdalHome, "gdalinfo"),
-                                    $"\"{fullPath}\" -json");
-                            var deserialized = JsonConvert.DeserializeObject<GdalInfoOuput>(startInfo);
-
                             if (deserialized?.Wgs84Extent != null)
                             {
                                 double xMin = double.MaxValue;
@@ -274,7 +264,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                                         yMin = Math.Min(yMin, coord[1]);
                                         yMax = Math.Max(yMax, coord[1]);
                                     }
-
                                 }
 
                                 item.XMinVal = xMin;
@@ -288,24 +277,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             else
                                 throw new InvalidOperationException(".tif file is not recognized as map");
                         }
-                        catch (Win32Exception e)
+                        else
                         {
-                            if (e.NativeErrorCode == 2)
-                            {
-                                throw new InvalidOperationException("gdalinfo utility not found. Please install gdal library and add to PATH variable", e);
-                            }
-                        }
-                        catch (NonZeroExitCodeException e)
-                        {
-                            if(!string.IsNullOrEmpty(e.ErrorOutput))
-                                logger.LogError(e.ErrorOutput);
-                            
-                            if (e.ProcessExitCode == 4)
-                            {
-                                throw new InvalidOperationException(".tif file is not recognized as map", e);
-                            }
-
-                            throw;
+                            var isGeoTiff = GeoTiffInfoReader.IsGeoTIFF(fullPath);
+                            if (!isGeoTiff)
+                                throw new InvalidOperationException(".tif file is not recognized as map");    
                         }
                     }
                     break;
@@ -313,57 +289,57 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 {
                     try
                     {
-                        var shapeFile = fileSystemAccessor.CombinePath(mapsDirectory, mapName);
+                        var shapeFilePath = fileSystemAccessor.CombinePath(mapsDirectory, mapName);
 
-                        var streamProviderRegistry = new ShapefileStreamProviderRegistry(shapeFile,
-                            validateDataPath: true,
-                            validateIndexPath: true, validateShapePath: true);
+                        using var shapefileReader = Shapefile.OpenRead(shapeFilePath);
+                       
+                        var headerBounds = shapefileReader.BoundingBox;
+                        item.XMinVal = headerBounds.MinX;
+                        item.YMinVal = headerBounds.MinY;
+                        item.XMaxVal = headerBounds.MaxX;
+                        item.YMaxVal = headerBounds.MaxY;
+                        item.ShapeType = shapefileReader.ShapeType.ToString();
+                        item.Wkid = 4326;  //geographic coordinates Wgs84
+                        item.ShapesCount = shapefileReader.RecordCount;
                         
-                        var dbfReader = new DbaseFileReader(streamProviderRegistry);
-                        var readHeader = dbfReader.GetHeader();
-                        ThrowIdInvalidFileData(mapFile.Name + ".dbf", dbfReader);
-
-                        var geometryFactory = GeometryFactory.Default;
-                        var shpReader = new ShapefileReader(streamProviderRegistry, geometryFactory);
-                        var shapeType = shpReader.Header.ShapeType;
-                        var shapeHandler = Shapefile.GetShapeHandler(shapeType);
-                        if (shapeHandler == null)
-                            throw new ArgumentException($"Can't read {mapFile.Name}.shp file. Unsupported shape type {shapeType}");
-                        
-                        ThrowIdInvalidFileData(mapFile.Name + ".shp", shpReader);
-                            
                         int? labelIndexOf = null;
 
-                        for (int i = 0; i < readHeader.NumFields; i++)
+                        for (int i = 0; i < shapefileReader.Fields.Count; i++)
                         {
-                            if (readHeader.Fields[i].Name == LabelFieldName)
+                            if (shapefileReader.Fields[i].Name == LabelFieldName)
                             {
                                 labelIndexOf = i + 1;
                                 break;
                             }
                         }
+                        
+                        CoordinateTransformationFilter coordinateTransformationFilter = null;
+                        var projection = shapefileReader.Projection;
+                        var sourceProjectionInfo = ProjectionInfo.FromEsriString(projection);
+                        if (!sourceProjectionInfo.IsLatLon)
+                        {
+                            var target = KnownCoordinateSystems.Geographic.World.WGS1984;
+                            coordinateTransformationFilter = new CoordinateTransformationFilter(sourceProjectionInfo, target);
 
-                        var headerBounds = shpReader.Header.Bounds;
-                        item.XMinVal = headerBounds.MinX;
-                        item.YMinVal = headerBounds.MinY;
-                        item.XMaxVal = headerBounds.MaxX;
-                        item.YMaxVal = headerBounds.MaxY;
-                        item.ShapeType = shapeType.ToString();
-                        item.Wkid = 4326; //geographic coordinates Wgs84
-                        item.ShapesCount = readHeader.NumRecords;
+                            var minHeaderCoordinate = coordinateTransformationFilter.Transform(headerBounds.MinX, headerBounds.MinY);
+                            item.XMinVal = minHeaderCoordinate.X;
+                            item.YMinVal = minHeaderCoordinate.Y;
+                            var maxHeaderCoordinate = coordinateTransformationFilter.Transform(headerBounds.MaxX, headerBounds.MaxY);
+                            item.XMaxVal = maxHeaderCoordinate.X;
+                            item.YMaxVal = maxHeaderCoordinate.Y;
+                        }
                         
                         FeatureCollection fc = new FeatureCollection();
                         HashSet<string> checkOnUnique = new HashSet<string>();
                         Dictionary<string, int> duplicateLabels = new Dictionary<string, int>();
 
-                        using var rd = new ShapefileDataReader(streamProviderRegistry, geometryFactory);
-                        while (rd.Read())
+                        while (shapefileReader.Read(out bool deleted, out var readFeature))
                         {
                             AttributesTable attribs = new AttributesTable();
 
                             if (labelIndexOf.HasValue)
                             {
-                                var labelValue = rd.GetValue(labelIndexOf.Value).ToString();
+                                var labelValue = readFeature.Attributes[LabelFieldName].ToString();
 
                                 if (!string.IsNullOrWhiteSpace(labelValue))
                                 {
@@ -377,7 +353,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                                 }
                             }
 
-                            IFeature feature = new Feature(rd.Geometry, attribs);
+                            var featureGeometry = Transform(readFeature.Geometry, coordinateTransformationFilter);
+                            IFeature feature = new Feature(featureGeometry, attribs);
                             fc.Add(feature);
                         }
 
@@ -402,8 +379,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             UnaryUnionOp c = new UnaryUnionOp(fc.Select(f => f.Geometry).ToArray());
                             var geometryCollection = c.Union();
                             //DouglasPeuckerSimplifier simplifier = new DouglasPeuckerSimplifier(geometryCollection);
-                            TopologyPreservingSimplifier simplifier =
-                                new TopologyPreservingSimplifier(geometryCollection);
+                            TopologyPreservingSimplifier simplifier = new TopologyPreservingSimplifier(geometryCollection);
                             var simplifierGeometry = simplifier.GetResultGeometry();
 
                             FeatureCollection unionFc = new FeatureCollection();
@@ -431,23 +407,56 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             return item;
         }
 
-        private void ThrowIdInvalidFileData(string mapFile, IEnumerable reader)
+        private bool TryReadGdalInfomation(string fullPath, out GdalInfoOuput gdalInfo)
         {
-            IEnumerator enumerator = null;
+            gdalInfo = null;
+            
+            var valueGdalHome = this.geospatialConfig.Value.GdalHome;
 
+            if (string.IsNullOrWhiteSpace(valueGdalHome))
+                return false;
+                
             try
             {
-                enumerator = reader.GetEnumerator();
+                this.logger.LogInformation("Reading info from {FileName} with gdalinfo located in {GdalHome}", 
+                    fullPath, valueGdalHome);
+            
+                var startInfo = ConsoleCommand.Read(Path.Combine(valueGdalHome, "gdalinfo"), $"\"{fullPath}\" -json");
+                gdalInfo = JsonConvert.DeserializeObject<GdalInfoOuput>(startInfo);
+
+                return true;
             }
-            catch (Exception ex)
+            catch (Win32Exception e)
             {
-                logger.LogError(ex, "Can't read {MapName} file", mapFile);
-                throw new ArgumentException($"Can't read {mapFile} file. File is corrupt.", ex);
+                if (e.NativeErrorCode == 2)
+                {
+                    //throw new InvalidOperationException("gdalinfo utility not found. Please install gdal library and add to PATH variable", e);
+                    return false;
+                }
             }
-            finally
+            catch (NonZeroExitCodeException e)
             {
-                (enumerator as IDisposable)?.Dispose();
+                if(!string.IsNullOrEmpty(e.ErrorOutput))
+                    logger.LogError(e.ErrorOutput);
+                
+                if (e.ProcessExitCode == 4)
+                {
+                    throw new InvalidOperationException(".tif file is not recognized as map", e);
+                }
+
+                throw;
             }
+            
+            return false;
+        }
+
+        private Geometry Transform(Geometry geometry, CoordinateTransformationFilter coordinateTransformation)
+        {
+            if (coordinateTransformation == null)
+                return geometry;
+            
+            geometry.Apply(coordinateTransformation);
+            return geometry;
         }
 
         private static string GetGeoJson(FeatureCollection fc)

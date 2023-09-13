@@ -248,6 +248,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
     {
         public string Id { get; set; }
         public string Title { get; set; }
+        public string Name { get; set; }
         public bool IsDisabled { get; set; }
         public bool HideIfDisabled { get; set; }
     }

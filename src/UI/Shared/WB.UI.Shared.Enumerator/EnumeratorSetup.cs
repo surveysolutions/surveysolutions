@@ -133,7 +133,7 @@ namespace WB.UI.Shared.Enumerator
         {
             base.FillValueConverters(registry);
             
-            Mvx.CallbackWhenRegistered<IMvxValueCombinerRegistry>(combinerRegistry => 
+            Mvx.IoCProvider.CallbackWhenRegistered<IMvxValueCombinerRegistry>(combinerRegistry => 
                 combinerRegistry.AddOrOverwriteFrom(Assembly.GetAssembly(typeof(LayoutBackgroundStyleValueCombiner))));
 
             registry.AddOrOverwrite("EnumToString", new EnumToStringConverter());
@@ -152,11 +152,12 @@ namespace WB.UI.Shared.Enumerator
             registry.AddOrOverwrite("AudioNoiseTypeToDot", new AudioNoiseTypeToDotConverter());
 
             registry.AddOrOverwrite("Localization", new EnumeratorLocalizationValueConverter());
-            registry.AddOrOverwrite("StatusToDasboardBackground", new StatusToDasboardBackgroundConverter());
+            registry.AddOrOverwrite("StatusToDashboardBackground", new StatusToDashboardBackgroundConverter());
             registry.AddOrOverwrite("CalendarEventToColor", new CalendarEventToColorConverter());
             registry.AddOrOverwrite("InterviewStatusToColor", new InterviewStatusToColorConverter());
             registry.AddOrOverwrite("InterviewStatusToDrawable", new InterviewStatusToDrawableConverter());
             registry.AddOrOverwrite("InterviewStatusToButton", new InterviewStatusToButtonConverter());
+            registry.AddOrOverwrite("IsCoverVariableToColor", new IsCoverVariableToColorConverter());
             registry.AddOrOverwrite("SynchronizationStatusToDrawable", new SynchronizationStatusToDrawableConverter());
             registry.AddOrOverwrite("ValidationStyleBackground", new TextEditValidationStyleBackgroundConverter());
             registry.AddOrOverwrite("IsSynchronizationFailOrCanceled", new IsSynchronizationFailOrCanceledConverter());
@@ -188,7 +189,7 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<ProgressBar>("IndeterminateMode", (view) => new ProgressBarIndeterminateModeBinding(view));
             registry.RegisterCustomBindingFactory<View>("BackgroundStyle", (view) => new ViewBackgroundDrawableBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("Bold", textView => new TextViewBoldBinding(textView));
-            registry.RegisterCustomBindingFactory<View>("BackgroundColor", textView => new ViewBackgroundColorBinding(textView));
+            registry.RegisterCustomBindingFactory<View>("BackgroundColor", view => new ViewBackgroundColorBinding(view));
             registry.RegisterCustomBindingFactory<EditText>("DateChange", editText => new EditTextDateBinding(editText));
             registry.RegisterCustomBindingFactory<Button>("ButtonGroupStyle", button => new ButtonGroupStyleBinding(button));
             registry.RegisterCustomBindingFactory<Button>("ButtonHasWarningOrSuccess", button => new ButtonHasWarningOrSuccessBinding(button));
@@ -198,7 +199,9 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<View>("HideKeyboardOnClick", view => new ViewHideKeyboardOnClickBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("OnDone", view => new TextViewOnDoneBinding(view));
             registry.RegisterCustomBindingFactory<ViewGroup>("ColorByInterviewStatus", view => new ViewGroupColorByInterviewStatusBinding(view));
+            registry.RegisterCustomBindingFactory<ViewGroup>("ColorByDashboardGroupType", view => new DashboardColorByDashboardGroupTypeBinding(view));
             registry.RegisterCustomBindingFactory<ViewGroup>("StatusBarColorByInterviewStatus", view => new ViewGroupStatusBarColorByInterviewStatusBinding(view));
+            registry.RegisterCustomBindingFactory<ViewGroup>("StatusBarColorByDashboardGroupType", view => new DashboardStatusBarColorByDashboardGroupTypeBinding(view));
             registry.RegisterCustomBindingFactory<View>("Transparent", view => new ViewTransparentBinding(view));
             registry.RegisterCustomBindingFactory<View>("PaddingLeft", view => new ViewPaddingLeftBinding(view));
             registry.RegisterCustomBindingFactory<View>("Activated", view => new ViewActivatedBinding(view));

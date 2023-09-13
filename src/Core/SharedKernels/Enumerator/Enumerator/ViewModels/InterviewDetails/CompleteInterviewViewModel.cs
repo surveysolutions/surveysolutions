@@ -6,7 +6,6 @@ using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
-using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -19,7 +18,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public class CompleteInterviewViewModel : MvxViewModel, IDisposable
+    public class CompleteInterviewViewModel : BaseViewModel
     {
         protected readonly IViewModelNavigationService viewModelNavigationService;
         
@@ -28,7 +27,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly ILastCompletionComments lastCompletionComments;
         protected readonly IPrincipal principal;
 
-        
         protected readonly IMvxMessenger Messenger;
         
         public InterviewStateViewModel InterviewState { get; set; }
@@ -175,7 +173,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 logger.Warn("Interview has unexpected status", e);
             }
 
-            this.lastCompletionComments.Remove(interviewId);
             await this.CloseInterviewAfterComplete(this.RequestWebInterview);
         }
 
@@ -186,7 +183,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             Messenger.Publish(new InterviewCompletedMessage(this));
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             if (isDisposed)
                 return;
@@ -205,6 +202,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
 
             this.InterviewState?.DisposeIfDisposable();
+            
+            base.Dispose();
         }
     }
 }

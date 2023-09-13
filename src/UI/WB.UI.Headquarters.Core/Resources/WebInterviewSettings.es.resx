@@ -250,7 +250,7 @@
     <value>Título:</value>
   </data>
   <data name="WebInterviewSetupFor_Title" xml:space="preserve">
-    <value>Configuración de la entrevista web para</value>
+      <value>Configuración de la entrevista web: </value>
   </data>
   <data name="WelcomePage" xml:space="preserve">
     <value>Pagina de bienvenida</value>

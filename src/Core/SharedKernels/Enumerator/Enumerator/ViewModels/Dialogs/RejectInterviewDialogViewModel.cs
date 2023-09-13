@@ -47,7 +47,7 @@ public class RejectInterviewDialogViewModel: ActionDialogViewModel<RejectIntervi
     public override bool NeedAddSupervisorToResponsibles => false;
     public override bool CanApply => true;
 
-    protected override Task ApplyAsync()
+    protected override async Task ApplyAsync()
     {
         try
         {
@@ -62,7 +62,7 @@ public class RejectInterviewDialogViewModel: ActionDialogViewModel<RejectIntervi
                 ? new RejectInterviewToInterviewerCommand(currentUserId, interviewId, selectedResponsible.Id, Comments)
                 : new RejectInterviewCommand(interviewId, currentUserId, Comments);
 
-            this.commandService.Execute(command);
+            await this.commandService.ExecuteAsync(command);
 
             IAuditLogEntity logEntity = isNewResponsibleSelected
                 ? new RejectInterviewToInterviewerAuditLogEntity(interviewId, interview.GetInterviewKey().ToString(), selectedResponsible.Id, selectedResponsible.Login)
@@ -74,9 +74,7 @@ public class RejectInterviewDialogViewModel: ActionDialogViewModel<RejectIntervi
         }
         finally
         {
-            this.Cancel();
+            await this.Cancel();
         }
-        
-        return Task.CompletedTask;
     }
 }

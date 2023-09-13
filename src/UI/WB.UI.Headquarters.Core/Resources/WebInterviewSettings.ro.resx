@@ -250,7 +250,7 @@
     <value>Titlu:</value>
   </data>
   <data name="WebInterviewSetupFor_Title" xml:space="preserve">
-    <value>Configurare interviu web pentru</value>
+      <value>Configurare interviu web: </value>
   </data>
   <data name="WelcomePage" xml:space="preserve">
     <value>Pagina de bun venit</value>

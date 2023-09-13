@@ -165,4 +165,22 @@
   <data name="QuestionTypeText" xml:space="preserve">
     <value>نص</value>
   </data>
+  <data name="CoverPageSection" xml:space="preserve">
+    <value>غطاء</value>
+  </data>
+  <data name="GeometryTypeMultipoint" xml:space="preserve">
+    <value>متعدد النقاط</value>
+  </data>
+  <data name="GeometryTypePoint" xml:space="preserve">
+    <value>نقطة</value>
+  </data>
+  <data name="GeometryTypePolygon" xml:space="preserve">
+    <value>مضلع</value>
+  </data>
+  <data name="GeometryTypePolyline" xml:space="preserve">
+    <value>بوليلاين</value>
+  </data>
+  <data name="QuestionTypeGeography" xml:space="preserve">
+    <value>جغرافيا</value>
+  </data>
 </root>

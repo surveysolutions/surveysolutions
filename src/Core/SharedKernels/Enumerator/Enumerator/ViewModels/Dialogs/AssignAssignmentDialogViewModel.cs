@@ -55,10 +55,10 @@ public class AssignAssignmentDialogViewModel: ActionDialogViewModel<AssignAssign
         }
     }
 
-    protected override Task ApplyAsync()
+    protected override async Task ApplyAsync()
     {
         if (!this.CanApply) 
-            return Task.CompletedTask;
+            return;
         this.CanApply = false;
 
         var responsible = this.ResponsibleItems.Single(x => x.IsSelected);
@@ -80,10 +80,8 @@ public class AssignAssignmentDialogViewModel: ActionDialogViewModel<AssignAssign
         }
         finally
         {
-            this.Cancel();
+            await this.Cancel();
         }
-        
-        return Task.CompletedTask;
     }
 
     protected override Guid? GetCurrentEntityResponsible(AssignAssignmentDialogArgs parameter)

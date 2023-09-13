@@ -1,5 +1,5 @@
 <template>
-    <div class="question static-text"
+    <div class="question static-text variable"
         v-if="!$me.isLoading"
         :id="hash">
         <div class="question-editor">
@@ -41,7 +41,7 @@ export default {
             let value = this.$me.value && this.$me.value != ''
                 ? this.$me.value
                 : this.$t('WebInterviewUI.NotCalculated')
-            return this.$me.title + ' - ' + value
+            return (this.$me.title || this.$me.name) + ' - ' + value
         },
     },
     methods : {

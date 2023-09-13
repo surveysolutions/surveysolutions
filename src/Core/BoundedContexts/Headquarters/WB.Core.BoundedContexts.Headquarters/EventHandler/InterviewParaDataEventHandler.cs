@@ -17,6 +17,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -525,6 +526,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                                 {
                                     newParameters["roster"] = roster;
                                 }
+                                
+                                if (parameters.TryGetValue("conditions", out var conditions))
+                                {
+                                    newParameters["conditions"] = conditions;
+                                }
                             }
                         }
                         return new InterviewHistoricalRecordView(0, action, userName, userRole, newParameters, timestamp, offset);
@@ -638,6 +644,15 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return new Dictionary<string, string> { { "comment", comment } };
         }
 
+        private Dictionary<string, string> CreateQuestionValidityParameters(Guid questionId,
+            decimal[] propagationVector, IReadOnlyList<FailedValidationCondition> failedValidationConditions)
+        {
+            var parameters = CreateQuestionParameters(questionId, propagationVector);
+            parameters.Add("conditions", string.Join(",", failedValidationConditions));
+            
+            return parameters;
+        }
+
         private Dictionary<string, string> CreateQuestionParameters(Guid questionId, decimal[] propagationVector)
         {
             var result = new Dictionary<string, string>()
@@ -658,12 +673,12 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<AnswersDeclaredInvalid> @event)
         {
-            foreach (var question in @event.Payload.FailedValidationConditions.Keys)
+            foreach (var failedQuestion in @event.Payload.FailedValidationConditions)
             {
                 this.AddHistoricalRecord(view, InterviewHistoricalAction.QuestionDeclaredInvalid, null,
                     @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
                     @event.Payload.OriginDate?.Offset,
-                this.CreateQuestionParameters(question.Id, question.RosterVector));
+                this.CreateQuestionValidityParameters(failedQuestion.Key.Id, failedQuestion.Key.RosterVector, failedQuestion.Value));
             }
             return view;
         }

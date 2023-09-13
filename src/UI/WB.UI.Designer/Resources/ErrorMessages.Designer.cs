@@ -376,7 +376,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An unexpected error occurred. Please try acessing Designer again later..
+        ///   Looks up a localized string similar to An unexpected error occurred. Please try accessing Designer again later..
         /// </summary>
         public static string Unexpected_error_occurred_Please_try_again_later {
             get {

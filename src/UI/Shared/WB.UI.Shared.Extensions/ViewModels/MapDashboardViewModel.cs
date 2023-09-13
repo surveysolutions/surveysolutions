@@ -642,7 +642,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     markerColor = Color.FromArgb(100,25,0);
                     break;
                 default:
-                    markerColor = Color.FromArgb(255, 255, 0);
+                    markerColor = Color.FromArgb(163, 113, 247);
                     break;
             }
 
@@ -701,7 +701,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             return new CompositeSymbol(new[]
             {
                 new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, Color.White, 22 * size), //for contrast
-                new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, Color.FromArgb(255, 255, 0), 16 * size)
+                new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, Color.FromArgb(163, 113, 247), 16 * size)
             });
         }
 

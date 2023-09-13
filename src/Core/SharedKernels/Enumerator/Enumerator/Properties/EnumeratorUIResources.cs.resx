@@ -995,4 +995,10 @@ Při příští synchronizaci se objeví na zařízení tazatele</value>
   <data name="Prefs_EventChunkSizeTitle" xml:space="preserve">
     <value>Velikost části události</value>
   </data>
+  <data name="BluetoothPermissionRequired" xml:space="preserve">
+    <value>Pro synchronizaci offline je vyžadováno oprávnění Bluetooth</value>
+  </data>
+  <data name="NearbyPermissionRequired" xml:space="preserve">
+    <value>Pro synchronizaci offline je vyžadováno oprávnění Wi-Fi zařízení v okolí</value>
+  </data>
 </root>

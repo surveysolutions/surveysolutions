@@ -85,6 +85,8 @@ namespace WB.UI.Headquarters.Controllers
             
             var model = new QuestionnaireDetailsModel
             {
+                IsObserver = this.authorizedUser.IsObserver,
+                IsAdmin = this.authorizedUser.IsAdministrator,
                 QuestionnaireId = questionnaire.QuestionnaireId,
                 Title = questionnaire.Title,
                 Version = questionnaire.Version,
@@ -99,7 +101,15 @@ namespace WB.UI.Headquarters.Controllers
                 Variable = browseItem.Variable,
                 IsObserving = this.authorizedUser.IsObserving,
                 DefaultLanguageName = questionnaire.DefaultLanguageName,
-                ExposedVariablesUrl = Url.Action("ExposedVariables", "Questionnaires")
+                ExposedVariablesUrl = Url.Action("ExposedVariables", "Questionnaires"),
+                TakeNewInterviewUrl = Url.Action("TakeNew", "HQ"),
+                BatchUploadUrl = Url.Action("Upload", "Assignments"),
+                MigrateAssignmentsUrl = Url.Action("UpgradeAssignments", "SurveySetup"),
+                WebInterviewUrl = Url.Action("Settings", "WebInterviewSetup"),
+                DownloadLinksUrl = Url.Action("Download", "LinksExport"),
+                SendInvitationsUrl = Url.Action("SendInvitations", "WebInterviewSetup"),
+                CloneQuestionnaireUrl = Url.Action("Clone", "Questionnaires"),
+                ExportQuestionnaireUrl = Url.Action("ExportQuestionnaire", "HQ")
         };
 
             if (browseItem.ImportedBy.HasValue && browseItem.ImportedBy != Guid.Empty)

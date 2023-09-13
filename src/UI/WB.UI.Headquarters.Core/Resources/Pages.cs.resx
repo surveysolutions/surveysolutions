@@ -1371,9 +1371,6 @@
   <data name="QuestionnaireNameFormat" xml:space="preserve">
     <value>{{name}} (ver. {{version}})</value>
   </data>
-  <data name="QuestionnaireNameVersionFirst" xml:space="preserve">
-    <value>(ver. {1}) {0}</value>
-  </data>
   <data name="RecoveryCode" xml:space="preserve">
     <value>Obnovovací kód</value>
   </data>
@@ -1656,5 +1653,77 @@
   </data>
   <data name="WebsitePathIsTooLong_Title" xml:space="preserve">
     <value>Složka obsahující web má příliš dlouhý název cesty. Přesuňte prosím web do jiné složky s kratším názvem.</value>
+  </data>
+  <data name="AccountManage_ApiTokens" xml:space="preserve">
+    <value>Tokeny rozhraní API</value>
+  </data>
+  <data name="AccountManage_StatusApiToken" xml:space="preserve">
+    <value>Přístup ke koncovým bodům REST a GraphQL API je aktuálně </value>
+  </data>
+  <data name="AntiForgeryError_Title" xml:space="preserve">
+    <value>Neplatná data požadavku.</value>
+  </data>
+  <data name="AreaQuestion_RequestedAccuracy" xml:space="preserve">
+    <value>Přesnost</value>
+  </data>
+  <data name="AreaQuestion_RequestedFrequency" xml:space="preserve">
+    <value>Frekvence</value>
+  </data>
+  <data name="AutolockDescription" xml:space="preserve">
+    <value>Účet je automaticky uzamčen</value>
+  </data>
+  <data name="Filters_None" xml:space="preserve">
+    <value>Žádný</value>
+  </data>
+  <data name="Filters_Shapefiles" xml:space="preserve">
+    <value>Shapefiles</value>
+  </data>
+  <data name="GlobalSettings_DeleteQuestionnaireConfirmation" xml:space="preserve">
+    <value>Opravdu chcete odstranit dotazník? Všechny rozhovory vedené aktuálním dotazníkem, včetně rozhovorů shromážděných na tabletech, a to i ty, které aktuálně nevidíte na serveru, budou ztraceny.</value>
+  </data>
+  <data name="GlobalSettings_DeleteQuestionnaireWarning" xml:space="preserve">
+    <value>Varování! Jedná se o nevratné jednání</value>
+  </data>
+  <data name="Map_NoUsers" xml:space="preserve">
+    <value>Mapa není přiřazena žádnému uživateli</value>
+  </data>
+  <data name="MapDetails_DuplicateLabelsWarning" xml:space="preserve">
+    <value>Varování! Soubor shapefile obsahuje duplicitní popisky</value>
+  </data>
+  <data name="MapDetails_FullShapefilesDisclaimer" xml:space="preserve">
+    <value>Tento náhled ukazuje nahraný shapefile překrývající základní vrstvu satelitního snímku.</value>
+  </data>
+  <data name="MapDetails_SelectUser" xml:space="preserve">
+    <value>Vyberte uživatele</value>
+  </data>
+  <data name="MapDetails_ShapesCount" xml:space="preserve">
+    <value>Počet tvarů</value>
+  </data>
+  <data name="MapDetails_ShapeType" xml:space="preserve">
+    <value>Typ tvaru</value>
+  </data>
+  <data name="MapDetails_SimplifiedShapefilesDisclaimer" xml:space="preserve">
+    <value>Tento náhled ukazuje zmenšenou verzi nahraného souboru shapefile překrývající základní vrstvu satelitního snímku. Původní odeslaný soubor shapefile se v tomto náhledu nezobrazuje kvůli jeho velké velikosti.</value>
+  </data>
+  <data name="MapDetails_Unlink" xml:space="preserve">
+    <value>Rozpojit</value>
+  </data>
+  <data name="MapDetails_UploadedBy" xml:space="preserve">
+    <value>Nahrál</value>
+  </data>
+  <data name="MapList_MapType" xml:space="preserve">
+    <value>Typ</value>
+  </data>
+  <data name="MapUserLink_DiscardConfirm1" xml:space="preserve">
+    <value>Pokud se jedná o posledního uživatele v týmu propojeného s mapou, ztratí nadřízený týmu přístup k mapě.</value>
+  </data>
+  <data name="Profile_IssueApiToken" xml:space="preserve">
+    <value>Vydat</value>
+  </data>
+  <data name="Tablet_RelinkMessage" xml:space="preserve">
+    <value>S tímto účtem je propojeno jedno zařízení.</value>
+  </data>
+  <data name="Unlock" xml:space="preserve">
+    <value>Odemknout</value>
   </data>
 </root>

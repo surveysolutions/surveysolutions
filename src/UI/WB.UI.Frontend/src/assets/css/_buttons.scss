@@ -625,3 +625,14 @@ a.disabled {
     border: 2px solid #FD8900;
     color: #FD8900;
 }
+
+.btn-assignment {    
+    color: $white;
+    background-color: $assignment-color;
+    border-color: $assignment-color;
+    &:hover,
+    &:focus,
+    &:active{
+        color: $white;        
+    }
+}

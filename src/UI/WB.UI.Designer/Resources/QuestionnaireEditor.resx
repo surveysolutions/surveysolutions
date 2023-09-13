@@ -673,9 +673,6 @@
   <data name="RosterName" xml:space="preserve">
     <value>Roster name</value>
   </data>
-  <data name="RosterShowStrings" xml:space="preserve">
-    <value>Show strings</value>
-  </data>
   <data name="RosterSource" xml:space="preserve">
     <value>Roster source</value>
   </data>
@@ -762,9 +759,6 @@
   </data>
   <data name="SettingsWhoHasAccess" xml:space="preserve">
     <value>who has access</value>
-  </data>
-  <data name="ShowList" xml:space="preserve">
-    <value>Show list</value>
   </data>
   <data name="ValidationCondition" xml:space="preserve">
     <value>Validation condition</value>
@@ -868,9 +862,6 @@
   </data>
   <data name="QuestionPattern" xml:space="preserve">
     <value>Pattern</value>
-  </data>
-  <data name="QuestionShowStrings" xml:space="preserve">
-    <value>Show strings</value>
   </data>
   <data name="QuestionUploadOptions" xml:space="preserve">
     <value>Upload new categories</value>
@@ -1588,5 +1579,8 @@ You entered an invalid input. Each line should follow the format: "Title...Paren
   </data>
   <data name="AddEnablingCondition" xml:space="preserve">
     <value>Add enabling condition</value>
+  </data>
+  <data name="ManageAccount" xml:space="preserve">
+    <value>Manage account</value>
   </data>
 </root>

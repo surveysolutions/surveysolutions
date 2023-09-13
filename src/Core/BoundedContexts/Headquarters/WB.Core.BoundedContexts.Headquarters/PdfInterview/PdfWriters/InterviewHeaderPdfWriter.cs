@@ -162,8 +162,8 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
 
         private static Stream? GetEmbeddedResource(string filename)
         {
-            return Assembly.GetEntryAssembly()!
-                .GetManifestResourceStream($"WB.UI.Headquarters.Content.images.{filename}");
+            var assembly = Assembly.GetAssembly(typeof(InterviewHeaderPdfWriter))!;
+            return assembly.GetManifestResourceStream($"WB.Core.BoundedContexts.Headquarters.PdfInterview.images.{filename}");
         }
     }
 }

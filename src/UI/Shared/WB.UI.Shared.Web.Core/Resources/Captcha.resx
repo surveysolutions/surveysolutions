@@ -121,12 +121,15 @@
     <value>Enter the text you see above</value>
   </data>
   <data name="InvalidCaptcha" xml:space="preserve">
-    <value>Invalid captcha</value>
+      <value>Invalid captcha</value>
   </data>
   <data name="Required" xml:space="preserve">
     <value>Is required field</value>
   </data>
   <data name="TryAnother" xml:space="preserve">
     <value>Try another one</value>
+  </data>
+  <data name="CaptchaError" xml:space="preserve">
+      <value>Generate captcha error. Please contact your system administrator.</value>
   </data>
 </root>

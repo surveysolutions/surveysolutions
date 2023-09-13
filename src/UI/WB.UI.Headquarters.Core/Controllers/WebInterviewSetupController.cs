@@ -188,6 +188,8 @@ namespace WB.UI.Headquarters.Controllers
             model.EmailOnComplete = config.EmailOnComplete;
             model.AttachAnswersInEmail = config.AttachAnswersInEmail;
             model.AllowSwitchToCawiForInterviewer = config.AllowSwitchToCawiForInterviewer;
+            model.DownloadLinksUrl = Url.Action("Download", "LinksExport");
+            model.SendInvitationsUrl = Url.Action("SendInvitations", "WebInterviewSetup");
 
             return View(model);
         }
@@ -254,6 +256,8 @@ namespace WB.UI.Headquarters.Controllers
         public bool EmailOnComplete { get; set; }
         public bool AttachAnswersInEmail { get; set; }
         public bool AllowSwitchToCawiForInterviewer { set;get;}
+        public string DownloadLinksUrl { get; set; }
+        public string SendInvitationsUrl { get; set; }
     }
 
     public class EmailTextTemplateViewModel

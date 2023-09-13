@@ -703,7 +703,8 @@ namespace WB.Tests.Abc.TestFactories
             bool useFomatting = false,
             IEnumerable<ValidationCondition> validationConditions = null,
             int? countOfDecimalPlaces = null,
-            IEnumerable<Answer> specialValues = null)
+            IEnumerable<Answer> specialValues = null, 
+            bool preFilled = false)
             => new NumericQuestion
             {
                 PublicKey = id ?? Guid.NewGuid(),
@@ -714,7 +715,8 @@ namespace WB.Tests.Abc.TestFactories
                 ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 ValidationExpression = validationExpression,
                 CountOfDecimalPlaces = countOfDecimalPlaces,
-                Answers = new List<Answer>(specialValues ?? new Answer[] { })
+                Answers = new List<Answer>(specialValues ?? new Answer[] { }),
+                Featured = preFilled,
             };
 
         public Answer Option(string value = null, string text = null, string parentValue = null, Guid? id = null)
@@ -1140,7 +1142,8 @@ namespace WB.Tests.Abc.TestFactories
             string linkedFilter = null,
             string optionsFilter = null,
             bool showAsList = false,
-            Guid? categoryId = null)
+            Guid? categoryId = null,
+            bool isPrefilled = false)
             => new SingleQuestion
             {
                 PublicKey = id ?? Guid.NewGuid(),
@@ -1160,6 +1163,7 @@ namespace WB.Tests.Abc.TestFactories
                 },
                 ShowAsList = showAsList,
                 CategoriesId = categoryId,
+                Featured = isPrefilled,
             };
 
         public StaticText StaticText(
@@ -1309,7 +1313,7 @@ namespace WB.Tests.Abc.TestFactories
 
             foreach (var workspace in workspaces)
             {
-                var ws = new Workspace(workspace, workspace);
+                var ws = new Workspace(workspace, workspace, DateTime.UtcNow);
                 user.Workspaces.Add(new WorkspacesUsers(ws, user, supervisorId != null ? new HqUser{Id = supervisorId.Value}: null));
             }
             
@@ -2631,7 +2635,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public Workspace Workspace(string name = null, bool? disabled = false)
         {
-            var ws  = new Workspace(name ?? Guid.NewGuid().FormatGuid(), (name ?? "") + " Display name1");
+            var ws  = new Workspace(name ?? Guid.NewGuid().FormatGuid(), (name ?? "") + " Display name1", DateTime.UtcNow);
             
             if(disabled == true)
                 ws.Disable();

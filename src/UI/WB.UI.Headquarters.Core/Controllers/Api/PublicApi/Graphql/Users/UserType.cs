@@ -18,15 +18,16 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
 
             ConfigureUserFields(descriptor);
 
-            descriptor.Field(x => x.Workspaces).Type<NonNullType<ListType<NonNullType<StringType>>>>()
-                .Resolver(ctx => ctx.Parent<HqUser>().Workspaces.Select(w => w.Workspace.Name));
+            descriptor.Field(x => x.Workspaces)
+                .Type<NonNullType<ListType<NonNullType<StringType>>>>()
+                .Resolve(ctx => ctx.Parent<HqUser>().Workspaces.Select(w => w.Workspace.Name));
         }
 
         protected static void ConfigureUserFields(IObjectTypeDescriptor<HqUser> descriptor)
         {
             descriptor.Field(x => x.Id).Type<NonNullType<IdType>>();
             descriptor.Field("role").Type<NonNullType<EnumType<UserRoles>>>()
-                .Resolver(ctx => ctx.Parent<HqUser>().Role);
+                .Resolve(ctx => ctx.Parent<HqUser>().Role);
             descriptor.Field(x => x.UserName).Type<NonNullType<StringType>>();
             descriptor.Field(x => x.FullName).Type<StringType>();
             descriptor.Field(x => x.Email).Type<StringType>();
@@ -35,7 +36,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
             descriptor.Field(x => x.IsLocked).Type<BooleanType>();
             descriptor.Field(x => x.IsArchived).Type<BooleanType>();
             descriptor.Field("isRelinkAllowed").Type<BooleanType>()
-                .Resolver(ctx => ctx.Parent<HqUser>().Profile.AllowRelinkDate.HasValue);
+                .Resolve(ctx => ctx.Parent<HqUser>().Profile.AllowRelinkDate.HasValue);
         }
     }
 }

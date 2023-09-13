@@ -549,9 +549,6 @@
   <data name="QuestionScope" xml:space="preserve">
     <value>Alcance de la pregunta</value>
   </data>
-  <data name="QuestionShowStrings" xml:space="preserve">
-    <value>Mostrar cadenas</value>
-  </data>
   <data name="QuestionText" xml:space="preserve">
     <value>Texto de la pregunta</value>
   </data>
@@ -587,9 +584,6 @@
   </data>
   <data name="RosterName" xml:space="preserve">
     <value>Nombre de lista</value>
-  </data>
-  <data name="RosterShowStrings" xml:space="preserve">
-    <value>Mostrar cadenas</value>
   </data>
   <data name="RosterSource" xml:space="preserve">
     <value>Fuente de lista</value>
@@ -686,9 +680,6 @@
   </data>
   <data name="SettingsWhoHasAccess" xml:space="preserve">
     <value>Quien tiene acceso:</value>
-  </data>
-  <data name="ShowList" xml:space="preserve">
-    <value>Mostrar lista</value>
   </data>
   <data name="SideBarAddMacro" xml:space="preserve">
     <value>adicionar nueva Macro</value>
@@ -1417,5 +1408,8 @@
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Si</value>
+  </data>
+  <data name="ManageAccount" xml:space="preserve">
+      <value>Administrar cuenta</value>
   </data>
 </root>

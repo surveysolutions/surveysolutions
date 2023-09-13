@@ -15,7 +15,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
 {
-    public class OverviewViewModel : MvxViewModel, IDisposable
+    public class OverviewViewModel : BaseViewModel
     {
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IImageFileStorage fileStorage;
@@ -154,7 +154,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             }
             
             var variable = interview.GetVariable(interviewerEntityIdentity);
-            if (variable != null && questionnaire.IsPrefilled(interviewerEntityIdentity.Id))
+            if (variable != null && questionnaire.IsIdentifying(interviewerEntityIdentity.Id))
             {
                 return new OverviewVariableViewModel(variable, interview)
                 {
@@ -170,7 +170,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
 
         public DynamicTextViewModel Name { get; private set; }
 
-        public void Dispose()
+        public override void Dispose()
         {
             audioService?.Dispose();
             nameViewModel?.Dispose();
@@ -180,6 +180,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             {
                 item?.Dispose();
             }
+            
+            base.Dispose();
         }
     }
 }

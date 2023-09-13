@@ -713,7 +713,7 @@ namespace WB.Tests.Abc.TestFactories
                     Mock.Of<IOptions<IdentityOptions>>(x => x.Value == new IdentityOptions {Password = defaultPasswordOptions} )),
                 authorizedUser ?? Stub<IAuthorizedUser>.WithNotEmptyValues,
                 sessionProvider ?? Stub<IUnitOfWork>.WithNotEmptyValues,
-                workspacesService ?? Create.Service.WorkspacesService(Mock.Of<IPlainStorageAccessor<Workspace>>()));
+                workspacesService ?? Create.Service.WorkspacesService(Mock.Of<IWorkspacesStorage>()));
         }
 
         public ICsvReader CsvReader<T>(string[] headers, params T[] rows)
@@ -1398,21 +1398,26 @@ namespace WB.Tests.Abc.TestFactories
                 interviewerInterviewsFactory ?? Mock.Of<IInterviewInformationFactory>());
         }
 
-        public WorkspacesService WorkspacesService(IPlainStorageAccessor<Workspace> workspaces,
+        public WorkspacesService WorkspacesService(IWorkspacesStorage workspaces,
             IServiceLocator serviceLocator = null)
         {
             return new WorkspacesService(
                 new UnitOfWorkConnectionSettings(),
                 Mock.Of<Microsoft.Extensions.Logging.ILoggerProvider>(),
                 Mock.Of<IAuthorizedUser>(),
-                workspaces,
                 new TestPlainStorage<WorkspacesUsers>(),
                 Mock.Of<IUserRepository>(),
                 Mock.Of<ILogger<WorkspacesService>>(),
                 Mock.Of<ISystemLog>(),
                 Mock.Of<IWorkspacesUsersCache>(),
-                new NoScopeInScopeExecutor(serviceLocator ?? Create.Service.ServiceLocatorService())
+                new NoScopeInScopeExecutor(serviceLocator ?? Create.Service.ServiceLocatorService()),
+                workspaces
             );
+        }
+
+        public IWorkspacesStorage WorkspacesStorage(IPlainStorageAccessor<Workspace> workspaces)
+        {
+            return new WorkspacesStorage(workspaces, Mock.Of<IAuthorizedUser>());
         }
     }
 

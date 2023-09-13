@@ -29,7 +29,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Assignments
             descriptor.Field("calendarEvent")
                 .Description("Active Calendar Event associated with assignment")
                 .Type<CalendarEventObjectType>()
-                .Resolver(context =>
+                .Resolve(context =>
                 {
                     var assignmentId = context.Parent<Core.BoundedContexts.Headquarters.Assignments.Assignment>().Id;
                     var unitOfWork = context.Service<IUnitOfWork>();

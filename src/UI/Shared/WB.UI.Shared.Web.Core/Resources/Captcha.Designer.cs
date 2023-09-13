@@ -79,6 +79,15 @@ namespace WB.UI.Shared.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CaptchaError.
+        /// </summary>
+        internal static string CaptchaError {
+            get {
+                return ResourceManager.GetString("CaptchaError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Is required field.
         /// </summary>
         internal static string Required {

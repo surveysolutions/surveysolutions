@@ -60,6 +60,9 @@
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.WebTester\Resources\Common.ru.resx">
       <Link>Resources\Common.ru.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\WB.UI.WebTester\Resources\Common.uk.resx">
+      <Link>Resources\Common.uk.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\..\UI\WB.UI.WebTester\Resources\Common.zh.resx">
       <Link>Resources\Common.zh.resx</Link>
     </EmbeddedResource>

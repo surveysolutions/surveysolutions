@@ -2,7 +2,7 @@
 <resources>
   <style name="Interview_QuestionWithDivider" parent="VerticalFullWidthWrappingLayout">
     <item name="android:background">@drawable/question_background</item>
-  </style>
+  </style>  
 
   <style name="Interview_DisabledQuestion">
     <item name="android:layout_width">match_parent</item>
@@ -108,6 +108,7 @@
     <item name="android:layout_marginLeft">@dimen/Interview_Readonly_Question_Layout_margin_left</item>
     <item name="android:layout_marginRight">@dimen/Interview_Readonly_Question_Layout_margin_right</item>
     <item name="android:layout_marginTop">@dimen/Interview_Question_Answer_margin_top</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Question_Answer_margin_top</item>
   </style>
     
     <style name="Readonly_Devider_Spacer">

@@ -1,0 +1,369 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AllowInterviewerUpdateProfile" xml:space="preserve">
+    <value>Редагування профілю інтерів'ювера</value>
+  </data>
+  <data name="AllowInterviewerUpdateProfileDesc" xml:space="preserve">
+    <value>Дозволити інтерв'юверам оновлювати свою контактну інформацію в профілі облікового запису</value>
+  </data>
+  <data name="AllowWebInterviewEmailNotifications" xml:space="preserve">
+    <value>Сповіщення про веб-інтерв'ю на електронну пошту</value>
+  </data>
+  <data name="AllowWebInterviewEmailNotificationsDesc" xml:space="preserve">
+    <value>Дозвольте респондентам веб-інтерв'ю запитувати електронні листи з посиланнями для продовження розпочатих інтерв'ю (ефективно, якщо налаштований постачальник послуг масової розсилки електронної пошти)</value>
+  </data>
+  <data name="AutoUpdateDescription" xml:space="preserve">
+    <value>Якщо позначено, то лише остання версія додатку Інтерв'юер/Супервизор може синхронізуватися з Хедквотером</value>
+  </data>
+  <data name="ChangeStateConfirm" xml:space="preserve">
+    <value>Ви впевнені, що хочете змінити налаштування безпеки файлів експорту? Всі експортовані файли даних будуть захищені паролем.</value>
+  </data>
+  <data name="ChangeStateDisabledConfirm" xml:space="preserve">
+    <value>Ви впевнені, що хочете змінити налаштування безпеки файлів експорту? Експортовані файли даних більше не будуть захищені паролем.</value>
+  </data>
+  <data name="ClearExportCache_Description" xml:space="preserve">
+    <value>Ця операція очистить весь експортний кеш. Наступний експорт займе більше часу.</value>
+  </data>
+  <data name="ClearExportCache_Title" xml:space="preserve">
+    <value>Очистити кеш експорту</value>
+  </data>
+  <data name="CurrentLogo" xml:space="preserve">
+    <value>Поточний логотип</value>
+  </data>
+  <data name="DeviceNotifications" xml:space="preserve">
+    <value>Увімкнути сповіщення на пристрої</value>
+  </data>
+  <data name="DeviceNotificationsDescription" xml:space="preserve">
+    <value>Якщо увімкнено, пристрої сповіщатимуть власників про зміни та дії, які необхідно виконати</value>
+  </data>
+  <data name="EmailProvider_Address" xml:space="preserve">
+    <value>Поштова адреса відправника</value>
+  </data>
+  <data name="EmailProvider_AddressHelp" xml:space="preserve">
+    <value>Поточна поштова адреса відправника.</value>
+  </data>
+  <data name="EmailProvider_Amazon" xml:space="preserve">
+    <value>Amazon Simple Email Service (SES)</value>
+  </data>
+  <data name="EmailProvider_AmazonDescription" xml:space="preserve">
+    <value>Налаштуйте параметри для доступу до Amazon SES нижче. Додаткові відомості про використання Amazon SES з Survey Solutions доступні </value>
+  </data>
+  <data name="EmailProvider_AwsAccessKeyId" xml:space="preserve">
+    <value>Ідентифікатор ключа доступу</value>
+  </data>
+  <data name="EmailProvider_AwsAccessKeyIdHelp" xml:space="preserve">
+    <value>Ідентифікатор облікового запису AWS можна знайти в консолі керування AWS</value>
+  </data>
+  <data name="EmailProvider_AwsRegion" xml:space="preserve">
+    <value>Регіон</value>
+  </data>
+  <data name="EmailProvider_AwsRegion_Unknown" xml:space="preserve">
+    <value>Вибрано невідомий регіон. Будь ласка, перевірте його.</value>
+  </data>
+  <data name="EmailProvider_AwsRegionHelp" xml:space="preserve">
+    <value>Регіон для консолі керування AWS</value>
+  </data>
+  <data name="EmailProvider_AwsSecretAccessKey" xml:space="preserve">
+    <value>Секретний ключ доступу</value>
+  </data>
+  <data name="EmailProvider_AwsSecretAccessKeyHelp" xml:space="preserve">
+    <value>Знайдено у розділі Облікові дані безпеки в консолі керування AWS</value>
+  </data>
+  <data name="EmailProvider_GeneralError" xml:space="preserve">
+    <value>Виникла загальна помилка</value>
+  </data>
+  <data name="EmailProvider_HelpLinkText" xml:space="preserve">
+    <value>тут</value>
+  </data>
+  <data name="EmailProvider_None" xml:space="preserve">
+      <value>Без розсилки</value>
+  </data>
+  <data name="EmailProvider_NoneDescription" xml:space="preserve">
+    <value>Повідомлення із запрошеннями на веб-інтерв'ю не надсилаються Survey Solutions респондентам.</value>
+  </data>
+  <data name="EmailProvider_PageDesc" xml:space="preserve">
+    <value>Налаштуйте постачальника послуг масової розсилки. Налаштуйте спосіб надсилання запрошень на веб-інтерв'ю.</value>
+  </data>
+  <data name="EmailProvider_ReplyAddress" xml:space="preserve">
+    <value>Адреса для відповіді</value>
+  </data>
+  <data name="EmailProvider_ReplyAddressHelp" xml:space="preserve">
+    <value>Адреса електронної пошти, на яку можна надсилати відповіді від запрошених (за замовчуванням - адреса відправника).</value>
+  </data>
+  <data name="EmailProvider_SenderAddress" xml:space="preserve">
+    <value>Адреса електронної пошти відправника</value>
+  </data>
+  <data name="EmailProvider_SenderHeader" xml:space="preserve">
+    <value>Інформація про відправника</value>
+  </data>
+  <data name="EmailProvider_SenderHelp" xml:space="preserve">
+    <value>Адреса електронної пошти відправника, яка буде відображатися в полі FROM вхідних повідомлень.</value>
+  </data>
+  <data name="EmailProvider_SenderName" xml:space="preserve">
+    <value>Ім'я відправника</value>
+  </data>
+  <data name="EmailProvider_SenderNameHelp" xml:space="preserve">
+    <value>Ім'я відправника, яке буде відображатися в полі FROM вхідних повідомлень.</value>
+  </data>
+  <data name="EmailProvider_Sendgrid" xml:space="preserve">
+    <value>Сервіс доставки електронної пошти SendGrid</value>
+  </data>
+  <data name="EmailProvider_SendGridApiKey" xml:space="preserve">
+    <value>Ключ API</value>
+  </data>
+  <data name="EmailProvider_SendGridApiKeyHelp" xml:space="preserve">
+    <value>Ви можете знайти його на сторінці API Keys в пункті меню налаштувань SendGrid</value>
+  </data>
+  <data name="EmailProvider_SendgridDescription" xml:space="preserve">
+    <value>Налаштуйте параметри для доступу до SendGrid нижче. Додаткові відомості про використання SendGrid з рішеннями для проведення опитувань доступні </value>
+  </data>
+  <data name="EmailProvider_SendTestEmail" xml:space="preserve">
+    <value>Надіслати електронну лист</value>
+  </data>
+  <data name="EmailProvider_SendTestEmailHeader" xml:space="preserve">
+    <value>Надіслати тестовий лист</value>
+  </data>
+  <data name="EmailProvider_SendTestEmailMessage" xml:space="preserve">
+    <value>Надішліть собі тестовий лист, щоб переконатися, що служба масових розсилок працює, і отримати попередній перегляд того, що отримають респонденти.</value>
+  </data>
+  <data name="EmailProvider_SendTestEmailResult" xml:space="preserve">
+    <value>Приклад успішно відправленого листа із запрошенням</value>
+  </data>
+  <data name="EmailProvider_ServiceProvideHeader" xml:space="preserve">
+    <value>Вкажіть постачальника послуг масової розсилки</value>
+  </data>
+  <data name="EmailProvider_SettingsSavedSuccessfully" xml:space="preserve">
+    <value>Конфігурацію поштового сервісу успішно збережено.</value>
+  </data>
+  <data name="EmailProvider_TestEmailAddress" xml:space="preserve">
+    <value>Адреса електронної пошти</value>
+  </data>
+  <data name="EnableEncryption" xml:space="preserve">
+    <value>Увімкнути шифрування</value>
+  </data>
+  <data name="ExportEncryption_Description" xml:space="preserve">
+    <value>Встановіть прапорець "Увімкнути шифрування", щоб захистити архіви експортованих даних, зашифрувавши їх за допомогою вказаного пароля. Змініть пароль, натиснувши кнопку з круговою стрілкою. Після шифрування тільки люди, які знають пароль, зможуть відкрити експортовані дані.</value>
+  </data>
+  <data name="ExportEncryption_Title" xml:space="preserve">
+    <value>Шифрування експорту</value>
+  </data>
+  <data name="ExportEncryptionSettings" xml:space="preserve">
+    <value>Налаштування шифрування експорту </value>
+  </data>
+  <data name="GeographyQuestionAccuracyInMetersDescription" xml:space="preserve">
+    <value>Встановити точність у метрах для питання з географії</value>
+  </data>
+  <data name="GeographyQuestionPeriodInSecondsDescription" xml:space="preserve">
+    <value>Встановити період у секундах для питання з географії</value>
+  </data>
+  <data name="GlobalNoteClearingConfirm" xml:space="preserve">
+    <value>Ви впевнені, що хочете видалити глобальну нотатку?</value>
+  </data>
+  <data name="GlobalNoteSaved" xml:space="preserve">
+      <value>Нотатка збережена</value>
+  </data>
+  <data name="GlobalNoteSettings" xml:space="preserve">
+    <value>Глобальна нотатка</value>
+  </data>
+  <data name="GlobalNoteSettings_Description" xml:space="preserve">
+    <value>Вкажіть текст у полі "Глобальна нотатка", який буде показано у верхній частині кожного екрана на сервері.</value>
+  </data>
+  <data name="GlobalNotice" xml:space="preserve">
+    <value>Глобальна нотатка</value>
+  </data>
+  <data name="InterviewerAutoUpdate" xml:space="preserve">
+    <value>Увімкнути автоматичні оновлення</value>
+  </data>
+  <data name="InterviewerAutoUpdateDisabled" xml:space="preserve">
+    <value>Автоматичне оновлення Android-додатків вимкнено</value>
+  </data>
+  <data name="InterviewerAutoUpdateEnabled" xml:space="preserve">
+    <value>Увімкнено автоматичне оновлення додатків для Android</value>
+  </data>
+  <data name="InterviewerGeographyQuestionAccuracyInMeters" xml:space="preserve">
+    <value>Точність географічного питання</value>
+  </data>
+  <data name="InterviewerGeographyQuestionPeriodInSeconds" xml:space="preserve">
+    <value>Періодичність для запитань з географії</value>
+  </data>
+  <data name="InterviewerPartialSynchronization" xml:space="preserve">
+    <value>Увімкнути часткову синхронізацію</value>
+  </data>
+  <data name="Logo" xml:space="preserve">
+    <value>Логотип компанії</value>
+  </data>
+  <data name="LogoNotUpdated" xml:space="preserve">
+    <value>Логотип компанії не оновлено. Будь ласка, надайте дійсне зображення</value>
+  </data>
+  <data name="LogoSettings" xml:space="preserve">
+      <value>Налаштування логотипу </value>
+  </data>
+  <data name="LogoSettings_Description" xml:space="preserve">
+    <value>Логотип компанії - це зображення, яке відображається на сторінці входу на сервер і на сторінці входу в додаток Interviewer.</value>
+  </data>
+  <data name="LogoSettings_Description1" xml:space="preserve">
+    <value>Натисніть кнопку "Вибрати файл", щоб завантажити зображення з вашого комп'ютера на сервер для використання в якості логотипу. Потім натисніть кнопку "Зберегти".</value>
+  </data>
+  <data name="LogoUpdated" xml:space="preserve">
+    <value>Оновлений логотип компанії</value>
+  </data>
+  <data name="MobileAppSettings_Description" xml:space="preserve">
+    <value>Деякі специфічні налаштування для андроїд-версії додатку Інтерв'юер/Супервізор</value>
+  </data>
+  <data name="MobileAppSettings_Title" xml:space="preserve">
+    <value>Налаштування додатку для нтерв'юера/Супервізора</value>
+  </data>
+  <data name="PartialSynchronizationDescription" xml:space="preserve">
+    <value>Якщо увімкнено, планшети інтерв'юерів надсилатимуть відповіді на незавершені інтерв'ю до Хедквотеру</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Пароль</value>
+  </data>
+  <data name="RegeneratePasswordConfirm" xml:space="preserve">
+    <value>Ви впевнені, що хочете створити новий пароль? Новий пароль буде застосовано до всіх експортованих файлів даних, створених відтепер.</value>
+  </data>
+  <data name="RemoveExportCache" xml:space="preserve">
+    <value>Очистити кеш</value>
+  </data>
+  <data name="RemoveExportCache_Warning" xml:space="preserve">
+    <value>Обережно! Це незворотна дія</value>
+  </data>
+  <data name="RemoveExportCacheConfirm" xml:space="preserve">
+    <value>Ви впевнені, що хочете очистити кеш експорту? Всі згенеровані експортні файли будуть видалені з сервера і НЕ будуть доступні для завантаження.</value>
+  </data>
+  <data name="RemoveExportCacheFail" xml:space="preserve">
+    <value>Помилка очистки кешу</value>
+  </data>
+  <data name="RemoveExportCacheSuccess" xml:space="preserve">
+    <value>Кеш успішно видалено</value>
+  </data>
+  <data name="RemoveLogo" xml:space="preserve">
+    <value>Видалити логотип</value>
+  </data>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>Налаштування</value>
+  </data>
+  <data name="UserProfileSettings_Title" xml:space="preserve">
+    <value>Налаштування профілю користувача</value>
+  </data>
+  <data name="WebInterviewEmailNotifications_Title" xml:space="preserve">
+    <value>Налаштування веб-інтерв'ю</value>
+  </data>
+</root>

@@ -111,16 +111,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public IMvxAsyncCommand<bool> OnFocusChangeCommand => new MvxAsyncCommand<bool>(OnFocusChange);
         public IMvxCommand<string> FilterCommand => new MvxCommand<string>(Filter);
 
-        private void Filter(string filter)
+        private void Filter(string? filter)
         {
             this.FilterText = filter;
         }
 
         public IMvxCommand<SingleOptionLinkedQuestionOptionViewModel> SaveAnswerBySelectedOptionCommand => new MvxCommand<SingleOptionLinkedQuestionOptionViewModel>(RememberSelectedOption);
 
-        private void RememberSelectedOption(SingleOptionLinkedQuestionOptionViewModel option)
+        private void RememberSelectedOption(SingleOptionLinkedQuestionOptionViewModel? option)
         {
-            this.FilterText = option.Title;
+            this.FilterText = option?.Title;
         }
 
         private async Task OnFocusChange(bool hasFocus)

@@ -26,6 +26,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
         private readonly IWebInterviewInterviewEntityFactory interviewEntityFactory;
+        
+        protected abstract bool IncludeVariables { get; }
 
         public InterviewDataController(IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository statefulInterviewRepository,
@@ -119,7 +121,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         private IdentifyingEntity GetIdentifyingEntity(Guid entityId, IStatefulInterview interview, IQuestionnaire questionnaire)
         {
             var entityIdentity = new Identity(entityId, RosterVector.Empty);
-            var entityType = this.interviewEntityFactory.GetEntityType(entityIdentity, questionnaire, interview, IsReviewMode());
+            var entityType = this.interviewEntityFactory.GetEntityType(entityIdentity, questionnaire, interview, IsReviewMode(), IncludeVariables);
 
             if (entityType == InterviewEntityType.Variable)
             {
@@ -185,7 +187,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 .Select(x => new InterviewEntityWithType
                 {
                     Identity = Identity.Create(x, RosterVector.Empty).ToString(),
-                    EntityType = this.interviewEntityFactory.GetEntityType(new Identity(x, RosterVector.Empty), questionnaire, interview, IsReviewMode()).ToString()
+                    EntityType = this.interviewEntityFactory.GetEntityType(new Identity(x, RosterVector.Empty), questionnaire, interview, IsReviewMode(), IncludeVariables).ToString()
                 })
                 .ToArray();
 
@@ -243,7 +245,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             {
                 return IsReviewMode()
                     ? statefulInterview.GetUnderlyingEntitiesForReview(identity)
-                    : statefulInterview.GetUnderlyingInterviewerEntities(identity);
+                    : statefulInterview.GetUnderlyingInterviewerEntities(identity, IncludeVariables);
             }
 
             List<Identity> groupIds = new List<Identity>();
@@ -271,7 +273,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 .Select(x => new InterviewEntityWithType
                 {
                     Identity = x.ToString(),
-                    EntityType = this.interviewEntityFactory.GetEntityType(x, questionnaire, statefulInterview, IsReviewMode()).ToString()
+                    EntityType = this.interviewEntityFactory.GetEntityType(x, questionnaire, statefulInterview, IsReviewMode(), IncludeVariables).ToString()
                 })
                 .Concat(ActionButtonsDefinition)
                 .ToArray();

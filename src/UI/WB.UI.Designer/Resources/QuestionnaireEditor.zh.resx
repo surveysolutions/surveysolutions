@@ -612,9 +612,6 @@
   <data name="QuestionScope" xml:space="preserve">
     <value>问题范围</value>
   </data>
-  <data name="QuestionShowStrings" xml:space="preserve">
-    <value>显示字符串</value>
-  </data>
   <data name="QuestionText" xml:space="preserve">
     <value>问题内容</value>
   </data>
@@ -650,9 +647,6 @@
   </data>
   <data name="RosterName" xml:space="preserve">
     <value>二维表名称</value>
-  </data>
-  <data name="RosterShowStrings" xml:space="preserve">
-    <value>显示字符串</value>
   </data>
   <data name="RosterSource" xml:space="preserve">
     <value>二维表源</value>
@@ -767,9 +761,6 @@
   </data>
   <data name="SettingsWhoHasAccess" xml:space="preserve">
     <value>拥有访问权限的人：</value>
-  </data>
-  <data name="ShowList" xml:space="preserve">
-    <value>显示列表</value>
   </data>
   <data name="SideBarAddMacro" xml:space="preserve">
     <value>添加新的宏</value>
@@ -1163,5 +1154,8 @@
   <data name="Translation_Original" xml:space="preserve">
       <value>初始的</value>
       <comment>初始的</comment>
+  </data>
+  <data name="ManageAccount" xml:space="preserve">
+      <value>管理账号</value>
   </data>
 </root>

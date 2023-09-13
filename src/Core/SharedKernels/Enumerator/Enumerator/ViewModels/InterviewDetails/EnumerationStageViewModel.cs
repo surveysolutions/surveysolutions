@@ -19,9 +19,8 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public class EnumerationStageViewModel : MvxViewModel,
-        IAsyncViewModelEventHandler<GroupsDisabled>,
-        IDisposable
+    public class EnumerationStageViewModel : BaseViewModel,
+        IAsyncViewModelEventHandler<GroupsDisabled>
     {
         private List<IInterviewEntityViewModel> createdEntities = new List<IInterviewEntityViewModel>();
 
@@ -140,16 +139,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         }
         
         private bool isDisposed = false;
-        public void Dispose()
+        public override void Dispose()
         {
             if(isDisposed) return;
+            isDisposed = true;
             
             this.liteEventRegistry.Unsubscribe(this);
             this.Items.ToArray().ForEach(ie => ie.DisposeIfDisposable());
             this.createdEntities.ToArray().ForEach(ie => ie.DisposeIfDisposable());
             this.Name.Dispose();
             
-            isDisposed = true;
+            base.Dispose();
         }
 
         public async Task HandleAsync(GroupsDisabled @event)

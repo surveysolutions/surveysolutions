@@ -101,8 +101,8 @@ namespace WB.UI.Shared.Enumerator.Activities
             TryWriteMemoryInformationToLog($"Destroyed Activity {this.GetType().Name}");
             base.OnDestroy();
             
-            this.ViewModel.DisposeIfDisposable();
             this.BindingContext.ClearAllBindings();
+            //this.ViewModel.DisposeIfDisposable();
             
             //cleanup cache to remove disposed viewmodel
             if (Mvx.IoCProvider.TryResolve<IMvxSingleViewModelCache>(out var cache))

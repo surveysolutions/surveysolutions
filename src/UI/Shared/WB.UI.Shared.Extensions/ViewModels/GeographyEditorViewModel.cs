@@ -1,10 +1,12 @@
-﻿using System.Drawing;
+﻿using System.ComponentModel;
+using System.Drawing;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Location;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.UI;
+using Esri.ArcGISRuntime.UI.Editing;
 using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
@@ -15,6 +17,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.UI.Shared.Extensions.Entities;
+using WB.UI.Shared.Extensions.Extensions;
 using WB.UI.Shared.Extensions.Services;
 using GeometryType = WB.Core.SharedKernels.Questionnaire.Documents.GeometryType;
 using EsriGeometryType = Esri.ArcGISRuntime.Geometry.GeometryType;
@@ -108,16 +111,20 @@ namespace WB.UI.Shared.Extensions.ViewModels
             await this.NavigationService.Close(this);
         });
         
-        private async void GeometryChangedHandler(object sender, GeometryChangedEventArgs args)
+        private async void GeometryChangedHandler(object sender, PropertyChangedEventArgs args)
         {
-            var geometry = args.NewGeometry;
+            if (args.PropertyName != nameof(GeometryEditor.Geometry))
+                return;
+                
+            //var geometry = args.NewGeometry;
+            var geometry = this.MapView.GeometryEditor.Geometry;
             try
             {
                 this.UpdateLabels(geometry);
                 await UpdateDrawNeighborsAsync(geometry, this.GeographyNeighbors).ConfigureAwait(false);
                 
-                CanUndo = this.MapView.SketchEditor.UndoCommand.CanExecute(this.MapView.SketchEditor.UndoCommand);
-                CanSave = this.MapView.SketchEditor.CompleteCommand.CanExecute(this.MapView.SketchEditor.CompleteCommand);
+                CanUndo = this.MapView.GeometryEditor.CanUndo;
+                CanSave = this.MapView.GeometryEditor.IsStarted && !this.MapView.GeometryEditor.Geometry.IsEmpty;
             }
             catch
             {
@@ -130,7 +137,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
             try
             {
-                this.MapView.SketchEditor.GeometryChanged += GeometryChangedHandler;
+                this.MapView.GeometryEditor.PropertyChanged += GeometryChangedHandler;
 
                 if (this.Geometry == null)
                 {
@@ -202,12 +209,11 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             if (IsManual)
             {
-                if (this.MapView.SketchEditor != null)
+                if (this.MapView.GeometryEditor != null)
                 {
-                    var command = this.MapView.SketchEditor.CompleteCommand;
-                    if (this.MapView.SketchEditor.CompleteCommand.CanExecute(command))
+                    if (this.MapView.GeometryEditor.IsStarted && !this.MapView.GeometryEditor.Geometry.IsEmpty)
                     {
-                        this.MapView.SketchEditor.CompleteCommand.Execute(command);
+                        this.MapView.GeometryEditor.Stop();
                     }
                     else
                     {
@@ -393,9 +399,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         IsGeometryAreaVisible = false;
                         
                         return geometry == null
-                            ? await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Polyline).ConfigureAwait(false)
-                            : await this.MapView.SketchEditor.StartAsync(geometry, SketchCreationMode.Polyline)
-                                .ConfigureAwait(false);
+                            ? await this.MapView.GeometryEditor.StartAsync(EsriGeometryType.Polyline)
+                            : await this.MapView.GeometryEditor.StartAsync(geometry);
                     }
                 case GeometryType.Point:
                     {
@@ -403,21 +408,20 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         IsGeometryAreaVisible = false;
 
                         return geometry == null
-                            ? await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Point).ConfigureAwait(false)
-                            : await this.MapView.SketchEditor.StartAsync(geometry, SketchCreationMode.Point)
-                                .ConfigureAwait(false);
+                            ? await this.MapView.GeometryEditor.StartAsync(EsriGeometryType.Point)
+                            : await this.MapView.GeometryEditor.StartAsync(geometry);
                     }
                 case GeometryType.Multipoint:
                     {
                         IsGeometryLengthVisible = false;
                         IsGeometryAreaVisible = false;
 
-                        this.MapView.SketchEditor.Style.MidVertexSymbol = null;
-                        this.MapView.SketchEditor.Style.LineSymbol = null;
+                        this.MapView.GeometryEditor.Tool.Style.MidVertexSymbol = null;
+                        this.MapView.GeometryEditor.Tool.Style.LineSymbol = null;
 
-                        return geometry == null ?
-                            await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Multipoint).ConfigureAwait(false) :
-                            await this.MapView.SketchEditor.StartAsync(geometry, SketchCreationMode.Multipoint).ConfigureAwait(false);
+                        return geometry == null 
+                            ? await this.MapView.GeometryEditor.StartAsync(EsriGeometryType.Multipoint)
+                            : await this.MapView.GeometryEditor.StartAsync(geometry);
                     }
                 default:
                     {
@@ -425,9 +429,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         IsGeometryAreaVisible = true;
 
                         return geometry == null
-                            ? await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Polygon).ConfigureAwait(false)
-                            : await this.MapView.SketchEditor.StartAsync(geometry, SketchCreationMode.Polygon)
-                                .ConfigureAwait(false);
+                            ? await this.MapView.GeometryEditor.StartAsync(EsriGeometryType.Polygon)
+                            : await this.MapView.GeometryEditor.StartAsync(geometry);
                     }
             }
         }
@@ -611,9 +614,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             if (IsManual)
             {
-                var command = this.MapView?.SketchEditor.UndoCommand;
-                if (this.MapView?.SketchEditor?.UndoCommand.CanExecute(command) ?? false)
-                    this.MapView.SketchEditor.UndoCommand.Execute(command);
+                if (this.MapView?.GeometryEditor?.CanUndo ?? false)
+                    this.MapView.GeometryEditor.Undo();
             }
             else if (RequestedGeometryInputMode == GeometryInputMode.Semiautomatic)
             {
@@ -645,10 +647,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         private void BtnCancelCommand()
         {
-            var command = this.MapView?.SketchEditor.UndoCommand;
-            while (this.MapView?.SketchEditor?.UndoCommand.CanExecute(command) ?? false)
+            while (this.MapView?.GeometryEditor?.CanUndo ?? false)
             {
-                this.MapView.SketchEditor.UndoCommand.Execute(command);
+                this.MapView.GeometryEditor.Undo();
             }
         }
 
@@ -927,7 +928,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             IsPanelVisible = false;
 
             await this.UpdateBaseMap(mapDescription.MapName);
-            var geometry = this.MapView.SketchEditor?.Geometry;
+            var geometry = this.MapView.GeometryEditor?.Geometry;
 
             //update internal structures
             //SpatialReference of new map could differ from initial
@@ -936,12 +937,12 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 if (this.MapView != null && !this.MapView.Map.SpatialReference.IsEqual(geometry.SpatialReference))
                     geometry = GeometryEngine.Project(geometry, this.MapView.Map.SpatialReference);
 
-                this.MapView.SketchEditor.GeometryChanged -= GeometryChangedHandler;
+                this.MapView.GeometryEditor.PropertyChanged -= GeometryChangedHandler;
                 
-                this.MapView.SketchEditor.ClearGeometry();
-                this.MapView.SketchEditor.ReplaceGeometry(geometry);
+                this.MapView.GeometryEditor.ClearGeometry();
+                this.MapView.GeometryEditor.ReplaceGeometry(geometry);
                 
-                this.MapView.SketchEditor.GeometryChanged += GeometryChangedHandler;
+                this.MapView.GeometryEditor.PropertyChanged += GeometryChangedHandler;
 
                 await DrawNeighborsAsync(geometry).ConfigureAwait(false);
             }
@@ -955,7 +956,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         protected override async Task SetViewToValues()
         {
-            Geometry currentGeometry = IsManual ? this.MapView.SketchEditor?.Geometry : geometryBuilder?.ToGeometry();
+            Geometry currentGeometry = IsManual ? this.MapView.GeometryEditor?.Geometry : geometryBuilder?.ToGeometry();
             await SetViewpointToGeometry(currentGeometry);
         }
 
@@ -1007,8 +1008,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 locationDataSource.StopAsync();
             }
 
-            if(this.MapView?.SketchEditor != null)
-                this.MapView.SketchEditor.GeometryChanged -= GeometryChangedHandler;
+            if(this.MapView?.GeometryEditor != null)
+                this.MapView.GeometryEditor.PropertyChanged -= GeometryChangedHandler;
             
             collectionCancellationTokenSource?.Cancel();
             collectionCancellationTokenSource?.Dispose();

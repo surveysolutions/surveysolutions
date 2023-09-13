@@ -672,6 +672,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assignment {0}.
+        /// </summary>
+        public static string AssignmentDetails_PageTitle {
+            get {
+                return ResourceManager.GetString("AssignmentDetails_PageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assignments.
         /// </summary>
         public static string Assignments_PageTitle {
@@ -960,7 +969,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bulk Email Services.
+        ///   Looks up a localized string similar to Email Providers.
         /// </summary>
         public static string EmailProvidersTitle {
             get {
@@ -3219,6 +3228,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Preview data is missing for this map.
+        /// </summary>
+        public static string MapDetails_EmptyMapData {
+            get {
+                return ResourceManager.GetString("MapDetails_EmptyMapData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This preview shows the uploaded shapefile superimposed on the satellite image base layer..
         /// </summary>
         public static string MapDetails_FullShapefilesDisclaimer {
@@ -3939,11 +3957,20 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to (ver. {1}) {0} .
+        ///   Looks up a localized string similar to [ver. {{version}}] {{name}} .
         /// </summary>
         public static string QuestionnaireNameVersionFirst {
             get {
                 return ResourceManager.GetString("QuestionnaireNameVersionFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [ver. {1}] {0}.
+        /// </summary>
+        public static string QuestionnaireVersionAndName {
+            get {
+                return ResourceManager.GetString("QuestionnaireVersionAndName", resourceCulture);
             }
         }
         

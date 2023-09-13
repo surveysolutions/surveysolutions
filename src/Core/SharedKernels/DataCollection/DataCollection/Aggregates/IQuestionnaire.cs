@@ -95,6 +95,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         CategoricalOption GetOptionForQuestionByOptionValueFromStructure(Guid questionId, decimal optionValue, int? parentQuestionValue);
 
         string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue, int? answerParentValue);
+        
+        string GetAnswerOptionAttachment(Guid questionId, decimal answerOptionValue, int? answerParentValue);
 
         int? GetMaxSelectedAnswerOptions(Guid questionId);
 
@@ -252,7 +254,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IReadOnlyList<Guid> GetSubSectionsWithEnablementCondition(Guid groupId);
 
-        bool IsPrefilled(Guid entityId);
+        bool IsIdentifying(Guid entityId);
         bool ShouldBeHiddenIfDisabled(Guid entityId);
 
         string GetValidationMessage(Guid questionId, int conditionIndex);

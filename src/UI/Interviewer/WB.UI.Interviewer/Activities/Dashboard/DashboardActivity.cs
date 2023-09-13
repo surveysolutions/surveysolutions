@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using Android.App;
+﻿using System.ComponentModel;
 using Android.Content;
 using Android.Gms.Nearby;
-using Android.OS;
-using Android.Runtime;
 using Android.Views;
-using AndroidX.AppCompat.Widget;
 using AndroidX.ViewPager.Widget;
 using Google.Android.Material.Snackbar;
 using Google.Android.Material.Tabs;
@@ -18,8 +12,8 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
+
 using WB.UI.Shared.Enumerator.Activities;
-using WB.UI.Shared.Enumerator.Activities.Callbacks;
 using WB.UI.Shared.Enumerator.Activities.Dashboard;
 using WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation;
 using WB.UI.Shared.Enumerator.Services;
@@ -47,6 +41,8 @@ namespace WB.UI.Interviewer.Activities.Dashboard
 
         private MvxFragmentStatePagerAdapter fragmentStatePagerAdapter;
         private ViewPager viewPager;
+
+
 
         protected override void OnPause()
         {
@@ -98,6 +94,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             this.viewPager.Adapter = null;
 
             this.viewPager.PageSelected -= this.ViewPager_PageSelected;
+
             this.ViewModel.StartedInterviews.PropertyChanged -= this.StartedInterviewsOnPropertyChanged;
             this.ViewModel.RejectedInterviews.PropertyChanged -= this.RejectedInterviewsOnPropertyChanged;
             this.ViewModel.CompletedInterviews.PropertyChanged -= this.CompletedInterviewsOnPropertyChanged;
@@ -109,9 +106,15 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         {
             this.viewPager = this.FindViewById<ViewPager>(Resource.Id.pager);
 
+
+
+
             this.fragmentStatePagerAdapter = new MvxFragmentStatePagerAdapter(this, this.SupportFragmentManager);
             this.viewPager.Adapter = this.fragmentStatePagerAdapter;
             this.viewPager.PageSelected += this.ViewPager_PageSelected;
+
+
+
 
             this.ViewModel.StartedInterviews.PropertyChanged += this.StartedInterviewsOnPropertyChanged;
             this.ViewModel.RejectedInterviews.PropertyChanged += this.RejectedInterviewsOnPropertyChanged;
@@ -136,9 +139,10 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             var tabLayout = this.FindViewById<TabLayout>(Resource.Id.tabs);
             tabLayout.SetupWithViewPager(this.viewPager);
 
+
+
             OpenRequestedTab();
         }
-
 
         private void OpenRequestedTab()
         {
@@ -146,7 +150,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             {
                 var fragment = (MvxFragment)fragmentStatePagerAdapter.GetItem(i);
                 InterviewTabPanel viewModel = (InterviewTabPanel)fragment.ViewModel;
-                if (viewModel.InterviewStatus == this.ViewModel.TypeOfInterviews)
+                if (viewModel.DashboardType == this.ViewModel.TypeOfInterviews)
                 {
                     this.viewPager.SetCurrentItem(i, false);
                     break;
@@ -193,7 +197,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         {
             var fragment = (MvvmCross.Platforms.Android.Views.Fragments.MvxFragment)this.fragmentStatePagerAdapter.GetItem(tabPosition);
             var viewModel = (ListViewModel)fragment.ViewModel;
-            this.ViewModel.TypeOfInterviews = viewModel.InterviewStatus;
+            this.ViewModel.TypeOfInterviews = viewModel.DashboardType;
         }
 
         protected override void OnStart()

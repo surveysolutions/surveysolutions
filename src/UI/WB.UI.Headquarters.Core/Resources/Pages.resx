@@ -1113,9 +1113,12 @@
   <data name="Assignments_PageTitle" xml:space="preserve">
     <value>Assignments</value>
   </data>
+  <data name="AssignmentDetails_PageTitle" xml:space="preserve">
+    <value>Assignment {0}</value>
+  </data>  
   <data name="QuestionnaireNameVersionFirst" xml:space="preserve">
-    <value>(ver. {1}) {0} </value>
-    <comment>{0} - Questionnaire name, {1} - Questionnaire version</comment>
+      <value>[ver. {{version}}] {{name}} </value>
+      <comment>{{name}} - Questionnaire name, {{version}} - Questionnaire version</comment>
   </data>
   <data name="HQ_LockWarning" xml:space="preserve">
     <value>Locked headquarters (box checked) cannot login and perform any actions on the server.</value>
@@ -1324,6 +1327,9 @@
   <data name="MapDetails_Size" xml:space="preserve">
     <value>Size(MB)</value>
   </data>
+  <data name="MapDetails_EmptyMapData" xml:space="preserve">
+    <value>Preview data is missing for this map</value>
+  </data>
   <data name="MapDetails_MinScale" xml:space="preserve">
     <value>Min Scale</value>
   </data>
@@ -1482,7 +1488,7 @@
     <value>Email providers settings</value>
   </data>
   <data name="EmailProvidersTitle" xml:space="preserve">
-    <value>Bulk Email Services</value>
+    <value>Email Providers</value>
   </data>
   <data name="InterviewerProfile_QrCodeAlt" xml:space="preserve">
     <value>Qr code that simplifies interviewer application setup</value>
@@ -1733,5 +1739,8 @@
   </data>
   <data name="MapUserLink_DiscardConfirm1" xml:space="preserve">
       <value>If this is the last user in the team linked to the map then the team's supervisor will lose access to the map.</value>
+  </data>
+  <data name="QuestionnaireVersionAndName" xml:space="preserve">
+      <value>[ver. {1}] {0}</value>
   </data>
 </root>
