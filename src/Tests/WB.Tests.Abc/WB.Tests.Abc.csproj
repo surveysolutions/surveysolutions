@@ -27,7 +27,7 @@
     <PackageReference Include="Moq" Version="4.20.69" />
     <PackageReference Include="MvvmCross.Plugin.Messenger" Version="9.1.1" />
     <PackageReference Include="NHibernate" Version="5.4.6" />
-    <PackageReference Include="NSubstitute" Version="5.0.0" />
+    <PackageReference Include="NSubstitute" Version="5.1.0" />
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="NUnit.Extension.NUnitProjectLoader" Version="3.7.1" />
     <PackageReference Include="NUnit.Extension.NUnitV2Driver" Version="3.9.0" />

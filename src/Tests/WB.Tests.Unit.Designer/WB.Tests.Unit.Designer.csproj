@@ -56,7 +56,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.15" />
     <PackageReference Include="NJsonSchema" Version="10.9.0" />
-    <PackageReference Include="NSubstitute" Version="5.0.0" />
+    <PackageReference Include="NSubstitute" Version="5.1.0" />
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="NUnit.Extension.TeamCityEventListener" Version="1.0.8" />
     <PackageReference Include="NUnit.Extension.VSProjectLoader" Version="3.9.0" />
