@@ -32,9 +32,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AWSSDK.Core" Version="3.7.200.13" />
+        <PackageReference Include="AWSSDK.Core" Version="3.7.202.6" />
         <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.7" />
-        <PackageReference Include="AWSSDK.S3" Version="3.7.201.11" />
+        <PackageReference Include="AWSSDK.S3" Version="3.7.203.12" />
         <PackageReference Include="CsvHelper" Version="30.0.1" />
         <PackageReference Include="Dapper" Version="2.0.151" />
         <PackageReference Include="Dropbox.Api" Version="6.1.0" />
