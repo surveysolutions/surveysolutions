@@ -134,6 +134,7 @@ using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
 using IAuditLogService = WB.Core.SharedKernels.Enumerator.Services.IAuditLogService;
 using IDenormalizerRegistry = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.IDenormalizerRegistry;
+using IHttpClientFactory = WB.Core.Infrastructure.HttpServices.Services.IHttpClientFactory;
 
 namespace WB.Tests.Abc.TestFactories
 {
