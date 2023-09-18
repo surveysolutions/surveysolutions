@@ -16,7 +16,7 @@
       <!-- aspnetcorev2.dll version is v17.0.22323.1 for Bundle 7.0.10 -->
       <PackageGroup Id="WindowsDotNetHosting501">
         <ExePackage
-          Name="dotnet-hosting-7.0.10-win.exe"
+          Name="dotnet-hosting-7.0.11-win.exe"
           InstallCommand="/install /quiet /norestart /log &quot;[WindowsDotNetHosting501Log]&quot;"
           RepairCommand="/repair /quiet /norestart /log &quot;[WindowsDotNetHosting501Log]&quot;"
           UninstallCommand="/uninstall /quiet /norestart /log &quot;[WindowsDotNetHosting501Log]&quot;"
@@ -26,17 +26,18 @@
           Vital="yes"
           Permanent="yes"
           Protocol="burn"
-          DownloadUrl="https://download.visualstudio.microsoft.com/download/pr/d489c5d0-4d0f-4622-ab93-b0f2a3e92eed/101a2fae29a291956d402377b941f401/dotnet-hosting-7.0.10-win.exe"
+          DownloadUrl="https://download.visualstudio.microsoft.com/download/pr/91644a20-1e21-43c9-8ae0-90e402c1a368/469c198fab110c6c3d822e03509e9aec/dotnet-hosting-7.0.11-win.exe"
           LogPathVariable="WindowsDotNetHosting501Log"
           Compressed="no">
         <!-- heat.exe payload "dotnet-hosting-3.1.1-win.exe" -o "dotnet-hosting.wxs" -->
-          <RemotePayload CertificatePublicKey="51E8CCBFA002A22CB64E5CD25F42FE7BFAA920F6" 
-                         CertificateThumbprint="72105B6D5F370B62FD5C82F1512F7AD7DEE5F2C0" 
-                         Description="Microsoft .NET 7.0.10 - Windows Server Hosting" 
-                         Hash="0E99C13C4CB4CD94BFCD70B215DCEEE0A6728251" 
-                         ProductName="Microsoft .NET 7.0.10 - Windows Server Hosting" 
-                         Size="110040032" 
-                         Version="7.0.10.23364" />  
+          <RemotePayload
+			CertificatePublicKey="51E8CCBFA002A22CB64E5CD25F42FE7BFAA920F6" 
+			CertificateThumbprint="72105B6D5F370B62FD5C82F1512F7AD7DEE5F2C0" 
+			Description="Microsoft .NET 7.0.11 - Windows Server Hosting" 
+			Hash="7350E42E6A0386DBFCA1C2A5EA2E4523A586151C" 
+			ProductName="Microsoft .NET 7.0.11 - Windows Server Hosting" 
+			Size="110736480" 
+			Version="7.0.11.23425" />  
       </ExePackage>
     </PackageGroup>
   </Fragment>
