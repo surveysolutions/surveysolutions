@@ -14,7 +14,12 @@ const resxFiles = [
   join('../Resources/QuestionnaireEditor.*.resx')
 ];
 
-export default defineConfig({
+export default defineConfig(({ mode }) => {
+
+  const isDevMode = mode === 'development';
+  const isProdMode = !isDevMode
+
+  return {
     plugins: [
       Vue(),
       Vuetify({ autoImport: true }),
@@ -31,10 +36,14 @@ export default defineConfig({
         //resolvers: [VuetifyResolver()],
       }),
     ],
+    build: {
+      minify: isProdMode,
+    },
     resolve: {
         alias: {
             // eslint-disable-next-line no-undef
             '@': path.resolve(__dirname, './src'),
         },
     },
+  }
 })

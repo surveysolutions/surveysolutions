@@ -15,7 +15,7 @@ namespace WB.UI.Designer.Controllers
         [AntiForgeryFilter]
         [Route("q/details/{id}")]
         [Route("q/details/{id}/chapter/{chapterId}/{entityType}/{entityId}")]
-        public IActionResult QuestionnaireDetails(QuestionnaireRevision? id, Guid? chapterId, string entityType, Guid? entityid)
+        public IActionResult QuestionnaireDetails(QuestionnaireRevision? id, Guid? chapterId, string entityType, Guid? entityId)
         {
             if(id == null)
                 return this.RedirectToAction("Index", "QuestionnaireList");
@@ -28,7 +28,7 @@ namespace WB.UI.Designer.Controllers
             {
                 return RedirectToAction("Details", new RouteValueDictionary
                 {
-                    { "id", id.OriginalQuestionnaireId.FormatGuid() }, { "chapterId", chapterId?.FormatGuid() }, { "entityType", entityType }, { "entityid", entityid?.FormatGuid() }
+                    { "id", id.OriginalQuestionnaireId.FormatGuid() }, { "chapterId", chapterId?.FormatGuid() }, { "entityType", entityType }, { "entityid", entityId?.FormatGuid() }
                 });
             }
 

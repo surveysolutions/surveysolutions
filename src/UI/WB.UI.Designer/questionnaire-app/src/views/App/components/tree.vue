@@ -1,5 +1,6 @@
 <template>
-  <div class="questionnaire-tree-holder col-xs-6">
+  Tree
+  <!--div class="questionnaire-tree-holder col-xs-6">
     <div class="chapter-title" v-switch on="filtersBoxMode" ui-sref-active="selected"
       ui-sref="questionnaire.chapter.group({ chapterId: currentChapter.itemId, itemId: currentChapter.itemId})">
       <div v-click="$event.stopPropagation()" class="search-box" v-switch-when="search">
@@ -107,14 +108,17 @@
 
 <div class="comments-editor col-xs-6" ui-view="comments">
 
-</div></template>
+</div-->
+
+</template>
+
 <script>
 export default {
   name: 'Tree',
   props: {},
   data() {
     return {
-      items =[],
+      items :[],
     }
   }
 }

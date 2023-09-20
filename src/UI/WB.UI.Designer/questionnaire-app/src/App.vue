@@ -1,13 +1,19 @@
 <template>
     <v-app>
         <v-main>
-            <router-view></router-view>
+            <div class="questionnaire" slot>
+                <router-view name="header"></router-view>
+                <router-view name="tree"></router-view>
+                <section>
+                    <router-view></router-view>
+                </section>
+            </div>
         </v-main>
     </v-app>
 </template>
 
 <script>
 export default {
-    name: 'App'
+    name: 'QuestionnaireApp'
 };
 </script>
