@@ -135,7 +135,6 @@
     "QuestionPattern": "نمط",
     "QuestionQuestionType": "نوع السؤال",
     "QuestionScope": "نطاق السؤال",
-    "QuestionShowStrings": "اظهار السلاسل",
     "QuestionText": "نص السؤال",
     "QuestionToUpdateOptions": "تحديث الفئة",
     "QuestionUploadOptions": "تحميل فئات جديدة",
@@ -148,7 +147,6 @@
     "RequestFailedUnexpectedly": "فشل الطلب بشكل غير متوقع.",
     "RosterAddItem": "إضافة عنصر",
     "RosterName": "اسم القائمة",
-    "RosterShowStrings": "اظهار السلاسل",
     "RosterSource": "مصدر القائمة",
     "RosterSourceFixed": "مجموعة ثابتة من البنود:",
     "RosterSourceNumericQuestion": "سؤال المصدر لارقام الصفوف",
@@ -181,7 +179,6 @@
     "SettingsVisibleToEveryone": "مرئية للجميع في وضع القراءة فقط",
     "SettingsVisibleToOwner": "مرئية للمالك فقط",
     "SettingsWhoHasAccess": "من يمكنه الدخول",
-    "ShowList": "اظهار القائمة",
     "SideBarAttachmentDetailsFormat": "الشكل: {{- type}}",
     "SideBarAttachmentDetailsResolution": "{{width}} × {{height}}px",
     "SideBarAttachmentDetailsSize": "الحجم :{{size}}",
@@ -370,7 +367,9 @@
     "HelpVirtualCoverPage": "Cover is virtual section that shows all identifying questions.\r\n    Questions cannot be changed in this section",
     "HotkeysCloseMacros": "Close macros panel",
     "HotkeysCloseMetadata": "Close metadata panel",
+    "HotkeysCloseScenarios": "Close scenarios panel",
     "HotkeysCloseCategories": "Close categories panel",
+    "HotkeysCloseComments": "Close comments panel",
     "HotkeysFocusTree": "Focus questionnaire tree",
     "HotkeysNavigateToPrevSibling": "Navigate to previous sibling",
     "HotkeysNavigateToSibling": "Navigate to next sibling",
@@ -485,6 +484,7 @@
     "OptionsCascadingListError": "\r\nYou entered an invalid input. Each line should follow the format: \"Title...ParentValue/Value[...Attachment name]\". 'Value' and 'ParentValue' must be an integer number. 'Title' must be an alpha-numeric string. 'Attachment name' is optional. No empty lines are allowed.",
     "ShowParentValues": "Show Parent values",
     "HideParentValues": "Hide Parent values",
-    "AddEnablingCondition": "Add enabling condition"
+    "AddEnablingCondition": "Add enabling condition",
+    "ManageAccount": "Manage account"
   }
 }

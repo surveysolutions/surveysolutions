@@ -140,7 +140,6 @@
     "QuestionPattern": "Modèle",
     "QuestionQuestionType": "Type de question",
     "QuestionScope": "Champ de la question",
-    "QuestionShowStrings": "Afficher les chaînes",
     "QuestionText": "Question de type texte",
     "QuestionToUpdateOptions": "Pour mettre à jour les catégories",
     "QuestionUploadOptions": "Charger de nouvelles catégories",
@@ -152,7 +151,6 @@
     "Recompile": "Recompiler",
     "RosterAddItem": "Ajouter un élement",
     "RosterName": "Nom du roster",
-    "RosterShowStrings": "Afficher les chaînes",
     "RosterSource": "Source de Roster",
     "RosterSourceFixed": "Ensemble d'éléments fixés:",
     "RosterSourceNumericQuestion": "Question source pour le nombre de lignes:",
@@ -183,7 +181,6 @@
     "SettingsVisibleToEveryone": "visible à tout le monde en mode lecture seule",
     "SettingsVisibleToOwner": "visible uniquement au propriétaire",
     "SettingsWhoHasAccess": "Qui a accès:",
-    "ShowList": "Montrer la liste",
     "SideBarAddMacro": "ajouter une nouvelle macro",
     "SideBarAttachmentDetailsFormat": "format: {{- type}}",
     "SideBarAttachmentDetailsResolution": "{{width}} × {{height}}px",
@@ -395,7 +392,9 @@
     "HelpAttachmentName": "The name of attachment file that will be displayed.",
     "HelpCoverPage": "The first section of every questionnaire contains identifying questions that are also displayed at the interviewers' and supervisors' dashboards.",
     "HelpVirtualCoverPage": "Cover is virtual section that shows all identifying questions.\r\n    Questions cannot be changed in this section",
+    "HotkeysCloseScenarios": "Close scenarios panel",
     "HotkeysCloseCategories": "Close categories panel",
+    "HotkeysCloseComments": "Close comments panel",
     "DeleteConfirmCategories": "Are you sure you want to delete set of categories \"{{trimmedTitle}}\"? Source of categories for categorical questions dependent on it will be changed to user defined categories",
     "CategoriesObtained": "Obtained {0} row from categories file",
     "CategoriesObtained_plural": "Obtained {0} rows from categories file",
@@ -485,6 +484,7 @@
     "OptionsCascadingListError": "\r\nYou entered an invalid input. Each line should follow the format: \"Title...ParentValue/Value[...Attachment name]\". 'Value' and 'ParentValue' must be an integer number. 'Title' must be an alpha-numeric string. 'Attachment name' is optional. No empty lines are allowed.",
     "ShowParentValues": "Show Parent values",
     "HideParentValues": "Hide Parent values",
-    "AddEnablingCondition": "Add enabling condition"
+    "AddEnablingCondition": "Add enabling condition",
+    "ManageAccount": "Manage account"
   }
 }

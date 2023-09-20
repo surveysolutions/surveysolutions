@@ -185,7 +185,6 @@
     "QuestionVariableName": "Variable name",
     "RosterAddItem": "Add item",
     "RosterName": "Roster name",
-    "RosterShowStrings": "Show strings",
     "RosterSource": "Roster source",
     "RosterSourceFixed": "Fixed set of items:",
     "RosterSourceNumericQuestion": "Source question for number of rows:",
@@ -215,7 +214,6 @@
     "SettingsTurnOffAnonymousAccess": "Turn off anonymous sharing.",
     "SettingsVisibleToOwner": "visible to owner only",
     "SettingsWhoHasAccess": "who has access",
-    "ShowList": "Show list",
     "ValidationCondition": "Validation condition",
     "AddQuestion": "Add question",
     "AddRoster": "Add roster",
@@ -250,7 +248,6 @@
     "QuestionOptionsCut": "Question was marked as \"Combo box\" or \"Cascading combo box\" while uploading question's details and contained too many categories, their number was reduced up to {{count}}",
     "QuestionOrdered": "Record answer order",
     "QuestionPattern": "Pattern",
-    "QuestionShowStrings": "Show strings",
     "QuestionUploadOptions": "Upload new categories",
     "QuestionUseSeparator": "Use 1000 separator",
     "QuestionYesNoMode": "Yes/No buttons",
@@ -302,7 +299,7 @@
     "HelpTitles": "Titles of rows.",
     "HelpUseFormatting": "When checked, the numeric field on the tablet will be formatted as: d,ddd,ddd.dd, \"d\" represents digits (0-9), “,”(comma) is a thousand separator, and \".\" (dot) is a decimal point symbol.  Thousand separator and the decimal point symbol may vary for tablets with different cultures.",
     "HelpValidationExpression": "A logical expression that validates an answer to the current question. Might include values of other questions.",
-    "HelpValidationMessage": "Error or warning message is shown when validation condition evaluates to \"False\" or error occurres during expression evaluation.",
+    "HelpValidationMessage": "Error or warning message is shown when validation condition evaluates to \"False\" or error occurs during expression evaluation.",
     "HelpVariableDescription": "Text that will be shown next to a variable for testing purposes",
     "HelpVariableLabel": "A text up to {{maxLength}} characters that will be attached to the exported variable.",
     "HelpVariableName": "Variable names and roster IDs may be from {{minLength}} to {{maxLength}} characters long and must contain only following characters: a-z, A-Z, _, or 0-9. The first character cannot be 0-9 or _ and the last one cannot be _.",
@@ -313,8 +310,10 @@
     "HotkeysCloseLookup": "Close lookup tables panel",
     "HotkeysCloseMacros": "Close macros panel",
     "HotkeysCloseMetadata": "Close metadata panel",
+    "HotkeysCloseScenarios": "Close scenarios panel",
     "HotkeysCloseTranslations": "Close translations panel",
     "HotkeysCloseCategories": "Close categories panel",
+    "HotkeysCloseComments": "Close comments panel",
     "HotkeysFocusTitle": "Focus title field in editor",
     "HotkeysFocusTree": "Focus questionnaire tree",
     "HotkeysHideAttachments": "Close attachments panel",
@@ -485,6 +484,7 @@
     "OptionsCascadingListError": "\r\nYou entered an invalid input. Each line should follow the format: \"Title...ParentValue/Value[...Attachment name]\". 'Value' and 'ParentValue' must be an integer number. 'Title' must be an alpha-numeric string. 'Attachment name' is optional. No empty lines are allowed.",
     "ShowParentValues": "Show Parent values",
     "HideParentValues": "Hide Parent values",
-    "AddEnablingCondition": "Add enabling condition"
+    "AddEnablingCondition": "Add enabling condition",
+    "ManageAccount": "Manage account"
   }
 }
