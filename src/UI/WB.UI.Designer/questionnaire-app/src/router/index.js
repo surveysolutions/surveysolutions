@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import PageNotFound from '../views/PageNotFound.vue';
-
+/*
 import OptionsEditor from '../views/OptionsEditor/OptionsEditor.vue'
 import Questionnaire from '../views/App/Main.vue'
 import Tree from '../views/App/components/tree.vue'
@@ -9,7 +9,15 @@ import Question from '../views/App/components/question.vue'
 import StaticText from '../views/App/components/statictext.vue'
 import Chapter from '../views/App/components/chapter.vue'
 import QuestionnaireHeader from '../views/App/components/header.vue'
-
+*/
+const OptionsEditor = () => import('../views/OptionsEditor/OptionsEditor.vue')
+const RightPanel = () => import('../views/App/components/RightPanel.vue')
+const Tree = () => import('../views/App/components/Tree.vue')
+const Variable = () => import('../views/App/components/Variable.vue')
+const Question = () => import('../views/App/components/Question.vue')
+const StaticText = () => import('../views/App/components/StaticText.vue')
+const Chapter = () => import('../views/App/components/Chapter.vue')
+const QuestionnaireHeader = () => import('../views/App/components/Header.vue')
 
 const routes = [
     {
@@ -32,105 +40,41 @@ const routes = [
             cascading: route.query.cascading == 'true'
         })
     },
-    /*{
-        path: '/q/details/:questionnaireId',
-        component: Questionnaire,
-        props: route => ({
-            questionnaireRev: route.params.questionnaireId            
-        })
-    },
-    {
-        path: '/q/details/:questionnaireId/chapter/:chapterId/:entityType/:entityId',
-        component: Questionnaire,
-        props: route => ({
-            questionnaireRev: route.params.questionnaireId,            
-            chapterId: route.params.chapterId,            
-            entityType: route.params.entityType,            
-            entityId: route.params.entityId,            
-        })
-    },*/
     {
         name: 'questionnaire',
         path: '/q/details/:questionnaireId',
         components: {
-            //default: Question,
+            default: RightPanel,
             tree: Tree,
             header: QuestionnaireHeader,
         },
-        /*props: route => ({
-            questionnaireRev: route.params.questionnaireId,            
-        }),*/
         children: [
-            /*{
-                name: 'variable',
-                path: '/chapter/:chapterId/variable/:variableId',
-                component: Variable,
-            },
-            {
-                name: 'question',
-                path: '/chapter/:chapterId/question/:questionId',
-                component: Question,
-            },
-            {
-                name: 'statictext',
-                path: '/chapter/:chapterId/statictext/:statictextId',
-                component: StaticText,
-            },*/
-
-
             {
                 name: 'chapter',
                 path: 'chapter/:chapterId',
-                component: Chapter,
-                /*components: {
-                    default: Chapter,
-                    tree: Tree,
-                    header: QuestionnaireHeader,
-                },*/
-                /*props: route => ({
-                    chapterId: route.params.chapterId            
-                }),*/
                 children: [
                     {
-                        //name: 'variable',
+                        name: 'variable',
                         path: 'variable/:variableId',
-                        //component: Variable,
-                        components: {
-                            default: Variable,
-                            tree: Tree,
-                            header: QuestionnaireHeader,
-                        },
-                        /*props: route => ({
-                            variableId: route.params.variableId            
-                        }),*/
+                        component: Variable,
                     },
                     {
-                        //name: 'question',
+                        name: 'question',
                         path: 'question/:questionId',
                         component: Question,
-                        /*props: route => ({
-                            questionId: route.params.questionId            
-                        }),*/
                     },
                     {
-                        //name: 'statictext',
+                        name: 'statictext',
                         path: 'statictext/:statictextId',
                         component: StaticText,
-                        /*props: route => ({
-                            statictextId: route.params.statictextId            
-                        }),*/
                     },
-        
-        
-                    /*{
+                    {
                         name: 'chapter',
                         path: '',
                         component: Chapter,
-                    },*/
-                    
+                    },
                 ],
             },
-            
         ],
     },
     {

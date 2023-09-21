@@ -14,6 +14,7 @@ namespace WB.UI.Designer.Controllers
         [VuePage]
         [AntiForgeryFilter]
         [Route("q/details/{id}")]
+        [Route("q/details/{id}/chapter/{chapterId}")]
         [Route("q/details/{id}/chapter/{chapterId}/{entityType}/{entityId}")]
         public IActionResult QuestionnaireDetails(QuestionnaireRevision? id, Guid? chapterId, string entityType, Guid? entityId)
         {

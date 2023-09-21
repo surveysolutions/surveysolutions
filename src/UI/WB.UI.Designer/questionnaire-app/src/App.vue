@@ -1,11 +1,11 @@
 <template>
     <v-app>
         <v-main>
-            <div class="questionnaire" slot>
+            <div class="questionnaire">
                 <router-view name="header"></router-view>
                 <router-view name="tree"></router-view>
                 <section>
-                    <router-view></router-view>
+                    <router-view />
                 </section>
             </div>
         </v-main>
