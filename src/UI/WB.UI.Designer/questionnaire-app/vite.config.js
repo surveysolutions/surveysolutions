@@ -4,9 +4,8 @@ import Vue from '@vitejs/plugin-vue'
 import Components from 'unplugin-vue-components/vite'
 //import { VuetifyResolver } from 'unplugin-vue-components/resolvers'
 import LocalizationPlugin  from './tools/vite-plugin-localization'
-import { ignorePathWatch } from './tools/vite-plugin-watch-ignore'
 import Vuetify from 'vite-plugin-vuetify'
-import { readdirSync } from 'node:fs'
+
 
 const baseDir = path.resolve(__dirname, './');
 const join = path.join.bind(path, baseDir);
@@ -16,12 +15,6 @@ const resxFiles = [
   join('../Resources/QuestionnaireEditor.*.resx')
 ];
 
-function getExcludeDirs() {
-  const resxDirectoryPath = path.resolve(baseDir, 'src', 'locale');
-  const filesInResxDirectory = readdirSync(resxDirectoryPath);
-  filesInResxDirectory.map(file => console.log( join(resxDirectoryPath, file)));
-  return filesInResxDirectory.map(file => join(resxDirectoryPath, file));
-}
 
 export default defineConfig(({ mode }) => {
 
@@ -30,7 +23,6 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [
-      ignorePathWatch('**/src/locale/**'),
       Vue(),
       Vuetify({ autoImport: true }),
       LocalizationPlugin({
@@ -48,18 +40,12 @@ export default defineConfig(({ mode }) => {
     ],
     server: {
       watch: {
-        ignored: ['**/src/locale/**'],// ['**/src/locale/**'],
+        ignored: ['**/src/locale/**'],
       },
-    },
-    optimizeDeps: {
-      exclude: 'locale',
     },
     build: {
       minify: isProdMode,
       rollupOptions: {
-        //external: [
-        //  ...getExcludeDirs()
-        //],
         output: {
           assetFileNames: (assetInfo) => {
             let extType = assetInfo.name.split('.').at(1);
