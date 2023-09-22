@@ -27,6 +27,12 @@ export default {
         })
         state.entities = sectionData
     },
+    CLEAR_SECTION_ENTITIES(state) {
+        forEach(state.entities, entity => {
+            Vue.delete(state.entities, entity.identity)
+            Vue.delete(state.entityDetails, entity.identity)
+        })
+    },
     CLEAR_ENTITIES(state, { ids }) {
         forEach(ids, id => {
             Vue.delete(state.entityDetails, id)

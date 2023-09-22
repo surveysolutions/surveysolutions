@@ -1,4 +1,4 @@
-import { map, debounce, uniq } from 'lodash'
+import { map, debounce, uniq, forEach } from 'lodash'
 import Vue from 'vue'
 
 import { batchedAction } from '../helpers'
@@ -206,14 +206,19 @@ export default {
         }
     }, 200),
 
+    clearSectionData: async ({ dispatch, commit, rootState }) => {
+        commit('CLEAR_SECTION_ENTITIES')
+    },
+
     fetchSectionEntities: debounce(async ({ dispatch, commit, rootState }) => {
+
         const sectionId = rootState.route.params.sectionId
         //      const interviewId = rootState.route.params.interviewId
 
         const id = sectionId
         const isPrefilledSection = id === undefined
 
-        if (isPrefilledSection) {
+        if (isPrefilledSection) {            
             const prefilledPageData = await Vue.$api.interview.get('getPrefilledEntities')
             if (!prefilledPageData.hasAnyQuestions) {
                 const loc = {
@@ -238,6 +243,13 @@ export default {
 
                 const showVariables = rootState.webinterview.showVariables || false
                 const section = await Vue.$api.interview.get('getFullSectionInfo', { sectionId: id, includeVariables: showVariables })
+
+                const isCover = id === undefined || id == Vue.$config.coverPageId
+                if (isCover) {
+                    forEach(section.details, entity => {
+                        entity.isCover = true
+                    })
+                }
 
                 commit('SET_SECTION_DATA', section.entities)
                 commit('SET_ENTITIES_DETAILS', {

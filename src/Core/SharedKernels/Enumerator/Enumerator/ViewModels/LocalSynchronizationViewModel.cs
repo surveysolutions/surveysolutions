@@ -109,8 +109,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.synchronizationCancellationTokenSource = new CancellationTokenSource();
 
             this.SynchronizationErrorOccured = false;
-            this.SyncBgService.StartSync();
-            var syncProgressDto = this.SyncBgService.CurrentProgress;
+            this.SyncBgService?.StartSync();
+            var syncProgressDto = this.SyncBgService?.CurrentProgress;
             if (syncProgressDto != null)
             {
                 syncProgressDto.Progress.ProgressChanged += ProgressOnProgressChanged;
