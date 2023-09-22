@@ -8,6 +8,7 @@ using MvvmCross.Commands;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels;
@@ -35,7 +36,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             IInterviewViewModelFactory viewModelFactory,
             IDeviceSynchronizationProgress deviceSynchronizationProgress,
             IUserInteractionService userInteractionService,
-            IGoogleApiService googleApiService)
+            IGoogleApiService googleApiService,
+            ILogger logger)
             : base(principal, viewModelNavigationService, permissions, nearbyConnection)
         {
             UserInteractionService = userInteractionService;
@@ -43,7 +45,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             SetStatus(ConnectionStatus.WaitingForGoogleApi);
             communicator.IncomingInfo.Subscribe(OnIncomingData);
             this.viewModelFactory = viewModelFactory;
-            devicesSubscribtion = deviceSynchronizationProgress.SyncStats.Subscribe(OnDeviceProgressReported);
+            devicesSubscription = deviceSynchronizationProgress.SyncStats.Subscribe(OnDeviceProgressReported);
+            this.logger = logger;
         }
 
         private string title;
@@ -79,8 +82,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         }
 
         private ObservableCollection<ConnectedDeviceViewModel> connectedDevices;
-        private readonly IDisposable devicesSubscribtion;
+        private readonly IDisposable devicesSubscription;
         private bool isInitialized = false;
+        private readonly ILogger logger;
 
         public ObservableCollection<ConnectedDeviceViewModel> ConnectedDevices
         {
@@ -226,6 +230,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             }
             catch (NearbyConnectionException nce)
             {
+                this.logger.Error($"Error on advertising start.", nce);
                 SetStatus(ConnectionStatus.Error, nce.Message);
             }
         }
@@ -243,7 +248,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         public override void Dispose()
         {
             base.Dispose();
-            this.devicesSubscribtion?.Dispose();
+            this.devicesSubscription?.Dispose();
         }
     }
 }

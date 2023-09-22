@@ -231,7 +231,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         public async Task MapControlCreatedAsync()
         {
-            if (this.Map?.LoadStatus != LoadStatus.FailedToLoad)
+            if (this.Map != null && this.Map?.LoadStatus != LoadStatus.FailedToLoad)
             {
                 this.FirstLoad = true;
                 
@@ -270,7 +270,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         protected abstract Task SetViewToValues();
 
-        public async Task UpdateBaseMap(string selectedMapToLoad)
+        protected async Task UpdateBaseMap(string selectedMapToLoad)
         {
             logger.Debug($"UpdateBaseMap was called with map: {selectedMapToLoad}" );
             
@@ -284,10 +284,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 
                 this.SelectedMap = selectedMapToLoad;
                 this.Map.Basemap = baseMap;
-            }
-            else
-            {
-                
             }
 
             if (this.Map.LoadStatus == LoadStatus.Loaded 
