@@ -2,7 +2,6 @@
   <router-view />
 </template>
 
-
 <script>
 export default {
   name: 'RightPanel',

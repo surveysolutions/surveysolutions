@@ -2,7 +2,6 @@
   QuestionnaireHeader
 </template>
 
-
 <script>
 export default {
   name: 'QuestionnaireHeader',

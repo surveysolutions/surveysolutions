@@ -2,7 +2,6 @@
   Question
 </template>
 
-
 <script>
 export default {
   name: 'Question',

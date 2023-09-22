@@ -2,7 +2,6 @@
   StaticText
 </template>
 
-
 <script>
 export default {
   name: 'StaticText',

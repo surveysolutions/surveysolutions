@@ -2,7 +2,6 @@
   Chapter
 </template>
 
-
 <script>
 export default {
   name: 'Chapter',

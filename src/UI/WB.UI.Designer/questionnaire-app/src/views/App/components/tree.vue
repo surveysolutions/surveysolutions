@@ -109,7 +109,6 @@
 <div class="comments-editor col-xs-6" ui-view="comments">
 
 </div-->
-
 </template>
 
 <script>

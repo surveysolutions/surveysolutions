@@ -2,7 +2,6 @@
   variable
 </template>
 
-
 <script>
 export default {
   name: 'Variable',
