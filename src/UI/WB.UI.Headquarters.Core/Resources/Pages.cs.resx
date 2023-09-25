@@ -1592,7 +1592,8 @@
     <value>Neaktivní uživatelé</value>
   </data>
   <data name="Users_ArchiveUsersConfirmMessage" xml:space="preserve">
-    <value>Deaktivujete Garanty a tazatele v rámci jejich týmu. Tazatelé přiřazení k deaktivovanému Garantovi budou rovněž deaktivováni ve všech úlohách. Pokud mají tazatelé nějaká nesynchronizovaná data na tabletech, budou smazána.</value>
+      <value>Deaktivujete Garanty a tazatele v rámci jejich týmu. Tazatelé přiřazení k deaktivovanému Garantovi budou rovněž deaktivováni ve všech úlohách. 
+Jakákoli zbývající nesynchronizovaná data na zařízeních archivovaných uživatelů (tazatelů nebo supervizorů) nebudou přenesena na server.</value>
   </data>
   <data name="Users_Headquarters_Instruction1" xml:space="preserve">
     <value>Stisknutím tlačítka Přidat Ústředí vytvoříte nového uživatele Ústředí.</value>

@@ -76,12 +76,12 @@
 
         <Confirm ref="confirmArchive" id="confirmArchive" slot="modals">
             {{ $t('Pages.Users_ArchiveUsersConfirmMessage') }}
-            <br />
+            <br /> <br />
             {{ $t('Pages.Users_UsersConfirm') }}
         </Confirm>
         <Confirm ref="confirmUnarchive" id="confirmUnarchive" slot="modals">
             {{ $t('Pages.Users_UnarchiveUsersWarning') }}
-            <br />
+            <br /> <br />
             {{ $t('Pages.Users_UsersConfirm') }}
         </Confirm>
 
