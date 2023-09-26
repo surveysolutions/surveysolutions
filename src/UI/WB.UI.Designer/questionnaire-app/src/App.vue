@@ -1,7 +1,7 @@
 <template>
     <v-app>
         <v-main>
-            <div class="questionnaire container">
+            <div  id="designer-editor" class="questionnaire container">
                 <router-view name="header"></router-view>
                 <router-view name="tree"></router-view>
                 <section>
