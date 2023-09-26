@@ -4,6 +4,8 @@ import App from './App.vue';
 import router from './router';
 import {vuetify, i18n} /*, install, i18n */ from './plugins/vuetify';
 
+import '../../questionnaire/content/markup.less'
+
 /** Register Vue */
 const pinia = createPinia();
 const vue = createApp(App);

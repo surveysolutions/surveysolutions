@@ -83,5 +83,10 @@ export default defineConfig(({ mode }) => {
             '@': path.resolve(__dirname, './src'),
         },
     },
+    rollupOptions: {
+      input: 'src/main.js',
+      format: 'system',
+      preserveEntrySignatures: true
+    },
   }
 })
