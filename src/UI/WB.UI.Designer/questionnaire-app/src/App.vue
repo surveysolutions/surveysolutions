@@ -3,9 +3,13 @@
         <v-main>
             <div  id="designer-editor" class="questionnaire container">
                 <router-view name="header"></router-view>
-                <router-view name="tree"></router-view>
-                <section>
-                    <router-view />
+                <section id="spacer" class="row">
+                    <div class="left">
+                        <router-view name="tree"></router-view>
+                    </div>
+                    <div class="right">
+                        <router-view />
+                    </div>
                 </section>
             </div>
         </v-main>
