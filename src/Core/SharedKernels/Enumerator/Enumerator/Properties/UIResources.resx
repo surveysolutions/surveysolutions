@@ -289,7 +289,7 @@
     <value>Note: {0} questions is unanswered</value>
   </data>
   <data name="Dashboard_EmptyQuestionnairesList" xml:space="preserve">
-    <value>No questionnaires yet
+      <value>No questionnaires yet. 
 
 You can create or edit your questionnaires in Survey Solutions Designer</value>
   </data>

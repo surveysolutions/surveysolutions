@@ -49,13 +49,13 @@
     <PackageReference Include="Humanizer.Core" Version="2.14.1" />
     <PackageReference Include="Iesi.Collections" Version="4.0.5" />
     <PackageReference Include="JsonDiffPatch.Net" Version="2.3.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.11" />
     <PackageReference Include="Moq" Version="4.20.69" />
     <PackageReference Include="MvvmCross.Plugin.Messenger" Version="9.1.1" />
     <PackageReference Include="MvvmCross.Tests" Version="9.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NHibernate" Version="5.4.6" />
-    <PackageReference Include="NSubstitute" Version="5.0.0" />
+    <PackageReference Include="NSubstitute" Version="5.1.0" />
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="NUnit.Extension.NUnitProjectLoader" Version="3.7.1" />
     <PackageReference Include="NUnit.Extension.TeamCityEventListener" Version="1.0.8" />
@@ -64,7 +64,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Quartz" Version="3.6.2" />
+    <PackageReference Include="Quartz" Version="3.7.0" />
     <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
     <PackageReference Include="ReflectionMagic" Version="5.0.0" />

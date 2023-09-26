@@ -1,5 +1,6 @@
 <template>
     <div class="question static-text variable"
+        :class="variableClass"
         v-if="!$me.isLoading"
         :id="hash">
         <div class="question-editor">
@@ -26,10 +27,9 @@ export default {
     },
     data() {
         return {
-            text: '',
+            text: '',            
         }
     },
-
     mounted() {
         this.scroll()
     },
@@ -42,6 +42,13 @@ export default {
                 ? this.$me.value
                 : this.$t('WebInterviewUI.NotCalculated')
             return (this.$me.title || this.$me.name) + ' - ' + value
+        },
+        variableClass() {
+            return [
+                {
+                    'section-variable': !this.$me.isCover 
+                },
+            ]
         },
     },
     methods : {

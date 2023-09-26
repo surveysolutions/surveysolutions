@@ -346,7 +346,7 @@
     <value>Создать</value>
   </data>
   <data name="InterviewerEdit_DeviceIdTitle" xml:space="preserve">
-    <value>Идентификатор планшета</value>
+      <value>Идентификатор устройства</value>
   </data>
   <data name="InterviewerEdit_NoDeviceHistory" xml:space="preserve">
     <value>Интервьюер еще не синхронизировался. Информации об устройствах отсутствует.</value>
@@ -472,7 +472,7 @@
     <value>Не найден</value>
   </data>
   <data name="PackagesInfo_DeviceId" xml:space="preserve">
-    <value>Идентификатор планшета</value>
+      <value>Идентификатор устройства</value>
   </data>
   <data name="PackagesInfo_Header" xml:space="preserve">
     <value>Информационные пакеты планшета</value>
@@ -559,7 +559,7 @@
     <value>Загрузить</value>
   </data>
   <data name="WebsitePathIsTooLong_Title" xml:space="preserve">
-    <value>Папка, которая содержит веб-сайт, имеет долгий путь. Пожалуйста переместите сайт выше.</value>
+      <value>Папка, которая содержит веб-сайт, имеет слишком длинный путь. Пожалуйста переместите сайт выше.</value>
   </data>
   <data name="YesNoQuestion_No" xml:space="preserve">
     <value>Нет</value>
@@ -601,7 +601,7 @@
     <value>Внимание!</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Отмена</value>
+      <value>Отменить</value>
   </data>
   <data name="Completed" xml:space="preserve">
     <value>Завершено</value>
@@ -968,7 +968,7 @@
     <comment>Если интервьюер имеет законченные интервью в режиме переписи на это планшете, то они будут потерянны.</comment>
   </data>
   <data name="Users_ArchiveUsersConfirmMessage" xml:space="preserve">
-    <value>Будут заархивированы интервьюверы и супервизоры с их командами. Интервьюверы супервизора будут заархивированы во всех рабочих областях. Если интервьюеры имеют не просинхронизированные данные на на планшетах, то они будут удалены.</value>
+      <value>Будут заархивированы интервьюверы и супервизоры с их командами. Интервьюверы супервизора будут заархивированы во всех рабочих областях. Если интервьюеры имеют не просинхронизированные данные на на планшетах, то они не будут переданы на сервер.</value>
 
   </data>
   <data name="Supervisors_Archive" xml:space="preserve">
@@ -984,7 +984,7 @@
     <comment>Разархивировать</comment>
   </data>
   <data name="Interviewers_ConnectedToDeviceTitle" xml:space="preserve">
-    <value>Подключен к планшету</value>
+      <value>Подключен к серверу</value>
   </data>
   <data name="InterviewerProfile_Sync_Activity_Title" xml:space="preserve">
     <value>Последние данные по синхронизации</value>
@@ -1476,8 +1476,8 @@
     <comment>Интервью пакеты</comment>
   </data>
   <data name="Exceptions" xml:space="preserve">
-    <value>Ошибки</value>
-    <comment>Ошибки</comment>
+      <value>Исключения</value>
+      <comment>Ошибки</comment>
   </data>
   <data name="Admin_InterviewPackages_Exception" xml:space="preserve">
     <value>Ошибка</value>

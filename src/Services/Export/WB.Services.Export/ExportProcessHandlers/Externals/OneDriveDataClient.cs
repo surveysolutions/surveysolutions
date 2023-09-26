@@ -5,8 +5,12 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Graph;
+using Microsoft.Graph.Drives.Item.Items.Item.CreateUploadSession;
+using Microsoft.Graph.Models;
+using Microsoft.Kiota.Abstractions.Authentication;
 using Polly;
 using Polly.Retry;
 using WB.Services.Export.Infrastructure;
@@ -39,7 +43,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
             this.logger = logger;
             this.tenantContext = tenantContext;
 
-            this.retry = Policy.Handle<ServiceException>(e => e.StatusCode == HttpStatusCode.Unauthorized)
+            this.retry = Policy.Handle<ServiceException>(e => e.ResponseStatusCode == StatusCodes.Status401Unauthorized)
                 .RetryAsync(2, async (exception, span) =>
                 {
                     this.logger.LogError(exception, $"Unauthorized exception during request to OneDrive");
@@ -64,14 +68,9 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
         {
             logger.LogTrace("Creating Microsoft.Graph.Client for OneDrive file upload");
 
-            this.GraphServiceClient = new GraphServiceClient(new DelegateAuthenticationProvider(requestMessage =>
-            {
-                requestMessage
-                    .Headers
-                    .Authorization = new AuthenticationHeaderValue("bearer", accessToken);
-
-                return Task.CompletedTask;
-            }));
+            this.GraphServiceClient = new GraphServiceClient(
+                new ApiKeyAuthenticationProvider(accessToken, "bearer", ApiKeyAuthenticationProvider.KeyLocation.Header)            
+            );
         }
 
         private string Join(params string[] path) 
@@ -99,10 +98,14 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
 
                     await this.retry.ExecuteAsync(async () =>
                     {
-                        var session = await GraphServiceClient.Drive.Root.ItemWithPath(Join(folder, fileName)).CreateUploadSession().Request()
-                            .PostAsync(cancellationToken);
+                        var driveItem = await GraphServiceClient.Me.Drive.GetAsync(cancellationToken: cancellationToken);
+                        if (driveItem == null)
+                            throw new Exception("Can't receive drive information");
+
+                        var session = await GraphServiceClient.Drives[driveItem.Id].Root.ItemWithPath(Join(folder, fileName)).CreateUploadSession
+                            .PostAsync(new CreateUploadSessionPostRequestBody(), cancellationToken: cancellationToken);
                         
-                        return new ChunkedUploadProvider(session, graphServiceClient, fs, maxSizeChunk).UploadAsync();
+                        return new LargeFileUploadTask<DriveItem>(session, fs, maxSizeChunk).UploadAsync(cancellationToken: cancellationToken);
                     });
                 }
                 finally
@@ -115,16 +118,23 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
             {
                 logger.LogTrace("Uploading {fileName} to {folder}. Small file of size {Length}", fileName, folder, contentLength);
                 
-                await this.retry.ExecuteAsync(() =>
-                    GraphServiceClient.Drive.Root.ItemWithPath(Join(folder, fileName)).Content.Request()
-                        .PutAsync<DriveItem>(fileStream));
+                await this.retry.ExecuteAsync(async () =>
+                {
+                    var driveItem = await GraphServiceClient.Me.Drive.GetAsync(cancellationToken: cancellationToken);
+                    if (driveItem == null)
+                        throw new Exception("Can't receive drive information");
+                    
+                    return await GraphServiceClient.Drives[driveItem.Id].Root.ItemWithPath(Join(folder, fileName)).Content
+                        .PutAsync(fileStream, cancellationToken: cancellationToken);
+                });
             }
         }
 
         public async Task<long?> GetFreeSpaceAsync(CancellationToken cancellationToken)
         {
             var storageInfo = 
-                await this.retry.ExecuteAsync(GraphServiceClient.Drive.Request().GetAsync, cancellationToken);
+                await this.retry.ExecuteAsync(() => 
+                    GraphServiceClient.Me.Drive.GetAsync(cancellationToken: cancellationToken));
             if (storageInfo?.Quota?.Total == null) return null;
 
             return storageInfo.Quota.Total - storageInfo.Quota.Used ?? 0;

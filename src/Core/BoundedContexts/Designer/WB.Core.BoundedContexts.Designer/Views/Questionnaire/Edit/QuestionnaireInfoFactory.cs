@@ -348,18 +348,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         {
             var document = this.questionnaireDocumentReader.Get(questionnaireId);
 
-            var question = document?.Find<IQuestion>(questionId);
-            if (question == null)
-                return null;
-
-            if (document == null)
-                return null;
+            if (document == null) return null;
+            var question = document.Find<IQuestion>(questionId);
+            if (question == null) return null;
+            
             ReadOnlyQuestionnaireDocument questionnaire = new ReadOnlyQuestionnaireDocument(document);
 
             NewEditQuestionView? result = MapQuestionFields(question);
             if (result != null)
             {
-                result.Options ??= new CategoricalOption[0];
+                result.Options ??= Array.Empty<CategoricalOption>();
                 result.OptionsCount = result.Options.Length;
                 result.Breadcrumbs = this.GetBreadcrumbs(questionnaire, question);
                 result.SourceOfLinkedEntities = this.GetSourcesOfLinkedQuestionBriefs(questionnaire, questionId);

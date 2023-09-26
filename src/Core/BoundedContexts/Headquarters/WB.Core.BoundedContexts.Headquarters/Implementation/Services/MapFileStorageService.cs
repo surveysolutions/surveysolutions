@@ -240,77 +240,48 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     break;
                 case ".tif":
                     {
-                        try
+                        var tempFile = Path.Combine(mapsDirectory, mapFile.Name);
+                        var fullPath = Path.GetFullPath(tempFile);
+
+                        bool isReaded = TryReadGdalInfomation(fullPath, out var deserialized);
+
+                        if (isReaded)
                         {
-                            var tempFile = Path.Combine(mapsDirectory, mapFile.Name);
-                            var fullPath = Path.GetFullPath(tempFile);
-
-                            var valueGdalHome = this.geospatialConfig.Value.GdalHome;
-
-                            if (!string.IsNullOrWhiteSpace(valueGdalHome))
+                            if (deserialized?.Wgs84Extent != null)
                             {
-                                this.logger.LogInformation("Reading info from {FileName} with gdalinfo located in {GdalHome}", 
-                                    fullPath, valueGdalHome);
-                            
-                                var startInfo = ConsoleCommand.Read(Path.Combine(valueGdalHome, "gdalinfo"), $"\"{fullPath}\" -json");
-                                var deserialized = JsonConvert.DeserializeObject<GdalInfoOuput>(startInfo);
+                                double xMin = double.MaxValue;
+                                double xMax = double.MinValue;
+                                double yMin = double.MaxValue;
+                                double yMax = double.MinValue;
 
-                                if (deserialized?.Wgs84Extent != null)
+                                foreach (double[][] poli in deserialized.Wgs84Extent.Coordinates)
                                 {
-                                    double xMin = double.MaxValue;
-                                    double xMax = double.MinValue;
-                                    double yMin = double.MaxValue;
-                                    double yMax = double.MinValue;
-
-                                    foreach (double[][] poli in deserialized.Wgs84Extent.Coordinates)
+                                    foreach (double[] coord in poli)
                                     {
-                                        foreach (double[] coord in poli)
-                                        {
-                                            xMin = Math.Min(xMin, coord[0]);
-                                            xMax = Math.Max(xMax, coord[0]);
+                                        xMin = Math.Min(xMin, coord[0]);
+                                        xMax = Math.Max(xMax, coord[0]);
 
-                                            yMin = Math.Min(yMin, coord[1]);
-                                            yMax = Math.Max(yMax, coord[1]);
-                                        }
+                                        yMin = Math.Min(yMin, coord[1]);
+                                        yMax = Math.Max(yMax, coord[1]);
                                     }
-
-                                    item.XMinVal = xMin;
-                                    item.YMinVal = yMin;
-
-                                    item.XMaxVal = xMax;
-                                    item.YMaxVal = yMax;
-
-                                    item.Wkid = WGS84Wkid; //geographic coordinates Wgs84
                                 }
-                                else
-                                    throw new InvalidOperationException(".tif file is not recognized as map");
+
+                                item.XMinVal = xMin;
+                                item.YMinVal = yMin;
+
+                                item.XMaxVal = xMax;
+                                item.YMaxVal = yMax;
+
+                                item.Wkid = WGS84Wkid; //geographic coordinates Wgs84
                             }
                             else
-                            {
-                                var isGeoTiff = GeoTiffInfoReader.IsGeoTIFF(fullPath);
-                                if (!isGeoTiff)
-                                    throw new InvalidOperationException(".tif file is not recognized as map");    
-                            }
-                            
+                                throw new InvalidOperationException(".tif file is not recognized as map");
                         }
-                        catch (Win32Exception e)
+                        else
                         {
-                            if (e.NativeErrorCode == 2)
-                            {
-                                throw new InvalidOperationException("gdalinfo utility not found. Please install gdal library and add to PATH variable", e);
-                            }
-                        }
-                        catch (NonZeroExitCodeException e)
-                        {
-                            if(!string.IsNullOrEmpty(e.ErrorOutput))
-                                logger.LogError(e.ErrorOutput);
-                            
-                            if (e.ProcessExitCode == 4)
-                            {
-                                throw new InvalidOperationException(".tif file is not recognized as map", e);
-                            }
-
-                            throw;
+                            var isGeoTiff = GeoTiffInfoReader.IsGeoTIFF(fullPath);
+                            if (!isGeoTiff)
+                                throw new InvalidOperationException(".tif file is not recognized as map");    
                         }
                     }
                     break;
@@ -434,6 +405,49 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             }
 
             return item;
+        }
+
+        private bool TryReadGdalInfomation(string fullPath, out GdalInfoOuput gdalInfo)
+        {
+            gdalInfo = null;
+            
+            var valueGdalHome = this.geospatialConfig.Value.GdalHome;
+
+            if (string.IsNullOrWhiteSpace(valueGdalHome))
+                return false;
+                
+            try
+            {
+                this.logger.LogInformation("Reading info from {FileName} with gdalinfo located in {GdalHome}", 
+                    fullPath, valueGdalHome);
+            
+                var startInfo = ConsoleCommand.Read(Path.Combine(valueGdalHome, "gdalinfo"), $"\"{fullPath}\" -json");
+                gdalInfo = JsonConvert.DeserializeObject<GdalInfoOuput>(startInfo);
+
+                return true;
+            }
+            catch (Win32Exception e)
+            {
+                if (e.NativeErrorCode == 2)
+                {
+                    //throw new InvalidOperationException("gdalinfo utility not found. Please install gdal library and add to PATH variable", e);
+                    return false;
+                }
+            }
+            catch (NonZeroExitCodeException e)
+            {
+                if(!string.IsNullOrEmpty(e.ErrorOutput))
+                    logger.LogError(e.ErrorOutput);
+                
+                if (e.ProcessExitCode == 4)
+                {
+                    throw new InvalidOperationException(".tif file is not recognized as map", e);
+                }
+
+                throw;
+            }
+            
+            return false;
         }
 
         private Geometry Transform(Geometry geometry, CoordinateTransformationFilter coordinateTransformation)

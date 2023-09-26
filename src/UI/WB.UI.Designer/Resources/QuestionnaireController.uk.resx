@@ -175,10 +175,10 @@
     <value>Створено</value>
   </data>
   <data name="CreatedDate" xml:space="preserve">
-    <value>Створено на</value>
+    <value>Створено о</value>
   </data>
   <data name="CreateNew" xml:space="preserve">
-    <value>Створити новий</value>
+    <value>Створити нову</value>
   </data>
   <data name="CreateNewQuestionnaire" xml:space="preserve">
     <value>Створити нову анкету</value>
@@ -310,7 +310,7 @@
     <value>Виберіть файл значень з табуляціями для завантаження, будь ласка</value>
   </data>
   <data name="SharedQuestionnaires" xml:space="preserve">
-    <value>Анкети у спільному доступі зі мною</value>
+    <value>Анкети доступі ме</value>
   </data>
   <data name="SuccessDeleteMessage" xml:space="preserve">
     <value>Анкету "{0}" успішно видалено</value>

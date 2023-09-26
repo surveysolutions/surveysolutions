@@ -181,7 +181,7 @@
     <value>Створити Супервізора</value>
   </data>
   <data name="CreationDate" xml:space="preserve">
-    <value>Обліковий запис створено на</value>
+    <value>Обліковий запис створено о</value>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Редагувати</value>
@@ -289,7 +289,7 @@
     <value>Супервізори</value>
   </data>
   <data name="Supervisors_Edit" xml:space="preserve">
-    <value>Керівник редагування</value>
+      <value>Редагування супервізора</value>
   </data>
   <data name="SupervisorsCountDescription" xml:space="preserve">
     <value>Супервізори ({{count}})</value>

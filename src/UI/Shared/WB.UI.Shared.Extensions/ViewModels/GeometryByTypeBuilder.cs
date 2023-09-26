@@ -1,7 +1,6 @@
-﻿using System;
-using System.Linq;
-using Esri.ArcGISRuntime.Geometry;
+﻿using Esri.ArcGISRuntime.Geometry;
 using GeometryType = WB.Core.SharedKernels.Questionnaire.Documents.GeometryType;
+using EsriGeometryType = Esri.ArcGISRuntime.Geometry.GeometryType;
 
 namespace WB.UI.Shared.Extensions.ViewModels;
 
@@ -34,6 +33,31 @@ internal class GeometryByTypeBuilder
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(geometryType), geometryType, "Invalid requested type");
+        }
+    }
+    
+    public GeometryByTypeBuilder(Geometry geometry)
+    {
+        switch (geometry.GeometryType)
+        {
+            case EsriGeometryType.Polygon:
+                this.geometryType = GeometryType.Polygon;
+                polygonBuilder = new PolygonBuilder((Polygon)geometry);
+                break;
+            case EsriGeometryType.Polyline:
+                this.geometryType = GeometryType.Polyline;
+                polylineBuilder = new PolylineBuilder((Polyline)geometry);
+                break;
+            case EsriGeometryType.Point:
+                this.geometryType = GeometryType.Point;
+                mapPointBuilder = new MapPointBuilder((MapPoint)geometry);
+                break;
+            case EsriGeometryType.Multipoint:
+                this.geometryType = GeometryType.Multipoint;
+                multipointBuilder = new MultipointBuilder((Multipoint)geometry);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(geometry.GeometryType), geometry.GeometryType, "Invalid requested type");
         }
     }
 
