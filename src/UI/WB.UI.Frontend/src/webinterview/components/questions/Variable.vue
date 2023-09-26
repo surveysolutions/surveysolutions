@@ -15,7 +15,7 @@
 <script lang="js">
 import { entityDetails } from '../mixins'
 import { getLocationHash } from '~/shared/helpers'
-import { debounce, filter } from 'lodash'
+import { debounce, find } from 'lodash'
 
 export default {
     name: 'Variable',
@@ -44,10 +44,10 @@ export default {
             return (this.$me.title || this.$me.name) + ' - ' + value
         },
         variableClass() {
-            const entity = filter(this.$store.state.webinterview.entities, d => d.identity == this.id)
+            const entity = find(this.$store.state.webinterview.entities, d => d.identity == this.id)
             return [
                 {
-                    'section-variable': !entity[0].isCover 
+                    'section-variable': !entity.isCover 
                 },
             ]
         },
