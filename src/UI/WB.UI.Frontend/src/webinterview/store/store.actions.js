@@ -246,7 +246,7 @@ export default {
 
                 const isCover = id === undefined || id == Vue.$config.coverPageId
                 if (isCover) {
-                    forEach(section.details, entity => {
+                    forEach(section.entities, entity => {
                         entity.isCover = true
                     })
                 }
