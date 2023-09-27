@@ -101,7 +101,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                                     staticTextId));
                             }
                         }
-                        else if (questionnaire.IsCustomViewRoster(parent.Id))
+                        if (questionnaire.IsCustomViewRoster(parent.Id))
                         {
                             var parentGroupIdentity = GetParentIdentity(parent, interview);
                             var connectedClientSectionKey =
