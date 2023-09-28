@@ -163,19 +163,19 @@
     <value>处理</value>
   </data>
   <data name="CompilationErrorsCounter" xml:space="preserve">
-    <value>发现{{count}}个错误</value>
+    <value>发现{count}个错误</value>
   </data>
   <data name="CompilationErrorsCounter_plural" xml:space="preserve">
-    <value>发现{{count}}个错误</value>
+    <value>发现{count}个错误</value>
   </data>
   <data name="CompilationLabel" xml:space="preserve">
     <value>编译：</value>
   </data>
   <data name="CompilationWarningsCounter" xml:space="preserve">
-    <value>发现{{count}}个警告</value>
+    <value>发现{count}个警告</value>
   </data>
   <data name="CompilationWarningsCounter_plural" xml:space="preserve">
-    <value>发现{{count}}个警告</value>
+    <value>发现{count}个警告</value>
   </data>
   <data name="Compile" xml:space="preserve">
     <value>编译：</value>
@@ -205,7 +205,7 @@
     <value>您确定要删除评论？</value>
   </data>
   <data name="DeleteConfirmQuestion" xml:space="preserve">
-    <value>您确认删除“{{trimmedTitle}}”吗？</value>
+    <value>您确认删除“{trimmedTitle}”吗？</value>
   </data>
   <data name="Download" xml:space="preserve">
     <value>下载</value>
@@ -220,19 +220,19 @@
     <value>本部分为空。</value>
   </data>
   <data name="EmptySectionLine2" xml:space="preserve">
-    <value>您可以从使用{{-addQuestionBtn}}和{{-addSubsectionBtn}}键开始</value>
+    <value>您可以从使用{-addQuestionBtn}和{-addSubsectionBtn}键开始</value>
   </data>
   <data name="EmptySectionLine3" xml:space="preserve">
-    <value>在此区域的上端，或使用{{-panel}}作面板的管理菜单</value>
+    <value>在此区域的上端，或使用{-panel}作面板的管理菜单</value>
   </data>
   <data name="EmptySectionLine5" xml:space="preserve">
-    <value>可以在 {{-settingsBtn}}面板（右上角）找到</value>
+    <value>可以在 {-settingsBtn}面板（右上角）找到</value>
   </data>
   <data name="EnablingCondition" xml:space="preserve">
     <value>启用条件</value>
   </data>
   <data name="EnteredMoreThanAllowed" xml:space="preserve">
-    <value>您输入了超过最大被允许的范围{{max}}。</value>
+    <value>您输入了超过最大被允许的范围{max}。</value>
   </data>
   <data name="EntityComment" xml:space="preserve">
     <value>新注释</value>
@@ -244,10 +244,10 @@
     <value>错误或警告消息</value>
   </data>
   <data name="ErrorsCounter" xml:space="preserve">
-    <value>{{count}}个错误</value>
+    <value>{count}个错误</value>
   </data>
   <data name="ErrorsCounter_plural" xml:space="preserve">
-    <value>{{count}}个错误</value>
+    <value>{count}个错误</value>
   </data>
   <data name="Export" xml:space="preserve">
     <value>导出到</value>
@@ -268,16 +268,16 @@
     <value>全部</value>
   </data>
   <data name="FindReplaceInAllFound" xml:space="preserve">
-    <value>在{{count}}中找到实体？</value>
+    <value>在{count}中找到实体？</value>
   </data>
   <data name="FindReplaceInAllFound_plural" xml:space="preserve">
-    <value>在{{count}}中找到实体？</value>
+    <value>在{count}中找到实体？</value>
   </data>
   <data name="FindReplaceMatchCase" xml:space="preserve">
     <value>匹配的个体</value>
   </data>
   <data name="FindReplaceMatchingLines" xml:space="preserve">
-    <value>匹配的行：{{count}}</value>
+    <value>匹配的行：{count}</value>
   </data>
   <data name="FindReplaceMatchWord" xml:space="preserve">
     <value>匹配整个词</value>
@@ -289,7 +289,7 @@
     <value>上一个</value>
   </data>
   <data name="FindReplaceReplaceAll" xml:space="preserve">
-    <value>替换所有({{count}})</value>
+    <value>替换所有({count})</value>
   </data>
   <data name="FindReplaceReplaceAllConfirm" xml:space="preserve">
     <value>替换所有</value>
@@ -319,7 +319,7 @@
     <value>标题</value>
   </data>
   <data name="HellowMessageBtn" xml:space="preserve">
-    <value>欢迎，{{currentUserName}}</value>
+    <value>欢迎，{currentUserName}</value>
   </data>
   <data name="Help" xml:space="preserve">
     <value>帮助</value>
@@ -358,7 +358,7 @@
     <value>添加注释</value>
   </data>
   <data name="HelpQuestionnaireVarible" xml:space="preserve">
-    <value>问卷变量被当成导出数据问卷名字的前缀。变量名称和二维表ID的长度为 {{minLength}} - {{maxLength}} 个字符，且只能包含如下字符： a-z，A-Z， _， 或者 0-9。第一个字符不能是 0-9 或 _ 且最后一个字符不能是_。</value>
+    <value>问卷变量被当成导出数据问卷名字的前缀。变量名称和二维表ID的长度为 {minLength} - {maxLength} 个字符，且只能包含如下字符： a-z，A-Z， _， 或者 0-9。第一个字符不能是 0-9 或 _ 且最后一个字符不能是_。</value>
   </data>
   <data name="HelpSourceQuestion" xml:space="preserve">
     <value>源问题（答案产生行数）</value>
@@ -379,10 +379,10 @@
     <value>文本将被显示在变量旁边用于测试目的</value>
   </data>
   <data name="HelpVariableLabel" xml:space="preserve">
-    <value>一段长度最长为{{maxLength}}的字符将被附加至被导出的变量。</value>
+    <value>一段长度最长为{maxLength}的字符将被附加至被导出的变量。</value>
   </data>
   <data name="HelpVariableName" xml:space="preserve">
-    <value>变量名和名单ID的长度为{{minLength}}至{{maxLength}}个字符，并且只能包含以下字符：a-z，A-Z，_或0-9。 第一个字符不能是0-9或_，最后一个字符不能是_。</value>
+    <value>变量名和名单ID的长度为{minLength}至{maxLength}个字符，并且只能包含以下字符：a-z，A-Z，_或0-9。 第一个字符不能是0-9或_，最后一个字符不能是_。</value>
   </data>
   <data name="HideIfDisabled" xml:space="preserve">
     <value>如果不启用则隐藏</value>
@@ -586,7 +586,7 @@
     <value>问卷设置</value>
   </data>
   <data name="QuestionnaireSummary" xml:space="preserve">
-    <value>({{questionsCount}}Q,{{groupsCount}}S,{{rostersCount}}R)</value>
+    <value>({questionsCount}Q,{groupsCount}S,{rostersCount}R)</value>
   </data>
   <data name="QuestionOnlyInts" xml:space="preserve">
     <value>只能填整数</value>
@@ -598,7 +598,7 @@
     <value>保存成功。文件上传的窗口将被打开。</value>
   </data>
   <data name="QuestionOptionsCut" xml:space="preserve">
-    <value>如果一问题已经被标记为“复选框型”或“级联复选框型”，且正在上传的问题的细节包含多个选项，那么这个问题的值将最多被减掉{{count}}</value>
+    <value>如果一问题已经被标记为“复选框型”或“级联复选框型”，且正在上传的问题的细节包含多个选项，那么这个问题的值将最多被减掉{count}</value>
   </data>
   <data name="QuestionOrdered" xml:space="preserve">
     <value>记录答题的顺序</value>
@@ -670,7 +670,7 @@
     <value>保存</value>
   </data>
   <data name="SavedAtTimestamp" xml:space="preserve">
-    <value>保存于{{dateTime, H:mm}}。</value>
+    <value>保存于{dateTime, H:mm}。</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>查找</value>
@@ -766,13 +766,13 @@
     <value>添加新的宏</value>
   </data>
   <data name="SideBarAttachmentDetailsFormat" xml:space="preserve">
-    <value>格式：{{- type}}</value>
+    <value>格式：{- type}</value>
   </data>
   <data name="SideBarAttachmentDetailsResolution" xml:space="preserve">
-    <value>{{width}}×{{height}}像素</value>
+    <value>{width}×{height}像素</value>
   </data>
   <data name="SideBarAttachmentDetailsSize" xml:space="preserve">
-    <value>大小：{{size}}</value>
+    <value>大小：{size}</value>
   </data>
   <data name="SideBarAttachmentName" xml:space="preserve">
     <value>附件名称</value>
@@ -781,10 +781,10 @@
     <value>附件没有名称</value>
   </data>
   <data name="SideBarAttachmentsCounter" xml:space="preserve">
-    <value>{{count}}附件文件 (共{{bytes}})</value>
+    <value>{count}附件文件 (共{bytes})</value>
   </data>
   <data name="SideBarAttachmentsCounter_plural" xml:space="preserve">
-    <value>{{count}}附件文件 (共{{bytes}})</value>
+    <value>{count}附件文件 (共{bytes})</value>
   </data>
   <data name="SideBarAttachmentsEmptyLine1" xml:space="preserve">
     <value>用这个 tab 去上传文件可能引用的多媒体文件。</value>
@@ -793,10 +793,10 @@
     <value>为了避免同步速度较慢，我们推荐小于2M的文件。对于被支持文件的类型、格式和大小</value>
   </data>
   <data name="SideBarAttachmentsEmptyLine3" xml:space="preserve">
-    <value>可以用来用一个附件来增加静态文本，并用附件属性 {{-name}} 来明确静态文本的名称</value>
+    <value>可以用来用一个附件来增加静态文本，并用附件属性 {-name} 来明确静态文本的名称</value>
   </data>
   <data name="SideBarAttachmentsEstimate" xml:space="preserve">
-    <value>东部标准时间：导入时间：{{timeString}}速度为{{downloadSpeed}}Kb/s (EDGE)</value>
+    <value>东部标准时间：导入时间：{timeString}速度为{downloadSpeed}Kb/s (EDGE)</value>
   </data>
   <data name="SideBarAttachmentsTitle" xml:space="preserve">
     <value>附件</value>
@@ -805,13 +805,13 @@
     <value>上传新文件</value>
   </data>
   <data name="SideBarAttachmentUploaded" xml:space="preserve">
-    <value>最近上传：{{-lastUpdate, MMMM DD[,] YYYY [at] k:mm}}</value>
+    <value>最近上传：{-lastUpdate, MMMM DD[,] YYYY [at] k:mm}</value>
   </data>
   <data name="SideBarCommentsCounter" xml:space="preserve">
-    <value>{{count}}个评论：</value>
+    <value>{count}个评论：</value>
   </data>
   <data name="SideBarCommentsCounter_plural" xml:space="preserve">
-    <value>{{count}}个评论：</value>
+    <value>{count}个评论：</value>
   </data>
   <data name="SideBarCommentsTitle" xml:space="preserve">
     <value>注释</value>
@@ -844,10 +844,10 @@
     <value>没有名称的查询表</value>
   </data>
   <data name="SideBarLookupTablesCounter" xml:space="preserve">
-    <value>{{count}} 个查询表：</value>
+    <value>{count} 个查询表：</value>
   </data>
   <data name="SideBarLookupTablesCounter_plural" xml:space="preserve">
-    <value>{{count}} 个查询表：</value>
+    <value>{count} 个查询表：</value>
   </data>
   <data name="SideBarLookupTableSelectFile" xml:space="preserve">
     <value>选择文件</value>
@@ -862,10 +862,10 @@
     <value>内用</value>
   </data>
   <data name="SideBarMacroCounter" xml:space="preserve">
-    <value>{{count}}个宏</value>
+    <value>{count}个宏</value>
   </data>
   <data name="SideBarMacroCounter_plural" xml:space="preserve">
-    <value>{{count}}个宏</value>
+    <value>{count}个宏</value>
   </data>
   <data name="SideBarMacroDescription" xml:space="preserve">
     <value>描述</value>
@@ -970,10 +970,10 @@
     <value>年：</value>
   </data>
   <data name="SideBarSectionsCounter" xml:space="preserve">
-    <value>{{count}}个问卷模块：</value>
+    <value>{count}个问卷模块：</value>
   </data>
   <data name="SideBarSectionsCounter_plural" xml:space="preserve">
-    <value>{{count}}个问卷模块：</value>
+    <value>{count}个问卷模块：</value>
   </data>
   <data name="SideBarSectionsTitle" xml:space="preserve">
     <value>问卷模块</value>
@@ -994,10 +994,10 @@
     <value>没有名称的翻译</value>
   </data>
   <data name="SideBarTranslationsCounter" xml:space="preserve">
-    <value>{{count}}个翻译</value>
+    <value>{count}个翻译</value>
   </data>
   <data name="SideBarTranslationsCounter_plural" xml:space="preserve">
-    <value>{{count}}个翻译</value>
+    <value>{count}个翻译</value>
   </data>
   <data name="SideBarTranslationsEmptyLine1" xml:space="preserve">
     <value>用这个tab 去管理问卷翻译。</value>
@@ -1120,16 +1120,16 @@
     <value>变量名称</value>
   </data>
   <data name="ViewResolvedCommentsCounter" xml:space="preserve">
-    <value>查看{{count}}已处理的注释</value>
+    <value>查看{count}已处理的注释</value>
   </data>
   <data name="ViewResolvedCommentsCounter_plural" xml:space="preserve">
-    <value>查看{{count}}已处理的注释</value>
+    <value>查看{count}已处理的注释</value>
   </data>
   <data name="WarningsCounter" xml:space="preserve">
-    <value>{{count}}个警告</value>
+    <value>{count}个警告</value>
   </data>
   <data name="WarningsCounter_plural" xml:space="preserve">
-    <value>{{count}}个警告</value>
+    <value>{count}个警告</value>
   </data>
   <data name="DownloadPdf" xml:space="preserve">
       <value>下载PDF版本</value>

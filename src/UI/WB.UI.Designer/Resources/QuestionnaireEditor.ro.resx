@@ -217,19 +217,19 @@
     <value>Rezolvă</value>
   </data>
   <data name="CompilationErrorsCounter" xml:space="preserve">
-    <value>S-a găsit o eroare {{count}}</value>
+    <value>S-a găsit o eroare {count}</value>
   </data>
   <data name="CompilationErrorsCounter_plural" xml:space="preserve">
-    <value>S-au găsit {{count}} erori</value>
+    <value>S-au găsit {count} erori</value>
   </data>
   <data name="CompilationLabel" xml:space="preserve">
     <value>Compilare:</value>
   </data>
   <data name="CompilationWarningsCounter" xml:space="preserve">
-    <value>A fost găsit un avertisment {{count}}</value>
+    <value>A fost găsit un avertisment {count}</value>
   </data>
   <data name="CompilationWarningsCounter_plural" xml:space="preserve">
-    <value>{{count}} avertismente găsite</value>
+    <value>{count} avertismente găsite</value>
   </data>
   <data name="Compile" xml:space="preserve">
     <value>Compilează</value>
@@ -262,10 +262,10 @@
     <value>Sigur doriți să ștergeți comentariul?</value>
   </data>
   <data name="DeleteConfirmCategories" xml:space="preserve">
-    <value>Sigur doriți să ștergeți setul de variante de răspuns "{{trimmedTitle}}"? Sursa variantelor de răspuns pentru întrebări categoriale dependente de aceasta va fi schimbată în variante de răspuns definite de utilizator</value>
+    <value>Sigur doriți să ștergeți setul de variante de răspuns "{trimmedTitle}"? Sursa variantelor de răspuns pentru întrebări categoriale dependente de aceasta va fi schimbată în variante de răspuns definite de utilizator</value>
   </data>
   <data name="DeleteConfirmQuestion" xml:space="preserve">
-    <value>Sigur doriți să ștergeți "{{trimmedTitle}}"?</value>
+    <value>Sigur doriți să ștergeți "{trimmedTitle}"?</value>
   </data>
   <data name="Download" xml:space="preserve">
     <value>Descarcă</value>
@@ -283,22 +283,22 @@
     <value>Această secțiune este goală.</value>
   </data>
   <data name="EmptySectionLine2" xml:space="preserve">
-    <value>Puteți începe utilizând butoanele {{-addQuestionBtn}} și {{-addSubsectionBtn}}</value>
+    <value>Puteți începe utilizând butoanele {-addQuestionBtn} și {-addSubsectionBtn}</value>
   </data>
   <data name="EmptySectionLine3" xml:space="preserve">
-    <value>deasupra acestui bloc sau gestionați secțiunile cu panoul din stânga {{-panel}}</value>
+    <value>deasupra acestui bloc sau gestionați secțiunile cu panoul din stânga {-panel}</value>
   </data>
   <data name="EmptySectionLine4" xml:space="preserve">
     <value>Numele chestionarului, variabila, colaborarea și alte opțiuni</value>
   </data>
   <data name="EmptySectionLine5" xml:space="preserve">
-    <value>poate fi găsit la panoul {{-settingsBtn}} (colțul din dreapta sus)</value>
+    <value>poate fi găsit la panoul {-settingsBtn} (colțul din dreapta sus)</value>
   </data>
   <data name="EnablingCondition" xml:space="preserve">
     <value>Condiția de activare</value>
   </data>
   <data name="EnteredMoreThanAllowed" xml:space="preserve">
-    <value>Ați introdus mai mult decât maximul permis {{max}}</value>
+    <value>Ați introdus mai mult decât maximul permis {max}</value>
   </data>
   <data name="EntityComment" xml:space="preserve">
     <value>Comentariu nou</value>
@@ -310,10 +310,10 @@
     <value>Mesaj de eroare sau de avertizare</value>
   </data>
   <data name="ErrorsCounter" xml:space="preserve">
-    <value>Eroare {{count}}</value>
+    <value>Eroare {count}</value>
   </data>
   <data name="ErrorsCounter_plural" xml:space="preserve">
-    <value>{{count}} erori</value>
+    <value>{count} erori</value>
   </data>
   <data name="Export" xml:space="preserve">
     <value>Export</value>
@@ -334,16 +334,16 @@
     <value>Tot</value>
   </data>
   <data name="FindReplaceInAllFound" xml:space="preserve">
-    <value>în {{count}} valoare găsită ?</value>
+    <value>în {count} valoare găsită ?</value>
   </data>
   <data name="FindReplaceInAllFound_plural" xml:space="preserve">
-    <value>în {{count}} valori găsite ?</value>
+    <value>în {count} valori găsite ?</value>
   </data>
   <data name="FindReplaceMatchCase" xml:space="preserve">
     <value>Potrivește capitalizarea</value>
   </data>
   <data name="FindReplaceMatchingLines" xml:space="preserve">
-    <value>Au fost găsite {{count}} linii</value>
+    <value>Au fost găsite {count} linii</value>
   </data>
   <data name="FindReplaceMatchWord" xml:space="preserve">
     <value>Potrivește cuvântul întreg</value>
@@ -355,7 +355,7 @@
     <value>Anterior</value>
   </data>
   <data name="FindReplaceReplaceAll" xml:space="preserve">
-    <value>Înlocuiește toate ({{count}})</value>
+    <value>Înlocuiește toate ({count})</value>
   </data>
   <data name="FindReplaceReplaceAllConfirm" xml:space="preserve">
     <value>Înlocuiește toate</value>
@@ -394,7 +394,7 @@
     <value>Titlu</value>
   </data>
   <data name="HellowMessageBtn" xml:space="preserve">
-    <value>Bună ziua, {{currentUserName}}</value>
+    <value>Bună ziua, {currentUserName}</value>
   </data>
   <data name="Help" xml:space="preserve">
     <value>Ajutor</value>
@@ -448,7 +448,7 @@
     <value>Codul numeric al variantei de răspuns (vizibil pentru anchetator)</value>
   </data>
   <data name="HelpQuestionnaireVarible" xml:space="preserve">
-    <value>Variabila chestionarului este utilizată ca prefix în formarea numelor pentru fișierele de export. Numele variabilelor și ID-urile listei pot avea de la {{minLength}} la {{maxLength}} caractere și trebuie să conțină numai următoarele caractere: a-z, A-Z, _ sau 0-9. Primul caracter nu poate fi 0-9 sau _ și ultimul nu poate fi _.</value>
+    <value>Variabila chestionarului este utilizată ca prefix în formarea numelor pentru fișierele de export. Numele variabilelor și ID-urile listei pot avea de la {minLength} la {maxLength} caractere și trebuie să conțină numai următoarele caractere: a-z, A-Z, _ sau 0-9. Primul caracter nu poate fi 0-9 sau _ și ultimul nu poate fi _.</value>
   </data>
   <data name="HelpRosterDisplayMode" xml:space="preserve">
     <value>Sub-secțiune - întrebările listei sunt afișate în spatele butoanelor corespunzătoare instanțelor listei.
@@ -476,10 +476,10 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
     <value>Text care va fi afișat lângă o variabilă în scopul testării</value>
   </data>
   <data name="HelpVariableLabel" xml:space="preserve">
-    <value>Un text de maximum {{maxLength}} caractere care va fi atașat variabilei exportate.</value>
+    <value>Un text de maximum {maxLength} caractere care va fi atașat variabilei exportate.</value>
   </data>
   <data name="HelpVariableName" xml:space="preserve">
-    <value>Numele variabilelor și ID-urile listei pot avea de la {{minLength}} la {{maxLength}} caractere și trebuie să conțină numai următoarele caractere: a-z, A-Z, _ sau 0-9. Primul caracter nu poate fi 0-9 sau _ și ultimul nu poate fi _.</value>
+    <value>Numele variabilelor și ID-urile listei pot avea de la {minLength} la {maxLength} caractere și trebuie să conțină numai următoarele caractere: a-z, A-Z, _ sau 0-9. Primul caracter nu poate fi 0-9 sau _ și ultimul nu poate fi _.</value>
   </data>
   <data name="HelpVirtualCoverPage" xml:space="preserve">
     <value>Coperta este o secțiune virtuală care arată toate întrebările de identificare.
@@ -612,7 +612,7 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
     <value>In regulă</value>
   </data>
   <data name="OnlyFirstOptionsWillBeTakenConfirmation" xml:space="preserve">
-    <value>Doar primele {{count}} categorii vor fi folosite pentru întrebarea „{{trimmedTitle}}”?</value>
+    <value>Doar primele {count} categorii vor fi folosite pentru întrebarea „{trimmedTitle}”?</value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>Deschis</value>
@@ -651,7 +651,7 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
     <value>vă rugăm să asteaptați ...</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>Previzualizați versiunea nr. {{revision}}</value>
+    <value>Previzualizați versiunea nr. {revision}</value>
   </data>
   <data name="PublicAccessSettings" xml:space="preserve">
     <value>Acces public</value>
@@ -726,7 +726,7 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
     <value>Setări chestionar</value>
   </data>
   <data name="QuestionnaireSummary" xml:space="preserve">
-    <value>({{questionsCount}}Q, {{groupsCount}}S, {{rostersCount}}R)</value>
+    <value>({questionsCount}Q, {groupsCount}S, {rostersCount}R)</value>
   </data>
   <data name="QuestionOneToFiftyAllowed" xml:space="preserve">
     <value>Sunt permise numere întregi între 1 și 50</value>
@@ -741,7 +741,7 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
     <value>A fost salvat cu succes. Se va deschide fereastra pentru încărcarea fișierelor.</value>
   </data>
   <data name="QuestionOptionsCut" xml:space="preserve">
-    <value>Întrebarea a fost marcată ca „Combo-box” sau „Combo-box legată” în timpul încărcării detaliilor întrebării și conținea prea multe variante de răspuns, numărul acestora a fost redus până la {{count}}</value>
+    <value>Întrebarea a fost marcată ca „Combo-box” sau „Combo-box legată” în timpul încărcării detaliilor întrebării și conținea prea multe variante de răspuns, numărul acestora a fost redus până la {count}</value>
   </data>
   <data name="QuestionOrdered" xml:space="preserve">
     <value>Înregistrați ordinea de răspuns</value>
@@ -798,7 +798,7 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
     <value>Recompilare</value>
   </data>
   <data name="ReplaceOptionsConfirmation" xml:space="preserve">
-    <value>Sigur doriți să înlocuiți variante de răspuns existente pentru întrebarea „{{trimmedTitle}}”?</value>
+    <value>Sigur doriți să înlocuiți variante de răspuns existente pentru întrebarea „{trimmedTitle}”?</value>
   </data>
   <data name="RequestFailedUnexpectedly" xml:space="preserve">
     <value>Solicitarea a eșuat în mod neașteptat.</value>
@@ -861,7 +861,7 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
     <value>Salvează ca</value>
   </data>
   <data name="SavedAtTimestamp" xml:space="preserve">
-    <value>salvat la {{dateTime, H: mm}}</value>
+    <value>salvat la {dateTime, H: mm}</value>
   </data>
   <data name="ScenarioDetails" xml:space="preserve">
     <value>Scenariu</value>
@@ -981,13 +981,13 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
     <value>adăugați o funcție de tip macrocomandă nouă</value>
   </data>
   <data name="SideBarAttachmentDetailsFormat" xml:space="preserve">
-    <value>format: {{- type}}</value>
+    <value>format: {- type}</value>
   </data>
   <data name="SideBarAttachmentDetailsResolution" xml:space="preserve">
-    <value>{{width}} × {{height}} px</value>
+    <value>{width} × {height} px</value>
   </data>
   <data name="SideBarAttachmentDetailsSize" xml:space="preserve">
-    <value>dimensiune: {{size}}</value>
+    <value>dimensiune: {size}</value>
   </data>
   <data name="SideBarAttachmentName" xml:space="preserve">
     <value>numele atașamentului</value>
@@ -996,10 +996,10 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
     <value>atașament fără nume</value>
   </data>
   <data name="SideBarAttachmentsCounter" xml:space="preserve">
-    <value>{{count}} Fișier atașat ({{bytes}} în total)</value>
+    <value>{count} Fișier atașat ({bytes} în total)</value>
   </data>
   <data name="SideBarAttachmentsCounter_plural" xml:space="preserve">
-    <value>{{count}} Fișiere atașate ({{bytes}} în total)</value>
+    <value>{count} Fișiere atașate ({bytes} în total)</value>
   </data>
   <data name="SideBarAttachmentsEmptyLine1" xml:space="preserve">
     <value>Utilizează această filă pentru a încărca fișiere multimedia la care se poate face referire în chestionar.</value>
@@ -1008,10 +1008,10 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
     <value>Pentru a evita sincronizarea lentă, vă recomandăm ca dimensiunea combinată a tuturor fișierelor atașate să nu depășească 2 MB. Pentru tipurile, formatele și dimensiunile de fișiere acceptate</value>
   </data>
   <data name="SideBarAttachmentsEmptyLine3" xml:space="preserve">
-    <value>Pentru a face referire la un atașament din chestionar, adăugați un element de text static și specificați atașamentul {{-name}} în proprietatea sa de atașament.</value>
+    <value>Pentru a face referire la un atașament din chestionar, adăugați un element de text static și specificați atașamentul {-name} în proprietatea sa de atașament.</value>
   </data>
   <data name="SideBarAttachmentsEstimate" xml:space="preserve">
-    <value>Timpul de încărcare estimat: {{timeString}} la {{downloadSpeed}} Kb/s (EDGE)</value>
+    <value>Timpul de încărcare estimat: {timeString} la {downloadSpeed} Kb/s (EDGE)</value>
   </data>
   <data name="SideBarAttachmentsTitle" xml:space="preserve">
     <value>Atașamente</value>
@@ -1020,10 +1020,10 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
     <value>Încarcă</value>
   </data>
   <data name="SideBarAttachmentUploaded" xml:space="preserve">
-    <value>încărcat: {{-lastUpdate, MMMM DD [,] YYYY [la] k:mm}}</value>
+    <value>încărcat: {-lastUpdate, MMMM DD [,] YYYY [la] k:mm}</value>
   </data>
   <data name="SideBarCategoriesCounter" xml:space="preserve">
-    <value>{{count}} Variante de răspuns</value>
+    <value>{count} Variante de răspuns</value>
   </data>
   <data name="SideBarCategoriesEmptyLine1" xml:space="preserve">
     <value>Utilizați această filă pentru a gestiona variantele de răspuns reutilizabile.</value>
@@ -1047,10 +1047,10 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
     <value>Încărcați variante de răspuns noi</value>
   </data>
   <data name="SideBarCommentsCounter" xml:space="preserve">
-    <value>{{count}} Flux de comentarii:</value>
+    <value>{count} Flux de comentarii:</value>
   </data>
   <data name="SideBarCommentsCounter_plural" xml:space="preserve">
-    <value>{{count}} Fluxuri de comentarii:</value>
+    <value>{count} Fluxuri de comentarii:</value>
   </data>
   <data name="SideBarCommentsTitle" xml:space="preserve">
     <value>Comentarii</value>
@@ -1083,10 +1083,10 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
     <value>tabel de căutare fără nume</value>
   </data>
   <data name="SideBarLookupTablesCounter" xml:space="preserve">
-    <value>{{count}} Tabel de căutare:</value>
+    <value>{count} Tabel de căutare:</value>
   </data>
   <data name="SideBarLookupTablesCounter_plural" xml:space="preserve">
-    <value>{{count}} Tabelele de căutare:</value>
+    <value>{count} Tabelele de căutare:</value>
   </data>
   <data name="SideBarLookupTableSelectFile" xml:space="preserve">
     <value>Selectați fișierul</value>
@@ -1101,10 +1101,10 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
     <value>conţinut</value>
   </data>
   <data name="SideBarMacroCounter" xml:space="preserve">
-    <value>{{count}} Macrocomandă:</value>
+    <value>{count} Macrocomandă:</value>
   </data>
   <data name="SideBarMacroCounter_plural" xml:space="preserve">
-    <value>{{count}} Macrocomenzi:</value>
+    <value>{count} Macrocomenzi:</value>
   </data>
   <data name="SideBarMacroDescription" xml:space="preserve">
     <value>descriere</value>
@@ -1209,10 +1209,10 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
     <value>An:</value>
   </data>
   <data name="SideBarScenarioCounter" xml:space="preserve">
-    <value>{{count}} Scenariu:</value>
+    <value>{count} Scenariu:</value>
   </data>
   <data name="SideBarScenarioCounter_plural" xml:space="preserve">
-    <value>{{count}} Scenarii:</value>
+    <value>{count} Scenarii:</value>
   </data>
   <data name="SideBarScenarioEmptyLine1" xml:space="preserve">
     <value>Utilizați această filă pentru a vizualiza scenariile dvs.</value>
@@ -1227,10 +1227,10 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
     <value>Scenarii</value>
   </data>
   <data name="SideBarSectionsCounter" xml:space="preserve">
-    <value>{{count}} Secțiune:</value>
+    <value>{count} Secțiune:</value>
   </data>
   <data name="SideBarSectionsCounter_plural" xml:space="preserve">
-    <value>{{count}} Secțiuni:</value>
+    <value>{count} Secțiuni:</value>
   </data>
   <data name="SideBarSectionsTitle" xml:space="preserve">
     <value>Secțiuni</value>
@@ -1251,10 +1251,10 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
     <value>traducere fără nume</value>
   </data>
   <data name="SideBarTranslationsCounter" xml:space="preserve">
-    <value>{{count}} Traducere</value>
+    <value>{count} Traducere</value>
   </data>
   <data name="SideBarTranslationsCounter_plural" xml:space="preserve">
-    <value>{{count}} Traduceri</value>
+    <value>{count} Traduceri</value>
   </data>
   <data name="SideBarTranslationsEmptyLine1" xml:space="preserve">
     <value>Utilizați această filă pentru a gestiona traducerile chestionarului.</value>
@@ -1392,19 +1392,19 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
     <value>Vizualizare</value>
   </data>
   <data name="ViewResolvedCommentsCounter" xml:space="preserve">
-    <value>Vizualizați toate {{count}} comentariile rezolvate</value>
+    <value>Vizualizați toate {count} comentariile rezolvate</value>
   </data>
   <data name="ViewResolvedCommentsCounter_plural" xml:space="preserve">
-    <value>Vizualizați toate {{count}} comentariile rezolvate</value>
+    <value>Vizualizați toate {count} comentariile rezolvate</value>
   </data>
   <data name="VirtualCoverPage" xml:space="preserve">
     <value>Pagina de copertă virtuală</value>
   </data>
   <data name="WarningsCounter" xml:space="preserve">
-    <value>{{count}} avertisment</value>
+    <value>{count} avertisment</value>
   </data>
   <data name="WarningsCounter_plural" xml:space="preserve">
-    <value>{{count}} avertismente</value>
+    <value>{count} avertismente</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Da</value>

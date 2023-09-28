@@ -157,19 +157,19 @@
     <value>اغلق</value>
   </data>
   <data name="CompilationErrorsCounter" xml:space="preserve">
-    <value>{{count}} وجد خطأ</value>
+    <value>{count} وجد خطأ</value>
   </data>
   <data name="CompilationErrorsCounter_plural" xml:space="preserve">
-    <value>{{count}} وجد أخطاء</value>
+    <value>{count} وجد أخطاء</value>
   </data>
   <data name="CompilationLabel" xml:space="preserve">
     <value>تجميع</value>
   </data>
   <data name="CompilationWarningsCounter" xml:space="preserve">
-    <value>{{count}} وجد تحذير</value>
+    <value>{count} وجد تحذير</value>
   </data>
   <data name="CompilationWarningsCounter_plural" xml:space="preserve">
-    <value>{{count}} وجد تحذيرات</value>
+    <value>{count} وجد تحذيرات</value>
   </data>
   <data name="Compile" xml:space="preserve">
     <value>جمع</value>
@@ -196,7 +196,7 @@
     <value>حذف</value>
   </data>
   <data name="DeleteConfirmQuestion" xml:space="preserve">
-    <value>هل تريد بالتأكيد حذف المجلد {{trimmedTitle}}؟</value>
+    <value>هل تريد بالتأكيد حذف المجلد {trimmedTitle}؟</value>
   </data>
   <data name="Download" xml:space="preserve">
     <value>تنزيل</value>
@@ -205,16 +205,16 @@
     <value>هذا القسم فارغ</value>
   </data>
   <data name="EmptySectionLine2" xml:space="preserve">
-    <value>يمكنك البدء باستخدام أزرار {{-addQuestionBtn}} و {{-addSubsectionBtn}}</value>
+    <value>يمكنك البدء باستخدام أزرار {-addQuestionBtn} و {-addSubsectionBtn}</value>
   </data>
   <data name="EmptySectionLine5" xml:space="preserve">
-    <value>يمكن العثور عليها في  {{-settingsBtn}} لوحة (الزاوية اليسرى العليا)</value>
+    <value>يمكن العثور عليها في  {-settingsBtn} لوحة (الزاوية اليسرى العليا)</value>
   </data>
   <data name="EnablingCondition" xml:space="preserve">
     <value>شرط التمكين</value>
   </data>
   <data name="EnteredMoreThanAllowed" xml:space="preserve">
-    <value>لقد أدخلت أكثر من الحد الأقصى المسموح به {{max}}</value>
+    <value>لقد أدخلت أكثر من الحد الأقصى المسموح به {max}</value>
   </data>
   <data name="EntryWasNotFound" xml:space="preserve">
     <value>لم يتم العثور على إدخال في الاستبيان، يرجى اختيار آخر.</value>
@@ -223,10 +223,10 @@
     <value>رسالة خطأ</value>
   </data>
   <data name="ErrorsCounter" xml:space="preserve">
-    <value>{{count}} خطأ</value>
+    <value>{count} خطأ</value>
   </data>
   <data name="ErrorsCounter_plural" xml:space="preserve">
-    <value>{{count}} أخطاء</value>
+    <value>{count} أخطاء</value>
   </data>
   <data name="Export" xml:space="preserve">
     <value>تصدير</value>
@@ -250,7 +250,7 @@
     <value>حالة التطابق</value>
   </data>
   <data name="FindReplaceMatchingLines" xml:space="preserve">
-    <value>الخطوط المطابقة: {{count}}</value>
+    <value>الخطوط المطابقة: {count}</value>
   </data>
   <data name="FindReplaceMatchWord" xml:space="preserve">
     <value>تطابق الكلمة بالكامل</value>
@@ -262,7 +262,7 @@
     <value>السابق</value>
   </data>
   <data name="FindReplaceReplaceAll" xml:space="preserve">
-    <value>استبدال الكل ({{count}})</value>
+    <value>استبدال الكل ({count})</value>
   </data>
   <data name="FindReplaceReplaceAllConfirm" xml:space="preserve">
     <value>استبدال الكل </value>
@@ -289,7 +289,7 @@
     <value>عنوان</value>
   </data>
   <data name="HellowMessageBtn" xml:space="preserve">
-    <value>مرحبا, {{currentUserName}}</value>
+    <value>مرحبا, {currentUserName}</value>
   </data>
   <data name="Help" xml:space="preserve">
     <value>مساعدة</value>
@@ -334,10 +334,10 @@
     <value>النص الذي سيتم عرضه بجوار متغير لأغراض الاختبار</value>
   </data>
   <data name="HelpVariableLabel" xml:space="preserve">
-    <value>نص يصل إلى {{maxLength}} من الأحرف التي سيتم إرفاقها بالمتغير المصدر.</value>
+    <value>نص يصل إلى {maxLength} من الأحرف التي سيتم إرفاقها بالمتغير المصدر.</value>
   </data>
   <data name="HelpVariableName" xml:space="preserve">
-    <value>يمكن أن تكون أسماء المتغيرات ومعرفات القوائم من {{minLength}} إلى أحرف {{maxLength}} طويلة ويجب أن تحتوي على الأحرف التالية فقط: a-z أو A-Z أو _ أو 0-9. لا يمكن أن يكون الحرف الأول 0-9 أو _ وآخر لا يمكن أن يكون _.</value>
+    <value>يمكن أن تكون أسماء المتغيرات ومعرفات القوائم من {minLength} إلى أحرف {maxLength} طويلة ويجب أن تحتوي على الأحرف التالية فقط: a-z أو A-Z أو _ أو 0-9. لا يمكن أن يكون الحرف الأول 0-9 أو _ وآخر لا يمكن أن يكون _.</value>
   </data>
   <data name="HideIfDisabled" xml:space="preserve">
     <value>إخفاء إذا تم تعطيله</value>
@@ -496,7 +496,7 @@
     <value>يجب ربط هذا السؤال</value>
   </data>
   <data name="QuestionnaireSummary" xml:space="preserve">
-    <value>({{questionsCount}}Q, {{groupsCount}}S, {{rostersCount}}R)</value>
+    <value>({questionsCount}Q, {groupsCount}S, {rostersCount}R)</value>
   </data>
   <data name="QuestionOnlyInts" xml:space="preserve">
     <value>يسمح فقط باعداد صحيحة.</value>
@@ -508,7 +508,7 @@
     <value>تم حفظه بنجاح. سيتم فتح نافذة تحميل الملف.</value>
   </data>
   <data name="QuestionOptionsCut" xml:space="preserve">
-    <value>تم وضع علامة على السؤال كـ "مربع تحرير وسرد" أو "مربع تحرير وسرد متتالي" أثناء تحميل تفاصيل السؤال وتضمين عددًا كبيرًا جدًا من الفئات ، وتم تقليل عددهم إلى {{count}}</value>
+    <value>تم وضع علامة على السؤال كـ "مربع تحرير وسرد" أو "مربع تحرير وسرد متتالي" أثناء تحميل تفاصيل السؤال وتضمين عددًا كبيرًا جدًا من الفئات ، وتم تقليل عددهم إلى {count}</value>
   </data>
   <data name="QuestionOrdered" xml:space="preserve">
     <value>سجل إجابة النظام</value>
@@ -580,7 +580,7 @@
     <value>حفظ</value>
   </data>
   <data name="SavedAtTimestamp" xml:space="preserve">
-    <value>حفظ في {{dateTime, H:mm}}</value>
+    <value>حفظ في {dateTime, H:mm}</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>البحث</value>
@@ -655,13 +655,13 @@
     <value>من يمكنه الدخول</value>
   </data>
   <data name="SideBarAttachmentDetailsFormat" xml:space="preserve">
-    <value>الشكل: {{- type}}</value>
+    <value>الشكل: {- type}</value>
   </data>
   <data name="SideBarAttachmentDetailsResolution" xml:space="preserve">
-    <value>{{width}} × {{height}}px</value>
+    <value>{width} × {height}px</value>
   </data>
   <data name="SideBarAttachmentDetailsSize" xml:space="preserve">
-    <value>الحجم :{{size}}</value>
+    <value>الحجم :{size}</value>
   </data>
   <data name="SideBarAttachmentName" xml:space="preserve">
     <value>اسم المرفق</value>
@@ -670,10 +670,10 @@
     <value>مرفق بدون اسم</value>
   </data>
   <data name="SideBarAttachmentsCounter" xml:space="preserve">
-    <value>{{count}} ملف ملرفق ({{bytes}} مجموع)</value>
+    <value>{count} ملف ملرفق ({bytes} مجموع)</value>
   </data>
   <data name="SideBarAttachmentsCounter_plural" xml:space="preserve">
-    <value>{{count}} ملفات مرفقة ({{bytes}} مجموع)</value>
+    <value>{count} ملفات مرفقة ({bytes} مجموع)</value>
   </data>
   <data name="SideBarAttachmentsEmptyLine1" xml:space="preserve">
     <value>استخدم علامة التبويب هذه لتحميل ملفات الوسائط المتعددة التي يمكن الرجوع إليها في الاستبيان.</value>
@@ -688,7 +688,7 @@
     <value>تحميل جديد</value>
   </data>
   <data name="SideBarAttachmentUploaded" xml:space="preserve">
-    <value>تم تحميل :{{-lastUpdate, MMMM DD[,] YYYY [at] k:mm}}</value>
+    <value>تم تحميل :{-lastUpdate, MMMM DD[,] YYYY [at] k:mm}</value>
   </data>
   <data name="SideBarLookupEmptyLine1" xml:space="preserve">
     <value>استخدم علامة التبويب هذه لتحديد جداول البحث.</value>
@@ -715,10 +715,10 @@
     <value>جدول بحث بلا اسم</value>
   </data>
   <data name="SideBarLookupTablesCounter" xml:space="preserve">
-    <value>:{{count}} جدول البحث</value>
+    <value>:{count} جدول البحث</value>
   </data>
   <data name="SideBarLookupTablesCounter_plural" xml:space="preserve">
-    <value>:{{count}} جداول البحث</value>
+    <value>:{count} جداول البحث</value>
   </data>
   <data name="SideBarLookupTableSelectFile" xml:space="preserve">
     <value>اختار الملف</value>
@@ -745,10 +745,10 @@
     <value>اضافة وصف</value>
   </data>
   <data name="SideBarSectionsCounter" xml:space="preserve">
-    <value>{{count}} قسم:</value>
+    <value>{count} قسم:</value>
   </data>
   <data name="SideBarSectionsCounter_plural" xml:space="preserve">
-    <value>{{count}} أقسام:</value>
+    <value>{count} أقسام:</value>
   </data>
   <data name="SideBarSectionsTitle" xml:space="preserve">
     <value>اقسام</value>
@@ -769,10 +769,10 @@
     <value>الترجمة دون اسم</value>
   </data>
   <data name="SideBarTranslationsCounter" xml:space="preserve">
-    <value>{{count}} ترجمة</value>
+    <value>{count} ترجمة</value>
   </data>
   <data name="SideBarTranslationsCounter_plural" xml:space="preserve">
-    <value>{{count}} ترجمات</value>
+    <value>{count} ترجمات</value>
   </data>
   <data name="SideBarTranslationsEmptyLine1" xml:space="preserve">
     <value>استخدم علامة التبويب هذه لادارة ترجمة الاستبانة </value>
@@ -889,10 +889,10 @@
     <value>نوع المتغير</value>
   </data>
   <data name="WarningsCounter" xml:space="preserve">
-    <value>{{count}} تحذير</value>
+    <value>{count} تحذير</value>
   </data>
   <data name="WarningsCounter_plural" xml:space="preserve">
-    <value>{{count}} تحذيرات</value>
+    <value>{count} تحذيرات</value>
   </data>
   <data name="DownloadPdf" xml:space="preserve">
       <value>تنزيل PDF</value>

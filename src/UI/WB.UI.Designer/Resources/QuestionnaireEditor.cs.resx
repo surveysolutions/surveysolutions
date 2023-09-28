@@ -163,7 +163,7 @@
     <value>Uživatelé, kteří mají tento odkaz, budou moci tento dotazník otevřít</value>
   </data>
   <data name="AnonymousQuestionnaireGeneratedDate" xml:space="preserve">
-    <value>vygenerovaný odkaz: {{datetime}}</value>
+    <value>vygenerovaný odkaz: {datetime}</value>
   </data>
   <data name="AnonymousQuestionnaireSettings" xml:space="preserve">
     <value>Sdílení odkazů</value>
@@ -250,19 +250,19 @@
     <value>Chyba sítě</value>
   </data>
   <data name="CompilationErrorsCounter" xml:space="preserve">
-    <value>Byla nalezena chyba {{count}}</value>
+    <value>Byla nalezena chyba {count}</value>
   </data>
   <data name="CompilationErrorsCounter_plural" xml:space="preserve">
-    <value>Nalezeny chyby {{count}}</value>
+    <value>Nalezeny chyby {count}</value>
   </data>
   <data name="CompilationLabel" xml:space="preserve">
     <value>Kompilace:</value>
   </data>
   <data name="CompilationWarningsCounter" xml:space="preserve">
-    <value>Bylo nalezeno varování {{count}}</value>
+    <value>Bylo nalezeno varování {count}</value>
   </data>
   <data name="CompilationWarningsCounter_plural" xml:space="preserve">
-    <value>Nalezena upozornění {{count}}</value>
+    <value>Nalezena upozornění {count}</value>
   </data>
   <data name="Compile" xml:space="preserve">
     <value>Kompilovat</value>
@@ -304,10 +304,10 @@
     <value>Opravdu chcete odstranit komentář?</value>
   </data>
   <data name="DeleteConfirmCategories" xml:space="preserve">
-    <value>Opravdu chcete odstranit sadu kategorií "{{trimmedTitle}}"? Zdroj kategorií pro kategorické otázky na něm závislé bude změněn na uživatelem definované kategorie</value>
+    <value>Opravdu chcete odstranit sadu kategorií "{trimmedTitle}"? Zdroj kategorií pro kategorické otázky na něm závislé bude změněn na uživatelem definované kategorie</value>
   </data>
   <data name="DeleteConfirmQuestion" xml:space="preserve">
-    <value>Opravdu chcete odstranit "{{trimmedTitle}}"?</value>
+    <value>Opravdu chcete odstranit "{trimmedTitle}"?</value>
   </data>
   <data name="DeleteItemCofirm" xml:space="preserve">
     <value>Opravdu chcete odstranit tuto položku?</value>
@@ -328,28 +328,28 @@
     <value>Skrýt komentáře</value>
   </data>
   <data name="EditorShowComments" xml:space="preserve">
-    <value>Zobrazit komentáře ({{count}})</value>
+    <value>Zobrazit komentáře ({count})</value>
   </data>
   <data name="EmptySectionLine1" xml:space="preserve">
     <value>Tato sekce je prázdná.</value>
   </data>
   <data name="EmptySectionLine2" xml:space="preserve">
-    <value>Můžete začít pomocí tlačítek {{-addQuestionBtn}} a {{-addSubsectionBtn}}</value>
+    <value>Můžete začít pomocí tlačítek {-addQuestionBtn} a {-addSubsectionBtn}</value>
   </data>
   <data name="EmptySectionLine3" xml:space="preserve">
-    <value>v horní části tohoto bloku nebo spravovat sekce pomocí {{-panel}} levého panelu</value>
+    <value>v horní části tohoto bloku nebo spravovat sekce pomocí {-panel} levého panelu</value>
   </data>
   <data name="EmptySectionLine4" xml:space="preserve">
     <value>Název dotazníku, proměnná, spolupráce a další možnosti</value>
   </data>
   <data name="EmptySectionLine5" xml:space="preserve">
-    <value>najdete na panelu {{-settingsBtn}} (v pravém horním rohu)</value>
+    <value>najdete na panelu {-settingsBtn} (v pravém horním rohu)</value>
   </data>
   <data name="EnablingCondition" xml:space="preserve">
     <value>Podmínka povolení</value>
   </data>
   <data name="EnteredMoreThanAllowed" xml:space="preserve">
-    <value>Zadali jste více než maximální povolené {{max}}</value>
+    <value>Zadali jste více než maximální povolené {max}</value>
   </data>
   <data name="EntityComment" xml:space="preserve">
     <value>Nový komentář</value>
@@ -361,10 +361,10 @@
     <value>Chybová zpráva nebo upozornění</value>
   </data>
   <data name="ErrorsCounter" xml:space="preserve">
-    <value>Chyba {{count}}</value>
+    <value>Chyba {count}</value>
   </data>
   <data name="ErrorsCounter_plural" xml:space="preserve">
-    <value>Chyby {{count}}</value>
+    <value>Chyby {count}</value>
   </data>
   <data name="Export" xml:space="preserve">
     <value>Vývoz</value>
@@ -391,16 +391,16 @@
     <value>Všichni</value>
   </data>
   <data name="FindReplaceInAllFound" xml:space="preserve">
-    <value>v {{count}} nalezené entitě?</value>
+    <value>v {count} nalezené entitě?</value>
   </data>
   <data name="FindReplaceInAllFound_plural" xml:space="preserve">
-    <value>v {{count}} nalezených entitách?</value>
+    <value>v {count} nalezených entitách?</value>
   </data>
   <data name="FindReplaceMatchCase" xml:space="preserve">
     <value>Případ zápasu</value>
   </data>
   <data name="FindReplaceMatchingLines" xml:space="preserve">
-    <value>Odpovídající řádky: {{count}}</value>
+    <value>Odpovídající řádky: {count}</value>
   </data>
   <data name="FindReplaceMatchWord" xml:space="preserve">
     <value>Shoda celého slova</value>
@@ -412,7 +412,7 @@
     <value>Předchozí</value>
   </data>
   <data name="FindReplaceReplaceAll" xml:space="preserve">
-    <value>Nahradit vše ({{count}})</value>
+    <value>Nahradit vše ({count})</value>
   </data>
   <data name="FindReplaceReplaceAllConfirm" xml:space="preserve">
     <value>Nahradit vše </value>
@@ -466,7 +466,7 @@
     <value>Titul</value>
   </data>
   <data name="HellowMessageBtn" xml:space="preserve">
-    <value>Ahoj, {{currentUserName}}</value>
+    <value>Ahoj, {currentUserName}</value>
   </data>
   <data name="Help" xml:space="preserve">
     <value>Pomoc</value>
@@ -523,7 +523,7 @@
     <value>Zobrazení a zvýraznění překrývání této odpovědi na otázky s odpověďmi na stejné otázky v instancích sourozenecké sourozenecké soupisky</value>
   </data>
   <data name="HelpQuestionnaireVarible" xml:space="preserve">
-    <value>Proměnná dotazníku se používá jako předpona při vytváření názvů pro exportní soubory. Názvy proměnných a ID soupisek mohou mít délku od {{minLength}} do {{maxLength}} znaků a musí obsahovat pouze následující znaky: a-z, A-Z, _ nebo 0-9. První znak nemůže být 0-9 nebo _ a poslední nemůže být _.</value>
+    <value>Proměnná dotazníku se používá jako předpona při vytváření názvů pro exportní soubory. Názvy proměnných a ID soupisek mohou mít délku od {minLength} do {maxLength} znaků a musí obsahovat pouze následující znaky: a-z, A-Z, _ nebo 0-9. První znak nemůže být 0-9 nebo _ a poslední nemůže být _.</value>
   </data>
   <data name="HelpRosterDisplayMode" xml:space="preserve">
     <value>Podsekce - otázky soupisky jsou zobrazeny za tlačítky odpovídajícími instancím soupisky.
@@ -551,10 +551,10 @@ Zobrazení tabulky a matice jsou podporována pouze ve webovém průzkumu, table
     <value>Text, který se zobrazí vedle proměnné pro účely testování</value>
   </data>
   <data name="HelpVariableLabel" xml:space="preserve">
-    <value>Text o délce {{maxLength}} znaků, který bude připojen k exportované proměnné.</value>
+    <value>Text o délce {maxLength} znaků, který bude připojen k exportované proměnné.</value>
   </data>
   <data name="HelpVariableName" xml:space="preserve">
-    <value>Názvy proměnných a ID soupisek mohou mít délku od {{minLength}} do {{maxLength}} znaků a musí obsahovat pouze následující znaky: a-z, A-Z, _ nebo 0-9. První znak nemůže být 0-9 nebo _ a poslední nemůže být _.</value>
+    <value>Názvy proměnných a ID soupisek mohou mít délku od {minLength} do {maxLength} znaků a musí obsahovat pouze následující znaky: a-z, A-Z, _ nebo 0-9. První znak nemůže být 0-9 nebo _ a poslední nemůže být _.</value>
   </data>
   <data name="HelpVirtualCoverPage" xml:space="preserve">
     <value>Obálka je virtuální sekce, která zobrazuje všechny identifikační otázky.
@@ -699,7 +699,7 @@ Zobrazení tabulky a matice jsou podporována pouze ve webovém průzkumu, table
     <value>OK</value>
   </data>
   <data name="OnlyFirstOptionsWillBeTakenConfirmation" xml:space="preserve">
-    <value>Pouze první {{count}} kategorie budou brány pro otázku "{{trimmedTitle}}"?</value>
+    <value>Pouze první {count} kategorie budou brány pro otázku "{trimmedTitle}"?</value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>Otevřený</value>
@@ -748,7 +748,7 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
     <value>Počkejte prosím...</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>Náhled revize #{{revision}}</value>
+    <value>Náhled revize #{revision}</value>
   </data>
   <data name="PublicAccessDescriptionSettings" xml:space="preserve">
     <value>Veřejné dotazníky jsou viditelné všem uživatelům s účtem v tomto systému v režimu pouze pro čtení.</value>
@@ -838,7 +838,7 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
     <value>Nastavení dotazníku</value>
   </data>
   <data name="QuestionnaireSummary" xml:space="preserve">
-    <value>({{questionsCount}}Q, {{groupsCount}}S, {{rostersCount}}R)</value>
+    <value>({questionsCount}Q, {groupsCount}S, {rostersCount}R)</value>
   </data>
   <data name="QuestionOneToFiftyAllowed" xml:space="preserve">
     <value>Celá čísla mezi 1 a 50 jsou povolena</value>
@@ -853,7 +853,7 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
     <value>Byla úspěšně uložena. Otevře se okno pro nahrání souboru.</value>
   </data>
   <data name="QuestionOptionsCut" xml:space="preserve">
-    <value>Otázka byla označena jako "Combo box" nebo "Cascading combo box" při nahrávání podrobností o otázce a obsahovala příliš mnoho kategorií, jejich počet byl snížen až na {{count}}</value>
+    <value>Otázka byla označena jako "Combo box" nebo "Cascading combo box" při nahrávání podrobností o otázce a obsahovala příliš mnoho kategorií, jejich počet byl snížen až na {count}</value>
   </data>
   <data name="QuestionOrdered" xml:space="preserve">
     <value>Záznam pořadí odpovědí</value>
@@ -913,7 +913,7 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
     <value>Znovu vygenerovat odkaz</value>
   </data>
   <data name="ReplaceOptionsConfirmation" xml:space="preserve">
-    <value>Opravdu chcete nahradit existující kategorie pro otázku "{{trimmedTitle}}"?</value>
+    <value>Opravdu chcete nahradit existující kategorie pro otázku "{trimmedTitle}"?</value>
   </data>
   <data name="RequestFailedUnexpectedly" xml:space="preserve">
     <value>Požadavek se neočekávaně nezdařil.</value>
@@ -982,7 +982,7 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
     <value>Uložit jako</value>
   </data>
   <data name="SavedAtTimestamp" xml:space="preserve">
-    <value>uloženo v {{dateTime, H:mm}}</value>
+    <value>uloženo v {dateTime, H:mm}</value>
   </data>
   <data name="ScenarioDetails" xml:space="preserve">
     <value>Scénář</value>
@@ -1123,13 +1123,13 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
     <value>přidat nové makro</value>
   </data>
   <data name="SideBarAttachmentDetailsFormat" xml:space="preserve">
-    <value>formát: {{- type}}</value>
+    <value>formát: {- type}</value>
   </data>
   <data name="SideBarAttachmentDetailsResolution" xml:space="preserve">
-    <value>{{width}} × {{height}}px</value>
+    <value>{width} × {height}px</value>
   </data>
   <data name="SideBarAttachmentDetailsSize" xml:space="preserve">
-    <value>Velikost: {{size}}</value>
+    <value>Velikost: {size}</value>
   </data>
   <data name="SideBarAttachmentName" xml:space="preserve">
     <value>Název přílohy</value>
@@ -1138,10 +1138,10 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
     <value>Příloha bez názvu</value>
   </data>
   <data name="SideBarAttachmentsCounter" xml:space="preserve">
-    <value>{{count}} Příloha souboru (celkem {{bytes}})</value>
+    <value>{count} Příloha souboru (celkem {bytes})</value>
   </data>
   <data name="SideBarAttachmentsCounter_plural" xml:space="preserve">
-    <value>{{count}} Přílohy souborů (celkem {{bytes}})</value>
+    <value>{count} Přílohy souborů (celkem {bytes})</value>
   </data>
   <data name="SideBarAttachmentsEmptyLine1" xml:space="preserve">
     <value>Tato karta slouží k nahrání multimediálních souborů, na které může být odkazováno v dotazníku.</value>
@@ -1150,10 +1150,10 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
     <value>Chcete-li se vyhnout pomalé synchronizaci, doporučujeme kombinovat velikost všech připojených souborů nepřesahující 2MB. Pro podporované typy souborů, formáty a rozměry</value>
   </data>
   <data name="SideBarAttachmentsEmptyLine3" xml:space="preserve">
-    <value>Chcete-li odkazovat na přílohu v dotazníku, přidejte statický textový prvek a zadejte přílohu {{-name}} v její vlastnosti attachment</value>
+    <value>Chcete-li odkazovat na přílohu v dotazníku, přidejte statický textový prvek a zadejte přílohu {-name} v její vlastnosti attachment</value>
   </data>
   <data name="SideBarAttachmentsEstimate" xml:space="preserve">
-    <value>Odhadovaná doba načítání: {{timeString}} na {{downloadSpeed}}Kb/s (EDGE)</value>
+    <value>Odhadovaná doba načítání: {timeString} na {downloadSpeed}Kb/s (EDGE)</value>
   </data>
   <data name="SideBarAttachmentsTitle" xml:space="preserve">
     <value>Přílohy</value>
@@ -1162,13 +1162,13 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
     <value>Nahrát nový</value>
   </data>
   <data name="SideBarAttachmentUploaded" xml:space="preserve">
-    <value>Nahráno: {{-lastUpdate, MMMM DD[,] YYYY [at] k:mm}}</value>
+    <value>Nahráno: {-lastUpdate, MMMM DD[,] YYYY [at] k:mm}</value>
   </data>
   <data name="SideBarCategoriesAddNew" xml:space="preserve">
     <value>Přidat novou kategorii</value>
   </data>
   <data name="SideBarCategoriesCounter" xml:space="preserve">
-    <value>{{count}} Kategorie</value>
+    <value>{count} Kategorie</value>
   </data>
   <data name="SideBarCategoriesEmptyLine1" xml:space="preserve">
     <value>Tato karta slouží ke správě opakovaně použitelných kategorií.</value>
@@ -1192,10 +1192,10 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
     <value>Nahrát nové kategorie</value>
   </data>
   <data name="SideBarCommentsCounter" xml:space="preserve">
-    <value>{{count}} Vlákno komentářů:</value>
+    <value>{count} Vlákno komentářů:</value>
   </data>
   <data name="SideBarCommentsCounter_plural" xml:space="preserve">
-    <value>{{count}} Vlákna komentářů:</value>
+    <value>{count} Vlákna komentářů:</value>
   </data>
   <data name="SideBarCommentsTitle" xml:space="preserve">
     <value>Komentáře</value>
@@ -1234,10 +1234,10 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
     <value>Vyhledávací tabulka bez názvu</value>
   </data>
   <data name="SideBarLookupTablesCounter" xml:space="preserve">
-    <value>{{count}} Vyhledávací tabulka:</value>
+    <value>{count} Vyhledávací tabulka:</value>
   </data>
   <data name="SideBarLookupTablesCounter_plural" xml:space="preserve">
-    <value>{{count}} Vyhledávací tabulky:</value>
+    <value>{count} Vyhledávací tabulky:</value>
   </data>
   <data name="SideBarLookupTableSelectFile" xml:space="preserve">
     <value>Vybrat soubor</value>
@@ -1252,10 +1252,10 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
     <value>obsah</value>
   </data>
   <data name="SideBarMacroCounter" xml:space="preserve">
-    <value>{{count}} Makro:</value>
+    <value>{count} Makro:</value>
   </data>
   <data name="SideBarMacroCounter_plural" xml:space="preserve">
-    <value>{{count}} Makra:</value>
+    <value>{count} Makra:</value>
   </data>
   <data name="SideBarMacroDescription" xml:space="preserve">
     <value>popis</value>
@@ -1360,10 +1360,10 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
     <value>Rok:</value>
   </data>
   <data name="SideBarScenarioCounter" xml:space="preserve">
-    <value>{{count}} Scénář:</value>
+    <value>{count} Scénář:</value>
   </data>
   <data name="SideBarScenarioCounter_plural" xml:space="preserve">
-    <value>{{count}} Scénáře:</value>
+    <value>{count} Scénáře:</value>
   </data>
   <data name="SideBarScenarioEmptyLine1" xml:space="preserve">
     <value>Tato karta slouží k zobrazení scénářů.</value>
@@ -1378,10 +1378,10 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
     <value>Scénáře</value>
   </data>
   <data name="SideBarSectionsCounter" xml:space="preserve">
-    <value>{{count}} Oddíl:</value>
+    <value>{count} Oddíl:</value>
   </data>
   <data name="SideBarSectionsCounter_plural" xml:space="preserve">
-    <value>{{count}} Sekce:</value>
+    <value>{count} Sekce:</value>
   </data>
   <data name="SideBarSectionsTitle" xml:space="preserve">
     <value>Sekce</value>
@@ -1408,10 +1408,10 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
     <value>Překlad bez názvu</value>
   </data>
   <data name="SideBarTranslationsCounter" xml:space="preserve">
-    <value>{{count}} Překlad</value>
+    <value>{count} Překlad</value>
   </data>
   <data name="SideBarTranslationsCounter_plural" xml:space="preserve">
-    <value>{{count}} Překlady</value>
+    <value>{count} Překlady</value>
   </data>
   <data name="SideBarTranslationsEmptyLine1" xml:space="preserve">
     <value>Tato karta slouží ke správě překladů dotazníků.</value>
@@ -1561,19 +1561,19 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
     <value>Pohled</value>
   </data>
   <data name="ViewResolvedCommentsCounter" xml:space="preserve">
-    <value>Zobrazit všechny {{count}} vyřešené komentáře</value>
+    <value>Zobrazit všechny {count} vyřešené komentáře</value>
   </data>
   <data name="ViewResolvedCommentsCounter_plural" xml:space="preserve">
-    <value>Zobrazit všechny {{count}} vyřešené komentáře</value>
+    <value>Zobrazit všechny {count} vyřešené komentáře</value>
   </data>
   <data name="VirtualCoverPage" xml:space="preserve">
     <value>Virtuální titulní strana</value>
   </data>
   <data name="WarningsCounter" xml:space="preserve">
-    <value>{{count}} upozornění</value>
+    <value>{count} upozornění</value>
   </data>
   <data name="WarningsCounter_plural" xml:space="preserve">
-    <value>{{count}} upozornění</value>
+    <value>{count} upozornění</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Ano</value>
