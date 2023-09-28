@@ -14,6 +14,9 @@ vue.use(pinia);
 vue.use(vuetify); //reqired by options component. consider either remove or use.
 vue.use(i18n);
 
+//import { useQuestionnaireStore } from './store'
+//vue.provide('store', useQuestionnaireStore)
+
 // Run!
 router.isReady().then(() => {
   vue.mount('#app');

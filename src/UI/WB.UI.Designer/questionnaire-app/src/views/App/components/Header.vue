@@ -120,9 +120,18 @@
   </section>
 </template>
 
+
+<!--script setup>
+import { useQuestionnaireStore } from '../../../stores/questionnaire'
+const questionnaireStore = useQuestionnaireStore()
+</script-->
 <script>
+
+import { useQuestionnaireStore } from '../../../stores/questionnaire'
+
 export default {
   name: 'QuestionnaireHeader',
+  //inject: ["useQuestionnaireStore"],
   props: {},
   data() {
     return {
@@ -144,8 +153,21 @@ export default {
         errors: [],
         time: ''
       },
-
     }
+  },
+  setup(props) {
+    debugger
+    const questionnaireStore = useQuestionnaireStore()
+    questionnaireStore.fetchQuestionnaireInfo()
+  },
+  beforeMount() {
+    this.fetch()
+  },
+  methods: {
+    fetch() {
+      //questionnaireStore.alert()
+      //this.questionnaireStore.fetchQuestionnaireInfo()
+    },
   }
 }
 </script>

@@ -17,7 +17,12 @@
 </template>
 
 <script>
+import { provide } from 'vue'
+//import store from '@/store'
+import {useQuestionnaireStore} from './stores/questionnaire'
+
 export default {
-    name: 'QuestionnaireApp'
+    name: 'QuestionnaireApp',
+    provide: { useQuestionnaireStore },
 };
 </script>
