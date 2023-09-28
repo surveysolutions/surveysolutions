@@ -150,31 +150,31 @@ export default {
     }
   },
   setup(props) {
-    const questionnaire = useQuestionnaireStore()
-    const user = useUserStore()
+    const questionnaireStore = useQuestionnaireStore()
+    const userStore = useUserStore()
 
     return {
-      questionnaire,
-      user
+      questionnaireStore,
+      userStore
     }
   },
   async beforeMount() {
     await this.fetch()
 
-    this.questionnaire = this.questionnaire.info
+    this.questionnaire = this.questionnaireStore.info
   },
   computed: {
     currentUserIsAuthenticated() {
-      return this.user.isAuthenticated
+      return this.userStore.isAuthenticated
     },
     currentUserName() {
-      return this.user.userName
+      return this.userStore.userName
     }
   },
   methods: {
     async fetch() {
-      await this.user.fetchUserInfo()
-      await this.questionnaire.fetchQuestionnaireInfo()
+      await this.userStore.fetchUserInfo()
+      await this.questionnaireStore.fetchQuestionnaireInfo()
     },
     webTest() {
       // call web tester
