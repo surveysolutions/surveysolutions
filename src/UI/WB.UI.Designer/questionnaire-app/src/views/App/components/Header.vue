@@ -8,20 +8,20 @@
             $t('QuestionnaireEditor.Help') }}</a>
           <a class="btn" href="https://forum.mysurvey.solutions" target="_blank">{{ $t('QuestionnaireEditor.Forum') }}
           </a>
-          <a class="btn" href="../../questionnaire/questionnairehistory/{{questionnaire.questionnaireId}}" target="_blank"
+          <a class="btn" :href="'/questionnaire/questionnairehistory/' + questionnaire.questionnaireId" target="_blank"
             v-if="questionnaire.hasViewerAdminRights ||
               questionnaire.isSharedWithUser
               ">{{ $t('QuestionnaireEditor.History') }}</a>
           <button class="btn" type="button" @click="showDownloadPdf()">
             {{ $t('QuestionnaireEditor.DownloadPdf') }}
           </button>
-          <a class="btn" type="button" v-if="questionnaire.hasViewerAdminRights" @click="ortQuestionnaire()">{{
+          <a class="btn" type="button" v-if="questionnaire.hasViewerAdminRights" @click="saveAsQuestionnaire">{{
             $t('QuestionnaireEditor.SaveAs') }}</a>
 
           <a class="btn" v-if="questionnaire.questionnaireRevision ||
             questionnaire.isReadOnlyForUser
             "
-            href="../../questionnaire/clone/{{questionnaire.questionnaireId}}{{questionnaire.questionnaireRevision ? '$' + questionnaire.questionnaireRevision : ''}}"
+            href="/questionnaire/clone/{{questionnaire.questionnaireId}}{{questionnaire.questionnaireRevision ? '$' + questionnaire.questionnaireRevision : ''}}"
             target="_blank">{{ $t('QuestionnaireEditor.CopyTo') }}</a>
           <button class="btn" type="button" v-disabled="questionnaire.isReadOnlyForUser &&
             !questionnaire.hasViewerAdminRights &&
@@ -40,12 +40,12 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-right">
               <li>
-                <a href="../../identity/account/manage">{{
+                <a href="/identity/account/manage">{{
                   $t('QuestionnaireEditor.ManageAccount')
                 }}</a>
               </li>
               <li>
-                <a href="../../identity/account/logout">{{
+                <a href="/identity/account/logout">{{
                   $t('QuestionnaireEditor.LogOut')
                 }}</a>
               </li>
@@ -78,9 +78,9 @@
       verificationStatus.errors.length ==
       0
   }">
-                 <a href="javascript:void(0);"
-                               @click="showVerificationErrors()">{{ $t('QuestionnaireEditor.ErrorsCounter',{ count: verificationStatus.errors.length}) }}
-                            </a> 
+                <a href="javascript:void(0);"
+                    @click="showVerificationErrors()">{{ $t('QuestionnaireEditor.ErrorsCounter',{ count: verificationStatus.errors.length}) }}
+                </a> 
               </span>
               <span data-toggle="modal" v-if="verificationStatus.warnings.length > 0
                 " class="warniv-message v-hide">
@@ -117,14 +117,11 @@
   </section>
 </template>
 
-
-<!--script setup>
-import { useQuestionnaireStore } from '../../../stores/questionnaire'
-const questionnaireStore = useQuestionnaireStore()
-</script-->
 <script>
 
 import { useQuestionnaireStore } from '../../../stores/questionnaire'
+import { useUserStore } from '../../../stores/user'
+
 
 export default {
   name: 'QuestionnaireHeader',
@@ -153,24 +150,44 @@ export default {
     }
   },
   setup(props) {
-    const questionnaireStore = useQuestionnaireStore()
+    const questionnaire = useQuestionnaireStore()
+    const user = useUserStore()
 
     return {
-      questionnaireStore,
+      questionnaire,
+      user
     }
   },
   async beforeMount() {
     await this.fetch()
 
-    this.questionnaire = this.questionnaireStore.info
+    this.questionnaire = this.questionnaire.info
+  },
+  computed: {
+    currentUserIsAuthenticated() {
+      return this.user.isAuthenticated
+    },
+    currentUserName() {
+      return this.user.userName
+    }
   },
   methods: {
     async fetch() {
-      await this.questionnaireStore.fetchQuestionnaireInfo()
+      await this.user.fetchUserInfo()
+      await this.questionnaire.fetchQuestionnaireInfo()
     },
     webTest() {
       // call web tester
-    }
+    },
+    showDownloadPdf() {
+
+    },
+    saveAsQuestionnaire() {
+
+    },
+    showVerificationWarnings() {
+
+    },
   }
 }
 </script>
