@@ -156,17 +156,20 @@ export default {
     }
   },
   setup(props) {
-    debugger
     const questionnaireStore = useQuestionnaireStore()
-    questionnaireStore.fetchQuestionnaireInfo()
+
+    return {
+      questionnaireStore,
+    }
   },
-  beforeMount() {
-    this.fetch()
+  async beforeMount() {
+    await this.fetch()
+
+    this.questionnaire = this.questionnaireStore.info
   },
   methods: {
-    fetch() {
-      //questionnaireStore.alert()
-      //this.questionnaireStore.fetchQuestionnaireInfo()
+    async fetch() {
+      await this.questionnaireStore.fetchQuestionnaireInfo()
     },
   }
 }
