@@ -20,7 +20,6 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
 
       setQuestionnaireInfo(info) {
         this.info = info
-        console.log('set info')
       }
 
     },    

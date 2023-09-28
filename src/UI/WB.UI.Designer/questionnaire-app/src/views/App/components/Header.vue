@@ -31,7 +31,7 @@
           </button>
 
           <div class="btn-group" v-if="currentUserIsAuthenticated">
-            <!-- <a class="btn btn-default">{{ $t('QuestionnaireEditor.HellowMessageBtn', {currentUserName:currentUserName}) }}</a> -->
+            <a class="btn btn-default">{{ $t('QuestionnaireEditor.HellowMessageBtn', {currentUserName:currentUserName}) }}</a>
             <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <span class="caret"></span>
               <span class="sr-only">{{
@@ -51,8 +51,7 @@
               </li>
             </ul>
           </div>
-          <a class="btn" href="/" type="button" v-if="!currentUserIsAuthenticated">{{ $t('QuestionnaireEditor.Login')
-          }}</a>
+          <a class="btn" href="/" type="button" v-if="!currentUserIsAuthenticated">{{ $t('QuestionnaireEditor.Login') }}</a>
           <a class="btn" href="/identity/account/register" type="button" v-if="!currentUserIsAuthenticated">{{
             $t('QuestionnaireEditor.Register') }}</a>
         </div>
@@ -63,15 +62,13 @@
             {{ questionnaire.title }}
           </div>
           <div class="questionnarie-title-buttons">
-            <!-- <span class="text-muted">{{ $t('QuestionnaireEditor.QuestionnaireSummary', { questionsCount: questionnaire.questionsCount, groupsCount: questionnaire.groupsCount, rostersCount: questionnaire.rostersCount}) }} 
-
-                    </span>-->
-            <button id="verification-btn" type="button" class="btn" @click="verify()" v-if="questionnaire.questionnaireRevision === null
-              ">
+            <span class="text-muted">
+              {{ $t('QuestionnaireEditor.QuestionnaireSummary', { questionsCount: questionnaire.questionsCount, groupsCount: questionnaire.groupsCount, rostersCount: questionnaire.rostersCount}) }} 
+            </span>
+            <button id="verification-btn" type="button" class="btn" @click="verify()" v-if="questionnaire.questionnaireRevision === null">
               {{ $t('QuestionnaireEditor.Compile') }}
             </button>
-            <span v-if="verificationStatus.warnings != null &&
-              verificationStatus.errors != null
+            <span v-if="verificationStatus.warnings != null && verificationStatus.errors != null
               ">
               <span data-toggle="modal" v-if="verificationStatus.warnings.length +
                 verificationStatus.errors.length >
@@ -81,14 +78,14 @@
       verificationStatus.errors.length ==
       0
   }">
-                <!-- <a href="javascript:void(0);"
+                 <a href="javascript:void(0);"
                                @click="showVerificationErrors()">{{ $t('QuestionnaireEditor.ErrorsCounter',{ count: verificationStatus.errors.length}) }}
-                            </a> -->
+                            </a> 
               </span>
               <span data-toggle="modal" v-if="verificationStatus.warnings.length > 0
                 " class="warniv-message v-hide">
                 <a href="javascript:void(0);" @click="showVerificationWarnings()">
-                  <!-- {{ $t('QuestionnaireEditor.WarningsCounter',{ count: verificationStatus.warnings.length}) }} -->
+                  {{ $t('QuestionnaireEditor.WarningsCounter',{ count: verificationStatus.warnings.length}) }} 
                 </a>
               </span>
               <span class="text-success" v-if="verificationStatus.warnings.length +
@@ -171,6 +168,9 @@ export default {
     async fetch() {
       await this.questionnaireStore.fetchQuestionnaireInfo()
     },
+    webTest() {
+      // call web tester
+    }
   }
 }
 </script>
