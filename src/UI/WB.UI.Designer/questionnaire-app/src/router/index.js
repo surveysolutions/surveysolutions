@@ -67,6 +67,9 @@ const routes = [
                         name: 'statictext',
                         path: 'statictext/:statictextId',
                         component: StaticText,
+                        props: route => ({
+                            statictextId: route.params.statictextId                            
+                        })
                     },
                     {
                         name: 'chapter',
