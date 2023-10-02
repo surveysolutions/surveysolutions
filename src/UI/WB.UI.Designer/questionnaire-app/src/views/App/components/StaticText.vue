@@ -72,14 +72,14 @@
 
       <div class="pseudo-form-control">
         <div ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" v-bind="validation.expression"
-          v-attr-id="'validation-expression-' + $index" v-attr-tabindex="{$index + 1}"></div>
+          v-attr-id="'validation-expression-' + $index" v-attr-tabindex="$index + 1"></div>
       </div>
 
       <label for="validation-message-{{$index}}" class="validation-message">{{ 'ErrorMessage' | i18next }}
         <help key="validationMessage" />
       </label>
       <div class="pseudo-form-control">
-        <div v-attr-id="'validation-message-' + $index" v-attr-tabindex="{ $index + 1 }"
+        <div v-attr-id="'validation-message-' + $index" v-attr-tabindex="$index + 1"
           ui-ace="{ onLoad : setupAceForSubstitutions, require: ['ace/ext/language_tools'] }" v-bind=" validation.message ">
         </div>
       </div>
