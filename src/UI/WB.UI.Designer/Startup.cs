@@ -152,6 +152,7 @@ namespace WB.UI.Designer
 
             services.ConfigureApplicationCookie(options =>
             {
+				options.Cookie.Name = ".AspNetCore.Identity.Designer";
                 options.Events.OnRedirectToLogin = context =>
                 {
                     var hasAcceptHeader = context.Request.Headers.TryGetValue(HeaderNames.Accept, out var accept);
