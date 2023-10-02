@@ -13,8 +13,8 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
     },
     actions: {
 
-      async fetchQuestionnaireInfo() {
-        const info = await api.get('c3e8c62233ef4b8ca0a186cb7eaf9d2e')
+      async fetchQuestionnaireInfo(questionnaireId) {
+        const info = await api.get(questionnaireId)
         this.setQuestionnaireInfo(info)
       },
 

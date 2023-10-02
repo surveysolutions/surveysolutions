@@ -1,15 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import PageNotFound from '../views/PageNotFound.vue';
-/*
-import OptionsEditor from '../views/OptionsEditor/OptionsEditor.vue'
-import Questionnaire from '../views/App/Main.vue'
-import Tree from '../views/App/components/tree.vue'
-import Variable from '../views/App/components/variable.vue'
-import Question from '../views/App/components/question.vue'
-import StaticText from '../views/App/components/statictext.vue'
-import Chapter from '../views/App/components/chapter.vue'
-import QuestionnaireHeader from '../views/App/components/header.vue'
-*/
+
 const OptionsEditor = () => import('../views/OptionsEditor/OptionsEditor.vue')
 const RightPanel = () => import('../views/App/components/RightPanel.vue')
 const Tree = () => import('../views/App/components/Tree.vue')
@@ -46,8 +37,11 @@ const routes = [
         components: {
             default: RightPanel,
             tree: Tree,
-            header: QuestionnaireHeader,
+            header: QuestionnaireHeader, 
         },
+        props: route => ({
+            questionnaireId: route.params.questionnaireId                            
+        }),
         children: [
             {
                 name: 'chapter',
