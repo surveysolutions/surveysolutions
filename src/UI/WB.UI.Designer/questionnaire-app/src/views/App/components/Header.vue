@@ -247,18 +247,6 @@
     <VerificationDialog ref="verificationDialog" />
 </template>
 
-<!--script setup>
-import VerificationDialog from './VerificationDialog.vue';
-
-import { useQuestionnaireStore } from '../../../stores/questionnaire';
-import { useUserStore } from '../../../stores/user';
-import { useVerificationStore } from '../../../stores/verification';
-
-const questionnaireStore = useQuestionnaireStore();
-const userStore = useUserStore();
-const verificationStore = useVerificationStore();
-</script-->
-
 <script>
 import VerificationDialog from './VerificationDialog.vue';
 
@@ -273,9 +261,9 @@ import { ref } from 'vue';
 export default {
     name: 'QuestionnaireHeader',
     //inject: ["useQuestionnaireStore"],
-    //components: {
-    //    VerificationDialog
-    //},
+    components: {
+        VerificationDialog
+    },
     props: {
         questionnaireId: { type: String, required: true }
     },
