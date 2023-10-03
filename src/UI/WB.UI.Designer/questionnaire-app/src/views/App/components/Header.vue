@@ -243,17 +243,39 @@
         <div class="left"></div>
         <div class="right"></div>
     </section>
+
+    <VerificationDialog ref="verificationDialog" />
 </template>
 
-<script>
+<!--script setup>
+import VerificationDialog from './VerificationDialog.vue';
+
 import { useQuestionnaireStore } from '../../../stores/questionnaire';
 import { useUserStore } from '../../../stores/user';
+import { useVerificationStore } from '../../../stores/verification';
+
+const questionnaireStore = useQuestionnaireStore();
+const userStore = useUserStore();
+const verificationStore = useVerificationStore();
+</script-->
+
+<script>
+import VerificationDialog from './VerificationDialog.vue';
+
+import { useQuestionnaireStore } from '../../../stores/questionnaire';
+import { useUserStore } from '../../../stores/user';
+import { useVerificationStore } from '../../../stores/verification';
+
 import WebTesterApi from '../../../api/webTester';
-import VerificationApi from '../../../api/verification';
+
+import { ref } from 'vue';
 
 export default {
     name: 'QuestionnaireHeader',
     //inject: ["useQuestionnaireStore"],
+    //components: {
+    //    VerificationDialog
+    //},
     props: {
         questionnaireId: { type: String, required: true }
     },
@@ -281,10 +303,17 @@ export default {
     setup(props) {
         const questionnaireStore = useQuestionnaireStore();
         const userStore = useUserStore();
+        const verificationStore = useVerificationStore();
+
+        //const verificationDialog = VerificationDialog;
+        //const verificationDialog = .$refsref(null);
+        const verificationDialog = ref(null);
 
         return {
             questionnaireStore,
-            userStore
+            userStore,
+            verificationStore,
+            verificationDialog
         };
     },
     async beforeMount() {
@@ -321,36 +350,38 @@ export default {
             this.verificationStatus.warnings = null;
             // $rootScope.$broadcast("verifing", {});
 
-            const data = await VerificationApi.verify(this.questionnaireId);
+            await this.verificationStore.fetchVerificationStatus(
+                this.questionnaireId
+            );
+            const data = this.verificationStore.status;
 
             this.verificationStatus.errors = data.errors;
             this.verificationStatus.warnings = data.warnings;
             this.verificationStatus.time = new Date();
-            this.verificationStatus.typeOfMessageToBeShown = ERROR;
+            //this.verificationStatus.typeOfMessageToBeShown = ERROR;
 
-            if ($scope.verificationStatus.errors.length > 0) {
+            if (this.verificationStatus.errors.length > 0) {
                 this.showVerificationErrors();
             } else {
-                this.closeVerifications();
+                this.verificationDialog.close();
             }
         },
         showShareInfo() {
             // TODO
         },
         showVerificationErrors() {
-            if ($scope.verificationStatus.errors.length === 0) return;
-            this.verificationStatus.typeOfMessageToBeShown = ERROR;
-            this.verificationStatus.messagesToShow = this.verificationStatus.errors;
-            this.verificationStatus.visible = true;
+            if (this.verificationStatus.errors.length === 0) return;
+            //this.verificationStatus.typeOfMessageToBeShown = ERROR;
+            //this.verificationStatus.messagesToShow = this.verificationStatus.errors;
+            //this.verificationStatus.visible = true;
+            this.verificationDialog.openErrors();
         },
         showVerificationWarnings() {
-            if ($scope.verificationStatus.warnings.length === 0) return;
-            this.verificationStatus.typeOfMessageToBeShown = WARNING;
-            this.verificationStatus.messagesToShow = this.verificationStatus.warnings;
-            this.verificationStatus.visible = true;
-        },
-        closeVerifications() {
-            this.verificationStatus.visible = false;
+            if (this.verificationStatus.warnings.length === 0) return;
+            //this.verificationStatus.typeOfMessageToBeShown = WARNING;
+            //this.verificationStatus.messagesToShow = this.verificationStatus.warnings;
+            //this.verificationStatus.visible = true;
+            this.verificationDialog.openWarnings();
         }
     }
 };
