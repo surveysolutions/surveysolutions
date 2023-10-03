@@ -1,10 +1,12 @@
 import { createApp } from 'vue';
-import { createPinia } from 'pinia'
+import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './router';
-import {vuetify, i18n} /*, install, i18n */ from './plugins/vuetify';
+import { vuetify, i18n /*, install, i18n */ } from './plugins/vuetify';
 
-import '../../questionnaire/content/markup.less'
+import '../../questionnaire/content/markup.less';
+
+import './directives';
 
 /** Register Vue */
 const pinia = createPinia();
@@ -19,5 +21,5 @@ vue.use(i18n);
 
 // Run!
 router.isReady().then(() => {
-  vue.mount('#app');
+    vue.mount('#app');
 });
