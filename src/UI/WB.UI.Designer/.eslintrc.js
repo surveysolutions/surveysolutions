@@ -1,12 +1,13 @@
-{
-    "root": true,
-    "env": {
-        "node": true
+module.exports = {
+    root: true,
+    env: {
+        es2021: true
     },
-    "extends": [
-        "plugin:vue/essential",
-        "eslint:recommended",
-        "prettier"
+    extends: [
+        'plugin:vue/recommended',
+        'eslint:recommended',
+        'prettier/vue',
+        'plugin:prettier/recommended'
     ],
     "rules": {
         "comma-dangle": [
@@ -94,4 +95,4 @@
         "vue.config.js",
         "tools/**"
     ]
-}
+};
