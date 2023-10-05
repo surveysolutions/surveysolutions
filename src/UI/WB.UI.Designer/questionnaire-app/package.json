@@ -36,7 +36,7 @@
     "globby": "9.2.0",
     "is-svg": "^4.2.2",
     "normalize-url": "^6.1.0",
-    "postcss": "^8.3.0",
+    "postcss": "^8.4.31",
     "postcss-svgo": "5.1.0",
     "prettier": "1.19.1",
     "sass": "~1.32.13",
