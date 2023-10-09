@@ -18,6 +18,7 @@ export const useVerificationStore = defineStore('verification', {
 
         setVerificationStatus(status) {
             this.status = status;
+            this.status.time = new Date();
         }
     }
 });

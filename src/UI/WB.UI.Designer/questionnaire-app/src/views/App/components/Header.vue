@@ -145,22 +145,14 @@
                             {{ $t('QuestionnaireEditor.Compile') }}
                         </button>
                         <span
-                            v-if="
-                                verificationStatus.warnings != null &&
-                                    verificationStatus.errors != null
-                            "
+                            v-if="warningsCount != null && errorsCount != null"
                         >
                             <span
                                 data-toggle="modal"
-                                v-if="
-                                    verificationStatus.warnings.length +
-                                        verificationStatus.errors.length >
-                                        0
-                                "
+                                v-if="warningsCount + errorsCount > 0"
                                 class="error-message v-hide"
                                 v-class="{
-                                    'no-errors':
-                                        verificationStatus.errors.length == 0
+                                    'no-errors': errorsCount == 0
                                 }"
                             >
                                 <a
@@ -171,9 +163,7 @@
                                         $t(
                                             'QuestionnaireEditor.ErrorsCounter',
                                             {
-                                                count:
-                                                    verificationStatus.errors
-                                                        .length
+                                                count: errorsCount
                                             }
                                         )
                                     }}
@@ -181,7 +171,7 @@
                             </span>
                             <span
                                 data-toggle="modal"
-                                v-if="verificationStatus.warnings.length > 0"
+                                v-if="warningsCount > 0"
                                 class="warniv-message v-hide"
                             >
                                 <a
@@ -192,9 +182,7 @@
                                         $t(
                                             'QuestionnaireEditor.WarningsCounter',
                                             {
-                                                count:
-                                                    verificationStatus.warnings
-                                                        .length
+                                                count: warningsCount
                                             }
                                         )
                                     }}
@@ -202,11 +190,7 @@
                             </span>
                             <span
                                 class="text-success"
-                                v-if="
-                                    verificationStatus.warnings.length +
-                                        verificationStatus.errors.length ===
-                                        0
-                                "
+                                v-if="warningsCount + errorsCount === 0"
                             >
                                 {{ $t('QuestionnaireEditor.Ok') }}
                             </span>
@@ -244,7 +228,10 @@
         <div class="right"></div>
     </section>
 
-    <VerificationDialog ref="verificationDialog" />
+    <VerificationDialog
+        ref="verificationDialog"
+        :questionnaireId="questionnaireId"
+    />
 </template>
 
 <script>
@@ -280,11 +267,6 @@ export default {
                 questionsCount: 0,
                 groupsCount: 0,
                 rostersCount: 0
-            },
-            verificationStatus: {
-                warnings: null, //[],
-                errors: null, //[],
-                time: null //''
             }
         };
     },
@@ -293,8 +275,6 @@ export default {
         const userStore = useUserStore();
         const verificationStore = useVerificationStore();
 
-        //const verificationDialog = VerificationDialog;
-        //const verificationDialog = .$refsref(null);
         const verificationDialog = ref(null);
 
         return {
@@ -315,6 +295,12 @@ export default {
         },
         currentUserName() {
             return this.userStore.userName;
+        },
+        errorsCount() {
+            return this.verificationStore.status.errors.length;
+        },
+        warningsCount() {
+            return this.verificationStore.status.warnings.length;
         }
     },
     methods: {
@@ -334,21 +320,13 @@ export default {
             // TODO
         },
         async verify() {
-            this.verificationStatus.errors = null;
-            this.verificationStatus.warnings = null;
             // $rootScope.$broadcast("verifing", {});
 
             await this.verificationStore.fetchVerificationStatus(
                 this.questionnaireId
             );
-            const data = this.verificationStore.status;
 
-            this.verificationStatus.errors = data.errors;
-            this.verificationStatus.warnings = data.warnings;
-            this.verificationStatus.time = new Date();
-            //this.verificationStatus.typeOfMessageToBeShown = ERROR;
-
-            if (this.verificationStatus.errors.length > 0) {
+            if (this.errorsCount > 0) {
                 this.showVerificationErrors();
             } else {
                 this.verificationDialog.close();
@@ -358,17 +336,11 @@ export default {
             // TODO
         },
         showVerificationErrors() {
-            if (this.verificationStatus.errors.length === 0) return;
-            //this.verificationStatus.typeOfMessageToBeShown = ERROR;
-            //this.verificationStatus.messagesToShow = this.verificationStatus.errors;
-            //this.verificationStatus.visible = true;
+            if (this.errorsCount === 0) return;
             this.verificationDialog.openErrors();
         },
         showVerificationWarnings() {
-            if (this.verificationStatus.warnings.length === 0) return;
-            //this.verificationStatus.typeOfMessageToBeShown = WARNING;
-            //this.verificationStatus.messagesToShow = this.verificationStatus.warnings;
-            //this.verificationStatus.visible = true;
+            if (this.warningsCount === 0) return;
             this.verificationDialog.openWarnings();
         }
     }

@@ -5,16 +5,19 @@
                 <button
                     type="button"
                     class="close"
-                    @click="closeVerifications()"
+                    @click="close()"
                     aria-hidden="true"
                 ></button>
                 <h3 class="modal-title">
-                    <span v-t="{ path: 'CompilationLabel' }"></span>
+                    <span
+                        v-t="{ path: 'QuestionnaireEditor.CompilationLabel' }"
+                    ></span>
 
                     <span
                         v-if="typeOfMessageToBeShown === 'error'"
                         v-t="{
-                            path: 'CompilationErrorsCounter',
+                            path:
+                                'QuestionnaireEditor.CompilationErrorsCounter',
                             args: {
                                 count: messagesToShow.length
                             }
@@ -23,7 +26,8 @@
                     <span
                         v-if="typeOfMessageToBeShown === 'warning'"
                         v-t="{
-                            path: 'CompilationWarningsCounter',
+                            path:
+                                'QuestionnaireEditor.CompilationWarningsCounter',
                             args: {
                                 count: messagesToShow.length
                             }
@@ -68,67 +72,104 @@
                                                         reference.type ==
                                                             'Question'
                                                     "
-                                                    class="icon {{reference.questionType}}  icon-{{typeOfMessageToBeShown}}"
+                                                    class="icon"
+                                                    :class="[
+                                                        reference.questionType,
+                                                        'icon-' +
+                                                            typeOfMessageToBeShown
+                                                    ]"
                                                 ></span>
                                                 <span
                                                     v-if="
                                                         reference.type ==
                                                             'Questionnaire'
                                                     "
-                                                    class="icon icon-questionnaire icon-{{typeOfMessageToBeShown}}"
+                                                    class="icon icon-questionnaire"
+                                                    :class="[
+                                                        'icon-' +
+                                                            typeOfMessageToBeShown
+                                                    ]"
                                                 ></span>
                                                 <span
                                                     v-if="
                                                         reference.type ==
                                                             'Macro'
                                                     "
-                                                    class="icon icon-macro icon-{{typeOfMessageToBeShown}}"
+                                                    class="icon icon-macro"
+                                                    :class="[
+                                                        'icon-' +
+                                                            typeOfMessageToBeShown
+                                                    ]"
                                                 ></span>
                                                 <span
                                                     v-if="
                                                         reference.type ==
                                                             'LookupTable'
                                                     "
-                                                    class="icon icon-lookup icon-{{typeOfMessageToBeShown}}"
+                                                    class="icon icon-lookup "
+                                                    :class="[
+                                                        'icon-' +
+                                                            typeOfMessageToBeShown
+                                                    ]"
                                                 ></span>
                                                 <span
                                                     v-if="
                                                         reference.type ==
                                                             'StaticText'
                                                     "
-                                                    class="icon icon-statictext icon-{{typeOfMessageToBeShown}}"
+                                                    class="icon icon-statictext "
+                                                    :class="[
+                                                        'icon-' +
+                                                            typeOfMessageToBeShown
+                                                    ]"
                                                 ></span>
                                                 <span
                                                     v-if="
                                                         reference.type ==
                                                             'Attachment'
                                                     "
-                                                    class="icon icon-attachment icon-{{typeOfMessageToBeShown}}"
+                                                    class="icon icon-attachment "
+                                                    :class="[
+                                                        'icon-' +
+                                                            typeOfMessageToBeShown
+                                                    ]"
                                                 ></span>
                                                 <span
                                                     v-if="
                                                         reference.type ==
                                                             'Variable'
                                                     "
-                                                    class="icon icon-variable icon-{{typeOfMessageToBeShown}}"
+                                                    class="icon icon-variable"
+                                                    :class="[
+                                                        'icon-' +
+                                                            typeOfMessageToBeShown
+                                                    ]"
                                                 ></span>
                                                 <span
                                                     v-if="
                                                         reference.type ==
                                                             'Translation'
                                                     "
-                                                    class="icon icon-translation icon-{{typeOfMessageToBeShown}}"
+                                                    class="icon icon-translation "
+                                                    :class="[
+                                                        'icon-' +
+                                                            typeOfMessageToBeShown
+                                                    ]"
                                                 ></span>
                                                 <span
                                                     v-if="
                                                         reference.type ==
                                                             'Categories'
                                                     "
-                                                    class="icon icon-categories icon-{{typeOfMessageToBeShown}}"
+                                                    class="icon icon-categories "
+                                                    :class="[
+                                                        'icon-' +
+                                                            typeOfMessageToBeShown
+                                                    ]"
                                                 ></span>
-                                                <span class="title">{{
-                                                    reference.title | escape
-                                                }}</span>
+                                                <span class="title">
+                                                    {{ reference.title }}
+                                                </span>
                                                 <span
                                                     class="variable"
                                                     v-bind-html="
@@ -148,7 +189,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-link" @click="verify" v-i18next>
-                    Recompile
+                    {{ $t('QuestionnaireEditor.Recompile') }}
                 </button>
                 <button
                     class="btn btn-link"
@@ -156,7 +197,7 @@
                     @click="close"
                     v-i18next
                 >
-                    Close
+                    {{ $t('QuestionnaireEditor.Close') }}
                 </button>
             </div>
         </div>
@@ -168,9 +209,9 @@ import { useVerificationStore } from '../../../stores/verification';
 
 export default {
     name: 'VerificationDialog',
-    /*props: {
+    props: {
         questionnaireId: { type: String, required: true }
-    },*/
+    },
     data() {
         return {
             messagesToShow: [],
@@ -200,7 +241,15 @@ export default {
         close() {
             this.visible = false;
         },
-        verify() {}
+        async verify() {
+            await this.verificationStore.fetchVerificationStatus(
+                this.questionnaireId
+            );
+
+            if (this.typeOfMessageToBeShown === 'error')
+                this.messagesToShow = this.verificationStore.status.errors;
+            else this.messagesToShow = this.verificationStore.status.warnings;
+        }
     }
 };
 </script>
