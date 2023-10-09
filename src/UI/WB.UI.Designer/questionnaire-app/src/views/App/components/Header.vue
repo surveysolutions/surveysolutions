@@ -80,8 +80,8 @@
                             })
                         }}</a>
                         <a
-                            class="btn btn-default dropdown-toggle"
-                            data-toggle="dropdown"
+                            class="btn btn-default"
+                            data-bs-toggle="dropdown"
                             aria-haspopup="true"
                             aria-expanded="false"
                         >
@@ -148,7 +148,7 @@
                             v-if="warningsCount != null && errorsCount != null"
                         >
                             <span
-                                data-toggle="modal"
+                                data-bs-toggle="modal"
                                 v-if="warningsCount + errorsCount > 0"
                                 class="error-message v-hide"
                                 v-class="{
@@ -170,7 +170,7 @@
                                 </a>
                             </span>
                             <span
-                                data-toggle="modal"
+                                data-bs-toggle="modal"
                                 v-if="warningsCount > 0"
                                 class="warniv-message v-hide"
                             >
@@ -297,10 +297,14 @@ export default {
             return this.userStore.userName;
         },
         errorsCount() {
-            return this.verificationStore.status.errors.length;
+            return this.verificationStore.status.errors
+                ? this.verificationStore.status.errors.length
+                : null;
         },
         warningsCount() {
-            return this.verificationStore.status.warnings.length;
+            return this.verificationStore.status.warnings
+                ? this.verificationStore.status.warnings.length
+                : null;
         }
     },
     methods: {

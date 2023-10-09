@@ -5,6 +5,8 @@ import router from './router';
 import { vuetify, i18n /*, install, i18n */ } from './plugins/vuetify';
 
 import '../../questionnaire/content/markup.less';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap';
 
 import './directives';
 
