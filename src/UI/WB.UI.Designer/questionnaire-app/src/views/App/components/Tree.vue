@@ -1,23 +1,10 @@
 <template>
-    <vue3-tree-vue
-        :items="items"
-        :isCheckable="false"
-        :hideGuideLines="false"
-        @onCheck="onItemChecked"
-        @dropValidator="onBeforeItemDropped"
-        @onSelect="onItemSelected"
-        @onExpanded="lazyLoadNode"
-    >
-        <!-- Applying some simple styling to tree-items -->
-        <template v-slot:item-prepend-icon="treeViewItem">
-            <img
-                alt="folder"
-                v-if="treeViewItem.type === 'folder'"
-                height="20"
-                width="20"
-            />
-        </template>
-    </vue3-tree-vue>
+    <Draggable
+        v-model="treeData"
+        textKey="title"
+        childrenKey="items"
+        defaultOpen="true"
+    />
 
     <div class="questionnaire-tree-holder col-xs-6">
         <div
@@ -217,44 +204,28 @@
 </template>
 
 <script>
-import 'vue3-tree-vue/dist/style.css';
 import { useTreeStore } from '../../../stores/tree';
+import { BaseTree, Draggable } from '@he-tree/vue';
+import '@he-tree/vue/style/default.css';
 
 export default {
     name: 'Tree',
+    components: { Draggable },
     props: {
         questionnaireId: { type: String, required: true },
         chapterId: { type: String, required: true }
     },
     data() {
         return {
-            items: []
+            items: [],
+            treeData: []
         };
     },
     setup() {
         const treeStore = useTreeStore();
 
-        const onItemSelected = item => console.log(item);
-        const onBeforeItemDropped = (droppedItem, dropHost) => {
-            // dropHost == undefined means dropping at the root of the tree.
-
-            // Here you can specify any kind of drop validation you will like.
-            // this function should return true if the drop operation is valid.
-
-            if (dropHost.type !== playlist) return false;
-            return true;
-        };
-
-        const onExpanded = expandedItem => {
-            //fetch data
-            //const lazyLoadedItems = fetchFromApi(...);
-            //expandedItem.children.push(...lazyLoadedItems)
-        };
-
         return {
-            treeStore,
-            onItemSelected,
-            onBeforeItemDropped
+            treeStore
         };
     },
     async beforeMount() {
@@ -266,6 +237,7 @@ export default {
                 this.questionnaireId,
                 this.chapterId
             );
+            this.treeData = this.treeStore.getItems;
         }
     }
 };
