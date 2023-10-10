@@ -1,81 +1,78 @@
 <template>
-    <Draggable
-        v-model="treeData"
-        textKey="title"
-        childrenKey="items"
-        defaultOpen="true"
-    />
-
     <div class="questionnaire-tree-holder col-xs-6">
         <div
             class="chapter-title"
-            ng-switch
+            v-switch
             on="filtersBoxMode"
             ui-sref-active="selected"
             ui-sref="questionnaire.chapter.group({ chapterId: currentChapter.itemId, itemId: currentChapter.itemId})"
         >
-            <div
-                ng-click="$event.stopPropagation()"
-                class="search-box"
-                ng-switch-when="search"
-            >
+            <div @click.stop class="search-box" v-switch-when="search">
                 <div class="input-group">
                     <span
                         class="input-group-addon glyphicon glyphicon-search"
-                        ng-i18next="[title]Search"
-                    ></span>
+                        >{{ $t('QuestionnaireEditor.Search') }}</span
+                    >
                     <input
                         type="text"
-                        ng-model="search.searchText"
-                        ng-model-options="{debounce: 300}"
+                        v-model="search.searchText"
+                        v-model-options="{ debounce: 300 }"
                         focus-on-out="focusSearch"
                         hotkey="{esc: hideSearch}"
                         hotkey-allow-in="INPUT"
                     />
                     <span
                         class="input-group-addon glyphicon glyphicon-option-horizontal pointer"
-                        ng-i18next="[title]FindReplaceTitle"
-                        ng-click="showFindReplaceDialog()"
-                    ></span>
+                        @click="showFindReplaceDialog()"
+                        >{{ $t('QuestionnaireEditor.FindReplaceTitle') }}</span
+                    >
                 </div>
-                <button
-                    ng-click="hideSearch();$event.stopPropagation()"
-                    ng-i18next="[title]Cancel"
-                    type="button"
-                ></button>
+                <button @click.stop="hideSearch()" type="button">
+                    {{ $t('QuestionnaireEditor.Cancel') }}
+                </button>
             </div>
 
-            <div ng-switch-when="default" class="chapter-name">
+            <div v-switch-when="default" class="chapter-name">
                 <a
                     id="group-{{currentChapter.itemId}}"
                     class="chapter-title-text"
                     ui-sref="questionnaire.chapter.group({ chapterId: currentChapter.itemId, itemId: currentChapter.itemId})"
                 >
-                    <span ng-bind-html="currentChapter.title | escape"></span>
+                    <span v-bind-html="currentChapter.title | escape"></span>
                     <span
-                        ng-if="currentChapter.isCover && currentChapter.isReadOnly"
-                        class="warning-message"
-                        ng-i18next
-                        >VirtualCoverPage</span
+                        v-if="
+                            currentChapter.isCover && currentChapter.isReadOnly
+                        "
+                        class="warniv-message"
+                    >
+                        {{ $t('QuestionnaireEditor.VirtualCoverPage') }}</span
                     >
                     <help
-                        ng-if="currentChapter.isCover && currentChapter.isReadOnly"
+                        v-if="
+                            currentChapter.isCover && currentChapter.isReadOnly
+                        "
                         key="virtualCoverPage"
                     />
                     <a
-                        ng-if="!questionnaire.isReadOnlyForUser && currentChapter.isCover && currentChapter.isReadOnly"
+                        v-if="
+                            !questionnaire.isReadOnlyForUser &&
+                                currentChapter.isCover &&
+                                currentChapter.isReadOnly
+                        "
                         href="javascript:void(0);"
-                        ng-click="migrateToNewVersion();$event.stopPropagation()"
-                        ng-i18next
-                        >MigrateToNewCover</a
+                        @click.stop="migrateToNewVersion()"
+                        >{{ $t('QuestionnaireEditor.MigrateToNewCover') }}</a
                     >
                 </a>
                 <div class="qname-block chapter-condition-block">
                     <div class="conditions-block">
                         <div
-                            class="enabling-group-marker"
-                            ng-class="{'hide-if-disabled': currentChapter.hideIfDisabled}"
-                            ng-if="currentChapter.hasCondition"
+                            class="enabliv-group-marker"
+                            :class="{
+                                'hide-if-disabled':
+                                    currentChapter.hideIfDisabled
+                            }"
+                            v-if="currentChapter.hasCondition"
                         ></div>
                     </div>
                 </div>
@@ -83,10 +80,10 @@
                     <li>
                         <a
                             href="javascript:void(0);"
-                            ng-click="showSearch();$event.stopPropagation()"
+                            @click.stop="showSearch()"
                             class="search"
-                            ng-i18next="[title]ToggleSearch"
-                        ></a>
+                            >{{ $t('QuestionnaireEditor.ToggleSearch') }}</a
+                        >
                     </li>
                 </ul>
             </div>
@@ -97,97 +94,142 @@
                 ui-tree="groupsTree"
                 data-bs-empty-placeholder-enabled="false"
             >
-                <div ui-tree-nodes ng-model="items">
+                <Draggable
+                    class="ui-tree-nodes"
+                    v-model="treeData"
+                    textKey="title"
+                    childrenKey="items"
+                    defaultOpen="true"
+                >
+                    <template #default="{ node, stat }">
+                        <component
+                            :key="node.itemId"
+                            :is="itemTemplate(node.itemType)"
+                            :id="node.itemId"
+                        ></component>
+                    </template>
+                </Draggable>
+
+                <div ui-tree-nodes vmodel="items">
                     <div
-                        ng-repeat="item in items | filter:searchItem as results"
+                        vrepeat="item in items | filter:searchItem as results"
                         ui-tree-node
                         data-bs-nodrag="{{ currentChapter.isReadOnly }}"
                     >
-                        <ng-include
+                        <v-include
                             src="itemTemplate(item.itemType)"
-                        ></ng-include>
+                        ></v-include>
                     </div>
                     <div
                         class="section item"
-                        ng-if="filtersBoxMode == 'search' && results.length === 0"
+                        v-if="
+                            filtersBoxMode == 'search' && results.length === 0
+                        "
                     >
                         <div class="item-text">
-                            <span ng-i18next="NothingFound"></span>
+                            <span v-i18next="NothingFound"></span>
                         </div>
                     </div>
                     <div
                         class="chapter-level-buttons"
-                        ng-show="!search.searchText"
+                        v-show="!search.searchText"
                     >
                         <button
                             type="button"
                             class="btn lighter-hover"
-                            ng-if="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
-                            ng-click="addQuestion(currentChapter)"
-                            ng-i18next="AddQuestion"
+                            v-if="
+                                !questionnaire.isReadOnlyForUser &&
+                                    !currentChapter.isReadOnly
+                            "
+                            @click="addQuestion(currentChapter)"
+                            v-t="{ path: 'QuestionnaireEditor.AddQuestion' }"
                         ></button>
                         <button
                             type="button"
                             class="btn lighter-hover"
-                            ng-if="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly && !currentChapter.isCover"
-                            ng-click="addGroup(currentChapter)"
-                            ng-i18next="AddSubsection"
+                            v-if="
+                                !questionnaire.isReadOnlyForUser &&
+                                    !currentChapter.isReadOnly &&
+                                    !currentChapter.isCover
+                            "
+                            @click="addGroup(currentChapter)"
+                            v-t="{ path: 'QuestionnaireEditor.AddSubsection' }"
                         ></button>
                         <button
                             type="button"
                             class="btn lighter-hover"
-                            ng-if="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly && !currentChapter.isCover"
-                            ng-click="addRoster(currentChapter)"
-                            ng-i18next="AddRoster"
+                            v-if="
+                                !questionnaire.isReadOnlyForUser &&
+                                    !currentChapter.isReadOnly &&
+                                    !currentChapter.isCover
+                            "
+                            @click="addRoster(currentChapter)"
+                            v-t="{ path: 'QuestionnaireEditor.AddRoster' }"
                         ></button>
                         <button
                             type="button"
                             class="btn lighter-hover"
-                            ng-if="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
-                            ng-click="addStaticText(currentChapter)"
-                            ng-i18next="AddStaticText"
+                            v-if="
+                                !questionnaire.isReadOnlyForUser &&
+                                    !currentChapter.isReadOnly
+                            "
+                            @click="addStaticText(currentChapter)"
+                            v-t="{ path: 'QuestionnaireEditor.AddStaticText' }"
                         ></button>
                         <button
                             type="button"
                             class="btn lighter-hover"
-                            ng-if="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
-                            ng-click="addVariable(currentChapter)"
-                            ng-i18next="AddVariable"
+                            v-if="
+                                !questionnaire.isReadOnlyForUser &&
+                                    !currentChapter.isReadOnly
+                            "
+                            @click="addVariable(currentChapter)"
+                            v-t="{ path: 'QuestionnaireEditor.AddVariable' }"
                         ></button>
 
                         <button
                             type="button"
                             class="btn lighter-hover"
-                            ng-if="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
-                            ng-click="searchForQuestion(currentChapter)"
-                            ng-i18next="SearchForQuestion"
+                            v-if="
+                                !questionnaire.isReadOnlyForUser &&
+                                    !currentChapter.isReadOnly
+                            "
+                            @click="searchForQuestion(currentChapter)"
+                            v-t="{
+                                path: 'QuestionnaireEditor.SearchForQuestion'
+                            }"
                         ></button>
 
                         <input
                             type="button"
                             class="btn lighter-hover pull-right"
-                            ng-disabled="!readyToPaste"
-                            ng-if="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
-                            ng-i18next="[value]Paste"
-                            ng-click="pasteItemInto(currentChapter)"
+                            v-disabled="!readyToPaste"
+                            v-if="
+                                !questionnaire.isReadOnlyForUser &&
+                                    !currentChapter.isReadOnly
+                            "
+                            v-t="{ path: 'QuestionnaireEditor.Paste' }"
+                            @click="pasteItemInto(currentChapter)"
                         />
                     </div>
                 </div>
 
-                <div class="start-box" ng-if="showStartScreen()">
-                    <p ng-i18next="EmptySectionLine1"></p>
+                <div class="start-box" v-if="showStartScreen">
+                    <p v-i18next="EmptySectionLine1"></p>
                     <p>
-                        <span ng-bind-html="emptySectionHtmlLine1"> </span>
+                        <span v-bind-html="emptySectionHtmlLine1"> </span>
                         <br />
-                        <span
-                            ng-i18next="[html]({panel: '&lt;span class=&quot;left-panel-glyph&quot;&gt;&lt;/span&gt;'})EmptySectionLine3"
-                        ></span>
+                        <!--                        <span
+                            v-i18next="[html]({panel: '&lt;span class=&quot;left-panel-glyph&quot;&gt;&lt;/span&gt;'})EmptySectionLine3"
+                        >
+                            <span class="left-panel-glyph"></span>
+                        </span-->
                     </p>
 
                     <p>
-                        <span ng-i18next="EmptySectionLine4"></span>
+                        <span v-i18next="EmptySectionLine4"></span>
                         <br />
-                        <span ng-bind-html="emptySectionHtmlLine2"></span>
+                        <span v-bind-html="emptySectionHtmlLine2"></span>
                     </p>
                 </div>
             </div>
@@ -196,7 +238,7 @@
 
     <div
         class="question-editor col-xs-6"
-        ng-class="{ commenting : isCommentsBlockVisible}"
+        v-class="{ commenting: isCommentsBlockVisible }"
         ui-view
     ></div>
 
@@ -205,31 +247,59 @@
 
 <script>
 import { useTreeStore } from '../../../stores/tree';
+import { useQuestionnaireStore } from '../../../stores/questionnaire';
 import { BaseTree, Draggable } from '@he-tree/vue';
 import '@he-tree/vue/style/default.css';
 
+import TreeGroup from './TreeGroup.vue';
+import TreeQuestion from './TreeQuestion.vue';
+import TreeStaticText from './TreeStaticText.vue';
+import TreeVariable from './TreeVariable.vue';
+
 export default {
     name: 'Tree',
-    components: { Draggable },
+    components: {
+        Draggable,
+        TreeGroup,
+        TreeQuestion,
+        TreeStaticText,
+        TreeVariable
+    },
     props: {
         questionnaireId: { type: String, required: true },
         chapterId: { type: String, required: true }
     },
     data() {
         return {
-            items: [],
-            treeData: []
+            currentChapter: {
+                title: null,
+                isCover: false
+            },
+            treeData: [],
+            search: {
+                searchText: null
+            }
         };
     },
     setup() {
         const treeStore = useTreeStore();
+        const questionnaireStore = useQuestionnaireStore();
 
         return {
-            treeStore
+            treeStore,
+            questionnaireStore
         };
     },
     async beforeMount() {
         await this.fetch();
+    },
+    computed: {
+        questionnaire() {
+            return this.questionnaireStore.info;
+        },
+        showStartScreen() {
+            return true; // TODO
+        }
     },
     methods: {
         async fetch() {
@@ -237,8 +307,23 @@ export default {
                 this.questionnaireId,
                 this.chapterId
             );
+            this.currentChapter = this.treeStore.getChapter;
             this.treeData = this.treeStore.getItems;
-        }
+        },
+        itemTemplate(itemType) {
+            return 'Tree' + itemType;
+        },
+        addQuestion(chapter) {},
+        addGroup(chapter) {},
+        addRoster(chapter) {},
+        addStaticText(chapter) {},
+        addVariable(chapter) {},
+        searchForQuestion(chapter) {},
+        pasteItemInto(chapter) {},
+        migrateToNewVersion() {},
+        showFindReplaceDialog() {},
+        showSearch() {},
+        hideSearch() {}
     }
 };
 </script>
