@@ -106,6 +106,7 @@
                             :key="node.itemId"
                             :is="itemTemplate(node.itemType)"
                             :id="node.itemId"
+                            :item="node"
                         ></component>
                     </template>
                 </Draggable>

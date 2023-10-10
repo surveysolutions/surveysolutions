@@ -1,11 +1,12 @@
-<template>
-    TreeStaticText
-</template>
+<template> TreeStaticText {{ item.text }} </template>
 
 <script>
 export default {
     name: 'TreeStaticText',
-    props: {},
+    props: {
+        id: { type: String, required: true },
+        item: { type: Object, required: true }
+    },
     data() {
         return {};
     }

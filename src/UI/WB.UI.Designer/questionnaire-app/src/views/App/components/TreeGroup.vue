@@ -1,11 +1,12 @@
-<template>
-    TreeGroup
-</template>
+<template> TreeGroup {{ item.title }} </template>
 
 <script>
 export default {
     name: 'TreeGroup',
-    props: {},
+    props: {
+        id: { type: String, required: true },
+        item: { type: Object, required: true }
+    },
     data() {
         return {};
     }

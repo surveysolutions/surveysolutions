@@ -1,11 +1,12 @@
-<template>
-    TreeQuestion
-</template>
+<template> TreeQuestion {{ item.title }} </template>
 
 <script>
 export default {
     name: 'TreeQuestion',
-    props: {},
+    props: {
+        id: { type: String, required: true },
+        item: { type: Object, required: true }
+    },
     data() {
         return {};
     }
