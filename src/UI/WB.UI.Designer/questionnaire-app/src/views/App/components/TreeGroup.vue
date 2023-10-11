@@ -1,6 +1,4 @@
 <template>
-    TreeGroup {{ item.title }}
-
     <div
         context-menu
         class="section item group"
@@ -37,7 +35,7 @@
                     v-show="item.isRoster"
                     v-i18next="TreeRoster"
                 ></span>
-                <span v-bind-html="filter(item.title)"></span>
+                <span v-text="filter(item.title)"></span>
             </div>
             <div class="qname-block">
                 <div class="conditions-block">
@@ -47,7 +45,7 @@
                         v-if="item.hasCondition"
                     ></div>
                 </div>
-                <span v-bind-html="filter(item.variable)"></span>
+                <span v-text="filter(item.variable)"></span>
             </div>
         </a>
         <div

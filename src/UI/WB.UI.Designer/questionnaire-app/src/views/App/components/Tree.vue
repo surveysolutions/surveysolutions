@@ -42,8 +42,8 @@
                     :to="{
                         name: 'group',
                         params: {
-                            chapterId: currentChapter.itemId,
-                            groupId: currentChapter.itemId
+                            groupId: chapterId,
+                            chapterId: chapterId
                         }
                     }"
                 >
@@ -105,7 +105,7 @@
             >
                 <Draggable
                     class="ui-tree-nodes"
-                    v-model="treeData"
+                    v-model="filteredTreeData"
                     textKey="title"
                     childrenKey="items"
                     defaultOpen="true"
@@ -259,7 +259,7 @@
 <script>
 import { useTreeStore } from '../../../stores/tree';
 import { useQuestionnaireStore } from '../../../stores/questionnaire';
-import { BaseTree, Draggable } from '@he-tree/vue';
+import { BaseTree, Draggable, walkTreeData } from '@he-tree/vue';
 import '@he-tree/vue/style/default.css';
 import { ref, nextTick } from 'vue';
 
@@ -285,7 +285,8 @@ export default {
         return {
             currentChapter: {
                 title: null,
-                isCover: false
+                isCover: false,
+                itemId: ''
             },
             treeData: [],
             search: {
@@ -313,6 +314,30 @@ export default {
         },
         showStartScreen() {
             return true; // TODO
+        },
+        filteredTreeData() {
+            if (!this.search.open || !this.search.searchText)
+                return this.treeData;
+
+            let results = [];
+            walkTreeData(
+                this.treeData,
+                (node, index, parent) => {
+                    if (
+                        node.title &&
+                        node.title.includes(this.search.searchText)
+                    ) {
+                        results.push(node);
+                        return `skip children`;
+                    }
+                },
+                {
+                    childrenKey: 'items',
+                    reverse: false,
+                    childFirst: false
+                }
+            );
+            return results;
         }
     },
     methods: {
