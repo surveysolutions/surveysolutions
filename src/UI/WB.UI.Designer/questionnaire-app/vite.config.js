@@ -70,6 +70,10 @@ export default defineConfig(({ mode }) => {
             return 'js/[name]-[hash].js' 
           },
           manualChunks: (id) => {
+                        if (isDevMode) {
+                            var filename = id.replace(/^.*[\\\/]/, '');
+                            if (filename.endsWith('.css')) return filename;
+                        }
             if (id.includes('node_modules')) {
               return 'vendor';
             }
