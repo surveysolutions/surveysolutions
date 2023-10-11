@@ -297,10 +297,14 @@ export default {
             return this.userStore.userName;
         },
         errorsCount() {
-            return this.verificationStore.status.errors.length;
+            return this.verificationStore.status.errors
+                ? this.verificationStore.status.errors.length
+                : null;
         },
         warningsCount() {
-            return this.verificationStore.status.warnings.length;
+            return this.verificationStore.status.warnings
+                ? this.verificationStore.status.warnings.length
+                : null;
         }
     },
     methods: {

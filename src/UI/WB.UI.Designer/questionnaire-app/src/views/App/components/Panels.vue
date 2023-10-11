@@ -1,8 +1,6 @@
 <template>
-    <div class="left">
+    <div class="questionnaire-tree">
         <router-view name="tree"></router-view>
-    </div>
-    <div class="right">
         <router-view />
     </div>
 </template>

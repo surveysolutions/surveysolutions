@@ -107,6 +107,7 @@
                             :is="itemTemplate(node.itemType)"
                             :id="node.itemId"
                             :item="node"
+                            :highlightedId="highlightedId"
                         ></component>
                     </template>
                 </Draggable>
@@ -279,7 +280,8 @@ export default {
             treeData: [],
             search: {
                 searchText: null
-            }
+            },
+            highlightedId: null
         };
     },
     setup() {
@@ -296,7 +298,7 @@ export default {
     },
     computed: {
         questionnaire() {
-            return this.questionnaireStore.info;
+            return this.questionnaireStore.info || {};
         },
         showStartScreen() {
             return true; // TODO

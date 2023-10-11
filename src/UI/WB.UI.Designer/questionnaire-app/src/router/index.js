@@ -3,6 +3,7 @@ import PageNotFound from '../views/PageNotFound.vue';
 
 const OptionsEditor = () => import('../views/OptionsEditor/OptionsEditor.vue');
 
+const LeftSidePanel = () => import('../views/App/components/LeftSidePanel.vue');
 const Panels = () => import('../views/App/components/Panels.vue');
 const RightPanel = () => import('../views/App/components/RightPanel.vue');
 const Tree = () => import('../views/App/components/Tree.vue');
@@ -38,7 +39,8 @@ const routes = [
         path: '/q/details/:questionnaireId',
         components: {
             default: Panels,
-            header: QuestionnaireHeader
+            header: QuestionnaireHeader,
+            leftSidePanel: LeftSidePanel
         },
         props: route => ({
             questionnaireId: route.params.questionnaireId

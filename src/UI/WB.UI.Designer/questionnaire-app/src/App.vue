@@ -4,6 +4,11 @@
             <div id="designer-editor" class="questionnaire container">
                 <router-view name="header"></router-view>
                 <section id="spacer" class="row">
+                    <div class="left"></div>
+                    <div class="right"></div>
+                </section>
+                <section id="main" class="row">
+                    <router-view name="leftSidePanel"></router-view>
                     <router-view />
                 </section>
             </div>
