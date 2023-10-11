@@ -1,6 +1,6 @@
 <template>
-  Variable
-  <!--form role="form" id="question-editor" name="variableForm" unsaved-warning-form ng-show="activeVariable">
+    Variable
+    <!--form role="form" id="question-editor" name="variableForm" unsaved-warning-form ng-show="activeVariable">
       <div class="form-holder">
           <div class="breadcrumbs-container">
               <div data-item-breadcrumbs data-crumbs="activeVariable.breadcrumbs"></div>
@@ -79,17 +79,16 @@
           </div>
       </div>
   </form-->
-
 </template>
 
 <script>
 export default {
-  name: 'Variable',
-  props: {},
-  data() {
-    return {
-      
+    name: 'Variable',
+    props: {
+        variableId: { type: String, required: true }
+    },
+    data() {
+        return {};
     }
-  }
-}
+};
 </script>
