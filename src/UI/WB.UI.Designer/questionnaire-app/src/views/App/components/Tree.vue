@@ -7,13 +7,14 @@
             ui-sref-active="selected"
             ui-sref="questionnaire.chapter.group({ chapterId: currentChapter.itemId, itemId: currentChapter.itemId})"
         >
-            <div @click.stop class="search-box" v-switch-when="search">
+            <div @click.stop class="search-box" v-if="search.open">
                 <div class="input-group">
                     <span
                         class="input-group-addon glyphicon glyphicon-search"
-                        >{{ $t('QuestionnaireEditor.Search') }}</span
-                    >
+                        :title="$t('QuestionnaireEditor.Search')"
+                    ></span>
                     <input
+                        id="chapterSearch"
                         type="text"
                         v-model="search.searchText"
                         v-model-options="{ debounce: 300 }"
@@ -24,21 +25,29 @@
                     <span
                         class="input-group-addon glyphicon glyphicon-option-horizontal pointer"
                         @click="showFindReplaceDialog()"
-                        >{{ $t('QuestionnaireEditor.FindReplaceTitle') }}</span
-                    >
+                        :title="$t('QuestionnaireEditor.FindReplaceTitle')"
+                    ></span>
                 </div>
-                <button @click.stop="hideSearch()" type="button">
-                    {{ $t('QuestionnaireEditor.Cancel') }}
-                </button>
+                <button
+                    @click.stop="hideSearch()"
+                    type="button"
+                    :title="$t('QuestionnaireEditor.Cancel')"
+                ></button>
             </div>
 
-            <div v-switch-when="default" class="chapter-name">
-                <a
-                    id="group-{{currentChapter.itemId}}"
+            <div v-if="!search.open" class="chapter-name">
+                <router-link
+                    :id="'group-' + currentChapter.itemId"
                     class="chapter-title-text"
-                    ui-sref="questionnaire.chapter.group({ chapterId: currentChapter.itemId, itemId: currentChapter.itemId})"
+                    :to="{
+                        name: 'group',
+                        params: {
+                            chapterId: currentChapter.itemId,
+                            groupId: currentChapter.itemId
+                        }
+                    }"
                 >
-                    <span v-bind-html="currentChapter.title | escape"></span>
+                    <span v-text="currentChapter.title"></span>
                     <span
                         v-if="
                             currentChapter.isCover && currentChapter.isReadOnly
@@ -63,7 +72,7 @@
                         @click.stop="migrateToNewVersion()"
                         >{{ $t('QuestionnaireEditor.MigrateToNewCover') }}</a
                     >
-                </a>
+                </router-link>
                 <div class="qname-block chapter-condition-block">
                     <div class="conditions-block">
                         <div
@@ -82,8 +91,8 @@
                             href="javascript:void(0);"
                             @click.stop="showSearch()"
                             class="search"
-                            >{{ $t('QuestionnaireEditor.ToggleSearch') }}</a
-                        >
+                            :title="$t('QuestionnaireEditor.ToggleSearch')"
+                        ></a>
                     </li>
                 </ul>
             </div>
@@ -252,6 +261,7 @@ import { useTreeStore } from '../../../stores/tree';
 import { useQuestionnaireStore } from '../../../stores/questionnaire';
 import { BaseTree, Draggable } from '@he-tree/vue';
 import '@he-tree/vue/style/default.css';
+import { ref, nextTick } from 'vue';
 
 import TreeGroup from './TreeGroup.vue';
 import TreeQuestion from './TreeQuestion.vue';
@@ -279,6 +289,7 @@ export default {
             },
             treeData: [],
             search: {
+                open: false,
                 searchText: null
             },
             highlightedId: null
@@ -325,8 +336,15 @@ export default {
         pasteItemInto(chapter) {},
         migrateToNewVersion() {},
         showFindReplaceDialog() {},
-        showSearch() {},
-        hideSearch() {}
+        async showSearch() {
+            this.search.open = true;
+            await nextTick();
+            document.getElementById('chapterSearch').focus();
+        },
+        hideSearch() {
+            this.search.open = false;
+            this.search.searchText = '';
+        }
     }
 };
 </script>
