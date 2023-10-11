@@ -9,10 +9,16 @@
     >
         <span class="cursor"></span>
         <a class="handler" ui-tree-handle></a>
-        <a
+        <router-link
             class="item-body"
             :id="item.itemId"
             ui-sref="questionnaire.chapter.variable({itemId: item.itemId})"
+            :to="{
+                name: 'variable',
+                params: {
+                    variableId: item.itemId
+                }
+            }"
         >
             <div class="item-text">
                 <div class="icon icon-variable"></div>
@@ -28,7 +34,7 @@
                 ></span-->
                 <span v-text="item.variableData.name"></span>
             </div>
-        </a>
+        </router-link>
         <div
             class="dropdown position-fixed"
             :id="'context-menu-' + item.itemId"

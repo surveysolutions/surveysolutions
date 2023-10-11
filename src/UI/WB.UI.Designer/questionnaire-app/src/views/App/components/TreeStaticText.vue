@@ -9,10 +9,16 @@
     >
         <span class="cursor"></span>
         <a class="handler" ui-tree-handle></a>
-        <a
+        <router-link
             class="item-body"
             :id="item.itemId"
             ui-sref="questionnaire.chapter.statictext({itemId: item.itemId})"
+            :to="{
+                name: 'statictext',
+                params: {
+                    statictextId: item.itemId
+                }
+            }"
         >
             <div class="item-text">
                 <div class="icon icon-statictext"></div>
@@ -52,7 +58,7 @@
                     ></div>
                 </div>
             </div>
-        </a>
+        </router-link>
         <div
             class="dropdown position-fixed"
             :id="'context-menu-' + item.itemId"

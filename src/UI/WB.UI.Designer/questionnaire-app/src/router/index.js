@@ -89,6 +89,14 @@ const routes = [
                         })
                     },
                     {
+                        name: 'roster',
+                        path: 'roster/:rosterId',
+                        component: Group,
+                        props: route => ({
+                            groupId: route.params.rosterId
+                        })
+                    },
+                    {
                         name: 'chapter',
                         path: '',
                         component: Chapter

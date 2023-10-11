@@ -7,19 +7,25 @@
         :data-target="'context-menu-' + item.itemId"
         context-menu-hide-on-mouse-leave="true"
     >
-        <span class="cursor" v-show="!currentChapter.isReadOnly"></span>
+        <span class="cursor" ng-show="!currentChapter.isReadOnly"></span>
         <a
             class="handler"
             ui-tree-handle
-            v-show="!currentChapter.isReadOnly"
+            ng-show="!currentChapter.isReadOnly"
         ></a>
-        <a
+        <router-link
             class="item-body"
             :id="item.itemId"
             ui-sref="questionnaire.chapter.question({itemId: item.itemId})"
+            :to="{
+                name: 'question',
+                params: {
+                    questionId: item.itemId
+                }
+            }"
         >
             <div class="item-text">
-                <div class="icon" :class="[answerTypeClass[item.type]]"></div>
+                <!--div class="icon" :class="[answerTypeClass[item.type]]"></div-->
                 <!--                <span
                     ng-bind-html="item.title | escape | highlight:search.searchText"
                 ></span>
@@ -44,8 +50,8 @@
 -->
                 <span v-text="item.variable"></span>
             </div>
-        </a>
-        <div
+        </router-link>
+        <!--div
             class="dropdown position-fixed"
             :id="'context-menu-' + item.itemId"
         >
@@ -121,7 +127,7 @@
                     >
                 </li>
             </ul>
-        </div>
+        </div-->
     </div>
 </template>
 

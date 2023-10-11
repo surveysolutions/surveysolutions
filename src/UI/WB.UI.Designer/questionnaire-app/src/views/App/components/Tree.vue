@@ -286,6 +286,7 @@ export default {
             currentChapter: {
                 title: null,
                 isCover: false,
+                isReadOnly: true,
                 itemId: ''
             },
             treeData: [],

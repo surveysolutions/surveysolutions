@@ -13,10 +13,25 @@
     >
         <span class="cursor"></span>
         <a class="handler" ui-tree-handle></a>
-        <a
+        <router-link
             class="item-body"
             :id="item.itemId"
             ui-sref="{{ !item.isRoster ? 'questionnaire.chapter.group({itemId: item.itemId})' : 'questionnaire.chapter.roster({itemId: item.itemId})' }}"
+            :to="
+                !item.isRoster
+                    ? {
+                          name: 'group',
+                          params: {
+                              groupId: item.itemId
+                          }
+                      }
+                    : {
+                          name: 'roster',
+                          params: {
+                              rosterId: item.itemId
+                          }
+                      }
+            "
         >
             <div class="item-text">
                 <button
@@ -47,7 +62,7 @@
                 </div>
                 <span v-text="filter(item.variable)"></span>
             </div>
-        </a>
+        </router-link>
         <div
             class="dropdown position-fixed"
             :id="'context-menu-' + item.itemId"
