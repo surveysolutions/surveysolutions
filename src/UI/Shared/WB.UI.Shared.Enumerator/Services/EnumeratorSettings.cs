@@ -240,7 +240,7 @@ namespace WB.UI.Shared.Enumerator.Services
         private string GetRAMInformation()
             => AndroidInformationUtils.GetRAMInformation();
 
-        private string GetDiskInformation()
+        public string GetDiskInformation()
             => AndroidInformationUtils.GetDiskInformation();
 
         public string GetDataBaseSize() => 
