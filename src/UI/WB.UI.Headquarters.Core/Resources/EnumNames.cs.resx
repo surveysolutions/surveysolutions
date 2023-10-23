@@ -136,7 +136,7 @@
     <value>Uzamknout</value>
   </data>
   <data name="WebInterviewUserMessages_CompleteNoteToSupervisor" xml:space="preserve">
-    <value>Poznámka pro Garanta</value>
+    <value>Poznámka pro garanta</value>
   </data>
   <data name="InterviewerFacet_None" xml:space="preserve">
     <value>Žádné</value>
@@ -178,7 +178,7 @@
     <value>Pozvánka</value>
   </data>
   <data name="WebInterviewUserMessages_LinkWelcome" xml:space="preserve">
-    <value>Úvítací záhlaví</value>
+    <value>Vítej v ústředí</value>
   </data>
   <data name="WebInterviewUserMessages_ResumeButton" xml:space="preserve">
     <value>Pokračovat</value>
@@ -193,12 +193,12 @@
     <value>Zahájení nového rozhovoru</value>
   </data>
   <data name="WebInterviewUserMessages_SurveyName" xml:space="preserve">
-    <value>Název průzkumu</value>
+    <value>Název šetření</value>
   </data>
   <data name="WebInterviewUserMessages_WebSurveyHeader" xml:space="preserve">
     <value>Dokončit záhlaví</value>
   </data>
   <data name="WebInterviewUserMessages_WelcomeText" xml:space="preserve">
-    <value>Úvítací záhlaví</value>
+    <value>Vítej v ústředí</value>
   </data>
 </root>

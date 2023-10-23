@@ -118,22 +118,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AssignmentResponsibleNotFound" xml:space="preserve">
-    <value>Odpovědný nebyl nalezen</value>
+    <value>Zodpovědný uživatel nebyl nalezen</value>
   </data>
   <data name="QuestionnaireNameUniqueFormat" xml:space="preserve">
-    <value>Dotazník "{0}" již existuje. Zvolte prosím jiné jméno.</value>
+    <value>Typ dotazníku '{0}' již existuje. Vyberte prosím jiný název.</value>
   </data>
   <data name="QuestionnaireVariableUniqueFormat" xml:space="preserve">
-    <value>Již jste importovali jiný dotazník s proměnnou dotazníku "{0}" z návrháře. Pokud stále chcete importovat tento konkrétní, zadejte jinou proměnnou dotazníku v Designer.</value>
+    <value>Již jste importovali jiný dotazník s proměnnou dotazníku '{0}' z Designeru. Pokud stále chcete importovat tento konkrétní, zadejte mu prosím jinou proměnnou dotazníku v Designeru.</value>
   </data>
   <data name="UserDontHavePermissionsToAnswer" xml:space="preserve">
-    <value>Pouze nadřízený odpovědný za toto zadání může odpovídat na otázky nadřízeného</value>
+    <value>Na garantské otázky může odpovídat pouze garant, který je zodpovědný za tento dotazník.</value>
   </data>
   <data name="WebModeAssignmentShouldBeOnInterviewer" xml:space="preserve">
-    <value>Úkol pro online pohovor musí mít osobu vedoucí pohovor jako odpovědnou osobu</value>
+    <value>Každý dotazník pro webový rozhovor musí mít tazatele, který je za něj zodpovědný</value>
   </data>
   <data name="AssignmentLimitReached" xml:space="preserve">
-    <value>Byl dosažen limit přiřazení</value>
+    <value>Byl dosažen limit žádanek</value>
   </data>
   <data name="QuestionnaireWasDeleted" xml:space="preserve">
     <value>Dotazník byl odstraněn</value>

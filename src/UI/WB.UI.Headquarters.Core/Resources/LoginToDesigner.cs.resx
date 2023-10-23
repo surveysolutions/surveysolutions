@@ -124,7 +124,7 @@
     <value>Toto je bezplatný nástroj pro vytváření typů dotazníků pro platformu CAPI Světové banky. Lze jej nalézt na</value>
   </data>
   <data name="InvalidCredentials" xml:space="preserve">
-    <value>Uživatel nemá oprávnění. Zkontrolujte prosím své přihlašovací jméno a heslo.</value>
+    <value>Uživatel nemá oprávnění. Zkontrolujte prosím své přihlašovací jméno a heslo nebo zda účet není uzamčen.</value>
   </data>
   <data name="LoginWatermark" xml:space="preserve">
     <value>Přihlášení nebo email</value>

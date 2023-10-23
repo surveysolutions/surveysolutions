@@ -157,7 +157,7 @@
     <value>Umístění</value>
   </data>
   <data name="AreaMap_LocationDataSourceFailed" xml:space="preserve">
-    <value>Vaše poloha nebyla nalezena. Ověřte, zda máte povoleno sledování polohy na Vašem zařízení.</value>
+    <value>Vaše poloha nebyla nalezena. Ověřte, zda máte zapnuto sledování polohy na Vašem zařízení.</value>
   </data>
   <data name="AreaMap_LocationOutOfBoundaries" xml:space="preserve">
     <value>Vaše poloha je mimo dostupnou mapu.</value>
@@ -172,7 +172,7 @@
     <value>Žádné změny k uložení.</value>
   </data>
   <data name="AreaMap_NoMapsFound" xml:space="preserve">
-    <value>Nebyla nalezena žádná mapa. Aktualizujte si mapy na Vašem zařízení</value>
+    <value>Mapa nebyla nalezena. Aktualizujte si mapy na Vašem zařízení</value>
   </data>
   <data name="AreaMap_PointsFormat" xml:space="preserve">
     <value>Body: {0}</value>
@@ -193,13 +193,13 @@
     <value>Upravit mapy</value>
   </data>
   <data name="AssignmentN" xml:space="preserve">
-    <value>Dotazník #{0}</value>
+    <value>Žádanka #{0}</value>
   </data>
   <data name="Audio_Io_Exception_Message" xml:space="preserve">
     <value>Nelze uložit zvukový soubor. Zkontrolujte, zda má zařízení k dispozici interní úložiště.</value>
   </data>
   <data name="Audio_Unhandled_Exception_Message" xml:space="preserve">
-    <value>Neočkávaná chyba během spuštění záznamu zvuku</value>
+    <value>Neočekávaná chyba během spuštění záznamu zvuku</value>
   </data>
   <data name="AudioQuestion_DurationFormat" xml:space="preserve">
     <value>{0} zvukové nahrávky</value>
@@ -249,7 +249,7 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>Zadaná URL adresa aplikace Designer je neplatná. Zkontrolujte nastavení.</value>
   </data>
   <data name="ErrorMessage_Maintenance" xml:space="preserve">
-    <value>Web aplikace Designer je nyní v režimu údržby. Omluvám se za nepříjemnost</value>
+    <value>Web aplikace Designer je nyní v režimu údržby. Omlouvám se za nepříjemnost</value>
   </data>
   <data name="ErrorMessage_PermissionForUnkownSourcesRequired" xml:space="preserve">
     <value>Aplikaci není uděleno oprávnění k vlastní aktualizaci. V nabídce nastavení „Informace o aplikaci“ povolte možnost „Povolit z tohoto zdroje“.</value>
@@ -309,7 +309,7 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>0</value>
   </data>
   <data name="Interview_Complete_Note_For_Supervisor" xml:space="preserve">
-    <value>Poznámka pro Garanta</value>
+    <value>Poznámka pro garanta</value>
   </data>
   <data name="Interview_Complete_Questions_Status" xml:space="preserve">
     <value>Přehled vyplněnosti otázek</value>
@@ -333,16 +333,16 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>První {0} otázek s poznámkou:</value>
   </data>
   <data name="Interview_Cover_Questions_With_Comments" xml:space="preserve">
-    <value>Otázky s poznámkami od Garanta:</value>
+    <value>Otázky s poznámkami od garanta:</value>
   </data>
   <data name="Interview_Cover_Screen_Title" xml:space="preserve">
     <value>Úvod</value>
   </data>
   <data name="Interview_Cover_Supervisor_Comments_does_not_exists" xml:space="preserve">
-    <value>Bez poznámky pro Garanta</value>
+    <value>Neobsahuje poznámku pro garanta</value>
   </data>
   <data name="Interview_Cover_Supervisor_Note" xml:space="preserve">
-    <value>Poznámka Garanta:</value>
+    <value>Poznámka garanta:</value>
   </data>
   <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve">
     <value>Odpovědí - {0}</value>
@@ -375,7 +375,7 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>žádné podsekce</value>
   </data>
   <data name="Interview_Headquarters_Comment_Caption" xml:space="preserve">
-    <value>Poznámka od Ústředí</value>
+    <value>Poznámka od ústředí</value>
   </data>
   <data name="Interview_Instruction_ShowInstruction" xml:space="preserve">
     <value>Ukázat nápovědu</value>
@@ -465,7 +465,7 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>Vyplňte všechny požadované hodnoty</value>
   </data>
   <data name="Interview_Questions_Area_SaveAnswer" xml:space="preserve">
-    <value>Klepnutím upravte oblast</value>
+    <value>Klepnutím zadejte odpověď</value>
   </data>
   <data name="Interview_Questions_Audio_RecordNew" xml:space="preserve">
     <value>Nový záznam</value>
@@ -489,7 +489,7 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>Opravdu chcete smazat tyto seznamy (rostery)?</value>
   </data>
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
-    <value>Opravdu chcete smazat tyto seznamy (rostery) '{0}' i z každého souvisejího seznamu (rosteru)?</value>
+    <value>Opravdu chcete smazat tyto seznamy (rostery) '{0}' i z každého souvisejícího seznamu (rosteru)?</value>
   </data>
   <data name="Interview_Questions_Timestamp_SaveAnswer" xml:space="preserve">
     <value>Klepnutím zaznamenáte aktuální čas</value>
@@ -504,7 +504,7 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>Přihlaste se zde</value>
   </data>
   <data name="Interview_Supervisor_Comment_Caption" xml:space="preserve">
-    <value>Poznámka Garanta</value>
+    <value>Poznámka od garanta</value>
   </data>
   <data name="Interview_TakeSignature" xml:space="preserve">
     <value>Uložit podpis</value>
@@ -522,7 +522,7 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>Hotovo</value>
   </data>
   <data name="Interviewer_Reassign_Comment" xml:space="preserve">
-    <value>Napsat komentář pro nadřízenou osobu</value>
+    <value>Napsat poznámku pro nadřízenou osobu</value>
   </data>
   <data name="Interviewer_RelinkDevice_Cancel" xml:space="preserve">
     <value>Zrušit</value>
@@ -534,7 +534,7 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>přepojit</value>
   </data>
   <data name="Interviewer_RelinkDevice_RelinkMessage" xml:space="preserve">
-    <value>Pokud znovu připojíte toto zařízení &lt;br/&gt; všechna data ve starém zařízení budou ztracena</value>
+    <value>Pokud se znovu připojíte do tohoto zařízení &lt;br/&gt; všechna data ve starém zařízení budou ztracena</value>
   </data>
   <data name="Interviewer_TryOnlineLogin" xml:space="preserve">
     <value>Přihlaste se, až budete připojeni k internetu</value>
@@ -543,7 +543,7 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>ID rozhovoru: {0}</value>
   </data>
   <data name="InvalidTimeMessage" xml:space="preserve">
-    <value>Je důležité, aby nastavení hodin bylo přesné. Zdá se, že datum a čas na Vašem zařízení je nastaveno nesprávně. Než budete pokračovat v práci, upravte hodiny nastavením správného data / času.</value>
+    <value>Je důležité, aby nastavení hodin bylo přesné. Zdá se, že datum a čas na Vašem zařízení je nastaveno nesprávně. Než budete pokračovat v práci, nastavte si správný čas na Vašem zařízení.</value>
   </data>
   <data name="LoginNameHint" xml:space="preserve">
     <value>Uživatelské jméno</value>
@@ -555,7 +555,7 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>Aplikace Testr</value>
   </data>
   <data name="MapDashboard_AllQuestionnaires" xml:space="preserve">
-    <value>Všechny typy</value>
+    <value>Všechny typy dotazníků</value>
   </data>
   <data name="MapDashboard_Assignments" xml:space="preserve">
     <value>Nové dotazníky</value>
@@ -591,16 +591,16 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>Aplikace nemá dostatečná oprávnění k provedení požadované akce</value>
   </data>
   <data name="MissingPermissions_Camera" xml:space="preserve">
-    <value>Pokud chcete odpovědět na tuto otázku, musí mít aplikace povolení k použití kamery. Zkuste to znovu a povolte přístup. Pokud nevidíte vyskakovací okno oprávnění, přejděte do Nastavení a povolte aplikaci používat kameru.</value>
+    <value>Pokud chcete odpovědět na tuto otázku, musí mít aplikace povolení k použití kamery. Zkuste to znovu a povolte přístup. Pokud se neobjevilo vyskakovací okno pro nastavení oprávnění, přejděte do Nastavení a povolte aplikaci používat kameru.</value>
   </data>
   <data name="MissingPermissions_Microphone" xml:space="preserve">
-    <value>Pokud chcete odpovědět na tuto otázku, musí mít aplikace povolení k použití mikrofonu. Zkuste to znovu a povolte přístup. Pokud nevidíte vyskakovací okno oprávnění, přejděte do Nastavení a povolte aplikaci používat mikrofon.</value>
+    <value>Pokud chcete odpovědět na tuto otázku, musí mít aplikace povolení k použití mikrofonu.Zkuste to znovu a povolte přístup. Pokud se neobjevilo vyskakovací okno pro nastavení oprávnění, přejděte do Nastavení a povolte aplikaci používat mikrofon.</value>
   </data>
   <data name="MissingPermissions_Microphone_Global" xml:space="preserve">
-    <value>Pokud chcete odpovědět na tuto otázku, musí mít aplikace povolení k použití mikrofonu. Opakujte poslední akci a povolte přístup. Pokud nevidíte vyskakovací okno oprávnění, přejděte do Nastavení a povolte aplikaci používat mikrofon.</value>
+    <value>Pokud chcete odpovědět na tuto otázku, musí mít aplikace povolení k použití úložiště. Zkuste to znovu a povolte přístup. Pokud se neobjevilo vyskakovací okno pro nastavení oprávnění, přejděte do Nastavení a povolte aplikaci používat úložiště.</value>
   </data>
   <data name="MissingPermissions_Storage" xml:space="preserve">
-    <value>Pokud chcete odpovědět na tuto otázku, musí mít aplikace povolení k použití úložiště. Zkuste to znovu a povolte přístup. Pokud nevidíte vyskakovací okno oprávnění, přejděte do Nastavení a povolte aplikaci používat úložiště.</value>
+    <value>Pokud chcete odpovědět na tuto otázku, musí mít aplikace povolení k použití úložiště. Opakujte poslední akci a povolte přístup. Pokud nevidíte vyskakovací okno oprávnění, přejděte do Nastavení a povolte aplikaci používat úložiště.</value>
   </data>
   <data name="MissingPermissions_Storage_Global" xml:space="preserve">
     <value>Pokud chcete odpovědět na tuto otázku, musí mít aplikace povolení k použití úložiště. Opakujte poslední akci a povolte přístup. Pokud nevidíte vyskakovací okno oprávnění, přejděte do Nastavení a povolte aplikaci používat úložiště.</value>
@@ -666,7 +666,7 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>Stáhněte si aktualizace pro aplikaci Tazatel</value>
   </data>
   <data name="Prefs_DownloadUpdatesForInterviewerAppSummary" xml:space="preserve">
-    <value>Pokud tazatel nemá přístup k internetu, měla by být tato funkce povolena, protože umožňuje aktualizovat jeho aplikaci během offline synchronizace s garantskou aplikací</value>
+    <value>Pokud tazatel nemá přístup k internetu, měla by být tato funkce povolena, protože umožňuje aktualizovat jeho aplikaci během offline synchronizace s garantskou mobilní aplikací</value>
   </data>
   <data name="Prefs_GpsDesiredAccuracySubTitle" xml:space="preserve">
     <value>Nastavení přesnosti v metrech</value>
@@ -723,13 +723,13 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>Odpověď je neplatná</value>
   </data>
   <data name="Validity_InterviewSizeLimitReached" xml:space="preserve">
-    <value>Tento rozhovor obsahuje více zadaných možností, než systém umožňuje. Pokud je to možné, odstraňte nepotřebné řádky v seznamu nebo neodpovídejte na otázky.</value>
+    <value>Tento rozhovor obsahuje více zadaných možností, než systém umožňuje. Pokud je to možné, odstraňte nepotřebné řádky v seznamu (rosteru) a/nebo neodpovídejte na tyto otázky.</value>
   </data>
   <data name="Validity_NotAnswered_InterviewException_ErrorCaption" xml:space="preserve">
     <value>Odpověď nebyla uložena</value>
   </data>
   <data name="Validity_QuestionDoesntExist" xml:space="preserve">
-    <value>Aktuální seznam (roster) již neexistuje. Pomocí navigační lišty přejděte do další dostupné sekce nebo rosteru.</value>
+    <value>Aktuální seznam (roster) již neexistuje. Pomocí navigační lišty přejděte do další dostupné sekce nebo seznamu (rosteru).</value>
   </data>
   <data name="VariableEmptyValue" xml:space="preserve">
     <value>&lt;prázdné&gt;</value>
@@ -771,7 +771,7 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>Heslo musí být stejné</value>
   </data>
   <data name="AreaMap_PerimeterFormat" xml:space="preserve">
-    <value>Obvod: {0:0.00} m</value>
+    <value>Obvod: {0:0,00} m</value>
   </data>
   <data name="Dashboard_LastEntryDate_Format" xml:space="preserve">
     <value>{0:dd MMM HH:mm}</value>
@@ -783,10 +783,10 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>Koncový bod webových služeb:</value>
   </data>
   <data name="AreaMap_HideBoundaries" xml:space="preserve">
-    <value>Skrytí hranic</value>
+    <value>Skrýt hranice</value>
   </data>
   <data name="AreaMap_InitLocation" xml:space="preserve">
-    <value>Zahajující...</value>
+    <value>Iniciování…</value>
   </data>
   <data name="AreaMap_ItemsOutsideDedicatedArea" xml:space="preserve">
     <value>Některé značky spadají mimo vyznačenou oblast</value>
@@ -798,7 +798,7 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>a {0} další.</value>
   </data>
   <data name="AreaMap_Save_With_Warning_Confirm" xml:space="preserve">
-    <value>Chystáte se uložit ne přesný výsledek. Chcete pokračovat?</value>
+    <value>Chystáte se uložit nepřesný výsledek. Chcete pokračovat?</value>
   </data>
   <data name="AreaMap_SelectShapefile" xml:space="preserve">
     <value>Vybrat soubor hranic</value>
@@ -810,64 +810,64 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>Začínat</value>
   </data>
   <data name="Interviewer_Comment" xml:space="preserve">
-    <value>Zanechat komentář</value>
+    <value>Zapsat poznámku</value>
   </data>
   <data name="Interviewer_Reassign_AlreadyReceivedAssignment" xml:space="preserve">
-    <value>Tazatel {0} již tento úkol obdržel {1}. Opravdu chcete změnit přiřazení?</value>
+    <value>Tazatel {0} již obdržel žádanku {1}. Opravdu chcete změnit přiřazení?</value>
   </data>
   <data name="Interviewer_Reassign_AlreadyReceivedInterview" xml:space="preserve">
-    <value>Tazatel {0} již tento rozhovor obdržel {1}. Opravdu chcete změnit přiřazení?</value>
+    <value>Tazatel {0} již obdržel rozhovor {1}. Opravdu chcete změnit přiřazení?</value>
   </data>
   <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
-    <value>Schváleno ústředím</value>
+    <value>Schváleno Ústředím</value>
   </data>
   <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
-    <value>Schváleno supervizorem</value>
+    <value>Schváleno Garantem</value>
   </data>
   <data name="InterviewStatus_Completed" xml:space="preserve">
-    <value>Hotový</value>
+    <value>Dokončené</value>
   </data>
   <data name="InterviewStatus_Created" xml:space="preserve">
-    <value>Vytvořil</value>
+    <value>Vytvořeno</value>
   </data>
   <data name="InterviewStatus_Deleted" xml:space="preserve">
-    <value>Smazaný</value>
+    <value>Smazáno</value>
   </data>
   <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
-    <value>Přidělen tazatel</value>
+    <value>Tazatel přiřazen</value>
   </data>
   <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
-    <value>Zamítnuto ústředím</value>
+    <value>Vránceno Ústředím</value>
   </data>
   <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
-    <value>Zamítnuto supervizorem</value>
+    <value>Vráceno Garantem</value>
   </data>
   <data name="InterviewStatus_Restarted" xml:space="preserve">
-    <value>Restartovaný</value>
+    <value>Restartováno</value>
   </data>
   <data name="InterviewStatus_Restored" xml:space="preserve">
-    <value>Obnovený</value>
+    <value>Obnoveno</value>
   </data>
   <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
-    <value>Přidělený školitel</value>
+    <value>Garant přidělen</value>
   </data>
   <data name="Loading" xml:space="preserve">
-    <value>Nakládka...</value>
+    <value>Načítání…</value>
   </data>
   <data name="MapDashboard_AllResponsibles" xml:space="preserve">
     <value>Všichni zodpovědní</value>
   </data>
   <data name="MapDashboard_AllStatuses" xml:space="preserve">
-    <value>Všechny stavy</value>
+    <value>Všechny statusy</value>
   </data>
   <data name="MapDashboard_ResponsibleTitle" xml:space="preserve">
     <value>Zodpovědný</value>
   </data>
   <data name="MapDashboard_StatusTitle" xml:space="preserve">
-    <value>Stav</value>
+    <value>Status</value>
   </data>
   <data name="MissingPermissions_MapsLocation" xml:space="preserve">
-    <value>Aplikace musí mít oprávnění k použití polohy. Pokud nevidíte vyskakovací okno oprávnění, přejděte na Nastavení a povolte aplikaci používat polohu.</value>
+    <value>Pokud chcete odpovědět na tuto otázku, musí mít aplikace povolení k použití mikrofonu. Zkuste to znovu a povolte přístup. Pokud se neobjevilo vyskakovací okno pro nastavení oprávnění, přejděte do Nastavení a povolte aplikaci používat mikrofon.</value>
   </data>
   <data name="NoMapsApplication" xml:space="preserve">
     <value>Navigační aplikace nebyla nalezena.</value>

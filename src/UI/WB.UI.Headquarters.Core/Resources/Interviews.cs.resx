@@ -133,7 +133,7 @@
     <value>hodnota</value>
   </data>
   <data name="Tooltip_Table_NotAnsweredCount" xml:space="preserve">
-    <value>Počet nezodpovězených otázek. Zahrnuje garantské a tazatelské otázky a technické údaje. Může obsahovat prázné hodnoty pro dotazníky které byly dokončeny před vydáním verze 20.09.</value>
+    <value>Počet nezodpovězených otázek. Zahrnuje garantské a tazatelské otázky a technické údaje. Může obsahovat prázdné hodnoty pro rozhovory, které byly dokončeny před vydáním verze 20.09.</value>
   </data>
   <data name="Tooltip_Table_ReceivedByInterviewer" xml:space="preserve">
     <value>Indikátor, zda byl dotazník stažen do tazatelského tabletu. Seřadíte podle přijetí tazatelem kliknutím na ikonu řazení.</value>
@@ -146,14 +146,14 @@
   </data>
   <data name="ApproveConfirmMessageHQ" xml:space="preserve">
       <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; počet rozhovorů co bude schváleno.&lt;/h3&gt;
-&lt;b&gt;Pozor!&lt;/b&gt; Schvalovat můžete pouze rozhovory s následujícím statusem: &lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}}&lt;/i&gt; a &lt;i&gt;{{status3}}&lt;/i&gt;.</value>
+&lt;b&gt;Pozor!&lt;/b&gt; Schvalovat můžete pouze rozhovory s následujícím statusem: &lt;i&gt;{ {status1}}&lt;/i&gt;, &lt;i&gt;{{status2}}&lt;/i&gt; a &lt;i&gt;{{status3}}&lt;/i&gt;.</value>
   </data>
   <data name="ApproveReceivedWarning" xml:space="preserve">
     <value>Pokud tazatel již na rozhovoru začal pracovat, budou veškerá data, která tazatel zadal před další synchronizací, VYMAZÁNY!</value>
   </data>
   <data name="AssignConfirmMessage" xml:space="preserve">
       <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; počet rozhovorů vybraných k přeřazení.&lt;/h3&gt;
-&lt;b&gt;Pozor!&lt;/b&gt; Můžete přiřadit pouze rozhovory s následujícími statusy: &lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}} (pouze u jiného tazatele)&lt;/i&gt; a &lt;i&gt;{{status3}}&lt;/i&gt;.
+&lt;b&gt;Pozor!&lt;/b&gt; Můžete přiřadit pouze rozhovory s následujícími statusy: &lt;i&gt;{ {status1}}&lt;/i&gt;, &lt;i&gt;{{status2}} (pouze u jiného tazatele)&lt;/i&gt; a &lt;i&gt;{{status3}}&lt;/i&gt;.
 </value>
   </data>
   <data name="Assignment" xml:space="preserve">
@@ -173,7 +173,7 @@
     <value>Vyberte technické údaje, které chcete použít ve filtru</value>
   </data>
   <data name="ChooseResponsible" xml:space="preserve">
-    <value>Vyberte prosím Garanta nebo tazatele.</value>
+    <value>Vyberte prosím garanta nebo tazatele.</value>
   </data>
   <data name="ChooseResponsibleInterviewer" xml:space="preserve">
     <value>Vyberte tazatele.</value>
@@ -229,11 +229,11 @@
   </data>
   <data name="RejectConfirmMessage" xml:space="preserve">
       <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; rozhovory, které budou vráceny.&lt;/h3&gt;
-&lt;b&gt;Pozor!&lt;/b&gt; Můžete vrátit rozhovory pouze s následujícími statusy: &lt;i&gt;{{status1}}&lt;/i&gt; a &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
+&lt;b&gt;Pozor!&lt;/b&gt; Můžete vrátit rozhovory pouze s následujícími statusy: &lt;i&gt;{ {status1}}&lt;/i&gt; a &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
   </data>
   <data name="RejectConfirmMessageHQ" xml:space="preserve">
       <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; rozhovory, které budou vráceny.&lt;/h3&gt;
-&lt;b&gt;Pozor!&lt;/b&gt; Můžete vrátit rozhovory pouze s následujícím statusem: &lt;i&gt;{{status1}}&lt;/i&gt; a &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
+&lt;b&gt;Pozor!&lt;/b&gt; Můžete vrátit rozhovory pouze s následujícím statusem: &lt;i&gt;{ {status1}}&lt;/i&gt; a &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
   </data>
   <data name="RejectToNewResponsible" xml:space="preserve">
     <value>Vrátit a vybrat nového zodpovědného uživatele</value>
@@ -251,7 +251,7 @@
     <value>Výběrem typu dotazníku zobrazíte související rozhovory. Vyberte „Všechny typy“, chcete-li zobrazit rozhovory jakéhokoli typu.</value>
   </data>
   <data name="Tooltip_Filter_Responsible" xml:space="preserve">
-    <value>Zodpovědný uživatel. Klikněte do pole k vybrání uživatelského jména buď přímým výběrem, nebo zadáním jména pro další filtrování v seznamu uživatelských jmen.</value>
+    <value>Zodpovědný uživatel. Uživatelské jméno vyberte buď přímým výběrem, nebo ho vyfiltrujte zadáním jména v seznamu uživatelských jmen.</value>
   </data>
   <data name="Tooltip_Filter_Status" xml:space="preserve">
     <value>Stav rozhovoru. Výběrem stavu zobrazíte všechny rozhovory s tímto stavem. Chcete-li zobrazit rozhovory s libovolným stavem, vyberte „Všechny stavy“.</value>
@@ -263,13 +263,13 @@
     <value>Zobrazuje celkový počet neplatných otázek a statických textů v rozhovoru. Více neúspěšných podmínek ověření u stejné entity se počítá jako 1.</value>
   </data>
   <data name="Tooltip_Table_HideShowIdentifying" xml:space="preserve">
-    <value>Klikněte sem pro skrytí nebo zobrazení technických údajů. Skrytí technických údajů může poskytnout více prostoru pro další informace. Zobrazenítechnických údajů může poskytnout podrobnosti potřebné k rozlišení mezi rozhovory.</value>
+    <value>Klikněte sem pro skrytí nebo zobrazení technických údajů. Skrytí technických údajů může poskytnout více prostoru pro další informace. Zobrazení technických údajů může poskytnout podrobnosti potřebné k rozlišení mezi rozhovory.</value>
   </data>
   <data name="Tooltip_Table_IdentifyingQuestions" xml:space="preserve">
     <value>Informace, které identifikují každý dotazník. Toto jsou odpovědi na otázky označené v aplikaci Designer jako identifikační.</value>
   </data>
   <data name="Tooltip_Table_InterviewKey" xml:space="preserve">
-    <value>Krátký identifikátor případu, který se objevuje v celém systému – Ústředí, Garantům a tazatelům. Zvažte použití tohoto ID při komunikaci s týmem v terénu, spíše než velké sady technických údajů.</value>
+    <value>Tento krátký identifikátor se objevuje v celém systému na ústředí, garantům i tazatelům. Zvažte použití tohoto ID při komunikaci s týmem v terénu, spíše než technických údajů.</value>
   </data>
   <data name="Tooltip_Table_LastUpdate" xml:space="preserve">
     <value>Kdy byly změny v rozhovoru naposledy zveřejněny na serveru. Kliknutím na ikonu řazení seřadíte podle času.</value>
@@ -282,6 +282,9 @@
   </data>
   <data name="UnapproveConfirmMessageHQ" xml:space="preserve">
       <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; počet rozhovorů co nebude schváleno.&lt;/h3&gt;
-&lt;b&gt;Pozor!&lt;/b&gt; Můžete zrušit schválení rozhovoru pouze s následujícím statusem: &lt;i&gt;{{status1}}&lt;/i&gt;.</value>
+&lt;b&gt;Pozor!&lt;/b&gt; Můžete zrušit schválení rozhovoru pouze s následujícím statusem: &lt;i&gt;{ {status1}}&lt;/i&gt;.</value>
+  </data>
+  <data name="Tooltip_Table_InterviewMode" xml:space="preserve">
+    <value>Ukázat současný status (CAPI nebo CAWI) u každého tazatele</value>
   </data>
 </root>
