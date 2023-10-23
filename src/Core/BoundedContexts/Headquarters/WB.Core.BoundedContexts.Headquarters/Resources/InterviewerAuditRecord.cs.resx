@@ -223,6 +223,6 @@
     <value>Synchronizace zahájena ({0})</value>
   </data>
   <data name="RejectInterviewToInterviewer" xml:space="preserve">
-    <value>Rozhovor {0} vrácen tazateli</value>
+    <value>Rozhovor {0} vrácen tazateli {1}</value>
   </data>
 </root>
