@@ -146,14 +146,14 @@
   </data>
   <data name="ApproveConfirmMessageHQ" xml:space="preserve">
       <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; počet rozhovorů co bude schváleno.&lt;/h3&gt;
-&lt;b&gt;Pozor!&lt;/b&gt; Schvalovat můžete pouze rozhovory s následujícím statusem: &lt;i&gt;{ {status1}}&lt;/i&gt;, &lt;i&gt;{{status2}}&lt;/i&gt; a &lt;i&gt;{{status3}}&lt;/i&gt;.</value>
+&lt;b&gt;Pozor!&lt;/b&gt; Schvalovat můžete pouze rozhovory s následujícím statusem: &lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}}&lt;/i&gt; a &lt;i&gt;{{status3}}&lt;/i&gt;.</value>
   </data>
   <data name="ApproveReceivedWarning" xml:space="preserve">
     <value>Pokud tazatel již na rozhovoru začal pracovat, budou veškerá data, která tazatel zadal před další synchronizací, VYMAZÁNY!</value>
   </data>
   <data name="AssignConfirmMessage" xml:space="preserve">
       <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; počet rozhovorů vybraných k přeřazení.&lt;/h3&gt;
-&lt;b&gt;Pozor!&lt;/b&gt; Můžete přiřadit pouze rozhovory s následujícími statusy: &lt;i&gt;{ {status1}}&lt;/i&gt;, &lt;i&gt;{{status2}} (pouze u jiného tazatele)&lt;/i&gt; a &lt;i&gt;{{status3}}&lt;/i&gt;.
+&lt;b&gt;Pozor!&lt;/b&gt; Můžete přiřadit pouze rozhovory s následujícími statusy: &lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}} (pouze u jiného tazatele)&lt;/i&gt; a &lt;i&gt;{{status3}}&lt;/i&gt;.
 </value>
   </data>
   <data name="Assignment" xml:space="preserve">
@@ -233,7 +233,7 @@
   </data>
   <data name="RejectConfirmMessageHQ" xml:space="preserve">
       <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; rozhovory, které budou vráceny.&lt;/h3&gt;
-&lt;b&gt;Pozor!&lt;/b&gt; Můžete vrátit rozhovory pouze s následujícím statusem: &lt;i&gt;{ {status1}}&lt;/i&gt; a &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
+&lt;b&gt;Pozor!&lt;/b&gt; Můžete vrátit rozhovory pouze s následujícím statusem: &lt;i&gt;{{status1}}&lt;/i&gt; a &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
   </data>
   <data name="RejectToNewResponsible" xml:space="preserve">
     <value>Vrátit a vybrat nového zodpovědného uživatele</value>
