@@ -3,7 +3,6 @@
         <router-link
             class="item-body"
             :id="item.itemId"
-            ui-sref="questionnaire.chapter.question({itemId: item.itemId})"
             :to="{
                 name: 'question',
                 params: {

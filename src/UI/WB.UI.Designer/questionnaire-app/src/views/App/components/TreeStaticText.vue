@@ -1,9 +1,8 @@
 <template>
-    <TreeItem :item="item">
+    <TreeItem :item="item" :stat="stat">
         <router-link
             class="item-body"
             :id="item.itemId"
-            ui-sref="questionnaire.chapter.statictext({itemId: item.itemId})"
             :to="{
                 name: 'statictext',
                 params: {
@@ -143,7 +142,8 @@ export default {
     },
     props: {
         id: { type: String, required: true },
-        item: { type: Object, required: true }
+        item: { type: Object, required: true },
+        stat: { type: Object, required: true }
     },
     data() {
         return {};

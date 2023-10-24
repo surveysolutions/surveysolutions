@@ -126,7 +126,7 @@ export default {
         id: { type: String, required: true },
         item: { type: Object, required: true },
         stat: { type: Object, required: true },
-        highlightedId: { type: String, required: true }
+        selectedItemId: { type: String, required: false }
     },
     data() {
         return {
@@ -151,8 +151,10 @@ export default {
         },
         itemClass() {
             let classes = [];
-            if (this.item.itemId === this.highlightedId)
+            if (this.item.itemId === this.selectedItemId) {
                 classes.push('highlight');
+                classes.push('selected');
+            }
             if (this.is_highlighted) classes.push('highlighted');
             if (this.item.itemType)
                 classes.push(this.item.itemType.toLowerCase());

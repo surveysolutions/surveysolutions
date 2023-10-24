@@ -117,7 +117,8 @@
                             :id="node.itemId"
                             :item="node"
                             :stat="stat"
-                            :highlightedId="highlightedId"
+                            :selectedItemId="selectedItemId"
+                            :isReadOnly="currentChapter.isReadOnly"
                         ></component>
                     </template>
                 </Draggable>
@@ -294,8 +295,7 @@ export default {
             search: {
                 open: false,
                 searchText: null
-            },
-            highlightedId: null
+            }
         };
     },
     setup() {
@@ -340,6 +340,15 @@ export default {
                 }
             );
             return results;
+        },
+        selectedItemId() {
+            return (
+                this.$route.params.variableId ||
+                this.$route.params.statictextId ||
+                this.$route.params.questionId ||
+                this.$route.params.groupId ||
+                this.$route.params.rosterId
+            );
         }
     },
     methods: {
