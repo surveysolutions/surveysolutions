@@ -118,6 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="LimitIsReachedErrorMessageFormat" xml:space="preserve">
-    <value>Bylo vytvořeno více rozhovorů, než je povolený limit. Stanovený limit pro toto šetření je {0}. Kontaktujte tým Survey Solutions pro případ, že potřebujete vytvořit více rozhovorů.</value>
+    <value>Bylo vytvořeno více rozhovorů, než je povolený limit. Stanovený limit pro toto šetření je {0}. V případě, že potřebujete vytvořit další rozhovory, kontaktujte svého garanta.</value>
   </data>
 </root>
