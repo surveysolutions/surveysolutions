@@ -61,11 +61,6 @@ namespace WB.UI.Designer.SupportTool
                 var logger = loggerProvider.CreateLogger(nameof(UsersCreateCommand));
                 var userManager = locator.GetRequiredService<UserManager<DesignerIdentityUser>>();
                 
-                if (email)
-                {
-                    throw new Exception($"Invalid email {email}");
-                }
-                
                 var user = new DesignerIdentityUser
                 {
                     UserName = login,
