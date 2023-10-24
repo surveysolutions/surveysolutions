@@ -1,12 +1,12 @@
 using System.CommandLine;
 using System.CommandLine.Invocation;
-using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
 using WB.Infrastructure.Native.Storage.Postgre;
 using Option = System.CommandLine.Option;
 
@@ -31,7 +31,7 @@ namespace WB.UI.Designer.SupportTool
                 new Option("--role")
                 {
                     Required = true,
-                    Argument = new Argument<UserRoles>()
+                    Argument = new Argument<SimpleRoleEnum>()
                 },
                 new Option("--password")
                 {
@@ -50,7 +50,7 @@ namespace WB.UI.Designer.SupportTool
                 }
             };
 
-            cmd.Handler = CommandHandler.Create<UserRoles, string, string, string>(async (role, password, login, email) =>
+            cmd.Handler = CommandHandler.Create<SimpleRoleEnum, string, string, string>(async (role, password, login, email) =>
             {
                 using var scope = this.host.Services.CreateScope();
                 var locator = scope.ServiceProvider;
