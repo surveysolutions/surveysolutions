@@ -124,13 +124,13 @@
     <value>Stáhnout dotazník ({0})&lt;/br&gt;</value>
   </data>
   <data name="GetAssignmentsFormat" xml:space="preserve">
-    <value>Stáhnout seznam dotazníků ({0}). &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;</value>
+    <value>Stáhnout seznam žádanek ({0}). &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;</value>
   </data>
   <data name="GetAttachmentContent" xml:space="preserve">
     <value>Stáhněte si obsah přílohy: {0}</value>
   </data>
   <data name="GetCensusQuestionnaires" xml:space="preserve">
-    <value>Seznam úplných typů dotazníků ke stažení: &lt;br/&gt; &lt;ul&gt;{0}&lt;/ul&gt;</value>
+    <value>Seznam úplných dotazníků ke stažení: &lt;br/&gt; &lt;ul&gt;{0}&lt;/ul&gt;</value>
   </data>
   <data name="GetInterview" xml:space="preserve">
     <value>Stáhněte si rozhovor: &lt;b&gt;{0}&lt;/b&gt;</value>
@@ -148,10 +148,10 @@
     <value>&lt;b&gt;V3&lt;/b&gt; Stáhnout balíček s rozhovory: {0}</value>
   </data>
   <data name="GetInterviewPatch" xml:space="preserve">
-    <value>Stáhněte si změny dotazníku z Ústředí: {0}</value>
+    <value>Stáhněte si změny rozhovorů z ústředí: {0}</value>
   </data>
   <data name="GetInterviews" xml:space="preserve">
-    <value>Seznam rozhovorů ke stažení. &lt;/br&gt; &lt;ul&gt; {0} &lt;/ul&gt;</value>
+    <value>Stáhnout seznam rozhovorů. &lt;/br&gt; &lt;ul&gt; {0} &lt;/ul&gt;</value>
   </data>
   <data name="GetMap" xml:space="preserve">
     <value>Staženo map: {0}</value>
@@ -187,7 +187,7 @@
     <value>Požadován nový soubor aplikace</value>
   </data>
   <data name="AssignmentReceivedByTablet" xml:space="preserve">
-    <value>Dotazník &lt;b&gt;{0}&lt;/b&gt; stažen a uložen do tabletu</value>
+    <value>Žádanka &lt;b&gt;{0}&lt;/b&gt; stažena a uložena do tabletu</value>
   </data>
   <data name="CalendarEventsListFormat" xml:space="preserve">
     <value>Stáhnout kalendář schůzek ({0}). &lt;/br&gt; &lt;ul&gt; {1}&lt;/ul&gt;</value>
@@ -265,10 +265,10 @@
     <value>&lt;font color="green"'&gt;typ dotazníku &lt;b&gt;{0}&lt;/b&gt; [{1}] úspěšně zpracován&lt;/font&gt;</value>
   </data>
   <data name="SupervisorApkRequested" xml:space="preserve">
-    <value>Požadován nový soubor aplikace Garant</value>
+    <value>Požadován nový soubor do aplikace Garant Survey Solutions</value>
   </data>
   <data name="SupervisorPatchRequestedFormat" xml:space="preserve">
-    <value>Opravný soubor Garanta je vyžadován pro verzi {0}</value>
+    <value>Opravný soubor je vyžadován pro verzi {0}</value>
   </data>
   <data name="UpdateInterviewPackage" xml:space="preserve">
     <value>&lt;li&gt;Upravit rozhovor: &lt;a href="{3}"&gt;{0}&lt;/a&gt;, Balíček: {1}, Index řazení: {2}&lt;/li&gt;</value>

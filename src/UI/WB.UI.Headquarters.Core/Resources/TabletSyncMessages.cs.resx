@@ -151,7 +151,7 @@
     <value>Váš účet nemá roli povolující tuto operaci.</value>
   </data>
   <data name="Maintenance" xml:space="preserve">
-    <value>Server je nyní v režimu údržby. Omluváme se za nepříjemnost. Prosím zkuste to znovu později.</value>
+    <value>Server je nyní v režimu údržby. Omlouváme se za nepříjemnost. Prosím zkuste to znovu později.</value>
   </data>
   <data name="NoClientIdentifier" xml:space="preserve">
     <value>Synchronizace se nezdařila. Přeinstalujte aplikaci. Chybí identifikátor instalace. Kontaktujte prosím programátora.</value>

@@ -118,16 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ErrorConnectingToDatabase" xml:space="preserve">
-    <value>Aplikace se nemůže připojit k databázi pomocí zadaného připojovacího řetězce. Podrobnosti najdete v souboru protokolu aplikace</value>
+    <value>Aplikace se nemůže připojit k databázi pomocí zadaného připojovacího řetězce. Podrobnosti najdete v protokolu</value>
   </data>
   <data name="ErrorDatabaseUnauthorized" xml:space="preserve">
-    <value>Aplikace není autorizována pro připojení k databázi. Podrobnosti najdete v souboru protokolu aplikace</value>
+    <value>Aplikace není autorizována pro připojení k databázi. Podrobnosti najdete v protokolu</value>
   </data>
   <data name="ErrorDuringRunningMigrations" xml:space="preserve">
-    <value>Chyba během migrace databáze. Podrobnosti najdete v souboru protokolu aplikace</value>
+    <value>Chyba během migrace databáze. Podrobnosti najdete v protokolu</value>
   </data>
   <data name="ErrorDuringSiteInitialization" xml:space="preserve">
-    <value>Chyba při inicializaci webu. Podrobnosti najdete v souboru protokolu aplikace</value>
+    <value>Chyba při inicializaci. Podrobnosti najdete v protokolu</value>
   </data>
   <data name="InitializingDb" xml:space="preserve">
     <value>Databáze se inicializuje</value>

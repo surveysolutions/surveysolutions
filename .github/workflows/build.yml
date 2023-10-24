@@ -272,7 +272,7 @@ jobs:
           Write-Host "::set-output name=filename::$FileName"
 
       - name: Sign the installer
-        if: ${{ needs.prepare.outputs.environment == 'release' }}
+        if: ${{ needs.prepare.outputs.environment == 'release' && false }}
         run: |
           & installer/wix314-binaries/insignia.exe `
             -ib ${{ steps.build-installer.outputs.filename }} `
