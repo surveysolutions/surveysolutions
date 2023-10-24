@@ -1,18 +1,5 @@
 <template>
-    <div
-        class="question item question"
-        ui-sref-active="selected"
-        :class="{ highlight: item.itemId === highlightedId }"
-        context-menu
-        :data-target="'context-menu-' + item.itemId"
-        context-menu-hide-on-mouse-leave="true"
-    >
-        <span class="cursor" ng-show="!currentChapter.isReadOnly"></span>
-        <a
-            class="handler"
-            ui-tree-handle
-            ng-show="!currentChapter.isReadOnly"
-        ></a>
+    <TreeItem :item="item" :stat="stat">
         <router-link
             class="item-body"
             :id="item.itemId"
@@ -25,7 +12,7 @@
             }"
         >
             <div class="item-text">
-                <!--div class="icon" :class="[answerTypeClass[item.type]]"></div-->
+                <div class="icon" :class="getQuestionClass"></div>
                 <!--                <span
                     ng-bind-html="item.title | escape | highlight:search.searchText"
                 ></span>
@@ -51,7 +38,23 @@
                 <span v-text="item.variable"></span>
             </div>
         </router-link>
-        <!--div
+    </TreeItem>
+    <!--div
+        class="question item question"
+        ui-sref-active="selected"
+        :class="{ highlight: item.itemId === highlightedId }"
+        context-menu
+        :data-target="'context-menu-' + item.itemId"
+        context-menu-hide-on-mouse-leave="true"
+    >
+        <span class="cursor" ng-show="!currentChapter.isReadOnly"></span>
+        <a
+            class="handler"
+            ui-tree-handle
+            ng-show="!currentChapter.isReadOnly"
+        ></a>
+
+        <div
             class="dropdown position-fixed"
             :id="'context-menu-' + item.itemId"
         >
@@ -127,20 +130,49 @@
                     >
                 </li>
             </ul>
-        </div-->
-    </div>
+        </div>
+    </div-->
 </template>
 
 <script>
+import TreeItem from './TreeItem.vue';
+
+const answerTypeClass = {
+    YesNo: 'icon-singleoption',
+    DropDownList: 'icon-singleoption',
+    MultyOption: 'icon-multyoption',
+    Numeric: 'icon-numeric',
+    DateTime: 'icon-datetime',
+    GpsCoordinates: 'icon-gpscoordinates',
+    AutoPropagate: 'icon-textedit',
+    TextList: 'icon-textlist',
+    QRBarcode: 'icon-qrbarcode',
+    Text: 'icon-text',
+    SingleOption: 'icon-singleoption',
+    Multimedia: 'icon-photo',
+    Area: 'icon-area',
+    Audio: 'icon-audio'
+};
+
 export default {
     name: 'TreeQuestion',
+    components: {
+        TreeItem
+    },
     props: {
         id: { type: String, required: true },
         item: { type: Object, required: true },
+        stat: { type: Object, required: true },
         highlightedId: { type: String, required: true }
     },
     data() {
         return {};
+    },
+    methods: {
+        getQuestionClass() {
+            debugger;
+            return [answerTypeClass[this.item.type]];
+        }
     }
 };
 </script>

@@ -1,14 +1,5 @@
 <template>
-    <div
-        class="question item statictext"
-        :class="{ highlight: item.itemId === highlightedId }"
-        context-menu
-        :data-target="'context-menu-' + item.itemId"
-        ui-sref-active="selected"
-        context-menu-hide-on-mouse-leave="true"
-    >
-        <span class="cursor"></span>
-        <a class="handler" ui-tree-handle></a>
+    <TreeItem :item="item">
         <router-link
             class="item-body"
             :id="item.itemId"
@@ -59,6 +50,19 @@
                 </div>
             </div>
         </router-link>
+    </TreeItem>
+
+    <!--div
+        class="question item statictext"
+        :class="{ highlight: item.itemId === highlightedId }"
+        context-menu
+        :data-target="'context-menu-' + item.itemId"
+        ui-sref-active="selected"
+        context-menu-hide-on-mouse-leave="true"
+    >
+        <span class="cursor"></span>
+        <a class="handler" ui-tree-handle></a>
+
         <div
             class="dropdown position-fixed"
             :id="'context-menu-' + item.itemId"
@@ -126,12 +130,17 @@
                 </li>
             </ul>
         </div>
-    </div>
+    </div-->
 </template>
 
 <script>
+import TreeItem from './TreeItem.vue';
+
 export default {
     name: 'TreeStaticText',
+    components: {
+        TreeItem
+    },
     props: {
         id: { type: String, required: true },
         item: { type: Object, required: true }

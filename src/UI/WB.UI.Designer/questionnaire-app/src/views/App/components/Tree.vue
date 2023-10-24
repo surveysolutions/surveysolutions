@@ -116,6 +116,7 @@
                             :is="itemTemplate(node.itemType)"
                             :id="node.itemId"
                             :item="node"
+                            :stat="stat"
                             :highlightedId="highlightedId"
                         ></component>
                     </template>
