@@ -178,10 +178,10 @@
     <value>Stáhnout zprávu jako</value>
   </data>
   <data name="DownloadSupervisorPage_PageTitle" xml:space="preserve">
-    <value>Stáhnout aplikaci Garant</value>
+    <value>Stáhnout mobilní garantskou aplikaci Survey Solutions</value>
   </data>
   <data name="DownloadSupervisorPage_Welcome" xml:space="preserve">
-    <value>Vítejte na stránce Survey Solutions ke stažení aplikace Garant</value>
+    <value>Vítejte na stránce Survey Solutions ke stažení mobilní garantské aplikace Survey Solutions</value>
   </data>
   <data name="EditQuestion_Save" xml:space="preserve">
     <value>Uložit</value>
@@ -202,7 +202,7 @@
     <value>Stáhněte si nejnovější verzi aplikace Tazatel</value>
   </data>
   <data name="GetLatestSupervisorApp" xml:space="preserve">
-    <value>Stáhněte si nejnovější verzi aplikace Garant</value>
+    <value>Stáhněte si nejnovější verzi mobilní garantské aplikace Survey Solutions</value>
   </data>
   <data name="GlobalSettings_NotifyDialogText" xml:space="preserve">
     <value>Váš předchozí požadavek není hotov. Počkejte prosím na dokončení a opakujte.</value>
@@ -214,10 +214,10 @@
     <value>nahráno: {{uploaded}}, staženo: {{downloaded}}</value>
   </data>
   <data name="InterviewerProfile_StartedAssignments" xml:space="preserve">
-    <value>Počet rozpracovaných (nedokončených) dotazníků</value>
+    <value>Počet rozpracovaných (nedokončených) rozhovorů</value>
   </data>
   <data name="InterviewerProfile_Sync_Activity_Downloaded_Assignments_Desc" xml:space="preserve">
-    <value>Stažené dotazníky</value>
+    <value>Stažené žádanky</value>
   </data>
   <data name="InterviewerProfile_Sync_Activity_Uploaded_Interview_Desc" xml:space="preserve">
     <value>Nahráno na server pro schválení</value>
@@ -457,7 +457,7 @@
     <value>Body</value>
   </data>
   <data name="Assignments_PageTitle" xml:space="preserve">
-    <value>Dotazníky</value>
+    <value>Žádanky</value>
   </data>
   <data name="Attention" xml:space="preserve">
     <value>Pozor!</value>
@@ -517,7 +517,7 @@
     <value>Instrukce k instalaci</value>
   </data>
   <data name="DownloadPage_Title" xml:space="preserve">
-    <value>Technologie počítačem řízenýho osobního rozhovoru vyvinutá Světovou bankou.</value>
+    <value>Technologie počítačem řízeného osobního rozhovoru vyvinutá Světovou bankou.</value>
   </data>
   <data name="DownloadPage_Version" xml:space="preserve">
     <value>Verze</value>
@@ -526,7 +526,7 @@
     <value>Nastavení poskytovatelů e-mailu</value>
   </data>
   <data name="EmailProvidersTitle" xml:space="preserve">
-    <value>Hromadné e-mailové služby</value>
+    <value>Poskytovatel e-mailu</value>
   </data>
   <data name="EnableAuthenticatorLine1" xml:space="preserve">
     <value>Chcete-li používat aplikaci pro ověření, následujte kroky níže:</value>
@@ -580,7 +580,7 @@
     <value>Titul</value>
   </data>
   <data name="Filters_Assignment" xml:space="preserve">
-    <value>ID dotazníku</value>
+    <value>Žádanka</value>
   </data>
   <data name="Filters_InterviewMode" xml:space="preserve">
     <value>Režim rozhovoru</value>
@@ -682,7 +682,7 @@
     <value>Domů</value>
   </data>
   <data name="HQ_LockWarning" xml:space="preserve">
-    <value>Uzamčené Ústředí (zaškrtnuté políčko) se nemůže přihlásit a provádět na serveru žádné akce.</value>
+    <value>Do uzamčeného ústředí (zaškrtnuté políčko) se nelze přihlásit a provádět na serveru žádnnou akci.</value>
   </data>
   <data name="Index_cshtml_Execute_Do_you_want_to_continue_" xml:space="preserve">
     <value>Chcete pokračovat?</value>
@@ -757,7 +757,7 @@
     <value>nezodpovězeno</value>
   </data>
   <data name="Interviewer_CreateText" xml:space="preserve">
-    <value>Touto akcí vytvoříte jednotlivého uživatele s právy tazatele,&lt;br&gt; pro vytvoření několika uživatelů můžete použít &lt;a href="{{link}}" target="_blank"&gt;vytvoření dávky uživatelů&lt;/a&gt;.</value>
+    <value>Touto akcí vytvoříte jednoho uživatele s tazatelskými právy,&lt;br&gt; pro vytvoření více uživatelů najednou můžete použít &lt;a href="{{link}}" target="_blank"&gt;vytvoření skupiny uživatelů&lt;/a&gt;.</value>
   </data>
   <data name="Interviewer_LockWarning" xml:space="preserve">
     <value>Uzamčení tazatelé nemohou propojit své tablety se serverem a posílat rozhovory.</value>
@@ -877,7 +877,7 @@
     <value>Sériové číslo zařízení</value>
   </data>
   <data name="InterviewerProfile_DownloadedAssignmentsCount" xml:space="preserve">
-    <value>Počet stažených dotazníků</value>
+    <value>Počet stažených žádanek</value>
   </data>
   <data name="InterviewerProfile_DownloadedQuestionnairesCount" xml:space="preserve">
     <value>Počet stažených typů dotazníků</value>
@@ -970,7 +970,7 @@
     <value>Informace o systému a nesynchronizovaná data z rozhovoru</value>
   </data>
   <data name="InterviewerProfile_Sync_Activity_All_Assignments_Desc" xml:space="preserve">
-    <value>Počet nedokončených nebo nesynchronizovaných dotazníků na tabletu v každém daném okamžiku</value>
+    <value>Současný počet nedokončených nebo nesynchronizovaných dotazníků na tabletu</value>
   </data>
   <data name="InterviewerProfile_Sync_Activity_Failed_Sync" xml:space="preserve">
     <value>Neúspěšný pokus o synchronizaci</value>
@@ -997,7 +997,7 @@
     <value>Využitá data</value>
   </data>
   <data name="InterviewerProfile_WaitingForApproval" xml:space="preserve">
-    <value>Odeslané dotazníky Garantovi (neschválené)</value>
+    <value>Odeslané dotazníky garantovi (neschválené)</value>
   </data>
   <data name="Interviewers_ActiveUsers" xml:space="preserve">
     <value>Aktivní tazatelé</value>
@@ -1027,7 +1027,7 @@
     <value>Účet vytvořen dne</value>
   </data>
   <data name="Interviewers_CreationDateTooltip" xml:space="preserve">
-    <value>Datum vytvoření účetu tazatele</value>
+    <value>Datum vytvoření účtu tazatele</value>
   </data>
   <data name="Interviewers_EmailTitle" xml:space="preserve">
     <value>E-mail tazatele</value>
@@ -1063,7 +1063,7 @@
     <value>Poslední datum, kdy se tazatel naposledy přihlásil na web</value>
   </data>
   <data name="Interviewers_MoveAllToNewTeam" xml:space="preserve">
-    <value>Přesuňte tazatele a jeho dotazníky a rozhovory do týmu Garanta {{supervisor}}.</value>
+    <value>Přesuňte tazatelovi žádanky a rozhovory do týmu příslušného garanta {{supervisor}}.</value>
   </data>
   <data name="Interviewers_MoveInterviewerPopupTitle" xml:space="preserve">
     <value>Vyberte tým, kam přesunout {{names}}</value>
@@ -1072,7 +1072,7 @@
     <value>Přesunout do jiného týmu</value>
   </data>
   <data name="Interviewers_MoveWebAssigment" xml:space="preserve">
-    <value>Přesouváte tazatele, který měl webové dotazníky, do jiného týmu. Tyto dotazníky budou přiděleny původnímu Garantovi. Pokud jste již odeslali odkazy na tyto dotazníky, respondenti nebudou moci na Vaše šetření reagovat, dokud nebude dotazník znovu přidělen uživateli v roli TAZATEL.</value>
+    <value>Přesouváte tazatele, který měl žádanky na webové rozhovory, do jiného týmu. Tyto rozhovory budou přiděleny původnímu garantovi. Pokud jste již odeslali odkazy na webové dotazníky, respondenti nebudou moci na Vaše šetření reagovat, dokud nebude rozhovor znovu přidělen uživateli v roli TAZATEL.</value>
   </data>
   <data name="Interviewers_MovingIsInProgress" xml:space="preserve">
     <value>Probíhá přesun</value>
@@ -1093,13 +1093,13 @@
     <value>Zastaralý</value>
   </data>
   <data name="Interviewers_ReassignToOriginalSupervisor" xml:space="preserve">
-    <value>Udělat původního Garanta zodpovědným za stávající dotazníky a rozhovory přesunutého tazatele/ů.</value>
+    <value>Udělat původního garanta zodpovědným za stávající žádanky a rozhovory přesunutého tazatele/ů.</value>
   </data>
   <data name="Interviewers_Selected" xml:space="preserve">
     <value>vybraných tazatelů</value>
   </data>
   <data name="Interviewers_SupervisorTooltip" xml:space="preserve">
-    <value>Přihlašovací jméno tazatelova Garanta</value>
+    <value>Přihlašovací jméno tazatelova garanta</value>
   </data>
   <data name="Interviewers_Title" xml:space="preserve">
     <value>Tazatelé</value>
@@ -1150,7 +1150,7 @@
     <value>Přihlásit se</value>
   </data>
   <data name="LogOn_Legend" xml:space="preserve">
-    <value>Prosím přihlašte se</value>
+    <value>Prosím přihlaste se</value>
   </data>
   <data name="LogOn_LogIn" xml:space="preserve">
     <value>Přihlásit se</value>
@@ -1168,13 +1168,13 @@
     <value>Přihlásit se</value>
   </data>
   <data name="LogOn_TwoFactor" xml:space="preserve">
-    <value>Váše přihlášení je chráněno aplikací k ověření. Zadejte svůj ověřovací kód níže.</value>
+    <value>Při přihlášení je nutné ověření. Zadejte svůj ověřovací kód níže.</value>
   </data>
   <data name="LogOn_UnsuccessfulLogin" xml:space="preserve">
     <value>Přihlášení se nezdařilo. Opravte chyby a zkuste to znovu.</value>
   </data>
   <data name="Maintenance_Description" xml:space="preserve">
-    <value>V současné době probíhá upgrade aplikace na novější verzi. Toto je ruční operace a může vyžadovat značné množství času. Omluváme se za nepříjemnost. Po dokončení procesu budete automaticky přesměrováni na požadovanou stránku.</value>
+    <value>V současné době probíhá upgrade aplikace na novější verzi. Toto je ruční operace a může vyžadovat značné množství času. Omlouváme se za nepříjemnost. Po dokončení procesu budete automaticky přesměrováni na požadovanou stránku.</value>
   </data>
   <data name="Maintenance_RebuildDescription" xml:space="preserve">
     <value>Aplikace se nyní restartuje, což může trvat až 10 minut nebo déle. Po dokončení procesu budete automaticky přesměrováni na požadovanou stránku.</value>
@@ -1207,7 +1207,7 @@
       <value>Uživatelské jméno</value>
   </data>
   <data name="MapDetails_MapDisclaimer" xml:space="preserve">
-    <value>Tento náhled zobrazuje načtenou mapu překrytou na mapě světa</value>
+    <value>Tento náhled zobrazuje načtenou mapu překrytou na mapě světa.</value>
   </data>
   <data name="MapDetails_MapTitle" xml:space="preserve">
     <value>Mapa</value>
@@ -1225,7 +1225,7 @@
     <value>Správa přiřazení uživatelů a mapy</value>
   </data>
   <data name="MapLinking_UploadDescription" xml:space="preserve">
-    <value>Toto Vám umožní vytvořit mapu s korespondencí uživatele.</value>
+    <value>Toto Vám umožní vytvořit mapu se souhlasem uživatele.</value>
   </data>
   <data name="MapLinking_UploadFileDescription1" xml:space="preserve">
     <value> Neplatná jména a uživatelská jména budou ignorována.</value>
@@ -1309,7 +1309,7 @@
     <value>Vytvořit Ústředí</value>
   </data>
   <data name="Profile_HeadquartersEditFormat" xml:space="preserve">
-    <value>Upravit profil Ústředí: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+    <value>Upravit profil ústředí: &lt;strong&gt;{0}&lt;/strong&gt;</value>
   </data>
   <data name="Profile_HeadquartersList" xml:space="preserve">
     <value>Ústředí</value>
@@ -1336,10 +1336,10 @@
     <value>Pozorovatelé</value>
   </data>
   <data name="Profile_SupervisorCreate" xml:space="preserve">
-    <value>Vytvořit Garanta</value>
+    <value>Vytvořit garanta</value>
   </data>
   <data name="Profile_SupervisorEditFormat" xml:space="preserve">
-    <value>Upravit profil Garanta: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+    <value>Upravit profil garanta: &lt;strong&gt;{0}&lt;/strong&gt;</value>
   </data>
   <data name="PublicSection" xml:space="preserve">
     <value>Podrobnosti o osobních údajích (volitelné) &lt;br&gt; budou viditelné pouze uživatelům Ústředí</value>
@@ -1426,29 +1426,29 @@
     <value>Kolik dní jsou dotazníky a rozhovory v jejich aktuálním stavu</value>
   </data>
   <data name="Supervisor_CreateText" xml:space="preserve">
-    <value>Tato akce vytvoří jednotlivého uživatele s právy garanta,
-&lt;br&gt;pro vytvoření několika uživatelů můžete použít &lt;a href="{{link}}" target="_blank"&gt;vytvoření dávky uživatelů&lt;/a&gt;</value>
+    <value>Tato akce vytvoří jednoho uživatele s garantskými právy,
+&lt;br&gt;pro vytvoření více uživatelů najednou můžete použít &lt;a href="{{link}}" target="_blank"&gt;vytvoření skupiny uživatelů&lt;/a&gt;</value>
   </data>
   <data name="Supervisor_LockWarning" xml:space="preserve">
-    <value>Uzamčený Garant (zaškrtnuté políčko) se nemůže přihlásit a provádět na serveru žádné akce.</value>
+    <value>Uzamčený garant (zaškrtnuté políčko) se nemůže přihlásit a provádět na serveru žádné akce.</value>
   </data>
   <data name="SupervisorAssigned" xml:space="preserve">
-    <value>Přidělených Garantů</value>
+    <value>Garant přidělen</value>
   </data>
   <data name="Supervisors_ActiveUsers" xml:space="preserve">
-    <value>Aktivní Garanti</value>
+    <value>Aktivní garanti</value>
   </data>
   <data name="Supervisors_Archive" xml:space="preserve">
     <value>Deaktivovat</value>
   </data>
   <data name="Supervisors_ArchivedUsers" xml:space="preserve">
-    <value>Neaktivní Garanti</value>
+    <value>Neaktivní garanti</value>
   </data>
   <data name="Supervisors_ArchiveStatusTitle" xml:space="preserve">
     <value>Stav účtu</value>
   </data>
   <data name="Supervisors_Selected" xml:space="preserve">
-    <value>vybraní Garanti</value>
+    <value>vybraní garanti</value>
   </data>
   <data name="Supervisors_Unarchive" xml:space="preserve">
     <value>Obnovit účet</value>
@@ -1484,7 +1484,7 @@
     <value>Status</value>
   </data>
   <data name="SurveysAndStatuses_HeadquartersDescription" xml:space="preserve">
-    <value>Zobrazuje počet rozhovorů v každém stavu (sloupcích) pro každý nástroj průzkumu (řádky)</value>
+    <value>Zobrazuje počet rozhovorů podle stavu (sloupcích) pro jednotlivé typy dotazníků (řádky)</value>
   </data>
   <data name="SurveysAndStatuses_InterviewerStatisticsFormat" xml:space="preserve">
     <value>Rozhovorů - {0}</value>
@@ -1511,10 +1511,10 @@
     <value>Vráceno Ústředím</value>
   </data>
   <data name="SurveysStatuses_SupervisorAssigned" xml:space="preserve">
-    <value>Přidělených Garantů</value>
+    <value>Garant přidělen</value>
   </data>
   <data name="SurveysStatuses_SurveyName" xml:space="preserve">
-    <value>Název průzkumu</value>
+    <value>Název šetření</value>
   </data>
   <data name="SurveysStatuses_TeamMembersHeader" xml:space="preserve">
     <value>Tazatelé</value>
@@ -1550,31 +1550,31 @@
     <value>Aktualizace dotazníků</value>
   </data>
   <data name="User_CreateText_UserBatchUploadLinkText" xml:space="preserve">
-    <value>vytvoření uživatelské dávky</value>
+    <value>skupinové vytvoření uživatelů</value>
   </data>
   <data name="User_CreateText1" xml:space="preserve">
     <value>Tato akce vytvoří individuálního uživatele,</value>
   </data>
   <data name="User_CreateText2" xml:space="preserve">
-    <value>k vytvoření několika tazatelů a Garantů můžete použít {{link}}</value>
+    <value>k vytvoření více tazatelských a garantských účtů můžete použít {{link}}</value>
   </data>
   <data name="UserManagement_AddToWorkspace" xml:space="preserve">
-    <value>Přidat do úloh</value>
+    <value>Přidat do prostředí</value>
   </data>
   <data name="UserManagement_ManageWorkspacesTitle" xml:space="preserve">
-    <value>Spravujte úlohy</value>
+    <value>Spravujte prostředí</value>
   </data>
   <data name="UserManagement_RemoveFromWorkspace" xml:space="preserve">
-    <value>Odebrat z úlohy</value>
+    <value>Odebrat z prostředí</value>
   </data>
   <data name="UserManagement_SubtitleAdd" xml:space="preserve">
-    <value>Vyberte úlohy, které je třeba přidat vybraným uživatelům</value>
+    <value>K vybraným uživatelům přiřaďte prostředí</value>
   </data>
   <data name="UserManagement_SubtitleAddInterviewer" xml:space="preserve">
-    <value>Vyberte úlohu a Garanta, kteří potřebují vytvořit tazatele</value>
+    <value>Vyberte prostředí a garanta, ke kterým je potřeba vytvořit tazatele</value>
   </data>
   <data name="UserManagement_SubtitleRemove" xml:space="preserve">
-    <value>Vyberte úlohy, které je třeba odebrat vybraným uživatelům</value>
+    <value>Vyberte prostředí, které je třeba odebrat vybraným uživatelům</value>
   </data>
   <data name="UserManagement_UsersSelected" xml:space="preserve">
     <value>Vybraní uživatelé</value>
@@ -1592,11 +1592,10 @@
     <value>Neaktivní uživatelé</value>
   </data>
   <data name="Users_ArchiveUsersConfirmMessage" xml:space="preserve">
-      <value>Deaktivujete Garanty a tazatele v rámci jejich týmu. Tazatelé přiřazení k deaktivovanému Garantovi budou rovněž deaktivováni ve všech úlohách. 
-Jakákoli zbývající nesynchronizovaná data na zařízeních archivovaných uživatelů (tazatelů nebo supervizorů) nebudou přenesena na server.</value>
+      <value>Deaktivujete garanty a tazatele v rámci jejich týmu. Tazatelé přiřazení k deaktivovanému garantovi budou rovněž deaktivováni ve všech prostředích. Pokud mají tazatelé nějaká nesynchronizovaná data na tabletech, budou smazána.</value>
   </data>
   <data name="Users_Headquarters_Instruction1" xml:space="preserve">
-    <value>Stisknutím tlačítka Přidat Ústředí vytvoříte nového uživatele Ústředí.</value>
+    <value>Stisknutím tlačítka Přidat Ústředí vytvoříte nového uživatele ústředí.</value>
   </data>
   <data name="Users_Headquarters_Instruction2" xml:space="preserve">
     <value>Klikněte na Přihlašovací jméno k upravení profilu již existujícího uživatele (Ústředí).</value>
@@ -1614,13 +1613,13 @@ Jakákoli zbývající nesynchronizovaná data na zařízeních archivovaných u
     <value>Klikněte na Přihlašovací jméno k upravení profilu již existujícího uživatele (Pozorovatele).</value>
   </data>
   <data name="Users_Supervisors_Instruction1" xml:space="preserve">
-    <value>Stisknutím tlačítka Přidat garanta vytvoříte nového Garanta.</value>
+    <value>Stisknutím tlačítka Přidat garanta vytvoříte nového garanta.</value>
   </data>
   <data name="Users_Supervisors_Instruction2" xml:space="preserve">
-    <value>Klikněte na Přihlašovací jméno k upravení profilu již existujícího Garanta.</value>
+    <value>Klikněte na Přihlašovací jméno k upravení profilu již existujícího garanta.</value>
   </data>
   <data name="Users_UnarchiveUsersWarning" xml:space="preserve">
-    <value>Uživatel(é) budou zaktivování.</value>
+    <value>Uživatel(é) budou aktivování.</value>
   </data>
   <data name="Users_UsersConfirm" xml:space="preserve">
     <value>Chcete pokračovat?</value>
@@ -1632,7 +1631,7 @@ Jakákoli zbývající nesynchronizovaná data na zařízeních archivovaných u
     <value>Všichni uživatelé</value>
   </data>
   <data name="UsersManage_SupervisorFilterPlaceholder" xml:space="preserve">
-    <value>Vyberte Garanta</value>
+    <value>Vyberte garanta</value>
   </data>
   <data name="UsersManage_SupervisorFilterTitle" xml:space="preserve">
     <value>Garant (do jeho týmu budou přidáni tazatelé)</value>
@@ -1644,10 +1643,10 @@ Jakákoli zbývající nesynchronizovaná data na zařízeních archivovaných u
     <value>Tým</value>
   </data>
   <data name="UsersManage_WorkspacesFilterPlaceholder" xml:space="preserve">
-    <value>Všechny úlohy</value>
+    <value>Všechny prostředí</value>
   </data>
   <data name="UsersManage_WorkspacesFilterTitle" xml:space="preserve">
-    <value>Úloha</value>
+    <value>Prostředí</value>
   </data>
   <data name="Verify" xml:space="preserve">
     <value>Ověřit</value>
@@ -1662,7 +1661,7 @@ Jakákoli zbývající nesynchronizovaná data na zařízeních archivovaných u
     <value>Přístup ke koncovým bodům REST a GraphQL API je aktuálně </value>
   </data>
   <data name="AntiForgeryError_Title" xml:space="preserve">
-    <value>Neplatná data požadavku.</value>
+    <value>Neplatný požadavek.</value>
   </data>
   <data name="AreaQuestion_RequestedAccuracy" xml:space="preserve">
     <value>Přesnost</value>
@@ -1680,10 +1679,10 @@ Jakákoli zbývající nesynchronizovaná data na zařízeních archivovaných u
     <value>Shapefiles</value>
   </data>
   <data name="GlobalSettings_DeleteQuestionnaireConfirmation" xml:space="preserve">
-    <value>Opravdu chcete odstranit dotazník? Všechny rozhovory vedené aktuálním dotazníkem, včetně rozhovorů shromážděných na tabletech, a to i ty, které aktuálně nevidíte na serveru, budou ztraceny.</value>
+    <value>Opravdu chcete odstranit tento typ dotazníku? Všechny rozhovory vedené v tomto typu dotazníku, včetně rozhovorů shromážděných na tabletech, a to i ty, které aktuálně nevidíte na serveru, budou ztraceny.</value>
   </data>
   <data name="GlobalSettings_DeleteQuestionnaireWarning" xml:space="preserve">
-    <value>Varování! Jedná se o nevratné jednání</value>
+    <value>Varování! Jedná se o nevratnou akci</value>
   </data>
   <data name="Map_NoUsers" xml:space="preserve">
     <value>Mapa není přiřazena žádnému uživateli</value>
@@ -1695,7 +1694,7 @@ Jakákoli zbývající nesynchronizovaná data na zařízeních archivovaných u
     <value>Tento náhled ukazuje nahraný shapefile překrývající základní vrstvu satelitního snímku.</value>
   </data>
   <data name="MapDetails_SelectUser" xml:space="preserve">
-    <value>Vyberte uživatele</value>
+    <value>Velikost (MB)</value>
   </data>
   <data name="MapDetails_ShapesCount" xml:space="preserve">
     <value>Počet tvarů</value>
@@ -1704,7 +1703,7 @@ Jakákoli zbývající nesynchronizovaná data na zařízeních archivovaných u
     <value>Typ tvaru</value>
   </data>
   <data name="MapDetails_SimplifiedShapefilesDisclaimer" xml:space="preserve">
-    <value>Tento náhled ukazuje zmenšenou verzi nahraného souboru shapefile překrývající základní vrstvu satelitního snímku. Původní odeslaný soubor shapefile se v tomto náhledu nezobrazuje kvůli jeho velké velikosti.</value>
+    <value>Tento náhled ukazuje zmenšenou verzi nahraného souboru shapefile překrývající základní vrstvu satelitního snímku. Původně odeslaný soubor shapefile se v tomto náhledu nezobrazuje kvůli jeho velké velikosti.</value>
   </data>
   <data name="MapDetails_Unlink" xml:space="preserve">
     <value>Rozpojit</value>
@@ -1719,12 +1718,24 @@ Jakákoli zbývající nesynchronizovaná data na zařízeních archivovaných u
     <value>Pokud se jedná o posledního uživatele v týmu propojeného s mapou, ztratí nadřízený týmu přístup k mapě.</value>
   </data>
   <data name="Profile_IssueApiToken" xml:space="preserve">
-    <value>Vydat</value>
+    <value>Upozornění</value>
   </data>
   <data name="Tablet_RelinkMessage" xml:space="preserve">
     <value>S tímto účtem je propojeno jedno zařízení.</value>
   </data>
   <data name="Unlock" xml:space="preserve">
     <value>Odemknout</value>
+  </data>
+  <data name="AssignmentDetails_PageTitle" xml:space="preserve">
+    <value>Žádanka {0}</value>
+  </data>
+  <data name="MapDetails_EmptyMapData" xml:space="preserve">
+    <value>Této mapě chybí data náhledu</value>
+  </data>
+  <data name="QuestionnaireNameVersionFirst" xml:space="preserve">
+    <value>[ver. {{version}}] {{name}} </value>
+  </data>
+  <data name="QuestionnaireVersionAndName" xml:space="preserve">
+    <value>(ver. {1}) {0}</value>
   </data>
 </root>

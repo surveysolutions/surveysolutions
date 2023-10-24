@@ -208,7 +208,7 @@
     <value>Typ dotazníku</value>
   </data>
   <data name="QuestionnaireDeleteWarn" xml:space="preserve">
-    <value>Rozhovorů - {{receivedInterviews}}, dotazníků - {{receivedAssignments}}; Počet rozhovorů a dotazníků, které byly staženy tazateli/Garanty, kteří pracují offline. Po potvrzení smazání šetření, server již nebude přijímat informace na základě těchto rozhovorů/dotazníků a při příští synchronizaci zmizí bez možnosti obnovení, i kdyby obsahovaly nově zadané/upravené informace. Je Vaše zodpovědnost upozornit tazatele, aby již tyto rozhovory/dotazníky nevyplňovali, protože nebudou automaticky upozorněni. Chcete pokračovat?</value>
+    <value>Rozhovorů - {{receivedInterviews}}, žádanek - {{receivedAssignments}}; Počet rozhovorů a žádanek, které byly staženy tazateli/garanty, kteří pracují offline. Po potvrzení smazání šetření, server již nebude přijímat informace na základě těchto rozhovorů/žádanek a při příští synchronizaci zmizí bez možnosti obnovení, i kdyby obsahovaly nově zadané/upravené informace. Je nutné upozornit tazatele, aby již tyto rozhovory/žádanky nevyplňovali, protože nebudou automaticky upozorněni. Chcete pokračovat?</value>
   </data>
   <data name="Questionnaires" xml:space="preserve">
     <value>Typy dotazníků</value>
@@ -229,7 +229,7 @@
     <value>Klikněte na tlačítko Importovat typ dotazníku pro načtení typu dotazníku z aplikace Designer</value>
   </data>
   <data name="SurveySetupIntroMessage2" xml:space="preserve">
-    <value>Klikněte na typ dotazníku ze seznamu pro vytvoření dotazníků</value>
+    <value>Vyberte typ dotazníku k vytvoření požadovaných žádanek</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Titul</value>
@@ -254,5 +254,8 @@
   </data>
   <data name="QuestionnairePreview" xml:space="preserve">
     <value>Náhled dotazníku</value>
+  </data>
+  <data name="SaveQuestionnaire" xml:space="preserve">
+    <value>Uložit typ dotazníku do souboru</value>
   </data>
 </root>

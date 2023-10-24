@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Dashboard_HaveNotBeenUpdated" xml:space="preserve">
-    <value>seznam nebyl aktualizován</value>
+    <value>přehled nebyl aktualizován</value>
   </data>
   <data name="Dashboard_LastUpdated" xml:space="preserve">
-    <value>seznam byl aktualizován {0}</value>
+    <value>přehled byl aktualizován {0}</value>
   </data>
   <data name="ImportQuestionnaire_CheckConnectionToServer" xml:space="preserve">
     <value>Připojení k serveru</value>
@@ -136,7 +136,7 @@
     <value>Dotazník „{0}“ nelze otevřít. Váš uživatelský účet v aplikaci Designer není autorizován. Zkontrolujte prosím své přihlašovací jméno a heslo.</value>
   </data>
   <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
-    <value>Dotazník „{0}“ nelze otevřít. Dotazník nelze najít. Obnovte prosím seznam dotazníků.</value>
+    <value>Dotazník „{0}“ nelze otevřít. Dotazník nelze najít. Obnovte prosím přehled s dotazníky.</value>
   </data>
   <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
     <value>Dotazník „{0}“ nelze otevřít. Dotazník obsahuje chyby. Opravte ho prosím v aplikaci Designer.</value>
@@ -148,7 +148,7 @@
     <value>Stahování příloh dotazníku – {0} %</value>
   </data>
   <data name="Login_Error_EmptyName" xml:space="preserve">
-    <value>Zadejte prosím správné přihlašovací údaje</value>
+    <value>Zadejte správné přihlašovací údaje</value>
   </data>
   <data name="Login_Error_NotFound" xml:space="preserve">
     <value>Webová aplikace Designer není v tuto chvíli přístupná. Zkontrolujte nastavení připojení nebo to zkuste znovu později</value>
@@ -196,13 +196,13 @@
     <value>Několik vteřin vyčkejte na odpověď serveru</value>
   </data>
   <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
-    <value>Časový limit odpovědi serveru</value>
+    <value>Časový odezva serveru</value>
   </data>
   <data name="Prefs_ShowAnswerTime" xml:space="preserve">
     <value>Zobrazit uplynulý čas na odpověď</value>
   </data>
   <data name="Prefs_ShowAnswerTimeSummary" xml:space="preserve">
-    <value>Měří dobu aktivace, validace a šíření seznamu. Příjem GPS dat nebo doba pořízení snímku nejsou zahrnuty.</value>
+    <value>Měří čas aktivace, validace a záznamu v seznamu (rosteru). Příjem GPS dat nebo doba pořízení snímku nejsou zahrnuty.</value>
   </data>
   <data name="Prefs_ShowVariables" xml:space="preserve">
     <value>Zobrazit proměnné</value>
@@ -229,15 +229,15 @@
     <value>Dotazník nelze otevřít. Dotazník nebyl nalezen.</value>
   </data>
   <data name="AnonymousQuestionnaires_Open" xml:space="preserve">
-    <value>Otevřený</value>
+    <value>Otevřít</value>
   </data>
   <data name="AnonymousQuestionnaires_QuestionnaireUrl" xml:space="preserve">
-    <value>Adresa URL anonymního dotazníku</value>
+    <value>Anonymní adresa URL dotazníku</value>
   </data>
   <data name="MenuItem_Title_AnonymousQuestionnaires" xml:space="preserve">
     <value>Anonymní dotazníky</value>
   </data>
   <data name="MenuItem_Title_Login" xml:space="preserve">
-    <value>Přihlášení do systému</value>
+    <value>Přihlásit se</value>
   </data>
 </root>

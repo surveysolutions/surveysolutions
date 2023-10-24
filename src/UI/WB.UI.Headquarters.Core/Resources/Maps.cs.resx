@@ -178,7 +178,7 @@
     <value>Název souboru {0} obsahuje znaky jiné než UTF-8.</value>
   </data>
   <data name="MapFileSizeLimit" xml:space="preserve">
-    <value>Velikost souboru {0} je větší, než je použitelné omezení {1}</value>
+    <value>Velikost souboru {0} je větší, než limit {1}</value>
   </data>
   <data name="MapOverlapsWith" xml:space="preserve">
     <value>Překrývá se s:</value>
