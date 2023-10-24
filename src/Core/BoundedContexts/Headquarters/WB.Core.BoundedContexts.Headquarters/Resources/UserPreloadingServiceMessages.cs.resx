@@ -118,19 +118,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CannotParseIncomingFile" xml:space="preserve">
-    <value>Poskytnutý soubor má chybu v řádku {0} a nelze jej analyzovat</value>
+    <value>Poskytnutý soubor obsahuje chybu na řádku {0} a nelze jej analyzovat</value>
   </data>
   <data name="FileColumnsCantBeMappedFormat" xml:space="preserve">
-    <value>Soubor "{0}" obsahuje následující sloupce, které nelze mapovat na žádnou vlastnost uživatele (např. celé jméno, telefonní číslo atd.): {1}</value>
+    <value>Soubor '{0}' obsahuje následující sloupce, které nelze namapovat na žádnou uživatelskou vlastnost (např. celé jméno, telefonní číslo atd.): {1}</value>
   </data>
   <data name="FileColumnsMissingFormat" xml:space="preserve">
-    <value>Soubor {0} neobsahuje povinné sloupce: {1}</value>
+    <value>Soubor '{0}' neobsahuje povinné sloupce: {1}</value>
   </data>
   <data name="FileDoesNotContainAnyData" xml:space="preserve">
-    <value>Soubor "{0}" neobsahuje žádná uživatelská data</value>
+    <value>Soubor '{0}' neobsahuje žádná uživatelská data</value>
   </data>
   <data name="HasUsersToImport" xml:space="preserve">
-    <value>Vyčkejte prosím na dokončení předchozího importu uživatelů</value>
+    <value>Počkejte prosím na dokončení předchozího importu uživatelů</value>
   </data>
   <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
     <value>Maximální povolený počet záznamů je {0}</value>
