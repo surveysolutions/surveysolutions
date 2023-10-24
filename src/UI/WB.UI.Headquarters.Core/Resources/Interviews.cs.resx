@@ -229,7 +229,7 @@
   </data>
   <data name="RejectConfirmMessage" xml:space="preserve">
       <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; rozhovory, které budou vráceny.&lt;/h3&gt;
-&lt;b&gt;Pozor!&lt;/b&gt; Můžete vrátit rozhovory pouze s následujícími statusy: &lt;i&gt;{ {status1}}&lt;/i&gt; a &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
+&lt;b&gt;Pozor!&lt;/b&gt; Můžete vrátit rozhovory pouze s následujícími statusy: &lt;i&gt;{{status1}}&lt;/i&gt; a &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
   </data>
   <data name="RejectConfirmMessageHQ" xml:space="preserve">
       <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; rozhovory, které budou vráceny.&lt;/h3&gt;
@@ -282,7 +282,7 @@
   </data>
   <data name="UnapproveConfirmMessageHQ" xml:space="preserve">
       <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; počet rozhovorů co nebude schváleno.&lt;/h3&gt;
-&lt;b&gt;Pozor!&lt;/b&gt; Můžete zrušit schválení rozhovoru pouze s následujícím statusem: &lt;i&gt;{ {status1}}&lt;/i&gt;.</value>
+&lt;b&gt;Pozor!&lt;/b&gt; Můžete zrušit schválení rozhovoru pouze s následujícím statusem: &lt;i&gt;{{status1}}&lt;/i&gt;.</value>
   </data>
   <data name="Tooltip_Table_InterviewMode" xml:space="preserve">
     <value>Ukázat současný status (CAPI nebo CAWI) u každého tazatele</value>
