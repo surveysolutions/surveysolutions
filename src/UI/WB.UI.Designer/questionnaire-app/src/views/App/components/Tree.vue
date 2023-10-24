@@ -330,7 +330,16 @@ export default {
                         node.title.includes(this.search.searchText)
                     ) {
                         results.push(node);
-                        return `skip children`;
+                    } else if (
+                        node.text &&
+                        node.text.includes(this.search.searchText)
+                    ) {
+                        results.push(node);
+                    } else if (
+                        node.variable &&
+                        node.variable.includes(this.search.searchText)
+                    ) {
+                        results.push(node);
                     }
                 },
                 {
