@@ -172,7 +172,7 @@
                             <span
                                 data-toggle="modal"
                                 v-if="warningsCount > 0"
-                                class="warniv-message v-hide"
+                                class="warning-message v-hide"
                             >
                                 <a
                                     href="javascript:void(0);"

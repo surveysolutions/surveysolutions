@@ -160,7 +160,7 @@
                                     v-if="
                                         verificationStatus.warnings.length > 0
                                     "
-                                    class="warniv-message v-hide"
+                                    class="warning-message v-hide"
                                 >
                                     <a
                                         href="javascript:void(0);"
@@ -2794,7 +2794,11 @@
                                         }}</span>
                                         <span
                                             class="variable"
-                                            v-bind-html="commentThread.entity.variable || '&nbsp;'">
+                                            v-bind-html="
+                                                commentThread.entity.variable ||
+                                                    '&nbsp;'
+                                            "
+                                        >
                                             &nbsp;
                                         </span>
                                     </a>

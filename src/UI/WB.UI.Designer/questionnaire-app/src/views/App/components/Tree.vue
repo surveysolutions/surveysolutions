@@ -52,7 +52,7 @@
                         v-if="
                             currentChapter.isCover && currentChapter.isReadOnly
                         "
-                        class="warniv-message"
+                        class="warning-message"
                     >
                         {{ $t('QuestionnaireEditor.VirtualCoverPage') }}</span
                     >
@@ -124,7 +124,7 @@
                 </Draggable>
 
                 <div ui-tree-nodes vmodel="items">
-                    <div
+                    <!--div
                         vrepeat="item in items | filter:searchItem as results"
                         ui-tree-node
                         data-bs-nodrag="{{ currentChapter.isReadOnly }}"
@@ -132,15 +132,21 @@
                         <v-include
                             src="itemTemplate(item.itemType)"
                         ></v-include>
-                    </div>
+                    </div-->
                     <div
                         class="section item"
                         v-if="
-                            filtersBoxMode == 'search' && results.length === 0
+                            search.open &&
+                                search.searchText &&
+                                filteredTreeData.length === 0
                         "
                     >
                         <div class="item-text">
-                            <span v-i18next="NothingFound"></span>
+                            <span
+                                v-t="{
+                                    path: 'QuestionnaireEditor.NothingFound'
+                                }"
+                            ></span>
                         </div>
                     </div>
                     <div
@@ -372,13 +378,25 @@ export default {
         itemTemplate(itemType) {
             return 'Tree' + itemType;
         },
-        addQuestion(chapter) {},
-        addGroup(chapter) {},
-        addRoster(chapter) {},
-        addStaticText(chapter) {},
-        addVariable(chapter) {},
+        addQuestion(chapter) {
+            treeStore.addQuestion(chapter);
+        },
+        addGroup(chapter) {
+            treeStore.addGroup(chapter);
+        },
+        addRoster(chapter) {
+            treeStore.addRoster(chapter);
+        },
+        addStaticText(chapter) {
+            treeStore.addStaticText(chapter);
+        },
+        addVariable(chapter) {
+            treeStore.addVariable(chapter);
+        },
         searchForQuestion(chapter) {},
-        pasteItemInto(chapter) {},
+        pasteItemInto(chapter) {
+            treeStore.pasteItemInto(chapter);
+        },
         migrateToNewVersion() {},
         showFindReplaceDialog() {},
         async showSearch() {
