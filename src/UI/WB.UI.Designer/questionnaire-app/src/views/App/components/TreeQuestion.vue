@@ -11,7 +11,7 @@
             }"
         >
             <div class="item-text">
-                <div class="icon" :class="getQuestionClass"></div>
+                <div class="icon" :class="questionClass"></div>
                 <!--                <span
                     ng-bind-html="item.title | escape | highlight:search.searchText"
                 ></span>
@@ -167,11 +167,11 @@ export default {
     data() {
         return {};
     },
-    methods: {
-        getQuestionClass() {
-            debugger;
+    computed: {
+        questionClass() {
             return [answerTypeClass[this.item.type]];
         }
-    }
+    },
+    methods: {}
 };
 </script>
