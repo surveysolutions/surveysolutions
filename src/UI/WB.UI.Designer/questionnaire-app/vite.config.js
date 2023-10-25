@@ -24,7 +24,7 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [
       Vue(),
-      Vuetify({ autoImport: true }),
+            //Vuetify({ autoImport: true }),
       LocalizationPlugin({
         noHash: true,
         inline: true,
