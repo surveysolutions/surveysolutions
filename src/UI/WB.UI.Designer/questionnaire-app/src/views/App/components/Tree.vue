@@ -4,8 +4,16 @@
             class="chapter-title"
             v-switch
             on="filtersBoxMode"
-            ui-sref-active="selected"
-            ui-sref="questionnaire.chapter.group({ chapterId: currentChapter.itemId, itemId: currentChapter.itemId})"
+            :class="{ selected: currentChapter.itemId === selectedItemId }"
+            @click="
+                router.push({
+                    name: 'group',
+                    params: {
+                        groupId: currentChapter.itemId,
+                        chapterId: currentChapter.itemId
+                    }
+                })
+            "
         >
             <div @click.stop class="search-box" v-if="search.open">
                 <div class="input-group">
@@ -103,27 +111,30 @@
                 ui-tree="groupsTree"
                 data-bs-empty-placeholder-enabled="false"
             >
-                <Draggable
-                    class="ui-tree-nodes"
-                    v-model="filteredTreeData"
-                    textKey="title"
-                    childrenKey="items"
-                    defaultOpen="true"
+                <div
+                    ui-tree-nodes
+                    vmodel="items"
+                    class="ui-tree-nodes angular-ui-tree-nodes"
                 >
-                    <template #default="{ node, stat }">
-                        <component
-                            :key="node.itemId"
-                            :is="itemTemplate(node.itemType)"
-                            :id="node.itemId"
-                            :item="node"
-                            :stat="stat"
-                            :selectedItemId="selectedItemId"
-                            :isReadOnly="currentChapter.isReadOnly"
-                        ></component>
-                    </template>
-                </Draggable>
-
-                <div ui-tree-nodes vmodel="items">
+                    <Draggable
+                        ref="tree"
+                        v-model="filteredTreeData"
+                        textKey="title"
+                        childrenKey="items"
+                        defaultOpen="true"
+                    >
+                        <template #default="{ node, stat }">
+                            <component
+                                :key="node.itemId"
+                                :is="itemTemplate(node.itemType)"
+                                :id="node.itemId"
+                                :item="node"
+                                :stat="stat"
+                                :selectedItemId="selectedItemId"
+                                :isReadOnly="currentChapter.isReadOnly"
+                            ></component>
+                        </template>
+                    </Draggable>
                     <!--div
                         vrepeat="item in items | filter:searchItem as results"
                         ui-tree-node
@@ -222,12 +233,12 @@
                         <input
                             type="button"
                             class="btn lighter-hover pull-right"
-                            v-disabled="!readyToPaste"
+                            :disabled="!readyToPaste"
                             v-if="
                                 !questionnaire.isReadOnlyForUser &&
                                     !currentChapter.isReadOnly
                             "
-                            v-t="{ path: 'QuestionnaireEditor.Paste' }"
+                            :value="$t('QuestionnaireEditor.Paste')"
                             @click="pasteItemInto(currentChapter)"
                         />
                     </div>
@@ -291,17 +302,18 @@ export default {
     },
     data() {
         return {
-            currentChapter: {
+            /*currentChapter: {
                 title: null,
                 isCover: false,
                 isReadOnly: true,
                 itemId: ''
-            },
-            treeData: [],
+            },*/
+            //treeData: [],
             search: {
                 open: false,
                 searchText: null
-            }
+            },
+            readyToPaste: false
         };
     },
     setup() {
@@ -319,6 +331,12 @@ export default {
     computed: {
         questionnaire() {
             return this.questionnaireStore.info || {};
+        },
+        currentChapter() {
+            return this.treeStore.getChapter || {};
+        },
+        treeData() {
+            return this.treeStore.getItems || {};
         },
         showStartScreen() {
             return true; // TODO
@@ -372,26 +390,88 @@ export default {
                 this.questionnaireId,
                 this.chapterId
             );
-            this.currentChapter = this.treeStore.getChapter;
-            this.treeData = this.treeStore.getItems;
+            //this.currentChapter = this.treeStore.getChapter;
+            //this.treeData = this.treeStore.getItems;
         },
         itemTemplate(itemType) {
             return 'Tree' + itemType;
         },
         addQuestion(chapter) {
-            treeStore.addQuestion(chapter);
+            this.treeStore.addQuestion(
+                chapter,
+                null,
+                (question, parent, index) => {
+                    if (index < 0) index = this.$refs.tree.rootChildren.length;
+                    this.$refs.tree.add(question, null, index);
+
+                    this.$router.push({
+                        name: 'question',
+                        params: {
+                            questionId: question.itemId
+                        }
+                    });
+                }
+            );
         },
         addGroup(chapter) {
-            treeStore.addGroup(chapter);
+            this.treeStore.addGroup(chapter, null, (group, parent, index) => {
+                if (index < 0) index = this.$refs.tree.rootChildren.length;
+                this.$refs.tree.add(group, null, index);
+
+                this.$router.push({
+                    name: 'group',
+                    params: {
+                        groupId: group.itemId
+                    }
+                });
+            });
         },
         addRoster(chapter) {
-            treeStore.addRoster(chapter);
+            this.treeStore.addRoster(chapter, null, (roster, parent, index) => {
+                if (index < 0) index = this.$refs.tree.rootChildren.length;
+                this.$refs.tree.add(roster, null, index);
+
+                this.$router.push({
+                    name: 'roster',
+                    params: {
+                        rosterId: roster.itemId
+                    }
+                });
+            });
         },
         addStaticText(chapter) {
-            treeStore.addStaticText(chapter);
+            this.treeStore.addStaticText(
+                chapter,
+                null,
+                (statictext, parent, index) => {
+                    if (index < 0) index = this.$refs.tree.rootChildren.length;
+                    this.$refs.tree.add(statictext, null, index);
+
+                    this.$router.push({
+                        name: 'statictext',
+                        params: {
+                            statictextId: statictext.itemId
+                        }
+                    });
+                }
+            );
         },
         addVariable(chapter) {
-            treeStore.addVariable(chapter);
+            this.treeStore.addVariable(
+                chapter,
+                null,
+                (variable, parent, index) => {
+                    if (index < 0) index = this.$refs.tree.rootChildren.length;
+                    this.$refs.tree.add(variable, null, index);
+
+                    this.$router.push({
+                        name: 'variable',
+                        params: {
+                            variableId: variable.itemId
+                        }
+                    });
+                }
+            );
         },
         searchForQuestion(chapter) {},
         pasteItemInto(chapter) {

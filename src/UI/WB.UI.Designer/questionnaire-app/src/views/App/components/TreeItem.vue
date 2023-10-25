@@ -24,8 +24,7 @@
                             !questionnaire.isReadOnlyForUser &&
                                 !currentChapter.isReadOnly
                         "
-                        v-i18next="TreeAddQuestion"
-                        >Add question</a
+                        >{{ $t('QuestionnaireEditor.TreeAddQuestion') }}</a
                     >
                 </li>
                 <li>
@@ -36,8 +35,7 @@
                                 !currentChapter.isReadOnly &&
                                 !currentChapter.isCover
                         "
-                        v-i18next="TreeAddSection"
-                        >Add sub-section</a
+                        >{{ $t('QuestionnaireEditor.TreeAddSection') }}</a
                     >
                 </li>
                 <li>
@@ -48,8 +46,7 @@
                                 !currentChapter.isReadOnly &&
                                 !currentChapter.isCover
                         "
-                        v-i18next="TreeAddRoster"
-                        >Add roster</a
+                        >{{ $t('QuestionnaireEditor.TreeAddRoster') }}</a
                     >
                 </li>
                 <li>
@@ -59,8 +56,7 @@
                             !questionnaire.isReadOnlyForUser &&
                                 !currentChapter.isReadOnly
                         "
-                        v-i18next="TreeAddStaticText"
-                        >Add static text</a
+                        >{{ $t('QuestionnaireEditor.TreeAddStaticText') }}</a
                     >
                 </li>
                 <li>
@@ -70,21 +66,24 @@
                             !questionnaire.isReadOnlyForUser &&
                                 !currentChapter.isReadOnly
                         "
-                        v-i18next="TreeAddVariable"
-                        >Add variable</a
+                        >{{ $t('QuestionnaireEditor.TreeAddVariable') }}</a
                     >
                 </li>
-                <li><a @click="copyRef(item)" v-i18next>Copy</a></li>
+                <li>
+                    <a @click="copyRef(item)">{{
+                        $t('QuestionnaireEditor.Copy')
+                    }}</a>
+                </li>
                 <li>
                     <a
-                        v-disabled="!readyToPaste"
+                        :disabled="!readyToPaste"
                         @click="pasteItemAfter(item)"
                         v-if="
                             !questionnaire.isReadOnlyForUser &&
                                 !currentChapter.isReadOnly
                         "
-                        v-i18next="PasteAfter"
-                    ></a>
+                        >{{ $t('QuestionnaireEditor.PasteAfter') }}</a
+                    >
                 </li>
                 <li>
                     <a
@@ -93,8 +92,7 @@
                             !questionnaire.isReadOnlyForUser &&
                                 !currentChapter.isReadOnly
                         "
-                        v-i18next
-                        >Delete</a
+                        >{{ $t('QuestionnaireEditor.Delete') }}</a
                     >
                 </li>
             </ul>
