@@ -152,7 +152,7 @@ export default {
         itemClass() {
             let classes = [];
             if (this.item.itemId === this.selectedItemId) {
-                classes.push('highlight');
+                //classes.push('highlight');
                 classes.push('selected');
             }
             if (this.is_highlighted) classes.push('highlighted');
