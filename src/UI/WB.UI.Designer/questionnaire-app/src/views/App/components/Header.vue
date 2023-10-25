@@ -151,7 +151,7 @@
                                 data-toggle="modal"
                                 v-if="warningsCount + errorsCount > 0"
                                 class="error-message v-hide"
-                                v-class="{
+                                :class="{
                                     'no-errors': errorsCount == 0
                                 }"
                             >
