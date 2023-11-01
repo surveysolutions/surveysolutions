@@ -21,17 +21,17 @@
                         style="text-transform:uppercase;"
                         v-if="question.validity.errorMessage">{{ $t("WebInterviewUI.AnswerWasNotSaved") }}</h6>
                     <template v-for="message in question.validity.messages">
-                        <span v-dateTimeFormatting
+                        <div v-dateTimeFormatting
                             v-html="message"
-                            :key="message"></span>
+                            :key="message"></div>
                     </template>
                 </div>
                 <div class="warning-tooltip"
                     v-else-if="question.validity.warnings.length > 0">
                     <template v-for="message in question.validity.warnings">
-                        <span v-dateTimeFormatting
+                        <div v-dateTimeFormatting
                             v-html="message"
-                            :key="message"></span>
+                            :key="message"></div>
                     </template>
                 </div>
             </template>
