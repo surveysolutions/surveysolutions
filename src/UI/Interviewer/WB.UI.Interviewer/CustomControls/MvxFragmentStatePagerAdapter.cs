@@ -58,6 +58,8 @@ namespace WB.UI.Interviewer.CustomControls
 
         private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
+            if(context == null) return;
+            
             var vm = sender as MvxViewModel;
             var viewPagerItem = this.fragments.FirstOrDefault(x => x.ViewModel == vm);
             var titlePropertyName = viewPagerItem?.TitlePropertyName;
@@ -90,7 +92,7 @@ namespace WB.UI.Interviewer.CustomControls
         {
             this.fragments[position].ViewModel.PropertyChanged -= this.ViewModel_PropertyChanged;
             this.fragments[position].ViewModel = null;
-            this.fragments[position].CachedFragment.Dispose();
+            //this.fragments[position].CachedFragment.Dispose();
             this.fragments[position].CachedFragment = null;
             this.fragments.RemoveAt(position);
 
