@@ -8,6 +8,8 @@ import i18n from './plugins/localization';
 //import '../../questionnaire/content/markup.less';
 //import 'bootstrap/dist/css/bootstrap.min.css';
 
+import ConfirmDialog from './plugins/confirm';
+
 import * as uiv from 'uiv';
 
 import './directives';
@@ -20,6 +22,9 @@ vue.use(pinia);
 //vue.use(vuetify); //reqired by options component. consider either remove or use.
 vue.use(i18n);
 vue.use(uiv);
+
+vue.use(ConfirmDialog);
+vue.component('confirm-dialog', ConfirmDialog.default);
 
 //import { useQuestionnaireStore } from './store'
 //vue.provide('store', useQuestionnaireStore)

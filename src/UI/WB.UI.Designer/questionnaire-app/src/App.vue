@@ -12,6 +12,7 @@
             <router-view />
         </section>
     </div>
+    <confirm-dialog></confirm-dialog>
     <!--/v-main>
     </v-app-->
 </template>
