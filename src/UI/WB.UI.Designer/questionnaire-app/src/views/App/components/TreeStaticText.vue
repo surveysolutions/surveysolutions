@@ -141,9 +141,7 @@ export default {
         TreeItem
     },
     props: {
-        id: { type: String, required: true },
-        item: { type: Object, required: true },
-        stat: { type: Object, required: true }
+        item: { type: Object, required: true }
     },
     data() {
         return {};

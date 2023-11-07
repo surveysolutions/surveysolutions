@@ -130,6 +130,7 @@
                                 :id="node.itemId"
                                 :item="node"
                                 :stat="stat"
+                                :tree="$refs.tree"
                                 :selectedItemId="selectedItemId"
                                 :isReadOnly="currentChapter.isReadOnly"
                             ></component>

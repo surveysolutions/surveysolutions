@@ -102,7 +102,7 @@
                     </li>
                     <li>
                         <a
-                            @click="deleteGroup()"
+                            @click="deleteItem()"
                             v-if="
                                 !questionnaire.isReadOnlyForUser &&
                                     !currentChapter.isReadOnly
@@ -135,6 +135,7 @@ import { useQuestionnaireStore } from '../../../stores/questionnaire';
 import { useTreeStore } from '../../../stores/tree';
 import clickOutside from '../../../directives/clickOutside';
 import contextmenuOutside from '../../../directives/contextmenuOutside';
+import { createQuestionForDeleteConfirmationPopup } from '../../../services/utilityService';
 
 export default {
     name: 'TreeItem',
@@ -143,9 +144,9 @@ export default {
         contextmenuOutside
     },
     props: {
-        id: { type: String, required: true },
         item: { type: Object, required: true },
         stat: { type: Object, required: true },
+        tree: { type: Object, required: true },
         selectedItemId: { type: String, required: false }
     },
     data() {
@@ -213,9 +214,8 @@ export default {
                 afterItemId,
                 (question, parent, index) => {
                     if (index < 0) index = this.$refs.tree.rootChildren.length;
-                    this.$refs.tree.add(question, null, index);
-
-                    this.$router.push({
+                    this.tree.add(question, this.stat.parent, index);
+                    this.this.$router.push({
                         name: 'question',
                         params: {
                             questionId: question.itemId
@@ -232,7 +232,7 @@ export default {
                 afterItemId,
                 (group, parent, index) => {
                     if (index < 0) index = this.$refs.tree.rootChildren.length;
-                    this.$refs.tree.add(group, null, index);
+                    this.$refs.tree.add(group, this.stat.parent, index);
 
                     this.$router.push({
                         name: 'group',
@@ -251,7 +251,7 @@ export default {
                 afterItemId,
                 (roster, parent, index) => {
                     if (index < 0) index = this.$refs.tree.rootChildren.length;
-                    this.$refs.tree.add(roster, null, index);
+                    this.$refs.tree.add(roster, this.stat.parent, index);
 
                     this.$router.push({
                         name: 'roster',
@@ -270,7 +270,7 @@ export default {
                 afterItemId,
                 (statictext, parent, index) => {
                     if (index < 0) index = this.$refs.tree.rootChildren.length;
-                    this.$refs.tree.add(statictext, null, index);
+                    this.$refs.tree.add(statictext, this.stat.parent, index);
 
                     this.$router.push({
                         name: 'statictext',
@@ -289,7 +289,7 @@ export default {
                 afterItemId,
                 (variable, parent, index) => {
                     if (index < 0) index = this.$refs.tree.rootChildren.length;
-                    this.$refs.tree.add(variable, null, index);
+                    this.$refs.tree.add(variable, this.stat.parent, index);
 
                     this.$router.push({
                         name: 'variable',
@@ -308,10 +308,139 @@ export default {
         },
         getAfterItemId() {
             if (this.isGroup()) return null;
-            return item.itemId;
+            return this.item.itemId;
         },
         isGroup() {
             return this.item.itemType == 'Group';
+        },
+
+        deleteItem() {
+            if (this.item.itemType == 'Question')
+                this.deleteQuestion(this.item.itemId);
+            else if (this.item.itemType == 'StaticText')
+                this.deleteStaticText(this.item.itemId);
+            else if (this.item.itemType == 'Variable')
+                this.deleteVariable(this.item.itemId);
+            else if (this.isGroup) this.deleteGroup(this.item.itemId);
+        },
+
+        deleteQuestion() {
+            var itemIdToDelete = this.item.itemId;
+
+            const params = createQuestionForDeleteConfirmationPopup(
+                this.item.title ||
+                    this.$t('QuestionnaireEditor.UntitledQuestion')
+            );
+
+            params.callback = confirm => {
+                if (confirm) {
+                    this.treeStore
+                        .deleteQuestion(itemIdToDelete)
+                        .then(response => {
+                            this.tree.remove(this.stat);
+
+                            //questionnaireService.removeItemWithId(
+                            //    $scope.items,
+                            //    itemIdToDelete
+                            //);
+                            //$scope.resetSelection();
+                            //$rootScope.$emit('questionDeleted', itemIdToDelete);
+                            //removeSelectionIfHighlighted(itemIdToDelete);
+                        });
+                }
+            };
+
+            this.$confirm(params);
+        },
+
+        deleteStaticText() {
+            var itemIdToDelete = this.item.itemId;
+
+            const params = createQuestionForDeleteConfirmationPopup(
+                this.item.text ||
+                    this.$t('QuestionnaireEditor.UntitledStaticText')
+            );
+
+            params.callback = confirm => {
+                if (confirm) {
+                    this.treeStore
+                        .deleteStaticText(itemIdToDelete)
+                        .then(response => {
+                            this.tree.remove(this.stat);
+
+                            //questionnaireService.removeItemWithId(
+                            //    $scope.items,
+                            //    itemIdToDelete
+                            //);
+                            //$scope.resetSelection();
+                            //$rootScope.$emit('questionDeleted', itemIdToDelete);
+                            //removeSelectionIfHighlighted(itemIdToDelete);
+                        });
+                }
+            };
+
+            this.$confirm(params);
+        },
+
+        deleteVariable() {
+            var itemIdToDelete = this.item.itemId;
+
+            var label = this.item.variableData
+                ? this.item.variableData.label
+                : this.item.label;
+
+            const params = createQuestionForDeleteConfirmationPopup(
+                label || this.$t('QuestionnaireEditor.UntitledVariable')
+            );
+
+            params.callback = confirm => {
+                if (confirm) {
+                    this.treeStore
+                        .deleteVariable(itemIdToDelete)
+                        .then(response => {
+                            this.tree.remove(this.stat);
+
+                            //questionnaireService.removeItemWithId(
+                            //    $scope.items,
+                            //    itemIdToDelete
+                            //);
+                            //$scope.resetSelection();
+                            //$rootScope.$emit('questionDeleted', itemIdToDelete);
+                            //removeSelectionIfHighlighted(itemIdToDelete);
+                        });
+                }
+            };
+
+            this.$confirm(params);
+        },
+
+        deleteGroup() {
+            var itemIdToDelete = this.item.itemId;
+
+            const params = createQuestionForDeleteConfirmationPopup(
+                this.item.title ||
+                    this.$t('QuestionnaireEditor.UntitledGroupOrRoster')
+            );
+
+            params.callback = confirm => {
+                if (confirm) {
+                    this.treeStore
+                        .deleteStaticText(itemIdToDelete)
+                        .then(response => {
+                            this.tree.remove(this.stat);
+
+                            //questionnaireService.removeItemWithId(
+                            //    $scope.items,
+                            //    itemIdToDelete
+                            //);
+                            //$scope.resetSelection();
+                            //$rootScope.$emit('questionDeleted', itemIdToDelete);
+                            //removeSelectionIfHighlighted(itemIdToDelete);
+                        });
+                }
+            };
+
+            this.$confirm(params);
         }
     }
 };

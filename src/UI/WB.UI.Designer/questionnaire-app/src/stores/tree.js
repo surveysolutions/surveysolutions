@@ -258,6 +258,47 @@ export const useTreeStore = defineStore('tree', {
             });
 
             return index;
+        },
+
+        deleteGroup(itemId) {
+            var command = {
+                questionnaireId: this.questionnaireId,
+                groupId: itemId
+            };
+
+            return this.commandCall('DeleteGroup', command).then(function(
+                result
+            ) {
+                parent.items.splice(index, 0, group);
+                callback(group, parent, index);
+            });
+        },
+
+        deleteQuestion(itemId) {
+            var command = {
+                questionnaireId: this.questionnaireId,
+                questionId: itemId
+            };
+
+            return this.commandCall('DeleteQuestion', command);
+        },
+
+        deleteVariable(itemId) {
+            var command = {
+                questionnaireId: this.questionnaireId,
+                entityId: itemId
+            };
+
+            return this.commandCall('DeleteVariable', command);
+        },
+
+        deleteStaticText(itemId) {
+            var command = {
+                questionnaireId: this.questionnaireId,
+                entityId: itemId
+            };
+
+            return this.commandCall('DeleteStaticText', command);
         }
     }
 });
