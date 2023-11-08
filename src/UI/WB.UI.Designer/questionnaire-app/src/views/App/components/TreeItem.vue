@@ -85,7 +85,7 @@
                         >
                     </li>
                     <li>
-                        <a @click="copyRef()">{{
+                        <a @click="copyItem()">{{
                             $t('QuestionnaireEditor.Copy')
                         }}</a>
                     </li>
@@ -189,6 +189,9 @@ export default {
             if (this.stat.parent && this.stat.parent.data.isRoster)
                 classes.push('roster-items');
             return classes;
+        },
+        readyToPaste() {
+            return this.treeStore.canPaste();
         }
     },
     methods: {
@@ -441,6 +444,24 @@ export default {
             };
 
             this.$confirm(params);
+        },
+
+        copyItem() {
+            this.treeStore.copyItem(this.item);
+        },
+
+        pasteItemAfter() {
+            if (!this.treeStore.canPaste()) return;
+
+            this.treeStore.pasteItemAfter(this.item).then(function(result) {
+                if (!chapter.isCover)
+                    this.$router.push({
+                        name: result.itemType,
+                        params: {
+                            itemId: result.itemId
+                        }
+                    });
+            });
         }
     }
 };

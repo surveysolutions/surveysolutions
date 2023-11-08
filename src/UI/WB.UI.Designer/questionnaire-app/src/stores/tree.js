@@ -4,13 +4,15 @@ import { useBlockUIStore } from './blockUI';
 import { newGuid } from '../helpers/guid';
 import { findIndex } from 'lodash';
 import { i18n } from '../plugins/localization';
+import { useCookies } from 'vue3-cookies';
 
 const api = mande('/api/questionnaire/chapter/' /*, globalOptions*/);
 const commandsApi = mande('/api/command' /*, globalOptions*/);
 
 export const useTreeStore = defineStore('tree', {
     state: () => ({
-        info: {}
+        info: {},
+        readyToPaste: null
     }),
     getters: {
         getItems: state => (state.info.chapter || {}).items,
@@ -229,8 +231,70 @@ export const useTreeStore = defineStore('tree', {
             return emptyVariable;
         },
 
-        pasteItemInto(root) {
-            //treeStore.pasteItemInto(chapter);
+        copyItem(item) {
+            const cookies = useCookies();
+
+            var itemIdToCopy = item.itemId;
+
+            var itemToCopy = {
+                questionnaireId: this.questionnaireId,
+                itemId: itemIdToCopy,
+                itemType: item.itemType
+            };
+
+            cookies.cookies.remove('itemToCopy');
+            cookies.cookies.set('itemToCopy', itemToCopy, { expires: 7 });
+
+            this.readyToPaste = true;
+        },
+
+        canPaste() {
+            if (this.readyToPaste != null) return this.readyToPaste;
+            const cookies = useCookies();
+            this.readyToPaste = cookies.cookies.isKey('itemToCopy');
+            return this.readyToPaste;
+        },
+
+        pasteItemInto(parent) {
+            const cookies = useCookies();
+
+            var itemToCopy = cookies.cookies.get('itemToCopy');
+            if (!itemToCopy) return;
+
+            const newId = newGuid();
+
+            var command = {
+                sourceQuestionnaireId: itemToCopy.questionnaireId,
+                sourceItemId: itemToCopy.itemId,
+                parentId: parent.itemId,
+                entityId: newId,
+                questionnaireId: this.questionnaireId
+            };
+
+            return this.commandCall('PasteInto', command).then(() =>
+                this.fetchTree(this.questionnaireId, this.chapterId)
+            );
+        },
+
+        pasteItemAfter(afterNode) {
+            const cookies = useCookies();
+
+            var itemToCopy = cookies.cookies.get('itemToCopy');
+            if (!itemToCopy) return;
+
+            const newId = newGuid();
+
+            var command = {
+                sourceQuestionnaireId: itemToCopy.questionnaireId,
+                sourceItemId: itemToCopy.itemId,
+                entityId: newId,
+                questionnaireId: this.questionnaireId,
+                itemToPasteAfterId: afterNode.itemId
+            };
+
+            return this.commandCall('PasteAfter', command).then(() =>
+                this.fetchTree(this.questionnaireId, this.chapterId)
+            );
         },
 
         async commandCall(type, command) {

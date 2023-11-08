@@ -127,7 +127,6 @@
                             <component
                                 :key="node.itemId"
                                 :is="itemTemplate(node.itemType)"
-                                :id="node.itemId"
                                 :item="node"
                                 :stat="stat"
                                 :tree="$refs.tree"
@@ -313,8 +312,7 @@ export default {
             search: {
                 open: false,
                 searchText: null
-            },
-            readyToPaste: false
+            }
         };
     },
     setup() {
@@ -383,6 +381,9 @@ export default {
                 this.$route.params.groupId ||
                 this.$route.params.rosterId
             );
+        },
+        readyToPaste() {
+            return this.treeStore.canPaste();
         }
     },
     methods: {
@@ -476,7 +477,15 @@ export default {
         },
         searchForQuestion(chapter) {},
         pasteItemInto(chapter) {
-            treeStore.pasteItemInto(chapter);
+            this.treeStore.pasteItemInto(chapter).then(function(result) {
+                if (!chapter.isCover)
+                    this.$router.push({
+                        name: result.itemType,
+                        params: {
+                            itemId: result.itemId
+                        }
+                    });
+            });
         },
         migrateToNewVersion() {},
         showFindReplaceDialog() {},
