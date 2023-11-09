@@ -216,7 +216,7 @@ export default {
                 classes.push(this.item.itemType.toLowerCase());
             if (this.item.itemType === 'Group' && this.item.isRoster)
                 classes.push('roster');
-            if (this.stat && this.stat.parent && this.stat.parent.data.isRoster)
+            if (this.stat.parent && this.stat.parent.data.isRoster)
                 classes.push('roster-items');
             return classes;
         },
