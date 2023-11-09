@@ -122,6 +122,7 @@
                         textKey="title"
                         childrenKey="items"
                         defaultOpen="true"
+                        indent="30"
                         triggerClass="handler"
                         :statHandler="treeNodeCreated"
                         @after-drop="treeNodeDropped"
