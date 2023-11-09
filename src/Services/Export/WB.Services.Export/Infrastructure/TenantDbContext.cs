@@ -203,7 +203,7 @@ namespace WB.Services.Export.Infrastructure
             try
             {
                 await db.QueryAsync($"select pg_advisory_lock ({SchemaChangesLock})");
-                
+
                 var schemas = (await db.QueryAsync<string>(
                     "select nspname from pg_catalog.pg_namespace n " +
                     "join pg_catalog.pg_description d on d.objoid = n.oid " +
@@ -253,6 +253,13 @@ namespace WB.Services.Export.Infrastructure
 
                     await tr.CommitAsync(cancellationToken);
                 }
+                
+                logger?.LogInformation("End drop tenant schema: {Tenant}. Removed {tables} tables in {schemas} schemas", tenant, tablesToDelete.Count, schemas.Count);
+            }
+            catch (Exception e)
+            {
+                logger?.LogCritical(e, "Error drop tenant schema: {Tenant}", tenant);
+                throw;
             }
             finally
             {
