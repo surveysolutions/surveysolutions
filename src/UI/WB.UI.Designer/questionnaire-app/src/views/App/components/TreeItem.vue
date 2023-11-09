@@ -246,8 +246,7 @@ export default {
                 parent,
                 afterItemId,
                 (question, parent, index) => {
-                    if (index < 0) index = this.tree.rootChildren.length;
-                    this.tree.add(question, this.stat.parent, index);
+                    this.tree.add(question, this.getParentStat(), index);
                     this.this.$router.push({
                         name: 'question',
                         params: {
@@ -264,8 +263,7 @@ export default {
                 parent,
                 afterItemId,
                 (group, parent, index) => {
-                    if (index < 0) index = this.tree.rootChildren.length;
-                    this.tree.add(group, this.stat.parent, index);
+                    this.tree.add(group, this.getParentStat(), index);
 
                     this.$router.push({
                         name: 'group',
@@ -283,8 +281,7 @@ export default {
                 parent,
                 afterItemId,
                 (roster, parent, index) => {
-                    if (index < 0) index = this.tree.rootChildren.length;
-                    this.tree.add(roster, this.stat.parent, index);
+                    this.tree.add(roster, this.getParentStat(), index);
 
                     this.$router.push({
                         name: 'roster',
@@ -302,8 +299,7 @@ export default {
                 parent,
                 afterItemId,
                 (statictext, parent, index) => {
-                    if (index < 0) index = this.tree.rootChildren.length;
-                    this.tree.add(statictext, this.stat.parent, index);
+                    this.tree.add(statictext, this.getParentStat(), index);
 
                     this.$router.push({
                         name: 'statictext',
@@ -321,8 +317,7 @@ export default {
                 parent,
                 afterItemId,
                 (variable, parent, index) => {
-                    if (index < 0) index = this.tree.rootChildren.length;
-                    this.tree.add(variable, this.stat.parent, index);
+                    this.tree.add(variable, this.getParentStat(), index);
 
                     this.$router.push({
                         name: 'variable',
@@ -334,10 +329,15 @@ export default {
             );
         },
         getParentItem() {
-            if (this.isGroup()) return item;
+            if (this.isGroup()) return this.item;
             if (this.stat.parent && this.stat.parent.data)
                 return this.stat.parent.data;
             return this.currentChapter;
+        },
+        getParentStat() {
+            if (this.isGroup()) return this.stat;
+            if (this.stat.parent) return this.stat.parent;
+            return null;
         },
         getAfterItemId() {
             if (this.isGroup()) return null;

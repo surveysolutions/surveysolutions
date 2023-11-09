@@ -35,10 +35,11 @@ export const useTreeStore = defineStore('tree', {
         },
 
         addQuestion(parent, afterNodeId, callback) {
-            const index = this.getItemIndexByIdFromParentItemsList(
+            let index = this.getItemIndexByIdFromParentItemsList(
                 parent,
                 afterNodeId
             );
+
             const emptyQuestion = this.createEmptyQuestion(parent);
 
             const command = {
@@ -46,7 +47,10 @@ export const useTreeStore = defineStore('tree', {
                 parentGroupId: parent.itemId,
                 questionId: emptyQuestion.itemId
             };
-            if (index >= 0) command.index = index + 1;
+            if (index != null && index >= 0) {
+                index = index + 1;
+                command.index = index;
+            }
 
             return this.commandCall('AddDefaultTypeQuestion', command).then(
                 function(result) {
@@ -65,6 +69,7 @@ export const useTreeStore = defineStore('tree', {
                 itemType: 'Question',
                 hasCondition: false,
                 hasValidation: false,
+                items: [],
                 getParentItem: function() {
                     return parent;
                 }
@@ -73,7 +78,7 @@ export const useTreeStore = defineStore('tree', {
         },
 
         addGroup(parent, afterNodeId, callback) {
-            const index = this.getItemIndexByIdFromParentItemsList(
+            let index = this.getItemIndexByIdFromParentItemsList(
                 parent,
                 afterNodeId
             );
@@ -93,7 +98,10 @@ export const useTreeStore = defineStore('tree', {
                 parentGroupId: parent.itemId,
                 variableName: null
             };
-            if (index >= 0) command.index = index + 1;
+            if (index != null && index >= 0) {
+                index = index + 1;
+                command.index = index;
+            }
 
             return this.commandCall('AddGroup', command).then(function(result) {
                 parent.items.splice(index, 0, group);
@@ -115,7 +123,7 @@ export const useTreeStore = defineStore('tree', {
             return emptyGroup;
         },
         addRoster(parent, afterNodeId, callback) {
-            const index = this.getItemIndexByIdFromParentItemsList(
+            let index = this.getItemIndexByIdFromParentItemsList(
                 parent,
                 afterNodeId
             );
@@ -138,7 +146,10 @@ export const useTreeStore = defineStore('tree', {
                 parentGroupId: parent.itemId,
                 variableName: group.variableName
             };
-            if (index >= 0) command.index = index + 1;
+            if (index != null && index >= 0) {
+                index = index + 1;
+                command.index = index;
+            }
 
             return this.commandCall('AddGroup', command).then(function(result) {
                 parent.items.splice(index, 0, group);
@@ -161,7 +172,7 @@ export const useTreeStore = defineStore('tree', {
             return emptyRoster;
         },
         addStaticText(parent, afterNodeId, callback) {
-            const index = this.getItemIndexByIdFromParentItemsList(
+            let index = this.getItemIndexByIdFromParentItemsList(
                 parent,
                 afterNodeId
             );
@@ -173,7 +184,10 @@ export const useTreeStore = defineStore('tree', {
                 entityId: staticText.itemId,
                 text: staticText.text
             };
-            if (index >= 0) command.index = index + 1;
+            if (index != null && index >= 0) {
+                index = index + 1;
+                command.index = index;
+            }
 
             return this.commandCall('AddStaticText', command).then(function(
                 result
@@ -190,6 +204,7 @@ export const useTreeStore = defineStore('tree', {
                 itemType: 'StaticText',
                 hasCondition: false,
                 hasValidation: false,
+                items: [],
                 getParentItem: function() {
                     return parent;
                 }
@@ -197,7 +212,7 @@ export const useTreeStore = defineStore('tree', {
             return emptyStaticText;
         },
         addVariable(parent, afterNodeId, callback) {
-            const index = this.getItemIndexByIdFromParentItemsList(
+            let index = this.getItemIndexByIdFromParentItemsList(
                 parent,
                 afterNodeId
             );
@@ -209,7 +224,10 @@ export const useTreeStore = defineStore('tree', {
                 parentId: parent.itemId,
                 variableData: {}
             };
-            if (index >= 0) command.index = index + 1;
+            if (index != null && index >= 0) {
+                index = index + 1;
+                command.index = index;
+            }
 
             return this.commandCall('AddVariable', command).then(function(
                 result
@@ -224,6 +242,7 @@ export const useTreeStore = defineStore('tree', {
                 itemId: newId,
                 itemType: 'Variable',
                 variableData: {},
+                items: [],
                 getParentItem: function() {
                     return parent;
                 }
@@ -315,13 +334,13 @@ export const useTreeStore = defineStore('tree', {
         },
 
         getItemIndexByIdFromParentItemsList(parent, id) {
-            if (!parent || !id) return -1;
+            if (!parent || !id) return null;
 
             var index = findIndex(parent.items, function(i) {
                 return i.itemId === id;
             });
 
-            return index;
+            return index < 0 ? null : index;
         },
 
         deleteGroup(itemId) {
