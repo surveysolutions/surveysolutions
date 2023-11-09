@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -87,12 +88,31 @@ namespace WB.UI.Headquarters.Controllers.Api
         public async Task<IActionResult> RemoveExportCache()
         {
             if (await this.IsExistsDataExportInProgress())
-                return StatusCode((int)HttpStatusCode.Forbidden,new {message = DataExport.ErrorThereAreRunningProcesses}); 
+                return StatusCode((int)HttpStatusCode.Forbidden,new {message = DataExport.ErrorThereAreRunningProcesses});
 
-            await exportServiceApi.DeleteTenant();;
-            await this.ClearExportData();
+            this.logger.LogInformation("Start to remove export cache by {User}.", new {User = base.User.Identity.Name});
 
-            this.logger.LogInformation("Export cache was removed by {User}.", new {User = base.User.Identity.Name});
+            try
+            {
+                await exportServiceApi.DeleteTenant();
+            }
+            catch (Exception e)
+            {
+                this.logger.LogError(e, "Fail to remove Export service tenant.");
+                throw;
+            }
+            
+            try
+            {
+                await this.ClearExportData();
+            }
+            catch (Exception e)
+            {
+                this.logger.LogError(e, "Fail to remove Export service data.");
+                throw;
+            }
+
+            this.logger.LogInformation("End to remove export cache by {User}.", new {User = base.User.Identity.Name});
 
             return new JsonResult(new { Success = true });
         }
