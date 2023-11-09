@@ -23,13 +23,7 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [
-            Vue({
-                template: {
-                    compilerOptions: {
-                        whitespace: 'preserve'
-                    }
-                }
-            }),
+      Vue(),
             //Vuetify({ autoImport: true }),
       LocalizationPlugin({
         noHash: true,
