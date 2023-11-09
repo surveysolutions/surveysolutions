@@ -122,6 +122,9 @@
                         textKey="title"
                         childrenKey="items"
                         defaultOpen="true"
+                        triggerClass="handler"
+                        :statHandler="treeNodeCreated"
+                        @after-drop="treeNodeDropped"
                     >
                         <template #default="{ node, stat }">
                             <component
@@ -134,6 +137,9 @@
                                 :isReadOnly="currentChapter.isReadOnly"
                             ></component>
                         </template>
+                        <!--template #placeholder="{ node, stat }">
+                            <div class="ngular-ui-tree-placeholder"></div>
+                        </template-->
                     </Draggable>
                     <!--div
                         vrepeat="item in items | filter:searchItem as results"
@@ -278,7 +284,7 @@
 <script>
 import { useTreeStore } from '../../../stores/tree';
 import { useQuestionnaireStore } from '../../../stores/questionnaire';
-import { BaseTree, Draggable, walkTreeData } from '@he-tree/vue';
+import { Draggable, dragContext, walkTreeData } from '@he-tree/vue';
 import '@he-tree/vue/style/default.css';
 import { ref, nextTick } from 'vue';
 
@@ -384,6 +390,12 @@ export default {
         },
         readyToPaste() {
             return this.treeStore.canPaste();
+        },
+        isReadOnly() {
+            return (
+                this.questionnaire.isReadOnlyForUser ||
+                this.currentChapter.isReadOnly
+            );
         }
     },
     methods: {
@@ -497,6 +509,33 @@ export default {
         hideSearch() {
             this.search.open = false;
             this.search.searchText = '';
+        },
+        treeNodeCreated(stat) {
+            if (this.isReadOnly) {
+                stat.droppable = false;
+                stat.draggable = false;
+            } else {
+                const isGroup = stat.data.itemType == 'Group';
+                stat.droppable = isGroup;
+            }
+
+            return stat;
+        },
+        treeNodeDropped() {
+            const item = dragContext.dragNode.data;
+            const parentId =
+                ((dragContext.targetInfo.parent || {}).data || {}).itemId ||
+                this.chapterId;
+            let index = dragContext.targetInfo.indexBeforeDrop;
+
+            const start = dragContext.startInfo;
+            if (start.parent == dragContext.targetInfo.parent) {
+                const startIndex = start.indexBeforeDrop;
+                if (startIndex == index) return;
+                if (startIndex < index) index--;
+            }
+
+            this.treeStore.moveItem(item, parentId, index);
         }
     }
 };

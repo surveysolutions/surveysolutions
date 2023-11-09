@@ -363,6 +363,61 @@ export const useTreeStore = defineStore('tree', {
             };
 
             return this.commandCall('DeleteStaticText', command);
+        },
+
+        moveItem(item, newParentId, index) {
+            if (item.itemType == 'Question')
+                return this.moveQuestion(item.itemId, index, newParentId);
+            else if (item.itemType == 'StaticText')
+                return this.moveStaticText(item.itemId, index, newParentId);
+            else if (item.itemType == 'Variable')
+                return this.moveVariable(item.itemId, index, newParentId);
+            else if (item.itemType == 'Group')
+                return this.moveGroup(item.itemId, index, newParentId);
+        },
+
+        moveGroup(groupId, index, destGroupId) {
+            var command = {
+                targetGroupId: destGroupId,
+                targetIndex: index,
+                groupId: groupId,
+                questionnaireId: this.questionnaireId
+            };
+
+            return this.commandCall('MoveGroup', command);
+        },
+
+        moveQuestion(questionId, index, destGroupId) {
+            var command = {
+                targetGroupId: destGroupId,
+                targetIndex: index,
+                questionId: questionId,
+                questionnaireId: this.questionnaireId
+            };
+
+            return this.commandCall('MoveQuestion', command);
+        },
+
+        moveStaticText(entityId, index, destGroupId) {
+            var command = {
+                targetEntityId: destGroupId,
+                targetIndex: index,
+                entityId: entityId,
+                questionnaireId: this.questionnaireId
+            };
+
+            return this.commandCall('MoveStaticText', command);
+        },
+
+        moveVariable(entityId, index, destGroupId) {
+            var command = {
+                targetEntityId: destGroupId,
+                targetIndex: index,
+                entityId: entityId,
+                questionnaireId: this.questionnaireId
+            };
+
+            return this.commandCall('MoveVariable', command);
         }
     }
 });

@@ -13,7 +13,7 @@
         @mouseleave="is_highlighted = false"
     >
         <span class="cursor"></span>
-        <a class="handler" ui-tree-handle></a>
+        <a class="handler angular-ui-tree-handle" ui-tree-handle></a>
 
         <slot />
 
@@ -91,10 +91,10 @@
                     </li>
                     <li>
                         <a
-                            :disabled="!readyToPaste"
                             @click="pasteItemAfter()"
                             v-if="
-                                !questionnaire.isReadOnlyForUser &&
+                                readyToPaste &&
+                                    !questionnaire.isReadOnlyForUser &&
                                     !currentChapter.isReadOnly
                             "
                             >{{ $t('QuestionnaireEditor.PasteAfter') }}</a
@@ -186,7 +186,7 @@ export default {
                 classes.push(this.item.itemType.toLowerCase());
             if (this.item.itemType === 'Group' && this.item.isRoster)
                 classes.push('roster');
-            if (this.stat.parent && this.stat.parent.data.isRoster)
+            if (this.stat && this.stat.parent && this.stat.parent.data.isRoster)
                 classes.push('roster-items');
             return classes;
         },
@@ -216,7 +216,7 @@ export default {
                 parent,
                 afterItemId,
                 (question, parent, index) => {
-                    if (index < 0) index = this.$refs.tree.rootChildren.length;
+                    if (index < 0) index = this.tree.rootChildren.length;
                     this.tree.add(question, this.stat.parent, index);
                     this.this.$router.push({
                         name: 'question',
@@ -234,8 +234,8 @@ export default {
                 parent,
                 afterItemId,
                 (group, parent, index) => {
-                    if (index < 0) index = this.$refs.tree.rootChildren.length;
-                    this.$refs.tree.add(group, this.stat.parent, index);
+                    if (index < 0) index = this.tree.rootChildren.length;
+                    this.tree.add(group, this.stat.parent, index);
 
                     this.$router.push({
                         name: 'group',
@@ -253,8 +253,8 @@ export default {
                 parent,
                 afterItemId,
                 (roster, parent, index) => {
-                    if (index < 0) index = this.$refs.tree.rootChildren.length;
-                    this.$refs.tree.add(roster, this.stat.parent, index);
+                    if (index < 0) index = this.tree.rootChildren.length;
+                    this.tree.add(roster, this.stat.parent, index);
 
                     this.$router.push({
                         name: 'roster',
@@ -272,8 +272,8 @@ export default {
                 parent,
                 afterItemId,
                 (statictext, parent, index) => {
-                    if (index < 0) index = this.$refs.tree.rootChildren.length;
-                    this.$refs.tree.add(statictext, this.stat.parent, index);
+                    if (index < 0) index = this.tree.rootChildren.length;
+                    this.tree.add(statictext, this.stat.parent, index);
 
                     this.$router.push({
                         name: 'statictext',
@@ -291,8 +291,8 @@ export default {
                 parent,
                 afterItemId,
                 (variable, parent, index) => {
-                    if (index < 0) index = this.$refs.tree.rootChildren.length;
-                    this.$refs.tree.add(variable, this.stat.parent, index);
+                    if (index < 0) index = this.tree.rootChildren.length;
+                    this.tree.add(variable, this.stat.parent, index);
 
                     this.$router.push({
                         name: 'variable',
@@ -455,6 +455,100 @@ export default {
 
             this.treeStore.pasteItemAfter(this.item).then(function(result) {
                 if (!chapter.isCover)
+                    this.$router.push({
+                        name: result.itemType,
+                        params: {
+                            itemId: result.itemId
+                        }
+                    });
+            });
+        },
+
+        addQuestionInto() {
+            this.treeStore.addQuestion(
+                this.item,
+                null,
+                (question, parent, index) => {
+                    if (index < 0) index = this.tree.rootChildren.length;
+                    this.tree.add(question, null, index);
+
+                    this.$router.push({
+                        name: 'question',
+                        params: {
+                            questionId: question.itemId
+                        }
+                    });
+                }
+            );
+        },
+        addGroupInto() {
+            this.treeStore.addGroup(this.item, null, (group, parent, index) => {
+                if (index < 0) index = this.tree.rootChildren.length;
+                this.tree.add(group, null, index);
+
+                this.$router.push({
+                    name: 'group',
+                    params: {
+                        groupId: group.itemId
+                    }
+                });
+            });
+        },
+        addRosterInto() {
+            this.treeStore.addRoster(
+                this.item,
+                null,
+                (roster, parent, index) => {
+                    if (index < 0) index = this.tree.rootChildren.length;
+                    this.tree.add(roster, null, index);
+
+                    this.$router.push({
+                        name: 'roster',
+                        params: {
+                            rosterId: roster.itemId
+                        }
+                    });
+                }
+            );
+        },
+        addStaticTextInto() {
+            this.treeStore.addStaticText(
+                this.item,
+                null,
+                (statictext, parent, index) => {
+                    if (index < 0) index = this.tree.rootChildren.length;
+                    this.tree.add(statictext, null, index);
+
+                    this.$router.push({
+                        name: 'statictext',
+                        params: {
+                            statictextId: statictext.itemId
+                        }
+                    });
+                }
+            );
+        },
+        addVariableInto() {
+            this.treeStore.addVariable(
+                this.item,
+                null,
+                (variable, parent, index) => {
+                    if (index < 0) index = this.tree.rootChildren.length;
+                    this.tree.add(variable, null, index);
+
+                    this.$router.push({
+                        name: 'variable',
+                        params: {
+                            variableId: variable.itemId
+                        }
+                    });
+                }
+            );
+        },
+
+        pasteItemIntoInto() {
+            this.treeStore.pasteItemInto(this.item).then(function(result) {
+                if (!this.item.isCover)
                     this.$router.push({
                         name: result.itemType,
                         params: {
