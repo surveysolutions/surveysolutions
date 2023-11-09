@@ -37,7 +37,13 @@
                                 !questionnaire.isReadOnlyForUser &&
                                     !currentChapter.isReadOnly
                             "
-                            >{{ $t('QuestionnaireEditor.TreeAddQuestion') }}</a
+                            >{{
+                                isGroup()
+                                    ? $t('QuestionnaireEditor.TreeAddQuestion')
+                                    : $t(
+                                          'QuestionnaireEditor.TreeAddQuestionAfter'
+                                      )
+                            }}</a
                         >
                     </li>
                     <li>
@@ -48,7 +54,13 @@
                                     !currentChapter.isReadOnly &&
                                     !currentChapter.isCover
                             "
-                            >{{ $t('QuestionnaireEditor.TreeAddSection') }}</a
+                            >{{
+                                isGroup()
+                                    ? $t('QuestionnaireEditor.TreeAddSection')
+                                    : $t(
+                                          'QuestionnaireEditor.TreeAddSectionAfter'
+                                      )
+                            }}</a
                         >
                     </li>
                     <li>
@@ -59,7 +71,13 @@
                                     !currentChapter.isReadOnly &&
                                     !currentChapter.isCover
                             "
-                            >{{ $t('QuestionnaireEditor.TreeAddRoster') }}</a
+                            >{{
+                                isGroup()
+                                    ? $t('QuestionnaireEditor.TreeAddRoster')
+                                    : $t(
+                                          'QuestionnaireEditor.TreeAddRosterAfter'
+                                      )
+                            }}</a
                         >
                     </li>
                     <li>
@@ -70,7 +88,13 @@
                                     !currentChapter.isReadOnly
                             "
                             >{{
-                                $t('QuestionnaireEditor.TreeAddStaticText')
+                                isGroup()
+                                    ? $t(
+                                          'QuestionnaireEditor.TreeAddStaticText'
+                                      )
+                                    : $t(
+                                          'QuestionnaireEditor.TreeAddStaticTextAfter'
+                                      )
                             }}</a
                         >
                     </li>
@@ -81,7 +105,13 @@
                                 !questionnaire.isReadOnlyForUser &&
                                     !currentChapter.isReadOnly
                             "
-                            >{{ $t('QuestionnaireEditor.TreeAddVariable') }}</a
+                            >{{
+                                isGroup()
+                                    ? $t('QuestionnaireEditor.TreeAddVariable')
+                                    : $t(
+                                          'QuestionnaireEditor.TreeAddVariableAfter'
+                                      )
+                            }}</a
                         >
                     </li>
                     <li>
@@ -455,100 +485,6 @@ export default {
 
             this.treeStore.pasteItemAfter(this.item).then(function(result) {
                 if (!chapter.isCover)
-                    this.$router.push({
-                        name: result.itemType,
-                        params: {
-                            itemId: result.itemId
-                        }
-                    });
-            });
-        },
-
-        addQuestionInto() {
-            this.treeStore.addQuestion(
-                this.item,
-                null,
-                (question, parent, index) => {
-                    if (index < 0) index = this.tree.rootChildren.length;
-                    this.tree.add(question, null, index);
-
-                    this.$router.push({
-                        name: 'question',
-                        params: {
-                            questionId: question.itemId
-                        }
-                    });
-                }
-            );
-        },
-        addGroupInto() {
-            this.treeStore.addGroup(this.item, null, (group, parent, index) => {
-                if (index < 0) index = this.tree.rootChildren.length;
-                this.tree.add(group, null, index);
-
-                this.$router.push({
-                    name: 'group',
-                    params: {
-                        groupId: group.itemId
-                    }
-                });
-            });
-        },
-        addRosterInto() {
-            this.treeStore.addRoster(
-                this.item,
-                null,
-                (roster, parent, index) => {
-                    if (index < 0) index = this.tree.rootChildren.length;
-                    this.tree.add(roster, null, index);
-
-                    this.$router.push({
-                        name: 'roster',
-                        params: {
-                            rosterId: roster.itemId
-                        }
-                    });
-                }
-            );
-        },
-        addStaticTextInto() {
-            this.treeStore.addStaticText(
-                this.item,
-                null,
-                (statictext, parent, index) => {
-                    if (index < 0) index = this.tree.rootChildren.length;
-                    this.tree.add(statictext, null, index);
-
-                    this.$router.push({
-                        name: 'statictext',
-                        params: {
-                            statictextId: statictext.itemId
-                        }
-                    });
-                }
-            );
-        },
-        addVariableInto() {
-            this.treeStore.addVariable(
-                this.item,
-                null,
-                (variable, parent, index) => {
-                    if (index < 0) index = this.tree.rootChildren.length;
-                    this.tree.add(variable, null, index);
-
-                    this.$router.push({
-                        name: 'variable',
-                        params: {
-                            variableId: variable.itemId
-                        }
-                    });
-                }
-            );
-        },
-
-        pasteItemIntoInto() {
-            this.treeStore.pasteItemInto(this.item).then(function(result) {
-                if (!this.item.isCover)
                     this.$router.push({
                         name: result.itemType,
                         params: {
