@@ -74,22 +74,6 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
         }
 
         /// <summary>
-        /// Deletes data.
-        /// </summary>
-        /// <param name="key">Key for the data to be deleted.</param>
-        public void Delete(string key)
-        {
-            lock (keyStoreFileLock)
-            {
-                this.keyStore.DeleteEntry(key);
-                using var keyStoreFile = Application.Context.OpenFileOutput(keyStoreFileName, FileCreationMode.Private);
-                this.keyStore.Store(keyStoreFile, null);
-
-                this.inMemoryKeyStorage.Remove(key);
-            }
-        }
-
-        /// <summary>
         /// Checks if the storage contains a key.
         /// </summary>
         /// <param name="key">The key to search.</param>

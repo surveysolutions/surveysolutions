@@ -102,7 +102,7 @@ namespace WB.UI.Shared.Enumerator
             // SecureStorage is singleton because very very long getting secret keys
             registry.BindAsSingleton<ISecureStorage, SecureStorage>();
 
-            registry.Bind<IEncryptionService, AesEncryptionService>();
+            registry.BindAsSingleton<IEncryptionService, AesEncryptionService>();
             
             registry.Bind<INotificationPublisher, NotificationPublisher>();
             registry.Bind<IEnumeratorWorkerManager, EnumeratorWorkerManager>();
