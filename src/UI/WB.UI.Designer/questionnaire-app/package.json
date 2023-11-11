@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@intlify/unplugin-vue-i18n": "^0.8.1",
-    "axios": "1.2.6",
+    "axios": "1.6.0",
     "core-js": "^3.27.1",
     "unplugin-vue-components": "0.23.0",
     "vue": "^3.2.45",
