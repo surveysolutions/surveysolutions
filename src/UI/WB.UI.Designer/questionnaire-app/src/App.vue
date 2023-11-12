@@ -19,11 +19,15 @@
 
 <script>
 import { provide } from 'vue';
+import ConfirmDialog from './views/App/components/Confirm.vue';
 //import store from '@/store'
 import { useQuestionnaireStore } from './stores/questionnaire';
 
 export default {
     name: 'QuestionnaireApp',
-    provide: { useQuestionnaireStore }
+    provide: { useQuestionnaireStore },
+    components: {
+        ConfirmDialog
+    }
 };
 </script>
