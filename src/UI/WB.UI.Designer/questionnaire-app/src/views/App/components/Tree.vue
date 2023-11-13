@@ -284,7 +284,6 @@
 
 <script>
 import { useTreeStore } from '../../../stores/tree';
-import { useQuestionnaireStore } from '../../../stores/questionnaire';
 import { Draggable, dragContext, walkTreeData } from '@he-tree/vue';
 import '@he-tree/vue/style/default.css';
 import { ref, nextTick } from 'vue';
@@ -303,6 +302,7 @@ export default {
         TreeStaticText,
         TreeVariable
     },
+    inject: ['questionnaire'],
     props: {
         questionnaireId: { type: String, required: true },
         chapterId: { type: String, required: true }
@@ -324,20 +324,15 @@ export default {
     },
     setup() {
         const treeStore = useTreeStore();
-        const questionnaireStore = useQuestionnaireStore();
 
         return {
-            treeStore,
-            questionnaireStore
+            treeStore
         };
     },
     async beforeMount() {
         await this.fetch();
     },
     computed: {
-        questionnaire() {
-            return this.questionnaireStore.info || {};
-        },
         currentChapter() {
             return this.treeStore.getChapter || {};
         },
