@@ -100,6 +100,9 @@
                         ui-ace="{ onLoad : aceLoaded , require: ['ace/ext/language_tools']}"
                         ng-model="activeVariable.expression"
                     ></div>
+                    <ExpressionEditor
+                        v-model="activeVariable.expression"
+                    ></ExpressionEditor>
                 </div>
             </div>
         </div>
@@ -171,10 +174,11 @@
 <script>
 import { useVariableStore } from '../../../stores/variable';
 import MoveToChapterSnippet from './MoveToChapterSnippet.vue';
+import ExpressionEditor from './ExpressionEditor.vue';
 
 export default {
     name: 'Variable',
-    components: { MoveToChapterSnippet },
+    components: { MoveToChapterSnippet, ExpressionEditor },
     inject: ['questionnaire', 'currentChapter'],
     props: {
         questionnaireId: { type: String, required: true },
