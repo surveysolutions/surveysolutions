@@ -272,14 +272,6 @@
             </div>
         </perfect-scrollbar>
     </div>
-
-    <div
-        class="question-editor col-xs-6"
-        v-class="{ commenting: isCommentsBlockVisible }"
-        ui-view
-    ></div>
-
-    <div class="comments-editor col-xs-6" ui-view="comments"></div>
 </template>
 
 <script>
