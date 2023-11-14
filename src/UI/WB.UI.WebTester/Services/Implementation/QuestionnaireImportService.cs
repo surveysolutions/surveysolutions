@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -46,11 +47,13 @@ namespace WB.UI.WebTester.Services.Implementation
             this.categoriesManagementService = categoriesManagementService ?? throw new ArgumentNullException(nameof(categoriesManagementService));
         }
 
-        public Dictionary<Guid, QuestionnaireIdentity> TokenToQuestionnaireMap { get; } = new Dictionary<Guid, QuestionnaireIdentity>();
+        private ConcurrentDictionary<Guid, QuestionnaireIdentity> TokenToQuestionnaireMap { get; } 
+            = new ConcurrentDictionary<Guid, QuestionnaireIdentity>();
+        private readonly object tokensLock = new object();
 
         public void RemoveQuestionnaire(Guid designerToken)
         {
-            lock (TokenToQuestionnaireMap)
+            lock (tokensLock)
             {
                 if (!TokenToQuestionnaireMap.ContainsKey(designerToken)) return;
 
@@ -61,7 +64,7 @@ namespace WB.UI.WebTester.Services.Implementation
                 translationManagementService.Delete(questionnaireId);
 
                 attachmentsStorage.RemoveArea(designerToken);
-                TokenToQuestionnaireMap.Remove(designerToken);
+                TokenToQuestionnaireMap.Remove(designerToken, out _);
             }
         }
 
@@ -84,7 +87,7 @@ namespace WB.UI.WebTester.Services.Implementation
 
             var categories = await webTesterApi.GetCategoriesAsync(designerToken.ToString());
 
-            lock (TokenToQuestionnaireMap)
+            lock (tokensLock)
             {
                 TokenToQuestionnaireMap[designerToken] = questionnaireIdentity;
 
