@@ -64,6 +64,7 @@ const routes = [
                         path: 'variable/:variableId',
                         component: Variable,
                         props: route => ({
+                            questionnaireId: route.params.questionnaireId,
                             variableId: route.params.variableId
                         })
                     },

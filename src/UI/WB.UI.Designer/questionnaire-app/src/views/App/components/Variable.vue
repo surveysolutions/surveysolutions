@@ -1,94 +1,232 @@
 <template>
-    Variable
-    <!--form role="form" id="question-editor" name="variableForm" unsaved-warning-form ng-show="activeVariable">
-      <div class="form-holder">
-          <div class="breadcrumbs-container">
-              <div data-item-breadcrumbs data-crumbs="activeVariable.breadcrumbs"></div>
-          </div>
+    <form
+        role="form"
+        id="question-editor"
+        name="variableForm"
+        unsaved-warning-form
+        v-if="activeVariable"
+    >
+        <div class="form-holder">
+            <div class="breadcrumbs-container">
+                <div
+                    data-item-breadcrumbs
+                    data-crumbs="activeVariable.breadcrumbs"
+                ></div>
+            </div>
 
-          <div class="row">
-              <div class="form-group col-xs-6">
-                  <label class="wb-label">{{'VariableType' | i18next}}</label><br>
-                  <div class="btn-group type-container-dropdown" uib-dropdown>
-                      <button id="variableTypeBtn" class="btn btn-default form-control" uib-dropdown-toggle type="button">
-                          {{activeVariable.typeName}}
-                          <span class="dropdown-arrow"></span>
-                      </button>
+            <div class="row">
+                <div class="form-group col-xs-6">
+                    <label class="wb-label">{{
+                        $t('QuestionnaireEditor.VariableType')
+                    }}</label
+                    ><br />
+                    <div class="btn-group type-container-dropdown" uib-dropdown>
+                        <button
+                            id="variableTypeBtn"
+                            class="btn btn-default form-control"
+                            uib-dropdown-toggle
+                            type="button"
+                        >
+                            {{ activeVariable.typeName }}
+                            <span class="dropdown-arrow"></span>
+                        </button>
 
-                      <ul class="dropdown-menu" role="menu">
-                          <li role="presentation" ng-repeat="type in activeVariable.typeOptions">
-                              <a role="menuitem" tabindex="-1" ng-click="setType(type.value)">
-                                  {{type.text}}
-                              </a>
-                          </li>
-                      </ul>
-                  </div>
-              </div>
+                        <ul class="dropdown-menu" role="menu">
+                            <li
+                                role="presentation"
+                                v-for="typeOption in activeVariable.typeOptions"
+                            >
+                                <a
+                                    role="menuitem"
+                                    tabindex="-1"
+                                    @click="setType(typeOption.value)"
+                                >
+                                    {{ typeOption.text }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
 
-              <div class="form-group input-variable-name col-xs-5 pull-right">
-                  <label for="edit-question-variable-name" class="wb-label">{{'VariableVariableName' | i18next}}
-                      <help key="variableName" placement="left" /></label>
-                  <br />
-                  <input id="edit-question-variable-name" type="text" ng-model="activeVariable.variable"
-                      spellcheck="false" autocomplete="false" class="form-control" maxlength="32" />
-              </div>
-          </div>
-          <div class="form-group">
-              <label for="edit-variable-title-highlight" class="wb-label">{{'VariableLabel' | i18next}}
-                  <help key="variableDescription" /></label>
-              <div class="pseudo-form-control">
-                  <div id="edit-variable-title-highlight"
-                      ui-ace="{ onLoad : setupAceForSubstitutions, require: ['ace/ext/language_tools'] }"
-                      ng-model="activeVariable.label"></div>
-              </div>
-          </div>
-          <div class="form-group">
-              <label for="edit-group-condition">{{'VariableExpression' | i18next }}
-                  <help key="expression" /></label>
-                  <input id="cb-do-not-export" type="checkbox" class="wb-checkbox" ng-model="activeVariable.doNotExport" />
-              <label for="cb-do-not-export"><span></span>{{'VariableNoExport' | i18next}}</label>
-              <help key="doNotExport"></help>
-              <div class="pseudo-form-control">
-                  <div id="edit-group-condition" ui-ace="{ onLoad : aceLoaded , require: ['ace/ext/language_tools']}"
-                      ng-model="activeVariable.expression"></div>
-              </div>
-              
-          </div>
-      </div>
-      </div>
-      <div class="form-buttons-holder">
-          <div class="pull-left">
-              <button type="submit" ng-show="!questionnaire.isReadOnlyForUser" id="edit-chapter-save-button"
-                  class="btn btn-lg" ng-class="{ 'btn-primary': variableForm.$dirty }" ng-click="saveVariable()"
-                  unsaved-warning-clear ng-disabled="!variableForm.$valid" ng-i18next>Save</button>
-              <button type="reset" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" ng-click="cancel()"
-                  unsaved-warning-clear ng-i18next>Cancel</button>
-          </div>
-          <div class="pull-right">
-              <button type="button" ng-show="!questionnaire.isReadOnlyForUser" id="add-comment-button"
-                  class="btn btn-lg btn-link" ng-click="toggleComments(activeQuestion)" unsaved-warning-clear>
-                  <span ng-i18next ng-show="!isCommentsBlockVisible && commentsCount == 0">EditorAddComment</span>
-                  <span ng-show="!isCommentsBlockVisible && commentsCount > 0">{{'EditorShowComments' | i18next: { count: commentsCount } }}</span>
-                  <span ng-i18next ng-show="isCommentsBlockVisible">EditorHideComment</span>
-              </button>
-              <button type="button" ng-show="!questionnaire.isReadOnlyForUser" id="edit-chapter-delete-button"
-                  class="btn btn-lg btn-link" ng-click="deleteVariable(activeVariable)" unsaved-warning-clear
-                  ng-i18next>Delete</button>
-              <ng-include src="'moveToChapterSnippet'" ng-show="!questionnaire.isReadOnlyForUser"
-                  ng-if="!activeGroup.isChapter" />
-          </div>
-      </div>
-  </form-->
+                <div class="form-group input-variable-name col-xs-5 pull-right">
+                    <label for="edit-question-variable-name" class="wb-label"
+                        >{{ $t('QuestionnaireEditor.VariableVariableName') }}
+                        <help key="variableName" placement="left"
+                    /></label>
+                    <br />
+                    <input
+                        id="edit-question-variable-name"
+                        type="text"
+                        v-model="activeVariable.variable"
+                        spellcheck="false"
+                        autocomplete="false"
+                        class="form-control"
+                        maxlength="32"
+                    />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="edit-variable-title-highlight" class="wb-label"
+                    >{{ $t('QuestionnaireEditor.VariableLabel') }}
+                    <help key="variableDescription"
+                /></label>
+                <div class="pseudo-form-control">
+                    <div
+                        id="edit-variable-title-highlight"
+                        ui-ace="{ onLoad : setupAceForSubstitutions, require: ['ace/ext/language_tools'] }"
+                        ng-model="activeVariable.label"
+                    ></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="edit-group-condition"
+                    >{{ $t('QuestionnaireEditor.VariableExpression') }}
+                    <help key="expression"
+                /></label>
+                <input
+                    id="cb-do-not-export"
+                    type="checkbox"
+                    class="wb-checkbox"
+                    v-model="activeVariable.doNotExport"
+                />
+                <label for="cb-do-not-export"
+                    ><span></span
+                    >{{ $t('QuestionnaireEditor.VariableNoExport') }}</label
+                >
+                <help key="doNotExport"></help>
+                <div class="pseudo-form-control">
+                    <div
+                        id="edit-group-condition"
+                        ui-ace="{ onLoad : aceLoaded , require: ['ace/ext/language_tools']}"
+                        ng-model="activeVariable.expression"
+                    ></div>
+                    <ExpressionEditor
+                        v-model="activeVariable.expression"
+                    ></ExpressionEditor>
+                </div>
+            </div>
+        </div>
+        <div class="form-buttons-holder">
+            <div class="pull-left">
+                <button
+                    type="submit"
+                    v-show="!questionnaire.isReadOnlyForUser"
+                    id="edit-chapter-save-button"
+                    class="btn btn-lg"
+                    :class="{ 'btn-primary': dirty }"
+                    @click="saveVariable()"
+                    unsaved-warning-clear
+                    :disabled="!valid"
+                >
+                    {{ $t('QuestionnaireEditor.Save') }}
+                </button>
+                <button
+                    type="reset"
+                    id="edit-chapter-cancel-button"
+                    class="btn btn-lg btn-link"
+                    @click="cancel()"
+                    unsaved-warning-clear
+                >
+                    {{ $t('QuestionnaireEditor.Cancel') }}
+                </button>
+            </div>
+            <div class="pull-right">
+                <button
+                    type="button"
+                    v-show="!questionnaire.isReadOnlyForUser"
+                    id="add-comment-button"
+                    class="btn btn-lg btn-link"
+                    @click="toggleComments(activeQuestion)"
+                    unsaved-warning-clear
+                >
+                    <span
+                        v-show="!isCommentsBlockVisible && commentsCount == 0"
+                        >{{ $t('QuestionnaireEditor.EditorAddComment') }}</span
+                    >
+                    <span v-show="!isCommentsBlockVisible && commentsCount > 0">{{
+                        $t('QuestionnaireEditor.EditorShowComments', {
+                            count: commentsCount
+                        })
+                    }}</span>
+                    <span v-show="isCommentsBlockVisible">{{
+                        $t('QuestionnaireEditor.EditorHideComment')
+                    }}</span>
+                </button>
+                <button
+                    type="button"
+                    v-show="!questionnaire.isReadOnlyForUser"
+                    id="edit-chapter-delete-button"
+                    class="btn btn-lg btn-link"
+                    @click="deleteVariable(activeVariable)"
+                    unsaved-warning-clear
+                >
+                    {{ $t('QuestionnaireEditor.Delete') }}
+                </button>
+                <MoveToChapterSnippet
+                    :item-id="variableId"
+                    v-show="!questionnaire.isReadOnlyForUser"
+                ></MoveToChapterSnippet>
+            </div>
+        </div>
+    </form>
 </template>
 
 <script>
+import { useVariableStore } from '../../../stores/variable';
+import MoveToChapterSnippet from './MoveToChapterSnippet.vue';
+import ExpressionEditor from './ExpressionEditor.vue';
+
 export default {
     name: 'Variable',
+    components: { MoveToChapterSnippet, ExpressionEditor },
+    inject: ['questionnaire', 'currentChapter'],
     props: {
+        questionnaireId: { type: String, required: true },
         variableId: { type: String, required: true }
     },
     data() {
-        return {};
+        return {
+            activeVariable: null,
+            dirty: false,
+            valid: true
+        };
+    },
+    watch: {
+        activeVariable: {
+            handler(newVal, oldVal) {
+                this.dirty = true;
+            },
+            deep: true
+        }
+    },
+    setup() {
+        const variableStore = useVariableStore();
+
+        return {
+            variableStore
+        };
+    },
+    async beforeMount() {
+        await this.fetch();
+    },
+    methods: {
+        async fetch() {
+            await this.variableStore.fetchVarableData(
+                this.questionnaireId,
+                this.variableId
+            );
+
+            this.activeVariable = this.variableStore.getData;
+        },
+        saveVariable() {
+            //
+        },
+        cancel() {
+            //
+        },
+        setType(newType) {
+            //
+        }
     }
 };
 </script>

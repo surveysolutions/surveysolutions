@@ -18,16 +18,33 @@
 </template>
 
 <script>
-import { provide } from 'vue';
-import ConfirmDialog from './views/App/components/Confirm.vue';
-//import store from '@/store'
 import { useQuestionnaireStore } from './stores/questionnaire';
+import { useTreeStore } from './stores/tree';
 
 export default {
     name: 'QuestionnaireApp',
-    provide: { useQuestionnaireStore },
-    components: {
-        ConfirmDialog
+    provide() {
+        return {
+            questionnaire: this.questionnaire,
+            currentChapter: this.currentChapter
+        };
+    },
+    setup() {
+        const questionnaireStore = useQuestionnaireStore();
+        const treeStore = useTreeStore();
+
+        return {
+            questionnaireStore,
+            treeStore
+        };
+    },
+    computed: {
+        questionnaire() {
+            return this.questionnaireStore.info || {};
+        },
+        currentChapter() {
+            return this.treeStore.getChapter || {};
+        }
     }
 };
 </script>
