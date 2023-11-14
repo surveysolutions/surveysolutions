@@ -1,149 +1,149 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <UserSecretsId>WB.UI.Designer-083C0E5C-5E46-4A24-AE00-1A58F4183DE6</UserSecretsId>
-    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
-    <RootNamespace>WB.UI.Designer</RootNamespace>
-    <AspNetCoreModuleName>AspNetCoreModuleV2</AspNetCoreModuleName>
-    <Nullable>enable</Nullable>
-    <WarningsAsErrors>CS8600;CS8601;CS8602;CS8603;CS8604;CS8610;CS8613;CS8614;CS8618;CS8619;CS8620;CS8625;CS8629;CS8632;CS8634;CS8714</WarningsAsErrors>
-    <SpaRoot>questionnaire-app\</SpaRoot>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsAsErrors />
-    <NoWarn>1701;1702;618</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <NoWarn>1701;1702;</NoWarn>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <UserSecretsId>WB.UI.Designer-083C0E5C-5E46-4A24-AE00-1A58F4183DE6</UserSecretsId>
+        <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+        <RootNamespace>WB.UI.Designer</RootNamespace>
+        <AspNetCoreModuleName>AspNetCoreModuleV2</AspNetCoreModuleName>
+        <Nullable>enable</Nullable>
+        <WarningsAsErrors>CS8600;CS8601;CS8602;CS8603;CS8604;CS8610;CS8613;CS8614;CS8618;CS8619;CS8620;CS8625;CS8629;CS8632;CS8634;CS8714</WarningsAsErrors>
+        <SpaRoot>questionnaire-app\</SpaRoot>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <WarningsAsErrors/>
+        <NoWarn>1701;1702;618</NoWarn>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <NoWarn>1701;1702;</NoWarn>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <Content Update="**\*.json" CopyToPublishDirectory="Never" />
-    <Content Update="wwwroot\**\*" CopyToPublishDirectory="PreserveNewest" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="FluentMigrator" Version="3.3.2" />
-    <PackageReference Include="FluentMigrator.Runner.Core" Version="3.3.2" />
-    <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.15" />
-    <PackageReference Include="NJsonSchema" Version="10.9.0" />
-    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.6" />
-    <PackageReference Include="SkiaSharp.QrCode" Version="0.6.0" />
-    <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20071.2" />
-    <PackageReference Include="FluentMigrator.Runner" Version="3.3.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.11" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.10" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.11" />
-    <PackageReference Include="reCAPTCHA.AspNetCore" Version="2.2.5" />
-    <PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />
-    <PackageReference Include="SharpZipLib" Version="1.4.2" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.0.2" />
-    <PackageReference Include="StackExchange.Exceptional.AspNetCore" Version="2.2.32" />
-    <PackageReference Include="StackExchange.Exceptional.PostgreSql" Version="2.2.32" />
-    <PackageReference Include="Shark.PdfConvert" Version="1.0.5" />
-
-
-    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="7.0.11" />
-
-
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
-
-
-    <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
-    <PackageReference Include="VueCliMiddleware" Version="6.0.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj" />
-    <ProjectReference Include="..\..\Core\Infrastructure\WB.Infrastructure.AspNetCore\WB.Infrastructure.AspNetCore.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\WB.Persistence.Designer\WB.Persistence.Designer.csproj" />
-    <ProjectReference Include="..\Shared\WB.UI.Shared.Web.Core\WB.UI.Shared.Web.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="**\*.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Code\ImportExport\QuestionnaireSchema.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="appsettings.ini" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
-    <Content Include="appsettings.*.ini" CopyToPublishDirectory="Never" ExcludeFromSingleFile="true">
-      <DependentUpon>appsettings.ini</DependentUpon>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Resources\ErrorMessages.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ErrorMessages.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\FindReplaceResources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>FindReplaceResources.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\QuestionnaireController.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>QuestionnaireController.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\QuestionnaireEditor.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\QuestionnaireHistoryResources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\QuestionnaireEditor.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Resources\ErrorMessages.resx">
-      <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\FindReplaceResources.resx">
-      <LastGenOutput>FindReplaceResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\QuestionnaireController.resx">
-      <LastGenOutput>QuestionnaireController.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\QuestionnaireEditor.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>QuestionnaireEditor.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\QuestionnaireHistoryResources.resx">
-      <LastGenOutput>QuestionnaireHistoryResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-
-  <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
-    <!-- As part of publishing, ensure the JS resources are freshly built in production mode. https://docs.npmjs.com/cli/ci.html -->
-    <Exec WorkingDirectory="$(SpaRoot)" Command="npm ci" Condition="'$(SkipSpaBuild)' != 'true'" />
-    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build" Condition="'$(SkipSpaBuild)' != 'true'" />
-
-    <!-- Include the newly-built files in the publish output -->
     <ItemGroup>
-      <DistFiles Include="$(SpaRoot)dist\**" />
-      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
-        <RelativePath>%(DistFiles.Identity)</RelativePath>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      </ResolvedFileToPublish>
+        <Content Update="**\*.json" CopyToPublishDirectory="Never"/>
+        <Content Update="wwwroot\**\*" CopyToPublishDirectory="PreserveNewest"/>
     </ItemGroup>
-  </Target>
+
+    <ItemGroup>
+        <PackageReference Include="FluentMigrator" Version="3.3.2"/>
+        <PackageReference Include="FluentMigrator.Runner.Core" Version="3.3.2"/>
+        <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.15"/>
+        <PackageReference Include="NJsonSchema" Version="10.9.0"/>
+        <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.6"/>
+        <PackageReference Include="SkiaSharp.QrCode" Version="0.6.0"/>
+        <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20071.2"/>
+        <PackageReference Include="FluentMigrator.Runner" Version="3.3.2"/>
+        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.11"/>
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.1"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.10"/>
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.11"/>
+        <PackageReference Include="reCAPTCHA.AspNetCore" Version="2.2.5"/>
+        <PackageReference Include="Serilog.AspNetCore" Version="7.0.0"/>
+        <PackageReference Include="SharpZipLib" Version="1.4.2"/>
+        <PackageReference Include="SixLabors.ImageSharp" Version="3.0.2"/>
+        <PackageReference Include="StackExchange.Exceptional.AspNetCore" Version="2.2.32"/>
+        <PackageReference Include="StackExchange.Exceptional.PostgreSql" Version="2.2.32"/>
+        <PackageReference Include="Shark.PdfConvert" Version="1.0.5"/>
+        <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="7.0.11"/>
+        <PackageReference Include="System.Data.SqlClient" Version="4.8.5"/>
+        <PackageReference Include="System.Drawing.Common" Version="7.0.0"/>
+    </ItemGroup>
+    <ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <PackageReference Include="Yarp.ReverseProxy" Version="2.0.1" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj"/>
+        <ProjectReference Include="..\..\Core\Infrastructure\WB.Infrastructure.AspNetCore\WB.Infrastructure.AspNetCore.csproj"/>
+        <ProjectReference Include="..\..\Infrastructure\WB.Persistence.Designer\WB.Persistence.Designer.csproj"/>
+        <ProjectReference Include="..\Shared\WB.UI.Shared.Web.Core\WB.UI.Shared.Web.Core.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Update="**\*.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+        </EmbeddedResource>
+        <EmbeddedResource Include="Code\ImportExport\QuestionnaireSchema.json"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="appsettings.ini" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true"/>
+        <Content Include="appsettings.*.ini" CopyToPublishDirectory="Never" ExcludeFromSingleFile="true">
+            <DependentUpon>appsettings.ini</DependentUpon>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="Resources\ErrorMessages.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>ErrorMessages.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\FindReplaceResources.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>FindReplaceResources.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\QuestionnaireController.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>QuestionnaireController.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\QuestionnaireEditor.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\QuestionnaireHistoryResources.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\QuestionnaireEditor.Designer.cs">
+            <AutoGen>True</AutoGen>
+            <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
+            <DesignTime>True</DesignTime>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="questionnaire-app" />
+    </ItemGroup>    
+    
+    <ItemGroup>
+        <EmbeddedResource Update="Resources\ErrorMessages.resx">
+            <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\FindReplaceResources.resx">
+            <LastGenOutput>FindReplaceResources.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\QuestionnaireController.resx">
+            <LastGenOutput>QuestionnaireController.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\QuestionnaireEditor.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>QuestionnaireEditor.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\QuestionnaireHistoryResources.resx">
+            <LastGenOutput>QuestionnaireHistoryResources.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+    </ItemGroup>
+
+    <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+        <!-- As part of publishing, ensure the JS resources are freshly built in production mode. https://docs.npmjs.com/cli/ci.html -->
+        <Exec WorkingDirectory="$(SpaRoot)" Command="npm ci" Condition="'$(SkipSpaBuild)' != 'true'"/>
+        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build" Condition="'$(SkipSpaBuild)' != 'true'"/>
+
+        <!-- Include the newly-built files in the publish output -->
+        <ItemGroup>
+            <DistFiles Include="$(SpaRoot)dist\**"/>
+            <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+                <RelativePath>%(DistFiles.Identity)</RelativePath>
+                <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+                <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+            </ResolvedFileToPublish>
+        </ItemGroup>
+    </Target>
 
 </Project>

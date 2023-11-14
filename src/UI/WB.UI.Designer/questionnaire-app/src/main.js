@@ -23,9 +23,6 @@ vue.use(pinia);
 vue.use(i18n);
 vue.use(uiv);
 
-vue.use(ConfirmDialog);
-vue.component('confirm-dialog', ConfirmDialog.default);
-
 //import { useQuestionnaireStore } from './store'
 //vue.provide('store', useQuestionnaireStore)
 
