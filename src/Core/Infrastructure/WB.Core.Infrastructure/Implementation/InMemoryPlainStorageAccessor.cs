@@ -34,8 +34,14 @@ namespace WB.Core.Infrastructure.Implementation
         {
             foreach (var entity in entities.ToList())
             {
-                var itemToRemove = this.InMemoryStorage.SingleOrDefault(x => x.Value.Equals(entity));
-                this.InMemoryStorage.TryRemove(itemToRemove.Key, out _);
+                var key = (object)entity;
+                if (this.InMemoryStorage.ContainsKey(key))
+                    this.InMemoryStorage.TryRemove(key, out _);
+                else
+                {
+                    var itemToRemove = this.InMemoryStorage.SingleOrDefault(x => x.Value.Equals(entity));
+                    this.InMemoryStorage.TryRemove(itemToRemove.Key, out _);
+                }
             }
         }
 
