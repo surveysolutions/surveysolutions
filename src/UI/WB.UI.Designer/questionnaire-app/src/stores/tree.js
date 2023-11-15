@@ -1,6 +1,6 @@
+@@ -0,0 +1,420 @@
 import { defineStore } from 'pinia';
 import { mande } from 'mande';
-import { useBlockUIStore } from './blockUI';
 import { newGuid } from '../helpers/guid';
 import { findIndex } from 'lodash';
 import { i18n } from '../plugins/localization';
@@ -328,7 +328,7 @@ export const useTreeStore = defineStore('tree', {
                 groupId: itemId
             };
 
-            return this.commandCall('DeleteGroup', command).then(function(
+            return commandCall('DeleteGroup', command).then(function(
                 result
             ) {
                 parent.items.splice(index, 0, group);
@@ -342,7 +342,7 @@ export const useTreeStore = defineStore('tree', {
                 questionId: itemId
             };
 
-            return this.commandCall('DeleteQuestion', command);
+            return commandCall('DeleteQuestion', command);
         },
 
         deleteVariable(itemId) {
@@ -351,7 +351,7 @@ export const useTreeStore = defineStore('tree', {
                 entityId: itemId
             };
 
-            return this.commandCall('DeleteVariable', command);
+            return commandCall('DeleteVariable', command);
         },
 
         deleteStaticText(itemId) {
@@ -360,7 +360,7 @@ export const useTreeStore = defineStore('tree', {
                 entityId: itemId
             };
 
-            return this.commandCall('DeleteStaticText', command);
+            return commandCall('DeleteStaticText', command);
         },
 
         moveItem(item, newParentId, index) {
@@ -382,7 +382,7 @@ export const useTreeStore = defineStore('tree', {
                 questionnaireId: this.questionnaireId
             };
 
-            return this.commandCall('MoveGroup', command);
+            return commandCall('MoveGroup', command);
         },
 
         moveQuestion(questionId, index, destGroupId) {
@@ -393,7 +393,7 @@ export const useTreeStore = defineStore('tree', {
                 questionnaireId: this.questionnaireId
             };
 
-            return this.commandCall('MoveQuestion', command);
+            return commandCall('MoveQuestion', command);
         },
 
         moveStaticText(entityId, index, destGroupId) {
@@ -404,7 +404,7 @@ export const useTreeStore = defineStore('tree', {
                 questionnaireId: this.questionnaireId
             };
 
-            return this.commandCall('MoveStaticText', command);
+            return commandCall('MoveStaticText', command);
         },
 
         moveVariable(entityId, index, destGroupId) {
@@ -415,7 +415,7 @@ export const useTreeStore = defineStore('tree', {
                 questionnaireId: this.questionnaireId
             };
 
-            return this.commandCall('MoveVariable', command);
+            return commandCall('MoveVariable', command);
         }
     }
 });
