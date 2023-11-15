@@ -118,25 +118,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Headquarter" xml:space="preserve">
-    <value>Velitelství</value>
+    <value>Ústředí</value>
   </data>
   <data name="Supervisor" xml:space="preserve">
-    <value>Vedoucí</value>
+    <value>Garant</value>
   </data>
   <data name="Administrator" xml:space="preserve">
-    <value>Správce</value>
+    <value>Administrátor</value>
   </data>
   <data name="ApiUser" xml:space="preserve">
-    <value>Uživatel rozhraní API</value>
+    <value>Api Uživatel</value>
   </data>
   <data name="FileContentIsMissingForFileNameAndInterviewFormat" xml:space="preserve">
-    <value>Chybí obsah souboru pro název souboru {0} pohovoru {1}</value>
+    <value>Chybí obsah souboru {0} rozhovor {1}</value>
   </data>
   <data name="Interviewer" xml:space="preserve">
     <value>Tazatel</value>
   </data>
   <data name="InterviewWithIdIsAbsentFormat" xml:space="preserve">
-    <value>Chybí rozhovor s id "{0}"</value>
+    <value>Chybí rozhovor s ID '{0}'</value>
   </data>
   <data name="UnknownRole" xml:space="preserve">
     <value>&lt;NEZNÁMÁ ROLE&gt;</value>

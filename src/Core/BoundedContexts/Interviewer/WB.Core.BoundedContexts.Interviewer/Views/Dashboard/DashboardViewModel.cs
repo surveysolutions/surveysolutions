@@ -207,7 +207,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         });
 
         public IMvxAsyncCommand NavigateToMapDashboardCommand =>
-            new MvxAsyncCommand(async () => await NavigateToMapDashboard(), () => !string.IsNullOrEmpty(this.principal.CurrentUserIdentity.Workspace));
+            new MvxAsyncCommand(async () => await NavigateToMapDashboard(), 
+                () => !string.IsNullOrEmpty(CurrentWorkspace));
 
         private async Task NavigateToMapDashboard()
         {
@@ -511,7 +512,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private void StopDiscovery() => this.nearbyConnection.StopDiscovery();
 
         protected override string GetDeviceIdentification() =>
-            ((InterviewerIdentity)this.principal.CurrentUserIdentity).SupervisorId.FormatGuid() + this.principal.CurrentUserIdentity.Workspace;
+            ((InterviewerIdentity)this.principal.CurrentUserIdentity).SupervisorId.FormatGuid() + CurrentWorkspace;
 
         public void ShowSynchronizationError(string error)
         {
