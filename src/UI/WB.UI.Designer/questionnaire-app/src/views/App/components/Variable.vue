@@ -71,11 +71,14 @@
                     <help key="variableDescription"
                 /></label>
                 <div class="pseudo-form-control">
-                    <div
+                    <!--div
                         id="edit-variable-title-highlight"
                         ui-ace="{ onLoad : setupAceForSubstitutions, require: ['ace/ext/language_tools'] }"
                         ng-model="activeVariable.label"
-                    ></div>
+                    ></div-->
+                    <ExpressionEditor
+                        v-model="activeVariable.label"
+                    ></ExpressionEditor>
                 </div>
             </div>
             <div class="form-group">
@@ -109,7 +112,7 @@
         <div class="form-buttons-holder">
             <div class="pull-left">
                 <button
-                    type="submit"
+                    type="button"
                     v-show="!questionnaire.isReadOnlyForUser"
                     id="edit-chapter-save-button"
                     class="btn btn-lg"
@@ -194,7 +197,7 @@ export default {
     watch: {
         activeVariable: {
             handler(newVal, oldVal) {
-                this.dirty = true;
+                if (oldVal != null) this.dirty = true;
             },
             deep: true
         }
@@ -219,10 +222,12 @@ export default {
             this.activeVariable = this.variableStore.getData;
         },
         saveVariable() {
-            //
+            this.variableStore.saveVariableData();
+            this.dirty = false;
         },
         cancel() {
-            //
+            this.variableStore.discardChanges();
+            this.dirty = false;
         },
         setType(newType) {
             //

@@ -5,9 +5,9 @@ import { newGuid } from '../helpers/guid';
 import { findIndex } from 'lodash';
 import { i18n } from '../plugins/localization';
 import { useCookies } from 'vue3-cookies';
+import { commandCall } from '../services/commandService';
 
 const api = mande('/api/questionnaire/chapter/' /*, globalOptions*/);
-const commandsApi = mande('/api/command' /*, globalOptions*/);
 
 export const useTreeStore = defineStore('tree', {
     state: () => ({
@@ -52,13 +52,13 @@ export const useTreeStore = defineStore('tree', {
                 command.index = index;
             }
 
-            return this.commandCall('AddDefaultTypeQuestion', command).then(
-                function(result) {
-                    parent.items.splice(index, 0, emptyQuestion);
-                    callback(emptyQuestion, parent, index);
-                    //emitAddedItemState('question', emptyQuestion.itemId);
-                }
-            );
+            return commandCall('AddDefaultTypeQuestion', command).then(function(
+                result
+            ) {
+                parent.items.splice(index, 0, emptyQuestion);
+                callback(emptyQuestion, parent, index);
+                //emitAddedItemState('question', emptyQuestion.itemId);
+            });
         },
         createEmptyQuestion(parent) {
             var newId = newGuid();
@@ -103,7 +103,7 @@ export const useTreeStore = defineStore('tree', {
                 command.index = index;
             }
 
-            return this.commandCall('AddGroup', command).then(function(result) {
+            return commandCall('AddGroup', command).then(function(result) {
                 parent.items.splice(index, 0, group);
                 callback(group, parent, index);
             });
@@ -151,7 +151,7 @@ export const useTreeStore = defineStore('tree', {
                 command.index = index;
             }
 
-            return this.commandCall('AddGroup', command).then(function(result) {
+            return commandCall('AddGroup', command).then(function(result) {
                 parent.items.splice(index, 0, group);
                 callback(group, parent, index);
             });
@@ -189,9 +189,7 @@ export const useTreeStore = defineStore('tree', {
                 command.index = index;
             }
 
-            return this.commandCall('AddStaticText', command).then(function(
-                result
-            ) {
+            return commandCall('AddStaticText', command).then(function(result) {
                 parent.items.splice(index, 0, staticText);
                 callback(staticText, parent, index);
             });
@@ -229,9 +227,7 @@ export const useTreeStore = defineStore('tree', {
                 command.index = index;
             }
 
-            return this.commandCall('AddVariable', command).then(function(
-                result
-            ) {
+            return commandCall('AddVariable', command).then(function(result) {
                 parent.items.splice(index, 0, variable);
                 callback(variable, parent, index);
             });
@@ -290,7 +286,7 @@ export const useTreeStore = defineStore('tree', {
                 questionnaireId: this.questionnaireId
             };
 
-            return this.commandCall('PasteInto', command).then(() =>
+            return commandCall('PasteInto', command).then(() =>
                 this.fetchTree(this.questionnaireId, this.chapterId)
             );
         },
@@ -311,26 +307,9 @@ export const useTreeStore = defineStore('tree', {
                 itemToPasteAfterId: afterNode.itemId
             };
 
-            return this.commandCall('PasteAfter', command).then(() =>
+            return commandCall('PasteAfter', command).then(() =>
                 this.fetchTree(this.questionnaireId, this.chapterId)
             );
-        },
-
-        async commandCall(type, command) {
-            const blockUI = useBlockUIStore();
-            if (type.indexOf('Move') < 0) {
-                blockUI.start();
-            }
-
-            return commandsApi
-                .post({
-                    type: type,
-                    command: JSON.stringify(command)
-                })
-                .then(response => {
-                    blockUI.stop();
-                    return response;
-                });
         },
 
         getItemIndexByIdFromParentItemsList(parent, id) {

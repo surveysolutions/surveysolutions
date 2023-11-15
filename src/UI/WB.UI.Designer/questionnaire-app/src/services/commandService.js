@@ -1,31 +1,21 @@
-import axios from 'axios';
+import { mande } from 'mande';
+import { useBlockUIStore } from '../stores/blockUI';
 
-axios.defaults.headers.common['Content-Type'] = 'application/json';
+const commandsApi = mande('/api/command' /*, globalOptions*/);
 
-class CommandService {
-  urlBase = '../../api/';
-  urlCommands = urlBase + 'command';
-
-  commandCall(type, command) {
-    if (type.indexOf('Move') < 0) {
+export function commandCall(commandType, command) {
+    const blockUI = useBlockUIStore();
+    if (commandType.indexOf('Move') < 0) {
         blockUI.start();
     }
-    return $http({
-        method: 'POST',
-        url: urlCommands,
-        data: {
-            "type": type,
-            "command": JSON.stringify(command)
-        },
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
-    }).then(function (response) {
-        blockUI.stop();
-        return response;
-    }, function (response) {
-        blockUI.stop();
-        return $q.reject(response);
-    });
-}
-}
 
-export default CommandService
+    return commandsApi
+        .post({
+            type: commandType,
+            command: JSON.stringify(command)
+        })
+        .then(response => {
+            blockUI.stop();
+            return response;
+        });
+}
