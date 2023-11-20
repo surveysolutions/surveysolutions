@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -88,20 +90,29 @@ namespace WB.UI.Headquarters.Controllers.Api
         public async Task<IActionResult> RemoveExportCache()
         {
             if (await this.IsExistsDataExportInProgress())
-                return StatusCode((int)HttpStatusCode.Forbidden,new {message = DataExport.ErrorThereAreRunningProcesses});
+                return StatusCode((int)HttpStatusCode.Forbidden,new {message = DataExport.RemoveExportCacheGeneratingFail});
 
-            this.logger.LogInformation("Start to remove export cache by {User}.", new {User = base.User.Identity.Name});
+            await RunClearExportData();
+
+            return new JsonResult(new { Success = true });
+        }
+
+        private async Task RunClearExportData()
+        {
+            this.logger.LogInformation("Start to remove export cache by {User}.", new { User = base.User.Identity.Name });
 
             try
             {
-                await exportServiceApi.DeleteTenant();
+                var status = await exportServiceApi.StatusDeleteTenant();
+                if (status.Status != StopTenantStatus.Removing)
+                    await exportServiceApi.DeleteTenant();
             }
             catch (Exception e)
             {
                 this.logger.LogError(e, "Fail to remove Export service tenant.");
                 throw;
             }
-            
+
             try
             {
                 await this.ClearExportData();
@@ -112,9 +123,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 throw;
             }
 
-            this.logger.LogInformation("End to remove export cache by {User}.", new {User = base.User.Identity.Name});
-
-            return new JsonResult(new { Success = true });
+            this.logger.LogInformation("End to remove export cache by {User}.", new { User = base.User.Identity.Name });
         }
 
         private Task ClearExportData()
@@ -125,6 +134,30 @@ namespace WB.UI.Headquarters.Controllers.Api
         private async Task<bool> IsExistsDataExportInProgress()
         {
             return (await this.exportServiceApi.GetRunningExportJobs()).Any();
+        }
+        
+        [HttpGet]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> StatusExportCache()
+        {
+            if (await this.IsExistsDataExportInProgress())
+                return StatusCode((int)HttpStatusCode.Forbidden,new {message = DataExport.RemoveExportCacheGeneratingFail});
+
+            try
+            {
+                var status = await exportServiceApi.StatusDeleteTenant();
+                return new JsonResult(new
+                {
+                    Success = true,
+                    Status = status.Status,
+                });
+            }
+            catch (Exception e)
+            {
+                this.logger.LogError(e, "Fail to check status of remove Export service tenant.");
+                throw;
+            }
+            
         }
     }
 }
