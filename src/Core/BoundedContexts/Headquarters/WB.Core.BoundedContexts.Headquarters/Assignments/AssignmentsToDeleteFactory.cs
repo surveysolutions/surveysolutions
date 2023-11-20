@@ -26,6 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             await this.sessionFactory.Session.Query<Assignment>()
                 .Where(a => a.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId
                             && a.QuestionnaireId.Version == questionnaireIdentity.Version)
+                .WithOptions(o => { o.SetTimeout(300); })
                 .DeleteAsync();
         }
 
