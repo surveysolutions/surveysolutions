@@ -92,7 +92,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             if (await this.IsExistsDataExportInProgress())
                 return StatusCode((int)HttpStatusCode.Forbidden,new {message = DataExport.RemoveExportCacheGeneratingFail});
 
-            await RunClearExportData();
+            Task.Run(RunClearExportData).Wait(TimeSpan.FromSeconds(2));
 
             return new JsonResult(new { Success = true });
         }
