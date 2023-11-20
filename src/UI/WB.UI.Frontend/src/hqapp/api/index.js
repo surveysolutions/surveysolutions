@@ -534,13 +534,20 @@ class ExportSettings {
             })
     }
 
-    removeExportCache() {
-        return this.http(
-            {
+    dropExportCache() {
+        return this.http({
                 method: 'delete',
                 url: `${this.base}/RemoveExportCache`,
                 headers: {'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie()},
             })
+    }
+
+    statusDropExportCache() {
+        return this.http({
+            method: 'get',
+            url: `${this.base}/StatusExportCache`,
+            headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
+        })
     }
 }
 
