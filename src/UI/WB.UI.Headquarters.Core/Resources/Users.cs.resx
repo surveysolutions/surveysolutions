@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AddSupervisor" xml:space="preserve">
-    <value>Zadat garanta</value>
+    <value>Zadat Garanta</value>
   </data>
   <data name="AddUser" xml:space="preserve">
     <value>Zadat uživatele</value>
@@ -154,7 +154,7 @@
     <value>API Uživatelé ({{count}})</value>
   </data>
   <data name="ArchivedSupervisors" xml:space="preserve">
-    <value>Neaktivní garanti</value>
+    <value>Neaktivní Garanti</value>
   </data>
   <data name="ArchivingStatusTitle" xml:space="preserve">
     <value>Stav účtu</value>
@@ -178,7 +178,7 @@
     <value>Vytvořte Pozorovatele</value>
   </data>
   <data name="CreateSupervisor" xml:space="preserve">
-    <value>Vytvořit garanta</value>
+    <value>Vytvořit Garanta</value>
   </data>
   <data name="CreationDate" xml:space="preserve">
     <value>Účet vytvořen dne</value>
@@ -202,16 +202,16 @@
     <value>Uzamčení uživatelé</value>
   </data>
   <data name="Filter_WithDisabledWorkspaces" xml:space="preserve">
-    <value>Pouze deaktivované prostředí</value>
+    <value>Pouze se zakázanými úlohami</value>
   </data>
   <data name="Filter_WithMissingWorkspace" xml:space="preserve">
-    <value>Chybí prostředí</value>
+    <value>Chybí úloha</value>
   </data>
   <data name="FinishInstallation" xml:space="preserve">
     <value>Dokončit instalaci</value>
   </data>
   <data name="HeadquarterAccountCreationDate" xml:space="preserve">
-    <value>Datum vytvoření účtu ústředí</value>
+    <value>Datum vytvoření účetu Ústředí</value>
   </data>
   <data name="Headquarters" xml:space="preserve">
     <value>Ústředí</value>
@@ -220,7 +220,7 @@
     <value>Ústředí ({{count}})</value>
   </data>
   <data name="HeadquartersEmail" xml:space="preserve">
-    <value>E-mail Ústředí</value>
+    <value>Email Ústředí</value>
   </data>
   <data name="ImpersonateAsUser" xml:space="preserve">
     <value>Zobrazit jako tento uživatel v režimu pouze pro čtení</value>
@@ -277,16 +277,16 @@
     <value>Obnovit uživatelské heslo</value>
   </data>
   <data name="SupervisorAccountCreationDate" xml:space="preserve">
-    <value>Datum vytvoření účtu garanta</value>
+    <value>Datum vytvoření účetu Garanta</value>
   </data>
   <data name="SupervisorEmail" xml:space="preserve">
-    <value>E-mail garanta</value>
+    <value>E-mail Garanta</value>
   </data>
   <data name="Supervisors" xml:space="preserve">
     <value>Garanti</value>
   </data>
   <data name="Supervisors_Edit" xml:space="preserve">
-    <value>Upravit garanta</value>
+    <value>Upravit Garanta</value>
   </data>
   <data name="SupervisorsCountDescription" xml:space="preserve">
     <value>Garanti ({{count}})</value>

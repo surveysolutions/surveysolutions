@@ -4714,7 +4714,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You will archive supervisors and interviewers within their teams. Interviewers assigned to archived supervisors will be archived in ALL workspaces. Any remaining non synchronized data at the devices of archived users (interviewers or supervisors) will not be transmitted to the server..
+        ///   Looks up a localized string similar to You will archive supervisors and interviewers within theirs team. Interviewers assigned to archived supervisor will be also archived in all workspaces. If interviewers have any non synchronized data on tablets it will be deleted..
         /// </summary>
         public static string Users_ArchiveUsersConfirmMessage {
             get {

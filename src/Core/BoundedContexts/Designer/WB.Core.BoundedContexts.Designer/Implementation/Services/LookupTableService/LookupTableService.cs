@@ -199,20 +199,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
         private LookupTableContent CreateLookupTableContent(string fileContent)
         {
-            using (var csvReader = new CsvParser(new StringReader(fileContent), this.CreateCsvConfiguration()))
+            using (var csvReader = new CsvReader(new StringReader(fileContent), this.CreateCsvConfiguration()))
             {
                 var rows = new List<LookupTableRow>();
 
-                if (!csvReader.Read())
+                if (!csvReader.Read() || !csvReader.ReadHeader() || !csvReader.Read())
                 {
                     throw new ArgumentException(ExceptionMessages.LookupTables_cant_has_empty_content);
                 }
 
-                var fieldHeaders = csvReader.Record?.Select(x => x.Trim()).ToArray();
-                if (fieldHeaders == null)
-                {
-                    throw new ArgumentException(ExceptionMessages.LookupTables_cant_has_empty_content);
-                }
+                var fieldHeaders = csvReader.Context.HeaderRecord.Select(x => x.Trim()).ToArray();
 
                 var amountOfHeaders = fieldHeaders.Length;
 
@@ -239,19 +235,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                 }
                 int rowCurrentRowNumber = 1;
 
-                if (!csvReader.Read())
-                {
-                    throw new ArgumentException(ExceptionMessages.LookupTables_cant_has_empty_content);
-                }
-                
                 do
                 {
                     var variables = new List<decimal?>();
                     var row = new LookupTableRow();
-                    var record = csvReader.Record;
-                    
-                    if (record == null)
-                        continue;
+                    var record = csvReader.Context.Record;
 
                     for (int i = 0; i < amountOfHeaders; i++)
                     {
@@ -336,7 +324,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             {
                 HasHeaderRecord = true,
                 TrimOptions = TrimOptions.Trim,
-                Mode = CsvMode.RFC4180,
+                IgnoreQuotes = false,
                 Delimiter = DELIMETER,
                 MissingFieldFound = null
             };

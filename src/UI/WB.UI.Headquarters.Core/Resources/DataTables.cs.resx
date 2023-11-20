@@ -145,7 +145,7 @@
     <value>Zobrazuje se 0 až 0 z 0 záznamů</value>
   </data>
   <data name="InfoFiltered" xml:space="preserve">
-    <value>(vyfiltrováno z _MAX_ celkových položek)</value>
+    <value>(vyfiltorváno z _MAX_ total položek)</value>
   </data>
   <data name="InfoThousands" xml:space="preserve">
     <value>.</value>

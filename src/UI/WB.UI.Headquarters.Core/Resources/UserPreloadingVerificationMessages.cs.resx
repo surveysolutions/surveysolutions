@@ -184,19 +184,19 @@
     <value>Role '{0}' je neplatná</value>
   </data>
   <data name="PLU0009Recomendation" xml:space="preserve">
-    <value>Povolen je pouze "garant“ nebo "tazatel“</value>
+    <value>Povolen je pouze "Garant“ nebo "tazatel“</value>
   </data>
   <data name="PLU0010" xml:space="preserve">
     <value>Chyba závislosti</value>
   </data>
   <data name="PLU0010Description" xml:space="preserve">
-    <value>Garant '{0}' nebyl v prostředí nalezen</value>
+    <value>Garant '{0}' nebyl v úloze nalezen</value>
   </data>
   <data name="PLU0011" xml:space="preserve">
     <value>Chyba závislosti</value>
   </data>
   <data name="PLU0011Description" xml:space="preserve">
-    <value>Sloupec Garant by měl být prázdný pro roli garanta</value>
+    <value>Sloupec Garant by měl být prázdný pro roli Garanta</value>
   </data>
   <data name="PLU0012" xml:space="preserve">
     <value>Špatná délka jména tazatele</value>
@@ -223,7 +223,7 @@
     <value>Celé jméno '{0}' obsahuje neplatné znaky</value>
   </data>
   <data name="PLU0014Recomendation" xml:space="preserve">
-    <value>Jsou povolena pouze písmena, tečky, mezery a pomlčky</value>
+    <value>Jsou povolena pouze písmena, tečky, mezery a polmčky</value>
   </data>
   <data name="PLU0015" xml:space="preserve">
     <value>Heslo je příliš krátké</value>
@@ -289,12 +289,12 @@
     <value>Přidat heslo</value>
   </data>
   <data name="PLU0022" xml:space="preserve">
-    <value>Prostředí nenalezeno</value>
+    <value>Úloha nenalezena</value>
   </data>
   <data name="PLU0022Description" xml:space="preserve">
-    <value>Prostředí musí existovat a být povoleno</value>
+    <value>Úloha musí existovat a být povolena</value>
   </data>
   <data name="PLU0022Recomendation" xml:space="preserve">
-    <value>Zkontrolujte název prostředí</value>
+    <value>Zkontrolujte název úlohy</value>
   </data>
 </root>

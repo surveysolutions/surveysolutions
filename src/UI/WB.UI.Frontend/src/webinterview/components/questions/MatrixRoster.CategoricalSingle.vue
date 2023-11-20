@@ -16,17 +16,17 @@
                         {{ $t("WebInterviewUI.AnswerWasNotSaved") }}
                     </h6>
                     <template v-for="message in question.validity.messages">
-                        <div v-dateTimeFormatting
+                        <span v-dateTimeFormatting
                             v-html="message"
-                            :key="message"></div>
+                            :key="message"></span>
                     </template>
                 </div>
                 <div class="warning-tooltip"
                     v-else-if="question.validity.warnings.length > 0">
                     <template v-for="message in question.validity.warnings">
-                        <div v-dateTimeFormatting
+                        <span v-dateTimeFormatting
                             v-html="message"
-                            :key="message"></div>
+                            :key="message"></span>
                     </template>
                 </div>
             </template>
@@ -48,8 +48,7 @@
                     :disabled="disabled"
                     v-model="answer"
                     @change="change">
-                <label :for="$me.id + '_' + option.value" 
-                    style="padding-top:10px;padding-bottom: 10px;">
+                <label :for="$me.id + '_' + option.value">
                     <span class="tick"></span>
                 </label>
 

@@ -24,23 +24,20 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
 
         public IEnumerable<string[]> ReadRowsWithHeader(Stream csvFileStream, string delimiter)
         {
-            var configuration = new CsvConfiguration(CultureInfo.InvariantCulture)
-            {
-                Delimiter = delimiter,
-                Mode = CsvMode.NoEscape,
-            };
-            using var csvReader = new CsvHelper.CsvReader(new StreamReader(csvFileStream), configuration);
+            using var csvReader = new CsvHelper.CsvReader(new StreamReader(csvFileStream), CultureInfo.InvariantCulture);
+            csvReader.Configuration.Delimiter = delimiter;
+            csvReader.Configuration.IgnoreQuotes = true;
             csvReader.Read();
             csvReader.ReadHeader();
 
-            if (csvReader.HeaderRecord != null && csvReader.HeaderRecord.Length > 0)
+            if (csvReader.Context.HeaderRecord != null && csvReader.Context.HeaderRecord.Length > 0)
             {
-                yield return csvReader.HeaderRecord;
+                yield return csvReader.Context.HeaderRecord;
             }
 
             while (csvReader.Read())
-                yield return csvReader.HeaderRecord.Select((x, index) =>
-                    index < csvReader.Parser.Record.Length ? csvReader.GetField(x) : null).ToArray();
+                yield return csvReader.Context.HeaderRecord.Select((x, index) =>
+                    index < csvReader.Context.Record.Length ? csvReader.GetField(x) : null).ToArray();
         }
 
         public IEnumerable<dynamic> GetRecords(Stream csvFileStream, string delimiter)
@@ -60,9 +57,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
             using (var parser = new CsvParser(new StreamReader(csvFileStream),
                 GetConfiguration(delimiter, true), true))
             {
-                return parser.Read()
-                    ? parser.Record
-                    : new string[] { };
+                return parser.Read() ?? new string[] { };
             }
         }
 
@@ -73,11 +68,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
                 MissingFieldFound = null,
                 Delimiter = delimiter,
                 HasHeaderRecord = hasHeaderRow,
-                Mode = CsvMode.NoEscape,
+                IgnoreQuotes = true
             };
 
             if (ignoreCameCase)
-                configuration.PrepareHeaderForMatch = (s) => s.Header.ToLower();
+                configuration.PrepareHeaderForMatch = (s, index) => s.ToLower();
 
             return configuration;
         }

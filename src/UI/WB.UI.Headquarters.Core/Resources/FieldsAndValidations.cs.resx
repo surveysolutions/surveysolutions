@@ -175,10 +175,10 @@
     <value>Neplatný uživatel</value>
   </data>
   <data name="IsLockedBySupervisorFieldName" xml:space="preserve">
-    <value>Je uzamčeno garantem</value>
+    <value>Je uzamčeno Garantem</value>
   </data>
   <data name="IsLockedFieldName" xml:space="preserve">
-    <value>Je uzamčen adminem nebo ústředím</value>
+    <value>Je uzamčen Adminem nebo Ústředím</value>
   </data>
   <data name="LogOnModel_Password" xml:space="preserve">
     <value>Heslo</value>
@@ -259,7 +259,7 @@
     <value>Musíte vybrat soubor, který chcete nahrát</value>
   </data>
   <data name="UserIsLockedByHq" xml:space="preserve">
-    <value>Uživatel je uzamčen ústředím</value>
+    <value>Uživatel je uzamčen Ústředím</value>
   </data>
   <data name="UserName_Taken" xml:space="preserve">
     <value>Vyberte prosím jiné uživatelské jméno</value>
@@ -277,12 +277,12 @@
     <value>Ověřovací kód</value>
   </data>
   <data name="WorkspaceMissing" xml:space="preserve">
-    <value>Prostředí nenalezeno</value>
+    <value>Úloha nenalezena</value>
   </data>
   <data name="WorkspaceRequired" xml:space="preserve">
-    <value>Nutné zvolení prostředí</value>
+    <value>Je vyžadována úloha</value>
   </data>
   <data name="AllowRelinkTablet" xml:space="preserve">
-    <value>Povolit opětovné propojení s jiným zařízením kvůli ztrátě dat na původním zařízení.</value>
+    <value>Povolit opětovné propojení s jiným zařízením se ztrátou dat na původním zařízení.</value>
   </data>
 </root>

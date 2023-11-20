@@ -127,13 +127,13 @@
     <value>Aktivní tazatelé</value>
   </data>
   <data name="ActiveSupervisors" xml:space="preserve">
-    <value>Aktivní garanti</value>
+    <value>Aktivní Garanti</value>
   </data>
   <data name="ArchivedInterviewers" xml:space="preserve">
     <value>Neaktivní tazatelé</value>
   </data>
   <data name="ArchivedSupervisors" xml:space="preserve">
-    <value>Neaktivní garanti</value>
+    <value>Neaktivní Garanti</value>
   </data>
   <data name="CreationDate" xml:space="preserve">
     <value>Datum vytvoření</value>
@@ -151,6 +151,6 @@
     <value>Tazatel(é) budou znovu aktivováni.</value>
   </data>
   <data name="UnarchiveSupervisorWarning" xml:space="preserve">
-    <value>Garant/i budou aktivováni</value>
+    <value>Garant/i budou zaktivováni</value>
   </data>
 </root>

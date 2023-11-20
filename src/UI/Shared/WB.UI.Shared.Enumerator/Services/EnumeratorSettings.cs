@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Android.App;
 using Android.Content.PM;
-using Android.Gms.Common;
 using Android.OS;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
@@ -133,7 +132,6 @@ namespace WB.UI.Shared.Enumerator.Services
                                                          $"Device model: {this.GetDeviceModel()} {Environment.NewLine}" +
                                                          $"Device type: {this.GetDeviceType()} {Environment.NewLine}" +
                                                          $"Android version: {GetAndroidVersion()} {Environment.NewLine}" +
-                                                         $"Google Play services version: {GetGooglePlayServicesVersion()} {Environment.NewLine}"+
                                                          $"DeviceId: {this.GetDeviceId()} {Environment.NewLine}" +
                                                          $"RAM: {GetRAMInformation()} {Environment.NewLine}" +
                                                          $"Disk: {GetDiskInformation()} {Environment.NewLine}" +
@@ -153,23 +151,6 @@ namespace WB.UI.Shared.Enumerator.Services
         public string GetDeviceType() => Xamarin.Essentials.DeviceInfo.Idiom.ToString();
 
         public string GetAndroidVersion() => Build.VERSION.Release;
-
-        public string GetGooglePlayServicesVersion()
-        {
-            try
-            {
-                PackageInfo pi =
-                    Application.Context.PackageManager.GetPackageInfo(GoogleApiAvailability.GooglePlayServicesPackage,
-                        0);
-                if (pi == null)
-                    return String.Empty;
-
-                return pi.VersionName;
-            }
-            catch { }
-
-            return string.Empty;
-        }
 
         public void SetEventChunkSize(int eventChunkSize)
         {
@@ -240,7 +221,7 @@ namespace WB.UI.Shared.Enumerator.Services
         private string GetRAMInformation()
             => AndroidInformationUtils.GetRAMInformation();
 
-        public string GetDiskInformation()
+        private string GetDiskInformation()
             => AndroidInformationUtils.GetDiskInformation();
 
         public string GetDataBaseSize() => 

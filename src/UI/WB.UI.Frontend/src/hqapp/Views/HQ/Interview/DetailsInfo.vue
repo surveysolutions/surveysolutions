@@ -361,7 +361,7 @@
                                 rejectToNewResponsible == true ||
                                 interviewerShouldbeSelected
                             "
-                            control-id="rejectResponsibleId"
+                            control-id="newResponsibleId"
                             :placeholder="$t('Common.Responsible')"
                             :value="newResponsibleId"
                             @selected="newResponsibleSelected"

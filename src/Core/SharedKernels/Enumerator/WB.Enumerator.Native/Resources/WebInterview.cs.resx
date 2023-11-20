@@ -200,7 +200,7 @@ Děkujeme za spolupráci!</value>
     <value>Informace rozhovoru byly zaznamenány. Nejsou potřeba žádné další kroky.</value>
   </data>
   <data name="Error_NotFound" xml:space="preserve">
-    <value>Rozhovor nebyl nalezen nebo není potřeba</value>
+    <value>Rozhovor nebyl nalezen</value>
   </data>
   <data name="Error_UserNotAuthorised" xml:space="preserve">
     <value>Uživatel nemá oprávnění</value>
@@ -218,7 +218,7 @@ Děkujeme za spolupráci!</value>
     <value>Pro tazatele</value>
   </data>
   <data name="Filters_ForSupervisor" xml:space="preserve">
-    <value>Pro garanta</value>
+    <value>Pro Garanta</value>
   </data>
   <data name="Filters_Invalid" xml:space="preserve">
     <value>Neplatný</value>
@@ -287,7 +287,7 @@ Děkujeme za spolupráci!</value>
     <value>Nelze upravit rozhovor, který byl stažen do tabletu</value>
   </data>
   <data name="InterviewSizeLimitReached" xml:space="preserve">
-    <value>V dotazníku je překročen limit pro celkový počet seznamů (rosterů) a otázek.</value>
+    <value>V dotazníku je překročen limit pro celkový počet seznamů a otázek.</value>
   </data>
   <data name="InterviewStartDateFormatText" xml:space="preserve">
     <value>Datum zahájení rozhovoru:</value>
@@ -302,10 +302,10 @@ Děkujeme za spolupráci!</value>
     <value>Byli jste pozváni k účasti v následujícím šetření: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="NoteForSupervisor" xml:space="preserve">
-    <value>Poznámka pro garanta</value>
+    <value>Poznámka pro Garanta</value>
   </data>
   <data name="NotStartedText" xml:space="preserve">
-    <value>Ještě nezačaté</value>
+    <value>Ještě nezačnuté</value>
   </data>
   <data name="Original_Language" xml:space="preserve">
     <value>Původní</value>
@@ -374,6 +374,6 @@ Děkujeme za spolupráci!</value>
     <value>{0} (ver. {1})</value>
   </data>
   <data name="AssignmentLimitReached" xml:space="preserve">
-    <value>Vyplňme všechny rozhovory v tomto šetření</value>
+    <value>Shromažďujeme všechny rozhovory v tomto průzkumu.</value>
   </data>
 </root>

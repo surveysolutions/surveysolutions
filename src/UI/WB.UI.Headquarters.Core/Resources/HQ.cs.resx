@@ -142,13 +142,13 @@
     <value>Garant &lt;b&gt;{0}&lt;/b&gt; byl úspěšně vytvořen.</value>
   </data>
   <data name="SupervisorNotFound" xml:space="preserve">
-    <value>Lze vytvořit tazatele. Vybraný garant neexistuje, je uzamčen nebo archivován</value>
+    <value>Lze vytvořit tazatele. Vybraný Garant neexistuje</value>
   </data>
   <data name="UserNotExists" xml:space="preserve">
     <value>Informace o uživateli nelze aktualizovat, protože uživatel neexistuje</value>
   </data>
   <data name="UserWasCreatedFormat" xml:space="preserve">
-    <value>Uživatel ústředí {0} byl úspěšně vytvořen.</value>
+    <value>Uživatel Ústředí {0} byl úspěšně vytvořen.</value>
   </data>
   <data name="UserWasUpdatedFormat" xml:space="preserve">
     <value>Informace o &lt;b&gt;{0}&lt;/b&gt; byly úspěšně aktualizovány</value>

@@ -44,10 +44,7 @@ namespace WB.UI.Supervisor
         {
             var logger = Mvx.IoCProvider.Resolve<ILoggerProvider>().GetFor<SupervisorAppStart>();
             logger.Info($"Application started. Version: {this.deviceSettings.GetApplicationVersionName()}");
-            logger.Info($"Android Version: {this.deviceSettings.GetAndroidVersion()}");
-            logger.Info($"Google Play Services Version: {this.deviceSettings.GetGooglePlayServicesVersion()}");
-            logger.Info($"Disk: {this.deviceSettings.GetDiskInformation()}");
-            
+
             this.migrationRunner.MigrateUp("Supervisor", this.GetType().Assembly, typeof(Encrypt_Data).Assembly);
 
             return base.ApplicationStartup(hint);

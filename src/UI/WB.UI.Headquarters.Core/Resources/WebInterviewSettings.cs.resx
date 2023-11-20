@@ -148,7 +148,7 @@
     <value>%question_variable:qrcode% - zobraz odpověď jako QR Code</value>
   </data>
   <data name="NoteToSupervisor" xml:space="preserve">
-    <value>Poznámka pro garanta</value>
+    <value>Poznámka pro Garanta</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Uložit</value>
@@ -181,7 +181,7 @@
     <value>Předmět:</value>
   </data>
   <data name="EmailTemplateDescription" xml:space="preserve">
-    <value>Jako název šetření můžete použít náhradu %SURVEYNAME%.</value>
+    <value>Jako název průzkumu můžete v textu použít náhradu %SURVEYNAME%.</value>
   </data>
   <data name="ExampleFinishPage" xml:space="preserve">
     <value>Příklad konečné stránky</value>
@@ -208,7 +208,7 @@
     <value>Dokončit stránku</value>
   </data>
   <data name="InterviewDataInsertInTextDescription" xml:space="preserve">
-    <value>V této e-mailové šabloně můžete použít zástupný symbol %question_variable% v textu, jako odpověď na otázku v rozhovoru. Otázka musí být z nejvyšší úrovně typu dotazníku (ne uvnitř rosteru).</value>
+    <value>V této e-mailové šambolně můžete použít zástupný symbol %question_variable% v textu jako odpověď na otázku v rozhovoru. Otázka musí být z nejvyšší úrovně typu dotazníku (ne uvnitř rosteru).</value>
   </data>
   <data name="Invitation" xml:space="preserve">
     <value>Pozvánka</value>
@@ -268,7 +268,7 @@
     <value>Titul:</value>
   </data>
   <data name="WebInterviewSetupFor_Title" xml:space="preserve">
-      <value>Nastavení webového rozhovoru:</value>
+      <value>Nastavení webového rozhovoru: </value>
   </data>
   <data name="WelcomePage" xml:space="preserve">
     <value>Uvítací stránka</value>

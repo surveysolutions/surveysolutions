@@ -121,7 +121,7 @@
     <value>Zrušit</value>
   </data>
   <data name="CommentSupervisor" xml:space="preserve">
-    <value>Poznámka od garanta</value>
+    <value>Poznámka Garanta</value>
   </data>
   <data name="Complete" xml:space="preserve">
     <value>Uzamknout</value>
@@ -130,10 +130,10 @@
     <value>Chystáte se dokončit tento rozhovor</value>
   </data>
   <data name="CompleteNoteToSupervisor" xml:space="preserve">
-    <value>Poznámka pro garanta</value>
+    <value>Poznámka pro Garanta</value>
   </data>
   <data name="CoverSupervisorNote" xml:space="preserve">
-    <value>Poznámka od garanta:</value>
+    <value>Poznámka Garanta:</value>
   </data>
   <data name="Error" xml:space="preserve">
     <value>Chyba</value>
@@ -187,7 +187,7 @@
     <value>Záznam nový</value>
   </data>
   <data name="ClickToAnswer" xml:space="preserve">
-    <value>Klikněte a odpovězte</value>
+    <value>Kliknětě k odpovězení</value>
   </data>
   <data name="CloseInterviewMessage" xml:space="preserve">
     <value>&lt;p&gt;Webový rozhovor podporuje pouze jednu aktivní kartu s rozhovorem.&lt;/p&gt;&lt;p&gt;Chcete-li tuto kartu nadále používat, znovu načtěte tuto stránku nebo ji zavřete.&lt;/p&gt;</value>
@@ -208,7 +208,7 @@
     <value>Zadejte svoji poznámku</value>
   </data>
   <data name="CommentHeadquarters" xml:space="preserve">
-    <value>Poznámka od ústředí</value>
+    <value>Poznámka od Ústředí</value>
   </data>
   <data name="CommentHide" xml:space="preserve">
     <value>Skrýt poznámku</value>
@@ -258,7 +258,7 @@
   <data name="CoverBrokenPackegeText" xml:space="preserve">
     <value>Pozor! Tento rozhovor obsahuje poškozená data, &lt;br /&gt;
 je k dispozici pouze předchozí verze rozhovoru. &lt;br /&gt;
-Požádejte o pomoc svého garanta.</value>
+Požádejte o pomoc svého Garanta.</value>
   </data>
   <data name="CoverBrokenPackegeTitle" xml:space="preserve">
     <value>Chyba: Tento rozhovor je poškozen</value>
@@ -378,7 +378,7 @@ Požádejte o pomoc svého garanta.</value>
     <value>Nic nebylo nalezeno</value>
   </data>
   <data name="NotCalculated" xml:space="preserve">
-    <value>Nevypočítáno</value>
+    <value>Nevypočítano</value>
   </data>
   <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
     <value>Zadaná hodnota nemůže být menší než chráněná odpověď</value>
@@ -390,13 +390,13 @@ Požádejte o pomoc svého garanta.</value>
     <value>Vložit číslo</value>
   </data>
   <data name="NumberRosterError" xml:space="preserve">
-    <value>Odpověď '{{answer}}' je chybná, protože otázka je využívá velikost seznamu (rosteru) a zadaná odpověď je záporná</value>
+    <value>Odpověď '{{answer}}' je nesprávná, protože otázka je použita jako velikost seznamu (rosteru) a zadaná odpověď je záporná</value>
   </data>
   <data name="NumberRosterRemoveConfirm" xml:space="preserve">
     <value>Opravdu chcete odebrat {{amountOfRostersToRemove}} řádků z každého souvisejícího seznamu (rosteru)?</value>
   </data>
   <data name="NumberRosterUpperBound" xml:space="preserve">
-    <value>Odpověď '{{answer}}' je chybná, protože odpověď je větší než maximální limit seznamu (rosteru) {{answerMaxValue}}.</value>
+    <value>Odpověď '{{answer}}' je nesprávná, protože odpověď je větší než maximální limit seznamu (rosteru) {{answerMaxValue}}.</value>
   </data>
   <data name="OptionsAvailableAfterAnswer" xml:space="preserve">
     <value>Kategorie budou dostupné po zodpovězení uvedené otázky</value>
@@ -423,7 +423,7 @@ Požádejte o pomoc svého garanta.</value>
     <value>Vyřešit</value>
   </data>
   <data name="ResolveHint" xml:space="preserve">
-    <value>Vyřešené poznámky jsou ve výchozím nastavení skryté, ale mohou být zobrazeny</value>
+    <value>Vyřešené poznámky jsou ve výchozím nastavení skryté, ale mohou být prohíženy všechny účastníky dotazníku</value>
   </data>
   <data name="SaveScenario" xml:space="preserve">
     <value>Uložit scénář</value>
@@ -501,12 +501,6 @@ Požádejte o pomoc svého garanta.</value>
     <value>Zavřete prosím tuto stránku. Můžete otevřít novou návratem na webovou stránku Designer</value>
   </data>
   <data name="AssignmentLimitError" xml:space="preserve">
-    <value>Z této žádnaky nelze vytvořit více rozhovorů</value>
-  </data>
-  <data name="HideVariables" xml:space="preserve">
-    <value>Skrýt proměnné</value>
-  </data>
-  <data name="ShowVariables" xml:space="preserve">
-    <value>Zobrazit proměnné</value>
+    <value>Z tohoto úkolu nelze vytvořit více rozhovorů</value>
   </data>
 </root>

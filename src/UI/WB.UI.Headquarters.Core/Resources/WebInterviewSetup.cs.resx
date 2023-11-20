@@ -121,7 +121,7 @@
     <value>Stažení ({{count}})</value>
   </data>
   <data name="ExportAssignmentsTitle" xml:space="preserve">
-    <value>Můžete si stáhnout seznam vytvořených žádanek, které jsou přiděleny tazateli pro rozeslání webových odkazů respondentům</value>
+    <value>Můžete si stáhnout seznam vytvořených dotazníků, které  jsou přiděleny tazateli pro dodání webových odkazů respondentům</value>
   </data>
   <data name="Invitations_Sent" xml:space="preserve">
     <value>Již odeslaných pozvánek - {{count}}.</value>
@@ -139,7 +139,7 @@
     <value>Uzamknout</value>
   </data>
   <data name="WebInterviewUserMessages_CompleteNoteToSupervisor_Descr" xml:space="preserve">
-    <value>Poznámka pro garanta</value>
+    <value>Poznámka pro Garanta</value>
   </data>
   <data name="WebInterviewUserMessages_FinishInterview_Descr" xml:space="preserve">
     <value>Text se zobrazí na poslední stránce po ukončení dotazníku</value>
@@ -151,7 +151,7 @@
     <value>Přiložte přepis PDF</value>
   </data>
   <data name="BackToQuestionnaires" xml:space="preserve">
-    <value>Zpět na Nastavení šetření</value>
+    <value>Zpět na Nastavení průzkumu</value>
   </data>
   <data name="CustomMessageTooLong" xml:space="preserve">
     <value>Vlastní zpráva by neměla obsahovat více než {0} znaků (včetně html)</value>

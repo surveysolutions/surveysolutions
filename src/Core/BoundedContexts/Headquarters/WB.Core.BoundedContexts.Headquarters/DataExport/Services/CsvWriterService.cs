@@ -3,7 +3,6 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using CsvHelper;
-using CsvHelper.Configuration;
 using WB.Core.BoundedContexts.Headquarters.Services;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
@@ -18,11 +17,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         {
             this.delimiter = delimiter;
             this.streamWriter = new StreamWriter(stream, Encoding.UTF8);
-            var configuration = new CsvConfiguration(CultureInfo.InvariantCulture)
-            {
-                Delimiter = this.delimiter
-            };
-            this.csvWriter = new CsvWriter(this.streamWriter, configuration);
+            this.csvWriter = new CsvWriter(this.streamWriter, CultureInfo.InvariantCulture);
+            this.csvWriter.Configuration.Delimiter = this.delimiter;
         }
 
         public void Dispose()

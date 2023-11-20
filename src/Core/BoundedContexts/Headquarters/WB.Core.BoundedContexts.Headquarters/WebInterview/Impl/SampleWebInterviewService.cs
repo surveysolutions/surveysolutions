@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
             {
                 HasHeaderRecord = true,
                 TrimOptions = TrimOptions.Trim,
-                Mode = CsvMode.RFC4180,
+                IgnoreQuotes = false,
                 Delimiter = "\t",
                 MissingFieldFound = null
             };

@@ -122,8 +122,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
                     {
                         throw new PreloadingException(
                             string.Format(UserPreloadingServiceMessages.CannotParseIncomingFile,
-                                dataException.Context.Parser.Row));
+                                dataException.ReadingContext.Row));
                     }
+
                     if (userToImports.Current?.Email?.Trim() == string.Empty)
                         userToImports.Current.Email = null;
 

@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
         {
             HasHeaderRecord = true,
             TrimOptions = TrimOptions.Trim,
-            Mode = CsvMode.RFC4180,
+            IgnoreQuotes = false,
             Delimiter = "\t"
         };
 
@@ -41,8 +41,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
             
             using (var csvReader = new CsvParser(new StreamReader(file), csvConfiguration))
             {
-                var read = csvReader.Read();
-                var rawRow = csvReader.Record;
+                var rawRow = csvReader.Read()?.ToList();
                 var headers = TryGetHeadersFromFile(rawRow);
                 if (headers == null)
                 {
@@ -57,14 +56,14 @@ namespace WB.Core.BoundedContexts.Designer.Services
                         })
                     };
                 }
+                
+                rawRow = csvReader.Read()?.ToList();
 
-                while (csvReader.Read())
+                while (true)
                 {
-                    rawRow = csvReader.Record;
-                    
                     if (rawRow == null) break;
 
-                    var row = GetRowValues(rawRow, headers, csvReader.RawRow);
+                    var row = GetRowValues(rawRow, headers, csvReader.Context.RawRow);
 
                     if (!string.IsNullOrEmpty(row.Id) || !string.IsNullOrEmpty(row.ParentId) || !string.IsNullOrEmpty(row.Text))
                     {
@@ -80,6 +79,8 @@ namespace WB.Core.BoundedContexts.Designer.Services
                         if (categories.Count > AbstractVerifier.MaxOptionsCountInFilteredComboboxQuestion)
                             throw new InvalidFileException(ExceptionMessages.Excel_Categories_More_Than_Limit.FormatString(AbstractVerifier.MaxOptionsCountInFilteredComboboxQuestion));
                     }
+
+                    rawRow = csvReader.Read()?.ToList();
                 }
 
                 if (errors.Any())
@@ -120,14 +121,14 @@ namespace WB.Core.BoundedContexts.Designer.Services
         {
             var cfg = CreateCsvConfiguration();
 
+            if (isCascading)
+                cfg.RegisterClassMap<CascadingItemMap>();
+            else
+                cfg.RegisterClassMap<CategoriesItemMap>();
+
             var sb = new StringBuilder();
             using (var csvWriter = new CsvWriter(new StringWriter(sb), cfg))
             {
-                if (isCascading)
-                    csvWriter.Context.RegisterClassMap<CascadingItemMap>();
-                else
-                    csvWriter.Context.RegisterClassMap<CategoriesItemMap>();
-                
                 csvWriter.WriteRecords(options);
             }
 
@@ -140,13 +141,13 @@ namespace WB.Core.BoundedContexts.Designer.Services
             return GetCsvFile(isCascading, items);
         }
 
-        private CategoriesHeaderMap? TryGetHeadersFromFile(string[]? rowValues)
+        private CategoriesHeaderMap? TryGetHeadersFromFile(List<string>? rowValues)
         {
             if (rowValues == null)
                 return null;
 
             var headerMap = new CategoriesHeaderMap();
-            for (int i = 0; i < rowValues.Length; i++)
+            for (int i = 0; i < rowValues.Count; i++)
             {
                 var rowValue = rowValues[i];
 
@@ -174,7 +175,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
             return headerMap;
         }
 
-        private CategoriesRow GetRowValues(string[]? row, CategoriesHeaderMap headerMap, int rowNumber) => new CategoriesRow
+        private CategoriesRow GetRowValues(List<string> row, CategoriesHeaderMap headerMap, int rowNumber) => new CategoriesRow
         {
             Id = GetRowValue(row, headerMap.IdIndex),
             Text = GetRowValue(row, headerMap.TextIndex) ?? String.Empty,
@@ -183,10 +184,8 @@ namespace WB.Core.BoundedContexts.Designer.Services
             AttachmentName = GetRowValue(row, headerMap.AttachmentNameIndex)
         };
 
-        private string? GetRowValue(string[]? row, string? index)
+        private string? GetRowValue(List<string> row, string? index)
         {
-            if (row == null) return null;
-            
             return !int.TryParse(index, out var i) ? null : row.ElementAtOrDefault(i);
         }
     }

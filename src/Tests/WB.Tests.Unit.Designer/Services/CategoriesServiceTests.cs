@@ -86,19 +86,19 @@ namespace WB.Tests.Unit.Designer.Services
             var ms = new MemoryStream();
 
             using (var sw = new StreamWriter(ms, Encoding.UTF8, 4096, true))
-            using (var csvWriter = new CsvWriter(sw, new CsvConfiguration(CultureInfo.InvariantCulture)
+            using (var csvWriter = new CsvSerializer(sw, new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = false,
                 TrimOptions = TrimOptions.Trim,
-                Mode = CsvMode.RFC4180,
+                IgnoreQuotes = false,
                 Delimiter = "\t"
 
             }, true))
             {
                 foreach (var row in data)
                 {
-                    csvWriter.WriteField(row);
-                    csvWriter.NextRecord();
+                    csvWriter.Write(row);
+                    csvWriter.WriteLine();
                 }
 
                 sw.Flush();

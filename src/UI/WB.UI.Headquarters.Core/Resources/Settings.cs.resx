@@ -121,7 +121,7 @@
     <value>Logo společnosti zobrazuje vlastní obrázek na přihlašovací stránce serveru a na přihlašovací stránce aplikace Tazatel. </value>
   </data>
   <data name="PartialSynchronizationDescription" xml:space="preserve">
-    <value>Pokud je to povoleno, bude tazatelský tablet odesílat i rozšetřené rozhovory do ústředí</value>
+    <value>Pokud povoleno, bude tazatelský tablet odesílat i rozšetřené rozhovory do Ústředí</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>Heslo</value>
@@ -142,7 +142,7 @@
     <value>Povolte respondentům webových dotazníků požadovat e-maily s odkazy na pokračování v zahájených dotaznících (možné, pokud je nastaven poskytovatel hromadných e-mailových služeb)</value>
   </data>
   <data name="AutoUpdateDescription" xml:space="preserve">
-    <value>Pouze nejnovější verze aplikace Tazatel/Garant na tabletu se může synchronizovat s ústředím</value>
+    <value>Pokud zaškrtnuto, pouze nejnovější verze aplikace Tazatel/Garant se může synchronizovat s Ústředím</value>
   </data>
   <data name="ChangeStateConfirm" xml:space="preserve">
     <value>Opravdu chcete změnit nastavení zabezpečení exportovaného souboru? Všechny exportované datové soubory budou chráněny heslem.</value>
@@ -202,7 +202,7 @@
     <value>Žádné</value>
   </data>
   <data name="EmailProvider_NoneDescription" xml:space="preserve">
-    <value>Pozvánky na webové dotazníky nejsou respondentům zasílány od Survey Solutions</value>
+    <value>Pozvánky na webové dotazníky nejsou respondentům zasílany od Survey Solutions</value>
   </data>
   <data name="EmailProvider_PageDesc" xml:space="preserve">
     <value>Nastavte poskytovatele hromadných e-mailových služeb. Nakonfigurujte, jak se budou zasílat pozvánky na webové rozhovory.</value>
@@ -310,16 +310,16 @@
     <value>Firemní logo</value>
   </data>
   <data name="LogoSettings_Description1" xml:space="preserve">
-    <value>Klikněte na tlačítko „Vybrat soubor“ pro nahrání obrázku ze svého počítače na server, který bude použit jako obrázek loga. Poté klikněte na tlačítko 'Uložit'.</value>
+    <value>Klikněte na tlačítko „Vybrat soubor“ pro nahrání obrázeku ze svého počítače na server, který bude použit jako obrázek loga. Poté klikněte na tlačítko 'Uložit'.</value>
   </data>
   <data name="LogoUpdated" xml:space="preserve">
     <value>Firemní logo aktualizováno</value>
   </data>
   <data name="MobileAppSettings_Description" xml:space="preserve">
-    <value>Některá konkrétní nastavení podle Android verze aplikace Tazatel/Garant na tabletu</value>
+    <value>Některá konkrétní nastavení podle Android verze aplikace Tazatel/Garant</value>
   </data>
   <data name="MobileAppSettings_Title" xml:space="preserve">
-    <value>Nastavení aplikace Tazatel/Garant na tabletu</value>
+    <value>Nastavení aplikace Tazatel/Garant</value>
   </data>
   <data name="RegeneratePasswordConfirm" xml:space="preserve">
     <value>Opravdu chcete vytvořit nové heslo? Nové heslo bude od této chvíle použito pro všechny exportované datové soubory.</value>
@@ -334,36 +334,36 @@
     <value>Nastavení webového rozhovoru</value>
   </data>
   <data name="ClearExportCache_Description" xml:space="preserve">
-    <value>Tato operace vymaže z mezipaměti všechna data exportu . Další export bude trvat déle.</value>
+    <value>Tato operace vymaže všechna data exportu mezipaměti. Další export bude trvat déle.</value>
   </data>
   <data name="ClearExportCache_Title" xml:space="preserve">
     <value>Vymazat mezipaměť exportu</value>
   </data>
   <data name="GeographyQuestionAccuracyInMetersDescription" xml:space="preserve">
-    <value>Nastavení přesnosti v metrech pro geografickou otázku</value>
+    <value>Nastavení přesnosti v metrech pro zeměpisnou otázku</value>
   </data>
   <data name="GeographyQuestionPeriodInSecondsDescription" xml:space="preserve">
-    <value>Nastavte období v sekundách pro geografickou otázku</value>
+    <value>Nastavte období v sekundách pro zeměpisnou otázku</value>
   </data>
   <data name="InterviewerGeographyQuestionAccuracyInMeters" xml:space="preserve">
-    <value>Přesnost geografických otázek</value>
+    <value>Přesnost zeměpisných otázek</value>
   </data>
   <data name="InterviewerGeographyQuestionPeriodInSeconds" xml:space="preserve">
-    <value>Období geografických otázek</value>
+    <value>Období zeměpisných otázek</value>
   </data>
   <data name="RemoveExportCache" xml:space="preserve">
     <value>Vymazat mezipaměť</value>
   </data>
   <data name="RemoveExportCache_Warning" xml:space="preserve">
-    <value>Varování! Jedná se o nevratnou akci</value>
+    <value>Varování! Jedná se o nevratné jednání</value>
   </data>
   <data name="RemoveExportCacheConfirm" xml:space="preserve">
-    <value>Opravdu chcete vymazat mezipaměť obsahující export? Všechny vygenerované exportní soubory budou ze serveru odstraněny a NEBUDOU k dispozici ke stažení.</value>
+    <value>Opravdu chcete vymazat exportní mezipaměť? Všechny vygenerované exportní soubory budou ze serveru odstraněny a NEBUDOU k dispozici ke stažení.</value>
   </data>
   <data name="RemoveExportCacheFail" xml:space="preserve">
-    <value>Vymazání chyb z mezipaměti</value>
+    <value>Vymazání mezipaměti chyb</value>
   </data>
   <data name="RemoveExportCacheSuccess" xml:space="preserve">
-    <value>Mezipaměť byla úspěšně vymazána</value>
+    <value>Mezipaměť byla úspěšně odstraněna</value>
   </data>
 </root>

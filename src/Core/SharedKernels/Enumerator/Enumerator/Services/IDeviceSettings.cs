@@ -6,9 +6,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services
     {
         string GetDeviceId();
         string GetApplicationVersionName();
-        string GetAndroidVersion();
-        string GetGooglePlayServicesVersion();
-        string GetDiskInformation();
         string GetDeviceTechnicalInformation();
         int GetApplicationVersionCode();
         void SetEndpoint(string endpoint);

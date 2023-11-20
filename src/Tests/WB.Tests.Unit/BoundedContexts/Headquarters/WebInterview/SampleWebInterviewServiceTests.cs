@@ -131,7 +131,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             {
                 HasHeaderRecord = true,
                 TrimOptions = TrimOptions.Trim,
-                Mode = CsvMode.RFC4180,
+                IgnoreQuotes = false,
                 Delimiter = "\t",
                 MissingFieldFound = null,
             });
@@ -139,8 +139,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             reader.Read();
             reader.ReadHeader();
 
-            var columnsCount = reader.HeaderRecord.Length;
-            result.Add(reader.HeaderRecord);
+            var columnsCount = reader.Context.HeaderRecord.Length;
+            result.Add(reader.Context.HeaderRecord);
 
             while (reader.Read())
             {

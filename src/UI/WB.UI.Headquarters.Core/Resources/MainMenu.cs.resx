@@ -127,16 +127,16 @@
     <value>Mapy</value>
   </data>
   <data name="UserBatchUpload" xml:space="preserve">
-    <value>Skupinové nahrání uživatelů</value>
+    <value>Dávkové nahrání uživatelů</value>
   </data>
   <data name="Administration" xml:space="preserve">
-    <value>Admin</value>
+    <value>Správa</value>
   </data>
   <data name="ApiUsers" xml:space="preserve">
     <value>API Uživatelé</value>
   </data>
   <data name="Assignments" xml:space="preserve">
-    <value>Žádanky</value>
+    <value>Dotazníky</value>
   </data>
   <data name="CreateNew" xml:space="preserve">
     <value>Nové dotazníky</value>
@@ -202,7 +202,7 @@
     <value>Typy dotazníků (status)</value>
   </data>
   <data name="SurveySetup" xml:space="preserve">
-    <value>Nastavení šetření</value>
+    <value>Nastavení průzkumu</value>
   </data>
   <data name="SurveyStatistics" xml:space="preserve">
     <value>Statistika šetření</value>
@@ -226,13 +226,13 @@
     <value>Uživatelé</value>
   </data>
   <data name="Workspaces" xml:space="preserve">
-    <value>Prostředí</value>
+    <value>Úlohy</value>
   </data>
   <data name="AuditLog" xml:space="preserve">
     <value>Protokol auditu</value>
   </data>
   <data name="DeviceLogs" xml:space="preserve">
-    <value>Protokol zařízení</value>
+    <value>Protokoly zařízení</value>
   </data>
   <data name="Diagnostics" xml:space="preserve">
     <value>Diagnostika</value>
@@ -241,7 +241,7 @@
     <value>Poskytovatelé e-mailu</value>
   </data>
   <data name="InterviewPackages" xml:space="preserve">
-    <value>Balíčky rozhovorů</value>
+    <value>Balíčky pohovorů</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Nastavení</value>
@@ -250,6 +250,6 @@
     <value>Informace o tabletu</value>
   </data>
   <data name="WorkspaceSettings" xml:space="preserve">
-    <value>Nastavení prostředí</value>
+    <value>Nastavení pracovního prostoru</value>
   </data>
 </root>

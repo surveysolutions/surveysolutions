@@ -22,7 +22,7 @@
                                     </li>
                                 </ul>
                                 <ul class="list-unstyled pull-left table-info">
-                                    <li id="detailsInfo_createdAtListItem">
+                                    <li id="detailsInfo_lastUpdatedListItem">
                                         <span class="data-label"
                                             >{{
                                                 this.$t(

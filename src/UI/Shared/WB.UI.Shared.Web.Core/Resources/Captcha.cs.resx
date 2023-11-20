@@ -129,7 +129,4 @@
   <data name="TryAnother" xml:space="preserve">
     <value>Zkuste jiný</value>
   </data>
-  <data name="CaptchaError" xml:space="preserve">
-    <value>Vygenerovat chybu captcha. Obraťte se na správce systému.</value>
-  </data>
 </root>

@@ -136,7 +136,7 @@
     <value>U každého tazatele je uveden počet dokončených rozhovorů. Vrácené a poté dokončené rozhovory se počítají samostatně.</value>
   </data>
   <data name="NumberOfCompletedInterviewsDescriptionPerTeam" xml:space="preserve">
-    <value>Počet dokončených rozhovorů od Vašich tazatelů. Vrácené a poté dokončené rozhovory se počítají samostatně.</value>
+    <value>Počet rozhovorů od všech Vašich tazatelů. Vrácené a poté dokončené rozhovory se počítají samostatně.</value>
   </data>
   <data name="Average" xml:space="preserve">
     <value>Průměr</value>
@@ -145,10 +145,10 @@
     <value>Průměrná doba trvání dotazníku</value>
   </data>
   <data name="AverageHQProcessingTime" xml:space="preserve">
-    <value>Průměrná doba zpracování ústředím</value>
+    <value>Průměrná doba zpracování Ústředím</value>
   </data>
   <data name="AverageHQProcessingTimeDescription" xml:space="preserve">
-    <value>Průměrná doba od chvíle, kdy garant schválí rozhovor, do okamžiku, kdy je tento rozhovor schválen nebo vrácen ústředím.</value>
+    <value>Průměrná doba od chvíle, kdy Garant schválí rozhovor, do okamžiku, kdy je tento rozhovor schválen nebo vrácen Ústředím.</value>
   </data>
   <data name="AverageInterviewDurationDescription" xml:space="preserve">
     <value>Průměrná doba (na 1 tazatele), po kterou byl rozhovor prezentován na obrazovce tazatele před dokončením.</value>
@@ -157,16 +157,16 @@
     <value>Průměrná celková doba zpracování případu</value>
   </data>
   <data name="AverageOverallCaseProcessingTimeDescription" xml:space="preserve">
-    <value>Průměrná doba od počátečního přidělení žádanky do okamžiku, kdy ústředí tento rozhovor schválí.</value>
+    <value>Průměrná doba od počátečního přidělení rozhovoru do okamžiku, kdy Ústředí tento rozhovor schválí.</value>
   </data>
   <data name="AverageSupervisorProcessingTime" xml:space="preserve">
-    <value>Průměrná doba zpracování garantem</value>
+    <value>Průměrná doba zpracování Garantem</value>
   </data>
   <data name="AverageSupervisorProcessingTimeDescription" xml:space="preserve">
-    <value>Průměrná doba od okamžiku, kdy tazatel stiskne tlačítko Dokončit, do okamžiku, kdy garant rozhovor buď schválí nebo vrátí.</value>
+    <value>Průměrná doba od okamžiku, kdy tazatel stiskne tlačítko Dokončit, do okamžiku, kdy Garant rozhovor buď schválí nebo vrátí.</value>
   </data>
   <data name="BackToSupervisors" xml:space="preserve">
-    <value>Zpět ke Garantům</value>
+    <value>Zpět ke Garatnům</value>
   </data>
   <data name="BackToTeams" xml:space="preserve">
     <value>Zpět k týmům</value>
@@ -193,25 +193,25 @@
     <value>Ode dne</value>
   </data>
   <data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
-    <value>Počet rozhovorů schválených ústředím</value>
+    <value>Počet rozhovorů schválených Ústředím</value>
   </data>
   <data name="NumberOfInterviewsApprovedByHQDescription" xml:space="preserve">
-    <value>Počet shromážděných rozhovorů {0} schválených ústředím.</value>
+    <value>Počet rozhovorů shromážděných uživatelem {0} schválených Ústředím.</value>
   </data>
   <data name="NumberOfInterviewTransactionsByHQ" xml:space="preserve">
-    <value>Počet rozhovorů schválených/vrácených ústředím</value>
+    <value>Počet rozhovorů schválených/vrácených Ústředím</value>
   </data>
   <data name="NumberOfInterviewTransactionsByHQDescription" xml:space="preserve">
-    <value>Počet schválených/vrácených rozhovorů ústředím {0}.</value>
+    <value>Počet schválení a zamítnutí podle Ústředí u rozhovorů shromážděných {0}.</value>
   </data>
   <data name="NumberOfInterviewTransactionsBySupervisor" xml:space="preserve">
-    <value>Počet rozhovorů schválených/vrácených garantem</value>
+    <value>Počet rozhovorů schválených/vrácených Garantem</value>
   </data>
   <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerInterviewer" xml:space="preserve">
-    <value>Počet schválených a vrácených rozhovorů od tazatele/ů garantem.</value>
+    <value>Počet schválení a zamítnutí Garanta u rozhovorů shromážděných tazatelem.</value>
   </data>
   <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerTeam" xml:space="preserve">
-    <value>Počet schválených a vrácených rozhovorů garantem {0}.</value>
+    <value>Počet schválení a zamítnutí Garanta u rozhovorů shromážděných {0}.</value>
   </data>
   <data name="OverTheLast" xml:space="preserve">
     <value>Poslední(ch)</value>

@@ -142,7 +142,7 @@
     <value>Import {{percent}} %</value>
   </data>
   <data name="ImportModePageTitle" xml:space="preserve">
-    <value>Import typu otazníku:</value>
+    <value>Import dtypu otazníku:</value>
   </data>
   <data name="ImportModeTitle" xml:space="preserve">
     <value>Režim importu typu dotazníku</value>

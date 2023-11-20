@@ -262,7 +262,7 @@
     <value>Průměrná doba trvání dotazníku</value>
   </data>
   <data name="Report_Average_HQ_processing_time" xml:space="preserve">
-    <value>Průměrná doba zpracování ústředím</value>
+    <value>Průměrná doba zpracování Ústředím</value>
   </data>
   <data name="Report_Average_Interview_Duration" xml:space="preserve">
     <value>Průměrná délka rozhovoru</value>
@@ -271,7 +271,7 @@
     <value>Průměrná celková doba zpracování případu</value>
   </data>
   <data name="Report_Average_supervisor_processing_time" xml:space="preserve">
-    <value>Průměrná doba zpracování garantem</value>
+    <value>Průměrná doba zpracování Garantem</value>
   </data>
   <data name="Report_Days_by_Interview_Status" xml:space="preserve">
     <value>Dny podle stavu rozhovoru</value>
@@ -280,13 +280,13 @@
     <value>Zařízení a tazatelé</value>
   </data>
   <data name="Report_Number_of_interview_transactions_by_HQ" xml:space="preserve">
-    <value>Počet převedených rozhovorů ústředím</value>
+    <value>Počet rozhovorů schválených/vrácených Ústředím</value>
   </data>
   <data name="Report_Number_of_interview_transactions_by_Supervisor" xml:space="preserve">
-    <value>Počet rozhovorů schválených/vrácených garantem</value>
+    <value>Počet rozhovorů schválených/vrácených Garantem</value>
   </data>
   <data name="Report_Number_of_interviews_approved_by_HQ" xml:space="preserve">
-    <value>Počet schválených rozhovorů ústředím</value>
+    <value>Počet rozhovorů schválených Ústředím</value>
   </data>
   <data name="Report_Quantity_By_Interviewers" xml:space="preserve">
     <value>Množství podle tazatelů</value>
@@ -337,7 +337,7 @@
     <value>Součet</value>
   </data>
   <data name="SupervisorAssigned" xml:space="preserve">
-    <value>Garant přidělen</value>
+    <value>Přidělených Garantů</value>
   </data>
   <data name="SupervisorsAndSurveys" xml:space="preserve">
     <value>Garanti a šetření</value>

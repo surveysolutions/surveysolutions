@@ -140,7 +140,7 @@
     <value>Probíhá stahování aktualizace. {0} z {1} staženo</value>
   </data>
   <data name="Synchronization_Synchronize_HQ" xml:space="preserve">
-    <value>Synchronizace s ústředím</value>
+    <value>Synchronizace s Ústředím</value>
   </data>
   <data name="Synchronization_Synchronize_Offline" xml:space="preserve">
     <value>Synchronizace s tazateli</value>

@@ -53,9 +53,6 @@ namespace WB.UI.Interviewer
             auditLogService.WriteApplicationLevelRecord(new OpenApplicationAuditLogEntity());
 
             logger.Info($"Application started. Version: {this.deviceSettings.GetApplicationVersionName()}");
-            logger.Info($"Android Version: {this.deviceSettings.GetAndroidVersion()}");
-            logger.Info($"Google Play Services Version: {this.deviceSettings.GetGooglePlayServicesVersion()}");
-            logger.Info($"Disk: {this.deviceSettings.GetDiskInformation()}");
 
             migrationRunner.MigrateUp("Interviewer", this.GetType().Assembly, typeof(Encrypt_Data).Assembly);
 
