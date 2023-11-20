@@ -52,8 +52,8 @@
                         <span v-if="statusDropExportCache == 'Removed'" style="color:green">
                             {{ $t('Settings.RemoveExportCacheSuccess') }}
                         </span>
-                        <span v-if="statusDropExportCache == 'Error'" style="color:red">
-                            {{ $t('Settings.RemoveExportCacheFail') }}
+                        <span v-if="statusDropExportCache == 'Error'" style="color:red"
+                            v-html="$t('Settings.RemoveExportCacheFail').replaceAll('\n', '<br/>')">
                         </span>
                     </div>
                 </div>
@@ -498,8 +498,8 @@ export default {
                         label: self.$t('Common.Clear'),
                         className: 'btn btn-danger',
                         callback: async () => {
-                            this.statusDropExportCache = null
                             this.allowToRemoveExportCache = false
+                            this.statusDropExportCache = 'Removing'
                             await this.runDropExportSchema()
                         },
                     },
