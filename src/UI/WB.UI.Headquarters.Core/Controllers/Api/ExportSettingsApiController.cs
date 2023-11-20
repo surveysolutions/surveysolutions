@@ -11,7 +11,9 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.Models;
 
 namespace WB.UI.Headquarters.Controllers.Api
@@ -24,15 +26,21 @@ namespace WB.UI.Headquarters.Controllers.Api
         private readonly IExportSettings exportSettings;
         private readonly ISystemLog auditLog;
         private readonly IExportServiceApi exportServiceApi;
+        private readonly IInScopeExecutor<IExportServiceApi> exportService;
+        private readonly IWorkspaceContextAccessor workspaceContextAccessor;
 
         public ExportSettingsApiController(ILogger<ExportSettingsApiController> logger, 
             IExportSettings exportSettings,
             ISystemLog auditLog,
-            IExportServiceApi exportServiceApi)
+            IExportServiceApi exportServiceApi,
+            IInScopeExecutor<IExportServiceApi> exportService,
+            IWorkspaceContextAccessor workspaceContextAccessor)
         {
             this.exportSettings = exportSettings;
             this.auditLog = auditLog;
             this.exportServiceApi = exportServiceApi;
+            this.exportService = exportService;
+            this.workspaceContextAccessor = workspaceContextAccessor;
             this.logger = logger;
         }
 
@@ -103,9 +111,13 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             try
             {
+                var workspace = workspaceContextAccessor.CurrentWorkspace()?.Name;
                 var status = await exportServiceApi.StatusDeleteTenant();
                 if (status.Status != StopTenantStatus.Removing)
-                    await exportServiceApi.DeleteTenant();
+                    await exportService.ExecuteAsync(async export =>
+                    {
+                        await export.DeleteTenant();
+                    }, workspace);
             }
             catch (Exception e)
             {
