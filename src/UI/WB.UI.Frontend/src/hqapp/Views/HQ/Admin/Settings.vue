@@ -757,8 +757,9 @@ export default {
                         label: self.$t('Common.Clear'),
                         className: 'btn btn-danger',
                         callback: async () => {
+                            this.statusDropExportCache = null
                             this.allowToRemoveExportCache = false
-                            this.runDropExportSchema()
+                            await this.runDropExportSchema()
                         },
                     },
                     cancel: {
@@ -771,13 +772,12 @@ export default {
         },
         async runDropExportSchema() {
             const status = await this.$hq.ExportSettings.statusDropExportCache()
-            this.statusDropExportCache = status.data.status
-            if (this.statusDropExportCache != 'Removing')
+            if (status.data.status != 'Removing')
                 await this.$hq.ExportSettings.dropExportCache()
                     .then((response) => {
                         const success = response.data.success
 
-                        this.dropSchemaTimer = setInterval(this.checkStatusDropExportCache(), 1000);
+                        this.dropSchemaTimer = setInterval(async () => await this.checkStatusDropExportCache(), 1000);
                     })
                     .catch((e) => {
                         if (
