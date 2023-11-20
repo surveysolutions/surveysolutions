@@ -62,13 +62,12 @@
             </div>
             <div class="col-sm-7">
                 <div class="block-filter action-block">
-                    <button
-                        type="button"
-                        class="btn btn-danger"
-                        @click="removeExportCache"
-                    >
+                    <button type="button" class="btn btn-danger" @click="removeExportCache" v-if="allowToRemoveExportCache">
                         {{ $t('Settings.RemoveExportCache') }}
                     </button>
+                    <span v-else>
+                        {{ removeExportCacheStatus }}
+                    </span>
                 </div>
             </div>
         </div>
@@ -550,10 +549,23 @@ export default {
             geographyQuestionPeriodInSeconds: 10,
             geographyQuestionAccuracyInMetersCancel: 10,
             geographyQuestionPeriodInSecondsCancel: 10,
+            allowToRemoveExportCache: true,
+            statusDropExportCache: 'NotStarted'
         }
     },
     mounted() {
         this.getFormData()
+    },
+    compaund: {
+        removeExportCacheStatus() {
+            if (this.statusDropExportCache == 'Removing')
+                return this.$t('Settings.RemovingExportCache')
+            if (this.statusDropExportCache == 'Removed')
+                return this.$t('Settings.RemoveExportCacheSuccess')
+            if (this.statusDropExportCache == 'Error')
+                return this.$t('Settings.RemoveExportCacheFail')
+            return null
+        }
     },
     methods: {
         async getFormData() {
@@ -747,44 +759,7 @@ export default {
                         label: self.$t('Common.Clear'),
                         className: 'btn btn-danger',
                         callback: async () => {
-                            await self.$hq.ExportSettings.removeExportCache()
-                                .then((response) => {
-                                    const success = response.data.success
-                                    debugger
-                                    if (success) {
-                                        self.showAlert(
-                                            self.$t(
-                                                'Settings.RemoveExportCacheSuccess',
-                                            ),
-                                        )
-                                        return
-                                    } else {
-                                        self.showAlert(
-                                            self.$t(
-                                                'Settings.RemoveExportCacheFail',
-                                            ),
-                                        )
-                                        return
-                                    }
-                                })
-                                .catch((e) => {
-                                    debugger
-                                    if (
-                                        e.response &&
-                                        e.response.data &&
-                                        e.response.data.message
-                                    ) {
-                                        self.showAlert(e.response.data.message)
-                                        return
-                                    } else {
-                                        self.showAlert(
-                                            self.$t(
-                                                'Settings.RemoveExportCacheFail',
-                                            ),
-                                        )
-                                        return
-                                    }
-                                })
+                            runDropExportSchema()
                         },
                     },
                     cancel: {
@@ -794,6 +769,38 @@ export default {
                     },
                 },
             })
+        },
+        async runDropExportSchema() {
+            debugger
+            const status = await this.$hq.ExportSettings.statusDropExportCache()
+            this.statusDropExportCache = status.status
+            if (this.statusDropExportCache != 'Removing')
+                await this.$hq.ExportSettings.dropExportCache()
+                    .then((response) => {
+                        const success = response.data.success
+
+                    })
+                    .catch((e) => {
+                        if (
+                            e.response &&
+                            e.response.data &&
+                            e.response.data.message
+                        ) {
+                            this.showAlert(e.response.data.message)
+                            return
+                        } else {
+                            this.showAlert(
+                                this.$t(
+                                    'Settings.RemoveExportCacheFail',
+                                ),
+                            )
+                            return
+                        }
+                    })
+        },
+        async checkStatusDropExportCache() {
+            const status = await self.$hq.ExportSettings.statusDropExportCache()
+            this.statusDropExportCache = status.status
         },
         showAlert(message) {
             modal.alert({
