@@ -65,9 +65,17 @@
                     <button type="button" class="btn btn-danger" @click="removeExportCache" v-if="allowToRemoveExportCache">
                         {{ $t('Settings.RemoveExportCache') }}
                     </button>
-                    <span v-else>
-                        {{ removeExportCacheStatus }}
-                    </span>
+                    <div v-else>
+                        <span v-if="statusDropExportCache == 'Removing'" style="color:blue">
+                            {{ $t('Settings.RemovingExportCache') }}
+                        </span>
+                        <span v-if="statusDropExportCache == 'Removed'" style="color:green">
+                            {{ $t('Settings.RemoveExportCacheSuccess') }}
+                        </span>
+                        <span v-if="statusDropExportCache == 'Error'" style="color:red">
+                            {{ $t('Settings.RemoveExportCacheFail') }}
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -550,22 +558,12 @@ export default {
             geographyQuestionAccuracyInMetersCancel: 10,
             geographyQuestionPeriodInSecondsCancel: 10,
             allowToRemoveExportCache: true,
-            statusDropExportCache: 'NotStarted'
+            statusDropExportCache: 'NotStarted',
+            dropSchemaTimer: null
         }
     },
     mounted() {
         this.getFormData()
-    },
-    compaund: {
-        removeExportCacheStatus() {
-            if (this.statusDropExportCache == 'Removing')
-                return this.$t('Settings.RemovingExportCache')
-            if (this.statusDropExportCache == 'Removed')
-                return this.$t('Settings.RemoveExportCacheSuccess')
-            if (this.statusDropExportCache == 'Error')
-                return this.$t('Settings.RemoveExportCacheFail')
-            return null
-        }
     },
     methods: {
         async getFormData() {
@@ -759,7 +757,8 @@ export default {
                         label: self.$t('Common.Clear'),
                         className: 'btn btn-danger',
                         callback: async () => {
-                            runDropExportSchema()
+                            this.allowToRemoveExportCache = false
+                            this.runDropExportSchema()
                         },
                     },
                     cancel: {
@@ -771,14 +770,14 @@ export default {
             })
         },
         async runDropExportSchema() {
-            debugger
             const status = await this.$hq.ExportSettings.statusDropExportCache()
-            this.statusDropExportCache = status.status
+            this.statusDropExportCache = status.data.status
             if (this.statusDropExportCache != 'Removing')
                 await this.$hq.ExportSettings.dropExportCache()
                     .then((response) => {
                         const success = response.data.success
 
+                        this.dropSchemaTimer = setInterval(this.checkStatusDropExportCache(), 1000);
                     })
                     .catch((e) => {
                         if (
@@ -799,8 +798,13 @@ export default {
                     })
         },
         async checkStatusDropExportCache() {
-            const status = await self.$hq.ExportSettings.statusDropExportCache()
-            this.statusDropExportCache = status.status
+            const status = await this.$hq.ExportSettings.statusDropExportCache()
+            this.statusDropExportCache = status.data.status
+
+            if (this.statusDropExportCache != 'Removing' && this.dropSchemaTimer != null) {
+                clearInterval(this.dropSchemaTimer)
+                this.dropSchemaTimer = null
+            }
         },
         showAlert(message) {
             modal.alert({
