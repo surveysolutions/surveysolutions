@@ -133,10 +133,10 @@
     <value>Вы точно хотите почистить экспортный кэш? Все сгенерированые файлы не будут доступны для загрузки.</value>
   </data>
   <data name="RemoveExportCacheSuccess" xml:space="preserve">
-    <value>Кэш был удален успешно</value>
+    <value>Кэш экспорта успешно удален</value>
   </data>
   <data name="RemovingExportCache" xml:space="preserve">
-    <value>Удаление экспортного кеша запущенно</value>
+    <value>Идет процесс удаления кэша экспорта</value>
   </data>
   <data name="RemoveExportCacheFail" xml:space="preserve">
     <value>Кэш экспорта в данный момент не может быть очищен. Пожалуйста, повторите попытку позже.
