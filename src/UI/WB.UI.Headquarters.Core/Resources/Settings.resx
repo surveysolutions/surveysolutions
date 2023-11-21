@@ -133,10 +133,10 @@
     <value>Are you sure you want to clear export cache? All generated export files will be removed from the server and will NOT be available for download.</value>
   </data>
   <data name="RemoveExportCacheSuccess" xml:space="preserve">
-    <value>Cache was deleted successfully</value>
+    <value>Export cache was cleared successfully</value>
   </data>
   <data name="RemovingExportCache" xml:space="preserve">
-    <value>Removing export cache is running</value>
+    <value>Clearing export cache is running</value>
   </data>
   <data name="RemoveExportCacheFail" xml:space="preserve">
     <value>Export cache cannot be cleared at the moment. Please try again later. 
