@@ -15,20 +15,19 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 namespace WB.UI.Shared.Enumerator.Activities
 {
     [MvxDialogFragmentPresentation]
-    [Register(nameof(CalendarEventDialog))]
-    public class CalendarEventDialog : BaseFragmentDialog<CalendarEventDialogViewModel>
+    [Register(nameof(PlayAudioDialog))]
+    public class PlayAudioDialog : BaseFragmentDialog<PlayAudioViewModel>
     {
-        public CalendarEventDialog()
+        public PlayAudioDialog()
         {
         }
 
-        protected CalendarEventDialog(IntPtr javaReference, JniHandleOwnership transfer)
+        protected PlayAudioDialog(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
         {
         }
 
         protected override string? Title => ViewModel?.Title;
-        protected override int LayoutFragmentId => Resource.Layout.calendar_event_dialog;
-        protected override bool IsCancelable => false;
+        protected override int LayoutFragmentId => Resource.Layout.play_audio_dialog;
     }
 }
