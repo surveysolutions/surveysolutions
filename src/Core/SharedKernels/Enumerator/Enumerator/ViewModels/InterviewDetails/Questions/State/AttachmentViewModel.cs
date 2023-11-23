@@ -116,7 +116,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 this.attachmentId = newAttachment;
                 var interview = this.interviewRepository.GetOrThrow(interviewId);
-                IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+                IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
                 var attachment = questionnaire.GetAttachmentById(this.attachmentId.Value);
                 
                 this.attachmentContentMetadata = this.attachmentContentStorage.GetMetadata(attachment.ContentId);
@@ -124,23 +124,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (IsImage)
                 {
                     this.Image = await this.attachmentContentStorage.GetPreviewContentAsync(attachment.ContentId);
-                }
-
-                var backingFile = await this.attachmentContentStorage.GetFileCacheLocationAsync(attachment.ContentId);
-                if (!string.IsNullOrWhiteSpace(backingFile))
-                {
-                    if (IsVideo)
-                    {
-                        this.Video = backingFile;
-                    }
-                    else if (IsAudio)
-                    {
-                        this.Audio = backingFile;
-                    }
-                    else if (IsPdf)
-                    {
-                        this.ContentPath = backingFile;
-                    }
                 }
                 
                 await RaiseAllPropertiesChanged();
@@ -154,12 +137,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await RaiseAllPropertiesChanged();
         }
 
-        public string Audio { get; private set; }
-        public string Video { get; private set; }
         public byte[] Image { get; private set; }
-
-        public string ContentPath { get; set; }
-
+        
         public bool IsImage => this.attachmentContentMetadata != null
                                && this.attachmentContentMetadata.ContentType.StartsWith(ImageMimeType,
                                    StringComparison.OrdinalIgnoreCase);
@@ -228,9 +207,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public override void ViewDestroy(bool viewFinishing = true)
         {
-            this.Video = null;
-            this.Audio = null;
-            this.ContentPath = null;
             this.Image = null;
             
             base.ViewDestroy(viewFinishing);
