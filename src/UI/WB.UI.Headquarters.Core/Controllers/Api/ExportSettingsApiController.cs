@@ -152,9 +152,6 @@ namespace WB.UI.Headquarters.Controllers.Api
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> StatusExportCache()
         {
-            if (await this.IsExistsDataExportInProgress())
-                return StatusCode((int)HttpStatusCode.Forbidden,new {message = DataExport.RemoveExportCacheGeneratingFail});
-
             try
             {
                 var status = await exportServiceApi.StatusDeleteTenant();

@@ -1,9 +1,6 @@
 <template>
     <HqLayout :hasFilter="false">
-        <div
-            class="row extra-margin-bottom contain-input"
-            data-suso="settings-page"
-        >
+        <div class="row extra-margin-bottom contain-input" data-suso="settings-page">
             <div class="col-sm-7">
                 <h2>{{ $t('Settings.ExportEncryption_Title') }}</h2>
                 <p>{{ $t('Settings.ExportEncryption_Description') }}</p>
@@ -11,13 +8,8 @@
             <div class="col-sm-12">
                 <div class="block-filter">
                     <div class="form-group">
-                        <input
-                            class="checkbox-filter single-checkbox"
-                            v-model="encryptionEnabled"
-                            @change="changeEncryptionEnabled"
-                            id="isEnabled"
-                            type="checkbox"
-                        />
+                        <input class="checkbox-filter single-checkbox" v-model="encryptionEnabled"
+                            @change="changeEncryptionEnabled" id="isEnabled" type="checkbox" />
                         <label for="isEnabled" style="font-weight: bold">
                             <span class="tick"></span>
                             {{ $t('Settings.EnableEncryption') }}
@@ -30,19 +22,10 @@
                     </label>
                     <div class="form-group">
                         <div class="input-group">
-                            <input
-                                id="exportPassword"
-                                type="text"
-                                v-model="encryptionPassword"
-                                readonly="readonly"
-                                class="form-control"
-                            />
+                            <input id="exportPassword" type="text" v-model="encryptionPassword" readonly="readonly"
+                                class="form-control" />
                             <span class="input-group-btn">
-                                <button
-                                    class="btn btn-default"
-                                    @click="regenPassword"
-                                    :disabled="!encryptionEnabled"
-                                >
+                                <button class="btn btn-default" @click="regenPassword" :disabled="!encryptionEnabled">
                                     <i class="glyphicon glyphicon-refresh"></i>
                                 </button>
                             </span>
@@ -52,26 +35,25 @@
             </div>
         </div>
 
-        <div
-            class="row extra-margin-bottom contain-input"
-            data-suso="settings-page"
-        >
+        <div class="row extra-margin-bottom contain-input" data-suso="settings-page">
             <div class="col-sm-7">
                 <h2>{{ $t('Settings.ClearExportCache_Title') }}</h2>
                 <p>{{ $t('Settings.ClearExportCache_Description') }}</p>
             </div>
             <div class="col-sm-7">
                 <div class="block-filter action-block">
-                    <button type="button" class="btn btn-danger" @click="removeExportCache" v-if="allowToRemoveExportCache">
+                    <button type="button" class="btn btn-danger" @click="removeExportCache"
+                        :disabled="!allowToRemoveExportCache" style="margin-right: 15px">
                         {{ $t('Settings.RemoveExportCache') }}
                     </button>
-                    <div v-else>
-                        <span v-if="statusDropExportCache == 'Removing'" style="color:blue">
-                            {{ $t('Settings.RemovingExportCache') }}
-                        </span>
-                        <span v-if="statusDropExportCache == 'Removed'" style="color:green">
-                            {{ $t('Settings.RemoveExportCacheSuccess') }}
-                        </span>
+                    <span v-if="!allowToRemoveExportCache && statusDropExportCache == 'Removing'" style="color:blue">
+                        {{ $t('Settings.RemovingExportCache') }}
+                    </span>
+                    <span v-if="statusDropExportCache == 'Removed'" style="color:green">
+                        {{ $t('Settings.RemoveExportCacheSuccess') }}
+                    </span>
+                    <div v-if="!allowToRemoveExportCache">
+                        <br />
                         <span v-if="statusDropExportCache == 'Error'" style="color:red"
                             v-html="$t('Settings.RemoveExportCacheFail').replaceAll('\n', '<br/>')">
                         </span>
@@ -91,28 +73,15 @@
                         <label for="notificationText">
                             {{ $t('Settings.GlobalNotice') }}:
                         </label>
-                        <textarea
-                            class="form-control"
-                            id="notificationText"
-                            type="text"
-                            v-model="globalNotice"
-                            maxlength="1000"
-                        ></textarea>
+                        <textarea class="form-control" id="notificationText" type="text" v-model="globalNotice"
+                            maxlength="1000"></textarea>
                     </div>
                 </div>
                 <div class="block-filter">
-                    <button
-                        type="button"
-                        class="btn btn-success"
-                        @click="updateMessage"
-                    >
+                    <button type="button" class="btn btn-success" @click="updateMessage">
                         {{ $t('Common.Save') }}
                     </button>
-                    <button
-                        type="button"
-                        class="btn btn-link"
-                        @click="clearMessage"
-                    >
+                    <button type="button" class="btn btn-link" @click="clearMessage">
                         {{ $t('Common.Delete') }}
                     </button>
                     <span class="text-success" v-if="globalNoticeUpdated">{{
@@ -129,17 +98,10 @@
             <div class="col-sm-7">
                 <div class="block-filter">
                     <div class="form-group">
-                        <input
-                            class="checkbox-filter single-checkbox"
-                            v-model="isAllowInterviewerUpdateProfile"
-                            @change="updateAllowInterviewerUpdateProfile"
-                            id="allowInterviewerUpdateProfile"
-                            type="checkbox"
-                        />
-                        <label
-                            for="allowInterviewerUpdateProfile"
-                            style="font-weight: bold"
-                        >
+                        <input class="checkbox-filter single-checkbox" v-model="isAllowInterviewerUpdateProfile"
+                            @change="updateAllowInterviewerUpdateProfile" id="allowInterviewerUpdateProfile"
+                            type="checkbox" />
+                        <label for="allowInterviewerUpdateProfile" style="font-weight: bold">
                             <span class="tick"></span>
                             {{ $t('Settings.AllowInterviewerUpdateProfile') }}
                             <p style="font-weight: normal">
@@ -163,17 +125,9 @@
             <div class="col-sm-7">
                 <div class="block-filter">
                     <div class="form-group">
-                        <input
-                            class="checkbox-filter single-checkbox"
-                            v-model="isInterviewerAutomaticUpdatesEnabled"
-                            @change="updateDeviceSettings"
-                            id="interviewerAutomaticUpdatesEnabled"
-                            type="checkbox"
-                        />
-                        <label
-                            for="interviewerAutomaticUpdatesEnabled"
-                            style="font-weight: bold"
-                        >
+                        <input class="checkbox-filter single-checkbox" v-model="isInterviewerAutomaticUpdatesEnabled"
+                            @change="updateDeviceSettings" id="interviewerAutomaticUpdatesEnabled" type="checkbox" />
+                        <label for="interviewerAutomaticUpdatesEnabled" style="font-weight: bold">
                             <span class="tick"></span>
                             {{ $t('Settings.InterviewerAutoUpdate') }}
                             <p style="font-weight: normal">
@@ -186,17 +140,9 @@
             <div class="col-sm-7">
                 <div class="block-filter">
                     <div class="form-group">
-                        <input
-                            class="checkbox-filter single-checkbox"
-                            v-model="isDeviceNotificationsEnabled"
-                            @change="updateDeviceSettings"
-                            id="deviceNotificationsEnabled"
-                            type="checkbox"
-                        />
-                        <label
-                            for="deviceNotificationsEnabled"
-                            style="font-weight: bold"
-                        >
+                        <input class="checkbox-filter single-checkbox" v-model="isDeviceNotificationsEnabled"
+                            @change="updateDeviceSettings" id="deviceNotificationsEnabled" type="checkbox" />
+                        <label for="deviceNotificationsEnabled" style="font-weight: bold">
                             <span class="tick"></span>
                             {{ $t('Settings.DeviceNotifications') }}
                             <p style="font-weight: normal">
@@ -213,17 +159,9 @@
             <div class="col-sm-7">
                 <div class="block-filter">
                     <div class="form-group">
-                        <input
-                            class="checkbox-filter single-checkbox"
-                            v-model="isPartialSynchronizationEnabled"
-                            @change="updateDeviceSettings"
-                            id="interviewerPartialSynchronizationEnabled"
-                            type="checkbox"
-                        />
-                        <label
-                            for="interviewerPartialSynchronizationEnabled"
-                            style="font-weight: bold"
-                        >
+                        <input class="checkbox-filter single-checkbox" v-model="isPartialSynchronizationEnabled"
+                            @change="updateDeviceSettings" id="interviewerPartialSynchronizationEnabled" type="checkbox" />
+                        <label for="interviewerPartialSynchronizationEnabled" style="font-weight: bold">
                             <span class="tick"></span>
                             {{
                                 $t('Settings.InterviewerPartialSynchronization')
@@ -242,10 +180,7 @@
             <div class="col-sm-7">
                 <div class="block-filter" style="padding-left: 30px">
                     <div class="form-group">
-                        <label
-                            for="interviewerGeographyQuestionAccuracyInMeters"
-                            style="font-weight: bold"
-                        >
+                        <label for="interviewerGeographyQuestionAccuracyInMeters" style="font-weight: bold">
                             <span class="tick"></span>
                             {{
                                 $t(
@@ -263,45 +198,25 @@
                     </div>
                     <div class="form-group">
                         <div class="input-group input-group-save">
-                            <input
-                                class="form-control number"
-                                v-model.number="
-                                    geographyQuestionAccuracyInMeters
-                                "
-                                v-validate="{
-                                    numeric: true,
-                                    required: true,
-                                    min_value: 1,
-                                    max_value: 1000,
-                                }"
-                                name="accuracy"
-                                id="interviewerGeographyQuestionAccuracyInMeters"
-                                type="number"
-                            />
+                            <input class="form-control number" v-model.number="geographyQuestionAccuracyInMeters
+                                    " v-validate="{
+            numeric: true,
+            required: true,
+            min_value: 1,
+            max_value: 1000,
+        }" name="accuracy" id="interviewerGeographyQuestionAccuracyInMeters" type="number" />
                         </div>
-                        <button
-                            type="button"
-                            class="btn btn-success"
-                            :disabled="
-                                geographyQuestionAccuracyInMeters ==
-                                    geographyQuestionAccuracyInMetersCancel ||
-                                geographyQuestionAccuracyInMeters < 1 ||
-                                geographyQuestionAccuracyInMeters > 1000 ||
-                                errors.has('accuracy')
-                            "
-                            @click="updateGeographyQuestionAccuracyInMeters"
-                        >
+                        <button type="button" class="btn btn-success" :disabled="geographyQuestionAccuracyInMeters ==
+                            geographyQuestionAccuracyInMetersCancel ||
+                            geographyQuestionAccuracyInMeters < 1 ||
+                            geographyQuestionAccuracyInMeters > 1000 ||
+                            errors.has('accuracy')
+                            " @click="updateGeographyQuestionAccuracyInMeters">
                             {{ $t('Common.Save') }}
                         </button>
-                        <button
-                            type="button"
-                            class="btn btn-link"
-                            :disabled="
-                                geographyQuestionAccuracyInMeters ==
-                                geographyQuestionAccuracyInMetersCancel
-                            "
-                            @click="cancelGeographyQuestionAccuracyInMeters"
-                        >
+                        <button type="button" class="btn btn-link" :disabled="geographyQuestionAccuracyInMeters ==
+                            geographyQuestionAccuracyInMetersCancel
+                            " @click="cancelGeographyQuestionAccuracyInMeters">
                             {{ $t('Common.Cancel') }}
                         </button>
                     </div>
@@ -313,10 +228,7 @@
             <div class="col-sm-7">
                 <div class="block-filter" style="padding-left: 30px">
                     <div class="form-group">
-                        <label
-                            for="interviewerGeographyQuestionPeriodInSeconds"
-                            style="font-weight: bold"
-                        >
+                        <label for="interviewerGeographyQuestionPeriodInSeconds" style="font-weight: bold">
                             <span class="tick"></span>
                             {{
                                 $t(
@@ -334,45 +246,25 @@
                     </div>
                     <div class="form-group">
                         <div class="input-group input-group-save">
-                            <input
-                                class="form-control number"
-                                v-model.number="
-                                    geographyQuestionPeriodInSeconds
-                                "
-                                v-validate="{
-                                    numeric: true,
-                                    required: true,
-                                    min_value: 5,
-                                    max_value: 1000,
-                                }"
-                                id="interviewerGeographyQuestionPeriodInSeconds"
-                                name="period"
-                                type="number"
-                            />
+                            <input class="form-control number" v-model.number="geographyQuestionPeriodInSeconds
+                                    " v-validate="{
+            numeric: true,
+            required: true,
+            min_value: 5,
+            max_value: 1000,
+        }" id="interviewerGeographyQuestionPeriodInSeconds" name="period" type="number" />
                         </div>
-                        <button
-                            type="button"
-                            class="btn btn-success"
-                            :disabled="
-                                geographyQuestionPeriodInSeconds ==
-                                    geographyQuestionPeriodInSecondsCancel ||
-                                geographyQuestionPeriodInSeconds < 5 ||
-                                geographyQuestionPeriodInSeconds > 1000 ||
-                                errors.has('period')
-                            "
-                            @click="updateGeographyQuestionPeriodInSeconds"
-                        >
+                        <button type="button" class="btn btn-success" :disabled="geographyQuestionPeriodInSeconds ==
+                            geographyQuestionPeriodInSecondsCancel ||
+                            geographyQuestionPeriodInSeconds < 5 ||
+                            geographyQuestionPeriodInSeconds > 1000 ||
+                            errors.has('period')
+                            " @click="updateGeographyQuestionPeriodInSeconds">
                             {{ $t('Common.Save') }}
                         </button>
-                        <button
-                            type="button"
-                            class="btn btn-link"
-                            :disabled="
-                                geographyQuestionPeriodInSeconds ==
-                                geographyQuestionPeriodInSecondsCancel
-                            "
-                            @click="cancelGeographyQuestionPeriodInSeconds"
-                        >
+                        <button type="button" class="btn btn-link" :disabled="geographyQuestionPeriodInSeconds ==
+                            geographyQuestionPeriodInSecondsCancel
+                            " @click="cancelGeographyQuestionPeriodInSeconds">
                             {{ $t('Common.Cancel') }}
                         </button>
                     </div>
@@ -392,17 +284,10 @@
             <div class="col-sm-7">
                 <div class="block-filter">
                     <div class="form-group">
-                        <input
-                            class="checkbox-filter single-checkbox"
-                            v-model="isEmailAllowed"
-                            @change="updateWebInterviewEmailNotifications"
-                            id="allowWebInterviewEmailNotifications"
-                            type="checkbox"
-                        />
-                        <label
-                            for="allowWebInterviewEmailNotifications"
-                            style="font-weight: bold"
-                        >
+                        <input class="checkbox-filter single-checkbox" v-model="isEmailAllowed"
+                            @change="updateWebInterviewEmailNotifications" id="allowWebInterviewEmailNotifications"
+                            type="checkbox" />
+                        <label for="allowWebInterviewEmailNotifications" style="font-weight: bold">
                             <span class="tick"></span>
                             {{
                                 $t(
@@ -428,49 +313,24 @@
                 <p>{{ $t('Settings.LogoSettings_Description') }}</p>
                 <p>{{ $t('Settings.LogoSettings_Description1') }}</p>
             </div>
-            <form
-                :action="$config.model.updateLogoUrl"
-                method="post"
-                enctype="multipart/form-data"
-                class="col-sm-7"
-                @submit="onLogoSubmit"
-            >
-                <input
-                    name="__RequestVerificationToken"
-                    type="hidden"
-                    :value="this.$hq.Util.getCsrfCookie()"
-                />
+            <form :action="$config.model.updateLogoUrl" method="post" enctype="multipart/form-data" class="col-sm-7"
+                @submit="onLogoSubmit">
+                <input name="__RequestVerificationToken" type="hidden" :value="this.$hq.Util.getCsrfCookie()" />
                 <div class="block-filter">
-                    <div
-                        class="form-group"
-                        :class="{
-                            'has-error': this.$config.model.invalidImage,
-                        }"
-                    >
+                    <div class="form-group" :class="{
+                        'has-error': this.$config.model.invalidImage,
+                    }">
                         <label for="companyLogo">
                             {{ $t('Settings.Logo') }}
                         </label>
-                        <input
-                            type="file"
-                            id="companyLogo"
-                            ref="logoRef"
-                            name="logo"
-                            @change="changedFile"
-                            accept="image/gif, image/jpeg, image/png"
-                        />
-                        <span
-                            class="help-block"
-                            v-if="this.$config.model.invalidImage"
-                            >{{ this.$t('Settings.LogoNotUpdated') }}</span
-                        >
+                        <input type="file" id="companyLogo" ref="logoRef" name="logo" @change="changedFile"
+                            accept="image/gif, image/jpeg, image/png" />
+                        <span class="help-block" v-if="this.$config.model.invalidImage">{{
+                            this.$t('Settings.LogoNotUpdated') }}</span>
                     </div>
                 </div>
                 <div class="block-filter">
-                    <button
-                        :disabled="files.length == 0"
-                        type="submit"
-                        class="btn btn-success"
-                    >
+                    <button :disabled="files.length == 0" type="submit" class="btn btn-success">
                         {{ $t('Common.Save') }}
                     </button>
                 </div>
@@ -481,22 +341,13 @@
                         <figcaption>
                             {{ $t('Settings.CurrentLogo') }}:
                         </figcaption>
-                        <img
-                            class="logo extra-margin-bottom"
-                            ref="logoImage"
-                            :src="$config.model.logoUrl"
-                            @error="logoError"
-                            alt="logo image"
-                        />
+                        <img class="logo extra-margin-bottom" ref="logoImage" :src="$config.model.logoUrl"
+                            @error="logoError" alt="logo image" />
                     </figure>
                 </div>
                 <div class="block-filter action-block">
                     <form :action="$config.model.removeLogoUrl" method="post">
-                        <input
-                            name="__RequestVerificationToken"
-                            type="hidden"
-                            :value="this.$hq.Util.getCsrfCookie()"
-                        />
+                        <input name="__RequestVerificationToken" type="hidden" :value="this.$hq.Util.getCsrfCookie()" />
                         <button type="submit" class="btn btn-danger">
                             {{ $t('Settings.RemoveLogo') }}
                         </button>
@@ -765,7 +616,7 @@ export default {
                     cancel: {
                         label: self.$t('Common.Cancel'),
                         className: 'btn btn-link',
-                        callback: () => {},
+                        callback: () => { },
                     },
                 },
             })
@@ -804,6 +655,7 @@ export default {
             if (this.statusDropExportCache != 'Removing' && this.dropSchemaTimer != null) {
                 clearInterval(this.dropSchemaTimer)
                 this.dropSchemaTimer = null
+                this.allowToRemoveExportCache = true;
             }
         },
         showAlert(message) {
