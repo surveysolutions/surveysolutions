@@ -1,4 +1,3 @@
-@@ -0,0 +1,420 @@
 import { defineStore } from 'pinia';
 import { mande } from 'mande';
 import { newGuid } from '../helpers/guid';
@@ -328,9 +327,7 @@ export const useTreeStore = defineStore('tree', {
                 groupId: itemId
             };
 
-            return commandCall('DeleteGroup', command).then(function(
-                result
-            ) {
+            return commandCall('DeleteGroup', command).then(function(result) {
                 parent.items.splice(index, 0, group);
                 callback(group, parent, index);
             });
