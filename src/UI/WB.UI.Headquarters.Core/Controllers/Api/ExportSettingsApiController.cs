@@ -100,6 +100,10 @@ namespace WB.UI.Headquarters.Controllers.Api
             if (await this.IsExistsDataExportInProgress())
                 return StatusCode((int)HttpStatusCode.Forbidden,new {message = DataExport.RemoveExportCacheGeneratingFail});
 
+            var status = await exportServiceApi.StatusDeleteTenant();
+            if (status.Status == StopTenantStatus.Removing)
+                return StatusCode((int)HttpStatusCode.Forbidden,new {message = DataExport.RemoveExportCacheGeneratingFail});
+
             Task.Run(RunClearExportData).Wait(TimeSpan.FromSeconds(2));
 
             return new JsonResult(new { Success = true });
@@ -111,13 +115,15 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             try
             {
-                var workspace = workspaceContextAccessor.CurrentWorkspace()?.Name;
                 var status = await exportServiceApi.StatusDeleteTenant();
                 if (status.Status != StopTenantStatus.Removing)
+                {
+                    var workspace = workspaceContextAccessor.CurrentWorkspace()?.Name;
                     await exportService.ExecuteAsync(async export =>
                     {
                         await export.DeleteTenant();
                     }, workspace);
+                }
             }
             catch (Exception e)
             {
