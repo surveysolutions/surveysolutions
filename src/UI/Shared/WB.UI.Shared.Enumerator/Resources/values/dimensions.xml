@@ -58,6 +58,7 @@
     <dimen name="exo_player_button_size">48dp</dimen>
     <dimen name="exo_player_play_button_size">32dp</dimen>
     <dimen name="exo_player_play_button_margin_top">8dp</dimen>
+    <dimen name="exo_player_center_play_button_size">100dp</dimen>
     
     <dimen name="calendar_event_dialog_padding">10dp</dimen>
     <dimen name="calendar_event_dialog_margin">3dp</dimen>

@@ -4,6 +4,7 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:background="@color/exo_video_bar_background"
               local:MvxBind="HideKeyboardOnClick .">
 
     <com.google.android.exoplayer2.ui.StyledPlayerView
