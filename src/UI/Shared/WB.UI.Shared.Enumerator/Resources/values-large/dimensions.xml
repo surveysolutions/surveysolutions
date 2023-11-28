@@ -14,6 +14,7 @@
     <dimen name="textsize_30">30sp</dimen>
 
     <dimen name="button_corners_radius">8dp</dimen>
+    <dimen name="dialog_corners_radius">3dp</dimen>
 
     <dimen name="OfflineSync_MainHolder_LayoutWidth">440dp</dimen>
     <dimen name="OfflineSync_Base_MarginTop">38dp</dimen>
