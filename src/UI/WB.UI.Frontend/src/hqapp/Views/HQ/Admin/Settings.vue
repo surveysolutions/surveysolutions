@@ -52,7 +52,7 @@
                     <span v-if="statusDropExportCache == 'Removed'" style="color:green">
                         {{ $t('Settings.RemoveExportCacheSuccess') }}
                     </span>
-                    <div v-if="allowToRemoveExportCache && statusDropExportCache == 'Error'">
+                    <div v-if="statusDropExportCache == 'Error'">
                         <br />
                         <span style="color:red" v-html="$t('Settings.RemoveExportCacheFail').replaceAll('\n', '<br/>')">
                         </span>
