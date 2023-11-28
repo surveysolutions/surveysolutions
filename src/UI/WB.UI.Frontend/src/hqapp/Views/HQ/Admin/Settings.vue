@@ -52,10 +52,9 @@
                     <span v-if="statusDropExportCache == 'Removed'" style="color:green">
                         {{ $t('Settings.RemoveExportCacheSuccess') }}
                     </span>
-                    <div v-if="!allowToRemoveExportCache">
+                    <div v-if="allowToRemoveExportCache && statusDropExportCache == 'Error'">
                         <br />
-                        <span v-if="statusDropExportCache == 'Error'" style="color:red"
-                            v-html="$t('Settings.RemoveExportCacheFail').replaceAll('\n', '<br/>')">
+                        <span style="color:red" v-html="$t('Settings.RemoveExportCacheFail').replaceAll('\n', '<br/>')">
                         </span>
                     </div>
                 </div>
@@ -639,11 +638,7 @@ export default {
                             this.showAlert(e.response.data.message)
                             return
                         } else {
-                            this.showAlert(
-                                this.$t(
-                                    'Settings.RemoveExportCacheFail',
-                                ),
-                            )
+                            this.statusDropExportCache = 'Error'
                             return
                         }
                     })
