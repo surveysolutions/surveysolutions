@@ -9,11 +9,10 @@
               android:paddingTop="@dimen/calendar_event_dialog_padding"
               android:paddingBottom="@dimen/calendar_event_dialog_padding"
               android:minWidth="400dp"
-              android:maxHeight="400dp"
               local:MvxBind="HideKeyboardOnClick .">
 
     <LinearLayout  android:layout_width="match_parent"
-                   android:layout_height="48dp"
+                   android:layout_height="@dimen/exo_player_button_size"
                    android:orientation="vertical">
 
         <com.google.android.exoplayer2.ui.StyledPlayerView

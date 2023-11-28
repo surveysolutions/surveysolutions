@@ -5,16 +5,7 @@
              android:layout_height="match_parent"
              
 >
-
-    <ImageButton android:id="@id/exo_play_pause"
-                 android:layout_width="@dimen/exo_player_center_play_button_size"
-                 android:layout_height="@dimen/exo_player_center_play_button_size"
-                 android:layout_gravity="center"
-                 android:tint="@color/exo_player_button_tint"
-                 style="@style/ExoStyledControls.Button.Center.PlayPause"/>
-
-
-
+    
     <LinearLayout
             android:id="@id/exo_bottom_bar"
             android:layout_width="match_parent"
@@ -26,12 +17,15 @@
             android:paddingTop="4dp"
             android:orientation="horizontal">
 
-        <!--ImageButton android:id="@id/exo_play_pause"
-                     style="@style/ExoStyledControls.Button.Bottom.VR"/-->
+        <ImageButton android:id="@id/exo_play_pause"
+                     android:layout_width="@dimen/exo_player_center_play_button_size"
+                     android:layout_height="@dimen/exo_player_center_play_button_size"
+                     style="@style/ExoStyledControls.Button.Center.PlayPause"/>
         
         <TextView android:id="@id/exo_position"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
+                  android:layout_gravity="center"
                   android:textSize="@dimen/exo_player_text_size"
                   android:textStyle="bold"
                   android:paddingLeft="8dp"
@@ -48,6 +42,7 @@
         <TextView android:id="@id/exo_duration"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
+                  android:layout_gravity="center"
                   android:textSize="@dimen/exo_player_text_size"
                   android:textStyle="bold"
                   android:paddingLeft="4dp"

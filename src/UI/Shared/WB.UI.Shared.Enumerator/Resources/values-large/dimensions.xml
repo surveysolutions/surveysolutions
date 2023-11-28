@@ -22,11 +22,11 @@
     <dimen name="OfflineSync_Small_MarginLeft">18dp</dimen>
     <dimen name="OfflineSync_Spinner_Size">76dp</dimen>
 
-    <dimen name="exo_player_text_size">24sp</dimen>
-    <dimen name="exo_player_seek_height">39dp</dimen>
+    <dimen name="exo_player_text_size">30sp</dimen>
+    <dimen name="exo_player_seek_height">96dp</dimen>
     <dimen name="exo_player_button_size">72dp</dimen>
-    <dimen name="exo_player_play_button_size">48dp</dimen>
+    <dimen name="exo_player_play_button_size">108dp</dimen>
     <dimen name="exo_player_play_button_margin_top">12dp</dimen>
-    <dimen name="exo_player_center_play_button_size">150dp</dimen>
+    <dimen name="exo_player_center_play_button_size">96dp</dimen>
 
 </resources>
