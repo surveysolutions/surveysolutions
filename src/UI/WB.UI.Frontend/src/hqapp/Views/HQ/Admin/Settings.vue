@@ -639,6 +639,7 @@ export default {
                             return
                         } else {
                             this.statusDropExportCache = 'Error'
+                            this.allowToRemoveExportCache = true;
                             return
                         }
                     })
