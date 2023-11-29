@@ -7,6 +7,8 @@ import i18n from './plugins/localization';
 
 //import '../../questionnaire/content/markup.less';
 //import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-vue-next/dist/bootstrap-vue-next.css';
 
 import ConfirmDialog from './plugins/confirm';
 
