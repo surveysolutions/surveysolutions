@@ -20,19 +20,15 @@
                         $t('QuestionnaireEditor.VariableType')
                     }}</label
                     ><br />
-                    <div
-                        class="btn-group type-container-dropdown dropdown"
-                        uib-dropdown
-                    >
+                    <div class="btn-group type-container-dropdown dropdown">
                         <button
                             id="variableTypeBtn"
                             class="btn btn-default form-control dropdown-toggle"
                             data-bs-toggle="dropdown"
                             aria-expanded="false"
-                            uib-dropdown-toggle
                             type="button"
                         >
-                            {{ activeVariable.typeName }}
+                            {{ typeName }}
                             <span class="dropdown-arrow"></span>
                         </button>
 
@@ -45,7 +41,9 @@
                                 <a
                                     role="menuitem"
                                     tabindex="-1"
-                                    @click="setType(typeOption.value)"
+                                    @click="
+                                        activeVariable.type = typeOption.value
+                                    "
                                 >
                                     {{ typeOption.text }}
                                 </a>
@@ -218,6 +216,14 @@ export default {
     async beforeMount() {
         await this.fetch();
     },
+    computed: {
+        typeName() {
+            const option = this.activeVariable.typeOptions.find(
+                p => p.value == this.activeVariable.type
+            );
+            return option != null ? option.text : null;
+        }
+    },
     methods: {
         async fetch() {
             await this.variableStore.fetchVarableData(
@@ -233,10 +239,8 @@ export default {
         },
         cancel() {
             this.variableStore.discardChanges();
+            this.activeVariable = this.variableStore.getData;
             this.dirty = false;
-        },
-        setType(newType) {
-            //
         }
     }
 };

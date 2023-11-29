@@ -7,6 +7,7 @@ import i18n from './plugins/localization';
 
 //import '../../questionnaire/content/markup.less';
 //import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap';
 
 import ConfirmDialog from './plugins/confirm';
 

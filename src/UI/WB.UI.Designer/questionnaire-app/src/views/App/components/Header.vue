@@ -80,8 +80,8 @@
                             })
                         }}</a>
                         <a
-                            class="btn btn-default dropdown-toggle"
-                            data-toggle="dropdown"
+                            class="btn btn-default"
+                            data-bs-toggle="dropdown"
                             aria-haspopup="true"
                             aria-expanded="false"
                         >
@@ -148,7 +148,7 @@
                             v-if="warningsCount != null && errorsCount != null"
                         >
                             <span
-                                data-toggle="modal"
+                                data-bs-toggle="modal"
                                 v-if="warningsCount + errorsCount > 0"
                                 class="error-message v-hide"
                                 :class="{
@@ -170,7 +170,7 @@
                                 </a>
                             </span>
                             <span
-                                data-toggle="modal"
+                                data-bs-toggle="modal"
                                 v-if="warningsCount > 0"
                                 class="warning-message v-hide"
                             >
