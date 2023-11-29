@@ -1,5 +1,4 @@
 {
-    "i18n-ally.localesPaths": "src/locale",
     "eslint.enable": true,
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": true,
@@ -13,10 +12,10 @@
     "typescript.preferences.quoteStyle": "single",
     "javascript.preferences.quoteStyle": "single",
     "[vue]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "Vue.volar"
     },
     "[javascript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "Vue.volar"
     },
     "editor.detectIndentation": false,
 }
