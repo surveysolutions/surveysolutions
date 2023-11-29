@@ -10,7 +10,7 @@ import i18n from './plugins/localization';
 
 import ConfirmDialog from './plugins/confirm';
 
-import * as uiv from 'uiv';
+//import * as uiv from 'uiv';
 
 import './directives';
 
@@ -21,7 +21,7 @@ vue.use(router);
 vue.use(pinia);
 //vue.use(vuetify); //reqired by options component. consider either remove or use.
 vue.use(i18n);
-vue.use(uiv);
+//vue.use(uiv);
 
 //import { useQuestionnaireStore } from './store'
 //vue.provide('store', useQuestionnaireStore)

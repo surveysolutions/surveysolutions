@@ -20,10 +20,15 @@
                         $t('QuestionnaireEditor.VariableType')
                     }}</label
                     ><br />
-                    <div class="btn-group type-container-dropdown" uib-dropdown>
+                    <div
+                        class="btn-group type-container-dropdown dropdown"
+                        uib-dropdown
+                    >
                         <button
                             id="variableTypeBtn"
-                            class="btn btn-default form-control"
+                            class="btn btn-default form-control dropdown-toggle"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
                             uib-dropdown-toggle
                             type="button"
                         >
@@ -33,6 +38,7 @@
 
                         <ul class="dropdown-menu" role="menu">
                             <li
+                                class="dropdown-item"
                                 role="presentation"
                                 v-for="typeOption in activeVariable.typeOptions"
                             >
