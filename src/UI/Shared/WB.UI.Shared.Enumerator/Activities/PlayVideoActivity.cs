@@ -1,5 +1,7 @@
 using Android.Content.PM;
+using Android.OS;
 using Android.Views;
+using Com.Google.Android.Exoplayer2.UI;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.UI.Shared.Enumerator.Activities;
@@ -12,7 +14,18 @@ namespace WB.UI.Shared.Enumerator.Activities;
 public class PlayVideoActivity: BaseActivity<PlayVideoViewModel>
 {
     protected override int ViewResourceId => Resource.Layout.interview_video_view;
-        
+
+    protected override void OnCreate(Bundle bundle)
+    {
+        base.OnCreate(bundle);
+    
+        var styledPlayerView = FindViewById<StyledPlayerView>(Resource.Id.video_player_view);
+        if (styledPlayerView?.Player != null)
+        {
+            styledPlayerView.Player.PlayWhenReady = true;
+        }
+    }
+
     private void Cancel()
     {
         this.Finish();
