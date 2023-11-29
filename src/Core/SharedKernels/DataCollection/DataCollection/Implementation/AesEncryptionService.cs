@@ -23,10 +23,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation
 
             using var aesCreate = Aes.Create();
             aesCreate.GenerateIV();
-            this.secureStorage.Store(IV, aes.IV);
+            this.secureStorage.Store(IV, aesCreate.IV);
 
             aesCreate.GenerateKey();
-            this.secureStorage.Store(Key, aes.Key);
+            this.secureStorage.Store(Key, aesCreate.Key);
         }
 
         public string Encrypt(string textToEncrypt)
