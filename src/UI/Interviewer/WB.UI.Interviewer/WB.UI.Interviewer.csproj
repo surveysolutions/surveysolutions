@@ -264,14 +264,14 @@
     <Choose>
         <When Condition=" '$(ExcludeExtensions)' != 'True' ">
             <ItemGroup>
-            </ItemGroup>
-        </When>
-        <Otherwise>
-            <ItemGroup>
                 <ProjectReference Include="..\..\Shared\WB.UI.Shared.Extensions\WB.UI.Shared.Extensions.csproj">
                     <Project>{f69d3c48-f648-4b9f-9b4f-ba44e014224c}</Project>
                     <Name>WB.UI.Shared.Extensions</Name>
                 </ProjectReference>
+            </ItemGroup>
+        </When>
+        <Otherwise>
+            <ItemGroup>
             </ItemGroup>
         </Otherwise>
     </Choose>
