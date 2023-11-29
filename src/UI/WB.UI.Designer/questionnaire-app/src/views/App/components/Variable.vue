@@ -20,15 +20,6 @@
                         $t('QuestionnaireEditor.VariableType')
                     }}</label
                     ><br />
-                    <BDropdown v-model="show" :text="activeVariable.typeName">
-                        <BDropdownItem>First Action</BDropdownItem>
-                        <BDropdownItem>Second Action</BDropdownItem>
-                        <BDropdownItem>Third Action</BDropdownItem>
-                        <BDropdownDivider />
-                        <BDropdownItem active>Active action</BDropdownItem>
-                        <BDropdownItem disabled>Disabled action</BDropdownItem>
-                    </BDropdown>
-
                     <div
                         class="btn-group type-container-dropdown dropdown"
                         uib-dropdown
