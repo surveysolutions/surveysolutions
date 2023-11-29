@@ -39,7 +39,10 @@ public abstract class BaseFragmentDialog<T> : MvxDialogFragment<T> where T : Mvx
         this.Dialog.SetTitle(Title);
         this.Dialog.SetCancelable(true);
         this.Dialog.SetCanceledOnTouchOutside(IsCancelable);
-            
+        
+        if (this.Dialog.Window != null)
+            this.Dialog.Window.SetLayout(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent);
+        
         if (Activity == null) throw new InvalidOperationException("Activity is null");
         Activity.Window?.SetSoftInputMode(SoftInput.AdjustPan);
         return view;
