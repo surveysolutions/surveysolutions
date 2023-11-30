@@ -22,10 +22,10 @@ namespace WB.UI.Designer.Code.Attributes
             ResponseStatusCode = responseStatusCode;
         }
 
-        protected UnauthorizedException(
+        /*protected UnauthorizedException(
             SerializationInfo info,
             StreamingContext context) : base(info, context)
         {
-        }
+        }*/
     }
 }
