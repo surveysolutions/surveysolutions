@@ -40,8 +40,6 @@ namespace WB.Services.Export.Host.Controllers
             this.logger = logger;
         }
 
-        private static string lastError = "";
-
         [HttpDelete]
         [Route("api/v1/deleteTenant")]
         public async Task<ActionResult> StopTenant([FromQuery] string? tenant = null)
@@ -72,7 +70,6 @@ namespace WB.Services.Export.Host.Controllers
             {
                 this.logger.LogCritical(e, "Fail to drop tenant {tenant}", tenant);
                 dropTenantStatuses[tenant] = StopTenantStatus.Error;
-                lastError = e.ToString();
                 throw;
             }
         }
@@ -97,8 +94,7 @@ namespace WB.Services.Export.Host.Controllers
             
             return Ok(new
             {
-                status = status,
-                lastError = lastError
+                status = status
             });
         }
     }

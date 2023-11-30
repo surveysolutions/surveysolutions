@@ -165,7 +165,6 @@ namespace WB.UI.Headquarters.Controllers.Api
                 {
                     Success = true,
                     Status = status.Status,
-                    Error = status.LastError,
                 });
             }
             catch (Exception e)
