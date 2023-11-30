@@ -16,12 +16,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
 
         public InterviewUniqueKeyGeneratorException(string message, Exception inner) : base(message, inner)
         {
-        }
-
-        /*protected InterviewUniqueKeyGeneratorException(
-            SerializationInfo info,
-            StreamingContext context) : base(info, context)
-        {
-        }*/
+        }        
     }
 }
