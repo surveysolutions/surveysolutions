@@ -475,7 +475,7 @@ namespace WB.UI.Headquarters
                     });
             }
             
-            app.UseMetrics(Configuration);
+            app.UseAppMetrics(Configuration);
             app.UseRouting();
             app.UseCors();
 
