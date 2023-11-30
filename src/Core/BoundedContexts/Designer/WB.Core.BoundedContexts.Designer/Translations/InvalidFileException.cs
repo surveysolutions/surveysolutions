@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 
 namespace WB.Core.BoundedContexts.Designer.Translations
 {
