@@ -18,10 +18,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
         {
         }
 
-        protected InterviewUniqueKeyGeneratorException(
+        /*protected InterviewUniqueKeyGeneratorException(
             SerializationInfo info,
             StreamingContext context) : base(info, context)
         {
-        }
+        }*/
     }
 }

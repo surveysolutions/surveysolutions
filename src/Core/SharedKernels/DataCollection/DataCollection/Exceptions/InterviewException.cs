@@ -20,16 +20,5 @@ namespace WB.Core.SharedKernels.DataCollection.Exceptions
         {
             this.ExceptionType = exceptionType ?? InterviewDomainExceptionType.Undefined;
         }
-
-        protected InterviewException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-            ExceptionType = (InterviewDomainExceptionType)info.GetInt32(nameof(ExceptionType));
-        }
-
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            info.AddValue(nameof(ExceptionType), (int)this.ExceptionType);
-            base.GetObjectData(info, context);
-        }
     }
 }

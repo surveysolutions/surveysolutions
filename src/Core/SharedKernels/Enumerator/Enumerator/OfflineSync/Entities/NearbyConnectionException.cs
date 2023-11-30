@@ -17,8 +17,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Entities
         {
         }
 
-        protected NearbyConnectionException(SerializationInfo info, StreamingContext context) : base(info, context)
+        /*protected NearbyConnectionException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
-        }
+        }*/
     }
 }
