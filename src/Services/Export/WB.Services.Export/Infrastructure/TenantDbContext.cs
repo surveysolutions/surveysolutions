@@ -236,7 +236,7 @@ namespace WB.Services.Export.Infrastructure
                     await using var tr = await db.BeginTransactionAsync(cancellationToken);
                     foreach (var table in tables)
                     {
-                        await db.ExecuteAsync($@"drop table if exists {table}");
+                        await db.ExecuteAsync($@"drop table if exists {table} cascade");
                         logger?.LogInformation("Dropped {Table}", table);
                     }
 
@@ -247,7 +247,7 @@ namespace WB.Services.Export.Infrastructure
                 {
                     foreach (var schema in schemas)
                     {
-                        await db.ExecuteAsync($@"drop schema if exists ""{schema}""");
+                        await db.ExecuteAsync($@"drop schema if exists ""{schema}"" cascade");
                         logger?.LogInformation("Dropped schema {Schema}", schema);
                     }
 
