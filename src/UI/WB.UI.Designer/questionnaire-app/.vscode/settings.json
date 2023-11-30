@@ -15,7 +15,7 @@
         "editor.defaultFormatter": "Vue.volar"
     },
     "[javascript]": {
-        "editor.defaultFormatter": "Vue.volar"
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "editor.detectIndentation": false,
 }
