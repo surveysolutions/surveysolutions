@@ -47,7 +47,7 @@
                         {{ $t('Settings.RemoveExportCache') }}
                     </button>
                     <span v-if="!allowToRemoveExportCache && statusDropExportCache == 'Removing'" style="color:blue">
-                        {{ $t('Settings.RemovingExportCache') }}
+                        {{ $t('Settings.RemovingExportCache') + ".".repeat(dropSchemaDots) }}
                     </span>
                     <span v-if="statusDropExportCache == 'Removed'" style="color:green">
                         {{ $t('Settings.RemoveExportCacheSuccess') }}
@@ -409,7 +409,8 @@ export default {
             geographyQuestionPeriodInSecondsCancel: 10,
             allowToRemoveExportCache: true,
             statusDropExportCache: 'NotStarted',
-            dropSchemaTimer: null
+            dropSchemaTimer: null,
+            dropSchemaDots: 1
         }
     },
     mounted() {
@@ -647,6 +648,11 @@ export default {
         async checkStatusDropExportCache() {
             const status = await this.$hq.ExportSettings.statusDropExportCache()
             this.statusDropExportCache = status.data.status
+
+            if (this.dropSchemaDots >= 3)
+                this.dropSchemaDots = 1;
+            else
+                this.dropSchemaDots++;
 
             if (this.statusDropExportCache != 'Removing' && this.dropSchemaTimer != null) {
                 clearInterval(this.dropSchemaTimer)
