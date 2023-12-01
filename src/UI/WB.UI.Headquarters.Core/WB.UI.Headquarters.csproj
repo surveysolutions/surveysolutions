@@ -49,7 +49,7 @@
     <PackageReference Include="reCAPTCHA.AspNetCore" Version="2.2.5" />
     <PackageReference Include="Refit.HttpClientFactory" Version="7.0.0" />
     <PackageReference Include="Refit.Newtonsoft.Json" Version="7.0.0" />
-    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.5" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.6" />
 
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20071.2" />
     <PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />
@@ -67,7 +67,7 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.5.0" />
     <PackageReference Include="UAParser" Version="3.1.47" />
     <PackageReference Include="SkiaSharp.QrCode" Version="0.6.0" />
-    <PackageReference Include="SkiaSharp" Version="2.88.5" />
+    <PackageReference Include="SkiaSharp" Version="2.88.6" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="7.0.10" />
   </ItemGroup>
 
