@@ -80,7 +80,7 @@
             </div>
             <div class="pull-right">
                 <button type="button" v-show="!questionnaire.isReadOnlyForUser" id="add-comment-button"
-                    class="btn btn-lg btn-link" @click="toggleComments(activeQuestion)" unsaved-warning-clear>
+                    class="btn btn-lg btn-link" @click="toggleComments()" unsaved-warning-clear>
                     <span v-show="!isCommentsBlockVisible && commentsCount == 0">{{
                         $t('QuestionnaireEditor.EditorAddComment') }}</span>
                     <span v-show="!isCommentsBlockVisible && commentsCount > 0">{{
@@ -105,6 +105,7 @@
 
 <script>
 import { useVariableStore } from '../../../stores/variable';
+import { useCommentsStore } from '../../../stores/comments';
 import MoveToChapterSnippet from './MoveToChapterSnippet.vue';
 import ExpressionEditor from './ExpressionEditor.vue';
 import Breadcrumbs from './Breadcrumbs.vue'
@@ -134,9 +135,10 @@ export default {
     },
     setup() {
         const variableStore = useVariableStore();
+        const commentsStore = useCommentsStore();
 
         return {
-            variableStore
+            variableStore, commentsStore
         };
     },
     async beforeMount() {
@@ -148,6 +150,12 @@ export default {
                 p => p.value == this.activeVariable.type
             );
             return option != null ? option.text : null;
+        },
+        commentsCount() {
+            return this.commentsStore.getCommentsCount;
+        },
+        isCommentsBlockVisible() {
+            return this.commentsStore.getIsCommentsBlockVisible;
         }
     },
     methods: {
@@ -167,6 +175,9 @@ export default {
             this.variableStore.discardChanges();
             this.activeVariable = this.variableStore.getData;
             this.dirty = false;
+        },
+        toggleComments() {
+            this.commentsStore.toggleComments();
         }
     }
 };

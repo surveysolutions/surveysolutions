@@ -13,6 +13,7 @@ const StaticText = () => import('../views/App/components/StaticText.vue');
 const Chapter = () => import('../views/App/components/Chapter.vue');
 const Group = () => import('../views/App/components/Group.vue');
 const QuestionnaireHeader = () => import('../views/App/components/Header.vue');
+const Comments = () => import('../views/App/components/Comments.vue');
 
 const routes = [
     {
@@ -62,10 +63,14 @@ const routes = [
                     {
                         name: 'variable',
                         path: 'variable/:variableId',
-                        component: Variable,
+                        components: {
+                            default: Variable,
+                            comments: Comments
+                        },
                         props: route => ({
                             questionnaireId: route.params.questionnaireId,
-                            variableId: route.params.variableId
+                            variableId: route.params.variableId,
+                            entityId: route.params.variableId
                         })
                     },
                     {

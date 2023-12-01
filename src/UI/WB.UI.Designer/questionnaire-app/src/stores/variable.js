@@ -48,13 +48,14 @@ export const useVariableStore = defineStore('variable', {
         },
 
         discardChanges() {
+            Object.assign(this.data, this.initialVariable);
             //this.data = Object.assign({}, this.initialVariable);
 
-            this.data.expression = this.initialVariable.expression;
-            this.data.variable = this.initialVariable.variable;
-            this.data.type = this.initialVariable.type;
-            this.data.label = this.initialVariable.label;
-            this.data.doNotExport = this.initialVariable.doNotExport;
+            //this.data.expression = this.initialVariable.expression;
+            //this.data.variable = this.initialVariable.variable;
+            //this.data.type = this.initialVariable.type;
+            //this.data.label = this.initialVariable.label;
+            //this.data.doNotExport = this.initialVariable.doNotExport;
         }
     }
 });
