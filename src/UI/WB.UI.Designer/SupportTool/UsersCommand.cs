@@ -1,3 +1,4 @@
+using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using Microsoft.AspNetCore.Identity;
@@ -45,7 +46,7 @@ namespace WB.UI.Designer.SupportTool
                 },
                 new Option("--email")
                 {
-                    Required = false,
+                    Required = true,
                     Argument = new Argument<string>()
                 }
             };
@@ -59,6 +60,7 @@ namespace WB.UI.Designer.SupportTool
                 var loggerProvider = locator.GetRequiredService<ILoggerProvider>();
                 var logger = loggerProvider.CreateLogger(nameof(UsersCreateCommand));
                 var userManager = locator.GetRequiredService<UserManager<DesignerIdentityUser>>();
+                
                 var user = new DesignerIdentityUser
                 {
                     UserName = login,

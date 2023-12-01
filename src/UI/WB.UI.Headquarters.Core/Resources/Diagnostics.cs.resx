@@ -184,22 +184,22 @@
     <value>Výpočet metrik</value>
   </data>
   <data name="designer_check" xml:space="preserve">
-    <value>Kontrola připojení návrháře</value>
+    <value>Kontrola připojení aplikace Designer</value>
   </data>
   <data name="designer_connectivity_check_Degraded" xml:space="preserve">
-    <value>Žádné připojení k aplikaci Designer ve společnosti {0}</value>
+    <value>Žádné připojení k aplikaci Designer v {0}</value>
   </data>
   <data name="designer_service_check_Healthy" xml:space="preserve">
-    <value>Designer ve společnosti {0} odpověděl verzí: v{1}</value>
+    <value>Designer ve {0} odpovídá verzi: v{1}</value>
   </data>
   <data name="temp_folder_permissions" xml:space="preserve">
     <value>Kontrola oprávnění dočasné složky</value>
   </data>
   <data name="temp_folder_permissions_Degraded_without_permissions" xml:space="preserve">
-    <value>Aplikace nemá oprávnění ke kontrole oprávnění {0} dočasné složky</value>
+    <value>Aplikace nemá oprávnění ke kontrole dočasné složky {0} dočasné složky</value>
   </data>
   <data name="temp_folder_permissions_Healthy" xml:space="preserve">
-    <value>Úspěšný přístup k dočasné složce</value>
+    <value>Přístup k dočasné složce je úspěšný</value>
   </data>
   <data name="temp_folder_permissions_Unhealty_can_not_check" xml:space="preserve">
     <value>Nelze zkontrolovat oprávnění dočasné složky {0}. Chyba: {1}</value>
