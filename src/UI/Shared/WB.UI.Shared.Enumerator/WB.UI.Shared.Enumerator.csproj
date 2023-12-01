@@ -124,7 +124,7 @@
       <Version>2.1.0.4</Version>
     </PackageReference>
     <PackageReference Include="Serilog">
-      <Version>3.0.1</Version>
+      <Version>3.1.1</Version>
     </PackageReference>
     <PackageReference Include="Serilog.Extensions.Logging">
       <Version>7.0.0</Version>
