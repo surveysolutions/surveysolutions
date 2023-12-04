@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
         {
             //non windows fonts
             var fontForGraphicEngine = SystemFonts.Collection.TryGet(NotoSansFontFamilyName, out var fontFamily) ? fontFamily :
-                    SystemFonts.Collection.Families.First();
+                    throw new InvalidOperationException($"Font family {NotoSansFontFamilyName} was not found");
             var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(fontForGraphicEngine.Name) };
             
             using XLWorkbook excelPackage = new XLWorkbook(loadOptions);
@@ -82,7 +82,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
         {
             //non windows fonts
             var fontForGraphicEngine = SystemFonts.Collection.TryGet(NotoSansFontFamilyName, out var fontFamily) ? fontFamily :
-                    SystemFonts.Collection.Families.First();
+                    throw new InvalidOperationException($"Font family {NotoSansFontFamilyName} was not found");
             var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(fontForGraphicEngine.Name) };
             
             var categories = new List<CategoriesRow>();
