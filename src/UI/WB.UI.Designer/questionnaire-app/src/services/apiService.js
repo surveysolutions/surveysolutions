@@ -9,13 +9,26 @@ export function get(url) {
 }
 
 export function post(url, params) {
-    const headers = {
+    const headers = getHeaders();
+    return api.post(url, params, { headers: headers });
+}
+
+export function patch(url, params) {
+    const headers = getHeaders();
+    return api.patch(url, params, { headers: headers });
+}
+
+export function del(url, params) {
+    const headers = getHeaders();
+    return api.delete(url, params, { headers: headers });
+}
+
+function getHeaders() {
+    return {
         'Content-Type': 'application/json',
         Accept: 'application/json',
         'X-CSRF-TOKEN': getCsrfCookie()
     };
-
-    return api.post(url, params, { headers: headers });
 }
 
 function getCsrfCookie() {

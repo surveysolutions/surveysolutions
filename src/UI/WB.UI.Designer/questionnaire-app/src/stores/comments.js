@@ -4,7 +4,7 @@ import moment from 'moment';
 import { remove } from 'lodash';
 import { useUserStore } from './user';
 import { newGuid } from '../helpers/guid';
-import { post } from '../services/apiService';
+import { post, patch, del } from '../services/apiService';
 
 const api = mande('/questionnaire' /*, globalOptions*/);
 
@@ -68,23 +68,17 @@ export const useCommentsStore = defineStore('comments', {
             return response;
         },
 
-        deleteComment(commentId) {
-            return api
-                .delete(this.questionnaireId + '/comment/' + commentId)
-                .then(res => {
-                    remove(
-                        this.$state.comments,
-                        comment => comment.id === commentId
-                    );
-                });
+        async deleteComment(commentId) {
+            await del(this.questionnaireId + '/comment/' + commentId);
+            remove(this.$state.comments, comment => comment.id === commentId);
         },
 
-        resolveComment(comment) {
-            return api
-                .patch(this.questionnaireId + '/comment/resolve/' + comment.id)
-                .then(res => {
-                    comment.resolveDate = new Date();
-                });
+        async resolveComment(comment) {
+            await patch(
+                this.questionnaireId + '/comment/resolve/' + comment.id
+            );
+
+            comment.resolveDate = new Date();
         }
     }
 });

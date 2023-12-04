@@ -103,17 +103,17 @@ export default {
                 okButtonTitle: this.$t('QuestionnaireEditor.Delete'),
                 cancelButtonTitle: this.$t('QuestionnaireEditor.Cancel'),
                 isReadOnly: this.questionnaire.isReadOnlyForUser,
-                callback: confirm => {
+                callback: async confirm => {
                     if (confirm) {
-                        this.commentsStore.deleteComment(commentId)
+                        await this.commentsStore.deleteComment(commentId)
                     }
                 }
             };
 
             this.$confirm(params);
         },
-        resolveComment(comment) {
-            this.commentsStore.resolveComment(comment);
+        async resolveComment(comment) {
+            await this.commentsStore.resolveComment(comment);
         }
     }
 };
