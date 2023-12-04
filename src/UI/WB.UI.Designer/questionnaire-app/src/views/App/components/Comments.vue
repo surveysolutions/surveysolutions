@@ -28,7 +28,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <button type="submit" id="edit-post-comment-button" class="btn btn-lg " :class="{ 'btn-primary': dirty }"
+                <button type="button" id="edit-post-comment-button" class="btn btn-lg " :class="{ 'btn-primary': dirty }"
                     unsaved-warning-clear @click="postComment()" v-if="!questionnaire.isReadOnlyForUser" :disabled="!valid"
                     v-t="{ path: 'QuestionnaireEditor.EditorAddComment' }"></button>
             </div>
@@ -53,8 +53,7 @@ export default {
                 comment: '',
                 serverValidation: null
             },
-            maxCommentLength: 1000,
-            valid: true
+            maxCommentLength: 1000
         }
     },
     watch: {
@@ -78,14 +77,25 @@ export default {
     computed: {
         comments() {
             return this.commentsStore.getComments;
+        },
+        valid() {
+            return this.activeComment.comment && this.activeComment.comment.length > 0 && this.activeComment.comment.length < this.maxCommentLength
         }
     },
     methods: {
         async fetch() {
             await this.commentsStore.fetchComments(this.questionnaireId, this.entityId);
         },
-        postComment() {
-            this.commentsStore.postComment()
+        async postComment() {
+            const response = await this.commentsStore.postComment(this.activeComment.comment)
+
+            if (response && response.error) {
+                this.activeComment.serverValidation = response.error || null;
+            }
+            else {
+                this.activeComment.comment = '';
+                this.activeComment.serverValidation = null;
+            }
         },
         deleteComment(commentId) {
             const params = {

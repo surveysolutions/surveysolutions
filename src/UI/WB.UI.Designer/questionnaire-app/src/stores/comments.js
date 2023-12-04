@@ -2,6 +2,9 @@ import { defineStore } from 'pinia';
 import { mande } from 'mande';
 import moment from 'moment';
 import { remove } from 'lodash';
+import { useUserStore } from './user';
+import { newGuid } from '../helpers/guid';
+import { post } from '../services/apiService';
 
 const api = mande('/questionnaire' /*, globalOptions*/);
 
@@ -29,7 +32,7 @@ export const useCommentsStore = defineStore('comments', {
 
         setComments(data) {
             this.comments = data;
-            this.isCommentsBlockVisible = data.length > 0;
+            this.isCommentsBlockVisible = data && data.length > 0;
         },
 
         toggleComments() {
@@ -37,34 +40,32 @@ export const useCommentsStore = defineStore('comments', {
         },
 
         async postComment(comment) {
-            commentsService.postComment(
-                $state.params.questionnaireId,
-                $state.params.itemId,
-                $scope.activeComment
+            const userStore = useUserStore();
+            const userName = userStore.userName;
+            const userEmail = userStore.email;
+            const id = newGuid();
+
+            const response = await post(
+                this.questionnaireId + '/entity/addComment',
+                {
+                    comment: comment,
+                    entityId: this.entityId,
+                    id: id,
+                    questionnaireId: this.questionnaireId
+                }
             );
 
-            const data = await api
-                .post(questionnaireId + '/entity/addComment')
-                .then(function(response) {
-                    if (!_.isNull(response.data.error || null)) {
-                        $scope.activeComment.serverValidation =
-                            response.data.error || null;
-                        $scope.addCommentForm.$setPristine();
-                    } else {
-                        var comment = angular.copy($scope.activeComment);
-                        comment.date = moment(new Date()).format('LLL');
-                        comment.userName = $scope.currentUserName;
-                        comment.userEmail = $scope.currentUserEmail;
-                        $scope.comments.push(comment);
-                        $rootScope.$broadcast('newCommentPosted', comment);
-                        $scope.activeComment = createNewComment();
+            if (response && response.error) return response;
 
-                        $rootScope.$broadcast(
-                            'commentsCount',
-                            $scope.comments.length
-                        );
-                    }
-                });
+            this.$state.comments.push({
+                id: id,
+                comment: comment,
+                date: moment(new Date()).format('LLL'),
+                userName: userName,
+                userEmail: userEmail
+            });
+
+            return response;
         },
 
         deleteComment(commentId) {
@@ -72,7 +73,7 @@ export const useCommentsStore = defineStore('comments', {
                 .delete(this.questionnaireId + '/comment/' + commentId)
                 .then(res => {
                     remove(
-                        this.state.comments,
+                        this.$state.comments,
                         comment => comment.id === commentId
                     );
                 });
