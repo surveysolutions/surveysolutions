@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -8,22 +7,14 @@ using ClosedXML.Excel;
 using ClosedXML.Graphics;
 using CsvHelper;
 using CsvHelper.Configuration;
-using Main.Core.Documents;
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using NSubstitute.Extensions;
 using NUnit.Framework;
 using SixLabors.Fonts;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
 using WB.Core.BoundedContexts.Designer.DataAccess;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
-using WB.Infrastructure.Native.Questionnaire;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Designer.Services
@@ -31,6 +22,8 @@ namespace WB.Tests.Unit.Designer.Services
     [TestOf(typeof(ReusableCategoriesService))]
     internal class CategoriesServiceTests
     {
+        private const string NotoSansFontFamilyName = "Noto Sans";
+
         private static ReusableCategoriesService CreateCategoriesService(DesignerDbContext dbContext = null, 
             IQuestionnaireViewFactory questionnaireStorage = null)
         {
@@ -65,8 +58,9 @@ namespace WB.Tests.Unit.Designer.Services
         private static Stream CreateExcelFile(string[][] data)
         {
             //non windows fonts
-            var firstFont = SystemFonts.Collection.Families.First();
-            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(firstFont.Name) };
+            var fontForGraphicEngine = SystemFonts.Collection.TryGet(NotoSansFontFamilyName, out var fontFamily) ? fontFamily :
+                    SystemFonts.Collection.Families.First();
+            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(fontForGraphicEngine.Name) };
             
             using XLWorkbook package = new XLWorkbook(loadOptions);
             var worksheet = package.Worksheets.Add("Categories");

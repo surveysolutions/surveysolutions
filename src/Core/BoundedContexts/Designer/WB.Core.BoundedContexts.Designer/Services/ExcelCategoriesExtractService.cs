@@ -12,6 +12,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.ReusableCategories;
+using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 
 namespace WB.Core.BoundedContexts.Designer.Services
 {
@@ -33,7 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
         {
             //non windows fonts
             var fontForGraphicEngine = SystemFonts.Collection.TryGet(NotoSansFontFamilyName, out var fontFamily) ? fontFamily :
-                    throw new InvalidOperationException($"Font family {NotoSansFontFamilyName} was not found");
+                    SystemFonts.Collection.Families.First();
             var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(fontForGraphicEngine.Name) };
             
             using XLWorkbook excelPackage = new XLWorkbook(loadOptions);
@@ -82,7 +83,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
         {
             //non windows fonts
             var fontForGraphicEngine = SystemFonts.Collection.TryGet(NotoSansFontFamilyName, out var fontFamily) ? fontFamily :
-                    throw new InvalidOperationException($"Font family {NotoSansFontFamilyName} was not found");
+                    SystemFonts.Collection.Families.First();
             var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(fontForGraphicEngine.Name) };
             
             var categories = new List<CategoriesRow>();
