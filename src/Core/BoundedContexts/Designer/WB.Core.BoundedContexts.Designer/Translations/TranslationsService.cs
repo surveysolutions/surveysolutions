@@ -43,6 +43,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             public string? TranslationIndex { get; set; }
         }
 
+        private const string NotoSansFontFamilyName = "Noto Sans";
         private readonly TranslationType[] translationTypesWithIndexes =
         {
             TranslationType.FixedRosterTitle,
@@ -120,8 +121,11 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             try
             {
                 //non windows fonts
-                var firstFont = SystemFonts.Collection.Families.First();
-                var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(firstFont.Name) };
+                      
+                var fontForGraphicEngine = SystemFonts.Collection.TryGet(NotoSansFontFamilyName, out var fontFamily) ? fontFamily :
+                    SystemFonts.Collection.Families.First();
+                
+                var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(fontForGraphicEngine.Name) };
                 
                 using var package = new XLWorkbook(stream, loadOptions);
 
