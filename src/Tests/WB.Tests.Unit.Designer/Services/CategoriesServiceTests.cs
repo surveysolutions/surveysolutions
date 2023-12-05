@@ -63,11 +63,15 @@ namespace WB.Tests.Unit.Designer.Services
             var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(fontForGraphicEngine.Name) };
             
             using XLWorkbook package = new XLWorkbook(loadOptions);
+            
             var worksheet = package.Worksheets.Add("Categories");
 
             for (var row = 0; row < data.Length; row++)
-            for (var column = 0; column < data[row].Length; column++)
-                worksheet.Cell(row + 1, column + 1).Value = data[row][column];
+                for (var column = 0; column < data[row].Length; column++) {
+                    worksheet.Cell(row + 1, column + 1).Value = data[row][column];
+                    worksheet.Cell(row + 1, column + 1).Style.Font.FontName = NotoSansFontFamilyName;
+                }
+            package.Style.Font.FontName = NotoSansFontFamilyName;     
 
             var ms = new MemoryStream();
             package.SaveAs(ms);
