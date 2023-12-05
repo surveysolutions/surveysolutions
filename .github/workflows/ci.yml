@@ -19,6 +19,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      
+      - name: Install Google Fonts
+        run: |
+          wget -O Noto_Sans.zip https://fonts.google.com/download?family=Noto%20Sans
+          unzip -d noto_sans/ Noto_Sans.zip
+          mv noto_sans /usr/share/fonts/
+          fc-cache -fv
           
       - name: Setup dotnet
         uses: actions/setup-dotnet@v1
