@@ -583,11 +583,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             //non windows fonts
             var fontForGraphicEngine = SystemFonts.Collection.TryGet(NotoSansFontFamilyName, out var fontFamily) ? fontFamily :
                 SystemFonts.Collection.Families.First();
-
-            string listOfNames = SystemFonts.Collection.Families.Select(x => x.Name).Aggregate((x, y) => x + ", " + y);
-
-            throw new Exception( $"List: {listOfNames}");
-
+                        
             var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(fontForGraphicEngine.Name) };
 
             using XLWorkbook package = new XLWorkbook(loadOptions);
