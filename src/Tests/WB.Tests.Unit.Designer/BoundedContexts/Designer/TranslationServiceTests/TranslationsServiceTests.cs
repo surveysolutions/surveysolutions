@@ -586,8 +586,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
             string listOfNames = SystemFonts.Collection.Families.Select(x => x.Name).Aggregate((x, y) => x + ", " + y);
 
-            if (fontForGraphicEngine.Name != NotoSansFontFamilyName)
-                throw new Exception($"Font {NotoSansFontFamilyName} was not found. Selected: {fontForGraphicEngine.Name}. List: {listOfNames}");
+            throw new Exception( $"List: {listOfNames}");
 
             var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(fontForGraphicEngine.Name) };
 
