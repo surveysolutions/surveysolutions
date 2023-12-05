@@ -18,7 +18,7 @@ public class FontTests
 
         Assert.That(tryGet, Is.True);
         Assert.That(fontFamily, Is.Not.Null);
-        Assert.That(fontFamily.Name, Is.EqualTo("Noto Sans"));
+        Assert.That(fontFamily.Name, Is.EqualTo("Noto Sans Regular"));
     }
     
     [Test]
