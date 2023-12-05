@@ -576,25 +576,38 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         private static byte[] CreateExcelWithCategories(string categoriesName, string[][] data)
             => CreateExcel(new Dictionary<string, string[][]> {{$"@@@_{categoriesName}", data}});
 
-        private static byte[] CreateExcel(Dictionary<string,string[][]>  datas)
+        private const string NotoSansFontFamilyName = "Noto Sans";
+
+        private static byte[] CreateExcel(Dictionary<string, string[][]> datas)
         {
             //non windows fonts
-            var firstFont = SystemFonts.Collection.Families.First();
-            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(firstFont.Name) };
-            
+            var fontForGraphicEngine = SystemFonts.Collection.TryGet(NotoSansFontFamilyName, out var fontFamily) ? fontFamily :
+                SystemFonts.Collection.Families.First();
+
+            string listOfNames = SystemFonts.Collection.Families.Select(x => x.Name).Aggregate((x, y) => x + ", " + y);
+
+            if (fontForGraphicEngine.Name != NotoSansFontFamilyName)
+                throw new Exception($"Font {NotoSansFontFamilyName} was not found. Selected: {fontForGraphicEngine.Name}. List: {listOfNames}");
+
+            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(fontForGraphicEngine.Name) };
+
             using XLWorkbook package = new XLWorkbook(loadOptions);
+            package.Style.Font.FontName = fontForGraphicEngine.Name;
 
             foreach (var data in datas)
             {
                 var worksheet = package.Worksheets.Add(data.Key);
 
                 for (var row = 0; row < data.Value.Length; row++)
-                for (var column = 0; column < data.Value[row].Length; column++)
-                {
-                    var value = data.Value[row][column];
-                    worksheet.Cell(row + 1, column + 1).SetValue(value);
-                }    
+                    for (var column = 0; column < data.Value[row].Length; column++)
+                    {
+                        var value = data.Value[row][column];
+                        worksheet.Cell(row + 1, column + 1).SetValue(value);
+                        worksheet.Cell(row + 1, column + 1).Style.Font.FontName = fontForGraphicEngine.Name;
+                    }
             }
+
+            package.Style.Font.FontName = fontForGraphicEngine.Name;
 
             using var stream = new MemoryStream();
             package.SaveAs(stream);
