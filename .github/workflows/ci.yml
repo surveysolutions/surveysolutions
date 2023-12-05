@@ -33,6 +33,11 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '7.0.x'
+      - name: Designer unit tests
+        run: |
+          dotnet test src/Tests/WB.Tests.Unit.Designer \
+            --collect:"XPlat Code Coverage" \
+            -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
       - name: Headquarters unit tests
         run: |
           dotnet test src/Tests/WB.Tests.Unit \
@@ -41,11 +46,6 @@ jobs:
       - name: Headquarters web tests
         run: |
           dotnet test src/Tests/WB.Tests.Web \
-            --collect:"XPlat Code Coverage" \
-            -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
-      - name: Designer unit tests
-        run: |
-          dotnet test src/Tests/WB.Tests.Unit.Designer \
             --collect:"XPlat Code Coverage" \
             -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
       - name: Test coverage artifacts
