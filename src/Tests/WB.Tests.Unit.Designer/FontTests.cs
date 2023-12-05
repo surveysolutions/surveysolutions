@@ -84,6 +84,6 @@ public class FontTests
                     val2 += (int)glyphMetrics.AdvanceWidth;
                 val1 = Math.Max(val1, val2);
             }
-        }
+        }  
     }
 }
