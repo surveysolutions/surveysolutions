@@ -32,24 +32,30 @@ public class FontTests
     [Test]
     public void check_all_fonts_fonts()
     {
+        Console.WriteLine("All fonts: ");
+        foreach (var collectionFamily in SystemFonts.Collection.Families)
+        {
+            var font = new Font(collectionFamily, 10);
+            Console.Write(font.Name + ":  ");
+
+            try
+            {
+                TestFont(font);
+                Console.WriteLine("OK");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Fail");
+            }
+        }
+        
         foreach (var collectionFamily in SystemFonts.Collection.Families)
         {
             var font = new Font(collectionFamily, 10);
 
             try
             {
-                int val1 = int.MinValue;
-                for (char ch = '0'; ch <= '9'; ++ch)
-                {
-                    IReadOnlyList<GlyphMetrics> metrics;
-                    if (font.FontMetrics.TryGetGlyphMetrics(new CodePoint(ch), TextAttributes.None, TextDecorations.None, LayoutMode.HorizontalTopBottom, ColorFontSupport.None, out metrics))
-                    {
-                        int val2 = 0;
-                        foreach (GlyphMetrics glyphMetrics in (IEnumerable<GlyphMetrics>) metrics)
-                            val2 += (int) glyphMetrics.AdvanceWidth;
-                        val1 = Math.Max(val1, val2);
-                    }
-                }
+                TestFont(font);
             }
             catch (Exception e)
             {
@@ -62,5 +68,22 @@ public class FontTests
         var fontFamily = SystemFonts.Collection.Families.First();
         
         Assert.That(fontFamily, Is.Not.Null);
+    }
+
+    private static void TestFont(Font font)
+    {
+        int val1 = int.MinValue;
+        for (char ch = '0'; ch <= '9'; ++ch)
+        {
+            IReadOnlyList<GlyphMetrics> metrics;
+            if (font.FontMetrics.TryGetGlyphMetrics(new CodePoint(ch), TextAttributes.None, TextDecorations.None,
+                    LayoutMode.HorizontalTopBottom, ColorFontSupport.None, out metrics))
+            {
+                int val2 = 0;
+                foreach (GlyphMetrics glyphMetrics in (IEnumerable<GlyphMetrics>)metrics)
+                    val2 += (int)glyphMetrics.AdvanceWidth;
+                val1 = Math.Max(val1, val2);
+            }
+        }
     }
 }
