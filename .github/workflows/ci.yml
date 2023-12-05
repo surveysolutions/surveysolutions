@@ -21,6 +21,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: Remove font
+        run: |
+          sudo apt-get purge --auto-remove fonts-noto-color-emoji
           
       - name: Setup dotnet
         uses: actions/setup-dotnet@v1
