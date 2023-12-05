@@ -798,6 +798,12 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Interview_ShowPdf" xml:space="preserve">
     <value>Show PDF </value>
   </data>
+  <data name="Interview_PlayVideo" xml:space="preserve">
+    <value>Play Video </value>
+  </data>
+  <data name="Interview_PlayAudio" xml:space="preserve">
+    <value>Play Audio </value>
+  </data>
   <data name="Validity_InterviewSizeLimitReached" xml:space="preserve">
     <value>This interview contains more data than the system allows. If possible, delete unnecessary roster rows and/or unanswer questions.</value>
   </data>

@@ -765,6 +765,12 @@
   <data name="Interview_ShowPdf" xml:space="preserve">
     <value>Показать PDF</value>
   </data>
+  <data name="Interview_PlayVideo" xml:space="preserve">
+    <value>Проиграть видео </value>
+  </data>
+  <data name="Interview_PlayAudio" xml:space="preserve">
+    <value>Проиграть аудио </value>
+  </data>
   <data name="Validity_InterviewSizeLimitReached" xml:space="preserve">
     <value>Количество ростеров и вопросов в интервью превысило лимиты.</value>
   </data>
