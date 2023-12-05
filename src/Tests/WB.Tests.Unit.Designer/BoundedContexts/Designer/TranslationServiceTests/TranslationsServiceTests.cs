@@ -401,7 +401,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         [Test]
         public void when_storing_translations_from_excel_file_with_categories()
         {
-            //assert
+            //assert  
             Guid questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             Guid translationId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             var categoriesId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
