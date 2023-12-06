@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia';
 import { mande } from 'mande';
 import { commandCall } from '../services/commandService';
+import { get, post, patch, del } from '../services/apiService';
 
-const api = mande('/api/questionnaire/editVariable/' /*, globalOptions*/);
+//const api = mande('/api/questionnaire/editVariable/' /*, globalOptions*/);
 
 export const useVariableStore = defineStore('variable', {
     state: () => ({
@@ -15,11 +16,12 @@ export const useVariableStore = defineStore('variable', {
     },
     actions: {
         async fetchVarableData(questionnaireId, variableId) {
-            const data = await api.get(questionnaireId, {
-                query: {
+            const data = await get(
+                '/api/questionnaire/editVariable/' + questionnaireId,
+                {
                     variableId: variableId
                 }
-            });
+            );
             this.questionnaireId = questionnaireId;
             this.setVariableData(data);
         },
@@ -43,7 +45,7 @@ export const useVariableStore = defineStore('variable', {
             };
 
             return commandCall('UpdateVariable', command).then(response => {
-                this.initialVariable = Object.assign({}, data);
+                this.initialVariable = Object.assign({}, this.data);
             });
         },
 

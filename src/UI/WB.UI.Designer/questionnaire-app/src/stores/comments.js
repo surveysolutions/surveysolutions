@@ -1,12 +1,9 @@
 import { defineStore } from 'pinia';
-import { mande } from 'mande';
 import moment from 'moment';
 import { remove } from 'lodash';
 import { useUserStore } from './user';
 import { newGuid } from '../helpers/guid';
-import { post, patch, del } from '../services/apiService';
-
-const api = mande('/questionnaire' /*, globalOptions*/);
+import { get, post, patch, del } from '../services/apiService';
 
 export const useCommentsStore = defineStore('comments', {
     state: () => ({
@@ -22,8 +19,12 @@ export const useCommentsStore = defineStore('comments', {
     },
     actions: {
         async fetchComments(questionnaireId, entityId) {
-            const data = await api.get(
-                questionnaireId + '/entity/' + entityId + '/comments'
+            const data = await get(
+                'questionnaire/' +
+                    questionnaireId +
+                    '/entity/' +
+                    entityId +
+                    '/comments'
             );
             this.questionnaireId = questionnaireId;
             this.entityId = entityId;
@@ -46,7 +47,7 @@ export const useCommentsStore = defineStore('comments', {
             const id = newGuid();
 
             const response = await post(
-                this.questionnaireId + '/entity/addComment',
+                'questionnaire/' + this.questionnaireId + '/entity/addComment',
                 {
                     comment: comment,
                     entityId: this.entityId,
@@ -69,13 +70,21 @@ export const useCommentsStore = defineStore('comments', {
         },
 
         async deleteComment(commentId) {
-            await del(this.questionnaireId + '/comment/' + commentId);
+            await del(
+                'questionnaire/' +
+                    this.questionnaireId +
+                    '/comment/' +
+                    commentId
+            );
             remove(this.$state.comments, comment => comment.id === commentId);
         },
 
         async resolveComment(comment) {
             await patch(
-                this.questionnaireId + '/comment/resolve/' + comment.id
+                'questionnaire/' +
+                    this.questionnaireId +
+                    '/comment/resolve/' +
+                    comment.id
             );
 
             comment.resolveDate = new Date();
