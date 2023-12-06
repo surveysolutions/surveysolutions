@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Infrastructure.Native.Utils;
 
 namespace WB.Infrastructure.Native.Questionnaire
 {
@@ -70,9 +71,7 @@ namespace WB.Infrastructure.Native.Questionnaire
 
         private byte[] GetExcelFileContentEEPlus(QuestionnaireDocument questionnaire, ITranslation translation, ICategories categoriesService)
         {
-            //non windows fonts
-            var firstFont = SystemFonts.Collection.Families.First();
-            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(firstFont.Name) };
+            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
             
             using (XLWorkbook excelPackage = new XLWorkbook(loadOptions))
             {

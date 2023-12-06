@@ -155,6 +155,9 @@
     <color name="offline_sync_waitingdevice_text">#2a81cb</color>
     <color name="offline_sync_error_text">#e4512b</color>
 
+    <color name="exo_video_bar_text">#FFBEBEBE</color>
+    <color name="exo_video_bar_background">#CC000000</color>
+
     <color name="exo_player_text">#333333</color>
     <color name="exo_player_button_tint">#000</color>
     <color name="exo_player_seek_scrubber">@color/colorAccent</color>
