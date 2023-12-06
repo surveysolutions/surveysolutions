@@ -1,9 +1,7 @@
 import { defineStore } from 'pinia';
 import { mande } from 'mande';
 import { commandCall } from '../services/commandService';
-import { get, post, patch, del } from '../services/apiService';
-
-//const api = mande('/api/questionnaire/editVariable/' /*, globalOptions*/);
+import { get } from '../services/apiService';
 
 export const useVariableStore = defineStore('variable', {
     state: () => ({

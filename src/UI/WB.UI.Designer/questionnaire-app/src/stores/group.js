@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia';
 import { mande } from 'mande';
 import { commandCall } from '../services/commandService';
-
-const api = mande('/api/questionnaire/editGroup/' /*, globalOptions*/);
+import { get } from '../services/apiService';
 
 export const useGroupStore = defineStore('group', {
     state: () => ({
@@ -16,11 +15,12 @@ export const useGroupStore = defineStore('group', {
     },
     actions: {
         async fetchGroupData(questionnaireId, groupId) {
-            const data = await api.get(questionnaireId, {
-                query: {
+            const data = await get(
+                '/api/questionnaire/editGroup/' + questionnaireId,
+                {
                     groupId: groupId
                 }
-            });
+            );
             this.questionnaireId = questionnaireId;
             this.setGroupData(data);
         },
