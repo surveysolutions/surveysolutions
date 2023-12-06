@@ -17,6 +17,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Infrastructure.Native.Utils;
 
 namespace WB.Core.BoundedContexts.Designer.Translations
 {
@@ -120,12 +121,8 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
             try
             {
-                //non windows fonts
-                      
-                var fontForGraphicEngine = SystemFonts.Collection.TryGet(NotoSansFontFamilyName, out var fontFamily) ? fontFamily :
-                    SystemFonts.Collection.Families.First();
-                
-                var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(fontForGraphicEngine.Name) };
+
+                var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
                 
                 using var package = new XLWorkbook(stream, loadOptions);
 

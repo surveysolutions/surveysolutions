@@ -15,6 +15,10 @@ using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
+using WB.Infrastructure.Native.Questionnaire;
+using WB.Infrastructure.Native.Utils;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Designer.Services
@@ -57,10 +61,8 @@ namespace WB.Tests.Unit.Designer.Services
 
         private static Stream CreateExcelFile(string[][] data)
         {
-            //non windows fonts
-            var fontForGraphicEngine = SystemFonts.Collection.TryGet(NotoSansFontFamilyName, out var fontFamily) ? fontFamily :
-                    SystemFonts.Collection.Families.First();
-            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(fontForGraphicEngine.Name) };
+            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
+
             
             using XLWorkbook package = new XLWorkbook(loadOptions);
             
