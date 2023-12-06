@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Infrastructure.Native.Utils;
 
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTests
@@ -63,9 +64,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         [NUnit.Framework.Test]
         public void should_exported_excel_file_has_3_specified_worksheets()
         {
-            //non windows fonts
-            var firstFont = SystemFonts.Collection.Families.First();
-            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(firstFont.Name) };
+            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
             
             using var excelWorkbook = new XLWorkbook(new MemoryStream(translationFile.ContentAsExcelFile), loadOptions);
             var worksheetNames = excelWorkbook.Worksheets.Select(x => x.Name).ToList();
