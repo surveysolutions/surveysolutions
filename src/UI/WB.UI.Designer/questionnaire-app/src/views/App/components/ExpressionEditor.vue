@@ -1,11 +1,5 @@
 <template>
-    <v-ace-editor
-        v-model:value="editorValue"
-        @init="editorInit"
-        lang="html"
-        theme="chrome"
-        style="height: 300px"
-    />
+    <v-ace-editor v-model:value="editorValue" @init="editorInit" lang="html" theme="chrome" />
 </template>
 
 <script>

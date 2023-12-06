@@ -89,9 +89,14 @@ const routes = [
                     {
                         name: 'group',
                         path: 'group/:groupId',
-                        component: Group,
+                        components: {
+                            default: Group,
+                            comments: Comments
+                        },
                         props: route => ({
-                            groupId: route.params.groupId
+                            questionnaireId: route.params.questionnaireId,
+                            groupId: route.params.groupId,
+                            entityId: route.params.groupId
                         })
                     },
                     {

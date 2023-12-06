@@ -1,10 +1,16 @@
 import { mande, defaults } from 'mande';
-
+import { useBlockUIStore } from '../stores/blockUI';
 //defaults.headers.Authorization = 'Bearer token';
 
-const api = mande('/questionnaire' /*, globalOptions*/);
+const api = mande('/' /*, globalOptions*/);
 
-export function get(url) {
+export function get(url, queryParams) {
+    if (queryParams) {
+        return api.get(url, {
+            query: queryParams
+        });
+    }
+
     return api.get(url);
 }
 
