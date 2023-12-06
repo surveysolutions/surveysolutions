@@ -5,6 +5,7 @@ using ClosedXML.Excel;
 using ClosedXML.Graphics;
 using SixLabors.Fonts;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
+using WB.Infrastructure.Native.Utils;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
 {
@@ -15,9 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
             var headers = report.Headers;
             var data = report.Data;
 
-            //non windows fonts
-            var firstFont = SystemFonts.Collection.Families.First();
-            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(firstFont.Name) };
+            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
             
             using (XLWorkbook excelPackage = new XLWorkbook(loadOptions))
             {

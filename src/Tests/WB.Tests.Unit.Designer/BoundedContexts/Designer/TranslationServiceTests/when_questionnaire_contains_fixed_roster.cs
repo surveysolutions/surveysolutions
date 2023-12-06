@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Infrastructure.Native.Utils;
 using WB.Tests.Abc;
 using TranslationInstance = WB.Core.BoundedContexts.Designer.Translations.TranslationInstance;
 
@@ -60,9 +61,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
         private void BecauseOf()
         {
-            //non windows fonts
-            var firstFont = SystemFonts.Collection.Families.First();
-            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(firstFont.Name) };
+            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
             
             excelFile = service.GetAsExcelFile(new QuestionnaireRevision(questionnaireId), translationId);
             workbook = new XLWorkbook(new MemoryStream(excelFile.ContentAsExcelFile), loadOptions);

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using SixLabors.Fonts;
+using WB.Infrastructure.Native.Utils;
 using WB.UI.Shared.Web.Captcha;
 
 namespace WB.Tests.Unit;
@@ -9,14 +10,13 @@ namespace WB.Tests.Unit;
 public class CaptchaImageGeneratorTests
 {
     [Test]
-    [Ignore("To be fixed on main branch")]
+    //[Ignore("To be fixed on main branch")]
     public void when_generate_then_should_return_result_without_exception()
     {
         string code = "12345";
-        var firstFont = SystemFonts.Collection.Families.First();
-
+        
         var captchaImageGenerator = new CaptchaImageGenerator();
-        captchaImageGenerator.SetFonts(firstFont.Name);
+        captchaImageGenerator.SetFonts(FontsHelper.DefaultFontName);
 
         var imageContent = captchaImageGenerator.Generate(code);
         
