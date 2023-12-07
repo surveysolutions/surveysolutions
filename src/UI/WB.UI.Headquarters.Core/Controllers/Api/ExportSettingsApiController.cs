@@ -100,8 +100,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             if (await this.IsExistsDataExportInProgress())
                 return StatusCode((int)HttpStatusCode.Forbidden,new {message = DataExport.RemoveExportCacheGeneratingFail});
 
-            var status = await exportServiceApi.StatusDeleteTenant();
-            if (status.Status == StopTenantStatus.Removing)
+            var status = await exportServiceApi.DroppingTenantStatus();
+            if (status.Status == DropTenantStatus.Removing)
                 return StatusCode((int)HttpStatusCode.Forbidden,new {message = DataExport.RemoveExportCacheGeneratingFail});
 
             Task.Run(RunClearExportData).Wait(TimeSpan.FromSeconds(2));
@@ -115,13 +115,13 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             try
             {
-                var status = await exportServiceApi.StatusDeleteTenant();
-                if (status.Status != StopTenantStatus.Removing)
+                var status = await exportServiceApi.DroppingTenantStatus();
+                if (status.Status != DropTenantStatus.Removing)
                 {
                     var workspace = workspaceContextAccessor.CurrentWorkspace()?.Name;
                     await exportService.ExecuteAsync(async export =>
                     {
-                        await export.DeleteTenant();
+                        await export.DropTenant();
                     }, workspace);
                 }
             }
@@ -155,12 +155,11 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
         
         [HttpGet]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> StatusExportCache()
         {
             try
             {
-                var status = await exportServiceApi.StatusDeleteTenant();
+                var status = await exportServiceApi.DroppingTenantStatus();
                 return new JsonResult(new
                 {
                     Success = true,

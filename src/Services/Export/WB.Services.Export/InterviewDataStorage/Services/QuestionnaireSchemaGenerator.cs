@@ -206,23 +206,15 @@ namespace WB.Services.Export.InterviewDataStorage.Services
                     throw new ArgumentException("Unknown variable type: " + variable.Type);
             }
         }
-        
-        private object lockObj = new object();
 
         private void CreateSchema(DbConnection connection, TenantInfo tenant)
         {
-            lock (lockObj)
-            {
-                connection.Execute(commandBuilder.GenerateCreateSchema(tenant));
-            }
+            connection.Execute(commandBuilder.GenerateCreateSchema(tenant));
         }
 
         public Task DropTenantSchemaAsync(string tenant, CancellationToken cancellationToken = default)
         {
-            lock (lockObj)
-            {
-                return dbContext.DropTenantSchemaAsync(tenant, cancellationToken);
-            }
+            return dbContext.DropTenantSchemaAsync(tenant, cancellationToken);
         }
     }
 }

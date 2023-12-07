@@ -74,7 +74,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
             await exportService.ExecuteAsync(async export =>
             {
-                await export.DeleteTenant();
+                await export.DropTenant();
             }, workspace.Name);
 
             await deleteService.ExecuteAsync(async (map, workspacesService) =>
