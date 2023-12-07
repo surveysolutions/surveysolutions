@@ -10,6 +10,12 @@ namespace WB.UI.Interviewer.CustomControls
 {
     public class MvxFragmentStatePagerAdapter : FragmentStatePagerAdapter
     {
+        protected override void Dispose(bool disposing)
+        {
+            this.context = null;
+            base.Dispose(disposing);
+        }
+
         private class ViewPagerItem
         {
             public Type Type { get; set; }
@@ -18,8 +24,8 @@ namespace WB.UI.Interviewer.CustomControls
             public string TitlePropertyName { get; set; }
         }
 
-        private readonly Context _context;
-        private readonly List<ViewPagerItem> _fragments = new List<ViewPagerItem>();
+        private Context context;
+        private readonly List<ViewPagerItem> fragments = new List<ViewPagerItem>();
 
         public MvxFragmentStatePagerAdapter(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer) { }
@@ -27,50 +33,52 @@ namespace WB.UI.Interviewer.CustomControls
         public MvxFragmentStatePagerAdapter(Context context, AndroidX.Fragment.App.FragmentManager fm)
             : base(fm)
         {
-            this._context = context;
+            this.context = context;
         }
 
         public override AndroidX.Fragment.App.Fragment GetItem(int position)
         {
-            if (position < 0 || position > this._fragments.Count - 1) return null;
+            if (position < 0 || position > this.fragments.Count - 1) return null;
 
             var bundle = new Bundle();
             bundle.PutInt("number", position);
 
-            var cachedFragment = this._fragments[position].CachedFragment;
+            var cachedFragment = this.fragments[position].CachedFragment;
 
             if (cachedFragment != null) return cachedFragment;
 
-            cachedFragment = (MvxFragment)AndroidX.Fragment.App.Fragment.Instantiate(this._context,
-                this.FragmentJavaName(this._fragments[position].Type), bundle);
+            cachedFragment = (MvxFragment)AndroidX.Fragment.App.Fragment.Instantiate(this.context,
+                this.FragmentJavaName(this.fragments[position].Type), bundle);
 
-            cachedFragment.ViewModel = this._fragments[position].ViewModel;
+            cachedFragment.ViewModel = this.fragments[position].ViewModel;
 
-            this._fragments[position].CachedFragment = cachedFragment;
+            this.fragments[position].CachedFragment = cachedFragment;
 
             return cachedFragment;
         }
 
         private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
+            if(context == null) return;
+            
             var vm = sender as MvxViewModel;
-            var viewPagerItem = this._fragments.FirstOrDefault(x => x.ViewModel == vm);
+            var viewPagerItem = this.fragments.FirstOrDefault(x => x.ViewModel == vm);
             var titlePropertyName = viewPagerItem?.TitlePropertyName;
 
             if (e.PropertyName == titlePropertyName)
                 this.NotifyDataSetChanged();
         }
 
-        public override int Count => this._fragments.Count;
+        public override int Count => this.fragments.Count;
 
         public void InsertFragment(Type fragType, MvxViewModel model, string titlePropertyName, int position = -1)
         {
-            if (position < 0 && this._fragments.Count == 0)
+            if (position < 0 && this.fragments.Count == 0)
                 position = 0;
-            else if ((position < 0 || position > this._fragments.Count) && this._fragments.Count > 0)
-                position = this._fragments.Count;
+            else if ((position < 0 || position > this.fragments.Count) && this.fragments.Count > 0)
+                position = this.fragments.Count;
 
-            this._fragments.Insert(position, new ViewPagerItem
+            this.fragments.Insert(position, new ViewPagerItem
             {
                 Type = fragType,
                 ViewModel = model,
@@ -83,18 +91,21 @@ namespace WB.UI.Interviewer.CustomControls
 
         public void RemoveFragment(int position)
         {
-            this._fragments[position].ViewModel.PropertyChanged -= this.ViewModel_PropertyChanged;
-            this._fragments.RemoveAt(position);
+            this.fragments[position].ViewModel.PropertyChanged -= this.ViewModel_PropertyChanged;
+            this.fragments[position].ViewModel = null;
+            //this.fragments[position].CachedFragment.Dispose();
+            this.fragments[position].CachedFragment = null;
+            this.fragments.RemoveAt(position);
 
             this.NotifyDataSetChanged();
         }
 
         public void RemoveFragmentByViewModel(MvxViewModel viewModel)
-            => this.RemoveFragment(this._fragments.FindIndex(x => x.ViewModel == viewModel));
+            => this.RemoveFragment(this.fragments.FindIndex(x => x.ViewModel == viewModel));
 
         public override ICharSequence GetPageTitleFormatted(int position) => new Java.Lang.String(
-            (string) this._fragments[position].ViewModel.GetType().GetProperty(this._fragments[position].TitlePropertyName)
-                .GetValue(this._fragments[position].ViewModel, null) ?? "");
+            (string) this.fragments[position].ViewModel.GetType().GetProperty(this.fragments[position].TitlePropertyName)
+                .GetValue(this.fragments[position].ViewModel, null) ?? "");
 
         protected virtual string FragmentJavaName(Type fragmentType)
         {
@@ -105,13 +116,13 @@ namespace WB.UI.Interviewer.CustomControls
         }
 
         public bool HasFragmentForViewModel(MvxViewModel viewModel) 
-            => this._fragments.Any(x => x.ViewModel == viewModel);
+            => this.fragments.Any(x => x.ViewModel == viewModel);
 
         public override int GetItemPosition(Object @object) => PositionNone;
 
         public void RemoveAllFragments()
         {
-            for (var fragmentIndex = this._fragments.Count - 1; fragmentIndex >= 0; fragmentIndex--)
+            for (var fragmentIndex = this.fragments.Count - 1; fragmentIndex >= 0; fragmentIndex--)
                 this.RemoveFragment(fragmentIndex);
         }
     }
