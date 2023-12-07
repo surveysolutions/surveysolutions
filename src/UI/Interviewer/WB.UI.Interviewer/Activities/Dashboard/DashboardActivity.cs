@@ -89,9 +89,8 @@ namespace WB.UI.Interviewer.Activities.Dashboard
 
         private void RemoveFragments()
         {
-            this.fragmentStatePagerAdapter.Release();
-            
             this.fragmentStatePagerAdapter.RemoveAllFragments();
+            this.fragmentStatePagerAdapter.Dispose();
             this.fragmentStatePagerAdapter = null;
             this.viewPager.Adapter = null;
 

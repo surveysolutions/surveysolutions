@@ -10,9 +10,10 @@ namespace WB.UI.Interviewer.CustomControls
 {
     public class MvxFragmentStatePagerAdapter : FragmentStatePagerAdapter
     {
-        public void Release()
+        protected override void Dispose(bool disposing)
         {
             this.context = null;
+            base.Dispose(disposing);
         }
 
         private class ViewPagerItem
