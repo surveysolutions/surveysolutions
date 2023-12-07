@@ -2,11 +2,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 
 public class ExportServiceDropTenantStatus
 {
-    public StopTenantStatus Status { get; set; }
+    public DropTenantStatus Status { get; set; }
 }
 
-public enum StopTenantStatus
+public enum DropTenantStatus
 {
+    Unknown = 0,
     NotStarted = 1,
     Removing,
     Removed,

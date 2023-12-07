@@ -81,10 +81,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
         Task<string> GetConnectivityStatus();
 
         [Delete("/api/v1/deleteTenant")]
-        Task DeleteTenant();
+        Task DropTenant();
 
         [Get("/api/v1/statusDeleteTenant")]
-        Task<ExportServiceDropTenantStatus> StatusDeleteTenant();
+        Task<ExportServiceDropTenantStatus> DroppingTenantStatus();
 
         [Delete("/api/v1/deleteQuestionnaire")]
         Task DeleteQuestionnaire(string questionnaire);

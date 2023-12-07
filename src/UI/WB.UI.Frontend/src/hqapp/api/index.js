@@ -545,8 +545,7 @@ class ExportSettings {
     statusDropExportCache() {
         return this.http({
             method: 'get',
-            url: `${this.base}/StatusExportCache`,
-            headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
+            url: `${this.base}/StatusExportCache`
         })
     }
 }
