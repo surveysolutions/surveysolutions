@@ -83,6 +83,8 @@ namespace WB.UI.Tester.Infrastructure
             registry.BindAsSingletonWithConstructorArgument<IAudioFileStorage, TesterAudioFileStorage>("rootDirectoryPath", basePath);
             registry.BindAsSingletonWithConstructorArgument<IImageFileStorage, TesterImageFileStorage>("rootDirectoryPath", basePath);
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
+            
+            registry.BindAsSingleton<ILastCompletionComments, DummyLastCompletionComments>();
         }
     }
 }
