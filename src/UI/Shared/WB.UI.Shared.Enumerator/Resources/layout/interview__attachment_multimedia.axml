@@ -8,27 +8,5 @@
                     Tag Attachment.Tag;
                     Click Attachment.ShowPhotoView;
                     Visible Attachment.IsImage;"/>
-
-    <com.google.android.exoplayer2.ui.StyledPlayerView 
-            android:id="@+id/video_player_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="400dp"
-            local:controller_layout_id="@layout/simple_video_controls"
-            local:MvxBind="Video Attachment.Video; 
-                            Tag Attachment.Tag;
-                            Visible Attachment.IsVideo;" />
-
-    <com.google.android.exoplayer2.ui.StyledPlayerView 
-        android:id="@+id/audio_player_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/Interview_Entity_margin_with_border_left"
-        android:paddingRight="@dimen/Interview_Entity_margin_with_border_right"
-        android:paddingBottom="@dimen/Interview_Entity_margin_vertical"
-        local:use_artwork="false"
-        local:controller_layout_id="@layout/simple_audio_controls"
-        local:MvxBind="Audio Attachment.Audio; 
-                       Visible Attachment.IsAudio; 
-                       Tag Attachment.Tag" />
+   
 </merge>

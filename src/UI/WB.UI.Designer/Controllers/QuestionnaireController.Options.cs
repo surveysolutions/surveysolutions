@@ -313,7 +313,7 @@ namespace WB.UI.Designer.Controllers
                 }
                 catch (Exception e)
                 {
-                    this.logger.LogError(e, "Error on categories saving", e);
+                    this.logger.LogError(e, "Error on categories saving");
 
                     dynamic commandResult = new ExpandoObject();
                     commandResult.IsSuccess = false;

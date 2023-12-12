@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Android.App;
-using Android.Content;
+﻿using Android.Content;
 using Android.OS;
 using AndroidX.Core.App;
 using AndroidX.Core.Content;
@@ -24,13 +21,11 @@ namespace WB.UI.Shared.Enumerator.Services
         private readonly ICommandService commandService;
         private readonly IUserInteractionService userInteractionService;
         private readonly IUserInterfaceStateService userInterfaceStateService;
-        
-
         private readonly IPrincipal principal;
         private readonly ILogger logger;
 
         protected IMvxAndroidCurrentTopActivity TopActivity { get; }
-        protected IMvxNavigationService NavigationService { get; }
+        private IMvxNavigationService NavigationService { get; }
 
         protected BaseViewModelNavigationService(ICommandService commandService,
             IUserInteractionService userInteractionService,
@@ -101,12 +96,13 @@ namespace WB.UI.Shared.Enumerator.Services
         public abstract Task NavigateToMapsAsync();
 
         public abstract Task<bool> NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity);
-        public abstract Task NavigateToPrefilledQuestionsAsync(string interviewId);
+        public abstract Task<bool> NavigateToPrefilledQuestionsAsync(string interviewId);
         public abstract void NavigateToSplashScreen();
 
         protected abstract void NavigateToSettingsImpl();
 
-        public async Task<bool> NavigateToAsync<TViewModel, TParam>(TParam param, bool finishActivityOnSuccess = false) where TViewModel : IMvxViewModel<TParam>
+        public async Task<bool> NavigateToAsync<TViewModel, TParam>(TParam param, bool finishActivityOnSuccess = false) 
+            where TViewModel : IMvxViewModel<TParam>
         {
             if (this.HasPendingOperations)
             {
@@ -124,15 +120,13 @@ namespace WB.UI.Shared.Enumerator.Services
             return result;
         }
 
-        public Task NavigateToAsync<TViewModel>() where TViewModel : IMvxViewModel
+        public Task<bool> NavigateToAsync<TViewModel>() where TViewModel : IMvxViewModel
         {
-            if (this.HasPendingOperations)
-            {
-                this.ShowWaitMessage();
-                return Task.CompletedTask;
-            }
+            if (!this.HasPendingOperations) return this.NavigationService.Navigate<TViewModel>();
+            
+            this.ShowWaitMessage();
+            return Task.FromResult(false);
 
-            return this.NavigationService.Navigate<TViewModel>();
         }
 
         public abstract Task<bool> NavigateToDashboardAsync(string interviewId = null);

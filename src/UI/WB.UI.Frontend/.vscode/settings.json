@@ -3,10 +3,7 @@
         "**/dist": true,
         "**/locale": true
     },
-    "eslint.alwaysShowStatus": true,
     "eslint.lintTask.enable": true,
-    "vetur.format.enable": false,
-    "vetur.validation.template": false,
     "editor.formatOnSave": true,
     "typescript.preferences.quoteStyle": "single",
     "javascript.preferences.quoteStyle": "single",
@@ -15,13 +12,10 @@
         "source.fixAll": true
     },
     "[vue]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "Vue.volar",
     },
     "[javascript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "Vue.volar"
     },
     "editor.detectIndentation": false,
-    "vetur.format.defaultFormatter.js": "prettier-eslint",
-    "vetur.format.defaultFormatter.html": "none",
-    "i18n-ally.localesPaths": []
 }
