@@ -12,6 +12,7 @@ const Question = () => import('../views/App/components/Question.vue');
 const StaticText = () => import('../views/App/components/StaticText.vue');
 const Chapter = () => import('../views/App/components/Chapter.vue');
 const Group = () => import('../views/App/components/Group.vue');
+const Roster = () => import('../views/App/components/Roster.vue');
 const QuestionnaireHeader = () => import('../views/App/components/Header.vue');
 const Comments = () => import('../views/App/components/Comments.vue');
 
@@ -102,9 +103,14 @@ const routes = [
                     {
                         name: 'roster',
                         path: 'roster/:rosterId',
-                        component: Group,
+                        components: {
+                            default: Roster,
+                            comments: Comments
+                        },
                         props: route => ({
-                            groupId: route.params.rosterId
+                            rosterId: route.params.rosterId,
+                            questionnaireId: route.params.questionnaireId,
+                            entityId: route.params.rosterId
                         })
                     },
                     {
