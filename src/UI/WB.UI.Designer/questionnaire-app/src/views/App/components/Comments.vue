@@ -62,6 +62,12 @@ export default {
                 if (oldVal != null) this.dirty = true;
             },
             deep: true
+        },
+        async entityId(newValue, oldValue) {
+            if (newValue != oldValue) {
+                this.commentsStore.clear();
+                await this.fetch();
+            }
         }
     },
     setup() {

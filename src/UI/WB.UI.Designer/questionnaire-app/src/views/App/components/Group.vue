@@ -139,6 +139,13 @@ export default {
                 if (oldVal != null) this.dirty = true;
             },
             deep: true
+        },
+
+        async groupId(newValue, oldValue) {
+            if (newValue != oldValue) {
+                this.groupStore.clear();
+                await this.fetch();
+            }
         }
     },
     setup() {

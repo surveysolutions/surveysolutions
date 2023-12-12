@@ -131,6 +131,13 @@ export default {
                 if (oldVal != null) this.dirty = true;
             },
             deep: true
+        },
+
+        async variableId(newValue, oldValue) {
+            if (newValue != oldValue) {
+                this.variableStore.clear();
+                await this.fetch();
+            }
         }
     },
     setup() {

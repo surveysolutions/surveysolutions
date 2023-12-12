@@ -30,6 +30,12 @@ export const useGroupStore = defineStore('group', {
             this.initialGroup = Object.assign({}, data.group);
         },
 
+        clear() {
+            this.group = {};
+            this.initialGroup = {};
+            this.questionnaireId = null;
+        },
+
         saveGroupData() {
             var command = {
                 questionnaireId: this.questionnaireId,

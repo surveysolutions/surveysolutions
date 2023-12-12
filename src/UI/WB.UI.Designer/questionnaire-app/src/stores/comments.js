@@ -31,9 +31,16 @@ export const useCommentsStore = defineStore('comments', {
             this.setComments(data);
         },
 
+        clear() {
+            this.comments = [];
+            this.questionnaireId = null;
+            this.entityId = null;
+        },
+
         setComments(data) {
             this.comments = data;
-            this.isCommentsBlockVisible = data && data.length > 0;
+            this.isCommentsBlockVisible =
+                this.isCommentsBlockVisible == true && data && data.length > 0;
         },
 
         toggleComments() {

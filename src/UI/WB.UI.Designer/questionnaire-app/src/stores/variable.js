@@ -29,6 +29,12 @@ export const useVariableStore = defineStore('variable', {
             this.initialVariable = Object.assign({}, data);
         },
 
+        clear() {
+            this.data = {};
+            this.initialVariable = {};
+            this.questionnaireId = null;
+        },
+
         saveVariableData() {
             var command = {
                 questionnaireId: this.questionnaireId,
