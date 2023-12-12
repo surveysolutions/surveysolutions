@@ -190,7 +190,7 @@ export default {
         },
         cancel() {
             this.groupStore.discardChanges();
-            this.activeGroup = this.groupStore.getData;
+            this.activeGroup = this.groupStore.getGroup;
             this.dirty = false;
         },
         toggleComments() {
