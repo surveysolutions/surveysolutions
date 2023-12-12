@@ -32,7 +32,7 @@
                 <div class="form-group input-variable-name col-xs-5 pull-right">
                     <label for="edit-question-variable-name" class="wb-label">{{
                         $t('QuestionnaireEditor.VariableVariableName') }}
-                        <help key="variableName" placement="left" />
+                        <help link="variableName" placement="left" />
                     </label>
                     <br />
                     <input id="edit-question-variable-name" type="text" v-model="activeVariable.variable" spellcheck="false"
@@ -41,7 +41,7 @@
             </div>
             <div class="form-group">
                 <label for="edit-variable-title-highlight" class="wb-label">{{ $t('QuestionnaireEditor.VariableLabel') }}
-                    <help key="variableDescription" />
+                    <help link="variableDescription" />
                 </label>
                 <div class="pseudo-form-control">
                     <!--div
@@ -54,11 +54,11 @@
             </div>
             <div class="form-group">
                 <label for="edit-group-condition">{{ $t('QuestionnaireEditor.VariableExpression') }}
-                    <help key="expression" />
+                    <help link="expression" />
                 </label>
                 <input id="cb-do-not-export" type="checkbox" class="wb-checkbox" v-model="activeVariable.doNotExport" />
                 <label for="cb-do-not-export"><span></span>{{ $t('QuestionnaireEditor.VariableNoExport') }}</label>
-                <help key="doNotExport"></help>
+                <help link="doNotExport"></help>
                 <div class="pseudo-form-control">
                     <div id="edit-group-condition" ui-ace="{ onLoad : aceLoaded , require: ['ace/ext/language_tools']}"
                         ng-model="activeVariable.expression"></div>
@@ -109,10 +109,11 @@ import { useCommentsStore } from '../../../stores/comments';
 import MoveToChapterSnippet from './MoveToChapterSnippet.vue';
 import ExpressionEditor from './ExpressionEditor.vue';
 import Breadcrumbs from './Breadcrumbs.vue'
+import Help from './Help.vue'
 
 export default {
     name: 'Variable',
-    components: { MoveToChapterSnippet, ExpressionEditor, Breadcrumbs },
+    components: { MoveToChapterSnippet, ExpressionEditor, Breadcrumbs, Help },
     inject: ['questionnaire', 'currentChapter'],
     props: {
         questionnaireId: { type: String, required: true },

@@ -15,7 +15,7 @@
             <div class="row" id="edit-entity-comment-row">
                 <div class="form-group col-xs-12">
                     <label class="wb-label" for="edit-entity-comment"> {{ $t('EntityComment') }}
-                        <help key="newComment" />
+                        <help link="newComment" />
                     </label>
                     <textarea name="comment" id="edit-entity-comment" v-model="activeComment.comment" class="form-control"
                         required msd-elastic></textarea>
@@ -39,9 +39,11 @@
 <script>
 
 import { useCommentsStore } from '../../../stores/comments';
+import Help from './Help.vue'
 
 export default {
     name: 'Comments',
+    components: { Help },
     inject: ['questionnaire'],
     props: {
         questionnaireId: { type: String, required: true },

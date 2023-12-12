@@ -22,7 +22,7 @@
                 <div class="form-group input-variable-name col-xs-12 pull-right">
                     <label for="edit-group-variableName" class="wb-label">
                         {{ $t('QuestionnaireEditor.SectionVariableName') }}
-                        <help key="variableName" placement="left" />
+                        <help link="variableName" placement="left" />
                     </label>
                     <br />
                     <input id="edit-group-variableName" type="text" class="wb-input bg-white width-auto"
@@ -42,7 +42,7 @@
                 <div class="form-group col-xs-11">
                     <div class="enabling-group-marker" :class="{ 'hide-if-disabled': activeGroup.hideIfDisabled }"></div>
                     <label for="edit-group-condition">{{ $t('QuestionnaireEditor.EnablingCondition') }}
-                        <help key="conditionExpression" />
+                        <help link="conditionExpression" />
                     </label>
 
                     <input type="checkbox" class="wb-checkbox" disabled="disabled" checked="checked"
@@ -53,7 +53,7 @@
                         <span :title="questionnaire.hideIfDisabled ? $t('QuestionnaireEditor.HideIfDisabledNested') : ''">
                         </span>
                         {{ $t('QuestionnaireEditor.HideIfDisabled') }}
-                        <help key="hideIfDisabled" />
+                        <help link="hideIfDisabled" />
                     </label>
                     <br>
                     <div class="pseudo-form-control">
@@ -115,10 +115,11 @@ import { useCommentsStore } from '../../../stores/comments';
 import MoveToChapterSnippet from './MoveToChapterSnippet.vue';
 import ExpressionEditor from './ExpressionEditor.vue';
 import Breadcrumbs from './Breadcrumbs.vue'
+import Help from './Help.vue'
 
 export default {
     name: 'Group',
-    components: { MoveToChapterSnippet, ExpressionEditor, Breadcrumbs },
+    components: { MoveToChapterSnippet, ExpressionEditor, Breadcrumbs, Help },
     inject: ['questionnaire', 'currentChapter'],
     props: {
         questionnaireId: { type: String, required: true },
