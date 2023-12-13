@@ -11,7 +11,7 @@ namespace WB.UI.Shared.Web.Versions
         public ProductVersion(Assembly assembly)
         {
             FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-            this.version = fileVersionInfo.ProductVersion;
+            this.version = GetProductVersion(fileVersionInfo);
             this.getVersion = Version.TryParse(this.version.Split(' ')[0], out var ver) ? ver : null;
             this.buildNumber = fileVersionInfo.FilePrivatePart;
         }
@@ -35,6 +35,23 @@ namespace WB.UI.Shared.Web.Versions
             }
 
             return result + $" (build {version.MinorRevision})";
+        }
+        
+        public static string GetProductVersion(FileVersionInfo fileVersionInfo)
+        {
+            var productVersion = fileVersionInfo.ProductVersion;
+            
+            if (!string.IsNullOrWhiteSpace(productVersion))
+            {
+                int indexOf = productVersion.LastIndexOf('+');
+
+                if (indexOf > 0)
+                {
+                    return productVersion.Substring(0, indexOf);
+                }
+            }
+
+            return productVersion;
         }
     }
 }
