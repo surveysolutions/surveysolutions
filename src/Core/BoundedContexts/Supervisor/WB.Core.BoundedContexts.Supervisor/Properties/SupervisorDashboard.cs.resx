@@ -124,19 +124,19 @@
     <value>Odeslané</value>
   </data>
   <data name="OutboxSubtitle" xml:space="preserve">
-    <value>Dotazníky a rozhovory budou odeslány z Vašeho tabletu během příští synchronizace</value>
+    <value>Rozhovory budou odeslány z Vašeho tabletu během příští synchronizace</value>
   </data>
   <data name="SentToInterviewer" xml:space="preserve">
     <value>Rozpracované u tazatele</value>
   </data>
   <data name="SentToInterviewerSubtitle" xml:space="preserve">
-    <value>Dotazníky a rozhovory, které jsou u tazetele v tabletu</value>
+    <value>Žádanky a rozhovory, které jsou u tazatele v tabletu</value>
   </data>
   <data name="ToBeAssigned" xml:space="preserve">
     <value>Dotazníky k přiřazení</value>
   </data>
   <data name="ToBeAssignedListSubtitle" xml:space="preserve">
-    <value>Dotazníky, které je potřeba přiřadit Vašim tazatelům</value>
+    <value>Žádanky, které je potřeba přiřadit Vašim tazatelům</value>
   </data>
   <data name="WaitingForAction" xml:space="preserve">
     <value>Dokončeno - ke schválení</value>

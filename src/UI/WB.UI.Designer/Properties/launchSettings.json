@@ -8,6 +8,13 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "https://localhost:5100;http://0.0.0.0:5101"
+    },
+    "WB.UI.Designer.Manage": {
+      "commandName": "Project",
+      "commandLineArgs": "manage users create --role=User --login=Test1 --password=qqq",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
     }
   }
 }

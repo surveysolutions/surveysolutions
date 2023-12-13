@@ -118,48 +118,48 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Complete" xml:space="preserve">
-    <value>Kompletní</value>
+    <value>Uzamknout</value>
   </data>
   <data name="FinishInterviewText" xml:space="preserve">
-    <value>Tento rozhovor byl dokončen</value>
+    <value>Rozhovor byl dokončen</value>
   </data>
   <data name="LinkToInterviewPage" xml:space="preserve">
-    <value>Webový rozhovor</value>
+    <value>Webový dotazník</value>
   </data>
   <data name="NoteForSupervisor" xml:space="preserve">
-    <value>Poznámka pro školitele</value>
+    <value>Poznámka pro garanta</value>
   </data>
   <data name="StartNewInterview" xml:space="preserve">
-    <value>Zahájit nový pohovor</value>
+    <value>Zahájení nového rozhovoru</value>
   </data>
   <data name="InterviewReceivedByInterviewer" xml:space="preserve">
-    <value>Nelze upravit rozhovor, který byl přijat zařízením</value>
+    <value>Nelze upravit rozhovor, který byl stažen do tabletu</value>
   </data>
   <data name="InvitationText" xml:space="preserve">
-    <value>Byli jste pozváni k účasti v následujícím průzkumu: "%DOTAZNÍK%"</value>
+    <value>Byli jste pozváni k účasti v následujícím šetření: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="LinkInvitation" xml:space="preserve">
-    <value>Byli jste pozváni k účasti v následujícím průzkumu: "%DOTAZNÍK%". Váš pohovor ještě není připraven.</value>
+    <value>Byli jste pozváni k účasti v následujícím šetření: "%QUESTIONNAIRE%". Váš rozhovor ještě není připraven.</value>
   </data>
   <data name="LinkWelcome" xml:space="preserve">
-    <value>Dobrý den, vítejte v průzkumu Survey Solutions Web Survey</value>
+    <value>Vítejte v Survey Solutions webovém šetření</value>
   </data>
   <data name="Resume_InvitationText" xml:space="preserve">
-    <value>Na pohovor můžete přejít v následujícím průzkumu: "%DOTAZNÍK%"</value>
+    <value>Můžete přejít na rozhovor v následujícím šetření: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="Resume_WelcomeText" xml:space="preserve">
-    <value>Dobrý den, vítejte v průzkumu Survey Solutions Web Survey</value>
+    <value>Vítejte v Survey Solutions webovém šetření</value>
   </data>
   <data name="ResumeInterview" xml:space="preserve">
-    <value>Životopis pohovoru</value>
+    <value>Pokračovat v rozhovoru</value>
   </data>
   <data name="SurveyFormatText" xml:space="preserve">
-    <value>Průzkum: "%DOTAZNÍK%"</value>
+    <value>Šetření: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="WebSurvey" xml:space="preserve">
-    <value>Webový průzkum Survey Solutions</value>
+    <value>Survey Solutions webové šetření</value>
   </data>
   <data name="WelcomeText" xml:space="preserve">
-    <value>Dobrý den, vítejte v průzkumu Survey Solutions Web Survey</value>
+    <value>Vítejte v Survey Solutions webovém šetření</value>
   </data>
 </root>

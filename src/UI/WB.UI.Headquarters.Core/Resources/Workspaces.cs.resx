@@ -130,34 +130,34 @@
     <value>Rozumím, že tuto operaci nelze vrátit zpět</value>
   </data>
   <data name="AssignedWorkspaces" xml:space="preserve">
-    <value>Vyberte úlohy, ke kterým má uživatel přístup</value>
+    <value>Vyberte všechna prostředí, ke kterým má uživatel přístup</value>
   </data>
   <data name="CanNotBeChanged" xml:space="preserve">
     <value>Po vytvoření nelze změnit</value>
   </data>
   <data name="CantDeleteExplanation" xml:space="preserve">
-    <value>Úlohu nelze smazat. S touto úlohou je spojen alespoň jeden typ dotazníku. Smazat lze pouze úlohy bez typů dotazníků.</value>
+    <value>Prostředí nelze smazat. S tímto prostředím je spojen alespoň jeden typ dotazníku. Smazat lze pouze prostředí, které neobsahují typy dotazníků.</value>
   </data>
   <data name="CreateWorkspace" xml:space="preserve">
-    <value>Vytvoření úlohy</value>
+    <value>Vytvoření prostředí</value>
   </data>
   <data name="CurrentWorkspace" xml:space="preserve">
-    <value>Aktuální úloha</value>
+    <value>Aktuální prostředí</value>
   </data>
   <data name="DeleteExplanation" xml:space="preserve">
-    <value>Opravdu chcete smazat úlohu &lt;strong&gt;{{name}}&lt;/strong&gt;?
-Všechny uživatelské účty připojené k této úloze z ní budou odstraněny. Aplikace Tazatel a Garant nainstalované na tabletech těchto uživatelů již nebudou moci komunikovat s touto úlohou a data shromážděná v této úloze budou ztracena.
+    <value>Opravdu chcete smazat prostředí &lt;strong&gt;{{name}}&lt;/strong&gt;?
+Všechny uživatelské účty v tomto prostředí budou odstraněny. Aplikace Tazatel v tabletu těchto uživatelů již nebude moci komunikovat s tímto prostředím a data shromážděná v tomto prostředí budou ztracena.
 
-Následující data spojená s touto úlohou budou smazána:</value>
+Následující data v tomto prostředí budou smazána:</value>
   </data>
   <data name="DeleteWorkspacePopupTitle" xml:space="preserve">
-    <value>Smazat úlohu „{{name}}“</value>
+    <value>Smazat prostředí „{{name}}“</value>
   </data>
   <data name="Disable" xml:space="preserve">
     <value>Zakázat</value>
   </data>
   <data name="DisableExplanation" xml:space="preserve">
-    <value>Deaktivace úlohy k ní zastaví přístup všem uživatelům. Zastaví veškerý sběr dat, který by mohl probíhat.</value>
+    <value>Deaktivace tohoto prostředí zamezí přístup všem uživatelům. Nebude možný sběr dat, který by mohl probíhat.</value>
   </data>
   <data name="DisableWorkspacePopupTitle" xml:space="preserve">
     <value>Potvrďte deaktivaci „{{name}}“</value>
@@ -166,7 +166,7 @@ Následující data spojená s touto úlohou budou smazána:</value>
     <value>Zobrazit název</value>
   </data>
   <data name="DisplayNameHelpText" xml:space="preserve">
-    <value>Slouží k zobrazení úloh v nabídkách. Zkuste zvolit kratší názvy</value>
+    <value>Slouží k zobrazení prostředí v nabídkách. Zkuste zvolit kratší názvy</value>
   </data>
   <data name="DisplayNameRequired" xml:space="preserve">
     <value>Zobrazování názvu je povinné</value>
@@ -175,7 +175,7 @@ Následující data spojená s touto úlohou budou smazána:</value>
     <value>Upravit</value>
   </data>
   <data name="EditWorkspace" xml:space="preserve">
-    <value>Upravit úlohu „{{name}}“</value>
+    <value>Upravit prostředí „{{name}}“</value>
   </data>
   <data name="Enable" xml:space="preserve">
     <value>Povolit</value>
@@ -190,36 +190,42 @@ Následující data spojená s touto úlohou budou smazána:</value>
     <value>Nahrané mapy: {{count}}</value>
   </data>
   <data name="NameRequired" xml:space="preserve">
-    <value>Názeb je povinný</value>
+    <value>Název je povinný</value>
   </data>
   <data name="NameShouldBeUnique" xml:space="preserve">
     <value>Název by měl být jedinečný</value>
   </data>
   <data name="NameShouldNotBeOneOfForbidden" xml:space="preserve">
-    <value>Zadaný název úlohy není povolen</value>
+    <value>Tento název prostředí není povolen</value>
   </data>
   <data name="SupervisorsCount" xml:space="preserve">
     <value>Garanti: {{count}}</value>
   </data>
   <data name="UserWorkspacesTab" xml:space="preserve">
-    <value>Úlohy</value>
+    <value>Prostředí</value>
   </data>
   <data name="WorkspaceAccessDisabledReason" xml:space="preserve">
-    <value>Váš účet je v úloze deaktivován administrátorem systému a v důsledku toho nemůžete používat funkce tohoto webu. Pokud se domníváte, že se jedná o chybu, obraťte se na svého garanta.</value>
+    <value>Váš účet je v tomto prostředí deaktivován administrátorem systému a nelze ho použít. Pokud se domníváte, že se jedná o chybu, obraťte se na svého administrátora.</value>
   </data>
   <data name="WorkspaceCantBeRemoved" xml:space="preserve">
-    <value>Úlohu nelze odebrat, protože uživatel má přiřazenou práci. Znovu přidělte všechny dotazníky (včetně deaktivovaných) nedokončené rozhovory a pro Garanta přesuňte všechny tazatele do jiného týmu. Rozhovory: {0}, Dotazníky: {1}, Tazatelé: {2}</value>
+    <value>Toto prostředí nelze odebrat, protože je aktivně používáno. Znovu přidělte všechny žádanky (včetně deaktivovaných), nedokončené rozhovory a spolu s garantem přesuňte všechny tazatele do jiného týmu. Rozhovory: {0}, Žádanky: {1}, Tazatelé: {2}</value>
   </data>
   <data name="WorkspaceDisabledReason" xml:space="preserve">
-    <value>Úloha je deaktivována a nelze k ní získat přístup. Pokud se domníváte, že se jedná o chybu, kontaktujte Administrátora.</value>
+    <value>Prostředí je deaktivováno a nelze k němu získat přístup. Pokud se domníváte, že se jedná o chybu, kontaktujte administrátora.</value>
   </data>
   <data name="WorkspaceSettings" xml:space="preserve">
     <value>Nastavení</value>
   </data>
   <data name="WorkspacesSubtitle" xml:space="preserve">
-    <value>Každá úloha má izolované typy dotazníky, typy dotazníků a rozhovory.</value>
+    <value>Každé prostředí má vlastní verze dotazníků, žádanky i dotazníky.</value>
   </data>
   <data name="WorkspacesUpdated" xml:space="preserve">
-    <value>Seznam úloh aktualizován</value>
+    <value>Seznam prostředí je aktualizován</value>
+  </data>
+  <data name="CreatedAt" xml:space="preserve">
+    <value>Vytvoření</value>
+  </data>
+  <data name="Tooltip_Table_CreatedAt" xml:space="preserve">
+    <value>Kdy bylo prostředí původně vytvořeno. Kliknutím na ikonu řazení seřadíte podle data.</value>
   </data>
 </root>

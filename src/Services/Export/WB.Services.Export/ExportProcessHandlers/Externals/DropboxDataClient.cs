@@ -67,7 +67,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
             logger.LogTrace("Uploading file: {folder}/{fileName} - {length}bytes", folder, fileName, contentLength);
 
             await this.Client.Files.UploadAsync(
-                new CommitInfo(Join(folder, fileName), WriteMode.Overwrite.Instance), 
+                new UploadArg(Join(folder, fileName), WriteMode.Overwrite.Instance), 
                 fileStream);
             
             logger.LogTrace("Done Uploading file: {folder}/{fileName} - {length}bytes", folder, fileName, contentLength);

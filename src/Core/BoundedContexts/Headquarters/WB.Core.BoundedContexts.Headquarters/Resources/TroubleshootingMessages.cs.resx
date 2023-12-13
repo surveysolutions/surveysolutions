@@ -118,39 +118,39 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MissingCensusInterviews_NoBrokenPackages_Message" xml:space="preserve">
-    <value>Pokud pohovor, který se pokoušíte najít, není v seznamu, dejte tazateli pokyn, aby pohovor dokončil a synchronizoval znovu.</value>
+    <value>Pokud dotazník, který hledáte, není v přehledu, sdělte tazateli, aby rozhovor dokončil a znovu synchronizoval.</value>
   </data>
   <data name="MissingCensusInterviews_SomeBrokenPackages_Message" xml:space="preserve">
-    <value>Pokud pohovor, který se pokoušíte najít, není v seznamu, dejte prosím tazateli pokyn, aby pohovor dokončil a synchronizoval znovu. Poté rozhovor znovu vyhledejte. Pokud se pohovor nenachází při druhém vyhledávání, kontaktujte tým podpory.</value>
+    <value>Pokud dotazník, který hledáte, není v přehledu, sdělte to tazateli, aby rozhovor dokončil a znovu synchronizoval. Poté zkuste vyhledat dotazník znovu. Pokud se dotazník v přehledu opět nenachází, kontaktujte ústředí.</value>
   </data>
   <data name="NoData_ContactSupport" xml:space="preserve">
-    <value>Data z rozhovoru {0} byla poškozena. Kontaktujte podporu a získejte tento pohovor zpět</value>
+    <value>Data z rozhovoru {0} byla poškozena. Chcete-li tento rozhovor obnovit, kontaktujte garanta</value>
   </data>
   <data name="NoData_ContactSupportWithMoreDetails" xml:space="preserve">
-    <value>Kontaktujte prosím podporu a poskytněte další podrobnosti</value>
+    <value>Chcete-li poskytnout další podrobnosti, kontaktujte Administrátora</value>
   </data>
   <data name="NoData_InterveiwWasNotUploadedYet" xml:space="preserve">
     <value>Rozhovor {0} ještě nebyl synchronizován</value>
   </data>
   <data name="NoData_InterviewDeleted" xml:space="preserve">
-    <value>Pohovor {0} byl smazán ústředím nebo správcem, a proto nemůže být obnoven</value>
+    <value>Rozhovor {0} byl odstraněn ústředím nebo administrátorem, a proto jej nelze obnovit</value>
   </data>
   <data name="NoData_InterviewerChangedDevice" xml:space="preserve">
-    <value>Tazatel vyměnil tablety. Data pro {0} pohovorů mohou být ztracena, protože data jsou vymazána, když tazatelé přecházejí z jednoho tabletu na druhý. Je-li tomu tak, nelze tento pohovor obnovit</value>
+    <value>Tazatel vyměnil tablet. Data pro rozhovor {0} mohou být ztracena, protože data jsou smazána, když tazatelé přecházejí z jednoho tabletu na druhý. Pokud je tomu tak, rozhovor nelze obnovit</value>
   </data>
   <data name="NoData_InterviewWasNotReceived" xml:space="preserve">
-    <value>Rozhovor {0} dosud nebyl tazatel přijat {1}.</value>
+    <value>Rozhovor {0} dosud tazatel {1} ​​nestáhl do tabletu.</value>
   </data>
   <data name="NoData_InterviewWasReassigned" xml:space="preserve">
-    <value>Rozhovor {0} byl přeřazen jinému tazateli. Rozhovor je v současné době na tabletu tohoto tazatele.</value>
+    <value>Rozhovor {0} byl přeřazen jinému tazateli. Rozhovor je aktuálně na tabletu tohoto tazatele.</value>
   </data>
   <data name="NoData_NoIssuesInterviewOnServer" xml:space="preserve">
-    <value>Rozhovor {0} nemá žádné problémy zaznamenané na serveru.&lt;br /&gt;Získejte více informací od osoby, která je v současné době za tento rozhovor odpovědná.&lt;br /&gt;Pokud problém přetrvává, kontaktujte podporu a poskytněte další podrobnosti</value>
+    <value>Rozhovor {0} nemá na serveru zaznamenány žádné problémy.&lt;br /&gt;Získejte prosím více informací od uživatele aktuálně zodpovědného za tento rozhovor.&lt;br /&gt;Pokud problém přetrvává, kontaktujte administrátora</value>
   </data>
   <data name="NoData_NotFound" xml:space="preserve">
-    <value>Rozhovor {0} nelze nalézt</value>
+    <value>Rozhovor {0} nenalezen</value>
   </data>
   <data name="NoData_QuestionnaireDeleted" xml:space="preserve">
-    <value>Správce serveru smazal dotazník pro {0} pohovoru. V důsledku toho byly všechny rozhovory spojené s tímto dotazníkem vymazány a nelze je obnovit</value>
+    <value>Administrátor serveru smazal typ dotazníku pro rozhovor {0}. V důsledku toho byly všechny rozhovory spojené s tímto typem smazány a nelze je obnovit</value>
   </data>
 </root>

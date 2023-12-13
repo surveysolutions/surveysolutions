@@ -121,12 +121,12 @@
     <value>Informace o uživateli nelze aktualizovat, protože aktuální uživatel neexistuje</value>
   </data>
   <data name="UserNameIsTakenByArchivedUsersFormat" xml:space="preserve">
-    <value>Uživatelské jméno "{0}" je již převzato archivovaným uživatelem. Zvolte prosím jiné uživatelské jméno.</value>
+    <value>Uživatelské jméno '{0}' již používá neaktivní uživatel. Vyberte prosím jiné uživatelské jméno.</value>
   </data>
   <data name="UserNameIsTakenFormat" xml:space="preserve">
-    <value>Uživatelské jméno "{0}" je již obsazeno. Zvolte prosím jiné uživatelské jméno.</value>
+    <value>Uživatelské jméno '{0}' je již obsazeno. Vyberte prosím jiné uživatelské jméno.</value>
   </data>
   <data name="YouCantUnarchiveInterviewerUntilSupervisorIsArchivedFormat" xml:space="preserve">
-    <value>Archivaci tazatele nelze zrušit {0}, dokud nebude supervizor odarchivován</value>
+    <value>Nemůžete aktivovat tazatele {0}, dokud nebude z aktivován garant</value>
   </data>
 </root>

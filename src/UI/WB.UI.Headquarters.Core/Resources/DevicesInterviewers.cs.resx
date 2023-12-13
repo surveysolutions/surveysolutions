@@ -130,7 +130,7 @@
     <value>Nikdy nepřipojen</value>
   </data>
   <data name="NoAssignments" xml:space="preserve">
-    <value>Žádné dotazníky ke stažení</value>
+    <value>Žádné žádanky ke stažení</value>
   </data>
   <data name="OldAndroidVersion" xml:space="preserve">
     <value>Android 4.4 nebo nižší</value>
