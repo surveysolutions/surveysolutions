@@ -300,6 +300,7 @@ task PackageHqOffline frontend, {
             "-p:Version=$VERSION",
             "-p:InformationalVersion=$infoVersion",
             "-c", "Release",
+			"-f", "net7.0",
             "-o", "$tmp/hq-offline",
             "--no-self-contained",
             "/p:IncludeAllContentForSelfExtract=true"
