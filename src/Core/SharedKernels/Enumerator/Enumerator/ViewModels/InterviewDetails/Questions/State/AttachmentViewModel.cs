@@ -6,6 +6,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -115,7 +116,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 this.attachmentId = newAttachment;
                 var interview = this.interviewRepository.GetOrThrow(interviewId);
-                IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+                IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
                 var attachment = questionnaire.GetAttachmentById(this.attachmentId.Value);
                 
                 this.attachmentContentMetadata = this.attachmentContentStorage.GetMetadata(attachment.ContentId);
@@ -123,23 +124,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (IsImage)
                 {
                     this.Image = await this.attachmentContentStorage.GetPreviewContentAsync(attachment.ContentId);
-                }
-
-                var backingFile = await this.attachmentContentStorage.GetFileCacheLocationAsync(attachment.ContentId);
-                if (!string.IsNullOrWhiteSpace(backingFile))
-                {
-                    if (IsVideo)
-                    {
-                        this.Video = backingFile;
-                    }
-                    else if (IsAudio)
-                    {
-                        this.Audio = backingFile;
-                    }
-                    else if (IsPdf)
-                    {
-                        this.ContentPath = backingFile;
-                    }
                 }
                 
                 await RaiseAllPropertiesChanged();
@@ -153,12 +137,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await RaiseAllPropertiesChanged();
         }
 
-        public string Audio { get; private set; }
-        public string Video { get; private set; }
         public byte[] Image { get; private set; }
-
-        public string ContentPath { get; set; }
-
+        
         public bool IsImage => this.attachmentContentMetadata != null
                                && this.attachmentContentMetadata.ContentType.StartsWith(ImageMimeType,
                                    StringComparison.OrdinalIgnoreCase);
@@ -175,6 +155,45 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                              && this.attachmentContentMetadata.ContentType.StartsWith(PdfMimeType,
                                  StringComparison.OrdinalIgnoreCase);
 
+        public string ShowTitle
+        {
+            get
+            {
+                if (IsPdf)
+                    return UIResources.Interview_ShowPdf;
+                if (IsVideo)
+                    return UIResources.Interview_PlayVideo;
+                if (IsAudio)
+                    return UIResources.Interview_PlayAudio;
+                return string.Empty;
+            }
+        }
+        
+        public IMvxAsyncCommand ShowAttachment => new MvxAsyncCommand(OpenAttachmentAsync);
+        
+        private async Task OpenAttachmentAsync()
+        {
+            if (IsPdf)
+            {
+                if (this.attachmentId.HasValue)
+                    await pdfService.OpenAttachmentAsync(interviewId, this.attachmentId.Value);
+                else
+                    await pdfService.OpenAsync(interviewId, this.Identity);
+            }
+
+            if (IsVideo)
+            {
+                await viewModelNavigationService.NavigateToAsync<PlayVideoViewModel, PlayMediaViewModelArgs>(
+                    new PlayMediaViewModelArgs(interviewId, this.attachmentId.Value));
+            }
+
+            if (IsAudio)
+            {
+                await viewModelNavigationService.NavigateToAsync<PlayAudioViewModel, PlayMediaViewModelArgs>(
+                    new PlayMediaViewModelArgs(interviewId, this.attachmentId.Value));
+            }
+        }
+
         public IMvxAsyncCommand ShowPdf => new MvxAsyncCommand(OpenPdfAsync);
 
         private async Task OpenPdfAsync()
@@ -184,12 +203,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             else
                 await pdfService.OpenAsync(interviewId, this.Identity);
         }
+        
 
         public override void ViewDestroy(bool viewFinishing = true)
         {
-            this.Video = null;
-            this.Audio = null;
-            this.ContentPath = null;
             this.Image = null;
             
             base.ViewDestroy(viewFinishing);

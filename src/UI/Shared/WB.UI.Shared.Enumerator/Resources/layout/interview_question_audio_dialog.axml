@@ -22,13 +22,7 @@
         <TextView
           style="@style/Interview_Question_Title_Base"
           local:MvxBind="Html Title;"/>
-
       </LinearLayout>
-      <ImageButton style="@style/Interview_Question_RemoveAnswer"
-                   android:layout_marginRight="@dimen/Interview_Audio_Dialog_Remove_Button_Margin_Left"
-                   android:duplicateParentState="true"
-                   local:MvxBind="Click CancelCommand;" 
-                   local:srcCompat="@drawable/delete_button"/>
     </TableRow>
     <TableRow>
       <RelativeLayout
@@ -62,6 +56,11 @@
       
   </TableLayout>
   <LinearLayout style="@style/FullWidthWrappingLayout">
+      <View
+              android:layout_width="@dimen/calendar_event_buttons_space"
+              android:layout_height="0dp"
+              android:layout_weight="1"
+      />
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -31,8 +31,6 @@ namespace WB.UI.Headquarters.Services.Impl
             throw new KeyNotFoundException(key);
         }
 
-        public void Delete(string key) => throw new NotImplementedException();
-
         public bool Contains(string key) => key == RsaEncryptionService.PrivateKey;
     }
 }

@@ -1,8 +1,4 @@
-using System;
-using System.Threading.Tasks;
 using Android.Content;
-using MvvmCross.Navigation;
-using MvvmCross.Platforms.Android;
 using WB.Core.BoundedContexts.Supervisor.ViewModel;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -37,10 +33,10 @@ namespace WB.UI.Supervisor.Services.Implementation
             this.log = logger;
         }
 
-        public override Task NavigateToPrefilledQuestionsAsync(string interviewId)
+        public override async Task<bool> NavigateToPrefilledQuestionsAsync(string interviewId)
         {
-            this.log.Trace($"Navigating to PrefilledQuestionsViewModel interviewId: {interviewId}");
-            return NavigationService.Navigate<SupervisorInterviewViewModel, InterviewViewModelArgs>(
+            log.Trace($"Navigating to PrefilledQuestionsViewModel interviewId: {interviewId}");
+            return await NavigateToAsync<SupervisorInterviewViewModel, InterviewViewModelArgs>(
                 new InterviewViewModelArgs
                 {
                     InterviewId = interviewId,
@@ -48,17 +44,17 @@ namespace WB.UI.Supervisor.Services.Implementation
                 });
         }
 
-        public override void NavigateToSplashScreen() => base.RestartApp(typeof(SplashActivity));
+        public override void NavigateToSplashScreen() => RestartApp(typeof(SplashActivity));
 
         public override async Task<bool> NavigateToDashboardAsync(string interviewId = null)
         {
             this.log.Trace($"Navigating to dashboard interviewId: {interviewId ?? "'null'"}");
             if (interviewId == null)
             {
-                return await NavigationService.Navigate<DashboardViewModel>();
+                return await NavigateToAsync<DashboardViewModel>();
             }
 
-            return await NavigationService.Navigate<DashboardViewModel, DashboardViewModelArgs>(new DashboardViewModelArgs
+            return await NavigateToAsync<DashboardViewModel, DashboardViewModelArgs>(new DashboardViewModelArgs
             {
                 InterviewId = Guid.Parse(interviewId)
             });
@@ -87,10 +83,10 @@ namespace WB.UI.Supervisor.Services.Implementation
             throw new System.NotImplementedException();
         }
 
-        public override Task<bool> NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity)
+        public override async Task<bool> NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity)
         {
             this.log.Trace("Navigating to SupervisorInterviewViewModel");
-            return NavigationService.Navigate<SupervisorInterviewViewModel, InterviewViewModelArgs>(
+            return await NavigateToAsync<SupervisorInterviewViewModel, InterviewViewModelArgs>(
                 new InterviewViewModelArgs
                 {
                     InterviewId = interviewId,

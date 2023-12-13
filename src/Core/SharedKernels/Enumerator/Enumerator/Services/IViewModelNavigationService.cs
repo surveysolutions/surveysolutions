@@ -7,7 +7,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
     public interface IViewModelNavigationService
     {
         Task<bool> NavigateToAsync<TViewModel, TParam>(TParam param, bool finishActivityOnSuccess = false) where TViewModel : IMvxViewModel<TParam>;
-        Task NavigateToAsync<TViewModel>() where TViewModel : IMvxViewModel;
+        Task<bool> NavigateToAsync<TViewModel>() where TViewModel : IMvxViewModel;
         Task<bool> NavigateToDashboardAsync(string interviewId = null);
         void NavigateToSettings();
         Task SignOutAndNavigateToLoginAsync();
@@ -15,7 +15,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         Task NavigateToFinishInstallationAsync();
         Task NavigateToMapsAsync();
         Task<bool> NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity);
-        Task NavigateToPrefilledQuestionsAsync(string interviewId);
+        Task<bool> NavigateToPrefilledQuestionsAsync(string interviewId);
         void NavigateToSplashScreen();
         void ShowWaitMessage();
         bool HasPendingOperations { get; }

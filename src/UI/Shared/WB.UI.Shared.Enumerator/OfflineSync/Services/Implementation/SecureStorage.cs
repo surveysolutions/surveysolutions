@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using Android.App;
-using Android.Content;
+﻿using Android.Content;
 using Android.Runtime;
-using Java.IO;
 using Java.Security;
 using Javax.Crypto;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -25,29 +21,16 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
         {
             this.keyStore = KeyStore.GetInstance(KeyStore.DefaultType);
 
-            try
-            {
-                lock (keyStoreFileLock)
-                {
-                    using (var keyStoreFile = Application.Context.OpenFileInput(keyStoreFileName))
-                    {
-                        this.keyStore.Load(keyStoreFile, null);
-                    }
-                }
-            }
-            catch (Java.IO.FileNotFoundException)
-            {
-                this.LoadEmptyKeyStore(null);
-            }
-        }
-
-        private void Save()
-        {
             lock (keyStoreFileLock)
             {
-                using (var keyStoreFile = Application.Context.OpenFileOutput(keyStoreFileName, FileCreationMode.Private))
+                try
                 {
-                    this.keyStore.Store(keyStoreFile, null);
+                    using var keyStoreFile = Application.Context.OpenFileInput(keyStoreFileName);
+                    this.keyStore.Load(keyStoreFile, null);
+                }
+                catch (Java.IO.FileNotFoundException)
+                {
+                    this.LoadEmptyKeyStore(null);
                 }
             }
         }
@@ -59,8 +42,14 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
         /// <param name="dataBytes">Data bytes to store.</param>
         public void Store(string key, byte[] dataBytes)
         {
-            this.keyStore.SetEntry(key, new KeyStore.SecretKeyEntry(new SecureData(dataBytes)), null);
-            Save();
+            lock (keyStoreFileLock)
+            {
+                this.keyStore.SetEntry(key, new KeyStore.SecretKeyEntry(new SecureData(dataBytes)), null);
+                using var keyStoreFile = Application.Context.OpenFileOutput(keyStoreFileName, FileCreationMode.Private);
+                this.keyStore.Store(keyStoreFile, null);
+                
+                this.inMemoryKeyStorage.Remove(key);
+            }
         }
 
         /// <summary>
@@ -70,10 +59,10 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
         /// <returns>Byte array of stored data.</returns>
         public byte[] Retrieve(string key)
         {
-            if (inMemoryKeyStorage.ContainsKey(key)) return inMemoryKeyStorage[key];
-
             lock (keyStoreFileLock)
             {
+                if (inMemoryKeyStorage.TryGetValue(key, out var retrieve)) return retrieve;
+                
                 if (!(this.keyStore.GetEntry(key, null) is KeyStore.SecretKeyEntry entry))
                 {
                     throw new Exception($"No entry found for key {key}.");
@@ -85,21 +74,17 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
         }
 
         /// <summary>
-        /// Deletes data.
-        /// </summary>
-        /// <param name="key">Key for the data to be deleted.</param>
-        public void Delete(string key)
-        {
-            this.keyStore.DeleteEntry(key);
-            Save();
-        }
-
-        /// <summary>
         /// Checks if the storage contains a key.
         /// </summary>
         /// <param name="key">The key to search.</param>
         /// <returns>True if the storage has the key, otherwise false.</returns>
-        public bool Contains(string key) => this.keyStore.ContainsAlias(key);
+        public bool Contains(string key)
+        {
+            lock (keyStoreFileLock)
+            {
+                return inMemoryKeyStorage.ContainsKey(key) || this.keyStore.ContainsAlias(key);
+            }
+        }
 
         static IntPtr id_load_Ljava_io_InputStream_arrayC;
 

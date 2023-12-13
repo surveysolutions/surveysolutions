@@ -86,7 +86,6 @@
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
     <None Include="app.config" />
-    <None Include="Extensions.props" />
     <None Include="Directory.Build.targets" />
     <AndroidEnvironment Include="AndroidEnvironment.txt" />
   </ItemGroup>
@@ -262,8 +261,21 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Net.ILLink.Tasks" Version="8.0.100-1.23067.1" />
   </ItemGroup>
-  <ItemGroup />
-  <Import Project="Extensions.props" Condition=" '$(ExcludeExtensions)' != 'True' " />
+    <Choose>
+        <When Condition=" '$(ExcludeExtensions)' != 'True' ">
+            <ItemGroup>
+                <ProjectReference Include="..\..\Shared\WB.UI.Shared.Extensions\WB.UI.Shared.Extensions.csproj">
+                    <Project>{f69d3c48-f648-4b9f-9b4f-ba44e014224c}</Project>
+                    <Name>WB.UI.Shared.Extensions</Name>
+                </ProjectReference>
+            </ItemGroup>
+        </When>
+        <Otherwise>
+            <ItemGroup>
+            </ItemGroup>
+        </Otherwise>
+    </Choose>
+    
   <Import Project="ConfigureTrimming.props" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
      Other similar extension points exist, see Microsoft.Common.targets.
