@@ -252,11 +252,7 @@ task frontend {
 	"Finishing frontend task" | Out-Host
 }
 
-task PackageHq frontend, {
-	Write-Build 10 "RevisionId: $RevisionId"
-	Write-Build 10 "Version: $version""Starting HQ build task" | Out-Host
-    Write-Build 10 "InfoVersion: $infoVersion"
-	
+task PackageHq frontend, {	
     exec {
         dotnet publish @(
             "./src/UI/WB.UI.Headquarters.Core",
@@ -293,6 +289,10 @@ task PackageHqOffline frontend, {
         )
     }
      
+    Write-Build 10 "RevisionId: $RevisionId"
+	Write-Build 10 "Version: $version""Starting HQ build task" | Out-Host
+    Write-Build 10 "InfoVersion: $infoVersion"
+
     exec {
         dotnet publish @(
             "./src/UI/WB.UI.Headquarters.Core",
