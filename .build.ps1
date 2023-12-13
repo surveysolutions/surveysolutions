@@ -59,6 +59,7 @@ else {
     $tmp = [System.IO.Path]::GetTempPath() + ".build"
 }
 
+
 $gitBranch = $ENV:GIT_BRANCH
 if($null -eq $gitBranch) {
     $gitBranch = (git branch --show-current)
@@ -88,6 +89,7 @@ New-Item -Type Directory $output -ErrorAction SilentlyContinue | Out-Null
 $output = Resolve-Path $output
 
 Enter-Build {
+	Write-Build 10 "RevisionId: $RevisionId"
     Write-Build 10 "Version: $version"
     Write-Build 10 "InfoVersion: $infoVersion"
     
@@ -251,7 +253,10 @@ task frontend {
 }
 
 task PackageHq frontend, {
-	"Starting HQ build task" | Out-Host
+	Write-Build 10 "RevisionId: $RevisionId"
+	Write-Build 10 "Version: $version""Starting HQ build task" | Out-Host
+    Write-Build 10 "InfoVersion: $infoVersion"
+	
     exec {
         dotnet publish @(
             "./src/UI/WB.UI.Headquarters.Core",
