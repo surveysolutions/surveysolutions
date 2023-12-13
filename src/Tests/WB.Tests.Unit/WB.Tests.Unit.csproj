@@ -51,8 +51,8 @@
     <PackageReference Include="JsonDiffPatch.Net" Version="2.3.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
     <PackageReference Include="Moq" Version="4.20.69" />
-    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="9.1.1" />
-    <PackageReference Include="MvvmCross.Tests" Version="9.1.1" />
+    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="9.2.0-beta.5" />
+    <PackageReference Include="MvvmCross.Tests" Version="9.2.0-beta.5" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NHibernate" Version="5.4.6" />
     <PackageReference Include="NSubstitute" Version="5.1.0" />
