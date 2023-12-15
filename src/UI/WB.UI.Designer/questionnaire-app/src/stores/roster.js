@@ -71,7 +71,18 @@ export const useRosterStore = defineStore('roster', {
         },
 
         discardChanges() {
-            Object.assign(this.roster.group, this.initialRoster);
+            Object.assign(this.roster, this.initialRoster);
+        },
+
+        getQuestionsEligibleForNumericRosterTitle(rosterSizeQuestionId) {
+            return get(
+                '/api/questionnaire/getQuestionsEligibleForNumericRosterTitle/' +
+                    this.questionnaireId,
+                {
+                    rosterId: this.roster.itemId,
+                    rosterSizeQuestionId: rosterSizeQuestionId
+                }
+            );
         }
     }
 });

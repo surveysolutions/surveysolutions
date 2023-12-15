@@ -53,7 +53,8 @@
                     <div class="dropdown-with-breadcrumbs-and-icons" v-if="activeRoster.type == 'List'">
                         <label>{{ $t('QuestionnaireEditor.RosterSourceQuestion') }}</label>
                         <div class="btn-group" uib-dropdown>
-                            <button class="btn dropdown-toggle" uib-dropdown-toggle type="button">
+                            <button class="btn dropdown-toggle" uib-dropdown-toggle type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
                                 <span class="select-placeholder" v-if="selectedListQuestion == null">
                                     {{ $t('QuestionnaireEditor.SelectQuestion') }}
                                 </span>
@@ -70,7 +71,7 @@
 
                             <ul class="dropdown-menu" role="menu">
                                 <li role="presentation" :class="{ 'dropdown-header': breadCrumb.isSectionPlaceHolder }"
-                                    v-for="breadCrumb in activeRoster.lists ">
+                                    v-for="breadCrumb in activeRoster.textListsQuestions">
                                     <span v-if="breadCrumb.isSectionPlaceHolder">{{ breadCrumb.title }}</span>
 
                                     <a v-if="!breadCrumb.isSectionPlaceHolder" @click="selectListQuestion(breadCrumb.id)"
@@ -94,7 +95,8 @@
                     <div class="dropdown-with-breadcrumbs-and-icons" v-if="activeRoster.type == 'Numeric'">
                         <label>{{ $t('QuestionnaireEditor.RosterSourceNumericQuestion') }}</label>
                         <div class="btn-group" uib-dropdown>
-                            <button class="btn dropdown-toggle" uib-dropdown-toggle type="button">
+                            <button class="btn dropdown-toggle" uib-dropdown-toggle type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
                                 <span class="select-placeholder" v-if="selectedNumericQuestion == null">
                                     {{ $t('QuestionnaireEditor.SelectQuestion') }}
                                 </span>
@@ -111,7 +113,7 @@
 
                             <ul class="dropdown-menu" role="menu">
                                 <li role="presentation" :class="{ 'dropdown-header': breadCrumb.isSectionPlaceHolder }"
-                                    v-for="breadCrumb in activeRoster.numerics">
+                                    v-for="breadCrumb in activeRoster.numericIntegerQuestions">
                                     <span v-if="breadCrumb.isSectionPlaceHolder">{{ breadCrumb.title }}</span>
 
                                     <a v-if="!breadCrumb.isSectionPlaceHolder" @click="selectNumericQuestion(breadCrumb.id)"
@@ -132,7 +134,8 @@
                     <div class="dropdown-with-breadcrumbs-and-icons" v-if="activeRoster.type == 'Numeric'">
                         <label>{{ $t('QuestionnaireEditor.RosterSourceNumericTitles') }}</label>
                         <div class="btn-group" uib-dropdown>
-                            <button class="btn dropdown-toggle" uib-dropdown-toggle type="button">
+                            <button class="btn dropdown-toggle" uib-dropdown-toggle type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
                                 <span class="select-placeholder" v-if="selectedTitleQuestion == null">
                                     {{ $t('QuestionnaireEditor.SelectQuestion') }}
                                 </span>
@@ -149,7 +152,7 @@
 
                             <ul class="dropdown-menu" role="menu">
                                 <li role="presentation" :class="{ 'dropdown-header': breadCrumb.isSectionPlaceHolder }"
-                                    v-for="breadCrumb in activeRoster.titles">
+                                    v-for="breadCrumb in activeRoster.numericIntegerTitles">
                                     <span v-if="breadCrumb.isSectionPlaceHolder">{{ breadCrumb.title }}</span>
 
                                     <a v-if="!breadCrumb.isSectionPlaceHolder" @click="selectTitleQuestion(breadCrumb.id)"
@@ -176,14 +179,14 @@
                         </label>
                         <!--<textarea id="edit-fixed-roster-title" class="form-control" ng-model="activeRoster.fixedRosterTitles" msd-elastic split-array></textarea>-->
                         <div class="options-editor">
-                            <div v-if="activeRoster.useListAsRosterTitleEditor" class="form-group">
+                            <div v-if="useListAsRosterTitleEditor" class="form-group">
                                 <div class="table-holder">
                                     <div class="table-row fixed-roster-titles-editor"
                                         v-for="(title, index) in activeRoster.fixedRosterTitles">
                                         <div class="column-2">
                                             <input type="number" min="-2147483648" max="2147483647"
                                                 v-model.number="title.value" :name="'title_value_' + index"
-                                                :class="{ 'has-error': !title.valid }"
+                                                :class="{ 'has-error': title.invalid }"
                                                 class="form-control fixed-roster-value-editor border-right">
                                         </div>
                                         <div class="column-3">
@@ -191,27 +194,29 @@
                                                 ng-keypress="onKeyPressInOptions($event)" class="form-control border-right">
                                         </div>
                                         <div class="column-4">
-                                            <a href class="btn" tabindex="-1" @click="removeFixedTitle($index)"></a>
+                                            <a href class="btn" tabindex="-1" @click="removeFixedTitle(index)"></a>
                                         </div>
                                     </div>
                                 </div>
                                 <p>
-                                    <button class="btn btn-link" v-show="!wasTitlesLimitReached()"
+                                    <button class="btn btn-link" type="button"
+                                        v-show="activeRoster.fixedRosterTitles.length < fixedRosterLimit"
                                         @click="addFixedTitle()">{{ $t('QuestionnaireEditor.RosterAddItem') }}</button>
                                     <button class="btn btn-link pull-right" @click="showOptionsInTextarea()">
                                         {{ $t('QuestionnaireEditor.StringsView') }}
                                     </button>
                                 </p>
                             </div>
-                            <div v-if="!activeRoster.useListAsRosterTitleEditor">
+                            <div v-if="!useListAsRosterTitleEditor">
                                 <div class="form-group" :class="{ 'has-error': !stringifiedRosterTitles.valid }">
                                     <textarea name="stringifiedRosterTitles" class="form-control mono"
                                         v-model="activeRoster.stringifiedRosterTitles" match-options-pattern
-                                        max-options-count msd-elastic></textarea>
+                                        v-on:keyup="stringifiedRosterTitlesValidate" max-options-count
+                                        msd-elastic></textarea>
                                     <p class="help-block">
-                                        <input class="btn btn-link" type="button" @click="showRosterTitlesInList()"
+                                        <button class="btn btn-link" type="button" @click="showRosterTitlesInList()"
                                             :disabled="!stringifiedRosterTitles.valid"
-                                            :value="$t('QuestionnaireEditor.ShowList')" />
+                                            v-t="{ path: 'QuestionnaireEditor.ShowList' }" />
                                     </p>
                                     <p class="help-block ng-cloak"
                                         v-show="stringifiedRosterTitles.$error.matchOptionsPattern">
@@ -219,7 +224,7 @@
                                     </p>
                                     <p class="help-block ng-cloak" v-show="stringifiedRosterTitles.$error.maxOptionsCount">
                                         {{ $t('QuestionnaireEditor.EnteredMoreThanAllowed', {
-                                            max: 200
+                                            max: fixedRosterLimit
                                         }) }}
                                     </p>
                                 </div>
@@ -232,7 +237,8 @@
                     <div class="dropdown-with-breadcrumbs-and-icons" v-if="activeRoster.type == 'Multi'">
                         <label>{{ $t('QuestionnaireEditor.RosterSourceQuestion') }}</label>
                         <div class="btn-group" uib-dropdown>
-                            <button class="btn dropdown-toggle" uib-dropdown-toggle type="button">
+                            <button class="btn dropdown-toggle" uib-dropdown-toggle type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
                                 <span class="select-placeholder" v-if="selectedMultiQuestion == null">{{
                                     $t('QuestionnaireEditor.SelectQuestion') }}</span>
                                 <span class="selected-item" v-if="selectedMultiQuestion !== null">
@@ -249,7 +255,7 @@
 
                             <ul class="dropdown-menu" role="menu">
                                 <li role="presentation" :class="{ 'dropdown-header': breadCrumb.isSectionPlaceHolder }"
-                                    v-for="breadCrumb in activeRoster.multiOption">
+                                    v-for="breadCrumb in activeRoster.notLinkedMultiOptionQuestions">
                                     <span v-if="breadCrumb.isSectionPlaceHolder">{{ breadCrumb.title }}</span>
 
                                     <a v-if="!breadCrumb.isSectionPlaceHolder" @click="selectMultiQuestion(breadCrumb.id)"
@@ -341,7 +347,7 @@
                     class="btn btn-lg" :class="{ 'btn-primary': dirty }" @click="saveRoster()" unsaved-warning-clear
                     :disabled="!valid">{{ $t('QuestionnaireEditor.Save') }}</button>
                 <button type="reset" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" unsaved-warning-clear
-                    @click="cancelRoster()">{{ $t('QuestionnaireEditor.Cancel') }}</button>
+                    @click="cancel()">{{ $t('QuestionnaireEditor.Cancel') }}</button>
             </div>
             <div class="pull-right">
                 <button type="button" v-show="!questionnaire.isReadOnlyForUser" id="add-comment-button"
@@ -373,6 +379,8 @@ import MoveToChapterSnippet from './MoveToChapterSnippet.vue';
 import ExpressionEditor from './ExpressionEditor.vue';
 import Breadcrumbs from './Breadcrumbs.vue'
 import Help from './Help.vue'
+import { find } from 'lodash'
+import { convertToText, validateText, convertToTable } from '../../OptionsEditor/utils/tableToString';
 
 export default {
     name: 'Roster',
@@ -387,16 +395,21 @@ export default {
             activeRoster: {},
             breadcrumbs: [],
             showEnablingConditions: undefined,
-            selectedTitleQuestion: null,
             selectedListQuestion: null,
             selectedMultiQuestion: null,
             selectedNumericQuestion: null,
+            selectedTitleQuestion: null,
             dirty: false,
             valid: true,
             stringifiedRosterTitles: {
                 valid: true,
-                $error: {}
-            }
+                $error: {
+                    matchOptionsPattern: false,
+                    maxOptionsCount: false
+                }
+            },
+            useListAsRosterTitleEditor: true,
+            fixedRosterLimit: 2,
         };
     },
     watch: {
@@ -439,7 +452,7 @@ export default {
         },
         isCommentsBlockVisible() {
             return this.commentsStore.getIsCommentsBlockVisible;
-        }
+        },
     },
     methods: {
         async fetch() {
@@ -450,8 +463,14 @@ export default {
 
             this.activeRoster = this.rosterStore.getRoster;
             this.breadcrumbs = this.rosterStore.getBreadcrumbs;
+
+            this.selectedNumericQuestion = this.findQuestion(this.activeRoster.numericIntegerQuestions, this.activeRoster.rosterSizeNumericQuestionId);
+            this.selectedTitleQuestion = this.findQuestion(this.activeRoster.numericIntegerTitles, this.activeRoster.rosterTitleQuestionId);
+            this.selectedListQuestion = this.findQuestion(this.activeRoster.textListsQuestions, this.activeRoster.rosterSizeListQuestionId);
+            this.selectedMultiQuestion = this.findQuestion(this.activeRoster.notLinkedMultiOptionQuestions, this.activeRoster.rosterSizeMultiQuestionId);
+            this.dirty = false;
         },
-        saveGroup() {
+        saveRoster() {
             this.rosterStore.saveRosterData();
             this.dirty = false;
         },
@@ -462,6 +481,104 @@ export default {
         },
         toggleComments() {
             this.commentsStore.toggleComments();
+        },
+        async selectNumericQuestion(numericId) {
+            this.activeRoster.rosterSizeNumericQuestionId = numericId;
+            this.selectedNumericQuestion = this.findQuestion(this.activeRoster.numericIntegerQuestions, numericId);
+            this.dirty = true;
+            const result = await this.rosterStore.getQuestionsEligibleForNumericRosterTitle(this.activeRoster.rosterSizeNumericQuestionId);
+
+            this.activeRoster.numericIntegerTitles = result;
+            this.selectedTitleQuestion = this.findQuestion(this.activeRoster.numericIntegerTitles, this.activeRoster.rosterTitleQuestionId);
+        },
+        selectTitleQuestion(titleQuestionId) {
+            this.activeRoster.rosterTitleQuestionId = titleQuestionId;
+            this.selectedTitleQuestion = this.findQuestion(this.activeRoster.numericIntegerTitles, titleQuestionId);
+            this.dirty = true;
+        },
+        selectListQuestion(listId) {
+            this.activeRoster.rosterSizeListQuestionId = listId;
+            this.selectedListQuestion = this.findQuestion(this.activeRoster.textListsQuestions, listId);
+            this.dirty = true;
+        },
+        selectMultiQuestion(multiId) {
+            this.activeRoster.rosterSizeMultiQuestionId = multiId;
+            this.selectedMultiQuestion = this.findQuestion(this.activeRoster.notLinkedMultiOptionQuestions, multiId);
+            this.dirty = true;
+        },
+        findQuestion(collection, itemId) {
+            const item = find(collection, item => item.id == itemId && item.isSectionPlaceHolder == false);
+            if (item)
+                return item;
+
+            return null;
+        },
+        deleteRoster() {
+            //
+        },
+        addFixedTitle() {
+            this.activeRoster.fixedRosterTitles.push({
+                "value": null,
+                "title": ''
+            });
+            this.dirty = true;
+        },
+        removeFixedTitle(index) {
+            this.activeRoster.fixedRosterTitles.splice(index, 1);
+            this.dirty = true;
+        },
+        async showOptionsInTextarea() {
+            const text = await convertToText(this.activeRoster.fixedRosterTitles);
+            this.activeRoster.stringifiedRosterTitles = text;
+            this.useListAsRosterTitleEditor = false;
+        },
+
+        async showRosterTitlesInList() {
+            if (this.useListAsRosterTitleEditor) {
+                return;
+            }
+
+            this.stringifiedRosterTitlesValidate();
+
+            if (!this.stringifiedRosterTitles.valid) {
+                return;
+            }
+            if (this.activeRoster.stringifiedRosterTitles) {
+                const titles = await convertToTable(this.activeRoster.stringifiedRosterTitles);
+                this.activeRoster.fixedRosterTitles = titles;
+            }
+            this.useListAsRosterTitleEditor = true;
+        },
+
+        stringifiedRosterTitlesValidate() {
+            if (this.useListAsRosterTitleEditor == true)
+                return true;
+
+            const lines = (this.activeRoster.stringifiedRosterTitles || '').split(/\r\n|\r|\n/);
+            const lineCount = lines.length
+
+            if (lineCount > this.fixedRosterLimit) {
+                this.stringifiedRosterTitles.$error.maxOptionsCount = true
+                this.stringifiedRosterTitles.valid = false;
+                return;
+            }
+            else if (this.stringifiedRosterTitles.$error.maxOptionsCount == true) {
+                this.stringifiedRosterTitles.$error.maxOptionsCount = false
+            }
+
+            const top5Errors = validateText(this.activeRoster.stringifiedRosterTitles, false).slice(0, 5);
+            if (top5Errors.length > 0) {
+                this.stringifiedRosterTitles.$error.matchOptionsPattern = true;
+                this.stringifiedRosterTitles.valid = false;
+                return;
+            }
+            else if (this.stringifiedRosterTitles.$error.matchOptionsPattern == true) {
+                this.stringifiedRosterTitles.$error.matchOptionsPattern = false
+            }
+
+            if (this.stringifiedRosterTitles.valid == false) {
+                this.stringifiedRosterTitles.valid = true;
+            }
         }
     }
 }
