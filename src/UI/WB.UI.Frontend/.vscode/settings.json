@@ -8,8 +8,8 @@
     "typescript.preferences.quoteStyle": "single",
     "javascript.preferences.quoteStyle": "single",
     "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true,
-        "source.fixAll": true
+        "source.fixAll.eslint": "explicit",
+        "source.fixAll": "explicit"
     },
     "[vue]": {
         "editor.defaultFormatter": "Vue.volar",
