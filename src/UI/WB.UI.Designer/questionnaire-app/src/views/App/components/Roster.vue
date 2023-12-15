@@ -184,14 +184,15 @@
                                     <div class="table-row fixed-roster-titles-editor"
                                         v-for="(title, index) in activeRoster.fixedRosterTitles">
                                         <div class="column-2">
-                                            <input type="number" min="-2147483648" max="2147483647"
+                                            <input type="number" min="-2147483648" max="2147483647" v-focus="initilized"
                                                 v-model.number="title.value" :name="'title_value_' + index"
+                                                @keypress="onKeyPressInOptions($event)"
                                                 :class="{ 'has-error': title.invalid }"
                                                 class="form-control fixed-roster-value-editor border-right">
                                         </div>
                                         <div class="column-3">
                                             <input :attr-id="'fixed-item-' + index" type="text" v-model="title.title"
-                                                ng-keypress="onKeyPressInOptions($event)" class="form-control border-right">
+                                                @keypress="onKeyPressInOptions($event)" class="form-control border-right">
                                         </div>
                                         <div class="column-4">
                                             <a href class="btn" tabindex="-1" @click="removeFixedTitle(index)"></a>
@@ -381,6 +382,7 @@ import Breadcrumbs from './Breadcrumbs.vue'
 import Help from './Help.vue'
 import { find } from 'lodash'
 import { convertToText, validateText, convertToTable } from '../../OptionsEditor/utils/tableToString';
+import { moveFocusAndAddOptionIfNeeded } from '../../../services/utilityService'
 
 export default {
     name: 'Roster',
@@ -409,7 +411,8 @@ export default {
                 }
             },
             useListAsRosterTitleEditor: true,
-            fixedRosterLimit: 2,
+            fixedRosterLimit: 200,
+            initilized: false,
         };
     },
     watch: {
@@ -422,8 +425,10 @@ export default {
 
         async rosterId(newValue, oldValue) {
             if (newValue != oldValue) {
+                this.initilized = false;
                 this.rosterStore.clear();
                 await this.fetch();
+                this.initilized = true;
             }
         }
     },
@@ -437,6 +442,9 @@ export default {
     },
     async beforeMount() {
         await this.fetch();
+    },
+    mounted() {
+        this.initilized = true;
     },
     computed: {
         typeName() {
@@ -578,6 +586,24 @@ export default {
 
             if (this.stringifiedRosterTitles.valid == false) {
                 this.stringifiedRosterTitles.valid = true;
+            }
+        },
+
+        onKeyPressInOptions(keyEvent) {
+            if (keyEvent.which === 13) {
+                keyEvent.preventDefault();
+
+                if (this.activeRoster.fixedRosterTitles.length >= this.fixedRosterLimit)
+                    return;
+
+                this.addFixedTitle();
+                /*moveFocusAndAddOptionIfNeeded(
+                    keyEvent.target ? keyEvent.target : keyEvent.srcElement,
+                    ".fixed-roster-titles-editor",
+                    ".fixed-roster-titles-editor input.fixed-roster-value-editor",
+                    this.activeRoster.fixedRosterTitles,
+                    function () { return this.addFixedTitle(); },
+                    "title");*/
             }
         }
     }

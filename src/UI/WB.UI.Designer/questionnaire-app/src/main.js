@@ -15,7 +15,7 @@ import PerfectScrollbar from 'vue3-perfect-scrollbar';
 
 //import * as uiv from 'uiv';
 
-import './directives';
+import directives from './directives/';
 
 /** Register Vue */
 const pinia = createPinia();
@@ -28,8 +28,7 @@ vue.use(i18n);
 vue.use(PerfectScrollbar);
 vue.use(VueDOMPurifyHTML);
 
-//import { useQuestionnaireStore } from './store'
-//vue.provide('store', useQuestionnaireStore)
+directives(vue);
 
 // Run!
 router.isReady().then(() => {

@@ -1,4 +1,5 @@
 import { i18n } from '../plugins/localization';
+import { nextTick } from 'vue';
 
 export function format(format) {
     var args = Array.prototype.slice.call(arguments, 1);
@@ -47,7 +48,7 @@ export function focusout(name) {
     });
 }
 
-export function moveFocusAndAddOptionIfNeeded(
+export async function moveFocusAndAddOptionIfNeeded(
     targetDomElement,
     optionEditorClassName,
     optionVauleEditorClassName,
@@ -55,7 +56,7 @@ export function moveFocusAndAddOptionIfNeeded(
     addOptionCallBack,
     optionPropertyName
 ) {
-    var target = $(targetDomElement);
+    var target = targetDomElement;
     if (target.parents(optionEditorClassName).length <= 0) {
         return;
     }
@@ -64,14 +65,16 @@ export function moveFocusAndAddOptionIfNeeded(
     var indexOfOption = options.indexOf(optionScope);
     if (indexOfOption < 0) return;
 
-    if (indexOfOption === options.length - 1) addOptionCallBack();
+    if (indexOfOption === options.length - 1) {
+        addOptionCallBack();
+    }
 
-    $timeout(function() {
-        var questionOptionValueEditor = $(optionVauleEditorClassName);
-        var optionValueInput = $(questionOptionValueEditor[indexOfOption + 1]);
-        optionValueInput.focus();
-        optionValueInput.select();
-    });
+    await nextTick();
+
+    var questionOptionValueEditor = $(optionVauleEditorClassName);
+    var optionValueInput = $(questionOptionValueEditor[indexOfOption + 1]);
+    optionValueInput.focus();
+    optionValueInput.select();
 }
 
 export function sanitize(input) {
