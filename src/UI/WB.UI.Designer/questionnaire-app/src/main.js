@@ -11,6 +11,7 @@ import i18n from './plugins/localization';
 import 'bootstrap';
 
 import ConfirmDialog from './plugins/confirm';
+import PerfectScrollbar from 'vue3-perfect-scrollbar';
 
 //import * as uiv from 'uiv';
 
@@ -24,6 +25,7 @@ vue.use(pinia);
 //vue.use(vuetify); //reqired by options component. consider either remove or use.
 vue.use(i18n);
 //vue.use(uiv);
+vue.use(PerfectScrollbar);
 vue.use(VueDOMPurifyHTML);
 
 //import { useQuestionnaireStore } from './store'
