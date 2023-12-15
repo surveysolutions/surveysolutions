@@ -99,7 +99,7 @@
                 </button>
                 <button type="button" v-show="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
                     v-if="!activeGroup.isCoverPage" id="edit-chapter-delete-button" class="btn btn-lg btn-link"
-                    @click="deleteItem()" unsaved-warning-clear>{{ $t('QuestionnaireEditor.Delete') }}</button>
+                    @click="deleteGroup()" unsaved-warning-clear>{{ $t('QuestionnaireEditor.Delete') }}</button>
                 <MoveToChapterSnippet :item-id="groupId"
                     v-show="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
                     v-if="!activeGroup.isChapter && !activeGroup.isCoverPage">
@@ -195,6 +195,9 @@ export default {
         },
         toggleComments() {
             this.commentsStore.toggleComments();
+        },
+        deleteGroup() {
+            //
         }
     }
 };

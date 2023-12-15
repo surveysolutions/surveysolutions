@@ -93,7 +93,7 @@
                     }}</span>
                 </button>
                 <button type="button" v-show="!questionnaire.isReadOnlyForUser" id="edit-chapter-delete-button"
-                    class="btn btn-lg btn-link" @click="deleteVariable(activeVariable)" unsaved-warning-clear>
+                    class="btn btn-lg btn-link" @click="deleteVariable()" unsaved-warning-clear>
                     {{ $t('QuestionnaireEditor.Delete') }}
                 </button>
                 <MoveToChapterSnippet :item-id="variableId" v-show="!questionnaire.isReadOnlyForUser">
@@ -186,6 +186,9 @@ export default {
         },
         toggleComments() {
             this.commentsStore.toggleComments();
+        },
+        deleteVariable() {
+            //
         }
     }
 };
