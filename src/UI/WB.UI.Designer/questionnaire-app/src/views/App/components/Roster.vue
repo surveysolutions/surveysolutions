@@ -477,7 +477,8 @@ export default {
             this.selectedMultiQuestion = this.findQuestion(this.activeRoster.notLinkedMultiOptionQuestions, this.activeRoster.rosterSizeMultiQuestionId);
             this.dirty = false;
         },
-        saveRoster() {
+        async saveRoster() {
+            await this.showRosterTitlesInList();
             this.rosterStore.saveRosterData();
             this.dirty = false;
         },
