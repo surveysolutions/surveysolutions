@@ -89,7 +89,7 @@ const pages = {
 };
 
 const fileTargets = [
-    { source: join(".resources", "**", "*.json"), destination: join("dist", "locale"), isFlat: false  },
+    { source: join(".resources", "**", "*.js"), destination: join("dist", "locale"), isFlat: false  },
 
     { source: join("dist", "img", "**", "*.*"), destination: path.join(hqDist, "wwwroot", "img"), isFlat: false },
     { source: join("dist", "fonts", "**", "*.*"), destination: path.join(hqDist, "wwwroot", "fonts") },

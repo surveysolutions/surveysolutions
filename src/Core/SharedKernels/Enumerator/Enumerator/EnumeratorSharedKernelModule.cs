@@ -54,7 +54,6 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<IInterviewExpressionStorageProvider, InterviewExpressionStorageProvider>();
             registry.BindAsSingleton<IFriendlyErrorMessageService, FriendlyErrorMessageService>();
             registry.Bind<ICompositeCollectionInflationService, CompositeCollectionInflationService>();
-            registry.BindAsSingleton<ILastCompletionComments, LastCompletionComments>();
             registry.Bind<IInterviewsRemover, Implementation.Services.Synchronization.Steps.InterviewsRemover>();
             registry.Bind<ICompanyLogoSynchronizer, CompanyLogoSynchronizer>();
             registry.Bind<IAttachmentsCleanupService, AttachmentsCleanupService>();

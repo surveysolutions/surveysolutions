@@ -24,6 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             var query = sessionFactory.Session.CreateSQLQuery(queryText);
             query.SetParameter("questionnaireId", questionnaireIdentity.QuestionnaireId);
             query.SetParameter("questionnaireVersion", questionnaireIdentity.Version);
+            query.SetTimeout(300);
             query.ExecuteUpdate();
         }
     }

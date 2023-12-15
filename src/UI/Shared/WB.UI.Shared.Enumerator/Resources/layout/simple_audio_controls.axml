@@ -17,7 +17,7 @@
             android:id="@id/exo_play_pause"
             style="@style/ExoStyledControls.Button.Center.PlayPause"
             android:tint="@color/exo_player_button_tint"
-            android:layout_marginTop="@dimen/exo_player_play_button_margin_top"
+            android:layout_gravity="center"
             android:layout_width="@dimen/exo_player_play_button_size"
             android:layout_height="@dimen/exo_player_play_button_size" />
   </FrameLayout>
@@ -25,7 +25,7 @@
   <TextView android:id="@id/exo_position"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_gravity="center_horizontal"
+      android:layout_gravity="center"
       android:textColor="@color/exo_player_text"
       android:textSize="@dimen/exo_player_text_size"
       android:textStyle="bold"
@@ -53,7 +53,7 @@
       android:id="@id/exo_duration"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_gravity="right"
+      android:layout_gravity="center"
       android:textSize="@dimen/exo_player_text_size"
       android:textColor="@color/exo_player_text"
       android:textStyle="bold"

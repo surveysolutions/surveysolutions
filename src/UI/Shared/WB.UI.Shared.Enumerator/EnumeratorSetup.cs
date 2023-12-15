@@ -102,7 +102,10 @@ namespace WB.UI.Shared.Enumerator
             lookup.Add<AssignInterviewDialogViewModel,  DoActionDialogFragment>();
             lookup.Add<AssignAssignmentDialogViewModel, DoActionDialogFragment>();
             lookup.Add<RejectInterviewDialogViewModel,  DoActionDialogFragment>();
-            
+
+            lookup.Add<PlayAudioViewModel,  PlayAudioDialog>();
+            lookup.Add<PlayVideoViewModel,  PlayVideoActivity>();
+
             return lookup;
         }
 

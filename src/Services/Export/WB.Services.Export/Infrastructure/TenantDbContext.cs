@@ -203,7 +203,7 @@ namespace WB.Services.Export.Infrastructure
             try
             {
                 await db.QueryAsync($"select pg_advisory_lock ({SchemaChangesLock})");
-                
+
                 var schemas = (await db.QueryAsync<string>(
                     "select nspname from pg_catalog.pg_namespace n " +
                     "join pg_catalog.pg_description d on d.objoid = n.oid " +
@@ -236,7 +236,7 @@ namespace WB.Services.Export.Infrastructure
                     await using var tr = await db.BeginTransactionAsync(cancellationToken);
                     foreach (var table in tables)
                     {
-                        await db.ExecuteAsync($@"drop table if exists {table}");
+                        await db.ExecuteAsync($@"drop table if exists {table} cascade");
                         logger?.LogInformation("Dropped {Table}", table);
                     }
 
@@ -247,12 +247,19 @@ namespace WB.Services.Export.Infrastructure
                 {
                     foreach (var schema in schemas)
                     {
-                        await db.ExecuteAsync($@"drop schema if exists ""{schema}""");
+                        await db.ExecuteAsync($@"drop schema if exists ""{schema}"" cascade");
                         logger?.LogInformation("Dropped schema {Schema}", schema);
                     }
 
                     await tr.CommitAsync(cancellationToken);
                 }
+                
+                logger?.LogInformation("End drop tenant schema: {Tenant}. Removed {tables} tables in {schemas} schemas", tenant, tablesToDelete.Count, schemas.Count);
+            }
+            catch (Exception e)
+            {
+                logger?.LogCritical(e, "Error drop tenant schema: {Tenant}", tenant);
+                throw;
             }
             finally
             {
