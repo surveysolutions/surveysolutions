@@ -186,8 +186,8 @@
                                         <div class="column-2">
                                             <input type="number" min="-2147483648" max="2147483647" v-focus="initilized"
                                                 v-model.number="title.value" :name="'title_value_' + index"
-                                                @keypress="onKeyPressInOptions($event)"
-                                                :class="{ 'has-error': title.invalid }"
+                                                @keypress="onKeyPressIsNumber($event)"
+                                                :class="{ 'has-error': !isNumber(title.value) }"
                                                 class="form-control fixed-roster-value-editor border-right">
                                         </div>
                                         <div class="column-3">
@@ -382,7 +382,6 @@ import Breadcrumbs from './Breadcrumbs.vue'
 import Help from './Help.vue'
 import { find } from 'lodash'
 import { convertToText, validateText, convertToTable } from '../../OptionsEditor/utils/tableToString';
-import { moveFocusAndAddOptionIfNeeded } from '../../../services/utilityService'
 
 export default {
     name: 'Roster',
@@ -597,15 +596,26 @@ export default {
                     return;
 
                 this.addFixedTitle();
-                /*moveFocusAndAddOptionIfNeeded(
-                    keyEvent.target ? keyEvent.target : keyEvent.srcElement,
-                    ".fixed-roster-titles-editor",
-                    ".fixed-roster-titles-editor input.fixed-roster-value-editor",
-                    this.activeRoster.fixedRosterTitles,
-                    function () { return this.addFixedTitle(); },
-                    "title");*/
             }
-        }
+        },
+
+        isNumber(value) {
+            return value == null || /^([-+]?\d+)$/.test(value);
+        },
+
+        onKeyPressIsNumber(keyEvent) {
+            const charCode = (keyEvent.which) ? keyEvent.which : keyEvent.keyCode;
+            if ((charCode > 31 && (charCode < 48 || charCode > 57))
+                && charCode !== 13 // enter
+                && charCode !== 45 // -
+                && charCode !== 43 // +
+            ) {
+                keyEvent.preventDefault();;
+            } else {
+                this.onKeyPressInOptions(keyEvent)
+                return true;
+            }
+        },
     }
 }
 </script>
