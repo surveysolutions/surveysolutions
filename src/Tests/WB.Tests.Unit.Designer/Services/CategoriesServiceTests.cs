@@ -71,9 +71,9 @@ namespace WB.Tests.Unit.Designer.Services
             for (var row = 0; row < data.Length; row++)
                 for (var column = 0; column < data[row].Length; column++) {
                     worksheet.Cell(row + 1, column + 1).Value = data[row][column];
-                    worksheet.Cell(row + 1, column + 1).Style.Font.FontName = fontForGraphicEngine.Name;
+                    worksheet.Cell(row + 1, column + 1).Style.Font.FontName = FontsHelper.DefaultFontName;
                 }
-            package.Style.Font.FontName = fontForGraphicEngine.Name;     
+            package.Style.Font.FontName = FontsHelper.DefaultFontName;     
 
             var ms = new MemoryStream();
             package.SaveAs(ms);

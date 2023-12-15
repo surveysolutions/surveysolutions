@@ -584,7 +584,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
             
             using XLWorkbook package = new XLWorkbook(loadOptions);
-            package.Style.Font.FontName = fontForGraphicEngine.Name;
+            package.Style.Font.FontName = FontsHelper.DefaultFontName;
 
             foreach (var data in datas)
             {
@@ -595,11 +595,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                     {
                         var value = data.Value[row][column];
                         worksheet.Cell(row + 1, column + 1).SetValue(value);
-                        worksheet.Cell(row + 1, column + 1).Style.Font.FontName = fontForGraphicEngine.Name;
+                        worksheet.Cell(row + 1, column + 1).Style.Font.FontName = FontsHelper.DefaultFontName;
                     }
             }
-
-            package.Style.Font.FontName = fontForGraphicEngine.Name;
 
             using var stream = new MemoryStream();
             package.SaveAs(stream);
