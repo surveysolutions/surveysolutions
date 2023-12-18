@@ -17,7 +17,7 @@ using WB.UI.Shared.Enumerator.Utils;
 namespace WB.UI.Shared.Enumerator.Activities
 {
     [MvxActivityPresentation]
-    public abstract class BaseActivity<TViewModel> : MvvmCross.Platforms.Android.Views.MvxActivity<TViewModel> where TViewModel : class, IMvxViewModel
+    public abstract class BaseActivity<TViewModel> : MvxActivity<TViewModel> where TViewModel : class, IMvxViewModel
     {
         protected abstract int ViewResourceId { get; }
         private Logger log;
@@ -101,13 +101,13 @@ namespace WB.UI.Shared.Enumerator.Activities
             TryWriteMemoryInformationToLog($"Destroyed Activity {this.GetType().Name}");
             base.OnDestroy();
             
-            this.BindingContext.ClearAllBindings();
-            //this.ViewModel.DisposeIfDisposable();
+            this.BindingContext?.ClearAllBindings();
+            this.ViewModel?.DisposeIfDisposable();
             
             //cleanup cache to remove disposed viewmodel
             if (Mvx.IoCProvider.TryResolve<IMvxSingleViewModelCache>(out var cache))
             {
-                cache.GetAndClear(null);
+                cache?.GetAndClear(null);
             }
         }
 

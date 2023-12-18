@@ -1001,8 +1001,13 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         }
 
+        private bool isDisposed = false;
         public override void Dispose()
         {
+            if(isDisposed) return;
+            isDisposed = true;
+            
+            base.Dispose();
             if (locationDataSource != null)
             {
                 locationDataSource.LocationChanged -= LocationDataSourceOnLocationChanged;
@@ -1015,8 +1020,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
             collectionCancellationTokenSource?.Cancel();
             collectionCancellationTokenSource?.Dispose();
             collectionCancellationTokenSource = null;
-
-            base.Dispose();
         }
     }
 }

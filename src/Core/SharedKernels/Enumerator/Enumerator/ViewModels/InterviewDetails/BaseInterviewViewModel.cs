@@ -384,8 +384,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void NavigateToPreviousViewModel(Action navigateToIfHistoryIsEmpty)
             => this.NavigationState.NavigateBack(navigateToIfHistoryIsEmpty);
 
+        private bool isDisposed = false;
+        
         public override void Dispose()
         {
+            if(isDisposed) return;
+            isDisposed = true;
+            
             base.Dispose();
 
             this.NavigationState.ScreenChanged -= this.OnScreenChanged;

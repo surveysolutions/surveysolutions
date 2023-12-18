@@ -203,7 +203,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public IMvxAsyncCommand NavigateToMapsCommand => new MvxAsyncCommand(async() =>
         {
-            await this.NavigateToMaps();
+            this.Synchronization.CancelSynchronizationCommand.Execute();
+            await this.ViewModelNavigationService.NavigateToAsync<MapsViewModel>();
+            this.Dispose();
         });
 
         public IMvxAsyncCommand NavigateToMapDashboardCommand =>
@@ -221,13 +223,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             {
                 UserInteractionService.ShowToast(e.Message);
             }
-        }
-
-        private async Task NavigateToMaps()
-        {
-            this.Synchronization.CancelSynchronizationCommand.Execute();
-            await this.ViewModelNavigationService.NavigateToAsync<MapsViewModel>();
-            this.Dispose();
         }
 
         private bool isInProgress;
@@ -350,6 +345,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             if (isDisposed) return;
             isDisposed = true;
 
+            base.Dispose();
+            
             UnsubscribeFromMessages();
             syncSubscription.Dispose();
 
@@ -363,8 +360,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.CreateNew.OnItemsLoaded -= this.OnItemsLoaded;
             this.Synchronization.OnCancel -= this.Synchronization_OnCancel;
             this.Synchronization.OnProgressChanged -= this.Synchronization_OnProgressChanged;
-            
-            base.Dispose();
         }
 
         protected override void InitFromBundle(IMvxBundle parameters)

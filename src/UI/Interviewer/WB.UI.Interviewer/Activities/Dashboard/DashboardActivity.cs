@@ -42,8 +42,6 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         private MvxFragmentStatePagerAdapter fragmentStatePagerAdapter;
         private ViewPager viewPager;
 
-
-
         protected override void OnPause()
         {
             base.OnPause();
@@ -85,7 +83,6 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         protected override void BackButtonPressed()
         {
         }
-
 
         private void RemoveFragments()
         {
@@ -133,8 +130,6 @@ namespace WB.UI.Interviewer.Activities.Dashboard
 
             var tabLayout = this.FindViewById<TabLayout>(Resource.Id.tabs);
             tabLayout.SetupWithViewPager(this.viewPager);
-
-
 
             OpenRequestedTab();
         }
