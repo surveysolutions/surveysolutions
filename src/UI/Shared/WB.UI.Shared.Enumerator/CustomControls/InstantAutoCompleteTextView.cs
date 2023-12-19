@@ -18,18 +18,15 @@ namespace WB.UI.Shared.Enumerator.CustomControls
     public class InstantAutoCompleteTextView: AppCompatAutoCompleteTextView
     {
         private FixedMvxFilteringAdapter adapter => base.Adapter as FixedMvxFilteringAdapter;
-
+        
         public InstantAutoCompleteTextView(Context context, IAttributeSet attrs)
-            : this(context, attrs, new FixedMvxFilteringAdapter(context))
-        {
-        }
-
-        public InstantAutoCompleteTextView(Context context, IAttributeSet attrs, FixedMvxFilteringAdapter adapter)
             : base(context, attrs)
         {
-            adapter.ItemTemplateId = MvxAttributeHelpers.ReadListItemTemplateId(context, attrs);
-            adapter.PartialTextChanged += this.AdapterOnPartialTextChanged;
-            base.Adapter = adapter;
+            var filteringAdapter = new FixedMvxFilteringAdapter(context);
+            filteringAdapter.ItemTemplateId = MvxAttributeHelpers.ReadListItemTemplateId(context, attrs);
+            filteringAdapter.PartialTextChanged += this.AdapterOnPartialTextChanged;
+            
+            base.Adapter = filteringAdapter;
             
             this.ItemClick += this.OnItemClick;
             this.ItemSelected += OnItemSelected;

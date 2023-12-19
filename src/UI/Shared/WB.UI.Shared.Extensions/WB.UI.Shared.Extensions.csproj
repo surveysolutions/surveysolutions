@@ -80,9 +80,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Esri.ArcGISRuntime.Android" Version="200.2.0" />
-    <PackageReference Include="Plugin.CurrentActivity">
-      <Version>2.1.0.4</Version>
-    </PackageReference>
     <PackageReference Include="System.Collections.Immutable">
       <Version>7.0.0</Version>
     </PackageReference>

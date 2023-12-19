@@ -58,7 +58,7 @@
     <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
     <Debugger>Xamarin</Debugger>
     <DevInstrumentationEnabled>True</DevInstrumentationEnabled>
-    <AotAssemblies>false</AotAssemblies>
+    <RunAOTCompilation>false</RunAOTCompilation>
     <EnableLLVM>false</EnableLLVM>
     <EnableProguard>False</EnableProguard>
     <AndroidTlsProvider>btls</AndroidTlsProvider>
@@ -81,6 +81,7 @@
     <AndroidEnableSGenConcurrent>true</AndroidEnableSGenConcurrent>
     <NoWarn>618;CA1416</NoWarn>
     <AndroidPackageFormat>apk</AndroidPackageFormat>
+    <RunAOTCompilation>true</RunAOTCompilation>
     <PublishTrimmed>true</PublishTrimmed>
   </PropertyGroup>
   <ItemGroup>
@@ -198,9 +199,6 @@
     </PackageReference>
     <PackageReference Include="NLog.Extensions.Logging">
       <Version>5.3.4</Version>
-    </PackageReference>
-    <PackageReference Include="Plugin.CurrentActivity">
-      <Version>2.1.0.4</Version>
     </PackageReference>
     <PackageReference Include="sqlite-net-pcl">
       <Version>1.8.116</Version>

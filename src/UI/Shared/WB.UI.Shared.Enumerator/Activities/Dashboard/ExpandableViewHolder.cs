@@ -2,49 +2,57 @@ using Android.Views;
 using AndroidX.Transitions;
 using MvvmCross.DroidX.RecyclerView;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
+using MvvmCross.Platforms.Android.WeakSubscription;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 
 namespace WB.UI.Shared.Enumerator.Activities.Dashboard
 {
     public class ExpandableViewHolder : MvxRecyclerViewHolder
     {
-        public ViewGroup DashboardItem { get; }
-        public ImageView MenuHandle { get; }
+        private IDisposable dashboardItemClickSubscription, menuHandleClickSubscription;
 
+        public ViewGroup DashboardItem { get; private set; }
+        public ImageView MenuHandle { get; private set;}
+        
         public ExpandableViewHolder(View itemView, IMvxAndroidBindingContext context) : base(itemView, context)
         {
             this.DashboardItem = itemView.FindViewById<ViewGroup>(Resource.Id.dashboardItem);
-
-            if (this.DashboardItem != null)
-            {
-                this.DashboardItem.Click += CardClick;
-            }
-
             this.MenuHandle = itemView.FindViewById<ImageView>(Resource.Id.menu);
-
-            if (MenuHandle != null)
-            {
-                this.MenuHandle.Click += MenuClick;
-            }
         }
 
-        protected override void Dispose(bool disposing)
+        public override void OnAttachedToWindow()
         {
-            if (disposing)
+            if (dashboardItemClickSubscription == null)
             {
-                if (DashboardItem != null)
-                {
-                    DashboardItem.Click -= CardClick;
-                    DashboardItem.Dispose();
-                }
-
-                if (MenuHandle != null)
-                {
-                    MenuHandle.Click -= MenuClick;
-                    MenuHandle.Dispose();
-                }
+                if(DashboardItem != null)
+                    dashboardItemClickSubscription = DashboardItem.WeakSubscribe(nameof(View.Click), CardClick);
             }
-            base.Dispose(disposing);
+
+            if (menuHandleClickSubscription == null)
+            {
+                if(MenuHandle != null)
+                    menuHandleClickSubscription = MenuHandle.WeakSubscribe(nameof(View.Click), MenuClick);
+            }
+            
+            base.OnAttachedToWindow();
+        }
+
+        public override void OnDetachedFromWindow()
+        {
+            dashboardItemClickSubscription?.Dispose();
+            dashboardItemClickSubscription = null;
+            menuHandleClickSubscription?.Dispose();
+            menuHandleClickSubscription = null;
+            
+            base.OnDetachedFromWindow();
+        }
+        
+        public override void OnViewRecycled()
+        {
+            MenuHandle = null;
+            DashboardItem = null;
+            
+            base.OnViewRecycled();
         }
 
         public void CardClick(object o, EventArgs eventArgs)

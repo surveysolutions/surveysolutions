@@ -1,6 +1,3 @@
-using System;
-using System.Threading;
-using Android.App;
 using Android.Views;
 using AndroidX.AppCompat.App;
 using MvvmCross.Base;
@@ -8,6 +5,7 @@ using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Views;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using Xamarin.Essentials;
 
 namespace WB.UI.Shared.Enumerator.CustomServices
 {
@@ -55,7 +53,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.viewModel.OnCancel += ViewModel_OnCancel;
             this.viewModel.OnDone += ViewModel_OnDone;
 
-            var parentActivity = Plugin.CurrentActivity.CrossCurrentActivity.Current.Activity;
+            var parentActivity = Platform.CurrentActivity;
 
             //keep ref to context not to be collected by GC
             this.modalDialogBindingContext = new MvxAndroidBindingContext(parentActivity,

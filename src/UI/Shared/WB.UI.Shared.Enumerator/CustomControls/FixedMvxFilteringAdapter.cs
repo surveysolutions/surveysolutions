@@ -17,6 +17,17 @@ namespace WB.UI.Shared.Enumerator.CustomControls
     public class FixedMvxFilteringAdapter
         : MvxAdapter, IFilterable
     {
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                Filter?.Dispose();
+                //Context = null;
+            }
+
+            base.Dispose(disposing);
+        }
+
         private readonly object _syncLock = new object();
 
         private class MyFilter : Filter
