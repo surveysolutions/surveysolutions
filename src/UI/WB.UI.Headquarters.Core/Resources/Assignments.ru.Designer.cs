@@ -888,7 +888,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Размер.
+        ///   Looks up a localized string similar to Ожидаемо.
         /// </summary>
         public static string Size {
             get {

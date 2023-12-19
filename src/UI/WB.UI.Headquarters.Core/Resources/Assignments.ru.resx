@@ -152,7 +152,7 @@
     <value>{{count}} Задание будет изменено</value>
   </data>
   <data name="Size" xml:space="preserve">
-    <value>Размер</value>
+      <value>Ожидаемо</value>
   </data>
   <data name="SelectResponsible" xml:space="preserve">
     <value>Выбор ответственного</value>

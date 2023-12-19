@@ -172,7 +172,7 @@
     <value>Estado archivado</value>
   </data>
   <data name="Size" xml:space="preserve">
-    <value>Tamaño (MB)</value>
+      <value>Esperado</value>
   </data>
   <data name="SizeExplanation" xml:space="preserve">
     <value>Especifique la cantidad máxima de entrevistas que se generarán para esa asignación. Valores permitidos: -1 es para asignación ilimitada, 0 es para asignación vacía, números para tamaño de asignación</value>
