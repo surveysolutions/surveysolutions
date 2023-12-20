@@ -77,14 +77,27 @@ const routes = [
                     {
                         name: 'question',
                         path: 'question/:questionId',
-                        component: Question
+                        components: {
+                            default: Question,
+                            comments: Comments
+                        },
+                        props: route => ({
+                            questionnaireId: route.params.questionnaireId,
+                            questionId: route.params.questionId,
+                            entityId: route.params.questionId
+                        })
                     },
                     {
                         name: 'statictext',
                         path: 'statictext/:statictextId',
-                        component: StaticText,
+                        components: {
+                            default: StaticText,
+                            comments: Comments
+                        },
                         props: route => ({
-                            statictextId: route.params.statictextId
+                            questionnaireId: route.params.questionnaireId,
+                            statictextId: route.params.statictextId,
+                            entityId: route.params.statictextId
                         })
                     },
                     {
