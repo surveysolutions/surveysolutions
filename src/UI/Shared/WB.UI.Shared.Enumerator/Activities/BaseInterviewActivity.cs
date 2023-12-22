@@ -80,7 +80,6 @@ namespace WB.UI.Shared.Enumerator.Activities
                 onDrawerOpenedSubscription?.Dispose();
                 onDrawerOpenedSubscription = null;
                 
-                this.ViewModel.Dispose();
                 this.Finish();
             }
             catch (ObjectDisposedException e)

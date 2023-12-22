@@ -45,6 +45,5 @@ public class OverviewSingleCategoricalQuestionViewModel : OverviewQuestionViewMo
         base.Dispose();
         
         Attachment?.ViewDestroy();
-        Attachment?.Dispose();
     }
 }

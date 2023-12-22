@@ -94,7 +94,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             var visibleSectionItems = this.compositeCollectionInflationService.GetInflatedCompositeCollection(prefilledEntities);
             
             this.startButton = this.interviewViewModelFactory.GetNew<StartInterviewViewModel>();
-            startButton.InterviewStarted += (sender, args) => this.Dispose();
+            
             startButton.Init(InterviewId);
 
             visibleSectionItems.Add(startButton);
@@ -119,11 +119,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public Task StartInterviewAsync() => this.startButton.StartInterviewCommand.ExecuteAsync();
 
-        public override void Dispose()
+        public override void ViewDestroy(bool viewFinishing = true)
         {
-            base.Dispose();
-
-            PrefilledQuestions.ForEach(viewModel=> viewModel.DisposeIfDisposable());
+            if (viewFinishing)
+            {
+                PrefilledQuestions.ForEach(prefilledQuestion=> prefilledQuestion.DisposeIfDisposable());
+            }
+            base.ViewDestroy(viewFinishing);
         }
     }
 }

@@ -1,14 +1,10 @@
-using Android.App;
 using Android.Content;
-using Android.OS;
 using Android.Views;
-using AndroidX.AppCompat.Widget;
 using Java.Interop;
 using MvvmCross;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Shared.Enumerator.Activities;
-using WB.UI.Shared.Enumerator.Activities.Callbacks;
 using WB.UI.Shared.Enumerator.Services.Notifications;
 using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
 
@@ -16,7 +12,9 @@ namespace WB.UI.Interviewer.Activities
 {
     [Activity(WindowSoftInputMode = SoftInput.StateHidden, 
         Theme = "@style/GrayAppTheme",
-        Exported = false)]
+        Exported = false,
+        NoHistory = true,
+        ExcludeFromRecents = true)]
     public class LoginActivity : BaseActivity<LoginViewModel>
     {
         protected override int ViewResourceId
@@ -35,6 +33,8 @@ namespace WB.UI.Interviewer.Activities
         protected override bool BackButtonCustomAction => true;
         protected override void BackButtonPressed()
         {
+            //back button is suppressed
+            //should be changed but backstack should be cleared
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)

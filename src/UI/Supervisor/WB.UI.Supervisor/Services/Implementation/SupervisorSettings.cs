@@ -30,8 +30,9 @@ namespace WB.UI.Supervisor.Services.Implementation
             IPlainStorage<SupervisorIdentity> usersStorage,
             IFileSystemAccessor fileSystemAccessor,
             string backupFolder, string restoreFolder,
-            IWorkspaceAccessor workspaceAccessor) : base(syncProtocolVersionProvider,
-            questionnaireContentVersionProvider, fileSystemAccessor, backupFolder, restoreFolder)
+            IWorkspaceAccessor workspaceAccessor,
+            IEnvironmentInformationUtils environmentInformationUtils) : base(syncProtocolVersionProvider,
+            questionnaireContentVersionProvider, fileSystemAccessor, backupFolder, restoreFolder, environmentInformationUtils)
         {
             this.settingsStorage = settingsStorage;
             this.workspaceSettingsStorage = workspaceSettingsStorage;

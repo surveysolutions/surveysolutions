@@ -1,8 +1,5 @@
-﻿using Android.App;
-using Android.Content;
-using Android.OS;
+﻿using Android.Content;
 using Android.Views;
-using AndroidX.AppCompat.Widget;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Shared.Enumerator.Activities;
@@ -45,10 +42,10 @@ namespace WB.UI.Interviewer.Activities
                     break;
                 case Resource.Id.menu_settings:
                     Intent intent = new Intent(this, typeof(PrefsActivity));
+                    intent.AddFlags(ActivityFlags.ClearTop | ActivityFlags.NewTask);
                     this.StartActivity(intent);
                     break;
                 case Android.Resource.Id.Home:
-                    this.Finish();
                     return true;
             }
             return base.OnOptionsItemSelected(item);

@@ -76,11 +76,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 throw new ArgumentException(nameof(Answer));
         }
 
-        public override void Dispose()
+        public override void ViewDestroy(bool viewFinishing = true)
         {
-            Answer = null;
-
-            base.Dispose();
+            if (viewFinishing)
+            {
+                Answer = null;    
+            }
+            base.ViewDestroy(viewFinishing);
         }
     }
 }

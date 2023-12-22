@@ -35,8 +35,9 @@ namespace WB.UI.Interviewer.Settings
             IFileSystemAccessor fileSystemAccessor,
             string backupFolder, 
             string restoreFolder,
-            IWorkspaceAccessor workspaceAccessor) : base(syncProtocolVersionProvider,
-            questionnaireContentVersionProvider, fileSystemAccessor, backupFolder, restoreFolder)
+            IWorkspaceAccessor workspaceAccessor,
+            IEnvironmentInformationUtils environmentInformationUtils) : base(syncProtocolVersionProvider,
+            questionnaireContentVersionProvider, fileSystemAccessor, backupFolder, restoreFolder, environmentInformationUtils)
         {
             this.settingsStorage = settingsStorage;
             this.workspaceSettingsStorage = workspaceSettingsStorage;

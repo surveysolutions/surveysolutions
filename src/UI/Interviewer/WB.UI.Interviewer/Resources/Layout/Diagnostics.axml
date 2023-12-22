@@ -45,6 +45,7 @@
                               local:MvxBind="Html Localization('Diagnostics_Share_Description')" />
                 </LinearLayout>
             </LinearLayout>
+            <include layout="@layout/diagnostics__memory" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

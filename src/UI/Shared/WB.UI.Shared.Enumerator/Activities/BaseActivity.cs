@@ -7,9 +7,9 @@ using MvvmCross.Platforms.Android.Views;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
 using NLog;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Activities.Callbacks;
 using WB.UI.Shared.Enumerator.Services;
-using WB.UI.Shared.Enumerator.Utils;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
@@ -26,7 +26,6 @@ namespace WB.UI.Shared.Enumerator.Activities
             log.Trace("Create");
             base.OnCreate(bundle);
             Xamarin.Essentials.Platform.Init(this, bundle);
-
 
             if (BackButtonCustomAction)
             {
@@ -91,13 +90,13 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         protected override void OnDestroy()
         {
+            base.OnDestroy();
+            
             backPressedCallbackWrapper?.Remove();
             backPressedCallbackWrapper?.Dispose();
             backPressedCallbackWrapper = null;
 
             TryWriteMemoryInformationToLog($"Destroyed Activity {this.GetType().Name}");
-            base.OnDestroy();
-            
             this.BindingContext?.ClearAllBindings();
             this.ViewModel?.DisposeIfDisposable();
             
@@ -119,7 +118,11 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             try
             {
-                log.Info($"{message} RAM: {AndroidInformationUtils.GetRAMInformation()} Disk: {AndroidInformationUtils.GetDiskInformation()}");
+                if (Mvx.IoCProvider.TryResolve<IEnvironmentInformationUtils>(out var utils))
+                {
+                    log.Info($"{message} RAM: {utils.GetRAMInformation()} Disk: {utils.GetDiskInformation()}");
+                    return;
+                }
             }
             catch
             {

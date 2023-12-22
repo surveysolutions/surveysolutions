@@ -2,12 +2,13 @@
 using Android.OS;
 using Java.Interop;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.UI.Shared.Enumerator.Utils
 {
-    public static class AndroidInformationUtils
+    public class AndroidInformationUtils: IEnvironmentInformationUtils  
     {
-        public static string GetRAMInformation()
+        public string GetRAMInformation()
         {
             ActivityManager activityManager = Application.Context.GetSystemService(Context.ActivityService) as ActivityManager;
             if (activityManager == null)
@@ -15,10 +16,32 @@ namespace WB.UI.Shared.Enumerator.Utils
 
             ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
             activityManager.GetMemoryInfo(mi);
-            return $"{FileSizeUtils.SizeSuffix(mi.TotalMem)} total, avaliable {mi.AvailMem.PercentOf(mi.TotalMem)}% ({FileSizeUtils.SizeSuffix(mi.AvailMem)})";
+            return $"{FileSizeUtils.SizeSuffix(mi.TotalMem)} total, available {mi.AvailMem.PercentOf(mi.TotalMem)}% ({FileSizeUtils.SizeSuffix(mi.AvailMem)})";
         }
 
-        public static string GetDiskInformation()
+        public string GetPeersFormatted()
+        {
+            var peers = GetPeers();
+            var result = string.Empty;
+            foreach (var peer in peers)
+            {
+                result += $"{peer.Type} ({peer.Count})\n";
+                /*foreach (var instance in peer.Instances)
+                {
+                    result += $"    {instance}\n";
+                }*/
+            }
+
+            return result;
+        }
+
+        public string GetReferencesFormatted()
+        {
+            return $"GlobalReferenceCount: {Java.Interop.JniRuntime.CurrentRuntime.GlobalReferenceCount} \n" +
+                   $"WeakGlobalReferenceCount: {Java.Interop.JniRuntime.CurrentRuntime.WeakGlobalReferenceCount}";
+        }
+
+        public string GetDiskInformation()
         {
             string path = global::Android.OS.Environment.DataDirectory.Path;
             StatFs stat = new StatFs(path);
@@ -30,7 +53,7 @@ namespace WB.UI.Shared.Enumerator.Utils
             return $"{FileSizeUtils.SizeSuffix(totalInternalMemorySize)} total, avaliable {availableInternalMemorySize.PercentOf(totalInternalMemorySize)}% ({FileSizeUtils.SizeSuffix(availableInternalMemorySize)})";
         }
 
-        public static List<GroupedPeer> GetPeers()
+        private List<GroupedPeer> GetPeers()
         {
             var groupBy = Java.Interop.JniRuntime.CurrentRuntime.ValueManager.GetSurfacedPeers()
                 .Select(s => s.SurfacedPeer.TryGetTarget(out var target)
@@ -43,7 +66,7 @@ namespace WB.UI.Shared.Enumerator.Utils
 
             return groupBy;
         }
-
+        
         public class GroupedPeer
         {
             public string Type { get; set; }

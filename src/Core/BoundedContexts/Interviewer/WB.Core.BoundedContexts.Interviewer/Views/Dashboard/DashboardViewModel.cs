@@ -198,14 +198,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
             await this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>();
-            this.Dispose();
         });
 
         public IMvxAsyncCommand NavigateToMapsCommand => new MvxAsyncCommand(async() =>
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
             await this.ViewModelNavigationService.NavigateToAsync<MapsViewModel>();
-            this.Dispose();
         });
 
         public IMvxAsyncCommand NavigateToMapDashboardCommand =>
@@ -217,7 +215,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             {
                 this.Synchronization.CancelSynchronizationCommand.Execute();
                 await mapInteractionService.OpenInterviewerMapDashboardAsync();
-                this.Dispose();
             }
             catch (MissingPermissionsException e)
             {
@@ -325,7 +322,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             var userName = this.Principal.CurrentUserIdentity.Name;
             this.auditLogService.Write(new LogoutAuditLogEntity(userName));
             await this.ViewModelNavigationService.SignOutAndNavigateToLoginAsync();
-            this.Dispose();
         }
 
         private void DashboardItemOnStartingLongOperation(StartingLongOperationMessage message)
@@ -338,30 +334,26 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IsInProgress = false;
         }
 
-        private bool isDisposed = false;
-        
-        public override void Dispose()
+        public override void ViewDestroy(bool viewFinishing = true)
         {
-            if (isDisposed) return;
-            isDisposed = true;
+            if (viewFinishing)
+            {
+                UnsubscribeFromMessages();
+                syncSubscription.Dispose();
 
-            base.Dispose();
-            
-            UnsubscribeFromMessages();
-            syncSubscription.Dispose();
-
-            this.StartedInterviews.OnInterviewRemoved -= this.OnInterviewRemoved;
-            this.CompletedInterviews.OnInterviewRemoved -= this.OnInterviewRemoved;
-            this.WebInterviews.OnInterviewRemoved -= this.OnInterviewRemoved;
-            this.StartedInterviews.OnItemsLoaded -= this.OnItemsLoaded;
-            this.RejectedInterviews.OnItemsLoaded -= this.OnItemsLoaded;
-            this.CompletedInterviews.OnItemsLoaded -= this.OnItemsLoaded;
-            this.WebInterviews.OnItemsLoaded -= this.OnItemsLoaded;
-            this.CreateNew.OnItemsLoaded -= this.OnItemsLoaded;
-            this.Synchronization.OnCancel -= this.Synchronization_OnCancel;
-            this.Synchronization.OnProgressChanged -= this.Synchronization_OnProgressChanged;
+                this.StartedInterviews.OnInterviewRemoved -= this.OnInterviewRemoved;
+                this.CompletedInterviews.OnInterviewRemoved -= this.OnInterviewRemoved;
+                this.WebInterviews.OnInterviewRemoved -= this.OnInterviewRemoved;
+                this.StartedInterviews.OnItemsLoaded -= this.OnItemsLoaded;
+                this.RejectedInterviews.OnItemsLoaded -= this.OnItemsLoaded;
+                this.CompletedInterviews.OnItemsLoaded -= this.OnItemsLoaded;
+                this.WebInterviews.OnItemsLoaded -= this.OnItemsLoaded;
+                this.CreateNew.OnItemsLoaded -= this.OnItemsLoaded;
+                this.Synchronization.OnCancel -= this.Synchronization_OnCancel;
+                this.Synchronization.OnProgressChanged -= this.Synchronization_OnProgressChanged;
+            }
+            base.ViewDestroy(viewFinishing);
         }
-
         protected override void InitFromBundle(IMvxBundle parameters)
         {
             base.InitFromBundle(parameters);
@@ -397,7 +389,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             {
                 this.Synchronization.CancelSynchronizationCommand.Execute();
                 await ViewModelNavigationService.NavigateToAsync<SearchViewModel>();
-                this.Dispose();
             });
 
         #region Offline synchronization
@@ -570,7 +561,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             memoryCacheSource.ClearAll();
 
             await ViewModelNavigationService.NavigateToDashboardAsync();
-            this.Dispose();
         }
 
         public event EventHandler? WorkspaceListUpdated;
@@ -600,7 +590,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 if (interviewerApiView.Workspaces.All(w => CurrentWorkspace != w.Name))
                 {
                     await ViewModelNavigationService.NavigateToDashboardAsync();
-                    this.Dispose();
                     return;
                 }
                 

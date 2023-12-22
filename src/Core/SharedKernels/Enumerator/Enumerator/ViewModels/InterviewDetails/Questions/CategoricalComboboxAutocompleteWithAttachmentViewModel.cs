@@ -19,6 +19,5 @@ public class CategoricalComboboxAutocompleteWithAttachmentViewModel : Categorica
         base.Dispose();
         
         Attachment?.ViewDestroy();
-        Attachment?.Dispose();
     }
 }

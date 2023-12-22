@@ -323,9 +323,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             set => this.RaiseAndSetIfChanged(ref this.map, value);
         }
 
-        private bool isDisposed;
         private bool shapeFileLoaded;
-        
         protected ShapefileFeatureTable LoadedShapefile;
 
         public MapView MapView { get; set; }
@@ -442,23 +440,19 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         });
 
-        public override void Dispose()
+        public override void ViewDestroy(bool viewFinishing = true)
         {
-            if (isDisposed)
-                return;
+            if (viewFinishing)
+            {
+                if (this.MapView?.LocationDisplay != null)
+                    this.MapView.LocationDisplay.LocationChanged -= LocationDisplayOnLocationChanged;
             
-            isDisposed = true;
-            
-            base.Dispose();
-            
-            if (this.MapView?.LocationDisplay != null)
-                this.MapView.LocationDisplay.LocationChanged -= LocationDisplayOnLocationChanged;
-            
-            if (this.MapView?.LocationDisplay?.DataSource != null)
-                this.MapView.LocationDisplay.DataSource.StatusChanged -= DataSourceOnStatusChanged;
-            
+                if (this.MapView?.LocationDisplay?.DataSource != null)
+                    this.MapView.LocationDisplay.DataSource.StatusChanged -= DataSourceOnStatusChanged;
            
-            this.MapView?.Dispose();
+                this.MapView?.Dispose();
+            }
+            base.ViewDestroy(viewFinishing);
         }
     }
 }

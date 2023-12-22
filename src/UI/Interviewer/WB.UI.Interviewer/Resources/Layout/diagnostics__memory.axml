@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:local="http://schemas.android.com/apk/res-auto" style="@style/Diagnostics_Section">
+    <LinearLayout style="@style/Diagnostics_TitleSection">
+        <TextView
+                style="@style/Diagnostics_Section_Title"
+                local:MvxBind="Text 'Generate memory report'; Click MemoryStatus.CreateReportCommand;  UnderlinePressed ." />
+    </LinearLayout>    
+    <LinearLayout style="@style/Diagnostics_SubSection" local:MvxBind="Visible IsStringNotEmpty(MemoryStatus.Report)" >        
+        <TextView
+                style="@style/Diagnostics_Section_Description"
+                local:MvxBind="Text MemoryStatus.Report" />        
+    </LinearLayout>
+</LinearLayout>

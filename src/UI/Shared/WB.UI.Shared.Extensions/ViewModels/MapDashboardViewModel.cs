@@ -815,22 +815,25 @@ namespace WB.UI.Shared.Extensions.ViewModels
         public IMvxAsyncCommand NavigateToDashboardCommand => 
             new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToDashboardAsync());
         
-        public override void Dispose()
+        
+        public override void ViewDestroy(bool viewFinishing = true)
         {
-            if (MapView != null)
-                MapView.GeoViewTapped -= OnMapViewTapped;
-
-            this.AvailableMarkers.ToList().ForEach(item =>
+            if (viewFinishing)
             {
-                if (item is IDashboardItemWithEvents withEvents)
-                    withEvents.OnItemUpdated -= Markers_OnItemUpdated;
-                if (item is InterviewDashboardItemViewModel interview)
-                    interview.OnItemRemoved -= Markers_InterviewItemRemoved;
+                if (MapView != null)
+                    MapView.GeoViewTapped -= OnMapViewTapped;
 
-                item?.DisposeIfDisposable();
-            });
-            
-            base.Dispose();
+                this.AvailableMarkers.ToList().ForEach(item =>
+                {
+                    if (item is IDashboardItemWithEvents withEvents)
+                        withEvents.OnItemUpdated -= Markers_OnItemUpdated;
+                    if (item is InterviewDashboardItemViewModel interview)
+                        interview.OnItemRemoved -= Markers_InterviewItemRemoved;
+
+                    item?.DisposeIfDisposable();
+                });
+            }
+            base.ViewDestroy(viewFinishing);
         }
     }
 

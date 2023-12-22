@@ -95,7 +95,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected virtual void Dispose(bool disposing)
         {
             Attachment?.ViewDestroy();
-            Attachment?.Dispose();
         }
     }
 }

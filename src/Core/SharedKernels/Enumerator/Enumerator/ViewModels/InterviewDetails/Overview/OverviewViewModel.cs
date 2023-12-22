@@ -170,7 +170,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
 
         public DynamicTextViewModel Name { get; private set; }
 
-        public override void Dispose()
+        
+        public override void ViewDestroy(bool viewFinishing = true)
         {
             audioService?.Dispose();
             nameViewModel?.Dispose();
@@ -181,7 +182,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
                 item?.Dispose();
             }
             
-            base.Dispose();
+            base.ViewDestroy(viewFinishing);
         }
     }
 }

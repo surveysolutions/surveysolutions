@@ -1,8 +1,5 @@
-using Android.App;
 using Android.Content.PM;
-using Android.OS;
 using MvvmCross.Platforms.Android.Views;
-using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Interviewer.Activities
 {

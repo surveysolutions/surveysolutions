@@ -1,11 +1,7 @@
-using Android.App;
-using Android.OS;
 using Android.Views;
-using AndroidX.AppCompat.Widget;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Shared.Enumerator.Activities;
-using WB.UI.Shared.Enumerator.Activities.Callbacks;
 using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
 
 namespace WB.UI.Interviewer.Activities

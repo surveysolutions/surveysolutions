@@ -347,10 +347,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             SearchByLocalQuestionnaires(SearchText);
         }
 
-        public override void Dispose()
+        public override void ViewDestroy(bool viewFinishing = true)
         {
-            tokenSource?.Dispose();
-            base.Dispose();
+            if(viewFinishing)
+                tokenSource?.Dispose();    
+            base.ViewDestroy(viewFinishing);
         }
     }
 }

@@ -14,11 +14,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public MvxViewModel Stage { get; }
         public NavigationDirection Direction { get; }
-
-        public override void Dispose()
+        
+        public override void ViewDestroy(bool viewFinishing = true)
         {
-            this.Stage.DisposeIfDisposable();
-            base.Dispose();
-        } 
+            //this.Stage.DisposeIfDisposable();
+            base.ViewDestroy(viewFinishing);
+        }
+ 
     }
 }

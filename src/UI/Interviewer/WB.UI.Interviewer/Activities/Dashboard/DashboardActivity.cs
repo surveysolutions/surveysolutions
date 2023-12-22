@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using Android.Content;
+using Android.Content.PM;
 using Android.Gms.Nearby;
 using Android.Views;
 using AndroidX.ViewPager.Widget;
@@ -12,7 +13,6 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
-
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Activities.Dashboard;
 using WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation;
@@ -28,6 +28,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         WindowSoftInputMode = SoftInput.StateHidden,
         HardwareAccelerated = true,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize,
+        LaunchMode = LaunchMode.SingleTask,
         Exported = false)]
     public class DashboardActivity : BaseActivity<DashboardViewModel>,
         ISyncBgService<SyncProgressDto>,
@@ -311,6 +312,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             {
                 case Resource.Id.menu_settings:
                     Intent intent = new Intent(this, typeof(PrefsActivity));
+                    intent.AddFlags(ActivityFlags.ClearTop | ActivityFlags.NewTask);
                     this.StartActivity(intent);
                     break;
                 case Resource.Id.menu_diagnostics:

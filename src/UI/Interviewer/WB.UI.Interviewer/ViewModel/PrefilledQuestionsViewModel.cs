@@ -56,14 +56,12 @@ namespace WB.UI.Interviewer.ViewModel
         public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () =>
         {
             await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
-            this.Dispose();
         });
 
         public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
         public IMvxCommand SignOutCommand => new MvxAsyncCommand(async () =>
         {
             await this.ViewModelNavigationService.SignOutAndNavigateToLoginAsync();
-            this.Dispose();
         });
 
         public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToAsync<MapsViewModel>);

@@ -143,7 +143,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private bool isDisposed = false;
         private List<IInterviewEntityViewModel> prefilledEntities;
 
-        public override void Dispose()
+        public override void ViewDestroy(bool viewFinishing = true)
         {
             if (isDisposed)
                 return;
@@ -172,7 +172,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             
             Name?.Dispose();
             
-            base.Dispose();
+            base.ViewDestroy(viewFinishing);
         }
     }
 }

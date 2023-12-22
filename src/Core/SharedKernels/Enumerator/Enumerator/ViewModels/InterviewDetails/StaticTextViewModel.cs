@@ -44,7 +44,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void Dispose()
         {
             this.Attachment.ViewDestroy();
-            this.Attachment.Dispose();
             this.StaticTextState.Dispose();
             this.Text.Dispose();
         }

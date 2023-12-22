@@ -19,6 +19,9 @@ using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
 
 namespace WB.UI.Shared.Extensions.Activities
 {
+    //nohistory for derived activities
+    //if logic required - override OnBackPressed
+    
     public abstract class MapDashboardActivity<T> : BaseActivity<T> where T : MapDashboardViewModel
     {
         protected override int ViewResourceId => Resource.Layout.map_dashboard;
@@ -239,12 +242,7 @@ namespace WB.UI.Shared.Extensions.Activities
 
         protected virtual IMvxTemplateSelector CreateCarouselTemplateSelector() => new MapDashboardTemplateSelector();
 
-        protected override bool BackButtonCustomAction => true;
-        protected override void BackButtonPressed()
-        {
-            this.ViewModel.NavigateToDashboardCommand.Execute();
-            this.Cancel();
-        }
+        protected override bool BackButtonCustomAction => false;
 
         private void OnDrawerLayoutOnDrawerOpened(object sender, DrawerLayout.DrawerOpenedEventArgs args)
         {

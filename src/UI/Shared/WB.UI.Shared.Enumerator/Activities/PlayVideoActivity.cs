@@ -1,5 +1,4 @@
 using Android.Content.PM;
-using Android.OS;
 using Android.Views;
 using Com.Google.Android.Exoplayer2.UI;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -10,6 +9,7 @@ namespace WB.UI.Shared.Enumerator.Activities;
     Theme = "@style/AppTheme", 
     ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize,
     HardwareAccelerated = false,
+    NoHistory = true,
     Exported = false)]
 public class PlayVideoActivity: BaseActivity<PlayVideoViewModel>
 {
@@ -35,12 +35,5 @@ public class PlayVideoActivity: BaseActivity<PlayVideoViewModel>
     protected override void BackButtonPressed()
     {
         Cancel();
-    }
-
-    protected override void OnDestroy()
-    {
-        base.OnDestroy();
-            
-        
     }
 }

@@ -92,7 +92,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             if (interview == null)
             {
                 await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId).ConfigureAwait(false);
-                this.Dispose();
                 return;
             }
 
@@ -363,19 +362,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public IMvxAsyncCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () =>
         {
             await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
-            this.Dispose();
         });
 
         public IMvxCommand NavigateToLoginCommand => new MvxAsyncCommand(async () =>
         {
             await this.ViewModelNavigationService.NavigateToLoginAsync();
-            this.Dispose();
         });
         
         public IMvxCommand SignOutCommand => new MvxAsyncCommand(async () =>
         {
             await this.ViewModelNavigationService.SignOutAndNavigateToLoginAsync();
-            this.Dispose();
         });
         
         public IMvxCommand NavigateToSettingsCommand => new MvxCommand(this.ViewModelNavigationService.NavigateToSettings);
@@ -384,21 +380,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void NavigateToPreviousViewModel(Action navigateToIfHistoryIsEmpty)
             => this.NavigationState.NavigateBack(navigateToIfHistoryIsEmpty);
 
-        private bool isDisposed = false;
         
-        public override void Dispose()
+        public override void ViewDestroy(bool viewFinishing = true)
         {
-            if(isDisposed) return;
-            isDisposed = true;
-            
-            base.Dispose();
-
-            this.NavigationState.ScreenChanged -= this.OnScreenChanged;
-            this.answerNotifier.QuestionAnswered -= this.AnswerNotifierOnQuestionAnswered;
-            this.CurrentStage.DisposeIfDisposable();
-            this.answerNotifier.Dispose();
-            this.BreadCrumbs.Dispose();
-            this.Sections.Dispose();
+            if (viewFinishing)
+            {
+                this.NavigationState.ScreenChanged -= this.OnScreenChanged;
+                this.answerNotifier.QuestionAnswered -= this.AnswerNotifierOnQuestionAnswered;
+                this.CurrentStage.DisposeIfDisposable();
+                this.answerNotifier.Dispose();
+                this.BreadCrumbs.Dispose();
+                this.Sections.Dispose();
+            }
+            base.ViewDestroy(viewFinishing);
         }
     }
 }

@@ -221,11 +221,14 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
 
         protected abstract string GetDeviceIdentification();
 
-        public override void Dispose()
+        public override void ViewDestroy(bool viewFinishing = true)
         {
-            base.Dispose();
-            cancellationTokenSource?.Dispose();
-            nearbyConnectionSubscription?.Dispose();
+            if(viewFinishing)
+            {
+                cancellationTokenSource?.Dispose();
+                nearbyConnectionSubscription?.Dispose();
+            }
+            base.ViewDestroy(viewFinishing);
         }
     }
 }

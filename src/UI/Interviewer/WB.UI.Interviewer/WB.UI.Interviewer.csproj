@@ -259,6 +259,12 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Net.ILLink.Tasks" Version="8.0.100-1.23067.1" />
   </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Update="Resources\Layout\diagnostics__memory.axml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
+  </ItemGroup>
     <Choose>
         <When Condition=" '$(ExcludeExtensions)' != 'True' ">
             <ItemGroup>

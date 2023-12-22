@@ -84,7 +84,6 @@ namespace WB.UI.Interviewer.ViewModel
         public override async Task NavigateBack()
         {
             await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
-            this.Dispose();
         }
 
         protected override NavigationIdentity GetDefaultScreenToNavigate(IStatefulInterview interview, IQuestionnaire questionnaire)

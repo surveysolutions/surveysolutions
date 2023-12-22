@@ -1,5 +1,5 @@
-﻿using MvvmCross.Commands;
-using MvvmCross.Plugin.Messenger;
+﻿using System;
+using MvvmCross.Commands;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -9,7 +9,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
     public class DiagnosticsViewModel : BasePrincipalViewModel
     {
         private readonly ITabletDiagnosticService tabletDiagnosticService;
-        private readonly SendLogsViewModel logsViewModel;
+        
         private readonly IDeviceSettings deviceSettings;
 
         public DiagnosticsViewModel(IPrincipal principal, 
@@ -20,29 +20,32 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             CheckNewVersionViewModel checkNewVersion,
             BackupRestoreViewModel backupRestore,
             BandwidthTestViewModel bandwidthTest,
-            SendLogsViewModel logsViewModel) : base(principal, viewModelNavigationService, false)
+            SendLogsViewModel logsViewModel,
+            MemoryStatusViewModel memoryStatus) : base(principal, viewModelNavigationService, false)
         {
             this.deviceSettings = deviceSettings;
             this.tabletDiagnosticService = tabletDiagnosticService;
-            this.logsViewModel = logsViewModel;
+            this.Logs = logsViewModel;
+            this.MemoryStatus = memoryStatus;
             this.TabletInformation = sendTabletInformationViewModel;
             this.CheckNewVersion = checkNewVersion;
             this.BackupRestore = backupRestore;
             this.BandwidthTest = bandwidthTest;
         }
 
+        public MemoryStatusViewModel MemoryStatus { get; set; }
         public SendTabletInformationViewModel TabletInformation { get; set; }
-
         public CheckNewVersionViewModel CheckNewVersion { get; set; }
-
         public BackupRestoreViewModel BackupRestore { get; set; }
-
         public BandwidthTestViewModel BandwidthTest { get; set; }
 
-        public SendLogsViewModel Logs => logsViewModel;
+        public SendLogsViewModel Logs { set; get; }
 
         public IMvxCommand ShareDeviceTechnicalInformationCommand => new MvxCommand(this.ShareDeviceTechnicalInformation);
-        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToDashboardAsync());
+        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () =>
+        {
+            await this.ViewModelNavigationService.NavigateToDashboardAsync();
+        });
         public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToMapsAsync);
 
         public IMvxCommand SignOutCommand

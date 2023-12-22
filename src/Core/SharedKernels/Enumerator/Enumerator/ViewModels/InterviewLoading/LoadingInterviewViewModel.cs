@@ -198,11 +198,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
                 this.loadingCancellationTokenSource.Cancel();
             }
         }
-
-        public override void Dispose()
+        
+        public override void ViewDestroy(bool viewFinishing = true)
         {
+            interviewsRepository?.Dispose();
             loadingCancellationTokenSource?.Dispose();
-            base.Dispose();
+            
+            base.ViewDestroy(viewFinishing);
         }
     }
 }

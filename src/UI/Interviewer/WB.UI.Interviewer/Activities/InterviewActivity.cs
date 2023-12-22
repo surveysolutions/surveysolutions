@@ -1,7 +1,5 @@
-using Android.App;
 using Android.Views;
 using Java.Interop;
-using MvvmCross.Commands;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator.Activities;
@@ -26,11 +24,7 @@ namespace WB.UI.Interviewer.Activities
             {
                 Resource.Id.menu_dashboard,
                 EnumeratorUIResources.MenuItem_Title_Dashboard,
-                new MvxAsyncCommand(async () =>  
-                {
-                    await this.ViewModel.NavigateToDashboardCommand.ExecuteAsync();
-                    this.ReleaseActivity();
-                })
+                this.ViewModel.NavigateToDashboardCommand
             },
             {
                 Resource.Id.menu_signout,

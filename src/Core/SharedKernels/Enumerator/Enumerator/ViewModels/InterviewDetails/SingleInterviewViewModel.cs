@@ -76,10 +76,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private void SwitchTranslation(string language) => this.commandService.Execute(
             new SwitchTranslation(Guid.Parse(this.InterviewId), language, this.Principal.CurrentUserIdentity.UserId));
 
-        public override void Dispose()
+        public override void ViewDestroy(bool viewFinishing = true)
         {
-            base.Dispose();
-            this.vibrationViewModel.Dispose();
+            if (viewFinishing)
+            {
+                this.vibrationViewModel.Dispose();
+            }
+            base.ViewDestroy(viewFinishing);
         }
     }
 }

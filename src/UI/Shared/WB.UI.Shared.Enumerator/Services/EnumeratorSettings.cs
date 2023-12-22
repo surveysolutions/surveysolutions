@@ -20,6 +20,7 @@ namespace WB.UI.Shared.Enumerator.Services
         private readonly ISyncProtocolVersionProvider syncProtocolVersionProvider;
         private readonly IQuestionnaireContentVersionProvider questionnaireContentVersionProvider;
         protected readonly IFileSystemAccessor fileSystemAccessor;
+        protected readonly IEnvironmentInformationUtils EnvironmentInformationUtils;
 
         private PackageInfo appPackageInfo =>
             Application.Context.PackageManager.GetPackageInfo(Application.Context.PackageName, PackageInfoFlags.MetaData);
@@ -29,13 +30,15 @@ namespace WB.UI.Shared.Enumerator.Services
             IQuestionnaireContentVersionProvider questionnaireContentVersionProvider,
             IFileSystemAccessor fileSystemAccessor,
             string backupFolder, 
-            string restoreFolder)
+            string restoreFolder,
+            IEnvironmentInformationUtils environmentInformationUtils)
         {
             this.syncProtocolVersionProvider = syncProtocolVersionProvider;
             this.questionnaireContentVersionProvider = questionnaireContentVersionProvider;
             this.fileSystemAccessor = fileSystemAccessor;
             this.BackupFolder = backupFolder;
             this.RestoreFolder = restoreFolder;
+            EnvironmentInformationUtils = environmentInformationUtils;
         }
 
         protected abstract EnumeratorSettingsView CurrentSettings { get; }
@@ -219,10 +222,10 @@ namespace WB.UI.Shared.Enumerator.Services
         protected abstract void SaveSettings(EnumeratorWorkspaceSettingsView settings);
 
         private string GetRAMInformation()
-            => AndroidInformationUtils.GetRAMInformation();
+            => EnvironmentInformationUtils.GetRAMInformation();
 
         private string GetDiskInformation()
-            => AndroidInformationUtils.GetDiskInformation();
+            => EnvironmentInformationUtils.GetDiskInformation();
 
         public string GetDataBaseSize() => 
             FileSizeUtils.SizeSuffix(this.fileSystemAccessor.GetDirectorySize(AndroidPathUtils.GetPathToInternalDirectory()));

@@ -60,6 +60,5 @@ public class OverviewNumericQuestionViewModel : OverviewQuestionViewModel
         base.Dispose();
         
         Attachment?.ViewDestroy();
-        Attachment?.Dispose();
     }
 }

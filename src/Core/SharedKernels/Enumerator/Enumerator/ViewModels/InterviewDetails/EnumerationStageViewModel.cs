@@ -139,8 +139,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         }
         
         private bool isDisposed = false;
-        public override void Dispose()
+        
+        public override void ViewDestroy(bool viewFinishing = true)
         {
+            if (isDisposed)
+                return;
+
+            isDisposed = true;
+
             if(isDisposed) return;
             isDisposed = true;
             
@@ -149,8 +155,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.createdEntities.ToArray().ForEach(ie => ie.DisposeIfDisposable());
             this.Name.Dispose();
             
-            base.Dispose();
+            base.ViewDestroy(viewFinishing);
         }
+        
 
         public async Task HandleAsync(GroupsDisabled @event)
         {

@@ -85,7 +85,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             this.mvxNavigationService.DidNavigate += OnAfterNavigate;
             this.Synchronization.OnProgressChanged += SynchronizationOnProgressChanged;
 
-            messengerSubscribtion = Mvx.IoCProvider.GetSingleton<IMvxMessenger>().Subscribe<RequestSynchronizationMsg>(msg => SynchronizationCommand.Execute());
+            messengerSubscription = Mvx.IoCProvider.GetSingleton<IMvxMessenger>().Subscribe<RequestSynchronizationMsg>(msg => SynchronizationCommand.Execute());
         }
 
         public DashboardNotificationsViewModel DashboardNotifications { get; set; }
@@ -99,7 +99,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             }
         }
 
-        private readonly MvxSubscriptionToken messengerSubscribtion;
+        private readonly MvxSubscriptionToken messengerSubscription;
         private string dashboardTitle;
         private DashboardGroupType typeOfInterviews;
 
@@ -226,12 +226,16 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             }
         }
 
-        public override void Dispose()
+        public override void ViewDestroy(bool viewFinishing = true)
         {
-            base.Dispose();
-            messengerSubscribtion.Dispose();
-            this.mvxNavigationService.DidNavigate -= OnAfterNavigate;
-            this.Synchronization.OnProgressChanged -= SynchronizationOnProgressChanged;
+            if (viewFinishing)
+            {
+                messengerSubscription.Dispose();
+                this.mvxNavigationService.DidNavigate -= OnAfterNavigate;
+                this.Synchronization.OnProgressChanged -= SynchronizationOnProgressChanged;
+            }
+
+            base.ViewDestroy(viewFinishing);
         }
 
         private void SynchronizationOnProgressChanged(object sender, SyncProgressInfo e)
@@ -319,7 +323,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             {
                 this.Synchronization.CancelSynchronizationCommand.Execute();
                 await mapInteractionService.OpenSupervisorMapDashboardAsync();
-                this.Dispose();
             }
             catch (MissingPermissionsException e)
             {

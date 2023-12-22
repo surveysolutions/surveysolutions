@@ -67,14 +67,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         
         public void Dispose()
         {
-            if(IsDisposed) return;
-            IsDisposed = true;
+            if(isDisposed) return;
+            isDisposed = true;
             
             Attachment?.ViewDestroy();
-            Attachment?.Dispose();
         }
 
-        private bool IsDisposed = false;
+        private bool isDisposed = false;
     }
 
     public class SingleOptionQuestionOptionViewModelEqualityComparer : IEqualityComparer<SingleOptionQuestionOptionViewModel>

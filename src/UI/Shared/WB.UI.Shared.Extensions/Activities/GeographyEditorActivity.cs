@@ -1,15 +1,8 @@
-﻿using System;
-using Android.App;
-using Android.Content.PM;
-using Android.OS;
+﻿using Android.Content.PM;
 using Android.Views;
-using Android.Widget;
 using Esri.ArcGISRuntime.UI.Controls;
-using MvvmCross.Binding.BindingContext;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Shared.Enumerator.Activities;
-using WB.UI.Shared.Enumerator.Activities.Callbacks;
 using WB.UI.Shared.Extensions.Entities;
 using WB.UI.Shared.Extensions.ViewModels;
 using Toolbar = AndroidX.AppCompat.Widget.Toolbar;
@@ -18,6 +11,7 @@ namespace WB.UI.Shared.Extensions.Activities
 {
     [Activity(WindowSoftInputMode = SoftInput.StateHidden, 
         Theme = "@style/AppTheme", 
+        NoHistory = true,
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize,
         Exported = false)]
     public class GeographyEditorActivity : BaseActivity<GeographyEditorViewModel>

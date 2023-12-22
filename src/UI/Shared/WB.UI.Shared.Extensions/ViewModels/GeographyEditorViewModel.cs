@@ -1001,25 +1001,24 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         }
 
-        private bool isDisposed = false;
-        public override void Dispose()
+        public override void ViewDestroy(bool viewFinishing = true)
         {
-            if(isDisposed) return;
-            isDisposed = true;
-            
-            base.Dispose();
-            if (locationDataSource != null)
+            if (viewFinishing)
             {
-                locationDataSource.LocationChanged -= LocationDataSourceOnLocationChanged;
-                locationDataSource.StopAsync();
-            }
+                if (locationDataSource != null)
+                {
+                    locationDataSource.LocationChanged -= LocationDataSourceOnLocationChanged;
+                    locationDataSource.StopAsync();
+                }
 
-            if(this.MapView?.GeometryEditor != null)
-                this.MapView.GeometryEditor.PropertyChanged -= GeometryChangedHandler;
+                if(this.MapView?.GeometryEditor != null)
+                    this.MapView.GeometryEditor.PropertyChanged -= GeometryChangedHandler;
             
-            collectionCancellationTokenSource?.Cancel();
-            collectionCancellationTokenSource?.Dispose();
-            collectionCancellationTokenSource = null;
+                collectionCancellationTokenSource?.Cancel();
+                collectionCancellationTokenSource?.Dispose();
+                collectionCancellationTokenSource = null;
+            }
+            base.ViewDestroy(viewFinishing);
         }
     }
 }

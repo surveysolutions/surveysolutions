@@ -311,7 +311,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         private bool isDisposed = false;
         
-        public override void Dispose()
+        public override void ViewDestroy(bool viewFinishing = true)
         {
             if(isDisposed)  return;
             isDisposed = true;
@@ -326,7 +326,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             identifyingQuestionsField = null;
             assignments = null;
             
-            base.Dispose();
+            
+            
+            base.ViewDestroy(viewFinishing);
         }
     }
 }

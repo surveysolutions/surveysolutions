@@ -5,7 +5,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
-    public abstract class BaseViewModel<T> : MvxViewModel<T>, IDisposable
+    public abstract class BaseViewModel<T> : MvxViewModel<T>
     {
         protected readonly IPrincipal Principal;
         protected readonly IViewModelNavigationService ViewModelNavigationService;
@@ -37,16 +37,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             base.SaveStateToBundle(bundle);
             BaseViewModelSetupMethods.SaveStateToBundle(this.Principal, bundle);
         }
-
-        public virtual void Dispose()
-        {
-        }
         
         public override void ViewDestroy(bool viewFinishing = true)
         {
-            if(viewFinishing)
-                Dispose();
-            
             base.ViewDestroy(viewFinishing);
         }
     }

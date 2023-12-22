@@ -1,6 +1,4 @@
 using System.Globalization;
-using Android.App;
-using Android.OS;
 using AndroidX.AppCompat.App;
 using AndroidX.Preference;
 using MvvmCross;

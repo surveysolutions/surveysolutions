@@ -16,6 +16,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         Theme = "@style/AppTheme", 
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize,
         HardwareAccelerated = false,
+        NoHistory = true,
         Exported = false)]
     public class PhotoViewActivity : BaseActivity<PhotoViewViewModel>
     {

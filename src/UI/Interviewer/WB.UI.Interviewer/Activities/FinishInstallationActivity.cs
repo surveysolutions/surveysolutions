@@ -1,20 +1,17 @@
-using Android.App;
 using Android.Content;
 using Android.Content.PM;
-using Android.OS;
 using Android.Views;
-using AndroidX.AppCompat.Widget;
 using Java.Interop;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Shared.Enumerator.Activities;
-using WB.UI.Shared.Enumerator.Activities.Callbacks;
 using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
 
 namespace WB.UI.Interviewer.Activities
 {
     [Activity(WindowSoftInputMode = SoftInput.StateHidden, 
         HardwareAccelerated = true,
+        NoHistory = true,
         Theme = "@style/GrayAppTheme", 
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize,
         Exported = false)]

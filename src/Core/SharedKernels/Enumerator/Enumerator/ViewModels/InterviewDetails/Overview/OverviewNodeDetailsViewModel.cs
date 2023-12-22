@@ -71,10 +71,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
         public IMvxAsyncCommand CancelCommand => new MvxAsyncCommand(this.Cancel);
         private async Task Cancel() => await ViewModelNavigationService.Close(this);
         
-        public override void Dispose()
+        public override void ViewDestroy(bool viewFinishing = true)
         {
-            Comments.Dispose();
-            base.Dispose();
+            if (viewFinishing)
+            {
+                Comments.Dispose();
+            }
+            base.ViewDestroy(viewFinishing);
         }
     }
 

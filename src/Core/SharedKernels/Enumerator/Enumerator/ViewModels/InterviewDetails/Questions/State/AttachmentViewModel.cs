@@ -204,10 +204,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await pdfService.OpenAsync(interviewId, this.Identity);
         }
         
-
         public override void ViewDestroy(bool viewFinishing = true)
         {
             this.Image = null;
+            this.eventRegistry.Unsubscribe(this);
             
             base.ViewDestroy(viewFinishing);
         }
@@ -215,12 +215,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public async Task HandleAsync(VariablesChanged @event)
         {
             await BindAttachment();
-        }
-
-        public override void Dispose()
-        {
-            this.eventRegistry.Unsubscribe(this);
-            base.Dispose();
         }
     }
 }

@@ -109,6 +109,8 @@ namespace WB.UI.Shared.Enumerator
             registry.Bind<ICurrentViewModelPresenter, CurrentViewModelPresenter>();
             registry.Bind<IAnswerToStringConverter, AnswerToStringConverter>();
             registry.BindToConstant<IMemoryCache>(() => new MemoryCache(Options.Create(new MemoryCacheOptions())));
+            
+            registry.BindAsSingleton<IEnvironmentInformationUtils, AndroidInformationUtils>();
 
             SetupLoggingFacility(registry);
         }
