@@ -56,13 +56,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         public IMvxAsyncCommand NavigateToAnonymousQuestionnairesCommand => new MvxAsyncCommand(async () =>
         {
             await this.ViewModelNavigationService.NavigateToAsync<AnonymousQuestionnairesViewModel>();
-            this.Dispose();
         });
 
         public override async Task NavigateBack()
         {
             await this.ViewModelNavigationService.NavigateToDashboardAsync();
-            this.Dispose();
         }
 
         private async Task ReloadQuestionnaire()
@@ -80,18 +78,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     new Progress<string>(), CancellationToken.None);
 
                 if (!succeeded) return;
-
-                this.Dispose();
             }
             finally
             {
                 this.IsInProgress = false;
             }
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
         }
     }
 }

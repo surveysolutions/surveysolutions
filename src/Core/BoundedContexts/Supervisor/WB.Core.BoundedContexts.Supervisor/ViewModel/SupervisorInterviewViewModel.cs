@@ -33,7 +33,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         public override async Task NavigateBack()
         {
             await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
-            this.Dispose();
         }
 
         protected override BaseViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)

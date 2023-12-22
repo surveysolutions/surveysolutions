@@ -245,10 +245,13 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         public IMvxCommand CancelCommand => new MvxCommand(() => { });
 
-        public override void Dispose()
+        public override void ViewDestroy(bool viewFinishing = true)
         {
-            base.Dispose();
-            this.devicesSubscription?.Dispose();
+            if(viewFinishing)
+            {
+                this.devicesSubscription?.Dispose();
+            }
+            base.ViewDestroy(viewFinishing);
         }
     }
 }
