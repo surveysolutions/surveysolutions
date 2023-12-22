@@ -12,6 +12,6 @@ namespace WB.UI.Interviewer.Activities
         Exported = false)]
     public class LoadingInterviewActivity : ProgressInterviewActivity<LoadingInterviewViewModel>
     {
-        public override bool IsSupportMenu => true;
+        public override bool IsSupportMenu => false;
     }
 }
