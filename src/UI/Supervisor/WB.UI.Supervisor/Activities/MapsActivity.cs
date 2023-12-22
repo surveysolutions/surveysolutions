@@ -1,9 +1,5 @@
-using Android.App;
 using Android.Content;
-using Android.OS;
 using Android.Views;
-using AndroidX.AppCompat.Widget;
-using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services.MapSynchronization;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -17,7 +13,8 @@ namespace WB.UI.Supervisor.Activities
         WindowSoftInputMode = SoftInput.StateHidden,
         HardwareAccelerated = true,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize,
-        Exported = false)]
+        Exported = false,
+        NoHistory = true)]
     public class MapsActivity : BaseActivity<MapsViewModel>, ISyncBgService<MapSyncProgressStatus>, ISyncServiceHost<MapDownloadBackgroundService>
     {
         public ServiceBinder<MapDownloadBackgroundService> Binder { get; set; }
@@ -25,6 +22,11 @@ namespace WB.UI.Supervisor.Activities
         protected override int ViewResourceId
         {
             get { return Resource.Layout.maps; }
+        }
+        
+        public override bool OnSupportNavigateUp() {
+            OnBackPressedDispatcher.OnBackPressed();
+            return true;
         }
 
         protected override void OnCreate(Bundle bundle)
@@ -46,37 +48,18 @@ namespace WB.UI.Supervisor.Activities
             base.OnStart();
             this.BindService(new Intent(this, typeof(MapDownloadBackgroundService)), new SyncServiceConnection<MapDownloadBackgroundService>(this), Bind.AutoCreate);
         }
-
+        
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             this.MenuInflater.Inflate(Resource.Menu.maps, menu);
-
-            menu.LocalizeMenuItem(Resource.Id.menu_settings, EnumeratorUIResources.MenuItem_Title_Settings);
-            menu.LocalizeMenuItem(Resource.Id.menu_diagnostics, EnumeratorUIResources.MenuItem_Title_Diagnostics);
-            menu.LocalizeMenuItem(Resource.Id.menu_signout, EnumeratorUIResources.MenuItem_Title_SignOut);
-            menu.LocalizeMenuItem(Resource.Id.menu_dashboard, EnumeratorUIResources.MenuItem_Title_Dashboard);
-
             return base.OnCreateOptionsMenu(menu);
         }
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
             switch (item.ItemId)
             {
-                case Resource.Id.menu_dashboard:
-                    this.ViewModel.NavigateToDashboardCommand.Execute();
-                    break;
                 case Resource.Id.menu_map_synchronization:
                     this.ViewModel.MapSynchronizationCommand.Execute();
-                    break;
-                case Resource.Id.menu_settings:
-                    Intent intent = new Intent(this, typeof(PrefsActivity));
-                    this.StartActivity(intent);
-                    break;
-                case Resource.Id.menu_diagnostics:
-                    this.ViewModel.NavigateToDiagnosticsPageCommand.Execute();
-                    break;
-                case Resource.Id.menu_signout:
-                    this.ViewModel.SignOutCommand.Execute();
                     break;
             }
             return base.OnOptionsItemSelected(item);

@@ -151,8 +151,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.Password = string.Empty;
             await this.viewModelNavigationService.NavigateToDashboardAsync();
             await this.viewModelNavigationService.Close(this);
-            
-            
         }
 
         private async Task RemoteSignInAsync()

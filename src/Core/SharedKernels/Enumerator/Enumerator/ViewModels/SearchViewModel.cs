@@ -308,14 +308,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             IsInProgressLongOperation = false;
         }
-
-        private bool isDisposed = false;
         
         public override void ViewDestroy(bool viewFinishing = true)
         {
-            if(isDisposed)  return;
-            isDisposed = true;
-            
             startingLongOperationMessageSubscriptionToken.Dispose();
             stopLongOperationMessageSubscriptionToken.Dispose();
 

@@ -49,9 +49,6 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             await this.ViewModelNavigationService.SignOutAndNavigateToLoginAsync();
         }
 
-        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => 
-            await this.ViewModelNavigationService.NavigateToDashboardAsync());
-
         private MvxObservableCollection<MapItem> uiItems = new MvxObservableCollection<MapItem>();
         public MvxObservableCollection<MapItem> Maps
         {
@@ -136,19 +133,12 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             {
                 this.IsInProgress = false;
             }
-            
         });
-
-        public IMvxCommand NavigateToDiagnosticsPageCommand =>
-            new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
 
         public override async Task Initialize()
         {
             await base.Initialize();
-           
             UpdateUiItems();
         }
-        
-
     }
 }

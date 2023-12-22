@@ -1,5 +1,4 @@
-﻿using System;
-using MvvmCross.Commands;
+﻿using MvvmCross.Commands;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -42,18 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public SendLogsViewModel Logs { set; get; }
 
         public IMvxCommand ShareDeviceTechnicalInformationCommand => new MvxCommand(this.ShareDeviceTechnicalInformation);
-        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () =>
-        {
-            await this.ViewModelNavigationService.NavigateToDashboardAsync();
-        });
-        public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToMapsAsync);
-
-        public IMvxCommand SignOutCommand
-            => new MvxAsyncCommand(this.ViewModelNavigationService.SignOutAndNavigateToLoginAsync);
-
-        public IMvxCommand NavigateToLoginCommand
-            => new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToLoginAsync);
-
+        
         public bool IsAuthenticated => this.Principal.IsAuthenticated;
 
         private void ShareDeviceTechnicalInformation()

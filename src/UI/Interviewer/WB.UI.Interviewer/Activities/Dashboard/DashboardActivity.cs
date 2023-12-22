@@ -28,7 +28,6 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         WindowSoftInputMode = SoftInput.StateHidden,
         HardwareAccelerated = true,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize,
-        LaunchMode = LaunchMode.SingleTask,
         Exported = false)]
     public class DashboardActivity : BaseActivity<DashboardViewModel>,
         ISyncBgService<SyncProgressDto>,
@@ -62,7 +61,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         protected override void OnCreate(Bundle bundle)
         {
             this.RestoreGoogleApiConnectionIfNeeded();
-
+            //FinishAffinity();
             base.OnCreate(bundle);
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             this.SetSupportActionBar(this.FindViewById<Toolbar>(Resource.Id.toolbar));
@@ -80,10 +79,10 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             snack.Show();
         }
         
-        protected override bool BackButtonCustomAction => true;
-        protected override void BackButtonPressed()
+        protected override bool BackButtonCustomAction => false;
+        /*protected override void BackButtonPressed()
         {
-        }
+        }*/
 
         private void RemoveFragments()
         {

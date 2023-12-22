@@ -11,7 +11,7 @@ namespace WB.UI.Interviewer.Activities
 {
     [Activity(WindowSoftInputMode = SoftInput.StateHidden, 
         HardwareAccelerated = true,
-        NoHistory = true,
+        //NoHistory = true,
         Theme = "@style/GrayAppTheme", 
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize,
         Exported = false)]

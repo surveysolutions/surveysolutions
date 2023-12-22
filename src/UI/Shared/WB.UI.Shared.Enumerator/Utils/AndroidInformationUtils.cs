@@ -19,6 +19,24 @@ namespace WB.UI.Shared.Enumerator.Utils
             return $"{FileSizeUtils.SizeSuffix(mi.TotalMem)} total, available {mi.AvailMem.PercentOf(mi.TotalMem)}% ({FileSizeUtils.SizeSuffix(mi.AvailMem)})";
         }
 
+        public string GetActivitiesInfo()
+        {
+            ActivityManager activityManager = Application.Context.GetSystemService(Context.ActivityService) as ActivityManager;
+            if (activityManager == null)
+                return "UNKNOWN";
+            string result = String.Empty;
+
+            var runningTaskInfoList = activityManager.GetRunningTasks(10);
+            foreach (var item in runningTaskInfoList)
+            {
+                string first = item.BaseActivity.ShortClassName.Substring((item.BaseActivity.ShortClassName.LastIndexOf('.') + 1), item.BaseActivity.ShortClassName.Length - (item.BaseActivity.ShortClassName.LastIndexOf('.') + 1));
+                string current = item.TopActivity.ShortClassName.Substring((item.TopActivity.ShortClassName.LastIndexOf('.') + 1), item.TopActivity.ShortClassName.Length - (item.TopActivity.ShortClassName.LastIndexOf('.') + 1));
+                result += first + " - " + current + "\n";
+            }
+
+            return result;
+        }
+
         public string GetPeersFormatted()
         {
             var peers = GetPeers();
@@ -31,6 +49,8 @@ namespace WB.UI.Shared.Enumerator.Utils
                     result += $"    {instance}\n";
                 }*/
             }
+            
+            //result = result + "\n" + GetActivitiesInfo();
 
             return result;
         }

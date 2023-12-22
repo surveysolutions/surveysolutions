@@ -58,7 +58,7 @@ namespace WB.UI.Shared.Enumerator.Activities
                 .ForEach(x => x.CommentsInputShown -= this.OnCommentsBlockShown);
             
             Java.Interop.JniRuntime.CurrentRuntime.ValueManager.CollectPeers();
-            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+             GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
             
             //GC.WaitForPendingFinalizers();
             //GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);

@@ -1,14 +1,10 @@
-using Android.App;
 using Android.Content;
 using Android.Content.PM;
-using Android.OS;
 using Android.Views;
-using AndroidX.AppCompat.Widget;
 using Java.Interop;
 using WB.Core.BoundedContexts.Supervisor.ViewModel;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Shared.Enumerator.Activities;
-using WB.UI.Shared.Enumerator.Activities.Callbacks;
 using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
 
 namespace WB.UI.Supervisor.Activities
@@ -17,6 +13,7 @@ namespace WB.UI.Supervisor.Activities
         HardwareAccelerated = true,
         Theme = "@style/GrayAppTheme", 
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize,
+        //NoHistory = true,
         Exported = false)]
     public class FinishInstallationActivity : BaseActivity<FinishInstallationViewModel>
     {
@@ -44,7 +41,6 @@ namespace WB.UI.Supervisor.Activities
             this.MenuInflater.Inflate(Resource.Menu.finish, menu);
 
             menu.LocalizeMenuItem(Resource.Id.menu_settings, EnumeratorUIResources.MenuItem_Title_Settings);
-
             menu.LocalizeMenuItem(Resource.Id.menu_diagnostics, EnumeratorUIResources.MenuItem_Title_Diagnostics);
             return base.OnCreateOptionsMenu(menu);
         }

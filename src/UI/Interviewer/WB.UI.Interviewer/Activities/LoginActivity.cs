@@ -13,7 +13,7 @@ namespace WB.UI.Interviewer.Activities
     [Activity(WindowSoftInputMode = SoftInput.StateHidden, 
         Theme = "@style/GrayAppTheme",
         Exported = false,
-        NoHistory = true,
+        //NoHistory = true,
         ExcludeFromRecents = true)]
     public class LoginActivity : BaseActivity<LoginViewModel>
     {
