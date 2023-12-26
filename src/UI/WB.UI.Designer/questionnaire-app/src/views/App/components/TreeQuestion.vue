@@ -1,15 +1,11 @@
 <template>
     <TreeItem :item="item" :stat="stat">
-        <router-link
-            class="item-body"
-            :id="item.itemId"
-            :to="{
-                name: 'question',
-                params: {
-                    questionId: item.itemId
-                }
-            }"
-        >
+        <router-link class="item-body" :id="item.itemId" :to="{
+            name: 'question',
+            params: {
+                questionId: item.itemId
+            }
+        }">
             <div class="item-text">
                 <div class="icon" :class="questionClass"></div>
                 <!--                <span
@@ -20,15 +16,9 @@
             </div>
             <div class="qname-block">
                 <div class="conditions-block">
-                    <div
-                        class="enabling-group-marker"
-                        :class="{ 'hide-if-disabled': item.hideIfDisabled }"
-                        v-if="item.hasCondition"
-                    ></div>
-                    <div
-                        class="validation-group-marker"
-                        v-if="item.hasValidation"
-                    ></div>
+                    <div class="enabling-group-marker" :class="{ 'hide-if-disabled': item.hideIfDisabled }"
+                        v-if="item.hasCondition"></div>
+                    <div class="validation-group-marker" v-if="item.hasValidation"></div>
                 </div>
                 <!--span
                     ng-bind-html="item.variable | escape | highlight:search.searchText"
@@ -135,8 +125,9 @@
 
 <script>
 import TreeItem from './TreeItem.vue';
+import { answerTypeClass } from '../../../helpers/question'
 
-const answerTypeClass = {
+/*const answerTypeClass = {
     YesNo: 'icon-singleoption',
     DropDownList: 'icon-singleoption',
     MultyOption: 'icon-multyoption',
@@ -151,7 +142,7 @@ const answerTypeClass = {
     Multimedia: 'icon-photo',
     Area: 'icon-area',
     Audio: 'icon-audio'
-};
+};*/
 
 export default {
     name: 'TreeQuestion',

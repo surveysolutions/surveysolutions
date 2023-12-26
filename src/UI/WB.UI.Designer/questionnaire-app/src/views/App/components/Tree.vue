@@ -1,11 +1,7 @@
 <template>
     <div class="questionnaire-tree-holder col-xs-6">
-        <div
-            class="chapter-title"
-            v-switch
-            on="filtersBoxMode"
-            :class="{ selected: currentChapter.itemId === selectedItemId }"
-            @click="
+        <div class="chapter-title" v-switch on="filtersBoxMode"
+            :class="{ selected: currentChapter.itemId === selectedItemId }" @click="
                 router.push({
                     name: 'group',
                     params: {
@@ -13,130 +9,62 @@
                         chapterId: currentChapter.itemId
                     }
                 })
-            "
-        >
+                ">
             <div @click.stop class="search-box" v-if="search.open">
                 <div class="input-group">
-                    <span
-                        class="input-group-addon glyphicon glyphicon-search"
-                        :title="$t('QuestionnaireEditor.Search')"
-                    ></span>
-                    <input
-                        id="chapterSearch"
-                        type="text"
-                        v-model="search.searchText"
-                        v-model-options="{ debounce: 300 }"
-                        focus-on-out="focusSearch"
-                        hotkey="{esc: hideSearch}"
-                        hotkey-allow-in="INPUT"
-                    />
-                    <span
-                        class="input-group-addon glyphicon glyphicon-option-horizontal pointer"
-                        @click="showFindReplaceDialog()"
-                        :title="$t('QuestionnaireEditor.FindReplaceTitle')"
-                    ></span>
+                    <span class="input-group-addon glyphicon glyphicon-search"
+                        :title="$t('QuestionnaireEditor.Search')"></span>
+                    <input id="chapterSearch" type="text" v-model="search.searchText" v-model-options="{ debounce: 300 }"
+                        focus-on-out="focusSearch" hotkey="{esc: hideSearch}" hotkey-allow-in="INPUT" />
+                    <span class="input-group-addon glyphicon glyphicon-option-horizontal pointer"
+                        @click="showFindReplaceDialog()" :title="$t('QuestionnaireEditor.FindReplaceTitle')"></span>
                 </div>
-                <button
-                    @click.stop="hideSearch()"
-                    type="button"
-                    :title="$t('QuestionnaireEditor.Cancel')"
-                ></button>
+                <button @click.stop="hideSearch()" type="button" :title="$t('QuestionnaireEditor.Cancel')"></button>
             </div>
 
             <div v-if="!search.open" class="chapter-name">
-                <router-link
-                    :id="'group-' + currentChapter.itemId"
-                    class="chapter-title-text"
-                    :to="{
-                        name: 'group',
-                        params: {
-                            groupId: chapterId,
-                            chapterId: chapterId
-                        }
-                    }"
-                >
+                <router-link :id="'group-' + currentChapter.itemId" class="chapter-title-text" :to="{
+                    name: 'group',
+                    params: {
+                        groupId: chapterId,
+                        chapterId: chapterId
+                    }
+                }">
                     <span v-text="currentChapter.title"></span>
-                    <span
-                        v-if="
-                            currentChapter.isCover && currentChapter.isReadOnly
-                        "
-                        class="warning-message"
-                    >
-                        {{ $t('QuestionnaireEditor.VirtualCoverPage') }}</span
-                    >
-                    <help
-                        v-if="
-                            currentChapter.isCover && currentChapter.isReadOnly
-                        "
-                        key="virtualCoverPage"
-                    />
-                    <a
-                        v-if="
-                            !questionnaire.isReadOnlyForUser &&
-                                currentChapter.isCover &&
-                                currentChapter.isReadOnly
-                        "
-                        href="javascript:void(0);"
-                        @click.stop="migrateToNewVersion()"
-                        >{{ $t('QuestionnaireEditor.MigrateToNewCover') }}</a
-                    >
+                    <span v-if="currentChapter.isCover && currentChapter.isReadOnly
+                        " class="warning-message">
+                        {{ $t('QuestionnaireEditor.VirtualCoverPage') }}</span>
+                    <help v-if="currentChapter.isCover && currentChapter.isReadOnly
+                        " key="virtualCoverPage" />
+                    <a v-if="!questionnaire.isReadOnlyForUser &&
+                        currentChapter.isCover &&
+                        currentChapter.isReadOnly" href="javascript:void(0);" @click.stop="migrateToNewVersion()">{{
+        $t('QuestionnaireEditor.MigrateToNewCover') }}</a>
                 </router-link>
                 <div class="qname-block chapter-condition-block">
                     <div class="conditions-block">
-                        <div
-                            class="enabliv-group-marker"
-                            :class="{
-                                'hide-if-disabled':
-                                    currentChapter.hideIfDisabled
-                            }"
-                            v-if="currentChapter.hasCondition"
-                        ></div>
+                        <div class="enabliv-group-marker" :class="{
+                            'hide-if-disabled':
+                                currentChapter.hideIfDisabled
+                        }" v-if="currentChapter.hasCondition"></div>
                     </div>
                 </div>
                 <ul class="controls-right">
                     <li>
-                        <a
-                            href="javascript:void(0);"
-                            @click.stop="showSearch()"
-                            class="search"
-                            :title="$t('QuestionnaireEditor.ToggleSearch')"
-                        ></a>
+                        <a href="javascript:void(0);" @click.stop="showSearch()" class="search"
+                            :title="$t('QuestionnaireEditor.ToggleSearch')"></a>
                     </li>
                 </ul>
             </div>
         </div>
         <perfect-scrollbar class="scroller">
-            <div
-                class="question-list"
-                ui-tree="groupsTree"
-                data-bs-empty-placeholder-enabled="false"
-            >
-                <div
-                    ui-tree-nodes
-                    vmodel="items"
-                    class="ui-tree-nodes angular-ui-tree-nodes"
-                >
-                    <Draggable
-                        ref="tree"
-                        v-model="filteredTreeData"
-                        textKey="title"
-                        childrenKey="items"
-                        defaultOpen="true"
-                        indent="30"
-                        triggerClass="handler"
-                        :statHandler="treeNodeCreated"
-                        @after-drop="treeNodeDropped"
-                    >
+            <div class="question-list" ui-tree="groupsTree" data-bs-empty-placeholder-enabled="false">
+                <div ui-tree-nodes vmodel="items" class="ui-tree-nodes angular-ui-tree-nodes">
+                    <Draggable ref="tree" v-model="filteredTreeData" textKey="title" childrenKey="items" defaultOpen="true"
+                        indent="30" triggerClass="handler" :statHandler="treeNodeCreated" @after-drop="treeNodeDropped">
                         <template #default="{ node, stat }">
-                            <component
-                                :key="node.itemId"
-                                :is="itemTemplate(node.itemType)"
-                                :item="node"
-                                :stat="stat"
-                                :tree="$refs.tree"
-                                :selectedItemId="selectedItemId"
-                                :isReadOnly="currentChapter.isReadOnly"
-                            ></component>
+                            <component :key="node.itemId" :is="itemTemplate(node.itemType)" :item="node" :stat="stat"
+                                :tree="$refs.tree" :selectedItemId="selectedItemId"></component>
                         </template>
                         <!--template #placeholder="{ node, stat }">
                             <div class="ngular-ui-tree-placeholder"></div>
@@ -151,103 +79,49 @@
                             src="itemTemplate(item.itemType)"
                         ></v-include>
                     </div-->
-                    <div
-                        class="section item"
-                        v-if="
-                            search.open &&
-                                search.searchText &&
-                                filteredTreeData.length === 0
-                        "
-                    >
+                    <div class="section item" v-if="search.open &&
+                        search.searchText &&
+                        filteredTreeData.length === 0
+                        ">
                         <div class="item-text">
-                            <span
-                                v-t="{
-                                    path: 'QuestionnaireEditor.NothingFound'
-                                }"
-                            ></span>
+                            <span v-t="{
+                                path: 'QuestionnaireEditor.NothingFound'
+                            }"></span>
                         </div>
                     </div>
-                    <div
-                        class="chapter-level-buttons"
-                        v-show="!search.searchText"
-                    >
-                        <button
-                            type="button"
-                            class="btn lighter-hover"
-                            v-if="
-                                !questionnaire.isReadOnlyForUser &&
-                                    !currentChapter.isReadOnly
-                            "
-                            @click="addQuestion(currentChapter)"
-                            v-t="{ path: 'QuestionnaireEditor.AddQuestion' }"
-                        ></button>
-                        <button
-                            type="button"
-                            class="btn lighter-hover"
-                            v-if="
-                                !questionnaire.isReadOnlyForUser &&
-                                    !currentChapter.isReadOnly &&
-                                    !currentChapter.isCover
-                            "
-                            @click="addGroup(currentChapter)"
-                            v-t="{ path: 'QuestionnaireEditor.AddSubsection' }"
-                        ></button>
-                        <button
-                            type="button"
-                            class="btn lighter-hover"
-                            v-if="
-                                !questionnaire.isReadOnlyForUser &&
-                                    !currentChapter.isReadOnly &&
-                                    !currentChapter.isCover
-                            "
-                            @click="addRoster(currentChapter)"
-                            v-t="{ path: 'QuestionnaireEditor.AddRoster' }"
-                        ></button>
-                        <button
-                            type="button"
-                            class="btn lighter-hover"
-                            v-if="
-                                !questionnaire.isReadOnlyForUser &&
-                                    !currentChapter.isReadOnly
-                            "
-                            @click="addStaticText(currentChapter)"
-                            v-t="{ path: 'QuestionnaireEditor.AddStaticText' }"
-                        ></button>
-                        <button
-                            type="button"
-                            class="btn lighter-hover"
-                            v-if="
-                                !questionnaire.isReadOnlyForUser &&
-                                    !currentChapter.isReadOnly
-                            "
-                            @click="addVariable(currentChapter)"
-                            v-t="{ path: 'QuestionnaireEditor.AddVariable' }"
-                        ></button>
+                    <div class="chapter-level-buttons" v-show="!search.searchText">
+                        <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
+                            !currentChapter.isReadOnly
+                            " @click="addQuestion(currentChapter)"
+                            v-t="{ path: 'QuestionnaireEditor.AddQuestion' }"></button>
+                        <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
+                            !currentChapter.isReadOnly &&
+                            !currentChapter.isCover
+                            " @click="addGroup(currentChapter)"
+                            v-t="{ path: 'QuestionnaireEditor.AddSubsection' }"></button>
+                        <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
+                            !currentChapter.isReadOnly &&
+                            !currentChapter.isCover
+                            " @click="addRoster(currentChapter)"
+                            v-t="{ path: 'QuestionnaireEditor.AddRoster' }"></button>
+                        <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
+                            !currentChapter.isReadOnly
+                            " @click="addStaticText(currentChapter)"
+                            v-t="{ path: 'QuestionnaireEditor.AddStaticText' }"></button>
+                        <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
+                            !currentChapter.isReadOnly
+                            " @click="addVariable(currentChapter)"
+                            v-t="{ path: 'QuestionnaireEditor.AddVariable' }"></button>
 
-                        <button
-                            type="button"
-                            class="btn lighter-hover"
-                            v-if="
-                                !questionnaire.isReadOnlyForUser &&
-                                    !currentChapter.isReadOnly
-                            "
-                            @click="searchForQuestion(currentChapter)"
-                            v-t="{
-                                path: 'QuestionnaireEditor.SearchForQuestion'
-                            }"
-                        ></button>
+                        <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
+                            !currentChapter.isReadOnly
+                            " @click="searchForQuestion(currentChapter)" v-t="{
+        path: 'QuestionnaireEditor.SearchForQuestion'
+    }"></button>
 
-                        <input
-                            type="button"
-                            class="btn lighter-hover pull-right"
-                            :disabled="!readyToPaste"
-                            v-if="
-                                !questionnaire.isReadOnlyForUser &&
-                                    !currentChapter.isReadOnly
-                            "
-                            :value="$t('QuestionnaireEditor.Paste')"
-                            @click="pasteItemInto(currentChapter)"
-                        />
+                        <input type="button" class="btn lighter-hover pull-right" :disabled="!readyToPaste" v-if="!questionnaire.isReadOnlyForUser &&
+                            !currentChapter.isReadOnly
+                            " :value="$t('QuestionnaireEditor.Paste')" @click="pasteItemInto(currentChapter)" />
                     </div>
                 </div>
 
@@ -475,9 +349,9 @@ export default {
                 }
             );
         },
-        searchForQuestion(chapter) {},
+        searchForQuestion(chapter) { },
         pasteItemInto(chapter) {
-            this.treeStore.pasteItemInto(chapter).then(function(result) {
+            this.treeStore.pasteItemInto(chapter).then(function (result) {
                 if (!chapter.isCover)
                     this.$router.push({
                         name: result.itemType,
@@ -487,8 +361,8 @@ export default {
                     });
             });
         },
-        migrateToNewVersion() {},
-        showFindReplaceDialog() {},
+        migrateToNewVersion() { },
+        showFindReplaceDialog() { },
         async showSearch() {
             this.search.open = true;
             await nextTick();

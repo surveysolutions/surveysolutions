@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-import { mande } from 'mande';
 import { commandCall } from '../services/commandService';
 import { get } from '../services/apiService';
 
