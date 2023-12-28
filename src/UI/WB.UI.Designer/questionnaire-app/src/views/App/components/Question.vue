@@ -254,10 +254,18 @@ import ExpressionEditor from './ExpressionEditor.vue';
 import Breadcrumbs from './Breadcrumbs.vue'
 import Help from './Help.vue'
 import { indexOf, find, filter, isEmpty } from 'lodash'
-import { answerTypeClass } from '../../../helpers/question'
+import { answerTypeClass, geometryInputModeOptions } from '../../../helpers/question'
 
-import TextQuestion from './parts/TextQuestion.vue'
+import AreaQuestion from './parts/AreaQuestion.vue'
+import DateTimeQuestion from './parts/DateTimeQuestion.vue'
+import GpsCoordinatesQuestion from './parts/GpsCoordinatesQuestion.vue'
+import MultimediaQuestion from './parts/MultimediaQuestion.vue'
+import MultyOptionQuestion from './parts/MultyOptionQuestion.vue'
 import NumericQuestion from './parts/NumericQuestion.vue'
+import QRBarcodeQuestion from './parts/QRBarcodeQuestion.vue'
+import SingleOptionQuestion from './parts/SingleOptionQuestion.vue'
+import TextListQuestion from './parts/TextListQuestion.vue'
+import TextQuestion from './parts/TextQuestion.vue'
 
 const questionsWithOnlyInterviewerScope = ['Multimedia', 'Audio', 'Area', 'QRBarcode'];
 const questionTypesDoesNotSupportValidations = ["Multimedia", "Audio"];
@@ -269,8 +277,17 @@ export default {
         ExpressionEditor,
         Breadcrumbs,
         Help,
+
+        AreaQuestion,
+        DateTimeQuestion,
+        GpsCoordinatesQuestion,
+        MultimediaQuestion,
+        MultyOptionQuestion,
+        NumericQuestion,
+        QRBarcodeQuestion,
+        SingleOptionQuestion,
+        TextListQuestion,
         TextQuestion,
-        NumericQuestion
     },
     inject: ['questionnaire', 'currentChapter'],
     props: {
@@ -471,7 +488,7 @@ export default {
                     this.activeQuestion.geometryType = this.activeQuestion.geometryTypeOptions[0].value;
 
                 if (this.activeQuestion.geometryInputMode === null)
-                    this.activeQuestion.geometryInputMode = this.activeQuestion.geometryInputModeOptions[0].value;
+                    this.activeQuestion.geometryInputMode = geometryInputModeOptions[0].value;
             }
             else {
                 this.activeQuestion.geometryType = null;
