@@ -115,9 +115,8 @@
 
                         <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
                             !currentChapter.isReadOnly
-                            " @click="searchForQuestion(currentChapter)" v-t="{
-        path: 'QuestionnaireEditor.SearchForQuestion'
-    }"></button>
+                            " @click="searchForQuestion(currentChapter)"
+                            v-t="{ path: 'QuestionnaireEditor.SearchForQuestion' }"></button>
 
                         <input type="button" class="btn lighter-hover pull-right" :disabled="!readyToPaste" v-if="!questionnaire.isReadOnlyForUser &&
                             !currentChapter.isReadOnly
@@ -126,21 +125,19 @@
                 </div>
 
                 <div class="start-box" v-if="showStartScreen">
-                    <p v-i18next="EmptySectionLine1"></p>
+                    <p>{{ $t('QuestionnaireEditor.EmptySectionLine1') }}</p>
                     <p>
-                        <span v-bind-html="emptySectionHtmlLine1"> </span>
+                        <span v-dompurify-html="emptySectionHtmlLine1"> </span>
                         <br />
-                        <!--                        <span
-                            v-i18next="[html]({panel: '&lt;span class=&quot;left-panel-glyph&quot;&gt;&lt;/span&gt;'})EmptySectionLine3"
-                        >
+                        <span v-dompurify-html="emptySectionHtmlLine3">
                             <span class="left-panel-glyph"></span>
-                        </span-->
+                        </span>
                     </p>
 
                     <p>
-                        <span v-i18next="EmptySectionLine4"></span>
+                        <span>{{ $t('QuestionnaireEditor.EmptySectionLine4') }}</span>
                         <br />
-                        <span v-bind-html="emptySectionHtmlLine2"></span>
+                        <span v-dompurify-html="emptySectionHtmlLine2"></span>
                     </p>
                 </div>
             </div>
@@ -258,6 +255,19 @@ export default {
                 this.questionnaire.isReadOnlyForUser ||
                 this.currentChapter.isReadOnly
             );
+        },
+        emptySectionHtmlLine1() {
+            var emptySectionAddQuestion = "<button class='btn' disabled type='button'>" + $i18next.t('AddQuestion') + " </button>";
+            var emptySectionAddSubsectionHtml = "<button class=\"btn\" disabled type=\"button\">" + $i18next.t('AddSubsection') + " </button>";
+            return this.$t('EmptySectionLine2', { addQuestionBtn: emptySectionAddQuestion, addSubsectionBtn: emptySectionAddSubsectionHtml });
+
+        },
+        emptySectionHtmlLine2() {
+            var emptySectionSettingsHtml = "<button class=\"btn\" type=\"button\" disabled>" + $i18next.t('Settings') + " </button>";
+            return this.$t('EmptySectionLine5', { settingsBtn: emptySectionSettingsHtml });
+        },
+        emptySectionHtmlLine3() {
+            return this.$t('EmptySectionLine3', { panel: '&lt;span class=&quot;left-panel-glyph&quot;&gt;&lt;/span&gt;' });
         }
     },
     methods: {
