@@ -8,7 +8,8 @@
         <div class="col-xs-12">
             <div class="dropdown-with-breadcrumbs-and-icons">
                 <div class="btn-group" uib-dropdown>
-                    <button class="btn dropdown-toggle" id="cb-categorical-kind" uib-dropdown-toggle type="button">
+                    <button class="btn dropdown-toggle" id="cb-categorical-kind" uib-dropdown-toggle type="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
                         {{ getCategoricalSingleDisplayMode() }}
                         <span class="dropdown-arrow"></span>
                     </button>
@@ -41,7 +42,8 @@
         <div class="col-xs-12">
             <div class="dropdown-with-breadcrumbs-and-icons">
                 <div class="btn-group" uib-dropdown>
-                    <button class="btn dropdown-toggle" id="cb-categorical-type" uib-dropdown-toggle type="button">
+                    <button class="btn dropdown-toggle" id="cb-categorical-type" uib-dropdown-toggle type="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
                         {{ getSourceOfCategories() }}
                         <span class="dropdown-arrow"></span>
                     </button>
@@ -69,7 +71,10 @@
         <div class="col-xs-12">
             <div class="well well-sm" v-if="activeQuestion.wereOptionsTruncated">{{
                 $t('QuestionnaireEditor.QuestionOptionsCut', { count: 200 }) }}</div>
-            <ng-include src="'views/question-details/OptionsEditor-template.html'"></ng-include>
+            <!--ng-include src="'views/question-details/OptionsEditor-template.html'"></ng-include-->
+            <OptionsEditorTemplate ref="options" :activeQuestion="activeQuestion">
+            </OptionsEditorTemplate>
+
             <p></p>
         </div>
     </div>
@@ -84,7 +89,8 @@
         <div class="col-xs-12">
             <div class="dropdown-with-breadcrumbs-and-icons">
                 <div class="btn-group" uib-dropdown>
-                    <button class="btn dropdown-toggle" uib-dropdown-toggle id="cb-categories" type="button">
+                    <button class="btn dropdown-toggle" uib-dropdown-toggle id="cb-categories" type="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="select-placeholder" v-if="(activeQuestion.categoriesId || '') == ''">{{
                             $t('QuestionnaireEditor.SelectCategories') }}</span>
                         <span class="selected-item" v-if="(activeQuestion.categoriesId || '') !== ''">
@@ -94,7 +100,7 @@
                     </button>
 
                     <ul class="dropdown-menu" role="menu">
-                        <li role="presentation" v-for="   categories    in    getCategoriesList()   ">
+                        <li role="presentation" v-for="categories in getCategoriesList()">
                             <a @click="setCategories(categories)" role="menuitem" tabindex="-1"
                                 class="linked-question-source" href="javascript:void(0);">
                                 <div>
@@ -113,9 +119,9 @@
         v-if="activeQuestion.isFilteredCombobox && !activeQuestion.isCascade && !activeQuestion.isLinkedToReusableCategories && !activeQuestion.isLinked">
         <div class="col-xs-12">
             <a href="javascript:void(0);" class="btn btn-link upload-categories-button"
-                v-click="editFilteredComboboxOptions()">{{ $t('QuestionnaireEditor.QuestionUploadOptions') }}
+                @click="editFilteredComboboxOptions()">{{ $t('QuestionnaireEditor.QuestionUploadOptions') }}
             </a>
-            <a href="javascript:void(0);" class="btn btn-link" v-click="showAddClassificationModal()">{{
+            <a href="javascript:void(0);" class="btn btn-link" @click="showAddClassificationModal()">{{
                 $t('QuestionnaireEditor.QuestionAddClassification') }}
             </a>
             <p></p>
@@ -124,7 +130,7 @@
     <div class="row" v-if="activeQuestion.isLinked">
         <div class="col-xs-12">
             <div class="form-group" ng-include="'linkTemplate.html'"
-                v-class="{ 'has-error': !questionForm.linkedToEntity.$valid }"></div>
+                :class="{ 'has-error': !questionForm.linkedToEntity.$valid }"></div>
             <p></p>
         </div>
     </div>
@@ -153,19 +159,99 @@
 <script>
 
 import Help from './../Help.vue'
+import OptionsEditorTemplate from './OptionsEditorTemplate.vue'
 
 export default {
     name: 'SingleOptionQuestion',
     components: {
         Help,
+        OptionsEditorTemplate,
     },
     props: {
         activeQuestion: { type: Object, required: true }
     },
     data() {
         return {
-
+            dirty: false,
         }
     },
+    methods: {
+        preperaToSave() {
+            this.$refs.options.showOptionsInList();
+        },
+
+        getCategoricalSingleDisplayMode() {
+            if (this.activeQuestion.isCascade || (this.activeQuestion.cascadeFromQuestionId || '') !== '')
+                return this.$t('QuestionnaireEditor.QuestionCascading');
+
+            if (this.activeQuestion.isFilteredCombobox === true)
+                return this.$t('QuestionnaireEditor.QuestionComboBox');
+
+            else return this.$t('QuestionnaireEditor.QuestionRadioButtonList');
+        },
+
+        getSourceOfCategories() {
+            if (this.activeQuestion.isLinked)
+                return this.$t('QuestionnaireEditor.RostersQuestion');
+
+            return this.activeQuestion.isLinkedToReusableCategories === true
+                ? this.$t('QuestionnaireEditor.ReusableCategories')
+                : this.$t('QuestionnaireEditor.UserDefinedCategories');
+        },
+
+        setQuestionAsRadioButtons() {
+            this.activeQuestion.isCascade = false;
+            this.activeQuestion.isLinked = false;
+            this.activeQuestion.isFilteredCombobox = false;
+
+            this.markFormAsChanged();
+        },
+
+        setQuestionAsCombobox() {
+            if (this.activeQuestion.isFilteredCombobox === true) return;
+
+            this.activeQuestion.isCascade = false;
+            this.activeQuestion.isFilteredCombobox = true;
+
+            this.markFormAsChanged();
+        },
+
+        setQuestionAsCascading() {
+            if (this.activeQuestion.isCascade === true) return;
+
+            this.activeQuestion.isLinked = false;
+            this.activeQuestion.isFilteredCombobox = false;
+            this.activeQuestion.isCascade = true;
+
+            this.markFormAsChanged();
+        },
+
+        markFormAsChanged() {
+            this.dirty = trus;
+        },
+
+        setIsReusableCategories() {
+            if (this.activeQuestion.isLinkedToReusableCategories === true) return;
+
+            this.activeQuestion.isLinked = false;
+            this.activeQuestion.isLinkedToReusableCategories = true;
+
+            this.markFormAsChanged();
+        },
+
+        setUserDefinedCategories() {
+            if (this.activeQuestion.isLinkedToReusableCategories === false) return;
+
+            this.activeQuestion.isLinked = false;
+            this.activeQuestion.categoriesId = null;
+            this.activeQuestion.isLinkedToReusableCategories = false;
+
+            this.markFormAsChanged();
+        },
+
+        getCategoriesList() {
+            return (this.questionnaire || {}).categories || [];
+        },
+    }
 }
 </script>

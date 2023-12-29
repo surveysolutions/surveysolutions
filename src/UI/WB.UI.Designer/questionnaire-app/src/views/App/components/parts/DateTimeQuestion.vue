@@ -10,8 +10,10 @@
         <div class="col-md-5 ng-scope inline-inputs" v-if="!activeQuestion.isTimestamp">
             <div class="form-group checkbox checkbox-in-column">
                 <label for="dt-default-date">{{ $t('QuestionnaireEditor.QuestionDefaultDate') }}</label>
-                <input id="dt-default-date" type="text" jqdatepicker v-model="activeQuestion.defaultDate"
-                    class="form-control small-date-input" />
+                <!--input id="dt-default-date" type="text" jqdatepicker v-model="activeQuestion.defaultDate"
+                    class="form-control small-date-input" /-->
+                <Datepicker v-model="activeQuestion.defaultDate" id="dt-default-date"
+                    inputClass="form-control small-date-input" showClearButton="true" date-format="YYYY-MM-DD" />
                 <help link="defaultDate"></help>
             </div>
         </div>
@@ -20,12 +22,16 @@
 
 <script>
 
+import 'vue-datepicker-ui/lib/vuedatepickerui.css';
+import VueDatepickerUi from 'vue-datepicker-ui';
+
 import Help from './../Help.vue'
 
 export default {
     name: 'DateTimeQuestion',
     components: {
         Help,
+        Datepicker: VueDatepickerUi
     },
     props: {
         activeQuestion: { type: Object, required: true }

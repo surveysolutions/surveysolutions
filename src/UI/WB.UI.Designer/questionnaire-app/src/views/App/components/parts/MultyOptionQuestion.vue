@@ -8,13 +8,14 @@
         <div class="col-xs-12">
             <div class="dropdown-with-breadcrumbs-and-icons">
                 <div class="btn-group" uib-dropdown>
-                    <button class="btn dropdown-toggle" id="cb-categorical-kind" uib-dropdown-toggle type="button">
+                    <button class="btn dropdown-toggle" id="cb-categorical-kind" uib-dropdown-toggle type="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
                         {{ getCategoricalKind().text }}
                         <span class="dropdown-arrow"></span>
                     </button>
 
                     <ul class="dropdown-menu" role="menu">
-                        <li role="presentation" v-for="kind in activeQuestion.categoricalMultiKinds">
+                        <li role="presentation" v-for="kind in getCategoricalMultiKinds()">
                             <a role="menuitem" tabindex="-1" @click="changeCategoricalKind(kind)">
                                 {{ kind.text }}
                             </a>
@@ -34,7 +35,8 @@
         <div class="col-xs-12">
             <div class="dropdown-with-breadcrumbs-and-icons">
                 <div class="btn-group" uib-dropdown>
-                    <button class="btn dropdown-toggle" id="cb-categorical-type" uib-dropdown-toggle type="button">
+                    <button class="btn dropdown-toggle" id="cb-categorical-type" uib-dropdown-toggle type="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
                         {{ getSourceOfCategories() }}
                         <span class="dropdown-arrow"></span>
                     </button>
@@ -64,7 +66,10 @@
         <div class="col-xs-12">
             <div class="well well-sm" v-if="activeQuestion.wereOptionsTruncated">{{
                 $t('QuestionnaireEditor.QuestionOptionsCut', { count: 200 }) }}</div>
-            <ng-include src="'views/question-details/OptionsEditor-template.html'"></ng-include>
+            <!--ng-include src="'views/question-details/OptionsEditor-template.html'"></ng-include-->
+            <OptionsEditorTemplate ref="options" :activeQuestion="activeQuestion">
+            </OptionsEditorTemplate>
+
             <p></p>
         </div>
     </div>
@@ -77,7 +82,8 @@
         <div class="col-xs-12">
             <div class="dropdown-with-breadcrumbs-and-icons">
                 <div class="btn-group" uib-dropdown>
-                    <button class="btn dropdown-toggle" uib-dropdown-toggle id="cb-categories" type="button">
+                    <button class="btn dropdown-toggle" uib-dropdown-toggle id="cb-categories" type="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="select-placeholder" v-if="(activeQuestion.categoriesId || '') == ''">{{
                             $t('QuestionnaireEditor.SelectCategories') }}</span>
                         <span class="selected-item" v-if="(activeQuestion.categoriesId || '') !== ''">
@@ -133,14 +139,13 @@
             </div>
         </div>
         <div class="col-xs-6">
-            <div class="form-group singleline-group checkbox-in-column"
-                :class="{ 'has-error': !questionForm.editQuestionMaxAnswersNumber.$valid }">
+            <div class="form-group singleline-group checkbox-in-column" :class="{ 'has-error': !validMaxAllowedAnswers }">
                 <label for="edit-question-max-answers-number">{{ $t('QuestionnaireEditor.QuestionMaxNumberOfAnswers')
                 }}</label>
-                <input maxlength="9" name="editQuestionMaxAnswersNumber" ng-pattern="/^\d+$/"
+                <input maxlength="9" name="editQuestionMaxAnswersNumber" v-pattern="/^\d+$/"
                     id="edit-question-max-answers-number" type="text" class="form-control small-numeric-input"
-                    v-model="activeQuestion.maxAllowedAnswers" />
-                <p class="help-block ng-cloak" v-show="questionForm.editQuestionMaxAnswersNumber.$error.pattern">{{
+                    v-model.number="activeQuestion.maxAllowedAnswers" />
+                <p class="help-block ng-cloak" v-show="!validMaxAllowedAnswers">{{
                     $t('QuestionnaireEditor.QuestionOnlyInts') }}
                 </p>
             </div>
@@ -151,11 +156,15 @@
 <script>
 
 import Help from './../Help.vue'
+import OptionsEditorTemplate from './OptionsEditorTemplate.vue'
+import { categoricalMultiKinds } from '../../../../helpers/question'
+import { isInteger } from '../../../../helpers/number';
 
 export default {
     name: 'MultyOptionQuestion',
     components: {
         Help,
+        OptionsEditorTemplate,
     },
     props: {
         activeQuestion: { type: Object, required: true }
@@ -165,5 +174,38 @@ export default {
 
         }
     },
+    computed: {
+        validMaxAllowedAnswers() {
+            return this.activeQuestion.maxAllowedAnswers == null || this.activeQuestion.maxAllowedAnswers == '' || isInteger(this.activeQuestion.maxAllowedAnswers);
+        }
+    },
+    methods: {
+        preperaToSave() {
+            this.$refs.options.showOptionsInList();
+        },
+
+        getCategoricalKind() {
+            if (this.activeQuestion.isFilteredCombobox)
+                return categoricalMultiKinds[2];
+            else if (this.activeQuestion.yesNoView)
+                return categoricalMultiKinds[1];
+            else
+                return categoricalMultiKinds[0];
+        },
+
+        getCategoricalMultiKinds() {
+            return categoricalMultiKinds;
+        },
+
+        getSourceOfCategories() {
+            if (this.activeQuestion.isLinked)
+                return this.$t('QuestionnaireEditor.RostersQuestion');
+
+            return this.activeQuestion.isLinkedToReusableCategories === true
+                ? this.$t('QuestionnaireEditor.ReusableCategories')
+                : this.$t('QuestionnaireEditor.UserDefinedCategories');
+        },
+    }
+
 }
 </script>

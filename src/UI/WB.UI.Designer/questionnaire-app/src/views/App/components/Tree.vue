@@ -203,7 +203,8 @@ export default {
             return this.treeStore.getItems || {};
         },
         showStartScreen() {
-            return true; // TODO
+            const count = this.treeData.length;
+            return count == null || count == 0; // TODO
         },
         filteredTreeData() {
             if (!this.search.open || !this.search.searchText)
@@ -257,17 +258,17 @@ export default {
             );
         },
         emptySectionHtmlLine1() {
-            var emptySectionAddQuestion = "<button class='btn' disabled type='button'>" + $i18next.t('AddQuestion') + " </button>";
-            var emptySectionAddSubsectionHtml = "<button class=\"btn\" disabled type=\"button\">" + $i18next.t('AddSubsection') + " </button>";
-            return this.$t('EmptySectionLine2', { addQuestionBtn: emptySectionAddQuestion, addSubsectionBtn: emptySectionAddSubsectionHtml });
+            var emptySectionAddQuestion = "<button class='btn' disabled type='button'>" + this.$t('QuestionnaireEditor.AddQuestion') + " </button>";
+            var emptySectionAddSubsectionHtml = "<button class=\"btn\" disabled type=\"button\">" + this.$t('QuestionnaireEditor.AddSubsection') + " </button>";
+            return this.$t('QuestionnaireEditor.EmptySectionLine2', { addQuestionBtn: emptySectionAddQuestion, addSubsectionBtn: emptySectionAddSubsectionHtml });
 
         },
         emptySectionHtmlLine2() {
-            var emptySectionSettingsHtml = "<button class=\"btn\" type=\"button\" disabled>" + $i18next.t('Settings') + " </button>";
-            return this.$t('EmptySectionLine5', { settingsBtn: emptySectionSettingsHtml });
+            var emptySectionSettingsHtml = "<button class=\"btn\" type=\"button\" disabled>" + this.$t('QuestionnaireEditor.Settings') + " </button>";
+            return this.$t('QuestionnaireEditor.EmptySectionLine5', { settingsBtn: emptySectionSettingsHtml });
         },
         emptySectionHtmlLine3() {
-            return this.$t('EmptySectionLine3', { panel: '&lt;span class=&quot;left-panel-glyph&quot;&gt;&lt;/span&gt;' });
+            return this.$t('QuestionnaireEditor.EmptySectionLine3', { panel: '&lt;span class=&quot;left-panel-glyph&quot;&gt;&lt;/span&gt;' });
         }
     },
     methods: {

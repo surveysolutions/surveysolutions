@@ -30,7 +30,9 @@
 <script>
 export default {
     name: 'CategoricalFilterExpression',
-    props: {},
+    props: {
+        activeQuestion: { type: Object, required: true }
+    },
     data() {
         return {};
     }

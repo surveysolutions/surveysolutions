@@ -11,12 +11,12 @@
                     <span class="path">{{ activeQuestion.linkedToEntity.breadcrumbs }}</span>
                     <span class="chosen-item" v-if="activeQuestion.linkedToEntity.type !== 'roster'">
                         <i class="dropdown-icon" :class="['icon-' + activeQuestion.linkedToEntity.type]"></i>
-                        {{ activeQuestion.linkedToEntity.title | escape }} (<span
-                            class="var-name-line">{{ activeQuestion.linkedToEntity.varName }}</span>)
+                        {{ activeQuestion.linkedToEntity.title | escape }} (<span class="var-name-line">{{
+                            activeQuestion.linkedToEntity.varName }}</span>)
                     </span>
                     <span class="linked-roster-source" v-if="activeQuestion.linkedToEntity.type === 'roster'">
-                        {{ activeQuestion.linkedToEntity.title | escape }} (<span
-                            class="var-name-line">{{ activeQuestion.linkedToEntity.varName }}</span>)
+                        {{ activeQuestion.linkedToEntity.title | escape }} (<span class="var-name-line">{{
+                            activeQuestion.linkedToEntity.varName }}</span>)
                     </span>
                 </span>
                 <span class="dropdown-arrow"></span>
@@ -62,7 +62,9 @@
 <script>
 export default {
     name: 'LinkTemplate',
-    props: {},
+    props: {
+        activeQuestion: { type: Object, required: true }
+    },
     data() {
         return {};
     }

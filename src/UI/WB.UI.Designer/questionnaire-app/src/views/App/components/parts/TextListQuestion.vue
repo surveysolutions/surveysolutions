@@ -1,13 +1,13 @@
 <template>
     <div class="row table-holder">
         <div class="col-xs-offset-5 col-xs-6">
-            <div class="form-group singleline-group" :class="{ 'has-error': !questionForm.maxAnswerCount.$valid }">
+            <div class="form-group singleline-group" :class="{ 'has-error': !isValidMaxAnswerCount }">
                 <label for="edit-question-max-answers-number">{{
                     $t('QuestionnaireEditor.QuestionMaxNumberOfAnswers') }}</label>
-                <input id="edit-question-max-answers-number" maxlength="9" name="maxAnswerCount" type="text"
-                    ng-pattern="/^\d+$/" ng-model="activeQuestion.maxAnswerCount"
+                <input id="edit-question-max-answers-number" maxlength="9" name="maxAnswerCount" type="text" v-number
+                    ng-pattern="/^\d+$/" v-model.number="activeQuestion.maxAnswerCount"
                     class="form-control small-numeric-input" />
-                <p class="help-block ng-cloak" v-show="questionForm.maxAnswerCount.$error.pattern">{{
+                <p class="help-block ng-cloak" v-show="!isValidMaxAnswerCount">{{
                     $t('QuestionnaireEditor.QuestionOnlyInts') }}
                 </p>
             </div>
@@ -17,6 +17,8 @@
 
 <script>
 
+import { isInteger } from '../../../../helpers/number';
+
 export default {
     name: 'TextListQuestion',
     props: {
@@ -24,8 +26,13 @@ export default {
     },
     data() {
         return {
-
+            valid: true
         }
     },
+    computed: {
+        isValidMaxAnswerCount() {
+            return this.activeQuestion.maxAnswerCount == null || this.activeQuestion.maxAnswerCount == '' || isInteger(this.activeQuestion.maxAnswerCount);
+        }
+    }
 }
 </script>

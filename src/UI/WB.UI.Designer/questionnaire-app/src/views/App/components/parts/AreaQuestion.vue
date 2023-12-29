@@ -43,7 +43,7 @@
                     </button>
 
                     <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="geometry-input-mode">
-                        <li role="presentation" v-for="mode in geometryInputModeOptions">
+                        <li role="presentation" v-for="mode in getGeometryInputModeOptions">
                             <a role="menuitem" tabindex="-1" @click="changeGeometryInputMode(mode.value)">
                                 {{ mode.text }}
                             </a>
@@ -82,7 +82,8 @@ export default {
     },
     data() {
         return {
-            valid: true
+            valid: true,
+            dirty: false,
         }
     },
     computed: {
@@ -98,6 +99,9 @@ export default {
             );
             return option != null ? option.text : null;
         },
+        getGeometryInputModeOptions() {
+            return geometryInputModeOptions;
+        }
     },
     methods: {
         changeGeometryType(geometry) {
@@ -113,7 +117,7 @@ export default {
         },
 
         markFormAsChanged() {
-            // TODO
+            this.dirty = true;
         }
     }
 }

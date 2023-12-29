@@ -187,7 +187,7 @@
                                             <input type="number" min="-2147483648" max="2147483647" v-focus="initilized"
                                                 v-model.number="title.value" :name="'title_value_' + index"
                                                 @keypress="onKeyPressIsNumber($event)"
-                                                :class="{ 'has-error': !isNumber(title.value) }"
+                                                :class="{ 'has-error': !isInteger(title.value) }"
                                                 class="form-control fixed-roster-value-editor border-right">
                                         </div>
                                         <div class="column-3">
@@ -382,6 +382,7 @@ import Breadcrumbs from './Breadcrumbs.vue'
 import Help from './Help.vue'
 import { find } from 'lodash'
 import { convertToText, validateText, convertToTable } from '../../OptionsEditor/utils/tableToString';
+import { isInteger } from '../../../helpers/number';
 
 export default {
     name: 'Roster',
@@ -600,8 +601,8 @@ export default {
             }
         },
 
-        isNumber(value) {
-            return value == null || /^([-+]?\d+)$/.test(value);
+        isInteger(value) {
+            return isInteger(value);
         },
 
         onKeyPressIsNumber(keyEvent) {

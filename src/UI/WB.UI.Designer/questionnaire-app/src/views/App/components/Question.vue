@@ -67,7 +67,7 @@
                 <div class="question-type-specific-block"
                     ng-include="'views/question-details/' + activeQuestion.type + '-template.html'">
 
-                    <component :key="activeQuestion.id" :is="questionTemplate(activeQuestion.type)"
+                    <component ref="questionSpecific" :key="activeQuestion.id" :is="questionTemplate(activeQuestion.type)"
                         :activeQuestion="activeQuestion" v-if="activeQuestion.type != undefined
                             && (activeQuestion.type != 'GpsCoordinates'
                                 && activeQuestion.type != 'QRBarcode'
@@ -210,7 +210,7 @@
         </div>
         <div class="form-buttons-holder">
             <div class="pull-left">
-                <button type="submit" v-show="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
+                <button type="button" v-show="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
                     id="edit-chapter-save-button" class="btn btn-lg " :class="{ 'btn-primary': dirty }"
                     unsaved-warning-clear @click="saveQuestion()" :disabled="!valid">{{
                         $t('QuestionnaireEditor.Save') }}</button>
@@ -253,7 +253,7 @@ import MoveToChapterSnippet from './MoveToChapterSnippet.vue';
 import ExpressionEditor from './ExpressionEditor.vue';
 import Breadcrumbs from './Breadcrumbs.vue'
 import Help from './Help.vue'
-import { indexOf, find, filter, isEmpty } from 'lodash'
+import { indexOf, find, filter, isEmpty, isNull } from 'lodash'
 import { answerTypeClass, geometryInputModeOptions } from '../../../helpers/question'
 
 import AreaQuestion from './parts/AreaQuestion.vue'
@@ -318,12 +318,12 @@ export default {
             deep: true
         },
 
-        /*async questionId(newValue, oldValue) {
+        async questionId(newValue, oldValue) {
             if (newValue != oldValue) {
                 this.questionStore.clear();
                 await this.fetch();
             }
-        }*/
+        }
     },
     setup() {
         const questionStore = useQuestionStore();
@@ -362,10 +362,26 @@ export default {
             this.activeQuestion = this.questionStore.getQuestion;
             this.shouldUserSeeReloadDetailsPromt = false;
         },
-        saveQuestion() {
+
+        async saveQuestion() {
+
+            if (this.dirty == false) return;
+
+            const beforeSave = this.$refs.questionSpecific.preperaToSave;
+            if (beforeSave != undefined) {
+                beforeSave();
+            }
+
+            if (!this.valid) return;
+
+            const componentValid = this.$refs.questionSpecific.valid || true;
+            if (!componentValid) return;
+
             this.questionStore.saveQuestionData();
+
             this.dirty = false;
         },
+
         cancel() {
             this.questionStore.discardChanges();
             this.activeQuestion = this.questionStore.getData;
@@ -440,7 +456,7 @@ export default {
         setQuestionType(type) {
             this.activeQuestion.type = type;
             this.activeQuestion.typeName = find(this.activeQuestion.questionTypeOptions, { value: type }).text;
-            this.activeQuestion.allQuestionScopeOptions = dictionaries.allQuestionScopeOptions;
+            //this.activeQuestion.allQuestionScopeOptions = dictionaries.allQuestionScopeOptions;
 
             const isQuestionScopeSupervisorOrPrefilled = this.activeQuestion.questionScope === 'Supervisor' || this.activeQuestion.questionScope === 'Identifying';
             if (type === 'TextList' && isQuestionScopeSupervisorOrPrefilled) {
@@ -474,7 +490,7 @@ export default {
 
             if (type === 'MultyOption' || type === "SingleOption") {
                 if (this.activeQuestion.options.length === 0) {
-                    this.addOption();
+                    //this.addOption();
                 }
             }
 
@@ -560,7 +576,8 @@ export default {
 
         setDirty() {
             this.dirty = true;
-        }
+        },
+
     }
 }
 </script>
