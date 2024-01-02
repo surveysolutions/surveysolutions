@@ -289,4 +289,7 @@
   <data name="PasswordChangeRequired" xml:space="preserve">
     <value>Ваш пароль был сброшен. Вы должны изменить его для получения доступа к сайту.</value>
   </data>
+  <data name="RestrictedAccountMessage" xml:space="preserve">
+      <value>Эта учетная запись ограничена в совершении этого действия</value>
+  </data>
 </root>

@@ -16,6 +16,7 @@ using WB.Enumerator.Native.WebInterview.Models;
 using WB.Enumerator.Native.WebInterview.Pipeline;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.UI.Headquarters.Code.Authentication;
+using WB.UI.Headquarters.Code.UsersManagement;
 using WB.UI.Headquarters.Code.WebInterview.Pipeline;
 using WB.UI.Headquarters.Code.Workspaces;
 using WB.UI.Headquarters.Configs;
@@ -98,6 +99,9 @@ namespace WB.UI.Headquarters
                     services.AddTransient<ICaptchaProvider, NoCaptchaProvider>();
                     break;
             }
+            
+            AccountManagementConfig eventBusConfig = configuration.GetSection("AccountManagement").Get<AccountManagementConfig>();
+            registry.BindToConstant(() => new UsersManagementSettings(eventBusConfig.RestrictedUser));
         }
 
         private void ConfigureEventBus(IIocRegistry registry)

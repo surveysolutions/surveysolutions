@@ -24,6 +24,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.Authentication;
+using WB.UI.Headquarters.Code.UsersManagement;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Models.Users;
@@ -42,6 +43,7 @@ namespace WB.UI.Headquarters.Controllers
         private IOptions<HeadquartersConfig> options;
         private readonly IWorkspacesStorage workspaces;
         private readonly ITokenProvider tokenProvider;
+        private readonly UsersManagementSettings usersManagementSettings;
         
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
 
@@ -54,7 +56,8 @@ namespace WB.UI.Headquarters.Controllers
             UrlEncoder urlEncoder,
             IOptions<HeadquartersConfig> options,
             IWorkspacesStorage workspaces,
-            ITokenProvider tokenProvider)
+            ITokenProvider tokenProvider,
+            UsersManagementSettings usersManagementSettings)
         {
             this.authorizedUser = authorizedUser;
             this.userManager = userManager;
@@ -63,6 +66,7 @@ namespace WB.UI.Headquarters.Controllers
             this.options = options;
             this.workspaces = workspaces;
             this.tokenProvider = tokenProvider;
+            this.usersManagementSettings = usersManagementSettings;
         }
         
         [Authorize(Roles = "Administrator, Observer")]
@@ -655,11 +659,20 @@ namespace WB.UI.Headquarters.Controllers
 
             if (model.UserId == this.authorizedUser.Id)
             {
-                bool isPasswordValid = !string.IsNullOrEmpty(model.OldPassword)
-                                       && await this.userManager.CheckPasswordAsync(userToUpdate,
-                                           model.OldPassword);
-                if (!isPasswordValid)
-                    this.ModelState.AddModelError(nameof(ChangePasswordModel.OldPassword), FieldsAndValidations.OldPasswordErrorMessage);
+                if (usersManagementSettings.RestrictedUsersInLower.Contains(this.authorizedUser.UserName
+                        .ToLowerInvariant()))
+                {
+                    this.ModelState.AddModelError(nameof(ChangePasswordModel.Password), 
+                        FieldsAndValidations.RestrictedAccountMessage);
+                }
+                else
+                {
+                    bool isPasswordValid = !string.IsNullOrEmpty(model.OldPassword)
+                                           && await this.userManager.CheckPasswordAsync(userToUpdate,
+                                               model.OldPassword);
+                    if (!isPasswordValid)
+                        this.ModelState.AddModelError(nameof(ChangePasswordModel.OldPassword), FieldsAndValidations.OldPasswordErrorMessage);
+                }
             }
 
             if (this.ModelState.IsValid)

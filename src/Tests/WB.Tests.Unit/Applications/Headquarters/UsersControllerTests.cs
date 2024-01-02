@@ -20,6 +20,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Workspaces;
 using WB.Tests.Abc;
+using WB.UI.Headquarters.Code.UsersManagement;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Models.Users;
 
@@ -95,7 +96,9 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 Mock.Of<UrlEncoder>(),
                 Mock.Of<IOptions<HeadquartersConfig>>(),
                 null,
-                null);
+                null,
+                new UsersManagementSettings(Array.Empty<string>())
+                );
             controller.ControllerContext.HttpContext = Mock.Of<HttpContext>(c => 
                 c.Session == new MockHttpSession()
                 && c.Request == Mock.Of<HttpRequest>(r => r.Cookies == Mock.Of<IRequestCookieCollection>())
