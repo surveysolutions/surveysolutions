@@ -659,7 +659,8 @@ namespace WB.UI.Headquarters.Controllers
 
             if (model.UserId == this.authorizedUser.Id)
             {
-                if (usersManagementSettings.RestrictedUsersInLower.Contains(this.authorizedUser.UserName
+                if (!this.authorizedUser.PasswordChangeRequired 
+                    && usersManagementSettings.RestrictedUsersInLower.Contains(this.authorizedUser.UserName
                         .ToLowerInvariant()))
                 {
                     this.ModelState.AddModelError(nameof(ChangePasswordModel.Password), 
