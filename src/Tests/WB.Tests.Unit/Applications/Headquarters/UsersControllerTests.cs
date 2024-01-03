@@ -97,8 +97,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 Mock.Of<IOptions<HeadquartersConfig>>(),
                 null,
                 null,
-                new UsersManagementSettings(Array.Empty<string>())
-                );
+                new UsersManagementSettings(null));
             controller.ControllerContext.HttpContext = Mock.Of<HttpContext>(c => 
                 c.Session == new MockHttpSession()
                 && c.Request == Mock.Of<HttpRequest>(r => r.Cookies == Mock.Of<IRequestCookieCollection>())
