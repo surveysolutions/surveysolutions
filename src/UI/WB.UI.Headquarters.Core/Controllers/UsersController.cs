@@ -774,6 +774,16 @@ namespace WB.UI.Headquarters.Controllers
             if (!authorizedUser.IsAdministrator && !authorizedUser.IsHeadquarter && currentUser.IsLockedByHeadquaters != editModel.IsLockedByHeadquarters)
                 return this.Forbid();
 
+            if (editModel.UserId == this.authorizedUser.Id)
+            {
+                if (usersManagementSettings.RestrictedUsersInLower.Contains(this.authorizedUser.UserName
+                        .ToLowerInvariant()))
+                {
+                    this.ModelState.AddModelError(nameof(ChangePasswordModel.Password),
+                        FieldsAndValidations.RestrictedAccountMessage);
+                }
+            }
+
             if (this.ModelState.IsValid)
             {
                 currentUser.Email = editModel.Email;

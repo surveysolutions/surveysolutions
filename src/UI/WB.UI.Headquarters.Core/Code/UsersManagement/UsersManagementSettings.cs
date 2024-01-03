@@ -1,14 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using WB.UI.Headquarters.Configs;
 
 namespace WB.UI.Headquarters.Code.UsersManagement;
 
 public class UsersManagementSettings
 {
-    public UsersManagementSettings(string[] restrictedUsers)
+    public UsersManagementSettings(AccountManagementConfig accountManagementConfig)
     {
-        RestrictedUsersInLower = new HashSet<string>(restrictedUsers.Select(x => x.ToLowerInvariant()));
+        if(accountManagementConfig?.RestrictedUser != null)
+            RestrictedUsersInLower = new HashSet<string>(accountManagementConfig.RestrictedUser.Select(x => x.ToLowerInvariant()));
     }
 
-    public HashSet<string> RestrictedUsersInLower { get; set; }
+    public HashSet<string> RestrictedUsersInLower { get; set; } = new HashSet<string>();
 }
