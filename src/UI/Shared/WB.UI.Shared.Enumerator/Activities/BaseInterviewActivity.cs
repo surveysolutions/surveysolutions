@@ -44,11 +44,18 @@ namespace WB.UI.Shared.Enumerator.Activities
         protected override bool BackButtonCustomAction => true;
         protected override void BackButtonPressed()
         {
-            this.ViewModel.NavigateToPreviousViewModel(() =>
+            if(drawerLayout.IsOpen)
             {
-                this.ViewModel.NavigateBack();
-                ReleaseActivity();
-            });
+                drawerLayout.CloseDrawers();
+            }
+            else
+            {
+                this.ViewModel.NavigateToPreviousViewModel(() =>
+                {
+                    this.ViewModel.NavigateBack();
+                    ReleaseActivity();
+                });
+            }
         }
 
         private void OnDrawerLayoutOnDrawerOpened(object sender, DrawerLayout.DrawerOpenedEventArgs args)

@@ -28,6 +28,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         WindowSoftInputMode = SoftInput.StateHidden,
         HardwareAccelerated = true,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize,
+        LaunchMode = LaunchMode.SingleInstance,
         Exported = false)]
     public class DashboardActivity : BaseActivity<DashboardViewModel>,
         ISyncBgService<SyncProgressDto>,
@@ -47,7 +48,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             base.OnPause();
             this.RemoveFragments();
         }
-
+        
         protected override void OnResume()
         {
             base.OnResume();
@@ -79,10 +80,11 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             snack.Show();
         }
         
-        protected override bool BackButtonCustomAction => false;
-        /*protected override void BackButtonPressed()
+        protected override bool BackButtonCustomAction => true;
+        protected override void BackButtonPressed()
         {
-        }*/
+            this.MoveTaskToBack(true);
+        }
 
         private void RemoveFragments()
         {

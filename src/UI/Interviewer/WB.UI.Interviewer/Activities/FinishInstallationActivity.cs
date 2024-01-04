@@ -11,9 +11,9 @@ namespace WB.UI.Interviewer.Activities
 {
     [Activity(WindowSoftInputMode = SoftInput.StateHidden, 
         HardwareAccelerated = true,
-        //NoHistory = true,
         Theme = "@style/GrayAppTheme", 
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize,
+        LaunchMode = LaunchMode.SingleInstance,
         Exported = false)]
     public class FinishInstallationActivity : BaseActivity<FinishInstallationViewModel>
     {
@@ -34,9 +34,10 @@ namespace WB.UI.Interviewer.Activities
             {
                 this.ViewModel.CancelInProgressTask();
             }
+            
+            this.MoveTaskToBack(true);
         }
-
-
+        
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             this.MenuInflater.Inflate(Resource.Menu.finish, menu);

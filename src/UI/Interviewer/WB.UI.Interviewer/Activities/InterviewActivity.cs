@@ -1,3 +1,4 @@
+using Android.Content.PM;
 using Android.Views;
 using Java.Interop;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -11,6 +12,7 @@ namespace WB.UI.Interviewer.Activities
         HardwareAccelerated = true,
         WindowSoftInputMode = SoftInput.StateAlwaysHidden | SoftInput.AdjustPan,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize,
+        LaunchMode = LaunchMode.SingleInstance,
         Exported = false)]
     public class InterviewActivity : BaseInterviewActivity<InterviewViewModel>
     {

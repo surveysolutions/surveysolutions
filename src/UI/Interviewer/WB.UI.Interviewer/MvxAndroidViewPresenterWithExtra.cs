@@ -26,7 +26,7 @@ public class MvxAndroidViewPresenterWithExtra : MvxAndroidViewPresenter
         if (intent != null 
             && request?.ViewModelType != null 
             && registeredViewModelsForClearBackStack.Any(x => x.IsAssignableFrom(request.ViewModelType))) {
-            intent.AddFlags(ActivityFlags.ClearTop | ActivityFlags.SingleTop | ActivityFlags.ClearTask);
+            intent.AddFlags(ActivityFlags.ClearTask | ActivityFlags.NewTask);
         }
 
         return intent;

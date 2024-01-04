@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using Android.Widget;
 using Autofac;
 using Autofac.Features.ResolveAnything;
 using MvvmCross.Binding.Bindings.Target.Construction;
@@ -51,11 +47,7 @@ namespace WB.UI.Interviewer
     {
         private IModule[] modules;
 
-        public Setup()
-        {
-            
-         
-        }
+        public Setup() { }
         
         protected override IMvxViewsContainer InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup, IMvxIoCProvider iocProvider)
         {
@@ -193,7 +185,11 @@ namespace WB.UI.Interviewer
         protected override IMvxAndroidViewPresenter CreateViewPresenter()
         {
             var presenter = new MvxAndroidViewPresenterWithExtra(AndroidViewAssemblies);
+            
             presenter.RegisterViewModelForClearBackStack<DashboardViewModel>();
+            presenter.RegisterViewModelForClearBackStack<EnumeratorLoginViewModel>();
+            presenter.RegisterViewModelForClearBackStack<EnumeratorFinishInstallationViewModel>();
+            
             return presenter;
         }
 

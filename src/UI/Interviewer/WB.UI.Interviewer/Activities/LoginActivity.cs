@@ -13,14 +13,16 @@ namespace WB.UI.Interviewer.Activities
     [Activity(WindowSoftInputMode = SoftInput.StateHidden, 
         Theme = "@style/GrayAppTheme",
         Exported = false,
-        //NoHistory = true,
         ExcludeFromRecents = true)]
     public class LoginActivity : BaseActivity<LoginViewModel>
     {
-        protected override int ViewResourceId
+        protected override bool BackButtonCustomAction => true;
+        protected override void BackButtonPressed()
         {
-            get { return Resource.Layout.Login; }
+            this.MoveTaskToBack(true);
         }
+
+        protected override int ViewResourceId => Resource.Layout.Login;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -29,20 +31,11 @@ namespace WB.UI.Interviewer.Activities
             toolbar.Title = "";
             this.SetSupportActionBar(toolbar);
         }
-        
-        protected override bool BackButtonCustomAction => true;
-        protected override void BackButtonPressed()
-        {
-            //back button is suppressed
-            //should be changed but backstack should be cleared
-        }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             this.MenuInflater.Inflate(Resource.Menu.login, menu);
-
             menu.LocalizeMenuItem(Resource.Id.menu_settings, EnumeratorUIResources.MenuItem_Title_Settings);
-
             menu.LocalizeMenuItem(Resource.Id.menu_diagnostics, EnumeratorUIResources.MenuItem_Title_Diagnostics);
             return base.OnCreateOptionsMenu(menu);
         }

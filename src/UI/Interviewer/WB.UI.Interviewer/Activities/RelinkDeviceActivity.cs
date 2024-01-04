@@ -27,7 +27,6 @@ namespace WB.UI.Interviewer.Activities
             this.ViewModel.NavigateToPreviousViewModel();
         }
 
-
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             this.MenuInflater.Inflate(Resource.Menu.relink, menu);

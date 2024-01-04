@@ -26,12 +26,12 @@ namespace WB.UI.Shared.Enumerator.Utils
                 return "UNKNOWN";
             string result = String.Empty;
 
-            var runningTaskInfoList = activityManager.GetRunningTasks(10);
+            var runningTaskInfoList = activityManager.GetRunningTasks(20);
             foreach (var item in runningTaskInfoList)
             {
                 string first = item.BaseActivity.ShortClassName.Substring((item.BaseActivity.ShortClassName.LastIndexOf('.') + 1), item.BaseActivity.ShortClassName.Length - (item.BaseActivity.ShortClassName.LastIndexOf('.') + 1));
                 string current = item.TopActivity.ShortClassName.Substring((item.TopActivity.ShortClassName.LastIndexOf('.') + 1), item.TopActivity.ShortClassName.Length - (item.TopActivity.ShortClassName.LastIndexOf('.') + 1));
-                result += first + " - " + current + "\n";
+                result += first + " - " + current + $". Task Id: {item.TaskId}. Activities: {item.NumActivities}" + "\n";
             }
 
             return result;
@@ -50,7 +50,7 @@ namespace WB.UI.Shared.Enumerator.Utils
                 }*/
             }
             
-            //result = result + "\n" + GetActivitiesInfo();
+            result = result + "\n" + "Running tasks:" +  "\n" + GetActivitiesInfo();
 
             return result;
         }
@@ -70,7 +70,7 @@ namespace WB.UI.Shared.Enumerator.Utils
             long totalBlocks = stat.BlockCountLong;
             var availableInternalMemorySize = (availableBlocks * blockSize);
             var totalInternalMemorySize = totalBlocks * blockSize;
-            return $"{FileSizeUtils.SizeSuffix(totalInternalMemorySize)} total, avaliable {availableInternalMemorySize.PercentOf(totalInternalMemorySize)}% ({FileSizeUtils.SizeSuffix(availableInternalMemorySize)})";
+            return $"{FileSizeUtils.SizeSuffix(totalInternalMemorySize)} total, available {availableInternalMemorySize.PercentOf(totalInternalMemorySize)}% ({FileSizeUtils.SizeSuffix(availableInternalMemorySize)})";
         }
 
         private List<GroupedPeer> GetPeers()
