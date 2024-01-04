@@ -292,4 +292,7 @@
   <data name="RestrictedAccountMessage" xml:space="preserve">
       <value>Эта учетная запись ограничена в совершении этого действия</value>
   </data>
+  <data name="RestrictedAccount" xml:space="preserve">
+      <value>Эта учетная запись ограничена</value>
+  </data>  
 </root>
