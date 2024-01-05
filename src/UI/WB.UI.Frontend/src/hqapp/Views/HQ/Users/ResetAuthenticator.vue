@@ -1,37 +1,27 @@
 <template>
-    <ProfileLayout ref="profile"
-        :role="userInfo.role"
-        :isOwnProfile="userInfo.isOwnProfile"
-        :userName="userInfo.userName"
-        :canChangePassword="userInfo.canChangePassword"
-        :userId="userInfo.userId"
-        :currentTab="currentTab"
-        :canGenerateToken="userInfo.canGetApiToken">
+    <ProfileLayout ref="profile" :role="userInfo.role" :isOwnProfile="userInfo.isOwnProfile" :userName="userInfo.userName"
+        :canChangePassword="userInfo.canChangePassword" :userId="userInfo.userId" :currentTab="currentTab"
+        :canGenerateToken="userInfo.canGetApiToken" :isRestricted="userInfo.isRestricted">
 
-        <div >
-            <h2>{{$t('Strings.HQ_Views_ResetAuthenticator_Title')}}</h2>
+        <div>
+            <h2>{{ $t('Strings.HQ_Views_ResetAuthenticator_Title') }}</h2>
         </div>
         <div>
-            <div class="alert alert-warning"
-                role="alert">
+            <div class="alert alert-warning" role="alert">
                 <p>
-                    <span class="glyphicon glyphicon-warning-sign"
-                        style="margin-right: 5px;"></span>
-                    <strong>{{$t('Pages.ResetAuthenticatorLine1')}}</strong>
+                    <span class="glyphicon glyphicon-warning-sign" style="margin-right: 5px;"></span>
+                    <strong>{{ $t('Pages.ResetAuthenticatorLine1') }}</strong>
                 </p>
                 <p>
-                    {{$t('Pages.ResetAuthenticatorLine2')}}
+                    {{ $t('Pages.ResetAuthenticatorLine2') }}
                 </p>
             </div>
         </div>
         <div>
             <div class="block-filter">
-                <button
-                    type="submit"
-                    class="btn btn-danger"
-                    id="btnResetAuthenticator"
-                    v-bind:disabled="userInfo.isObserving"
-                    @click="resetAuthenticator">{{$t('Pages.ResetAuthenticator')}}</button>
+                <button type="submit" class="btn btn-danger" id="btnResetAuthenticator"
+                    v-bind:disabled="userInfo.isObserving || userInfo.isRestricted" @click="resetAuthenticator">{{
+                        $t('Pages.ResetAuthenticator') }}</button>
             </div>
         </div>
     </ProfileLayout>
@@ -39,7 +29,7 @@
 
 <script>
 import Vue from 'vue'
-import {each} from 'lodash'
+import { each } from 'lodash'
 
 export default {
     data() {
@@ -49,16 +39,16 @@ export default {
         }
     },
     computed: {
-        currentTab(){
+        currentTab() {
             return 'two-factor'
         },
-        is2faEnabled(){
+        is2faEnabled() {
             return this.userInfo.is2faEnabled
         },
-        recoveryCodesLeft(){
+        recoveryCodesLeft() {
             return this.userInfo.recoveryCodesLeft
         },
-        hasAuthenticator(){
+        hasAuthenticator() {
             return this.userInfo.hasAuthenticator
         },
         model() {
@@ -72,7 +62,7 @@ export default {
         },
     },
     methods: {
-        resetAuthenticator(){
+        resetAuthenticator() {
             this.successMessage = null
             for (var error in this.modelState) {
                 delete this.modelState[error]

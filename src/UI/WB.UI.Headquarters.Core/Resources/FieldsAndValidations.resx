@@ -237,6 +237,12 @@
   <data name="OldPasswordFieldName" xml:space="preserve">
     <value>Old password</value>
   </data>
+  <data name="RestrictedAccountMessage" xml:space="preserve">
+    <value>This account is restricted to perform this action</value>
+  </data>
+  <data name="RestrictedAccount" xml:space="preserve">
+    <value>This account is restricted</value>
+  </data>   
   <data name="UserName_Taken" xml:space="preserve">
     <value>Please choose another username</value>
   </data>

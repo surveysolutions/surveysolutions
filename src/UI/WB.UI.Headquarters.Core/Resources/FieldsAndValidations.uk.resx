@@ -285,4 +285,10 @@
   <data name="WorkspaceRequired" xml:space="preserve">
     <value>Потрібен робочий простір</value>
   </data>
+  <data name="RestrictedAccountMessage" xml:space="preserve">
+      <value>Цей обліковий запис обмежено для виконання цієї дії</value>
+  </data>
+  <data name="RestrictedAccount" xml:space="preserve">
+      <value>Цей обліковий запис обмежено</value>
+  </data>
 </root>
