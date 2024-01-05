@@ -1,23 +1,25 @@
 <template>
     <div id="sourceOfLinkedEntity" class="dropdown-with-breadcrumbs-and-icons"
-        ng-class="{'has-error': !questionForm.linkedToEntity.$valid}">
-        <input type="hidden" name="cascadeFromQuestionId" ng-model="activeQuestion.cascadeFromQuestionId" ng-update-hidden
+        :class="{ 'has-error': !isLinkedToEntityValid }">
+        <input type="hidden" name="cascadeFromQuestionId" v-model="activeQuestion.cascadeFromQuestionId" ng-update-hidden
             ng-required="true" />
-        <label for="singleOptionQuestionSource" ng-i18next="SelectParentQuestion"></label>
+        <label for="singleOptionQuestionSource">{{ $t('QuestionnaireEditor.SelectParentQuestion') }}</label>
         <div class="btn-group dropdown" uib-dropdown>
-            <button class="btn dropdown-toggle" uib-dropdown-toggle id="singleOptionQuestionSource" type="button">
-                <span class="select-placeholder" ng-if="(activeQuestion.cascadeFromQuestion.title || '') == ''"
-                    ng-i18next="SelectQuestion"></span>
+            <button class="btn dropdown-toggle" uib-dropdown-toggle id="singleOptionQuestionSource" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="select-placeholder" v-if="(cascadeFromQuestion.title || '') == ''">{{
+                    $t('QuestionnaireEditor.SelectQuestion') }}</span>
 
-                <div class="selected-item" ng-if="(activeQuestion.cascadeFromQuestion.title || '') !== ''">
-                    <span class="path">{{ activeQuestion.cascadeFromQuestion.breadcrumbs }}</span>
+                <div class="selected-item" v-if="(cascadeFromQuestion.title || '') !== ''">
+                    <span class="path">{{ cascadeFromQuestion.breadcrumbs }}</span>
                     <div class="selected-block">
                         <div>
                             <span class="chosen-item "><i class="dropdown-icon"
-                                    ng-class="'icon-'+activeQuestion.cascadeFromQuestion.type"></i>{{ activeQuestion.cascadeFromQuestion.title }}</span>
+                                    :class="['icon-' + cascadeFromQuestion.type]"></i>{{
+                                        cascadeFromQuestion.title }}</span>
                         </div>
                         <div class="var-block">
-                            <span class="var-name" ng-bind-html="activeQuestion.cascadeFromQuestion.varName"></span>
+                            <span class="var-name" v-dompurify-html="cascadeFromQuestion.varName"></span>
                         </div>
                     </div>
                 </div>
@@ -26,46 +28,45 @@
             </button>
 
             <ul class="dropdown-menu" role="menu">
-                <li role="presentation" ng-class="{'dropdown-header': breadCrumb.isSectionPlaceHolder}"
-                    ng-repeat="breadCrumb in sourceOfSingleQuestions track by $index">
-                    <span ng-if="breadCrumb.isSectionPlaceHolder">{{:: breadCrumb.title }}</span>
-                    <a ng-if="!breadCrumb.isSectionPlaceHolder" ng-click="setCascadeSource(breadCrumb.id)" role="menuitem"
+                <li role="presentation" :class="{ 'dropdown-header': breadCrumb.isSectionPlaceHolder }"
+                    v-for="(breadCrumb, index) in activeQuestion.sourceOfSingleQuestions">
+                    <span v-if="breadCrumb.isSectionPlaceHolder">{{ breadCrumb.title }}</span>
+                    <a v-if="!breadCrumb.isSectionPlaceHolder" @click="setCascadeSource(breadCrumb.id)" role="menuitem"
                         tabindex="-1" href="javascript:void(0);">
                         <div>
-                            <i class="dropdown-icon icon-{{breadCrumb.type}}"></i>
-                            <span ng-bind-html="breadCrumb.title"></span>
+                            <i :class="['dropdown-icon', 'icon-' + breadCrumb.type]"></i>
+                            <span v-dompurify-html="breadCrumb.title"></span>
                         </div>
                         <div class="var-block">
-                            <span class="var-name" ng-bind-html="breadCrumb.varName"></span>
+                            <span class="var-name" v-dompurify-html="breadCrumb.varName"></span>
                         </div>
                     </a>
                 </li>
             </ul>
         </div>
-        <p class="help-block ng-cloak" ng-show="questionForm.cascadeFromQuestionId.$error.required"
-            ng-i18next="SelectParentQuestionError"></p>
+        <p class="help-block ng-cloak" v-show="!isExistsCascadeFromQuestionId">{{
+            $t('QuestionnaireEditor.SelectParentQuestionError') }}</p>
     </div>
     <div class="row">
         <div class="col-md-6">
             <div class="checkbox checkbox-in-column">
-                <input id="cb-as-list" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.showAsList"
-                    ng-change="showAsListChange()" />
-                <label for="cb-as-list"><span></span>{{ 'ShowAsList' | i18next }}</label>
+                <input id="cb-as-list" type="checkbox" class="wb-checkbox" v-model="activeQuestion.showAsList"
+                    @change="showAsListChange()" />
+                <label for="cb-as-list"><span></span>{{ $t('QuestionnaireEditor.ShowAsList') }}</label>
             </div>
         </div>
 
         <div class="col-md-5 inline-inputs">
-            <div class="form-group checkbox checkbox-in-column" ng-show="activeQuestion.showAsList"
-                ng-class="{'has-error': !questionForm.showAsListThreshold.$valid}">
-                <label for="edit-question-count-for-list" ng-i18next="QuestionShowListLimit"></label>
+            <div class="form-group checkbox checkbox-in-column" v-show="activeQuestion.showAsList"
+                :class="{ 'has-error': !isValidShowAsListThreshold }">
+                <label for="edit-question-count-for-list">{{ $t('QuestionnaireEditor.QuestionShowListLimit') }}</label>
                 <input id="edit-question-count-for-list" type="number" step="1" maxlength="2" name="showAsListThreshold"
-                    min="1" max="50" ng-pattern="/^\d+$/" ng-model="activeQuestion.showAsListThreshold"
+                    min="1" max="50" v-pattern="/^\d+$/" v-model.number="activeQuestion.showAsListThreshold" v-number
                     class="form-control small-numeric-input wb-input">
-                <p class="help-block ng-cloak" ng-show="questionForm.showAsListThreshold.$error.pattern"
-                    ng-i18next="QuestionOnlyInts"></p>
-                <p class="help-block ng-cloak"
-                    ng-show="questionForm.showAsListThreshold.$error.max || questionForm.showAsListThreshold.$error.min"
-                    ng-i18next="QuestionOneToFiftyAllowed"></p>
+                <p class="help-block ng-cloak" v-show="!isValidNumberShowAsListThreshold">{{
+                    $t('QuestionnaireEditor.QuestionOnlyInts') }}</p>
+                <p class="help-block ng-cloak" v-show="!isValidMaxMin">{{
+                    $t('QuestionnaireEditor.QuestionOneToFiftyAllowed') }}</p>
             </div>
         </div>
     </div>
@@ -74,6 +75,8 @@
 <script>
 
 import Help from './../Help.vue'
+import { isInteger } from '../../../../helpers/number';
+import { find, isEmpty } from 'lodash'
 
 export default {
     name: 'CascadingComboBoxTemplate',
@@ -85,8 +88,55 @@ export default {
     },
     data() {
         return {
-
+            dirty: false,
         }
     },
+    computed: {
+        isValidNumberShowAsListThreshold() {
+            return this.activeQuestion.showAsListThreshold == null || this.activeQuestion.showAsListThreshold == '' || isInteger(this.activeQuestion.showAsListThreshold);
+        },
+        isValidMaxMin() {
+            if (this.activeQuestion.showAsListThreshold == null || this.activeQuestion.showAsListThreshold == '')
+                return true;
+
+            return this.activeQuestion.showAsListThreshold <= 50 && this.activeQuestion.showAsListThreshold >= 1;
+        },
+        isValidShowAsListThreshold() {
+            return this.isValidNumberShowAsListThreshold && this.isValidMaxMin;
+        },
+        isExistsCascadeFromQuestionId() {
+            return this.activeQuestion.cascadeFromQuestionId != null && this.activeQuestion.cascadeFromQuestionId != '';
+        },
+        valid() {
+            return this.isValidShowAsListThreshold && this.isExistsCascadeFromQuestionId;
+        },
+        isLinkedToEntityValid() {
+            return this.activeQuestion.linkedToEntity != null && this.activeQuestion.linkedToEntity != undefined;
+        },
+        cascadeFromQuestion() {
+            if (this.activeQuestion.cascadeFromQuestionId == null)
+                return {};
+
+            const sourceQuestion = this.activeQuestion.sourceOfSingleQuestions.find(
+                p => p.id == this.activeQuestion.cascadeFromQuestionId && p.isSectionPlaceHolder != true
+            );
+            return sourceQuestion != undefined ? sourceQuestion : {};
+        }
+    },
+    methods: {
+        setCascadeSource(itemId) {
+            this.activeQuestion.isCascade = !isEmpty(itemId);
+
+            if (itemId) {
+                this.activeQuestion.cascadeFromQuestionId = itemId;
+                //this.activeQuestion.cascadeFromQuestion = find(this.sourceOfSingleQuestions, { id: this.activeQuestion.cascadeFromQuestionId });
+                this.markFormAsChanged();
+            }
+        },
+
+        markFormAsChanged() {
+            this.dirty = trus;
+        },
+    }
 }
 </script>

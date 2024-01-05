@@ -60,8 +60,8 @@
                 <input id="cb-show-neighbours" type="checkbox" class="wb-checkbox"
                     v-model="activeQuestion.geometryOverlapDetection" />
                 <label for="cb-show-neighbours"><span></span>{{ $t('QuestionnaireEditor.GeometryOverlapDetection') }}
-                    <help link="HelpOverlapDetection" />
                 </label>
+                <help link="HelpOverlapDetection" />
             </div>
         </div>
     </div>

@@ -93,7 +93,7 @@
                     </button>
 
                     <ul class="dropdown-menu" role="menu">
-                        <li role="presentation" v-for="  categories   in   getCategoriesList()  ">
+                        <li role="presentation" v-for="categories in getCategoriesList()  ">
                             <a @click="setCategories(categories)" role="menuitem" tabindex="-1"
                                 class="linked-question-source" href="javascript:void(0);">
                                 <div>
@@ -121,14 +121,16 @@
     <p></p>
     <div class="row" v-if="activeQuestion.isLinked">
         <div class="col-xs-12">
-            <div class="form-group" ng-include="'linkTemplate.html'"
-                :class="{ 'has-error': !questionForm.linkedToEntity.$valid }"></div>
+            <LinkTemplate :activeQuestion="activeQuestion">
+            </LinkTemplate>
             <p></p>
         </div>
     </div>
     <div class="row">
         <div class="col-xs-12">
-            <ng-include src="'categorical-filter-expression'"></ng-include>
+            <!--ng-include src="'categorical-filter-expression'"></ng-include-->
+            <CategoricalFilterExpression :activeQuestion="activeQuestion">
+            </CategoricalFilterExpression>
         </div>
     </div>
     <div class="row table-holder">
@@ -157,6 +159,9 @@
 
 import Help from './../Help.vue'
 import OptionsEditorTemplate from './OptionsEditorTemplate.vue'
+import CategoricalFilterExpression from './CategoricalFilterExpression.vue'
+import LinkTemplate from './LinkTemplate.vue'
+
 import { categoricalMultiKinds } from '../../../../helpers/question'
 import { isInteger } from '../../../../helpers/number';
 
@@ -165,6 +170,8 @@ export default {
     components: {
         Help,
         OptionsEditorTemplate,
+        CategoricalFilterExpression,
+        LinkTemplate,
     },
     props: {
         activeQuestion: { type: Object, required: true }
@@ -177,7 +184,7 @@ export default {
     computed: {
         validMaxAllowedAnswers() {
             return this.activeQuestion.maxAllowedAnswers == null || this.activeQuestion.maxAllowedAnswers == '' || isInteger(this.activeQuestion.maxAllowedAnswers);
-        }
+        },
     },
     methods: {
         preperaToSave() {
@@ -204,6 +211,67 @@ export default {
             return this.activeQuestion.isLinkedToReusableCategories === true
                 ? this.$t('QuestionnaireEditor.ReusableCategories')
                 : this.$t('QuestionnaireEditor.UserDefinedCategories');
+        },
+
+        changeCategoricalKind(kind) {
+            var isFilteredCombobox = kind.value === 3;
+            var yesNoView = kind.value === 2;
+
+            if (isFilteredCombobox === this.activeQuestion.isFilteredCombobox &&
+                yesNoView === this.activeQuestion.yesNoView) return;
+
+            this.activeQuestion.isFilteredCombobox = isFilteredCombobox;
+            this.activeQuestion.yesNoView = yesNoView;
+
+            if (this.activeQuestion.isLinked)
+                this.activeQuestion.isLinked = !isFilteredCombobox && !yesNoView;
+
+            this.markFormAsChanged();
+        },
+
+        setCategories(categories) {
+            if (this.activeQuestion.categoriesId === categories.categoriesId) return;
+
+            this.activeQuestion.categoriesId = categories.categoriesId;
+            this.markFormAsChanged();
+        },
+
+        markFormAsChanged() {
+            this.dirty = true;
+        },
+
+        setIsReusableCategories() {
+            if (this.activeQuestion.isLinkedToReusableCategories === true) return;
+
+            this.activeQuestion.isLinked = false;
+            this.activeQuestion.isLinkedToReusableCategories = true;
+
+            this.markFormAsChanged();
+        },
+
+        setUserDefinedCategories() {
+            if (this.activeQuestion.isLinkedToReusableCategories === false) return;
+
+            this.activeQuestion.isLinked = false;
+            this.activeQuestion.categoriesId = null;
+            this.activeQuestion.isLinkedToReusableCategories = false;
+
+            this.markFormAsChanged();
+        },
+
+        setIsLinkedQuestion() {
+            if (this.activeQuestion.isLinked === true) return;
+
+            this.activeQuestion.isLinked = true;
+            this.activeQuestion.isCascade = false;
+            this.activeQuestion.isLinkedToReusableCategories = null;
+            this.activeQuestion.categoriesId = null;
+
+            this.markFormAsChanged();
+        },
+
+        getCategoriesList() {
+            return (this.questionnaire || {}).categories || [];
         },
     }
 

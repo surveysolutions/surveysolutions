@@ -119,9 +119,9 @@ export function validateText(value, isCascading) {
     for (var i = 0; i < options.length; i++) {
         const option = options[i].trim();
 
-        if (option == '') continue;
+        if (option == '' || option == '...') continue;
 
-        if (regex.test(option) === false && option != '...') {
+        if (regex.test(option) === false) {
             diff.push(`  ${i + 1}: ${options[i]}`);
         }
     }

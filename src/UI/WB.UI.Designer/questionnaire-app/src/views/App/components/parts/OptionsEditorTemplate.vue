@@ -98,6 +98,7 @@ export default {
                 }
             },
             MAX_OPTIONS_COUNT: 200,
+            dirty: false,
         }
     },
     computed: {
@@ -182,7 +183,7 @@ export default {
         },
 
         markFormAsChanged() {
-            // TODO
+            this.dirty = true;
         },
 
         showAddClassificationModal() {

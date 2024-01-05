@@ -129,19 +129,24 @@
     </div>
     <div class="row" v-if="activeQuestion.isLinked">
         <div class="col-xs-12">
-            <div class="form-group" ng-include="'linkTemplate.html'"
-                :class="{ 'has-error': !questionForm.linkedToEntity.$valid }"></div>
+            <LinkTemplate :activeQuestion="activeQuestion">
+            </LinkTemplate>
             <p></p>
         </div>
     </div>
     <div class="row">
         <div class="col-xs-12">
-            <ng-include src="'categorical-filter-expression'"></ng-include>
+            <!--ng-include src="'categorical-filter-expression'"></ng-include-->
+            <CategoricalFilterExpression :activeQuestion="activeQuestion">
+            </CategoricalFilterExpression>
         </div>
     </div>
     <div class="row" v-if="activeQuestion.isCascade">
         <div class="col-xs-12">
-            <div class="form-group" ng-include="'views/question-details/CascadingComboBox-Template.html'"></div>
+            <div class="form-group">
+                <CascadingComboBoxTemplate :activeQuestion="activeQuestion">
+                </CascadingComboBoxTemplate>
+            </div>
             <p></p>
         </div>
     </div>
@@ -160,12 +165,18 @@
 
 import Help from './../Help.vue'
 import OptionsEditorTemplate from './OptionsEditorTemplate.vue'
+import CategoricalFilterExpression from './CategoricalFilterExpression.vue'
+import CascadingComboBoxTemplate from './CascadingComboBoxTemplate.vue'
+import LinkTemplate from './LinkTemplate.vue'
 
 export default {
     name: 'SingleOptionQuestion',
     components: {
         Help,
         OptionsEditorTemplate,
+        CategoricalFilterExpression,
+        CascadingComboBoxTemplate,
+        LinkTemplate,
     },
     props: {
         activeQuestion: { type: Object, required: true }
@@ -227,7 +238,7 @@ export default {
         },
 
         markFormAsChanged() {
-            this.dirty = trus;
+            this.dirty = true;
         },
 
         setIsReusableCategories() {
@@ -245,6 +256,17 @@ export default {
             this.activeQuestion.isLinked = false;
             this.activeQuestion.categoriesId = null;
             this.activeQuestion.isLinkedToReusableCategories = false;
+
+            this.markFormAsChanged();
+        },
+
+        setIsLinkedQuestion() {
+            if (this.activeQuestion.isLinked === true) return;
+
+            this.activeQuestion.isLinked = true;
+            this.activeQuestion.isCascade = false;
+            this.activeQuestion.isLinkedToReusableCategories = null;
+            this.activeQuestion.categoriesId = null;
 
             this.markFormAsChanged();
         },

@@ -15,16 +15,16 @@
                     <div class="btn-group type-container-dropdown">
                         <button id="questionTypeBtn" class="btn btn-default form-control dropdown-toggle" type="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="icon" :class="[answerTypeClass[activeQuestion.type]]"></i>
+                            <i class="icon" :class="[getAnswerTypeClass(activeQuestion.type)]"></i>
                             <span class="vertical-line"></span>
-                            {{ activeQuestion.type }}
+                            {{ activeQuestionType }}
                             <span class="dropdown-arrow"></span>
                         </button>
 
                         <ul class="dropdown-menu " role="menu" aria-labelledby="questionTypeBtn">
                             <li role="presentation" v-for="qtype in activeQuestion.questionTypeOptions">
                                 <a role="menuitem" tabindex="-1" @click="setQuestionType(qtype.value)">
-                                    <i class="icon" :class="[answerTypeClass[qtype.value]]"></i>
+                                    <i class="icon" :class="[getAnswerTypeClass(qtype.value)]"></i>
                                     {{ qtype.text }}
                                 </a>
                             </li>
@@ -64,14 +64,13 @@
                         v-model="activeQuestion.title"></div-->
                     <ExpressionEditor v-model="activeQuestion.title"></ExpressionEditor>
                 </div>
-                <div class="question-type-specific-block"
-                    ng-include="'views/question-details/' + activeQuestion.type + '-template.html'">
+                <div class="question-type-specific-block" v-if="activeQuestion.type != undefined
+                    && (activeQuestion.type != 'GpsCoordinates'
+                        && activeQuestion.type != 'QRBarcode'
+                        && activeQuestion.type != 'Audio')">
 
                     <component ref="questionSpecific" :key="activeQuestion.id" :is="questionTemplate(activeQuestion.type)"
-                        :activeQuestion="activeQuestion" v-if="activeQuestion.type != undefined
-                            && (activeQuestion.type != 'GpsCoordinates'
-                                && activeQuestion.type != 'QRBarcode'
-                                && activeQuestion.type != 'Audio')">
+                        :activeQuestion="activeQuestion">
                     </component>
 
                 </div>
@@ -351,6 +350,13 @@ export default {
         isCommentsBlockVisible() {
             return this.commentsStore.getIsCommentsBlockVisible;
         },
+
+        activeQuestionType() {
+            const option = this.activeQuestion.questionTypeOptions.find(
+                p => p.value == this.activeQuestion.type
+            );
+            return option != null ? option.text : null;
+        }
     },
     methods: {
         async fetch() {
@@ -422,8 +428,8 @@ export default {
 
             return false;
         },
-        answerTypeClass(type) {
-            return '';
+        getAnswerTypeClass(type) {
+            return answerTypeClass[type];
         },
         getQuestionScopes() {
             if (!this.activeQuestion)
@@ -485,7 +491,7 @@ export default {
             }
 
             if (type !== "SingleOption" && type !== "MultyOption") {
-                this.setLinkSource(null, null, null);
+                this.activeQuestion.isLinked = !isEmpty(null);
             }
 
             if (type === 'MultyOption' || type === "SingleOption") {
@@ -527,36 +533,7 @@ export default {
             this.setDirty();
         },
 
-        setLinkSource(itemId, linkedFilterExpression, optionsFilterExpression) {
-            this.activeQuestion.isLinked = !isEmpty(itemId);
 
-            if (itemId) {
-                this.activeQuestion.linkedToEntityId = itemId;
-                this.activeQuestion.linkedToEntity = find(this.sourceOfLinkedEntities, { id: this.activeQuestion.linkedToEntityId });
-
-
-                var filter = linkedFilterExpression || optionsFilterExpression;
-                if (this.activeQuestion.linkedToEntity !== undefined && this.activeQuestion.linkedToEntity.type === 'textlist') {
-                    this.activeQuestion.linkedFilterExpression = null;
-                    this.activeQuestion.optionsFilterExpression = filter;
-                } else {
-                    this.activeQuestion.linkedFilterExpression = filter;
-                    this.activeQuestion.optionsFilterExpression = null;
-                }
-
-                this.setDirty();
-            }
-        },
-
-        setCascadeSource(itemId) {
-            this.activeQuestion.isCascade = !_.isEmpty(itemId);
-
-            if (itemId) {
-                this.activeQuestion.cascadeFromQuestionId = itemId;
-                this.activeQuestion.cascadeFromQuestion = find(this.sourceOfSingleQuestions, { id: this.activeQuestion.cascadeFromQuestionId });
-                this.setDirty();
-            }
-        },
 
         removeValidationCondition(index) {
             this.activeQuestion.validationConditions.splice(index, 1);
