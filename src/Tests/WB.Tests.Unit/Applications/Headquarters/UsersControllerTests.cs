@@ -34,10 +34,12 @@ namespace WB.Tests.Unit.Applications.Headquarters
         public void when_UpdatePassword_by_admin_should_set_flag_PasswordChangeRequired()
         {
             var userId = Guid.NewGuid();
+            var authorizedUserId = Guid.NewGuid();
 
-            var user = Mock.Of<HqUser>();
+            var user = Mock.Of<HqUser>(u => u.Id == userId);
             var authorizedUser = Mock.Of<IAuthorizedUser>(u =>
-                u.IsAdministrator == true);
+                u.IsAdministrator == true && u.Id == authorizedUserId && u.UserName == "admin");
+            
             var userManager = new Mock<IUserStore<HqUser>>();
             userManager.Setup(u => u.FindByIdAsync(userId.FormatGuid(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(user));
