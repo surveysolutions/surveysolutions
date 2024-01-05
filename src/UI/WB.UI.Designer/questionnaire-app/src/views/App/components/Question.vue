@@ -70,7 +70,7 @@
                         && activeQuestion.type != 'Audio')">
 
                     <component ref="questionSpecific" :key="activeQuestion.id" :is="questionTemplate(activeQuestion.type)"
-                        :activeQuestion="activeQuestion">
+                        :activeQuestion="activeQuestion" :questionnaireId="questionnaireId">
                     </component>
 
                 </div>

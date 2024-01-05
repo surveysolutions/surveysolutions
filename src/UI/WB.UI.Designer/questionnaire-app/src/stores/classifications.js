@@ -2,16 +2,17 @@ import { defineStore } from 'pinia';
 import { each } from 'lodash';
 import { get, post, patch, del } from '../services/apiService';
 import { i18n } from '../plugins/localization';
+import { commandCall } from '../services/commandService';
 
 const baseUrl = '/api/';
 
 const allClassificationGroups = {
     id: null,
-    title: i18n.$t('QuestionnaireEditor.AllClassifications')
+    title: i18n.t('QuestionnaireEditor.AllClassifications')
 };
 const myClassificationGroups = {
     id: null,
-    title: i18n.$t('QuestionnaireEditor.MyClassifications'),
+    title: i18n.t('QuestionnaireEditor.MyClassifications'),
     privateOnly: true
 };
 
@@ -30,23 +31,21 @@ export const useClassificationsStore = defineStore('classifications', {
     actions: {
         async loadClassificationGroups() {
             const response = await get(baseUrl + 'classifications/groups');
-            this.groups = response.data;
+            this.groups = response;
             this.groups.splice(0, 0, myClassificationGroups);
             this.groups.splice(0, 0, allClassificationGroups);
         },
 
         async loadCategories(classification) {
-            if (classification.categories.length > 0)
-                return new Promise(function(resolve, reject) {
-                    resolve();
-                });
-            const response = get(
+            if (classification.categories.length > 0) return;
+
+            const response = await get(
                 baseUrl +
                     'classifications/classification/' +
                     classification.id +
                     '/categories'
             );
-            classification.categories = response.data;
+            classification.categories = response;
         },
 
         async search(searchText) {
@@ -68,6 +67,19 @@ export const useClassificationsStore = defineStore('classifications', {
             this.classifications1 = classifications.slice(0, half);
             this.classifications2 = classifications.slice(half);
             this.totalResults = data.total;
+        },
+
+        replaceOptionsWithClassification(
+            questionnaireId,
+            questionId,
+            classificationId
+        ) {
+            var command = {
+                questionnaireId: questionnaireId,
+                questionId: questionId,
+                classificationId: classificationId
+            };
+            return commandCall('ReplaceOptionsWithClassification', command);
         }
     }
 });

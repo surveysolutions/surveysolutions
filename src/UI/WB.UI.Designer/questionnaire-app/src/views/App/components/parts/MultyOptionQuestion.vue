@@ -116,6 +116,8 @@
                 $t('QuestionnaireEditor.QuestionAddClassification') }}
             </a>
             <p></p>
+            <add-classification ref="classification" :activeQuestion='activeQuestion' :questionnaireId="questionnaireId">
+            </add-classification>
         </div>
     </div>
     <p></p>
@@ -161,6 +163,7 @@ import Help from './../Help.vue'
 import OptionsEditorTemplate from './OptionsEditorTemplate.vue'
 import CategoricalFilterExpression from './CategoricalFilterExpression.vue'
 import LinkTemplate from './LinkTemplate.vue'
+import AddClassification from './AddClassification.vue';
 
 import { categoricalMultiKinds } from '../../../../helpers/question'
 import { isInteger } from '../../../../helpers/number';
@@ -172,8 +175,10 @@ export default {
         OptionsEditorTemplate,
         CategoricalFilterExpression,
         LinkTemplate,
+        AddClassification,
     },
     props: {
+        questionnaireId: { type: String, required: true },
         activeQuestion: { type: Object, required: true }
     },
     data() {
@@ -272,6 +277,10 @@ export default {
 
         getCategoriesList() {
             return (this.questionnaire || {}).categories || [];
+        },
+
+        showAddClassificationModal() {
+            this.$refs.classification.openDialog();
         },
     }
 

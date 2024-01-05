@@ -39,7 +39,7 @@
 
 <script>
 import Help from './../Help.vue'
-import { isNumber, isInteger } from '../../../../helpers/number';
+import { isInteger } from '../../../../helpers/number';
 import OptionsEditorTemplate from './OptionsEditorTemplate.vue'
 
 export default {

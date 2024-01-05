@@ -125,6 +125,8 @@
                 $t('QuestionnaireEditor.QuestionAddClassification') }}
             </a>
             <p></p>
+            <add-classification ref="classification" :activeQuestion='activeQuestion' :questionnaireId="questionnaireId">
+            </add-classification>
         </div>
     </div>
     <div class="row" v-if="activeQuestion.isLinked">
@@ -168,6 +170,7 @@ import OptionsEditorTemplate from './OptionsEditorTemplate.vue'
 import CategoricalFilterExpression from './CategoricalFilterExpression.vue'
 import CascadingComboBoxTemplate from './CascadingComboBoxTemplate.vue'
 import LinkTemplate from './LinkTemplate.vue'
+import AddClassification from './AddClassification.vue';
 
 export default {
     name: 'SingleOptionQuestion',
@@ -177,8 +180,10 @@ export default {
         CategoricalFilterExpression,
         CascadingComboBoxTemplate,
         LinkTemplate,
+        AddClassification,
     },
     props: {
+        questionnaireId: { type: String, required: true },
         activeQuestion: { type: Object, required: true }
     },
     data() {
@@ -273,6 +278,10 @@ export default {
 
         getCategoriesList() {
             return (this.questionnaire || {}).categories || [];
+        },
+
+        showAddClassificationModal() {
+            this.$refs.classification.openDialog();
         },
     }
 }

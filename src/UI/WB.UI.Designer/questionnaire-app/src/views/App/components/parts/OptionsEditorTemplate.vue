@@ -69,8 +69,7 @@
             </div>
         </div>
     </div>
-    <add-classification :isReadOnlyForUser='questionnaire.isReadOnlyForUser || currentChapter.isReadOnly || false'
-        :hasOptions='activeQuestion.optionsCount > 0'>
+    <add-classification ref="classification" :activeQuestion='activeQuestion' :questionnaireId="questionnaireId">
     </add-classification>
 </template>
 
@@ -90,6 +89,7 @@ export default {
         AddClassification,
     },
     props: {
+        questionnaireId: { type: String, required: true },
         activeQuestion: { type: Object, required: true }
     },
     data() {
@@ -221,87 +221,7 @@ export default {
         },
 
         showAddClassificationModal() {
-            var showModal = function () {
-                var modalInstance = $uibModal.open({
-                    templateUrl: 'views/add-classification.html',
-                    backdrop: false,
-                    windowClass: "add-classification-modal dragAndDrop",
-                    controller: 'addClassificationCtrl',
-                    resolve: {
-                        isReadOnlyForUser: this.questionnaire.isReadOnlyForUser || this.currentChapter.isReadOnly || false,
-                        hasOptions: this.activeQuestion.optionsCount > 0
-                    }
-                });
-
-                modalInstance.result.then(function (selectedClassification) {
-                    if (_.isNull(selectedClassification) || _.isUndefined(selectedClassification))
-                        return;
-
-                    var questionTitle = this.activeQuestion.title || $i18next.t('UntitledQuestion');
-                    var replaceOptions = function () {
-
-                        var optionsToInsertCount = selectedClassification.categoriesCount;
-
-                        if (optionsToInsertCount > this.MAX_OPTIONS_COUNT) {
-                            if (this.activeQuestion.type !== "SingleOption") {
-
-                                var modalInstance = confirmService.open(
-                                    utilityService.willBeTakenOnlyFirstOptionsConfirmationPopup(questionTitle,
-                                        this.MAX_OPTIONS_COUNT));
-
-                                modalInstance.result.then(function (confirmResult) {
-                                    if (confirmResult === 'ok') {
-                                        this.activeQuestion.options = selectedClassification.categories;
-                                        this.activeQuestion.optionsCount = this.activeQuestion.options.length;
-                                        markFormAsChanged();
-                                    }
-                                });
-                            } else {
-                                commandService.replaceOptionsWithClassification(
-                                    $state.params.questionnaireId,
-                                    this.activeQuestion.itemId,
-                                    selectedClassification.id);
-
-                                this.activeQuestion.isFilteredCombobox = true;
-                                this.activeQuestion.options = selectedClassification.categories;
-                                this.activeQuestion.optionsCount = this.activeQuestion.options.length;
-                                markFormAsChanged();
-                            }
-                        } else {
-                            if (this.activeQuestion.isFilteredCombobox) {
-                                commandService.replaceOptionsWithClassification(
-                                    $state.params.questionnaireId,
-                                    this.activeQuestion.itemId,
-                                    selectedClassification.id);
-                            }
-                            this.activeQuestion.options = selectedClassification.categories;
-                            this.activeQuestion.optionsCount = selectedClassification.categories.length;
-                            markFormAsChanged();
-                        }
-                    };
-
-                    if (this.activeQuestion.options.length > 0) {
-                        var modalInstance = confirmService.open(utilityService.replaceOptionsConfirmationPopup(questionTitle));
-                        modalInstance.result.then(function (confirmResult) {
-                            if (confirmResult === 'ok') {
-                                replaceOptions();
-                            }
-                        });
-                    } else {
-                        replaceOptions();
-                    }
-                },
-                    function () {
-
-                    });
-            };
-
-
-            if (this.questionForm.$dirty) {
-                this.saveQuestion(showModal);
-            } else {
-                showModal();
-            }
+            this.$refs.classification.openDialog();
         },
     }
 }
