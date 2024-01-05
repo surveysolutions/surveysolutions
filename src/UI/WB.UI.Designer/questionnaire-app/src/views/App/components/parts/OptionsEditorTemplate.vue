@@ -69,6 +69,9 @@
             </div>
         </div>
     </div>
+    <add-classification :isReadOnlyForUser='questionnaire.isReadOnlyForUser || currentChapter.isReadOnly || false'
+        :hasOptions='activeQuestion.optionsCount > 0'>
+    </add-classification>
 </template>
 
 <script>
@@ -78,11 +81,13 @@ import { newGuid } from '../../../../helpers/guid';
 import { convertToText, validateText, convertToTable } from '../../../OptionsEditor/utils/tableToString';
 import { isInteger } from '../../../../helpers/number';
 import Help from '../Help.vue'
+import AddClassification from './AddClassification.vue';
 
 export default {
     name: 'OptionsEditorTemplate',
     components: {
         Help,
+        AddClassification,
     },
     props: {
         activeQuestion: { type: Object, required: true }
@@ -186,9 +191,37 @@ export default {
             this.dirty = true;
         },
 
+        onKeyPressInOptions(keyEvent) {
+            if (keyEvent && keyEvent.which === 13) {
+                keyEvent.preventDefault();
+
+                if (this.activeQuestion.options.length >= this.MAX_OPTIONS_COUNT)
+                    return;
+
+                this.addOption();
+            }
+        },
+
+        onKeyPressIsNumber(keyEvent) {
+            const charCode = (keyEvent.which) ? keyEvent.which : keyEvent.keyCode;
+            if ((charCode > 31 && (charCode < 48 || charCode > 57))
+                && charCode !== 13 // enter
+                && charCode !== 45 // -
+                && charCode !== 43 // +
+            ) {
+                keyEvent.preventDefault();;
+            } else {
+                this.onKeyPressInOptions(keyEvent)
+                return true;
+            }
+        },
+
+        isInteger(value) {
+            return isInteger(value);
+        },
+
         showAddClassificationModal() {
-            // TODO
-            /*var showModal = function () {
+            var showModal = function () {
                 var modalInstance = $uibModal.open({
                     templateUrl: 'views/add-classification.html',
                     backdrop: false,
@@ -268,38 +301,8 @@ export default {
                 this.saveQuestion(showModal);
             } else {
                 showModal();
-            }*/
-        },
-
-        onKeyPressInOptions(keyEvent) {
-            if (keyEvent && keyEvent.which === 13) {
-                keyEvent.preventDefault();
-
-                if (this.activeQuestion.options.length >= this.MAX_OPTIONS_COUNT)
-                    return;
-
-                this.addOption();
             }
         },
-
-        onKeyPressIsNumber(keyEvent) {
-            const charCode = (keyEvent.which) ? keyEvent.which : keyEvent.keyCode;
-            if ((charCode > 31 && (charCode < 48 || charCode > 57))
-                && charCode !== 13 // enter
-                && charCode !== 45 // -
-                && charCode !== 43 // +
-            ) {
-                keyEvent.preventDefault();;
-            } else {
-                this.onKeyPressInOptions(keyEvent)
-                return true;
-            }
-        },
-
-        isInteger(value) {
-            return isInteger(value);
-        },
-
     }
 }
 </script>
