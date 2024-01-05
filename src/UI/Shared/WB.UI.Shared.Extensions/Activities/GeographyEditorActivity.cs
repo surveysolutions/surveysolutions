@@ -61,15 +61,5 @@ namespace WB.UI.Shared.Extensions.Activities
             
             return base.OnOptionsItemSelected(item);
         }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                this.ViewModel.OnAreaEditCompleted = null;
-            }
-
-            base.Dispose(disposing);
-        }
     }
 }

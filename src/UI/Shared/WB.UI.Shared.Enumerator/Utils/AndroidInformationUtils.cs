@@ -31,7 +31,7 @@ namespace WB.UI.Shared.Enumerator.Utils
             {
                 string first = item.BaseActivity.ShortClassName.Substring((item.BaseActivity.ShortClassName.LastIndexOf('.') + 1), item.BaseActivity.ShortClassName.Length - (item.BaseActivity.ShortClassName.LastIndexOf('.') + 1));
                 string current = item.TopActivity.ShortClassName.Substring((item.TopActivity.ShortClassName.LastIndexOf('.') + 1), item.TopActivity.ShortClassName.Length - (item.TopActivity.ShortClassName.LastIndexOf('.') + 1));
-                result += first + " - " + current + $". Task Id: {item.TaskId}. Activities: {item.NumActivities}" + "\n";
+                result += $"Task Id: {item.TaskId}. [" + first + " - " + current + $"]. Activities: {item.NumActivities}" + "\n";
             }
 
             return result;

@@ -1,13 +1,8 @@
-using Android.App;
 using Android.Content;
-using Android.OS;
 using Android.Views;
-using AndroidX.AppCompat.Widget;
-using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services.MapSynchronization;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
-using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Services;
 using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
@@ -22,6 +17,8 @@ namespace WB.UI.Interviewer.Activities
         Exported = false)]
     public class MapsActivity : BaseActivity<MapsViewModel>, ISyncBgService<MapSyncProgressStatus>, ISyncServiceHost<MapDownloadBackgroundService>
     {
+        private SyncServiceConnection<MapDownloadBackgroundService> connection;
+        private bool isBound;
         public ServiceBinder<MapDownloadBackgroundService> Binder { get; set; }
 
         protected override int ViewResourceId => Resource.Layout.maps;
@@ -35,7 +32,7 @@ namespace WB.UI.Interviewer.Activities
             
             this.SupportActionBar.SetDisplayHomeAsUpEnabled(true);
         }
-        
+
         public override bool OnSupportNavigateUp() {
             OnBackPressedDispatcher.OnBackPressed();
             return true;
@@ -50,7 +47,20 @@ namespace WB.UI.Interviewer.Activities
         protected override void OnStart()
         {
             base.OnStart();
-            this.BindService(new Intent(this, typeof(MapDownloadBackgroundService)), new SyncServiceConnection<MapDownloadBackgroundService>(this), Bind.AutoCreate);
+            connection = new SyncServiceConnection<MapDownloadBackgroundService>(this);
+            this.BindService(new Intent(this, typeof(MapDownloadBackgroundService)), connection, Bind.AutoCreate);
+            isBound = true;
+        }
+
+        protected override void OnStop()
+        {
+            base.OnStop();
+            
+            if(!isBound) return;
+            
+            this.UnbindService(connection);
+            isBound = false;
+            connection = null;
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)

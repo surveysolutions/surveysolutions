@@ -12,8 +12,7 @@ namespace WB.UI.Interviewer.Activities
 {
     [Activity(WindowSoftInputMode = SoftInput.StateHidden, 
         Theme = "@style/GrayAppTheme",
-        Exported = false,
-        ExcludeFromRecents = true)]
+        Exported = false)]
     public class LoginActivity : BaseActivity<LoginViewModel>
     {
         protected override bool BackButtonCustomAction => true;

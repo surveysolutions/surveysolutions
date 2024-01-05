@@ -1,5 +1,4 @@
-﻿using Android.App;
-using Android.Content;
+﻿using Android.Content;
 using Android.OS;
 
 namespace WB.UI.Shared.Enumerator.Services
@@ -28,6 +27,7 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public void OnServiceDisconnected(ComponentName name)
         {
+            syncServiceHost.Binder = null;
         }
     }
 }

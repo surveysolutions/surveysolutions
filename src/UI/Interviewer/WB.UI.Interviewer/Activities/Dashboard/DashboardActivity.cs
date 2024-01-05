@@ -48,7 +48,12 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             base.OnPause();
             this.RemoveFragments();
         }
-        
+
+        public override void Finish()
+        {
+            base.Finish();
+        }
+
         protected override void OnResume()
         {
             base.OnResume();
@@ -195,8 +200,17 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         protected override void OnStart()
         {
             base.OnStart();
+            connection = new SyncServiceConnection<SyncBgService>(this);
             this.BindService(new Intent(this, typeof(SyncBgService)),
-                new SyncServiceConnection<SyncBgService>(this), Bind.AutoCreate);
+                connection, Bind.AutoCreate);
+        }
+
+        protected override void OnStop()
+        {
+            base.OnStop();
+            UnbindService(connection);
+            connection = null;
+
         }
 
         private void ViewPager_PageSelected(object sender, ViewPager.PageSelectedEventArgs e)
@@ -226,6 +240,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         }
 
         private IMenu dashboardMenu;
+        private SyncServiceConnection<SyncBgService> connection;
 
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
@@ -327,6 +342,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                     break;
                 case Resource.Id.menu_signout:
                     this.ViewModel.SignOutCommand.Execute();
+                    Finish();
                     break;
                 case Resource.Id.menu_search:
                     this.ViewModel.ShowSearchCommand.Execute();

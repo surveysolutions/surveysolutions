@@ -187,8 +187,8 @@ namespace WB.UI.Interviewer
             var presenter = new MvxAndroidViewPresenterWithExtra(AndroidViewAssemblies);
             
             presenter.RegisterViewModelForClearBackStack<DashboardViewModel>();
-            presenter.RegisterViewModelForClearBackStack<EnumeratorLoginViewModel>();
-            presenter.RegisterViewModelForClearBackStack<EnumeratorFinishInstallationViewModel>();
+            //presenter.RegisterViewModelForClearBackStack<EnumeratorLoginViewModel>();
+            //presenter.RegisterViewModelForClearBackStack<EnumeratorFinishInstallationViewModel>();
             
             return presenter;
         }

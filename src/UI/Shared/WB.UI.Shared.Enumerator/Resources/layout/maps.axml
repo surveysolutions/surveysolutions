@@ -73,9 +73,7 @@
                               local:MvxBind="Visible Not(GreaterThan(Maps.Count, 0));">
 
                     <TextView style="@style/Dashboard_NoInterviewsText"
-                              local:MvxBind="Text Localization('Maps_NoMapsText')" />
-
-                    
+                              local:MvxBind="Text Localization('Maps_NoMapsText')" />                    
                 </LinearLayout>
                 <MvxRecyclerView
                         android:layout_width="match_parent"

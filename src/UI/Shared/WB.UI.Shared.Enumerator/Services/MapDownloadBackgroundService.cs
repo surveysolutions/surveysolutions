@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading;
-using Android.App;
-using Android.Content;
+﻿using Android.Content;
 using Android.OS;
 using MvvmCross;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -17,7 +14,7 @@ namespace WB.UI.Shared.Enumerator.Services
         private ServiceBinder<MapDownloadBackgroundService> binder;
         private Thread thread;
         private bool isSyncRunning;
-
+        
         public void SyncMaps()
         {
              if (!this.isSyncRunning)
@@ -60,6 +57,12 @@ namespace WB.UI.Shared.Enumerator.Services
         {
             this.binder = new ServiceBinder<MapDownloadBackgroundService>(this);
             return this.binder;
+        }        
+        
+        public override void OnDestroy()
+        {
+            this.binder = null;
+            base.OnDestroy();
         }
     }
 }

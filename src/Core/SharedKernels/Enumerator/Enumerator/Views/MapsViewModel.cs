@@ -41,14 +41,6 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             this.Synchronization.Init();
         }
 
-        public IMvxCommand SignOutCommand => new MvxAsyncCommand(this.SignOutAsync);
-
-        private async Task SignOutAsync()
-        {
-            this.Synchronization.CancelSynchronizationCommand.Execute();
-            await this.ViewModelNavigationService.SignOutAndNavigateToLoginAsync();
-        }
-
         private MvxObservableCollection<MapItem> uiItems = new MvxObservableCollection<MapItem>();
         public MvxObservableCollection<MapItem> Maps
         {
@@ -67,7 +59,6 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         }
 
         public string MapsTitle => EnumeratorUIResources.Maps_Title;
-
         
         private async Task RunMapSyncAsync()
         {
@@ -107,7 +98,6 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         {
             UpdateUiItems();
         }
-
         
         protected void UpdateUiItems() => Task.Run(() =>
         {

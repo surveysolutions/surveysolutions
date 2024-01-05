@@ -59,7 +59,6 @@ namespace WB.UI.Shared.Enumerator.Services
 
                 this.isSyncRunning = true;
                 this.thread.Start();
-
             }
         }
 
@@ -69,6 +68,11 @@ namespace WB.UI.Shared.Enumerator.Services
         {
             this.binder = new ServiceBinder<SyncBgService>(this);
             return this.binder;
+        }
+        public override void OnDestroy()
+        {
+            this.binder = null;
+            base.OnDestroy();
         }
     }
 }

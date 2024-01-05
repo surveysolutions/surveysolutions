@@ -11,6 +11,11 @@ namespace WB.UI.Interviewer.Activities
         Exported = false)]
     public class DiagnosticsActivity : BaseActivity<DiagnosticsViewModel>
     {
+        public override void Finish()
+        {
+            base.Finish();
+        }
+
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
