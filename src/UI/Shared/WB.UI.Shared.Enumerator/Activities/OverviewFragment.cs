@@ -28,6 +28,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             this.recyclerView = view.FindViewById<MvxRecyclerView>(Resource.Id.overview_recycler);
 
             this.recyclerView.SetLayoutManager(new LinearLayoutManager(this.Context));
+            this.recyclerView.SetItemAnimator(null);
             this.recyclerView.Adapter.ItemClick = new MvxAsyncCommand<OverviewNode>(async node =>
             {
                 var viewModelNavigationService = Mvx.IoCProvider.Resolve<IViewModelNavigationService>();

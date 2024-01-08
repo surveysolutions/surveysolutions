@@ -12,7 +12,8 @@ namespace WB.UI.Supervisor.Activities
         WindowSoftInputMode = SoftInput.StateVisible,
         HardwareAccelerated = true,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize,
-        Exported = false)]
+        Exported = false,
+        NoHistory = true)]
     public class SupervisorSearchActivity : SearchActivity
     {
         protected override void OnCreate(Bundle bundle)

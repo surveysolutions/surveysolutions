@@ -43,7 +43,12 @@ namespace WB.UI.Shared.Enumerator.Utils
             var result = string.Empty;
             foreach (var peer in peers)
             {
-                result += $"{peer.Type} ({peer.Count})\n";
+                var peerLine = $"{peer.Type} ({peer.Count})";
+                if (peer.Type.EndsWith("activity", StringComparison.OrdinalIgnoreCase))
+                    peerLine = "\n" + peerLine + "\n";
+                    
+                result += $"{peerLine}\n";
+                
                 /*foreach (var instance in peer.Instances)
                 {
                     result += $"    {instance}\n";

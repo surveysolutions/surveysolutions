@@ -56,12 +56,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         protected string InterviewId;
 
-        protected override void ReloadFromBundle(IMvxBundle state)
+        protected override void ReloadFromBundle(IMvxBundle bundle)
         {
-            base.ReloadFromBundle(state);
-            if (state.Data.ContainsKey("interviewId"))
+            base.ReloadFromBundle(bundle);
+            if (bundle.Data.ContainsKey("interviewId"))
             {
-                this.InterviewId = state.Data["interviewId"];
+                this.InterviewId = bundle.Data["interviewId"];
             }
         }
 

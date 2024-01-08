@@ -17,6 +17,15 @@ namespace WB.UI.Interviewer.Activities
         Exported = false)]
     public class MapsActivity : BaseActivity<MapsViewModel>, ISyncBgService<MapSyncProgressStatus>, ISyncServiceHost<MapDownloadBackgroundService>
     {
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                Binder?.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
         private SyncServiceConnection<MapDownloadBackgroundService> connection;
         private bool isBound;
         public ServiceBinder<MapDownloadBackgroundService> Binder { get; set; }
@@ -82,5 +91,7 @@ namespace WB.UI.Interviewer.Activities
         public void StartSync() => this.Binder.GetService().SyncMaps();
 
         public MapSyncProgressStatus CurrentProgress => this.Binder.GetService().CurrentProgress;
+        
+        
     }
 }

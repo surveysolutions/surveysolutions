@@ -185,11 +185,7 @@ namespace WB.UI.Interviewer
         protected override IMvxAndroidViewPresenter CreateViewPresenter()
         {
             var presenter = new MvxAndroidViewPresenterWithExtra(AndroidViewAssemblies);
-            
-            presenter.RegisterViewModelForClearBackStack<DashboardViewModel>();
-            //presenter.RegisterViewModelForClearBackStack<EnumeratorLoginViewModel>();
-            //presenter.RegisterViewModelForClearBackStack<EnumeratorFinishInstallationViewModel>();
-            
+            //presenter.RegisterViewModelForClearBackStack<DashboardViewModel>();  
             return presenter;
         }
 

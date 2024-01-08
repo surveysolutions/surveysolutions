@@ -29,7 +29,7 @@ namespace WB.UI.Shared.Enumerator.Activities
 
             this.layoutManager = new LinearLayoutManager(this.Context);
             this.recyclerView.SetLayoutManager(this.layoutManager);
-            recyclerView?.SetItemAnimator(null);
+            recyclerView.SetItemAnimator(null);
 
             this.adapter = new InterviewEntityAdapter((IMvxAndroidBindingContext)this.BindingContext);
             //this.adapter.HasStableIds = true;

@@ -19,6 +19,17 @@ namespace WB.UI.Shared.Enumerator.Activities
     public abstract class BaseInterviewActivity<TViewModel> : SingleInterviewActivity<TViewModel>
         where TViewModel : BaseInterviewViewModel
     {
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                onNavigationSubscription?.Dispose();
+                onDrawerOpenedSubscription?.Dispose();
+            }
+
+            base.Dispose(disposing);
+        }
+
         private ActionBarDrawerToggle drawerToggle;
         private DrawerLayout drawerLayout;
         private MvxSubscriptionToken sectionChangeSubscriptionToken;

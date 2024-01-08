@@ -10,6 +10,11 @@ namespace WB.UI.Shared.Enumerator.Activities
     {
         protected override int ViewResourceId => Resource.Layout.search;
 
+        public override bool OnSupportNavigateUp() {
+            OnBackPressedDispatcher.OnBackPressed();
+            return true;
+        }
+        
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
@@ -17,6 +22,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             var recyclerView = this.FindViewById<MvxRecyclerView>(Resource.Id.dashboard_tab_recycler);
             recyclerView.HasFixedSize = true;
             recyclerView.Adapter = new RecyclerViewAdapter((IMvxAndroidBindingContext)base.BindingContext);
+            recyclerView.SetItemAnimator(null);
         }
     }
 }

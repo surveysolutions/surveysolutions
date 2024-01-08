@@ -1,3 +1,4 @@
+using Android.Animation;
 using Android.Views;
 using AndroidX.VectorDrawable.Graphics.Drawable;
 using MvvmCross;
@@ -16,17 +17,33 @@ namespace WB.UI.Shared.Enumerator.Activities
     [MvxActivityPresentation]
     public abstract class BaseActivity<TViewModel> : MvxActivity<TViewModel> where TViewModel : class, IMvxViewModel
     {
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                GlobalRegistry.Remove(this.activityId);
+            }
+
+            base.Dispose(disposing);
+        }
+
+        private readonly Guid activityId = Guid.NewGuid();
         protected abstract int ViewResourceId { get; }
         private Logger log;
         private OnBackPressedCallbackWrapper backPressedCallbackWrapper;
 
+        private static Dictionary<Guid, string> GlobalRegistry { get; } = new();
+
         protected override void OnCreate(Bundle bundle)
         {
+            GlobalRegistry.Add(this.activityId, this.GetType().Name + $" at {DateTime.Now}" );
+            
             log = LogManager.GetLogger(this.GetType().Name);
             log.Trace("Create");
             base.OnCreate(bundle);
             Xamarin.Essentials.Platform.Init(this, bundle);
 
+            
             if (BackButtonCustomAction)
             {
                 backPressedCallbackWrapper = new OnBackPressedCallbackWrapper(BackButtonPressed);
@@ -91,6 +108,12 @@ namespace WB.UI.Shared.Enumerator.Activities
         protected override void OnDestroy()
         {
             base.OnDestroy();
+
+            // get current instance of ObjectAnimator and call RemoveAllListeners from ObjectAnimator to prevent memory leaks
+            //var currentAnimator = ObjectAnimator.OfFloat(this, "alpha", 1f, 1f);
+            //currentAnimator?.RemoveAllListeners();
+            
+            
             
             backPressedCallbackWrapper?.Remove();
             backPressedCallbackWrapper?.Dispose();

@@ -374,8 +374,8 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                 //this.GoogleApiClnt?.Dispose();
                 //this.GoogleApiClnt = null;
                 this.ViewModel.OnOfflineSynchronizationStarted = null;
-                
                 this.fragmentStatePagerAdapter?.Dispose();
+                Binder?.Dispose();
             }
 
             base.Dispose(disposing);

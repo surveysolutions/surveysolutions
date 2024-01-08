@@ -353,24 +353,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
             base.ViewDestroy(viewFinishing);
         }
-        protected override void InitFromBundle(IMvxBundle parameters)
+        protected override void InitFromBundle(IMvxBundle bundle)
         {
-            base.InitFromBundle(parameters);
-            this.LoadFromBundle(parameters);
+            base.InitFromBundle(bundle);
+            this.LoadFromBundle(bundle);
         }
 
-        protected override void ReloadFromBundle(IMvxBundle parameters)
+        protected override void ReloadFromBundle(IMvxBundle bundle)
         {
-            base.ReloadFromBundle(parameters);
-            this.LoadFromBundle(parameters);
+            base.ReloadFromBundle(bundle);
+            this.LoadFromBundle(bundle);
         }
 
-        private void LoadFromBundle(IMvxBundle parameters)
+        private void LoadFromBundle(IMvxBundle bundle)
         {
-            if (!parameters.Data.ContainsKey(nameof(LastVisitedInterviewId)) ||
-                parameters.Data[nameof(LastVisitedInterviewId)] == null) return;
+            if (!bundle.Data.ContainsKey(nameof(LastVisitedInterviewId)) ||
+                bundle.Data[nameof(LastVisitedInterviewId)] == null) return;
 
-            if (Guid.TryParse(parameters.Data[nameof(LastVisitedInterviewId)], out var parsedLastVisitedId))
+            if (Guid.TryParse(bundle.Data[nameof(LastVisitedInterviewId)], out var parsedLastVisitedId))
                 this.LastVisitedInterviewId = parsedLastVisitedId;
         }
 

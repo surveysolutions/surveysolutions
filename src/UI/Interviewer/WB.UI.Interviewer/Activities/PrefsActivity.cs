@@ -11,7 +11,7 @@ using WB.UI.Shared.Enumerator.Settings;
 namespace WB.UI.Interviewer.Activities
 {
     [Activity(Label = "Preferences activity", 
-        NoHistory = false, 
+        NoHistory = true, 
         Theme = "@style/GrayAppTheme",
         Exported = false)]
     public class PrefsActivity : AppCompatActivity
