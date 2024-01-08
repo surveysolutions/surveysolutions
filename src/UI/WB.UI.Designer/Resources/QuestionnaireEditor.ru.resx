@@ -145,10 +145,10 @@
     <value>Скачать</value>
   </data>
   <data name="ErrorsCounter" xml:space="preserve">
-    <value>{count} ошибка</value>
+    <value>{{count}} ошибка</value>
   </data>
   <data name="HellowMessageBtn" xml:space="preserve">
-    <value>Здравствуйте, {currentUserName}</value>
+    <value>Здравствуйте, {{currentUserName}}</value>
   </data>
   <data name="Help" xml:space="preserve">
     <value>Помощь</value>
@@ -166,8 +166,8 @@
     <value>Вставить после</value>
   </data>
   <data name="QuestionnaireSummary" xml:space="preserve">
-    <value>({questionsCount}В, {groupsCount}С, {rostersCount}Р)</value>
-    <comment>Q, S, R are the first letters of the Question, Section and Roster. Keep values that are in {} without changes</comment>
+    <value>({{questionsCount}}В, {{groupsCount}}С, {{rostersCount}}Р)</value>
+    <comment>Q, S, R are the first letters of the Question, Section and Roster. Keep values that are in {{}} without changes</comment>
   </data>
   <data name="ReadOnly" xml:space="preserve">
     <value>Только чтение</value>
@@ -179,7 +179,7 @@
     <value>Сохранить</value>
   </data>
   <data name="SavedAtTimestamp" xml:space="preserve">
-    <value>сохранено в {dateTime, H:mm}</value>
+    <value>сохранено в {{dateTime, H:mm}}</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Настройки</value>
@@ -191,7 +191,7 @@
     <value>имя вложения</value>
   </data>
   <data name="SideBarAttachmentsCounter" xml:space="preserve">
-    <value>{count} Вложение (итого {bytes})</value>
+    <value>{{count}} Вложение (итого {{bytes}})</value>
   </data>
   <data name="SideBarAttachmentsEmptyLine1" xml:space="preserve">
     <value>Используйте вкладку для загрузки мультимедиа файлов, которые можно использовать в опроснике.</value>
@@ -200,10 +200,10 @@
     <value>Для избежания медленной синхронизации рекомендовано не превышать 2МБ общего объёма вложений. Для информации о поддерживаемых типах файлов, форматов и размеров </value>
   </data>
   <data name="SideBarAttachmentsEmptyLine3" xml:space="preserve">
-    <value>Чтобы сослаться на вложение в опроснике добавьте статический текст и укажите {-name} в его свойстве Имя вложения.</value>
+    <value>Чтобы сослаться на вложение в опроснике добавьте статический текст и укажите {{-name}} в его свойстве Имя вложения.</value>
   </data>
   <data name="SideBarAttachmentsEstimate" xml:space="preserve">
-    <value>Оценка времени скачивания: {timeString} используя {downloadSpeed}Кб/сек (EDGE)</value>
+    <value>Оценка времени скачивания: {{timeString}} используя {{downloadSpeed}}Кб/сек (EDGE)</value>
   </data>
   <data name="SideBarAttachmentsUpload" xml:space="preserve">
     <value>Загрузить новый</value>
@@ -230,7 +230,7 @@
     <value>Имя таблицы</value>
   </data>
   <data name="SideBarLookupTablesCounter" xml:space="preserve">
-    <value>{count} Справочная таблица:</value>
+    <value>{{count}} Справочная таблица:</value>
   </data>
   <data name="SideBarLookupTableSelectFile" xml:space="preserve">
     <value>Выбрать файл</value>
@@ -242,7 +242,7 @@
     <value>содержимое</value>
   </data>
   <data name="SideBarMacroCounter" xml:space="preserve">
-    <value>{count} Макрос:</value>
+    <value>{{count}} Макрос:</value>
   </data>
   <data name="SideBarMacroDescription" xml:space="preserve">
     <value>описание</value>
@@ -266,10 +266,10 @@
     <value>добавить описание</value>
   </data>
   <data name="SideBarSectionsCounter" xml:space="preserve">
-    <value>{count} Секция:</value>
+    <value>{{count}} Секция:</value>
   </data>
   <data name="SideBarTranslationsCounter" xml:space="preserve">
-    <value>{count} Перевод</value>
+    <value>{{count}} Перевод</value>
   </data>
   <data name="SideBarTranslationsEmptyLine1" xml:space="preserve">
     <value>Используйте вкладку для управления переводами.</value>
@@ -290,19 +290,19 @@
     <value>имя</value>
   </data>
   <data name="WarningsCounter" xml:space="preserve">
-    <value>{count} предупреждение</value>
+    <value>{{count}} предупреждение</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Закрыть</value>
   </data>
   <data name="CompilationErrorsCounter" xml:space="preserve">
-    <value>{count} ошибка найдена</value>
+    <value>{{count}} ошибка найдена</value>
   </data>
   <data name="CompilationLabel" xml:space="preserve">
     <value>Компиляция:</value>
   </data>
   <data name="CompilationWarningsCounter" xml:space="preserve">
-    <value>{count} предупреждение найдено</value>
+    <value>{{count}} предупреждение найдено</value>
   </data>
   <data name="MoveTo" xml:space="preserve">
     <value>Перенести</value>
@@ -311,19 +311,19 @@
     <value>Перекомпилировать</value>
   </data>
   <data name="SideBarAttachmentDetailsFormat" xml:space="preserve">
-    <value>формат: {- type}</value>
+    <value>формат: {{- type}}</value>
   </data>
   <data name="SideBarAttachmentDetailsResolution" xml:space="preserve">
-    <value>{width} × {height}px</value>
+    <value>{{width}} × {{height}}px</value>
   </data>
   <data name="SideBarAttachmentDetailsSize" xml:space="preserve">
-    <value>размер: {size}</value>
+    <value>размер: {{size}}</value>
   </data>
   <data name="SideBarAttachmentsTitle" xml:space="preserve">
     <value>Вложения</value>
   </data>
   <data name="SideBarAttachmentUploaded" xml:space="preserve">
-    <value>загружено: {-lastUpdate, MMMM DD[,] YYYY [в] k:mm}</value>
+    <value>загружено: {{-lastUpdate, MMMM DD[,] YYYY [в] k:mm}}</value>
   </data>
   <data name="SideBarLookupTitle" xml:space="preserve">
     <value>Справочные таблицы</value>
@@ -401,10 +401,10 @@
     <value>Все</value>
   </data>
   <data name="FindReplaceInAllFound" xml:space="preserve">
-    <value>в найденном {count} объекте?</value>
+    <value>в найденном {{count}} объекте?</value>
   </data>
   <data name="FindReplaceMatchingLines" xml:space="preserve">
-    <value>Найденные строки: {count}</value>
+    <value>Найденные строки: {{count}}</value>
   </data>
   <data name="FindReplaceNext" xml:space="preserve">
     <value>Следующее</value>
@@ -413,7 +413,7 @@
     <value>Предыдущее</value>
   </data>
   <data name="FindReplaceReplaceAll" xml:space="preserve">
-    <value>Заменить все ({count})</value>
+    <value>Заменить все ({{count}})</value>
   </data>
   <data name="FindReplaceReplaceAllConfirm" xml:space="preserve">
     <value>Заменить все</value>
@@ -440,7 +440,7 @@
     <value>Добавить проверку</value>
   </data>
   <data name="EnteredMoreThanAllowed" xml:space="preserve">
-    <value>Введено больше чем разшенное максимальное количество {max}</value>
+    <value>Введено больше чем разшенное максимальное количество {{max}}</value>
   </data>
   <data name="ErrorMessage" xml:space="preserve">
     <value>Сообщение об ошибке или предупреждение</value>
@@ -545,7 +545,7 @@
     <value>Перегенерировать линк</value>
   </data>
   <data name="AnonymousQuestionnaireGeneratedDate" xml:space="preserve">
-    <value>Ссылка сгенерированна: {datetime}</value>
+    <value>Ссылка сгенерированна: {{datetime}}</value>
   </data>
   <data name="SettingsQuestionnaireSharing" xml:space="preserve">
     <value>Сделать опросник </value>
@@ -609,16 +609,16 @@
     <value>Секция пустая.</value>
   </data>
   <data name="EmptySectionLine2" xml:space="preserve">
-    <value>Начать следует используя кнопки {-addQuestionBtn} и {-addSubsectionBtn}</value>
+    <value>Начать следует используя кнопки {{-addQuestionBtn}} и {{-addSubsectionBtn}}</value>
   </data>
   <data name="EmptySectionLine3" xml:space="preserve">
-    <value>вверху этого блока или изменить секции используя {-panel} панель слева</value>
+    <value>вверху этого блока или изменить секции используя {{-panel}} панель слева</value>
   </data>
   <data name="EmptySectionLine4" xml:space="preserve">
     <value>Переменная опросника, название, настройки доступа и другие опции </value>
   </data>
   <data name="EmptySectionLine5" xml:space="preserve">
-    <value>можно изменить используя {-settingsBtn} панель (вверху справа)</value>
+    <value>можно изменить используя {{-settingsBtn}} панель (вверху справа)</value>
   </data>
   <data name="NothingFound" xml:space="preserve">
     <value>Ничего не найдено</value>
@@ -660,7 +660,7 @@
     <value>Разрешены целые числа между 1 и 50</value>
   </data>
   <data name="QuestionOptionsCut" xml:space="preserve">
-    <value>Вопрос был отмечен как "Поле со списком" или "Каскадное поле со списком" во время сохранения и содержал больше категорий, чем разрешено, их количество было уменьшено до {count}</value>
+    <value>Вопрос был отмечен как "Поле со списком" или "Каскадное поле со списком" во время сохранения и содержал больше категорий, чем разрешено, их количество было уменьшено до {{count}}</value>
   </data>
   <data name="QuestionOrdered" xml:space="preserve">
     <value>Сохранять порядок ответов</value>
@@ -813,10 +813,10 @@
     <value>Текст, отображаемый во время тестирования опросника</value>
   </data>
   <data name="HelpVariableLabel" xml:space="preserve">
-    <value>Текст до {maxLength} символов, который будет использован для экспорта переменной.</value>
+    <value>Текст до {{maxLength}} символов, который будет использован для экспорта переменной.</value>
   </data>
   <data name="HelpVariableName" xml:space="preserve">
-    <value>Имена переменных и ростеров могут быть от {minLength} до {maxLength} символов и должны содержать только следующие символы: a-z, A-Z, _, или 0-9.  Первый символ не может быть 0-9 или _ и последний символ не может быть _.</value>
+    <value>Имена переменных и ростеров могут быть от {{minLength}} до {{maxLength}} символов и должны содержать только следующие символы: a-z, A-Z, _, или 0-9.  Первый символ не может быть 0-9 или _ и последний символ не может быть _.</value>
   </data>
   <data name="ConditionMightBeBroken" xml:space="preserve">
     <value>Условия на каскадном списке может быть сломано</value>
@@ -886,7 +886,7 @@
     <comment>Имя опросника:</comment>
   </data>
   <data name="DeleteConfirmQuestion" xml:space="preserve">
-    <value>Вы уверены,что хотите удалить "{trimmedTitle}"?</value>
+    <value>Вы уверены,что хотите удалить "{{trimmedTitle}}"?</value>
   </data>
   <data name="UntitledQuestion" xml:space="preserve">
     <value>Вопрос без названия</value>
@@ -1154,10 +1154,10 @@
     <value>Использовать подпись</value>
   </data>
   <data name="SideBarCommentsCounter" xml:space="preserve">
-    <value>{count} канал(ов) обсуждения:</value>
+    <value>{{count}} канал(ов) обсуждения:</value>
   </data>
   <data name="SideBarCommentsCounter_plural" xml:space="preserve">
-    <value>{count} канал(ов) обсуждения:</value>
+    <value>{{count}} канал(ов) обсуждения:</value>
   </data>
   <data name="SideBarEmptyCommentsLine" xml:space="preserve">
     <value>Тут вы увидите комментарии</value>
@@ -1166,10 +1166,10 @@
     <value>Добавьте комментарий</value>
   </data>
   <data name="ViewResolvedCommentsCounter" xml:space="preserve">
-    <value>Показать {count} закрытый комментарий</value>
+    <value>Показать {{count}} закрытый комментарий</value>
   </data>
   <data name="ViewResolvedCommentsCounter_plural" xml:space="preserve">
-    <value>Показать {count} закрытых комментария</value>
+    <value>Показать {{count}} закрытых комментария</value>
   </data>
   <data name="HideResolvedComments" xml:space="preserve">
     <value>Скрыть закрытые комментарии</value>
@@ -1178,7 +1178,7 @@
     <value>Добавить комментарий</value>
   </data>
   <data name="EditorShowComments" xml:space="preserve">
-    <value>Показать комментарии ({count})</value>
+    <value>Показать комментарии ({{count}})</value>
   </data>
   <data name="JumpToEdit" xml:space="preserve">
     <value>Перейти к редактированию</value>
@@ -1262,7 +1262,7 @@
     <value>Комбобокс - это комбинация выпадающего списка и однострочного текстового поля. Категории могут быть выбраны либо непостредственно из списка, либо набором значиния в поле</value>
   </data>
   <data name="HelpQuestionnaireVarible" xml:space="preserve">
-    <value>Переменная опросника используется как префикс для формирования имени экспортных файлов. Имена переменных и ростеров могут быть от {minLength} до {maxLength} символов и должны содержать только следующие символы: a-z, A-Z, _, или 0-9.  Первый символ не может быть 0-9 или _ и последний символ не может быть _.</value>
+    <value>Переменная опросника используется как префикс для формирования имени экспортных файлов. Имена переменных и ростеров могут быть от {{minLength}} до {{maxLength}} символов и должны содержать только следующие символы: a-z, A-Z, _, или 0-9.  Первый символ не может быть 0-9 или _ и последний символ не может быть _.</value>
   </data>
   <data name="DeleteCommentConfirm" xml:space="preserve">
     <value>Вы уверены, что хотите удалить комментарий?</value>
@@ -1309,13 +1309,13 @@
     <value>Банк вопросов. Классификации</value>
   </data>
   <data name="OnlyFirstOptionsWillBeTakenConfirmation" xml:space="preserve">
-    <value>Только первые {count} категорий  будут вставлены в вопрос "{trimmedTitle}"?</value>
+    <value>Только первые {{count}} категорий  будут вставлены в вопрос "{{trimmedTitle}}"?</value>
   </data>
   <data name="QuestionAddClassification" xml:space="preserve">
     <value>Найти классификацию</value>
   </data>
   <data name="ReplaceOptionsConfirmation" xml:space="preserve">
-    <value>Вы уверены, что хотите заменить существующие категории в вопросе "{trimmedTitle}"?</value>
+    <value>Вы уверены, что хотите заменить существующие категории в вопросе "{{trimmedTitle}}"?</value>
   </data>
   <data name="SearchClassification" xml:space="preserve">
     <value>Найти классификацию</value>
@@ -1407,11 +1407,11 @@
     <value>Да</value>
   </data>
   <data name="SideBarScenarioCounter" xml:space="preserve">
-    <value>{count} Сценарий:</value>
-    <comment>{count} Сценарий:</comment>
+    <value>{{count}} Сценарий:</value>
+    <comment>{{count}} Сценарий:</comment>
   </data>
   <data name="SideBarScenarioCounter_plural" xml:space="preserve">
-    <value>{count} Сценарии:</value>
+    <value>{{count}} Сценарии:</value>
   </data>
   <data name="SideBarScenarioEmptyLine1" xml:space="preserve">
     <value>На этой вкладке вы можите видеть ваши сценарии.</value>
@@ -1461,13 +1461,13 @@
     <value>Копировать в</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>Просмотр ревизии №{revision}</value>
+    <value>Просмотр ревизии №{{revision}}</value>
   </data>
   <data name="SideBarCategoriesName" xml:space="preserve">
     <value>имя для списка категорий</value>
   </data>
   <data name="SideBarCategoriesCounter" xml:space="preserve">
-    <value>{count} списков категорий</value>
+    <value>{{count}} списков категорий</value>
   </data>
   <data name="SideBarCategoriesEmptyLine1" xml:space="preserve">
     <value>Используйте вкладку для управления списками категорий.</value>
@@ -1521,7 +1521,7 @@
     <value>Получено {0} строк(и) из файла с категориями</value>
   </data>
   <data name="DeleteConfirmCategories" xml:space="preserve">
-    <value>Вы уверены, что хотите удалить категории "{trimmedTitle}"? Источник категорий для зависимых категориальных вопросов будет сброшен в категории определенные пользователем</value>
+    <value>Вы уверены, что хотите удалить категории "{{trimmedTitle}}"? Источник категорий для зависимых категориальных вопросов будет сброшен в категории определенные пользователем</value>
   </data>
   <data name="CustomRosterTitle" xml:space="preserve">
     <value>Переопределить имя</value>

@@ -157,19 +157,19 @@
     <value>Close</value>
   </data>
   <data name="CompilationErrorsCounter" xml:space="preserve">
-    <value>{count} errores encontrado</value>
+    <value>{{count}} errores encontrado</value>
   </data>
   <data name="CompilationErrorsCounter_plural" xml:space="preserve">
-    <value>{count} errores encontrados</value>
+    <value>{{count}} errores encontrados</value>
   </data>
   <data name="CompilationLabel" xml:space="preserve">
     <value>Compilación:</value>
   </data>
   <data name="CompilationWarningsCounter" xml:space="preserve">
-    <value>{count} advertencia encontrada</value>
+    <value>{{count}} advertencia encontrada</value>
   </data>
   <data name="CompilationWarningsCounter_plural" xml:space="preserve">
-    <value>{count} advertencias encontradas</value>
+    <value>{{count}} advertencias encontradas</value>
   </data>
   <data name="Compile" xml:space="preserve">
     <value>Compilar</value>
@@ -196,7 +196,7 @@
     <value>Eliminar</value>
   </data>
   <data name="DeleteConfirmQuestion" xml:space="preserve">
-    <value>Esta seguro de querer eliminar "{trimmedTitle}"?</value>
+    <value>Esta seguro de querer eliminar "{{trimmedTitle}}"?</value>
   </data>
   <data name="Download" xml:space="preserve">
     <value>Descargar</value>
@@ -205,19 +205,19 @@
     <value>Esta sección esta vacía</value>
   </data>
   <data name="EmptySectionLine2" xml:space="preserve">
-    <value>Puede comenzar utilizando los botones {-addQuestionBtn} y {-addSubsectionBtn}</value>
+    <value>Puede comenzar utilizando los botones {{-addQuestionBtn}} y {{-addSubsectionBtn}}</value>
   </data>
   <data name="EmptySectionLine3" xml:space="preserve">
-    <value>en la parte superior de este bloque o administrar secciones con {-panel} panel izquierdo</value>
+    <value>en la parte superior de este bloque o administrar secciones con {{-panel}} panel izquierdo</value>
   </data>
   <data name="EmptySectionLine5" xml:space="preserve">
-    <value>se puede encontrar en el panel {-settingsBtn} (esquina superior derecha)</value>
+    <value>se puede encontrar en el panel {{-settingsBtn}} (esquina superior derecha)</value>
   </data>
   <data name="EnablingCondition" xml:space="preserve">
     <value>Condición habilitante</value>
   </data>
   <data name="EnteredMoreThanAllowed" xml:space="preserve">
-    <value>Usted ha ingresado más del máximo permitido {max}</value>
+    <value>Usted ha ingresado más del máximo permitido {{max}}</value>
   </data>
   <data name="EntryWasNotFound" xml:space="preserve">
     <value>La entrada no se encontró en el cuestionario, favor seleccione otra</value>
@@ -226,10 +226,10 @@
     <value>Mensaje de error o advertencia</value>
   </data>
   <data name="ErrorsCounter" xml:space="preserve">
-    <value>{count} error</value>
+    <value>{{count}} error</value>
   </data>
   <data name="ErrorsCounter_plural" xml:space="preserve">
-    <value>{count} errores</value>
+    <value>{{count}} errores</value>
   </data>
   <data name="Export" xml:space="preserve">
     <value>Exportar</value>
@@ -250,16 +250,16 @@
     <value>Todos</value>
   </data>
   <data name="FindReplaceInAllFound" xml:space="preserve">
-    <value>Entidad encontrada en {count} ?</value>
+    <value>Entidad encontrada en {{count}} ?</value>
   </data>
   <data name="FindReplaceInAllFound_plural" xml:space="preserve">
-    <value>Entidades encontradas en {count} ?</value>
+    <value>Entidades encontradas en {{count}} ?</value>
   </data>
   <data name="FindReplaceMatchCase" xml:space="preserve">
     <value>Que coincida con caso</value>
   </data>
   <data name="FindReplaceMatchingLines" xml:space="preserve">
-    <value>Que coincida con líneas:  {count}</value>
+    <value>Que coincida con líneas:  {{count}}</value>
   </data>
   <data name="FindReplaceMatchWord" xml:space="preserve">
     <value>Que coincida con palabra</value>
@@ -271,7 +271,7 @@
     <value>Anterior</value>
   </data>
   <data name="FindReplaceReplaceAll" xml:space="preserve">
-    <value>Reemplazar todos ({count})</value>
+    <value>Reemplazar todos ({{count}})</value>
   </data>
   <data name="FindReplaceReplaceAllConfirm" xml:space="preserve">
     <value>Reemplazar todos</value>
@@ -298,7 +298,7 @@
     <value>título</value>
   </data>
   <data name="HellowMessageBtn" xml:space="preserve">
-    <value>Hola, {currentUserName}</value>
+    <value>Hola, {{currentUserName}}</value>
   </data>
   <data name="Help" xml:space="preserve">
     <value>Ayuda</value>
@@ -346,10 +346,10 @@
     <value>Texto que se mostrará junto a una variable para fines de prueba</value>
   </data>
   <data name="HelpVariableLabel" xml:space="preserve">
-    <value>Texto de hasta {maxLength} caracteres que será adjunto a la variable exportada</value>
+    <value>Texto de hasta {{maxLength}} caracteres que será adjunto a la variable exportada</value>
   </data>
   <data name="HelpVariableName" xml:space="preserve">
-    <value>Los nombres de las variables y los identificadores de lista pueden ser de {minLength} a {maxLength} caracteres de largo y solo deben contener los siguientes caracteres: a-z, A-Z, _ o 0-9. El primer carácter no puede ser 0-9 o _ y el último no puede ser _.</value>
+    <value>Los nombres de las variables y los identificadores de lista pueden ser de {{minLength}} a {{maxLength}} caracteres de largo y solo deben contener los siguientes caracteres: a-z, A-Z, _ o 0-9. El primer carácter no puede ser 0-9 o _ y el último no puede ser _.</value>
   </data>
   <data name="HideIfDisabled" xml:space="preserve">
     <value>Ocultar si no esta habilitado</value>
@@ -523,7 +523,7 @@
     <value>Debe enlazar esta pregunta</value>
   </data>
   <data name="QuestionnaireSummary" xml:space="preserve">
-    <value>({questionsCount}Q, {groupsCount}S, {rostersCount}R)</value>
+    <value>({{questionsCount}}Q, {{groupsCount}}S, {{rostersCount}}R)</value>
   </data>
   <data name="QuestionOnlyInts" xml:space="preserve">
     <value>Solamente se permiten enteros</value>
@@ -535,7 +535,7 @@
     <value>Se ha grabado exitosamente Se abrirá la ventana para subir archivos.</value>
   </data>
   <data name="QuestionOptionsCut" xml:space="preserve">
-    <value>La pregunta se marcó como "Cuadro combinado" o "Cuadro combinado en cascada" al cargar los detalles de la pregunta y contenía demasiadas categorías, su número se redujo hasta {count}</value>
+    <value>La pregunta se marcó como "Cuadro combinado" o "Cuadro combinado en cascada" al cargar los detalles de la pregunta y contenía demasiadas categorías, su número se redujo hasta {{count}}</value>
   </data>
   <data name="QuestionOrdered" xml:space="preserve">
     <value>Registrar el orden de las respuesta</value>
@@ -607,7 +607,7 @@
     <value>save</value>
   </data>
   <data name="SavedAtTimestamp" xml:space="preserve">
-    <value>guardado a las {dateTime, H:mm}</value>
+    <value>guardado a las {{dateTime, H:mm}}</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Buscar</value>
@@ -685,13 +685,13 @@
     <value>adicionar nueva Macro</value>
   </data>
   <data name="SideBarAttachmentDetailsFormat" xml:space="preserve">
-    <value>formato {- tipo}</value>
+    <value>formato {{- tipo}}</value>
   </data>
   <data name="SideBarAttachmentDetailsResolution" xml:space="preserve">
-    <value>{width} × {height}px</value>
+    <value>{{width}} × {{height}}px</value>
   </data>
   <data name="SideBarAttachmentDetailsSize" xml:space="preserve">
-    <value>tamaño: {size}</value>
+    <value>tamaño: {{size}}</value>
   </data>
   <data name="SideBarAttachmentName" xml:space="preserve">
     <value>nombre de adjunto</value>
@@ -700,10 +700,10 @@
     <value>adjunto carece de nombre</value>
   </data>
   <data name="SideBarAttachmentsCounter" xml:space="preserve">
-    <value>{count} Archivo adjunto ({bytes} en total)</value>
+    <value>{{count}} Archivo adjunto ({{bytes}} en total)</value>
   </data>
   <data name="SideBarAttachmentsCounter_plural" xml:space="preserve">
-    <value>{count} Archivos adjuntos ({bytes} en total)</value>
+    <value>{{count}} Archivos adjuntos ({{bytes}} en total)</value>
   </data>
   <data name="SideBarAttachmentsEmptyLine1" xml:space="preserve">
     <value>Use esta pestaña para cargar archivos multimedia a los cuales se puede hacer referencia en el cuestionario</value>
@@ -712,7 +712,7 @@
     <value>Para evitar una sincronización lenta, recomendamos que el tamaño combinado de todos los archivos adjuntos no exceda los 2MB. Para conocer los tipos de archivos compatibles, formatos y dimensiones</value>
   </data>
   <data name="SideBarAttachmentsEstimate" xml:space="preserve">
-    <value>Tiempo estimado de carga: {timeString} a {downloadSpeed}Kb/s (EDGE)</value>
+    <value>Tiempo estimado de carga: {{timeString}} a {{downloadSpeed}}Kb/s (EDGE)</value>
   </data>
   <data name="SideBarAttachmentsTitle" xml:space="preserve">
     <value>Adjuntos</value>
@@ -721,7 +721,7 @@
     <value>Cargar nuevo</value>
   </data>
   <data name="SideBarAttachmentUploaded" xml:space="preserve">
-    <value>cargado: {-lastUpdate, MMMM DD[,] YYYY [at] k:mm}</value>
+    <value>cargado: {{-lastUpdate, MMMM DD[,] YYYY [at] k:mm}}</value>
   </data>
   <data name="SideBarLookupEmptyLine1" xml:space="preserve">
     <value>Use esta pestaña para definir tablas de búsqueda</value>
@@ -748,10 +748,10 @@
     <value>tabla de búsqueda carece de nombre</value>
   </data>
   <data name="SideBarLookupTablesCounter" xml:space="preserve">
-    <value>{count} Tabla de búsqueda:</value>
+    <value>{{count}} Tabla de búsqueda:</value>
   </data>
   <data name="SideBarLookupTablesCounter_plural" xml:space="preserve">
-    <value>{count} Tablas de búsqueda:</value>
+    <value>{{count}} Tablas de búsqueda:</value>
   </data>
   <data name="SideBarLookupTableSelectFile" xml:space="preserve">
     <value>Seleccionar archivo</value>
@@ -766,10 +766,10 @@
     <value>contenido</value>
   </data>
   <data name="SideBarMacroCounter" xml:space="preserve">
-    <value>{count} Macro:</value>
+    <value>{{count}} Macro:</value>
   </data>
   <data name="SideBarMacroCounter_plural" xml:space="preserve">
-    <value>{count} Macros:</value>
+    <value>{{count}} Macros:</value>
   </data>
   <data name="SideBarMacroDescription" xml:space="preserve">
     <value>descripción</value>
@@ -799,10 +799,10 @@
     <value>Macros</value>
   </data>
   <data name="SideBarSectionsCounter" xml:space="preserve">
-    <value>{count} Sección</value>
+    <value>{{count}} Sección</value>
   </data>
   <data name="SideBarSectionsCounter_plural" xml:space="preserve">
-    <value>{count} Secciones:</value>
+    <value>{{count}} Secciones:</value>
   </data>
   <data name="SideBarSectionsTitle" xml:space="preserve">
     <value>Secciones</value>
@@ -823,10 +823,10 @@
     <value>traducción carece de nombre</value>
   </data>
   <data name="SideBarTranslationsCounter" xml:space="preserve">
-    <value>{count} Traducción</value>
+    <value>{{count}} Traducción</value>
   </data>
   <data name="SideBarTranslationsCounter_plural" xml:space="preserve">
-    <value>{count} Traducciones</value>
+    <value>{{count}} Traducciones</value>
   </data>
   <data name="SideBarTranslationsEmptyLine1" xml:space="preserve">
     <value>Use esta pestaña para administrar traducciones de cuestionarios</value>
@@ -943,10 +943,10 @@
     <value>Tipo de variable</value>
   </data>
   <data name="WarningsCounter" xml:space="preserve">
-    <value>{count} advertencia</value>
+    <value>{{count}} advertencia</value>
   </data>
   <data name="WarningsCounter_plural" xml:space="preserve">
-    <value>{count} Advertencias</value>
+    <value>{{count}} Advertencias</value>
   </data>
   <data name="DownloadPdf" xml:space="preserve">
       <value>Descargar PDF</value>
@@ -1035,7 +1035,7 @@
     <value>¿Estás seguro de que deseas eliminar el comentario?</value>
   </data>
   <data name="DeleteConfirmCategories" xml:space="preserve">
-    <value>¿Está seguro de que desea eliminar el conjunto de categorías "{trimmedTitle}"? La fuente de las categorías para las preguntas categóricas que dependen de ella se cambiará a categorías definidas por el usuario</value>
+    <value>¿Está seguro de que desea eliminar el conjunto de categorías "{{trimmedTitle}}"? La fuente de las categorías para las preguntas categóricas que dependen de ella se cambiará a categorías definidas por el usuario</value>
   </data>
   <data name="EditorAddComment" xml:space="preserve">
     <value>Adicionar comentario</value>
@@ -1083,7 +1083,7 @@
     <value>Código entero numérico de la categoría (invisible para el entrevistador)</value>
   </data>
   <data name="HelpQuestionnaireVarible" xml:space="preserve">
-    <value>La variable del cuestionario se utiliza como prefijo para formar los nombres de los archivos de exportación. Los nombres de las variables y los ID de la lista pueden tener entre {minLength} y {maxLength} caracteres y deben contener solo los siguientes caracteres: a-z, A-Z, _ o 0-9. El primer carácter no puede ser 0-9 o _ y el último no puede ser _.</value>
+    <value>La variable del cuestionario se utiliza como prefijo para formar los nombres de los archivos de exportación. Los nombres de las variables y los ID de la lista pueden tener entre {{minLength}} y {{maxLength}} caracteres y deben contener solo los siguientes caracteres: a-z, A-Z, _ o 0-9. El primer carácter no puede ser 0-9 o _ y el último no puede ser _.</value>
   </data>
   <data name="HelpRosterDisplayMode" xml:space="preserve">
     <value>Subsección: las preguntas de la lista se muestran detrás de los botones correspondientes a las instancias de la lista. Plano: las preguntas de la lista se muestran en el mismo nivel, separadas por encabezados que corresponden a las instancias de la lista. Tabla: las preguntas de la lista se muestran en el mismo nivel que las filas y columnas de la tabla. Matriz: una pregunta categórica de la lista se muestra como matriz. Las vistas de tabla y matriz solo se admiten en encuestas web, la tableta vuelve al modo 'Subsección'.</value>
@@ -1128,13 +1128,13 @@
     <value>El archivo seleccionado no es compatible como archivo adjunto</value>
   </data>
   <data name="OnlyFirstOptionsWillBeTakenConfirmation" xml:space="preserve">
-    <value>¿Solo las primeras {count} categorías se tomarán para la pregunta "{trimmedTitle}"?</value>
+    <value>¿Solo las primeras {{count}} categorías se tomarán para la pregunta "{{trimmedTitle}}"?</value>
   </data>
   <data name="OptionsWindowTitle" xml:space="preserve">
     <value>Edit categories</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>Vista previa de la revisión n.º {revision}</value>
+    <value>Vista previa de la revisión n.º {{revision}}</value>
   </data>
   <data name="PublicAccessSettings" xml:space="preserve">
     <value>Acceso público</value>
@@ -1176,7 +1176,7 @@
     <value>Es una pregunta de solo lectura. No puedes editarlo.</value>
   </data>
   <data name="ReplaceOptionsConfirmation" xml:space="preserve">
-    <value>¿Está seguro de que desea reemplazar las categorías existentes para la pregunta "{trimmedTitle}"?</value>
+    <value>¿Está seguro de que desea reemplazar las categorías existentes para la pregunta "{{trimmedTitle}}"?</value>
   </data>
   <data name="ReusableCategories" xml:space="preserve">
     <value>Categorías reutilizables</value>
@@ -1248,10 +1248,10 @@
     <value>Show as a list of categories</value>
   </data>
   <data name="SideBarAttachmentsEmptyLine3" xml:space="preserve">
-    <value>Para hacer referencia a un archivo adjunto en el cuestionario, agregue un elemento de texto estático y especifique el archivo adjunto {-name} en su propiedad de archivo adjunto</value>
+    <value>Para hacer referencia a un archivo adjunto en el cuestionario, agregue un elemento de texto estático y especifique el archivo adjunto {{-name}} en su propiedad de archivo adjunto</value>
   </data>
   <data name="SideBarCategoriesCounter" xml:space="preserve">
-    <value>{count} Categories</value>
+    <value>{{count}} Categories</value>
   </data>
   <data name="SideBarCategoriesEmptyLine1" xml:space="preserve">
     <value>Utilice esta pestaña para administrar categorías reutilizables.</value>
@@ -1275,10 +1275,10 @@
     <value>Subir nuevas categorías</value>
   </data>
   <data name="SideBarCommentsCounter" xml:space="preserve">
-    <value>{count} Hilo de comentarios:</value>
+    <value>{{count}} Hilo de comentarios:</value>
   </data>
   <data name="SideBarCommentsCounter_plural" xml:space="preserve">
-    <value>{count} Hilos de comentarios:</value>
+    <value>{{count}} Hilos de comentarios:</value>
   </data>
   <data name="SideBarCommentsTitle" xml:space="preserve">
     <value>Comments</value>
@@ -1362,10 +1362,10 @@
     <value>Año:</value>
   </data>
   <data name="SideBarScenarioCounter" xml:space="preserve">
-    <value>{count} Escenario:</value>
+    <value>{{count}} Escenario:</value>
   </data>
   <data name="SideBarScenarioCounter_plural" xml:space="preserve">
-    <value>{count} Escenarios:</value>
+    <value>{{count}} Escenarios:</value>
   </data>
   <data name="SideBarScenarioEmptyLine1" xml:space="preserve">
     <value>Utilice esta pestaña para ver sus escenarios.</value>
@@ -1398,10 +1398,10 @@
     <value>Ver</value>
   </data>
   <data name="ViewResolvedCommentsCounter" xml:space="preserve">
-    <value>Ver todos los {count} comentarios resueltos</value>
+    <value>Ver todos los {{count}} comentarios resueltos</value>
   </data>
   <data name="ViewResolvedCommentsCounter_plural" xml:space="preserve">
-    <value>Ver todos los {count} comentarios resueltos</value>
+    <value>Ver todos los {{count}} comentarios resueltos</value>
   </data>
   <data name="VirtualCoverPage" xml:space="preserve">
     <value>Portada virtual</value>

@@ -202,19 +202,19 @@
     <value>Zgjidh</value>
   </data>
   <data name="CompilationErrorsCounter" xml:space="preserve">
-    <value>u gjet {count} gabim</value>
+    <value>u gjet {{count}} gabim</value>
   </data>
   <data name="CompilationErrorsCounter_plural" xml:space="preserve">
-    <value>u gjetën {count} gabime</value>
+    <value>u gjetën {{count}} gabime</value>
   </data>
   <data name="CompilationLabel" xml:space="preserve">
     <value>Përpilim:</value>
   </data>
   <data name="CompilationWarningsCounter" xml:space="preserve">
-    <value>u gjet {count} paralajmërim</value>
+    <value>u gjet {{count}} paralajmërim</value>
   </data>
   <data name="CompilationWarningsCounter_plural" xml:space="preserve">
-    <value>u gjetën {count} paralajmërime</value>
+    <value>u gjetën {{count}} paralajmërime</value>
   </data>
   <data name="Compile" xml:space="preserve">
     <value>Përpilo</value>
@@ -244,7 +244,7 @@
     <value>Jeni të sigurt që dëshironi të fshini komentin?</value>
   </data>
   <data name="DeleteConfirmQuestion" xml:space="preserve">
-    <value>Jeni të sigurt që dëshironi të fshini "{trimmedTitle}"?</value>
+    <value>Jeni të sigurt që dëshironi të fshini "{{trimmedTitle}}"?</value>
   </data>
   <data name="Download" xml:space="preserve">
     <value>Shkarko</value>
@@ -259,19 +259,19 @@
     <value>Kjo rubrikë është bosh.</value>
   </data>
   <data name="EmptySectionLine2" xml:space="preserve">
-    <value>Mund të filloni duke përdorur butonat {-addQuestionBtn} dhe {-addSubsectionBtn} </value>
+    <value>Mund të filloni duke përdorur butonat {{-addQuestionBtn}} dhe {{-addSubsectionBtn}} </value>
   </data>
   <data name="EmptySectionLine3" xml:space="preserve">
-    <value>në krue të këtij blloku ose menaxhoni rubrikat me {-panel} panelin e majtë</value>
+    <value>në krue të këtij blloku ose menaxhoni rubrikat me {{-panel}} panelin e majtë</value>
   </data>
   <data name="EmptySectionLine5" xml:space="preserve">
-    <value>mund të gjendet në panelin {-settingsBtn} (sipër në të djathë)</value>
+    <value>mund të gjendet në panelin {{-settingsBtn}} (sipër në të djathë)</value>
   </data>
   <data name="EnablingCondition" xml:space="preserve">
     <value>Kushti i aktivizimit</value>
   </data>
   <data name="EnteredMoreThanAllowed" xml:space="preserve">
-    <value>Keni shkruar më shumë sesa maksimumi i lejuar {max}</value>
+    <value>Keni shkruar më shumë sesa maksimumi i lejuar {{max}}</value>
   </data>
   <data name="EntityComment" xml:space="preserve">
     <value>Koment i ri</value>
@@ -283,10 +283,10 @@
     <value>Gabim ose mesazh paralajmërues </value>
   </data>
   <data name="ErrorsCounter" xml:space="preserve">
-    <value>{count} gabim</value>
+    <value>{{count}} gabim</value>
   </data>
   <data name="ErrorsCounter_plural" xml:space="preserve">
-    <value>{count} gabime</value>
+    <value>{{count}} gabime</value>
   </data>
   <data name="Export" xml:space="preserve">
     <value>Eksporto</value>
@@ -307,16 +307,16 @@
     <value>Të gjitha</value>
   </data>
   <data name="FindReplaceInAllFound" xml:space="preserve">
-    <value>në {count} entitet i gjetur?</value>
+    <value>në {{count}} entitet i gjetur?</value>
   </data>
   <data name="FindReplaceInAllFound_plural" xml:space="preserve">
-    <value>në {count} entitete të gjetura?</value>
+    <value>në {{count}} entitete të gjetura?</value>
   </data>
   <data name="FindReplaceMatchCase" xml:space="preserve">
     <value>Përputh madhësinë e shkronjave</value>
   </data>
   <data name="FindReplaceMatchingLines" xml:space="preserve">
-    <value>Rreshta që përputhen: {count}</value>
+    <value>Rreshta që përputhen: {{count}}</value>
   </data>
   <data name="FindReplaceMatchWord" xml:space="preserve">
     <value>Përputh të gjithë fjalën</value>
@@ -328,7 +328,7 @@
     <value>Para</value>
   </data>
   <data name="FindReplaceReplaceAll" xml:space="preserve">
-    <value>Zëvendësoji të ({count})</value>
+    <value>Zëvendësoji të ({{count}})</value>
   </data>
   <data name="FindReplaceReplaceAllConfirm" xml:space="preserve">
     <value>Zëvendësoji të gjitha</value>
@@ -358,7 +358,7 @@
     <value>Titulli</value>
   </data>
   <data name="HellowMessageBtn" xml:space="preserve">
-    <value>Përshëndetje, {currentUserName}</value>
+    <value>Përshëndetje, {{currentUserName}}</value>
   </data>
   <data name="Help" xml:space="preserve">
     <value>Ndihmë</value>
@@ -397,7 +397,7 @@
     <value>Shto koment</value>
   </data>
   <data name="HelpQuestionnaireVarible" xml:space="preserve">
-    <value>Variabli i pyetësorit përdoret si parashtesë në formimin e emrave për skedarët që do të eksportohen. Emrat variabël dhe identifikuesit e rosterit mund të jenë të gjata nga {minLength} në {maxLength} karaktere dhe duhet të përmbajnë vetëm këto karaktere: a-z, A-Z, _, or 0-9. Karakteri i parë nuk mund të jetë 0-9 ose _ dhe i fundit nuk mund të jetë _.</value>
+    <value>Variabli i pyetësorit përdoret si parashtesë në formimin e emrave për skedarët që do të eksportohen. Emrat variabël dhe identifikuesit e rosterit mund të jenë të gjata nga {{minLength}} në {{maxLength}} karaktere dhe duhet të përmbajnë vetëm këto karaktere: a-z, A-Z, _, or 0-9. Karakteri i parë nuk mund të jetë 0-9 ose _ dhe i fundit nuk mund të jetë _.</value>
   </data>
   <data name="HelpSourceQuestion" xml:space="preserve">
     <value>Pyetja burimore (përgjigjja gjeneron numrin e rreshtave)</value>
@@ -418,10 +418,10 @@
     <value>Teksti që shfaqet pranë një variable për qëllime testimi</value>
   </data>
   <data name="HelpVariableLabel" xml:space="preserve">
-    <value>Një tekst deri në {maxLength} karaktere që do t’i bashkëlidhet variablit të eksportuar.</value>
+    <value>Një tekst deri në {{maxLength}} karaktere që do t’i bashkëlidhet variablit të eksportuar.</value>
   </data>
   <data name="HelpVariableName" xml:space="preserve">
-    <value>Emërtimet e variablit dhe identifikuesit e rosterit mund të jenë nga {minLength} në {maxLength} karaktere dhe duhet të përmbajnë vetëm këto karaktere: a-z, A-Z, _, ose 0-9. Karakteri i parë nuk mund të jetë 0-9 ose _ dhe i fundit nuk mund të jetë _.</value>
+    <value>Emërtimet e variablit dhe identifikuesit e rosterit mund të jenë nga {{minLength}} në {{maxLength}} karaktere dhe duhet të përmbajnë vetëm këto karaktere: a-z, A-Z, _, ose 0-9. Karakteri i parë nuk mund të jetë 0-9 ose _ dhe i fundit nuk mund të jetë _.</value>
   </data>
   <data name="HideIfDisabled" xml:space="preserve">
     <value>Fshih nëse është çaktivizuar</value>
@@ -535,7 +535,7 @@
     <value>OK</value>
   </data>
   <data name="OnlyFirstOptionsWillBeTakenConfirmation" xml:space="preserve">
-    <value>Vetëm {count} kategoritë e para do të merren për pyetjen "{trimmedTitle}"?</value>
+    <value>Vetëm {{count}} kategoritë e para do të merren për pyetjen "{{trimmedTitle}}"?</value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>Hap</value>
@@ -643,7 +643,7 @@
     <value>Cilësimet e pyetësorit</value>
   </data>
   <data name="QuestionnaireSummary" xml:space="preserve">
-    <value>({questionsCount}Q, {groupsCount}S, {rostersCount}R)</value>
+    <value>({{questionsCount}}Q, {{groupsCount}}S, {{rostersCount}}R)</value>
   </data>
   <data name="QuestionOneToFiftyAllowed" xml:space="preserve">
     <value>Lejohen numrat e plotë midis 1 dhe 50</value>
@@ -658,7 +658,7 @@
     <value>U ruajt me sukses. Dritarja për ngarkimin e skedarit do të hapet.</value>
   </data>
   <data name="QuestionOptionsCut" xml:space="preserve">
-    <value>Pyetja u shënjua si "Kutia e kombinuar" ose "Kuti e kombinuar kaskadë”  gjatë ngarkimit të hollësive të pyetjes dhe përmbante shumë kategori, numri i tyre u ul deri në {count}</value>
+    <value>Pyetja u shënjua si "Kutia e kombinuar" ose "Kuti e kombinuar kaskadë”  gjatë ngarkimit të hollësive të pyetjes dhe përmbante shumë kategori, numri i tyre u ul deri në {{count}}</value>
   </data>
   <data name="QuestionOrdered" xml:space="preserve">
     <value>Regjistro rendin e përgjigjeve</value>
@@ -709,7 +709,7 @@
     <value>Ripërpilo</value>
   </data>
   <data name="ReplaceOptionsConfirmation" xml:space="preserve">
-    <value>Jeni të sigurt që doni të zëvendësoni kategoritë ekzistuese për pyetjen "{trimmedTitle}"?</value>
+    <value>Jeni të sigurt që doni të zëvendësoni kategoritë ekzistuese për pyetjen "{{trimmedTitle}}"?</value>
   </data>
   <data name="RequestFailedUnexpectedly" xml:space="preserve">
     <value>Kërkesa dështoi papritur.</value>
@@ -742,7 +742,7 @@
     <value>Ruaj</value>
   </data>
   <data name="SavedAtTimestamp" xml:space="preserve">
-    <value>ruajtur më {dateTime, H:mm}</value>
+    <value>ruajtur më {{dateTime, H:mm}}</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Kërko</value>
@@ -853,13 +853,13 @@
     <value>shto Makro të re</value>
   </data>
   <data name="SideBarAttachmentDetailsFormat" xml:space="preserve">
-    <value>formati: {- type}</value>
+    <value>formati: {{- type}}</value>
   </data>
   <data name="SideBarAttachmentDetailsResolution" xml:space="preserve">
-    <value>{width} × {height}px</value>
+    <value>{{width}} × {{height}}px</value>
   </data>
   <data name="SideBarAttachmentDetailsSize" xml:space="preserve">
-    <value>madhësia: {size}</value>
+    <value>madhësia: {{size}}</value>
   </data>
   <data name="SideBarAttachmentName" xml:space="preserve">
     <value>emërtimi i bashkëlidhjes</value>
@@ -868,10 +868,10 @@
     <value>bashkëlidhje pa emërtim</value>
   </data>
   <data name="SideBarAttachmentsCounter" xml:space="preserve">
-    <value>{count} Skedar i bashkëlidhur ({bytes} gjithsej)</value>
+    <value>{{count}} Skedar i bashkëlidhur ({{bytes}} gjithsej)</value>
   </data>
   <data name="SideBarAttachmentsCounter_plural" xml:space="preserve">
-    <value>{count} Skedarë të bashkëlidhur ({bytes} gjithsej)</value>
+    <value>{{count}} Skedarë të bashkëlidhur ({{bytes}} gjithsej)</value>
   </data>
   <data name="SideBarAttachmentsEmptyLine1" xml:space="preserve">
     <value>Përdor këtë tab për ngarkimin e skedarëve multimedialë që mund të përmenden në pyetësor.</value>
@@ -880,10 +880,10 @@
     <value>Për të shmangur sinkronizimin e ngadaltë, rekomandojmë që madhësia e kombinuar e të gjithë skedarëve të bashkëlidhur të mos i kalojë 2MB. Për llojet, formatet dhe përmasat e mbështetura</value>
   </data>
   <data name="SideBarAttachmentsEmptyLine3" xml:space="preserve">
-    <value>Për t’iu referuar një bashkëlidhjeje në pyetësor shtoni një element teksti statik dhe specifikoni bashkëlidhjen {-name} në vetitë e saj të bashkëlidhjes</value>
+    <value>Për t’iu referuar një bashkëlidhjeje në pyetësor shtoni një element teksti statik dhe specifikoni bashkëlidhjen {{-name}} në vetitë e saj të bashkëlidhjes</value>
   </data>
   <data name="SideBarAttachmentsEstimate" xml:space="preserve">
-    <value>Koha e vlerësuar e ngarkimit: {timeString} me {downloadSpeed}Kb/s (EDGE)</value>
+    <value>Koha e vlerësuar e ngarkimit: {{timeString}} me {{downloadSpeed}}Kb/s (EDGE)</value>
   </data>
   <data name="SideBarAttachmentsTitle" xml:space="preserve">
     <value>Bashkëlidhjet</value>
@@ -892,13 +892,13 @@
     <value>Ngarko të ri</value>
   </data>
   <data name="SideBarAttachmentUploaded" xml:space="preserve">
-    <value>ngarkuar: {-lastUpdate, MMMM DD[,] YYYY [at] k:mm}</value>
+    <value>ngarkuar: {{-lastUpdate, MMMM DD[,] YYYY [at] k:mm}}</value>
   </data>
   <data name="SideBarCommentsCounter" xml:space="preserve">
-    <value>{count} Varg komentesh:</value>
+    <value>{{count}} Varg komentesh:</value>
   </data>
   <data name="SideBarCommentsCounter_plural" xml:space="preserve">
-    <value>{count} Vargje komentesh:</value>
+    <value>{{count}} Vargje komentesh:</value>
   </data>
   <data name="SideBarCommentsTitle" xml:space="preserve">
     <value>Komente</value>
@@ -931,10 +931,10 @@
     <value>tabelë kërkimi pa emërtim</value>
   </data>
   <data name="SideBarLookupTablesCounter" xml:space="preserve">
-    <value>{count} Tabelë Kërkimi:</value>
+    <value>{{count}} Tabelë Kërkimi:</value>
   </data>
   <data name="SideBarLookupTablesCounter_plural" xml:space="preserve">
-    <value>{count} Tabela Kërkimi:</value>
+    <value>{{count}} Tabela Kërkimi:</value>
   </data>
   <data name="SideBarLookupTableSelectFile" xml:space="preserve">
     <value>Zgjidh skedarin</value>
@@ -949,10 +949,10 @@
     <value>përmbajtja </value>
   </data>
   <data name="SideBarMacroCounter" xml:space="preserve">
-    <value>{count} Makro:</value>
+    <value>{{count}} Makro:</value>
   </data>
   <data name="SideBarMacroCounter_plural" xml:space="preserve">
-    <value>{count} Makro:</value>
+    <value>{{count}} Makro:</value>
   </data>
   <data name="SideBarMacroDescription" xml:space="preserve">
     <value>Përshkrim</value>
@@ -1057,10 +1057,10 @@
     <value>Viti:</value>
   </data>
   <data name="SideBarSectionsCounter" xml:space="preserve">
-    <value>{count} Rubrikë:</value>
+    <value>{{count}} Rubrikë:</value>
   </data>
   <data name="SideBarSectionsCounter_plural" xml:space="preserve">
-    <value>{count} Rubrika:</value>
+    <value>{{count}} Rubrika:</value>
   </data>
   <data name="SideBarSectionsTitle" xml:space="preserve">
     <value>Rubrikat</value>
@@ -1081,10 +1081,10 @@
     <value>përkthim pa emër</value>
   </data>
   <data name="SideBarTranslationsCounter" xml:space="preserve">
-    <value>{count} Përkthim</value>
+    <value>{{count}} Përkthim</value>
   </data>
   <data name="SideBarTranslationsCounter_plural" xml:space="preserve">
-    <value>{count} Përkthime</value>
+    <value>{{count}} Përkthime</value>
   </data>
   <data name="SideBarTranslationsEmptyLine1" xml:space="preserve">
     <value>Përdor këtë tab për të menaxhuar përkthimet e pyetësorit.</value>
@@ -1207,16 +1207,16 @@
     <value>Emërtimi i variablit</value>
   </data>
   <data name="ViewResolvedCommentsCounter" xml:space="preserve">
-    <value>Shih të {count} koment të përfunduar </value>
+    <value>Shih të {{count}} koment të përfunduar </value>
   </data>
   <data name="ViewResolvedCommentsCounter_plural" xml:space="preserve">
-    <value>Shih të {count} komentet e përfunduara </value>
+    <value>Shih të {{count}} komentet e përfunduara </value>
   </data>
   <data name="WarningsCounter" xml:space="preserve">
-    <value>{count} paralajmërim</value>
+    <value>{{count}} paralajmërim</value>
   </data>
   <data name="WarningsCounter_plural" xml:space="preserve">
-    <value>{count} paralajmërime</value>
+    <value>{{count}} paralajmërime</value>
   </data>
   <data name="ManageAccount" xml:space="preserve">
       <value>Menaxho llogarinë</value>
