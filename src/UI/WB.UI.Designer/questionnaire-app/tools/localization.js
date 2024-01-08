@@ -161,9 +161,10 @@ module.exports = class LocalizationBuilder {
         valueNodes.forEach(function(element) {
             var name = element.attr.name;
             var values = element.childrenNamed('value');
-
             if (values.length == 1) {
-                resourceObject[name] = values[0].val;
+                resourceObject[name] = values[0].val
+                    .replaceAll('{{', '{')
+                    .replaceAll('}}', '}');
             }
         });
 
