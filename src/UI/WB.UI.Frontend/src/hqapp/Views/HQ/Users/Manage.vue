@@ -1,125 +1,77 @@
 <template>
-    <ProfileLayout ref="profile"
-        :role="userInfo.role"
-        :isOwnProfile="userInfo.isOwnProfile"
-        :forceChangePassword="userInfo.forceChangePassword"
-        :canChangePassword="userInfo.canChangePassword"
-        :userName="userInfo.userName"
-        :userId="userInfo.userId"
-        :currentTab="currentTab"
-        :canGenerateToken="userInfo.canGetApiToken">
+    <ProfileLayout ref="profile" :role="userInfo.role" :isOwnProfile="userInfo.isOwnProfile"
+        :forceChangePassword="userInfo.forceChangePassword" :canChangePassword="userInfo.canChangePassword"
+        :userName="userInfo.userName" :userId="userInfo.userId" :currentTab="currentTab"
+        :canGenerateToken="userInfo.canGetApiToken" :isRestricted="userInfo.isRestricted">
         <div>
-            <form-group
-                :label="$t('FieldsAndValidations.PersonNameFieldName')"
-                :error="modelState['PersonName']">
-                <TextInput
-                    v-model.trim="personName"
-                    :haserror="modelState['PersonName'] !== undefined"
-                    id="PersonName"/>
+            <form-group :label="$t('FieldsAndValidations.PersonNameFieldName')" :error="modelState['PersonName']">
+                <TextInput v-model.trim="personName" :haserror="modelState['PersonName'] !== undefined" id="PersonName" />
             </form-group>
-            <form-group
-                :label="$t('FieldsAndValidations.EmailFieldName')"
-                :error="modelState['Email']">
-                <TextInput
-                    v-model.trim="email"
-                    :haserror="modelState['Email'] !== undefined"
-                    id="Email"/>
+            <form-group :label="$t('FieldsAndValidations.EmailFieldName')" :error="modelState['Email']">
+                <TextInput v-model.trim="email" :haserror="modelState['Email'] !== undefined" id="Email" />
             </form-group>
-            <form-group
-                :label="$t('FieldsAndValidations.PhoneNumberFieldName')"
-                :error="modelState['PhoneNumber']">
-                <TextInput
-                    v-model.trim="phoneNumber"
-                    :haserror="modelState['PhoneNumber'] !== undefined"
-                    id="PhoneNumber"/>
+            <form-group :label="$t('FieldsAndValidations.PhoneNumberFieldName')" :error="modelState['PhoneNumber']">
+                <TextInput v-model.trim="phoneNumber" :haserror="modelState['PhoneNumber'] !== undefined"
+                    id="PhoneNumber" />
             </form-group>
-            <p v-if="isRelinkVisible">{{this.$t('Pages.Tablet_RelinkMessage')}}</p>
-            <form-group v-if="isRelinkVisible"
-                :error="modelState['isRelinkAllowed']">
+            <p v-if="isRelinkVisible">{{ this.$t('Pages.Tablet_RelinkMessage') }}</p>
+            <form-group v-if="isRelinkVisible" :error="modelState['isRelinkAllowed']">
                 <div>
-                    <input
-                        class="checkbox-filter single-checkbox"
-                        id="IsRelinkAllowed"
-                        name="IsRelinkAllowed"
-                        type="checkbox"
-                        v-model="isRelinkAllowed"/>
-                    <label for="IsRelinkAllowed"
-                        style="font-weight: bold">
+                    <input class="checkbox-filter single-checkbox" id="IsRelinkAllowed" name="IsRelinkAllowed"
+                        type="checkbox" v-model="isRelinkAllowed" />
+                    <label for="IsRelinkAllowed" style="font-weight: bold">
                         <span class="tick"></span>
-                        {{$t('FieldsAndValidations.AllowRelinkTablet')}}
+                        {{ $t('FieldsAndValidations.AllowRelinkTablet') }}
                     </label>
                 </div>
             </form-group>
-            <p v-if="!isOwnProfile && lockMessage != null">{{lockMessage}}</p>
-            <form-group v-if="!isOwnProfile && canBeLockedAsHeadquarters"
-                :error="modelState['IsLockedByHeadquarters']">
+            <p v-if="!isOwnProfile && lockMessage != null">{{ lockMessage }}</p>
+            <form-group v-if="!isOwnProfile && canBeLockedAsHeadquarters" :error="modelState['IsLockedByHeadquarters']">
                 <div>
-                    <input
-                        class="checkbox-filter single-checkbox"
-                        id="IsLocked"
-                        name="IsLocked"
-                        type="checkbox"
-                        v-model="isLockedByHeadquarters"/>
-                    <label for="IsLocked"
-                        style="font-weight: bold">
+                    <input class="checkbox-filter single-checkbox" id="IsLocked" name="IsLocked" type="checkbox"
+                        v-model="isLockedByHeadquarters" />
+                    <label for="IsLocked" style="font-weight: bold">
                         <span class="tick"></span>
-                        {{$t('FieldsAndValidations.IsLockedFieldName')}}
+                        {{ $t('FieldsAndValidations.IsLockedFieldName') }}
                     </label>
                 </div>
             </form-group>
-            <form-group v-if="!isOwnProfile && canLockBySupervisor"
-                :error="modelState['IsLockedBySupervisor']">
+            <form-group v-if="!isOwnProfile && canLockBySupervisor" :error="modelState['IsLockedBySupervisor']">
                 <div>
-                    <input
-                        class="checkbox-filter single-checkbox"
-                        data-val="true"
-                        id="IsLockedBySupervisor"
-                        name="IsLockedBySupervisor"
-                        type="checkbox"
-                        v-model="isLockedBySupervisor"/>
-                    <label for="IsLockedBySupervisor"
-                        style="font-weight: bold">
+                    <input class="checkbox-filter single-checkbox" data-val="true" id="IsLockedBySupervisor"
+                        name="IsLockedBySupervisor" type="checkbox" v-model="isLockedBySupervisor" />
+                    <label for="IsLockedBySupervisor" style="font-weight: bold">
                         <span class="tick"></span>
-                        {{$t('FieldsAndValidations.IsLockedBySupervisorFieldName')}}
+                        {{ $t('FieldsAndValidations.IsLockedBySupervisorFieldName') }}
                     </label>
                 </div>
             </form-group>
         </div>
 
-        <div >
+        <div>
             <div class="block-filter">
-                <button
-                    type="submit"
-                    class="btn btn-success"
-                    style="margin-right:5px"
-                    id="btnUpdateUser"
-                    v-bind:disabled="userInfo.isObserving"
-                    @click="updateAccount">{{$t('Pages.Update')}}</button>
-                <a class="btn btn-default"
-                    v-bind:href="referrerUrl"
-                    id="lnkCancelUpdateUser">
-                    {{$t('Common.Cancel')}}
+                <button type="submit" class="btn btn-success" style="margin-right:5px" id="btnUpdateUser"
+                    v-bind:disabled="userInfo.isObserving || userInfo.isRestricted" @click="updateAccount">{{
+                        $t('Pages.Update') }}</button>
+                <a class="btn btn-default" v-bind:href="referrerUrl" id="lnkCancelUpdateUser">
+                    {{ $t('Common.Cancel') }}
                 </a>
             </div>
         </div>
 
         <div v-if="isLockedOut">
-            <p>{{$t('Pages.AutolockDescription')}}</p>
-            <button
-                type="submit"
-                class="btn btn-success"
-                style="margin-right:5px"
-                id="btnUpdateUser"
-                v-if='lockedOutCanBeReleased'
-                v-bind:disabled="userInfo.isObserving"
-                @click="releaseLock">{{$t('Pages.Unlock')}}</button>
-        </div >
+            <p>{{ $t('Pages.AutolockDescription') }}</p>
+            <button type="submit" class="btn btn-success" style="margin-right:5px" id="btnUpdateUser"
+                v-if='lockedOutCanBeReleased' v-bind:disabled="userInfo.isObserving || userInfo.isRestricted"
+                @click="releaseLock">{{
+                    $t('Pages.Unlock') }}</button>
+        </div>
     </ProfileLayout>
 </template>
 
 <script>
 import Vue from 'vue'
-import {each} from 'lodash'
+import { each } from 'lodash'
 
 export default {
     data() {
@@ -130,13 +82,13 @@ export default {
             phoneNumber: null,
             isLockedByHeadquarters: false,
             isLockedBySupervisor: false,
-            isLockedOut : false,
+            isLockedOut: false,
             successMessage: null,
             isRelinkAllowed: false,
         }
     },
     computed: {
-        currentTab(){
+        currentTab() {
             return 'account'
         },
         model() {
@@ -173,7 +125,7 @@ export default {
         referrerUrl() {
             return '/users/UsersManagement'
         },
-        lockedOutCanBeReleased(){
+        lockedOutCanBeReleased() {
             return this.userInfo.lockedOutCanBeReleased
         },
         isRelinkVisible() {
@@ -192,18 +144,18 @@ export default {
         this.isRelinkAllowed = this.userInfo.isRelinkAllowed
     },
     watch: {
-        personName: function(val) {
-            Vue.delete( this.modelState, 'PersonName')
+        personName: function (val) {
+            Vue.delete(this.modelState, 'PersonName')
         },
-        email: function(val) {
-            Vue.delete( this.modelState, 'Email')
+        email: function (val) {
+            Vue.delete(this.modelState, 'Email')
         },
-        phoneNumber: function(val) {
-            Vue.delete( this.modelState, 'PhoneNumber')
+        phoneNumber: function (val) {
+            Vue.delete(this.modelState, 'PhoneNumber')
         },
     },
     methods: {
-        updateAccount: function(event) {
+        updateAccount: function (event) {
             this.successMessage = null
             for (var error in this.modelState) {
                 delete this.modelState[error]
@@ -234,8 +186,7 @@ export default {
                 }
             )
         },
-        releaseLock: function()
-        {
+        releaseLock: function () {
             var self = this
             this.$http({
                 method: 'post',
@@ -252,13 +203,13 @@ export default {
                     self.isLockedOut = false
                 })
         },
-        processModelState: function(response, vm) {
+        processModelState: function (response, vm) {
             if (response) {
-                each(response, function(state) {
+                each(response, function (state) {
                     var message = ''
                     var stateErrors = state.value
                     if (stateErrors) {
-                        each(stateErrors, function(stateError, j) {
+                        each(stateErrors, function (stateError, j) {
                             if (j > 0) {
                                 message += '; '
                             }
