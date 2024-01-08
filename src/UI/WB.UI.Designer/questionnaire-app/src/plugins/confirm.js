@@ -3,11 +3,6 @@ import event from './events';
 
 export default {
     install: (app, args = {}) => {
-        if (this.installed) return;
-
-        this.installed = true;
-        this.params = args;
-
         app.component(args.componentName || 'confirm-dialog', Confirm);
 
         const confirm = params => {

@@ -27,6 +27,8 @@ vue.use(i18n);
 //vue.use(uiv);
 vue.use(PerfectScrollbar);
 vue.use(VueDOMPurifyHTML);
+vue.use(ConfirmDialog);
+vue.component('confirm-dialog', ConfirmDialog.default);
 
 directives(vue);
 

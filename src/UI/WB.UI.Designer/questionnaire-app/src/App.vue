@@ -20,9 +20,13 @@
 <script>
 import { useQuestionnaireStore } from './stores/questionnaire';
 import { useTreeStore } from './stores/tree';
+//import ConfirmDialog from './views/App/components/Confirm.vue';
 
 export default {
     name: 'QuestionnaireApp',
+    components: {
+        //ConfirmDialog
+    },
     provide() {
         return {
             questionnaire: this.questionnaire,
