@@ -88,6 +88,7 @@ namespace WB.UI.Supervisor.ServiceLocation
 
             registry.BindAsSingleton<IPlainStorage<SupervisorIdentity>, SqlitePlainStorage<SupervisorIdentity>>();
             registry.BindAsSingleton<IPlainStorage<WorkspaceView>, SqlitePlainStorage<WorkspaceView>>();
+            registry.BindAsSingleton<ILastCompletionComments, LastCompletionComments>();
         }
     }
 }

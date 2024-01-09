@@ -133,11 +133,24 @@
     <value>Вы точно хотите почистить экспортный кэш? Все сгенерированые файлы не будут доступны для загрузки.</value>
   </data>
   <data name="RemoveExportCacheSuccess" xml:space="preserve">
-    <value>Кэш был удален успешно</value>
+    <value>Кэш экспорта успешно удален</value>
+  </data>
+  <data name="RemovingExportCache" xml:space="preserve">
+    <value>Идет процесс удаления кэша экспорта</value>
   </data>
   <data name="RemoveExportCacheFail" xml:space="preserve">
-    <value>Ошибка удаления</value>
+    <value>Кэш экспорта в данный момент не может быть очищен. Пожалуйста, повторите попытку позже.
+
+Возможные причины:
+* Генерируется файл экспорта.
+* Загружается файл экспорта с сервера.
+* Удаление сгенерированного экспортного файла заблокировано другой программой.
+* и т.д.</value>
   </data>
+    <data name="RemoveExportCacheGeneratingFail" xml:space="preserve">
+    <value>Кэш экспорта в данный момент не может быть очищен. Генерируется файл экспорта.</value>
+  </data>
+    
   <data name="RemoveExportCache_Warning" xml:space="preserve">
     <value>Внимание! Эта операция необратима</value>
   </data>

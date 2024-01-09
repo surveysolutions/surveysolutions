@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:local="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:paddingRight="@dimen/calendar_event_dialog_padding"
+              android:paddingLeft="@dimen/calendar_event_dialog_padding"
+              android:paddingTop="@dimen/calendar_event_dialog_padding"
+              android:paddingBottom="@dimen/calendar_event_dialog_padding"
+              android:minWidth="400dp"
+              local:MvxBind="HideKeyboardOnClick .">
+
+    <com.google.android.exoplayer2.ui.StyledPlayerView
+            android:id="@+id/video_player_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="400dp"
+            local:controller_layout_id="@layout/simple_video_controls"
+            local:MvxBind="Video PathToFile; 
+                            Tag Tag;" />
+    <LinearLayout  android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:orientation="horizontal"
+                   android:layout_marginTop="@dimen/calendar_event_dialog_margin">
+        <View
+                android:layout_width="@dimen/calendar_event_buttons_space"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+        />
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                style="@style/Widget.App.NegativeButton"
+                local:MvxBind="Text Localization('Cancel'); HideKeyboardOnClick .; Click CloseCommand;" />
+    </LinearLayout>
+</LinearLayout>

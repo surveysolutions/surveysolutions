@@ -52,7 +52,7 @@ module.exports = class LocalizationBuilder {
                 ? ''
                 : '.' + this.getHash(fileBody);
 
-            const filename = language + hash + '.json';
+            const filename = language + hash + '.js';
 
             const resultPath = path.join(destinationFolder, filename);
 

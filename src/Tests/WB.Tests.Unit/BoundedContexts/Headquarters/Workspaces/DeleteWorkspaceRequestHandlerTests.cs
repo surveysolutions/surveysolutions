@@ -95,7 +95,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Workspaces
             // act
             var response = await Subject.Handle(new DeleteWorkspaceRequest(Workspace.Name));
 
-            exportApi.Verify(a => a.DeleteTenant(), Times.Once);
+            exportApi.Verify(a => a.DropTenant(), Times.Once);
 
             Assert.That(response, Has.Property(nameof(DeleteWorkspaceResponse.Success)).True);
         }
