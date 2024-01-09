@@ -107,6 +107,7 @@
                         class="btn"
                         href="/"
                         type="button"
+                        style="margin-right: 0px;"
                         v-if="!currentUserIsAuthenticated"
                         >{{ $t('QuestionnaireEditor.Login') }}</a
                     >
