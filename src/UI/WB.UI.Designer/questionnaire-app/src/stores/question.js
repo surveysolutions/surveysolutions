@@ -183,7 +183,7 @@ export const useQuestionStore = defineStore('question', {
                     );
                 }
 
-                this.initialVariable = Object.assign({}, this.question);
+                this.initialQuestion = Object.assign({}, this.question);
             });
         },
 
