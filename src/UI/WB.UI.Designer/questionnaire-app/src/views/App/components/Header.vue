@@ -223,10 +223,10 @@
         </div>
     </section>
 
-    <section id="spacer" class="row">
+    <!-- <section id="spacer" class="row">
         <div class="left"></div>
         <div class="right"></div>
-    </section>
+    </section> -->
 
     <VerificationDialog
         ref="verificationDialog"
