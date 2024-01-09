@@ -11,7 +11,9 @@ import i18n from './plugins/localization';
 import 'bootstrap';
 
 import ConfirmDialog from './plugins/confirm';
+
 import PerfectScrollbar from 'vue3-perfect-scrollbar';
+import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css';
 
 //import * as uiv from 'uiv';
 
