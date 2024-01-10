@@ -9,13 +9,8 @@
                 <label for="edit-group-title-highlight" class="wb-label">
                     {{ $t('QuestionnaireEditor.GroupTitle') }}
                 </label>
-                <br />
-                <div class="pseudo-form-control">
-                    <!--div id="edit-group-title-highlight"
-                        ui-ace="{ onLoad : setupAceForSubstitutions, require: ['ace/ext/language_tools'] }"
-                        ng-model="activeGroup.title"></div-->
-                    <ExpressionEditor v-model="activeGroup.title"></ExpressionEditor>
-                </div>
+                <br />                
+                <ExpressionEditor v-model="activeGroup.title"></ExpressionEditor>                
             </div>
 
             <div class="row">
@@ -56,11 +51,7 @@
                         <help link="hideIfDisabled" />
                     </label>
                     <br>
-                    <div class="pseudo-form-control">
-                        <!--div id="edit-group-condition" ui-ace="{ onLoad : aceLoaded , require: ['ace/ext/language_tools']}"
-                            ng-model="activeGroup.enablementCondition"></div-->
-                        <ExpressionEditor v-model="activeGroup.enablementCondition"></ExpressionEditor>
-                    </div>
+                    <ExpressionEditor v-model="activeGroup.enablementCondition"></ExpressionEditor>                    
                 </div>
                 <div class="form-group col-xs-1">
                     <button type="button" class="btn cross instructions-cross"

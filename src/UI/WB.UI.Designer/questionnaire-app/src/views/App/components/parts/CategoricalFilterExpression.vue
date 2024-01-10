@@ -8,20 +8,12 @@
         <div class="form-group col-xs-11">
             <label class="wb-label" for="optionsFilterExpression"
                 v-t="{ path: 'QuestionnaireEditor.QuestionFilter' }"></label>
-            <div class="pseudo-form-control">
-                <!--div id="optionsFilterExpression"
-                    v-if="activeQuestion.isLinked && activeQuestion.linkedToEntity.type != 'textlist'"
-                    ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }"
-                    v-model="activeQuestion.linkedFilterExpression"></div-->
-                <ExpressionEditor v-if="activeQuestion.isLinked && linkedToEntity.type != 'textlist'"
-                    v-model="activeQuestion.linkedFilterExpression"></ExpressionEditor>
-                <!--div id="optionsFilterExpression"
-                    v-if="!(activeQuestion.isLinked && activeQuestion.linkedToEntity.type != 'textlist')"
-                    ui-ace="{ onLoad : aceLoadedForOptionFilter, require: ['ace/ext/language_tools'] }"
-                    v-model="activeQuestion.optionsFilterExpression"></div-->
-                <ExpressionEditor v-if="!(activeQuestion.isLinked && linkedToEntity.type != 'textlist')"
-                    v-model="activeQuestion.optionsFilterExpression"></ExpressionEditor>
-            </div>
+            
+            <ExpressionEditor v-if="activeQuestion.isLinked && linkedToEntity.type != 'textlist'"
+                    v-model="activeQuestion.linkedFilterExpression" mode="expression"></ExpressionEditor>
+            <ExpressionEditor v-if="!(activeQuestion.isLinked && linkedToEntity.type != 'textlist')"
+                    v-model="activeQuestion.optionsFilterExpression" mode="expression"></ExpressionEditor>
+            
         </div>
 
         <div class="form-group col-xs-1">

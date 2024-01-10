@@ -43,14 +43,9 @@
                 <label for="edit-variable-title-highlight" class="wb-label">{{ $t('QuestionnaireEditor.VariableLabel') }}
                     <help link="variableDescription" />
                 </label>
-                <div class="pseudo-form-control">
-                    <!--div
-                        id="edit-variable-title-highlight"
-                        ui-ace="{ onLoad : setupAceForSubstitutions, require: ['ace/ext/language_tools'] }"
-                        ng-model="activeVariable.label"
-                    ></div-->
-                    <ExpressionEditor v-model="activeVariable.label"></ExpressionEditor>
-                </div>
+                
+                <ExpressionEditor v-model="activeVariable.label"></ExpressionEditor>
+                
             </div>
             <div class="form-group">
                 <label for="edit-group-condition">{{ $t('QuestionnaireEditor.VariableExpression') }}
@@ -59,11 +54,9 @@
                 <input id="cb-do-not-export" type="checkbox" class="wb-checkbox" v-model="activeVariable.doNotExport" />
                 <label for="cb-do-not-export"><span></span>{{ $t('QuestionnaireEditor.VariableNoExport') }}</label>
                 <help link="doNotExport"></help>
-                <div class="pseudo-form-control">
-                    <div id="edit-group-condition" ui-ace="{ onLoad : aceLoaded , require: ['ace/ext/language_tools']}"
-                        ng-model="activeVariable.expression"></div>
-                    <ExpressionEditor mode="expression" v-model="activeVariable.expression"></ExpressionEditor>
-                </div>
+                
+                <ExpressionEditor mode="expression" v-model="activeVariable.expression"></ExpressionEditor>
+                
             </div>
         </div>
         <div class="form-buttons-holder">

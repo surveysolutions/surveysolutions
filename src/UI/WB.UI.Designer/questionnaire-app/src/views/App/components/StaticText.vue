@@ -15,13 +15,8 @@
             <div class="form-group">
                 <label for="edit-static-text-highlight" class="wb-label">
                     {{ $t('QuestionnaireEditor.StaticText') }}</label><br />
-                <div class="pseudo-form-control">
-                    <div>
-                        <!-- ui-ace="{ onLoad : setupAceForSubstitutions, require: ['ace/ext/language_tools'] }" -->
-                        <ExpressionEditor id="edit-static-text-highlight" mode="substitutions"
+                <ExpressionEditor id="edit-static-text-highlight" mode="substitutions"
                             v-model:value="activeStaticText.text" />
-                    </div>
-                </div>
             </div>
             <div class="form-group">
                 <label for="edit-static-attachment-name" class="wb-label">
@@ -73,10 +68,8 @@
                         {{ $t('QuestionnaireEditor.HideIfDisabled') }}
                         <help key="hideIfDisabled" />
                     </label>
-
-                    <div class="pseudo-form-control">
-                        <ExpressionEditor v-model="activeStaticText.enablementCondition"></ExpressionEditor>
-                    </div>
+                    <ExpressionEditor v-model="activeStaticText.enablementCondition"></ExpressionEditor>
+                    
                 </div>
                 <div class="form-group col-xs-1">
                     <button type="button" class="btn cross instructions-cross" @click="
@@ -101,24 +94,13 @@
                 <label :for="'cb-isWarning' + index"><span></span>{{ $t('QuestionnaireEditor.IsWarning') }}</label>
 
                 <button class="btn delete-btn-sm delete-validation-condition" @click="removeValidationCondition(index)"
-                    tabindex="-1"></button>
-
-                <div class="pseudo-form-control">
-                    <!-- <div ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" v-bind="validation.expression"
-                    v-attr-id="'validation-expression-' + $index" v-attr-tabindex="$index + 1"></div> -->
-                    <ExpressionEditor v-model="validation.expression" mode="expression"></ExpressionEditor>
-                </div>
-
+                    tabindex="-1"></button>                
+                <ExpressionEditor v-model="validation.expression" mode="expression"/>
                 <label for="validationMessage{{$index}}" class="validation-message">{{
                     $t('QuestionnaireEditor.ErrorMessage') }}
                     <help link="validationMessage" />
                 </label>
-                <div class="pseudo-form-control">
-                    <!--div ng-attr-id="{{'validation-message-' + $index}}" ng-attr-tabindex="{{$index + 1}}"
-                        ui-ace="{ onLoad : setupAceForSubstitutions, require: ['ace/ext/language_tools'] }"
-                        v-model="validation.message"></div-->
-                    <ExpressionEditor v-model="validation.message" mode="substitutions"></ExpressionEditor>
-                </div>
+                <ExpressionEditor v-model="validation.message" mode="substitutions"/>
             </div>
             <div class="form-group" v-if="activeStaticText.validationConditions.length < 10">
                 <button type="button" class="btn btn-lg btn-link" @click="addValidationCondition()">

@@ -57,13 +57,10 @@
 
             <div class="form-group">
                 <label for="edit-question-title-highlight" class="wb-label"
-                    v-t="{ path: 'QuestionnaireEditor.QuestionText' }"></label><br>
-                <div class="pseudo-form-control">
-                    <!--div id="edit-question-title-highlight"
-                        ui-ace="{ onLoad : setupAceForSubstitutions, require: ['ace/ext/language_tools'] }"
-                        v-model="activeQuestion.title"></div-->
-                    <ExpressionEditor v-model="activeQuestion.title"></ExpressionEditor>
-                </div>
+                    v-t="{ path: 'QuestionnaireEditor.QuestionText' }"></label><br> 
+
+                <ExpressionEditor v-model="activeQuestion.title"></ExpressionEditor>                
+                
                 <div class="question-type-specific-block" v-if="activeQuestion.type != undefined
                     && (activeQuestion.type != 'GpsCoordinates'
                         && activeQuestion.type != 'QRBarcode'
@@ -93,12 +90,7 @@
                         <help link="hideInstructions" />
                     </label>
 
-                    <div class="pseudo-form-control">
-                        <!--div id="edit-question-instructions"
-                            ui-ace="{ onLoad : setupAceForSubstitutions, require: ['ace/ext/language_tools'] }"
-                            v-model="activeQuestion.instructions"></div-->
-                        <ExpressionEditor v-model="activeQuestion.instructions"></ExpressionEditor>
-                    </div>
+                    <ExpressionEditor v-model="activeQuestion.instructions"></ExpressionEditor>                    
                 </div>
 
                 <div class="form-group col-xs-1">
@@ -132,12 +124,7 @@
                         <help link="hideIfDisabled" />
                     </label>
 
-                    <div class="pseudo-form-control">
-                        <!--div id="edit-question-enablement-condition"
-                            ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }"
-                            v-model="activeQuestion.enablementCondition"></div-->
-                        <ExpressionEditor v-model="activeQuestion.enablementCondition"></ExpressionEditor>
-                    </div>
+                    <ExpressionEditor v-model="activeQuestion.enablementCondition"></ExpressionEditor>                    
                 </div>
                 <div class="form-group col-xs-1">
                     <button type="button" class="btn cross instructions-cross"
@@ -157,24 +144,17 @@
 
                 <button type="button" class="btn delete-btn-sm delete-validation-condition"
                     @click="removeValidationCondition(index)" tabindex="-1"></button>
-
-                <div class="pseudo-form-control">
-                    <!--div ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }"
-                        ng-attr-id="{{'validation-expression-' + $index}}" v-model="validation.expression"
-                        ng-attr-tabindex="{{$index + 1}}"></div-->
-                    <ExpressionEditor mode="expression" v-model="validation.expression"></ExpressionEditor>
-                </div>
+                
+                <ExpressionEditor mode="expression" v-model="validation.expression"></ExpressionEditor>
+                
 
                 <label for="validationMessage{{$index}}" class="validation-message">{{
                     $t('QuestionnaireEditor.ErrorMessage') }}
                     <help link="validationMessage" />
                 </label>
-                <div class="pseudo-form-control">
-                    <!--div ng-attr-id="{{'validation-message-' + $index}}" ng-attr-tabindex="{{$index + 1}}"
-                        ui-ace="{ onLoad : setupAceForSubstitutions, require: ['ace/ext/language_tools'] }"
-                        v-model="validation.message"></div-->
-                    <ExpressionEditor v-model="validation.message"></ExpressionEditor>
-                </div>
+                
+                <ExpressionEditor v-model="validation.message"></ExpressionEditor>
+                
             </div>
             <div class="form-group"
                 v-if="doesQuestionSupportValidations() && activeQuestion.validationConditions.length < 10">

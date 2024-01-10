@@ -41,12 +41,7 @@
                 </label>
 
                 <br />
-                <div class="pseudo-form-control">
-                    <!--div id="edit-roster-title-highlight"
-                        ui-ace="{ onLoad : setupAceForSubstitutions, require: ['ace/ext/language_tools'] }"
-                        v-model="activeRoster.title"></div-->
-                    <ExpressionEditor v-model="activeRoster.title"></ExpressionEditor>
-                </div>
+                <ExpressionEditor v-model="activeRoster.title"></ExpressionEditor>                
                 <div class="roster-type-specific-block" v-if="activeRoster.type != undefined">
 
 
@@ -328,11 +323,9 @@
                         <help link="hideIfDisabled" />
                     </label>
                     <br>
-                    <div class="pseudo-form-control">
-                        <!--div id="edit-group-condition" ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }"
-                            v-model="activeRoster.enablementCondition"></div-->
-                        <ExpressionEditor v-model="activeRoster.enablementCondition"></ExpressionEditor>
-                    </div>
+                    
+                    <ExpressionEditor v-model="activeRoster.enablementCondition"></ExpressionEditor>
+                    
                 </div>
                 <div class="form-group col-xs-1">
                     <button type="button" class="btn cross instructions-cross"
