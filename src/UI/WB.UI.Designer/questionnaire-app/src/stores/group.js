@@ -68,6 +68,23 @@ export const useGroupStore = defineStore('group', {
 
         discardChanges() {
             Object.assign(this.group.group, this.initialGroup);
+        },
+
+        deleteGroup(itemId) {
+            var command = {
+                questionnaireId: this.questionnaireId,
+                groupId: itemId
+            };
+
+            return commandCall('DeleteGroup', command).then(result => {
+                if ((this.group.group.id = itemId)) {
+                    this.clear();
+                }
+
+                emitter.emit('variableDeleted', {
+                    itemId: itemId
+                });
+            });
         }
     }
 });

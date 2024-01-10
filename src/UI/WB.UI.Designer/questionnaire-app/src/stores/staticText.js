@@ -81,6 +81,23 @@ export const useStaticTextStore = defineStore('staticText', {
 
         discardChanges() {
             Object.assign(this.staticText, this.initialStaticText);
+        },
+
+        deleteStaticText(itemId) {
+            var command = {
+                questionnaireId: this.questionnaireId,
+                entityId: itemId
+            };
+
+            return commandCall('DeleteStaticText', command).then(result => {
+                if ((this.staticText.id = itemId)) {
+                    this.clear();
+                }
+
+                emitter.emit('staticTextDeleted', {
+                    itemId: itemId
+                });
+            });
         }
     }
 });

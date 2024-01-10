@@ -95,6 +95,23 @@ export const useRosterStore = defineStore('roster', {
                     rosterSizeQuestionId: rosterSizeQuestionId
                 }
             );
+        },
+
+        deleteRoster(itemId) {
+            var command = {
+                questionnaireId: this.questionnaireId,
+                groupId: itemId
+            };
+
+            return commandCall('DeleteGroup', command).then(result => {
+                if ((this.roster.itemId = itemId)) {
+                    this.clear();
+                }
+
+                emitter.emit('rosterDeleted', {
+                    itemId: itemId
+                });
+            });
         }
     }
 });

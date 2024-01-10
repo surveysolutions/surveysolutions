@@ -1,118 +1,78 @@
 <template>
-    <div
-        context-menu
-        class="section item"
-        :data-bs-target="'context-menu-' + item.itemId"
-        :class="itemClass"
-        ui-sref-active="selected"
-        context-menu-hide-on-mouse-leave="true"
-        @contextmenu.prevent="onContextMenu($event)"
-        v-click-outside="closeContextMenu"
-        v-contextmenu-outside="closeContextMenu"
-        @mouseenter="is_highlighted = true"
-        @mouseleave="is_highlighted = false"
-    >
+    <div context-menu class="section item" :data-bs-target="'context-menu-' + item.itemId" :class="itemClass"
+        ui-sref-active="selected" context-menu-hide-on-mouse-leave="true" @contextmenu.prevent="onContextMenu($event)"
+        v-click-outside="closeContextMenu" v-contextmenu-outside="closeContextMenu" @mouseenter="is_highlighted = true"
+        @mouseleave="is_highlighted = false">
         <span class="cursor"></span>
         <a class="handler angular-ui-tree-handle" ui-tree-handle></a>
 
         <slot />
 
         <Teleport to="body">
-            <div
-                v-show="contextmenu.open"
-                :style="{
-                    top: contextmenu.y + 'px',
-                    left: contextmenu.x + 'px'
-                }"
-                @click="closeContextMenu"
-                class="dropdown position-fixed"
-                :class="{ open: contextmenu.open }"
-                :id="'context-menu-' + item.itemId"
-            >
+            <div v-show="contextmenu.open" :style="{
+                top: contextmenu.y + 'px',
+                left: contextmenu.x + 'px'
+            }" @click="closeContextMenu" class="dropdown position-fixed" :class="{ open: contextmenu.open }"
+                :id="'context-menu-' + item.itemId">
                 <ul class="dropdown-menu" role="menu">
                     <li>
-                        <a
-                            @click="addQuestion()"
-                            v-if="
-                                !questionnaire.isReadOnlyForUser &&
-                                    !currentChapter.isReadOnly
-                            "
-                            >{{
-                                isGroup()
-                                    ? $t('QuestionnaireEditor.TreeAddQuestion')
-                                    : $t(
-                                          'QuestionnaireEditor.TreeAddQuestionAfter'
-                                      )
-                            }}</a
-                        >
+                        <a @click="addQuestion()" v-if="!questionnaire.isReadOnlyForUser &&
+                            !currentChapter.isReadOnly
+                            ">{{
+        isGroup()
+        ? $t('QuestionnaireEditor.TreeAddQuestion')
+        : $t(
+            'QuestionnaireEditor.TreeAddQuestionAfter'
+        )
+    }}</a>
                     </li>
                     <li>
-                        <a
-                            @click="addGroup()"
-                            v-if="
-                                !questionnaire.isReadOnlyForUser &&
-                                    !currentChapter.isReadOnly &&
-                                    !currentChapter.isCover
-                            "
-                            >{{
-                                isGroup()
-                                    ? $t('QuestionnaireEditor.TreeAddSection')
-                                    : $t(
-                                          'QuestionnaireEditor.TreeAddSectionAfter'
-                                      )
-                            }}</a
-                        >
+                        <a @click="addGroup()" v-if="!questionnaire.isReadOnlyForUser &&
+                                !currentChapter.isReadOnly &&
+                                !currentChapter.isCover
+                                ">{{
+            isGroup()
+            ? $t('QuestionnaireEditor.TreeAddSection')
+            : $t(
+                'QuestionnaireEditor.TreeAddSectionAfter'
+            )
+        }}</a>
                     </li>
                     <li>
-                        <a
-                            @click="addRoster()"
-                            v-if="
-                                !questionnaire.isReadOnlyForUser &&
-                                    !currentChapter.isReadOnly &&
-                                    !currentChapter.isCover
-                            "
-                            >{{
-                                isGroup()
-                                    ? $t('QuestionnaireEditor.TreeAddRoster')
-                                    : $t(
-                                          'QuestionnaireEditor.TreeAddRosterAfter'
-                                      )
-                            }}</a
-                        >
+                        <a @click="addRoster()" v-if="!questionnaire.isReadOnlyForUser &&
+                                !currentChapter.isReadOnly &&
+                                !currentChapter.isCover
+                                ">{{
+            isGroup()
+            ? $t('QuestionnaireEditor.TreeAddRoster')
+            : $t(
+                'QuestionnaireEditor.TreeAddRosterAfter'
+            )
+        }}</a>
                     </li>
                     <li>
-                        <a
-                            @click="addStaticText()"
-                            v-if="
-                                !questionnaire.isReadOnlyForUser &&
-                                    !currentChapter.isReadOnly
-                            "
-                            >{{
-                                isGroup()
-                                    ? $t(
-                                          'QuestionnaireEditor.TreeAddStaticText'
-                                      )
-                                    : $t(
-                                          'QuestionnaireEditor.TreeAddStaticTextAfter'
-                                      )
-                            }}</a
-                        >
+                        <a @click="addStaticText()" v-if="!questionnaire.isReadOnlyForUser &&
+                                !currentChapter.isReadOnly
+                                ">{{
+            isGroup()
+            ? $t(
+                'QuestionnaireEditor.TreeAddStaticText'
+            )
+            : $t(
+                'QuestionnaireEditor.TreeAddStaticTextAfter'
+            )
+        }}</a>
                     </li>
                     <li>
-                        <a
-                            @click="addVariable()"
-                            v-if="
-                                !questionnaire.isReadOnlyForUser &&
-                                    !currentChapter.isReadOnly
-                            "
-                            >{{
-                                isGroup()
-                                    ? $t('QuestionnaireEditor.TreeAddVariable')
-                                    : $t(
-                                          'QuestionnaireEditor.TreeAddVariableAfter'
-                                      )
-                            }}</a
-                        >
+                        <a @click="addVariable()" v-if="!questionnaire.isReadOnlyForUser &&
+                                !currentChapter.isReadOnly
+                                ">{{
+            isGroup()
+            ? $t('QuestionnaireEditor.TreeAddVariable')
+            : $t(
+                'QuestionnaireEditor.TreeAddVariableAfter'
+            )
+        }}</a>
                     </li>
                     <li>
                         <a @click="copyItem()">{{
@@ -120,25 +80,15 @@
                         }}</a>
                     </li>
                     <li>
-                        <a
-                            @click="pasteItemAfter()"
-                            v-if="
-                                readyToPaste &&
-                                    !questionnaire.isReadOnlyForUser &&
-                                    !currentChapter.isReadOnly
-                            "
-                            >{{ $t('QuestionnaireEditor.PasteAfter') }}</a
-                        >
+                        <a @click="pasteItemAfter()" v-if="readyToPaste &&
+                                !questionnaire.isReadOnlyForUser &&
+                                !currentChapter.isReadOnly
+                                ">{{ $t('QuestionnaireEditor.PasteAfter') }}</a>
                     </li>
                     <li>
-                        <a
-                            @click="deleteItem()"
-                            v-if="
-                                !questionnaire.isReadOnlyForUser &&
-                                    !currentChapter.isReadOnly
-                            "
-                            >{{ $t('QuestionnaireEditor.Delete') }}</a
-                        >
+                        <a @click="deleteItem()" v-if="!questionnaire.isReadOnlyForUser &&
+                            !currentChapter.isReadOnly
+                            ">{{ $t('QuestionnaireEditor.Delete') }}</a>
                     </li>
                 </ul>
             </div>
@@ -163,6 +113,11 @@
 <script>
 import { useQuestionnaireStore } from '../../../stores/questionnaire';
 import { useTreeStore } from '../../../stores/tree';
+import { useGroupStore } from '../../../stores/group';
+import { useQuestionStore } from '../../../stores/question';
+import { useRosterStore } from '../../../stores/roster';
+import { useStaticTextStore } from '../../../stores/staticText';
+import { useVariableStore } from '../../../stores/variable';
 import clickOutside from '../../../directives/clickOutside';
 import contextmenuOutside from '../../../directives/contextmenuOutside';
 import { createQuestionForDeleteConfirmationPopup } from '../../../services/utilityService';
@@ -192,10 +147,20 @@ export default {
     setup(props) {
         const treeStore = useTreeStore();
         const questionnaireStore = useQuestionnaireStore();
+        const groupStore = useGroupStore();
+        const questionStore = useQuestionStore();
+        const rosterStore = useRosterStore();
+        const staticTextStore = useStaticTextStore();
+        const variableStore = useVariableStore();
 
         return {
             treeStore,
-            questionnaireStore
+            questionnaireStore,
+            groupStore,
+            questionStore,
+            rosterStore,
+            staticTextStore,
+            variableStore,
         };
     },
     computed: {
@@ -362,12 +327,12 @@ export default {
 
             const params = createQuestionForDeleteConfirmationPopup(
                 this.item.title ||
-                    this.$t('QuestionnaireEditor.UntitledQuestion')
+                this.$t('QuestionnaireEditor.UntitledQuestion')
             );
 
             params.callback = confirm => {
                 if (confirm) {
-                    this.treeStore
+                    this.questionStore
                         .deleteQuestion(itemIdToDelete)
                         .then(response => {
                             this.tree.remove(this.stat);
@@ -391,12 +356,12 @@ export default {
 
             const params = createQuestionForDeleteConfirmationPopup(
                 this.item.text ||
-                    this.$t('QuestionnaireEditor.UntitledStaticText')
+                this.$t('QuestionnaireEditor.UntitledStaticText')
             );
 
             params.callback = confirm => {
                 if (confirm) {
-                    this.treeStore
+                    this.staticTextStore
                         .deleteStaticText(itemIdToDelete)
                         .then(response => {
                             this.tree.remove(this.stat);
@@ -428,7 +393,7 @@ export default {
 
             params.callback = confirm => {
                 if (confirm) {
-                    this.treeStore
+                    this.variableStore
                         .deleteVariable(itemIdToDelete)
                         .then(response => {
                             this.tree.remove(this.stat);
@@ -452,13 +417,13 @@ export default {
 
             const params = createQuestionForDeleteConfirmationPopup(
                 this.item.title ||
-                    this.$t('QuestionnaireEditor.UntitledGroupOrRoster')
+                this.$t('QuestionnaireEditor.UntitledGroupOrRoster')
             );
 
             params.callback = confirm => {
                 if (confirm) {
-                    this.treeStore
-                        .deleteStaticText(itemIdToDelete)
+                    this.groupStore
+                        .deleteGroup(itemIdToDelete)
                         .then(response => {
                             this.tree.remove(this.stat);
 
@@ -483,7 +448,7 @@ export default {
         pasteItemAfter() {
             if (!this.treeStore.canPaste()) return;
 
-            this.treeStore.pasteItemAfter(this.item).then(function(result) {
+            this.treeStore.pasteItemAfter(this.item).then(function (result) {
                 if (!chapter.isCover)
                     this.$router.push({
                         name: result.itemType,

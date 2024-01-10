@@ -106,6 +106,7 @@
 <script>
 import { useVariableStore } from '../../../stores/variable';
 import { useCommentsStore } from '../../../stores/comments';
+import { createQuestionForDeleteConfirmationPopup } from '../../../services/utilityService'
 import MoveToChapterSnippet from './MoveToChapterSnippet.vue';
 import ExpressionEditor from './ExpressionEditor.vue';
 import Breadcrumbs from './Breadcrumbs.vue'
@@ -188,7 +189,21 @@ export default {
             this.commentsStore.toggleComments();
         },
         deleteVariable() {
-            //
+            var itemIdToDelete = this.activeVariable.id;
+
+            var label = this.activeVariable.label;
+
+            const params = createQuestionForDeleteConfirmationPopup(
+                label || this.$t('QuestionnaireEditor.UntitledVariable')
+            );
+
+            params.callback = confirm => {
+                if (confirm) {
+                    this.variableStore.deleteVariable(itemIdToDelete);
+                }
+            };
+
+            this.$confirm(params);
         }
     }
 };

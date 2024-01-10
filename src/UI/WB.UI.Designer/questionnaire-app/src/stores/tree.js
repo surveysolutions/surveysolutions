@@ -16,8 +16,8 @@ export const useTreeStore = defineStore('tree', {
     }),
     getters: {
         getItems: state => (state.info.chapter || {}).items,
-        getChapter: state => state.info.chapter,
-        getChapterInfo: state => state.info
+        getChapterData: state => state.info.chapter,
+        getChapter: state => state.info
     },
     actions: {
         setupListeners() {
@@ -26,6 +26,12 @@ export const useTreeStore = defineStore('tree', {
             emitter.on('variableUpdated', this.variableUpdated);
             emitter.on('groupUpdated', this.groupUpdated);
             emitter.on('rosterUpdated', this.rosterUpdated);
+
+            emitter.on('questionDeleted', this.questionDeleted);
+            emitter.on('staticTextDeleted', this.staticTextDeleted);
+            emitter.on('variableDeleted', this.variableDeleted);
+            emitter.on('groupDeleted', this.groupDeleted);
+            emitter.on('rosterDeleted', this.rosterDeleted);
         },
 
         async fetchTree(questionnaireId, chapterId) {
@@ -121,7 +127,7 @@ export const useTreeStore = defineStore('tree', {
             var newId = newGuid();
             var emptyGroup = {
                 itemId: newId,
-                title: i18n.t('DefaultNewSubsection'),
+                title: i18n.t('QuestionnaireEditor.DefaultNewSubsection'),
                 items: [],
                 itemType: 'Group',
                 hasCondition: false,
@@ -169,7 +175,9 @@ export const useTreeStore = defineStore('tree', {
             var newId = newGuid();
             var emptyRoster = {
                 itemId: newId,
-                title: i18n.t('DefaultNewRoster') + ' - %rostertitle%',
+                title:
+                    i18n.t('QuestionnaireEditor.DefaultNewRoster') +
+                    ' - %rostertitle%',
                 items: [],
                 itemType: 'Group',
                 hasCondition: false,
@@ -207,7 +215,7 @@ export const useTreeStore = defineStore('tree', {
             var newId = newGuid();
             var emptyStaticText = {
                 itemId: newId,
-                text: i18n.t('DefaultNewStaticText'),
+                text: i18n.t('QuestionnaireEditor.DefaultNewStaticText'),
                 itemType: 'StaticText',
                 hasCondition: false,
                 hasValidation: false,
@@ -237,7 +245,8 @@ export const useTreeStore = defineStore('tree', {
             }
 
             return commandCall('AddVariable', command).then(function(result) {
-                parent.items.splice(index, 0, variable);
+                const insertIdx = index == null ? parent.items.length : index;
+                parent.items.splice(insertIdx, 0, variable);
                 callback(variable, parent, index);
             });
         },
@@ -331,7 +340,7 @@ export const useTreeStore = defineStore('tree', {
             return index < 0 ? null : index;
         },
 
-        deleteGroup(itemId) {
+        /*deleteGroup(itemId) {
             var command = {
                 questionnaireId: this.questionnaireId,
                 groupId: itemId
@@ -367,8 +376,13 @@ export const useTreeStore = defineStore('tree', {
                 entityId: itemId
             };
 
-            return commandCall('DeleteStaticText', command);
-        },
+            return commandCall('DeleteStaticText', command).then(function(result) {
+                parent.items.splice(index, 0, group);
+                callback(group, parent, index);
+
+                emitter.emit
+            });;
+        },*/
 
         moveItem(item, newParentId, index) {
             if (item.itemType == 'Question')
@@ -464,7 +478,7 @@ export const useTreeStore = defineStore('tree', {
 
         groupUpdated(data) {
             const itemId = data.itemId.replaceAll('-', '');
-            const chapter = this.getChapter;
+            const chapter = this.getChapterData;
             if (chapter.itemId === itemId) {
                 chapter.title = data.title;
                 chapter.hasCondition = data.hasCondition;
@@ -500,6 +514,55 @@ export const useTreeStore = defineStore('tree', {
                 return Array.isArray(a.items) && a.items.some(iter);
             });
             return o;
+        },
+
+        questionDeleted(data) {
+            this.deleteTreeNode(data.itemId);
+        },
+        staticTextDeleted(data) {
+            this.deleteTreeNode(data.itemId);
+        },
+        variableDeleted(data) {
+            this.deleteTreeNode(data.itemId);
+        },
+        groupDeleted(data) {
+            this.deleteTreeNode(data.itemId);
+        },
+        rosterDeleted(data) {
+            this.deleteTreeNode(data.itemId);
+        },
+        deleteTreeNode(itemId) {
+            const id = itemId.replaceAll('-', '');
+            var parent = this.findTreeItemParent(id);
+            if (isNull(parent) || isUndefined(parent)) return;
+
+            const index = this.getItemIndexByIdFromParentItemsList(
+                parent,
+                itemId
+            );
+            parent.items.splice(index, 1);
+        },
+
+        findTreeItemParent(value) {
+            const chapter = this.getChapterData;
+            return this.findParent(chapter, value);
+        },
+
+        findParent(parent, value) {
+            if (!parent.items) {
+                return;
+            }
+
+            for (const item of parent.items) {
+                if (item.itemId === value) {
+                    return parent;
+                }
+
+                const find = this.findParent(item.items, value);
+                if (find) {
+                    return find;
+                }
+            }
         }
     }
 });

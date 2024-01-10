@@ -61,6 +61,23 @@ export const useVariableStore = defineStore('variable', {
             });
         },
 
+        deleteVariable(itemId) {
+            var command = {
+                questionnaireId: this.questionnaireId,
+                entityId: itemId
+            };
+
+            return commandCall('DeleteVariable', command).then(response => {
+                if ((this.data.id = itemId)) {
+                    this.clear();
+                }
+
+                emitter.emit('variableDeleted', {
+                    itemId: itemId
+                });
+            });
+        },
+
         discardChanges() {
             Object.assign(this.data, this.initialVariable);
             //this.data = Object.assign({}, this.initialVariable);

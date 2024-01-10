@@ -267,6 +267,23 @@ export const useQuestionStore = defineStore('question', {
 
         discardChanges() {
             Object.assign(this.question, this.initialQuestion);
+        },
+
+        deleteQuestion(itemId) {
+            var command = {
+                questionnaireId: this.questionnaireId,
+                questionId: itemId
+            };
+
+            return commandCall('DeleteQuestion', command).then(response => {
+                if ((this.question.id = itemId)) {
+                    this.clear();
+                }
+
+                emitter.emit('questionDeleted', {
+                    itemId: itemId
+                });
+            });
         }
     }
 });

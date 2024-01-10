@@ -1,12 +1,12 @@
 <template>
     <div class="questionnaire-tree-holder col-xs-6">
         <div class="chapter-title" v-switch on="filtersBoxMode"
-            :class="{ selected: currentChapter.itemId === selectedItemId }" @click="
+            :class="{ selected: currentChapterData.itemId === selectedItemId }" @click="
                 router.push({
                     name: 'group',
                     params: {
-                        groupId: currentChapter.itemId,
-                        chapterId: currentChapter.itemId
+                        groupId: currentChapterData.itemId,
+                        chapterId: currentChapterData.itemId
                     }
                 })
                 ">
@@ -23,30 +23,30 @@
             </div>
 
             <div v-if="!search.open" class="chapter-name">
-                <router-link :id="'group-' + currentChapter.itemId" class="chapter-title-text" :to="{
+                <router-link :id="'group-' + currentChapterData.itemId" class="chapter-title-text" :to="{
                     name: 'group',
                     params: {
                         groupId: chapterId,
                         chapterId: chapterId
                     }
                 }">
-                    <span v-text="currentChapter.title"></span>
-                    <span v-if="currentChapterInfo.isCover && currentChapterInfo.isReadOnly
+                    <span v-text="currentChapterData.title"></span>
+                    <span v-if="currentChapter.isCover && currentChapter.isReadOnly
                         " class="warning-message">
                         {{ $t('QuestionnaireEditor.VirtualCoverPage') }}</span>
-                    <help v-if="currentChapterInfo.isCover && currentChapterInfo.isReadOnly
+                    <help v-if="currentChapter.isCover && currentChapter.isReadOnly
                         " key="virtualCoverPage" />
                     <a v-if="!questionnaire.isReadOnlyForUser &&
-                        currentChapterInfo.isCover &&
-                        currentChapterInfo.isReadOnly" href="javascript:void(0);" @click.stop="migrateToNewVersion()">{{
+                        currentChapter.isCover &&
+                        currentChapter.isReadOnly" href="javascript:void(0);" @click.stop="migrateToNewVersion()">{{
         $t('QuestionnaireEditor.MigrateToNewCover') }}</a>
                 </router-link>
                 <div class="qname-block chapter-condition-block">
                     <div class="conditions-block">
                         <div class="enabliv-group-marker" :class="{
                             'hide-if-disabled':
-                            currentChapterInfo.hideIfDisabled
-                        }" v-if="currentChapterInfo.hasCondition"></div>
+                                currentChapter.hideIfDisabled
+                        }" v-if="currentChapter.hasCondition"></div>
                     </div>
                 </div>
                 <ul class="controls-right">
@@ -91,35 +91,35 @@
                     </div>
                     <div class="chapter-level-buttons" v-show="!search.searchText">
                         <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
-                            !currentChapterInfo.isReadOnly
-                            " @click="addQuestion(currentChapter)"
+                            !currentChapter.isReadOnly
+                            " @click="addQuestion(currentChapterData)"
                             v-t="{ path: 'QuestionnaireEditor.AddQuestion' }"></button>
                         <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
-                            !currentChapterInfo.isReadOnly &&
-                            !currentChapterInfo.isCover" @click="addGroup(currentChapter)"
+                            !currentChapter.isReadOnly &&
+                            !currentChapter.isCover" @click="addGroup(currentChapterData)"
                             v-t="{ path: 'QuestionnaireEditor.AddSubsection' }"></button>
                         <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
-                            !currentChapterInfo.isReadOnly &&
-                            !currentChapterInfo.isCover
-                            " @click="addRoster(currentChapter)"
+                            !currentChapter.isReadOnly &&
+                            !currentChapter.isCover
+                            " @click="addRoster(currentChapterData)"
                             v-t="{ path: 'QuestionnaireEditor.AddRoster' }"></button>
                         <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
-                            !currentChapterInfo.isReadOnly
-                            " @click="addStaticText(currentChapter)"
+                            !currentChapter.isReadOnly
+                            " @click="addStaticText(currentChapterData)"
                             v-t="{ path: 'QuestionnaireEditor.AddStaticText' }"></button>
                         <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
-                            !currentChapterInfo.isReadOnly
-                            " @click="addVariable(currentChapter)"
+                            !currentChapter.isReadOnly
+                            " @click="addVariable(currentChapterData)"
                             v-t="{ path: 'QuestionnaireEditor.AddVariable' }"></button>
 
                         <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
-                            !currentChapterInfo.isReadOnly
-                            " @click="searchForQuestion(currentChapter)"
+                            !currentChapter.isReadOnly
+                            " @click="searchForQuestion(currentChapterData)"
                             v-t="{ path: 'QuestionnaireEditor.SearchForQuestion' }"></button>
 
                         <input type="button" class="btn lighter-hover pull-right" :disabled="!readyToPaste" v-if="!questionnaire.isReadOnlyForUser &&
-                            !currentChapterInfo.isReadOnly
-                            " :value="$t('QuestionnaireEditor.Paste')" @click="pasteItemInto(currentChapterInfo)" />
+                            !currentChapter.isReadOnly
+                            " :value="$t('QuestionnaireEditor.Paste')" @click="pasteItemInto(currentChapter)" />
                     </div>
                 </div>
 
@@ -194,12 +194,26 @@ export default {
     async beforeMount() {
         await this.fetch();
     },
+    mounted() {
+        this.$emitter.on('questionDeleted', this.treeNodeDeleted);
+        this.$emitter.on('staticTextDeleted', this.treeNodeDeleted);
+        this.$emitter.on('variableDeleted', this.treeNodeDeleted);
+        this.$emitter.on('groupDeleted', this.treeNodeDeleted);
+        this.$emitter.on('rosterDeleted', this.treeNodeDeleted);
+    },
+    unmounted() {
+        this.$emitter.off('questionDeleted', this.treeNodeDeleted);
+        this.$emitter.off('staticTextDeleted', this.treeNodeDeleted);
+        this.$emitter.off('variableDeleted', this.treeNodeDeleted);
+        this.$emitter.off('groupDeleted', this.treeNodeDeleted);
+        this.$emitter.off('rosterDeleted', this.treeNodeDeleted);
+    },
     computed: {
+        currentChapterData() {
+            return this.treeStore.getChapterData || {};
+        },
         currentChapter() {
             return this.treeStore.getChapter || {};
-        },
-        currentChapterInfo() {
-            return this.treeStore.getChapterInfo || {};
         },
         treeData() {
             return this.treeStore.getItems || {};
@@ -256,7 +270,7 @@ export default {
         isReadOnly() {
             return (
                 this.questionnaire.isReadOnlyForUser ||
-                this.currentChapterInfo.isReadOnly
+                this.currentChapter.isReadOnly
             );
         },
         emptySectionHtmlLine1() {
@@ -411,6 +425,40 @@ export default {
             }
 
             this.treeStore.moveItem(item, parentId, index);
+        },
+
+        treeNodeDeleted(data) {
+            const itemId = data.itemId;
+
+            const tree = this.$refs.tree;
+            let stat = null;
+            const items = tree.rootChildren;
+            walkTreeData(
+                items,
+                (node, index, parent) => {
+                    if (node.data.itemId == itemId) {
+                        stat = node;
+                        return 'false';
+                    }
+                },
+                {
+                    childrenKey: 'children',
+                    reverse: false,
+                    childFirst: false
+                }
+            );
+
+            if (stat != null) {
+                tree.remove(stat);
+
+                this.$router.push({
+                    name: 'group',
+                    params: {
+                        groupId: this.currentChapterData.itemId,
+                        chapterId: this.currentChapterData.itemId
+                    }
+                });
+            }
         }
     }
 };
