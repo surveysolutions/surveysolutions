@@ -20,6 +20,7 @@
         "core-js": "^3.27.1",
         "lodash": "^4.17.21",
         "mande": "^2.0.7",
+        "mitt": "^3.0.1",
         "moment": "^2.29.4",
         "pinia": "^2.1.6",
         "unplugin-vue-components": "0.23.0",

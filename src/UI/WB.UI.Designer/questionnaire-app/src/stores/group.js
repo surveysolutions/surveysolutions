@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { commandCall } from '../services/commandService';
 import { get } from '../services/apiService';
+import emitter from '../services/emmiter';
 
 export const useGroupStore = defineStore('group', {
     state: () => ({
@@ -52,6 +53,16 @@ export const useGroupStore = defineStore('group', {
 
             return commandCall('UpdateGroup', command).then(response => {
                 this.initialVariable = Object.assign({}, this.group.group);
+
+                emitter.emit('groupUpdated', {
+                    itemId: this.group.group.id,
+                    variable: this.group.group.variableName,
+                    title: this.group.group.title,
+                    hasCondition:
+                        this.group.group.enablementCondition !== null &&
+                        /\S/.test(this.group.group.enablementCondition),
+                    hideIfDisabled: this.group.group.hideIfDisabled
+                });
             });
         },
 

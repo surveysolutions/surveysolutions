@@ -18,7 +18,8 @@
                 <div class="pseudo-form-control">
                     <div>
                         <!-- ui-ace="{ onLoad : setupAceForSubstitutions, require: ['ace/ext/language_tools'] }" -->
-                        <ExpressionEditor id="edit-static-text-highlight" mode="substitutions" v-model:value="activeStaticText.text" />
+                        <ExpressionEditor id="edit-static-text-highlight" mode="substitutions"
+                            v-model:value="activeStaticText.text" />
                     </div>
                 </div>
             </div>
@@ -64,10 +65,10 @@
                         v-model="activeStaticText.hideIfDisabled" />
 
                     <label for="cb-hideIfDisabled"><span :title="questionnaire.hideIfDisabled
-                            ? $t(
-                                'QuestionnaireEditor.HideIfDisabledNested'
-                            )
-                            : ''
+                        ? $t(
+                            'QuestionnaireEditor.HideIfDisabledNested'
+                        )
+                        : ''
                         "></span>
                         {{ $t('QuestionnaireEditor.HideIfDisabled') }}
                         <help key="hideIfDisabled" />
@@ -127,11 +128,11 @@
         </div>
         <div class="form-buttons-holder">
             <div class="pull-left">
-                <button id="edit-static-text-save-button" v-show="!questionnaire.isReadOnlyForUser"
+                <button type="button" id="edit-static-text-save-button" v-show="!questionnaire.isReadOnlyForUser"
                     :class="{ 'btn-primary': dirty }" class="btn btn-lg" unsaved-warning-clear @click="saveStaticText()">
                     {{ $t('QuestionnaireEditor.Save') }}
                 </button>
-                <button id="edit-static-text-cancel-button" class="btn btn-lg btn-link" unsaved-warning-clear
+                <button type="button" id="edit-static-text-cancel-button" class="btn btn-lg btn-link" unsaved-warning-clear
                     @click="cancelStaticText()">
                     {{ $t('QuestionnaireEditor.Cancel') }}
                 </button>
@@ -269,7 +270,7 @@ export default {
             //     this.questionnaireId,
             //     this.statictextId
             // );
-        },        
+        },
         doesStaticTextSupportEnablementConditions() {
             return (
                 this.activeStaticText && !this.activeStaticText.parentIsCover

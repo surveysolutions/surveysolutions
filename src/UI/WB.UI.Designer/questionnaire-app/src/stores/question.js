@@ -1,8 +1,13 @@
 import { defineStore } from 'pinia';
 import { commandCall } from '../services/commandService';
 import { get } from '../services/apiService';
-import { isEmpty, isNull, filter } from 'lodash';
+import { isEmpty, isNull, filter, indexOf } from 'lodash';
 import moment from 'moment/moment';
+import emitter from '../services/emmiter';
+import {
+    doesQuestionSupportEnablementConditions,
+    doesQuestionSupportValidations
+} from '../helpers/question';
 
 export const useQuestionStore = defineStore('question', {
     state: () => ({
@@ -54,7 +59,7 @@ export const useQuestionStore = defineStore('question', {
 
                 commonQuestionParameters: {
                     title: this.question.title,
-                    variableName: this.question.variable,
+                    variableName: this.question.variableName,
                     variableLabel: this.question.variableLabel,
                     enablementCondition: this.question.enablementCondition,
                     hideIfDisabled: this.question.hideIfDisabled,
@@ -163,6 +168,29 @@ export const useQuestionStore = defineStore('question', {
             var commandName = 'Update' + questionType + 'Question';
 
             return commandCall(commandName, command).then(async response => {
+                emitter.emit('questionUpdated', {
+                    itemId: this.question.id,
+                    type: this.question.type,
+                    linkedToEntityId: this.question.linkedToEntityId,
+                    linkedFilterExpression: this.question
+                        .linkedFilterExpression,
+                    hasCondition: this.hasQuestionEnablementConditions(
+                        this.question
+                    ),
+                    hasValidation: this.hasQuestionValidations(this.question),
+                    title: this.question.title,
+                    variable: this.question.variableName,
+                    hideIfDisabled: this.question.hideIfDisabled,
+                    yesNoView: this.question.yesNoView,
+                    isInteger: this.question.isInteger,
+                    linkedToType:
+                        this.question.linkedToEntity == null
+                            ? null
+                            : this.question.linkedToEntity.type,
+                    defaultDate: this.question.defaultDate,
+                    categoriesId: this.question.categoriesId
+                });
+
                 var notIsFilteredCombobox = !this.question.isFilteredCombobox;
                 var notIsCascadingCombobox = isEmpty(
                     this.question.cascadeFromQuestionId
@@ -185,6 +213,21 @@ export const useQuestionStore = defineStore('question', {
 
                 this.initialQuestion = Object.assign({}, this.question);
             });
+        },
+
+        hasQuestionEnablementConditions(question) {
+            return (
+                doesQuestionSupportEnablementConditions(question) &&
+                question.enablementCondition !== null &&
+                /\S/.test(question.enablementCondition)
+            );
+        },
+
+        hasQuestionValidations(question) {
+            return (
+                doesQuestionSupportValidations(question) &&
+                question.validationConditions.length > 0
+            );
         },
 
         trimEmptyOptions() {

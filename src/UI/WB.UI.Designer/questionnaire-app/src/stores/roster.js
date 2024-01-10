@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { commandCall } from '../services/commandService';
 import { get } from '../services/apiService';
+import emitter from '../services/emmiter';
 
 export const useRosterStore = defineStore('roster', {
     state: () => ({
@@ -67,6 +68,17 @@ export const useRosterStore = defineStore('roster', {
 
             return commandCall('UpdateGroup', command).then(response => {
                 this.initialVariable = Object.assign({}, this.roster);
+
+                emitter.emit('rosterUpdated', {
+                    itemId: this.roster.itemId,
+                    variable: this.roster.variableName,
+                    title: this.roster.title,
+                    hasCondition:
+                        this.roster.enablementCondition !== null &&
+                        /\S/.test(this.roster.enablementCondition),
+                    type: 'Roster',
+                    hideIfDisabled: this.roster.hideIfDisabled
+                });
             });
         },
 

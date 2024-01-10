@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia';
 import { mande } from 'mande';
 import { newGuid } from '../helpers/guid';
-import { findIndex } from 'lodash';
+import { findIndex, isNull, isUndefined, find } from 'lodash';
 import { i18n } from '../plugins/localization';
 import { useCookies } from 'vue3-cookies';
 import { commandCall } from '../services/commandService';
+import emitter from '../services/emmiter';
 
 const api = mande('/api/questionnaire/chapter/' /*, globalOptions*/);
 
@@ -19,6 +20,14 @@ export const useTreeStore = defineStore('tree', {
         getChapterInfo: state => state.info
     },
     actions: {
+        setupListeners() {
+            emitter.on('questionUpdated', this.questionUpdated);
+            emitter.on('staticTextUpdated', this.staticTextUpdated);
+            emitter.on('variableUpdated', this.variableUpdated);
+            emitter.on('groupUpdated', this.groupUpdated);
+            emitter.on('rosterUpdated', this.rosterUpdated);
+        },
+
         async fetchTree(questionnaireId, chapterId) {
             const info = await api.get(questionnaireId, {
                 query: {
@@ -414,6 +423,83 @@ export const useTreeStore = defineStore('tree', {
             };
 
             return commandCall('MoveVariable', command);
+        },
+
+        questionUpdated(data) {
+            const itemId = data.itemId.replaceAll('-', '');
+            var question = this.findTreeItem(itemId);
+            if (isNull(question) || isUndefined(question)) return;
+
+            question.title = data.title;
+            question.variable = data.variable;
+            question.type = data.type;
+            question.hasValidation = data.hasValidation;
+            question.hasCondition = data.hasCondition;
+            question.linkedToEntityId = data.linkedToEntityId;
+            question.linkedToType = data.linkedToType;
+            question.isInteger = data.isInteger;
+            question.yesNoView = data.yesNoView;
+            question.hideIfDisabled = data.hideIfDisabled;
+        },
+
+        staticTextUpdated(data) {
+            const itemId = data.itemId.replaceAll('-', '');
+            var staticText = this.findTreeItem(itemId);
+            if (isNull(staticText) || isUndefined(staticText)) return;
+            staticText.text = data.text;
+            staticText.attachmentName = data.attachmentName;
+
+            staticText.hasValidation = data.hasValidation;
+            staticText.hasCondition = data.hasCondition;
+            staticText.hideIfDisabled = data.hideIfDisabled;
+        },
+
+        variableUpdated(data) {
+            const itemId = data.itemId.replaceAll('-', '');
+            var variable = this.findTreeItem(itemId);
+            if (isNull(variable) || isUndefined(variable)) return;
+            variable.variableData.name = data.name;
+            variable.variableData.label = data.label;
+        },
+
+        groupUpdated(data) {
+            const itemId = data.itemId.replaceAll('-', '');
+            const chapter = this.getChapter;
+            if (chapter.itemId === itemId) {
+                chapter.title = data.title;
+                chapter.hasCondition = data.hasCondition;
+                chapter.hideIfDisabled = data.hideIfDisabled;
+            }
+
+            var group = this.findTreeItem(itemId);
+            if (isNull(group) || isUndefined(group)) return;
+            group.title = data.title;
+            group.variable = data.variable;
+            group.hasCondition = data.hasCondition;
+            group.hideIfDisabled = data.hideIfDisabled;
+        },
+
+        rosterUpdated(data) {
+            const itemId = data.itemId.replaceAll('-', '');
+            var roster = this.findTreeItem(itemId);
+            if (isNull(roster) || isUndefined(roster)) return;
+            roster.title = data.title;
+            roster.variable = data.variable;
+            roster.hasCondition = data.hasCondition;
+            roster.hideIfDisabled = data.hideIfDisabled;
+        },
+
+        findTreeItem(value) {
+            var o;
+            const items = this.getItems;
+            items.some(function iter(a) {
+                if (a.itemId === value) {
+                    o = a;
+                    return true;
+                }
+                return Array.isArray(a.items) && a.items.some(iter);
+            });
+            return o;
         }
     }
 });

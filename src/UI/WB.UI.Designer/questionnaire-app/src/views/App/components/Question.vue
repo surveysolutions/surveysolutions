@@ -253,7 +253,7 @@ import ExpressionEditor from './ExpressionEditor.vue';
 import Breadcrumbs from './Breadcrumbs.vue'
 import Help from './Help.vue'
 import { indexOf, find, filter, isEmpty, isNull } from 'lodash'
-import { answerTypeClass, geometryInputModeOptions } from '../../../helpers/question'
+import { answerTypeClass, geometryInputModeOptions, questionsWithOnlyInterviewerScope, questionTypesDoesNotSupportValidations } from '../../../helpers/question'
 
 import AreaQuestion from './parts/AreaQuestion.vue'
 import DateTimeQuestion from './parts/DateTimeQuestion.vue'
@@ -266,8 +266,6 @@ import SingleOptionQuestion from './parts/SingleOptionQuestion.vue'
 import TextListQuestion from './parts/TextListQuestion.vue'
 import TextQuestion from './parts/TextQuestion.vue'
 
-const questionsWithOnlyInterviewerScope = ['Multimedia', 'Audio', 'Area', 'QRBarcode'];
-const questionTypesDoesNotSupportValidations = ["Multimedia", "Audio"];
 
 export default {
     name: 'Question',
@@ -383,7 +381,7 @@ export default {
             const componentValid = this.$refs.questionSpecific.valid || true;
             if (!componentValid) return;
 
-            this.questionStore.saveQuestionData();
+            await this.questionStore.saveQuestionData();
 
             this.dirty = false;
         },

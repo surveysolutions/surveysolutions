@@ -19,9 +19,19 @@ import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css';
 
 import directives from './directives/';
 
-/** Register Vue */
+import emitter from './services/emmiter';
+
 const pinia = createPinia();
+pinia.use(({ store }) => {
+    if (store.setupListeners && typeof store.setupListeners === 'function') {
+        store.setupListeners();
+    }
+});
+
 const vue = createApp(App);
+
+vue.config.globalProperties.$emitter = emitter;
+
 vue.use(router);
 vue.use(pinia);
 //vue.use(vuetify); //reqired by options component. consider either remove or use.
@@ -29,6 +39,7 @@ vue.use(i18n);
 //vue.use(uiv);
 vue.use(PerfectScrollbar);
 vue.use(VueDOMPurifyHTML);
+
 vue.use(ConfirmDialog);
 vue.component('confirm-dialog', ConfirmDialog.default);
 

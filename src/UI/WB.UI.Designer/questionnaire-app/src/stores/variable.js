@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { commandCall } from '../services/commandService';
 import { get } from '../services/apiService';
+import emitter from '../services/emmiter';
 
 export const useVariableStore = defineStore('variable', {
     state: () => ({
@@ -49,6 +50,14 @@ export const useVariableStore = defineStore('variable', {
 
             return commandCall('UpdateVariable', command).then(response => {
                 this.initialVariable = Object.assign({}, this.data);
+
+                emitter.emit('variableUpdated', {
+                    itemId: this.data.id,
+                    name: this.data.variable,
+                    label: this.data.label,
+                    type: this.data.type,
+                    doNotExport: this.data.doNotExport
+                });
             });
         },
 

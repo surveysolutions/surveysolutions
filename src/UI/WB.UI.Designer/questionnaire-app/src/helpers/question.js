@@ -1,4 +1,5 @@
 import { i18n } from '../plugins/localization';
+import { indexOf } from 'lodash';
 
 export const answerTypeClass = {
     YesNo: 'icon-singleoption',
@@ -37,3 +38,28 @@ export const geometryInputModeOptions = [
         text: i18n.t('QuestionnaireEditor.GeographyInputModeSemiautomatic')
     }
 ];
+
+export const questionsWithOnlyInterviewerScope = [
+    'Multimedia',
+    'Audio',
+    'Area',
+    'QRBarcode'
+];
+
+export const questionTypesDoesNotSupportValidations = ['Multimedia', 'Audio'];
+
+export function doesQuestionSupportEnablementConditions(question) {
+    return (
+        question &&
+        question.questionScope != 'Identifying' &&
+        !(question.isCascade && this.activeQuestion.cascadeFromQuestionId) &&
+        !question.parentIsCover
+    );
+}
+
+export function doesQuestionSupportValidations(question) {
+    return (
+        question &&
+        indexOf(questionTypesDoesNotSupportValidations, question.type) < 0
+    );
+}
