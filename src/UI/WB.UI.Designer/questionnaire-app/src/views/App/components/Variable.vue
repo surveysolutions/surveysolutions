@@ -62,7 +62,7 @@
                 <div class="pseudo-form-control">
                     <div id="edit-group-condition" ui-ace="{ onLoad : aceLoaded , require: ['ace/ext/language_tools']}"
                         ng-model="activeVariable.expression"></div>
-                    <ExpressionEditor v-model="activeVariable.expression"></ExpressionEditor>
+                    <ExpressionEditor mode="expression" v-model="activeVariable.expression"></ExpressionEditor>
                 </div>
             </div>
         </div>

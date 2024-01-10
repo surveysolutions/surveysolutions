@@ -162,7 +162,7 @@
                     <!--div ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }"
                         ng-attr-id="{{'validation-expression-' + $index}}" v-model="validation.expression"
                         ng-attr-tabindex="{{$index + 1}}"></div-->
-                    <ExpressionEditor v-model="validation.expression"></ExpressionEditor>
+                    <ExpressionEditor mode="expression" v-model="validation.expression"></ExpressionEditor>
                 </div>
 
                 <label for="validationMessage{{$index}}" class="validation-message">{{

@@ -269,24 +269,7 @@ export default {
             //     this.questionnaireId,
             //     this.statictextId
             // );
-        },
-        // setupAceForSubstitutions(editor) {
-        //     editor.setOptions({
-        //         maxLines: 30,
-        //         fontSize: 16,
-        //         highlightActiveLine: false,
-        //         indentedSoftWrap: false,
-        //         showLineNumbers: false,
-        //         theme: 'github-extended'
-        //     });
-
-        //     var textExtendableMode = window.ace.require(
-        //         'ace/mode/text-extended'
-        //     ).Mode;
-        //     editor.getSession().setMode(new textExtendableMode());
-        //     editor.getSession().setUseWrapMode(true);
-        //     setCommonAceOptions(editor);
-        // },
+        },        
         doesStaticTextSupportEnablementConditions() {
             return (
                 this.activeStaticText && !this.activeStaticText.parentIsCover
