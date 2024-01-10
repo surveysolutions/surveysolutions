@@ -15,7 +15,8 @@ export const useTreeStore = defineStore('tree', {
     }),
     getters: {
         getItems: state => (state.info.chapter || {}).items,
-        getChapter: state => state.info.chapter
+        getChapter: state => state.info.chapter,
+        getChapterInfo: state => state.info
     },
     actions: {
         async fetchTree(questionnaireId, chapterId) {

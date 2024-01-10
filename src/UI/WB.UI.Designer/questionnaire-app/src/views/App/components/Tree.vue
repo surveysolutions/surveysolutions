@@ -31,22 +31,22 @@
                     }
                 }">
                     <span v-text="currentChapter.title"></span>
-                    <span v-if="currentChapter.isCover && currentChapter.isReadOnly
+                    <span v-if="currentChapterInfo.isCover && currentChapterInfo.isReadOnly
                         " class="warning-message">
                         {{ $t('QuestionnaireEditor.VirtualCoverPage') }}</span>
-                    <help v-if="currentChapter.isCover && currentChapter.isReadOnly
+                    <help v-if="currentChapterInfo.isCover && currentChapterInfo.isReadOnly
                         " key="virtualCoverPage" />
                     <a v-if="!questionnaire.isReadOnlyForUser &&
-                        currentChapter.isCover &&
-                        currentChapter.isReadOnly" href="javascript:void(0);" @click.stop="migrateToNewVersion()">{{
+                        currentChapterInfo.isCover &&
+                        currentChapterInfo.isReadOnly" href="javascript:void(0);" @click.stop="migrateToNewVersion()">{{
         $t('QuestionnaireEditor.MigrateToNewCover') }}</a>
                 </router-link>
                 <div class="qname-block chapter-condition-block">
                     <div class="conditions-block">
                         <div class="enabliv-group-marker" :class="{
                             'hide-if-disabled':
-                                currentChapter.hideIfDisabled
-                        }" v-if="currentChapter.hasCondition"></div>
+                            currentChapterInfo.hideIfDisabled
+                        }" v-if="currentChapterInfo.hasCondition"></div>
                     </div>
                 </div>
                 <ul class="controls-right">
@@ -91,36 +91,35 @@
                     </div>
                     <div class="chapter-level-buttons" v-show="!search.searchText">
                         <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
-                            !currentChapter.isReadOnly
+                            !currentChapterInfo.isReadOnly
                             " @click="addQuestion(currentChapter)"
                             v-t="{ path: 'QuestionnaireEditor.AddQuestion' }"></button>
                         <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
-                            !currentChapter.isReadOnly &&
-                            !currentChapter.isCover
-                            " @click="addGroup(currentChapter)"
+                            !currentChapterInfo.isReadOnly &&
+                            !currentChapterInfo.isCover" @click="addGroup(currentChapter)"
                             v-t="{ path: 'QuestionnaireEditor.AddSubsection' }"></button>
                         <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
-                            !currentChapter.isReadOnly &&
-                            !currentChapter.isCover
+                            !currentChapterInfo.isReadOnly &&
+                            !currentChapterInfo.isCover
                             " @click="addRoster(currentChapter)"
                             v-t="{ path: 'QuestionnaireEditor.AddRoster' }"></button>
                         <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
-                            !currentChapter.isReadOnly
+                            !currentChapterInfo.isReadOnly
                             " @click="addStaticText(currentChapter)"
                             v-t="{ path: 'QuestionnaireEditor.AddStaticText' }"></button>
                         <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
-                            !currentChapter.isReadOnly
+                            !currentChapterInfo.isReadOnly
                             " @click="addVariable(currentChapter)"
                             v-t="{ path: 'QuestionnaireEditor.AddVariable' }"></button>
 
                         <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
-                            !currentChapter.isReadOnly
+                            !currentChapterInfo.isReadOnly
                             " @click="searchForQuestion(currentChapter)"
                             v-t="{ path: 'QuestionnaireEditor.SearchForQuestion' }"></button>
 
                         <input type="button" class="btn lighter-hover pull-right" :disabled="!readyToPaste" v-if="!questionnaire.isReadOnlyForUser &&
-                            !currentChapter.isReadOnly
-                            " :value="$t('QuestionnaireEditor.Paste')" @click="pasteItemInto(currentChapter)" />
+                            !currentChapterInfo.isReadOnly
+                            " :value="$t('QuestionnaireEditor.Paste')" @click="pasteItemInto(currentChapterInfo)" />
                     </div>
                 </div>
 
@@ -199,6 +198,9 @@ export default {
         currentChapter() {
             return this.treeStore.getChapter || {};
         },
+        currentChapterInfo() {
+            return this.treeStore.getChapterInfo || {};
+        },
         treeData() {
             return this.treeStore.getItems || {};
         },
@@ -254,7 +256,7 @@ export default {
         isReadOnly() {
             return (
                 this.questionnaire.isReadOnlyForUser ||
-                this.currentChapter.isReadOnly
+                this.currentChapterInfo.isReadOnly
             );
         },
         emptySectionHtmlLine1() {
@@ -361,9 +363,9 @@ export default {
             );
         },
         searchForQuestion(chapter) { },
-        pasteItemInto(chapter) {
-            this.treeStore.pasteItemInto(chapter).then(function (result) {
-                if (!chapter.isCover)
+        pasteItemInto(chapterInfo) {
+            this.treeStore.pasteItemInto(chapterInfo.chapter).then(function (result) {
+                if (!chapterInfo.isCover)
                     this.$router.push({
                         name: result.itemType,
                         params: {

@@ -74,7 +74,8 @@
                     </button>
 
                     <div class="btn-group" v-if="currentUserIsAuthenticated">
-                        <a class="btn btn-default">{{
+                        <a class="btn btn-default" 
+                        style="margin-right: 0px;">{{
                             $t('QuestionnaireEditor.HellowMessageBtn', {
                                 currentUserName: currentUserName
                             })
@@ -107,7 +108,6 @@
                         class="btn"
                         href="/"
                         type="button"
-                        style="margin-right: 0px;"
                         v-if="!currentUserIsAuthenticated"
                         >{{ $t('QuestionnaireEditor.Login') }}</a
                     >
