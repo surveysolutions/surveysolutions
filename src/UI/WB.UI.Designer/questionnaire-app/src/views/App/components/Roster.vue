@@ -383,6 +383,7 @@ import Help from './Help.vue'
 import { find } from 'lodash'
 import { convertToText, validateText, convertToTable } from '../../OptionsEditor/utils/tableToString';
 import { isInteger } from '../../../helpers/number';
+import { createQuestionForDeleteConfirmationPopup } from '../../../services/utilityService'
 
 export default {
     name: 'Roster',
@@ -523,7 +524,20 @@ export default {
             return null;
         },
         deleteRoster() {
-            //
+            var itemIdToDelete = this.rosterId;
+
+            const params = createQuestionForDeleteConfirmationPopup(
+                this.activeRoster.title ||
+                this.$t('QuestionnaireEditor.UntitledGroupOrRoster')
+            );
+
+            params.callback = confirm => {
+                if (confirm) {
+                    this.rosterStore.deleteRoster(itemIdToDelete);
+                }
+            };
+
+            this.$confirm(params);
         },
         addFixedTitle() {
             this.activeRoster.fixedRosterTitles.push({

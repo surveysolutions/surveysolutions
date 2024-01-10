@@ -112,6 +112,8 @@
 <script>
 import { useGroupStore } from '../../../stores/group';
 import { useCommentsStore } from '../../../stores/comments';
+import { createQuestionForDeleteConfirmationPopup } from '../../../services/utilityService'
+
 import MoveToChapterSnippet from './MoveToChapterSnippet.vue';
 import ExpressionEditor from './ExpressionEditor.vue';
 import Breadcrumbs from './Breadcrumbs.vue'
@@ -197,7 +199,20 @@ export default {
             this.commentsStore.toggleComments();
         },
         deleteGroup() {
-            //
+            var itemIdToDelete = this.groupId;
+
+            const params = createQuestionForDeleteConfirmationPopup(
+                this.activeGroup.title ||
+                this.$t('QuestionnaireEditor.UntitledGroupOrRoster')
+            );
+
+            params.callback = confirm => {
+                if (confirm) {
+                    this.groupStore.deleteGroup(itemIdToDelete);
+                }
+            };
+
+            this.$confirm(params);
         }
     }
 };

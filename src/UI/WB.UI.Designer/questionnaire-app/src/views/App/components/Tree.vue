@@ -5,8 +5,8 @@
                 router.push({
                     name: 'group',
                     params: {
-                        groupId: currentChapterData.itemId,
-                        chapterId: currentChapterData.itemId
+                        groupId: chapterId,
+                        chapterId: chapterId
                     }
                 })
                 ">
@@ -23,7 +23,7 @@
             </div>
 
             <div v-if="!search.open" class="chapter-name">
-                <router-link :id="'group-' + currentChapterData.itemId" class="chapter-title-text" :to="{
+                <router-link :id="'group-' + chapterId" class="chapter-title-text" :to="{
                     name: 'group',
                     params: {
                         groupId: chapterId,
@@ -454,8 +454,8 @@ export default {
                 this.$router.push({
                     name: 'group',
                     params: {
-                        groupId: this.currentChapterData.itemId,
-                        chapterId: this.currentChapterData.itemId
+                        groupId: this.chapterId,
+                        chapterId: this.chapterId
                     }
                 });
             }

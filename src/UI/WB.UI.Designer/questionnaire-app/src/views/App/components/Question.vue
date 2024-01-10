@@ -234,7 +234,7 @@
                     <span v-show="isCommentsBlockVisible">{{ $t('QuestionnaireEditor.EditorHideComment') }}</span>
                 </button>
                 <button type="button" v-show="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
-                    id="edit-chapter-delete-button" class="btn btn-lg btn-link" @click="deleteQuestion(activeQuestion)"
+                    id="edit-chapter-delete-button" class="btn btn-lg btn-link" @click="deleteQuestion()"
                     unsaved-warning-clear>{{
                         $t('QuestionnaireEditor.Delete') }}</button>
                 <MoveToChapterSnippet :item-id="questionId"
@@ -254,6 +254,7 @@ import Breadcrumbs from './Breadcrumbs.vue'
 import Help from './Help.vue'
 import { indexOf, find, filter, isEmpty, isNull } from 'lodash'
 import { answerTypeClass, geometryInputModeOptions, questionsWithOnlyInterviewerScope, questionTypesDoesNotSupportValidations } from '../../../helpers/question'
+import { createQuestionForDeleteConfirmationPopup } from '../../../services/utilityService'
 
 import AreaQuestion from './parts/AreaQuestion.vue'
 import DateTimeQuestion from './parts/DateTimeQuestion.vue'
@@ -395,7 +396,20 @@ export default {
             this.commentsStore.toggleComments();
         },
         deleteQuestion() {
-            //
+            var itemIdToDelete = this.questionId;
+
+            const params = createQuestionForDeleteConfirmationPopup(
+                this.activeQuestion.title ||
+                this.$t('QuestionnaireEditor.UntitledQuestion')
+            );
+
+            params.callback = confirm => {
+                if (confirm) {
+                    this.questionStore.deleteQuestion(itemIdToDelete);
+                }
+            };
+
+            this.$confirm(params);
         },
         questionTemplate(questionType) {
             return questionType + 'Question';

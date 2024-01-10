@@ -153,7 +153,7 @@
                     <span v-show="isCommentsBlockVisible">{{ $t('QuestionnaireEditor.EditorHideComment') }}
                     </span>
                 </button>
-                <button id="edit-static-text-delete-button" v-show="!questionnaire.isReadOnlyForUser"
+                <button type="button" id="edit-static-text-delete-button" v-show="!questionnaire.isReadOnlyForUser"
                     class="btn btn-lg btn-link" @click="deleteStaticText()" unsaved-warning-clear>
                     {{ $t('QuestionnaireEditor.Delete') }}
                 </button>
@@ -169,6 +169,7 @@
 <script>
 import { useCommentsStore } from '../../../stores/comments';
 import { useStaticTextStore } from '../../../stores/staticText';
+import { createQuestionForDeleteConfirmationPopup } from '../../../services/utilityService'
 
 import Breadcrumbs from './Breadcrumbs.vue';
 import ExpressionEditor from './ExpressionEditor.vue';
@@ -266,10 +267,20 @@ export default {
         },
 
         deleteStaticText() {
-            // this.staticTextStore.deleteStaticTextData(
-            //     this.questionnaireId,
-            //     this.statictextId
-            // );
+            var itemIdToDelete = this.statictextId;
+
+            const params = createQuestionForDeleteConfirmationPopup(
+                this.activeStaticText.text ||
+                this.$t('QuestionnaireEditor.UntitledStaticText')
+            );
+
+            params.callback = confirm => {
+                if (confirm) {
+                    this.staticTextStore.deleteStaticText(itemIdToDelete);
+                }
+            };
+
+            this.$confirm(params);
         },
         doesStaticTextSupportEnablementConditions() {
             return (
