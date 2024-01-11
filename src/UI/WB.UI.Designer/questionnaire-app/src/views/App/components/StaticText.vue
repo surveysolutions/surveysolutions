@@ -13,10 +13,10 @@
             <Breadcrumbs :breadcrumbs="activeStaticText.breadcrumbs">
             </Breadcrumbs>
             <div class="form-group">
-                <label for="edit-static-text-highlight" class="wb-label">
+                <label class="wb-label">
                     {{ $t('QuestionnaireEditor.StaticText') }}</label><br />
-                <ExpressionEditor id="edit-static-text-highlight" mode="substitutions"
-                            v-model:value="activeStaticText.text" />
+                <ExpressionEditor mode="substitutions"
+                            v-model="activeStaticText.text" />
             </div>
             <div class="form-group">
                 <label for="edit-static-attachment-name" class="wb-label">
@@ -49,7 +49,7 @@
                     <div class="enabling-group-marker" :class="{
                         'hide-if-disabled': activeStaticText.hideIfDisabled
                     }"></div>
-                    <label for="edit-question-enablement-condition">{{ $t('QuestionnaireEditor.EnablingCondition') }}
+                    <label>{{ $t('QuestionnaireEditor.EnablingCondition') }}
                         <help key="conditionExpression" />
                     </label>
 
@@ -68,7 +68,7 @@
                         {{ $t('QuestionnaireEditor.HideIfDisabled') }}
                         <help key="hideIfDisabled" />
                     </label>
-                    <ExpressionEditor v-model="activeStaticText.enablementCondition"></ExpressionEditor>
+                    <ExpressionEditor v-model="activeStaticText.enablementCondition"/>
                     
                 </div>
                 <div class="form-group col-xs-1">
@@ -96,7 +96,7 @@
                 <button class="btn delete-btn-sm delete-validation-condition" @click="removeValidationCondition(index)"
                     tabindex="-1"></button>                
                 <ExpressionEditor v-model="validation.expression" mode="expression"/>
-                <label for="validationMessage{{$index}}" class="validation-message">{{
+                <label class="validation-message">{{
                     $t('QuestionnaireEditor.ErrorMessage') }}
                     <help link="validationMessage" />
                 </label>

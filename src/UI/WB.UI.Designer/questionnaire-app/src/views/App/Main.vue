@@ -121,7 +121,7 @@
 
                     </span>-->
                             <button
-                                id="verification-btn"
+                                id="verification-button"
                                 type="button"
                                 class="btn"
                                 @click="verify()"
