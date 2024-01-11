@@ -33,7 +33,7 @@
                                 <ul class="verification-items" :class="{
                                     singleError: !error.isGroupedMessage
                                 }">
-                                    <empty-tag v-for="referencesWithErrors in error.errors">
+                                    <template v-for="referencesWithErrors in error.errors">
                                         <li class="verification-item-container"
                                             v-for="reference in referencesWithErrors.references"
                                             @click="navigateTo(reference)">
@@ -67,7 +67,7 @@
                                                     v-dompurify-html="reference.variable || '&nbsp;'">&nbsp;</span>
                                             </a>
                                         </li>
-                                    </empty-tag>
+                                    </template>
                                 </ul>
                             </div>
                         </div>

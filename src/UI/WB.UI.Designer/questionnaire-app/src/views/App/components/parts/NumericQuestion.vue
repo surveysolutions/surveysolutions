@@ -32,7 +32,7 @@
     </div>
     <div class="row">
         <!--div class="col-md-12" ng-include="'views/question-details/OptionsEditor-template.html'"></div-->
-        <OptionsEditorTemplate ref="options" :activeQuestion="activeQuestion">
+        <OptionsEditorTemplate ref="options" :activeQuestion="activeQuestion" :questionnaireId="questionnaireId">
         </OptionsEditorTemplate>
     </div>
 </template>

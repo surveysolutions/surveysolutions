@@ -53,7 +53,7 @@
             </p>
         </div>
         <div v-if="!useListAsOptionsEditor">
-            <div class="form-group" v-class="{ 'has-error': !stringifiedOptions.valid }">
+            <div class="form-group" :class="{ 'has-error': !stringifiedOptions.valid }">
                 <textarea name="stringifiedOptions" class="form-control mono" v-model="activeQuestion.stringifiedOptions"
                     v-on:keyup="stringifiedOptionsValidate" match-options-pattern max-options-count msd-elastic></textarea>
                 <p class="help-block">
