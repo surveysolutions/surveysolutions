@@ -266,7 +266,7 @@ export default {
         },
         doesStaticTextSupportEnablementConditions() {
             return (
-                this.activeStaticText && !this.activeStaticText.parentIsCover
+                this.activeStaticText && !this.currentChapter.isCover
             );
         },
         removeValidationCondition(index) {

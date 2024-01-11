@@ -398,7 +398,7 @@ export default {
             return this.activeQuestion
                 && (this.activeQuestion.questionScope != 'Identifying')
                 && !(this.activeQuestion.isCascade && this.activeQuestion.cascadeFromQuestionId)
-                && !this.activeQuestion.parentIsCover;
+                && !this.currentChapter.isCover;
         },
         doesQuestionSupportValidations() {
             return this.activeQuestion &&
@@ -409,7 +409,7 @@ export default {
                 this.activeQuestion.allQuestionScopeOptions &&
                 this.activeQuestion.allQuestionScopeOptions.length > 0 &&
                 this.questionnaire &&
-                (!this.questionnaire.isCoverPageSupported || !this.activeQuestion.parentIsCover);
+                (!this.questionnaire.isCoverPageSupported || !this.currentChapter.isCover);
         },
         doesQuestionSupportOptionsFilters() {
             if (this.activeQuestion) {
