@@ -276,25 +276,26 @@ export default {
         emptySectionHtmlLine1() {
             var emptySectionAddQuestion = "<button class='btn' disabled type='button'>" + this.$t('QuestionnaireEditor.AddQuestion') + " </button>";
             var emptySectionAddSubsectionHtml = "<button class=\"btn\" disabled type=\"button\">" + this.$t('QuestionnaireEditor.AddSubsection') + " </button>";
-            return this.$t('QuestionnaireEditor.EmptySectionLine2')
-                .replaceAll('{-addQuestionBtn}', emptySectionAddQuestion)
-                .replaceAll('{addQuestionBtn-}', emptySectionAddQuestion)
-                .replaceAll('{-addSubsectionBtn}', emptySectionAddSubsectionHtml)
-                .replaceAll('{addSubsectionBtn-}', emptySectionAddSubsectionHtml);
-            //return this.$t('QuestionnaireEditor.EmptySectionLine2', { addQuestionBtn: emptySectionAddQuestion, addSubsectionBtn: emptySectionAddSubsectionHtml });
+            //return this.$t('QuestionnaireEditor.EmptySectionLine2')
+            //    .replaceAll('{-addQuestionBtn}', emptySectionAddQuestion)
+            //    .replaceAll('{addQuestionBtn-}', emptySectionAddQuestion)
+            //    .replaceAll('{-addSubsectionBtn}', emptySectionAddSubsectionHtml)
+            //    .replaceAll('{addSubsectionBtn-}', emptySectionAddSubsectionHtml);
+            return this.$t('QuestionnaireEditor.EmptySectionLine2', { addQuestionBtn: emptySectionAddQuestion, addSubsectionBtn: emptySectionAddSubsectionHtml });
         },
         emptySectionHtmlLine2() {
             var emptySectionSettingsHtml = "<button class=\"btn\" type=\"button\" disabled>" + this.$t('QuestionnaireEditor.Settings') + " </button>";
-            return this.$t('QuestionnaireEditor.EmptySectionLine5')
-                .replaceAll('{-settingsBtn}', emptySectionSettingsHtml)
-                .replaceAll('{settingsBtn-}', emptySectionSettingsHtml)
-            //return this.$t('QuestionnaireEditor.EmptySectionLine5', { settingsBtn: emptySectionSettingsHtml });
+            //return this.$t('QuestionnaireEditor.EmptySectionLine5')
+            //    .replaceAll('{-settingsBtn}', emptySectionSettingsHtml)
+            //    .replaceAll('{settingsBtn-}', emptySectionSettingsHtml)
+            return this.$t('QuestionnaireEditor.EmptySectionLine5', { settingsBtn: emptySectionSettingsHtml });
         },
         emptySectionHtmlLine3() {
             const panel = '<span class="left-panel-glyph"></span>';
-            return this.$t('QuestionnaireEditor.EmptySectionLine3')
-                .replaceAll('{-panel}', panel)
-                .replaceAll('{panel-}', panel);
+            return this.$t('QuestionnaireEditor.EmptySectionLine3', { panel: panel });
+            //return this.$t('QuestionnaireEditor.EmptySectionLine3')
+            //    .replaceAll('{-panel}', panel)
+            //    .replaceAll('{panel-}', panel);
             //return this.$t('QuestionnaireEditor.EmptySectionLine3', { '-panel': '&lt;span class=&quot;left-panel-glyph&quot;&gt;&lt;/span&gt;' });
         }
     },
