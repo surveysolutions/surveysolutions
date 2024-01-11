@@ -57,10 +57,10 @@
 
             <div class="form-group">
                 <label for="edit-question-title-highlight" class="wb-label"
-                    v-t="{ path: 'QuestionnaireEditor.QuestionText' }"></label><br> 
+                    v-t="{ path: 'QuestionnaireEditor.QuestionText' }"></label><br>
 
-                <ExpressionEditor v-model="activeQuestion.title"></ExpressionEditor>                
-                
+                <ExpressionEditor v-model="activeQuestion.title"></ExpressionEditor>
+
                 <div class="question-type-specific-block" v-if="activeQuestion.type != undefined
                     && (activeQuestion.type != 'GpsCoordinates'
                         && activeQuestion.type != 'QRBarcode'
@@ -90,7 +90,7 @@
                         <help link="hideInstructions" />
                     </label>
 
-                    <ExpressionEditor v-model="activeQuestion.instructions"></ExpressionEditor>                    
+                    <ExpressionEditor v-model="activeQuestion.instructions"></ExpressionEditor>
                 </div>
 
                 <div class="form-group col-xs-1">
@@ -124,7 +124,7 @@
                         <help link="hideIfDisabled" />
                     </label>
 
-                    <ExpressionEditor v-model="activeQuestion.enablementCondition"></ExpressionEditor>                    
+                    <ExpressionEditor v-model="activeQuestion.enablementCondition"></ExpressionEditor>
                 </div>
                 <div class="form-group col-xs-1">
                     <button type="button" class="btn cross instructions-cross"
@@ -144,17 +144,17 @@
 
                 <button type="button" class="btn delete-btn-sm delete-validation-condition"
                     @click="removeValidationCondition(index)" tabindex="-1"></button>
-                
+
                 <ExpressionEditor mode="expression" v-model="validation.expression"></ExpressionEditor>
-                
+
 
                 <label for="validationMessage{{$index}}" class="validation-message">{{
                     $t('QuestionnaireEditor.ErrorMessage') }}
                     <help link="validationMessage" />
                 </label>
-                
+
                 <ExpressionEditor v-model="validation.message"></ExpressionEditor>
-                
+
             </div>
             <div class="form-group"
                 v-if="doesQuestionSupportValidations() && activeQuestion.validationConditions.length < 10">

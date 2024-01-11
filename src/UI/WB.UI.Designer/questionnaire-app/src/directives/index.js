@@ -1,13 +1,13 @@
 import focus from './focus';
 import i18next from './i18next';
 import number from './number';
-import patern from './patern';
+import pattern from './pattern';
 
 const directives = app => {
     focus(app);
     i18next(app);
     number(app);
-    patern(app);
+    pattern(app);
 };
 
 export default directives;

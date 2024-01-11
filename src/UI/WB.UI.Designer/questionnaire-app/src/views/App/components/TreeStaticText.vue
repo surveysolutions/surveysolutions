@@ -1,15 +1,11 @@
 <template>
-    <TreeItem :item="item" :stat="stat">
-        <router-link
-            class="item-body"
-            :id="item.itemId"
-            :to="{
-                name: 'statictext',
-                params: {
-                    statictextId: item.itemId
-                }
-            }"
-        >
+    <TreeItem :item="item">
+        <router-link class="item-body" :id="item.itemId" :to="{
+            name: 'statictext',
+            params: {
+                statictextId: item.itemId
+            }
+        }">
             <div class="item-text">
                 <div class="icon icon-statictext"></div>
                 <!--span
@@ -26,26 +22,14 @@
                 ></span-->
 
                 <span v-if="item.text" v-text="item.text"></span>
-                <span
-                    v-if="!item.text && item.attachmentName"
-                    v-text="'Attachment: ' + item.attachmentName"
-                ></span>
-                <span
-                    v-if="!item.text && !item.attachmentName"
-                    v-text="item.text"
-                ></span>
+                <span v-if="!item.text && item.attachmentName" v-text="'Attachment: ' + item.attachmentName"></span>
+                <span v-if="!item.text && !item.attachmentName" v-text="item.text"></span>
             </div>
             <div class="qname-block">
                 <div class="conditions-block">
-                    <div
-                        class="enabling-group-marker"
-                        :class="{ 'hide-if-disabled': item.hideIfDisabled }"
-                        v-if="item.hasCondition"
-                    ></div>
-                    <div
-                        class="validation-group-marker"
-                        v-if="item.hasValidation"
-                    ></div>
+                    <div class="enabling-group-marker" :class="{ 'hide-if-disabled': item.hideIfDisabled }"
+                        v-if="item.hasCondition"></div>
+                    <div class="validation-group-marker" v-if="item.hasValidation"></div>
                 </div>
             </div>
         </router-link>

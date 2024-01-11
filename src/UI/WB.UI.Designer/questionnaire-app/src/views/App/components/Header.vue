@@ -4,88 +4,39 @@
         <div class="header-line">
             <div class="header-menu">
                 <div class="buttons">
-                    <a
-                        class="btn"
-                        href="http://support.mysurvey.solutions/designer"
-                        target="_blank"
-                        >{{ $t('QuestionnaireEditor.Help') }}</a
-                    >
-                    <a
-                        class="btn"
-                        href="https://forum.mysurvey.solutions"
-                        target="_blank"
-                        >{{ $t('QuestionnaireEditor.Forum') }}
+                    <a class="btn" href="http://support.mysurvey.solutions/designer" target="_blank">{{
+                        $t('QuestionnaireEditor.Help') }}</a>
+                    <a class="btn" href="https://forum.mysurvey.solutions" target="_blank">{{
+                        $t('QuestionnaireEditor.Forum') }}
                     </a>
-                    <a
-                        class="btn"
-                        :href="
-                            '/questionnaire/questionnairehistory/' +
-                                questionnaire.questionnaireId
-                        "
-                        target="_blank"
-                        v-if="
-                            questionnaire.hasViewerAdminRights ||
-                                questionnaire.isSharedWithUser
-                        "
-                        >{{ $t('QuestionnaireEditor.History') }}</a
-                    >
-                    <button
-                        class="btn"
-                        type="button"
-                        @click="showDownloadPdf()"
-                    >
+                    <a class="btn" :href="'/questionnaire/questionnairehistory/' +
+                        questionnaire.questionnaireId
+                        " target="_blank"
+                        v-if="questionnaire.hasViewerAdminRights || questionnaire.isSharedWithUser">{{
+                            $t('QuestionnaireEditor.History') }}</a>
+                    <button class="btn" type="button" @click="showDownloadPdf()">
                         {{ $t('QuestionnaireEditor.DownloadPdf') }}
                     </button>
-                    <a
-                        class="btn"
-                        type="button"
-                        v-if="questionnaire.hasViewerAdminRights"
-                        @click="saveAsQuestionnaire"
-                        >{{ $t('QuestionnaireEditor.SaveAs') }}</a
-                    >
+                    <a class="btn" type="button" v-if="questionnaire.hasViewerAdminRights" @click="saveAsQuestionnaire">{{
+                        $t('QuestionnaireEditor.SaveAs') }}</a>
 
-                    <a
-                        class="btn"
-                        v-if="
-                            questionnaire.questionnaireRevision ||
-                                questionnaire.isReadOnlyForUser
-                        "
-                        :href="
-                            '/questionnaire/clone/' +
-                                questionnaire.questionnaireId +
-                                (questionnaire.questionnaireRevision
-                                    ? '$' + questionnaire.questionnaireRevision
-                                    : '')
-                        "
-                        target="_blank"
-                        >{{ $t('QuestionnaireEditor.CopyTo') }}</a
-                    >
-                    <button
-                        class="btn"
-                        type="button"
-                        v-disabled="
-                            questionnaire.isReadOnlyForUser &&
-                                !questionnaire.hasViewerAdminRights &&
-                                !questionnaire.isSharedWithUser
-                        "
-                        @click="showShareInfo()"
-                    >
+                    <a class="btn" v-if="questionnaire.questionnaireRevision || questionnaire.isReadOnlyForUser"
+                        :href="'/questionnaire/clone/' + questionnaire.questionnaireId + (questionnaire.questionnaireRevision ? '$' + questionnaire.questionnaireRevision : '')"
+                        target="_blank">{{ $t('QuestionnaireEditor.CopyTo') }}</a>
+                    <button class="btn" type="button" :disabled="questionnaire.isReadOnlyForUser &&
+                        !questionnaire.hasViewerAdminRights &&
+                        !questionnaire.isSharedWithUser
+                        " @click="showShareInfo()">
                         {{ $t('QuestionnaireEditor.Settings') }}
                     </button>
 
                     <div class="btn-group" v-if="currentUserIsAuthenticated">
-                        <a class="btn btn-default" 
-                        style="margin-right: 0px;">{{
+                        <a class="btn btn-default" style="margin-right: 0px;">{{
                             $t('QuestionnaireEditor.HellowMessageBtn', {
                                 currentUserName: currentUserName
                             })
                         }}</a>
-                        <a
-                            class="btn btn-default"
-                            data-bs-toggle="dropdown"
-                            aria-haspopup="true"
-                            aria-expanded="false"
-                        >
+                        <a class="btn btn-default" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="caret"></span>
                             <span class="sr-only">{{
                                 $t('QuestionnaireEditor.ToggleDropdown')
@@ -104,20 +55,10 @@
                             </li>
                         </ul>
                     </div>
-                    <a
-                        class="btn"
-                        href="/"
-                        type="button"
-                        v-if="!currentUserIsAuthenticated"
-                        >{{ $t('QuestionnaireEditor.Login') }}</a
-                    >
-                    <a
-                        class="btn"
-                        href="/identity/account/register"
-                        type="button"
-                        v-if="!currentUserIsAuthenticated"
-                        >{{ $t('QuestionnaireEditor.Register') }}</a
-                    >
+                    <a class="btn" href="/" type="button" v-if="!currentUserIsAuthenticated">{{
+                        $t('QuestionnaireEditor.Login') }}</a>
+                    <a class="btn" href="/identity/account/register" type="button" v-if="!currentUserIsAuthenticated">{{
+                        $t('QuestionnaireEditor.Register') }}</a>
                 </div>
             </div>
             <div class="questionnarie-title">
@@ -129,37 +70,22 @@
                         <span class="text-muted">
                             {{
                                 $t('QuestionnaireEditor.QuestionnaireSummary', {
-                                    questionsCount:
-                                        questionnaire.questionsCount,
+                                    questionsCount: questionnaire.questionsCount,
                                     groupsCount: questionnaire.groupsCount,
                                     rostersCount: questionnaire.rostersCount
                                 })
                             }}
                         </span>
-                        <button
-                            id="verification-button"
-                            type="button"
-                            class="btn"
-                            @click="verify()"
-                            v-if="questionnaire.questionnaireRevision === null"
-                        >
+                        <button id="verification-button" type="button" class="btn" @click="verify()"
+                            v-if="questionnaire.questionnaireRevision === null">
                             {{ $t('QuestionnaireEditor.Compile') }}
                         </button>
-                        <span
-                            v-if="warningsCount != null && errorsCount != null"
-                        >
-                            <span
-                                data-bs-toggle="modal"
-                                v-if="warningsCount + errorsCount > 0"
-                                class="error-message v-hide"
+                        <span v-if="warningsCount != null && errorsCount != null">
+                            <span data-bs-toggle="modal" v-if="warningsCount + errorsCount > 0" class="error-message v-hide"
                                 :class="{
                                     'no-errors': errorsCount == 0
-                                }"
-                            >
-                                <a
-                                    href="javascript:void(0);"
-                                    @click="showVerificationErrors()"
-                                >
+                                }">
+                                <a href="javascript:void(0);" @click="showVerificationErrors()">
                                     {{
                                         $t(
                                             'QuestionnaireEditor.ErrorsCounter',
@@ -170,15 +96,8 @@
                                     }}
                                 </a>
                             </span>
-                            <span
-                                data-bs-toggle="modal"
-                                v-if="warningsCount > 0"
-                                class="warning-message v-hide"
-                            >
-                                <a
-                                    href="javascript:void(0);"
-                                    @click="showVerificationWarnings()"
-                                >
+                            <span data-bs-toggle="modal" v-if="warningsCount > 0" class="warning-message v-hide">
+                                <a href="javascript:void(0);" @click="showVerificationWarnings()">
                                     {{
                                         $t(
                                             'QuestionnaireEditor.WarningsCounter',
@@ -189,10 +108,7 @@
                                     }}
                                 </a>
                             </span>
-                            <span
-                                class="text-success"
-                                v-if="warningsCount + errorsCount === 0"
-                            >
+                            <span class="text-success" v-if="warningsCount + errorsCount === 0">
                                 {{ $t('QuestionnaireEditor.Ok') }}
                             </span>
 
@@ -200,22 +116,11 @@
                                 <!-- TODO <em>{{ $t('QuestionnaireEditor.SavedAtTimestamp',{ dateTime: verificationStatus.time}) }}</em> -->
                             </span>
                         </span>
-                        <span
-                            class="error-message strong"
-                            v-if="questionnaire.isReadOnlyForUser"
-                        >
-                            {{ $t('QuestionnaireEditor.ReadOnly') }}</span
-                        >
-                        <button
-                            id="webtest-btn"
-                            type="button"
-                            class="btn"
-                            v-if="
-                                questionnaire.webTestAvailable &&
-                                    questionnaire.questionnaireRevision === null
-                            "
-                            @click="webTest()"
-                        >
+                        <span class="error-message strong" v-if="questionnaire.isReadOnlyForUser">
+                            {{ $t('QuestionnaireEditor.ReadOnly') }}</span>
+                        <button id="webtest-btn" type="button" class="btn" v-if="questionnaire.webTestAvailable &&
+                            questionnaire.questionnaireRevision === null
+                            " @click="webTest()">
                             {{ $t('QuestionnaireEditor.Test') }}
                         </button>
                     </div>
@@ -229,10 +134,7 @@
         <div class="right"></div>
     </section> -->
 
-    <VerificationDialog
-        ref="verificationDialog"
-        :questionnaireId="questionnaireId"
-    />
+    <VerificationDialog ref="verificationDialog" :questionnaireId="questionnaireId" />
 </template>
 
 <script>

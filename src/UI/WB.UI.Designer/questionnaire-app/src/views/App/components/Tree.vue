@@ -34,8 +34,7 @@
                     <span v-if="currentChapter.isCover && currentChapter.isReadOnly
                         " class="warning-message">
                         {{ $t('QuestionnaireEditor.VirtualCoverPage') }}</span>
-                    <help v-if="currentChapter.isCover && currentChapter.isReadOnly
-                        " key="virtualCoverPage" />
+                    <help v-if="currentChapter.isCover && currentChapter.isReadOnly" link="virtualCoverPage" />
                     <a v-if="!questionnaire.isReadOnlyForUser &&
                         currentChapter.isCover &&
                         currentChapter.isReadOnly" href="javascript:void(0);" @click.stop="migrateToNewVersion()">{{
@@ -60,7 +59,7 @@
         <perfect-scrollbar class="scroller">
             <div class="question-list" ui-tree="groupsTree" data-bs-empty-placeholder-enabled="false">
                 <div ui-tree-nodes vmodel="items" class="ui-tree-nodes angular-ui-tree-nodes">
-                    <Draggable ref="tree" v-model="filteredTreeData" textKey="title" childrenKey="items" defaultOpen="true"
+                    <Draggable ref="tree" v-model="filteredTreeData" textKey="title" childrenKey="items" :defaultOpen="true"
                         indent="30" triggerClass="handler" :statHandler="treeNodeCreated" @after-drop="treeNodeDropped">
                         <template #default="{ node, stat }">
                             <component :key="node.itemId" :is="itemTemplate(node.itemType)" :item="node" :stat="stat"
@@ -155,6 +154,8 @@ import TreeQuestion from './TreeQuestion.vue';
 import TreeStaticText from './TreeStaticText.vue';
 import TreeVariable from './TreeVariable.vue';
 
+import Help from './Help.vue';
+
 export default {
     name: 'Tree',
     components: {
@@ -162,7 +163,9 @@ export default {
         TreeGroup,
         TreeQuestion,
         TreeStaticText,
-        TreeVariable
+        TreeVariable,
+
+        Help,
     },
     inject: ['questionnaire'],
     props: {

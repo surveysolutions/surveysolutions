@@ -40,10 +40,10 @@
             </div>
             <p>
                 <button type="button" class="btn btn-link" v-if="activeQuestion.type == 'Numeric'"
-                    v-hide="activeQuestion.options.length >= MAX_OPTIONS_COUNT" @click="addOption()">{{
+                    v-show="activeQuestion.options.length < MAX_OPTIONS_COUNT" @click="addOption()">{{
                         $t('QuestionnaireEditor.QuestionAddSpecialValues') }}</button>
                 <button type="button" class="btn btn-link" v-if="activeQuestion.type != 'Numeric'"
-                    v-hide="activeQuestion.options.length >= MAX_OPTIONS_COUNT" @click="addOption()">{{
+                    v-show="activeQuestion.options.length < MAX_OPTIONS_COUNT" @click="addOption()">{{
                         $t('QuestionnaireEditor.QuestionAddOption') }}</button>
                 <button type="button" class="btn btn-link" @click="showAddClassificationModal()">{{
                     $t('QuestionnaireEditor.QuestionAddClassification') }}</button>

@@ -1,5 +1,5 @@
-const patern = app => {
-    app.directive('patern', {
+const pattern = app => {
+    app.directive('pattern', {
         mounted(el, binding, vnode) {
             el.addEventListener('input', function(e) {
                 const value = e.target.value;
@@ -15,4 +15,4 @@ const patern = app => {
     });
 };
 
-export default patern;
+export default pattern;

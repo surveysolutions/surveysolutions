@@ -14,7 +14,7 @@
 
             <div class="row" id="edit-entity-comment-row">
                 <div class="form-group col-xs-12">
-                    <label class="wb-label" for="edit-entity-comment"> {{ $t('EntityComment') }}
+                    <label class="wb-label" for="edit-entity-comment"> {{ $t('QuestionnaireEditor.EntityComment') }}
                         <help link="newComment" />
                     </label>
                     <textarea name="comment" id="edit-entity-comment" v-model="activeComment.comment" class="form-control"
@@ -55,7 +55,8 @@ export default {
                 comment: '',
                 serverValidation: null
             },
-            maxCommentLength: 1000
+            maxCommentLength: 1000,
+            dirty: false,
         }
     },
     watch: {
@@ -104,6 +105,8 @@ export default {
                 this.activeComment.comment = '';
                 this.activeComment.serverValidation = null;
             }
+
+            this.dirty = false;
         },
         deleteComment(commentId) {
             const params = {

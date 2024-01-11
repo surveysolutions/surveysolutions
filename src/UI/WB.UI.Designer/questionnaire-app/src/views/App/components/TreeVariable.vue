@@ -1,15 +1,11 @@
 <template>
-    <TreeItem :item="item" :stat="stat">
-        <router-link
-            class="item-body"
-            :id="item.itemId"
-            :to="{
-                name: 'variable',
-                params: {
-                    variableId: item.itemId
-                }
-            }"
-        >
+    <TreeItem :item="item">
+        <router-link class="item-body" :id="item.itemId" :to="{
+            name: 'variable',
+            params: {
+                variableId: item.itemId
+            }
+        }">
             <div class="item-text">
                 <div class="icon icon-variable"></div>
                 <!--span
