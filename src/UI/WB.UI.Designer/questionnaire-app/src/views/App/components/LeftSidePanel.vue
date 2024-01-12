@@ -1,6 +1,6 @@
 <template>
-    <div class="left-side-panel chapters" :class="{ unfolded: isFolded }" ng-controller="ChaptersCtrl"
-        data-empty-place-holder-enabled="false">
+    <div v-if="openPanel == 'chapters'" class="left-side-panel chapters" :class="{ unfolded: isFolded }"
+        ng-controller="ChaptersCtrl" data-empty-place-holder-enabled="false">
         <div class="foldback-region" @click="foldback(); $event.stopPropagation()"></div>
         <div class="left-side-panel-content chapter-panel" ui-tree="chaptersTree">
             <div class="foldback-button" @click="foldback(); $event.stopPropagation()"></div>
@@ -10,8 +10,8 @@
         </div>
     </div>
 
-
-    <div class="left-side-panel scenarios" :class="{ unfolded: isFolded }" ng-controller="ScenariosCtrl">
+    <div v-if="openPanel == 'scenarios'" class="left-side-panel scenarios" :class="{ unfolded: isFolded }"
+        ng-controller="ScenariosCtrl">
         <div class="foldback-region" @click="foldback(); $event.stopPropagation()"></div>
         <div class="left-side-panel-content macros-panel">
             <div class="foldback-button-region" @click="foldback(); $event.stopPropagation()">
@@ -95,8 +95,8 @@
     <div id="left-menu" ng-controller="LeftMenuCtrl">
         <ul>
             <li>
-                <a class="left-menu-chapters" :class="{ unfolded: isUnfoldedChapters }" @click="unfoldChapters();"
-                    :title="$t('QuestionnaireEditor.SideBarSectionsTitle')"></a>
+                <a class="left-menu-chapters" :class="{ unfolded: openPanel == 'chapters' }"
+                    @click="openPanel = 'chapters';" :title="$t('QuestionnaireEditor.SideBarSectionsTitle')"></a>
             </li>
             <li>
                 <a class="left-menu-metadata" :class="{ unfolded: isUnfoldedMetadata }" @click="unfoldMetadata();"
@@ -164,7 +164,19 @@ export default {
     inject: ['questionnaire', 'currentChapter'],
     props: {},
     data() {
-        return {};
+        return {
+            openPanel: null,
+        };
+    },
+    computed: {
+        isFolded() {
+            return this.openPanel != null;
+        }
+    },
+    methods: {
+        foldback() {
+            this.openPanel = null;
+        }
     }
 };
 </script>
