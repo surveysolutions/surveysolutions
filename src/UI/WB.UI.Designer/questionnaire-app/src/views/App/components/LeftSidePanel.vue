@@ -1,866 +1,152 @@
 <template>
-    <!--div class="left-side-panel chapters" ng-class="{unfolded: isFolded }" ng-controller="ChaptersCtrl" data-empty-place-holder-enabled="false">
-        <div class="foldback-region" ng-click="foldback();$event.stopPropagation()"></div>
+    <div class="left-side-panel chapters" :class="{ unfolded: isFolded }" ng-controller="ChaptersCtrl"
+        data-empty-place-holder-enabled="false">
+        <div class="foldback-region" @click="foldback(); $event.stopPropagation()"></div>
         <div class="left-side-panel-content chapter-panel" ui-tree="chaptersTree">
-            <div class="foldback-button" ng-click="foldback();$event.stopPropagation()"></div>
+            <div class="foldback-button" @click="foldback(); $event.stopPropagation()"></div>
             <div class="ul-holder">
-                <div class="chapters">
-                    <perfect-scrollbar class="scroller">
-                        <h3>
-                            <span ng-i18next="[i18next]({count: questionnaire.chapters.length})SideBarSectionsCounter"></span>
-                        </h3>
-                        <ul ui-tree-nodes ng-model="questionnaire.chapters" class="chapters-list">
-                            <li class="chapter-panel-item"
-                                ng-repeat="chapter in questionnaire.chapters"
-                                ui-tree-node
-                                data-nodrag="{{ chapter.isCover }}"
-                                ng-class="{ current: isCurrentChapter(chapter) }"
-                                context-menu data-target="chapter-context-menu-{{ chapter.itemId }}"
-                                context-menu-hide-on-mouse-leave="true">
-                                <div class="holder" ng-click="editChapter(chapter);$event.stopPropagation();">
-                                    <div class="inner">
-                                        <a class="handler" ui-tree-handle ng-if="!questionnaire.isReadOnlyForUser && !chapter.isCover"><span></span></a>
-                                        <a class="chapter-panel-item-body" ui-sref="questionnaire.chapter.group({ chapterId: chapter.itemId, itemId: chapter.itemId})">
-                                            <span ng-bind-html="chapter.title | escape"></span>
-                                            <help link="coverPage" ng-if="chapter.isCover" />                                            
-                                        </a>
-                                        <div class="qname-block chapter-panel-item-condition">
-                                            <div class="conditions-block">
-                                                <div class="enabling-group-marker" ng-class="{'hide-if-disabled': chapter.hideIfDisabled}" ng-if="chapter.hasCondition"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="dropdown position-fixed" id="chapter-context-menu-{{ chapter.itemId }}">
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li><a ng-click="editChapter(chapter);" ng-i18next>Open</a></li>
-                                        <li><a ng-click="copyRef(chapter);" ng-i18next>Copy</a></li>
-                                        <li>
-                                            <a ng-disabled="!readyToPaste" ng-click="pasteAfterChapter(chapter);$event.stopPropagation();" ng-if="!questionnaire.isReadOnlyForUser && !chapter.isReadOnly" ng-i18next>PasteAfter</a>
-                                        </li>
-                                        <li><a ng-click="deleteChapter(chapter);$event.stopPropagation();" ng-if="!questionnaire.isReadOnlyForUser && !chapter.isCover" ng-i18next>Delete</a></li>
-                                    </ul>
-                                </div>
-                            </li>
-                        </ul>
-                        <div class="button-holder">
-                            <input type="button" class="btn lighter-hover" ng-i18next="[value]AddNewSection" value="ADD NEW SECTION" ng-click="addNewChapter()" ng-if="!questionnaire.isReadOnlyForUser">
-                        </div>
-                    </perfect-scrollbar>
-                </div>
+                <Chapters></Chapters>
             </div>
         </div>
     </div>
 
 
-    <div class="left-side-panel scenarios" ng-class="{unfolded: isFolded }" ng-controller="ScenariosCtrl">
-        <div class="foldback-region" ng-click="foldback();$event.stopPropagation()"></div>
+    <div class="left-side-panel scenarios" :class="{ unfolded: isFolded }" ng-controller="ScenariosCtrl">
+        <div class="foldback-region" @click="foldback(); $event.stopPropagation()"></div>
         <div class="left-side-panel-content macros-panel">
-            <div class="foldback-button-region" ng-click="foldback();$event.stopPropagation()">
+            <div class="foldback-button-region" @click="foldback(); $event.stopPropagation()">
                 <div class="foldback-button"></div>
             </div>
-            <div class="macroses">
-                <perfect-scrollbar class="scroller">
-                    <h3>
-                        <span ng-i18next="[i18next]({count: scenarios.length})SideBarScenarioCounter"></span>
-                    </h3>
-                    <div class="empty-list" ng-show="scenarios.length == 0">
-                        <p ng-i18next>SideBarScenarioEmptyLine1</p>
-                        <p ng-i18next>SideBarScenarioEmptyLine2</p>
-                    </div>
-                    <form role="form" name="scenariosForm" novalidate>
-                        <ul ng-model="scenarios">
-                            <li class="macroses-panel-item" ng-repeat="scenario in scenarios">
-                                <ng-form name="scenario.form">
-                                    <a href="javascript:void(0)" ng-if="!questionnaire.isReadOnlyForUser" ng-click="deleteScenario($index)" class="btn delete-btn" tabindex="-1"></a>
-                                    <div class="input-group macroses-name">
-                                        <input focus-on-out="focusScenario{{scenario.id}}" ng-i18next="[placeholder]SideBarScenarioName" maxlength="32" spellcheck="false" ng-model="scenario.title" name="name" class="form-control" type="text" />
-                                    </div>
-                                    <div class="divider"></div>
-                                    <button type="button" class="btn lighter-hover" ng-click="runScenario(scenario)" ng-i18next>Run</button>
-                                    <button type="button" class="btn lighter-hover" ng-click="showScenarioEditor(scenario.id, scenario.title)" ng-i18next>View</button>
-                                    <div class="actions" ng-show="scenario.form.$dirty" ng-if="!questionnaire.isReadOnlyForUser">
-                                        <button type="submit" ng-disabled="questionnaire.isReadOnlyForUser || scenario.form.$invalid" class="btn lighter-hover" ng-click="saveScenario(scenario)" ng-i18next>Save</button>
-                                        <button type="button" class="btn lighter-hover" ng-click="cancel(scenario)" ng-i18next>Cancel</button>
-                                    </div>
-                                </ng-form>
-                            </li>
-                        </ul>
-                    </form>
-                </perfect-scrollbar>
-            </div>
+
         </div>
     </div>
 
-
-    <div class="left-side-panel macroses" ng-class="{unfolded: isFolded }" ng-controller="MacrosCtrl">
-        <div class="foldback-region" ng-click="foldback();$event.stopPropagation()"></div>
+    <div class="left-side-panel macroses" :class="{ unfolded: isFolded }" ng-controller="MacrosCtrl">
+        <div class="foldback-region" @click="foldback(); $event.stopPropagation()"></div>
         <div class="left-side-panel-content macros-panel">
-            <div class="foldback-button-region" ng-click="foldback();$event.stopPropagation()">
+            <div class="foldback-button-region" @click="foldback(); $event.stopPropagation()">
                 <div class="foldback-button"></div>
             </div>
-            <div class="macroses">
-                <perfect-scrollbar class="scroller">
-                    <h3>
-                        <span ng-i18next="[i18next]({count: macros.length})SideBarMacroCounter"></span>
-                    </h3>
-                    <div class="empty-list" ng-show="macros.length == 0">
-                        <p ng-i18next>SideBarMacroEmptyLine1</p>
-                        <p ng-i18next>SideBarMacroEmptyLine2</p>
-                        <p>
-                            <span class="variable-name" ng-i18next="VariableName"></span>
-                            {{'SideBarMacroEmptyLine3' | i18next}}
-                        </p>
-                    </div>
-                    <form role="form" name="macrosForm" novalidate>
-                        <ul ng-model="macros">
-                            <li class="macros-panel-item" ng-repeat="macro in macros">
-                                <ng-form name="macro.form">
-                                    <a href ng-click="deleteMacro($index)" ng-disabled="questionnaire.isReadOnlyForUser" ng-if="!questionnaire.isReadOnlyForUser" class="btn delete-btn" tabindex="-1"></a>
-                                    <div class="input-group macros-name">
-                                        <span class="input-group-addon">$</span>
-                                        <input focus-on-out="focusMacro{{macro.itemId}}" ng-i18next="[placeholder]SideBarMacroName" maxlength="32" spellcheck="false" ng-model="macro.name" name="name" class="form-control" type="text" />
-                                    </div>
-                                    <div class="divider"></div>
-                                    <div ng-model="macro.content" ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" type="text"></div>
-                                    <div ng-show="macro.isDescriptionVisible">
-                                        <div class="divider"></div>
-                                        <textarea ng-i18next="[placeholder]SideBarMacroDescription" type="text" ng-model="macro.description" class="form-control macros-description" msd-elastic></textarea></div>
-                                    <div class="actions" ng-show="macro.form.$dirty">
-                                        <button type="submit" ng-disabled="questionnaire.isReadOnlyForUser || macro.form.$invalid" class="btn lighter-hover" ng-click="saveMacro(macro)" ng-i18next>Save</button>
-                                        <button type="button" class="btn lighter-hover" ng-click="cancel(macro)" ng-i18next>Cancel</button>
-                                        <button class="btn btn-default pull-right" ng-show="isDescriptionEmpty(macro)" type="button" ng-click="toggleDescription(macro)"
-                                                ng-i18next="{{macro.isDescriptionVisible ? 'SideBarMacroHideDescription' : 'SideBarMacroShowDescription'}}"></button>
-                                    </div>
-                                </ng-form>
-                            </li>
-                        </ul>
 
-                    </form>
-                    <div class="button-holder">
-                        <input type="button" class="btn lighter-hover" ng-disabled="questionnaire.isReadOnlyForUser" ng-i18next="[value]SideBarAddMacro" value="ADD NEW Macro" ng-click="addNewMacro()">
-                    </div>
-                </perfect-scrollbar>
-            </div>
         </div>
     </div>
-    <div class="left-side-panel lookup-tables" ng-class="{unfolded: isFolded }" ng-controller="LookupTablesCtrl">
-        <div class="foldback-region" ng-click="foldback();$event.stopPropagation()"></div>
+
+    <div class="left-side-panel lookup-tables" :class="{ unfolded: isFolded }" ng-controller="LookupTablesCtrl">
+        <div class="foldback-region" @click="foldback(); $event.stopPropagation()"></div>
         <div class="left-side-panel-content lookup-tables-panel">
-            <div class="foldback-button-region" ng-click="foldback();$event.stopPropagation()">
+            <div class="foldback-button-region" @click="foldback(); $event.stopPropagation()">
                 <div class="foldback-button"></div>
             </div>
-            <div class="lookup-tables">
-                <perfect-scrollbar class="scroller">
-                    <h3>
-                        <span ng-i18next="[i18next]({count: lookupTables.length})SideBarLookupTablesCounter"></span>
-                    </h3>
-                    <div class="empty-list" ng-show="lookupTables.length === 0">
-                        <p ng-i18next>SideBarLookupEmptyLine1</p>
-                        <p ng-i18next>SideBarLookupEmptyLine2</p>
-                        <p ng-i18next>SideBarLookupEmptyLine3</p>
-                    </div>
-                    <form role="form" name="lookupTablesForm" novalidate>
-                        <ul ng-model="lookupTables">
-                            <li class="lookup-table-panel-item" ng-repeat="table in lookupTables" ngf-drop="" ngf-change="fileSelected(table, $file)" ngf-max-size="1MB" accept=".tab,.txt" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
-                                <ng-form name="table.form">
-                                    <a href="javascript:void(0);" ng-click="deleteLookupTable($index)" ng-disabled="questionnaire.isReadOnlyForUser" ng-if="!questionnaire.isReadOnlyForUser" class="btn delete-btn" tabindex="-1"></a>
-                                    <input focus-on-out="focusLookupTable{{table.itemId}}" required="" ng-i18next="[placeholder]SideBarLookupTableName"
-                                           maxlength="32" spellcheck="false" autocomplete="off"
-                                           ng-model="table.name" name="name" class="form-control table-name" type="text" />
-                                    <div class="divider"></div>
-                                    <input ng-i18next="[placeholder]SideBarLookupTableFileName" required="" spellcheck="false" ng-model="table.fileName" name="fileName" class="form-control" disabled="" type="text" />
 
-                                    <div class="drop-box" ng-i18next>SideBarLookupTableDropFile</div>
-
-                                    <div class="actions clearfix" ng-class="{dirty: table.form.$dirty }">
-                                        <div ng-show="table.form.$dirty" class="pull-left">
-                                            <button type="submit" ng-disabled="questionnaire.isReadOnlyForUser || table.form.$invalid" class="btn lighter-hover" ng-click="saveLookupTable(table);$event.stopPropagation()" ng-i18next>Save</button>
-                                            <button type="button" class="btn lighter-hover" ng-click="cancel(table);$event.stopPropagation()" ng-i18next>Cancel</button>
-                                        </div>
-                                        <div class="permanent-actions clearfix">
-                                            <a href="{{downloadLookupFileBaseUrl + questionnaire.questionnaireId +'?lookupTableId='+ table.itemId}}" ng-show="table.hasUploadedFile" class="btn btn-default pull-right" target="_blank" rel="noopener noreferrer" ng-i18next>Download</a>
-                                            <button class="btn btn-default pull-right" ngf-select="" ngf-change="fileSelected(table, $file);$event.stopPropagation()" accept=".tab,.txt" ngf-max-size="2MB" type="file">
-                                                <span ng-hide="table.hasUploadedFile" ng-i18next="SideBarLookupTableSelectFile">Select file</span>
-                                                <span ng-show="table.hasUploadedFile" ng-i18next="SideBarLookupTableUpdateFile">Update file</span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </ng-form>
-                            </li>
-                        </ul>
-                    </form>
-                    <div class="button-holder">
-                        <input type="button" class="btn lighter-hover" ng-disabled="questionnaire.isReadOnlyForUser" ng-i18next="[value]SideBarLookupTableAdd" value="ADD NEW Lookup table" ng-click="addNewLookupTable()">
-                    </div>
-                </perfect-scrollbar>
-            </div>
         </div>
-
     </div>
-    <div class="left-side-panel attachments" ng-class="{unfolded: isFolded }" ng-controller="AttachmentsCtrl">
-        <div class="foldback-region" ng-click="foldback();$event.stopPropagation()"></div>
+
+    <div class="left-side-panel attachments" :class="{ unfolded: isFolded }" ng-controller="AttachmentsCtrl">
+        <div class="foldback-region" @click="foldback(); $event.stopPropagation()"></div>
         <div class="left-side-panel-content attachments-panel">
-            <div class="foldback-button-region" ng-click="foldback();$event.stopPropagation()">
+            <div class="foldback-button-region" @click="foldback(); $event.stopPropagation()">
                 <div class="foldback-button"></div>
             </div>
-            <div class="attachments">
-                <perfect-scrollbar class="scroller">
-                    <div class="panel-header clearfix">
-                        <div class="title pull-left">
-                            <h3 ng-i18next="[i18next]({count: attachments.length, bytes: formatBytes(totalSize())})SideBarAttachmentsCounter" />
-                            <p class="estimated-download-time"
-                               ng-i18next="[i18next]({timeString: formatSeconds(estimatedLoadingTime()), downloadSpeed: benchmarkDownloadSpeed})SideBarAttachmentsEstimate">
-                            </p>
 
-                        </div>
-                        <button class="btn btn-default btn-lg pull-left" ng-class="{'btn-primary': !isReadOnlyForUser}"
-                                ngf-select ngf-change="createAndUploadFile($file);$event.stopPropagation()"
-                                ngf-accept="'.pdf,image/*,video/*,audio/*'" ngf-max-size="100MB" type="file" ngf-select-disabled="isReadOnlyForUser"
-                                ngf-drop-disabled="isReadOnlyForUser" ng-disabled="isReadOnlyForUser"
-                                ng-i18next="SideBarAttachmentsUpload">
-                            Upload new
-                        </button>
-                    </div>
-                    <div class="empty-list" ng-show="attachments.length == 0">
-                        <p ng-i18next="SideBarAttachmentsEmptyLine1"></p>
-                        <p>
-                            <span ng-i18next="SideBarAttachmentsEmptyLine2"></span>
-                            <a href="https://support.mysurvey.solutions/questionnaire-designer/limits/multimedia-reference" target="_blank" ng-i18next="ClickHere">
-                                click here
-                            </a>
-                        </p>
-                        <p ng-bind-html="emptyAttachmentsDescription" />
-                    </div>
-                    <form role="form" name="attachmentsForm" novalidate>
-                        <div class="attachment-list">
-                            <ng-form name="attachment.form" ng-repeat="attachment in attachments">
-                                <div class="attachments-panel-item" ng-class="{'has-error': attachment.form.name.$error.pattern}" ngf-drop="" ngf-max-size="100MB" ngf-change="fileSelected(attachment, $file)" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
-                                    <a href ng-click="deleteAttachment($index)" ng-disabled="questionnaire.isReadOnlyForUser" ng-if="!questionnaire.isReadOnlyForUser" class="btn delete-btn" tabindex="-1"></a>
-                                    <div class="attachment">
-                                        <div class="attachment-preview">
-                                            <div class="attachment-preview-cover clearfix">
-                                                <img class="pull-right" ng-click="previewAttachment(attachment)" ngf-size="{width: 156, height: 140}" ng-src='{{downloadLookupFileBaseUrl + "/" + questionnaire.questionnaireId + "/thumbnail/" + attachment.attachmentId}}'>
-                                            </div>
-                                        </div>
-                                        <div class="attachment-content">
-                                            <input focus-on-out="focusAttachment{{attachment.attachmentId}}"
-                                                   required=""
-                                                   ng-i18next="[placeholder]SideBarAttachmentName"
-                                                   maxlength="32"
-                                                   spellcheck="false"
-                                                   ng-model="attachment.name"
-                                                   name="name"
-                                                   class="form-control table-name"
-                                                   type="text" />
-                                            <div class="divider"></div>
-                                            <div class="drop-box" ng-i18next="SideBarLookupTableDropFile">
-                                                Drop File here
-                                            </div>
-                                            <div class="attachment-meta" ng-include="'Image-attachment-info-template.html'"></div>
-                                            <div class="actions clearfix" ng-class="{dirty: attachment.form.$dirty }">
-                                                <div ng-show="attachment.form.$dirty" class="pull-left">
-                                                    <button type="submit" ng-disabled="questionnaire.isReadOnlyForUser || attachment.form.$invalid" class="btn lighter-hover" ng-click="saveAttachment(attachment);$event.stopPropagation()" ng-i18next>Save</button>
-                                                    <button type="button" class="btn lighter-hover" ng-click="cancel(attachment);$event.stopPropagation()" ng-i18next>Cancel</button>
-                                                </div>
-                                                <div class="permanent-actions pull-right clearfix">
-                                                    <button ng-disabled="isReadOnlyForUser" class="btn btn-default pull-right" ngf-select="" ngf-accept="'.pdf,image/*,video/*,audio/*'" ngf-max-size="100MB" ngf-change="fileSelected(attachment, $file);$event.stopPropagation()" type="file">
-                                                        <span ng-i18next>Update</span>
-                                                    </button>
-                                                    <a href="{{downloadLookupFileBaseUrl + '/' + questionnaire.questionnaireId + '/' + attachment.attachmentId}}" class="btn btn-default pull-right" target="_blank" rel="noopener noreferrer" ng-i18next>Download</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </ng-form>
-                        </div>
-                    </form>
-                </perfect-scrollbar>
-            </div>
         </div>
     </div>
-    <div class="left-side-panel translations" ng-class="{unfolded: isFolded }" ng-controller="TranslationsCtrl">
-        <div class="foldback-region" ng-click="foldback();$event.stopPropagation()"></div>
+
+    <div class="left-side-panel translations" :class="{ unfolded: isFolded }" ng-controller="TranslationsCtrl">
+        <div class="foldback-region" @click="foldback(); $event.stopPropagation()"></div>
         <div class="left-side-panel-content translations-panel">
-            <div class="foldback-button-region" ng-click="foldback();$event.stopPropagation()">
+            <div class="foldback-button-region" @click="foldback(); $event.stopPropagation()">
                 <div class="foldback-button"></div>
             </div>
-            <div class="translations">
-                <perfect-scrollbar class="scroller">
-                    <h3 ng-i18next="[i18next]({count: translations.length })SideBarTranslationsCounter"></h3>
 
-                    <div class="empty-list" ng-show="translations.length == 1">
-                        <p ng-i18next="SideBarTranslationsEmptyLine1"></p>
-                        <p ng-i18next="SideBarTranslationsEmptyLine2"></p>
-                        <p ng-i18next="SideBarTranslationsEmptyLine3"></p>
-                    </div>
-                    <form role="form" name="translationsForm" novalidate>
-                        <div class="translation-list">
-                            <ng-form name="translation.form" ng-repeat="translation in translations">
-                                <div class="translations-panel-item" ng-class="{'has-error': translation.form.name.$error.pattern}"
-                                     ngf-drop="" ngf-max-size="4MB" ngf-change="fileSelected(translation, $file)"
-                                     ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
-                                    <a href
-                                       ng-click="deleteTranslation($index)" 
-                                       ng-disabled="questionnaire.isReadOnlyForUser" 
-                                       class="btn delete-btn" 
-                                       tabindex="-1"
-                                       ng-show="!translation.isOriginalTranslation && !questionnaire.isReadOnlyForUser"></a>
-                                    <div class="translation-content">
-                                        <input focus-on-out="focusTranslation{{translation.translationId}}"
-                                               required=""
-                                               ng-i18next="[placeholder]SideBarTranslationName"
-                                               maxlength="32"
-                                               spellcheck="false"
-                                               ng-model="translation.name"
-                                               name="name"
-                                               class="form-control table-name"
-                                               type="text" />
-                                        <div class="drop-box" ng-i18next="SideBarLookupTableDropFile">
-                                            Drop File here
-                                        </div>
-                                        <div class="actions" ng-class="{dirty: translation.form.$dirty }">
-                                            <div ng-show="translation.form.$dirty" class="pull-left">
-                                                <button type="submit" ng-disabled="questionnaire.isReadOnlyForUser || translation.form.$invalid" class="btn lighter-hover" ng-click="onSave($event, translation)"
-                                                        ng-i18next>
-                                                    Save
-                                                </button>
-                                                <button type="button" class="btn lighter-hover" ng-click="onCancel($event, translation)" ng-i18next>Cancel</button>
-                                            </div>
-
-                                            <button type="button" class="btn btn-default"
-                                                    ng-show="translation.isDefault && !translation.isOriginalTranslation"
-                                                    ng-click="setDefaultTranslation($index, false);$event.stopPropagation()" ng-i18next>
-                                                UnMarkAsDefault
-                                            </button>
-
-                                            <div class="permanent-actions pull-right">
-                                                <button type="button" class="btn lighter-hover"
-                                                        ng-disabled="isReadOnlyForUser"
-                                                        ng-show="!translation.isDefault"
-                                                        ng-click="setDefaultTranslation($index, true);$event.stopPropagation()" ng-i18next>
-                                                    MarkAsDefault
-                                                </button>
-
-                                                <a ng-if="translation.downloadUrl" href="{{translation.downloadUrl}}" class="btn btn-default"
-                                                   target="_blank" rel="noopener noreferrer" ng-i18next>SideBarTranslationDownloadXlsx</a>
-
-                                                <button ng-hide="translation.form.$dirty || translation.isOriginalTranslation" 
-                                                        ng-disabled="isReadOnlyForUser" 
-                                                        class="btn btn-default" 
-                                                        ngf-select="" 
-                                                        ngf-max-size="10MB" 
-                                                        accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
-                                                        ngf-change="fileSelected(translation, $file);$event.stopPropagation()" 
-                                                        type="button">
-                                                    <span ng-i18next>Update</span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </ng-form>
-                        </div>
-                    </form>
-                    <div class="button-holder">
-                        <p>
-                            <span ng-i18next="SideBarTranslationGetTemplate"></span>
-                            <a class="btn btn-default" href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId + '/template' }}" target="_blank" rel="noopener" ng-i18next>
-                                SideBarTranslationGetTemplateLinkTextXlsx
-                            </a>                            
-                        </p>
-                        <p>
-                            <input type="button" ng-i18next="[value]SideBarTranslationsUploadNew" value="Upload new translation"
-                                   ng-disabled="isReadOnlyForUser"
-                                   class="btn lighter-hover" 
-                                   ngf-select
-                                   ngf-change="createAndUploadFile($file);$event.stopPropagation()"
-                                   ngf-max-size="10MB"
-                                   accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
-                                   ngf-select-disabled="isReadOnlyForUser"
-                                   ngf-drop-disabled="isReadOnlyForUser" />
-                        </p>
-                    </div>
-                </perfect-scrollbar>
-            </div>
         </div>
     </div>
 
-
-    <div class="left-side-panel categories" ng-class="{unfolded: isFolded }" ng-controller="CategoriesCtrl">
-        <div class="foldback-region" ng-click="foldback();$event.stopPropagation()"></div>
+    <div class="left-side-panel categories" :class="{ unfolded: isFolded }" ng-controller="CategoriesCtrl">
+        <div class="foldback-region" @click="foldback(); $event.stopPropagation()"></div>
         <div class="left-side-panel-content categories-panel">
-            <div class="foldback-button-region" ng-click="foldback();$event.stopPropagation()">
+            <div class="foldback-button-region" @click="foldback(); $event.stopPropagation()">
                 <div class="foldback-button"></div>
             </div>
-            <div class="categories">
-                <div id="show-reload-details-promt" class="ng-cloak" ng-show="shouldUserSeeReloadPromt">
-                    <div class="inner">{{'QuestionToUpdateOptions' | i18next}} <a href="#" onclick="window.location.reload(true);" ng-i18next="QuestionClickReload"></a></div>
-                </div>
 
-                <perfect-scrollbar class="scroller">
-                    <h3 ng-i18next="[i18next]({count: categoriesList.length })SideBarCategoriesCounter"></h3>
-
-                    <div class="empty-list" ng-show="categoriesList.length == 0">
-                        <p ng-i18next="SideBarCategoriesEmptyLine1"></p>
-                        <p ng-i18next="SideBarCategoriesEmptyLine2"></p>
-                        <p>
-                            <span class="variable-name" ng-i18next="VariableName"></span>
-                            {{'SideBarCategoriesEmptyLine3' | i18next}}
-                        </p>
-                    </div>
-                    <form role="form" name="categoriesForm" novalidate>
-                        <div class="categories-list">
-                            <ng-form name="categories.form" ng-repeat="categories in categoriesList">
-                                <div class="categories-panel-item" ng-class="{'has-error': categories.form.name.$error.pattern}"
-                                     ngf-drop="" ngf-change="fileSelected(categories, $file)"
-                                     ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
-                                    <a href ng-click="deleteCategories($index)" class="btn delete-btn" tabindex="-1" ng-if="!questionnaire.isReadOnlyForUser"></a>
-                                    <div class="categories-content">
-                                        <input focus-on-out="focusCategories{{categories.categoriesId}}"
-                                               required=""
-                                               ng-i18next="[placeholder]SideBarCategoriesName"
-                                               maxlength="32"
-                                               spellcheck="false"
-                                               ng-model="categories.name"
-                                               name="name"
-                                               class="form-control table-name"
-                                               type="text"/>
-                                        <div class="drop-box" ng-i18next="SideBarLookupTableDropFile">
-                                            Drop File here
-                                        </div>
-                                        <div class="actions" ng-class="{dirty: categories.form.$dirty }">
-                                            <div ng-show="categories.form.$dirty" class="pull-left">
-                                                <button type="submit" ng-disabled="categories.form.$invalid" class="btn lighter-hover"
-                                                        ng-click="saveCategories(categories);$event.stopPropagation()"
-                                                        ng-i18next>
-                                                    Save
-                                                </button>
-                                                <button type="button" class="btn lighter-hover" ng-click="cancel(categories);$event.stopPropagation()" ng-i18next>Cancel</button>
-                                            </div>
-
-                                            <div class="permanent-actions pull-right">
-                                                <a
-                                                    href="javascript:void(0);"
-                                                    class="btn btn-link"
-                                                    ng-click="editCategories(questionnaire.questionnaireId, categories.categoriesId)" ng-i18next="SideBarEditCategories">
-                                                </a>
-
-                                                <button ng-hide="categories.form.$dirty" ng-disabled="isReadOnlyForUser"
-                                                        class="btn btn-default" ngf-select="" ngf-max-size="10MB"
-                                                        accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.txt,.tsv,.tab"
-                                                        ngf-change="fileSelected(categories, $file);$event.stopPropagation()" type="button">
-                                                    <span ng-i18next>Update</span>
-                                                </button>
-
-                                                {{'SideBarDownload' | i18next}}
-                                                <a href="{{'/questionnaire/ExportOptions/' + questionnaire.questionnaireId  + '?type=xlsx&isCategory=true&entityId=' + categories.categoriesId}}" class="btn btn-default"
-                                                   target="_blank" rel="noopener" ng-i18next>SideBarXlsx</a>
-                                                <a href="{{'/questionnaire/ExportOptions/' + questionnaire.questionnaireId  + '?type=csv&isCategory=true&entityId=' + categories.categoriesId}}" class="btn btn-default"
-                                                   target="_blank" rel="noopener" ng-i18next>SideBarTab</a>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </ng-form>
-                        </div>
-                    </form>
-                    <div class="button-holder">
-                        <p>
-                            <span ng-i18next="SideBarTranslationGetTemplate"></span>
-
-                            <a class="btn btn-default" href="{{downloadBaseUrl + '/template' }}" target="_blank" rel="noopener" ng-i18next>
-                                SideBarXlsx
-                            </a>
-                            <a class="btn btn-default" href="{{downloadBaseUrl + '/templateTab' }}" target="_blank" rel="noopener" ng-i18next>
-                                SideBarTab
-                            </a>
-                        </p>
-                        <p>
-                            <input type="button" ng-i18next="[value]SideBarCategoriesAddNew" value="ADD new category"
-                                   class="btn lighter-hover" 
-                                   ng-click="addNewCategory();$event.stopPropagation()"
-                                   ng-disabled="isReadOnlyForUser" />
-                        </p>
-                        <p>
-                            <input type="button" ng-i18next="[value]SideBarCategoriesUploadNew" value="Upload new categories"
-                                   class="btn lighter-hover" ngf-select
-                                   ngf-change="createAndUploadFile($file);$event.stopPropagation()"
-                                   ngf-max-size="10MB"
-                                   accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.txt,.tsv,.tab"
-                                   ngf-select-disabled="isReadOnlyForUser"
-                                   ngf-drop-disabled="isReadOnlyForUser"
-                                   ng-disabled="isReadOnlyForUser" />
-                        </p>
-                    </div>
-                </perfect-scrollbar>
-            </div>
         </div>
     </div>
 
-    <div class="left-side-panel metadata" ng-class="{unfolded: isFolded }" ng-controller="MetadataCtrl">
-        <div class="foldback-region" ng-click="foldback();$event.stopPropagation()"></div>
+    <div class="left-side-panel metadata" :class="{ unfolded: isFolded }" ng-controller="MetadataCtrl">
+        <div class="foldback-region" @click="foldback(); $event.stopPropagation()"></div>
         <div class="left-side-panel-content metadata-panel">
-            <div class="foldback-button-region" ng-click="foldback();$event.stopPropagation()">
+            <div class="foldback-button-region" @click="foldback(); $event.stopPropagation()">
                 <div class="foldback-button"></div>
             </div>
 
-            <div class="metadata">
-                <perfect-scrollbar class="scroller">
-                    <h3 ng-i18next="SideBarMetadataHeader"></h3>
 
-                    <form role="form" name="metadataForm" novalidate>
-                        <ng-form name="metadata.form">
-
-                            <ul class="list-unstyled metadata-blocks">
-                                <li>
-                                    <h4>{{'SideBarMetadataBasicInfo' | i18next}}</h4>
-                                    <div class="field-wrapper">
-                                        <span class="label-title">{{'SideBarMetadataTitle' | i18next}}</span>
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" name="title" required="" minlength="1" ng-model="metadata.title" />
-                                        </div>
-                                    </div>
-                                    <div class="field-wrapper">
-                                        <span class="label-title">{{'SideBarMetadataSubtitle' | i18next}}</span>
-                                        <div class="form-group">
-                                            <textarea class="form-control msd-elastic" name="subTitle" ng-model="metadata.subTitle"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="field-wrapper">
-                                        <span class="label-title">{{'SideBarMetadataVersionIdentificator' | i18next}}</span>
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" name="version" ng-model="metadata.version">
-                                        </div>
-                                    </div>
-                                    <div class="field-wrapper">
-                                        <span class="label-title">{{'SideBarMetadataVersionNotes' | i18next}}</span>
-                                        <div class="form-group">
-                                            <textarea class="form-control msd-elastic" name="versionNotes" ng-model="metadata.versionNotes"></textarea>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <h4>{{'SideBarMetadataSurveyDataInfo' | i18next}}</h4>
-                                    <div class="field-wrapper">
-                                        <span class="label-title">{{'SideBarMetadataStudyTypes' | i18next}}</span>
-                                        <div class="form-group">
-                                            <div class="btn-group dropdown" ng-class="{'has-value': metadata.studyType }">
-                                                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                    {{ metadata.studyType ? (questionnaire.studyTypes | filter : {'code':metadata.studyType})[0].title : 'SelectStudyType' | i18next }}
-                                                    <span class="dropdown-arrow" aria-labelledby="dropdownMenu12"></span>
-                                                </button>
-                                                <button type="button" class="btn btn-link btn-clear" ng-click="metadata.studyType = null; metadata.form.$setDirty();">
-                                                    <span></span>
-                                                </button>
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenu12">
-                                                    <perfect-scrollbar class="scroller">
-                                                        <ul class="list-unstyled">
-                                                            <li ng-repeat="studyType in questionnaire.studyTypes">
-                                                                <a ng-click="metadata.studyType = studyType.code; metadata.form.$setDirty();" value="{{studyType.code}}" href="#">{{studyType.title}}</a>
-                                                            </li>
-                                                        </ul>
-                                                    </perfect-scrollbar>
-                                                </div>
-                                            </div>
-                                            <input type="hidden" class="form-control" name="studyType" ng-model="metadata.studyType" />
-                                        </div>
-                                    </div>
-                                    <div class="field-wrapper">
-                                        <span class="label-title">{{'SideBarMetadataKindOfData' | i18next}}</span>
-                                        <div class="form-group">
-                                            <div class="btn-group dropdown" ng-class="{'has-value': metadata.kindOfData }">
-                                                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                    {{ metadata.kindOfData ? (questionnaire.kindsOfData | filter : {'code':metadata.kindOfData})[0].title  : 'SelectKindOfData' | i18next}}
-                                                    <span class="dropdown-arrow" aria-labelledby="dropdownMenu12"></span>
-                                                </button>
-                                                <button type="button" class="btn btn-link btn-clear" ng-click="metadata.kindOfData = null; metadata.form.$setDirty();">
-                                                    <span></span>
-                                                </button>
-                                                <div class="dropdown-menu " aria-labelledby="dropdownMenu12">
-                                                    <ul class="scroller list-unstyled">
-                                                        <li ng-repeat="kindOfData in questionnaire.kindsOfData">
-                                                            <a ng-click="metadata.kindOfData = kindOfData.code; metadata.form.$setDirty();" value="{{kindOfData.code}}" href="#">{{kindOfData.title}}</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <input type="hidden" class="form-control" name="kindOfData" ng-model="metadata.kindOfData" />
-                                    </div>
-                                    <div class="field-wrapper">
-                                        <span class="label-title">{{'SideBarMetadataModeOfDataCollection' | i18next}}</span>
-
-                                        <div class="form-group">
-                                            <div class="btn-group dropdown" ng-class="{'has-value': metadata.modeOfDataCollection }">
-                                                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                    {{ metadata.modeOfDataCollection ? (questionnaire.modesOfDataCollection | filter : {'code':metadata.modeOfDataCollection})[0].title  : 'SelectModeOfDataCollection' | i18next}}
-                                                    <span class="dropdown-arrow" aria-labelledby="dropdownMenu12"></span>
-                                                </button>
-                                                <button type="button" class="btn btn-link btn-clear" ng-click="metadata.modeOfDataCollection = null; metadata.form.$setDirty();">
-                                                    <span></span>
-                                                </button>
-                                                <div class="dropdown-menu " aria-labelledby="dropdownMenu12">
-                                                    <ul class="scroller list-unstyled">
-                                                        <li ng-repeat="modeOfData in questionnaire.modesOfDataCollection">
-                                                            <a ng-click="metadata.modeOfDataCollection = modeOfData.code; metadata.form.$setDirty();" value="{{modeOfData.code}}" href="#">{{modeOfData.title}}</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <input type="hidden" class="form-control" id="modeOfDataCollection" name="modeOfDataCollection" ng-model="metadata.modeOfDataCollection" />
-                                    </div>
-                                </li>
-                                <li>
-                                    <h4>{{'SideBarMetadataSurveyInfo' | i18next}}</h4>
-                                    <div class="field-wrapper">
-                                        <span class="label-title">{{'SideBarMetadataCountry' | i18next}}</span>
-                                        <div class="form-group">
-                                            <div class="btn-group dropdown" ng-class="{'has-value': metadata.country }">
-                                                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                    {{ metadata.country ? (questionnaire.countries | filter : {'code':metadata.country})[0].title  : 'SelectCountry' | i18next}}
-                                                    <span class="dropdown-arrow" aria-labelledby="dropdownMenu12"></span>
-                                                </button>
-                                                <button type="button" class="btn btn-link btn-clear" ng-click="metadata.country = null; metadata.form.$setDirty();">
-                                                    <span></span>
-                                                </button>
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenu12">
-                                                    <perfect-scrollbar class="scroller">
-                                                        <ul class="list-unstyled">
-                                                            <li ng-repeat="country in questionnaire.countries">
-                                                                <a ng-click="metadata.country = country.code; metadata.form.$setDirty();" value="{{country.code}}" href="#">{{country.title}}</a>
-                                                            </li>
-                                                        </ul>
-                                                    </perfect-scrollbar>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <input type="hidden" class="form-control" name="country" ng-model="metadata.country" />
-                                    </div>
-                                    <div class="field-wrapper">
-                                        <span class="label-title">{{'SideBarMetadataYear' | i18next}}</span>
-                                        <div class="form-group">
-                                            <input type="text" min="0" max="9999" pattern="\d*" onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength="4" ng-pattern="/^\d+$/" class="form-control date-field" name="year" ng-model="metadata.year" />
-                                        </div>
-                                        <p class="help-block ng-cloak" ng-show="metadata.form.year.$error.pattern" ng-i18next="QuestionOnlyInts">
-                                        </p>
-                                    </div>
-                                    <div class="field-wrapper">
-                                        <span class="label-title">{{'SideBarMetadataLanguages' | i18next}}</span>
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" name="language" ng-model="metadata.language" />
-                                        </div>
-                                    </div>
-                                    <div class="field-wrapper">
-                                        <span class="label-title">{{'SideBarMetadataUnitOfAlalysis' | i18next}}</span>
-                                        <div class="form-group">
-                                            <textarea class="form-control msd-elastic" name="unitOfAnalysis" ng-model="metadata.unitOfAnalysis"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="field-wrapper">
-                                        <span class="label-title">{{'SideBarMetadataCoverage' | i18next}}</span>
-                                        <div class="form-group">
-                                            <textarea class="form-control msd-elastic" name="coverage" ng-model="metadata.coverage"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="field-wrapper">
-                                        <span class="label-title">{{'SideBarMetadataUniverse' | i18next}}</span>
-                                        <div class="form-group">
-                                            <textarea class="form-control msd-elastic" name="universe" ng-model="metadata.universe"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="field-wrapper">
-                                        <span class="label-title">{{'SideBarMetadataPrimaryInvestigator' | i18next}}</span>
-                                        <div class="form-group">
-                                            <textarea class="form-control msd-elastic" name="primaryInvestigator" ng-model="metadata.primaryInvestigator"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="field-wrapper">
-                                        <span class="label-title">{{'SideBarMetadataConsultants' | i18next}}</span>
-                                        <div class="form-group">
-                                            <textarea class="form-control msd-elastic" name="consultant" ng-model="metadata.consultant">
-                                            </textarea>
-                                        </div>
-                                    </div>
-                                    <div class="field-wrapper">
-                                        <span class="label-title">{{'SideBarMetadataFunding' | i18next}}</span>
-                                        <div class="form-group">
-                                            <textarea class="form-control msd-elastic" name="funding" ng-model="metadata.funding">
-                                            </textarea>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <h4>{{'SideBarMetadataAdditionalInfo' | i18next}}</h4>
-                                    <div class="field-wrapper">
-                                        <span class="label-title">{{'SideBarMetadataNotes' | i18next}}</span>
-                                        <div class="form-group">
-                                            <textarea class="form-control msd-elastic" name="notes" ng-model="metadata.notes"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="field-wrapper">
-                                        <span class="label-title">{{'SideBarMetadataKeywords' | i18next}}</span>
-                                        <div class="form-group">
-                                            <textarea class="form-control msd-elastic" name="keywords" ng-model="metadata.keywords"></textarea>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <h4>{{'SideBarMetadataQuestionnaireAccess' | i18next}}</h4>
-                                    <div class="checkbox">
-                                        <input id="agreeToMakeThisQuestionnairePublic" name="agreeToMakeThisQuestionnairePublic" ng-model="metadata.agreeToMakeThisQuestionnairePublic" type="checkbox" class="checkbox-filter" checked>
-                                        <label for="agreeToMakeThisQuestionnairePublic" class=""><span class="tick"></span>{{'SideBarMetadataAgreeToMakeThisQuestionnairePublic' | i18next}}</label>
-                                    </div>
-                                </li>
-                            </ul>
-                            <div class="form-buttons-holder" ng-class="{dirty: metadata.form.$dirty }">
-                                <button type="submit" class="btn btn-lg ng-isolate-scope" ng-disabled="questionnaire.isReadOnlyForUser || metadata.form.$invalid" ng-class="{ 'btn-primary': metadata.form.$dirty }" 
-                                        ng-click="saveMetadata();$event.stopPropagation()" ng-i18next>Save</button>
-                                <button type="button" class="btn btn-lg btn-link ng-isolate-scope" ng-click="cancelMetadata();$event.stopPropagation()" ng-i18next>Cancel</button>
-                            </div>
-                        </ng-form>
-                    </form>
-                </perfect-scrollbar>
-
-            </div>
         </div>
     </div>
-    <div class="left-side-panel comments" ng-class="{unfolded: isFolded }" ng-controller="CommentsCtrl" data-empty-place-holder-enabled="false">
-        <div class="foldback-region" ng-click="foldback();$event.stopPropagation()"></div>
+
+    <div class="left-side-panel comments" :class="{ unfolded: isFolded }" ng-controller="CommentsCtrl"
+        data-empty-place-holder-enabled="false">
+        <div class="foldback-region" @click="foldback(); $event.stopPropagation()"></div>
         <div class="left-side-panel-content comments-panel">
-            <div class="foldback-button-region" ng-click="foldback();$event.stopPropagation()">
+            <div class="foldback-button-region" @click="foldback(); $event.stopPropagation()">
                 <div class="foldback-button"></div>
             </div>
-            <div class="comments">
-                <perfect-scrollbar class="scroller">
-                    <h3>
-                        <span ng-i18next="[i18next]({count: commentThreads.length})SideBarCommentsCounter"></span>
-                    </h3>
-                    <div class="empty-list" ng-show="commentThreads.length == 0">
-                        <p ng-i18next>SideBarEmptyCommentsLine</p>
-                    </div>
-                    <ul ng-model="commentThreads">
-                        <li class="comment-thread" ng-repeat="commentThread in commentThreads">
-                            <a class="reference-item" href="javascript:void(0);" ng-click="showCommentsAndNavigateTo(commentThread.entity)">
-                                <span ng-if="commentThread.entity.type == 'Question'" class="icon {{commentThread.entity.questionType}} "></span>
-                                <span ng-if="commentThread.entity.type !== 'Question' && commentThread.entity.type !== 'Group' && commentThread.entity.type !== 'Roster'" class="icon icon-{{commentThread.entity.type.toLowerCase()}}"></span>
-                                <span class="title">{{commentThread.entity.title | escape}}</span>
-                                <span class="variable" ng-bind-html="commentThread.entity.variable || '&nbsp;'">&nbsp;</span>
-                            </a>
-                            <div class="comments-in-thread">
-                                <ul>
-                                    <li class="comment" ng-class="{resolved: comment.isResolved }" ng-repeat="comment in commentThread.comments">
-                                        <span class="author">{{comment.userEmail}}</span>
-                                        <span class="date">{{comment.date}}</span>
-                                        <p class="comment-text">{{comment.comment}}</p>
-                                    </li>
-                                </ul>
-                                <div ng-if="commentThread.resolvedComments.length > 0">
-                                    <a href="javascript:void(0);" class="show-more" ng-click="commentThread.toggleResolvedComments()">
-                                        <span ng-hide="commentThread.resolvedAreExpanded" ng-i18next="[i18next]({count: commentThread.resolvedComments.length})ViewResolvedCommentsCounter"></span>
-                                        <span ng-show="commentThread.resolvedAreExpanded" ng-i18next>HideResolvedComments</span>
-                                    </a>
-                                    <ul ng-show="commentThread.resolvedAreExpanded">
-                                        <li class="comment" ng-class="{resolved: comment.isResolved }" ng-repeat="comment in commentThread.resolvedComments">
-                                            <span class="author">{{comment.userEmail}}</span>
-                                            <span class="date">{{comment.date}}</span>
-                                            <p class="comment-text">{{comment.comment}}</p>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </perfect-scrollbar>
-            </div>
+
         </div>
-    </div-->
+    </div>
+
     <div id="left-menu" ng-controller="LeftMenuCtrl">
         <ul>
             <li>
-                <a
-                    class="left-menu-chapters"
-                    ng-class="{unfolded: isUnfoldedChapters }"
-                    ng-click="unfoldChapters();"
-                    ng-i18next="[title]SideBarSectionsTitle"
-                ></a>
+                <a class="left-menu-chapters" :class="{ unfolded: isUnfoldedChapters }" @click="unfoldChapters();"
+                    :title="$t('QuestionnaireEditor.SideBarSectionsTitle')"></a>
             </li>
             <li>
-                <a
-                    class="left-menu-metadata"
-                    ng-class="{unfolded: isUnfoldedMetadata }"
-                    ng-click="unfoldMetadata();"
-                    ng-i18next="[title]SideBarMetadataTitle"
-                ></a>
+                <a class="left-menu-metadata" :class="{ unfolded: isUnfoldedMetadata }" @click="unfoldMetadata();"
+                    :title="$t('QuestionnaireEditor.SideBarMetadataTitle')"></a>
             </li>
             <li>
-                <a
-                    class="left-menu-translations"
-                    ng-class="{unfolded: isUnfoldedTranslations }"
-                    ng-click="unfoldTranslations();"
-                    ng-i18next="[title]SideBarTranslationsTitle"
-                ></a>
+                <a class="left-menu-translations" :class="{ unfolded: isUnfoldedTranslations }"
+                    @click="unfoldTranslations();" :title="$t('QuestionnaireEditor.SideBarTranslationsTitle')"></a>
             </li>
             <li>
-                <a
-                    class="left-menu-categories"
-                    ng-class="{unfolded: isUnfoldedCategories }"
-                    ng-click="unfoldCategories();"
-                    ng-i18next="[title]SideBarCategoriesTitle"
-                ></a>
+                <a class="left-menu-categories" :class="{ unfolded: isUnfoldedCategories }" @click="unfoldCategories();"
+                    :title="$t('QuestionnaireEditor.SideBarCategoriesTitle')"></a>
             </li>
             <li>
-                <a
-                    class="left-menu-scenarios"
-                    ng-if="questionnaire.questionnaireRevision === null"
-                    ng-class="{unfolded: isUnfoldedScenarios }"
-                    ng-click="unfoldScenarios();"
-                    ng-i18next="[title]SideBarScenarioTitle"
-                ></a>
+                <a class="left-menu-scenarios" v-if="questionnaire.questionnaireRevision === null"
+                    :class="{ unfolded: isUnfoldedScenarios }" @click="unfoldScenarios();"
+                    :title="$t('QuestionnaireEditor.SideBarScenarioTitle')"></a>
             </li>
             <li>
-                <a
-                    class="left-menu-macroses"
-                    ng-class="{unfolded: isUnfoldedMacros }"
-                    ng-click="unfoldMacros();"
-                    ng-i18next="[title]SideBarMacroTitle"
-                ></a>
+                <a class="left-menu-macroses" :class="{ unfolded: isUnfoldedMacros }" @click="unfoldMacros();"
+                    :title="$t('QuestionnaireEditor.SideBarMacroTitle')"></a>
             </li>
             <li>
-                <a
-                    class="left-menu-lookupTables"
-                    ng-class="{unfolded: isUnfoldedLookupTables }"
-                    ng-click="unfoldLookupTables();"
-                    ng-i18next="[title]SideBarLookupTitle"
-                ></a>
+                <a class="left-menu-lookupTables" :class="{ unfolded: isUnfoldedLookupTables }"
+                    @click="unfoldLookupTables();" :title="$t('QuestionnaireEditor.SideBarLookupTitle')"></a>
             </li>
             <li>
-                <a
-                    class="left-menu-attachments"
-                    ng-class="{unfolded: isUnfoldedAttachments }"
-                    ng-click="unfoldAttachments();"
-                    ng-i18next="[title]SideBarAttachmentsTitle"
-                ></a>
+                <a class="left-menu-attachments" :class="{ unfolded: isUnfoldedAttachments }" @click="unfoldAttachments();"
+                    :title="$t('QuestionnaireEditor.SideBarAttachmentsTitle')"></a>
             </li>
             <li>
-                <a
-                    class="left-menu-comments"
-                    ng-if="!questionnaire.isReadOnlyForUser"
-                    ng-class="{unfolded: isUnfoldedComments }"
-                    ng-click="unfoldComments();"
-                    ng-i18next="[title]SideBarCommentsTitle"
-                ></a>
+                <a class="left-menu-comments" v-if="!questionnaire.isReadOnlyForUser"
+                    :class="{ unfolded: isUnfoldedComments }" @click="unfoldComments();"
+                    :title="$t('QuestionnaireEditor.SideBarCommentsTitle')"></a>
             </li>
         </ul>
     </div>
 </template>
 
 <script>
+
+import Chapters from './leftSidePanel/Chapters.vue';
+
 export default {
     name: 'LeftSidePanel',
+    components: {
+        Chapters,
+    },
+    inject: ['questionnaire', 'currentChapter'],
     props: {},
     data() {
         return {};
