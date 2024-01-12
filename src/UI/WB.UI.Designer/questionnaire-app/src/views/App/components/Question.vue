@@ -571,13 +571,13 @@ export default {
                     focusId = "edit-question-enablement-condition";
                     break;
                 case 'ValidationExpression':
-                    focusId = 'validation-expression-' + $state.params.indexOfEntityInProperty;
+                    focusId = 'validation-expression-' + state.indexOfEntityInProperty;
                     break;
                 case 'ValidationMessage':
-                    focusId = 'validation-message-' + $state.params.indexOfEntityInProperty;
+                    focusId = 'validation-message-' + state.indexOfEntityInProperty;
                     break;
                 case 'Option':
-                    focusId = 'option-title-' + $state.params.indexOfEntityInProperty;
+                    focusId = 'option-title-' + state.indexOfEntityInProperty;
                     break;
                 case 'OptionsFilter':
                     focusId = 'optionsFilterExpression';

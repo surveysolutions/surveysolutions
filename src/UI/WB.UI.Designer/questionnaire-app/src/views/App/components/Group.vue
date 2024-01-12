@@ -9,8 +9,8 @@
                 <label for="edit-group-title-highlight" class="wb-label">
                     {{ $t('QuestionnaireEditor.GroupTitle') }}
                 </label>
-                <br />                
-                <ExpressionEditor v-model="activeGroup.title"></ExpressionEditor>                
+                <br />
+                <ExpressionEditor v-model="activeGroup.title"></ExpressionEditor>
             </div>
 
             <div class="row">
@@ -51,7 +51,7 @@
                         <help link="hideIfDisabled" />
                     </label>
                     <br>
-                    <ExpressionEditor v-model="activeGroup.enablementCondition"></ExpressionEditor>                    
+                    <ExpressionEditor v-model="activeGroup.enablementCondition"></ExpressionEditor>
                 </div>
                 <div class="form-group col-xs-1">
                     <button type="button" class="btn cross instructions-cross"
@@ -104,6 +104,7 @@
 import { useGroupStore } from '../../../stores/group';
 import { useCommentsStore } from '../../../stores/comments';
 import { createQuestionForDeleteConfirmationPopup } from '../../../services/utilityService'
+import { setFocusIn } from '../../../services/utilityService'
 
 import MoveToChapterSnippet from './MoveToChapterSnippet.vue';
 import ExpressionEditor from './ExpressionEditor.vue';
@@ -139,6 +140,7 @@ export default {
             if (newValue != oldValue) {
                 this.groupStore.clear();
                 await this.fetch();
+                this.scrollTo();
             }
         }
     },
@@ -152,6 +154,9 @@ export default {
     },
     async beforeMount() {
         await this.fetch();
+    },
+    mounted() {
+        this.scrollTo();
     },
     computed: {
         typeName() {
@@ -204,6 +209,29 @@ export default {
             };
 
             this.$confirm(params);
+        },
+
+        scrollTo() {
+            //const state = this.$route.state
+            const state = window.history.state;
+            const property = (state || {}).property;
+            if (!property)
+                return;
+
+            var focusId = null;
+            switch (property) {
+                case 'Title':
+                    focusId = 'edit-group-title';
+                    break;
+                case 'EnablingCondition':
+                    focusId = 'edit-group-condition';
+                    break;
+
+                default:
+                    break;
+            }
+
+            setFocusIn(focusId);
         }
     }
 };

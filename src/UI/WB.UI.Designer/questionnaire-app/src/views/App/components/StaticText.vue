@@ -15,8 +15,7 @@
             <div class="form-group">
                 <label class="wb-label">
                     {{ $t('QuestionnaireEditor.StaticText') }}</label><br />
-                <ExpressionEditor mode="substitutions"
-                            v-model="activeStaticText.text" />
+                <ExpressionEditor mode="substitutions" v-model="activeStaticText.text" />
             </div>
             <div class="form-group">
                 <label for="edit-static-attachment-name" class="wb-label">
@@ -68,8 +67,8 @@
                         {{ $t('QuestionnaireEditor.HideIfDisabled') }}
                         <help key="hideIfDisabled" />
                     </label>
-                    <ExpressionEditor v-model="activeStaticText.enablementCondition"/>
-                    
+                    <ExpressionEditor v-model="activeStaticText.enablementCondition" />
+
                 </div>
                 <div class="form-group col-xs-1">
                     <button type="button" class="btn cross instructions-cross" @click="
@@ -94,13 +93,13 @@
                 <label :for="'cb-isWarning' + index"><span></span>{{ $t('QuestionnaireEditor.IsWarning') }}</label>
 
                 <button class="btn delete-btn-sm delete-validation-condition" @click="removeValidationCondition(index)"
-                    tabindex="-1"></button>                
-                <ExpressionEditor v-model="validation.expression" mode="expression"/>
+                    tabindex="-1"></button>
+                <ExpressionEditor v-model="validation.expression" mode="expression" />
                 <label class="validation-message">{{
                     $t('QuestionnaireEditor.ErrorMessage') }}
                     <help link="validationMessage" />
                 </label>
-                <ExpressionEditor v-model="validation.message" mode="substitutions"/>
+                <ExpressionEditor v-model="validation.message" mode="substitutions" />
             </div>
             <div class="form-group" v-if="activeStaticText.validationConditions.length < 10">
                 <button type="button" class="btn btn-lg btn-link" @click="addValidationCondition()">
@@ -152,6 +151,7 @@
 import { useCommentsStore } from '../../../stores/comments';
 import { useStaticTextStore } from '../../../stores/staticText';
 import { createQuestionForDeleteConfirmationPopup } from '../../../services/utilityService'
+import { setFocusIn } from '../../../services/utilityService'
 
 import Breadcrumbs from './Breadcrumbs.vue';
 import ExpressionEditor from './ExpressionEditor.vue';
@@ -199,6 +199,7 @@ export default {
             if (newValue != oldValue) {
                 this.questionStore.clear();
                 await this.fetch();
+                this.scrollTo();
             }
         }
     },
@@ -213,6 +214,9 @@ export default {
     },
     async beforeMount() {
         await this.fetch();
+    },
+    mounted() {
+        this.scrollTo();
     },
     computed: {
         commentsCount() {
@@ -287,6 +291,37 @@ export default {
 
         setDirty() {
             this.dirty = true;
+        },
+
+        scrollTo() {
+            //const state = this.$route.state
+            const state = window.history.state;
+            const property = (state || {}).property;
+            if (!property)
+                return;
+
+            var focusId = null;
+            switch (property) {
+                case 'Title':
+                    focusId = 'edit-static-text';
+                    break;
+                case 'EnablingCondition':
+                    focusId = 'edit-question-enablement-condition';
+                    break;
+                case 'ValidationExpression':
+                    focusId = 'validation-expression-' + state.indexOfEntityInProperty;
+                    break;
+                case 'ValidationMessage':
+                    focusId = 'validation-message-' + state.indexOfEntityInProperty;
+                    break;
+                case 'AttachmentName':
+                    focusId = 'edit-static-attachment-name';
+                    break;
+                default:
+                    break;
+            }
+
+            setFocusIn(focusId);
         }
     }
 };

@@ -43,9 +43,9 @@
                 <label for="edit-variable-title-highlight" class="wb-label">{{ $t('QuestionnaireEditor.VariableLabel') }}
                     <help link="variableDescription" />
                 </label>
-                
+
                 <ExpressionEditor v-model="activeVariable.label"></ExpressionEditor>
-                
+
             </div>
             <div class="form-group">
                 <label for="edit-group-condition">{{ $t('QuestionnaireEditor.VariableExpression') }}
@@ -54,9 +54,9 @@
                 <input id="cb-do-not-export" type="checkbox" class="wb-checkbox" v-model="activeVariable.doNotExport" />
                 <label for="cb-do-not-export"><span></span>{{ $t('QuestionnaireEditor.VariableNoExport') }}</label>
                 <help link="doNotExport"></help>
-                
+
                 <ExpressionEditor mode="expression" v-model="activeVariable.expression"></ExpressionEditor>
-                
+
             </div>
         </div>
         <div class="form-buttons-holder">
@@ -100,6 +100,8 @@
 import { useVariableStore } from '../../../stores/variable';
 import { useCommentsStore } from '../../../stores/comments';
 import { createQuestionForDeleteConfirmationPopup } from '../../../services/utilityService'
+import { setFocusIn } from '../../../services/utilityService'
+
 import MoveToChapterSnippet from './MoveToChapterSnippet.vue';
 import ExpressionEditor from './ExpressionEditor.vue';
 import Breadcrumbs from './Breadcrumbs.vue'
@@ -132,6 +134,7 @@ export default {
             if (newValue != oldValue) {
                 this.variableStore.clear();
                 await this.fetch();
+                this.scrollTo();
             }
         }
     },
@@ -145,6 +148,9 @@ export default {
     },
     async beforeMount() {
         await this.fetch();
+    },
+    mounted() {
+        this.scrollTo();
     },
     computed: {
         typeName() {
@@ -197,6 +203,31 @@ export default {
             };
 
             this.$confirm(params);
+        },
+
+        scrollTo() {
+            //const state = this.$route.state
+            const state = window.history.state;
+            const property = (state || {}).property;
+            if (!property)
+                return;
+
+            var focusId = null;
+            switch (property) {
+                case 'VariableName':
+                    focusId = 'edit-question-variable-name';
+                    break;
+                case 'VariableContent':
+                    focusId = "edit-group-condition";
+                    break;
+                case 'VariableLabel':
+                    focusId = "edit-variable-title-highlight";
+                    break;
+                default:
+                    break;
+            }
+
+            setFocusIn(focusId);
         }
     }
 };

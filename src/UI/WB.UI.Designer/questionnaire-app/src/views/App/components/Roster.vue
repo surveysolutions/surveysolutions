@@ -41,7 +41,7 @@
                 </label>
 
                 <br />
-                <ExpressionEditor v-model="activeRoster.title"></ExpressionEditor>                
+                <ExpressionEditor v-model="activeRoster.title"></ExpressionEditor>
                 <div class="roster-type-specific-block" v-if="activeRoster.type != undefined">
 
 
@@ -323,9 +323,9 @@
                         <help link="hideIfDisabled" />
                     </label>
                     <br>
-                    
+
                     <ExpressionEditor v-model="activeRoster.enablementCondition"></ExpressionEditor>
-                    
+
                 </div>
                 <div class="form-group col-xs-1">
                     <button type="button" class="btn cross instructions-cross"
@@ -377,6 +377,7 @@ import { find } from 'lodash'
 import { convertToText, validateText, convertToTable } from '../../OptionsEditor/utils/tableToString';
 import { isInteger } from '../../../helpers/number';
 import { createQuestionForDeleteConfirmationPopup } from '../../../services/utilityService'
+import { setFocusIn } from '../../../services/utilityService'
 
 export default {
     name: 'Roster',
@@ -422,6 +423,7 @@ export default {
                 this.initilized = false;
                 this.rosterStore.clear();
                 await this.fetch();
+                this.scrollTo();
                 this.initilized = true;
             }
         }
@@ -439,6 +441,7 @@ export default {
     },
     mounted() {
         this.initilized = true;
+        this.scrollTo();
     },
     computed: {
         typeName() {
@@ -625,6 +628,34 @@ export default {
                 return true;
             }
         },
+
+        scrollTo() {
+            //const state = this.$route.state
+            const state = window.history.state;
+            const property = (state || {}).property;
+            if (!property)
+                return;
+
+            var focusId = null;
+            switch (property) {
+                case 'Title':
+                    focusId = 'edit-group-title';
+                    break;
+                case 'VariableName':
+                    focusId = 'edit-group-variableName';
+                    break;
+                case 'EnablingCondition':
+                    focusId = 'edit-group-condition';
+                    break;
+                case 'FixedRosterItem':
+                    focusId = 'fixed-item-' + state.indexOfEntityInProperty;
+                    break;
+                default:
+                    break;
+            }
+
+            setFocusIn(focusId);
+        }
     }
 }
 </script>
