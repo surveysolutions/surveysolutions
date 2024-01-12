@@ -75,10 +75,10 @@
                 </perfect-scrollbar>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-link" @click="verify">
+                <button class="btn btn-link" @click="verify()">
                     {{ $t('QuestionnaireEditor.Recompile') }}
                 </button>
-                <button class="btn btn-link" data-dismiss="modal" @click="close">
+                <button class="btn btn-link" data-dismiss="modal" @click="close()">
                     {{ $t('QuestionnaireEditor.Close') }}
                 </button>
             </div>
