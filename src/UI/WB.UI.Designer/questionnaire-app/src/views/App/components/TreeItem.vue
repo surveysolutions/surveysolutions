@@ -212,7 +212,7 @@ export default {
                 afterItemId,
                 (question, parent, index) => {
                     this.tree.add(question, this.getParentStat(), index);
-                    this.this.$router.push({
+                    this.$router.push({
                         name: 'question',
                         params: {
                             questionId: question.itemId

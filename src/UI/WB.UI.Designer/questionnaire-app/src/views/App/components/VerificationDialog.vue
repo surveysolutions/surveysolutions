@@ -133,7 +133,7 @@ export default {
                 this.messagesToShow = this.verificationStore.status.errors;
             else this.messagesToShow = this.verificationStore.status.warnings;
         },
-        navigateTo(reference, reload) {
+        navigateTo(reference) {
             if (reference.type.toLowerCase() === "questionnaire") {
                 this.visible = false;
                 this.showShareInfo(); // TODO
@@ -159,18 +159,15 @@ export default {
                     params: {
                         chapterId: reference.chapterId,
                         [name + 'Id']: reference.itemId,
+                        //indexOfEntityInProperty: reference.indexOfEntityInProperty,
+                        //property: reference.property
+                    },
+                    force: true,
+                    state: {
                         indexOfEntityInProperty: reference.indexOfEntityInProperty,
                         property: reference.property
                     }
                 });
-
-                /*$state.go('questionnaire.chapter.' + reference.type.toLowerCase(), {
-                    chapterId: reference.chapterId,
-                    itemId: reference.itemId,
-                    indexOfEntityInProperty: reference.indexOfEntityInProperty,
-                    property: reference.property
-                },
-                    { reload: reload });*/
             }
         }
     }

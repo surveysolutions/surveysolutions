@@ -234,7 +234,8 @@ import Breadcrumbs from './Breadcrumbs.vue'
 import Help from './Help.vue'
 import { indexOf, find, filter, isEmpty, isNull } from 'lodash'
 import { answerTypeClass, geometryInputModeOptions, questionsWithOnlyInterviewerScope, questionTypesDoesNotSupportValidations } from '../../../helpers/question'
-import { createQuestionForDeleteConfirmationPopup } from '../../../services/utilityService'
+import { createQuestionForDeleteConfirmationPopup, scrollToValidationCondition, scrollToElement, setFocusIn } from '../../../services/utilityService'
+
 
 import AreaQuestion from './parts/AreaQuestion.vue'
 import DateTimeQuestion from './parts/DateTimeQuestion.vue'
@@ -300,6 +301,7 @@ export default {
             if (newValue != oldValue) {
                 this.questionStore.clear();
                 await this.fetch();
+                this.scrollTo();
             }
         }
     },
@@ -313,6 +315,9 @@ export default {
     },
     async beforeMount() {
         await this.fetch();
+    },
+    mounted() {
+        this.scrollTo();
     },
     computed: {
         currentQuestionScope() {
@@ -546,6 +551,53 @@ export default {
         setDirty() {
             this.dirty = true;
         },
+
+        scrollTo() {
+            //const state = this.$route.state
+            const state = window.history.state;
+            const property = (state || {}).property;
+            if (!property)
+                return;
+
+            var focusId = null;
+            switch (property) {
+                case 'Title':
+                    focusId = 'edit-question-title-highlight';
+                    break;
+                case 'VariableName':
+                    focusId = 'edit-question-variable-name';
+                    break;
+                case 'EnablingCondition':
+                    focusId = "edit-question-enablement-condition";
+                    break;
+                case 'ValidationExpression':
+                    focusId = 'validation-expression-' + $state.params.indexOfEntityInProperty;
+                    break;
+                case 'ValidationMessage':
+                    focusId = 'validation-message-' + $state.params.indexOfEntityInProperty;
+                    break;
+                case 'Option':
+                    focusId = 'option-title-' + $state.params.indexOfEntityInProperty;
+                    break;
+                case 'OptionsFilter':
+                    focusId = 'optionsFilterExpression';
+                    break;
+                case 'Instructions':
+                    focusId = 'edit-question-instructions';
+                    break;
+                default:
+                    break;
+            }
+
+            if (!isNull((state || {}).indexOfEntityInProperty))
+                scrollToValidationCondition(state.indexOfEntityInProperty);
+            else {
+                scrollToElement(".question-editor .form-holder", "#" + focusId);
+            }
+
+            setFocusIn(focusId);
+        }
+
 
     }
 }

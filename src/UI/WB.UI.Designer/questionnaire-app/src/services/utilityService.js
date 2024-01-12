@@ -1,5 +1,6 @@
 import { i18n } from '../plugins/localization';
 import { nextTick } from 'vue';
+import { defer, isNull } from 'lodash';
 
 export function format(format) {
     var args = Array.prototype.slice.call(arguments, 1);
@@ -248,24 +249,24 @@ export function isTreeItemVisible(item) {
 }
 
 export function scrollToValidationCondition(conditionIndex) {
-    if (!_.isNull(conditionIndex)) {
-        _.defer(function() {
-            $('.question-editor .form-holder').scrollTo(
-                '#validationCondition' + conditionIndex,
-                500,
-                {
+    if (!isNull(conditionIndex)) {
+        defer(function() {
+            document
+                .querySelector('.question-editor .form-holder')
+                .scrollTo('#validationCondition' + conditionIndex, 500, {
                     easing: 'swing',
                     offset: -10
-                }
-            );
+                });
         });
     }
 }
 
 export function scrollToElement(parent, id) {
-    if (_.isNull(parent) || _.isNull(id)) return;
+    if (isNull(parent) || isNull(id)) return;
 
-    _.defer(function() {
-        $(parent).scrollTo(id, 500, { easing: 'swing', offset: -10 });
+    defer(function() {
+        document
+            .querySelector(parent)
+            .scrollTo(id, 500, { easing: 'swing', offset: -10 });
     });
 }
