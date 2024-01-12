@@ -17,7 +17,7 @@
             <div class="foldback-button-region" @click="foldback(); $event.stopPropagation()">
                 <div class="foldback-button"></div>
             </div>
-
+            <Scenarios></Scenarios>
         </div>
     </div>
 
@@ -27,7 +27,7 @@
             <div class="foldback-button-region" @click="foldback(); $event.stopPropagation()">
                 <div class="foldback-button"></div>
             </div>
-
+            <Macroses></Macroses>
         </div>
     </div>
 
@@ -37,7 +37,7 @@
             <div class="foldback-button-region" @click="foldback(); $event.stopPropagation()">
                 <div class="foldback-button"></div>
             </div>
-
+            <LookupTables></LookupTables>
         </div>
     </div>
 
@@ -47,7 +47,7 @@
             <div class="foldback-button-region" @click="foldback(); $event.stopPropagation()">
                 <div class="foldback-button"></div>
             </div>
-
+            <Attachments></Attachments>
         </div>
     </div>
 
@@ -57,7 +57,7 @@
             <div class="foldback-button-region" @click="foldback(); $event.stopPropagation()">
                 <div class="foldback-button"></div>
             </div>
-
+            <Translations></Translations>
         </div>
     </div>
 
@@ -67,7 +67,7 @@
             <div class="foldback-button-region" @click="foldback(); $event.stopPropagation()">
                 <div class="foldback-button"></div>
             </div>
-
+            <Categories></Categories>
         </div>
     </div>
 
@@ -77,8 +77,7 @@
             <div class="foldback-button-region" @click="foldback(); $event.stopPropagation()">
                 <div class="foldback-button"></div>
             </div>
-
-
+            <Metadata></Metadata>
         </div>
     </div>
 
@@ -89,7 +88,7 @@
             <div class="foldback-button-region" @click="foldback(); $event.stopPropagation()">
                 <div class="foldback-button"></div>
             </div>
-
+            <Comments></Comments>
         </div>
     </div>
 
@@ -139,12 +138,28 @@
 
 <script>
 
+import Attachments from './leftSidePanel/Attachments.vue';
+import Categories from './leftSidePanel/Categories.vue';
 import Chapters from './leftSidePanel/Chapters.vue';
+import Comments from './leftSidePanel/Comments.vue';
+import LookupTables from './leftSidePanel/LookupTables.vue'
+import Macroses from './leftSidePanel/Macroses.vue'
+import Metadata from './leftSidePanel/Metadata.vue'
+import Scenarios from './leftSidePanel/Scenarios.vue'
+import Translations from './leftSidePanel/Translations.vue'
 
 export default {
     name: 'LeftSidePanel',
     components: {
+        Attachments,
+        Categories,
         Chapters,
+        Comments,
+        LookupTables,
+        Macroses,
+        Metadata,
+        Scenarios,
+        Translations
     },
     inject: ['questionnaire', 'currentChapter'],
     props: {},
