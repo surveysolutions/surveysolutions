@@ -1,4 +1,5 @@
 <template>
+    Chapters
     <!--div class="chapters">
         <perfect-scrollbar class="scroller">
             <h3>

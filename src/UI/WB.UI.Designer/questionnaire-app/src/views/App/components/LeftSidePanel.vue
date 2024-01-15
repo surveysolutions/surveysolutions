@@ -1,5 +1,5 @@
 <template>
-    <Transition>
+    <Transition name="slide">
         <div v-if="isUnfoldedChapters" class="left-side-panel chapters" :class="{ unfolded: isFolded }"
             ng-controller="ChaptersCtrl" data-empty-place-holder-enabled="false">
             <div class="foldback-region" @click.stop="foldback()"></div>
@@ -11,7 +11,7 @@
             </div>
         </div>
     </Transition>
-    <Transition>
+    <Transition name="slide">
         <div v-if="isUnfoldedScenarios" class="left-side-panel scenarios" :class="{ unfolded: isFolded }"
             ng-controller="ScenariosCtrl">
             <div class="foldback-region" @click.stop="foldback()"></div>
@@ -23,7 +23,7 @@
             </div>
         </div>
     </Transition>
-    <Transition>
+    <Transition name="slide">
         <div v-if="isUnfoldedMacros" class="left-side-panel macroses" :class="{ unfolded: isFolded }"
             ng-controller="MacrosCtrl">
             <div class="foldback-region" @click.stop="foldback()"></div>
@@ -35,7 +35,7 @@
             </div>
         </div>
     </Transition>
-    <Transition>
+    <Transition name="slide">
         <div v-if="isUnfoldedLookupTables" class="left-side-panel lookup-tables" :class="{ unfolded: isFolded }"
             ng-controller="LookupTablesCtrl">
             <div class="foldback-region" @click.stop="foldback()"></div>
@@ -47,7 +47,7 @@
             </div>
         </div>
     </Transition>
-    <Transition>
+    <Transition name="slide">
         <div v-if="isUnfoldedAttachments" class="left-side-panel attachments" :class="{ unfolded: isFolded }"
             ng-controller="AttachmentsCtrl">
             <div class="foldback-region" @click.stop="foldback()"></div>
@@ -59,7 +59,7 @@
             </div>
         </div>
     </Transition>
-    <Transition>
+    <Transition name="slide">
         <div v-if="isUnfoldedTranslations" class="left-side-panel translations" :class="{ unfolded: isFolded }"
             ng-controller="TranslationsCtrl">
             <div class="foldback-region" @click.stop="foldback()"></div>
@@ -71,7 +71,7 @@
             </div>
         </div>
     </Transition>
-    <Transition>
+    <Transition name="slide">
         <div v-if="isUnfoldedCategories" class="left-side-panel categories" :class="{ unfolded: isFolded }"
             ng-controller="CategoriesCtrl">
             <div class="foldback-region" @click.stop="foldback()"></div>
@@ -83,7 +83,7 @@
             </div>
         </div>
     </Transition>
-    <Transition>
+    <Transition name="slide">
         <div v-if="isUnfoldedMetadata" class="left-side-panel metadata" :class="{ unfolded: isFolded }"
             ng-controller="MetadataCtrl">
             <div class="foldback-region" @click.stop="foldback()"></div>
@@ -95,7 +95,7 @@
             </div>
         </div>
     </Transition>
-    <Transition>
+    <Transition name="slide">
         <div v-if="isUnfoldedComments" class="left-side-panel comments" :class="{ unfolded: isFolded }"
             ng-controller="CommentsCtrl" data-empty-place-holder-enabled="false">
             <div class="foldback-region" @click.stop="foldback()"></div>
@@ -110,8 +110,8 @@
     <div id="left-menu" ng-controller="LeftMenuCtrl">
         <ul>
             <li>
-                <a class="left-menu-chapters" :class="{ unfolded: openPanel == 'chapters' }"
-                    @click="openPanel = 'chapters';" :title="$t('QuestionnaireEditor.SideBarSectionsTitle')"></a>
+                <a class="left-menu-chapters" :class="{ unfolded: isUnfoldedChapters }" @click="openPanel = 'chapters';"
+                    :title="$t('QuestionnaireEditor.SideBarSectionsTitle')"></a>
             </li>
             <li>
                 <a class="left-menu-metadata" :class="{ unfolded: isUnfoldedMetadata }" @click="unfoldMetadata();"
@@ -150,7 +150,25 @@
         </ul>
     </div>
 </template>
+<style scoped>
+.slide-enter {
+    transform: translateX(-400px);
+}
 
+.slide-enter-active {
+    transition: all .3s ease-in;
+    z-index: 800;
+}
+
+.slide-leave-active {
+    transition: all .3s ease-in;
+    z-index: 700;
+}
+
+.slide-leave-to {
+    transform: translateX(-400px);
+}
+</style>
 <script>
 
 import Attachments from './leftSidePanel/Attachments.vue';
@@ -184,15 +202,15 @@ export default {
         };
     },
     mounted() {
-        this.$emitter.on('openChaptersList', this.openPanel = 'chapters');
-        this.$emitter.on('openCategoriesList', this.openPanel = 'categories');
-        this.$emitter.on('openLookupTables', this.openPanel = 'lookup-tables');
-        this.$emitter.on('openAttachments', this.openPanel = 'attachments');
-        this.$emitter.on('openTranslations', this.openPanel = 'translations');
-        this.$emitter.on('openMetadata', this.openPanel = 'metadata');
-        this.$emitter.on('openComments', this.openPanel = 'comments');
-        this.$emitter.on('openScenariosList', this.openPanel = 'scenarios');
-        this.$emitter.on('openMacrosList', this.openPanel = 'macroses');
+        this.$emitter.on('openChaptersList', this.setChaptersPanel);
+        this.$emitter.on('openCategoriesList', this.setCategoriesPanel);
+        this.$emitter.on('openLookupTables', this.setLookupTablesPanel);
+        this.$emitter.on('openAttachments', this.setAttachmentsPanel);
+        this.$emitter.on('openTranslations', this.setTranslationsPanel);
+        this.$emitter.on('openMetadata', this.setMetadataPanel);
+        this.$emitter.on('openComments', this.setCommentsPanel);
+        this.$emitter.on('openScenariosList', this.setScenariosPanel);
+        this.$emitter.on('openMacrosList', this.setMacrosesPanel);
 
         this.$emitter.on('closeCategories', this.closeAllPanel);
         this.$emitter.on('closeChaptersList', this.closeAllPanel);
@@ -207,6 +225,16 @@ export default {
         this.$emitter.on('verifing', this.closeOpenPanelIfAny);
     },
     unmounted() {
+        this.$emitter.off('openChaptersList', this.setChaptersPanel);
+        this.$emitter.off('openCategoriesList', this.setCategoriesPanel);
+        this.$emitter.off('openLookupTables', this.setLookupTablesPanel);
+        this.$emitter.off('openAttachments', this.setAttachmentsPanel);
+        this.$emitter.off('openTranslations', this.setTranslationsPanel);
+        this.$emitter.off('openMetadata', this.setMetadataPanel);
+        this.$emitter.off('openComments', this.setCommentsPanel);
+        this.$emitter.off('openScenariosList', this.setScenariosPanel);
+        this.$emitter.off('openMacrosList', this.setMacrosesPanel);
+
         this.$emitter.off('closeCategories', this.closeAllPanel);
         this.$emitter.off('closeChaptersList', this.closeAllPanel);
         this.$emitter.off('closeScenariosList', this.closeAllPanel);
@@ -279,81 +307,90 @@ export default {
             if (this.isUnfoldedChapters)
                 return;
             this.closeOpenPanelIfAny();
-            this.openPanel = 'chapters';
+            this.setChaptersPanel();
             this.$emitter.emit("openChaptersList", {});
         },
+        setChaptersPanel() { this.openPanel = 'chapters'; },
 
         unfoldCategories() {
             if (this.isUnfoldedCategories)
                 return;
 
             this.closeOpenPanelIfAny();
-            this.openPanel = 'categories';
+            this.setCategoriesPanel();
             this.$emitter.emit("openCategories", {});
         },
+        setCategoriesPanel() { this.openPanel = 'categories'; },
 
         unfoldMacros() {
             if (this.isUnfoldedMacros)
                 return;
 
             this.closeOpenPanelIfAny();
-            this.openPanel = 'macroses';
+            this.setMacrosesPanel();
             this.$emitter.emit("openMacrosList", {});
         },
+        setMacrosesPanel() { this.openPanel = 'macroses'; },
 
         unfoldScenarios() {
             if (this.isUnfoldedScenarios)
                 return;
 
             this.closeOpenPanelIfAny();
-            this.openPanel = 'scenarios';
+            this.setScenariosPanel();
             this.$emitter.emit("openScenariosList", {});
         },
+        setScenariosPanel() { this.openPanel = 'scenarios'; },
 
         unfoldLookupTables() {
             if (this.isUnfoldedLookupTables)
                 return;
 
             this.closeOpenPanelIfAny();
-            this.openPanel = 'lookup-tables';
+            this.setLookupTablesPanel();
             this.$emitter.emit("openLookupTables", {});
         },
+        setLookupTablesPanel() { this.openPanel = 'lookup-tables'; },
 
         unfoldAttachments() {
             if (this.isUnfoldedAttachments)
                 return;
 
             this.closeOpenPanelIfAny();
-            this.openPanel = 'attachments';
+            this.setAttachmentsPanel();
             this.$emitter.emit("openAttachments", {});
         },
+        setAttachmentsPanel() { this.openPanel = 'attachments'; },
 
         unfoldTranslations() {
             if (this.isUnfoldedTranslations)
                 return;
 
             this.closeOpenPanelIfAny();
-            this.openPanel = 'translations';
+            this.setTranslationsPanel();
             this.$emitter.emit("openTranslations", {});
         },
+        setTranslationsPanel() { this.openPanel = 'translations'; },
 
         unfoldMetadata() {
             if (this.isUnfoldedMetadata)
                 return;
 
             this.closeOpenPanelIfAny();
-            this.openPanel = 'metadata';
+            this.setMetadataPanel();
             this.$emitter.emit("openMetadata", {});
         },
+        setMetadataPanel() { this.openPanel = 'metadata'; },
 
         unfoldComments() {
             if (this.isUnfoldedComments)
                 return;
 
             this.closeOpenPanelIfAny();
-            this.openPanel = 'comments';
+            this.setCommentsPanel();
             this.$emitter.emit("openComments", {});
         },
+        setCommentsPanel() { this.openPanel = 'comments'; },
     }
 };
 </script>
