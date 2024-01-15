@@ -1,8 +1,8 @@
 <template>
     <span ref="tooltipBoundary">
         <span class="help-bracket">(</span>
-        <a ref="tooltipTrigger" data-bs-toggle="tooltip" :title="tooltipMessage" class="tooltip-help-trigger"
-            href="javascript:void(0);" tabindex="-1">?</a>
+        <a ref="tooltipTrigger" data-bs-toggle="tooltip" class="tooltip-help-trigger" href="javascript:void(0);"
+            tabindex="-1">?</a>
         <span class="help-bracket">)</span>
     </span>
 </template>
@@ -55,12 +55,12 @@ export default {
     setup() {
 
     },
-    mount() {
-        new bootstrap.Tooltip(this.$refs.tooltipTrigger, {
-            //title: this.tooltipMessage,
+    mounted() {
+        new bootstrap.Tooltip(this.$refs.tooltipBoundary, {
+            title: this.tooltipMessage,
             container: 'body',
             placement: this.placement,
-            //boundary: this.$refs.tooltipBoundary // or document.querySelector('#boundary')
+            customClass: 'in'
         })
     },
     computed: {
