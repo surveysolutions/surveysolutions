@@ -20,6 +20,7 @@
 <script>
 import { useQuestionnaireStore } from './stores/questionnaire';
 import { useTreeStore } from './stores/tree';
+import { useUserStore } from './stores/user';
 //import ConfirmDialog from './views/App/components/Confirm.vue';
 
 export default {
@@ -36,19 +37,33 @@ export default {
     setup() {
         const questionnaireStore = useQuestionnaireStore();
         const treeStore = useTreeStore();
+        const userStore = useUserStore();
 
         return {
             questionnaireStore,
-            treeStore
+            treeStore,
+            userStore
         };
+    },
+    async beforeMount() {
+        await this.fetch();
     },
     computed: {
         questionnaire() {
-            return this.questionnaireStore.info || {};
+            return this.questionnaireStore.getInfo || {};
         },
         currentChapter() {
             return this.treeStore.getChapter || {};
         }
+    },
+    methods: {
+        async fetch() {
+            await this.userStore.fetchUserInfo();
+            await this.questionnaireStore.fetchQuestionnaireInfo(
+                this.$route.params.questionnaireId
+            );
+        },
+
     }
 };
 </script>

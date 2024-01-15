@@ -10,7 +10,7 @@
                         $t('QuestionnaireEditor.Forum') }}
                     </a>
                     <a class="btn" :href="'/questionnaire/questionnairehistory/' +
-                        questionnaire.questionnaireId
+                        questionnaireId
                         " target="_blank"
                         v-if="questionnaire.hasViewerAdminRights || questionnaire.isSharedWithUser">{{
                             $t('QuestionnaireEditor.History') }}</a>
@@ -159,7 +159,7 @@ export default {
     },
     data() {
         return {
-            questionnaire: {
+            /*questionnaire: {
                 questionnaireId: 0,
                 hasViewerAdminRights: false,
                 isSharedWithUser: false,
@@ -170,7 +170,7 @@ export default {
                 questionsCount: 0,
                 groupsCount: 0,
                 rostersCount: 0
-            }
+            }*/
         };
     },
     setup(props) {
@@ -188,11 +188,12 @@ export default {
         };
     },
     async beforeMount() {
-        await this.fetch();
-
-        this.questionnaire = this.questionnaireStore.info;
+        //this.questionnaire = this.questionnaireStore.info;
     },
     computed: {
+        questionnaire() {
+            return this.questionnaireStore.info || {};
+        },
         currentUserIsAuthenticated() {
             return this.userStore.isAuthenticated;
         },
@@ -211,12 +212,6 @@ export default {
         }
     },
     methods: {
-        async fetch() {
-            await this.userStore.fetchUserInfo();
-            await this.questionnaireStore.fetchQuestionnaireInfo(
-                this.questionnaireId
-            );
-        },
         webTest() {
             WebTesterApi.run(this.questionnaireId);
         },
