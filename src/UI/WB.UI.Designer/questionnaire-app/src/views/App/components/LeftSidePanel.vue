@@ -151,8 +151,8 @@
     </div>
 </template>
 <style scoped>
-.slide-enter {
-    transform: translateX(-400px);
+.slide-enter-from {
+    transform: translateX(-500px);
 }
 
 .slide-enter-active {
@@ -166,7 +166,7 @@
 }
 
 .slide-leave-to {
-    transform: translateX(-400px);
+    transform: translateX(-500px);
 }
 </style>
 <script>
