@@ -1,5 +1,5 @@
 <template>
-    <div class="chapters">
+    <!--div class="chapters">
         <perfect-scrollbar class="scroller">
             <h3>
                 <span>{{ $t('QuestionnaireEditor.SideBarSectionsCounter', {
@@ -50,7 +50,7 @@
                     }}</button>
             </div>
         </perfect-scrollbar>
-    </div>
+    </div-->
 </template>
   
 <script>

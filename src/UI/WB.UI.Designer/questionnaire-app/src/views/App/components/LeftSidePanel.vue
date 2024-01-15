@@ -1,97 +1,112 @@
 <template>
-    <div v-if="openPanel == 'chapters'" class="left-side-panel chapters" :class="{ unfolded: isFolded }"
-        ng-controller="ChaptersCtrl" data-empty-place-holder-enabled="false">
-        <div class="foldback-region" @click="foldback(); $event.stopPropagation()"></div>
-        <div class="left-side-panel-content chapter-panel" ui-tree="chaptersTree">
-            <div class="foldback-button" @click="foldback(); $event.stopPropagation()"></div>
-            <div class="ul-holder">
-                <Chapters></Chapters>
+    <Transition>
+        <div v-if="isUnfoldedChapters" class="left-side-panel chapters" :class="{ unfolded: isFolded }"
+            ng-controller="ChaptersCtrl" data-empty-place-holder-enabled="false">
+            <div class="foldback-region" @click.stop="foldback()"></div>
+            <div class="left-side-panel-content chapter-panel" ui-tree="chaptersTree">
+                <div class="foldback-button" @click.stop="foldback()"></div>
+                <div class="ul-holder">
+                    <Chapters></Chapters>
+                </div>
             </div>
         </div>
-    </div>
-
-    <div v-if="openPanel == 'scenarios'" class="left-side-panel scenarios" :class="{ unfolded: isFolded }"
-        ng-controller="ScenariosCtrl">
-        <div class="foldback-region" @click="foldback(); $event.stopPropagation()"></div>
-        <div class="left-side-panel-content macros-panel">
-            <div class="foldback-button-region" @click="foldback(); $event.stopPropagation()">
-                <div class="foldback-button"></div>
+    </Transition>
+    <Transition>
+        <div v-if="isUnfoldedScenarios" class="left-side-panel scenarios" :class="{ unfolded: isFolded }"
+            ng-controller="ScenariosCtrl">
+            <div class="foldback-region" @click.stop="foldback()"></div>
+            <div class="left-side-panel-content macros-panel">
+                <div class="foldback-button-region" @click.stop="foldback()">
+                    <div class="foldback-button"></div>
+                </div>
+                <Scenarios></Scenarios>
             </div>
-            <Scenarios></Scenarios>
         </div>
-    </div>
-
-    <div class="left-side-panel macroses" :class="{ unfolded: isFolded }" ng-controller="MacrosCtrl">
-        <div class="foldback-region" @click="foldback(); $event.stopPropagation()"></div>
-        <div class="left-side-panel-content macros-panel">
-            <div class="foldback-button-region" @click="foldback(); $event.stopPropagation()">
-                <div class="foldback-button"></div>
+    </Transition>
+    <Transition>
+        <div v-if="isUnfoldedMacros" class="left-side-panel macroses" :class="{ unfolded: isFolded }"
+            ng-controller="MacrosCtrl">
+            <div class="foldback-region" @click.stop="foldback()"></div>
+            <div class="left-side-panel-content macros-panel">
+                <div class="foldback-button-region" @click.stop="foldback()">
+                    <div class="foldback-button"></div>
+                </div>
+                <Macroses></Macroses>
             </div>
-            <Macroses></Macroses>
         </div>
-    </div>
-
-    <div class="left-side-panel lookup-tables" :class="{ unfolded: isFolded }" ng-controller="LookupTablesCtrl">
-        <div class="foldback-region" @click="foldback(); $event.stopPropagation()"></div>
-        <div class="left-side-panel-content lookup-tables-panel">
-            <div class="foldback-button-region" @click="foldback(); $event.stopPropagation()">
-                <div class="foldback-button"></div>
+    </Transition>
+    <Transition>
+        <div v-if="isUnfoldedLookupTables" class="left-side-panel lookup-tables" :class="{ unfolded: isFolded }"
+            ng-controller="LookupTablesCtrl">
+            <div class="foldback-region" @click.stop="foldback()"></div>
+            <div class="left-side-panel-content lookup-tables-panel">
+                <div class="foldback-button-region" @click.stop="foldback()">
+                    <div class="foldback-button"></div>
+                </div>
+                <LookupTables></LookupTables>
             </div>
-            <LookupTables></LookupTables>
         </div>
-    </div>
-
-    <div class="left-side-panel attachments" :class="{ unfolded: isFolded }" ng-controller="AttachmentsCtrl">
-        <div class="foldback-region" @click="foldback(); $event.stopPropagation()"></div>
-        <div class="left-side-panel-content attachments-panel">
-            <div class="foldback-button-region" @click="foldback(); $event.stopPropagation()">
-                <div class="foldback-button"></div>
+    </Transition>
+    <Transition>
+        <div v-if="isUnfoldedAttachments" class="left-side-panel attachments" :class="{ unfolded: isFolded }"
+            ng-controller="AttachmentsCtrl">
+            <div class="foldback-region" @click.stop="foldback()"></div>
+            <div class="left-side-panel-content attachments-panel">
+                <div class="foldback-button-region" @click.stop="foldback()">
+                    <div class="foldback-button"></div>
+                </div>
+                <Attachments></Attachments>
             </div>
-            <Attachments></Attachments>
         </div>
-    </div>
-
-    <div class="left-side-panel translations" :class="{ unfolded: isFolded }" ng-controller="TranslationsCtrl">
-        <div class="foldback-region" @click="foldback(); $event.stopPropagation()"></div>
-        <div class="left-side-panel-content translations-panel">
-            <div class="foldback-button-region" @click="foldback(); $event.stopPropagation()">
-                <div class="foldback-button"></div>
+    </Transition>
+    <Transition>
+        <div v-if="isUnfoldedTranslations" class="left-side-panel translations" :class="{ unfolded: isFolded }"
+            ng-controller="TranslationsCtrl">
+            <div class="foldback-region" @click.stop="foldback()"></div>
+            <div class="left-side-panel-content translations-panel">
+                <div class="foldback-button-region" @click.stop="foldback()">
+                    <div class="foldback-button"></div>
+                </div>
+                <Translations></Translations>
             </div>
-            <Translations></Translations>
         </div>
-    </div>
-
-    <div class="left-side-panel categories" :class="{ unfolded: isFolded }" ng-controller="CategoriesCtrl">
-        <div class="foldback-region" @click="foldback(); $event.stopPropagation()"></div>
-        <div class="left-side-panel-content categories-panel">
-            <div class="foldback-button-region" @click="foldback(); $event.stopPropagation()">
-                <div class="foldback-button"></div>
+    </Transition>
+    <Transition>
+        <div v-if="isUnfoldedCategories" class="left-side-panel categories" :class="{ unfolded: isFolded }"
+            ng-controller="CategoriesCtrl">
+            <div class="foldback-region" @click.stop="foldback()"></div>
+            <div class="left-side-panel-content categories-panel">
+                <div class="foldback-button-region" @click.stop="foldback()">
+                    <div class="foldback-button"></div>
+                </div>
+                <Categories></Categories>
             </div>
-            <Categories></Categories>
         </div>
-    </div>
-
-    <div class="left-side-panel metadata" :class="{ unfolded: isFolded }" ng-controller="MetadataCtrl">
-        <div class="foldback-region" @click="foldback(); $event.stopPropagation()"></div>
-        <div class="left-side-panel-content metadata-panel">
-            <div class="foldback-button-region" @click="foldback(); $event.stopPropagation()">
-                <div class="foldback-button"></div>
+    </Transition>
+    <Transition>
+        <div v-if="isUnfoldedMetadata" class="left-side-panel metadata" :class="{ unfolded: isFolded }"
+            ng-controller="MetadataCtrl">
+            <div class="foldback-region" @click.stop="foldback()"></div>
+            <div class="left-side-panel-content metadata-panel">
+                <div class="foldback-button-region" @click.stop="foldback()">
+                    <div class="foldback-button"></div>
+                </div>
+                <Metadata></Metadata>
             </div>
-            <Metadata></Metadata>
         </div>
-    </div>
-
-    <div class="left-side-panel comments" :class="{ unfolded: isFolded }" ng-controller="CommentsCtrl"
-        data-empty-place-holder-enabled="false">
-        <div class="foldback-region" @click="foldback(); $event.stopPropagation()"></div>
-        <div class="left-side-panel-content comments-panel">
-            <div class="foldback-button-region" @click="foldback(); $event.stopPropagation()">
-                <div class="foldback-button"></div>
+    </Transition>
+    <Transition>
+        <div v-if="isUnfoldedComments" class="left-side-panel comments" :class="{ unfolded: isFolded }"
+            ng-controller="CommentsCtrl" data-empty-place-holder-enabled="false">
+            <div class="foldback-region" @click.stop="foldback()"></div>
+            <div class="left-side-panel-content comments-panel">
+                <div class="foldback-button-region" @click.stop="foldback()">
+                    <div class="foldback-button"></div>
+                </div>
+                <Comments></Comments>
             </div>
-            <Comments></Comments>
         </div>
-    </div>
-
+    </Transition>
     <div id="left-menu" ng-controller="LeftMenuCtrl">
         <ul>
             <li>
@@ -168,15 +183,177 @@ export default {
             openPanel: null,
         };
     },
+    mounted() {
+        this.$emitter.on('openChaptersList', this.openPanel = 'chapters');
+        this.$emitter.on('openCategoriesList', this.openPanel = 'categories');
+        this.$emitter.on('openLookupTables', this.openPanel = 'lookup-tables');
+        this.$emitter.on('openAttachments', this.openPanel = 'attachments');
+        this.$emitter.on('openTranslations', this.openPanel = 'translations');
+        this.$emitter.on('openMetadata', this.openPanel = 'metadata');
+        this.$emitter.on('openComments', this.openPanel = 'comments');
+        this.$emitter.on('openScenariosList', this.openPanel = 'scenarios');
+        this.$emitter.on('openMacrosList', this.openPanel = 'macroses');
+
+        this.$emitter.on('closeCategories', this.closeAllPanel);
+        this.$emitter.on('closeChaptersList', this.closeAllPanel);
+        this.$emitter.on('closeScenariosList', this.closeAllPanel);
+        this.$emitter.on('closeMacrosList', this.closeAllPanel);
+        this.$emitter.on('closeLookupTables', this.closeAllPanel);
+        this.$emitter.on('closeAttachments', this.closeAllPanel);
+        this.$emitter.on('closeTranslations', this.closeAllPanel);
+        this.$emitter.on('closeMetadata', this.closeAllPanel);
+        this.$emitter.on('closeComments', this.closeAllPanel);
+
+        this.$emitter.on('verifing', this.closeOpenPanelIfAny);
+    },
+    unmounted() {
+        this.$emitter.off('closeCategories', this.closeAllPanel);
+        this.$emitter.off('closeChaptersList', this.closeAllPanel);
+        this.$emitter.off('closeScenariosList', this.closeAllPanel);
+        this.$emitter.off('closeMacrosList', this.closeAllPanel);
+        this.$emitter.off('closeLookupTables', this.closeAllPanel);
+        this.$emitter.off('closeAttachments', this.closeAllPanel);
+        this.$emitter.off('closeTranslations', this.closeAllPanel);
+        this.$emitter.off('closeMetadata', this.closeAllPanel);
+        this.$emitter.off('closeComments', this.closeAllPanel);
+
+        this.$emitter.off('verifing', this.closeOpenPanelIfAny);
+    },
     computed: {
         isFolded() {
             return this.openPanel != null;
-        }
+        },
+        isUnfoldedScenarios() { return this.openPanel == 'scenarios' },
+        isUnfoldedMacros() { return this.openPanel == 'macroses' },
+        isUnfoldedChapters() { return this.openPanel == 'chapters' },
+        isUnfoldedLookupTables() { return this.openPanel == 'lookup-tables' },
+        isUnfoldedAttachments() { return this.openPanel == 'attachments' },
+        isUnfoldedTranslations() { return this.openPanel == 'translations' },
+        isUnfoldedMetadata() { return this.openPanel == 'metadata' },
+        isUnfoldedComments() { return this.openPanel == 'comments' },
+        isUnfoldedCategories() { return this.openPanel == 'categories' },
     },
     methods: {
         foldback() {
             this.openPanel = null;
-        }
+        },
+
+        closeOpenPanelIfAny() {
+            if (this.openPanel != null)
+                return;
+
+            if (this.isUnfoldedChapters) {
+                this.$emitter.emit("closeChaptersListRequested", {});
+            }
+            if (this.isUnfoldedScenarios) {
+                this.$emitter.emit("closeScenariosListRequested", {});
+            }
+            if (this.isUnfoldedMacros) {
+                this.$emitter.emit("closeMacrosListRequested", {});
+            }
+            if (this.isUnfoldedLookupTables) {
+                this.$emitter.emit("closeLookupTablesRequested", {});
+            }
+            if (this.isUnfoldedAttachments) {
+                this.$emitter.emit("closeAttachmentsRequested", {});
+            }
+            if (this.isUnfoldedTranslations) {
+                this.$emitter.emit("closeTranslationsRequested", {});
+            }
+            if (this.isUnfoldedMetadata) {
+                this.$emitter.emit("closeMetadataRequested", {});
+            }
+            if (this.isUnfoldedComments) {
+                this.$emitter.emit("closeCommentsRequested", {});
+            }
+            if (this.isUnfoldedCategories) {
+                this.$emitter.emit("closeCategoriesRequested", {});
+            }
+        },
+
+        closeAllPanel() {
+            this.openPanel = null;
+        },
+
+        unfoldChapters() {
+            if (this.isUnfoldedChapters)
+                return;
+            this.closeOpenPanelIfAny();
+            this.openPanel = 'chapters';
+            this.$emitter.emit("openChaptersList", {});
+        },
+
+        unfoldCategories() {
+            if (this.isUnfoldedCategories)
+                return;
+
+            this.closeOpenPanelIfAny();
+            this.openPanel = 'categories';
+            this.$emitter.emit("openCategories", {});
+        },
+
+        unfoldMacros() {
+            if (this.isUnfoldedMacros)
+                return;
+
+            this.closeOpenPanelIfAny();
+            this.openPanel = 'macroses';
+            this.$emitter.emit("openMacrosList", {});
+        },
+
+        unfoldScenarios() {
+            if (this.isUnfoldedScenarios)
+                return;
+
+            this.closeOpenPanelIfAny();
+            this.openPanel = 'scenarios';
+            this.$emitter.emit("openScenariosList", {});
+        },
+
+        unfoldLookupTables() {
+            if (this.isUnfoldedLookupTables)
+                return;
+
+            this.closeOpenPanelIfAny();
+            this.openPanel = 'lookup-tables';
+            this.$emitter.emit("openLookupTables", {});
+        },
+
+        unfoldAttachments() {
+            if (this.isUnfoldedAttachments)
+                return;
+
+            this.closeOpenPanelIfAny();
+            this.openPanel = 'attachments';
+            this.$emitter.emit("openAttachments", {});
+        },
+
+        unfoldTranslations() {
+            if (this.isUnfoldedTranslations)
+                return;
+
+            this.closeOpenPanelIfAny();
+            this.openPanel = 'translations';
+            this.$emitter.emit("openTranslations", {});
+        },
+
+        unfoldMetadata() {
+            if (this.isUnfoldedMetadata)
+                return;
+
+            this.closeOpenPanelIfAny();
+            this.openPanel = 'metadata';
+            this.$emitter.emit("openMetadata", {});
+        },
+
+        unfoldComments() {
+            if (this.isUnfoldedComments)
+                return;
+
+            this.closeOpenPanelIfAny();
+            this.openPanel = 'comments';
+            this.$emitter.emit("openComments", {});
+        },
     }
 };
 </script>
