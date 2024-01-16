@@ -157,12 +157,12 @@
 
 .slide-enter-active {
     transition: all .3s ease-in;
-    z-index: 800;
+    z-index: 400;
 }
 
 .slide-leave-active {
     transition: all .3s ease-in;
-    z-index: 700;
+    z-index: 300;
 }
 
 .slide-leave-to {
