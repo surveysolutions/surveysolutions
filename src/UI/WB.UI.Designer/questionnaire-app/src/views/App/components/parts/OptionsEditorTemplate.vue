@@ -187,6 +187,11 @@ export default {
             this.markFormAsChanged();
         },
 
+        removeOption(index) {
+            this.activeQuestion.options.splice(index, 1);
+            this.dirty = true;
+        },
+
         markFormAsChanged() {
             this.dirty = true;
         },
