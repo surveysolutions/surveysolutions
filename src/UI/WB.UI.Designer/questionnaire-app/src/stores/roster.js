@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { commandCall } from '../services/commandService';
 import { get } from '../services/apiService';
-import emitter from '../services/emmiter';
+import emitter from '../services/emitter';
 
 export const useRosterStore = defineStore('roster', {
     state: () => ({

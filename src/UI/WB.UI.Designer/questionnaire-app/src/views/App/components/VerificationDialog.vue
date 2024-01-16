@@ -88,7 +88,6 @@
 
 <script>
 import { useVerificationStore } from '../../../stores/verification';
-import emitter from '../../../services/emmiter';
 
 export default {
     name: 'VerificationDialog',
@@ -139,19 +138,19 @@ export default {
                 this.showShareInfo(); // TODO
             } else if (reference.type.toLowerCase() === "macro") {
                 this.visible = false;
-                emitter.emit("openMacrosList", { focusOn: reference.itemId });
+                this.$emitter.emit("openMacrosList", { focusOn: reference.itemId });
             } else if (reference.type.toLowerCase() === "lookuptable") {
                 this.visible = false;
-                emitter.emit("openLookupTables", { focusOn: reference.itemId });
+                this.$emitter.emit("openLookupTables", { focusOn: reference.itemId });
             } else if (reference.type.toLowerCase() === "attachment") {
                 this.visible = false;
-                emitter.emit("openAttachments", { focusOn: reference.itemId });
+                this.$emitter.emit("openAttachments", { focusOn: reference.itemId });
             } else if (reference.type.toLowerCase() === "translation") {
                 this.visible = false;
-                emitter.emit("openTranslations", { focusOn: reference.itemId });
+                this.$emitter.emit("openTranslations", { focusOn: reference.itemId });
             } else if (reference.type.toLowerCase() === "categories") {
                 this.visible = false;
-                emitter.emit("openCategories", { focusOn: reference.itemId });
+                this.$emitter.emit("openCategoriesList", { focusOn: reference.itemId });
             } else {
                 const name = reference.type.toLowerCase();
                 this.$router.push({

@@ -5,7 +5,7 @@ import { findIndex, isNull, isUndefined, find } from 'lodash';
 import { i18n } from '../plugins/localization';
 import { useCookies } from 'vue3-cookies';
 import { commandCall } from '../services/commandService';
-import emitter from '../services/emmiter';
+import emitter from '../services/emitter';
 
 const api = mande('/api/questionnaire/chapter/' /*, globalOptions*/);
 
@@ -339,50 +339,6 @@ export const useTreeStore = defineStore('tree', {
 
             return index < 0 ? null : index;
         },
-
-        /*deleteGroup(itemId) {
-            var command = {
-                questionnaireId: this.questionnaireId,
-                groupId: itemId
-            };
-
-            return commandCall('DeleteGroup', command).then(function(result) {
-                parent.items.splice(index, 0, group);
-                callback(group, parent, index);
-            });
-        },
-
-        deleteQuestion(itemId) {
-            var command = {
-                questionnaireId: this.questionnaireId,
-                questionId: itemId
-            };
-
-            return commandCall('DeleteQuestion', command);
-        },
-
-        deleteVariable(itemId) {
-            var command = {
-                questionnaireId: this.questionnaireId,
-                entityId: itemId
-            };
-
-            return commandCall('DeleteVariable', command);
-        },
-
-        deleteStaticText(itemId) {
-            var command = {
-                questionnaireId: this.questionnaireId,
-                entityId: itemId
-            };
-
-            return commandCall('DeleteStaticText', command).then(function(result) {
-                parent.items.splice(index, 0, group);
-                callback(group, parent, index);
-
-                emitter.emit
-            });;
-        },*/
 
         moveItem(item, newParentId, index) {
             if (item.itemType == 'Question')

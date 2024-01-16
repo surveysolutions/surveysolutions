@@ -3,7 +3,7 @@ import { commandCall } from '../services/commandService';
 import { get } from '../services/apiService';
 import { isEmpty, isNull, filter, indexOf } from 'lodash';
 import moment from 'moment/moment';
-import emitter from '../services/emmiter';
+import emitter from '../services/emitter';
 import {
     doesQuestionSupportEnablementConditions,
     doesQuestionSupportValidations

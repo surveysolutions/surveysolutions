@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { commandCall } from '../services/commandService';
 import { get } from '../services/apiService';
-import emitter from '../services/emmiter';
+import emitter from '../services/emitter';
 
 export const useGroupStore = defineStore('group', {
     state: () => ({
@@ -81,7 +81,7 @@ export const useGroupStore = defineStore('group', {
                     this.clear();
                 }
 
-                emitter.emit('variableDeleted', {
+                emitter.emit('groupDeleted', {
                     itemId: itemId
                 });
             });

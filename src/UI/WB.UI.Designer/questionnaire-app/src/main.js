@@ -19,7 +19,7 @@ import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css';
 
 import directives from './directives/';
 
-import emitter from './services/emmiter';
+import emitter from './services/emitter';
 
 const pinia = createPinia();
 pinia.use(({ store }) => {
