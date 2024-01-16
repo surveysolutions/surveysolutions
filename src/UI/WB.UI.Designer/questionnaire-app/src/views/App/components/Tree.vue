@@ -187,6 +187,14 @@ export default {
             }
         };
     },
+    watch: {
+        async chapterId(newValue, oldValue) {
+            if (newValue != oldValue) {
+                //this.treeStore.clear();
+                await this.fetch();
+            }
+        }
+    },
     setup() {
         const treeStore = useTreeStore();
 

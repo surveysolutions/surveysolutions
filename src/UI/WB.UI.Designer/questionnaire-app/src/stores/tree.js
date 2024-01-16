@@ -563,6 +563,11 @@ export const useTreeStore = defineStore('tree', {
                     return find;
                 }
             }
+        },
+
+        clear() {
+            this.info = {};
+            this.readyToPaste = null;
         }
     }
 });

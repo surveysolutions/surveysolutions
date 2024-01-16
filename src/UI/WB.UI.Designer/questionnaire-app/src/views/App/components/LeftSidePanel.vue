@@ -6,7 +6,7 @@
             <div class="left-side-panel-content chapter-panel" ui-tree="chaptersTree">
                 <div class="foldback-button" @click.stop="foldback()"></div>
                 <div class="ul-holder">
-                    <Chapters></Chapters>
+                    <Chapters :questionnaireId="questionnaireId"></Chapters>
                 </div>
             </div>
         </div>
@@ -195,10 +195,12 @@ export default {
         Translations
     },
     inject: ['questionnaire', 'currentChapter'],
-    props: {},
+    props: {
+        questionnaireId: { type: String, required: true },
+    },
     data() {
         return {
-            openPanel: null,
+            openPanel: null, //'chapters',
         };
     },
     mounted() {
