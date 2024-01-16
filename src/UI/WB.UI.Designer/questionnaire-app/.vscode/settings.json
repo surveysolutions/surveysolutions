@@ -17,5 +17,6 @@
     "[javascript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
-    "editor.detectIndentation": false
+    "editor.detectIndentation": false,
+    "prettier.printWidth": 120,
 }
