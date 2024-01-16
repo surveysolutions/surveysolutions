@@ -25,6 +25,11 @@ const contextmenu = app => {
 
             menu.style.display = 'none';
 
+            const appendToBody =
+                el.getAttribute('menu-append-to-body') === 'true';
+
+            const menuItemClass = el.getAttribute('menu-item-class') || 'a';
+
             const showMenu = event => {
                 activeMenu.close();
                 activeMenu.current = { hide: hideMenu };
@@ -32,8 +37,6 @@ const contextmenu = app => {
                 menu.classList.add('open');
                 menu.style.display = 'block';
 
-                const appendToBody =
-                    el.getAttribute('menu-append-to-body') === 'true';
                 if (appendToBody) {
                     document.body.appendChild(menu);
                     menu.style.position = 'absolute';
@@ -65,8 +68,12 @@ const contextmenu = app => {
 
                     popperInstance.update();
 
-                    // Add click event listeners to menu items
-                    menu.querySelectorAll('.menu-item').forEach(item => {
+                    const menuItems =
+                        menuItemClass === 'a'
+                            ? menu.querySelectorAll('a')
+                            : menu.querySelectorAll('.' + menuItemClass);
+
+                    menuItems.forEach(item => {
                         item.addEventListener('click', hideMenu);
                     });
                 });
@@ -81,7 +88,12 @@ const contextmenu = app => {
                     menu.remove();
                 }
 
-                menu.querySelectorAll('.menu-item').forEach(item => {
+                const menuItems =
+                    menuItemClass === 'a'
+                        ? menu.querySelectorAll('a')
+                        : menu.querySelectorAll('.' + menuItemClass);
+
+                menuItems.forEach(item => {
                     item.removeEventListener('click', hideMenu);
                 });
 
@@ -106,9 +118,16 @@ const contextmenu = app => {
             let { menu, popperInstance, showMenu, hideMenu } = el._contextMenu;
             el.removeEventListener('contextmenu', showMenu);
             document.removeEventListener('click', hideMenu);
-            menu.querySelectorAll('.menu-item').forEach(item => {
+
+            const menuItemClass = el.getAttribute('menu-item-class') || 'a';
+            const menuItems =
+                menuItemClass === 'a'
+                    ? menu.querySelectorAll('a')
+                    : menu.querySelectorAll('.' + menuItemClass);
+            menuItems.forEach(item => {
                 item.removeEventListener('click', hideMenu);
             });
+
             if (popperInstance) {
                 popperInstance.destroy();
             }
