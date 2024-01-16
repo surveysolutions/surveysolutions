@@ -7,20 +7,18 @@
                 }) }}</span>
             </h3>
             <ul ui-tree-nodes ng-model="questionnaire.chapters" class="chapters-list angular-ui-tree-nodes">
-                <Draggable ref="tree" v-model="questionnaire.chapters" textKey="title" childrenKey="items"
+                <Draggable ref="chapters" v-model="questionnaire.chapters" textKey="title" childrenKey="items"
                     :defaultOpen="false" triggerClass="handler" :statHandler="treeNodeCreated"
                     @after-drop="treeNodeDropped">
                     <template #default="{ node, stat }">
 
 
-                        <li class="chapter-panel-item" ui-tree-node :data-nodrag="node.isCover"
-                            :class="{ current: isCurrentChapter(node) }" context-menu
-                            :data-target="'chapter-context-menu-' + node.itemId" context-menu-hide-on-mouse-leave="true">
-                            <div class="holder" @click.stop="editChapter(node)">
+                        <li class="chapter-panel-item" :class="{ current: isCurrentChapter(node) }"
+                            v-contextmenu="'chapter-context-menu-' + node.itemId">
+                            <div class="holder" @click="editChapter(node)">
                                 <div class="inner">
                                     <a class="handler" ui-tree-handle
                                         v-if="!isReadOnlyForUser && !node.isCover"><span></span></a>
-
                                     <router-link class="chapter-panel-item-body" :id="node.itemId" :to="{
                                         name: 'group',
                                         params: {
@@ -31,13 +29,6 @@
                                         <span v-dompurify-html="node.title"></span>
                                         <help link="coverPage" v-if="node.isCover" />
                                     </router-link>
-
-
-                                    <!--a class="chapter-panel-item-body"
-                                        ui-sref="questionnaire.chapter.group({ chapterId: chapter.itemId, itemId: chapter.itemId})">
-                                        <span v-dompurify-html="node.title"></span>
-                                        <help link="coverPage" v-if="node.isCover" />
-                                    </a-->
                                     <div class="qname-block chapter-panel-item-condition">
                                         <div class="conditions-block">
                                             <div class="enabling-group-marker"
@@ -50,57 +41,22 @@
                             </div>
                             <div class="dropdown position-fixed" :id="'chapter-context-menu-' + node.itemId">
                                 <ul class="dropdown-menu" role="menu">
-                                    <li><a @click="editChapter(node);">{{ $t('QuestionnaireEditor.Open') }}</a></li>
-                                    <li><a @click="copyRef(node);">{{ $t('QuestionnaireEditor.Copy') }}</a></li>
+                                    <li><a @click="editChapter(chapter);">{{ $t('QuestionnaireEditor.Open') }}</a></li>
+                                    <li><a @click.self="copyRef(node);">{{ $t('QuestionnaireEditor.Copy') }}</a></li>
                                     <li>
                                         <a :disabled="!readyToPaste" @click.self="pasteAfterChapter(node)"
                                             v-if="!isReadOnlyForUser && !node.isReadOnly">{{
                                                 $t('QuestionnaireEditor.PasteAfter') }}</a>
                                     </li>
-                                    <li><a @click.self="deleteChapter(node)" v-if="!isReadOnlyForUser && !node.isCover">{{
-                                        $t('QuestionnaireEditor.Delete') }}</a></li>
+                                    <li><a @click.self="deleteChapter(node, stat)"
+                                            v-if="!isReadOnlyForUser && !node.isCover">{{
+                                                $t('QuestionnaireEditor.Delete') }}</a></li>
                                 </ul>
                             </div>
                         </li>
 
                     </template>
                 </Draggable>
-
-                <!--li class="chapter-panel-item" v-for="chapter in questionnaire.chapters" ui-tree-node
-                    data-nodrag="{{ chapter.isCover }}" :class="{ current: isCurrentChapter(chapter) }" context-menu
-                    data-target="chapter-context-menu-{{ chapter.itemId }}" context-menu-hide-on-mouse-leave="true">
-                    <div class="holder" @click="editChapter(chapter); $event.stopPropagation();">
-                        <div class="inner">
-                            <a class="handler" ui-tree-handle
-                                v-if="!isReadOnlyForUser && !chapter.isCover"><span></span></a>
-                            <a class="chapter-panel-item-body"
-                                ui-sref="questionnaire.chapter.group({ chapterId: chapter.itemId, itemId: chapter.itemId})">
-                                <span v-dompurify-html="chapter.title"></span>
-                                <help link="coverPage" v-if="chapter.isCover" />
-                            </a>
-                            <div class="qname-block chapter-panel-item-condition">
-                                <div class="conditions-block">
-                                    <div class="enabling-group-marker"
-                                        :class="{ 'hide-if-disabled': chapter.hideIfDisabled }" v-if="chapter.hasCondition">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dropdown position-fixed" id="chapter-context-menu-{{ chapter.itemId }}">
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a @click="editChapter(chapter);">{{ $t('QuestionnaireEditor.Open') }}</a></li>
-                            <li><a @click="copyRef(chapter);">{{ $t('QuestionnaireEditor.Copy') }}</a></li>
-                            <li>
-                                <a :disabled="!readyToPaste" @click.self="pasteAfterChapter(chapter)"
-                                    v-if="!isReadOnlyForUser && !chapter.isReadOnly">{{
-                                        $t('QuestionnaireEditor.PasteAfter') }}</a>
-                            </li>
-                            <li><a @click.self="deleteChapter(chapter)" v-if="!isReadOnlyForUser && !chapter.isCover">{{
-                                $t('QuestionnaireEditor.Delete') }}</a></li>
-                        </ul>
-                    </div>
-                </li-->
             </ul>
             <div class="button-holder">
                 <button type="button" class="btn lighter-hover" value="ADD NEW SECTION" @click="addNewChapter()"
@@ -114,6 +70,8 @@
 <script>
 import { useTreeStore } from '../../../../stores/tree';
 import { useQuestionnaireStore } from '../../../../stores/questionnaire';
+import { createQuestionForDeleteConfirmationPopup } from '../../../../services/utilityService'
+
 import { Draggable, dragContext, walkTreeData } from '@he-tree/vue';
 import Help from '../Help.vue';
 
@@ -138,7 +96,7 @@ export default {
 
         return {
             questionnaireStore,
-            treeStore
+            treeStore,
         };
     },
     computed: {
@@ -186,11 +144,68 @@ export default {
         },
 
         editChapter(chapter) {
+            this.$router.push({
+                name: 'group',
+                params: {
+                    chapterId: chapter.itemId,
+                    groupId: chapter.itemId
+                }
+            });
 
+            this.closePanel();
+        },
+
+        pasteAfterChapter(chapter) {
+            if (!this.treeStore.canPaste()) return;
+
+            this.treeStore.pasteItemAfter(chapter).then(result => {
+                if (!chapter.isCover)
+                    this.$router.push({
+                        name: result.itemType,
+                        params: {
+                            [name + 'Id']: result.itemId
+                        }
+                    });
+                this.closePanel();
+            });
         },
 
         copyRef(chapter) {
+            this.treeStore.copyItem(chapter);
+        },
 
+        deleteChapter(chapter, stat) {
+            var itemIdToDelete = chapter.itemId;
+
+            const params = createQuestionForDeleteConfirmationPopup(
+                chapter.title ||
+                this.$t('QuestionnaireEditor.UntitledSection')
+            );
+
+            params.callback = confirm => {
+                if (confirm) {
+                    this.questionnaireStore
+                        .deleteSection(itemIdToDelete)
+                        .then(response => {
+                            this.$refs.chapters.remove(stat);
+
+                            if (this.isCurrentChapter(chapter)) {
+                                const cover = this.chapters[0];
+                                this.$router.push({
+                                    name: 'group',
+                                    params: {
+                                        chapterId: cover.itemId,
+                                        groupId: cover.itemId
+                                    }
+                                });
+                            }
+
+                            this.closePanel();
+                        });
+                }
+            };
+
+            this.$confirm(params);
         },
 
         isCurrentChapter(chapter) {
@@ -200,8 +215,25 @@ export default {
         },
 
         addNewChapter() {
+            this.questionnaireStore.addSection(section => {
+                let index = this.$refs.chapters.rootChildren.length;
+                this.$refs.chapters.add(section, null, index);
 
-        }
+                this.$router.push({
+                    name: 'group',
+                    params: {
+                        chapterId: section.itemId,
+                        groupId: section.itemId
+                    }
+                });
+
+                this.closePanel();
+            });
+        },
+
+        closePanel() {
+            this.$emitter.emit("closeChaptersList", {});
+        },
     }
 }
 </script>
