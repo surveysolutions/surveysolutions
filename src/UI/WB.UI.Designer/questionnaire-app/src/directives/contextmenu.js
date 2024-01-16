@@ -34,29 +34,53 @@ const contextmenu = app => {
                 menu.style.display = 'block';
                 //menu.style.position = 'absolute';
 
-                // Update the position of the menu based on mouse click coordinates
-                const { clientX: mouseX, clientY: mouseY } = event;
-                menu.style.top = `${mouseY}px`;
-                menu.style.left = `${mouseX}px`;
+                // Initially place the menu off-screen
+                menu.style.top = `0px`;
+                menu.style.left = `0px`;
+                menu.style.visibility = 'hidden'; // Temporarily hide the menu
 
-                if (!popperInstance) {
-                    popperInstance = createPopper(menu, {
-                        placement: 'bottom-start'
-                    });
-                }
+                requestAnimationFrame(() => {
+                    let mouseX = event.clientX;
+                    let mouseY = event.clientY;
 
-                popperInstance.state.elements.reference = {
-                    getBoundingClientRect: () => ({
-                        width: 0,
-                        height: 0,
-                        top: mouseY,
-                        right: mouseX,
-                        bottom: mouseY,
-                        left: mouseX
-                    })
-                };
+                    const menuWidth = menu.scrollWidth;
+                    const menuHeight = menu.scrollHeight;
 
-                popperInstance.update();
+                    // Adjust if the menu goes beyond the right edge of the screen
+                    if (mouseX + menuWidth > window.innerWidth) {
+                        mouseX = window.innerWidth - menuWidth;
+                    }
+
+                    // Adjust if the menu goes beyond the bottom edge of the screen
+                    if (mouseY + menuHeight > window.innerHeight) {
+                        mouseY = window.innerHeight - menuHeight;
+                    }
+
+                    // Set the final position of the menu
+                    menu.style.top = `${mouseY}px`;
+                    menu.style.left = `${mouseX}px`;
+                    menu.style.visibility = 'visible'; // Make the menu visible
+
+                    if (!popperInstance) {
+                        popperInstance = createPopper(menu, {
+                            placement: 'bottom-start'
+                        });
+                    }
+
+                    popperInstance.state.elements.reference = {
+                        getBoundingClientRect: () => ({
+                            width: 0,
+                            height: 0,
+                            top: mouseY,
+                            right: mouseX,
+                            bottom: mouseY,
+                            left: mouseX
+                        })
+                    };
+
+                    popperInstance.update();
+                });
+
                 event.preventDefault();
             };
 
