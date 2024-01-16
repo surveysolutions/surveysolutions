@@ -26,7 +26,7 @@ const contextmenu = app => {
             menu.style.display = 'none';
 
             const showMenu = event => {
-                activeMenu.close(); // Close currently active menu
+                activeMenu.close();
                 activeMenu.current = { hide: hideMenu };
 
                 menu.classList.add('open');
@@ -46,12 +46,10 @@ const contextmenu = app => {
                     const menuWidth = menu.scrollWidth;
                     const menuHeight = menu.scrollHeight;
 
-                    // Adjust the position if the menu goes beyond the right edge of the screen
                     if (mouseX + menuWidth > window.innerWidth) {
                         mouseX = window.innerWidth - menuWidth;
                     }
 
-                    // Adjust the position if the menu goes beyond the bottom edge of the screen
                     if (mouseY + menuHeight > window.innerHeight) {
                         mouseY = window.innerHeight - menuHeight;
                     }
@@ -66,6 +64,11 @@ const contextmenu = app => {
                     }
 
                     popperInstance.update();
+
+                    // Add click event listeners to menu items
+                    menu.querySelectorAll('.menu-item').forEach(item => {
+                        item.addEventListener('click', hideMenu);
+                    });
                 });
 
                 event.preventDefault();
@@ -74,6 +77,19 @@ const contextmenu = app => {
             const hideMenu = () => {
                 menu.classList.remove('open');
                 menu.style.display = 'none';
+                if (appendToBody) {
+                    menu.remove();
+                }
+
+                menu.querySelectorAll('.menu-item').forEach(item => {
+                    item.removeEventListener('click', hideMenu);
+                });
+
+                if (popperInstance) {
+                    popperInstance.destroy();
+                    popperInstance = null;
+                }
+
                 activeMenu.current = null;
             };
 
@@ -90,6 +106,9 @@ const contextmenu = app => {
             let { menu, popperInstance, showMenu, hideMenu } = el._contextMenu;
             el.removeEventListener('contextmenu', showMenu);
             document.removeEventListener('click', hideMenu);
+            menu.querySelectorAll('.menu-item').forEach(item => {
+                item.removeEventListener('click', hideMenu);
+            });
             if (popperInstance) {
                 popperInstance.destroy();
             }
