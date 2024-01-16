@@ -118,9 +118,9 @@ export default {
                                     "constant.language": "null|true|false"
                                 }, "identifier");
 
-
                                 mapperRule.token = keywordMapper;
                                 mapperRule.onMatch = keywordMapper;
+                                mapperRule.regex = '[@a-zA-Z_$][a-zA-Z0-9_$]*\\b';
                             }
                         }
                     }
