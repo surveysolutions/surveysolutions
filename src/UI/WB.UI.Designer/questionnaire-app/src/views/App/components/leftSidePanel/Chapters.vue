@@ -6,7 +6,7 @@
                     count: chapters.length
                 }) }}</span>
             </h3>
-            <ul ui-tree-nodes ng-model="questionnaire.chapters" class="chapters-list angular-ui-tree-nodes">
+            <ul ui-tree-nodes class="chapters-list angular-ui-tree-nodes">
                 <Draggable ref="chapters" v-model="questionnaire.chapters" textKey="title" childrenKey="items"
                     :defaultOpen="false" triggerClass="handler" :statHandler="treeNodeCreated"
                     @after-drop="treeNodeDropped">

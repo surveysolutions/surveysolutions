@@ -1,6 +1,6 @@
 <template>
     <section id="header" class="row">
-        <a class="designer-logo" href="../../"></a>
+        <a class="designer-logo" href="/"></a>
         <div class="header-line">
             <div class="header-menu">
                 <div class="buttons">

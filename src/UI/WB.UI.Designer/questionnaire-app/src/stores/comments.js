@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import moment from 'moment';
-import { remove } from 'lodash';
+import _ from 'lodash';
 import { useUserStore } from './user';
 import { newGuid } from '../helpers/guid';
 import { get, post, patch, del } from '../services/apiService';
@@ -83,7 +83,7 @@ export const useCommentsStore = defineStore('comments', {
                     '/comment/' +
                     commentId
             );
-            remove(this.$state.comments, comment => comment.id === commentId);
+            _.remove(this.$state.comments, comment => comment.id === commentId);
         },
 
         async resolveComment(comment) {
@@ -95,6 +95,26 @@ export const useCommentsStore = defineStore('comments', {
             );
 
             comment.resolveDate = new Date();
-        }
+        },
+
+        async getCommentThreads(questionnaireId){
+
+            const data = await get('questionnaire/' + questionnaireId + '/commentThreads');
+
+            _.forEach(data, function(commentThread) {
+                commentThread.resolvedComments = [];
+                commentThread.resolvedAreExpanded = false;
+                
+                _.forEach(commentThread.comments, function(comment) {
+                    comment.date = moment.utc(comment.date).local().format("MMM DD, YYYY HH:mm");
+                    comment.isResolved = !_.isNull(comment.resolveDate || null);
+                });
+
+                commentThread.resolvedComments = _.filter(commentThread.comments, { isResolved: true });
+                commentThread.comments = _.filter(commentThread.comments, { isResolved: false });
+            });
+
+            return data;
+        },
     }
 });

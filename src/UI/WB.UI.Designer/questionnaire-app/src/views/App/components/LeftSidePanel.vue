@@ -103,7 +103,7 @@
                 <div class="foldback-button-region" @click.stop="foldback()">
                     <div class="foldback-button"></div>
                 </div>
-                <Comments></Comments>
+                <Comments :questionnaireId="questionnaireId"></Comments>
             </div>
         </div>
     </Transition>
