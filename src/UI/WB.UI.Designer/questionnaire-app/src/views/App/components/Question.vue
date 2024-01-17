@@ -400,10 +400,12 @@ export default {
             return questionType + 'Question';
         },
         doesQuestionSupportEnablementConditions() {
+            const isCover = this.currentChapter.isCover;
+            if (isCover)
+                return false;
             return this.activeQuestion
                 && (this.activeQuestion.questionScope != 'Identifying')
-                && !(this.activeQuestion.isCascade && this.activeQuestion.cascadeFromQuestionId)
-                && !this.currentChapter.isCover;
+                && !(this.activeQuestion.isCascade && this.activeQuestion.cascadeFromQuestionId);
         },
         doesQuestionSupportValidations() {
             return this.activeQuestion &&

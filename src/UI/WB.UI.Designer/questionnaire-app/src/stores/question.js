@@ -5,7 +5,7 @@ import { isEmpty, isNull, filter, indexOf } from 'lodash';
 import moment from 'moment/moment';
 import emitter from '../services/emitter';
 import {
-    doesQuestionSupportEnablementConditions,
+    hasQuestionEnablementConditions,
     doesQuestionSupportValidations
 } from '../helpers/question';
 
@@ -217,7 +217,7 @@ export const useQuestionStore = defineStore('question', {
 
         hasQuestionEnablementConditions(question) {
             return (
-                doesQuestionSupportEnablementConditions(question) &&
+                hasQuestionEnablementConditions(question) &&
                 question.enablementCondition !== null &&
                 /\S/.test(question.enablementCondition)
             );

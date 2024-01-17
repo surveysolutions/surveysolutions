@@ -48,12 +48,11 @@ export const questionsWithOnlyInterviewerScope = [
 
 export const questionTypesDoesNotSupportValidations = ['Multimedia', 'Audio'];
 
-export function doesQuestionSupportEnablementConditions(question) {
+export function hasQuestionEnablementConditions(question) {
     return (
         question &&
         question.questionScope != 'Identifying' &&
-        !(question.isCascade && this.activeQuestion.cascadeFromQuestionId) &&
-        !question.parentIsCover
+        !(question.isCascade && this.question.cascadeFromQuestionId)
     );
 }
 
