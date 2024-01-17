@@ -19,4 +19,5 @@
     },
     "editor.detectIndentation": false,
     "prettier.printWidth": 120,
+    "debug.javascript.terminalOptions": {}
 }
