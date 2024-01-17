@@ -150,7 +150,6 @@ import { ref } from 'vue';
 
 export default {
     name: 'QuestionnaireHeader',
-    //inject: ["useQuestionnaireStore"],
     components: {
         VerificationDialog
     },

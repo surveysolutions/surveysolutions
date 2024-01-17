@@ -1,6 +1,4 @@
 <template>
-    <!--v-app>
-        <v-main-->
     <div id="designer-editor" class="questionnaire container">
         <router-view name="header"></router-view>
         <section id="spacer" class="row">
@@ -13,8 +11,6 @@
         </section>
     </div>
     <confirm-dialog></confirm-dialog>
-    <!--/v-main>
-    </v-app-->
 </template>
 
 <script>
