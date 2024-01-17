@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import { computed } from 'vue'
+
 import { useQuestionnaireStore } from './stores/questionnaire';
 import { useTreeStore } from './stores/tree';
 import { useUserStore } from './stores/user';
@@ -26,8 +28,9 @@ export default {
     },
     provide() {
         return {
-            questionnaire: this.questionnaire,
-            currentChapter: this.currentChapter
+            questionnaire: computed(() => this.questionnaire),
+            currentChapter: computed(() => this.currentChapter),
+            isCover: computed(() => this.isCover)
         };
     },
     setup() {
@@ -50,7 +53,10 @@ export default {
         },
         currentChapter() {
             return this.treeStore.getChapter || {};
-        }
+        },
+        isCover() {
+            return this.treeStore.getChapter.isCover;
+        },
     },
     methods: {
         async fetch() {
