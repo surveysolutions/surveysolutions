@@ -26,14 +26,14 @@
             </div>
 
             <div class="form-group"
-                v-if="!activeGroup.isCoverPage && !((showEnablingConditions === undefined && activeGroup.enablementCondition) || showEnablingConditions)">
+                v-if="!isCoverPage && !((showEnablingConditions === undefined && activeGroup.enablementCondition) || showEnablingConditions)">
                 <button type="button" class="btn btn-lg btn-link" @click="showEnablingConditions = true">
                     {{ $t('QuestionnaireEditor.AddEnablingCondition') }}
                 </button>
             </div>
 
             <div class="row"
-                v-if="!activeGroup.isCoverPage && ((showEnablingConditions === undefined && activeGroup.enablementCondition) || showEnablingConditions)">
+                v-if="!isCoverPage && ((showEnablingConditions === undefined && activeGroup.enablementCondition) || showEnablingConditions)">
                 <div class="form-group col-xs-11">
                     <div class="enabling-group-marker" :class="{ 'hide-if-disabled': activeGroup.hideIfDisabled }"></div>
                     <label for="edit-group-condition">{{ $t('QuestionnaireEditor.EnablingCondition') }}
@@ -89,11 +89,11 @@
                     </span>
                 </button>
                 <button type="button" v-show="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
-                    v-if="!activeGroup.isCoverPage" id="edit-chapter-delete-button" class="btn btn-lg btn-link"
-                    @click="deleteGroup()" unsaved-warning-clear>{{ $t('QuestionnaireEditor.Delete') }}</button>
+                    v-if="!isCoverPage" id="edit-chapter-delete-button" class="btn btn-lg btn-link" @click="deleteGroup()"
+                    unsaved-warning-clear>{{ $t('QuestionnaireEditor.Delete') }}</button>
                 <MoveToChapterSnippet :item-id="groupId"
                     v-show="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
-                    v-if="!activeGroup.isChapter && !activeGroup.isCoverPage">
+                    v-if="!activeGroup.isChapter && !isCoverPage">
                 </MoveToChapterSnippet>
             </div>
         </div>
@@ -170,6 +170,14 @@ export default {
         },
         isCommentsBlockVisible() {
             return this.commentsStore.getIsCommentsBlockVisible;
+        },
+        isChapter() {
+            if (this.currentChapter && this.currentChapter.chapter)
+                return this.activeGroup.id.replaceAll('-', '') == this.currentChapter.chapter.itemId;
+            return true;
+        },
+        isCoverPage() {
+            return this.isChapter && this.currentChapter.isCover;
         }
     },
     methods: {

@@ -1,15 +1,14 @@
 <template>
     <div class="questionnaire-tree-holder col-xs-6">
-        <div class="chapter-title" v-switch on="filtersBoxMode"
-            :class="{ selected: currentChapterData.itemId === selectedItemId }" @click="
-                router.push({
-                    name: 'group',
-                    params: {
-                        groupId: chapterId,
-                        chapterId: chapterId
-                    }
-                })
-                ">
+        <div class="chapter-title" v-switch on="filtersBoxMode" :class="{ selected: chapterId === selectedItemId }" @click="
+            $router.push({
+                name: 'group',
+                params: {
+                    groupId: chapterId,
+                    chapterId: chapterId
+                }
+            })
+            ">
             <div @click.stop class="search-box" v-if="search.open">
                 <div class="input-group">
                     <span class="input-group-addon glyphicon glyphicon-search"
