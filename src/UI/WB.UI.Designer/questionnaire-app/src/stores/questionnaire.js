@@ -1,13 +1,11 @@
 import { defineStore } from 'pinia';
-import { mande } from 'mande';
+import { get } from '../services/apiService';
 import { newGuid } from '../helpers/guid';
 import { i18n } from '../plugins/localization';
 import { commandCall } from '../services/commandService';
 import emitter from '../services/emitter';
 import { findIndex } from 'lodash';
 import { useCookies } from 'vue3-cookies';
-
-const api = mande('/api/questionnaire/get/' /*, globalOptions*/);
 
 export const useQuestionnaireStore = defineStore('questionnaire', {
     state: () => ({
@@ -18,7 +16,7 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
     },
     actions: {
         async fetchQuestionnaireInfo(questionnaireId) {
-            const info = await api.get(questionnaireId);
+            const info = await get('/api/questionnaire/get/' + questionnaireId);
             this.setQuestionnaireInfo(info);
         },
 

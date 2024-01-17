@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './router';
+import VueProgressBar from "@aacassandra/vue3-progressbar";
 import VueDOMPurifyHTML from 'vue-dompurify-html';
 import i18n from './plugins/localization';
 //import { vuetify /*, install, i18n */ } from './plugins/vuetify';
@@ -39,6 +40,23 @@ vue.use(i18n);
 //vue.use(uiv);
 vue.use(PerfectScrollbar);
 vue.use(VueDOMPurifyHTML);
+
+const options = {
+    color: "#29d",
+    failedColor: "#874b4b",
+    thickness: "3px",
+    transition: {
+      speed: "0.2s",
+      opacity: "0.6s",
+      termination: 300,
+    },
+    autoRevert: true,
+    location: "top",
+    inverse: false,
+    autoFinish: false
+  };
+
+vue.use(VueProgressBar, options);
 
 vue.use(ConfirmDialog);
 vue.component('confirm-dialog', ConfirmDialog.default);

@@ -9,23 +9,23 @@
             <router-view name="leftSidePanel"></router-view>
             <router-view />
         </section>
+        <vue-progress-bar></vue-progress-bar>
     </div>
+    <div id="loading-logo" v-if="isActionRunning"></div>
     <confirm-dialog></confirm-dialog>
 </template>
 
 <script>
+import { useProgressStore } from './stores/progress';
 import { computed } from 'vue'
 
 import { useQuestionnaireStore } from './stores/questionnaire';
 import { useTreeStore } from './stores/tree';
 import { useUserStore } from './stores/user';
-//import ConfirmDialog from './views/App/components/Confirm.vue';
 
 export default {
     name: 'QuestionnaireApp',
-    components: {
-        //ConfirmDialog
-    },
+    components: {},
     provide() {
         return {
             questionnaire: computed(() => this.questionnaire),
@@ -37,15 +37,20 @@ export default {
         const questionnaireStore = useQuestionnaireStore();
         const treeStore = useTreeStore();
         const userStore = useUserStore();
+        const progressStore = useProgressStore();
 
         return {
             questionnaireStore,
             treeStore,
-            userStore
+            userStore,
+            progressStore
         };
     },
     async beforeMount() {
         await this.fetch();
+    },
+    mounted() {
+        this.$Progress.finish();
     },
     computed: {
         questionnaire() {
@@ -53,6 +58,19 @@ export default {
         },
         currentChapter() {
             return this.treeStore.getChapter || {};
+        },
+        isActionRunning() {
+            var progress = this.$Progress;
+            if (progress) {
+                this.$nextTick(() => {
+                    if (this.progressStore.getIsRunning)
+                        progress.start();
+                    else
+                        progress.finish();
+                });
+            }
+
+            return this.progressStore.getIsRunning || false;
         },
         isCover() {
             return this.treeStore.getChapter.isCover;
@@ -65,7 +83,6 @@ export default {
                 this.$route.params.questionnaireId
             );
         },
-
     }
 };
 </script>

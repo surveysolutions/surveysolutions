@@ -1,8 +1,6 @@
 import { defineStore } from 'pinia';
 import { commandCall } from '../services/commandService';
 import { get } from '../services/apiService';
-import { isEmpty, isNull, filter } from 'lodash';
-import moment from 'moment/moment';
 import emitter from '../services/emitter';
 
 export const useStaticTextStore = defineStore('staticText', {
@@ -83,9 +81,9 @@ export const useStaticTextStore = defineStore('staticText', {
             Object.assign(this.staticText, this.initialStaticText);
         },
 
-        deleteStaticText(itemId) {
+        deleteStaticText(questionnaireId, itemId) {
             var command = {
-                questionnaireId: this.questionnaireId,
+                questionnaireId: questionnaireId,
                 entityId: itemId
             };
 

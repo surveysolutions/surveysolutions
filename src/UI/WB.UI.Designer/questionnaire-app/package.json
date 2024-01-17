@@ -12,6 +12,7 @@
         "i18n:report": "vite i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'"
     },
     "dependencies": {
+        "@aacassandra/vue3-progressbar": "^1.0.3",
         "@he-tree/vue": "^2.7.0",
         "@intlify/unplugin-vue-i18n": "^0.8.1",
         "@popperjs/core": "^2.11.8",

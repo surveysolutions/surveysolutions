@@ -1,13 +1,11 @@
 import { defineStore } from 'pinia';
-import { mande } from 'mande';
+import { get } from '../services/apiService';
 import { newGuid } from '../helpers/guid';
 import { findIndex, isNull, isUndefined, find } from 'lodash';
 import { i18n } from '../plugins/localization';
 import { useCookies } from 'vue3-cookies';
 import { commandCall } from '../services/commandService';
 import emitter from '../services/emitter';
-
-const api = mande('/api/questionnaire/chapter/' /*, globalOptions*/);
 
 export const useTreeStore = defineStore('tree', {
     state: () => ({
@@ -35,11 +33,12 @@ export const useTreeStore = defineStore('tree', {
         },
 
         async fetchTree(questionnaireId, chapterId) {
-            const info = await api.get(questionnaireId, {
-                query: {
+            const info = await get(
+                '/api/questionnaire/chapter/' + questionnaireId,
+                {
                     chapterId: chapterId
                 }
-            });
+            );
             this.setChapterInfo(info);
             this.questionnaireId = questionnaireId;
             this.chapterId = chapterId;

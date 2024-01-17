@@ -321,7 +321,7 @@ export default {
         itemTemplate(itemType) {
             return 'Tree' + itemType;
         },
-        addQuestion(chapter) {
+        addQuestion(chapter) {            
             this.treeStore.addQuestion(
                 chapter,
                 null,

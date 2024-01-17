@@ -197,7 +197,7 @@ export default {
 
         async statictextId(newValue, oldValue) {
             if (newValue != oldValue) {
-                this.questionStore.clear();
+                this.staticTextStore.clear();
                 await this.fetch();
                 this.scrollTo();
             }
@@ -254,6 +254,7 @@ export default {
 
         deleteStaticText() {
             var itemIdToDelete = this.statictextId;
+            var questionnaireId = this.questionnaireId;
 
             const params = createQuestionForDeleteConfirmationPopup(
                 this.activeStaticText.text ||
@@ -262,7 +263,7 @@ export default {
 
             params.callback = confirm => {
                 if (confirm) {
-                    this.staticTextStore.deleteStaticText(itemIdToDelete);
+                    this.staticTextStore.deleteStaticText(questionnaireId, itemIdToDelete);
                 }
             };
 

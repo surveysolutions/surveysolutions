@@ -382,6 +382,7 @@ export default {
         },
         deleteQuestion() {
             var itemIdToDelete = this.questionId;
+            var questionnaireId = this.questionnaireId;
 
             const params = createQuestionForDeleteConfirmationPopup(
                 this.activeQuestion.title ||
@@ -390,7 +391,7 @@ export default {
 
             params.callback = confirm => {
                 if (confirm) {
-                    this.questionStore.deleteQuestion(itemIdToDelete);
+                    this.questionStore.deleteQuestion(questionnaireId, itemIdToDelete);
                 }
             };
 

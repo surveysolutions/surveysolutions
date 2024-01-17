@@ -314,16 +314,18 @@ export default {
 
         deleteItem() {
             if (this.item.itemType == 'Question')
-                this.deleteQuestion(this.item.itemId);
+                this.deleteQuestion();
             else if (this.item.itemType == 'StaticText')
-                this.deleteStaticText(this.item.itemId);
+                this.deleteStaticText();
             else if (this.item.itemType == 'Variable')
-                this.deleteVariable(this.item.itemId);
-            else if (this.isGroup) this.deleteGroup(this.item.itemId);
+                this.deleteVariable();
+            else if (this.isGroup) 
+                this.deleteGroup();
         },
 
         deleteQuestion() {
             var itemIdToDelete = this.item.itemId;
+            var questionnaireId = this.questionnaire.questionnaireId;
 
             const params = createQuestionForDeleteConfirmationPopup(
                 this.item.title ||
@@ -333,7 +335,7 @@ export default {
             params.callback = confirm => {
                 if (confirm) {
                     this.questionStore
-                        .deleteQuestion(itemIdToDelete)
+                        .deleteQuestion(questionnaireId, itemIdToDelete)
                         .then(response => {
                             this.tree.remove(this.stat);
 
@@ -353,6 +355,7 @@ export default {
 
         deleteStaticText() {
             var itemIdToDelete = this.item.itemId;
+            var questionnaireId = this.questionnaire.questionnaireId;
 
             const params = createQuestionForDeleteConfirmationPopup(
                 this.item.text ||
@@ -362,7 +365,7 @@ export default {
             params.callback = confirm => {
                 if (confirm) {
                     this.staticTextStore
-                        .deleteStaticText(itemIdToDelete)
+                        .deleteStaticText(questionnaireId, itemIdToDelete)
                         .then(response => {
                             this.tree.remove(this.stat);
 
@@ -382,6 +385,7 @@ export default {
 
         deleteVariable() {
             var itemIdToDelete = this.item.itemId;
+            var questionnaireId = this.questionnaire.questionnaireId;
 
             var label = this.item.variableData
                 ? this.item.variableData.label
@@ -394,7 +398,7 @@ export default {
             params.callback = confirm => {
                 if (confirm) {
                     this.variableStore
-                        .deleteVariable(itemIdToDelete)
+                        .deleteVariable(questionnaireId, itemIdToDelete)
                         .then(response => {
                             this.tree.remove(this.stat);
 
@@ -414,6 +418,7 @@ export default {
 
         deleteGroup() {
             var itemIdToDelete = this.item.itemId;
+            var questionnaireId = this.questionnaire.questionnaireId;
 
             const params = createQuestionForDeleteConfirmationPopup(
                 this.item.title ||
@@ -423,7 +428,7 @@ export default {
             params.callback = confirm => {
                 if (confirm) {
                     this.groupStore
-                        .deleteGroup(itemIdToDelete)
+                        .deleteGroup(questionnaireId, itemIdToDelete)
                         .then(response => {
                             this.tree.remove(this.stat);
 

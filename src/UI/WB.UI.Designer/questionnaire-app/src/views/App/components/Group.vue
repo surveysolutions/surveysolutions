@@ -204,6 +204,7 @@ export default {
         },
         deleteGroup() {
             var itemIdToDelete = this.groupId;
+            var questionnaireId = this.questionnaireId;
 
             const params = createQuestionForDeleteConfirmationPopup(
                 this.activeGroup.title ||
@@ -212,7 +213,7 @@ export default {
 
             params.callback = confirm => {
                 if (confirm) {
-                    this.groupStore.deleteGroup(itemIdToDelete);
+                    this.groupStore.deleteGroup(questionnaireId, itemIdToDelete);
                 }
             };
 

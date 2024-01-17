@@ -61,9 +61,9 @@ export const useVariableStore = defineStore('variable', {
             });
         },
 
-        deleteVariable(itemId) {
+        deleteVariable(questionnaireId, itemId) {
             var command = {
-                questionnaireId: this.questionnaireId,
+                questionnaireId: questionnaireId,
                 entityId: itemId
             };
 

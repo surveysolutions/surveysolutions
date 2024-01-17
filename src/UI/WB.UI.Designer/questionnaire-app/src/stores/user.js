@@ -1,8 +1,6 @@
 import { defineStore } from 'pinia'
-import { debounce } from 'lodash'
-import { mande } from 'mande'
 
-const api = mande('/api/users/CurrentLogin'/*, globalOptions*/)
+import { get } from '../services/apiService';
 
 export const useUserStore = defineStore('user', {
     state: () => ({
@@ -16,7 +14,7 @@ export const useUserStore = defineStore('user', {
     actions: {
 
       async fetchUserInfo() {
-        const data = await api.get()
+        const data = await get('/api/users/CurrentLogin');
         this.setUserInfo(data)
       },
 

@@ -22,13 +22,14 @@ export const useQuestionStore = defineStore('question', {
     },
     actions: {
         async fetchQuestionData(questionnaireId, questionId) {
+            this.questionnaireId = questionnaireId;
+            
             const data = await get(
                 '/api/questionnaire/editQuestion/' + questionnaireId,
                 {
                     questionId: questionId
                 }
-            );
-            this.questionnaireId = questionnaireId;
+            );            
             this.setQuestionData(data);
         },
 
@@ -269,9 +270,9 @@ export const useQuestionStore = defineStore('question', {
             Object.assign(this.question, this.initialQuestion);
         },
 
-        deleteQuestion(itemId) {
+        deleteQuestion(questionnaireId, itemId) {
             var command = {
-                questionnaireId: this.questionnaireId,
+                questionnaireId: questionnaireId,
                 questionId: itemId
             };
 

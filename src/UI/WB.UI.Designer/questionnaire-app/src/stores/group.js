@@ -70,9 +70,9 @@ export const useGroupStore = defineStore('group', {
             Object.assign(this.group.group, this.initialGroup);
         },
 
-        deleteGroup(itemId) {
+        deleteGroup(questionnaireId, itemId) {
             var command = {
-                questionnaireId: this.questionnaireId,
+                questionnaireId: questionnaireId,
                 groupId: itemId
             };
 

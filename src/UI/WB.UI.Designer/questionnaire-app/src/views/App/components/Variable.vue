@@ -189,6 +189,7 @@ export default {
         },
         deleteVariable() {
             var itemIdToDelete = this.activeVariable.id;
+            var questionnaireId = this.questionnaireId;
 
             var label = this.activeVariable.label;
 
@@ -198,7 +199,7 @@ export default {
 
             params.callback = confirm => {
                 if (confirm) {
-                    this.variableStore.deleteVariable(itemIdToDelete);
+                    this.variableStore.deleteVariable(questionnaireId, itemIdToDelete);
                 }
             };
 
