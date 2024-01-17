@@ -1,48 +1,34 @@
 <template>
     <TreeItem :item="item" :stat="stat">
-        <router-link
-            class="item-body"
-            :id="item.itemId"
-            :to="
-                !item.isRoster
-                    ? {
-                          name: 'group',
-                          params: {
-                              groupId: item.itemId
-                          }
-                      }
-                    : {
-                          name: 'roster',
-                          params: {
-                              rosterId: item.itemId
-                          }
-                      }
-            "
-        >
+        <router-link class="item-body" :id="item.itemId" :to="!item.isRoster
+            ? {
+                name: 'group',
+                params: {
+                    groupId: item.itemId
+                }
+            }
+            : {
+                name: 'roster',
+                params: {
+                    rosterId: item.itemId
+                }
+            }
+            ">
             <div class="item-text">
-                <button
-                    type="button"
-                    :class="{
-                        'btn-expand': !stat.open,
-                        'btn-collapse': stat.open
-                    }"
-                    data-nodrag
-                    @click.native="stat.open = !stat.open"
-                    @mouseenter="is_highlighted = true"
-                    @mouseleave="is_highlighted = false"
-                ></button>
+                <button type="button" :class="{
+                    'btn-expand': !stat.open,
+                    'btn-collapse': stat.open
+                }" data-nodrag @click.native="stat.open = !stat.open" @mouseenter="is_highlighted = true"
+                    @mouseleave="is_highlighted = false"></button>
                 <span class="roster-marker" v-show="item.isRoster">{{
                     $t('QuestionnaireEditor.TreeRoster')
-                }}</span>
+                }}&nbsp;</span>
                 <span v-text="filter(item.title)"></span>
             </div>
             <div class="qname-block">
                 <div class="conditions-block">
-                    <div
-                        class="enabliv-group-marker"
-                        :class="{ 'hide-if-disabled': item.hideIfDisabled }"
-                        v-if="item.hasCondition"
-                    ></div>
+                    <div class="enabling-group-marker" :class="{ 'hide-if-disabled': item.hideIfDisabled }"
+                        v-if="item.hasCondition"></div>
                 </div>
                 <span v-text="filter(item.variable)"></span>
             </div>

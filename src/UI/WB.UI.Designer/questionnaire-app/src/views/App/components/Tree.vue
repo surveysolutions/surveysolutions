@@ -41,7 +41,7 @@
                 </router-link>
                 <div class="qname-block chapter-condition-block">
                     <div class="conditions-block">
-                        <div class="enabliv-group-marker" :class="{
+                        <div class="enabling-group-marker" :class="{
                             'hide-if-disabled':
                                 currentChapter.hideIfDisabled
                         }" v-if="currentChapter.hasCondition"></div>
