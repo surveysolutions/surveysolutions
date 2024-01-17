@@ -5,6 +5,7 @@ import { i18n } from '../plugins/localization';
 import { commandCall } from '../services/commandService';
 import emitter from '../services/emitter';
 import { findIndex } from 'lodash';
+import { useCookies } from 'vue3-cookies';
 
 const api = mande('/api/questionnaire/get/' /*, globalOptions*/);
 
@@ -87,6 +88,27 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
                     itemId: chapterId
                 });
             });
+        },
+
+        pasteItemAfter(afterChapter) {
+            const cookies = useCookies();
+
+            var itemToCopy = cookies.cookies.get('itemToCopy');
+            if (!itemToCopy) return;
+
+            const newId = newGuid();
+
+            var command = {
+                sourceQuestionnaireId: itemToCopy.questionnaireId,
+                sourceItemId: itemToCopy.itemId,
+                entityId: newId,
+                questionnaireId: this.info.questionnaireId,
+                itemToPasteAfterId: afterChapter.itemId
+            };
+
+            return commandCall('PasteAfter', command).then(() =>
+                this.fetchQuestionnaireInfo(this.info.questionnaireId)
+            );
         }
     }
 });

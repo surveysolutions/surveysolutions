@@ -44,8 +44,8 @@
                                     <li><a @click="editChapter(chapter);">{{ $t('QuestionnaireEditor.Open') }}</a></li>
                                     <li><a @click.self="copyRef(node);">{{ $t('QuestionnaireEditor.Copy') }}</a></li>
                                     <li>
-                                        <a :disabled="!readyToPaste" @click.self="pasteAfterChapter(node)"
-                                            v-if="!isReadOnlyForUser && !node.isReadOnly">{{
+                                        <a @click.self="pasteAfterChapter(node)"
+                                            v-if="readyToPaste && !isReadOnlyForUser && !node.isReadOnly">{{
                                                 $t('QuestionnaireEditor.PasteAfter') }}</a>
                                     </li>
                                     <li><a @click.self="deleteChapter(node, stat)"
@@ -156,17 +156,10 @@ export default {
         },
 
         pasteAfterChapter(chapter) {
-            if (!this.treeStore.canPaste()) return;
+            if (!this.treeStore.canPaste()) return false;
 
-            this.treeStore.pasteItemAfter(chapter).then(result => {
-                if (!chapter.isCover)
-                    this.$router.push({
-                        name: result.itemType,
-                        params: {
-                            [name + 'Id']: result.itemId
-                        }
-                    });
-                this.closePanel();
+            this.questionnaireStore.pasteItemAfter(chapter).then(() => {
+                //this.closePanel();
             });
         },
 
