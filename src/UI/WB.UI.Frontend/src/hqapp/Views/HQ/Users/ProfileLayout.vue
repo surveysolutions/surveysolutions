@@ -1,67 +1,58 @@
 <template>
     <HqLayout :hasFilter="false">
         <div slot="filters">
-            <div v-if="successMessage != null"
-                id="alerts"
-                class="alerts">
-                <div class="alert alert-success">
-                    <button class="close"
-                        data-dismiss="alert"
-                        aria-hidden="true">
+            <div v-if="isRestricted" id="restricted" class="alerts">
+                <div class="alert alert-warning">
+                    <button class="close" data-dismiss="alert" aria-hidden="true">
                         ×
                     </button>
-                    {{successMessage}}
+                    {{ $t('FieldsAndValidations.RestrictedAccount') }}
+                </div>
+            </div>
+            <div v-if="successMessage != null" id="alerts" class="alerts">
+                <div class="alert alert-success">
+                    <button class="close" data-dismiss="alert" aria-hidden="true">
+                        ×
+                    </button>
+                    {{ successMessage }}
                 </div>
             </div>
         </div>
         <div slot="headers">
-            <ol class="breadcrumb"
-                v-if="!isOwnProfile">
+            <ol class="breadcrumb" v-if="!isOwnProfile">
                 <li>
-                    <a v-bind:href="referrerUrl">{{referrerTitle}}</a>
+                    <a v-bind:href="referrerUrl">{{ referrerTitle }}</a>
                 </li>
             </ol>
-            <h1>{{$t('Strings.HQ_Views_Manage_Title')}}<b v-if="!isOwnProfile">
-                : {{userName}}
-            </b></h1>
+            <h1>{{ $t('Strings.HQ_Views_Manage_Title') }}<b v-if="!isOwnProfile">
+                    : {{ userName }}
+                </b></h1>
         </div>
         <div class="extra-margin-bottom">
             <div class="profile">
                 <ul class="nav nav-tabs extra-margin-bottom">
-                    <li class="nav-item"
-                        v-if="!forceChangePassword"
-                        v-bind:class=" {'active': currentTab == 'account'}" >
-                        <a class="nav-link"
-                            id="profile"
-                            v-bind:href="getUrl('Manage')">{{$t('Pages.AccountManage_Profile')}}</a>
+                    <li class="nav-item" v-if="!forceChangePassword" v-bind:class="{ 'active': currentTab == 'account' }">
+                        <a class="nav-link" id="profile" v-bind:href="getUrl('Manage')">{{ $t('Pages.AccountManage_Profile')
+                        }}</a>
                     </li>
-                    <li class="nav-item"
-                        v-if="showWorkspaces && !forceChangePassword"
-                        v-bind:class=" {'active': currentTab == 'workspaces'}" >
-                        <a class="nav-link"
-                            id="profile"
-                            v-bind:href="getUrl(`Workspaces`)">{{$t('Workspaces.UserWorkspacesTab')}}</a>
+                    <li class="nav-item" v-if="showWorkspaces && !forceChangePassword"
+                        v-bind:class="{ 'active': currentTab == 'workspaces' }">
+                        <a class="nav-link" id="profile" v-bind:href="getUrl(`Workspaces`)">{{
+                            $t('Workspaces.UserWorkspacesTab') }}</a>
                     </li>
-                    <li class="nav-item"
-                        v-if="canChangePassword"
-                        v-bind:class="{'active': currentTab=='password'}">
-                        <a class="nav-link"
-                            id="password"
-                            v-bind:href="getUrl('ChangePassword')">{{$t('Pages.AccountManage_ChangePassword')}}</a>
+                    <li class="nav-item" v-if="canChangePassword" v-bind:class="{ 'active': currentTab == 'password' }">
+                        <a class="nav-link" id="password" v-bind:href="getUrl('ChangePassword')">{{
+                            $t('Pages.AccountManage_ChangePassword') }}</a>
                     </li>
-                    <li class="nav-item"
-                        v-if="userInfo.canSetupTwoFactorAuthentication && !forceChangePassword"
-                        v-bind:class="{'active': currentTab=='two-factor'}">
-                        <a class="nav-link"
-                            id="two-factor"
-                            v-bind:href="getUrl('TwoFactorAuthentication')">{{$t('Pages.AccountManage_TwoFactorAuth')}}</a>
+                    <li class="nav-item" v-if="userInfo.canSetupTwoFactorAuthentication && !forceChangePassword"
+                        v-bind:class="{ 'active': currentTab == 'two-factor' }">
+                        <a class="nav-link" id="two-factor" v-bind:href="getUrl('TwoFactorAuthentication')">{{
+                            $t('Pages.AccountManage_TwoFactorAuth') }}</a>
                     </li>
-                    <li class="nav-item"
-                        v-if="canGenerateToken && !forceChangePassword"
-                        v-bind:class="{'active': currentTab=='api-token'}">
-                        <a class="nav-link"
-                            id="two-factor"
-                            v-bind:href="getUrl('ApiTokens')">{{$t('Pages.AccountManage_ApiTokens')}}</a>
+                    <li class="nav-item" v-if="canGenerateToken && !forceChangePassword"
+                        v-bind:class="{ 'active': currentTab == 'api-token' }">
+                        <a class="nav-link" id="two-factor" v-bind:href="getUrl('ApiTokens')">{{
+                            $t('Pages.AccountManage_ApiTokens') }}</a>
                     </li>
                 </ul>
 
@@ -74,10 +65,11 @@
 </template>
 <script>
 export default {
-    props:{
+    props: {
         role: String,
         successMessage: String,
         isOwnProfile: Boolean,
+        isRestricted: Boolean,
         forceChangePassword: {
             type: Boolean,
             required: false,
@@ -94,13 +86,13 @@ export default {
             type: String,
             required: true,
         },
-        canGenerateToken:{
-            type:Boolean,
+        canGenerateToken: {
+            type: Boolean,
             require: false,
             default: false,
         },
     },
-    computed:{
+    computed: {
         model() {
             return this.$config.model
         },
@@ -136,7 +128,7 @@ export default {
         },
         referrerUrl() {
             const returnUrl = this.$route.query['returnUrl']
-            if(returnUrl != null && returnUrl.startsWith('/')) {
+            if (returnUrl != null && returnUrl.startsWith('/')) {
                 return returnUrl
             }
 
@@ -144,13 +136,13 @@ export default {
         },
 
     },
-    methods:{
-        getUrl: function(baseUrl){
-            if(this.isOwnProfile)
+    methods: {
+        getUrl: function (baseUrl) {
+            if (this.isOwnProfile)
                 return `./${baseUrl}`
-            else{
+            else {
                 const returnUrl = this.$route.query['returnUrl']
-                if(returnUrl != null && returnUrl.startsWith('/')) {
+                if (returnUrl != null && returnUrl.startsWith('/')) {
                     return `../${baseUrl}/${this.userId}?returnUrl=${encodeURIComponent(returnUrl)}`
                 }
                 return `../${baseUrl}/${this.userId}`

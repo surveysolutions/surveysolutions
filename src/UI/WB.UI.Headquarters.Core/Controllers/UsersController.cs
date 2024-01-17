@@ -24,6 +24,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.Authentication;
+using WB.UI.Headquarters.Code.UsersManagement;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Models.Users;
@@ -42,6 +43,7 @@ namespace WB.UI.Headquarters.Controllers
         private IOptions<HeadquartersConfig> options;
         private readonly IWorkspacesStorage workspaces;
         private readonly ITokenProvider tokenProvider;
+        private readonly UsersManagementSettings usersManagementSettings;
         
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
 
@@ -54,7 +56,8 @@ namespace WB.UI.Headquarters.Controllers
             UrlEncoder urlEncoder,
             IOptions<HeadquartersConfig> options,
             IWorkspacesStorage workspaces,
-            ITokenProvider tokenProvider)
+            ITokenProvider tokenProvider,
+            UsersManagementSettings usersManagementSettings)
         {
             this.authorizedUser = authorizedUser;
             this.userManager = userManager;
@@ -63,6 +66,7 @@ namespace WB.UI.Headquarters.Controllers
             this.options = options;
             this.workspaces = workspaces;
             this.tokenProvider = tokenProvider;
+            this.usersManagementSettings = usersManagementSettings;
         }
         
         [Authorize(Roles = "Administrator, Observer")]
@@ -275,6 +279,7 @@ namespace WB.UI.Headquarters.Controllers
                     TokenIssued = await this.tokenProvider.DoesTokenExist(user),
                     CanSetupTwoFactorAuthentication = HasPermissionsToSetupTwoFactorAuthentication(user),
                     IsRelinkAllowed = user.Profile?.IsRelinkAllowed() ?? false,
+                    IsRestricted = IsAccountRestricted(user.Id)
                 },
                 Api = new
                 {
@@ -365,6 +370,7 @@ namespace WB.UI.Headquarters.Controllers
                     CanGetApiToken = (userRole is UserRoles.Administrator or UserRoles.ApiUser) && tokenProvider.CanGenerate,
                     RecoveryCodes = string.Join(" ", RecoveryCodes),
                     CanSetupTwoFactorAuthentication =  tokenProvider.CanGenerate && HasPermissionsToSetupTwoFactorAuthentication(user),
+                    IsRestricted = IsAccountRestricted(user.Id)
                 },
                 Api = new
                 {
@@ -403,7 +409,6 @@ namespace WB.UI.Headquarters.Controllers
 
             return View(await GetUserInfo(user));
         }
-
 
         [HttpGet]
         [ObservingNotAllowed]
@@ -468,6 +473,7 @@ namespace WB.UI.Headquarters.Controllers
                     CanChangeWorkspacesList = authorizedUser.IsAdministrator && userRole is UserRoles.Headquarter or UserRoles.ApiUser or UserRoles.Supervisor,
                     CanGetApiToken = (userRole is UserRoles.Administrator or UserRoles.ApiUser) && tokenProvider.CanGenerate,
                     CanSetupTwoFactorAuthentication = tokenProvider.CanGenerate && HasPermissionsToSetupTwoFactorAuthentication(user),
+                    IsRestricted = IsAccountRestricted(user.Id)
                 },
                 Api = new
                 {
@@ -485,6 +491,12 @@ namespace WB.UI.Headquarters.Controllers
                     DeleteApiKEyUrl = Url.Action("DeleteApiKey")
                 }
             });
+        }
+
+        private bool IsAccountRestricted(Guid userId)
+        {
+            return userId == this.authorizedUser.Id 
+                   && usersManagementSettings.RestrictedUsersInLower.Contains(this.authorizedUser.UserName.ToLowerInvariant());
         }
 
         [HttpGet]
@@ -653,13 +665,23 @@ namespace WB.UI.Headquarters.Controllers
             if (userToUpdate.IsArchived)
                 this.ModelState.AddModelError(nameof(ChangePasswordModel.Password), FieldsAndValidations.CannotUpdate_CurrentUserIsArchived);
 
+            if (IsAccountRestricted(userToUpdate.Id) && !this.authorizedUser.PasswordChangeRequired)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new
+                {
+                    Message = FieldsAndValidations.RestrictedAccountMessage
+                });
+            }
+            
             if (model.UserId == this.authorizedUser.Id)
             {
-                bool isPasswordValid = !string.IsNullOrEmpty(model.OldPassword)
-                                       && await this.userManager.CheckPasswordAsync(userToUpdate,
-                                           model.OldPassword);
-                if (!isPasswordValid)
-                    this.ModelState.AddModelError(nameof(ChangePasswordModel.OldPassword), FieldsAndValidations.OldPasswordErrorMessage);
+                {
+                    bool isPasswordValid = !string.IsNullOrEmpty(model.OldPassword)
+                                           && await this.userManager.CheckPasswordAsync(userToUpdate,
+                                               model.OldPassword);
+                    if (!isPasswordValid)
+                        this.ModelState.AddModelError(nameof(ChangePasswordModel.OldPassword), FieldsAndValidations.OldPasswordErrorMessage);
+                }
             }
 
             if (this.ModelState.IsValid)
@@ -713,7 +735,7 @@ namespace WB.UI.Headquarters.Controllers
             if (!result.Succeeded)
             {
                 this.ModelState.AddModelError(nameof(UserModel.UserId),
-                    "Unable to release autolock");
+                    "Unable to release auto-lock");
             }
 
             return this.ModelState.ErrorsToJsonResult();
@@ -760,6 +782,22 @@ namespace WB.UI.Headquarters.Controllers
             if (!authorizedUser.IsAdministrator && !authorizedUser.IsHeadquarter && currentUser.IsLockedByHeadquaters != editModel.IsLockedByHeadquarters)
                 return this.Forbid();
 
+            if (IsAccountRestricted(editModel.UserId))
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new
+                {
+                    Message = FieldsAndValidations.RestrictedAccountMessage
+                });
+            }
+            
+            if (IsAccountRestricted(editModel.UserId))
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new
+                {
+                    Message = FieldsAndValidations.RestrictedAccountMessage
+                });
+            }
+
             if (this.ModelState.IsValid)
             {
                 currentUser.Email = editModel.Email;
@@ -805,7 +843,14 @@ namespace WB.UI.Headquarters.Controllers
             if (currentUser == null) return NotFound("User not found");
 
             if (!HasPermissionsToManageUser(currentUser)) return this.Forbid();
-
+            
+            if (IsAccountRestricted(currentUser.Id))
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new
+                {
+                    Message = FieldsAndValidations.RestrictedAccountMessage
+                });
+            }
             
             if (this.ModelState.IsValid)
             {
@@ -844,6 +889,14 @@ namespace WB.UI.Headquarters.Controllers
             if (currentUser == null) return NotFound("User not found");
 
             if (!HasPermissionsToSetupTwoFactorAuthentication(currentUser)) return this.Forbid();
+            
+            if (IsAccountRestricted(currentUser.Id))
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new
+                {
+                    Message = FieldsAndValidations.RestrictedAccountMessage
+                });
+            }
 
             if (this.ModelState.IsValid)
             {
@@ -866,6 +919,14 @@ namespace WB.UI.Headquarters.Controllers
             if (currentUser == null) return NotFound("User not found");
 
             if (!HasPermissionsToSetupTwoFactorAuthentication(currentUser)) return this.Forbid();
+            
+            if (IsAccountRestricted(currentUser.Id))
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new
+                {
+                    Message = FieldsAndValidations.RestrictedAccountMessage
+                });
+            }
 
             if (this.ModelState.IsValid)
             {
@@ -893,6 +954,14 @@ namespace WB.UI.Headquarters.Controllers
 
             if (!HasPermissionsToSetupTwoFactorAuthentication(currentUser)) return this.Forbid();
 
+            if (IsAccountRestricted(currentUser.Id))
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new
+                {
+                    Message = FieldsAndValidations.RestrictedAccountMessage
+                });
+            }
+            
             if (this.ModelState.IsValid)
             {
                 var isTwoFactorEnabled = await userManager.GetTwoFactorEnabledAsync(currentUser);
@@ -924,6 +993,14 @@ namespace WB.UI.Headquarters.Controllers
             if (currentUser == null) return NotFound("User not found");
 
             if (!HasPermissionsToSetupTwoFactorAuthentication(currentUser)) return this.Forbid();
+            
+            if (IsAccountRestricted(currentUser.Id))
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new
+                {
+                    Message = FieldsAndValidations.RestrictedAccountMessage
+                });
+            }
 
             if (currentUser.Role != UserRoles.ApiUser && currentUser.Role != UserRoles.Administrator)
             {
@@ -950,6 +1027,14 @@ namespace WB.UI.Headquarters.Controllers
             if (currentUser == null) return NotFound("User not found");
 
             if (!HasPermissionsToSetupTwoFactorAuthentication(currentUser)) return this.Forbid();
+            
+            if (IsAccountRestricted(currentUser.Id))
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new
+                {
+                    Message = FieldsAndValidations.RestrictedAccountMessage
+                });
+            }
 
             await this.tokenProvider.InvalidateBearerTokenAsync(currentUser);
 

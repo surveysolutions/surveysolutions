@@ -447,6 +447,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This account is restricted.
+        /// </summary>
+        public static string RestrictedAccount {
+            get {
+                return ResourceManager.GetString("RestrictedAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This account is restricted to perform this action.
+        /// </summary>
+        public static string RestrictedAccountMessage {
+            get {
+                return ResourceManager.GetString("RestrictedAccountMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Supervisor.
         /// </summary>
         public static string SupervisorFieldName {
