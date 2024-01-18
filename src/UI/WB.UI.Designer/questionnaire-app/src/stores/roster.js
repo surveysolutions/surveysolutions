@@ -67,7 +67,7 @@ export const useRosterStore = defineStore('roster', {
             }
 
             return commandCall('UpdateGroup', command).then(response => {
-                this.initialVariable = Object.assign({}, this.roster);
+                this.initialRoster = Object.assign({}, this.roster);
 
                 emitter.emit('rosterUpdated', {
                     itemId: this.roster.itemId,

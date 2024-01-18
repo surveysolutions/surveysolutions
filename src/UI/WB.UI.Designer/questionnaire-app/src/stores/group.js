@@ -52,7 +52,7 @@ export const useGroupStore = defineStore('group', {
             };
 
             return commandCall('UpdateGroup', command).then(response => {
-                this.initialVariable = Object.assign({}, this.group.group);
+                this.initialGroup = Object.assign({}, this.group.group);
 
                 emitter.emit('groupUpdated', {
                     itemId: this.group.group.id,
