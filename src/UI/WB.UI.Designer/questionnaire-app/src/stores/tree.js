@@ -1,10 +1,9 @@
 import { defineStore } from 'pinia';
-import { get } from '../services/apiService';
+import { get, commandCall } from '../services/apiService';
 import { newGuid } from '../helpers/guid';
 import { findIndex, isNull, isUndefined, find } from 'lodash';
 import { i18n } from '../plugins/localization';
 import { useCookies } from 'vue3-cookies';
-import { commandCall } from '../services/commandService';
 import emitter from '../services/emitter';
 
 export const useTreeStore = defineStore('tree', {

@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia';
-import { get } from '../services/apiService';
+import { get, commandCall } from '../services/apiService';
 import { newGuid } from '../helpers/guid';
 import { i18n } from '../plugins/localization';
-import { commandCall } from '../services/commandService';
 import emitter from '../services/emitter';
 import { findIndex } from 'lodash';
 import { useCookies } from 'vue3-cookies';

@@ -16,6 +16,7 @@
                         name: commentThread.entity.type.toLowerCase(),
                         params: {
                             entityId: commentThread.entity.itemId,
+                            chapterId: commentThread.entity.chapterId,
                         }
                     }">
                         <span v-if="commentThread.entity.type == 'Question'" class="icon"
@@ -88,6 +89,7 @@ export default {
     methods: {
         async fetch() {
             this.commentThreads = await this.commentsStore.getCommentThreads(this.questionnaireId);
+            //TODO: react to updates 
         },
     }
 }

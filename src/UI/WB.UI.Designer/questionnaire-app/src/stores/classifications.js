@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { each } from 'lodash';
 import { get, post, patch, del } from '../services/apiService';
 import { i18n } from '../plugins/localization';
-import { commandCall } from '../services/commandService';
+import { commandCall } from '../services/apiService';
 
 const baseUrl = '/api/';
 

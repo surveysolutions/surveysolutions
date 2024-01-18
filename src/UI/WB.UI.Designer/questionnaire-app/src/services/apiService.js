@@ -102,6 +102,10 @@ export function del(url, params) {
         });
 }
 
+export function commandCall(commandType, command) {
+    return post('/api/command', {type: commandType, command: JSON.stringify(command)});
+}
+
 function getHeaders() {
     return {
         'Content-Type': 'application/json',

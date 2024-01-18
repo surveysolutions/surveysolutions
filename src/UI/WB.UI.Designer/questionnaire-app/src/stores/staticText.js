@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
-import { commandCall } from '../services/commandService';
-import { get } from '../services/apiService';
+import { get, commandCall } from '../services/apiService';
 import emitter from '../services/emitter';
 
 export const useStaticTextStore = defineStore('staticText', {
