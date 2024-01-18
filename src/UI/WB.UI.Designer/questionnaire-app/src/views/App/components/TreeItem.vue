@@ -117,6 +117,7 @@ import { useGroupStore } from '../../../stores/group';
 import { useQuestionStore } from '../../../stores/question';
 import { useRosterStore } from '../../../stores/roster';
 import { useStaticTextStore } from '../../../stores/staticText';
+import { deleteStaticText } from '../../../services/staticTextService';
 import { useVariableStore } from '../../../stores/variable';
 import clickOutside from '../../../directives/clickOutside';
 import contextmenuOutside from '../../../directives/contextmenuOutside';
@@ -364,19 +365,19 @@ export default {
 
             params.callback = confirm => {
                 if (confirm) {
-                    this.staticTextStore
-                        .deleteStaticText(questionnaireId, itemIdToDelete)
-                        .then(response => {
-                            this.tree.remove(this.stat);
+                    deleteStaticText(questionnaireId, itemIdToDelete);
+                        // .then(response => {
+                        //     this.tree.remove(this.stat);
+                        //     //TODO: consider subscribe to event
 
-                            //questionnaireService.removeItemWithId(
-                            //    $scope.items,
-                            //    itemIdToDelete
-                            //);
-                            //$scope.resetSelection();
-                            //$rootScope.$emit('questionDeleted', itemIdToDelete);
-                            //removeSelectionIfHighlighted(itemIdToDelete);
-                        });
+                        //     //questionnaireService.removeItemWithId(
+                        //     //    $scope.items,
+                        //     //    itemIdToDelete
+                        //     //);
+                        //     //$scope.resetSelection();
+                        //     //$rootScope.$emit('questionDeleted', itemIdToDelete);
+                        //     //removeSelectionIfHighlighted(itemIdToDelete);
+                        // })
                 }
             };
 

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { get, commandCall } from '../services/apiService';
+import {getStaticText} from '../services/staticTextService';
 import emitter from '../services/emitter';
 
 export const useStaticTextStore = defineStore('staticText', {
@@ -14,87 +14,37 @@ export const useStaticTextStore = defineStore('staticText', {
         getInitialStaticText: state => state.initialStaticText
     },
     actions: {
+        setupListeners() {
+            emitter.on('staticTextUpdated', this.staticTextUpdated);
+            emitter.on('staticTextDeleted', this.staticTextDeleted);          
+        },
+        staticTextUpdated(payload) {
+            if ((this.staticText.id = payload.itemId)) {
+                this.setStaticTextData(payload);
+            }            
+        },
+        staticTextDeleted(payload) {
+            if ((this.staticText.id = payload.itemId)) {
+                this.clear();
+            }
+        },
         async fetchStaticTextData(questionnaireId, staticTextId) {
-            const data = await get(
-                '/api/questionnaire/editStaticText/' + questionnaireId,
-                {
-                    staticTextId: staticTextId
-                }
-            );
+            const data = await getStaticText(questionnaireId, staticTextId);            
+            
             this.questionnaireId = questionnaireId;
             this.setStaticTextData(data);
         },
-
-        setStaticTextData(data) {
-            this.staticText = data;
+        setStaticTextData(data) {            
             this.initialStaticText = Object.assign({}, data);
+            this.staticText = this.initialStaticText;
         },
-
         clear() {
             this.staticText = {};
             this.initialStaticText = {};
             this.questionnaireId = null;
         },
-
-        async saveStaticTextData() {
-            var command = {
-                questionnaireId: this.questionnaireId,
-                entityId: this.staticText.id,
-                text: this.staticText.text,
-                attachmentName: this.staticText.attachmentName,
-                enablementCondition: this.staticText.enablementCondition,
-                hideIfDisabled: this.staticText.hideIfDisabled,
-                validationConditions: this.staticText.validationConditions
-            };
-
-            var commandName = 'UpdateStaticText';
-            return commandCall(commandName, command).then(async response => {
-                this.initialStaticText = Object.assign({}, this.staticText);
-
-                emitter.emit('staticTextUpdated', {
-                    itemId: this.staticText.id,
-                    text: this.staticText.text,
-                    attachmentName: this.staticText.attachmentName,
-
-                    hasCondition: this.hasEnablementConditions(this.staticText),
-                    hasValidation: this.hasValidations(this.staticText),
-                    hideIfDisabled: this.staticText.hideIfDisabled
-                });
-            });
-        },
-
-        hasEnablementConditions(staticText) {
-            return (
-                staticText.enablementCondition !== null &&
-                /\S/.test(staticText.enablementCondition)
-            );
-        },
-
-        hasValidations(staticText) {
-            return staticText.validationConditions.length > 0;
-        },
-
-        //....
-
         discardChanges() {
             Object.assign(this.staticText, this.initialStaticText);
-        },
-
-        deleteStaticText(questionnaireId, itemId) {
-            var command = {
-                questionnaireId: questionnaireId,
-                entityId: itemId
-            };
-
-            return commandCall('DeleteStaticText', command).then(result => {
-                if ((this.staticText.id = itemId)) {
-                    this.clear();
-                }
-
-                emitter.emit('staticTextDeleted', {
-                    itemId: itemId
-                });
-            });
-        }
+        },        
     }
 });

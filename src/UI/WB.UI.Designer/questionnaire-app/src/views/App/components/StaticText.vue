@@ -22,7 +22,7 @@
                     {{
                         $t('QuestionnaireEditor.StaticTextAttachmentName')
                     }}&nbsp;
-                    <help key="attachmentName" />
+                    <help link="attachmentName" />
                 </label><br />
                 <input id="edit-static-attachment-name" type="text" class="form-control"
                     v-model="activeStaticText.attachmentName" spellcheck="false" maxlength="32" />
@@ -49,7 +49,7 @@
                         'hide-if-disabled': activeStaticText.hideIfDisabled
                     }"></div>
                     <label>{{ $t('QuestionnaireEditor.EnablingCondition') }}
-                        <help key="conditionExpression" />
+                        <help link="conditionExpression" />
                     </label>
 
                     <input type="checkbox" class="wb-checkbox" disabled="disabled" checked="checked"
@@ -65,7 +65,7 @@
                         : ''
                         "></span>
                         {{ $t('QuestionnaireEditor.HideIfDisabled') }}
-                        <help key="hideIfDisabled" />
+                        <help link="hideIfDisabled" />
                     </label>
                     <ExpressionEditor v-model="activeStaticText.enablementCondition" />
 
@@ -80,12 +80,12 @@
                 </div>
             </div>
 
-            <div class="form-group validation-group" v-for="(validation,
-                index) in activeStaticText.validationConditions" :id="'validationCondition' + index">
+            <div class="form-group validation-group" v-for="(validation, index) in activeStaticText.validationConditions"
+                :id="'validationCondition' + index">
                 <div class="validation-group-marker"></div>
                 <label>{{ $t('QuestionnaireEditor.ValidationCondition') }}
                     {{ index + 1 }}
-                    <help key="validationExpression" />
+                    <help link="validationExpression" />
                 </label>
 
                 <input :id="'cb-isWarning' + index" type="checkbox" class="wb-checkbox" v-model="validation.severity"
@@ -149,7 +149,10 @@
 
 <script>
 import { useCommentsStore } from '../../../stores/comments';
+
 import { useStaticTextStore } from '../../../stores/staticText';
+import { deleteStaticText, updateStaticText } from '../../../services/staticTextService';
+
 import { createQuestionForDeleteConfirmationPopup } from '../../../services/utilityService'
 import { setFocusIn } from '../../../services/utilityService'
 
@@ -235,14 +238,13 @@ export default {
 
             this.activeStaticText = this.staticTextStore.getStaticText;
             this.shouldUserSeeReloadDetailsPromt = false;
+            this.showEnablingConditions = this.activeStaticText.enablementCondition ? true : false;
         },
         async saveStaticText() {
             if (this.dirty == false) return;
-
             if (!this.valid) return;
 
-            this.staticTextStore.saveStaticTextData();
-
+            updateStaticText(this.questionnaireId, this.activeStaticText);
             this.dirty = false;
         },
 
@@ -263,7 +265,7 @@ export default {
 
             params.callback = confirm => {
                 if (confirm) {
-                    this.staticTextStore.deleteStaticText(questionnaireId, itemIdToDelete);
+                    deleteStaticText(questionnaireId, itemIdToDelete);
                 }
             };
 

@@ -417,8 +417,8 @@ export const useTreeStore = defineStore('tree', {
             staticText.text = data.text;
             staticText.attachmentName = data.attachmentName;
 
-            staticText.hasValidation = data.hasValidation;
-            staticText.hasCondition = data.hasCondition;
+            staticText.hasValidation = data.validationConditions.length > 0;
+            staticText.hasCondition = data.enablementCondition !== null && /\S/.test(data.enablementCondition);
             staticText.hideIfDisabled = data.hideIfDisabled;
         },
 

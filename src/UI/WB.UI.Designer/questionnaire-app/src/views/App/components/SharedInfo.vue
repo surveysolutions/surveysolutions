@@ -66,7 +66,7 @@
                                         'SettingsQuestionnaireVariable'
                                             | i18next
                                     }}
-                                    <help key="questionnaireVariableName" />
+                                    <help link="questionnaireVariableName" />
                                 </label>
                                 <input
                                     id="questionnaireVariable"
@@ -94,7 +94,7 @@
                                         'SettingsHideIfDisabled' | i18next
                                     }}</label
                                 >
-                                <help key="hideIfDisabled" />
+                                <help link="hideIfDisabled" />
                             </div>
                             <div class="form-group">
                                 <button
