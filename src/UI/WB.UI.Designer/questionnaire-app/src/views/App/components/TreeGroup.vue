@@ -4,13 +4,13 @@
             ? {
                 name: 'group',
                 params: {
-                    groupId: item.itemId
+                    entityId: item.itemId
                 }
             }
             : {
                 name: 'roster',
                 params: {
-                    rosterId: item.itemId
+                    entityId: item.itemId
                 }
             }
             ">

@@ -4,7 +4,7 @@
             $router.push({
                 name: 'group',
                 params: {
-                    groupId: chapterId,
+                    entityId: chapterId,
                     chapterId: chapterId
                 }
             })
@@ -25,7 +25,7 @@
                 <router-link :id="'group-' + chapterId" class="chapter-title-text" :to="{
                     name: 'group',
                     params: {
-                        groupId: chapterId,
+                        entityId: chapterId,
                         chapterId: chapterId
                     }
                 }">
@@ -321,7 +321,7 @@ export default {
         itemTemplate(itemType) {
             return 'Tree' + itemType;
         },
-        addQuestion(chapter) {            
+        addQuestion(chapter) {
             this.treeStore.addQuestion(
                 chapter,
                 null,
@@ -332,7 +332,7 @@ export default {
                     this.$router.push({
                         name: 'question',
                         params: {
-                            questionId: question.itemId
+                            entityId: question.itemId
                         }
                     });
                 }
@@ -346,7 +346,7 @@ export default {
                 this.$router.push({
                     name: 'group',
                     params: {
-                        groupId: group.itemId
+                        entityId: group.itemId
                     }
                 });
             });
@@ -359,7 +359,7 @@ export default {
                 this.$router.push({
                     name: 'roster',
                     params: {
-                        rosterId: roster.itemId
+                        entityId: roster.itemId
                     }
                 });
             });
@@ -375,7 +375,7 @@ export default {
                     this.$router.push({
                         name: 'statictext',
                         params: {
-                            statictextId: statictext.itemId
+                            entityId: statictext.itemId
                         }
                     });
                 }
@@ -392,7 +392,7 @@ export default {
                     this.$router.push({
                         name: 'variable',
                         params: {
-                            variableId: variable.itemId
+                            entityId: variable.itemId
                         }
                     });
                 }
@@ -405,7 +405,7 @@ export default {
                     this.$router.push({
                         name: result.itemType,
                         params: {
-                            itemId: result.itemId
+                            entityId: result.itemId
                         }
                     });
             });
@@ -476,7 +476,7 @@ export default {
                 this.$router.push({
                     name: 'group',
                     params: {
-                        groupId: this.chapterId,
+                        entityId: this.chapterId,
                         chapterId: this.chapterId
                     }
                 });

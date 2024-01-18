@@ -15,12 +15,7 @@
                     <router-link class="reference-item" :id="commentThread.entity.itemId" :to="{
                         name: commentThread.entity.type.toLowerCase(),
                         params: {
-                            statictextId: commentThread.entity.itemId,
-                            variableId: commentThread.entity.itemId,
-                            groupId: commentThread.entity.itemId,
-                            rosterId: commentThread.entity.itemId,
-
-                            questionId: commentThread.entity.itemId,
+                            entityId: commentThread.entity.itemId,
                         }
                     }">
                         <span v-if="commentThread.entity.type == 'Question'" class="icon"
@@ -93,7 +88,7 @@ export default {
     methods: {
         async fetch() {
             this.commentThreads = await this.commentsStore.getCommentThreads(this.questionnaireId);
-        },        
+        },
     }
 }
 </script>

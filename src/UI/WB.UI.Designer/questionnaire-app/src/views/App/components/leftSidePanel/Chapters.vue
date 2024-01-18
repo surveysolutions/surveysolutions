@@ -12,7 +12,6 @@
                     @after-drop="treeNodeDropped">
                     <template #default="{ node, stat }">
 
-
                         <li class="chapter-panel-item" :class="{ current: isCurrentChapter(node) }"
                             v-contextmenu="'chapter-context-menu-' + node.itemId">
                             <div class="holder" @click="editChapter(node)">
@@ -23,7 +22,7 @@
                                         name: 'group',
                                         params: {
                                             chapterId: node.itemId,
-                                            groupId: node.itemId,
+                                            entityId: node.itemId,
                                         }
                                     }">
                                         <span v-dompurify-html="node.title"></span>
@@ -148,7 +147,7 @@ export default {
                 name: 'group',
                 params: {
                     chapterId: chapter.itemId,
-                    groupId: chapter.itemId
+                    entityId: chapter.itemId
                 }
             });
 
@@ -188,7 +187,7 @@ export default {
                                     name: 'group',
                                     params: {
                                         chapterId: cover.itemId,
-                                        groupId: cover.itemId
+                                        entityId: cover.itemId
                                     }
                                 });
                             }
@@ -216,7 +215,7 @@ export default {
                     name: 'group',
                     params: {
                         chapterId: section.itemId,
-                        groupId: section.itemId
+                        entityId: section.itemId
                     }
                 });
 

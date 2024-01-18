@@ -215,7 +215,7 @@ export default {
                     this.$router.push({
                         name: 'question',
                         params: {
-                            questionId: question.itemId
+                            entityId: question.itemId
                         }
                     });
                 }
@@ -233,7 +233,7 @@ export default {
                     this.$router.push({
                         name: 'group',
                         params: {
-                            groupId: group.itemId
+                            entityId: group.itemId
                         }
                     });
                 }
@@ -251,7 +251,7 @@ export default {
                     this.$router.push({
                         name: 'roster',
                         params: {
-                            rosterId: roster.itemId
+                            entityId: roster.itemId
                         }
                     });
                 }
@@ -269,7 +269,7 @@ export default {
                     this.$router.push({
                         name: 'statictext',
                         params: {
-                            statictextId: statictext.itemId
+                            entityId: statictext.itemId
                         }
                     });
                 }
@@ -287,7 +287,7 @@ export default {
                     this.$router.push({
                         name: 'variable',
                         params: {
-                            variableId: variable.itemId
+                            entityId: variable.itemId
                         }
                     });
                 }
@@ -319,7 +319,7 @@ export default {
                 this.deleteStaticText();
             else if (this.item.itemType == 'Variable')
                 this.deleteVariable();
-            else if (this.isGroup) 
+            else if (this.isGroup)
                 this.deleteGroup();
         },
 
@@ -458,7 +458,7 @@ export default {
                     this.$router.push({
                         name: result.itemType,
                         params: {
-                            itemId: result.itemId
+                            entityId: result.itemId
                         }
                     });
             });

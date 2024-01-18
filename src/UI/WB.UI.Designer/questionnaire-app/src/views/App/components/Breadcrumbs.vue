@@ -7,21 +7,21 @@
                     <router-link v-if="index == 0" :to="{
                         name: 'group',
                         params: {
-                            groupId: breadcrumb.id
+                            entityId: breadcrumb.id
                         }
                     }">{{ breadcrumb.title }}</router-link>
 
                     <router-link v-if="index != 0 && !breadcrumb.isRoster" :to="{
                         name: 'group',
                         params: {
-                            groupId: breadcrumb.id
+                            entityId: breadcrumb.id
                         }
                     }">{{ breadcrumb.title }}</router-link>
 
                     <router-link v-if="index != 0 && breadcrumb.isRoster" :to="{
                         name: 'roster',
                         params: {
-                            rosterId: breadcrumb.id
+                            entityId: breadcrumb.id
                         }
                     }">{{ breadcrumb.title }}</router-link>
                 </li>

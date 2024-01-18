@@ -3,7 +3,7 @@
         <router-link class="item-body" :id="item.itemId" :to="{
             name: 'question',
             params: {
-                questionId: item.itemId
+                entityId: item.itemId
             }
         }">
             <div class="item-text">
