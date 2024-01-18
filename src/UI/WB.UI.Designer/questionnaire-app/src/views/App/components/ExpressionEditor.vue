@@ -130,6 +130,8 @@ export default {
                     session.bgTokenizer.start(0);
                 });
 
+                //TODO: for linked add "@current"
+
                 ace.config.loadModule('ace/ext/language_tools', function () {
                     var variablesCompletor =
                     {
