@@ -31,7 +31,7 @@
                 <div class="foldback-button-region" @click.stop="foldback()">
                     <div class="foldback-button"></div>
                 </div>
-                <Macroses></Macroses>
+                <Macros></Macros>
             </div>
         </div>
     </Transition>
@@ -176,7 +176,7 @@ import Categories from './leftSidePanel/Categories.vue';
 import Chapters from './leftSidePanel/Chapters.vue';
 import Comments from './leftSidePanel/Comments.vue';
 import LookupTables from './leftSidePanel/LookupTables.vue'
-import Macroses from './leftSidePanel/Macroses.vue'
+import Macros from './leftSidePanel/Macros.vue'
 import Metadata from './leftSidePanel/Metadata.vue'
 import Scenarios from './leftSidePanel/Scenarios.vue'
 import Translations from './leftSidePanel/Translations.vue'
@@ -189,7 +189,7 @@ export default {
         Chapters,
         Comments,
         LookupTables,
-        Macroses,
+        Macros,
         Metadata,
         Scenarios,
         Translations

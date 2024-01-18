@@ -83,7 +83,6 @@ export default {
     },
     setup() {
         const commentsStore = useCommentsStore();
-
         return {
             commentsStore
         };
@@ -94,8 +93,7 @@ export default {
     methods: {
         async fetch() {
             this.commentThreads = await this.commentsStore.getCommentThreads(this.questionnaireId);
-        },
-        showCommentsAndNavigateTo(entity) { },
+        },        
     }
 }
 </script>
