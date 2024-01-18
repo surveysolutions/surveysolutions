@@ -10,7 +10,9 @@ export const useVerificationStore = defineStore('verification', {
     },
     actions: {
         async fetchVerificationStatus(questionnaireId) {
-            const status = await get(questionnaireId);
+            const status = await get(
+                '/api/questionnaire/verify/' + questionnaireId
+            );
             this.setVerificationStatus(status);
         },
 
