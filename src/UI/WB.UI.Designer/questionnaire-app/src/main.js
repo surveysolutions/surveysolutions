@@ -16,6 +16,8 @@ import ConfirmDialog from './plugins/confirm';
 import PerfectScrollbar from 'vue3-perfect-scrollbar';
 import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css';
 
+import VueUploadComponent from 'vue-upload-component';
+
 //import * as uiv from 'uiv';
 
 import directives from './directives/';
@@ -40,6 +42,7 @@ vue.use(i18n);
 //vue.use(uiv);
 vue.use(PerfectScrollbar);
 vue.use(VueDOMPurifyHTML);
+vue.component('file-upload', VueUploadComponent);
 
 const options = {
     color: "#29d",
