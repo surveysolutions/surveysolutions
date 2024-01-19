@@ -1,6 +1,7 @@
 import { mande } from 'mande';
 import { useBlockUIStore } from '../stores/blockUI';
 import { useProgressStore } from '../stores/progress';
+import { isNull } from 'lodash';
 
 const api = mande('/' /*, globalOptions*/);
 
@@ -65,7 +66,7 @@ export function patch(url, params) {
     const blockUI = useBlockUIStore();
 
     const headers = getHeaders();
-    
+
     blockUI.start();
     progressStore.start();
 
@@ -103,7 +104,42 @@ export function del(url, params) {
 }
 
 export function commandCall(commandType, command) {
-    return post('/api/command', {type: commandType, command: JSON.stringify(command)});
+    return post('/api/command', {
+        type: commandType,
+        command: JSON.stringify(command)
+    });
+}
+
+export function upload(url, file, command) {
+    const progressStore = useProgressStore();
+    const blockUI = useBlockUIStore();
+
+    progressStore.start();
+    blockUI.start();
+
+    const api = mande(url, { headers: { 'Content-Type': null } });
+
+    const formData = new FormData();
+    formData.append('file', isNull(file) ? '' : file);
+    formData.append(
+        'command',
+        isNull(command) ? null : JSON.stringify(command)
+    );
+
+    return api
+        .post(formData)
+        .then(response => {
+            blockUI.stop();
+            progressStore.stop();
+
+            return response;
+        })
+        .catch(err => {
+            blockUI.stop();
+            progressStore.stop();
+
+            throw err;
+        });
 }
 
 function getHeaders() {
