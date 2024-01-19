@@ -1,12 +1,11 @@
 import { defineStore } from 'pinia';
-import {getStaticText} from '../services/staticTextService';
+import { getStaticText } from '../services/staticTextService';
 import emitter from '../services/emitter';
 
 export const useStaticTextStore = defineStore('staticText', {
     state: () => ({
         staticText: {},
-        initialStaticText: {},
-        questionnaireId: null
+        initialStaticText: {}
     }),
     getters: {
         getStaticText: state => state.staticText,
@@ -21,7 +20,7 @@ export const useStaticTextStore = defineStore('staticText', {
         staticTextUpdated(payload) {
             if ((this.staticText.id = payload.itemId)) {
                 this.setStaticTextData(payload);
-            }            
+            }
         },
         staticTextDeleted(payload) {
             if ((this.staticText.id = payload.itemId)) {
@@ -30,8 +29,6 @@ export const useStaticTextStore = defineStore('staticText', {
         },
         async fetchStaticTextData(questionnaireId, staticTextId) {
             const data = await getStaticText(questionnaireId, staticTextId);            
-            
-            this.questionnaireId = questionnaireId;
             this.setStaticTextData(data);
         },
         setStaticTextData(data) {            
@@ -41,7 +38,6 @@ export const useStaticTextStore = defineStore('staticText', {
         clear() {
             this.staticText = {};
             this.initialStaticText = {};
-            this.questionnaireId = null;
         },
         discardChanges() {
             Object.assign(this.staticText, this.initialStaticText);

@@ -1,24 +1,24 @@
 import { get, commandCall } from '../services/apiService';
 import emitter from './emitter';
 
-export function deleteStaticText(questionnaireId, itemId) {
+export function deleteStaticText(questionnaireId, entityId) {
     var command = {
         questionnaireId: questionnaireId,
-        entityId: itemId
+        entityId: entityId
     };
 
     return commandCall('DeleteStaticText', command).then(result => {
         emitter.emit('staticTextDeleted', {
-            itemId: itemId
+            itemId: entityId
         });
     });
 }
 
-export function getStaticText(questionnaireId, staticTextId) {
-    const data = get(
+export async function getStaticText(questionnaireId, entityId) {
+    const data = await get(
         '/api/questionnaire/editStaticText/' + questionnaireId,
         {
-            staticTextId: staticTextId
+            staticTextId: entityId
         }
     );
     return data;

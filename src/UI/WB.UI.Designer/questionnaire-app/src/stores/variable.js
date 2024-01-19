@@ -1,91 +1,44 @@
 import { defineStore } from 'pinia';
-import { get, commandCall } from '../services/apiService';
+import { getVariable } from '../services/variableService';
 import emitter from '../services/emitter';
 
 export const useVariableStore = defineStore('variable', {
     state: () => ({
-        data: {},
-        initialVariable: {},
-        questionnaireId: null
+        variable: {},
+        initialVariable: {}
     }),
     getters: {
-        getData: state => state.data
+        getData: state => state.variable
     },
     actions: {
+        setupListeners() {
+            emitter.on('variableUpdated', this.variableUpdated);
+            emitter.on('variableDeleted', this.variableDeleted);          
+        },
+        variableUpdated(payload) {
+            if ((this.variable.id = payload.itemId)) {
+                this.setVariableData(payload);
+            }
+        },
+        variableDeleted(payload) {
+            if ((this.variable.id = payload.itemId)) {
+                this.clear();
+            }
+        },
         async fetchVarableData(questionnaireId, variableId) {
-            const data = await get(
-                '/api/questionnaire/editVariable/' + questionnaireId,
-                {
-                    variableId: variableId
-                }
-            );
-            this.questionnaireId = questionnaireId;
+            const data = await getVariable(questionnaireId, variableId);
             this.setVariableData(data);
         },
-
         setVariableData(data) {
-            this.data = data;
             this.initialVariable = Object.assign({}, data);
+            this.variable = this.initialVariable;            
         },
-
         clear() {
-            this.data = {};
+            this.variable = {};
             this.initialVariable = {};
-            this.questionnaireId = null;
-        },
-
-        saveVariableData() {
-            var command = {
-                questionnaireId: this.questionnaireId,
-                entityId: this.data.id,
-                variableData: {
-                    expression: this.data.expression,
-                    name: this.data.variable,
-                    type: this.data.type,
-                    label: this.data.label,
-                    doNotExport: this.data.doNotExport
-                }
-            };
-
-            return commandCall('UpdateVariable', command).then(response => {
-                this.initialVariable = Object.assign({}, this.data);
-
-                emitter.emit('variableUpdated', {
-                    itemId: this.data.id,
-                    name: this.data.variable,
-                    label: this.data.label,
-                    type: this.data.type,
-                    doNotExport: this.data.doNotExport
-                });
-            });
-        },
-
-        deleteVariable(questionnaireId, itemId) {
-            var command = {
-                questionnaireId: questionnaireId,
-                entityId: itemId
-            };
-
-            return commandCall('DeleteVariable', command).then(response => {
-                if ((this.data.id = itemId)) {
-                    this.clear();
-                }
-
-                emitter.emit('variableDeleted', {
-                    itemId: itemId
-                });
-            });
-        },
-
+        },        
         discardChanges() {
-            Object.assign(this.data, this.initialVariable);
-            //this.data = Object.assign({}, this.initialVariable);
-
-            //this.data.expression = this.initialVariable.expression;
-            //this.data.variable = this.initialVariable.variable;
-            //this.data.type = this.initialVariable.type;
-            //this.data.label = this.initialVariable.label;
-            //this.data.doNotExport = this.initialVariable.doNotExport;
+            Object.assign(this.variable, this.initialVariable);            
         }
     }
 });

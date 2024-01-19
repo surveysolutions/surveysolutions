@@ -116,9 +116,13 @@ import { useTreeStore } from '../../../stores/tree';
 import { useGroupStore } from '../../../stores/group';
 import { useQuestionStore } from '../../../stores/question';
 import { useRosterStore } from '../../../stores/roster';
+
 import { useStaticTextStore } from '../../../stores/staticText';
 import { deleteStaticText } from '../../../services/staticTextService';
+
 import { useVariableStore } from '../../../stores/variable';
+import { deleteVariable } from '../../../services/variableService';
+
 import clickOutside from '../../../directives/clickOutside';
 import contextmenuOutside from '../../../directives/contextmenuOutside';
 import { createQuestionForDeleteConfirmationPopup } from '../../../services/utilityService';
@@ -398,19 +402,18 @@ export default {
 
             params.callback = confirm => {
                 if (confirm) {
-                    this.variableStore
-                        .deleteVariable(questionnaireId, itemIdToDelete)
-                        .then(response => {
-                            this.tree.remove(this.stat);
+                    deleteVariable(questionnaireId, itemIdToDelete);
+                        // .then(response => {
+                        //     this.tree.remove(this.stat);
 
-                            //questionnaireService.removeItemWithId(
-                            //    $scope.items,
-                            //    itemIdToDelete
-                            //);
-                            //$scope.resetSelection();
-                            //$rootScope.$emit('questionDeleted', itemIdToDelete);
-                            //removeSelectionIfHighlighted(itemIdToDelete);
-                        });
+                        //     //questionnaireService.removeItemWithId(
+                        //     //    $scope.items,
+                        //     //    itemIdToDelete
+                        //     //);
+                        //     //$scope.resetSelection();
+                        //     //$rootScope.$emit('questionDeleted', itemIdToDelete);
+                        //     //removeSelectionIfHighlighted(itemIdToDelete);
+                        // });
                 }
             };
 

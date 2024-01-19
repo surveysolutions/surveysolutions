@@ -98,6 +98,7 @@
 
 <script>
 import { useVariableStore } from '../../../stores/variable';
+import { updateVariable, deleteVariable } from '../../../services/variableService';
 import { useCommentsStore } from '../../../stores/comments';
 import { createQuestionForDeleteConfirmationPopup } from '../../../services/utilityService'
 import { setFocusIn } from '../../../services/utilityService'
@@ -176,7 +177,7 @@ export default {
             this.activeVariable = this.variableStore.getData;
         },
         saveVariable() {
-            this.variableStore.saveVariableData();
+            updateVariable(this.questionnaireId, this.activeVariable);
             this.dirty = false;
         },
         cancel() {
@@ -199,7 +200,7 @@ export default {
 
             params.callback = confirm => {
                 if (confirm) {
-                    this.variableStore.deleteVariable(questionnaireId, itemIdToDelete);
+                    deleteVariable(questionnaireId, itemIdToDelete);
                 }
             };
 
