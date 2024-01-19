@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { get, commandCall } from '../services/apiService';
+import { addStaticText } from '../services/staticTextService';
 import { newGuid } from '../helpers/guid';
 import { findIndex, isNull, isUndefined, find } from 'lodash';
 import { i18n } from '../plugins/localization';
@@ -204,7 +205,8 @@ export const useTreeStore = defineStore('tree', {
                 command.index = index;
             }
 
-            return commandCall('AddStaticText', command).then(function(result) {
+            //TODO: migrate logic to service
+            return addStaticText('AddStaticText', command).then(function(result) {
                 parent.items.splice(index, 0, staticText);
                 callback(staticText, parent, index);
             });
@@ -431,19 +433,21 @@ export const useTreeStore = defineStore('tree', {
         },
 
         groupUpdated(data) {
-            const itemId = data.itemId.replaceAll('-', '');
+            const itemId = data.id.replaceAll('-', '');
+            const hasCondition = data.enablementCondition !== null && /\S/.test(data.enablementCondition)
             const chapter = this.getChapterData;
+            
             if (chapter.itemId === itemId) {
                 chapter.title = data.title;
-                chapter.hasCondition = data.hasCondition;
+                chapter.hasCondition = hasCondition;
                 chapter.hideIfDisabled = data.hideIfDisabled;
             }
 
             var group = this.findTreeItem(itemId);
             if (isNull(group) || isUndefined(group)) return;
             group.title = data.title;
-            group.variable = data.variable;
-            group.hasCondition = data.hasCondition;
+            group.variable = data.variableName;
+            group.hasCondition = hasCondition;
             group.hideIfDisabled = data.hideIfDisabled;
         },
 

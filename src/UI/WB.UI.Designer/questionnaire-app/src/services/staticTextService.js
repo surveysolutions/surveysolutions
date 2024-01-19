@@ -24,6 +24,14 @@ export async function getStaticText(questionnaireId, entityId) {
     return data;
 }
 
+export function addStaticText(commandName, command) {
+    return commandCall(commandName, command).then(response => {
+        emitter.emit('staticTextAdded', {
+            //itemId: command.entityId
+        });
+    });
+}
+
 export function updateStaticText(questionnaireId, staticText) {
     var command = {
         questionnaireId: questionnaireId,
@@ -35,9 +43,7 @@ export function updateStaticText(questionnaireId, staticText) {
         validationConditions: staticText.validationConditions
     };
 
-    var commandName = 'UpdateStaticText';
-
-    return commandCall(commandName, command).then(response => {
+    return commandCall('UpdateStaticText', command).then(response => {
         emitter.emit('staticTextUpdated', {
             itemId: staticText.id,
             text: staticText.text,

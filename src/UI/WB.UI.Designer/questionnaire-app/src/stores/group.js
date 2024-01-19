@@ -1,89 +1,54 @@
 import { defineStore } from 'pinia';
-import { get, commandCall } from '../services/apiService';
+import { getGroup } from '../services/groupService';
 import emitter from '../services/emitter';
 
 export const useGroupStore = defineStore('group', {
     state: () => ({
-        group: {},
-        initialGroup: {},
-        questionnaireId: null
+        groupAndBreadcrumbs: {},
+        initialGroup: {}
     }),
     getters: {
-        getGroup: state => state.group.group,
-        getBreadcrumbs: state => state.group.breadcrumbs
+        getGroup: state => state.groupAndBreadcrumbs.group,
+        getBreadcrumbs: state => state.groupAndBreadcrumbs.breadcrumbs
     },
     actions: {
+        setupListeners() {
+            emitter.on('groupUpdated', this.groupUpdated);
+            emitter.on('groupDeleted', this.groupDeleted);          
+        },
+        groupUpdated(payload) {
+            if ((this.groupAndBreadcrumbs.id = payload.itemId)) {
+                this.setGroupData(payload);
+            }
+        },
+        groupDeleted(payload) {
+            if ((this.groupAndBreadcrumbs.id = payload.itemId)) {
+                this.clear();
+            }
+        },
         async fetchGroupData(questionnaireId, groupId) {
-            const data = await get(
-                '/api/questionnaire/editGroup/' + questionnaireId,
-                {
-                    groupId: groupId
-                }
-            );
-            this.questionnaireId = questionnaireId;
-            this.setGroupData(data);
+            const data = await getGroup(questionnaireId, groupId);
+            this.setGroupAndBreadcrumbsData(data);
+        },
+
+        //TODO: change service to return group and breadcrumbs in one oject
+        setGroupAndBreadcrumbsData(data) {
+            this.groupAndBreadcrumbs = data;
+            this.initialGroup = Object.assign({}, data.group);
         },
 
         setGroupData(data) {
-            this.group = data;
+            this.groupAndBreadcrumbs.group = data;
             this.initialGroup = Object.assign({}, data.group);
         },
 
         clear() {
-            this.group = {};
+            this.groupAndBreadcrumbs = {};
             this.initialGroup = {};
-            this.questionnaireId = null;
-        },
-
-        saveGroupData() {
-            var command = {
-                questionnaireId: this.questionnaireId,
-                groupId: this.group.group.id,
-                title: this.group.group.title,
-                condition: this.group.group.enablementCondition,
-                hideIfDisabled: this.group.group.hideIfDisabled,
-                isRoster: false,
-                rosterSizeQuestionId: null,
-                rosterSizeSource: 'Question',
-                rosterFixedTitles: null,
-                rosterTitleQuestionId: null,
-                variableName: this.group.group.variableName
-            };
-
-            return commandCall('UpdateGroup', command).then(response => {
-                this.initialGroup = Object.assign({}, this.group.group);
-
-                emitter.emit('groupUpdated', {
-                    itemId: this.group.group.id,
-                    variable: this.group.group.variableName,
-                    title: this.group.group.title,
-                    hasCondition:
-                        this.group.group.enablementCondition !== null &&
-                        /\S/.test(this.group.group.enablementCondition),
-                    hideIfDisabled: this.group.group.hideIfDisabled
-                });
-            });
-        },
+        },        
 
         discardChanges() {
-            Object.assign(this.group.group, this.initialGroup);
-        },
-
-        deleteGroup(questionnaireId, itemId) {
-            var command = {
-                questionnaireId: questionnaireId,
-                groupId: itemId
-            };
-
-            return commandCall('DeleteGroup', command).then(result => {
-                if ((this.group.group.id = itemId)) {
-                    this.clear();
-                }
-
-                emitter.emit('groupDeleted', {
-                    itemId: itemId
-                });
-            });
-        }
+            Object.assign(this.groupAndBreadcrumbs.group, this.initialGroup);
+        }        
     }
 });

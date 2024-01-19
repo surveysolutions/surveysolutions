@@ -29,9 +29,9 @@ export const useVariableStore = defineStore('variable', {
             const data = await getVariable(questionnaireId, variableId);
             this.setVariableData(data);
         },
-        setVariableData(data) {
+        setVariableData(data) {            
             this.initialVariable = Object.assign({}, data);
-            this.variable = this.initialVariable;            
+            this.variable = Object.assign({}, data);
         },
         clear() {
             this.variable = {};

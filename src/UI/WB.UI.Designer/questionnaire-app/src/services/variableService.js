@@ -1,4 +1,4 @@
-import { get, commandCall } from '../services/apiService';
+import { get, commandCall } from './apiService';
 import emitter from './emitter';
 
 export function deleteVariable(questionnaireId, entityId) {
@@ -37,9 +37,7 @@ export function updateVariable(questionnaireId, variable) {
         }
     };
 
-    var commandName = 'UpdateVariable';
-
-    return commandCall(commandName, command).then(response => {
+    return commandCall('UpdateVariable', command).then(response => {
         emitter.emit('variableUpdated', {
             itemId: variable.id,
             name: variable.variable,

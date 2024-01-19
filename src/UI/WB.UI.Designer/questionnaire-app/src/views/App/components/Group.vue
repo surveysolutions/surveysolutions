@@ -1,4 +1,4 @@
-<template>
+<template>    
     <form role="form" id="roster-editor" name="groupForm" unsaved-warning-form v-if="activeGroup">
         <div class="form-holder">
 
@@ -102,6 +102,7 @@
 
 <script>
 import { useGroupStore } from '../../../stores/group';
+import { deleteGroup, updateGroup } from '../../../services/groupService';
 import { useCommentsStore } from '../../../stores/comments';
 import { createQuestionForDeleteConfirmationPopup } from '../../../services/utilityService'
 import { setFocusIn } from '../../../services/utilityService'
@@ -191,7 +192,7 @@ export default {
             this.breadcrumbs = this.groupStore.getBreadcrumbs;
         },
         saveGroup() {
-            this.groupStore.saveGroupData();
+            updateGroup(this.questionnaireId, this.activeGroup);            
             this.dirty = false;
         },
         cancel() {
@@ -213,7 +214,7 @@ export default {
 
             params.callback = confirm => {
                 if (confirm) {
-                    this.groupStore.deleteGroup(questionnaireId, itemIdToDelete);
+                    deleteGroup(questionnaireId, itemIdToDelete);
                 }
             };
 

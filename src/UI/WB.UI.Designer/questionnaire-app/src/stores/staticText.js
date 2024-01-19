@@ -33,7 +33,7 @@ export const useStaticTextStore = defineStore('staticText', {
         },
         setStaticTextData(data) {            
             this.initialStaticText = Object.assign({}, data);
-            this.staticText = this.initialStaticText;
+            this.staticText = Object.assign({}, data);
         },
         clear() {
             this.staticText = {};
