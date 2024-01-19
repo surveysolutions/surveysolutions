@@ -44,7 +44,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.FirstInterviewerId);
             Property(x => x.FirstSupervisorId);
             Property(x => x.CreatedDate, pm => pm.Type<UtcDateTimeType>());
-            Property(x => x.FirstAnswerDate, pm => pm.Type<UtcDateTimeType>());
+            Property(x => x.FirstAnswerDate, pm =>
+            {
+                pm.Type<UtcDateTimeType>();
+                pm.NotNullable(false);
+            });
             Property(x => x.HasResolvedComments);
             Property(x => x.ErrorsCount);
             Property(x => x.InterviewMode, p => p.Column(cm =>

@@ -457,6 +457,7 @@ namespace WB.Tests.Abc.TestFactories
                 SupervisorName = string.IsNullOrWhiteSpace(teamLeadName) ? teamLeadId.FormatGuid() : teamLeadName,
                 ResponsibleRole = role,
                 Key = key,
+                CreatedDate = DateTime.UtcNow,
                 UpdateDate = updateDate ?? new DateTime(2017, 3, 23).ToUniversalTime(),
                 WasCreatedOnClient = wasCreatedOnClient ?? false,
                 ReceivedByInterviewerAtUtc = receivedByInterviewerAtUtc,

@@ -51,8 +51,8 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
             var created = interviewSummary.InterviewCommentedStatuses.FirstOrDefault(s =>
                 s.Status == InterviewExportedAction.Created);
 
-            interviewSummary.CreatedDate = created?.Timestamp ?? DateTime.UtcNow;
-            interviewSummary.FirstAnswerDate = firstAnswerSet?.Timestamp;
+            interviewSummary.CreatedDate = (created?.Timestamp ?? DateTime.UtcNow).ToUniversalTime();
+            interviewSummary.FirstAnswerDate = firstAnswerSet?.Timestamp.ToUniversalTime();
             interviewSummary.FirstInterviewerName = firstAnswerSet?.InterviewerName;
             interviewSummary.FirstInterviewerId = firstAnswerSet?.InterviewerId;
             interviewSummary.FirstSupervisorName = firstAnswerSet?.SupervisorName;

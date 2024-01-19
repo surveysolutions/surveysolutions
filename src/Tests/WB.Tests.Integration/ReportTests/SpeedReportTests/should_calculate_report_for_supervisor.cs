@@ -21,7 +21,7 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
         {
             var supervisorId = Id.gA;
             var interviewerId = Id.g1;
-            var reportEndDate = new DateTime(2010, 10, 30);
+            var reportEndDate = new DateTime(2010, 10, 30, 0, 0, 0, DateTimeKind.Utc);
 
             var interview = CreateCompletedInterviewWithDuration(TimeSpan.FromMinutes(15), 
                 supervisorId, interviewerId, reportEndDate);
@@ -56,7 +56,7 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
             var supervisorId = Id.gA;
             var interviewer1Id = Id.g1;
             var interviewer2Id = Id.g2;
-            var reportEndDate = new DateTime(2010, 10, 30);
+            var reportEndDate = new DateTime(2010, 10, 30, 0, 0, 0, DateTimeKind.Utc);
 
             var firstInterviewDuration = 15;
             var secondInterviewDuration = 9;
