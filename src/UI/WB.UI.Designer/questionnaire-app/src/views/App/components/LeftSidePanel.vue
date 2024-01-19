@@ -79,7 +79,7 @@
                 <div class="foldback-button-region" @click.stop="foldback()">
                     <div class="foldback-button"></div>
                 </div>
-                <Categories></Categories>
+                <Categories :questionnaireId="questionnaireId"></Categories>
             </div>
         </div>
     </Transition>
@@ -156,12 +156,12 @@
 }
 
 .slide-enter-active {
-    transition: all .3s ease-in;
+    transition: all .2s ease-in;
     z-index: 400;
 }
 
 .slide-leave-active {
-    transition: all .3s ease-in;
+    transition: all .2s ease-in;
     z-index: 300;
 }
 
@@ -200,7 +200,7 @@ export default {
     },
     data() {
         return {
-            openPanel: null, //'chapters',
+            openPanel: null,//'categories',
         };
     },
     mounted() {
