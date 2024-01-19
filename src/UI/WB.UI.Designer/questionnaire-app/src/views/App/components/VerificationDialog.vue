@@ -157,7 +157,7 @@ export default {
                     name: name,
                     params: {
                         chapterId: reference.chapterId,
-                        [name + 'Id']: reference.itemId,
+                        entityId: reference.itemId,
                         //indexOfEntityInProperty: reference.indexOfEntityInProperty,
                         //property: reference.property
                     },

@@ -267,11 +267,7 @@ export default {
         },
         selectedItemId() {
             return (
-                this.$route.params.variableId ||
-                this.$route.params.statictextId ||
-                this.$route.params.questionId ||
-                this.$route.params.groupId ||
-                this.$route.params.rosterId
+                this.$route.params.entityId
             );
         },
         readyToPaste() {
