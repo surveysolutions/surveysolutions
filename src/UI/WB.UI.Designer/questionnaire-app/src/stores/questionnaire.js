@@ -3,7 +3,7 @@ import { get, commandCall } from '../services/apiService';
 import { newGuid } from '../helpers/guid';
 import { i18n } from '../plugins/localization';
 import emitter from '../services/emitter';
-import { findIndex } from 'lodash';
+import { findIndex, forEach, isEmpty } from 'lodash';
 import { useCookies } from 'vue3-cookies';
 
 export const useQuestionnaireStore = defineStore('questionnaire', {
@@ -14,6 +14,34 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
         getInfo: state => state.info
     },
     actions: {
+        setupListeners() {
+            emitter.on('macroAdded', this.macroAdded);
+            emitter.on('macroDeleted', this.macroDeleted);
+            emitter.on('macroUpdated', this.macroUpdated);
+        },
+        macroAdded(payload) {
+            this.info.macros.push(payload);
+        },
+        macroDeleted(payload) {
+            const index = findIndex(this.info.macros, function(i) {
+                return i.itemId === payload.itemId;
+            });
+            if (index !== -1) {
+                this.info.macros.splice(index, 1);
+            }
+        },
+        macroUpdated(payload) {
+            const index = findIndex(this.info.macros, function(i) {
+                return i.itemId === payload.itemId;
+            });
+            if (index !== -1) {
+                payload.initialMacro = Object.assign({}, payload);
+                payload.isDescriptionVisible = !isEmpty(payload.description);
+
+                Object.assign(this.info.macros[index], payload);
+            }
+        },
+
         async fetchQuestionnaireInfo(questionnaireId) {
             const info = await get('/api/questionnaire/get/' + questionnaireId);
             this.setQuestionnaireInfo(info);
@@ -21,6 +49,11 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
 
         setQuestionnaireInfo(info) {
             this.info = info;
+
+            forEach(this.info.macros, macro => {
+                macro.initialMacro = Object.assign({}, macro);
+                macro.isDescriptionVisible = !isEmpty(macro.description);
+            });
         },
 
         addSection(callback) {

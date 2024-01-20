@@ -1,5 +1,5 @@
 <template>
-    <div class="pseudo-form-control" ref="editorHolder">
+    <div :class="{ 'pseudo-form-control' : focusable === 'true'}" ref="editorHolder">
         <v-ace-editor ref="editor" v-model:value="editorValue" @init="editorInit" theme="github"
             :lang="mode !== 'substitutions' ? 'csharp' : 'text'" :options="{
                 maxLines: 30,
@@ -36,6 +36,7 @@ export default {
     props: {
         modelValue: { type: String, required: true },
         mode: { type: String, default: 'substitutions' },
+        focusable: { type: String, default: 'true' },
     },
     data() {
         return {
