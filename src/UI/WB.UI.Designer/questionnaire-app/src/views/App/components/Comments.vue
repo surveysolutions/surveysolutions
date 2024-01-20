@@ -6,7 +6,7 @@
                 <button type="button" class="btn btn-sm btn-link pull-right" @click="deleteComment(comment.id)"
                     v-t="{ path: 'QuestionnaireEditor.Delete' }"></button>
                 <button v-show="comment.resolveDate == null" type="button" class="btn btn-sm btn-link pull-right"
-                    @click="resolveComment(comment)" v-t="{ path: 'QuestionnaireEditor.CommentEditorResolve' }"></button>
+                    @click="resolveComment(comment.id)" v-t="{ path: 'QuestionnaireEditor.CommentEditorResolve' }"></button>
                 <span class="author">{{ comment.userEmail }}</span>
                 <span class="date">{{ comment.date }}</span>
                 <p class="comment-text">{{ comment.comment }}</p>
@@ -38,7 +38,9 @@
 
 <script>
 
+import { useUserStore } from '../../../stores/user';
 import { useCommentsStore } from '../../../stores/comments';
+import { resolveComment, postComment, deleteComment } from '../../../services/commentsService';
 import Help from './Help.vue'
 
 export default {
@@ -96,15 +98,15 @@ export default {
             await this.commentsStore.fetchComments(this.questionnaireId, this.entityId);
         },
         async postComment() {
-            const response = await this.commentsStore.postComment(this.activeComment.comment)
 
-            if (response && response.error) {
-                this.activeComment.serverValidation = response.error || null;
-            }
-            else {
-                this.activeComment.comment = '';
-                this.activeComment.serverValidation = null;
-            }
+            const userStore = useUserStore();
+            const userName = userStore.userName;
+            const userEmail = userStore.email;
+
+            await postComment(this.questionnaireId, this.activeComment.comment, this.entityId, userName, userEmail);
+
+            this.activeComment.comment = '';
+            this.activeComment.serverValidation = null;
 
             this.dirty = false;
         },
@@ -116,15 +118,15 @@ export default {
                 isReadOnly: this.questionnaire.isReadOnlyForUser,
                 callback: async confirm => {
                     if (confirm) {
-                        await this.commentsStore.deleteComment(commentId)
+                        deleteComment(this.questionnaire.questionnaireId ,commentId, this.entityId);
                     }
                 }
             };
 
             this.$confirm(params);
         },
-        async resolveComment(comment) {
-            await this.commentsStore.resolveComment(comment);
+        resolveComment(commentId) {
+            resolveComment(this.questionnaire.questionnaireId, commentId, this.entityId);
         }
     }
 };

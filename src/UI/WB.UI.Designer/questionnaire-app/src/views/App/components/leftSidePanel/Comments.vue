@@ -1,5 +1,4 @@
-<template>
-    <div style="color: brown; font-size: large;">Under construction</div>
+<template>    
     <div class="comments">
         <perfect-scrollbar class="scroller">
             <h3>
@@ -66,7 +65,9 @@
 </template>
   
 <script>
-import { useCommentsStore } from '../../../../stores/comments';
+import { getCommentThreads } from '../../../../services/commentsService';
+import _ from 'lodash';
+import moment from 'moment';
 
 export default {
     name: 'Comments',
@@ -78,21 +79,95 @@ export default {
             commentThreads: [],
         }
     },
-    setup() {
-        const commentsStore = useCommentsStore();
-        return {
-            commentsStore
-        };
-    },
     async beforeMount() {
         await this.fetch();
     },
+    mounted() {
+        this.$emitter.on('commentResolved', this.commentResolved);
+        this.$emitter.on('commentDeleted', this.commentDeleted);
+        this.$emitter.on('commentAdded', this.commentAdded);
+    },
+    unmounted() {
+        this.$emitter.off('commentResolved', this.commentResolved);
+        this.$emitter.off('commentDeleted', this.commentDeleted);
+        this.$emitter.off('commentAdded', this.commentAdded);
+    },
     methods: {
         async fetch() {
-            this.commentThreads = await this.commentsStore.getCommentThreads(this.questionnaireId);
-            //TODO: react to updates 
-            //rewrite comments store and panel
+            const data = await getCommentThreads(this.questionnaireId);
+
+            _.forEach(data, function (commentThread) {
+                commentThread.resolvedComments = [];
+                commentThread.resolvedAreExpanded = false;
+
+                _.forEach(commentThread.comments, function (comment) {
+                    comment.date = moment
+                        .utc(comment.date)
+                        .local()
+                        .format('MMM DD, YYYY HH:mm');
+                    comment.isResolved = !_.isNull(comment.resolveDate || null);
+                });
+
+                commentThread.resolvedComments = _.filter(commentThread.comments, {
+                    isResolved: true
+                });
+                commentThread.comments = _.filter(commentThread.comments, {
+                    isResolved: false
+                });                
+            });
+
+            this.commentThreads = data;
         },
+        commentResolved(payload) {
+            const index = _.findIndex(this.commentThreads, function (i) {
+                return i.entity.itemId === payload.entityId;
+            });
+            if (index !== -1) {
+                const indexComment = _.findIndex(this.commentThreads[index].comments, function (i) {
+                    return i.id === payload.id;
+                });
+                if (indexComment !== -1) {
+                    this.commentThreads[index].comments[indexComment].resolveDate = payload.resolveDate;
+
+                    this.commentThreads[index].resolvedComments.push(this.commentThreads[index].comments[indexComment]);
+                    
+                    this.commentThreads[index].comments.splice(indexComment, 1);
+                }
+            }
+        },
+        commentDeleted(payload) {
+
+            const index = _.findIndex(this.commentThreads, function (i) {
+                return i.entity.itemId === payload.entityId;
+            });
+            if (index !== -1) {
+                const indexComment = _.findIndex(this.commentThreads[index].comments, function (i) {
+                    return i.id === payload.id;
+                });
+                if (indexComment !== -1) {
+                    this.commentThreads[index].comments.splice(indexComment, 1);
+                }
+                const indexCommentResolved = _.findIndex(this.commentThreads[index].resolvedComments, function (i) {
+                    return i.id === payload.id;
+                });
+                if (indexCommentResolved !== -1) {
+                    this.commentThreads[index].resolvedComments.splice(indexCommentResolved, 1);
+                }
+            }
+        },
+        commentAdded(payload) {
+            const index = _.findIndex(this.commentThreads, function (i) {
+                return i.entity.itemId === payload.entityId;
+            });            
+            if (index !== -1) {
+                const comment = Object.assign({}, payload);
+                comment.date = moment
+                        .utc(comment.date)
+                        .local()
+                        .format('MMM DD, YYYY HH:mm');
+                this.commentThreads[index].comments.push(comment);
+            }            
+        }
     }
 }
 </script>

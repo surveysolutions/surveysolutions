@@ -1,9 +1,8 @@
 import { defineStore } from 'pinia';
-import moment from 'moment';
 import _ from 'lodash';
-import { useUserStore } from './user';
-import { newGuid } from '../helpers/guid';
-import { get, post, patch, del } from '../services/apiService';
+import { get, post } from '../services/apiService';
+import { getComments } from '../services/commentsService';
+import emitter from '../services/emitter';
 
 export const useCommentsStore = defineStore('comments', {
     state: () => ({
@@ -18,14 +17,28 @@ export const useCommentsStore = defineStore('comments', {
         getIsCommentsBlockVisible: state => state.isCommentsBlockVisible
     },
     actions: {
+        setupListeners() {
+            emitter.on('commentResolved', this.commentResolved);
+            emitter.on('commentDeleted', this.commentDeleted);
+            emitter.on('commentAdded', this.commentAdded);            
+        },
+        commentResolved(payload) {
+            const index = _.findIndex(this.comments, function(i) {
+                return i.id === payload.id;
+            });
+            if (index !== -1) {
+                this.comments[index].resolveDate = payload.resolveDate;                
+            }
+        },
+        commentDeleted(payload) {
+            _.remove(this.$state.comments, comment => comment.id === payload.id);
+        },
+        commentAdded(payload) {
+            this.$state.comments.push(payload);
+        },
         async fetchComments(questionnaireId, entityId) {
-            const data = await get(
-                'questionnaire/' +
-                    questionnaireId +
-                    '/entity/' +
-                    entityId +
-                    '/comments'
-            );
+            const data = await getComments(questionnaireId, entityId);
+
             this.questionnaireId = questionnaireId;
             this.entityId = entityId;
             this.setComments(data);
@@ -45,76 +58,6 @@ export const useCommentsStore = defineStore('comments', {
 
         toggleComments() {
             this.isCommentsBlockVisible = !this.isCommentsBlockVisible;
-        },
-
-        async postComment(comment) {
-            const userStore = useUserStore();
-            const userName = userStore.userName;
-            const userEmail = userStore.email;
-            const id = newGuid();
-
-            const response = await post(
-                'questionnaire/' + this.questionnaireId + '/entity/addComment',
-                {
-                    comment: comment,
-                    entityId: this.entityId,
-                    id: id,
-                    questionnaireId: this.questionnaireId
-                }
-            );
-
-            if (response && response.error) return response;
-
-            this.$state.comments.push({
-                id: id,
-                comment: comment,
-                date: moment(new Date()).format('LLL'),
-                userName: userName,
-                userEmail: userEmail
-            });
-
-            return response;
-        },
-
-        async deleteComment(commentId) {
-            await del(
-                'questionnaire/' +
-                    this.questionnaireId +
-                    '/comment/' +
-                    commentId
-            );
-            _.remove(this.$state.comments, comment => comment.id === commentId);
-        },
-
-        async resolveComment(comment) {
-            await patch(
-                'questionnaire/' +
-                    this.questionnaireId +
-                    '/comment/resolve/' +
-                    comment.id
-            );
-
-            comment.resolveDate = new Date();
-        },
-
-        async getCommentThreads(questionnaireId){
-
-            const data = await get('questionnaire/' + questionnaireId + '/commentThreads');
-
-            _.forEach(data, function(commentThread) {
-                commentThread.resolvedComments = [];
-                commentThread.resolvedAreExpanded = false;
-                
-                _.forEach(commentThread.comments, function(comment) {
-                    comment.date = moment.utc(comment.date).local().format("MMM DD, YYYY HH:mm");
-                    comment.isResolved = !_.isNull(comment.resolveDate || null);
-                });
-
-                commentThread.resolvedComments = _.filter(commentThread.comments, { isResolved: true });
-                commentThread.comments = _.filter(commentThread.comments, { isResolved: false });
-            });
-
-            return data;
-        },
+        },        
     }
 });
