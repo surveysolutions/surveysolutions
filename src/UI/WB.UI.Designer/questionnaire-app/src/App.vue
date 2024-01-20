@@ -1,5 +1,5 @@
 <template>
-    <div id="designer-editor" class="questionnaire container">
+    <div id="designer-editor" class="questionnaire container vapp">
         <router-view name="header"></router-view>
         <section id="spacer" class="row">
             <div class="left"></div>
