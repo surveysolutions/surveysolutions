@@ -25,6 +25,8 @@ export function get(url, queryParams) {
             .catch(error => {
                 blockUI.stop();
                 progressStore.stop();
+
+                throw error;
             });
     }
 
@@ -38,6 +40,8 @@ export function get(url, queryParams) {
         .catch(error => {
             blockUI.stop();
             progressStore.stop();
+
+            throw error;
         });
 }
 
@@ -58,6 +62,8 @@ export function post(url, params) {
         .catch(error => {
             blockUI.stop();
             progressStore.stop();
+
+            throw error;
         });
 }
 
@@ -80,10 +86,12 @@ export function patch(url, params) {
         .catch(error => {
             blockUI.stop();
             progressStore.stop();
+
+            throw error;
         });
 }
 
-export function del(url, params) {
+export function del(url) {
     const progressStore = useProgressStore();
     const blockUI = useBlockUIStore();
 
@@ -91,7 +99,7 @@ export function del(url, params) {
     blockUI.start();
     progressStore.start();
     return api
-        .delete(url, params, { headers: headers })
+        .delete(url, { headers: headers })
         .then(response => {
             blockUI.stop();
             progressStore.stop();
@@ -100,6 +108,8 @@ export function del(url, params) {
         .catch(error => {
             blockUI.stop();
             progressStore.stop();
+
+            throw error;
         });
 }
 
