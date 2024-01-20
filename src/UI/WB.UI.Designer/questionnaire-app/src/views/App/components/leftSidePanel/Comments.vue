@@ -1,4 +1,5 @@
 <template>
+    <div style="color: brown; font-size: large;">Under construction</div>
     <div class="comments">
         <perfect-scrollbar class="scroller">
             <h3>
@@ -90,6 +91,7 @@ export default {
         async fetch() {
             this.commentThreads = await this.commentsStore.getCommentThreads(this.questionnaireId);
             //TODO: react to updates 
+            //rewrite comments store and panel
         },
     }
 }
