@@ -138,7 +138,7 @@
   <data name="AssignmentsSelected_other" xml:space="preserve">
     <value>{{count}} Interviuri alocate selectate</value>
   </data>
-  <data name="ChangeSizeModalTitle" xml:space="preserve">
+  <data name="ChangeExpectedModalTitle" xml:space="preserve">
     <value>Editați dimensiunea pentru alocarea {{assignmentId}}</value>
   </data>
   <data name="Count" xml:space="preserve">
@@ -159,7 +159,7 @@
   <data name="InterviewsNeeded" xml:space="preserve">
     <value>Interviuri necesare</value>
   </data>
-  <data name="InvalidSize" xml:space="preserve">
+  <data name="InvalidExpected" xml:space="preserve">
     <value>Câmpul Mărime trebuie să fie de -1 sau mai mult.</value>
   </data>
   <data name="NumberOfAssignmentsAffected" xml:space="preserve">
@@ -183,10 +183,10 @@
   <data name="ShowArchived" xml:space="preserve">
     <value>Starea arhivării</value>
   </data>
-  <data name="Size" xml:space="preserve">
+  <data name="Expected" xml:space="preserve">
     <value>Mărime </value>
   </data>
-  <data name="SizeExplanation" xml:space="preserve">
+  <data name="ExpectedExplanation" xml:space="preserve">
     <value>Specificați  numărul maxim de alocări care vor fi generate pentru acest interviu. Valori permise: -1 pentru nelimitat, 0 pentru nul, alt număr pentru numărul maxim de alocări</value>
   </data>
   <data name="Stop" xml:space="preserve">
@@ -216,7 +216,7 @@
   <data name="Tooltip_Table_Responsible" xml:space="preserve">
     <value>Utilizatorul responsabil pentru alocare. Faceți clic pe simbolul de sortare pentru a ordona numele de utilizatori.</value>
   </data>
-  <data name="Tooltip_Table_Size" xml:space="preserve">
+  <data name="Tooltip_Table_ExpectedValue" xml:space="preserve">
     <value>Numărul maxim de interviuri care pot fi efectuate pentru această alocare. Dați click pe orice celulă pentru a schimba acest număr. Dați click pe pictograma de sortare pentru a sorta după dimensiune.</value>
   </data>
   <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">
@@ -291,13 +291,13 @@
   <data name="Action_Deleted" xml:space="preserve">
     <value>Șters</value>
   </data>
-  <data name="Action_QuantityChanged" xml:space="preserve">
+  <data name="Action_ExpectedValueChanged" xml:space="preserve">
     <value>Dimensiunea s-a schimbat</value>
   </data>
-  <data name="Action_QuantityChanged_To" xml:space="preserve">
+  <data name="Action_ExpectedValueChanged_To" xml:space="preserve">
     <value>Dimensiunea s-a schimbat în {{quantity}}</value>
   </data>
-  <data name="Action_QuantityChanged_To_Unlimited" xml:space="preserve">
+  <data name="Action_ExpectedValueChanged_To_Unlimited" xml:space="preserve">
     <value>Dimensiunea a devenit nelimitată</value>
   </data>
   <data name="Action_Reassigned" xml:space="preserve">
@@ -342,7 +342,7 @@
   <data name="AssignmentInfo" xml:space="preserve">
     <value>Informații detaliate despre alocarea interviului</value>
   </data>
-  <data name="AssignmentSizeInWebMode" xml:space="preserve">
+  <data name="AssignmentExpectedInWebMode" xml:space="preserve">
     <value>Dimensiunea nu poate fi modificată pentru sarcinile în mod web</value>
   </data>
   <data name="AssignTo" xml:space="preserve">
@@ -408,10 +408,10 @@
   <data name="InvalidPassword" xml:space="preserve">
     <value>Parola este incorectă</value>
   </data>
-  <data name="InvalidSizeMessage" xml:space="preserve">
+  <data name="InvalidExpectedMessage" xml:space="preserve">
     <value>Mărimea este incorectă</value>
   </data>
-  <data name="InvalidSizeWithEmail" xml:space="preserve">
+  <data name="InvalidExpectedWithEmail" xml:space="preserve">
     <value>Pentru sarcini cu e-mail furnizat, dimensiunea permisă este 1</value>
   </data>
   <data name="IsAudioRecordingEnabled" xml:space="preserve">
@@ -453,10 +453,10 @@
   <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
     <value>Dimensiunea sarcinii {{id}} selectate va fi modificată din {{quantity}} în {{collected}} (numărul de interviuri colectate în prezent)</value>
   </data>
-  <data name="SizeForWebMode" xml:space="preserve">
+  <data name="ExpectedForWebMode" xml:space="preserve">
     <value>Sarcina cu dimensiunea 1 pentru modul web ar trebui să conțină e-mail sau parolă</value>
   </data>
-  <data name="SizeInstructions" xml:space="preserve">
+  <data name="ExpectedInstructions" xml:space="preserve">
     <value>Trebuie să fie un număr, -1 pentru nelimitat, 1 dacă este specificat un e-mail</value>
   </data>
   <data name="StartWebInterview" xml:space="preserve">

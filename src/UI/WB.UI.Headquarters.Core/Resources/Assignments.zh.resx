@@ -141,7 +141,7 @@
   <data name="AssignmentsSelected_other" xml:space="preserve">
     <value>{{count}}个任务被选中</value>
   </data>
-  <data name="ChangeSizeModalTitle" xml:space="preserve">
+  <data name="ChangeExpectedModalTitle" xml:space="preserve">
     <value>为任务{{assignmentId}}编辑大小</value>
   </data>
   <data name="Count" xml:space="preserve">
@@ -162,7 +162,7 @@
   <data name="InterviewsNeeded" xml:space="preserve">
     <value>需要访谈</value>
   </data>
-  <data name="InvalidSize" xml:space="preserve">
+  <data name="InvalidExpected" xml:space="preserve">
     <value>大小必须是 -1 或更大</value>
   </data>
   <data name="NumberOfAssignmentsAffected" xml:space="preserve">
@@ -177,10 +177,10 @@
   <data name="ShowArchived" xml:space="preserve">
     <value>归档状况</value>
   </data>
-  <data name="Size" xml:space="preserve">
+  <data name="Expected" xml:space="preserve">
     <value>大小</value>
   </data>
-  <data name="SizeExplanation" xml:space="preserve">
+  <data name="ExpectedExplanation" xml:space="preserve">
     <value>明确由任务生成的最大访谈数量。-1表示不限量，0表示空任务，其它数字指定访谈的数量</value>
   </data>
   <data name="Tooltip_Filter_ArchivedStatus" xml:space="preserve">
@@ -204,7 +204,7 @@
   <data name="Tooltip_Table_Responsible" xml:space="preserve">
     <value>最近任务的负责人。点击排序按钮按负责人名字排序。</value>
   </data>
-  <data name="Tooltip_Table_Size" xml:space="preserve">
+  <data name="Tooltip_Table_ExpectedValue" xml:space="preserve">
     <value>此任务可能完成的最大访谈数量。点击任何单元格已更改数量。</value>
   </data>
   <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">

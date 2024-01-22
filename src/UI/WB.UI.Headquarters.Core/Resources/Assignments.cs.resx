@@ -181,13 +181,13 @@
   <data name="Action_Created_Responsible" xml:space="preserve">
     <value>Přiřazeno uživateli {{responsible}}</value>
   </data>
-  <data name="Action_QuantityChanged" xml:space="preserve">
+  <data name="Action_ExpectedValueChanged" xml:space="preserve">
     <value>Velikost změněna</value>
   </data>
-  <data name="Action_QuantityChanged_To" xml:space="preserve">
+  <data name="Action_ExpectedValueChanged_To" xml:space="preserve">
     <value>Velikost změněna na {{quantity}}</value>
   </data>
-  <data name="Action_QuantityChanged_To_Unlimited" xml:space="preserve">
+  <data name="Action_ExpectedValueChanged_To_Unlimited" xml:space="preserve">
     <value>Velikost změněna na Neomezená</value>
   </data>
   <data name="Action_Reassigned" xml:space="preserve">
@@ -247,7 +247,7 @@
   <data name="AssignmentsHeader" xml:space="preserve">
     <value>Žádanky</value>
   </data>
-  <data name="AssignmentSizeInWebMode" xml:space="preserve">
+  <data name="AssignmentExpectedInWebMode" xml:space="preserve">
     <value>Velikost nelze změnit pro dotazník v režimu Web.</value>
   </data>
   <data name="AssignTo" xml:space="preserve">
@@ -271,7 +271,7 @@
   <data name="ChangeModeModalTitle" xml:space="preserve">
     <value>Změnit režim pro dotazník {{assignmentId}}</value>
   </data>
-  <data name="ChangeSizeModalTitle" xml:space="preserve">
+  <data name="ChangeExpectedModalTitle" xml:space="preserve">
     <value>Upravit velikost dotazníku {{assignmentId}}</value>
   </data>
   <data name="Close" xml:space="preserve">
@@ -343,13 +343,13 @@
   <data name="InvalidPassword" xml:space="preserve">
     <value>Heslo je neplatné</value>
   </data>
-  <data name="InvalidSize" xml:space="preserve">
+  <data name="InvalidExpected" xml:space="preserve">
     <value>Pole Velikost musí být -1 nebo více.</value>
   </data>
-  <data name="InvalidSizeMessage" xml:space="preserve">
+  <data name="InvalidExpectedMessage" xml:space="preserve">
     <value>Velikost je neplatná</value>
   </data>
-  <data name="InvalidSizeWithEmail" xml:space="preserve">
+  <data name="InvalidExpectedWithEmail" xml:space="preserve">
     <value>U dotazníků se zadaným e-mailem je povolená velikost 1</value>
   </data>
   <data name="IsAudioRecordingEnabled" xml:space="preserve">
@@ -406,16 +406,16 @@
   <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
     <value>Velikost vybrané žádanky {{id}} bude změněna z {{quantity}} na {{collected}} (počet aktuálně shromážděných rozhovorů)</value>
   </data>
-  <data name="Size" xml:space="preserve">
+  <data name="Expected" xml:space="preserve">
     <value>Očekávaný</value>
   </data>
-  <data name="SizeExplanation" xml:space="preserve">
+  <data name="ExpectedExplanation" xml:space="preserve">
     <value>Určete maximální počet rozhovorů pro daný dotazník. Povolené hodnoty: -1 je pro Neomezený dotazník, 0 je pro Prázdný dotazník, čísla jsou pro velikost dotazníku</value>
   </data>
-  <data name="SizeForWebMode" xml:space="preserve">
+  <data name="ExpectedForWebMode" xml:space="preserve">
     <value>Dotazník s velikostí 1 pro webový režim by měl obsahovat e-mail nebo heslo</value>
   </data>
-  <data name="SizeInstructions" xml:space="preserve">
+  <data name="ExpectedInstructions" xml:space="preserve">
     <value>Musí to být číslo, -1 pro neomezené, 1, pokud je zadán e-mail</value>
   </data>
   <data name="StartWebInterview" xml:space="preserve">
@@ -454,7 +454,7 @@
   <data name="Tooltip_Table_Responsible" xml:space="preserve">
     <value>Uživatel aktuálně zodpovědný za dotazník. Kliknutím na ikonu řazení seřadíte podle uživatelského jména.</value>
   </data>
-  <data name="Tooltip_Table_Size" xml:space="preserve">
+  <data name="Tooltip_Table_ExpectedValue" xml:space="preserve">
     <value>Maximální počet rozhovorů, které lze pro u tohoto dotazníku provést. Klikněte na libovolnou buňku pro změnu tohoto čísla. Klikněte na ikonu řazení pro seřazení podle velikosti.</value>
   </data>
   <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">
