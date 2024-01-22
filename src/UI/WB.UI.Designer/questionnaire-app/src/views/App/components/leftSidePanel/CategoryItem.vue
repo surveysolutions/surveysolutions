@@ -128,8 +128,10 @@ export default {
             this.$confirm(confirmParams);
         },
 
-        saveCategories() {
-            updateCategories(this.questionnaireId, this.category)
+        async saveCategories() {
+            await updateCategories(this.questionnaireId, this.category);
+
+            this.originName = this.category.name;
             /*.then(function (response) {
                     dataBind(categories.checkpoint, categories);
                     categories.form.$setPristine();
@@ -185,6 +187,7 @@ export default {
 
             categories.file = null;
             this.file = [];
+            this.originName = categories.name;
 
         },
 

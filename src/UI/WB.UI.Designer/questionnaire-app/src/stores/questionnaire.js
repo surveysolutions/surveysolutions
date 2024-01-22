@@ -3,7 +3,7 @@ import { get, commandCall } from '../services/apiService';
 import { newGuid } from '../helpers/guid';
 import { i18n } from '../plugins/localization';
 import emitter from '../services/emitter';
-import { findIndex, forEach, isEmpty, map, filter } from 'lodash';
+import { findIndex, forEach, isEmpty, map, filter, find } from 'lodash';
 import { useCookies } from 'vue3-cookies';
 
 export const useQuestionnaireStore = defineStore('questionnaire', {
@@ -147,19 +147,18 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
         updateQuestionnaireCategories(event) {
             if (this.info.categories === null) return;
 
-            this.info.categories = map(this.info.categories, categoriesDto => {
-                if (
-                    categoriesDto.categoriesId == event.categories.categoriesId
-                ) {
-                    return {
-                        categoriesId: categoriesDto.categoriesId,
-                        name: event.categories.name,
-                        oldCategoriesId: categoriesDto
-                    };
-                } else {
-                    return categoriesDto;
-                }
-            });
+            const id = event.categories.categoriesId;
+
+            const item = find(
+                this.info.categories,
+                item => item.categoriesId == id
+            );
+
+            if (item) {
+                item.name == event.categories.name;
+            } else {
+                this.info.categories.push(event.categories);
+            }
         },
 
         deleteQuestionnaireCategories(event) {
