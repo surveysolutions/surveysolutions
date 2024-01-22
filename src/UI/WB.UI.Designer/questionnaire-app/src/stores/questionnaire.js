@@ -3,7 +3,7 @@ import { get, commandCall } from '../services/apiService';
 import { newGuid } from '../helpers/guid';
 import { i18n } from '../plugins/localization';
 import emitter from '../services/emitter';
-import { findIndex, forEach, isEmpty } from 'lodash';
+import { findIndex, forEach, isEmpty, map, filter } from 'lodash';
 import { useCookies } from 'vue3-cookies';
 
 export const useQuestionnaireStore = defineStore('questionnaire', {
@@ -18,6 +18,9 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             emitter.on('macroAdded', this.macroAdded);
             emitter.on('macroDeleted', this.macroDeleted);
             emitter.on('macroUpdated', this.macroUpdated);
+
+            emitter.on('categoriesUpdated', this.updateQuestionnaireCategories);
+            emitter.on('categoriesDeleted', this.deleteQuestionnaireCategories);
         },
         macroAdded(payload) {
             this.info.macros.push(payload);
@@ -138,6 +141,35 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
 
             return commandCall('PasteAfter', command).then(() =>
                 this.fetchQuestionnaireInfo(this.info.questionnaireId)
+            );
+        },
+
+        updateQuestionnaireCategories(event) {
+            if (this.info.categories === null) return;
+
+            this.info.categories = map(this.info.categories, categoriesDto => {
+                if (
+                    categoriesDto.categoriesId == event.categories.categoriesId
+                ) {
+                    return {
+                        categoriesId: categoriesDto.categoriesId,
+                        name: event.categories.name,
+                        oldCategoriesId: categoriesDto
+                    };
+                } else {
+                    return categoriesDto;
+                }
+            });
+        },
+
+        deleteQuestionnaireCategories(event) {
+            if (this.info.categories === null) return;
+
+            this.info.categories = filter(
+                this.info.categories,
+                categoriesDto => {
+                    return categoriesDto.categoriesId !== event.categoriesId;
+                }
             );
         }
     }

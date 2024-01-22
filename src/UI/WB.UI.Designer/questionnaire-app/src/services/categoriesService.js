@@ -1,4 +1,5 @@
 import { upload, commandCall } from './apiService';
+import emitter from './emitter';
 
 export async function updateCategories(questionnaireId, categories) {
     var command = {
@@ -8,13 +9,13 @@ export async function updateCategories(questionnaireId, categories) {
         name: categories.name
     };
 
-    const response = await upload(
-        '/api/command/categories',
-        categories.file,
-        command
+    return upload('/api/command/categories', categories.file, command).then(
+        response => {
+            emitter.emit('categoriesUpdated', {
+                categories: categories
+            });
+        }
     );
-
-    return response;
 }
 
 export function deleteCategories(questionnaireId, categoriesId) {
@@ -22,5 +23,9 @@ export function deleteCategories(questionnaireId, categoriesId) {
         questionnaireId: questionnaireId,
         categoriesId: categoriesId
     };
-    return commandCall('DeleteCategories', command);
+    return commandCall('DeleteCategories', command).then(response => {
+        emitter.emit('categoriesDeleted', {
+            categoriesId: categoriesId
+        });
+    });
 }
