@@ -132,12 +132,12 @@
   <data name="AssignmentsSelected" xml:space="preserve">
     <value>{{count}} Задание выбрано </value>
   </data>
-  <data name="SizeExplanation" xml:space="preserve">
-    <value>Изменение количества интервью, которые будут созданы согласно этому заданию. Разрешенные значения: -1 для не ограниченного задания, 0 для пустого, число для конкретного количества</value>
+  <data name="ExpectedExplanation" xml:space="preserve">
+      <value>Изменение ожидаемого количества интервью, которые будут созданы согласно этому заданию. Разрешенные значения: -1 для не ограниченного задания, 0 для пустого, число для конкретного количества</value>
   </data>
-  <data name="ChangeSizeModalTitle" xml:space="preserve">
-    <value>Редактировать количество интервью для задания {{assignmentId}}</value>
-    <comment>{0} - id of the assignment</comment>
+  <data name="ChangeExpectedModalTitle" xml:space="preserve">
+      <value>Редактировать ожидаемое количество интервью для задания {{assignmentId}}</value>
+      <comment>{0} - id of the assignment</comment>
   </data>
   <data name="CreatedAt" xml:space="preserve">
     <value>Создан</value>
@@ -151,7 +151,7 @@
   <data name="NumberOfAssignmentsAffected" xml:space="preserve">
     <value>{{count}} Задание будет изменено</value>
   </data>
-  <data name="Size" xml:space="preserve">
+  <data name="Expected" xml:space="preserve">
       <value>Ожидаемо</value>
   </data>
   <data name="SelectResponsible" xml:space="preserve">
@@ -211,8 +211,8 @@
   <data name="Tooltip_Table_Responsible" xml:space="preserve">
     <value>Ответственный за задание пользователь. Кликните по иконке сортировки для упорядочивания по имени пользователя.</value>
   </data>
-  <data name="Tooltip_Table_Size" xml:space="preserve">
-    <value>Максимальное количество интервью, которое может быть собрано по этому заданию. Кликните на ячейке для редактирования значения. Кликните по иконке сортировки для упорядочивания по размеру задания.</value>
+  <data name="Tooltip_Table_ExpectedValue" xml:space="preserve">
+      <value>Максимальное ожидаемое количество интервью, которое может быть собрано по этому заданию. Кликните на ячейке для редактирования значения. Кликните по иконке сортировки для упорядочивания по размеру задания.</value>
   </data>
   <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">
     <value>Дата последнего изменения задания (например, последнего изменения размера). Кликните по иконке сортировки для упорядочивания по времени изменения.</value>
@@ -220,11 +220,11 @@
   <data name="Tooltip_Table_ReceivedByTablet" xml:space="preserve">
     <value>Дата скачивания задания на устройство пользователя. Кликните по иконке сортировки для упорядочивания по времени скачивания задания на устройство пользователя.</value>
   </data>
-  <data name="InvalidSize" xml:space="preserve">
-    <value>Количество заданий должно быть -1 или больше</value>
+  <data name="InvalidExpected" xml:space="preserve">
+      <value>Ожидаемое количество интервью должно быть -1 или больше</value>
   </data>
-  <data name="AssignmentSizeInWebMode" xml:space="preserve">
-    <value>Количество не может быть изменено для назначения в веб режиме.</value>
+  <data name="AssignmentExpectedInWebMode" xml:space="preserve">
+      <value>Ожидаемое количество не может быть изменено для назначения в веб режиме.</value>
   </data>
   <data name="SelectQuestionnaireToUpgradeFrom" xml:space="preserve">
     <value>Выберите опросник который следует обновить</value>
@@ -358,7 +358,7 @@
   <data name="EnterEmail" xml:space="preserve">
     <value>Введите электронную почту</value>
   </data>
-  <data name="SizeInstructions" xml:space="preserve">
+  <data name="ExpectedInstructions" xml:space="preserve">
     <value>Должно быть число, -1 для неограниченного, 1 если задан электронная почта</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
@@ -367,14 +367,14 @@
   <data name="InvalidPassword" xml:space="preserve">
     <value>Неправильный пароль</value>
   </data>
-  <data name="InvalidSizeMessage" xml:space="preserve">
-    <value>Неправильный размер</value>
+  <data name="InvalidExpectedMessage" xml:space="preserve">
+      <value>Неправильное значение</value>
   </data>
-  <data name="InvalidSizeWithEmail" xml:space="preserve">
-    <value>Для задания с указанной электронной почтой размер должен равняться 1</value>
+  <data name="InvalidExpectedWithEmail" xml:space="preserve">
+      <value>Для задания с указанной электронной почтой ожидаемое количество должен равняться 1</value>
   </data>
-  <data name="SizeForWebMode" xml:space="preserve">
-    <value>Задание с размером 1 для web режима должно иметь либо электронную почту либо пароль</value>
+  <data name="ExpectedForWebMode" xml:space="preserve">
+      <value>Задание с ожидаемым количеством равным 1 для web режима должно иметь либо электронную почту либо пароль</value>
   </data>
   <data name="DuplicatePasswordByWebModeWithQuantity1" xml:space="preserve">
     <value>Пароль для задания в веб режиме с количеством интервью равным 1 должен быть уникален</value>
@@ -389,10 +389,10 @@
     <value>Завершить</value>
   </data>
   <data name="MultipleAssignmentsClose" xml:space="preserve">
-    <value>{{count}} выбранных заданий будет завершено. Размер будет установлен в текущее количество собранных интервью.</value>
+      <value>{{count}} выбранных заданий будет завершено. Ожидаемое количество будет установлено в текущее количество собранных интервью.</value>
   </data>
   <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
-    <value>Для задания '{{id}}' текущий размер {{quantity}} будет установлен в {{collected}}</value>
+      <value>Для задания '{{id}}' ожидаемое количество {{quantity}} будет установлено в {{collected}}</value>
   </data>
   <data name="AssignmentCloseWebMode" xml:space="preserve">
     <value>Задание {{id}} не может быть закрыто, так как включён веб режим</value>
@@ -435,11 +435,11 @@
   <data name="Action_Deleted" xml:space="preserve">
     <value>Удалено</value>
   </data>
-  <data name="Action_QuantityChanged" xml:space="preserve">
-    <value>Размер изменён</value>
+  <data name="Action_ExpectedValueChanged" xml:space="preserve">
+      <value>Ожидаемое количество изменёно</value>
   </data>
-  <data name="Action_QuantityChanged_To" xml:space="preserve">
-    <value>Размер изменён на {{quantity}}</value>
+  <data name="Action_ExpectedValueChanged_To" xml:space="preserve">
+      <value>Ожидаемое количество изменёно на {{quantity}}</value>
   </data>
   <data name="Action_Reassigned" xml:space="preserve">
     <value>Назначено</value>
@@ -483,8 +483,8 @@
   <data name="Action_Created_Responsible" xml:space="preserve">
     <value>Ответственный: {{responsible}}</value>
   </data>
-  <data name="Action_QuantityChanged_To_Unlimited" xml:space="preserve">
-    <value>Размер изменён на Не ограничено</value>
+  <data name="Action_ExpectedValueChanged_To_Unlimited" xml:space="preserve">
+      <value>Ожидаемое количество изменёно на Неограниченое</value>
   </data>
   <data name="StartWebInterview" xml:space="preserve">
     <value>Начать Web интервью</value>

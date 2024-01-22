@@ -141,29 +141,29 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Размер изменён.
+        ///   Looks up a localized string similar to Ожидаемое количество изменёно.
         /// </summary>
-        public static string Action_QuantityChanged {
+        public static string Action_ExpectedValueChanged {
             get {
-                return ResourceManager.GetString("Action_QuantityChanged", resourceCulture);
+                return ResourceManager.GetString("Action_ExpectedValueChanged", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Размер изменён на {{quantity}}.
+        ///   Looks up a localized string similar to Ожидаемое количество изменёно на {{quantity}}.
         /// </summary>
-        public static string Action_QuantityChanged_To {
+        public static string Action_ExpectedValueChanged_To {
             get {
-                return ResourceManager.GetString("Action_QuantityChanged_To", resourceCulture);
+                return ResourceManager.GetString("Action_ExpectedValueChanged_To", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Размер изменён на Не ограничено.
+        ///   Looks up a localized string similar to Ожидаемое количество изменёно на Неограниченое.
         /// </summary>
-        public static string Action_QuantityChanged_To_Unlimited {
+        public static string Action_ExpectedValueChanged_To_Unlimited {
             get {
-                return ResourceManager.GetString("Action_QuantityChanged_To_Unlimited", resourceCulture);
+                return ResourceManager.GetString("Action_ExpectedValueChanged_To_Unlimited", resourceCulture);
             }
         }
         
@@ -312,6 +312,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ожидаемое количество не может быть изменено для назначения в веб режиме..
+        /// </summary>
+        public static string AssignmentExpectedInWebMode {
+            get {
+                return ResourceManager.GetString("AssignmentExpectedInWebMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to История.
         /// </summary>
         public static string AssignmentHistory {
@@ -344,15 +353,6 @@ namespace WB.UI.Headquarters.Resources {
         public static string AssignmentsHeader {
             get {
                 return ResourceManager.GetString("AssignmentsHeader", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Количество не может быть изменено для назначения в веб режиме..
-        /// </summary>
-        public static string AssignmentSizeInWebMode {
-            get {
-                return ResourceManager.GetString("AssignmentSizeInWebMode", resourceCulture);
             }
         }
         
@@ -420,20 +420,20 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Редактировать ожидаемое количество интервью для задания {{assignmentId}}.
+        /// </summary>
+        public static string ChangeExpectedModalTitle {
+            get {
+                return ResourceManager.GetString("ChangeExpectedModalTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Изменить режим назначения {{assignmentId}}.
         /// </summary>
         public static string ChangeModeModalTitle {
             get {
                 return ResourceManager.GetString("ChangeModeModalTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Редактировать количество интервью для задания {{assignmentId}}.
-        /// </summary>
-        public static string ChangeSizeModalTitle {
-            get {
-                return ResourceManager.GetString("ChangeSizeModalTitle", resourceCulture);
             }
         }
         
@@ -618,6 +618,42 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ожидаемо.
+        /// </summary>
+        public static string Expected {
+            get {
+                return ResourceManager.GetString("Expected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Изменение ожидаемого количества интервью, которые будут созданы согласно этому заданию. Разрешенные значения: -1 для не ограниченного задания, 0 для пустого, число для конкретного количества.
+        /// </summary>
+        public static string ExpectedExplanation {
+            get {
+                return ResourceManager.GetString("ExpectedExplanation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Задание с ожидаемым количеством равным 1 для web режима должно иметь либо электронную почту либо пароль.
+        /// </summary>
+        public static string ExpectedForWebMode {
+            get {
+                return ResourceManager.GetString("ExpectedForWebMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Должно быть число, -1 для неограниченного, 1 если задан электронная почта.
+        /// </summary>
+        public static string ExpectedInstructions {
+            get {
+                return ResourceManager.GetString("ExpectedInstructions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Идентификационные вопросы.
         /// </summary>
         public static string IdentifyingQuestions {
@@ -645,38 +681,38 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ожидаемое количество интервью должно быть -1 или больше.
+        /// </summary>
+        public static string InvalidExpected {
+            get {
+                return ResourceManager.GetString("InvalidExpected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Неправильное значение.
+        /// </summary>
+        public static string InvalidExpectedMessage {
+            get {
+                return ResourceManager.GetString("InvalidExpectedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Для задания с указанной электронной почтой ожидаемое количество должен равняться 1.
+        /// </summary>
+        public static string InvalidExpectedWithEmail {
+            get {
+                return ResourceManager.GetString("InvalidExpectedWithEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Неправильный пароль.
         /// </summary>
         public static string InvalidPassword {
             get {
                 return ResourceManager.GetString("InvalidPassword", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Количество заданий должно быть -1 или больше.
-        /// </summary>
-        public static string InvalidSize {
-            get {
-                return ResourceManager.GetString("InvalidSize", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Неправильный размер.
-        /// </summary>
-        public static string InvalidSizeMessage {
-            get {
-                return ResourceManager.GetString("InvalidSizeMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Для задания с указанной электронной почтой размер должен равняться 1.
-        /// </summary>
-        public static string InvalidSizeWithEmail {
-            get {
-                return ResourceManager.GetString("InvalidSizeWithEmail", resourceCulture);
             }
         }
         
@@ -708,7 +744,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {{count}} выбранных заданий будет завершено. Размер будет установлен в текущее количество собранных интервью..
+        ///   Looks up a localized string similar to {{count}} выбранных заданий будет завершено. Ожидаемое количество будет установлено в текущее количество собранных интервью..
         /// </summary>
         public static string MultipleAssignmentsClose {
             get {
@@ -879,47 +915,11 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Для задания &apos;{{id}}&apos; текущий размер {{quantity}} будет установлен в {{collected}}.
+        ///   Looks up a localized string similar to Для задания &apos;{{id}}&apos; ожидаемое количество {{quantity}} будет установлено в {{collected}}.
         /// </summary>
         public static string SingleAssignmentCloseConfirm {
             get {
                 return ResourceManager.GetString("SingleAssignmentCloseConfirm", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Ожидаемо.
-        /// </summary>
-        public static string Size {
-            get {
-                return ResourceManager.GetString("Size", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Изменение количества интервью, которые будут созданы согласно этому заданию. Разрешенные значения: -1 для не ограниченного задания, 0 для пустого, число для конкретного количества.
-        /// </summary>
-        public static string SizeExplanation {
-            get {
-                return ResourceManager.GetString("SizeExplanation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Задание с размером 1 для web режима должно иметь либо электронную почту либо пароль.
-        /// </summary>
-        public static string SizeForWebMode {
-            get {
-                return ResourceManager.GetString("SizeForWebMode", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Должно быть число, -1 для неограниченного, 1 если задан электронная почта.
-        /// </summary>
-        public static string SizeInstructions {
-            get {
-                return ResourceManager.GetString("SizeInstructions", resourceCulture);
             }
         }
         
@@ -1014,6 +1014,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Максимальное ожидаемое количество интервью, которое может быть собрано по этому заданию. Кликните на ячейке для редактирования значения. Кликните по иконке сортировки для упорядочивания по размеру задания..
+        /// </summary>
+        public static string Tooltip_Table_ExpectedValue {
+            get {
+                return ResourceManager.GetString("Tooltip_Table_ExpectedValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Идентифицирующая информация по каждому заданию..
         /// </summary>
         public static string Tooltip_Table_IdentifyingQuestions {
@@ -1064,15 +1073,6 @@ namespace WB.UI.Headquarters.Resources {
         public static string Tooltip_Table_Responsible {
             get {
                 return ResourceManager.GetString("Tooltip_Table_Responsible", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Максимальное количество интервью, которое может быть собрано по этому заданию. Кликните на ячейке для редактирования значения. Кликните по иконке сортировки для упорядочивания по размеру задания..
-        /// </summary>
-        public static string Tooltip_Table_Size {
-            get {
-                return ResourceManager.GetString("Tooltip_Table_Size", resourceCulture);
             }
         }
         

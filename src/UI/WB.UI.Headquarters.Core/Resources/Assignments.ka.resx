@@ -135,7 +135,7 @@
   <data name="AssignmentsSelected" xml:space="preserve">
     <value>{{count}} დავალებები შერჩეულია</value>
   </data>
-  <data name="ChangeSizeModalTitle" xml:space="preserve">
+  <data name="ChangeExpectedModalTitle" xml:space="preserve">
     <value>დავალების ზომა რედაქტირებისთვის {{assignmentId}}</value>
   </data>
   <data name="Count" xml:space="preserve">
@@ -168,10 +168,10 @@
   <data name="ShowArchived" xml:space="preserve">
     <value>არქივირებული სტატუსი</value>
   </data>
-  <data name="Size" xml:space="preserve">
+  <data name="Expected" xml:space="preserve">
     <value>ზომა</value>
   </data>
-  <data name="SizeExplanation" xml:space="preserve">
+  <data name="ExpectedExplanation" xml:space="preserve">
     <value>დააზუსტეთ ინტერვიუების მაქსიმუმი რიცხვი ამ დავალებაში დასაგენერირებლად. ნებადართული ღირებულებები: -1 არის შეუზღუდავი დავალებისთვის, 0 არის ცარიელი დავალებისთვის, ნომრები არის დავალების ზომისთვის.</value>
   </data>
   <data name="Unarchive" xml:space="preserve">

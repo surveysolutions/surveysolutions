@@ -135,7 +135,7 @@
   <data name="AssignmentsSelected" xml:space="preserve">
     <value>{{count}} Asignación(es) seleccionada(s)</value>
   </data>
-  <data name="ChangeSizeModalTitle" xml:space="preserve">
+  <data name="ChangeExpectedModalTitle" xml:space="preserve">
     <value>Editar tamaño de la asignación {{assignmentId}}</value>
   </data>
   <data name="Count" xml:space="preserve">
@@ -156,7 +156,7 @@
   <data name="InterviewsNeeded" xml:space="preserve">
     <value>Entrevistas necesarias</value>
   </data>
-  <data name="InvalidSize" xml:space="preserve">
+  <data name="InvalidExpected" xml:space="preserve">
     <value>El campo Tamaño debe ser -1 o mayor.</value>
   </data>
   <data name="NumberOfAssignmentsAffected" xml:space="preserve">
@@ -171,10 +171,10 @@
   <data name="ShowArchived" xml:space="preserve">
     <value>Estado archivado</value>
   </data>
-  <data name="Size" xml:space="preserve">
+  <data name="Expected" xml:space="preserve">
       <value>Esperado</value>
   </data>
-  <data name="SizeExplanation" xml:space="preserve">
+  <data name="ExpectedExplanation" xml:space="preserve">
     <value>Especifique la cantidad máxima de entrevistas que se generarán para esa asignación. Valores permitidos: -1 es para asignación ilimitada, 0 es para asignación vacía, números para tamaño de asignación</value>
   </data>
   <data name="Tooltip_Filter_ArchivedStatus" xml:space="preserve">
@@ -198,7 +198,7 @@
   <data name="Tooltip_Table_Responsible" xml:space="preserve">
     <value>Usuario actualmente responsable de la asignación. Haga clic en el icono de ordenar para ordenar por nombre de usuario.</value>
   </data>
-  <data name="Tooltip_Table_Size" xml:space="preserve">
+  <data name="Tooltip_Table_ExpectedValue" xml:space="preserve">
     <value>Número máximo de entrevistas que pueden realizarse para esta tarea. Haga clic en cualquier celda para cambiar este número. Haga clic en el icono de ordenar para ordenar por tamaño.</value>
   </data>
   <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">
@@ -240,13 +240,13 @@
   <data name="Action_Deleted" xml:space="preserve">
     <value>Eliminado</value>
   </data>
-  <data name="Action_QuantityChanged" xml:space="preserve">
+  <data name="Action_ExpectedValueChanged" xml:space="preserve">
     <value>Tamaño cambiado</value>
   </data>
-  <data name="Action_QuantityChanged_To" xml:space="preserve">
+  <data name="Action_ExpectedValueChanged_To" xml:space="preserve">
     <value>El tamaño cambió a {{quantity}}</value>
   </data>
-  <data name="Action_QuantityChanged_To_Unlimited" xml:space="preserve">
+  <data name="Action_ExpectedValueChanged_To_Unlimited" xml:space="preserve">
     <value>El tamaño cambió a ilimitado</value>
   </data>
   <data name="Action_Reassigned" xml:space="preserve">
@@ -294,7 +294,7 @@
   <data name="AssignmentInfo" xml:space="preserve">
     <value>Información detallada de la asignación</value>
   </data>
-  <data name="AssignmentSizeInWebMode" xml:space="preserve">
+  <data name="AssignmentExpectedInWebMode" xml:space="preserve">
     <value>El tamaño no se puede cambiar para una asignación en modo web.</value>
   </data>
   <data name="AssignmentsSelected_other" xml:space="preserve">
@@ -363,10 +363,10 @@
   <data name="InvalidPassword" xml:space="preserve">
     <value>La contraseña no es válida</value>
   </data>
-  <data name="InvalidSizeMessage" xml:space="preserve">
+  <data name="InvalidExpectedMessage" xml:space="preserve">
     <value>El Tamaño es inválido</value>
   </data>
-  <data name="InvalidSizeWithEmail" xml:space="preserve">
+  <data name="InvalidExpectedWithEmail" xml:space="preserve">
     <value>Para asignaciones con correo electrónico, el tamaño permitido es 1</value>
   </data>
   <data name="IsAudioRecordingEnabled" xml:space="preserve">
@@ -417,10 +417,10 @@
   <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
     <value>El tamaño de la asignación seleccionada {{id}} se cambiará de {{quantity}} a {{collected}} (número de entrevistas recopiladas actualmente)</value>
   </data>
-  <data name="SizeForWebMode" xml:space="preserve">
+  <data name="ExpectedForWebMode" xml:space="preserve">
     <value>La asignación con el tamaño 1 para el modo web debe incluir un correo electrónico o una contraseña.</value>
   </data>
-  <data name="SizeInstructions" xml:space="preserve">
+  <data name="ExpectedInstructions" xml:space="preserve">
     <value>Debe ser un número, -1 para ilimitado, 1 si se especifica correo electrónico</value>
   </data>
   <data name="StartWebInterview" xml:space="preserve">

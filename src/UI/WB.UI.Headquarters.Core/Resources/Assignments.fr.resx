@@ -138,7 +138,7 @@
   <data name="AssignmentsSelected" xml:space="preserve">
     <value>{{count}} Affectation sélectionnée</value>
   </data>
-  <data name="ChangeSizeModalTitle" xml:space="preserve">
+  <data name="ChangeExpectedModalTitle" xml:space="preserve">
     <value>Modifier la taille pour l'affectation {{assignmentId}}</value>
   </data>
   <data name="Count" xml:space="preserve">
@@ -159,7 +159,7 @@
   <data name="InterviewsNeeded" xml:space="preserve">
     <value>Entretiens nécessaires</value>
   </data>
-  <data name="InvalidSize" xml:space="preserve">
+  <data name="InvalidExpected" xml:space="preserve">
     <value>Le champ Taille doit être égal à -1 ou plus.</value>
   </data>
   <data name="NumberOfAssignmentsAffected" xml:space="preserve">
@@ -171,10 +171,10 @@
   <data name="ShowArchived" xml:space="preserve">
     <value>Statut archivé</value>
   </data>
-  <data name="Size" xml:space="preserve">
+  <data name="Expected" xml:space="preserve">
     <value>Taille</value>
   </data>
-  <data name="SizeExplanation" xml:space="preserve">
+  <data name="ExpectedExplanation" xml:space="preserve">
     <value>Indiquez le nombre maximum d'entretiens à générer pour cette affectation. Valeurs autorisées: -1 pour l'affectation illimitée, 0 pour l'affectation vide, les nombres pour la taille d'affectation</value>
   </data>
   <data name="Tooltip_Filter_ArchivedStatus" xml:space="preserve">
@@ -198,7 +198,7 @@
   <data name="Tooltip_Table_Responsible" xml:space="preserve">
     <value>Utilisateur actuellement responsable de l'affectation. Cliquez sur l'icône de tri pour trier le nom d'utilisateur.</value>
   </data>
-  <data name="Tooltip_Table_Size" xml:space="preserve">
+  <data name="Tooltip_Table_ExpectedValue" xml:space="preserve">
     <value>Nombre maximum d'entretiens pouvant être menés pour cette affectation. Cliquez sur n'importe quelle cellule pour changer ce nombre. Cliquez sur l'icône de tri pour trier par taille.</value>
   </data>
   <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">

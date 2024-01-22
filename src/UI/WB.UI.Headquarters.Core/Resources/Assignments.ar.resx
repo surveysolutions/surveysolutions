@@ -135,7 +135,7 @@
   <data name="AssignmentsSelected" xml:space="preserve">
     <value>اختايار مهمة (مهام) {{count}}</value>
   </data>
-  <data name="ChangeSizeModalTitle" xml:space="preserve">
+  <data name="ChangeExpectedModalTitle" xml:space="preserve">
     <value>تحرير الحجم للمهمة {{assignmentId}}</value>
   </data>
   <data name="Count" xml:space="preserve">
@@ -156,7 +156,7 @@
   <data name="InterviewsNeeded" xml:space="preserve">
     <value>المقابلات مطلوبة</value>
   </data>
-  <data name="InvalidSize" xml:space="preserve">
+  <data name="InvalidExpected" xml:space="preserve">
     <value>حقل الحجم يجب ان يكون -1 أو أكثر</value>
   </data>
   <data name="NumberOfAssignmentsAffected" xml:space="preserve">
@@ -171,10 +171,10 @@
   <data name="ShowArchived" xml:space="preserve">
     <value>حالة الأرشفة</value>
   </data>
-  <data name="Size" xml:space="preserve">
+  <data name="Expected" xml:space="preserve">
     <value>الحجم</value>
   </data>
-  <data name="SizeExplanation" xml:space="preserve">
+  <data name="ExpectedExplanation" xml:space="preserve">
     <value>حدد العدد الأقصى للمقابلات التي ستنشأ لهذا التعيين. القيم المسموح بها: -1 هي للتخصيص غير المحدود، 0 هو للتخصيص الفارغ، وأرقام لحجم التعيين</value>
   </data>
   <data name="Tooltip_Filter_ArchivedStatus" xml:space="preserve">
@@ -201,7 +201,7 @@
   <data name="Tooltip_Table_Responsible" xml:space="preserve">
     <value>المستخدم المسؤول حاليا عن التعيين. انقر على رمز الفرز لفرز اسم المستخدم.</value>
   </data>
-  <data name="Tooltip_Table_Size" xml:space="preserve">
+  <data name="Tooltip_Table_ExpectedValue" xml:space="preserve">
     <value>الحد الأقصى لعدد المقابلات التي يمكن إجراؤها لهذه المهمة. انقر على أي خلية لتغيير هذا الرقم. انقر على رمز الفرز للفرز حسب الحجم.</value>
   </data>
   <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">

@@ -144,14 +144,14 @@
   <data name="Action_Deleted" xml:space="preserve">
     <value>Видалено</value>
   </data>
-  <data name="Action_QuantityChanged" xml:space="preserve">
-    <value>Розмір змінено</value>
+  <data name="Action_ExpectedValueChanged" xml:space="preserve">
+    <value>Очикувана кількість змінена</value>
   </data>
-  <data name="Action_QuantityChanged_To" xml:space="preserve">
-    <value>Розмір змінено на {{quantity}}</value>
+  <data name="Action_ExpectedValueChanged_To" xml:space="preserve">
+    <value>Очикувана кількість змінена на {{quantity}}</value>
   </data>
-  <data name="Action_QuantityChanged_To_Unlimited" xml:space="preserve">
-    <value>Розмір змінено на Необмежений</value>
+  <data name="Action_ExpectedValueChanged_To_Unlimited" xml:space="preserve">
+    <value>Очикувана кількість змінена на Необмежену</value>
   </data>
   <data name="Action_Reassigned" xml:space="preserve">
     <value>Перепризначено</value>
@@ -213,7 +213,7 @@
   <data name="AssignmentsHeader" xml:space="preserve">
     <value>Завдання</value>
   </data>
-  <data name="AssignmentSizeInWebMode" xml:space="preserve">
+  <data name="AssignmentExpectedInWebMode" xml:space="preserve">
     <value>Розмір не може бути змінений для завдання у веб-режимі.</value>
   </data>
   <data name="AssignmentsSelected" xml:space="preserve">
@@ -243,7 +243,7 @@
   <data name="ChangeModeModalTitle" xml:space="preserve">
     <value>Змінити режим для завдання{{assignmentId}}</value>
   </data>
-  <data name="ChangeSizeModalTitle" xml:space="preserve">
+  <data name="ChangeExpectedModalTitle" xml:space="preserve">
     <value>Редагувати розмір для завдання {{assignmentId}}</value>
   </data>
   <data name="Close" xml:space="preserve">
@@ -318,13 +318,13 @@
   <data name="InvalidPassword" xml:space="preserve">
     <value>Пароль невірний</value>
   </data>
-  <data name="InvalidSize" xml:space="preserve">
+  <data name="InvalidExpected" xml:space="preserve">
     <value>Поле Розмір повинно мати значення -1 або більше.</value>
   </data>
-  <data name="InvalidSizeMessage" xml:space="preserve">
+  <data name="InvalidExpectedMessage" xml:space="preserve">
     <value>Розмір невірний</value>
   </data>
-  <data name="InvalidSizeWithEmail" xml:space="preserve">
+  <data name="InvalidExpectedWithEmail" xml:space="preserve">
     <value>Для завдань з вказаною електронною адресою дозволений розмір 1</value>
   </data>
   <data name="IsAudioRecordingEnabled" xml:space="preserve">
@@ -396,16 +396,16 @@
   <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
     <value>Розмір обраного завдання {{id}} буде змінено з {{quantity}} на {{collected}} (кількість зібраних на даний момент інтерв'ю)</value>
   </data>
-  <data name="Size" xml:space="preserve">
+  <data name="Expected" xml:space="preserve">
       <value>Очікуванo</value>
   </data>
-  <data name="SizeExplanation" xml:space="preserve">
+  <data name="ExpectedExplanation" xml:space="preserve">
     <value>Вкажіть максимальну кількість інтерв'ю, які будуть створені для цього завдання. Допустимі значення: -1 для необмеженого завдання, 0 для порожнього завдання, цифри для розміру завдання</value>
   </data>
-  <data name="SizeForWebMode" xml:space="preserve">
+  <data name="ExpectedForWebMode" xml:space="preserve">
     <value>Завдання з розміром 1 для веб-режиму повинно мати електронну пошту або пароль</value>
   </data>
-  <data name="SizeInstructions" xml:space="preserve">
+  <data name="ExpectedInstructions" xml:space="preserve">
     <value>Повинно бути числом, -1 для необмеженої кількості, 1, якщо вказана електронна пошта</value>
   </data>
   <data name="StartWebInterview" xml:space="preserve">
@@ -453,7 +453,7 @@
   <data name="Tooltip_Table_Responsible" xml:space="preserve">
     <value>Користувач, який наразі відповідає за завдання. Натисніть на іконку сортування, щоб відсортувати ім'я користувача.</value>
   </data>
-  <data name="Tooltip_Table_Size" xml:space="preserve">
+  <data name="Tooltip_Table_ExpectedValue" xml:space="preserve">
     <value>Максимальна кількість інтерв'ю, які можуть бути проведені для цього завдання. Натисніть на будь-яку клітинку, щоб змінити це число. Натисніть на іконку сортування, щоб відсортувати за розміром.</value>
   </data>
   <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">
