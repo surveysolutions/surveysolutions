@@ -1,6 +1,6 @@
 import { createVuetify } from 'vuetify';
 import { VDataTable } from 'vuetify/labs/VDataTable';
-import 'vuetify/styles';
+//import 'vuetify/styles';
 import i18nInstance from './localization';
 
 const myCustomLightTheme = {

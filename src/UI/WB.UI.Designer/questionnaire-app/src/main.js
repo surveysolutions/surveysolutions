@@ -5,7 +5,7 @@ import router from './router';
 import VueProgressBar from "@aacassandra/vue3-progressbar";
 import VueDOMPurifyHTML from 'vue-dompurify-html';
 import i18n from './plugins/localization';
-//import { vuetify /*, install, i18n */ } from './plugins/vuetify';
+import { vuetify /*, install, i18n */ } from './plugins/vuetify';
 
 //import '../../questionnaire/content/markup.less';
 //import 'bootstrap/dist/css/bootstrap.min.css';
@@ -37,7 +37,7 @@ vue.config.globalProperties.$emitter = emitter;
 
 vue.use(router);
 vue.use(pinia);
-//vue.use(vuetify); //reqired by options component. consider either remove or use.
+vue.use(vuetify); //reqired by options component. consider either remove or use.
 vue.use(i18n);
 //vue.use(uiv);
 vue.use(PerfectScrollbar);
