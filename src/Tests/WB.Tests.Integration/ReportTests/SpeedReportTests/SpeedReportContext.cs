@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
@@ -35,7 +36,7 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
 
             var interviewCommentedStatus = Create.Entity.InterviewCommentedStatus(
                 status: InterviewExportedAction.FirstAnswerSet,
-                timestamp: dateTime.AddMinutes(1),
+                timestamp: dateTime.AddMinutes(1).SetUtcKind(),
                 timeSpanWithPreviousStatus: TimeSpan.FromMinutes(1),
                 supervisorId: supervisorId,
                 interviewSummary: interview);

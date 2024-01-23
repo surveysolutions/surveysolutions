@@ -20,7 +20,7 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
         {
             var supervisorId = Id.gA;
             var interviewerId = Id.g1;
-            var reportEndDate = new DateTime(2010, 10, 30, 0, 0, 0, DateTimeKind.Utc);
+            var reportEndDate = new DateTime(2010, 10, 30);
 
             var interview = CreateCompletedInterviewWithDuration(TimeSpan.FromMinutes(10), supervisorId, interviewerId, reportEndDate, questionnaireId: Id.g2, questionnaireVersion: 1);
             var interview1 = CreateCompletedInterviewWithDuration(TimeSpan.FromMinutes(8), supervisorId, interviewerId, reportEndDate, questionnaireId: Id.g2, questionnaireVersion: 2);
@@ -58,7 +58,7 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
         {
             var supervisorId = Id.gA;
             var interviewerId = Id.g1;
-            var reportEndDate = new DateTime(2010, 10, 30, 0, 0, 0, DateTimeKind.Utc);
+            var reportEndDate = new DateTime(2010, 10, 30);
 
             var interview = CreateCompletedInterviewWithDuration(TimeSpan.FromMinutes(10), supervisorId, interviewerId, reportEndDate, questionnaireId: Id.g2, questionnaireVersion: 1);
             var interview1 = CreateCompletedInterviewWithDuration(TimeSpan.FromMinutes(8), supervisorId, interviewerId, reportEndDate, questionnaireId: Id.g2, questionnaireVersion: 2);
