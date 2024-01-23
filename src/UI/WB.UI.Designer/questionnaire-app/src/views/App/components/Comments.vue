@@ -112,7 +112,7 @@ export default {
         },
         deleteComment(commentId) {
             const params = {
-                title: this.$t('DeleteCommentConfirm'),
+                title: this.$t('QuestionnaireEditor.DeleteCommentConfirm'),
                 okButtonTitle: this.$t('QuestionnaireEditor.Delete'),
                 cancelButtonTitle: this.$t('QuestionnaireEditor.Cancel'),
                 isReadOnly: this.questionnaire.isReadOnlyForUser,

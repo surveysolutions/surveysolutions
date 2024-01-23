@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
 import _ from 'lodash';
-import { get, post } from '../services/apiService';
 import { getComments } from '../services/commentsService';
 import emitter from '../services/emitter';
+import moment from 'moment';
 
 export const useCommentsStore = defineStore('comments', {
     state: () => ({
@@ -41,6 +41,12 @@ export const useCommentsStore = defineStore('comments', {
 
             this.questionnaireId = questionnaireId;
             this.entityId = entityId;
+
+            _.forEach(data, function(comment) {
+                comment.date = moment.utc(comment.date).local().format("MMM DD, YYYY HH:mm");
+                comment.isResolved = !_.isNull(comment.resolveDate || null);
+            });
+
             this.setComments(data);
         },
 
