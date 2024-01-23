@@ -1,0 +1,120 @@
+<template>
+  <div id="search-modal" class="modal findReplaceModal fade in" v-if="visible" style="display:block; z-index:1050;">
+    <div class="modal-dialog" >
+        <div class="modal-content">            
+            <div class="modal-header">
+                <button type="button" class="close" aria-hidden="true" @click="close()">  </button>
+                    <h3 class="modal-title"> {{ $t('QuestionnaireEditor.FindReplaceTitle') }} </h3>
+</div>
+<div style="color: brown;font-size: large;">Under construction</div>
+<!--<div class="modal-body">
+    <div ng-switch on="step">
+        <form class="form-horizontal" ng-switch-when="search">
+            <div class="form-group">
+                <label for="searchFor" class="col-sm-3 control-label wb-label" ng-i18next="FindReplaceFindWhat">
+                </label>
+                <div class="col-sm-9">
+                    <input type="text" maxlength="500" class="form-control" id="searchFor" ng-model="searchForm.searchFor" on-enter="findAll()" autocomplete="off">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="relaceWith" class="col-sm-3 control-label wb-label" ng-i18next="FindReplaceReplaceWith">
+                </label>
+                <div class="col-sm-9">
+                    <input type="text" maxlength="500" class="form-control" id="relaceWith" ng-model="searchForm.replaceWith" autocomplete="off">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <input id="cb-match-case" type="checkbox" class="wb-checkbox" ng-model="searchForm.matchCase" />
+                    <label for="cb-match-case" class="wb-label">
+                        <span></span>
+                        {{ 'FindReplaceMatchCase' | i18next}}
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <input id="cb-match-wholeword" type="checkbox" class="wb-checkbox" ng-model="searchForm.matchWholeWord" />
+                    <label for="cb-match-wholeword" class="wb-label">
+                        <span></span>
+                        {{'FindReplaceMatchWord' | i18next}}
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <input id="cb-use-regexp" type="checkbox" class="wb-checkbox" ng-model="searchForm.useRegex" />
+                    <label for="cb-use-regexp" class="wb-label">
+                        <span></span>
+                        {{'FindReplaceUseRegex' | i18next}}
+                    </label>
+                </div>
+            </div>
+        </form>
+        
+        <div ng-switch-when="confirm">
+            <p ng-i18next="FindReplaceСonfirm"></p>
+            <p>
+                {{'FindReplaceReplaceAllConfirm' | i18next}} "<strong ng-bind="searchForm.searchFor"></strong>" {{'FindReplaceReplaceAllConfirmWith' | i18next}} "<strong ng-bind="searchForm.replaceWith"></strong>"
+            </p>
+            <p ng-i18next="({count: foundReferences.length})FindReplaceInAllFound"></p>
+        </div>
+        <div ng-switch-when="done">
+            {{'FindReplaceInAll' | i18next }} "<strong ng-bind="searchForm.searchFor"></strong>" {{'FindReplaceWereReplaced' | i18next}} "<strong ng-bind="searchForm.replaceWith"></strong>".
+        </div>
+    </div>
+    
+</div>
+<div class="modal-footer">
+    <div ng-switch on="step">
+        <div ng-switch-when="search">
+            <p class="wb-label" ng-i18next="({count: foundReferences.length})FindReplaceMatchingLines"></p>
+            <button type="button" class="btn btn-lg btn-primary" ng-disabled="searchForm.searchFor.length === 0" ng-click="findAll()" ng-i18next="FindReplaceFindAll"></button>
+            <button type="button"
+                    class="btn btn-lg btn-primary"
+                    ng-if="!isReadOnlyForUser"
+                    ng-disabled="foundReferences.length === 0"
+                    ng-click="confirmReplaceAll()"
+                    ng-i18next="({count: foundReferences.length})FindReplaceReplaceAll">
+            </button>
+
+            <div class="pull-right" ng-show="foundReferences.length">
+                <button type="button" class="btn btn-lg btn-link" ng-click="navigatePrev()" ng-i18next="FindReplacePrevious">Previous</button>
+                <button type="button" class="btn btn-lg btn-link" ng-click="navigateNext()" ng-i18next="FindReplaceNext">Next</button>
+            </div>
+        </div>
+        <div ng-switch-when="confirm">
+            <button type="button" class="btn btn-lg btn-primary" ng-disabled="foundReferences.length === 0" ng-click="replaceAll()" 
+                    ng-i18next="({count: foundReferences.length})FindReplaceReplaceAll">
+            </button>
+            <button type="button" class="btn btn-lg btn-link" ng-click="backToSearch()" ng-i18next="FindReplaceBackToSearch"></button>
+        </div>
+        <div ng-switch-when="done">
+            <button type="button" class="btn btn-lg btn-primary" ng-click="onDone()" ng-i18next="FindReplaceDone"></button>
+        </div>
+    </div>
+</div> -->
+        </div>
+    </div>
+</div>
+</template>
+
+<script>
+export default {
+    name: 'SearchDialog',
+    props: {
+        questionnaireId: { type: String, required: true }
+    },
+    data() {
+        return {
+            visible: false
+        };
+    },
+    expose: ['open', 'close'],
+    methods: {
+        close() {
+            this.visible = false;
+        },
+        open(){
+            this.visible = true;
+        }
+    }
+};
+</script>

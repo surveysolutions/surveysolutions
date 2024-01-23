@@ -140,6 +140,7 @@
             </div>
         </perfect-scrollbar>
     </div>
+    <SearchDialog ref="searchDialog" :questionnaireId="questionnaireId" />
 </template>
 
 <script>
@@ -147,6 +148,7 @@ import { useTreeStore } from '../../../stores/tree';
 import { Draggable, dragContext, walkTreeData } from '@he-tree/vue';
 import '@he-tree/vue/style/default.css';
 import { ref, nextTick } from 'vue';
+import SearchDialog from './SearchDialog.vue';
 
 import TreeGroup from './TreeGroup.vue';
 import TreeQuestion from './TreeQuestion.vue';
@@ -163,6 +165,7 @@ export default {
         TreeQuestion,
         TreeStaticText,
         TreeVariable,
+        SearchDialog,
 
         Help,
     },
@@ -197,8 +200,10 @@ export default {
     setup() {
         const treeStore = useTreeStore();
 
+        const searchDialog = ref(null);
         return {
-            treeStore
+            treeStore,
+            searchDialog
         };
     },
     async beforeMount() {
@@ -407,7 +412,9 @@ export default {
             });
         },
         migrateToNewVersion() { },
-        showFindReplaceDialog() { },
+        showFindReplaceDialog() {
+            this.searchDialog.open();
+         },
         async showSearch() {
             this.search.open = true;
             await nextTick();
