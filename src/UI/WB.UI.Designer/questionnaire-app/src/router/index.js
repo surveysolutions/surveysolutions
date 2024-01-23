@@ -3,6 +3,7 @@ import PageNotFound from '../views/PageNotFound.vue';
 
 const OptionsEditor = () => import('../views/OptionsEditor/OptionsEditor.vue');
 
+const Questionnaire = () => import('../views/Questionnaire.vue');
 const LeftSidePanel = () => import('../views/App/components/LeftSidePanel.vue');
 const Panels = () => import('../views/App/components/Panels.vue');
 const RightPanel = () => import('../views/App/components/RightPanel.vue');
@@ -38,98 +39,110 @@ const routes = [
         })
     },
     {
-        name: 'questionnaire',
-        path: '/q/details/:questionnaireId',
-        components: {
-            default: Panels,
-            header: QuestionnaireHeader,
-            leftSidePanel: LeftSidePanel
-        },
-        props: route => ({
-            questionnaireId: route.params.questionnaireId
-        }),
+        name: 'q',
+        path: '/q',
+        component: Questionnaire,
         children: [
             {
-                name: 'chapter',
-                path: 'chapter/:chapterId',
-                props: route => ({
-                    questionnaireId: route.params.questionnaireId,
-                    chapterId: route.params.chapterId
-                }),
+                name: 'questionnaire',
+                path: 'details/:questionnaireId',
                 components: {
-                    default: RightPanel,
-                    tree: Tree
+                    default: Panels,
+                    header: QuestionnaireHeader,
+                    leftSidePanel: LeftSidePanel
                 },
+                props: route => ({
+                    questionnaireId: route.params.questionnaireId
+                }),
                 children: [
                     {
-                        name: 'variable',
-                        path: 'variable/:entityId',
-                        components: {
-                            default: Variable,
-                            comments: Comments
-                        },
-                        props: route => ({
-                            questionnaireId: route.params.questionnaireId,
-                            variableId: route.params.entityId,
-                            entityId: route.params.entityId
-                        })
-                    },
-                    {
-                        name: 'question',
-                        path: 'question/:entityId',
-                        components: {
-                            default: Question,
-                            comments: Comments
-                        },
-                        props: route => ({
-                            questionnaireId: route.params.questionnaireId,
-                            questionId: route.params.entityId,
-                            entityId: route.params.entityId
-                        })
-                    },
-                    {
-                        name: 'statictext',
-                        path: 'statictext/:entityId',
-                        components: {
-                            default: StaticText,
-                            comments: Comments
-                        },
-                        props: route => ({
-                            questionnaireId: route.params.questionnaireId,
-                            statictextId: route.params.entityId,
-                            entityId: route.params.entityId
-                        })
-                    },
-                    {
-                        name: 'group',
-                        path: 'group/:entityId',
-                        components: {
-                            default: Group,
-                            comments: Comments
-                        },
-                        props: route => ({
-                            questionnaireId: route.params.questionnaireId,
-                            groupId: route.params.entityId,
-                            entityId: route.params.entityId
-                        })
-                    },
-                    {
-                        name: 'roster',
-                        path: 'roster/:entityId',
-                        components: {
-                            default: Roster,
-                            comments: Comments
-                        },
-                        props: route => ({
-                            rosterId: route.params.entityId,
-                            questionnaireId: route.params.questionnaireId,
-                            entityId: route.params.entityId
-                        })
-                    },
-                    {
                         name: 'chapter',
-                        path: '',
-                        component: Chapter
+                        path: 'chapter/:chapterId',
+                        props: route => ({
+                            questionnaireId: route.params.questionnaireId,
+                            chapterId: route.params.chapterId
+                        }),
+                        components: {
+                            default: RightPanel,
+                            tree: Tree
+                        },
+                        children: [
+                            {
+                                name: 'variable',
+                                path: 'variable/:entityId',
+                                components: {
+                                    default: Variable,
+                                    comments: Comments
+                                },
+                                props: route => ({
+                                    questionnaireId:
+                                        route.params.questionnaireId,
+                                    variableId: route.params.entityId,
+                                    entityId: route.params.entityId
+                                })
+                            },
+                            {
+                                name: 'question',
+                                path: 'question/:entityId',
+                                components: {
+                                    default: Question,
+                                    comments: Comments
+                                },
+                                props: route => ({
+                                    questionnaireId:
+                                        route.params.questionnaireId,
+                                    questionId: route.params.entityId,
+                                    entityId: route.params.entityId
+                                })
+                            },
+                            {
+                                name: 'statictext',
+                                path: 'statictext/:entityId',
+                                components: {
+                                    default: StaticText,
+                                    comments: Comments
+                                },
+                                props: route => ({
+                                    questionnaireId:
+                                        route.params.questionnaireId,
+                                    statictextId: route.params.entityId,
+                                    entityId: route.params.entityId
+                                })
+                            },
+                            {
+                                name: 'group',
+                                path: 'group/:entityId',
+                                components: {
+                                    default: Group,
+                                    comments: Comments
+                                },
+                                props: route => ({
+                                    questionnaireId:
+                                        route.params.questionnaireId,
+                                    groupId: route.params.entityId,
+                                    entityId: route.params.entityId
+                                })
+                            },
+                            {
+                                name: 'roster',
+                                path: 'roster/:entityId',
+                                components: {
+                                    default: Roster,
+                                    comments: Comments
+                                },
+                                props: route => ({
+                                    rosterId: route.params.entityId,
+                                    questionnaireId:
+                                        route.params.questionnaireId,
+                                    entityId: route.params.entityId
+                                })
+                            },
+                            {
+                                name: 'chapter',
+                                path: '',
+                                component: Chapter
+                            }
+                        ]
                     }
                 ]
             }
