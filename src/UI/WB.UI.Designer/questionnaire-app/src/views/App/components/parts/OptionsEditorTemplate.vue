@@ -55,7 +55,7 @@
         <div v-if="!useListAsOptionsEditor">
             <div class="form-group" :class="{ 'has-error': !stringifiedOptions.valid }">
                 <textarea name="stringifiedOptions" class="form-control mono" v-model="activeQuestion.stringifiedOptions"
-                    v-on:keyup="stringifiedOptionsValidate" match-options-pattern max-options-count msd-elastic></textarea>
+                    v-on:keyup="stringifiedOptionsValidate" match-options-pattern max-options-count v-autosize></textarea>
                 <p class="help-block">
                     <input class="btn btn-link" type="button" :value="$t('QuestionnaireEditor.TableView')" value="Show list"
                         @click="showOptionsInList()" :disabled="!stringifiedOptions.valid" />

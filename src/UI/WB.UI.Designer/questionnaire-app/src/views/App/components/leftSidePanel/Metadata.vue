@@ -19,7 +19,7 @@
                             <div class="field-wrapper">
                                 <span class="label-title">{{ $t('QuestionnaireEditor.SideBarMetadataSubtitle') }}</span>
                                 <div class="form-group">
-                                    <textarea class="form-control msd-elastic" name="subTitle"
+                                    <textarea class="form-control msd-elastic" v-autosize name="subTitle"
                                         v-model="metadata.subTitle"></textarea>
                                 </div>
                             </div>
@@ -33,7 +33,7 @@
                             <div class="field-wrapper">
                                 <span class="label-title">{{ $t('QuestionnaireEditor.SideBarMetadataVersionNotes') }}</span>
                                 <div class="form-group">
-                                    <textarea class="form-control msd-elastic" name="versionNotes"
+                                    <textarea class="form-control msd-elastic" v-autosize name="versionNotes"
                                         v-model="metadata.versionNotes"></textarea>
                                 </div>
                             </div>
@@ -172,21 +172,21 @@
                                 <span class="label-title">{{ $t('QuestionnaireEditor.SideBarMetadataUnitOfAlalysis')
                                 }}</span>
                                 <div class="form-group">
-                                    <textarea class="form-control msd-elastic" name="unitOfAnalysis"
+                                    <textarea class="form-control msd-elastic" v-autosize name="unitOfAnalysis"
                                         v-model="metadata.unitOfAnalysis"></textarea>
                                 </div>
                             </div>
                             <div class="field-wrapper">
                                 <span class="label-title">{{ $t('QuestionnaireEditor.SideBarMetadataCoverage') }}</span>
                                 <div class="form-group">
-                                    <textarea class="form-control msd-elastic" name="coverage"
+                                    <textarea class="form-control msd-elastic" v-autosize name="coverage"
                                         v-model="metadata.coverage"></textarea>
                                 </div>
                             </div>
                             <div class="field-wrapper">
                                 <span class="label-title">{{ $t('QuestionnaireEditor.SideBarMetadataUniverse') }}</span>
                                 <div class="form-group">
-                                    <textarea class="form-control msd-elastic" name="universe"
+                                    <textarea class="form-control msd-elastic" v-autosize name="universe"
                                         v-model="metadata.universe"></textarea>
                                 </div>
                             </div>
@@ -194,14 +194,14 @@
                                 <span class="label-title">{{ $t('QuestionnaireEditor.SideBarMetadataPrimaryInvestigator')
                                 }}</span>
                                 <div class="form-group">
-                                    <textarea class="form-control msd-elastic" name="primaryInvestigator"
+                                    <textarea class="form-control msd-elastic" v-autosize name="primaryInvestigator"
                                         v-model="metadata.primaryInvestigator"></textarea>
                                 </div>
                             </div>
                             <div class="field-wrapper">
                                 <span class="label-title">{{ $t('QuestionnaireEditor.SideBarMetadataConsultants') }}</span>
                                 <div class="form-group">
-                                    <textarea class="form-control msd-elastic" name="consultant"
+                                    <textarea class="form-control msd-elastic" v-autosize name="consultant"
                                         v-model="metadata.consultant">
                                             </textarea>
                                 </div>
@@ -209,7 +209,8 @@
                             <div class="field-wrapper">
                                 <span class="label-title">{{ $t('QuestionnaireEditor.SideBarMetadataFunding') }}</span>
                                 <div class="form-group">
-                                    <textarea class="form-control msd-elastic" name="funding" v-model="metadata.funding">
+                                    <textarea class="form-control msd-elastic" v-autosize name="funding"
+                                        v-model="metadata.funding">
                                             </textarea>
                                 </div>
                             </div>
@@ -219,14 +220,14 @@
                             <div class="field-wrapper">
                                 <span class="label-title">{{ $t('QuestionnaireEditor.SideBarMetadataNotes') }}</span>
                                 <div class="form-group">
-                                    <textarea class="form-control msd-elastic" name="notes"
+                                    <textarea class="form-control msd-elastic" v-autosize name="notes"
                                         v-model="metadata.notes"></textarea>
                                 </div>
                             </div>
                             <div class="field-wrapper">
                                 <span class="label-title">{{ $t('QuestionnaireEditor.SideBarMetadataKeywords') }}</span>
                                 <div class="form-group">
-                                    <textarea class="form-control msd-elastic" name="keywords"
+                                    <textarea class="form-control msd-elastic" v-autosize name="keywords"
                                         v-model="metadata.keywords"></textarea>
                                 </div>
                             </div>

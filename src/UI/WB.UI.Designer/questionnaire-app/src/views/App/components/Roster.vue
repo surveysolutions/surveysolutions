@@ -208,7 +208,7 @@
                                     <textarea name="stringifiedRosterTitles" class="form-control mono"
                                         v-model="activeRoster.stringifiedRosterTitles" match-options-pattern
                                         v-on:keyup="stringifiedRosterTitlesValidate" max-options-count
-                                        msd-elastic></textarea>
+                                        v-autosize></textarea>
                                     <p class="help-block">
                                         <button class="btn btn-link" type="button" @click="showRosterTitlesInList()"
                                             :disabled="!stringifiedRosterTitles.valid"

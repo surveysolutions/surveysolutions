@@ -18,8 +18,8 @@
             </div>
             <ul>
                 <li class="macros-panel-item" v-for="macro in macros">
-                    <a href="javascript:void(0);" @click="removeMacro(macro)" v-if="!questionnaire.isReadOnlyForUser" class="btn delete-btn"
-                        tabindex="-1"></a>
+                    <a href="javascript:void(0);" @click="removeMacro(macro)" v-if="!questionnaire.isReadOnlyForUser"
+                        class="btn delete-btn" tabindex="-1"></a>
                     <div class="input-group macros-name">
                         <span class="input-group-addon">$</span>
                         <input :placeholder="$t('QuestionnaireEditor.SideBarMacroName')" maxlength="32" spellcheck="false"
@@ -30,7 +30,7 @@
                     <div v-if="isDescriptionVisible(macro)">
                         <div class="divider"></div>
                         <textarea :placeholder="$t('QuestionnaireEditor.SideBarMacroDescription')" type="text"
-                            v-model="macro.description" class="form-control macros-description" msd-elastic></textarea>
+                            v-model="macro.description" class="form-control macros-description" v-autosize></textarea>
                     </div>
                     <div class="actions" v-if="isEditorDirty(macro)">
                         <button :disabled="questionnaire.isReadOnlyForUser" class="btn lighter-hover"
@@ -105,7 +105,7 @@ export default {
             };
 
             this.$confirm(params);
-            
+
         },
         toggleDescription(macro) {
             macro.isDescriptionVisible = !macro.isDescriptionVisible;

@@ -18,7 +18,7 @@
                         <help link="newComment" />
                     </label>
                     <textarea name="comment" id="edit-entity-comment" v-model="activeComment.comment" class="form-control"
-                        required msd-elastic></textarea>
+                        required v-autosize></textarea>
                     <div>
                         <span>{{ activeComment.comment.length }} / {{ maxCommentLength }}</span>
                     </div>
@@ -118,7 +118,7 @@ export default {
                 isReadOnly: this.questionnaire.isReadOnlyForUser,
                 callback: async confirm => {
                     if (confirm) {
-                        deleteComment(this.questionnaire.questionnaireId ,commentId, this.entityId);
+                        deleteComment(this.questionnaire.questionnaireId, commentId, this.entityId);
                     }
                 }
             };
