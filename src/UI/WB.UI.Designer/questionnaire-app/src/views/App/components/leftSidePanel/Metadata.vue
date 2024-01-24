@@ -158,7 +158,7 @@
                                         maxlength="4" v-pattern="/^\d+$/" class="form-control date-field" name="year"
                                         v-model="metadata.year" />
                                 </div>
-                                <p class="help-block ng-cloak" v-show="isInteger(metadata.year)">{{
+                                <p class="help-block ng-cloak" v-show="!isOnlyNumbers(metadata.year)">{{
                                     $t('QuestionnaireEditor.QuestionOnlyInts') }}
                                 </p>
                             </div>
@@ -259,7 +259,7 @@
   
 <script>
 
-import { isInteger } from '../../../../helpers/number';
+import { isOnlyNumbers } from '../../../../helpers/number';
 
 import { useQuestionnaireStore } from '../../../../stores/questionnaire';
 
@@ -296,7 +296,7 @@ export default {
         },
 
         invalid() {
-            return !this.isInteger(this.metadata.year);
+            return !this.isOnlyNumbers(this.metadata.year);
         },
 
         countryTitle() {
@@ -346,8 +346,8 @@ export default {
             }
         },
 
-        isInteger(value) {
-            return isInteger(value);
+        isOnlyNumbers(value) {
+            return value == null || value == '' || isOnlyNumbers(value);
         },
 
         async saveMetadata() {
