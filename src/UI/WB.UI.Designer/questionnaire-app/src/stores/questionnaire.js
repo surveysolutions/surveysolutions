@@ -176,14 +176,17 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             );
         },
 
-        discardMetadataChanges() {
+        async discardMetadataChanges() {
             this.edittingMetadata = Object.assign({}, this.info.metadata);
         },
 
         async saveMetadataChanges() {
-            await updateMetadata(this.questionnaireId, this.edittingMetadata);
+            await updateMetadata(
+                this.info.questionnaireId,
+                this.edittingMetadata
+            );
             this.info.title = this.edittingMetadata.title;
-            this.edittingMetadata = Object.assign({}, this.info.metadata);
+            this.info.metadata = Object.assign({}, this.edittingMetadata);
         }
     }
 });

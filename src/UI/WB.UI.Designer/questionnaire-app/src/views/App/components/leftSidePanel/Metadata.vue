@@ -355,8 +355,8 @@ export default {
             this.dirty = false;
         },
 
-        cancelMetadata() {
-            this.questionnaireStore.discardMetadataChanges();
+        async cancelMetadata() {
+            await this.questionnaireStore.discardMetadataChanges();
             this.dirty = false;
         },
 
