@@ -5,13 +5,15 @@ import { i18n } from '../plugins/localization';
 import emitter from '../services/emitter';
 import { findIndex, forEach, isEmpty, map, filter, find } from 'lodash';
 import { useCookies } from 'vue3-cookies';
+import { updateMetadata } from '../services/metadataService';
 
 export const useQuestionnaireStore = defineStore('questionnaire', {
     state: () => ({
         info: {}
     }),
     getters: {
-        getInfo: state => state.info
+        getInfo: state => state.info,
+        getEdittingMetadata: state => state.edittingMetadata
     },
     actions: {
         setupListeners() {
@@ -52,6 +54,8 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
 
         setQuestionnaireInfo(info) {
             this.info = info;
+
+            this.edittingMetadata = Object.assign({}, info.metadata);
 
             forEach(this.info.macros, macro => {
                 macro.initialMacro = Object.assign({}, macro);
@@ -170,6 +174,16 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
                     return categoriesDto.categoriesId !== event.categoriesId;
                 }
             );
+        },
+
+        discardMetadataChanges() {
+            this.edittingMetadata = Object.assign({}, this.info.metadata);
+        },
+
+        async saveMetadataChanges() {
+            await updateMetadata(this.questionnaireId, this.edittingMetadata);
+            this.info.title = this.edittingMetadata.title;
+            this.edittingMetadata = Object.assign({}, this.info.metadata);
         }
     }
 });
