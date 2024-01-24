@@ -166,7 +166,7 @@
                 <div class="form-group pull-right">
                     <label for="Question-scope">{{ $t('QuestionnaireEditor.QuestionScope') }}&nbsp;</label>
 
-                    <div class="btn-group dropup type-container-dropdown">
+                    <div class="btn-group dropup ">
                         <button class="btn dropdown-toggle" id="Question-scope" type="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
                             {{ $t(currentQuestionScope) }}
