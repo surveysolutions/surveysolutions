@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             var options = classificationsStorage.GetCategories(classificationCommand.ClassificationId)
                 .Result
-                .Select(x => new Option(x.Value.ToString(), x.Title))
+                .Select(x => new Option(x.Value, x.Title))
                 .ToArray();
                     
             classificationCommand.Options = options;

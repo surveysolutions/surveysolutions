@@ -32,9 +32,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                 answer =>
                     new Option
                     (
-                        value : incrementer.ToString(),
+                        value : incrementer,
                         title : (incrementer++).ToString(),
-                        parentValue : "1"
+                        parentValue : 1
                     )).ToArray();
 
             var questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
@@ -69,7 +69,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
             );
 
             questionnaire.UpdateCascadingComboboxOptions(cascadeQuestionId, responsibleId, 
-                oldOptions.Select(x => Create.QuestionnaireCategoricalOption(int.Parse(x.Value), x.Title)).ToArray());
+                oldOptions.Select(x => Create.QuestionnaireCategoricalOption(Convert.ToInt32(x.Value), x.Title)).ToArray());
 
             //act
             questionnaire.UpdateSingleOptionQuestion(
@@ -121,9 +121,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                 answer =>
                     new Option
                     (
-                        value : incrementer.ToString(),
+                        value : incrementer,
                         title : (incrementer++).ToString(),
-                        parentValue : "1"
+                        parentValue : 1
                     )).ToArray();
 
             var questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
@@ -162,7 +162,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
 
             //act
             questionnaire.UpdateCascadingComboboxOptions(cascadeQuestionId, responsibleId,
-                oldOptions.Select(x => Create.QuestionnaireCategoricalOption(int.Parse(x.Value), x.Title)).ToArray());
+                oldOptions.Select(x => Create.QuestionnaireCategoricalOption(Convert.ToInt32(x.Value), x.Title)).ToArray());
 
             
 
@@ -186,9 +186,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                 answer =>
                     new Option
                     (
-                        value : incrementer.ToString(),
+                        value : incrementer,
                         title : (incrementer++).ToString(),
-                        parentValue : "1"
+                        parentValue : 1
                     )).ToArray();
 
             var questionnaire = CreateQuestionnaire(responsibleId: responsibleId);

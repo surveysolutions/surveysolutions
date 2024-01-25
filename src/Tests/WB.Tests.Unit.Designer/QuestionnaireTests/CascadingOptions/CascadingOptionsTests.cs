@@ -135,9 +135,9 @@ namespace WB.Tests.Unit.Designer.QuestionnaireTests.CascadingOptions
                 responsibleId: actorId,
                 options: new[]
                 {
-                    new Option(String.Empty, String.Empty, (decimal?)null),
-                    new Option(String.Empty, String.Empty, (decimal?)null),
-                    new Option(String.Empty, String.Empty, (decimal?)null)
+                    new Option(null, String.Empty, (decimal?)null),
+                    new Option(null, String.Empty, (decimal?)null),
+                    new Option(null, String.Empty, (decimal?)null)
                 },
                 linkedToEntityId: null,
                 isFilteredCombobox: false,

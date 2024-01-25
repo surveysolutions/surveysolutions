@@ -43,8 +43,8 @@ namespace WB.Infrastructure.Native.Questionnaire.Impl
                                     AnswerCode = option.Id,
                                     AnswerText = option.Text,
                                     ParentCode = option.ParentId,
-                                    ParentValue = option.ParentId?.ToString(CultureInfo.InvariantCulture),
-                                    AnswerValue = option.Id.ToString(CultureInfo.InvariantCulture),
+                                    //ParentValue = option.ParentId?.ToString(CultureInfo.InvariantCulture),
+                                    //AnswerValue = option.Id.ToString(CultureInfo.InvariantCulture),
                                     AttachmentName = option.AttachmentName
                                 }).ToList();
                             });

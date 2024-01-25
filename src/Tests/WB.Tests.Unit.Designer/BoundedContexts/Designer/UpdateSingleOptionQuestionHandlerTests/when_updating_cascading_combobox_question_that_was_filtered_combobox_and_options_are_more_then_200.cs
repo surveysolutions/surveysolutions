@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
             );
 
             questionnaire.UpdateFilteredComboboxOptions(filteredQuestionId, responsibleId, 
-                oldOptions.Select(x=> Create.QuestionnaireCategoricalOption(int.Parse(x.Value), x.Title)).ToArray());
+                oldOptions.Select(x=> Create.QuestionnaireCategoricalOption((int)x.Value, x.Title)).ToArray());
             BecauseOf();
         }
 

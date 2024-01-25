@@ -6,16 +6,39 @@ namespace Main.Core.Entities.SubEntities
 {
     public class Answer
     {
+        private decimal? answerCode;
+        private decimal? parentCode;
+
         public string AnswerText { get; set; } = String.Empty;
 
-        public string AnswerValue { get; set; } = String.Empty;
+        public string AnswerValue
+        {
+            get => answerCode.HasValue ? answerCode.Value.ToString(CultureInfo.InvariantCulture) : String.Empty;
+            set => answerCode = string.IsNullOrEmpty(value) 
+                ? null 
+                : decimal.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out decimal parsedDecimal)
+                    ? parsedDecimal
+                    : null;
+        }
 
-        public string? ParentValue { get; set; }
-       
-        public decimal? AnswerCode { get; set; }
+        public string? ParentValue
+        {
+            get => parentCode.HasValue ? parentCode.Value.ToString(CultureInfo.InvariantCulture) : String.Empty;
+            set => parentCode = string.IsNullOrEmpty(value) ? null : decimal.Parse(value, NumberStyles.Number, CultureInfo.InvariantCulture);
+        }
 
-        public decimal? ParentCode { get; set; }
-        
+        public decimal? AnswerCode
+        {
+            get => answerCode;// ?? (string.IsNullOrEmpty(AnswerValue) ? null : GetParsedValue());
+            set => answerCode = value;
+        }
+
+        public decimal? ParentCode
+        {
+            get => parentCode;// ?? (string.IsNullOrEmpty(ParentValue) ? null : GetParsedParentValue());
+            set => parentCode = value;
+        }
+
         public string? AttachmentName { get; set; }
 
         public Answer Clone()
@@ -28,7 +51,7 @@ namespace Main.Core.Entities.SubEntities
 
         public decimal GetParsedValue()
         {
-            return this.AnswerCode ?? decimal.Parse(this.AnswerValue, NumberStyles.Number, CultureInfo.InvariantCulture);
+            return (decimal)this.AnswerCode!;// ?? decimal.Parse(this.AnswerValue, NumberStyles.Number, CultureInfo.InvariantCulture);
         }
 
         public int? GetParsedParentValue()
@@ -36,13 +59,14 @@ namespace Main.Core.Entities.SubEntities
             if (this.ParentCode.HasValue)
                 return (int) this.ParentCode;
 
-            if (string.IsNullOrEmpty(this.ParentValue)) return null;
+            return null;
+            //if (string.IsNullOrEmpty(this.ParentValue)) return null;
 
-            int.TryParse(this.ParentValue, NumberStyles.Number, CultureInfo.InvariantCulture, out var parsedParentValue);
-            return parsedParentValue;
+            //int.TryParse(this.ParentValue, NumberStyles.Number, CultureInfo.InvariantCulture, out var parsedParentValue);
+            //return parsedParentValue;
         }
 
-        public bool HasValue() => AnswerCode.HasValue || !string.IsNullOrEmpty(AnswerValue);
+        public bool HasValue() => AnswerCode.HasValue;// || !string.IsNullOrEmpty(AnswerValue);
 
         public override bool Equals(object? obj)
         {

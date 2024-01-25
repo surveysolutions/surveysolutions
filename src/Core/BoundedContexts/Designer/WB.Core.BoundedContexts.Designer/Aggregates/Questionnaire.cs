@@ -2128,8 +2128,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             AnswerCode = option.Value,
             AnswerText = option.Title,
             ParentCode = option.ParentValue,
-            ParentValue = option.ParentValue?.ToString(),
-            AnswerValue = option.Value.ToString(),
+            //ParentValue = option.ParentValue?.ToString(),
+            //AnswerValue = option.Value.ToString(),
             AttachmentName = option.AttachmentName,
         };
 
@@ -2138,9 +2138,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private static Answer ConvertOptionToAnswer(Option option) => new Answer
         {
-            AnswerValue = option.Value,
+            AnswerCode = option.Value,
             AnswerText = option.Title,
-            ParentValue = option.ParentValue,
+            ParentCode = option.ParentValue,
             AttachmentName = option.AttachmentName
         };
 

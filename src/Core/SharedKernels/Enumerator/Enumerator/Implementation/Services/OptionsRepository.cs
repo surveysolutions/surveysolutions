@@ -311,8 +311,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var answers = options.Select(a => new Answer()
             {
                 AnswerText = a.Text,
-                ParentValue = a.ParentId?.ToString(CultureInfo.InvariantCulture),
-                AnswerValue = a.Id.ToString(CultureInfo.InvariantCulture),
+                ParentCode = a.ParentId,
+                AnswerCode = a.Id,
+                //ParentValue = a.ParentId?.ToString(CultureInfo.InvariantCulture),
+                //AnswerValue = a.Id.ToString(CultureInfo.InvariantCulture),
                 AttachmentName = a.AttachmentName,
             }).ToList();
             StoreOptionsImpl(questionnaireIdentity, null, categoryId, answers, translations);

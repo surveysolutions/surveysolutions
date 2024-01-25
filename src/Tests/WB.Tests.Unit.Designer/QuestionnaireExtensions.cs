@@ -162,7 +162,7 @@ namespace WB.Tests.Unit.Designer
                 question.Answers = optionsList.Select(x => new Answer
                 {
                     AnswerText = x.Title,
-                    AnswerValue = x.Value
+                    AnswerCode = x.Value
                 }).ToList();
             }
         }

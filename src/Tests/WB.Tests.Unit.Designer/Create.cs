@@ -438,9 +438,9 @@ namespace WB.Tests.Unit.Designer
                 QuestionText = title,
                 VariableLabel = variableLabel,
                 Answers = options != null
-                    ? options.Select(x => new Answer { AnswerValue = x.Value, 
+                    ? options.Select(x => new Answer { AnswerCode = x.Value, 
                         AnswerText = x.Title, 
-                        ParentValue = x.ParentValue, 
+                        ParentCode = x.ParentValue, 
                         AttachmentName = x.AttachmentName}).ToList()
                     : Enumerable.Empty<Answer>().ToList()
             };
