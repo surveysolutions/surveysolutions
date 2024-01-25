@@ -129,17 +129,20 @@ export default {
 
             return stat;
         },
+
         treeNodeDropped() {
+            const oldIndex = dragContext.startInfo.indexBeforeDrop;
+            let newIndex = dragContext.targetInfo.indexBeforeDrop;
+            if (newIndex == 0) {
+                this.$refs.chapters.move(dragContext.dragNode, null, oldIndex)
+                return;
+            }
+
+            if (oldIndex == newIndex) return;
+            if (oldIndex < newIndex) newIndex--;
+
             const item = dragContext.dragNode.data;
-            const parentId = null;
-            let index = dragContext.targetInfo.indexBeforeDrop;
-
-            const start = dragContext.startInfo;
-            const startIndex = start.indexBeforeDrop;
-            if (startIndex == index) return;
-            if (startIndex < index) index--;
-
-            this.treeStore.moveGroup(item.itemId, index, parentId)
+            this.treeStore.moveGroup(item.itemId, newIndex, null);
         },
 
         editChapter(chapter) {
