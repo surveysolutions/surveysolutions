@@ -1,6 +1,7 @@
 import { i18n } from '../plugins/localization';
 import { nextTick } from 'vue';
 import { defer, isNull } from 'lodash';
+import { filterXSS } from 'xss';
 
 export function format(format) {
     var args = Array.prototype.slice.call(arguments, 1);
@@ -87,10 +88,6 @@ export function sanitize(input) {
         return html;
     }
     return input || '';
-}
-
-function filterXSS(input) {
-    return input; // TODO need filterXSS lib
 }
 
 export function trimText(text) {

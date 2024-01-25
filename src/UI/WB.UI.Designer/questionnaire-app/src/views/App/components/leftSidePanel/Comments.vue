@@ -24,7 +24,7 @@
                         <span
                             v-if="commentThread.entity.type !== 'Question' && commentThread.entity.type !== 'Group' && commentThread.entity.type !== 'Roster'"
                             class="icon" :class="'icon-' + commentThread.entity.type.toLowerCase()"></span>
-                        <span class="title" v-text="commentThread.entity.title"></span>
+                        <span class="title" v-text="sanitizeText(commentThread.entity.title)"></span>
                         <span class="variable" v-html="commentThread.entity.variable || '&nbsp;'"></span>
                     </router-link>
 
@@ -66,6 +66,7 @@
   
 <script>
 import { getCommentThreads } from '../../../../services/commentsService';
+import { sanitize } from '../../../../services/utilityService';
 import _ from 'lodash';
 import moment from 'moment';
 
@@ -167,6 +168,10 @@ export default {
                         .format('MMM DD, YYYY HH:mm');
                 this.commentThreads[index].comments.push(comment);
             }            
+        },
+        sanitizeText(value){
+            const sanitizedValue =  sanitize(value);
+            return sanitizedValue;
         }
     }
 }
