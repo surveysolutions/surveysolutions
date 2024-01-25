@@ -1,4 +1,4 @@
-<template>    
+<template>
     <div class="comments">
         <perfect-scrollbar class="scroller">
             <h3>
@@ -87,11 +87,23 @@ export default {
         this.$emitter.on('commentResolved', this.commentResolved);
         this.$emitter.on('commentDeleted', this.commentDeleted);
         this.$emitter.on('commentAdded', this.commentAdded);
+
+        this.$emitter.on('staticTextUpdated', this.staticTextUpdated);
+        this.$emitter.on('groupUpdated', this.groupUpdated);
+        this.$emitter.on('variableUpdated', this.variableUpdated);
+        this.$emitter.on('questionUpdated', this.questionUpdated);
+
     },
     unmounted() {
         this.$emitter.off('commentResolved', this.commentResolved);
         this.$emitter.off('commentDeleted', this.commentDeleted);
         this.$emitter.off('commentAdded', this.commentAdded);
+
+        this.$emitter.off('staticTextUpdated', this.staticTextUpdated);
+        this.$emitter.off('groupUpdated', this.groupUpdated);
+        this.$emitter.off('variableUpdated', this.variableUpdated);
+        this.$emitter.off('questionUpdated', this.questionUpdated);
+
     },
     methods: {
         async fetch() {
@@ -114,7 +126,7 @@ export default {
                 });
                 commentThread.comments = _.filter(commentThread.comments, {
                     isResolved: false
-                });                
+                });
             });
 
             this.commentThreads = data;
@@ -131,7 +143,7 @@ export default {
                     this.commentThreads[index].comments[indexComment].resolveDate = payload.resolveDate;
 
                     this.commentThreads[index].resolvedComments.push(this.commentThreads[index].comments[indexComment]);
-                    
+
                     this.commentThreads[index].comments.splice(indexComment, 1);
                 }
             }
@@ -159,18 +171,56 @@ export default {
         commentAdded(payload) {
             const index = _.findIndex(this.commentThreads, function (i) {
                 return i.entity.itemId === payload.entityId;
-            });            
+            });
             if (index !== -1) {
                 const comment = Object.assign({}, payload);
                 comment.date = moment
-                        .utc(comment.date)
-                        .local()
-                        .format('MMM DD, YYYY HH:mm');
+                    .utc(comment.date)
+                    .local()
+                    .format('MMM DD, YYYY HH:mm');
                 this.commentThreads[index].comments.push(comment);
-            }            
+            }
         },
-        sanitizeText(value){
-            const sanitizedValue =  sanitize(value);
+
+        staticTextUpdated(payload) {
+            const index = _.findIndex(this.commentThreads, function (i) {
+                return payload.itemId && i.entity.itemId === payload.itemId.replaceAll('-', '');
+            });
+            if (index !== -1) {
+                this.commentThreads[index].entity.title = payload.text;
+            }
+        },
+
+        groupUpdated(payload) {
+            const index = _.findIndex(this.commentThreads, function (i) {
+                return payload.id && i.entity.itemId === payload.id.replaceAll('-', '');
+            });
+            if (index !== -1) {
+                this.commentThreads[index].entity.title = payload.title;
+                this.commentThreads[index].entity.variable = payload.variableName;
+            }
+        },
+
+        variableUpdated(payload) {
+            const index = _.findIndex(this.commentThreads, function (i) {
+                return i.entity.itemId === payload.itemId;
+            });
+            if (index !== -1) {
+                this.commentThreads[index].entity.title = payload.label;
+                this.commentThreads[index].entity.variable = payload.name;
+            }
+        },
+        questionUpdated(payload) {
+            const index = _.findIndex(this.commentThreads, function (i) {
+                return payload.itemId && i.entity.itemId === payload.itemId.replaceAll('-', '');
+            });
+            if (index !== -1) {
+                this.commentThreads[index].entity.title = payload.title;
+                this.commentThreads[index].entity.variable = payload.variable;
+            }
+        },
+        sanitizeText(value) {
+            const sanitizedValue = sanitize(value);
             return sanitizedValue;
         }
     }

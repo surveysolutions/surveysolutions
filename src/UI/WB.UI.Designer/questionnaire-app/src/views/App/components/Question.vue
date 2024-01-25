@@ -233,6 +233,7 @@ import ExpressionEditor from './ExpressionEditor.vue';
 import Breadcrumbs from './Breadcrumbs.vue'
 import Help from './Help.vue'
 import { indexOf, find, filter, isEmpty, isNull } from 'lodash'
+import { deleteQuestion } from '../../../services/questionService';
 import { answerTypeClass, geometryInputModeOptions, questionsWithOnlyInterviewerScope, questionTypesDoesNotSupportValidations } from '../../../helpers/question'
 import { createQuestionForDeleteConfirmationPopup, scrollToValidationCondition, scrollToElement, setFocusIn } from '../../../services/utilityService'
 
@@ -336,7 +337,7 @@ export default {
         },
 
         activeQuestionType() {
-            const option = this.activeQuestion.questionTypeOptions.find(
+            const option = find(this.activeQuestion.questionTypeOptions,
                 p => p.value == this.activeQuestion.type
             );
             return option != null ? option.text : null;
@@ -391,7 +392,7 @@ export default {
 
             params.callback = confirm => {
                 if (confirm) {
-                    this.questionStore.deleteQuestion(questionnaireId, itemIdToDelete);
+                    deleteQuestion(questionnaireId, itemIdToDelete);
                 }
             };
 

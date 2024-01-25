@@ -111,11 +111,8 @@
 </template>
 
 <script>
-import { useQuestionnaireStore } from '../../../stores/questionnaire';
-import { useTreeStore } from '../../../stores/tree';
 import { useQuestionStore } from '../../../stores/question';
-import { useRosterStore } from '../../../stores/roster';
-
+import { deleteQuestion } from '../../../services/questionService';
 
 import { useGroupStore } from '../../../stores/group';
 import { deleteGroup } from '../../../services/groupService';
@@ -127,6 +124,9 @@ import { useVariableStore } from '../../../stores/variable';
 import { deleteVariable } from '../../../services/variableService';
 
 
+import { useQuestionnaireStore } from '../../../stores/questionnaire';
+import { useTreeStore } from '../../../stores/tree';
+import { useRosterStore } from '../../../stores/roster';
 import clickOutside from '../../../directives/clickOutside';
 import contextmenuOutside from '../../../directives/contextmenuOutside';
 import { createQuestionForDeleteConfirmationPopup } from '../../../services/utilityService';
@@ -343,19 +343,7 @@ export default {
 
             params.callback = confirm => {
                 if (confirm) {
-                    this.questionStore
-                        .deleteQuestion(questionnaireId, itemIdToDelete)
-                        .then(response => {
-                            this.tree.remove(this.stat);
-
-                            //questionnaireService.removeItemWithId(
-                            //    $scope.items,
-                            //    itemIdToDelete
-                            //);
-                            //$scope.resetSelection();
-                            //$rootScope.$emit('questionDeleted', itemIdToDelete);
-                            //removeSelectionIfHighlighted(itemIdToDelete);
-                        });
+                    deleteQuestion(questionnaireId, itemIdToDelete);
                 }
             };
 
@@ -373,19 +361,7 @@ export default {
 
             params.callback = confirm => {
                 if (confirm) {
-                    deleteStaticText(questionnaireId, itemIdToDelete);
-                        // .then(response => {
-                        //     this.tree.remove(this.stat);
-                        //     //TODO: consider subscribe to event
-
-                        //     //questionnaireService.removeItemWithId(
-                        //     //    $scope.items,
-                        //     //    itemIdToDelete
-                        //     //);
-                        //     //$scope.resetSelection();
-                        //     //$rootScope.$emit('questionDeleted', itemIdToDelete);
-                        //     //removeSelectionIfHighlighted(itemIdToDelete);
-                        // })
+                    deleteStaticText(questionnaireId, itemIdToDelete);                        
                 }
             };
 
@@ -406,18 +382,7 @@ export default {
 
             params.callback = confirm => {
                 if (confirm) {
-                    deleteVariable(questionnaireId, itemIdToDelete);
-                        // .then(response => {
-                        //     this.tree.remove(this.stat);
-
-                        //     //questionnaireService.removeItemWithId(
-                        //     //    $scope.items,
-                        //     //    itemIdToDelete
-                        //     //);
-                        //     //$scope.resetSelection();
-                        //     //$rootScope.$emit('questionDeleted', itemIdToDelete);
-                        //     //removeSelectionIfHighlighted(itemIdToDelete);
-                        // });
+                    deleteVariable(questionnaireId, itemIdToDelete);                        
                 }
             };
 
@@ -435,18 +400,7 @@ export default {
 
             params.callback = confirm => {
                 if (confirm) {
-                    deleteGroup(questionnaireId, itemIdToDelete);
-                        // .then(response => {
-                        //     this.tree.remove(this.stat);
-
-                        //     //questionnaireService.removeItemWithId(
-                        //     //    $scope.items,
-                        //     //    itemIdToDelete
-                        //     //);
-                        //     //$scope.resetSelection();
-                        //     //$rootScope.$emit('questionDeleted', itemIdToDelete);
-                        //     //removeSelectionIfHighlighted(itemIdToDelete);
-                        // });
+                    deleteGroup(questionnaireId, itemIdToDelete);                        
                 }
             };
 

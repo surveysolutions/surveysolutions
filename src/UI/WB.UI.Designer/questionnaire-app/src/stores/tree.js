@@ -192,18 +192,19 @@ export const useTreeStore = defineStore('tree', {
                 parent,
                 afterNodeId
             );
-            const staticText = this.createEmptyStaticText(parent);
+            
+            if (index != null && index >= 0) {
+                index = index + 1;
+                command.index = index;
+            }
 
+            const staticText = this.createEmptyStaticText(parent);
             const command = {
                 questionnaireId: this.questionnaireId,
                 parentId: parent.itemId,
                 entityId: staticText.itemId,
                 text: staticText.text
             };
-            if (index != null && index >= 0) {
-                index = index + 1;
-                command.index = index;
-            }
 
             //TODO: migrate logic to service
             return addStaticText('AddStaticText', command).then(function(result) {

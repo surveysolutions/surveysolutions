@@ -43,7 +43,7 @@ export function updateStaticText(questionnaireId, staticText) {
         validationConditions: staticText.validationConditions
     };
 
-    return commandCall('UpdateStaticText', command).then(response => {
+    return commandCall('UpdateStaticText', command).then(async response => {
         emitter.emit('staticTextUpdated', {
             itemId: staticText.id,
             text: staticText.text,
