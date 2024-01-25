@@ -167,7 +167,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var answer = 11;
 
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(
-                Create.Entity.SingleOptionQuestion(variable: variableName, answerCodes: new[] {1m, 2m})));
+                Create.Entity.SingleOptionQuestion(variable: variableName, answerCodes: new[] {1, 2})));
 
             var preloadingRow = Create.Entity.PreloadingAssignmentRow(fileName, answers: new[] { Create.Entity.AssignmentCategoricalSingleAnswer(variableName, answer) });
             var verifier = Create.Service.ImportDataVerifier();
@@ -192,7 +192,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             string answer = "999,99";
 
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(
-                Create.Entity.SingleOptionQuestion(variable: variableName, answerCodes: new[] { 1m, 2m })));
+                Create.Entity.SingleOptionQuestion(variable: variableName, answerCodes: new[] { 1, 2 })));
 
             var preloadingRow = Create.Entity.PreloadingAssignmentRow(fileName, answers: new[] { Create.Entity.AssignmentCategoricalSingleAnswer(variableName, value: answer) });
             var verifier = Create.Service.ImportDataVerifier();
@@ -1109,7 +1109,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         {
             // arrange
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(
-                Create.Entity.SingleOptionQuestion(Id.g1, variable: "parent", answerCodes: new decimal[]{1,2}),
+                Create.Entity.SingleOptionQuestion(Id.g1, variable: "parent", answerCodes: new[]{1,2}),
                 Create.Entity.SingleOptionQuestion(Id.g2, variable: "child", cascadeFromQuestionId: Id.g1, answers: new List<Answer>()
                 {
                     Create.Entity.Answer("11", 11, 1),

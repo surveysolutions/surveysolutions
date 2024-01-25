@@ -990,7 +990,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                         children: new[]
                         {
                             Create.Entity.SingleOptionQuestion(categoricalSingleQuestionId, categoricalSingleQuestion,
-                                answerCodes: new[] {9m, 10m, 11m})
+                                answerCodes: new[] {9, 10, 11})
                         })));
 
             var mainFile = Create.Entity.PreloadedFile(rows: new[] { Create.Entity.PreloadingRow(Create.Entity.PreloadingValue("interview__id", "1")) });
@@ -1290,7 +1290,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                         children: new[]
                         {
                             Create.Entity.SingleOptionQuestion(questionId, variable: variable,
-                                answerCodes: new[] {1m, 2m, 3m})
+                                answerCodes: new[] {1, 2, 3})
                         })));
 
             var mainFile = Create.Entity.PreloadedFile(rows: new[] { Create.Entity.PreloadingRow(Create.Entity.PreloadingValue("interview__id", "1")) });
@@ -1688,7 +1688,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                         {
                             Create.Entity.SingleOptionQuestion(questionId, variable: variable,
                                 linkedToQuestionId: Guid.NewGuid(),
-                                answerCodes: new[] {1m, 2m, 3m})
+                                answerCodes: new[] {1, 2, 3})
                         })));
 
             var mainFile = Create.Entity.PreloadedFile(rows: new[] { Create.Entity.PreloadingRow(Create.Entity.PreloadingValue("interview__id", "1")) });
@@ -1730,7 +1730,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                         {
                             Create.Entity.SingleOptionQuestion(questionId, variable: variable,
                                 linkedToRosterId: Guid.NewGuid(),
-                                answerCodes: new[] {1m, 2m, 3m})
+                                answerCodes: new[] {1, 2, 3})
                         })));
 
             var mainFile = Create.Entity.PreloadedFile(rows: new[] { Create.Entity.PreloadingRow(Create.Entity.PreloadingValue("interview__id", "1")) });

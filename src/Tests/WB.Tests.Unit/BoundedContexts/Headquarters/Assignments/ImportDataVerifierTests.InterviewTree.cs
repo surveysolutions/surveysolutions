@@ -31,9 +31,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var parentCascadingQuestionId = Guid.Parse("11111111111111111111111111111111");
             var cascadingQuestionId = Guid.Parse("22222222222222222222222222222222");
 
-            var answerOnParentQuestion = 99999m;
-            var answer = 9999m;
-            var expectedParentValue = 0m;
+            var answerOnParentQuestion = 99999;
+            var answer = 9999;
+            var expectedParentValue = 0;
 
             var optionsRepository = Create.Storage.QuestionnaireQuestionOptionsRepository();
 
@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                     Create.Entity.SingleOptionQuestion(parentCascadingQuestionId, answerCodes: new[] { answerOnParentQuestion, answer }),
                     Create.Entity.SingleOptionQuestion(cascadingQuestionId,
                         cascadeFromQuestionId: parentCascadingQuestionId, answerCodes: new[] { answerOnParentQuestion, answer },
-                        parentCodes: new[] { 1m, expectedParentValue })),
+                        parentCodes: new[] { 1, expectedParentValue })),
                 version: 1,
                 questionOptionsRepository: optionsRepository);
 

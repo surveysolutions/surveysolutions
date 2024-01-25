@@ -252,12 +252,12 @@ namespace WB.Tests.Integration.InterviewTests
 
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.SingleOptionQuestion(singleQuestionId, variable: "sq",
-                        answerCodes: new decimal[] {1, 2, 3}),
+                        answerCodes: new[] {1, 2, 3}),
                     Abc.Create.Entity.NumericIntegerQuestion(intQuestionId, variable: "i"),
                     Abc.Create.Entity.Group(groupId, enablementCondition: "i == 5", children: new[]
                     {
                         Abc.Create.Entity.SingleOptionQuestion(singleWithFilterQuestionId, variable: "sf",
-                            answerCodes: new decimal[] {1, 2, 3},
+                            answerCodes: new[] {1, 2, 3},
                             optionsFilterExpression:
                             "sq.InList(2, 3) && @optioncode!=1 || !sq.InList(2, 3) && @optioncode >= 1")
                     })
@@ -306,16 +306,16 @@ namespace WB.Tests.Integration.InterviewTests
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.TextListQuestion(textListQuestionId, variable: "tl"),
                     Abc.Create.Entity.SingleOptionQuestion(singleEnabledForSectionId, variable: "sos",
-                        answerCodes: new decimal[] {1, 2}),
+                        answerCodes: new[] {1, 2}),
                     Abc.Create.Entity.Group(sectionId, enablementCondition: "sos == 1", children: new IComposite[]
                     {
                         Abc.Create.Entity.SingleOptionQuestion(singleQuestionId, variable: "so",
-                            answerCodes: new decimal[] {1, 2}),
+                            answerCodes: new[] {1, 2}),
                         Abc.Create.Entity.ListRoster(rosterId, rosterSizeQuestionId: textListQuestionId,
                             enablementCondition: "so == 1", children: new IComposite[]
                             {
                                 Abc.Create.Entity.SingleOptionQuestion(singleInRosterQuestionId, variable: "sor",
-                                    answerCodes: new decimal[] {1, 2},
+                                    answerCodes: new[] {1, 2},
                                     title: "DID %rostertitle% OBTAIN"),
                                 Abc.Create.Entity.MultipleOptionsQuestion(multiInRosterQuestionId,
                                     enablementCondition: "so == 1", answers: new int[] {1, 2, 3})
@@ -377,14 +377,14 @@ namespace WB.Tests.Integration.InterviewTests
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.TextListQuestion(textListQuestionId, variable: "tl"),
                     Abc.Create.Entity.SingleOptionQuestion(singleEnabledForSectionId, variable: "sos",
-                        answerCodes: new decimal[] {1, 2}),
+                        answerCodes: new[] {1, 2}),
                     Abc.Create.Entity.Group(sectionId, enablementCondition: "sos == 1", children: new IComposite[]
                     {
                         Abc.Create.Entity.ListRoster(rosterId, rosterSizeQuestionId: textListQuestionId,
                             children: new IComposite[]
                             {
                                 Abc.Create.Entity.SingleOptionQuestion(singleInRosterQuestionId, variable: "sor",
-                                    answerCodes: new decimal[] {1, 2},
+                                    answerCodes: new int[] {1, 2},
                                     title: "DID %rostertitle% OBTAIN")
                             })
                     })
@@ -446,7 +446,7 @@ namespace WB.Tests.Integration.InterviewTests
 
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.SingleOptionQuestion(singleEnablementQuestionId, variable: "soe",
-                        answerCodes: new decimal[] {1, 2}),
+                        answerCodes: new int[] {1, 2}),
                     Abc.Create.Entity.Group(section1Id, enablementCondition: "soe == 1", children: new IComposite[]
                     {
                         Abc.Create.Entity.TextListQuestion(textListQuestionId, variable: "tl"),
@@ -455,7 +455,7 @@ namespace WB.Tests.Integration.InterviewTests
                             {
                                 Abc.Create.Entity.NumericIntegerQuestion(intQuestionId, variable: "inn"),
                                 Abc.Create.Entity.SingleOptionQuestion(singleQuestion1Id, variable: "so",
-                                    enablementCondition: "inn > 4", answerCodes: new decimal[] {1, 2}),
+                                    enablementCondition: "inn > 4", answerCodes: new int[] {1, 2}),
                             }),
                     }),
                     Abc.Create.Entity.Group(section2Id, enablementCondition: "soe == 1", children: new IComposite[]
@@ -464,7 +464,7 @@ namespace WB.Tests.Integration.InterviewTests
                             rosterSizeQuestionId: textListQuestionId, children: new IComposite[]
                             {
                                 Abc.Create.Entity.SingleOptionQuestion(singleQuestion2Id, variable: "so2",
-                                    answerCodes: new decimal[] {1, 2}),
+                                    answerCodes: new int[] {1, 2}),
                             })
                     })
                 );

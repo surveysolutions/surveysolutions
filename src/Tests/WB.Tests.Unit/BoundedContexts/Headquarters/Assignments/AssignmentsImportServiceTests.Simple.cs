@@ -574,7 +574,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var questionnaire = Create.Entity.PlainQuestionnaire(
                 Create.Entity.QuestionnaireDocumentWithOneChapter(
                     Create.Entity.SingleOptionQuestion(categoricalSingleQuestionId, categoricalSingleQuestion,
-                        answerCodes: new[] {9m, 10m, 11m})));
+                        answerCodes: new[] {9, 10, 11})));
 
             var preloadedFile = Create.Entity.PreloadedFile(rows: new[]
                 {Create.Entity.PreloadingRow(Create.Entity.PreloadingValue(categoricalSingleQuestion, "10"))});
@@ -812,7 +812,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var questionnaire = Create.Entity.PlainQuestionnaire(
                 Create.Entity.QuestionnaireDocumentWithOneChapter(
                     Create.Entity.SingleOptionQuestion(questionId, variable: variable,
-                        answerCodes: new[] {1m, 2m, 3m})));
+                        answerCodes: new[] {1, 2, 3})));
 
             var preloadedFile = Create.Entity.PreloadedFile(rows: new[]
                 {Create.Entity.PreloadingRow(Create.Entity.PreloadingValue(variable, ""))});
@@ -1078,7 +1078,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var questionnaire = Create.Entity.PlainQuestionnaire(
                 Create.Entity.QuestionnaireDocumentWithOneChapter(
                     Create.Entity.SingleOptionQuestion(questionId, variable: variable, linkedToQuestionId: Guid.NewGuid(),
-                        answerCodes: new[] { 1m, 2m, 3m })));
+                        answerCodes: new[] { 1, 2, 3 })));
 
             var preloadedFile = Create.Entity.PreloadedFile(rows: new[]
                 {Create.Entity.PreloadingRow(Create.Entity.PreloadingValue(variable, "2"))});
@@ -1105,7 +1105,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var questionnaire = Create.Entity.PlainQuestionnaire(
                 Create.Entity.QuestionnaireDocumentWithOneChapter(
                     Create.Entity.SingleOptionQuestion(questionId, variable: variable, linkedToRosterId: Guid.NewGuid(),
-                        answerCodes: new[] { 1m, 2m, 3m })));
+                        answerCodes: new[] { 1, 2, 3 })));
 
             var preloadedFile = Create.Entity.PreloadedFile(rows: new[]
                 {Create.Entity.PreloadingRow(Create.Entity.PreloadingValue(variable, "3"))});

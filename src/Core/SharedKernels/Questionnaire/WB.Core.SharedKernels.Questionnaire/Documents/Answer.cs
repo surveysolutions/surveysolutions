@@ -6,8 +6,8 @@ namespace Main.Core.Entities.SubEntities
 {
     public class Answer
     {
-        private decimal? answerCode;
-        private decimal? parentCode;
+        private int? answerCode;
+        private int? parentCode;
 
         public string AnswerText { get; set; } = String.Empty;
 
@@ -16,24 +16,24 @@ namespace Main.Core.Entities.SubEntities
             get => answerCode.HasValue ? answerCode.Value.ToString(CultureInfo.InvariantCulture) : String.Empty;
             set => answerCode = string.IsNullOrEmpty(value) 
                 ? null 
-                : decimal.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out decimal parsedDecimal)
-                    ? parsedDecimal
+                : int.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out int parsed)
+                    ? parsed
                     : null;
         }
 
         public string? ParentValue
         {
             get => parentCode.HasValue ? parentCode.Value.ToString(CultureInfo.InvariantCulture) : String.Empty;
-            set => parentCode = string.IsNullOrEmpty(value) ? null : decimal.Parse(value, NumberStyles.Number, CultureInfo.InvariantCulture);
+            set => parentCode = string.IsNullOrEmpty(value) ? null : int.Parse(value, NumberStyles.Number, CultureInfo.InvariantCulture);
         }
 
-        public decimal? AnswerCode
+        public int? AnswerCode
         {
             get => answerCode;// ?? (string.IsNullOrEmpty(AnswerValue) ? null : GetParsedValue());
             set => answerCode = value;
         }
 
-        public decimal? ParentCode
+        public int? ParentCode
         {
             get => parentCode;// ?? (string.IsNullOrEmpty(ParentValue) ? null : GetParsedParentValue());
             set => parentCode = value;
@@ -49,9 +49,9 @@ namespace Main.Core.Entities.SubEntities
             return answer;
         }
 
-        public decimal GetParsedValue()
+        public int GetParsedValue()
         {
-            return (decimal)this.AnswerCode!;// ?? decimal.Parse(this.AnswerValue, NumberStyles.Number, CultureInfo.InvariantCulture);
+            return this.AnswerCode!.Value;// ?? decimal.Parse(this.AnswerValue, NumberStyles.Number, CultureInfo.InvariantCulture);
         }
 
         public int? GetParsedParentValue()

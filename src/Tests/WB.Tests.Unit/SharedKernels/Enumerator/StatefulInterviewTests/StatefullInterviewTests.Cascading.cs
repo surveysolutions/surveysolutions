@@ -16,8 +16,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             //arrange
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
-                Create.Entity.SingleOptionQuestion(questionId: Id.g1, answerCodes: new decimal[] { 1, 2 }, variable: "q1"),
-                Create.Entity.SingleOptionQuestion(questionId: Id.g2, cascadeFromQuestionId: Id.g1, answerCodes: new decimal[] { 1, 2, 3, 4 }, parentCodes: new decimal[] { 1, 1, 2, 2 }, variable: "q2", showAsListThreshold: 3));
+                Create.Entity.SingleOptionQuestion(questionId: Id.g1, answerCodes: new[] { 1, 2 }, variable: "q1"),
+                Create.Entity.SingleOptionQuestion(questionId: Id.g2, cascadeFromQuestionId: Id.g1, answerCodes: new[] { 1, 2, 3, 4 }, parentCodes: new[] { 1, 1, 2, 2 }, variable: "q2", showAsListThreshold: 3));
 
             var options = new[]
             {
@@ -41,8 +41,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         {
             //arrange
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
-                Create.Entity.SingleOptionQuestion(questionId: Id.g1, answerCodes: new decimal[] { 1, 2 }, variable: "q1"),
-                Create.Entity.SingleOptionQuestion(questionId: Id.g2, cascadeFromQuestionId: Id.g1, answerCodes: new decimal[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }, parentCodes: new decimal[] { 1, 1, 2, 2, 2, 2, 2, 2, 2 }, variable: "q2", showAsListThreshold: 5));
+                Create.Entity.SingleOptionQuestion(questionId: Id.g1, answerCodes: new[] { 1, 2 }, variable: "q1"),
+                Create.Entity.SingleOptionQuestion(questionId: Id.g2, cascadeFromQuestionId: Id.g1, answerCodes: new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }, parentCodes: new[] { 1, 1, 2, 2, 2, 2, 2, 2, 2 }, variable: "q2", showAsListThreshold: 5));
             
             var options = new[]
             {

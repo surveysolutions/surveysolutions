@@ -467,10 +467,7 @@ namespace Main.Core.Documents
             foreach (var answer in question.Answers)
             {
                 answer.AnswerCode = answer.GetParsedValue();
-                if (!string.IsNullOrEmpty(answer.ParentValue))
-                {
-                    answer.ParentCode = decimal.Parse(answer.ParentValue, NumberStyles.Number, CultureInfo.InvariantCulture);
-                }
+                answer.ParentCode = answer.GetParsedParentValue();
             }
         }
 

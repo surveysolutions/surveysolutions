@@ -114,7 +114,7 @@ namespace WB.Tests.Abc.TestFactories
 
     internal class EntityFactory
     {
-        public Answer Answer(string answer, decimal value, decimal? parentValue = null)
+        public Answer Answer(string answer, int value, int? parentValue = null)
             => new Answer
             {
                 AnswerText = answer,
@@ -737,7 +737,7 @@ namespace WB.Tests.Abc.TestFactories
                 ParentValue = parentValue
             };
 
-        public Answer OptionByCode(int value, string text = null, decimal? parentCode = null)
+        public Answer OptionByCode(int value, string text = null, int? parentCode = null)
             => new Answer
             {
                 AnswerText = text ?? $"Option {value}",
@@ -1085,8 +1085,8 @@ namespace WB.Tests.Abc.TestFactories
             string validationExpression = null,
             Guid? linkedToQuestionId = null,
             Guid? cascadeFromQuestionId = null,
-            decimal[] answerCodes = null,
-            decimal[] parentCodes = null,
+            int[] answerCodes = null,
+            int[] parentCodes = null,
             string title = null,
             bool hideIfDisabled = false,
             string linkedFilterExpression = null,
@@ -1098,7 +1098,7 @@ namespace WB.Tests.Abc.TestFactories
             int? showAsListThreshold = null,
             Guid? categoryId = null)
         {
-            answers = answers ?? (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Entity.Answer(a.ToString(), a)).ToList();
+            answers = answers ?? (answerCodes ?? new int[] { 1, 2, 3 }).Select(a => Create.Entity.Answer(a.ToString(), a)).ToList();
             if (parentCodes != null)
             {
                 for (int i = 0; i < parentCodes.Length; i++)

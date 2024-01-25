@@ -35,7 +35,7 @@ namespace WB.Tests.Integration.InterviewTests
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Create.Entity.NumericIntegerQuestion(numeric1Id, variable: "i1"),
                     Create.Entity.NumericIntegerQuestion(numeric2Id, variable: "i2", enablementCondition: "i1 == 1"),
-                    Create.Entity.SingleOptionQuestion(singleId, optionsFilterExpression: "@optioncode==1 && i2==1", answerCodes: new decimal[]{ 1, 2, 3})
+                    Create.Entity.SingleOptionQuestion(singleId, optionsFilterExpression: "@optioncode==1 && i2==1", answerCodes: new int[]{ 1, 2, 3})
                 );
 
                 var interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);

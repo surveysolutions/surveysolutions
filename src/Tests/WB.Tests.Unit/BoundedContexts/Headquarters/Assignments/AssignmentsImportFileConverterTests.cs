@@ -337,7 +337,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             var questionnaire = Create.Entity.PlainQuestionnaire(
                 Create.Entity.QuestionnaireDocumentWithOneChapter(
-                    Create.Entity.SingleOptionQuestion(variable: variable, answerCodes: new[] {123m})));
+                    Create.Entity.SingleOptionQuestion(variable: variable, answerCodes: new[] {123})));
 
             var file = Create.Entity.PreloadedFile(rows: Create.Entity.PreloadingRow(Create.Entity.PreloadingValue(variable, value)));
 

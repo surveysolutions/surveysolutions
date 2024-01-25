@@ -230,7 +230,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
             {
                 Create.Entity.SingleOptionQuestion(questionId.Id, showAsListThreshold: 50,
-                    answerCodes: new[] {1m, 2m, 3m})
+                    answerCodes: new[] {1, 2, 3})
             });
             var interview = SetUp.StatefulInterview(questionnaire);
             interview.AnswerSingleOptionQuestion(Guid.Empty, questionId.Id, questionId.RosterVector, DateTimeOffset.UtcNow, 1);

@@ -29,11 +29,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             {
                 Create.Entity.MultipleOptionsQuestion(questionId: questionId, textAnswers: new []
                 {
-                    Create.Entity.Answer("option 1", 147m),
+                    Create.Entity.Answer("option 1", 147),
                     Create.Entity.Answer(option2Title, option2 = 184),
                     Create.Entity.Answer("option 3", 3),
                     Create.Entity.Answer(option4Title, option4 = 1),
-                    Create.Entity.Answer("option 5", 256128m),
+                    Create.Entity.Answer("option 5", 256128),
                 }),
 
                 Create.Entity.Roster(rosterId: rosterId, rosterSizeQuestionId: questionId),

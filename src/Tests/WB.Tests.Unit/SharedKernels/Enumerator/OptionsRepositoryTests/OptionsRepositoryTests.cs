@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
         public void should_keep_options_order_after_saving_options()
         {
             var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            var answerCodes = Enumerable.Range(0, 300).Reverse().Select(Convert.ToDecimal).ToArray();
+            var answerCodes = Enumerable.Range(0, 300).Reverse().ToArray();
 
             SingleQuestion question = Create.Entity.SingleOptionQuestion(
                 questionId: questionId,
@@ -107,7 +107,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
 
             var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            var answerCodes = Enumerable.Range(0, 100).Reverse().Select(Convert.ToDecimal).ToArray();
+            var answerCodes = Enumerable.Range(0, 100).Reverse().ToArray();
             var options = new List<Answer>();
 
             foreach (var answerCode in answerCodes)

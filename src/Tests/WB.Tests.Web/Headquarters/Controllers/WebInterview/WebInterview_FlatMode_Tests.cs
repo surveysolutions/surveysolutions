@@ -30,8 +30,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
         public void GetSectionEntities_for_entities_with_cascading_question_that_should_be_shown_as_combobox()
         {
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(Id.g1,
-                Create.Entity.SingleOptionQuestion(questionId: Id.g2, answerCodes: new decimal[] { 1, 2 }, variable: "q1"),
-                Create.Entity.SingleOptionQuestion(questionId: Id.g3, cascadeFromQuestionId: Id.g2, answerCodes: new decimal[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }, parentCodes: new decimal[] { 1, 1, 2, 2, 2, 2, 2, 2, 2 }, variable: "q2", showAsListThreshold: 5));
+                Create.Entity.SingleOptionQuestion(questionId: Id.g2, answerCodes: new int[] { 1, 2 }, variable: "q1"),
+                Create.Entity.SingleOptionQuestion(questionId: Id.g3, cascadeFromQuestionId: Id.g2, answerCodes: new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }, parentCodes: new[] { 1, 1, 2, 2, 2, 2, 2, 2, 2 }, variable: "q2", showAsListThreshold: 5));
             
             var options = new[]
             {
@@ -64,8 +64,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
         public void GetSectionEntities_for_entities_with_cascading_question_that_should_be_shown_as_list()
         {
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(Id.g1,
-                Create.Entity.SingleOptionQuestion(questionId: Id.g2, answerCodes: new decimal[] { 1, 2 }, variable: "q1"),
-                Create.Entity.SingleOptionQuestion(questionId: Id.g3, cascadeFromQuestionId: Id.g2, answerCodes: new decimal[] { 1, 2, 3, 4 }, parentCodes: new decimal[] { 1, 1, 2, 2 }, variable: "q2", showAsListThreshold: 3));
+                Create.Entity.SingleOptionQuestion(questionId: Id.g2, answerCodes: new int[] { 1, 2 }, variable: "q1"),
+                Create.Entity.SingleOptionQuestion(questionId: Id.g3, cascadeFromQuestionId: Id.g2, answerCodes: new[] { 1, 2, 3, 4 }, parentCodes: new[] { 1, 1, 2, 2 }, variable: "q2", showAsListThreshold: 3));
 
             var options = new[]
             {
