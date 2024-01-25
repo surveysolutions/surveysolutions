@@ -1748,16 +1748,32 @@
     }
 
     .questionnaire-tree-holder {
-        .roster-items.item {
+        .roster-items {
+            .item {
                 .item-body {
-                  .icon {
-                    background-position-x: -60px;
-                  }
+                    .icon {
+                        background-position-x: -60px;
+                    }
 
-                  .item-text {
-                    color: @questionnaire-tree-roster-color;
-                  }
+                    .item-text {
+                        color: @questionnaire-tree-roster-color;
+                    }
                 }
+            }
+        }
+    }
+
+    .questionnaire-tree-holder {
+        .roster-items.item {
+            .item-body {
+                .icon {
+                    background-position-x: -60px;
+                }
+          
+                .item-text {
+                    color: @questionnaire-tree-roster-color;
+                }
+            }
         }
     }
 
