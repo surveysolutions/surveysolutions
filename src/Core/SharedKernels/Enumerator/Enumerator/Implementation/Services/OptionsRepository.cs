@@ -313,6 +313,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 AnswerText = a.Text,
                 ParentCode = a.ParentId,
                 AnswerCode = a.Id,
+                ParentValue = a.ParentId?.ToString(CultureInfo.InvariantCulture),
+                AnswerValue = a.Id.ToString(CultureInfo.InvariantCulture),
                 AttachmentName = a.AttachmentName,
             }).ToList();
             StoreOptionsImpl(questionnaireIdentity, null, categoryId, answers, translations);
