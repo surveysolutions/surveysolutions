@@ -25,6 +25,7 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             emitter.on('categoriesDeleted', this.deleteQuestionnaireCategories);
         },
         macroAdded(payload) {
+            this.prepareMacro(payload);
             this.info.macros.push(payload);
         },
         macroDeleted(payload) {
@@ -40,9 +41,7 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
                 return i.itemId === payload.itemId;
             });
             if (index !== -1) {
-                payload.initialMacro = Object.assign({}, payload);
-                payload.isDescriptionVisible = !isEmpty(payload.description);
-
+                this.prepareMacro(payload);
                 Object.assign(this.info.macros[index], payload);
             }
         },
@@ -52,14 +51,18 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             this.setQuestionnaireInfo(info);
         },
 
+        prepareMacro(macro){
+            macro.initialMacro = Object.assign({}, macro);
+            macro.isDescriptionVisible = !isEmpty(macro.description);
+        },
+
         setQuestionnaireInfo(info) {
             this.info = info;
 
             this.edittingMetadata = Object.assign({}, info.metadata);
 
             forEach(this.info.macros, macro => {
-                macro.initialMacro = Object.assign({}, macro);
-                macro.isDescriptionVisible = !isEmpty(macro.description);
+                this.prepareMacro(macro);
             });
         },
 

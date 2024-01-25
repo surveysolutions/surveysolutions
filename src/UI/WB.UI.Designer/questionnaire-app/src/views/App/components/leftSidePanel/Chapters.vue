@@ -40,7 +40,7 @@
                             </div>
                             <div class="dropdown position-fixed" :id="'chapter-context-menu-' + node.itemId">
                                 <ul class="dropdown-menu" role="menu">
-                                    <li><a @click="editChapter(chapter);">{{ $t('QuestionnaireEditor.Open') }}</a></li>
+                                    <li><a @click="editChapter(node);">{{ $t('QuestionnaireEditor.Open') }}</a></li>
                                     <li><a @click.self="copyRef(node);">{{ $t('QuestionnaireEditor.Copy') }}</a></li>
                                     <li>
                                         <a @click.self="pasteAfterChapter(node)"
