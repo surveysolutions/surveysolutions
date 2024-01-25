@@ -21,8 +21,8 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.CascadingDropdow
                     PublicKey = parentSingleOptionQuestionId,
                     StataExportCaption = "var",
                     Answers = new List<Answer> {
-                            new Answer { AnswerText = "one", AnswerValue = "1" },
-                            new Answer { AnswerText = "two", AnswerValue = "2" }
+                            new Answer { AnswerText = "one", AnswerCode = 1 },
+                            new Answer { AnswerText = "two", AnswerCode = 2 }
                         }
                     },
                     new SingleQuestion
@@ -31,8 +31,8 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.CascadingDropdow
                         StataExportCaption = "var1",
                         CascadeFromQuestionId = parentSingleOptionQuestionId,
                         Answers = new List<Answer> {
-                            new Answer { AnswerText = "child 1", AnswerValue = "1", ParentValue = "3" },
-                            new Answer { AnswerText = "child 2", AnswerValue = "2", ParentValue = "4" },
+                            new Answer { AnswerText = "child 1", AnswerCode = 1, ParentCode = 3 },
+                            new Answer { AnswerText = "child 2", AnswerCode = 2, ParentCode = 4 },
                         }
                     }
                 );

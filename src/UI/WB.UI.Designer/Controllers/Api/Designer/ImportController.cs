@@ -141,9 +141,9 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                                          .Select(x => new Answer
                                          {
                                              AnswerText = x.Classification_label,
-                                             AnswerValue = int.TryParse(x.Value, out int code) 
-                                                 ? code.ToString() 
-                                                 : ((int)x.Value.ToUpper().Select((c, i) => (c - 'A' + 1)*Math.Pow(10, i)).Sum()).ToString()
+                                             AnswerCode = int.TryParse(x.Value, out int code) 
+                                                 ? code 
+                                                 : ((int)x.Value.ToUpper().Select((c, i) => (c - 'A' + 1)*Math.Pow(10, i)).Sum())
                                          }).ToList();
                                          
                                      item = new SingleQuestion(title)

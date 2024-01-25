@@ -21,8 +21,8 @@ public class WebInterviewInterviewEntityFactoryTests : WebInterviewInterviewEnti
         return Create.Entity.QuestionnaireDocumentWithOneChapter(Id.gA,
             Create.Entity.SingleQuestion(singleOptionQuestionId.Id, options: new List<Answer>()
             {
-                new Answer(){AnswerValue = "1", AnswerText = "1"},
-                new Answer(){AnswerValue = "2", AnswerText = "2"},
+                new Answer(){AnswerCode = 1, AnswerText = "1"},
+                new Answer(){AnswerCode = 2, AnswerText = "2"},
             }),
             Create.Entity.NumericIntegerQuestion(intQuestionId.Id),
             Create.Entity.TextListQuestion(textListQuestionId.Id),

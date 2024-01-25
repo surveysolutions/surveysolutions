@@ -14,17 +14,11 @@ namespace Main.Core.Entities.SubEntities
         public string AnswerValue
         {
             get => answerCode.HasValue ? answerCode.Value.ToString(CultureInfo.InvariantCulture) : String.Empty;
-            set => answerCode = string.IsNullOrEmpty(value) 
-                ? null 
-                : int.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out int parsed)
-                    ? parsed
-                    : null;
         }
 
         public string? ParentValue
         {
             get => parentCode.HasValue ? parentCode.Value.ToString(CultureInfo.InvariantCulture) : String.Empty;
-            set => parentCode = string.IsNullOrEmpty(value) ? null : int.Parse(value, NumberStyles.Number, CultureInfo.InvariantCulture);
         }
 
         public int? AnswerCode

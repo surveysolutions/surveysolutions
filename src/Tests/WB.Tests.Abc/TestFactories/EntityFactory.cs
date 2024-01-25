@@ -118,8 +118,7 @@ namespace WB.Tests.Abc.TestFactories
             => new Answer
             {
                 AnswerText = answer,
-                AnswerValue = value.ToString(),
-                ParentValue = parentValue?.ToString(),
+                ParentCode = parentValue,
                 AnswerCode = value
             };
 
@@ -720,21 +719,28 @@ namespace WB.Tests.Abc.TestFactories
                 Featured = preFilled,
             };
 
+        public Answer Option(int? value = null, string text = null, int? parentValue = null, Guid? id = null)
+            => new Answer
+            {
+                AnswerText = text ?? "text",
+                AnswerCode = value,
+                ParentCode = parentValue
+            };
+
         public Answer Option(string value = null, string text = null, string parentValue = null, Guid? id = null)
             => new Answer
             {
                 AnswerText = text ?? "text",
-                AnswerValue = value ?? "1",
-                ParentValue = parentValue
+                AnswerCode = string.IsNullOrWhiteSpace(value) ? null : int.Parse(value),
+                ParentCode = string.IsNullOrWhiteSpace(parentValue) ? null : int.Parse(parentValue)
             };
 
-        public Answer Option(int value, string text = null, string parentValue = null)
+        public Answer Option(int value, string text = null, int? parentValue = null)
             => new Answer
             {
                 AnswerText = text ?? $"Option {value}",
                 AnswerCode = value,
-                AnswerValue = value.ToString(),
-                ParentValue = parentValue
+                ParentCode = parentValue
             };
 
         public Answer OptionByCode(int value, string text = null, int? parentCode = null)
@@ -1103,7 +1109,7 @@ namespace WB.Tests.Abc.TestFactories
             {
                 for (int i = 0; i < parentCodes.Length; i++)
                 {
-                    answers[i].ParentValue = parentCodes[i].ToString(CultureInfo.InvariantCulture);
+                    answers[i].ParentCode = parentCodes[i];
                 }
             }
             return new SingleQuestion

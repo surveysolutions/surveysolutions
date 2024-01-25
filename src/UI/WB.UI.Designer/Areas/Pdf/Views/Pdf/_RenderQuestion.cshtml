@@ -20,8 +20,8 @@
         return categories!= null
             ? categories.Items.Select(x => new Answer
             {
-                AnswerValue = x.Id.ToString(),
-                ParentValue = x.ParentId?.ToString(),
+                AnswerCode = x.Id,
+                ParentCode = x.ParentId,
                 AnswerText = x.Text
             }).ToList()
             : new List<Answer>();

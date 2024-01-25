@@ -21,8 +21,8 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                     Create.SingleOptionQuestion(questionId: comboboxQuestionId, isComboBox: true,
                         answers: new[]
                             {
-                                Create.Answer(value: 1m, answer: "a"),
-                                Create.Answer(value: 2m, answer: "b")
+                                Create.Answer(value: 1, answer: "a"),
+                                Create.Answer(value: 2, answer: "b")
                             }
                             .ToList()),
                     Create.SingleOptionQuestion(questionId: questionId, cascadeFromQuestionId: comboboxQuestionId),

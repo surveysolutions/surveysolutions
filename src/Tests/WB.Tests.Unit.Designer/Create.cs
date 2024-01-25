@@ -86,13 +86,13 @@ namespace WB.Tests.Unit.Designer
                 UserName = userName,
             };
 
-        public static Answer Answer(string answer = "answer option", decimal? value = null, string stringValue = null, decimal? parentValue = null)
+        public static Answer Answer(string answer = "answer option", int? value = null, int? parentValue = null)
         {
             return new Answer()
             {
                 AnswerText = answer,
-                AnswerValue = stringValue ?? value.ToString(),
-                ParentValue = parentValue.HasValue ? parentValue.ToString() : null
+                AnswerCode = value,
+                ParentCode = parentValue
             };
         }
 
@@ -361,7 +361,7 @@ namespace WB.Tests.Unit.Designer
             string title = "test",
             bool isCombobox = false,
             string optionsFilterExpression = null,
-            params decimal[] answers)
+            params int[] answers)
         {
             var publicKey = questionId ?? Guid.NewGuid();
             var multipleOptionsQuestion = new MultyOptionsQuestion("Question MO")
