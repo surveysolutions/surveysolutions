@@ -311,8 +311,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var answers = options.Select(a => new Answer()
             {
                 AnswerText = a.Text,
-                ParentValue = a.ParentId?.ToString(CultureInfo.InvariantCulture),
-                AnswerValue = a.Id.ToString(CultureInfo.InvariantCulture),
+                ParentCode = a.ParentId,
+                AnswerCode = a.Id,
                 AttachmentName = a.AttachmentName,
             }).ToList();
             StoreOptionsImpl(questionnaireIdentity, null, categoryId, answers, translations);
@@ -336,12 +336,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             foreach (var option in options)
             {
                 decimal value = option.GetParsedValue();
-                decimal? parentValue = null;
-                if (!string.IsNullOrEmpty(option.ParentValue))
-                {
-                    parentValue = decimal.Parse(option.ParentValue, NumberStyles.Number, CultureInfo.InvariantCulture);
-                }
-
+                decimal? parentValue = option.GetParsedParentValue();
+                
                 var optionView = new OptionView
                 {
                     QuestionnaireId = questionnaireIdAsString,
