@@ -1,78 +1,82 @@
 <template>
-    <v-container fluid>
-        <v-snackbar v-model="snacks.fileUploaded" location='top' color="success">{{
-            $t('QuestionnaireEditor.FileUploaded')
-        }}</v-snackbar>
-        <v-snackbar v-model="snacks.formReverted" location='top' color="success">{{
-            $t('QuestionnaireEditor.DataChangesReverted')
-        }}</v-snackbar>
-        <v-snackbar v-model="snacks.ajaxError" location='top' color="error">{{
-            $t('QuestionnaireEditor.CommunicationError')
-        }}</v-snackbar>
-        <v-row align="start" justify="center">
-            <v-col lg="10">
-                <v-card class="mx-4 elevation-12" min-width="680">
-                    <v-toolbar dense dark color="primary">
-                        <v-toolbar-title v-if="options">{{
-                            formTitle
-                        }}</v-toolbar-title>
-                    </v-toolbar>
-                    <v-tabs v-model="tab" color="primary" fixed-tabs grow>
-                        <v-tab value="table" :disabled="!stringsIsValid">{{
-                            $t('QuestionnaireEditor.TableView')
-                        }}</v-tab>
-                        <v-tab value="strings">{{
-                            $t('QuestionnaireEditor.StringsView')
-                        }}</v-tab>
-                    </v-tabs>
-                    <div v-if="errors.length > 0" class="alert alert-danger">
-                        <v-card-text>
-                            <v-alert v-for="error in errors" :key="error" outlined type="error">
-                                {{ error }}
-                            </v-alert>
-                        </v-card-text>
-                    </div>
-                    <v-window v-model="tab">
-                        <v-window-item value="table">
-                            <category-table ref="table" :categories="categories" :parent-categories="parentCategories"
-                                :loading="loading" :is-category="isCategory" :is-cascading="isCascading"
-                                :readonly="isReadonly" @setCascading="setCascadingCategory"
-                                @update-categories="updateCategories" />
-                        </v-window-item>
-                        <v-window-item value="strings">
-                            <category-strings v-if="tab == 'strings'" ref="strings" :loading="loading"
-                                :show-parent-value="isCascading" :categories="categories" :readonly="isReadonly"
-                                @string-valid="v => (stringsIsValid = v)" @changeCategories="v => (categories = v)"
-                                @editing="v => (inEditMode = v)" @inprogress="v => (convert = v)" />
-                        </v-window-item>
-                    </v-window>
-                </v-card>
-            </v-col>
-        </v-row>
-        <v-footer app min-width="680">
-            <v-btn v-if="!readonly" class="ma-2" color="success" :disabled="!canApplyChanges" :loading="submitting"
-                @click="apply">{{ $t('QuestionnaireEditor.OptionsUploadApply') }}</v-btn>
-            <v-btn v-if="!readonly" @click="resetChanges">{{
-                $t('QuestionnaireEditor.OptionsUploadRevert')
-            }}</v-btn>
-            <v-btn v-if="readonly" @click="close">{{
-                $t('QuestionnaireEditor.Close')
-            }}</v-btn>
-            <v-spacer />
+    <v-app>
+        <v-main>
+            <v-container fluid>
+                <v-snackbar v-model="snacks.fileUploaded" location='top' color="success">{{
+                    $t('QuestionnaireEditor.FileUploaded')
+                }}</v-snackbar>
+                <v-snackbar v-model="snacks.formReverted" location='top' color="success">{{
+                    $t('QuestionnaireEditor.DataChangesReverted')
+                }}</v-snackbar>
+                <v-snackbar v-model="snacks.ajaxError" location='top' color="error">{{
+                    $t('QuestionnaireEditor.CommunicationError')
+                }}</v-snackbar>
+                <v-row align="start" justify="center">
+                    <v-col lg="10">
+                        <v-card class="mx-4 elevation-12" min-width="680">
+                            <v-toolbar dense dark color="primary">
+                                <v-toolbar-title v-if="options">{{
+                                    formTitle
+                                }}</v-toolbar-title>
+                            </v-toolbar>
+                            <v-tabs v-model="tab" color="primary" fixed-tabs grow>
+                                <v-tab value="table" :disabled="!stringsIsValid">{{
+                                    $t('QuestionnaireEditor.TableView')
+                                }}</v-tab>
+                                <v-tab value="strings">{{
+                                    $t('QuestionnaireEditor.StringsView')
+                                }}</v-tab>
+                            </v-tabs>
+                            <div v-if="errors.length > 0" class="alert alert-danger">
+                                <v-card-text>
+                                    <v-alert v-for="error in errors" :key="error" outlined type="error">
+                                        {{ error }}
+                                    </v-alert>
+                                </v-card-text>
+                            </div>
+                            <v-window v-model="tab">
+                                <v-window-item value="table">
+                                    <category-table ref="table" :categories="categories"
+                                        :parent-categories="parentCategories" :loading="loading" :is-category="isCategory"
+                                        :is-cascading="isCascading" :readonly="isReadonly"
+                                        @setCascading="setCascadingCategory" @update-categories="updateCategories" />
+                                </v-window-item>
+                                <v-window-item value="strings">
+                                    <category-strings v-if="tab == 'strings'" ref="strings" :loading="loading"
+                                        :show-parent-value="isCascading" :categories="categories" :readonly="isReadonly"
+                                        @string-valid="v => (stringsIsValid = v)" @changeCategories="v => (categories = v)"
+                                        @editing="v => (inEditMode = v)" @inprogress="v => (convert = v)" />
+                                </v-window-item>
+                            </v-window>
+                        </v-card>
+                    </v-col>
+                </v-row>
+                <v-footer app min-width="680">
+                    <v-btn v-if="!readonly" class="ma-2" color="success" :disabled="!canApplyChanges" :loading="submitting"
+                        @click="apply">{{ $t('QuestionnaireEditor.OptionsUploadApply') }}</v-btn>
+                    <v-btn v-if="!readonly" @click="resetChanges">{{
+                        $t('QuestionnaireEditor.OptionsUploadRevert')
+                    }}</v-btn>
+                    <v-btn v-if="readonly" @click="close">{{
+                        $t('QuestionnaireEditor.Close')
+                    }}</v-btn>
+                    <v-spacer />
 
-            <v-file-input v-if="!readonly" ref="file" v-model="file" class="pt-2"
-                accept=".tab, .txt, .tsv, .xls, .xlsx, .ods" :label="$t('QuestionnaireEditor.Upload')" dense show-size
-                @change="uploadFile"></v-file-input>
-            <span>
-                <v-icon>mdi-download</v-icon>
-                {{ $t('QuestionnaireEditor.SideBarDownload') }}
-            </span>
-            <a :href="exportOptionsAsExlsUri" class="ma-2 v-btn v-size--default">
-                {{ $t('QuestionnaireEditor.SideBarXlsx') }}</a>
-            <a :href="exportOptionsAsTabUri" class="ma-2 v-btn v-size--default">
-                {{ $t('QuestionnaireEditor.SideBarTab') }}</a>
-        </v-footer>
-    </v-container>
+                    <v-file-input v-if="!readonly" ref="file" v-model="file" class="pt-2"
+                        accept=".tab, .txt, .tsv, .xls, .xlsx, .ods" :label="$t('QuestionnaireEditor.Upload')" dense
+                        show-size @change="uploadFile"></v-file-input>
+                    <span>
+                        <v-icon>mdi-download</v-icon>
+                        {{ $t('QuestionnaireEditor.SideBarDownload') }}
+                    </span>
+                    <a :href="exportOptionsAsExlsUri" class="ma-2 v-btn v-size--default">
+                        {{ $t('QuestionnaireEditor.SideBarXlsx') }}</a>
+                    <a :href="exportOptionsAsTabUri" class="ma-2 v-btn v-size--default">
+                        {{ $t('QuestionnaireEditor.SideBarTab') }}</a>
+                </v-footer>
+            </v-container>
+        </v-main>
+    </v-app>
 </template>
 
 <script>

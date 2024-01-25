@@ -108,10 +108,9 @@ namespace WB.UI.Designer.Controllers
         }
         
         [HttpGet]
-        [VuePage]
         public IActionResult EditOptions()
         {
-            return Ok();
+            return View("Vue");
         }
 
         [HttpPost]
@@ -187,10 +186,9 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpGet]
-        [VuePage]
         public IActionResult EditCategories()
         {
-            return Ok();
+            return View("Vue");
         }
         
         [HttpPost]
