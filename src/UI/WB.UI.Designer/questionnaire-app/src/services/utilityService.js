@@ -20,6 +20,8 @@ export function guid() {
     return s4() + s4() + s4() + s4() + s4() + s4() + s4() + s4();
 }
 
+//TODO: fix usages of $...
+
 export function focus(name) {
     $timeout(function() {
         $rootScope.$broadcast('focusOn', name);
