@@ -79,11 +79,12 @@
     </v-app>
 </template>
 
+<style scoped></style>
+
 <script>
 import CategoryTable from './components/OptionItemsTable.vue';
 import CategoryStrings from './components/OptionItemsAsStrings.vue';
 import { optionsApi } from './services';
-
 import 'vuetify/styles';
 
 export default {

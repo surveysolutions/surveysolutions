@@ -15,8 +15,4 @@
         </v-main>
     </v-app>
 </template>
-<script>
 
-import 'vuetify/styles';
-
-</script>
