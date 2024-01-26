@@ -13,7 +13,40 @@
     </div>
     <div id="loading-logo" v-if="isActionRunning"></div>
     <confirm-dialog></confirm-dialog>
+    <notifications position="top right">
+        <template #body="props">
+            <div class="ui-pnotify ui-pnotify-fade-normal ui-pnotify-mobile-able ui-pnotify-in ui-pnotify-fade-in ui-pnotify-move"
+                aria-live="assertive" aria-role="alertdialog" style="position: inherit;">
+                <div class="alert ui-pnotify-container ui-pnotify-shadow"
+                    :class="{ 'alert-warning': props.item.type != 'error', 'alert-danger': props.item.type == 'error' }"
+                    role="alert" style="min-height: 16px;">
+                    <div class="ui-pnotify-closer" aria-role="button" tabindex="0" title="Close" @click="props.close"
+                        style="cursor: pointer;"><span class="glyphicon glyphicon-remove"></span></div>
+                    <div class="ui-pnotify-sticker" aria-role="button" aria-pressed="false" tabindex="0" title="Stick"
+                        style="cursor: pointer; visibility: hidden;"><span class="glyphicon glyphicon-pause"
+                            aria-pressed="false"></span></div>
+                    <div class="ui-pnotify-icon"><span class="glyphicon glyphicon-exclamation-sign"></span></div>
+                    <h4 class="ui-pnotify-title" style="display: none;">{{ props.item.title }}</h4>
+                    <div class="ui-pnotify-text" aria-role="alert" v-dompurify-html="props.item.text"></div>
+                    <div class="ui-pnotify-action-bar"
+                        style="margin-top: 5px; clear: both; text-align: right; display: none;"></div>
+                </div>
+            </div>
+        </template>
+    </notifications>
 </template>
+
+<style lang="scss">
+.vue-notification-group {
+    position: absolute;
+
+    .vue-notification-wrapper {
+        overflow: visible;
+        padding-top: 36px;
+        padding-right: 36px;
+    }
+}
+</style>
 
 <script>
 import { useProgressStore } from '../stores/progress';

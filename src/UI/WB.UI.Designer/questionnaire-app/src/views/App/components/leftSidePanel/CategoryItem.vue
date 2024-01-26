@@ -62,6 +62,7 @@ import { newGuid } from '../../../../helpers/guid';
 import { find, isNull, isUndefined } from 'lodash'
 import { updateCategories, deleteCategories } from '../../../../services/categoriesService';
 import { trimText, createDeletePopup } from '../../../../services/utilityService'
+import { notice } from '../../../../services/notificationService';
 import moment from 'moment';
 
 export default {
@@ -183,7 +184,7 @@ export default {
 
             const response = await updateCategories(this.questionnaireId, categories)
 
-            if (categories.file) notificationService.notice(response.data);
+            if (categories.file) notice(response);
 
             categories.file = null;
             this.file = [];

@@ -9,13 +9,16 @@ export async function updateCategories(questionnaireId, categories) {
         name: categories.name
     };
 
-    return upload('/api/command/categories', categories.file, command).then(
-        response => {
-            emitter.emit('categoriesUpdated', {
-                categories: categories
-            });
-        }
+    const response = await upload(
+        '/api/command/categories',
+        categories.file,
+        command
     );
+    emitter.emit('categoriesUpdated', {
+        categories: categories
+    });
+
+    return response;
 }
 
 export function deleteCategories(questionnaireId, categoriesId) {

@@ -61,6 +61,7 @@ import CategoryItem from './CategoryItem.vue';
 import { newGuid } from '../../../../helpers/guid';
 import { isNull, isUndefined } from 'lodash'
 import { updateCategories } from '../../../../services/categoriesService'
+import { notice } from '../../../../services/notificationService';
 import moment from 'moment';
 
 
@@ -102,7 +103,7 @@ export default {
             }
 
             if (this.isReadOnlyForUser) {
-                notificationService.notice(this.$t('QuestionnaireEditor.NoPermissions')); // TODO
+                notice(this.$t('QuestionnaireEditor.NoPermissions')); // TODO
                 return;
             }
 
@@ -130,12 +131,14 @@ export default {
             categories.name = categories.name.substring(0, fileNameLength < maxNameLength ? fileNameLength : maxNameLength);
             categories.oldCategoriesId = categories.categoriesId;
 
-            const response = await updateCategories(this.questionnaireId, categories)
+            updateCategories(this.questionnaireId, categories)
+                .then(response => {
+                    if (categories.file) notice(response);
 
-            if (categories.file) notificationService.notice(response.data);
+                    categories.file = null;
+                    this.file = [];
+                })
 
-            categories.file = null;
-            this.file = [];
 
             /*if (response.status !== 200) return;
 
@@ -153,7 +156,7 @@ export default {
 
         async addNewCategory() {
             if (this.isReadOnlyForUser) {
-                notificationService.notice($i18next.t('NoPermissions'));
+                notice($i18next.t('NoPermissions'));
                 return;
             }
 
