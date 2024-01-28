@@ -1,6 +1,6 @@
 import { get, post, commandCall } from '../services/apiService';
 import emitter from './emitter';
-import { toLocalDateTime } from '../../../services/utilityService';
+import { toLocalDateTime } from '../services/utilityService';
 
 export function updateQuestionnaire(questionnaireId, questionnaire) {
     var command = {
@@ -44,10 +44,10 @@ export async function regenerateAnonymousQuestionnaireLink(questionnaireId) {
 }
 
 export async function updateAnonymousQuestionnaireSettings(questionnaireId, isActive) {
-  var regenerateUrl =
+  var updateUrl =
       '/questionnaire/updateAnonymousQuestionnaireSettings/' + questionnaireId;
 
-  return await post(regenerateUrl, { isActive: isActive }).then(response => {
+  return await post(updateUrl, { isActive: isActive }).then(response => {
       var data = response;
       emitter.emit('anonymousQuestionnaireSettingsUpdated', {
         isAnonymouslyShared: data.isActive,
@@ -60,9 +60,3 @@ export async function updateAnonymousQuestionnaireSettings(questionnaireId, isAc
     });
   });
 }
-
-
-updateAnonymousQuestionnaireSettings = function(questionnaireId, isActive) {
-  var baseUrl = '../../questionnaire/updateAnonymousQuestionnaireSettings/' + questionnaireId;
-  return $http.post(baseUrl, { isActive: isActive }, { headers: { 'X-CSRF-TOKEN': getCsrfCookie()} });
-};

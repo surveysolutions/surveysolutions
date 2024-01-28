@@ -408,7 +408,18 @@ export default {
             else return _.find(this.shareTypeOptions, { name: type.name });
         },
         updateTitle() {
-            //this.questionnaire.updateTitle();
+
+            updateQuestionnaire(this.questionnaireId,
+                {
+                    isPublic: !this.questionnaire.isPublic,
+                    title: this.questionnaireEdit.editedTitle,
+                    variable: this.questionnaireEdit.editedVariable,
+                    hideIfDisabled: this.questionnaireEdit.editedHideIfDisabled,
+                    defaultLanguageName: this.questionnaire.defaultLanguageName
+                })
+                .then(() => {//TODO: subscribe to event
+                    this.questionnaire.isPublic = !this.questionnaire.isPublic;
+                });           
         },
         togleTab(value) {
             this.settings = value;
