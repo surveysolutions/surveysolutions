@@ -2,6 +2,7 @@ import { i18n } from '../plugins/localization';
 import { nextTick } from 'vue';
 import { defer, isNull } from 'lodash';
 import { filterXSS } from 'xss';
+import moment from 'moment';
 
 export function format(format) {
     var args = Array.prototype.slice.call(arguments, 1);
@@ -18,6 +19,10 @@ export function guid() {
     }
 
     return s4() + s4() + s4() + s4() + s4() + s4() + s4() + s4();
+}
+
+export function toLocalDateTime(utc) {
+    return moment.utc(utc).local().format('YYYY-MM-DD HH:mm');
 }
 
 //TODO: fix usages of $...

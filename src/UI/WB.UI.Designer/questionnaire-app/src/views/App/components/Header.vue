@@ -25,8 +25,7 @@
                         target="_blank">{{ $t('QuestionnaireEditor.CopyTo') }}</a>
                     <button class="btn" type="button" :disabled="questionnaire.isReadOnlyForUser &&
                         !questionnaire.hasViewerAdminRights &&
-                        !questionnaire.isSharedWithUser
-                        " @click="showShareInfo()">
+                        !questionnaire.isSharedWithUser" @click="showShareInfo()">
                         {{ $t('QuestionnaireEditor.Settings') }}
                     </button>
 
@@ -135,12 +134,13 @@
     </section> -->
 
     <VerificationDialog ref="verificationDialog" :questionnaireId="questionnaireId" />
+    <SharedInfoDialog ref="sharedInfoDialog" :questionnaireId="questionnaireId" />
 </template>
 
 <script>
 import VerificationDialog from './VerificationDialog.vue';
+import SharedInfoDialog from './SharedInfoDialog.vue';
 
-import { useQuestionnaireStore } from '../../../stores/questionnaire';
 import { useUserStore } from '../../../stores/user';
 import { useVerificationStore } from '../../../stores/verification';
 
@@ -151,48 +151,34 @@ import { ref } from 'vue';
 export default {
     name: 'QuestionnaireHeader',
     components: {
-        VerificationDialog
+        VerificationDialog,
+        SharedInfoDialog
     },
+    inject: ['questionnaire'],
     props: {
         questionnaireId: { type: String, required: true }
     },
     data() {
-        return {
-            /*questionnaire: {
-                questionnaireId: 0,
-                hasViewerAdminRights: false,
-                isSharedWithUser: false,
-                questionnaireRevision: null,
-                isReadOnlyForUser: false,
-                webTestAvailable: false,
-                title: '',
-                questionsCount: 0,
-                groupsCount: 0,
-                rostersCount: 0
-            }*/
-        };
+        return {};
     },
     setup(props) {
-        const questionnaireStore = useQuestionnaireStore();
         const userStore = useUserStore();
         const verificationStore = useVerificationStore();
 
         const verificationDialog = ref(null);
+        const sharedInfoDialog = ref(null);
 
         return {
-            questionnaireStore,
             userStore,
             verificationStore,
-            verificationDialog
+            verificationDialog,
+            sharedInfoDialog
         };
     },
     async beforeMount() {
         //this.questionnaire = this.questionnaireStore.info;
     },
     computed: {
-        questionnaire() {
-            return this.questionnaireStore.info || {};
-        },
         currentUserIsAuthenticated() {
             return this.userStore.isAuthenticated;
         },
@@ -234,7 +220,7 @@ export default {
             }
         },
         showShareInfo() {
-            // TODO
+            this.sharedInfoDialog.open();
         },
         showVerificationErrors() {
             if (this.errorsCount === 0) return;
