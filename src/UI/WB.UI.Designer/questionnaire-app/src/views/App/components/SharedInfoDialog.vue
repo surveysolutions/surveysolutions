@@ -143,20 +143,20 @@
                                             </div>
                                         </li>
                                     </ul>
-                                    <form role="form" class="row" name="viewModel.shareForm" novalidate>
+                                    <form role="form" class="row" name="viewModelData.shareForm" novalidate>
                                         <div class="col-xs-7">
                                             <div class=" form-group"
-                                                :class="{ 'has-error': viewModel.doesUserExist == false }">
+                                                :class="{ 'has-error': viewModelData.doesUserExist == false }">
                                                 <label class="control-label" for="questionnaireTitle">
                                                     {{ $t('QuestionnaireEditor.SettingsInviteCollaborators') }}
                                                 </label>
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" name="shareWithInput"
-                                                        v-model="viewModel.shareWith" />
+                                                        v-model="viewModelData.shareWith" />
                                                     <div class="input-group-btn dropup share-type">
                                                         <button type="button" class="btn btn-default dropdown-toggle"
                                                             data-toggle="dropdown" name="shareType" id="Share-type">
-                                                            {{ viewModel.shareType.text }}
+                                                            {{ viewModelData.shareType.text }}
                                                             <span class="caret"></span>
                                                         </button>
                                                         <ul class="dropdown-menu " role="menu"
@@ -170,7 +170,7 @@
                                                         </ul>
                                                     </div>
                                                 </div>
-                                                <p class="help-block ng-cloak" v-if="viewModel.doesUserExist == false">
+                                                <p class="help-block ng-cloak" v-if="viewModelData.doesUserExist == false">
                                                     {{ $t('QuestionnaireEditor.SettingsProvideExistingEmail') }}
                                                 </p>
                                             </div>
@@ -178,7 +178,7 @@
                                         <div class="col-xs-5">
                                             <div class="form-group pull-right">
                                                 <button class="btn btn-primary btn-lg invite-button" @click="invite()"
-                                                    :disabled="!viewModel.shareWith">
+                                                    :disabled="!viewModelData.shareWith">
                                                     {{ $t('QuestionnaireEditor.SettingsInvite') }}
                                                 </button>
                                             </div>
@@ -286,10 +286,14 @@
 import _ from 'lodash';
 import Help from './Help.vue';
 import { toLocalDateTime } from '../../../services/utilityService';
+import { findUserByEmailOrLogin } from '../../../services/userService';
 import {
     updateQuestionnaire,
     regenerateAnonymousQuestionnaireLink,
-    updateAnonymousQuestionnaireSettings
+    updateAnonymousQuestionnaireSettings,
+    shareWith,
+    removeSharedPerson,
+    passOwnership
 } from '../../../services/questionnaireService';
 
 export default {
@@ -297,12 +301,13 @@ export default {
     components: {
         Help
     },
-    inject: ['questionnaire'],
+    inject: ['questionnaire', 'currentUser'],
     props: {
         questionnaireId: { type: String, required: true }
     },
     data() {
         return {
+            viewModelData: {},
             shareTypeOptions: [
                 {
                     name: 'Edit',
@@ -313,8 +318,24 @@ export default {
                     text: this.$t('QuestionnaireEditor.SettingsShareView')
                 }
             ],
-
-            viewModel: {
+            
+            visible: false,
+            dirty: false,
+            settings: true,
+            passConfirmationOpen: null
+        };
+    },
+    watch: {
+        viewModelData: {
+            handler(newVal, oldVal) {
+                if (oldVal != null) 
+                    this.dirty = true;
+            },
+            deep: true
+        },        
+    },
+    beforeMount() {
+        this.viewModelData = {
                 shareWith: '',
                 shareForm: {},
                 shareType: {
@@ -322,17 +343,11 @@ export default {
                     text: this.$t('QuestionnaireEditor.SettingsShareEdit')
                 },
                 doesUserExist: true
-            },
-
-            visible: false,
-            dirty: false,
-            settings: true
-        };
+            };
     },
     computed: {
         questionnaireEdit() {
             return {
-                passConfirmationOpen: null,
                 editedTitle: this.questionnaire.title,
                 editedVariable: this.questionnaire.variable,
                 editedHideIfDisabled: this.questionnaire.hideIfDisabled,
@@ -361,7 +376,7 @@ export default {
                     hideIfDisabled: this.questionnaire.hideIfDisabled,
                     defaultLanguageName: this.questionnaire.defaultLanguageName
                 })
-                .then(() => {//TODO: subscribe to event
+                .then(() => {//TODO: subscribe to event, maybe move to questionnaire store
                     this.questionnaire.isPublic = !this.questionnaire.isPublic;
                 });
         },
@@ -377,30 +392,102 @@ export default {
         },
         updateAnonymousQuestionnaireSettings() {
             updateAnonymousQuestionnaireSettings(this.questionnaireId, !this.questionnaire.isAnonymouslyShared)
-                .then(() => {//TODO: subscribe to event
+                .then(() => {//TODO: subscribe to event, maybe move to questionnaire store
                     this.questionnaire.isAnonymouslyShared = !this.questionnaire.isAnonymouslyShared;
                 });
         },
-        isQuestionnaireOwner() {
-            //return this.questionnaire.isQuestionnaireOwner();
-        },
         passOwnershipCancel() {
-            //this.questionnaire.passOwnershipCancel();
+            this.passConfirmationOpen = null;
         },
-        passOwnershipConfirmation(s) {
-            //this.questionnaire.passOwnershipConfirmation(s);
+        isQuestionnaireOwner() {
+            const userEmail = this.currentUser.email;
+            _.forEach(this.questionnaire.sharedPersons, function (p) {
+                if (p.email == userEmail && p.isOwner) {
+                    return true;
+                }
+            });
+
+            return false;
         },
-        passOwnership(s) {
-            //this.questionnaire.passOwnership(s);
+        passOwnershipConfirmation(newOwner) {
+            const userEmail = this.currentUser.email;
+            passOwnership(
+                userEmail,
+                newOwner.userId,
+                newOwner.email,
+                this.questionnaire.questionnaireId
+            ).then(() => { //TODO: subscribe to event, maybe move to questionnaire store
+                newOwner.isOwner = true;
+
+                _.forEach(this.questionnaire.sharedPersons, function (person) {
+                    if (person.email == userEmail) {
+                        person.isOwner = false;
+                    }
+
+                    if (person.email == newOwner.email) {
+                        person.isOwner = true;
+                    }
+                });
+
+                this.passConfirmationOpen = null;
+            });
         },
-        revokeAccess(s) {
-            //this.questionnaire.revokeAccess(s);
+        passOwnership(personInfo) {
+            this.passConfirmationOpen = personInfo.email;
         },
-        invite() {
-            //this.questionnaire.invite();
+        revokeAccess(personInfo) {
+            removeSharedPerson(this.questionnaireId, personInfo.personId, personInfo.email)
+                .then(function () {//TODO: subscribe to event, maybe move to questionnaire store
+                    this.questionnaire.sharedPersons = _.without(
+                        this.questionnaire.sharedPersons,
+                        _.findWhere(this.questionnaire.sharedPersons, {
+                            email: personInfo.email
+                        })
+                    );
+
+                    this.sortSharedPersons();
+                });
+        },
+        sortSharedPersons() {
+            var owner = _.findWhere(this.questionnaire.sharedPersons, { isOwner: true });
+            var sharedPersons = _.sortBy(_.without(this.questionnaire.sharedPersons, owner), ['email']);
+
+            this.questionnaire.sharedPersons = [owner].concat(sharedPersons);
+        },
+
+        async invite() {
+            const user = await findUserByEmailOrLogin(this.viewModelData.shareWith);
+            this.viewModelData.doesUserExist = user.doesUserExist;
+
+            if (user.doesUserExist) {
+
+                shareWith(
+                    this.viewModelData.shareWith,
+                    this.questionnaire.questionnaireId,
+                    this.viewModelData.shareType.name
+                        .then(function () {//TODO: subscribe to event, maybe move to questionnaire store
+                            if (
+                                _.where(this.questionnaire.sharedPersons, {
+                                    email: this.viewModelData.shareWith
+                                }).length === 0
+                            ) {
+                                this.questionnaire.sharedPersons.push({
+                                    email: data.email,
+                                    login: data.userName,
+                                    userId: data.id,
+                                    shareType: this.viewModelData.shareType
+                                });
+                                this.sortSharedPersons();
+                            }
+
+                            this.viewModelData.shareWith = '';
+                            this.viewModelData.doesUserExist = true;
+                        })
+                );
+            }
         },
         changeShareType(shareType) {
-            //this.questionnaire.changeShareType(shareType);
+            this.viewModelData.shareType = shareType;
         },
         getShareType(type) {
             if (type === 'Edit' || type === 'View')
@@ -408,7 +495,6 @@ export default {
             else return _.find(this.shareTypeOptions, { name: type.name });
         },
         updateTitle() {
-
             updateQuestionnaire(this.questionnaireId,
                 {
                     isPublic: !this.questionnaire.isPublic,
@@ -419,7 +505,9 @@ export default {
                 })
                 .then(() => {//TODO: subscribe to event
                     this.questionnaire.isPublic = !this.questionnaire.isPublic;
-                });           
+
+                    this.close();
+                });
         },
         togleTab(value) {
             this.settings = value;

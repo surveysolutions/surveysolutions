@@ -29,10 +29,10 @@
                         {{ $t('QuestionnaireEditor.Settings') }}
                     </button>
 
-                    <div class="btn-group" v-if="currentUserIsAuthenticated">
+                    <div class="btn-group" v-if="currentUser.isAuthenticated">
                         <a class="btn btn-default" style="margin-right: 0px;">{{
                             $t('QuestionnaireEditor.HellowMessageBtn', {
-                                currentUserName: currentUserName
+                                currentUserName: currentUser.userName
                             })
                         }}</a>
                         <a class="btn btn-default" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -54,9 +54,9 @@
                             </li>
                         </ul>
                     </div>
-                    <a class="btn" href="/" type="button" v-if="!currentUserIsAuthenticated">{{
+                    <a class="btn" href="/" type="button" v-if="!currentUser.isAuthenticated">{{
                         $t('QuestionnaireEditor.Login') }}</a>
-                    <a class="btn" href="/identity/account/register" type="button" v-if="!currentUserIsAuthenticated">{{
+                    <a class="btn" href="/identity/account/register" type="button" v-if="!currentUser.isAuthenticated">{{
                         $t('QuestionnaireEditor.Register') }}</a>
                 </div>
             </div>
@@ -140,12 +140,8 @@
 <script>
 import VerificationDialog from './VerificationDialog.vue';
 import SharedInfoDialog from './SharedInfoDialog.vue';
-
-import { useUserStore } from '../../../stores/user';
 import { useVerificationStore } from '../../../stores/verification';
-
 import WebTesterApi from '../../../api/webTester';
-
 import { ref } from 'vue';
 
 export default {
@@ -154,37 +150,26 @@ export default {
         VerificationDialog,
         SharedInfoDialog
     },
-    inject: ['questionnaire'],
+    inject: ['questionnaire', 'currentUser'],
     props: {
         questionnaireId: { type: String, required: true }
     },
     data() {
         return {};
     },
-    setup(props) {
-        const userStore = useUserStore();
+    setup(props) {        
         const verificationStore = useVerificationStore();
 
         const verificationDialog = ref(null);
         const sharedInfoDialog = ref(null);
 
-        return {
-            userStore,
+        return {            
             verificationStore,
             verificationDialog,
             sharedInfoDialog
         };
-    },
-    async beforeMount() {
-        //this.questionnaire = this.questionnaireStore.info;
-    },
-    computed: {
-        currentUserIsAuthenticated() {
-            return this.userStore.isAuthenticated;
-        },
-        currentUserName() {
-            return this.userStore.userName;
-        },
+    },    
+    computed: {        
         errorsCount() {
             return this.verificationStore.status.errors
                 ? this.verificationStore.status.errors.length
@@ -207,8 +192,6 @@ export default {
             // TODO
         },
         async verify() {
-            // $rootScope.$broadcast("verifing", {});
-
             await this.verificationStore.fetchVerificationStatus(
                 this.questionnaireId
             );

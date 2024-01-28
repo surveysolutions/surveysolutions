@@ -50,7 +50,7 @@
 
 <script>
 import { useProgressStore } from '../stores/progress';
-import { computed } from 'vue'
+import { computed, readonly } from 'vue'
 
 import { useQuestionnaireStore } from '../stores/questionnaire';
 import { useTreeStore } from '../stores/tree';
@@ -62,8 +62,10 @@ export default {
     provide() {
         return {
             questionnaire: computed(() => this.questionnaire),
-            currentChapter: computed(() => this.currentChapter),
-            isCover: computed(() => this.isCover)
+            currentChapter: computed(() => this.currentChapter),            
+            isCover: computed(() => this.isCover),
+
+            currentUser: readonly(computed(() => this.currentUser))
         };
     },
     setup() {
@@ -91,6 +93,9 @@ export default {
         },
         currentChapter() {
             return this.treeStore.getChapter || {};
+        },
+        currentUser() {
+            return this.userStore.getInfo || {};
         },
         isActionRunning() {
             var progress = this.$Progress;

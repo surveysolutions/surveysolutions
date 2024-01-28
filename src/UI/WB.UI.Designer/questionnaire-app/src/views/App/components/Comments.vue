@@ -38,7 +38,6 @@
 
 <script>
 
-import { useUserStore } from '../../../stores/user';
 import { useCommentsStore } from '../../../stores/comments';
 import { resolveComment, postComment, deleteComment } from '../../../services/commentsService';
 import Help from './Help.vue'
@@ -46,7 +45,7 @@ import Help from './Help.vue'
 export default {
     name: 'Comments',
     components: { Help },
-    inject: ['questionnaire'],
+    inject: ['questionnaire', 'currentUser'],
     props: {
         questionnaireId: { type: String, required: true },
         entityId: { type: String, required: true }
@@ -98,10 +97,9 @@ export default {
             await this.commentsStore.fetchComments(this.questionnaireId, this.entityId);
         },
         async postComment() {
-
-            const userStore = useUserStore();
-            const userName = userStore.userName;
-            const userEmail = userStore.email;
+            
+            const userName = this.currentUser.userName;
+            const userEmail = this.currentUser.email;
 
             await postComment(this.questionnaireId, this.activeComment.comment, this.entityId, userName, userEmail);
 

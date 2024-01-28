@@ -1,28 +1,17 @@
-import { defineStore } from 'pinia'
-
-import { get } from '../services/apiService';
+import { defineStore } from 'pinia';
+import { getCurrentUser } from '../services/userService';
 
 export const useUserStore = defineStore('user', {
     state: () => ({
-      userName: '',
-      email: '',
-      isAuthenticated: false,
+        info: {}
     }),
     getters: {
-      getInfo: (state) => state.info,
+        getInfo: state => state.info
     },
     actions: {
-
-      async fetchUserInfo() {
-        const data = await get('/api/users/CurrentLogin');
-        this.setUserInfo(data)
-      },
-
-      setUserInfo(data) {
-        this.userName = data.userName;
-        this.email = data.email;
-        this.isAuthenticated = data.isAuthenticated;
-      }
-
-    },    
-})
+        async fetchUserInfo() {
+            const data = await getCurrentUser();
+            this.info = data;
+        }
+    }
+});
