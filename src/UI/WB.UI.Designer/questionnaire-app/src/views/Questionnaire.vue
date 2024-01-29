@@ -121,8 +121,10 @@ export default {
                 this.$route.params.questionnaireId
             );
             
-            var chapter = this.questionnaireStore.getInfo.chapters[0];
-            this.$router.push({
+            if(!this.$route.params.chapterId)
+            {
+                var chapter = this.questionnaireStore.getInfo.chapters[0];
+                this.$router.push({
                     name: 'group',
                     params: {
                         chapterId: chapter.itemId,
@@ -130,6 +132,7 @@ export default {
                     },
                     force: true
                 });
+            }
         },
     }
 };
