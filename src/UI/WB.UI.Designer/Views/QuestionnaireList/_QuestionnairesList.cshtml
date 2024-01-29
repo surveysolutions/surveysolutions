@@ -87,10 +87,22 @@
 
                             <tr class="@(listViewModel.IsDeleted ? "deleted" : "")">
                                 <td class="search-value">
-                                    <a href="@Url.Action(openActionName, "Questionnaire", routevalues)" title="@listViewModel.Location">
-                                        <span class="@iconCssClass"></span>
-                                        @listViewModel.Title
-                                    </a>
+                                    @{
+                                        if (listViewModel.IsFolder)
+                                        {
+                                            <a href="@Url.Action(openActionName, "Questionnaire", routevalues)" title="@listViewModel.Location">
+                                                <span class="@iconCssClass"></span>
+                                                @listViewModel.Title
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a href = "@Url.Action(openActionName, "Q", routevalues)" title = "@listViewModel.Location" >
+                                                <span class ="@iconCssClass" ></span >
+                                                @listViewModel.Title
+                                            </a>
+                                        }
+                                    }
                                 </td>
                                 <td class="date">
                                     <time datetime="@listViewModel.LastEntryDate.ToString("o")">@listViewModel.LastEntryDate.ConvertToLocalAndFormatDate()</time>

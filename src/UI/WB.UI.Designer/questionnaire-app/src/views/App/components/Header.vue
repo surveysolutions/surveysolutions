@@ -4,6 +4,9 @@
         <div class="header-line">
             <div class="header-menu">
                 <div class="buttons">
+                    <a class="btn" :href="'/questionnaire/details/' + questionnaireId" style="margin-right: 10px;">
+                        {{ $t('QuestionnaireEditor.OldUi') }}</a>
+
                     <a class="btn" href="http://support.mysurvey.solutions/designer" target="_blank">{{
                         $t('QuestionnaireEditor.Help') }}</a>
                     <a class="btn" href="https://forum.mysurvey.solutions" target="_blank">{{

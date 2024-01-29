@@ -7,7 +7,7 @@ export function updateQuestionnaire(questionnaireId, questionnaire) {
         title: questionnaire.title,
         variable: questionnaire.variable,
         questionnaireId: questionnaireId,
-        hideifDisabled: questionnaire.hideifDisabled,
+        hideifDisabled: questionnaire.hideIfDisabled,
         isPublic: questionnaire.isPublic,
         defaultLanguageName: questionnaire.defaultLanguageName
     };
@@ -17,7 +17,7 @@ export function updateQuestionnaire(questionnaireId, questionnaire) {
             title: questionnaire.title,
             variable: questionnaire.variable,
             questionnaireId: questionnaireId,
-            hideifDisabled: questionnaire.hideifDisabled,
+            hideifDisabled: questionnaire.hideIfDisabled,
             isPublic: questionnaire.isPublic,
             defaultLanguageName: questionnaire.defaultLanguageName
         });

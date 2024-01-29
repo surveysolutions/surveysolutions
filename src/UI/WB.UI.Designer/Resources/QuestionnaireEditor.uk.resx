@@ -1580,4 +1580,7 @@
   <data name="ManageAccount" xml:space="preserve">
       <value>Керування обліковим записом</value>
   </data>
+  <data name="OldUi" xml:space="preserve">
+      <value>Старий UI</value>
+  </data>
 </root>
