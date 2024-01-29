@@ -61,7 +61,7 @@ namespace WB.UI.Designer.Code.Implementation
                 ActionPersonCallName = String.IsNullOrWhiteSpace(actionPersonEmail) 
                     ? NotificationResources.MailNotifier_NotifyTargetPersonAboutShareChange_user 
                     : actionPersonEmail,
-                QuestionnaireLink = urlHelper.Action("Details", "Questionnaire", new { id = questionnaireId }, "https")
+                QuestionnaireLink = urlHelper.Action("Details", "Q", new { id = questionnaireId }, "https")
             };
 
             var message = this.GetShareChangeNotificationEmail(sharingNotificationModel);
@@ -92,8 +92,7 @@ namespace WB.UI.Designer.Code.Implementation
                     : NotificationResources.MailNotifier_NotifyOwnerAboutShareChange_view,
                 ActionPersonCallName = String.IsNullOrWhiteSpace(actionPersonEmail) ? NotificationResources.MailNotifier_NotifyTargetPersonAboutShareChange_user : actionPersonEmail,
                 SharedWithPersonEmail = String.IsNullOrWhiteSpace(sharedWithPersonEmail) ? NotificationResources.MailNotifier_NotifyTargetPersonAboutShareChange_user : sharedWithPersonEmail,
-                QuestionnaireLink = urlHelper.Action("Details", "Questionnaire", new { id = questionnaireId }, "https")
-
+                QuestionnaireLink = urlHelper.Action("Details", "Q", new { id = questionnaireId }, "https")
             };
             var message = this.GetOwnerShareChangeNotificationEmail(sharingNotificationModel);
 

@@ -120,6 +120,16 @@ export default {
             await this.questionnaireStore.fetchQuestionnaireInfo(
                 this.$route.params.questionnaireId
             );
+            
+            var chapter = this.questionnaireStore.getInfo.chapters[0];
+            this.$router.push({
+                    name: 'group',
+                    params: {
+                        chapterId: chapter.itemId,
+                        entityId: chapter.itemId,
+                    },
+                    force: true
+                });
         },
     }
 };
