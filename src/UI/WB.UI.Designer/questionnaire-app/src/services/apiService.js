@@ -2,6 +2,8 @@ import { mande } from 'mande';
 import { useBlockUIStore } from '../stores/blockUI';
 import { useProgressStore } from '../stores/progress';
 import { isNull } from 'lodash';
+import { notice, error } from './notificationService';
+import { i18n } from '../plugins/localization';
 
 const api = mande('/' /*, globalOptions*/);
 
@@ -25,6 +27,7 @@ export function get(url, queryParams) {
             .catch(error => {
                 blockUI.stop();
                 progressStore.stop();
+                responseError(err);
 
                 throw error;
             });
@@ -40,6 +43,7 @@ export function get(url, queryParams) {
         .catch(error => {
             blockUI.stop();
             progressStore.stop();
+            responseError(err);
 
             throw error;
         });
@@ -62,6 +66,7 @@ export function post(url, params) {
         .catch(error => {
             blockUI.stop();
             progressStore.stop();
+            responseError(error);
 
             throw error;
         });
@@ -86,6 +91,7 @@ export function patch(url, params) {
         .catch(error => {
             blockUI.stop();
             progressStore.stop();
+            responseError(err);
 
             throw error;
         });
@@ -108,6 +114,7 @@ export function del(url) {
         .catch(error => {
             blockUI.stop();
             progressStore.stop();
+            responseError(err);
 
             throw error;
         });
@@ -147,6 +154,7 @@ export function upload(url, file, command) {
         .catch(err => {
             blockUI.stop();
             progressStore.stop();
+            responseError(err);
 
             throw err;
         });
@@ -174,4 +182,22 @@ function getCsrfCookie() {
         }
     }
     return '';
+}
+
+function responseError(response) {
+    if (
+        response.response.status === 406 ||
+        response.response.status === 403 ||
+        response.response.status === 400
+    ) {
+        if (response.body.message) {
+            notice(response.body.message);
+        } else {
+            notice(response.body.Message);
+        }
+    } else if (response.response.status === 404) {
+        notice(i18n.t('QuestionnaireEditor.EntryWasNotFound'));
+    } else {
+        error(i18n.t('QuestionnaireEditor.RequestFailedUnexpectedly'));
+    }
 }
