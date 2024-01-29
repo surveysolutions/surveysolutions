@@ -5,7 +5,9 @@
             modal-animation="true" style="z-index: 1050; display: block;">
             <div class="modal-dialog ">
                 <div class="modal-content" uib-modal-transclude="">
-                    <div style="color: brown;font-size: large;">Under Construction</div>
+                    <div style="color: brown;font-size: large;">
+                        Under Construction
+                    </div>
                     <div class="modal-header blue-strip">
                         <button type="button" class="close" aria-hidden="true" @click="cancel()"></button>
                         <h1>
@@ -14,29 +16,39 @@
                     </div>
                     <div class="modal-body share-question-dialog">
                         <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" :class="{ 'active': settings }">
+                            <li role="presentation" :class="{ active: settings }">
                                 <a role="tab" data-toggle="tab" href="#questionnaireSettingsTab" @click="togleTab(true)">
-                                    {{ $t('QuestionnaireEditor.QuestionnaireSettings') }}
+                                    {{
+                                        $t(
+                                            'QuestionnaireEditor.QuestionnaireSettings'
+                                        )
+                                    }}
                                 </a>
                             </li>
-                            <li role="presentation" :class="{ 'active': !settings }">
-                                <a role="tab" data-toggle="tab" href="#shareTab"
-                                    v-if="!questionnaire.isReadOnlyForUser || questionnaire.hasViewerAdminRights"
-                                    @click="togleTab(false)">
-                                    {{ $t('QuestionnaireEditor.AccessSettings') }}
+                            <li role="presentation" :class="{ active: !settings }">
+                                <a role="tab" data-toggle="tab" href="#shareTab" v-if="!questionnaire.isReadOnlyForUser ||
+                                    questionnaire.hasViewerAdminRights
+                                    " @click="togleTab(false)">
+                                    {{
+                                        $t('QuestionnaireEditor.AccessSettings')
+                                    }}
                                 </a>
                             </li>
                         </ul>
                         <!-- Tab panes -->
                         <div class="tab-content">
-                            <div role="tabpanel" class="tab-pane" :class="{ 'active': settings }"
+                            <div role="tabpanel" class="tab-pane" :class="{ active: settings }"
                                 id="questionnaireSettingsTab">
                                 <div class="row well-sm">
                                     <div class="col-xs-7">
                                         <form role="form" name="questionnaireForm">
                                             <div class="form-group">
                                                 <label class="control-label" for="questionnaireTitle">
-                                                    {{ $t('QuestionnaireEditor.SettingsQuestionnaireName') }}
+                                                    {{
+                                                        $t(
+                                                            'QuestionnaireEditor.SettingsQuestionnaireName'
+                                                        )
+                                                    }}
                                                 </label>
                                                 <input id="questionnaireTitle" type="text"
                                                     class="form-control questionaire-title"
@@ -46,7 +58,11 @@
 
                                             <div class="form-group input-variable-name">
                                                 <label class="control-label" for="questionnaireTitle">
-                                                    {{ $t('QuestionnaireEditor.SettingsQuestionnaireVariable') }}
+                                                    {{
+                                                        $t(
+                                                            'QuestionnaireEditor.SettingsQuestionnaireVariable'
+                                                        )
+                                                    }}
                                                 </label>
                                                 <help link="questionnaireVariableName" />
                                                 <input id="questionnaireVariable"
@@ -59,11 +75,16 @@
                                             <!--i know this is horrible, but i cannot remove paddings from checkbox image so that visually they inputs are aligned-->
                                             <div class="form-group" style="margin-left: -8px;">
                                                 <input id="questionnaireHideIdDisabled" type="checkbox" class="wb-checkbox"
-                                                    :disabled="questionnaire.isReadOnlyForUser"
-                                                    v-model="questionnaireEdit.editedHideIfDisabled" />
+                                                    :disabled="questionnaire.isReadOnlyForUser
+                                                        " v-model="questionnaireEdit.editedHideIfDisabled
+        " />
                                                 <label for="questionnaireHideIdDisabled">
                                                     <span></span>
-                                                    {{ $t('QuestionnaireEditor.SettingsHideIfDisabled') }}
+                                                    {{
+                                                        $t(
+                                                            'QuestionnaireEditor.SettingsHideIfDisabled'
+                                                        )
+                                                    }}
                                                 </label>
                                                 <help link="hideIfDisabled" />
                                             </div>
@@ -72,24 +93,37 @@
                                                     :class="{ 'btn-primary': dirty }" unsaved-warning-clear
                                                     v-if="!questionnaire.isReadOnlyForUser" :disabled="!dirty"
                                                     @click="updateTitle()">
-                                                    {{ $t('QuestionnaireEditor.Update') }}
+                                                    {{
+                                                        $t(
+                                                            'QuestionnaireEditor.Update'
+                                                        )
+                                                    }}
                                                 </button>
                                             </div>
                                         </form>
                                     </div>
                                     <div class="col-xs-5">
-                                        <img alt="qr code"
-                                            :src="'/questionnaire/publicurl/' + questionnaire.questionnaireId" />
+                                        <img alt="qr code" :src="'/questionnaire/publicurl/' +
+                                                questionnaire.questionnaireId
+                                                " />
                                     </div>
                                 </div>
                             </div>
-                            <div role="tabpanel" class="tab-pane" :class="{ 'active': !settings }" id="shareTab">
+                            <div role="tabpanel" class="tab-pane" :class="{ active: !settings }" id="shareTab">
                                 <div class="well-sm">
                                     <h2>
-                                        {{ $t('QuestionnaireEditor.CollaboratorsSettings') }}
+                                        {{
+                                            $t(
+                                                'QuestionnaireEditor.CollaboratorsSettings'
+                                            )
+                                        }}
                                     </h2>
                                     <em class="text-muted">
-                                        {{ $t('QuestionnaireEditor.CollaboratorsDescriptionSettings') }}
+                                        {{
+                                            $t(
+                                                'QuestionnaireEditor.CollaboratorsDescriptionSettings'
+                                            )
+                                        }}
                                     </em>
                                     <br />
                                     <ul class="accounts">
@@ -100,7 +134,7 @@
                                             ({{ s.login }}) -
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-link dropdown-toggle"
-                                                    data-toggle="dropdown" v-if="!s.isOwner">
+                                                    data-bs-toggle="dropdown" v-if="!s.isOwner">
                                                     {{ $t('QuestionnaireEditor.SettingsCan') }}
                                                     {{ getShareType(s.shareType).text }}
                                                     <span class="caret"></span>
@@ -116,7 +150,7 @@
                                                             {{ $t('QuestionnaireEditor.SettingsRevokeAccess') }}
                                                         </a>
                                                     </li>
-                                                    <li v-if="isQuestionnaireOwner()">
+                                                    <li v-if="isQuestionnaireOwner">
                                                         <a @click="passOwnership(s)" href="javascript:void(0)">
                                                             {{ $t('QuestionnaireEditor.SettingsMakeOwner') }}
                                                         </a>
@@ -125,19 +159,39 @@
                                             </div>
                                             <div v-if="passConfirmationOpen === s.email" class="well">
                                                 <h2>
-                                                    {{ $t('QuestionnaireEditor.AreYouSure') }}
+                                                    {{
+                                                        $t(
+                                                            'QuestionnaireEditor.AreYouSure'
+                                                        )
+                                                    }}
                                                 </h2>
                                                 <p>
-                                                    {{ $t('QuestionnaireEditor.MakeOwnerConfirmationMessage') }}
+                                                    {{
+                                                        $t(
+                                                            'QuestionnaireEditor.MakeOwnerConfirmationMessage'
+                                                        )
+                                                    }}
                                                 </p>
                                                 <div class="btn-group">
-                                                    <button type="button" class="btn btn-default"
-                                                        @click="passOwnershipConfirmation(s)">
-                                                        {{ $t('QuestionnaireEditor.Yes') }}
+                                                    <button type="button" class="btn btn-default" @click="
+                                                    passOwnershipConfirmation(
+                                                        s
+                                                    )
+                                                        ">
+                                                        {{
+                                                            $t(
+                                                                'QuestionnaireEditor.Yes'
+                                                            )
+                                                        }}
                                                     </button>
-                                                    <button type="button" class="btn btn-default"
-                                                        @click="passOwnershipCancel()">
-                                                        {{ $t('QuestionnaireEditor.Cancel') }}
+                                                    <button type="button" class="btn btn-default" @click="
+                                                    passOwnershipCancel()
+                                                        ">
+                                                        {{
+                                                            $t(
+                                                                'QuestionnaireEditor.Cancel'
+                                                            )
+                                                        }}
                                                     </button>
                                                 </div>
                                             </div>
@@ -145,127 +199,211 @@
                                     </ul>
                                     <form role="form" class="row" name="viewModelData.shareForm" novalidate>
                                         <div class="col-xs-7">
-                                            <div class=" form-group"
-                                                :class="{ 'has-error': viewModelData.doesUserExist == false }">
+                                            <div class=" form-group" :class="{
+                                                'has-error':
+                                                    viewModelData.doesUserExist ==
+                                                    false
+                                            }">
                                                 <label class="control-label" for="questionnaireTitle">
-                                                    {{ $t('QuestionnaireEditor.SettingsInviteCollaborators') }}
+                                                    {{
+                                                        $t(
+                                                            'QuestionnaireEditor.SettingsInviteCollaborators'
+                                                        )
+                                                    }}
                                                 </label>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" name="shareWithInput"
-                                                        v-model="viewModelData.shareWith" />
+                                                    <input type="text" class="form-control" name="shareWithInput" v-model="viewModelData.shareWith
+                                                            " />
                                                     <div class="input-group-btn dropup share-type">
                                                         <button type="button" class="btn btn-default dropdown-toggle"
                                                             data-toggle="dropdown" name="shareType" id="Share-type">
-                                                            {{ viewModelData.shareType.text }}
+                                                            {{
+                                                                viewModelData
+                                                                    .shareType
+                                                                    .text
+                                                            }}
                                                             <span class="caret"></span>
                                                         </button>
                                                         <ul class="dropdown-menu " role="menu"
                                                             aria-labelledby="dropdownMenu1">
                                                             <li role="presentation" v-for="shareType in shareTypeOptions">
                                                                 <a role="menuitem" tabindex="-1" href="javascript:void(0);"
-                                                                    @click="changeShareType(shareType)">
-                                                                    {{ shareType.text }}
+                                                                    @click="
+                                                                        changeShareType(
+                                                                            shareType
+                                                                        )
+                                                                        ">
+                                                                    {{
+                                                                        shareType.text
+                                                                    }}
                                                                 </a>
                                                             </li>
                                                         </ul>
                                                     </div>
                                                 </div>
-                                                <p class="help-block ng-cloak" v-if="viewModelData.doesUserExist == false">
-                                                    {{ $t('QuestionnaireEditor.SettingsProvideExistingEmail') }}
+                                                <p class="help-block ng-cloak" v-if="viewModelData.doesUserExist ==
+                                                    false
+                                                    ">
+                                                    {{
+                                                        $t(
+                                                            'QuestionnaireEditor.SettingsProvideExistingEmail'
+                                                        )
+                                                    }}
                                                 </p>
                                             </div>
                                         </div>
                                         <div class="col-xs-5">
                                             <div class="form-group pull-right">
                                                 <button class="btn btn-primary btn-lg invite-button" @click="invite()"
-                                                    :disabled="!viewModelData.shareWith">
-                                                    {{ $t('QuestionnaireEditor.SettingsInvite') }}
+                                                    :disabled="!viewModelData.shareWith
+                                                            ">
+                                                    {{
+                                                        $t(
+                                                            'QuestionnaireEditor.SettingsInvite'
+                                                        )
+                                                    }}
                                                 </button>
                                             </div>
                                         </div>
                                     </form>
                                     <hr />
-                                    <div v-if="isQuestionnaireOwner() || questionnaire.hasViewerAdminRights">
+                                    <div v-if="isQuestionnaireOwner || questionnaire.hasViewerAdminRights">
                                         <h2>
-                                            {{ $t('QuestionnaireEditor.AnonymousQuestionnaireSettings') }}
+                                            {{
+                                                $t(
+                                                    'QuestionnaireEditor.AnonymousQuestionnaireSettings'
+                                                )
+                                            }}
                                         </h2>
                                         <em class="text-muted">
-                                            {{ $t('QuestionnaireEditor.AnonymousQuestionnaireDescriptionSettings') }}
+                                            {{
+                                                $t(
+                                                    'QuestionnaireEditor.AnonymousQuestionnaireDescriptionSettings'
+                                                )
+                                            }}
                                         </em>
                                         <br />
                                         <span>
                                             {{
                                                 questionnaireEdit.isAnonymouslyShared
-                                                ? $t('QuestionnaireEditor.SettingsStatusAllowAnonymousAccess')
-                                                : $t('QuestionnaireEditor.SettingsStatusDontAllowAnonymousAccess')
+                                                ? $t(
+                                                    'QuestionnaireEditor.SettingsStatusAllowAnonymousAccess'
+                                                )
+                                                : $t(
+                                                    'QuestionnaireEditor.SettingsStatusDontAllowAnonymousAccess'
+                                                )
                                             }}
                                         </span>
-                                        <button v-if="isQuestionnaireOwner()" class="btn btn-link answer"
-                                            @click="updateAnonymousQuestionnaireSettings()">
+                                        <button v-if="isQuestionnaireOwner" class="btn btn-link answer" @click="
+                                            updateAnonymousQuestionnaireSettings()
+                                            ">
                                             {{
                                                 questionnaireEdit.isAnonymouslyShared
-                                                ? $t('QuestionnaireEditor.SettingsTurnOffAnonymousAccess')
-                                                : $t('QuestionnaireEditor.SettingsTurnOnAnonymousAccess')
+                                                ? $t(
+                                                    'QuestionnaireEditor.SettingsTurnOffAnonymousAccess'
+                                                )
+                                                : $t(
+                                                    'QuestionnaireEditor.SettingsTurnOnAnonymousAccess'
+                                                )
                                             }}
                                         </button>
                                         <br />
-                                        <div v-if="questionnaireEdit.isAnonymouslyShared" class="row">
+                                        <div v-if="questionnaireEdit.isAnonymouslyShared
+                                                " class="row">
                                             <div class="col-xs-7">
                                                 <div style="margin-top: 15px">
-                                                    {{ $t('QuestionnaireEditor.AnonymousLink') }}
+                                                    {{
+                                                        $t(
+                                                            'QuestionnaireEditor.AnonymousLink'
+                                                        )
+                                                    }}
                                                 </div>
-                                                <a v-href="getAnonymousQuestionnaireLink()" style="word-break: break-word;"
-                                                    title="link" onclick="return false;">
-                                                    {{ getAnonymousQuestionnaireLink() }}
+                                                <a v-href="getAnonymousQuestionnaireLink()
+                                                        " style="word-break: break-word;" title="link"
+                                                    onclick="return false;">
+                                                    {{
+                                                        getAnonymousQuestionnaireLink()
+                                                    }}
                                                 </a>
                                                 <br />
                                                 <div>
-                                                    {{ $t('QuestionnaireEditor.AnonymousQuestionnaireGeneratedDate',
-                                                        {
-                                                            datetime: questionnaireEdit.anonymousQuestionnaireShareDate
-                                                        })
+                                                    {{
+                                                        $t(
+                                                            'QuestionnaireEditor.AnonymousQuestionnaireGeneratedDate',
+                                                            {
+                                                                datetime:
+                                                                    questionnaireEdit.anonymousQuestionnaireShareDate
+                                                            }
+                                                        )
                                                     }}
                                                 </div>
-                                                <button class="btn btn-link answer" style="padding-left: 0px;"
-                                                    @click="copyAnonymousQuestionnaireLink()">
-                                                    {{ $t('QuestionnaireEditor.CopyLink') }}
+                                                <button class="btn btn-link answer" style="padding-left: 0px;" @click="
+                                                copyAnonymousQuestionnaireLink()
+                                                    ">
+                                                    {{
+                                                        $t(
+                                                            'QuestionnaireEditor.CopyLink'
+                                                        )
+                                                    }}
                                                 </button>
-                                                <span v-if="isQuestionnaireOwner()">
+                                                <span v-if="isQuestionnaireOwner">
                                                     |
                                                 </span>
-                                                <button v-if="isQuestionnaireOwner()" class="btn btn-link answer"
+                                                <button v-if="isQuestionnaireOwner" class="btn btn-link answer" 
                                                     @click="regenerateAnonymousQuestionnaireLink()">
-                                                    {{ $t('QuestionnaireEditor.RegenerateQuestionnaireSharingLink') }}
+                                                    {{
+                                                        $t(
+                                                            'QuestionnaireEditor.RegenerateQuestionnaireSharingLink'
+                                                        )
+                                                    }}
                                                 </button>
                                             </div>
                                             <div class="col-xs-5">
-                                                <img alt="qr code" v-if="questionnaireEdit.isAnonymouslyShared"
+                                                <img alt="qr code" v-if="questionnaireEdit.isAnonymouslyShared" 
                                                     :src="'/questionnaire/publicurl/' + questionnaireEdit.anonymousQuestionnaireId" />
                                             </div>
                                         </div>
                                     </div>
 
-                                    <hr v-if="questionnaire.hasViewerAdminRights" />
-                                    <div v-if="questionnaire.hasViewerAdminRights">
+                                    <hr v-if="questionnaire.hasViewerAdminRights
+                                        " />
+                                    <div v-if="questionnaire.hasViewerAdminRights
+                                        ">
                                         <h2>
-                                            {{ $t('QuestionnaireEditor.PublicAccessSettings') }}
+                                            {{
+                                                $t(
+                                                    'QuestionnaireEditor.PublicAccessSettings'
+                                                )
+                                            }}
                                         </h2>
                                         <em class="text-muted">
-                                            {{ $t('QuestionnaireEditor.PublicAccessDescriptionSettings') }}
+                                            {{
+                                                $t(
+                                                    'QuestionnaireEditor.PublicAccessDescriptionSettings'
+                                                )
+                                            }}
                                         </em>
                                         <br />
                                         <span>
                                             {{
                                                 questionnaire.isPublic
-                                                ? $t('QuestionnaireEditor.PublicAccessSettingsStatusOn')
-                                                : $t('QuestionnaireEditor.PublicAccessSettingsStatusOff')
+                                                ? $t(
+                                                    'QuestionnaireEditor.PublicAccessSettingsStatusOn'
+                                                )
+                                                : $t(
+                                                    'QuestionnaireEditor.PublicAccessSettingsStatusOff'
+                                                )
                                             }}
                                         </span>
                                         <button class="btn btn-link answer" @click="togglePublicity()">
                                             {{
                                                 questionnaire.isPublic
-                                                ? $t('QuestionnaireEditor.PublicAccessSettingsOff')
-                                                : $t('QuestionnaireEditor.PublicAccessSettingsOn')
+                                                ? $t(
+                                                    'QuestionnaireEditor.PublicAccessSettingsOff'
+                                                )
+                                                : $t(
+                                                    'QuestionnaireEditor.PublicAccessSettingsOn'
+                                                )
                                             }}
                                         </button>
                                     </div>
@@ -318,7 +456,7 @@ export default {
                     text: this.$t('QuestionnaireEditor.SettingsShareView')
                 }
             ],
-            
+
             visible: false,
             dirty: false,
             settings: true,
@@ -328,22 +466,21 @@ export default {
     watch: {
         viewModelData: {
             handler(newVal, oldVal) {
-                if (oldVal != null) 
-                    this.dirty = true;
+                if (oldVal != null) this.dirty = true;
             },
             deep: true
-        },        
+        }
     },
     beforeMount() {
         this.viewModelData = {
-                shareWith: '',
-                shareForm: {},
-                shareType: {
-                    name: 'Edit',
-                    text: this.$t('QuestionnaireEditor.SettingsShareEdit')
-                },
-                doesUserExist: true
-            };
+            shareWith: '',
+            shareForm: {},
+            shareType: {
+                name: 'Edit',
+                text: this.$t('QuestionnaireEditor.SettingsShareEdit')
+            },
+            doesUserExist: true
+        };
     },
     computed: {
         questionnaireEdit() {
@@ -352,11 +489,22 @@ export default {
                 editedVariable: this.questionnaire.variable,
                 editedHideIfDisabled: this.questionnaire.hideIfDisabled,
                 isAnonymouslyShared: this.questionnaire.isAnonymouslyShared,
-                anonymousQuestionnaireId: this.questionnaire.anonymousQuestionnaireId,
-                anonymousQuestionnaireShareDate: toLocalDateTime(this.questionnaire.anonymouslySharedAtUtc)
+                anonymousQuestionnaireId: this.questionnaire
+                    .anonymousQuestionnaireId,
+                anonymousQuestionnaireShareDate: toLocalDateTime(
+                    this.questionnaire.anonymouslySharedAtUtc
+                )
             };
         },
+        isQuestionnaireOwner() {
+            const userEmail = this.currentUser.email;
 
+            var user = this.questionnaire.sharedPersons.find(item => item.email == userEmail);
+            if(user && user.isOwner)
+                return true;
+
+            return false;
+        },
     },
     setup(props) { },
     expose: ['open', 'close'],
@@ -368,47 +516,64 @@ export default {
             this.visible = false;
         },
         togglePublicity() {
-            updateQuestionnaire(this.questionnaireId,
-                {
-                    isPublic: !this.questionnaire.isPublic,
-                    title: this.questionnaire.title,
-                    variable: this.questionnaire.variable,
-                    hideIfDisabled: this.questionnaire.hideIfDisabled,
-                    defaultLanguageName: this.questionnaire.defaultLanguageName
-                })
-                .then(() => {//TODO: subscribe to event, maybe move to questionnaire store
-                    this.questionnaire.isPublic = !this.questionnaire.isPublic;
-                });
+            updateQuestionnaire(this.questionnaireId, {
+                isPublic: !this.questionnaire.isPublic,
+                title: this.questionnaire.title,
+                variable: this.questionnaire.variable,
+                hideIfDisabled: this.questionnaire.hideIfDisabled,
+                defaultLanguageName: this.questionnaire.defaultLanguageName
+            }).then(() => {
+                //TODO: subscribe to event, maybe move to questionnaire store
+                this.questionnaire.isPublic = !this.questionnaire.isPublic;
+            });
         },
-        regenerateAnonymousQuestionnaireLink() {
-            regenerateAnonymousQuestionnaireLink(this.questionnaireId);
+        async regenerateAnonymousQuestionnaireLink() {
+            self = this;
+            
+            const response = await regenerateAnonymousQuestionnaireLink(this.questionnaireId);
+                                    
+            self.questionnaire.isAnonymouslyShared = response.isActive;
+            self.questionnaire.anonymousQuestionnaireId = response.isActive ? response.anonymousQuestionnaireId : null;
+            self.questionnaire.anonymousQuestionnaireShareDate = toLocalDateTime(response.anonymouslySharedAtUtc);
+            
         },
         copyAnonymousQuestionnaireLink() {
-            const link = window.location.origin + '/questionnaire/details/' + this.questionnaire.anonymousQuestionnaireId;
+            const link =
+                window.location.origin +
+                '/questionnaire/details/' +
+                this.questionnaire.anonymousQuestionnaireId;
             navigator.clipboard.writeText(link);
         },
         getAnonymousQuestionnaireLink() {
-            return window.location.origin + '/questionnaire/details/' + questionnaire.anonymousQuestionnaireId;
+            return (
+                window.location.origin +
+                '/questionnaire/details/' +
+                this.questionnaire.anonymousQuestionnaireId
+            );
         },
         updateAnonymousQuestionnaireSettings() {
-            updateAnonymousQuestionnaireSettings(this.questionnaireId, !this.questionnaire.isAnonymouslyShared)
-                .then(() => {//TODO: subscribe to event, maybe move to questionnaire store
-                    this.questionnaire.isAnonymouslyShared = !this.questionnaire.isAnonymouslyShared;
-                });
+            updateAnonymousQuestionnaireSettings(
+                this.questionnaireId,
+                !this.questionnaire.isAnonymouslyShared
+            ).then(() => {
+                //TODO: subscribe to event, maybe move to questionnaire store
+                this.questionnaire.isAnonymouslyShared = !this.questionnaire
+                    .isAnonymouslyShared;
+            });
         },
         passOwnershipCancel() {
             this.passConfirmationOpen = null;
         },
-        isQuestionnaireOwner() {
-            const userEmail = this.currentUser.email;
-            _.forEach(this.questionnaire.sharedPersons, function (p) {
-                if (p.email == userEmail && p.isOwner) {
-                    return true;
-                }
-            });
+        // isQuestionnaireOwner() {
+        //     const userEmail = this.currentUser.email;
+        //     _.forEach(this.questionnaire.sharedPersons, function (p) {
+        //         if (p.email == userEmail && p.isOwner) {
+        //             return true;
+        //         }
+        //     });
 
-            return false;
-        },
+        //     return false;
+        // },
         passOwnershipConfirmation(newOwner) {
             const userEmail = this.currentUser.email;
             passOwnership(
@@ -416,7 +581,8 @@ export default {
                 newOwner.userId,
                 newOwner.email,
                 this.questionnaire.questionnaireId
-            ).then(() => { //TODO: subscribe to event, maybe move to questionnaire store
+            ).then(() => {
+                //TODO: subscribe to event, maybe move to questionnaire store
                 newOwner.isOwner = true;
 
                 _.forEach(this.questionnaire.sharedPersons, function (person) {
@@ -436,54 +602,66 @@ export default {
             this.passConfirmationOpen = personInfo.email;
         },
         revokeAccess(personInfo) {
-            removeSharedPerson(this.questionnaireId, personInfo.personId, personInfo.email)
-                .then(function () {//TODO: subscribe to event, maybe move to questionnaire store
-                    this.questionnaire.sharedPersons = _.without(
-                        this.questionnaire.sharedPersons,
-                        _.findWhere(this.questionnaire.sharedPersons, {
-                            email: personInfo.email
-                        })
-                    );
+            self = this;
+            removeSharedPerson(
+                this.questionnaireId,
+                personInfo.userId,
+                personInfo.email
+            ).then(function () {
+                //TODO: subscribe to event, maybe move to questionnaire store
+                self.questionnaire.sharedPersons = _.without(
+                    self.questionnaire.sharedPersons,
+                    _.filter(self.questionnaire.sharedPersons, {
+                        email: personInfo.email
+                    })
+                );
 
-                    this.sortSharedPersons();
-                });
+                self.sortSharedPersons();
+            });
         },
         sortSharedPersons() {
-            var owner = _.findWhere(this.questionnaire.sharedPersons, { isOwner: true });
-            var sharedPersons = _.sortBy(_.without(this.questionnaire.sharedPersons, owner), ['email']);
+            var owner = _.filter(this.questionnaire.sharedPersons, {
+                isOwner: true
+            });
+            var sharedPersons = _.sortBy(
+                _.without(this.questionnaire.sharedPersons, owner),
+                ['email']
+            );
 
             this.questionnaire.sharedPersons = [owner].concat(sharedPersons);
         },
 
         async invite() {
-            const user = await findUserByEmailOrLogin(this.viewModelData.shareWith);
+            const user = await findUserByEmailOrLogin(
+                this.viewModelData.shareWith
+            );
             this.viewModelData.doesUserExist = user.doesUserExist;
 
             if (user.doesUserExist) {
-
+                self = this;
                 shareWith(
                     this.viewModelData.shareWith,
                     this.questionnaire.questionnaireId,
                     this.viewModelData.shareType.name
-                        .then(function () {//TODO: subscribe to event, maybe move to questionnaire store
-                            if (
-                                _.where(this.questionnaire.sharedPersons, {
-                                    email: this.viewModelData.shareWith
-                                }).length === 0
-                            ) {
-                                this.questionnaire.sharedPersons.push({
-                                    email: data.email,
-                                    login: data.userName,
-                                    userId: data.id,
-                                    shareType: this.viewModelData.shareType
-                                });
-                                this.sortSharedPersons();
-                            }
+                ).then(function () {
+                    //TODO: subscribe to event, maybe move to questionnaire store
+                    if (
+                        _.filter(self.questionnaire.sharedPersons, {
+                            email: self.viewModelData.shareWith
+                        }).length === 0
+                    ) {
+                        self.questionnaire.sharedPersons.push({
+                            email: user.email,
+                            login: user.userName,
+                            userId: user.id,
+                            shareType: self.viewModelData.shareType
+                        });
+                        self.sortSharedPersons();
+                    }
 
-                            this.viewModelData.shareWith = '';
-                            this.viewModelData.doesUserExist = true;
-                        })
-                );
+                    self.viewModelData.shareWith = '';
+                    self.viewModelData.doesUserExist = true;
+                });
             }
         },
         changeShareType(shareType) {
@@ -495,19 +673,19 @@ export default {
             else return _.find(this.shareTypeOptions, { name: type.name });
         },
         updateTitle() {
-            updateQuestionnaire(this.questionnaireId,
-                {
-                    isPublic: !this.questionnaire.isPublic,
-                    title: this.questionnaireEdit.editedTitle,
-                    variable: this.questionnaireEdit.editedVariable,
-                    hideIfDisabled: this.questionnaireEdit.editedHideIfDisabled,
-                    defaultLanguageName: this.questionnaire.defaultLanguageName
-                })
-                .then(() => {//TODO: subscribe to event
-                    this.questionnaire.isPublic = !this.questionnaire.isPublic;
+            updateQuestionnaire(this.questionnaireId, {
+                isPublic: !this.questionnaire.isPublic,
+                title: this.questionnaireEdit.editedTitle,
+                variable: this.questionnaireEdit.editedVariable,
+                hideIfDisabled: this.questionnaireEdit.editedHideIfDisabled,
+                defaultLanguageName: this.questionnaire.defaultLanguageName
+            }).then(() => {
+                //TODO: subscribe to event
+                this.questionnaire.isPublic = !this.questionnaire.isPublic;
+                this.questionnaire.hideIfDisabled = this.questionnaireEdit.editedHideIfDisabled;
 
-                    this.close();
-                });
+                this.close();
+            });
         },
         togleTab(value) {
             this.settings = value;

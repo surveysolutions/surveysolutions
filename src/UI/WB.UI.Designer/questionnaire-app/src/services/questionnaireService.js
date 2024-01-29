@@ -40,6 +40,7 @@ export async function regenerateAnonymousQuestionnaireLink(questionnaireId) {
                 data.anonymouslySharedAtUtc
             )
         });
+        return data;
     });
 }
 
