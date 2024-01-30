@@ -20,8 +20,9 @@
                     <button class="btn" type="button" @click="showDownloadPdf()">
                         {{ $t('QuestionnaireEditor.DownloadPdf') }}
                     </button>
-                    <a class="btn" type="button" v-if="questionnaire.hasViewerAdminRights" @click="saveAsQuestionnaire">{{
-                        $t('QuestionnaireEditor.SaveAs') }}</a>
+                    <a class="btn" type="button" v-if="questionnaire.hasViewerAdminRights" @click="saveAsQuestionnaire"
+                        target="_blank" rel="noopener">{{
+                            $t('QuestionnaireEditor.SaveAs') }}</a>
 
                     <a class="btn" v-if="questionnaire.questionnaireRevision || questionnaire.isReadOnlyForUser"
                         :href="'/questionnaire/clone/' + questionnaire.questionnaireId + (questionnaire.questionnaireRevision ? '$' + questionnaire.questionnaireRevision : '')"
@@ -138,11 +139,14 @@
 
     <VerificationDialog ref="verificationDialog" :questionnaireId="questionnaireId" />
     <SharedInfoDialog ref="sharedInfoDialog" :questionnaireId="questionnaireId" />
+    <DownloadPDFDialog ref="downloadPDFDialog" :questionnaireId="questionnaireId" />
 </template>
 
 <script>
 import VerificationDialog from './VerificationDialog.vue';
 import SharedInfoDialog from './SharedInfoDialog.vue';
+import DownloadPDFDialog from './DownloadPDFDialog.vue';
+
 import { useVerificationStore } from '../../../stores/verification';
 import WebTesterApi from '../../../api/webTester';
 import { ref } from 'vue';
@@ -151,7 +155,8 @@ export default {
     name: 'QuestionnaireHeader',
     components: {
         VerificationDialog,
-        SharedInfoDialog
+        SharedInfoDialog,
+        DownloadPDFDialog
     },
     inject: ['questionnaire', 'currentUser'],
     props: {
@@ -160,19 +165,21 @@ export default {
     data() {
         return {};
     },
-    setup(props) {        
+    setup(props) {
         const verificationStore = useVerificationStore();
 
         const verificationDialog = ref(null);
         const sharedInfoDialog = ref(null);
+        const downloadPDFDialog = ref(null);
 
-        return {            
+        return {
             verificationStore,
             verificationDialog,
-            sharedInfoDialog
+            sharedInfoDialog,
+            downloadPDFDialog
         };
-    },    
-    computed: {        
+    },
+    computed: {
         errorsCount() {
             return this.verificationStore.status.errors
                 ? this.verificationStore.status.errors.length
@@ -189,10 +196,10 @@ export default {
             WebTesterApi.run(this.questionnaireId);
         },
         showDownloadPdf() {
-            // TODO
+            this.downloadPDFDialog.open();
         },
         saveAsQuestionnaire() {
-            // TODO
+            window.location = '../../api/hq/backup/package/' + this.questionnaireId
         },
         async verify() {
             await this.verificationStore.fetchVerificationStatus(
