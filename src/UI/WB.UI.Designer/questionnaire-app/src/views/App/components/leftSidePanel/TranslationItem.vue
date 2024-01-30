@@ -70,6 +70,11 @@ import moment from 'moment'
 import { newGuid } from '../../../../helpers/guid';
 import { trimText, createQuestionForDeleteConfirmationPopup } from '../../../../services/utilityService'
 import { useQuestionnaireStore } from '../../../../stores/questionnaire';
+import {
+    deleteTranslation,
+    updateTranslation,
+    setDefaultTranslation
+} from '../../../../services/translationService';
 
 export default {
     name: 'TranslationItem',
@@ -156,7 +161,7 @@ export default {
         },
 
         async saveTranslation() {
-            await this.questionnaireStore.updateTranslation(this.translation)
+            await updateTranslation(this.questionnaireId, this.translation)
             this.originName = this.translation.name;
             this.file = [];
         },
@@ -176,7 +181,7 @@ export default {
 
             confirmParams.callback = confirm => {
                 if (confirm) {
-                    this.questionnaireStore.deleteTranslation(this.translation.translationId)
+                    deleteTranslation(this.questionnaireId, this.translation.translationId)
                 }
             };
 
@@ -184,7 +189,7 @@ export default {
         },
 
         async setDefaultTranslation(isDefault) {
-            await this.questionnaireStore.setDefaultTranslation(isDefault ? this.translation.translationId : null)
+            await setDefaultTranslation(this.questionnaireId, isDefault ? this.translation.translationId : null)
         },
 
         openFileDialog() {

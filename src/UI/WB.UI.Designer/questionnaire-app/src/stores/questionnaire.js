@@ -6,11 +6,6 @@ import emitter from '../services/emitter';
 import { findIndex, forEach, isEmpty, map, filter, find, sortBy, without } from 'lodash';
 import { useCookies } from 'vue3-cookies';
 import { updateMetadata } from '../services/metadataService';
-import {
-    deleteTranslation,
-    updateTranslation,
-    setDefaultTranslation
-} from '../services/translationService';
 
 export const useQuestionnaireStore = defineStore('questionnaire', {
     state: () => ({
@@ -41,6 +36,13 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
 
             emitter.on('sharedPersonAdded', this.sharedPersonAdded);
             emitter.on('sharedPersonRemoved', this.sharedPersonRemoved);
+
+            emitter.on('translationUpdated', this.translationUpdated);
+            emitter.on('translationDeleted', this.translationDeleted);
+            emitter.on(
+                'settedDefaultTranslation',
+                this.settedDefaultTranslation
+            );
         },
 
         async fetchQuestionnaireInfo(questionnaireId) {
@@ -278,17 +280,8 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             );
         },
 
-        async addTranslation(translation) {
-            await updateTranslation(this.info.questionnaireId, translation);
-
-            this.info.translations.push(translation);
-
-            const eTranslation = Object.assign({}, translation);
-            this.edittingTranslations.push(eTranslation);
-        },
-
-        async updateTranslation(translation) {
-            await updateTranslation(this.info.questionnaireId, translation);
+        async translationUpdated(event) {
+            const translation = event.translation;
 
             const item = find(
                 this.info.translations,
@@ -301,11 +294,16 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
                 item.name == translation.name;
                 item.translationId == translation.translationId;
                 item.oldTranslationId == translation.oldTranslationId;
+            } else {
+                this.info.translations.push(translation);
+
+                const eTranslation = Object.assign({}, translation);
+                this.edittingTranslations.push(eTranslation);
             }
         },
 
-        async deleteTranslation(translationId) {
-            await deleteTranslation(this.info.questionnaireId, translationId);
+        async translationDeleted(event) {
+            const translationId = event.translationId;
 
             this.info.translations = filter(
                 this.info.translations,
@@ -321,11 +319,8 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             );
         },
 
-        async setDefaultTranslation(translationId) {
-            await setDefaultTranslation(
-                this.info.questionnaireId,
-                translationId
-            );
+        async settedDefaultTranslation(event) {
+            const translationId = event.translationId;
 
             const translationById = find(
                 this.info.translations,

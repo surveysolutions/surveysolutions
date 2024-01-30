@@ -40,5 +40,9 @@ export function setDefaultTranslation(questionnaireId, translationId) {
         questionnaireId: questionnaireId,
         translationId: translationId
     };
-    return commandCall('SetDefaultTranslation', command);
+    return commandCall('SetDefaultTranslation', command).then(response => {
+        emitter.emit('settedDefaultTranslation', {
+            translationId: translationId
+        });
+    });
 }
