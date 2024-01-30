@@ -103,7 +103,8 @@ export default {
         return {
             questionnaire: computed(() => this.questionnaire),
             currentChapter: computed(() => this.currentChapter),
-            isCover: computed(() => this.isCover),
+            isCover: readonly(computed(() => this.isCover)),
+            isReadOnlyForUser: readonly(computed(() => this.isReadOnlyForUser)),
 
             currentUser: readonly(computed(() => this.currentUser))
         };
@@ -150,7 +151,10 @@ export default {
         },
         isCover() {
             return this.treeStore.getChapter.isCover;
-        }
+        },
+        isReadOnlyForUser() {
+            return this.questionnaire.isReadOnlyForUser;
+        },
     },
     methods: {
         async fetch() {

@@ -133,6 +133,7 @@ export default {
             await updateCategories(this.questionnaireId, this.category);
 
             this.originName = this.category.name;
+            this.file = [];
             /*.then(function (response) {
                     dataBind(categories.checkpoint, categories);
                     categories.form.$setPristine();

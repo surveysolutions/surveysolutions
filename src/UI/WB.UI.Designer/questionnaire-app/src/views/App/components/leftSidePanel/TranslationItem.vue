@@ -1,0 +1,202 @@
+<template>
+    <form name="translation.form">
+        <div class="translations-panel-item"
+            :class="{ 'has-error': hasPatternError, 'dragover': $refs.upload && $refs.upload.dropActive }" ngf-drop=""
+            ngf-max-size="4MB" ngf-change="fileSelected(translation, $file)"
+            ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
+            <a href @click="deleteTranslation($event)" v-if="!isReadOnlyForUser" class="btn delete-btn" tabindex="-1"
+                v-show="!translation.isOriginalTranslation && !isReadOnlyForUser"></a>
+            <div class="translation-content">
+                <input focus-on-out="focusTranslation{{translation.translationId}}" required=""
+                    :placeholder="$t('QuestionnaireEditor.SideBarTranslationName')" maxlength="32" spellcheck="false"
+                    v-model="translation.name" name="name" class="form-control table-name" type="text" />
+                <div class="drop-box">
+                    {{ $t('QuestionnaireEditor.SideBarLookupTableDropFile') }}
+                </div>
+                <div class="actions" :class="{ dirty: dirty }">
+                    <div v-show="dirty" class="pull-left">
+                        <button type="button" :disabled="isReadOnlyForUser || isInvalid" class="btn lighter-hover"
+                            @click.self="saveTranslation()">
+                            {{ $t('QuestionnaireEditor.Save') }}
+                        </button>
+                        <button type="button" class="btn lighter-hover" @click.self="cancel()">{{
+                            $t('QuestionnaireEditor.Cancel')
+                        }}</button>
+                    </div>
+
+                    <button type="button" class="btn btn-default"
+                        v-show="translation.isDefault && !translation.isOriginalTranslation"
+                        @click.self="setDefaultTranslation(false);">
+                        {{ $t('QuestionnaireEditor.UnMarkAsDefault') }}
+                    </button>
+
+                    <div class="permanent-actions pull-right">
+                        <button type="button" class="btn lighter-hover" :disabled="isReadOnlyForUser"
+                            v-show="!translation.isDefault" @click.self="setDefaultTranslation(true);">
+                            {{ $t('QuestionnaireEditor.MarkAsDefault') }}
+                        </button>
+
+                        <a v-if="downloadUrl" :href="downloadUrl" class="btn btn-default" target="_blank"
+                            rel="noopener noreferrer">{{
+                                $t('QuestionnaireEditor.SideBarTranslationDownloadXlsx') }}</a>
+
+                        <file-upload ref="upload" v-if="!isReadOnlyForUser" :input-id="'tfu' + translation.translationId"
+                            v-model="file" @input-file="fileSelected" :size="10 * 1024 * 1024" :drop="true"
+                            :drop-directory="false"
+                            accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.txt,.tsv,.tab">
+                        </file-upload>
+                        <button v-show="!dirty && !translation.isOriginalTranslation" :disabled="isReadOnlyForUser"
+                            class="btn btn-default" @click.stop="openFileDialog()" type="button">
+                            <span>{{ $t('QuestionnaireEditor.Update') }}</span>
+                        </button>
+
+                        <!--button v-hide="translation.form.$dirty || translation.isOriginalTranslation"
+                            :disabled="isReadOnlyForUser" class="btn btn-default" ngf-select="" ngf-max-size="10MB"
+                            accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+                            ngf-change="fileSelected(translation, $file);$event.stopPropagation()" type="button">
+                            <span>{{ $t('QuestionnaireEditor.Update') }}</span>
+                        </button-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</template>
+  
+<script>
+
+import { isUndefined, isNull, each } from 'lodash'
+import moment from 'moment'
+import { newGuid } from '../../../../helpers/guid';
+import { trimText, createQuestionForDeleteConfirmationPopup } from '../../../../services/utilityService'
+import { useQuestionnaireStore } from '../../../../stores/questionnaire';
+
+export default {
+    name: 'TranslationItem',
+    inject: ['isReadOnlyForUser'],
+    props: {
+        questionnaireId: { type: String, required: true },
+        translation: { type: Object, required: true },
+    },
+    data() {
+        return {
+            downloadBaseUrl: '/translations',
+            originName: null,
+            file: [],
+        }
+    },
+    setup() {
+        const questionnaireStore = useQuestionnaireStore();
+
+        return {
+            questionnaireStore,
+        };
+    },
+    beforeMount() {
+        const tr = this.findTranslation();
+        this.originName = tr ? tr.name : this.translation.name;
+    },
+    computed: {
+        questionnaire() {
+            return this.questionnaireStore.getInfo;
+        },
+        dirty() {
+            return this.translation.name != this.originName || this.file.length > 0;
+        },
+        hasPatternError() {
+            return (this.translation.name) ? false : true;
+        },
+        downloadUrl() {
+            if (this.translation.isOriginalTranslation)
+                return null;
+            return this.downloadBaseUrl + '/' + this.questionnaireId + '/xlsx/' + this.translation.translationId;
+        },
+        isInvalid() {
+            return (this.translation.name) ? false : true;
+        },
+    },
+    methods: {
+        findTranslation() {
+            const translation = this.questionnaire.translations.find(
+                p => p.translationId == this.translation.translationId
+            );
+            return translation;
+        },
+
+        fileSelected(file) {
+            if (isUndefined(file) || isNull(file)) {
+                return;
+            }
+
+            translation.file = file;
+
+            translation.content = {};
+            translation.content.size = file.size;
+            translation.content.type = file.type;
+
+            translation.meta = {};
+            translation.meta.fileName = file.name;
+            translation.meta.lastUpdated = moment();
+
+            var maxNameLength = 32;
+
+            var suspectedTranslations = translation.meta.fileName.match(/[^[\]]+(?=])/g);
+
+            if (suspectedTranslations && suspectedTranslations.length > 0)
+                translation.name = suspectedTranslations[0];
+            else
+                translation.name = translation.meta.fileName.replace(/\.[^/.]+$/, "");
+
+            var fileNameLength = translation.name.length;
+            translation.name = translation.name.substring(0, fileNameLength < maxNameLength ? fileNameLength : maxNameLength);
+            translation.oldTranslationId = translation.translationId;
+            translation.translationId = newGuid();
+        },
+
+        async saveTranslation() {
+            await this.questionnaireStore.updateTranslation(this.translation)
+            this.originName = this.translation.name;
+            this.file = [];
+        },
+
+        cancel() {
+            this.translation.name = this.originName;
+            this.file = [];
+        },
+
+        deleteTranslation(event) {
+            event.preventDefault();
+
+            var translationName = this.translation.name || this.$t('QuestionnaireEditor.SideBarTranslationNoName');
+
+            var trimmedTranslationName = trimText(translationName);
+            var confirmParams = createQuestionForDeleteConfirmationPopup(trimmedTranslationName)
+
+            confirmParams.callback = confirm => {
+                if (confirm) {
+                    this.questionnaireStore.deleteTranslation(this.translation.translationId)
+                }
+            };
+
+            this.$confirm(confirmParams);
+        },
+
+        setDefaultTranslation(translationIndex, isDefault) {
+            var translation = this.translations[translationIndex];
+
+            this.questionnaireStore.setDefaultTranslation($state.params.questionnaireId, isDefault ? translation.translationId : null).then(function () {
+                each($scope.translations, function (translation) {
+                    translation.isDefault = translation.checkpoint.isDefault = false;
+                });
+                translation.isDefault = translation.checkpoint.isDefault = isDefault;
+            });
+        },
+
+        openFileDialog() {
+            const fu = this.$refs.upload
+            fu.$el.querySelector("#" + fu.inputId).click()
+        },
+    }
+}
+</script>
+  

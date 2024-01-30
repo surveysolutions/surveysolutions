@@ -6,14 +6,22 @@ import emitter from '../services/emitter';
 import { findIndex, forEach, isEmpty, map, filter, find } from 'lodash';
 import { useCookies } from 'vue3-cookies';
 import { updateMetadata } from '../services/metadataService';
+import {
+    deleteTranslation,
+    updateTranslation,
+    setDefaultTranslation
+} from '../services/translationService';
 
 export const useQuestionnaireStore = defineStore('questionnaire', {
     state: () => ({
-        info: {}
+        info: {},
+        edittingMetadata: {},
+        edittingTranslations: []
     }),
     getters: {
         getInfo: state => state.info,
-        getEdittingMetadata: state => state.edittingMetadata
+        getEdittingMetadata: state => state.edittingMetadata,
+        getEdittingTranslations: state => state.edittingTranslations
     },
     actions: {
         setupListeners() {
@@ -34,6 +42,23 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             emitter.on('sharedPersonAdded', this.sharedPersonAdded);
             emitter.on('sharedPersonRemoved', this.sharedPersonRemoved);
         },
+
+        async fetchQuestionnaireInfo(questionnaireId) {
+            const info = await get('/api/questionnaire/get/' + questionnaireId);
+            this.setQuestionnaireInfo(info);
+        },
+
+        setQuestionnaireInfo(info) {
+            this.info = info;
+
+            this.edittingMetadata = Object.assign({}, info.metadata);
+            this.edittingTranslations = Object.assign([], info.translations);
+
+            forEach(this.info.macros, macro => {
+                this.prepareMacro(macro);
+            });
+        },
+
         macroAdded(payload) {
             this.prepareMacro(payload);
             this.info.macros.push(payload);
@@ -115,23 +140,9 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             }
         },
 
-        async fetchQuestionnaireInfo(questionnaireId) {
-            const info = await get('/api/questionnaire/get/' + questionnaireId);
-            this.setQuestionnaireInfo(info);
-        },
         prepareMacro(macro) {
             macro.initialMacro = Object.assign({}, macro);
             macro.isDescriptionVisible = !isEmpty(macro.description);
-        },
-
-        setQuestionnaireInfo(info) {
-            this.info = info;
-
-            this.edittingMetadata = Object.assign({}, info.metadata);
-
-            forEach(this.info.macros, macro => {
-                this.prepareMacro(macro);
-            });
         },
 
         addSection(callback) {
@@ -258,6 +269,72 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             );
             this.info.title = this.edittingMetadata.title;
             this.info.metadata = Object.assign({}, this.edittingMetadata);
+        },
+
+        async discardTranslationChanges() {
+            this.edittingTranslations = Object.assign(
+                {},
+                this.info.translations
+            );
+        },
+
+        async addTranslation(translation) {
+            await updateTranslation(this.info.questionnaireId, translation);
+
+            this.info.translations.push(translation);
+
+            const eTranslation = Object.assign({}, translation);
+            this.edittingTranslations.push(eTranslation);
+        },
+
+        async updateTranslation(translation) {
+            await updateTranslation(this.info.questionnaireId, translation);
+
+            const item = find(
+                this.info.translations,
+                item =>
+                    item.translationId == translation.translationId ||
+                    item.translationId == translation.oldTranslationId
+            );
+
+            if (item) {
+                item.name == translation.name;
+                item.translationId == translation.translationId;
+                item.oldTranslationId == translation.oldTranslationId;
+            }
+        },
+
+        async deleteTranslation(translationId) {
+            await deleteTranslation(this.info.questionnaireId, translationId);
+
+            this.info.translations = filter(
+                this.info.translations,
+                translation => {
+                    return translation.translationId !== translationId;
+                }
+            );
+            this.edittingTranslations = filter(
+                this.edittingTranslations,
+                translation => {
+                    return translation.translationId !== translationId;
+                }
+            );
+        },
+
+        async setDefaultTranslation(translationId) {
+            await setDefaultTranslation(
+                this.info.questionnaireId,
+                translationId
+            );
+
+            const translationById = find(
+                this.info.translations,
+                item => item.translationId == translationId
+            );
+            each(this.info.translations, translation => {
+                translation.isDefault = false;
+            });
+            translationById.isDefault = true;
         }
     }
 });

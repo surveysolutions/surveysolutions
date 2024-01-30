@@ -67,7 +67,7 @@
                 <div class="foldback-button-region" @click.stop="foldback()">
                     <div class="foldback-button"></div>
                 </div>
-                <Translations></Translations>
+                <Translations :questionnaireId="questionnaireId"></Translations>
             </div>
         </div>
     </Transition>
@@ -91,7 +91,7 @@
                 <div class="foldback-button-region" @click.stop="foldback()">
                     <div class="foldback-button"></div>
                 </div>
-                <Metadata></Metadata>
+                <Metadata :questionnaireId="questionnaireId"></Metadata>
             </div>
         </div>
     </Transition>

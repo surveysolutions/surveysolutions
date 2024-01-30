@@ -103,7 +103,7 @@ export default {
             }
 
             if (this.isReadOnlyForUser) {
-                notice(this.$t('QuestionnaireEditor.NoPermissions')); // TODO
+                notice(this.$t('QuestionnaireEditor.NoPermissions'));
                 return;
             }
 

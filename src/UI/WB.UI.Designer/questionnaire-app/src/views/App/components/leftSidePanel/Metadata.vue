@@ -266,7 +266,9 @@ import { useQuestionnaireStore } from '../../../../stores/questionnaire';
 
 export default {
     name: 'Metadata',
-    props: {},
+    props: {
+        questionnaireId: { type: String, required: true },
+    },
     data() {
         return {
             dirty: false
