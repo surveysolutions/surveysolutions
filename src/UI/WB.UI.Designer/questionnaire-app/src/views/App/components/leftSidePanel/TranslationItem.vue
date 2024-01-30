@@ -128,7 +128,9 @@ export default {
                 return;
             }
 
-            translation.file = file;
+            let translation = this.translation
+
+            translation.file = file.file;
 
             translation.content = {};
             translation.content.size = file.size;

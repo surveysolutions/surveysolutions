@@ -125,7 +125,7 @@ export default {
             }
 
             let translation = {};
-            translation.file = file;
+            translation.file = file.file;
 
             translation.content = {};
             translation.content.size = file.size;
