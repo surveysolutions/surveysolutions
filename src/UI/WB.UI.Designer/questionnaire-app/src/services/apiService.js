@@ -27,9 +27,8 @@ export function get(url, queryParams) {
             .catch(error => {
                 blockUI.stop();
                 progressStore.stop();
-                responseError(err);
 
-                throw error;
+                processResponseErrorOrThrow(error);
             });
     }
 
@@ -43,9 +42,8 @@ export function get(url, queryParams) {
         .catch(error => {
             blockUI.stop();
             progressStore.stop();
-            responseError(err);
 
-            throw error;
+            processResponseErrorOrThrow(error);
         });
 }
 
@@ -66,9 +64,8 @@ export function post(url, params) {
         .catch(error => {
             blockUI.stop();
             progressStore.stop();
-            responseError(error);
 
-            throw error;
+            processResponseErrorOrThrow(error);
         });
 }
 
@@ -91,9 +88,8 @@ export function patch(url, params) {
         .catch(error => {
             blockUI.stop();
             progressStore.stop();
-            responseError(err);
 
-            throw error;
+            processResponseErrorOrThrow(error);
         });
 }
 
@@ -114,9 +110,8 @@ export function del(url) {
         .catch(error => {
             blockUI.stop();
             progressStore.stop();
-            responseError(err);
 
-            throw error;
+            processResponseErrorOrThrow(error);
         });
 }
 
@@ -151,12 +146,11 @@ export function upload(url, file, command) {
 
             return response;
         })
-        .catch(err => {
+        .catch(error => {
             blockUI.stop();
             progressStore.stop();
-            responseError(err);
 
-            throw err;
+            processResponseErrorOrThrow(error);
         });
 }
 
@@ -184,20 +178,21 @@ function getCsrfCookie() {
     return '';
 }
 
-function responseError(response) {
+function processResponseErrorOrThrow(error) {
     if (
-        response.response.status === 406 ||
-        response.response.status === 403 ||
-        response.response.status === 400
+        error.response.status === 406 ||
+        error.response.status === 403 ||
+        error.response.status === 400
     ) {
-        if (response.body.message) {
-            notice(response.body.message);
+        if (error.body.message) {
+            notice(error.body.message);
         } else {
-            notice(response.body.Message);
+            notice(error.body.Message);
         }
-    } else if (response.response.status === 404) {
+    } else if (error.response.status === 404) {
         notice(i18n.t('QuestionnaireEditor.EntryWasNotFound'));
     } else {
         error(i18n.t('QuestionnaireEditor.RequestFailedUnexpectedly'));
+        throw error;
     }
 }
