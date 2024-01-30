@@ -1,10 +1,10 @@
 <template>
-    <span ref="tooltipBoundary">
+    <tooltip ref="tooltipBoundary">
         <span class="help-bracket">(</span>
         <a ref="tooltipTrigger" data-bs-toggle="tooltip" class="tooltip-help-trigger" href="javascript:void(0);"
             tabindex="-1">?</a>
         <span class="help-bracket">)</span>
-    </span>
+    </tooltip>
 </template>
   
 <script>
