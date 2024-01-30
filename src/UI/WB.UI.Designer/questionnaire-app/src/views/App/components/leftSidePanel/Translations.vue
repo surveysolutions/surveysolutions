@@ -1,7 +1,7 @@
 <template>
     <div class="translations">
         <perfect-scrollbar class="scroller">
-            <h3>{{ $t('QuestionnaireEditor.SideBarTranslationsCounter', { count: translations.length }) }}</h3>
+            <h3>{{ $t('QuestionnaireEditor.SideBarTranslationsCounter', { count: translations.length + 1 }) }}</h3>
 
             <div class="empty-list" v-show="translations.length == 0">
                 <p>{{ $t('QuestionnaireEditor.SideBarTranslationsEmptyLine1') }}</p>

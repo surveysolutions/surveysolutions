@@ -331,10 +331,21 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
                 this.info.translations,
                 item => item.translationId == translationId
             );
-            each(this.info.translations, translation => {
+            forEach(this.info.translations, translation => {
                 translation.isDefault = false;
             });
-            translationById.isDefault = true;
+
+            if (translationById) translationById.isDefault = true;
+
+            const eTranslationById = find(
+                this.edittingTranslations,
+                item => item.translationId == translationId
+            );
+            forEach(this.edittingTranslations, translation => {
+                translation.isDefault = false;
+            });
+
+            if (eTranslationById) eTranslationById.isDefault = true;
         }
     }
 });

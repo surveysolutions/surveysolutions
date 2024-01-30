@@ -1,8 +1,8 @@
 <template>
     <form name="translation.form">
         <div class="translations-panel-item"
-            :class="{ 'has-error': hasPatternError, 'dragover': $refs.upload && $refs.upload.dropActive }" ngf-drop=""
-            ngf-max-size="4MB" ngf-change="fileSelected(translation, $file)"
+            :class="{ 'has-error': hasPatternError, 'dragover': !translation.isOriginalTranslation && $refs.upload && $refs.upload.dropActive }"
+            ngf-drop="" ngf-max-size="4MB" ngf-change="fileSelected(translation, $file)"
             ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
             <a href @click="deleteTranslation($event)" v-if="!isReadOnlyForUser" class="btn delete-btn" tabindex="-1"
                 v-show="!translation.isOriginalTranslation && !isReadOnlyForUser"></a>
@@ -181,15 +181,8 @@ export default {
             this.$confirm(confirmParams);
         },
 
-        setDefaultTranslation(translationIndex, isDefault) {
-            var translation = this.translations[translationIndex];
-
-            this.questionnaireStore.setDefaultTranslation($state.params.questionnaireId, isDefault ? translation.translationId : null).then(function () {
-                each($scope.translations, function (translation) {
-                    translation.isDefault = translation.checkpoint.isDefault = false;
-                });
-                translation.isDefault = translation.checkpoint.isDefault = isDefault;
-            });
+        async setDefaultTranslation(isDefault) {
+            await this.questionnaireStore.setDefaultTranslation(isDefault ? this.translation.translationId : null)
         },
 
         openFileDialog() {
