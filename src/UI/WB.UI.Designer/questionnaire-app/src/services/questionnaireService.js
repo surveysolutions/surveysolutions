@@ -17,7 +17,7 @@ export function updateQuestionnaire(questionnaireId, questionnaire) {
             title: questionnaire.title,
             variable: questionnaire.variable,
             questionnaireId: questionnaireId,
-            hideifDisabled: questionnaire.hideIfDisabled,
+            hideIfDisabled: questionnaire.hideIfDisabled,
             isPublic: questionnaire.isPublic,
             defaultLanguageName: questionnaire.defaultLanguageName
         });
@@ -36,9 +36,7 @@ export async function regenerateAnonymousQuestionnaireLink(questionnaireId) {
             anonymousQuestionnaireId: data.isActive
                 ? data.anonymousQuestionnaireId
                 : null,
-            anonymousQuestionnaireShareDate: toLocalDateTime(
-                data.anonymouslySharedAtUtc
-            )
+            anonymousQuestionnaireShareDate: data.anonymouslySharedAtUtc            
         });
         return data;
     });
@@ -59,9 +57,7 @@ export async function updateAnonymousQuestionnaireSettings(
             anonymousQuestionnaireId: data.isActive
                 ? data.anonymousQuestionnaireId
                 : null,
-            anonymousQuestionnaireShareDate: toLocalDateTime(
-                data.anonymouslySharedAtUtc
-            )
+            anonymousQuestionnaireShareDate: data.anonymouslySharedAtUtc
         });
     });
 }

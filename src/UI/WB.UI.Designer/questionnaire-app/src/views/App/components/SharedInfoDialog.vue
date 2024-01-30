@@ -41,66 +41,65 @@
                                 id="questionnaireSettingsTab">
                                 <div class="row well-sm">
                                     <div class="col-xs-7">
-                                        <form role="form" name="questionnaireForm">
-                                            <div class="form-group">
-                                                <label class="control-label" for="questionnaireTitle">
-                                                    {{
-                                                        $t(
-                                                            'QuestionnaireEditor.SettingsQuestionnaireName'
-                                                        )
-                                                    }}
-                                                </label>
-                                                <input id="questionnaireTitle" type="text"
-                                                    class="form-control questionaire-title"
-                                                    :disabled="questionnaire.isReadOnlyForUser"
-                                                    v-model="questionnaireEdit.editedTitle" maxlength="2000" />
-                                            </div>
 
-                                            <div class="form-group input-variable-name">
-                                                <label class="control-label" for="questionnaireTitle">
-                                                    {{
-                                                        $t(
-                                                            'QuestionnaireEditor.SettingsQuestionnaireVariable'
-                                                        )
-                                                    }}
-                                                </label>
-                                                <help link="questionnaireVariableName" />
-                                                <input id="questionnaireVariable"
-                                                    :disabled="questionnaire.isReadOnlyForUser" type="text"
-                                                    class="form-control questionaire-title"
-                                                    v-model="questionnaireEdit.editedVariable" maxlength="32"
-                                                    spellcheck="false" />
-                                            </div>
+                                        <div class="form-group">
+                                            <label class="control-label" for="questionnaireTitle">
+                                                {{
+                                                    $t(
+                                                        'QuestionnaireEditor.SettingsQuestionnaireName'
+                                                    )
+                                                }}
+                                            </label>
+                                            <input id="questionnaireTitle" type="text"
+                                                class="form-control questionaire-title"
+                                                :disabled="questionnaire.isReadOnlyForUser"
+                                                v-model="questionnaireEdit.editedTitle" maxlength="2000" />
+                                        </div>
 
-                                            <!--i know this is horrible, but i cannot remove paddings from checkbox image so that visually they inputs are aligned-->
-                                            <div class="form-group" style="margin-left: -8px;">
-                                                <input id="questionnaireHideIdDisabled" type="checkbox" class="wb-checkbox"
-                                                    :disabled="questionnaire.isReadOnlyForUser
-                                                        " v-model="questionnaireEdit.editedHideIfDisabled
+                                        <div class="form-group input-variable-name">
+                                            <label class="control-label" for="questionnaireTitle">
+                                                {{
+                                                    $t(
+                                                        'QuestionnaireEditor.SettingsQuestionnaireVariable'
+                                                    )
+                                                }}
+                                            </label>
+                                            <help link="questionnaireVariableName" />
+                                            <input id="questionnaireVariable" :disabled="questionnaire.isReadOnlyForUser"
+                                                type="text" class="form-control questionaire-title"
+                                                v-model="questionnaireEdit.editedVariable" maxlength="32"
+                                                spellcheck="false" />
+                                        </div>
+
+                                        <!--i know this is horrible, but i cannot remove paddings from checkbox image so that visually they inputs are aligned-->
+                                        <div class="form-group" style="margin-left: -8px;">
+                                            <input id="questionnaireHideIdDisabled" type="checkbox" class="wb-checkbox"
+                                                :disabled="questionnaire.isReadOnlyForUser
+                                                    " v-model="questionnaireEdit.editedHideIfDisabled
         " />
-                                                <label for="questionnaireHideIdDisabled">
-                                                    <span></span>
-                                                    {{
-                                                        $t(
-                                                            'QuestionnaireEditor.SettingsHideIfDisabled'
-                                                        )
-                                                    }}
-                                                </label>
-                                                <help link="hideIfDisabled" />
-                                            </div>
-                                            <div class="form-group">
-                                                <button type="submit" class="btn btn-lg update-button"
-                                                    :class="{ 'btn-primary': dirty }" unsaved-warning-clear
-                                                    v-if="!questionnaire.isReadOnlyForUser" :disabled="!dirty"
-                                                    @click="updateTitle()">
-                                                    {{
-                                                        $t(
-                                                            'QuestionnaireEditor.Update'
-                                                        )
-                                                    }}
-                                                </button>
-                                            </div>
-                                        </form>
+                                            <label for="questionnaireHideIdDisabled">
+                                                <span></span>
+                                                {{
+                                                    $t(
+                                                        'QuestionnaireEditor.SettingsHideIfDisabled'
+                                                    )
+                                                }}
+                                            </label>
+                                            <help link="hideIfDisabled" />
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-lg update-button"
+                                                :class="{ 'btn-primary': dirty }" unsaved-warning-clear
+                                                v-if="!questionnaire.isReadOnlyForUser" :disabled="!dirty"
+                                                @click="updateTitle()">
+                                                {{
+                                                    $t(
+                                                        'QuestionnaireEditor.Update'
+                                                    )
+                                                }}
+                                            </button>
+                                        </div>
+
                                     </div>
                                     <div class="col-xs-5">
                                         <img alt="qr code" :src="'/questionnaire/publicurl/' +
@@ -197,75 +196,74 @@
                                             </div>
                                         </li>
                                     </ul>
-                                    <form role="form" class="row" name="viewModelData.shareForm" novalidate>
-                                        <div class="col-xs-7">
-                                            <div class=" form-group" :class="{
-                                                'has-error':
-                                                    viewModelData.doesUserExist ==
-                                                    false
-                                            }">
-                                                <label class="control-label" for="questionnaireTitle">
-                                                    {{
-                                                        $t(
-                                                            'QuestionnaireEditor.SettingsInviteCollaborators'
-                                                        )
-                                                    }}
-                                                </label>
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control" name="shareWithInput" v-model="viewModelData.shareWith
-                                                            " />
-                                                    <div class="input-group-btn dropup share-type">
-                                                        <button type="button" class="btn btn-default dropdown-toggle"
-                                                            data-toggle="dropdown" name="shareType" id="Share-type">
-                                                            {{
-                                                                viewModelData
-                                                                    .shareType
-                                                                    .text
-                                                            }}
-                                                            <span class="caret"></span>
-                                                        </button>
-                                                        <ul class="dropdown-menu " role="menu"
-                                                            aria-labelledby="dropdownMenu1">
-                                                            <li role="presentation" v-for="shareType in shareTypeOptions">
-                                                                <a role="menuitem" tabindex="-1" href="javascript:void(0);"
-                                                                    @click="
-                                                                        changeShareType(
-                                                                            shareType
-                                                                        )
-                                                                        ">
-                                                                    {{
-                                                                        shareType.text
-                                                                    }}
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
+
+                                    <div class="col-xs-7">
+                                        <div class=" form-group" :class="{
+                                            'has-error':
+                                                viewModelData.doesUserExist ==
+                                                false
+                                        }">
+                                            <label class="control-label" for="questionnaireTitle">
+                                                {{
+                                                    $t(
+                                                        'QuestionnaireEditor.SettingsInviteCollaborators'
+                                                    )
+                                                }}
+                                            </label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="shareWithInput" v-model="viewModelData.shareWith
+                                                        " />
+                                                <div class="input-group-btn dropup share-type">
+                                                    <button type="button" class="btn btn-default dropdown-toggle"
+                                                        data-toggle="dropdown" name="shareType" id="Share-type">
+                                                        {{
+                                                            viewModelData
+                                                                .shareType
+                                                                .text
+                                                        }}
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenu1">
+                                                        <li role="presentation" v-for="shareType in shareTypeOptions">
+                                                            <a role="menuitem" tabindex="-1" href="javascript:void(0);"
+                                                                @click="
+                                                                    changeShareType(
+                                                                        shareType
+                                                                    )
+                                                                    ">
+                                                                {{
+                                                                    shareType.text
+                                                                }}
+                                                            </a>
+                                                        </li>
+                                                    </ul>
                                                 </div>
-                                                <p class="help-block ng-cloak" v-if="viewModelData.doesUserExist ==
-                                                    false
-                                                    ">
-                                                    {{
-                                                        $t(
-                                                            'QuestionnaireEditor.SettingsProvideExistingEmail'
-                                                        )
-                                                    }}
-                                                </p>
                                             </div>
+                                            <p class="help-block ng-cloak" v-if="viewModelData.doesUserExist ==
+                                                false
+                                                ">
+                                                {{
+                                                    $t(
+                                                        'QuestionnaireEditor.SettingsProvideExistingEmail'
+                                                    )
+                                                }}
+                                            </p>
                                         </div>
-                                        <div class="col-xs-5">
-                                            <div class="form-group pull-right">
-                                                <button class="btn btn-primary btn-lg invite-button" @click="invite()"
-                                                    :disabled="!viewModelData.shareWith
-                                                            ">
-                                                    {{
-                                                        $t(
-                                                            'QuestionnaireEditor.SettingsInvite'
-                                                        )
-                                                    }}
-                                                </button>
-                                            </div>
+                                    </div>
+                                    <div class="col-xs-5">
+                                        <div class="form-group pull-right">
+                                            <button class="btn btn-primary btn-lg invite-button" @click="invite()"
+                                                :disabled="!viewModelData.shareWith
+                                                        ">
+                                                {{
+                                                    $t(
+                                                        'QuestionnaireEditor.SettingsInvite'
+                                                    )
+                                                }}
+                                            </button>
                                         </div>
-                                    </form>
+                                    </div>
+
                                     <hr />
                                     <div v-if="isQuestionnaireOwner || questionnaire.hasViewerAdminRights">
                                         <h2>
@@ -349,7 +347,7 @@
                                                 <span v-if="isQuestionnaireOwner">
                                                     |
                                                 </span>
-                                                <button v-if="isQuestionnaireOwner" class="btn btn-link answer" 
+                                                <button v-if="isQuestionnaireOwner" class="btn btn-link answer"
                                                     @click="regenerateAnonymousQuestionnaireLink()">
                                                     {{
                                                         $t(
@@ -359,7 +357,7 @@
                                                 </button>
                                             </div>
                                             <div class="col-xs-5">
-                                                <img alt="qr code" v-if="questionnaireEdit.isAnonymouslyShared" 
+                                                <img alt="qr code" v-if="questionnaireEdit.isAnonymouslyShared"
                                                     :src="'/questionnaire/publicurl/' + questionnaireEdit.anonymousQuestionnaireId" />
                                             </div>
                                         </div>
@@ -488,22 +486,16 @@ export default {
                 editedTitle: this.questionnaire.title,
                 editedVariable: this.questionnaire.variable,
                 editedHideIfDisabled: this.questionnaire.hideIfDisabled,
+
                 isAnonymouslyShared: this.questionnaire.isAnonymouslyShared,
-                anonymousQuestionnaireId: this.questionnaire
-                    .anonymousQuestionnaireId,
-                anonymousQuestionnaireShareDate: toLocalDateTime(
-                    this.questionnaire.anonymouslySharedAtUtc
-                )
+                anonymousQuestionnaireId: this.questionnaire.anonymousQuestionnaireId,
+                anonymousQuestionnaireShareDate: toLocalDateTime(this.questionnaire.anonymouslySharedAtUtc)
             };
         },
         isQuestionnaireOwner() {
             const userEmail = this.currentUser.email;
-
             var user = this.questionnaire.sharedPersons.find(item => item.email == userEmail);
-            if(user && user.isOwner)
-                return true;
-
-            return false;
+            return user && user.isOwner;
         },
     },
     setup(props) { },
@@ -522,58 +514,33 @@ export default {
                 variable: this.questionnaire.variable,
                 hideIfDisabled: this.questionnaire.hideIfDisabled,
                 defaultLanguageName: this.questionnaire.defaultLanguageName
-            }).then(() => {
-                //TODO: subscribe to event, maybe move to questionnaire store
-                this.questionnaire.isPublic = !this.questionnaire.isPublic;
             });
         },
         async regenerateAnonymousQuestionnaireLink() {
-            self = this;
-            
-            const response = await regenerateAnonymousQuestionnaireLink(this.questionnaireId);
-                                    
-            self.questionnaire.isAnonymouslyShared = response.isActive;
-            self.questionnaire.anonymousQuestionnaireId = response.isActive ? response.anonymousQuestionnaireId : null;
-            self.questionnaire.anonymousQuestionnaireShareDate = toLocalDateTime(response.anonymouslySharedAtUtc);
-            
+            regenerateAnonymousQuestionnaireLink(this.questionnaireId);
         },
         copyAnonymousQuestionnaireLink() {
             const link =
                 window.location.origin +
-                '/questionnaire/details/' +
+                '/q/details/' +
                 this.questionnaire.anonymousQuestionnaireId;
             navigator.clipboard.writeText(link);
         },
         getAnonymousQuestionnaireLink() {
             return (
                 window.location.origin +
-                '/questionnaire/details/' +
+                '/q/details/' +
                 this.questionnaire.anonymousQuestionnaireId
             );
         },
         updateAnonymousQuestionnaireSettings() {
             updateAnonymousQuestionnaireSettings(
                 this.questionnaireId,
-                !this.questionnaire.isAnonymouslyShared
-            ).then(() => {
-                //TODO: subscribe to event, maybe move to questionnaire store
-                this.questionnaire.isAnonymouslyShared = !this.questionnaire
-                    .isAnonymouslyShared;
-            });
+                !this.questionnaire.isAnonymouslyShared);
         },
         passOwnershipCancel() {
             this.passConfirmationOpen = null;
         },
-        // isQuestionnaireOwner() {
-        //     const userEmail = this.currentUser.email;
-        //     _.forEach(this.questionnaire.sharedPersons, function (p) {
-        //         if (p.email == userEmail && p.isOwner) {
-        //             return true;
-        //         }
-        //     });
-
-        //     return false;
-        // },
         passOwnershipConfirmation(newOwner) {
             const userEmail = this.currentUser.email;
             passOwnership(
@@ -654,7 +621,7 @@ export default {
                             email: user.email,
                             login: user.userName,
                             userId: user.id,
-                            shareType: self.viewModelData.shareType
+                            shareType: self.viewModelData.shareType.name
                         });
                         self.sortSharedPersons();
                     }
@@ -674,18 +641,14 @@ export default {
         },
         updateTitle() {
             updateQuestionnaire(this.questionnaireId, {
-                isPublic: !this.questionnaire.isPublic,
+                isPublic: this.questionnaire.isPublic,
                 title: this.questionnaireEdit.editedTitle,
                 variable: this.questionnaireEdit.editedVariable,
                 hideIfDisabled: this.questionnaireEdit.editedHideIfDisabled,
                 defaultLanguageName: this.questionnaire.defaultLanguageName
-            }).then(() => {
-                //TODO: subscribe to event
-                this.questionnaire.isPublic = !this.questionnaire.isPublic;
-                this.questionnaire.hideIfDisabled = this.questionnaireEdit.editedHideIfDisabled;
-
-                this.close();
             });
+
+            this.close();
         },
         togleTab(value) {
             this.settings = value;
