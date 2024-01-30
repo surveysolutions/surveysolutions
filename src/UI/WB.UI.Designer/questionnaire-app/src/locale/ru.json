@@ -476,6 +476,7 @@
     "HideParentValues": "Спрятать родительские значения",
     "AddEnablingCondition": "Добавить условие",
     "ManageAccount": "Управление учётной записью",
+    "OldUi": "Старый UI",
     "ErrorsCounter_plural": "{count} errors",
     "SideBarAttachmentsCounter_plural": "{count} Files Attachments ({bytes} total)",
     "SideBarLookupTablesCounter_plural": "{count} Lookup Tables:",

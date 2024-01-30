@@ -485,6 +485,7 @@
     "ShowParentValues": "Show Parent values",
     "HideParentValues": "Hide Parent values",
     "AddEnablingCondition": "Add enabling condition",
-    "ManageAccount": "Manage account"
+    "ManageAccount": "Manage account",
+    "OldUi": "Old UI"
   }
 }

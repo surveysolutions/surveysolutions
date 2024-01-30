@@ -485,6 +485,7 @@
     "WarningsCounter": "{count} попереджень",
     "WarningsCounter_plural": "{count} попередження",
     "Yes": "Так",
-    "ManageAccount": "Керування обліковим записом"
+    "ManageAccount": "Керування обліковим записом",
+    "OldUi": "Старий UI"
   }
 }

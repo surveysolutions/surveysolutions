@@ -485,6 +485,7 @@
     "WarningsCounter": "{count} upozornění",
     "WarningsCounter_plural": "{count} upozornění",
     "Yes": "Ano",
-    "ManageAccount": "Spravovat účet"
+    "ManageAccount": "Spravovat účet",
+    "OldUi": "Old UI"
   }
 }

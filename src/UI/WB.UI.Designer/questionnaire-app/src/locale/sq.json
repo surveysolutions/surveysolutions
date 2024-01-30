@@ -485,6 +485,7 @@
     "OptionsCascadingListError": "\r\nYou entered an invalid input. Each line should follow the format: \"Title...ParentValue/Value[...Attachment name]\". 'Value' and 'ParentValue' must be an integer number. 'Title' must be an alpha-numeric string. 'Attachment name' is optional. No empty lines are allowed.",
     "ShowParentValues": "Show Parent values",
     "HideParentValues": "Hide Parent values",
-    "AddEnablingCondition": "Add enabling condition"
+    "AddEnablingCondition": "Add enabling condition",
+    "OldUi": "Old UI"
   }
 }
