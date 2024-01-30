@@ -62,16 +62,18 @@ export async function updateAnonymousQuestionnaireSettings(
     });
 }
 
-export function shareWith(emailOrLogin, questionnaireId, shareType) {
+export function shareWith(userEmail, userName, userId, questionnaireId, shareType) {
     return commandCall('AddSharedPersonToQuestionnaire', {
-        emailOrLogin: emailOrLogin,
+        emailOrLogin: userEmail,
         questionnaireId: questionnaireId,
         shareType: shareType
     }).then(response => {
-        emitter.emit('sharedPersonAdded', {
-            emailOrLogin: emailOrLogin,
+        emitter.emit('sharedPersonAdded', {            
             questionnaireId: questionnaireId,
-            shareType: shareType
+            shareType: shareType,
+            email: userEmail,
+            name: userName,
+            id: userId
         });
     });
 }

@@ -24,9 +24,15 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             emitter.on('categoriesUpdated', this.updateQuestionnaireCategories);
             emitter.on('categoriesDeleted', this.deleteQuestionnaireCategories);
 
-            emitter.on('anonymousQuestionnaireSettingsUpdated', this.anonymousQuestionnaireSettingsUpdated);
+            emitter.on(
+                'anonymousQuestionnaireSettingsUpdated',
+                this.anonymousQuestionnaireSettingsUpdated
+            );
             emitter.on('questionnaireUpdated', this.questionnaireUpdated);
             emitter.on('ownershipPassed', this.ownershipPassed);
+
+            emitter.on('sharedPersonAdded', this.sharedPersonAdded);
+            emitter.on('sharedPersonRemoved', this.sharedPersonRemoved);
         },
         macroAdded(payload) {
             this.prepareMacro(payload);
@@ -51,8 +57,10 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
         },
         anonymousQuestionnaireSettingsUpdated(payload) {
             this.info.isAnonymouslyShared = payload.isAnonymouslyShared;
-            this.info.anonymousQuestionnaireId = payload.anonymousQuestionnaireId;
-            this.info.anonymousQuestionnaireShareDate = payload.anonymousQuestionnaireShareDate;
+            this.info.anonymousQuestionnaireId =
+                payload.anonymousQuestionnaireId;
+            this.info.anonymousQuestionnaireShareDate =
+                payload.anonymousQuestionnaireShareDate;
         },
         questionnaireUpdated(payload) {
             this.info.title = payload.title;
@@ -61,13 +69,57 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             this.info.isPublic = payload.isPublic;
             this.info.defaultLanguageName = payload.defaultLanguageName;
         },
-        ownershipPassed(payload) {},
+        ownershipPassed(payload) {
+            forEach(this.info.sharedPersons, person => {
+                if (person.email == payload.ownerEmail) {
+                    person.isOwner = false;
+                }
+
+                if (person.email == payload.newOwnerEmail) {
+                    person.isOwner = true;
+                }
+            });
+        },
+        sharedPersonRemoved(payload) {
+            this.info.sharedPersons = filter(
+                this.info.sharedPersons,
+                person => {
+                    return person.email !== payload.email;
+                }
+            );
+        },
+        sharedPersonAdded(paylaod) {
+            if (
+                filter(this.info.sharedPersons, {
+                    email: paylaod.email
+                }).length === 0
+            ) {
+                this.info.sharedPersons.push({
+                    email: paylaod.email,
+                    login: paylaod.userName,
+                    userId: payload.id,
+                    shareType: paylaod.shareType
+                });
+
+                var owner = filter(this.info.sharedPersons, {
+                    isOwner: true
+                });
+                var sharedPersons = sortBy(
+                    without(this.info.sharedPersons, owner),
+                    ['email']
+                );
+
+                this.info.sharedPersons.sharedPersons = [owner].concat(
+                    sharedPersons
+                );
+            }
+        },
 
         async fetchQuestionnaireInfo(questionnaireId) {
             const info = await get('/api/questionnaire/get/' + questionnaireId);
             this.setQuestionnaireInfo(info);
         },
-        prepareMacro(macro){
+        prepareMacro(macro) {
             macro.initialMacro = Object.assign({}, macro);
             macro.isDescriptionVisible = !isEmpty(macro.description);
         },

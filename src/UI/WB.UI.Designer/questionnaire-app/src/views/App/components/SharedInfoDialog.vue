@@ -541,62 +541,26 @@ export default {
         passOwnershipCancel() {
             this.passConfirmationOpen = null;
         },
-        passOwnershipConfirmation(newOwner) {
-            const userEmail = this.currentUser.email;
+        passOwnershipConfirmation(newOwner) {            
             passOwnership(
-                userEmail,
+                this.currentUser.email,
                 newOwner.userId,
                 newOwner.email,
                 this.questionnaire.questionnaireId
-            ).then(() => {
-                //TODO: subscribe to event, maybe move to questionnaire store
-                newOwner.isOwner = true;
-
-                _.forEach(this.questionnaire.sharedPersons, function (person) {
-                    if (person.email == userEmail) {
-                        person.isOwner = false;
-                    }
-
-                    if (person.email == newOwner.email) {
-                        person.isOwner = true;
-                    }
-                });
-
-                this.passConfirmationOpen = null;
-            });
+            );
+            
+            this.passConfirmationOpen = null;
         },
         passOwnership(personInfo) {
             this.passConfirmationOpen = personInfo.email;
         },
-        revokeAccess(personInfo) {
-            self = this;
+        revokeAccess(personInfo){
             removeSharedPerson(
                 this.questionnaireId,
                 personInfo.userId,
                 personInfo.email
-            ).then(function () {
-                //TODO: subscribe to event, maybe move to questionnaire store
-                self.questionnaire.sharedPersons = _.without(
-                    self.questionnaire.sharedPersons,
-                    _.filter(self.questionnaire.sharedPersons, {
-                        email: personInfo.email
-                    })
-                );
-
-                self.sortSharedPersons();
-            });
-        },
-        sortSharedPersons() {
-            var owner = _.filter(this.questionnaire.sharedPersons, {
-                isOwner: true
-            });
-            var sharedPersons = _.sortBy(
-                _.without(this.questionnaire.sharedPersons, owner),
-                ['email']
             );
-
-            this.questionnaire.sharedPersons = [owner].concat(sharedPersons);
-        },
+        },        
 
         async invite() {
             const user = await findUserByEmailOrLogin(
@@ -606,29 +570,16 @@ export default {
 
             if (user.doesUserExist) {
                 self = this;
-                shareWith(
-                    this.viewModelData.shareWith,
+                shareWith(                    
+                    user.email,
+                    user.userName,
+                    user.id,
                     this.questionnaire.questionnaireId,
                     this.viewModelData.shareType.name
-                ).then(function () {
-                    //TODO: subscribe to event, maybe move to questionnaire store
-                    if (
-                        _.filter(self.questionnaire.sharedPersons, {
-                            email: self.viewModelData.shareWith
-                        }).length === 0
-                    ) {
-                        self.questionnaire.sharedPersons.push({
-                            email: user.email,
-                            login: user.userName,
-                            userId: user.id,
-                            shareType: self.viewModelData.shareType.name
-                        });
-                        self.sortSharedPersons();
-                    }
-
-                    self.viewModelData.shareWith = '';
-                    self.viewModelData.doesUserExist = true;
-                });
+                );
+                
+                self.viewModelData.shareWith = '';
+                self.viewModelData.doesUserExist = true;
             }
         },
         changeShareType(shareType) {
