@@ -83,7 +83,7 @@ export default {
         Help,
         Draggable,
     },
-    //inject: ['currentChapter'],
+    inject: ['questionnaire'],
     data() {
         return {
 
@@ -99,9 +99,9 @@ export default {
         };
     },
     computed: {
-        questionnaire() {
-            return (this.questionnaireStore || {}).info || {};
-        },
+        // questionnaire() {
+        //     return (this.questionnaireStore || {}).info || {};
+        // },
         chapters() {
             return ((this.questionnaire || {}).chapters || [])
         },

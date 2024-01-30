@@ -3,7 +3,16 @@ import { get, commandCall } from '../services/apiService';
 import { newGuid } from '../helpers/guid';
 import { i18n } from '../plugins/localization';
 import emitter from '../services/emitter';
-import { findIndex, forEach, isEmpty, map, filter, find, sortBy, without } from 'lodash';
+import {
+    findIndex,
+    forEach,
+    isEmpty,
+    map,
+    filter,
+    find,
+    sortBy,
+    without
+} from 'lodash';
 import { useCookies } from 'vue3-cookies';
 import { updateMetadata } from '../services/metadataService';
 
@@ -43,6 +52,8 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
                 'settedDefaultTranslation',
                 this.settedDefaultTranslation
             );
+
+            emitter.on('groupUpdated', this.groupUpdated);
         },
 
         async fetchQuestionnaireInfo(questionnaireId) {
@@ -140,6 +151,13 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
                     sharedPersons
                 );
             }
+        },
+        groupUpdated(payload) {
+            var index = findIndex(this.info.chapters, function(i) {
+                return i.itemId === payload.id.replaceAll('-', '');
+            });
+
+            if (index > -1) this.info.chapters[index].title = payload.title;
         },
 
         prepareMacro(macro) {
