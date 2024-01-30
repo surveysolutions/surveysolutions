@@ -3,7 +3,7 @@ import { get, commandCall } from '../services/apiService';
 import { newGuid } from '../helpers/guid';
 import { i18n } from '../plugins/localization';
 import emitter from '../services/emitter';
-import { findIndex, forEach, isEmpty, map, filter, find } from 'lodash';
+import { findIndex, forEach, isEmpty, map, filter, find, sortBy, without } from 'lodash';
 import { useCookies } from 'vue3-cookies';
 import { updateMetadata } from '../services/metadataService';
 import {
@@ -121,8 +121,8 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             ) {
                 this.info.sharedPersons.push({
                     email: paylaod.email,
-                    login: paylaod.userName,
-                    userId: payload.id,
+                    login: paylaod.name,
+                    userId: paylaod.id,
                     shareType: paylaod.shareType
                 });
 

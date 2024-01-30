@@ -84,9 +84,6 @@
                         </div>
                     </div>
 
-
-
-
                     <div class="dropdown-with-breadcrumbs-and-icons" v-if="activeRoster.type == 'Numeric'">
                         <label>{{ $t('QuestionnaireEditor.RosterSourceNumericQuestion') }}</label>
                         <div class="btn-group" uib-dropdown>
@@ -165,8 +162,6 @@
                         </div>
                     </div>
 
-
-
                     <div class="form-group" v-if="activeRoster.type == 'Fixed'">
                         <label for="edit-fixed-roster-title" class="wb-label">
                             {{ $t('QuestionnaireEditor.RosterSourceFixed') }}
@@ -227,8 +222,6 @@
                             </div>
                         </div>
                     </div>
-
-
 
                     <div class="dropdown-with-breadcrumbs-and-icons" v-if="activeRoster.type == 'Multi'">
                         <label>{{ $t('QuestionnaireEditor.RosterSourceQuestion') }}</label>

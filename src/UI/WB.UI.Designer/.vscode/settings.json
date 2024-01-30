@@ -4,7 +4,27 @@
         "bin/Debug/netcoreapp3.1/questionnaire-app/src/locale",
         "bin/Debug/netcoreapp3.1/questionnaire-app/src/locales"
     ],
-    "editor.tabSize": 2,
+    
     "eslint.format.enable": true,
-    "vetur.experimental.templateInterpolationService": true
+    "eslint.enable": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit",
+        "source.fixAll": "explicit"
+    },
+    "editor.tabSize": 4,
+    "eslint.format.enable": true,
+
+    "eslint.lintTask.enable": true,
+    "editor.formatOnSave": true,
+    "typescript.preferences.quoteStyle": "single",
+    "javascript.preferences.quoteStyle": "single",
+    "[vue]": {
+        "editor.defaultFormatter": "Vue.volar"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "editor.detectIndentation": false,
+    "prettier.printWidth": 120,
+    "debug.javascript.terminalOptions": {}
 }
