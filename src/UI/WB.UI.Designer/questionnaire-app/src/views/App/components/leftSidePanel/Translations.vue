@@ -148,8 +148,10 @@ export default {
             translation.oldTranslationId = null;
             translation.translationId = newGuid();
 
-            await this.questionnaireStore.addTranslation(translation);
+            const response = await this.questionnaireStore.addTranslation(translation);
 
+            if (translation.file) notice(response);
+            translation.file = null;
             this.file = [];
 
             //setTimeout(function () { utilityService.focus("focusTranslation" + translation.translationId); }, 500);

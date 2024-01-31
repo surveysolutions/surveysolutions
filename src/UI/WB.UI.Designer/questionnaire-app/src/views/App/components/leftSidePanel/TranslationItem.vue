@@ -67,6 +67,7 @@
 
 import { isUndefined, isNull, each } from 'lodash'
 import moment from 'moment'
+import { notice } from '../../../../services/notificationService';
 import { newGuid } from '../../../../helpers/guid';
 import { trimText, createQuestionForDeleteConfirmationPopup } from '../../../../services/utilityService'
 import { useQuestionnaireStore } from '../../../../stores/questionnaire';
@@ -161,8 +162,12 @@ export default {
         },
 
         async saveTranslation() {
-            await updateTranslation(this.questionnaireId, this.translation)
+            const response = await updateTranslation(this.questionnaireId, this.translation)
+
             this.originName = this.translation.name;
+
+            if (this.translation.file) notice(response);
+            this.translation.file = null;
             this.file = [];
         },
 
