@@ -2,6 +2,18 @@ import { get, post, commandCall } from '../services/apiService';
 import emitter from './emitter';
 import { toLocalDateTime } from '../services/utilityService';
 
+export function addSection(questionnaireId, newSection) {
+    // return commandCall('AddGroup', {questionnaireId, newGroup}).then(response => {
+    //     emitter.emit('groupAdded', {questionnaireId, newGroup});
+    // });
+}
+
+export function addSubsection(questionnaireId, newSubsection) {
+    // return commandCall('AddGroup', {questionnaireId, newGroup}).then(response => {
+    //     emitter.emit('groupAdded', {questionnaireId, newGroup});
+    // });
+}
+
 export function updateQuestionnaire(questionnaireId, questionnaire) {
     var command = {
         title: questionnaire.title,
@@ -36,7 +48,7 @@ export async function regenerateAnonymousQuestionnaireLink(questionnaireId) {
             anonymousQuestionnaireId: data.isActive
                 ? data.anonymousQuestionnaireId
                 : null,
-            anonymousQuestionnaireShareDate: data.anonymouslySharedAtUtc            
+            anonymousQuestionnaireShareDate: data.anonymouslySharedAtUtc
         });
         return data;
     });
@@ -62,13 +74,19 @@ export async function updateAnonymousQuestionnaireSettings(
     });
 }
 
-export function shareWith(userEmail, userName, userId, questionnaireId, shareType) {
+export function shareWith(
+    userEmail,
+    userName,
+    userId,
+    questionnaireId,
+    shareType
+) {
     return commandCall('AddSharedPersonToQuestionnaire', {
         emailOrLogin: userEmail,
         questionnaireId: questionnaireId,
         shareType: shareType
     }).then(response => {
-        emitter.emit('sharedPersonAdded', {            
+        emitter.emit('sharedPersonAdded', {
             questionnaireId: questionnaireId,
             shareType: shareType,
             email: userEmail,

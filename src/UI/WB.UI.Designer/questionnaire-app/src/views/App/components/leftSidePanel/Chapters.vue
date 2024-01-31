@@ -3,7 +3,7 @@
         <perfect-scrollbar class="scroller">
             <h3>
                 <span>{{ $t('QuestionnaireEditor.SideBarSectionsCounter', {
-                    count: chapters.length
+                    count: questionnaire.chapters.length
                 }) }}</span>
             </h3>
             <ul ui-tree-nodes class="chapters-list angular-ui-tree-nodes">
@@ -99,17 +99,9 @@ export default {
         };
     },
     computed: {
-        // questionnaire() {
-        //     return (this.questionnaireStore || {}).info || {};
-        // },
-        chapters() {
-            return ((this.questionnaire || {}).chapters || [])
-        },
-
         readyToPaste() {
             return this.treeStore.canPaste();
         },
-
         isReadOnlyForUser() {
             return (this.questionnaire || {}).isReadOnlyForUser;
         },
@@ -185,7 +177,7 @@ export default {
                             this.$refs.chapters.remove(stat);
 
                             if (this.isCurrentChapter(chapter)) {
-                                const cover = this.chapters[0];
+                                const cover = this.questionnaire.chapters[0];
                                 this.$router.push({
                                     name: 'group',
                                     params: {

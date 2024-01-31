@@ -157,7 +157,14 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
                 return i.itemId === payload.id.replaceAll('-', '');
             });
 
-            if (index > -1) this.info.chapters[index].title = payload.title;
+            if (index > -1) {
+                this.info.chapters[index].title = payload.title;
+                this.info.chapters[index].hasCondition =
+                    payload.enablementCondition !== null &&
+                    /\S/.test(payload.enablementCondition);
+                this.info.chapters[index].hideIfDisabled =
+                    payload.hideIfDisabled;
+            }
         },
 
         prepareMacro(macro) {
