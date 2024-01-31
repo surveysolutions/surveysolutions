@@ -37,10 +37,10 @@
                                         <li class="verification-item-container"
                                             v-for="reference in referencesWithErrors.references"
                                             @click="navigateTo(reference)">
-                                            <a class="verification-item" href="javascript:void(0);"
-                                                tooltip-class="error-tooltip" tooltip-append-to-body="true"
-                                                tooltip-placement="right"
-                                                uib-tooltip-html="referencesWithErrors.compilationErrorMessages != null ? referencesWithErrors.compilationErrorMessages.slice(0, 10).join('<br />') + (referencesWithErrors.compilationErrorMessages.length > 10 ? '<br />...' : '') : ''">
+                                            <a class="verification-item" href="javascript:void(0);" data-bs-placement="top"
+                                                data-bs-toggle="tooltip" data-bs-html="true"
+                                                :title="referencesWithErrors.compilationErrorMessages != null ? referencesWithErrors.compilationErrorMessages.slice(0, 10).join('<br />') + (referencesWithErrors.compilationErrorMessages.length > 10 ? '<br />...' : '') : ''"
+                                                data-bs-custom-class="error-tooltip in" data-bs-container='body'>
                                                 <span v-if="reference.type == 'Question'" class="icon"
                                                     :class="[reference.questionType, 'icon-' + typeOfMessageToBeShown]"></span>
                                                 <span v-if="reference.type == 'Questionnaire'"
@@ -88,6 +88,7 @@
 
 <script>
 import { useVerificationStore } from '../../../stores/verification';
+import * as bootstrap from 'bootstrap';
 
 export default {
     name: 'VerificationDialog',
