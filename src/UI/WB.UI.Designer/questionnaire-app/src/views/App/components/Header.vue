@@ -199,7 +199,7 @@ export default {
             this.downloadPDFDialog.open();
         },
         saveAsQuestionnaire() {
-            window.location = '../../api/hq/backup/package/' + this.questionnaireId
+            window.location = '/api/hq/backup/package/' + this.questionnaireId
         },
         async verify() {
             await this.verificationStore.fetchVerificationStatus(
