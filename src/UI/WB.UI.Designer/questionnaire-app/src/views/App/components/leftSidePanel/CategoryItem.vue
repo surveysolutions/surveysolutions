@@ -153,7 +153,7 @@ export default {
         },
 
         editCategories() {
-
+            this.$emit('editCategoriesOpen', { categoriesId: this.categoryId })
         },
 
         async fileSelected(newFile) {

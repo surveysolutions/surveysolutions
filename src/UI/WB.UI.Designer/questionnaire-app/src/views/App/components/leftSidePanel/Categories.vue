@@ -18,10 +18,10 @@
             </div>
             <form role="form" name="categoriesForm" novalidate>
                 <div class="categories-list">
-                    <template v-for="(category, index) in categoriesList">
-                        <CategoryItem :category-id="category.categoriesId" :questionnaire-id="questionnaireId">
-                        </CategoryItem>
-                    </template>
+                    <CategoryItem v-for="(category, index) in categoriesList" refs="categoriesItems"
+                        @editCategoriesOpen="editCategoriesOpen" :category-id="category.categoriesId"
+                        :questionnaire-id="questionnaireId">
+                    </CategoryItem>
                 </div>
             </form>
             <div class="button-holder">
@@ -59,7 +59,7 @@
 import CategoryItem from './CategoryItem.vue';
 
 import { newGuid } from '../../../../helpers/guid';
-import { isNull, isUndefined } from 'lodash'
+import { isNull, isUndefined, some } from 'lodash'
 import { updateCategories } from '../../../../services/categoriesService'
 import { notice } from '../../../../services/notificationService';
 import moment from 'moment';
@@ -74,6 +74,10 @@ export default {
     },
     data() {
         return {
+            shouldUserSeeReloadPromt: false,
+            openEditor: null,
+            bcChannel: null,
+
             downloadBaseUrl: '/categories',
             file: [],
         }
@@ -85,9 +89,20 @@ export default {
             questionnaireStore,
         };
     },
+    mounted() {
+        // https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API
+        // Automatically reload window on popup close. If supported by browser
+        if ('BroadcastChannel' in window) {
+            this.bcChannel = new BroadcastChannel("editcategory")
+            this.bcChannel.onmessage = ev => {
+                console.log(ev.data)
+                if (ev.data === 'close#' + this.openEditor) {
+                    window.location.reload();
+                }
+            }
+        }
+    },
     computed: {
-        shouldUserSeeReloadPromt() { return false; }, // TODO
-
         questionnaire() {
             return this.questionnaireStore.getInfo;
         },
@@ -180,6 +195,15 @@ export default {
             setTimeout(function () {
                 utilityService.focus("focusCategories" + categories.categoriesId);
             }, 500);*/
+        },
+
+        editCategoriesOpen(event) {
+            this.shouldUserSeeReloadPromt = true;
+            this.openEditor = event.categoriesId
+
+            window.open("/questionnaire/editcategories/" + this.questionnaireId + "?categoriesid=" + event.categoriesId,
+                "", "scrollbars=yes, center=yes, modal=yes, width=960, height=745, top=" + (screen.height - 745) / 4
+                + ", left= " + (screen.width - 960) / 2, true);
         }
     },
 }
