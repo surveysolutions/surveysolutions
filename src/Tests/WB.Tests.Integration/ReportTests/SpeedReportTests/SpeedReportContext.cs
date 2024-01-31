@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
@@ -35,7 +36,7 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
 
             var interviewCommentedStatus = Create.Entity.InterviewCommentedStatus(
                 status: InterviewExportedAction.FirstAnswerSet,
-                timestamp: dateTime.AddMinutes(1),
+                timestamp: dateTime.AddMinutes(1).SetUtcKind(),
                 timeSpanWithPreviousStatus: TimeSpan.FromMinutes(1),
                 supervisorId: supervisorId,
                 interviewSummary: interview);
@@ -51,8 +52,8 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
             var created = interviewSummary.InterviewCommentedStatuses.FirstOrDefault(s =>
                 s.Status == InterviewExportedAction.Created);
 
-            interviewSummary.CreatedDate = created?.Timestamp ?? DateTime.UtcNow;
-            interviewSummary.FirstAnswerDate = firstAnswerSet?.Timestamp;
+            interviewSummary.CreatedDate = (created?.Timestamp ?? DateTime.UtcNow).ToUniversalTime();
+            interviewSummary.FirstAnswerDate = firstAnswerSet?.Timestamp.ToUniversalTime();
             interviewSummary.FirstInterviewerName = firstAnswerSet?.InterviewerName;
             interviewSummary.FirstInterviewerId = firstAnswerSet?.InterviewerId;
             interviewSummary.FirstSupervisorName = firstAnswerSet?.SupervisorName;
