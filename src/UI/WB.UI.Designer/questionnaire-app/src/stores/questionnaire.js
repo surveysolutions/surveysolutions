@@ -19,12 +19,14 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
     state: () => ({
         info: {},
         edittingMetadata: {},
-        edittingTranslations: []
+        edittingTranslations: [],
+        edittingCategories: []
     }),
     getters: {
         getInfo: state => state.info,
         getEdittingMetadata: state => state.edittingMetadata,
-        getEdittingTranslations: state => state.edittingTranslations
+        getEdittingTranslations: state => state.edittingTranslations,
+        getEdittingCategories: state => state.edittingCategories
     },
     actions: {
         setupListeners() {
@@ -66,6 +68,7 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
 
             this.edittingMetadata = Object.assign({}, info.metadata);
             this.edittingTranslations = Object.assign([], info.translations);
+            this.edittingCategories = Object.assign([], info.categories);
 
             forEach(this.info.macros, macro => {
                 this.prepareMacro(macro);
@@ -260,7 +263,8 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
         updateQuestionnaireCategories(event) {
             if (this.info.categories === null) return;
 
-            const id = event.categories.categoriesId;
+            const categories = event.categories;
+            const id = categories.categoriesId;
 
             const item = find(
                 this.info.categories,
@@ -268,9 +272,12 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             );
 
             if (item) {
-                item.name == event.categories.name;
+                item.name == categories.name;
             } else {
-                this.info.categories.push(event.categories);
+                this.info.categories.push(categories);
+
+                const eCategories = Object.assign({}, categories);
+                this.edittingCategories.push(eCategories);
             }
         },
 
@@ -283,6 +290,16 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
                     return categoriesDto.categoriesId !== event.categoriesId;
                 }
             );
+            this.edittingCategories = filter(
+                this.edittingCategories,
+                categoriesDto => {
+                    return categoriesDto.categoriesId !== event.categoriesId;
+                }
+            );
+        },
+
+        async discardCategoriesChanges() {
+            this.edittingCategories = Object.assign([], this.info.categories);
         },
 
         async discardMetadataChanges() {

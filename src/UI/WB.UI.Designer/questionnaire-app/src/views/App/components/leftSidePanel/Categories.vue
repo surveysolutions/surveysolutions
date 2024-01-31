@@ -63,11 +63,11 @@ import { isNull, isUndefined } from 'lodash'
 import { updateCategories } from '../../../../services/categoriesService'
 import { notice } from '../../../../services/notificationService';
 import moment from 'moment';
-
+import { useQuestionnaireStore } from '../../../../stores/questionnaire';
 
 export default {
     name: 'Categories',
-    inject: ['questionnaire'],
+    inject: ['isReadOnlyForUser'],
     components: { CategoryItem, },
     props: {
         questionnaireId: { type: String, required: true },
@@ -78,17 +78,23 @@ export default {
             file: [],
         }
     },
+    setup() {
+        const questionnaireStore = useQuestionnaireStore();
+
+        return {
+            questionnaireStore,
+        };
+    },
     computed: {
         shouldUserSeeReloadPromt() { return false; }, // TODO
 
+        questionnaire() {
+            return this.questionnaireStore.getInfo;
+        },
+
         categoriesList() {
-            return this.questionnaire.categories;
+            return this.questionnaireStore.getEdittingCategories;
         },
-
-        isReadOnlyForUser() {
-            return this.questionnaire.isReadOnlyForUser;
-        },
-
     },
     methods: {
 

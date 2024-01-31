@@ -89,7 +89,7 @@ export default {
             return this.questionnaire.isReadOnlyForUser;
         },
         dirty() {
-            return this.category.name != this.originName;
+            return this.category.name != this.originName || this.file.length > 0;
         },
         isInvalid() {
             return (this.category.name) ? false : true;
@@ -130,10 +130,14 @@ export default {
         },
 
         async saveCategories() {
-            await updateCategories(this.questionnaireId, this.category);
+            const response = await updateCategories(this.questionnaireId, this.category)
 
-            this.originName = this.category.name;
+            if (this.category.file) notice(response);
+
+            this.category.file = null;
             this.file = [];
+            this.originName = this.category.name;
+
             /*.then(function (response) {
                     dataBind(categories.checkpoint, categories);
                     categories.form.$setPristine();
@@ -169,7 +173,6 @@ export default {
             categories.meta.fileName = newFile.name;
             categories.meta.lastUpdated = moment();
 
-            var maxNameLength = 32;
 
             var suspectedCategories = categories.meta.fileName.match(/[^[\]]+(?=])/g);
 
@@ -178,19 +181,11 @@ export default {
             else
                 categories.name = categories.meta.fileName.replace(/\.[^/.]+$/, "");
 
+            var maxNameLength = 32;
             var fileNameLength = categories.name.length;
             categories.name = categories.name.substring(0, fileNameLength < maxNameLength ? fileNameLength : maxNameLength);
             categories.oldCategoriesId = categories.categoriesId;
             categories.categoriesId = newGuid();
-
-            const response = await updateCategories(this.questionnaireId, categories)
-
-            if (categories.file) notice(response);
-
-            categories.file = null;
-            this.file = [];
-            this.originName = categories.name;
-
         },
 
         openFileDialog() {
