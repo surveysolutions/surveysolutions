@@ -14,7 +14,6 @@ import {
     without
 } from 'lodash';
 import { useCookies } from 'vue3-cookies';
-import { updateMetadata } from '../services/metadataService';
 
 export const useQuestionnaireStore = defineStore('questionnaire', {
     state: () => ({
@@ -53,6 +52,7 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
                 this.settedDefaultTranslation
             );
 
+            emitter.on('metadataUpdated', this.metadataUpdated);
             emitter.on('groupUpdated', this.groupUpdated);
         },
 
@@ -289,13 +289,10 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             this.edittingMetadata = Object.assign({}, this.info.metadata);
         },
 
-        async saveMetadataChanges() {
-            await updateMetadata(
-                this.info.questionnaireId,
-                this.edittingMetadata
-            );
-            this.info.title = this.edittingMetadata.title;
-            this.info.metadata = Object.assign({}, this.edittingMetadata);
+        metadataUpdated(event) {
+            this.info.metadata = Object.assign({}, event.metadata);
+            this.edittingMetadata = Object.assign({}, event.metadata);
+            this.info.title = event.metadata.title;
         },
 
         async discardTranslationChanges() {

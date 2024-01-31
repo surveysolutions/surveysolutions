@@ -261,6 +261,7 @@
 <script>
 
 import { isOnlyNumbers } from '../../../../helpers/number';
+import { updateMetadata } from '../../../../services/metadataService';
 
 import { useQuestionnaireStore } from '../../../../stores/questionnaire';
 
@@ -354,7 +355,7 @@ export default {
         },
 
         async saveMetadata() {
-            await this.questionnaireStore.saveMetadataChanges();
+            await updateMetadata(this.questionnaireId, this.metadata);
             this.dirty = false;
         },
 
