@@ -5,7 +5,7 @@
                 <button type="button" class="close" @click="close()" aria-hidden="true"></button>
                 <h3 class="modal-title">
                     <span v-t="{ path: 'QuestionnaireEditor.CompilationLabel' }"></span>
-
+                    <span>&nbsp;</span>
                     <span v-if="typeOfMessageToBeShown === 'error'" v-t="{
                         path:
                             'QuestionnaireEditor.CompilationErrorsCounter',
