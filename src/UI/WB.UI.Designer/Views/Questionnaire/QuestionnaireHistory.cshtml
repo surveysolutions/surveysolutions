@@ -66,7 +66,9 @@
                                             <ul class="dropdown-menu">
                                                 @if (listViewModel.HasRevertTo)
                                                 {
-                                                    <li>@Html.ActionLink("View", "Details", "Questionnaire", new { id = $"{Model.Id:N}${listViewModel.Sequence}" })</li>
+                                                    <li>
+                                                        <a href='@($"/q/details/{Model.Id:N}${listViewModel.Sequence}")'>View</a>
+                                                    </li>
                                                     <li class="divider"></li>
                                                     <li><a href="javascript:void(0);" onclick="confirmRevert('@listViewModel.Timestamp.ToString("s")', '@listViewModel.Id')">@QuestionnaireHistoryResources.RevertToThisVersion</a></li>
                                                     <li>@Html.ActionLink(QuestionnaireHistoryResources.ExtractAtRevision, "Clone", "Questionnaire", new { id = $"{Model.Id:N}${listViewModel.Sequence}" })</li>
