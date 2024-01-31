@@ -17,17 +17,17 @@
                         " target="_blank"
                         v-if="questionnaire.hasViewerAdminRights || questionnaire.isSharedWithUser">{{
                             $t('QuestionnaireEditor.History') }}</a>
-                    <button class="btn" type="button" @click="showDownloadPdf()">
+                    <button class="btn" @click="showDownloadPdf()">
                         {{ $t('QuestionnaireEditor.DownloadPdf') }}
                     </button>
-                    <a class="btn" type="button" v-if="questionnaire.hasViewerAdminRights" @click="saveAsQuestionnaire"
-                        target="_blank" rel="noopener">{{
+                    <a class="btn" v-if="questionnaire.hasViewerAdminRights" @click="saveAsQuestionnaire" target="_blank"
+                        rel="noopener">{{
                             $t('QuestionnaireEditor.SaveAs') }}</a>
 
                     <a class="btn" v-if="questionnaire.questionnaireRevision || questionnaire.isReadOnlyForUser"
                         :href="'/questionnaire/clone/' + questionnaire.questionnaireId + (questionnaire.questionnaireRevision ? '$' + questionnaire.questionnaireRevision : '')"
                         target="_blank">{{ $t('QuestionnaireEditor.CopyTo') }}</a>
-                    <button class="btn" type="button" :disabled="questionnaire.isReadOnlyForUser &&
+                    <button class="btn" :disabled="questionnaire.isReadOnlyForUser &&
                         !questionnaire.hasViewerAdminRights &&
                         !questionnaire.isSharedWithUser" @click="showShareInfo()">
                         {{ $t('QuestionnaireEditor.Settings') }}
