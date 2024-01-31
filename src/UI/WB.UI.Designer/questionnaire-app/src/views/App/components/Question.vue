@@ -375,7 +375,7 @@ export default {
 
         cancel() {
             this.questionStore.discardChanges();
-            this.activeQuestion = this.questionStore.getData;
+            this.activeQuestion = this.questionStore.getQuestion;
             this.dirty = false;
         },
         toggleComments() {

@@ -1,4 +1,4 @@
-<template>    
+<template>
     <form role="form" id="roster-editor" name="groupForm" unsaved-warning-form v-if="activeGroup">
         <div class="form-holder">
 
@@ -192,10 +192,10 @@ export default {
             this.breadcrumbs = this.groupStore.getBreadcrumbs;
         },
         saveGroup() {
-            updateGroup(this.questionnaireId, this.activeGroup);            
+            updateGroup(this.questionnaireId, this.activeGroup);
             this.dirty = false;
         },
-        cancel() {
+        cancelGroup() {
             this.groupStore.discardChanges();
             this.activeGroup = this.groupStore.getGroup;
             this.dirty = false;

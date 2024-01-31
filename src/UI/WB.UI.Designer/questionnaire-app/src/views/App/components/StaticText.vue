@@ -250,7 +250,7 @@ export default {
 
         cancelStaticText() {
             this.staticTextStore.discardChanges();
-            this.activeStaticText = this.staticTextStore.getData;
+            this.activeStaticText = this.staticTextStore.getStaticText;
             this.dirty = false;
         },
 
