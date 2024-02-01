@@ -1,4 +1,4 @@
-import { put, deleteCall, get } from './apiService';
+import { put, del, get } from './apiService';
 import emitter from './emitter';
 import { isUndefined } from 'lodash';
 
@@ -16,7 +16,7 @@ export async function updateScenario(questionnaireId, scenario) {
 }
 
 export async function deleteScenario(questionnaireId, scenarioId) {
-    const response = await deleteCall(
+    const response = await del(
         '/api/questionnaire/' + questionnaireId + '/scenarios/' + scenarioId
     );
 
