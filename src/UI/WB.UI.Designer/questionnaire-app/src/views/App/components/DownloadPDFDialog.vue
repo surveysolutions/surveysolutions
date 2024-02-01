@@ -28,8 +28,8 @@
                                     </li>
                                 </ul>
                             </div>
-
                         </div>
+                        <p></p>
                         <p>
                         <pre v-if="isGenerating">{{ generateStatusMessage }}</pre>
                         </p>
