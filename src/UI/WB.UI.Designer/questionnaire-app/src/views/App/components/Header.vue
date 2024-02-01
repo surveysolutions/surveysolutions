@@ -116,7 +116,7 @@
                             </span>
 
                             <span class="text-success">
-                                <!-- TODO <em>{{ $t('QuestionnaireEditor.SavedAtTimestamp',{ dateTime: verificationStatus.time}) }}</em> -->
+                                <em>{{ savedAtTimestamp }}&nbsp;</em>
                             </span>
                         </span>
                         <span class="error-message strong" v-if="questionnaire.isReadOnlyForUser">
@@ -189,6 +189,10 @@ export default {
             return this.verificationStore.status.warnings
                 ? this.verificationStore.status.warnings.length
                 : null;
+        },
+        savedAtTimestamp() {
+            const time = this.verificationStore.status.time;
+            return this.$t('QuestionnaireEditor.SavedAtTimestamp', { dateTime: time })
         }
     },
     methods: {
