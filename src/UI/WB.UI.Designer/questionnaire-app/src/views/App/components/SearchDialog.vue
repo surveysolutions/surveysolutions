@@ -2,7 +2,7 @@
     <div id="search-modal" class="modal findReplaceModal fade in" v-if="visible" style="display:block; z-index:1050;">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header" style="cursor: default;">
                     <button type="button" class="close" aria-hidden="true" @click="close()"> </button>
                     <h3 class="modal-title"> {{ $t('QuestionnaireEditor.FindReplaceTitle') }} </h3>
                 </div>

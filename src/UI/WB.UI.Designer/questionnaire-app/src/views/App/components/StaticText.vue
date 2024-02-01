@@ -184,10 +184,10 @@ export default {
                 hideIfDisabled: false,
                 attachmentName: ''
             },
+
             shouldUserSeeReloadDetailsPromt: true,
             showEnablingConditions: null,
-            dirty: false,
-            valid: true
+            dirty: false
         };
     },
     watch: {
@@ -252,7 +252,6 @@ export default {
         },
         async saveStaticText() {
             if (this.dirty == false) return;
-            if (!this.valid) return;
 
             updateStaticText(this.questionnaireId, this.activeStaticText);
             this.dirty = false;

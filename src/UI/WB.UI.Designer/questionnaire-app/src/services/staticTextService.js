@@ -45,10 +45,10 @@ export function updateStaticText(questionnaireId, staticText) {
 
     return commandCall('UpdateStaticText', command).then(async response => {
         emitter.emit('staticTextUpdated', {
-            itemId: staticText.id,
+            id: staticText.id,
             text: staticText.text,
             attachmentName: staticText.attachmentName,
-
+            hideIfDisabled: staticText.hideIfDisabled,
             enablementCondition: staticText.enablementCondition,
             validationConditions: staticText.validationConditions
         });
