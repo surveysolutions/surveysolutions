@@ -1,4 +1,4 @@
-import { i18n } from '../plugins/localization';
+//import { i18n } from '../plugins/localization';
 
 const i18next = app => {
     app.directive('i18next', {

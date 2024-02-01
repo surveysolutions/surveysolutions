@@ -6,6 +6,7 @@ import VueProgressBar from '@aacassandra/vue3-progressbar';
 import VueDOMPurifyHTML from 'vue-dompurify-html';
 import i18next from './plugins/localization';
 import I18NextVue from 'i18next-vue';
+import { vuetify } from './plugins/vuetify';
 
 //import '../../questionnaire/content/markup.less';
 //import 'bootstrap/dist/css/bootstrap.min.css';
@@ -41,7 +42,6 @@ vue.use(pinia);
 //vue.use(i18n);
 vue.use(I18NextVue, { i18next });
 //vue.use(uiv);
-import { vuetify /*, install, i18n */ } from './plugins/vuetify';
 vue.use(vuetify); //reqired by options component. consider either remove or use.
 vue.use(PerfectScrollbar);
 vue.use(VueDOMPurifyHTML);
