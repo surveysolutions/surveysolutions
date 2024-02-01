@@ -87,8 +87,6 @@ export default {
                 name: !this.questionnaire.defaultLanguageName ? this.$t("QuestionnaireEditor.Translation_Original") : this.questionnaire.defaultLanguageName
             });
 
-            this.selectedTranslation = translationsView[0];
-
             return translationsView;
         }
     },
@@ -96,6 +94,9 @@ export default {
     expose: ['open', 'close'],
     methods: {
         open() {
+            this.selectedTranslation = this.translations[0];
+            this.generateStatusMessage = '';
+
             this.visible = true;
         },
         close() {
@@ -155,6 +156,7 @@ export default {
         },
         cancel() {
             clearTimeout(this.generateTimerId);
+            this.generateStatusMessage = '';
             this.close();
         }
     }
