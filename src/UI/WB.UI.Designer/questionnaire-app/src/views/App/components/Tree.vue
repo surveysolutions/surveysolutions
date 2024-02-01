@@ -157,6 +157,8 @@ import TreeVariable from './TreeVariable.vue';
 
 import Help from './Help.vue';
 
+import { migrateToNewVersion } from '../../../services/questionnaireService'
+
 export default {
     name: 'Tree',
     components: {
@@ -411,10 +413,14 @@ export default {
                     });
             });
         },
-        migrateToNewVersion() { },
+        migrateToNewVersion() {
+            migrateToNewVersion(this.questionnaireId).then(function () {
+                document.location.reload();
+            });
+        },
         showFindReplaceDialog() {
             this.searchDialog.open();
-         },
+        },
         async showSearch() {
             this.search.open = true;
             await nextTick();

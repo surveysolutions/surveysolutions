@@ -130,3 +130,10 @@ export function passOwnership(
         });
     });
 }
+
+export function migrateToNewVersion(questionnaireId) {
+    var command = {
+        questionnaireId: questionnaireId
+    };
+    return commandCall('MigrateToNewVersion', command);
+}
