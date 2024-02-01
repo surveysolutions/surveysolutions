@@ -162,11 +162,11 @@ module.exports = class LocalizationBuilder {
             var name = element.attr.name;
             var values = element.childrenNamed('value');
             if (values.length == 1) {
-                resourceObject[name] = values[0].val
-                    .replaceAll('{{-', '{')
-                    .replaceAll('-}}', '}')
-                    .replaceAll('{{', '{')
-                    .replaceAll('}}', '}');
+                resourceObject[name] = values[0].val;
+                //.replaceAll('{{-', '{')
+                //.replaceAll('-}}', '}')
+                //.replaceAll('{{', '{')
+                //.replaceAll('}}', '}');
             }
         });
 
