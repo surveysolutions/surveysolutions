@@ -7,8 +7,8 @@
                 <div class="modal-content" uib-modal-transclude="">
                     <div class="modal-header">
                         <button class="close" @click="cancel()" aria-hidden="true" type="button"></button>
-                        <h3 class="modal-title" v-t="{ path: 'QuestionnaireEditor.ModalConfirm' }">
-                            Confirmation
+                        <h3 class="modal-title">
+                            {{ $t('QuestionnaireEditor.ModalConfirm') }}
                         </h3>
                     </div>
                     <div class="modal-body">

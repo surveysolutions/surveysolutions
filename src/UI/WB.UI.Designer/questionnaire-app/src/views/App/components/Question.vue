@@ -2,7 +2,7 @@
     <form role="form" method="POST" id="question-editor" name="questionForm" unsaved-warning-form v-show="activeQuestion">
         <div id="show-reload-details-promt" class="ng-cloak" v-show="shouldUserSeeReloadDetailsPromt">
             <div class="inner">{{ $t('QuestionnaireEditor.QuestionToUpdateOptions') }} <a @click="fetch()"
-                    href="javascript:void(0);" v-t="{ path: 'QuestionnaireEditor.QuestionClickReload' }"></a></div>
+                    href="javascript:void(0);">{{ $t('QuestionnaireEditor.QuestionClickReload') }}</a></div>
         </div>
         <div class="form-holder">
 
@@ -11,7 +11,7 @@
 
             <div class="row">
                 <div class="form-group col-xs-6">
-                    <label class="wb-label" v-t="{ path: 'QuestionnaireEditor.QuestionQuestionType' }"></label><br />
+                    <label class="wb-label">{{ $t('QuestionnaireEditor.QuestionQuestionType') }}</label><br />
                     <div class="btn-group type-container-dropdown">
                         <button id="questionTypeBtn" class="btn btn-default form-control dropdown-toggle" type="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
@@ -44,7 +44,8 @@
             </div>
             <div class="form-group"
                 v-show="activeQuestion.type == 'GpsCoordinates' && activeQuestion.questionScope == 'Identifying'">
-                <span class="edit-question-note" v-t="{ path: 'QuestionnaireEditor.QuestionGpsNavigation' }">
+                <span class="edit-question-note">
+                    {{ $t('QuestionnaireEditor.QuestionGpsNavigation') }}
                 </span>
             </div>
             <div class="form-group">
@@ -56,8 +57,8 @@
             </div>
 
             <div class="form-group">
-                <label for="edit-question-title-highlight" class="wb-label"
-                    v-t="{ path: 'QuestionnaireEditor.QuestionText' }"></label><br>
+                <label for="edit-question-title-highlight" class="wb-label">{{ $t('QuestionnaireEditor.QuestionText')
+                }}</label><br>
 
                 <ExpressionEditor v-model="activeQuestion.title"></ExpressionEditor>
 
@@ -74,8 +75,8 @@
             </div>
             <div class="form-group"
                 v-show="!((showInstruction === null && activeQuestion.instructions) || showInstruction)">
-                <button type="button" class="btn btn-lg btn-link" @click="showInstruction = true"
-                    v-t="{ path: 'QuestionnaireEditor.QuestionAddInstruction' }"></button>
+                <button type="button" class="btn btn-lg btn-link" @click="showInstruction = true">{{
+                    $t('QuestionnaireEditor.QuestionAddInstruction') }}</button>
             </div>
 
             <div class="row" v-show="(showInstruction === null && activeQuestion.instructions) || showInstruction">
@@ -101,8 +102,8 @@
 
             <div class="form-group"
                 v-show="(doesQuestionSupportEnablementConditions() && !((showEnablingConditions === null && activeQuestion.enablementCondition) || showEnablingConditions))">
-                <button type="button" class="btn btn-lg btn-link" @click="showEnablingConditions = true"
-                    v-t="{ path: 'QuestionnaireEditor.AddEnablingCondition' }"></button>
+                <button type="button" class="btn btn-lg btn-link" @click="showEnablingConditions = true">{{
+                    $t('QuestionnaireEditor.AddEnablingCondition') }}</button>
             </div>
 
             <div class="row"
@@ -158,8 +159,8 @@
             </div>
             <div class="form-group"
                 v-if="doesQuestionSupportValidations() && activeQuestion.validationConditions.length < 10">
-                <button type="button" class="btn btn-lg btn-link" @click="addValidationCondition()"
-                    v-t="{ path: 'QuestionnaireEditor.AddValidationRule' }"></button>
+                <button type="button" class="btn btn-lg btn-link" @click="addValidationCondition()">{{
+                    $t('QuestionnaireEditor.AddValidationRule') }}</button>
             </div>
 
             <div class="form-group" v-if="doesQuestionSupportQuestionScope()">

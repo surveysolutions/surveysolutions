@@ -82,38 +82,36 @@
                         filteredTreeData.length === 0
                         ">
                         <div class="item-text">
-                            <span v-t="{
-                                path: 'QuestionnaireEditor.NothingFound'
-                            }"></span>
+                            <span>{{ $t('QuestionnaireEditor.NothingFound') }}</span>
                         </div>
                     </div>
                     <div class="chapter-level-buttons" v-show="!search.searchText">
                         <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
                             !currentChapter.isReadOnly
-                            " @click="addQuestion(currentChapterData)"
-                            v-t="{ path: 'QuestionnaireEditor.AddQuestion' }"></button>
+                            " @click="addQuestion(currentChapterData)">{{
+        $t('QuestionnaireEditor.AddQuestion') }}</button>
                         <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
                             !currentChapter.isReadOnly &&
-                            !currentChapter.isCover" @click="addGroup(currentChapterData)"
-                            v-t="{ path: 'QuestionnaireEditor.AddSubsection' }"></button>
+                            !currentChapter.isCover"
+                            @click="addGroup(currentChapterData)">{{ $t('QuestionnaireEditor.AddSubsection') }}</button>
                         <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
                             !currentChapter.isReadOnly &&
                             !currentChapter.isCover
-                            " @click="addRoster(currentChapterData)"
-                            v-t="{ path: 'QuestionnaireEditor.AddRoster' }"></button>
+                            " @click="addRoster(currentChapterData)">{{ $t('QuestionnaireEditor.AddRoster') }}</button>
                         <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
                             !currentChapter.isReadOnly
-                            " @click="addStaticText(currentChapterData)"
-                            v-t="{ path: 'QuestionnaireEditor.AddStaticText' }"></button>
+                            " @click="addStaticText(currentChapterData)">{{
+        $t('QuestionnaireEditor.AddStaticText') }}</button>
                         <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
                             !currentChapter.isReadOnly
-                            " @click="addVariable(currentChapterData)"
-                            v-t="{ path: 'QuestionnaireEditor.AddVariable' }"></button>
+                            " @click="addVariable(currentChapterData)">{{
+        $t('QuestionnaireEditor.AddVariable') }}</button>
 
                         <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
                             !currentChapter.isReadOnly
-                            " @click="searchForQuestion(currentChapterData)"
-                            v-t="{ path: 'QuestionnaireEditor.SearchForQuestion' }"></button>
+                            "
+                            @click="searchForQuestion(currentChapterData)">{{ $t('QuestionnaireEditor.SearchForQuestion')
+                            }}</button>
 
                         <input type="button" class="btn lighter-hover pull-right" :disabled="!readyToPaste" v-if="!questionnaire.isReadOnlyForUser &&
                             !currentChapter.isReadOnly

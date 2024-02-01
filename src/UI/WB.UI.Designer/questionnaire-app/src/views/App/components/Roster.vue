@@ -206,8 +206,8 @@
                                         v-autosize></textarea>
                                     <p class="help-block">
                                         <button class="btn btn-link" type="button" @click="showRosterTitlesInList()"
-                                            :disabled="!stringifiedRosterTitles.valid"
-                                            v-t="{ path: 'QuestionnaireEditor.ShowList' }" />
+                                            :disabled="!stringifiedRosterTitles.valid">{{ $t('QuestionnaireEditor.ShowList')
+                                            }}</button>
                                     </p>
                                     <p class="help-block ng-cloak"
                                         v-show="stringifiedRosterTitles.$error.matchOptionsPattern">

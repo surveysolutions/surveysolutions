@@ -2,12 +2,12 @@
     <div class="form-group" :class="{ 'has-error': !isLinkedToEntityValid }">
         <div id="sourceOfLinkedEntity" class="dropdown-with-breadcrumbs-and-icons">
             <input type="hidden" name="linkedToEntity" v-model="activeQuestion.linkedToEntityId" ng-required="true" />
-            <label for="linkedEntitySource" v-t="{ path: 'QuestionnaireEditor.QuestionLinkedDescr' }"></label>
+            <label for="linkedEntitySource">{{ $t('QuestionnaireEditor.QuestionLinkedDescr') }}</label>
             <div class="btn-group" uib-dropdown>
                 <button class="btn dropdown-toggle" uib-dropdown-toggle id="linkedEntitySource" type="button"
                     data-bs-toggle="dropdown" aria-expanded="false">
-                    <span class="select-placeholder" v-if="(linkedToEntity.title || '') == ''"
-                        v-t="{ path: 'QuestionnaireEditor.SelectQuestion' }"></span>
+                    <span class="select-placeholder" v-if="(linkedToEntity.title || '') == ''">{{
+                        $t('QuestionnaireEditor.SelectQuestion') }}</span>
 
                     <span class="selected-item" v-if="(linkedToEntity.title || '') !== ''">
                         <span class="path">{{ linkedToEntity.breadcrumbs }}</span>
@@ -55,9 +55,8 @@
                     </li>
                 </ul>
             </div>
-            <p class="help-block ng-cloak" v-show="!isLinkedToEntityValid"
-                v-t="{ path: 'QuestionnaireEditor.QuestionMustBeBound' }">
-            </p>
+            <p class="help-block ng-cloak" v-show="!isLinkedToEntityValid">{{
+                $t('QuestionnaireEditor.QuestionMustBeBound') }}</p>
         </div>
     </div>
 </template>

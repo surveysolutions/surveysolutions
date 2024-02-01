@@ -4,22 +4,15 @@
             <div class="modal-header">
                 <button type="button" class="close" @click="close()" aria-hidden="true"></button>
                 <h3 class="modal-title">
-                    <span v-t="{ path: 'QuestionnaireEditor.CompilationLabel' }"></span>
+                    <span>{{ $t('QuestionnaireEditor.CompilationLabel') }}</span>
                     <span>&nbsp;</span>
-                    <span v-if="typeOfMessageToBeShown === 'error'" v-t="{
-                        path:
-                            'QuestionnaireEditor.CompilationErrorsCounter',
-                        args: {
+                    <span v-if="typeOfMessageToBeShown === 'error'">{{ $t('QuestionnaireEditor.CompilationErrorsCounter', {
+                        count: messagesToShow.length
+                    }) }}</span>
+                    <span v-if="typeOfMessageToBeShown === 'warning'">{{
+                        $t('QuestionnaireEditor.CompilationWarningsCounter', {
                             count: messagesToShow.length
-                        }
-                    }"></span>
-                    <span v-if="typeOfMessageToBeShown === 'warning'" v-t="{
-                        path:
-                            'QuestionnaireEditor.CompilationWarningsCounter',
-                        args: {
-                            count: messagesToShow.length
-                        }
-                    }"></span>
+                        }) }}</span>
                 </h3>
             </div>
             <div class="modal-body">

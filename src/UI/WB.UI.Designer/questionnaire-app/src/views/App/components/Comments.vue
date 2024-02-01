@@ -3,10 +3,10 @@
         <div class="form-holder">
             <div v-for="comment in comments" :key="comment.id" class="comment"
                 :class="{ isResolved: comment.resolveDate != null }">
-                <button type="button" class="btn btn-sm btn-link pull-right" @click="deleteComment(comment.id)"
-                    v-t="{ path: 'QuestionnaireEditor.Delete' }"></button>
+                <button type="button" class="btn btn-sm btn-link pull-right" @click="deleteComment(comment.id)">{{
+                    $t('QuestionnaireEditor.Delete') }}</button>
                 <button v-show="comment.resolveDate == null" type="button" class="btn btn-sm btn-link pull-right"
-                    @click="resolveComment(comment.id)" v-t="{ path: 'QuestionnaireEditor.CommentEditorResolve' }"></button>
+                    @click="resolveComment(comment.id)">{{ $t('QuestionnaireEditor.CommentEditorResolve') }}</button>
                 <span class="author">{{ comment.userEmail }}</span>
                 <span class="date">{{ comment.date }}</span>
                 <p class="comment-text">{{ comment.comment }}</p>
@@ -29,8 +29,8 @@
             </div>
             <div class="form-group">
                 <button type="button" id="edit-post-comment-button" class="btn btn-lg " :class="{ 'btn-primary': dirty }"
-                    unsaved-warning-clear @click="postComment()" v-if="!questionnaire.isReadOnlyForUser" :disabled="!valid"
-                    v-t="{ path: 'QuestionnaireEditor.EditorAddComment' }"></button>
+                    unsaved-warning-clear @click="postComment()" v-if="!questionnaire.isReadOnlyForUser"
+                    :disabled="!valid">{{ $t('QuestionnaireEditor.EditorAddComment') }}</button>
             </div>
         </div>
     </form>

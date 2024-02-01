@@ -4,8 +4,7 @@
         <div id="show-reload-details-promt" class="ng-cloak" v-show="shouldUserSeeReloadDetailsPromt">
             <div class="inner">
                 {{ $t('QuestionnaireEditor.QuestionToUpdateOptions') }}
-                <a @click="fetch()" href="javascript:void(0);"
-                    v-t="{ path: 'QuestionnaireEditor.QuestionClickReload' }"></a>
+                <a @click="fetch()" href="javascript:void(0);">{{ $t('QuestionnaireEditor.QuestionClickReload') }}</a>
             </div>
         </div>
         <div class="form-holder">
