@@ -143,6 +143,16 @@ export default {
         const variableStore = useVariableStore();
         const commentsStore = useCommentsStore();
 
+        commentsStore.registerEntityInfoProvider(function () {
+            const initial = variableStore.getInitialVariable;
+
+            return {
+                title: initial.label,
+                variable: initial.variable,
+                type: 'variable'
+            };
+        });
+
         return {
             variableStore, commentsStore
         };

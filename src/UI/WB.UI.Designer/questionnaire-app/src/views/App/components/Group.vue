@@ -149,6 +149,16 @@ export default {
         const groupStore = useGroupStore();
         const commentsStore = useCommentsStore();
 
+        commentsStore.registerEntityInfoProvider(function () {
+            const initial = groupStore.getInitialGroup;
+
+            return {
+                title: initial.title,
+                variable: initial.variableName,
+                type: 'group'
+            };
+        });
+
         return {
             groupStore, commentsStore
         };

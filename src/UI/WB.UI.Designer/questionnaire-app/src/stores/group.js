@@ -9,12 +9,13 @@ export const useGroupStore = defineStore('group', {
     }),
     getters: {
         getGroup: state => state.groupAndBreadcrumbs.group,
-        getBreadcrumbs: state => state.groupAndBreadcrumbs.breadcrumbs
+        getBreadcrumbs: state => state.groupAndBreadcrumbs.breadcrumbs,
+        getInitialGroup: state => state.initialGroup
     },
     actions: {
         setupListeners() {
             emitter.on('groupUpdated', this.groupUpdated);
-            emitter.on('groupDeleted', this.groupDeleted);          
+            emitter.on('groupDeleted', this.groupDeleted);
         },
         groupUpdated(payload) {
             if ((this.groupAndBreadcrumbs.id = payload.itemId)) {
@@ -45,10 +46,10 @@ export const useGroupStore = defineStore('group', {
         clear() {
             this.groupAndBreadcrumbs = {};
             this.initialGroup = {};
-        },        
+        },
 
         discardChanges() {
             Object.assign(this.groupAndBreadcrumbs.group, this.initialGroup);
-        }        
+        }
     }
 });

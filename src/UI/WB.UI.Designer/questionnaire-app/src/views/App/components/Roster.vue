@@ -425,6 +425,16 @@ export default {
         const rosterStore = useRosterStore();
         const commentsStore = useCommentsStore();
 
+        commentsStore.registerEntityInfoProvider(function () {
+            const initial = rosterStore.getInitialRoster;
+
+            return {
+                title: initial.title,
+                variable: initial.variableName,
+                type: 'roster'
+            };
+        });
+
         return {
             rosterStore, commentsStore
         };

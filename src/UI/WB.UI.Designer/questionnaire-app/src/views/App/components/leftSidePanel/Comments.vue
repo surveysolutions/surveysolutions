@@ -166,18 +166,38 @@ export default {
                 if (indexCommentResolved !== -1) {
                     this.commentThreads[index].resolvedComments.splice(indexCommentResolved, 1);
                 }
+
+                if (this.commentThreads[index].resolvedComments.length == 0 && this.commentThreads[index].comments.length == 0) {
+                    this.commentThreads.splice(index, 1)
+                }
             }
         },
         commentAdded(payload) {
             const index = _.findIndex(this.commentThreads, function (i) {
                 return i.entity.itemId === payload.entityId;
             });
-            if (index !== -1) {
-                const comment = Object.assign({}, payload);
-                comment.date = moment
-                    .utc(comment.date)
-                    .local()
-                    .format('MMM DD, YYYY HH:mm');
+
+            const comment = Object.assign({}, payload);
+            comment.date = moment
+                .utc(comment.date)
+                .local()
+                .format('MMM DD, YYYY HH:mm');
+
+            if (index === -1) {
+                this.commentThreads.push({
+                    entity: {
+                        itemId: payload.entityId,
+                        title: payload.title,
+                        type: payload.type,
+                        variable: payload.variable,
+                        chapterId: payload.chapterId
+                    },
+                    comments: [comment],
+                    resolvedComments: [],
+                    resolvedAreExpanded: false
+                });
+            }
+            else {
                 this.commentThreads[index].comments.push(comment);
             }
         },

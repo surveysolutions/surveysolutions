@@ -10,7 +10,8 @@ export const useRosterStore = defineStore('roster', {
     }),
     getters: {
         getRoster: state => state.roster,
-        getBreadcrumbs: state => state.roster.breadcrumbs
+        getBreadcrumbs: state => state.roster.breadcrumbs,
+        getInitialRoster: state => state.initialRoster
     },
     actions: {
         async fetchRosterData(questionnaireId, rosterId) {

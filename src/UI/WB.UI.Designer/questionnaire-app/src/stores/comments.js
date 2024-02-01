@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import _ from 'lodash';
-import { getComments } from '../services/commentsService';
+import { getComments, postComment } from '../services/commentsService';
 import emitter from '../services/emitter';
 import moment from 'moment';
 
@@ -9,7 +9,8 @@ export const useCommentsStore = defineStore('comments', {
         comments: [],
         questionnaireId: null,
         entityId: null,
-        isCommentsBlockVisible: false
+        isCommentsBlockVisible: false,
+        entityInfoProvider: null
     }),
     getters: {
         getComments: state => state.comments,
@@ -20,18 +21,21 @@ export const useCommentsStore = defineStore('comments', {
         setupListeners() {
             emitter.on('commentResolved', this.commentResolved);
             emitter.on('commentDeleted', this.commentDeleted);
-            emitter.on('commentAdded', this.commentAdded);            
+            emitter.on('commentAdded', this.commentAdded);
         },
         commentResolved(payload) {
             const index = _.findIndex(this.comments, function(i) {
                 return i.id === payload.id;
             });
             if (index !== -1) {
-                this.comments[index].resolveDate = payload.resolveDate;                
+                this.comments[index].resolveDate = payload.resolveDate;
             }
         },
         commentDeleted(payload) {
-            _.remove(this.$state.comments, comment => comment.id === payload.id);
+            _.remove(
+                this.$state.comments,
+                comment => comment.id === payload.id
+            );
         },
         commentAdded(payload) {
             this.$state.comments.push(payload);
@@ -43,7 +47,10 @@ export const useCommentsStore = defineStore('comments', {
             this.entityId = entityId;
 
             _.forEach(data, function(comment) {
-                comment.date = moment.utc(comment.date).local().format("MMM DD, YYYY HH:mm");
+                comment.date = moment
+                    .utc(comment.date)
+                    .local()
+                    .format('MMM DD, YYYY HH:mm');
                 comment.isResolved = !_.isNull(comment.resolveDate || null);
             });
 
@@ -64,6 +71,42 @@ export const useCommentsStore = defineStore('comments', {
 
         toggleComments() {
             this.isCommentsBlockVisible = !this.isCommentsBlockVisible;
-        },        
+        },
+
+        registerEntityInfoProvider(provider) {
+            this.entityInfoProvider = provider;
+        },
+
+        async postComment(
+            questionnaireId,
+            comment,
+            entityId,
+            userName,
+            userEmail,
+            chapterId
+        ) {
+            var title = '';
+            var variable = '';
+            var type = '';
+
+            if (this.entityInfoProvider) {
+                var entityInfo = this.entityInfoProvider();
+                title = entityInfo.title;
+                variable = entityInfo.variable;
+                type = entityInfo.type;
+            }
+
+            await postComment(
+                questionnaireId,
+                comment,
+                entityId,
+                userName,
+                userEmail,
+                chapterId,
+                title,
+                variable,
+                type
+            );
+        }
     }
 });

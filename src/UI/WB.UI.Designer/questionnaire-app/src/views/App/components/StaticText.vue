@@ -210,6 +210,16 @@ export default {
         const staticTextStore = useStaticTextStore();
         const commentsStore = useCommentsStore();
 
+        commentsStore.registerEntityInfoProvider(function () {
+            const initial = staticTextStore.getInitialStaticText;
+
+            return {
+                title: initial.text,
+                variable: '',
+                type: 'statictext'
+            };
+        });
+
         return {
             staticTextStore,
             commentsStore

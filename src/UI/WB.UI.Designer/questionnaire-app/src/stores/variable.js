@@ -8,12 +8,13 @@ export const useVariableStore = defineStore('variable', {
         initialVariable: {}
     }),
     getters: {
-        getData: state => state.variable
+        getData: state => state.variable,
+        getInitialVariable: state => state.initialVariable
     },
     actions: {
         setupListeners() {
             emitter.on('variableUpdated', this.variableUpdated);
-            emitter.on('variableDeleted', this.variableDeleted);          
+            emitter.on('variableDeleted', this.variableDeleted);
         },
         variableUpdated(payload) {
             if ((this.variable.id = payload.itemId)) {
@@ -29,16 +30,16 @@ export const useVariableStore = defineStore('variable', {
             const data = await getVariable(questionnaireId, variableId);
             this.setVariableData(data);
         },
-        setVariableData(data) {            
+        setVariableData(data) {
             this.initialVariable = Object.assign({}, data);
             this.variable = Object.assign({}, data);
         },
         clear() {
             this.variable = {};
             this.initialVariable = {};
-        },        
+        },
         discardChanges() {
-            Object.assign(this.variable, this.initialVariable);            
+            Object.assign(this.variable, this.initialVariable);
         }
     }
 });

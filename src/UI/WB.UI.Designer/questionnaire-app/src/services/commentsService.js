@@ -7,7 +7,7 @@ import { newGuid } from '../helpers/guid';
 export async function getComments(questionnaireId, entityId) {
     return await get(
         'questionnaire/' + questionnaireId + '/entity/' + entityId + '/comments'
-    );    
+    );
 }
 
 export function resolveComment(questionnaireId, commentId, entityId) {
@@ -17,7 +17,7 @@ export function resolveComment(questionnaireId, commentId, entityId) {
         emitter.emit('commentResolved', {
             id: commentId,
             resolveDate: new Date(),
-            entityId:entityId
+            entityId: entityId
         });
     });
 }
@@ -28,7 +28,7 @@ export function deleteComment(questionnaireId, commentId, entityId) {
     ).then(response => {
         emitter.emit('commentDeleted', {
             id: commentId,
-            entityId:entityId
+            entityId: entityId
         });
     });
 }
@@ -38,7 +38,11 @@ export async function postComment(
     comment,
     entityId,
     userName,
-    userEmail
+    userEmail,
+    chapterId,
+    title,
+    variable,
+    type
 ) {
     const id = newGuid();
 
@@ -57,7 +61,11 @@ export async function postComment(
             date: moment(new Date()).format('LLL'),
             id: id,
             userName: userName,
-            userEmail: userEmail
+            userEmail: userEmail,
+            title,
+            variable,
+            type,
+            chapterId
         });
     });
 }
@@ -65,7 +73,7 @@ export async function postComment(
 export async function getCommentThreads(questionnaireId) {
     const data = await get(
         'questionnaire/' + questionnaireId + '/commentThreads'
-    );   
+    );
 
     return data;
 }

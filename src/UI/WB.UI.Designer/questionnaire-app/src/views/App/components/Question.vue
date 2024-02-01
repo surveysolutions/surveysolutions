@@ -310,6 +310,16 @@ export default {
         const questionStore = useQuestionStore();
         const commentsStore = useCommentsStore();
 
+        commentsStore.registerEntityInfoProvider(function () {
+            const initial = questionStore.getInitialQuestion;
+
+            return {
+                title: initial.text,
+                variable: initial.variableName,
+                type: 'question'
+            };
+        });
+
         return {
             questionStore, commentsStore
         };

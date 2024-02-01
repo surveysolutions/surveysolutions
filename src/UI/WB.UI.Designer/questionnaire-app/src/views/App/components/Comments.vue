@@ -39,16 +39,16 @@
 <script>
 
 import { useCommentsStore } from '../../../stores/comments';
-import { resolveComment, postComment, deleteComment } from '../../../services/commentsService';
+import { resolveComment, deleteComment } from '../../../services/commentsService';
 import Help from './Help.vue'
 
 export default {
     name: 'Comments',
     components: { Help },
-    inject: ['questionnaire', 'currentUser'],
+    inject: ['questionnaire', 'currentUser', 'currentChapter'],
     props: {
         questionnaireId: { type: String, required: true },
-        entityId: { type: String, required: true }
+        entityId: { type: String, required: true },
     },
     data() {
         return {
@@ -97,11 +97,13 @@ export default {
             await this.commentsStore.fetchComments(this.questionnaireId, this.entityId);
         },
         async postComment() {
-            
+
             const userName = this.currentUser.userName;
             const userEmail = this.currentUser.email;
+            const chapterId = this.currentChapter.chapter.itemId;
 
-            await postComment(this.questionnaireId, this.activeComment.comment, this.entityId, userName, userEmail);
+            await this.commentsStore.postComment(this.questionnaireId, this.activeComment.comment,
+                this.entityId, userName, userEmail, chapterId);
 
             this.activeComment.comment = '';
             this.activeComment.serverValidation = null;
