@@ -132,6 +132,10 @@ export default {
             if (this.typeOfMessageToBeShown === 'error')
                 this.messagesToShow = this.verificationStore.status.errors;
             else this.messagesToShow = this.verificationStore.status.warnings;
+
+            if (this.messagesToShow.length == 0) {
+                this.close()
+            }
         },
         navigateTo(reference) {
             if (reference.type.toLowerCase() === "questionnaire") {
