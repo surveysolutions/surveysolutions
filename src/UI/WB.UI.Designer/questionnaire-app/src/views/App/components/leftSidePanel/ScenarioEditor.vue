@@ -1,72 +1,71 @@
 <template>
-    <div :class="{ 'pseudo-form-control': focusable === 'true' }" ref="editorHolder">
-        <v-ace-editor ref="editor" v-model:value="editorValue" @init="editorInit" theme="github" :lang="editorLang"
-            :options="{
-                maxLines: 30,
-                fontSize: 16,
-                highlightActiveLine: false,
-                indentedSoftWrap: false,
-                printMargin: mode !== 'substitutions',
-                showLineNumbers: false,
-                showGutter: false,
-                useWorker: true
-            }" />
-    </div>
+    <Teleport to="body">
+        <div v-if="isOpen" uib-modal-window="modal-window"
+            class="modal scenarioEditorModal dragAndDrop fade ng-scope ng-isolate-scope in" role="dialog" size="lg"
+            index="0" animate="animate" ng-style="{'z-index': 1050 + $$topModalIndex*10, display: 'block'}" tabindex="-1"
+            uib-modal-animation-class="fade" modal-in-class="in" modal-animation="true"
+            style="z-index: 1050; display: block;">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content" uib-modal-transclude="">
+                    <div class="modal-header blue-strip handle">
+                        <button type="button" class="close" aria-hidden="true" @click="isOpen = false"></button>
+                        <h3 class="modal-title">
+                            <span>{{ $t('QuestionnaireEditor.ScenarioDetails') }}</span>:
+                            <span style="overflow: hidden;">{{ scenario.title }}</span>
+                        </h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="header-block clearfix">
+                            <form name="frmEditor">
+                                <!--div id="edit-scenario" ui-ace="{ onLoad : aceLoaded,
+                                mode: 'json',
+                                showGutter: false }" v-model="scenario.steps"></div-->
+                                <!--v-ace-editor id="edit-scenario" ref="editor" v-model:value="scenario.steps"
+                                    @init="editorInit" theme="github" :lang="json" :options="{
+                                        maxLines: 30,
+                                        fontSize: 16,
+                                        highlightActiveLine: false,
+                                        indentedSoftWrap: false,
+                                        printMargin: true,
+                                        showLineNumbers: false,
+                                        showGutter: false,
+                                        useWorker: true
+                                    }" /-->
+                                <ExpressionEditor id="edit-scenario" v-model="scenarioSteps" mode="scenario">
+                                </ExpressionEditor>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </Teleport>
 </template>
 
 <script>
 import { VAceEditor } from 'vue3-ace-editor';
-
-import themeGithubUrl from 'ace-builds/src-noconflict/theme-github?url';
-import modeCsharpUrl from 'ace-builds/src-noconflict/mode-csharp?url';
-import tools from 'ace-builds/src-noconflict/ext-language_tools?url';
-
-ace.config.setModuleUrl('ace/theme/github', themeGithubUrl);
-ace.config.setModuleUrl('ace/mode/csharp', modeCsharpUrl);
-ace.config.setModuleUrl('ace/ext/language_tools', tools);
-
-import { setCompleters } from 'ace-builds/src-noconflict/ext-language_tools';
-import _ from 'lodash'
-import { useTreeStore } from '../../../stores/tree';
+import ExpressionEditor from '../ExpressionEditor.vue'
+import { getScenarioSteps } from '../../../../services/scenariosService'
 
 export default {
-    name: 'ExpressionEditor',
-    components: { VAceEditor },
-    emits: ['update:modelValue'],
+    name: 'ScenarioEditor',
+    components: { VAceEditor, ExpressionEditor },
     props: {
-        modelValue: { type: String, required: true },
-        mode: { type: String, default: 'substitutions' },
-        focusable: { type: String, default: 'true' },
+        questionnaireId: { type: String, required: true },
+        scenario: { type: Object, required: true },
     },
     data() {
         return {
-            //
-        };
-    },
-    setup() {
-        const treeStore = useTreeStore();
-
-        return {
-            treeStore
-        };
-    },
-    computed: {
-        editorValue: {
-            get() {
-                return this.modelValue;
-            },
-            set(newValue) {
-                this.$emit('update:modelValue', newValue);
-            }
-        },
-        editorLang() {
-            if (this.mode === 'scenario')
-                return 'json';
-            return this.mode !== 'substitutions' ? 'csharp' : 'text'
+            isOpen: false,
+            scenarioSteps: '',
         }
     },
     methods: {
-        editorInit(editor) {
+        async show() {
+            this.scenarioSteps = await getScenarioSteps(this.questionnaireId, this.scenario.id);
+            this.isOpen = true;
+        },
+        /*editorInit(editor) {
             self = this;
             var renderer = editor.renderer;
             renderer.setPadding(12);
@@ -75,23 +74,10 @@ export default {
             editor.commands.bindKey("tab", null);
             editor.commands.bindKey("shift+tab", null);
 
-
-            var holderDiv = this.$refs.editorHolder;
-            editor.on('focus', function () { holderDiv.classList.add('focused'); });
-            editor.on('blur', function () { holderDiv.classList.remove('focused'); });
-
             var session = editor.getSession();
 
-            if (this.mode === 'scenario') {
-                editor.setReadOnly(true);
-                editor.setOptions({
-                    maxLines: 40
-                });
-                editor.setShowPrintMargin(false);
-                return;
-            }
             //extend text mode with substitutions
-            else if (this.mode === 'substitutions') {
+            if (this.mode === 'substitutions') {
                 var rules = session.$mode.$highlightRules.getRules();
                 for (var stateName in rules) {
                     if (Object.prototype.hasOwnProperty.call(rules, stateName)) {
@@ -182,7 +168,11 @@ export default {
                     });
                 });
             }
-        }
+
+            var holderDiv = this.$refs.editorHolder;
+            editor.on('focus', function () { holderDiv.classList.add('focused'); });
+            editor.on('blur', function () { holderDiv.classList.remove('focused'); });
+        }*/
     }
-};
+}
 </script>

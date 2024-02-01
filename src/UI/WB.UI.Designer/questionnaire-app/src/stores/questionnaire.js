@@ -26,7 +26,8 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
         getInfo: state => state.info,
         getEdittingMetadata: state => state.edittingMetadata,
         getEdittingTranslations: state => state.edittingTranslations,
-        getEdittingCategories: state => state.edittingCategories
+        getEdittingCategories: state => state.edittingCategories,
+        getEdittingScenarios: state => state.edittingScenarios
     },
     actions: {
         setupListeners() {
@@ -55,7 +56,11 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             );
 
             emitter.on('metadataUpdated', this.metadataUpdated);
+
             emitter.on('groupUpdated', this.groupUpdated);
+
+            emitter.on('scenarioUpdated', this.scenarioUpdated);
+            emitter.on('scenarioDeleted', this.scenarioDeleted);
         },
 
         async fetchQuestionnaireInfo(questionnaireId) {
@@ -69,6 +74,7 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             this.edittingMetadata = Object.assign({}, info.metadata);
             this.edittingTranslations = Object.assign([], info.translations);
             this.edittingCategories = Object.assign([], info.categories);
+            this.edittingScenarios = Object.assign([], info.scenarios);
 
             forEach(this.info.macros, macro => {
                 this.prepareMacro(macro);
@@ -272,7 +278,7 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             );
 
             if (item) {
-                item.name == categories.name;
+                item.name = categories.name;
             } else {
                 this.info.categories.push(categories);
 
@@ -330,9 +336,9 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             );
 
             if (item) {
-                item.name == translation.name;
-                item.translationId == translation.translationId;
-                item.oldTranslationId == translation.oldTranslationId;
+                item.name = translation.name;
+                item.translationId = translation.translationId;
+                item.oldTranslationId = translation.oldTranslationId;
             } else {
                 this.info.translations.push(translation);
 
@@ -380,6 +386,33 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             });
 
             if (eTranslationById) eTranslationById.isDefault = true;
+        },
+
+        async scenarioUpdated(event) {
+            const scenario = event.scenario;
+
+            const item = find(
+                this.info.scenarios,
+                item => item.id == scenario.id
+            );
+
+            if (item) {
+                item.title = scenario.title;
+            }
+        },
+
+        async scenarioDeleted(event) {
+            const scenarioId = event.scenarioId;
+
+            this.info.scenarios = filter(this.info.scenarios, scenario => {
+                return scenario.id !== scenarioId;
+            });
+            this.edittingScenarios = filter(
+                this.edittingScenarios,
+                scenario => {
+                    return scenario.id !== scenarioId;
+                }
+            );
         }
     }
 });

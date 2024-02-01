@@ -19,7 +19,7 @@
                 <div class="foldback-button-region" @click.stop="foldback()">
                     <div class="foldback-button"></div>
                 </div>
-                <Scenarios></Scenarios>
+                <Scenarios :questionnaireId="questionnaireId"></Scenarios>
             </div>
         </div>
     </Transition>

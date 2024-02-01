@@ -93,6 +93,54 @@ export function patch(url, params) {
         });
 }
 
+export function put(url, params) {
+    const progressStore = useProgressStore();
+    const blockUI = useBlockUIStore();
+
+    const headers = getHeaders();
+
+    blockUI.start();
+    progressStore.start();
+
+    return api
+        .put(url, params, { headers: headers })
+        .then(response => {
+            blockUI.stop();
+            progressStore.stop();
+            return response;
+        })
+        .catch(error => {
+            blockUI.stop();
+            progressStore.stop();
+
+            processResponseErrorOrThrow(error);
+        });
+}
+
+export function deleteCall(url, params) {
+    const progressStore = useProgressStore();
+    const blockUI = useBlockUIStore();
+
+    const headers = getHeaders();
+
+    blockUI.start();
+    progressStore.start();
+
+    return api
+        .delete(url, params, { headers: headers })
+        .then(response => {
+            blockUI.stop();
+            progressStore.stop();
+            return response;
+        })
+        .catch(error => {
+            blockUI.stop();
+            progressStore.stop();
+
+            processResponseErrorOrThrow(error);
+        });
+}
+
 export function del(url) {
     const progressStore = useProgressStore();
     const blockUI = useBlockUIStore();
