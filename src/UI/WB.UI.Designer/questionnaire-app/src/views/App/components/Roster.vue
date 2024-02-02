@@ -325,7 +325,7 @@
                 <button type="button" v-if="!questionnaire.isReadOnlyForUser" id="edit-roster-save-button"
                     class="btn btn-lg" :class="{ 'btn-primary': isDirty }" @click="saveRoster()" unsaved-warning-clear
                     :disabled="!isDirty">{{ $t('QuestionnaireEditor.Save') }}</button>
-                <button type="reset" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" unsaved-warning-clear
+                <button type="button" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" unsaved-warning-clear
                     @click="cancel()">{{ $t('QuestionnaireEditor.Cancel') }}</button>
             </div>
             <div class="pull-right">

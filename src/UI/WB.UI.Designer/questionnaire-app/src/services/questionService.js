@@ -1,5 +1,6 @@
 import { get, commandCall } from '../services/apiService';
 import emitter from './emitter';
+import _ from 'lodash';
 
 import {
     hasQuestionEnablementConditions,
@@ -69,8 +70,8 @@ export function updateQuestion(
                 : command.validationMessage;
             if (
                 shouldGetOptionsOnServer ||
-                !isEmpty(command.linkedToEntityId) ||
-                !isEmpty(command.categoriesId)
+                !_.isEmpty(command.linkedToEntityId) ||
+                !_.isEmpty(command.categoriesId)
             ) {
                 command.options = null;
             } else {
@@ -86,7 +87,7 @@ export function updateQuestion(
             command.linkedFilterExpression = question.linkedFilterExpression;
             command.yesNoView = question.yesNoView;
             command.isFilteredCombobox = question.isFilteredCombobox || false;
-            command.options = !isEmpty(command.linkedToEntityId)
+            command.options = !_.isEmpty(command.linkedToEntityId)
                 ? null
                 : question.options;
             command.categoriesId = question.categoriesId;
@@ -101,7 +102,7 @@ export function updateQuestion(
         case 'DateTime':
             command.isTimestamp = question.isTimestamp;
             command.defaultDate =
-                question.isTimestamp || isEmpty(question.defaultDate)
+                question.isTimestamp || _.isEmpty(question.defaultDate)
                     ? null
                     : moment.utc(
                           question.defaultDate,

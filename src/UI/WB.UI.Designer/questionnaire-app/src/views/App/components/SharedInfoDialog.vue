@@ -67,7 +67,7 @@
                                             <help link="hideIfDisabled" />
                                         </div>
                                         <div class="form-group">
-                                            <button type="submit" class="btn btn-lg update-button"
+                                            <button type="button" class="btn btn-lg update-button"
                                                 :class="{ 'btn-primary': dirty }" unsaved-warning-clear
                                                 v-if="!questionnaire.isReadOnlyForUser" :disabled="!dirty"
                                                 @click="updateTitle()">

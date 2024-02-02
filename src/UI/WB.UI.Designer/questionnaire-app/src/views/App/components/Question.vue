@@ -198,7 +198,7 @@
                     class="btn btn-lg btn-link" unsaved-warning-clear
                     ui-sref="questionnaire.chapter.question({itemId: activeQuestion.itemId, chapterId: activeQuestion.chapterId })">{{
                         $t('QuestionnaireEditor.JumpToEdit') }}</button>
-                <button type="reset" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" unsaved-warning-clear
+                <button type="button" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" unsaved-warning-clear
                     @click="cancel()">{{ $t('QuestionnaireEditor.Cancel') }}</button>
             </div>
             <div class="pull-right">
@@ -233,7 +233,7 @@ import MoveToChapterSnippet from './MoveToChapterSnippet.vue';
 import ExpressionEditor from './ExpressionEditor.vue';
 import Breadcrumbs from './Breadcrumbs.vue'
 import Help from './Help.vue'
-import { indexOf, find, filter, isEmpty, isNull } from 'lodash'
+import _ from 'lodash'
 import { deleteQuestion } from '../../../services/questionService';
 import { answerTypeClass, geometryInputModeOptions, questionsWithOnlyInterviewerScope, questionTypesDoesNotSupportValidations } from '../../../helpers/question'
 import { createQuestionForDeleteConfirmationPopup, scrollToValidationCondition, scrollToElement, setFocusIn } from '../../../services/utilityService'
@@ -354,7 +354,7 @@ export default {
         activeQuestionType() {
             if (!this.activeQuestion.questionTypeOptions) return null;
 
-            const option = find(this.activeQuestion.questionTypeOptions,
+            const option = _.find(this.activeQuestion.questionTypeOptions,
                 p => p.value == this.activeQuestion.type
             );
             return option != null ? option.text : null;
@@ -424,7 +424,7 @@ export default {
         },
         doesQuestionSupportValidations() {
             return this.activeQuestion &&
-                indexOf(questionTypesDoesNotSupportValidations, this.activeQuestion.type) < 0;
+                _.indexOf(questionTypesDoesNotSupportValidations, this.activeQuestion.type) < 0;
         },
         doesQuestionSupportQuestionScope() {
             return this.activeQuestion &&
@@ -450,14 +450,14 @@ export default {
                 return [];
             var allScopes = this.activeQuestion.allQuestionScopeOptions;
 
-            if (indexOf(questionsWithOnlyInterviewerScope, this.activeQuestion.type) >= 0) {
+            if (_.indexOf(questionsWithOnlyInterviewerScope, this.activeQuestion.type) >= 0) {
                 return allScopes.filter(function (o) {
                     return o.value === 'Interviewer';
                 });
             }
 
             if (!this.activeQuestion.isCascade && !this.activeQuestion.isLinked &&
-                indexOf(['TextList', 'GpsCoordinates', 'MultyOption'], this.activeQuestion.type) < 0)
+                _.indexOf(['TextList', 'GpsCoordinates', 'MultyOption'], this.activeQuestion.type) < 0)
                 return allScopes;
 
             return allScopes.filter(o => {
@@ -475,7 +475,7 @@ export default {
         },
         setQuestionType(type) {
             this.activeQuestion.type = type;
-            this.activeQuestion.typeName = find(this.activeQuestion.questionTypeOptions, { value: type }).text;
+            this.activeQuestion.typeName = _.find(this.activeQuestion.questionTypeOptions, { value: type }).text;
             //this.activeQuestion.allQuestionScopeOptions = dictionaries.allQuestionScopeOptions;
 
             const isQuestionScopeSupervisorOrPrefilled = this.activeQuestion.questionScope === 'Supervisor' || this.activeQuestion.questionScope === 'Identifying';
@@ -484,7 +484,7 @@ export default {
             }
 
             if (type === 'DateTime') {
-                this.activeQuestion.allQuestionScopeOptions = filter(this.activeQuestion.allQuestionScopeOptions, function (val) {
+                this.activeQuestion.allQuestionScopeOptions = _.filter(this.activeQuestion.allQuestionScopeOptions, function (val) {
                     return val.value !== 'Supervisor';
                 });
                 if (this.activeQuestion.questionScope === 'Supervisor') {
@@ -492,7 +492,7 @@ export default {
                 }
             }
 
-            if (indexOf(questionsWithOnlyInterviewerScope, type) >= 0) {
+            if (_.indexOf(questionsWithOnlyInterviewerScope, type) >= 0) {
                 this.changeQuestionScope(this.getQuestionScopeByValue('Interviewer'));
             }
 
@@ -505,7 +505,7 @@ export default {
             }
 
             if (type !== "SingleOption" && type !== "MultyOption") {
-                this.activeQuestion.isLinked = !isEmpty(null);
+                this.activeQuestion.isLinked = !_.isEmpty(null);
             }
 
             if (type === 'MultyOption' || type === "SingleOption") {
@@ -534,7 +534,7 @@ export default {
         },
 
         getQuestionScopeByValue(value) {
-            return find(this.activeQuestion.allQuestionScopeOptions, { value: value });
+            return _.find(this.activeQuestion.allQuestionScopeOptions, { value: value });
         },
 
         changeQuestionScope(scope) {
@@ -592,7 +592,7 @@ export default {
                     break;
             }
 
-            if (!isNull((state || {}).indexOfEntityInProperty))
+            if (!_.isNull((state || {}).indexOfEntityInProperty))
                 scrollToValidationCondition(state.indexOfEntityInProperty);
             else {
                 scrollToElement(".question-editor .form-holder", "#" + focusId);

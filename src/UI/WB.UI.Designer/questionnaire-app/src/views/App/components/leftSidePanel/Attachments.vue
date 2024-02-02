@@ -90,7 +90,7 @@
                                     </div>
                                     <div class="actions clearfix" :class="{ dirty: attachment.form.$dirty }">
                                         <div ng-show="attachment.form.$dirty" class="pull-left">
-                                            <button type="submit"
+                                            <button type="button"
                                                 :disabled="questionnaire.isReadOnlyForUser || attachment.form.$invalid"
                                                 class="btn lighter-hover" @click="saveAttachment(attachment)">{{
                                                     $t('QuestionnaireEditor.Save') }}</button>

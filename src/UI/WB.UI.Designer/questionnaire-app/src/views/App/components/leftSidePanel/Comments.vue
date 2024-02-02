@@ -223,11 +223,11 @@ export default {
 
         variableUpdated(payload) {
             const index = _.findIndex(this.commentThreads, function (i) {
-                return i.entity.itemId === payload.itemId;
+                return i.entity.itemId === payload.id;
             });
             if (index !== -1) {
                 this.commentThreads[index].entity.title = payload.label;
-                this.commentThreads[index].entity.variable = payload.name;
+                this.commentThreads[index].entity.variable = payload.variable;
             }
         },
         questionUpdated(payload) {

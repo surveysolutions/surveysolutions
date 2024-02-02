@@ -25,7 +25,7 @@
                 <input id="edit-static-attachment-name" type="text" class="form-control"
                     v-model="activeStaticText.attachmentName" spellcheck="false" maxlength="32" />
             </div>
-            <div class="form-group" v-show="doesStaticTextSupportEnablementConditions() &&
+            <div class="form-group" v-if="doesStaticTextSupportEnablementConditions() &&
                 !(
                     (showEnablingConditions === undefined &&
                         activeStaticText.enablementCondition) ||
@@ -37,7 +37,7 @@
                 </button>
             </div>
 
-            <div class="row" v-show="doesStaticTextSupportEnablementConditions() &&
+            <div class="row" v-if="doesStaticTextSupportEnablementConditions() &&
                 ((showEnablingConditions === undefined &&
                     activeStaticText.enablementCondition) ||
                     showEnablingConditions)
@@ -104,7 +104,7 @@
         </div>
         <div class="form-buttons-holder">
             <div class="pull-left">
-                <button type="button" id="edit-static-text-save-button" v-show="!questionnaire.isReadOnlyForUser"
+                <button type="button" id="edit-static-text-save-button" v-if="!questionnaire.isReadOnlyForUser"
                     :class="{ 'btn-primary': isDirty }" :disabled="!isDirty" class="btn btn-lg" unsaved-warning-clear
                     @click="saveStaticText()">
                     {{ $t('QuestionnaireEditor.Save') }}
@@ -115,28 +115,27 @@
                 </button>
             </div>
             <div class="pull-right">
-                <button type="button" v-show="!questionnaire.isReadOnlyForUser" id="add-comment-button"
+                <button type="button" v-if="!questionnaire.isReadOnlyForUser" id="add-comment-button"
                     class="btn btn-lg btn-link" @click="toggleComments(activeStaticText)" unsaved-warning-clear>
-                    <span v-show="!isCommentsBlockVisible && commentsCount == 0">{{
+                    <span v-if="!isCommentsBlockVisible && commentsCount == 0">{{
                         $t('QuestionnaireEditor.EditorAddComment') }}
                     </span>
-                    <span v-show="!isCommentsBlockVisible && commentsCount > 0">
+                    <span v-if="!isCommentsBlockVisible && commentsCount > 0">
                         {{
                             $t('QuestionnaireEditor.EditorShowComments', {
                                 count: commentsCount
                             })
                         }}
                     </span>
-                    <span v-show="isCommentsBlockVisible">{{ $t('QuestionnaireEditor.EditorHideComment') }}
+                    <span v-if="isCommentsBlockVisible">{{ $t('QuestionnaireEditor.EditorHideComment') }}
                     </span>
                 </button>
-                <button type="button" id="edit-static-text-delete-button" v-show="!questionnaire.isReadOnlyForUser"
+                <button type="button" id="edit-static-text-delete-button" v-if="!questionnaire.isReadOnlyForUser"
                     class="btn btn-lg btn-link" @click="deleteStaticText()" unsaved-warning-clear>
                     {{ $t('QuestionnaireEditor.Delete') }}
                 </button>
                 <MoveToChapterSnippet :item-id="staticTextId"
-                    v-show="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly">
-                </MoveToChapterSnippet>
+                    v-if="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly" />
             </div>
         </div>
     </form>

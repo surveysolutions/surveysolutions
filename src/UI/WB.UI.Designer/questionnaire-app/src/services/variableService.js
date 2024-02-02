@@ -21,6 +21,7 @@ export async function getVariable(questionnaireId, entityId) {
             variableId: entityId
         }
     );
+
     return data;
 }
 
@@ -38,12 +39,6 @@ export function updateVariable(questionnaireId, variable) {
     };
 
     return commandCall('UpdateVariable', command).then(response => {
-        emitter.emit('variableUpdated', {
-            itemId: variable.id,
-            name: variable.variable,
-            label: variable.label,
-            type: variable.type,
-            doNotExport: variable.doNotExport
-        });
+        emitter.emit('variableUpdated', variable);
     });
 }

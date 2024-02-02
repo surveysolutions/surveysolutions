@@ -67,7 +67,7 @@
                     @click="saveGroup()" unsaved-warning-clear :disabled="!isDirty">
                     {{ $t('QuestionnaireEditor.Save') }}
                 </button>
-                <button type="reset" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" @click="cancelGroup()"
+                <button type="button" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" @click="cancelGroup()"
                     unsaved-warning-clear>
                     {{ $t('QuestionnaireEditor.Cancel') }}
                 </button>
