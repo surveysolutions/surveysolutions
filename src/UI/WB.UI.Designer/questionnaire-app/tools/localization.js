@@ -159,13 +159,10 @@ module.exports = class LocalizationBuilder {
         var resourceObject = {};
         var valueNodes = doc.childrenNamed('data');
         valueNodes.forEach(function(element) {
-            var name = element.attr.name;
+            var name = element.attr.name.replaceAll('_plural', '_other');
             var values = element.childrenNamed('value');
             if (values.length == 1) {
                 resourceObject[name] = values[0].val;
-                //.replaceAll('{{-', '{')
-                //.replaceAll('-}}', '}')
-                //.replaceAll('{{', '{')
                 //.replaceAll('}}', '}');
             }
         });
