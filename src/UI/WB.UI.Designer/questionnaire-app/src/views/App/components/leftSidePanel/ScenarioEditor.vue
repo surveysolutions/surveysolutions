@@ -19,7 +19,7 @@
                             <form name="frmEditor">
                                 <div id="edit-scenario">
                                     <v-ace-editor id="edit-scenario" ref="editor" v-model:value="scenarioSteps" lang="json"
-                                        theme="chrome" :options="{
+                                        :options="{
                                             maxLines: 40,
                                             highlightActiveLine: false,
                                             indentedSoftWrap: false,
@@ -28,6 +28,7 @@
                                             showGutter: false,
                                             useWorker: false
                                         }" />
+                                    <!-- theme="chrome" -->
                                 </div>
                             </form>
                         </div>
@@ -44,7 +45,7 @@ import { getScenarioSteps } from '../../../../services/scenariosService'
 
 import 'ace-builds';
 import 'ace-builds/src-noconflict/mode-json';
-import 'ace-builds/src-noconflict/theme-chrome';
+//import 'ace-builds/src-noconflict/theme-chrome';
 
 //if worker is needed
 //set useWorker: true
