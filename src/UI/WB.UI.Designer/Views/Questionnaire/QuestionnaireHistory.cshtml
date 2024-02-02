@@ -10,7 +10,8 @@
 
 <div id="edit-form" style="position: static;">
     <h3 style="margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
-        @Html.ActionLink(QuestionnaireHistoryResources.Edit, "Details", "Questionnaire", new { id = Model!.Id.FormatGuid() }, new { @class = "btn btn-default" }) @Model.Title
+        <a href='@($"/q/details/{Model!.Id.FormatGuid()}")' class="btn btn-default">@QuestionnaireHistoryResources.Edit</a>
+        @Model.Title
     </h3>
 </div>
 <table id="questionnaire-table-header" class="table  table-header">

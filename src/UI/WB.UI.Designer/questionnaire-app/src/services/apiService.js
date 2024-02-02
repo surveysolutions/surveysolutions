@@ -14,9 +14,12 @@ export function get(url, queryParams) {
     blockUI.start();
     progressStore.start();
 
+    const headers = getHeaders(false);
+
     if (queryParams) {
         return api
             .get(url, {
+                headers: headers,
                 query: queryParams
             })
             .then(response => {
@@ -33,7 +36,7 @@ export function get(url, queryParams) {
     }
 
     return api
-        .get(url)
+        .get(url, { headers: headers })
         .then(response => {
             blockUI.stop();
             progressStore.stop();
@@ -178,12 +181,17 @@ export function upload(url, file, command) {
         });
 }
 
-function getHeaders() {
-    return {
+function getHeaders(includeCSRF = true) {
+    var headers = {
         'Content-Type': 'application/json',
-        Accept: 'application/json',
-        'X-CSRF-TOKEN': getCsrfCookie()
+        Accept: 'application/json' //, text/plain, */*
     };
+
+    if (includeCSRF) {
+        headers['X-CSRF-TOKEN'] = getCsrfCookie();
+    }
+
+    return headers;
 }
 
 function getCsrfCookie() {

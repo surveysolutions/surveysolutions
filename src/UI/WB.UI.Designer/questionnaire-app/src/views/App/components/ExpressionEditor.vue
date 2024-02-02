@@ -1,7 +1,7 @@
 <template>
     <div :class="{ 'pseudo-form-control': focusable === 'true' }" ref="editorHolder">
-        <v-ace-editor ref="editor" v-model:value="editorValue" @init="editorInit" theme="github" :lang="editorLang"
-            :options="{
+        <v-ace-editor ref="editor" v-model:value="editorValue" @init="editorInit" theme="github"
+            :lang="mode !== 'substitutions' ? 'csharp' : 'text'" :options="{
                 maxLines: 30,
                 fontSize: 16,
                 highlightActiveLine: false,
@@ -58,11 +58,6 @@ export default {
             set(newValue) {
                 this.$emit('update:modelValue', newValue);
             }
-        },
-        editorLang() {
-            if (this.mode === 'scenario')
-                return 'json';
-            return this.mode !== 'substitutions' ? 'csharp' : 'text'
         }
     },
     methods: {
@@ -75,23 +70,10 @@ export default {
             editor.commands.bindKey("tab", null);
             editor.commands.bindKey("shift+tab", null);
 
-
-            var holderDiv = this.$refs.editorHolder;
-            editor.on('focus', function () { holderDiv.classList.add('focused'); });
-            editor.on('blur', function () { holderDiv.classList.remove('focused'); });
-
             var session = editor.getSession();
 
-            if (this.mode === 'scenario') {
-                editor.setReadOnly(true);
-                editor.setOptions({
-                    maxLines: 40
-                });
-                editor.setShowPrintMargin(false);
-                return;
-            }
             //extend text mode with substitutions
-            else if (this.mode === 'substitutions') {
+            if (this.mode === 'substitutions') {
                 var rules = session.$mode.$highlightRules.getRules();
                 for (var stateName in rules) {
                     if (Object.prototype.hasOwnProperty.call(rules, stateName)) {
@@ -182,6 +164,10 @@ export default {
                     });
                 });
             }
+
+            var holderDiv = this.$refs.editorHolder;
+            editor.on('focus', function () { holderDiv.classList.add('focused'); });
+            editor.on('blur', function () { holderDiv.classList.remove('focused'); });
         }
     }
 };

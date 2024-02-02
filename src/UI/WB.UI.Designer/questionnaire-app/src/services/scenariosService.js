@@ -27,21 +27,23 @@ export async function deleteScenario(questionnaireId, scenarioId) {
     return response;
 }
 
-export function runScenario(questionnaireId, scenarioId) {
+export async function runScenario(questionnaireId, scenarioId) {
     var webTesterWindow = window.open('about:blank', '_blank');
 
-    return get('/api/questionnaire/webTest/' + questionnaireId).then(
-        response => {
-            setLocation(webTesterWindow, response, scenarioId);
-        }
-    );
-}
+    var webTestUrl = await get(
+        '/api/questionnaire/webTest/' + questionnaireId
+    ).then(response => {
+        var url = response;
 
-function setLocation(webTesterWindow, url, scenarioId) {
+        if (!isUndefined(scenarioId)) {
+            url += '?scenarioId=' + scenarioId;
+        }
+    });
     if (!isUndefined(scenarioId)) {
-        url += '?scenarioId=' + scenarioId;
+        webTestUrl += '?scenarioId=' + scenarioId;
     }
-    webTesterWindow.location.href = url;
+
+    webTesterWindow.location.href = webTestUrl;
 }
 
 export async function getScenarioSteps(questionnaireId, scenarioId) {

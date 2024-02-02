@@ -54,8 +54,8 @@ export default {
         }
     },
     methods: {
-        runScenario() {
-            runScenario(this.questionnaireId, this.scenario.id)
+        async runScenario() {
+            await runScenario(this.questionnaireId, this.scenario.id)
         },
         async showScenarioEditor() {
             await this.$refs.editor.show();
