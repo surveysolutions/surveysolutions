@@ -7,7 +7,7 @@
                 }) }}</span>
             </h3>
             <div class="empty-list" v-if="commentThreads.length == 0">
-                <p> {{ $t('QuestionnaireEditor.SideBarCommentsCounter') }}</p>
+                <p> {{ $t('QuestionnaireEditor.SideBarEmptyCommentsLine') }}</p>
             </div>
             <ul>
                 <li class="comment-thread" v-for="commentThread in commentThreads">
