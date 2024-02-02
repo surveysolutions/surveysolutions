@@ -172,7 +172,7 @@ export default {
             return this.variableStore.getIsDirty;
         },
         typeName() {
-            if (!this.activeQuestion.questionTypeOptions) return null;
+            if (!this.activeVariable.questionTypeOptions) return null;
 
             const option = this.activeVariable.typeOptions.find(
                 p => p.value == this.activeVariable.type
