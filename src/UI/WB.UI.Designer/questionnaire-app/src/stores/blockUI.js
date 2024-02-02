@@ -2,16 +2,18 @@ import { defineStore } from 'pinia';
 
 export const useBlockUIStore = defineStore('blockUI', {
     state: () => ({
-        isBlock: false
+        blocked: false
     }),
-    getters: {},
+    getters: {
+        isBlocked: state => state.blocked
+    },
     actions: {
         start() {
-            this.isBlock = true;
+            this.blocked = true;
         },
 
         stop() {
-            this.isBlock = false;
+            this.blocked = false;
         }
     }
 });

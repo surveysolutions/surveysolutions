@@ -42,6 +42,12 @@
             </div>
         </template>
     </notifications>
+    <div v-if="isBlocked" block-ui-container="" class="block-ui-container ng-scope">
+        <div class="block-ui-overlay"></div>
+        <div class="block-ui-message-container" aria-live="assertive" aria-atomic="true">
+            <div class="block-ui-message ng-binding">Please wait...</div>
+        </div>
+    </div>
 </template>
  
 <style lang="scss">
@@ -58,6 +64,7 @@
 
 <script>
 import { useProgressStore } from '../stores/progress';
+import { useBlockUIStore } from '../stores/blockUI';
 import { computed, readonly } from 'vue';
 
 import { useQuestionnaireStore } from '../stores/questionnaire';
@@ -82,16 +89,28 @@ export default {
         const treeStore = useTreeStore();
         const userStore = useUserStore();
         const progressStore = useProgressStore();
+        const blockUIStore = useBlockUIStore();
 
         return {
             questionnaireStore,
             treeStore,
             userStore,
-            progressStore
+            progressStore,
+            blockUIStore
         };
     },
     async beforeMount() {
         await this.fetch();
+    },
+    watch: {
+        isBlocked: function (val) {
+            var body = document.body;
+            if (val) {
+                body.classList.add('block-ui-anim-fade', 'block-ui-active', 'block-ui-visible');
+            } else {
+                body.classList.remove('block-ui-anim-fade', 'block-ui-active', 'block-ui-visible');
+            }
+        }
     },
     mounted() {
         this.$Progress.finish();
@@ -123,6 +142,9 @@ export default {
         isReadOnlyForUser() {
             return this.questionnaire.isReadOnlyForUser;
         },
+        isBlocked() {
+            return this.blockUIStore.isBlocked;
+        }
     },
     methods: {
         async fetch() {

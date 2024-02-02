@@ -196,14 +196,14 @@
                                 </p>
                             </div>
                             <div v-if="!useListAsRosterTitleEditor">
-                                <div class="form-group" :class="{ 'has-error': !stringifiedRosterTitles.valid }">
+                                <div class="form-group" :class="{ 'has-error': !stringifiedRosterTitlesValidity.valid }">
                                     <textarea name="stringifiedRosterTitles" class="form-control mono"
-                                        v-model="stringifiedRosterTitles" match-options-pattern
-                                        v-on:keyup="stringifiedRosterTitlesValidate" max-options-count
-                                        v-autosize></textarea>
+                                        v-bind:value="stringifiedRosterTitles"
+                                        v-on:input="updateStringifiedRosterTitlesValue($event)" match-options-pattern
+                                        max-options-count v-autosize></textarea>
                                     <p class="help-block">
                                         <button class="btn btn-link" type="button" @click="showRosterTitlesInList()"
-                                            :disabled="!stringifiedRosterTitles.valid">
+                                            :disabled="!stringifiedRosterTitlesValidity.valid">
                                             {{ $t('QuestionnaireEditor.ShowList') }}
                                         </button>
                                     </p>
@@ -485,7 +485,7 @@ export default {
             if (!this.isDirty) return;
 
             await this.showRosterTitlesInList();
-            this.rosterStore.saveRosterData();
+            this.rosterStore.saveRosterData(this.questionnaireId);
 
         },
         cancel() {
@@ -564,18 +564,22 @@ export default {
             if (!this.stringifiedRosterTitlesValidity.valid) {
                 return;
             }
-            if (this.activeRoster.stringifiedRosterTitles) {
-                const titles = await convertToTable(this.activeRoster.stringifiedRosterTitles);
+            if (this.stringifiedRosterTitles) {
+                const titles = await convertToTable(this.stringifiedRosterTitles);
                 this.activeRoster.fixedRosterTitles = titles;
             }
             this.useListAsRosterTitleEditor = true;
         },
 
+        updateStringifiedRosterTitlesValue(e) {
+            this.stringifiedRosterTitles = e.target.value;
+            this.stringifiedRosterTitlesValidate();
+        },
         stringifiedRosterTitlesValidate() {
             if (this.useListAsRosterTitleEditor == true)
                 return true;
 
-            const lines = (this.activeRoster.stringifiedRosterTitles || '').split(/\r\n|\r|\n/);
+            const lines = (this.stringifiedRosterTitles || '').split(/\r\n|\r|\n/);
             const lineCount = lines.length
 
             if (lineCount > this.fixedRosterLimit) {
@@ -587,7 +591,7 @@ export default {
                 this.stringifiedRosterTitlesValidity.$error.maxOptionsCount = false
             }
 
-            const top5Errors = validateText(this.activeRoster.stringifiedRosterTitles, false).slice(0, 5);
+            const top5Errors = validateText(this.stringifiedRosterTitles, false).slice(0, 5);
             if (top5Errors.length > 0) {
                 this.stringifiedRosterTitlesValidity.$error.matchOptionsPattern = true;
                 this.stringifiedRosterTitlesValidity.valid = false;

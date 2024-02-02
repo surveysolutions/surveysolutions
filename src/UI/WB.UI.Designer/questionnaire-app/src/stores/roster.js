@@ -29,9 +29,9 @@ export const useRosterStore = defineStore('roster', {
             this.roster = {};
             this.initialRoster = {};
         },
-        saveRosterData() {
+        saveRosterData(questionnaireId) {
             var command = {
-                questionnaireId: this.questionnaireId,
+                questionnaireId: questionnaireId,
                 groupId: this.roster.itemId,
                 title: this.roster.title,
                 description: this.roster.description,
