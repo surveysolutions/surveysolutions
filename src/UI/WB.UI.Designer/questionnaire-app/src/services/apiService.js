@@ -1,7 +1,7 @@
 import { mande } from 'mande';
 import { useBlockUIStore } from '../stores/blockUI';
 import { useProgressStore } from '../stores/progress';
-import { isNull } from 'lodash';
+import { isNull, isUndefined } from 'lodash';
 import { notice, error } from './notificationService';
 import { i18n } from '../plugins/localization';
 
@@ -156,7 +156,7 @@ export function upload(url, file, command) {
     const api = mande(url, { headers: { 'Content-Type': null } });
 
     const formData = new FormData();
-    formData.append('file', isNull(file) ? '' : file);
+    formData.append('file', isNull(file) || isUndefined(file) ? '' : file);
     formData.append(
         'command',
         isNull(command) ? null : JSON.stringify(command)

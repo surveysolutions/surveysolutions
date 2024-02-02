@@ -11,7 +11,9 @@ import {
     filter,
     find,
     sortBy,
-    without
+    without,
+    cloneDeep,
+    isEqual
 } from 'lodash';
 import { useCookies } from 'vue3-cookies';
 
@@ -20,14 +22,19 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
         info: {},
         edittingMetadata: {},
         edittingTranslations: [],
-        edittingCategories: []
+        edittingCategories: [],
+        edittingScenarios: [],
+        edittingLookupTables: []
     }),
     getters: {
         getInfo: state => state.info,
         getEdittingMetadata: state => state.edittingMetadata,
+        getIsDirtyMetadata: state =>
+            !isEqual(state.edittingMetadata, state.info.metadata),
         getEdittingTranslations: state => state.edittingTranslations,
         getEdittingCategories: state => state.edittingCategories,
-        getEdittingScenarios: state => state.edittingScenarios
+        getEdittingScenarios: state => state.edittingScenarios,
+        getEdittingLookupTables: state => state.edittingLookupTables
     },
     actions: {
         setupListeners() {
@@ -61,6 +68,10 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
 
             emitter.on('scenarioUpdated', this.scenarioUpdated);
             emitter.on('scenarioDeleted', this.scenarioDeleted);
+
+            emitter.on('lookupTableAdded', this.lookupTableAdded);
+            emitter.on('lookupTableUpdated', this.lookupTableUpdated);
+            emitter.on('lookupTableDeleted', this.lookupTableDeleted);
         },
 
         async fetchQuestionnaireInfo(questionnaireId) {
@@ -71,10 +82,11 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
         setQuestionnaireInfo(info) {
             this.info = info;
 
-            this.edittingMetadata = Object.assign({}, info.metadata);
-            this.edittingTranslations = Object.assign([], info.translations);
-            this.edittingCategories = Object.assign([], info.categories);
-            this.edittingScenarios = Object.assign([], info.scenarios);
+            this.edittingMetadata = cloneDeep(info.metadata);
+            this.edittingTranslations = cloneDeep(info.translations);
+            this.edittingCategories = cloneDeep(info.categories);
+            this.edittingScenarios = cloneDeep(info.scenarios);
+            this.edittingLookupTables = cloneDeep(info.lookupTables);
 
             forEach(this.info.macros, macro => {
                 this.prepareMacro(macro);
@@ -177,7 +189,7 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
         },
 
         prepareMacro(macro) {
-            macro.initialMacro = Object.assign({}, macro);
+            macro.initialMacro = cloneDeep(macro);
             macro.isDescriptionVisible = !isEmpty(macro.description);
         },
 
@@ -282,7 +294,7 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             } else {
                 this.info.categories.push(categories);
 
-                const eCategories = Object.assign({}, categories);
+                const eCategories = cloneDeep(categories);
                 this.edittingCategories.push(eCategories);
             }
         },
@@ -305,24 +317,21 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
         },
 
         async discardCategoriesChanges() {
-            this.edittingCategories = Object.assign([], this.info.categories);
+            this.edittingCategories = cloneDeep(this.info.categories);
         },
 
         async discardMetadataChanges() {
-            this.edittingMetadata = Object.assign({}, this.info.metadata);
+            this.edittingMetadata = cloneDeep(this.info.metadata);
         },
 
         metadataUpdated(event) {
-            this.info.metadata = Object.assign({}, event.metadata);
-            this.edittingMetadata = Object.assign({}, event.metadata);
+            this.info.metadata = cloneDeep(event.metadata);
+            this.edittingMetadata = cloneDeep(event.metadata);
             this.info.title = event.metadata.title;
         },
 
         async discardTranslationChanges() {
-            this.edittingTranslations = Object.assign(
-                {},
-                this.info.translations
-            );
+            this.edittingTranslations = cloneDeep(this.info.translations);
         },
 
         async translationUpdated(event) {
@@ -342,7 +351,7 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             } else {
                 this.info.translations.push(translation);
 
-                const eTranslation = Object.assign({}, translation);
+                const eTranslation = cloneDeep(translation);
                 this.edittingTranslations.push(eTranslation);
             }
         },
@@ -411,6 +420,57 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
                 this.edittingScenarios,
                 scenario => {
                     return scenario.id !== scenarioId;
+                }
+            );
+        },
+
+        async lookupTableAdded(event) {
+            const lookupTable = event.lookupTable;
+
+            const newLookupTable = cloneDeep(lookupTable);
+            this.info.lookupTables.push(newLookupTable);
+
+            const eLookupTable = cloneDeep(lookupTable);
+            this.edittingLookupTables.push(eLookupTable);
+        },
+
+        async lookupTableUpdated(event) {
+            const lookupTable = event.lookupTable;
+
+            const item = find(
+                this.info.lookupTables,
+                item => item.itemId == lookupTable.oldItemId
+            );
+
+            if (item) {
+                item.name = lookupTable.name;
+                item.fileName = lookupTable.fileName;
+            }
+
+            const eItem = find(
+                this.info.edittingLookupTables,
+                item => item.itemId == lookupTable.oldItemId
+            );
+
+            if (eItem) {
+                eItem.name = lookupTable.name;
+                eItem.fileName = lookupTable.fileName;
+            }
+        },
+
+        async lookupTableDeleted(event) {
+            const lookupTableId = event.lookupTableId;
+
+            this.info.lookupTables = filter(
+                this.info.lookupTables,
+                lookupTable => {
+                    return lookupTable.itemId !== lookupTableId;
+                }
+            );
+            this.edittingLookupTables = filter(
+                this.edittingLookupTables,
+                lookupTable => {
+                    return lookupTable.itemId !== lookupTableId;
                 }
             );
         }

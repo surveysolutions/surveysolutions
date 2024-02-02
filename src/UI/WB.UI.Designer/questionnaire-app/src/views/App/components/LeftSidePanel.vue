@@ -43,7 +43,7 @@
                 <div class="foldback-button-region" @click.stop="foldback()">
                     <div class="foldback-button"></div>
                 </div>
-                <LookupTables></LookupTables>
+                <LookupTables :questionnaireId="questionnaireId"></LookupTables>
             </div>
         </div>
     </Transition>
@@ -55,7 +55,7 @@
                 <div class="foldback-button-region" @click.stop="foldback()">
                     <div class="foldback-button"></div>
                 </div>
-                <Attachments></Attachments>
+                <Attachments :questionnaireId="questionnaireId"></Attachments>
             </div>
         </div>
     </Transition>

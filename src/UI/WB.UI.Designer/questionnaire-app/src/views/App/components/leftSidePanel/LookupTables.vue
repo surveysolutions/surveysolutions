@@ -1,78 +1,112 @@
 <template>
-    LookupTables
-
-    <!--div class="lookup-tables">
+    <div class="lookup-tables">
         <perfect-scrollbar class="scroller">
             <h3>
-                <span ng-i18next="[i18next]({count: lookupTables.length})SideBarLookupTablesCounter"></span>
+                <span>{{ $t('QuestionnaireEditor.SideBarLookupTablesCounter', { count: lookupTables.length }) }}</span>
             </h3>
-            <div class="empty-list" ng-show="lookupTables.length === 0">
-                <p ng-i18next>SideBarLookupEmptyLine1</p>
-                <p ng-i18next>SideBarLookupEmptyLine2</p>
-                <p ng-i18next>SideBarLookupEmptyLine3</p>
+            <div class="empty-list" v-show="lookupTables.length === 0">
+                <p>{{ $t('QuestionnaireEditor.SideBarLookupEmptyLine1') }}</p>
+                <p>{{ $t('QuestionnaireEditor.SideBarLookupEmptyLine2') }}</p>
+                <p>{{ $t('QuestionnaireEditor.SideBarLookupEmptyLine3') }}</p>
             </div>
             <form role="form" name="lookupTablesForm" novalidate>
-                <ul ng-model="lookupTables">
-                    <li class="lookup-table-panel-item" ng-repeat="table in lookupTables" ngf-drop=""
+                <ul>
+                    <LookupTableItem v-for="table in lookupTables" :table="table" :questionnaire-id="questionnaireId">
+                    </LookupTableItem>
+                    <!--li class="lookup-table-panel-item" v-for=" table  in  lookupTables " ngf-drop=""
                         ngf-change="fileSelected(table, $file)" ngf-max-size="1MB" accept=".tab,.txt"
                         ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
-                        <ng-form name="table.form">
+                        <form name="table.form">
                             <a href="javascript:void(0);" @click="deleteLookupTable($index)"
-                                ng-disabled="questionnaire.isReadOnlyForUser" ng-if="!questionnaire.isReadOnlyForUser"
+                                :disabled="questionnaire.isReadOnlyForUser" v-if="!questionnaire.isReadOnlyForUser"
                                 class="btn delete-btn" tabindex="-1"></a>
                             <input focus-on-out="focusLookupTable{{table.itemId}}" required=""
-                                ng-i18next="[placeholder]SideBarLookupTableName" maxlength="32" spellcheck="false"
-                                autocomplete="off" ng-model="table.name" name="name" class="form-control table-name"
-                                type="text" />
+                                :placeholder="$t('QuestionnaireEditor.SideBarLookupTableName')" maxlength="32"
+                                spellcheck="false" autocomplete="off" v-model="table.name" name="name"
+                                class="form-control table-name" type="text" />
                             <div class="divider"></div>
-                            <input ng-i18next="[placeholder]SideBarLookupTableFileName" required="" spellcheck="false"
-                                ng-model="table.fileName" name="fileName" class="form-control" disabled="" type="text" />
+                            <input :placeholder="$t('QuestionnaireEditor.SideBarLookupTableFileName')" required=""
+                                spellcheck="false" v-model="table.fileName" name="fileName" class="form-control" disabled=""
+                                type="text" />
 
-                            <div class="drop-box" ng-i18next>SideBarLookupTableDropFile</div>
+                            <div class="drop-box">{{ $t('QuestionnaireEditor.SideBarLookupTableDropFile') }}</div>
 
                             <div class="actions clearfix" :class="{ dirty: table.form.$dirty }">
-                                <div ng-show="table.form.$dirty" class="pull-left">
-                                    <button type="submit"
-                                        ng-disabled="questionnaire.isReadOnlyForUser || table.form.$invalid"
-                                        class="btn lighter-hover" @click="saveLookupTable(table); $event.stopPropagation()"
-                                        ng-i18next>Save</button>
+                                <div v-show="table.form.$dirty" class="pull-left">
+                                    <button type="submit" :disabled="questionnaire.isReadOnlyForUser || table.form.$invalid"
+                                        class="btn lighter-hover"
+                                        @click="saveLookupTable(table); $event.stopPropagation()">{{
+                                            $t('QuestionnaireEditor.Save') }}</button>
                                     <button type="button" class="btn lighter-hover"
-                                        @click="cancel(table); $event.stopPropagation()" ng-i18next>Cancel</button>
+                                        @click="cancel(table); $event.stopPropagation()">{{ $t('QuestionnaireEditor.Cancel')
+                                        }}</button>
                                 </div>
                                 <div class="permanent-actions clearfix">
                                     <a href="{{downloadLookupFileBaseUrl + questionnaire.questionnaireId +'?lookupTableId='+ table.itemId}}"
-                                        ng-show="table.hasUploadedFile" class="btn btn-default pull-right" target="_blank"
-                                        rel="noopener noreferrer" ng-i18next>Download</a>
+                                        v-show="table.hasUploadedFile" class="btn btn-default pull-right" target="_blank"
+                                        rel="noopener noreferrer">{{ $t('QuestionnaireEditor.Download') }}</a>
                                     <button class="btn btn-default pull-right" ngf-select=""
                                         ngf-change="fileSelected(table, $file);$event.stopPropagation()" accept=".tab,.txt"
                                         ngf-max-size="2MB" type="file">
-                                        <span ng-hide="table.hasUploadedFile"
-                                            ng-i18next="SideBarLookupTableSelectFile">Select file</span>
-                                        <span ng-show="table.hasUploadedFile"
-                                            ng-i18next="SideBarLookupTableUpdateFile">Update file</span>
+                                        <span v-show="!table.hasUploadedFile">{{
+                                            $t('QuestionnaireEditor.SideBarLookupTableSelectFile') }}</span>
+                                        <span v-show="table.hasUploadedFile">{{
+                                            $t('QuestionnaireEditor.SideBarLookupTableUpdateFile') }}</span>
                                     </button>
                                 </div>
                             </div>
-                        </ng-form>
-                    </li>
+                        </form>
+                    </li-->
                 </ul>
             </form>
             <div class="button-holder">
-                <input type="button" class="btn lighter-hover" ng-disabled="questionnaire.isReadOnlyForUser"
-                    ng-i18next="[value]SideBarLookupTableAdd" value="ADD NEW Lookup table" @click="addNewLookupTable()">
+                <input type="button" class="btn lighter-hover" :disabled="isReadOnlyForUser"
+                    :value="$t('QuestionnaireEditor.SideBarLookupTableAdd')" value="ADD NEW Lookup table"
+                    @click="addNewLookupTable()">
             </div>
-    </perfect-scrollbar>
-</div-->
+        </perfect-scrollbar>
+    </div>
 </template>
   
 <script>
+
+import LookupTableItem from './LookupTableItem.vue';
+import { useQuestionnaireStore } from '../../../../stores/questionnaire';
+import { addLookupTable } from '../../../../services/lookupTableService'
+import { newGuid } from '../../../../helpers/guid';
+
 export default {
     name: 'LookupTables',
-    props: {},
+    inject: ['isReadOnlyForUser'],
+    components: { LookupTableItem },
+    props: {
+        questionnaireId: { type: String, required: true },
+    },
     data() {
         return {
 
         }
+    },
+    setup() {
+        const questionnaireStore = useQuestionnaireStore();
+
+        return {
+            questionnaireStore,
+        };
+    },
+    computed: {
+        lookupTables() {
+            return this.questionnaireStore.getEdittingLookupTables;
+        },
+    },
+    methods: {
+        addNewLookupTable() {
+            const newLookupTable = {
+                itemId: newGuid()
+            };
+
+            addLookupTable(this.questionnaireId, newLookupTable);
+        },
     }
 }
 </script>
