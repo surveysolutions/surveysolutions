@@ -1,41 +1,34 @@
 import { defineStore } from 'pinia';
+import { getRoster } from '../services/rosterService';
 import { get, commandCall } from '../services/apiService';
 import emitter from '../services/emitter';
+import _ from 'lodash';
 
 export const useRosterStore = defineStore('roster', {
     state: () => ({
         roster: {},
-        initialRoster: {},
-        questionnaireId: null
+        initialRoster: {}
     }),
     getters: {
         getRoster: state => state.roster,
-        getBreadcrumbs: state => state.roster.breadcrumbs,
-        getInitialRoster: state => state.initialRoster
+        getInitialRoster: state => state.initialRoster,
+        getIsDirty: state => !_.isEqual(state.roster, state.initialRoster)
     },
     actions: {
         async fetchRosterData(questionnaireId, rosterId) {
-            const data = await get(
-                '/api/questionnaire/editRoster/' + questionnaireId,
-                {
-                    rosterId: rosterId
-                }
-            );
-            this.questionnaireId = questionnaireId;
+            const data = await getRoster(questionnaireId, rosterId);
             this.setRosterData(data);
         },
 
         setRosterData(data) {
-            this.roster = data;
-            this.initialRoster = Object.assign({}, data);
+            this.initialRoster = _.cloneDeep(data);
+            this.roster = _.cloneDeep(this.initialRoster);
         },
 
         clear() {
             this.roster = {};
             this.initialRoster = {};
-            this.questionnaireId = null;
         },
-
         saveRosterData() {
             var command = {
                 questionnaireId: this.questionnaireId,
@@ -83,7 +76,7 @@ export const useRosterStore = defineStore('roster', {
         },
 
         discardChanges() {
-            Object.assign(this.roster, this.initialRoster);
+            this.roster = _.cloneDeep(this.initialRoster);
         },
 
         getQuestionsEligibleForNumericRosterTitle(rosterSizeQuestionId) {

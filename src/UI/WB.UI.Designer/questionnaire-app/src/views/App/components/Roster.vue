@@ -1,10 +1,7 @@
 <template>
-    <form role="form" id="roster-editor" name="editRosterForm" unsaved-warning-form v-show="activeRoster">
+    <form role="form" id="roster-editor" name="editRosterForm" unsaved-warning-form v-if="activeRoster">
         <div class="form-holder">
-
-            <Breadcrumbs :breadcrumbs="breadcrumbs">
-            </Breadcrumbs>
-
+            <Breadcrumbs :breadcrumbs="activeRoster.breadcrumbs" />
             <div class="row">
                 <div class="form-group col-xs-6">
                     <label for="edit-group-title" class="wb-label">
@@ -39,7 +36,6 @@
                 <label for="edit-roster-title-highlight" class="wb-label">
                     {{ $t('QuestionnaireEditor.RosterName') }}
                 </label>
-
                 <br />
                 <ExpressionEditor v-model="activeRoster.title"></ExpressionEditor>
                 <div class="roster-type-specific-block" v-if="activeRoster.type != undefined">
@@ -185,13 +181,14 @@
                                                 @keypress="onKeyPressInOptions($event)" class="form-control border-right">
                                         </div>
                                         <div class="column-4">
-                                            <a href class="btn" tabindex="-1" @click="removeFixedTitle(index)"></a>
+                                            <a href="javascript:void(0);" class="btn" tabindex="-1"
+                                                @click="removeFixedTitle(index)"></a>
                                         </div>
                                     </div>
                                 </div>
                                 <p>
                                     <button class="btn btn-link" type="button"
-                                        v-show="activeRoster.fixedRosterTitles.length < fixedRosterLimit"
+                                        v-if="activeRoster.fixedRosterTitles.length < fixedRosterLimit"
                                         @click="addFixedTitle()">{{ $t('QuestionnaireEditor.RosterAddItem') }}</button>
                                     <button class="btn btn-link pull-right" @click="showOptionsInTextarea()">
                                         {{ $t('QuestionnaireEditor.StringsView') }}
@@ -201,19 +198,21 @@
                             <div v-if="!useListAsRosterTitleEditor">
                                 <div class="form-group" :class="{ 'has-error': !stringifiedRosterTitles.valid }">
                                     <textarea name="stringifiedRosterTitles" class="form-control mono"
-                                        v-model="activeRoster.stringifiedRosterTitles" match-options-pattern
+                                        v-model="stringifiedRosterTitles" match-options-pattern
                                         v-on:keyup="stringifiedRosterTitlesValidate" max-options-count
                                         v-autosize></textarea>
                                     <p class="help-block">
                                         <button class="btn btn-link" type="button" @click="showRosterTitlesInList()"
-                                            :disabled="!stringifiedRosterTitles.valid">{{ $t('QuestionnaireEditor.ShowList')
-                                            }}</button>
+                                            :disabled="!stringifiedRosterTitles.valid">
+                                            {{ $t('QuestionnaireEditor.ShowList') }}
+                                        </button>
                                     </p>
                                     <p class="help-block ng-cloak"
-                                        v-show="stringifiedRosterTitles.$error.matchOptionsPattern">
+                                        v-if="stringifiedRosterTitlesValidity.$error.matchOptionsPattern">
                                         {{ $t('QuestionnaireEditor.OptionsListError') }}
                                     </p>
-                                    <p class="help-block ng-cloak" v-show="stringifiedRosterTitles.$error.maxOptionsCount">
+                                    <p class="help-block ng-cloak"
+                                        v-if="stringifiedRosterTitlesValidity.$error.maxOptionsCount">
                                         {{ $t('QuestionnaireEditor.EnteredMoreThanAllowed', {
                                             max: fixedRosterLimit
                                         }) }}
@@ -222,7 +221,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="dropdown-with-breadcrumbs-and-icons" v-if="activeRoster.type == 'Multi'">
                         <label>{{ $t('QuestionnaireEditor.RosterSourceQuestion') }}</label>
                         <div class="btn-group" uib-dropdown>
@@ -261,7 +259,6 @@
                             </ul>
                         </div>
                     </div>
-
                 </div>
             </div>
 
@@ -283,21 +280,20 @@
                         </li>
                     </ul>
                 </div>
-
                 <label>
                     <help link="rosterDisplayMode" />
                 </label>
             </div>
 
             <div class="form-group"
-                v-show="(!((showEnablingConditions === undefined && activeRoster.enablementCondition) || showEnablingConditions))">
+                v-if="(!((showEnablingConditions === undefined && activeRoster.enablementCondition) || showEnablingConditions))">
                 <button type="button" class="btn btn-lg btn-link" @click="showEnablingConditions = true">
                     {{ $t('QuestionnaireEditor.AddEnablingCondition') }}
                 </button>
             </div>
 
             <div class="row"
-                v-show="(((showEnablingConditions === undefined && activeRoster.enablementCondition) || showEnablingConditions))">
+                v-if="(((showEnablingConditions === undefined && activeRoster.enablementCondition) || showEnablingConditions))">
                 <div class="form-group col-xs-11">
                     <div class="enabling-group-marker" :class="{ 'hide-if-disabled': activeRoster.hideIfDisabled }"></div>
                     <label for="edit-group-condition">{{ $t('QuestionnaireEditor.EnablingCondition') }}
@@ -316,42 +312,38 @@
                         <help link="hideIfDisabled" />
                     </label>
                     <br>
-
-                    <ExpressionEditor v-model="activeRoster.enablementCondition"></ExpressionEditor>
-
+                    <ExpressionEditor v-model="activeRoster.enablementCondition" />
                 </div>
                 <div class="form-group col-xs-1">
                     <button type="button" class="btn cross instructions-cross"
-                        @click="showEnablingConditions = false; activeRoster.enablementCondition = ''; activeRoster.hideIfDisabled = false; dirty = true;"></button>
+                        @click="showEnablingConditions = false; activeRoster.enablementCondition = ''; activeRoster.hideIfDisabled = false;"></button>
                 </div>
-
             </div>
         </div>
-
         <div class="form-buttons-holder">
             <div class="pull-left">
-                <button type="button" v-show="!questionnaire.isReadOnlyForUser" id="edit-roster-save-button"
-                    class="btn btn-lg" :class="{ 'btn-primary': dirty }" @click="saveRoster()" unsaved-warning-clear
-                    :disabled="!valid">{{ $t('QuestionnaireEditor.Save') }}</button>
+                <button type="button" v-if="!questionnaire.isReadOnlyForUser" id="edit-roster-save-button"
+                    class="btn btn-lg" :class="{ 'btn-primary': isDirty }" @click="saveRoster()" unsaved-warning-clear
+                    :disabled="!isDirty">{{ $t('QuestionnaireEditor.Save') }}</button>
                 <button type="reset" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" unsaved-warning-clear
                     @click="cancel()">{{ $t('QuestionnaireEditor.Cancel') }}</button>
             </div>
             <div class="pull-right">
-                <button type="button" v-show="!questionnaire.isReadOnlyForUser" id="add-comment-button"
+                <button type="button" v-if="!questionnaire.isReadOnlyForUser" id="add-comment-button"
                     class="btn btn-lg btn-link" @click="toggleComments(activeQuestion)" unsaved-warning-clear>
-                    <span v-show="!isCommentsBlockVisible && commentsCount == 0">{{
+                    <span v-if="!isCommentsBlockVisible && commentsCount == 0">{{
                         $t('QuestionnaireEditor.EditorAddComment') }}</span>
-                    <span v-show="!isCommentsBlockVisible && commentsCount > 0">
+                    <span v-if="!isCommentsBlockVisible && commentsCount > 0">
                         {{ $t('QuestionnaireEditor.EditorShowComments', {
                             count: commentsCount
                         }) }}</span>
-                    <span v-show="isCommentsBlockVisible">{{ $t('QuestionnaireEditor.EditorHideComment') }}</span>
+                    <span v-if="isCommentsBlockVisible">{{ $t('QuestionnaireEditor.EditorHideComment') }}</span>
                 </button>
-                <button type="button" v-show="!questionnaire.isReadOnlyForUser" id="edit-chapter-delete-button"
+                <button type="button" v-if="!questionnaire.isReadOnlyForUser" id="edit-chapter-delete-button"
                     class="btn btn-lg btn-link" unsaved-warning-clear @click="deleteRoster()">{{
                         $t('QuestionnaireEditor.Delete') }}</button>
                 <MoveToChapterSnippet :item-id="rosterId"
-                    v-show="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly">
+                    v-if="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly">
                 </MoveToChapterSnippet>
             </div>
         </div>
@@ -382,16 +374,14 @@ export default {
     },
     data() {
         return {
-            activeRoster: {},
-            breadcrumbs: [],
             showEnablingConditions: undefined,
             selectedListQuestion: null,
             selectedMultiQuestion: null,
             selectedNumericQuestion: null,
             selectedTitleQuestion: null,
-            dirty: false,
             valid: true,
-            stringifiedRosterTitles: {
+            stringifiedRosterTitles: '',
+            stringifiedRosterTitlesValidity: {
                 valid: true,
                 $error: {
                     matchOptionsPattern: false,
@@ -404,13 +394,6 @@ export default {
         };
     },
     watch: {
-        activeRoster: {
-            handler(newVal, oldVal) {
-                if (oldVal != null) this.dirty = true;
-            },
-            deep: true
-        },
-
         async rosterId(newValue, oldValue) {
             if (newValue != oldValue) {
                 this.initilized = false;
@@ -446,7 +429,33 @@ export default {
         this.initilized = true;
         this.scrollTo();
     },
+    created() {
+        window.addEventListener('beforeunload', this.beforeWindowUnload)
+    },
+    beforeDestroy() {
+        window.removeEventListener('beforeunload', this.beforeWindowUnload)
+    },
+    beforeRouteLeave(to, from, next) {
+        if (this.isDirty && !this.confirmLeave()) {
+            next(false)
+        } else {
+            next()
+        }
+    },
+    beforeRouteUpdate(to, from, next) {
+        if (this.isDirty && !this.confirmLeave()) {
+            next(false)
+        } else {
+            next()
+        }
+    },
     computed: {
+        activeRoster() {
+            return this.rosterStore.getRoster;
+        },
+        isDirty() {
+            return this.rosterStore.getIsDirty || !this.useListAsRosterTitleEditor;
+        },
         typeName() {
             if (!this.activeRoster.rosterTypeOptions) return null;
 
@@ -460,33 +469,28 @@ export default {
         },
         isCommentsBlockVisible() {
             return this.commentsStore.getIsCommentsBlockVisible;
-        },
+        }
     },
     methods: {
         async fetch() {
-            await this.rosterStore.fetchRosterData(
-                this.questionnaireId,
-                this.rosterId
-            );
-
-            this.activeRoster = this.rosterStore.getRoster;
-            this.breadcrumbs = this.rosterStore.getBreadcrumbs;
+            await this.rosterStore.fetchRosterData(this.questionnaireId, this.rosterId);
 
             this.selectedNumericQuestion = this.findQuestion(this.activeRoster.numericIntegerQuestions, this.activeRoster.rosterSizeNumericQuestionId);
             this.selectedTitleQuestion = this.findQuestion(this.activeRoster.numericIntegerTitles, this.activeRoster.rosterTitleQuestionId);
             this.selectedListQuestion = this.findQuestion(this.activeRoster.textListsQuestions, this.activeRoster.rosterSizeListQuestionId);
             this.selectedMultiQuestion = this.findQuestion(this.activeRoster.notLinkedMultiOptionQuestions, this.activeRoster.rosterSizeMultiQuestionId);
-            this.dirty = false;
+
         },
         async saveRoster() {
+            if (!this.isDirty) return;
+
             await this.showRosterTitlesInList();
             this.rosterStore.saveRosterData();
-            this.dirty = false;
+
         },
         cancel() {
             this.rosterStore.discardChanges();
-            this.activeGroup = this.rosterStore.getRoster;
-            this.dirty = false;
+            this.useListAsRosterTitleEditor = true;
         },
         toggleComments() {
             this.commentsStore.toggleComments();
@@ -494,7 +498,6 @@ export default {
         async selectNumericQuestion(numericId) {
             this.activeRoster.rosterSizeNumericQuestionId = numericId;
             this.selectedNumericQuestion = this.findQuestion(this.activeRoster.numericIntegerQuestions, numericId);
-            this.dirty = true;
             const result = await this.rosterStore.getQuestionsEligibleForNumericRosterTitle(this.activeRoster.rosterSizeNumericQuestionId);
 
             this.activeRoster.numericIntegerTitles = result;
@@ -503,17 +506,14 @@ export default {
         selectTitleQuestion(titleQuestionId) {
             this.activeRoster.rosterTitleQuestionId = titleQuestionId;
             this.selectedTitleQuestion = this.findQuestion(this.activeRoster.numericIntegerTitles, titleQuestionId);
-            this.dirty = true;
         },
         selectListQuestion(listId) {
             this.activeRoster.rosterSizeListQuestionId = listId;
             this.selectedListQuestion = this.findQuestion(this.activeRoster.textListsQuestions, listId);
-            this.dirty = true;
         },
         selectMultiQuestion(multiId) {
             this.activeRoster.rosterSizeMultiQuestionId = multiId;
             this.selectedMultiQuestion = this.findQuestion(this.activeRoster.notLinkedMultiOptionQuestions, multiId);
-            this.dirty = true;
         },
         findQuestion(collection, itemId) {
             const item = find(collection, item => item.id == itemId && item.isSectionPlaceHolder == false);
@@ -543,15 +543,14 @@ export default {
                 "value": null,
                 "title": ''
             });
-            this.dirty = true;
         },
         removeFixedTitle(index) {
             this.activeRoster.fixedRosterTitles.splice(index, 1);
-            this.dirty = true;
         },
         async showOptionsInTextarea() {
             const text = await convertToText(this.activeRoster.fixedRosterTitles);
-            this.activeRoster.stringifiedRosterTitles = text;
+
+            this.stringifiedRosterTitles = text;
             this.useListAsRosterTitleEditor = false;
         },
 
@@ -562,7 +561,7 @@ export default {
 
             this.stringifiedRosterTitlesValidate();
 
-            if (!this.stringifiedRosterTitles.valid) {
+            if (!this.stringifiedRosterTitlesValidity.valid) {
                 return;
             }
             if (this.activeRoster.stringifiedRosterTitles) {
@@ -580,26 +579,26 @@ export default {
             const lineCount = lines.length
 
             if (lineCount > this.fixedRosterLimit) {
-                this.stringifiedRosterTitles.$error.maxOptionsCount = true
-                this.stringifiedRosterTitles.valid = false;
+                this.stringifiedRosterTitlesValidity.$error.maxOptionsCount = true
+                this.stringifiedRosterTitlesValidity.valid = false;
                 return;
             }
-            else if (this.stringifiedRosterTitles.$error.maxOptionsCount == true) {
-                this.stringifiedRosterTitles.$error.maxOptionsCount = false
+            else if (this.stringifiedRosterTitlesValidity.$error.maxOptionsCount == true) {
+                this.stringifiedRosterTitlesValidity.$error.maxOptionsCount = false
             }
 
             const top5Errors = validateText(this.activeRoster.stringifiedRosterTitles, false).slice(0, 5);
             if (top5Errors.length > 0) {
-                this.stringifiedRosterTitles.$error.matchOptionsPattern = true;
-                this.stringifiedRosterTitles.valid = false;
+                this.stringifiedRosterTitlesValidity.$error.matchOptionsPattern = true;
+                this.stringifiedRosterTitlesValidity.valid = false;
                 return;
             }
-            else if (this.stringifiedRosterTitles.$error.matchOptionsPattern == true) {
-                this.stringifiedRosterTitles.$error.matchOptionsPattern = false
+            else if (this.stringifiedRosterTitlesValidity.$error.matchOptionsPattern == true) {
+                this.stringifiedRosterTitlesValidity.$error.matchOptionsPattern = false
             }
 
-            if (this.stringifiedRosterTitles.valid == false) {
-                this.stringifiedRosterTitles.valid = true;
+            if (this.stringifiedRosterTitlesValidity.valid == false) {
+                this.stringifiedRosterTitlesValidity.valid = true;
             }
         },
 
@@ -658,6 +657,17 @@ export default {
             }
 
             setFocusIn(focusId);
+        },
+        //TODO: move to reuseable mixin
+        confirmLeave() {
+            return window.confirm(this.$t('QuestionnaireEditor.UnsavedChangesLeave'));
+        },
+        beforeWindowUnload(e) {
+            if (this.isDirty && !this.confirmLeave()) {
+                e.preventDefault()
+                e.returnValue = '' //for chrome
+            }
+            return null;
         }
     }
 }

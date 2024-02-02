@@ -63,8 +63,8 @@
         <div class="form-buttons-holder">
             <div class="pull-left">
                 <button type="button" v-if="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
-                    id="edit-chapter-save-button" class="btn btn-lg" :class="{ 'btn-primary': dirty }" @click="saveGroup()"
-                    unsaved-warning-clear :disabled="!valid">
+                    id="edit-chapter-save-button" class="btn btn-lg" :class="{ 'btn-primary': isDirty }"
+                    @click="saveGroup()" unsaved-warning-clear :disabled="!isDirty">
                     {{ $t('QuestionnaireEditor.Save') }}
                 </button>
                 <button type="reset" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" @click="cancelGroup()"
@@ -122,21 +122,10 @@ export default {
     },
     data() {
         return {
-            activeGroup: null,
-            breadcrumbs: [],
-            showEnablingConditions: undefined,
-            dirty: false,
-            valid: true
+            showEnablingConditions: undefined
         };
     },
     watch: {
-        activeGroup: {
-            handler(newVal, oldVal) {
-                if (oldVal != null) this.dirty = true;
-            },
-            deep: true
-        },
-
         async groupId(newValue, oldValue) {
             if (newValue != oldValue) {
                 this.groupStore.clear();
@@ -169,8 +158,39 @@ export default {
     mounted() {
         this.scrollTo();
     },
+    created() {
+        window.addEventListener('beforeunload', this.beforeWindowUnload)
+    },
+    beforeDestroy() {
+        window.removeEventListener('beforeunload', this.beforeWindowUnload)
+    },
+    beforeRouteLeave(to, from, next) {
+        if (this.isDirty && !this.confirmLeave()) {
+            next(false)
+        } else {
+            next()
+        }
+    },
+    beforeRouteUpdate(to, from, next) {
+        if (this.isDirty && !this.confirmLeave()) {
+            next(false)
+        } else {
+            next()
+        }
+    },
     computed: {
+        activeGroup() {
+            return this.groupStore.getGroup;
+        },
+        breadcrumbs() {
+            return this.groupStore.getBreadcrumbs;
+        },
+        isDirty() {
+            return this.groupStore.getIsDirty;
+        },
         typeName() {
+            if (!this.activeGroup.typeOptions) return null;
+
             const option = this.activeGroup.typeOptions.find(
                 p => p.value == this.activeGroup.type
             );
@@ -183,7 +203,7 @@ export default {
             return this.commentsStore.getIsCommentsBlockVisible;
         },
         isChapter() {
-            if (this.currentChapter && this.currentChapter.chapter)
+            if (this.currentChapter && this.currentChapter.chapter && this.activeGroup.id)
                 return this.activeGroup.id.replaceAll('-', '') == this.currentChapter.chapter.itemId;
             return true;
         },
@@ -193,22 +213,15 @@ export default {
     },
     methods: {
         async fetch() {
-            await this.groupStore.fetchGroupData(
-                this.questionnaireId,
-                this.groupId
-            );
-
-            this.activeGroup = this.groupStore.getGroup;
-            this.breadcrumbs = this.groupStore.getBreadcrumbs;
+            await this.groupStore.fetchGroupData(this.questionnaireId, this.groupId);
+            this.showEnablingConditions = this.activeGroup.enablementCondition ? true : false;
         },
         saveGroup() {
             updateGroup(this.questionnaireId, this.activeGroup);
-            this.dirty = false;
         },
         cancelGroup() {
             this.groupStore.discardChanges();
-            this.activeGroup = this.groupStore.getGroup;
-            this.dirty = false;
+            this.showEnablingConditions = this.activeGroup.enablementCondition ? true : false;
         },
         toggleComments() {
             this.commentsStore.toggleComments();
@@ -252,6 +265,17 @@ export default {
             }
 
             setFocusIn(focusId);
+        },
+        //TODO: move to reuseable mixin        
+        confirmLeave() {
+            return window.confirm(this.$t('QuestionnaireEditor.UnsavedChangesLeave'));
+        },
+        beforeWindowUnload(e) {
+            if (this.isDirty && !this.confirmLeave()) {
+                e.preventDefault()
+                e.returnValue = '' //for chrome
+            }
+            return null;
         }
     }
 };

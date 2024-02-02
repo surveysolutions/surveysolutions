@@ -1,38 +1,35 @@
 import { defineStore } from 'pinia';
 import { getQuestion, updateQuestion } from '../services/questionService';
-import { isEmpty, isNull, filter, indexOf } from 'lodash';
+import _ from 'lodash';
 
 export const useQuestionStore = defineStore('question', {
     state: () => ({
         question: {},
-        initialQuestion: {},
-        questionnaireId: null
+        initialQuestion: {}
     }),
     getters: {
         getQuestion: state => state.question,
-        getBreadcrumbs: state => state.question.breadcrumbs,
-        getInitialQuestion: state => state.initialQuestion
+        getInitialQuestion: state => state.initialQuestion,
+        getIsDirty: state => !_.isEqual(state.question, state.initialQuestion)
     },
     actions: {
         async fetchQuestionData(questionnaireId, questionId) {
-            this.questionnaireId = questionnaireId;
-
             const data = await getQuestion(questionnaireId, questionId);
             this.setQuestionData(data);
         },
 
         setQuestionData(data) {
-            this.question = data;
-            this.initialQuestion = Object.assign({}, data);
+            this.initialQuestion = _.cloneDeep(data);
+            this.question = _.cloneDeep(this.initialQuestion);
         },
 
         clear() {
             this.question = {};
             this.initialQuestion = {};
-            this.questionnaireId = null;
         },
 
-        async saveQuestionData() {
+        //TODO: move it to the service
+        async saveQuestionData(questionnaireId) {
             this.trimEmptyOptions();
 
             var shouldGetOptionsOnServer =
@@ -40,13 +37,13 @@ export const useQuestionStore = defineStore('question', {
                 this.question.isCascade;
 
             updateQuestion(
-                this.questionnaireId,
+                questionnaireId,
                 this.question,
                 shouldGetOptionsOnServer
             ).then(async response => {
                 //TODO: improve this by subscribing to event
                 var notIsFilteredCombobox = !this.question.isFilteredCombobox;
-                var notIsCascadingCombobox = isEmpty(
+                var notIsCascadingCombobox = _.isEmpty(
                     this.question.cascadeFromQuestionId
                 );
 
@@ -60,18 +57,18 @@ export const useQuestionStore = defineStore('question', {
 
                 if (shouldGetOptionsOnServer) {
                     await this.fetchQuestionData(
-                        this.questionnaireId,
+                        questionnaireId,
                         this.question.id
                     );
                 }
 
-                this.initialQuestion = Object.assign({}, this.question);
+                this.initialQuestion = _.cloneDeep(this.question);
             });
-        },        
+        },
 
         trimEmptyOptions() {
-            var notEmptyOptions = filter(this.question.options, function(o) {
-                return !isNull(o.value || null) || !isEmpty(o.title || '');
+            var notEmptyOptions = _.filter(this.question.options, function(o) {
+                return !_.isNull(o.value || null) || !_.isEmpty(o.title || '');
             });
             this.question.options = notEmptyOptions;
         },
@@ -88,15 +85,16 @@ export const useQuestionStore = defineStore('question', {
 
             var wasItFiltered =
                 this.initialQuestion.isFilteredCombobox || false;
-            var wasItCascade = !isEmpty(
+            var wasItCascade = !_.isEmpty(
                 this.initialQuestion.cascadeFromQuestionId
             );
 
             if (
                 (wasItCascade && this.question.isFilteredCombobox) ||
                 (wasItCascade &&
-                    !isEmpty(this.initialQuestion.cascadeFromQuestionId)) ||
-                (wasItFiltered && !isEmpty(this.question.cascadeFromQuestionId))
+                    !_.isEmpty(this.initialQuestion.cascadeFromQuestionId)) ||
+                (wasItFiltered &&
+                    !_.isEmpty(this.question.cascadeFromQuestionId))
             ) {
                 return true;
             }
@@ -105,7 +103,7 @@ export const useQuestionStore = defineStore('question', {
         },
 
         discardChanges() {
-            Object.assign(this.question, this.initialQuestion);
+            this.question = _.cloneDeep(this.initialQuestion);
         }
     }
 });

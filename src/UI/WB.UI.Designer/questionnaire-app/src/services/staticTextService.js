@@ -17,10 +17,9 @@ export function deleteStaticText(questionnaireId, entityId) {
 export async function getStaticText(questionnaireId, entityId) {
     const data = await get(
         '/api/questionnaire/editStaticText/' + questionnaireId,
-        {
-            staticTextId: entityId
-        }
+        { staticTextId: entityId }
     );
+
     return data;
 }
 
@@ -44,13 +43,6 @@ export function updateStaticText(questionnaireId, staticText) {
     };
 
     return commandCall('UpdateStaticText', command).then(async response => {
-        emitter.emit('staticTextUpdated', {
-            id: staticText.id,
-            text: staticText.text,
-            attachmentName: staticText.attachmentName,
-            hideIfDisabled: staticText.hideIfDisabled,
-            enablementCondition: staticText.enablementCondition,
-            validationConditions: staticText.validationConditions
-        });
+        emitter.emit('staticTextUpdated', staticText);
     });
 }

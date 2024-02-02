@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { getStaticText } from '../services/staticTextService';
 import emitter from '../services/emitter';
+import _ from 'lodash';
 
 export const useStaticTextStore = defineStore('staticText', {
     state: () => ({
@@ -9,16 +10,17 @@ export const useStaticTextStore = defineStore('staticText', {
     }),
     getters: {
         getStaticText: state => state.staticText,
-        getBreadcrumbs: state => state.staticText.breadcrumbs,
-        getInitialStaticText: state => state.initialStaticText
+        getInitialStaticText: state => state.initialStaticText,
+        getIsDirty: state =>
+            !_.isEqual(state.staticText, state.initialStaticText)
     },
     actions: {
         setupListeners() {
             emitter.on('staticTextUpdated', this.staticTextUpdated);
-            emitter.on('staticTextDeleted', this.staticTextDeleted);          
+            emitter.on('staticTextDeleted', this.staticTextDeleted);
         },
         staticTextUpdated(payload) {
-            if ((this.staticText.id = payload.itemId)) {
+            if ((this.staticText.id = payload.id)) {
                 this.setStaticTextData(payload);
             }
         },
@@ -28,19 +30,19 @@ export const useStaticTextStore = defineStore('staticText', {
             }
         },
         async fetchStaticTextData(questionnaireId, staticTextId) {
-            const data = await getStaticText(questionnaireId, staticTextId);            
+            const data = await getStaticText(questionnaireId, staticTextId);
             this.setStaticTextData(data);
         },
-        setStaticTextData(data) {            
-            this.initialStaticText = Object.assign({}, data);
-            this.staticText = Object.assign({}, data);
+        setStaticTextData(data) {
+            this.initialStaticText = _.cloneDeep(data);
+            this.staticText = _.cloneDeep(this.initialStaticText);
         },
         clear() {
             this.staticText = {};
             this.initialStaticText = {};
         },
         discardChanges() {
-            Object.assign(this.staticText, this.initialStaticText);
-        },        
+            this.staticText = _.cloneDeep(this.initialStaticText);
+        }
     }
 });

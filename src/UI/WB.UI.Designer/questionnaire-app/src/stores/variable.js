@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { getVariable } from '../services/variableService';
 import emitter from '../services/emitter';
+import _ from 'lodash';
 
 export const useVariableStore = defineStore('variable', {
     state: () => ({
@@ -8,8 +9,9 @@ export const useVariableStore = defineStore('variable', {
         initialVariable: {}
     }),
     getters: {
-        getData: state => state.variable,
-        getInitialVariable: state => state.initialVariable
+        getVariable: state => state.variable,
+        getInitialVariable: state => state.initialVariable,
+        getIsDirty: state => !_.isEqual(state.variable, state.initialVariable)
     },
     actions: {
         setupListeners() {
@@ -31,15 +33,15 @@ export const useVariableStore = defineStore('variable', {
             this.setVariableData(data);
         },
         setVariableData(data) {
-            this.initialVariable = Object.assign({}, data);
-            this.variable = Object.assign({}, data);
+            this.initialVariable = _.cloneDeep(data);
+            this.variable = _.cloneDeep(this.initialVariable);
         },
         clear() {
             this.variable = {};
             this.initialVariable = {};
         },
         discardChanges() {
-            Object.assign(this.variable, this.initialVariable);
+            this.variable = _.cloneDeep(this.initialVariable);
         }
     }
 });

@@ -42,8 +42,9 @@
                         <div class="attachments-panel-item" :class="{ 'has-error': attachment.form.name.$error.pattern }"
                             ngf-drop="" ngf-max-size="100MB" ngf-change="fileSelected(attachment, $file)"
                             ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
-                            <a href @click="deleteAttachment($index)" ng-disabled="questionnaire.isReadOnlyForUser"
-                                ng-if="!questionnaire.isReadOnlyForUser" class="btn delete-btn" tabindex="-1"></a>
+                            <a href="javascript:void(0);" @click="deleteAttachment($index)"
+                                ng-disabled="questionnaire.isReadOnlyForUser" ng-if="!questionnaire.isReadOnlyForUser"
+                                class="btn delete-btn" tabindex="-1"></a>
                             <div class="attachment">
                                 <div class="attachment-preview">
                                     <div class="attachment-preview-cover clearfix">

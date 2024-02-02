@@ -3,7 +3,8 @@
         <div class="categories-panel-item"
             :class="{ 'has-error': hasPatternError(), 'dragover': $refs.upload && $refs.upload.dropActive }" ngf-drop=""
             ngf-change="fileSelected(categories, $file)" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
-            <a href @click="deleteCategories" class="btn delete-btn" tabindex="-1" v-if="!isReadOnlyForUser"></a>
+            <a href="javascript:void(0);" @click="deleteCategories" class="btn delete-btn" tabindex="-1"
+                v-if="!isReadOnlyForUser"></a>
             <div class="categories-content">
                 <input focus-on-out="focusCategories{{categories.categoriesId}}" required=""
                     :placeholder="$t('QuestionnaireEditor.SideBarCategoriesName')" maxlength="32" spellcheck="false"

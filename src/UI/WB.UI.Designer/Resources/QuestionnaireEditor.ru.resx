@@ -1602,4 +1602,7 @@
   <data name="OldUi" xml:space="preserve">
       <value>Старый UI</value>
   </data>
+  <data name="ShowList" xml:space="preserve">
+      <value>Показать списком</value>
+  </data>
 </root>

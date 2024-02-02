@@ -96,7 +96,7 @@
 
                 <div class="form-group col-xs-1">
                     <button type="button" class="btn cross instructions-cross"
-                        @click="showInstruction = false; activeQuestion.instructions = ''; activeQuestion.hideInstructions = false; setDirty();"></button>
+                        @click="showInstruction = false; activeQuestion.instructions = ''; activeQuestion.hideInstructions = false;"></button>
                 </div>
             </div>
 
@@ -129,7 +129,7 @@
                 </div>
                 <div class="form-group col-xs-1">
                     <button type="button" class="btn cross instructions-cross"
-                        @click="showEnablingConditions = false; activeQuestion.enablementCondition = ''; activeQuestion.hideIfDisabled = false; dirty = false;"></button>
+                        @click="showEnablingConditions = false; activeQuestion.enablementCondition = ''; activeQuestion.hideIfDisabled = false;"></button>
                 </div>
             </div>
             <div class="form-group validation-group" v-if="doesQuestionSupportValidations()"
@@ -158,7 +158,7 @@
 
             </div>
             <div class="form-group"
-                v-if="doesQuestionSupportValidations() && activeQuestion.validationConditions.length < 10">
+                v-if="doesQuestionSupportValidations() && activeQuestion.validationConditions && activeQuestion.validationConditions.length < 10">
                 <button type="button" class="btn btn-lg btn-link" @click="addValidationCondition()">{{
                     $t('QuestionnaireEditor.AddValidationRule') }}</button>
             </div>
@@ -191,8 +191,8 @@
         <div class="form-buttons-holder">
             <div class="pull-left">
                 <button type="button" v-show="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
-                    id="edit-chapter-save-button" class="btn btn-lg " :class="{ 'btn-primary': dirty }"
-                    unsaved-warning-clear @click="saveQuestion()" :disabled="!valid">{{
+                    id="edit-chapter-save-button" class="btn btn-lg " :class="{ 'btn-primary': isDirty }"
+                    unsaved-warning-clear @click="saveQuestion()" :disabled="!isDirty">{{
                         $t('QuestionnaireEditor.Save') }}</button>
                 <button type="button" v-show="currentChapter.isReadOnly && currentChapter.isCover" id="jump-to-button"
                     class="btn btn-lg btn-link" unsaved-warning-clear
@@ -277,28 +277,12 @@ export default {
     },
     data() {
         return {
-            activeQuestion: {
-                breadcrumbs: [],
-                instructions: [],
-                questionTypeOptions: [],
-                validationConditions: [],
-                instructions: '',
-            },
             shouldUserSeeReloadDetailsPromt: true,
             showInstruction: null,
             showEnablingConditions: null,
-            dirty: false,
-            valid: true
         }
     },
     watch: {
-        activeQuestion: {
-            handler(newVal, oldVal) {
-                if (oldVal != null) this.setDirty();
-            },
-            deep: true
-        },
-
         async questionId(newValue, oldValue) {
             if (newValue != oldValue) {
                 this.questionStore.clear();
@@ -331,6 +315,26 @@ export default {
     mounted() {
         this.scrollTo();
     },
+    created() {
+        window.addEventListener('beforeunload', this.beforeWindowUnload)
+    },
+    beforeDestroy() {
+        window.removeEventListener('beforeunload', this.beforeWindowUnload)
+    },
+    beforeRouteLeave(to, from, next) {
+        if (this.isDirty && !this.confirmLeave()) {
+            next(false)
+        } else {
+            next()
+        }
+    },
+    beforeRouteUpdate(to, from, next) {
+        if (this.isDirty && !this.confirmLeave()) {
+            next(false)
+        } else {
+            next()
+        }
+    },
     computed: {
         currentQuestionScope() {
             const option = this.activeQuestion.allQuestionScopeOptions.find(
@@ -348,46 +352,44 @@ export default {
         },
 
         activeQuestionType() {
+            if (!this.activeQuestion.questionTypeOptions) return null;
+
             const option = find(this.activeQuestion.questionTypeOptions,
                 p => p.value == this.activeQuestion.type
             );
             return option != null ? option.text : null;
+        },
+        activeQuestion() {
+            return this.questionStore.getQuestion;
+        },
+        isDirty() {
+            return this.questionStore.getIsDirty;
         }
+
     },
     methods: {
         async fetch() {
-            await this.questionStore.fetchQuestionData(
-                this.questionnaireId,
-                this.questionId
-            );
-
-            this.activeQuestion = this.questionStore.getQuestion;
+            await this.questionStore.fetchQuestionData(this.questionnaireId, this.questionId);
             this.shouldUserSeeReloadDetailsPromt = false;
         },
 
         async saveQuestion() {
-
-            if (this.dirty == false) return;
+            if (this.isDirty == false) return;
 
             const beforeSave = this.$refs.questionSpecific.preperaToSave;
             if (beforeSave != undefined) {
                 beforeSave();
             }
 
-            if (!this.valid) return;
-
             const componentValid = this.$refs.questionSpecific.valid || true;
             if (!componentValid) return;
 
-            await this.questionStore.saveQuestionData();
-
-            this.dirty = false;
+            await this.questionStore.saveQuestionData(this.questionnaireId);
         },
 
         cancel() {
             this.questionStore.discardChanges();
-            this.activeQuestion = this.questionStore.getQuestion;
-            this.dirty = false;
+            this.shouldUserSeeReloadDetailsPromt = false;
         },
         toggleComments() {
             this.commentsStore.toggleComments();
@@ -529,8 +531,6 @@ export default {
                 this.activeQuestion.geometryInputMode = null;
                 this.activeQuestion.geometryOverlapDetection = null;
             }
-
-            this.setDirty();
         },
 
         getQuestionScopeByValue(value) {
@@ -542,14 +542,10 @@ export default {
             if (this.activeQuestion.questionScope === 'Identifying') {
                 this.activeQuestion.enablementCondition = '';
             }
-            this.setDirty();
         },
-
-
 
         removeValidationCondition(index) {
             this.activeQuestion.validationConditions.splice(index, 1);
-            this.setDirty();
         },
 
         addValidationCondition() {
@@ -557,14 +553,6 @@ export default {
                 expression: '',
                 message: ''
             });
-            this.setDirty();
-            /*_.defer(function () {
-                $(".question-editor .form-holder").scrollTo({ top: '+=200px', left: "+=0" }, 250);
-            })*/
-        },
-
-        setDirty() {
-            this.dirty = true;
         },
 
         scrollTo() {
@@ -611,9 +599,19 @@ export default {
             }
 
             setFocusIn(focusId);
+        },
+
+        //TODO: move to reuseable mixin
+        confirmLeave() {
+            return window.confirm(this.$t('QuestionnaireEditor.UnsavedChangesLeave'));
+        },
+        beforeWindowUnload(e) {
+            if (this.isDirty && !this.confirmLeave()) {
+                e.preventDefault()
+                e.returnValue = '' //for chrome
+            }
+            return null;
         }
-
-
     }
 }
 </script>

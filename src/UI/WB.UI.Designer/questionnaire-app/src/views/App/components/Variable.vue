@@ -19,9 +19,7 @@
 
                         <ul class="dropdown-menu" role="menu">
                             <li class="dropdown-item" role="presentation" v-for="typeOption in activeVariable.typeOptions">
-                                <a role="menuitem" tabindex="-1" @click="
-                                    activeVariable.type = typeOption.value
-                                    ">
+                                <a role="menuitem" tabindex="-1" @click="activeVariable.type = typeOption.value">
                                     {{ typeOption.text }}
                                 </a>
                             </li>
@@ -43,9 +41,7 @@
                 <label for="edit-variable-title-highlight" class="wb-label">{{ $t('QuestionnaireEditor.VariableLabel') }}
                     <help link="variableDescription" />
                 </label>
-
                 <ExpressionEditor v-model="activeVariable.label"></ExpressionEditor>
-
             </div>
             <div class="form-group">
                 <label for="edit-group-condition">{{ $t('QuestionnaireEditor.VariableExpression') }}
@@ -54,26 +50,22 @@
                 <input id="cb-do-not-export" type="checkbox" class="wb-checkbox" v-model="activeVariable.doNotExport" />
                 <label for="cb-do-not-export"><span></span>{{ $t('QuestionnaireEditor.VariableNoExport') }}</label>
                 <help link="doNotExport"></help>
-
                 <ExpressionEditor mode="expression" v-model="activeVariable.expression"></ExpressionEditor>
-
             </div>
         </div>
         <div class="form-buttons-holder">
             <div class="pull-left">
                 <button type="button" v-show="!questionnaire.isReadOnlyForUser" id="edit-chapter-save-button"
-                    class="btn btn-lg" :class="{ 'btn-primary': dirty }" @click="saveVariable()" unsaved-warning-clear
-                    :disabled="!valid">
+                    class="btn btn-lg" :class="{ 'btn-primary': isDirty }" :disabled="!isDirty" @click="saveVariable()">
                     {{ $t('QuestionnaireEditor.Save') }}
                 </button>
-                <button type="reset" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" @click="cancel()"
-                    unsaved-warning-clear>
+                <button type="reset" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" @click="cancel()">
                     {{ $t('QuestionnaireEditor.Cancel') }}
                 </button>
             </div>
             <div class="pull-right">
                 <button type="button" v-show="!questionnaire.isReadOnlyForUser" id="add-comment-button"
-                    class="btn btn-lg btn-link" @click="toggleComments()" unsaved-warning-clear>
+                    class="btn btn-lg btn-link" @click="toggleComments()">
                     <span v-show="!isCommentsBlockVisible && commentsCount == 0">{{
                         $t('QuestionnaireEditor.EditorAddComment') }}</span>
                     <span v-show="!isCommentsBlockVisible && commentsCount > 0">{{
@@ -117,20 +109,9 @@ export default {
         variableId: { type: String, required: true }
     },
     data() {
-        return {
-            activeVariable: null,
-            dirty: false,
-            valid: true
-        };
+        return {};
     },
     watch: {
-        activeVariable: {
-            handler(newVal, oldVal) {
-                if (oldVal != null) this.dirty = true;
-            },
-            deep: true
-        },
-
         async variableId(newValue, oldValue) {
             if (newValue != oldValue) {
                 this.variableStore.clear();
@@ -163,8 +144,36 @@ export default {
     mounted() {
         this.scrollTo();
     },
+    created() {
+        window.addEventListener('beforeunload', this.beforeWindowUnload)
+    },
+    beforeDestroy() {
+        window.removeEventListener('beforeunload', this.beforeWindowUnload)
+    },
+    beforeRouteLeave(to, from, next) {
+        if (this.isDirty && !this.confirmLeave()) {
+            next(false)
+        } else {
+            next()
+        }
+    },
+    beforeRouteUpdate(to, from, next) {
+        if (this.isDirty && !this.confirmLeave()) {
+            next(false)
+        } else {
+            next()
+        }
+    },
     computed: {
+        activeVariable() {
+            return this.variableStore.getVariable;
+        },
+        isDirty() {
+            return this.variableStore.getIsDirty;
+        },
         typeName() {
+            if (!this.activeQuestion.questionTypeOptions) return null;
+
             const option = this.activeVariable.typeOptions.find(
                 p => p.value == this.activeVariable.type
             );
@@ -179,21 +188,14 @@ export default {
     },
     methods: {
         async fetch() {
-            await this.variableStore.fetchVarableData(
-                this.questionnaireId,
-                this.variableId
-            );
-
-            this.activeVariable = this.variableStore.getData;
+            await this.variableStore.fetchVarableData(this.questionnaireId, this.variableId);
         },
         saveVariable() {
+            if (!this.isDirty) return;
             updateVariable(this.questionnaireId, this.activeVariable);
-            this.dirty = false;
         },
         cancel() {
             this.variableStore.discardChanges();
-            this.activeVariable = this.variableStore.getData;
-            this.dirty = false;
         },
         toggleComments() {
             this.commentsStore.toggleComments();
@@ -202,10 +204,8 @@ export default {
             var itemIdToDelete = this.activeVariable.id;
             var questionnaireId = this.questionnaireId;
 
-            var label = this.activeVariable.label;
-
             const params = createQuestionForDeleteConfirmationPopup(
-                label || this.$t('QuestionnaireEditor.UntitledVariable')
+                this.activeVariable.label || this.$t('QuestionnaireEditor.UntitledVariable')
             );
 
             params.callback = confirm => {
@@ -216,9 +216,7 @@ export default {
 
             this.$confirm(params);
         },
-
         scrollTo() {
-            //const state = this.$route.state
             const state = window.history.state;
             const property = (state || {}).property;
             if (!property)
@@ -240,6 +238,18 @@ export default {
             }
 
             setFocusIn(focusId);
+        },
+
+        //TODO: move to reuseable mixin
+        confirmLeave() {
+            return window.confirm(this.$t('QuestionnaireEditor.UnsavedChangesLeave'));
+        },
+        beforeWindowUnload(e) {
+            if (this.isDirty && !this.confirmLeave()) {
+                e.preventDefault()
+                e.returnValue = '' //for chrome
+            }
+            return null;
         }
     }
 };

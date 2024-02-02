@@ -192,7 +192,7 @@ export const useTreeStore = defineStore('tree', {
                 parent,
                 afterNodeId
             );
-            
+
             if (index != null && index >= 0) {
                 index = index + 1;
                 command.index = index;
@@ -207,7 +207,9 @@ export const useTreeStore = defineStore('tree', {
             };
 
             //TODO: migrate logic to service
-            return addStaticText('AddStaticText', command).then(function(result) {
+            return addStaticText('AddStaticText', command).then(function(
+                result
+            ) {
                 parent.items.splice(index, 0, staticText);
                 callback(staticText, parent, index);
             });
@@ -414,14 +416,16 @@ export const useTreeStore = defineStore('tree', {
         },
 
         staticTextUpdated(data) {
-            const itemId = data.itemId.replaceAll('-', '');
+            const itemId = data.id.replaceAll('-', '');
             var staticText = this.findTreeItem(itemId);
             if (isNull(staticText) || isUndefined(staticText)) return;
             staticText.text = data.text;
             staticText.attachmentName = data.attachmentName;
 
             staticText.hasValidation = data.validationConditions.length > 0;
-            staticText.hasCondition = data.enablementCondition !== null && /\S/.test(data.enablementCondition);
+            staticText.hasCondition =
+                data.enablementCondition !== null &&
+                /\S/.test(data.enablementCondition);
             staticText.hideIfDisabled = data.hideIfDisabled;
         },
 
@@ -435,9 +439,11 @@ export const useTreeStore = defineStore('tree', {
 
         groupUpdated(data) {
             const itemId = data.id.replaceAll('-', '');
-            const hasCondition = data.enablementCondition !== null && /\S/.test(data.enablementCondition)
+            const hasCondition =
+                data.enablementCondition !== null &&
+                /\S/.test(data.enablementCondition);
             const chapter = this.getChapterData;
-            
+
             if (chapter.itemId === itemId) {
                 chapter.title = data.title;
                 chapter.hasCondition = hasCondition;

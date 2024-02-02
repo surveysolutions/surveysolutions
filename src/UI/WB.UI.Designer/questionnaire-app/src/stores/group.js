@@ -1,16 +1,19 @@
 import { defineStore } from 'pinia';
 import { getGroup } from '../services/groupService';
 import emitter from '../services/emitter';
+import _ from 'lodash';
 
 export const useGroupStore = defineStore('group', {
     state: () => ({
-        groupAndBreadcrumbs: {},
-        initialGroup: {}
+        group: {},
+        initialGroup: {},
+        breadcrumbs: {}
     }),
     getters: {
-        getGroup: state => state.groupAndBreadcrumbs.group,
-        getBreadcrumbs: state => state.groupAndBreadcrumbs.breadcrumbs,
-        getInitialGroup: state => state.initialGroup
+        getGroup: state => state.group,
+        getBreadcrumbs: state => state.breadcrumbs,
+        getInitialGroup: state => state.initialGroup,
+        getIsDirty: state => !_.isEqual(state.group, state.initialGroup)
     },
     actions: {
         setupListeners() {
@@ -18,12 +21,12 @@ export const useGroupStore = defineStore('group', {
             emitter.on('groupDeleted', this.groupDeleted);
         },
         groupUpdated(payload) {
-            if ((this.groupAndBreadcrumbs.id = payload.itemId)) {
+            if ((this.group.id = payload.itemId)) {
                 this.setGroupData(payload);
             }
         },
         groupDeleted(payload) {
-            if ((this.groupAndBreadcrumbs.id = payload.itemId)) {
+            if ((this.group.id = payload.itemId)) {
                 this.clear();
             }
         },
@@ -34,22 +37,23 @@ export const useGroupStore = defineStore('group', {
 
         //TODO: change service to return group and breadcrumbs in one oject
         setGroupAndBreadcrumbsData(data) {
-            this.groupAndBreadcrumbs = data;
-            this.initialGroup = Object.assign({}, data.group);
+            this.setGroupData(data.group);
+            this.breadcrumbs = _.cloneDeep(data.breadcrumbs);
         },
 
-        setGroupData(data) {
-            this.groupAndBreadcrumbs.group = data;
-            this.initialGroup = Object.assign({}, data.group);
+        setGroupData(groupData) {
+            this.initialGroup = _.cloneDeep(groupData);
+            this.group = _.cloneDeep(this.initialGroup);
         },
 
         clear() {
-            this.groupAndBreadcrumbs = {};
+            this.group = {};
             this.initialGroup = {};
+            this.breadcrumbs = {};
         },
 
         discardChanges() {
-            Object.assign(this.groupAndBreadcrumbs.group, this.initialGroup);
+            this.group = _.cloneDeep(this.initialGroup);
         }
     }
 });

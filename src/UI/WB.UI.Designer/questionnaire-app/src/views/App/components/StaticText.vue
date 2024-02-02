@@ -1,6 +1,5 @@
 <template>
-    <form role="form" method="POST" id="staticText-editor" name="staticTextForm" unsaved-warning-form
-        v-show="activeStaticText">
+    <form id="staticText-editor" name="staticTextForm" unsaved-warning-form v-show="activeStaticText">
         <div id="show-reload-details-promt" class="ng-cloak" v-show="shouldUserSeeReloadDetailsPromt">
             <div class="inner">
                 {{ $t('QuestionnaireEditor.QuestionToUpdateOptions') }}
@@ -70,12 +69,8 @@
 
                 </div>
                 <div class="form-group col-xs-1">
-                    <button type="button" class="btn cross instructions-cross" @click="
-                        showEnablingConditions = false;
-                    activeStaticText.enablementCondition = '';
-                    activeStaticText.hideIfDisabled = false;
-                    dirty = false;
-                    "></button>
+                    <button type="button" class="btn cross instructions-cross"
+                        @click="showEnablingConditions = false; activeStaticText.enablementCondition = '';"></button>
                 </div>
             </div>
 
@@ -100,7 +95,8 @@
                 </label>
                 <ExpressionEditor v-model="validation.message" mode="substitutions" />
             </div>
-            <div class="form-group" v-if="activeStaticText.validationConditions.length < 10">
+            <div class="form-group"
+                v-if="activeStaticText.validationConditions && activeStaticText.validationConditions.length < 10">
                 <button type="button" class="btn btn-lg btn-link" @click="addValidationCondition()">
                     {{ $t('QuestionnaireEditor.AddValidationRule') }}
                 </button>
@@ -109,7 +105,8 @@
         <div class="form-buttons-holder">
             <div class="pull-left">
                 <button type="button" id="edit-static-text-save-button" v-show="!questionnaire.isReadOnlyForUser"
-                    :class="{ 'btn-primary': dirty }" class="btn btn-lg" unsaved-warning-clear @click="saveStaticText()">
+                    :class="{ 'btn-primary': isDirty }" :disabled="!isDirty" class="btn btn-lg" unsaved-warning-clear
+                    @click="saveStaticText()">
                     {{ $t('QuestionnaireEditor.Save') }}
                 </button>
                 <button type="button" id="edit-static-text-cancel-button" class="btn btn-lg btn-link" unsaved-warning-clear
@@ -137,9 +134,8 @@
                     class="btn btn-lg btn-link" @click="deleteStaticText()" unsaved-warning-clear>
                     {{ $t('QuestionnaireEditor.Delete') }}
                 </button>
-                <MoveToChapterSnippet :item-id="staticTextId" v-show="!questionnaire.isReadOnlyForUser &&
-                    !currentChapter.isReadOnly
-                    ">
+                <MoveToChapterSnippet :item-id="staticTextId"
+                    v-show="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly">
                 </MoveToChapterSnippet>
             </div>
         </div>
@@ -175,28 +171,11 @@ export default {
     },
     data() {
         return {
-            activeStaticText: {
-                breadcrumbs: '',
-                text: '',
-                validationConditions: [],
-                enablementCondition: '',
-                hideIfDisabled: false,
-                attachmentName: ''
-            },
-
             shouldUserSeeReloadDetailsPromt: true,
             showEnablingConditions: null,
-            dirty: false
         };
     },
     watch: {
-        activeStaticText: {
-            handler(newVal, oldVal) {
-                if (oldVal != null) this.setDirty();
-            },
-            deep: true
-        },
-
         async statictextId(newValue, oldValue) {
             if (newValue != oldValue) {
                 this.staticTextStore.clear();
@@ -230,36 +209,54 @@ export default {
     mounted() {
         this.scrollTo();
     },
+    created() {
+        window.addEventListener('beforeunload', this.beforeWindowUnload)
+    },
+    beforeDestroy() {
+        window.removeEventListener('beforeunload', this.beforeWindowUnload)
+    },
+    beforeRouteLeave(to, from, next) {
+        if (this.isDirty && !this.confirmLeave()) {
+            next(false)
+        } else {
+            next()
+        }
+    },
+    beforeRouteUpdate(to, from, next) {
+        if (this.isDirty && !this.confirmLeave()) {
+            next(false)
+        } else {
+            next()
+        }
+    },
     computed: {
         commentsCount() {
             return this.commentsStore.getCommentsCount;
         },
         isCommentsBlockVisible() {
             return this.commentsStore.getIsCommentsBlockVisible;
+        },
+        activeStaticText() {
+            return this.staticTextStore.getStaticText;
+        },
+        isDirty() {
+            return this.staticTextStore.getIsDirty;
         }
     },
     methods: {
         async fetch() {
-            await this.staticTextStore.fetchStaticTextData(
-                this.questionnaireId,
-                this.statictextId
-            );
-
-            this.activeStaticText = this.staticTextStore.getStaticText;
+            await this.staticTextStore.fetchStaticTextData(this.questionnaireId, this.statictextId);
             this.shouldUserSeeReloadDetailsPromt = false;
             this.showEnablingConditions = this.activeStaticText.enablementCondition ? true : false;
         },
         async saveStaticText() {
-            if (this.dirty == false) return;
-
+            if (!this.isDirty) return;
             updateStaticText(this.questionnaireId, this.activeStaticText);
-            this.dirty = false;
         },
 
         cancelStaticText() {
             this.staticTextStore.discardChanges();
-            this.activeStaticText = this.staticTextStore.getStaticText;
-            this.dirty = false;
+            this.showEnablingConditions = this.activeStaticText.enablementCondition ? true : false;
         },
 
         deleteStaticText() {
@@ -280,32 +277,22 @@ export default {
             this.$confirm(params);
         },
         doesStaticTextSupportEnablementConditions() {
-            return (
-                this.activeStaticText && !this.currentChapter.isCover
-            );
+            return this.activeStaticText && !this.currentChapter.isCover;
         },
         removeValidationCondition(index) {
             this.activeStaticText.validationConditions.splice(index, 1);
-            this.setDirty();
         },
         addValidationCondition() {
             this.activeStaticText.validationConditions.push({
                 expression: '',
                 message: ''
             });
-            this.setDirty();
         },
-
         toggleComments() {
             this.commentsStore.toggleComments();
         },
 
-        setDirty() {
-            this.dirty = true;
-        },
-
         scrollTo() {
-            //const state = this.$route.state
             const state = window.history.state;
             const property = (state || {}).property;
             if (!property)
@@ -333,6 +320,17 @@ export default {
             }
 
             setFocusIn(focusId);
+        },
+        //TODO: move to reuseable mixin
+        confirmLeave() {
+            return window.confirm(this.$t('QuestionnaireEditor.UnsavedChangesLeave'));
+        },
+        beforeWindowUnload(e) {
+            if (this.isDirty && !this.confirmLeave()) {
+                e.preventDefault()
+                e.returnValue = '' //for chrome
+            }
+            return null;
         }
     }
 };
