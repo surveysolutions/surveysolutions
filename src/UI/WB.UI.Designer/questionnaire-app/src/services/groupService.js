@@ -35,19 +35,8 @@ export function updateGroup(questionnaireId, group) {
         rosterTitleQuestionId: null,
         variableName: group.variableName
     };
-    
+
     return commandCall('UpdateGroup', command).then(async response => {
-        emitter.emit('groupUpdated', {
-            id: group.id,
-            title: group.title,
-            enablementCondition: group.enablementCondition,
-            hideIfDisabled: group.hideIfDisabled,
-            isRoster: false,
-            rosterSizeQuestionId: null,
-            rosterSizeSource: 'Question',
-            rosterFixedTitles: null,
-            rosterTitleQuestionId: null,
-            variableName: group.variableName
-        });
+        emitter.emit('groupUpdated', group);
     });
 }
