@@ -93,7 +93,7 @@
                     unsaved-warning-clear>{{ $t('QuestionnaireEditor.Delete') }}</button>
                 <MoveToChapterSnippet :item-id="groupId"
                     v-show="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
-                    v-if="!activeGroup.isChapter && !isCoverPage">
+                    v-if="!isChapter && !isCoverPage">
                 </MoveToChapterSnippet>
             </div>
         </div>
