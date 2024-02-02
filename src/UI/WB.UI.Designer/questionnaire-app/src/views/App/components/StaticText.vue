@@ -65,7 +65,7 @@
                         {{ $t('QuestionnaireEditor.HideIfDisabled') }}
                         <help link="hideIfDisabled" />
                     </label>
-                    <ExpressionEditor v-model="activeStaticText.enablementCondition" />
+                    <ExpressionEditor v-model="activeStaticText.enablementCondition" mode="expression" />
 
                 </div>
                 <div class="form-group col-xs-1">

@@ -312,7 +312,7 @@
                         <help link="hideIfDisabled" />
                     </label>
                     <br>
-                    <ExpressionEditor v-model="activeRoster.enablementCondition" />
+                    <ExpressionEditor v-model="activeRoster.enablementCondition" mode="expression" />
                 </div>
                 <div class="form-group col-xs-1">
                     <button type="button" class="btn cross instructions-cross"
@@ -375,11 +375,6 @@ export default {
     data() {
         return {
             showEnablingConditions: undefined,
-            selectedListQuestion: null,
-            selectedMultiQuestion: null,
-            selectedNumericQuestion: null,
-            selectedTitleQuestion: null,
-            valid: true,
             stringifiedRosterTitles: '',
             stringifiedRosterTitlesValidity: {
                 valid: true,
@@ -389,6 +384,14 @@ export default {
                 }
             },
             useListAsRosterTitleEditor: true,
+
+            selectedListQuestion: null,
+            selectedMultiQuestion: null,
+            selectedNumericQuestion: null,
+            selectedTitleQuestion: null,
+            valid: true,
+
+
             fixedRosterLimit: 200,
             initilized: false,
         };
@@ -485,12 +488,18 @@ export default {
             if (!this.isDirty) return;
 
             await this.showRosterTitlesInList();
+
+            if (!this.stringifiedRosterTitlesValidity.valid) {
+                return;
+            }
             this.rosterStore.saveRosterData(this.questionnaireId);
 
         },
         cancel() {
             this.rosterStore.discardChanges();
             this.useListAsRosterTitleEditor = true;
+
+            this.showEnablingConditions = this.activeRoster.enablementCondition ? true : false;
         },
         toggleComments() {
             this.commentsStore.toggleComments();

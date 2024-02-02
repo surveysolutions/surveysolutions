@@ -51,7 +51,7 @@
                         <help link="hideIfDisabled" />
                     </label>
                     <br>
-                    <ExpressionEditor v-model="activeGroup.enablementCondition"></ExpressionEditor>
+                    <ExpressionEditor v-model="activeGroup.enablementCondition" mode="expression"></ExpressionEditor>
                 </div>
                 <div class="form-group col-xs-1">
                     <button type="button" class="btn cross instructions-cross"
