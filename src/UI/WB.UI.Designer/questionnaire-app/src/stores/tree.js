@@ -430,10 +430,9 @@ export const useTreeStore = defineStore('tree', {
         },
 
         variableUpdated(data) {
-            const itemId = data.itemId.replaceAll('-', '');
-            var variable = this.findTreeItem(itemId);
+            var variable = this.findTreeItem(data.id);
             if (isNull(variable) || isUndefined(variable)) return;
-            variable.variableData.name = data.name;
+            variable.variableData.name = data.variable;
             variable.variableData.label = data.label;
         },
 
