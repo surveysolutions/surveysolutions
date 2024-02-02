@@ -50,14 +50,14 @@
                                             <span class="dropdown-arrow" aria-labelledby="dropdownMenu12"></span>
                                         </button>
                                         <button type="button" class="btn btn-link btn-clear"
-                                            @click="metadata.studyType = null; setDirty();">
+                                            @click="metadata.studyType = null;">
                                             <span></span>
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenu12">
                                             <perfect-scrollbar class="scroller">
                                                 <ul class="list-unstyled">
                                                     <li v-for="studyType in questionnaire.studyTypes">
-                                                        <a @click="metadata.studyType = studyType.code; setDirty();"
+                                                        <a @click="metadata.studyType = studyType.code;"
                                                             :value="studyType.code" href="#">{{ studyType.title }}</a>
                                                     </li>
                                                 </ul>
@@ -78,13 +78,13 @@
                                             <span class="dropdown-arrow" aria-labelledby="dropdownMenu12"></span>
                                         </button>
                                         <button type="button" class="btn btn-link btn-clear"
-                                            @click="metadata.kindOfData = null; setDirty();">
+                                            @click="metadata.kindOfData = null">
                                             <span></span>
                                         </button>
                                         <div class="dropdown-menu " aria-labelledby="dropdownMenu12">
                                             <ul class="scroller list-unstyled">
                                                 <li v-for="kindOfData in questionnaire.kindsOfData">
-                                                    <a @click="metadata.kindOfData = kindOfData.code; setDirty();"
+                                                    <a @click="metadata.kindOfData = kindOfData.code"
                                                         :value="kindOfData.code" href="#">{{ kindOfData.title }}</a>
                                                 </li>
                                             </ul>
@@ -105,13 +105,13 @@
                                             <span class="dropdown-arrow" aria-labelledby="dropdownMenu12"></span>
                                         </button>
                                         <button type="button" class="btn btn-link btn-clear"
-                                            @click="metadata.modeOfDataCollection = null; setDirty();">
+                                            @click="metadata.modeOfDataCollection = null">
                                             <span></span>
                                         </button>
                                         <div class="dropdown-menu " aria-labelledby="dropdownMenu12">
                                             <ul class="scroller list-unstyled">
                                                 <li v-for="modeOfData in questionnaire.modesOfDataCollection">
-                                                    <a @click="metadata.modeOfDataCollection = modeOfData.code; setDirty();"
+                                                    <a @click="metadata.modeOfDataCollection = modeOfData.code"
                                                         :value="modeOfData.code" href="#">{{ modeOfData.title }}</a>
                                                 </li>
                                             </ul>
@@ -134,15 +134,15 @@
                                             <span class="dropdown-arrow" aria-labelledby="dropdownMenu12"></span>
                                         </button>
                                         <button type="button" class="btn btn-link btn-clear"
-                                            @click="metadata.country = null; setDirty();">
+                                            @click="metadata.country = null">
                                             <span></span>
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenu12">
                                             <perfect-scrollbar class="scroller">
                                                 <ul class="list-unstyled">
                                                     <li v-for="country in questionnaire.countries">
-                                                        <a @click="metadata.country = country.code; setDirty();"
-                                                            :value="country.code" href="#">{{ country.title }}</a>
+                                                        <a @click="metadata.country = country.code" :value="country.code"
+                                                            href="#">{{ country.title }}</a>
                                                     </li>
                                                 </ul>
                                             </perfect-scrollbar>
@@ -272,7 +272,7 @@ export default {
     },
     data() {
         return {
-            dirty: false
+
         }
     },
     setup() {
@@ -282,14 +282,6 @@ export default {
             questionnaireStore,
         };
     },
-    watch: {
-        metadata: {
-            handler(newVal, oldVal) {
-                if (oldVal != null) this.dirty = true;
-            },
-            deep: true
-        },
-    },
     computed: {
         questionnaire() {
             return this.questionnaireStore.getInfo || {};
@@ -297,6 +289,10 @@ export default {
 
         metadata() {
             return this.questionnaireStore.getEdittingMetadata || {};
+        },
+
+        dirty() {
+            return this.questionnaireStore.getIsDirtyMetadata
         },
 
         invalid() {
@@ -356,17 +352,11 @@ export default {
 
         async saveMetadata() {
             await updateMetadata(this.questionnaireId, this.metadata);
-            this.dirty = false;
         },
 
         async cancelMetadata() {
             await this.questionnaireStore.discardMetadataChanges();
-            this.dirty = false;
         },
-
-        setDirty() {
-            this.dirty = true;
-        }
     },
 }
 </script>
