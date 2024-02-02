@@ -199,7 +199,7 @@
                                                 : $t('QuestionnaireEditor.SettingsStatusDontAllowAnonymousAccess')
                                             }}
                                         </span>
-                                        <button v-if="questionnaireEdit.isQuestionnaireOwner" class="btn btn-link answer"
+                                        <button v-if="isQuestionnaireOwner" class="btn btn-link answer"
                                             @click="updateAnonymousQuestionnaireSettings()">
                                             {{
                                                 questionnaireEdit.isAnonymouslyShared

@@ -97,6 +97,7 @@ export default {
             this.selectedTranslation = this.translations[0];
             this.generateStatusMessage = '';
 
+            this.isGenerating = false;
             this.visible = true;
         },
         close() {
