@@ -48,7 +48,7 @@ export default {
         },
 
         scenarios() {
-            return this.questionnaire.scenarios;
+            return this.questionnaireStore.getEdittingScenarios;
         },
     }
 }

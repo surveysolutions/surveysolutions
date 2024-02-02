@@ -50,7 +50,7 @@ export default {
             return this.originName != this.scenario.title;
         },
         invalid() {
-            return false;
+            return (this.scenario.title) ? false : true;
         }
     },
     methods: {
@@ -60,14 +60,16 @@ export default {
         async showScenarioEditor() {
             await this.$refs.editor.show();
         },
-        saveScenario() {
-            updateScenario(this.questionnaireId, this.scenario)
+        async saveScenario() {
+            await updateScenario(this.questionnaireId, this.scenario)
+
+            this.originName = this.scenario.title;
         },
         cancel() {
             this.scenario.title = this.originName;
         },
         deleteScenario() {
-            var scenarioName = this.scenario.title || $t("QuestionnaireEditor.SideBarScenarioNoName");
+            var scenarioName = this.scenario.title || this.$t("QuestionnaireEditor.SideBarScenarioNoName");
             var modalInstance = createQuestionForDeleteConfirmationPopup(scenarioName);
 
             modalInstance.callback = confirm => {
