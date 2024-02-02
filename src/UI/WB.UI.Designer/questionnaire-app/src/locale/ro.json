@@ -486,6 +486,7 @@
     "AttachmentDimensionsAreTooBig": "Dimensions are too big",
     "HelpOverlapDetection": "Display and highlight the overlaps of this question answer with answers to the same questions in sibling roster instances",
     "AddEnablingCondition": "Add enabling condition",
-    "OldUi": "Old UI"
+    "OldUi": "Old UI",
+    "ShowList": "Show list"
   }
 }

@@ -477,6 +477,7 @@
     "AddEnablingCondition": "Добавить условие",
     "ManageAccount": "Управление учётной записью",
     "OldUi": "Старый UI",
+    "ShowList": "Показать списком",
     "ErrorsCounter_other": "{{count}} errors",
     "SideBarAttachmentsCounter_other": "{{count}} Files Attachments ({{bytes}} total)",
     "SideBarLookupTablesCounter_other": "{{count}} Lookup Tables:",

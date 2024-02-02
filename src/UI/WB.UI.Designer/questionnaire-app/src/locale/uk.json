@@ -486,6 +486,7 @@
     "WarningsCounter_other": "{{count}} попередження",
     "Yes": "Так",
     "ManageAccount": "Керування обліковим записом",
-    "OldUi": "Старий UI"
+    "OldUi": "Старий UI",
+    "ShowList": "Відобразити списком"
   }
 }
