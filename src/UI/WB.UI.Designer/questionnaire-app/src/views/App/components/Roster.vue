@@ -39,8 +39,6 @@
                 <br />
                 <ExpressionEditor v-model="activeRoster.title"></ExpressionEditor>
                 <div class="roster-type-specific-block" v-if="activeRoster.type != undefined">
-
-
                     <div class="dropdown-with-breadcrumbs-and-icons" v-if="activeRoster.type == 'List'">
                         <label>{{ $t('QuestionnaireEditor.RosterSourceQuestion') }}</label>
                         <div class="btn-group" uib-dropdown>
@@ -362,6 +360,7 @@ import { find } from 'lodash'
 import { convertToText, validateText, convertToTable } from '../../OptionsEditor/utils/tableToString';
 import { isInteger } from '../../../helpers/number';
 import { createQuestionForDeleteConfirmationPopup } from '../../../services/utilityService'
+import { updateRoster, deleteRoster } from '../../../services/rosterService'
 import { setFocusIn } from '../../../services/utilityService'
 
 export default {
@@ -384,13 +383,6 @@ export default {
                 }
             },
             useListAsRosterTitleEditor: true,
-
-            selectedListQuestion: null,
-            selectedMultiQuestion: null,
-            selectedNumericQuestion: null,
-            selectedTitleQuestion: null,
-            valid: true,
-
 
             fixedRosterLimit: 200,
             initilized: false,
@@ -472,17 +464,16 @@ export default {
         },
         isCommentsBlockVisible() {
             return this.commentsStore.getIsCommentsBlockVisible;
-        }
+        },
+
+        selectedNumericQuestion() { return this.findQuestion(this.activeRoster.numericIntegerQuestions, this.activeRoster.rosterSizeNumericQuestionId); },
+        selectedTitleQuestion() { return this.findQuestion(this.activeRoster.numericIntegerTitles, this.activeRoster.rosterTitleQuestionId); },
+        selectedListQuestion() { return this.findQuestion(this.activeRoster.textListsQuestions, this.activeRoster.rosterSizeListQuestionId); },
+        selectedMultiQuestion() { return this.findQuestion(this.activeRoster.notLinkedMultiOptionQuestions, this.activeRoster.rosterSizeMultiQuestionId); }
     },
     methods: {
         async fetch() {
             await this.rosterStore.fetchRosterData(this.questionnaireId, this.rosterId);
-
-            this.selectedNumericQuestion = this.findQuestion(this.activeRoster.numericIntegerQuestions, this.activeRoster.rosterSizeNumericQuestionId);
-            this.selectedTitleQuestion = this.findQuestion(this.activeRoster.numericIntegerTitles, this.activeRoster.rosterTitleQuestionId);
-            this.selectedListQuestion = this.findQuestion(this.activeRoster.textListsQuestions, this.activeRoster.rosterSizeListQuestionId);
-            this.selectedMultiQuestion = this.findQuestion(this.activeRoster.notLinkedMultiOptionQuestions, this.activeRoster.rosterSizeMultiQuestionId);
-
         },
         async saveRoster() {
             if (!this.isDirty) return;
@@ -492,7 +483,8 @@ export default {
             if (!this.stringifiedRosterTitlesValidity.valid) {
                 return;
             }
-            this.rosterStore.saveRosterData(this.questionnaireId);
+
+            updateRoster(this.questionnaireId, this.activeRoster);
 
         },
         cancel() {
@@ -533,6 +525,7 @@ export default {
         },
         deleteRoster() {
             var itemIdToDelete = this.rosterId;
+            var questionnaireId = this.questionnaireId;
 
             const params = createQuestionForDeleteConfirmationPopup(
                 this.activeRoster.title ||
@@ -541,7 +534,7 @@ export default {
 
             params.callback = confirm => {
                 if (confirm) {
-                    this.rosterStore.deleteRoster(itemIdToDelete);
+                    deleteRoster(questionnaireId, itemIdToDelete);
                 }
             };
 

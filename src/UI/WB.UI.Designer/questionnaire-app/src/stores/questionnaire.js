@@ -65,6 +65,7 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             emitter.on('metadataUpdated', this.metadataUpdated);
 
             emitter.on('groupUpdated', this.groupUpdated);
+            emitter.on('rosterUpdated', this.rosterUpdated);
 
             emitter.on('scenarioUpdated', this.scenarioUpdated);
             emitter.on('scenarioDeleted', this.scenarioDeleted);
@@ -187,6 +188,7 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
                     payload.hideIfDisabled;
             }
         },
+        rosterUpdated(payload) {},
 
         prepareMacro(macro) {
             macro.initialMacro = cloneDeep(macro);

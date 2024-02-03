@@ -458,12 +458,16 @@ export const useTreeStore = defineStore('tree', {
         },
 
         rosterUpdated(data) {
+            const hasCondition =
+                data.enablementCondition !== null &&
+                /\S/.test(data.enablementCondition);
+
             const itemId = data.itemId.replaceAll('-', '');
             var roster = this.findTreeItem(itemId);
             if (isNull(roster) || isUndefined(roster)) return;
             roster.title = data.title;
             roster.variable = data.variable;
-            roster.hasCondition = data.hasCondition;
+            roster.hasCondition = hasCondition;
             roster.hideIfDisabled = data.hideIfDisabled;
         },
 
