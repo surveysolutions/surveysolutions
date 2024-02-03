@@ -55,7 +55,7 @@
                 </div>
                 <div class="form-group col-xs-1">
                     <button type="button" class="btn cross instructions-cross"
-                        @click="showEnablingConditions = false; activeGroup.enablementCondition = ''; activeGroup.hideIfDisabled = false; dirty = true;"></button>
+                        @click="showEnablingConditions = false; activeGroup.enablementCondition = ''; activeGroup.hideIfDisabled = false;"></button>
                 </div>
             </div>
 

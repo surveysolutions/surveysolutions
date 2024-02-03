@@ -130,30 +130,7 @@ export function updateQuestion(
 
     return commandCall(commandName, command).then(async response => {
         //TODO: check if everything is published
-        emitter.emit('questionUpdated', {
-            itemId: question.id,
-            type: question.type,
-            linkedToEntityId: question.linkedToEntityId,
-            linkedFilterExpression: question.linkedFilterExpression,
-            hasCondition:
-                hasQuestionEnablementConditions(question) &&
-                question.enablementCondition !== null &&
-                /\S/.test(question.enablementCondition),
-            hasValidation:
-                doesQuestionSupportValidations(question) &&
-                question.validationConditions.length > 0,
-            title: question.title,
-            variable: question.variableName,
-            hideIfDisabled: question.hideIfDisabled,
-            yesNoView: question.yesNoView,
-            isInteger: question.isInteger,
-            linkedToType:
-                question.linkedToEntity == null
-                    ? null
-                    : question.linkedToEntity.type,
-            defaultDate: question.defaultDate,
-            categoriesId: question.categoriesId
-        });
+        emitter.emit('questionUpdated', question);
     });
 }
 

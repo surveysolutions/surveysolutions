@@ -29,16 +29,16 @@ export const useQuestionStore = defineStore('question', {
         },
 
         //TODO: move it to the service
-        async saveQuestionData(questionnaireId) {
+        async saveQuestionData(questionnaireId, question) {
             this.trimEmptyOptions();
 
             var shouldGetOptionsOnServer =
                 this.wasThereOptionsLooseWhileChanginQuestionProperties() &&
-                this.question.isCascade;
+                question.isCascade;
 
             updateQuestion(
                 questionnaireId,
-                this.question,
+                question,
                 shouldGetOptionsOnServer
             ).then(async response => {
                 //TODO: improve this by subscribing to event

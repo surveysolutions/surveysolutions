@@ -70,7 +70,7 @@
                 </div>
                 <div class="form-group col-xs-1">
                     <button type="button" class="btn cross instructions-cross"
-                        @click="showEnablingConditions = false; activeStaticText.enablementCondition = '';"></button>
+                        @click="showEnablingConditions = false; activeStaticText.enablementCondition = ''; activeStaticText.hideIfDisabled = false;"></button>
                 </div>
             </div>
 

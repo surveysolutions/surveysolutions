@@ -399,17 +399,20 @@ export const useTreeStore = defineStore('tree', {
         },
 
         questionUpdated(data) {
-            const itemId = data.itemId.replaceAll('-', '');
+            const itemId = data.id.replaceAll('-', '');
             var question = this.findTreeItem(itemId);
             if (isNull(question) || isUndefined(question)) return;
 
             question.title = data.title;
             question.variable = data.variable;
             question.type = data.type;
-            question.hasValidation = data.hasValidation;
-            question.hasCondition = data.hasCondition;
+            question.hasValidation = data.validationConditions.length > 0;
+            question.hasCondition =
+                data.enablementCondition !== null &&
+                /\S/.test(data.enablementCondition);
             question.linkedToEntityId = data.linkedToEntityId;
-            question.linkedToType = data.linkedToType;
+            question.linkedToType =
+                data.linkedToEntity == null ? null : data.linkedToEntity.type;
             question.isInteger = data.isInteger;
             question.yesNoView = data.yesNoView;
             question.hideIfDisabled = data.hideIfDisabled;

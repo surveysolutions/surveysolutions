@@ -5,10 +5,7 @@
                     href="javascript:void(0);">{{ $t('QuestionnaireEditor.QuestionClickReload') }}</a></div>
         </div>
         <div class="form-holder">
-
-            <Breadcrumbs :breadcrumbs="activeQuestion.breadcrumbs">
-            </Breadcrumbs>
-
+            <Breadcrumbs :breadcrumbs="activeQuestion.breadcrumbs" />
             <div class="row">
                 <div class="form-group col-xs-6">
                     <label class="wb-label">{{ $t('QuestionnaireEditor.QuestionQuestionType') }}</label><br />
@@ -185,8 +182,6 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
         <div class="form-buttons-holder">
             <div class="pull-left">
@@ -219,8 +214,8 @@
                     unsaved-warning-clear>{{
                         $t('QuestionnaireEditor.Delete') }}</button>
                 <MoveToChapterSnippet :item-id="questionId"
-                    v-show="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly">
-                </MoveToChapterSnippet>
+                    v-show="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly" />
+
             </div>
         </div>
     </form>
@@ -278,6 +273,7 @@ export default {
     data() {
         return {
             shouldUserSeeReloadDetailsPromt: true,
+
             showInstruction: null,
             showEnablingConditions: null,
         }
@@ -371,6 +367,9 @@ export default {
         async fetch() {
             await this.questionStore.fetchQuestionData(this.questionnaireId, this.questionId);
             this.shouldUserSeeReloadDetailsPromt = false;
+
+            this.showInstruction = this.activeQuestion.instructions ? true : false;
+            this.showEnablingConditions = this.activeQuestion.enablementCondition ? true : false;
         },
 
         async saveQuestion() {
@@ -384,12 +383,15 @@ export default {
             const componentValid = this.$refs.questionSpecific.valid || true;
             if (!componentValid) return;
 
-            await this.questionStore.saveQuestionData(this.questionnaireId);
+            await this.questionStore.saveQuestionData(this.questionnaireId, this.activeQuestion);
         },
 
         cancel() {
             this.questionStore.discardChanges();
+
             this.shouldUserSeeReloadDetailsPromt = false;
+            this.showInstruction = this.activeQuestion.instructions ? true : false;
+            this.showEnablingConditions = this.activeQuestion.enablementCondition ? true : false;
         },
         toggleComments() {
             this.commentsStore.toggleComments();
