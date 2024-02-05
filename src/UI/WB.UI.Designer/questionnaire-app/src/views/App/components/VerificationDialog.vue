@@ -182,10 +182,6 @@ export default {
                 }*/))
             })
         },
-        referenceCssClass(reference) {
-            if (reference.type == 'Question')
-                return [reference.questionType, 'icon-' + typeOfMessageToBeShown]
-        }
     }
 };
 </script>
