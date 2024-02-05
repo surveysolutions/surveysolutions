@@ -120,7 +120,7 @@
                             </span>
                         </span>
                         <span class="error-message strong" v-if="questionnaire.isReadOnlyForUser">
-                            {{ $t('QuestionnaireEditor.ReadOnly') }}</span>
+                            {{ $t('QuestionnaireEditor.ReadOnly') }}&nbsp;</span>
                         <button id="webtest-btn" type="button" class="btn" v-if="questionnaire.webTestAvailable &&
                             questionnaire.questionnaireRevision === null
                             " @click="webTest()">
