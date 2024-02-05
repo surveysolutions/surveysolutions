@@ -18,7 +18,7 @@
             <div class="modal-body">
                 <perfect-scrollbar class="scroller">
                     <div id="verify-popover-content">
-                        <div class="question-list">
+                        <div class="question-list" ref="errorsList">
                             <div v-for="error in messagesToShow">
                                 <div class="error-message">
                                     <span class="error-code">[{{ error.code }}]:</span>{{ error.message }}
@@ -30,8 +30,8 @@
                                         <li class="verification-item-container"
                                             v-for="reference in referencesWithErrors.references"
                                             @click="navigateTo(reference)">
-                                            <a class="verification-item" href="javascript:void(0);" data-bs-placement="top"
-                                                data-bs-toggle="tooltip" data-bs-html="true"
+                                            <a class="verification-item" href="javascript:void(0);"
+                                                data-bs-placement="right" data-bs-toggle="tooltip" data-bs-html="true"
                                                 :title="referencesWithErrors.compilationErrorMessages != null ? referencesWithErrors.compilationErrorMessages.slice(0, 10).join('<br />') + (referencesWithErrors.compilationErrorMessages.length > 10 ? '<br />...' : '') : ''"
                                                 data-bs-custom-class="error-tooltip in" data-bs-container='body'>
                                                 <span v-if="reference.type == 'Question'" class="icon"
@@ -103,16 +103,23 @@ export default {
         };
     },
     expose: ['openErrors', 'openWarnings', 'close'],
+    computed: {
+        messagesToShow() {
+            if (this.typeOfMessageToBeShown === 'error')
+                return this.verificationStore.status.errors;
+            return this.verificationStore.status.warnings;
+        }
+    },
     methods: {
         openErrors() {
             this.typeOfMessageToBeShown = 'error';
-            this.messagesToShow = this.verificationStore.status.errors;
             this.visible = true;
+            this.initTooltips();
         },
         openWarnings() {
             this.typeOfMessageToBeShown = 'warning';
-            this.messagesToShow = this.verificationStore.status.warnings;
             this.visible = true;
+            this.initTooltips();
         },
         close() {
             this.visible = false;
@@ -122,18 +129,18 @@ export default {
                 this.questionnaireId
             );
 
-            if (this.typeOfMessageToBeShown === 'error')
-                this.messagesToShow = this.verificationStore.status.errors;
-            else this.messagesToShow = this.verificationStore.status.warnings;
-
             if (this.messagesToShow.length == 0) {
                 this.close()
             }
+            else (
+                this.initTooltips()
+            )
         },
         navigateTo(reference) {
             if (reference.type.toLowerCase() === "questionnaire") {
                 this.visible = false;
-                this.showShareInfo(); // TODO
+                this.$emitter.emit("showShareInfo", {});
+                //this.showShareInfo(); 
             } else if (reference.type.toLowerCase() === "macro") {
                 this.visible = false;
                 this.$emitter.emit("openMacrosList", { focusOn: reference.itemId });
@@ -156,8 +163,6 @@ export default {
                     params: {
                         chapterId: reference.chapterId,
                         entityId: reference.itemId,
-                        //indexOfEntityInProperty: reference.indexOfEntityInProperty,
-                        //property: reference.property
                     },
                     force: true,
                     state: {
@@ -166,6 +171,20 @@ export default {
                     }
                 });
             }
+        },
+        initTooltips() {
+            this.$nextTick(() => {
+                const errorsList = this.$refs.errorsList;
+                const tooltipTriggerList = errorsList.querySelectorAll('[data-bs-toggle="tooltip"]')
+                const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl/*, {
+                    customClass: 'right in',
+                    placement: 'right'
+                }*/))
+            })
+        },
+        referenceCssClass(reference) {
+            if (reference.type == 'Question')
+                return [reference.questionType, 'icon-' + typeOfMessageToBeShown]
         }
     }
 };
