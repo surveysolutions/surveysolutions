@@ -47,7 +47,7 @@
                                         <div class="form-group input-variable-name">
                                             <label class="control-label" for="questionnaireTitle">
                                                 {{ $t('QuestionnaireEditor.SettingsQuestionnaireVariable') }}
-                                            </label>
+                                            </label>&nbsp;
                                             <help link="questionnaireVariableName" />
                                             <input id="questionnaireVariable" :disabled="questionnaire.isReadOnlyForUser"
                                                 type="text" class="form-control questionaire-title"
