@@ -307,6 +307,15 @@ export default {
     },
     data() {
         return {
+            questionnaireEdit: {
+                editedTitle: null,
+                editedVariable: null,
+                editedHideIfDisabled: false,
+
+                isAnonymouslyShared: false,
+                anonymousQuestionnaireId: null,
+                anonymousQuestionnaireShareDate: null
+            },
             viewModelData: {},
             shareTypeOptions: [
                 {
@@ -320,18 +329,9 @@ export default {
             ],
 
             visible: false,
-            dirty: false,
             settings: true,
             passConfirmationOpen: null
         };
-    },
-    watch: {
-        questionnaireEdit: {
-            handler(newVal, oldVal) {
-                if (oldVal != null) this.dirty = true;
-            },
-            deep: true
-        }
     },
     beforeMount() {
         this.viewModelData = {
@@ -345,16 +345,10 @@ export default {
         };
     },
     computed: {
-        questionnaireEdit() {
-            return {
-                editedTitle: this.questionnaire.title,
-                editedVariable: this.questionnaire.variable,
-                editedHideIfDisabled: this.questionnaire.hideIfDisabled,
-
-                isAnonymouslyShared: this.questionnaire.isAnonymouslyShared,
-                anonymousQuestionnaireId: this.questionnaire.anonymousQuestionnaireId,
-                anonymousQuestionnaireShareDate: toLocalDateTime(this.questionnaire.anonymouslySharedAtUtc)
-            };
+        dirty() {
+            return this.questionnaireEdit.editedTitle != this.questionnaire.title
+                || this.questionnaireEdit.editedVariable != this.questionnaire.variable
+                || this.questionnaireEdit.editedHideIfDisabled != this.questionnaire.hideIfDisabled;
         },
         isQuestionnaireOwner() {
             const userEmail = this.currentUser.email;
@@ -366,10 +360,21 @@ export default {
     expose: ['open', 'close'],
     methods: {
         open() {
+            this.fillQuestionnaireEditData();
+
             this.visible = true;
         },
         close() {
             this.visible = false;
+        },
+        fillQuestionnaireEditData() {
+            this.questionnaireEdit.editedTitle = this.questionnaire.title
+            this.questionnaireEdit.editedVariable = this.questionnaire.variable
+            this.questionnaireEdit.editedHideIfDisabled = this.questionnaire.hideIfDisabled
+
+            this.questionnaireEdit.isAnonymouslyShared = this.questionnaire.isAnonymouslyShared
+            this.questionnaireEdit.anonymousQuestionnaireId = this.questionnaire.anonymousQuestionnaireId
+            this.questionnaireEdit.anonymousQuestionnaireShareDate = toLocalDateTime(this.questionnaire.anonymouslySharedAtUtc)
         },
         togglePublicity() {
             updateQuestionnaire(this.questionnaireId, {
