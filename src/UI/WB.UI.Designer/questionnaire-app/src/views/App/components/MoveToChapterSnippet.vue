@@ -25,6 +25,7 @@
 <script>
 
 import { useTreeStore } from '../../../stores/tree';
+import { moveItem } from '../../../services/questionnaireService'
 
 export default {
     name: 'MoveToChapterSnippet',
@@ -53,16 +54,22 @@ export default {
         }
     },
     methods: {
-        moveToChapter(chapterId) {
+        async moveToChapter(chapterId) {
             if (chapterId == this.currentChapterId)
                 return;
 
             const itemToMoveId = this.itemId;
 
-            this.treeStore.moveItem(itemToMoveId, this.itemType, chapterId, 0);
+            await moveItem(this.questionnaire.questionnaireId, itemToMoveId, this.itemType, chapterId, 0);
 
-            //questionnaireService.removeItemWithId($scope.items, itemToMoveId);
-            //$scope.resetSelection();
+            this.$router.push({
+                name: 'group',
+                params: {
+                    chapterId: this.currentChapterId,
+                    entityId: this.currentChapterId
+                },
+                force: true
+            });
         }
     }
 };

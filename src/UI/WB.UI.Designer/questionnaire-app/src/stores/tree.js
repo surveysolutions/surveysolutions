@@ -30,6 +30,11 @@ export const useTreeStore = defineStore('tree', {
             emitter.on('variableDeleted', this.variableDeleted);
             emitter.on('groupDeleted', this.groupDeleted);
             emitter.on('rosterDeleted', this.rosterDeleted);
+
+            emitter.on('groupMoved', this.groupMoved);
+            emitter.on('questionMoved', this.questionMoved);
+            emitter.on('staticTextMoved', this.staticTextMoved);
+            emitter.on('variableMoved', this.variableMoved);
         },
 
         async fetchTree(questionnaireId, chapterId) {
@@ -343,61 +348,6 @@ export const useTreeStore = defineStore('tree', {
             return index < 0 ? null : index;
         },
 
-        moveItem(itemId, itemType, newParentId, index) {
-            if (itemType == 'Question')
-                return this.moveQuestion(itemId, index, newParentId);
-            else if (itemType == 'StaticText')
-                return this.moveStaticText(itemId, index, newParentId);
-            else if (itemType == 'Variable')
-                return this.moveVariable(itemId, index, newParentId);
-            else if (itemType == 'Group')
-                return this.moveGroup(itemId, index, newParentId);
-        },
-
-        moveGroup(groupId, index, destGroupId) {
-            var command = {
-                targetGroupId: destGroupId,
-                targetIndex: index,
-                groupId: groupId,
-                questionnaireId: this.questionnaireId
-            };
-
-            return commandCall('MoveGroup', command);
-        },
-
-        moveQuestion(questionId, index, destGroupId) {
-            var command = {
-                targetGroupId: destGroupId,
-                targetIndex: index,
-                questionId: questionId,
-                questionnaireId: this.questionnaireId
-            };
-
-            return commandCall('MoveQuestion', command);
-        },
-
-        moveStaticText(entityId, index, destGroupId) {
-            var command = {
-                targetEntityId: destGroupId,
-                targetIndex: index,
-                entityId: entityId,
-                questionnaireId: this.questionnaireId
-            };
-
-            return commandCall('MoveStaticText', command);
-        },
-
-        moveVariable(entityId, index, destGroupId) {
-            var command = {
-                targetEntityId: destGroupId,
-                targetIndex: index,
-                entityId: entityId,
-                questionnaireId: this.questionnaireId
-            };
-
-            return commandCall('MoveVariable', command);
-        },
-
         questionUpdated(data) {
             const itemId = data.id.replaceAll('-', '');
             var question = this.findTreeItem(itemId);
@@ -474,11 +424,11 @@ export const useTreeStore = defineStore('tree', {
             roster.hideIfDisabled = data.hideIfDisabled;
         },
 
-        findTreeItem(value) {
+        findTreeItem(itemId) {
             var o;
             const items = this.getItems;
             items.some(function iter(a) {
-                if (a.itemId === value) {
+                if (a.itemId === itemId) {
                     o = a;
                     return true;
                 }
@@ -539,6 +489,44 @@ export const useTreeStore = defineStore('tree', {
         clear() {
             this.info = {};
             this.readyToPaste = null;
+        },
+
+        questionMoved(event) {
+            this.treeItemMoved(event.itemId, event.newParentId, event.newIndex);
+        },
+        staticTextMoved(event) {
+            this.treeItemMoved(event.itemId, event.newParentId, event.newIndex);
+        },
+        variableMoved(event) {
+            this.treeItemMoved(event.itemId, event.newParentId, event.newIndex);
+        },
+        groupMoved(event) {
+            this.treeItemMoved(event.itemId, event.newParentId, event.newIndex);
+        },
+        treeItemMoved(itemId, newParentId, newIndex) {
+            const id = itemId.replaceAll('-', '');
+            var treeItem = this.findTreeItem(id);
+            if (isNull(treeItem) || isUndefined(treeItem)) {
+                return;
+            }
+
+            var parent = this.findTreeItemParent(id);
+            if (isNull(parent) || isUndefined(parent)) {
+                return;
+            }
+
+            const index = this.getItemIndexByIdFromParentItemsList(
+                parent,
+                itemId
+            );
+            parent.items.splice(index, 1);
+
+            var newParent = this.findTreeItem(newParentId);
+            if (isNull(newParent) || isUndefined(newParent)) {
+                return;
+            }
+
+            newParent.items.splice(newIndex, 0, treeItem);
         }
     }
 });

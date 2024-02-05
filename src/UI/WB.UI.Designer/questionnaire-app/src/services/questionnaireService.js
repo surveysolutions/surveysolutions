@@ -137,3 +137,92 @@ export function migrateToNewVersion(questionnaireId) {
     };
     return commandCall('MigrateToNewVersion', command);
 }
+
+export function moveItem(
+    questionnaireId,
+    itemId,
+    itemType,
+    newParentId,
+    index
+) {
+    if (itemType == 'Question')
+        return moveQuestion(questionnaireId, itemId, index, newParentId);
+    else if (itemType == 'StaticText')
+        return moveStaticText(questionnaireId, itemId, index, newParentId);
+    else if (itemType == 'Variable')
+        return moveVariable(questionnaireId, itemId, index, newParentId);
+    else if (itemType == 'Group')
+        return moveGroup(questionnaireId, itemId, index, newParentId);
+}
+
+export function moveGroup(questionnaireId, groupId, index, destGroupId) {
+    var command = {
+        targetGroupId: destGroupId,
+        targetIndex: index,
+        groupId: groupId,
+        questionnaireId: questionnaireId
+    };
+
+    return commandCall('MoveGroup', command).then(response => {
+        emitter.emit('groupMoved', {
+            itemId: groupId,
+            newParentId: destGroupId,
+            newIndex: index,
+            questionnaireId: questionnaireId
+        });
+    });
+}
+
+export function moveQuestion(questionnaireId, questionId, index, destGroupId) {
+    var command = {
+        targetGroupId: destGroupId,
+        targetIndex: index,
+        questionId: questionId,
+        questionnaireId: questionnaireId
+    };
+
+    return commandCall('MoveQuestion', command).then(response => {
+        emitter.emit('questionMoved', {
+            itemId: questionId,
+            newParentId: destGroupId,
+            newIndex: index,
+            questionnaireId: questionnaireId
+        });
+    });
+}
+
+export function moveStaticText(questionnaireId, entityId, index, destGroupId) {
+    var command = {
+        targetEntityId: destGroupId,
+        targetIndex: index,
+        entityId: entityId,
+        questionnaireId: questionnaireId
+    };
+
+    return commandCall('MoveStaticText', command).then(response => {
+        emitter.emit('staticTextMoved', {
+            itemId: entityId,
+            newParentId: destGroupId,
+            newIndex: index,
+            questionnaireId: questionnaireId
+        });
+    });
+}
+
+export function moveVariable(questionnaireId, entityId, index, destGroupId) {
+    var command = {
+        targetEntityId: destGroupId,
+        targetIndex: index,
+        entityId: entityId,
+        questionnaireId: questionnaireId
+    };
+
+    return commandCall('MoveVariable', command).then(response => {
+        emitter.emit('variableMoved', {
+            itemId: entityId,
+            newParentId: destGroupId,
+            newIndex: index,
+            questionnaireId: questionnaireId
+        });
+    });
+}

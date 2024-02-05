@@ -147,6 +147,7 @@ import { Draggable, dragContext, walkTreeData } from '@he-tree/vue';
 import '@he-tree/vue/style/default.css';
 import { ref, nextTick } from 'vue';
 import SearchDialog from './SearchDialog.vue';
+import { moveItem } from '../../../services/questionnaireService'
 
 import TreeGroup from './TreeGroup.vue';
 import TreeQuestion from './TreeQuestion.vue';
@@ -215,6 +216,11 @@ export default {
         this.$emitter.on('variableDeleted', this.treeNodeDeleted);
         this.$emitter.on('groupDeleted', this.treeNodeDeleted);
         this.$emitter.on('rosterDeleted', this.treeNodeDeleted);
+
+        this.$emitter.on('questionMoved', this.treeNodeMoved);
+        this.$emitter.on('staticTextMoved', this.treeNodeMoved);
+        this.$emitter.on('variableMoved', this.treeNodeMoved);
+        this.$emitter.on('groupMoved', this.treeNodeMoved);
     },
     unmounted() {
         this.$emitter.off('questionDeleted', this.treeNodeDeleted);
@@ -222,6 +228,11 @@ export default {
         this.$emitter.off('variableDeleted', this.treeNodeDeleted);
         this.$emitter.off('groupDeleted', this.treeNodeDeleted);
         this.$emitter.off('rosterDeleted', this.treeNodeDeleted);
+
+        this.$emitter.off('questionMoved', this.treeNodeMoved);
+        this.$emitter.off('staticTextMoved', this.treeNodeMoved);
+        this.$emitter.off('variableMoved', this.treeNodeMoved);
+        this.$emitter.off('groupMoved', this.treeNodeMoved);
     },
     computed: {
         currentChapterData() {
@@ -453,7 +464,7 @@ export default {
                 if (startIndex < index) index--;
             }
 
-            this.treeStore.moveItem(item.itemId, item.itemType, parentId, index);
+            moveItem(this.questionnaireId, item.itemId, item.itemType, parentId, index);
         },
 
         treeNodeDeleted(data) {
@@ -487,6 +498,44 @@ export default {
                         chapterId: this.chapterId
                     }
                 });
+            }
+        },
+
+        treeNodeMoved(data) {
+            const itemId = data.itemId;
+            const newParentId = data.newParentId;
+
+            const tree = this.$refs.tree;
+            let itemStat = null;
+            let newParentStat = null;
+            const items = tree.rootChildren;
+            walkTreeData(
+                items,
+                (node, index, parent) => {
+                    if (node.data.itemId == itemId) {
+                        itemStat = node;
+                    }
+                    else if (node.data.itemId == newParentId) {
+                        newParentStat = node;
+                    }
+                    if (newParentStat != null && itemStat != null) {
+                        return 'false';
+                    }
+                },
+                {
+                    childrenKey: 'children',
+                    reverse: false,
+                    childFirst: false
+                }
+            );
+
+            if (itemStat != null) {
+                if (newParentStat != null) {
+                    tree.move(itemStat, newParentStat, data.newIndex);
+                }
+                else {
+                    tree.remove(itemStat);
+                }
             }
         }
     }
