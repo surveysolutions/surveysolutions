@@ -453,7 +453,7 @@ export default {
                 if (startIndex < index) index--;
             }
 
-            this.treeStore.moveItem(item, parentId, index);
+            this.treeStore.moveItem(item.itemId, item.itemType, parentId, index);
         },
 
         treeNodeDeleted(data) {

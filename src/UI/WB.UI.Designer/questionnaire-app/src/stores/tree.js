@@ -343,15 +343,15 @@ export const useTreeStore = defineStore('tree', {
             return index < 0 ? null : index;
         },
 
-        moveItem(item, newParentId, index) {
-            if (item.itemType == 'Question')
-                return this.moveQuestion(item.itemId, index, newParentId);
-            else if (item.itemType == 'StaticText')
-                return this.moveStaticText(item.itemId, index, newParentId);
-            else if (item.itemType == 'Variable')
-                return this.moveVariable(item.itemId, index, newParentId);
-            else if (item.itemType == 'Group')
-                return this.moveGroup(item.itemId, index, newParentId);
+        moveItem(itemId, itemType, newParentId, index) {
+            if (itemType == 'Question')
+                return this.moveQuestion(itemId, index, newParentId);
+            else if (itemType == 'StaticText')
+                return this.moveStaticText(itemId, index, newParentId);
+            else if (itemType == 'Variable')
+                return this.moveVariable(itemId, index, newParentId);
+            else if (itemType == 'Group')
+                return this.moveGroup(itemId, index, newParentId);
         },
 
         moveGroup(groupId, index, destGroupId) {

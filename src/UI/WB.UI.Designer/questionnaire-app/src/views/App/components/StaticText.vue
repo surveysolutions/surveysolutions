@@ -134,7 +134,7 @@
                     class="btn btn-lg btn-link" @click="deleteStaticText()" unsaved-warning-clear>
                     {{ $t('QuestionnaireEditor.Delete') }}
                 </button>
-                <MoveToChapterSnippet :item-id="staticTextId"
+                <MoveToChapterSnippet :item-id="staticTextId" :item-type="'StaticText'"
                     v-if="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly" />
             </div>
         </div>

@@ -91,7 +91,7 @@
                 <button type="button" v-show="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
                     v-if="!isCoverPage" id="edit-chapter-delete-button" class="btn btn-lg btn-link" @click="deleteGroup()"
                     unsaved-warning-clear>{{ $t('QuestionnaireEditor.Delete') }}</button>
-                <MoveToChapterSnippet :item-id="groupId"
+                <MoveToChapterSnippet :item-id="groupId" :item-type="'Group'"
                     v-show="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
                     v-if="!isChapter && !isCoverPage">
                 </MoveToChapterSnippet>

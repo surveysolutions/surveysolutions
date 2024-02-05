@@ -213,7 +213,7 @@
                     id="edit-chapter-delete-button" class="btn btn-lg btn-link" @click="deleteQuestion()"
                     unsaved-warning-clear>{{
                         $t('QuestionnaireEditor.Delete') }}</button>
-                <MoveToChapterSnippet :item-id="questionId"
+                <MoveToChapterSnippet :item-id="questionId" :item-type="'Question'"
                     v-show="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly" />
 
             </div>

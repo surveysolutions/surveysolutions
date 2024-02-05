@@ -77,7 +77,8 @@
                     class="btn btn-lg btn-link" @click="deleteVariable()" unsaved-warning-clear>
                     {{ $t('QuestionnaireEditor.Delete') }}
                 </button>
-                <MoveToChapterSnippet :item-id="variableId" v-if="!questionnaire.isReadOnlyForUser" />
+                <MoveToChapterSnippet :item-id="variableId" :item-type="'Variable'"
+                    v-if="!questionnaire.isReadOnlyForUser" />
             </div>
         </div>
     </form>

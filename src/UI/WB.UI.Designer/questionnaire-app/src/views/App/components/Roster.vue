@@ -340,7 +340,7 @@
                 <button type="button" v-if="!questionnaire.isReadOnlyForUser" id="edit-chapter-delete-button"
                     class="btn btn-lg btn-link" unsaved-warning-clear @click="deleteRoster()">{{
                         $t('QuestionnaireEditor.Delete') }}</button>
-                <MoveToChapterSnippet :item-id="rosterId"
+                <MoveToChapterSnippet :item-id="rosterId" :item-type="'Group'"
                     v-if="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly">
                 </MoveToChapterSnippet>
             </div>
