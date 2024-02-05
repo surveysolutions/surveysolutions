@@ -24,7 +24,8 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
         edittingTranslations: [],
         edittingCategories: [],
         edittingScenarios: [],
-        edittingLookupTables: []
+        edittingLookupTables: [],
+        edittingAttachments: []
     }),
     getters: {
         getInfo: state => state.info,
@@ -34,7 +35,8 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
         getEdittingTranslations: state => state.edittingTranslations,
         getEdittingCategories: state => state.edittingCategories,
         getEdittingScenarios: state => state.edittingScenarios,
-        getEdittingLookupTables: state => state.edittingLookupTables
+        getEdittingLookupTables: state => state.edittingLookupTables,
+        getEdittingAttachments: state => state.edittingAttachments
     },
     actions: {
         setupListeners() {
@@ -73,6 +75,8 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             emitter.on('lookupTableAdded', this.lookupTableAdded);
             emitter.on('lookupTableUpdated', this.lookupTableUpdated);
             emitter.on('lookupTableDeleted', this.lookupTableDeleted);
+
+            emitter.on('attachmentDeleted', this.attachmentDeleted);
         },
 
         async fetchQuestionnaireInfo(questionnaireId) {
@@ -88,6 +92,7 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             this.edittingCategories = cloneDeep(info.categories);
             this.edittingScenarios = cloneDeep(info.scenarios);
             this.edittingLookupTables = cloneDeep(info.lookupTables);
+            this.edittingAttachments = cloneDeep(info.attachments);
 
             forEach(this.info.macros, macro => {
                 this.prepareMacro(macro);
@@ -189,6 +194,21 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             }
         },
         rosterUpdated(payload) {},
+        attachmentDeleted(payload) {
+            const index = findIndex(this.info.attachments, function(i) {
+                return i.itemId === payload.itemId;
+            });
+            if (index !== -1) {
+                this.info.attachments.splice(index, 1);
+            }
+
+            const editIndex = findIndex(this.edittingAttachments, function(i) {
+                return i.itemId === payload.itemId;
+            });
+            if (editIndex !== -1) {
+                this.edittingAttachments.splice(editIndex, 1);
+            }
+        },
 
         prepareMacro(macro) {
             macro.initialMacro = cloneDeep(macro);
