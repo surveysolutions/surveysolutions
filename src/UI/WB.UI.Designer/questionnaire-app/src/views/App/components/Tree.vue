@@ -1,6 +1,6 @@
 <template>
     <div class="questionnaire-tree-holder col-xs-6">
-        <div class="chapter-title" v-switch on="filtersBoxMode" :class="{ selected: chapterId === selectedItemId }" @click="
+        <div class="chapter-title" :class="{ selected: chapterId === selectedItemId }" @click.stop="
             $router.push({
                 name: 'group',
                 params: {
@@ -13,8 +13,8 @@
                 <div class="input-group">
                     <span class="input-group-addon glyphicon glyphicon-search"
                         :title="$t('QuestionnaireEditor.Search')"></span>
-                    <input id="chapterSearch" type="text" v-model="search.searchText" v-model-options="{ debounce: 300 }"
-                        focus-on-out="focusSearch" hotkey="{esc: hideSearch}" hotkey-allow-in="INPUT" />
+                    <input id="chapterSearch" type="text" v-model="search.searchText" focus-on-out="focusSearch"
+                        hotkey="{esc: hideSearch}" hotkey-allow-in="INPUT" />
                     <span class="input-group-addon glyphicon glyphicon-option-horizontal pointer"
                         @click="showFindReplaceDialog()" :title="$t('QuestionnaireEditor.FindReplaceTitle')"></span>
                 </div>
@@ -59,24 +59,18 @@
             <div class="question-list" ui-tree="groupsTree" data-bs-empty-placeholder-enabled="false">
                 <div ui-tree-nodes vmodel="items" class="ui-tree-nodes angular-ui-tree-nodes">
                     <Draggable ref="tree" v-model="filteredTreeData" textKey="title" childrenKey="items" :defaultOpen="true"
-                        indent="30" triggerClass="handler" :statHandler="treeNodeCreated" @after-drop="treeNodeDropped">
+                        :maxLevel="null" :indent="30" triggerClass="handler" :statHandler="treeNodeCreated"
+                        @after-drop="treeNodeDropped">
                         <template #default="{ node, stat }">
                             <component :key="node.itemId" :is="itemTemplate(node.itemType)" :item="node" :stat="stat"
                                 :tree="$refs.tree" :selectedItemId="selectedItemId"></component>
                         </template>
-                        <!--template #placeholder="{ node, stat }">
-                            <div class="ngular-ui-tree-placeholder"></div>
+
+                        <!--template #placeholder>
+                            <div class="angular-ui-tree-placeholder2" style="height: 36px;"></div>
                         </template-->
                     </Draggable>
-                    <!--div
-                        vrepeat="item in items | filter:searchItem as results"
-                        ui-tree-node
-                        data-bs-nodrag="{{ currentChapter.isReadOnly }}"
-                    >
-                        <v-include
-                            src="itemTemplate(item.itemType)"
-                        ></v-include>
-                    </div-->
+
                     <div class="section item" v-if="search.open &&
                         search.searchText &&
                         filteredTreeData.length === 0
@@ -92,8 +86,8 @@
         $t('QuestionnaireEditor.AddQuestion') }}</button>
                         <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
                             !currentChapter.isReadOnly &&
-                            !currentChapter.isCover"
-                            @click="addGroup(currentChapterData)">{{ $t('QuestionnaireEditor.AddSubsection') }}</button>
+                            !currentChapter.isCover" @click="addGroup(currentChapterData)">{{
+        $t('QuestionnaireEditor.AddSubsection') }}</button>
                         <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
                             !currentChapter.isReadOnly &&
                             !currentChapter.isCover
@@ -109,13 +103,13 @@
 
                         <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
                             !currentChapter.isReadOnly
-                            "
-                            @click="searchForQuestion(currentChapterData)">{{ $t('QuestionnaireEditor.SearchForQuestion')
-                            }}</button>
+                            " @click="searchForQuestion(currentChapterData)">{{
+        $t('QuestionnaireEditor.SearchForQuestion')
+    }}</button>
 
                         <input type="button" class="btn lighter-hover pull-right" :disabled="!readyToPaste" v-if="!questionnaire.isReadOnlyForUser &&
-                            !currentChapter.isReadOnly
-                            " :value="$t('QuestionnaireEditor.Paste')" @click="pasteItemInto(currentChapter)" />
+                                !currentChapter.isReadOnly
+                                " :value="$t('QuestionnaireEditor.Paste')" @click="pasteItemInto(currentChapter)" />
                     </div>
                 </div>
 
@@ -446,6 +440,7 @@ export default {
             } else {
                 const isGroup = stat.data.itemType == 'Group';
                 stat.droppable = isGroup;
+                stat.draggable = true;
             }
 
             return stat;
@@ -534,7 +529,11 @@ export default {
                     tree.move(itemStat, newParentStat, data.newIndex);
                 }
                 else {
-                    tree.remove(itemStat);
+                    if (newParentId == this.currentChapter.chapter.itemId) {
+                        tree.move(itemStat, null, data.newIndex);
+                    } else {
+                        tree.remove(itemStat);
+                    }
                 }
             }
         }
