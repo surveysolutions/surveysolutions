@@ -26,6 +26,7 @@
                                         }
                                     }">
                                         <span v-dompurify-html="node.title"></span>
+                                        <span>&nbsp;</span>
                                         <help link="coverPage" v-if="node.isCover" />
                                     </router-link>
                                     <div class="qname-block chapter-panel-item-condition">
