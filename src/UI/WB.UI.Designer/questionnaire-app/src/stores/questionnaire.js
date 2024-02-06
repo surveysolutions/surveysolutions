@@ -134,6 +134,9 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             this.info.hideIfDisabled = payload.hideIfDisabled;
             this.info.isPublic = payload.isPublic;
             this.info.defaultLanguageName = payload.defaultLanguageName;
+
+            this.info.metadata.title = payload.title;
+            this.edittingMetadata.title = payload.title;
         },
         ownershipPassed(payload) {
             forEach(this.info.sharedPersons, person => {
