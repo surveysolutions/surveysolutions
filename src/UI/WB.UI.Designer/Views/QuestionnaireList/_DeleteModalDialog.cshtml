@@ -6,7 +6,7 @@
                 <h4 class="modal-title">@QuestionnaireController.Delete @QuestionnaireController.Confirmation</h4>
             </div>
             <div class="modal-body" style="word-break: break-all;">
-                <p>@Html.Raw(string.Format(QuestionnaireController.DeleteConfirmationText, "<i><font color=\"d32828\"><strong id=\"delete-modal-questionnaire-title\"></strong></font></i>"))</p>
+                <p>@Html.Raw(string.Format(QuestionnaireController.DeleteConfirmationText, "<i><strong style=\"color:#d32828\" id=\"delete-modal-questionnaire-title\"></strong></i>"))</p>
             </div>
             <div class="modal-footer">
                 <form asp-action="Delete" asp-controller="Questionnaire" method="post">
