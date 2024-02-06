@@ -8,7 +8,7 @@
             </h3>
             <ul ui-tree-nodes class="chapters-list angular-ui-tree-nodes">
                 <Draggable ref="chapters" v-model="questionnaire.chapters" textKey="title" childrenKey="items"
-                    :defaultOpen="false" triggerClass="handler" :statHandler="treeNodeCreated"
+                    :defaultOpen="false" triggerClass="handler" :keepPlaceholder="true" :statHandler="treeNodeCreated"
                     @after-drop="treeNodeDropped">
                     <template #default="{ node, stat }">
 
@@ -66,6 +66,16 @@
     </div>
 </template>
   
+<style lang="scss">
+.chapters {
+    .drag-placeholder {
+        height: 53px;
+        border: none;
+        background: rgba(0, 0, 0, 0.1);
+    }
+}
+</style>
+
 <script>
 import { useTreeStore } from '../../../../stores/tree';
 import { useQuestionnaireStore } from '../../../../stores/questionnaire';

@@ -59,15 +59,15 @@
             <div class="question-list" ui-tree="groupsTree" data-bs-empty-placeholder-enabled="false">
                 <div ui-tree-nodes vmodel="items" class="ui-tree-nodes angular-ui-tree-nodes">
                     <Draggable ref="tree" v-model="filteredTreeData" textKey="title" childrenKey="items" :defaultOpen="true"
-                        :maxLevel="null" :indent="30" triggerClass="handler" :statHandler="treeNodeCreated"
-                        @after-drop="treeNodeDropped">
+                        :maxLevel="null" :indent="30" triggerClass="handler" :keepPlaceholder="true"
+                        :statHandler="treeNodeCreated" @after-drop="treeNodeDropped">
                         <template #default="{ node, stat }">
                             <component :key="node.itemId" :is="itemTemplate(node.itemType)" :item="node" :stat="stat"
                                 :tree="$refs.tree" :selectedItemId="selectedItemId"></component>
                         </template>
 
                         <!--template #placeholder>
-                            <div class="angular-ui-tree-placeholder2" style="height: 36px;"></div>
+                            <div class="angular-ui-tree-placeholder"></div>
                         </template-->
                     </Draggable>
 
@@ -134,6 +134,16 @@
     </div>
     <SearchDialog ref="searchDialog" :questionnaireId="questionnaireId" />
 </template>
+
+<style lang="scss">
+.questionnaire-tree-holder {
+    .drag-placeholder {
+        height: 36px;
+        border: none;
+        background: rgba(0, 0, 0, 0.1);
+    }
+}
+</style>
 
 <script>
 import { useTreeStore } from '../../../stores/tree';
