@@ -41,8 +41,7 @@
             <form role="form" name="attachmentsForm" novalidate>
                 <div class="attachment-list">
                     <template v-for="(attachment, index) in attachments">
-                        <AttachmentItem :attachment="attachment" :questionnaire-id="questionnaireId">
-                        </AttachmentItem>
+                        <AttachmentItem :attachmentItem="attachment" :questionnaire-id="questionnaireId" />
                     </template>
                 </div>
             </form>
@@ -90,7 +89,7 @@ export default {
         },
 
         attachments() {
-            return this.questionnaireStore.getEdittingAttachments;
+            return this.questionnaireStore.getInfo.attachments;
         },
     },
     methods: {
@@ -130,7 +129,7 @@ export default {
                     details: {}
                 };
             attachment.meta = {
-                lastUpdated: moment(),
+                lastUpdatedDate: null,
                 fileName: file.name
             };
 

@@ -1,13 +1,14 @@
 <template>
     <div name="attachment.form">
-        <div class="attachments-panel-item" :class="{ 'has-error': isNameValid(attachment.name) }">
+        <div class="attachments-panel-item" :class="{ 'has-error': isNameValid }">
             <a href="javascript:void(0);" @click="deleteAttachment(attachment)"
                 :disabled="isReadOnlyForUser ? 'disabled' : null" v-if="!isReadOnlyForUser" class="btn delete-btn"
                 tabindex="-1"></a>
             <div class="attachment">
                 <div class="attachment-preview">
                     <div class="attachment-preview-cover clearfix">
-                        <img class="pull-right" @click="previewAttachment(attachment)" ngf-size="{width: 156, height: 140}"
+                        <img class="pull-right" @click="previewAttachment(attachment)" style="{width: 156, height: 140}"
+                            v-if="!attachment.file"
                             :src='downloadBaseUrl + "/" + questionnaireId + "/thumbnail/" + attachment.attachmentId'>
                     </div>
                 </div>
@@ -40,10 +41,9 @@
                                     size: formatBytes(attachment.content.size)
                                 }) }}</span>
                         </p>
-                        <p>
+                        <p v-if="attachment.meta.lastUpdateDate">
                             {{ $t('QuestionnaireEditor.SideBarAttachmentUploaded', {
-                                lastUpdate: attachment.meta.lastUpdateDate ||
-                                    toLocalDateTime(attachment.meta.lastUpdateDate)
+                                lastUpdate: attachment.meta.lastUpdateDate
                             }) }}
                         </p>
                     </div>
@@ -56,28 +56,19 @@
                                 $t('QuestionnaireEditor.Cancel') }}</button>
                         </div>
                         <div class="permanent-actions pull-right clearfix">
-                            <!-- <button :disabled="isReadOnlyForUser" class="btn btn-default pull-right"
-                                                ngf-select="" ngf-accept="'.pdf,image/*,video/*,audio/*'"
-                                                ngf-max-size="100MB"
-                                                ngf-change="fileSelected(attachment, $file);$event.stopPropagation()"
-                                                type="file">
-                                                <span>{{ $t('QuestionnaireEditor.Update') }}</span>
-                                            </button> -->
-                            <!-- !!! -->
                             <button type="button" :value="$t('QuestionnaireEditor.SideBarAttachmentsUpload')"
                                 @click.stop="openFileDialog()" value="Upload new attachment"
                                 class="btn btn-default pull-right" ngf-select :disabled="isReadOnlyForUser" capture>
                                 <span>{{ $t('QuestionnaireEditor.Update') }}</span>
                             </button>
 
-                            <file-upload ref="upload" v-if="!isReadOnlyForUser" :input-id="'tfunew'" v-model="file"
-                                :size="100 * 1024 * 1024" :drop="false" :drop-directory="false"
-                                @input-file="updateFile(attachment, $file)" accept=".pdf,image/*,video/*,audio/*">
+                            <file-upload ref="upload" v-if="!isReadOnlyForUser" :input-id="'tfunew'"
+                                v-model="attachment.file" :size="100 * 1024 * 1024" :drop="false" :drop-directory="false"
+                                @input-file="fileSelected" accept=".pdf,image/*,video/*,audio/*">
                             </file-upload>
 
-
-                            <a :href="downloadLookupFileBaseUrl + '/' + questionnaire.questionnaireId + '/' + attachment.attachmentId"
-                                class="btn btn-default pull-right" target="_blank" rel="noopener noreferrer">{{
+                            <a :href="getDownloadUrl" class="btn btn-default pull-right" target="_blank"
+                                rel="noopener noreferrer">{{
                                     $t('QuestionnaireEditor.Download') }}</a>
                         </div>
                     </div>
@@ -97,39 +88,34 @@ import { deleteAttachment, updateAttachment } from '../../../../services/attachm
 export default {
     name: 'AttachmentItem',
     props: {
-        attachment: { type: Object, required: true },
+        attachmentItem: { type: Object, required: true },
         questionnaireId: { type: String, required: true },
     },
     inject: ['questionnaire', 'isReadOnlyForUser'],
     data() {
         return {
             downloadBaseUrl: '/attachments',
-            initialName: null,
-            file: [],
         }
     },
     computed: {
-        hasUploadedFile() {
-            return !_.isEmpty(this.attachment.fileName)
+        attachment() {
+            return this.attachmentItem.editAttachment;
         },
         isDirty() {
-            return this.attachment.name != this.initialName || this.file.length > 0;
+            return this.attachment.name != this.attachmentItem.name || (this.attachment.file && this.attachment.file.length > 0);
         },
         isInvalid() {
             return true;
-            //return this.isNameValid(this.attachment.name);
         },
-    },
-    beforeMount() {
-        this.initialName = this.attachment.name;
     },
     methods: {
         formatBytes(bytes) {
             return formatBytes(bytes);
         },
-        previewAttachment(attachment) {
-
-            var srcImage = attachment.file || (this.downloadBaseUrl + "/" + this.questionnaireId + "/thumbnail/" + attachment.attachmentId + '/568');
+        previewAttachment() {
+            if (this.attachment.file)
+                return;
+            var srcImage = this.attachment.file || (this.downloadBaseUrl + "/" + this.questionnaireId + "/thumbnail/" + this.attachment.attachmentId + '/568');
             var confirmParams = {
                 noControls: true,
                 header: this.$t('QuestionnaireEditor.AttachmentPreview'),
@@ -138,19 +124,22 @@ export default {
 
             this.$confirm(confirmParams);
         },
-        isAttachmentSizeTooBig(attachment) {
-            return attachment.content.size > 5 * 1024 * 1824;
+        getDownloadUrl() {
+            return this.attachment ? this.downloadLookupFileBaseUrl + '/' + this.questionnaire.questionnaireId + '/' + this.attachment.attachmentId : '';
         },
-        isAttachmentResolutionTooBig(attachment) {
+        isAttachmentSizeTooBig() {
+            return this.attachment.content.size > 5 * 1024 * 1824;
+        },
+        isAttachmentResolutionTooBig() {
             var recommendedMaxResolution = 1024;
-            return ((attachment.content.details.height || 0) > recommendedMaxResolution) || ((attachment.content.details.width || 0) > recommendedMaxResolution);
+            return ((this.attachment.content.details.height || 0) > recommendedMaxResolution) || ((this.attachment.content.details.width || 0) > recommendedMaxResolution);
         },
-        isNameValid(name) {
+        isNameValid() {
             return true;
             //return name && name.length < 32;
         },
         //TODO move to reuse
-        async updateFile(attachment, file, callback) {
+        async fileSelected(file) {
             if (_.isNull(file) || _.isUndefined(file)) {
                 return;
             }
@@ -160,22 +149,23 @@ export default {
                 return;
             }
 
-            attachment.file = file.file,
-                attachment.content = {
-                    size: file.size,
-                    type: file.type,
-                    details: {}
-                };
-            attachment.meta = {
-                lastUpdated: moment(),
+            this.attachment.file = file.file;
+
+            this.attachment.content = {
+                size: file.size,
+                type: file.type,
+                details: {}
+            };
+            this.attachment.meta = {
+                lastUpdatedDate: null,
                 fileName: file.name
             };
 
-            if (attachment.meta.fileName) {
+            if (this.attachment.meta.fileName) {
                 var maxAttachmentNameLength = 32;
-                var attachmentFileNameLength = attachment.meta.fileName.length;
+                var attachmentFileNameLength = this.attachment.meta.fileName.length;
 
-                attachment.name = attachment.meta.fileName.replace(/\.[^/.]+$/, "")
+                this.attachment.name = this.attachment.meta.fileName.replace(/\.[^/.]+$/, "")
                     .replace(" ", "_")
                     .substring(0, attachmentFileNameLength < maxAttachmentNameLength ?
                         attachmentFileNameLength :
@@ -193,51 +183,42 @@ export default {
                         let w = image.naturalWidth;
                         let h = image.naturalHeight;
 
-                        attachment.content.details.height = height;
-                        attachment.content.details.width = width;
+                        self.attachment.content.details.height = height;
+                        self.attachment.content.details.width = width;
 
-                        if (((attachment.content.details.height || 0) > self.allowedMaxResolution)
-                            || ((attachment.content.details.width || 0) > self.allowedMaxResolution)) {
+                        if (((self.attachment.content.details.height || 0) > self.allowedMaxResolution)
+                            || ((self.attachment.content.details.width || 0) > self.allowedMaxResolution)) {
                             notice(self.$t('QuestionnaireEditor.AttachmentDimensionsAreTooBig'));
                             return;
-                        }
-
-                        if (!_.isUndefined(callback)) {
-                            await callback();
                         }
                     }
                     image.src = e.target.result;
                 };
                 await reader.readAsDataURL(file.file);
             }
-            else {
-                if (!_.isUndefined(callback)) {
-                    await callback();
-                }
-            }
         },
         openFileDialog() {
             const fu = this.$refs.upload
             fu.$el.querySelector("#" + fu.inputId).click()
         },
-        async saveAttachment(attachment) {
+        async saveAttachment() {
 
-            attachment.oldAttachmentId = attachment.attachmentId;
+            this.attachment.oldAttachmentId = this.attachment.attachmentId;
             var newAttachmentId = newGuid();
-            attachment.attachmentId = newAttachmentId;
+            this.attachment.attachmentId = newAttachmentId;
 
-            await updateAttachment(this.questionnaireId, attachment);
+            await updateAttachment(this.questionnaireId, this.attachment);
         },
-        cancel(attachment) {
-            //reload from state
-            attachment.name = this.initialName;
-            this.file = [];
+        cancel() {
+            var clonned = _.cloneDeep(this.attachmentItem);
+            clonned.editAttachment = null;
+            this.attachmentItem.editAttachment = clonned;
         },
-        deleteAttachment(attachment) {
-            var attachmentName = attachment.name || this.$t('QuestionnaireEditor.SideBarAttachmentName');
+        deleteAttachment() {
+            var attachmentName = this.attachment.name || this.$t('QuestionnaireEditor.SideBarAttachmentName');
 
             const questionnaireId = this.questionnaire.questionnaireId;
-            const attachmentId = attachment.attachmentId;
+            const attachmentId = this.attachment.attachmentId;
             var confirmParams = createQuestionForDeleteConfirmationPopup(attachmentName)
 
             confirmParams.callback = confirm => {

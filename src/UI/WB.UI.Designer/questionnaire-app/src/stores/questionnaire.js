@@ -24,8 +24,7 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
         edittingTranslations: [],
         edittingCategories: [],
         edittingScenarios: [],
-        edittingLookupTables: [],
-        edittingAttachments: [],
+        edittingLookupTables: [],        
         edittingSharedInfo: {}
     }),
     getters: {
@@ -37,7 +36,7 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
         getEdittingCategories: state => state.edittingCategories,
         getEdittingScenarios: state => state.edittingScenarios,
         getEdittingLookupTables: state => state.edittingLookupTables,
-        getEdittingAttachments: state => state.edittingAttachments,
+        
         getEdittingSharedInfo: state => state.edittingSharedInfo,
         getQuestionnaireEditDataDirty: state =>
             state.edittingSharedInfo.title != state.info.title ||
@@ -102,8 +101,12 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             this.edittingCategories = cloneDeep(info.categories);
             this.edittingScenarios = cloneDeep(info.scenarios);
             this.edittingLookupTables = cloneDeep(info.lookupTables);
-            this.edittingAttachments = cloneDeep(info.attachments);
             this.edittingSharedInfo = this.getQuestionnaireEditData();
+            
+            forEach(this.info.attachments, attachment => {
+                var editAttachment = cloneDeep(attachment);
+                attachment.editAttachment = editAttachment;
+            });
 
             forEach(this.info.macros, macro => {
                 this.prepareMacro(macro);
@@ -224,35 +227,33 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
         rosterUpdated(payload) {},
         attachmentDeleted(payload) {
             const index = findIndex(this.info.attachments, function(i) {
-                return i.itemId === payload.itemId;
+                return i.attachmentId === payload.id;
             });
             if (index !== -1) {
                 this.info.attachments.splice(index, 1);
             }
-
-            const editIndex = findIndex(this.edittingAttachments, function(i) {
-                return i.itemId === payload.itemId;
-            });
-            if (editIndex !== -1) {
-                this.edittingAttachments.splice(editIndex, 1);
-            }
         },
         attachmentUpdated(payload) {
-            if (payload.oldAttachmentId) {
-                const index = findIndex(this.info.attachments, function(i) {
-                    return i.attachmentId === payload.oldAttachmentId;
+            const newAttachment = cloneDeep(payload.attachment);
+            newAttachment.file = null;
+            newAttachment.editAttachment = cloneDeep(newAttachment);
+
+            if (payload.attachment.oldAttachmentId) {
+                const indexInit = findIndex(this.info.attachments, function(i) {
+                    return (
+                        i.attachmentId === payload.attachment.oldAttachmentId
+                    );
                 });
-                if (index !== -1) {
-                    this.info.attachments[index] = payload;
+                if (indexInit !== -1) {
+                    this.info.attachments[indexInit] = newAttachment;
                 }
             } else {
-                this.info.attachments.push(payload);
-                this.info.edittingAttachments.push(payload);
+                this.info.attachments.push(newAttachment);
             }
         },
 
         prepareMacro(macro) {
-            macro.initialMacro = cloneDeep(macro);
+            macro.editMacro = cloneDeep(macro);
             macro.isDescriptionVisible = !isEmpty(macro.description);
         },
 

@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { upload, commandCall } from './apiService';
 import emitter from './emitter';
 
@@ -18,6 +19,8 @@ export async function updateAttachment(questionnaireId, attachment) {
         fileName
     );
 
+    attachment.meta.lastUpdatedDate = moment();
+
     emitter.emit('attachmentUpdated', {
         attachment: attachment
     });
@@ -33,7 +36,7 @@ export function deleteAttachment(questionnaireId, attachmentId) {
 
     return commandCall('DeleteAttachment', command).then(response => {
         emitter.emit('attachmentDeleted', {
-            attachmentId: attachmentId
+            id: attachmentId
         });
     });
 }

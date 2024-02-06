@@ -23,14 +23,15 @@
                     <div class="input-group macros-name">
                         <span class="input-group-addon">$</span>
                         <input :placeholder="$t('QuestionnaireEditor.SideBarMacroName')" maxlength="32" spellcheck="false"
-                            v-model="macro.name" name="name" class="form-control" type="text" />
+                            v-model="macro.editMacro.name" name="name" class="form-control" type="text" />
                     </div>
                     <div class="divider"></div>
-                    <ExpressionEditor v-model="macro.content" mode="expression" focusable="false" />
+                    <ExpressionEditor v-model="macro.editMacro.content" mode="expression" focusable="false" />
                     <div v-if="isDescriptionVisible(macro)">
                         <div class="divider"></div>
                         <textarea :placeholder="$t('QuestionnaireEditor.SideBarMacroDescription')" type="text"
-                            v-model="macro.description" class="form-control macros-description" v-autosize></textarea>
+                            v-model="macro.editMacro.description" class="form-control macros-description"
+                            v-autosize></textarea>
                     </div>
                     <div class="actions" v-if="isEditorDirty(macro)">
                         <button :disabled="questionnaire.isReadOnlyForUser" class="btn lighter-hover"
@@ -95,7 +96,7 @@ export default {
         },
         removeMacro(macro) {
             const params = createQuestionForDeleteConfirmationPopup(
-                macro.name || this.$t('QuestionnaireEditor.SideBarMacroNoName')
+                macro.editMacro.name || this.$t('QuestionnaireEditor.SideBarMacroNoName')
             );
 
             params.callback = confirm => {
@@ -108,22 +109,24 @@ export default {
 
         },
         toggleDescription(macro) {
-            macro.isDescriptionVisible = !macro.isDescriptionVisible;
+            macro.editMacro.isDescriptionVisible = !macro.editMacro.isDescriptionVisible;
         },
         isDescriptionEmpty(macro) {
-            return macro.description.trim().length === 0;
+            return macro.editMacro.description.trim().length === 0;
         },
         isDescriptionVisible(macro) {
-            return macro.isDescriptionVisible || !_.isEmpty(macro.description)
+            return macro.editMacro.isDescriptionVisible || !_.isEmpty(macro.editMacro.description)
         },
         saveMacro(macro) {
-            updateMacro(this.questionnaire.questionnaireId, macro);
+            updateMacro(this.questionnaire.questionnaireId, macro.editMacro);
         },
         cancel(macro) {
-            Object.assign(macro, macro.initialMacro);
+            var clonned = _.cloneDeep(macro);
+            clonned.editMacro = null;
+            macro.editMacro = clonned;
         },
         isEditorDirty(macro) {
-            return macro.name !== macro.initialMacro.name || macro.content !== macro.initialMacro.content || macro.description !== macro.initialMacro.description;
+            return macro.name !== macro.editMacro.name || macro.content !== macro.editMacro.content || macro.description !== macro.editMacro.description;
         }
     }
 }
