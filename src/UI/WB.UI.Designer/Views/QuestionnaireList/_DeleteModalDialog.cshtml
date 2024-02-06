@@ -3,17 +3,17 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="@QuestionnaireController.Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">@QuestionnaireController.Delete <small>@QuestionnaireController.Confirmation</small></h4>
+                <h4 class="modal-title">@QuestionnaireController.Delete @QuestionnaireController.Confirmation</h4>
             </div>
             <div class="modal-body" style="word-break: break-all;">
-                <p>@Html.Raw(string.Format(QuestionnaireController.DeleteConfirmationText, "<strong id=\"delete-modal-questionnaire-title\"></strong>"))</p>
+                <p>@Html.Raw(string.Format(QuestionnaireController.DeleteConfirmationText, "<i><font color=\"d32828\"><strong id=\"delete-modal-questionnaire-title\"></strong></font></i>"))</p>
             </div>
             <div class="modal-footer">
                 <form asp-action="Delete" asp-controller="Questionnaire" method="post">
                     @Html.AntiForgeryToken()
                     <input name="id" id="delete-modal-questionnaire-id" type="hidden" />
                     <button class="btn" data-dismiss="modal" aria-hidden="true">@QuestionnaireController.Cancel</button>
-                    <button type="submit" class="btn btn-primary" value="@QuestionnaireController.Delete" onclick="this.disabled = true;this.value = '@QuestionnaireController.Deleting';this.form.submit();">
+                    <button type="submit" class="btn btn-danger" value="@QuestionnaireController.Delete" onclick="this.disabled = true;this.value = '@QuestionnaireController.Deleting';this.form.submit();">
                         @QuestionnaireController.Delete
                     </button>
                 </form>
