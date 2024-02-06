@@ -77,6 +77,7 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             emitter.on('lookupTableDeleted', this.lookupTableDeleted);
 
             emitter.on('attachmentDeleted', this.attachmentDeleted);
+            emitter.on('attachmentUpdated', this.attachmentUpdated);
         },
 
         async fetchQuestionnaireInfo(questionnaireId) {
@@ -207,6 +208,19 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             });
             if (editIndex !== -1) {
                 this.edittingAttachments.splice(editIndex, 1);
+            }
+        },
+        attachmentUpdated(payload) {
+            if (payload.oldAttachmentId) {
+                const index = findIndex(this.info.attachments, function(i) {
+                    return i.attachmentId === payload.oldAttachmentId;
+                });
+                if (index !== -1) {
+                    this.info.attachments[index] = payload;
+                }
+            } else {
+                this.info.attachments.push(payload);
+                this.info.edittingAttachments.push(payload);
             }
         },
 

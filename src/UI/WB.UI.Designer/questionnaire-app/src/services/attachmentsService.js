@@ -1,22 +1,24 @@
 import { upload, commandCall } from './apiService';
 import emitter from './emitter';
 
-export async function updateAttachment(questionnaireId, attachment) {}
-
-export async function addAttachment(questionnaireId, attachment) {
+export async function updateAttachment(questionnaireId, attachment) {
     var command = {
         questionnaireId: questionnaireId,
         attachmentId: attachment.attachmentId,
-        attachmentName: attachment.name
+        attachmentName: attachment.name,
+        oldAttachmentId: attachment.oldAttachmentId
     };
+
+    const fileName = attachment.meta ? attachment.meta.fileName : null;
 
     const response = await upload(
         '/api/command/attachment',
         attachment.file,
-        command
+        command,
+        fileName
     );
 
-    emitter.emit('attachmentAdded', {
+    emitter.emit('attachmentUpdated', {
         attachment: attachment
     });
 

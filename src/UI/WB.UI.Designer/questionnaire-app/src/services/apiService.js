@@ -149,7 +149,7 @@ export function commandCall(commandType, command) {
     });
 }
 
-export function upload(url, file, command) {
+export function upload(url, file, command, fileName) {
     const progressStore = useProgressStore();
     const blockUI = useBlockUIStore();
 
@@ -164,6 +164,10 @@ export function upload(url, file, command) {
         'command',
         isNull(command) ? null : JSON.stringify(command)
     );
+
+    if (fileName) {
+        formData.append('fileName', fileName);
+    }
 
     return api
         .post(formData)

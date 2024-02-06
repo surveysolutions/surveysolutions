@@ -22,7 +22,10 @@ export function guid() {
 }
 
 export function toLocalDateTime(utc) {
-    return moment.utc(utc).local().format('YYYY-MM-DD HH:mm');
+    return moment
+        .utc(utc)
+        .local()
+        .format('YYYY-MM-DD HH:mm');
 }
 
 //TODO: fix usages of $...
@@ -273,4 +276,24 @@ export function scrollToElement(parent, id) {
             .querySelector(parent)
             .scrollTo(id, 500, { easing: 'swing', offset: -10 });
     });
+}
+
+export function formatBytes(bytes) {
+    if (bytes === 0) return '0 Byte';
+
+    var KB = 1024;
+    var MB = KB * KB;
+
+    var base = KB;
+    var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    var degree = Math.min(
+        Math.floor(Math.log(bytes) / Math.log(base)),
+        sizes.length - 1
+    );
+    var decimalPlaces = Math.min(Math.max(degree - 1, 0), 2);
+    return (
+        parseFloat((bytes / Math.pow(base, degree)).toFixed(decimalPlaces)) +
+        ' ' +
+        sizes[degree]
+    );
 }

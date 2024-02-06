@@ -8,13 +8,12 @@
                     <div class="modal-header">
                         <button class="close" @click="cancel()" aria-hidden="true" type="button"></button>
                         <h3 class="modal-title">
-                            {{ $t('QuestionnaireEditor.ModalConfirm') }}
+                            {{ header || $t('QuestionnaireEditor.ModalConfirm') }}
                         </h3>
                     </div>
-                    <div class="modal-body">
-                        {{ title }}
+                    <div class="modal-body" v-html="title">
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer" v-if="!noControls">
                         <button class="btn btn-primary btn-lg" v-if="!isReadOnly" @click="ok()">
                             {{ okButtonTitle || $t('QuestionnaireEditor.OK') }}
                         </button>
@@ -39,20 +38,15 @@ import event from '../../../plugins/events';
 
 const confirmDialog = {
     name: 'Confirm',
-    /*props: {
-        title: { type: String, required: true },
-        okButtonTitle: { type: String, required: false },
-        cancelButtonTitle: { type: String, required: false },
-        isReadOnly: { type: Boolean, required: false },
-        callback: { type: Function, required: false }
-    },*/
     data() {
         return {
             title: { type: String, required: true },
+            header: { type: String, required: false },
             okButtonTitle: { type: String, required: false },
             cancelButtonTitle: { type: String, required: false },
             isReadOnly: { type: Boolean, required: false },
             callback: { type: Function, required: false },
+            noControls: { type: Boolean, required: false },
             isOpen: false
         };
     },
@@ -67,18 +61,22 @@ const confirmDialog = {
     methods: {
         open(params) {
             this.title = params.title;
+            this.header = params.header;
             this.okButtonTitle = params.okButtonTitle;
             this.cancelButtonTitle = params.cancelButtonTitle;
             this.isReadOnly = params.isReadOnly || false;
             this.callback = params.callback;
+            this.noControls = params.noControls || false;
             this.isOpen = true;
         },
         cancel() {
-            this.callback(false);
+            if (this.callback)
+                this.callback(false);
             this.isOpen = false;
         },
         ok() {
-            this.callback(true);
+            if (this.callback)
+                this.callback(true);
             this.isOpen = false;
         }
     }
