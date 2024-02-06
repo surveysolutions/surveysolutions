@@ -25,7 +25,8 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
         edittingCategories: [],
         edittingScenarios: [],
         edittingLookupTables: [],
-        edittingAttachments: []
+        edittingAttachments: [],
+        edittingSharedInfo: {}
     }),
     getters: {
         getInfo: state => state.info,
@@ -36,7 +37,12 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
         getEdittingCategories: state => state.edittingCategories,
         getEdittingScenarios: state => state.edittingScenarios,
         getEdittingLookupTables: state => state.edittingLookupTables,
-        getEdittingAttachments: state => state.edittingAttachments
+        getEdittingAttachments: state => state.edittingAttachments,
+        getEdittingSharedInfo: state => state.edittingSharedInfo,
+        getQuestionnaireEditDataDirty: state =>
+            state.edittingSharedInfo.title != state.info.title ||
+            state.edittingSharedInfo.variable != state.info.variable ||
+            state.edittingSharedInfo.hideIfDisabled != state.info.hideIfDisabled
     },
     actions: {
         setupListeners() {
@@ -51,7 +57,10 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
                 'anonymousQuestionnaireSettingsUpdated',
                 this.anonymousQuestionnaireSettingsUpdated
             );
-            emitter.on('questionnaireUpdated', this.questionnaireUpdated);
+            emitter.on(
+                'questionnaireSettingsUpdated',
+                this.questionnaireSettingsUpdated
+            );
             emitter.on('ownershipPassed', this.ownershipPassed);
 
             emitter.on('sharedPersonAdded', this.sharedPersonAdded);
@@ -94,10 +103,23 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             this.edittingScenarios = cloneDeep(info.scenarios);
             this.edittingLookupTables = cloneDeep(info.lookupTables);
             this.edittingAttachments = cloneDeep(info.attachments);
+            this.edittingSharedInfo = this.getQuestionnaireEditData();
 
             forEach(this.info.macros, macro => {
                 this.prepareMacro(macro);
             });
+        },
+
+        getQuestionnaireEditData() {
+            return {
+                title: this.info.title,
+                variable: this.info.variable,
+                hideIfDisabled: this.info.hideIfDisabled,
+
+                isAnonymouslyShared: this.info.isAnonymouslyShared,
+                anonymousQuestionnaireId: this.info.anonymousQuestionnaireId,
+                anonymouslySharedAtUtc: this.info.anonymouslySharedAtUtc
+            };
         },
 
         macroAdded(payload) {
@@ -128,12 +150,14 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             this.info.anonymousQuestionnaireShareDate =
                 payload.anonymousQuestionnaireShareDate;
         },
-        questionnaireUpdated(payload) {
+        questionnaireSettingsUpdated(payload) {
             this.info.title = payload.title;
             this.info.variable = payload.variable;
             this.info.hideIfDisabled = payload.hideIfDisabled;
             this.info.isPublic = payload.isPublic;
             this.info.defaultLanguageName = payload.defaultLanguageName;
+
+            this.edittingSharedInfo = this.getQuestionnaireEditData();
 
             this.info.metadata.title = payload.title;
             this.edittingMetadata.title = payload.title;

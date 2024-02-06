@@ -14,7 +14,7 @@ export function addSubsection(questionnaireId, newSubsection) {
     // });
 }
 
-export function updateQuestionnaire(questionnaireId, questionnaire) {
+export function questionnaireSettingsUpdated(questionnaireId, questionnaire) {
     var command = {
         title: questionnaire.title,
         variable: questionnaire.variable,
@@ -25,7 +25,7 @@ export function updateQuestionnaire(questionnaireId, questionnaire) {
     };
 
     return commandCall('UpdateQuestionnaire', command).then(async response => {
-        emitter.emit('questionnaireUpdated', {
+        emitter.emit('questionnaireSettingsUpdated', {
             title: questionnaire.title,
             variable: questionnaire.variable,
             questionnaireId: questionnaireId,

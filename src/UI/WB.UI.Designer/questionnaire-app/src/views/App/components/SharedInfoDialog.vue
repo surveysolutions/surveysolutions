@@ -41,7 +41,7 @@
                                             <input id="questionnaireTitle" type="text"
                                                 class="form-control questionaire-title"
                                                 :disabled="questionnaire.isReadOnlyForUser"
-                                                v-model="questionnaireEdit.editedTitle" maxlength="2000" />
+                                                v-model="questionnaireEdit.title" maxlength="2000" />
                                         </div>
 
                                         <div class="form-group input-variable-name">
@@ -51,15 +51,14 @@
                                             <help link="questionnaireVariableName" />
                                             <input id="questionnaireVariable" :disabled="questionnaire.isReadOnlyForUser"
                                                 type="text" class="form-control questionaire-title"
-                                                v-model="questionnaireEdit.editedVariable" maxlength="32"
-                                                spellcheck="false" />
+                                                v-model="questionnaireEdit.variable" maxlength="32" spellcheck="false" />
                                         </div>
 
                                         <!--i know this is horrible, but i cannot remove paddings from checkbox image so that visually they inputs are aligned-->
                                         <div class="form-group" style="margin-left: -8px;">
                                             <input id="questionnaireHideIdDisabled" type="checkbox" class="wb-checkbox"
                                                 :disabled="questionnaire.isReadOnlyForUser"
-                                                v-model="questionnaireEdit.editedHideIfDisabled" />
+                                                v-model="questionnaireEdit.hideIfDisabled" />
                                             <label for="questionnaireHideIdDisabled">
                                                 <span></span>
                                                 {{ $t('QuestionnaireEditor.SettingsHideIfDisabled') }}
@@ -222,7 +221,7 @@
                                                 <br />
                                                 <div>
                                                     {{ $t('QuestionnaireEditor.AnonymousQuestionnaireGeneratedDate', {
-                                                        datetime: questionnaireEdit.anonymousQuestionnaireShareDate
+                                                        datetime: anonymousQuestionnaireShareDate
                                                     })
                                                     }}
                                                 </div>
@@ -288,13 +287,14 @@ import Help from './Help.vue';
 import { toLocalDateTime } from '../../../services/utilityService';
 import { findUserByEmailOrLogin } from '../../../services/userService';
 import {
-    updateQuestionnaire,
+    questionnaireSettingsUpdated,
     regenerateAnonymousQuestionnaireLink,
     updateAnonymousQuestionnaireSettings,
     shareWith,
     removeSharedPerson,
     passOwnership
 } from '../../../services/questionnaireService';
+import { useQuestionnaireStore } from '../../../stores/questionnaire';
 
 export default {
     name: 'SharedInfoDialog',
@@ -307,15 +307,6 @@ export default {
     },
     data() {
         return {
-            questionnaireEdit: {
-                editedTitle: null,
-                editedVariable: null,
-                editedHideIfDisabled: false,
-
-                isAnonymouslyShared: false,
-                anonymousQuestionnaireId: null,
-                anonymousQuestionnaireShareDate: null
-            },
             viewModelData: {},
             shareTypeOptions: [
                 {
@@ -333,6 +324,13 @@ export default {
             passConfirmationOpen: null
         };
     },
+    setup() {
+        const questionnaireStore = useQuestionnaireStore();
+
+        return {
+            questionnaireStore,
+        };
+    },
     beforeMount() {
         this.viewModelData = {
             shareWith: '',
@@ -345,10 +343,14 @@ export default {
         };
     },
     computed: {
+        questionnaireEdit() {
+            return this.questionnaireStore.getEdittingSharedInfo;
+        },
+        anonymousQuestionnaireShareDate() {
+            return toLocalDateTime(this.questionnaireEdit.anonymouslySharedAtUtc)
+        },
         dirty() {
-            return this.questionnaireEdit.editedTitle != this.questionnaire.title
-                || this.questionnaireEdit.editedVariable != this.questionnaire.variable
-                || this.questionnaireEdit.editedHideIfDisabled != this.questionnaire.hideIfDisabled;
+            return this.questionnaireStore.getQuestionnaireEditDataDirty;
         },
         isQuestionnaireOwner() {
             const userEmail = this.currentUser.email;
@@ -356,28 +358,16 @@ export default {
             return user && user.isOwner;
         },
     },
-    setup(props) { },
     expose: ['open', 'close'],
     methods: {
         open() {
-            this.fillQuestionnaireEditData();
-
             this.visible = true;
         },
         close() {
             this.visible = false;
         },
-        fillQuestionnaireEditData() {
-            this.questionnaireEdit.editedTitle = this.questionnaire.title
-            this.questionnaireEdit.editedVariable = this.questionnaire.variable
-            this.questionnaireEdit.editedHideIfDisabled = this.questionnaire.hideIfDisabled
-
-            this.questionnaireEdit.isAnonymouslyShared = this.questionnaire.isAnonymouslyShared
-            this.questionnaireEdit.anonymousQuestionnaireId = this.questionnaire.anonymousQuestionnaireId
-            this.questionnaireEdit.anonymousQuestionnaireShareDate = toLocalDateTime(this.questionnaire.anonymouslySharedAtUtc)
-        },
         togglePublicity() {
-            updateQuestionnaire(this.questionnaireId, {
+            questionnaireSettingsUpdated(this.questionnaireId, {
                 isPublic: !this.questionnaire.isPublic,
                 title: this.questionnaire.title,
                 variable: this.questionnaire.variable,
@@ -460,11 +450,11 @@ export default {
             else return _.find(this.shareTypeOptions, { name: type.name });
         },
         updateTitle() {
-            updateQuestionnaire(this.questionnaireId, {
+            questionnaireSettingsUpdated(this.questionnaireId, {
                 isPublic: this.questionnaire.isPublic,
-                title: this.questionnaireEdit.editedTitle,
-                variable: this.questionnaireEdit.editedVariable,
-                hideIfDisabled: this.questionnaireEdit.editedHideIfDisabled,
+                title: this.questionnaireEdit.title,
+                variable: this.questionnaireEdit.variable,
+                hideIfDisabled: this.questionnaireEdit.hideIfDisabled,
                 defaultLanguageName: this.questionnaire.defaultLanguageName
             });
 
