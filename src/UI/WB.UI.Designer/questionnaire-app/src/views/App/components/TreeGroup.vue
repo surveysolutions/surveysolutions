@@ -23,14 +23,14 @@
                 <span class="roster-marker" v-show="item.isRoster">{{
                     $t('QuestionnaireEditor.TreeRoster')
                 }}&nbsp;</span>
-                <span v-text="filter(item.title)"></span>
+                <span v-sanitize-html="filter(item.title)"></span>
             </div>
             <div class="qname-block">
                 <div class="conditions-block">
                     <div class="enabling-group-marker" :class="{ 'hide-if-disabled': item.hideIfDisabled }"
                         v-if="item.hasCondition"></div>
                 </div>
-                <span v-text="filter(item.variable)"></span>
+                <span v-sanitize-html="filter(item.variable)"></span>
             </div>
         </router-link>
     </TreeItem>

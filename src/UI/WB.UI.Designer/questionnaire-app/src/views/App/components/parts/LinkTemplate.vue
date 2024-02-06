@@ -13,11 +13,11 @@
                         <span class="path">{{ linkedToEntity.breadcrumbs }}</span>
                         <span class="chosen-item" v-if="linkedToEntity.type !== 'roster'">
                             <i class="dropdown-icon" :class="['icon-' + linkedToEntity.type]"></i>
-                            {{ linkedToEntity.title | escape }} (<span class="var-name-line">{{
+                            {{ linkedToEntity.title /*| escape*/ }} (<span class="var-name-line">{{
                                 linkedToEntity.varName }}</span>)
                         </span>
                         <span class="linked-roster-source" v-if="linkedToEntity.type === 'roster'">
-                            {{ linkedToEntity.title | escape }} (<span class="var-name-line">{{
+                            {{ linkedToEntity.title /*| escape*/ }} (<span class="var-name-line">{{
                                 linkedToEntity.varName }}</span>)
                         </span>
                     </span>

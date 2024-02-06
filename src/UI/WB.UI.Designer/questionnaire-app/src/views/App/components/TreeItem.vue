@@ -94,20 +94,6 @@
             </div>
         </Teleport>
     </div>
-    <!--div
-        v-hide="collapsed"
-        class="slide"
-        :class="{ highlighted: is_highlighted, 'roster-items': item.isRoster }"
-        ui-tree-nodes="item.items"
-        v-model="item.items"
-    >
-        <div
-            v-repeat="item in item.items | filter:searchItem"
-            class="filter-animate"
-            ui-tree-node
-            v-include="itemTemplate(item.itemType)"
-        ></div>
-    </div-->
 </template>
 
 <script>
@@ -199,9 +185,6 @@ export default {
         }
     },
     methods: {
-        filter(value) {
-            return value; // TODO | escape | highlight:search.searchText
-        },
         onContextMenu(e) {
             e.preventDefault();
 
@@ -361,7 +344,7 @@ export default {
 
             params.callback = confirm => {
                 if (confirm) {
-                    deleteStaticText(questionnaireId, itemIdToDelete);                        
+                    deleteStaticText(questionnaireId, itemIdToDelete);
                 }
             };
 
@@ -382,7 +365,7 @@ export default {
 
             params.callback = confirm => {
                 if (confirm) {
-                    deleteVariable(questionnaireId, itemIdToDelete);                        
+                    deleteVariable(questionnaireId, itemIdToDelete);
                 }
             };
 
@@ -400,7 +383,7 @@ export default {
 
             params.callback = confirm => {
                 if (confirm) {
-                    deleteGroup(questionnaireId, itemIdToDelete);                        
+                    deleteGroup(questionnaireId, itemIdToDelete);
                 }
             };
 

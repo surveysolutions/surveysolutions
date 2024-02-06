@@ -104,7 +104,7 @@
                             <a @click="setCategories(categories)" role="menuitem" tabindex="-1"
                                 class="linked-question-source" href="javascript:void(0);">
                                 <div>
-                                    <span v-bind="categories.name | escape"></span>
+                                    <span v-sanitize-text="categories.name"></span>
                                 </div>
                             </a>
                         </li>
