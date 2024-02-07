@@ -60,7 +60,8 @@ export default {
             title: this.tooltipMessage,
             container: 'body',
             placement: this.placement,
-            customClass: 'in'
+            customClass: 'in',
+            trigger: 'hover'
         })
     },
     computed: {
