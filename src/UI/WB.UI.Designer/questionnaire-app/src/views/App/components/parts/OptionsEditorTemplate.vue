@@ -19,8 +19,8 @@
                 <div class="table-row question-options-editor" v-for="(option, index) in activeQuestion.options">
                     <div class="column-2">
                         <v-form name="options_value_form">
-                            <input type="number" v-focus min="-2147483648" max="2147483647" name="option_value"
-                                v-model="option.value" v-pattern="/^([-+]?\d+)$/"
+                            <input type="number" min="-2147483648" max="2147483647" v-model="option.value"
+                                v-pattern="/^([-+]?\d+)$/" :name="'option_value_' + index"
                                 :class="{ 'has-error': !isInteger(option.value) }" @keypress="onKeyPressIsNumber($event)"
                                 class="form-control question-option-value-editor border-right" />
                         </v-form>
@@ -81,6 +81,7 @@ import { convertToText, validateText, convertToTable } from '../../../OptionsEdi
 import { isInteger } from '../../../../helpers/number';
 import Help from '../Help.vue'
 import AddClassification from './AddClassification.vue';
+import { focusElementByName } from '../../../../services/utilityService'
 
 export default {
     name: 'OptionsEditorTemplate',
@@ -185,6 +186,11 @@ export default {
             });
             this.activeQuestion.optionsCount += 1;
             this.markFormAsChanged();
+
+            this.$nextTick(() => {
+                const index = this.activeQuestion.options.length - 1;
+                focusElementByName('option_value_' + index)
+            })
         },
 
         removeOption(index) {

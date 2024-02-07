@@ -168,7 +168,7 @@
                                     <div class="table-row fixed-roster-titles-editor"
                                         v-for="(title, index) in activeRoster.fixedRosterTitles">
                                         <div class="column-2">
-                                            <input type="number" min="-2147483648" max="2147483647" v-focus="initilized"
+                                            <input type="number" min="-2147483648" max="2147483647"
                                                 v-model.number="title.value" :name="'title_value_' + index"
                                                 @keypress="onKeyPressIsNumber($event)"
                                                 :class="{ 'has-error': !isInteger(title.value) }"
@@ -359,7 +359,7 @@ import Help from './Help.vue'
 import { find } from 'lodash'
 import { convertToText, validateText, convertToTable } from '../../OptionsEditor/utils/tableToString';
 import { isInteger } from '../../../helpers/number';
-import { createQuestionForDeleteConfirmationPopup } from '../../../services/utilityService'
+import { createQuestionForDeleteConfirmationPopup, focusElementByName } from '../../../services/utilityService'
 import { updateRoster, deleteRoster } from '../../../services/rosterService'
 import { setFocusIn } from '../../../services/utilityService'
 
@@ -385,17 +385,14 @@ export default {
             useListAsRosterTitleEditor: true,
 
             fixedRosterLimit: 200,
-            initilized: false,
         };
     },
     watch: {
         async rosterId(newValue, oldValue) {
             if (newValue != oldValue) {
-                this.initilized = false;
                 this.rosterStore.clear();
                 await this.fetch();
                 this.scrollTo();
-                this.initilized = true;
             }
         }
     },
@@ -421,7 +418,6 @@ export default {
         await this.fetch();
     },
     mounted() {
-        this.initilized = true;
         this.scrollTo();
     },
     created() {
@@ -555,6 +551,11 @@ export default {
                 "value": null,
                 "title": ''
             });
+
+            this.$nextTick(() => {
+                const index = this.activeRoster.fixedRosterTitles.length - 1;
+                focusElementByName('title_value_' + index)
+            })
         },
         removeFixedTitle(index) {
             this.activeRoster.fixedRosterTitles.splice(index, 1);

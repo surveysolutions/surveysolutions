@@ -25,6 +25,13 @@ export function toLocalDateTime(utc) {
     return formatDateTime(utc);
 }
 
+export function focusElementByName(name) {
+    var elements = document.getElementsByName(name);
+    if (elements.length > 0) {
+        elements[0].focus();
+    }
+}
+
 //TODO: fix usages of $...
 
 export function focus(name) {
