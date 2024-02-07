@@ -51,6 +51,9 @@
                 </div>
             </div>
         </div>
+        <div v-if="visible" uib-modal-backdrop="modal-backdrop" class="modal-backdrop fade ng-scope in"
+            uib-modal-animation-class="fade" modal-in-class="in" modal-animation="true"
+            data-bootstrap-modal-aria-hidden-count="1" aria-hidden="true" style="z-index: 1040;" @click="cancel()"></div>
     </teleport>
 </template>
 
