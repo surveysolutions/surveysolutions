@@ -206,7 +206,17 @@ export default {
 
             params.callback = confirm => {
                 if (confirm) {
-                    deleteVariable(questionnaireId, itemIdToDelete);
+                    deleteVariable(questionnaireId, itemIdToDelete).then(() => {
+                        const chapterId = this.currentChapter.chapter.itemId;
+                        this.$router.push({
+                            name: 'group',
+                            params: {
+                                chapterId: chapterId,
+                                entityId: chapterId
+                            },
+                            force: true
+                        });
+                    });
                 }
             };
 

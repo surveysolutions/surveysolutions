@@ -74,6 +74,7 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
 
             emitter.on('metadataUpdated', this.metadataUpdated);
 
+            emitter.on('groupDeleted', this.groupDeleted);
             emitter.on('groupUpdated', this.groupUpdated);
             emitter.on('rosterUpdated', this.rosterUpdated);
 
@@ -208,6 +209,15 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
                 this.info.sharedPersons.sharedPersons = [owner].concat(
                     sharedPersons
                 );
+            }
+        },
+        groupDeleted(event) {
+            var index = findIndex(this.info.chapters, function(i) {
+                return i.itemId === event.itemId.replaceAll('-', '');
+            });
+
+            if (index > -1) {
+                this.info.chapters.splice(index, 1);
             }
         },
         groupUpdated(payload) {
