@@ -50,7 +50,7 @@
   
 <script>
 
-import { computed } from 'vue';
+import { computed, reactive } from 'vue';
 import moment from 'moment'
 import { isUndefined, isNull, some } from 'lodash'
 import TranslationItem from './TranslationItem.vue';
@@ -96,14 +96,14 @@ export default {
         },
 
         defaultTranslation() {
-            return {
+            return reactive({
                 translationId: null,
                 name: !this.questionnaire.defaultLanguageName ? this.$t("QuestionnaireEditor.Translation_Original") : this.questionnaire.defaultLanguageName,
                 file: null,
                 isDefault: !some(this.translations, { isDefault: true }),
                 content: { details: {} },
                 isOriginalTranslation: true
-            }
+            });
         },
     },
 

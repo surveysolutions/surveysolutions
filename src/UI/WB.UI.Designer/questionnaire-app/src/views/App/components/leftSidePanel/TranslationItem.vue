@@ -77,9 +77,11 @@ import {
     setDefaultTranslation
 } from '../../../../services/translationService';
 
+import { updateQuestionnaireSettings } from '../../../../services/questionnaireService';
+
 export default {
     name: 'TranslationItem',
-    inject: ['isReadOnlyForUser'],
+    inject: ['questionnaire', 'isReadOnlyForUser'],
     props: {
         questionnaireId: { type: String, required: true },
         translation: { type: Object, required: true },
@@ -162,13 +164,26 @@ export default {
         },
 
         async saveTranslation() {
-            const response = await updateTranslation(this.questionnaireId, this.translation)
+            if (!this.translation.isOriginalTranslation) {
+                const response = await updateTranslation(this.questionnaireId, this.translation)
 
-            this.originName = this.translation.name;
+                this.originName = this.translation.name;
 
-            if (this.translation.file) notice(response);
-            this.translation.file = null;
-            this.file = [];
+                if (this.translation.file) notice(response);
+                this.translation.file = null;
+                this.file = [];
+            }
+            else {
+
+                updateQuestionnaireSettings(this.questionnaireId, {
+                    isPublic: this.questionnaire.isPublic,
+                    title: this.questionnaire.title,
+                    variable: this.questionnaire.variable,
+                    hideIfDisabled: this.questionnaire.hideIfDisabled,
+                    defaultLanguageName: this.translation.name
+                });
+                this.originName = this.translation.name;
+            }
         },
 
         cancel() {

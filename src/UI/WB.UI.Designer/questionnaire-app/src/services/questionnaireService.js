@@ -14,7 +14,7 @@ export function addSubsection(questionnaireId, newSubsection) {
     // });
 }
 
-export function questionnaireSettingsUpdated(questionnaireId, questionnaire) {
+export function updateQuestionnaireSettings(questionnaireId, questionnaire) {
     var command = {
         title: questionnaire.title,
         variable: questionnaire.variable,

@@ -287,7 +287,7 @@ import Help from './Help.vue';
 import { toLocalDateTime } from '../../../services/utilityService';
 import { findUserByEmailOrLogin } from '../../../services/userService';
 import {
-    questionnaireSettingsUpdated,
+    updateQuestionnaireSettings,
     regenerateAnonymousQuestionnaireLink,
     updateAnonymousQuestionnaireSettings,
     shareWith,
@@ -367,7 +367,7 @@ export default {
             this.visible = false;
         },
         togglePublicity() {
-            questionnaireSettingsUpdated(this.questionnaireId, {
+            updateQuestionnaireSettings(this.questionnaireId, {
                 isPublic: !this.questionnaire.isPublic,
                 title: this.questionnaire.title,
                 variable: this.questionnaire.variable,
@@ -450,7 +450,7 @@ export default {
             else return _.find(this.shareTypeOptions, { name: type.name });
         },
         updateTitle() {
-            questionnaireSettingsUpdated(this.questionnaireId, {
+            updateQuestionnaireSettings(this.questionnaireId, {
                 isPublic: this.questionnaire.isPublic,
                 title: this.questionnaireEdit.title,
                 variable: this.questionnaireEdit.variable,
