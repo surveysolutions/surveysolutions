@@ -245,8 +245,9 @@
                     </ul>
                     <div class="form-buttons-holder" :class="{ dirty: dirty }">
                         <button type="button" class="btn btn-lg ng-isolate-scope"
-                            :disabled="questionnaire.isReadOnlyForUser || invalid" :class="{ 'btn-primary': dirty }"
-                            @click.self="saveMetadata()">{{ $t('QuestionnaireEditor.Save') }}</button>
+                            :disabled="questionnaire.isReadOnlyForUser || !dirty ? 'disabled' : null"
+                            :class="{ 'btn-primary': dirty }" @click.self="saveMetadata()">{{ $t('QuestionnaireEditor.Save')
+                            }}</button>
                         <button type="button" class="btn btn-lg btn-link ng-isolate-scope" @click.self="cancelMetadata()">{{
                             $t('QuestionnaireEditor.Cancel')
                         }}</button>
@@ -264,6 +265,7 @@ import { isOnlyNumbers } from '../../../../helpers/number';
 import { updateMetadata } from '../../../../services/metadataService';
 
 import { useQuestionnaireStore } from '../../../../stores/questionnaire';
+import { notice, error } from '../../../../services/notificationService';
 
 export default {
     name: 'Metadata',
@@ -271,9 +273,7 @@ export default {
         questionnaireId: { type: String, required: true },
     },
     data() {
-        return {
-
-        }
+        return {}
     },
     setup() {
         const questionnaireStore = useQuestionnaireStore();
@@ -351,6 +351,11 @@ export default {
         },
 
         async saveMetadata() {
+            if (!this.isOnlyNumbers(this.metadata.year)) {
+                notice("Year must be a number");
+                return;
+            }
+
             await updateMetadata(this.questionnaireId, this.metadata);
         },
 
