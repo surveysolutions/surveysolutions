@@ -2,13 +2,13 @@
     <div class="row">
         <div class="col-md-5">
             <div class="checkbox checkbox-in-column">
-                <input id="cb-is-integer" type="checkbox" class="wb-checkbox" v-model="isIntegerState"
+                <input id="cb-is-integer" type="checkbox" class="wb-checkbox" v-model="activeQuestion.isInteger"
                     @change="isIntegerChange($event)" />
                 <label for="cb-is-integer"><span></span>{{ $t('QuestionnaireEditor.QuestionInteger') }}</label>
             </div>
         </div>
         <div class="col-md-5 inline-inputs">
-            <div class="form-group checkbox-in-column" v-show="!isIntegerState"
+            <div class="form-group checkbox-in-column" v-show="!activeQuestion.isInteger"
                 :class="{ 'has-error': !isValidCountOfDecimalPlaces }">
                 <label for="edit-question-count-decimal">{{ $t('QuestionnaireEditor.QuestionDecimalPlaces') }}</label>
                 <input id="edit-question-count-decimal" type="text" maxlength="15" name="countOfDecimalPlaces" v-number
@@ -54,22 +54,26 @@ export default {
     data() {
         return {}
     },
+    beforeMount() {
+        if (!this.activeQuestion.isInteger)
+            this.activeQuestion.isInteger = true;
+    },
     computed: {
         isValidCountOfDecimalPlaces() {
             if (!this.activeQuestion.countOfDecimalPlaces)
                 return true;
             return isInteger(this.activeQuestion.countOfDecimalPlaces);
         },
-        isIntegerState() {
-            return this.activeQuestion.isInteger ?? true;
-        }
+        // isIntegerState() {
+        //     return this.activeQuestion.isInteger ?? true;
+        // }
     },
     methods: {
         preperaToSave() {
             this.$refs.options.showOptionsInList();
         },
         isIntegerChange(event) {
-            this.activeQuestion.isInteger = event.target.checked;
+            //this.activeQuestion.isInteger = event.target.checked;
         },
     }
 }
