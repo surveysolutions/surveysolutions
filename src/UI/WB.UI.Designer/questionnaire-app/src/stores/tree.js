@@ -389,25 +389,25 @@ export const useTreeStore = defineStore('tree', {
             variable.variableData.label = data.label;
         },
 
-        groupUpdated(data) {
-            const itemId = data.id.replaceAll('-', '');
+        groupUpdated(payload) {
+            const itemId = payload.group.id.replaceAll('-', '');
             const hasCondition =
-                data.enablementCondition !== null &&
-                /\S/.test(data.enablementCondition);
+                payload.group.enablementCondition !== null &&
+                /\S/.test(payload.group.enablementCondition);
             const chapter = this.getChapterData;
 
             if (chapter.itemId === itemId) {
-                chapter.title = data.title;
+                chapter.title = payload.group.title;
                 chapter.hasCondition = hasCondition;
-                chapter.hideIfDisabled = data.hideIfDisabled;
+                chapter.hideIfDisabled = payload.group.hideIfDisabled;
             }
 
             var group = this.findTreeItem(itemId);
             if (isNull(group) || isUndefined(group)) return;
-            group.title = data.title;
-            group.variable = data.variableName;
+            group.title = payload.group.title;
+            group.variable = payload.group.variableName;
             group.hasCondition = hasCondition;
-            group.hideIfDisabled = data.hideIfDisabled;
+            group.hideIfDisabled = payload.group.hideIfDisabled;
         },
 
         rosterUpdated(data) {

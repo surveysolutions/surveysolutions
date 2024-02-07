@@ -24,7 +24,7 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
         edittingTranslations: [],
         edittingCategories: [],
         edittingScenarios: [],
-        edittingLookupTables: [],        
+        edittingLookupTables: [],
         edittingSharedInfo: {}
     }),
     getters: {
@@ -36,7 +36,7 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
         getEdittingCategories: state => state.edittingCategories,
         getEdittingScenarios: state => state.edittingScenarios,
         getEdittingLookupTables: state => state.edittingLookupTables,
-        
+
         getEdittingSharedInfo: state => state.edittingSharedInfo,
         getQuestionnaireEditDataDirty: state =>
             state.edittingSharedInfo.title != state.info.title ||
@@ -102,7 +102,7 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             this.edittingScenarios = cloneDeep(info.scenarios);
             this.edittingLookupTables = cloneDeep(info.lookupTables);
             this.edittingSharedInfo = this.getQuestionnaireEditData();
-            
+
             forEach(this.info.attachments, attachment => {
                 var editAttachment = cloneDeep(attachment);
                 attachment.editAttachment = editAttachment;
@@ -212,16 +212,16 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
         },
         groupUpdated(payload) {
             var index = findIndex(this.info.chapters, function(i) {
-                return i.itemId === payload.id.replaceAll('-', '');
+                return i.itemId === payload.group.id.replaceAll('-', '');
             });
 
             if (index > -1) {
-                this.info.chapters[index].title = payload.title;
+                this.info.chapters[index].title = payload.group.title;
                 this.info.chapters[index].hasCondition =
-                    payload.enablementCondition !== null &&
-                    /\S/.test(payload.enablementCondition);
+                    payload.group.enablementCondition !== null &&
+                    /\S/.test(payload.group.enablementCondition);
                 this.info.chapters[index].hideIfDisabled =
-                    payload.hideIfDisabled;
+                    payload.group.hideIfDisabled;
             }
         },
         rosterUpdated(payload) {},

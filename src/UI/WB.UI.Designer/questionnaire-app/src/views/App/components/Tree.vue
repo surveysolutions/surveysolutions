@@ -24,27 +24,24 @@
             <div v-if="!search.open" class="chapter-name">
                 <router-link :id="'group-' + chapterId" class="chapter-title-text" :to="{
                     name: 'group',
-                    params: {
-                        entityId: chapterId,
-                        chapterId: chapterId
-                    }
+                    params: { entityId: chapterId, chapterId: chapterId }
                 }">
                     <span v-text="currentChapterData.title"></span>
-                    <span v-if="currentChapter.isCover && currentChapter.isReadOnly
+                    <span v-if="currentChapterData.isCover && currentChapterData.isReadOnly
                         " class="warning-message">
                         {{ $t('QuestionnaireEditor.VirtualCoverPage') }}</span>
-                    <help v-if="currentChapter.isCover && currentChapter.isReadOnly" link="virtualCoverPage" />
+                    <help v-if="currentChapterData.isCover && currentChapterData.isReadOnly" link="virtualCoverPage" />
                     <a v-if="!questionnaire.isReadOnlyForUser &&
-                        currentChapter.isCover &&
-                        currentChapter.isReadOnly" href="javascript:void(0);" @click.stop="migrateToNewVersion()">{{
-        $t('QuestionnaireEditor.MigrateToNewCover') }}</a>
+                        currentChapterData.isCover &&
+                        currentChapterData.isReadOnly" href="javascript:void(0);" @click.stop="migrateToNewVersion()">
+                        {{ $t('QuestionnaireEditor.MigrateToNewCover') }}</a>
                 </router-link>
                 <div class="qname-block chapter-condition-block">
                     <div class="conditions-block">
-                        <div class="enabling-group-marker" :class="{
-                            'hide-if-disabled':
-                                currentChapter.hideIfDisabled
-                        }" v-if="currentChapter.hasCondition"></div>
+                        <div class="enabling-group-marker"
+                            :class="{ 'hide-if-disabled': currentChapterData.hideIfDisabled }"
+                            v-if="currentChapterData.hasCondition">
+                        </div>
                     </div>
                 </div>
                 <ul class="controls-right">

@@ -213,11 +213,11 @@ export default {
 
         groupUpdated(payload) {
             const index = _.findIndex(this.commentThreads, function (i) {
-                return payload.id && i.entity.itemId === payload.id.replaceAll('-', '');
+                return payload.group.id && i.entity.itemId === payload.group.id.replaceAll('-', '');
             });
             if (index !== -1) {
-                this.commentThreads[index].entity.title = payload.title;
-                this.commentThreads[index].entity.variable = payload.variableName;
+                this.commentThreads[index].entity.title = payload.group.title;
+                this.commentThreads[index].entity.variable = payload.group.variableName;
             }
         },
 

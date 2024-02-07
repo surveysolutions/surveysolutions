@@ -37,6 +37,6 @@ export function updateGroup(questionnaireId, group) {
     };
 
     return commandCall('UpdateGroup', command).then(async response => {
-        emitter.emit('groupUpdated', group);
+        emitter.emit('groupUpdated', { group: group });
     });
 }

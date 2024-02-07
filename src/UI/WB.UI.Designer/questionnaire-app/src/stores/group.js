@@ -21,8 +21,8 @@ export const useGroupStore = defineStore('group', {
             emitter.on('groupDeleted', this.groupDeleted);
         },
         groupUpdated(payload) {
-            if ((this.group.id = payload.id)) {
-                this.setGroupData(payload);
+            if ((this.group.id = payload.group.id)) {
+                this.setGroupData(payload.group);
             }
         },
         groupDeleted(payload) {
