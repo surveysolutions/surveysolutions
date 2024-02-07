@@ -7,13 +7,14 @@
                 <help link="isTimestamp"></help>
             </div>
         </div>
-        <div class="col-md-5 ng-scope inline-inputs" v-if="!activeQuestion.isTimestamp">
+        <div class="col-md-6 ng-scope inline-inputs" v-if="!activeQuestion.isTimestamp">
             <div class="form-group checkbox checkbox-in-column">
                 <label for="dt-default-date">{{ $t('QuestionnaireEditor.QuestionDefaultDate') }}</label>
                 <!--input id="dt-default-date" type="text" jqdatepicker v-model="activeQuestion.defaultDate"
                     class="form-control small-date-input" /-->
                 <Datepicker v-model="activeQuestion.defaultDate" id="dt-default-date"
-                    inputClass="form-control small-date-input" showClearButton="true" date-format="YYYY-MM-DD" />
+                    inputClass="form-control small-date-input" showClearButton="true" date-format="YYYY-MM-DD"
+                    style="display: inline-block;" lang="en" placeholder="" position="right" />
                 <help link="defaultDate"></help>
             </div>
         </div>
