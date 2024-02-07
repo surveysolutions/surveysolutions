@@ -6,6 +6,7 @@ import contextmenu from './contextmenu';
 import autosize from './autosize';
 import sanitizeText from './sanitizeText';
 import sanitizeHtml from './sanitizeHtml';
+import dateTime from './dateTime';
 
 const directives = app => {
     focus(app);
@@ -16,6 +17,7 @@ const directives = app => {
     autosize(app);
     sanitizeText(app);
     sanitizeHtml(app);
+    dateTime(app);
 };
 
 export default directives;

@@ -33,7 +33,7 @@
                             <li class="comment" :class="{ resolved: comment.isResolved }"
                                 v-for="comment in commentThread.comments">
                                 <span class="author">{{ comment.userEmail }}</span>
-                                <span class="date">{{ comment.date }}</span>
+                                <span class="date" v-dateTime="comment.date"></span>
                                 <p class="comment-text">{{ comment.comment }}</p>
                             </li>
                         </ul>
@@ -52,7 +52,7 @@
                                 <li class="comment" :class="{ resolved: comment.isResolved }"
                                     v-for="comment in commentThread.resolvedComments">
                                     <span class="author">{{ comment.userEmail }}</span>
-                                    <span class="date">{{ comment.date }}</span>
+                                    <span class="date" v-dateTime="comment.date"></span>
                                     <p class="comment-text">{{ comment.comment }}</p>
                                 </li>
                             </ul>
@@ -114,10 +114,7 @@ export default {
                 commentThread.resolvedAreExpanded = false;
 
                 _.forEach(commentThread.comments, function (comment) {
-                    comment.date = moment
-                        .utc(comment.date)
-                        .local()
-                        .format('MMM DD, YYYY HH:mm');
+                    comment.date = moment.utc(comment.date)
                     comment.isResolved = !_.isNull(comment.resolveDate || null);
                 });
 
@@ -178,10 +175,6 @@ export default {
             });
 
             const comment = Object.assign({}, payload);
-            comment.date = moment
-                .utc(comment.date)
-                .local()
-                .format('MMM DD, YYYY HH:mm');
 
             if (index === -1) {
                 this.commentThreads.push({

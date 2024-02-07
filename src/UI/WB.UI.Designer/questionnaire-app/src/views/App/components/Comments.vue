@@ -8,7 +8,7 @@
                 <button v-show="comment.resolveDate == null" type="button" class="btn btn-sm btn-link pull-right"
                     @click="resolveComment(comment.id)">{{ $t('QuestionnaireEditor.CommentEditorResolve') }}</button>
                 <span class="author">{{ comment.userEmail }}</span>
-                <span class="date">{{ comment.date }}</span>
+                <span class="date" v-dateTime="comment.date"></span>
                 <p class="comment-text">{{ comment.comment }}</p>
             </div>
 

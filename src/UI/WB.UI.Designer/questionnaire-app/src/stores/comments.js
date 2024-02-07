@@ -47,10 +47,7 @@ export const useCommentsStore = defineStore('comments', {
             this.entityId = entityId;
 
             _.forEach(data, function(comment) {
-                comment.date = moment
-                    .utc(comment.date)
-                    .local()
-                    .format('MMM DD, YYYY HH:mm');
+                comment.date = moment.utc(comment.date);
                 comment.isResolved = !_.isNull(comment.resolveDate || null);
             });
 

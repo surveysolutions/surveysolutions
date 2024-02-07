@@ -22,10 +22,7 @@ export function guid() {
 }
 
 export function toLocalDateTime(utc) {
-    return moment
-        .utc(utc)
-        .local()
-        .format('YYYY-MM-DD HH:mm');
+    return formatDateTime(utc);
 }
 
 //TODO: fix usages of $...
@@ -296,4 +293,24 @@ export function formatBytes(bytes) {
         ' ' +
         sizes[degree]
     );
+}
+
+export const DateFormats = {
+    date: 'MMM DD, YYYY',
+    //dateTime: 'YYYY-MM-DD HH:mm:ss',
+    dateTime: 'MMM DD, YYYY HH:mm'
+};
+
+export function formatDateTime(utcDateTime) {
+    return moment //(utcDateTime)
+        .utc(utcDateTime)
+        .local()
+        .format(DateFormats.dateTime);
+}
+
+export function formatDate(utcDate) {
+    return moment
+        .utc(utcDate)
+        .local()
+        .format(DateFormats.date);
 }
