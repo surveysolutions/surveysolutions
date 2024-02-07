@@ -1,14 +1,16 @@
 <template>
-    <div class="row table-holder">
-        <div class="col-xs-offset-5 col-xs-6">
-            <div class="form-group singleline-group" :class="{ 'has-error': !isValidMaxAnswerCount }">
-                <label for="edit-question-max-answers-number">{{
-                    $t('QuestionnaireEditor.QuestionMaxNumberOfAnswers') }}</label>
+    <div class="row">
+        <div class="col-md-5"></div>
+        <div class="col-md-5 inline-inputs">
+            <div class="form-group singleline-group checkbox-in-column" :class="{ 'has-error': !isValidMaxAnswerCount }">
+                <label for="edit-question-max-answers-number">
+                    {{ $t('QuestionnaireEditor.QuestionMaxNumberOfAnswers') }}
+                </label>
                 <input id="edit-question-max-answers-number" maxlength="9" name="maxAnswerCount" type="text" v-number
                     ng-pattern="/^\d+$/" v-model.number="activeQuestion.maxAnswerCount"
                     class="form-control small-numeric-input" />
-                <p class="help-block ng-cloak" v-show="!isValidMaxAnswerCount">{{
-                    $t('QuestionnaireEditor.QuestionOnlyInts') }}
+                <p class="help-block ng-cloak" v-show="!isValidMaxAnswerCount">
+                    {{ $t('QuestionnaireEditor.QuestionOnlyInts') }}
                 </p>
             </div>
         </div>
