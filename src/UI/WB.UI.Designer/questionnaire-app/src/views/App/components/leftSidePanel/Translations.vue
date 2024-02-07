@@ -58,6 +58,7 @@ import TranslationItem from './TranslationItem.vue';
 import { useQuestionnaireStore } from '../../../../stores/questionnaire';
 import { notice } from '../../../../services/notificationService';
 import { newGuid } from '../../../../helpers/guid';
+import { updateTranslation } from '../../../../services/translationService';
 
 export default {
     name: 'Translations',
@@ -87,9 +88,7 @@ export default {
         },
 
         translations() {
-            return this.questionnaireStore.edittingTranslations || [];
-            //return this.questionnaireStore.getEdittingTranslations;
-            //return computed(() => this.questionnaireStore.getEdittingTranslations);
+            return this.questionnaireStore.getEdittingTranslations;
         },
 
         isReadOnlyForUser() {
@@ -148,7 +147,7 @@ export default {
             translation.oldTranslationId = null;
             translation.translationId = newGuid();
 
-            const response = await this.questionnaireStore.addTranslation(translation);
+            const response = await updateTranslation(this.questionnaireId, translation);
 
             if (translation.file) notice(response);
             translation.file = null;
