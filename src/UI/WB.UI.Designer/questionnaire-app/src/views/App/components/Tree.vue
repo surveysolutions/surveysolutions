@@ -253,23 +253,24 @@ export default {
             if (!this.search.open || !this.search.searchText)
                 return this.treeData;
 
+            const searchUpper = this.search.searchText.toUpperCase()
             let results = [];
             walkTreeData(
                 this.treeData,
                 (node, index, parent) => {
                     if (
                         node.title &&
-                        node.title.includes(this.search.searchText)
+                        node.title.toUpperCase().includes(searchUpper)
                     ) {
                         results.push(node);
                     } else if (
                         node.text &&
-                        node.text.includes(this.search.searchText)
+                        node.text.toUpperCase().includes(searchUpper)
                     ) {
                         results.push(node);
                     } else if (
                         node.variable &&
-                        node.variable.includes(this.search.searchText)
+                        node.variable.toUpperCase().includes(searchUpper)
                     ) {
                         results.push(node);
                     }
@@ -299,27 +300,15 @@ export default {
         emptySectionHtmlLine1() {
             var emptySectionAddQuestion = "<button class='btn' disabled type='button'>" + this.$t('QuestionnaireEditor.AddQuestion') + " </button>";
             var emptySectionAddSubsectionHtml = "<button class=\"btn\" disabled type=\"button\">" + this.$t('QuestionnaireEditor.AddSubsection') + " </button>";
-            //return this.$t('QuestionnaireEditor.EmptySectionLine2')
-            //    .replaceAll('{-addQuestionBtn}', emptySectionAddQuestion)
-            //    .replaceAll('{addQuestionBtn-}', emptySectionAddQuestion)
-            //    .replaceAll('{-addSubsectionBtn}', emptySectionAddSubsectionHtml)
-            //    .replaceAll('{addSubsectionBtn-}', emptySectionAddSubsectionHtml);
             return this.$t('QuestionnaireEditor.EmptySectionLine2', { addQuestionBtn: emptySectionAddQuestion, addSubsectionBtn: emptySectionAddSubsectionHtml });
         },
         emptySectionHtmlLine2() {
             var emptySectionSettingsHtml = "<button class=\"btn\" type=\"button\" disabled>" + this.$t('QuestionnaireEditor.Settings') + " </button>";
-            //return this.$t('QuestionnaireEditor.EmptySectionLine5')
-            //    .replaceAll('{-settingsBtn}', emptySectionSettingsHtml)
-            //    .replaceAll('{settingsBtn-}', emptySectionSettingsHtml)
             return this.$t('QuestionnaireEditor.EmptySectionLine5', { settingsBtn: emptySectionSettingsHtml });
         },
         emptySectionHtmlLine3() {
             const panel = '<span class="left-panel-glyph"></span>';
             return this.$t('QuestionnaireEditor.EmptySectionLine3', { panel: panel });
-            //return this.$t('QuestionnaireEditor.EmptySectionLine3')
-            //    .replaceAll('{-panel}', panel)
-            //    .replaceAll('{panel-}', panel);
-            //return this.$t('QuestionnaireEditor.EmptySectionLine3', { '-panel': '&lt;span class=&quot;left-panel-glyph&quot;&gt;&lt;/span&gt;' });
         }
     },
     methods: {
@@ -328,8 +317,6 @@ export default {
                 this.questionnaireId,
                 this.chapterId
             );
-            //this.currentChapter = this.treeStore.getChapter;
-            //this.treeData = this.treeStore.getItems;
         },
         itemTemplate(itemType) {
             return 'Tree' + itemType;
