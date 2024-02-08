@@ -54,10 +54,6 @@ export default {
     data() {
         return {}
     },
-    beforeMount() {
-        if (!this.activeQuestion.isInteger)
-            this.activeQuestion.isInteger = true;
-    },
     computed: {
         isValidCountOfDecimalPlaces() {
             if (!this.activeQuestion.countOfDecimalPlaces)

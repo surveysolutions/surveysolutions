@@ -67,9 +67,7 @@
             <div class="well well-sm" v-if="activeQuestion.wereOptionsTruncated">{{
                 $t('QuestionnaireEditor.QuestionOptionsCut', { count: 200 }) }}</div>
             <!--ng-include src="'views/question-details/OptionsEditor-template.html'"></ng-include-->
-            <OptionsEditorTemplate ref="options" :activeQuestion="activeQuestion" :questionnaireId="questionnaireId">
-            </OptionsEditorTemplate>
-
+            <OptionsEditorTemplate ref="options" :activeQuestion="activeQuestion" :questionnaireId="questionnaireId" />
             <p></p>
         </div>
     </div>

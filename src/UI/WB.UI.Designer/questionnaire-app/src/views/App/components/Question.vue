@@ -521,8 +521,18 @@ export default {
             }
 
             if (type === 'MultyOption' || type === "SingleOption") {
-                if (this.activeQuestion.options.length === 0) {
-                    //this.addOption();
+                if (!this.activeQuestion.options || this.activeQuestion.options.length === 0) {
+                    this.activeQuestion.options = [{ title: '', value: '', attachmentName: '' }];
+                }
+            }
+
+            if (type === 'Numeric') {
+                if (_.isNull(this.activeQuestion.isInteger) || _.isUndefined(this.activeQuestion.isInteger)) {
+                    this.activeQuestion.isInteger = true;
+                }
+
+                if (!this.activeQuestion.options || this.activeQuestion.options.length === 0) {
+                    this.activeQuestion.options = [{ title: '', value: '', attachmentName: '' }];
                 }
             }
 
