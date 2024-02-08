@@ -91,7 +91,7 @@
                     </button>
 
                     <ul class="dropdown-menu" role="menu">
-                        <li role="presentation" v-for="categories in getCategoriesList()  ">
+                        <li role="presentation" v-for="categories in questionnaire.categories">
                             <a @click="setCategories(categories)" role="menuitem" tabindex="-1"
                                 class="linked-question-source" href="javascript:void(0);">
                                 <div>
@@ -169,6 +169,7 @@ import { isInteger } from '../../../../helpers/number';
 
 export default {
     name: 'MultyOptionQuestion',
+    inject: ['questionnaire'],
     components: {
         Help,
         OptionsEditorTemplate,
@@ -237,6 +238,7 @@ export default {
             if (this.activeQuestion.categoriesId === categories.categoriesId) return;
 
             this.activeQuestion.categoriesId = categories.categoriesId;
+
             this.markFormAsChanged();
         },
 

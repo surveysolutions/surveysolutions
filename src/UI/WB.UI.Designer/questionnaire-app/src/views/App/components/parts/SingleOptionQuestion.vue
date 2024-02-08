@@ -100,7 +100,7 @@
                     </button>
 
                     <ul class="dropdown-menu" role="menu">
-                        <li role="presentation" v-for="categories in getCategoriesList()">
+                        <li role="presentation" v-for="categories in questionnaire.categories">
                             <a @click="setCategories(categories)" role="menuitem" tabindex="-1"
                                 class="linked-question-source" href="javascript:void(0);">
                                 <div>
@@ -174,6 +174,7 @@ import AddClassification from './AddClassification.vue';
 
 export default {
     name: 'SingleOptionQuestion',
+    inject: ['questionnaire'],
     components: {
         Help,
         OptionsEditorTemplate,
@@ -282,6 +283,13 @@ export default {
 
         showAddClassificationModal() {
             this.$refs.classification.openDialog();
+        },
+        setCategories(categories) {
+            if (this.activeQuestion.categoriesId === categories.categoriesId) return;
+
+            this.activeQuestion.categoriesId = categories.categoriesId;
+
+            this.markFormAsChanged();
         },
     }
 }
