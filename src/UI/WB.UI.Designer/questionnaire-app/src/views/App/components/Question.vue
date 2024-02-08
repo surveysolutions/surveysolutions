@@ -272,7 +272,7 @@ export default {
     },
     data() {
         return {
-            shouldUserSeeReloadDetailsPromt: true,
+            shouldUserSeeReloadDetailsPromt: null,
 
             showInstruction: null,
             showEnablingConditions: null,

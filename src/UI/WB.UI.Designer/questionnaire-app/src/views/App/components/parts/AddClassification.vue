@@ -204,7 +204,7 @@ export default {
         },
         async loadClassificationGroups() {
             await this.classificationsStore.loadClassificationGroups();
-            //this.groups = this.classificationsStore.groups;
+            this.selectedGroup = this.groups[0];
         },
 
         async search() {

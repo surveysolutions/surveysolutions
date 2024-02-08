@@ -170,7 +170,7 @@ export default {
     },
     data() {
         return {
-            shouldUserSeeReloadDetailsPromt: true,
+            shouldUserSeeReloadDetailsPromt: null,
             showEnablingConditions: null,
         };
     },
