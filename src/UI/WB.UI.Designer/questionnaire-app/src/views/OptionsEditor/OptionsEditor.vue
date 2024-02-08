@@ -79,8 +79,6 @@
     </v-app>
 </template>
 
-<style scoped></style>
-
 <script>
 import CategoryTable from './components/OptionItemsTable.vue';
 import CategoryStrings from './components/OptionItemsAsStrings.vue';
