@@ -52,17 +52,23 @@ export default {
         link: { type: String, required: true },
         placement: { default: "top", type: String },
     },
-    setup() {
-
+    data() {
+        return {
+            tooltip: null
+        }
     },
     mounted() {
-        new bootstrap.Tooltip(this.$refs.tooltipBoundary, {
+        this.tooltip = new bootstrap.Tooltip(this.$refs.tooltipBoundary, {
             title: this.tooltipMessage,
             container: 'body',
             placement: this.placement,
             customClass: 'in',
             trigger: 'hover'
         })
+    },
+    unmounted() {
+        this.tooltip.dispose();
+        this.tooltip = null;
     },
     computed: {
         tooltipMessage() {
