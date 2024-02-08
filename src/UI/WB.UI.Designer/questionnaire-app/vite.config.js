@@ -89,16 +89,8 @@ export default defineConfig(({ mode, command }) => {
                     entryFileNames: chunkInfo => {
                         if (isDevMode) return 'js/[name].js';
                         return 'js/[name]-[hash].js';
-                    },
-                    manualChunks: id => {
-                        if (isDevMode) {
-                            var filename = id.replace(/^.*[\\\/]/, '');
-                            if (filename.endsWith('.css')) return filename;
-                        }
-                        if (id.includes('node_modules')) {
-                            return 'vendor';
-                        }
                     }
+                    //manualChunks: id => {}
                 }
             }
         },
