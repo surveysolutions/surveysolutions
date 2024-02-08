@@ -374,7 +374,8 @@ export default {
     data() {
         return {
             showEnablingConditions: undefined,
-            stringifiedRosterTitles: '',
+            stringifiedRosterTitles: null,
+            initialStringifiedRosterTitles: null,
             stringifiedRosterTitlesValidity: {
                 valid: true,
                 $error: {
@@ -445,7 +446,9 @@ export default {
             return this.rosterStore.getRoster;
         },
         isDirty() {
-            return this.rosterStore.getIsDirty || !this.useListAsRosterTitleEditor;
+            return this.rosterStore.getIsDirty
+                || (!this.useListAsRosterTitleEditor
+                    && this.stringifiedRosterTitles !== this.initialStringifiedRosterTitles);
         },
         typeName() {
             if (!this.activeRoster.rosterTypeOptions) return null;
@@ -471,7 +474,8 @@ export default {
         async fetch() {
             await this.rosterStore.fetchRosterData(this.questionnaireId, this.rosterId);
 
-            this.stringifiedRosterTitles = '';
+            this.stringifiedRosterTitles = null;
+            this.initialStringifiedRosterTitles = null;
             this.useListAsRosterTitleEditor = true;
             this.stringifiedRosterTitlesValidity.valid = true;
 
@@ -491,7 +495,11 @@ export default {
         },
         cancel() {
             this.rosterStore.discardChanges();
+
+            this.stringifiedRosterTitles = null;
+            this.initialStringifiedRosterTitles = null;
             this.useListAsRosterTitleEditor = true;
+            this.stringifiedRosterTitlesValidity.valid = true;
 
             this.showEnablingConditions = this.activeRoster.enablementCondition ? true : false;
         },
@@ -570,6 +578,7 @@ export default {
             const text = await convertToText(this.activeRoster.fixedRosterTitles);
 
             this.stringifiedRosterTitles = text;
+            this.initialStringifiedRosterTitles = text;
             this.useListAsRosterTitleEditor = false;
         },
 
@@ -578,15 +587,20 @@ export default {
                 return;
             }
 
-            this.stringifiedRosterTitlesValidate();
+            if (this.stringifiedRosterTitles !== this.initialStringifiedRosterTitles) {
+                this.stringifiedRosterTitlesValidate();
 
-            if (!this.stringifiedRosterTitlesValidity.valid) {
-                return;
+                if (!this.stringifiedRosterTitlesValidity.valid) {
+                    return;
+                }
+                if (this.stringifiedRosterTitles) {
+                    const titles = await convertToTable(this.stringifiedRosterTitles);
+                    this.activeRoster.fixedRosterTitles = titles;
+                }
             }
-            if (this.stringifiedRosterTitles) {
-                const titles = await convertToTable(this.stringifiedRosterTitles);
-                this.activeRoster.fixedRosterTitles = titles;
-            }
+
+            this.stringifiedRosterTitles = null;
+            this.initialStringifiedRosterTitles = null;
             this.useListAsRosterTitleEditor = true;
         },
 
