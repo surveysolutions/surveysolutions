@@ -30,7 +30,7 @@
                     <div class="enabling-group-marker" :class="{ 'hide-if-disabled': item.hideIfDisabled }"
                         v-if="item.hasCondition"></div>
                 </div>
-                <span v-sanitize-html="filter(item.variable)"></span>
+                &nbsp;<span v-sanitize-html="filter(item.variable)"></span>
             </div>
         </router-link>
     </TreeItem>

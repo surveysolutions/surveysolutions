@@ -18,7 +18,7 @@
                 <!--span
                     ng-bind-html="item.variableData.name | escape | highlight:search.searchText"
                 ></span-->
-                <span v-sanitize-html="item.variableData.name"></span>
+                &nbsp;<span v-sanitize-html="item.variableData.name"></span>
             </div>
         </router-link>
     </TreeItem>

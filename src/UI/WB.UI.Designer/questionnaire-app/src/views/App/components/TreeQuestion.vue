@@ -24,7 +24,7 @@
                     ng-bind-html="item.variable | escape | highlight:search.searchText"
                 ></span>
 -->
-                <span v-sanitize-html="item.variable"></span>
+                &nbsp;<span v-sanitize-html="item.variable"></span>
             </div>
         </router-link>
     </TreeItem>
