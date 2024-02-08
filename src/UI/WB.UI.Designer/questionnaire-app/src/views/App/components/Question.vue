@@ -375,13 +375,15 @@ export default {
         async saveQuestion() {
             if (this.isDirty == false) return;
 
-            const beforeSave = this.$refs.questionSpecific.preperaToSave;
-            if (beforeSave != undefined) {
-                beforeSave();
-            }
+            if (this.$refs.questionSpecific != null) {
+                const beforeSave = this.$refs.questionSpecific.preperaToSave;
+                if (beforeSave != undefined) {
+                    beforeSave();
+                }
 
-            const componentValid = this.$refs.questionSpecific.valid || true;
-            if (!componentValid) return;
+                const componentValid = this.$refs.questionSpecific.valid || true;
+                if (!componentValid) return;
+            }
 
             await this.questionStore.saveQuestionData(this.questionnaireId, this.activeQuestion);
         },

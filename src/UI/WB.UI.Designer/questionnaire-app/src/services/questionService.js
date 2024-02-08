@@ -121,7 +121,7 @@ export function updateQuestion(
             command.maxAnswerCount = question.maxAnswerCount;
             break;
         case 'Multimedia':
-            command.IsSignature = question.isSignature;
+            command.IsSignature = question.isSignature || false;
             break;
     }
     var questionType =
