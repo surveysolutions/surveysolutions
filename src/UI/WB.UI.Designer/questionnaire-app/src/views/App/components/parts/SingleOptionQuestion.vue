@@ -66,8 +66,7 @@
             <p></p>
         </div>
     </div>
-    <div class="row"
-        v-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked && !activeQuestion.isCascade && !activeQuestion.isLinkedToReusableCategories">
+    <div class="row" v-if="hasOptionsOwn">
         <div class="col-xs-12">
             <div class="well well-sm" v-if="activeQuestion.wereOptionsTruncated">{{
                 $t('QuestionnaireEditor.QuestionOptionsCut', { count: 200 }) }}</div>
@@ -94,7 +93,7 @@
                         <span class="select-placeholder" v-if="(activeQuestion.categoriesId || '') == ''">{{
                             $t('QuestionnaireEditor.SelectCategories') }}</span>
                         <span class="selected-item" v-if="(activeQuestion.categoriesId || '') !== ''">
-                            {{ getSelectedCategories().name }}
+                            {{ getSelectedCategories.name }}
                         </span>
                         <span class="dropdown-arrow"></span>
                     </button>
@@ -192,9 +191,24 @@ export default {
             dirty: false,
         }
     },
+    mounted() {
+        this.activeQuestion.isLinkedToReusableCategories = this.activeQuestion.categoriesId || false;
+    },
+    computed: {
+        hasOptionsOwn() {
+            !this.activeQuestion.isFilteredCombobox
+                && !this.activeQuestion.isLinked
+                && !this.activeQuestion.isCascade
+                && !this.activeQuestion.isLinkedToReusableCategories
+        },
+        getSelectedCategories() {
+            return this.getCategoriesList().find(c => c.categoriesId === this.activeQuestion.categoriesId) || {};
+        }
+    },
     methods: {
         prepareToSave() {
-            this.$refs.options.showOptionsInList();
+            if (this.hasOptionsOwn)
+                this.$refs.options.showOptionsInList();
         },
 
         getCategoricalSingleDisplayMode() {

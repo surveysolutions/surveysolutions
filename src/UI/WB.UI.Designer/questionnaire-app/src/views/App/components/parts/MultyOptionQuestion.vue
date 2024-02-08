@@ -61,8 +61,7 @@
             <p></p>
         </div>
     </div>
-    <div class="row"
-        v-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked && !activeQuestion.isLinkedToReusableCategories">
+    <div class="row" v-if="hasOwnCategories">
         <div class="col-xs-12">
             <div class="well well-sm" v-if="activeQuestion.wereOptionsTruncated">{{
                 $t('QuestionnaireEditor.QuestionOptionsCut', { count: 200 }) }}</div>
@@ -85,7 +84,7 @@
                         <span class="select-placeholder" v-if="(activeQuestion.categoriesId || '') == ''">{{
                             $t('QuestionnaireEditor.SelectCategories') }}</span>
                         <span class="selected-item" v-if="(activeQuestion.categoriesId || '') !== ''">
-                            {{ getSelectedCategories().name }}
+                            {{ getSelectedCategories.name }}
                         </span>
                         <span class="dropdown-arrow"></span>
                     </button>
@@ -186,14 +185,26 @@ export default {
 
         }
     },
+    mounted() {
+        this.activeQuestion.isLinkedToReusableCategories = this.activeQuestion.categoriesId || false;
+    },
     computed: {
+        hasOwnCategories() {
+            !this.activeQuestion.isFilteredCombobox
+                && !this.activeQuestion.isLinked
+                && !this.activeQuestion.isLinkedToReusableCategories
+        },
         validMaxAllowedAnswers() {
             return this.activeQuestion.maxAllowedAnswers == null || this.activeQuestion.maxAllowedAnswers == '' || isInteger(this.activeQuestion.maxAllowedAnswers);
         },
+        getSelectedCategories() {
+            return this.getCategoriesList().find(c => c.categoriesId === this.activeQuestion.categoriesId) || {};
+        }
     },
     methods: {
         prepareToSave() {
-            this.$refs.options.showOptionsInList();
+            if (this.hasOwnCategories)
+                this.$refs.options.showOptionsInList();
         },
 
         getCategoricalKind() {
