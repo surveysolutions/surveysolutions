@@ -214,21 +214,21 @@ function getCsrfCookie() {
     return '';
 }
 
-function processResponseErrorOrThrow(error) {
+function processResponseErrorOrThrow(errorResp) {
     if (
-        error.response.status === 406 ||
-        error.response.status === 403 ||
-        error.response.status === 400
+        errorResp.response.status === 406 ||
+        errorResp.response.status === 403 ||
+        errorResp.response.status === 400
     ) {
-        if (error.body.message) {
-            notice(error.body.message);
+        if (errorResp.body.message) {
+            notice(errorResp.body.message);
         } else {
-            notice(error.body.Message);
+            notice(errorResp.body.Message);
         }
-    } else if (error.response.status === 404) {
+    } else if (errorResp.response.status === 404) {
         notice(i18n.t('QuestionnaireEditor.EntryWasNotFound'));
     } else {
         error(i18n.t('QuestionnaireEditor.RequestFailedUnexpectedly'));
-        throw error;
+        throw errorResp;
     }
 }
