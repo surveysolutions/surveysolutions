@@ -53,9 +53,7 @@
                                                     :class="['icon-' + typeOfMessageToBeShown]"></span>
                                                 <span v-if="reference.type == 'Categories'" class="icon icon-categories "
                                                     :class="['icon-' + typeOfMessageToBeShown]"></span>
-                                                <span class="title">
-                                                    {{ reference.title }}
-                                                </span>
+                                                <span class="title" v-sanitize-html="reference.title"></span>
                                                 <span class="variable"
                                                     v-dompurify-html="reference.variable || '&nbsp;'">&nbsp;</span>
                                             </a>
