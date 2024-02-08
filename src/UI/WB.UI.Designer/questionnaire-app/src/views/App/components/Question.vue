@@ -122,7 +122,7 @@
                         <help link="hideIfDisabled" />
                     </label>
 
-                    <ExpressionEditor v-model="activeQuestion.enablementCondition"></ExpressionEditor>
+                    <ExpressionEditor v-model="activeQuestion.enablementCondition" mode="expression"></ExpressionEditor>
                 </div>
                 <div class="form-group col-xs-1">
                     <button type="button" class="btn cross instructions-cross"

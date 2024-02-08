@@ -1,15 +1,16 @@
 <template>
     <div :class="{ 'pseudo-form-control': focusable === 'true' }" ref="editorHolder">
-        <v-ace-editor ref="editor" v-model:value="editorValue" @init="editorInit" theme="github"
+        <v-ace-editor ref="editor" v-autosize v-model:value="editorValue" @init="editorInit" theme="github"
             :lang="mode !== 'substitutions' ? 'csharp' : 'text'" :options="{
-                maxLines: 30,
+                maxLines: 300,
                 fontSize: 16,
                 highlightActiveLine: false,
                 indentedSoftWrap: false,
                 printMargin: mode !== 'substitutions',
                 showLineNumbers: false,
                 showGutter: false,
-                useWorker: true
+                useWorker: true,
+                wrap: true
             }" />
     </div>
 </template>
