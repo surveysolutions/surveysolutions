@@ -1,6 +1,7 @@
 import { get, commandCall } from '../services/apiService';
 import emitter from './emitter';
 import _ from 'lodash';
+import moment from 'moment';
 
 import {
     hasQuestionEnablementConditions,
@@ -102,13 +103,9 @@ export function updateQuestion(
         case 'DateTime':
             command.isTimestamp = question.isTimestamp;
             command.defaultDate =
-                question.isTimestamp || _.isEmpty(question.defaultDate)
+                question.isTimestamp || !question.defaultDate
                     ? null
-                    : moment.utc(
-                          question.defaultDate,
-                          moment.HTML5_FMT.DATE,
-                          true
-                      );
+                    : moment.utc(question.defaultDate);
             break;
         case 'GpsCoordinates':
         case 'Text':

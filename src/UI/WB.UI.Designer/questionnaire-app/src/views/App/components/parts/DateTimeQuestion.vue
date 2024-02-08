@@ -13,13 +13,17 @@
                 <!--input id="dt-default-date" type="text" jqdatepicker v-model="activeQuestion.defaultDate"
                     class="form-control small-date-input" /-->
                 <Datepicker v-model="activeQuestion.defaultDate" id="dt-default-date"
-                    inputClass="form-control small-date-input" showClearButton="true" date-format="YYYY-MM-DD"
-                    style="display: inline-block;" lang="en" placeholder="" position="right" />
+                    inputClass="form-control small-date-input" showClearButton="true" date-format="{
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit'
+                    }" style="display: inline-block;" lang="en" placeholder="" position="right" />
                 <help link="defaultDate"></help>
             </div>
         </div>
     </div>
 </template>
+
 
 <script>
 
