@@ -206,11 +206,11 @@
                                         </button>
                                     </p>
                                     <p class="help-block ng-cloak"
-                                        v-if="stringifiedRosterTitlesValidity.$error.matchOptionsPattern">
+                                        v-if="!stringifiedRosterTitlesValidity.valid && stringifiedRosterTitlesValidity.$error.matchOptionsPattern">
                                         {{ $t('QuestionnaireEditor.OptionsListError') }}
                                     </p>
                                     <p class="help-block ng-cloak"
-                                        v-if="stringifiedRosterTitlesValidity.$error.maxOptionsCount">
+                                        v-if="!stringifiedRosterTitlesValidity.valid && stringifiedRosterTitlesValidity.$error.maxOptionsCount">
                                         {{ $t('QuestionnaireEditor.EnteredMoreThanAllowed', {
                                             max: fixedRosterLimit
                                         }) }}
@@ -470,6 +470,10 @@ export default {
     methods: {
         async fetch() {
             await this.rosterStore.fetchRosterData(this.questionnaireId, this.rosterId);
+
+            this.stringifiedRosterTitles = '';
+            this.useListAsRosterTitleEditor = true;
+            this.stringifiedRosterTitlesValidity.valid = true;
 
             this.showEnablingConditions = this.activeRoster.enablementCondition ? true : false;
         },
