@@ -45,7 +45,8 @@
                                     <li><a @click.self="copyRef(node);">{{ $t('QuestionnaireEditor.Copy') }}</a></li>
                                     <li>
                                         <a @click.self="pasteAfterChapter(node)"
-                                            v-if="readyToPaste && !isReadOnlyForUser && !node.isReadOnly">{{
+                                            :disabled="!readyToPaste ? 'disabled' : null"
+                                            v-if="!isReadOnlyForUser && !node.isReadOnly">{{
                                                 $t('QuestionnaireEditor.PasteAfter') }}</a>
                                     </li>
                                     <li><a @click.self="deleteChapter(node, stat)"
