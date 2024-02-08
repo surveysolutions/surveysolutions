@@ -470,6 +470,8 @@ export default {
     methods: {
         async fetch() {
             await this.rosterStore.fetchRosterData(this.questionnaireId, this.rosterId);
+
+            this.showEnablingConditions = this.activeRoster.enablementCondition ? true : false;
         },
         async saveRoster() {
             if (!this.isDirty) return;

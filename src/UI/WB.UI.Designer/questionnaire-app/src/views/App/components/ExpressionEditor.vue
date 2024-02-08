@@ -60,7 +60,63 @@ export default {
             }
         }
     },
+    // beforeUnmount() {
+    //     this.$refs.editor.getAceInstance().destroy();
+    // },
     methods: {
+        onModeChanged(e, session) {
+
+            if (session.$mode.$id !== 'ace/mode/csharp')
+                return;
+
+
+            var rules = session.$mode.$highlightRules.getRules();
+            for (var stateName in rules) {
+                if (Object.prototype.hasOwnProperty.call(rules, stateName)) {
+
+                    var mapperRule = rules[stateName].find(function (rule) {
+                        return rule.regex == '[a-zA-Z_$][a-zA-Z0-9_$]*\\b';
+                    });
+                    if (mapperRule == undefined || mapperRule == null)
+                        continue;
+                    else {
+
+                        var lastUpdated = null;
+                        var keywordMapper = null;
+
+                        function getKeywordMapper(value) {
+                            var variables = self.treeStore.getVariableNames;
+
+                            if (lastUpdated !== variables.lastUpdated || keywordMapper === null) {
+                                keywordMapper = session.$mode.$highlightRules.createKeywordMapper({
+                                    "variable.language": "this|self",
+                                    "support.variable": variables.variableNamesTokens,
+                                    "keyword": "abstract|event|new|struct|as|explicit|null|switch|base|extern|object|this|bool|false|operator|throw|break|finally|out|true|byte|fixed|override|try|case|float|params|typeof|catch|for|private|uint|char|foreach|protected|ulong|checked|goto|public|unchecked|class|if|readonly|unsafe|const|implicit|ref|ushort|continue|in|return|using|decimal|int|sbyte|virtual|default|interface|sealed|volatile|delegate|internal|short|void|do|is|sizeof|while|double|lock|stackalloc|else|long|static|enum|namespace|string|var|dynamic",
+                                    "constant.language": "null|true|false"
+                                }, "identifier");
+
+                                lastUpdated = variables.lastUpdated;
+                            }
+
+                            return keywordMapper(value);
+                        }
+
+                        mapperRule.token = getKeywordMapper;
+                        mapperRule.onMatch = getKeywordMapper;
+                        mapperRule.regex = '[@a-zA-Z_$][a-zA-Z0-9_$]*\\b';
+                    }
+                }
+            }
+
+            session.$mode.$tokenizer = null;
+            session.bgTokenizer.setTokenizer(session.$mode.getTokenizer());
+            session.bgTokenizer.start(0);
+
+            session.$mode.hasBeenUpdated = true;
+
+            session.off("changeMode", this.onModeChanged);
+        }
+        ,
         editorInit(editor) {
             self = this;
             var renderer = editor.renderer;
@@ -73,6 +129,7 @@ export default {
             var session = editor.getSession();
 
             //extend text mode with substitutions
+            //text is a default mode
             if (this.mode === 'substitutions') {
                 var rules = session.$mode.$highlightRules.getRules();
                 for (var stateName in rules) {
@@ -89,47 +146,10 @@ export default {
                 session.bgTokenizer.start(0);
             }
             else if (self.mode !== 'substitutions') {
-                session.on("changeMode", function () {
-                    if (session.$mode.$id !== 'ace/mode/csharp')
-                        return;
 
-                    var rules = session.$mode.$highlightRules.getRules();
-                    for (var stateName in rules) {
-                        if (Object.prototype.hasOwnProperty.call(rules, stateName)) {
-
-                            var mapperRule = rules[stateName].find(function (rule) {
-                                return rule.regex == '[a-zA-Z_$][a-zA-Z0-9_$]*\\b';
-                            });
-                            if (mapperRule == undefined || mapperRule == null)
-                                continue;
-                            else {
-
-                                var supportVariableList = "";
-                                var variables = self.treeStore.getChapter.variableNames;
-                                if (variables)
-                                    supportVariableList = variables.map(function (el) {
-                                        return el.name;
-                                    }).join('|');
-
-
-                                var keywordMapper = session.$mode.$highlightRules.createKeywordMapper({
-                                    "variable.language": "this|self",
-                                    "support.variable": supportVariableList,
-                                    "keyword": "abstract|event|new|struct|as|explicit|null|switch|base|extern|object|this|bool|false|operator|throw|break|finally|out|true|byte|fixed|override|try|case|float|params|typeof|catch|for|private|uint|char|foreach|protected|ulong|checked|goto|public|unchecked|class|if|readonly|unsafe|const|implicit|ref|ushort|continue|in|return|using|decimal|int|sbyte|virtual|default|interface|sealed|volatile|delegate|internal|short|void|do|is|sizeof|while|double|lock|stackalloc|else|long|static|enum|namespace|string|var|dynamic",
-                                    "constant.language": "null|true|false"
-                                }, "identifier");
-
-                                mapperRule.token = keywordMapper;
-                                mapperRule.onMatch = keywordMapper;
-                                mapperRule.regex = '[@a-zA-Z_$][a-zA-Z0-9_$]*\\b';
-                            }
-                        }
-                    }
-
-                    session.$mode.$tokenizer = null;
-                    session.bgTokenizer.setTokenizer(session.$mode.getTokenizer());
-                    session.bgTokenizer.start(0);
-                });
+                //do not subscribe if it's already updated
+                if (!session.$mode.hasBeenUpdated)
+                    session.on("changeMode", this.onModeChanged);
 
                 //TODO: for linked add "@current"
 
@@ -137,18 +157,7 @@ export default {
                     var variablesCompletor =
                     {
                         getCompletions: function (editor, session, pos, prefix, callback) {
-                            var i = 0;
-
-                            var variables =
-                                _.orderBy(self.treeStore.getChapter.variableNames, 'name', 'desc')
-                                    .map(function (variable) {
-                                        return {
-                                            name: variable.name,
-                                            value: variable.name,
-                                            score: i++,
-                                            meta: variable.type
-                                        }
-                                    });
+                            var variables = self.treeStore.getVariableNames.variableNamesCompletions;
                             callback(null, variables);
                         },
 

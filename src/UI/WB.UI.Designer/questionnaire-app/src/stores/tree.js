@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { get, commandCall } from '../services/apiService';
 import { addStaticText } from '../services/staticTextService';
 import { newGuid } from '../helpers/guid';
-import { findIndex, isNull, isUndefined, find } from 'lodash';
+import { findIndex, isNull, isUndefined, find, orderBy } from 'lodash';
 import { i18n } from '../plugins/localization';
 import { useCookies } from 'vue3-cookies';
 import emitter from '../services/emitter';
@@ -10,12 +10,18 @@ import emitter from '../services/emitter';
 export const useTreeStore = defineStore('tree', {
     state: () => ({
         info: {},
-        readyToPaste: null
+        readyToPaste: null,
+        variableNamesStore: {
+            variableNamesTokens: '',
+            variableNamesCompletions: [],
+            lastUpdated: null
+        }
     }),
     getters: {
         getItems: state => (state.info.chapter || {}).items,
         getChapterData: state => state.info.chapter,
-        getChapter: state => state.info
+        getChapter: state => state.info,
+        getVariableNames: state => state.variableNamesStore
     },
     actions: {
         setupListeners() {
@@ -51,6 +57,7 @@ export const useTreeStore = defineStore('tree', {
 
         setChapterInfo(info) {
             this.info = info;
+            this.recalculateVariableNames();
         },
 
         addQuestion(parent, afterNodeId, callback) {
@@ -366,6 +373,8 @@ export const useTreeStore = defineStore('tree', {
             question.isInteger = data.isInteger;
             question.yesNoView = data.yesNoView;
             question.hideIfDisabled = data.hideIfDisabled;
+
+            this.updateVariableName(itemId, data.variable);
         },
 
         staticTextUpdated(data) {
@@ -387,6 +396,8 @@ export const useTreeStore = defineStore('tree', {
             if (isNull(variable) || isUndefined(variable)) return;
             variable.variableData.name = data.variable;
             variable.variableData.label = data.label;
+
+            this.updateVariableName(data.id, data.variable);
         },
 
         groupUpdated(payload) {
@@ -408,20 +419,67 @@ export const useTreeStore = defineStore('tree', {
             group.variable = payload.group.variableName;
             group.hasCondition = hasCondition;
             group.hideIfDisabled = payload.group.hideIfDisabled;
+
+            this.updateVariableName(itemId, data.group.variableName);
         },
 
         rosterUpdated(data) {
             const hasCondition =
-                data.enablementCondition !== null &&
-                /\S/.test(data.enablementCondition);
+                data.roster.enablementCondition !== null &&
+                /\S/.test(data.roster.enablementCondition);
 
-            const itemId = data.itemId.replaceAll('-', '');
+            const itemId = data.roster.itemId.replaceAll('-', '');
             var roster = this.findTreeItem(itemId);
             if (isNull(roster) || isUndefined(roster)) return;
-            roster.title = data.title;
-            roster.variable = data.variable;
+            roster.title = data.roster.title;
+            roster.variable = data.roster.variableName;
             roster.hasCondition = hasCondition;
-            roster.hideIfDisabled = data.hideIfDisabled;
+            roster.hideIfDisabled = data.roster.hideIfDisabled;
+
+            this.updateVariableName(itemId, data.roster.variableName);
+        },
+
+        updateVariableName(id, newName) {
+            var index = findIndex(this.info.variableNames, function(i) {
+                return i.id === id.replaceAll('-', '');
+            });
+            if (index > -1) {
+                this.info.variableNames[index].name = newName;
+                this.recalculateVariableNames();
+            }
+        },
+        removeVariableName(id) {
+            var index = findIndex(this.info.variableNames, function(i) {
+                return i.id === id.replaceAll('-', '');
+            });
+            if (index > -1) {
+                this.info.variableNames.splice(index, 1);
+                this.recalculateVariableNames();
+            }
+        },
+
+        recalculateVariableNames() {
+            var i = 0;
+            this.variableNamesStore.variableNamesCompletions = orderBy(
+                this.info.variableNames,
+                'name',
+                'desc'
+            ).map(function(variable) {
+                return {
+                    name: variable.name,
+                    value: variable.name,
+                    score: i++,
+                    meta: variable.type
+                };
+            });
+
+            this.variableNamesStore.variableNamesTokens = this.info.variableNames
+                .map(function(el) {
+                    return el.name;
+                })
+                .join('|');
+
+            this.variableNamesStore.lastUpdated = new Date();
         },
 
         findTreeItem(itemId) {
@@ -439,18 +497,22 @@ export const useTreeStore = defineStore('tree', {
 
         questionDeleted(data) {
             this.deleteTreeNode(data.itemId);
+            this.removeVariableName(data.itemId);
         },
         staticTextDeleted(data) {
             this.deleteTreeNode(data.itemId);
         },
         variableDeleted(data) {
             this.deleteTreeNode(data.itemId);
+            this.removeVariableName(data.itemId);
         },
         groupDeleted(data) {
             this.deleteTreeNode(data.itemId);
+            this.removeVariableName(data.itemId);
         },
         rosterDeleted(data) {
-            this.deleteTreeNode(data.itemId);
+            this.deleteTreeNode(data.id);
+            this.removeVariableName(data.itemId);
         },
         deleteTreeNode(itemId) {
             const id = itemId.replaceAll('-', '');

@@ -110,7 +110,7 @@
                     {{ $t('QuestionnaireEditor.Save') }}
                 </button>
                 <button type="button" id="edit-static-text-cancel-button" class="btn btn-lg btn-link" unsaved-warning-clear
-                    @click="cancelStaticText()">
+                    @click="cancel()">
                     {{ $t('QuestionnaireEditor.Cancel') }}
                 </button>
             </div>
@@ -253,7 +253,7 @@ export default {
             updateStaticText(this.questionnaireId, this.activeStaticText);
         },
 
-        cancelStaticText() {
+        cancel() {
             this.staticTextStore.discardChanges();
             this.showEnablingConditions = this.activeStaticText.enablementCondition ? true : false;
         },

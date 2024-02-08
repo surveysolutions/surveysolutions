@@ -39,7 +39,7 @@ export function updateRoster(questionnaireId, roster) {
     }
 
     return commandCall('UpdateGroup', command).then(response => {
-        emitter.emit('rosterUpdated', roster);
+        emitter.emit('rosterUpdated', { roster: roster });
     });
 }
 
@@ -51,7 +51,7 @@ export function deleteRoster(questionnaireId, entityId) {
 
     return commandCall('DeleteGroup', command).then(result => {
         emitter.emit('rosterDeleted', {
-            itemId: entityId
+            id: entityId
         });
     });
 }

@@ -457,7 +457,7 @@ export default {
         },
 
         treeNodeDeleted(data) {
-            const itemId = data.itemId;
+            const itemId = data.itemId ?? data.id;
 
             const tree = this.$refs.tree;
             let stat = null;

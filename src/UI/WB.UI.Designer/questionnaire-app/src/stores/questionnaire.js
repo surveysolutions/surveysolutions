@@ -76,6 +76,7 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
 
             emitter.on('groupDeleted', this.groupDeleted);
             emitter.on('groupUpdated', this.groupUpdated);
+
             emitter.on('rosterUpdated', this.rosterUpdated);
 
             emitter.on('scenarioUpdated', this.scenarioUpdated);
@@ -234,6 +235,7 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
                     payload.group.hideIfDisabled;
             }
         },
+
         rosterUpdated(payload) {},
         attachmentDeleted(payload) {
             const index = findIndex(this.info.attachments, function(i) {

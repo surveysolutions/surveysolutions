@@ -21,12 +21,12 @@ export const useRosterStore = defineStore('roster', {
             emitter.on('questionDeleted', this.questionDeleted);
         },
         rosterUpdated(payload) {
-            if ((this.roster.itemId = payload.itemId)) {
-                this.setRosterData(payload);
+            if ((this.roster.itemId = payload.roster.itemId)) {
+                this.setRosterData(payload.roster);
             }
         },
         rosterDeleted(payload) {
-            if ((this.roster.itemId = payload.itemId)) {
+            if ((this.roster.itemId = payload.id)) {
                 this.clear();
             }
         },
