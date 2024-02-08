@@ -193,7 +193,7 @@ export default {
         }
     },
     methods: {
-        preperaToSave() {
+        prepareToSave() {
             this.$refs.options.showOptionsInList();
         },
 

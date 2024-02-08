@@ -376,7 +376,7 @@ export default {
             if (this.isDirty == false) return;
 
             if (this.$refs.questionSpecific != null) {
-                const beforeSave = this.$refs.questionSpecific.preperaToSave;
+                const beforeSave = this.$refs.questionSpecific.prepareToSave;
                 if (beforeSave != undefined) {
                     beforeSave();
                 }
