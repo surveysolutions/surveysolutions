@@ -170,6 +170,7 @@ import CategoricalFilterExpression from './CategoricalFilterExpression.vue'
 import CascadingComboBoxTemplate from './CascadingComboBoxTemplate.vue'
 import LinkTemplate from './LinkTemplate.vue'
 import AddClassification from './AddClassification.vue';
+import _ from 'lodash';
 
 export default {
     name: 'SingleOptionQuestion',
@@ -192,7 +193,7 @@ export default {
         }
     },
     mounted() {
-        this.activeQuestion.isLinkedToReusableCategories = this.activeQuestion.categoriesId || false;
+        this.activeQuestion.isLinkedToReusableCategories = !_.isEmpty(this.activeQuestion.categoriesId);
     },
     computed: {
         hasOptionsOwn() {

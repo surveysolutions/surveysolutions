@@ -186,7 +186,7 @@ export default {
         }
     },
     mounted() {
-        this.activeQuestion.isLinkedToReusableCategories = this.activeQuestion.categoriesId || false;
+        this.activeQuestion.isLinkedToReusableCategories = !_.isEmpty(this.activeQuestion.categoriesId);
     },
     computed: {
         hasOwnCategories() {
