@@ -280,7 +280,6 @@ export default {
             if (this.activeQuestion.isLinked === true) return;
 
             this.activeQuestion.isLinked = true;
-            this.activeQuestion.isCascade = false;
             this.activeQuestion.isLinkedToReusableCategories = null;
             this.activeQuestion.categoriesId = null;
 

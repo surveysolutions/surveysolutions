@@ -135,7 +135,7 @@ export default {
         },
 
         markFormAsChanged() {
-            this.dirty = trus;
+            this.dirty = true;
         },
     }
 }

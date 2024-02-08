@@ -194,6 +194,8 @@ export default {
     },
     mounted() {
         this.activeQuestion.isLinkedToReusableCategories = !_.isEmpty(this.activeQuestion.categoriesId);
+
+        this.activeQuestion.isCascade = !_.isEmpty(this.activeQuestion.cascadeFromQuestionId);
     },
     computed: {
         hasOptionsOwn() {
