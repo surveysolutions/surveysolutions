@@ -1,7 +1,7 @@
-import { get, post } from './apiService';
+import { getSilently, post } from './apiService';
 
 export function updateExportPdfStatus(questionnaireId, translationId) {
-    return get(
+    return getSilently(
         '/pdf/statusPdf/' +
             questionnaireId +
             '?timezoneOffsetMinutes=' +

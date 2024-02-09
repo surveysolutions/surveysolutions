@@ -7,13 +7,22 @@ import { i18n } from '../plugins/localization';
 
 const api = mande('/' /*, globalOptions*/);
 
+export function getSilently(url, queryParams) {
+    return getImpl(url, queryParams, true);
+}
+
 export function get(url, queryParams) {
+    return getImpl(url, queryParams, false);
+}
+
+function getImpl(url, queryParams, silent = false) {
     const progressStore = useProgressStore();
     const blockUI = useBlockUIStore();
 
-    blockUI.start();
-    progressStore.start();
-
+    if (!silent) {
+        blockUI.start();
+        progressStore.start();
+    }
     const headers = getHeaders(false);
 
     if (queryParams) {
@@ -23,14 +32,17 @@ export function get(url, queryParams) {
                 query: queryParams
             })
             .then(response => {
-                blockUI.stop();
-                progressStore.stop();
+                if (!silent) {
+                    blockUI.stop();
+                    progressStore.stop();
+                }
                 return response;
             })
             .catch(error => {
-                blockUI.stop();
-                progressStore.stop();
-
+                if (!silent) {
+                    blockUI.stop();
+                    progressStore.stop();
+                }
                 processResponseErrorOrThrow(error);
             });
     }
@@ -38,14 +50,17 @@ export function get(url, queryParams) {
     return api
         .get(url, { headers: headers })
         .then(response => {
-            blockUI.stop();
-            progressStore.stop();
+            if (!silent) {
+                blockUI.stop();
+                progressStore.stop();
+            }
             return response;
         })
         .catch(error => {
-            blockUI.stop();
-            progressStore.stop();
-
+            if (!silent) {
+                blockUI.stop();
+                progressStore.stop();
+            }
             processResponseErrorOrThrow(error);
         });
 }
