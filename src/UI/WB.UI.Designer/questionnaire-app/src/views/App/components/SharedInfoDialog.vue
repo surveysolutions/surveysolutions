@@ -6,7 +6,7 @@
             <div class="modal-dialog ">
                 <div class="modal-content" uib-modal-transclude="">
                     <div class="modal-header blue-strip">
-                        <button type="button" class="close" aria-hidden="true" @click="cancel()"></button>
+                        <button type="button" class="close" aria-hidden="true" @click="close()"></button>
                         <h1>
                             {{ $t('QuestionnaireEditor.SettingsTitle') }}
                         </h1>
@@ -72,6 +72,9 @@
                                                 @click="updateTitle()">
                                                 {{ $t('QuestionnaireEditor.Update') }}
                                             </button>
+                                            <button type="button" id="edit-chapter-cancel-button"
+                                                class="btn btn-lg btn-link" unsaved-warning-clear @click="cancel()">{{
+                                                    $t('QuestionnaireEditor.Cancel') }}</button>
                                         </div>
 
                                     </div>
@@ -465,7 +468,7 @@ export default {
         },
 
         cancel() {
-            this.close();
+            this.questionnaireStore.resetSharedInfo();
         }
     }
 };

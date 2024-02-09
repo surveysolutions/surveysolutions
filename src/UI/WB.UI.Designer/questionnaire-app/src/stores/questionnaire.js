@@ -95,6 +95,10 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             this.setQuestionnaireInfo(info);
         },
 
+        resetSharedInfo() {
+            this.edittingSharedInfo = this.getQuestionnaireEditData();
+        },
+
         setQuestionnaireInfo(info) {
             this.info = info;
 
