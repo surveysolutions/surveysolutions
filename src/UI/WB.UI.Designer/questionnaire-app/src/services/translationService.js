@@ -1,7 +1,7 @@
 import { upload, commandCall } from './apiService';
 import emitter from './emitter';
 
-export async function updateTranslation(questionnaireId, translation) {
+export function updateTranslation(questionnaireId, translation) {
     var command = {
         questionnaireId: questionnaireId,
         translationId: translation.translationId,
@@ -9,17 +9,13 @@ export async function updateTranslation(questionnaireId, translation) {
         name: translation.name
     };
 
-    const response = await upload(
-        '/api/command/translation',
-        translation.file,
-        command
+    return upload('/api/command/translation', translation.file, command).then(
+        response => {
+            emitter.emit('translationUpdated', {
+                translation: translation
+            });
+        }
     );
-
-    emitter.emit('translationUpdated', {
-        translation: translation
-    });
-
-    return response;
 }
 
 export function deleteTranslation(questionnaireId, translationId) {

@@ -244,6 +244,6 @@ function processResponseErrorOrThrow(errorResp) {
         notice(i18n.t('QuestionnaireEditor.EntryWasNotFound'));
     } else {
         error(i18n.t('QuestionnaireEditor.RequestFailedUnexpectedly'));
-        throw errorResp;
     }
+    throw errorResp;
 }
