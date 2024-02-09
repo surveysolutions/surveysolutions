@@ -361,7 +361,7 @@ export const useTreeStore = defineStore('tree', {
             if (isNull(question) || isUndefined(question)) return;
 
             question.title = data.title;
-            question.variable = data.variable;
+            question.variable = data.variableName;
             question.type = data.type;
             question.hasValidation = data.validationConditions.length > 0;
             question.hasCondition =
@@ -377,18 +377,18 @@ export const useTreeStore = defineStore('tree', {
             this.updateVariableName(itemId, data.variable);
         },
 
-        staticTextUpdated(data) {
-            const itemId = data.id.replaceAll('-', '');
+        staticTextUpdated(event) {
+            const itemId = event.id.replaceAll('-', '');
             var staticText = this.findTreeItem(itemId);
             if (isNull(staticText) || isUndefined(staticText)) return;
-            staticText.text = data.text;
-            staticText.attachmentName = data.attachmentName;
+            staticText.text = event.text;
+            staticText.attachmentName = event.attachmentName;
 
-            staticText.hasValidation = data.validationConditions.length > 0;
+            staticText.hasValidation = event.validationConditions.length > 0;
             staticText.hasCondition =
-                data.enablementCondition !== null &&
-                /\S/.test(data.enablementCondition);
-            staticText.hideIfDisabled = data.hideIfDisabled;
+                event.enablementCondition !== null &&
+                /\S/.test(event.enablementCondition);
+            staticText.hideIfDisabled = event.hideIfDisabled;
         },
 
         variableUpdated(data) {
