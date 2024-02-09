@@ -105,7 +105,7 @@
                                     <a v-if="!breadCrumb.isSectionPlaceHolder" @click="selectNumericQuestion(breadCrumb.id)"
                                         role="menuitem" tabindex="-1" href="javascript:void(0);">
                                         <div>
-                                            <i class="dropdown-icon icon-{{breadCrumb.type}}"></i>
+                                            <i class="dropdown-icon" :class="['icon-' + breadCrumb.type]"></i>
                                             <span v-dompurify-html="breadCrumb.title"></span>
                                         </div>
                                         <div class="var-block">
@@ -360,7 +360,7 @@ import { find } from 'lodash'
 import { convertToText, validateText, convertToTable } from '../../OptionsEditor/utils/tableToString';
 import { isInteger } from '../../../helpers/number';
 import { createQuestionForDeleteConfirmationPopup, focusElementByName } from '../../../services/utilityService'
-import { updateRoster, deleteRoster } from '../../../services/rosterService'
+import { updateRoster, deleteRoster, getQuestionsEligibleForNumericRosterTitle } from '../../../services/rosterService'
 import { setFocusIn } from '../../../services/utilityService'
 
 export default {
@@ -509,7 +509,7 @@ export default {
         async selectNumericQuestion(numericId) {
             this.activeRoster.rosterSizeNumericQuestionId = numericId;
             this.selectedNumericQuestion = this.findQuestion(this.activeRoster.numericIntegerQuestions, numericId);
-            const result = await this.rosterStore.getQuestionsEligibleForNumericRosterTitle(this.activeRoster.rosterSizeNumericQuestionId);
+            const result = await getQuestionsEligibleForNumericRosterTitle(this.questionnaireId, this.rosterId, this.activeRoster.rosterSizeNumericQuestionId);
 
             this.activeRoster.numericIntegerTitles = result;
             this.selectedTitleQuestion = this.findQuestion(this.activeRoster.numericIntegerTitles, this.activeRoster.rosterTitleQuestionId);

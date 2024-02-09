@@ -55,3 +55,18 @@ export function deleteRoster(questionnaireId, entityId) {
         });
     });
 }
+
+export function getQuestionsEligibleForNumericRosterTitle(
+    questionnaireId,
+    rosterId,
+    rosterSizeQuestionId
+) {
+    return get(
+        '/api/questionnaire/getQuestionsEligibleForNumericRosterTitle/' +
+            questionnaireId,
+        {
+            rosterId: rosterId,
+            rosterSizeQuestionId: rosterSizeQuestionId
+        }
+    );
+}

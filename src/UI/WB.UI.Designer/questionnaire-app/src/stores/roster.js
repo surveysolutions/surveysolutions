@@ -54,17 +54,6 @@ export const useRosterStore = defineStore('roster', {
 
         discardChanges() {
             this.roster = _.cloneDeep(this.initialRoster);
-        },
-
-        getQuestionsEligibleForNumericRosterTitle(rosterSizeQuestionId) {
-            return get(
-                '/api/questionnaire/getQuestionsEligibleForNumericRosterTitle/' +
-                    this.questionnaireId,
-                {
-                    rosterId: this.roster.itemId,
-                    rosterSizeQuestionId: rosterSizeQuestionId
-                }
-            );
         }
     }
 });
