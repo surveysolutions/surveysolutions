@@ -266,7 +266,7 @@ export default {
             if (this.isGroup()) return this.item;
             if (this.stat.parent && this.stat.parent.data)
                 return this.stat.parent.data;
-            return this.currentChapter;
+            return this.currentChapter.chapter;
         },
         getParentStat() {
             if (this.isGroup()) return this.stat;

@@ -165,6 +165,7 @@ import AddClassification from './AddClassification.vue';
 
 import { categoricalMultiKinds } from '../../../../helpers/question'
 import { isInteger } from '../../../../helpers/number';
+import _ from 'lodash';
 
 export default {
     name: 'MultyOptionQuestion',
