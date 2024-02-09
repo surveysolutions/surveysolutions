@@ -347,7 +347,7 @@ export default {
             return this.questionnaireStore.getEdittingSharedInfo;
         },
         anonymousQuestionnaireShareDate() {
-            return toLocalDateTime(this.questionnaireEdit.anonymouslySharedAtUtc)
+            return toLocalDateTime(this.questionnaire.anonymouslySharedAtUtc)
         },
         dirty() {
             return this.questionnaireStore.getQuestionnaireEditDataDirty;

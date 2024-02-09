@@ -48,7 +48,7 @@ export async function regenerateAnonymousQuestionnaireLink(questionnaireId) {
             anonymousQuestionnaireId: data.isActive
                 ? data.anonymousQuestionnaireId
                 : null,
-            anonymousQuestionnaireShareDate: data.anonymouslySharedAtUtc
+            anonymouslySharedAtUtc: data.generatedAtUtc
         });
         return data;
     });
@@ -69,7 +69,7 @@ export async function updateAnonymousQuestionnaireSettings(
             anonymousQuestionnaireId: data.isActive
                 ? data.anonymousQuestionnaireId
                 : null,
-            anonymousQuestionnaireShareDate: data.anonymouslySharedAtUtc
+            anonymouslySharedAtUtc: data.anonymouslySharedAtUtc
         });
     });
 }

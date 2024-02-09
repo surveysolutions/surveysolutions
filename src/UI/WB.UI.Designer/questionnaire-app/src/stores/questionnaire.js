@@ -152,8 +152,7 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             this.info.isAnonymouslyShared = payload.isAnonymouslyShared;
             this.info.anonymousQuestionnaireId =
                 payload.anonymousQuestionnaireId;
-            this.info.anonymousQuestionnaireShareDate =
-                payload.anonymousQuestionnaireShareDate;
+            this.info.anonymouslySharedAtUtc = payload.anonymouslySharedAtUtc;
         },
         questionnaireSettingsUpdated(payload) {
             this.info.title = payload.title;
