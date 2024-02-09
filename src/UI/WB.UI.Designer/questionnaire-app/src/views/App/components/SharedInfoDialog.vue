@@ -241,8 +241,8 @@
                                                 </button>
                                             </div>
                                             <div class="col-xs-5">
-                                                <img alt="qr code" v-if="questionnaireEdit.isAnonymouslyShared"
-                                                    :src="'/questionnaire/publicurl/' + questionnaireEdit.anonymousQuestionnaireId" />
+                                                <img alt="qr code" v-if="questionnaire.isAnonymouslyShared"
+                                                    :src="'/questionnaire/publicurl/' + questionnaire.anonymousQuestionnaireId" />
                                             </div>
                                         </div>
                                     </div>
