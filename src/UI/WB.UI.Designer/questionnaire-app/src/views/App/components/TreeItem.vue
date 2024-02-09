@@ -1,14 +1,12 @@
 <template>
-    <div class="section item" :class="itemClass" @contextmenu.prevent="onContextMenu($event)"
-        @mouseenter="is_highlighted = true" @mouseleave="is_highlighted = false"
+    <div class="section item" :class="itemClass" @mouseenter="is_highlighted = true" @mouseleave="is_highlighted = false"
         v-contextmenu="'treeitem-context-menu-' + item.itemId">
         <span class="cursor"></span>
         <a class="handler angular-ui-tree-handle" ui-tree-handle></a>
 
         <slot />
 
-        <div v-show="contextmenu.open" @click="closeContextMenu" class="dropdown position-fixed"
-            :class="{ open: contextmenu.open }" :id="'treeitem-context-menu-' + item.itemId">
+        <div class="dropdown position-fixed" :id="'treeitem-context-menu-' + item.itemId">
             <ul class="dropdown-menu" role="menu">
                 <li>
                     <a @click="addQuestion()" v-if="!questionnaire.isReadOnlyForUser &&
@@ -90,16 +88,10 @@ import { deleteVariable } from '../../../services/variableService';
 import { useQuestionnaireStore } from '../../../stores/questionnaire';
 import { useTreeStore } from '../../../stores/tree';
 import { useRosterStore } from '../../../stores/roster';
-import clickOutside from '../../../directives/clickOutside';
-import contextmenuOutside from '../../../directives/contextmenuOutside';
 import { createQuestionForDeleteConfirmationPopup } from '../../../services/utilityService';
 
 export default {
     name: 'TreeItem',
-    directives: {
-        clickOutside,
-        contextmenuOutside
-    },
     props: {
         item: { type: Object, required: true },
         stat: { type: Object, required: true },
@@ -109,11 +101,6 @@ export default {
     data() {
         return {
             is_highlighted: false,
-            contextmenu: {
-                open: false,
-                x: 0,
-                y: 0
-            }
         };
     },
     setup(props) {
@@ -162,17 +149,6 @@ export default {
         }
     },
     methods: {
-        onContextMenu(e) {
-            e.preventDefault();
-
-            this.contextmenu.x = e.x;
-            this.contextmenu.y = e.y;
-            this.contextmenu.open = true;
-        },
-        closeContextMenu() {
-            this.contextmenu.open = false;
-        },
-
         addQuestion() {
             const parent = this.getParentItem();
             const afterItemId = this.getAfterItemId();
