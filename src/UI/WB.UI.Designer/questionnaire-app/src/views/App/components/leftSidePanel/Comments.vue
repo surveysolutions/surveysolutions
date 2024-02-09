@@ -24,7 +24,7 @@
                         <span
                             v-if="commentThread.entity.type !== 'Question' && commentThread.entity.type !== 'Group' && commentThread.entity.type !== 'Roster'"
                             class="icon" :class="'icon-' + commentThread.entity.type.toLowerCase()"></span>
-                        <span class="title" v-text="sanitizeText(commentThread.entity.title)"></span>
+                        <span class="title" v-html="sanitizeText(commentThread.entity.title)"></span>
                         <span class="variable" v-html="commentThread.entity.variable || '&nbsp;'"></span>
                     </router-link>
 
