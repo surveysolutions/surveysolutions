@@ -81,7 +81,12 @@ export const useTreeStore = defineStore('tree', {
             return commandCall('AddDefaultTypeQuestion', command).then(function(
                 result
             ) {
-                parent.items.splice(index, 0, emptyQuestion);
+                if (index == null) {
+                    parent.items.push(emptyQuestion);
+                } else {
+                    parent.items.splice(index, 0, emptyQuestion);
+                }
+
                 callback(emptyQuestion, parent, index);
                 //emitAddedItemState('question', emptyQuestion.itemId);
             });
@@ -130,7 +135,12 @@ export const useTreeStore = defineStore('tree', {
             }
 
             return commandCall('AddGroup', command).then(function(result) {
-                parent.items.splice(index, 0, group);
+                if (index == null) {
+                    parent.items.push(group);
+                } else {
+                    parent.items.splice(index, 0, group);
+                }
+
                 callback(group, parent, index);
             });
         },
@@ -178,7 +188,12 @@ export const useTreeStore = defineStore('tree', {
             }
 
             return commandCall('AddGroup', command).then(function(result) {
-                parent.items.splice(index, 0, group);
+                if (index == null) {
+                    parent.items.push(group);
+                } else {
+                    parent.items.splice(index, 0, group);
+                }
+
                 callback(group, parent, index);
             });
         },
@@ -222,7 +237,12 @@ export const useTreeStore = defineStore('tree', {
             return addStaticText('AddStaticText', command).then(function(
                 result
             ) {
-                parent.items.splice(index, 0, staticText);
+                if (index == null) {
+                    parent.items.push(staticText);
+                } else {
+                    parent.items.splice(index, 0, staticText);
+                }
+
                 callback(staticText, parent, index);
             });
         },
@@ -260,8 +280,12 @@ export const useTreeStore = defineStore('tree', {
             }
 
             return commandCall('AddVariable', command).then(function(result) {
-                const insertIdx = index == null ? parent.items.length : index;
-                parent.items.splice(insertIdx, 0, variable);
+                if (index == null) {
+                    parent.items.push(variable);
+                } else {
+                    parent.items.splice(index, 0, variable);
+                }
+
                 callback(variable, parent, index);
             });
         },
