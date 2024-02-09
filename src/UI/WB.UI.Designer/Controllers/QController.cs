@@ -4,7 +4,6 @@ using WB.UI.Designer.Controllers.Api.Designer;
 
 namespace WB.UI.Designer.Controllers;
 
-[AuthorizeOrAnonymousQuestionnaire]
 [Route("/q")]
 public class QController : Controller
 {

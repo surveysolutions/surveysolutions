@@ -91,8 +91,16 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
         },
 
         async fetchQuestionnaireInfo(questionnaireId) {
-            const info = await get('/api/questionnaire/get/' + questionnaireId);
-            this.setQuestionnaireInfo(info);
+            try {
+                const info = await get(
+                    '/api/questionnaire/get/' + questionnaireId
+                );
+                this.setQuestionnaireInfo(info);
+            } catch (error) {
+                if (error.response.status === 401) {
+                    window.location = '/';
+                }
+            }
         },
 
         resetSharedInfo() {
