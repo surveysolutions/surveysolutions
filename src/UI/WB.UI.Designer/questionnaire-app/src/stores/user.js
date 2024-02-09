@@ -3,7 +3,7 @@ import { getCurrentUser } from '../services/userService';
 
 export const useUserStore = defineStore('user', {
     state: () => ({
-        info: {}
+        info: { isAuthenticated: false }
     }),
     getters: {
         getInfo: state => state.info
