@@ -178,13 +178,6 @@ export default {
     },
     data() {
         return {
-            /*currentChapter: {
-                title: null,
-                isCover: false,
-                isReadOnly: true,
-                itemId: ''
-            },*/
-            //treeData: [],
             search: {
                 open: false,
                 searchText: null
@@ -194,7 +187,6 @@ export default {
     watch: {
         async chapterId(newValue, oldValue) {
             if (newValue != oldValue) {
-                //this.treeStore.clear();
                 await this.fetch();
             }
         }
