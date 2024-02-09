@@ -1605,4 +1605,10 @@
   <data name="ShowList" xml:space="preserve">
       <value>Показать списком</value>
   </data>
+  <data name="Login" xml:space="preserve">
+      <value>Логин</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+      <value>Зарегистрироваться</value>
+  </data>
 </root>

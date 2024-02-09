@@ -1589,4 +1589,10 @@ You entered an invalid input. Each line should follow the format: "Title...Paren
   <data name="ShowList" xml:space="preserve">
       <value>Show list</value>
   </data>
+  <data name="Login" xml:space="preserve">
+      <value>Login</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+      <value>Register</value>
+  </data>
 </root>
