@@ -254,33 +254,8 @@ export default {
                 return this.treeData;
 
             const searchUpper = this.search.searchText.toUpperCase()
-            let results = [];
-            walkTreeData(
-                this.treeData,
-                (node, index, parent) => {
-                    if (
-                        node.title &&
-                        node.title.toUpperCase().includes(searchUpper)
-                    ) {
-                        results.push(node);
-                    } else if (
-                        node.text &&
-                        node.text.toUpperCase().includes(searchUpper)
-                    ) {
-                        results.push(node);
-                    } else if (
-                        node.variable &&
-                        node.variable.toUpperCase().includes(searchUpper)
-                    ) {
-                        results.push(node);
-                    }
-                },
-                {
-                    childrenKey: 'items',
-                    reverse: false,
-                    childFirst: false
-                }
-            );
+            const results = this.runFilterNodes(this.treeData, searchUpper)
+
             return results;
         },
         selectedItemId() {
@@ -317,6 +292,43 @@ export default {
                 this.questionnaireId,
                 this.chapterId
             );
+        },
+        runFilterNodes(nodes, search) {
+            return nodes.reduce((acc, node) => {
+                let isMatched = this.isNeedShowByFilter(node, search);
+                let newNode = { ...node, items: [] };
+
+                if (node.items && node.items.length > 0) {
+                    let filteredItems = this.runFilterNodes(node.items, search);
+                    if (filteredItems.length > 0 || isMatched) {
+                        newNode.items = filteredItems;
+                        acc.push(newNode);
+                    }
+                } else if (isMatched) {
+                    acc.push(newNode);
+                }
+
+                return acc;
+            }, []);
+        },
+        isNeedShowByFilter(node, search) {
+            if (
+                node.title &&
+                node.title.toUpperCase().includes(search)
+            ) {
+                return true;
+            } else if (
+                node.text &&
+                node.text.toUpperCase().includes(search)
+            ) {
+                return true;
+            } else if (
+                node.variable &&
+                node.variable.toUpperCase().includes(search)
+            ) {
+                return true;
+            }
+            return false;
         },
         itemTemplate(itemType) {
             return 'Tree' + itemType;
@@ -530,6 +542,39 @@ export default {
                     }
                 }
             }
+        },
+        filterTree(root, title) {
+            let queue = [{ node: root, path: [] }];
+            let results = [];
+
+            while (queue.length > 0) {
+                let { node, path } = queue.shift();
+                let newPath = [...path, node];
+
+                // Check current node title
+                let matches = node.title.includes(title);
+
+                // Add children to the queue
+                for (let child of node.children || []) {
+                    queue.push({ node: child, path: newPath });
+                    matches = matches || child.title.includes(title); // Check children titles
+                }
+
+                // If match found, reconstruct the path
+                if (matches) {
+                    let currentNode = results;
+                    newPath.forEach((n, idx) => {
+                        let existingNode = currentNode.find(c => c === n);
+                        if (!existingNode) {
+                            existingNode = { ...n, children: [] };
+                            currentNode.push(existingNode);
+                        }
+                        currentNode = existingNode.children;
+                    });
+                }
+            }
+
+            return results;
         }
     }
 };
