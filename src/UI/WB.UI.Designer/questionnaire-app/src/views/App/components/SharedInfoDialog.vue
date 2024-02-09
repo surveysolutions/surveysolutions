@@ -196,7 +196,7 @@
                                         <br />
                                         <span>
                                             {{
-                                                questionnaireEdit.isAnonymouslyShared
+                                                questionnaire.isAnonymouslyShared
                                                 ? $t('QuestionnaireEditor.SettingsStatusAllowAnonymousAccess')
                                                 : $t('QuestionnaireEditor.SettingsStatusDontAllowAnonymousAccess')
                                             }}
@@ -204,13 +204,13 @@
                                         <button v-if="isQuestionnaireOwner" class="btn btn-link answer"
                                             @click="updateAnonymousQuestionnaireSettings()">
                                             {{
-                                                questionnaireEdit.isAnonymouslyShared
+                                                questionnaire.isAnonymouslyShared
                                                 ? $t('QuestionnaireEditor.SettingsTurnOffAnonymousAccess')
                                                 : $t('QuestionnaireEditor.SettingsTurnOnAnonymousAccess')
                                             }}
                                         </button>
                                         <br />
-                                        <div v-if="questionnaireEdit.isAnonymouslyShared" class="row">
+                                        <div v-if="questionnaire.isAnonymouslyShared" class="row">
                                             <div class="col-xs-7">
                                                 <div style="margin-top: 15px">
                                                     {{ $t('QuestionnaireEditor.AnonymousLink') }}
