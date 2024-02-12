@@ -119,7 +119,7 @@ export default {
         const hotkeysStore = useHotkeysStore();
 
         const keys = useMagicKeys();
-        const ShiftCtrlQ = keys['Ctrl+Shift+?'];
+        const shiftCtrlQ = keys['Ctrl+Shift+?'];
         const ctrlShiftP = keys['Ctrl+Shift+P'];
         const escape = keys['escape'];
 
@@ -130,7 +130,7 @@ export default {
             progressStore,
             blockUIStore,
             hotkeysStore,
-            ShiftCtrlQ,
+            shiftCtrlQ,
             ctrlShiftP,
             escape
         };
@@ -147,7 +147,7 @@ export default {
                 body.classList.remove('block-ui-anim-fade', 'block-ui-active', 'block-ui-visible');
             }
         },
-        ShiftCtrlQ: function (v) {
+        shiftCtrlQ: function (v) {
             if (v)
                 this.toggleCheatSheet();
         },

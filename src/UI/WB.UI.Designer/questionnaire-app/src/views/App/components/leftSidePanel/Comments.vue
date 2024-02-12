@@ -197,7 +197,7 @@ export default {
 
         staticTextUpdated(payload) {
             const index = _.findIndex(this.commentThreads, function (i) {
-                return payload.itemId && i.entity.itemId === payload.itemId.replaceAll('-', '');
+                return payload.id && i.entity.itemId === payload.id.replaceAll('-', '');
             });
             if (index !== -1) {
                 this.commentThreads[index].entity.title = payload.text;
@@ -225,7 +225,7 @@ export default {
         },
         questionUpdated(payload) {
             const index = _.findIndex(this.commentThreads, function (i) {
-                return payload.itemId && i.entity.itemId === payload.itemId.replaceAll('-', '');
+                return payload.id && i.entity.itemId === payload.id.replaceAll('-', '');
             });
             if (index !== -1) {
                 this.commentThreads[index].entity.title = payload.title;
