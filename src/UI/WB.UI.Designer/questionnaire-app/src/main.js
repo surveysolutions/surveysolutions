@@ -7,6 +7,7 @@ import VueDOMPurifyHTML from 'vue-dompurify-html';
 import i18next from './plugins/localization';
 import I18NextVue from 'i18next-vue';
 import { vuetify } from './plugins/vuetify';
+import { setupErrorHandler } from './plugins/errorHandler';
 
 //import '../../questionnaire/content/markup.less';
 //import 'bootstrap/dist/css/bootstrap.min.css';
@@ -34,6 +35,8 @@ pinia.use(({ store }) => {
 });
 
 const vue = createApp(App);
+
+setupErrorHandler(vue);
 
 vue.config.globalProperties.$emitter = emitter;
 
