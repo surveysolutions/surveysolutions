@@ -478,6 +478,8 @@
     "ManageAccount": "Управление учётной записью",
     "OldUi": "Старый UI",
     "ShowList": "Показать списком",
+    "Login": "Логин",
+    "Register": "Зарегистрироваться",
     "ErrorsCounter_other": "{{count}} errors",
     "SideBarAttachmentsCounter_other": "{{count}} Files Attachments ({{bytes}} total)",
     "SideBarLookupTablesCounter_other": "{{count}} Lookup Tables:",

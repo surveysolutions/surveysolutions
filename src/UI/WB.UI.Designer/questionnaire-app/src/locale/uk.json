@@ -487,6 +487,8 @@
     "Yes": "Так",
     "ManageAccount": "Керування обліковим записом",
     "OldUi": "Старий UI",
-    "ShowList": "Відобразити списком"
+    "ShowList": "Відобразити списком",
+    "Login": "Login",
+    "Register": "Register"
   }
 }

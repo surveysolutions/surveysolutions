@@ -487,6 +487,8 @@
     "Yes": "Ano",
     "ManageAccount": "Spravovat účet",
     "OldUi": "Old UI",
-    "ShowList": "Show list"
+    "ShowList": "Show list",
+    "Login": "Login",
+    "Register": "Register"
   }
 }
