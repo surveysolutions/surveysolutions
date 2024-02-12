@@ -250,7 +250,7 @@ export const useTreeStore = defineStore('tree', {
             group.hasCondition = hasCondition;
             group.hideIfDisabled = payload.group.hideIfDisabled;
 
-            this.updateVariableName(itemId, data.group.variableName);
+            this.updateVariableName(itemId, payload.group.variableName);
         },
 
         rosterUpdated(data) {
