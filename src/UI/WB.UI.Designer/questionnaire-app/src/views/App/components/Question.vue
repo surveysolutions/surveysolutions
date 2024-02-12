@@ -287,7 +287,7 @@ export default {
                 this.scrollTo();
             }
         },
-        ctrlS: function (v) {
+        ctrlShiftS: function (v) {
             if (v)
                 this.saveQuestion();
         }
@@ -307,10 +307,10 @@ export default {
         });
 
         const keys = useMagicKeys();
-        const ctrlS = keys['Ctrl+s'];
+        const ctrlShiftS = keys['Ctrl+Shift+s'];
 
         return {
-            questionStore, commentsStore, ctrlS
+            questionStore, commentsStore, ctrlShiftS
         };
     },
     async beforeMount() {

@@ -117,7 +117,6 @@
 </template>
 
 <script>
-import { setFocusIn } from '../../../services/utilityService'
 import { replaceAll, findAll } from '../../../services/searchService'
 
 export default {

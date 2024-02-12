@@ -398,7 +398,7 @@ export default {
                 this.scrollTo();
             }
         },
-        ctrlS: function (v) {
+        ctrlShiftS: function (v) {
             if (v) {
                 this.saveRoster();
             }
@@ -419,10 +419,10 @@ export default {
         });
 
         const keys = useMagicKeys();
-        const ctrlS = keys['Ctrl+s'];
+        const ctrlShiftS = keys['Ctrl+Shift+s'];
 
         return {
-            rosterStore, commentsStore, ctrlS
+            rosterStore, commentsStore, ctrlShiftS
         };
     },
     async beforeMount() {

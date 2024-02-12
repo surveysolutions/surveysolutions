@@ -48,8 +48,9 @@
             <div class="block-ui-message ng-binding">Please wait...</div>
         </div>
     </div>
-    <div class="cfp-hotkeys-container fade" :class="{ 'in': cheatSheetVisible }" v-if="cheatSheetVisible">
-        <div class="cfp-hotkeys ">
+    <div class="cfp-hotkeys-container fade" :class="{ 'in': cheatSheetVisible }" v-if="cheatSheetVisible"
+        style="overflow-y: auto;display: flex !important; justify-content: center;">
+        <div class="cfp-hotkeys" style="height: 100vh; width: 100vw; padding: 20px;">
             <h4 class="cfp-hotkeys-title">{{ $t('QuestionnaireEditor.HotkeysShortcuts') }}</h4>
             <table>
                 <tbody>
@@ -118,8 +119,8 @@ export default {
         const hotkeysStore = useHotkeysStore();
 
         const keys = useMagicKeys();
-        const ShiftQ = keys['Shift+Ctrl+?'];
-        const ctrlP = keys['Ctrl+P'];
+        const ShiftCtrlQ = keys['Ctrl+Shift+?'];
+        const ctrlShiftP = keys['Ctrl+Shift+P'];
         const escape = keys['escape'];
 
         return {
@@ -129,8 +130,8 @@ export default {
             progressStore,
             blockUIStore,
             hotkeysStore,
-            ShiftQ,
-            ctrlP,
+            ShiftCtrlQ,
+            ctrlShiftP,
             escape
         };
     },
@@ -146,11 +147,11 @@ export default {
                 body.classList.remove('block-ui-anim-fade', 'block-ui-active', 'block-ui-visible');
             }
         },
-        ShiftQ: function (v) {
+        ShiftCtrlQ: function (v) {
             if (v)
                 this.toggleCheatSheet();
         },
-        ctrlP: function (v) {
+        ctrlShiftP: function (v) {
             if (v)
                 window.open("/pdf/printpreview/" + this.questionnaire.questionnaireId, "_blank");
         },

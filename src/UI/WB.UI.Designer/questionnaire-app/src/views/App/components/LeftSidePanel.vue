@@ -209,9 +209,10 @@ export default {
 
         const keys = useMagicKeys();
         const arrowLeft = keys['arrowleft'];
+        const arrowRight = keys['arrowright'];
 
         return {
-            arrowLeft
+            arrowLeft, arrowRight
         };
     },
     mounted() {
@@ -278,6 +279,10 @@ export default {
         arrowLeft: function (value) {
             if (value)
                 this.unfoldChapters();
+        },
+        arrowRight: function (value) {
+            if (value)
+                this.foldChapters();
         }
     },
 
@@ -331,6 +336,13 @@ export default {
             this.$emitter.emit("openChaptersList", {});
         },
         setChaptersPanel() { this.openPanel = 'chapters'; },
+
+        foldChapters() {
+            if (this.isUnfoldedChapters) {
+                this.foldback();
+                this.$emitter.emit("closeChaptersListRequested", {});
+            }
+        },
 
         unfoldCategories() {
             if (this.isUnfoldedCategories)

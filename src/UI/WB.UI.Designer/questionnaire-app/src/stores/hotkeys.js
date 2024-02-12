@@ -5,11 +5,23 @@ export const useHotkeysStore = defineStore('hotkeys', {
     state: () => ({
         hotkeys: [
             {
-                keys: ['Shift + Ctrl + ?'],
+                keys: ['Ctrl + Shift + ?'],
                 description: i18n.t('QuestionnaireEditor.HotkeysShowHideHelp')
             },
             {
-                keys: ['Ctrl + p'],
+                keys: ['Ctrl + Shift + s'],
+                description: i18n.t('QuestionnaireEditor.Save')
+            },
+            {
+                keys: ['Ctrl + Shift + f'],
+                description: i18n.t('QuestionnaireEditor.HotkeysSearch')
+            },
+            {
+                keys: ['Ctrl + Shift + h'],
+                description: i18n.t('QuestionnaireEditor.FindReplaceTitle')
+            },
+            {
+                keys: ['Ctrl + Shift + p'],
                 description: i18n.t('QuestionnaireEditor.HotkeysPrint')
             },
             {
@@ -27,10 +39,6 @@ export const useHotkeysStore = defineStore('hotkeys', {
             {
                 keys: ['arrowleft'],
                 description: i18n.t('QuestionnaireEditor.HotkeysOpenSection')
-            },
-            {
-                keys: ['Ctrl + h'],
-                description: i18n.t('QuestionnaireEditor.FindReplaceTitle')
             },
             {
                 keys: ['arrowright'],
@@ -87,16 +95,8 @@ export const useHotkeysStore = defineStore('hotkeys', {
                 )
             },
             {
-                keys: ['Ctrl + Shift + f'],
-                description: i18n.t('QuestionnaireEditor.HotkeysSearch')
-            },
-            {
                 keys: ['enter'],
                 description: i18n.t('QuestionnaireEditor.HotkeysOpenItem')
-            },
-            {
-                keys: ['Ctrl + s'],
-                description: i18n.t('QuestionnaireEditor.Save')
             }
         ]
     }),

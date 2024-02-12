@@ -117,7 +117,7 @@ export default {
                 this.scrollTo();
             }
         },
-        ctrlS: function (value) {
+        ctrlShiftS: function (value) {
             if (value)
                 this.saveVariable();
         }
@@ -137,10 +137,10 @@ export default {
         });
 
         const keys = useMagicKeys();
-        const ctrlS = keys['Ctrl+s'];
+        const ctrlShiftS = keys['Ctrl+Shift+s'];
 
         return {
-            variableStore, commentsStore, ctrlS
+            variableStore, commentsStore, ctrlShiftS
         };
     },
     async beforeMount() {

@@ -184,7 +184,7 @@ export default {
                 this.scrollTo();
             }
         },
-        ctrlS: function (v, e, t, r) {
+        ctrlShiftS: function (v) {
             if (v) {
                 this.saveStaticText();
             }
@@ -205,12 +205,12 @@ export default {
         });
 
         const keys = useMagicKeys();
-        const ctrlS = keys['Ctrl+s'];
+        const ctrlShiftS = keys['Ctrl+Shift+s'];
 
         return {
             staticTextStore,
             commentsStore,
-            ctrlS
+            ctrlShiftS
         };
     },
     async beforeMount() {

@@ -165,6 +165,7 @@ import { addVariable } from '../../../services/variableService';
 import Help from './Help.vue';
 
 import { migrateToNewVersion } from '../../../services/questionnaireService'
+import { useMagicKeys } from '@vueuse/core';
 
 export default {
     name: 'Tree',
@@ -196,15 +197,29 @@ export default {
             if (newValue != oldValue) {
                 await this.fetch();
             }
+        },
+        ctrlShiftF: function (value) {
+            if (value)
+                this.showSearch();
+        },
+        ctrlShiftH: function (value) {
+            if (value)
+                this.showFindReplaceDialog();
         }
     },
     setup() {
         const treeStore = useTreeStore();
-
         const searchDialog = ref(null);
+
+        const keys = useMagicKeys();
+        const ctrlShiftF = keys['Ctrl+Shift+f'];
+        const ctrlShiftH = keys['Ctrl+Shift+h'];
+
         return {
             treeStore,
-            searchDialog
+            searchDialog,
+            ctrlShiftF,
+            ctrlShiftH
         };
     },
     async beforeMount() {
