@@ -149,7 +149,9 @@ export default {
 
             const response = await updateTranslation(this.questionnaireId, translation);
 
-            if (translation.file) notice(response);
+            if (translation.file)
+                notice(response);
+
             translation.file = null;
             this.file = [];
 

@@ -14,6 +14,7 @@ export function updateTranslation(questionnaireId, translation) {
             emitter.emit('translationUpdated', {
                 translation: translation
             });
+            return response;
         }
     );
 }
