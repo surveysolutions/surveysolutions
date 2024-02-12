@@ -138,17 +138,24 @@ export default {
                 return;
             }
 
-            this.stringifiedOptionsValidate();
+            if (this.stringifiedCategories !== this.initialStringifiedCategories) {
 
-            if (!this.stringifiedCategoriesValidity.valid) {
-                return;
+                this.stringifiedOptionsValidate();
+
+                if (!this.stringifiedCategoriesValidity.valid) {
+                    return;
+                }
+
+                if (this.stringifiedCategories) {
+                    this.activeQuestion.options = await convertToTable(this.stringifiedCategories);
+                    //this.activeQuestion.optionsCount = this.activeQuestion.options.length;
+                }
             }
 
-            if (this.stringifiedCategories) {
-                this.activeQuestion.options = await convertToTable(this.stringifiedCategories);
-                //this.activeQuestion.optionsCount = this.activeQuestion.options.length;
-            }
+            this.stringifiedCategories = null;
+            this.initialStringifiedCategories = null;
             this.useListAsOptionsEditor = true;
+            this.stringifiedCategoriesValidity.valid = true;
         },
 
         updateStringifiedCategoriesValue(e) {
