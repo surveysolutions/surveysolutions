@@ -57,7 +57,7 @@
                 <div ui-tree-nodes vmodel="items" class="ui-tree-nodes angular-ui-tree-nodes">
                     <Draggable ref="tree" v-model="filteredTreeData" textKey="title" childrenKey="items" :defaultOpen="true"
                         :maxLevel="10" :indent="30" triggerClass="handler" :keepPlaceholder="true"
-                        :statHandler="treeNodeCreated" @after-drop="treeNodeDropped">
+                        :statHandler="treeNodeCreated" @after-drop="treeNodeDropped" updateBehavior="disabled">
                         <template #default="{ node, stat }">
                             <component :key="node.itemId" :is="itemTemplate(node.itemType)" :item="node" :stat="stat"
                                 :questionnaireId="questionnaireId" :tree="$refs.tree" :selectedItemId="selectedItemId">
