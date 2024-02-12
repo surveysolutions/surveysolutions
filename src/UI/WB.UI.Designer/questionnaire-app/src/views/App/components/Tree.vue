@@ -60,7 +60,8 @@
                         :statHandler="treeNodeCreated" @after-drop="treeNodeDropped">
                         <template #default="{ node, stat }">
                             <component :key="node.itemId" :is="itemTemplate(node.itemType)" :item="node" :stat="stat"
-                                :tree="$refs.tree" :selectedItemId="selectedItemId"></component>
+                                :questionnaireId="questionnaireId" :tree="$refs.tree" :selectedItemId="selectedItemId">
+                            </component>
                         </template>
 
                         <!--template #placeholder>
@@ -155,6 +156,12 @@ import TreeQuestion from './TreeQuestion.vue';
 import TreeStaticText from './TreeStaticText.vue';
 import TreeVariable from './TreeVariable.vue';
 
+import { addGroup } from '../../../services/groupService';
+import { addQuestion } from '../../../services/questionService';
+import { addRoster } from '../../../services/rosterService';
+import { addStaticText } from '../../../services/staticTextService';
+import { addVariable } from '../../../services/variableService';
+
 import Help from './Help.vue';
 
 import { migrateToNewVersion } from '../../../services/questionnaireService'
@@ -204,6 +211,12 @@ export default {
         await this.fetch();
     },
     mounted() {
+        this.$emitter.on('questionAdded', this.questionAdded);
+        this.$emitter.on('staticTextAdded', this.staticTextAdded);
+        this.$emitter.on('variableAdded', this.variableAdded);
+        this.$emitter.on('groupAdded', this.groupAdded);
+        this.$emitter.on('rosterAdded', this.rosterAdded);
+
         this.$emitter.on('questionDeleted', this.treeNodeDeleted);
         this.$emitter.on('staticTextDeleted', this.treeNodeDeleted);
         this.$emitter.on('variableDeleted', this.treeNodeDeleted);
@@ -216,6 +229,12 @@ export default {
         this.$emitter.on('groupMoved', this.treeNodeMoved);
     },
     unmounted() {
+        this.$emitter.off('questionAdded', this.questionAdded);
+        this.$emitter.off('staticTextAdded', this.staticTextAdded);
+        this.$emitter.off('variableAdded', this.variableAdded);
+        this.$emitter.off('groupAdded', this.groupAdded);
+        this.$emitter.off('rosterAdded', this.rosterAdded);
+
         this.$emitter.off('questionDeleted', this.treeNodeDeleted);
         this.$emitter.off('staticTextDeleted', this.treeNodeDeleted);
         this.$emitter.off('variableDeleted', this.treeNodeDeleted);
@@ -325,82 +344,59 @@ export default {
         itemTemplate(itemType) {
             return 'Tree' + itemType;
         },
-        addQuestion(chapter) {
-            this.treeStore.addQuestion(
+        async addQuestion(chapter) {
+            await addQuestion(
+                this.questionnaireId,
                 chapter,
                 null,
-                (question, parent, index) => {
-                    if (index < 0) index = this.$refs.tree.rootChildren.length;
-                    this.$refs.tree.add(question, null, index);
-
-                    this.$router.push({
-                        name: 'question',
-                        params: {
-                            entityId: question.itemId
-                        }
-                    });
-                }
             );
-        },
-        addGroup(chapter) {
-            this.treeStore.addGroup(chapter, null, (group, parent, index) => {
-                if (index < 0) index = this.$refs.tree.rootChildren.length;
-                this.$refs.tree.add(group, null, index);
 
-                this.$router.push({
-                    name: 'group',
-                    params: {
-                        entityId: group.itemId
-                    }
-                });
+            /*this.$router.push({
+                name: 'question',
+                params: {
+                    entityId: question.itemId
+                }
+            });*/
+        },
+        async addGroup(chapter) {
+            await addGroup(this.questionnaireId, chapter, null);
+
+            this.$router.push({
+                name: 'group',
+                params: {
+                    entityId: group.itemId
+                }
             });
         },
-        addRoster(chapter) {
-            this.treeStore.addRoster(chapter, null, (roster, parent, index) => {
-                if (index < 0) index = this.$refs.tree.rootChildren.length;
-                this.$refs.tree.add(roster, null, index);
+        async addRoster(chapter) {
+            await addRoster(this.questionnaireId, chapter, null);
 
-                this.$router.push({
-                    name: 'roster',
-                    params: {
-                        entityId: roster.itemId
-                    }
-                });
-            });
-        },
-        addStaticText(chapter) {
-            this.treeStore.addStaticText(
-                chapter,
-                null,
-                (statictext, parent, index) => {
-                    if (index < 0) index = this.$refs.tree.rootChildren.length;
-                    this.$refs.tree.add(statictext, null, index);
-
-                    this.$router.push({
-                        name: 'statictext',
-                        params: {
-                            entityId: statictext.itemId
-                        }
-                    });
+            /*this.$router.push({
+                name: 'roster',
+                params: {
+                    entityId: roster.itemId
                 }
-            );
+            });*/
         },
-        addVariable(chapter) {
-            this.treeStore.addVariable(
-                chapter,
-                null,
-                (variable, parent, index) => {
-                    if (index < 0) index = this.$refs.tree.rootChildren.length;
-                    this.$refs.tree.add(variable, null, index);
+        async addStaticText(chapter) {
+            await addStaticText(this.questionnaireId, chapter, null);
 
-                    this.$router.push({
-                        name: 'variable',
-                        params: {
-                            entityId: variable.itemId
-                        }
-                    });
+            /*this.$router.push({
+                name: 'statictext',
+                params: {
+                    entityId: statictext.itemId
                 }
-            );
+            });*/
+        },
+        async addVariable(chapter) {
+            await addVariable(this.questionnaireId, chapter, null);
+
+            /*this.$router.push({
+                name: 'variable',
+                params: {
+                    entityId: variable.itemId
+                }
+            });*/
         },
         searchForQuestion(chapter) { },
         pasteItemInto(chapterInfo) {
@@ -535,39 +531,50 @@ export default {
                 }
             }
         },
-        filterTree(root, title) {
-            let queue = [{ node: root, path: [] }];
-            let results = [];
 
-            while (queue.length > 0) {
-                let { node, path } = queue.shift();
-                let newPath = [...path, node];
+        questionAdded(event) { this.addTreeNode(event.question, event.parent, event.index); },
+        staticTextAdded(event) { this.addTreeNode(event.staticText, event.parent, event.index); },
+        variableAdded(event) { this.addTreeNode(event.variable, event.parent, event.index); },
+        groupAdded(event) { this.addTreeNode(event.group, event.parent, event.index); },
+        rosterAdded(event) { this.addTreeNode(event.roster, event.parent, event.index); },
 
-                // Check current node title
-                let matches = node.title.includes(title);
+        addTreeNode(entity, parent, index) {
+            const tree = this.$refs.tree;
+            let parentStat = null;
+            const parentId = parent == null || parent.itemId == this.chapterId
+                ? null
+                : parent.itemId
 
-                // Add children to the queue
-                for (let child of node.children || []) {
-                    queue.push({ node: child, path: newPath });
-                    matches = matches || child.title.includes(title); // Check children titles
-                }
+            if (parentId != null) {
+                const items = tree.rootChildren;
 
-                // If match found, reconstruct the path
-                if (matches) {
-                    let currentNode = results;
-                    newPath.forEach((n, idx) => {
-                        let existingNode = currentNode.find(c => c === n);
-                        if (!existingNode) {
-                            existingNode = { ...n, children: [] };
-                            currentNode.push(existingNode);
+                walkTreeData(
+                    items,
+                    (node, index, parent) => {
+                        if (node.data.itemId == parentId) {
+                            parentStat = node;
+                            return 'false';
                         }
-                        currentNode = existingNode.children;
-                    });
-                }
+                    },
+                    {
+                        childrenKey: 'children',
+                        reverse: false,
+                        childFirst: false
+                    }
+                );
             }
 
-            return results;
-        }
+            if (index == null || index < 0)
+                index = parentStat == null ? tree.rootChildren.length : parentStat.children.length;
+            tree.add(entity, parentStat, index);
+
+            this.$router.push({
+                name: entity.itemType.toLowerCase(),
+                params: {
+                    entityId: entity.itemId
+                }
+            });
+        },
     }
 };
 </script>

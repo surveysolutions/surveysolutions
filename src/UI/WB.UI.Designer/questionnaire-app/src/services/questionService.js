@@ -2,7 +2,9 @@ import { get, commandCall } from '../services/apiService';
 import emitter from './emitter';
 import _ from 'lodash';
 import moment from 'moment';
-
+import { getItemIndexByIdFromParentItemsList } from './utilityService';
+import { newGuid } from '../helpers/guid';
+import { i18n } from '../plugins/localization';
 import {
     hasQuestionEnablementConditions,
     doesQuestionSupportValidations
@@ -142,4 +144,42 @@ export function deleteQuestion(questionnaireId, itemId) {
             itemId: itemId
         });
     });
+}
+
+export function addQuestion(questionnaireId, parent, afterNodeId) {
+    let index = getItemIndexByIdFromParentItemsList(parent, afterNodeId);
+
+    const emptyQuestion = createEmptyQuestion(parent);
+
+    const command = {
+        questionnaireId: questionnaireId,
+        parentGroupId: parent.itemId,
+        questionId: emptyQuestion.itemId
+    };
+    if (index != null && index >= 0) {
+        index = index + 1;
+        command.index = index;
+    }
+
+    return commandCall('AddDefaultTypeQuestion', command).then(result => {
+        emitter.emit('questionAdded', {
+            question: emptyQuestion,
+            index: index,
+            parent: parent
+        });
+    });
+}
+
+function createEmptyQuestion() {
+    var newId = newGuid();
+    var emptyQuestion = {
+        itemId: newId,
+        title: '',
+        type: 'Text',
+        itemType: 'Question',
+        hasCondition: false,
+        hasValidation: false,
+        items: []
+    };
+    return emptyQuestion;
 }

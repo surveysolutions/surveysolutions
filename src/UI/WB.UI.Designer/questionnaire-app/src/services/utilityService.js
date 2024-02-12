@@ -1,6 +1,6 @@
 import { i18n } from '../plugins/localization';
 import { nextTick } from 'vue';
-import { defer, isNull } from 'lodash';
+import { defer, isNull, findIndex } from 'lodash';
 import { filterXSS } from 'xss';
 import moment from 'moment';
 
@@ -320,4 +320,14 @@ export function formatDate(utcDate) {
         .utc(utcDate)
         .local()
         .format(DateFormats.date);
+}
+
+export function getItemIndexByIdFromParentItemsList(parent, id) {
+    if (!parent || !id) return null;
+
+    var index = findIndex(parent.items, function(i) {
+        return i.itemId === id;
+    });
+
+    return index < 0 ? null : index;
 }

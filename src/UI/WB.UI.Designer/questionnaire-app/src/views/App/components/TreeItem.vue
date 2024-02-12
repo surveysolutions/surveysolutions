@@ -90,9 +90,17 @@ import { useTreeStore } from '../../../stores/tree';
 import { useRosterStore } from '../../../stores/roster';
 import { createQuestionForDeleteConfirmationPopup } from '../../../services/utilityService';
 
+import { addGroup } from '../../../services/groupService';
+import { addQuestion } from '../../../services/questionService';
+import { addRoster } from '../../../services/rosterService';
+import { addStaticText } from '../../../services/staticTextService';
+import { addVariable } from '../../../services/variableService';
+
+
 export default {
     name: 'TreeItem',
     props: {
+        questionnaireId: { type: String, required: true },
         item: { type: Object, required: true },
         stat: { type: Object, required: true },
         tree: { type: Object, required: true },
@@ -152,91 +160,83 @@ export default {
         addQuestion() {
             const parent = this.getParentItem();
             const afterItemId = this.getAfterItemId();
-            this.treeStore.addQuestion(
-                parent,
-                afterItemId,
-                (question, parent, index) => {
-                    this.tree.add(question, this.getParentStat(), index);
-                    this.$router.push({
-                        name: 'question',
-                        params: {
-                            entityId: question.itemId
-                        }
-                    });
-                }
-            );
+            addQuestion(this.questionnaireId, parent, afterItemId);
+
+            (question, parent, index) => {
+                this.tree.add(question, this.getParentStat(), index);
+                this.$router.push({
+                    name: 'question',
+                    params: {
+                        entityId: question.itemId
+                    }
+                });
+            }
         },
         addGroup() {
             const parent = this.getParentItem();
             const afterItemId = this.getAfterItemId();
-            this.treeStore.addGroup(
-                parent,
-                afterItemId,
-                (group, parent, index) => {
-                    this.tree.add(group, this.getParentStat(), index);
+            addGroup(this.questionnaireId, parent, afterItemId);
 
-                    this.$router.push({
-                        name: 'group',
-                        params: {
-                            entityId: group.itemId
-                        }
-                    });
-                }
-            );
+            (group, parent, index) => {
+                this.tree.add(group, this.getParentStat(), index);
+
+                this.$router.push({
+                    name: 'group',
+                    params: {
+                        entityId: group.itemId
+                    }
+                });
+            }
         },
         addRoster() {
             const parent = this.getParentItem();
             const afterItemId = this.getAfterItemId();
-            this.treeStore.addRoster(
-                parent,
-                afterItemId,
-                (roster, parent, index) => {
-                    this.tree.add(roster, this.getParentStat(), index);
+            addRoster(this.questionnaireId, parent, afterItemId);
 
-                    this.$router.push({
-                        name: 'roster',
-                        params: {
-                            entityId: roster.itemId
-                        }
-                    });
-                }
-            );
+            (roster, parent, index) => {
+                this.tree.add(roster, this.getParentStat(), index);
+
+                this.$router.push({
+                    name: 'roster',
+                    params: {
+                        entityId: roster.itemId
+                    }
+                });
+            }
+
         },
         addStaticText() {
             const parent = this.getParentItem();
             const afterItemId = this.getAfterItemId();
-            this.treeStore.addStaticText(
-                parent,
-                afterItemId,
-                (statictext, parent, index) => {
-                    this.tree.add(statictext, this.getParentStat(), index);
+            addStaticText(this.questionnaireId, parent, afterItemId);
 
-                    this.$router.push({
-                        name: 'statictext',
-                        params: {
-                            entityId: statictext.itemId
-                        }
-                    });
-                }
-            );
+            (statictext, parent, index) => {
+                this.tree.add(statictext, this.getParentStat(), index);
+
+                this.$router.push({
+                    name: 'statictext',
+                    params: {
+                        entityId: statictext.itemId
+                    }
+                });
+            }
+
         },
         addVariable() {
             const parent = this.getParentItem();
             const afterItemId = this.getAfterItemId();
-            this.treeStore.addVariable(
-                parent,
-                afterItemId,
-                (variable, parent, index) => {
-                    this.tree.add(variable, this.getParentStat(), index);
+            addVariable(this.questionnaireId, parent, afterItemId);
 
-                    this.$router.push({
-                        name: 'variable',
-                        params: {
-                            entityId: variable.itemId
-                        }
-                    });
-                }
-            );
+            (variable, parent, index) => {
+                this.tree.add(variable, this.getParentStat(), index);
+
+                this.$router.push({
+                    name: 'variable',
+                    params: {
+                        entityId: variable.itemId
+                    }
+                });
+            }
         },
         getParentItem() {
             if (this.isGroup()) return this.item;

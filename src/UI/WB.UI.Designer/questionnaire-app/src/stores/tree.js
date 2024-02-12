@@ -1,9 +1,7 @@
 import { defineStore } from 'pinia';
 import { get, commandCall } from '../services/apiService';
-import { addStaticText } from '../services/staticTextService';
 import { newGuid } from '../helpers/guid';
-import { findIndex, isNull, isUndefined, find, orderBy } from 'lodash';
-import { i18n } from '../plugins/localization';
+import { findIndex, isNull, isUndefined, cloneDeep, orderBy } from 'lodash';
 import { useCookies } from 'vue3-cookies';
 import emitter from '../services/emitter';
 
@@ -41,6 +39,12 @@ export const useTreeStore = defineStore('tree', {
             emitter.on('questionMoved', this.questionMoved);
             emitter.on('staticTextMoved', this.staticTextMoved);
             emitter.on('variableMoved', this.variableMoved);
+
+            emitter.on('questionAdded', this.questionAdded);
+            emitter.on('groupAdded', this.groupAdded);
+            emitter.on('rosterAdded', this.rosterAdded);
+            emitter.on('staticTextAdded', this.staticTextAdded);
+            emitter.on('variableAdded', this.variableAdded);
         },
 
         async fetchTree(questionnaireId, chapterId) {
@@ -60,247 +64,49 @@ export const useTreeStore = defineStore('tree', {
             this.recalculateVariableNames();
         },
 
-        addQuestion(parent, afterNodeId, callback) {
-            let index = this.getItemIndexByIdFromParentItemsList(
-                parent,
-                afterNodeId
-            );
-
-            const emptyQuestion = this.createEmptyQuestion(parent);
-
-            const command = {
-                questionnaireId: this.questionnaireId,
-                parentGroupId: parent.itemId,
-                questionId: emptyQuestion.itemId
-            };
-            if (index != null && index >= 0) {
-                index = index + 1;
-                command.index = index;
+        questionAdded(event) {
+            const question = cloneDeep(event.question);
+            if (event.index == null) {
+                event.parent.items.push(question);
+            } else {
+                event.parent.items.splice(event.index, 0, question);
             }
-
-            return commandCall('AddDefaultTypeQuestion', command).then(function(
-                result
-            ) {
-                if (index == null) {
-                    parent.items.push(emptyQuestion);
-                } else {
-                    parent.items.splice(index, 0, emptyQuestion);
-                }
-
-                callback(emptyQuestion, parent, index);
-                //emitAddedItemState('question', emptyQuestion.itemId);
-            });
-        },
-        createEmptyQuestion(parent) {
-            var newId = newGuid();
-            var emptyQuestion = {
-                itemId: newId,
-                title: '',
-                type: 'Text',
-                itemType: 'Question',
-                hasCondition: false,
-                hasValidation: false,
-                items: [],
-                getParentItem: function() {
-                    return parent;
-                }
-            };
-            return emptyQuestion;
         },
 
-        addGroup(parent, afterNodeId, callback) {
-            let index = this.getItemIndexByIdFromParentItemsList(
-                parent,
-                afterNodeId
-            );
-            const group = this.createEmptyGroup(parent);
-
-            var command = {
-                questionnaireId: this.questionnaireId,
-                groupId: group.itemId,
-                title: group.title,
-                condition: '',
-                hideIfDisabled: false,
-                isRoster: false,
-                rosterSizeQuestionId: null,
-                rosterSizeSource: 'Question',
-                rosterFixedTitles: null,
-                rosterTitleQuestionId: null,
-                parentGroupId: parent.itemId,
-                variableName: null
-            };
-            if (index != null && index >= 0) {
-                index = index + 1;
-                command.index = index;
+        groupAdded(event) {
+            const group = cloneDeep(event.group);
+            if (event.index == null) {
+                event.parent.items.push(group);
+            } else {
+                event.parent.items.splice(event.index, 0, group);
             }
-
-            return commandCall('AddGroup', command).then(function(result) {
-                if (index == null) {
-                    parent.items.push(group);
-                } else {
-                    parent.items.splice(index, 0, group);
-                }
-
-                callback(group, parent, index);
-            });
         },
-        createEmptyGroup(parent) {
-            var newId = newGuid();
-            var emptyGroup = {
-                itemId: newId,
-                title: i18n.t('QuestionnaireEditor.DefaultNewSubsection'),
-                items: [],
-                itemType: 'Group',
-                hasCondition: false,
-                getParentItem: function() {
-                    return parent;
-                }
-            };
-            return emptyGroup;
-        },
-        addRoster(parent, afterNodeId, callback) {
-            let index = this.getItemIndexByIdFromParentItemsList(
-                parent,
-                afterNodeId
-            );
-            const group = this.createEmptyRoster(parent);
 
-            var command = {
-                questionnaireId: this.questionnaireId,
-                groupId: group.itemId,
-                title: group.title,
-                condition: '',
-                hideIfDisabled: false,
-                isRoster: true,
-                rosterSizeQuestionId: null,
-                rosterSizeSource: 'FixedTitles',
-                fixedRosterTitles: [
-                    { value: 1, title: 'First Title' },
-                    { value: 2, title: 'Second Title' }
-                ],
-                rosterTitleQuestionId: null,
-                parentGroupId: parent.itemId,
-                variableName: group.variableName
-            };
-            if (index != null && index >= 0) {
-                index = index + 1;
-                command.index = index;
+        rosterAdded(event) {
+            const roster = cloneDeep(event.roster);
+            if (event.index == null) {
+                event.parent.items.push(roster);
+            } else {
+                event.parent.items.splice(event.index, 0, roster);
             }
-
-            return commandCall('AddGroup', command).then(function(result) {
-                if (index == null) {
-                    parent.items.push(group);
-                } else {
-                    parent.items.splice(index, 0, group);
-                }
-
-                callback(group, parent, index);
-            });
         },
-        createEmptyRoster(parent) {
-            var newId = newGuid();
-            var emptyRoster = {
-                itemId: newId,
-                title:
-                    i18n.t('QuestionnaireEditor.DefaultNewRoster') +
-                    ' - %rostertitle%',
-                items: [],
-                itemType: 'Group',
-                hasCondition: false,
-                isRoster: true,
-                getParentItem: function() {
-                    return parent;
-                }
-            };
-            return emptyRoster;
-        },
-        addStaticText(parent, afterNodeId, callback) {
-            let index = this.getItemIndexByIdFromParentItemsList(
-                parent,
-                afterNodeId
-            );
 
-            const staticText = this.createEmptyStaticText(parent);
-            const command = {
-                questionnaireId: this.questionnaireId,
-                parentId: parent.itemId,
-                entityId: staticText.itemId,
-                text: staticText.text
-            };
-
-            if (index != null && index >= 0) {
-                index = index + 1;
-                command.index = index;
+        staticTextAdded(event) {
+            const staticText = cloneDeep(event.staticText);
+            if (event.index == null) {
+                event.parent.items.push(staticText);
+            } else {
+                event.parent.items.splice(event.index, 0, staticText);
             }
-
-            //TODO: migrate logic to service
-            return addStaticText('AddStaticText', command).then(function(
-                result
-            ) {
-                if (index == null) {
-                    parent.items.push(staticText);
-                } else {
-                    parent.items.splice(index, 0, staticText);
-                }
-
-                callback(staticText, parent, index);
-            });
         },
-        createEmptyStaticText(parent) {
-            var newId = newGuid();
-            var emptyStaticText = {
-                itemId: newId,
-                text: i18n.t('QuestionnaireEditor.DefaultNewStaticText'),
-                itemType: 'StaticText',
-                hasCondition: false,
-                hasValidation: false,
-                items: [],
-                getParentItem: function() {
-                    return parent;
-                }
-            };
-            return emptyStaticText;
-        },
-        addVariable(parent, afterNodeId, callback) {
-            let index = this.getItemIndexByIdFromParentItemsList(
-                parent,
-                afterNodeId
-            );
-            const variable = this.createEmptyVariable(parent);
 
-            var command = {
-                questionnaireId: this.questionnaireId,
-                entityId: variable.itemId,
-                parentId: parent.itemId,
-                variableData: {}
-            };
-            if (index != null && index >= 0) {
-                index = index + 1;
-                command.index = index;
+        variableAdded(event) {
+            const variable = cloneDeep(event.variable);
+            if (event.index == null) {
+                event.parent.items.push(variable);
+            } else {
+                event.parent.items.splice(event.index, 0, variable);
             }
-
-            return commandCall('AddVariable', command).then(function(result) {
-                if (index == null) {
-                    parent.items.push(variable);
-                } else {
-                    parent.items.splice(index, 0, variable);
-                }
-
-                callback(variable, parent, index);
-            });
-        },
-        createEmptyVariable(parent) {
-            var newId = newGuid();
-            var emptyVariable = {
-                itemId: newId,
-                itemType: 'Variable',
-                variableData: {},
-                items: [],
-                getParentItem: function() {
-                    return parent;
-                }
-            };
-            return emptyVariable;
         },
 
         copyItem(item) {

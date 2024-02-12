@@ -1,5 +1,8 @@
 import { get, commandCall } from '../services/apiService';
 import emitter from './emitter';
+import { getItemIndexByIdFromParentItemsList } from './utilityService';
+import { newGuid } from '../helpers/guid';
+import { i18n } from '../plugins/localization';
 
 export function deleteStaticText(questionnaireId, entityId) {
     var command = {
@@ -23,14 +26,6 @@ export async function getStaticText(questionnaireId, entityId) {
     return data;
 }
 
-export function addStaticText(commandName, command) {
-    return commandCall(commandName, command).then(response => {
-        emitter.emit('staticTextAdded', {
-            //itemId: command.entityId
-        });
-    });
-}
-
 export function updateStaticText(questionnaireId, staticText) {
     var command = {
         questionnaireId: questionnaireId,
@@ -45,4 +40,42 @@ export function updateStaticText(questionnaireId, staticText) {
     return commandCall('UpdateStaticText', command).then(async response => {
         emitter.emit('staticTextUpdated', staticText);
     });
+}
+
+export function addStaticText(questionnaireId, parent, afterNodeId) {
+    let index = getItemIndexByIdFromParentItemsList(parent, afterNodeId);
+
+    const staticText = createEmptyStaticText();
+    const command = {
+        questionnaireId: questionnaireId,
+        parentId: parent.itemId,
+        entityId: staticText.itemId,
+        text: staticText.text
+    };
+
+    if (index != null && index >= 0) {
+        index = index + 1;
+        command.index = index;
+    }
+
+    return commandCall('AddStaticText', command).then(result => {
+        emitter.emit('staticTextAdded', {
+            staticText: staticText,
+            index: index,
+            parent: parent
+        });
+    });
+}
+
+function createEmptyStaticText() {
+    var newId = newGuid();
+    var staticText = {
+        itemId: newId,
+        text: i18n.t('QuestionnaireEditor.DefaultNewStaticText'),
+        itemType: 'StaticText',
+        hasCondition: false,
+        hasValidation: false,
+        items: []
+    };
+    return staticText;
 }

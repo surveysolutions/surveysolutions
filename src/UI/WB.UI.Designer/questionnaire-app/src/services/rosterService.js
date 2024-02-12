@@ -1,5 +1,8 @@
 import { get, commandCall } from './apiService';
 import emitter from './emitter';
+import { getItemIndexByIdFromParentItemsList } from './utilityService';
+import { newGuid } from '../helpers/guid';
+import { i18n } from '../plugins/localization';
 
 export async function getRoster(questionnaireId, entityId) {
     const data = await get('/api/questionnaire/editRoster/' + questionnaireId, {
@@ -69,4 +72,53 @@ export function getQuestionsEligibleForNumericRosterTitle(
             rosterSizeQuestionId: rosterSizeQuestionId
         }
     );
+}
+
+export function addRoster(questionnaireId, parent, afterNodeId) {
+    let index = getItemIndexByIdFromParentItemsList(parent, afterNodeId);
+    const roster = createEmptyRoster();
+
+    var command = {
+        questionnaireId: questionnaireId,
+        groupId: roster.itemId,
+        title: roster.title,
+        condition: '',
+        hideIfDisabled: false,
+        isRoster: true,
+        rosterSizeQuestionId: null,
+        rosterSizeSource: 'FixedTitles',
+        fixedRosterTitles: [
+            { value: 1, title: 'First Title' },
+            { value: 2, title: 'Second Title' }
+        ],
+        rosterTitleQuestionId: null,
+        parentGroupId: parent.itemId,
+        variableName: roster.variableName
+    };
+    if (index != null && index >= 0) {
+        index = index + 1;
+        command.index = index;
+    }
+
+    return commandCall('AddGroup', command).then(function(result) {
+        emitter.emit('rosterAdded', {
+            roster: roster,
+            index: index,
+            parent: parent
+        });
+    });
+}
+
+function createEmptyRoster() {
+    var newId = newGuid();
+    var emptyRoster = {
+        itemId: newId,
+        title:
+            i18n.t('QuestionnaireEditor.DefaultNewRoster') + ' - %rostertitle%',
+        items: [],
+        itemType: 'Group',
+        hasCondition: false,
+        isRoster: true
+    };
+    return emptyRoster;
 }
