@@ -112,6 +112,8 @@ import ExpressionEditor from './ExpressionEditor.vue';
 import Breadcrumbs from './Breadcrumbs.vue'
 import Help from './Help.vue'
 
+import { useMagicKeys } from '@vueuse/core';
+
 export default {
     name: 'Group',
     components: { MoveToChapterSnippet, ExpressionEditor, Breadcrumbs, Help },
@@ -132,6 +134,11 @@ export default {
                 await this.fetch();
                 this.scrollTo();
             }
+        },
+        ctrlS: function (newValue) {
+            if (newValue) {
+                this.saveGroup();
+            }
         }
     },
     setup() {
@@ -148,8 +155,11 @@ export default {
             };
         });
 
+        const keys = useMagicKeys();
+        const ctrlS = keys['Ctrl+s'];
+
         return {
-            groupStore, commentsStore
+            groupStore, commentsStore, ctrlS
         };
     },
     async beforeMount() {
@@ -217,6 +227,9 @@ export default {
             this.showEnablingConditions = this.activeGroup.enablementCondition ? true : false;
         },
         saveGroup() {
+            if (this.questionnaire.isReadOnlyForUser) return;
+            if (this.isDirty == false) return;
+
             updateGroup(this.questionnaireId, this.activeGroup);
         },
         cancelGroup() {

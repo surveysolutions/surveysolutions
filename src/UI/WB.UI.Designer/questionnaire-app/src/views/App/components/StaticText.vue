@@ -155,6 +155,8 @@ import ExpressionEditor from './ExpressionEditor.vue';
 import Help from './Help.vue';
 import MoveToChapterSnippet from './MoveToChapterSnippet.vue';
 
+import { useMagicKeys } from '@vueuse/core';
+
 export default {
     name: 'StaticText',
     components: {
@@ -181,6 +183,11 @@ export default {
                 await this.fetch();
                 this.scrollTo();
             }
+        },
+        ctrlS: function (v, e, t, r) {
+            if (v) {
+                this.saveStaticText();
+            }
         }
     },
     setup() {
@@ -197,9 +204,13 @@ export default {
             };
         });
 
+        const keys = useMagicKeys();
+        const ctrlS = keys['Ctrl+s'];
+
         return {
             staticTextStore,
-            commentsStore
+            commentsStore,
+            ctrlS
         };
     },
     async beforeMount() {
@@ -248,7 +259,8 @@ export default {
             this.shouldUserSeeReloadDetailsPromt = false;
             this.showEnablingConditions = this.activeStaticText.enablementCondition ? true : false;
         },
-        async saveStaticText() {
+        saveStaticText() {
+            if (this.questionnaire.isReadOnlyForUser) return;
             if (!this.isDirty) return;
             updateStaticText(this.questionnaireId, this.activeStaticText);
         },

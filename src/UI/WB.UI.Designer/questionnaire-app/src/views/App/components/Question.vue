@@ -245,6 +245,7 @@ import SingleOptionQuestion from './parts/SingleOptionQuestion.vue'
 import TextListQuestion from './parts/TextListQuestion.vue'
 import TextQuestion from './parts/TextQuestion.vue'
 
+import { useMagicKeys } from '@vueuse/core';
 
 export default {
     name: 'Question',
@@ -285,6 +286,10 @@ export default {
                 await this.fetch();
                 this.scrollTo();
             }
+        },
+        ctrlS: function (v) {
+            if (v)
+                this.saveQuestion();
         }
     },
     setup() {
@@ -301,8 +306,11 @@ export default {
             };
         });
 
+        const keys = useMagicKeys();
+        const ctrlS = keys['Ctrl+s'];
+
         return {
-            questionStore, commentsStore
+            questionStore, commentsStore, ctrlS
         };
     },
     async beforeMount() {
@@ -373,6 +381,7 @@ export default {
         },
 
         async saveQuestion() {
+            if (this.questionnaire.isReadOnlyForUser) return;
             if (this.isDirty == false) return;
 
             if (this.$refs.questionSpecific != null) {

@@ -146,6 +146,7 @@
 import VerificationDialog from './VerificationDialog.vue';
 import SharedInfoDialog from './SharedInfoDialog.vue';
 import DownloadPDFDialog from './DownloadPDFDialog.vue';
+import { useMagicKeys } from '@vueuse/core';
 
 import { useVerificationStore } from '../../../stores/verification';
 import WebTesterApi from '../../../api/webTester';
@@ -172,12 +173,22 @@ export default {
         const sharedInfoDialog = ref(null);
         const downloadPDFDialog = ref(null);
 
+        const keys = useMagicKeys();
+        const ctrlB = keys['Ctrl+b'];
+
         return {
             verificationStore,
             verificationDialog,
             sharedInfoDialog,
-            downloadPDFDialog
+            downloadPDFDialog,
+            ctrlB
         };
+    },
+    watch: {
+        ctrlB: function (v) {
+            if (v)
+                this.verify();
+        }
     },
     computed: {
         errorsCount() {

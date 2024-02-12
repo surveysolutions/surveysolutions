@@ -48,6 +48,24 @@
             <div class="block-ui-message ng-binding">Please wait...</div>
         </div>
     </div>
+    <div class="cfp-hotkeys-container fade" :class="{ 'in': cheatSheetVisible }" v-if="cheatSheetVisible">
+        <div class="cfp-hotkeys ">
+            <h4 class="cfp-hotkeys-title">{{ $t('QuestionnaireEditor.HotkeysShortcuts') }}</h4>
+            <table>
+                <tbody>
+                    <tr v-for="hotkey in hotkeys">
+                        <td class="cfp-hotkeys-keys">
+                            <span v-for="key in hotkey.keys" class="cfp-hotkeys-key">
+                                {{ key }}
+                            </span>
+                        </td>
+                        <td class="cfp-hotkeys-text">{{ hotkey.description }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="cfp-hotkeys-close" @click="toggleCheatSheet()">&#215;</div>
+        </div>
+    </div>
 </template>
  
 <style lang="scss">
@@ -70,6 +88,8 @@ import { computed, readonly } from 'vue';
 import { useQuestionnaireStore } from '../stores/questionnaire';
 import { useTreeStore } from '../stores/tree';
 import { useUserStore } from '../stores/user';
+import { useHotkeysStore } from '../stores/hotkeys';
+import { useMagicKeys } from '@vueuse/core';
 
 export default {
     name: 'QuestionnaireApp',
@@ -84,19 +104,34 @@ export default {
             currentUser: readonly(computed(() => this.currentUser))
         };
     },
+    data() {
+        return {
+            cheatSheetVisible: false
+        };
+    },
     setup() {
         const questionnaireStore = useQuestionnaireStore();
         const treeStore = useTreeStore();
         const userStore = useUserStore();
         const progressStore = useProgressStore();
         const blockUIStore = useBlockUIStore();
+        const hotkeysStore = useHotkeysStore();
+
+        const keys = useMagicKeys();
+        const ShiftQ = keys['Shift+Ctrl+?'];
+        const ctrlP = keys['Ctrl+P'];
+        const escape = keys['escape'];
 
         return {
             questionnaireStore,
             treeStore,
             userStore,
             progressStore,
-            blockUIStore
+            blockUIStore,
+            hotkeysStore,
+            ShiftQ,
+            ctrlP,
+            escape
         };
     },
     async beforeMount() {
@@ -110,7 +145,19 @@ export default {
             } else {
                 body.classList.remove('block-ui-anim-fade', 'block-ui-active', 'block-ui-visible');
             }
-        }
+        },
+        ShiftQ: function (v) {
+            if (v)
+                this.toggleCheatSheet();
+        },
+        ctrlP: function (v) {
+            if (v)
+                window.open("/pdf/printpreview/" + this.questionnaire.questionnaireId, "_blank");
+        },
+        escape: function (v) {
+            if (v && this.cheatSheetVisible)
+                this.toggleCheatSheet();
+        },
     },
     mounted() {
         this.$Progress.finish();
@@ -124,6 +171,9 @@ export default {
         },
         currentUser() {
             return this.userStore.getInfo || {};
+        },
+        hotkeys() {
+            return this.hotkeysStore.getHotkeys;
         },
         isActionRunning() {
             var progress = this.$Progress;
@@ -164,6 +214,9 @@ export default {
                     force: true
                 });
             }
+        },
+        toggleCheatSheet() {
+            this.cheatSheetVisible = !this.cheatSheetVisible;
         }
     }
 };

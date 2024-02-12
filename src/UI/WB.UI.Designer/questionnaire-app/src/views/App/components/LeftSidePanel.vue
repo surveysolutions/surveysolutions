@@ -181,6 +181,8 @@ import Metadata from './leftSidePanel/Metadata.vue'
 import Scenarios from './leftSidePanel/Scenarios.vue'
 import Translations from './leftSidePanel/Translations.vue'
 
+import { useMagicKeys } from '@vueuse/core';
+
 export default {
     name: 'LeftSidePanel',
     components: {
@@ -201,6 +203,15 @@ export default {
     data() {
         return {
             openPanel: null,//'categories',
+        };
+    },
+    setup(props) {
+
+        const keys = useMagicKeys();
+        const arrowLeft = keys['arrowleft'];
+
+        return {
+            arrowLeft
         };
     },
     mounted() {
@@ -263,6 +274,13 @@ export default {
         isUnfoldedComments() { return this.openPanel == 'comments' },
         isUnfoldedCategories() { return this.openPanel == 'categories' },
     },
+    watch: {
+        arrowLeft: function (value) {
+            if (value)
+                this.unfoldChapters();
+        }
+    },
+
     methods: {
         foldback() {
             this.openPanel = null;

@@ -96,6 +96,8 @@ import ExpressionEditor from './ExpressionEditor.vue';
 import Breadcrumbs from './Breadcrumbs.vue'
 import Help from './Help.vue'
 
+import { useMagicKeys } from '@vueuse/core';
+
 export default {
     name: 'Variable',
     components: { MoveToChapterSnippet, ExpressionEditor, Breadcrumbs, Help },
@@ -114,6 +116,10 @@ export default {
                 await this.fetch();
                 this.scrollTo();
             }
+        },
+        ctrlS: function (value) {
+            if (value)
+                this.saveVariable();
         }
     },
     setup() {
@@ -130,8 +136,11 @@ export default {
             };
         });
 
+        const keys = useMagicKeys();
+        const ctrlS = keys['Ctrl+s'];
+
         return {
-            variableStore, commentsStore
+            variableStore, commentsStore, ctrlS
         };
     },
     async beforeMount() {
@@ -187,6 +196,7 @@ export default {
             await this.variableStore.fetchVarableData(this.questionnaireId, this.variableId);
         },
         saveVariable() {
+            if (this.questionnaire.isReadOnlyForUser) return;
             if (!this.isDirty) return;
             updateVariable(this.questionnaireId, this.activeVariable);
         },

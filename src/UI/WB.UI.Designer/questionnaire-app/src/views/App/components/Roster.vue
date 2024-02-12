@@ -363,6 +363,8 @@ import { createQuestionForDeleteConfirmationPopup, focusElementByName } from '..
 import { updateRoster, deleteRoster, getQuestionsEligibleForNumericRosterTitle } from '../../../services/rosterService'
 import { setFocusIn } from '../../../services/utilityService'
 
+import { useMagicKeys } from '@vueuse/core';
+
 export default {
     name: 'Roster',
     components: { MoveToChapterSnippet, ExpressionEditor, Breadcrumbs, Help },
@@ -395,6 +397,11 @@ export default {
                 await this.fetch();
                 this.scrollTo();
             }
+        },
+        ctrlS: function (v) {
+            if (v) {
+                this.saveRoster();
+            }
         }
     },
     setup() {
@@ -411,8 +418,11 @@ export default {
             };
         });
 
+        const keys = useMagicKeys();
+        const ctrlS = keys['Ctrl+s'];
+
         return {
-            rosterStore, commentsStore
+            rosterStore, commentsStore, ctrlS
         };
     },
     async beforeMount() {
@@ -482,6 +492,7 @@ export default {
             this.showEnablingConditions = this.activeRoster.enablementCondition ? true : false;
         },
         async saveRoster() {
+            if (this.questionnaire.isReadOnlyForUser) return;
             if (!this.isDirty) return;
 
             await this.showRosterTitlesInList();
