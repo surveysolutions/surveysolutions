@@ -247,6 +247,8 @@ import TextQuestion from './parts/TextQuestion.vue'
 
 import { useMagicKeys } from '@vueuse/core';
 
+import emitter from '../../../services/emitter';
+
 export default {
     name: 'Question',
     components: {
@@ -403,6 +405,8 @@ export default {
             this.shouldUserSeeReloadDetailsPromt = false;
             this.showInstruction = this.activeQuestion.instructions ? true : false;
             this.showEnablingConditions = this.activeQuestion.enablementCondition ? true : false;
+
+            emitter.emit('questionChangesDiscarded');
         },
         toggleComments() {
             this.commentsStore.toggleComments();

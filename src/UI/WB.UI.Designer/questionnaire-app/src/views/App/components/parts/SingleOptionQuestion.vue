@@ -66,7 +66,7 @@
             <p></p>
         </div>
     </div>
-    <div class="row" v-if="hasOptionsOwn">
+    <div class="row" v-if="hasOwnCategories">
         <div class="col-xs-12">
             <div class="well well-sm" v-if="activeQuestion.wereOptionsTruncated">{{
                 $t('QuestionnaireEditor.QuestionOptionsCut', { count: 200 }) }}</div>
@@ -193,16 +193,20 @@ export default {
         }
     },
     mounted() {
+        //move to initial binding
         this.activeQuestion.isLinkedToReusableCategories = !_.isEmpty(this.activeQuestion.categoriesId);
-
         this.activeQuestion.isCascade = !_.isEmpty(this.activeQuestion.cascadeFromQuestionId);
+        this.activeQuestion.isLinked = !_.isEmpty(this.activeQuestion.linkedToEntityId);
+
     },
     computed: {
-        hasOptionsOwn() {
-            !this.activeQuestion.isFilteredCombobox
+        hasOwnCategories() {
+            var hasCategories = !this.activeQuestion.isFilteredCombobox
                 && !this.activeQuestion.isLinked
                 && !this.activeQuestion.isCascade
-                && !this.activeQuestion.isLinkedToReusableCategories
+                && !this.activeQuestion.isLinkedToReusableCategories;
+
+            return hasCategories;
         },
         getSelectedCategories() {
             return this.getCategoriesList().find(c => c.categoriesId === this.activeQuestion.categoriesId) || {};
@@ -210,7 +214,7 @@ export default {
     },
     methods: {
         prepareToSave() {
-            if (this.hasOptionsOwn)
+            if (this.hasOwnCategories)
                 this.$refs.options.showOptionsInList();
         },
 
@@ -265,16 +269,17 @@ export default {
         },
 
         setIsReusableCategories() {
-            if (this.activeQuestion.isLinkedToReusableCategories === true) return;
+            //if (this.activeQuestion.isLinkedToReusableCategories === true) return;
 
             this.activeQuestion.isLinked = false;
+            this.activeQuestion.categoriesId = null;
             this.activeQuestion.isLinkedToReusableCategories = true;
 
             this.markFormAsChanged();
         },
 
         setUserDefinedCategories() {
-            if (this.activeQuestion.isLinkedToReusableCategories === false) return;
+            //if (this.activeQuestion.isLinkedToReusableCategories === false) return;
 
             this.activeQuestion.isLinked = false;
             this.activeQuestion.categoriesId = null;

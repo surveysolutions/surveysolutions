@@ -188,10 +188,11 @@ export default {
     },
     mounted() {
         this.activeQuestion.isLinkedToReusableCategories = !_.isEmpty(this.activeQuestion.categoriesId);
+        this.activeQuestion.isLinked = !_.isEmpty(this.activeQuestion.linkedToEntityId);
     },
     computed: {
         hasOwnCategories() {
-            !this.activeQuestion.isFilteredCombobox
+            return !this.activeQuestion.isFilteredCombobox
                 && !this.activeQuestion.isLinked
                 && !this.activeQuestion.isLinkedToReusableCategories
         },

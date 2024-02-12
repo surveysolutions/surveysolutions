@@ -53,17 +53,18 @@
             </p>
         </div>
         <div v-if="!useListAsOptionsEditor">
-            <div class="form-group" :class="{ 'has-error': !stringifiedOptions.valid }">
-                <textarea name="stringifiedOptions" class="form-control mono" v-model="activeQuestion.stringifiedOptions"
-                    v-on:keyup="stringifiedOptionsValidate" match-options-pattern max-options-count v-autosize></textarea>
+            <div class="form-group" :class="{ 'has-error': !stringifiedCategoriesValidity.valid }">
+                <textarea name="stringifiedOptions" class="form-control mono" v-bind:value="stringifiedCategories"
+                    v-on:input="updateStringifiedCategoriesValue($event)" match-options-pattern max-options-count
+                    v-autosize></textarea>
                 <p class="help-block">
                     <input class="btn btn-link" type="button" :value="$t('QuestionnaireEditor.TableView')" value="Show list"
-                        @click="showOptionsInList()" :disabled="!stringifiedOptions.valid" />
+                        @click="showOptionsInList()" :disabled="!stringifiedCategoriesValidity.valid" />
                 </p>
-                <p class="help-block v-cloak" v-show="stringifiedOptions.$error.matchOptionsPattern">{{
+                <p class="help-block v-cloak" v-show="stringifiedCategoriesValidity.$error.matchOptionsPattern">{{
                     $t('QuestionnaireEditor.OptionsListError') }}
                 </p>
-                <p class="help-block v-cloak" v-show="stringifiedOptions.$error.maxOptionsCount">{{
+                <p class="help-block v-cloak" v-show="stringifiedCategoriesValidity.$error.maxOptionsCount">{{
                     $t('QuestionnaireEditor.EnteredMoreThanAllowed', { count: 200 }) }}
                 </p>
             </div>
@@ -96,7 +97,9 @@ export default {
     data() {
         return {
             useListAsOptionsEditor: true,
-            stringifiedOptions: {
+            stringifiedCategories: null,
+            initialStringifiedCategories: null,
+            stringifiedCategoriesValidity: {
                 valid: true,
                 $error: {
                     matchOptionsPattern: false,
@@ -107,6 +110,12 @@ export default {
             dirty: false,
         }
     },
+    mounted() {
+        this.$emitter.on('questionChangesDiscarded', this.questionChangesDiscarded);
+    },
+    unmounted() {
+        this.$emitter.off('questionChangesDiscarded', this.questionChangesDiscarded);
+    },
     computed: {
         optionsCount() {
             return this.activeQuestion.options.length;
@@ -115,8 +124,13 @@ export default {
     methods: {
         async showOptionsInTextarea() {
             //this.activeQuestion.stringifiedOptions = optionsService.stringifyOptions(this.activeQuestion.options);
-            this.activeQuestion.stringifiedOptions = await convertToText(this.activeQuestion.options);
+            const text = await convertToText(this.activeQuestion.options);
+            this.initialStringifiedCategories = text;
+            this.stringifiedCategories = text;
             this.useListAsOptionsEditor = false;
+        },
+        questionChangesDiscarded() {
+            this.reset()
         },
 
         async showOptionsInList() {
@@ -126,45 +140,49 @@ export default {
 
             this.stringifiedOptionsValidate();
 
-            if (!this.stringifiedOptions.valid) {
+            if (!this.stringifiedCategoriesValidity.valid) {
                 return;
             }
 
-            if (this.activeQuestion.stringifiedOptions) {
-                this.activeQuestion.options = await convertToTable(this.activeQuestion.stringifiedOptions);
+            if (this.stringifiedCategories) {
+                this.activeQuestion.options = await convertToTable(this.stringifiedCategories);
                 //this.activeQuestion.optionsCount = this.activeQuestion.options.length;
             }
             this.useListAsOptionsEditor = true;
         },
 
+        updateStringifiedCategoriesValue(e) {
+            this.stringifiedCategories = e.target.value;
+            this.stringifiedOptionsValidate();
+        },
         stringifiedOptionsValidate() {
             if (this.useListAsRosterTitleEditor == true)
                 return true;
 
-            const lines = (this.activeQuestion.stringifiedOptions || '').split(/\r\n|\r|\n/);
+            const lines = (this.stringifiedCategories || '').split(/\r\n|\r|\n/);
             const lineCount = lines.length
 
             if (lineCount > this.fixedRosterLimit) {
-                this.stringifiedOptions.$error.maxOptionsCount = true
-                this.stringifiedOptions.valid = false;
+                this.stringifiedCategoriesValidity.$error.maxOptionsCount = true
+                this.stringifiedCategoriesValidity.valid = false;
                 return;
             }
-            else if (this.stringifiedOptions.$error.maxOptionsCount == true) {
-                this.stringifiedOptions.$error.maxOptionsCount = false
+            else if (this.stringifiedCategoriesValidity.$error.maxOptionsCount == true) {
+                this.stringifiedCategoriesValidity.$error.maxOptionsCount = false
             }
 
-            const top5Errors = validateText(this.activeQuestion.stringifiedOptions, false).slice(0, 5);
+            const top5Errors = validateText(this.stringifiedCategories, false).slice(0, 5);
             if (top5Errors.length > 0) {
-                this.stringifiedOptions.$error.matchOptionsPattern = true;
-                this.stringifiedOptions.valid = false;
+                this.stringifiedCategoriesValidity.$error.matchOptionsPattern = true;
+                this.stringifiedCategoriesValidity.valid = false;
                 return;
             }
-            else if (this.stringifiedOptions.$error.matchOptionsPattern == true) {
-                this.stringifiedOptions.$error.matchOptionsPattern = false
+            else if (this.stringifiedCategoriesValidity.$error.matchOptionsPattern == true) {
+                this.stringifiedCategoriesValidity.$error.matchOptionsPattern = false
             }
 
-            if (this.stringifiedOptions.valid == false) {
-                this.stringifiedOptions.valid = true;
+            if (this.stringifiedCategoriesValidity.valid == false) {
+                this.stringifiedCategoriesValidity.valid = true;
             }
         },
 
@@ -234,6 +252,13 @@ export default {
         showAddClassificationModal() {
             this.$refs.classification.openDialog();
         },
+
+        reset() {
+            this.stringifiedCategories = null;
+            this.initialStringifiedCategories = null;
+            this.useListAsOptionsEditor = true;
+            this.stringifiedCategoriesValidity.valid = true;
+        }
     }
 }
 </script>
