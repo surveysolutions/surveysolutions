@@ -477,20 +477,12 @@ export default {
             const tree = this.$refs.tree;
             let stat = null;
             const items = tree.rootChildren;
-            walkTreeData(
-                items,
-                (node, index, parent) => {
-                    if (node.data.itemId == itemId) {
-                        stat = node;
-                        return 'false';
-                    }
-                },
-                {
-                    childrenKey: 'children',
-                    reverse: false,
-                    childFirst: false
+            walkTreeData(items, (node, index, parent) => {
+                if (node.data.itemId == itemId) {
+                    stat = node;
+                    return 'false';
                 }
-            );
+            });
 
             if (stat != null) {
                 tree.remove(stat);
@@ -513,25 +505,17 @@ export default {
             let itemStat = null;
             let newParentStat = null;
             const items = tree.rootChildren;
-            walkTreeData(
-                items,
-                (node, index, parent) => {
-                    if (node.data.itemId == itemId) {
-                        itemStat = node;
-                    }
-                    else if (node.data.itemId == newParentId) {
-                        newParentStat = node;
-                    }
-                    if (newParentStat != null && itemStat != null) {
-                        return 'false';
-                    }
-                },
-                {
-                    childrenKey: 'children',
-                    reverse: false,
-                    childFirst: false
+            walkTreeData(items, (node, index, parent) => {
+                if (node.data.itemId == itemId) {
+                    itemStat = node;
                 }
-            );
+                else if (node.data.itemId == newParentId) {
+                    newParentStat = node;
+                }
+                if (newParentStat != null && itemStat != null) {
+                    return 'false';
+                }
+            });
 
             if (itemStat != null) {
                 if (newParentStat != null) {
@@ -563,30 +547,25 @@ export default {
             if (parentId != null) {
                 const items = tree.rootChildren;
 
-                walkTreeData(
-                    items,
-                    (node, index, parent) => {
-                        if (node.data.itemId == parentId) {
-                            parentStat = node;
-                            return 'false';
-                        }
-                    },
-                    {
-                        childrenKey: 'children',
-                        reverse: false,
-                        childFirst: false
+                walkTreeData(items, (node, index, parent) => {
+                    if (node.data.itemId == parentId) {
+                        parentStat = node;
+                        return 'false';
                     }
-                );
+                });
             }
 
-            if (index == null || index < 0)
+            if (index == null || index < 0) {
                 index = parentStat == null ? tree.rootChildren.length : parentStat.children.length;
-            tree.add(entity, parentStat, index);
+            }
+
+            const refEntity = this.treeStore.findTreeItem(entity.itemId);
+            tree.add(refEntity, parentStat, index);
 
             this.$router.push({
-                name: entity.itemType.toLowerCase(),
+                name: refEntity.itemType.toLowerCase(),
                 params: {
-                    entityId: entity.itemId
+                    entityId: refEntity.itemId
                 }
             });
         },
