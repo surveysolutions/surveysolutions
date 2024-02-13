@@ -562,8 +562,13 @@ export default {
             const refEntity = this.treeStore.findTreeItem(entity.itemId);
             tree.add(refEntity, parentStat, index);
 
+            let routeName = refEntity.itemType.toLowerCase()
+            if (routeName == 'group' && refEntity.isRoster) {
+                routeName = 'roster'
+            }
+
             this.$router.push({
-                name: refEntity.itemType.toLowerCase(),
+                name: routeName,
                 params: {
                     entityId: refEntity.itemId
                 }
