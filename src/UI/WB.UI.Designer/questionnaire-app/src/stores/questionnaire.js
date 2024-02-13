@@ -21,7 +21,6 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
     state: () => ({
         info: {},
         edittingMetadata: {},
-        edittingTranslations: [],
         edittingCategories: [],
         edittingScenarios: [],
         edittingLookupTables: [],
@@ -32,11 +31,9 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
         getEdittingMetadata: state => state.edittingMetadata,
         getIsDirtyMetadata: state =>
             !isEqual(state.edittingMetadata, state.info.metadata),
-        getEdittingTranslations: state => state.edittingTranslations,
         getEdittingCategories: state => state.edittingCategories,
         getEdittingScenarios: state => state.edittingScenarios,
         getEdittingLookupTables: state => state.edittingLookupTables,
-
         getEdittingSharedInfo: state => state.edittingSharedInfo,
         getQuestionnaireEditDataDirty: state =>
             state.edittingSharedInfo.title != state.info.title ||
@@ -67,10 +64,7 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
 
             emitter.on('translationUpdated', this.translationUpdated);
             emitter.on('translationDeleted', this.translationDeleted);
-            emitter.on(
-                'settedDefaultTranslation',
-                this.settedDefaultTranslation
-            );
+            emitter.on('defaultTranslationSet', this.defaultTranslationSet);
 
             emitter.on('metadataUpdated', this.metadataUpdated);
 
@@ -111,11 +105,16 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             this.info = info;
 
             this.edittingMetadata = cloneDeep(info.metadata);
-            this.edittingTranslations = cloneDeep(info.translations);
+
             this.edittingCategories = cloneDeep(info.categories);
             this.edittingScenarios = cloneDeep(info.scenarios);
             this.edittingLookupTables = cloneDeep(info.lookupTables);
             this.edittingSharedInfo = this.getQuestionnaireEditData();
+
+            forEach(this.info.translations, translation => {
+                var editTranslation = cloneDeep(translation);
+                translation.editTranslation = editTranslation;
+            });
 
             forEach(this.info.attachments, attachment => {
                 var editAttachment = cloneDeep(attachment);
@@ -417,71 +416,46 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             this.info.title = event.metadata.title;
         },
 
-        async discardTranslationChanges() {
-            this.edittingTranslations = cloneDeep(this.info.translations);
+        translationDeleted(payload) {
+            const index = findIndex(this.info.translations, function(i) {
+                return i.translationId === payload.id;
+            });
+            if (index !== -1) {
+                this.info.translations.splice(index, 1);
+            }
         },
+        translationUpdated(payload) {
+            const newTranslation = cloneDeep(payload.translation);
+            newTranslation.file = null;
+            newTranslation.editTranslation = cloneDeep(newTranslation);
 
-        async translationUpdated(event) {
-            const translation = event.translation;
-
-            const item = find(
-                this.info.translations,
-                item =>
-                    item.translationId == translation.translationId ||
-                    item.translationId == translation.oldTranslationId
-            );
-
-            if (item) {
-                item.name = translation.name;
-                item.translationId = translation.translationId;
-                item.oldTranslationId = translation.oldTranslationId;
+            if (payload.translation.oldTranslationId) {
+                const index = findIndex(this.info.translations, function(i) {
+                    return (
+                        i.translationId === payload.translation.oldTranslationId
+                    );
+                });
+                if (index !== -1) {
+                    this.info.translations[index] = newTranslation;
+                }
             } else {
-                this.info.translations.push(translation);
-
-                const eTranslation = cloneDeep(translation);
-                this.edittingTranslations.push(eTranslation);
+                this.info.translations.push(newTranslation);
             }
         },
 
-        async translationDeleted(event) {
+        defaultTranslationSet(event) {
             const translationId = event.translationId;
 
-            this.info.translations = filter(
-                this.info.translations,
-                translation => {
-                    return translation.translationId !== translationId;
-                }
-            );
-            this.edittingTranslations = filter(
-                this.edittingTranslations,
-                translation => {
-                    return translation.translationId !== translationId;
-                }
-            );
-        },
-
-        async settedDefaultTranslation(event) {
-            const translationId = event.translationId;
-
-            const translationById = find(
-                this.info.translations,
-                item => item.translationId == translationId
-            );
             forEach(this.info.translations, translation => {
-                translation.isDefault = false;
+                if (translation.translationId == translationId) {
+                    translation.isDefault = true;
+                    translation.editTranslation.isDefault = false;
+                } else {
+                    translation.isDefault = false;
+
+                    translation.editTranslation.isDefault = false;
+                }
             });
-
-            if (translationById) translationById.isDefault = true;
-
-            const eTranslationById = find(
-                this.edittingTranslations,
-                item => item.translationId == translationId
-            );
-            forEach(this.edittingTranslations, translation => {
-                translation.isDefault = false;
-            });
-
-            if (eTranslationById) eTranslationById.isDefault = true;
         },
 
         async scenarioUpdated(event) {

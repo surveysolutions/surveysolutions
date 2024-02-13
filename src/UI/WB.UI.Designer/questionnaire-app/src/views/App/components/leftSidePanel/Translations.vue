@@ -10,12 +10,11 @@
             </div>
             <form role="form" name="translationsForm" novalidate>
                 <div class="translation-list">
-                    <TranslationItem :translation="defaultTranslation" :questionnaire-id="questionnaireId">
+                    <TranslationItem :translationItem="defaultTranslation" :questionnaire-id="questionnaireId">
                     </TranslationItem>
 
                     <template v-for="(translation, index) in translations">
-                        <TranslationItem :translation="translation" :questionnaire-id="questionnaireId">
-                        </TranslationItem>
+                        <TranslationItem :translationItem="translation" :questionnaire-id="questionnaireId" />
                     </template>
                 </div>
             </form>
@@ -28,12 +27,6 @@
                     </a>
                 </p>
                 <p>
-                    <!--input type="button" :value="$t('QuestionnaireEditor.SideBarTranslationsUploadNew')"
-                        value="Upload new translation" :disabled="isReadOnlyForUser" class="btn lighter-hover" ngf-select
-                        ngf-change="createAndUploadFile($file);$event.stopPropagation()" ngf-max-size="10MB"
-                        accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
-                        ngf-select-disabled="isReadOnlyForUser" ngf-drop-disabled="isReadOnlyForUser" /-->
-
                     <input type="button" :value="$t('QuestionnaireEditor.SideBarTranslationsUploadNew')"
                         @click.stop="openFileDialog()" value="Upload new categories" class="btn lighter-hover" ngf-select
                         :disabled="isReadOnlyForUser" capture />
@@ -50,9 +43,9 @@
   
 <script>
 
-import { computed, reactive } from 'vue';
+import { reactive } from 'vue';
 import moment from 'moment'
-import { isUndefined, isNull, some } from 'lodash'
+import { isUndefined, isNull, some, cloneDeep } from 'lodash'
 import TranslationItem from './TranslationItem.vue';
 
 import { useQuestionnaireStore } from '../../../../stores/questionnaire';
@@ -62,6 +55,7 @@ import { updateTranslation } from '../../../../services/translationService';
 
 export default {
     name: 'Translations',
+    inject: ['questionnaire', 'isReadOnlyForUser'],
     components: {
         TranslationItem,
     },
@@ -83,27 +77,24 @@ export default {
         };
     },
     computed: {
-        questionnaire() {
-            return this.questionnaireStore.getInfo;
-        },
-
         translations() {
-            return this.questionnaireStore.getEdittingTranslations;
-        },
-
-        isReadOnlyForUser() {
-            return this.questionnaire.isReadOnlyForUser;
+            return this.questionnaireStore.getInfo.translations;
         },
 
         defaultTranslation() {
-            return reactive({
+            var translation = {
                 translationId: null,
                 name: !this.questionnaire.defaultLanguageName ? this.$t("QuestionnaireEditor.Translation_Original") : this.questionnaire.defaultLanguageName,
                 file: null,
                 isDefault: !some(this.translations, { isDefault: true }),
                 content: { details: {} },
-                isOriginalTranslation: true
-            });
+                isOriginalTranslation: true,
+            };
+
+            var editTranslation = cloneDeep(translation);
+            translation.editTranslation = editTranslation;
+
+            return reactive(translation);
         },
     },
 

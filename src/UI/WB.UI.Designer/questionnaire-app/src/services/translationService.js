@@ -27,7 +27,7 @@ export function deleteTranslation(questionnaireId, translationId) {
 
     return commandCall('DeleteTranslation', command).then(response => {
         emitter.emit('translationDeleted', {
-            translationId: translationId
+            id: translationId
         });
     });
 }
@@ -38,7 +38,7 @@ export function setDefaultTranslation(questionnaireId, translationId) {
         translationId: translationId
     };
     return commandCall('SetDefaultTranslation', command).then(response => {
-        emitter.emit('settedDefaultTranslation', {
+        emitter.emit('defaultTranslationSet', {
             translationId: translationId
         });
     });

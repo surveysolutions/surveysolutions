@@ -13,8 +13,8 @@
                 <div class="drop-box">
                     {{ $t('QuestionnaireEditor.SideBarLookupTableDropFile') }}
                 </div>
-                <div class="actions" :class="{ dirty: dirty }">
-                    <div v-show="dirty" class="pull-left">
+                <div class="actions" :class="{ 'dirty': isDirty }">
+                    <div v-show="isDirty" class="pull-left">
                         <button type="button" :disabled="isReadOnlyForUser || isInvalid" class="btn lighter-hover"
                             @click.self="saveTranslation()">
                             {{ $t('QuestionnaireEditor.Save') }}
@@ -45,7 +45,7 @@
                             :drop-directory="false"
                             accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.txt,.tsv,.tab">
                         </file-upload>
-                        <button v-show="!dirty && !translation.isOriginalTranslation" :disabled="isReadOnlyForUser"
+                        <button v-show="!isDirty && !translation.isOriginalTranslation" :disabled="isReadOnlyForUser"
                             class="btn btn-default" @click.stop="openFileDialog()" type="button">
                             <span>{{ $t('QuestionnaireEditor.Update') }}</span>
                         </button>
@@ -84,12 +84,11 @@ export default {
     inject: ['questionnaire', 'isReadOnlyForUser'],
     props: {
         questionnaireId: { type: String, required: true },
-        translation: { type: Object, required: true },
+        translationItem: { type: Object, required: true },
     },
     data() {
         return {
             downloadBaseUrl: '/translations',
-            originName: null,
             file: [],
         }
     },
@@ -100,16 +99,16 @@ export default {
             questionnaireStore,
         };
     },
-    beforeMount() {
-        const tr = this.findTranslation();
-        this.originName = tr ? tr.name : this.translation.name;
-    },
+
     computed: {
+        translation() {
+            return this.translationItem.editTranslation;
+        },
         questionnaire() {
             return this.questionnaireStore.getInfo;
         },
-        dirty() {
-            return this.translation.name != this.originName || this.file.length > 0;
+        isDirty() {
+            return this.translation.name != this.translationItem.name || (this.translation.file && this.translation.file.length > 0);
         },
         hasPatternError() {
             return (this.translation.name) ? false : true;
@@ -159,17 +158,18 @@ export default {
 
             var fileNameLength = translation.name.length;
             translation.name = translation.name.substring(0, fileNameLength < maxNameLength ? fileNameLength : maxNameLength);
-            translation.oldTranslationId = translation.translationId;
-            translation.translationId = newGuid();
         },
 
         async saveTranslation() {
             if (!this.translation.isOriginalTranslation) {
+
+                this.translation.oldTranslationId = this.translation.translationId;
+                this.translation.translationId = newGuid();
+
                 const response = await updateTranslation(this.questionnaireId, this.translation)
 
-                this.originName = this.translation.name;
-
-                if (this.translation.file) notice(response);
+                if (this.translation.file)
+                    notice(response);
                 this.translation.file = null;
                 this.file = [];
             }
@@ -182,13 +182,13 @@ export default {
                     hideIfDisabled: this.questionnaire.hideIfDisabled,
                     defaultLanguageName: this.translation.name
                 });
-                this.originName = this.translation.name;
             }
         },
 
         cancel() {
-            this.translation.name = this.originName;
-            this.file = [];
+            var clonned = _.cloneDeep(this.translationItem);
+            clonned.editTranslation = null;
+            this.translationItem.editTranslation = clonned;
         },
 
         deleteTranslation(event) {

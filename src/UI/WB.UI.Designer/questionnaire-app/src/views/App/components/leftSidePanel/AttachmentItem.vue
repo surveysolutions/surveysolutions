@@ -202,10 +202,8 @@ export default {
             fu.$el.querySelector("#" + fu.inputId).click()
         },
         async saveAttachment() {
-
             this.attachment.oldAttachmentId = this.attachment.attachmentId;
-            var newAttachmentId = newGuid();
-            this.attachment.attachmentId = newAttachmentId;
+            this.attachment.attachmentId = newGuid();
 
             await updateAttachment(this.questionnaireId, this.attachment);
         },

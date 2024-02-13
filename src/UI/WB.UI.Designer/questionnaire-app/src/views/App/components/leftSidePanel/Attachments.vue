@@ -84,10 +84,6 @@ export default {
         };
     },
     computed: {
-        questionnaire() {
-            return this.questionnaireStore.getInfo;
-        },
-
         attachments() {
             return this.questionnaireStore.getInfo.attachments;
         },
