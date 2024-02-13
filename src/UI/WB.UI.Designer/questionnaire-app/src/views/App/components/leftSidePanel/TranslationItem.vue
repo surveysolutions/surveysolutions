@@ -65,7 +65,7 @@
   
 <script>
 
-import { isUndefined, isNull, each } from 'lodash'
+import { isUndefined, isNull, each, cloneDeep } from 'lodash'
 import moment from 'moment'
 import { notice } from '../../../../services/notificationService';
 import { newGuid } from '../../../../helpers/guid';
@@ -186,7 +186,7 @@ export default {
         },
 
         cancel() {
-            var clonned = _.cloneDeep(this.translationItem);
+            var clonned = cloneDeep(this.translationItem);
             clonned.editTranslation = null;
             this.translationItem.editTranslation = clonned;
         },
