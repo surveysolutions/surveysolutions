@@ -243,20 +243,12 @@ export default {
 
             if (this.activeQuestion.isLinked)
                 this.activeQuestion.isLinked = !isFilteredCombobox && !yesNoView;
-
-            this.markFormAsChanged();
         },
 
         setCategories(categories) {
             if (this.activeQuestion.categoriesId === categories.categoriesId) return;
 
             this.activeQuestion.categoriesId = categories.categoriesId;
-
-            this.markFormAsChanged();
-        },
-
-        markFormAsChanged() {
-            this.dirty = true;
         },
 
         setIsReusableCategories() {
@@ -264,8 +256,6 @@ export default {
 
             this.activeQuestion.isLinked = false;
             this.activeQuestion.isLinkedToReusableCategories = true;
-
-            this.markFormAsChanged();
         },
 
         setUserDefinedCategories() {
@@ -274,8 +264,6 @@ export default {
             this.activeQuestion.isLinked = false;
             this.activeQuestion.categoriesId = null;
             this.activeQuestion.isLinkedToReusableCategories = false;
-
-            this.markFormAsChanged();
         },
 
         setIsLinkedQuestion() {
@@ -284,8 +272,6 @@ export default {
             this.activeQuestion.isLinked = true;
             this.activeQuestion.isLinkedToReusableCategories = null;
             this.activeQuestion.categoriesId = null;
-
-            this.markFormAsChanged();
         },
 
         getCategoriesList() {

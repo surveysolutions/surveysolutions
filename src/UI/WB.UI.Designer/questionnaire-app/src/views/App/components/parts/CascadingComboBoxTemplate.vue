@@ -88,7 +88,6 @@ export default {
     },
     data() {
         return {
-            dirty: false,
         }
     },
     computed: {
@@ -130,12 +129,7 @@ export default {
             if (itemId) {
                 this.activeQuestion.cascadeFromQuestionId = itemId;
                 //this.activeQuestion.cascadeFromQuestion = find(this.sourceOfSingleQuestions, { id: this.activeQuestion.cascadeFromQuestionId });
-                this.markFormAsChanged();
             }
-        },
-
-        markFormAsChanged() {
-            this.dirty = true;
         },
     }
 }

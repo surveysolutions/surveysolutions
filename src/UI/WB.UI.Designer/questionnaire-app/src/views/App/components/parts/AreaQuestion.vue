@@ -83,7 +83,6 @@ export default {
     data() {
         return {
             valid: true,
-            dirty: false,
         }
     },
     computed: {
@@ -106,19 +105,11 @@ export default {
     methods: {
         changeGeometryType(geometry) {
             this.activeQuestion.geometryType = geometry;
-
-            this.markFormAsChanged();
         },
 
         changeGeometryInputMode(mode) {
             this.activeQuestion.geometryInputMode = mode;
-
-            this.markFormAsChanged();
         },
-
-        markFormAsChanged() {
-            this.dirty = true;
-        }
     }
 }
 </script>

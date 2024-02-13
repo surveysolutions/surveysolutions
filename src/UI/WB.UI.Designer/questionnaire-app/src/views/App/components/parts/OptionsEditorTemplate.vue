@@ -107,7 +107,6 @@ export default {
                 }
             },
             MAX_OPTIONS_COUNT: 200,
-            dirty: false,
         }
     },
     mounted() {
@@ -210,7 +209,6 @@ export default {
                 "id": newGuid()
             });
             this.activeQuestion.optionsCount += 1;
-            this.markFormAsChanged();
 
             this.$nextTick(() => {
                 const index = this.activeQuestion.options.length - 1;
@@ -220,11 +218,6 @@ export default {
 
         removeOption(index) {
             this.activeQuestion.options.splice(index, 1);
-            this.dirty = true;
-        },
-
-        markFormAsChanged() {
-            this.dirty = true;
         },
 
         onKeyPressInOptions(keyEvent) {

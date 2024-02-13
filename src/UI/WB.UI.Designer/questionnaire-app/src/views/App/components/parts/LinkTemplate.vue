@@ -72,7 +72,7 @@ export default {
     },
     data() {
         return {
-            dirty: false,
+
         };
     },
     computed: {
@@ -105,13 +105,7 @@ export default {
                     this.activeQuestion.linkedFilterExpression = filter;
                     this.activeQuestion.optionsFilterExpression = null;
                 }
-
-                this.setDirty();
             }
-        },
-
-        setDirty() {
-            this.dirty = true;
         },
     }
 };

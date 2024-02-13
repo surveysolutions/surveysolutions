@@ -157,7 +157,6 @@ export default {
             //totalResults: 0,
             open: false,
             MAX_OPTIONS_COUNT: 200,
-            dirty: false,
         }
     },
     setup() {
@@ -255,7 +254,6 @@ export default {
                         if (confirmResult === 'ok') {
                             this.activeQuestion.options = selectedClassification.categories;
                             this.activeQuestion.optionsCount = this.activeQuestion.options.length;
-                            this.markFormAsChanged();
                         }
                     });
                 } else {
@@ -267,7 +265,6 @@ export default {
                     this.activeQuestion.isFilteredCombobox = true;
                     this.activeQuestion.options = selectedClassification.categories;
                     this.activeQuestion.optionsCount = this.activeQuestion.options.length;
-                    this.markFormAsChanged();
                 }
             } else {
                 if (this.activeQuestion.isFilteredCombobox) {
@@ -278,7 +275,6 @@ export default {
                 }
                 this.activeQuestion.options = selectedClassification.categories;
                 this.activeQuestion.optionsCount = selectedClassification.categories.length;
-                this.markFormAsChanged();
             }
 
             this.open = false;
@@ -290,10 +286,6 @@ export default {
             this.open = true;
             await this.search();
         },
-
-        markFormAsChanged() {
-            this.dirty = true;
-        }
     }
 }
 </script>

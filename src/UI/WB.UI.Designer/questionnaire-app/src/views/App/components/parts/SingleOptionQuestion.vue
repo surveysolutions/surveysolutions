@@ -190,7 +190,6 @@ export default {
     },
     data() {
         return {
-            dirty: false,
         }
     },
     mounted() {
@@ -242,8 +241,6 @@ export default {
             this.activeQuestion.isCascade = false;
             this.activeQuestion.isLinked = false;
             this.activeQuestion.isFilteredCombobox = false;
-
-            this.markFormAsChanged();
         },
 
         setQuestionAsCombobox() {
@@ -251,8 +248,6 @@ export default {
 
             this.activeQuestion.isCascade = false;
             this.activeQuestion.isFilteredCombobox = true;
-
-            this.markFormAsChanged();
         },
 
         setQuestionAsCascading() {
@@ -261,12 +256,6 @@ export default {
             this.activeQuestion.isLinked = false;
             this.activeQuestion.isFilteredCombobox = false;
             this.activeQuestion.isCascade = true;
-
-            this.markFormAsChanged();
-        },
-
-        markFormAsChanged() {
-            this.dirty = true;
         },
 
         setIsReusableCategories() {
@@ -275,8 +264,6 @@ export default {
             this.activeQuestion.isLinked = false;
             this.activeQuestion.categoriesId = null;
             this.activeQuestion.isLinkedToReusableCategories = true;
-
-            this.markFormAsChanged();
         },
 
         setUserDefinedCategories() {
@@ -285,8 +272,6 @@ export default {
             this.activeQuestion.isLinked = false;
             this.activeQuestion.categoriesId = null;
             this.activeQuestion.isLinkedToReusableCategories = false;
-
-            this.markFormAsChanged();
         },
 
         setIsLinkedQuestion() {
@@ -296,8 +281,6 @@ export default {
             this.activeQuestion.isCascade = false;
             this.activeQuestion.isLinkedToReusableCategories = null;
             this.activeQuestion.categoriesId = null;
-
-            this.markFormAsChanged();
         },
 
         getCategoriesList() {
@@ -311,8 +294,6 @@ export default {
             if (this.activeQuestion.categoriesId === categories.categoriesId) return;
 
             this.activeQuestion.categoriesId = categories.categoriesId;
-
-            this.markFormAsChanged();
         },
 
         editCascadingComboboxOptions() {
