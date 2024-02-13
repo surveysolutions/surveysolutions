@@ -413,6 +413,11 @@ export const useTreeStore = defineStore('tree', {
             );
             parent.items.splice(index, 1);
 
+            if (newParentId == this.chapterId) {
+                this.info.chapter.items.splice(newIndex, 0, treeItem);
+                return;
+            }
+
             var newParent = this.findTreeItem(newParentId);
             if (isNull(newParent) || isUndefined(newParent)) {
                 return;
