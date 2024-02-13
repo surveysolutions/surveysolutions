@@ -407,7 +407,7 @@ export default {
                 params: {
                     entityId: variable.itemId
                 }
-            });*/
+            });
         },
         searchForQuestion(chapter) { },
         pasteItemInto(chapterInfo) {
