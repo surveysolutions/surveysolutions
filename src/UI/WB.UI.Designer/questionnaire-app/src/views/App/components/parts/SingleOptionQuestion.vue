@@ -117,9 +117,8 @@
     <div class="row"
         v-if="activeQuestion.isFilteredCombobox && !activeQuestion.isCascade && !activeQuestion.isLinkedToReusableCategories && !activeQuestion.isLinked">
         <div class="col-xs-12">
-            <a href="javascript:void(0);" class="btn btn-link upload-categories-button"
-                @click="editFilteredComboboxOptions()">{{ $t('QuestionnaireEditor.QuestionUploadOptions') }}
-            </a>
+            <FilteredComboboxOptionsTemplate :active-question="activeQuestion" :questionnaire-id="questionnaireId">
+            </FilteredComboboxOptionsTemplate>
             <a href="javascript:void(0);" class="btn btn-link" @click="showAddClassificationModal()">{{
                 $t('QuestionnaireEditor.QuestionAddClassification') }}
             </a>
@@ -170,6 +169,7 @@ import CategoricalFilterExpression from './CategoricalFilterExpression.vue'
 import CascadingComboBoxTemplate from './CascadingComboBoxTemplate.vue'
 import LinkTemplate from './LinkTemplate.vue'
 import AddClassification from './AddClassification.vue';
+import FilteredComboboxOptionsTemplate from './FilteredComboboxOptionsTemplate.vue'
 import _ from 'lodash';
 
 export default {
@@ -182,6 +182,7 @@ export default {
         CascadingComboBoxTemplate,
         LinkTemplate,
         AddClassification,
+        FilteredComboboxOptionsTemplate,
     },
     props: {
         questionnaireId: { type: String, required: true },

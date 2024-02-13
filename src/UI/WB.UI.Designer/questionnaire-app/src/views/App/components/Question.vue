@@ -273,9 +273,15 @@ export default {
         questionnaireId: { type: String, required: true },
         questionId: { type: String, required: true }
     },
+    provide() {
+        return {
+            openExternalEditor: this.openExternalEditor,
+        };
+    },
     data() {
         return {
-            shouldUserSeeReloadDetailsPromt: null,
+            shouldUserSeeReloadDetailsPromt: false,
+            openEditor: null,
 
             showInstruction: null,
             showEnablingConditions: null,
@@ -320,6 +326,18 @@ export default {
     },
     mounted() {
         this.scrollTo();
+
+        // https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API
+        // Automatically reload window on popup close. If supported by browser
+        if ('BroadcastChannel' in window) {
+            this.bcChannel = new BroadcastChannel("editcategory")
+            this.bcChannel.onmessage = ev => {
+                console.log(ev.data)
+                if (ev.data === 'close#' + this.openEditor) {
+                    window.location.reload();
+                }
+            }
+        }
     },
     created() {
         window.addEventListener('beforeunload', this.beforeWindowUnload)
@@ -648,7 +666,14 @@ export default {
                 e.returnValue = '' //for chrome
             }
             return null;
-        }
+        },
+
+        openExternalEditor(id, url) {
+            this.shouldUserSeeReloadDetailsPromt = true;
+            this.openEditor = id
+
+            window.open(url, "", "scrollbars=yes, center=yes, modal=yes, width=960, height=745, top=" + (screen.height - 745) / 4 + ", left= " + (screen.width - 960) / 2, true);
+        },
     }
 }
 </script>

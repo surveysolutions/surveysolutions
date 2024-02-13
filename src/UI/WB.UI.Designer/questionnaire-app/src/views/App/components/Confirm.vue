@@ -17,7 +17,7 @@
                         <button class="btn btn-primary btn-lg" v-if="!isReadOnly" @click="ok()">
                             {{ okButtonTitle || $t('QuestionnaireEditor.OK') }}
                         </button>
-                        <button class="btn btn-link" @click="cancel()">
+                        <button v-if="!isAlert" class="btn btn-link" @click="cancel()">
                             {{
                                 cancelButtonTitle ||
                                 $t('QuestionnaireEditor.Cancel')
@@ -47,6 +47,7 @@ const confirmDialog = {
             isReadOnly: { type: Boolean, required: false },
             callback: { type: Function, required: false },
             noControls: { type: Boolean, required: false },
+            isAlert: { type: Boolean, required: false, default: false },
             isOpen: false
         };
     },
@@ -65,6 +66,7 @@ const confirmDialog = {
             this.okButtonTitle = params.okButtonTitle;
             this.cancelButtonTitle = params.cancelButtonTitle;
             this.isReadOnly = params.isReadOnly || false;
+            this.isAlert = params.isAlert || false;
             this.callback = params.callback;
             this.noControls = params.noControls || false;
             this.isOpen = true;

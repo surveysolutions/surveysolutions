@@ -106,9 +106,8 @@
     </div>
     <div class="row" v-if="activeQuestion.isFilteredCombobox && !activeQuestion.isLinkedToReusableCategories">
         <div class="col-xs-12">
-            <a href="javascript:void(0);" class="btn btn-link upload-categories-button"
-                @click="editFilteredComboboxOptions()">{{ $t('QuestionnaireEditor.QuestionUploadOptions') }}
-            </a>
+            <FilteredComboboxOptionsTemplate :active-question="activeQuestion" :questionnaire-id="questionnaireId">
+            </FilteredComboboxOptionsTemplate>
             <a href="javascript:void(0);" class="btn btn-link" @click="showAddClassificationModal()">{{
                 $t('QuestionnaireEditor.QuestionAddClassification') }}
             </a>
@@ -162,7 +161,7 @@ import OptionsEditorTemplate from './OptionsEditorTemplate.vue'
 import CategoricalFilterExpression from './CategoricalFilterExpression.vue'
 import LinkTemplate from './LinkTemplate.vue'
 import AddClassification from './AddClassification.vue';
-
+import FilteredComboboxOptionsTemplate from './FilteredComboboxOptionsTemplate.vue'
 import { categoricalMultiKinds } from '../../../../helpers/question'
 import { isInteger } from '../../../../helpers/number';
 import _ from 'lodash';
@@ -176,6 +175,7 @@ export default {
         CategoricalFilterExpression,
         LinkTemplate,
         AddClassification,
+        FilteredComboboxOptionsTemplate,
     },
     props: {
         questionnaireId: { type: String, required: true },
