@@ -162,7 +162,7 @@ export default {
             const afterItemId = this.getAfterItemId();
             addQuestion(this.questionnaireId, parent, afterItemId);
 
-            (question, parent, index) => {
+            /*(question, parent, index) => {
                 this.tree.add(question, this.getParentStat(), index);
                 this.$router.push({
                     name: 'question',
@@ -170,14 +170,14 @@ export default {
                         entityId: question.itemId
                     }
                 });
-            }
+            }*/
         },
         addGroup() {
             const parent = this.getParentItem();
             const afterItemId = this.getAfterItemId();
             addGroup(this.questionnaireId, parent, afterItemId);
 
-            (group, parent, index) => {
+            /*(group, parent, index) => {
                 this.tree.add(group, this.getParentStat(), index);
 
                 this.$router.push({
@@ -186,14 +186,14 @@ export default {
                         entityId: group.itemId
                     }
                 });
-            }
+            }*/
         },
         addRoster() {
             const parent = this.getParentItem();
             const afterItemId = this.getAfterItemId();
             addRoster(this.questionnaireId, parent, afterItemId);
 
-            (roster, parent, index) => {
+            /*(roster, parent, index) => {
                 this.tree.add(roster, this.getParentStat(), index);
 
                 this.$router.push({
@@ -202,7 +202,7 @@ export default {
                         entityId: roster.itemId
                     }
                 });
-            }
+            }*/
 
         },
         addStaticText() {
@@ -210,7 +210,7 @@ export default {
             const afterItemId = this.getAfterItemId();
             addStaticText(this.questionnaireId, parent, afterItemId);
 
-            (statictext, parent, index) => {
+            /*(statictext, parent, index) => {
                 this.tree.add(statictext, this.getParentStat(), index);
 
                 this.$router.push({
@@ -219,7 +219,7 @@ export default {
                         entityId: statictext.itemId
                     }
                 });
-            }
+            }*/
 
         },
         addVariable() {
@@ -227,7 +227,7 @@ export default {
             const afterItemId = this.getAfterItemId();
             addVariable(this.questionnaireId, parent, afterItemId);
 
-            (variable, parent, index) => {
+            /*(variable, parent, index) => {
                 this.tree.add(variable, this.getParentStat(), index);
 
                 this.$router.push({
@@ -236,7 +236,7 @@ export default {
                         entityId: variable.itemId
                     }
                 });
-            }
+            }*/
         },
         getParentItem() {
             if (this.isGroup()) return this.item;
