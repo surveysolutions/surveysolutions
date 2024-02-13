@@ -360,7 +360,7 @@ export default {
             return 'Tree' + itemType;
         },
         async addQuestion(chapter) {
-            const question = await await addQuestion(this.questionnaireId, chapter, null);
+            const question = await addQuestion(this.questionnaireId, chapter, null);
 
             this.$router.push({
                 name: 'question',
