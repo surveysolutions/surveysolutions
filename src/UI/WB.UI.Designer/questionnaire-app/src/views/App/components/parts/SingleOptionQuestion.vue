@@ -174,7 +174,7 @@ import _ from 'lodash';
 
 export default {
     name: 'SingleOptionQuestion',
-    inject: ['questionnaire'],
+    inject: ['questionnaire', 'currentChapter', 'openExternalEditor'],
     components: {
         Help,
         OptionsEditorTemplate,
@@ -314,6 +314,43 @@ export default {
 
             this.markFormAsChanged();
         },
+
+        editCascadingComboboxOptions() {
+            const wasCascadeFromQuestionIdChanged = (this.activeQuestion.cascadeFromQuestionId != this.initialQuestion.cascadeFromQuestionId);
+            if (this.questionStore.getIsDirty || wasCascadeFromQuestionIdChanged) {
+                const params = {
+                    title: this.$t('QuestionnaireEditor.QuestionOpenEditorConfirm'),
+                    okButtonTitle: this.$t('QuestionnaireEditor.Save'),
+                    cancelButtonTitle: this.$t('QuestionnaireEditor.Cancel'),
+                    isReadOnly: this.questionnaire.isReadOnlyForUser || this.currentChapter.isReadOnly,
+                    callback: async confirm => {
+                        if (confirm) {
+                            await this.questionStore.saveQuestionData(this.questionnaireId, this.activeQuestion);
+
+                            const alertParams = {
+                                title: this.$t('QuestionnaireEditor.QuestionOpenEditorSaved'),
+                                okButtonTitle: this.$t('QuestionnaireEditor.Ok'),
+                                isReadOnly: this.questionnaire.isReadOnlyForUser || this.currentChapter.isReadOnly,
+                                isAlert: true,
+                                callback: async alertConfirm => {
+                                    this.openCascadeOptionsEditor();
+                                }
+                            }
+
+                            this.$confirm(alertParams);
+                        }
+                    }
+                };
+
+                this.$confirm(params);
+            } else {
+                this.openCascadeOptionsEditor();
+            }
+        },
+
+        openCascadeOptionsEditor() {
+            this.openExternalEditor(this.activeQuestion.id, "/questionnaire/editoptions/" + this.questionnaireId + "?questionid=" + this.activeQuestion.id + "&cascading=true")
+        }
     }
 }
 </script>
