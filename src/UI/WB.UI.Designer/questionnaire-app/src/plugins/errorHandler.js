@@ -4,7 +4,7 @@ const api = mande('/q/errors');
 
 export function setupErrorHandler(app) {
     app.config.errorHandler = (err, vm, info) => {
-        const errorDetails = {
+        var errorDetails = {
             message: err.message,
             additionalData: {
                 component: vm.$options.name,
@@ -13,6 +13,11 @@ export function setupErrorHandler(app) {
                 info
             }
         };
+
+        if (err.response) {
+            errorDetails.additionalData.resposeStatus = err.response.status;
+            errorDetails.additionalData.requestedUrl = err.response.url;
+        }
 
         api.post('', errorDetails).catch(error => {
             console.error('Error sending error details to server:', error);
