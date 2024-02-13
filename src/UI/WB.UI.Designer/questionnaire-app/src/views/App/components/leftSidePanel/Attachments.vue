@@ -1,5 +1,4 @@
 <template>
-    <div style="color: brown; font-size: large;">Under construction</div>
     <div class="attachments">
         <perfect-scrollbar class="scroller">
             <div class="panel-header clearfix">
