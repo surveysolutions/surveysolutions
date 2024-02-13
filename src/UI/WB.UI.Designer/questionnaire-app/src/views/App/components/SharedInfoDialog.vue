@@ -95,7 +95,7 @@
                                     <br />
                                     <ul class="accounts">
                                         <li v-for="s in questionnaire.sharedPersons">
-                                            <a href="mailto:{{s.email}}">
+                                            <a :href="'mailto:' + s.email">
                                                 {{ s.email }}
                                             </a>
                                             ({{ s.login }}) -
@@ -215,10 +215,10 @@
                                                 <div style="margin-top: 15px">
                                                     {{ $t('QuestionnaireEditor.AnonymousLink') }}
                                                 </div>
-                                                <a v-href="getAnonymousQuestionnaireLink()" style="word-break: break-word;"
+                                                <a :href="getAnonymousQuestionnaireLink" style="word-break: break-word;"
                                                     title="link" onclick="return false;">
                                                     {{
-                                                        getAnonymousQuestionnaireLink()
+                                                        getAnonymousQuestionnaireLink
                                                     }}
                                                 </a>
                                                 <br />
@@ -360,6 +360,13 @@ export default {
             var user = this.questionnaire.sharedPersons.find(item => item.email == userEmail);
             return user && user.isOwner;
         },
+        getAnonymousQuestionnaireLink() {
+            return (
+                window.location.origin +
+                '/q/details/' +
+                this.questionnaire.anonymousQuestionnaireId
+            );
+        },
     },
     expose: ['open', 'close'],
     methods: {
@@ -387,13 +394,6 @@ export default {
                 '/q/details/' +
                 this.questionnaire.anonymousQuestionnaireId;
             navigator.clipboard.writeText(link);
-        },
-        getAnonymousQuestionnaireLink() {
-            return (
-                window.location.origin +
-                '/q/details/' +
-                this.questionnaire.anonymousQuestionnaireId
-            );
         },
         updateAnonymousQuestionnaireSettings() {
             updateAnonymousQuestionnaireSettings(
