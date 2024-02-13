@@ -183,7 +183,7 @@ export default {
 
             var categories = { categoriesId: newGuid() };
 
-            await updateCategories(this.questionnaireId, categories)
+            var response = await updateCategories(this.questionnaireId, categories)
             if (response.status !== 200) return;
 
             /*categories.checkpoint = categories.checkpoint || {};
