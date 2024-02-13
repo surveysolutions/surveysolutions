@@ -145,6 +145,7 @@ export default {
     },
     inject: ['questionnaire', 'currentChapter'],
     props: {
+        questionnaireId: { type: String, required: true },
         activeQuestion: { type: Object, required: true },
     },
     data() {
