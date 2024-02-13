@@ -73,6 +73,8 @@ export function addGroup(questionnaireId, parent, afterNodeId) {
             index: index,
             parent: parent
         });
+
+        return group;
     });
 }
 

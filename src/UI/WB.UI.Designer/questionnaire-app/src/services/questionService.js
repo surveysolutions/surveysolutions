@@ -167,6 +167,8 @@ export function addQuestion(questionnaireId, parent, afterNodeId) {
             index: index,
             parent: parent
         });
+
+        return emptyQuestion;
     });
 }
 

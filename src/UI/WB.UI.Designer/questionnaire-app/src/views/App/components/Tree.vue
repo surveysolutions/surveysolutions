@@ -360,21 +360,17 @@ export default {
             return 'Tree' + itemType;
         },
         async addQuestion(chapter) {
-            await addQuestion(
-                this.questionnaireId,
-                chapter,
-                null,
-            );
+            const question = await await addQuestion(this.questionnaireId, chapter, null);
 
-            /*this.$router.push({
+            this.$router.push({
                 name: 'question',
                 params: {
                     entityId: question.itemId
                 }
-            });*/
+            });
         },
         async addGroup(chapter) {
-            await addGroup(this.questionnaireId, chapter, null);
+            const group = await addGroup(this.questionnaireId, chapter, null);
 
             this.$router.push({
                 name: 'group',
@@ -384,29 +380,29 @@ export default {
             });
         },
         async addRoster(chapter) {
-            await addRoster(this.questionnaireId, chapter, null);
+            const roster = await addRoster(this.questionnaireId, chapter, null);
 
-            /*this.$router.push({
+            this.$router.push({
                 name: 'roster',
                 params: {
                     entityId: roster.itemId
                 }
-            });*/
+            });
         },
         async addStaticText(chapter) {
-            await addStaticText(this.questionnaireId, chapter, null);
+            const statictext = await addStaticText(this.questionnaireId, chapter, null);
 
-            /*this.$router.push({
+            this.$router.push({
                 name: 'statictext',
                 params: {
                     entityId: statictext.itemId
                 }
-            });*/
+            });
         },
         async addVariable(chapter) {
-            await addVariable(this.questionnaireId, chapter, null);
+            const variable = await addVariable(this.questionnaireId, chapter, null);
 
-            /*this.$router.push({
+            this.$router.push({
                 name: 'variable',
                 params: {
                     entityId: variable.itemId
@@ -561,18 +557,6 @@ export default {
 
             const refEntity = this.treeStore.findTreeItem(entity.itemId);
             tree.add(refEntity, parentStat, index);
-
-            let routeName = refEntity.itemType.toLowerCase()
-            if (routeName == 'group' && refEntity.isRoster) {
-                routeName = 'roster'
-            }
-
-            this.$router.push({
-                name: routeName,
-                params: {
-                    entityId: refEntity.itemId
-                }
-            });
         },
     }
 };

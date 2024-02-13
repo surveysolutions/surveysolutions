@@ -106,6 +106,8 @@ export function addRoster(questionnaireId, parent, afterNodeId) {
             index: index,
             parent: parent
         });
+
+        return roster;
     });
 }
 

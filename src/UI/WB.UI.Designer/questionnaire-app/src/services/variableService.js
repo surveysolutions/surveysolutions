@@ -66,6 +66,8 @@ export function addVariable(questionnaireId, parent, afterNodeId) {
             index: index,
             parent: parent
         });
+
+        return variable;
     });
 }
 

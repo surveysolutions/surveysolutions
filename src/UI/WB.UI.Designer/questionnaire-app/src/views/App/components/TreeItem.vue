@@ -157,86 +157,65 @@ export default {
         }
     },
     methods: {
-        addQuestion() {
+        async addQuestion() {
             const parent = this.getParentItem();
             const afterItemId = this.getAfterItemId();
-            addQuestion(this.questionnaireId, parent, afterItemId);
+            const question = await addQuestion(this.questionnaireId, parent, afterItemId);
 
-            /*(question, parent, index) => {
-                this.tree.add(question, this.getParentStat(), index);
-                this.$router.push({
-                    name: 'question',
-                    params: {
-                        entityId: question.itemId
-                    }
-                });
-            }*/
+            this.$router.push({
+                name: 'question',
+                params: {
+                    entityId: question.itemId
+                }
+            });
         },
-        addGroup() {
+        async addGroup() {
             const parent = this.getParentItem();
             const afterItemId = this.getAfterItemId();
-            addGroup(this.questionnaireId, parent, afterItemId);
+            const group = await addGroup(this.questionnaireId, parent, afterItemId);
 
-            /*(group, parent, index) => {
-                this.tree.add(group, this.getParentStat(), index);
-
-                this.$router.push({
-                    name: 'group',
-                    params: {
-                        entityId: group.itemId
-                    }
-                });
-            }*/
+            this.$router.push({
+                name: 'group',
+                params: {
+                    entityId: group.itemId
+                }
+            });
         },
-        addRoster() {
+        async addRoster() {
             const parent = this.getParentItem();
             const afterItemId = this.getAfterItemId();
-            addRoster(this.questionnaireId, parent, afterItemId);
+            const roster = await addRoster(this.questionnaireId, parent, afterItemId);
 
-            /*(roster, parent, index) => {
-                this.tree.add(roster, this.getParentStat(), index);
-
-                this.$router.push({
-                    name: 'roster',
-                    params: {
-                        entityId: roster.itemId
-                    }
-                });
-            }*/
-
+            this.$router.push({
+                name: 'roster',
+                params: {
+                    entityId: roster.itemId
+                }
+            });
         },
-        addStaticText() {
+        async addStaticText() {
             const parent = this.getParentItem();
             const afterItemId = this.getAfterItemId();
-            addStaticText(this.questionnaireId, parent, afterItemId);
+            const statictext = await addStaticText(this.questionnaireId, parent, afterItemId);
 
-            /*(statictext, parent, index) => {
-                this.tree.add(statictext, this.getParentStat(), index);
-
-                this.$router.push({
-                    name: 'statictext',
-                    params: {
-                        entityId: statictext.itemId
-                    }
-                });
-            }*/
-
+            this.$router.push({
+                name: 'statictext',
+                params: {
+                    entityId: statictext.itemId
+                }
+            });
         },
-        addVariable() {
+        async addVariable() {
             const parent = this.getParentItem();
             const afterItemId = this.getAfterItemId();
-            addVariable(this.questionnaireId, parent, afterItemId);
+            const variable = await addVariable(this.questionnaireId, parent, afterItemId);
 
-            /*(variable, parent, index) => {
-                this.tree.add(variable, this.getParentStat(), index);
-
-                this.$router.push({
-                    name: 'variable',
-                    params: {
-                        entityId: variable.itemId
-                    }
-                });
-            }*/
+            this.$router.push({
+                name: 'variable',
+                params: {
+                    entityId: variable.itemId
+                }
+            });
         },
         getParentItem() {
             if (this.isGroup()) return this.item;

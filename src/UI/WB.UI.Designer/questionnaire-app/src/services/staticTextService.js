@@ -64,6 +64,8 @@ export function addStaticText(questionnaireId, parent, afterNodeId) {
             index: index,
             parent: parent
         });
+
+        return staticText;
     });
 }
 
