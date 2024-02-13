@@ -17,7 +17,7 @@
 
         <div class="form-group col-xs-1">
             <button type="button" class="btn cross filter-cross"
-                @click="activeQuestion.showFilterInput = false; activeQuestion.linkedFilterExpression = ''; activeQuestion.optionsFilterExpression = ''; questionForm.$setDirty();"></button>
+                @click="activeQuestion.showFilterInput = false; activeQuestion.linkedFilterExpression = ''; activeQuestion.optionsFilterExpression = '';"></button>
         </div>
     </div>
 </template>
