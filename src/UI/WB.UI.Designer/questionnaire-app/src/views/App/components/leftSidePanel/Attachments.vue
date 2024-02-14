@@ -29,7 +29,7 @@
             <div class="empty-list" v-if="attachments.length == 0">
                 <p> {{ $t('QuestionnaireEditor.SideBarAttachmentsEmptyLine1') }} </p>
                 <p>
-                    <span>{{ $t('QuestionnaireEditor.SideBarAttachmentsEmptyLine2') }}</span>
+                    <span>{{ $t('QuestionnaireEditor.SideBarAttachmentsEmptyLine2') }}</span><span>&nbsp;</span>
                     <a href="https://support.mysurvey.solutions/questionnaire-designer/limits/multimedia-reference"
                         target="_blank">
                         {{ $t('QuestionnaireEditor.ClickHere') }}
