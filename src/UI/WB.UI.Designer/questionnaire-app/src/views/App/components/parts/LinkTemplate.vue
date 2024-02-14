@@ -33,7 +33,7 @@
                             @click="setLinkSource(breadCrumb.id, activeQuestion.linkedFilterExpression, activeQuestion.optionsFilterExpression)"
                             role="menuitem" tabindex="-1" class="linked-roster-source" href="javascript:void(0);">
                             <div>
-                                <i class="dropdown-icon icon-{{breadCrumb.questionType || 'none'}}"></i>
+                                <i class="dropdown-icon" :class="['icon-' + breadCrumb.questionType || 'none']"></i>
                                 <span v-dompurify-html="breadCrumb.title"></span>
                             </div>
                             <div class="var-block">
@@ -45,7 +45,7 @@
                             @click="setLinkSource(breadCrumb.id, activeQuestion.linkedFilterExpression, activeQuestion.optionsFilterExpression)"
                             role="menuitem" tabindex="-1" class="linked-question-source" href="javascript:void(0);">
                             <div>
-                                <i class="dropdown-icon icon-{{breadCrumb.type}}"></i>
+                                <i class="dropdown-icon" :class="['icon-' + breadCrumb.type]"></i>
                                 <span v-dompurify-html="breadCrumb.title"></span>
                             </div>
                             <div class="var-block">

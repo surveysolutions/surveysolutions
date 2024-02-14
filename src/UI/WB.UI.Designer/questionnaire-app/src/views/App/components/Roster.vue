@@ -144,7 +144,7 @@
                                     <a v-if="!breadCrumb.isSectionPlaceHolder" @click="selectTitleQuestion(breadCrumb.id)"
                                         role="menuitem" tabindex="-1" href="javascript:void(0);">
                                         <div>
-                                            <i class="dropdown-icon icon-{{breadCrumb.type}}"></i>
+                                            <i class="dropdown-icon" :class="['icon-' + breadCrumb.type]"></i>
                                             <span v-dompurify-html="breadCrumb.title"></span>
                                         </div>
                                         <div class="var-block">
