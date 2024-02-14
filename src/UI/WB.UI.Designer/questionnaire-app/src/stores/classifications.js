@@ -67,19 +67,6 @@ export const useClassificationsStore = defineStore('classifications', {
             this.classifications1 = classifications.slice(0, half);
             this.classifications2 = classifications.slice(half);
             this.totalResults = data.total;
-        },
-
-        replaceOptionsWithClassification(
-            questionnaireId,
-            questionId,
-            classificationId
-        ) {
-            var command = {
-                questionnaireId: questionnaireId,
-                questionId: questionId,
-                classificationId: classificationId
-            };
-            return commandCall('ReplaceOptionsWithClassification', command);
         }
     }
 });

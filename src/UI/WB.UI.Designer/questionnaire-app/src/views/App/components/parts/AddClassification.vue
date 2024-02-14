@@ -136,6 +136,7 @@
 import { useClassificationsStore } from '../../../../stores/classifications';
 
 import { willBeTakenOnlyFirstOptionsConfirmationPopup } from '../../../../services/utilityService'
+import { replaceOptionsWithClassification } from '../../../../services/classificationIdService'
 
 import { debounce, isNull, isUndefined } from 'lodash'
 
@@ -246,21 +247,18 @@ export default {
 
             if (optionsToInsertCount > this.MAX_OPTIONS_COUNT) {
                 if (this.activeQuestion.type !== "SingleOption") {
-
-                    var modalInstance = confirmService.open(
-                        willBeTakenOnlyFirstOptionsConfirmationPopup(questionTitle,
-                            this.MAX_OPTIONS_COUNT));
-
-                    modalInstance.result.then(function (confirmResult) {
-                        if (confirmResult === 'ok') {
+                    var modalParams = willBeTakenOnlyFirstOptionsConfirmationPopup(questionTitle, this.MAX_OPTIONS_COUNT);
+                    modalParams.callback = confirmResult => {
+                        if (confirmResult) {
                             this.activeQuestion.options = selectedClassification.categories;
                             this.activeQuestion.optionsCount = this.activeQuestion.options.length;
                         }
-                    });
+                    }
+                    this.$confirm(modalParams);
                 } else {
-                    this.classificationsStore.replaceOptionsWithClassification(
+                    replaceOptionsWithClassification(
                         this.questionnaireId,
-                        this.activeQuestion.itemId,
+                        this.activeQuestion.id,
                         selectedClassification.id);
 
                     this.activeQuestion.isFilteredCombobox = true;
@@ -269,7 +267,7 @@ export default {
                 }
             } else {
                 if (this.activeQuestion.isFilteredCombobox) {
-                    this.classificationsStore.replaceOptionsWithClassification(
+                    replaceOptionsWithClassification(
                         this.questionnaireId,
                         this.activeQuestion.id,
                         selectedClassification.id);
