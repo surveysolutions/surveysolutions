@@ -7,8 +7,8 @@ export function setupErrorHandler(app) {
         var errorDetails = {
             message: err.message,
             additionalData: {
-                component: vm.$options.name,
-                route: vm.$route.fullPath,
+                component: vm?.$options?.name,
+                route: vm?.$route.fullPath,
                 stack: err.stack,
                 info
             }
