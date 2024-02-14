@@ -2,8 +2,7 @@
     <form name="translation.form">
         <div class="translations-panel-item"
             :class="{ 'has-error': hasPatternError, 'dragover': !translation.isOriginalTranslation && $refs.upload && $refs.upload.dropActive }"
-            ngf-drop="" ngf-max-size="4MB" ngf-change="fileSelected(translation, $file)"
-            ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
+            ngf-drop="" ngf-max-size="4MB" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
             <a href="javascript:void(0);" @click="deleteTranslation($event)" v-if="!isReadOnlyForUser"
                 class="btn delete-btn" tabindex="-1" v-show="!translation.isOriginalTranslation && !isReadOnlyForUser"></a>
             <div class="translation-content">
@@ -108,7 +107,7 @@ export default {
             return this.questionnaireStore.getInfo;
         },
         isDirty() {
-            return this.translation.name != this.translationItem.name || (this.translation.file && this.translation.file.length > 0);
+            return this.translation.name != this.translationItem.name || (this.translation.file !== null && this.translation.file !== undefined);
         },
         hasPatternError() {
             return (this.translation.name) ? false : true;

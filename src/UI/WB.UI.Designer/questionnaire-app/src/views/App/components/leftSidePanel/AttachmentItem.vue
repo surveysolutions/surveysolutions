@@ -62,9 +62,9 @@
                                 <span>{{ $t('QuestionnaireEditor.Update') }}</span>
                             </button>
 
-                            <file-upload ref="upload" v-if="!isReadOnlyForUser" :input-id="'tfunew'"
-                                v-model="attachment.file" :size="100 * 1024 * 1024" :drop="false" :drop-directory="false"
-                                @input-file="fileSelected" accept=".pdf,image/*,video/*,audio/*">
+                            <file-upload ref="upload" v-if="!isReadOnlyForUser" :input-id="'tfunew'" v-model="file"
+                                :size="100 * 1024 * 1024" :drop="false" :drop-directory="false" @input-file="fileSelected"
+                                accept=".pdf,image/*,video/*,audio/*">
                             </file-upload>
 
                             <a :href="getDownloadUrl()" class="btn btn-default pull-right" target="_blank"
@@ -95,6 +95,7 @@ export default {
     data() {
         return {
             downloadBaseUrl: '/attachments',
+            file: []
         }
     },
     computed: {
@@ -102,7 +103,7 @@ export default {
             return this.attachmentItem.editAttachment;
         },
         isDirty() {
-            return this.attachment.name != this.attachmentItem.name || (this.attachment.file && this.attachment.file.length > 0);
+            return this.attachment.name != this.attachmentItem.name || (this.attachment.file !== null && this.attachment.file !== undefined);
         },
         isInvalid() {
             return true;
@@ -113,7 +114,7 @@ export default {
             return formatBytes(bytes);
         },
         previewAttachment() {
-            if (this.attachment.file)
+            if (this.attachment.file !== null && this.attachment.file !== undefined)
                 return;
             var srcImage = this.attachment.file || (this.downloadBaseUrl + "/" + this.questionnaireId + "/thumbnail/" + this.attachment.attachmentId + '/568');
             var confirmParams = {
@@ -136,7 +137,6 @@ export default {
         },
         isNameValid() {
             return true;
-            //return name && name.length < 32;
         },
         //TODO move to reuse
         async fileSelected(file) {
@@ -206,6 +206,9 @@ export default {
             this.attachment.attachmentId = newGuid();
 
             await updateAttachment(this.questionnaireId, this.attachment);
+
+            this.attachment.file = null;
+            this.file = [];
         },
         cancel() {
             var clonned = _.cloneDeep(this.attachmentItem);
