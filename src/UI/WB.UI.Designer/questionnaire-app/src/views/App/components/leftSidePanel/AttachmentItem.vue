@@ -67,7 +67,7 @@
                                 @input-file="fileSelected" accept=".pdf,image/*,video/*,audio/*">
                             </file-upload>
 
-                            <a :href="getDownloadUrl" class="btn btn-default pull-right" target="_blank"
+                            <a :href="getDownloadUrl()" class="btn btn-default pull-right" target="_blank"
                                 rel="noopener noreferrer">{{
                                     $t('QuestionnaireEditor.Download') }}</a>
                         </div>
@@ -125,7 +125,7 @@ export default {
             this.$confirm(confirmParams);
         },
         getDownloadUrl() {
-            return this.attachment ? this.downloadLookupFileBaseUrl + '/' + this.questionnaire.questionnaireId + '/' + this.attachment.attachmentId : '';
+            return this.attachment ? this.downloadBaseUrl + '/' + this.questionnaire.questionnaireId + '/' + this.attachment.attachmentId : '';
         },
         isAttachmentSizeTooBig() {
             return this.attachment.content.size > 5 * 1024 * 1824;
