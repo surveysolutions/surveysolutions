@@ -21,7 +21,8 @@
                         <v-form name="options_value_form">
                             <input type="number" min="-2147483648" max="2147483647" v-model="option.value"
                                 v-pattern="/^([-+]?\d+)$/" :name="'option_value_' + index"
-                                :class="{ 'has-error': !isInteger(option.value) }" @keypress="onKeyPressIsNumber($event)"
+                                :class="{ 'has-error': option.value && !isInteger(option.value) }"
+                                @keypress="onKeyPressIsNumber($event)"
                                 class="form-control question-option-value-editor border-right" />
                         </v-form>
                     </div>
