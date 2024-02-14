@@ -26,7 +26,8 @@
                                             printMargin: true,
                                             showLineNumbers: false,
                                             showGutter: false,
-                                            useWorker: false
+                                            useWorker: false,
+                                            readOnly: true
                                         }" />
                                     <!-- theme="chrome" -->
                                 </div>
