@@ -12,7 +12,7 @@ export function deleteGroup(questionnaireId, entityId) {
 
     return commandCall('DeleteGroup', command).then(result => {
         emitter.emit('groupDeleted', {
-            itemId: entityId
+            id: entityId
         });
     });
 }

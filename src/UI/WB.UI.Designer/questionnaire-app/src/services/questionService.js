@@ -141,7 +141,7 @@ export function deleteQuestion(questionnaireId, itemId) {
 
     return commandCall('DeleteQuestion', command).then(result => {
         emitter.emit('questionDeleted', {
-            itemId: itemId
+            id: itemId
         });
     });
 }

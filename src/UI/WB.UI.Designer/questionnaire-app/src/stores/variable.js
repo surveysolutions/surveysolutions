@@ -24,7 +24,7 @@ export const useVariableStore = defineStore('variable', {
             }
         },
         variableDeleted(payload) {
-            if ((this.variable.id = payload.itemId)) {
+            if ((this.variable.id = payload.id)) {
                 this.clear();
             }
         },

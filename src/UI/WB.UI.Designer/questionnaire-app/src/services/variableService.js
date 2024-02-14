@@ -11,7 +11,7 @@ export function deleteVariable(questionnaireId, entityId) {
 
     return commandCall('DeleteVariable', command).then(result => {
         emitter.emit('variableDeleted', {
-            itemId: entityId
+            id: entityId
         });
     });
 }

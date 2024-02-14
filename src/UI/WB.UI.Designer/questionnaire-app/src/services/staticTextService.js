@@ -12,7 +12,7 @@ export function deleteStaticText(questionnaireId, entityId) {
 
     return commandCall('DeleteStaticText', command).then(result => {
         emitter.emit('staticTextDeleted', {
-            itemId: entityId
+            id: entityId
         });
     });
 }

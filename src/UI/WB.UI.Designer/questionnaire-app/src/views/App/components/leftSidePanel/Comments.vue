@@ -93,6 +93,10 @@ export default {
         this.$emitter.on('variableUpdated', this.variableUpdated);
         this.$emitter.on('questionUpdated', this.questionUpdated);
 
+        this.$emitter.on('staticTextDeleted', this.entityDeleted);
+        this.$emitter.on('groupDeleted', this.entityDeleted);
+        this.$emitter.on('variableDeleted', this.entityDeleted);
+        this.$emitter.on('questionDeleted', this.entityDeleted);
     },
     unmounted() {
         this.$emitter.off('commentResolved', this.commentResolved);
@@ -104,6 +108,10 @@ export default {
         this.$emitter.off('variableUpdated', this.variableUpdated);
         this.$emitter.off('questionUpdated', this.questionUpdated);
 
+        this.$emitter.off('staticTextDeleted', this.entityDeleted);
+        this.$emitter.off('groupDeleted', this.entityDeleted);
+        this.$emitter.off('variableDeleted', this.entityDeleted);
+        this.$emitter.off('questionDeleted', this.entityDeleted);
     },
     methods: {
         async fetch() {
@@ -224,14 +232,29 @@ export default {
             }
         },
         questionUpdated(payload) {
+            const id = payload.id.replaceAll('-', '');
             const index = _.findIndex(this.commentThreads, function (i) {
-                return payload.id && i.entity.itemId === payload.id.replaceAll('-', '');
+                return i.entity.itemId === id;
             });
             if (index !== -1) {
                 this.commentThreads[index].entity.title = payload.title;
-                this.commentThreads[index].entity.variable = payload.variable;
+                this.commentThreads[index].entity.variable = payload.variableName;
             }
         },
+
+        entityDeleted(payload) {
+            var id = payload.itemId ?? payload.id;
+            if (id) {
+                id = id.replaceAll('-', '');
+                const index = _.findIndex(this.commentThreads, function (i) {
+                    return i.entity.itemId === id;
+                });
+                if (index !== -1) {
+                    this.commentThreads.splice(index, 1)
+                }
+            }
+        },
+
         sanitizeText(value) {
             const sanitizedValue = sanitize(value);
             return sanitizedValue;

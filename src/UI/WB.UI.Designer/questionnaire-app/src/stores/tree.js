@@ -326,19 +326,19 @@ export const useTreeStore = defineStore('tree', {
         },
 
         questionDeleted(data) {
-            this.deleteTreeNode(data.itemId);
-            this.removeVariableName(data.itemId);
+            this.deleteTreeNode(data.id);
+            this.removeVariableName(data.id);
         },
         staticTextDeleted(data) {
-            this.deleteTreeNode(data.itemId);
+            this.deleteTreeNode(data.id);
         },
         variableDeleted(data) {
-            this.deleteTreeNode(data.itemId);
-            this.removeVariableName(data.itemId);
+            this.deleteTreeNode(data.id);
+            this.removeVariableName(data.id);
         },
         groupDeleted(data) {
-            this.deleteTreeNode(data.itemId);
-            this.removeVariableName(data.itemId);
+            this.deleteTreeNode(data.id);
+            this.removeVariableName(data.id);
         },
         rosterDeleted(data) {
             this.deleteTreeNode(data.id);

@@ -25,7 +25,7 @@ export const useStaticTextStore = defineStore('staticText', {
             }
         },
         staticTextDeleted(payload) {
-            if ((this.staticText.id = payload.itemId)) {
+            if ((this.staticText.id = payload.id)) {
                 this.clear();
             }
         },

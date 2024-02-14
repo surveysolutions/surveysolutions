@@ -26,7 +26,7 @@ export const useGroupStore = defineStore('group', {
             }
         },
         groupDeleted(payload) {
-            if ((this.group.id = payload.itemId)) {
+            if ((this.group.id = payload.id)) {
                 this.clear();
             }
         },
