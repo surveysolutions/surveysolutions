@@ -449,10 +449,9 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             forEach(this.info.translations, translation => {
                 if (translation.translationId == translationId) {
                     translation.isDefault = true;
-                    translation.editTranslation.isDefault = false;
+                    translation.editTranslation.isDefault = true;
                 } else {
                     translation.isDefault = false;
-
                     translation.editTranslation.isDefault = false;
                 }
             });
