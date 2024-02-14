@@ -123,13 +123,6 @@ export default {
         },
     },
     methods: {
-        findTranslation() {
-            const translation = this.questionnaire.translations.find(
-                p => p.translationId == this.translation.translationId
-            );
-            return translation;
-        },
-
         fileSelected(file) {
             if (isUndefined(file) || isNull(file)) {
                 return;
@@ -165,16 +158,17 @@ export default {
 
                 this.translation.oldTranslationId = this.translation.translationId;
                 this.translation.translationId = newGuid();
+                const showUploadResult = this.translation.file ? true : false;
 
                 const response = await updateTranslation(this.questionnaireId, this.translation)
 
-                if (this.translation.file)
+                if (showUploadResult)
                     notice(response);
+
                 this.translation.file = null;
                 this.file = [];
             }
             else {
-
                 updateQuestionnaireSettings(this.questionnaireId, {
                     isPublic: this.questionnaire.isPublic,
                     title: this.questionnaire.title,
