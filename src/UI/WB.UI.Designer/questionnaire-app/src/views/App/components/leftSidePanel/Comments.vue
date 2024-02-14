@@ -90,6 +90,7 @@ export default {
 
         this.$emitter.on('staticTextUpdated', this.staticTextUpdated);
         this.$emitter.on('groupUpdated', this.groupUpdated);
+        this.$emitter.on('rosterUpdated', this.rosterUpdated);
         this.$emitter.on('variableUpdated', this.variableUpdated);
         this.$emitter.on('questionUpdated', this.questionUpdated);
 
@@ -105,6 +106,7 @@ export default {
 
         this.$emitter.off('staticTextUpdated', this.staticTextUpdated);
         this.$emitter.off('groupUpdated', this.groupUpdated);
+        this.$emitter.off('rosterUpdated', this.rosterUpdated);
         this.$emitter.off('variableUpdated', this.variableUpdated);
         this.$emitter.off('questionUpdated', this.questionUpdated);
 
@@ -213,12 +215,25 @@ export default {
         },
 
         groupUpdated(payload) {
+            var id = payload.group.id.replaceAll('-', '');
             const index = _.findIndex(this.commentThreads, function (i) {
-                return payload.group.id && i.entity.itemId === payload.group.id.replaceAll('-', '');
+                return i.entity.itemId === id
             });
+
             if (index !== -1) {
                 this.commentThreads[index].entity.title = payload.group.title;
                 this.commentThreads[index].entity.variable = payload.group.variableName;
+            }
+        },
+
+        rosterUpdated(payload) {
+            var id = payload.roster.itemId.replaceAll('-', '');
+            const index = _.findIndex(this.commentThreads, function (i) {
+                return i.entity.itemId === id;
+            });
+            if (index !== -1) {
+                this.commentThreads[index].entity.title = payload.roster.title;
+                this.commentThreads[index].entity.variable = payload.roster.variableName;
             }
         },
 
