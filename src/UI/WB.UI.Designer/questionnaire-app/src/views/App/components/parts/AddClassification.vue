@@ -271,7 +271,7 @@ export default {
                 if (this.activeQuestion.isFilteredCombobox) {
                     this.classificationsStore.replaceOptionsWithClassification(
                         this.questionnaireId,
-                        this.activeQuestion.itemId,
+                        this.activeQuestion.id,
                         selectedClassification.id);
                 }
                 this.activeQuestion.options = selectedClassification.categories;
