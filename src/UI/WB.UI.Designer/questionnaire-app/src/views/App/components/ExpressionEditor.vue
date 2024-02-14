@@ -61,15 +61,9 @@ export default {
             }
         }
     },
-    // beforeUnmount() {
-    //     this.$refs.editor.getAceInstance().destroy();
-    // },
     methods: {
         onModeChanged(e, session) {
-
-            if (session.$mode.$id !== 'ace/mode/csharp')
-                return;
-
+            if (session.$mode.$id !== 'ace/mode/csharp') return;
 
             var rules = session.$mode.$highlightRules.getRules();
             for (var stateName in rules) {
@@ -116,8 +110,7 @@ export default {
             session.$mode.hasBeenUpdated = true;
 
             session.off("changeMode", this.onModeChanged);
-        }
-        ,
+        },
         editorInit(editor) {
             self = this;
             var renderer = editor.renderer;
@@ -153,7 +146,6 @@ export default {
                     session.on("changeMode", this.onModeChanged);
 
                 //TODO: for linked add "@current"
-
                 ace.config.loadModule('ace/ext/language_tools', function () {
                     var variablesCompletor =
                     {

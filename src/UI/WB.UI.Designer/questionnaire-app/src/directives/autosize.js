@@ -15,8 +15,11 @@ const autosize = app => {
                 requestAnimationFrame(() => {
                     const newHeight =
                         el.scrollHeight + el.offsetHeight - el.clientHeight;
-                    el.style.height =
+                    var calculatedHeight =
                         newHeight < minHeight ? minHeightPx : newHeight + 'px';
+
+                    if (el.style.height !== calculatedHeight)
+                        el.style.height = calculatedHeight;
                 });
             };
 
