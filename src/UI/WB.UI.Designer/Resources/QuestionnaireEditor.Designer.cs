@@ -2984,5 +2984,11 @@ namespace WB.UI.Designer.Resources {
                 return ResourceManager.GetString("Register", resourceCulture);
             }
         }
+        
+        public static string No {
+            get {
+                return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
     }
 }

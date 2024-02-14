@@ -135,7 +135,7 @@
 
 import { useClassificationsStore } from '../../../../stores/classifications';
 
-import { willBeTakenOnlyFirstOptionsConfirmationPopup } from '../../../../services/utilityService'
+import { willBeTakenOnlyFirstOptionsConfirmationPopup, replaceOptionsConfirmationPopup } from '../../../../services/utilityService'
 import { replaceOptionsWithClassification } from '../../../../services/classificationIdService'
 
 import { debounce, isNull, isUndefined } from 'lodash'
@@ -241,9 +241,25 @@ export default {
             if (isNull(selectedClassification) || isUndefined(selectedClassification))
                 return;
 
-            var questionTitle = this.activeQuestion.title || this.$t('UntitledQuestion');
+            if (this.activeQuestion.options.length > 0) {
+                const questionTitle = this.activeQuestion.title || this.$t('QuestionnaireEditor.UntitledQuestion');
+                let confirmParams = replaceOptionsConfirmationPopup(questionTitle);
+                confirmParams.callback = confirmResult => {
+                    if (confirmResult) {
+                        this.doReplaceOptions(selectedClassification);
+                    }
+                };
+                this.$confirm(confirmParams)
+            } else {
+                this.doReplaceOptions(selectedClassification);
+            }
 
-            var optionsToInsertCount = selectedClassification.categoriesCount;
+            this.open = false;
+        },
+
+        doReplaceOptions(selectedClassification) {
+            const questionTitle = this.activeQuestion.title || this.$t('QuestionnaireEditor.UntitledQuestion');
+            const optionsToInsertCount = selectedClassification.categoriesCount;
 
             if (optionsToInsertCount > this.MAX_OPTIONS_COUNT) {
                 if (this.activeQuestion.type !== "SingleOption") {
@@ -275,8 +291,6 @@ export default {
                 this.activeQuestion.options = selectedClassification.categories;
                 this.activeQuestion.optionsCount = selectedClassification.categories.length;
             }
-
-            this.open = false;
         },
 
         async openDialog() {

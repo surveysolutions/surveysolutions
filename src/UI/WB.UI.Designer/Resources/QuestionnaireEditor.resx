@@ -1595,4 +1595,7 @@ You entered an invalid input. Each line should follow the format: "Title...Paren
   <data name="Register" xml:space="preserve">
       <value>Register</value>
   </data>
+  <data name="No" xml:space="preserve">
+      <value>No</value>
+  </data>
 </root>

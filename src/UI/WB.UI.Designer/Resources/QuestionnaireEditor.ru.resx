@@ -1611,4 +1611,7 @@
   <data name="Register" xml:space="preserve">
       <value>Зарегистрироваться</value>
   </data>
+  <data name="No" xml:space="preserve">
+      <value>Нет</value>
+  </data>
 </root>
