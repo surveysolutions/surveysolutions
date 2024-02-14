@@ -1,10 +1,10 @@
 <template>
-    <div class="add-filter-label" v-if="activeQuestion.showFilterInput != true && activeQuestion.isCascade != true">
-        <button type="button" class="btn btn-lg btn-link" @click="activeQuestion.showFilterInput = true">{{
+    <div class="add-filter-label" v-if="showFilter != true && activeQuestion.isCascade != true">
+        <button type="button" class="btn btn-lg btn-link" @click="showFilter = true">{{
             $t('QuestionnaireEditor.AddFilter') }}</button>
     </div>
 
-    <div class="row" v-show="activeQuestion.showFilterInput == true && activeQuestion.isCascade != true">
+    <div class="row" v-show="showFilter == true && activeQuestion.isCascade != true">
         <div class="form-group col-xs-11">
             <label class="wb-label" for="optionsFilterExpression">{{ $t('QuestionnaireEditor.QuestionFilter') }}</label>
 
@@ -17,7 +17,7 @@
 
         <div class="form-group col-xs-1">
             <button type="button" class="btn cross filter-cross"
-                @click="activeQuestion.showFilterInput = false; activeQuestion.linkedFilterExpression = ''; activeQuestion.optionsFilterExpression = '';"></button>
+                @click="showFilter = false; activeQuestion.linkedFilterExpression = ''; activeQuestion.optionsFilterExpression = '';"></button>
         </div>
     </div>
 </template>
@@ -35,7 +35,14 @@ export default {
         activeQuestion: { type: Object, required: true }
     },
     data() {
-        return {};
+        return {
+            showFilter: null,
+        };
+    },
+    async beforeMount() {
+        this.showFilter =
+            (this.activeQuestion.linkedFilterExpression && this.activeQuestion.linkedFilterExpression !== '')
+                || (this.activeQuestion.optionsFilterExpression && this.activeQuestion.optionsFilterExpression !== '') ? true : false;
     },
     computed: {
         linkedToEntity() {
