@@ -480,6 +480,7 @@
     "ShowList": "Показать списком",
     "Login": "Логин",
     "Register": "Зарегистрироваться",
+    "No": "Нет",
     "ErrorsCounter_other": "{{count}} errors",
     "SideBarAttachmentsCounter_other": "{{count}} Files Attachments ({{bytes}} total)",
     "SideBarLookupTablesCounter_other": "{{count}} Lookup Tables:",
