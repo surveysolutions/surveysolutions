@@ -157,7 +157,7 @@ export default {
                 details: {}
             };
             this.attachment.meta = {
-                lastUpdatedDate: null,
+                lastUpdateDate: null,
                 fileName: file.name
             };
 

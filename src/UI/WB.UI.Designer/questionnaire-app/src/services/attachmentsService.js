@@ -19,7 +19,7 @@ export async function updateAttachment(questionnaireId, attachment) {
         fileName
     );
 
-    attachment.meta.lastUpdatedDate = moment();
+    attachment.meta.lastUpdateDate = new Date();
 
     emitter.emit('attachmentUpdated', {
         attachment: attachment
