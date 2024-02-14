@@ -30,15 +30,8 @@ export async function deleteScenario(questionnaireId, scenarioId) {
 export async function runScenario(questionnaireId, scenarioId) {
     var webTesterWindow = window.open('about:blank', '_blank');
 
-    var webTestUrl = await get(
-        '/api/questionnaire/webTest/' + questionnaireId
-    ).then(response => {
-        var url = response;
+    var webTestUrl = await get('/api/questionnaire/webTest/' + questionnaireId);
 
-        if (!isUndefined(scenarioId)) {
-            url += '?scenarioId=' + scenarioId;
-        }
-    });
     if (!isUndefined(scenarioId)) {
         webTestUrl += '?scenarioId=' + scenarioId;
     }
