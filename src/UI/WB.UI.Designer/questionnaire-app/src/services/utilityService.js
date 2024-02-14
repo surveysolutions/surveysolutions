@@ -1,6 +1,6 @@
 import { i18n } from '../plugins/localization';
 import { nextTick } from 'vue';
-import { defer, isNull, findIndex } from 'lodash';
+import { defer, isNull, isUndefined, findIndex } from 'lodash';
 import { filterXSS } from 'xss';
 import moment from 'moment';
 
@@ -43,9 +43,9 @@ export function focus(name) {
 export function setFocusIn(elementId) {
     if (elementId) {
         $timeout(function() {
-            var element = angular.element('#' + elementId);
+            const element = document.getElementById(elementId);
 
-            if (!_.isNull(element) && !_.isUndefined(element)) {
+            if (!isNull(element) && !isUndefined(element)) {
                 if (element.attr('ui-ace')) {
                     var edit = ace.edit(element.attr('id'));
                     edit.focus();
@@ -157,82 +157,6 @@ export function willBeTakenOnlyFirstOptionsConfirmationPopup(title, count) {
         okButtonTitle: i18n.t('QuestionnaireEditor.Yes'),
         cancelButtonTitle: i18n.t('QuestionnaireEditor.No')
     };
-}
-
-export function createEmptyGroup(parent) {
-    var newId = guid();
-    var emptyGroup = {
-        itemId: newId,
-        title: i18n.t('QuestionnaireEditor.DefaultNewSubsection'),
-        items: [],
-        itemType: 'Group',
-        hasCondition: false,
-        getParentItem: function() {
-            return parent;
-        }
-    };
-    return emptyGroup;
-}
-
-export function createEmptyRoster(parent) {
-    var newId = guid();
-    var emptyRoster = {
-        itemId: newId,
-        title:
-            i18n.t('QuestionnaireEditor.DefaultNewRoster') + ' - %rostertitle%',
-        items: [],
-        itemType: 'Group',
-        hasCondition: false,
-        isRoster: true,
-        getParentItem: function() {
-            return parent;
-        }
-    };
-    return emptyRoster;
-}
-
-export function createEmptyQuestion(parent) {
-    var newId = guid();
-    var emptyQuestion = {
-        itemId: newId,
-        title: '',
-        type: 'Text',
-        itemType: 'Question',
-        hasCondition: false,
-        hasValidation: false,
-        getParentItem: function() {
-            return parent;
-        }
-    };
-    return emptyQuestion;
-}
-
-export function createEmptyStaticText(parent) {
-    var newId = guid();
-    var emptyStaticText = {
-        itemId: newId,
-        text: i18n.t('QuestionnaireEditor.DefaultNewStaticText'),
-        itemType: 'StaticText',
-        hasCondition: false,
-        hasValidation: false,
-        getParentItem: function() {
-            return parent;
-        }
-    };
-    return emptyStaticText;
-}
-
-export function createEmptyVariable(parent) {
-    var newId = guid();
-    var emptyVariable = {
-        itemId: newId,
-        itemType: 'Variable',
-        variableData: {},
-        getParentItem: function() {
-            return parent;
-        }
-    };
-    return emptyVariable;
 }
 
 export function isTreeItemVisible(item) {
