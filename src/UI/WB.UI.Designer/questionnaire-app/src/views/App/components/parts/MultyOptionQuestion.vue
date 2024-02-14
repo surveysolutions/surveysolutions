@@ -10,7 +10,7 @@
                 <div class="btn-group" uib-dropdown>
                     <button class="btn dropdown-toggle" id="cb-categorical-kind" uib-dropdown-toggle type="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                        {{ getCategoricalKind().text }}
+                        {{ getCategoricalKind.text }}
                         <span class="dropdown-arrow"></span>
                     </button>
 
@@ -37,7 +37,7 @@
                 <div class="btn-group" uib-dropdown>
                     <button class="btn dropdown-toggle" id="cb-categorical-type" uib-dropdown-toggle type="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                        {{ getSourceOfCategories() }}
+                        {{ categoriesSource }}
                         <span class="dropdown-arrow"></span>
                     </button>
 
@@ -70,12 +70,12 @@
             <p></p>
         </div>
     </div>
-    <div class="row" v-if="activeQuestion.isLinkedToReusableCategories === true">
+    <div class="row" v-if="isLinkedToReusableCategories === true">
         <div class="col-xs-12">
             <label class="wb-label" for="cb-categories">{{ $t('QuestionnaireEditor.BindToReusableCategories') }}</label>
         </div>
     </div>
-    <div class="row" v-if="activeQuestion.isLinkedToReusableCategories === true">
+    <div class="row" v-if="isLinkedToReusableCategories === true">
         <div class="col-xs-12">
             <div class="dropdown-with-breadcrumbs-and-icons">
                 <div class="btn-group" uib-dropdown>
@@ -104,7 +104,7 @@
             <p></p>
         </div>
     </div>
-    <div class="row" v-if="activeQuestion.isFilteredCombobox && !activeQuestion.isLinkedToReusableCategories">
+    <div class="row" v-if="activeQuestion.isFilteredCombobox && !isLinkedToReusableCategories">
         <div class="col-xs-12">
             <FilteredComboboxOptionsTemplate :active-question="activeQuestion" :questionnaire-id="questionnaireId">
             </FilteredComboboxOptionsTemplate>
@@ -117,7 +117,7 @@
         </div>
     </div>
     <p></p>
-    <div class="row" v-if="activeQuestion.isLinked">
+    <div class="row" v-if="isLinked">
         <div class="col-xs-12">
             <LinkTemplate :activeQuestion="activeQuestion">
             </LinkTemplate>
@@ -183,32 +183,42 @@ export default {
     },
     data() {
         return {
-
+            isLinkedToReusableCategories: false,
+            isLinked: false,
         }
     },
     mounted() {
-        this.activeQuestion.isLinkedToReusableCategories = !_.isEmpty(this.activeQuestion.categoriesId);
-        this.activeQuestion.isLinked = !_.isEmpty(this.activeQuestion.linkedToEntityId);
+        this.$emitter.on('questionChangesDiscarded', this.questionChangesDiscarded);
+        this.reset();
+    },
+    unmounted() {
+        this.$emitter.off('questionChangesDiscarded', this.questionChangesDiscarded);
+    },
+    watch: {
+        categoriesId: function (v) {
+            this.isLinkedToReusableCategories = this.activeQuestion.categoriesId;
+        }
     },
     computed: {
         hasOwnCategories() {
             return !this.activeQuestion.isFilteredCombobox
-                && !this.activeQuestion.isLinked
-                && !this.activeQuestion.isLinkedToReusableCategories
+                && !this.isLinked
+                && !this.isLinkedToReusableCategories
         },
         validMaxAllowedAnswers() {
             return this.activeQuestion.maxAllowedAnswers == null || this.activeQuestion.maxAllowedAnswers == '' || isInteger(this.activeQuestion.maxAllowedAnswers);
         },
         getSelectedCategories() {
             return this.getCategoriesList().find(c => c.categoriesId === this.activeQuestion.categoriesId) || {};
-        }
-    },
-    methods: {
-        prepareToSave() {
-            if (this.hasOwnCategories)
-                this.$refs.options.showOptionsInList();
         },
+        categoriesSource() {
+            if (this.isLinked)
+                return this.$t('QuestionnaireEditor.RostersQuestion');
 
+            return this.isLinkedToReusableCategories === true
+                ? this.$t('QuestionnaireEditor.ReusableCategories')
+                : this.$t('QuestionnaireEditor.UserDefinedCategories');
+        },
         getCategoricalKind() {
             if (this.activeQuestion.isFilteredCombobox)
                 return categoricalMultiKinds[2];
@@ -217,18 +227,25 @@ export default {
             else
                 return categoricalMultiKinds[0];
         },
+        categoriesId() {
+            return this.activeQuestion.categoriesId;
+        }
+    },
+    methods: {
+        questionChangesDiscarded() {
+            this.reset();
+        },
+        reset() {
+            this.isLinkedToReusableCategories = this.activeQuestion.categoriesId != null;
+            this.isLinked = this.activeQuestion.isLinked;
+        },
+        prepareToSave() {
+            if (this.hasOwnCategories)
+                this.$refs.options.showOptionsInList();
+        },
 
         getCategoricalMultiKinds() {
             return categoricalMultiKinds;
-        },
-
-        getSourceOfCategories() {
-            if (this.activeQuestion.isLinked)
-                return this.$t('QuestionnaireEditor.RostersQuestion');
-
-            return this.activeQuestion.isLinkedToReusableCategories === true
-                ? this.$t('QuestionnaireEditor.ReusableCategories')
-                : this.$t('QuestionnaireEditor.UserDefinedCategories');
         },
 
         changeCategoricalKind(kind) {
@@ -241,8 +258,8 @@ export default {
             this.activeQuestion.isFilteredCombobox = isFilteredCombobox;
             this.activeQuestion.yesNoView = yesNoView;
 
-            if (this.activeQuestion.isLinked)
-                this.activeQuestion.isLinked = !isFilteredCombobox && !yesNoView;
+            if (this.isLinked)
+                this.isLinked = !isFilteredCombobox && !yesNoView;
         },
 
         setCategories(categories) {
@@ -252,25 +269,25 @@ export default {
         },
 
         setIsReusableCategories() {
-            if (this.activeQuestion.isLinkedToReusableCategories === true) return;
+            if (this.isLinkedToReusableCategories === true) return;
 
-            this.activeQuestion.isLinked = false;
-            this.activeQuestion.isLinkedToReusableCategories = true;
+            this.isLinked = false;
+            this.isLinkedToReusableCategories = true;
         },
 
         setUserDefinedCategories() {
-            if (this.activeQuestion.isLinkedToReusableCategories === false) return;
+            if (this.isLinkedToReusableCategories === false) return;
 
-            this.activeQuestion.isLinked = false;
+            this.isLinked = false;
             this.activeQuestion.categoriesId = null;
-            this.activeQuestion.isLinkedToReusableCategories = false;
+            this.isLinkedToReusableCategories = false;
         },
 
         setIsLinkedQuestion() {
-            if (this.activeQuestion.isLinked === true) return;
+            if (this.isLinked === true) return;
 
-            this.activeQuestion.isLinked = true;
-            this.activeQuestion.isLinkedToReusableCategories = null;
+            this.isLinked = true;
+            this.isLinkedToReusableCategories = null;
             this.activeQuestion.categoriesId = null;
         },
 

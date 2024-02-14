@@ -389,7 +389,6 @@ export default {
         isDirty() {
             return this.questionStore.getIsDirty;
         }
-
     },
     methods: {
         async fetch() {

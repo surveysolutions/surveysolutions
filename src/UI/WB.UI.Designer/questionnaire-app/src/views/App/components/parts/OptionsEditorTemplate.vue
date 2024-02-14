@@ -2,7 +2,8 @@
     <div class="options-editor">
         <div v-if="useListAsOptionsEditor">
             <div class="table-holder">
-                <div class="table-row question-options-editor" style="height: 0">
+                <div class="table-row question-options-editor" style="height: 0"
+                    v-if="activeQuestion.options && activeQuestion.options.length > 0">
                     <div class="column-2">
                         <label class="wb-label">{{ $t('QuestionnaireEditor.OptionsUploadValue') }}</label>
                         <help link="HelpOptionValue" />

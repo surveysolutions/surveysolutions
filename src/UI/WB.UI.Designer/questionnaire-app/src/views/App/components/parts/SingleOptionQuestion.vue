@@ -10,7 +10,7 @@
                 <div class="btn-group" uib-dropdown>
                     <button class="btn dropdown-toggle" id="cb-categorical-kind" uib-dropdown-toggle type="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                        {{ getCategoricalSingleDisplayMode() }}
+                        {{ displayMode }}
                         <span class="dropdown-arrow"></span>
                     </button>
 
@@ -44,7 +44,7 @@
                 <div class="btn-group" uib-dropdown>
                     <button class="btn dropdown-toggle" id="cb-categorical-type" uib-dropdown-toggle type="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                        {{ getSourceOfCategories() }}
+                        {{ categoriesSource }}
                         <span class="dropdown-arrow"></span>
                     </button>
                     <ul class="dropdown-menu" role="menu">
@@ -57,8 +57,8 @@
                                 $t('QuestionnaireEditor.ReusableCategories') }}</a>
                         </li>
                         <li role="presentation">
-                            <a role="menuitem" tabindex="-1" v-if="!activeQuestion.isCascade"
-                                @click="setIsLinkedQuestion()">{{ $t('QuestionnaireEditor.RostersQuestion') }}</a>
+                            <a role="menuitem" tabindex="-1" v-if="!isCascade" @click="setIsLinkedQuestion()">{{
+                                $t('QuestionnaireEditor.RostersQuestion') }}</a>
                         </li>
                     </ul>
                 </div>
@@ -79,12 +79,12 @@
     </div>
 
 
-    <div class="row" v-if="activeQuestion.isLinkedToReusableCategories === true">
+    <div class="row" v-if="isLinkedToReusableCategories === true">
         <div class="col-xs-12">
             <label class="wb-label" for="cb-categories">{{ $t('QuestionnaireEditor.BindToReusableCategories') }}</label>
         </div>
     </div>
-    <div class="row" v-if="activeQuestion.isLinkedToReusableCategories === true">
+    <div class="row" v-if="isLinkedToReusableCategories === true">
         <div class="col-xs-12">
             <div class="dropdown-with-breadcrumbs-and-icons">
                 <div class="btn-group" uib-dropdown>
@@ -114,8 +114,7 @@
         </div>
     </div>
     <p></p>
-    <div class="row"
-        v-if="activeQuestion.isFilteredCombobox && !activeQuestion.isCascade && !activeQuestion.isLinkedToReusableCategories && !activeQuestion.isLinked">
+    <div class="row" v-if="activeQuestion.isFilteredCombobox && !isCascade && !isLinkedToReusableCategories && !isLinked">
         <div class="col-xs-12">
             <FilteredComboboxOptionsTemplate :active-question="activeQuestion" :questionnaire-id="questionnaireId">
             </FilteredComboboxOptionsTemplate>
@@ -127,7 +126,7 @@
             </add-classification>
         </div>
     </div>
-    <div class="row" v-if="activeQuestion.isLinked">
+    <div class="row" v-if="isLinked">
         <div class="col-xs-12">
             <LinkTemplate :activeQuestion="activeQuestion">
             </LinkTemplate>
@@ -141,7 +140,7 @@
             </CategoricalFilterExpression>
         </div>
     </div>
-    <div class="row" v-if="activeQuestion.isCascade">
+    <div class="row" v-if="isCascade">
         <div class="col-xs-12">
             <div class="form-group">
                 <CascadingComboBoxTemplate :activeQuestion="activeQuestion">
@@ -151,7 +150,7 @@
         </div>
     </div>
     <div class="row"
-        v-if="activeQuestion.isCascade && (activeQuestion.cascadeFromQuestionId || '') !== '' && !activeQuestion.isLinkedToReusableCategories">
+        v-if="isCascade && (activeQuestion.cascadeFromQuestionId || '') !== '' && !isLinkedToReusableCategories">
         <div class="col-xs-12">
             <a href="javascript:void(0);" class="btn btn-link" @click="editCascadingComboboxOptions()">{{
                 $t('QuestionnaireEditor.QuestionUploadOptions') }}
@@ -190,36 +189,38 @@ export default {
     },
     data() {
         return {
+            isLinkedToReusableCategories: false,
+            isCascade: false,
+            isLinked: false,
         }
     },
-    mounted() {
-        //move to initial binding
-        this.activeQuestion.isLinkedToReusableCategories = !_.isEmpty(this.activeQuestion.categoriesId);
-        this.activeQuestion.isCascade = !_.isEmpty(this.activeQuestion.cascadeFromQuestionId);
-        this.activeQuestion.isLinked = !_.isEmpty(this.activeQuestion.linkedToEntityId);
 
+    mounted() {
+        this.$emitter.on('questionChangesDiscarded', this.questionChangesDiscarded);
+        this.reset();
+    },
+    unmounted() {
+        this.$emitter.off('questionChangesDiscarded', this.questionChangesDiscarded);
+    },
+    watch: {
+        categoriesId: function (v) {
+            this.isLinkedToReusableCategories = this.activeQuestion.categoriesId;
+        }
     },
     computed: {
         hasOwnCategories() {
             var hasCategories = !this.activeQuestion.isFilteredCombobox
-                && !this.activeQuestion.isLinked
-                && !this.activeQuestion.isCascade
-                && !this.activeQuestion.isLinkedToReusableCategories;
+                && !this.isLinked
+                && !this.isCascade
+                && !this.isLinkedToReusableCategories;
 
             return hasCategories;
         },
         getSelectedCategories() {
             return this.getCategoriesList().find(c => c.categoriesId === this.activeQuestion.categoriesId) || {};
-        }
-    },
-    methods: {
-        prepareToSave() {
-            if (this.hasOwnCategories)
-                this.$refs.options.showOptionsInList();
         },
-
-        getCategoricalSingleDisplayMode() {
-            if (this.activeQuestion.isCascade || (this.activeQuestion.cascadeFromQuestionId || '') !== '')
+        displayMode() {
+            if (this.isCascade || (this.activeQuestion.cascadeFromQuestionId || '') !== '')
                 return this.$t('QuestionnaireEditor.QuestionCascading');
 
             if (this.activeQuestion.isFilteredCombobox === true)
@@ -227,59 +228,74 @@ export default {
 
             else return this.$t('QuestionnaireEditor.QuestionRadioButtonList');
         },
-
-        getSourceOfCategories() {
-            if (this.activeQuestion.isLinked)
+        categoriesSource() {
+            if (this.isLinked)
                 return this.$t('QuestionnaireEditor.RostersQuestion');
 
-            return this.activeQuestion.isLinkedToReusableCategories === true
+            return this.isLinkedToReusableCategories === true
                 ? this.$t('QuestionnaireEditor.ReusableCategories')
                 : this.$t('QuestionnaireEditor.UserDefinedCategories');
         },
+        categoriesId() {
+            return this.activeQuestion.categoriesId;
+        }
+    },
+    methods: {
+        reset() {
+            this.isLinkedToReusableCategories = !_.isEmpty(this.activeQuestion.categoriesId);
+            this.isCascade = !_.isEmpty(this.activeQuestion.cascadeFromQuestionId);
+            this.isLinked = !_.isEmpty(this.activeQuestion.linkedToEntityId);
+        },
+        questionChangesDiscarded() {
+            this.reset()
+        },
+        prepareToSave() {
+            if (this.hasOwnCategories)
+                this.$refs.options.showOptionsInList();
+        },
 
         setQuestionAsRadioButtons() {
-            this.activeQuestion.isCascade = false;
-            this.activeQuestion.isLinked = false;
+            this.isCascade = false;
+            this.isLinked = false;
             this.activeQuestion.isFilteredCombobox = false;
         },
 
         setQuestionAsCombobox() {
             if (this.activeQuestion.isFilteredCombobox === true) return;
 
-            this.activeQuestion.isCascade = false;
+            this.isCascade = false;
             this.activeQuestion.isFilteredCombobox = true;
         },
 
         setQuestionAsCascading() {
-            if (this.activeQuestion.isCascade === true) return;
+            if (this.isCascade === true) return;
 
-            this.activeQuestion.isLinked = false;
+            this.isLinked = false;
             this.activeQuestion.isFilteredCombobox = false;
-            this.activeQuestion.isCascade = true;
+            this.isCascade = true;
         },
 
         setIsReusableCategories() {
-            //if (this.activeQuestion.isLinkedToReusableCategories === true) return;
+            if (this.isLinkedToReusableCategories === true) return;
 
-            this.activeQuestion.isLinked = false;
+            this.isLinked = false;
             this.activeQuestion.categoriesId = null;
-            this.activeQuestion.isLinkedToReusableCategories = true;
+            this.isLinkedToReusableCategories = true;
         },
 
         setUserDefinedCategories() {
-            //if (this.activeQuestion.isLinkedToReusableCategories === false) return;
 
-            this.activeQuestion.isLinked = false;
+            this.isLinked = false;
             this.activeQuestion.categoriesId = null;
-            this.activeQuestion.isLinkedToReusableCategories = false;
+            this.isLinkedToReusableCategories = false;
         },
 
         setIsLinkedQuestion() {
-            if (this.activeQuestion.isLinked === true) return;
+            if (this.isLinked === true) return;
 
-            this.activeQuestion.isLinked = true;
-            this.activeQuestion.isCascade = false;
-            this.activeQuestion.isLinkedToReusableCategories = null;
+            this.isLinked = true;
+            this.isCascade = false;
+            this.isLinkedToReusableCategories = null;
             this.activeQuestion.categoriesId = null;
         },
 

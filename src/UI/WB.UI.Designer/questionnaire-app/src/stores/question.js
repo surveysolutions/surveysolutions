@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { getQuestion, updateQuestion } from '../services/questionService';
+import emitter from '../services/emitter';
 import _ from 'lodash';
 
 export const useQuestionStore = defineStore('question', {
@@ -13,6 +14,17 @@ export const useQuestionStore = defineStore('question', {
         getIsDirty: state => !_.isEqual(state.question, state.initialQuestion)
     },
     actions: {
+        setupListeners() {
+            emitter.on('categoriesDeleted', this.categoriesDeleted);
+        },
+        categoriesDeleted(payload) {
+            if (this.initialQuestion.categoriesId === payload.categoriesId) {
+                this.initialQuestion.categoriesId = null;
+
+                //Is it necessary?
+                this.question.categoriesId = null;
+            }
+        },
         async fetchQuestionData(questionnaireId, questionId) {
             const data = await getQuestion(questionnaireId, questionId);
             this.setQuestionData(data);
