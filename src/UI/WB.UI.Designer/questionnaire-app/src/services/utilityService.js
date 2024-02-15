@@ -1,6 +1,6 @@
 import { i18n } from '../plugins/localization';
 import { nextTick } from 'vue';
-import { defer, isNull, isUndefined, findIndex } from 'lodash';
+import { defer, isNull, isUndefined, findIndex, debounce } from 'lodash';
 import { filterXSS } from 'xss';
 import moment from 'moment';
 
@@ -35,14 +35,14 @@ export function focusElementByName(name) {
 //TODO: fix usages of $...
 
 export function focus(name) {
-    $timeout(function() {
+    debounce(function() {
         $rootScope.$broadcast('focusOn', name);
     });
 }
 
 export function setFocusIn(elementId) {
     if (elementId) {
-        $timeout(function() {
+        debounce(function() {
             const element = document.getElementById(elementId);
 
             if (!isNull(element) && !isUndefined(element)) {
@@ -59,7 +59,7 @@ export function setFocusIn(elementId) {
 }
 
 export function focusout(name) {
-    $timeout(function() {
+    debounce(function() {
         $rootScope.$broadcast('focusOut', name);
     });
 }
