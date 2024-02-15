@@ -1,22 +1,21 @@
 <template>
     <div id="sourceOfLinkedEntity" class="dropdown-with-breadcrumbs-and-icons"
         :class="{ 'has-error': !isLinkedToEntityValid }">
-        <input type="hidden" name="cascadeFromQuestionId" v-model="activeQuestion.cascadeFromQuestionId" ng-update-hidden
-            ng-required="true" />
+        <input type="hidden" name="cascadeFromQuestionId" v-model="activeQuestion.cascadeFromQuestionId" />
         <label for="singleOptionQuestionSource">{{ $t('QuestionnaireEditor.SelectParentQuestion') }}</label>
         <div class="btn-group dropdown" uib-dropdown>
             <button class="btn dropdown-toggle" uib-dropdown-toggle id="singleOptionQuestionSource" type="button"
                 data-bs-toggle="dropdown" aria-expanded="false">
-                <span class="select-placeholder" v-if="(cascadeFromQuestion.title || '') == ''">{{
+                <span class="select-placeholder" v-if="!cascadeFromQuestion">{{
                     $t('QuestionnaireEditor.SelectQuestion') }}</span>
 
-                <div class="selected-item" v-if="(cascadeFromQuestion.title || '') !== ''">
+                <div class="selected-item" v-if="cascadeFromQuestion">
                     <span class="path">{{ cascadeFromQuestion.breadcrumbs }}</span>
                     <div class="selected-block">
                         <div>
                             <span class="chosen-item "><i class="dropdown-icon"
-                                    :class="['icon-' + cascadeFromQuestion.type]"></i>{{
-                                        cascadeFromQuestion.title }}</span>
+                                    :class="['icon-' + cascadeFromQuestion.type]"></i>
+                                {{ cascadeFromQuestion.title }}&nbsp;</span>
                         </div>
                         <div class="var-block">
                             <span class="var-name" v-dompurify-html="cascadeFromQuestion.varName"></span>
@@ -50,8 +49,7 @@
     <div class="row">
         <div class="col-md-6">
             <div class="checkbox checkbox-in-column">
-                <input id="cb-as-list" type="checkbox" class="wb-checkbox" v-model="activeQuestion.showAsList"
-                    @change="showAsListChange()" />
+                <input id="cb-as-list" type="checkbox" class="wb-checkbox" v-model="activeQuestion.showAsList" />
                 <label for="cb-as-list"><span></span>{{ $t('QuestionnaireEditor.ShowAsList') }}</label>
             </div>
         </div>
@@ -88,6 +86,9 @@ export default {
     },
     data() {
         return {
+            isValidShowAsListThreshold: true,
+            isValidNumberShowAsListThreshold: true,
+            isValidMaxMin: true,
         }
     },
     computed: {
@@ -114,12 +115,12 @@ export default {
         },
         cascadeFromQuestion() {
             if (this.activeQuestion.cascadeFromQuestionId == null)
-                return {};
+                return null;
 
-            const sourceQuestion = this.activeQuestion.sourceOfSingleQuestions.find(
+            const sourceQuestion = find(this.activeQuestion.sourceOfSingleQuestions,
                 p => p.id == this.activeQuestion.cascadeFromQuestionId && p.isSectionPlaceHolder != true
             );
-            return sourceQuestion != undefined ? sourceQuestion : {};
+            return sourceQuestion != undefined ? sourceQuestion : null;
         }
     },
     methods: {
@@ -130,7 +131,7 @@ export default {
                 this.activeQuestion.cascadeFromQuestionId = itemId;
                 //this.activeQuestion.cascadeFromQuestion = find(this.sourceOfSingleQuestions, { id: this.activeQuestion.cascadeFromQuestionId });
             }
-        },
+        }
     }
 }
 </script>

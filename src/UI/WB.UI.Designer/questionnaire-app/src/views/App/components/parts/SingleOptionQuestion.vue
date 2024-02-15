@@ -133,14 +133,14 @@
             <p></p>
         </div>
     </div>
-    <div class="row">
+    <div class="row" v-if="isCascade === false">
         <div class="col-xs-12">
             <!--ng-include src="'categorical-filter-expression'"></ng-include-->
             <CategoricalFilterExpression :activeQuestion="activeQuestion">
             </CategoricalFilterExpression>
         </div>
     </div>
-    <div class="row" v-if="isCascade">
+    <div class="row" v-if="isCascade === true">
         <div class="col-xs-12">
             <div class="form-group">
                 <CascadingComboBoxTemplate :activeQuestion="activeQuestion">
@@ -190,7 +190,7 @@ export default {
     data() {
         return {
             isLinkedToReusableCategories: false,
-            isCascade: false,
+            isCascade: null,
             isLinked: false,
         }
     },
@@ -220,7 +220,7 @@ export default {
             return this.getCategoriesList().find(c => c.categoriesId === this.activeQuestion.categoriesId) || {};
         },
         displayMode() {
-            if (this.isCascade || (this.activeQuestion.cascadeFromQuestionId || '') !== '')
+            if (this.isCascade)
                 return this.$t('QuestionnaireEditor.QuestionCascading');
 
             if (this.activeQuestion.isFilteredCombobox === true)
@@ -258,13 +258,21 @@ export default {
             this.isCascade = false;
             this.isLinked = false;
             this.activeQuestion.isFilteredCombobox = false;
+            this.activeQuestion.cascadeFromQuestionId = null;
+
+            this.activeQuestion.showAsListThreshold = null;
+            this.activeQuestion.showAsList = false;
         },
 
         setQuestionAsCombobox() {
             if (this.activeQuestion.isFilteredCombobox === true) return;
 
             this.isCascade = false;
+            this.activeQuestion.cascadeFromQuestionId = null;
             this.activeQuestion.isFilteredCombobox = true;
+
+            this.activeQuestion.showAsListThreshold = null;
+            this.activeQuestion.showAsList = false;
         },
 
         setQuestionAsCascading() {
