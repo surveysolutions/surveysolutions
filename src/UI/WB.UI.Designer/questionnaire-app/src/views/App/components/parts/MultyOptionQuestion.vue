@@ -196,7 +196,7 @@ export default {
     },
     watch: {
         categoriesId: function (v) {
-            this.isLinkedToReusableCategories = this.activeQuestion.categoriesId;
+            this.isLinkedToReusableCategories = this.activeQuestion.categoriesId != null;
         }
     },
     computed: {

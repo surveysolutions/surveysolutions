@@ -77,8 +77,6 @@
             <p></p>
         </div>
     </div>
-
-
     <div class="row" v-if="isLinkedToReusableCategories === true">
         <div class="col-xs-12">
             <label class="wb-label" for="cb-categories">{{ $t('QuestionnaireEditor.BindToReusableCategories') }}</label>
@@ -204,7 +202,7 @@ export default {
     },
     watch: {
         categoriesId: function (v) {
-            this.isLinkedToReusableCategories = this.activeQuestion.categoriesId;
+            this.isLinkedToReusableCategories = this.activeQuestion.categoriesId !== null;
         }
     },
     computed: {
