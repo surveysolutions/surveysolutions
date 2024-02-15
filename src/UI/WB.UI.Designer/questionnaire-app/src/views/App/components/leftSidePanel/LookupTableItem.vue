@@ -14,8 +14,8 @@
 
             <div class="actions clearfix" :class="{ 'dirty': isDirty }">
                 <div v-show="isDirty" class="pull-left">
-                    <button type="button" :disabled="isReadOnlyForUser || isInvalid" class="btn lighter-hover"
-                        @click.self="saveLookupTable()">{{
+                    <button type="button" v-if="!isReadOnlyForUser" :disabled="isInvalid ? 'disabled' : null"
+                        class="btn lighter-hover" @click.self="saveLookupTable()">{{
                             $t('QuestionnaireEditor.Save') }}</button>
                     <button type="button" class="btn lighter-hover" @click.self="cancel()">{{
                         $t('QuestionnaireEditor.Cancel')

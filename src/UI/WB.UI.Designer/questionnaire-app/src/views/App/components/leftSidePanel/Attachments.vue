@@ -18,8 +18,7 @@
                 </div>
                 <input type="button" :value="$t('QuestionnaireEditor.SideBarAttachmentsUpload')"
                     @click.stop="openFileDialog()" value="Upload new attachment" class="btn btn-default btn-lg pull-left"
-                    :class="{ 'btn-primary': !isReadOnlyForUser }" ngf-select
-                    :disabled="isReadOnlyForUser ? 'disabled' : null" capture />
+                    :class="{ 'btn-primary': !isReadOnlyForUser }" v-if="!isReadOnlyForUser" capture />
 
                 <file-upload ref="upload" v-if="!isReadOnlyForUser" :input-id="'tfunew'" v-model="file"
                     :size="100 * 1024 * 1024" :drop="false" :drop-directory="false" @input-file="createAndUploadFile"

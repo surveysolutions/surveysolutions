@@ -8,12 +8,12 @@
             <div class="categories-content">
                 <input focus-on-out="focusCategories{{categories.categoriesId}}" required=""
                     :placeholder="$t('QuestionnaireEditor.SideBarCategoriesName')" maxlength="32" spellcheck="false"
-                    v-model="category.name" name="name" class="form-control table-name" type="text" />
+                    v-model="categories.name" name="name" class="form-control table-name" type="text" />
                 <div class="drop-box">
                     {{ $t('QuestionnaireEditor.SideBarLookupTableDropFile') }}
                 </div>
-                <div class="actions" :class="{ dirty: dirty }">
-                    <div v-show="dirty" class="pull-left">
+                <div class="actions" :class="{ 'dirty': isDirty }">
+                    <div v-show="isDirty" class="pull-left">
                         <button type="button" :disabled="isInvalid" class="btn lighter-hover"
                             @click.stop="saveCategories(categories)">
                             {{ $t('QuestionnaireEditor.Save') }}
@@ -21,32 +21,23 @@
                         <button type="button" class="btn lighter-hover" @click.stop="cancel()">{{
                             $t('QuestionnaireEditor.Cancel') }}</button>
                     </div>
-
                     <div class="permanent-actions pull-right">
                         <a href="javascript:void(0);" class="btn btn-link" @click="editCategories()">{{
                             $t('QuestionnaireEditor.SideBarEditCategories') }}
                         </a>
-
-                        <file-upload ref="upload" v-if="!isReadOnlyForUser" :input-id="'cfu' + categoryId" v-model="file"
-                            @input-file="fileSelected" :size="10 * 1024 * 1024" :drop="true" :drop-directory="false"
+                        <file-upload ref="upload" v-if="!isReadOnlyForUser" v-model="file" @input-file="fileSelected"
+                            :size="10 * 1024 * 1024" :drop="true" :drop-directory="false"
                             accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.txt,.tsv,.tab">
                         </file-upload>
-                        <button v-show="!dirty" :disabled="isReadOnlyForUser" class="btn btn-default"
+                        <button v-show="!isDirty" v-if="!isReadOnlyForUser" class="btn btn-default"
                             @click.stop="openFileDialog()" type="button">
                             <span>{{ $t('QuestionnaireEditor.Update') }}</span>
                         </button>
-
-                        <!--button v-show="!dirty" :disabled="isReadOnlyForUser" class="btn btn-default" ngf-select=""
-                            ngf-max-size="10MB"
-                            accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.txt,.tsv,.tab"
-                            @change.stop="fileSelected($file)" type="button">
-                            <span>{{ $t('QuestionnaireEditor.Update') }}</span>
-                        </button-->
                         {{ $t('QuestionnaireEditor.SideBarDownload') }}
-                        <a :href="exportOptionsBaseUrl + questionnaire.questionnaireId + '?type=xlsx&isCategory=true&entityId=' + category.categoriesId"
+                        <a :href="exportOptionsBaseUrl + questionnaire.questionnaireId + '?type=xlsx&isCategory=true&entityId=' + categories.categoriesId"
                             class="btn btn-default" target="_blank" rel="noopener">{{
                                 $t('QuestionnaireEditor.SideBarXlsx') }}</a>
-                        <a :href="exportOptionsBaseUrl + questionnaire.questionnaireId + '?type=csv&isCategory=true&entityId=' + category.categoriesId"
+                        <a :href="exportOptionsBaseUrl + questionnaire.questionnaireId + '?type=csv&isCategory=true&entityId=' + categories.categoriesId"
                             class="btn btn-default" target="_blank" rel="noopener">{{
                                 $t('QuestionnaireEditor.SideBarTab') }}</a>
 
@@ -67,51 +58,36 @@ import { notice } from '../../../../services/notificationService';
 import moment from 'moment';
 
 export default {
-    name: 'CategoryItem',
-    inject: ['questionnaire'],
+    name: 'CategoriesItem',
+    inject: ['questionnaire', 'isReadOnlyForUser'],
     props: {
         questionnaireId: { type: String, required: true },
-        categoryId: { type: String, required: true },
+        categoriesItem: { type: Object, required: true },
     },
     data() {
         return {
             exportOptionsBaseUrl: '/questionnaire/ExportOptions/',
-            category: {},
-            originName: null,
             file: []
         }
     },
-    beforeMount() {
-        this.category = this.findCategory();
-        this.originName = this.category.name;
-    },
     computed: {
-        isReadOnlyForUser() {
-            return this.questionnaire.isReadOnlyForUser;
+        categories() {
+            return this.categoriesItem.editCategories;
         },
-        dirty() {
-            return this.category.name != this.originName || this.file.length > 0;
+        isDirty() {
+            return this.categories.name != this.categoriesItem.name || (this.categories.file !== null && this.categories.file !== undefined);
         },
         isInvalid() {
-            return (this.category.name) ? false : true;
+            return (this.categories.name) ? false : true;
         },
     },
     methods: {
-        findCategory() {
-            const category = this.questionnaire.categories.find(
-                p => p.categoriesId == this.categoryId
-            );
-            return category;
-        },
         hasPatternError() {
-            return (this.category.name) ? false : true;
+            return (this.categories.name) ? false : true;
         },
-
 
         deleteCategories(event) {
-            event.preventDefault();
-
-            var categoriesName = this.category.name || this.$t('QuestionnaireEditor.SideBarCategoriesNoName');
+            var categoriesName = this.categories.name || this.$t('QuestionnaireEditor.SideBarCategoriesNoName');
 
             var trimmedCategoriesName = trimText(categoriesName);
             var message = this.$t('QuestionnaireEditor.DeleteConfirmCategories', { trimmedTitle: trimmedCategoriesName });
@@ -122,7 +98,7 @@ export default {
                 cancelButtonTitle: this.$t('QuestionnaireEditor.Cancel'),
                 callback: confirm => {
                     if (confirm) {
-                        deleteCategories(this.questionnaireId, this.categoryId)
+                        deleteCategories(this.questionnaireId, this.categories.categoriesId)
                     }
                 }
             };
@@ -131,21 +107,25 @@ export default {
         },
 
         async saveCategories() {
-            const response = await updateCategories(this.questionnaireId, this.category)
+            this.categories.oldCategoriesId = this.categories.categoriesId;
+            this.categories.categoriesId = newGuid();
 
-            if (this.category.file) notice(response);
+            const response = await updateCategories(this.questionnaireId, this.categories)
 
-            this.category.file = null;
+            if (this.categories.file) notice(response);
+
+            this.categories.file = null;
             this.file = [];
-            this.originName = this.category.name;
         },
 
         cancel() {
-            this.category.name = this.originName;
+            var clonned = _.cloneDeep(this.categoriesItem);
+            clonned.editCategories = null;
+            this.categoriesItem.editCategories = clonned;
         },
 
         editCategories() {
-            this.$emit('editCategoriesOpen', { categoriesId: this.categoryId })
+            this.$emit('editCategoriesOpen', { categoriesId: this.categories.categoriesId })
         },
 
         async fileSelected(newFile) {
@@ -153,7 +133,7 @@ export default {
                 return;
             }
 
-            let categories = this.category;
+            let categories = this.categories;
 
             categories.file = newFile.file;
 
@@ -176,8 +156,6 @@ export default {
             var maxNameLength = 32;
             var fileNameLength = categories.name.length;
             categories.name = categories.name.substring(0, fileNameLength < maxNameLength ? fileNameLength : maxNameLength);
-            categories.oldCategoriesId = categories.categoriesId;
-            categories.categoriesId = newGuid();
         },
 
         openFileDialog() {

@@ -20,7 +20,6 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
     state: () => ({
         info: {},
         edittingMetadata: {},
-        edittingCategories: [],
         edittingScenarios: [],
         edittingSharedInfo: {}
     }),
@@ -29,7 +28,6 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
         getEdittingMetadata: state => state.edittingMetadata,
         getIsDirtyMetadata: state =>
             !isEqual(state.edittingMetadata, state.info.metadata),
-        getEdittingCategories: state => state.edittingCategories,
         getEdittingScenarios: state => state.edittingScenarios,
         getEdittingSharedInfo: state => state.edittingSharedInfo,
         getQuestionnaireEditDataDirty: state =>
@@ -43,8 +41,8 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             emitter.on('macroDeleted', this.macroDeleted);
             emitter.on('macroUpdated', this.macroUpdated);
 
-            emitter.on('categoriesUpdated', this.updateQuestionnaireCategories);
-            emitter.on('categoriesDeleted', this.deleteQuestionnaireCategories);
+            emitter.on('categoriesUpdated', this.categoriesUpdated);
+            emitter.on('categoriesDeleted', this.categoriesDeleted);
 
             emitter.on(
                 'anonymousQuestionnaireSettingsUpdated',
@@ -103,10 +101,13 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             this.info = info;
 
             this.edittingMetadata = cloneDeep(info.metadata);
-
-            this.edittingCategories = cloneDeep(info.categories);
             this.edittingScenarios = cloneDeep(info.scenarios);
             this.edittingSharedInfo = this.getQuestionnaireEditData();
+
+            forEach(this.info.categories, categoriesItem => {
+                var editCategories = cloneDeep(categoriesItem);
+                categoriesItem.editCategories = editCategories;
+            });
 
             forEach(this.info.lookupTables, lookupTable => {
                 var editLookupTable = cloneDeep(lookupTable);
@@ -345,46 +346,32 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             });
         },
 
-        updateQuestionnaireCategories(event) {
-            if (this.info.categories === null) return;
+        categoriesUpdated(payload) {
+            const newCategories = cloneDeep(payload.categories);
+            newCategories.file = null;
+            newCategories.editCategories = cloneDeep(newCategories);
 
-            const categories = event.categories;
-            const id = categories.categoriesId;
-
-            const item = find(
-                this.info.categories,
-                item => item.categoriesId == id
-            );
-
-            if (item) {
-                item.name = categories.name;
+            if (payload.categories.oldCategoriesId) {
+                const indexInit = findIndex(this.info.categories, function(i) {
+                    return (
+                        i.categoriesId === payload.categories.oldCategoriesId
+                    );
+                });
+                if (indexInit !== -1) {
+                    this.info.categories[indexInit] = newCategories;
+                }
             } else {
-                this.info.categories.push(categories);
-
-                const eCategories = cloneDeep(categories);
-                this.edittingCategories.push(eCategories);
+                this.info.categories.push(newCategories);
             }
         },
 
-        deleteQuestionnaireCategories(event) {
-            if (this.info.categories === null) return;
-
-            this.info.categories = filter(
-                this.info.categories,
-                categoriesDto => {
-                    return categoriesDto.categoriesId !== event.categoriesId;
-                }
-            );
-            this.edittingCategories = filter(
-                this.edittingCategories,
-                categoriesDto => {
-                    return categoriesDto.categoriesId !== event.categoriesId;
-                }
-            );
-        },
-
-        async discardCategoriesChanges() {
-            this.edittingCategories = cloneDeep(this.info.categories);
+        categoriesDeleted(payload) {
+            const index = findIndex(this.info.categories, function(i) {
+                return i.categoriesId === payload.id;
+            });
+            if (index !== -1) {
+                this.info.categories.splice(index, 1);
+            }
         },
 
         async discardMetadataChanges() {

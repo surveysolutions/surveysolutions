@@ -18,10 +18,9 @@
             </div>
             <form role="form" name="categoriesForm" novalidate>
                 <div class="categories-list">
-                    <CategoryItem v-for="(category, index) in categoriesList" refs="categoriesItems"
-                        @editCategoriesOpen="editCategoriesOpen" :category-id="category.categoriesId"
-                        :questionnaire-id="questionnaireId">
-                    </CategoryItem>
+                    <CategoriesItem v-for="(categories, index) in categoriesList" refs="categoriesItems"
+                        @editCategoriesOpen="editCategoriesOpen" :categoriesItem="categories"
+                        :questionnaire-id="questionnaireId" />
                 </div>
             </form>
             <div class="button-holder">
@@ -37,12 +36,12 @@
                 </p>
                 <p>
                     <input type="button" :value="$t('QuestionnaireEditor.SideBarCategoriesAddNew')" value="ADD new category"
-                        class="btn lighter-hover" @click.stop="addNewCategory()" :disabled="isReadOnlyForUser" />
+                        class="btn lighter-hover" @click.stop="addNewCategory()" v-if="!isReadOnlyForUser" />
                 </p>
                 <p>
                     <input type="button" :value="$t('QuestionnaireEditor.SideBarCategoriesUploadNew')"
-                        @click.stop="openFileDialog()" value="Upload new categories" class="btn lighter-hover" ngf-select
-                        :disabled="isReadOnlyForUser" capture />
+                        @click.stop="openFileDialog()" value="Upload new categories" class="btn lighter-hover"
+                        v-if="!isReadOnlyForUser" capture />
 
                     <file-upload ref="upload" v-if="!isReadOnlyForUser" :input-id="'cfunew'" v-model="file"
                         :size="10 * 1024 * 1024" :drop="false" :drop-directory="false" @input-file="createAndUploadFile"
@@ -56,19 +55,18 @@
   
 <script>
 
-import CategoryItem from './CategoryItem.vue';
+import CategoriesItem from './CategoriesItem.vue';
 
 import { newGuid } from '../../../../helpers/guid';
 import { isNull, isUndefined, some } from 'lodash'
 import { updateCategories } from '../../../../services/categoriesService'
 import { notice } from '../../../../services/notificationService';
 import moment from 'moment';
-import { useQuestionnaireStore } from '../../../../stores/questionnaire';
 
 export default {
     name: 'Categories',
-    inject: ['isReadOnlyForUser'],
-    components: { CategoryItem, },
+    inject: ['questionnaire', 'isReadOnlyForUser'],
+    components: { CategoriesItem, },
     props: {
         questionnaireId: { type: String, required: true },
     },
@@ -81,13 +79,6 @@ export default {
             downloadBaseUrl: '/categories',
             file: [],
         }
-    },
-    setup() {
-        const questionnaireStore = useQuestionnaireStore();
-
-        return {
-            questionnaireStore,
-        };
     },
     mounted() {
         // https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API
@@ -103,12 +94,8 @@ export default {
         }
     },
     computed: {
-        questionnaire() {
-            return this.questionnaireStore.getInfo;
-        },
-
         categoriesList() {
-            return this.questionnaireStore.getEdittingCategories;
+            return this.questionnaire.categories;
         },
     },
     methods: {
@@ -152,49 +139,21 @@ export default {
             categories.name = categories.name.substring(0, fileNameLength < maxNameLength ? fileNameLength : maxNameLength);
             categories.oldCategoriesId = categories.categoriesId;
 
-            updateCategories(this.questionnaireId, categories)
-                .then(response => {
-                    if (categories.file) notice(response);
+            var response = updateCategories(this.questionnaireId, categories);
 
-                    categories.file = null;
-                    this.file = [];
-                })
+            if (categories.file)
+                notice(response);
 
-
-            /*if (response.status !== 200) return;
-
-            categories.checkpoint = categories.checkpoint || {};
-
-            dataBind(categories.checkpoint, categories);
-            $scope.categoriesList.push(categories);
-            updateQuestionnaireCategories();
-
-            setTimeout(function () {
-                utilityService.focus("focusCategories" + categories.categoriesId);
-            },
-                500);*/
+            this.categories.file = null;
+            this.file = [];
         },
 
         async addNewCategory() {
-            if (this.isReadOnlyForUser) {
-                notice($i18next.t('NoPermissions'));
-                return;
-            }
+            const categories = {
+                categoriesId: newGuid()
+            };
 
-            var categories = { categoriesId: newGuid() };
-
-            var response = await updateCategories(this.questionnaireId, categories)
-            if (response.status !== 200) return;
-
-            /*categories.checkpoint = categories.checkpoint || {};
-
-            dataBind(categories.checkpoint, categories);
-            $scope.categoriesList.push(categories);
-            updateQuestionnaireCategories();
-
-            setTimeout(function () {
-                utilityService.focus("focusCategories" + categories.categoriesId);
-            }, 500);*/
+            await updateCategories(this.questionnaireId, categories)
         },
 
         editCategoriesOpen(event) {

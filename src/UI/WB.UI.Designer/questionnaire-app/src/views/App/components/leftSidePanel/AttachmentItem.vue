@@ -48,8 +48,8 @@
                     </div>
                     <div class="actions clearfix" :class="{ 'dirty': isDirty }">
                         <div v-if="isDirty" class="pull-left">
-                            <button type="button" :disabled="isReadOnlyForUser || isInvalid" class="btn lighter-hover"
-                                @click="saveAttachment(attachment)">{{
+                            <button type="button" v-if="!isReadOnlyForUser" :disabled="isInvalid ? 'disabled' : null"
+                                class="btn lighter-hover" @click="saveAttachment(attachment)">{{
                                     $t('QuestionnaireEditor.Save') }}</button>
                             <button type="button" class="btn lighter-hover" @click="cancel(attachment)">{{
                                 $t('QuestionnaireEditor.Cancel') }}</button>
@@ -57,7 +57,7 @@
                         <div class="permanent-actions pull-right clearfix">
                             <button type="button" :value="$t('QuestionnaireEditor.SideBarAttachmentsUpload')"
                                 @click.stop="openFileDialog()" value="Upload new attachment"
-                                class="btn btn-default pull-right" :disabled="isReadOnlyForUser" capture>
+                                class="btn btn-default pull-right" v-if="!isReadOnlyForUser" capture>
                                 <span>{{ $t('QuestionnaireEditor.Update') }}</span>
                             </button>
 

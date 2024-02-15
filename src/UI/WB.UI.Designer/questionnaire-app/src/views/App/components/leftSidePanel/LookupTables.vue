@@ -15,8 +15,8 @@
                 </ul>
             </form>
             <div class="button-holder">
-                <input type="button" class="btn lighter-hover" :disabled="isReadOnlyForUser"
-                    :value="$t('QuestionnaireEditor.SideBarLookupTableAdd')" value="ADD NEW Lookup table"
+                <input type="button" class="btn lighter-hover" v-if="!isReadOnlyForUser"
+                    :value="$t('QuestionnaireEditor.SideBarLookupTableAdd')" value="Add new Lookup table"
                     @click="addNewLookupTable()">
             </div>
         </perfect-scrollbar>

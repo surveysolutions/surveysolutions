@@ -28,7 +28,7 @@ export function deleteCategories(questionnaireId, categoriesId) {
     };
     return commandCall('DeleteCategories', command).then(response => {
         emitter.emit('categoriesDeleted', {
-            categoriesId: categoriesId
+            id: categoriesId
         });
     });
 }

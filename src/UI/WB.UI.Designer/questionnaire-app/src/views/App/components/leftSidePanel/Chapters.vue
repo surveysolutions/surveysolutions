@@ -96,11 +96,9 @@ export default {
         Help,
         Draggable,
     },
-    inject: ['questionnaire'],
+    inject: ['questionnaire', 'isReadOnlyForUser'],
     data() {
-        return {
-
-        }
+        return {}
     },
     setup() {
         const treeStore = useTreeStore();
@@ -115,9 +113,6 @@ export default {
     computed: {
         readyToPaste() {
             return this.canPaste;
-        },
-        isReadOnlyForUser() {
-            return (this.questionnaire || {}).isReadOnlyForUser;
         },
         currentChapterData() {
             return this.treeStore.getChapterData || {};

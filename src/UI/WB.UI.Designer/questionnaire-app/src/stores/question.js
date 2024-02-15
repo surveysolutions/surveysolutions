@@ -18,7 +18,7 @@ export const useQuestionStore = defineStore('question', {
             emitter.on('categoriesDeleted', this.categoriesDeleted);
         },
         categoriesDeleted(payload) {
-            if (this.initialQuestion.categoriesId === payload.categoriesId) {
+            if (this.initialQuestion.categoriesId === payload.id) {
                 this.initialQuestion.categoriesId = null;
 
                 //Is it necessary?
