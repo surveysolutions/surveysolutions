@@ -56,7 +56,8 @@
         </div>
         <div v-if="!useListAsOptionsEditor">
             <div class="form-group" :class="{ 'has-error': !stringifiedCategoriesValidity.valid }">
-                <textarea name="stringifiedOptions" class="form-control mono" v-bind:value="stringifiedCategories"
+                <textarea name="stringifiedOptions" class="form-control mono"
+                    v-bind:value="activeQuestion.stringifiedCategories"
                     v-on:input="updateStringifiedCategoriesValue($event)" match-options-pattern max-options-count
                     v-autosize></textarea>
                 <p class="help-block">
@@ -78,6 +79,7 @@
 
 <script>
 
+import { useQuestionStore } from '../../../../stores/question';
 import { filter, isNull, isEmpty, isUndefined } from 'lodash'
 import { newGuid } from '../../../../helpers/guid';
 import { convertToText, validateText, convertToTable } from '../../../OptionsEditor/utils/tableToString';
@@ -99,8 +101,7 @@ export default {
     data() {
         return {
             useListAsOptionsEditor: true,
-            stringifiedCategories: null,
-            initialStringifiedCategories: null,
+
             stringifiedCategoriesValidity: {
                 valid: true,
                 $error: {
@@ -110,6 +111,13 @@ export default {
             },
             MAX_OPTIONS_COUNT: 200,
         }
+    },
+    setup() {
+        const questionStore = useQuestionStore();
+
+        return {
+            questionStore
+        };
     },
     mounted() {
         this.$emitter.on('questionChangesDiscarded', this.questionChangesDiscarded);
@@ -126,8 +134,9 @@ export default {
         async showOptionsInTextarea() {
             //this.activeQuestion.stringifiedOptions = optionsService.stringifyOptions(this.activeQuestion.options);
             const text = await convertToText(this.activeQuestion.options);
-            this.initialStringifiedCategories = text;
-            this.stringifiedCategories = text;
+
+            this.questionStore.initStringifiedCategories(text);
+
             this.useListAsOptionsEditor = false;
         },
         questionChangesDiscarded() {
@@ -139,7 +148,7 @@ export default {
                 return;
             }
 
-            if (this.stringifiedCategories !== this.initialStringifiedCategories) {
+            if (this.questionStore.haveStringifiedCategoriesChanded()) {
 
                 this.stringifiedOptionsValidate();
 
@@ -147,27 +156,27 @@ export default {
                     return;
                 }
 
-                if (this.stringifiedCategories) {
-                    this.activeQuestion.options = await convertToTable(this.stringifiedCategories);
+                if (this.activeQuestion.stringifiedCategories) {
+                    this.activeQuestion.options = await convertToTable(this.activeQuestion.stringifiedCategories);
                     //this.activeQuestion.optionsCount = this.activeQuestion.options.length;
                 }
             }
 
-            this.stringifiedCategories = null;
-            this.initialStringifiedCategories = null;
+            this.questionStore.initStringifiedCategories('');
+
             this.useListAsOptionsEditor = true;
             this.stringifiedCategoriesValidity.valid = true;
         },
 
         updateStringifiedCategoriesValue(e) {
-            this.stringifiedCategories = e.target.value;
+            this.activeQuestion.stringifiedCategories = e.target.value;
             this.stringifiedOptionsValidate();
         },
         stringifiedOptionsValidate() {
             if (this.useListAsRosterTitleEditor == true)
                 return true;
 
-            const lines = (this.stringifiedCategories || '').split(/\r\n|\r|\n/);
+            const lines = (this.activeQuestion.stringifiedCategories || '').split(/\r\n|\r|\n/);
             const lineCount = lines.length
 
             if (lineCount > this.fixedRosterLimit) {
@@ -179,7 +188,7 @@ export default {
                 this.stringifiedCategoriesValidity.$error.maxOptionsCount = false
             }
 
-            const top5Errors = validateText(this.stringifiedCategories, false).slice(0, 5);
+            const top5Errors = validateText(this.activeQuestion.stringifiedCategories, false).slice(0, 5);
             if (top5Errors.length > 0) {
                 this.stringifiedCategoriesValidity.$error.matchOptionsPattern = true;
                 this.stringifiedCategoriesValidity.valid = false;
@@ -256,8 +265,6 @@ export default {
         },
 
         reset() {
-            this.stringifiedCategories = null;
-            this.initialStringifiedCategories = null;
             this.useListAsOptionsEditor = true;
             this.stringifiedCategoriesValidity.valid = true;
         }

@@ -31,10 +31,21 @@ export const useQuestionStore = defineStore('question', {
         },
 
         setQuestionData(data) {
+            data.stringifiedCategories = '';
             this.initialQuestion = _.cloneDeep(data);
             this.question = _.cloneDeep(this.initialQuestion);
         },
 
+        initStringifiedCategories(text) {
+            this.question.stringifiedCategories = text;
+            this.initialQuestion.stringifiedCategories = text;
+        },
+        haveStringifiedCategoriesChanded() {
+            return (
+                this.question.stringifiedCategories !==
+                this.initialQuestion.stringifiedCategories
+            );
+        },
         clear() {
             this.question = {};
             this.initialQuestion = {};
@@ -116,6 +127,8 @@ export const useQuestionStore = defineStore('question', {
 
         discardChanges() {
             this.question = _.cloneDeep(this.initialQuestion);
+            this.categoriesTextView = '';
+            this.initialCategoriesTextView = '';
         }
     }
 });
