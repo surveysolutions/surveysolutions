@@ -218,11 +218,10 @@ export default {
     },
     mounted() {
         this.scrollTo();
-    },
-    created() {
+
         window.addEventListener('beforeunload', this.beforeWindowUnload)
     },
-    beforeDestroy() {
+    unmounted() {
         window.removeEventListener('beforeunload', this.beforeWindowUnload)
     },
     beforeRouteLeave(to, from, next) {

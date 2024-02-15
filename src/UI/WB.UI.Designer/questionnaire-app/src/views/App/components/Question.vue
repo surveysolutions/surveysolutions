@@ -338,11 +338,10 @@ export default {
                 }
             }
         }
-    },
-    created() {
+
         window.addEventListener('beforeunload', this.beforeWindowUnload)
     },
-    beforeDestroy() {
+    unmounted() {
         window.removeEventListener('beforeunload', this.beforeWindowUnload)
     },
     beforeRouteLeave(to, from, next) {
