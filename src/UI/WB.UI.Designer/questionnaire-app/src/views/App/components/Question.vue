@@ -481,14 +481,14 @@ export default {
             }
 
             if (!this.activeQuestion.isCascade && !this.activeQuestion.isLinked &&
-                _.indexOf(['TextList', 'GpsCoordinates', 'MultyOption'], this.activeQuestion.type) < 0)
+                _.indexOf(['TextList', 'GpsCoordinates', 'MultyOption', 'DateTime', 'SingleOption'], this.activeQuestion.type) < 0)
                 return allScopes;
 
             return allScopes.filter(o => {
                 if (this.activeQuestion.type === 'MultyOption')
                     return o.value !== 'Identifying';
 
-                if (this.activeQuestion.type === 'GpsCoordinates')
+                if (this.activeQuestion.type === 'GpsCoordinates' || this.activeQuestion.type === 'DateTime')
                     return o.value !== 'Supervisor';
 
                 if (this.activeQuestion.type === 'SingleOption')
