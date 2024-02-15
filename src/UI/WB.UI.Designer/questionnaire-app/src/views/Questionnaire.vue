@@ -90,6 +90,7 @@ import { useQuestionnaireStore } from '../stores/questionnaire';
 import { useTreeStore } from '../stores/tree';
 import { useUserStore } from '../stores/user';
 import { useHotkeysStore } from '../stores/hotkeys';
+import { useUnsavedChanges } from '../stores/unsavedChanges';
 import { useMagicKeys } from '@vueuse/core';
 
 export default {
@@ -117,6 +118,7 @@ export default {
         const progressStore = useProgressStore();
         const blockUIStore = useBlockUIStore();
         const hotkeysStore = useHotkeysStore();
+        const unsavedChanges = useUnsavedChanges();
 
         const keys = useMagicKeys();
         const shiftCtrlQ = keys['Ctrl+Shift+?'];
@@ -132,7 +134,8 @@ export default {
             hotkeysStore,
             shiftCtrlQ,
             ctrlShiftP,
-            escape
+            escape,
+            unsavedChanges
         };
     },
     async beforeMount() {

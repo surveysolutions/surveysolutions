@@ -218,25 +218,6 @@ export default {
     },
     mounted() {
         this.scrollTo();
-
-        window.addEventListener('beforeunload', this.beforeWindowUnload)
-    },
-    unmounted() {
-        window.removeEventListener('beforeunload', this.beforeWindowUnload)
-    },
-    beforeRouteLeave(to, from, next) {
-        if (this.isDirty && !this.confirmLeave()) {
-            next(false)
-        } else {
-            next()
-        }
-    },
-    beforeRouteUpdate(to, from, next) {
-        if (this.isDirty && !this.confirmLeave()) {
-            next(false)
-        } else {
-            next()
-        }
     },
     computed: {
         commentsCount() {
@@ -341,17 +322,6 @@ export default {
 
             setFocusIn(focusId);
         },
-        //TODO: move to reuseable mixin
-        confirmLeave() {
-            return window.confirm(this.$t('QuestionnaireEditor.UnsavedChangesLeave'));
-        },
-        beforeWindowUnload(e) {
-            if (this.isDirty && !this.confirmLeave()) {
-                e.preventDefault()
-                e.returnValue = '' //for chrome
-            }
-            return null;
-        }
     }
 };
 </script>

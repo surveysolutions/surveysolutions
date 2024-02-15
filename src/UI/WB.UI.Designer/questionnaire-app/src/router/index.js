@@ -17,6 +17,8 @@ const Roster = () => import('../views/App/components/Roster.vue');
 const QuestionnaireHeader = () => import('../views/App/components/Header.vue');
 const Comments = () => import('../views/App/components/Comments.vue');
 
+import { useUnsavedChanges } from '../stores/unsavedChanges';
+
 const routes = [
     {
         path: '/questionnaire/editcategories/:questionnaireId',
@@ -158,6 +160,16 @@ const router = createRouter({
     history: createWebHistory(),
     //base: import.meta.env.BASE_URL,
     routes
+});
+
+router.beforeEach((to, from, next) => {
+    const { getUnsavedChanges, confirmLeave } = useUnsavedChanges();
+
+    if (getUnsavedChanges(from.name) && !confirmLeave()) {
+        next(false);
+    } else {
+        next();
+    }
 });
 
 export default router;
