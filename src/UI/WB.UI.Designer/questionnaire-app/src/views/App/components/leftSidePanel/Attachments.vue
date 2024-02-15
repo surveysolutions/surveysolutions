@@ -53,7 +53,6 @@
 import _ from 'lodash';
 import moment from 'moment';
 import { newGuid } from '../../../../helpers/guid';
-import { useQuestionnaireStore } from '../../../../stores/questionnaire';
 import { notice } from '../../../../services/notificationService';
 import AttachmentItem from './AttachmentItem.vue';
 import { formatBytes } from '../../../../services/utilityService';
@@ -75,16 +74,9 @@ export default {
             allowedMaxResolution: 4096
         }
     },
-    setup() {
-        const questionnaireStore = useQuestionnaireStore();
-
-        return {
-            questionnaireStore,
-        };
-    },
     computed: {
         attachments() {
-            return this.questionnaireStore.getInfo.attachments;
+            return this.questionnaire.attachments;
         },
     },
     methods: {

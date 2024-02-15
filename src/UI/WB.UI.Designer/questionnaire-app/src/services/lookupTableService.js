@@ -7,7 +7,7 @@ export async function addLookupTable(questionnaireId, lookupTable) {
         lookupTableId: lookupTable.itemId
     };
     return commandCall('AddLookupTable', command).then(response => {
-        emitter.emit('lookupTableAdded', {
+        emitter.emit('lookupTableUpdated', {
             lookupTable: lookupTable
         });
     });
@@ -19,7 +19,7 @@ export async function updateLookupTable(questionnaireId, lookupTable) {
         lookupTableId: lookupTable.itemId,
         lookupTableName: lookupTable.name,
         lookupTableFileName: lookupTable.fileName,
-        oldLookupTableId: lookupTable.oldItemId
+        oldLookupTableId: lookupTable.oldLookupTableId
     };
 
     const response = await upload(
@@ -27,6 +27,8 @@ export async function updateLookupTable(questionnaireId, lookupTable) {
         lookupTable.file,
         command
     );
+
+    lookupTable.meta.lastUpdated = new Date();
 
     emitter.emit('lookupTableUpdated', {
         lookupTable: lookupTable
@@ -43,7 +45,7 @@ export function deleteLookupTable(questionnaireId, itemId) {
 
     return commandCall('DeleteLookupTable', command).then(response => {
         emitter.emit('lookupTableDeleted', {
-            lookupTableId: itemId
+            id: itemId
         });
     });
 }

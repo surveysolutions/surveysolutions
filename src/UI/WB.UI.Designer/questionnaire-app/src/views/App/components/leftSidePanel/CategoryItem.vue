@@ -138,15 +138,6 @@ export default {
             this.category.file = null;
             this.file = [];
             this.originName = this.category.name;
-
-            /*.then(function (response) {
-                    dataBind(categories.checkpoint, categories);
-                    categories.form.$setPristine();
-
-                    updateQuestionnaireCategories(categories);
-                }).catch(function() {
-                    categories.categoriesId = categories.oldCategoriesId;
-                });*/
         },
 
         cancel() {

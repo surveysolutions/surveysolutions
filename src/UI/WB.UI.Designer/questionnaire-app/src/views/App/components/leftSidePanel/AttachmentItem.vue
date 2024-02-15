@@ -48,7 +48,7 @@
                     </div>
                     <div class="actions clearfix" :class="{ 'dirty': isDirty }">
                         <div v-if="isDirty" class="pull-left">
-                            <button type="button" :disabled="isReadOnlyForUser || !isInvalid" class="btn lighter-hover"
+                            <button type="button" :disabled="isReadOnlyForUser || isInvalid" class="btn lighter-hover"
                                 @click="saveAttachment(attachment)">{{
                                     $t('QuestionnaireEditor.Save') }}</button>
                             <button type="button" class="btn lighter-hover" @click="cancel(attachment)">{{
@@ -57,7 +57,7 @@
                         <div class="permanent-actions pull-right clearfix">
                             <button type="button" :value="$t('QuestionnaireEditor.SideBarAttachmentsUpload')"
                                 @click.stop="openFileDialog()" value="Upload new attachment"
-                                class="btn btn-default pull-right" ngf-select :disabled="isReadOnlyForUser" capture>
+                                class="btn btn-default pull-right" :disabled="isReadOnlyForUser" capture>
                                 <span>{{ $t('QuestionnaireEditor.Update') }}</span>
                             </button>
 
@@ -105,7 +105,7 @@ export default {
             return this.attachment.name != this.attachmentItem.name || (this.attachment.file !== null && this.attachment.file !== undefined);
         },
         isInvalid() {
-            return true;
+            return (this.attachment.name) ? false : true;
         },
     },
     methods: {

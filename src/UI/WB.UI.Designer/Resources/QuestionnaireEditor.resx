@@ -1562,7 +1562,7 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
     <value>Network error</value>
   </data>
   <data name="SideBarCategoriesAddNew" xml:space="preserve">
-    <value>Add new category</value>
+    <value>Add new categories</value>
   </data>
   <data name="RowAdded" xml:space="preserve">
     <value>Row added</value>

@@ -22,7 +22,6 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
         edittingMetadata: {},
         edittingCategories: [],
         edittingScenarios: [],
-        edittingLookupTables: [],
         edittingSharedInfo: {}
     }),
     getters: {
@@ -32,7 +31,6 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             !isEqual(state.edittingMetadata, state.info.metadata),
         getEdittingCategories: state => state.edittingCategories,
         getEdittingScenarios: state => state.edittingScenarios,
-        getEdittingLookupTables: state => state.edittingLookupTables,
         getEdittingSharedInfo: state => state.edittingSharedInfo,
         getQuestionnaireEditDataDirty: state =>
             state.edittingSharedInfo.title != state.info.title ||
@@ -75,7 +73,6 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             emitter.on('scenarioUpdated', this.scenarioUpdated);
             emitter.on('scenarioDeleted', this.scenarioDeleted);
 
-            emitter.on('lookupTableAdded', this.lookupTableAdded);
             emitter.on('lookupTableUpdated', this.lookupTableUpdated);
             emitter.on('lookupTableDeleted', this.lookupTableDeleted);
 
@@ -109,8 +106,12 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
 
             this.edittingCategories = cloneDeep(info.categories);
             this.edittingScenarios = cloneDeep(info.scenarios);
-            this.edittingLookupTables = cloneDeep(info.lookupTables);
             this.edittingSharedInfo = this.getQuestionnaireEditData();
+
+            forEach(this.info.lookupTables, lookupTable => {
+                var editLookupTable = cloneDeep(lookupTable);
+                lookupTable.editLookupTable = editLookupTable;
+            });
 
             forEach(this.info.translations, translation => {
                 var editTranslation = cloneDeep(translation);
@@ -464,55 +465,32 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             );
         },
 
-        async lookupTableAdded(event) {
-            const lookupTable = event.lookupTable;
+        lookupTableUpdated(payload) {
+            const newLookupTable = cloneDeep(payload.lookupTable);
+            newLookupTable.file = null;
+            newLookupTable.editLookupTable = cloneDeep(newLookupTable);
 
-            const newLookupTable = cloneDeep(lookupTable);
-            this.info.lookupTables.push(newLookupTable);
-
-            const eLookupTable = cloneDeep(lookupTable);
-            this.edittingLookupTables.push(eLookupTable);
-        },
-
-        async lookupTableUpdated(event) {
-            const lookupTable = event.lookupTable;
-
-            const item = find(
-                this.info.lookupTables,
-                item => item.itemId == lookupTable.oldItemId
-            );
-
-            if (item) {
-                item.name = lookupTable.name;
-                item.fileName = lookupTable.fileName;
-            }
-
-            const eItem = find(
-                this.info.edittingLookupTables,
-                item => item.itemId == lookupTable.oldItemId
-            );
-
-            if (eItem) {
-                eItem.name = lookupTable.name;
-                eItem.fileName = lookupTable.fileName;
+            if (payload.lookupTable.oldLookupTableId) {
+                const indexInit = findIndex(this.info.lookupTables, function(
+                    i
+                ) {
+                    return i.itemId === payload.lookupTable.oldLookupTableId;
+                });
+                if (indexInit !== -1) {
+                    this.info.lookupTables[indexInit] = newLookupTable;
+                }
+            } else {
+                this.info.lookupTables.push(newLookupTable);
             }
         },
 
-        async lookupTableDeleted(event) {
-            const lookupTableId = event.lookupTableId;
-
-            this.info.lookupTables = filter(
-                this.info.lookupTables,
-                lookupTable => {
-                    return lookupTable.itemId !== lookupTableId;
-                }
-            );
-            this.edittingLookupTables = filter(
-                this.edittingLookupTables,
-                lookupTable => {
-                    return lookupTable.itemId !== lookupTableId;
-                }
-            );
+        async lookupTableDeleted(payload) {
+            const indexInit = findIndex(this.info.lookupTables, function(i) {
+                return i.itemId === payload.id;
+            });
+            if (indexInit !== -1) {
+                this.info.lookupTables.splice(indexInit, 1);
+            }
         },
 
         itemPasted(event) {

@@ -7,7 +7,7 @@ import { ref, computed } from 'vue';
 const readyToPaste = ref(null);
 
 export const canPaste = computed(() => {
-    console.log('canPaste: ' + readyToPaste.value);
+    //console.log('canPaste: ' + readyToPaste.value);
     if (readyToPaste.value !== null) {
         return readyToPaste.value;
     }

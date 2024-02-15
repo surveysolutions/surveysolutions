@@ -12,8 +12,8 @@
 
             <div class="drop-box">{{ $t('QuestionnaireEditor.SideBarLookupTableDropFile') }}</div>
 
-            <div class="actions clearfix" :class="{ dirty: dirty }">
-                <div v-show="dirty" class="pull-left">
+            <div class="actions clearfix" :class="{ 'dirty': isDirty }">
+                <div v-show="isDirty" class="pull-left">
                     <button type="button" :disabled="isReadOnlyForUser || isInvalid" class="btn lighter-hover"
                         @click.self="saveLookupTable()">{{
                             $t('QuestionnaireEditor.Save') }}</button>
@@ -42,34 +42,30 @@
 </template>
   
 <script>
-
 import { updateLookupTable, deleteLookupTable } from '../../../../services/lookupTableService'
-import { isEmpty, isUndefined, isNull } from 'lodash'
+import { isEmpty, isUndefined, isNull, cloneDeep } from 'lodash'
 import { newGuid } from '../../../../helpers/guid';
 import { createQuestionForDeleteConfirmationPopup, trimText } from '../../../../services/utilityService'
-
 
 export default {
     name: 'LookupTableItem',
     inject: ['questionnaire', 'isReadOnlyForUser'],
     props: {
         questionnaireId: { type: String, required: true },
-        table: { type: Object, required: true },
+        tableItem: { type: Object, required: true },
     },
     data() {
         return {
             downloadLookupFileBaseUrl: '/Questionnaire/ExportLookupTable/',
-            originName: null,
             file: [],
         }
     },
-    beforeMount() {
-        const lt = this.findLookupTable(this.table.itemId);
-        this.originName = lt.name;
-    },
     computed: {
-        dirty() {
-            return this.table.name != this.originName || this.file.length > 0;
+        table() {
+            return this.tableItem.editLookupTable;
+        },
+        isDirty() {
+            return this.table.name != this.tableItem.name || (this.table.file !== null && this.table.file !== undefined);
         },
         downloadUrl() {
             return this.downloadLookupFileBaseUrl + this.questionnaireId + '?lookupTableId=' + this.table.itemId;
@@ -82,13 +78,6 @@ export default {
         }
     },
     methods: {
-        findLookupTable(itemId) {
-            const item = this.questionnaire.lookupTables.find(
-                p => p.itemId == itemId
-            );
-            return item;
-        },
-
         fileSelected(file) {
             if (isUndefined(file) || isNull(file)) {
                 return;
@@ -105,36 +94,22 @@ export default {
 
             table.meta = {};
             table.meta.fileName = file.name;
-            table.meta.lastUpdated = moment();
+
         },
 
         async saveLookupTable() {
-            let response = null;
+            this.table.oldLookupTableId = this.table.itemId;
+            this.table.itemId = newGuid();
 
-            try {
-                this.table.oldItemId = this.table.itemId;
-                this.table.itemId = newGuid();
+            var response = await updateLookupTable(this.questionnaireId, this.table)
 
-                response = await updateLookupTable(this.questionnaireId, this.table)
+            if (this.table.file)
+                notice(response);
 
-                if (this.table.file) notice(response);
-                this.table.file = null;
-                this.file = [];
-            }
-            catch (e) {
-                const lt = this.findLookupTable(this.table.oldItemId);
-                table.itemId = lt.itemId;
-                table.oldItemId = lt.oldItemId;
-            }
 
-            this.originName = this.table.name;
-        },
-
-        cancel() {
-            this.table.name = this.originName;
+            this.table.file = null;
             this.file = [];
         },
-
         deleteLookupTable() {
             var tableName = this.table.name || this.$t('QuestionnaireEditor.SideBarTranslationNoName');
 
@@ -149,15 +124,15 @@ export default {
 
             this.$confirm(confirmParams);
         },
-
-        async setDefaultTranslation(isDefault) {
-            await setDefaultTranslation(this.questionnaireId, isDefault ? this.translation.translationId : null)
-        },
-
         openFileDialog() {
             const fu = this.$refs.upload
             fu.$el.querySelector("#" + fu.inputId).click()
         },
+        cancel() {
+            var clonned = cloneDeep(this.tableItem);
+            clonned.editLookupTable = null;
+            this.tableItem.editLookupTable = clonned;
+        }
     }
 }
 </script>
