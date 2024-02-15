@@ -138,7 +138,7 @@ export const useTreeStore = defineStore('tree', {
             question.yesNoView = data.yesNoView;
             question.hideIfDisabled = data.hideIfDisabled;
 
-            this.updateVariableName(itemId, data.variable);
+            this.updateVariableName(itemId, data.variableName);
         },
 
         staticTextUpdated(event) {
