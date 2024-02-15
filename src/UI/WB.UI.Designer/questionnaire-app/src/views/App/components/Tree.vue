@@ -131,6 +131,8 @@
         </perfect-scrollbar>
     </div>
     <SearchDialog ref="searchDialog" :questionnaireId="questionnaireId" />
+    <SearchForQuestion ref="searchForQuestion" :questionnaire-id="questionnaireId" :chapter-id="chapterId">
+    </SearchForQuestion>
 </template>
 
 <style lang="scss">
@@ -178,7 +180,7 @@ export default {
         TreeStaticText,
         TreeVariable,
         SearchDialog,
-
+        SearchForQuestion,
         Help,
     },
     inject: ['questionnaire'],
@@ -411,7 +413,9 @@ export default {
                 }
             });
         },
-        searchForQuestion(chapter) { },
+        searchForQuestion(chapter) {
+            this.$refs.searchForQuestion.show();
+        },
         pasteItemInto(chapterInfo) {
             pasteItemInto(this.questionnaireId, chapterInfo.chapter.itemId).then(function (result) {
                 if (!chapterInfo.isCover)
