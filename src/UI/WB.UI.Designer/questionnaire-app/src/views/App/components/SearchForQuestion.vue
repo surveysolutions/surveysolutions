@@ -233,6 +233,10 @@ export default {
             this.loadFilters().then(() => {
                 this.search();
             });
+        },
+
+        close() {
+            this.open = false;
         }
     }
 }
