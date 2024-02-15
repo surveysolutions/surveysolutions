@@ -1,9 +1,8 @@
 <template>
     <div name="attachment.form">
         <div class="attachments-panel-item" :class="{ 'has-error': isNameValid }">
-            <a href="javascript:void(0);" @click="deleteAttachment(attachment)"
-                :disabled="isReadOnlyForUser ? 'disabled' : null" v-if="!isReadOnlyForUser" class="btn delete-btn"
-                tabindex="-1"></a>
+            <a href="javascript:void(0);" @click="deleteAttachment(attachment)" v-if="!isReadOnlyForUser"
+                class="btn delete-btn" tabindex="-1"></a>
             <div class="attachment">
                 <div class="attachment-preview">
                     <div class="attachment-preview-cover clearfix">

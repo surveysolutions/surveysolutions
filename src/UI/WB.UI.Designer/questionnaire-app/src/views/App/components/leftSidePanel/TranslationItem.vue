@@ -3,8 +3,8 @@
         <div class="translations-panel-item"
             :class="{ 'has-error': hasPatternError, 'dragover': !translation.isOriginalTranslation && $refs.upload && $refs.upload.dropActive }"
             ngf-drop="" ngf-max-size="4MB" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
-            <a href="javascript:void(0);" @click="deleteTranslation($event)" v-if="!isReadOnlyForUser"
-                class="btn delete-btn" tabindex="-1" v-show="!translation.isOriginalTranslation && !isReadOnlyForUser"></a>
+            <a href="javascript:void(0);" @click="deleteTranslation($event)"
+                v-if="!translation.isOriginalTranslation && !isReadOnlyForUser" class="btn delete-btn" tabindex="-1"></a>
             <div class="translation-content">
                 <input focus-on-out="focusTranslation{{translation.translationId}}" required=""
                     :placeholder="$t('QuestionnaireEditor.SideBarTranslationName')" maxlength="32" spellcheck="false"

@@ -1,8 +1,8 @@
 <template>
     <li class="lookup-table-panel-item" :class="{ 'dragover': $refs.upload && $refs.upload.dropActive }">
         <form name="table.form">
-            <a href="javascript:void(0);" @click.self="deleteLookupTable()" :disabled="isReadOnlyForUser"
-                v-if="!isReadOnlyForUser" class="btn delete-btn" tabindex="-1"></a>
+            <a href="javascript:void(0);" @click.self="deleteLookupTable()" v-if="!isReadOnlyForUser" class="btn delete-btn"
+                tabindex="-1"></a>
             <input focus-on-out="focusLookupTable{{table.itemId}}" required=""
                 :placeholder="$t('QuestionnaireEditor.SideBarLookupTableName')" maxlength="32" spellcheck="false"
                 autocomplete="off" v-model="table.name" name="name" class="form-control table-name" type="text" />
