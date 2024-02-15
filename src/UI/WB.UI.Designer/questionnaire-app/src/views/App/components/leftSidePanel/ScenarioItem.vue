@@ -14,7 +14,7 @@
             $t('QuestionnaireEditor.View')
         }}</button>
         <div class="actions" v-show="dirty" v-if="!isReadOnlyForUser">
-            <button type="button" :disabled="isReadOnlyForUser || invalid" class="btn lighter-hover"
+            <button type="button" v-if="!isReadOnlyForUser" :disabled="invalid" class="btn lighter-hover"
                 @click="saveScenario()">{{
                     $t('QuestionnaireEditor.Save') }}</button>
             <button type="button" class="btn lighter-hover" @click="cancel()">{{

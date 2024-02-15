@@ -29,7 +29,7 @@
                 <p>
                     <input type="button" :value="$t('QuestionnaireEditor.SideBarTranslationsUploadNew')"
                         @click.stop="openFileDialog()" value="Upload new categories" class="btn lighter-hover" ngf-select
-                        :disabled="isReadOnlyForUser" capture />
+                        v-if="!isReadOnlyForUser" capture />
 
                     <file-upload ref="upload" v-if="!isReadOnlyForUser" :input-id="'tfunew'" v-model="file"
                         :size="10 * 1024 * 1024" :drop="false" :drop-directory="false" @input-file="createAndUploadFile"

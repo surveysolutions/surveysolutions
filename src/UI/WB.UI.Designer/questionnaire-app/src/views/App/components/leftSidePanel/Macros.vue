@@ -18,7 +18,7 @@
             </div>
             <ul>
                 <li class="macros-panel-item" v-for="macro in macros">
-                    <a href="javascript:void(0);" @click="removeMacro(macro)" v-if="!questionnaire.isReadOnlyForUser"
+                    <a href="javascript:void(0);" @click="removeMacro(macro)" v-if="!isReadOnlyForUser"
                         class="btn delete-btn" tabindex="-1"></a>
                     <div class="input-group macros-name">
                         <span class="input-group-addon">$</span>
@@ -34,8 +34,8 @@
                             v-autosize></textarea>
                     </div>
                     <div class="actions" v-if="isEditorDirty(macro)">
-                        <button :disabled="questionnaire.isReadOnlyForUser" class="btn lighter-hover"
-                            @click="saveMacro(macro)">{{ $t('QuestionnaireEditor.Save') }}
+                        <button v-if="!isReadOnlyForUser" class="btn lighter-hover" @click="saveMacro(macro)">{{
+                            $t('QuestionnaireEditor.Save') }}
                         </button>
                         <button type="button" class="btn lighter-hover" @click="cancel(macro)">{{
                             $t('QuestionnaireEditor.Cancel') }}</button>
@@ -48,7 +48,7 @@
                 </li>
             </ul>
             <div class="button-holder">
-                <input type="button" class="btn lighter-hover" :disabled="questionnaire.isReadOnlyForUser"
+                <input type="button" class="btn lighter-hover" v-if="!isReadOnlyForUser"
                     :value="$t('QuestionnaireEditor.SideBarAddMacro')" @click="addNewMacro()">
             </div>
         </perfect-scrollbar>
@@ -56,7 +56,6 @@
 </template>
   
 <script>
-import { useQuestionnaireStore } from '../../../../stores/questionnaire';
 import ExpressionEditor from '../ExpressionEditor.vue';
 import { createQuestionForDeleteConfirmationPopup } from '../../../../services/utilityService'
 import _ from 'lodash';
@@ -68,25 +67,16 @@ export default {
     props: {
         questionnaireId: { type: String, required: true },
     },
+    inject: ['questionnaire', 'isReadOnlyForUser'],
     components: {
         ExpressionEditor,
     },
     data() {
         return {}
     },
-    setup() {
-        const questionnaireStore = useQuestionnaireStore();
-
-        return {
-            questionnaireStore
-        };
-    },
     computed: {
-        questionnaire() {
-            return this.questionnaireStore.info || {};
-        },
         macros() {
-            return this.questionnaire.macros || [];
+            return this.questionnaire.macros;
         },
     },
     methods: {

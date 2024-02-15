@@ -14,7 +14,7 @@
                 </div>
                 <div class="actions" :class="{ 'dirty': isDirty }">
                     <div v-show="isDirty" class="pull-left">
-                        <button type="button" :disabled="isReadOnlyForUser || isInvalid" class="btn lighter-hover"
+                        <button type="button" v-if="!isReadOnlyForUser" :disabled="isInvalid" class="btn lighter-hover"
                             @click.self="saveTranslation()">
                             {{ $t('QuestionnaireEditor.Save') }}
                         </button>
@@ -30,7 +30,7 @@
                     </button>
 
                     <div class="permanent-actions pull-right">
-                        <button type="button" class="btn lighter-hover" :disabled="isReadOnlyForUser"
+                        <button type="button" class="btn lighter-hover" v-if="!isReadOnlyForUser"
                             v-show="!translation.isDefault" @click.self="setDefaultTranslation(true);">
                             {{ $t('QuestionnaireEditor.MarkAsDefault') }}
                         </button>
@@ -44,17 +44,10 @@
                             :drop-directory="false"
                             accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.txt,.tsv,.tab">
                         </file-upload>
-                        <button v-show="!isDirty && !translation.isOriginalTranslation" :disabled="isReadOnlyForUser"
+                        <button v-show="!isDirty && !translation.isOriginalTranslation" v-if="!isReadOnlyForUser"
                             class="btn btn-default" @click.stop="openFileDialog()" type="button">
                             <span>{{ $t('QuestionnaireEditor.Update') }}</span>
                         </button>
-
-                        <!--button v-hide="translation.form.$dirty || translation.isOriginalTranslation"
-                            :disabled="isReadOnlyForUser" class="btn btn-default" ngf-select="" ngf-max-size="10MB"
-                            accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
-                            ngf-change="fileSelected(translation, $file);$event.stopPropagation()" type="button">
-                            <span>{{ $t('QuestionnaireEditor.Update') }}</span>
-                        </button-->
                     </div>
                 </div>
             </div>

@@ -244,9 +244,9 @@
                         </li>
                     </ul>
                     <div class="form-buttons-holder" :class="{ dirty: dirty }">
-                        <button type="button" class="btn btn-lg ng-isolate-scope"
-                            :disabled="questionnaire.isReadOnlyForUser || !dirty ? 'disabled' : null"
-                            :class="{ 'btn-primary': dirty }" @click.self="saveMetadata()">{{ $t('QuestionnaireEditor.Save')
+                        <button type="button" class="btn btn-lg ng-isolate-scope" v-if="!isReadOnlyForUser"
+                            :disabled="!dirty ? 'disabled' : null" :class="{ 'btn-primary': dirty }"
+                            @click.self="saveMetadata()">{{ $t('QuestionnaireEditor.Save')
                             }}</button>
                         <button type="button" class="btn btn-lg btn-link ng-isolate-scope" @click.self="cancelMetadata()">{{
                             $t('QuestionnaireEditor.Cancel')
@@ -272,6 +272,7 @@ export default {
     props: {
         questionnaireId: { type: String, required: true },
     },
+    inject: ['questionnaire', 'isReadOnlyForUser'],
     data() {
         return {}
     },

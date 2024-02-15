@@ -28,8 +28,7 @@
                     <a class="btn" v-if="questionnaire.questionnaireRevision || questionnaire.isReadOnlyForUser"
                         :href="'/questionnaire/clone/' + questionnaire.questionnaireId + (questionnaire.questionnaireRevision ? '$' + questionnaire.questionnaireRevision : '')"
                         target="_blank">{{ $t('QuestionnaireEditor.CopyTo') }}</a>
-                    <button class="btn" :disabled="questionnaire.isReadOnlyForUser &&
-                        !questionnaire.hasViewerAdminRights &&
+                    <button class="btn" v-if="!questionnaire.isReadOnlyForUser" :disabled="!questionnaire.hasViewerAdminRights &&
                         !questionnaire.isSharedWithUser" @click="showShareInfo()">
                         {{ $t('QuestionnaireEditor.Settings') }}
                     </button>

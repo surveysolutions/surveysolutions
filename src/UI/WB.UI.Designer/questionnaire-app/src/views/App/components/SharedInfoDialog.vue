@@ -68,8 +68,7 @@
                                         <div class="form-group">
                                             <button type="button" class="btn btn-lg update-button"
                                                 :class="{ 'btn-primary': dirty }" unsaved-warning-clear
-                                                v-if="!questionnaire.isReadOnlyForUser" :disabled="!dirty"
-                                                @click="updateTitle()">
+                                                v-if="!isReadOnlyForUser" :disabled="!dirty" @click="updateTitle()">
                                                 {{ $t('QuestionnaireEditor.Update') }}
                                             </button>
                                             <button type="button" id="edit-chapter-cancel-button"
@@ -301,6 +300,7 @@ import { useQuestionnaireStore } from '../../../stores/questionnaire';
 
 export default {
     name: 'SharedInfoDialog',
+    inject: ['questionnaire', 'isReadOnlyForUser'],
     components: {
         Help
     },
