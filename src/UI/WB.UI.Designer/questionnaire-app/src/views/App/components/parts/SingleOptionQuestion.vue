@@ -161,6 +161,7 @@
 <script>
 
 import Help from './../Help.vue'
+import { useQuestionStore } from '../../../../stores/question';
 import OptionsEditorTemplate from './OptionsEditorTemplate.vue'
 import CategoricalFilterExpression from './CategoricalFilterExpression.vue'
 import CascadingComboBoxTemplate from './CascadingComboBoxTemplate.vue'
@@ -192,7 +193,13 @@ export default {
             isLinked: false,
         }
     },
+    setup() {
+        const questionStore = useQuestionStore();
 
+        return {
+            questionStore
+        };
+    },
     mounted() {
         this.$emitter.on('questionChangesDiscarded', this.questionChangesDiscarded);
         this.reset();
@@ -236,7 +243,10 @@ export default {
         },
         categoriesId() {
             return this.activeQuestion.categoriesId;
-        }
+        },
+        initialQuestion() {
+            return this.questionStore.getInitialQuestion;
+        },
     },
     methods: {
         reset() {
