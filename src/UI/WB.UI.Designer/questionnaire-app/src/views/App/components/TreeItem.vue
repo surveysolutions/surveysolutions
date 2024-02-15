@@ -83,7 +83,7 @@ import { deleteStaticText } from '../../../services/staticTextService';
 
 import { useVariableStore } from '../../../stores/variable';
 import { deleteVariable } from '../../../services/variableService';
-
+import { pasteItemAfter, canPaste, copyItem } from '../../../services/copyPasteService'
 
 import { useQuestionnaireStore } from '../../../stores/questionnaire';
 import { useTreeStore } from '../../../stores/tree';
@@ -153,7 +153,7 @@ export default {
             return classes;
         },
         readyToPaste() {
-            return this.treeStore.canPaste();
+            return canPaste();
         }
     },
     methods: {
@@ -323,13 +323,13 @@ export default {
         },
 
         copyItem() {
-            this.treeStore.copyItem(this.item);
+            copyItem(this.questionnaireId, this.item);
         },
 
         pasteItemAfter() {
-            if (!this.treeStore.canPaste()) return;
+            if (!canPaste()) return;
 
-            this.treeStore.pasteItemAfter(this.item).then(function (result) {
+            pasteItemAfter(this.questionnaireId, this.item.itemId).then(function (result) {
                 if (!chapter.isCover)
                     this.$router.push({
                         name: result.itemType,

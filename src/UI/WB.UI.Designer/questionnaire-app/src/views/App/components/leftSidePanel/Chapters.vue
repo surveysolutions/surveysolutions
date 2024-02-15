@@ -82,6 +82,7 @@
 import { useTreeStore } from '../../../../stores/tree';
 import { useQuestionnaireStore } from '../../../../stores/questionnaire';
 import { createQuestionForDeleteConfirmationPopup } from '../../../../services/utilityService'
+import { pasteItemAfter, canPaste, copyItem } from '../../../../services/copyPasteService'
 
 import { Draggable, dragContext, walkTreeData } from '@he-tree/vue';
 import Help from '../Help.vue';
@@ -112,7 +113,7 @@ export default {
     },
     computed: {
         readyToPaste() {
-            return this.treeStore.canPaste();
+            return canPaste();
         },
         isReadOnlyForUser() {
             return (this.questionnaire || {}).isReadOnlyForUser;
@@ -162,15 +163,15 @@ export default {
         },
 
         pasteAfterChapter(chapter) {
-            if (!this.treeStore.canPaste()) return false;
+            if (!canPaste()) return false;
 
-            this.questionnaireStore.pasteItemAfter(chapter).then(() => {
+            pasteItemAfter(this.questionnaireId, chapter.itemId).then(() => {
                 //this.closePanel();
             });
         },
 
         copyRef(chapter) {
-            this.treeStore.copyItem(chapter);
+            copyItem(this.questionnaireId, chapter);
         },
 
         deleteChapter(chapter, stat) {

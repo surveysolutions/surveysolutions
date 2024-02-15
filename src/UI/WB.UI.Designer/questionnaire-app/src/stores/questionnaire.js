@@ -15,7 +15,6 @@ import {
     cloneDeep,
     isEqual
 } from 'lodash';
-import { useCookies } from 'vue3-cookies';
 
 export const useQuestionnaireStore = defineStore('questionnaire', {
     state: () => ({
@@ -82,6 +81,8 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
 
             emitter.on('attachmentDeleted', this.attachmentDeleted);
             emitter.on('attachmentUpdated', this.attachmentUpdated);
+
+            emitter.on('itemPasted', this.itemPasted);
         },
 
         async fetchQuestionnaireInfo(questionnaireId) {
@@ -343,27 +344,6 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             });
         },
 
-        pasteItemAfter(afterChapter) {
-            const cookies = useCookies();
-
-            var itemToCopy = cookies.cookies.get('itemToCopy');
-            if (!itemToCopy) return;
-
-            const newId = newGuid();
-
-            var command = {
-                sourceQuestionnaireId: itemToCopy.questionnaireId,
-                sourceItemId: itemToCopy.itemId,
-                entityId: newId,
-                questionnaireId: this.info.questionnaireId,
-                itemToPasteAfterId: afterChapter.itemId
-            };
-
-            return commandCall('PasteAfter', command).then(() =>
-                this.fetchQuestionnaireInfo(this.info.questionnaireId)
-            );
-        },
-
         updateQuestionnaireCategories(event) {
             if (this.info.categories === null) return;
 
@@ -533,6 +513,12 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
                     return lookupTable.itemId !== lookupTableId;
                 }
             );
+        },
+
+        itemPasted(event) {
+            //if (event.parentId == null) {
+            this.fetchQuestionnaireInfo(this.info.questionnaireId);
+            //}
         }
     }
 });

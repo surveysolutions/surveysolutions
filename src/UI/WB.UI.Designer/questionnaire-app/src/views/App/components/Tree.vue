@@ -149,18 +149,20 @@ import { Draggable, dragContext, walkTreeData } from '@he-tree/vue';
 import '@he-tree/vue/style/default.css';
 import { ref, nextTick } from 'vue';
 import SearchDialog from './SearchDialog.vue';
-import { moveItem } from '../../../services/questionnaireService'
+import SearchForQuestion from './SearchForQuestion.vue';
 
 import TreeGroup from './TreeGroup.vue';
 import TreeQuestion from './TreeQuestion.vue';
 import TreeStaticText from './TreeStaticText.vue';
 import TreeVariable from './TreeVariable.vue';
 
+import { moveItem } from '../../../services/questionnaireService'
 import { addGroup } from '../../../services/groupService';
 import { addQuestion } from '../../../services/questionService';
 import { addRoster } from '../../../services/rosterService';
 import { addStaticText } from '../../../services/staticTextService';
 import { addVariable } from '../../../services/variableService';
+import { canPaste, pasteItemInto } from '../../../services/copyPasteService'
 
 import Help from './Help.vue';
 
@@ -290,7 +292,7 @@ export default {
             );
         },
         readyToPaste() {
-            return this.treeStore.canPaste();
+            return canPaste();
         },
         isReadOnly() {
             return (
@@ -411,7 +413,7 @@ export default {
         },
         searchForQuestion(chapter) { },
         pasteItemInto(chapterInfo) {
-            this.treeStore.pasteItemInto(chapterInfo.chapter).then(function (result) {
+            pasteItemInto(this.questionnaireId, chapterInfo.chapter.itemId).then(function (result) {
                 if (!chapterInfo.isCover)
                     this.$router.push({
                         name: result.itemType,

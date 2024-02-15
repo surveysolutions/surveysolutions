@@ -1,8 +1,6 @@
 import { defineStore } from 'pinia';
-import { get, commandCall } from '../services/apiService';
-import { newGuid } from '../helpers/guid';
+import { get } from '../services/apiService';
 import { findIndex, isNull, isUndefined, cloneDeep, orderBy } from 'lodash';
-import { useCookies } from 'vue3-cookies';
 import emitter from '../services/emitter';
 
 export const useTreeStore = defineStore('tree', {
@@ -45,6 +43,8 @@ export const useTreeStore = defineStore('tree', {
             emitter.on('rosterAdded', this.rosterAdded);
             emitter.on('staticTextAdded', this.staticTextAdded);
             emitter.on('variableAdded', this.variableAdded);
+
+            emitter.on('itemPasted', this.itemPasted);
         },
 
         async fetchTree(questionnaireId, chapterId) {
@@ -107,72 +107,6 @@ export const useTreeStore = defineStore('tree', {
             } else {
                 event.parent.items.splice(event.index, 0, variable);
             }
-        },
-
-        copyItem(item) {
-            const cookies = useCookies();
-
-            var itemIdToCopy = item.itemId;
-
-            var itemToCopy = {
-                questionnaireId: this.questionnaireId,
-                itemId: itemIdToCopy,
-                itemType: item.itemType
-            };
-
-            cookies.cookies.remove('itemToCopy');
-            cookies.cookies.set('itemToCopy', itemToCopy, { expires: 7 });
-
-            this.readyToPaste = true;
-        },
-
-        canPaste() {
-            if (this.readyToPaste != null) return this.readyToPaste;
-            const cookies = useCookies();
-            this.readyToPaste = cookies.cookies.isKey('itemToCopy');
-            return this.readyToPaste;
-        },
-
-        pasteItemInto(parent) {
-            const cookies = useCookies();
-
-            var itemToCopy = cookies.cookies.get('itemToCopy');
-            if (!itemToCopy) return;
-
-            const newId = newGuid();
-
-            var command = {
-                sourceQuestionnaireId: itemToCopy.questionnaireId,
-                sourceItemId: itemToCopy.itemId,
-                parentId: parent.itemId,
-                entityId: newId,
-                questionnaireId: this.questionnaireId
-            };
-
-            return commandCall('PasteInto', command).then(() =>
-                this.fetchTree(this.questionnaireId, this.chapterId)
-            );
-        },
-
-        pasteItemAfter(afterNode) {
-            const cookies = useCookies();
-
-            var itemToCopy = cookies.cookies.get('itemToCopy');
-            if (!itemToCopy) return;
-
-            const newId = newGuid();
-
-            var command = {
-                sourceQuestionnaireId: itemToCopy.questionnaireId,
-                sourceItemId: itemToCopy.itemId,
-                entityId: newId,
-                questionnaireId: this.questionnaireId,
-                itemToPasteAfterId: afterNode.itemId
-            };
-
-            return commandCall('PasteAfter', command).then(() =>
-                this.fetchTree(this.questionnaireId, this.chapterId)
-            );
         },
 
         getItemIndexByIdFromParentItemsList(parent, id) {
@@ -424,6 +358,10 @@ export const useTreeStore = defineStore('tree', {
             }
 
             newParent.items.splice(newIndex, 0, treeItem);
+        },
+
+        itemPasted(event) {
+            this.fetchTree(this.questionnaireId, this.chapterId);
         }
     }
 });
