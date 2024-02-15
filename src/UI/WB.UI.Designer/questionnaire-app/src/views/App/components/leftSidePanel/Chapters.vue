@@ -109,11 +109,12 @@ export default {
         return {
             questionnaireStore,
             treeStore,
+            canPaste,
         };
     },
     computed: {
         readyToPaste() {
-            return canPaste();
+            return this.canPaste;
         },
         isReadOnlyForUser() {
             return (this.questionnaire || {}).isReadOnlyForUser;
@@ -163,7 +164,7 @@ export default {
         },
 
         pasteAfterChapter(chapter) {
-            if (!canPaste()) return false;
+            if (!this.canPaste) return false;
 
             pasteItemAfter(this.questionnaireId, chapter.itemId).then(() => {
                 //this.closePanel();

@@ -128,6 +128,7 @@ export default {
             rosterStore,
             staticTextStore,
             variableStore,
+            canPaste,
         };
     },
     computed: {
@@ -153,7 +154,7 @@ export default {
             return classes;
         },
         readyToPaste() {
-            return canPaste();
+            return this.canPaste;
         }
     },
     methods: {
@@ -327,7 +328,7 @@ export default {
         },
 
         pasteItemAfter() {
-            if (!canPaste()) return;
+            if (!this.canPaste) return;
 
             pasteItemAfter(this.questionnaireId, this.item.itemId).then(function (result) {
                 if (!chapter.isCover)

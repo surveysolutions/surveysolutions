@@ -2,8 +2,20 @@ import { commandCall } from './apiService';
 import emitter from './emitter';
 import { newGuid } from '../helpers/guid';
 import { useCookies } from 'vue3-cookies';
+import { ref, computed } from 'vue';
 
-let readyToPaste = null;
+const readyToPaste = ref(null);
+
+export const canPaste = computed(() => {
+    console.log('canPaste: ' + readyToPaste.value);
+    if (readyToPaste.value !== null) {
+        return readyToPaste.value;
+    }
+
+    const cookies = useCookies();
+    readyToPaste.value = cookies.cookies.isKey('itemToCopy');
+    return readyToPaste.value;
+});
 
 export function copyItem(questionnaireId, item) {
     const cookies = useCookies();
@@ -19,14 +31,7 @@ export function copyItem(questionnaireId, item) {
     cookies.cookies.remove('itemToCopy');
     cookies.cookies.set('itemToCopy', itemToCopy, { expires: 7 });
 
-    readyToPaste = true;
-}
-
-export function canPaste() {
-    if (readyToPaste != null) return readyToPaste;
-    const cookies = useCookies();
-    readyToPaste = cookies.cookies.isKey('itemToCopy');
-    return readyToPaste;
+    readyToPaste.value = true;
 }
 
 export function pasteItemInto(questionnaireId, parentId) {

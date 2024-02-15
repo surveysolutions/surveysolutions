@@ -223,7 +223,8 @@ export default {
             treeStore,
             searchDialog,
             ctrlShiftF,
-            ctrlShiftH
+            ctrlShiftH,
+            canPaste
         };
     },
     async beforeMount() {
@@ -294,7 +295,7 @@ export default {
             );
         },
         readyToPaste() {
-            return canPaste();
+            return this.canPaste;
         },
         isReadOnly() {
             return (
