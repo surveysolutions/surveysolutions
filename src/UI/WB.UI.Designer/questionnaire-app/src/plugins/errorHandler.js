@@ -1,6 +1,6 @@
 import { mande } from 'mande';
 
-const api = mande('/q/errors');
+const api = mande('/error/report');
 
 export function setupErrorHandler(app) {
     app.config.errorHandler = (err, vm, info) => {
