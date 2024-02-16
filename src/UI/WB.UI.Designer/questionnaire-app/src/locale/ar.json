@@ -479,7 +479,7 @@
     "DataChangesReverted": "Data changes reverted",
     "OptionsSizeLimit": "Maximum {max_rows} rows allowed",
     "CommunicationError": "Network error",
-    "SideBarCategoriesAddNew": "Add new category",
+    "SideBarCategoriesAddNew": "Add new categories",
     "RowAdded": "Row added",
     "OptionsCascadingListError": "\r\nYou entered an invalid input. Each line should follow the format: \"Title...ParentValue/Value[...Attachment name]\". 'Value' and 'ParentValue' must be an integer number. 'Title' must be an alpha-numeric string. 'Attachment name' is optional. No empty lines are allowed.",
     "ShowParentValues": "Show Parent values",
