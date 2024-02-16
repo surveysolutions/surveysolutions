@@ -70,7 +70,8 @@ export default {
         return {
             benchmarkDownloadSpeed: 20,
             downloadLookupFileBaseUrl: '/attachments',
-            allowedMaxResolution: 4096
+            allowedMaxResolution: 4096,
+            variableNameHtml: "<span class=\"variable-name\">" + this.$t('QuestionnaireEditor.VariableName') + "</span>",
         }
     },
     computed: {
