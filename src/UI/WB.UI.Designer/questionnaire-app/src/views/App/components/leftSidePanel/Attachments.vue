@@ -34,7 +34,7 @@
                         {{ $t('QuestionnaireEditor.ClickHere') }}
                     </a>
                 </p>
-                <p v-html="emptyAttachmentsDescription" />
+                <p v-dompurify-html="$t('QuestionnaireEditor.SideBarAttachmentsEmptyLine3', { name: variableNameHtml })" />
             </div>
             <form role="form" name="attachmentsForm" novalidate>
                 <div class="attachment-list">
