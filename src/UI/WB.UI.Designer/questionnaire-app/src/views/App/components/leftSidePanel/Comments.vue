@@ -96,6 +96,7 @@ export default {
 
         this.$emitter.on('staticTextDeleted', this.entityDeleted);
         this.$emitter.on('groupDeleted', this.entityDeleted);
+        this.$emitter.on('rosterDeleted', this.entityDeleted);
         this.$emitter.on('variableDeleted', this.entityDeleted);
         this.$emitter.on('questionDeleted', this.entityDeleted);
     },
@@ -112,6 +113,7 @@ export default {
 
         this.$emitter.off('staticTextDeleted', this.entityDeleted);
         this.$emitter.off('groupDeleted', this.entityDeleted);
+        this.$emitter.off('rosterDeleted', this.entityDeleted);
         this.$emitter.off('variableDeleted', this.entityDeleted);
         this.$emitter.off('questionDeleted', this.entityDeleted);
     },
