@@ -138,12 +138,11 @@ export default {
             const fileNameLength = categories.name.length;
             categories.name = categories.name.substring(0, fileNameLength < maxNameLength ? fileNameLength : maxNameLength);
 
-            var response = updateCategories(this.questionnaireId, categories, true);
+            var response = await updateCategories(this.questionnaireId, categories, true);
 
-            if (this.file)
+            if (this.file.length > 0)
                 notice(response);
 
-            this.categories.file = null;
             this.file = [];
         },
 
