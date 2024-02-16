@@ -42,7 +42,7 @@
                         </p>
                         <p v-if="attachment.meta.lastUpdateDate">
                             {{ $t('QuestionnaireEditor.SideBarAttachmentUploaded', {
-                                lastUpdate: attachment.meta.lastUpdateDate
+                                lastUpdate: getDateTimeString(attachment.meta.lastUpdateDate)
                             }) }}
                         </p>
                     </div>
@@ -81,7 +81,7 @@
 import _ from 'lodash'
 import moment from 'moment';
 import { newGuid } from '../../../../helpers/guid';
-import { toLocalDateTime, createQuestionForDeleteConfirmationPopup, formatBytes } from '../../../../services/utilityService'
+import { createQuestionForDeleteConfirmationPopup, formatBytes, formatDateTime } from '../../../../services/utilityService'
 import { deleteAttachment, updateAttachment } from '../../../../services/attachmentsService';
 
 export default {
@@ -136,6 +136,9 @@ export default {
         },
         isNameValid() {
             return true;
+        },
+        getDateTimeString(dateTime) {
+            return formatDateTime(dateTime)
         },
         //TODO move to reuse
         async fileSelected(file) {
