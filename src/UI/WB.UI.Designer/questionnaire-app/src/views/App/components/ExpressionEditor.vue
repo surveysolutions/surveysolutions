@@ -1,7 +1,8 @@
 <template>
     <div :class="{ 'pseudo-form-control': focusable === 'true' }" ref="editorHolder">
-        <v-ace-editor ref="editor" v-autosize v-model:value="editorValue" @init="editorInit" theme="github"
+        <v-ace-editor ref="editor" v-model:value="editorValue" @init="editorInit" theme="github"
             :lang="mode !== 'substitutions' ? 'csharp' : 'text'" :options="{
+                minLines: 1,
                 maxLines: 300,
                 fontSize: 16,
                 highlightActiveLine: false,
