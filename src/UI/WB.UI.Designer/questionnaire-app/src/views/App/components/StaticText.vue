@@ -205,12 +205,6 @@ export default {
             };
         });
 
-        const keys = useMagicKeys();
-        const activeElement = useActiveElement();
-        const notUsingInput = computed(() =>
-            activeElement.value?.tagName !== 'INPUT'
-            && activeElement.value?.tagName !== 'TEXTAREA',);
-
         const { ctrl_s } = useMagicKeys({
             passive: false,
             onEventFired(e) {
@@ -218,7 +212,6 @@ export default {
                     e.preventDefault()
             },
         })
-        //const notInputCtrS = logicAnd(keys['Ctrl+s'], notUsingInput);
 
         return {
             staticTextStore,

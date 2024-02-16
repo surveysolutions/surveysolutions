@@ -156,22 +156,13 @@ export default {
             };
         });
 
-
-        const activeElement = useActiveElement();
-        const notUsingInput = computed(() =>
-            activeElement.value?.tagName !== 'INPUT'
-            && activeElement.value?.tagName !== 'TEXTAREA',);
-
-
         const { ctrl_s } = useMagicKeys({
             passive: false,
             onEventFired(e) {
                 if (e.ctrlKey && e.key === 's' && e.type === 'keydown')
                     e.preventDefault()
             },
-        })
-
-        //const notInputCtrS = logicAnd(keys['Ctrl+s'], notUsingInput);
+        });
 
         return {
             groupStore, commentsStore, ctrl_s

@@ -419,11 +419,6 @@ export default {
             };
         });
 
-        const keys = useMagicKeys();
-        const activeElement = useActiveElement();
-        const notUsingInput = computed(() =>
-            activeElement.value?.tagName !== 'INPUT'
-            && activeElement.value?.tagName !== 'TEXTAREA',);
 
         const { ctrl_s } = useMagicKeys({
             passive: false,
@@ -432,7 +427,6 @@ export default {
                     e.preventDefault()
             },
         })
-        //const notInputCtrS = logicAnd(keys['Ctrl+s'], notUsingInput);
 
         return {
             rosterStore, commentsStore, ctrl_s

@@ -124,10 +124,17 @@ export default {
         const activeElement = useActiveElement();
         const notUsingInput = computed(() =>
             activeElement.value?.tagName !== 'INPUT'
-            && activeElement.value?.tagName !== 'TEXTAREA',);
+            && activeElement.value?.tagName !== 'TEXTAREA');
 
         const notInputQ = logicAnd(keys['?'], notUsingInput);
-        const notInputCtrlP = logicAnd(keys['Ctrl+p'], notUsingInput);
+
+        const { ctrl_p } = useMagicKeys({
+            passive: false,
+            onEventFired(e) {
+                if (e.ctrlKey && e.key === 'p' && e.type === 'keydown')
+                    e.preventDefault()
+            },
+        })
 
         return {
             questionnaireStore,
@@ -137,7 +144,7 @@ export default {
             blockUIStore,
             hotkeysStore,
             unsavedChanges,
-            notInputCtrlP,
+            ctrl_p,
             notInputQ
         };
     },
@@ -153,7 +160,7 @@ export default {
                 body.classList.remove('block-ui-anim-fade', 'block-ui-active', 'block-ui-visible');
             }
         },
-        notInputQ: function (val) {
+        ctrl_p: function (val) {
             if (val)
                 this.changeCheatSheetVisibility();
         },

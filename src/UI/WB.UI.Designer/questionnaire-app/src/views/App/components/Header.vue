@@ -178,7 +178,7 @@ export default {
         const activeElement = useActiveElement();
         const notUsingInput = computed(() =>
             activeElement.value?.tagName !== 'INPUT'
-            && activeElement.value?.tagName !== 'TEXTAREA',);
+            && activeElement.value?.tagName !== 'TEXTAREA');
 
         const notInputCtrlB = logicAnd(keys['Ctrl+b'], notUsingInput);
 
