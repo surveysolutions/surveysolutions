@@ -138,7 +138,45 @@ export const useTreeStore = defineStore('tree', {
             question.yesNoView = data.yesNoView;
             question.hideIfDisabled = data.hideIfDisabled;
 
-            this.updateVariableName(itemId, data.variableName);
+            const varType = this.getUnderlyingQuestionType(question);
+            this.updateVariableName(itemId, data.variableName, varType);
+        },
+
+        getUnderlyingQuestionType(question) {
+            switch (question.type) {
+                case 'Text':
+                case 'Multimedia':
+                case 'QRBarcode':
+                    return 'string';
+                case 'TextList':
+                    return 'TextList'; // real type is TextListAnswerRow[]
+                case 'DateTime':
+                    return 'DateTime?';
+                case 'GpsCoordinates':
+                    return 'GeoLocation';
+                case 'MultyOption':
+                    if (question.yesNoView) {
+                        return 'YesNoAnswers'; // real type is YesNoAndAnswersMissings
+                    }
+                    if (isNotLinkedOrLinkedToTextList(question)) {
+                        return 'int[]';
+                    }
+                    return 'RosterVector[]';
+                case 'SingleOption':
+                    if (isNotLinkedOrLinkedToTextList(question)) {
+                        return 'int?';
+                    }
+
+                    return 'RosterVector';
+                case 'Numeric':
+                    if (question.isInteger) {
+                        return 'int?';
+                    }
+
+                    return 'double?';
+            }
+
+            return null;
         },
 
         staticTextUpdated(event) {
@@ -160,8 +198,27 @@ export const useTreeStore = defineStore('tree', {
             if (isNull(variable) || isUndefined(variable)) return;
             variable.variableData.name = data.variable;
             variable.variableData.label = data.label;
+            variable.variableData.type = data.type;
 
-            this.updateVariableName(data.id, data.variable);
+            const varType = this.getUnderlyingVariableType(variable);
+            this.updateVariableName(data.id, data.variable, varType);
+        },
+
+        getUnderlyingVariableType(variable) {
+            switch (variable.variableData.type) {
+                case 'LongInteger':
+                    return 'long?';
+                case 'String':
+                    return 'string';
+                case 'DateTime':
+                    return 'DateTime?';
+                case 'Double':
+                    return 'double?';
+                case 'Boolean':
+                    return 'bool?';
+            }
+
+            return null;
         },
 
         groupUpdated(payload) {
@@ -184,7 +241,11 @@ export const useTreeStore = defineStore('tree', {
             group.hasCondition = hasCondition;
             group.hideIfDisabled = payload.group.hideIfDisabled;
 
-            this.updateVariableName(itemId, payload.group.variableName);
+            this.updateVariableName(
+                itemId,
+                payload.group.variableName,
+                'Roster'
+            );
         },
 
         rosterUpdated(data) {
@@ -200,17 +261,25 @@ export const useTreeStore = defineStore('tree', {
             roster.hasCondition = hasCondition;
             roster.hideIfDisabled = data.roster.hideIfDisabled;
 
-            this.updateVariableName(itemId, data.roster.variableName);
+            this.updateVariableName(itemId, data.roster.variableName, 'Roster');
         },
 
-        updateVariableName(id, newName) {
+        updateVariableName(id, newName, type) {
+            const trimId = id.replaceAll('-', '');
             var index = findIndex(this.info.variableNames, function(i) {
-                return i.id === id.replaceAll('-', '');
+                return i.id === trimId;
             });
             if (index > -1) {
                 this.info.variableNames[index].name = newName;
-                this.recalculateVariableNames();
+                this.info.variableNames[index].type = type;
+            } else {
+                this.info.variableNames.push({
+                    id: trimId,
+                    name: newName,
+                    type: type
+                });
             }
+            this.recalculateVariableNames();
         },
         removeVariableName(id) {
             var index = findIndex(this.info.variableNames, function(i) {
