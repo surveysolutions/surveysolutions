@@ -149,7 +149,7 @@
 import { useTreeStore } from '../../../stores/tree';
 import { Draggable, dragContext, walkTreeData } from '@he-tree/vue';
 import '@he-tree/vue/style/default.css';
-import { ref, nextTick } from 'vue';
+import { ref, nextTick, computed } from 'vue';
 import SearchDialog from './SearchDialog.vue';
 import SearchForQuestion from './SearchForQuestion.vue';
 
@@ -169,7 +169,8 @@ import { canPaste, pasteItemInto } from '../../../services/copyPasteService'
 import Help from './Help.vue';
 
 import { migrateToNewVersion } from '../../../services/questionnaireService'
-import { useMagicKeys } from '@vueuse/core';
+import { useActiveElement, useMagicKeys } from '@vueuse/core';
+import { logicAnd } from '@vueuse/math'
 
 export default {
     name: 'Tree',
@@ -202,11 +203,11 @@ export default {
                 await this.fetch();
             }
         },
-        ctrlShiftF: function (value) {
+        notInputCtrlF: function (value) {
             if (value)
                 this.showSearch();
         },
-        ctrlShiftH: function (value) {
+        notInputCtrlH: function (value) {
             if (value)
                 this.showFindReplaceDialog();
         }
@@ -216,14 +217,19 @@ export default {
         const searchDialog = ref(null);
 
         const keys = useMagicKeys();
-        const ctrlShiftF = keys['Ctrl+Shift+f'];
-        const ctrlShiftH = keys['Ctrl+Shift+h'];
+        const activeElement = useActiveElement();
+        const notUsingInput = computed(() =>
+            activeElement.value?.tagName !== 'INPUT'
+            && activeElement.value?.tagName !== 'TEXTAREA',);
+
+        const notInputCtrlF = logicAnd(keys['Ctrl+f'], notUsingInput);
+        const notInputCtrlH = logicAnd(keys['Ctrl+h'], notUsingInput);
 
         return {
             treeStore,
             searchDialog,
-            ctrlShiftF,
-            ctrlShiftH,
+            notInputCtrlF,
+            notInputCtrlH,
             canPaste
         };
     },

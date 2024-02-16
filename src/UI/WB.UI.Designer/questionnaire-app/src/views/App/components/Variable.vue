@@ -95,8 +95,9 @@ import MoveToChapterSnippet from './MoveToChapterSnippet.vue';
 import ExpressionEditor from './ExpressionEditor.vue';
 import Breadcrumbs from './Breadcrumbs.vue'
 import Help from './Help.vue'
-
-import { useMagicKeys } from '@vueuse/core';
+import { computed } from 'vue';
+import { useMagicKeys, useActiveElement } from '@vueuse/core';
+import { logicAnd } from '@vueuse/math'
 
 export default {
     name: 'Variable',
@@ -117,7 +118,7 @@ export default {
                 this.scrollTo();
             }
         },
-        ctrlShiftS: function (value) {
+        ctrl_s: function (value) {
             if (value)
                 this.saveVariable();
         }
@@ -137,10 +138,23 @@ export default {
         });
 
         const keys = useMagicKeys();
-        const ctrlShiftS = keys['Ctrl+Shift+s'];
+        const activeElement = useActiveElement();
+        const notUsingInput = computed(() =>
+            activeElement.value?.tagName !== 'INPUT'
+            && activeElement.value?.tagName !== 'TEXTAREA',);
+
+        const { ctrl_s } = useMagicKeys({
+            passive: false,
+            onEventFired(e) {
+                if (e.ctrlKey && e.key === 's' && e.type === 'keydown')
+                    e.preventDefault()
+            },
+        })
+
+        //const notInputCtrS = logicAnd(keys['Ctrl+s'], notUsingInput);
 
         return {
-            variableStore, commentsStore, ctrlShiftS
+            variableStore, commentsStore, ctrl_s
         };
     },
     async beforeMount() {

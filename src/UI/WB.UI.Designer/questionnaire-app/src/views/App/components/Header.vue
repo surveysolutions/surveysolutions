@@ -146,11 +146,12 @@
 import VerificationDialog from './VerificationDialog.vue';
 import SharedInfoDialog from './SharedInfoDialog.vue';
 import DownloadPDFDialog from './DownloadPDFDialog.vue';
-import { useMagicKeys } from '@vueuse/core';
+import { useMagicKeys, useActiveElement } from '@vueuse/core';
+import { logicAnd } from '@vueuse/math'
 
 import { useVerificationStore } from '../../../stores/verification';
 import WebTesterApi from '../../../api/webTester';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 export default {
     name: 'QuestionnaireHeader',
@@ -174,18 +175,23 @@ export default {
         const downloadPDFDialog = ref(null);
 
         const keys = useMagicKeys();
-        const ctrlB = keys['Ctrl+b'];
+        const activeElement = useActiveElement();
+        const notUsingInput = computed(() =>
+            activeElement.value?.tagName !== 'INPUT'
+            && activeElement.value?.tagName !== 'TEXTAREA',);
+
+        const notInputCtrlB = logicAnd(keys['Ctrl+b'], notUsingInput);
 
         return {
             verificationStore,
             verificationDialog,
             sharedInfoDialog,
             downloadPDFDialog,
-            ctrlB
+            notInputCtrlB
         };
     },
     watch: {
-        ctrlB: function (v) {
+        notInputCtrlB: function (v) {
             if (v)
                 this.verify();
         }

@@ -277,12 +277,12 @@ export default {
     },
     watch: {
         arrowLeft: function (value) {
-            if (value)
-                this.unfoldChapters();
+            // if (value)
+            //     this.unfoldChapters();
         },
         arrowRight: function (value) {
-            if (value)
-                this.foldChapters();
+            // if (value)
+            //     this.foldChapters();
         }
     },
 

@@ -64,7 +64,7 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="cfp-hotkeys-close" @click="toggleCheatSheet()">&#215;</div>
+            <div class="cfp-hotkeys-close" @click="changeCheatSheetVisibility">&#215;</div>
         </div>
     </div>
 </template>
@@ -91,7 +91,8 @@ import { useTreeStore } from '../stores/tree';
 import { useUserStore } from '../stores/user';
 import { useHotkeysStore } from '../stores/hotkeys';
 import { useUnsavedChanges } from '../stores/unsavedChanges';
-import { useMagicKeys } from '@vueuse/core';
+import { useActiveElement, useMagicKeys } from '@vueuse/core';
+import { logicAnd } from '@vueuse/math'
 
 export default {
     name: 'QuestionnaireApp',
@@ -102,13 +103,12 @@ export default {
             currentChapter: computed(() => this.currentChapter),
             isCover: readonly(computed(() => this.isCover)),
             isReadOnlyForUser: readonly(computed(() => this.isReadOnlyForUser)),
-
             currentUser: readonly(computed(() => this.currentUser))
         };
     },
     data() {
         return {
-            cheatSheetVisible: false
+            showCheatSheet: false
         };
     },
     setup() {
@@ -121,9 +121,13 @@ export default {
         const unsavedChanges = useUnsavedChanges();
 
         const keys = useMagicKeys();
-        const shiftCtrlQ = keys['Ctrl+Shift+?'];
-        const ctrlShiftP = keys['Ctrl+Shift+P'];
-        const escape = keys['escape'];
+        const activeElement = useActiveElement();
+        const notUsingInput = computed(() =>
+            activeElement.value?.tagName !== 'INPUT'
+            && activeElement.value?.tagName !== 'TEXTAREA',);
+
+        const notInputQ = logicAnd(keys['?'], notUsingInput);
+        const notInputCtrlP = logicAnd(keys['Ctrl+p'], notUsingInput);
 
         return {
             questionnaireStore,
@@ -132,10 +136,9 @@ export default {
             progressStore,
             blockUIStore,
             hotkeysStore,
-            shiftCtrlQ,
-            ctrlShiftP,
-            escape,
-            unsavedChanges
+            unsavedChanges,
+            notInputCtrlP,
+            notInputQ
         };
     },
     async beforeMount() {
@@ -150,18 +153,14 @@ export default {
                 body.classList.remove('block-ui-anim-fade', 'block-ui-active', 'block-ui-visible');
             }
         },
-        shiftCtrlQ: function (v) {
-            if (v)
-                this.toggleCheatSheet();
+        notInputQ: function (val) {
+            if (val)
+                this.changeCheatSheetVisibility();
         },
-        ctrlShiftP: function (v) {
-            if (v)
+        notInputCtrlP: function (val) {
+            if (val)
                 window.open("/pdf/printpreview/" + this.questionnaire.questionnaireId, "_blank");
-        },
-        escape: function (v) {
-            if (v && this.cheatSheetVisible)
-                this.toggleCheatSheet();
-        },
+        }
     },
     mounted() {
         this.$Progress.finish();
@@ -198,6 +197,9 @@ export default {
         },
         isBlocked() {
             return this.blockUIStore.isBlocked;
+        },
+        cheatSheetVisible() {
+            return this.showCheatSheet;
         }
     },
     methods: {
@@ -219,8 +221,8 @@ export default {
                 });
             }
         },
-        toggleCheatSheet() {
-            this.cheatSheetVisible = !this.cheatSheetVisible;
+        changeCheatSheetVisibility() {
+            this.showCheatSheet = !this.showCheatSheet;
         }
     }
 };

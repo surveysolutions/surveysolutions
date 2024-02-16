@@ -362,8 +362,9 @@ import { isInteger } from '../../../helpers/number';
 import { createQuestionForDeleteConfirmationPopup, focusElementByName } from '../../../services/utilityService'
 import { updateRoster, deleteRoster, getQuestionsEligibleForNumericRosterTitle } from '../../../services/rosterService'
 import { setFocusIn } from '../../../services/utilityService'
-
-import { useMagicKeys } from '@vueuse/core';
+import { computed } from 'vue';
+import { useMagicKeys, useActiveElement } from '@vueuse/core';
+import { logicAnd } from '@vueuse/math'
 
 export default {
     name: 'Roster',
@@ -398,7 +399,7 @@ export default {
                 this.scrollTo();
             }
         },
-        ctrlShiftS: function (v) {
+        ctrl_s: function (v) {
             if (v) {
                 this.saveRoster();
             }
@@ -419,10 +420,22 @@ export default {
         });
 
         const keys = useMagicKeys();
-        const ctrlShiftS = keys['Ctrl+Shift+s'];
+        const activeElement = useActiveElement();
+        const notUsingInput = computed(() =>
+            activeElement.value?.tagName !== 'INPUT'
+            && activeElement.value?.tagName !== 'TEXTAREA',);
+
+        const { ctrl_s } = useMagicKeys({
+            passive: false,
+            onEventFired(e) {
+                if (e.ctrlKey && e.key === 's' && e.type === 'keydown')
+                    e.preventDefault()
+            },
+        })
+        //const notInputCtrS = logicAnd(keys['Ctrl+s'], notUsingInput);
 
         return {
-            rosterStore, commentsStore, ctrlShiftS
+            rosterStore, commentsStore, ctrl_s
         };
     },
     async beforeMount() {

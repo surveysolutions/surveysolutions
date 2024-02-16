@@ -154,8 +154,9 @@ import Breadcrumbs from './Breadcrumbs.vue';
 import ExpressionEditor from './ExpressionEditor.vue';
 import Help from './Help.vue';
 import MoveToChapterSnippet from './MoveToChapterSnippet.vue';
-
-import { useMagicKeys } from '@vueuse/core';
+import { computed } from 'vue';
+import { useMagicKeys, useActiveElement } from '@vueuse/core';
+import { logicAnd } from '@vueuse/math'
 
 export default {
     name: 'StaticText',
@@ -184,7 +185,7 @@ export default {
                 this.scrollTo();
             }
         },
-        ctrlShiftS: function (v) {
+        ctrl_s: function (v) {
             if (v) {
                 this.saveStaticText();
             }
@@ -205,12 +206,24 @@ export default {
         });
 
         const keys = useMagicKeys();
-        const ctrlShiftS = keys['Ctrl+Shift+s'];
+        const activeElement = useActiveElement();
+        const notUsingInput = computed(() =>
+            activeElement.value?.tagName !== 'INPUT'
+            && activeElement.value?.tagName !== 'TEXTAREA',);
+
+        const { ctrl_s } = useMagicKeys({
+            passive: false,
+            onEventFired(e) {
+                if (e.ctrlKey && e.key === 's' && e.type === 'keydown')
+                    e.preventDefault()
+            },
+        })
+        //const notInputCtrS = logicAnd(keys['Ctrl+s'], notUsingInput);
 
         return {
             staticTextStore,
             commentsStore,
-            ctrlShiftS
+            ctrl_s
         };
     },
     async beforeMount() {
