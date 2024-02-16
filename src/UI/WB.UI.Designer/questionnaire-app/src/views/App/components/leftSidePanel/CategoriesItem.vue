@@ -50,10 +50,9 @@
   
 <script>
 
-import { newGuid } from '../../../../helpers/guid';
-import { find, isNull, isUndefined } from 'lodash'
+import { isNull, isUndefined } from 'lodash'
 import { updateCategories, deleteCategories } from '../../../../services/categoriesService';
-import { trimText, createDeletePopup } from '../../../../services/utilityService'
+import { trimText } from '../../../../services/utilityService'
 import { notice } from '../../../../services/notificationService';
 import moment from 'moment';
 
@@ -107,12 +106,10 @@ export default {
         },
 
         async saveCategories() {
-            this.categories.oldCategoriesId = this.categories.categoriesId;
-            this.categories.categoriesId = newGuid();
+            const response = await updateCategories(this.questionnaireId, this.categories);
 
-            const response = await updateCategories(this.questionnaireId, this.categories)
-
-            if (this.categories.file) notice(response);
+            if (this.file.length > 0)
+                notice(response);
 
             this.categories.file = null;
             this.file = [];

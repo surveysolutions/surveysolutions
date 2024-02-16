@@ -1,18 +1,24 @@
 import { upload, commandCall } from './apiService';
 import emitter from './emitter';
+import { newGuid } from '../helpers/guid';
 
-export function updateTranslation(questionnaireId, translation) {
+export function updateTranslation(questionnaireId, translation, isNew = false) {
     var command = {
         questionnaireId: questionnaireId,
         translationId: translation.translationId,
-        oldTranslationId: translation.oldTranslationId,
         name: translation.name
     };
+
+    if (!isNew && translation.file !== null && translation.file !== undefined) {
+        command.oldTranslationId = translation.translationId;
+        command.translationId = newGuid();
+    }
 
     return upload('/api/command/translation', translation.file, command).then(
         response => {
             emitter.emit('translationUpdated', {
-                translation: translation
+                translation: translation,
+                newId: command.oldTranslationId ? command.translationId : null
             });
             return response;
         }

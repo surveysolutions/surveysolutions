@@ -1,14 +1,23 @@
-import moment from 'moment';
 import { upload, commandCall } from './apiService';
 import emitter from './emitter';
+import { newGuid } from '../helpers/guid';
 
-export async function updateAttachment(questionnaireId, attachment) {
+export async function updateAttachment(
+    questionnaireId,
+    attachment,
+    isNew = false
+) {
     var command = {
         questionnaireId: questionnaireId,
         attachmentId: attachment.attachmentId,
-        attachmentName: attachment.name,
-        oldAttachmentId: attachment.oldAttachmentId
+        attachmentName: attachment.name
     };
+
+    //attachment update requires new Id even for only title change
+    if (!isNew) {
+        command.oldAttachmentId = attachment.attachmentId;
+        command.attachmentId = newGuid();
+    }
 
     const fileName = attachment.meta ? attachment.meta.fileName : null;
 
@@ -22,7 +31,8 @@ export async function updateAttachment(questionnaireId, attachment) {
     attachment.meta.lastUpdateDate = new Date();
 
     emitter.emit('attachmentUpdated', {
-        attachment: attachment
+        attachment: attachment,
+        newId: command.oldAttachmentId ? command.attachmentId : null
     });
 
     return response;

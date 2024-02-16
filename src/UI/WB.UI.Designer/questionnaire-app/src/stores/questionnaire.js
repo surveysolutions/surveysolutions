@@ -263,15 +263,16 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             newAttachment.file = null;
             newAttachment.editAttachment = cloneDeep(newAttachment);
 
-            if (payload.attachment.oldAttachmentId) {
-                const indexInit = findIndex(this.info.attachments, function(i) {
-                    return (
-                        i.attachmentId === payload.attachment.oldAttachmentId
-                    );
-                });
-                if (indexInit !== -1) {
-                    this.info.attachments[indexInit] = newAttachment;
+            const indexInit = findIndex(this.info.attachments, function(i) {
+                return i.attachmentId === payload.attachment.attachmentId;
+            });
+            if (indexInit !== -1) {
+                if (payload.newId && payload.newId !== null) {
+                    newAttachment.attachmentId = payload.newId;
+                    newAttachment.editAttachment.attachmentId = payload.newId;
                 }
+
+                this.info.attachments[indexInit] = newAttachment;
             } else {
                 this.info.attachments.push(newAttachment);
             }
@@ -351,15 +352,15 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             newCategories.file = null;
             newCategories.editCategories = cloneDeep(newCategories);
 
-            if (payload.categories.oldCategoriesId) {
-                const indexInit = findIndex(this.info.categories, function(i) {
-                    return (
-                        i.categoriesId === payload.categories.oldCategoriesId
-                    );
-                });
-                if (indexInit !== -1) {
-                    this.info.categories[indexInit] = newCategories;
+            const indexInit = findIndex(this.info.categories, function(i) {
+                return i.categoriesId === payload.categories.categoriesId;
+            });
+            if (indexInit !== -1) {
+                if (payload.newId && payload.newId !== null) {
+                    newCategories.categoriesId = payload.newId;
+                    newCategories.editCategories.categoriesId = payload.newId;
                 }
+                this.info.categories[indexInit] = newCategories;
             } else {
                 this.info.categories.push(newCategories);
             }
@@ -397,15 +398,16 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             newTranslation.file = null;
             newTranslation.editTranslation = cloneDeep(newTranslation);
 
-            if (payload.translation.oldTranslationId) {
-                const index = findIndex(this.info.translations, function(i) {
-                    return (
-                        i.translationId === payload.translation.oldTranslationId
-                    );
-                });
-                if (index !== -1) {
-                    this.info.translations[index] = newTranslation;
+            const index = findIndex(this.info.translations, function(i) {
+                return i.translationId === payload.translation.translationId;
+            });
+            if (index !== -1) {
+                if (payload.newId && payload.newId !== null) {
+                    newTranslation.translationId = payload.newId;
+                    newTranslation.editTranslation.translationId =
+                        payload.newId;
                 }
+                this.info.translations[index] = newTranslation;
             } else {
                 this.info.translations.push(newTranslation);
             }
@@ -457,15 +459,17 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             newLookupTable.file = null;
             newLookupTable.editLookupTable = cloneDeep(newLookupTable);
 
-            if (payload.lookupTable.oldLookupTableId) {
-                const indexInit = findIndex(this.info.lookupTables, function(
-                    i
-                ) {
-                    return i.itemId === payload.lookupTable.oldLookupTableId;
-                });
-                if (indexInit !== -1) {
-                    this.info.lookupTables[indexInit] = newLookupTable;
+            const indexInit = findIndex(this.info.lookupTables, function(i) {
+                return i.itemId === payload.lookupTable.itemId;
+            });
+            if (indexInit !== -1) {
+                if (payload.newId && payload.newId !== null) {
+                    newLookupTable.lookupTableId = payload.newId;
+                    newLookupTable.editLookupTable.lookupTableId =
+                        payload.newId;
                 }
+
+                this.info.lookupTables[indexInit] = newLookupTable;
             } else {
                 this.info.lookupTables.push(newLookupTable);
             }

@@ -1,21 +1,30 @@
 import { upload, commandCall } from './apiService';
 import emitter from './emitter';
+import { newGuid } from '../helpers/guid';
 
-export async function updateCategories(questionnaireId, categories) {
+export async function updateCategories(
+    questionnaireId,
+    categories,
+    isNew = false
+) {
     var command = {
         questionnaireId: questionnaireId,
         categoriesId: categories.categoriesId,
-        oldCategoriesId: categories.oldCategoriesId,
         name: categories.name
     };
 
+    if (!isNew && categories.file !== null && categories.file !== undefined) {
+        command.oldCategoriesId = categories.categoriesId;
+        command.categoriesId = newGuid();
+    }
     const response = await upload(
         '/api/command/categories',
         categories.file,
         command
     );
     emitter.emit('categoriesUpdated', {
-        categories: categories
+        categories: categories,
+        newId: command.oldCategoriesId ? command.categoriesId : null
     });
 
     return response;

@@ -1,5 +1,6 @@
 import { upload, commandCall } from './apiService';
 import emitter from './emitter';
+import { newGuid } from '../helpers/guid';
 
 export async function addLookupTable(questionnaireId, lookupTable) {
     var command = {
@@ -18,9 +19,13 @@ export async function updateLookupTable(questionnaireId, lookupTable) {
         questionnaireId: questionnaireId,
         lookupTableId: lookupTable.itemId,
         lookupTableName: lookupTable.name,
-        lookupTableFileName: lookupTable.fileName,
-        oldLookupTableId: lookupTable.oldLookupTableId
+        lookupTableFileName: lookupTable.fileName
     };
+
+    if (lookupTable.file !== null && lookupTable.file !== undefined) {
+        command.oldLookupTableId = lookupTable.itemId;
+        command.lookupTableId = newGuid();
+    }
 
     const response = await upload(
         '/api/command/UpdateLookupTable',
@@ -28,10 +33,11 @@ export async function updateLookupTable(questionnaireId, lookupTable) {
         command
     );
 
-    lookupTable.meta.lastUpdated = new Date();
+    //lookupTable.meta.lastUpdated = new Date();
 
     emitter.emit('lookupTableUpdated', {
-        lookupTable: lookupTable
+        lookupTable: lookupTable,
+        newId: command.oldLookupTableId ? command.lookupTableId : null
     });
 
     return response;

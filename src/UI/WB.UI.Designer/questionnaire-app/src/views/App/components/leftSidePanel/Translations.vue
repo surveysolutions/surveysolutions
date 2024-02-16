@@ -50,7 +50,6 @@ import TranslationItem from './TranslationItem.vue';
 
 import { useQuestionnaireStore } from '../../../../stores/questionnaire';
 import { notice } from '../../../../services/notificationService';
-import { newGuid } from '../../../../helpers/guid';
 import { updateTranslation } from '../../../../services/translationService';
 
 export default {
@@ -135,18 +134,15 @@ export default {
             const maxNameLength = 32;
             const fileNameLength = translation.name.length;
             translation.name = translation.name.substring(0, fileNameLength < maxNameLength ? fileNameLength : maxNameLength);
-            translation.oldTranslationId = null;
-            translation.translationId = newGuid();
 
-            const response = await updateTranslation(this.questionnaireId, translation);
+            const response = await updateTranslation(this.questionnaireId, translation, true);
 
-            if (translation.file)
+            if (this.file)
                 notice(response);
 
             translation.file = null;
             this.file = [];
 
-            //setTimeout(function () { utilityService.focus("focusTranslation" + translation.translationId); }, 500);
         },
     },
 }

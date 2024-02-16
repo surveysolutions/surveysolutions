@@ -79,8 +79,6 @@
 
 <script>
 import _ from 'lodash'
-import moment from 'moment';
-import { newGuid } from '../../../../helpers/guid';
 import { createQuestionForDeleteConfirmationPopup, formatBytes, formatDateTime } from '../../../../services/utilityService'
 import { deleteAttachment, updateAttachment } from '../../../../services/attachmentsService';
 
@@ -204,9 +202,6 @@ export default {
             fu.$el.querySelector("#" + fu.inputId).click()
         },
         async saveAttachment() {
-            this.attachment.oldAttachmentId = this.attachment.attachmentId;
-            this.attachment.attachmentId = newGuid();
-
             await updateAttachment(this.questionnaireId, this.attachment);
 
             this.attachment.file = null;

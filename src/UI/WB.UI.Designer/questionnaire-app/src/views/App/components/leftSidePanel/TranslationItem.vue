@@ -57,10 +57,9 @@
   
 <script>
 
-import { isUndefined, isNull, each, cloneDeep } from 'lodash'
+import { isUndefined, isNull, cloneDeep } from 'lodash'
 import moment from 'moment'
 import { notice } from '../../../../services/notificationService';
-import { newGuid } from '../../../../helpers/guid';
 import { trimText, createQuestionForDeleteConfirmationPopup } from '../../../../services/utilityService'
 import { useQuestionnaireStore } from '../../../../stores/questionnaire';
 import {
@@ -147,14 +146,9 @@ export default {
 
         async saveTranslation() {
             if (!this.translation.isOriginalTranslation) {
-
-                this.translation.oldTranslationId = this.translation.translationId;
-                this.translation.translationId = newGuid();
-                const showUploadResult = this.translation.file ? true : false;
-
                 const response = await updateTranslation(this.questionnaireId, this.translation)
 
-                if (showUploadResult)
+                if (this.file.length > 0)
                     notice(response);
 
                 this.translation.file = null;

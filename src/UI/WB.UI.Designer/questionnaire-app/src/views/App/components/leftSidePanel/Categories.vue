@@ -137,11 +137,10 @@ export default {
             const maxNameLength = 32;
             const fileNameLength = categories.name.length;
             categories.name = categories.name.substring(0, fileNameLength < maxNameLength ? fileNameLength : maxNameLength);
-            categories.oldCategoriesId = categories.categoriesId;
 
-            var response = updateCategories(this.questionnaireId, categories);
+            var response = updateCategories(this.questionnaireId, categories, true);
 
-            if (categories.file)
+            if (this.file)
                 notice(response);
 
             this.categories.file = null;

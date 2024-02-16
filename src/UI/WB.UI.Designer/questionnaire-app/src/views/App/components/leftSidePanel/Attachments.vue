@@ -181,7 +181,7 @@ export default {
 
             self = this;
             await this.updateAttachmentData(attachment, file, async () => {
-                await updateAttachment(self.questionnaireId, attachment);
+                await updateAttachment(self.questionnaireId, attachment, true);
             });
         },
     }

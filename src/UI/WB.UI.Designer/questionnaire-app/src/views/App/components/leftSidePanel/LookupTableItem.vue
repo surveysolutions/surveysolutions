@@ -44,7 +44,6 @@
 <script>
 import { updateLookupTable, deleteLookupTable } from '../../../../services/lookupTableService'
 import { isEmpty, isUndefined, isNull, cloneDeep } from 'lodash'
-import { newGuid } from '../../../../helpers/guid';
 import { createQuestionForDeleteConfirmationPopup, trimText } from '../../../../services/utilityService'
 
 export default {
@@ -98,14 +97,10 @@ export default {
         },
 
         async saveLookupTable() {
-            this.table.oldLookupTableId = this.table.itemId;
-            this.table.itemId = newGuid();
-
             var response = await updateLookupTable(this.questionnaireId, this.table)
 
-            if (this.table.file)
+            if (this.file.length > 0)
                 notice(response);
-
 
             this.table.file = null;
             this.file = [];
