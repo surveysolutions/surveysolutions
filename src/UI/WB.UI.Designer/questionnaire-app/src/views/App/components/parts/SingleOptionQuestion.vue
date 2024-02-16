@@ -173,6 +173,7 @@ import _ from 'lodash';
 export default {
     name: 'SingleOptionQuestion',
     inject: ['questionnaire', 'currentChapter', 'openExternalEditor'],
+    expose: ['prepareToSave'],
     components: {
         Help,
         OptionsEditorTemplate,
@@ -257,9 +258,9 @@ export default {
         questionChangesDiscarded() {
             this.reset()
         },
-        prepareToSave() {
+        async prepareToSave() {
             if (this.hasOwnCategories)
-                this.$refs.options.showOptionsInList();
+                await this.$refs.options.showOptionsInList();
         },
 
         setQuestionAsRadioButtons() {

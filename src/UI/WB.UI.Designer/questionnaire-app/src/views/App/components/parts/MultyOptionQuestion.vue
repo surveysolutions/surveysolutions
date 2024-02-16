@@ -169,6 +169,7 @@ import _ from 'lodash';
 export default {
     name: 'MultyOptionQuestion',
     inject: ['questionnaire'],
+    expose: ['prepareToSave'],
     components: {
         Help,
         OptionsEditorTemplate,
@@ -239,9 +240,9 @@ export default {
             this.isLinkedToReusableCategories = this.activeQuestion.categoriesId != null;
             this.isLinked = this.activeQuestion.isLinked;
         },
-        prepareToSave() {
+        async prepareToSave() {
             if (this.hasOwnCategories)
-                this.$refs.options.showOptionsInList();
+                await this.$refs.options.showOptionsInList();
         },
 
         getCategoricalMultiKinds() {
@@ -299,6 +300,5 @@ export default {
             this.$refs.classification.openDialog();
         },
     }
-
 }
 </script>

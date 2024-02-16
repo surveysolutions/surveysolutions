@@ -44,6 +44,7 @@ import OptionsEditorTemplate from './OptionsEditorTemplate.vue'
 
 export default {
     name: 'NumericQuestion',
+    expose: ['prepareToSave'],
     components: {
         Help,
         OptionsEditorTemplate,
@@ -65,8 +66,8 @@ export default {
         // }
     },
     methods: {
-        prepareToSave() {
-            this.$refs.options.showOptionsInList();
+        async prepareToSave() {
+            await this.$refs.options.showOptionsInList();
         },
         isIntegerChange(event) {
             //this.activeQuestion.isInteger = event.target.checked;

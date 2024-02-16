@@ -187,7 +187,7 @@
             <div class="pull-left">
                 <button type="button" v-show="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
                     id="edit-chapter-save-button" class="btn btn-lg " :class="{ 'btn-primary': isDirty }"
-                    unsaved-warning-clear @click="saveQuestion()" :disabled="!isDirty">{{
+                    unsaved-warning-clear @click="saveQuestion()" :disabled="!isDirty || !isValid">{{
                         $t('QuestionnaireEditor.Save') }}</button>
                 <button type="button" v-show="currentChapter.isReadOnly && currentChapter.isCover" id="jump-to-button"
                     class="btn btn-lg btn-link" unsaved-warning-clear
@@ -374,6 +374,9 @@ export default {
         },
         isDirty() {
             return this.questionStore.getIsDirty;
+        },
+        isValid() {
+            return this.questionStore.getIsValid;
         }
     },
     methods: {
@@ -387,12 +390,13 @@ export default {
 
         async saveQuestion() {
             if (this.questionnaire.isReadOnlyForUser) return;
-            if (this.isDirty == false) return;
+            if (this.isDirty == false || this.isValid !== true) return;
+
 
             if (this.$refs.questionSpecific != null) {
                 const beforeSave = this.$refs.questionSpecific.prepareToSave;
                 if (beforeSave != undefined) {
-                    beforeSave();
+                    await beforeSave();
                 }
 
                 const componentValid = this.$refs.questionSpecific.valid || true;

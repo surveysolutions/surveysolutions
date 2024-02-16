@@ -94,6 +94,7 @@ export default {
         Help,
         AddClassification,
     },
+    expose: ['showOptionsInList'],
     props: {
         questionnaireId: { type: String, required: true },
         activeQuestion: { type: Object, required: true }
@@ -132,11 +133,8 @@ export default {
     },
     methods: {
         async showOptionsInTextarea() {
-            //this.activeQuestion.stringifiedOptions = optionsService.stringifyOptions(this.activeQuestion.options);
             const text = await convertToText(this.activeQuestion.options);
-
             this.questionStore.initStringifiedCategories(text);
-
             this.useListAsOptionsEditor = false;
         },
         questionChangesDiscarded() {
@@ -158,14 +156,13 @@ export default {
 
                 if (this.activeQuestion.stringifiedCategories) {
                     this.activeQuestion.options = await convertToTable(this.activeQuestion.stringifiedCategories);
-                    //this.activeQuestion.optionsCount = this.activeQuestion.options.length;
                 }
             }
 
             this.questionStore.initStringifiedCategories('');
 
             this.useListAsOptionsEditor = true;
-            this.stringifiedCategoriesValidity.valid = true;
+            this.setValidityState(true);
         },
 
         updateStringifiedCategoriesValue(e) {
@@ -181,7 +178,7 @@ export default {
 
             if (lineCount > this.fixedRosterLimit) {
                 this.stringifiedCategoriesValidity.$error.maxOptionsCount = true
-                this.stringifiedCategoriesValidity.valid = false;
+                this.setValidityState(false);
                 return;
             }
             else if (this.stringifiedCategoriesValidity.$error.maxOptionsCount == true) {
@@ -191,7 +188,7 @@ export default {
             const top5Errors = validateText(this.activeQuestion.stringifiedCategories, false).slice(0, 5);
             if (top5Errors.length > 0) {
                 this.stringifiedCategoriesValidity.$error.matchOptionsPattern = true;
-                this.stringifiedCategoriesValidity.valid = false;
+                this.setValidityState(false);
                 return;
             }
             else if (this.stringifiedCategoriesValidity.$error.matchOptionsPattern == true) {
@@ -199,8 +196,13 @@ export default {
             }
 
             if (this.stringifiedCategoriesValidity.valid == false) {
-                this.stringifiedCategoriesValidity.valid = true;
+                this.setValidityState(true);
             }
+        },
+
+        setValidityState(state) {
+            this.stringifiedCategoriesValidity.valid = state;
+            this.questionStore.setValidityState(state);
         },
 
         trimEmptyOptions() {
@@ -266,7 +268,7 @@ export default {
 
         reset() {
             this.useListAsOptionsEditor = true;
-            this.stringifiedCategoriesValidity.valid = true;
+            this.setValidityState(true);
         }
     }
 }

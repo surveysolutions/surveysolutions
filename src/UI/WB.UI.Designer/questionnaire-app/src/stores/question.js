@@ -6,12 +6,14 @@ import _ from 'lodash';
 export const useQuestionStore = defineStore('question', {
     state: () => ({
         question: {},
-        initialQuestion: {}
+        initialQuestion: {},
+        isValid: true
     }),
     getters: {
         getQuestion: state => state.question,
         getInitialQuestion: state => state.initialQuestion,
-        getIsDirty: state => !_.isEqual(state.question, state.initialQuestion)
+        getIsDirty: state => !_.isEqual(state.question, state.initialQuestion),
+        getIsValid: state => state.isValid
     },
     actions: {
         setupListeners() {
@@ -49,6 +51,9 @@ export const useQuestionStore = defineStore('question', {
         clear() {
             this.question = {};
             this.initialQuestion = {};
+        },
+        setValidityState(state) {
+            this.isValid = state;
         },
 
         //TODO: move it to the service
