@@ -11,19 +11,20 @@ const autosize = app => {
 
             const calculateHeight = () => {
                 el.style.height = 'auto';
+                const newHeight =
+                    el.scrollHeight + el.offsetHeight - el.clientHeight;
+                var calculatedHeight =
+                    newHeight < minHeight ? minHeightPx : newHeight + 'px';
 
-                requestAnimationFrame(() => {
-                    const newHeight =
-                        el.scrollHeight + el.offsetHeight - el.clientHeight;
-                    var calculatedHeight =
-                        newHeight < minHeight ? minHeightPx : newHeight + 'px';
-
-                    if (el.style.height !== calculatedHeight)
-                        el.style.height = calculatedHeight;
-                });
+                if (el.style.height !== calculatedHeight)
+                    el.style.height = calculatedHeight;
             };
 
             el.calculateHeight = calculateHeight;
+
+            requestAnimationFrame(() => {
+                calculateHeight();
+            });
 
             calculateHeight();
 
