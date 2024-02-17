@@ -61,9 +61,6 @@ export default {
                 return true;
             return isInteger(this.activeQuestion.countOfDecimalPlaces);
         },
-        // isIntegerState() {
-        //     return this.activeQuestion.isInteger ?? true;
-        // }
     },
     methods: {
         async prepareToSave() {

@@ -41,9 +41,7 @@ export default {
         focusable: { type: String, default: 'true' },
     },
     data() {
-        return {
-            //
-        };
+        return {};
     },
     setup() {
         const treeStore = useTreeStore();
@@ -61,6 +59,12 @@ export default {
                 this.$emit('update:modelValue', newValue);
             }
         }
+    },
+    mounted() {
+        this.$emitter.on('variablesRecalculated', this.variablesRecalculated);
+    },
+    unmounted() {
+        this.$emitter.off('variablesRecalculated', this.variablesRecalculated);
     },
     methods: {
         onModeChanged(e, session) {
@@ -86,7 +90,7 @@ export default {
                             if (lastUpdated !== variables.lastUpdated || keywordMapper === null) {
                                 keywordMapper = session.$mode.$highlightRules.createKeywordMapper({
                                     "variable.language": "this|self",
-                                    "support.variable": variables.variableNamesTokens,
+                                    "support.variable": variables.getTokens(),
                                     "keyword": "abstract|event|new|struct|as|explicit|null|switch|base|extern|object|this|bool|false|operator|throw|break|finally|out|true|byte|fixed|override|try|case|float|params|typeof|catch|for|private|uint|char|foreach|protected|ulong|checked|goto|public|unchecked|class|if|readonly|unsafe|const|implicit|ref|ushort|continue|in|return|using|decimal|int|sbyte|virtual|default|interface|sealed|volatile|delegate|internal|short|void|do|is|sizeof|while|double|lock|stackalloc|else|long|static|enum|namespace|string|var|dynamic",
                                     "constant.language": "null|true|false"
                                 }, "identifier");
@@ -151,7 +155,7 @@ export default {
                     var variablesCompletor =
                     {
                         getCompletions: function (editor, session, pos, prefix, callback) {
-                            var variables = self.treeStore.getVariableNames.variableNamesCompletions;
+                            var variables = self.treeStore.getVariableNames.getCompletions();
                             callback(null, variables);
                         },
 
@@ -171,6 +175,18 @@ export default {
             var holderDiv = this.$refs.editorHolder;
             editor.on('focus', function () { holderDiv.classList.add('focused'); });
             editor.on('blur', function () { holderDiv.classList.remove('focused'); });
+        },
+        variablesRecalculated() {
+            (this.mode !== 'substitutions')
+            {
+                //this.$refs.editor._editor._emit("change");
+                var session = this.$refs.editor._editor.getSession();
+                if (session.$mode.hasBeenUpdated) {
+                    session.$mode.$tokenizer = null;
+                    session.bgTokenizer.setTokenizer(session.$mode.getTokenizer());
+                    session.bgTokenizer.start(0);
+                }
+            }
         }
     }
 };

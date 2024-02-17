@@ -8,6 +8,12 @@ export const useTreeStore = defineStore('tree', {
         info: {},
         readyToPaste: null,
         variableNamesStore: {
+            getTokens() {
+                return this.variableNamesTokens;
+            },
+            getCompletions() {
+                return this.variableNamesCompletions;
+            },
             variableNamesTokens: '',
             variableNamesCompletions: [],
             lastUpdated: null
@@ -313,6 +319,8 @@ export const useTreeStore = defineStore('tree', {
                 .join('|');
 
             this.variableNamesStore.lastUpdated = new Date();
+
+            emitter.emit('variablesRecalculated');
         },
 
         findTreeItem(itemId) {
