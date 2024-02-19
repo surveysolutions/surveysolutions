@@ -56,8 +56,7 @@
                     }}</a>
                 </li>
                 <li>
-                    <a @click="pasteItemAfter()" v-if="readyToPaste &&
-                            !questionnaire.isReadOnlyForUser &&
+                    <a @click="pasteItemAfter()" :disabled="readyToPaste ? null : true" v-if="!questionnaire.isReadOnlyForUser &&
                             !currentChapter.isReadOnly
                             ">{{ $t('QuestionnaireEditor.PasteAfter') }}</a>
                 </li>
