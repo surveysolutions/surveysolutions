@@ -284,7 +284,7 @@ export default {
         },
         showStartScreen() {
             const count = this.treeData.length;
-            return count == null || count == 0; // TODO
+            return count == null || count == 0;
         },
         filteredTreeData() {
             if (!this.search.open || !this.search.searchText)
