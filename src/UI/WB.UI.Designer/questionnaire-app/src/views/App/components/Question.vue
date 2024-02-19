@@ -490,7 +490,7 @@ export default {
                 });
             }
 
-            if (!this.activeQuestion.isCascade && !this.activeQuestion.isLinked &&
+            if (!this.activeQuestion.isCascade && this.activeQuestion.linkedToEntityId == null &&
                 _.indexOf(['TextList', 'GpsCoordinates', 'MultyOption', 'DateTime', 'SingleOption'], this.activeQuestion.type) < 0)
                 return allScopes;
 
@@ -539,7 +539,6 @@ export default {
             }
 
             if (type !== "SingleOption" && type !== "MultyOption") {
-                this.activeQuestion.isLinked = !_.isEmpty(null);
             }
 
             if (type === 'MultyOption' || type === "SingleOption") {

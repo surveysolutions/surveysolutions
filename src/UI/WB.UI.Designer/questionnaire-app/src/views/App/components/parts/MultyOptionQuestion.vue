@@ -238,7 +238,7 @@ export default {
         },
         reset() {
             this.isLinkedToReusableCategories = this.activeQuestion.categoriesId != null;
-            this.isLinked = this.activeQuestion.isLinked;
+            this.isLinked = this.activeQuestion.linkedToEntityId != null;
         },
         async prepareToSave() {
             if (this.hasOwnCategories)

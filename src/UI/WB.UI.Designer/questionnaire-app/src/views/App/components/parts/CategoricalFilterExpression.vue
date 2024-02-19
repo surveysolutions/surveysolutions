@@ -8,9 +8,9 @@
         <div class="form-group col-xs-11">
             <label class="wb-label" for="optionsFilterExpression">{{ $t('QuestionnaireEditor.QuestionFilter') }}</label>
 
-            <ExpressionEditor v-if="activeQuestion.isLinked && linkedToEntity.type != 'textlist'"
+            <ExpressionEditor v-if="activeQuestion.linkedToEntityId != null && linkedToEntity.type != 'textlist'"
                 v-model="activeQuestion.linkedFilterExpression" mode="expression"></ExpressionEditor>
-            <ExpressionEditor v-if="!(activeQuestion.isLinked && linkedToEntity.type != 'textlist')"
+            <ExpressionEditor v-if="!(activeQuestion.linkedToEntityId != null && linkedToEntity.type != 'textlist')"
                 v-model="activeQuestion.optionsFilterExpression" mode="expression"></ExpressionEditor>
 
         </div>

@@ -91,7 +91,6 @@ export default {
     },
     methods: {
         setLinkSource(itemId, linkedFilterExpression, optionsFilterExpression) {
-            this.activeQuestion.isLinked = !isEmpty(itemId);
 
             if (itemId) {
                 this.activeQuestion.linkedToEntityId = itemId;
@@ -105,6 +104,9 @@ export default {
                     this.activeQuestion.linkedFilterExpression = filter;
                     this.activeQuestion.optionsFilterExpression = null;
                 }
+            }
+            else {
+                this.activeQuestion.linkedToEntityId = null;
             }
         },
     }
