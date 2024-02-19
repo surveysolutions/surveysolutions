@@ -6,67 +6,69 @@
 
         <slot />
 
-        <div class="dropdown position-fixed" :id="'treeitem-context-menu-' + item.itemId">
-            <ul class="dropdown-menu" role="menu">
-                <li>
-                    <a @click="addQuestion()" v-if="!questionnaire.isReadOnlyForUser &&
-                        !currentChapter.isReadOnly
-                        ">{{ isGroup()
+        <Teleport to="body">
+            <div class="dropdown position-fixed" :id="'treeitem-context-menu-' + item.itemId">
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <a @click="addQuestion()" v-if="!questionnaire.isReadOnlyForUser &&
+                            !currentChapter.isReadOnly
+                            ">{{ isGroup()
         ? $t('QuestionnaireEditor.TreeAddQuestion')
         : $t('QuestionnaireEditor.TreeAddQuestionAfter')
     }}</a>
-                </li>
-                <li>
-                    <a @click="addGroup()" v-if="!questionnaire.isReadOnlyForUser &&
-                            !currentChapter.isReadOnly &&
-                            !currentChapter.isCover
-                            ">{{ isGroup()
+                    </li>
+                    <li>
+                        <a @click="addGroup()" v-if="!questionnaire.isReadOnlyForUser &&
+                                !currentChapter.isReadOnly &&
+                                !currentChapter.isCover
+                                ">{{ isGroup()
             ? $t('QuestionnaireEditor.TreeAddSection')
             : $t('QuestionnaireEditor.TreeAddSectionAfter')
         }}</a>
-                </li>
-                <li>
-                    <a @click="addRoster()" v-if="!questionnaire.isReadOnlyForUser &&
-                            !currentChapter.isReadOnly &&
-                            !currentChapter.isCover
-                            ">{{ isGroup()
+                    </li>
+                    <li>
+                        <a @click="addRoster()" v-if="!questionnaire.isReadOnlyForUser &&
+                                !currentChapter.isReadOnly &&
+                                !currentChapter.isCover
+                                ">{{ isGroup()
             ? $t('QuestionnaireEditor.TreeAddRoster')
             : $t('QuestionnaireEditor.TreeAddRosterAfter')
         }}</a>
-                </li>
-                <li>
-                    <a @click="addStaticText()" v-if="!questionnaire.isReadOnlyForUser &&
-                            !currentChapter.isReadOnly
-                            ">{{ isGroup()
+                    </li>
+                    <li>
+                        <a @click="addStaticText()" v-if="!questionnaire.isReadOnlyForUser &&
+                                !currentChapter.isReadOnly
+                                ">{{ isGroup()
             ? $t('QuestionnaireEditor.TreeAddStaticText')
             : $t('QuestionnaireEditor.TreeAddStaticTextAfter')
         }}</a>
-                </li>
-                <li>
-                    <a @click="addVariable()" v-if="!questionnaire.isReadOnlyForUser &&
-                            !currentChapter.isReadOnly
-                            ">{{ isGroup()
+                    </li>
+                    <li>
+                        <a @click="addVariable()" v-if="!questionnaire.isReadOnlyForUser &&
+                                !currentChapter.isReadOnly
+                                ">{{ isGroup()
             ? $t('QuestionnaireEditor.TreeAddVariable')
             : $t('QuestionnaireEditor.TreeAddVariableAfter')
         }}</a>
-                </li>
-                <li>
-                    <a @click="copyItem()">{{
-                        $t('QuestionnaireEditor.Copy')
-                    }}</a>
-                </li>
-                <li>
-                    <a @click="pasteItemAfter()" :disabled="readyToPaste ? null : true" v-if="!questionnaire.isReadOnlyForUser &&
+                    </li>
+                    <li>
+                        <a @click="copyItem()">{{
+                            $t('QuestionnaireEditor.Copy')
+                        }}</a>
+                    </li>
+                    <li>
+                        <a @click="pasteItemAfter()" :disabled="readyToPaste ? null : true" v-if="!questionnaire.isReadOnlyForUser &&
+                                !currentChapter.isReadOnly
+                                ">{{ $t('QuestionnaireEditor.PasteAfter') }}</a>
+                    </li>
+                    <li>
+                        <a @click="deleteItem()" v-if="!questionnaire.isReadOnlyForUser &&
                             !currentChapter.isReadOnly
-                            ">{{ $t('QuestionnaireEditor.PasteAfter') }}</a>
-                </li>
-                <li>
-                    <a @click="deleteItem()" v-if="!questionnaire.isReadOnlyForUser &&
-                        !currentChapter.isReadOnly
-                        ">{{ $t('QuestionnaireEditor.Delete') }}</a>
-                </li>
-            </ul>
-        </div>
+                            ">{{ $t('QuestionnaireEditor.Delete') }}</a>
+                    </li>
+                </ul>
+            </div>
+        </Teleport>
     </div>
 </template>
 
