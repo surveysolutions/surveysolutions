@@ -130,6 +130,20 @@ export const useQuestionStore = defineStore('question', {
             return false;
         },
 
+        getLinkedSource(id) {
+            if (!id) return null;
+
+            const index = _.findIndex(
+                this.initialQuestion.sourceOfLinkedEntities,
+                function(i) {
+                    return i.id === id;
+                }
+            );
+            return index < 0
+                ? null
+                : this.initialQuestion.sourceOfLinkedEntities[index];
+        },
+
         discardChanges() {
             this.question = _.cloneDeep(this.initialQuestion);
             this.categoriesTextView = '';

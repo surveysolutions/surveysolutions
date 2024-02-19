@@ -1,5 +1,6 @@
 import { i18n } from '../plugins/localization';
 import { indexOf } from 'lodash';
+import { useQuestionStore } from '../stores/question';
 
 export const answerTypeClass = {
     YesNo: 'icon-singleoption',
@@ -61,4 +62,16 @@ export function doesQuestionSupportValidations(question) {
         question &&
         indexOf(questionTypesDoesNotSupportValidations, question.type) < 0
     );
+}
+
+export function isNotLinkedOrLinkedToTextList(linkedToEntityId) {
+    var notLinked = linkedToEntityId == null;
+    if (notLinked) return true;
+
+    const questionStore = useQuestionStore();
+    const linkedSource = questionStore.getLinkedSource(linkedToEntityId);
+    if (linkedSource == null) return true;
+
+    var linkedToTl = linkedSource.type === 'textlist';
+    return linkedToTl;
 }

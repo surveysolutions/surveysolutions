@@ -2,11 +2,11 @@ import { defineStore } from 'pinia';
 import { get } from '../services/apiService';
 import { findIndex, isNull, isUndefined, cloneDeep, orderBy } from 'lodash';
 import emitter from '../services/emitter';
+import { isNotLinkedOrLinkedToTextList } from '../helpers/question';
 
 export const useTreeStore = defineStore('tree', {
     state: () => ({
         info: {},
-        readyToPaste: null,
         variableNamesStore: {
             getTokens() {
                 return this.variableNamesTokens;
@@ -138,8 +138,6 @@ export const useTreeStore = defineStore('tree', {
                 data.enablementCondition !== null &&
                 /\S/.test(data.enablementCondition);
             question.linkedToEntityId = data.linkedToEntityId;
-            question.linkedToType =
-                data.linkedToEntity == null ? null : data.linkedToEntity.type;
             question.isInteger = data.isInteger;
             question.yesNoView = data.yesNoView;
             question.hideIfDisabled = data.hideIfDisabled;
@@ -164,12 +162,16 @@ export const useTreeStore = defineStore('tree', {
                     if (question.yesNoView) {
                         return 'YesNoAnswers'; // real type is YesNoAndAnswersMissings
                     }
-                    if (isNotLinkedOrLinkedToTextList(question)) {
+                    if (
+                        isNotLinkedOrLinkedToTextList(question.linkedToEntityId)
+                    ) {
                         return 'int[]';
                     }
                     return 'RosterVector[]';
                 case 'SingleOption':
-                    if (isNotLinkedOrLinkedToTextList(question)) {
+                    if (
+                        isNotLinkedOrLinkedToTextList(question.linkedToEntityId)
+                    ) {
                         return 'int?';
                     }
 
@@ -391,7 +393,6 @@ export const useTreeStore = defineStore('tree', {
 
         clear() {
             this.info = {};
-            this.readyToPaste = null;
         },
 
         questionMoved(event) {

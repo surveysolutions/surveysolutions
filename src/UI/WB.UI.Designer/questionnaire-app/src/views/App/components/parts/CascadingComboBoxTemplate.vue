@@ -75,6 +75,7 @@
 import Help from './../Help.vue'
 import { isInteger } from '../../../../helpers/number';
 import { find, isEmpty } from 'lodash'
+import { useQuestionStore } from '../../../../stores/question'
 
 export default {
     name: 'CascadingComboBoxTemplate',
@@ -90,6 +91,13 @@ export default {
             isValidNumberShowAsListThreshold: true,
             isValidMaxMin: true,
         }
+    },
+    setup() {
+        const questionStore = useQuestionStore();
+
+        return {
+            questionStore
+        };
     },
     computed: {
         isValidNumberShowAsListThreshold() {
@@ -111,7 +119,7 @@ export default {
             return this.isValidShowAsListThreshold && this.isExistsCascadeFromQuestionId;
         },
         isLinkedToEntityValid() {
-            return this.activeQuestion.linkedToEntity != null && this.activeQuestion.linkedToEntity != undefined;
+            return this.activeQuestion.linkedToEntityId != null && this.questionStore.getLinkedSource(this.activeQuestion.linkedToEntityId) != null;
         },
         cascadeFromQuestion() {
             if (this.activeQuestion.cascadeFromQuestionId == null)
