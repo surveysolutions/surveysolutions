@@ -135,11 +135,11 @@
   <data name="AssignmentsSelected_other" xml:space="preserve">
     <value>{{count}} Assignments selected</value>
   </data>
-  <data name="SizeExplanation" xml:space="preserve">
-    <value>Specify maximum number of interviews to be generated for that assignment. Permitted values: -1 is for Unlimited assignment, 0 is for Empty assignment, numbers for assignment size</value>
+  <data name="ExpectedExplanation" xml:space="preserve">
+      <value>Specify maximum number of interviews to be generated for that assignment. Permitted values: -1 is for Unlimited assignment, 0 is for Empty assignment, numbers for assignment expected value</value>
   </data>
-  <data name="ChangeSizeModalTitle" xml:space="preserve">
-    <value>Edit size for assignment {{assignmentId}}</value>
+  <data name="ChangeExpectedModalTitle" xml:space="preserve">
+      <value>Edit Expected value for assignment {{assignmentId}}</value>
   </data>
   <data name="ChangeModeModalTitle" xml:space="preserve">
     <value>Change mode for assignment {{assignmentId}}</value>
@@ -162,7 +162,7 @@
   <data name="NumberOfAssignmentsAffected_other" xml:space="preserve">
     <value>{{count}} Assignments are going to be changed</value>
   </data>
-  <data name="Size" xml:space="preserve">
+  <data name="Expected" xml:space="preserve">
     <value>Expected</value>
   </data>
   <data name="SelectResponsible" xml:space="preserve">
@@ -234,8 +234,8 @@
   <data name="Tooltip_Table_Responsible" xml:space="preserve">
     <value>User currently responsible for the assignment. Click sort icon to sort user name.</value>
   </data>
-  <data name="Tooltip_Table_Size" xml:space="preserve">
-    <value>Maximum number of interviews that may be conducted for this assignment. Click on any cell to change this number. Click on the sort icon to sort by size.</value>
+  <data name="Tooltip_Table_ExpectedValue" xml:space="preserve">
+      <value>Maximum number of interviews that may be conducted for this assignment. Click on any cell to change this number. Click on the sort icon to sort by expected value.</value>
   </data>
   <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">
     <value>When the assignment was last updated. Click on the sort icon to sort by time.</value>
@@ -243,11 +243,11 @@
   <data name="Tooltip_Table_ReceivedByTablet" xml:space="preserve">
     <value>Indicator for whether the assignment has been downloaded onto the tablet. Click on the sort icon to sort by receipt time.</value>
   </data>
-  <data name="InvalidSize" xml:space="preserve">
-    <value>The Size field must be -1 or more.</value>
+  <data name="InvalidExpected" xml:space="preserve">
+      <value>The Expected field must be -1 or more.</value>
   </data>
-  <data name="AssignmentSizeInWebMode" xml:space="preserve">
-    <value>The Size cannot be changed for Web mode Assignment.</value>
+  <data name="AssignmentExpectedInWebMode" xml:space="preserve">
+      <value>The Expected value cannot be changed for Web mode Assignment.</value>
   </data>
   <data name="SelectQuestionnaire" xml:space="preserve">
     <value>Select existing questionnaire to upgrade assignments from</value>
@@ -387,7 +387,7 @@
   <data name="EnterEmail" xml:space="preserve">
     <value>Enter Email</value>
   </data>
-  <data name="SizeInstructions" xml:space="preserve">
+  <data name="ExpectedInstructions" xml:space="preserve">
     <value>Must be a number, -1 for unlimited, 1 if email is specified</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
@@ -396,14 +396,14 @@
   <data name="InvalidPassword" xml:space="preserve">
     <value>Password is invalid</value>
   </data>
-  <data name="InvalidSizeMessage" xml:space="preserve">
-    <value>Size is invalid</value>
+  <data name="InvalidExpectedMessage" xml:space="preserve">
+      <value>Expected value is invalid</value>
   </data>
-  <data name="InvalidSizeWithEmail" xml:space="preserve">
-    <value>For assignments with provided email allowed size is 1</value>
+  <data name="InvalidExpectedWithEmail" xml:space="preserve">
+      <value>For assignments with provided email allowed Expected value is 1</value>
   </data>
-  <data name="SizeForWebMode" xml:space="preserve">
-    <value>Assignment with size 1 for web mode should have email or password provided</value>
+  <data name="ExpectedForWebMode" xml:space="preserve">
+      <value>Assignment with expected value 1 for web mode should have email or password provided</value>
   </data>
   <data name="DuplicatePasswordByWebModeWithQuantity1" xml:space="preserve">
     <value>Password by assignment for web mode with quantity 1 should be unique</value>
@@ -415,10 +415,10 @@
     <value>Assignment ID</value>
   </data>
   <data name="MultipleAssignmentsClose" xml:space="preserve">
-    <value>{{count}} selected assignments are going to be closed. Size will be set to currently collected interviews count.</value>
+      <value>{{count}} selected assignments are going to be closed. Expected value will be set to currently collected interviews count.</value>
   </data>
   <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
-    <value>Size of the selected assignment {{id}} will be changed from {{quantity}} to {{collected}} (number of currently collected interviews)</value>
+      <value>Expected value of the selected assignment {{id}} will be changed from {{quantity}} to {{collected}} (number of currently collected interviews)</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Close</value>
@@ -453,8 +453,8 @@
   <data name="Action_Deleted" xml:space="preserve">
     <value>Deleted</value>
   </data>
-  <data name="Action_QuantityChanged" xml:space="preserve">
-    <value>Size changed</value>
+  <data name="Action_ExpectedValueChanged" xml:space="preserve">
+      <value>Expected value changed</value>
   </data>
   <data name="Action_ReceivedByTablet" xml:space="preserve">
     <value>Received by tablet</value>
@@ -489,11 +489,11 @@
   <data name="Action_WebModeChanged_True" xml:space="preserve">
     <value>Web Mode enabled</value>
   </data>
-  <data name="Action_QuantityChanged_To" xml:space="preserve">
-    <value>Size changed to {{quantity}}</value>
+  <data name="Action_ExpectedValueChanged_To" xml:space="preserve">
+      <value>Expected value changed to {{quantity}}</value>
   </data>
-  <data name="Action_QuantityChanged_To_Unlimited" xml:space="preserve">
-    <value>Size changed to Unlimited</value>
+  <data name="Action_ExpectedValueChanged_To_Unlimited" xml:space="preserve">
+      <value>Expected value changed to Unlimited</value>
   </data>
   <data name="Action_Reassigned_To" xml:space="preserve">
     <value>Reassigned to {{newResponsible}}</value>
