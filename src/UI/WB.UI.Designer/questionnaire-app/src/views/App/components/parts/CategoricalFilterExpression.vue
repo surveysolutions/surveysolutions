@@ -39,10 +39,18 @@ export default {
             showFilter: null,
         };
     },
+    watch: {
+        'activeQuestion.linkedFilterExpression'(newValue, oldValue) {
+            if (!oldValue && !this.showFilter)
+                this.calculateShowFilter();
+        },
+        'activeQuestion.linkedFilterExpression'(newValue, oldValue) {
+            if (!oldValue && !this.showFilter)
+                this.calculateShowFilter();
+        },
+    },
     async beforeMount() {
-        this.showFilter =
-            (this.activeQuestion.linkedFilterExpression && this.activeQuestion.linkedFilterExpression !== '')
-                || (this.activeQuestion.optionsFilterExpression && this.activeQuestion.optionsFilterExpression !== '') ? true : false;
+        this.calculateShowFilter();
     },
     computed: {
         linkedToEntity() {
@@ -54,6 +62,12 @@ export default {
             );
             return sourceQuestion != undefined ? sourceQuestion : {};
         },
+    },
+    methods: {
+        calculateShowFilter() {
+            this.showFilter = (this.activeQuestion.linkedFilterExpression && this.activeQuestion.linkedFilterExpression !== '')
+                || (this.activeQuestion.optionsFilterExpression && this.activeQuestion.optionsFilterExpression !== '') ? true : false;
+        }
     }
 };
 </script>
