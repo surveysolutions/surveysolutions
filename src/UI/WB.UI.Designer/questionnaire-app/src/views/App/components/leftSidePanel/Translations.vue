@@ -51,6 +51,7 @@ import TranslationItem from './TranslationItem.vue';
 import { useQuestionnaireStore } from '../../../../stores/questionnaire';
 import { notice } from '../../../../services/notificationService';
 import { updateTranslation } from '../../../../services/translationService';
+import { newGuid } from '../../../../helpers/guid';
 
 export default {
     name: 'Translations',
@@ -113,7 +114,7 @@ export default {
                 return;
             }
 
-            let translation = {};
+            let translation = { translationId: newGuid() };
             translation.file = file.file;
 
             translation.content = {};

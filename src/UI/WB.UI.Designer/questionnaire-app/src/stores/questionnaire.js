@@ -394,21 +394,25 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             }
         },
         translationUpdated(payload) {
-            const newTranslation = cloneDeep(payload.translation);
-            newTranslation.file = null;
-            newTranslation.editTranslation = cloneDeep(newTranslation);
-
             const index = findIndex(this.info.translations, function(i) {
                 return i.translationId === payload.translation.translationId;
             });
             if (index !== -1) {
+                const tr = this.info.translations[index];
                 if (payload.newId && payload.newId !== null) {
-                    newTranslation.translationId = payload.newId;
-                    newTranslation.editTranslation.translationId =
+                    tr.translationId = tr.editTranslation.translationId =
                         payload.newId;
                 }
-                this.info.translations[index] = newTranslation;
+                tr.name = tr.editTranslation.name = payload.translation.name;
+                tr.isDefault = tr.editTranslation.isDefault =
+                    payload.translation.isDefault;
             } else {
+                const newTranslation = {
+                    translationId: payload.translation.translationId,
+                    isDefault: false,
+                    name: payload.translation.name
+                };
+                newTranslation.editTranslation = cloneDeep(newTranslation);
                 this.info.translations.push(newTranslation);
             }
         },
