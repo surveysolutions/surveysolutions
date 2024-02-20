@@ -234,8 +234,14 @@ export const useTreeStore = defineStore('tree', {
             const hasCondition =
                 payload.group.enablementCondition !== null &&
                 /\S/.test(payload.group.enablementCondition);
-            const chapter = this.getChapterData;
 
+            this.updateVariableName(
+                itemId,
+                payload.group.variableName,
+                'Roster'
+            );
+
+            const chapter = this.getChapterData;
             if (chapter.itemId === itemId) {
                 chapter.title = payload.group.title;
                 chapter.hasCondition = hasCondition;
@@ -248,12 +254,6 @@ export const useTreeStore = defineStore('tree', {
             group.variable = payload.group.variableName;
             group.hasCondition = hasCondition;
             group.hideIfDisabled = payload.group.hideIfDisabled;
-
-            this.updateVariableName(
-                itemId,
-                payload.group.variableName,
-                'Roster'
-            );
         },
 
         rosterUpdated(data) {
