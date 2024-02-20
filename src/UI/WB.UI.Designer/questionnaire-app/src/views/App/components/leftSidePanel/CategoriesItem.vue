@@ -27,6 +27,7 @@
                         </a>
                         <file-upload ref="upload" v-if="!isReadOnlyForUser" v-model="file" @input-file="fileSelected"
                             :size="10 * 1024 * 1024" :drop="true" :drop-directory="false"
+                            :input-id="'cifu' + categoriesItem.categoriesId"
                             accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.txt,.tsv,.tab">
                         </file-upload>
                         <button v-show="!isDirty" v-if="!isReadOnlyForUser" class="btn btn-default"
