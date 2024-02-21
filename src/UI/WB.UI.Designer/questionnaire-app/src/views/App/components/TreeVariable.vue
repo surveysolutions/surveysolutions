@@ -8,17 +8,11 @@
         }">
             <div class="item-text">
                 <div class="icon icon-variable"></div>
-                <!--span
-                    ng-bind-html="item.variableData.label | escape | highlight:search.searchText"
-                ></span-->
-                <span v-sanitize-html="item.variableData.label"></span>
+                <TreeHighlighter :searchText="searchText" :text="item.variableData.label" />
             </div>
             <div class="qname-block">
-                <div class="conditions-block"></div>
-                <!--span
-                    ng-bind-html="item.variableData.name | escape | highlight:search.searchText"
-                ></span-->
-                &nbsp;<span v-sanitize-html="item.variableData.name"></span>
+                <div class="conditions-block"></div>&nbsp;
+                <TreeHighlighter :searchText="searchText" :text="item.variableData.name" />
             </div>
         </router-link>
     </TreeItem>
@@ -26,14 +20,17 @@
 
 <script>
 import TreeItem from './TreeItem.vue';
+import TreeHighlighter from './TreeHighlighter.vue'
 
 export default {
     name: 'TreeVariable',
     components: {
-        TreeItem
+        TreeItem,
+        TreeHighlighter,
     },
     props: {
-        item: { type: Object, required: true }
+        item: { type: Object, required: true },
+        searchText: { type: String, required: true },
     },
     data() {
         return {};

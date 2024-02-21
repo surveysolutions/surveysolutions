@@ -104,7 +104,6 @@ export default {
         questionnaireId: { type: String, required: true },
         item: { type: Object, required: true },
         stat: { type: Object, required: true },
-        tree: { type: Object, required: true },
         selectedItemId: { type: String, required: false }
     },
     data() {

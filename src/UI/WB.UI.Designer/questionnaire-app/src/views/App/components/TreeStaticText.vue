@@ -8,23 +8,7 @@
         }">
             <div class="item-text">
                 <div class="icon icon-statictext"></div>
-                <!--span
-                    ng-if="item.text"
-                    ng-bind-html="item.text | escape | highlight:search.searchText"
-                ></span>
-                <span
-                    ng-if="!item.text && item.attachmentName"
-                    ng-bind-html="'Attachment: ' + item.attachmentName | escape | highlight:search.searchText"
-                ></span>
-                <span
-                    ng-if="!item.text && !item.attachmentName"
-                    ng-bind-html="item.text | escape | highlight:search.searchText"
-                ></span-->
-
-                <span v-if="item.text" v-sanitize-html="item.text"></span>
-                <span v-if="!item.text && item.attachmentName"
-                    v-sanitize-html="'Attachment: ' + item.attachmentName"></span>
-                <span v-if="!item.text && !item.attachmentName" v-sanitize-html="item.text"></span>
+                <TreeHighlighter :searchText="searchText" :text="title" />
             </div>
             <div class="qname-block">
                 <div class="conditions-block">
@@ -39,17 +23,29 @@
 
 <script>
 import TreeItem from './TreeItem.vue';
+import TreeHighlighter from './TreeHighlighter.vue'
 
 export default {
     name: 'TreeStaticText',
     components: {
-        TreeItem
+        TreeItem,
+        TreeHighlighter,
     },
     props: {
-        item: { type: Object, required: true }
+        item: { type: Object, required: true },
+        searchText: { type: String, required: true },
     },
     data() {
         return {};
+    },
+    computed: {
+        title() {
+            if (this.item.text)
+                return this.item.text;
+            if (this.item.attachmentName)
+                return 'Attachment: ' + this.item.attachmentName
+            return this.item.text;
+        }
     }
 };
 </script>

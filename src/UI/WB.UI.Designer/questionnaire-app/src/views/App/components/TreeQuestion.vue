@@ -8,23 +8,15 @@
         }">
             <div class="item-text">
                 <div class="icon" :class="questionClass"></div>
-                <!--                <span
-                    ng-bind-html="item.title | escape | highlight:search.searchText"
-                ></span>
--->
-                <span v-sanitize-html="item.title"></span>
+                <TreeHighlighter :searchText="searchText" :text="item.title" />
             </div>
             <div class="qname-block">
                 <div class="conditions-block">
                     <div class="enabling-group-marker" :class="{ 'hide-if-disabled': item.hideIfDisabled }"
                         v-if="item.hasCondition"></div>
                     <div class="validation-group-marker" v-if="item.hasValidation"></div>
-                </div>
-                <!--span
-                    ng-bind-html="item.variable | escape | highlight:search.searchText"
-                ></span>
--->
-                &nbsp;<span v-sanitize-html="item.variable"></span>
+                </div>&nbsp;
+                <TreeHighlighter :searchText="searchText" :text="item.variable" />
             </div>
         </router-link>
     </TreeItem>
@@ -32,15 +24,18 @@
 
 <script>
 import TreeItem from './TreeItem.vue';
+import TreeHighlighter from './TreeHighlighter.vue'
 import { answerTypeClass } from '../../../helpers/question'
 
 export default {
     name: 'TreeQuestion',
     components: {
-        TreeItem
+        TreeItem,
+        TreeHighlighter,
     },
     props: {
-        item: { type: Object, required: true }
+        item: { type: Object, required: true },
+        searchText: { type: String, required: true },
     },
     data() {
         return {};

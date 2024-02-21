@@ -23,60 +23,38 @@
                 <span class="roster-marker" v-show="item.isRoster">{{
                     $t('QuestionnaireEditor.TreeRoster')
                 }}&nbsp;</span>
-                <span v-sanitize-html="filter(item.title)"></span>
+                <TreeHighlighter :searchText="searchText" :text="item.title" />
             </div>
             <div class="qname-block">
                 <div class="conditions-block">
                     <div class="enabling-group-marker" :class="{ 'hide-if-disabled': item.hideIfDisabled }"
                         v-if="item.hasCondition"></div>
-                </div>
-                &nbsp;<span v-sanitize-html="filter(item.variable)"></span>
+                </div>&nbsp;
+                <TreeHighlighter :searchText="searchText" :text="item.variable" />
             </div>
         </router-link>
     </TreeItem>
 </template>
 
 <script>
-import { useQuestionnaireStore } from '../../../stores/questionnaire';
-import { useTreeStore } from '../../../stores/tree';
-
 import TreeItem from './TreeItem.vue';
+import TreeHighlighter from './TreeHighlighter.vue'
 
 export default {
     name: 'TreeGroup',
     components: {
-        TreeItem
+        TreeItem,
+        TreeHighlighter,
     },
     props: {
         item: { type: Object, required: true },
-        stat: { type: Object, required: true }
+        stat: { type: Object, required: true },
+        searchText: { type: String, required: true },
     },
     data() {
         return {
             is_highlighted: false
         };
     },
-    setup(props) {
-        const treeStore = useTreeStore();
-        const questionnaireStore = useQuestionnaireStore();
-
-        return {
-            treeStore,
-            questionnaireStore
-        };
-    },
-    computed: {
-        questionnaire() {
-            return this.questionnaireStore.info || {};
-        },
-        currentChapter() {
-            return this.treeStore.getChapter;
-        }
-    },
-    methods: {
-        filter(value) {
-            return value; // TODO | escape | highlight:search.searchText
-        }
-    }
 };
 </script>

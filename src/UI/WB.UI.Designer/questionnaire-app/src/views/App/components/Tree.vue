@@ -60,7 +60,8 @@
                         :statHandler="treeNodeCreated" @after-drop="treeNodeDropped">
                         <template #default="{ node, stat }">
                             <component :key="node.itemId" :is="itemTemplate(node.itemType)" :item="node" :stat="stat"
-                                :questionnaireId="questionnaireId" :tree="$refs.tree" :selectedItemId="selectedItemId">
+                                :searchText="search.searchText" :questionnaireId="questionnaireId"
+                                :selectedItemId="selectedItemId">
                             </component>
                         </template>
 
