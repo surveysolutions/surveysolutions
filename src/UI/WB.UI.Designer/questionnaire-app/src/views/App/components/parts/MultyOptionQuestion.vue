@@ -259,8 +259,12 @@ export default {
             this.activeQuestion.isFilteredCombobox = isFilteredCombobox;
             this.activeQuestion.yesNoView = yesNoView;
 
-            if (this.isLinked)
+            if (this.isLinked) {
                 this.isLinked = !isFilteredCombobox && !yesNoView;
+
+                if (!this.isLinked)
+                    this.activeQuestion.linkedToEntityId = null;
+            }
         },
 
         setCategories(categories) {
