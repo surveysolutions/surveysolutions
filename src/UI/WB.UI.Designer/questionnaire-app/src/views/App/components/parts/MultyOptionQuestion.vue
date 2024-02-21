@@ -273,22 +273,24 @@ export default {
             if (this.isLinkedToReusableCategories === true) return;
 
             this.isLinked = false;
+            this.activeQuestion.linkedToEntityId = null;
             this.isLinkedToReusableCategories = true;
         },
 
         setUserDefinedCategories() {
-            if (this.isLinkedToReusableCategories === false) return;
+            if (this.isLinked === false && this.isLinkedToReusableCategories === false) return;
 
             this.isLinked = false;
-            this.activeQuestion.categoriesId = null;
             this.isLinkedToReusableCategories = false;
+            this.activeQuestion.linkedToEntityId = null;
+            this.activeQuestion.categoriesId = null;
         },
 
         setIsLinkedQuestion() {
             if (this.isLinked === true) return;
 
             this.isLinked = true;
-            this.isLinkedToReusableCategories = null;
+            this.isLinkedToReusableCategories = false;
             this.activeQuestion.categoriesId = null;
         },
 
