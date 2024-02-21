@@ -57,7 +57,7 @@
                 <div ui-tree-nodes vmodel="items" class="ui-tree-nodes angular-ui-tree-nodes">
                     <Draggable ref="tree" v-model="filteredTreeData" textKey="title" childrenKey="items" :defaultOpen="true"
                         :maxLevel="10" :indent="30" triggerClass="handler" :keepPlaceholder="true"
-                        :statHandler="treeNodeCreated" @after-drop="treeNodeDropped">
+                        :statHandler="treeNodeCreated" @after-drop="treeNodeDropped" :ondragstart="customDragImage">
                         <template #default="{ node, stat }">
                             <component :key="node.itemId" :is="itemTemplate(node.itemType)" :item="node" :stat="stat"
                                 :searchText="search.searchText" :questionnaireId="questionnaireId"
@@ -571,6 +571,20 @@ export default {
 
             const refEntity = this.treeStore.findTreeItem(entity.itemId);
             tree.add(refEntity, parentStat, index);
+        },
+
+        customDragImage(event) {
+            const id = this.$refs.tree.dragNode.data.itemId;
+            const link = document.getElementById(id);
+            const dragElement = link.parentElement.parentElement;
+
+            const { x, y } = dragElement.getBoundingClientRect();
+            const { clientX, clientY } = event;
+            event.dataTransfer?.setDragImage(
+                dragElement,
+                clientX - x,
+                clientY - y
+            );
         },
     }
 };
