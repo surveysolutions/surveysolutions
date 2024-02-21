@@ -1,16 +1,15 @@
 <template>
-    <Highlighter highlightClassName="ui-match" :searchWords="keywords" :autoEscape="true" :sanitize="sanitizeText"
-        :textToHighlight="text" />
+    <WordHighlighter :query="searchText" :htmlToHighlight="sanitizeText(text)" highlightClass="ui-match" />
 </template>
 
 <script>
 
 import { sanitize } from '../../../services/utilityService';
-import Highlighter from 'vue-highlight-words'
+import WordHighlighter from "vue-word-highlighter";
 
 export default {
     name: 'TreeHighlighter',
-    components: { Highlighter },
+    components: { WordHighlighter },
     props: {
         text: { type: Object, required: true },
         searchText: { type: String, required: true },
@@ -18,13 +17,6 @@ export default {
     data() {
         return {
 
-        }
-    },
-    computed: {
-        keywords() {
-            if (this.searchText)
-                return [this.searchText]
-            return []
         }
     },
     methods: {
