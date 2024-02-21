@@ -51,7 +51,7 @@
   
 <script>
 
-import { isNull, isUndefined } from 'lodash'
+import { isNull, isUndefined, cloneDeep } from 'lodash'
 import { updateCategories, deleteCategories } from '../../../../services/categoriesService';
 import { trimText } from '../../../../services/utilityService'
 import { notice } from '../../../../services/notificationService';
@@ -117,7 +117,7 @@ export default {
         },
 
         cancel() {
-            var clonned = _.cloneDeep(this.categoriesItem);
+            var clonned = cloneDeep(this.categoriesItem);
             clonned.editCategories = null;
             this.categoriesItem.editCategories = clonned;
         },
