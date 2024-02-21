@@ -194,7 +194,7 @@ export default {
         return {
             search: {
                 open: false,
-                searchText: null
+                searchText: ''
             }
         };
     },

@@ -1,5 +1,5 @@
 <template>
-    <WordHighlighter :query="searchText" :htmlToHighlight="sanitizeText(text)" highlightClass="ui-match" />
+    <WordHighlighter :query="queryText" :htmlToHighlight="sanitizeText(text)" highlightClass="ui-match" />
 </template>
 
 <script>
@@ -11,12 +11,17 @@ export default {
     name: 'TreeHighlighter',
     components: { WordHighlighter },
     props: {
-        text: { type: Object, required: true },
+        text: { type: String, required: true },
         searchText: { type: String, required: true },
     },
     data() {
         return {
 
+        }
+    },
+    computed: {
+        queryText() {
+            return this.searchText || '';
         }
     },
     methods: {
