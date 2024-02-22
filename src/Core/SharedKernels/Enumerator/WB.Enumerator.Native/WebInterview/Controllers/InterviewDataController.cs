@@ -528,6 +528,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             if (interview == null) return null;
             var questionnaire = this.GetCallerQuestionnaire(interview.QuestionnaireIdentity);
             if (questionnaire == null) return null;
+            if (ids.Length == 0)
+                ids = new string[] { null };
 
             return this.interviewEntityFactory.GetSidebarChildSectionsOf(sectionId, interview, questionnaire, ids, IsReviewMode());
         }
