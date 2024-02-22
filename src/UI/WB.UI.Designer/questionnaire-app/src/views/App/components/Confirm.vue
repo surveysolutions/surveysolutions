@@ -11,7 +11,7 @@
                             {{ header || $t('QuestionnaireEditor.ModalConfirm') }}
                         </h3>
                     </div>
-                    <div class="modal-body" v-html="title">
+                    <div class="modal-body" v-dompurify-html="title">
                     </div>
                     <div class="modal-footer" v-if="!noControls">
                         <button class="btn btn-primary btn-lg" v-if="!isReadOnly" @click="ok()">
