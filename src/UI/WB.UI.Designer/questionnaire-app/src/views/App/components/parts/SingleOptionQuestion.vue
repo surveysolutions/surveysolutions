@@ -289,6 +289,7 @@ export default {
 
             this.isLinked = false;
             this.activeQuestion.isFilteredCombobox = false;
+            this.activeQuestion.linkedToEntityId = null;
             this.isCascade = true;
         },
 
