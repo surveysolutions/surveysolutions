@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using NHibernate.Criterion;
@@ -285,6 +287,29 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
 
             var storage = Create.Storage.OptionsRepository(new SqliteInmemoryStorage<OptionView, int?>());
 
+            var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
+            storage.StoreOptionsForCategory(questionnaireIdentity, categoryId, answerCodes, new List<TranslationDto>());
+
+            var filteredQuestionOptions = storage.GetFilteredCategoriesOptions(questionnaireIdentity, categoryId, null, null, null);
+
+            var actual = filteredQuestionOptions.Select(x => x.Value).ToList();
+            Assert.That(actual, Is.Not.Empty);
+            Assert.That(actual, Is.Ordered.Descending);
+        }
+        
+        [Test]
+        [SetCulture("sv-SE")]
+        public void should_keep_categories_options_order_after_saving_options_in_Culture()
+        {
+            var categoryId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var answerCodes = Enumerable.Range(-5, 300).Reverse().Select(o => new CategoriesItem()
+            {
+                Id = o,
+                Text = o.ToString()
+            }).ToList();
+
+            var storage = Create.Storage.OptionsRepository(new SqliteInmemoryStorage<OptionView, int?>());
+            
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
             storage.StoreOptionsForCategory(questionnaireIdentity, categoryId, answerCodes, new List<TranslationDto>());
 
