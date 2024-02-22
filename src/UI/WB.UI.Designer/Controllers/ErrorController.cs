@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StackExchange.Exceptional;
+using WB.UI.Designer.Exceptions;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -14,7 +16,7 @@ namespace WB.UI.Designer.Controllers
         [Route("403")]
         public ActionResult Forbidden() => this.View("Forbidden");
         
-        [Route("{statusCode}")]
+        [Route("{statusCode:int}")]
 
         public IActionResult Error(int? statusCode = null)
         {
@@ -29,6 +31,24 @@ namespace WB.UI.Designer.Controllers
                 }
             }
             return Index();
+        }
+        
+        [Route("report")]
+        [HttpPost]
+        public IActionResult LogError([FromBody] ClientErrorModel clientError)
+        {
+            try
+            {
+                var exception = new ClientException(clientError);
+
+                exception.Log(HttpContext, category: "vue3");
+            
+                return Ok();
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
         }
     }
 }

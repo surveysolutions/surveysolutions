@@ -6,8 +6,14 @@ export default (userOptions = {}) => {
         enforce: "pre",
         userOptions: userOptions,
         buildStart(options){
-            this.localization = new LocalizationBuilder(userOptions);
-            this.localization.prepareLocalizationFiles();
+            if (!userOptions.resxProcessed) {
+                this.localization = new LocalizationBuilder(userOptions);
+                this.localization.prepareLocalizationFiles();
+                userOptions.resxProcessed = true
+            }
         }
     }
 }
+
+
+

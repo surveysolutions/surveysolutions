@@ -248,7 +248,7 @@ namespace WB.UI.Designer.Controllers
 
                     await dbContext.SaveChangesAsync();
 
-                    return this.RedirectToAction("Details", "Questionnaire", new { id = questionnaireId.FormatGuid() });
+                    return this.RedirectToAction("Details", "Q", new { id = questionnaireId.FormatGuid() });
                 }
                 catch (Exception e)
                 {
@@ -297,7 +297,7 @@ namespace WB.UI.Designer.Controllers
                     this.commandService.Execute(command);
                     this.dbContext.SaveChanges();
 
-                    return this.RedirectToAction("Details", "Questionnaire", new { id = questionnaireId.FormatGuid() });
+                    return this.RedirectToAction("Details", "Q", new { id = questionnaireId.FormatGuid() });
                 }
                 catch (QuestionnaireException e)
                 {
@@ -540,7 +540,7 @@ namespace WB.UI.Designer.Controllers
             
             var userName = User.GetUserName();
             var questionnaire = questionnaireView.Title;
-            var sharingLink = Url.Action("Details", "Questionnaire", new { id = anonymousQuestionnaireId }, Request.Scheme);
+            var sharingLink = Url.Action("Details", "Q", new { id = anonymousQuestionnaireId }, Request.Scheme);
             if (sharingLink == null)
                 throw new ArgumentNullException("sharingLink is null");
 
@@ -558,7 +558,7 @@ namespace WB.UI.Designer.Controllers
         [HttpGet]
         public IActionResult PublicUrl(Guid id, int height = 250, int width = 250)
         {
-            var url = Url.Action("Details", "Questionnaire", new{ id = id }, Request.Scheme);
+            var url = Url.Action("Details", "Q", new{ id = id }, Request.Scheme);
             
             // generate QRCode
             var qrCode = new QrCode(url, new Vector2Slim(height, width), SKEncodedImageFormat.Png);
