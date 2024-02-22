@@ -300,11 +300,10 @@ import { useQuestionnaireStore } from '../../../stores/questionnaire';
 
 export default {
     name: 'SharedInfoDialog',
-    inject: ['questionnaire', 'isReadOnlyForUser'],
+    inject: ['questionnaire', 'currentUser', 'isReadOnlyForUser'],
     components: {
         Help
     },
-    inject: ['questionnaire', 'currentUser'],
     props: {
         questionnaireId: { type: String, required: true }
     },

@@ -46,7 +46,7 @@ export function updateGroup(questionnaireId, group) {
 
 export function addGroup(questionnaireId, parent, afterNodeId) {
     let index = getItemIndexByIdFromParentItemsList(parent, afterNodeId);
-    const group = createEmptyGroup(parent);
+    const group = createEmptyGroup();
 
     var command = {
         questionnaireId: questionnaireId,

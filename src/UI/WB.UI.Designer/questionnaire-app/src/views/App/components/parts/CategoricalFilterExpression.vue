@@ -44,7 +44,7 @@ export default {
             if (!oldValue && !this.showFilter)
                 this.calculateShowFilter();
         },
-        'activeQuestion.linkedFilterExpression'(newValue, oldValue) {
+        'activeQuestion.optionsFilterExpression'(newValue, oldValue) {
             if (!oldValue && !this.showFilter)
                 this.calculateShowFilter();
         },

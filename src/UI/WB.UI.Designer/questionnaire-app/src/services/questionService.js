@@ -149,7 +149,7 @@ export function deleteQuestion(questionnaireId, itemId) {
 export function addQuestion(questionnaireId, parent, afterNodeId) {
     let index = getItemIndexByIdFromParentItemsList(parent, afterNodeId);
 
-    const emptyQuestion = createEmptyQuestion(parent);
+    const emptyQuestion = createEmptyQuestion();
 
     const command = {
         questionnaireId: questionnaireId,

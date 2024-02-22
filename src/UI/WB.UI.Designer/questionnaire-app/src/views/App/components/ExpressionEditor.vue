@@ -177,8 +177,7 @@ export default {
             editor.on('blur', function () { holderDiv.classList.remove('focused'); });
         },
         variablesRecalculated() {
-            (this.mode !== 'substitutions')
-            {
+            if (this.mode !== 'substitutions') {
                 //this.$refs.editor._editor._emit("change");
                 var session = this.$refs.editor._editor.getSession();
                 if (session.$mode.hasBeenUpdated) {
