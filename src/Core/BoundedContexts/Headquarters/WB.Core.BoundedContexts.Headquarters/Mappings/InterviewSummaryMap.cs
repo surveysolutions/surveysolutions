@@ -43,8 +43,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.FirstSupervisorName);
             Property(x => x.FirstInterviewerId);
             Property(x => x.FirstSupervisorId);
-            Property(x => x.CreatedDate);
-            Property(x => x.FirstAnswerDate);
+            Property(x => x.CreatedDate, pm => pm.Type<UtcDateTimeType>());
+            Property(x => x.FirstAnswerDate, pm =>
+            {
+                pm.Type<UtcDateTimeType>();
+                pm.NotNullable(false);
+            });
             Property(x => x.HasResolvedComments);
             Property(x => x.ErrorsCount);
             Property(x => x.InterviewMode, p => p.Column(cm =>
@@ -156,7 +160,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.SupervisorId);
             Property(x => x.InterviewerId);
             Property(x => x.StatusChangeOriginatorId);
-            Property(x => x.Timestamp, tm => tm.Column("timestamp"));
+            Property(x => x.Timestamp, tm =>
+            {
+                tm.Column("timestamp");
+                tm.Type<UtcDateTimeType>();
+            });
             Property(x => x.StatusChangeOriginatorName);
             Property(x => x.StatusChangeOriginatorRole);
             Property(x => x.Status);
