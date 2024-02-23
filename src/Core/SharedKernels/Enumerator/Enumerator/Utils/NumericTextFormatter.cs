@@ -101,24 +101,22 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
         public static string FormatBytesHumanized(double bytes)
         {
             string[] suffixes = { "B", "KB", "MB", "GB", "TB", "PB" };
-            int suffixIndex = 0;
             double bytesAsDouble = bytes;
 
-            while (bytesAsDouble >= 1024 && suffixIndex < suffixes.Length - 1)
-            {
-                bytesAsDouble /= 1024;
-                suffixIndex++;
-            }
-
-            return $"{bytesAsDouble:0.##} {suffixes[suffixIndex]}";
+            return FormatNumberOrSpeed(bytesAsDouble, suffixes);
         }
 
         public static string FormatSpeedHumanized(double bytes, TimeSpan elapsed)
         {
             string[] suffixes = { "B/s", "KB/s", "MB/s", "GB/s", "TB/s", "PB/s" };
-            int suffixIndex = 0;
             double bytesAsDouble = bytes / elapsed.TotalSeconds;
 
+            return FormatNumberOrSpeed(bytesAsDouble, suffixes);
+        }
+
+        private static string FormatNumberOrSpeed(double bytesAsDouble, string[] suffixes)
+        {
+            int suffixIndex = 0;
             while (bytesAsDouble >= 1024 && suffixIndex < suffixes.Length - 1)
             {
                 bytesAsDouble /= 1024;
@@ -127,27 +125,37 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
             return $"{bytesAsDouble:0.##} {suffixes[suffixIndex]}";
         }
-        
-        //Format Time Humanized up to years including localization 
+
         public static string FormatTimeHumanized(TimeSpan time, CultureInfo culture = null)
         {
-            if (time.TotalSeconds < 1)
+            if (time.TotalSeconds < 8)
             {
-                return "0s";
+                return "seconds";
             }
             
-            string[] suffixes = { "seconds", "minutes", "hours", "days", "months", "years" };
-            int suffixIndex = 0;
-            double timeAsDouble = time.TotalSeconds;
+            var days = time.Days;
+            var hours = time.Hours;
+            var minutes = time.Minutes;
+            var secondsLeft = time.Seconds;
 
-            while (timeAsDouble >= 60 && suffixIndex < suffixes.Length - 1)
+            var result = "";
+            if (days > 0)
             {
-                timeAsDouble /= 60;
-                suffixIndex++;
+                result += days + " day" + (days > 1 ? "s" : "") + " ";
             }
-
-            return $"{timeAsDouble:0.##} {suffixes[suffixIndex]}";
+            if (hours > 0)
+            {
+                result += hours + " hour" + (hours > 1 ? "s" : "") + " ";
+            }
+            if (minutes > 0)
+            {
+                result += minutes + " minute" + (minutes > 1 ? "s" : "") + " ";
+            }
+            if (secondsLeft > 0)
+            {
+                result += secondsLeft + " second" + (secondsLeft > 1 ? "s" : "") + " ";
+            }
+            return result.Trim();
         }
-        
     }
 }
