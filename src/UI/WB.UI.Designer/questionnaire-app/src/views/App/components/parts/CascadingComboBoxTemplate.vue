@@ -59,7 +59,7 @@
                 :class="{ 'has-error': !isValidShowAsListThreshold }">
                 <label for="edit-question-count-for-list">{{ $t('QuestionnaireEditor.QuestionShowListLimit') }}</label>
                 <input id="edit-question-count-for-list" type="number" step="1" maxlength="2" name="showAsListThreshold"
-                    min="1" max="50" v-pattern="/^\d+$/" v-model.number="activeQuestion.showAsListThreshold" v-number
+                    min="1" max="50" v-model.number="activeQuestion.showAsListThreshold" v-number
                     class="form-control small-numeric-input wb-input">
                 <p class="help-block ng-cloak" v-show="!isValidNumberShowAsListThreshold">{{
                     $t('QuestionnaireEditor.QuestionOnlyInts') }}</p>

@@ -155,7 +155,7 @@
                                 <span class="label-title">{{ $t('QuestionnaireEditor.SideBarMetadataYear') }}</span>
                                 <div class="form-group">
                                     <input type="text" min="0" max="9999" pattern="\d*" @keypress='onKeyPressYear($event)'
-                                        maxlength="4" v-pattern="/^\d+$/" class="form-control date-field" name="year"
+                                        maxlength="4" v-number="/^\d+$/" class="form-control date-field" name="year"
                                         v-model="metadata.year" />
                                 </div>
                                 <p class="help-block ng-cloak" v-show="!isOnlyNumbers(metadata.year)">{{

@@ -11,9 +11,8 @@
             <div class="form-group checkbox-in-column" v-show="!activeQuestion.isInteger"
                 :class="{ 'has-error': !isValidCountOfDecimalPlaces }">
                 <label for="edit-question-count-decimal">{{ $t('QuestionnaireEditor.QuestionDecimalPlaces') }}</label>
-                <input id="edit-question-count-decimal" type="text" maxlength="15" name="countOfDecimalPlaces" v-number
-                    ng-pattern="/^\d+$/" v-model="activeQuestion.countOfDecimalPlaces"
-                    class="form-control small-numeric-input">
+                <input id="edit-question-count-decimal" type="number" maxlength="15" name="countOfDecimalPlaces" v-number
+                    v-model="activeQuestion.countOfDecimalPlaces" class="form-control small-numeric-input">
                 <p class="help-block ng-cloak" v-show="!isValidCountOfDecimalPlaces">
                     {{ $t('QuestionnaireEditor.QuestionOnlyInts') }}
                 </p>

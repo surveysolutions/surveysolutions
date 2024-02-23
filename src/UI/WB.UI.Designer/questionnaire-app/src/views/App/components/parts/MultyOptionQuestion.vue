@@ -143,7 +143,7 @@
                 <label for="edit-question-max-answers-number">
                     {{ $t('QuestionnaireEditor.QuestionMaxNumberOfAnswers') }}
                 </label>
-                <input maxlength="9" name="editQuestionMaxAnswersNumber" v-pattern="/^\d+$/"
+                <input maxlength="9" name="editQuestionMaxAnswersNumber" v-number="/^\d+$/"
                     id="edit-question-max-answers-number" type="text" class="form-control small-numeric-input"
                     v-model.number="activeQuestion.maxAllowedAnswers" />
                 <p class="help-block ng-cloak" v-show="!validMaxAllowedAnswers">

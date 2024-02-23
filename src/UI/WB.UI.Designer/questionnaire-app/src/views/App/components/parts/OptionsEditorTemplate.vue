@@ -20,8 +20,8 @@
                 <div class="table-row question-options-editor" v-for="(option, index) in activeQuestion.options">
                     <div class="column-2">
                         <v-form name="options_value_form">
-                            <input type="number" min="-2147483648" max="2147483647" v-model="option.value"
-                                v-pattern="/^([-+]?\d+)$/" :name="'option_value_' + index"
+                            <input type="text" min="-2147483648" max="2147483647" v-model="option.value"
+                                v-number="/^([-+]?\d*)$/" :name="'option_value_' + index"
                                 :class="{ 'has-error': option.value && !isInteger(option.value) }"
                                 @keypress="onKeyPressIsNumber($event)"
                                 class="form-control question-option-value-editor border-right" />
