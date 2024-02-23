@@ -160,11 +160,11 @@ export default {
                 body.classList.remove('block-ui-anim-fade', 'block-ui-active', 'block-ui-visible');
             }
         },
-        ctrl_p: function (val) {
+        notInputQ: function (val) {
             if (val)
                 this.changeCheatSheetVisibility();
         },
-        notInputCtrlP: function (val) {
+        ctrl_p: function (val) {
             if (val)
                 window.open("/pdf/printpreview/" + this.questionnaire.questionnaireId, "_blank");
         }
