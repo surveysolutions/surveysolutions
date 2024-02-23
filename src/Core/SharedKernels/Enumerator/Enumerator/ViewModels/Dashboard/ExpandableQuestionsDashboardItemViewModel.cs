@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
-using Humanizer;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using NodaTime;
@@ -12,6 +11,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views.Dashboard;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
@@ -194,7 +194,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             if (!utcDateTime.HasValue)
                 return string.Empty;
             
-            var culture = CultureInfo.CurrentUICulture;
             var now = DateTime.Now;
             var dateTime = DateTime.SpecifyKind(utcDateTime.Value, DateTimeKind.Utc);
 
@@ -202,7 +201,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             string dateTimeString = StringFormat.ShortDateTime(localTime).ToPascalCase();
             if (localTime > now.Date.AddDays(-1) && localTime < now.Date.AddDays(3))
             {
-                dateTimeString = localTime.Humanize(utcDate: false, culture: culture) + " (" + dateTimeString + ")";
+                DateTimeFormatInfo formatInfo = CultureInfo.CurrentUICulture.DateTimeFormat;
+                dateTimeString = localTime.ToString(formatInfo) +" (" + dateTimeString + ")";
             }
             
             return string.Format(formatString, dateTimeString);

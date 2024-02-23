@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -96,5 +97,57 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
             return string.Join(this.settings.DecimalSeparator, integerAndFraction);
         }
+        
+        public static string FormatBytesHumanized(double bytes)
+        {
+            string[] suffixes = { "B", "KB", "MB", "GB", "TB", "PB" };
+            int suffixIndex = 0;
+            double bytesAsDouble = bytes;
+
+            while (bytesAsDouble >= 1024 && suffixIndex < suffixes.Length - 1)
+            {
+                bytesAsDouble /= 1024;
+                suffixIndex++;
+            }
+
+            return $"{bytesAsDouble:0.##} {suffixes[suffixIndex]}";
+        }
+
+        public static string FormatSpeedHumanized(double bytes, TimeSpan elapsed)
+        {
+            string[] suffixes = { "B/s", "KB/s", "MB/s", "GB/s", "TB/s", "PB/s" };
+            int suffixIndex = 0;
+            double bytesAsDouble = bytes / elapsed.TotalSeconds;
+
+            while (bytesAsDouble >= 1024 && suffixIndex < suffixes.Length - 1)
+            {
+                bytesAsDouble /= 1024;
+                suffixIndex++;
+            }
+
+            return $"{bytesAsDouble:0.##} {suffixes[suffixIndex]}";
+        }
+        
+        //Format Time Humanized up to years including localization 
+        public static string FormatTimeHumanized(TimeSpan time, CultureInfo culture = null)
+        {
+            if (time.TotalSeconds < 1)
+            {
+                return "0s";
+            }
+            
+            string[] suffixes = { "seconds", "minutes", "hours", "days", "months", "years" };
+            int suffixIndex = 0;
+            double timeAsDouble = time.TotalSeconds;
+
+            while (timeAsDouble >= 60 && suffixIndex < suffixes.Length - 1)
+            {
+                timeAsDouble /= 60;
+                suffixIndex++;
+            }
+
+            return $"{timeAsDouble:0.##} {suffixes[suffixIndex]}";
+        }
+        
     }
 }
