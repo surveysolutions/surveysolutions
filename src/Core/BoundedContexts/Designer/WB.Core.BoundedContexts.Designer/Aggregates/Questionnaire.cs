@@ -2030,6 +2030,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(Guid viewerId) 
         {
+            if (this.innerDocument.IsDeleted)
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.QuestionnaireIsDeleted, ExceptionMessages.NoPremissionsToEditQuestionnaire);
+            }
             if (this.innerDocument.CreatedBy != viewerId && !this.SharedUsersIds.Contains(viewerId))
             {
                 throw new QuestionnaireException(

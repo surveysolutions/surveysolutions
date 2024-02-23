@@ -26,13 +26,22 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 return;
                 
             var id = context.ActionArguments["id"];
-
-            Guid questionnaireid;
-            if (id != null && id is QuestionnaireRevision rev)
+            if (id == null)
             {
-                questionnaireid = rev.QuestionnaireId;
+                context.Result = new NotFoundResult();
+                return;
+            }
+            
+            QuestionnaireRevision? questionnaireRevision = null;
+            if (id is QuestionnaireRevision rev)
+            {
+                questionnaireRevision = rev;
             } 
-            else if (id == null || !Guid.TryParse(id.ToString(), out questionnaireid))
+            else if (Guid.TryParse(id.ToString(), out Guid questionnaireId))
+            {
+                questionnaireRevision = new QuestionnaireRevision(questionnaireId);
+            }
+            else
             {
                 context.Result = new NotFoundResult();
                 return;
@@ -41,13 +50,13 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             var viewFactory = context.HttpContext.RequestServices.GetRequiredService<IQuestionnaireViewFactory>();
             var httpContextUser = context.HttpContext.User;
 
-            bool hasAnonymousAccess = viewFactory.IsAnonymousQuestionnaire(questionnaireid, out var originQuestionnaireId);
+            bool hasAnonymousAccess = viewFactory.IsAnonymousQuestionnaire(questionnaireRevision.QuestionnaireId, out var originQuestionnaireId);
             if (hasAnonymousAccess && originQuestionnaireId.HasValue && id is QuestionnaireRevision r)
                 r.MarkAsAnonymousQuestionnaire(originQuestionnaireId.Value);
 
             if (write)
             {
-                bool hasWriteAccess = viewFactory.HasUserChangeAccessToQuestionnaire(questionnaireid, httpContextUser.GetId());
+                bool hasWriteAccess = viewFactory.HasUserChangeAccessToQuestionnaire(questionnaireRevision.QuestionnaireId, httpContextUser.GetId());
                 if (!hasWriteAccess)
                 {
                     context.Result = new JsonResult(new { message = ExceptionMessages.NoPremissionsToEditQuestionnaire })
@@ -69,7 +78,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
             bool hasAccess = hasAnonymousAccess ||
                   httpContextUser.IsAdmin() ||
-                  viewFactory.HasUserAccessToQuestionnaire(questionnaireid, httpContextUser.GetId());
+                  viewFactory.HasUserAccessToQuestionnaire(questionnaireRevision, httpContextUser.GetId());
             if (!hasAccess)
             {
                 context.Result = new JsonResult(new { message = ExceptionMessages.NoPremissionsToEditQuestionnaire })

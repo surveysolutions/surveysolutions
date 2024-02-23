@@ -4,6 +4,7 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
@@ -31,7 +32,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireViewFacto
 
             var factory = new QuestionnaireViewFactory(questionnaireStorage, inMemoryDbContext);
 
-            var result = factory.HasUserAccessToQuestionnaire(questionnaireId, userId);
+            QuestionnaireRevision questionnaireRevision = new QuestionnaireRevision(questionnaireId);
+            var result = factory.HasUserAccessToQuestionnaire(questionnaireRevision, userId);
 
             Assert.True(result);
         }
