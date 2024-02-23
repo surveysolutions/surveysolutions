@@ -175,7 +175,7 @@ type Interview {
   supervisorName: String
   "Indicates if interview was ever completed by interviewer"
   wasCompleted: Boolean!
-  "Date when interview was created"
+  "Date and Time (UTC) when interview was created"
   createdDate: DateTime!
   "Short case identifier that appears throughout the system - in Headquarters, Supervisor, and Interviewer"
   key: String!

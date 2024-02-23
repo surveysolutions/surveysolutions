@@ -44,6 +44,10 @@
 .btn-primary {
   background-color: @inline-button-medium-bg-color;
   &:hover { background-color: darken(@inline-button-medium-bg-color, 5%); }
+  &:active { 
+    background-color: darken(@inline-button-medium-bg-color, 5%); 
+    &:hover { background-color: darken(@inline-button-medium-bg-color, 5%); }
+  }
   .inline-button-fontstyle();
   text-transform: uppercase;
   color: @inline-button-medium-fg-color;
