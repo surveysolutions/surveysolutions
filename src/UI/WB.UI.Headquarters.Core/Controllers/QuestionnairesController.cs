@@ -96,7 +96,7 @@ namespace WB.UI.Headquarters.Controllers
                 WebMode = this.webInterviewConfigProvider.Get(questionnaireIdentity).Started,
                 AudioAudit = browseItem.IsAudioRecordingEnabled,
                 DesignerUrl = this.restServiceSettings.Endpoint.TrimEnd('/') +
-                              $"/questionnaire/details/{questionnaire.QuestionnaireId:N}${questionnaire.Revision}",
+                              $"/q/details/{questionnaire.QuestionnaireId:N}${questionnaire.Revision}",
                 Comment = browseItem.Comment,
                 Variable = browseItem.Variable,
                 IsObserving = this.authorizedUser.IsObserving,
@@ -234,7 +234,7 @@ namespace WB.UI.Headquarters.Controllers
                 IsObserving = this.authorizedUser.IsObserving,
                 DataUrl = Url.Action("GetQuestionnaireVariables", "QuestionnairesApi"),
                 DesignerUrl = this.restServiceSettings.Endpoint.TrimEnd('/') +
-                              $"/questionnaire/details/{questionnaire.QuestionnaireId:N}${questionnaire.Revision}",
+                              $"/q/details/{questionnaire.QuestionnaireId:N}${questionnaire.Revision}",
 
             };
 

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -9,6 +9,7 @@
     <Nullable>enable</Nullable>
     <WarningsAsErrors>CS8600;CS8601;CS8602;CS8603;CS8604;CS8610;CS8613;CS8614;CS8618;CS8619;CS8620;CS8625;CS8629;CS8632;CS8634;CS8714</WarningsAsErrors>
     <SpaRoot>questionnaire-app\</SpaRoot>
+    <Configurations>Release;Debug</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -20,6 +21,7 @@
     <NoWarn>1701;1702;</NoWarn>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'WB.UI.Designer.Manage' " />
   <ItemGroup>
     <Content Update="**\*.json" CopyToPublishDirectory="Never" />
     <Content Update="wwwroot\**\*" CopyToPublishDirectory="PreserveNewest" />
@@ -46,16 +48,13 @@
     <PackageReference Include="StackExchange.Exceptional.AspNetCore" Version="2.2.32" />
     <PackageReference Include="StackExchange.Exceptional.PostgreSql" Version="2.2.32" />
     <PackageReference Include="Shark.PdfConvert" Version="1.0.5" />
-
-
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="8.0.0" />
-
-
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
-
-
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
     <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
     <PackageReference Include="VueCliMiddleware" Version="6.0.0" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <PackageReference Include="Yarp.ReverseProxy" Version="2.1.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj" />
@@ -112,6 +111,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="questionnaire-app" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Update="Resources\ErrorMessages.resx">
       <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
@@ -138,7 +141,7 @@
     <!-- Include the newly-built files in the publish output -->
     <ItemGroup>
       <DistFiles Include="$(SpaRoot)dist\**" />
-      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+      <ResolvedFileToPublish Include="@(DistFiles-&gt;'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
         <RelativePath>%(DistFiles.Identity)</RelativePath>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>

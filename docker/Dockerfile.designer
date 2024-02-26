@@ -31,7 +31,6 @@ COPY src/UI/WB.UI.Designer/.jshintrc .jshintrc
 
 RUN cd questionnaire-app && npm run build
 
-
 FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}${DOTNET_CA_PATCH} as builder
 ARG VERSION
 ARG INFO_VERSION
@@ -91,11 +90,10 @@ COPY [ "src/UI/WB.UI.Designer",\
 # DESIGNER_FOLDERS_END
 
 COPY --from=designer_js /dist src/UI/WB.UI.Designer
-COPY --from=questionnaire-app /app/questionnaire-app/dist src/UI/WB.UI.Designer/questionnaire-app/dist
+COPY --from=questionnaire-app /app/wwwroot/assets src/UI/WB.UI.Designer/wwwroot/assets
 
 RUN dotnet publish src/UI/WB.UI.Designer --no-restore \
     -c Release -o /designer -p:SkipSpaBuild=True -p:Version="${VERSION}" -p:InformationalVersion="${INFO_VERSION}"
-
 
 FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION} as fonts
 RUN apt-get update && apt-get install unzip -y --no-install-recommends

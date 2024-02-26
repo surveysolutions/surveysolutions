@@ -46,6 +46,7 @@
     border-top: solid 1px #FAD540;
     border-bottom: solid 1px #FAD540;
     border-radius: 3px;
+    padding: 0;
 }
 
 .scroller {
@@ -147,10 +148,6 @@
     left: -50%;
     height: 100%;
     .transition(left 0.4s ease);
-
-    .btn[disabled] {
-        color: @light-grey; //@selected-panel-grey-color;
-    }
 
     .left-side-panel-content {
         width: @panel-width;
@@ -1137,11 +1134,7 @@
                             display: block;
                             vertical-align: top;
                             position: relative;
-                        }
-
-                        #verification-button {
-                            margin-left: 5px;
-                        }
+                        }                        
 
                         > span.gray {
                             .questionnarie-title-span-gray-fontstyle();
@@ -1625,6 +1618,8 @@
             white-space: nowrap;
             color: @designer-editor-chapter-list-color;
             text-decoration: none;
+            display: block;
+            width: 100%;
             
             .warning-message {
                 color: @error-message-color;
@@ -1762,6 +1757,20 @@
                     .item-text {
                         color: @questionnaire-tree-roster-color;
                     }
+                }
+            }
+        }
+    }
+
+    .questionnaire-tree-holder {
+        .roster-items.item {
+            .item-body {
+                .icon {
+                    background-position-x: -60px;
+                }
+          
+                .item-text {
+                    color: @questionnaire-tree-roster-color;
                 }
             }
         }
@@ -2110,4 +2119,8 @@
     font-weight: normal;
     font-style: italic;
     .georgia-font();
+}
+
+.ace-github .ace_support.ace_variable  {
+    color: @qname-color;
 }

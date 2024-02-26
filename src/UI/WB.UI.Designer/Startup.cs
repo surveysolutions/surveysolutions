@@ -23,6 +23,7 @@ using Microsoft.Net.Http.Headers;
 using Ncqrs.Domain.Storage;
 using Newtonsoft.Json.Serialization;
 using reCAPTCHA.AspNetCore;
+using Vite.Extensions.AspNetCore;
 //using VueCliMiddleware;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.DataAccess;
@@ -76,6 +77,11 @@ namespace WB.UI.Designer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDistributedMemoryCache();
+
+            services.AddViteHelper(options =>
+            {
+                options.Entry = "src/main.js";
+            });
 
             services.AddSession(options =>
             {
@@ -247,12 +253,6 @@ namespace WB.UI.Designer
             services.Configure<QuestionnaireHistorySettings>(Configuration.GetSection("QuestionnaireHistorySettings"));
             services.Configure<WebTesterSettings>(Configuration.GetSection("WebTester"));
 
-            // In production, the Vue files will be served from this directory
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = $"{SpaRoot}/dist";
-            });
-
             aspCoreKernel = new AspCoreKernel(services);
 
             aspCoreKernel.Load(
@@ -270,6 +270,7 @@ namespace WB.UI.Designer
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
+            app.UseViteForwarder();
             app.UseExceptional();
 
             if (!env.IsDevelopment())
@@ -298,7 +299,6 @@ namespace WB.UI.Designer
                     }
                 }
             });
-            app.UseSpaStaticFiles();
             
             app.UseCookiePolicy();
             app.UseSession();
@@ -357,14 +357,10 @@ namespace WB.UI.Designer
                 routes.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=QuestionnaireList}/{action=Index}/{id?}");
+               
                 routes.MapRazorPages();
             });
             
-            app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = SpaRoot;
-            });
-
             if (aspCoreKernel == null) return;
 
             var initTask = aspCoreKernel.InitAsync(serviceProvider);

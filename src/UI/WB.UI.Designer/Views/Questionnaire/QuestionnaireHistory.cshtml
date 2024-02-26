@@ -10,7 +10,8 @@
 
 <div id="edit-form" style="position: static;">
     <h3 style="margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
-        @Html.ActionLink(QuestionnaireHistoryResources.Edit, "Details", "Questionnaire", new { id = Model!.Id.FormatGuid() }, new { @class = "btn btn-default" }) @Model.Title
+        <a href='@($"/q/details/{Model!.Id.FormatGuid()}")' class="btn btn-default">@QuestionnaireHistoryResources.Edit</a>
+        @Model.Title
     </h3>
 </div>
 <table id="questionnaire-table-header" class="table  table-header">
@@ -66,7 +67,9 @@
                                             <ul class="dropdown-menu">
                                                 @if (listViewModel.HasRevertTo)
                                                 {
-                                                    <li>@Html.ActionLink("View", "Details", "Questionnaire", new { id = $"{Model.Id:N}${listViewModel.Sequence}" })</li>
+                                                    <li>
+                                                        <a href='@($"/q/details/{Model.Id:N}${listViewModel.Sequence}")'>View</a>
+                                                    </li>
                                                     <li class="divider"></li>
                                                     <li><a href="javascript:void(0);" onclick="confirmRevert('@listViewModel.Timestamp.ToString("s")', '@listViewModel.Id')">@QuestionnaireHistoryResources.RevertToThisVersion</a></li>
                                                     <li>@Html.ActionLink(QuestionnaireHistoryResources.ExtractAtRevision, "Clone", "Questionnaire", new { id = $"{Model.Id:N}${listViewModel.Sequence}" })</li>
@@ -102,7 +105,7 @@
 </div>
 
 @section Modal {
-    <!-- Modal -->
+    <!-- Comment Modal -->
     <div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -120,8 +123,8 @@
             </div>
         </div>
     </div>
-    <!-- Comment modal -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <!-- Revert modal -->
+    <div class="modal fade" id="revertModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -149,7 +152,7 @@
         window.confirmRevert = function(date, revertId) {
             $('#version').text(date);
             $('#commandId').val(revertId);
-            $('#myModal').modal('show');
+            $('#revertModal').modal('show');
         };
 
         var comments = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model?.ChangeHistory.ToDictionary(c=> c.Id, c=> c.Comment)));

@@ -2,121 +2,85 @@
     <main class="web-interview web-interview-for-supervisor">
         <div class="container-fluid">
             <div class="row">
-                <div v-if="!isLoaded"
-                    class="loading">
+                <div v-if="!isLoaded" class="loading">
                     <div style="margin-top:90px">
                         {{ $t("WebInterviewUI.LoadingWait") }}
                     </div>
                 </div>
-                <div class="unit-section complete-section"
-                    v-else>
+                <div class="unit-section complete-section" v-else>
                     <div class="wrapper-info error">
                         <div class="container-info">
                             <h2>
-                                {{ $t('Assignments.CreatingNewAssignment', {questionnaire: questionnaireTitle}) }}
-                                <span :title="$t('Reports.Version')">({{ this.$t('Assignments.QuestionnaireVersion', { version: this.questionnaireVersion}) }})</span>
+                                {{ $t('Assignments.CreatingNewAssignment', { questionnaire: questionnaireTitle }) }}
+                                <span :title="$t('Reports.Version')">({{ this.$t('Assignments.QuestionnaireVersion', {
+                                    version: this.questionnaireVersion
+                                }) }})</span>
                             </h2>
                         </div>
                     </div>
-                    <component
-                        v-for="entity in entities"
-                        :key="`${entity.identity}-${entity.entityType}`"
-                        :is="entity.entityType"
-                        :id="entity.identity"
-                        fetchOnMount
-                        noComments="true"></component>
-                    <wb-question
-                        ref="ref_newResponsibleId"
-                        :question="assignToQuestion"
-                        noValidation="true"
-                        :noComments="true"
-                        :no-title="false"
-                        questionCssClassName="single-select-question">
-                        <h5>{{$t("Assignments.CreateAssignment_ResponsibleInstruction")}}</h5>
+                    <component v-for="entity in entities" :key="`${entity.identity}-${entity.entityType}`"
+                        :is="entity.entityType" :id="entity.identity" fetchOnMount noComments="true"></component>
+                    <wb-question ref="ref_newResponsibleId" :question="assignToQuestion" noValidation="true"
+                        :noComments="true" :no-title="false" questionCssClassName="single-select-question">
+                        <h5>{{ $t("Assignments.CreateAssignment_ResponsibleInstruction") }}</h5>
                         <div class="question-unit">
                             <div class="options-group">
                                 <div class="form-group">
-                                    <div class="field"
-                                        :class="{answered: newResponsibleId != null}">
-                                        <Typeahead
-                                            v-validate="responsibleValidations"
-                                            control-id="newResponsibleId"
-                                            :placeholder="$t('Common.Responsible')"
-                                            :value="newResponsibleId"
-                                            :ajax-params="{ }"
-                                            @selected="newResponsibleSelected"
+                                    <div class="field" :class="{ answered: newResponsibleId != null }">
+                                        <Typeahead v-validate="responsibleValidations" control-id="newResponsibleId"
+                                            :placeholder="$t('Common.Responsible')" :value="newResponsibleId"
+                                            :ajax-params="{}" @selected="newResponsibleSelected"
                                             :fetch-url="config.responsiblesUrl"></Typeahead>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="information-block text-danger"
-                            v-if="!assignToQuestion.validity.isValid">
+                        <div class="information-block text-danger" v-if="!assignToQuestion.validity.isValid">
                             <p v-for="error in errors.collect('newResponsibleId')">{{ error }}</p>
                         </div>
                     </wb-question>
 
-                    <wb-question
-                        ref="ref_size"
-                        :question="sizeQuestion"
-                        noValidation="true"
-                        noComments="true"
+                    <wb-question ref="ref_size" :question="sizeQuestion" noValidation="true" noComments="true"
                         questionCssClassName="numeric-question">
-                        <h5>{{ this.$t("Assignments.Size") }}</h5>
+                        <h5>{{ this.$t("Assignments.Expected") }}</h5>
                         <div class="instructions-wrapper">
                             <div class="information-block instruction">
-                                <p>{{ this.$t("Assignments.SizeInstructions") }}</p>
+                                <p>{{ this.$t("Assignments.ExpectedInstructions") }}</p>
                             </div>
                         </div>
                         <div class="question-unit">
                             <div class="options-group">
                                 <div class="form-group">
                                     <div class="field answered">
-                                        <input
-                                            v-model="sizeQuestion.answer"
-                                            :title="this.$t('Assignments.SizeExplanation')"
-                                            v-validate="sizeValidations"
-                                            name="size"
-                                            maxlength="5"
-                                            type="text"
-                                            autocomplete="off"
-                                            inputmode="numeric"
+                                        <input v-model="sizeQuestion.answer"
+                                            :title="this.$t('Assignments.ExpectedExplanation')" v-validate="sizeValidations"
+                                            name="size" maxlength="5" type="text" autocomplete="off" inputmode="numeric"
                                             class="field-to-fill">
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="information-block text-danger"
-                            v-if="!sizeQuestion.validity.isValid">
-                            <p>{{ this.$t("Assignments.InvalidSizeMessage") }}</p>
+                        <div class="information-block text-danger" v-if="!sizeQuestion.validity.isValid">
+                            <p>{{ this.$t("Assignments.InvalidExpected") }}</p>
                             <p>{{ errors.first('size') }}</p>
                         </div>
                     </wb-question>
 
-                    <wb-question
-                        :question="webMode"
-                        noValidation="true"
-                        noComments="true"
+                    <wb-question :question="webMode" noValidation="true" noComments="true"
                         questionCssClassName="multiselect-question">
                         <h5>{{ this.$t("Assignments.WebMode") }} <a target="_blank"
-                            href="https://support.mysurvey.solutions/headquarters/cawi">
-                            (?)
-                        </a></h5>
+                                href="https://support.mysurvey.solutions/headquarters/cawi">
+                                (?)
+                            </a></h5>
                         <div class="question-unit">
                             <div class="options-group">
                                 <div class="form-group">
                                     <div class="field answered">
-                                        <input
-                                            id="webModeId"
-                                            @change="webModeChange"
-                                            checked="checked"
-                                            v-model="webMode.answer"
-                                            data-val="true"
-                                            type="checkbox"
-                                            class="wb-checkbox">
+                                        <input id="webModeId" @change="webModeChange" checked="checked"
+                                            v-model="webMode.answer" data-val="true" type="checkbox" class="wb-checkbox">
                                         <label for="webModeId">
                                             <span class="tick"></span>
-                                            {{$t("Assignments.CawiActivated")}}
+                                            {{ $t("Assignments.CawiActivated") }}
                                         </label>
                                     </div>
                                 </div>
@@ -124,44 +88,28 @@
                         </div>
                     </wb-question>
 
-                    <wb-question
-                        ref="ref_email"
-                        :question="emailQuestion"
-                        noValidation="true"
-                        noComments="true"
-                        :isDisabled="!webMode.answer"
-                        questionCssClassName="text-question">
+                    <wb-question ref="ref_email" :question="emailQuestion" noValidation="true" noComments="true"
+                        :isDisabled="!webMode.answer" questionCssClassName="text-question">
                         <h5>{{ this.$t("Assignments.Email") }}</h5>
                         <div class="question-unit">
                             <div class="options-group">
                                 <div class="form-group">
                                     <div class="field answered">
-                                        <input
-                                            v-model="emailQuestion.answer"
+                                        <input v-model="emailQuestion.answer"
                                             :title="this.$t('Assignments.EmailExplanation')"
-                                            :placeholder="$t('Assignments.EnterEmail')"
-                                            v-validate="'email'"
-                                            name="email"
-                                            type="text"
-                                            autocomplete="off"
-                                            class="field-to-fill">
+                                            :placeholder="$t('Assignments.EnterEmail')" v-validate="'email'" name="email"
+                                            type="text" autocomplete="off" class="field-to-fill">
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="information-block text-danger"
-                            v-if="!emailQuestion.validity.isValid">
+                        <div class="information-block text-danger" v-if="!emailQuestion.validity.isValid">
                             <p>{{ this.$t("Assignments.InvalidEmail") }}</p>
                         </div>
                     </wb-question>
 
-                    <wb-question
-                        ref="ref_password"
-                        :question="passwordQuestion"
-                        noValidation="true"
-                        noComments="true"
-                        :isDisabled="!webMode.answer"
-                        questionCssClassName="text-question">
+                    <wb-question ref="ref_password" :question="passwordQuestion" noValidation="true" noComments="true"
+                        :isDisabled="!webMode.answer" questionCssClassName="text-question">
                         <h5>{{ this.$t("Assignments.Password") }}</h5>
                         <div class="instructions-wrapper">
                             <div class="information-block instruction">
@@ -172,49 +120,36 @@
                             <div class="options-group">
                                 <div class="form-group">
                                     <div class="field answered">
-                                        <input
-                                            v-model="passwordQuestion.answer"
+                                        <input v-model="passwordQuestion.answer"
                                             :placeholder="$t('Assignments.EnterPassword')"
                                             :title="this.$t('Assignments.PasswordExplanation')"
-                                            v-validate="passwordValidations"
-                                            name="password"
-                                            type="text"
-                                            autocomplete="off"
+                                            v-validate="passwordValidations" name="password" type="text" autocomplete="off"
                                             class="field-to-fill">
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="information-block text-danger"
-                            v-if="!passwordQuestion.validity.isValid">
+                        <div class="information-block text-danger" v-if="!passwordQuestion.validity.isValid">
                             <p>{{ this.$t("Assignments.InvalidPassword") }}</p>
                         </div>
                     </wb-question>
 
-                    <wb-question
-                        :question="isAudioRecordingEnabled"
-                        noValidation="true"
-                        noComments="true"
-                        :isDisabled="webMode.answer"
-                        questionCssClassName="multiselect-question">
+                    <wb-question :question="isAudioRecordingEnabled" noValidation="true" noComments="true"
+                        :isDisabled="webMode.answer" questionCssClassName="multiselect-question">
                         <h5>{{ this.$t("Assignments.IsAudioRecordingEnabled") }} <a target="_blank"
-                            href="https://support.mysurvey.solutions/headquarters/audio-audit/">
-                            (?)
-                        </a></h5>
+                                href="https://support.mysurvey.solutions/headquarters/audio-audit/">
+                                (?)
+                            </a></h5>
                         <div class="question-unit">
                             <div class="options-group">
                                 <div class="form-group">
                                     <div class="field answered">
-                                        <input
-                                            id="isAudioRecordingEnabledId"
-                                            checked="checked"
-                                            v-model="isAudioRecordingEnabled.answer"
-                                            data-val="true"
-                                            type="checkbox"
+                                        <input id="isAudioRecordingEnabledId" checked="checked"
+                                            v-model="isAudioRecordingEnabled.answer" data-val="true" type="checkbox"
                                             class="wb-checkbox">
                                         <label for="isAudioRecordingEnabledId">
                                             <span class="tick"></span>
-                                            {{$t("Assignments.Activated")}}
+                                            {{ $t("Assignments.Activated") }}
                                         </label>
                                     </div>
                                 </div>
@@ -222,23 +157,16 @@
                         </div>
                     </wb-question>
 
-                    <wb-question
-                        :question="commentsQuestion"
-                        noValidation="true"
-                        noComments="true"
+                    <wb-question :question="commentsQuestion" noValidation="true" noComments="true"
                         questionCssClassName="text-question">
                         <h5>{{ this.$t("Assignments.Comments") }}</h5>
                         <div class="question-unit">
                             <div class="options-group">
                                 <div class="form-group">
                                     <div class="field answered">
-                                        <textarea
-                                            v-model="commentsQuestion.answer"
-                                            :placeholder="$t('Assignments.EnterComments')"
-                                            name="comments"
-                                            rows="6"
-                                            maxlength="500"
-                                            class="form-control" />
+                                        <textarea v-model="commentsQuestion.answer"
+                                            :placeholder="$t('Assignments.EnterComments')" name="comments" rows="6"
+                                            maxlength="500" class="form-control" />
                                     </div>
                                 </div>
                             </div>
@@ -246,44 +174,47 @@
                     </wb-question>
 
                     <div class="action-container">
-                        <button
-                            :class="{'shake' : buttonAnimated}"
-                            type="button"
-                            @click="create($event)"
+                        <button :class="{ 'shake': buttonAnimated }" type="button" @click="create($event)"
                             class="btn btn-success btn-lg">{{ $t('Common.Create') }}</button>
                     </div>
                 </div>
             </div>
         </div>
-        <portal-target name="body"
-            multiple >
+        <portal-target name="body" multiple>
         </portal-target>
         <IdleTimeoutService />
-        <signalr @connected="connected"
-            mode="takeNew"
-            :interviewId="interviewId" />
+        <signalr @connected="connected" mode="takeNew" :interviewId="interviewId" />
     </main>
 </template>
 
 <style scoped>
-
 .shake {
-  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
-  transform: translate3d(0, 0, 0);
+    animation: shake 0.82s cubic-bezier(.36, .07, .19, .97) both;
+    transform: translate3d(0, 0, 0);
 }
+
 @keyframes shake {
-  10%, 90% {
-    transform: translate3d(-1px, 0, 0);
-  }
-  20%, 80% {
-    transform: translate3d(2px, 0, 0);
-  }
-  30%, 50%, 70% {
-    transform: translate3d(-4px, 0, 0);
-  }
-  40%, 60% {
-    transform: translate3d(4px, 0, 0);
-  }
+
+    10%,
+    90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+
+    20%,
+    80% {
+        transform: translate3d(2px, 0, 0);
+    }
+
+    30%,
+    50%,
+    70% {
+        transform: translate3d(-4px, 0, 0);
+    }
+
+    40%,
+    60% {
+        transform: translate3d(4px, 0, 0);
+    }
 }
 </style>
 
@@ -292,7 +223,7 @@ import Vue from 'vue'
 import { Validator } from 'vee-validate'
 import * as toastr from 'toastr'
 import http from '~/webinterview/api/http'
-import {RoleNames} from '~/shared/constants'
+import { RoleNames } from '~/shared/constants'
 import { filter } from 'lodash'
 import '@/assets/css/markup-web-interview.scss'
 
@@ -308,7 +239,7 @@ Validator.localize('en', validationTranslations)
 
 const emailOrPasswordRequired = {
     getMessage() {
-        return Vue.$t('Assignments.SizeForWebMode')
+        return Vue.$t('Assignments.ExpectedForWebMode')
     },
     validate(value, [email, password]) {
         return (email !== null && email !== '') || (password !== null && password !== '')
@@ -318,7 +249,7 @@ const emailOrPasswordRequired = {
 
 const emailShouldBeEmpty = {
     getMessage() {
-        return Vue.$t('Assignments.InvalidSizeWithEmail')
+        return Vue.$t('Assignments.InvalidExpectedWithEmail')
     },
     validate(value, [email]) {
         return email === null || email === ''
@@ -430,10 +361,10 @@ export default {
 
             return validations
         },
-        responsibleValidations(){
+        responsibleValidations() {
             return {
                 required: true,
-                responsibleShouldBeInterviewer: [ this.webMode.answer],
+                responsibleShouldBeInterviewer: [this.webMode.answer],
             }
         },
         passwordValidations() {
@@ -546,7 +477,7 @@ export default {
     mounted() {
         const self = this
 
-        this.$nextTick(function() {
+        this.$nextTick(function () {
             window.addEventListener('resize', self.onResize)
             self.onResize()
         })

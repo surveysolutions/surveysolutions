@@ -32,11 +32,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             var localTo = from.Date.AddDays(1);
             var localFrom = AddPeriod(localTo, period, -columnCount);
 
-            var utcFrom = localFrom.AddMinutes(timezoneAdjastmentMins);
-            var utcTo = localTo.AddMinutes(timezoneAdjastmentMins);
+            var utcFrom = localFrom.AddMinutes(timezoneAdjastmentMins).SetUtcKind();
+            var utcTo = localTo.AddMinutes(timezoneAdjastmentMins).SetUtcKind();
 
-            DateTime? utcMinDate = GetFirstInterviewCreatedDate(questionnaireId, questionnaireVersion , interviewstatusStorage);
-            DateTime? localMinDate = utcMinDate?.AddMinutes(-timezoneAdjastmentMins);
+            DateTime? utcMinDate = GetFirstInterviewCreatedDate(questionnaireId, questionnaireVersion, interviewstatusStorage);
+            DateTime? localMinDate = utcMinDate?.AddMinutes(-timezoneAdjastmentMins).SetKind(DateTimeKind.Unspecified);
 
             DateTimeRange[] dateTimeRangesLocal =
                 Enumerable.Range(0, columnCount)

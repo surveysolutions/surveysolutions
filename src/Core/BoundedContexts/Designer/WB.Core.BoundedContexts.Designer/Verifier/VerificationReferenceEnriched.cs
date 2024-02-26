@@ -5,7 +5,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
     public class QuestionnaireEntityExtendedReference
     {
         public QuestionnaireEntityExtendedReference(QuestionnaireVerificationReferenceType type, string itemId, 
-            string title, string? chapterId = null, string? variable = null, string? questionType = null, int? indexOfEntityInProperty = null)
+            string title, string? chapterId = null, string? variable = null, string? questionType = null, int? indexOfEntityInProperty = null,
+            string? property = null)
         {
             Type = type;
             ItemId = itemId;
@@ -14,6 +15,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Variable = variable;
             QuestionType = questionType;
             IndexOfEntityInProperty = indexOfEntityInProperty;
+            Property = property;
         }
 
         public QuestionnaireVerificationReferenceType Type { get; set; }
@@ -22,6 +24,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         public string? ChapterId { get; set; }
         public string? Variable { get; set; }
         public string? QuestionType { get; set; }
+        public string? Property { get; set; }
         public int? IndexOfEntityInProperty { get; set; }
     }
 }

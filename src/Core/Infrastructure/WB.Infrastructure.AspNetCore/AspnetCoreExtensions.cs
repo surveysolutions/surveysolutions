@@ -101,6 +101,8 @@ namespace WB.Infrastructure.AspNetCore
                 c.AddIniFile("appsettings.cloud.ini", true, true);
                 c.AddIniFile($"appsettings.{Environment.MachineName}.ini", true);
                 c.AddIniFile("appsettings.Production.ini", true, true);
+                
+                c.AddUserSecrets<TStartup>();
 
                 configure?.Invoke(hostingContext, c);
 

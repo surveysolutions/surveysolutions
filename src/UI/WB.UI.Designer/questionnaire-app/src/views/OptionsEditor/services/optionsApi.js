@@ -83,7 +83,11 @@ class OptionsApi {
 
         formData.append('csvFile', file);
 
-        return await axios.post(`/questionnaire/EditCategories`, formData);
+        return await axios.post(`/questionnaire/EditCategories`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
     }
 
     async uploadOptions(questionnaire, question, file) {
@@ -92,7 +96,11 @@ class OptionsApi {
         formData.append('questionId', question);
         formData.append('csvFile', file);
 
-        return await axios.post('/questionnaire/EditOptions', formData);
+        return await axios.post('/questionnaire/EditOptions', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
     }
 }
 

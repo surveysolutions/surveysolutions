@@ -232,7 +232,7 @@ return {
 					jQuery: 'jquery',
 				})
 			],
-		  output: {
+		    output: {
 			  assetFileNames: (assetInfo) => {
 				  let extType = assetInfo.name.split('.').at(1);
 				  if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
@@ -266,7 +266,7 @@ return {
 					  return filename;
 				}*/
 			  },
-		  },
+		    },
 		},
 	  },
 	}

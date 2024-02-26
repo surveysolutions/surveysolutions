@@ -50,12 +50,10 @@
     <PackageReference Include="Refit.HttpClientFactory" Version="7.0.0" />
     <PackageReference Include="Refit.Newtonsoft.Json" Version="7.0.0" />
     <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.6" />
-
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20071.2" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
     <PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0" />
-
     <!--needed for eppplus https://github.com/JanKallman/EPPlus/issues/31 -->
     <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.0" />
