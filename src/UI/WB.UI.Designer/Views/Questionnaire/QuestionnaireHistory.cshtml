@@ -105,7 +105,7 @@
 </div>
 
 @section Modal {
-    <!-- Modal -->
+    <!-- Comment Modal -->
     <div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -123,8 +123,8 @@
             </div>
         </div>
     </div>
-    <!-- Comment modal -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <!-- Revert modal -->
+    <div class="modal fade" id="revertModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -152,7 +152,7 @@
         window.confirmRevert = function(date, revertId) {
             $('#version').text(date);
             $('#commandId').val(revertId);
-            $('#myModal').modal('show');
+            $('#revertModal').modal('show');
         };
 
         var comments = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model?.ChangeHistory.ToDictionary(c=> c.Id, c=> c.Comment)));

@@ -22,6 +22,7 @@ namespace WB.UI.Headquarters
             {
                 var workspaceAccessor = sp.GetRequiredService<IWorkspaceContextAccessor>();
                 var config = configuration.HeadquarterOptions().Get<HeadquartersConfig>();
+                config.BaseUrl = config.BaseUrl.TrimEnd('/');
                 config.BaseAppUrl = config.BaseUrl;
                 var workspace = workspaceAccessor.CurrentWorkspace();
 
@@ -29,9 +30,7 @@ namespace WB.UI.Headquarters
                 {
                     config.BaseUrl = config.BaseAppUrl + "/" + workspace.Name;
                 }
-
-                config.BaseUrl = config.BaseUrl.TrimEnd('/');
-
+                
                 return Options.Create(config);
             });
             
