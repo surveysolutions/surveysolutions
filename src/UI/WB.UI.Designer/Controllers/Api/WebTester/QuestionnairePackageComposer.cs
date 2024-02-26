@@ -51,13 +51,25 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
 
         public Questionnaire? ComposeQuestionnaire(Guid questionnaireId)
         {
+            var anonymousQuestionnaire = this.dbContext.AnonymousQuestionnaires.FirstOrDefault(a => a.IsActive
+                && a.AnonymousQuestionnaireId == questionnaireId);
+            var originalQuestionnaireId = anonymousQuestionnaire?.QuestionnaireId ?? questionnaireId;
+
+            var maxSequenceByQuestionnaire = this.dbContext.QuestionnaireChangeRecords
+                .Where(y => y.QuestionnaireId == originalQuestionnaireId.FormatGuid())
+                .Select(y => (int?)y.Sequence)
+                .Max();
+
+            var questionnaireKey = $"{questionnaireId}.{maxSequenceByQuestionnaire}";
+
             try
             {
-                return questionnaireCacheStorage.GetOrCreate(questionnaireId, ComposeQuestionnaireImpl);
+                return questionnaireCacheStorage.GetOrCreate(questionnaireKey, questionnaireId, 
+                    id => ComposeQuestionnaireImpl(originalQuestionnaireId, id));
             }
             catch
             {
-                questionnaireCacheStorage.Remove(questionnaireId);
+                questionnaireCacheStorage.Remove(questionnaireKey);
                 throw;
             }
         }

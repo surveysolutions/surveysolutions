@@ -143,7 +143,7 @@ namespace WB.UI.Designer.Controllers
             var fileType = excelExtensions.Contains(extension)
                 ? CategoriesFileType.Excel
                 : CategoriesFileType.Tsv;
-
+            
             try
             {
                 var importResult = this.categoricalOptionsImportService.ImportOptions(
@@ -162,7 +162,7 @@ namespace WB.UI.Designer.Controllers
                         }).ToArray()
                     };
                 }
-
+                
                 errors.AddRange(importResult.Errors);
             }
             catch (InvalidFileException e)
@@ -178,17 +178,13 @@ namespace WB.UI.Designer.Controllers
                 errors.Add(Resources.QuestionnaireController.ExcelOrTabFilesOnly);
                 this.logger.LogError(e, e.Message);
             }
-            finally
-            {
-                questionnaireCacheStorage.Remove(id.QuestionnaireId);
-            }
 
             return new EditOptionsResponse
             {
                 Errors = errors
             };
         }
-        
+
         [HttpGet]
         public IActionResult EditCategories()
         {
@@ -400,11 +396,6 @@ namespace WB.UI.Designer.Controllers
                 commandResult.HasPermissions = domainEx != null && domainEx.ErrorType != DomainExceptionType.DoesNotHavePermissionsForEdit;
                 commandResult.Error = domainEx != null ? domainEx.Message : "Something went wrong";
             }
-            finally
-            {
-                questionnaireCacheStorage.Remove(command.QuestionnaireId);
-            }
-            
             return commandResult;
         }
 
