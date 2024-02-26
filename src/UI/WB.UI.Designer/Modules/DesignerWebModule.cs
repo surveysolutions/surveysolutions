@@ -33,7 +33,7 @@ namespace WB.UI.Designer.Modules
             registry.Bind<IJsonAllTypesSerializer, JsonAllTypesSerializer>();
 
             registry.Bind<IQuestionnairePackageComposer, QuestionnairePackageComposer>();
-            registry.BindAsSingleton<IQuestionnaireCacheStorage, QuestionnaireCacheStorage>();
+            registry.Bind<IQuestionnaireCacheStorage, QuestionnaireCacheStorage>();
             registry.Bind<IArchiveUtils, ZipArchiveUtils>();
 
             registry.Bind<IQuestionnaireSearchStorage, QuestionnaireSearchStorage>();

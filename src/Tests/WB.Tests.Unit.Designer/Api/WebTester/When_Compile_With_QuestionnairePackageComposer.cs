@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
                 .Setup(q => q.Load(It.IsAny<QuestionnaireViewInputModel>()))
                 .Returns(questionnaireView);
 
-            fixture.Register<IQuestionnaireCacheStorage>(() => new QuestionnaireCacheStorage(new MemoryCache(Options.Create(new MemoryCacheOptions()))));
+            fixture.Register<IQuestionnaireCacheStorage>(() => new QuestionnaireCacheStorage(new MemoryCache(Options.Create(new MemoryCacheOptions())), Create.InMemoryDbContext()));
 
             fixture.Register<DesignerDbContext>(() =>
             {

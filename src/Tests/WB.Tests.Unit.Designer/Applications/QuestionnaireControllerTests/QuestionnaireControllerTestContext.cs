@@ -56,6 +56,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 reusableCategoriesService: Mock.Of<IReusableCategoriesService>(),
                 Mock.Of<IEmailSender>(),
                 Mock.Of<IViewRenderService>(),
+                null!,
                 null!);
             questionnaireController.ControllerContext = new ControllerContext
             {

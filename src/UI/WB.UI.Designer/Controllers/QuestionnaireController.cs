@@ -27,6 +27,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInf
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
+using WB.UI.Designer.Api.WebTester;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Controllers.Api.Designer;
 using WB.UI.Designer.Extensions;
@@ -88,6 +89,7 @@ namespace WB.UI.Designer.Controllers
         private readonly IEmailSender emailSender;
         private readonly IViewRenderService viewRenderService;
         private readonly UserManager<DesignerIdentityUser> users;
+        private readonly IQuestionnaireCacheStorage questionnaireCacheStorage;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
 
         public QuestionnaireController(
@@ -105,7 +107,8 @@ namespace WB.UI.Designer.Controllers
             IReusableCategoriesService reusableCategoriesService,
             IEmailSender emailSender,
             IViewRenderService viewRenderService,
-            UserManager<DesignerIdentityUser> users)
+            UserManager<DesignerIdentityUser> users,
+            IQuestionnaireCacheStorage questionnaireCacheStorage)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -121,6 +124,7 @@ namespace WB.UI.Designer.Controllers
             this.emailSender = emailSender;
             this.viewRenderService = viewRenderService;
             this.users = users;
+            this.questionnaireCacheStorage = questionnaireCacheStorage;
             this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
         }
 
