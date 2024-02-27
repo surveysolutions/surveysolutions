@@ -52,7 +52,7 @@
         style="overflow-y: auto;display: flex !important; justify-content: center;">
         <div class="cfp-hotkeys" style="height: 100vh; width: 100vw; padding: 20px;">
             <h4 class="cfp-hotkeys-title">{{ $t('QuestionnaireEditor.HotkeysShortcuts') }}</h4>
-            <table>
+            <table role="presentation">
                 <tbody>
                     <tr v-for="hotkey in hotkeys">
                         <td class="cfp-hotkeys-keys">
