@@ -168,9 +168,9 @@
                                     <div class="table-row fixed-roster-titles-editor"
                                         v-for="(title, index) in activeRoster.fixedRosterTitles">
                                         <div class="column-2">
-                                            <input type="text" min="-2147483648" max="2147483647" v-number="/^([-+]?\d*)$/"
-                                                v-model.number="title.value" :name="'title_value_' + index"
-                                                @keypress="onKeyPressIsNumber($event)"
+                                            <input type="text" inputmode="numeric" min="-2147483648" max="2147483647"
+                                                v-number="/^([-+]?\d*)$/" v-model.number="title.value"
+                                                :name="'title_value_' + index" @keypress="onKeyPressIsNumber($event)"
                                                 :class="{ 'has-error': !isInteger(title.value) }"
                                                 class="form-control fixed-roster-value-editor border-right">
                                         </div>
