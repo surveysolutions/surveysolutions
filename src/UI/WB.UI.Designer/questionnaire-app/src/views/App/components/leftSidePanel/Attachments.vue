@@ -30,7 +30,7 @@
                 <p>
                     <span>{{ $t('QuestionnaireEditor.SideBarAttachmentsEmptyLine2') }}</span><span>&nbsp;</span>
                     <a href="https://support.mysurvey.solutions/questionnaire-designer/limits/multimedia-reference"
-                        target="_blank">
+                        target="_blank" rel="noopener">
                         {{ $t('QuestionnaireEditor.ClickHere') }}
                     </a>
                 </p>
