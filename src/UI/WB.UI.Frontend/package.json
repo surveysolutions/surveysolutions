@@ -27,7 +27,7 @@
         "bootstrap-sass": "^3.4.3",
         "bootstrap-select": "^1.13.18",
         "chart.js": "^2.9.4",
-        "datatables.net": "^1.13.2",
+        "datatables.net": "^1.13.10",
         "datatables.net-select": "^1.6.0",
         "fast-glob": "^3.2.12",
         "flatpickr": "^4.6.9",

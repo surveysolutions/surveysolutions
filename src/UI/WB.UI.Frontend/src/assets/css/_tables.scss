@@ -456,6 +456,10 @@
     }
 .dataTables_processing{
     @extend %loading-indicator;
+
+    > div:last-child {
+        display: none;
+    }
     
     &.error {
         background: rgba(100,0,0,0.1);
