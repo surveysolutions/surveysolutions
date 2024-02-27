@@ -1219,6 +1219,12 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   <data name="UnMarkAsDefault" xml:space="preserve">
     <value>Don't use as default</value>
   </data>
+  <data name="Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
   <data name="PleaseWait" xml:space="preserve">
     <value>Please wait...</value>
   </data>

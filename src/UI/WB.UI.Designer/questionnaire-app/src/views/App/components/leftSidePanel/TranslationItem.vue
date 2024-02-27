@@ -23,10 +23,14 @@
                         }}</button>
                     </div>
 
+                    <span class="default-label" v-if="translation.isDefault">{{
+                        $t('QuestionnaireEditor.Default')
+                    }}</span>
+
                     <button type="button" class="btn btn-default" v-if="!isReadOnlyForUser"
                         v-show="translation.isDefault && !translation.isOriginalTranslation"
                         @click.self="setDefaultTranslation(false);">
-                        {{ $t('QuestionnaireEditor.UnMarkAsDefault') }}
+                        {{ $t('QuestionnaireEditor.Reset') }}
                     </button>
 
                     <div class="permanent-actions pull-right">
