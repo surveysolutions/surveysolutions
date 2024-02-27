@@ -111,5 +111,33 @@ namespace WB.Tests.Unit.Designer.QuestionnaireTests
             Assert.That(optins[1].GetParsedValue(), Is.EqualTo(2));
             Assert.That(optins[1].AnswerText, Is.EqualTo("World"));
         }
+        
+        [Test]
+        public void When_update_question_in_deleted_questionnaire()
+        {
+            // arrange
+            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(Id.gA, Create.TextQuestion(Id.g2, "n1"));
+            questionnaireDocument.IsDeleted = true;
+            Questionnaire questionnaire = Create.Questionnaire(responsible: Id.gF, document: questionnaireDocument);
+
+            // act
+            var command = Create.Command.UpdateNumericQuestion(
+                questionnaireId: Id.gA, 
+                questionId: Id.g2,
+                responsibleId: Id.gF,
+                title: "Title", 
+                isPreFilled: false, 
+                scope: QuestionScope.Interviewer, 
+                isInteger: true, 
+                useFormatting: false, 
+                options: Create.Options(Create.Option(1, "Hello"), Create.Option(2, "World")));
+            
+
+            // assert
+            var exception = Assert.Catch<QuestionnaireException>(() => questionnaire.UpdateNumericQuestion(command));
+
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ErrorType, Is.EqualTo(DomainExceptionType.QuestionnaireIsDeleted));
+        }
     }
 }
