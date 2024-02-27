@@ -23,7 +23,7 @@
                         }}</button>
                     </div>
 
-                    <button type="button" class="btn btn-default"
+                    <button type="button" class="btn btn-default" v-if="!isReadOnlyForUser"
                         v-show="translation.isDefault && !translation.isOriginalTranslation"
                         @click.self="setDefaultTranslation(false);">
                         {{ $t('QuestionnaireEditor.UnMarkAsDefault') }}
