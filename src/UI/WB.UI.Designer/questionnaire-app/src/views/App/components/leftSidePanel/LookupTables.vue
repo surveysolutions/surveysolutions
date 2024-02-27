@@ -11,7 +11,10 @@
             </div>
             <form role="form" name="lookupTablesForm" novalidate>
                 <ul>
-                    <LookupTableItem v-for="table in lookupTables" :tableItem="table" :questionnaire-id="questionnaireId" />
+                    <li class="lookup-table-panel-item">
+                        <LookupTableItem v-for="table in lookupTables" :tableItem="table"
+                            :questionnaire-id="questionnaireId" />
+                    </li>
                 </ul>
             </form>
             <div class="button-holder">
