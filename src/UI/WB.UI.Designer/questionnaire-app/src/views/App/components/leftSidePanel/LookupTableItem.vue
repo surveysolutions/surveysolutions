@@ -21,8 +21,9 @@
                 }}</button>
             </div>
             <div class="permanent-actions clearfix">
-                <a :href="downloadUrl" v-show="hasUploadedFile" class="btn btn-default pull-right" target="_blank"
-                    rel="noopener noreferrer">{{ $t('QuestionnaireEditor.Download') }}</a>
+                <a :href="sanitizeUrl(downloadLookupFileBaseUrl + questionnaireId + '?lookupTableId=' + table.itemId)"
+                    v-if="hasUploadedFile" class="btn btn-default pull-right" target="_blank" rel="noopener noreferrer">{{
+                        $t('QuestionnaireEditor.Download') }}</a>
                 <button class="btn btn-default pull-right" type="button" @click.stop="openFileDialog()"
                     :disabled="isReadOnlyForUser">
                     <span v-show="!hasUploadedFile">{{
@@ -44,6 +45,8 @@ import { updateLookupTable, deleteLookupTable } from '../../../../services/looku
 import { isEmpty, isUndefined, isNull, cloneDeep } from 'lodash'
 import { createQuestionForDeleteConfirmationPopup, trimText } from '../../../../services/utilityService'
 
+import { sanitizeUrl } from '@braintree/sanitize-url';
+
 export default {
     name: 'LookupTableItem',
     inject: ['questionnaire', 'isReadOnlyForUser'],
@@ -63,9 +66,6 @@ export default {
         },
         isDirty() {
             return this.table.name != this.tableItem.name || (this.table.file !== null && this.table.file !== undefined);
-        },
-        downloadUrl() {
-            return this.downloadLookupFileBaseUrl + this.questionnaireId + '?lookupTableId=' + this.table.itemId;
         },
         isInvalid() {
             return (this.table.name) ? false : true;
@@ -125,6 +125,9 @@ export default {
             var clonned = cloneDeep(this.tableItem);
             clonned.editLookupTable = null;
             this.tableItem.editLookupTable = clonned;
+        },
+        sanitizeUrl(url) {
+            return sanitizeUrl(url);
         }
     }
 }
