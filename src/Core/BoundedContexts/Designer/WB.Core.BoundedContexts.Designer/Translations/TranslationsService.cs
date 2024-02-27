@@ -204,7 +204,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 : null;
 
             var categoriesId = isCategoriesWorksheet
-                ? questionnaire.Categories.Single(x => x.Name.ToLower() == categoriesWorksheetName).Id
+                ? questionnaire.Categories.First(x => x.Name.ToLower() == categoriesWorksheetName).Id
                 : (Guid?) null;
 
             var translationErrors = (isCategoriesWorksheet
