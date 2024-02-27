@@ -9,6 +9,9 @@ public class NumericTextFormatterTests : NumericTextFormatterTestsContext
     [Test]
     public void should_format_time()
     {
+        Assert.That(NumericTextFormatter.FormatTimeHumanized(TimeSpan.FromSeconds(0)),
+            Is.EqualTo("seconds"));
+        
         Assert.That(NumericTextFormatter.FormatTimeHumanized(TimeSpan.FromSeconds(5)),
             Is.EqualTo("seconds"));
         
@@ -27,6 +30,12 @@ public class NumericTextFormatterTests : NumericTextFormatterTestsContext
     [Test]
     public void should_format_bytes()
     {
+        Assert.That(NumericTextFormatter.FormatBytesHumanized(0d),
+            Is.EqualTo("0 B"));
+        
+        Assert.That(NumericTextFormatter.FormatBytesHumanized(1024d),
+            Is.EqualTo("1 KB"));
+        
         Assert.That(NumericTextFormatter.FormatBytesHumanized(1023d),
             Is.EqualTo("1023 B"));
         Assert.That(NumericTextFormatter.FormatBytesHumanized(1023d * 1024),
@@ -37,12 +46,22 @@ public class NumericTextFormatterTests : NumericTextFormatterTestsContext
             Is.EqualTo("1023 GB"));
         Assert.That(NumericTextFormatter.FormatBytesHumanized(1023d * 1024 * 1024 * 1024 * 1024),
             Is.EqualTo("1023 TB"));
+        
+        Assert.That(NumericTextFormatter.FormatBytesHumanized(1024d * 1024 * 1024 * 1024 * 1024),
+            Is.EqualTo("1 PB"));
+        
         Assert.That(NumericTextFormatter.FormatBytesHumanized(1023d * 1024 * 1024 * 1024 * 1024 * 1024),
             Is.EqualTo("1023 PB"));
     }
     [Test]
     public void should_format_speed()
     {
+        Assert.That(NumericTextFormatter.FormatSpeedHumanized(0d, TimeSpan.FromSeconds(1)),
+            Is.EqualTo("0 B/s"));
+        
+        Assert.That(NumericTextFormatter.FormatSpeedHumanized(1024d, TimeSpan.FromSeconds(1)),
+            Is.EqualTo("1 KB/s"));
+        
         Assert.That(NumericTextFormatter.FormatSpeedHumanized(1023d, TimeSpan.FromSeconds(1)),
             Is.EqualTo("1023 B/s"));
         Assert.That(NumericTextFormatter.FormatSpeedHumanized(1023d * 1024, TimeSpan.FromSeconds(1)),
@@ -53,6 +72,10 @@ public class NumericTextFormatterTests : NumericTextFormatterTestsContext
             Is.EqualTo("1023 GB/s"));
         Assert.That(NumericTextFormatter.FormatSpeedHumanized(1023d * 1024 * 1024 * 1024 * 1024, TimeSpan.FromSeconds(1)),
             Is.EqualTo("1023 TB/s"));
+        
+        Assert.That(NumericTextFormatter.FormatSpeedHumanized(1024d * 1024 * 1024 * 1024 * 1024, TimeSpan.FromSeconds(1)),
+            Is.EqualTo("1 PB/s"));
+        
         Assert.That(NumericTextFormatter.FormatSpeedHumanized(1023d * 1024 * 1024 * 1024 * 1024 * 1024, TimeSpan.FromSeconds(1)),
             Is.EqualTo("1023 PB/s"));
     }
