@@ -146,8 +146,7 @@
 import VerificationDialog from './VerificationDialog.vue';
 import SharedInfoDialog from './SharedInfoDialog.vue';
 import DownloadPDFDialog from './DownloadPDFDialog.vue';
-import { useMagicKeys, useActiveElement } from '@vueuse/core';
-import { logicAnd } from '@vueuse/math'
+import { useMagicKeys } from '@vueuse/core';
 
 import { useVerificationStore } from '../../../stores/verification';
 import WebTesterApi from '../../../api/webTester';
