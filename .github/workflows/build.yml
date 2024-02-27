@@ -307,7 +307,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: Windows Installer
-          path: ${{ steps.build-installer.outputs.filename }}
+          path: |
+            ${{ steps.build-installer.outputs.filename }}
+            artifacts/WB.UI.Headquarters.Offline.zip
