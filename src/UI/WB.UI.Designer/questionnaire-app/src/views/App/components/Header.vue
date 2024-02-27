@@ -52,6 +52,11 @@
                                 }}</a>
                             </li>
                             <li>
+                                <a href="/identity/account/manage/changepassword">{{
+                                    $t('QuestionnaireEditor.ChangePassword')
+                                }}</a>
+                            </li>
+                            <li>
                                 <a href="/identity/account/logout">{{
                                     $t('QuestionnaireEditor.LogOut')
                                 }}</a>
