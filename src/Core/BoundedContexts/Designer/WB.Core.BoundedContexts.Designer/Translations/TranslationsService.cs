@@ -204,10 +204,10 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             var categoriesWorksheetName = isCategoriesWorksheet
                 ? worksheetName.TrimStart(TranslationExcelOptions.CategoriesWorksheetPreffix)
                 : null;
-
-            var categoriesId = isCategoriesWorksheet
-                ? questionnaire.Categories.Single(x => x.Name.ToLower() == categoriesWorksheetName).Id
-                : (Guid?) null;
+            
+            Guid[] categoriesIds = isCategoriesWorksheet
+                ? questionnaire.Categories.Where(x => x.Name.ToLower() == categoriesWorksheetName).Select(x => x.Id).ToArray()
+                : Array.Empty<Guid>();
 
             var translationErrors = (isCategoriesWorksheet
                 ? this.VerifyCategories(translationWithHeaderMap)
@@ -223,13 +223,21 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
                 if (string.IsNullOrWhiteSpace(importedTranslation.Translation)) continue;
 
-                var translationInstance = categoriesId.HasValue
-                    ? GetCategoriesTranslation(questionnaireId, translationId, categoriesId.Value, importedTranslation)
-                    : GetQuestionnaireTranslation(questionnaireId, translationId,
+                if (categoriesIds.Length > 0)
+                {
+                    foreach (var categoriesId in categoriesIds)
+                    {
+                        yield return GetCategoriesTranslation(questionnaireId, translationId, categoriesId,
+                            importedTranslation);
+                    }
+                }
+                else
+                {
+                    var translationInstance = GetQuestionnaireTranslation(questionnaireId, translationId,
                         importedTranslation, idsOfAllQuestionnaireEntities);
-
-                if (translationInstance != null)
-                    yield return translationInstance;
+                    if (translationInstance != null)
+                        yield return translationInstance;
+                }
             }
         }
 

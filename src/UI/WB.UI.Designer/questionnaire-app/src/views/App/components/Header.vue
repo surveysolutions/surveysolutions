@@ -52,6 +52,11 @@
                                 }}</a>
                             </li>
                             <li>
+                                <a href="/identity/account/manage/changepassword">{{
+                                    $t('QuestionnaireEditor.ChangePassword')
+                                }}</a>
+                            </li>
+                            <li>
                                 <a href="/identity/account/logout">{{
                                     $t('QuestionnaireEditor.LogOut')
                                 }}</a>
@@ -146,8 +151,7 @@
 import VerificationDialog from './VerificationDialog.vue';
 import SharedInfoDialog from './SharedInfoDialog.vue';
 import DownloadPDFDialog from './DownloadPDFDialog.vue';
-import { useMagicKeys, useActiveElement } from '@vueuse/core';
-import { logicAnd } from '@vueuse/math'
+import { useMagicKeys } from '@vueuse/core';
 
 import { useVerificationStore } from '../../../stores/verification';
 import WebTesterApi from '../../../api/webTester';
@@ -174,24 +178,24 @@ export default {
         const sharedInfoDialog = ref(null);
         const downloadPDFDialog = ref(null);
 
-        const keys = useMagicKeys();
-        const activeElement = useActiveElement();
-        const notUsingInput = computed(() =>
-            activeElement.value?.tagName !== 'INPUT'
-            && activeElement.value?.tagName !== 'TEXTAREA');
-
-        const notInputCtrlB = logicAnd(keys['Ctrl+b'], notUsingInput);
+        const { ctrl_b } = useMagicKeys({
+            passive: false,
+            onEventFired(e) {
+                if (e.ctrlKey && e.key === 'b' && e.type === 'keydown')
+                    e.preventDefault()
+            },
+        })
 
         return {
             verificationStore,
             verificationDialog,
             sharedInfoDialog,
             downloadPDFDialog,
-            notInputCtrlB
+            ctrl_b
         };
     },
     watch: {
-        notInputCtrlB: function (v) {
+        ctrl_b: function (v) {
             if (v)
                 this.verify();
         }

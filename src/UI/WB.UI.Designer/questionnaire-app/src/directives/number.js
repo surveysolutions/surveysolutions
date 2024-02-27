@@ -1,19 +1,38 @@
 const number = app => {
     app.directive('number', {
         mounted(el, binding, vnode) {
-            el.addEventListener('input', function(e) {
-                const value = e.target.value;
-                const regex = binding.value
-                    ? /^[0-9]*[.,]?[0-9]*$/
-                    : /^[0-9]*$/;
+            el.oldValue = el.value;
 
-                if (!regex.test(value)) {
-                    const newValue = value.slice(0, -1);
-                    e.target.value = newValue;
+            el.numberCheck = function(e) {
+                const value = e.target.value;
+                const regex = binding.value || /^[0-9]*$/;
+
+                const min = el.hasAttribute('min')
+                    ? parseFloat(el.getAttribute('min'))
+                    : -Infinity;
+                const max = el.hasAttribute('max')
+                    ? parseFloat(el.getAttribute('max'))
+                    : Infinity;
+                const numericValue = parseFloat(value);
+
+                //console.log('Current Value:', value, 'Regex:', regex, 'Min:', min, 'Max:', max, 'numericValue:', numericValue);
+
+                if (
+                    isNaN(value) ||
+                    !regex.test(value) ||
+                    numericValue < min ||
+                    numericValue > max
+                ) {
+                    e.target.value = el.oldValue;
                     e.target.dispatchEvent(new Event('input'));
-                    //binding.instance.$emit('input', newValue);
+                } else {
+                    el.oldValue = value;
                 }
-            });
+            };
+            el.addEventListener('input', el.numberCheck);
+        },
+        unmounted(el, binding) {
+            el.removeEventListener('input', el.numberCheck);
         }
     });
 };

@@ -91,8 +91,7 @@ import { useTreeStore } from '../stores/tree';
 import { useUserStore } from '../stores/user';
 import { useHotkeysStore } from '../stores/hotkeys';
 import { useUnsavedChanges } from '../stores/unsavedChanges';
-import { useActiveElement, useMagicKeys } from '@vueuse/core';
-import { logicAnd } from '@vueuse/math'
+import { useMagicKeys } from '@vueuse/core';
 
 export default {
     name: 'QuestionnaireApp',
@@ -120,13 +119,21 @@ export default {
         const hotkeysStore = useHotkeysStore();
         const unsavedChanges = useUnsavedChanges();
 
-        const keys = useMagicKeys();
-        const activeElement = useActiveElement();
-        const notUsingInput = computed(() =>
-            activeElement.value?.tagName !== 'INPUT'
-            && activeElement.value?.tagName !== 'TEXTAREA');
-
-        const notInputQ = logicAnd(keys['?'], notUsingInput);
+        const { shift_question } = useMagicKeys({
+            aliasMap: {
+                question: '?',
+            },
+            passive: false,
+            onEventFired(e) {
+                if (e.shiftKey && e.key === '?' && e.type === 'keydown') {
+                    //workaround for the issue with useMagicKeys useActiveElement      
+                    if (!(document.activeElement?.tagName.toUpperCase() == 'INPUT'
+                        || document.activeElement?.tagName.toUpperCase() == 'TEXTAREA')) {
+                        e.preventDefault();
+                    }
+                }
+            },
+        })
 
         const { ctrl_p } = useMagicKeys({
             passive: false,
@@ -145,7 +152,7 @@ export default {
             hotkeysStore,
             unsavedChanges,
             ctrl_p,
-            notInputQ
+            shift_question
         };
     },
     async beforeMount() {
@@ -160,11 +167,15 @@ export default {
                 body.classList.remove('block-ui-anim-fade', 'block-ui-active', 'block-ui-visible');
             }
         },
-        ctrl_p: function (val) {
-            if (val)
-                this.changeCheatSheetVisibility();
+        shift_question: function (val) {
+            if (!(document.activeElement?.tagName.toUpperCase() == 'INPUT'
+                || document.activeElement?.tagName.toUpperCase() == 'TEXTAREA')) {
+                if (val)
+                    this.changeCheatSheetVisibility();
+            }
+
         },
-        notInputCtrlP: function (val) {
+        ctrl_p: function (val) {
             if (val)
                 window.open("/pdf/printpreview/" + this.questionnaire.questionnaireId, "_blank");
         }

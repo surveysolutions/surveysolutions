@@ -128,7 +128,7 @@ namespace WB.UI.Designer.Controllers
         public IActionResult DetailsNoSection(QuestionnaireRevision id,
             Guid? chapterId, string entityType, Guid? entityid)
         {
-            if (User.IsAdmin() || this.UserHasAccessToEditOrViewQuestionnaire(id.QuestionnaireId))
+            if (User.IsAdmin() || this.UserHasAccessToEditOrViewQuestionnaire(id))
             {
                 // get section id and redirect
                 var sectionId = questionnaireInfoFactory.GetSectionIdForItem(id, entityid);
@@ -161,7 +161,7 @@ namespace WB.UI.Designer.Controllers
                 });
             }
 
-            return (User.IsAdmin() || this.UserHasAccessToEditOrViewQuestionnaire(id.QuestionnaireId))
+            return (User.IsAdmin() || this.UserHasAccessToEditOrViewQuestionnaire(id))
                 ? this.View("~/questionnaire/index.cshtml")
                 : this.LackOfPermits();
         }
@@ -201,7 +201,7 @@ namespace WB.UI.Designer.Controllers
             return false;
         }
 
-        private bool UserHasAccessToEditOrViewQuestionnaire(Guid id)
+        private bool UserHasAccessToEditOrViewQuestionnaire(QuestionnaireRevision id)
         {
             return this.questionnaireViewFactory.HasUserAccessToQuestionnaire(id, User.GetIdOrNull());
         }
@@ -210,7 +210,7 @@ namespace WB.UI.Designer.Controllers
         public IActionResult Clone(QuestionnaireRevision id)
         {
             var questionnaireId = id.OriginalQuestionnaireId ?? id.QuestionnaireId;
-            QuestionnaireView? questionnaire = this.GetQuestionnaireView(questionnaireId);
+            QuestionnaireView? questionnaire = this.questionnaireViewFactory.Load(id);
             if (questionnaire == null) return NotFound();
 
             QuestionnaireView model = questionnaire;
@@ -377,7 +377,7 @@ namespace WB.UI.Designer.Controllers
         [AntiForgeryFilter]
         public async Task<IActionResult> QuestionnaireHistory(QuestionnaireRevision id, int? p)
         {
-            bool hasAccess = this.User.IsAdmin() || this.questionnaireViewFactory.HasUserAccessToQuestionnaire(id.QuestionnaireId, this.User.GetIdOrNull());
+            bool hasAccess = this.User.IsAdmin() || this.questionnaireViewFactory.HasUserAccessToQuestionnaire(id, this.User.GetIdOrNull());
             if (!hasAccess)
             {
                 this.Error(ErrorMessages.NoAccessToQuestionnaire);

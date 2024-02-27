@@ -553,6 +553,67 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             //assert
             Assert.That(act, Throws.Nothing);
         }
+        
+        [Test]
+        public void when_storing_translations_from_excel_file_with_2_categories_with_the_same_name()
+        {
+            //assert
+            Guid questionnaireId = Id.gB;
+            Guid translationId = Id.gC;
+            var categoriesId1 = Id.gD;
+            var categoriesId2 = Id.gE;
+            var categoriesName = "duplicate";
+
+            byte[] fileStream = CreateExcelWithHeader(categoriesName, new[]
+            {
+                new[]
+                {
+                    "1$1", "original text", "translation"
+                }
+            });
+
+            var plainStorageAccessor = Create.InMemoryDbContext();
+
+            var questionnaire = Create.QuestionnaireDocument(questionnaireId);
+            questionnaire.Categories = new List<Categories>
+            {
+                new Categories{ Id = categoriesId1, Name = categoriesName},
+                new Categories{ Id = categoriesId2, Name = categoriesName},
+            };
+
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
+
+            var cat = new Mock<IReusableCategoriesService>();
+            cat.Setup(x => x.GetCategoriesById(questionnaire.PublicKey, categoriesId1))
+                .Returns(new List<CategoriesItem>(){new CategoriesItem(){Id = 1, Text = "one"}}.AsQueryable);
+            cat.Setup(x => x.GetCategoriesById(questionnaire.PublicKey, categoriesId2))
+                .Returns(new List<CategoriesItem>(){new CategoriesItem(){Id = 2, Text = "two"}}.AsQueryable);
+            
+            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object, reusableCategoriesService: cat.Object);
+
+            //act
+            service.Store(questionnaireId, translationId, fileStream);
+
+            //assert
+            Assert.That(plainStorageAccessor.TranslationInstances.Count(), Is.EqualTo(2));
+
+            var translations = plainStorageAccessor.TranslationInstances.ToArray();
+            
+            var translationInstance1 = translations.First();
+            Assert.That(translationInstance1.Value, Is.EqualTo("translation"));
+            Assert.That(translationInstance1.QuestionnaireEntityId, Is.EqualTo(categoriesId1));
+            Assert.That(translationInstance1.Type, Is.EqualTo(TranslationType.Categories));
+            Assert.That(translationInstance1.QuestionnaireId, Is.EqualTo(questionnaireId));
+            Assert.That(translationInstance1.TranslationIndex, Is.EqualTo("1$1"));
+            
+            var translationInstance2 = translations.Second();
+            Assert.That(translationInstance2.Value, Is.EqualTo("translation"));
+            Assert.That(translationInstance2.QuestionnaireEntityId, Is.EqualTo(categoriesId2));
+            Assert.That(translationInstance2.Type, Is.EqualTo(TranslationType.Categories));
+            Assert.That(translationInstance2.QuestionnaireId, Is.EqualTo(questionnaireId));
+            Assert.That(translationInstance2.TranslationIndex, Is.EqualTo("1$1"));
+        }
 
         private byte[] GetEmbendedFileContent(string fileName)
         {

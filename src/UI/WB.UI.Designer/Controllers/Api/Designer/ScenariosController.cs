@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Scenarios;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
@@ -89,7 +90,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [Route("{id:int}")]
         public async Task<IActionResult> Get(Guid questionnaireId, int id)
         {
-            var hasUserAccess = User.IsAdmin() || viewFactory.HasUserAccessToQuestionnaire(questionnaireId, User.GetIdOrNull());
+            QuestionnaireRevision questionnaireRevision = new QuestionnaireRevision(questionnaireId);
+            var hasUserAccess = User.IsAdmin() || viewFactory.HasUserAccessToQuestionnaire(questionnaireRevision, User.GetIdOrNull());
             if (!hasUserAccess)
                 return Forbid();
 

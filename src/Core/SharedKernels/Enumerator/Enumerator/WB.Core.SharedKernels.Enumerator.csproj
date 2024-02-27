@@ -20,8 +20,7 @@
   <ItemGroup>
     <PackageReference Include="Autofac" Version="7.1.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
-    <PackageReference Include="Humanizer.Core" Version="2.14.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />    
     <PackageReference Include="MvvmCross" Version="9.2.0" />
     <PackageReference Include="MvvmCross.Plugin.Json" Version="9.2.0" />
     <PackageReference Include="MvvmCross.Plugin.Messenger" Version="9.2.0" />
