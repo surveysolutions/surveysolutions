@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Humanizer;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -9,6 +8,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
@@ -90,13 +90,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                         this.CheckNewVersionResult = EnumeratorUIResources.Diagnostics_DownloadingPleaseWait
                                                      + $" ({(int)progress.ProgressPercentage}%)";
 
-                        var bytesReceived = progress.BytesReceived.Bytes().Humanize("0.00");
+                        var bytesReceived = NumericTextFormatter.FormatBytesHumanized(progress.BytesReceived);
                         var total = progress.TotalBytesToReceive.HasValue
-                            ? progress.TotalBytesToReceive.Value.Bytes().Humanize("0.00")
+                            ? NumericTextFormatter.FormatBytesHumanized(progress.TotalBytesToReceive.Value)
                             : "N/A";
 
                         var speed = progress.Speed.HasValue
-                            ? progress.Speed.Value.Bytes().Per(TimeSpan.FromSeconds(1)).Humanize("0.00")
+                            ? NumericTextFormatter.FormatSpeedHumanized(progress.Speed.Value, TimeSpan.FromSeconds(1))
                             : "N/A";
 
                         this.CheckNewVersionDetails = $"{bytesReceived}/{total} @ {speed}";

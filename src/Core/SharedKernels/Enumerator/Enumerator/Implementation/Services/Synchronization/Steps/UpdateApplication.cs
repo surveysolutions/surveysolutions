@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using Humanizer;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps
@@ -56,25 +56,26 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         if (sw == null) sw = Stopwatch.StartNew();
                         if (downloadProgress.ProgressPercentage % 1 != 0) return;
 
-                        var receivedKilobytes = downloadProgress.BytesReceived.Bytes();
-                        var totalKilobytes = (downloadProgress.TotalBytesToReceive ?? 0).Bytes();
+                        var receivedDataHumanized = NumericTextFormatter.FormatBytesHumanized(downloadProgress.BytesReceived);
+                        var receivedSpeedHumanized = NumericTextFormatter.FormatSpeedHumanized(downloadProgress.BytesReceived, sw.Elapsed);
+                        var totalSizeHumanized = NumericTextFormatter.FormatBytesHumanized(downloadProgress.TotalBytesToReceive ?? 0);
 
                         Context.Progress.Report(new SyncProgressInfo
                         {
                             Title = EnumeratorUIResources.Synchronization_DownloadApplication,
                             Description = string.Format(
                                 EnumeratorUIResources.Synchronization_DownloadApplication_Description,
-                                receivedKilobytes.Humanize("0.00 MB"),
-                                totalKilobytes.Humanize("0.00 MB"),
-                                receivedKilobytes.Per(sw.Elapsed).Humanize("0.00"),
+                                receivedDataHumanized,
+                                totalSizeHumanized,
+                                receivedSpeedHumanized,
                                 (int) downloadProgress.ProgressPercentage),
                             Status = SynchronizationStatus.Download,
                             Stage = SyncStage.DownloadApplication,
                             StageExtraInfo = new Dictionary<string, string>()
                             {
-                                { "receivedKilobytes", receivedKilobytes.Humanize("0.00 MB") },
-                                { "totalKilobytes", totalKilobytes.Humanize("0.00 MB")},
-                                { "receivingRate", receivedKilobytes.Per(sw.Elapsed).Humanize("0.00")},
+                                { "receivedKilobytes", receivedDataHumanized },
+                                { "totalKilobytes", totalSizeHumanized},
+                                { "receivingRate", receivedSpeedHumanized},
                                 { "progressPercentage", ((int) downloadProgress.ProgressPercentage).ToString()}
                             }
                         });
