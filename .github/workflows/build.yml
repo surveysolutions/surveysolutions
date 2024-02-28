@@ -155,7 +155,7 @@ jobs:
         -ArcGisApiKey "${{ secrets.ARCGIS_API_KEY }}"
        
     - name: Publish
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: Mobile Apps
         path: ${{ github.workspace }}/artifacts
@@ -312,4 +312,4 @@ jobs:
           name: Windows Installer
           path: |
             ${{ steps.build-installer.outputs.filename }}
-            artifacts/WB.UI.Headquarters.Offline.zip
+            ${{ github.workspace }}/artifacts/WB.UI.Headquarters.Offline.zip
