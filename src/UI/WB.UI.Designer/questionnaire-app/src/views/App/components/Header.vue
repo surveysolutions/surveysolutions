@@ -130,6 +130,15 @@
                             " @click="webTest()">
                             {{ $t('QuestionnaireEditor.Test') }}
                         </button>
+                        <span class="error-message strong"
+                            v-if="questionnaire.previewRevision !== null && questionnaire.previewRevision !== undefined">{{
+                                $t(
+                                    'QuestionnaireEditor.Preview',
+                                    {
+                                        revision: questionnaire.previewRevision
+                                    }
+                                )
+                            }}</span>
                     </div>
                 </div>
             </div>
