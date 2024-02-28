@@ -471,6 +471,8 @@
     "HotkeysCloseScenarios": "Close scenarios panel",
     "HotkeysCloseComments": "Close comments panel",
     "AttachmentName": "Attachment name",
+    "Default": "Default",
+    "Reset": "Reset",
     "EditorShowComments": "Show comments ({{count}})",
     "CollaboratorsDescriptionSettings": "the following users have access to this questionnaire",
     "AccessSettings": "Access",

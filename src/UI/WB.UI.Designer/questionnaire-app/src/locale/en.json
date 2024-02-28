@@ -365,6 +365,8 @@
     "HotkeysShowHideHelp": "Show / hide this help menu",
     "MarkAsDefault": "Mark as default language",
     "UnMarkAsDefault": "Don't use as default",
+    "Default": "Default",
+    "Reset": "Reset",
     "PleaseWait": "Please wait...",
     "EntryWasNotFound": "Entry was not found in questionnaire, please select another.",
     "RequestFailedUnexpectedly": "Request failed unexpectedly.",

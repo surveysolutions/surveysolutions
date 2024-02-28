@@ -382,6 +382,8 @@
     "AttachmentName": "Attachment name",
     "SideBarMacroNoName": "macro with no name",
     "SideBarCategoriesNoName": "categories with no name",
+    "Default": "Default",
+    "Reset": "Reset",
     "SelectModeOfDataCollection": "Select a Mode of Data Collection",
     "SelectCountry": "Select country",
     "SelectStudyType": "Select a Study Type",
