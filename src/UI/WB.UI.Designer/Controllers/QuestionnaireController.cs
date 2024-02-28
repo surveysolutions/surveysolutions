@@ -252,7 +252,7 @@ namespace WB.UI.Designer.Controllers
                 }
                 catch (Exception e)
                 {
-                    logger.LogError(e, "Error on questionnaire cloning.");
+                    logger.LogError(e, $"Error on questionnaire cloning.Source questionnaire: {model.QuestionnaireId}${model.Revision}");
 
                     var domainException = e.GetSelfOrInnerAs<QuestionnaireException>();
                     if (domainException != null)
