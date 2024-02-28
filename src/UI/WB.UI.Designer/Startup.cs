@@ -74,12 +74,11 @@ namespace WB.UI.Designer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDistributedMemoryCache();
-
-            //disabled to investigate the issue with release mode
-            // services.AddViteHelper(options =>
-            // {
-            //     options.Entry = "src/main.js";
-            // });
+            
+            services.AddViteHelper(options =>
+            {
+                options.Entry = "src/main.js";
+            });
 
             services.AddSession(options =>
             {
