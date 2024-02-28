@@ -11,14 +11,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Localization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.SpaServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using Ncqrs.Domain.Storage;
 using Newtonsoft.Json.Serialization;
@@ -78,10 +75,11 @@ namespace WB.UI.Designer
         {
             services.AddDistributedMemoryCache();
 
-            services.AddViteHelper(options =>
-            {
-                options.Entry = "src/main.js";
-            });
+            //disabled to investigate the issue with release mode
+            // services.AddViteHelper(options =>
+            // {
+            //     options.Entry = "src/main.js";
+            // });
 
             services.AddSession(options =>
             {
