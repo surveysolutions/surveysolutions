@@ -154,9 +154,7 @@ import Breadcrumbs from './Breadcrumbs.vue';
 import ExpressionEditor from './ExpressionEditor.vue';
 import Help from './Help.vue';
 import MoveToChapterSnippet from './MoveToChapterSnippet.vue';
-import { computed } from 'vue';
-import { useMagicKeys, useActiveElement } from '@vueuse/core';
-import { logicAnd } from '@vueuse/math'
+import { useMagicKeys } from '@vueuse/core';
 
 export default {
     name: 'StaticText',

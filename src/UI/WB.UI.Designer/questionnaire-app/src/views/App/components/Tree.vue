@@ -170,8 +170,7 @@ import { canPaste, pasteItemInto } from '../../../services/copyPasteService'
 import Help from './Help.vue';
 
 import { migrateToNewVersion } from '../../../services/questionnaireService'
-import { useActiveElement, useMagicKeys } from '@vueuse/core';
-import { logicAnd } from '@vueuse/math'
+import { useMagicKeys } from '@vueuse/core';
 
 export default {
     name: 'Tree',
@@ -204,11 +203,11 @@ export default {
                 await this.fetch();
             }
         },
-        notInputCtrlF: function (value) {
+        ctrl_f: function (value) {
             if (value)
                 this.showSearch();
         },
-        notInputCtrlH: function (value) {
+        ctrl_h: function (value) {
             if (value)
                 this.showFindReplaceDialog();
         }
@@ -217,20 +216,27 @@ export default {
         const treeStore = useTreeStore();
         const searchDialog = ref(null);
 
-        const keys = useMagicKeys();
-        const activeElement = useActiveElement();
-        const notUsingInput = computed(() =>
-            activeElement.value?.tagName !== 'INPUT'
-            && activeElement.value?.tagName !== 'TEXTAREA',);
+        const { ctrl_f } = useMagicKeys({
+            passive: false,
+            onEventFired(e) {
+                if (e.ctrlKey && e.key === 'f' && e.type === 'keydown')
+                    e.preventDefault()
+            },
+        })
 
-        const notInputCtrlF = logicAnd(keys['Ctrl+f'], notUsingInput);
-        const notInputCtrlH = logicAnd(keys['Ctrl+h'], notUsingInput);
+        const { ctrl_h } = useMagicKeys({
+            passive: false,
+            onEventFired(e) {
+                if (e.ctrlKey && e.key === 'h' && e.type === 'keydown')
+                    e.preventDefault()
+            },
+        })
 
         return {
             treeStore,
             searchDialog,
-            notInputCtrlF,
-            notInputCtrlH,
+            ctrl_f,
+            ctrl_h,
             canPaste
         };
     },

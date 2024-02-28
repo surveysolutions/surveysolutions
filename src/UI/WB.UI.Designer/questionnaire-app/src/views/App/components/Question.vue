@@ -244,9 +244,7 @@ import QRBarcodeQuestion from './parts/QRBarcodeQuestion.vue'
 import SingleOptionQuestion from './parts/SingleOptionQuestion.vue'
 import TextListQuestion from './parts/TextListQuestion.vue'
 import TextQuestion from './parts/TextQuestion.vue'
-import { computed } from 'vue';
-import { useMagicKeys, useActiveElement } from '@vueuse/core';
-import { logicAnd } from '@vueuse/math'
+import { useMagicKeys } from '@vueuse/core';
 
 import emitter from '../../../services/emitter';
 
