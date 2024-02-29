@@ -201,8 +201,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             string dateTimeString = StringFormat.ShortDateTime(localTime).ToPascalCase();
             if (localTime > now.Date.AddDays(-1) && localTime < now.Date.AddDays(3))
             {
-                DateTimeFormatInfo formatInfo = CultureInfo.CurrentUICulture.DateTimeFormat;
-                dateTimeString = localTime.ToString(formatInfo) +" (" + dateTimeString + ")";
+                dateTimeString = NumericTextFormatter.FormatTimeHumanized(now - localTime) + " (" + dateTimeString + ")";
             }
             
             return string.Format(formatString, dateTimeString);
