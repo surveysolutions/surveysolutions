@@ -310,6 +310,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Windows Installer
-          path: |
-            ${{ steps.build-installer.outputs.filename }}
-            artifacts/WB.UI.Headquarters.Offline.zip
+          path: ${{ steps.build-installer.outputs.filename }}
+            #artifacts/WB.UI.Headquarters.Offline.zip
