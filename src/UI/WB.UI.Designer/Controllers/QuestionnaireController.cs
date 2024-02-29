@@ -57,6 +57,8 @@ namespace WB.UI.Designer.Controllers
             [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.QuestionnaireTitle_required))]
             [StringLength(AbstractVerifier.MaxTitleLength, ErrorMessageResourceName = nameof(ErrorMessages.QuestionnaireTitle_MaxLength), ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessage = null)]
             public string? Title { get; set; }
+
+            public bool IsDeleted { get; set; }
         }
 
         public class QuestionnaireViewModel
@@ -229,14 +231,15 @@ namespace WB.UI.Designer.Controllers
             var questionnaireId = id.OriginalQuestionnaireId ?? id.QuestionnaireId;
             QuestionnaireView? questionnaire = this.questionnaireViewFactory.Load(id);
             if (questionnaire == null) return NotFound();
-
+            
             QuestionnaireView model = questionnaire;
             return View(
                     new QuestionnaireCloneModel
                     {
                         Title = $"Copy of {model.Title}",
                         QuestionnaireId = questionnaireId,
-                        Revision = id.Revision
+                        Revision = id.Revision,
+                        IsDeleted = model.Source.IsDeleted
                     });
         }
 
