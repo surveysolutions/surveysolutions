@@ -18,7 +18,7 @@ const number = app => {
                 //console.log('Current Value:', value, 'Regex:', regex, 'Min:', min, 'Max:', max, 'numericValue:', numericValue);
 
                 if (
-                    isNaN(value) ||
+                    //isNaN(value) ||
                     !regex.test(value) ||
                     numericValue < min ||
                     numericValue > max
