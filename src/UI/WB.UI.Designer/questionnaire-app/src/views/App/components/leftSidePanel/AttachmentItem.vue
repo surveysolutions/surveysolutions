@@ -19,7 +19,7 @@
                     <div class="drop-box">
                         {{ $t('QuestionnaireEditor.SideBarLookupTableDropFile') }}
                     </div>
-                    <div class="attachment-meta">
+                    <div class="attachment-meta" v-if="attachment.meta">
                         <p>
                             <span class="file-name">{{ attachment.meta.fileName }}</span><br>
                             <span :class="{ 'error': isAttachmentResolutionTooBig(attachment) }"
