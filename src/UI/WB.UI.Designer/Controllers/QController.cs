@@ -10,15 +10,12 @@ namespace WB.UI.Designer.Controllers;
 [Route("/q")]
 public class QController : Controller
 {
-    private readonly ITagHelperComponentManager tagHelperComponentManager;
-    
     public QController(ITagHelperComponentManager tagHelperComponentManager,
         IWebHostEnvironment webHost,
         IOptions<ViteTagOptions> options,
         IMemoryCache memoryCache)
     {
-        this.tagHelperComponentManager = tagHelperComponentManager;
-        this.tagHelperComponentManager.Components.Add(new ViteTagHelperComponent(webHost, options, memoryCache));
+        tagHelperComponentManager.Components.Add(new ViteTagHelperComponent(webHost, options, memoryCache));
     }
     
     [Route("{**catchAll}")]

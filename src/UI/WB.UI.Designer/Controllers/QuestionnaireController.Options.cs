@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Vite.Extensions.AspNetCore;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
@@ -110,6 +111,7 @@ namespace WB.UI.Designer.Controllers
         [HttpGet]
         public IActionResult EditOptions()
         {
+            tagHelperComponentManager.Components.Add(new ViteTagHelperComponent(webHost, options, memoryCache));
             return View("Vue");
         }
 
@@ -188,6 +190,7 @@ namespace WB.UI.Designer.Controllers
         [HttpGet]
         public IActionResult EditCategories()
         {
+            tagHelperComponentManager.Components.Add(new ViteTagHelperComponent(webHost, options, memoryCache));
             return View("Vue");
         }
         
