@@ -65,25 +65,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return QuestionnaireEntityReference.CreateFrom(entity, property, failedValidationIndex);
         }
 
-        protected static QuestionnaireEntityReference CreateReference(IComposite entity,
-            int? failedValidationIndex = null,
-            QuestionnaireVerificationReferenceProperty property = QuestionnaireVerificationReferenceProperty.None)
-        {
-            return new QuestionnaireEntityReference(
-                entity is IGroup
-                    ? QuestionnaireVerificationReferenceType.Group
-                    : entity is IStaticText
-                        ? QuestionnaireVerificationReferenceType.StaticText
-                        : entity is IVariable
-                            ? QuestionnaireVerificationReferenceType.Variable
-                            : QuestionnaireVerificationReferenceType.Question,
-                entity.PublicKey)
-            {
-                Property = property,
-                IndexOfEntityInProperty = failedValidationIndex
-            };
-        }
-
         protected static long CalculateRosterInstancesCountAndUpdateCache(IGroup roster, Dictionary<Guid, long> rosterPropagationCounts, MultiLanguageQuestionnaireDocument questionnaire)
         {
             long rosterCount;
