@@ -57,7 +57,7 @@
                 <label for="edit-question-title-highlight" class="wb-label">{{ $t('QuestionnaireEditor.QuestionText')
                 }}</label><br>
 
-                <ExpressionEditor v-model="activeQuestion.title"></ExpressionEditor>
+                <ExpressionEditor id="edit-question-title-highlight" v-model="activeQuestion.title"></ExpressionEditor>
 
                 <div class="question-type-specific-block" v-if="activeQuestion.type != undefined
                     && (activeQuestion.type != 'GpsCoordinates'
@@ -88,7 +88,7 @@
                         <help link="hideInstructions" />
                     </label>
 
-                    <ExpressionEditor v-model="activeQuestion.instructions"></ExpressionEditor>
+                    <ExpressionEditor id="edit-question-instructions" v-model="activeQuestion.instructions" />
                 </div>
 
                 <div class="form-group col-xs-1">
@@ -122,7 +122,8 @@
                         <help link="hideIfDisabled" />
                     </label>
 
-                    <ExpressionEditor v-model="activeQuestion.enablementCondition" mode="expression"></ExpressionEditor>
+                    <ExpressionEditor id="edit-question-enablement-condition" v-model="activeQuestion.enablementCondition"
+                        mode="expression" />
                 </div>
                 <div class="form-group col-xs-1">
                     <button type="button" class="btn cross instructions-cross"
@@ -143,15 +144,14 @@
                 <button type="button" class="btn delete-btn-sm delete-validation-condition"
                     @click="removeValidationCondition(index)" tabindex="-1"></button>
 
-                <ExpressionEditor mode="expression" v-model="validation.expression"></ExpressionEditor>
-
+                <ExpressionEditor :id="'validation-expression-' + index" mode="expression"
+                    v-model="validation.expression" />
 
                 <label for="validationMessage{{$index}}" class="validation-message">{{
                     $t('QuestionnaireEditor.ErrorMessage') }}
                     <help link="validationMessage" />
                 </label>
-
-                <ExpressionEditor v-model="validation.message"></ExpressionEditor>
+                <ExpressionEditor :id="'validation-message-' + index" v-model="validation.message"></ExpressionEditor>
 
             </div>
             <div class="form-group"
@@ -233,7 +233,6 @@ import { deleteQuestion } from '../../../services/questionService';
 import { answerTypeClass, geometryInputModeOptions, questionsWithOnlyInterviewerScope, questionTypesDoesNotSupportValidations } from '../../../helpers/question'
 import { createQuestionForDeleteConfirmationPopup, scrollToValidationCondition, scrollToElement, setFocusIn } from '../../../services/utilityService'
 
-
 import AreaQuestion from './parts/AreaQuestion.vue'
 import DateTimeQuestion from './parts/DateTimeQuestion.vue'
 import GpsCoordinatesQuestion from './parts/GpsCoordinatesQuestion.vue'
@@ -245,7 +244,6 @@ import SingleOptionQuestion from './parts/SingleOptionQuestion.vue'
 import TextListQuestion from './parts/TextListQuestion.vue'
 import TextQuestion from './parts/TextQuestion.vue'
 import { useMagicKeys } from '@vueuse/core';
-
 import emitter from '../../../services/emitter';
 
 export default {
@@ -297,6 +295,9 @@ export default {
         ctrl_s: function (v) {
             if (v)
                 this.saveQuestion();
+        },
+        $route: function (oldValue, newValue) {
+            this.scrollTo();
         }
     },
     setup() {
@@ -319,7 +320,7 @@ export default {
                 if (e.ctrlKey && e.key === 's' && e.type === 'keydown')
                     e.preventDefault()
             },
-        })
+        });
 
         return {
             questionStore, commentsStore, ctrl_s

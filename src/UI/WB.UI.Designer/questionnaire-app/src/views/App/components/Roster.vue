@@ -37,7 +37,7 @@
                     {{ $t('QuestionnaireEditor.RosterName') }}
                 </label>
                 <br />
-                <ExpressionEditor v-model="activeRoster.title"></ExpressionEditor>
+                <ExpressionEditor id="edit-roster-title-highlight" v-model="activeRoster.title" />
                 <div class="roster-type-specific-block" v-if="activeRoster.type != undefined">
                     <div class="dropdown-with-breadcrumbs-and-icons" v-if="activeRoster.type == 'List'">
                         <label>{{ $t('QuestionnaireEditor.RosterSourceQuestion') }}</label>
@@ -310,7 +310,8 @@
                         <help link="hideIfDisabled" />
                     </label>
                     <br>
-                    <ExpressionEditor v-model="activeRoster.enablementCondition" mode="expression" />
+                    <ExpressionEditor id="edit-group-condition" v-model="activeRoster.enablementCondition"
+                        mode="expression" />
                 </div>
                 <div class="form-group col-xs-1">
                     <button type="button" class="btn cross instructions-cross"
@@ -362,9 +363,7 @@ import { isInteger } from '../../../helpers/number';
 import { createQuestionForDeleteConfirmationPopup, focusElementByName } from '../../../services/utilityService'
 import { updateRoster, deleteRoster, getQuestionsEligibleForNumericRosterTitle } from '../../../services/rosterService'
 import { setFocusIn } from '../../../services/utilityService'
-import { computed } from 'vue';
-import { useMagicKeys, useActiveElement } from '@vueuse/core';
-import { logicAnd } from '@vueuse/math'
+import { useMagicKeys } from '@vueuse/core';
 
 export default {
     name: 'Roster',
@@ -403,6 +402,9 @@ export default {
             if (v) {
                 this.saveRoster();
             }
+        },
+        $route: function (oldValue, newValue) {
+            this.scrollTo();
         }
     },
     setup() {
@@ -419,14 +421,13 @@ export default {
             };
         });
 
-
         const { ctrl_s } = useMagicKeys({
             passive: false,
             onEventFired(e) {
                 if (e.ctrlKey && e.key === 's' && e.type === 'keydown')
                     e.preventDefault()
             },
-        })
+        });
 
         return {
             rosterStore, commentsStore, ctrl_s
@@ -676,7 +677,7 @@ export default {
             var focusId = null;
             switch (property) {
                 case 'Title':
-                    focusId = 'edit-group-title';
+                    focusId = 'edit-roster-title-highlight';
                     break;
                 case 'VariableName':
                     focusId = 'edit-group-variableName';

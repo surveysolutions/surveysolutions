@@ -8,9 +8,11 @@
         <div class="form-group col-xs-11">
             <label class="wb-label" for="optionsFilterExpression">{{ $t('QuestionnaireEditor.QuestionFilter') }}</label>
 
-            <ExpressionEditor v-if="activeQuestion.linkedToEntityId != null && linkedToEntity.type != 'textlist'"
+            <ExpressionEditor id="linkedFilterExpression"
+                v-if="activeQuestion.linkedToEntityId != null && linkedToEntity.type != 'textlist'"
                 v-model="activeQuestion.linkedFilterExpression" mode="expression"></ExpressionEditor>
-            <ExpressionEditor v-if="!(activeQuestion.linkedToEntityId != null && linkedToEntity.type != 'textlist')"
+            <ExpressionEditor id="optionsFilterExpression"
+                v-if="!(activeQuestion.linkedToEntityId != null && linkedToEntity.type != 'textlist')"
                 v-model="activeQuestion.optionsFilterExpression" mode="expression"></ExpressionEditor>
 
         </div>

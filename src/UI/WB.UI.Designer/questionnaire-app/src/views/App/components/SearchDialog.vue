@@ -177,38 +177,48 @@ export default {
         },
 
         navigateNext() {
-            if (this.indexOfCurrentReference < this.foundReferences.length - 1) {
-                this.indexOfCurrentReference++;
+            this.indexOfCurrentReference++;
+            if (this.indexOfCurrentReference >= this.foundReferences.length)
+                this.indexOfCurrentReference = 0;
 
-                const reference = this.foundReferences[this.indexOfCurrentReference];
+            const reference = this.foundReferences[this.indexOfCurrentReference];
 
-                const name = reference.type.toLowerCase();
-                this.$router.push({
-                    name: name,
-                    params: {
-                        chapterId: reference.chapterId,
-                        entityId: reference.itemId,
-                    },
-                    force: true
-                });
-            }
+            const name = reference.type.toLowerCase();
+            this.$router.push({
+                name: name,
+                params: {
+                    chapterId: reference.chapterId,
+                    entityId: reference.itemId,
+                },
+                force: true,
+                state: {
+                    indexOfEntityInProperty: reference.indexOfEntityInProperty,
+                    property: reference.property
+                }
+            });
+
         },
         navigatePrev() {
-            if (this.indexOfCurrentReference > 0) {
-                this.indexOfCurrentReference--;
-
-                const reference = this.foundReferences[this.indexOfCurrentReference];
-
-                const name = reference.type.toLowerCase();
-                this.$router.push({
-                    name: name,
-                    params: {
-                        chapterId: reference.chapterId,
-                        entityId: reference.itemId,
-                    },
-                    force: true
-                });
+            this.indexOfCurrentReference--;
+            if (this.indexOfCurrentReference < 0) {
+                this.indexOfCurrentReference = this.foundReferences.length - 1;
             }
+
+            const reference = this.foundReferences[this.indexOfCurrentReference];
+            const name = reference.type.toLowerCase();
+            this.$router.push({
+                name: name,
+                params: {
+                    chapterId: reference.chapterId,
+                    entityId: reference.itemId,
+                },
+                force: true,
+                state: {
+                    indexOfEntityInProperty: reference.indexOfEntityInProperty,
+                    property: reference.property
+                }
+            });
+
         },
 
         async findAll() {
