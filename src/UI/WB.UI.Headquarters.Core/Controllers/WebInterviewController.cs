@@ -302,7 +302,8 @@ namespace WB.UI.Headquarters.Controllers
 
             if (assignment.WebMode == false)
             {
-                // Compatibility issue. Every time users will use link, they will create a new interview. All links will be bounced back
+                // Compatibility issue. Every time users will use link, they will create a new interview.
+                // All links will be bouncing back
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound,
                     Enumerator.Native.Resources.WebInterview.Error_NotFound);
             }
@@ -886,12 +887,12 @@ namespace WB.UI.Headquarters.Controllers
             if (!webInterviewConfig.Started)
                 throw new InvalidOperationException(@"Web interview is not started for this questionnaire");
 
-            var interviewer = this.usersRepository.GetUser(assignment.ResponsibleId);
+            var responsible = this.usersRepository.GetUser(assignment.ResponsibleId);
             
-            if (interviewer == null)
+            if (responsible == null)
                 throw new InvalidOperationException($"User was not found{assignment.ResponsibleId}");
 
-            if (interviewer.Roles.Any(x => x == UserRoles.Supervisor || x == UserRoles.Headquarter))
+            if (responsible.Roles.Any(x => x == UserRoles.Supervisor || x == UserRoles.Headquarter))
                 throw new InvalidOperationException(@"Web interview is not allowed to be completed by this role");
 
             var interviewId = Guid.NewGuid();
@@ -900,12 +901,12 @@ namespace WB.UI.Headquarters.Controllers
 
             var createInterviewCommand = new CreateInterview(
                 interviewId,
-                interviewer.PublicKey,
+                responsible.PublicKey,
                 assignment.QuestionnaireId,
                 assignment.Answers.ToList(),
                 assignment.ProtectedVariables,
-                interviewer.Supervisor?.Id ?? interviewer.PublicKey,
-                interviewer.IsInterviewer() ? interviewer.PublicKey : (Guid?)null,
+                responsible.Supervisor?.Id ?? responsible.PublicKey,
+                responsible.IsInterviewer() ? responsible.PublicKey : (Guid?)null,
                 interviewKey,
                 assignment.Id,
                 assignment.AudioRecording,
@@ -917,7 +918,7 @@ namespace WB.UI.Headquarters.Controllers
             if (calendarEvent != null)
             {
                 var createCalendarEvent = new CreateCalendarEventCommand(Guid.NewGuid(), 
-                    interviewer.PublicKey,
+                    responsible.PublicKey,
                     calendarEvent.Start.ToDateTimeUtc(),
                     calendarEvent.Start.Zone.Id,
                     interviewId,
