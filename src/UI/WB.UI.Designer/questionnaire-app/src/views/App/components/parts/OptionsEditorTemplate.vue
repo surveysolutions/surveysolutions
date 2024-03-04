@@ -20,19 +20,19 @@
                 <div class="table-row question-options-editor" v-for="(option, index) in activeQuestion.options">
                     <div class="column-2">
                         <v-form name="options_value_form">
-                            <input type="text" inputmode="numeric" min="-2147483648" max="2147483647" v-model="option.value"
-                                v-number="/^([-]?\d*)$/" :name="'option_value_' + index"
+                            <input type="text" inputmode="numeric" min="-2147483648" max="2147483647"
+                                v-model="option.value" v-number="/^([-]?\d*)$/" :name="'option_value_' + index"
                                 :class="{ 'has-error': option.value && !isInteger(option.value) }"
                                 @keypress="onKeyPressIsNumber($event)"
                                 class="form-control question-option-value-editor border-right" />
                         </v-form>
                     </div>
                     <div class="column-3">
-                        <input :attr-id="'option-title-' + index" type="text" v-model="option.title"
+                        <input :id="'option-title-' + index" type="text" v-model="option.title"
                             @keypress="onKeyPressInOptions($event)" class="form-control border-right" />
                     </div>
                     <div class="column-35">
-                        <input :attr-id="'option-attachmentName-' + index" type="text" v-model="option.attachmentName"
+                        <input :id="'option-attachmentName-' + index" type="text" v-model="option.attachmentName"
                             @keypress="onKeyPressInOptions($event)" class="form-control border-right" />
                     </div>
                     <div class="column-4">
@@ -43,15 +43,15 @@
             <p>
                 <button type="button" class="btn btn-link" v-if="activeQuestion.type == 'Numeric'"
                     v-show="activeQuestion.options.length < MAX_OPTIONS_COUNT" @click="addOption()">{{
-                        $t('QuestionnaireEditor.QuestionAddSpecialValues') }}</button>
+            $t('QuestionnaireEditor.QuestionAddSpecialValues') }}</button>
                 <button type="button" class="btn btn-link" v-if="activeQuestion.type != 'Numeric'"
                     v-show="activeQuestion.options.length < MAX_OPTIONS_COUNT" @click="addOption()">{{
-                        $t('QuestionnaireEditor.QuestionAddOption') }}</button>
+            $t('QuestionnaireEditor.QuestionAddOption') }}</button>
                 <button type="button" class="btn btn-link" @click="showAddClassificationModal()">{{
-                    $t('QuestionnaireEditor.QuestionAddClassification') }}</button>
+            $t('QuestionnaireEditor.QuestionAddClassification') }}</button>
 
                 <button type="button" class="btn btn-link pull-right" @click="showOptionsInTextarea()">{{
-                    $t('QuestionnaireEditor.StringsView') }}</button>
+            $t('QuestionnaireEditor.StringsView') }}</button>
             </p>
         </div>
         <div v-if="!useListAsOptionsEditor">
@@ -61,14 +61,15 @@
                     v-on:input="updateStringifiedCategoriesValue($event)" match-options-pattern max-options-count
                     v-autosize></textarea>
                 <p class="help-block">
-                    <input class="btn btn-link" type="button" :value="$t('QuestionnaireEditor.TableView')" value="Show list"
-                        @click="showOptionsInList()" :disabled="!stringifiedCategoriesValidity.valid" />
+                    <input class="btn btn-link" type="button" :value="$t('QuestionnaireEditor.TableView')"
+                        value="Show list" @click="showOptionsInList()"
+                        :disabled="!stringifiedCategoriesValidity.valid" />
                 </p>
                 <p class="help-block v-cloak" v-show="stringifiedCategoriesValidity.$error.matchOptionsPattern">{{
-                    $t('QuestionnaireEditor.OptionsListError') }}
+            $t('QuestionnaireEditor.OptionsListError') }}
                 </p>
                 <p class="help-block v-cloak" v-show="stringifiedCategoriesValidity.$error.maxOptionsCount">{{
-                    $t('QuestionnaireEditor.EnteredMoreThanAllowed', { count: 200 }) }}
+            $t('QuestionnaireEditor.EnteredMoreThanAllowed', { count: 200 }) }}
                 </p>
             </div>
         </div>

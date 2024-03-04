@@ -22,8 +22,9 @@
                         class="btn delete-btn" tabindex="-1"></a>
                     <div class="input-group macros-name">
                         <span class="input-group-addon">$</span>
-                        <input :placeholder="$t('QuestionnaireEditor.SideBarMacroName')" maxlength="32" spellcheck="false"
-                            v-model="macro.editMacro.name" name="name" class="form-control" type="text" />
+                        <input :id="macro.itemId" :placeholder="$t('QuestionnaireEditor.SideBarMacroName')"
+                            maxlength="32" spellcheck="false" v-model="macro.editMacro.name" name="name"
+                            class="form-control" type="text" />
                     </div>
                     <div class="divider"></div>
                     <ExpressionEditor v-model="macro.editMacro.content" mode="expression" focusable="false" />
@@ -35,14 +36,14 @@
                     </div>
                     <div class="actions" v-if="isEditorDirty(macro)">
                         <button v-if="!isReadOnlyForUser" class="btn lighter-hover" @click="saveMacro(macro)">{{
-                            $t('QuestionnaireEditor.Save') }}
+                        $t('QuestionnaireEditor.Save') }}
                         </button>
                         <button type="button" class="btn lighter-hover" @click="cancel(macro)">{{
-                            $t('QuestionnaireEditor.Cancel') }}</button>
+                        $t('QuestionnaireEditor.Cancel') }}</button>
                         <button class="btn btn-default pull-right" v-if="isDescriptionEmpty(macro)" type="button"
                             @click="toggleDescription(macro)">
                             {{ isDescriptionVisible(macro) ? $t('QuestionnaireEditor.SideBarMacroHideDescription') :
-                                $t('QuestionnaireEditor.SideBarMacroShowDescription') }}
+                        $t('QuestionnaireEditor.SideBarMacroShowDescription') }}
                         </button>
                     </div>
                 </li>
@@ -54,7 +55,7 @@
         </perfect-scrollbar>
     </div>
 </template>
-  
+
 <script>
 import ExpressionEditor from '../ExpressionEditor.vue';
 import { createQuestionForDeleteConfirmationPopup } from '../../../../services/utilityService'
@@ -121,4 +122,3 @@ export default {
     }
 }
 </script>
-  
