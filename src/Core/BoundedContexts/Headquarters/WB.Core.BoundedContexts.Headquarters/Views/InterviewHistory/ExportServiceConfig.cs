@@ -10,7 +10,7 @@
     public enum ExportMode
     {
         Auto = 0, // default
-        Client,   // don't lunch export, use url to use export 
+        Client,   // don't launch export, use url to use export 
         Provider, // open export outside by port
     }
 }
