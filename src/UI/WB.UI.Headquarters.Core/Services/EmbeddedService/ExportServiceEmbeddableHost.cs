@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -17,6 +18,7 @@ using Microsoft.Extensions.Options;
 using Npgsql;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
+using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Infrastructure.Native.Utils;
@@ -34,6 +36,7 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
         private readonly EmbeddedExportServiceHealthCheck healthCheck;
         private readonly IConfiguration configuration;
         private readonly IServer server;
+        private readonly IOptionsSnapshot<ExportServiceConfig> exportOptions;
 
         public ExportServiceEmbeddableHost(
             IOptions<HeadquartersConfig> headquarterOptions,
@@ -42,7 +45,8 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
             IConfiguration configuration,
             ILogger<ExportServiceEmbeddableHost> logger,
             EmbeddedExportServiceHealthCheck healthCheck,
-            IServer server)
+            IServer server,
+            IOptionsSnapshot<ExportServiceConfig> exportOptions)
         {
             this.headquarterOptions = headquarterOptions;
             this.fileStorageConfig = fileStorageConfig;
@@ -50,11 +54,26 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
             this.logger = logger;
             this.healthCheck = healthCheck;
             this.server = server;
+            this.exportOptions = exportOptions;
             this.configuration = configuration;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            var exportMode = exportOptions.Value.ExportMode;
+            if (exportMode == ExportMode.Client)
+            {
+                logger.LogInformation("Export mode: {exportMode}", exportMode);
+                return;
+            }
+            
+            var exportPort = exportOptions.Value.ExportPort;
+            if (exportMode == ExportMode.Provider && exportPort == 0)
+            {
+                logger.LogError("To run export in provider mode required to define export port in config (\"DataExport:ExportPort\"). Export mode: {exportMode}, port {exportPort}", exportMode, exportPort);
+                throw new Exception("To run export in provider mode required to define export port in config (\"DataExport:ExportPort\").");
+            }
+
             var exportHostPath = configuration.GetPathToExportServiceHostDll();
 
             if (!System.IO.File.Exists(exportHostPath))
@@ -131,11 +150,11 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
 
                 builder.AddInMemoryCollection(settings);
             });
-
+            
             exportHostBuilder.ConfigureWebHost(w =>
             {
                 w.UseSetting("UseIISIntegration", true.ToString());
-                w.UseKestrel(k => k.Listen(IPAddress.Loopback, 0));
+                w.UseKestrel(k => k.Listen(IPAddress.Loopback, exportPort));
                 w.UseStartup(exportHost.GetType("WB.Services.Export.Host.Startup"));
             });
 
