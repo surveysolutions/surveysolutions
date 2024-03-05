@@ -44,7 +44,6 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             public string? TranslationIndex { get; set; }
         }
 
-        private const string NotoSansFontFamilyName = "Noto Sans";
         private readonly TranslationType[] translationTypesWithIndexes =
         {
             TranslationType.FixedRosterTitle,
@@ -121,7 +120,6 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
             try
             {
-
                 var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
                 
                 using var package = new XLWorkbook(stream, loadOptions);

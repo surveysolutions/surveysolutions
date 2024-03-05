@@ -409,7 +409,7 @@ namespace WB.UI.Headquarters
             });
 
             services.AddAntiforgery(options => options.HeaderName = "X-CSRF-TOKEN");
-            services.AddAppMetrics();
+            services.AddMetrics();
 
         }
 
@@ -475,7 +475,7 @@ namespace WB.UI.Headquarters
                     });
             }
             
-            app.UseAppMetrics(Configuration);
+            app.UseMetrics(Configuration);
             app.UseRouting();
             app.UseCors();
 

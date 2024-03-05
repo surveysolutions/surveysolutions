@@ -19,8 +19,6 @@ namespace WB.Core.BoundedContexts.Designer.Services
 {
     internal class ExcelCategoriesExtractService : ICategoriesExtractService
     {
-        private const string NotoSansFontFamilyName = "Noto Sans";
-
         private readonly ICategoriesVerifier verifier;
         private readonly ICategoriesExportService categoriesExportService;
 
@@ -33,7 +31,6 @@ namespace WB.Core.BoundedContexts.Designer.Services
         
         public byte[] GetTemplateFile(bool isCascading)
         {
-
             var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
             
             using XLWorkbook excelPackage = new XLWorkbook(loadOptions);
@@ -80,7 +77,6 @@ namespace WB.Core.BoundedContexts.Designer.Services
 
         private List<CategoriesRow> ExtractCategoriesFromExcelFile(Stream xmlFile)
         {
-
             var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
             
             var categories = new List<CategoriesRow>();

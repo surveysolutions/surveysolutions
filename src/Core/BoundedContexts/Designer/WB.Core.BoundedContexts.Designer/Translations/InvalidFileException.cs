@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace WB.Core.BoundedContexts.Designer.Translations
 {
@@ -18,7 +19,14 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         public InvalidFileException(string message, Exception inner)
             : base(message, inner)
         {
-        }        
+        }
+
+        protected InvalidFileException(
+            SerializationInfo info,
+            StreamingContext context)
+            : base(info, context)
+        {
+        }
 
         public List<ImportValidationError>? FoundErrors { get; set; }
     }

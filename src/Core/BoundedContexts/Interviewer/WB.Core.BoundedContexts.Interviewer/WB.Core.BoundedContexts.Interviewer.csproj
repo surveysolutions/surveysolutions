@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <GenerateAssemblyInformationalVersionAttribute>true</GenerateAssemblyInformationalVersionAttribute>
     <GenerateAssemblyVersionAttribute>true</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyFileVersionAttribute>true</GenerateAssemblyFileVersionAttribute>
@@ -22,8 +22,9 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Autofac" Version="7.1.0" />
-    <PackageReference Include="MvvmCross.Plugin.Json" Version="9.2.0" />
-    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="9.2.0" />
+    <PackageReference Include="MvvmCross.Plugin.Json" Version="9.1.1" />
+    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="9.1.1" />
+    <PackageReference Include="MvvmCross.Plugin.WebBrowser" Version="8.0.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
     <PackageReference Include="Xamarin.FFImageLoading" Version="2.4.11.982" />

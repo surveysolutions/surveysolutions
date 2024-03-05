@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <RootNamespace>WB.UI.Shared.Web</RootNamespace>
   </PropertyGroup>
@@ -24,7 +24,7 @@
     <PackageReference Include="StackExchange.Exceptional.AspNetCore" Version="2.2.32" />
     <PackageReference Include="StackExchange.Exceptional.PostgreSql" Version="2.2.32" />
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-      <PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
+      <PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
