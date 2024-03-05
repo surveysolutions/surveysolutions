@@ -17,5 +17,6 @@ namespace WB.Services.Scheduler
         public string WorkerId { get; set; } =  Environment.MachineName + ":" + Assembly.GetExecutingAssembly().GetName().Version;
 
         public int MaxRetryAttempts { get; set; } = 3;
+        public bool IsReadonly { get; set; }
     }
 }

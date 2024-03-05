@@ -28,6 +28,9 @@ namespace WB.Services.Scheduler.Services.Implementation.HostedServices
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
+            if (options.Value.IsReadonly)
+                return Task.CompletedTask;
+            
             scope = serviceProvider.CreateScope();
 
             var workersCount = this.options.Value.WorkerCount;
