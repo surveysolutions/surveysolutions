@@ -20,12 +20,6 @@ namespace WB.UI.Designer.Code.Attributes
         public UnauthorizedException(string message, int responseStatusCode, Exception inner) : base(message, inner)
         {
             ResponseStatusCode = responseStatusCode;
-        }
-
-        protected UnauthorizedException(
-            SerializationInfo info,
-            StreamingContext context) : base(info, context)
-        {
-        }
+        }        
     }
 }
