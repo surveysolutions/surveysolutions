@@ -39,8 +39,9 @@
         </div>
     </form>
 </template>
-  
+
 <script>
+import { notice } from '../../../../services/notificationService';
 import { updateLookupTable, deleteLookupTable } from '../../../../services/lookupTableService'
 import { isEmpty, isUndefined, isNull, cloneDeep } from 'lodash'
 import { createQuestionForDeleteConfirmationPopup, trimText } from '../../../../services/utilityService'

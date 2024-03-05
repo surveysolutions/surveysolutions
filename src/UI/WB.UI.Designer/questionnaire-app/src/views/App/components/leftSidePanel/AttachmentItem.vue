@@ -79,6 +79,7 @@
 
 <script>
 import _ from 'lodash'
+import { notice } from '../../../../services/notificationService';
 import { createQuestionForDeleteConfirmationPopup, formatBytes, formatDateTime } from '../../../../services/utilityService'
 import { deleteAttachment, updateAttachment } from '../../../../services/attachmentsService';
 
