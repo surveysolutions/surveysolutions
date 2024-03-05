@@ -150,11 +150,12 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
 
                 builder.AddInMemoryCollection(settings);
             });
-            
+
+            var ipAddress = exportMode == ExportMode.Provider ? IPAddress.Any : IPAddress.Loopback;
             exportHostBuilder.ConfigureWebHost(w =>
             {
                 w.UseSetting("UseIISIntegration", true.ToString());
-                w.UseKestrel(k => k.Listen(IPAddress.Loopback, exportPort));
+                w.UseKestrel(k => k.Listen(ipAddress, exportPort));
                 w.UseStartup(exportHost.GetType("WB.Services.Export.Host.Startup"));
             });
 
