@@ -165,7 +165,8 @@ export default {
         },
 
         searchThrottled() {
-            debounce(this.search(), 1000)
+            const searchDebounce = debounce(this.search, 1000);
+            searchDebounce();
         },
 
         search() {
