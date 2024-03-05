@@ -165,13 +165,16 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
 
             lifetime.ApplicationStarted.Register(() =>
             {
-                var exportServer = host.Services.GetRequiredService<IServer>();
+                if (exportMode != ExportMode.Provider)
+                {
+                    var exportServer = host.Services.GetRequiredService<IServer>();
 
-                var addresses = exportServer.Features.Get<IServerAddressesFeature>().Addresses;
-                configuration["DataExport:ExportServiceUrl"] = addresses.First();
+                    var addresses = exportServer.Features.Get<IServerAddressesFeature>().Addresses;
+                    configuration["DataExport:ExportServiceUrl"] = addresses.First();
 
-                logger.LogInformation("Headquarters reconfigured to use {exportUrl} address for Export Service",
-                    configuration["DataExport:ExportServiceUrl"]);
+                    logger.LogInformation("Headquarters reconfigured to use {exportUrl} address for Export Service",
+                        configuration["DataExport:ExportServiceUrl"]);
+                }
             });
 
             healthCheck.StartupTaskCompleted = true;
