@@ -7,6 +7,7 @@ import autosize from './autosize';
 import sanitizeText from './sanitizeText';
 import sanitizeHtml from './sanitizeHtml';
 import dateTime from './dateTime';
+import dragAndDrop from './dragAndDrop';
 
 const directives = app => {
     focus(app);
@@ -18,6 +19,7 @@ const directives = app => {
     sanitizeText(app);
     sanitizeHtml(app);
     dateTime(app);
+    dragAndDrop(app);
 };
 
 export default directives;

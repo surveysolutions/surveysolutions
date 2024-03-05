@@ -1,9 +1,10 @@
 <template>
     <Teleport to="body">
-        <div class="modal fade add-classification-modal dragAndDrop ng-scope ng-isolate-scope in" id="mAddCalassification"
-            :style="dialogStyle" v-if="open == true" uib-modal-window="modal-window" role="dialog" index="0"
-            animate="animate" ng-style="{'z-index': 1050 + $$topModalIndex*10, display: 'block'}" tabindex="-1"
-            uib-modal-animation-class="fade" modal-in-class="in" modal-animation="true">
+        <div class="modal fade add-classification-modal dragAndDrop ng-scope ng-isolate-scope in"
+            id="mAddCalassification" :style="dialogStyle" v-if="open == true" uib-modal-window="modal-window"
+            role="dialog" index="0" animate="animate"
+            ng-style="{'z-index': 1050 + $$topModalIndex*10, display: 'block'}" tabindex="-1"
+            uib-modal-animation-class="fade" modal-in-class="in" modal-animation="true" v-dragAndDrop>
             <div class=" modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header blue-strip handle">

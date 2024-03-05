@@ -1,5 +1,6 @@
 <template>
-    <div id="search-modal" class="modal findReplaceModal fade in" v-if="visible" style="display:block; z-index:1050;">
+    <div id="search-modal" class="modal findReplaceModal fade in" v-if="visible" style="display:block; z-index:1050;"
+        v-dragAndDrop>
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header" style="cursor: default;">
