@@ -250,9 +250,11 @@ export default {
 
         openLeftPanel() {
             const modal = this.$refs.searchModal;
-            const rect = modal.getBoundingClientRect();
-            if (rect.left < 700)
-                modal.style.left = '700px'
+            if (modal) {
+                const rect = modal.getBoundingClientRect();
+                if (rect.left < 700)
+                    modal.style.left = '700px'
+            }
         }
     }
 };
