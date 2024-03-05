@@ -1,6 +1,6 @@
 <template>
-    <div id="search-modal" class="modal findReplaceModal fade in" v-if="visible" style="display:block; z-index:1050;"
-        v-dragAndDrop>
+    <div id="search-modal" ref="searchModal" class="modal findReplaceModal fade in" v-if="visible"
+        style="display:block; z-index:1050;" v-dragAndDrop>
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header" style="cursor: default;">
@@ -142,6 +142,12 @@ export default {
         };
     },
     expose: ['open', 'close'],
+    mounted() {
+        this.$emitter.on('openMacrosList', this.openLeftPanel);
+    },
+    unmounted() {
+        this.$emitter.off('openMacrosList', this.openLeftPanel);
+    },
     methods: {
         close() {
             this.visible = false;
@@ -241,6 +247,13 @@ export default {
                 this.indexOfCurrentReference = -1;
             }
         },
+
+        openLeftPanel() {
+            const modal = this.$refs.searchModal;
+            const rect = modal.getBoundingClientRect();
+            if (rect.left < 700)
+                modal.style.left = '700px'
+        }
     }
 };
 </script>
