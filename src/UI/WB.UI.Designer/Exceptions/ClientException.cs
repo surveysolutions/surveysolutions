@@ -17,5 +17,14 @@ public class ClientException : Exception
             
         if (errorModel.AdditionalData.TryGetValue("stack", out var stack))
             ExceptionDispatchInfo.SetRemoteStackTrace(this, stack);
+        
+        if (errorModel.AdditionalData.TryGetValue("errorStack", out var errorStack))
+            ExceptionDispatchInfo.SetRemoteStackTrace(this, errorStack);
+    }
+
+    public ClientException(string? error) : base(error)
+    {
+        if(error != null)
+            ExceptionDispatchInfo.SetRemoteStackTrace(this, error);
     }
 }

@@ -35,14 +35,15 @@ namespace WB.UI.Designer.Controllers
         
         [Route("report")]
         [HttpPost]
-        public IActionResult LogError([FromBody] ClientErrorModel clientError)
+        public IActionResult LogError([FromBody] ClientErrorModel? clientError)
         {
             try
             {
-                var exception = new ClientException(clientError);
-
-                exception.Log(HttpContext, category: "vue3");
-            
+                var exception = clientError == null ? 
+                    new ClientException("Unknown error") 
+                    : new ClientException(clientError);
+                
+                exception.Log(null, category: "vue3");
                 return Ok();
             }
             catch
