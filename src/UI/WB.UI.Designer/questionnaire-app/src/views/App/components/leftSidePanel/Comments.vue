@@ -13,12 +13,12 @@
                 <li class="comment-thread" v-for="commentThread in commentThreads">
 
                     <router-link class="reference-item" :id="commentThread.entity.itemId" :to="{
-                        name: commentThread.entity.type.toLowerCase(),
-                        params: {
-                            entityId: commentThread.entity.itemId,
-                            chapterId: commentThread.entity.chapterId,
-                        }
-                    }">
+                    name: commentThread.entity.type.toLowerCase(),
+                    params: {
+                        entityId: commentThread.entity.itemId,
+                        chapterId: commentThread.entity.chapterId,
+                    }
+                }">
                         <span v-if="commentThread.entity.type == 'Question'" class="icon"
                             :class="commentThread.entity.questionType"></span>
                         <span
@@ -42,11 +42,11 @@
                                 @click="commentThread.resolvedAreExpanded = !commentThread.resolvedAreExpanded">
                                 <span v-if="!commentThread.resolvedAreExpanded">
                                     {{ $t('QuestionnaireEditor.ViewResolvedCommentsCounter', {
-                                        count: commentThread.resolvedComments.length
-                                    }) }}
+                    count: commentThread.resolvedComments.length
+                }) }}
                                 </span>
                                 <span v-if="commentThread.resolvedAreExpanded">{{
-                                    $t('QuestionnaireEditor.HideResolvedComments') }}</span>
+                    $t('QuestionnaireEditor.HideResolvedComments') }}</span>
                             </a>
                             <ul v-if="commentThread.resolvedAreExpanded">
                                 <li class="comment" :class="{ resolved: comment.isResolved }"
@@ -63,7 +63,7 @@
         </perfect-scrollbar>
     </div>
 </template>
-  
+
 <script>
 import { getCommentThreads } from '../../../../services/commentsService';
 import { sanitize } from '../../../../services/utilityService';
@@ -95,8 +95,8 @@ export default {
         this.$emitter.on('questionUpdated', this.questionUpdated);
 
         this.$emitter.on('staticTextDeleted', this.entityDeleted);
-        this.$emitter.on('groupDeleted', this.entityDeleted);
-        this.$emitter.on('rosterDeleted', this.entityDeleted);
+        this.$emitter.on('groupDeleted', this.compoundEntityDeleted);
+        this.$emitter.on('rosterDeleted', this.compoundEntityDeleted);
         this.$emitter.on('variableDeleted', this.entityDeleted);
         this.$emitter.on('questionDeleted', this.entityDeleted);
     },
@@ -112,8 +112,8 @@ export default {
         this.$emitter.off('questionUpdated', this.questionUpdated);
 
         this.$emitter.off('staticTextDeleted', this.entityDeleted);
-        this.$emitter.off('groupDeleted', this.entityDeleted);
-        this.$emitter.off('rosterDeleted', this.entityDeleted);
+        this.$emitter.off('groupDeleted', this.compoundEntityDeleted);
+        this.$emitter.off('rosterDeleted', this.compoundEntityDeleted);
         this.$emitter.off('variableDeleted', this.entityDeleted);
         this.$emitter.off('questionDeleted', this.entityDeleted);
     },
@@ -272,6 +272,10 @@ export default {
             }
         },
 
+        async compoundEntityDeleted(payload) {
+            await this.fetch();
+        },
+
         sanitizeText(value) {
             const sanitizedValue = sanitize(value);
             return sanitizedValue;
@@ -279,4 +283,3 @@ export default {
     }
 }
 </script>
-  
