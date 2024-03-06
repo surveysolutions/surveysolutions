@@ -75,11 +75,14 @@ namespace WB.UI.Designer
         {
             services.AddDistributedMemoryCache();
             
+            #if DEBUG
             //hot reload on global level brakes other pars of application
-            // services.AddViteHelper(options =>
-            // {
-            //     options.Entry = "src/main.js";
-            // });
+            services.AddViteHelper(options =>
+            {
+                options.Entry = "src/main.js";
+            });
+            #endif
+            
             services.AddMemoryCache();
             
             services.AddSession(options =>
