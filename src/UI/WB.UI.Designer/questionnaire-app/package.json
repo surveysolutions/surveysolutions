@@ -6,8 +6,8 @@
     "serve": "vite preview",
     "build": "vite build --emptyOutDir",
     "dev": "vite",
-    "devb": "vite build --mode development",
-    "hot": "vite build --mode development --watch",
+    "devb": "vite build --mode development --emptyOutDir",
+    "hot": "vite build --mode development --watch --emptyOutDir",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
     "i18n:report": "vite i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'"
   },
