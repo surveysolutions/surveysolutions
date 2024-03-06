@@ -4,7 +4,6 @@ import moment from 'moment';
 
 function loadLocaleMessages() {
     const locales = import.meta.glob('../locale/*.json', { eager: true });
-    //const locales = import.meta.globEager('../locale/*.json');
 
     const messages = {};
 
