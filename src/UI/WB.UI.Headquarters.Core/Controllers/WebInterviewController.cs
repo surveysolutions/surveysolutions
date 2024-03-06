@@ -893,7 +893,8 @@ namespace WB.UI.Headquarters.Controllers
                 throw new InvalidOperationException($"User was not found{assignment.ResponsibleId}");
 
             if (responsible.Roles.Any(x => x == UserRoles.Supervisor || x == UserRoles.Headquarter))
-                throw new InvalidOperationException(@"Web interview is not allowed to be completed by this role");
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
+                    Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
 
             var interviewId = Guid.NewGuid();
             var interviewKey = this.keyGenerator.Get();
