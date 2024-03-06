@@ -1,5 +1,4 @@
 import { createVuetify } from 'vuetify';
-//import { VDataTable } from 'vuetify/labs/VDataTable';
 import i18nInstance from './localization';
 
 const myCustomLightTheme = {
@@ -20,9 +19,6 @@ const vuetify = createVuetify({
     locale: {
         t: (key, ...params) => i18nInstance.t(key, params)
     }
-    /*components: {
-        VDataTable
-    }*/
 });
 
 export { vuetify };
