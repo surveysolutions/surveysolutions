@@ -39,6 +39,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
 
         public async Task Execute(IJobExecutionContext context)
         {
+            this.logger.Debug("Assignments verification job: Starting");
             try
             {
                 var importProcess = assignmentsImportService.GetImportStatus();
@@ -49,7 +50,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
                 importProcess = assignmentsImportService.GetImportStatus();
                 if (importProcess?.ProcessStatus != AssignmentsImportProcessStatus.Verification) return;
 
-                this.logger.Debug("Assignments verification job: Started");
+                this.logger.Debug("Assignments verification job: Processing");
 
                 var sw = new Stopwatch();
                 sw.Start();
