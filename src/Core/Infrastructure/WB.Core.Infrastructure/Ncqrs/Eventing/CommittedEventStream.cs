@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace Ncqrs.Eventing
 {
@@ -124,7 +125,28 @@ namespace Ncqrs.Eventing
 
                 throw new ArgumentException("events", msg);
             }
-        }        
+        }
+
+        //    if(events.IsEmpty())
+        //        return;
+
+        //    var first = events.First();
+
+        //    var eventCounter = 0;
+        //    var eventSourceId = first.EventSourceId;
+        //    var currentEventSequence = first.EventSequence;
+
+        //    foreach(var evnt in events.Skip(1))
+        //    {
+        //        if(evnt.EventSourceId != eventSourceId)
+        //        {
+        //            var msg =
+        //                String.Format("Event {0} did not contain the expected event source id {1}. "+
+        //                    "Actual value was {2}.",
+        //                    evnt.EventIdentifier, eventSourceId, evnt.EventSourceId);
+        //            throw new ArgumentOutOfRangeException("events", msg);
+        //        }
+        //}
     }
 
     public class InvalidCommittedEventException : Exception

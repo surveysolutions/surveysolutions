@@ -105,9 +105,9 @@ namespace WB.UI.Interviewer
             return new MvxIoCProviderWithParent(CreateIocOptions(),this.CreateAndInitializeIoc());
         }
 
-        protected override void InitializeApp(IMvxApplication app)
+        protected override void InitializeApp(IMvxPluginManager pluginManager, IMvxApplication app)
         {
-            base.InitializeApp(app);
+            base.InitializeApp(pluginManager, app);
 
             string appcenterKey = ApplicationContext.Resources.GetString(Resource.String.appcenter_key);
             if (!string.IsNullOrEmpty(appcenterKey))

@@ -23,24 +23,24 @@
 
             <div v-if="!search.open" class="chapter-name">
                 <router-link :id="'group-' + chapterId" class="chapter-title-text" :to="{
-                    name: 'group',
-                    params: { entityId: chapterId, chapterId: chapterId }
-                }">
+            name: 'group',
+            params: { entityId: chapterId, chapterId: chapterId }
+        }">
                     <span v-text="currentChapterData.title"></span>
-                    <span v-if="currentChapterData.isCover && currentChapterData.isReadOnly
-                        " class="warning-message">
-                        {{ $t('QuestionnaireEditor.VirtualCoverPage') }}</span>
-                    <help v-if="currentChapterData.isCover && currentChapterData.isReadOnly" link="virtualCoverPage" />
-                    <a v-if="!questionnaire.isReadOnlyForUser &&
-                        currentChapterData.isCover &&
-                        currentChapterData.isReadOnly" href="javascript:void(0);" @click.stop="migrateToNewVersion()">
+                    <span v-if="currentChapter.isCover && currentChapter.isReadOnly
+            " class="warning-message">
+                        {{ $t('QuestionnaireEditor.VirtualCoverPage') }}&nbsp;</span>
+                    <help v-if="currentChapter.isCover && currentChapter.isReadOnly" link="virtualCoverPage" />
+                    &nbsp;<a v-if="!questionnaire.isReadOnlyForUser &&
+            currentChapter.isCover &&
+            currentChapter.isReadOnly" href="javascript:void(0);" @click.stop="migrateToNewVersion()">
                         {{ $t('QuestionnaireEditor.MigrateToNewCover') }}</a>
                 </router-link>
                 <div class="qname-block chapter-condition-block">
                     <div class="conditions-block">
                         <div class="enabling-group-marker"
-                            :class="{ 'hide-if-disabled': currentChapterData.hideIfDisabled }"
-                            v-if="currentChapterData.hasCondition">
+                            :class="{ 'hide-if-disabled': currentChapter.hideIfDisabled }"
+                            v-if="currentChapter.hasCondition">
                         </div>
                     </div>
                 </div>
@@ -55,8 +55,8 @@
         <perfect-scrollbar class="scroller">
             <div class="question-list" ui-tree="groupsTree" data-bs-empty-placeholder-enabled="false">
                 <div ui-tree-nodes vmodel="items" class="ui-tree-nodes angular-ui-tree-nodes">
-                    <Draggable ref="tree" v-model="filteredTreeData" textKey="title" childrenKey="items" :defaultOpen="true"
-                        :maxLevel="10" :indent="30" triggerClass="handler" :keepPlaceholder="true"
+                    <Draggable ref="tree" v-model="filteredTreeData" textKey="title" childrenKey="items"
+                        :defaultOpen="true" :maxLevel="10" :indent="30" triggerClass="handler" :keepPlaceholder="true"
                         :statHandler="treeNodeCreated" @after-drop="treeNodeDropped" :ondragstart="customDragImage">
                         <template #default="{ node, stat }">
                             <component :key="node.itemId" :is="itemTemplate(node.itemType)" :item="node" :stat="stat"
@@ -71,44 +71,44 @@
                     </Draggable>
 
                     <div class="section item" v-if="search.open &&
-                        search.searchText &&
-                        filteredTreeData.length === 0
-                        ">
+            search.searchText &&
+            filteredTreeData.length === 0
+            ">
                         <div class="item-text">
                             <span>{{ $t('QuestionnaireEditor.NothingFound') }}</span>
                         </div>
                     </div>
                     <div class="chapter-level-buttons" v-show="!search.searchText">
                         <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
-                            !currentChapter.isReadOnly
-                            " @click="addQuestion(currentChapterData)">{{
-        $t('QuestionnaireEditor.AddQuestion') }}</button>
+            !currentChapter.isReadOnly
+            " @click="addQuestion(currentChapterData)">{{
+            $t('QuestionnaireEditor.AddQuestion') }}</button>
                         <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
-                            !currentChapter.isReadOnly &&
-                            !currentChapter.isCover" @click="addGroup(currentChapterData)">{{
-        $t('QuestionnaireEditor.AddSubsection') }}</button>
+            !currentChapter.isReadOnly &&
+            !currentChapter.isCover" @click="addGroup(currentChapterData)">{{
+            $t('QuestionnaireEditor.AddSubsection') }}</button>
                         <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
-                            !currentChapter.isReadOnly &&
-                            !currentChapter.isCover
-                            " @click="addRoster(currentChapterData)">{{ $t('QuestionnaireEditor.AddRoster') }}</button>
+            !currentChapter.isReadOnly &&
+            !currentChapter.isCover
+            " @click="addRoster(currentChapterData)">{{ $t('QuestionnaireEditor.AddRoster') }}</button>
                         <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
-                            !currentChapter.isReadOnly
-                            " @click="addStaticText(currentChapterData)">{{
-        $t('QuestionnaireEditor.AddStaticText') }}</button>
+            !currentChapter.isReadOnly
+            " @click="addStaticText(currentChapterData)">{{
+            $t('QuestionnaireEditor.AddStaticText') }}</button>
                         <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
-                            !currentChapter.isReadOnly
-                            " @click="addVariable(currentChapterData)">{{
-        $t('QuestionnaireEditor.AddVariable') }}</button>
+            !currentChapter.isReadOnly
+            " @click="addVariable(currentChapterData)">{{
+            $t('QuestionnaireEditor.AddVariable') }}</button>
 
                         <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
-                            !currentChapter.isReadOnly
-                            " @click="searchForQuestion(currentChapterData)">{{
-        $t('QuestionnaireEditor.SearchForQuestion')
-    }}</button>
+            !currentChapter.isReadOnly
+            " @click="searchForQuestion(currentChapterData)">{{
+            $t('QuestionnaireEditor.SearchForQuestion')
+        }}</button>
 
                         <input type="button" class="btn lighter-hover pull-right" :disabled="!readyToPaste" v-if="!questionnaire.isReadOnlyForUser &&
-                                !currentChapter.isReadOnly
-                                " :value="$t('QuestionnaireEditor.Paste')" @click="pasteItemInto(currentChapter)" />
+            !currentChapter.isReadOnly
+            " :value="$t('QuestionnaireEditor.Paste')" @click="pasteItemInto(currentChapter)" />
                     </div>
                 </div>
 
@@ -170,8 +170,7 @@ import { canPaste, pasteItemInto } from '../../../services/copyPasteService'
 import Help from './Help.vue';
 
 import { migrateToNewVersion } from '../../../services/questionnaireService'
-import { useActiveElement, useMagicKeys } from '@vueuse/core';
-import { logicAnd } from '@vueuse/math'
+import { useMagicKeys } from '@vueuse/core';
 
 export default {
     name: 'Tree',
@@ -204,11 +203,11 @@ export default {
                 await this.fetch();
             }
         },
-        notInputCtrlF: function (value) {
+        ctrl_f: function (value) {
             if (value)
                 this.showSearch();
         },
-        notInputCtrlH: function (value) {
+        ctrl_h: function (value) {
             if (value)
                 this.showFindReplaceDialog();
         }
@@ -217,20 +216,27 @@ export default {
         const treeStore = useTreeStore();
         const searchDialog = ref(null);
 
-        const keys = useMagicKeys();
-        const activeElement = useActiveElement();
-        const notUsingInput = computed(() =>
-            activeElement.value?.tagName !== 'INPUT'
-            && activeElement.value?.tagName !== 'TEXTAREA',);
+        const { ctrl_f } = useMagicKeys({
+            passive: false,
+            onEventFired(e) {
+                if (e.ctrlKey && e.key === 'f' && e.type === 'keydown')
+                    e.preventDefault()
+            },
+        })
 
-        const notInputCtrlF = logicAnd(keys['Ctrl+f'], notUsingInput);
-        const notInputCtrlH = logicAnd(keys['Ctrl+h'], notUsingInput);
+        const { ctrl_h } = useMagicKeys({
+            passive: false,
+            onEventFired(e) {
+                if (e.ctrlKey && e.key === 'h' && e.type === 'keydown')
+                    e.preventDefault()
+            },
+        })
 
         return {
             treeStore,
             searchDialog,
-            notInputCtrlF,
-            notInputCtrlH,
+            ctrl_f,
+            ctrl_h,
             canPaste
         };
     },

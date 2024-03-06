@@ -4,6 +4,8 @@ import { defer, isNull, isUndefined, findIndex, debounce } from 'lodash';
 import { filterXSS } from 'xss';
 import moment from 'moment';
 
+import ace from 'ace-builds';
+
 export function format(format) {
     var args = Array.prototype.slice.call(arguments, 1);
     return format.replace(/{(\d+)}/g, function(match, number) {
@@ -40,21 +42,23 @@ export function focus(name) {
     });
 }
 
-export function setFocusIn(elementId) {
-    if (elementId) {
-        debounce(function() {
+export function setFocusIn(elId) {
+    if (elId) {
+        const debounceCall = debounce(elementId => {
             const element = document.getElementById(elementId);
 
             if (!isNull(element) && !isUndefined(element)) {
-                if (element.attr('ui-ace')) {
-                    var edit = ace.edit(element.attr('id'));
-                    edit.focus();
-                    edit.navigateFileEnd();
+                if (element.getAttribute('aceeditor') !== null) {
+                    var editor = ace.edit(element.firstChild);
+                    editor?.focus();
+                    editor?.navigateFileEnd();
                 } else {
                     element.focus();
                 }
             }
         }, 300);
+
+        debounceCall(elId);
     }
 }
 

@@ -4,15 +4,20 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Razor.TagHelpers;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using SkiaSharp;
 using SkiaSharp.QrCode.Image;
+using Vite.Extensions.AspNetCore;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.AnonymousQuestionnaires;
@@ -52,6 +57,8 @@ namespace WB.UI.Designer.Controllers
             [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.QuestionnaireTitle_required))]
             [StringLength(AbstractVerifier.MaxTitleLength, ErrorMessageResourceName = nameof(ErrorMessages.QuestionnaireTitle_MaxLength), ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessage = null)]
             public string? Title { get; set; }
+
+            public bool IsDeleted { get; set; }
         }
 
         public class QuestionnaireViewModel
@@ -89,6 +96,10 @@ namespace WB.UI.Designer.Controllers
         private readonly IViewRenderService viewRenderService;
         private readonly UserManager<DesignerIdentityUser> users;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
+        private readonly ITagHelperComponentManager tagHelperComponentManager;
+        private readonly IWebHostEnvironment webHost;
+        private readonly IOptions<ViteTagOptions> options;
+        private readonly IMemoryCache memoryCache;
 
         public QuestionnaireController(
             IQuestionnaireViewFactory questionnaireViewFactory,
@@ -105,7 +116,11 @@ namespace WB.UI.Designer.Controllers
             IReusableCategoriesService reusableCategoriesService,
             IEmailSender emailSender,
             IViewRenderService viewRenderService,
-            UserManager<DesignerIdentityUser> users)
+            UserManager<DesignerIdentityUser> users,
+            ITagHelperComponentManager tagHelperComponentManager,
+            IWebHostEnvironment webHost,
+            IOptions<ViteTagOptions> options,
+            IMemoryCache memoryCache)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -122,6 +137,10 @@ namespace WB.UI.Designer.Controllers
             this.viewRenderService = viewRenderService;
             this.users = users;
             this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
+            this.tagHelperComponentManager = tagHelperComponentManager;
+            this.webHost = webHost;
+            this.options = options;
+            this.memoryCache = memoryCache;
         }
 
         [Route("questionnaire/details/{id}/nosection/{entityType}/{entityId}")]
@@ -212,14 +231,15 @@ namespace WB.UI.Designer.Controllers
             var questionnaireId = id.OriginalQuestionnaireId ?? id.QuestionnaireId;
             QuestionnaireView? questionnaire = this.questionnaireViewFactory.Load(id);
             if (questionnaire == null) return NotFound();
-
+            
             QuestionnaireView model = questionnaire;
             return View(
                     new QuestionnaireCloneModel
                     {
                         Title = $"Copy of {model.Title}",
                         QuestionnaireId = questionnaireId,
-                        Revision = id.Revision
+                        Revision = id.Revision,
+                        IsDeleted = model.Source.IsDeleted
                     });
         }
 
@@ -252,7 +272,7 @@ namespace WB.UI.Designer.Controllers
                 }
                 catch (Exception e)
                 {
-                    logger.LogError(e, "Error on questionnaire cloning.");
+                    logger.LogError(e, $"Error on questionnaire cloning.Source questionnaire: {model.QuestionnaireId}${model.Revision}");
 
                     var domainException = e.GetSelfOrInnerAs<QuestionnaireException>();
                     if (domainException != null)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -17,6 +18,7 @@ namespace WB.UI.Headquarters.Services.Impl
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IAggregateRootPrototypeService prototypeService;
+        private readonly IUserViewFactory usersRepository;
 
         private static readonly List<InterviewStatus> AllowedInterviewStatuses = new()
         {
@@ -30,12 +32,14 @@ namespace WB.UI.Headquarters.Services.Impl
             IStatefulInterviewRepository statefulInterviewRepository,
             IWebInterviewConfigProvider webInterviewConfigProvider,
             IAuthorizedUser authorizedUser,
-            IAggregateRootPrototypeService prototypeService)
+            IAggregateRootPrototypeService prototypeService,
+            IUserViewFactory usersRepository)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.authorizedUser = authorizedUser;
             this.prototypeService = prototypeService;
+            this.usersRepository = usersRepository;
         }
 
         public void CheckWebInterviewAccessPermissions(string interviewId)
@@ -57,6 +61,14 @@ namespace WB.UI.Headquarters.Services.Impl
             if (!AllowedInterviewStatuses.Contains(interview.Status))
                 throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, 
                     Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded);
+
+            //is user in role of interviewer 
+            var responsible = this.usersRepository.GetUser(interview.CurrentResponsibleId);
+            if (responsible == null || !responsible.IsInterviewer())
+            {
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
+                    Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
+            }
 
             if (this.authorizedUser.IsInterviewer)
             {

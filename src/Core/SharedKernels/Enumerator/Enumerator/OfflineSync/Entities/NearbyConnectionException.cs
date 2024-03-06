@@ -15,6 +15,10 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Entities
 
         public NearbyConnectionException(string message, Exception innerException) : base(message, innerException)
         {
-        }        
+        }
+
+        protected NearbyConnectionException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
     }
 }

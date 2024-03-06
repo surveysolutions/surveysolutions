@@ -139,8 +139,8 @@
                     @click="unfoldLookupTables();" :title="$t('QuestionnaireEditor.SideBarLookupTitle')"></a>
             </li>
             <li>
-                <a class="left-menu-attachments" :class="{ unfolded: isUnfoldedAttachments }" @click="unfoldAttachments();"
-                    :title="$t('QuestionnaireEditor.SideBarAttachmentsTitle')"></a>
+                <a class="left-menu-attachments" :class="{ unfolded: isUnfoldedAttachments }"
+                    @click="unfoldAttachments();" :title="$t('QuestionnaireEditor.SideBarAttachmentsTitle')"></a>
             </li>
             <li>
                 <a class="left-menu-comments" v-if="!questionnaire.isReadOnlyForUser"
@@ -150,6 +150,7 @@
         </ul>
     </div>
 </template>
+
 <style scoped>
 .slide-enter-from {
     transform: translateX(-500px);
@@ -169,6 +170,7 @@
     transform: translateX(-500px);
 }
 </style>
+
 <script>
 
 import Attachments from './leftSidePanel/Attachments.vue';
@@ -180,6 +182,8 @@ import Macros from './leftSidePanel/Macros.vue'
 import Metadata from './leftSidePanel/Metadata.vue'
 import Scenarios from './leftSidePanel/Scenarios.vue'
 import Translations from './leftSidePanel/Translations.vue'
+
+import { setFocusIn } from '../../../services/utilityService'
 
 import { useMagicKeys } from '@vueuse/core';
 
@@ -362,7 +366,12 @@ export default {
             this.setMacrosesPanel();
             this.$emitter.emit("openMacrosList", {});
         },
-        setMacrosesPanel() { this.openPanel = 'macroses'; },
+        setMacrosesPanel(payload) {
+            this.openPanel = 'macroses';
+            if (payload && payload.focusOn) {
+                setFocusIn(payload.focusOn);
+            }
+        },
 
         unfoldScenarios() {
             if (this.isUnfoldedScenarios)

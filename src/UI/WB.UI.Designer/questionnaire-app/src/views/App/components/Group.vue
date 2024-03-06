@@ -10,7 +10,7 @@
                     {{ $t('QuestionnaireEditor.GroupTitle') }}
                 </label>
                 <br />
-                <ExpressionEditor v-model="activeGroup.title"></ExpressionEditor>
+                <ExpressionEditor id="edit-group-title-highlight" v-model="activeGroup.title"></ExpressionEditor>
             </div>
 
             <div class="row">
@@ -51,14 +51,14 @@
                         <help link="hideIfDisabled" />
                     </label>
                     <br>
-                    <ExpressionEditor v-model="activeGroup.enablementCondition" mode="expression"></ExpressionEditor>
+                    <ExpressionEditor id="edit-group-condition" v-model="activeGroup.enablementCondition"
+                        mode="expression" />
                 </div>
                 <div class="form-group col-xs-1">
                     <button type="button" class="btn cross instructions-cross"
                         @click="showEnablingConditions = false; activeGroup.enablementCondition = ''; activeGroup.hideIfDisabled = false;"></button>
                 </div>
             </div>
-
         </div>
         <div class="form-buttons-holder">
             <div class="pull-left">
@@ -111,9 +111,7 @@ import MoveToChapterSnippet from './MoveToChapterSnippet.vue';
 import ExpressionEditor from './ExpressionEditor.vue';
 import Breadcrumbs from './Breadcrumbs.vue'
 import Help from './Help.vue'
-import { computed } from 'vue';
-import { useMagicKeys, useActiveElement } from '@vueuse/core';
-import { logicAnd } from '@vueuse/math'
+import { useMagicKeys } from '@vueuse/core';
 
 export default {
     name: 'Group',
@@ -140,6 +138,9 @@ export default {
             if (newValue) {
                 this.saveGroup();
             }
+        },
+        $route: function (oldValue, newValue) {
+            this.scrollTo();
         }
     },
     setup() {

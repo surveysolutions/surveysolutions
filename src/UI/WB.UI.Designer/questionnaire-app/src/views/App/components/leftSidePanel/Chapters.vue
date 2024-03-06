@@ -142,6 +142,9 @@ export default {
             if (oldIndex == newIndex) return;
             if (oldIndex < newIndex) newIndex--;
 
+            if (!this.questionnaire.isCoverPageSupported)
+                newIndex--;
+
             const item = dragContext.dragNode.data;
             moveGroup(this.questionnaireId, item.itemId, newIndex, null);
         },

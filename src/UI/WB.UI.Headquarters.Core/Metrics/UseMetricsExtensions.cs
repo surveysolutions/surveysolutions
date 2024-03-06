@@ -15,7 +15,7 @@ namespace WB.UI.Headquarters.Metrics
 {
     public static class UseMetricsExtensions
     {
-        public static void AddAppMetrics(this IServiceCollection services)
+        public static void AddMetrics(this IServiceCollection services)
         {
             services.AddHostedService<PushGatewayMetricsPusher>();
             services.AddHostedService<NpgsqlMetricsCollectionService>();
@@ -27,7 +27,7 @@ namespace WB.UI.Headquarters.Metrics
             services.AddTransient<IOnDemandCollector, ThreadPoolStatsCollector>();
         }
   
-        public static void UseAppMetrics(this IApplicationBuilder app, IConfiguration configuration)
+        public static void UseMetrics(this IApplicationBuilder app, IConfiguration configuration)
         {
             var metricsConfig = configuration.MetricsConfiguration().Get<MetricsConfig>();
             var logger = app.ApplicationServices.GetRequiredService<ILogger<MetricsRegistry>>();

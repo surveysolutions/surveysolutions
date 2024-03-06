@@ -19,7 +19,7 @@ namespace WB.UI.Designer.HealthChecks
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && OperatingSystem.IsWindowsVersionAtLeast(7))
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 string fontName = "Noto Sans";
                 float fontSize = 12;

@@ -2,7 +2,7 @@
     <teleport to="body">
         <div v-if="visible" uib-modal-window="modal-window" class="modal share-window fade ng-scope ng-isolate-scope in"
             role="dialog" index="0" animate="animate" tabindex="-1" uib-modal-animation-class="fade" modal-in-class="in"
-            modal-animation="true" style="z-index: 1050; display: block;">
+            modal-animation="true" style="z-index: 1050; display: block;" v-dragAndDrop>
             <div class="modal-dialog ">
                 <div class="modal-content" uib-modal-transclude="">
                     <div class="modal-header blue-strip">

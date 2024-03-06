@@ -22,10 +22,8 @@ export async function updateLookupTable(questionnaireId, lookupTable) {
         lookupTableFileName: lookupTable.fileName
     };
 
-    if (lookupTable.file !== null && lookupTable.file !== undefined) {
-        command.oldLookupTableId = lookupTable.itemId;
-        command.lookupTableId = newGuid();
-    }
+    command.oldLookupTableId = lookupTable.itemId;
+    command.lookupTableId = newGuid();
 
     const response = await upload(
         '/api/command/UpdateLookupTable',

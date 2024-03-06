@@ -136,9 +136,9 @@ namespace WB.UI.Shared.Enumerator
         {
             base.FillValueConverters(registry);
             
-            if (Mvx.IoCProvider.TryResolve(out IMvxValueCombinerRegistry combinerRegistry))
-                combinerRegistry.AddOrOverwriteFrom(Assembly.GetAssembly(typeof(LayoutBackgroundStyleValueCombiner)));
-            
+            Mvx.IoCProvider.CallbackWhenRegistered<IMvxValueCombinerRegistry>(combinerRegistry => 
+                combinerRegistry.AddOrOverwriteFrom(Assembly.GetAssembly(typeof(LayoutBackgroundStyleValueCombiner))));
+
             registry.AddOrOverwrite("EnumToString", new EnumToStringConverter());
             registry.AddOrOverwrite("GroupStateToColor", new GroupStateToColorConverter());
             registry.AddOrOverwrite("CommentStateToColor", new IsCurrentUserCommentToColorConverter());

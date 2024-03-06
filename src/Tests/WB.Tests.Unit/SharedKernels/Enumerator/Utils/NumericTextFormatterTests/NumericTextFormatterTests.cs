@@ -10,10 +10,10 @@ public class NumericTextFormatterTests : NumericTextFormatterTestsContext
     public void should_format_time()
     {
         Assert.That(NumericTextFormatter.FormatTimeHumanized(TimeSpan.FromSeconds(0)),
-            Is.EqualTo("seconds"));
+            Is.EqualTo("less than a second"));
         
         Assert.That(NumericTextFormatter.FormatTimeHumanized(TimeSpan.FromSeconds(5)),
-            Is.EqualTo("seconds"));
+            Is.EqualTo("5 seconds"));
         
         Assert.That(NumericTextFormatter.FormatTimeHumanized(TimeSpan.FromDays(5)),
             Is.EqualTo("5 days"));

@@ -128,9 +128,9 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
         public static string FormatTimeHumanized(TimeSpan time, CultureInfo culture = null)
         {
-            if (time.TotalSeconds < 8)
+            if (time.TotalSeconds < 1)
             {
-                return "seconds";
+                return "less than a second";
             }
             
             var days = time.Days;

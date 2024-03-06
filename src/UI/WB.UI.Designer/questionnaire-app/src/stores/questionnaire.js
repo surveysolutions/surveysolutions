@@ -468,9 +468,8 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             });
             if (indexInit !== -1) {
                 if (payload.newId && payload.newId !== null) {
-                    newLookupTable.lookupTableId = payload.newId;
-                    newLookupTable.editLookupTable.lookupTableId =
-                        payload.newId;
+                    newLookupTable.itemId = payload.newId;
+                    newLookupTable.editLookupTable.itemId = payload.newId;
                 }
 
                 this.info.lookupTables[indexInit] = newLookupTable;
