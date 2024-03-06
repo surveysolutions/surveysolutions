@@ -174,12 +174,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     lookupTableService.CloneLookupTable(document.PublicKey, lookupTable.Key,  this.Id, lookupTable.Key);
                 }
             }
-
-            foreach (var attachment in clonedDocument.Attachments)
+            
+            if(document.IsDeleted)
+                clonedDocument.Attachments = new List<Attachment>();
+            else
             {
-                var newAttachmentId = Guid.NewGuid();
-                this.attachmentService.CloneMeta(attachment.AttachmentId, newAttachmentId, clonedDocument.PublicKey);
-                attachment.AttachmentId = newAttachmentId;
+                foreach (var attachment in clonedDocument.Attachments)
+                {
+                    var newAttachmentId = Guid.NewGuid();
+                    this.attachmentService.CloneMeta(attachment.AttachmentId, newAttachmentId,
+                        clonedDocument.PublicKey);
+                    attachment.AttachmentId = newAttachmentId;
+                }
             }
 
             foreach (var translation in clonedDocument.Translations)
@@ -2030,6 +2036,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(Guid viewerId) 
         {
+            if (this.innerDocument.IsDeleted)
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.QuestionnaireIsDeleted, ExceptionMessages.NoPremissionsToEditQuestionnaire);
+            }
             if (this.innerDocument.CreatedBy != viewerId && !this.SharedUsersIds.Contains(viewerId))
             {
                 throw new QuestionnaireException(

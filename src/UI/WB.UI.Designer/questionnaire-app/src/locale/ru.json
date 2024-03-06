@@ -286,6 +286,8 @@
     "Ok": "Ok",
     "MarkAsDefault": "Установить язык по умолчанию ",
     "UnMarkAsDefault": "Не использовать по умолчанию",
+    "Default": "По умолчанию",
+    "Reset": "Сбросить",
     "PleaseWait": "Ожидайте...",
     "UntitledGroupOrRoster": "Подсекция или ростер без названия",
     "UntitledVariable": "Переменная без названия",

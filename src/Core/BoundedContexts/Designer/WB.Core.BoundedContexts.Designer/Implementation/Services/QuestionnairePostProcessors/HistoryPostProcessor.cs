@@ -70,6 +70,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, UpdateTextQuestion>,
         ICommandPostProcessor<Questionnaire, UpdateMultiOptionQuestion>,
         ICommandPostProcessor<Questionnaire, UpdateFilteredComboboxOptions>,
+        ICommandPostProcessor<Questionnaire, UpdateCascadingComboboxOptions>,
+        ICommandPostProcessor<Questionnaire, ReplaceOptionsWithClassification>,
         ICommandPostProcessor<Questionnaire, UpdateSingleOptionQuestion>,
         ICommandPostProcessor<Questionnaire, AddLookupTable>,
         ICommandPostProcessor<Questionnaire, UpdateLookupTable>,
@@ -654,19 +656,24 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             this.questionnaireStateTrackerStorage.Store(questionnaire, command.QuestionnaireId.FormatGuid());
         }
 
-        public void Process(Questionnaire aggregate, UpdateFilteredComboboxOptions command)
+        public void Process(Questionnaire aggregate, UpdateFilteredComboboxOptions command) => AddQuestionOptionsChanges(aggregate, command);
+
+        public void Process(Questionnaire aggregate, UpdateCascadingComboboxOptions command) => AddQuestionOptionsChanges(aggregate, command);
+        
+        public void Process(Questionnaire aggregate, ReplaceOptionsWithClassification command) => AddQuestionOptionsChanges(aggregate, command);
+
+        private void AddQuestionOptionsChanges(Questionnaire aggregate, QuestionCommand command)
         {
             var questionnaire = questionnaireStateTrackerStorage.GetById(command.QuestionnaireId.FormatGuid());
             if (questionnaire == null)
                 return;
-
+            
             questionnaire.QuestionsState.TryGetValue(command.QuestionId, out var questionTitle);
 
             this.AddOrUpdateQuestionState(command.QuestionnaireId, command.QuestionId, questionTitle, parentId: null);
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Update,
                 QuestionnaireItemType.Question, command.QuestionId, questionTitle, aggregate.QuestionnaireDocument);
         }
-
 
         public void Process(Questionnaire aggregate, MoveQuestion command)
             => this.MoveEntity(command.QuestionnaireId, command.QuestionId, command.TargetGroupId, command.ResponsibleId, aggregate.QuestionnaireDocument);

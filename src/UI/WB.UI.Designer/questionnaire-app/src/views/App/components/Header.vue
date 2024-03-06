@@ -4,18 +4,17 @@
         <div class="header-line">
             <div class="header-menu">
                 <div class="buttons">
-                    <a class="btn btn-primary" :href="'/questionnaire/details/' + questionnaireId"
+                    <a class="btn btn-primary" :href="sanitizeUrl('/questionnaire/details/' + questionnaireId)"
                         style="margin-right: 10px;">
                         {{ $t('QuestionnaireEditor.OldUi') }}</a>
 
-                    <a class="btn" href="http://support.mysurvey.solutions/designer" target="_blank">{{
+                    <a class="btn" href="http://support.mysurvey.solutions/designer" target="_blank" rel="noopener">{{
                         $t('QuestionnaireEditor.Help') }}</a>
-                    <a class="btn" href="https://forum.mysurvey.solutions" target="_blank">{{
+                    <a class="btn" href="https://forum.mysurvey.solutions" target="_blank" rel="noopener">{{
                         $t('QuestionnaireEditor.Forum') }}
                     </a>
-                    <a class="btn" :href="'/questionnaire/questionnairehistory/' +
-                        questionnaireId
-                        " target="_blank"
+                    <a class="btn" :href="sanitizeUrl('/questionnaire/questionnairehistory/' + questionnaireId)"
+                        target="_blank" rel="noopener"
                         v-if="questionnaire.hasViewerAdminRights || questionnaire.isSharedWithUser">{{
                             $t('QuestionnaireEditor.History') }}</a>
                     <button class="btn" @click="showDownloadPdf()">
@@ -26,8 +25,8 @@
                             $t('QuestionnaireEditor.SaveAs') }}</a>
 
                     <a class="btn" v-if="questionnaire.questionnaireRevision || questionnaire.isReadOnlyForUser"
-                        :href="'/questionnaire/clone/' + questionnaire.questionnaireId + (questionnaire.questionnaireRevision ? '$' + questionnaire.questionnaireRevision : '')"
-                        target="_blank">{{ $t('QuestionnaireEditor.CopyTo') }}</a>
+                        :href="sanitizeUrl('/questionnaire/clone/' + questionnaire.questionnaireId + (questionnaire.questionnaireRevision ? '$' + questionnaire.questionnaireRevision : ''))"
+                        target="_blank" rel="noopener">{{ $t('QuestionnaireEditor.CopyTo') }}</a>
                     <button class="btn" v-if="!questionnaire.isReadOnlyForUser" :disabled="!questionnaire.hasViewerAdminRights &&
                         !questionnaire.isSharedWithUser" @click="showShareInfo()">
                         {{ $t('QuestionnaireEditor.Settings') }}
@@ -49,6 +48,11 @@
                             <li>
                                 <a href="/identity/account/manage">{{
                                     $t('QuestionnaireEditor.ManageAccount')
+                                }}</a>
+                            </li>
+                            <li>
+                                <a href="/identity/account/manage/changepassword">{{
+                                    $t('QuestionnaireEditor.ChangePassword')
                                 }}</a>
                             </li>
                             <li>
@@ -126,6 +130,15 @@
                             " @click="webTest()">
                             {{ $t('QuestionnaireEditor.Test') }}
                         </button>
+                        <span class="error-message strong"
+                            v-if="questionnaire.previewRevision !== null && questionnaire.previewRevision !== undefined">{{
+                                $t(
+                                    'QuestionnaireEditor.Preview',
+                                    {
+                                        revision: questionnaire.previewRevision
+                                    }
+                                )
+                            }}</span>
                     </div>
                 </div>
             </div>
@@ -146,12 +159,13 @@
 import VerificationDialog from './VerificationDialog.vue';
 import SharedInfoDialog from './SharedInfoDialog.vue';
 import DownloadPDFDialog from './DownloadPDFDialog.vue';
-import { useMagicKeys, useActiveElement } from '@vueuse/core';
-import { logicAnd } from '@vueuse/math'
+import { useMagicKeys } from '@vueuse/core';
 
 import { useVerificationStore } from '../../../stores/verification';
 import WebTesterApi from '../../../api/webTester';
 import { ref, computed } from 'vue';
+
+import { sanitizeUrl } from '@braintree/sanitize-url';
 
 export default {
     name: 'QuestionnaireHeader',
@@ -174,24 +188,24 @@ export default {
         const sharedInfoDialog = ref(null);
         const downloadPDFDialog = ref(null);
 
-        const keys = useMagicKeys();
-        const activeElement = useActiveElement();
-        const notUsingInput = computed(() =>
-            activeElement.value?.tagName !== 'INPUT'
-            && activeElement.value?.tagName !== 'TEXTAREA');
-
-        const notInputCtrlB = logicAnd(keys['Ctrl+b'], notUsingInput);
+        const { ctrl_b } = useMagicKeys({
+            passive: false,
+            onEventFired(e) {
+                if (e.ctrlKey && e.key === 'b' && e.type === 'keydown')
+                    e.preventDefault()
+            },
+        })
 
         return {
             verificationStore,
             verificationDialog,
             sharedInfoDialog,
             downloadPDFDialog,
-            notInputCtrlB
+            ctrl_b
         };
     },
     watch: {
-        notInputCtrlB: function (v) {
+        ctrl_b: function (v) {
             if (v)
                 this.verify();
         }
@@ -243,6 +257,9 @@ export default {
         showVerificationWarnings() {
             if (this.warningsCount === 0) return;
             this.verificationDialog.openWarnings();
+        },
+        sanitizeUrl(url) {
+            return sanitizeUrl(url);
         }
     }
 };

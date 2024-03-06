@@ -455,6 +455,8 @@
     "HotkeysCloseComments": "Close comments panel",
     "OptionsUploadRevert": "Revert changes",
     "AttachmentName": "Attachment name",
+    "Default": "Default",
+    "Reset": "Reset",
     "EditorShowComments": "Show comments ({{count}})",
     "CollaboratorsDescriptionSettings": "the following users have access to this questionnaire",
     "AccessSettings": "Access",

@@ -403,6 +403,8 @@
     "CascadingOptionsWindowTitle": "Edit cascading categories",
     "AttachmentName": "Attachment name",
     "SideBarCategoriesNoName": "categories with no name",
+    "Default": "Default",
+    "Reset": "Reset",
     "EditorShowComments": "Show comments ({{count}})",
     "JumpToEdit": "Jump to edit",
     "SettingsQuestionnaireVariable": "Questionnaire variable",

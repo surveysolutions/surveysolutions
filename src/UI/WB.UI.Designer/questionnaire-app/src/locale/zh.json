@@ -414,6 +414,8 @@
     "CascadingOptionsWindowTitle": "Edit cascading categories",
     "AttachmentName": "Attachment name",
     "SideBarCategoriesNoName": "categories with no name",
+    "Default": "Default",
+    "Reset": "Reset",
     "EditorShowComments": "Show comments ({{count}})",
     "JumpToEdit": "Jump to edit",
     "CollaboratorsDescriptionSettings": "the following users have access to this questionnaire",

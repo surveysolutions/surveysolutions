@@ -1,5 +1,6 @@
 <template>
-    <div id="search-modal" class="modal findReplaceModal fade in" v-if="visible" style="display:block; z-index:1050;">
+    <div id="search-modal" ref="searchModal" class="modal findReplaceModal fade in" v-if="visible"
+        style="display:block; z-index:1050;" v-dragAndDrop>
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header" style="cursor: default;">
@@ -79,11 +80,12 @@
                     <div>
                         <div v-if="step == 'search'">
                             <p class="wb-label">
-                                {{ $t('QuestionnaireEditor.FindReplaceMatchingLines', { count: foundReferences.length }) }}
+                                {{ $t('QuestionnaireEditor.FindReplaceMatchingLines', { count: foundReferences.length })
+                                }}
                             </p>
                             <button type="button" class="btn btn-lg btn-primary"
                                 :disabled="searchForm.searchFor.length === 0" @click="findAll()">{{
-                                    $t('QuestionnaireEditor.FindReplaceFindAll') }}</button>
+        $t('QuestionnaireEditor.FindReplaceFindAll') }}</button>
                             <button type="button" class="btn btn-lg btn-primary" v-if="!isReadOnlyForUser"
                                 :disabled="foundReferences.length === 0" @click="confirmReplaceAll()">
                                 {{ $t('QuestionnaireEditor.FindReplaceReplaceAll', { count: foundReferences.length }) }}
@@ -91,19 +93,19 @@
 
                             <div class="pull-right" v-if="foundReferences.length">
                                 <button type="button" class="btn btn-lg btn-link" @click="navigatePrev()"> {{
-                                    $t('QuestionnaireEditor.FindReplacePrevious') }}
+        $t('QuestionnaireEditor.FindReplacePrevious') }}
                                 </button>
                                 <button type="button" class="btn btn-lg btn-link" @click="navigateNext()">{{
-                                    $t('QuestionnaireEditor.FindReplaceNext') }}</button>
+        $t('QuestionnaireEditor.FindReplaceNext') }}</button>
                             </div>
                         </div>
                         <div v-if="step == 'confirm'">
-                            <button type="button" class="btn btn-lg btn-primary" :disabled="foundReferences.length === 0"
-                                @click="replaceAll()">
+                            <button type="button" class="btn btn-lg btn-primary"
+                                :disabled="foundReferences.length === 0" @click="replaceAll()">
                                 {{ $t('QuestionnaireEditor.FindReplaceReplaceAll', { count: foundReferences.length }) }}
                             </button>
                             <button type="button" class="btn btn-lg btn-link" @click="backToSearch()"> {{
-                                $t('QuestionnaireEditor.FindReplaceBackToSearch') }}</button>
+        $t('QuestionnaireEditor.FindReplaceBackToSearch') }}</button>
                         </div>
                         <div v-if="step == 'done'">
                             <button type="button" class="btn btn-lg btn-primary" @click="onDone()">{{
@@ -140,6 +142,12 @@ export default {
         };
     },
     expose: ['open', 'close'],
+    mounted() {
+        this.$emitter.on('openMacrosList', this.openLeftPanel);
+    },
+    unmounted() {
+        this.$emitter.off('openMacrosList', this.openLeftPanel);
+    },
     methods: {
         close() {
             this.visible = false;
@@ -177,38 +185,59 @@ export default {
         },
 
         navigateNext() {
-            if (this.indexOfCurrentReference < this.foundReferences.length - 1) {
-                this.indexOfCurrentReference++;
+            this.indexOfCurrentReference++;
+            if (this.indexOfCurrentReference >= this.foundReferences.length)
+                this.indexOfCurrentReference = 0;
 
-                const reference = this.foundReferences[this.indexOfCurrentReference];
+            const reference = this.foundReferences[this.indexOfCurrentReference];
 
-                const name = reference.type.toLowerCase();
+            const name = reference.type.toLowerCase();
+            if (name === "macro") {
+                this.$emitter.emit("openMacrosList", { focusOn: reference.itemId });
+            }
+            else {
                 this.$router.push({
                     name: name,
                     params: {
                         chapterId: reference.chapterId,
                         entityId: reference.itemId,
                     },
-                    force: true
+                    force: true,
+                    state: {
+                        indexOfEntityInProperty: reference.indexOfEntityInProperty,
+                        property: reference.property
+                    }
                 });
             }
+
         },
         navigatePrev() {
-            if (this.indexOfCurrentReference > 0) {
-                this.indexOfCurrentReference--;
+            this.indexOfCurrentReference--;
+            if (this.indexOfCurrentReference < 0) {
+                this.indexOfCurrentReference = this.foundReferences.length - 1;
+            }
 
-                const reference = this.foundReferences[this.indexOfCurrentReference];
+            const reference = this.foundReferences[this.indexOfCurrentReference];
+            const name = reference.type.toLowerCase();
 
-                const name = reference.type.toLowerCase();
+            if (name === "macro") {
+                this.$emitter.emit("openMacrosList", { focusOn: reference.itemId });
+            }
+            else {
                 this.$router.push({
                     name: name,
                     params: {
                         chapterId: reference.chapterId,
                         entityId: reference.itemId,
                     },
-                    force: true
+                    force: true,
+                    state: {
+                        indexOfEntityInProperty: reference.indexOfEntityInProperty,
+                        property: reference.property
+                    }
                 });
             }
+
         },
 
         async findAll() {
@@ -218,6 +247,15 @@ export default {
                 this.indexOfCurrentReference = -1;
             }
         },
+
+        openLeftPanel() {
+            const modal = this.$refs.searchModal;
+            if (modal) {
+                const rect = modal.getBoundingClientRect();
+                if (rect.left < 700)
+                    modal.style.left = '700px'
+            }
+        }
     }
 };
 </script>

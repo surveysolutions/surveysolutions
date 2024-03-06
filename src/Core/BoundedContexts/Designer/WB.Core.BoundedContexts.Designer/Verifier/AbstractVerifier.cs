@@ -58,25 +58,11 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         public const string VariableRegularExpression = "^(?!.*[_]{2})[A-Za-z][_A-Za-z0-9]*(?<!_)$";
         public static readonly Regex VariableNameRegex = new Regex(VariableRegularExpression);
 
-        protected static QuestionnaireEntityReference CreateReference(IQuestionnaireEntity entity)
+        protected static QuestionnaireEntityReference CreateReference(IQuestionnaireEntity? entity,
+            int? failedValidationIndex = null,
+            QuestionnaireVerificationReferenceProperty property = QuestionnaireVerificationReferenceProperty.None)
         {
-            return QuestionnaireEntityReference.CreateFrom(entity);
-        }
-
-        protected static QuestionnaireEntityReference CreateReference(IComposite entity, int? failedValidationIndex)
-        {
-            return new QuestionnaireEntityReference(
-                entity is IGroup
-                    ? QuestionnaireVerificationReferenceType.Group
-                    : entity is IStaticText
-                        ? QuestionnaireVerificationReferenceType.StaticText
-                        : entity is IVariable
-                            ? QuestionnaireVerificationReferenceType.Variable
-                            : QuestionnaireVerificationReferenceType.Question,
-                entity.PublicKey)
-            {
-                IndexOfEntityInProperty = failedValidationIndex
-            };
+            return QuestionnaireEntityReference.CreateFrom(entity, property, failedValidationIndex);
         }
 
         protected static long CalculateRosterInstancesCountAndUpdateCache(IGroup roster, Dictionary<Guid, long> rosterPropagationCounts, MultiLanguageQuestionnaireDocument questionnaire)
@@ -145,16 +131,22 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         protected static bool IsSection(IQuestionnaireEntity entity) => entity.GetParent()?.GetParent() == null;
 
-        protected static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error<TEntity>(string code, Func<TEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string message)
+        protected static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error<TEntity>(string code, 
+            Func<TEntity, MultiLanguageQuestionnaireDocument, bool> hasError, 
+            string message,
+            QuestionnaireVerificationReferenceProperty property = QuestionnaireVerificationReferenceProperty.None)
             where TEntity : class, IComposite
         {
             return questionnaire =>
                 questionnaire
                     .Find<TEntity>(entity => hasError(entity, questionnaire))
-                    .Select(entity => QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity)));
+                    .Select(entity => QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity, null , property)));
         }
         
-        protected static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error<TEntity>(string code, Func<TEntity, ReadOnlyQuestionnaireDocument, IQuestionnaireEntity?> hasEntityWithError, string message)
+        protected static Func<ReadOnlyQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error<TEntity>(string code, 
+            Func<TEntity, ReadOnlyQuestionnaireDocument, IQuestionnaireEntity?> hasEntityWithError, 
+            string message,
+            QuestionnaireVerificationReferenceProperty property = QuestionnaireVerificationReferenceProperty.None)
             where TEntity : class, IComposite
         {
             return questionnaire =>
@@ -163,7 +155,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     .Find<TEntity>()
                     .Select(entity => hasEntityWithError(entity, questionnaire))
                     .Where(entity => entity != null)
-                    .Select(entity => QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity!)));
+                    .Select(entity => QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity, null, property)));
         }
 
         protected static QuestionnaireVerificationReferenceType GetReferenceTypeByItemTypeAndId(MultiLanguageQuestionnaireDocument questionnaire, Guid id, Type entityType)

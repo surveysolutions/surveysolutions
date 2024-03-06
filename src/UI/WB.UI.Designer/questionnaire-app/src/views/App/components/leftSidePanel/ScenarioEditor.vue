@@ -2,9 +2,9 @@
     <Teleport to="body">
         <div v-if="isOpen" uib-modal-window="modal-window"
             class="modal scenarioEditorModal dragAndDrop fade ng-scope ng-isolate-scope in" role="dialog" size="lg"
-            index="0" animate="animate" ng-style="{'z-index': 1050 + $$topModalIndex*10, display: 'block'}" tabindex="-1"
-            uib-modal-animation-class="fade" modal-in-class="in" modal-animation="true"
-            style="z-index: 1050; display: block;">
+            index="0" animate="animate" ng-style="{'z-index': 1050 + $$topModalIndex*10, display: 'block'}"
+            tabindex="-1" uib-modal-animation-class="fade" modal-in-class="in" modal-animation="true"
+            style="z-index: 1050; display: block;" v-dragAndDrop>
             <div class="modal-dialog modal-lg">
                 <div class="modal-content" uib-modal-transclude="">
                     <div class="modal-header blue-strip handle">
@@ -18,17 +18,17 @@
                         <div class="header-block clearfix">
                             <form name="frmEditor">
                                 <div id="edit-scenario">
-                                    <v-ace-editor id="edit-scenario" ref="editor" v-model:value="scenarioSteps" lang="json"
-                                        theme="github" :options="{
-                                            maxLines: 40,
-                                            highlightActiveLine: false,
-                                            indentedSoftWrap: false,
-                                            printMargin: true,
-                                            showLineNumbers: false,
-                                            showGutter: false,
-                                            useWorker: false,
-                                            readOnly: true
-                                        }" />
+                                    <v-ace-editor id="edit-scenario" ref="editor" v-model:value="scenarioSteps"
+                                        lang="json" theme="github" :options="{
+            maxLines: 40,
+            highlightActiveLine: false,
+            indentedSoftWrap: false,
+            printMargin: true,
+            showLineNumbers: false,
+            showGutter: false,
+            useWorker: false,
+            readOnly: true
+        }" />
                                     <!-- theme="chrome" -->
                                 </div>
                             </form>

@@ -1,9 +1,10 @@
 <template>
     <Teleport to="body">
-        <div class="modal fade add-classification-modal dragAndDrop ng-scope ng-isolate-scope in" id="mAddCalassification"
-            :style="dialogStyle" v-if="open == true" uib-modal-window="modal-window" role="dialog" index="0"
-            animate="animate" ng-style="{'z-index': 1050 + $$topModalIndex*10, display: 'block'}" tabindex="-1"
-            uib-modal-animation-class="fade" modal-in-class="in" modal-animation="true">
+        <div class="modal fade add-classification-modal dragAndDrop ng-scope ng-isolate-scope in"
+            id="mAddCalassification" :style="dialogStyle" v-if="open == true" uib-modal-window="modal-window"
+            role="dialog" index="0" animate="animate"
+            ng-style="{'z-index': 1050 + $$topModalIndex*10, display: 'block'}" tabindex="-1"
+            uib-modal-animation-class="fade" modal-in-class="in" modal-animation="true" v-dragAndDrop>
             <div class=" modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header blue-strip handle">
@@ -17,9 +18,9 @@
                             <form>
                                 <div class="input-group custom-dropdown-search">
                                     <div class="input-group-btn custom-dropdown">
-                                        <button class="btn dropdown-toggle" id="classification-group" data-toggle="dropdown"
-                                            uib-dropdown-toggle type="button" data-bs-toggle="dropdown"
-                                            aria-expanded="false">
+                                        <button class="btn dropdown-toggle" id="classification-group"
+                                            data-toggle="dropdown" uib-dropdown-toggle type="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
                                             {{ selectedGroup.title }}
                                             <span class="dropdown-arrow"></span>
                                         </button>
@@ -30,7 +31,7 @@
                                                     <li v-for="group in groups">
                                                         <a role="menuitem" tabindex="-1"
                                                             @click="changeClassificationGroup(group)">{{
-                                                                group.title }}</a>
+                group.title }}</a>
                                                     </li>
                                                 </ul>
                                             </perfect-scrollbar>
@@ -39,7 +40,8 @@
                                     <div class="search">
                                         <input type="text" v-model="searchText"
                                             :placeholder="$t('QuestionnaireEditor.SearchClassification')"
-                                            class="form-control" id="searchFor" aria-label="classification-search" v-focus>
+                                            class="form-control" id="searchFor" aria-label="classification-search"
+                                            v-focus>
                                     </div>
                                     <div class="input-group-btn input-group-btn-right">
                                         <span class="search-icon" aria-hidden="true"></span>
@@ -50,7 +52,7 @@
                                 </div><!-- /input-group -->
                             </form>
                             <span class="group-summary pull-right">{{ totalResults }} {{
-                                $t('QuestionnaireEditor.ClassificationsSearchEntities') }}</span>
+                $t('QuestionnaireEditor.ClassificationsSearchEntities') }}</span>
                         </div>
                         <perfect-scrollbar class="scroller">
                             <div class="tile-wrapper">
@@ -61,8 +63,8 @@
                                             :class="{ 'collapsed': classification.categoriesAreOpen == false }"
                                             @click="toggleCategories(classification)">
                                             {{ $t('QuestionnaireEditor.ClassificationShowCategories') }} ({{
-                                                classification.categoriesCount
-                                            }})
+                classification.categoriesCount
+            }})
                                         </button>
                                         <div class="collapse" :class="{ 'in': classification.categoriesAreOpen }"
                                             v-show="classification.categoriesAreOpen">
@@ -71,14 +73,15 @@
                                                     <li v-for="category in classification.categories">
                                                         <span>{{ category.title }}<span>...</span></span> <span
                                                             class="option-value">{{
-                                                                category.value }}</span>
+                category.value }}</span>
                                                     </li>
                                                 </ul>
                                             </perfect-scrollbar>
                                         </div>
                                         <div class="tile-footer clearfix">
-                                            <a class="bg-info" @click="changeClassificationGroup(classification.group)">{{
-                                                classification.group.title }}</a>
+                                            <a class="bg-info"
+                                                @click="changeClassificationGroup(classification.group)">{{
+                classification.group.title }}</a>
                                             <button v-if="!isReadOnlyForUser" class="btn btn-link add-button"
                                                 @click="replaceOptions(classification)">{{ $t('QuestionnaireEditor.Add')
                                                 }}</button>
@@ -92,8 +95,8 @@
                                             :class="{ 'collapsed': classification.categoriesAreOpen == false }"
                                             @click="toggleCategories(classification)">
                                             {{ $t('QuestionnaireEditor.ClassificationShowCategories') }} ({{
-                                                classification.categoriesCount
-                                            }})
+                classification.categoriesCount
+            }})
                                         </button>
                                         <div class="collapse" :class="{ 'in': classification.categoriesAreOpen }"
                                             v-show="classification.categoriesAreOpen">
@@ -102,15 +105,17 @@
                                                     <li v-for="category in classification.categories">
                                                         <span>{{ category.title }}<span>...</span></span> <span
                                                             class="option-value">{{
-                                                                category.value }}</span>
+                category.value }}</span>
                                                     </li>
                                                 </ul>
                                             </perfect-scrollbar>
                                         </div>
                                         <div class="tile-footer clearfix">
-                                            <a class="bg-info" @click="changeClassificationGroup(classification.group)">{{
+                                            <a class="bg-info"
+                                                @click="changeClassificationGroup(classification.group)">{{
                                                 classification.group.title }}</a>
-                                            <button type="button" v-if="!isReadOnlyForUser" class="btn btn-link add-button"
+                                            <button type="button" v-if="!isReadOnlyForUser"
+                                                class="btn btn-link add-button"
                                                 @click="replaceOptions(classification)">{{ $t('QuestionnaireEditor.Add')
                                                 }}</button>
                                         </div>
@@ -133,12 +138,23 @@
 
 <script>
 
-import { useClassificationsStore } from '../../../../stores/classifications';
+import { loadClassificationGroups, loadCategories, search } from '../../../../services/classificationsService';
 
 import { willBeTakenOnlyFirstOptionsConfirmationPopup, replaceOptionsConfirmationPopup } from '../../../../services/utilityService'
-import { replaceOptionsWithClassification } from '../../../../services/classificationIdService'
+import { replaceOptionsWithClassification } from '../../../../services/classificationsService'
 
-import { debounce, isNull, isUndefined } from 'lodash'
+import { debounce, isNull, isUndefined, each } from 'lodash'
+import { i18n } from '../../../../plugins/localization';
+
+const allClassificationGroups = {
+    id: null,
+    title: i18n.t('QuestionnaireEditor.AllClassifications')
+};
+const myClassificationGroups = {
+    id: null,
+    title: i18n.t('QuestionnaireEditor.MyClassifications'),
+    privateOnly: true
+};
 
 export default {
     name: 'AddClassification',
@@ -151,22 +167,16 @@ export default {
     },
     data() {
         return {
-            //groups: [],
-            selectedGroup: {},
+            groups: [],
+            selectedGroup: allClassificationGroups,
             searchText: '',
-            //classifications1: [],
-            //classifications2: [],
-            //totalResults: 0,
+            classifications1: [],
+            classifications2: [],
+            totalResults: 0,
+
             open: false,
             MAX_OPTIONS_COUNT: 200,
         }
-    },
-    setup() {
-        const classificationsStore = useClassificationsStore();
-
-        return {
-            classificationsStore,
-        };
     },
     watch: {
         searchText(newValue, oldValue) {
@@ -185,18 +195,6 @@ export default {
                 return { display: 'block', opacity: 1, 'z-index': 1050 };
             return {};
         },
-        groups() {
-            return this.classificationsStore.groups;
-        },
-        classifications1() {
-            return this.classificationsStore.classifications1;
-        },
-        classifications2() {
-            return this.classificationsStore.classifications2;
-        },
-        totalResults() {
-            return this.classificationsStore.totalResults;
-        },
     },
     methods: {
         searchThrottled() {
@@ -204,17 +202,28 @@ export default {
             searchDebounce();
         },
         async loadClassificationGroups() {
-            await this.classificationsStore.loadClassificationGroups();
+            const response = await loadClassificationGroups();
+            this.groups = response;
+            this.groups.splice(0, 0, myClassificationGroups);
+            this.groups.splice(0, 0, allClassificationGroups);
             this.selectedGroup = this.groups[0];
         },
 
         async search() {
             const searchText = this.searchText.toLowerCase();
-            await this.classificationsStore.search(searchText);
+            const groupId = this.selectedGroup.id;
+            const privateOnly = this.selectedGroup.privateOnly || false;
+            const data = await search(groupId, searchText, privateOnly);
 
-            //this.classifications1 = this.classificationsStore.classifications1;
-            //this.classifications2 = this.classificationsStore.classifications2;
-            //this.totalResults = this.classificationsStore.totalResults;
+            var classifications = data.classifications;
+            each(classifications, function (classification) {
+                classification.categories = [];
+                classification.categoriesAreOpen = false;
+            });
+            var half = Math.ceil(classifications.length / 2);
+            this.classifications1 = classifications.slice(0, half);
+            this.classifications2 = classifications.slice(half);
+            this.totalResults = data.total;
         },
 
         changeClassificationGroup(group) {
@@ -224,17 +233,24 @@ export default {
 
         async toggleCategories(classification) {
             if (classification.categories.length === 0) {
-                await this.classificationsStore.loadCategories(classification);
+                await this.loadCategories(classification);
                 classification.categoriesAreOpen = true;
             } else {
                 classification.categoriesAreOpen = !classification.categoriesAreOpen;
             }
         },
 
+        async loadCategories(classification) {
+            if (classification.categories.length > 0) return;
+
+            const response = await loadCategories(classification.id);
+            classification.categories = response;
+        },
+
         async replaceOptions(classification) {
 
             if (classification.categories.length === 0) {
-                await this.classificationsStore.loadCategories(classification)
+                await this.loadCategories(classification)
             }
 
             const selectedClassification = classification;

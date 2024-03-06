@@ -6,8 +6,8 @@
                 <label for="edit-question-max-answers-number">
                     {{ $t('QuestionnaireEditor.QuestionMaxNumberOfAnswers') }}
                 </label>
-                <input id="edit-question-max-answers-number" maxlength="9" name="maxAnswerCount" type="text" v-number
-                    ng-pattern="/^\d+$/" v-model.number="activeQuestion.maxAnswerCount"
+                <input id="edit-question-max-answers-number" maxlength="9" name="maxAnswerCount" type="number"
+                    inputmode="numeric" v-number v-model.number="activeQuestion.maxAnswerCount"
                     class="form-control small-numeric-input" />
                 <p class="help-block ng-cloak" v-show="!isValidMaxAnswerCount">
                     {{ $t('QuestionnaireEditor.QuestionOnlyInts') }}

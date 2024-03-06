@@ -37,7 +37,7 @@
                 <label for="edit-variable-title-highlight" class="wb-label">{{ $t('QuestionnaireEditor.VariableLabel') }}
                     <help link="variableDescription" />
                 </label>
-                <ExpressionEditor v-model="activeVariable.label" />
+                <ExpressionEditor id="edit-variable-title-highlight" v-model="activeVariable.label" />
             </div>
             <div class="form-group">
                 <label for="edit-group-condition">{{ $t('QuestionnaireEditor.VariableExpression') }}
@@ -46,7 +46,7 @@
                 <input id="cb-do-not-export" type="checkbox" class="wb-checkbox" v-model="activeVariable.doNotExport" />
                 <label for="cb-do-not-export"><span></span>{{ $t('QuestionnaireEditor.VariableNoExport') }}</label>
                 <help link="doNotExport"></help>
-                <ExpressionEditor v-model="activeVariable.expression" mode="expression" />
+                <ExpressionEditor id="edit-group-condition" v-model="activeVariable.expression" mode="expression" />
             </div>
         </div>
         <div class="form-buttons-holder">
@@ -95,9 +95,7 @@ import MoveToChapterSnippet from './MoveToChapterSnippet.vue';
 import ExpressionEditor from './ExpressionEditor.vue';
 import Breadcrumbs from './Breadcrumbs.vue'
 import Help from './Help.vue'
-import { computed } from 'vue';
-import { useMagicKeys, useActiveElement } from '@vueuse/core';
-import { logicAnd } from '@vueuse/math'
+import { useMagicKeys } from '@vueuse/core';
 
 export default {
     name: 'Variable',
@@ -121,6 +119,9 @@ export default {
         ctrl_s: function (value) {
             if (value)
                 this.saveVariable();
+        },
+        $route: function (oldValue, newValue) {
+            this.scrollTo();
         }
     },
     setup() {

@@ -1,5 +1,5 @@
 <template>
-    <div :class="{ 'pseudo-form-control': focusable === 'true' }" ref="editorHolder">
+    <div :class="{ 'pseudo-form-control': focusable === 'true' }" ref="editorHolder" aceEditor>
         <v-ace-editor ref="editor" v-model:value="editorValue" @init="editorInit" theme="github"
             :lang="mode !== 'substitutions' ? 'csharp' : 'text'" :options="{
                 minLines: 1,
@@ -178,7 +178,6 @@ export default {
         },
         variablesRecalculated() {
             if (this.mode !== 'substitutions') {
-                //this.$refs.editor._editor._emit("change");
                 var session = this.$refs.editor._editor.getSession();
                 if (session.$mode.hasBeenUpdated) {
                     session.$mode.$tokenizer = null;

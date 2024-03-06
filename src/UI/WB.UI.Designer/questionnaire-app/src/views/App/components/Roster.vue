@@ -8,8 +8,8 @@
                         {{ $t('QuestionnaireEditor.RosterSource') }}
                     </label><br>
                     <div class="btn-group type-container-dropdown" uib-dropdown>
-                        <button id="rosterTypeBtn" class="btn btn-default dropdown-toggle form-control" uib-dropdown-toggle
-                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button id="rosterTypeBtn" class="btn btn-default dropdown-toggle form-control"
+                            uib-dropdown-toggle type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             {{ typeName }}
                             <span class="dropdown-arrow"></span>
                         </button>
@@ -24,7 +24,8 @@
                 </div>
 
                 <div class="form-group input-variable-name col-xs-5 pull-right">
-                    <label for="edit-group-variableName" class="wb-label">{{ $t('QuestionnaireEditor.RosterVariableName') }}
+                    <label for="edit-group-variableName" class="wb-label">{{
+        $t('QuestionnaireEditor.RosterVariableName') }}
                         <help link="variableName" placement="left" />
                     </label><br>
                     <input id="edit-group-variableName" type="text" class="wb-input bg-white width-auto"
@@ -37,13 +38,13 @@
                     {{ $t('QuestionnaireEditor.RosterName') }}
                 </label>
                 <br />
-                <ExpressionEditor v-model="activeRoster.title"></ExpressionEditor>
+                <ExpressionEditor id="edit-roster-title-highlight" v-model="activeRoster.title" />
                 <div class="roster-type-specific-block" v-if="activeRoster.type != undefined">
                     <div class="dropdown-with-breadcrumbs-and-icons" v-if="activeRoster.type == 'List'">
                         <label>{{ $t('QuestionnaireEditor.RosterSourceQuestion') }}</label>
                         <div class="btn-group" uib-dropdown>
-                            <button class="btn dropdown-toggle" uib-dropdown-toggle type="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
+                            <button class="btn dropdown-toggle" uib-dropdown-toggle type="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
                                 <span class="select-placeholder" v-if="selectedListQuestion == null">
                                     {{ $t('QuestionnaireEditor.SelectQuestion') }}
                                 </span>
@@ -63,8 +64,9 @@
                                     v-for="breadCrumb in activeRoster.textListsQuestions">
                                     <span v-if="breadCrumb.isSectionPlaceHolder">{{ breadCrumb.title }}</span>
 
-                                    <a v-if="!breadCrumb.isSectionPlaceHolder" @click="selectListQuestion(breadCrumb.id)"
-                                        role="menuitem" tabindex="-1" href="javascript:void(0);">
+                                    <a v-if="!breadCrumb.isSectionPlaceHolder"
+                                        @click="selectListQuestion(breadCrumb.id)" role="menuitem" tabindex="-1"
+                                        href="javascript:void(0);">
                                         <div>
                                             <i :class="['dropdown-icon', 'icon-' + breadCrumb.type]"></i>
                                             <span v-dompurify-html="breadCrumb.title"></span>
@@ -81,8 +83,8 @@
                     <div class="dropdown-with-breadcrumbs-and-icons" v-if="activeRoster.type == 'Numeric'">
                         <label>{{ $t('QuestionnaireEditor.RosterSourceNumericQuestion') }}</label>
                         <div class="btn-group" uib-dropdown>
-                            <button class="btn dropdown-toggle" uib-dropdown-toggle type="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
+                            <button class="btn dropdown-toggle" uib-dropdown-toggle type="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
                                 <span class="select-placeholder" v-if="selectedNumericQuestion == null">
                                     {{ $t('QuestionnaireEditor.SelectQuestion') }}
                                 </span>
@@ -102,8 +104,9 @@
                                     v-for="breadCrumb in activeRoster.numericIntegerQuestions">
                                     <span v-if="breadCrumb.isSectionPlaceHolder">{{ breadCrumb.title }}</span>
 
-                                    <a v-if="!breadCrumb.isSectionPlaceHolder" @click="selectNumericQuestion(breadCrumb.id)"
-                                        role="menuitem" tabindex="-1" href="javascript:void(0);">
+                                    <a v-if="!breadCrumb.isSectionPlaceHolder"
+                                        @click="selectNumericQuestion(breadCrumb.id)" role="menuitem" tabindex="-1"
+                                        href="javascript:void(0);">
                                         <div>
                                             <i class="dropdown-icon" :class="['icon-' + breadCrumb.type]"></i>
                                             <span v-dompurify-html="breadCrumb.title"></span>
@@ -120,8 +123,8 @@
                     <div class="dropdown-with-breadcrumbs-and-icons" v-if="activeRoster.type == 'Numeric'">
                         <label>{{ $t('QuestionnaireEditor.RosterSourceNumericTitles') }}</label>
                         <div class="btn-group" uib-dropdown>
-                            <button class="btn dropdown-toggle" uib-dropdown-toggle type="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
+                            <button class="btn dropdown-toggle" uib-dropdown-toggle type="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
                                 <span class="select-placeholder" v-if="selectedTitleQuestion == null">
                                     {{ $t('QuestionnaireEditor.SelectQuestion') }}
                                 </span>
@@ -141,8 +144,9 @@
                                     v-for="breadCrumb in activeRoster.numericIntegerTitles">
                                     <span v-if="breadCrumb.isSectionPlaceHolder">{{ breadCrumb.title }}</span>
 
-                                    <a v-if="!breadCrumb.isSectionPlaceHolder" @click="selectTitleQuestion(breadCrumb.id)"
-                                        role="menuitem" tabindex="-1" href="javascript:void(0);">
+                                    <a v-if="!breadCrumb.isSectionPlaceHolder"
+                                        @click="selectTitleQuestion(breadCrumb.id)" role="menuitem" tabindex="-1"
+                                        href="javascript:void(0);">
                                         <div>
                                             <i class="dropdown-icon" :class="['icon-' + breadCrumb.type]"></i>
                                             <span v-dompurify-html="breadCrumb.title"></span>
@@ -168,15 +172,16 @@
                                     <div class="table-row fixed-roster-titles-editor"
                                         v-for="(title, index) in activeRoster.fixedRosterTitles">
                                         <div class="column-2">
-                                            <input type="number" min="-2147483648" max="2147483647"
-                                                v-model.number="title.value" :name="'title_value_' + index"
-                                                @keypress="onKeyPressIsNumber($event)"
+                                            <input type="text" inputmode="numeric" min="-2147483648" max="2147483647"
+                                                v-number="/^([-]?\d*)$/" v-model.number="title.value"
+                                                :name="'title_value_' + index" @keypress="onKeyPressIsNumber($event)"
                                                 :class="{ 'has-error': !isInteger(title.value) }"
                                                 class="form-control fixed-roster-value-editor border-right">
                                         </div>
                                         <div class="column-3">
-                                            <input :attr-id="'fixed-item-' + index" type="text" v-model="title.title"
-                                                @keypress="onKeyPressInOptions($event)" class="form-control border-right">
+                                            <input :id="'fixed-item-' + index" type="text" v-model="title.title"
+                                                @keypress="onKeyPressInOptions($event)"
+                                                class="form-control border-right">
                                         </div>
                                         <div class="column-4">
                                             <a href="javascript:void(0);" class="btn" tabindex="-1"
@@ -194,7 +199,8 @@
                                 </p>
                             </div>
                             <div v-if="!useListAsRosterTitleEditor">
-                                <div class="form-group" :class="{ 'has-error': !stringifiedRosterTitlesValidity.valid }">
+                                <div class="form-group"
+                                    :class="{ 'has-error': !stringifiedRosterTitlesValidity.valid }">
                                     <textarea name="stringifiedRosterTitles" class="form-control mono"
                                         v-bind:value="stringifiedRosterTitles"
                                         v-on:input="updateStringifiedRosterTitlesValue($event)" match-options-pattern
@@ -212,8 +218,8 @@
                                     <p class="help-block ng-cloak"
                                         v-if="!stringifiedRosterTitlesValidity.valid && stringifiedRosterTitlesValidity.$error.maxOptionsCount">
                                         {{ $t('QuestionnaireEditor.EnteredMoreThanAllowed', {
-                                            max: fixedRosterLimit
-                                        }) }}
+        max: fixedRosterLimit
+    }) }}
                                     </p>
                                 </div>
                             </div>
@@ -222,16 +228,16 @@
                     <div class="dropdown-with-breadcrumbs-and-icons" v-if="activeRoster.type == 'Multi'">
                         <label>{{ $t('QuestionnaireEditor.RosterSourceQuestion') }}</label>
                         <div class="btn-group" uib-dropdown>
-                            <button class="btn dropdown-toggle" uib-dropdown-toggle type="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
+                            <button class="btn dropdown-toggle" uib-dropdown-toggle type="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
                                 <span class="select-placeholder" v-if="selectedMultiQuestion == null">{{
-                                    $t('QuestionnaireEditor.SelectQuestion') }}</span>
+        $t('QuestionnaireEditor.SelectQuestion') }}</span>
                                 <span class="selected-item" v-if="selectedMultiQuestion !== null">
                                     <span class="path">{{ selectedMultiQuestion.breadcrumbs }}</span>
                                     <span class="chosen-item"><i class="dropdown-icon"
                                             :class="['icon-' + selectedMultiQuestion.type]"></i>{{
-                                                selectedMultiQuestion.title
-                                            }}
+        selectedMultiQuestion.title
+    }}
                                         (<span class="var-name-line">{{ selectedMultiQuestion.varName }}</span>)
                                     </span>
                                 </span>
@@ -243,8 +249,9 @@
                                     v-for="breadCrumb in activeRoster.notLinkedMultiOptionQuestions">
                                     <span v-if="breadCrumb.isSectionPlaceHolder">{{ breadCrumb.title }}</span>
 
-                                    <a v-if="!breadCrumb.isSectionPlaceHolder" @click="selectMultiQuestion(breadCrumb.id)"
-                                        role="menuitem" tabindex="-1" href="javascript:void(0);">
+                                    <a v-if="!breadCrumb.isSectionPlaceHolder"
+                                        @click="selectMultiQuestion(breadCrumb.id)" role="menuitem" tabindex="-1"
+                                        href="javascript:void(0);">
                                         <div>
                                             <i :class="['dropdown-icon', 'icon-' + breadCrumb.type]"></i>
                                             <span v-dompurify-html="breadCrumb.title"></span>
@@ -293,7 +300,8 @@
             <div class="row"
                 v-if="(((showEnablingConditions === undefined && activeRoster.enablementCondition) || showEnablingConditions))">
                 <div class="form-group col-xs-11">
-                    <div class="enabling-group-marker" :class="{ 'hide-if-disabled': activeRoster.hideIfDisabled }"></div>
+                    <div class="enabling-group-marker" :class="{ 'hide-if-disabled': activeRoster.hideIfDisabled }">
+                    </div>
                     <label for="edit-group-condition">{{ $t('QuestionnaireEditor.EnablingCondition') }}
                         <help link="conditionExpression" />
                     </label>
@@ -301,8 +309,8 @@
                     <input type="checkbox" class="wb-checkbox" disabled="disabled" checked="checked"
                         v-if="questionnaire.hideIfDisabled" :title="$t('QuestionnaireEditor.HideIfDisabledNested')" />
 
-                    <input id="cb-hideIfDisabled" type="checkbox" class="wb-checkbox" v-model="activeRoster.hideIfDisabled"
-                        v-if="!questionnaire.hideIfDisabled" />
+                    <input id="cb-hideIfDisabled" type="checkbox" class="wb-checkbox"
+                        v-model="activeRoster.hideIfDisabled" v-if="!questionnaire.hideIfDisabled" />
                     <label for="cb-hideIfDisabled">
                         <span
                             :title="questionnaire.hideIfDisabled ? $t('QuestionnaireEditor.HideIfDisabledNested') : ''"></span>
@@ -310,7 +318,8 @@
                         <help link="hideIfDisabled" />
                     </label>
                     <br>
-                    <ExpressionEditor v-model="activeRoster.enablementCondition" mode="expression" />
+                    <ExpressionEditor id="edit-group-condition" v-model="activeRoster.enablementCondition"
+                        mode="expression" />
                 </div>
                 <div class="form-group col-xs-1">
                     <button type="button" class="btn cross instructions-cross"
@@ -330,16 +339,16 @@
                 <button type="button" v-if="!questionnaire.isReadOnlyForUser" id="add-comment-button"
                     class="btn btn-lg btn-link" @click="toggleComments(activeQuestion)" unsaved-warning-clear>
                     <span v-if="!isCommentsBlockVisible && commentsCount == 0">{{
-                        $t('QuestionnaireEditor.EditorAddComment') }}</span>
+        $t('QuestionnaireEditor.EditorAddComment') }}</span>
                     <span v-if="!isCommentsBlockVisible && commentsCount > 0">
                         {{ $t('QuestionnaireEditor.EditorShowComments', {
-                            count: commentsCount
-                        }) }}</span>
+        count: commentsCount
+    }) }}</span>
                     <span v-if="isCommentsBlockVisible">{{ $t('QuestionnaireEditor.EditorHideComment') }}</span>
                 </button>
                 <button type="button" v-if="!questionnaire.isReadOnlyForUser" id="edit-chapter-delete-button"
                     class="btn btn-lg btn-link" unsaved-warning-clear @click="deleteRoster()">{{
-                        $t('QuestionnaireEditor.Delete') }}</button>
+        $t('QuestionnaireEditor.Delete') }}</button>
                 <MoveToChapterSnippet :item-id="rosterId" :item-type="'Group'"
                     v-if="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly">
                 </MoveToChapterSnippet>
@@ -362,9 +371,7 @@ import { isInteger } from '../../../helpers/number';
 import { createQuestionForDeleteConfirmationPopup, focusElementByName } from '../../../services/utilityService'
 import { updateRoster, deleteRoster, getQuestionsEligibleForNumericRosterTitle } from '../../../services/rosterService'
 import { setFocusIn } from '../../../services/utilityService'
-import { computed } from 'vue';
-import { useMagicKeys, useActiveElement } from '@vueuse/core';
-import { logicAnd } from '@vueuse/math'
+import { useMagicKeys } from '@vueuse/core';
 
 export default {
     name: 'Roster',
@@ -403,6 +410,9 @@ export default {
             if (v) {
                 this.saveRoster();
             }
+        },
+        $route: function (oldValue, newValue) {
+            this.scrollTo();
         }
     },
     setup() {
@@ -419,14 +429,13 @@ export default {
             };
         });
 
-
         const { ctrl_s } = useMagicKeys({
             passive: false,
             onEventFired(e) {
                 if (e.ctrlKey && e.key === 's' && e.type === 'keydown')
                     e.preventDefault()
             },
-        })
+        });
 
         return {
             rosterStore, commentsStore, ctrl_s
@@ -676,7 +685,7 @@ export default {
             var focusId = null;
             switch (property) {
                 case 'Title':
-                    focusId = 'edit-group-title';
+                    focusId = 'edit-roster-title-highlight';
                     break;
                 case 'VariableName':
                     focusId = 'edit-group-variableName';

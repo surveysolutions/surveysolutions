@@ -13,7 +13,7 @@
             <div class="form-group">
                 <label class="wb-label">
                     {{ $t('QuestionnaireEditor.StaticText') }}</label><br />
-                <ExpressionEditor mode="substitutions" v-model="activeStaticText.text" />
+                <ExpressionEditor id="edit-static-text-highlight" mode="substitutions" v-model="activeStaticText.text" />
             </div>
             <div class="form-group">
                 <label for="edit-static-attachment-name" class="wb-label">
@@ -65,7 +65,8 @@
                         {{ $t('QuestionnaireEditor.HideIfDisabled') }}
                         <help link="hideIfDisabled" />
                     </label>
-                    <ExpressionEditor v-model="activeStaticText.enablementCondition" mode="expression" />
+                    <ExpressionEditor id="edit-question-enablement-condition" v-model="activeStaticText.enablementCondition"
+                        mode="expression" />
 
                 </div>
                 <div class="form-group col-xs-1">
@@ -88,12 +89,13 @@
 
                 <button class="btn delete-btn-sm delete-validation-condition" @click="removeValidationCondition(index)"
                     tabindex="-1"></button>
-                <ExpressionEditor v-model="validation.expression" mode="expression" />
+                <ExpressionEditor :id="'validation-expression-' + index" v-model="validation.expression"
+                    mode="expression" />
                 <label class="validation-message">{{
                     $t('QuestionnaireEditor.ErrorMessage') }}
                     <help link="validationMessage" />
                 </label>
-                <ExpressionEditor v-model="validation.message" mode="substitutions" />
+                <ExpressionEditor :id="'validation-message-' + index" v-model="validation.message" mode="substitutions" />
             </div>
             <div class="form-group"
                 v-if="activeStaticText.validationConditions && activeStaticText.validationConditions.length < 10">
@@ -154,9 +156,7 @@ import Breadcrumbs from './Breadcrumbs.vue';
 import ExpressionEditor from './ExpressionEditor.vue';
 import Help from './Help.vue';
 import MoveToChapterSnippet from './MoveToChapterSnippet.vue';
-import { computed } from 'vue';
-import { useMagicKeys, useActiveElement } from '@vueuse/core';
-import { logicAnd } from '@vueuse/math'
+import { useMagicKeys } from '@vueuse/core';
 
 export default {
     name: 'StaticText',
@@ -189,6 +189,9 @@ export default {
             if (v) {
                 this.saveStaticText();
             }
+        },
+        $route: function (oldValue, newValue) {
+            this.scrollTo();
         }
     },
     setup() {
@@ -211,7 +214,7 @@ export default {
                 if (e.ctrlKey && e.key === 's' && e.type === 'keydown')
                     e.preventDefault()
             },
-        })
+        });
 
         return {
             staticTextStore,

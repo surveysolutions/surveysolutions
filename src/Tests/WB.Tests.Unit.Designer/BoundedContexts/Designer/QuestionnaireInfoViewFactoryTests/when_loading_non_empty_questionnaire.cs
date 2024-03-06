@@ -40,6 +40,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
                 Id = Id.gB,
                 Name = "NotDefault"
             });
+            questionnaire.IsDeleted = true;
+            
             var repositoryMock = new Mock<IDesignerQuestionnaireStorage>();
             repositoryMock
                 .Setup(x => x.Get(questionnaireId))
@@ -88,6 +90,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
         [Test]
         public void should_not_contain_default_translation_value_for_non_default_translations
             () => view.Translations[1].IsDefault.Should().Be(false);
+
+        [Test]
+        public void should_return_readonly_flag_for_deleted_questionnaire
+            () => view.IsReadOnlyForUser.Should().Be(true);
 
         private static QuestionnaireInfoView view;
         private static QuestionnaireInfoViewFactory factory;

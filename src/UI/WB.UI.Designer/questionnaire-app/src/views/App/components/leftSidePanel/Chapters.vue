@@ -83,9 +83,9 @@ import { useTreeStore } from '../../../../stores/tree';
 import { useQuestionnaireStore } from '../../../../stores/questionnaire';
 import { createQuestionForDeleteConfirmationPopup } from '../../../../services/utilityService'
 import { pasteItemAfter, canPaste, copyItem } from '../../../../services/copyPasteService'
-
 import { Draggable, dragContext, walkTreeData } from '@he-tree/vue';
 import Help from '../Help.vue';
+import { moveGroup } from '../../../../services/questionnaireService';
 
 export default {
     name: 'Chapters',
@@ -142,8 +142,11 @@ export default {
             if (oldIndex == newIndex) return;
             if (oldIndex < newIndex) newIndex--;
 
+            if (!this.questionnaire.isCoverPageSupported)
+                newIndex--;
+
             const item = dragContext.dragNode.data;
-            this.treeStore.moveGroup(item.itemId, newIndex, null);
+            moveGroup(this.questionnaireId, item.itemId, newIndex, null);
         },
 
         editChapter(chapter) {

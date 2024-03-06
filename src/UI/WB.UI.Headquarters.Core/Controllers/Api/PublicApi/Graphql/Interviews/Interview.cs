@@ -55,7 +55,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             
             descriptor.Field(x => x.CreatedDate)
                 .Type<NonNullType<DateTimeType>>()
-                .Description("Date when interview was created");
+                .Description("Date and Time (UTC) when interview was created");
 
             descriptor.Field(x => x.Key).Type<NonNullType<StringType>>()  
                 .Description("Short case identifier that appears throughout the system - in Headquarters, Supervisor, and Interviewer");

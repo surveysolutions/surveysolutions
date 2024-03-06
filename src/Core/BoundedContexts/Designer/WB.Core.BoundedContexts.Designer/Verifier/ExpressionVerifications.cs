@@ -326,7 +326,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                         {
                             result.Add(QuestionnaireVerificationMessage.Warning("WB0250",
                                 string.Format(VerificationMessages.WB0250_ValidationConditionRefersToAFutureQuestion, validationIndex),
-                                CreateReference(enitiesWithValidation, validationIndex),
+                                CreateReference(enitiesWithValidation, validationIndex, QuestionnaireVerificationReferenceProperty.ValidationExpression),
                                 CreateReference(referencedQuestion)));
                         }
                     }
@@ -537,13 +537,13 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         }
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error<TEntity, TSubEntity>(
-            Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TEntity, TSubEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex, VerificationMessageLevel level = VerificationMessageLevel.General)
+            Func<TEntity, IEnumerable<TSubEntity>> getSubEntities, Func<TEntity, TSubEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex, VerificationMessageLevel level = VerificationMessageLevel.General)
             where TEntity : class, IComposite
         {
             return questionnaire =>
                 questionnaire
                     .Find<TEntity>(entity => true)
-                    .SelectMany(entity => getSubEnitites(entity).Select((subEntity, index) => new { Entity = entity, SubEntity = subEntity, Index = index }))
+                    .SelectMany(entity => getSubEntities(entity).Select((subEntity, index) => new { Entity = entity, SubEntity = subEntity, Index = index }))
                     .Where(descriptor => hasError(descriptor.Entity, descriptor.SubEntity, questionnaire))
                     .Select(descriptor => level == VerificationMessageLevel.General 
                         ? QuestionnaireVerificationMessage.Error(code, getMessageBySubEntityIndex(descriptor.Index + 1), CreateReference(descriptor.Entity, descriptor.Index))
@@ -624,7 +624,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 from entity in questionnaire.Find<TEntity>(_ => true)
                 let verificationResult = verifyEntity(entity, questionnaire)
                 where verificationResult.HasErrors
-                select QuestionnaireVerificationMessage.Warning(code, message, verificationResult.ReferencedEntities.Select(CreateReference).ToArray());
+                select QuestionnaireVerificationMessage.Warning(code, message, 
+                    verificationResult.ReferencedEntities.Select(entity => CreateReference(entity)).ToArray());
         }
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity>(

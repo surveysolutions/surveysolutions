@@ -19,7 +19,7 @@
                     <div class="drop-box">
                         {{ $t('QuestionnaireEditor.SideBarLookupTableDropFile') }}
                     </div>
-                    <div class="attachment-meta">
+                    <div class="attachment-meta" v-if="attachment.meta">
                         <p>
                             <span class="file-name">{{ attachment.meta.fileName }}</span><br>
                             <span :class="{ 'error': isAttachmentResolutionTooBig(attachment) }"
@@ -79,6 +79,7 @@
 
 <script>
 import _ from 'lodash'
+import { notice } from '../../../../services/notificationService';
 import { createQuestionForDeleteConfirmationPopup, formatBytes, formatDateTime } from '../../../../services/utilityService'
 import { deleteAttachment, updateAttachment } from '../../../../services/attachmentsService';
 

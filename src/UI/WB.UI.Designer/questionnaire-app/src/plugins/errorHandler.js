@@ -25,4 +25,36 @@ export function setupErrorHandler(app) {
 
         console.error('Error Handler:', err);
     };
+
+    window.addEventListener('error', function(e) {
+        var errorDetails = {
+            message: e.error.message,
+
+            additionalData: {
+                stack: e.error.stack
+            }
+        };
+
+        api.post('', errorDetails).catch(error => {
+            console.error('Error sending error details to server:', error);
+        });
+
+        return false;
+    });
+
+    window.addEventListener('unhandledrejection', function(e) {
+        var errorDetails = {
+            message: e.reason?.body?.message ?? e.reason,
+
+            additionalData: {
+                stack: e.reason?.stack
+            }
+        };
+
+        api.post('', errorDetails).catch(error => {
+            console.error('Error sending error details to server:', error);
+        });
+
+        return false;
+    });
 }

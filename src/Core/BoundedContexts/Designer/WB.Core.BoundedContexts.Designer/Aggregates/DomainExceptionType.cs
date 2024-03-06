@@ -164,6 +164,7 @@
         CanNotAddElementToCoverPage,
         CanNotEditElementIntoCoverPage,
         MigrateToNewVersion,
-        InvalidUserInfo
+        InvalidUserInfo,
+        QuestionnaireIsDeleted,
     }
 }

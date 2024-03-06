@@ -157,7 +157,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             questionnaireInfoView.SharedPersons = sharedPersons;
 
             questionnaireInfoView.PreviewRevision = questionnaireRevision.Version;
-            if (questionnaireRevision.Revision != null)
+            if (questionnaireRevision.Revision != null || questionnaireDocument.IsDeleted)
             {
                 questionnaireInfoView.IsReadOnlyForUser = true;
                 questionnaireInfoView.PreviewRevision = questionnaireRevision.Version;

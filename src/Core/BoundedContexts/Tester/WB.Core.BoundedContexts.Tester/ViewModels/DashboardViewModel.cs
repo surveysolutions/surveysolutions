@@ -4,17 +4,15 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Humanizer;
 using MvvmCross.Commands;
 using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.Views;
-using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels
@@ -322,7 +320,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private void HumanizeLastUpdateDate(DateTime? lastUpdate)
         {
             this.HumanizedLastUpdateDate = lastUpdate.HasValue
-                ? string.Format(TesterUIResources.Dashboard_LastUpdated, lastUpdate.Value.Humanize(dateToCompareAgainst: DateTime.UtcNow, culture: CultureInfo.InvariantCulture))
+                ? string.Format(TesterUIResources.Dashboard_LastUpdated, NumericTextFormatter.FormatTimeHumanized(DateTime.UtcNow - lastUpdate.Value))
                 : TesterUIResources.Dashboard_HaveNotBeenUpdated;
         }
 
