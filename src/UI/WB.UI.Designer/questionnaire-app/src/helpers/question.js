@@ -53,7 +53,7 @@ export function hasQuestionEnablementConditions(question) {
     return (
         question &&
         question.questionScope != 'Identifying' &&
-        !(question.isCascade && this.question.cascadeFromQuestionId)
+        this.question.cascadeFromQuestionId == null
     );
 }
 

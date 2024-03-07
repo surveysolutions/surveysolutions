@@ -62,7 +62,7 @@ export const useQuestionStore = defineStore('question', {
 
             var shouldGetOptionsOnServer =
                 this.wasThereOptionsLooseWhileChanginQuestionProperties() &&
-                question.isCascade;
+                question.cascadeFromQuestionId != null;
 
             updateQuestion(
                 questionnaireId,

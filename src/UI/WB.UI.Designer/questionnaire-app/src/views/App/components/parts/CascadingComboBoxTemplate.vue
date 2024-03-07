@@ -7,7 +7,7 @@
             <button class="btn dropdown-toggle" uib-dropdown-toggle id="singleOptionQuestionSource" type="button"
                 data-bs-toggle="dropdown" aria-expanded="false">
                 <span class="select-placeholder" v-if="!cascadeFromQuestion">{{
-                    $t('QuestionnaireEditor.SelectQuestion') }}</span>
+            $t('QuestionnaireEditor.SelectQuestion') }}</span>
 
                 <div class="selected-item" v-if="cascadeFromQuestion">
                     <span class="path">{{ cascadeFromQuestion.breadcrumbs }}</span>
@@ -59,12 +59,12 @@
                 :class="{ 'has-error': !isValidShowAsListThreshold }">
                 <label for="edit-question-count-for-list">{{ $t('QuestionnaireEditor.QuestionShowListLimit') }}</label>
                 <input id="edit-question-count-for-list" type="text" inputmode="numeric" step="1" maxlength="2"
-                    name="showAsListThreshold" min="1" max="50" v-model.number="activeQuestion.showAsListThreshold" v-number
-                    class="form-control small-numeric-input wb-input">
+                    name="showAsListThreshold" min="1" max="50" v-model.number="activeQuestion.showAsListThreshold"
+                    v-number class="form-control small-numeric-input wb-input">
                 <p class="help-block ng-cloak" v-show="!isValidNumberShowAsListThreshold">{{
-                    $t('QuestionnaireEditor.QuestionOnlyInts') }}</p>
+            $t('QuestionnaireEditor.QuestionOnlyInts') }}</p>
                 <p class="help-block ng-cloak" v-show="!isValidMaxMin">{{
-                    $t('QuestionnaireEditor.QuestionOneToFiftyAllowed') }}</p>
+            $t('QuestionnaireEditor.QuestionOneToFiftyAllowed') }}</p>
             </div>
         </div>
     </div>
@@ -126,18 +126,15 @@ export default {
                 return null;
 
             const sourceQuestion = find(this.activeQuestion.sourceOfSingleQuestions,
-                p => p.id == this.activeQuestion.cascadeFromQuestionId && p.isSectionPlaceHolder != true
+                p => p.id == this.activeQuestion.cascadeFromQuestionId != null && p.isSectionPlaceHolder != true
             );
             return sourceQuestion != undefined ? sourceQuestion : null;
         }
     },
     methods: {
         setCascadeSource(itemId) {
-            this.activeQuestion.isCascade = !isEmpty(itemId);
-
             if (itemId) {
                 this.activeQuestion.cascadeFromQuestionId = itemId;
-                //this.activeQuestion.cascadeFromQuestion = find(this.sourceOfSingleQuestions, { id: this.activeQuestion.cascadeFromQuestionId });
             }
         }
     }

@@ -307,7 +307,15 @@ export default {
         },
         $route: function (oldValue, newValue) {
             this.scrollTo();
-        }
+        },
+        'activeQuestion.cascadeFromQuestionId'(newValue, oldValue) {
+            if (oldValue == null && newValue != null && this.activeQuestion.questionScope == 'Identifying' && this.activeQuestion.type == 'SingleOption')
+                this.activeQuestion.questionScope = null;
+        },
+        'activeQuestion.linkedToEntityId'(newValue, oldValue) {
+            if (oldValue == null && newValue != null && this.activeQuestion.questionScope == 'Identifying' && this.activeQuestion.type == 'SingleOption')
+                this.activeQuestion.questionScope = null;
+        },
     },
     setup() {
         const questionStore = useQuestionStore();
@@ -384,7 +392,7 @@ export default {
             return this.questionStore.getIsDirty;
         },
         isValid() {
-            return this.questionStore.getIsValid;
+            return this.activeQuestion.questionScope != null && this.questionStore.getIsValid;
         }
     },
     methods: {
@@ -462,7 +470,7 @@ export default {
                 return false;
             return this.activeQuestion
                 && (this.activeQuestion.questionScope != 'Identifying')
-                && !(this.activeQuestion.isCascade && this.activeQuestion.cascadeFromQuestionId);
+                && this.activeQuestion.cascadeFromQuestionId == null;
         },
         doesQuestionSupportValidations() {
             return this.activeQuestion &&
@@ -493,19 +501,13 @@ export default {
 
             var allScopes = this.activeQuestion.allQuestionScopeOptions;
 
-            if (this.activeQuestion.type === 'DateTime') {
-                allScopes = allScopes.filter(function (val) {
-                    return val.value !== 'Supervisor';
-                });
-            }
-
             if (_.indexOf(questionsWithOnlyInterviewerScope, this.activeQuestion.type) >= 0) {
                 return allScopes.filter(function (o) {
                     return o.value === 'Interviewer';
                 });
             }
 
-            if (!this.activeQuestion.isCascade && this.activeQuestion.linkedToEntityId == null &&
+            if (this.activeQuestion.cascadeFromQuestionId == null && this.activeQuestion.linkedToEntityId == null &&
                 _.indexOf(['TextList', 'GpsCoordinates', 'MultyOption', 'DateTime', 'SingleOption'], this.activeQuestion.type) < 0)
                 return allScopes;
 
@@ -550,6 +552,9 @@ export default {
             }
 
             if (type !== "SingleOption" && type !== "MultyOption") {
+                this.activeQuestion.linkedToEntityId = null;
+                this.activeQuestion.linkedFilterExpression = null;
+                this.activeQuestion.optionsFilterExpression = null;
             }
 
             if (type === 'MultyOption' || type === "SingleOption") {
