@@ -33,6 +33,8 @@ export const useQuestionStore = defineStore('question', {
         },
 
         setQuestionData(data) {
+            if (data.isPreFilled) data.questionScope = 'Identifying';
+
             data.stringifiedCategories = '';
             this.initialQuestion = _.cloneDeep(data);
             this.question = _.cloneDeep(this.initialQuestion);

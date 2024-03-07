@@ -363,8 +363,9 @@ export default {
     },
     computed: {
         currentQuestionScope() {
+            const questionScope = this.activeQuestion.questionScope
             const option = this.activeQuestion.allQuestionScopeOptions.find(
-                p => p.value == this.activeQuestion.questionScope
+                p => p.value == questionScope
             );
             return option != null ? option.text : null;
         },
