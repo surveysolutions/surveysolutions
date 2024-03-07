@@ -931,6 +931,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (command.CategoriesId.HasValue)
                 answers = Array.Empty<Answer>();
+
+            if (command is { CascadeFromQuestionId: not null, Properties.OptionsFilterExpression: not null })
+                command.Properties.OptionsFilterExpression = null;
+            
+            string? linkedFilterExpression = command is { CascadeFromQuestionId: not null, LinkedFilterExpression: not null }
+                ? null
+                : command.LinkedFilterExpression;
             
             var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
             IQuestion newQuestion = CreateQuestion(command.QuestionId,
@@ -954,7 +961,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 command.CascadeFromQuestionId,
                 null,
                 command.ValidationConditions,
-                command.LinkedFilterExpression,
+                linkedFilterExpression,
                 false,
                 showAsList:command.ShowAsList,
                 showAsListThreshold: command.ShowAsListThreshold,
