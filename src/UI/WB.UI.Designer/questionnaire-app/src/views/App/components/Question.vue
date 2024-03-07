@@ -309,8 +309,20 @@ export default {
             this.scrollTo();
         },
         'activeQuestion.cascadeFromQuestionId'(newValue, oldValue) {
-            if (oldValue == null && newValue != null && this.activeQuestion.questionScope == 'Identifying' && this.activeQuestion.type == 'SingleOption')
-                this.activeQuestion.questionScope = null;
+            if (this.activeQuestion) {
+                if (newValue) {
+                    if (oldValue == null && this.activeQuestion.questionScope == 'Identifying' && this.activeQuestion.type == 'SingleOption')
+                        this.activeQuestion.questionScope = null;
+
+                    if (this.activeQuestion.questionScope !== 'Interviewer'
+                        && this.activeQuestion.questionScope !== 'Hidden'
+                        && this.activeQuestion.questionScope !== 'Supervisor'
+                        && this.activeQuestion.questionScope !== 'Identifying') {
+                        this.changeQuestionScope(this.getQuestionScopeByValue('Interviewer'));
+                    }
+                    this.activeQuestion.optionsFilterExpression = null;
+                }
+            }
         },
         'activeQuestion.linkedToEntityId'(newValue, oldValue) {
             if (oldValue == null && newValue != null && this.activeQuestion.questionScope == 'Identifying' && this.activeQuestion.type == 'SingleOption')
