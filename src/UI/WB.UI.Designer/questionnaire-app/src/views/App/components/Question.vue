@@ -490,7 +490,14 @@ export default {
         getQuestionScopes() {
             if (!this.activeQuestion)
                 return [];
+
             var allScopes = this.activeQuestion.allQuestionScopeOptions;
+
+            if (this.activeQuestion.type === 'DateTime') {
+                allScopes = allScopes.filter(function (val) {
+                    return val.value !== 'Supervisor';
+                });
+            }
 
             if (_.indexOf(questionsWithOnlyInterviewerScope, this.activeQuestion.type) >= 0) {
                 return allScopes.filter(function (o) {
@@ -518,7 +525,6 @@ export default {
         setQuestionType(type) {
             this.activeQuestion.type = type;
             this.activeQuestion.typeName = _.find(this.activeQuestion.questionTypeOptions, { value: type }).text;
-            //this.activeQuestion.allQuestionScopeOptions = dictionaries.allQuestionScopeOptions;
 
             const isQuestionScopeSupervisorOrPrefilled = this.activeQuestion.questionScope === 'Supervisor' || this.activeQuestion.questionScope === 'Identifying';
             if (type === 'TextList' && isQuestionScopeSupervisorOrPrefilled) {
@@ -526,9 +532,6 @@ export default {
             }
 
             if (type === 'DateTime') {
-                this.activeQuestion.allQuestionScopeOptions = _.filter(this.activeQuestion.allQuestionScopeOptions, function (val) {
-                    return val.value !== 'Supervisor';
-                });
                 if (this.activeQuestion.questionScope === 'Supervisor') {
                     this.changeQuestionScope(this.getQuestionScopeByValue('Interviewer'));
                 }
