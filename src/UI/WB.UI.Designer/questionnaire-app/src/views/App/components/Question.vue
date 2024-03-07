@@ -508,7 +508,7 @@ export default {
             }
 
             if (this.activeQuestion.cascadeFromQuestionId == null && this.activeQuestion.linkedToEntityId == null &&
-                _.indexOf(['TextList', 'GpsCoordinates', 'MultyOption', 'DateTime', 'SingleOption'], this.activeQuestion.type) < 0)
+                _.indexOf(['TextList', 'GpsCoordinates', 'MultyOption', 'DateTime'], this.activeQuestion.type) < 0)
                 return allScopes;
 
             return allScopes.filter(o => {
