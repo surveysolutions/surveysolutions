@@ -505,6 +505,18 @@ export default {
 
             return false;
         },
+        doesQuestionSupportLinkedToEntity() {
+            if (this.activeQuestion) {
+                if (this.activeQuestion.type === 'MultyOption') {
+                    return !this.activeQuestion.isFilteredCombobox && this.activeQuestion.yesNoView != true;
+                }
+                if (this.activeQuestion.type === 'SingleOption') {
+                    return true;
+                }
+            }
+
+            return false;
+        },
         getAnswerTypeClass(type) {
             return answerTypeClass[type];
         },
@@ -589,6 +601,10 @@ export default {
             if (!this.doesQuestionSupportOptionsFilters()) {
                 this.activeQuestion.optionsFilterExpression = null;
                 this.activeQuestion.linkedFilterExpression = null;
+            }
+
+            if (!this.doesQuestionSupportLinkedToEntity()) {
+                this.activeQuestion.linkedToEntityId = null;
             }
 
             if (type === "Area") {
