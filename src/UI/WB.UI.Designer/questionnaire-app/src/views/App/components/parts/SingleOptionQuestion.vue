@@ -268,6 +268,7 @@ export default {
             this.isLinked = false;
             this.activeQuestion.isFilteredCombobox = false;
             this.activeQuestion.cascadeFromQuestionId = null;
+            this.activeQuestion.linkedToEntityId = null;
 
             this.activeQuestion.showAsListThreshold = null;
             this.activeQuestion.showAsList = false;
