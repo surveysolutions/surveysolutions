@@ -136,6 +136,9 @@ export default {
             if (itemId) {
                 this.activeQuestion.cascadeFromQuestionId = itemId;
             }
+            else {
+                this.activeQuestion.cascadeFromQuestionId = null;
+            }
         }
     }
 }
