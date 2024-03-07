@@ -981,6 +981,12 @@
   <data name="UnMarkAsDefault" xml:space="preserve">
     <value>Не использовать по умолчанию</value>
   </data>
+  <data name="Default" xml:space="preserve">
+    <value>По умолчанию</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Сбросить</value>
+  </data>
   <data name="PleaseWait" xml:space="preserve">
     <value>Ожидайте...</value>
   </data>
@@ -1598,5 +1604,20 @@
   </data>
   <data name="ManageAccount" xml:space="preserve">
       <value>Управление учётной записью</value>
+  </data>
+  <data name="OldUi" xml:space="preserve">
+      <value>Старый UI</value>
+  </data>
+  <data name="ShowList" xml:space="preserve">
+      <value>Показать списком</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+      <value>Логин</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+      <value>Зарегистрироваться</value>
+  </data>
+  <data name="No" xml:space="preserve">
+      <value>Нет</value>
   </data>
 </root>

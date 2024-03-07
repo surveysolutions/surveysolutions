@@ -286,4 +286,7 @@
   <data name="DynamicFilter_MatchTypes_ValuePlaceholder" xml:space="preserve">
     <value>value</value>
   </data>
+  <data name="WebInterviewResponsibleWarning" xml:space="preserve">
+      <value>Responsible is not Interviewer. Link will not work.</value>
+  </data>
 </root>

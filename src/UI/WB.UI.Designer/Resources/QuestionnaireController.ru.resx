@@ -350,5 +350,8 @@
   </data>
   <data name="SaveAs" xml:space="preserve">
     <value>Сохранить как</value>
-  </data>  
+  </data>
+  <data name="CloneDeletedWarning" xml:space="preserve">
+      <value>Вы копируете удаленный опросник. Некоторые компоненты могут быть утеряны.</value>
+  </data>
 </root>

@@ -44,13 +44,14 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error("WB0277", QuestionnaireTitleHasConsecutiveUnderscores, VerificationMessages.WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore),
             Error("WB0281", QuestionnaireExceededEntitiesLimit, limit => string.Format(VerificationMessages.WB0281_QuestionnaireExceededEntitiesLimit, limit, QuestionnaireTotalEntitiesLimit)),
             Error("WB0316", QuestionnaireWithOldCoverPage, VerificationMessages.WB0316_QuestionnaireWithOldCoverPage),
-            Error<IComposite, int>("WB0121", VariableNameTooLong, length => string.Format(VerificationMessages.WB0121_VariableNameTooLong, length)),
-            Error<IComposite>("WB0124", VariableNameEndWithUnderscore, VerificationMessages.WB0124_VariableNameEndWithUnderscore),
-            Error<IComposite>("WB0125", VariableNameHasConsecutiveUnderscores, VerificationMessages.WB0125_VariableNameHasConsecutiveUnderscores),
-            Critical<IComposite>("WB0067", VariableNameIsEmpty, string.Format(VerificationMessages.WB0067_VariableNameIsEmpty)),
-            Critical<IComposite>("WB0058", VariableNameIsKeywords, VerificationMessages.WB0058_QuestionHasVariableNameReservedForServiceNeeds),
-            Critical<IComposite>("WB0122", VariableNameHasSpecialCharacters, VerificationMessages.WB0122_VariableNameHasSpecialCharacters),
-            Critical<IComposite>("WB0123", VariableNameStartWithDigitOrUnderscore, VerificationMessages.WB0123_VariableNameStartWithDigitOrUnderscore),
+            Error<IComposite, int>("WB0121", VariableNameTooLong, length => string.Format(VerificationMessages.WB0121_VariableNameTooLong, length), QuestionnaireVerificationReferenceProperty.VariableName),
+            Error<IComposite>("WB0124", VariableNameEndWithUnderscore, VerificationMessages.WB0124_VariableNameEndWithUnderscore, QuestionnaireVerificationReferenceProperty.VariableName),
+            Error<IComposite>("WB0125", VariableNameHasConsecutiveUnderscores, VerificationMessages.WB0125_VariableNameHasConsecutiveUnderscores, QuestionnaireVerificationReferenceProperty.VariableName),
+            
+            Critical<IComposite>("WB0067", VariableNameIsEmpty, string.Format(VerificationMessages.WB0067_VariableNameIsEmpty), QuestionnaireVerificationReferenceProperty.VariableName),
+            Critical<IComposite>("WB0058", VariableNameIsKeywords, VerificationMessages.WB0058_QuestionHasVariableNameReservedForServiceNeeds, QuestionnaireVerificationReferenceProperty.VariableName),
+            Critical<IComposite>("WB0122", VariableNameHasSpecialCharacters, VerificationMessages.WB0122_VariableNameHasSpecialCharacters , QuestionnaireVerificationReferenceProperty.VariableName),
+            Critical<IComposite>("WB0123", VariableNameStartWithDigitOrUnderscore, VerificationMessages.WB0123_VariableNameStartWithDigitOrUnderscore, QuestionnaireVerificationReferenceProperty.VariableName),
             
             ErrorsBySubstitutions,
             ErrorsByMarkdownText,
@@ -81,6 +82,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             var foundErrors = new List<QuestionnaireVerificationMessage>();
 
             var reference = QuestionnaireEntityReference.CreateForQuestionnaire(questionnaire.PublicKey);
+            reference.Property = QuestionnaireVerificationReferenceProperty.VariableName;
             if (string.IsNullOrWhiteSpace(questionnaire.VariableName))
                 foundErrors.Add(QuestionnaireVerificationMessage.Error("WB0067", VerificationMessages.WB0067_VariableNameIsEmpty, reference));
 
@@ -573,7 +575,10 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             };
         }
 
-        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error<TEntity, TArg>(string code, Func<TEntity, MultiLanguageQuestionnaireDocument, Tuple<bool, TArg>> hasError, Func<TArg, string> messageBuilder)
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error<TEntity, TArg>(string code, 
+            Func<TEntity, MultiLanguageQuestionnaireDocument, Tuple<bool, TArg>> hasError, 
+            Func<TArg, string> messageBuilder,
+            QuestionnaireVerificationReferenceProperty property = QuestionnaireVerificationReferenceProperty.None)
             where TEntity : class, IComposite
         {
             IEnumerable<QuestionnaireVerificationMessage> LocalFunction(MultiLanguageQuestionnaireDocument questionnaire)
@@ -583,7 +588,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     var hasErrorResult = hasError(entity, questionnaire);
                     if (hasErrorResult.Item1)
                     {
-                        yield return QuestionnaireVerificationMessage.Error(code, messageBuilder.Invoke(hasErrorResult.Item2), CreateReference(entity));
+                        yield return QuestionnaireVerificationMessage.Error(code, messageBuilder.Invoke(hasErrorResult.Item2), CreateReference(entity, null, property));
                     }
                 }
             }
@@ -610,13 +615,14 @@ string code, Func<MultiLanguageQuestionnaireDocument, bool> hasError, string mes
         }
         
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Critical<TEntity>(
-            string code, Func<TEntity, MultiLanguageQuestionnaireDocument, bool> hasError,  string message)
+            string code, Func<TEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string message,
+            QuestionnaireVerificationReferenceProperty property = QuestionnaireVerificationReferenceProperty.None)
             where TEntity : class, IComposite
         {
             return questionnaire =>
                 questionnaire
                     .Find<TEntity>(entity => hasError(entity, questionnaire))
-                    .Select(entity => QuestionnaireVerificationMessage.Critical(code, message, CreateReference(entity)));
+                    .Select(entity => QuestionnaireVerificationMessage.Critical(code, message, CreateReference(entity, null, property)));
         }
 
         public IEnumerable<QuestionnaireVerificationMessage> Verify(MultiLanguageQuestionnaireDocument multiLanguageQuestionnaireDocument)

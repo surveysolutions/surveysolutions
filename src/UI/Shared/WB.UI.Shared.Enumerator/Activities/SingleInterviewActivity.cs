@@ -1,15 +1,10 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Android.OS;
 using Android.Views;
-using Android.Widget;
-using Humanizer;
-using Humanizer.Localisation;
 using MvvmCross;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using Toolbar = AndroidX.AppCompat.Widget.Toolbar;
 
@@ -92,7 +87,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             if (!ViewModel.EnumeratorSettings.ShowAnswerTime) return;
 
             var message = string.Format(UIResources.AnswerRecordedMsg,
-                msg.Elapsed.Humanize(maxUnit: TimeUnit.Minute));
+                NumericTextFormatter.FormatTimeHumanized(msg.Elapsed));
 
             toast?.Cancel();
 

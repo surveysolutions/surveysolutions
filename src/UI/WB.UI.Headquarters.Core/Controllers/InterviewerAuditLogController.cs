@@ -109,7 +109,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 HasHeaderRecord = true,
                 TrimOptions = TrimOptions.Trim,
-                IgnoreQuotes = false,
+                Mode = CsvMode.RFC4180,
                 Delimiter = "\t",
                 MissingFieldFound = null,
             };

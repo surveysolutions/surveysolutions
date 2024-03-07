@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -95,6 +96,66 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
             integerAndFraction[0] = this.numberFormatRegex.Replace(integerAndFraction[0], this.settings.GroupingSeparator);
 
             return string.Join(this.settings.DecimalSeparator, integerAndFraction);
+        }
+        
+        public static string FormatBytesHumanized(double bytes)
+        {
+            string[] suffixes = { "B", "KB", "MB", "GB", "TB", "PB" };
+            double bytesAsDouble = bytes;
+
+            return FormatNumberOrSpeed(bytesAsDouble, suffixes);
+        }
+
+        public static string FormatSpeedHumanized(double bytes, TimeSpan elapsed)
+        {
+            string[] suffixes = { "B/s", "KB/s", "MB/s", "GB/s", "TB/s", "PB/s" };
+            double bytesAsDouble = bytes / elapsed.TotalSeconds;
+
+            return FormatNumberOrSpeed(bytesAsDouble, suffixes);
+        }
+
+        private static string FormatNumberOrSpeed(double bytesAsDouble, string[] suffixes)
+        {
+            int suffixIndex = 0;
+            while (bytesAsDouble >= 1024 && suffixIndex < suffixes.Length - 1)
+            {
+                bytesAsDouble /= 1024;
+                suffixIndex++;
+            }
+
+            return $"{bytesAsDouble:0.##} {suffixes[suffixIndex]}";
+        }
+
+        public static string FormatTimeHumanized(TimeSpan time, CultureInfo culture = null)
+        {
+            if (time.TotalSeconds < 1)
+            {
+                return "less than a second";
+            }
+            
+            var days = time.Days;
+            var hours = time.Hours;
+            var minutes = time.Minutes;
+            var secondsLeft = time.Seconds;
+
+            var result = "";
+            if (days > 0)
+            {
+                result += days + " day" + (days > 1 ? "s" : "") + " ";
+            }
+            if (hours > 0)
+            {
+                result += hours + " hour" + (hours > 1 ? "s" : "") + " ";
+            }
+            if (minutes > 0)
+            {
+                result += minutes + " minute" + (minutes > 1 ? "s" : "") + " ";
+            }
+            if (secondsLeft > 0)
+            {
+                result += secondsLeft + " second" + (secondsLeft > 1 ? "s" : "") + " ";
+            }
+            return result.Trim();
         }
     }
 }

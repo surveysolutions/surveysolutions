@@ -82,6 +82,12 @@
     </v-dialog>
 </template>
 
+<style lang="scss">
+body {
+    overflow: scroll;
+}
+</style>
+
 <script>
 export default {
     props: {

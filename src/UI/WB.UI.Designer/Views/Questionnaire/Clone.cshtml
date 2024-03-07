@@ -18,6 +18,12 @@
     {
         <p class="note has-error">@Html.Raw(TempData[Alerts.ERROR])</p>
     }
+    @if (Model.IsDeleted)
+    {
+        <div class="form-group">
+            <span class="text-danger">@QuestionnaireController.CloneDeletedWarning</span>
+        </div>
+    }
     <div class="form-group">
         <input type="text" asp-for="Title" class="form-control" placeholder="@QuestionnaireController.QuestionnaireTitle" />
         <span asp-validation-for="Title" class="text-danger header-line"></span>

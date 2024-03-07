@@ -3,23 +3,19 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Tests.Abc;
-using WB.UI.Headquarters.API.WebInterview.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Services;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
+using WB.Tests.Abc;
 using WB.UI.Headquarters.Services.Impl;
 
-namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
+namespace WB.Tests.Web.Headquarters.WebInterview
 {
     [TestFixture]
     [TestOf(typeof(WebInterviewAllowService))]
@@ -33,7 +29,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         private Mock<IAggregateRootPrototypeService> prototypeService;
         private Mock<IStatefulInterviewRepository> statefulInterviewRepo;
         private StatefulInterview interview;
-
+        private Mock<IUserViewFactory> usersRepositoryMock;
+        
 
         [SetUp]
         public void Setup()
@@ -43,12 +40,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             webInterviewConfigProvider = Mock.Of<IWebInterviewConfigProvider>(tmp => tmp.Get(It.IsAny<QuestionnaireIdentity>()) == webInterviewConfig);
             authorizedUserMock = new Mock<IAuthorizedUser>();
             prototypeService = new Mock<IAggregateRootPrototypeService>();
+            usersRepositoryMock = new Mock<IUserViewFactory>();
 
             var interviewAllowService = new WebInterviewAllowService(
                 statefulInterviewRepo.Object,
                 webInterviewConfigProvider,
                 authorizedUserMock.Object, 
-                prototypeService.Object);
+                prototypeService.Object,
+                usersRepositoryMock.Object);
             webInterviewAllowService = interviewAllowService;
         }
 
@@ -63,7 +62,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             bool webInterviewEnabled = true, 
             Guid? loggedInUserId = null, 
             Guid? responsibleId = null,
-            Guid? teamLeadId = null)
+            Guid? teamLeadId = null,
+            UserRoles responsibleRole = UserRoles.Interviewer)
         {
             if (loggedInUserId.HasValue && loggedInUserRole.HasValue)
             {
@@ -85,8 +85,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
 
             if (interviewStatus.HasValue)
             {
-                interview = Create.AggregateRoot.StatefulInterview(interviewId, userId: responsibleId, supervisorId: teamLeadId);
-                var @event = Create.PublishedEvent.SynchronizationMetadataApplied(
+                interview = Abc.Create.AggregateRoot.StatefulInterview(interviewId, userId: responsibleId, supervisorId: teamLeadId);
+                var @event = Abc.Create.PublishedEvent.SynchronizationMetadataApplied(
                     userId: responsibleId.FormatGuid(),
                     status: interviewStatus.Value);
                 interview.Apply(@event.Payload);
@@ -95,9 +95,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
                 webInterviewConfig.Started = webInterviewEnabled;
                 if (webInterviewEnabled)
                 {
-                    interview.Apply(Create.PublishedEvent.InterviewModeChanged(userId: responsibleId.FormatGuid()).Payload);
+                    interview.Apply(Abc.Create.PublishedEvent.InterviewModeChanged(userId: responsibleId.FormatGuid()).Payload);
                 }
             }
+            if(responsibleId.HasValue)
+                usersRepositoryMock.Setup(x => x.GetUser(responsibleId.Value)).Returns(new UserViewLite(){Roles =
+                    {
+                        responsibleRole
+                    }});
         }
 
         [TestCase(InterviewStatus.InterviewerAssigned, ExpectedResult = true)]
@@ -108,7 +113,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         [TestCase(InterviewStatus.RejectedBySupervisor, ExpectedResult = true)]
         public bool should_only_allow_interviews_in_state(InterviewStatus interviewStatus)
         {
-            ArrangeTest(interviewStatus: interviewStatus, webInterviewEnabled: true);
+            ArrangeTest(interviewStatus: interviewStatus, webInterviewEnabled: true, responsibleId:Id.g2);
 
             try
             {
@@ -133,7 +138,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         [Test]
         public void should_allow_access_if_webInterviewEnabled()
         {
-            ArrangeTest(webInterviewEnabled: true);
+            ArrangeTest(webInterviewEnabled: true, responsibleId:Id.g2);
 
             Act();
         }
@@ -213,6 +218,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
 
             // Act
             Assert.DoesNotThrow(Act);
+        }
+        
+        [Test]
+        public void should_not_allow_access_if_responsible_is_not_interviewer()
+        {
+            ArrangeTest(webInterviewEnabled: true, responsibleId:Id.g2, responsibleRole: UserRoles.Supervisor);
+
+            Assert.Throws<InterviewAccessException>(Act);
         }
     }
 }

@@ -327,4 +327,7 @@
   <data name="SaveAs" xml:space="preserve">
     <value>Save as</value>
   </data>
+  <data name="CloneDeletedWarning" xml:space="preserve">
+      <value>You are creating a copy of deleted questionnaire. Some parts might be lost.</value>
+  </data>
 </root>

@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Humanizer;
+﻿using System.Text;
 using SQLite;
 using SQLitePCL;
-using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
@@ -18,7 +10,6 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
-using Xamarin.Essentials;
 
 namespace WB.UI.Shared.Enumerator.Services
 {
@@ -395,7 +386,7 @@ namespace WB.UI.Shared.Enumerator.Services
                     sb.Append($"\t[md5:{Convert.ToBase64String(hash)}]");
                 }
 
-                sb.Append($"\t{fi.Length}({fi.Length.Bytes().ToString("0.00")})\t{fi.LastWriteTimeUtc}");
+                sb.Append($"\t{fi.Length}({NumericTextFormatter.FormatBytesHumanized(fi.Length)})\t{fi.LastWriteTimeUtc}");
                 sb.AppendLine();
             }
 

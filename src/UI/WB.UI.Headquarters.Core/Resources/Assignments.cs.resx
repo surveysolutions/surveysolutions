@@ -155,7 +155,7 @@
     <value>Počet rozhovorů potřebných k dokončení tohoto dotazníku.</value>
   </data>
   <data name="UpgradeDownloadFailed" xml:space="preserve">
-    <value>Seznam ke stažení</value>
+    <value>List ke stažení</value>
   </data>
   <data name="UpgradeProgressDone" xml:space="preserve">
     <value>Hotovo</value>
@@ -181,13 +181,13 @@
   <data name="Action_Created_Responsible" xml:space="preserve">
     <value>Přiřazeno uživateli {{responsible}}</value>
   </data>
-  <data name="Action_QuantityChanged" xml:space="preserve">
+  <data name="Action_ExpectedValueChanged" xml:space="preserve">
     <value>Velikost změněna</value>
   </data>
-  <data name="Action_QuantityChanged_To" xml:space="preserve">
+  <data name="Action_ExpectedValueChanged_To" xml:space="preserve">
     <value>Velikost změněna na {{quantity}}</value>
   </data>
-  <data name="Action_QuantityChanged_To_Unlimited" xml:space="preserve">
+  <data name="Action_ExpectedValueChanged_To_Unlimited" xml:space="preserve">
     <value>Velikost změněna na Neomezená</value>
   </data>
   <data name="Action_Reassigned" xml:space="preserve">
@@ -203,7 +203,7 @@
     <value>Staženo do tabletu</value>
   </data>
   <data name="Action_UnArchived" xml:space="preserve">
-    <value>zaktivovat</value>
+    <value>aktivovat</value>
   </data>
   <data name="Action_WebModeChanged" xml:space="preserve">
     <value>Webový režim se změnil</value>
@@ -224,7 +224,7 @@
     <value>Zadáno</value>
   </data>
   <data name="AllAssignments" xml:space="preserve">
-    <value>Všechny dotazníky</value>
+    <value>Všechny žádanky</value>
   </data>
   <data name="Archive" xml:space="preserve">
     <value>Deaktivovat</value>
@@ -245,9 +245,9 @@
     <value>Podrobné informace o dotazníku</value>
   </data>
   <data name="AssignmentsHeader" xml:space="preserve">
-    <value>Dotazníky</value>
+    <value>Žádanky</value>
   </data>
-  <data name="AssignmentSizeInWebMode" xml:space="preserve">
+  <data name="AssignmentExpectedInWebMode" xml:space="preserve">
     <value>Velikost nelze změnit pro dotazník v režimu Web.</value>
   </data>
   <data name="AssignTo" xml:space="preserve">
@@ -271,7 +271,7 @@
   <data name="ChangeModeModalTitle" xml:space="preserve">
     <value>Změnit režim pro dotazník {{assignmentId}}</value>
   </data>
-  <data name="ChangeSizeModalTitle" xml:space="preserve">
+  <data name="ChangeExpectedModalTitle" xml:space="preserve">
     <value>Upravit velikost dotazníku {{assignmentId}}</value>
   </data>
   <data name="Close" xml:space="preserve">
@@ -287,7 +287,7 @@
     <value>Vyplňte všechna nebo některá identifikační pole</value>
   </data>
   <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
-    <value>Vyberte zodpovědného uživatele (Ústředí nebo Garant nebo tazatel) za tento dotazník</value>
+    <value>Vyberte zodpovědného uživatele (ústředí, garanta nebo tazatele) za tento dotazník</value>
   </data>
   <data name="CreateAssignmentWebModeExplanation" xml:space="preserve">
     <value>Tento dotazník bude použit u webového režimu</value>
@@ -299,7 +299,7 @@
     <value>Zahájení nového rozhovoru</value>
   </data>
   <data name="CreatingNewAssignment" xml:space="preserve">
-    <value>Vytvořit novdý otazník pro typ {{questionnaire}}</value>
+    <value>Vytvořit novou žádanku pro typ dotazníku {{questionnaire}}</value>
   </data>
   <data name="DateFromPast" xml:space="preserve">
     <value>Vybrané datum je v minulosti</value>
@@ -343,13 +343,13 @@
   <data name="InvalidPassword" xml:space="preserve">
     <value>Heslo je neplatné</value>
   </data>
-  <data name="InvalidSize" xml:space="preserve">
+  <data name="InvalidExpected" xml:space="preserve">
     <value>Pole Velikost musí být -1 nebo více.</value>
   </data>
-  <data name="InvalidSizeMessage" xml:space="preserve">
+  <data name="InvalidExpectedMessage" xml:space="preserve">
     <value>Velikost je neplatná</value>
   </data>
-  <data name="InvalidSizeWithEmail" xml:space="preserve">
+  <data name="InvalidExpectedWithEmail" xml:space="preserve">
     <value>U dotazníků se zadaným e-mailem je povolená velikost 1</value>
   </data>
   <data name="IsAudioRecordingEnabled" xml:space="preserve">
@@ -404,18 +404,18 @@
     <value>Stav účtu</value>
   </data>
   <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
-    <value>Velikost vybraného dotazníku {{id}} bude změněna z {{quantity}} na {{collected}} (počet aktuálně shromážděných rozhovorů)</value>
+    <value>Velikost vybrané žádanky {{id}} bude změněna z {{quantity}} na {{collected}} (počet aktuálně shromážděných rozhovorů)</value>
   </data>
-  <data name="Size" xml:space="preserve">
+  <data name="Expected" xml:space="preserve">
     <value>Očekávaný</value>
   </data>
-  <data name="SizeExplanation" xml:space="preserve">
+  <data name="ExpectedExplanation" xml:space="preserve">
     <value>Určete maximální počet rozhovorů pro daný dotazník. Povolené hodnoty: -1 je pro Neomezený dotazník, 0 je pro Prázdný dotazník, čísla jsou pro velikost dotazníku</value>
   </data>
-  <data name="SizeForWebMode" xml:space="preserve">
+  <data name="ExpectedForWebMode" xml:space="preserve">
     <value>Dotazník s velikostí 1 pro webový režim by měl obsahovat e-mail nebo heslo</value>
   </data>
-  <data name="SizeInstructions" xml:space="preserve">
+  <data name="ExpectedInstructions" xml:space="preserve">
     <value>Musí to být číslo, -1 pro neomezené, 1, pokud je zadán e-mail</value>
   </data>
   <data name="StartWebInterview" xml:space="preserve">
@@ -437,7 +437,7 @@
     <value>Indikátor, zda byl dotazník stažen do tabletu či ne</value>
   </data>
   <data name="Tooltip_Filter_Responsible" xml:space="preserve">
-    <value>Zodpovědný uživatel. Klikněte do pole k vybrání uživatelského jména buď přímým výběrem, nebo zadáním jména pro další filtrování v seznamu uživatelských jmen.</value>
+    <value>Zodpovědný uživatel. Uživatelské jméno vyberte buď přímým výběrem, nebo ho vyfiltrujte zadáním jména v seznamu uživatelských jmen.</value>
   </data>
   <data name="Tooltip_Table_Count" xml:space="preserve">
     <value>Počet aktuálně odeslaných rozhovorů pro tento dotazník. Mohlo být vytvořeno více rozhovorů, ale ještě nebyly synchronizovány. Kliknutím na libovolnou buňku zobrazíte související rozhovory. Kliknutím na ikonu řazení seřadíte podle počtu.</value>
@@ -449,12 +449,12 @@
     <value>Informace, které identifikují každý dotazník. Toto jsou odpovědi na otázky označené v aplikaci Designer jako identifikační.</value>
   </data>
   <data name="Tooltip_Table_IsAudioRecordingEnabled" xml:space="preserve">
-    <value>Zaznamenejte proces rozhovoru</value>
+    <value>Zaznamenejte stav rozhovoru</value>
   </data>
   <data name="Tooltip_Table_Responsible" xml:space="preserve">
     <value>Uživatel aktuálně zodpovědný za dotazník. Kliknutím na ikonu řazení seřadíte podle uživatelského jména.</value>
   </data>
-  <data name="Tooltip_Table_Size" xml:space="preserve">
+  <data name="Tooltip_Table_ExpectedValue" xml:space="preserve">
     <value>Maximální počet rozhovorů, které lze pro u tohoto dotazníku provést. Klikněte na libovolnou buňku pro změnu tohoto čísla. Klikněte na ikonu řazení pro seřazení podle velikosti.</value>
   </data>
   <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">
@@ -479,7 +479,7 @@
     <value>Upgrade zastaven</value>
   </data>
   <data name="UpgradeDescription" xml:space="preserve">
-    <value>Když jsou dotazníky upraveny a aktualizovány, budou aktualizoovány i všechny zbývající dotazníky.</value>
+    <value>Když dochází k aktualizaci žádanek, jsou aktualizovány i nepřiřazené žádanky.</value>
   </data>
   <data name="UpgradeError" xml:space="preserve">
     <value>Vyskytla se chyba. Zkuste to později.</value>
@@ -515,18 +515,27 @@
     <value>Všechny dotazníky pro webové dotazníky musí být zadány tazateli</value>
   </data>
   <data name="WebModeReassignToNonInterviewer" xml:space="preserve">
-    <value>Přidělujete webový dotazník uživateli, který není TAZATEL. Pokud jste již odeslali odkaz na tento dotazník, respondenti nebudou moci na Váše šetření reagovat, dokud nebude dotazník vrácen uživateli v roli TAZATEL.</value>
+    <value>Přidělujete žádanku na webový dotazník uživateli, který není TAZATEL. Pokud jste již odeslali odkaz na tento rozhovor respondenti nebudou moci na Vaše šetření reagovat, dokud nebude dotazník vrácen uživateli v roli TAZATEL.</value>
   </data>
   <data name="WebModeReassignToNonInterviewer_other" xml:space="preserve">
-    <value>Přidělujete webové dotazníky uživateli, který není TAZATEL. Pokud jste již odeslali odkazy na tyto dotazníky, respondenti nebudou moci na Váše šetření reagovat, dokud nebudou dotazníky vráceny uživateli v roli TAZATEL.</value>
+    <value>Přidělujete žádanku na webový dotazník uživateli, který není TAZATEL. Pokud jste již odeslali odkaz na tento rozhovor respondenti nebudou moci na Vaše šetření reagovat, dokud nebude dotazník vrácen uživateli v roli TAZATEL.</value>
   </data>
   <data name="Action_UpgradedFrom" xml:space="preserve">
-    <value>Upgradováno z přiřazení {{id}}</value>
+    <value>Nová verze ze žádanky {{id}}</value>
   </data>
   <data name="Tooltip_Table_Email" xml:space="preserve">
-    <value>E-mail pro oznámení</value>
+    <value>E-mail pro notifikace </value>
   </data>
   <data name="Tooltip_Table_Password" xml:space="preserve">
-    <value>Heslo pro omezení přístupu</value>
+    <value>Heslo k omezení přístupu</value>
+  </data>
+  <data name="Property" xml:space="preserve">
+    <value>Vlastnictví</value>
+  </data>
+  <data name="Tooltip_Table_ReceivedByTablet" xml:space="preserve">
+    <value>Ukazatel, zda byla žádanka stažena do tabletu. Kliknutím na ikonu seřazení, seřadíte podle času přijetí.</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Hodnota</value>
   </data>
 </root>

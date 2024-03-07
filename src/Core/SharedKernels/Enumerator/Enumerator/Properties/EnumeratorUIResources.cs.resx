@@ -124,7 +124,7 @@
     <value>Pro Váš uživatelský účet není založena role tazatele</value>
   </data>
   <data name="AccountIsNotApprovedOnServer" xml:space="preserve">
-    <value>Váš uživatelský účet není schválen. Obraťte se na svého Garanta.</value>
+    <value>Váš uživatelský účet není schválen. Obraťte se na svého garanta.</value>
   </data>
   <data name="ApplicationIncompatibleWithServer" xml:space="preserve">
     <value>Aplikace Tazatel není kompatibilní se serverem. Aktualizujte si aplikaci Tazatel.</value>
@@ -151,7 +151,7 @@
     <value>Dokončené ({0})</value>
   </data>
   <data name="Dashboard_CompletedTabText" xml:space="preserve">
-    <value>Uzamčené rozhovory budou odeslány Garantovi během příští synchronizace</value>
+    <value>Tyto uzamčené rozhovory budou odeslány garantovi během příští synchronizace</value>
   </data>
   <data name="Dashboard_CreateNewTabText" xml:space="preserve">
     <value>Vyberte z nabídky nových dotazníků</value>
@@ -163,7 +163,7 @@
     <value>Dotazník #{0}</value>
   </data>
   <data name="Dashboard_Interview_QuestionsAnsweredFormat" xml:space="preserve">
-    <value>Zdpovězených otázek - {0}</value>
+    <value>Zodpovězených otázek - {0}</value>
   </data>
   <data name="Dashboard_NeedTextForSearch" xml:space="preserve">
     <value>Pro zobrazení výsledků, zadejte text pro vyhledávání</value>
@@ -178,8 +178,8 @@
     <value>Synchronizovat</value>
   </data>
   <data name="Dashboard_NoInterviewsText" xml:space="preserve">
-    <value>Pro načtení nových dotazníků synchronizujte
-nebo se obraťte na svého Garanta pro další pokyny</value>
+    <value>Pro načtení nových rozhovorů synchronizujte
+nebo se obraťte na svého garanta pro další pokyny</value>
   </data>
   <data name="Dashboard_NoInterviewsTitle" xml:space="preserve">
     <value>Nemáte žádné nové dotazníky</value>
@@ -203,8 +203,8 @@ nebo se obraťte na svého Garanta pro další pokyny</value>
     <value>Vráceno ({0})</value>
   </data>
   <data name="Dashboard_RejectedTabText" xml:space="preserve">
-    <value>Rozhovory byly vráceny Garantem.
-Upravte dotazník dle poznámek na titulní stránce a poté je odešlete zpět Garantovi.</value>
+    <value>Rozhovory byly vráceny garantem.
+Upravte dotazník podle poznámek na začátku dotazníku a poté je odešlete zpět garantovi.</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
     <value>POZOR: Opravdu chcete v tomto rozhovoru ({0}) smazat nyní provedené úpravy a přesunout ho do záložky Nové dotazníky?</value>
@@ -235,7 +235,7 @@ Upravte dotazník dle poznámek na titulní stránce a poté je odešlete zpět 
   </data>
   <data name="Dashboard_StartedTabText" xml:space="preserve">
     <value>Rozpracované rozhovory nejsou uzamčeny.
-Chcete-li je odeslat Garantovi, musíte je uzamknout.</value>
+Chcete-li je předat garantovi ke schválení, musíte je uzamknout a dokončit.</value>
   </data>
   <data name="Dashboard_StartNewInterview" xml:space="preserve">
     <value>Zahájení nového rozhovoru</value>
@@ -268,7 +268,7 @@ Chcete-li je odeslat Garantovi, musíte je uzamknout.</value>
     <value>Vytvořeno {0}</value>
   </data>
   <data name="DashboardItem_NotStarted" xml:space="preserve">
-    <value>Ještě nezačnuté</value>
+    <value>Ještě nezačaté</value>
   </data>
   <data name="DashboardItem_RejectedByHqOn" xml:space="preserve">
     <value>Vráceno Ústředím {0}</value>
@@ -409,7 +409,7 @@ Chcete-li je odeslat Garantovi, musíte je uzamknout.</value>
     <value>Nepodařilo se otevřít rozhovor</value>
   </data>
   <data name="FailedToLoadInterviewDescription" xml:space="preserve">
-    <value>Tento dotazník je neplatný a nelze jej otevřít. Zkuste znovu synchronizovat, pokud problém přetrvává obraťte se na svého Garanta.</value>
+    <value>Tento dotazník je neplatný a nelze jej otevřít. Zkuste znovu synchronizovat, pokud problém přetrvává, obraťte se na svého garanta.</value>
   </data>
   <data name="FinishInstallation_EndpointDiffers" xml:space="preserve">
     <value>Koncový bod synchronizace „{0}“ se liší od uvedeného v Nastavení („{1}“). Načíst adresu URL z nastavení?</value>
@@ -418,7 +418,7 @@ Chcete-li je odeslat Garantovi, musíte je uzamknout.</value>
     <value>Při skenování došlo k chybě</value>
   </data>
   <data name="HeadquartersVersion" xml:space="preserve">
-    <value>Verze podporovaná Ústředím: {0}</value>
+    <value>Verze podporovaná ústředím: {0}</value>
   </data>
   <data name="HostUnreachable" xml:space="preserve">
     <value>Server není přístupný. Zkontrolujte serverovou adresu nebo nastavení internetového připojení</value>
@@ -443,7 +443,7 @@ nevypínejte tuto aplikaci</value>
     <value>Načítání rozhovoru {0}%</value>
   </data>
   <data name="InterviewerFromDifferentTeam" xml:space="preserve">
-    <value>Tazatel je součástí jiné skupiny. Synchronizujte prosím s Ústředím.</value>
+    <value>Tazatel je součástí jiného týmu. Synchronizujte prosím s ústředím.</value>
   </data>
   <data name="InterviewerVersion" xml:space="preserve">
     <value>Tazatel verze: {0}</value>
@@ -462,10 +462,10 @@ nevypínejte tuto aplikaci</value>
 Chcete-li pokračovat, je nutné připojení k internetu.</value>
   </data>
   <data name="Login_Online_Signin_Explanation_message" xml:space="preserve">
-    <value>Pokud jste zapomněli heslo, pro jeho obnovu je nutné se obrátit na Vašeho Garanta </value>
+    <value>Pokud jste zapomněli heslo, pro jeho obnovu je nutné se obrátit na Vašeho garanta </value>
   </data>
   <data name="Login_Online_SignIn_Failed" xml:space="preserve">
-    <value>Problém s ověřením na serveru. Obraťte se na svého Garanta</value>
+    <value>Problém s ověřením na serveru. Obraťte se na svého garanta</value>
   </data>
   <data name="Login_WrongPassword" xml:space="preserve">
     <value>Chybné heslo</value>
@@ -539,10 +539,10 @@ Staženo {3}%</value>
     <value>Rozhovory</value>
   </data>
   <data name="Notifications_ManyCompletedInterviews" xml:space="preserve">
-    <value>Máte moc dokončených (a nesynchronizovaných) rozhovorů. Prosím synchonizujte je.</value>
+    <value>Máte moc dokončených (a nesynchronizovaných) rozhovorů. Prosím synchronizujte je.</value>
   </data>
   <data name="Notifications_ManyStartedInterviews" xml:space="preserve">
-    <value>Máte moc rozšetřených rozhovorů. Prosím dokončete je.</value>
+    <value>Máte mnoho rozšetřených rozhovorů. Je-li to možné dokončete je.</value>
   </data>
   <data name="Notifications_RejectedInterviewsText" xml:space="preserve">
     <value>Máte {0} vrácených rozhovorů, které nebyly upraveny</value>
@@ -560,19 +560,19 @@ Staženo {3}%</value>
     <value>Již delší dobu nebyla provedena synchronizace. Prosím synchronizujte</value>
   </data>
   <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
-    <value>Máte nainstalovanou nekompatibilní verzi aplikace Tazatel. Odinstalujte ji a znovu nainstalujte z webu Survey Solutions Headquarters</value>
+    <value>Máte nainstalovanou nekompatibilní verzi aplikace Tazatel. Odinstalujte ji a znovu nainstalujte</value>
   </data>
   <data name="Prefs_AboutApplication" xml:space="preserve">
     <value>O aplikaci</value>
   </data>
   <data name="Prefs_AllowSyncWithHq" xml:space="preserve">
-    <value>Povolte synchronizaci s Ústředím</value>
+    <value>Povolte synchronizaci s ústředím</value>
   </data>
   <data name="Prefs_AllowSyncWithHq_Summary" xml:space="preserve">
-    <value>Zakázat toto nastavení, pokud chcete synchronizovat pouze s mobilní aplikací Garant. Po první úspěšné synchronizaci s aplikací Garant nebude možné toto nastavení znovu povolit</value>
+    <value>Zneaktivnit toto nastavení, pokud chcete synchronizovat pouze s mobilní aplikací. Po první úspěšné synchronizaci s aplikací nebude možné toto nastavení znovu povolit.</value>
   </data>
   <data name="Prefs_AllowSyncWithHq_Summary_Disabled" xml:space="preserve">
-    <value>Není možné synchronizovat s Ústředím, jakmile došlo k alespoň jedné úspěšné synchronizaci s aplikací Garant</value>
+    <value>Není možné synchronizovat s ústředím, jakmile došlo k alespoň jedné úspěšné synchronizaci s aplikací Garant Survey Solutions</value>
   </data>
   <data name="Prefs_ApplicationVersionTitle" xml:space="preserve">
     <value>Verze aplikace:</value>
@@ -720,7 +720,7 @@ Při příští synchronizaci se objeví na zařízení tazatele</value>
     <value>Synchronizováno {0} z {1} rozhovorů</value>
   </data>
   <data name="Synchronization_Of_Supervisor_details" xml:space="preserve">
-    <value>Synchronizace údajů od Garanta</value>
+    <value>Synchronizace údajů od garanta</value>
   </data>
   <data name="Synchronization_PartialInterviews" xml:space="preserve">
     <value>změny rozhovoru</value>
@@ -762,10 +762,10 @@ Při příští synchronizaci se objeví na zařízení tazatele</value>
     <value>Synchronizace byla dokončena v pořádku </value>
   </data>
   <data name="Synchronization_SupervisorShouldDoOnlineSync" xml:space="preserve">
-    <value>Garant by měl mít vždy poslední změny z Ústředí, proto musí synchronizovat, jako poslední, než bude k dispozici offline synchronizace</value>
+    <value>Garant by měl mít vždy poslední změny z ústředí, proto musí synchronizovat, jako poslední, než bude k dispozici offline synchronizace</value>
   </data>
   <data name="Synchronization_SupervisorShouldDoOnlineSync_Title" xml:space="preserve">
-    <value>Je potřeba synchronizovat aplikaci Garant.</value>
+    <value>Garantskou aplikaci je potřeba synchronizovat.</value>
   </data>
   <data name="Synchronization_Update_Interviews_Title" xml:space="preserve">
     <value>Úprava Vašich rozhovorů v tabletu se změnami ze serveru</value>
@@ -798,7 +798,7 @@ Při příští synchronizaci se objeví na zařízení tazatele</value>
     <value>Ověření uživatele</value>
   </data>
   <data name="Synchronization_UserDoNotBelongToTeam" xml:space="preserve">
-    <value>Uživatel již nepatří pod tohoto Garanta. Podrobnosti vám sdělí na Ústředí.</value>
+    <value>Uživatel již nepatří do týmu tohoto garanta. Podrobnosti vám sdělí na ústředí.</value>
   </data>
   <data name="Synchronization_UserLinkedToAnotherDevice_Status" xml:space="preserve">
     <value>Chyba ověření uživatele</value>
@@ -807,13 +807,13 @@ Při příští synchronizaci se objeví na zařízení tazatele</value>
     <value>Váš uživatelský účet byl přihlášen na jiném zařízení</value>
   </data>
   <data name="Synchronization_UserLinkedToAnotherServer_Description" xml:space="preserve">
-    <value>Tento uživatel byl vytvořen v jiné aplikaci na Ústředí. Změňte adresu URL koncového bodu synchronizace na původní server</value>
+    <value>Tento uživatel byl vytvořen v jiné aplikaci na ústředí. Změňte adresu URL koncového bodu synchronizace na původní server</value>
   </data>
   <data name="Synchronization_UserLinkedToAnotherServer_Status" xml:space="preserve">
     <value>Uživatel propojen s jiným serverem</value>
   </data>
   <data name="Synchronization_UserPassword_Update_Format" xml:space="preserve">
-    <value>Problém s ověřením. Nepodařilo se nám ověřit Vaše přihlašovací údaje '{0}'. Váš účet může mít jiné heslo, může být uzamčen nebo smazán. Zadejte prosím znovu svoje heslo. Pokud problém přetrvá, kontaktujte svého Garanta nebo Ústředí.</value>
+    <value>Problém s ověřením. Nepodařilo se nám ověřit Vaše přihlašovací údaje '{0}'. Váš účet může mít jiné heslo, může být uzamčen nebo smazán. Zadejte prosím znovu svoje heslo. Pokud problém přetrvá, kontaktujte svého garanta nebo ústředí.</value>
   </data>
   <data name="TransferringAssignments" xml:space="preserve">
     <value>Přenos dotazníků</value>
@@ -915,7 +915,7 @@ Při příští synchronizaci se objeví na zařízení tazatele</value>
     <value>Zadat schůzku na jindy</value>
   </data>
   <data name="Dashboard_CantOpenCawi" xml:space="preserve">
-    <value>Rozhovor nelze otevřít v režimu CAWI. Po synchronizaci bude odeslán na Ústředí.</value>
+    <value>Rozhovor nelze otevřít v režimu CAWI. Po synchronizaci bude odeslán na ústředí.</value>
   </data>
   <data name="Dashboard_EditCalendarEvent" xml:space="preserve">
     <value>Upravit schůzku na jindy</value>
@@ -927,13 +927,13 @@ Při příští synchronizaci se objeví na zařízení tazatele</value>
     <value>Vybraný čas je v minulosti</value>
   </data>
   <data name="Dashboard_RefreshWorkspaces" xml:space="preserve">
-    <value>Obnovení Úloh</value>
+    <value>Obnovení Prostředí</value>
   </data>
   <data name="Dashboard_RefreshWorkspacesError" xml:space="preserve">
-    <value>Při načítání seznamu Úloh došlo k chybě. Obraťte se na svého Garanta.</value>
+    <value>Při načítání seznamu jednotlivých prostředí došlo k chybě. Obraťte se na svého garanta.</value>
   </data>
   <data name="Dashboard_RefreshWorkspacesFinished" xml:space="preserve">
-    <value>Úlohy byly obnoveny</value>
+    <value>Seznam prostředí byl obnoven</value>
   </data>
   <data name="Dashboard_RemoveCalendarEvent" xml:space="preserve">
     <value>Smazat schůzku</value>
@@ -954,10 +954,10 @@ Při příští synchronizaci se objeví na zařízení tazatele</value>
     <value>Stav: {0}/{1}</value>
   </data>
   <data name="MenuItem_Title_RefreshWorkspaces" xml:space="preserve">
-    <value>Obnovit úlohy</value>
+    <value>Obnovit prostředí</value>
   </data>
   <data name="MenuItem_Title_Workspaces" xml:space="preserve">
-    <value>Úloha</value>
+    <value>Prostředí</value>
   </data>
   <data name="Synchronization_Download_CalendarEvents_Title" xml:space="preserve">
     <value>Upravit schůzku na jindy</value>
@@ -969,10 +969,10 @@ Při příští synchronizaci se objeví na zařízení tazatele</value>
     <value>Schůzka na jindy</value>
   </data>
   <data name="Synchronization_WorkspaceAccessDisabledReason" xml:space="preserve">
-    <value>Váš účet je pro tuto úlohu neaktivní. Obraťte se na svého Garanta.</value>
+    <value>Váš účet je v tomto prostředí neaktivní. Obraťte se na svého garanta.</value>
   </data>
   <data name="Synchronization_WorkspaceDisabled" xml:space="preserve">
-    <value>Váš účet je pro tuto úlohu deaktivován Garantem. Obraťte se na svého Garanta.</value>
+    <value>Váš účet je v tomto prostředí deaktivován garantem. Obraťte se na svého garanta.</value>
   </data>
   <data name="TransferringCalendarEvents" xml:space="preserve">
     <value>Převést schůzky na jindy</value>
@@ -996,9 +996,9 @@ Při příští synchronizaci se objeví na zařízení tazatele</value>
     <value>Velikost části události</value>
   </data>
   <data name="BluetoothPermissionRequired" xml:space="preserve">
-    <value>Pro synchronizaci offline je vyžadováno oprávnění Bluetooth</value>
+    <value>Pro offline synchronizaci je vyžadováno Bluetooth</value>
   </data>
   <data name="NearbyPermissionRequired" xml:space="preserve">
-    <value>Pro synchronizaci offline je vyžadováno oprávnění Wi-Fi zařízení v okolí</value>
+    <value>Pro offline synchronizaci je vyžadováno povolení Wi-Fi pro zařízení v okolí</value>
   </data>
 </root>

@@ -1,5 +1,5 @@
-﻿using Humanizer;
-using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
+﻿using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
+using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services
 {
@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services
 
         public override string ToString()
         {
-            return $"{FlowDirection.ToString()} # {Name} message {Type}. {BytesTransfered.Bytes().ToString("0.00")} of {TotalBytes.Bytes().ToString("0.00")} ";
+            return $"{FlowDirection.ToString()} # {Name} message {Type}. {NumericTextFormatter.FormatBytesHumanized(BytesTransfered)} of {NumericTextFormatter.FormatBytesHumanized(TotalBytes)} ";
         }
     }
 }

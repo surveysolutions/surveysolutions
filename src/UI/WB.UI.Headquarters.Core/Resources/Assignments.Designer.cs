@@ -141,29 +141,29 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Size changed.
+        ///   Looks up a localized string similar to Expected value changed.
         /// </summary>
-        public static string Action_QuantityChanged {
+        public static string Action_ExpectedValueChanged {
             get {
-                return ResourceManager.GetString("Action_QuantityChanged", resourceCulture);
+                return ResourceManager.GetString("Action_ExpectedValueChanged", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Size changed to {{quantity}}.
+        ///   Looks up a localized string similar to Expected value changed to {{quantity}}.
         /// </summary>
-        public static string Action_QuantityChanged_To {
+        public static string Action_ExpectedValueChanged_To {
             get {
-                return ResourceManager.GetString("Action_QuantityChanged_To", resourceCulture);
+                return ResourceManager.GetString("Action_ExpectedValueChanged_To", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Size changed to Unlimited.
+        ///   Looks up a localized string similar to Expected value changed to Unlimited.
         /// </summary>
-        public static string Action_QuantityChanged_To_Unlimited {
+        public static string Action_ExpectedValueChanged_To_Unlimited {
             get {
-                return ResourceManager.GetString("Action_QuantityChanged_To_Unlimited", resourceCulture);
+                return ResourceManager.GetString("Action_ExpectedValueChanged_To_Unlimited", resourceCulture);
             }
         }
         
@@ -312,6 +312,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The Expected value cannot be changed for Web mode Assignment..
+        /// </summary>
+        public static string AssignmentExpectedInWebMode {
+            get {
+                return ResourceManager.GetString("AssignmentExpectedInWebMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to History.
         /// </summary>
         public static string AssignmentHistory {
@@ -344,15 +353,6 @@ namespace WB.UI.Headquarters.Resources {
         public static string AssignmentsHeader {
             get {
                 return ResourceManager.GetString("AssignmentsHeader", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The Size cannot be changed for Web mode Assignment..
-        /// </summary>
-        public static string AssignmentSizeInWebMode {
-            get {
-                return ResourceManager.GetString("AssignmentSizeInWebMode", resourceCulture);
             }
         }
         
@@ -429,20 +429,20 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit Expected value for assignment {{assignmentId}}.
+        /// </summary>
+        public static string ChangeExpectedModalTitle {
+            get {
+                return ResourceManager.GetString("ChangeExpectedModalTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change mode for assignment {{assignmentId}}.
         /// </summary>
         public static string ChangeModeModalTitle {
             get {
                 return ResourceManager.GetString("ChangeModeModalTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Edit size for assignment {{assignmentId}}.
-        /// </summary>
-        public static string ChangeSizeModalTitle {
-            get {
-                return ResourceManager.GetString("ChangeSizeModalTitle", resourceCulture);
             }
         }
         
@@ -627,6 +627,42 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Expected.
+        /// </summary>
+        public static string Expected {
+            get {
+                return ResourceManager.GetString("Expected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specify maximum number of interviews to be generated for that assignment. Permitted values: -1 is for Unlimited assignment, 0 is for Empty assignment, numbers for assignment expected value.
+        /// </summary>
+        public static string ExpectedExplanation {
+            get {
+                return ResourceManager.GetString("ExpectedExplanation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assignment with expected value 1 for web mode should have email or password provided.
+        /// </summary>
+        public static string ExpectedForWebMode {
+            get {
+                return ResourceManager.GetString("ExpectedForWebMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Must be a number, -1 for unlimited, 1 if email is specified.
+        /// </summary>
+        public static string ExpectedInstructions {
+            get {
+                return ResourceManager.GetString("ExpectedInstructions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Identifying Questions.
         /// </summary>
         public static string IdentifyingQuestions {
@@ -654,38 +690,38 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The Expected field must be -1 or more..
+        /// </summary>
+        public static string InvalidExpected {
+            get {
+                return ResourceManager.GetString("InvalidExpected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expected value is invalid.
+        /// </summary>
+        public static string InvalidExpectedMessage {
+            get {
+                return ResourceManager.GetString("InvalidExpectedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For assignments with provided email allowed Expected value is 1.
+        /// </summary>
+        public static string InvalidExpectedWithEmail {
+            get {
+                return ResourceManager.GetString("InvalidExpectedWithEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password is invalid.
         /// </summary>
         public static string InvalidPassword {
             get {
                 return ResourceManager.GetString("InvalidPassword", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The Size field must be -1 or more..
-        /// </summary>
-        public static string InvalidSize {
-            get {
-                return ResourceManager.GetString("InvalidSize", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Size is invalid.
-        /// </summary>
-        public static string InvalidSizeMessage {
-            get {
-                return ResourceManager.GetString("InvalidSizeMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to For assignments with provided email allowed size is 1.
-        /// </summary>
-        public static string InvalidSizeWithEmail {
-            get {
-                return ResourceManager.GetString("InvalidSizeWithEmail", resourceCulture);
             }
         }
         
@@ -717,7 +753,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {{count}} selected assignments are going to be closed. Size will be set to currently collected interviews count..
+        ///   Looks up a localized string similar to {{count}} selected assignments are going to be closed. Expected value will be set to currently collected interviews count..
         /// </summary>
         public static string MultipleAssignmentsClose {
             get {
@@ -897,47 +933,11 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Size of the selected assignment {{id}} will be changed from {{quantity}} to {{collected}} (number of currently collected interviews).
+        ///   Looks up a localized string similar to Expected value of the selected assignment {{id}} will be changed from {{quantity}} to {{collected}} (number of currently collected interviews).
         /// </summary>
         public static string SingleAssignmentCloseConfirm {
             get {
                 return ResourceManager.GetString("SingleAssignmentCloseConfirm", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Expected.
-        /// </summary>
-        public static string Size {
-            get {
-                return ResourceManager.GetString("Size", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Specify maximum number of interviews to be generated for that assignment. Permitted values: -1 is for Unlimited assignment, 0 is for Empty assignment, numbers for assignment size.
-        /// </summary>
-        public static string SizeExplanation {
-            get {
-                return ResourceManager.GetString("SizeExplanation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Assignment with size 1 for web mode should have email or password provided.
-        /// </summary>
-        public static string SizeForWebMode {
-            get {
-                return ResourceManager.GetString("SizeForWebMode", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Must be a number, -1 for unlimited, 1 if email is specified.
-        /// </summary>
-        public static string SizeInstructions {
-            get {
-                return ResourceManager.GetString("SizeInstructions", resourceCulture);
             }
         }
         
@@ -1032,6 +1032,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Maximum number of interviews that may be conducted for this assignment. Click on any cell to change this number. Click on the sort icon to sort by expected value..
+        /// </summary>
+        public static string Tooltip_Table_ExpectedValue {
+            get {
+                return ResourceManager.GetString("Tooltip_Table_ExpectedValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Information that identifies each assignment. These are the answers to questions marked as identifying in Designer..
         /// </summary>
         public static string Tooltip_Table_IdentifyingQuestions {
@@ -1082,15 +1091,6 @@ namespace WB.UI.Headquarters.Resources {
         public static string Tooltip_Table_Responsible {
             get {
                 return ResourceManager.GetString("Tooltip_Table_Responsible", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Maximum number of interviews that may be conducted for this assignment. Click on any cell to change this number. Click on the sort icon to sort by size..
-        /// </summary>
-        public static string Tooltip_Table_Size {
-            get {
-                return ResourceManager.GetString("Tooltip_Table_Size", resourceCulture);
             }
         }
         

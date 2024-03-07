@@ -1,44 +1,31 @@
 <template>
     <div :class="wrapperClass">
-        <span id="loadingPixel"
-            style="display:none"
-            :data-loading="isProcessingFlag"></span>
-        <table
-            ref="table"
-            v-bind:class="tableClass"
+        <span id="loadingPixel" style="display:none" :data-loading="isProcessingFlag"></span>
+        <table ref="table" v-bind:class="tableClass"
             class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes table-with-prefilled-column table-interviews responsive">
             <thead ref="header">
                 <slot name="header"></slot>
             </thead>
             <tbody ref="body"></tbody>
             <transition name="fade">
-                <div
-                    class="dataTables_processing"
-                    v-if="isProcessing"
-                    :class="{ 'error': errorMessage != null }">
+                <div class="dataTables_processing" v-if="isProcessing" :class="{ 'error': errorMessage != null }">
                     <div v-if="errorMessage">
-                        {{errorMessage}}
+                        {{ errorMessage }}
                     </div>
                     <div v-else>
-                        {{$t("Common.Processing")}}...
+                        {{ $t("Common.Processing") }}...
                     </div>
                 </div>
             </transition>
         </table>
-        <div class="download-report-as"
-            v-if="exportable">
-            {{$t("Pages.DownloadReport")}}
-            <a target="_blank"
-                v-bind:href="this.export.excel"
-                v-html="'XLSX'">
+        <div class="download-report-as" v-if="exportable">
+            {{ $t("Pages.DownloadReport") }}
+            <a target="_blank" v-bind:href="this.export.excel" v-html="'XLSX'">
             </a>,
-            <a target="_blank"
-                v-bind:href="this.export.csv"
-                v-html="'CSV'">
+            <a target="_blank" v-bind:href="this.export.csv" v-html="'CSV'">
             </a>
-            {{$t("Pages.Or")}}
-            <a target="_blank"
-                v-bind:href="this.export.tab">
+            {{ $t("Pages.Or") }}
+            <a target="_blank" v-bind:href="this.export.tab">
                 TAB
             </a>
         </div>
@@ -53,20 +40,20 @@ import 'jquery-contextmenu'
 import 'jquery-contextmenu/dist/jquery.contextMenu.css'
 import 'jquery-highlight'
 import './datatable.plugins'
-import {template, debounce, includes, without, assign} from 'lodash'
+import { template, debounce, includes, without, assign } from 'lodash'
 
-$.fn.dataTable.ext.errMode = function(a, b, c, d) {
+$.fn.dataTable.ext.errMode = function (a, b, c, d) {
     // swallow all errors for production
     if (process.env.NODE_ENV !== 'production') {
         if (console != null) console.error(a, b, c, d)
-        else throw {a, b, c, d}
+        else throw { a, b, c, d }
     }
 }
 
 var checkBox = template(
     '<input class="checkbox-filter" type="checkbox" value="<%= id %>"' +
-        ' id="<%= checkboxId %>"><label for="<%= checkboxId %>">' +
-        '<span class="tick"></span></label>'
+    ' id="<%= checkboxId %>"><label for="<%= checkboxId %>">' +
+    '<span class="tick"></span></label>'
 )
 
 export default {
@@ -116,14 +103,14 @@ export default {
                 return {}
             },
         },
-        reloadDebounce: {type: Number, default: 100},
+        reloadDebounce: { type: Number, default: 100 },
         noPaging: Boolean,
         noSearch: Boolean,
         exportable: Boolean,
         // support for rows selection
         selectable: Boolean,
-        mutliRowSelect: {type: Boolean, default: false},
-        selectableId: {type: String, default: 'id'},
+        mutliRowSelect: { type: Boolean, default: false },
+        selectableId: { type: String, default: 'id' },
         pagingType: {
             type: String,
             default: 'full_numbers',
@@ -163,7 +150,7 @@ export default {
     },
 
     methods: {
-        reload: debounce(function() {
+        reload: debounce(function () {
             if (this.table != null) {
                 if (this.selectable) {
                     $('#check-all').prop('checked', false)
@@ -177,7 +164,7 @@ export default {
             var self = this
 
             var optionsFromProperties = {
-                processing: false,
+                processing: true,
                 rowId: self.selectableId,
                 deferLoading: 200,
                 select: !this.noSelect,
@@ -248,7 +235,7 @@ export default {
                     render(data, type, row) {
                         const id = row[self.selectableId]
                         const checkboxId = 'check-' + id
-                        return checkBox({id, checkboxId})
+                        return checkBox({ id, checkboxId })
                     },
                     responsivePriority: 1,
                 })
@@ -305,7 +292,7 @@ export default {
                     self.$emit('ajaxComplete', response.responseJSON)
                 })
 
-                options.ajax.error = options.ajax.error || function(response) {
+                options.ajax.error = options.ajax.error || function (response) {
                     self.errorMessage = response.responseJSON.Message
                 }
             }
@@ -369,8 +356,8 @@ export default {
                 self.$emit('page')
             })
 
-            this.table.on('order', (a,b,c) => {
-                self.$emit('order', { args: c})
+            this.table.on('order', (a, b, c) => {
+                self.$emit('order', { args: c })
             })
 
             this.$emit('DataTableRef', this.table)
@@ -394,7 +381,7 @@ export default {
                 .children()
                 .index(parent)
             this.table.row(rowIndex).select()
-            const rowData = this.table.rows({selected: true}).data()[0]
+            const rowData = this.table.rows({ selected: true }).data()[0]
 
             this.table.rows().deselect()
 
@@ -417,12 +404,12 @@ export default {
 
             searchInput.after(clearSearchButton)
 
-            clearSearchButton.on('click', function() {
+            clearSearchButton.on('click', function () {
                 searchInput.val('')
                 self.table.search('').draw()
             })
 
-            searchInput.off().on('keyup', function(e) {
+            searchInput.off().on('keyup', function (e) {
                 if ((e.ctrlKey && e.keyCode === 86) || e.key === 'Enter') {
                     searchInput.val(searchInput.val().trim())
                 }
@@ -433,10 +420,10 @@ export default {
 
         initProcessingBox() {
             const self = this
-            this.table.on('processing', function(evnt, dt, show) {
+            this.table.on('processing', function (evnt, dt, show) {
                 self.isProcessingFlag = show
 
-                debounce(function(evnt, dt, show) {
+                debounce(function (evnt, dt, show) {
                     self.isProcessing = show
                 }, 250)
             })
@@ -449,11 +436,11 @@ export default {
             var firstHeader = table.column(0).header()
             $(firstHeader).html(
                 '<input class="double-checkbox" id="check-all" type="checkbox">' +
-                    '<label for="check-all">' +
-                    '<span class="tick"></span>' +
-                    '</label>'
+                '<label for="check-all">' +
+                '<span class="tick"></span>' +
+                '</label>'
             )
-            $('#check-all').change(function() {
+            $('#check-all').change(function () {
                 if (!this.checked) {
                     table.rows().deselect()
                     $(table.rows)
@@ -481,7 +468,7 @@ export default {
 
                     var items = this.contextMenuItems(selectedRow)
                     if (items == null) return
-                    return {items: items}
+                    return { items: items }
                 },
                 trigger: 'left',
             }

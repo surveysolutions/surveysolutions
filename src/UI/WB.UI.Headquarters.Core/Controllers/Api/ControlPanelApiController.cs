@@ -46,9 +46,9 @@ namespace WB.UI.Headquarters.Controllers.Api
             "Captcha:SecretKey", "Captcha:SiteKey",
             "ASPNETCORE_TOKEN",
             "ExternalStorages:OAuth2:Dropbox:ClientId", "ExternalStorages:OAuth2:Dropbox:ClientSecret",
-            "ExternalStorages:OAuth2:GoogleDrive:ClientId", "ExternalStorages:GoogleDrive:Dropbox:ClientSecret",
+            "ExternalStorages:OAuth2:GoogleDrive:ClientId", "ExternalStorages:OAuth2:GoogleDrive:ClientSecret",
             "ExternalStorages:OAuth2:OneDrive:ClientId", "ExternalStorages:OAuth2:OneDrive:ClientSecret",
-            "GoogleMap:ApiKey",
+            "GoogleMap:ApiKey", "JwtBearer:SecretKey",
         };
 
         private readonly ITabletInformationService tabletInformationService;

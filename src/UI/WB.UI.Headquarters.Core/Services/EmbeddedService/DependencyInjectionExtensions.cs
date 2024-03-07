@@ -6,12 +6,35 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.UI.Headquarters.HealthChecks;
 
 namespace WB.UI.Headquarters.Services.EmbeddedService
 {
     public static class DependencyInjectionExtensions
     {
+        public static ExportMode GetExportMode(this IConfiguration configuration)
+        {
+            var modeString = configuration["DataExport:ExportMode"];
+            if (!string.IsNullOrEmpty(modeString) && Enum.TryParse<ExportMode>(modeString, out var exportMode))
+            {
+                return exportMode;
+            }
+
+            return ExportMode.Auto;
+        }
+        
+        public static int GetExportPort(this IConfiguration configuration)
+        {
+            var portString = configuration["DataExport:ExportPort"];
+            if (!string.IsNullOrEmpty(portString) && int.TryParse(portString, out var exportPort))
+            {
+                return exportPort;
+            }
+
+            return 0;
+        }
+        
         public static string GetPathToExportServiceHostDll(this IConfiguration configuration)
         {
             var exportFolder = configuration["DataExport:EmbeddedExportSearchPath"] ?? "./Export.Service";
@@ -46,6 +69,10 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
             return hostBuilder
                 .ConfigureServices((context, services) =>
                 {
+                    var exportMode = context.Configuration.GetExportMode();
+                    if (exportMode == ExportMode.Client)
+                        return;
+                    
                     var exportServiceHostDll = context.Configuration.GetPathToExportServiceHostDll();
                     if (System.IO.File.Exists(exportServiceHostDll))
                     {

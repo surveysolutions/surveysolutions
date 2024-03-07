@@ -1219,6 +1219,12 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   <data name="UnMarkAsDefault" xml:space="preserve">
     <value>Don't use as default</value>
   </data>
+  <data name="Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
   <data name="PleaseWait" xml:space="preserve">
     <value>Please wait...</value>
   </data>
@@ -1562,7 +1568,7 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
     <value>Network error</value>
   </data>
   <data name="SideBarCategoriesAddNew" xml:space="preserve">
-    <value>Add new category</value>
+    <value>Add new categories</value>
   </data>
   <data name="RowAdded" xml:space="preserve">
     <value>Row added</value>
@@ -1582,5 +1588,20 @@ You entered an invalid input. Each line should follow the format: "Title...Paren
   </data>
   <data name="ManageAccount" xml:space="preserve">
     <value>Manage account</value>
+  </data>
+  <data name="OldUi" xml:space="preserve">
+      <value>Old UI</value>
+  </data>
+  <data name="ShowList" xml:space="preserve">
+      <value>Show list</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+      <value>Login</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+      <value>Register</value>
+  </data>
+  <data name="No" xml:space="preserve">
+      <value>No</value>
   </data>
 </root>
