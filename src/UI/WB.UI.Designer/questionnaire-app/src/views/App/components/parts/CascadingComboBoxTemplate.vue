@@ -126,7 +126,7 @@ export default {
                 return null;
 
             const sourceQuestion = find(this.activeQuestion.sourceOfSingleQuestions,
-                p => p.id == this.activeQuestion.cascadeFromQuestionId != null && p.isSectionPlaceHolder != true
+                p => p.id == this.activeQuestion.cascadeFromQuestionId && p.isSectionPlaceHolder != true
             );
             return sourceQuestion != undefined ? sourceQuestion : null;
         }
