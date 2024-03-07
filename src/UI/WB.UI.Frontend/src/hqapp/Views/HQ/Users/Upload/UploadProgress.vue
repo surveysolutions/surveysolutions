@@ -1,28 +1,25 @@
 <template>
     <div>
         <slot name="title">
-            <h3>{{$t('UploadUsers.ImportingUserInfo')}} <br>{{fileName}}</h3>
+            <h3>{{ $t('UploadUsers.ImportingUserInfo') }} <br>{{ fileName }}</h3>
         </slot>
         <div class="row">
             <div class="col-sm-7 col-xs-12 action-block uploading-verifying active-preloading">
                 <div class="import-progress">
-                    <p>{{$t('UploadUsers.Uploading', {importedUsersCount: importedUsersCount, totalUsersToImportCount: totalUsersToImportCount})}}</p>
+                    <p>{{ $t('UploadUsers.Uploading', {
+                importedUsersCount: importedUsersCount, totalUsersToImportCount:
+                    totalUsersToImportCount
+            }) }}</p>
                 </div>
                 <div class="cancelable-progress">
                     <div class="progress">
-                        <div class="progress-bar"
-                            role="progressbar"
-                            aria-valuenow="60"
-                            aria-valuemin="0"
-                            aria-valuemax="100"
-                            v-bind:style="{ width: importedUsersInPercents + '%' }">
-                            <span class="sr-only">{{importedUsersInPercents}}%</span>
+                        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                            aria-valuemax="100" v-bind:style="{ width: importedUsersInPercents + '%' }">
+                            <span class="sr-only">{{ importedUsersInPercents }}%</span>
                         </div>
                     </div>
-                    <button class="btn  btn-link"
-                        type="button"
-                        @click="cancelUpload">
-                        {{$t('UploadUsers.Cancel')}}
+                    <button class="btn  btn-link" type="button" @click="cancelUpload">
+                        {{ $t('UploadUsers.Cancel')}}
                     </button>
                 </div>
             </div>
@@ -33,7 +30,7 @@
 
 <script>
 export default {
-    data: function() {
+    data: function () {
         return {
             timerId: 0,
         }
@@ -62,7 +59,7 @@ export default {
         this.updateStatus()
         this.timerId = window.setInterval(() => {
             this.updateStatus()
-        }, 500)
+        }, 1500)
     },
     methods: {
         cancelUpload() {
