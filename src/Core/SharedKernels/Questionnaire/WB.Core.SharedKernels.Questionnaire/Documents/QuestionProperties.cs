@@ -28,5 +28,7 @@ namespace WB.Core.SharedKernels.QuestionnaireEntities
 
         // for date question
         public DateTime? DefaultDate { get; set; }
+        
+        public bool IsCritical { get; set; }
     }
 }
