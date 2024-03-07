@@ -311,15 +311,6 @@ export default {
         'activeQuestion.cascadeFromQuestionId'(newValue, oldValue) {
             if (this.activeQuestion) {
                 if (newValue) {
-                    if (oldValue == null && this.activeQuestion.questionScope == 'Identifying' && this.activeQuestion.type == 'SingleOption')
-                        this.activeQuestion.questionScope = null;
-
-                    if (this.activeQuestion.questionScope !== 'Interviewer'
-                        && this.activeQuestion.questionScope !== 'Hidden'
-                        && this.activeQuestion.questionScope !== 'Supervisor'
-                        && this.activeQuestion.questionScope !== 'Identifying') {
-                        this.changeQuestionScope(this.getQuestionScopeByValue('Interviewer'));
-                    }
                     this.activeQuestion.optionsFilterExpression = null;
                 }
             }
@@ -532,7 +523,7 @@ export default {
                 });
             }
 
-            if (this.activeQuestion.cascadeFromQuestionId == null && this.activeQuestion.linkedToEntityId == null &&
+            if (this.activeQuestion.linkedToEntityId == null &&
                 _.indexOf(['TextList', 'GpsCoordinates', 'MultyOption', 'DateTime'], this.activeQuestion.type) < 0)
                 return allScopes;
 
@@ -605,6 +596,7 @@ export default {
 
             if (!this.doesQuestionSupportLinkedToEntity()) {
                 this.activeQuestion.linkedToEntityId = null;
+                this.activeQuestion.linkedFilterExpression = null;
             }
 
             if (type === "Area") {
