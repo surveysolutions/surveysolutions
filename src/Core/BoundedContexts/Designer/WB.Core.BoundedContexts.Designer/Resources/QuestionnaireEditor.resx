@@ -183,4 +183,10 @@
     <data name="GeometryTypeMultipoint" xml:space="preserve">
     <value>Multipoint</value>
   </data>
+  <data name="QuestionIsCritical" xml:space="preserve">
+      <value>Critical question</value>
+  </data>
+  <data name="HelpIsCritical" xml:space="preserve">
+      <value>Mark question is critical. This question is required for complite interview.</value>
+  </data>
 </root>
