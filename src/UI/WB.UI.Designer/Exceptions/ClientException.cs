@@ -7,24 +7,25 @@ public class ClientException : Exception
 {
     public ClientException(ClientErrorModel errorModel) : base(errorModel.Message)
     {
+        string fullInfo = string.Empty;
+
         if (errorModel.AdditionalData.TryGetValue("component", out var component))
             Source = component;
             
         foreach (var key in errorModel.AdditionalData.Keys)
         {
-            Data[key] = errorModel.AdditionalData[key];
+            var value = errorModel.AdditionalData[key];
+            Data[key] = value;
+            fullInfo += $"{key}: {value}\r\n";
         }
             
-        if (errorModel.AdditionalData.TryGetValue("stack", out var stack))
-            ExceptionDispatchInfo.SetRemoteStackTrace(this, stack);
-        
-        if (errorModel.AdditionalData.TryGetValue("errorStack", out var errorStack))
-            ExceptionDispatchInfo.SetRemoteStackTrace(this, errorStack);
+        if (!string.IsNullOrWhiteSpace(fullInfo))
+            ExceptionDispatchInfo.SetRemoteStackTrace(this, fullInfo);
     }
 
     public ClientException(string? error) : base(error)
     {
-        if(error != null)
+        if (error != null)
             ExceptionDispatchInfo.SetRemoteStackTrace(this, error);
     }
 }
