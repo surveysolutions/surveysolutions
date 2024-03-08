@@ -278,7 +278,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             },
             new QuestionnaireContentVersion
             {
-                Version = ApiVersion.MaxQuestionnaireVersion,
+                Version = 34,
                 NewFeatures = new []
                 {
                     new QuestionnaireFeature
@@ -367,6 +367,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                             return false;
                         },
                         description: "Geography question accuracy or frequency is used in expressions"
+                    ),
+                }
+            },
+            new QuestionnaireContentVersion
+            {
+                Version = ApiVersion.MaxQuestionnaireVersion,
+                NewFeatures = new []
+                {
+                    new QuestionnaireFeature
+                    (
+                        hasQuestionnaire: questionnaire => 
+                            questionnaire.FirstOrDefault<IQuestion>(x => x.Properties?.IsCritical == true) != null,
+                        description: "Some question in questionnaire use criticality flag"
                     ),
                 }
             },
