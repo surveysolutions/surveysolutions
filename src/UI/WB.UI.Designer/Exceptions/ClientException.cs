@@ -23,9 +23,9 @@ public class ClientException : Exception
             ExceptionDispatchInfo.SetRemoteStackTrace(this, fullInfo);
     }
 
-    public ClientException(string? error) : base(error)
+    public ClientException(string error, string? json) : base(error)
     {
-        if (error != null)
-            ExceptionDispatchInfo.SetRemoteStackTrace(this, error);
+        if (json != null)
+            ExceptionDispatchInfo.SetRemoteStackTrace(this, json);
     }
 }
