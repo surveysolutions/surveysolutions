@@ -233,6 +233,7 @@ article {
   font-size: 16px;
   line-height: 18px;
   margin-bottom: 10px;
+  position: relative;
 }
 .answer {
   display: table-cell;
@@ -441,7 +442,9 @@ input[type=date] {
 .condition span,
 .instructions span,
 .validation-expression span,
-.validation-message span {
+.validation-message span,
+.question-title span
+{
   position: absolute;
   display: block;
   min-width: 40px;
