@@ -181,9 +181,12 @@ namespace WB.Tests.Unit.Designer
                 new QuestionTypeToCSharpTypeMapper()));
         }
 
-        public static QuestionProperties QuestionProperties()
+        public static QuestionProperties QuestionProperties(bool? isCritical = null)
         {
-            return new QuestionProperties(false, false);
+            return new QuestionProperties(false, false)
+            {
+                IsCritical = isCritical ?? false
+            };
         }
 
         public static DateTimeQuestion DateTimeQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
@@ -581,6 +584,7 @@ namespace WB.Tests.Unit.Designer
                         QuestionScope = scope,
                         LinkedToRosterId = linkedToRoster,
                         LinkedToQuestionId = linkedToQuestion,
+                        Properties = properties
                     };
                 case QuestionType.Multimedia:
                     return new MultimediaQuestion()
@@ -598,6 +602,7 @@ namespace WB.Tests.Unit.Designer
                         QuestionScope = scope,
                         LinkedToRosterId = linkedToRoster,
                         LinkedToQuestionId = linkedToQuestion,
+                        Properties = properties
                     };
                 case QuestionType.Numeric:
                     return new NumericQuestion()
@@ -615,6 +620,7 @@ namespace WB.Tests.Unit.Designer
                         QuestionScope = scope,
                         LinkedToRosterId = linkedToRoster,
                         LinkedToQuestionId = linkedToQuestion,
+                        Properties = properties
                     };
                 case QuestionType.DateTime:
                     return new DateTimeQuestion()
@@ -632,6 +638,7 @@ namespace WB.Tests.Unit.Designer
                         QuestionScope = scope,
                         LinkedToRosterId = linkedToRoster,
                         LinkedToQuestionId = linkedToQuestion,
+                        Properties = properties
                     };
                 case QuestionType.GpsCoordinates:
                     return new GpsCoordinateQuestion()
@@ -649,6 +656,7 @@ namespace WB.Tests.Unit.Designer
                         QuestionScope = scope,
                         LinkedToRosterId = linkedToRoster,
                         LinkedToQuestionId = linkedToQuestion,
+                        Properties = properties
                     };
                 case QuestionType.MultyOption:
                     return new MultyOptionsQuestion()
@@ -666,6 +674,7 @@ namespace WB.Tests.Unit.Designer
                         QuestionScope = scope,
                         LinkedToRosterId = linkedToRoster,
                         LinkedToQuestionId = linkedToQuestion,
+                        Properties = properties
                     };
                 case QuestionType.SingleOption:
                     return new SingleQuestion()
@@ -683,6 +692,7 @@ namespace WB.Tests.Unit.Designer
                         QuestionScope = scope,
                         LinkedToRosterId = linkedToRoster,
                         LinkedToQuestionId = linkedToQuestion,
+                        Properties = properties
                     };
                 case QuestionType.TextList:
                     return new TextListQuestion()
@@ -700,6 +710,7 @@ namespace WB.Tests.Unit.Designer
                         QuestionScope = scope,
                         LinkedToRosterId = linkedToRoster,
                         LinkedToQuestionId = linkedToQuestion,
+                        Properties = properties
                     };
                 case QuestionType.QRBarcode:
                     return new QRBarcodeQuestion()
@@ -717,6 +728,7 @@ namespace WB.Tests.Unit.Designer
                         QuestionScope = scope,
                         LinkedToRosterId = linkedToRoster,
                         LinkedToQuestionId = linkedToQuestion,
+                        Properties = properties
                     };
                 case QuestionType.Text:
                     default:
@@ -736,6 +748,7 @@ namespace WB.Tests.Unit.Designer
                         QuestionScope = scope,
                         LinkedToRosterId = linkedToRoster,
                         LinkedToQuestionId = linkedToQuestion,
+                        Properties = properties
                     };
             }
             

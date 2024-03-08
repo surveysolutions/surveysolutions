@@ -838,4 +838,7 @@
   <data name="WB0316_QuestionnaireWithOldCoverPage" xml:space="preserve">
     <value>Questionnaire in old format. Please use "Generate cover" link on Cover section.</value>
   </data>
+  <data name="WB0317_CriticalityIsNotAllowed" xml:space="preserve">
+    <value>Question with critical flag can't has hidden and supervisor scopes.</value>
+  </data>
 </root>

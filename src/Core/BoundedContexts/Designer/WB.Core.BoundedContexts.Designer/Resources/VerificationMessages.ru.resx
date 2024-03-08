@@ -851,4 +851,7 @@
   <data name="WB0316_QuestionnaireWithOldCoverPage" xml:space="preserve">
     <value>Опросник в старом формате. Используйте ссылку "Сгенерировать обложку" на секции Обложка.</value>
   </data>
+  <data name="WB0317_CriticalityIsNotAllowed" xml:space="preserve">
+      <value>Вопрос с критичным флагом не может иметь скрытый или супервизор видимость</value>
+  </data>
 </root>
