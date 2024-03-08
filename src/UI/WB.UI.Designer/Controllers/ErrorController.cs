@@ -50,7 +50,7 @@ namespace WB.UI.Designer.Controllers
                 var clientErrorModel = JsonConvert.DeserializeObject<ClientErrorModel>(json);
                 exception = clientErrorModel != null
                     ? new ClientException(clientErrorModel)
-                    : new ClientException("Deserialize client error is null", json);
+                    : new ClientException("Client error is null", json);
             }
             catch
             {
