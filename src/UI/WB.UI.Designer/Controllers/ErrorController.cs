@@ -1,6 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using StackExchange.Exceptional;
 using WB.UI.Designer.Exceptions;
+using WB.UI.Designer.Extensions;
+using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -35,21 +40,25 @@ namespace WB.UI.Designer.Controllers
         
         [Route("report")]
         [HttpPost]
-        public IActionResult LogError([FromBody] ClientErrorModel? clientError)
+        public IActionResult LogError([FromBody] JObject clientError)
         {
+            string json = clientError.ToString();
+            ClientException exception;
+            
             try
             {
-                var exception = clientError == null ? 
-                    new ClientException("Unknown error") 
-                    : new ClientException(clientError);
-                
-                exception.Log(null, category: "vue3");
-                return Ok();
+                var clientErrorModel = JsonConvert.DeserializeObject<ClientErrorModel>(json);
+                exception = clientErrorModel != null
+                    ? new ClientException(clientErrorModel)
+                    : new ClientException("Deserialize client error is null", json);
             }
             catch
             {
-                return StatusCode(500);
+                exception = new ClientException("Error deserialize client error", json);
             }
+            
+            exception.Log(null, category: "vue3");
+            return Ok();
         }
     }
 }

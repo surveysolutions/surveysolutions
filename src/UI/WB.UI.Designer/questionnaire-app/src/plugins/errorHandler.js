@@ -71,7 +71,7 @@ export function setupErrorHandler(app) {
                 stack:
                     e.reason instanceof Error
                         ? getNestedErrorDetails(e.reason)
-                        : e.reason
+                        : e.reason?.stack
             }
         };
 
