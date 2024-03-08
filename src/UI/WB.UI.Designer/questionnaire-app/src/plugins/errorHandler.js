@@ -7,6 +7,7 @@ export function setupErrorHandler(app) {
         var errorDetails = {
             message: err.message,
             additionalData: {
+                source: 'vue-error-handler',
                 component: vm?.$options?.name || 'unknown',
                 route: vm?.$route.fullPath,
                 info,
@@ -49,6 +50,7 @@ export function setupErrorHandler(app) {
             message: e.error.message,
 
             additionalData: {
+                source: 'error event',
                 stack: getNestedErrorDetails(e.error)
             }
         };
@@ -65,6 +67,7 @@ export function setupErrorHandler(app) {
             message: e.reason?.body?.message ?? e.reason,
 
             additionalData: {
+                source: 'unhandledrejection event',
                 stack:
                     e.reason instanceof Error
                         ? getNestedErrorDetails(e.reason)
