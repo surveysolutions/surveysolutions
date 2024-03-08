@@ -202,14 +202,20 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             this.CreateMap<AbstractQuestion, Models.Question.AbstractQuestion>()
                 .IncludeBase<IComposite, QuestionnaireEntity>()
                 .ForMember(d => d.HideInstructions, t =>
-                    t.MapFrom(p => p.Properties == null ? false : p.Properties.HideInstructions));
+                    t.MapFrom(p => p.Properties == null ? false : p.Properties.HideInstructions))
+                .ForMember(d => d.IsCritical, t =>
+                    t.MapFrom(p => p.Properties == null ? false : p.Properties.IsCritical));
             this.CreateMap<Models.Question.AbstractQuestion, AbstractQuestion>()
                 .IncludeBase<IQuestionnaireEntity, IComposite>()
                 .ForMember(aq => aq.StataExportCaption, aq=> 
                     aq.MapFrom(x => x.VariableName))
                 .ForMember(s => s.PublicKey, opt => opt.MapFrom((s, d, value, context) => 
                     GetIdOrGenerate(s.VariableName, s.Id, context)))
-                .AfterMap((s, d) => d.Properties!.HideInstructions = s.HideInstructions);
+                .AfterMap((s, d) =>
+                {
+                    d.Properties!.HideInstructions = s.HideInstructions;
+                    d.Properties!.IsCritical = s.IsCritical;
+                });
 
             this.CreateMap<TextQuestion, Models.Question.TextQuestion>()
                 .IncludeBase<AbstractQuestion, Models.Question.AbstractQuestion>();

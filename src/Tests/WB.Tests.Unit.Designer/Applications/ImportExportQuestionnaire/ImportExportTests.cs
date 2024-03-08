@@ -350,7 +350,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 label: "label",
                 instruction: "instruction",
                 validationConditions: new ValidationCondition[] { Create.ValidationCondition() },
-                hideIfDisabled: true
+                hideIfDisabled: true,
+                isCritical: true
                 );
             
             var questionnaireDocument = Create.QuestionnaireDocumentWithEmptyCoverPage(Id.g1,
@@ -380,7 +381,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 label: "label",
                 instruction: "instruction",
                 validationConditions: new ValidationCondition[] { Create.ValidationCondition() },
-                hideIfDisabled: true
+                hideIfDisabled: true,
+                isCritical: true
                 );
             
             var questionnaireDocument = Create.QuestionnaireDocumentWithCoverPage(Id.g1,
@@ -434,7 +436,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 //linkedToRosterId: Guid.NewGuid(),
                 title: "numeric", 
                 variableLabel: "label", 
-                options: new []{ new Option("1", "option1", null, "") }
+                options: new []{ new Option("1", "option1", null, "") },
+                isCritical: true
                 );
             numericQuestion.CountOfDecimalPlaces = 7;
             numericQuestion.UseFormatting = true;
@@ -487,6 +490,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 QuestionScope = QuestionScope.Supervisor,
                 StataExportCaption = "stata caption",
                 HideIfDisabled = true,
+                Properties = Create.QuestionProperties(isCritical: true)
             };
             
             var questionnaireDocument = Create.QuestionnaireDocumentWithEmptyCoverPage(Id.g1,
@@ -537,6 +541,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 Properties = new QuestionProperties(hideInstructions: true, useFormatting: false)
                 {
                     GeometryType = GeometryType.Polygon,
+                    IsCritical = true
                 }
             };
             
@@ -588,7 +593,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 IsTimestamp = true,
                 Properties = new QuestionProperties(hideInstructions: true, useFormatting: false)
                 {
-                    DefaultDate = DateTime.Now
+                    DefaultDate = DateTime.Now,
+                    IsCritical = true,
                 }
             };
             
@@ -637,6 +643,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 QuestionScope = QuestionScope.Supervisor,
                 StataExportCaption = "stata caption",
                 HideIfDisabled = true,
+                Properties = Create.QuestionProperties(isCritical: true)
             };
             
             var questionnaireDocument = Create.QuestionnaireDocumentWithEmptyCoverPage(Id.g1,
@@ -684,7 +691,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 QuestionScope = QuestionScope.Supervisor,
                 StataExportCaption = "stata caption",
                 HideIfDisabled = true,
-                IsSignature = true
+                IsSignature = true,
+                Properties = Create.QuestionProperties(isCritical: true)
             };
             
             var questionnaireDocument = Create.QuestionnaireDocumentWithEmptyCoverPage(Id.g1,
@@ -750,6 +758,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 // {
                 //     OptionsFilterExpression = "OptionsFilterExpression"
                 // }
+                Properties = Create.QuestionProperties(isCritical: true)
             };
             
             var questionnaireDocument = Create.QuestionnaireDocumentWithEmptyCoverPage(Id.g1,
@@ -797,6 +806,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 QuestionScope = QuestionScope.Supervisor,
                 StataExportCaption = "stata caption",
                 HideIfDisabled = true,
+                Properties = Create.QuestionProperties(isCritical: true)
             };
             
             var questionnaireDocument = Create.QuestionnaireDocumentWithEmptyCoverPage(Id.g1,
@@ -856,6 +866,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 LinkedFilterExpression = "filter expression",
                 CascadeFromQuestionId = Guid.NewGuid(),
                 //IsFilteredCombobox = true,
+                Properties = Create.QuestionProperties(isCritical: true)
             };
             
             var questionnaireDocument = Create.QuestionnaireDocumentWithEmptyCoverPage(Id.g1,
@@ -908,6 +919,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 StataExportCaption = "stata caption",
                 HideIfDisabled = true,
                 MaxAnswerCount = 77,
+                Properties = Create.QuestionProperties(isCritical: true)
             };
             
             var questionnaireDocument = Create.QuestionnaireDocumentWithEmptyCoverPage(Id.g1,

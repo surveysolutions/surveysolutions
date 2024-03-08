@@ -422,7 +422,7 @@ namespace WB.Tests.Unit.Designer
         public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = null, string enablementCondition = null,
             string validationExpression = null, QuestionScope scope = QuestionScope.Interviewer, bool isPrefilled = false,
             bool hideIfDisabled = false, IEnumerable<ValidationCondition> validationConditions = null, Guid? linkedToRosterId = null,
-            string title = "test", string variableLabel = null, Option[] options = null)
+            string title = "test", string variableLabel = null, Option[] options = null, bool? isCritical = null)
         {
             var publicKey = id ?? Guid.NewGuid();
             var stataExportCaption = variable ?? "numeric_question"+publicKey;
@@ -445,7 +445,8 @@ namespace WB.Tests.Unit.Designer
                         AnswerText = x.Title, 
                         ParentValue = x.ParentValue, 
                         AttachmentName = x.AttachmentName}).ToList()
-                    : Enumerable.Empty<Answer>().ToList()
+                    : Enumerable.Empty<Answer>().ToList(),
+                Properties = Create.QuestionProperties(isCritical)
             };
         }
 
@@ -1242,7 +1243,8 @@ namespace WB.Tests.Unit.Designer
             string label = null,
             string instruction = null,
             IEnumerable<ValidationCondition> validationConditions = null,
-            bool hideIfDisabled = false)
+            bool hideIfDisabled = false,
+            bool? isCritical = null)
 
         {
             var publicKey = questionId ?? Guid.NewGuid();
@@ -1262,7 +1264,7 @@ namespace WB.Tests.Unit.Designer
                 VariableLabel = label,
                 Instructions = instruction,
                 ValidationConditions = validationConditions?.ToList().ConcatWithOldConditionIfNotEmpty(validationExpression, validationMessage),
-                
+                Properties = Create.QuestionProperties(isCritical)
             };
         }
 
