@@ -141,6 +141,7 @@ export const useTreeStore = defineStore('tree', {
             question.isInteger = data.isInteger;
             question.yesNoView = data.yesNoView;
             question.hideIfDisabled = data.hideIfDisabled;
+            question.isCritical = data.isCritical;
 
             const varType = this.getUnderlyingQuestionType(question);
             this.updateVariableName(itemId, data.variableName, varType);
