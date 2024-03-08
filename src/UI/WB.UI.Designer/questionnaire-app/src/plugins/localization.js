@@ -31,7 +31,7 @@ const userLocale = userLang.split('-')[0];
 i18next.use(LanguageDetector).init({
     debug: false,
     lng: userLocale || import.meta.env.VUE_APP_I18N_LOCALE || 'en',
-    fallbackLng: userLocale || import.meta.env.VUE_APP_I18N_LOCALE || 'en',
+    fallbackLng: import.meta.env.VUE_APP_I18N_FALLBACK_LOCALE || 'en',
     /*backend: {
         loadPath: function(languages) {
             var key = 'QuestionnaireEditor.' + languages[0] + '.json';
