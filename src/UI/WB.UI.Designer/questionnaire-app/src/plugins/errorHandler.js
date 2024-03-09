@@ -64,7 +64,7 @@ export function setupErrorHandler(app) {
 
     window.addEventListener('unhandledrejection', function(e) {
         var errorDetails = {
-            message: e.reason?.body?.message ?? e.reason,
+            message: e.reason?.body?.message ?? e.reason?.message,
 
             additionalData: {
                 source: 'unhandledrejection event',
