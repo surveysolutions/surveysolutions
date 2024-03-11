@@ -76,7 +76,7 @@
                         {{ questionnaire.title }}
                     </div>
                     <div class="questionnarie-title-buttons">
-                        <span class="text-muted">
+                        <span class="text-muted" id="questionnaireStats">
                             {{
                         $t('QuestionnaireEditor.QuestionnaireSummary', {
                             questionsCount: questionnaire.questionsCount,
