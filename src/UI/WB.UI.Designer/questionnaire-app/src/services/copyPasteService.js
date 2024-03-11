@@ -34,7 +34,7 @@ export function copyItem(questionnaireId, item) {
     readyToPaste.value = true;
 }
 
-export function pasteItemInto(questionnaireId, parentId) {
+export async function pasteItemInto(questionnaireId, parentId) {
     const cookies = useCookies();
 
     var itemToCopy = cookies.cookies.get('itemToCopy');
@@ -42,13 +42,18 @@ export function pasteItemInto(questionnaireId, parentId) {
 
     const newId = newGuid();
 
-    return pasteItemIntoDetailed(
+    await pasteItemIntoDetailed(
         questionnaireId,
         parentId,
         itemToCopy.questionnaireId,
         itemToCopy.itemId,
         newId
     );
+
+    return {
+        id: newId,
+        itemType: itemToCopy.itemType
+    };
 }
 
 export async function pasteItemAfter(questionnaireId, afterNodeId) {

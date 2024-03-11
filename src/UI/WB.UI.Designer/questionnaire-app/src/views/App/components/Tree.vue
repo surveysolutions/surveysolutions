@@ -430,16 +430,16 @@ export default {
         searchForQuestion(chapter) {
             this.$refs.searchForQuestion.show();
         },
-        pasteItemInto(chapterInfo) {
-            pasteItemInto(this.questionnaireId, chapterInfo.chapter.itemId).then(function (result) {
-                if (!chapterInfo.isCover)
-                    this.$router.push({
-                        name: result.itemType,
-                        params: {
-                            entityId: result.itemId
-                        }
-                    });
-            });
+        async pasteItemInto(chapterInfo) {
+            const result = await pasteItemInto(this.questionnaireId, chapterInfo.chapter.itemId)
+
+            if (!chapterInfo.isCover)
+                this.$router.push({
+                    name: result.itemType.toLowerCase(),
+                    params: {
+                        entityId: result.id
+                    }
+                });
         },
         migrateToNewVersion() {
             migrateToNewVersion(this.questionnaireId).then(function () {
