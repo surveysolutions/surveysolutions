@@ -51,7 +51,7 @@ export function pasteItemInto(questionnaireId, parentId) {
     );
 }
 
-export function pasteItemAfter(questionnaireId, afterNodeId) {
+export async function pasteItemAfter(questionnaireId, afterNodeId) {
     const cookies = useCookies();
 
     var itemToCopy = cookies.cookies.get('itemToCopy');
@@ -67,12 +67,17 @@ export function pasteItemAfter(questionnaireId, afterNodeId) {
         itemToPasteAfterId: afterNodeId
     };
 
-    return commandCall('PasteAfter', command).then(() =>
-        emitter.emit('itemPasted', {
-            questionnaireId: questionnaireId,
-            afterNodeId: afterNodeId
-        })
-    );
+    await commandCall('PasteAfter', command);
+
+    emitter.emit('itemPasted', {
+        questionnaireId: questionnaireId,
+        afterNodeId: afterNodeId
+    });
+
+    return {
+        id: newId,
+        itemType: itemToCopy.itemType
+    };
 }
 
 export function pasteItemIntoDetailed(
