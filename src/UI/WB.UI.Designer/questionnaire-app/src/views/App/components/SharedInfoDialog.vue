@@ -14,17 +14,18 @@
                     <div class="modal-body share-question-dialog">
                         <ul class="nav nav-tabs" role="tablist">
                             <li role="presentation" :class="{ active: settings }">
-                                <a role="tab" data-toggle="tab" href="#questionnaireSettingsTab" @click="togleTab(true)">
+                                <a role="tab" data-toggle="tab" href="#questionnaireSettingsTab"
+                                    @click="togleTab(true)">
                                     {{ $t('QuestionnaireEditor.QuestionnaireSettings') }}
                                 </a>
                             </li>
                             <li role="presentation" :class="{ active: !settings }">
                                 <a role="tab" data-toggle="tab" href="#shareTab" v-if="!questionnaire.isReadOnlyForUser ||
-                                    questionnaire.hasViewerAdminRights
-                                    " @click="togleTab(false)">
+            questionnaire.hasViewerAdminRights
+            " @click="togleTab(false)">
                                     {{
-                                        $t('QuestionnaireEditor.AccessSettings')
-                                    }}
+            $t('QuestionnaireEditor.AccessSettings')
+        }}
                                 </a>
                             </li>
                         </ul>
@@ -49,9 +50,11 @@
                                                 {{ $t('QuestionnaireEditor.SettingsQuestionnaireVariable') }}
                                             </label>&nbsp;
                                             <help link="questionnaireVariableName" />
-                                            <input id="questionnaireVariable" :disabled="questionnaire.isReadOnlyForUser"
-                                                type="text" class="form-control questionaire-title"
-                                                v-model="questionnaireEdit.variable" maxlength="32" spellcheck="false" />
+                                            <input id="questionnaireVariable"
+                                                :disabled="questionnaire.isReadOnlyForUser" type="text"
+                                                class="form-control questionaire-title"
+                                                v-model="questionnaireEdit.variable" maxlength="32"
+                                                spellcheck="false" />
                                         </div>
 
                                         <!--i know this is horrible, but i cannot remove paddings from checkbox image so that visually they inputs are aligned-->
@@ -73,7 +76,7 @@
                                             </button>
                                             <button type="button" id="edit-chapter-cancel-button"
                                                 class="btn btn-lg btn-link" unsaved-warning-clear @click="cancel()">{{
-                                                    $t('QuestionnaireEditor.Cancel') }}</button>
+            $t('QuestionnaireEditor.Cancel') }}</button>
                                         </div>
 
                                     </div>
@@ -161,8 +164,10 @@
                                                         </button>
                                                         <ul class="dropdown-menu " role="menu"
                                                             aria-labelledby="dropdownMenu1">
-                                                            <li role="presentation" v-for="shareType in shareTypeOptions">
-                                                                <a role="menuitem" tabindex="-1" href="javascript:void(0);"
+                                                            <li role="presentation"
+                                                                v-for="shareType in shareTypeOptions">
+                                                                <a role="menuitem" tabindex="-1"
+                                                                    href="javascript:void(0);"
                                                                     @click="changeShareType(shareType)">
                                                                     {{ shareType.text }}
                                                                 </a>
@@ -170,7 +175,8 @@
                                                         </ul>
                                                     </div>
                                                 </div>
-                                                <p class="help-block ng-cloak" v-if="viewModelData.doesUserExist == false">
+                                                <p class="help-block ng-cloak"
+                                                    v-if="viewModelData.doesUserExist == false">
                                                     {{ $t('QuestionnaireEditor.SettingsProvideExistingEmail') }}
                                                 </p>
                                             </div>
@@ -178,7 +184,7 @@
                                         <div class="col-xs-5">
                                             <div class="form-group pull-right">
                                                 <button class="btn btn-primary btn-lg invite-button" @click="invite()"
-                                                    :disabled="!viewModelData.shareWith">
+                                                    :disabled="!viewModelData.shareWith || questionnaire.isReadOnlyForUser">
                                                     {{ $t('QuestionnaireEditor.SettingsInvite') }}
                                                 </button>
                                             </div>
@@ -195,18 +201,18 @@
                                         <br />
                                         <span>
                                             {{
-                                                questionnaire.isAnonymouslyShared
-                                                ? $t('QuestionnaireEditor.SettingsStatusAllowAnonymousAccess')
-                                                : $t('QuestionnaireEditor.SettingsStatusDontAllowAnonymousAccess')
-                                            }}
+            questionnaire.isAnonymouslyShared
+                ? $t('QuestionnaireEditor.SettingsStatusAllowAnonymousAccess')
+                : $t('QuestionnaireEditor.SettingsStatusDontAllowAnonymousAccess')
+        }}
                                         </span>
                                         <button v-if="isQuestionnaireOwner" class="btn btn-link answer"
                                             @click="updateAnonymousQuestionnaireSettings()">
                                             {{
-                                                questionnaire.isAnonymouslyShared
-                                                ? $t('QuestionnaireEditor.SettingsTurnOffAnonymousAccess')
-                                                : $t('QuestionnaireEditor.SettingsTurnOnAnonymousAccess')
-                                            }}
+            questionnaire.isAnonymouslyShared
+                ? $t('QuestionnaireEditor.SettingsTurnOffAnonymousAccess')
+                : $t('QuestionnaireEditor.SettingsTurnOnAnonymousAccess')
+        }}
                                         </button>
                                         <br />
                                         <div v-if="questionnaire.isAnonymouslyShared" class="row">
@@ -217,14 +223,14 @@
                                                 <a :href="getAnonymousQuestionnaireLink" style="word-break: break-word;"
                                                     title="link" onclick="return false;">
                                                     {{
-                                                        getAnonymousQuestionnaireLink
-                                                    }}
+            getAnonymousQuestionnaireLink
+        }}
                                                 </a>
                                                 <br />
                                                 <div>
                                                     {{ $t('QuestionnaireEditor.AnonymousQuestionnaireGeneratedDate', {
-                                                        datetime: anonymousQuestionnaireShareDate
-                                                    })
+            datetime: anonymousQuestionnaireShareDate
+        })
                                                     }}
                                                 </div>
                                                 <button class="btn btn-link answer" style="padding-left: 0px;"
@@ -247,9 +253,9 @@
                                     </div>
 
                                     <hr v-if="questionnaire.hasViewerAdminRights
-                                        " />
+            " />
                                     <div v-if="questionnaire.hasViewerAdminRights
-                                        ">
+            ">
                                         <h2>
                                             {{ $t('QuestionnaireEditor.PublicAccessSettings') }}
                                         </h2>
@@ -259,15 +265,15 @@
                                         <br />
                                         <span>
                                             {{ questionnaire.isPublic ?
-                                                $t('QuestionnaireEditor.PublicAccessSettingsStatusOn') :
-                                                $t('QuestionnaireEditor.PublicAccessSettingsStatusOff') }}
+            $t('QuestionnaireEditor.PublicAccessSettingsStatusOn') :
+            $t('QuestionnaireEditor.PublicAccessSettingsStatusOff') }}
                                         </span>
                                         <button class="btn btn-link answer" @click="togglePublicity()">
                                             {{
-                                                questionnaire.isPublic
-                                                ? $t('QuestionnaireEditor.PublicAccessSettingsOff')
-                                                : $t('QuestionnaireEditor.PublicAccessSettingsOn')
-                                            }}
+            questionnaire.isPublic
+                ? $t('QuestionnaireEditor.PublicAccessSettingsOff')
+                : $t('QuestionnaireEditor.PublicAccessSettingsOn')
+        }}
                                         </button>
                                     </div>
                                 </div>
@@ -279,7 +285,8 @@
         </div>
         <div v-if="visible" uib-modal-backdrop="modal-backdrop" class="modal-backdrop fade ng-scope in"
             uib-modal-animation-class="fade" modal-in-class="in" modal-animation="true"
-            data-bootstrap-modal-aria-hidden-count="1" aria-hidden="true" style="z-index: 1040;" @click="cancel()"></div>
+            data-bootstrap-modal-aria-hidden-count="1" aria-hidden="true" style="z-index: 1040;" @click="cancel()">
+        </div>
     </teleport>
 </template>
 
