@@ -161,11 +161,18 @@ export default {
             this.closePanel();
         },
 
-        pasteAfterChapter(chapter) {
+        async pasteAfterChapter(chapter) {
             if (!this.canPaste) return false;
 
-            pasteItemAfter(this.questionnaireId, chapter.itemId).then(() => {
-                //this.closePanel();
+            const result = await pasteItemAfter(this.questionnaireId, chapter.itemId)
+
+            //this.closePanel();
+            this.$router.push({
+                name: result.itemType.toLowerCase(),
+                params: {
+                    entityId: result.id,
+                    chapterId: result.id,
+                }
             });
         },
 

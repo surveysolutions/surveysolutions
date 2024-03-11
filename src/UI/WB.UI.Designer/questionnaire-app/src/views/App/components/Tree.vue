@@ -150,7 +150,7 @@
 import { useTreeStore } from '../../../stores/tree';
 import { Draggable, dragContext, walkTreeData } from '@he-tree/vue';
 import '@he-tree/vue/style/default.css';
-import { ref, nextTick, computed } from 'vue';
+import { ref } from 'vue';
 import SearchDialog from './SearchDialog.vue';
 import SearchForQuestion from './SearchForQuestion.vue';
 
@@ -430,16 +430,16 @@ export default {
         searchForQuestion(chapter) {
             this.$refs.searchForQuestion.show();
         },
-        pasteItemInto(chapterInfo) {
-            pasteItemInto(this.questionnaireId, chapterInfo.chapter.itemId).then(function (result) {
-                if (!chapterInfo.isCover)
-                    this.$router.push({
-                        name: result.itemType,
-                        params: {
-                            entityId: result.itemId
-                        }
-                    });
-            });
+        async pasteItemInto(chapterInfo) {
+            const result = await pasteItemInto(this.questionnaireId, chapterInfo.chapter.itemId)
+
+            if (!chapterInfo.isCover)
+                this.$router.push({
+                    name: result.itemType.toLowerCase(),
+                    params: {
+                        entityId: result.id
+                    }
+                });
         },
         migrateToNewVersion() {
             migrateToNewVersion(this.questionnaireId).then(function () {
@@ -451,7 +451,7 @@ export default {
         },
         async showSearch() {
             this.search.open = true;
-            await nextTick();
+            await this.$nextTick();
             document.getElementById('chapterSearch').focus();
         },
         hideSearch() {
