@@ -150,7 +150,7 @@
 import { useTreeStore } from '../../../stores/tree';
 import { Draggable, dragContext, walkTreeData } from '@he-tree/vue';
 import '@he-tree/vue/style/default.css';
-import { ref, nextTick, computed } from 'vue';
+import { ref } from 'vue';
 import SearchDialog from './SearchDialog.vue';
 import SearchForQuestion from './SearchForQuestion.vue';
 
@@ -451,7 +451,7 @@ export default {
         },
         async showSearch() {
             this.search.open = true;
-            await nextTick();
+            await this.$nextTick();
             document.getElementById('chapterSearch').focus();
         },
         hideSearch() {
