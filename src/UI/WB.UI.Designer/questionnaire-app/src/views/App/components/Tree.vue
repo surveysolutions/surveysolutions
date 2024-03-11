@@ -64,51 +64,48 @@
                                 :selectedItemId="selectedItemId">
                             </component>
                         </template>
-
-                        <!--template #placeholder>
-                            <div class="angular-ui-tree-placeholder"></div>
-                        </template-->
                     </Draggable>
-
-                    <div class="section item" v-if="search.open &&
-            search.searchText &&
-            filteredTreeData.length === 0
-            ">
+                    <div class="section item" v-if="search.open && search.searchText && filteredTreeData.length === 0">
                         <div class="item-text">
                             <span>{{ $t('QuestionnaireEditor.NothingFound') }}</span>
                         </div>
                     </div>
                     <div class="chapter-level-buttons" v-show="!search.searchText">
-                        <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
-            !currentChapter.isReadOnly
-            " @click="addQuestion(currentChapterData)">{{
-            $t('QuestionnaireEditor.AddQuestion') }}</button>
-                        <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
-            !currentChapter.isReadOnly &&
-            !currentChapter.isCover" @click="addGroup(currentChapterData)">{{
-            $t('QuestionnaireEditor.AddSubsection') }}</button>
-                        <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
-            !currentChapter.isReadOnly &&
-            !currentChapter.isCover
-            " @click="addRoster(currentChapterData)">{{ $t('QuestionnaireEditor.AddRoster') }}</button>
-                        <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
-            !currentChapter.isReadOnly
-            " @click="addStaticText(currentChapterData)">{{
-            $t('QuestionnaireEditor.AddStaticText') }}</button>
-                        <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
-            !currentChapter.isReadOnly
-            " @click="addVariable(currentChapterData)">{{
-            $t('QuestionnaireEditor.AddVariable') }}</button>
+                        <button type="button" class="btn lighter-hover" id="treeAddQuestion"
+                            v-if="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
+                            @click="addQuestion(currentChapterData)">
+                            {{ $t('QuestionnaireEditor.AddQuestion') }}
+                        </button>
+                        <button type="button" class="btn lighter-hover" id="treeAddSubsection"
+                            v-if="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly && !currentChapter.isCover"
+                            @click="addGroup(currentChapterData)">
+                            {{ $t('QuestionnaireEditor.AddSubsection') }}
+                        </button>
+                        <button type="button" class="btn lighter-hover" id="treeAddRoster"
+                            v-if="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly && !currentChapter.isCover"
+                            @click="addRoster(currentChapterData)">
+                            {{ $t('QuestionnaireEditor.AddRoster') }}
+                        </button>
+                        <button type="button" class="btn lighter-hover" id="treeAddStaticText"
+                            v-if="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
+                            @click="addStaticText(currentChapterData)">
+                            {{ $t('QuestionnaireEditor.AddStaticText') }}
+                        </button>
+                        <button type="button" class="btn lighter-hover" id="treeAddVariable"
+                            v-if="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
+                            @click="addVariable(currentChapterData)">
+                            {{ $t('QuestionnaireEditor.AddVariable') }}
+                        </button>
+                        <button type="button" class="btn lighter-hover" id="treeSearchForQuestion"
+                            v-if="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
+                            @click="searchForQuestion(currentChapterData)">
+                            {{ $t('QuestionnaireEditor.SearchForQuestion') }}
+                        </button>
 
-                        <button type="button" class="btn lighter-hover" v-if="!questionnaire.isReadOnlyForUser &&
-            !currentChapter.isReadOnly
-            " @click="searchForQuestion(currentChapterData)">{{
-            $t('QuestionnaireEditor.SearchForQuestion')
-        }}</button>
-
-                        <input type="button" class="btn lighter-hover pull-right" :disabled="!readyToPaste" v-if="!questionnaire.isReadOnlyForUser &&
-            !currentChapter.isReadOnly
-            " :value="$t('QuestionnaireEditor.Paste')" @click="pasteItemInto(currentChapter)" />
+                        <input type="button" class="btn lighter-hover pull-right" id="treePaste"
+                            :disabled="!readyToPaste"
+                            v-if="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
+                            :value="$t('QuestionnaireEditor.Paste')" @click="pasteItemInto(currentChapter)" />
                     </div>
                 </div>
 
