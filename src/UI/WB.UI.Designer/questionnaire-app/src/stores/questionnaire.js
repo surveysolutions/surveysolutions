@@ -91,6 +91,11 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
         },
 
         setQuestionnaireInfo(info) {
+            if (info === null || info === undefined) {
+                this.$reset();
+                return;
+            }
+
             this.info = info;
 
             this.edittingMetadata = cloneDeep(info.metadata);
