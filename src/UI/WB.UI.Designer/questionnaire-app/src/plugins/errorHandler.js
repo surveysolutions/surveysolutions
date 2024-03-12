@@ -62,7 +62,7 @@ export function setupErrorHandler(app) {
         return false;
     });
 
-    const ignoreStatusCodes = [400, 403, 404, 406];
+    const ignoreStatusCodes = [400, 403, 406];
 
     window.addEventListener('unhandledrejection', function(e) {
         const status = e.reason?.response?.status;
