@@ -6,7 +6,7 @@ ARG APK_FILES=build
 ARG FONTS="NotoSans-hinted.zip;NotoSansMyanmar-hinted.zip"
 
 # Building WB.UI.Frontend application
-FROM --platform=amd64 node:$NODE as frontend
+FROM --platform=amd64 node:$NODE-bookworm as frontend
 
 WORKDIR /src/UI/WB.UI.Frontend
 COPY src/UI/WB.UI.Frontend/package*.json /src/UI/WB.UI.Frontend
