@@ -9,10 +9,8 @@
             <h1>{{ $t('QuestionnaireEditor.MoveToAnotherSubSection') }}</h1>
             <ul>
                 <li v-for="chapter in questionnaire.chapters">
-                    <a @click="
-                        chapter.itemId == currentChapter.itemId ||
-                        moveToChapter(chapter.itemId)
-                        " v-show="!chapter.isReadOnly" :disabled="chapter.itemId == currentChapterId ? true : null"
+                    <a @click="chapter.itemId == currentChapterId || moveToChapter(chapter.itemId)"
+                        v-show="!chapter.isReadOnly" :disabled="chapter.itemId == currentChapterId ? true : null"
                         unsaved-warning-clear>
                         {{ chapter.title }}
                     </a>

@@ -28,9 +28,10 @@
                                             <perfect-scrollbar class="scroller">
                                                 <ul class="list-unstyled">
                                                     <li v-for="filter in filters">
-                                                        <a role="menuitem" tabindex="-1" @click="changeFilter(filter)">{{
-                                                            filter.title
-                                                        }}</a>
+                                                        <a role="menuitem" tabindex="-1"
+                                                            @click="changeFilter(filter)">{{
+                filter.title
+            }}</a>
                                                     </li>
                                                 </ul>
                                             </perfect-scrollbar>
@@ -50,47 +51,51 @@
                                 </div><!-- /input-group -->
                             </form>
                             <span class="group-summary pull-right">{{ totalResults }} {{
-                                $t('QuestionnaireEditor.QuestionsSearchEntities')
-                            }}</span>
+                $t('QuestionnaireEditor.QuestionsSearchEntities')
+            }}</span>
                         </div>
                         <perfect-scrollbar class="scroller">
                             <div class="tile-wrapper">
                                 <div class="tile-column">
-                                    <div class="tile" :class="[searchResult.type]" v-for="searchResult in  searchResult1 ">
+                                    <div class="tile" :class="[searchResult.type]"
+                                        v-for="searchResult in  searchResult1 ">
                                         <h4>
                                             <div v-if="searchResult.icon !== null" class="icon"
                                                 :class="[searchResult.icon]"></div><a target="_blank"
                                                 rel="noopener noreferrer" :href="getLink(searchResult)"><span
                                                     class="roster-marker" v-show="searchResult.type === 'roster'">{{
-                                                        $t('QuestionnaireEditor.TreeRoster') }}</span> {{ searchResult.title
-    }}</a>
+                $t('QuestionnaireEditor.TreeRoster') }}</span> {{ searchResult.title
+                                                }}</a>
                                         </h4>
                                         <h5>{{ searchResult.questionnaireTitle }}</h5>
                                         <div class="tile-footer clearfix">
                                             <a v-if="searchResult.hasFolder" class="bg-info"
                                                 @click="changeFilter(searchResult.folder)">{{
-                                                    searchResult.folder.title }}</a>
-                                            <button class="btn btn-link add-button" @click="pasteEntity(searchResult)">{{
-                                                $t('QuestionnaireEditor.Add') }}</button>
+                searchResult.folder.title }}</a>
+                                            <button class="btn btn-link add-button"
+                                                @click="pasteEntity(searchResult)">{{
+                $t('QuestionnaireEditor.Add') }}</button>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="tile-column">
-                                    <div class="tile" :class="[searchResult.type]" v-for="searchResult in searchResult2">
+                                    <div class="tile" :class="[searchResult.type]"
+                                        v-for="searchResult in searchResult2">
                                         <h4>
                                             <div v-if="searchResult.icon !== null" class="icon"
                                                 :class="[searchResult.icon]"></div><a target="_blank"
                                                 rel="noopener noreferrer" :href="getLink(searchResult)"><span
                                                     class="roster-marker" v-show="searchResult.type === 'roster'">{{
-                                                        $t('QuestionnaireEditor.TreeRoster') }}</span> {{ searchResult.title
-    }}</a>
+                $t('QuestionnaireEditor.TreeRoster') }}</span> {{ searchResult.title
+                                                }}</a>
                                         </h4>
                                         <h5>{{ searchResult.questionnaireTitle }}</h5>
                                         <div class="tile-footer clearfix">
                                             <a v-if="searchResult.hasFolder" class="bg-info"
                                                 @click="changeFilter(searchResult.folder)">{{
-                                                    searchResult.folder.title }}</a>
-                                            <button class="btn btn-link add-button" @click="pasteEntity(searchResult)">{{
+                                                searchResult.folder.title }}</a>
+                                            <button class="btn btn-link add-button"
+                                                @click="pasteEntity(searchResult)">{{
                                                 $t('QuestionnaireEditor.Add') }}</button>
                                         </div>
                                     </div>
@@ -211,20 +216,19 @@ export default {
             return '/questionnaire/details/' + searchResult.questionnaireId + '/nosection/' + searchResult.type + '/' + searchResult.itemId;
         },
 
-        pasteEntity(searchResult) {
+        async pasteEntity(searchResult) {
             const newId = guid();
             const entityToPaste = searchResult;
 
-            pasteItemIntoDetailed(this.questionnaireId, this.chapterId, entityToPaste.questionnaireId, entityToPaste.itemId, newId)
-                .then(() => {
-                    this.$router.push({
-                        name: result.itemType,
-                        params: {
-                            chapterId: this.chapterId,
-                            entityId: newId
-                        }
-                    });
-                });
+            await pasteItemIntoDetailed(this.questionnaireId, this.chapterId, entityToPaste.questionnaireId, entityToPaste.itemId, newId)
+
+            this.$router.push({
+                name: entityToPaste.itemType.toLowerCase(),
+                params: {
+                    chapterId: this.chapterId,
+                    entityId: newId
+                }
+            });
 
             this.open = false;
         },
