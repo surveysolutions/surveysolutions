@@ -230,6 +230,11 @@ function getCsrfCookie() {
 }
 
 function processResponseErrorOrThrow(errorResp) {
+    if (!errorResp.response) {
+        error(i18n.t('QuestionnaireEditor.RequestFailedUnexpectedly'));
+        throw errorResp;
+    }
+
     if (
         errorResp.response.status === 406 ||
         errorResp.response.status === 403 ||
@@ -245,5 +250,6 @@ function processResponseErrorOrThrow(errorResp) {
     } else {
         error(i18n.t('QuestionnaireEditor.RequestFailedUnexpectedly'));
     }
+
     throw errorResp;
 }

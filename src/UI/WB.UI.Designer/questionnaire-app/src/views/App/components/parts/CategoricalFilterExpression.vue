@@ -1,10 +1,10 @@
 <template>
-    <div class="add-filter-label" v-if="showFilter != true && activeQuestion.isCascade != true">
+    <div class="add-filter-label" v-if="showFilter != true && activeQuestion.cascadeFromQuestionId == null">
         <button type="button" class="btn btn-lg btn-link" @click="showFilter = true">{{
-            $t('QuestionnaireEditor.AddFilter') }}</button>
+        $t('QuestionnaireEditor.AddFilter') }}</button>
     </div>
 
-    <div class="row" v-show="showFilter == true && activeQuestion.isCascade != true">
+    <div class="row" v-show="showFilter == true && activeQuestion.cascadeFromQuestionId == null">
         <div class="form-group col-xs-11">
             <label class="wb-label" for="optionsFilterExpression">{{ $t('QuestionnaireEditor.QuestionFilter') }}</label>
 

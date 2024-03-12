@@ -34,7 +34,7 @@ export function copyItem(questionnaireId, item) {
     readyToPaste.value = true;
 }
 
-export function pasteItemInto(questionnaireId, parentId) {
+export async function pasteItemInto(questionnaireId, parentId) {
     const cookies = useCookies();
 
     var itemToCopy = cookies.cookies.get('itemToCopy');
@@ -42,16 +42,21 @@ export function pasteItemInto(questionnaireId, parentId) {
 
     const newId = newGuid();
 
-    return pasteItemIntoDetailed(
+    await pasteItemIntoDetailed(
         questionnaireId,
         parentId,
         itemToCopy.questionnaireId,
         itemToCopy.itemId,
         newId
     );
+
+    return {
+        id: newId,
+        itemType: itemToCopy.itemType
+    };
 }
 
-export function pasteItemAfter(questionnaireId, afterNodeId) {
+export async function pasteItemAfter(questionnaireId, afterNodeId) {
     const cookies = useCookies();
 
     var itemToCopy = cookies.cookies.get('itemToCopy');
@@ -67,12 +72,17 @@ export function pasteItemAfter(questionnaireId, afterNodeId) {
         itemToPasteAfterId: afterNodeId
     };
 
-    return commandCall('PasteAfter', command).then(() =>
-        emitter.emit('itemPasted', {
-            questionnaireId: questionnaireId,
-            afterNodeId: afterNodeId
-        })
-    );
+    await commandCall('PasteAfter', command);
+
+    emitter.emit('itemPasted', {
+        questionnaireId: questionnaireId,
+        afterNodeId: afterNodeId
+    });
+
+    return {
+        id: newId,
+        itemType: itemToCopy.itemType
+    };
 }
 
 export function pasteItemIntoDetailed(
