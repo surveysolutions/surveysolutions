@@ -452,8 +452,12 @@ input[type=date] {
   top: 0;
   left: -50px;
 }
+.question-title span {
+    font-size: 12px;
+}
 .condition span,
-.validation-expression span {
+.validation-expression span,
+.question-title span {
   font-family: "Noto Sans", Arial, sans-serif;
   top: -1px;
 }
