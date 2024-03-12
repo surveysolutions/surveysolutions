@@ -62,12 +62,19 @@ export function setupErrorHandler(app) {
         return false;
     });
 
+    const ignoreStatusCodes = [400, 403, 406];
+
     window.addEventListener('unhandledrejection', function(e) {
+        const status = e.reason?.response?.status;
+
+        if (status && ignoreStatusCodes.includes(status)) return false;
+
         var errorDetails = {
             message: e.reason?.body?.message ?? e.reason?.message,
 
             additionalData: {
                 source: 'unhandledrejection event',
+                responseStatusCode: status || null,
                 stack:
                     e.reason instanceof Error
                         ? getNestedErrorDetails(e.reason)
