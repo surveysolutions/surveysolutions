@@ -3002,5 +3002,17 @@ namespace WB.UI.Designer.Resources {
                 return ResourceManager.GetString("No", resourceCulture);
             }
         }
+        
+        public static string QuestionIsCritical {
+            get {
+                return ResourceManager.GetString("QuestionIsCritical", resourceCulture);
+            }
+        }
+        
+        public static string HelpIsCritical {
+            get {
+                return ResourceManager.GetString("HelpIsCritical", resourceCulture);
+            }
+        }
     }
 }

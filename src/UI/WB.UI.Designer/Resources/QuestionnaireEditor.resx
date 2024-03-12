@@ -1604,4 +1604,10 @@ You entered an invalid input. Each line should follow the format: "Title...Paren
   <data name="No" xml:space="preserve">
       <value>No</value>
   </data>
+  <data name="QuestionIsCritical" xml:space="preserve">
+      <value>Require an answer to this question</value>
+  </data>
+  <data name="HelpIsCritical" xml:space="preserve">
+      <value>Prevent submission of interviews with this question left not answered.</value>
+  </data>
 </root>

@@ -176,17 +176,5 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("GeometryTypeMultipoint", resourceCulture);
             }
         }
-        
-        public static string QuestionIsCritical {
-            get {
-                return ResourceManager.GetString("QuestionIsCritical", resourceCulture);
-            }
-        }
-        
-        public static string HelpIsCritical {
-            get {
-                return ResourceManager.GetString("HelpIsCritical", resourceCulture);
-            }
-        }
     }
 }

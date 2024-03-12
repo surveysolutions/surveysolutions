@@ -183,10 +183,4 @@
     <data name="GeometryTypeMultipoint" xml:space="preserve">
     <value>Множество точек</value>
   </data>
-  <data name="QuestionIsCritical" xml:space="preserve">
-      <value>Критичный вопрос</value>
-  </data>
-  <data name="HelpIsCritical" xml:space="preserve">
-      <value>Пометить вопрос как обязательный. Его заполнение необходимо для завершения интервью.</value>
-  </data>
 </root>
