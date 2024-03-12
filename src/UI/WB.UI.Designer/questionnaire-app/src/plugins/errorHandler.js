@@ -74,6 +74,7 @@ export function setupErrorHandler(app) {
 
             additionalData: {
                 source: 'unhandledrejection event',
+                responseStatusCode: status || null,
                 stack:
                     e.reason instanceof Error
                         ? getNestedErrorDetails(e.reason)
