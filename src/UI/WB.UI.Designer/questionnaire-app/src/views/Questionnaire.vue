@@ -229,7 +229,7 @@ export default {
 
             if (!this.$route.params.chapterId) {
                 var info = this.questionnaireStore.getInfo;
-                if (info) {
+                if (info?.chapters && info.chapters.length > 0) {
                     var chapter = info.chapters[0];
                     this.$router.push({
                         name: 'group',
