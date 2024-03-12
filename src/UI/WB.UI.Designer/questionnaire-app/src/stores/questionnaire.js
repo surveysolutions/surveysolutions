@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia';
-import { get, commandCall } from '../services/apiService';
+import { commandCall } from '../services/apiService';
 import { newGuid } from '../helpers/guid';
 import { i18n } from '../plugins/localization';
 import emitter from '../services/emitter';
+import { getQuestionnaire } from '../services/questionnaireService';
 import {
     findIndex,
     forEach,
@@ -81,16 +82,8 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
         },
 
         async fetchQuestionnaireInfo(questionnaireId) {
-            try {
-                const info = await get(
-                    '/api/questionnaire/get/' + questionnaireId
-                );
-                this.setQuestionnaireInfo(info);
-            } catch (error) {
-                if (error.response.status === 401) {
-                    window.location = '/';
-                }
-            }
+            var info = await getQuestionnaire(questionnaireId);
+            this.setQuestionnaireInfo(info);
         },
 
         resetSharedInfo() {
@@ -98,6 +91,11 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
         },
 
         setQuestionnaireInfo(info) {
+            if (info === null || info === undefined) {
+                this.$reset();
+                return;
+            }
+
             this.info = info;
 
             this.edittingMetadata = cloneDeep(info.metadata);

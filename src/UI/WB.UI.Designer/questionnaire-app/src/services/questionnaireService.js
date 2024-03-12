@@ -14,6 +14,16 @@ export function addSubsection(questionnaireId, newSubsection) {
     // });
 }
 
+export async function getQuestionnaire(questionnaireId) {
+    try {
+        return await get('/api/questionnaire/get/' + questionnaireId);
+    } catch (error) {
+        if (error.response.status === 401 || error.response.status === 404) {
+            window.location = '/';
+        } else throw error;
+    }
+}
+
 export function updateQuestionnaireSettings(questionnaireId, questionnaire) {
     var command = {
         title: questionnaire.title,

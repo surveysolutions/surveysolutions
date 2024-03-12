@@ -320,7 +320,18 @@ export default {
         },
         $route: function (oldValue, newValue) {
             this.scrollTo();
-        }
+        },
+        'activeQuestion.cascadeFromQuestionId'(newValue, oldValue) {
+            if (this.activeQuestion) {
+                if (newValue) {
+                    this.activeQuestion.optionsFilterExpression = null;
+                }
+            }
+        },
+        'activeQuestion.linkedToEntityId'(newValue, oldValue) {
+            if (oldValue == null && newValue != null && this.activeQuestion.questionScope == 'Identifying' && this.activeQuestion.type == 'SingleOption')
+                this.activeQuestion.questionScope = null;
+        },
     },
     setup() {
         const questionStore = useQuestionStore();
@@ -368,8 +379,9 @@ export default {
     },
     computed: {
         currentQuestionScope() {
+            const questionScope = this.activeQuestion.questionScope
             const option = this.activeQuestion.allQuestionScopeOptions.find(
-                p => p.value == this.activeQuestion.questionScope
+                p => p.value == questionScope
             );
             return option != null ? option.text : null;
         },
@@ -397,7 +409,7 @@ export default {
             return this.questionStore.getIsDirty;
         },
         isValid() {
-            return this.questionStore.getIsValid;
+            return this.activeQuestion.questionScope != null && this.questionStore.getIsValid;
         }
     },
     methods: {
@@ -475,7 +487,7 @@ export default {
                 return false;
             return this.activeQuestion
                 && (this.activeQuestion.questionScope != 'Identifying')
-                && !(this.activeQuestion.isCascade && this.activeQuestion.cascadeFromQuestionId);
+                && this.activeQuestion.cascadeFromQuestionId == null;
         },
         doesQuestionSupportValidations() {
             return this.activeQuestion &&
@@ -515,6 +527,7 @@ export default {
         getQuestionScopes() {
             if (!this.activeQuestion)
                 return [];
+
             var allScopes = this.activeQuestion.allQuestionScopeOptions;
 
             if (_.indexOf(questionsWithOnlyInterviewerScope, this.activeQuestion.type) >= 0) {
@@ -523,8 +536,8 @@ export default {
                 });
             }
 
-            if (!this.activeQuestion.isCascade && this.activeQuestion.linkedToEntityId == null &&
-                _.indexOf(['TextList', 'GpsCoordinates', 'MultyOption', 'DateTime', 'SingleOption'], this.activeQuestion.type) < 0)
+            if (this.activeQuestion.linkedToEntityId == null &&
+                _.indexOf(['TextList', 'GpsCoordinates', 'MultyOption', 'DateTime'], this.activeQuestion.type) < 0)
                 return allScopes;
 
             return allScopes.filter(o => {
@@ -543,7 +556,6 @@ export default {
         setQuestionType(type) {
             this.activeQuestion.type = type;
             this.activeQuestion.typeName = _.find(this.activeQuestion.questionTypeOptions, { value: type }).text;
-            //this.activeQuestion.allQuestionScopeOptions = dictionaries.allQuestionScopeOptions;
 
             const isQuestionScopeSupervisorOrPrefilled = this.activeQuestion.questionScope === 'Supervisor' || this.activeQuestion.questionScope === 'Identifying';
             if (type === 'TextList' && isQuestionScopeSupervisorOrPrefilled) {
@@ -551,9 +563,6 @@ export default {
             }
 
             if (type === 'DateTime') {
-                this.activeQuestion.allQuestionScopeOptions = _.filter(this.activeQuestion.allQuestionScopeOptions, function (val) {
-                    return val.value !== 'Supervisor';
-                });
                 if (this.activeQuestion.questionScope === 'Supervisor') {
                     this.changeQuestionScope(this.getQuestionScopeByValue('Interviewer'));
                 }
@@ -572,6 +581,9 @@ export default {
             }
 
             if (type !== "SingleOption" && type !== "MultyOption") {
+                this.activeQuestion.linkedToEntityId = null;
+                this.activeQuestion.linkedFilterExpression = null;
+                this.activeQuestion.optionsFilterExpression = null;
             }
 
             if (type === 'MultyOption' || type === "SingleOption") {
@@ -597,6 +609,7 @@ export default {
 
             if (!this.doesQuestionSupportLinkedToEntity()) {
                 this.activeQuestion.linkedToEntityId = null;
+                this.activeQuestion.linkedFilterExpression = null;
             }
 
             if (type === "Area") {

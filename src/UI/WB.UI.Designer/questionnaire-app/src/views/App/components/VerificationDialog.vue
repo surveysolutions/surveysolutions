@@ -6,13 +6,14 @@
                 <h3 class="modal-title">
                     <span>{{ $t('QuestionnaireEditor.CompilationLabel') }}</span>
                     <span>&nbsp;</span>
-                    <span v-if="typeOfMessageToBeShown === 'error'">{{ $t('QuestionnaireEditor.CompilationErrorsCounter', {
-                        count: messagesToShow.length
-                    }) }}</span>
+                    <span v-if="typeOfMessageToBeShown === 'error'">{{
+        $t('QuestionnaireEditor.CompilationErrorsCounter', {
+            count: messagesToShow.length
+        }) }}</span>
                     <span v-if="typeOfMessageToBeShown === 'warning'">{{
-                        $t('QuestionnaireEditor.CompilationWarningsCounter', {
-                            count: messagesToShow.length
-                        }) }}</span>
+        $t('QuestionnaireEditor.CompilationWarningsCounter', {
+            count: messagesToShow.length
+        }) }}</span>
                 </h3>
             </div>
             <div class="modal-body">
@@ -24,8 +25,8 @@
                                     <span class="error-code">[{{ error.code }}]:</span>{{ error.message }}
                                 </div>
                                 <ul class="verification-items" :class="{
-                                    singleError: !error.isGroupedMessage
-                                }">
+        singleError: !error.isGroupedMessage
+    }">
                                     <template v-for="referencesWithErrors in error.errors">
                                         <li class="verification-item-container"
                                             v-for="reference in referencesWithErrors.references"
@@ -43,15 +44,19 @@
                                                     :class="['icon-' + typeOfMessageToBeShown]"></span>
                                                 <span v-if="reference.type == 'LookupTable'" class="icon icon-lookup "
                                                     :class="['icon-' + typeOfMessageToBeShown]"></span>
-                                                <span v-if="reference.type == 'StaticText'" class="icon icon-statictext "
+                                                <span v-if="reference.type == 'StaticText'"
+                                                    class="icon icon-statictext "
                                                     :class="['icon-' + typeOfMessageToBeShown]"></span>
-                                                <span v-if="reference.type == 'Attachment'" class="icon icon-attachment "
+                                                <span v-if="reference.type == 'Attachment'"
+                                                    class="icon icon-attachment "
                                                     :class="['icon-' + typeOfMessageToBeShown]"></span>
                                                 <span v-if="reference.type == 'Variable'" class="icon icon-variable"
                                                     :class="['icon-' + typeOfMessageToBeShown]"></span>
-                                                <span v-if="reference.type == 'Translation'" class="icon icon-translation "
+                                                <span v-if="reference.type == 'Translation'"
+                                                    class="icon icon-translation "
                                                     :class="['icon-' + typeOfMessageToBeShown]"></span>
-                                                <span v-if="reference.type == 'Categories'" class="icon icon-categories "
+                                                <span v-if="reference.type == 'Categories'"
+                                                    class="icon icon-categories "
                                                     :class="['icon-' + typeOfMessageToBeShown]"></span>
                                                 <span class="title" v-sanitize-html="reference.title"></span>
                                                 <span class="variable"
@@ -127,7 +132,8 @@ export default {
                 this.questionnaireId
             );
 
-            if (this.messagesToShow.length == 0) {
+            const errorsCount = this.verificationStore.status.errors.length;
+            if (errorsCount == 0) {
                 this.close()
             }
             else (

@@ -18,9 +18,9 @@
             <div class="ui-pnotify ui-pnotify-fade-normal ui-pnotify-mobile-able ui-pnotify-in ui-pnotify-fade-in ui-pnotify-move"
                 aria-live="assertive" aria-role="alertdialog" style="position: inherit;">
                 <div class="alert ui-pnotify-container ui-pnotify-shadow" :class="{
-                    'alert-warning': props.item.type != 'error',
-                    'alert-danger': props.item.type == 'error'
-                }" role="alert" style="min-height: 16px;">
+        'alert-warning': props.item.type != 'error',
+        'alert-danger': props.item.type == 'error'
+    }" role="alert" style="min-height: 16px;">
                     <div class="ui-pnotify-closer" aria-role="button" tabindex="0" title="Close" @click="props.close"
                         style="cursor: pointer;">
                         <span class="glyphicon glyphicon-remove"></span>
@@ -68,7 +68,7 @@
         </div>
     </div>
 </template>
- 
+
 <style lang="scss">
 .vue-notification-group {
     position: absolute;
@@ -228,15 +228,18 @@ export default {
             );
 
             if (!this.$route.params.chapterId) {
-                var chapter = this.questionnaireStore.getInfo.chapters[0];
-                this.$router.push({
-                    name: 'group',
-                    params: {
-                        chapterId: chapter.itemId,
-                        entityId: chapter.itemId
-                    },
-                    force: true
-                });
+                var info = this.questionnaireStore.getInfo;
+                if (info) {
+                    var chapter = info.chapters[0];
+                    this.$router.push({
+                        name: 'group',
+                        params: {
+                            chapterId: chapter.itemId,
+                            entityId: chapter.itemId
+                        },
+                        force: true
+                    });
+                }
             }
         },
         changeCheatSheetVisibility() {

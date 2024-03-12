@@ -327,17 +327,16 @@ export default {
             copyItem(this.questionnaireId, this.item);
         },
 
-        pasteItemAfter() {
+        async pasteItemAfter() {
             if (!this.canPaste) return;
 
-            pasteItemAfter(this.questionnaireId, this.item.itemId).then(function (result) {
-                if (!chapter.isCover)
-                    this.$router.push({
-                        name: result.itemType,
-                        params: {
-                            entityId: result.itemId
-                        }
-                    });
+            const result = await pasteItemAfter(this.questionnaireId, this.item.itemId)
+
+            this.$router.push({
+                name: result.itemType.toLowerCase(),
+                params: {
+                    entityId: result.id
+                }
             });
         }
     }
