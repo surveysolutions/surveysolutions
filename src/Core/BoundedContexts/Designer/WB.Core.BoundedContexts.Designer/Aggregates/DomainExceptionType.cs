@@ -166,5 +166,8 @@
         MigrateToNewVersion,
         InvalidUserInfo,
         QuestionnaireIsDeleted,
+        CriticalityConditionIsAbsent,
+        CriticalityConditionAlreadyExist,
+
     }
 }

@@ -14,6 +14,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         Variable,
         Translation,
         Metadata,
-        Categories
+        Categories,
+        CriticalityCondition,
     }
 }

@@ -153,6 +153,12 @@
   <data name="MacroIsAbsent" xml:space="preserve">
     <value>Macro is absent.</value>
   </data>
+  <data name="CriticalityConditionAlreadyExist" xml:space="preserve">
+    <value>Criticality condition already exists.</value>
+  </data>
+  <data name="CriticalityConditionIsAbsent" xml:space="preserve">
+    <value>Criticality condition is absent.</value>
+  </data>
   <data name="LookupTables_duplicating_headers_are_not_allowed" xml:space="preserve">
     <value>Headers with the same name are not allowed</value>
   </data>

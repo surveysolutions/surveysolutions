@@ -34,6 +34,7 @@ namespace Main.Core.Documents
             this.Attachments = new List<Attachment>();
             this.Translations = new List<Translation>();
             this.Categories = new List<Categories>();
+            this.CriticalityConditions = new();
 
             if(children == null)
                 this.children = new List<IComposite>();
@@ -63,6 +64,8 @@ namespace Main.Core.Documents
         }
 
         public Dictionary<Guid, Macro> Macros { get; set; }
+
+        public List<CriticalityCondition> CriticalityConditions { get; set; }
 
         public Dictionary<Guid, LookupTable> LookupTables { get; set; }
 

@@ -17,6 +17,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.CriticalityConditions;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
@@ -289,6 +290,37 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfMacroIsAbsent(command.MacroId);
 
             innerDocument.Macros.Remove(command.MacroId);
+        }
+
+        #endregion
+        
+        #region CriticalityCondition command handlers
+
+        public void AddCriticalityCondition(AddCriticalityCondition command)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+            this.ThrowDomainExceptionIfCriticalityConditionAlreadyExist(command.Id);
+
+            this.innerDocument.CriticalityConditions.Add(new CriticalityCondition() { Id = command.Id });
+        }
+
+        public void UpdateCriticalityCondition(UpdateCriticalityCondition command)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+            this.ThrowDomainExceptionIfCriticalityConditionIsAbsent(command.Id);
+            
+            var criticalityCondition = this.innerDocument.CriticalityConditions.Single(ss => ss.Id == command.Id);
+            criticalityCondition.Message = command.Message;
+            criticalityCondition.Expression = command.Expression;
+            criticalityCondition.Description = command.Description;
+        }
+
+        public void DeleteCriticalityCondition(DeleteCriticalityCondition command)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+            this.ThrowDomainExceptionIfCriticalityConditionIsAbsent(command.Id);
+
+            innerDocument.CriticalityConditions.RemoveAll(cc => cc.Id == command.Id);
         }
 
         #endregion
@@ -2038,6 +2070,22 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (!this.innerDocument.Macros.ContainsKey(macroId))
             {
                 throw new QuestionnaireException(DomainExceptionType.MacroIsAbsent, ExceptionMessages.MacroIsAbsent);
+            }
+        }
+        
+        private void ThrowDomainExceptionIfCriticalityConditionAlreadyExist(Guid id)
+        {
+            if (this.innerDocument.CriticalityConditions.Any(cc => cc.Id == id))
+            {
+                throw new QuestionnaireException(DomainExceptionType.CriticalityConditionAlreadyExist, ExceptionMessages.CriticalityConditionAlreadyExist);
+            }
+        }
+
+        private void ThrowDomainExceptionIfCriticalityConditionIsAbsent(Guid id)
+        {
+            if (this.innerDocument.CriticalityConditions.All(cc => cc.Id != id))
+            {
+                throw new QuestionnaireException(DomainExceptionType.CriticalityConditionIsAbsent, ExceptionMessages.CriticalityConditionIsAbsent);
             }
         }
 
