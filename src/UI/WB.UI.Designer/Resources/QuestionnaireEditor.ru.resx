@@ -1621,7 +1621,7 @@
       <value>Нет</value>
   </data>
   <data name="QuestionIsCritical" xml:space="preserve">
-      <value>Необходимо ответить на этот вопрос</value>
+      <value>Требовать ответ на этот вопрос</value>
   </data>
   <data name="HelpIsCritical" xml:space="preserve">
       <value>Запретить завершение интервью, если вопрос неотвечен.</value>

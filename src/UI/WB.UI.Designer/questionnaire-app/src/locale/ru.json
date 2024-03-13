@@ -483,7 +483,7 @@
     "Login": "Логин",
     "Register": "Зарегистрироваться",
     "No": "Нет",
-    "QuestionIsCritical": "Необходимо ответить на этот вопрос",
+    "QuestionIsCritical": "Требовать ответ на этот вопрос",
     "HelpIsCritical": "Запретить завершение интервью, если вопрос неотвечен.",
     "ErrorsCounter_other": "{{count}} errors",
     "SideBarAttachmentsCounter_other": "{{count}} Files Attachments ({{bytes}} total)",
