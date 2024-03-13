@@ -1,12 +1,15 @@
 ARG DOTNET_VERSION=7.0
 ARG VERSION=21.01
 ARG INFO_VERSION=21.01
-ARG NODE=20
+ARG NODE=18
 ARG APK_FILES=build
 ARG FONTS="NotoSans-hinted.zip;NotoSansMyanmar-hinted.zip"
 
+FROM bookworm:latest
+CMD echo "Running on $(uname -m)"
+
 # Building WB.UI.Frontend application
-FROM --platform=amd64 node:$NODE-bookworm as frontend
+FROM --platform=amd64 node:$NODE as frontend
 
 WORKDIR /src/UI/WB.UI.Frontend
 COPY src/UI/WB.UI.Frontend/package*.json /src/UI/WB.UI.Frontend
