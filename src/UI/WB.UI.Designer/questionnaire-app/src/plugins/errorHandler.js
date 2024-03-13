@@ -3,7 +3,13 @@ import { mande } from 'mande';
 const api = mande('/error/report');
 
 export function setupErrorHandler(app) {
+    const ignoreStatusCodes = [400, 403, 406];
+
     app.config.errorHandler = (err, vm, info) => {
+        const status = err.response?.status;
+
+        if (status && ignoreStatusCodes.includes(status)) return false;
+
         var errorDetails = {
             message: err.message,
             additionalData: {
@@ -61,8 +67,6 @@ export function setupErrorHandler(app) {
 
         return false;
     });
-
-    const ignoreStatusCodes = [400, 403, 406];
 
     window.addEventListener('unhandledrejection', function(e) {
         const status = e.reason?.response?.status;
