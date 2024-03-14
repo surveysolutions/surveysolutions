@@ -8,7 +8,6 @@ import {
     findIndex,
     forEach,
     isEmpty,
-    map,
     filter,
     find,
     sortBy,
@@ -64,9 +63,15 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
 
             emitter.on('metadataUpdated', this.metadataUpdated);
 
+            emitter.on('questionAdded', this.questionAdded);
+            emitter.on('questionDeleted', this.questionDeleted);
+
+            emitter.on('groupAdded', this.groupAdded);
             emitter.on('groupDeleted', this.groupDeleted);
             emitter.on('groupUpdated', this.groupUpdated);
 
+            emitter.on('rosterAdded', this.rosterAdded);
+            emitter.on('rosterDeleted', this.rosterDeleted);
             emitter.on('rosterUpdated', this.rosterUpdated);
 
             emitter.on('scenarioUpdated', this.scenarioUpdated);
@@ -223,6 +228,10 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
                 );
             }
         },
+
+        groupAdded(payload) {
+            this.info.groupsCount++;
+        },
         groupDeleted(event) {
             var index = findIndex(this.info.chapters, function(i) {
                 return i.itemId === event.id.replaceAll('-', '');
@@ -231,6 +240,8 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             if (index > -1) {
                 this.info.chapters.splice(index, 1);
             }
+
+            this.info.groupsCount--;
         },
         groupUpdated(payload) {
             var index = findIndex(this.info.chapters, function(i) {
@@ -247,6 +258,12 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             }
         },
 
+        rosterAdded(payload) {
+            this.info.rostersCount++;
+        },
+        rosterDeleted(payload) {
+            this.info.rostersCount--;
+        },
         rosterUpdated(payload) {},
         attachmentDeleted(payload) {
             const index = findIndex(this.info.attachments, function(i) {
@@ -371,6 +388,13 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             if (index !== -1) {
                 this.info.categories.splice(index, 1);
             }
+        },
+
+        questionAdded(payload) {
+            this.info.questionsCount++;
+        },
+        questionDeleted(payload) {
+            this.info.questionsCount--;
         },
 
         async discardMetadataChanges() {
