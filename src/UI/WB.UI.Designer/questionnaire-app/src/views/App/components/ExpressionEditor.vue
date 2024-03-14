@@ -122,6 +122,9 @@ export default {
             renderer.setPadding(12);
 
             editor.$blockScrolling = Infinity;
+
+            editor.keyBinding.$defaultHandler.commandKeyBinding = {};
+
             editor.commands.bindKey("tab", null);
             editor.commands.bindKey("shift+tab", null);
 
