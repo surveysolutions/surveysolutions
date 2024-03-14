@@ -118,11 +118,15 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
 
             this.CreateMap<Documents.Macro, Models.Macro>();
             this.CreateMap<Models.Macro, Documents.Macro>();
-
             this.CreateMap<KeyValuePair<Guid, Documents.Macro>, Models.Macro>()
                 .ConstructUsing((kv, context) => context.Mapper.Map<Documents.Macro, Models.Macro>(kv.Value));
             this.CreateMap<Models.Macro, KeyValuePair<Guid, Documents.Macro>>()
                 .ConstructUsing((v, context) => new KeyValuePair<Guid, Documents.Macro>(Guid.NewGuid(), context.Mapper.Map<Models.Macro, Documents.Macro>(v)));
+
+            this.CreateMap<Documents.CriticalityCondition, Models.CriticalityCondition>();
+            this.CreateMap<Models.CriticalityCondition, Documents.CriticalityCondition>()
+                .ForMember(x => x.Id, x => x.MapFrom(s =>
+                    s.Id.HasValue ? s.Id.Value : Guid.NewGuid()));
 
             this.CreateMap<IComposite, QuestionnaireEntity>()
                 .ForMember(s => s.Id, opt => opt.MapFrom(t => 

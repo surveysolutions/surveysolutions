@@ -275,6 +275,25 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
         }
         
         [Test]
+        public void when_export_questionnaire_with_CriticalityConditions_should_be_equals_after_import()
+        {
+            var questionnaireDocument = Create.QuestionnaireDocumentWithEmptyCoverPage(Id.g1,
+                Create.Chapter()
+            );
+            questionnaireDocument.CriticalityConditions = new List<CriticalityCondition>()
+            {
+                { new CriticalityCondition() { Message = "Message #1", Description = "Description 1", Expression = "Expression1"} },
+                { new CriticalityCondition() { Message = "Message #2", Description = "Description 2", Expression = "Expression2"} },
+            };
+
+            var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);
+            
+            questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
+            newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
+            errors.Count.Should().Be(0);
+        }
+
+        [Test]
         public void when_export_questionnaire_with_translations_should_be_equals_after_import()
         {
             var questionnaireDocument = Create.QuestionnaireDocumentWithEmptyCoverPage(Id.g1,
