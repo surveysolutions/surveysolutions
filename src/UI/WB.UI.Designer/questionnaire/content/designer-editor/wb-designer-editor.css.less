@@ -65,7 +65,7 @@
 @selected-panel-border-color: #dbdfe2;
 @selected-panel-grey-color: #7e898f;
 @leftpanel-accent-color: #e004c9;
-@leftpanel-icons-sprite: '../i/designer-left-icons-4.png';
+@leftpanel-icons-sprite: '../i/designer-left-icons-4-3.png';
 @leftpanel-icon-height: 50px;
 
 #left-menu {
@@ -121,6 +121,18 @@
 
             &.left-menu-comments {
                 background: url(@leftpanel-icons-sprite) 0 -@leftpanel-icon-height*7 no-repeat;
+            }
+
+            &.left-menu-criticality-conditions {
+                background: url(@leftpanel-icons-sprite) 0 -@leftpanel-icon-height*9 no-repeat;
+            }
+
+            &.left-menu-metadata {
+                background: url(@leftpanel-icons-sprite) 0 -@leftpanel-icon-height*5 no-repeat;
+            }
+
+            &.left-menu-categories {
+                background: url(@leftpanel-icons-sprite) 0 -@leftpanel-icon-height*8 no-repeat;
             }
 
             &:hover {

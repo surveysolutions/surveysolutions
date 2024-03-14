@@ -108,7 +108,7 @@
         </div>
     </Transition>
     <Transition name="slide">
-        <div v-if="isUnfoldedCriticalityConditions" class="left-side-panel completionchecks"
+        <div v-if="isUnfoldedCriticalityConditions" class="left-side-panel criticality-conditions"
             :class="{ unfolded: isFolded }">
             <div class="foldback-region" @click.stop="foldback()"></div>
             <div class="left-side-panel-content macros-panel">
@@ -160,7 +160,7 @@
                     :title="$t('QuestionnaireEditor.SideBarCommentsTitle')"></a>
             </li>
             <li>
-                <a class="left-menu-completionchecks" v-if="!questionnaire.isReadOnlyForUser"
+                <a class="left-menu-criticality-conditions" v-if="!questionnaire.isReadOnlyForUser"
                     :class="{ unfolded: isUnfoldedCriticalityConditions }" @click="unfoldCriticalityConditions();"
                     :title="$t('QuestionnaireEditor.SideBarCriticalityConditionsTitle')"></a>
             </li>
