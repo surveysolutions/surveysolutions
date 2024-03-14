@@ -2,14 +2,15 @@
     <li class="macros-panel-item">
         <a href="javascript:void(0);" @click="remove()" v-if="!isReadOnlyForUser" class="btn delete-btn"
             tabindex="-1"></a>
+        <ExpressionEditor v-model="criticalityCondition.edit.expression" mode="expression" focusable="false"
+            :placeholder="$t('QuestionnaireEditor.SideBarCriticalityConditionExpression')" />
+        <div class="divider"></div>
         <div class="input-group macros-name">
             <input :id="criticalityCondition.id"
                 :placeholder="$t('QuestionnaireEditor.SideBarCriticalityConditionMessage')" maxlength="32"
                 spellcheck="false" v-model="criticalityCondition.edit.message" name="message" class="form-control"
                 type="text" />
         </div>
-        <div class="divider"></div>
-        <ExpressionEditor v-model="criticalityCondition.edit.expression" mode="expression" focusable="false" />
         <div v-if="isDescriptionVisible()">
             <div class="divider"></div>
             <textarea :placeholder="$t('QuestionnaireEditor.SideBarCriticalityConditionDescription')" type="text"
