@@ -4,7 +4,7 @@
             tabindex="-1"></a>
         <div class="input-group macros-name">
             <input :id="criticalityCondition.id"
-                :placeholder="$t('QuestionnaireEditor.SideBarCriticalityConditionName')" maxlength="32"
+                :placeholder="$t('QuestionnaireEditor.SideBarCriticalityConditionMessage')" maxlength="32"
                 spellcheck="false" v-model="criticalityCondition.edit.message" name="message" class="form-control"
                 type="text" />
         </div>

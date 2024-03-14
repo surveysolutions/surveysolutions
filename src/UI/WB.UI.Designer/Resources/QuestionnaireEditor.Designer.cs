@@ -387,6 +387,78 @@ namespace WB.UI.Designer.Resources {
             }
         }
         
+        public static string SideBarCriticalityConditionExpression {
+            get {
+                return ResourceManager.GetString("SideBarCriticalityConditionExpression", resourceCulture);
+            }
+        }
+        
+        public static string SideBarCriticalityConditionsCounter {
+            get {
+                return ResourceManager.GetString("SideBarCriticalityConditionsCounter", resourceCulture);
+            }
+        }
+        
+        public static string SideBarCriticalityConditionsCounter_plural {
+            get {
+                return ResourceManager.GetString("SideBarCriticalityConditionsCounter_plural", resourceCulture);
+            }
+        }
+        
+        public static string SideBarCriticalityConditionDescription {
+            get {
+                return ResourceManager.GetString("SideBarCriticalityConditionDescription", resourceCulture);
+            }
+        }
+        
+        public static string SideBarCriticalityConditionsEmptyLine1 {
+            get {
+                return ResourceManager.GetString("SideBarCriticalityConditionsEmptyLine1", resourceCulture);
+            }
+        }
+        
+        public static string SideBarCriticalityConditionsEmptyLine2 {
+            get {
+                return ResourceManager.GetString("SideBarCriticalityConditionsEmptyLine2", resourceCulture);
+            }
+        }
+        
+        public static string SideBarCriticalityConditionsEmptyLine3 {
+            get {
+                return ResourceManager.GetString("SideBarCriticalityConditionsEmptyLine3", resourceCulture);
+            }
+        }
+        
+        public static string SideBarHideDescription {
+            get {
+                return ResourceManager.GetString("SideBarHideDescription", resourceCulture);
+            }
+        }
+        
+        public static string SideBarCriticalityConditionMessage {
+            get {
+                return ResourceManager.GetString("SideBarCriticalityConditionMessage", resourceCulture);
+            }
+        }
+        
+        public static string SideBarShowDescription {
+            get {
+                return ResourceManager.GetString("SideBarShowDescription", resourceCulture);
+            }
+        }
+        
+        public static string SideBarAddCriticalityCondition {
+            get {
+                return ResourceManager.GetString("SideBarAddCriticalityCondition", resourceCulture);
+            }
+        }
+        
+        public static string SideBarCriticalityConditionNoMessage {
+            get {
+                return ResourceManager.GetString("SideBarCriticalityConditionNoMessage", resourceCulture);
+            }
+        }
+        
         public static string SideBarScenarioCounter {
             get {
                 return ResourceManager.GetString("SideBarScenarioCounter", resourceCulture);
