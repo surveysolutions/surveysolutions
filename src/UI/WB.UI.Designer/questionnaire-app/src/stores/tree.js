@@ -350,12 +350,10 @@ export const useTreeStore = defineStore('tree', {
             this.removeVariableName(data.id);
         },
         groupDeleted(data) {
-            this.deleteTreeNode(data.id);
-            this.removeVariableName(data.id);
+            this.fetchTree(this.questionnaireId, this.chapterId);
         },
         rosterDeleted(data) {
-            this.deleteTreeNode(data.id);
-            this.removeVariableName(data.id);
+            this.fetchTree(this.questionnaireId, this.chapterId);
         },
         deleteTreeNode(itemId) {
             const id = itemId.replaceAll('-', '');
