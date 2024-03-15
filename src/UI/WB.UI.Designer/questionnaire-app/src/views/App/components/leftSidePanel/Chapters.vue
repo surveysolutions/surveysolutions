@@ -3,7 +3,7 @@
         <perfect-scrollbar class="scroller">
             <h3>
                 <span>{{ $t('QuestionnaireEditor.SideBarSectionsCounter', {
-                    count: questionnaire.chapters.length
+                    count: questionnaire?.chapters?.length || 0
                 }) }}</span>
             </h3>
             <ul ui-tree-nodes class="chapters-list angular-ui-tree-nodes">
