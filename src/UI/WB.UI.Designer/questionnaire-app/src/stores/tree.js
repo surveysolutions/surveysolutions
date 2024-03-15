@@ -20,8 +20,8 @@ export const useTreeStore = defineStore('tree', {
         }
     }),
     getters: {
-        getItems: state => (state.info.chapter || {}).items,
-        getChapterData: state => state.info.chapter,
+        getItems: state => (state.info?.chapter || {}).items,
+        getChapterData: state => state.info?.chapter,
         getChapter: state => state.info,
         getVariableNames: state => state.variableNamesStore
     },
