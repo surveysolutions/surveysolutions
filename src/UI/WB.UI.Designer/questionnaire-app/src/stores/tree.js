@@ -300,26 +300,30 @@ export const useTreeStore = defineStore('tree', {
         },
 
         recalculateVariableNames() {
-            var i = 0;
-            this.variableNamesStore.variableNamesCompletions = orderBy(
-                this.info.variableNames,
-                'name',
-                'desc'
-            ).map(function(variable) {
-                return {
-                    name: variable.name,
-                    value: variable.name,
-                    score: i++,
-                    meta: variable.type
-                };
-            });
+            if (this.info) {
+                var i = 0;
+                this.variableNamesStore.variableNamesCompletions = orderBy(
+                    this.info.variableNames,
+                    'name',
+                    'desc'
+                ).map(function(variable) {
+                    return {
+                        name: variable.name,
+                        value: variable.name,
+                        score: i++,
+                        meta: variable.type
+                    };
+                });
 
-            this.variableNamesStore.variableNamesTokens = this.info.variableNames
-                .map(function(el) {
-                    return el.name;
-                })
-                .join('|');
-
+                this.variableNamesStore.variableNamesTokens = this.info.variableNames
+                    .map(function(el) {
+                        return el.name;
+                    })
+                    .join('|');
+            } else {
+                this.variableNamesStore.variableNamesCompletions = [];
+                this.variableNamesStore.variableNamesTokens = '';
+            }
             this.variableNamesStore.lastUpdated = new Date();
 
             emitter.emit('variablesRecalculated');
