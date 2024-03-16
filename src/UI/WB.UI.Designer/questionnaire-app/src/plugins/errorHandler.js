@@ -3,7 +3,7 @@ import { mande } from 'mande';
 const api = mande('/error/report');
 
 export function setupErrorHandler(app) {
-    const ignoreStatusCodes = [400, 403, 406];
+    const ignoreStatusCodes = [401, 400, 403, 406];
 
     app.config.errorHandler = (err, vm, info) => {
         const status = err.response?.status;
