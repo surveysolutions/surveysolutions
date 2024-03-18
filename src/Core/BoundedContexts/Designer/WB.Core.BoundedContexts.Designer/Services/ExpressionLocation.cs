@@ -85,6 +85,11 @@ namespace WB.Core.BoundedContexts.Designer.Services
         public static ExpressionLocation RosterCondition(Guid rosterId)
             => new ExpressionLocation(ExpressionLocationItemType.Roster, ExpressionLocationType.Condition, rosterId);
         
+        
+        public static ExpressionLocation CriticalityCondition(Guid criticalityConditionId, int position)
+            => new ExpressionLocation(ExpressionLocationItemType.Questionnaire, ExpressionLocationType.CriticalityCondition, 
+                criticalityConditionId, position);
+        
         public override string ToString()
         {
             var result = String.Format("{0}:{1}:{2}", ItemType, ExpressionType, Id);

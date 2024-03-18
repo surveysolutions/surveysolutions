@@ -18,6 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
         public const string EnablementPrefix = "IsEnabled__";
         public const string OptionsFilterPrefix = "FilterOption__";
         public const string VariablePrefix = "Variable__";
+        public const string CriticalityConditionPrefix = "Criticality__";
         
         public const string ValidationPrefix = "IsValid__";
         public const string LinkedFilterPrefix = "FilterForLinkedQuestion__";
@@ -55,7 +56,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
 
             var lookupTablesTemplate = new LookupTablesTemplate(model.LookupTables);
             generatedClasses.Add(ExpressionLocation.LookupTables().Key, lookupTablesTemplate.TransformText());
-
+            
             foreach (ConditionMethodModel variableMethodModel in model.VariableMethodModel)
             {
                 var methodTemplate = new ConditionMethodTemplate(variableMethodModel)
@@ -91,6 +92,15 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                 };
                 generatedClasses.Add(linkedFilterMethodModel.Location.Key, methodTemplate.TransformText());
             }
+
+            /*foreach (var conditionMethodModel in model.CriticalityConditionsModel)
+            {
+                var methodTemplate = new ConditionMethodTemplate(conditionMethodModel)
+                {
+                    InSingleFile = inSingleFile
+                };
+                generatedClasses.Add(conditionMethodModel.Location.Key, methodTemplate.TransformText());
+            }*/
 
             return generatedClasses;
         }

@@ -4,6 +4,17 @@ namespace WB.Core.SharedKernels.SurveySolutions.Documents
 {
     public class CriticalityCondition
     {
+        public CriticalityCondition()
+        {
+        }
+
+        public CriticalityCondition(Guid id, string? expression, string? message)
+        {
+            this.Id = id;
+            this.Expression = expression;
+            this.Message = message;
+        }
+        
         public Guid Id { get; set; }
         public string? Message { get; set; }
         public string? Expression { get; set; }

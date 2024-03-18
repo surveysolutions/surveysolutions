@@ -24,7 +24,9 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
         public List<ConditionMethodModel> VariableMethodModel { get; } = new List<ConditionMethodModel>();
 
         public List<LookupTableTemplateModel> LookupTables { get; set; } = new List<LookupTableTemplateModel>();
-       
+        
+        //public List<ConditionMethodModel> CriticalityConditionsModel { get; } = new List<ConditionMethodModel>();
+
         public Dictionary<Guid, string> IdMap { get; set; } = new Dictionary<Guid, string>();
 
 
@@ -66,6 +68,15 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
         public IEnumerable<LinkedFilterMethodModel> GetLinkedFilters(string className)
         {
             return this.LinkedFilterMethodModel.Where(x => x.ClassName == className);
+        }
+
+        public Dictionary<string, string[]> GetCriticalityConditions(string className)
+        {
+            return this.ExpressionMethodModel
+                .Where(x => x.Location.ExpressionType == ExpressionLocationType.CriticalityCondition)
+                .Where(x => x.ClassName == className)
+                .GroupBy(x => x.Variable)
+                .ToDictionary(x => x.Key, x => x.OrderBy(v => v.Location.ExpressionPosition).Select(v => v.MethodName).ToArray());
         }
     }
 }

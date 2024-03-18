@@ -78,6 +78,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
             codeGenerationModel.LinkedFilterMethodModel.AddRange(this.CreateLinkedFilterModels(questionnaire, levelClassNames));
             codeGenerationModel.CategoricalOptionsFilterModel.AddRange(this.CreateCategoricalOptionsFilterModels(questionnaire, levelClassNames));
             codeGenerationModel.VariableMethodModel.AddRange(this.CreateVariableMethodModel(questionnaire, levelClassNames));
+            //codeGenerationModel.CriticalityConditionsModel.AddRange(this.CreateCriticalityConditionsModelModels(questionnaire, levelClassNames));
 
             return codeGenerationModel;
         }
@@ -260,6 +261,28 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                         conditionExpression,
                         false,
                         formattedId);
+                }
+            }
+        /*}
+        
+        public IEnumerable<ConditionMethodModel> CreateCriticalityConditionsModelModels(ReadOnlyQuestionnaireDocument questionnaire, Dictionary<RosterScope, string> levelClassNames)
+        {*/
+            for (int index = 0; index < questionnaire.CriticalityConditions.Count; index++)
+            {
+                var criticalityCondition = questionnaire.CriticalityConditions[index];
+                var conditionExpression = this.macrosSubstitutionService.InlineMacros(criticalityCondition.Expression, questionnaire.Macros.Values);
+                //var methodName = CodeGeneratorV2.CriticalityConditionPrefix + criticalityCondition.Id.FormatGuid();
+                var methodName = CodeGeneratorV2.CriticalityConditionPrefix + CodeGeneratorV2.QuestionnaireIdName + CodeGeneratorV2.PrivateFieldsPrefix + index;
+                
+                if (!string.IsNullOrWhiteSpace(conditionExpression))
+                {
+                    yield return new ConditionMethodModel(
+                        ExpressionLocation.CriticalityCondition(criticalityCondition.Id, index),
+                        levelClassNames.First().Value,
+                        methodName,
+                        conditionExpression,
+                        false,
+                        CodeGeneratorV2.QuestionnaireIdName);
                 }
             }
         }
