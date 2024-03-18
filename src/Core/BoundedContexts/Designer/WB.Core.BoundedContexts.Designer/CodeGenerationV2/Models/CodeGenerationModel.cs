@@ -25,8 +25,6 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
 
         public List<LookupTableTemplateModel> LookupTables { get; set; } = new List<LookupTableTemplateModel>();
         
-        //public List<ConditionMethodModel> CriticalityConditionsModel { get; } = new List<ConditionMethodModel>();
-
         public Dictionary<Guid, string> IdMap { get; set; } = new Dictionary<Guid, string>();
 
 

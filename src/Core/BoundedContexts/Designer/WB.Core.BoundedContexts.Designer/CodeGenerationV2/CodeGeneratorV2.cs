@@ -93,15 +93,6 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                 generatedClasses.Add(linkedFilterMethodModel.Location.Key, methodTemplate.TransformText());
             }
 
-            /*foreach (var conditionMethodModel in model.CriticalityConditionsModel)
-            {
-                var methodTemplate = new ConditionMethodTemplate(conditionMethodModel)
-                {
-                    InSingleFile = inSingleFile
-                };
-                generatedClasses.Add(conditionMethodModel.Location.Key, methodTemplate.TransformText());
-            }*/
-
             return generatedClasses;
         }
     }
