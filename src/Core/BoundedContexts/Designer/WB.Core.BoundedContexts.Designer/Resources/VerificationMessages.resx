@@ -841,4 +841,7 @@
   <data name="WB0317_CriticalityIsNotAllowed" xml:space="preserve">
     <value>Question with critical flag can't has hidden and supervisor scopes.</value>
   </data>
+  <data name="WB0318_CriticalityConditionExpressionHasIncorrectSyntax" xml:space="preserve">
+    <value>Criticality condition condition has a syntax error.</value>
+  </data>
 </root>

@@ -13,7 +13,8 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
         Variable = 70,
         Translation = 80,
         Questionnaire = 90,
-        Categories = 100
+        Categories = 100,
+        CriticalityCondition = 110,
     }
 
     public enum QuestionnaireVerificationReferenceProperty

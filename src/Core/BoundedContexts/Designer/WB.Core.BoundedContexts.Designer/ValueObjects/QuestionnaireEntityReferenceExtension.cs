@@ -84,6 +84,17 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
                 );
             }
 
+            if (reference.Type == QuestionnaireVerificationReferenceType.CriticalityCondition)
+            {
+                var criticalityCondition = questionnaireDocument.CriticalityConditions.First(x => x.Id == reference.Id);
+                return new QuestionnaireEntityExtendedReference
+                (
+                    itemId : reference.Id.FormatGuid(),
+                    type : QuestionnaireVerificationReferenceType.CriticalityCondition,
+                    title : criticalityCondition.Message ?? string.Empty
+                );
+            }
+
             var item = questionnaireDocument.Find<IComposite>(reference.Id);
             var parent = item;
             while (parent != null)

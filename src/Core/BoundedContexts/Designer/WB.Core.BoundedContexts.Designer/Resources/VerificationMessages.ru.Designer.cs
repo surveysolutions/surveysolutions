@@ -1485,5 +1485,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0317_CriticalityIsNotAllowed", resourceCulture);
             }
         }
+        
+        public static string WB0318_CriticalityConditionExpressionHasIncorrectSyntax {
+            get {
+                return ResourceManager.GetString("WB0318_CriticalityConditionExpressionHasIncorrectSyntax", resourceCulture);
+            }
+        }
     }
 }

@@ -854,4 +854,7 @@
   <data name="WB0317_CriticalityIsNotAllowed" xml:space="preserve">
       <value>Вопрос с критичным флагом не может иметь скрытый или супервизор видимость</value>
   </data>
+  <data name="WB0318_CriticalityConditionExpressionHasIncorrectSyntax" xml:space="preserve">
+    <value>Ошибка в критическом условим.</value>
+  </data>
 </root>
