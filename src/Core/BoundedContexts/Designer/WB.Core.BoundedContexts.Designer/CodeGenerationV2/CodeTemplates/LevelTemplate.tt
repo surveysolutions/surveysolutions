@@ -64,11 +64,11 @@
     }
 #>
 <#
-    foreach (var methodGroup in Storage.GetCriticalityConditions(Model.ClassName)) 
+    foreach (var methodGroup in Storage.GetCriticalityConditions(Model.ClassName))
     {
 #>            
-            criticalityConditions.Add(IdOf.<#=methodGroup.Key#>, new Func<bool>[] { <#=string.Join(",",  methodGroup.Value)#> });
-<# 
+            criticalityConditions = new Func<bool>[] { <#= string.Join(",", methodGroup.Value) #> };
+<#
     }
 #>
         }
@@ -123,14 +123,9 @@
             return null;
         }
 
-        public Func<bool>[] GetCriticalityConditions(Identity identity)
+        public Func<bool>[] GetCriticalityConditions()
         {
-            if (criticalityConditions.TryGetValue(identity.Id, out var result))
-            {
-                return result;
-            }
-
-            return null;
+            return criticalityConditions;
         }
 
         private readonly Dictionary<Guid, Func<<#=typeof(IInterviewLevel).Name#>, bool>> linkedFilters = new Dictionary<Guid, Func<<#=typeof(IInterviewLevel).Name#>, bool>>();
@@ -138,7 +133,7 @@
         private readonly Dictionary<Guid, Func<bool>> enablementConditions = new Dictionary<Guid, Func<bool>>();
         private readonly Dictionary<Guid, Func<bool>[]> validationConditions = new Dictionary<Guid, Func<bool>[]>();
         private readonly Dictionary<Guid, Func<object>> variableExpressions = new Dictionary<Guid, Func<object>>();
-        private readonly Dictionary<Guid, Func<bool>[]> criticalityConditions = new Dictionary<Guid, Func<bool>[]>();
+        private readonly Func<bool>[] criticalityConditions = new Func<bool>[0];
 
         private readonly <#= Storage.ClassName #> _storage;
 
