@@ -3,7 +3,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import moment from 'moment';
 
 function loadLocaleMessages() {
-    const locales = import.meta.globEager('../locale/*.json');
+    const locales = import.meta.glob('../locale/*.json', { eager: true });
 
     const messages = {};
 
