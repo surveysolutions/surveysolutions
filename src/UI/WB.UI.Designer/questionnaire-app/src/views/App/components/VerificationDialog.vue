@@ -162,6 +162,9 @@ export default {
             } else if (reference.type.toLowerCase() === "categories") {
                 this.close();
                 this.$emitter.emit("openCategoriesList", { focusOn: reference.itemId });
+            } else if (reference.type.toLowerCase() === "criticalitycondition") {
+                this.close();
+                this.$emitter.emit("openCriticalityConditions", { focusOn: reference.itemId });
             } else {
                 const name = reference.type.toLowerCase();
                 this.$router.push({
