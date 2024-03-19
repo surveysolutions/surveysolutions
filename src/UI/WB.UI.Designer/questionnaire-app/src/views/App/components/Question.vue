@@ -72,6 +72,19 @@
 
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="checkbox-in-column">
+                        <input id="cb-is-critical" type="checkbox" class="wb-checkbox"
+                            v-model="activeQuestion.isCritical" />
+                        <label for="cb-is-critical"><span></span>{{ $t('QuestionnaireEditor.QuestionIsCritical')
+                            }}</label>
+                        <help link="isCritical"></help>
+                    </div>
+                </div>
+            </div>
+
             <div class="form-group"
                 v-show="!((showInstruction === null && activeQuestion.instructions) || showInstruction)">
                 <button type="button" class="btn btn-lg btn-link" @click="showInstruction = true">{{

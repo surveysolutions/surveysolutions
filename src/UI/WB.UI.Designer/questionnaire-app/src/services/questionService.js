@@ -43,7 +43,8 @@ export function updateQuestion(
             optionsFilterExpression: question.optionsFilterExpression,
             geometryType: question.geometryType,
             geometryInputMode: question.geometryInputMode,
-            geometryOverlapDetection: question.geometryOverlapDetection
+            geometryOverlapDetection: question.geometryOverlapDetection,
+            isCritical: question.isCritical
         }
     };
 

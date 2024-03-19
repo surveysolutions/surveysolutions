@@ -118,22 +118,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="WB0001_NoQuestions" xml:space="preserve">
-    <value>Опросник должен содержать хотя бы один вопрос</value>
+    <value>Опросник должен содержать хотя бы один вопрос.</value>
   </data>
   <data name="WB0002_CustomValidationExpressionHasIncorrectSyntax" xml:space="preserve">
-    <value>Ошибка в проверочном выражении</value>
+    <value>Ошибка в проверочном выражении.</value>
   </data>
   <data name="WB0003_CustomEnablementConditionHasIncorrectSyntax" xml:space="preserve">
-    <value>Ошибка во включающем выражении</value>
+    <value>Ошибка во включающем выражении.</value>
   </data>
   <data name="WB0004_VariableHasEmptyExpression" xml:space="preserve">
-    <value>Переменная не может содержать пустое выражение</value>
+    <value>Переменная не может содержать пустое выражение.</value>
   </data>
   <data name="WB0005_VariableExpressionHasLengthMoreThan10000Characters" xml:space="preserve">
     <value>Выражение переменной не может содержать более {0} символа.</value>
   </data>
   <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
-    <value>Только один GPS вопрос может быть помечен как идентифицирующий</value>
+    <value>Только один GPS вопрос может быть помечен как идентифицирующий.</value>
   </data>
   <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
     <value>Да/нет вопрос с множественным выбором не может быть связанным.</value>
@@ -142,10 +142,10 @@
     <value>Нельзя использовать подстановки в теге переменной.</value>
   </data>
   <data name="WB0009_RosterSizeQuestionIsMissing" xml:space="preserve">
-    <value>Вопрос, определяющий количество строк в ростере, отсутствует</value>
+    <value>Вопрос, определяющий количество строк в ростере, отсутствует.</value>
   </data>
   <data name="WB0010_MacroHasInvalidName" xml:space="preserve">
-    <value>Неверное имя макроса</value>
+    <value>Неверное имя макроса.</value>
   </data>
   <data name="WB0011_LinkedQuestionReferencesNotExistingQuestion" xml:space="preserve">
     <value>Связанный вопрос ссылается на несуществующий вопрос.</value>
@@ -154,19 +154,19 @@
     <value>Связанный вопрос ссылается на неподдерживаемый тип вопсроса.</value>
   </data>
   <data name="WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup" xml:space="preserve">
-    <value>Связанный вопрос ссылается на вопрос вне ростера</value>
+    <value>Связанный вопрос ссылается на вопрос вне ростера.</value>
   </data>
   <data name="WB0014_MacroHasEmptyName" xml:space="preserve">
-    <value>Имя макроса не может быть пустым</value>
+    <value>Имя макроса не может быть пустым.</value>
   </data>
   <data name="WB0015_QuestionWithTitleSubstitutionCantBePrefilled" xml:space="preserve">
-    <value>Вопрос с подстановкой в тексте или инструкциях не может быть помечен как идентифицирующий</value>
+    <value>Вопрос с подстановкой в тексте или инструкциях не может быть помечен как идентифицирующий.</value>
   </data>
   <data name="WB0017_SubstitutionReferencesNotExistingQuestionOrVariable" xml:space="preserve">
-    <value>Подстановка ссылается на несуществующий вопрос либо переменную</value>
+    <value>Подстановка ссылается на несуществующий вопрос либо переменную.</value>
   </data>
   <data name="WB0018_SubstitutionReferencesUnsupportedEntity" xml:space="preserve">
-    <value>Подстановка ссылается на вопрос, который не может быть использован в подстановках</value>
+    <value>Подстановка ссылается на вопрос, который не может быть использован в подстановках.</value>
   </data>
   <data name="WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel" xml:space="preserve">
     <value>В подстановках не могут быть использованы переменные с более глубоким уровнем вложенности.</value>
@@ -217,7 +217,7 @@
     <value>Фиксированный ростер не может содержать вопрос о заголовке ростера.</value>
   </data>
   <data name="WB0035_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion" xml:space="preserve">
-    <value>Вопрос, определяющий имена строк в числовом ростере, указан неверно</value>
+    <value>Вопрос, определяющий имена строк в числовом ростере, указан неверно.</value>
   </data>
   <data name="WB0036_ListAndMultiRostersCantHaveRosterTitleQuestion" xml:space="preserve">
     <value>Ростер, в котором управляющий вопрос многовариантный или вопрос-список, не может содержать определяющий имя ростера вопрос.</value>
@@ -241,13 +241,13 @@
     <value>Максимальное количество элементов списка должно находиться в диапазоне [{1}, {0}].</value>
   </data>
   <data name="WB0043_LookupTableMoreThan11Columns" xml:space="preserve">
-    <value>В справочной таблице слишком много столбцов</value>
+    <value>В справочной таблице слишком много столбцов.</value>
   </data>
   <data name="WB0044_LookupTableMoreThan15000Rows" xml:space="preserve">
-    <value>В справочной таблице слишком много строк</value>
+    <value>В справочной таблице слишком много строк.</value>
   </data>
   <data name="WB0045_QuestionHasOptionsWithEmptyValue" xml:space="preserve">
-    <value>Вопрос содержит опцию (и) с пустым (и) значением (ями)</value>
+    <value>Вопрос содержит опцию (и) с пустым (и) значением (ями).</value>
   </data>
   <data name="WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel" xml:space="preserve">
     <value>Включающее выражение не может ссылаться на вопрос из более глубокого уровня ростера.</value>
@@ -256,7 +256,7 @@
     <value>Справочная таблица содержит не уникальные значения в колонке rowcode.</value>
   </data>
   <data name="WB0048_LookupHasEmptyContent" xml:space="preserve">
-    <value>Справочная таблица не может быть пустой</value>
+    <value>Справочная таблица не может быть пустой.</value>
   </data>
   <data name="WB0049_QRBarcodeQuestionIsSupervisorQuestion" xml:space="preserve">
     <value>Вопрос со штрих-кодом не может быть заполнен супервизором.</value>
@@ -271,7 +271,7 @@
     <value>Имя справочной таблицы не может быть зарезервированным словом.</value>
   </data>
   <data name="WB0053_LinkedQuestionReferencesNotExistingRoster" xml:space="preserve">
-    <value>Связанный вопрос ссылается на несуществующий ростер</value>
+    <value>Связанный вопрос ссылается на несуществующий ростер.</value>
   </data>
   <data name="WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster" xml:space="preserve">
     <value>Ростер должен иметь более глубокий или такой же уровень вложенности как и вопрос являющийся источником ростера.</value>
@@ -313,10 +313,10 @@
     <value>Вопрос данного типа не поддерживается.</value>
   </data>
   <data name="WB0067_VariableNameIsEmpty" xml:space="preserve">
-    <value>Имя переменной или ID ростера не должны быть пустыми</value>
+    <value>Имя переменной или ID ростера не должны быть пустыми.</value>
   </data>
   <data name="WB0068_RosterHasMoreThanAllowedChildElements" xml:space="preserve">
-    <value>Ростер не может содержать более {0} дочерних элементов</value>
+    <value>Ростер не может содержать более {0} дочерних элементов.</value>
   </data>
   <data name="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" xml:space="preserve">
     <value>ID ростера совпадает с именем опросника.</value>
@@ -352,13 +352,13 @@
     <value>Ростер с более чем {0} строк не может содержать вложенные ростеры.</value>
   </data>
   <data name="WB0081_LongRosterCannotBeNested" xml:space="preserve">
-    <value>Ростер с более чем {0} строк не может быть вложенным</value>
+    <value>Ростер с более чем {0} строк не может быть вложенным.</value>
   </data>
   <data name="WB0082_RosterSizeMultiOptionQuestionShouldBeLimited" xml:space="preserve">
     <value>Многовариантный вопрос являющийся управляющим для ростера должен иметь предел.</value>
   </data>
   <data name="WB0083_QuestionCannotBeUsedAsRosterTitle" xml:space="preserve">
-    <value>Вопрос данного типа не может быть использован как определяющий имя ростера</value>
+    <value>Вопрос данного типа не может быть использован как определяющий имя ростера.</value>
   </data>
   <data name="WB0084_CascadingOptionsShouldHaveParent" xml:space="preserve">
     <value>Опции дочернего каскадного вопроса должны ссылаться только на существующие опции родительского вопроса.</value>
@@ -394,7 +394,7 @@
     <value>Включающее выражение имеет длину более {0} символов.</value>
   </data>
   <data name="WB0095_StaticTextRefersAbsentAttachment" xml:space="preserve">
-    <value>Статический текст относится к отсутствующему вложению</value>
+    <value>Статический текст относится к отсутствующему вложению.</value>
   </data>
   <data name="WB0096_GeneralCompilationError" xml:space="preserve">
     <value>Ошибка при компиляции опросника.</value>
@@ -415,7 +415,7 @@
     <value>Следующие элементы вопросника (вопрос / группа / статический текст / и т.д.) Используют один и тот же внутренний идентификатор. Пожалуйста, удалите один из них.</value>
   </data>
   <data name="WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster" xml:space="preserve">
-    <value>Ростер являющимся источником для связанного вопроса, является ростером, а не подсекцией</value>
+    <value>Ростер являющимся источником для связанного вопроса, является ростером, а не подсекцией.</value>
   </data>
   <data name="WB0104_ValidationConditionIsTooLong" xml:space="preserve">
     <value>Проверочное выражение  # {0} слишком большое. Оно должно быть не более {1} символов.</value>
@@ -439,7 +439,7 @@
     <value>Выражение фильтра содержит синтаксическую ошибку.</value>
   </data>
   <data name="WB0111_AttachmentHasEmptyContent" xml:space="preserve">
-    <value>Вложение не может быть пустым</value>
+    <value>Вложение не может быть пустым.</value>
   </data>
   <data name="WB0112_VariableHasInvalidName" xml:space="preserve">
     <value>Некорректное имя переменной.</value>
@@ -448,10 +448,10 @@
     <value>У переменной не может быть пустого имени.</value>
   </data>
   <data name="WB0114_CategoricalQuestionSupportsOnlyIntegerPositiveValues" xml:space="preserve">
-    <value>Категориальный вопрос поддерживает только целочисленные значения опций в диапазоне от {0} до {1}</value>
+    <value>Категориальный вопрос поддерживает только целочисленные значения опций в диапазоне от {0} до {1}.</value>
   </data>
   <data name="WB0115_FixRosterSupportsOnlyIntegerTitleValues" xml:space="preserve">
-    <value>Фиксированный ростер поддерживает только целые значения</value>
+    <value>Фиксированный ростер поддерживает только целые значения.</value>
   </data>
   <data name="WB0116_LinkedQuestionReferenceTextListQuestionFromWrongScope" xml:space="preserve">
     <value>Связанный вопрос ссылается на вопрос ростера с неправильного уровня.</value>
@@ -472,13 +472,13 @@
     <value>Имя переменной или ID не должно быть длиннее чем {0} символа.</value>
   </data>
   <data name="WB0122_VariableNameHasSpecialCharacters" xml:space="preserve">
-    <value>Действительная переменная или ростер ID должны содержать только буквы, цифры и символ подчеркивания</value>
+    <value>Действительная переменная или ростер ID должны содержать только буквы, цифры и символ подчеркивания.</value>
   </data>
   <data name="WB0123_VariableNameStartWithDigitOrUnderscore" xml:space="preserve">
-    <value>Имя переменной или ID ростера не должны начинаться с цифры или символа подчеркивания</value>
+    <value>Имя переменной или ID ростера не должны начинаться с цифры или символа подчеркивания.</value>
   </data>
   <data name="WB0124_VariableNameEndWithUnderscore" xml:space="preserve">
-    <value>Имя переменной или ID ростера не должны заканчиваться символом подчеркивания</value>
+    <value>Имя переменной или ID ростера не должны заканчиваться символом подчеркивания.</value>
   </data>
   <data name="WB0125_VariableNameHasConsecutiveUnderscores" xml:space="preserve">
     <value>Имя переменной или ID ростера не должны содержать двух и более последовательных символов подчеркивания.</value>
@@ -556,22 +556,22 @@
     <value>Включающее выражение слишком длинное. Вероятно, возможно использовать более короткие, более читаемые условия, использующие встроенные функции (такие как InList ()).</value>
   </data>
   <data name="WB0210_CategoricalQuestionHasManyOptions" xml:space="preserve">
-    <value>Катигориальный вопрос содержит слишком много опций, рассмотрите использование поля с каскадным списком</value>
+    <value>Катигориальный вопрос содержит слишком много опций, рассмотрите использование поля с каскадным списком.</value>
   </data>
   <data name="WB0211_QuestionnaireHasNoGpsQuestion" xml:space="preserve">
     <value>Опросник не содержит GPS вопросов. Рассмотрите вариант добавления GPS вопроса.</value>
   </data>
   <data name="WB0212_LongValidationCondition" xml:space="preserve">
-    <value>Проверочное выражение # {0} длинное. Возможно использовать более короткие, более читаемые условия со встроенными функциями (напр. InList ())</value>
+    <value>Проверочное выражение # {0} длинное. Возможно использовать более короткие, более читаемые условия со встроенными функциями (напр. InList ()).</value>
   </data>
   <data name="WB0213_AttachmentSizeIsMoreThan5Mb" xml:space="preserve">
-    <value>Размер вложения больше {0} Мб</value>
+    <value>Размер вложения больше {0} Мб.</value>
   </data>
   <data name="WB0214_TotalAttachmentsSizeIsMoreThan50Mb" xml:space="preserve">
-    <value>Общий размер вложений больше {0} Мб</value>
+    <value>Общий размер вложений больше {0} Мб.</value>
   </data>
   <data name="WB0215_UnusedAttachments" xml:space="preserve">
-    <value>Опросник содержит неиспользуемые вложения</value>
+    <value>Опросник содержит неиспользуемые вложения.</value>
   </data>
   <data name="WB0216_NoPrefilledQuestions" xml:space="preserve">
     <value>Идентифицирующие вопросы не созданы. Определите хотя бы один идентифицирующий вопрос.</value>
@@ -601,7 +601,7 @@
     <value>Слишком много подсекций на одном уровне. Пересмотрите иерархическую структуру.</value>
   </data>
   <data name="WB0225_ComboBoxWithLessThan10Elements" xml:space="preserve">
-    <value>Выпадающее меню (поле со списком) содержит менее 10 элементов. Рассмотрите переход на стандартное представление с выбором одной опции. </value>
+    <value>Выпадающее меню (поле со списком) содержит менее 10 элементов. Рассмотрите переход на стандартное представление с выбором одной опции. .</value>
   </data>
   <data name="WB0226_SameCascadingParentQuestion" xml:space="preserve">
     <value>Каскадные вопросы имеют один и тот же родительский вопрос.</value>
@@ -613,7 +613,7 @@
     <value>Категориальный вопрос имеет непоследовательные коды опций. Проверьте отсутствующие значения.</value>
   </data>
   <data name="WB0229_SupervisorQuestionInValidation" xml:space="preserve">
-    <value>В проверочном выражении используется супервизоровский вопрос. Убедитесь, что условие включения учитывает отвеченность супервизоровского вопроса или проинструктируйте супервизоров всегда отвечать на него. </value>
+    <value>В проверочном выражении используется супервизоровский вопрос. Убедитесь, что условие включения учитывает отвеченность супервизоровского вопроса или проинструктируйте супервизоров всегда отвечать на него. .</value>
   </data>
   <data name="WB0230_NonconsecutiveCascadings" xml:space="preserve">
     <value>Непоследовательные каскадные вопросы. Расположите каскадные вопросы один за другим.</value>
@@ -655,37 +655,37 @@
     <value>Используйте функцию IsValidEmail () для проверки адреса электронной почты.</value>
   </data>
   <data name="WB0255_QuestionIsTooShort" xml:space="preserve">
-    <value>Слишком короткий вопрос. Дополните описание. </value>
+    <value>Слишком короткий вопрос. Дополните описание. .</value>
   </data>
   <data name="WB0256_TranslationNameIsInvalid" xml:space="preserve">
-    <value>Имя перевода не верно</value>
+    <value>Имя перевода не верно.</value>
   </data>
   <data name="WB0257_TranslationHasEmptyContent" xml:space="preserve">
-    <value>Файл с переводом не может быть пустым. </value>
+    <value>Файл с переводом не может быть пустым. .</value>
   </data>
   <data name="WB0258_TranslationsHaveDuplicatedNames" xml:space="preserve">
-    <value>Имена переводов совпадают</value>
+    <value>Имена переводов совпадают.</value>
   </data>
   <data name="WB0259_QuestionTitleIsTooLong" xml:space="preserve">
     <value>Текст вопроса слишком длинный. Он должен быть не более {0} символов.</value>
   </data>
   <data name="WB0260_GroupTitleIsTooLong" xml:space="preserve">
-    <value>Название секции слишком длинное. Оно не должно содержать более {0} символов. </value>
+    <value>Название секции слишком длинное. Оно не должно содержать более {0} символов. .</value>
   </data>
   <data name="WB0261_RosterStructureTooExplosive" xml:space="preserve">
-    <value>Опросник содержит слишком большое количество экземпляров ростера {0}, что привышает разрешенный лимит {1}</value>
+    <value>Опросник содержит слишком большое количество экземпляров ростера {0}, что привышает разрешенный лимит {1}.</value>
   </data>
   <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
     <value>Ростер достиг максимального размера. Уменьшите размер ростера или уровень вложенности.</value>
   </data>
   <data name="WB0264_GpsQuestion" xml:space="preserve">
-    <value>Опросник содержит GPS вопрос. Планшеты, в которых будет использоваться этот тип вопроса должны поддерживать функцию геолокации. </value>
+    <value>Опросник содержит GPS вопрос. Планшеты, в которых будет использоваться этот тип вопроса должны поддерживать функцию геолокации. .</value>
   </data>
   <data name="WB0265_MoreThan30PercentQuestionsAreText" xml:space="preserve">
     <value>Более {0}% вопросов - текстовые вопросы. Текстовые вопросы трудно заполнять на планшетах. Вместо этого рассмотрите возможность использования вопросов с одним или несколькими вариантами выбора.</value>
   </data>
   <data name="WB0266_SameTitle" xml:space="preserve">
-    <value>Одинаковые вопросы. (У вопросов одинаковый текст.)</value>
+    <value>Одинаковые вопросы. (У вопросов одинаковый текст.).</value>
   </data>
   <data name="WB0267_QRBarcodeQuestion" xml:space="preserve">
     <value>У вас есть вопрос со штрих-кодом. Планшеты, которые будут использоваться с этим опросником,  должны поддерживать автофокус.</value>
@@ -729,7 +729,7 @@
   </data>
   <data name="WB0280_TextContainsLinkToUnknownQuestionOrGroup" xml:space="preserve">
     <value>Текст содержит ссылку на неизвестный вопрос, подсекцию, ростер или pdf вложение.
-</value>
+.</value>
   </data>
   <data name="WB0281_QuestionnaireExceededEntitiesLimit" xml:space="preserve">
     <value>Общее количество элементов ({0}) превышает системные лимиты ({1}). Рассмотрите возможность уменьшения количества вопросов, статических текстов, переменных или элементов фиксированных ростеров.</value>
@@ -758,7 +758,7 @@
     <comment>Табличное представление доступно только в web режиме, на плпншетах это будет обычный режим.</comment>
   </data>
   <data name="WB0288_ValueAndTitleNumbersIsNotEquals" xml:space="preserve">
-    <value>Заголовок {1} и код {0} числовые и отличается значениями</value>
+    <value>Заголовок {1} и код {0} числовые и отличается значениями.</value>
     <comment>Заголовок {1} и код {0} числовые и отличается значениями</comment>
   </data>
   <data name="WB0289" xml:space="preserve">
@@ -766,27 +766,27 @@
     <comment>Имя коллекции категорий не может быть больше чем {0} символов.</comment>
   </data>
   <data name="WB0290" xml:space="preserve">
-    <value>Название категорий не может заканчиваться на символ подчёркивания</value>
+    <value>Название категорий не может заканчиваться на символ подчёркивания.</value>
     <comment>Имя коллекции категорий не может заканчиваться на символ подчёркивания</comment>
   </data>
   <data name="WB0291" xml:space="preserve">
-    <value>Название категорий не должно иметь двух и более последовательных символов подчёркивания</value>
+    <value>Название категорий не должно иметь двух и более последовательных символов подчёркивания.</value>
     <comment>Название категорий не должно иметь двух и более последовательных символов подчёркивания</comment>
   </data>
   <data name="WB0292" xml:space="preserve">
-    <value>Название категорий не может быть пустым</value>
+    <value>Название категорий не может быть пустым.</value>
     <comment>Название категорий не может быть пустым</comment>
   </data>
   <data name="WB0293" xml:space="preserve">
-    <value>Название категорий совпадает с зарезервированным словом</value>
+    <value>Название категорий совпадает с зарезервированным словом.</value>
     <comment>Название категорий совпадает с зарезервированным словом</comment>
   </data>
   <data name="WB0294" xml:space="preserve">
-    <value>Название категорий должно содержать только латинские буквы, цифры и символ подчёркивания</value>
+    <value>Название категорий должно содержать только латинские буквы, цифры и символ подчёркивания.</value>
     <comment>Название категорий должно содержать только латинские буквы, цифры и символ подчёркивания</comment>
   </data>
   <data name="WB0295" xml:space="preserve">
-    <value>Название категорий не может начинаться с цифры или символа подчёркивания</value>
+    <value>Название категорий не может начинаться с цифры или символа подчёркивания.</value>
     <comment>Название категорий не может начинаться с цифры или символа подчёркивания</comment>
   </data>
   <data name="WB0296" xml:space="preserve">
@@ -804,51 +804,54 @@
   </data>
   <data name="WB0301_MatrixRosterHasToContainNoLinkedQuestions" xml:space="preserve">
     <value>Матричное представление ростера не может содержать связанные вопросы.
-</value>
+.</value>
   </data>
   <data name="WB0302" xml:space="preserve">
     <value>В подстановках не могут быть использованы переменные с таким же уровнем вложенности.</value>
   </data>
   <data name="WB0305_DuplicatedCategoryIdParentIdPair" xml:space="preserve">
-    <value>Категории должны содержать уникальную пару Id, ParentId</value>
+    <value>Категории должны содержать уникальную пару Id, ParentId.</value>
   </data>
   <data name="WB0306_DuplicatedCategoryParentIdText" xml:space="preserve">
-    <value>Категории должны содержать уникальную пару ParentId, Text</value>
+    <value>Категории должны содержать уникальную пару ParentId, Text.</value>
   </data>
   <data name="WB0307_QuestionReferancedToIncorrectCategories" xml:space="preserve">
     <value>Вопрос ссылается на не существующую категорию.</value>
   </data>
   <data name="WB0309_IdentityQuestionsMustHaveVariableLabel" xml:space="preserve">
-    <value>Вопросы в секции "Обложка" должны иметь тег переменной</value>
+    <value>Вопросы в секции "Обложка" должны иметь тег переменной.</value>
   </data>
   <data name="WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes" xml:space="preserve">
     <value>Идентификационные вопросы могут иметь только разрешенные типы (Текстовый, Числовой, Дата, Gps, Категориальный: выбор одного).</value>
   </data>
   <data name="WB0390_OnlyStringVariableAllowedAsAttachmentName" xml:space="preserve">
-    <value>Только строковая переменная может быть использована как источник имени вложения</value>
+    <value>Только строковая переменная может быть использована как источник имени вложения.</value>
   </data>
     <data name="WB0391" xml:space="preserve">
-    <value>Статический текст не может ссылаться на переменную находящуюся глубже нежели он сам</value>
+    <value>Статический текст не может ссылаться на переменную находящуюся глубже нежели он сам.</value>
   </data>
   <data name="WB3010_LinkToHiddenQuestionNotAllowed" xml:space="preserve">
-      <value>Ссылка на скрытую переменную запрещена</value>
+      <value>Ссылка на скрытую переменную запрещена.</value>
   </data>
   <data name="WB0312" xml:space="preserve">
-      <value>Категория должна иметь минимум 2 опции</value>
+      <value>Категория должна иметь минимум 2 опции.</value>
   </data>
   <data name="WB0311_IdentityVariablesMustHaveLabel" xml:space="preserve">
-    <value>Переменные на обложке должны иметь описание</value>
+    <value>Переменные на обложке должны иметь описание.</value>
   </data>
   <data name="WB0313_QuestionOptionReferenceToNonExistentAttachment" xml:space="preserve">
-      <value>Вопрос содержит категорию, ссылающуюся на несуществующий файл</value>
+      <value>Вопрос содержит категорию, ссылающуюся на несуществующий файл.</value>
   </data>
   <data name="WB0314_NonUniqueAttachment" xml:space="preserve">
-      <value>Вопрос содержит несколько категорий, ссылающихся на одинаковый файл</value>
+      <value>Вопрос содержит несколько категорий, ссылающихся на одинаковый файл.</value>
   </data>
   <data name="WB0315_AttachmentHasInvalidName" xml:space="preserve">
     <value>Имя файла должно содержать только английские буквы, цифры и символы подчеркивания. Начинаться с буквы, без последовательных символов подчеркивания, не закаечиваться на символ подчеркивания и не быть зарезервированныи словом, пустым или более 32 символов.</value>
   </data>
   <data name="WB0316_QuestionnaireWithOldCoverPage" xml:space="preserve">
     <value>Опросник в старом формате. Используйте ссылку "Сгенерировать обложку" на секции Обложка.</value>
+  </data>
+  <data name="WB0317_CriticalityIsNotAllowed" xml:space="preserve">
+      <value>Вопрос не может требовать ответа, если у него одна из следующих областей видимости: Скрытый, Супервизор.</value>
   </data>
 </root>

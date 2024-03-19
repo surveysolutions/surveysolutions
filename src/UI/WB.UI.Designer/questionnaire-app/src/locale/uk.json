@@ -492,6 +492,8 @@
     "Reset": "Reset",
     "Login": "Login",
     "Register": "Register",
-    "No": "No"
+    "No": "No",
+    "QuestionIsCritical": "Require an answer to this question",
+    "HelpIsCritical": "Prevent submission of interviews with this question left not answered."
   }
 }
