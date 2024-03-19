@@ -68,8 +68,13 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         [HttpGet]
         [Route("get/{id}")]
-        public IActionResult Get(QuestionnaireRevision id)
+        public IActionResult Get(QuestionnaireRevision? id)
         {
+            if (id == null)
+            {
+                return NotFound(string.Format(ExceptionMessages.QuestionCannotBeFound , id));
+            }
+            
             var questionnaireInfoView = this.questionnaireInfoViewFactory.Load(id, User.GetIdOrNull());
 
             if (questionnaireInfoView == null)

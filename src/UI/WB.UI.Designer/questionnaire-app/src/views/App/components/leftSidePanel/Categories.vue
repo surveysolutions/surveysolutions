@@ -2,7 +2,8 @@
     <div class="categories">
         <div id="show-reload-details-promt" class="ng-cloak" v-show="shouldUserSeeReloadPromt">
             <div class="inner">{{ $t('QuestionnaireEditor.QuestionToUpdateOptions') }} <a href="#"
-                    onclick="window.location.reload(true);">{{ $t('QuestionnaireEditor.QuestionClickReload') }}</a></div>
+                    onclick="window.location.reload(true);">{{ $t('QuestionnaireEditor.QuestionClickReload') }}</a>
+            </div>
         </div>
 
         <perfect-scrollbar class="scroller">
@@ -28,15 +29,17 @@
                     <span>{{ $t('QuestionnaireEditor.SideBarTranslationGetTemplate') }}</span>
 
                     <a class="btn btn-default" :href="downloadBaseUrl + '/template'" target="_blank" rel="noopener">{{
-                        $t('QuestionnaireEditor.SideBarXlsx') }}
+            $t('QuestionnaireEditor.SideBarXlsx') }}
                     </a>
-                    <a class="btn btn-default" :href="downloadBaseUrl + '/templateTab'" target="_blank" rel="noopener">{{
-                        $t('QuestionnaireEditor.SideBarTab') }}
+                    <a class="btn btn-default" :href="downloadBaseUrl + '/templateTab'" target="_blank"
+                        rel="noopener">{{
+            $t('QuestionnaireEditor.SideBarTab') }}
                     </a>
                 </p>
                 <p>
-                    <input type="button" :value="$t('QuestionnaireEditor.SideBarCategoriesAddNew')" value="ADD new category"
-                        class="btn lighter-hover" @click.stop="addNewCategory()" v-if="!isReadOnlyForUser" />
+                    <input type="button" :value="$t('QuestionnaireEditor.SideBarCategoriesAddNew')"
+                        value="ADD new category" class="btn lighter-hover" @click.stop="addNewCategory()"
+                        v-if="!isReadOnlyForUser" />
                 </p>
                 <p>
                     <input type="button" :value="$t('QuestionnaireEditor.SideBarCategoriesUploadNew')"
@@ -52,7 +55,7 @@
         </perfect-scrollbar>
     </div>
 </template>
-  
+
 <script>
 
 import CategoriesItem from './CategoriesItem.vue';
@@ -140,7 +143,7 @@ export default {
 
             var response = await updateCategories(this.questionnaireId, categories, true);
 
-            if (this.file.length > 0)
+            if (this.file.length > 0 && response != null)
                 notice(response);
 
             this.file = [];
@@ -165,4 +168,3 @@ export default {
     },
 }
 </script>
-  
