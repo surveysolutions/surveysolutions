@@ -120,6 +120,7 @@
 
 <script>
 import { replaceAll, findAll } from '../../../services/searchService'
+import { setFocusIn } from '../../../services/utilityService'
 
 export default {
     name: 'SearchDialog',
@@ -165,7 +166,7 @@ export default {
 
             this.visible = true;
 
-            //setFocusIn('searchFor');
+            setFocusIn('searchFor');
         },
         onDone() {
             this.close();

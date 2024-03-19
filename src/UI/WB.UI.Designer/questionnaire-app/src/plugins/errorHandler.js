@@ -3,12 +3,18 @@ import { mande } from 'mande';
 const api = mande('/error/report');
 
 export function setupErrorHandler(app) {
-    const ignoreStatusCodes = [401, 400, 403, 406];
+    const ignoreStatusCodes = [401, 400, 403, 404, 406];
+
+    const ignoredMessages = [
+        'NetworkError when attempting to fetch resource.',
+        'Failed to fetch'
+    ];
 
     app.config.errorHandler = (err, vm, info) => {
         const status = err.response?.status;
 
         if (status && ignoreStatusCodes.includes(status)) return false;
+        if (err.message && ignoredMessages.includes(err.message)) return false;
 
         var errorDetails = {
             message: err.message,
@@ -70,11 +76,13 @@ export function setupErrorHandler(app) {
 
     window.addEventListener('unhandledrejection', function(e) {
         const status = e.reason?.response?.status;
+        const message = e.reason?.body?.message ?? e.reason?.message;
 
         if (status && ignoreStatusCodes.includes(status)) return false;
+        if (message && ignoredMessages.includes(message)) return false;
 
         var errorDetails = {
-            message: e.reason?.body?.message ?? e.reason?.message,
+            message: message,
 
             additionalData: {
                 source: 'unhandledrejection event',
