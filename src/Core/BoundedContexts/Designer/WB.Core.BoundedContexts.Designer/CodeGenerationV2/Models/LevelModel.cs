@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -17,6 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
        
         public string Variable {get; }
         public string ClassName { get; }
+        public bool HasCriticalityConditions { get; private set; }
         public RosterScope RosterScope { get; }
 
         public List<QuestionModel> Questions { get; } = new List<QuestionModel>();
@@ -26,6 +28,9 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
 
         public void Init(ReadOnlyQuestionnaireDocument questionnaire, Dictionary<RosterScope, string> levelClassNames, IQuestionTypeToCSharpTypeMapper questionTypeMapper)
         {
+            if (RosterScope.Length == 0)
+                this.HasCriticalityConditions = questionnaire.CriticalityConditions.Any();
+            
             this.CreateQuestionsForCurrentAndParentLevels(questionnaire, questionTypeMapper);
 
             this.CreateVariablesForCurrentAndParentLevels(questionnaire, questionTypeMapper);
