@@ -2,17 +2,17 @@
     <div :class="{ 'pseudo-form-control': focusable === 'true' }" ref="editorHolder" aceEditor>
         <v-ace-editor ref="editor" v-model:value="editorValue" @init="editorInit" theme="github"
             :lang="mode !== 'substitutions' ? 'csharp' : 'text'" :options="{
-                minLines: 1,
-                maxLines: 300,
-                fontSize: 16,
-                highlightActiveLine: false,
-                indentedSoftWrap: false,
-                printMargin: mode !== 'substitutions',
-                showLineNumbers: false,
-                showGutter: false,
-                useWorker: true,
-                wrap: true
-            }" />
+        minLines: 1,
+        maxLines: 300,
+        fontSize: 16,
+        highlightActiveLine: false,
+        indentedSoftWrap: false,
+        printMargin: mode !== 'substitutions',
+        showLineNumbers: false,
+        showGutter: false,
+        useWorker: true,
+        wrap: true
+    }" />
     </div>
 </template>
 
@@ -123,7 +123,10 @@ export default {
 
             editor.$blockScrolling = Infinity;
 
-            editor.keyBinding.$defaultHandler.commandKeyBinding = {};
+            editor.commands.bindKey("ctrl+f", null);
+            editor.commands.bindKey("ctrl+h", null);
+            editor.commands.bindKey("ctrl+b", null);
+            editor.commands.bindKey("ctrl+s", null);
 
             editor.commands.bindKey("tab", null);
             editor.commands.bindKey("shift+tab", null);
