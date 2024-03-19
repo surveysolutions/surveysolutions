@@ -1,9 +1,23 @@
 {
-    "i18n-ally.localesPaths": "src/locale",
     "eslint.enable": true,
     "editor.codeActionsOnSave": {
-        "source.fixAll": true
+        "source.fixAll.eslint": "explicit",
+        "source.fixAll": "explicit"
     },
-    "editor.tabSize": 2,
+    "editor.tabSize": 4,
     "eslint.format.enable": true,
+
+    "eslint.lintTask.enable": true,
+    "editor.formatOnSave": true,
+    "typescript.preferences.quoteStyle": "single",
+    "javascript.preferences.quoteStyle": "single",
+    "[vue]": {
+        "editor.defaultFormatter": "Vue.volar"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "editor.detectIndentation": false,
+    "prettier.printWidth": 120,
+    "debug.javascript.terminalOptions": {}
 }

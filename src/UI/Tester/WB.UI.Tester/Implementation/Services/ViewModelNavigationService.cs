@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using Android.Content;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
@@ -37,17 +35,17 @@ namespace WB.UI.Tester.Implementation.Services
         public override async Task<bool> NavigateToDashboardAsync(string interviewId = null)
         {
             return IsRealUserAuthenticated 
-                ? await NavigationService.Navigate<DashboardViewModel>()
-                : await NavigationService.Navigate<AnonymousQuestionnairesViewModel>();
+                ? await NavigateToAsync<DashboardViewModel>()
+                : await NavigateToAsync<AnonymousQuestionnairesViewModel>();
         }
 
         public override void NavigateToSplashScreen()
         {
-            base.RestartApp(typeof(SplashActivity));
+            RestartApp(typeof(SplashActivity));
         }
 
-        public override Task NavigateToPrefilledQuestionsAsync(string interviewId) => 
-            NavigationService.Navigate<InterviewViewModel, InterviewViewModelArgs>(new InterviewViewModelArgs
+        public override async Task<bool> NavigateToPrefilledQuestionsAsync(string interviewId) => 
+            await NavigateToAsync<InterviewViewModel, InterviewViewModelArgs>(new InterviewViewModelArgs
             {
                 InterviewId = interviewId,
                 NavigationIdentity = NavigationIdentity.CreateForCoverScreen()
@@ -59,8 +57,8 @@ namespace WB.UI.Tester.Implementation.Services
         public override Task NavigateToMapsAsync()
         => throw new NotImplementedException();
 
-        public override Task<bool> NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity)
-            => NavigationService.Navigate<InterviewViewModel, InterviewViewModelArgs>(new InterviewViewModelArgs
+        public override async Task<bool> NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity)
+            => await NavigateToAsync<InterviewViewModel, InterviewViewModelArgs>(new InterviewViewModelArgs
             {
                 InterviewId = interviewId,
                 NavigationIdentity = navigationIdentity

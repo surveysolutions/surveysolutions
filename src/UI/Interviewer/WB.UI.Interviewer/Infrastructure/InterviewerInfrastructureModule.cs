@@ -93,6 +93,7 @@ namespace WB.UI.Interviewer.Infrastructure
             registry.Bind<ICalendarEventRemoval, CalendarEventRemoval>();
             
             registry.BindAsSingleton<ICompanyLogoStorage, CompanyLogoStorage>();
+            registry.BindAsSingleton<ILastCompletionComments, LastCompletionComments>();
         }
     }
 }

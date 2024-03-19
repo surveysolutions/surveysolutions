@@ -108,7 +108,8 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
                     type : @group?.IsRoster == true ? QuestionnaireVerificationReferenceType.Roster : reference.Type,
                     variable : @group?.VariableName,
                     title : @group?.Title ?? "",
-                    chapterId : parent?.PublicKey.FormatGuid()
+                    chapterId : parent?.PublicKey.FormatGuid(),
+                    property: reference.Property.ToString()
                 );
             }
 
@@ -122,7 +123,8 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
                     type : reference.Type,
                     title : String.IsNullOrEmpty(staticText?.Text) ? "static text" : staticText.Text,
                     chapterId : parent?.PublicKey.FormatGuid(),
-                    indexOfEntityInProperty : reference.IndexOfEntityInProperty
+                    indexOfEntityInProperty : reference.IndexOfEntityInProperty,
+                    property: reference.Property.ToString()
                 );
             }
 
@@ -135,7 +137,8 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
                     type : reference.Type,
                     title : variable?.Label ?? String.Empty,
                     variable : variable?.Name,
-                    chapterId : parent?.PublicKey.FormatGuid()
+                    chapterId : parent?.PublicKey.FormatGuid(),
+                    property: reference.Property.ToString()
                 );
             }
             else
@@ -150,7 +153,8 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
                     questionType : "icon-" + question?.QuestionType.ToString().ToLower(),
                     title : question?.QuestionText ?? "",
                     chapterId : parent?.PublicKey.FormatGuid(),
-                    indexOfEntityInProperty : reference.IndexOfEntityInProperty
+                    indexOfEntityInProperty : reference.IndexOfEntityInProperty,
+                    property: reference.Property.ToString()
                 );
             }
         }

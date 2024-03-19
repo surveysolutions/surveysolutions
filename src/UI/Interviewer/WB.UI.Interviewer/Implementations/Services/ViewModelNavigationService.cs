@@ -1,9 +1,4 @@
-using System;
-using System.Threading.Tasks;
 using Android.Content;
-using MvvmCross;
-using MvvmCross.Navigation;
-using MvvmCross.Platforms.Android;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.CreateInterview;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
@@ -16,7 +11,6 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Interviewer.Activities;
 using WB.UI.Interviewer.ViewModel;
-using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Services;
 
 namespace WB.UI.Interviewer.Implementations.Services
@@ -45,19 +39,19 @@ namespace WB.UI.Interviewer.Implementations.Services
             this.log.Trace($"Navigating to dashboard interviewId: {interviewId ?? "'null'"}");
             if (interviewId == null)
             {
-               return await NavigationService.Navigate<DashboardViewModel>().ConfigureAwait(false);
+               return await NavigateToAsync<DashboardViewModel>().ConfigureAwait(false);
             }
 
-            return await NavigationService.Navigate<DashboardViewModel, DashboardViewModelArgs>(new DashboardViewModelArgs
+            return await NavigateToAsync<DashboardViewModel, DashboardViewModelArgs>(new DashboardViewModelArgs
             {
                 InterviewId = Guid.Parse(interviewId)
             }).ConfigureAwait(false);
         }
 
-        public override Task NavigateToPrefilledQuestionsAsync(string interviewId)
+        public override async Task<bool> NavigateToPrefilledQuestionsAsync(string interviewId)
         {
             this.log.Trace($"Navigating to PrefilledQuestionsViewModel interviewId: {interviewId}");
-            return NavigationService.Navigate<InterviewViewModel, InterviewViewModelArgs>(
+            return await NavigateToAsync<InterviewViewModel, InterviewViewModelArgs>(
                 new InterviewViewModelArgs
                 {
                     InterviewId = interviewId,
@@ -82,10 +76,10 @@ namespace WB.UI.Interviewer.Implementations.Services
             return this.NavigateToAsync<MapsViewModel>();
         }
 
-        public override Task<bool> NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity)
+        public override async Task<bool> NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity)
         {
             this.log.Trace($"Navigating to interview {interviewId}:{navigationIdentity}");
-            return NavigationService.Navigate<InterviewViewModel, InterviewViewModelArgs>(
+            return await NavigateToAsync<InterviewViewModel, InterviewViewModelArgs>(
                 new InterviewViewModelArgs
                 {
                     InterviewId = interviewId,

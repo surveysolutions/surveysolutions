@@ -90,6 +90,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         private void RemoveFragments()
         {
             this.fragmentStatePagerAdapter.RemoveAllFragments();
+            this.fragmentStatePagerAdapter.Dispose();
             this.fragmentStatePagerAdapter = null;
             this.viewPager.Adapter = null;
 
@@ -105,16 +106,10 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         private void CreateFragments()
         {
             this.viewPager = this.FindViewById<ViewPager>(Resource.Id.pager);
-
-
-
-
+            
             this.fragmentStatePagerAdapter = new MvxFragmentStatePagerAdapter(this, this.SupportFragmentManager);
             this.viewPager.Adapter = this.fragmentStatePagerAdapter;
             this.viewPager.PageSelected += this.ViewPager_PageSelected;
-
-
-
 
             this.ViewModel.StartedInterviews.PropertyChanged += this.StartedInterviewsOnPropertyChanged;
             this.ViewModel.RejectedInterviews.PropertyChanged += this.RejectedInterviewsOnPropertyChanged;
@@ -365,6 +360,8 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                 //this.GoogleApiClnt?.Dispose();
                 //this.GoogleApiClnt = null;
                 this.ViewModel.OnOfflineSynchronizationStarted = null;
+                
+                this.fragmentStatePagerAdapter?.Dispose();
             }
 
             base.Dispose(disposing);

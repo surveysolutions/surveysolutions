@@ -1,10 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using StackExchange.Exceptional;
+using WB.UI.Designer.Exceptions;
 
 namespace WB.UI.Designer.Controllers
-{
-    [Route("error")]
+{ [Route("error")]
     public class ErrorController : Controller
     {
+        private const int MaxLengthToSave = 1000;
+        
         [Route("500")]
         public ActionResult Index() => View("Index");
         [Route("404")]
@@ -14,7 +20,7 @@ namespace WB.UI.Designer.Controllers
         [Route("403")]
         public ActionResult Forbidden() => this.View("Forbidden");
         
-        [Route("{statusCode}")]
+        [Route("{statusCode:int}")]
 
         public IActionResult Error(int? statusCode = null)
         {
@@ -29,6 +35,31 @@ namespace WB.UI.Designer.Controllers
                 }
             }
             return Index();
+        }
+        
+        [Route("report")]
+        [HttpPost]
+        public IActionResult LogError([FromBody] JObject clientError)
+        {
+            string json = clientError.ToString();
+            ClientException exception;
+            
+            try
+            {
+                var clientErrorModel = JsonConvert.DeserializeObject<ClientErrorModel>(json);
+                exception = clientErrorModel != null
+                    ? new ClientException(clientErrorModel)
+                    : new ClientException("Client error is null", 
+                        json.Substring(0, Math.Min(MaxLengthToSave, json.Length)));
+            }
+            catch
+            {
+                exception = new ClientException("Error deserialize client error", 
+                    json.Substring(0, Math.Min(MaxLengthToSave, json.Length)));
+            }
+            
+            exception.Log(null, category: "vue3");
+            return Ok();
         }
     }
 }

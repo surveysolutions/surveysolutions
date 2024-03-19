@@ -174,12 +174,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     lookupTableService.CloneLookupTable(document.PublicKey, lookupTable.Key,  this.Id, lookupTable.Key);
                 }
             }
-
-            foreach (var attachment in clonedDocument.Attachments)
+            
+            if(document.IsDeleted)
+                clonedDocument.Attachments = new List<Attachment>();
+            else
             {
-                var newAttachmentId = Guid.NewGuid();
-                this.attachmentService.CloneMeta(attachment.AttachmentId, newAttachmentId, clonedDocument.PublicKey);
-                attachment.AttachmentId = newAttachmentId;
+                foreach (var attachment in clonedDocument.Attachments)
+                {
+                    var newAttachmentId = Guid.NewGuid();
+                    this.attachmentService.CloneMeta(attachment.AttachmentId, newAttachmentId,
+                        clonedDocument.PublicKey);
+                    attachment.AttachmentId = newAttachmentId;
+                }
             }
 
             foreach (var translation in clonedDocument.Translations)
@@ -925,6 +931,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (command.CategoriesId.HasValue)
                 answers = Array.Empty<Answer>();
+
+            if (command is { CascadeFromQuestionId: not null, Properties.OptionsFilterExpression: not null })
+                command.Properties.OptionsFilterExpression = null;
+            
+            string? linkedFilterExpression = command is { CascadeFromQuestionId: not null, LinkedFilterExpression: not null }
+                ? null
+                : command.LinkedFilterExpression;
             
             var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
             IQuestion newQuestion = CreateQuestion(command.QuestionId,
@@ -948,7 +961,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 command.CascadeFromQuestionId,
                 null,
                 command.ValidationConditions,
-                command.LinkedFilterExpression,
+                linkedFilterExpression,
                 false,
                 showAsList:command.ShowAsList,
                 showAsListThreshold: command.ShowAsListThreshold,
@@ -2030,6 +2043,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(Guid viewerId) 
         {
+            if (this.innerDocument.IsDeleted)
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.QuestionnaireIsDeleted, ExceptionMessages.NoPremissionsToEditQuestionnaire);
+            }
             if (this.innerDocument.CreatedBy != viewerId && !this.SharedUsersIds.Contains(viewerId))
             {
                 throw new QuestionnaireException(

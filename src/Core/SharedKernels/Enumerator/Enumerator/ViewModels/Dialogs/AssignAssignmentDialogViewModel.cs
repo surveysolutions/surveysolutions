@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Humanizer;
-using Humanizer.Localisation;
 using MvvmCross.Navigation;
 using MvvmCross.Plugin.Messenger;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
@@ -10,6 +8,7 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dialogs;
@@ -50,7 +49,7 @@ public class AssignAssignmentDialogViewModel: ActionDialogViewModel<AssignAssign
             var timeSpan = DateTime.UtcNow - assignmentDocument.ReceivedByInterviewerAt.Value;
             ConfirmText = string.Format(UIResources.Interviewer_Reassign_AlreadyReceivedAssignment,
                 assignmentDocument.ResponsibleName,
-                timeSpan.Humanize(minUnit: TimeUnit.Second));
+                NumericTextFormatter.FormatTimeHumanized(timeSpan));
             ShowConfirm = true;
         }
     }

@@ -89,7 +89,7 @@ const pages = {
 };
 
 const fileTargets = [
-    { source: join(".resources", "**", "*.json"), destination: join("dist", "locale"), isFlat: false  },
+    { source: join(".resources", "**", "*.js"), destination: join("dist", "locale"), isFlat: false  },
 
     { source: join("dist", "img", "**", "*.*"), destination: path.join(hqDist, "wwwroot", "img"), isFlat: false },
     { source: join("dist", "fonts", "**", "*.*"), destination: path.join(hqDist, "wwwroot", "fonts") },
@@ -232,7 +232,7 @@ return {
 					jQuery: 'jquery',
 				})
 			],
-		  output: {
+		    output: {
 			  assetFileNames: (assetInfo) => {
 				  let extType = assetInfo.name.split('.').at(1);
 				  if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
@@ -266,7 +266,7 @@ return {
 					  return filename;
 				}*/
 			  },
-		  },
+		    },
 		},
 	  },
 	}

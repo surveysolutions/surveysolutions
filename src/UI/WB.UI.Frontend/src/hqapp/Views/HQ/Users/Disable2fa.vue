@@ -1,35 +1,27 @@
 <template>
-    <ProfileLayout ref="profile"
-        :role="userInfo.role"
-        :isOwnProfile="userInfo.isOwnProfile"
-        :userName="userInfo.userName"
-        :canChangePassword="userInfo.canChangePassword"
-        :userId="userInfo.userId"
-        :currentTab="currentTab"
-        :canGenerateToken="userInfo.canGetApiToken">
+    <ProfileLayout ref="profile" :role="userInfo.role" :isOwnProfile="userInfo.isOwnProfile" :userName="userInfo.userName"
+        :canChangePassword="userInfo.canChangePassword" :userId="userInfo.userId" :currentTab="currentTab"
+        :canGenerateToken="userInfo.canGetApiToken" :isRestricted="userInfo.isRestricted">
 
-        <div >
-            <h2>{{$t('Strings.HQ_Views_DisableTwoFactorAuth_Title')}}</h2>
+        <div>
+            <h2>{{ $t('Strings.HQ_Views_DisableTwoFactorAuth_Title') }}</h2>
         </div>
-        <div  >
-            <div class="alert alert-warning"
-                role="alert">
+        <div>
+            <div class="alert alert-warning" role="alert">
                 <p>
-                    <strong>{{$t('Pages.Disable2faLine1')}}</strong>
+                    <strong>{{ $t('Pages.Disable2faLine1') }}</strong>
                 </p>
                 <p>
-                    {{$t('Pages.ChandgeKeyLine1')}} <a v-bind:href="getUrl('ResetAuthenticator')">{{$t('Pages.ChandgeKeyLine2')}}</a>
+                    {{ $t('Pages.ChandgeKeyLine1') }} <a v-bind:href="getUrl('ResetAuthenticator')">{{
+                        $t('Pages.ChandgeKeyLine2') }}</a>
                 </p>
             </div>
         </div>
-        <div >
+        <div>
             <div class="block-filter">
-                <button
-                    type="submit"
-                    class="btn btn-danger"
-                    id="btnDisable2fa"
-                    v-bind:disabled="userInfo.isObserving"
-                    @click="disable2fa">{{$t('Pages.Disable2fa')}}</button>
+                <button type="submit" class="btn btn-danger" id="btnDisable2fa"
+                    v-bind:disabled="userInfo.isObserving || userInfo.isRestricted" @click="disable2fa">{{
+                        $t('Pages.Disable2fa') }}</button>
             </div>
         </div>
 
@@ -38,7 +30,7 @@
 
 <script>
 import Vue from 'vue'
-import {each} from 'lodash'
+import { each } from 'lodash'
 
 export default {
     data() {
@@ -47,7 +39,7 @@ export default {
         }
     },
     computed: {
-        currentTab(){
+        currentTab() {
             return 'two-factor'
         },
         model() {
@@ -61,7 +53,7 @@ export default {
         },
     },
     methods: {
-        disable2fa(){
+        disable2fa() {
             this.successMessage = null
             for (var error in this.modelState) {
                 delete this.modelState[error]
@@ -87,8 +79,8 @@ export default {
             )
 
         },
-        getUrl: function(baseUrl){
-            if(this.isOwnProfile)
+        getUrl: function (baseUrl) {
+            if (this.isOwnProfile)
                 return `./${baseUrl}`
             else
                 return `../${baseUrl}/` + this.model.userInfo.userId

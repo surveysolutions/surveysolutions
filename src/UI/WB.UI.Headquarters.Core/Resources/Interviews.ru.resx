@@ -285,4 +285,7 @@
   <data name="DynamicFilter_MatchTypes_ValuePlaceholder" xml:space="preserve">
     <value>значение</value>
   </data>
+  <data name="WebInterviewResponsibleWarning" xml:space="preserve">
+      <value>Ответственный не Интервьюер. Линк будет недоступен.</value>
+  </data>
 </root>

@@ -5,6 +5,7 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -49,8 +50,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
             // Assert
             viewModel.IsImage.Should().BeFalse();
             viewModel.IsVideo.Should().BeTrue();
-            viewModel.Video.Should().NotBe(null);
-            viewModel.Video.Should().BeEquivalentTo("cache");
+            viewModel.IsAudio.Should().BeFalse();
+            viewModel.IsPdf.Should().BeFalse();
+            viewModel.ShowTitle.Should().NotBe(null);
+            viewModel.ShowTitle.Should().BeEquivalentTo(UIResources.Interview_PlayVideo);
         }
     }
 }

@@ -1,9 +1,9 @@
 import globby from 'globby';
-import fs from 'fs'
-import path from 'path'
-import crypto from 'crypto'
-import xmldoc from 'xmldoc'
-import rimraf from 'rimraf'
+import fs from 'fs';
+import path from 'path';
+import crypto from 'crypto';
+import xmldoc from 'xmldoc';
+import { sync } from 'rimraf';
 
 module.exports = class LocalizationBuilder {
     constructor(options) {
@@ -34,7 +34,7 @@ module.exports = class LocalizationBuilder {
     writeFiles(destination, folder, namespaces) {
         const response = {};
         const destinationFolder = path.join(destination, folder);
-        rimraf.sync(destinationFolder);
+        sync(destinationFolder);
 
         Object.keys(this.localeInfo).forEach(language => {
             const locale = this.localeInfo[language];
@@ -58,7 +58,7 @@ module.exports = class LocalizationBuilder {
 
             this.ensureDirectoryExistence(resultPath);
 
-            require('fs').writeFileSync(resultPath, fileBody);
+            fs.writeFileSync(resultPath, fileBody);
 
             response[language] = path
                 .join(folder, filename)
@@ -70,7 +70,7 @@ module.exports = class LocalizationBuilder {
 
     getFiles() {
         const { patterns } = this.options;
-        let files = globby.sync(patterns, { onlyFiles: true });        
+        let files = globby.sync(patterns, { onlyFiles: true });
         return files;
     }
 
@@ -159,11 +159,11 @@ module.exports = class LocalizationBuilder {
         var resourceObject = {};
         var valueNodes = doc.childrenNamed('data');
         valueNodes.forEach(function(element) {
-            var name = element.attr.name;
+            var name = element.attr.name.replaceAll('_plural', '_other');
             var values = element.childrenNamed('value');
-
             if (values.length == 1) {
                 resourceObject[name] = values[0].val;
+                //.replaceAll('}}', '}');
             }
         });
 
@@ -205,8 +205,6 @@ module.exports = class LocalizationBuilder {
 
     ensureDirectoryExistence(filePath) {
         var dirname = path.dirname(filePath);
-
-        const fs = require('fs');
 
         if (fs.existsSync(dirname)) {
             return true;

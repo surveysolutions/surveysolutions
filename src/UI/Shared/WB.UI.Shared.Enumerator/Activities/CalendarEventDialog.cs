@@ -16,7 +16,7 @@ namespace WB.UI.Shared.Enumerator.Activities
 {
     [MvxDialogFragmentPresentation]
     [Register(nameof(CalendarEventDialog))]
-    public class CalendarEventDialog : MvxDialogFragment<CalendarEventDialogViewModel>
+    public class CalendarEventDialog : BaseFragmentDialog<CalendarEventDialogViewModel>
     {
         public CalendarEventDialog()
         {
@@ -27,45 +27,8 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
         }
 
-        public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-        {
-            if (Context == null) throw new InvalidOperationException("Context is null");
-            
-            Context.Theme?.ApplyStyle(Resource.Style.DialogWithTitle, true);
-            var ignore = base.OnCreateView(inflater, container, savedInstanceState);
-            var view = this.BindingInflate(Resource.Layout.calendar_event_dialog, null);
-            
-            if (this.Dialog == null) throw new InvalidOperationException("Dialog is null");
-            this.Dialog.SetTitle(ViewModel.Title);
-            this.Dialog.SetCancelable(false);
-            this.Dialog.SetCanceledOnTouchOutside(false);
-            
-            if (Activity == null) throw new InvalidOperationException("Activity is null");
-            Activity.Window?.SetSoftInputMode(SoftInput.AdjustPan);
-            return view;
-        }
-
-        public override void OnDismiss(IDialogInterface dialog)
-        {
-            HideKeyboard();
-
-            base.OnDismiss(dialog);
-        }
-        
-        public override void OnStop()
-        {
-            HideKeyboard();
-
-            base.OnStop();
-        }
-
-        private void HideKeyboard()
-        {
-            var activity = Mvx.IoCProvider!.Resolve<IMvxAndroidCurrentTopActivity>()!.Activity;
-
-            activity.RemoveFocusFromEditText();
-            if(View!= null)
-                activity.HideKeyboard(View.WindowToken);
-        }
+        protected override string? Title => ViewModel?.Title;
+        protected override int LayoutFragmentId => Resource.Layout.calendar_event_dialog;
+        protected override bool IsCancelable => false;
     }
 }

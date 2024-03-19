@@ -3,12 +3,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Humanizer;
-using Humanizer.Localisation;
 using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -199,7 +196,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private void SetAnswer(TimeSpan duration)
         {
             this.Answer = string.Format(UIResources.AudioQuestion_DurationFormat,
-                duration.Humanize(maxUnit: TimeUnit.Minute, minUnit: TimeUnit.Second));
+                NumericTextFormatter.FormatTimeHumanized(duration));
             
             this.CanBePlayed = this.audioFileStorage.GetInterviewBinaryData(this.interviewId, GetAudioFileName()) != null;
         }

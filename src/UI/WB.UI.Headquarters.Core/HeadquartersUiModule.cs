@@ -1,8 +1,6 @@
 using System;
 using System.Linq;
 using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Configuration;
 using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Headquarters.PdfInterview;
@@ -16,8 +14,8 @@ using WB.Enumerator.Native.WebInterview.Models;
 using WB.Enumerator.Native.WebInterview.Pipeline;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.UI.Headquarters.Code.Authentication;
+using WB.UI.Headquarters.Code.UsersManagement;
 using WB.UI.Headquarters.Code.WebInterview.Pipeline;
-using WB.UI.Headquarters.Code.Workspaces;
 using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Controllers.Api.PublicApi;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Models;
@@ -98,6 +96,9 @@ namespace WB.UI.Headquarters
                     services.AddTransient<ICaptchaProvider, NoCaptchaProvider>();
                     break;
             }
+            
+            AccountManagementConfig accountManagementConfig = configuration.GetSection("AccountManagement").Get<AccountManagementConfig>();
+            registry.BindToConstant(() => new UsersManagementSettings(accountManagementConfig));
         }
 
         private void ConfigureEventBus(IIocRegistry registry)

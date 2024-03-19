@@ -2235,6 +2235,18 @@ namespace WB.UI.Designer.Resources {
             }
         }
         
+        public static string Default {
+            get {
+                return ResourceManager.GetString("Default", resourceCulture);
+            }
+        }
+        
+        public static string Reset {
+            get {
+                return ResourceManager.GetString("Reset", resourceCulture);
+            }
+        }
+        
         public static string PleaseWait {
             get {
                 return ResourceManager.GetString("PleaseWait", resourceCulture);
@@ -2958,6 +2970,36 @@ namespace WB.UI.Designer.Resources {
         public static string ManageAccount {
             get {
                 return ResourceManager.GetString("ManageAccount", resourceCulture);
+            }
+        }
+        
+        public static string OldUi {
+            get {
+                return ResourceManager.GetString("OldUi", resourceCulture);
+            }
+        }
+        
+        public static string ShowList {
+            get {
+                return ResourceManager.GetString("ShowList", resourceCulture);
+            }
+        }
+        
+        public static string Login {
+            get {
+                return ResourceManager.GetString("Login", resourceCulture);
+            }
+        }
+        
+        public static string Register {
+            get {
+                return ResourceManager.GetString("Register", resourceCulture);
+            }
+        }
+        
+        public static string No {
+            get {
+                return ResourceManager.GetString("No", resourceCulture);
             }
         }
     }

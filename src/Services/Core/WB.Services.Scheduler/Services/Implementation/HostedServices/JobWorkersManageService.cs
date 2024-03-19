@@ -28,6 +28,12 @@ namespace WB.Services.Scheduler.Services.Implementation.HostedServices
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
+            if (options.Value.IsReadonly)
+            {
+                logger.LogInformation("Export service is running in readonly mode. This instance don't get export jobs.");
+                return Task.CompletedTask;
+            }
+            
             scope = serviceProvider.CreateScope();
 
             var workersCount = this.options.Value.WorkerCount;

@@ -1,45 +1,29 @@
 <template>
-    <ProfileLayout ref="profile"
-        :role="userInfo.role"
-        :forceChangePassword="false"
-        :isOwnProfile="userInfo.isOwnProfile"
-        :canChangePassword="userInfo.canChangePassword"
-        :userName="userInfo.userName"
-        :currentTab="currentTab"
-        :userId="userInfo.userId"
-        :canGenerateToken="userInfo.canGetApiToken">
+    <ProfileLayout ref="profile" :role="userInfo.role" :forceChangePassword="false" :isOwnProfile="userInfo.isOwnProfile"
+        :canChangePassword="userInfo.canChangePassword" :userName="userInfo.userName" :currentTab="currentTab"
+        :userId="userInfo.userId" :canGenerateToken="userInfo.canGetApiToken" :isRestricted="userInfo.isRestricted">
 
         <h4>
-            {{$t('Workspaces.AssignedWorkspaces')}}
+            {{ $t('Workspaces.AssignedWorkspaces') }}
         </h4>
         <div class="form-group">
             <ul class="list-unstyled">
-                <li v-for="workspace in allWorkspaces"
-                    v-bind:key="workspace.Name">
-                    <input
-                        class="checkbox-filter single-checkbox"
-                        v-model="workspace.Assigned"
-                        :id="workspace.Name"
-                        type="checkbox"/>
-                    <label :for="workspace.Name"
-                        :class="{ 'disabled-item' : workspace.DisabledAtUtc != null }">
+                <li v-for="workspace in allWorkspaces" v-bind:key="workspace.Name">
+                    <input class="checkbox-filter single-checkbox" v-model="workspace.Assigned" :id="workspace.Name"
+                        type="checkbox" />
+                    <label :for="workspace.Name" :class="{ 'disabled-item': workspace.DisabledAtUtc != null }">
                         <span class="tick"></span>
-                        {{workspace.DisplayName}}
+                        {{ workspace.DisplayName }}
                     </label>
                 </li>
             </ul>
         </div>
         <div>
             <div class="block-filter">
-                <button
-                    type="button"
-                    class="btn btn-success"
-                    id="btnSaveWorkspaces"
-                    @click="save"
-                    v-bind:disabled="userInfo.isObserving || inProgress">{{$t('Pages.Update')}}</button>
-                <span
-                    class="text-success marl"
-                    v-if="updated">{{$t('Workspaces.WorkspacesUpdated')}}</span>
+                <button type="button" class="btn btn-success" id="btnSaveWorkspaces" @click="save"
+                    v-bind:disabled="userInfo.isObserving || userInfo.isRestricted || inProgress">{{ $t('Pages.Update')
+                    }}</button>
+                <span class="text-success marl" v-if="updated">{{ $t('Workspaces.WorkspacesUpdated') }}</span>
             </div>
         </div>
 
@@ -59,8 +43,7 @@ export default {
     },
     mounted() {
         this.$hq.Workspaces.List(null, true).then((data) => {
-            this.allWorkspaces = data.Workspaces.map(w =>
-            {
+            this.allWorkspaces = data.Workspaces.map(w => {
                 return {
                     ...w,
                     Assigned: false,
@@ -70,10 +53,10 @@ export default {
             this.$hq.Workspaces.List(this.userInfo.userId, true).then((data) => {
                 this.userWorkspaces = data.Workspaces
                 this.allWorkspaces.forEach(w => {
-                    if(this.userWorkspaces.findIndex(uw => uw.Name === w.Name) >= 0){
+                    if (this.userWorkspaces.findIndex(uw => uw.Name === w.Name) >= 0) {
                         w.Assigned = true
                     }
-                    else{
+                    else {
                         w.Assigned = false
                     }
                 })
@@ -99,7 +82,7 @@ export default {
                     this.allWorkspaces.filter(w => w.Assigned === true)
                         .map(w => w.Name))
 
-                if(response.status === 204) {
+                if (response.status === 204) {
                     this.updated = true
                 }
             }
