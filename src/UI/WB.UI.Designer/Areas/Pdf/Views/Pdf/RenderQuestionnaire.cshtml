@@ -592,17 +592,21 @@
                 <li>
                     <span class="number">[@(i + 1)]</span>
                     <div class="appendix_detail">
-                        <a href="#@questionnaire.GetItemRef(criticalityCondition.Id)" id="@questionnaire.GetCriticalityConditionRef(criticalityCondition.Id)">
-                            <span>@criticalityCondition.Message</span>
+                        <p>
+                        	@PdfStrings.CriticalityCondition
+                        	<pre>@criticalityCondition.Expression?.Trim()</pre>
+                        </p>
+                        <p>
+                        	@PdfStrings.CriticalityMessage
+                        	<span>@criticalityCondition.Message</span>
+                        </p>
                             @if (!string.IsNullOrWhiteSpace(criticalityCondition.Description))
                             {
-                                <text>: @(criticalityCondition.Description)</text>
+                                <p>
+                                    @PdfStrings.Description
+                                    <span>@criticalityCondition.Description</span>
+                                </p>
                             }
-                        </a>
-                        <p>
-                            @(PdfStrings.CriticalityCondition)
-                            <pre>@(criticalityCondition.Expression)</pre>
-                        </p>
                     </div>
                 </li>
             }

@@ -156,6 +156,12 @@
   <data name="CriticalityCondition" xml:space="preserve">
     <value>Критическое условие:</value>
   </data>
+  <data name="CriticalityMessage" xml:space="preserve">
+    <value>Критическое сообщение:</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Описание:</value>
+  </data>
   <data name="GeneratedBy" xml:space="preserve">
     <value>Сгенерирован: {0}</value>
   </data>

@@ -123,6 +123,18 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
             }
         }
         
+        public static string CriticalityMessage {
+            get {
+                return ResourceManager.GetString("CriticalityMessage", resourceCulture);
+            }
+        }
+        
+        public static string Description {
+            get {
+                return ResourceManager.GetString("Description", resourceCulture);
+            }
+        }
+        
         public static string GeneratedBy {
             get {
                 return ResourceManager.GetString("GeneratedBy", resourceCulture);
