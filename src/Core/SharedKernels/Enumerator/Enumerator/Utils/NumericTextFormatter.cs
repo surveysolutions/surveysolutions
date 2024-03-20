@@ -47,7 +47,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
             string integer = (integerAndFraction[0] ?? "").Replace(this.settings.GroupingSeparator, "");
             string fraction = integerAndFraction.Length > 1 ? integerAndFraction[1] ?? "" : "";
 
-            var varifiers = new Func<bool>[]
+            var verifiers = new Func<bool>[]
             {
                 () =>
                 {
@@ -58,6 +58,10 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                 () =>
                 {
                     int decimalPointPosition = enteredText.IndexOf((string) this.settings.DecimalSeparator);
+
+                    if (this.settings.MaxDigitsAfterDecimal == 0 && decimalPointPosition > 0)
+                        return true;
+                    
                     return decimalPointPosition > 0 && textWithoutSign.Substring(decimalPointPosition).IndexOf((string) this.settings.GroupingSeparator) > 0;
                 },
                 () => textWithoutSign.Length == 1 && textWithoutSign == this.settings.DecimalSeparator,
@@ -65,7 +69,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                 () => fraction.Length > maxFractionDigits,
                 () => (integer.Length + fraction.Length) > maxDigitsInDecimal,
                 () => this.settings.MaxDigitsBeforeDecimal > 0 && integer.Length > this.settings.MaxDigitsBeforeDecimal,
-                () => this.settings.MaxDigitsAfterDecimal > 0 && fraction.Length > this.settings.MaxDigitsAfterDecimal,
+                () => this.settings.MaxDigitsAfterDecimal >= 0 && fraction.Length > this.settings.MaxDigitsAfterDecimal,
                 () =>
                 {
                     if (textWithoutSign.Length <= 2) return false;
@@ -78,7 +82,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                 }
             };
 
-            return varifiers.Any(isInvalid => isInvalid()) ? "" : hasNonLocalizedAndroidDecimalSeparator ? this.settings.DecimalSeparator : null;
+            return verifiers.Any(isInvalid => isInvalid()) ? "" : hasNonLocalizedAndroidDecimalSeparator ? this.settings.DecimalSeparator : null;
         }
 
         private int GetSubstringsCount(string text, string substring)
