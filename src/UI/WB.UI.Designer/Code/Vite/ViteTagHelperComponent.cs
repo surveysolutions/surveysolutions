@@ -54,7 +54,7 @@ public class ViteTagHelperComponent : TagHelperComponent
     {
         var result = await _memoryCache.GetOrCreateAsync("fs://assets/" + renderPart, async entry =>
         {
-            entry.AddExpirationToken(_webHost.WebRootFileProvider.Watch("assets/manifest.json"));
+            entry.AddExpirationToken(_webHost.WebRootFileProvider.Watch("assets/.vite/manifest.json"));
             return await RenderPart(renderPart).ConfigureAwait(false);
         }).ConfigureAwait(false);
 
@@ -63,7 +63,7 @@ public class ViteTagHelperComponent : TagHelperComponent
 
     private async Task<string> RenderPart(ViteRender renderPart)
     {
-        var manifestJson = _webHost.WebRootFileProvider.GetFileInfo("assets/manifest.json");
+        var manifestJson = _webHost.WebRootFileProvider.GetFileInfo("assets/.vite/manifest.json");
         if (!manifestJson.Exists)
         {
             if (renderPart == ViteRender.Js)
