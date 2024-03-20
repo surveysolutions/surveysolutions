@@ -188,6 +188,13 @@
 					<a href="#special_values_appendix" class="section_name appendix">@Pdf.Format(PdfStrings.Appendix_SpecialValues, questionnaire.SpecialValuesAppendixIndex, "&#8212;")</a>
 				</dd>
 				}
+				@if (!questionnaire.IsCriticalityConditionsAppendixEmpty)
+				{
+				<dt>&nbsp;</dt>
+				<dd>
+					<a href="#criticality_conditions_appendix" class="section_name appendix">@Pdf.Format(PdfStrings.Appendix_CriticalityConditions, questionnaire.CriticalityConditionsAppendixIndex, "&#8212;")</a>
+				</dd>
+				}
 				<dt>&nbsp;</dt>
 				<dd>
 					<a href="#legend_appendix" class="section_name appendix">@PdfStrings.Legend</a>
@@ -570,6 +577,36 @@
 				</li>
 			}
 		</ul>
+	</article>
+}
+
+@if (!questionnaire.IsCriticalityConditionsAppendixEmpty)
+{
+	<article class="appendix_section">
+        <h2 id="criticality_conditions_appendix">@Pdf.Format(PdfStrings.Appendix_CriticalityConditions, questionnaire.CriticalityConditionsAppendixIndex, "&#8212;")</h2>
+        
+        <ul class="container">
+            @for (var i = 0; i < questionnaire.CriticalityConditions.Count; i++)
+            {
+                var criticalityCondition = questionnaire.CriticalityConditions[i];
+                <li>
+                    <span class="number">[@(i + 1)]</span>
+                    <div class="appendix_detail">
+                        <a href="#@questionnaire.GetItemRef(criticalityCondition.Id)" id="@questionnaire.GetCriticalityConditionRef(criticalityCondition.Id)">
+                            <span>@criticalityCondition.Message</span>
+                            @if (!string.IsNullOrWhiteSpace(criticalityCondition.Description))
+                            {
+                                <text>: @(criticalityCondition.Description)</text>
+                            }
+                        </a>
+                        <p>
+                            @(PdfStrings.CriticalityCondition)
+                            <pre>@(criticalityCondition.Expression)</pre>
+                        </p>
+                    </div>
+                </li>
+            }
+        </ul>
 	</article>
 }
 
