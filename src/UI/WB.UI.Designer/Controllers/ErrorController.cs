@@ -58,7 +58,7 @@ namespace WB.UI.Designer.Controllers
                     json.Substring(0, Math.Min(MaxLengthToSave, json.Length)));
             }
             
-            exception.Log(null, category: "vue3");
+            exception.Log(HttpContext, category: "vue3");
             return Ok();
         }
     }

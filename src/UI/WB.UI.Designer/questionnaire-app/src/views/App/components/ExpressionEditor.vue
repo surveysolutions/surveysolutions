@@ -68,6 +68,7 @@ export default {
     },
     methods: {
         onModeChanged(e, session) {
+            var self = this;
             if (session.$mode.$id !== 'ace/mode/csharp') return;
 
             var rules = session.$mode.$highlightRules.getRules();
@@ -80,7 +81,6 @@ export default {
                     if (mapperRule == undefined || mapperRule == null)
                         continue;
                     else {
-
                         var lastUpdated = null;
                         var keywordMapper = null;
 
@@ -117,7 +117,7 @@ export default {
             session.off("changeMode", this.onModeChanged);
         },
         editorInit(editor) {
-            self = this;
+            var self = this;
             var renderer = editor.renderer;
             renderer.setPadding(12);
 
