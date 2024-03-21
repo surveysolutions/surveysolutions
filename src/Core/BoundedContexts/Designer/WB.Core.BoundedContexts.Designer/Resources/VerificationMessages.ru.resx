@@ -857,4 +857,13 @@
   <data name="WB0318_CriticalityConditionExpressionHasIncorrectSyntax" xml:space="preserve">
     <value>Ошибка в критическом условим.</value>
   </data>
+  <data name="WB0319_CriticalityConditionExpressionIsEmpty" xml:space="preserve">
+    <value>Выражение в критическом условии не заполнено.</value>
+  </data>
+  <data name="WB0320_CriticalityConditionExpressionIsEmpty" xml:space="preserve">
+    <value>Сообщение в критическом условии не заполнено.</value>
+  </data>
+  <data name="WB0321_CriticalityConditionUsingForbiddenClasses" xml:space="preserve">
+    <value>Критическое условие использует запрещённый тип.</value>
+  </data>
 </root>

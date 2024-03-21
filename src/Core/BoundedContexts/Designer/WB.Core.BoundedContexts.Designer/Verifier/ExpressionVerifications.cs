@@ -43,8 +43,12 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new []
         {
             ExpressionError(ExpressionUsesForbiddenDateTimeProperties, "WB0118", WB0118_ExpressionReferencingForbiddenDateTimeProperies),
-            //CriticalityConditionError(CheckForbiddenClassesUsage, "WB0272", VerificationMessages.WB0272_ConditionUsingForbiddenClasses),
-            //ExpressionError(CheckForbiddenClassesUsage, "WB0272", VerificationMessages.WB0272_ConditionUsingForbiddenClasses),
+            ExpressionWarning(this.BitwiseAnd, "WB0237", VerificationMessages.WB0237_BitwiseAnd),
+            ExpressionWarning(this.BitwiseOr, "WB0238", VerificationMessages.WB0238_BitwiseOr),
+
+            CriticalityConditionError(CriticalityConditionExpressionIsEmpty, "WB0319", VerificationMessages.WB0319_CriticalityConditionExpressionIsEmpty),
+            CriticalityConditionError(CriticalityConditionMessageIsEmpty, "WB0320", VerificationMessages.WB0320_CriticalityConditionExpressionIsEmpty),
+            CriticalityConditionError(CriticalityConditionUsingForbiddenClasses, "WB0321", VerificationMessages.WB0321_CriticalityConditionUsingForbiddenClasses),
 
             Critical<IVariable>(VariableExpressionHasLengthMoreThan10000Characters, "WB0005", string.Format(VerificationMessages.WB0005_VariableExpressionHasLengthMoreThan10000Characters, MaxExpressionLength)),
             Error<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationConditionUsesForbiddenDateTimeProperties, "WB0118", index => string.Format(WB0118_ExpressionReferencingForbiddenDateTimeProperies, index)),
@@ -59,8 +63,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Critical<IGroup>(GroupEnablementConditionReferenceChildItems,  "WB0130", VerificationMessages.WB0130_SubsectionOrRosterReferenceChildrendInCondition),
             WarningForCollection(FewQuestionsWithSameLongEnablement, "WB0235", VerificationMessages.WB0235_FewQuestionsWithSameLongEnablement),
             WarningForCollection(FewQuestionsWithSameLongValidation, "WB0236", VerificationMessages.WB0236_FewQuestionsWithSameLongValidation),
-            Warning<IQuestionnaireEntity>(this.BitwiseAnd, "WB0237", VerificationMessages.WB0237_BitwiseAnd),
-            Warning<IQuestionnaireEntity>(this.BitwiseOr, "WB0238", VerificationMessages.WB0238_BitwiseOr),
             Warning<IQuestionnaireEntity>(this.RowIndexInMultiOptionBasedRoster, "WB0220", string.Format(VerificationMessages.WB0220_RowIndexInMultiOptionBasedRoster, nameof(IRosterLevel.rowindex), nameof(IRosterLevel.rowcode))),
             this.Warning_ValidationConditionRefersToAFutureQuestion_WB0250,
             this.Warning_EnablementConditionRefersToAFutureQuestion_WB0251,
@@ -123,6 +125,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             var enablingCondition = item.GetEnablingCondition();
             return CheckForbiddenClassesUsage(enablingCondition, questionnaire);
         }
+
+        private bool CriticalityConditionUsingForbiddenClasses(CriticalityCondition item, MultiLanguageQuestionnaireDocument questionnaire) 
+            => CheckForbiddenClassesUsage(item.Expression, questionnaire);
 
         private bool CheckForbiddenClassesUsage(string? expression, MultiLanguageQuestionnaireDocument questionnaire)
         {
@@ -352,8 +357,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return identifiers.Contains("rowindex") || identifiers.Contains("@rowindex");
         }
 
-        private bool BitwiseAnd(IQuestionnaireEntity entity) => entity.GetAllExpressions().Any(this.expressionProcessor.ContainsBitwiseAnd);
-        private bool BitwiseOr(IQuestionnaireEntity entity) => entity.GetAllExpressions().Any(this.expressionProcessor.ContainsBitwiseOr);
+        private bool BitwiseAnd(string expression, MultiLanguageQuestionnaireDocument questionnaire) => this.expressionProcessor.ContainsBitwiseAnd(expression);
+        private bool BitwiseOr(string expression, MultiLanguageQuestionnaireDocument questionnaire) => this.expressionProcessor.ContainsBitwiseOr(expression);
 
         private static IEnumerable<QuestionnaireEntityReference[]> FewQuestionsWithSameLongValidation(MultiLanguageQuestionnaireDocument questionnaire)
             => questionnaire
@@ -434,7 +439,12 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private static bool ValidationConditionIsEmpty(IComposite question, ValidationCondition validationCondition, MultiLanguageQuestionnaireDocument questionnaire)
             => string.IsNullOrWhiteSpace(validationCondition.Expression);
 
-       
+        private static bool CriticalityConditionExpressionIsEmpty(CriticalityCondition criticalityCondition, MultiLanguageQuestionnaireDocument questionnaire)
+            => string.IsNullOrWhiteSpace(criticalityCondition.Expression);
+
+        private static bool CriticalityConditionMessageIsEmpty(CriticalityCondition criticalityCondition, MultiLanguageQuestionnaireDocument questionnaire)
+            => string.IsNullOrWhiteSpace(criticalityCondition.Message);
+        
 
         private static bool ValidationConditionIsTooLong(IComposite question, ValidationCondition validationCondition, MultiLanguageQuestionnaireDocument questionnaire)
             => validationCondition.Expression?.Length > MaxExpressionLength;
