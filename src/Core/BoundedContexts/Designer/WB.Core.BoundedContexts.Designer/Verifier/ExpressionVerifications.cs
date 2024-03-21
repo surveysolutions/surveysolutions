@@ -15,8 +15,10 @@ using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
 using WB.Core.SharedKernels.Questionnaire.Documents;
-using WB.Core.SharedKernels.QuestionnaireEntities; 
+using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Verifier
 {
@@ -40,12 +42,10 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new []
         {
-            Error<IStaticText>(EnablementUsesForbiddenDateTimeProperties, "WB0118", WB0118_ExpressionReferencingForbiddenDateTimeProperies),
-            Error<IGroup>(EnablementUsesForbiddenDateTimeProperties, "WB0118", WB0118_ExpressionReferencingForbiddenDateTimeProperies),
-            Error<IQuestion>(CategoricalFilterUsesForbiddenDateTimeProperties, "WB0118", WB0118_ExpressionReferencingForbiddenDateTimeProperies),
-            Error<IQuestion>(LinkedFilterUsesForbiddenDateTimeProperties, "WB0118",WB0118_ExpressionReferencingForbiddenDateTimeProperies),
-            Error<IQuestion>(EnablementUsesForbiddenDateTimeProperties, "WB0118", WB0118_ExpressionReferencingForbiddenDateTimeProperies),
-            Error<IVariable>(VariableUsesForbiddenDateTimeProperties, "WB0118", WB0118_ExpressionReferencingForbiddenDateTimeProperies),
+            ExpressionError(ExpressionUsesForbiddenDateTimeProperties, "WB0118", WB0118_ExpressionReferencingForbiddenDateTimeProperies),
+            //CriticalityConditionError(CheckForbiddenClassesUsage, "WB0272", VerificationMessages.WB0272_ConditionUsingForbiddenClasses),
+            //ExpressionError(CheckForbiddenClassesUsage, "WB0272", VerificationMessages.WB0272_ConditionUsingForbiddenClasses),
+
             Critical<IVariable>(VariableExpressionHasLengthMoreThan10000Characters, "WB0005", string.Format(VerificationMessages.WB0005_VariableExpressionHasLengthMoreThan10000Characters, MaxExpressionLength)),
             Error<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationConditionUsesForbiddenDateTimeProperties, "WB0118", index => string.Format(WB0118_ExpressionReferencingForbiddenDateTimeProperies, index)),
             Error<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationConditionIsTooLong, "WB0104", index => string.Format(VerificationMessages.WB0104_ValidationConditionIsTooLong, index, MaxExpressionLength), VerificationMessageLevel.Critical),
@@ -438,13 +438,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private static bool ValidationConditionIsTooLong(IComposite question, ValidationCondition validationCondition, MultiLanguageQuestionnaireDocument questionnaire)
             => validationCondition.Expression?.Length > MaxExpressionLength;
-
-        private bool LinkedFilterUsesForbiddenDateTimeProperties(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
-            => ExpressionUsesForbiddenDateTimeProperties(question.LinkedFilterExpression, questionnaire);
-
-        private bool CategoricalFilterUsesForbiddenDateTimeProperties(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
-            => ExpressionUsesForbiddenDateTimeProperties(question.Properties?.OptionsFilterExpression, questionnaire);
-
+        
 
 
         private EntityVerificationResult<IComposite> VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
@@ -473,10 +467,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 ReferencedEntities = referencedEntities
             };
         }
-
-        private bool VariableUsesForbiddenDateTimeProperties(IVariable variable, MultiLanguageQuestionnaireDocument questionnaire)
-            => ExpressionUsesForbiddenDateTimeProperties(variable.Expression, questionnaire);
-
+        
         private bool DoesExpressionExceed1000CharsLimit(MultiLanguageQuestionnaireDocument questionnaire, string? expression)
         {
             if (string.IsNullOrEmpty(expression))
@@ -492,11 +483,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             MultiLanguageQuestionnaireDocument questionnaire)
             => this.DoesExpressionExceed1000CharsLimit(questionnaire, variable.Expression);
 
-
-        private bool EnablementUsesForbiddenDateTimeProperties(IConditional conditional,
-            MultiLanguageQuestionnaireDocument questionnaire)
-            => ExpressionUsesForbiddenDateTimeProperties(conditional.ConditionExpression, questionnaire);
-
+        
         protected bool ExpressionUsesForbiddenDateTimeProperties(string? expression,
             MultiLanguageQuestionnaireDocument questionnaire)
         {
@@ -535,6 +522,98 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     .Find<TEntity>(entity => hasError(entity, questionnaire))
                     .Select(entity => QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity)));
         }
+
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> ExpressionError(
+            Func<string, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
+        {
+            return questionnaire => ExpressionCheckImpl(questionnaire, VerificationMessageLevel.General, hasError, code, message);
+        }
+
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> ExpressionWarning(
+            Func<string, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
+        {
+            return questionnaire => ExpressionCheckImpl(questionnaire, VerificationMessageLevel.Warning, hasError, code, message);
+        }
+
+        private static IEnumerable<QuestionnaireVerificationMessage> ExpressionCheckImpl(MultiLanguageQuestionnaireDocument questionnaire,
+            VerificationMessageLevel messageLevel,
+                Func<string, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
+        {
+            var entitiesWithConditions =
+                    questionnaire.Find<IComposite>(c => !string.IsNullOrEmpty((c as IConditional)?.ConditionExpression));
+
+            foreach (var entitiesWithCondition in entitiesWithConditions)
+            {
+                if (entitiesWithCondition is IConditional conditional && hasError(conditional.ConditionExpression, questionnaire))
+                    yield return QuestionnaireVerificationMessage.VerificationMessage(messageLevel, code, message, CreateReference(entitiesWithCondition, property: QuestionnaireVerificationReferenceProperty.EnablingCondition)); 
+            }
+
+            var questionsWithFilter = questionnaire.Find<IQuestion>(c => !string.IsNullOrEmpty(c.Properties?.OptionsFilterExpression));
+            foreach (var question in questionsWithFilter)
+            {
+                var filter = question.Properties?.OptionsFilterExpression;
+                if (filter != null && hasError(filter, questionnaire))
+                    yield return QuestionnaireVerificationMessage.VerificationMessage(messageLevel, code, message, CreateReference(question, property: QuestionnaireVerificationReferenceProperty.OptionsFilter)); 
+            }
+
+            var questionsWithLinkedFilter = questionnaire.Find<IQuestion>(c => !string.IsNullOrEmpty(c.LinkedFilterExpression));
+            foreach (var question in questionsWithLinkedFilter)
+            {
+                var filter = question.LinkedFilterExpression;
+                if (filter != null && hasError(filter, questionnaire))
+                    yield return QuestionnaireVerificationMessage.VerificationMessage(messageLevel, code, message, CreateReference(question)); 
+            }
+            
+            var entitiesWithValidationConditions =
+                questionnaire
+                    .Find<IComposite>(c => (c as IValidatable)?.ValidationConditions.Count > 0)
+                    .Select(e => (IValidatable)e);
+
+            foreach (var entity in entitiesWithValidationConditions)
+            {
+                for(var index = 0; index < entity.ValidationConditions.Count; index++)
+                {
+                    var validationCondition = entity.ValidationConditions[index];
+                    if (!string.IsNullOrWhiteSpace(validationCondition.Expression) && hasError(validationCondition.Expression, questionnaire))
+                        yield return QuestionnaireVerificationMessage.VerificationMessage(messageLevel, code, message, CreateReference(entity, index, QuestionnaireVerificationReferenceProperty.ValidationExpression)); 
+                }
+            }
+            
+            var variables = questionnaire.Find<IVariable>(v => !string.IsNullOrEmpty(v.Expression));
+            foreach (var variable in variables)
+            {
+                if (!string.IsNullOrWhiteSpace(variable.Expression) && hasError(variable.Expression, questionnaire))
+                    yield return QuestionnaireVerificationMessage.VerificationMessage(messageLevel, code, message, QuestionnaireEntityReference.CreateForVariable(variable.PublicKey)); 
+            }
+
+            foreach (var criticalityCondition in questionnaire.CriticalityConditions)
+            {
+                if (!string.IsNullOrEmpty(criticalityCondition.Expression) && hasError(criticalityCondition.Expression, questionnaire))
+                    yield return QuestionnaireVerificationMessage.VerificationMessage(messageLevel, code, message, 
+                        QuestionnaireEntityReference.CreateForCriticalityCondition(criticalityCondition.Id)); 
+            }
+        }
+        
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> CriticalityConditionError(
+            Func<CriticalityCondition, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
+        {
+            return questionnaire =>
+                questionnaire.CriticalityConditions
+                    .Where(cc => hasError(cc, questionnaire))
+                    .Select(cc => QuestionnaireVerificationMessage.Error(code, message,
+                        QuestionnaireEntityReference.CreateForCriticalityCondition(cc.Id)));
+        }
+
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> CriticalityConditionWarning(
+            Func<CriticalityCondition, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
+        {
+            return questionnaire =>
+                questionnaire.CriticalityConditions
+                    .Where(cc => hasError(cc, questionnaire))
+                    .Select(cc => QuestionnaireVerificationMessage.Warning(code, message,
+                        QuestionnaireEntityReference.CreateForCriticalityCondition(cc.Id)));
+        }
+
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error<TEntity, TSubEntity>(
             Func<TEntity, IEnumerable<TSubEntity>> getSubEntities, Func<TEntity, TSubEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex, VerificationMessageLevel level = VerificationMessageLevel.General)
@@ -655,6 +734,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             {
                 verificationMessagesByQuestionnaire.AddRange(verifier.Invoke(multiLanguageQuestionnaireDocument));
             }
+
             return verificationMessagesByQuestionnaire;
         }
 
