@@ -3,7 +3,7 @@
         <a href="javascript:void(0);" @click="remove()" v-if="!isReadOnlyForUser" class="btn delete-btn"
             tabindex="-1"></a>
         <ExpressionEditor v-model="criticalityCondition.edit.expression" mode="expression" focusable="false"
-            :placeholder="$t('QuestionnaireEditor.SideBarCriticalityConditionExpression')" />
+            :usePadding="false" :placeholder="$t('QuestionnaireEditor.SideBarCriticalityConditionExpression')" />
         <div class="divider"></div>
         <div class="input-group macros-name">
             <input :id="criticalityCondition.id"
