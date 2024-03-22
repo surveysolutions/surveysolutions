@@ -256,7 +256,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 
             questionnaireInfoView.CriticalityConditions = questionnaireDocument
                 .CriticalityConditions
-                .Select(x => new CriticalityConditionView { Id = x.Id, Message = x.Message, Description = x.Description, Expression = x.Expression })
+                .Select(x => new CriticalityConditionView { Id = x.Id.FormatGuid(), Message = x.Message, Description = x.Description, Expression = x.Expression })
                 .OrderBy(x => x.Message)
                 .ToList();
 
