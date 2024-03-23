@@ -290,16 +290,16 @@
     <value>add description</value>
   </data>
   <data name="SideBarCriticalityConditionExpression" xml:space="preserve">
-    <value>expression</value>
+      <value>Criticality condition</value>
   </data>
   <data name="SideBarCriticalityConditionsCounter" xml:space="preserve">
-    <value>{{count}} Criticality Condition:</value>
+      <value>Criticality Conditions: {{count}}</value>
   </data>
   <data name="SideBarCriticalityConditionsCounter_plural" xml:space="preserve">
-    <value>{{count}} Criticality Conditions:</value>
+      <value>Criticality Conditions: {{count}}</value>
   </data>
   <data name="SideBarCriticalityConditionDescription" xml:space="preserve">
-    <value>description</value>
+      <value>Description</value>
   </data>
   <data name="SideBarCriticalityConditionsEmptyLine1" xml:space="preserve">
     <value>Use this tab to define criticality conditions.</value>
@@ -314,7 +314,7 @@
     <value>hide description</value>
   </data>
   <data name="SideBarCriticalityConditionMessage" xml:space="preserve">
-    <value>message</value>
+      <value>Message</value>
   </data>
   <data name="SideBarShowDescription" xml:space="preserve">
     <value>add description</value>
@@ -641,7 +641,7 @@
     <value>Flat mode</value>
   </data>
   <data name="AddValidationRule" xml:space="preserve">
-    <value>Add new validation rule</value>
+    <value>Add validation condition</value>
   </data>
   <data name="EnteredMoreThanAllowed" xml:space="preserve">
     <value>You entered more than maximum allowed {{max}}</value>

@@ -1,23 +1,31 @@
-<template>
-    <li class="macros-panel-item">
-        <a href="javascript:void(0);" @click="remove()" v-if="!isReadOnlyForUser" class="btn delete-btn"
-            tabindex="-1"></a>
-        <ExpressionEditor v-model="criticalityCondition.edit.expression" mode="expression" focusable="false"
-            :placeholder="$t('QuestionnaireEditor.SideBarCriticalityConditionExpression')" />
-        <div class="divider"></div>
-        <div class="input-group macros-name">
-            <input :id="criticalityCondition.id"
-                :placeholder="$t('QuestionnaireEditor.SideBarCriticalityConditionMessage')" maxlength="32"
-                spellcheck="false" v-model="criticalityCondition.edit.message" name="message" class="form-control"
-                type="text" />
+<template>    
+    <div class="form-group validation-group" style="background:000;">
+        <div>
+            <label>
+                    {{ $t('QuestionnaireEditor.SideBarCriticalityConditionExpression') }} {{ index + 1 }}
+            </label>
+
+                <button type="button" class="btn delete-btn-sm delete-validation-condition"
+                    @click="remove()" v-if="!isReadOnlyForUser" tabindex="-1"></button>
+
+                <ExpressionEditor v-model="criticalityCondition.edit.expression" mode="expression" focusable="true" />
+
+                <label class="validation-message">
+                    {{ $t('QuestionnaireEditor.SideBarCriticalityConditionMessage') }}                    
+                </label>
+                <ExpressionEditor v-model="criticalityCondition.edit.message" />
         </div>
         <div v-if="isDescriptionVisible()">
-            <div class="divider"></div>
-            <textarea :placeholder="$t('QuestionnaireEditor.SideBarCriticalityConditionDescription')" type="text"
-                v-model="criticalityCondition.edit.description" class="form-control macros-description"
-                v-autosize></textarea>
+                <label class="validation-message">
+                    {{ $t('QuestionnaireEditor.SideBarCriticalityConditionDescription') }}
+                </label>
+                <textarea type="text"
+                    v-model="criticalityCondition.edit.description" class="form-control macros-description"
+                    v-autosize>
+                </textarea>
+                <hr style="margin-top:0px; margin-bottom:0px;">
         </div>
-        <div class="actions" v-if="isDirty">
+        <div class="actions" v-if="isDirty" style="padding-top: 10px;">
             <button v-if="!isReadOnlyForUser" class="btn lighter-hover" @click="save()">{{
             $t('QuestionnaireEditor.Save') }}
             </button>
@@ -29,7 +37,8 @@
             $t('QuestionnaireEditor.SideBarShowDescription') }}
             </button>
         </div>
-    </li>
+    </div>
+
 </template>
 
 <script>
@@ -47,6 +56,7 @@ export default {
     props: {
         questionnaireId: { type: String, required: true },
         criticalityCondition: { type: Object, required: true },
+        index: { type: Number, required: true}
     },
     data() {
         return {}

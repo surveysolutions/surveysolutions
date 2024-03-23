@@ -16,8 +16,11 @@
             </div>
 
             <ul>
-                <CriticalityConditionItem v-for="(criticalityCondition, index) in criticalityConditions"
-                    :criticalityCondition="criticalityCondition" :questionnaire-id="questionnaireId" />
+                <li class="macros-panel-item" style="padding:0px;" 
+                    v-for="(criticalityCondition, index) in criticalityConditions">
+                    <CriticalityConditionItem  :criticalityCondition="criticalityCondition" :index="index" 
+                        :questionnaire-id="questionnaireId" />
+                </li>    
             </ul>
             <div class="button-holder">
                 <input type="button" class="btn lighter-hover" v-if="!isReadOnlyForUser"
