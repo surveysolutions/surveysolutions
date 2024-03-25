@@ -1325,6 +1325,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public bool IsNeighboringSupport(Guid entityId)
             => GetQuestion(entityId)?.Properties?.GeometryOverlapDetection ?? false;
 
+        public Guid GetCriticalityConditionIdByIndex(int index)
+        {
+            if (this.innerDocument.CriticalityConditions.Count > index)
+                return this.innerDocument.CriticalityConditions[index].Id;
+            throw new ArgumentException(
+                $"Fail to resolve criticality condition with index {index} in questionnaire {innerDocument.Id}");
+        }
+
         public Guid GetQuestionReferencedByLinkedQuestion(Guid linkedQuestionId)
         {
             IQuestion linkedQuestion = this.GetQuestionOrThrow(linkedQuestionId);

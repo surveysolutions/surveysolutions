@@ -4,7 +4,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 
 public class CriticalityConditionView
 {
-    public string Id { get; set; }
+    public string Id { get; set; } = String.Empty;
     public string? Message { get; set; }
     public string? Expression { get; set; }
     public string? Description{ get; set; }

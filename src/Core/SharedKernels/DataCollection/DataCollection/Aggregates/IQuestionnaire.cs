@@ -333,5 +333,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         Guid GetEntityReferencedByLinkedQuestion(Guid linkedQuestionId);
         bool IsInsideRoster(Guid entityId);
         bool IsNeighboringSupport(Guid entityId);
+        Guid GetCriticalityConditionIdByIndex(int index);
     }
 }

@@ -2443,5 +2443,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.properties.StartedDate = answerDate;
         }
+        
+        protected IEnumerable<Tuple<Guid, bool>> RunCriticalityChecks()
+        {
+            var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
+
+            propertiesInvariants.ThrowIfInterviewHardDeleted();
+            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(
+                InterviewStatus.SupervisorAssigned, InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted, InterviewStatus.RejectedBySupervisor);
+
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            var changedInterviewTree = GetChangedTree();
+            
+            IInterviewExpressionStorage expressionStorage = this.GetExpressionStorage();
+            var interviewPropertiesForExpressions = new InterviewPropertiesForExpressions(new InterviewProperties(this.EventSourceId), this.properties);
+            expressionStorage.Initialize(new InterviewStateForExpressions(changedInterviewTree, interviewPropertiesForExpressions));
+            using var runner = new InterviewTreeCriticalityRunner(expressionStorage, questionnaire);
+
+            var results = runner.RunCriticalityConditions();
+            return results;
+        }
     }
 }
