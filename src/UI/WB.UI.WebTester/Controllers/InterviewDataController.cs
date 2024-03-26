@@ -100,5 +100,9 @@ namespace WB.UI.WebTester.Controllers
         [HttpGet]
         [Route("getInterviewDetails")]
         public override InterviewInfo GetInterviewDetails(Guid interviewId) => base.GetInterviewDetails(interviewId);
+
+        [HttpGet]
+        [Route("getCriticalityChecks")]
+        public override CriticalityCheckResult GetCriticalityChecks(Guid interviewId) => base.GetCriticalityChecks(interviewId);
     }
 }

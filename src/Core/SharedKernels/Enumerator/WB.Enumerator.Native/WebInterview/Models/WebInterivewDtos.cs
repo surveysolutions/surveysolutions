@@ -400,4 +400,26 @@ namespace WB.Enumerator.Native.WebInterview.Models
     {
         public string Comment { get; set; }
     }
+
+    public enum CriticalityCheckType
+    {
+        Unknown,
+        Question,
+        Condition,
+    }
+
+    public class CriticalityCheck
+    {
+        public CriticalityCheckType Type { get; set; }
+        public Identity QuestionId { get; set; }
+        public Guid? CriticalityConditionId { get; set; }
+        
+        public string Message { get; set; }
+    }
+    
+    public class CriticalityCheckResult
+    {
+        public CriticalityCheck[] FailChecks { get; set; }
+    }
+
 }

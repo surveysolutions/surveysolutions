@@ -83,7 +83,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             if (statefulInterview == null) return null;
 
             var questionnaire = this.GetCallerQuestionnaire(statefulInterview.QuestionnaireIdentity, statefulInterview.Language);
-
+        
             return new InterviewInfo
             {
                 QuestionnaireTitle = IsReviewMode()
@@ -101,6 +101,38 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 IsCurrentUserObserving = this.IsCurrentUserObserving(),
                 DoesBrokenPackageExist = false
             };
+        }
+        
+        public virtual CriticalityCheckResult GetCriticalityChecks(Guid interviewId)
+        {
+            var result = new List<CriticalityCheck>();
+            
+            var interview = statefulInterviewRepository.GetOrThrow(interviewId.FormatGuid());
+            var unansweredCriticalQuestions = interview.GetAllUnansweredCriticalQuestions().ToList();
+            foreach (var questionId in unansweredCriticalQuestions)
+            {
+                var question = interview.GetQuestion(questionId);
+                result.Add(new CriticalityCheck()
+                {
+                    Type = CriticalityCheckType.Question,
+                    QuestionId = questionId,
+                    Message = question.Title.BrowserReadyText, 
+                });
+            }
+
+            var failCriticalityConditions = interview.RunAndGetFailCriticalityConditions().ToList();
+            foreach (var conditionId in failCriticalityConditions)
+            {
+                var message = interview.GetCriticalityConditionMessage(conditionId);
+                result.Add(new CriticalityCheck()
+                {
+                    Type = CriticalityCheckType.Condition,
+                    CriticalityConditionId = conditionId,
+                    Message = message, 
+                });
+            }
+
+            return new CriticalityCheckResult() { FailChecks = result.ToArray() };
         }
 
         public virtual bool IsEnabled(Guid interviewId, string id)
