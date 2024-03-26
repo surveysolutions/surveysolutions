@@ -334,5 +334,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsInsideRoster(Guid entityId);
         bool IsNeighboringSupport(Guid entityId);
         Guid GetCriticalityConditionIdByIndex(int index);
+        string GetCriticalityConditionMessage(Guid id);
+        bool IsCritical(Guid identityId);
     }
 }

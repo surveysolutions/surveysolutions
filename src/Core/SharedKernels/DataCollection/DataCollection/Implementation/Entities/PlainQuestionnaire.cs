@@ -1333,6 +1333,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 $"Fail to resolve criticality condition with index {index} in questionnaire {innerDocument.Id}");
         }
 
+        public string GetCriticalityConditionMessage(Guid id) => 
+            this.innerDocument.CriticalityConditions.First(cc => cc.Id == id).Message;
+
+        public bool IsCritical(Guid questionId) => GetQuestion(questionId)?.Properties?.IsCritical ?? false;
+
         public Guid GetQuestionReferencedByLinkedQuestion(Guid linkedQuestionId)
         {
             IQuestion linkedQuestion = this.GetQuestionOrThrow(linkedQuestionId);

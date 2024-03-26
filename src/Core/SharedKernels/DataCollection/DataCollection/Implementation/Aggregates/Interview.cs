@@ -2463,5 +2463,32 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var results = runner.RunCriticalityConditions();
             return results;
         }
+
+        protected IEnumerable<InterviewTreeQuestion> GetNotAnsweredRequiredQuestions()
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            var changedInterviewTree = GetChangedTree();
+            var questions = changedInterviewTree.AllNodes
+                .Where(n => n.NodeType == NodeType.Question)
+                .Cast<InterviewTreeQuestion>()
+                .Where(q => !q.IsDisabled());
+            
+            foreach (var question in questions)
+            {
+                if (questionnaire.IsCritical(question.Identity.Id) && !question.IsAnswered())
+                    yield return question;
+            }
+        }
+        
+        public string GetCriticalityConditionMessage(Guid criticalityConditionId)
+        {
+            var changedInterviewTree = GetChangedTree();
+            var questionnaire = GetQuestionnaireOrThrow();
+            var message = questionnaire.GetCriticalityConditionMessage(criticalityConditionId);
+            //var identity = new Identity(questionnaire.CoverPageSectionId, RosterVector.Empty);
+            SubstitutionText title = substitutionTextFactory.CreateText(message, questionnaire);
+            title.ReplaceSubstitutions(changedInterviewTree);
+            return title.BrowserReadyText;
+        }
     }
 }

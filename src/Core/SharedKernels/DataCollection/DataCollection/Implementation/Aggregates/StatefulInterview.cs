@@ -1070,7 +1070,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var criticalityChecks = base.RunCriticalityChecks();
             return criticalityChecks.Where(t => t.Item2 == false).Select(t => t.Item1);
         }
-        
+
+        public IEnumerable<Identity> GetAllUnansweredCriticalQuestions()
+        {
+            var questions = base.GetNotAnsweredRequiredQuestions();
+            return questions.Select(q => q.Identity);
+        }
+
         private void Apply(InterviewPaused @event)
         {
             this.properties.LastPaused = @event.OriginDate;

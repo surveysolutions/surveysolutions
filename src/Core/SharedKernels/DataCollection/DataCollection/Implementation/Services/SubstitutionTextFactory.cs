@@ -23,7 +23,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
 
         public SubstitutionText CreateText(Identity identity, string text, IQuestionnaire questionnaire)
         {
-            var entityVariable = questionnaire.GetEntityVariableOrThrow(identity.Id);
+            return CreateTextImpl(identity, text, questionnaire);
+        }
+
+        public SubstitutionText CreateText(string text, IQuestionnaire questionnaire)
+        {
+            return CreateTextImpl(null, text, questionnaire);
+        }
+
+        private SubstitutionText CreateTextImpl(Identity identity, string text, IQuestionnaire questionnaire)
+        {
+            var entityVariable = identity != null
+                ? questionnaire.GetEntityVariableOrThrow(identity.Id)
+                : null;
             string[] variableNames = this.substitutionService.GetAllSubstitutionVariableNames(text, entityVariable);
 
             var substitutionVariables = new List<SubstitutionVariable>();

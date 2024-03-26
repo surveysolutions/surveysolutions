@@ -62,4 +62,45 @@ public class CriticalityConditionsTests: InterviewTestsContext
         appDomainContext.Dispose();
         appDomainContext = null;
     }
+    
+    
+    [Test]
+    public void when_criticality_conditions_message_use_substitutions_should_return_correct_message()
+    {
+        var userId = Guid.Parse("11111111111111111111111111111111");
+
+        var questionnaireId = Guid.Parse("77778888000000000000000000000000");
+        var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+        var appDomainContext = AppDomainContext.Create();
+
+        var results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
+        {
+            SetUp.MockedServiceLocator();
+
+            var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                Abc.Create.Entity.TextQuestion(questionId, variable: "tt")
+            );
+            questionnaireDocument.CriticalityConditions.Add(new CriticalityCondition(Abc.Id.g1, "tt == \"test\"", "check fail: %tt%"));
+
+            var interview = SetupStatefullInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument, new List<object>());
+
+            using (var eventContext = new EventContext())
+            {
+                interview.AnswerTextQuestion(userId, questionId, RosterVector.Empty, DateTime.Now, "true");
+                
+                return new
+                {
+                    CriticalityMessage = interview.GetCriticalityConditionMessage(Abc.Id.g1)
+                };
+            }
+        });
+
+        Assert.That(results, Is.Not.Null);
+        Assert.That(results.CriticalityMessage, Is.Not.Null);
+        Assert.That(results.CriticalityMessage, Is.EqualTo("check fail: true"));
+
+        appDomainContext.Dispose();
+        appDomainContext = null;
+    }
 }

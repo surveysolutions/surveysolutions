@@ -213,5 +213,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         InterviewSimpleStatus GetInterviewSimpleStatus(bool includingSupervisorEntities);
         IEnumerable<Identity> GetNeighboringQuestionIdentities(Identity identity);
+
+        IEnumerable<Guid> RunAndGetFailCriticalityConditions();
+        
+        IEnumerable<Identity> GetAllUnansweredCriticalQuestions();
+        
+        string GetCriticalityConditionMessage(Guid criticalityConditionId);
     }
 }
