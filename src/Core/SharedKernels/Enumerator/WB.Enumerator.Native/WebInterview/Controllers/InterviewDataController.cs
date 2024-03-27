@@ -99,7 +99,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 CanAddComments = statefulInterview.Status != InterviewStatus.ApprovedByHeadquarters && !this.IsCurrentUserObserving(),
                 ReceivedByInterviewer = statefulInterview.ReceivedByInterviewer,
                 IsCurrentUserObserving = this.IsCurrentUserObserving(),
-                DoesBrokenPackageExist = false
+                DoesBrokenPackageExist = false,
+                IsExistsCriticality =  questionnaire.IsExistsCriticality(),
             };
         }
         
@@ -115,7 +116,9 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 result.Add(new CriticalityCheck()
                 {
                     Type = CriticalityCheckType.Question,
-                    QuestionId = questionId,
+                    Id = questionId.ToString(),
+                    ParentId = question.Parent?.Identity.ToString(),
+                    IsPrefilled = question.IsPrefilled,
                     Message = question.Title.BrowserReadyText, 
                 });
             }
@@ -126,8 +129,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 var message = interview.GetCriticalityConditionMessage(conditionId);
                 result.Add(new CriticalityCheck()
                 {
-                    Type = CriticalityCheckType.Condition,
-                    CriticalityConditionId = conditionId,
+                    Type = CriticalityCheckType.CriticalityCondition,
+                    Id = conditionId.FormatGuid(),
                     Message = message, 
                 });
             }

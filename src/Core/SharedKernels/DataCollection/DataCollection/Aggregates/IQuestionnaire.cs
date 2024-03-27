@@ -336,5 +336,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         Guid GetCriticalityConditionIdByIndex(int index);
         string GetCriticalityConditionMessage(Guid id);
         bool IsCritical(Guid identityId);
+        bool IsExistsCriticality();
     }
 }
