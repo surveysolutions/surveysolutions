@@ -2211,10 +2211,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0320_CriticalityConditionExpressionIsEmpty", resourceCulture);
             }
         }
-        
-        public static string WB0321_CriticalityConditionUsingForbiddenClasses {
-            get {
+
+        public static string WB0321_CriticalityConditionUsingForbiddenClasses
+        {
+            get
+            {
                 return ResourceManager.GetString("WB0321_CriticalityConditionUsingForbiddenClasses", resourceCulture);
+            }
+        }
 
         /// <summary>
         ///   Looks up a localized string similar to Only string variable type can be used as source of the attachment name.
