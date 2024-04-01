@@ -33,6 +33,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public List<Attachment> Attachments => this.Questionnaire.Attachments;
         public List<Translation> Translations => this.Questionnaire.Translations;
         public List<Categories> Categories => this.Questionnaire.Categories;
+        public List<CriticalityCondition> CriticalityConditions => this.Questionnaire.CriticalityConditions;
         public string Title => this.Questionnaire.Title;
         public Guid PublicKey => this.Questionnaire.PublicKey;
         public string VariableName => this.Questionnaire.VariableName;

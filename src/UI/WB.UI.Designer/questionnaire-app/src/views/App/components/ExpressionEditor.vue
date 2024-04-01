@@ -2,17 +2,18 @@
     <div :class="{ 'pseudo-form-control': focusable === 'true' }" ref="editorHolder" aceEditor>
         <v-ace-editor ref="editor" v-model:value="editorValue" @init="editorInit" theme="github"
             :lang="mode !== 'substitutions' ? 'csharp' : 'text'" :options="{
-                minLines: 1,
-                maxLines: 300,
-                fontSize: 16,
-                highlightActiveLine: false,
-                indentedSoftWrap: false,
-                printMargin: mode !== 'substitutions',
-                showLineNumbers: false,
-                showGutter: false,
-                useWorker: true,
-                wrap: true
-            }" />
+        minLines: 1,
+        maxLines: 300,
+        fontSize: 16,
+        highlightActiveLine: false,
+        indentedSoftWrap: false,
+        printMargin: mode !== 'substitutions',
+        showLineNumbers: false,
+        showGutter: false,
+        useWorker: true,
+        wrap: true,
+        placeholder: this.placeholder,
+    }" />
     </div>
 </template>
 
@@ -39,6 +40,7 @@ export default {
         modelValue: { type: String, required: true },
         mode: { type: String, default: 'substitutions' },
         focusable: { type: String, default: 'true' },
+        placeholder: { type: String, required: false, default: null },
     },
     data() {
         return {};

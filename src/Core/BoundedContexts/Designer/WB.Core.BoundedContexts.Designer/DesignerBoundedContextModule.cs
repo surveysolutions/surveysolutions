@@ -5,6 +5,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.CriticalityConditions;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
@@ -148,6 +149,10 @@ namespace WB.Core.BoundedContexts.Designer
                 // Categories
                 .Handles<AddOrUpdateCategories>(aggregate => aggregate.AddOrUpdateCategories, config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>().PostProcessBy<SearchPostProcessors>())
                 .Handles<DeleteCategories>(aggregate => aggregate.DeleteCategories, config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>().PostProcessBy<SearchPostProcessors>())
+                // CriticalityConditions
+                .Handles<AddCriticalityCondition>(aggregate => aggregate.AddCriticalityCondition, config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
+                .Handles<DeleteCriticalityCondition>(aggregate => aggregate.DeleteCriticalityCondition, config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
+                .Handles<UpdateCriticalityCondition>(aggregate => aggregate.UpdateCriticalityCondition, config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
                 // Metadata
                 .Handles<UpdateMetadata>(aggregate => aggregate.UpdateMetaInfo, config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
                 // Group

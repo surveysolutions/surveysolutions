@@ -11,13 +11,14 @@
                 <TreeHighlighter :searchText="searchText" :text="item.title" />
             </div>
             <div class="qname-block">
+                <TreeHighlighter :searchText="searchText" :text="item.variable" />
+                <span>&nbsp;</span>
                 <div class="conditions-block">
                     <div class="criticality-group-marker" v-if="item.isCritical"></div>
                     <div class="enabling-group-marker" :class="{ 'hide-if-disabled': item.hideIfDisabled }"
                         v-if="item.hasCondition"></div>
                     <div class="validation-group-marker" v-if="item.hasValidation"></div>
-                </div>&nbsp;
-                <TreeHighlighter :searchText="searchText" :text="item.variable" />
+                </div>                
             </div>
         </router-link>
     </TreeItem>

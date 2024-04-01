@@ -79,6 +79,19 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             emitter.on('attachmentUpdated', this.attachmentUpdated);
 
             emitter.on('itemPasted', this.itemPasted);
+
+            emitter.on(
+                'criticalityConditionAdded',
+                this.criticalityConditionAdded
+            );
+            emitter.on(
+                'criticalityConditionDeleted',
+                this.criticalityConditionDeleted
+            );
+            emitter.on(
+                'criticalityConditionUpdated',
+                this.criticalityConditionUpdated
+            );
         },
 
         async fetchQuestionnaireInfo(questionnaireId) {
@@ -124,6 +137,13 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
 
             forEach(this.info.macros, macro => {
                 this.prepareMacro(macro);
+            });
+
+            forEach(this.info.criticalityConditions, criticalityCondition => {
+                criticalityCondition.edit = cloneDeep(criticalityCondition);
+                criticalityCondition.edit.isDescriptionVisible = !isEmpty(
+                    criticalityCondition.description
+                );
             });
         },
 
@@ -489,6 +509,40 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             //if (event.parentId == null) {
             this.fetchQuestionnaireInfo(this.info.questionnaireId);
             //}
+        },
+
+        criticalityConditionAdded(payload) {
+            const criticalityCondition = cloneDeep(payload);
+            criticalityCondition.edit = cloneDeep(payload);
+            criticalityCondition.edit.isDescriptionVisible = !isEmpty(
+                criticalityCondition.edit.description
+            );
+
+            this.info.criticalityConditions.push(criticalityCondition);
+        },
+        criticalityConditionDeleted(payload) {
+            const index = findIndex(this.info.criticalityConditions, function(
+                i
+            ) {
+                return i.id === payload.id;
+            });
+            if (index !== -1) {
+                this.info.criticalityConditions.splice(index, 1);
+            }
+        },
+        criticalityConditionUpdated(payload) {
+            const index = findIndex(this.info.criticalityConditions, function(
+                i
+            ) {
+                return i.id === payload.id;
+            });
+            if (index !== -1) {
+                const criticalityCondition = cloneDeep(payload);
+                Object.assign(
+                    this.info.criticalityConditions[index],
+                    criticalityCondition
+                );
+            }
         }
     }
 });

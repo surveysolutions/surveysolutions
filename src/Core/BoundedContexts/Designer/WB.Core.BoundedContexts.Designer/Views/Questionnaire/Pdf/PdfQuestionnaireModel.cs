@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Sanitizer;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
@@ -109,8 +110,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public List<ICategoricalQuestion> QuestionsWithLongOptionsList { get; internal set; } = new List<ICategoricalQuestion>();
 
         public List<IQuestion> QuestionsWithLongSpecialValuesList { get; internal set; } = new List<IQuestion>();
-
-
+        public List<CriticalityCondition> CriticalityConditions { get; internal set; } = new List<CriticalityCondition>();
+        
         public List<IQuestion> QuestionsWithLongInstructions { get; internal set; } = new List<IQuestion>();
 
         public List<IQuestion> QuestionsWithLongOptionsFilterExpression { get; internal set; } = new List<IQuestion>();
@@ -480,6 +481,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public string GetOptionsFilterRef(Guid id) => $"options-filter-{id.FormatGuid()}";
 
         public string GetConditionRef(Guid id) => $"condition-{id.FormatGuid()}";
+        public string GetCriticalityConditionRef(Guid id) => $"criticality-condition-{id.FormatGuid()}";
 
         public string GetValidationsRef(Guid id) => $"validations-{id.FormatGuid()}";
 
@@ -528,8 +530,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public bool IsOptionsFilterAppendixEmpty => QuestionsWithLongOptionsFilterExpression.Count == 0;
         public bool IsOptionsAppendixEmpty => QuestionsWithLongOptionsList.Count == 0 && CategoriesList.Count == 0;
         public bool IsVariablesAppendixEmpty => VariableWithLongExpressions.Count == 0;
-
         public bool IsSpecialValuesAppendixEmpty => QuestionsWithLongSpecialValuesList.Count == 0;
+        public bool IsCriticalityConditionsAppendixEmpty => CriticalityConditions.Count == 0;
 
         public char ConditionsAppendixIndex => 'A';
         public char ValidationsAppendixIndex => IsConditionsAppendixEmpty ? ConditionsAppendixIndex : (char)(ConditionsAppendixIndex + 1);
@@ -537,8 +539,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public char OptionsAppendixIndex => IsInstructionsAppendixEmpty ? InstructionsAppendixIndex : (char)(InstructionsAppendixIndex + 1);
         public char VariablesAppendixIndex => IsOptionsAppendixEmpty ? OptionsAppendixIndex : (char)(OptionsAppendixIndex + 1);
         public char OptionsFilterAppendixIndex => IsVariablesAppendixEmpty ? VariablesAppendixIndex : (char)(VariablesAppendixIndex + 1);
-
-        public char SpecialValuesAppendixIndex => IsVariablesAppendixEmpty ? OptionsFilterAppendixIndex : (char)(OptionsFilterAppendixIndex + 1);
+        public char SpecialValuesAppendixIndex => IsOptionsAppendixEmpty ? OptionsFilterAppendixIndex : (char)(OptionsFilterAppendixIndex + 1);
+        public char CriticalityConditionsAppendixIndex => IsSpecialValuesAppendixEmpty ? SpecialValuesAppendixIndex : (char)(SpecialValuesAppendixIndex + 1);
         public int TimezoneOffsetMinutes { get; set; }
     }
 }

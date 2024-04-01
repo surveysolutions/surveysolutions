@@ -30,6 +30,12 @@
         "$ref": "#/definitions/Macro"
       }
     },
+    "CriticalityConditions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/CriticalityCondition"
+      }
+    },
     "LookupTables": {
       "type": "array",
       "items": {
@@ -896,6 +902,37 @@
         },
         "Content": {
           "type": "string"
+        }
+      }
+    },
+    "CriticalityCondition": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Id": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "format": "guid"
+        },
+        "Message": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "Expression": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "Description": {
+          "type": [
+            "null",
+            "string"
+          ]
         }
       }
     },

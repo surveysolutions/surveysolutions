@@ -13,6 +13,8 @@
     { 
         #> 
         , <#=nameof(IIndexedInterviewLevel) #>
+    <# } else if (Model.HasCriticalityConditions) { #>
+        , <#=nameof(ICriticalityConditionLevel) #>
     <# } #>
     {
         
@@ -61,6 +63,16 @@
 #>            
             linkedFilters.Add(IdOf.<#=method.Variable#>, <#=method.MethodName#>);
 <# 
+    }
+#>
+<#  if (Model.HasCriticalityConditions)
+    {
+        foreach (var methodGroup in Storage.GetCriticalityConditions(Model.ClassName))
+        {
+#>            
+            criticalityConditions = new Func<bool>[] { <#= string.Join(",", methodGroup.Value) #> };
+<#
+        }
     }
 #>
         }
@@ -115,6 +127,14 @@
             return null;
         }
 
+<# if (Model.HasCriticalityConditions) { #>
+        public Func<bool>[] GetCriticalityConditions()
+        {
+            return criticalityConditions;
+        }
+
+        private readonly Func<bool>[] criticalityConditions = new Func<bool>[0];
+<# } #>
         private readonly Dictionary<Guid, Func<<#=typeof(IInterviewLevel).Name#>, bool>> linkedFilters = new Dictionary<Guid, Func<<#=typeof(IInterviewLevel).Name#>, bool>>();
         private readonly Dictionary<Guid, Func<int, bool>> categoricalFilters = new Dictionary<Guid, Func<int, bool>>();
         private readonly Dictionary<Guid, Func<bool>> enablementConditions = new Dictionary<Guid, Func<bool>>();

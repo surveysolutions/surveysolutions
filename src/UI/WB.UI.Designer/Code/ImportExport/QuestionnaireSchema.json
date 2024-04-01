@@ -46,6 +46,12 @@
         "$ref": "#/definitions/Categories"
       }
     },
+    "CriticalityConditions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/CriticalityCondition"
+      }
+    },
     "Metadata": { "$ref": "#/definitions/QuestionnaireMetaInfo" }
   },
 
@@ -154,6 +160,18 @@
       },
       "additionalProperties": false,
       "required": ["FileName", "Name"]
+    },
+
+    "CriticalityCondition": {
+      "type": "object",
+      "properties": {
+        "Message": { "type": "string" },
+        "Expression": { "type": "string" },
+        "Description": { "type": "string" },
+        "Id": { "$ref": "#/definitions/GUID" }
+      },
+      "additionalProperties": false,
+      "required": ["Message", "Expression"]
     },
 
     "DateTimeQuestion": {

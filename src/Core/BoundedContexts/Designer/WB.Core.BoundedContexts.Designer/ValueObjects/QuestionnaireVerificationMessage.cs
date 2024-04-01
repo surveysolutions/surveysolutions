@@ -31,6 +31,9 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
         public static QuestionnaireVerificationMessage Critical(string code, string message, params QuestionnaireEntityReference[] references)
             => new QuestionnaireVerificationMessage(code, message, null, VerificationMessageLevel.Critical, null, references);
 
+        public static QuestionnaireVerificationMessage VerificationMessage(VerificationMessageLevel messageLevel, string code, string message, params QuestionnaireEntityReference[] references)
+            => new QuestionnaireVerificationMessage(code, message, null, messageLevel, null, references);
+
         private QuestionnaireVerificationMessage(
             string code, 
             string message,

@@ -95,7 +95,8 @@ export default {
         return {
             messagesToShow: [],
             visible: false,
-            typeOfMessageToBeShown: 'error'
+            typeOfMessageToBeShown: 'error',
+            tooltipList: [],
         };
     },
     setup(props) {
@@ -125,6 +126,7 @@ export default {
             this.initTooltips();
         },
         close() {
+            this.disposeTooltips();
             this.visible = false;
         },
         async verify() {
@@ -142,24 +144,27 @@ export default {
         },
         navigateTo(reference) {
             if (reference.type.toLowerCase() === "questionnaire") {
-                this.visible = false;
+                this.close();
                 this.$emitter.emit("showShareInfo", {});
                 //this.showShareInfo(); 
             } else if (reference.type.toLowerCase() === "macro") {
-                this.visible = false;
+                this.close();
                 this.$emitter.emit("openMacrosList", { focusOn: reference.itemId });
             } else if (reference.type.toLowerCase() === "lookuptable") {
-                this.visible = false;
+                this.close();
                 this.$emitter.emit("openLookupTables", { focusOn: reference.itemId });
             } else if (reference.type.toLowerCase() === "attachment") {
-                this.visible = false;
+                this.close();
                 this.$emitter.emit("openAttachments", { focusOn: reference.itemId });
             } else if (reference.type.toLowerCase() === "translation") {
-                this.visible = false;
+                this.close();
                 this.$emitter.emit("openTranslations", { focusOn: reference.itemId });
             } else if (reference.type.toLowerCase() === "categories") {
-                this.visible = false;
+                this.close();
                 this.$emitter.emit("openCategoriesList", { focusOn: reference.itemId });
+            } else if (reference.type.toLowerCase() === "criticalitycondition") {
+                this.close();
+                this.$emitter.emit("openCriticalityConditions", { focusOn: reference.itemId });
             } else {
                 const name = reference.type.toLowerCase();
                 this.$router.push({
@@ -178,13 +183,19 @@ export default {
         },
         initTooltips() {
             this.$nextTick(() => {
+                this.disposeTooltips();
+
                 const errorsList = this.$refs.errorsList;
                 const tooltipTriggerList = errorsList.querySelectorAll('[data-bs-toggle="tooltip"]')
-                const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl/*, {
+                this.tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl/*, {
                     customClass: 'right in',
                     placement: 'right'
                 }*/))
             })
+        },
+        disposeTooltips() {
+            [...this.tooltipList].map(tooltip => tooltip.dispose());
+            this.tooltipList = [];
         },
     }
 };

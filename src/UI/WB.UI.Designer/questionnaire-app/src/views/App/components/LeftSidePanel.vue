@@ -107,6 +107,18 @@
             </div>
         </div>
     </Transition>
+    <Transition name="slide">
+        <div v-if="isUnfoldedCriticalityConditions" class="left-side-panel criticality-conditions"
+            :class="{ unfolded: isFolded }">
+            <div class="foldback-region" @click.stop="foldback()"></div>
+            <div class="left-side-panel-content macros-panel">
+                <div class="foldback-button-region" @click.stop="foldback()">
+                    <div class="foldback-button"></div>
+                </div>
+                <CriticalityConditions :questionnaireId="questionnaireId"></CriticalityConditions>
+            </div>
+        </div>
+    </Transition>
     <div id="left-menu" ng-controller="LeftMenuCtrl">
         <ul>
             <li>
@@ -147,6 +159,11 @@
                     :class="{ unfolded: isUnfoldedComments }" @click="unfoldComments();"
                     :title="$t('QuestionnaireEditor.SideBarCommentsTitle')"></a>
             </li>
+            <li>
+                <a class="left-menu-criticality-conditions" v-if="!questionnaire.isReadOnlyForUser"
+                    :class="{ unfolded: isUnfoldedCriticalityConditions }" @click="unfoldCriticalityConditions();"
+                    :title="$t('QuestionnaireEditor.SideBarCriticalityConditionsTitle')"></a>
+            </li>
         </ul>
     </div>
 </template>
@@ -182,6 +199,7 @@ import Macros from './leftSidePanel/Macros.vue'
 import Metadata from './leftSidePanel/Metadata.vue'
 import Scenarios from './leftSidePanel/Scenarios.vue'
 import Translations from './leftSidePanel/Translations.vue'
+import CriticalityConditions from './leftSidePanel/CriticalityConditions.vue';
 
 import { setFocusIn } from '../../../services/utilityService'
 
@@ -198,7 +216,8 @@ export default {
         Macros,
         Metadata,
         Scenarios,
-        Translations
+        Translations,
+        CriticalityConditions,
     },
     inject: ['questionnaire', 'currentChapter'],
     props: {
@@ -229,6 +248,7 @@ export default {
         this.$emitter.on('openComments', this.setCommentsPanel);
         this.$emitter.on('openScenariosList', this.setScenariosPanel);
         this.$emitter.on('openMacrosList', this.setMacrosesPanel);
+        this.$emitter.on('openCriticalityConditions', this.setCriticalityConditionsPanel);
 
         this.$emitter.on('closeCategories', this.closeAllPanel);
         this.$emitter.on('closeChaptersList', this.closeAllPanel);
@@ -239,6 +259,7 @@ export default {
         this.$emitter.on('closeTranslations', this.closeAllPanel);
         this.$emitter.on('closeMetadata', this.closeAllPanel);
         this.$emitter.on('closeComments', this.closeAllPanel);
+        this.$emitter.on('closeCriticalityConditions', this.closeAllPanel);
 
         this.$emitter.on('verifing', this.closeOpenPanelIfAny);
     },
@@ -252,6 +273,7 @@ export default {
         this.$emitter.off('openComments', this.setCommentsPanel);
         this.$emitter.off('openScenariosList', this.setScenariosPanel);
         this.$emitter.off('openMacrosList', this.setMacrosesPanel);
+        this.$emitter.off('openCriticalityConditions', this.setCriticalityConditionsPanel);
 
         this.$emitter.off('closeCategories', this.closeAllPanel);
         this.$emitter.off('closeChaptersList', this.closeAllPanel);
@@ -262,6 +284,7 @@ export default {
         this.$emitter.off('closeTranslations', this.closeAllPanel);
         this.$emitter.off('closeMetadata', this.closeAllPanel);
         this.$emitter.off('closeComments', this.closeAllPanel);
+        this.$emitter.off('closeCriticalityConditions', this.closeAllPanel);
 
         this.$emitter.off('verifing', this.closeOpenPanelIfAny);
     },
@@ -278,6 +301,7 @@ export default {
         isUnfoldedMetadata() { return this.openPanel == 'metadata' },
         isUnfoldedComments() { return this.openPanel == 'comments' },
         isUnfoldedCategories() { return this.openPanel == 'categories' },
+        isUnfoldedCriticalityConditions() { return this.openPanel == 'criticalityconditions' },
     },
     watch: {
         arrowLeft: function (value) {
@@ -325,6 +349,9 @@ export default {
             }
             if (this.isUnfoldedCategories) {
                 this.$emitter.emit("closeCategoriesRequested", {});
+            }
+            if (this.isUnfoldedCriticalityConditions) {
+                this.$emitter.emit("closeCriticalityConditionsRequested", {});
             }
         },
 
@@ -432,6 +459,16 @@ export default {
             this.$emitter.emit("openComments", {});
         },
         setCommentsPanel() { this.openPanel = 'comments'; },
+
+        unfoldCriticalityConditions() {
+            if (this.isUnfoldedCriticalityConditions)
+                return;
+
+            this.closeOpenPanelIfAny();
+            this.setCriticalityConditionsPanel();
+            this.$emitter.emit("openCriticalityConditions", {});
+        },
+        setCriticalityConditionsPanel() { this.openPanel = 'criticalityconditions'; },
     }
 };
 </script>

@@ -63,6 +63,44 @@
       ]
     },
     "CoverPage": {},
+    "CriticalityCondition": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "Id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "Message": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "Expression": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "Description": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "Id",
+        "Message",
+        "Expression",
+        "Description"
+      ]
+    },
     "Group": {},
     "List<Attachment>": {
       "type": [
@@ -80,6 +118,15 @@
       ],
       "items": {
         "$ref": "#/definitions/Categories"
+      }
+    },
+    "List<CriticalityCondition>": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "#/definitions/CriticalityCondition"
       }
     },
     "List<Group>": {
@@ -417,6 +464,9 @@
     "Macros": {
       "$ref": "#/definitions/List<Macro>"
     },
+    "CriticalityConditions": {
+      "$ref": "#/definitions/List<CriticalityCondition>"
+    },
     "LookupTables": {
       "$ref": "#/definitions/List<LookupTable>"
     },
@@ -459,6 +509,7 @@
     "CoverPage",
     "Children",
     "Macros",
+    "CriticalityConditions",
     "LookupTables",
     "Attachments",
     "Translations",

@@ -174,6 +174,12 @@
   <data name="MacroIsAbsent" xml:space="preserve">
     <value>Макрос с таким ключом отсутствует</value>
   </data>
+  <data name="CriticalityConditionAlreadyExist" xml:space="preserve">
+    <value>Критическое условие с таким ключом уже существует.</value>
+  </data>
+  <data name="CriticalityConditionIsAbsent" xml:space="preserve">
+    <value>Критическое условие с таким ключом отсутствует.</value>
+  </data>
   <data name="MoreThanOneQuestionWithSameId" xml:space="preserve">
     <value>Один или более вопросов с одинаковым ключом {0} уже существуют:{1}{2}.</value>
   </data>

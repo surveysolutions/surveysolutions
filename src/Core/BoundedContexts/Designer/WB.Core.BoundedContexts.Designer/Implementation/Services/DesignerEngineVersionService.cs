@@ -381,6 +381,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                             questionnaire.FirstOrDefault<IQuestion>(x => x.Properties?.IsCritical == true) != null,
                         description: "Some question in questionnaire use criticality flag"
                     ),
+                    new QuestionnaireFeature
+                    (
+                        hasQuestionnaire: questionnaire => questionnaire.CriticalityConditions?.Count > 0,
+                        description: "This questionnaire use criticality conditions feature"
+                    ),
                 }
             },
         };

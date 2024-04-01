@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.CriticalityConditions;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
@@ -47,6 +48,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, AddMacro>,
         ICommandPostProcessor<Questionnaire, UpdateMacro>,
         ICommandPostProcessor<Questionnaire, DeleteMacro>,
+        ICommandPostProcessor<Questionnaire, AddCriticalityCondition>,
+        ICommandPostProcessor<Questionnaire, UpdateCriticalityCondition>,
+        ICommandPostProcessor<Questionnaire, DeleteCriticalityCondition>,
         ICommandPostProcessor<Questionnaire, AddOrUpdateAttachment>,
         ICommandPostProcessor<Questionnaire, DeleteAttachment>,
         ICommandPostProcessor<Questionnaire, AddOrUpdateTranslation>,
@@ -327,6 +331,28 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         public void Process(Questionnaire aggregate, DeleteMacro command)
             => this.DeleteItemFromStateAndUpdateHistory(command.QuestionnaireId, q => q.MacroState, command.MacroId,
                 QuestionnaireItemType.Macro, command.ResponsibleId, aggregate.QuestionnaireDocument);
+
+        #endregion
+        
+        #region CriticalityConditions
+        public void Process(Questionnaire aggregate, AddCriticalityCondition command)
+        {
+            this.AddOrUpdateCriticalityConditionState(command.QuestionnaireId, command.Id, string.Empty);
+
+            this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Add,
+                QuestionnaireItemType.CriticalityCondition, command.Id, null, aggregate.QuestionnaireDocument);
+        }
+
+        public void Process(Questionnaire aggregate, UpdateCriticalityCondition command)
+        {
+            this.AddOrUpdateCriticalityConditionState(command.QuestionnaireId, command.Id, command.Message);
+            this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Update,
+                QuestionnaireItemType.CriticalityCondition, command.Id, command.Message, aggregate.QuestionnaireDocument);
+        }
+
+        public void Process(Questionnaire aggregate, DeleteCriticalityCondition command)
+            => this.DeleteItemFromStateAndUpdateHistory(command.QuestionnaireId, q => q.CriticalityConditionState, command.Id,
+                QuestionnaireItemType.CriticalityCondition, command.ResponsibleId, aggregate.QuestionnaireDocument);
 
         #endregion
 
@@ -943,6 +969,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         {
             AddOrUpdateQuestionnaireStateItem(questionnaireId, itemId, itemTitle,
                 parentId: null, setAction: (s, id, title) => s.MacroState[id] = title);
+        }
+
+        private void AddOrUpdateCriticalityConditionState(Guid questionnaireId, Guid itemId, string? itemTitle)
+        {
+            AddOrUpdateQuestionnaireStateItem(questionnaireId, itemId, itemTitle,
+                parentId: null, setAction: (s, id, title) => s.CriticalityConditionState[id] = title);
         }
 
         private void AddOrUpdateStaticTextState(Guid questionnaireId, Guid itemId, string? itemTitle, Guid? parentId)

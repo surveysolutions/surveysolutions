@@ -66,6 +66,9 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
         public static QuestionnaireEntityReference CreateForLookupTable(Guid lookupTableId)
             => new QuestionnaireEntityReference(QuestionnaireVerificationReferenceType.LookupTable, lookupTableId);
 
+        public static QuestionnaireEntityReference CreateForCriticalityCondition(Guid criticalityConditionId)
+            => new QuestionnaireEntityReference(QuestionnaireVerificationReferenceType.CriticalityCondition, criticalityConditionId);
+
         public static QuestionnaireEntityReference CreateForAttachment(Guid attachmentId)
             => new QuestionnaireEntityReference(QuestionnaireVerificationReferenceType.Attachment, attachmentId);
 
