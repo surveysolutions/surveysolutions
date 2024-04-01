@@ -839,7 +839,7 @@
     <value>Questionnaire in old format. Please use "Generate cover" link on Cover section.</value>
   </data>
   <data name="WB0317_CriticalityIsNotAllowed" xml:space="preserve">
-    <value>Question with critical flag can't has hidden and supervisor scopes.</value>
+    <value>Question may not require an answer if that question's scope is any of the following: hidden, supervisor.</value>
   </data>
   <data name="WB0318_CriticalityConditionExpressionHasIncorrectSyntax" xml:space="preserve">
     <value>Criticality condition has a syntax error in expression.</value>
