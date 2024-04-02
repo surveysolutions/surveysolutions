@@ -11,8 +11,9 @@
                 <TreeHighlighter :searchText="searchText" :text="item.variableData.label" />
             </div>
             <div class="qname-block">
-                <div class="conditions-block"></div>&nbsp;
                 <TreeHighlighter :searchText="searchText" :text="item.variableData.name" />
+                <span>&nbsp;</span>
+                <div class="conditions-block"></div>                
             </div>
         </router-link>
     </TreeItem>

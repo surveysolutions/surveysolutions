@@ -164,12 +164,11 @@
                 <ExpressionEditor :id="'validation-expression-' + index" mode="expression"
                     v-model="validation.expression" />
 
-                <label for="validationMessage{{$index}}" class="validation-message">{{
-            $t('QuestionnaireEditor.ErrorMessage') }}
+                <label for="validationMessage{{$index}}" class="validation-message">
+                    {{ $t('QuestionnaireEditor.ErrorMessage') }}
                     <help link="validationMessage" />
                 </label>
-                <ExpressionEditor :id="'validation-message-' + index" v-model="validation.message"></ExpressionEditor>
-
+                <ExpressionEditor :id="'validation-message-' + index" v-model="validation.message"/>
             </div>
             <div class="form-group"
                 v-if="doesQuestionSupportValidations() && activeQuestion.validationConditions && activeQuestion.validationConditions.length < 10">

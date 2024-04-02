@@ -269,10 +269,10 @@
     <value>выражение</value>
   </data>
   <data name="SideBarCriticalityConditionsCounter" xml:space="preserve">
-    <value>{{count}} Критическое условие:</value>
+      <value>Критические условия: {{count}}</value>
   </data>
   <data name="SideBarCriticalityConditionsCounter_plural" xml:space="preserve">
-    <value>{{count}} Критических условий:</value>
+      <value>Критические условия: {{count}}</value>
   </data>
   <data name="SideBarCriticalityConditionDescription" xml:space="preserve">
     <value>описание</value>
@@ -1657,9 +1657,9 @@
       <value>Нет</value>
   </data>
   <data name="QuestionIsCritical" xml:space="preserve">
-      <value>Требуется ответа на этот вопрос</value>
+      <value>Требовать ответ на этот вопрос</value>
   </data>
   <data name="HelpIsCritical" xml:space="preserve">
-      <value>Запретить завершение интервью, если этот вопрос останется без ответа.</value>
+      <value>Запретить завершение интервью, если вопрос неотвечен.</value>
   </data>
 </root>
