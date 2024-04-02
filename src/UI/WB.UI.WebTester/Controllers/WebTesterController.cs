@@ -95,6 +95,7 @@ namespace WB.UI.WebTester.Controllers
         [Route("Interview/{id}")]
         [Route("Interview/{id}/Cover")]
         [Route("Interview/{id}/Section/{url}")]
+        [Route("Interview/{id}/Complete")]
         public IActionResult Interview(string id)
         {
             try
