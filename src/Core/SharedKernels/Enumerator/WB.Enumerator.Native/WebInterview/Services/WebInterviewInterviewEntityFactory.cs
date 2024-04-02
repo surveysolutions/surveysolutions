@@ -589,6 +589,13 @@ namespace WB.Enumerator.Native.WebInterview.Services
             return parent;
         }
 
+        public string GetCriticalityConditionMessage(Guid conditionId, IStatefulInterview interview, IQuestionnaire questionnaire, bool isReview)
+        {
+            var message = interview.GetCriticalityConditionMessage(conditionId);
+            return this.webNavigationService
+                .MakeNavigationLinks(message, new Identity(interview.Id, RosterVector.Empty), questionnaire, interview, WebLinksVirtualDirectory(isReview));
+        }
+
         public InterviewEntityType GetEntityType(Identity identity, IQuestionnaire callerQuestionnaire,
             IStatefulInterview interview, bool isReviewMode, bool includeVariables)
         {

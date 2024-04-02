@@ -75,9 +75,13 @@
 	li{
 		border-top: 1px solid $gray-form;
 		padding: 15px 40px 15px 0;
-		a{
+		a, span{
 			color: $red_error;
 			font-weight: bold;
+
+            a {
+                color: #2a81cb;
+            }
 		}
 		&:first-child{
 			border-left: none;

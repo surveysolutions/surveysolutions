@@ -1,6 +1,6 @@
 <template>
     <div class="unit-section first-last-chapter" v-if="hasCompleteInfo"
-        v-bind:class="{ 'section-with-error': hasInvalidQuestions, 'complete-section': isAllAnswered }">
+        v-bind:class="{ 'section-with-error': hasErrors, 'complete-section': isAllAnswered }">
         <div class="unit-title">
             <wb-humburger></wb-humburger>
             <h3>{{ competeButtonTitle }}</h3>
@@ -25,7 +25,7 @@
         unansweredQuestionsCountString }}
                             <span>{{ $t('WebInterviewUI.CompleteQuestionsUnanswered') }}</span>
                         </li>
-                        <li class="errors" v-bind:class="{ 'has-value': hasInvalidQuestions || hasCriticalErrors }">{{
+                        <li class="errors" v-bind:class="{ 'has-value': hasErrors }">{{
         invalidQuestionsCountString }}
                             <span>{{ $t('WebInterviewUI.Error', { count: errorsCount }) }}</span>
                         </li>
@@ -33,17 +33,32 @@
                 </div>
             </div>
         </div>
-        <div class="wrapper-info" v-if="hasInvalidQuestions">
+        <div class="wrapper-info" v-if="criticalityInfo?.failCriticalQuestions.length > 0">
+            <div class="container-info">
+                <h4 class="gray-uppercase">{{ $t('WebInterviewUI.CriticalQuestionErrors') }}</h4>
+                <ul class="list-unstyled marked-questions">
+                    <li v-for="check in criticalityInfo.failCriticalQuestions" :key="check.id">
+                        <a href="javascript:void(0);" @click="navigateTo(check)" v-html="check.message"></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="wrapper-info" v-if="criticalityInfo?.failCriticalityConditions.length > 0">
+            <div class="container-info">
+                <h4 class="gray-uppercase">{{ $t('WebInterviewUI.CriticalityConditionsErrors') }}</h4>
+                <ul class="list-unstyled marked-questions">
+                    <li v-for="check in criticalityInfo.failCriticalityConditions" :key="check.id">
+                        <span v-html="check.message"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="wrapper-info" v-if="completeInfo.entitiesWithError.length > 0">
             <div class="container-info">
                 <h4 class="gray-uppercase">{{ doesShowErrorsCommentWithCount
-        ? $t('WebInterviewUI.CompleteFirstErrors', { count: errorsCount })
+        ? $t('WebInterviewUI.CompleteFirstErrors', { count: completeInfo.entitiesWithError.length })
         : $t('WebInterviewUI.CompleteErrors') }}</h4>
                 <ul class="list-unstyled marked-questions">
-                    <li v-if="hasCriticalErrors" v-for="check in criticalityInfo.failChecks" :key="check.id">
-                        <span v-if="check.type == 'CriticalityCondition'" v-html="check.message"></span>
-                        <a v-if="check.type == 'Question'" href="javascript:void(0);" @click="navigateTo(check)"
-                            v-html="check.message"></a>
-                    </li>
                     <li v-for="entity in completeInfo.entitiesWithError" :key="entity.id">
                         <a href="javascript:void(0);" @click="navigateTo(entity)" v-html="entity.title"></a>
                     </li>
@@ -87,7 +102,7 @@
                 <a href="javascript:void(0);" id="btnComplete" class="btn btn-lg" v-bind:class="{
         'btn-success': isAllAnswered,
         'btn-primary': hasUnansweredQuestions,
-        'btn-danger': hasInvalidQuestions,
+        'btn-danger': hasErrors,
         'disabled': isAllowCompleteInterview,
                         }" @click="completeInterview">{{ competeButtonTitle }}</a>
             </div>
@@ -115,6 +130,7 @@ export default {
     watch: {
         $route(to, from) {
             this.fetchCompleteInfo()
+            this.fetchCriticalityInfo()
         },
         shouldCloseWindow(to) {
             if (to === true) {
@@ -130,12 +146,12 @@ export default {
             return this.$store.state.webinterview.criticalityInfo
         },
         isExistsCriticality() {
-            return this.$store.state.webinterview.isExistsCriticality
+            return this.$store.state.webinterview.isExistsCriticality != false
         },
         isAllowCompleteInterview() {
             if (!this.isExistsCriticality)
                 return true;
-            return this.isReadyLastCriticalityInfo && this.criticalityInfo?.failChecks?.length > 0
+            return this.isReadyLastCriticalityInfo && this.criticalityInfo?.failCriticalQuestions?.length > 0 && this.criticalityInfo?.failCriticalityConditions?.length > 0
         },
         shouldCloseWindow() {
             return this.$store.state.webinterview.interviewCompleted && this.$config.inWebTesterMode
@@ -153,7 +169,7 @@ export default {
             return this.completeInfo.answeredCount > 0
         },
         hasCriticalErrors() {
-            return this.criticalityInfo?.failChecks?.length > 0
+            return this.criticalityInfo?.failCriticalQuestions?.length > 0 || this.criticalityInfo?.failCriticalityConditions?.length > 0
         },
         isAllAnswered() {
             return this.completeInfo.unansweredCount == 0 && this.completeInfo.errorsCount == 0
@@ -167,19 +183,16 @@ export default {
         unansweredQuestionsCountString() {
             return this.hasUnansweredQuestions ? this.completeInfo.unansweredCount : this.$t('WebInterviewUI.No')
         },
-        hasInvalidQuestions() {
-            console.log(this.completeInfo)
-            console.log(this.criticalityInfo)
-
+        hasErrors() {
             return this.completeInfo.errorsCount > 0 || this.hasCriticalErrors
         },
         errorsCount() {
             if (this.hasCriticalErrors)
-                return this.completeInfo.errorsCount + this.criticalityInfo.failChecks.length
+                return this.completeInfo.errorsCount + this.criticalityInfo.failCriticalQuestions.length + this.criticalityInfo.failCriticalityConditions.length
             return this.completeInfo.errorsCount;
         },
         invalidQuestionsCountString() {
-            return this.hasInvalidQuestions ? this.completeInfo.errorsCount : this.$t('WebInterviewUI.No')
+            return this.hasErrors ? this.errorsCount : this.$t('WebInterviewUI.No')
         },
         criticalErrorsCountString() {
             return this.hasCriticalErrors ? this.criticalityInfo.failChecks.length : this.$t('WebInterviewUI.No')

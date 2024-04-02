@@ -26,7 +26,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
         private readonly IWebInterviewInterviewEntityFactory interviewEntityFactory;
-        
+
         protected abstract bool IncludeVariables { get; }
 
         public InterviewDataController(IQuestionnaireStorage questionnaireRepository,
@@ -106,16 +106,16 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         
         public virtual CriticalityCheckResult GetCriticalityChecks(Guid interviewId)
         {
-            var result = new List<CriticalityCheck>();
-            
             var interview = statefulInterviewRepository.GetOrThrow(interviewId.FormatGuid());
+            var questionnaire = questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
+
+            var criticalQuestions = new List<CriticalQuestionCheck>();
             var unansweredCriticalQuestions = interview.GetAllUnansweredCriticalQuestions().ToList();
             foreach (var questionId in unansweredCriticalQuestions)
             {
                 var question = interview.GetQuestion(questionId);
-                result.Add(new CriticalityCheck()
+                criticalQuestions.Add(new CriticalQuestionCheck()
                 {
-                    Type = CriticalityCheckType.Question,
                     Id = questionId.ToString(),
                     ParentId = question.Parent?.Identity.ToString(),
                     IsPrefilled = question.IsPrefilled,
@@ -123,19 +123,24 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 });
             }
 
+            var criticalityConditions = new List<CriticalityConditionCheck>();
             var failCriticalityConditions = interview.RunAndGetFailCriticalityConditions().ToList();
             foreach (var conditionId in failCriticalityConditions)
             {
-                var message = interview.GetCriticalityConditionMessage(conditionId);
-                result.Add(new CriticalityCheck()
+                var message = interviewEntityFactory.GetCriticalityConditionMessage(conditionId, interview, questionnaire, IsReviewMode());
+                //var message = interview.GetCriticalityConditionMessage(conditionId);
+                criticalityConditions.Add(new CriticalityConditionCheck()
                 {
-                    Type = CriticalityCheckType.CriticalityCondition,
                     Id = conditionId.FormatGuid(),
                     Message = message, 
                 });
             }
 
-            return new CriticalityCheckResult() { FailChecks = result.ToArray() };
+            return new CriticalityCheckResult()
+            {
+                FailCriticalityConditions = criticalityConditions.ToArray(),
+                FailCriticalQuestions = criticalQuestions.ToArray()
+            };
         }
 
         public virtual bool IsEnabled(Guid interviewId, string id)

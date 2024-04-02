@@ -402,25 +402,24 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public string Comment { get; set; }
     }
 
-    public enum CriticalityCheckType
+    public class CriticalQuestionCheck
     {
-        Unknown,
-        Question,
-        CriticalityCondition,
-    }
-
-    public class CriticalityCheck
-    {
-        public CriticalityCheckType Type { get; set; }
         public string Id { get; set; }
         public string ParentId { get; set; }
         public bool IsPrefilled { get; set; }
         public string Message { get; set; }
     }
     
+    public class CriticalityConditionCheck
+    {
+        public string Id { get; set; }
+        public string Message { get; set; }
+    }
+    
     public class CriticalityCheckResult
     {
-        public CriticalityCheck[] FailChecks { get; set; }
+        public CriticalityConditionCheck[] FailCriticalityConditions { get; set; }
+        public CriticalQuestionCheck[] FailCriticalQuestions { get; set; }
     }
 
 }
