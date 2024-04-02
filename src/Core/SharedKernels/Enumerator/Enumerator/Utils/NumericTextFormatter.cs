@@ -7,9 +7,9 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 {
     public class NumericTextFormatter
     {
-        private const int maxDigitsInDecimal = 28;
-        private const int maxFractionDigits = 15;
-        private const string nonLocalizedAndroidDecimalSeparator = ".";
+        private const int MaxDigitsInDecimal = 28;
+        private const int MaxFractionDigits = 15;
+        private const string NonLocalizedAndroidDecimalSeparator = ".";
 
         private readonly Regex numberFormatRegex = new Regex(@"\B(?=(\d{3})+(?!\d))", RegexOptions.None);
         private readonly NumericTextFormatterSettings settings;
@@ -22,16 +22,16 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
             this.allowedSymbols = $"0123456789{this.settings.NegativeSign}";
             if (this.settings.IsDecimal)
             {
-                allowedSymbols += $"{nonLocalizedAndroidDecimalSeparator}{this.settings.DecimalSeparator}";
+                allowedSymbols += $"{NonLocalizedAndroidDecimalSeparator}{this.settings.DecimalSeparator}";
             }
         }
 
         public string FilterFormatted(string addedText, string sourceText, int insertToIndex)
         {
-            var hasNonLocalizedAndroidDecimalSeparator = addedText == nonLocalizedAndroidDecimalSeparator && this.settings.DecimalSeparator != nonLocalizedAndroidDecimalSeparator;
-            var hasDecimalSeperatorInInteger = (addedText == this.settings.DecimalSeparator || hasNonLocalizedAndroidDecimalSeparator) && !this.settings.IsDecimal;
+            var hasNonLocalizedAndroidDecimalSeparator = addedText == NonLocalizedAndroidDecimalSeparator && this.settings.DecimalSeparator != NonLocalizedAndroidDecimalSeparator;
+            var hasDecimalSeparatorInInteger = (addedText == this.settings.DecimalSeparator || hasNonLocalizedAndroidDecimalSeparator) && !this.settings.IsDecimal;
 
-            if (hasDecimalSeperatorInInteger || !addedText.ToCharArray().All(x => this.allowedSymbols.ToCharArray().Contains(x)))
+            if (hasDecimalSeparatorInInteger || !addedText.ToCharArray().All(x => this.allowedSymbols.ToCharArray().Contains(x)))
             {
                 return "";
             }
@@ -54,7 +54,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                     var countOfNegativeSigns = this.GetSubstringsCount(enteredText, this.settings.NegativeSign);
                     return countOfNegativeSigns > 1 || (countOfNegativeSigns == 1 && !hasTextNegativeSign);
                 },
-                () => enteredText.StartsWith(this.settings.DecimalSeparator) || enteredText.StartsWith(nonLocalizedAndroidDecimalSeparator),
+                () => enteredText.StartsWith(this.settings.DecimalSeparator) || enteredText.StartsWith(NonLocalizedAndroidDecimalSeparator),
                 () =>
                 {
                     int decimalPointPosition = enteredText.IndexOf((string) this.settings.DecimalSeparator);
@@ -66,8 +66,8 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                 },
                 () => textWithoutSign.Length == 1 && textWithoutSign == this.settings.DecimalSeparator,
                 () => this.GetSubstringsCount(enteredText, this.settings.DecimalSeparator) > 1,
-                () => fraction.Length > maxFractionDigits,
-                () => (integer.Length + fraction.Length) > maxDigitsInDecimal,
+                () => fraction.Length > MaxFractionDigits,
+                () => (integer.Length + fraction.Length) > MaxDigitsInDecimal,
                 () => this.settings.MaxDigitsBeforeDecimal > 0 && integer.Length > this.settings.MaxDigitsBeforeDecimal,
                 () => this.settings.MaxDigitsAfterDecimal >= 0 && fraction.Length > this.settings.MaxDigitsAfterDecimal,
                 () =>

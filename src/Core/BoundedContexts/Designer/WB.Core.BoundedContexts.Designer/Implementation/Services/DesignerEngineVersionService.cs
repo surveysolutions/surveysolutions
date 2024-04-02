@@ -278,7 +278,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             },
             new QuestionnaireContentVersion
             {
-                Version = ApiVersion.MaxQuestionnaireVersion,
+                Version = 34,
                 NewFeatures = new []
                 {
                     new QuestionnaireFeature
@@ -368,6 +368,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                         },
                         description: "Geography question accuracy or frequency is used in expressions"
                     ),
+                }
+            },
+            new QuestionnaireContentVersion
+            {
+                Version = ApiVersion.MaxQuestionnaireVersion, 
+                NewFeatures = new []
+                {
+                    new QuestionnaireFeature
+                    (
+                        hasQuestionnaire : questionnaire => questionnaire.Find<NumericQuestion>(q => q is { IsInteger: false, CountOfDecimalPlaces: 0 } ).Any(),
+                        description : "Decimal question with zero decimal places"
+                    )
                 }
             },
         };
