@@ -103,7 +103,27 @@ function Compress($folder, $dest) {
         Remove-Item $dest
     }
 
-    [System.IO.Compression.ZipFile]::CreateFromDirectory($folder, $dest)
+    $ZipPath = $dest
+
+    @( 'System.IO.Compression','System.IO.Compression.FileSystem') | % { [void][Reflection.Assembly]::LoadWithPartialName($_) }
+    Push-Location $folder 
+    $FileList = (Get-ChildItem '*.*' -File -Recurse) 
+    Try{
+        $WriteArchive = [IO.Compression.ZipFile]::Open( $ZipPath,'Update')
+        ForEach ($File in $FileList){
+            $RelativePath = (Resolve-Path -LiteralPath "$($File.FullName)" -Relative) -replace '^.\\' #trim leading .\ from path 
+            Try{    
+                [IO.Compression.ZipFileExtensions]::CreateEntryFromFile($WriteArchive, $File.FullName, $RelativePath, 'Optimal').FullName
+            }Catch{ 
+                Write-Warning  "$($File.FullName) could not be archived. `n $($_.Exception.Message)"  
+            }
+        }
+    }Catch [Exception]{ 
+        Write-Error $_.Exception
+    }Finally{
+        $WriteArchive.Dispose() 
+    }
+    Pop-Location
 }
 
 function Set-AndroidXmlResourceValue {
