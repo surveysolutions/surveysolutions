@@ -103,7 +103,7 @@ function Compress($folder, $dest) {
         Remove-Item $dest
     }
 
-    Compress-Archive -Path $folder/* -DestinationPath $dest
+    [System.IO.Compression.ZipFile]::CreateFromDirectory($folder, $dest)
 }
 
 function Set-AndroidXmlResourceValue {
