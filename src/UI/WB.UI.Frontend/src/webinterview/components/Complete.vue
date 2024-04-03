@@ -142,6 +142,11 @@ export default {
                 this.completeInterview()
             }
         },
+        criticalityInfo(to, from) {
+            if (to) {
+                this.isReadyLastCriticalityInfo = true;
+            }
+        }
     },
     computed: {
         completeInfo() {
@@ -223,7 +228,6 @@ export default {
 
             this.isReadyLastCriticalityInfo = false;
             this.$store.dispatch('fetchCriticalityInfo')
-            this.isReadyLastCriticalityInfo = true;
         },
 
         completeInterview() {
