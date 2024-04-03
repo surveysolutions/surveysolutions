@@ -103,19 +103,24 @@
         'btn-success': isAllAnswered,
         'btn-primary': hasUnansweredQuestions,
         'btn-danger': hasErrors,
-        'disabled': isAllowCompleteInterview,
+        'disabled': !isAllowCompleteInterview,
                         }" @click="completeInterview">{{ competeButtonTitle }}</a>
             </div>
         </div>
+        <SectionLoadingProgress />
     </div>
 </template>
 
 <script lang="js">
 import modal from '@/shared/modal'
 import Vue from 'vue'
+import SectionProgress from './SectionLoadProgress'
 
 export default {
     name: 'complete-view',
+    components: {
+        SectionLoadingProgress: SectionProgress,
+    },
     data() {
         return {
             comment: '',
@@ -151,7 +156,7 @@ export default {
         isAllowCompleteInterview() {
             if (!this.isExistsCriticality)
                 return true;
-            return this.isReadyLastCriticalityInfo && this.criticalityInfo?.failCriticalQuestions?.length > 0 && this.criticalityInfo?.failCriticalityConditions?.length > 0
+            return this.isReadyLastCriticalityInfo && this.criticalityInfo?.failCriticalQuestions?.length === 0 && this.criticalityInfo?.failCriticalityConditions?.length === 0
         },
         shouldCloseWindow() {
             return this.$store.state.webinterview.interviewCompleted && this.$config.inWebTesterMode
@@ -216,6 +221,7 @@ export default {
             if (!this.isExistsCriticality)
                 return;
 
+            this.isReadyLastCriticalityInfo = false;
             this.$store.dispatch('fetchCriticalityInfo')
             this.isReadyLastCriticalityInfo = true;
         },
