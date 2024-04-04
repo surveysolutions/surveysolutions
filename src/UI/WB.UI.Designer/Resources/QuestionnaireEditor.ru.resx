@@ -1662,4 +1662,10 @@
   <data name="HelpIsCritical" xml:space="preserve">
       <value>Запретить завершение интервью, если вопрос неотвечен.</value>
   </data>
+  <data name="HelpCriticalityConditionExpression" xml:space="preserve">
+      <value>Выражение критического условия.</value>
+  </data>
+  <data name="HelpCriticalityConditionMessage" xml:space="preserve">
+      <value>Сообщение критического условия.</value>
+  </data>
 </root>

@@ -3086,5 +3086,17 @@ namespace WB.UI.Designer.Resources {
                 return ResourceManager.GetString("HelpIsCritical", resourceCulture);
             }
         }
+        
+        public static string HelpCriticalityConditionExpression {
+            get {
+                return ResourceManager.GetString("HelpCriticalityConditionExpression", resourceCulture);
+            }
+        }
+        
+        public static string HelpCriticalityConditionMessage {
+            get {
+                return ResourceManager.GetString("HelpCriticalityConditionMessage", resourceCulture);
+            }
+        }
     }
 }

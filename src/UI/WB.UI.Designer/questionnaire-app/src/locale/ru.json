@@ -497,6 +497,8 @@
     "No": "Нет",
     "QuestionIsCritical": "Требовать ответ на этот вопрос",
     "HelpIsCritical": "Запретить завершение интервью, если вопрос неотвечен.",
+    "HelpCriticalityConditionExpression": "Выражение критического условия.",
+    "HelpCriticalityConditionMessage": "Сообщение критического условия.",
     "ErrorsCounter_other": "{{count}} errors",
     "SideBarAttachmentsCounter_other": "{{count}} Files Attachments ({{bytes}} total)",
     "SideBarLookupTablesCounter_other": "{{count}} Lookup Tables:",

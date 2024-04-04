@@ -1646,4 +1646,10 @@ You entered an invalid input. Each line should follow the format: "Title...Paren
   <data name="HelpIsCritical" xml:space="preserve">
       <value>Prevent submission of interviews with this question left not answered.</value>
   </data>
+  <data name="HelpCriticalityConditionExpression" xml:space="preserve">
+      <value>Expression of Criticality Condition.</value>
+  </data>
+  <data name="HelpCriticalityConditionMessage" xml:space="preserve">
+      <value>Message of Criticality Condition.</value>
+  </data>
 </root>

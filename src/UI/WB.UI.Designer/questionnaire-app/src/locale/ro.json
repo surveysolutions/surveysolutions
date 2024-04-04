@@ -506,6 +506,8 @@
     "Register": "Register",
     "No": "No",
     "QuestionIsCritical": "Require an answer to this question",
-    "HelpIsCritical": "Prevent submission of interviews with this question left not answered."
+    "HelpIsCritical": "Prevent submission of interviews with this question left not answered.",
+    "HelpCriticalityConditionExpression": "Expression of Criticality Condition.",
+    "HelpCriticalityConditionMessage": "Message of Criticality Condition."
   }
 }
