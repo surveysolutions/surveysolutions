@@ -104,7 +104,7 @@ function Compress($folder, $dest) {
     }
 
     $archiveName = (Get-Item $folder).Name
-    $compressor = [System.IO.Compression.ZipFile]::Open($dest + "\$archiveName.zip", 'Create')
+    $compressor = [System.IO.Compression.ZipFile]::Open($dest, 'Create')
     $files = Get-ChildItem -Path $folder -Recurse
     foreach ($file in $files) {
         if ($file.FullName -notlike "*.vite*") {
