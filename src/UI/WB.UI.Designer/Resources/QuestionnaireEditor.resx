@@ -293,10 +293,10 @@
       <value>Criticality condition</value>
   </data>
   <data name="SideBarCriticalityConditionsCounter" xml:space="preserve">
-      <value>Criticality Conditions: {{count}}</value>
+      <value>{{count}} Criticality Condition:</value>
   </data>
   <data name="SideBarCriticalityConditionsCounter_plural" xml:space="preserve">
-      <value>Criticality Conditions: {{count}}</value>
+      <value>{{count}} Criticality Conditions:</value>
   </data>
   <data name="SideBarCriticalityConditionDescription" xml:space="preserve">
       <value>Description</value>

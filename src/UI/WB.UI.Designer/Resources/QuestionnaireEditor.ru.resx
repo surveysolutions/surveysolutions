@@ -269,10 +269,10 @@
     <value>выражение</value>
   </data>
   <data name="SideBarCriticalityConditionsCounter" xml:space="preserve">
-      <value>Критические условия: {{count}}</value>
+      <value>{{count}} Критическое условие:</value>
   </data>
   <data name="SideBarCriticalityConditionsCounter_plural" xml:space="preserve">
-      <value>Критические условия: {{count}}</value>
+      <value>{{count}} Критические условия:</value>
   </data>
   <data name="SideBarCriticalityConditionDescription" xml:space="preserve">
     <value>описание</value>
