@@ -103,15 +103,7 @@ function Compress($folder, $dest) {
         Remove-Item $dest
     }
 
-    $archiveName = (Get-Item $folder).Name
-    $compressor = [System.IO.Compression.ZipFile]::Open($dest, 'Create')
-    $files = Get-ChildItem -Path $folder -Recurse
-    foreach ($file in $files) {
-        if ($file.FullName -notlike "*.vite*") {
-            $entry = $compressor.CreateEntryFromFile($file.FullName, $file.FullName.Substring($folder.Length))
-        }
-    }
-    $compressor.Dispose()
+    Compress-Archive -Path $folder/* -DestinationPath $dest
 }
 
 function Set-AndroidXmlResourceValue {
