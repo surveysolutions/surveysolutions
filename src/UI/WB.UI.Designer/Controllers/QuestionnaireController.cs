@@ -371,7 +371,7 @@ namespace WB.UI.Designer.Controllers
             this.commandService.Execute(command);
 
             string sid = id.FormatGuid();
-            return this.RedirectToAction("Details", new { id = sid });
+            return Redirect($"/q/details/{sid}");
         }
 
         [Authorize]
