@@ -73,18 +73,6 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="checkbox-in-column">
-                        <input id="cb-is-critical" type="checkbox" class="wb-checkbox"
-                            v-model="activeQuestion.isCritical" />
-                        <label for="cb-is-critical"><span></span>{{ $t('QuestionnaireEditor.QuestionIsCritical')
-                            }}</label>
-                        <help link="isCritical"></help>
-                    </div>
-                </div>
-            </div>
-
             <div class="form-group"
                 v-show="!((showInstruction === null && activeQuestion.instructions) || showInstruction)">
                 <button type="button" class="btn btn-lg btn-link" @click="showInstruction = true">{{
@@ -168,7 +156,7 @@
                     {{ $t('QuestionnaireEditor.ErrorMessage') }}
                     <help link="validationMessage" />
                 </label>
-                <ExpressionEditor :id="'validation-message-' + index" v-model="validation.message"/>
+                <ExpressionEditor :id="'validation-message-' + index" v-model="validation.message" />
             </div>
             <div class="form-group"
                 v-if="doesQuestionSupportValidations() && activeQuestion.validationConditions && activeQuestion.validationConditions.length < 10">
@@ -176,8 +164,15 @@
             $t('QuestionnaireEditor.AddValidationRule') }}</button>
             </div>
 
-            <div class="form-group" v-if="doesQuestionSupportQuestionScope()">
-                <div class="form-group pull-right">
+            <div class="form-group">
+                <div class="checkbox-in-column pull-left">
+                    <input id="cb-is-critical" type="checkbox" class="wb-checkbox"
+                        v-model="activeQuestion.isCritical" />
+                    <label for="cb-is-critical"><span></span>{{ $t('QuestionnaireEditor.QuestionIsCritical')
+                        }} <help link="isCritical"></help></label>
+
+                </div>
+                <div class="form-group pull-right" v-if="doesQuestionSupportQuestionScope()">
                     <label for="Question-scope">{{ $t('QuestionnaireEditor.QuestionScope') }}&nbsp;</label>
 
                     <div class="btn-group dropup ">
