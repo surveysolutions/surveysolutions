@@ -9,6 +9,7 @@
         OptionTitle = 4,
         FixedRosterTitle = 5,
         SpecialValue = 6,
-        Categories = 7
+        Categories = 7,
+        CriticalityCondition = 8,
     }
 }
