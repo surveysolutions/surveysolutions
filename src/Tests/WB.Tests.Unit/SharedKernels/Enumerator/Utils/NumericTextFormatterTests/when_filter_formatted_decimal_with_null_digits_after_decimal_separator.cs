@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Utils.NumericTextFormatterTests
         private static IEnumerable<string> filteredResults;
 
         private static readonly FilterFormattedParam[] FilterFormattedParams =
-        [
+        new []{
             new FilterFormattedParam {SourceText = "", AddedText = "-", InsertToIndex = 0},
             new FilterFormattedParam {SourceText = "-1", AddedText = "1", InsertToIndex = 2},
             new FilterFormattedParam {SourceText = "-1.11", AddedText = "1", InsertToIndex = 4},
@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Utils.NumericTextFormatterTests
             new FilterFormattedParam {SourceText = "-1,111", AddedText = ".", InsertToIndex = 6},
             new FilterFormattedParam {SourceText = "-1,111", AddedText = "1", InsertToIndex = 2},
             new FilterFormattedParam {SourceText = "11111111111111", AddedText = ".", InsertToIndex = 13},
-            new FilterFormattedParam {SourceText = "1111111111111111111111", AddedText = ".", InsertToIndex = 13},
-        ];
+            new FilterFormattedParam {SourceText = "1111111111111111111111", AddedText = ".", InsertToIndex = 13}
+        };
     }
 }
