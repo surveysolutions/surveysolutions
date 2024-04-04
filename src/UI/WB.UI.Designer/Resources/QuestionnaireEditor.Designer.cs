@@ -717,6 +717,12 @@ namespace WB.UI.Designer.Resources {
             }
         }
         
+        public static string SideBarCriticalityConditionsTitle {
+            get {
+                return ResourceManager.GetString("SideBarCriticalityConditionsTitle", resourceCulture);
+            }
+        }
+        
         public static string SideBarMetadataHeader {
             get {
                 return ResourceManager.GetString("SideBarMetadataHeader", resourceCulture);

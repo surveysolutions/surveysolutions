@@ -454,6 +454,9 @@
   <data name="SideBarCommentsTitle" xml:space="preserve">
     <value>Comments</value>
   </data>
+  <data name="SideBarCriticalityConditionsTitle" xml:space="preserve">
+    <value>Criticality Conditions</value>
+  </data>
   <data name="SideBarMetadataHeader" xml:space="preserve">
     <value>Questionnaire description and survey info</value>
   </data>

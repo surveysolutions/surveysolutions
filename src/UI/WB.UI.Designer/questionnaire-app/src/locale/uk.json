@@ -500,6 +500,7 @@
     "SideBarShowDescription": "add description",
     "SideBarAddCriticalityCondition": "add criticality condition",
     "SideBarCriticalityConditionNoMessage": "Criticality condition with no message",
+    "SideBarCriticalityConditionsTitle": "Criticality Conditions",
     "Default": "Default",
     "Reset": "Reset",
     "Login": "Login",

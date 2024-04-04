@@ -358,6 +358,7 @@
     "JumpToEdit": "Перейти к редактированию",
     "EditorHideComment": "Скрыть комментарии",
     "SideBarCommentsTitle": "Комментарии",
+    "SideBarCriticalityConditionsTitle": "Критические условия",
     "VariableVariableName": "Имя переменной",
     "MaxCommentLengthErrorMessage": "Комментарий не может быть больше чем {1} символов",
     "CommentEditorResolve": "Обработать",
