@@ -24,6 +24,7 @@ namespace WB.Core.SharedKernels.SurveySolutions.Documents
         {
             return new CriticalityCondition
             {
+                Id = this.Id,
                 Message = this.Message,
                 Description = this.Description,
                 Expression = this.Expression
