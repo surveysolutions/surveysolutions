@@ -7,7 +7,8 @@ export function setupErrorHandler(app) {
 
     const ignoredMessages = [
         'NetworkError when attempting to fetch resource.',
-        'Failed to fetch'
+        'Failed to fetch',
+        'Load failed'
     ];
 
     app.config.errorHandler = (err, vm, info) => {
