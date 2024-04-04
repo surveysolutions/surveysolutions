@@ -44,6 +44,11 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
                 }
             }
 
+            foreach (var criticalityCondition in translatedDocument.CriticalityConditions)
+            {
+                TranslateCriticalityCondition(criticalityCondition, translation);
+            }
+
             return translatedDocument;
         }
 
@@ -59,6 +64,13 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
             question.Instructions = Translate(
                 original: question.Instructions,
                 translated: translation.GetInstruction(question.PublicKey));
+        }
+
+        private static void TranslateCriticalityCondition(CriticalityCondition criticalityCondition, ITranslation translation)
+        {
+            criticalityCondition.Message = Translate(
+                original: criticalityCondition.Message,
+                translated: translation.GetCriticalityConditionMessage(criticalityCondition.Id));
         }
 
         private static void TranslateAnswerOptions(IQuestion question, ITranslation translation)

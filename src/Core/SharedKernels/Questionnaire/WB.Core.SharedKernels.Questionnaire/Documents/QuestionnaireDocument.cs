@@ -571,6 +571,9 @@ namespace Main.Core.Documents
             doc.Categories = new List<Categories>();
             this.Categories.ForEach(x => doc.Categories.Add(x.Clone()));
 
+            doc.CriticalityConditions = new List<CriticalityCondition>();
+            this.CriticalityConditions.ForEach(x => doc.CriticalityConditions.Add(x.Clone()));
+
             if(this.EntitiesIdMap != null)
                 doc.EntitiesIdMap = new Dictionary<Guid, int>(this.EntitiesIdMap);
 
