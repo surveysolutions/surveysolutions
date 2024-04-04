@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 
 namespace WB.UI.Headquarters.Models
 {
@@ -44,6 +46,9 @@ namespace WB.UI.Headquarters.Models
         public string CloneQuestionnaireUrl { get; set; }
         public bool IsAdmin { get; set; }
         public string ExportQuestionnaireUrl { get; set; }
+        public bool? CriticalitySupport { get; set; }
+        public string CriticalityLevel { get; set; }
+        public ComboboxViewItem[] CriticalityLevels { get; set; }
 
         public class User
         {

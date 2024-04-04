@@ -85,5 +85,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
 
         public virtual bool IsAudioRecordingEnabled { get; set; }
         public virtual bool WebModeEnabled { get; set; }
+        
+        public virtual bool? CriticalitySupport { get; set; }
+        
+        public virtual CriticalityLevel? CriticalityLevel { get; set; }
     }
 }

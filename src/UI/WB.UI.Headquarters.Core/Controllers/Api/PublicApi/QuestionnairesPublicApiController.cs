@@ -213,6 +213,45 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             return NoContent();
         }
+        
+        /// <summary>
+        /// Sets criticality level setting for questionnaire
+        /// </summary>
+        /// <param name="id">Questionnaire guid</param>
+        /// <param name="version">Questionnaire version</param>
+        /// <param name="requestData"></param>
+        /// <response code="204">Questionnaire setting updated</response>
+        /// <response code="404">Questionnaire cannot be found</response>
+        [HttpPost]
+        [Route("{id:guid}/{version:long}/criticalityLevel", Name = "SetCriticalityLevelSetting")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Authorize(Roles = "ApiUser, Administrator, Headquarter")]
+        [ObservingNotAllowed]
+        public ActionResult CriticalityLevel(Guid id, long version, [FromBody, BindRequired]CriticalityLevelRequest requestData)
+        {
+            if (!ModelState.IsValid)
+                return StatusCode(StatusCodes.Status400BadRequest, 
+                    $@"Invalid parameter or property: {string.Join(',',ModelState.Keys.ToList())}");
+            
+            var questionnaire = 
+                this.questionnaireBrowseItems.Query(_ => _.FirstOrDefault(
+                    x => x.QuestionnaireId == id
+                         && x.Version == version
+                         && x.IsDeleted == false
+                         && x.Disabled == false
+                ));
+            
+            if (questionnaire == null)
+            {
+                return NotFound();
+            }
+
+            questionnaire.CriticalityLevel = requestData.CriticalityLevel;
+
+            return NoContent();
+        }
 
         /// <summary>
         /// Gets audio recording enabled setting for provided questionnaire

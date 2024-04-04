@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
@@ -99,6 +100,14 @@ namespace WB.UI.Headquarters.Controllers
                               $"/q/details/{questionnaire.QuestionnaireId:N}${questionnaire.Revision}",
                 Comment = browseItem.Comment,
                 Variable = browseItem.Variable,
+                CriticalitySupport = browseItem.CriticalitySupport,
+                CriticalityLevel = browseItem.CriticalityLevel.HasValue ?((int) browseItem.CriticalityLevel.Value).ToString() : "",
+                CriticalityLevels = new[]
+                {
+                    new ComboboxViewItem() { Key = ((int)CriticalityLevel.Ignore).ToString(), Value = CriticalityLevel.Ignore.ToString() },
+                    new ComboboxViewItem() { Key = ((int)CriticalityLevel.Warning).ToString(), Value = CriticalityLevel.Warning.ToString() },
+                    new ComboboxViewItem() { Key = ((int)CriticalityLevel.Error).ToString(), Value = CriticalityLevel.Error.ToString() },
+                },
                 IsObserving = this.authorizedUser.IsObserving,
                 DefaultLanguageName = questionnaire.DefaultLanguageName,
                 ExposedVariablesUrl = Url.Action("ExposedVariables", "Questionnaires"),

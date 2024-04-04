@@ -1743,4 +1743,16 @@
   <data name="QuestionnaireVersionAndName" xml:space="preserve">
       <value>[ver. {1}] {0}</value>
   </data>
+  <data name="Questionnaire_SupportCriticalVerifications" xml:space="preserve">
+      <value>Critical verifications</value>
+  </data>
+  <data name="Questionnaire_CriticalVerificationLevel" xml:space="preserve">
+      <value>Critical verification level</value>
+  </data>
+  <data name="Questionnaire_ChangeCriticalVerificationLevelTitle" xml:space="preserve">
+      <value>Changing critical verification level</value>
+  </data>
+  <data name="Questionnaire_ChangeCriticalityLevelExplanation" xml:space="preserve">
+      <value>Changing criticality level will affect how interview is completed. If level is Error and interview is not passing criticality verification completion will not be permitted.  </value>
+  </data>
 </root>

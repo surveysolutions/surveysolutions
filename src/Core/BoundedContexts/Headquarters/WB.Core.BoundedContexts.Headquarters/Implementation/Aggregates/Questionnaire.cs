@@ -76,7 +76,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
                 isSupportExportVariables: true,
                 comment: command.Comment,
                 userId: command.CreatedBy, 
-                false);
+                false,
+                command.CriticalitySupport,
+                CriticalityLevel.Ignore);
         }
 
         public void CloneQuestionnaire(CloneQuestionnaire command)
@@ -112,7 +114,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
                 questionnaireBrowseItem.AllowExportVariables,
                 comment: command.Comment,
                 userId: command.UserId,
-                questionnaireBrowseItem.IsAudioRecordingEnabled);
+                questionnaireBrowseItem.IsAudioRecordingEnabled,
+                questionnaireBrowseItem.CriticalitySupport,
+                questionnaireBrowseItem.CriticalityLevel);
         }
 
         private void CloneQuestionnaireBackup(Guid sourceQuestionnaireId, long sourceQuestionnaireVersion, long newQuestionnaireVersion)
@@ -185,7 +189,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             bool isSupportExportVariables,
             string comment,
             Guid userId,
-            bool isAudioRecordingEnabled)
+            bool isAudioRecordingEnabled,
+            bool? criticalitySupport,
+            CriticalityLevel? criticalityLevel)
         {
             var identity = new QuestionnaireIdentity(this.Id, questionnaireVersion);
             
@@ -199,7 +205,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
                 new QuestionnaireBrowseItem(questionnaireDocument, identity.Version, isCensus,
                     questionnaireContentVersion, isSupportAssignments, isSupportExportVariables, comment, userId)
                 {
-                    IsAudioRecordingEnabled = isAudioRecordingEnabled
+                    IsAudioRecordingEnabled = isAudioRecordingEnabled,
+                    CriticalitySupport = criticalitySupport,
+                    CriticalityLevel = criticalityLevel
                 },
                 projectionId);
         }

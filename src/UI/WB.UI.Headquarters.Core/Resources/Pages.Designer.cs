@@ -3867,6 +3867,33 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Changing criticality level will affect how interview is completed. If level is Error and interview is not passing criticality verification completion will not be permitted.  .
+        /// </summary>
+        public static string Questionnaire_ChangeCriticalityLevelExplanation {
+            get {
+                return ResourceManager.GetString("Questionnaire_ChangeCriticalityLevelExplanation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changing critical verification level.
+        /// </summary>
+        public static string Questionnaire_ChangeCriticalVerificationLevelTitle {
+            get {
+                return ResourceManager.GetString("Questionnaire_ChangeCriticalVerificationLevelTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Critical verification level.
+        /// </summary>
+        public static string Questionnaire_CriticalVerificationLevel {
+            get {
+                return ResourceManager.GetString("Questionnaire_CriticalVerificationLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Questionnaire exposed variables.
         /// </summary>
         public static string Questionnaire_Exposed_Variables {
@@ -3935,6 +3962,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Questionnaire_SubSectionsCount {
             get {
                 return ResourceManager.GetString("Questionnaire_SubSectionsCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Critical verifications.
+        /// </summary>
+        public static string Questionnaire_SupportCriticalVerifications {
+            get {
+                return ResourceManager.GetString("Questionnaire_SupportCriticalVerifications", resourceCulture);
             }
         }
         
