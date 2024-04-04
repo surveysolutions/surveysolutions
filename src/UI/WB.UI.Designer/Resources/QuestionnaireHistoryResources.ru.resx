@@ -362,4 +362,13 @@
       <value>Категории {0} обновлены</value>
       <comment>Категории {0} обновлены</comment>
   </data>
+  <data name="CriticalityCondition_Add" xml:space="preserve">
+    <value>Добавлены критические условия {0}</value>
+  </data>
+  <data name="CriticalityCondition_Delete" xml:space="preserve">
+    <value>Удалены критические условия {0}</value>
+  </data>
+  <data name="CriticalityCondition_Update" xml:space="preserve">
+    <value>Критические условия {0} обновлены</value>
+  </data>
 </root>

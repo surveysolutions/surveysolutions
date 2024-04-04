@@ -432,15 +432,15 @@
     "ManageAccount": "Administrar cuenta",
     "CopyTo": "Copy to",
     "SideBarEditCategories": "Edit Categories",
-    "SideBarCriticalityConditionExpression": "expression",
+    "SideBarCriticalityConditionExpression": "Criticality condition",
     "SideBarCriticalityConditionsCounter": "{{count}} Criticality Condition:",
     "SideBarCriticalityConditionsCounter_other": "{{count}} Criticality Conditions:",
-    "SideBarCriticalityConditionDescription": "description",
+    "SideBarCriticalityConditionDescription": "Description",
     "SideBarCriticalityConditionsEmptyLine1": "Use this tab to define criticality conditions.",
     "SideBarCriticalityConditionsEmptyLine2": "A criticality condition is a named expression that can be used in ...",
     "SideBarCriticalityConditionsEmptyLine3": "line 3",
     "SideBarHideDescription": "hide description",
-    "SideBarCriticalityConditionMessage": "message",
+    "SideBarCriticalityConditionMessage": "Message",
     "SideBarShowDescription": "add description",
     "SideBarAddCriticalityCondition": "add criticality condition",
     "SideBarCriticalityConditionNoMessage": "Criticality condition with no message",
@@ -448,6 +448,7 @@
     "SideBarXlsx": "Xlsx",
     "SideBarTab": "Tab",
     "SideBarTranslationGetTemplateLinkTextCsv": "Tab (txt)",
+    "SideBarCriticalityConditionsTitle": "Criticality Conditions",
     "AddFilter": "Add filter",
     "SettingsAnonymous": "Anonymous",
     "RegenerateQuestionnaireSharingLink": "Regenerate link",
@@ -506,6 +507,8 @@
     "Register": "Register",
     "No": "No",
     "QuestionIsCritical": "Require an answer to this question",
-    "HelpIsCritical": "Prevent submission of interviews with this question left not answered."
+    "HelpIsCritical": "Prevent submission of interviews with this question left not answered.",
+    "HelpCriticalityConditionExpression": "Expression of Criticality Condition.",
+    "HelpCriticalityConditionMessage": "Message of Criticality Condition."
   }
 }

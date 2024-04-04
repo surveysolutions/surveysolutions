@@ -45,6 +45,8 @@ const helpMap = {
     virtualCoverPage: $t('QuestionnaireEditor.HelpVirtualCoverPage'),
     HelpOverlapDetection: $t('QuestionnaireEditor.HelpOverlapDetection'),
     isCritical: $t('QuestionnaireEditor.HelpIsCritical'),
+    criticalityConditionExpression: $t('QuestionnaireEditor.HelpCriticalityConditionExpression'),
+    criticalityConditionMessage: $t('QuestionnaireEditor.HelpCriticalityConditionMessage'),
 };
 
 export default {

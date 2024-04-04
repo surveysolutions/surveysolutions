@@ -1,40 +1,41 @@
-<template>    
+<template>
     <div class="form-group validation-group" style="background:000;">
         <div>
             <label>
-                    {{ $t('QuestionnaireEditor.SideBarCriticalityConditionExpression') }} {{ index + 1 }}
+                {{ $t('QuestionnaireEditor.SideBarCriticalityConditionExpression') }} {{ index + 1 }}
+                <help link="criticalityConditionExpression" />
             </label>
 
-                <button type="button" class="btn delete-btn-sm delete-validation-condition"
-                    @click="remove()" v-if="!isReadOnlyForUser" tabindex="-1"></button>
+            <button type="button" class="btn delete-btn-sm delete-validation-condition" @click="remove()"
+                v-if="!isReadOnlyForUser" tabindex="-1"></button>
 
-                <ExpressionEditor v-model="criticalityCondition.edit.expression" mode="expression" focusable="true" />
+            <ExpressionEditor v-model="criticalityCondition.edit.expression" mode="expression" focusable="true" />
 
-                <label class="validation-message">
-                    {{ $t('QuestionnaireEditor.SideBarCriticalityConditionMessage') }}                    
-                </label>
-                <ExpressionEditor v-model="criticalityCondition.edit.message" />
+            <label class="validation-message">
+                {{ $t('QuestionnaireEditor.SideBarCriticalityConditionMessage') }}
+                <help link="criticalityConditionMessage" />
+            </label>
+            <ExpressionEditor v-model="criticalityCondition.edit.message" />
         </div>
         <div v-if="isDescriptionVisible()">
-                <label class="validation-message">
-                    {{ $t('QuestionnaireEditor.SideBarCriticalityConditionDescription') }}
-                </label>
-                <textarea type="text"
-                    v-model="criticalityCondition.edit.description" class="form-control macros-description"
-                    v-autosize>
+            <label class="validation-message">
+                {{ $t('QuestionnaireEditor.SideBarCriticalityConditionDescription') }}
+            </label>
+            <textarea type="text" v-model="criticalityCondition.edit.description"
+                class="form-control macros-description" v-autosize>
                 </textarea>
-                <hr style="margin-top:0px; margin-bottom:0px;">
+            <hr style="margin-top:0px; margin-bottom:0px;">
         </div>
         <div class="actions" v-if="isDirty" style="padding-top: 10px;">
             <button v-if="!isReadOnlyForUser" class="btn lighter-hover" @click="save()">{{
-            $t('QuestionnaireEditor.Save') }}
+                    $t('QuestionnaireEditor.Save') }}
             </button>
             <button type="button" class="btn lighter-hover" @click="cancel()">{{
-            $t('QuestionnaireEditor.Cancel') }}</button>
+                    $t('QuestionnaireEditor.Cancel') }}</button>
             <button class="btn btn-default pull-right" v-if="isDescriptionEmpty()" type="button"
                 @click="toggleDescription()">
                 {{ isDescriptionVisible() ? $t('QuestionnaireEditor.SideBarHideDescription') :
-            $t('QuestionnaireEditor.SideBarShowDescription') }}
+                    $t('QuestionnaireEditor.SideBarShowDescription') }}
             </button>
         </div>
     </div>
@@ -43,6 +44,7 @@
 
 <script>
 import ExpressionEditor from '../ExpressionEditor.vue';
+import Help from '../Help.vue'
 import { isEmpty, cloneDeep } from 'lodash'
 import { updateCriticalityCondition, deleteCriticalityCondition } from '../../../../services/criticalityConditionsService';
 import { createQuestionForDeleteConfirmationPopup } from '../../../../services/utilityService'
@@ -52,11 +54,12 @@ export default {
     inject: ['questionnaire', 'isReadOnlyForUser'],
     components: {
         ExpressionEditor,
+        Help,
     },
     props: {
         questionnaireId: { type: String, required: true },
         criticalityCondition: { type: Object, required: true },
-        index: { type: Number, required: true}
+        index: { type: Number, required: true }
     },
     data() {
         return {}
