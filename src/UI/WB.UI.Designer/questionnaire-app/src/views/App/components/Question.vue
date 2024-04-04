@@ -166,6 +166,7 @@
 
             <div class="form-group">
                 <div class="checkbox-in-column pull-left">
+                    <div class="criticality-group-marker"></div>
                     <input id="cb-is-critical" type="checkbox" class="wb-checkbox"
                         v-model="activeQuestion.isCritical" />
                     <label for="cb-is-critical"><span></span>{{ $t('QuestionnaireEditor.QuestionIsCritical')
