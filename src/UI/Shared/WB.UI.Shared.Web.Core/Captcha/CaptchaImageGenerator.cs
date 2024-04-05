@@ -22,7 +22,7 @@ namespace WB.UI.Shared.Web.Captcha
         
         string[] fontFamilies;
         static readonly Color[] colors = { Color.Red, Color.DarkBlue, Color.Chocolate, Color.DarkCyan, Color.Orange };
-        private static readonly FontStyle[] fontStyles = {FontStyle.Bold, FontStyle.Italic, FontStyle.Regular};
+        private static readonly FontStyle[] fontStyles = { FontStyle.Bold, FontStyle.Italic, FontStyle.Regular };
 
         public const int ReduceLines = 30;
         public const int ReducePoints = 15;
