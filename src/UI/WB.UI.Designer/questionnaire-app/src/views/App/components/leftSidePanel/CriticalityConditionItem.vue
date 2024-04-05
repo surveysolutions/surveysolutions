@@ -68,7 +68,9 @@ export default {
         isDirty() {
             return this.criticalityCondition.message !== this.criticalityCondition.edit.message
                 || this.criticalityCondition.expression !== this.criticalityCondition.edit.expression
-                || this.criticalityCondition.description !== this.criticalityCondition.edit.description;
+                || this.criticalityCondition.description !== this.criticalityCondition.edit.description
+                || (this.criticalityCondition.edit.description == '' && this.criticalityCondition.edit.isDescriptionVisible);
+
         },
         isInvalid() {
             return (this.categories.message) ? false : true;
