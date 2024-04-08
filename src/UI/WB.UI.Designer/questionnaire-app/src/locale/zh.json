@@ -349,15 +349,15 @@
     "CopyTo": "Copy to",
     "ReadOnlyQuestion": "It is readonly question. You cannot edit it.",
     "SideBarEditCategories": "Edit Categories",
-    "SideBarCriticalityConditionExpression": "expression",
+    "SideBarCriticalityConditionExpression": "Criticality condition",
     "SideBarCriticalityConditionsCounter": "{{count}} Criticality Condition:",
     "SideBarCriticalityConditionsCounter_other": "{{count}} Criticality Conditions:",
-    "SideBarCriticalityConditionDescription": "description",
+    "SideBarCriticalityConditionDescription": "Description",
     "SideBarCriticalityConditionsEmptyLine1": "Use this tab to define criticality conditions.",
     "SideBarCriticalityConditionsEmptyLine2": "A criticality condition is a named expression that can be used in ...",
     "SideBarCriticalityConditionsEmptyLine3": "line 3",
     "SideBarHideDescription": "hide description",
-    "SideBarCriticalityConditionMessage": "message",
+    "SideBarCriticalityConditionMessage": "Message",
     "SideBarShowDescription": "add description",
     "SideBarAddCriticalityCondition": "add criticality condition",
     "SideBarCriticalityConditionNoMessage": "Criticality condition with no message",
@@ -375,6 +375,7 @@
     "SideBarCategoriesEmptyLine1": "Use this tab to manage reusable categories.",
     "SideBarCategoriesEmptyLine2": "You may download and update categories.",
     "SideBarCategoriesEmptyLine3": "will be added to list of reusable categories for any types of categorical questions",
+    "SideBarCriticalityConditionsTitle": "Criticality Conditions",
     "SideBarScenarioTitle": "Scenarios",
     "SideBarCategoriesTitle": "Categories",
     "SideBarCategoriesUploadNew": "Upload new categories",
@@ -506,6 +507,8 @@
     "Register": "Register",
     "No": "No",
     "QuestionIsCritical": "Require an answer to this question",
-    "HelpIsCritical": "Prevent submission of interviews with this question left not answered."
+    "HelpIsCritical": "Prevent submission of interviews with this question left not answered.",
+    "HelpCriticalityConditionExpression": "Expression of Criticality Condition.",
+    "HelpCriticalityConditionMessage": "Message of Criticality Condition."
   }
 }

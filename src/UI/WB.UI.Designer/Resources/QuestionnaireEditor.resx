@@ -293,10 +293,10 @@
       <value>Criticality condition</value>
   </data>
   <data name="SideBarCriticalityConditionsCounter" xml:space="preserve">
-      <value>Criticality Conditions: {{count}}</value>
+      <value>{{count}} Criticality Condition:</value>
   </data>
   <data name="SideBarCriticalityConditionsCounter_plural" xml:space="preserve">
-      <value>Criticality Conditions: {{count}}</value>
+      <value>{{count}} Criticality Conditions:</value>
   </data>
   <data name="SideBarCriticalityConditionDescription" xml:space="preserve">
       <value>Description</value>
@@ -453,6 +453,9 @@
   </data>
   <data name="SideBarCommentsTitle" xml:space="preserve">
     <value>Comments</value>
+  </data>
+  <data name="SideBarCriticalityConditionsTitle" xml:space="preserve">
+    <value>Criticality Conditions</value>
   </data>
   <data name="SideBarMetadataHeader" xml:space="preserve">
     <value>Questionnaire description and survey info</value>
@@ -1645,5 +1648,11 @@ You entered an invalid input. Each line should follow the format: "Title...Paren
   </data>
   <data name="HelpIsCritical" xml:space="preserve">
       <value>Prevent submission of interviews with this question left not answered.</value>
+  </data>
+  <data name="HelpCriticalityConditionExpression" xml:space="preserve">
+      <value>Expression of Criticality Condition.</value>
+  </data>
+  <data name="HelpCriticalityConditionMessage" xml:space="preserve">
+      <value>Message of Criticality Condition.</value>
   </data>
 </root>

@@ -23,7 +23,7 @@ public static class ViteHelper
                 options?.Invoke(c);
             });
         
-        services.AddTransient<ITagHelperComponent, ViteTagHelperComponent>();
+        //services.AddTransient<ITagHelperComponent, ViteTagHelperComponent>();
         services.AddMemoryCache();
 
         #if DEBUG
