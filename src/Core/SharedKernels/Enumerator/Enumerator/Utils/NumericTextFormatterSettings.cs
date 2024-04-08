@@ -8,7 +8,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
         
         public bool IsDecimal { get; set; }
         public int MaxDigitsBeforeDecimal { get; set; }
-        public int MaxDigitsAfterDecimal { get; set; }
+        public int? MaxDigitsAfterDecimal { get; set; }
         public bool UseGroupSeparator { get; set; }
     }
 }

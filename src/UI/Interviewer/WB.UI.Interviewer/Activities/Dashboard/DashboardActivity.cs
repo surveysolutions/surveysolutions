@@ -326,6 +326,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                     break;
                 case Resource.Id.menu_maps:
                     this.ViewModel.NavigateToMapsCommand.Execute();
+                    this.Finish();
                     break;
                 case Resource.Id.menu_signout:
                     this.ViewModel.SignOutCommand.Execute();
@@ -351,22 +352,17 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         #region Offline synhronization
 
         const int RequestCodeRecoverPlayServices = 1001;
-            
-        protected override void Dispose(bool disposing)
+        
+        protected override void OnDestroy()
         {
-            if (disposing)
-            {
-                //if(this.communicator.)
-                //this.GoogleApiClnt?.Dispose();
-                //this.GoogleApiClnt = null;
+            if(this.ViewModel!= null)
                 this.ViewModel.OnOfflineSynchronizationStarted = null;
-                
-                this.fragmentStatePagerAdapter?.Dispose();
-            }
+            
+            this.fragmentStatePagerAdapter?.Dispose();
 
-            base.Dispose(disposing);
+            base.OnDestroy();
         }
-
+        
         private void OnOfflineSynchronizationStarted()
         {
             if (!this.CheckPlayServices()) return;

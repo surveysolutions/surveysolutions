@@ -14,9 +14,9 @@ namespace WB.Core.SharedKernels.DataCollection.Exceptions
         {
         }
 
-        protected AnswerNotAcceptedException(SerializationInfo info, StreamingContext context) : base(info, context)
+        /*protected AnswerNotAcceptedException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
             ExceptionType = (InterviewDomainExceptionType)info.GetInt32(nameof(ExceptionType));
-        }
+        }*/
     }
 }

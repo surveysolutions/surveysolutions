@@ -15,21 +15,22 @@
             <div v-show="isDirty" class="pull-left">
                 <button type="button" v-if="!isReadOnlyForUser" :disabled="isInvalid ? 'disabled' : null"
                     class="btn lighter-hover" @click.self="saveLookupTable()">{{
-                        $t('QuestionnaireEditor.Save') }}</button>
+        $t('QuestionnaireEditor.Save') }}</button>
                 <button type="button" class="btn lighter-hover" @click.self="cancel()">{{
-                    $t('QuestionnaireEditor.Cancel')
-                }}</button>
+        $t('QuestionnaireEditor.Cancel')
+    }}</button>
             </div>
             <div class="permanent-actions clearfix">
                 <a :href="sanitizeUrl(downloadLookupFileBaseUrl + questionnaireId + '?lookupTableId=' + table.itemId)"
-                    v-if="hasUploadedFile" class="btn btn-default pull-right" target="_blank" rel="noopener noreferrer">{{
-                        $t('QuestionnaireEditor.Download') }}</a>
+                    v-if="hasUploadedFile" class="btn btn-default pull-right" target="_blank"
+                    rel="noopener noreferrer">{{
+        $t('QuestionnaireEditor.Download') }}</a>
                 <button class="btn btn-default pull-right" type="button" @click.stop="openFileDialog()"
                     :disabled="isReadOnlyForUser">
                     <span v-show="!hasUploadedFile">{{
-                        $t('QuestionnaireEditor.SideBarLookupTableSelectFile') }}</span>
+        $t('QuestionnaireEditor.SideBarLookupTableSelectFile') }}</span>
                     <span v-show="hasUploadedFile">{{
-                        $t('QuestionnaireEditor.SideBarLookupTableUpdateFile') }}</span>
+        $t('QuestionnaireEditor.SideBarLookupTableUpdateFile') }}</span>
                 </button>
                 <file-upload ref="upload" v-if="!isReadOnlyForUser" :input-id="'ltfu' + table.itemId" v-model="file"
                     @input-file="fileSelected" :size="2 * 1024 * 1024" :drop="true" :drop-directory="false"
@@ -92,13 +93,12 @@ export default {
 
             table.meta = {};
             table.meta.fileName = file.name;
-
         },
 
         async saveLookupTable() {
             var response = await updateLookupTable(this.questionnaireId, this.table)
 
-            if (this.file.length > 0)
+            if (this.file.length > 0 && response != null)
                 notice(response);
 
             this.table.file = null;
@@ -133,4 +133,3 @@ export default {
     }
 }
 </script>
-  

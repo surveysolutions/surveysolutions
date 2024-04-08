@@ -1,96 +1,56 @@
 <template>
-    
-        <v-card-title class="d-flex">
-            <v-text-field
-                v-model="search"
-                append-icon="mdi-magnify"
-                :label="$t('QuestionnaireEditor.Filter')"
-                single-line
-                clearable
-                hide-details
-            ></v-text-field>
-            <v-spacer></v-spacer>
-            <v-btn
-                v-if="!readonly"
-                class="ma-2"
-                color="primary"
-                @click="newRow"
-            >
-                <v-icon left>mdi-plus</v-icon
-                >{{ $t('QuestionnaireEditor.NewItem') }}
-            </v-btn>
-            <v-btn
-                v-if="isCategory && !isCascading"
-                class="ma-2"
-                @click="setCascading(true)"
-                >{{ $t('QuestionnaireEditor.ShowParentValues') }}</v-btn
-            >
-            <v-btn
-                v-if="isCategory && isCascading"
-                class="ma-2"
-                @click="setCascading(null)"
-                >{{ $t('QuestionnaireEditor.HideParentValues') }}</v-btn
-            >
-        </v-card-title>
 
-        <category-dialog
-            v-if="dialog"
-            :title="formTitle"
-            :item="editedItem"
-            :parent-categories="parentCategories"
-            :shown="dialog"
-            :show-parent-value="isCascading"
-            @cancel="dialog = false"
-            @saveCategory="save"
-        />
+    <v-card-title class="d-flex">
+        <v-text-field v-model="search" append-icon="mdi-magnify" :label="$t('QuestionnaireEditor.Filter')" single-line
+            clearable hide-details></v-text-field>
+        <v-spacer></v-spacer>
+        <v-btn v-if="!readonly" class="ma-2" color="primary" @click="newRow">
+            <v-icon left>mdi-plus</v-icon>{{ $t('QuestionnaireEditor.NewItem') }}
+        </v-btn>
+        <v-btn v-if="isCategory && !isCascading" class="ma-2" @click="setCascading(true)">{{
+            $t('QuestionnaireEditor.ShowParentValues') }}</v-btn>
+        <v-btn v-if="isCategory && isCascading" class="ma-2" @click="setCascading(null)">{{
+            $t('QuestionnaireEditor.HideParentValues') }}</v-btn>
+    </v-card-title>
 
-        <v-snackbar v-model="snacks.rowAdded" location='top' color="success">{{
+    <category-dialog v-if="dialog" :title="formTitle" :item="editedItem" :parent-categories="parentCategories"
+        :shown="dialog" :show-parent-value="isCascading" @cancel="dialog = false" @saveCategory="save" />
+
+    <v-snackbar v-model="snacks.rowAdded" location='top' color="success">{{
             $t('QuestionnaireEditor.RowAdded')
         }}</v-snackbar>
 
-        <v-data-table
-            ref="table"
-            :headers="headers"
-            :items="categoriesLocal"
-            :search="search"
-            :items-per-page="10"
-            :footer-props="{'items-per-page-options': [10, 20, 50, 100]}"
-            :loading="loading"
-            class="table-striped elevation-1 mb-14"
-            style="overflow-wrap:anywhere;"
-            density="compact"
-        >
-            <template #[`item.value`]="{ item }">
-                <span class="text-no-wrap">{{ item.raw.value }}</span>
-            </template> 
-            <template #[`item.parentValue`]="props">
-                <div>
-                    {{ props.item.raw.parentValue }}
-                    <span
-                        v-if="parentCategories && parentCategories.length > 0"
-                        class="caption v-field--disabled .d-none .d-md-flex .d-lg-none"
-                        >{{
-                            captionForParentValue(props.item.raw.parentValue)
-                        }}</span
-                    >
-                </div>
-            </template>
-            <template #[`item.actions`]="{ item }">
-                <div v-if="!readonly">
-                    <v-icon small class="mr-2" @click="editItem(item.raw)"
-                        >mdi-pencil</v-icon
-                    >
-                    <v-icon small @click="deleteItem(item.raw)">mdi-delete</v-icon>
-                </div>
-            </template>
-            <!-- <template #no-data>
+    <v-data-table ref="table" :headers="headers" :items="categoriesLocal" :search="search" :items-per-page="10"
+        :footer-props="{ 'items-per-page-options': [10, 20, 50, 100] }" :loading="loading"
+        class="table-striped elevation-1 mb-14" style="overflow-wrap:anywhere;" density="compact">
+        <template #[`item.value`]="{ item }">
+            <span class="text-no-wrap">{{ item.value }}</span>
+        </template>
+
+        <template #[`item.parentValue`]="props">
+            <div>
+                {{ props.item.parentValue }}
+                <span v-if="parentCategories && parentCategories.length > 0"
+                    class="caption v-field--disabled .d-none .d-md-flex .d-lg-none">{{
+            captionForParentValue(props.item.parentValue)
+        }}</span>
+            </div>
+        </template>
+
+        <template #[`item.actions`]="{ item }">
+            <div v-if="!readonly">
+                <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+                <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
+            </div>
+        </template>
+        <!-- <template #no-data>
                 {{
                     $t('QuestionnaireEditor.OptionsUploadLimit', {
                         limit: 15000
                     })
                 }}
             </template> -->
-        </v-data-table>    
+    </v-data-table>
 </template>
 
 <script>

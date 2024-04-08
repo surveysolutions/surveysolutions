@@ -2,7 +2,8 @@
     <form name="categories.form">
         <div class="categories-panel-item"
             :class="{ 'has-error': hasPatternError(), 'dragover': $refs.upload && $refs.upload.dropActive }" ngf-drop=""
-            ngf-change="fileSelected(categories, $file)" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
+            ngf-change="fileSelected(categories, $file)"
+            ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
             <a href="javascript:void(0);" @click="deleteCategories" class="btn delete-btn" tabindex="-1"
                 v-if="!isReadOnlyForUser"></a>
             <div class="categories-content">
@@ -19,11 +20,11 @@
                             {{ $t('QuestionnaireEditor.Save') }}
                         </button>
                         <button type="button" class="btn lighter-hover" @click.stop="cancel()">{{
-                            $t('QuestionnaireEditor.Cancel') }}</button>
+                $t('QuestionnaireEditor.Cancel') }}</button>
                     </div>
                     <div class="permanent-actions pull-right">
                         <a href="javascript:void(0);" class="btn btn-link" @click="editCategories()">{{
-                            $t('QuestionnaireEditor.SideBarEditCategories') }}
+                $t('QuestionnaireEditor.SideBarEditCategories') }}
                         </a>
                         <file-upload ref="upload" v-if="!isReadOnlyForUser" v-model="file" @input-file="fileSelected"
                             :size="10 * 1024 * 1024" :drop="true" :drop-directory="false"
@@ -37,10 +38,10 @@
                         {{ $t('QuestionnaireEditor.SideBarDownload') }}
                         <a :href="exportOptionsBaseUrl + questionnaire.questionnaireId + '?type=xlsx&isCategory=true&entityId=' + categories.categoriesId"
                             class="btn btn-default" target="_blank" rel="noopener">{{
-                                $t('QuestionnaireEditor.SideBarXlsx') }}</a>
+                $t('QuestionnaireEditor.SideBarXlsx') }}</a>
                         <a :href="exportOptionsBaseUrl + questionnaire.questionnaireId + '?type=csv&isCategory=true&entityId=' + categories.categoriesId"
                             class="btn btn-default" target="_blank" rel="noopener">{{
-                                $t('QuestionnaireEditor.SideBarTab') }}</a>
+                $t('QuestionnaireEditor.SideBarTab') }}</a>
 
                     </div>
                 </div>
@@ -48,7 +49,7 @@
         </div>
     </form>
 </template>
-  
+
 <script>
 
 import { isNull, isUndefined, cloneDeep } from 'lodash'
@@ -109,7 +110,7 @@ export default {
         async saveCategories() {
             const response = await updateCategories(this.questionnaireId, this.categories);
 
-            if (this.file.length > 0)
+            if (this.file.length > 0 && response != null)
                 notice(response);
 
             this.categories.file = null;
@@ -163,4 +164,3 @@ export default {
     },
 }
 </script>
-  

@@ -78,6 +78,28 @@ export function addGroup(questionnaireId, parent, afterNodeId) {
     });
 }
 
+export function addSectionGroup(questionnaireId, section) {
+    var command = {
+        questionnaireId: questionnaireId,
+        groupId: section.itemId,
+        title: section.title,
+        condition: '',
+        hideIfDisabled: false,
+        isRoster: false,
+        rosterSizeQuestionId: null,
+        rosterSizeSource: 'Question',
+        rosterFixedTitles: null,
+        rosterTitleQuestionId: null,
+        parentGroupId: null,
+        variableName: null
+    };
+
+    return commandCall('AddGroup', command).then(result => {
+        emitter.emit('chapterAdded');
+        return section;
+    });
+}
+
 function createEmptyGroup() {
     var newId = newGuid();
     var emptyGroup = {

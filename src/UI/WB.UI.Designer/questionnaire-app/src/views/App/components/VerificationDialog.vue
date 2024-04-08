@@ -71,7 +71,7 @@
                 </perfect-scrollbar>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-link" @click="verify()">
+                <button class="btn btn-link" id="verificationRecompile" @click="verify()">
                     {{ $t('QuestionnaireEditor.Recompile') }}
                 </button>
                 <button class="btn btn-link" data-dismiss="modal" @click="close()">
