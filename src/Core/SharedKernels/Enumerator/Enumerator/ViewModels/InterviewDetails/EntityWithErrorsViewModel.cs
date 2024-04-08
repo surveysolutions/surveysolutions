@@ -30,5 +30,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
     public class EntityWithCommentsViewModel : EntityWithErrorsViewModel
     {
+    }    
+    
+    public class FailCriticalityConditionViewModel : BaseViewModel
+    {
+        public string EntityTitle { get; private set; }
+
+        public void Init(string title)
+        {
+            this.EntityTitle = title;
+        }
     }
 }

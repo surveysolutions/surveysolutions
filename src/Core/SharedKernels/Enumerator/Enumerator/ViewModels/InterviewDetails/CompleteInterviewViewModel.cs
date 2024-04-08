@@ -6,10 +6,12 @@ using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -75,8 +77,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.ErrorsCount = InterviewState.InvalidAnswersCount;
             this.UnansweredCount = questionsCount - this.AnsweredCount;
 
-            this.EntitiesWithErrors =
-                    this.entitiesListViewModelFactory.GetEntitiesWithErrors(interviewId, navigationState).ToList();
+            this.EntitiesWithErrors = this.entitiesListViewModelFactory.GetEntitiesWithErrors(interviewId, navigationState).ToList();
+            this.UnansweredCriticalQuestions = this.entitiesListViewModelFactory.GetUnansweredCriticalQuestions(interviewId, navigationState).ToList();
+            this.FailCriticalityConditions = this.entitiesListViewModelFactory.RunAndGetFailCriticalityConditions(interviewId, navigationState).ToList();
 
             this.EntitiesWithErrorsDescription = EntitiesWithErrors.Count < this.ErrorsCount
                 ? string.Format(UIResources.Interview_Complete_First_n_Entities_With_Errors,
@@ -85,6 +88,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.Comment = lastCompletionComments.Get(this.interviewId);
             this.CommentLabel = UIResources.Interview_Complete_Note_For_Supervisor;
+
+            Task.Run(() => CollectCriticalityInfo());
+        }
+
+        private Task CollectCriticalityInfo()
+        {
+            /*var interview = interviewRepository.GetOrThrow(this.interviewId.FormatGuid());
+            var criticalQuestions = interview.GetAllUnansweredCriticalQuestions();
+            var failCriticalityConditions = interview.RunAndGetFailCriticalityConditions();*/
+
+            return Task.CompletedTask;
         }
 
         public int AnsweredCount { get; set; }
@@ -92,6 +106,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public int UnansweredCount { get; set; }
 
         public int ErrorsCount { get; set; }
+        public int UnansweredCriticalQuestionsCount => UnansweredCriticalQuestions.Count;
+        public int FailCriticalityConditionsCount => FailCriticalityConditions.Count;
 
         public string EntitiesWithErrorsDescription { get; private set; }
 
@@ -110,6 +126,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public string WebInterviewUrl { get; set; }
 
         public IList<EntityWithErrorsViewModel> EntitiesWithErrors { get; private set; }
+        public IList<EntityWithErrorsViewModel> UnansweredCriticalQuestions { get; private set; }
+        public IList<FailCriticalityConditionViewModel> FailCriticalityConditions { get; private set; }
 
         private IMvxAsyncCommand completeInterviewCommand;
         public IMvxAsyncCommand CompleteInterviewCommand
@@ -198,6 +216,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 foreach (var entityWithErrorsViewModel in entitiesWithErrors)
                 {
                     entityWithErrorsViewModel?.DisposeIfDisposable();
+                }
+            }
+
+            if (UnansweredCriticalQuestions != null)
+            {
+                var viewModels = UnansweredCriticalQuestions.ToArray();
+                foreach (var viewModel in viewModels)
+                {
+                    viewModel?.DisposeIfDisposable();
+                }
+            }
+
+            if (FailCriticalityConditions != null)
+            {
+                var errors = FailCriticalityConditions.ToArray();
+                foreach (var errorsViewModel in errors)
+                {
+                    errorsViewModel?.DisposeIfDisposable();
                 }
             }
 
