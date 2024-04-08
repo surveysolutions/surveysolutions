@@ -20,10 +20,9 @@ namespace WB.UI.Designer.Code.Attributes
         public BasicAuthenticationHandler(
             IOptionsMonitor<BasicAuthenticationSchemeOptions> options,
             ILoggerFactory logger,
-            UrlEncoder encoder,
-            ISystemClock clock,
+            UrlEncoder encoder,            
             IBasicAuthenticationService userService)
-            : base(options, logger, encoder, clock)
+            : base(options, logger, encoder)
         {
             _userService = userService;
         }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -8,16 +7,11 @@ using ClosedXML.Excel;
 using ClosedXML.Graphics;
 using CsvHelper;
 using CsvHelper.Configuration;
-using Main.Core.Documents;
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using NSubstitute.Extensions;
 using NUnit.Framework;
 using SixLabors.Fonts;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
 using WB.Core.BoundedContexts.Designer.DataAccess;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -32,6 +26,8 @@ namespace WB.Tests.Unit.Designer.Services
     [TestOf(typeof(ReusableCategoriesService))]
     internal class CategoriesServiceTests
     {
+        private const string NotoSansFontFamilyName = "Noto Sans";
+
         private static ReusableCategoriesService CreateCategoriesService(DesignerDbContext dbContext = null, 
             IQuestionnaireViewFactory questionnaireStorage = null)
         {
@@ -66,13 +62,18 @@ namespace WB.Tests.Unit.Designer.Services
         private static Stream CreateExcelFile(string[][] data)
         {
             var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
+
             
             using XLWorkbook package = new XLWorkbook(loadOptions);
+            
             var worksheet = package.Worksheets.Add("Categories");
 
             for (var row = 0; row < data.Length; row++)
-            for (var column = 0; column < data[row].Length; column++)
-                worksheet.Cell(row + 1, column + 1).Value = data[row][column];
+                for (var column = 0; column < data[row].Length; column++) {
+                    worksheet.Cell(row + 1, column + 1).Value = data[row][column];
+                    worksheet.Cell(row + 1, column + 1).Style.Font.FontName = FontsHelper.DefaultFontName;
+                }
+            package.Style.Font.FontName = FontsHelper.DefaultFontName;     
 
             var ms = new MemoryStream();
             package.SaveAs(ms);
