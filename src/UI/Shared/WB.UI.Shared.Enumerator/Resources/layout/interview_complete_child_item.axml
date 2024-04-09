@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:local="http://schemas.android.com/apk/res-auto"
+    style="@style/VerticalFullWidthWrappingLayout" android:orientation="vertical" clickable="true" local:MvxBind="Click NavigateToSectionCommand;">
+  <View style="@style/Interview_Entity_Divider" />
+  <TextView
+           style="@style/Interview_Complete_Screen_Statistics_Errors_Label"  android:layout_marginTop="@dimen/Interview_Entity_Title_margin_vertical"
+           local:MvxBind="Html EntityTitle" />
+</LinearLayout>

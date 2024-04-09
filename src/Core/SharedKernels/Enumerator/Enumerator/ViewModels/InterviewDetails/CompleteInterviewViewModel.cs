@@ -6,6 +6,7 @@ using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
+using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -74,12 +75,46 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             var questionsCount = InterviewState.QuestionsCount;
             this.AnsweredCount = InterviewState.AnsweredQuestionsCount;
-            this.ErrorsCount = InterviewState.InvalidAnswersCount;
+            var answersGroup = new CompleteGroup()
+            {
+                AllCount = this.AnsweredCount,
+                TitleResourceKey = UIResources.Interview_Complete_Answered,
+            };
             this.UnansweredCount = questionsCount - this.AnsweredCount;
+            var unansweredGroup = new CompleteGroup()
+            {
+                AllCount = this.UnansweredCount,
+                TitleResourceKey = UIResources.Interview_Complete_Unanswered,
+            };
 
+            this.ErrorsCount = InterviewState.InvalidAnswersCount;
             this.EntitiesWithErrors = this.entitiesListViewModelFactory.GetEntitiesWithErrors(interviewId, navigationState).ToList();
+            var errorsGroup = new CompleteGroup(EntitiesWithErrors)
+            {
+                AllCount = this.ErrorsCount,
+                TitleResourceKey = UIResources.Interview_Complete_Errors,
+            };
             this.UnansweredCriticalQuestions = this.entitiesListViewModelFactory.GetUnansweredCriticalQuestions(interviewId, navigationState).ToList();
+            var unansweredCriticalQuestionsGroup = new CompleteGroup(UnansweredCriticalQuestions)
+            {
+                AllCount = this.UnansweredCriticalQuestions.Count,
+                TitleResourceKey = UIResources.Interview_Complete_Errors,
+            };
             this.FailCriticalityConditions = this.entitiesListViewModelFactory.RunAndGetFailCriticalityConditions(interviewId, navigationState).ToList();
+            var failCriticalityConditionsGroup = new CompleteGroup()
+            {
+                AllCount = this.FailCriticalityConditions.Count,
+                TitleResourceKey = UIResources.Interview_Complete_Errors,
+            };
+
+            this.CompleteGroups = new List<CompleteGroup>()
+            {
+                answersGroup,
+                unansweredGroup,
+                unansweredCriticalQuestionsGroup,
+                failCriticalityConditionsGroup,
+                errorsGroup,
+            };
 
             this.EntitiesWithErrorsDescription = EntitiesWithErrors.Count < this.ErrorsCount
                 ? string.Format(UIResources.Interview_Complete_First_n_Entities_With_Errors,
@@ -99,6 +134,27 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var failCriticalityConditions = interview.RunAndGetFailCriticalityConditions();*/
 
             return Task.CompletedTask;
+        }
+        
+        public List<CompleteGroup> CompleteGroups { get; set; }
+        
+        public class CompleteGroup : MvxObservableCollection<EntityWithErrorsViewModel>
+        {
+            public CompleteGroup()
+            {
+            }
+
+            public CompleteGroup(IEnumerable<EntityWithErrorsViewModel> items) : base(items)
+            {
+            }
+
+            public string TitleResourceKey { get; set; }
+            public int AllCount { get; set; }
+        }
+        
+        public class CompleteItem: MvxViewModel
+        {
+            public string Title { get; set; }
         }
 
         public int AnsweredCount { get; set; }

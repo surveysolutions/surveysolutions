@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:local="http://schemas.android.com/apk/res-auto"
+    style="@style/VerticalFullWidthWrappingLayout" android:orientation="vertical">
+    
+    <View style="@style/Interview_Entity_Divider" />
+
+        <LinearLayout style="@style/FullWidthWrappingLayout"
+                      android:orientation="horizontal"
+                      android:layout_marginLeft="30dp"
+                      local:MvxBind="Visibility Visibility(AllCount)"  
+                      >
+            <TextView
+                    android:id="@+id/Complete_AnsweredCount"
+                    style="@style/Interview_Complete_Screen_Statistics_Answered_Counter"
+                    local:MvxBind="Text AllCount" />
+            <TextView
+                    android:id="@+id/Complete_AnsweredCountLabel"
+                    style="@style/Interview_Complete_Screen_Statistics_Answered_Label"
+                    local:MvxBind="Text TitleResourceKey" />
+        </LinearLayout>
+        <LinearLayout style="@style/FullWidthWrappingLayout"
+                      android:orientation="horizontal"
+                      android:layout_marginLeft="30dp"
+                      local:MvxBind="Visibility InvertedVisibility(AllCount)" 
+                      >
+            <TextView style="@style/Interview_Complete_Screen_Statistics_Counter" local:MvxBind="Text Localization('Interview_Complete_No')" />
+            <TextView style="@style/Interview_Complete_Screen_Statistics_Label" local:MvxBind="Text TitleResourceKey" />
+        </LinearLayout>
+    
+</LinearLayout>
