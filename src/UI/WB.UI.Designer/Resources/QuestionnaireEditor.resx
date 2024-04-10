@@ -320,7 +320,7 @@
     <value>add description</value>
   </data>
   <data name="SideBarAddCriticalityCondition" xml:space="preserve">
-    <value>add critical rule</value>
+    <value>add new critical rule</value>
   </data>
   <data name="SideBarCriticalityConditionNoMessage" xml:space="preserve">
     <value>Critical rule with no message</value>
@@ -644,7 +644,7 @@
     <value>Flat mode</value>
   </data>
   <data name="AddValidationRule" xml:space="preserve">
-    <value>Add validation condition</value>
+    <value>Add new validation condition</value>
   </data>
   <data name="EnteredMoreThanAllowed" xml:space="preserve">
     <value>You entered more than maximum allowed {{max}}</value>

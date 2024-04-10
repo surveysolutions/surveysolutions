@@ -142,7 +142,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add validation condition.
+        ///   Looks up a localized string similar to Add new validation condition.
         /// </summary>
         public static string AddValidationRule {
             get {
@@ -3163,7 +3163,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to add critical rule.
+        ///   Looks up a localized string similar to add new critical rule.
         /// </summary>
         public static string SideBarAddCriticalityCondition {
             get {
