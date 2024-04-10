@@ -1660,10 +1660,10 @@
       <value>Нет</value>
   </data>
   <data name="QuestionIsCritical" xml:space="preserve">
-      <value>Требовать ответ на этот вопрос</value>
+      <value>Это критический вопрос</value>
   </data>
   <data name="HelpIsCritical" xml:space="preserve">
-      <value>Запретить завершение интервью, если вопрос неотвечен.</value>
+      <value>Авторы анкеты могут указать, что ответ на этот вопрос имеет критическое значение для завершения интервью.</value>
   </data>
   <data name="HelpCriticalityConditionExpression" xml:space="preserve">
       <value>Выражение критического условия.</value>
