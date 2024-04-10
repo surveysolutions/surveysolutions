@@ -2,8 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
      xmlns:local="http://schemas.android.com/apk/res-auto"
     style="@style/VerticalFullWidthWrappingLayout" android:orientation="vertical" clickable="true" local:MvxBind="Click NavigateToSectionCommand;">
-  <View style="@style/Interview_Entity_Divider" />
   <TextView
-           style="@style/Interview_Complete_Screen_Statistics_Errors_Label"  android:layout_marginTop="@dimen/Interview_Entity_Title_margin_vertical"
+           style="@style/Interview_Complete_Screen_Statistics_Errors_Label"  
+           android:layout_marginTop="@dimen/Interview_Entity_Title_margin_vertical"
+           android:layout_marginLeft="30dp"
            local:MvxBind="Html EntityTitle" />
 </LinearLayout>

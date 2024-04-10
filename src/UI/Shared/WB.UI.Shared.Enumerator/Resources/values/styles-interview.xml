@@ -152,12 +152,14 @@
     <item name="android:textSize">@dimen/textsize_30</item>
     <item name="android:textColor">@color/complete_screen_statistics_neutral_color</item>
     <item name="android:layout_marginTop">@dimen/Interview_Entity_Title_margin_vertical</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Entity_Title_margin_vertical</item>
   </style>
 
   <style name="Interview_Complete_Screen_Statistics_Label" parent="FullWidthWrappingLayout">
     <item name="android:textStyle">bold</item>
     <item name="android:textSize">@dimen/textsize_16</item>
     <item name="android:textColor">@color/complete_screen_statistics_neutral_color</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Entity_Title_margin_vertical</item>
     <item name="android:layout_marginBottom">@dimen/Interview_Entity_Title_margin_vertical</item>
   </style>
 

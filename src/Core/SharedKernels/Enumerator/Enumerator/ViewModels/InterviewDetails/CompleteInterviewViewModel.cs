@@ -150,6 +150,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             public string TitleResourceKey { get; set; }
             public int AllCount { get; set; }
+            
+            public string YesTitle => AllCount + " " + TitleResourceKey;
+            public string NoTitle => UIResources.Interview_Complete_No + " " + TitleResourceKey;
         }
         
         public class CompleteItem: MvxViewModel

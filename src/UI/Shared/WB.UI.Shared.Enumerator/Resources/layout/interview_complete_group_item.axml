@@ -11,21 +11,21 @@
                       local:MvxBind="Visibility Visibility(AllCount)"  
                       >
             <TextView
+                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
                     android:id="@+id/Complete_AnsweredCount"
                     style="@style/Interview_Complete_Screen_Statistics_Answered_Counter"
-                    local:MvxBind="Text AllCount" />
-            <TextView
-                    android:id="@+id/Complete_AnsweredCountLabel"
-                    style="@style/Interview_Complete_Screen_Statistics_Answered_Label"
-                    local:MvxBind="Text TitleResourceKey" />
+                    local:MvxBind="Text YesTitle" />
         </LinearLayout>
         <LinearLayout style="@style/FullWidthWrappingLayout"
                       android:orientation="horizontal"
                       android:layout_marginLeft="30dp"
                       local:MvxBind="Visibility InvertedVisibility(AllCount)" 
                       >
-            <TextView style="@style/Interview_Complete_Screen_Statistics_Counter" local:MvxBind="Text Localization('Interview_Complete_No')" />
-            <TextView style="@style/Interview_Complete_Screen_Statistics_Label" local:MvxBind="Text TitleResourceKey" />
+            <TextView style="@style/Interview_Complete_Screen_Statistics_Counter"
+                      android:layout_height="match_parent"
+                      android:layout_width="wrap_content"
+                      local:MvxBind="Text NoTitle" />
         </LinearLayout>
     
 </LinearLayout>

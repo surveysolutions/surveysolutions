@@ -1,5 +1,10 @@
 ﻿using Android.Runtime;
+using Android.Views;
+using MvvmCross.Platforms.Android.Binding.BindingContext;
+using MvvmCross.Platforms.Android.Binding.Views;
+using MvvmCross.Platforms.Android.Views.Fragments;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.UI.Shared.Enumerator.CustomControls;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
@@ -7,5 +12,24 @@ namespace WB.UI.Shared.Enumerator.Activities
     public class CompleteInterviewFragment : BaseFragment<CompleteInterviewViewModel>
     {
         protected override int ViewResourceId => Resource.Layout.interview_complete;
+
+        public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+        {
+            this.EnsureBindingContextIsSet(inflater);
+            //base.OnCreateView(inflater, container, savedInstanceState);
+            //var view = base.OnCreateView(inflater, container, savedInstanceState);
+            var view = this.BindingInflate(ViewResourceId, container, false);
+            
+            var expandableListView = view.FindViewById<MvxExpandableListView>(Resource.Id.tv_Complete_Groups_Information);
+            var adapter = new CompleteInformationAdapter(Context, (IMvxAndroidBindingContext)base.BindingContext);
+
+            expandableListView.SetAdapter(adapter);
+            /*var itemsSource = expandableListView.ItemsSource;
+            expandableListView.SetAdapter(adapter);
+            expandableListView.ItemsSource = itemsSource;
+            */
+
+            return view;
+        }
     }
 }
