@@ -9,10 +9,7 @@
             <div class="empty-list" v-show="criticalityConditions.length == 0">
                 <p>{{ $t('QuestionnaireEditor.SideBarCriticalityConditionsEmptyLine1') }}</p>
                 <p>{{ $t('QuestionnaireEditor.SideBarCriticalityConditionsEmptyLine2') }}</p>
-                <p>
-                    <span class="variable-name">{{ $t('QuestionnaireEditor.VariableName') }}</span>
-                    {{ $t('QuestionnaireEditor.SideBarCriticalityConditionsEmptyLine3') }}
-                </p>
+                <p>{{ $t('QuestionnaireEditor.SideBarCriticalityConditionsEmptyLine3') }}</p>
             </div>
 
             <ul>
