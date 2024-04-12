@@ -1814,4 +1814,7 @@
   <data name="Questionnaire_ChangeCriticalityLevelExplanation" xml:space="preserve">
       <value>Интервью, которое не проходит проверок в уровне Ошибка не будет разрешено к завершению </value>
   </data>
+  <data name="Questionnaire_SupportCriticalVerifications" xml:space="preserve">
+      <value>Критические проверки</value>
+  </data>
 </root>
