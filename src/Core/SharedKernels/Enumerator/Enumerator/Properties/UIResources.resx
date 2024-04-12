@@ -360,10 +360,10 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Error(s)</value>
   </data>
   <data name="Interview_Complete_CriticalUnanswered" xml:space="preserve">
-    <value>Critical unanswered question(s)</value>
+    <value>Critical unanswered questions: {0}</value>
   </data>
   <data name="Interview_Complete_FailCriticalConditions" xml:space="preserve">
-    <value>Fail critical condition(s)</value>
+    <value>Fail critical rules: {0}</value>
   </data>
   <data name="Interview_Complete_No" xml:space="preserve">
     <value>No</value>

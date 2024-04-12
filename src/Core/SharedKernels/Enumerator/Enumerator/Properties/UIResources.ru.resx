@@ -333,10 +333,10 @@
     <value>Ошибок</value>
   </data>
   <data name="Interview_Complete_CriticalUnanswered" xml:space="preserve">
-    <value>Критичных не отвеченных вопросов</value>
+    <value>Критичных не отвеченных вопросов: {0}</value>
   </data>
   <data name="Interview_Complete_FailCriticalConditions" xml:space="preserve">
-    <value>Не выполненных критических условий</value>
+    <value>Не выполненных критических правил: {0}</value>
   </data>
   <data name="Interview_Complete_No" xml:space="preserve">
     <value>Нет</value>

@@ -5,23 +5,21 @@
               android:background="@color/complete_screen_statistics_group_background"
               android:orientation="vertical">
     
-    <View style="@style/Interview_Entity_Divider" />
-
     <TextView
             android:id="@+id/Complete_AnsweredCount"
             style="@style/Interview_Complete_Screen_Statistics_Answered_Counter"
-            local:MvxBind="Text YesTitle; Visible IsAnswered" />
+            local:MvxBind="Text Title; Visible IsAnswered" />
     <TextView
             android:id="@+id/Complete_AnsweredCount"
             style="@style/Interview_Complete_Screen_Statistics_Unanswered_Counter"
-            local:MvxBind="Text YesTitle; Visible IsUnanswered" />
+            local:MvxBind="Text Title; Visible IsUnanswered" />
     <TextView
             android:id="@+id/Complete_AnsweredCount"
             style="@style/Interview_Complete_Screen_Statistics_Errors_Counter"
-            local:MvxBind="Text YesTitle; Visible IsError" />
+            local:MvxBind="Text Title; Visible IsError" />
     <TextView
             android:id="@+id/Complete_AnsweredCount"
             style="@style/Interview_Complete_Screen_Statistics_Counter"
-            local:MvxBind="Text NoTitle; Visibility InvertedVisibility(AllCount)" />
+            local:MvxBind="Text Title; Visibility InvertedVisibility(AllCount)" />
     
 </LinearLayout>

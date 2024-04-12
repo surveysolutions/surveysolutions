@@ -80,7 +80,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             })
             {
                 AllCount = this.AnsweredCount,
-                TitleResource = UIResources.Interview_Complete_Answered,
+                Title = UIResources.Interview_Complete_Answered + ": " + AnsweredCount,
                 GroupContent = CompleteGroupContent.Answered,
             };
             this.UnansweredCount = questionsCount - this.AnsweredCount;
@@ -90,20 +90,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             })
             {
                 AllCount = this.UnansweredCount,
-                TitleResource = UIResources.Interview_Complete_Unanswered,
+                Title = UIResources.Interview_Complete_Unanswered + ": " + UnansweredCount,
                 GroupContent = CompleteGroupContent.Unanswered,
             };
 
             this.ErrorsCount = InterviewState.InvalidAnswersCount;
             this.EntitiesWithErrors = this.entitiesListViewModelFactory.GetEntitiesWithErrors(interviewId, navigationState).ToList();
+            this.EntitiesWithErrorsDescription = EntitiesWithErrors.Count < this.ErrorsCount
+                ? string.Format(UIResources.Interview_Complete_First_n_Entities_With_Errors,
+                    this.entitiesListViewModelFactory.MaxNumberOfEntities)
+                : UIResources.Interview_Complete_Entities_With_Errors;
             if (this.EntitiesWithErrors.Count == 0)
             {
-                this.EntitiesWithErrors.Add(EntityWithErrorsViewModel.InitTitle(ErrorsCount + " " + UIResources.Interview_Complete_Errors));
+                //this.EntitiesWithErrors.Add(EntityWithErrorsViewModel.InitTitle());
             }
             var errorsGroup = new CompleteGroup(EntitiesWithErrors)
             {
                 AllCount = this.ErrorsCount,
-                TitleResource = UIResources.Interview_Complete_Errors,
+                Title = this.EntitiesWithErrorsDescription,
                 GroupContent = CompleteGroupContent.Error,
             };
 
@@ -117,10 +121,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 errorsGroup,
             };
 
-            this.EntitiesWithErrorsDescription = EntitiesWithErrors.Count < this.ErrorsCount
-                ? string.Format(UIResources.Interview_Complete_First_n_Entities_With_Errors,
-                    this.entitiesListViewModelFactory.MaxNumberOfEntities)
-                : UIResources.Interview_Complete_Entities_With_Errors;
 
             this.Comment = lastCompletionComments.Get(this.interviewId);
             this.CommentLabel = UIResources.Interview_Complete_Note_For_Supervisor;
@@ -141,7 +141,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var unansweredCriticalQuestionsGroup = new CompleteGroup(UnansweredCriticalQuestions)
             {
                 AllCount = this.UnansweredCriticalQuestions.Count,
-                TitleResource = UIResources.Interview_Complete_CriticalUnanswered,
+                Title= string.Format(UIResources.Interview_Complete_CriticalUnanswered, this.UnansweredCriticalQuestions.Count),
                 GroupContent = CompleteGroupContent.Error,
             };
             CompleteGroups.Insert(2, unansweredCriticalQuestionsGroup);
@@ -152,7 +152,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var failCriticalityConditionsGroup = new CompleteGroup(results)
             {
                 AllCount = this.FailCriticalityConditions.Count,
-                TitleResource = UIResources.Interview_Complete_FailCriticalConditions,
+                Title = string.Format(UIResources.Interview_Complete_FailCriticalConditions, this.FailCriticalityConditions.Count),
                 GroupContent = CompleteGroupContent.Error,
             };
             CompleteGroups.Insert(3, failCriticalityConditionsGroup);
@@ -182,13 +182,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
             }
 
-            public string TitleResource { get; set; }
             public int AllCount { get; set; }
             public CompleteGroupContent GroupContent { get; set; }
             
-            public string YesTitle => TitleResource + ": " + AllCount;
-            public string NoTitle =>  TitleResource + ": " + UIResources.Interview_Complete_No;
-
+            public string Title { get; set; }
             public bool IsError => GroupContent == CompleteGroupContent.Error && AllCount > 0;
             public bool IsAnswered => GroupContent == CompleteGroupContent.Answered && AllCount > 0;
             public bool IsUnanswered => GroupContent == CompleteGroupContent.Unanswered && AllCount > 0;
