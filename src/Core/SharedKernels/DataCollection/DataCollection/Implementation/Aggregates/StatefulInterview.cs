@@ -1077,6 +1077,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return questions.Select(q => q.Identity);
         }
 
+        public bool HasCriticalFeature()
+        {
+            var questionnaire = GetQuestionnaireOrThrow();
+            return questionnaire.IsExistsCriticality();
+        }
+
         private void Apply(InterviewPaused @event)
         {
             this.properties.LastPaused = @event.OriginDate;

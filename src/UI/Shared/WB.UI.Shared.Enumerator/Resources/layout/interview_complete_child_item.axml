@@ -3,8 +3,13 @@
      xmlns:local="http://schemas.android.com/apk/res-auto"
     style="@style/VerticalFullWidthWrappingLayout" android:orientation="vertical" clickable="true" local:MvxBind="Click NavigateToSectionCommand;">
   <TextView
+           style="@style/Interview_Complete_Screen_Statistics_Label"  
+           android:layout_marginTop="@dimen/Interview_Entity_Title_margin_vertical"
+           android:layout_marginLeft="40dp"
+           local:MvxBind="Html EntityTitle; Visible Not(IsError)" />
+  <TextView
            style="@style/Interview_Complete_Screen_Statistics_Errors_Label"  
            android:layout_marginTop="@dimen/Interview_Entity_Title_margin_vertical"
-           android:layout_marginLeft="30dp"
-           local:MvxBind="Html EntityTitle" />
+           android:layout_marginLeft="40dp"
+           local:MvxBind="Html EntityTitle; Visible IsError" />
 </LinearLayout>

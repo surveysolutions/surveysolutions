@@ -11,5 +11,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         IEnumerable<EntityWithErrorsViewModel> GetUnansweredCriticalQuestions(string interviewId, NavigationState navigationState);
         IEnumerable<FailCriticalityConditionViewModel> RunAndGetFailCriticalityConditions(string interviewId, NavigationState navigationState);
         int MaxNumberOfEntities { get; }
+        bool HasCriticalFeature(string interviewId);
     }
 }

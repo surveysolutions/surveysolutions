@@ -332,6 +332,12 @@
   <data name="Interview_Complete_Errors" xml:space="preserve">
     <value>Ошибок</value>
   </data>
+  <data name="Interview_Complete_CriticalUnanswered" xml:space="preserve">
+    <value>Критичных не отвеченных вопросов</value>
+  </data>
+  <data name="Interview_Complete_FailCriticalConditions" xml:space="preserve">
+    <value>Не выполненных критических условий</value>
+  </data>
   <data name="Interview_Complete_No" xml:space="preserve">
     <value>Нет</value>
   </data>
@@ -340,6 +346,9 @@
   </data>
   <data name="Interview_Complete_Questions_Status" xml:space="preserve">
     <value>Статусы вопросов</value>
+  </data>
+  <data name="Interview_Complete_Interview_Status" xml:space="preserve">
+    <value>Статус интервью</value>
   </data>
   <data name="Interview_Complete_Unanswered" xml:space="preserve">
     <value>Неотвеченных</value>

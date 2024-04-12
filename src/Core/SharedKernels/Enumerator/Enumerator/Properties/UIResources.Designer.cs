@@ -525,6 +525,18 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string Interview_Complete_CriticalUnanswered {
+            get {
+                return ResourceManager.GetString("Interview_Complete_CriticalUnanswered", resourceCulture);
+            }
+        }
+        
+        public static string Interview_Complete_FailCriticalConditions {
+            get {
+                return ResourceManager.GetString("Interview_Complete_FailCriticalConditions", resourceCulture);
+            }
+        }
+        
         public static string Interview_Complete_No {
             get {
                 return ResourceManager.GetString("Interview_Complete_No", resourceCulture);
@@ -540,6 +552,12 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Interview_Complete_Questions_Status {
             get {
                 return ResourceManager.GetString("Interview_Complete_Questions_Status", resourceCulture);
+            }
+        }
+        
+        public static string Interview_Complete_Interview_Status {
+            get {
+                return ResourceManager.GetString("Interview_Complete_Interview_Status", resourceCulture);
             }
         }
         

@@ -1,31 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
      xmlns:local="http://schemas.android.com/apk/res-auto"
-    style="@style/VerticalFullWidthWrappingLayout" android:orientation="vertical">
+    style="@style/VerticalFullWidthWrappingLayout"
+              android:background="@color/complete_screen_statistics_group_background"
+              android:orientation="vertical">
     
     <View style="@style/Interview_Entity_Divider" />
 
-        <LinearLayout style="@style/FullWidthWrappingLayout"
-                      android:orientation="horizontal"
-                      android:layout_marginLeft="30dp"
-                      local:MvxBind="Visibility Visibility(AllCount)"  
-                      >
-            <TextView
-                    android:layout_height="match_parent"
-                    android:layout_width="wrap_content"
-                    android:id="@+id/Complete_AnsweredCount"
-                    style="@style/Interview_Complete_Screen_Statistics_Answered_Counter"
-                    local:MvxBind="Text YesTitle" />
-        </LinearLayout>
-        <LinearLayout style="@style/FullWidthWrappingLayout"
-                      android:orientation="horizontal"
-                      android:layout_marginLeft="30dp"
-                      local:MvxBind="Visibility InvertedVisibility(AllCount)" 
-                      >
-            <TextView style="@style/Interview_Complete_Screen_Statistics_Counter"
-                      android:layout_height="match_parent"
-                      android:layout_width="wrap_content"
-                      local:MvxBind="Text NoTitle" />
-        </LinearLayout>
+    <LinearLayout style="@style/FullWidthWrappingLayout"
+                  android:layout_marginLeft="40dp"
+                  local:MvxBind="Visibility Visibility(AllCount)"  
+                  >
+        <TextView
+                android:id="@+id/Complete_AnsweredCount"
+                style="@style/Interview_Complete_Screen_Statistics_Answered_Counter"
+                local:MvxBind="Text YesTitle" />
+    </LinearLayout>
+    <LinearLayout style="@style/FullWidthWrappingLayout"
+                  android:layout_marginLeft="40dp"
+                  local:MvxBind="Visibility InvertedVisibility(AllCount)" 
+                  >
+        <TextView style="@style/Interview_Complete_Screen_Statistics_Counter"
+                  local:MvxBind="Text NoTitle" />
+    </LinearLayout>
     
 </LinearLayout>

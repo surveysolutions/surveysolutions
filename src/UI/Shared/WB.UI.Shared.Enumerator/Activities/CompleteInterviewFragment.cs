@@ -13,7 +13,7 @@ namespace WB.UI.Shared.Enumerator.Activities
     {
         protected override int ViewResourceId => Resource.Layout.interview_complete;
 
-        public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+        /*public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             this.EnsureBindingContextIsSet(inflater);
             //base.OnCreateView(inflater, container, savedInstanceState);
@@ -27,9 +27,9 @@ namespace WB.UI.Shared.Enumerator.Activities
             /*var itemsSource = expandableListView.ItemsSource;
             expandableListView.SetAdapter(adapter);
             expandableListView.ItemsSource = itemsSource;
-            */
+            #1#
 
             return view;
-        }
+        }*/
     }
 }

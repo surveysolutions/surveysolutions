@@ -15,17 +15,35 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.navigationState = navigationState;
             this.entityIdentity = entityIdentity;
             this.entityTitle = entityTitle;
+            this.IsError = true;
         }
 
         private NavigationState navigationState;
 
         private string entityTitle;
         public string EntityTitle => this.entityTitle;
+        
+        public bool IsError { get; private set; }
 
         private NavigationIdentity entityIdentity;
 
         public IMvxCommand NavigateToSectionCommand => 
-            new MvxAsyncCommand(async ()=> await this.navigationState.NavigateTo(this.entityIdentity));
+            new MvxAsyncCommand(async ()=> await this.navigationState.NavigateTo(this.entityIdentity), () => entityIdentity != null);
+
+        public static EntityWithErrorsViewModel InitTitle(string title)
+        {
+            var viewModel = new EntityWithErrorsViewModel();
+            viewModel.Init(null, title, null);
+            viewModel.IsError = false;
+            return viewModel;
+        }
+
+        public static EntityWithErrorsViewModel InitError(string title)
+        {
+            var viewModel = new EntityWithErrorsViewModel();
+            viewModel.Init(null, title, null);
+            return viewModel;
+        }
     }
 
     public class EntityWithCommentsViewModel : EntityWithErrorsViewModel

@@ -62,8 +62,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         protected Guid interviewId;
 
-        public virtual void Configure(string interviewId,
-            NavigationState navigationState)
+        public virtual void Configure(string interviewId, NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             this.interviewId = Guid.Parse(interviewId);
@@ -75,13 +74,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             var questionsCount = InterviewState.QuestionsCount;
             this.AnsweredCount = InterviewState.AnsweredQuestionsCount;
-            var answersGroup = new CompleteGroup()
+            var answersGroup = new CompleteGroup(new []
+            {
+                EntityWithErrorsViewModel.InitTitle(AnsweredCount + " " + UIResources.Interview_Complete_Answered)
+            })
             {
                 AllCount = this.AnsweredCount,
                 TitleResourceKey = UIResources.Interview_Complete_Answered,
             };
             this.UnansweredCount = questionsCount - this.AnsweredCount;
-            var unansweredGroup = new CompleteGroup()
+            var unansweredGroup = new CompleteGroup(new []
+            {
+                EntityWithErrorsViewModel.InitTitle(UnansweredCount + " " + UIResources.Interview_Complete_Unanswered)
+            })
             {
                 AllCount = this.UnansweredCount,
                 TitleResourceKey = UIResources.Interview_Complete_Unanswered,
@@ -89,30 +94,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.ErrorsCount = InterviewState.InvalidAnswersCount;
             this.EntitiesWithErrors = this.entitiesListViewModelFactory.GetEntitiesWithErrors(interviewId, navigationState).ToList();
+            if (this.EntitiesWithErrors.Count == 0)
+            {
+                this.EntitiesWithErrors.Add(EntityWithErrorsViewModel.InitTitle(ErrorsCount + " " + UIResources.Interview_Complete_Errors));
+            }
             var errorsGroup = new CompleteGroup(EntitiesWithErrors)
             {
                 AllCount = this.ErrorsCount,
                 TitleResourceKey = UIResources.Interview_Complete_Errors,
             };
-            this.UnansweredCriticalQuestions = this.entitiesListViewModelFactory.GetUnansweredCriticalQuestions(interviewId, navigationState).ToList();
-            var unansweredCriticalQuestionsGroup = new CompleteGroup(UnansweredCriticalQuestions)
-            {
-                AllCount = this.UnansweredCriticalQuestions.Count,
-                TitleResourceKey = UIResources.Interview_Complete_Errors,
-            };
-            this.FailCriticalityConditions = this.entitiesListViewModelFactory.RunAndGetFailCriticalityConditions(interviewId, navigationState).ToList();
-            var failCriticalityConditionsGroup = new CompleteGroup()
-            {
-                AllCount = this.FailCriticalityConditions.Count,
-                TitleResourceKey = UIResources.Interview_Complete_Errors,
-            };
 
-            this.CompleteGroups = new List<CompleteGroup>()
+
+            this.CompleteGroups = new MvxObservableCollection<CompleteGroup>()
             {
                 answersGroup,
                 unansweredGroup,
-                unansweredCriticalQuestionsGroup,
-                failCriticalityConditionsGroup,
+                //unansweredCriticalQuestionsGroup,
+                //failCriticalityConditionsGroup,
                 errorsGroup,
             };
 
@@ -124,19 +122,42 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.Comment = lastCompletionComments.Get(this.interviewId);
             this.CommentLabel = UIResources.Interview_Complete_Note_For_Supervisor;
 
-            Task.Run(() => CollectCriticalityInfo());
+            Task.Run(() => CollectCriticalityInfo(interviewId, navigationState));
+
         }
 
-        private Task CollectCriticalityInfo()
+        private Task CollectCriticalityInfo(string interviewId, NavigationState navigationState)
         {
-            /*var interview = interviewRepository.GetOrThrow(this.interviewId.FormatGuid());
-            var criticalQuestions = interview.GetAllUnansweredCriticalQuestions();
-            var failCriticalityConditions = interview.RunAndGetFailCriticalityConditions();*/
+            if (!this.entitiesListViewModelFactory.HasCriticalFeature(interviewId))
+            {
+                IsAllowToCompleteInterview = true;
+                return Task.CompletedTask;
+            }
+            
+            this.UnansweredCriticalQuestions = this.entitiesListViewModelFactory.GetUnansweredCriticalQuestions(interviewId, navigationState).ToList();
+            var unansweredCriticalQuestionsGroup = new CompleteGroup(UnansweredCriticalQuestions)
+            {
+                AllCount = this.UnansweredCriticalQuestions.Count,
+                TitleResourceKey = UIResources.Interview_Complete_CriticalUnanswered,
+            };
+            CompleteGroups.Insert(2, unansweredCriticalQuestionsGroup);
+            
+            this.FailCriticalityConditions = this.entitiesListViewModelFactory.RunAndGetFailCriticalityConditions(interviewId, navigationState).ToList();
+            var results = this.FailCriticalityConditions.Select(i =>
+                EntityWithErrorsViewModel.InitError(i.EntityTitle)).ToArray();
+            var failCriticalityConditionsGroup = new CompleteGroup(results)
+            {
+                AllCount = this.FailCriticalityConditions.Count,
+                TitleResourceKey = UIResources.Interview_Complete_FailCriticalConditions,
+            };
+            CompleteGroups.Insert(3, failCriticalityConditionsGroup);
+
+            IsAllowToCompleteInterview = UnansweredCriticalQuestionsCount > 0 || FailCriticalityConditionsCount > 0;
 
             return Task.CompletedTask;
         }
         
-        public List<CompleteGroup> CompleteGroups { get; set; }
+        public MvxObservableCollection<CompleteGroup> CompleteGroups { get; set; }
         
         public class CompleteGroup : MvxObservableCollection<EntityWithErrorsViewModel>
         {
@@ -151,8 +172,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             public string TitleResourceKey { get; set; }
             public int AllCount { get; set; }
             
-            public string YesTitle => AllCount + " " + TitleResourceKey;
-            public string NoTitle => UIResources.Interview_Complete_No + " " + TitleResourceKey;
+            public string YesTitle => TitleResourceKey + ": " + AllCount;
+            public string NoTitle =>  TitleResourceKey + ": " + UIResources.Interview_Complete_No;
         }
         
         public class CompleteItem: MvxViewModel
@@ -194,7 +215,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             get
             {
                 return this.completeInterviewCommand ??= new MvxAsyncCommand(async () =>
-                    await this.CompleteInterviewAsync(), () => !WasThisInterviewCompleted);
+                    await this.CompleteInterviewAsync(), () => !WasThisInterviewCompleted && IsAllowToCompleteInterview);
             }
         }
 
@@ -217,13 +238,31 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             set => this.RaiseAndSetIfChanged(ref this.wasThisInterviewCompleted, value);
         }
 
+        public bool IsAllowToCompleteInterview
+        {
+            get => isAllowToCompleteInterview;
+            set
+            {
+                if (value == isAllowToCompleteInterview) 
+                    return;
+                isAllowToCompleteInterview = value;
+                RaisePropertyChanged(() => IsAllowToCompleteInterview);
+                RaisePropertyChanged(() => CompleteInterviewCommand);
+            }
+        }
+
+
         private string comment;
         private bool requestWebInterview;
         private bool canSwitchToWebMode;
         private bool isDisposed;
+        private bool isAllowToCompleteInterview;
 
         private async Task CompleteInterviewAsync()
         {
+            if (!this.IsAllowToCompleteInterview)
+                return;
+            
             if (this.WasThisInterviewCompleted)
                 return;
 

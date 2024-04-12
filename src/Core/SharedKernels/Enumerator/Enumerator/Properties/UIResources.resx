@@ -359,6 +359,12 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Interview_Complete_Errors" xml:space="preserve">
     <value>Error(s)</value>
   </data>
+  <data name="Interview_Complete_CriticalUnanswered" xml:space="preserve">
+    <value>Critical unanswered question(s)</value>
+  </data>
+  <data name="Interview_Complete_FailCriticalConditions" xml:space="preserve">
+    <value>Fail critical condition(s)</value>
+  </data>
   <data name="Interview_Complete_No" xml:space="preserve">
     <value>No</value>
   </data>
@@ -367,6 +373,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   </data>
   <data name="Interview_Complete_Questions_Status" xml:space="preserve">
     <value>Questions status</value>
+  </data>
+  <data name="Interview_Complete_Interview_Status" xml:space="preserve">
+    <value>Interview status</value>
   </data>
   <data name="Interview_Complete_Unanswered" xml:space="preserve">
     <value>Unanswered</value>
