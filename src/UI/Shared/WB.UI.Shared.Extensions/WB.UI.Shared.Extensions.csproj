@@ -79,7 +79,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Esri.ArcGISRuntime.Android" Version="200.3.0" />
+    <PackageReference Include="Esri.ArcGISRuntime.Android" Version="200.4.0" />
     <PackageReference Include="Plugin.CurrentActivity">
       <Version>2.1.0.4</Version>
     </PackageReference>
