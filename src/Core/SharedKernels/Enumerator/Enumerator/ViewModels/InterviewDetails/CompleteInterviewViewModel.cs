@@ -80,7 +80,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             })
             {
                 AllCount = this.AnsweredCount,
-                TitleResourceKey = UIResources.Interview_Complete_Answered,
+                TitleResource = UIResources.Interview_Complete_Answered,
+                GroupContent = CompleteGroupContent.Answered,
             };
             this.UnansweredCount = questionsCount - this.AnsweredCount;
             var unansweredGroup = new CompleteGroup(new []
@@ -89,7 +90,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             })
             {
                 AllCount = this.UnansweredCount,
-                TitleResourceKey = UIResources.Interview_Complete_Unanswered,
+                TitleResource = UIResources.Interview_Complete_Unanswered,
+                GroupContent = CompleteGroupContent.Unanswered,
             };
 
             this.ErrorsCount = InterviewState.InvalidAnswersCount;
@@ -101,7 +103,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var errorsGroup = new CompleteGroup(EntitiesWithErrors)
             {
                 AllCount = this.ErrorsCount,
-                TitleResourceKey = UIResources.Interview_Complete_Errors,
+                TitleResource = UIResources.Interview_Complete_Errors,
+                GroupContent = CompleteGroupContent.Error,
             };
 
 
@@ -138,7 +141,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var unansweredCriticalQuestionsGroup = new CompleteGroup(UnansweredCriticalQuestions)
             {
                 AllCount = this.UnansweredCriticalQuestions.Count,
-                TitleResourceKey = UIResources.Interview_Complete_CriticalUnanswered,
+                TitleResource = UIResources.Interview_Complete_CriticalUnanswered,
+                GroupContent = CompleteGroupContent.Error,
             };
             CompleteGroups.Insert(2, unansweredCriticalQuestionsGroup);
             
@@ -148,7 +152,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var failCriticalityConditionsGroup = new CompleteGroup(results)
             {
                 AllCount = this.FailCriticalityConditions.Count,
-                TitleResourceKey = UIResources.Interview_Complete_FailCriticalConditions,
+                TitleResource = UIResources.Interview_Complete_FailCriticalConditions,
+                GroupContent = CompleteGroupContent.Error,
             };
             CompleteGroups.Insert(3, failCriticalityConditionsGroup);
 
@@ -158,6 +163,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         }
         
         public MvxObservableCollection<CompleteGroup> CompleteGroups { get; set; }
+
+        public enum CompleteGroupContent
+        {
+            Unknown,
+            Error,
+            Answered,
+            Unanswered,
+        }
         
         public class CompleteGroup : MvxObservableCollection<EntityWithErrorsViewModel>
         {
@@ -169,11 +182,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
             }
 
-            public string TitleResourceKey { get; set; }
+            public string TitleResource { get; set; }
             public int AllCount { get; set; }
+            public CompleteGroupContent GroupContent { get; set; }
             
-            public string YesTitle => TitleResourceKey + ": " + AllCount;
-            public string NoTitle =>  TitleResourceKey + ": " + UIResources.Interview_Complete_No;
+            public string YesTitle => TitleResource + ": " + AllCount;
+            public string NoTitle =>  TitleResource + ": " + UIResources.Interview_Complete_No;
+
+            public bool IsError => GroupContent == CompleteGroupContent.Error && AllCount > 0;
+            public bool IsAnswered => GroupContent == CompleteGroupContent.Answered && AllCount > 0;
+            public bool IsUnanswered => GroupContent == CompleteGroupContent.Unanswered && AllCount > 0;
         }
         
         public class CompleteItem: MvxViewModel

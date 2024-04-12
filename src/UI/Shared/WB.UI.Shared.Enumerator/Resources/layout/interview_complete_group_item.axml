@@ -7,21 +7,21 @@
     
     <View style="@style/Interview_Entity_Divider" />
 
-    <LinearLayout style="@style/FullWidthWrappingLayout"
-                  android:layout_marginLeft="40dp"
-                  local:MvxBind="Visibility Visibility(AllCount)"  
-                  >
-        <TextView
-                android:id="@+id/Complete_AnsweredCount"
-                style="@style/Interview_Complete_Screen_Statistics_Answered_Counter"
-                local:MvxBind="Text YesTitle" />
-    </LinearLayout>
-    <LinearLayout style="@style/FullWidthWrappingLayout"
-                  android:layout_marginLeft="40dp"
-                  local:MvxBind="Visibility InvertedVisibility(AllCount)" 
-                  >
-        <TextView style="@style/Interview_Complete_Screen_Statistics_Counter"
-                  local:MvxBind="Text NoTitle" />
-    </LinearLayout>
+    <TextView
+            android:id="@+id/Complete_AnsweredCount"
+            style="@style/Interview_Complete_Screen_Statistics_Answered_Counter"
+            local:MvxBind="Text YesTitle; Visible IsAnswered" />
+    <TextView
+            android:id="@+id/Complete_AnsweredCount"
+            style="@style/Interview_Complete_Screen_Statistics_Unanswered_Counter"
+            local:MvxBind="Text YesTitle; Visible IsUnanswered" />
+    <TextView
+            android:id="@+id/Complete_AnsweredCount"
+            style="@style/Interview_Complete_Screen_Statistics_Errors_Counter"
+            local:MvxBind="Text YesTitle; Visible IsError" />
+    <TextView
+            android:id="@+id/Complete_AnsweredCount"
+            style="@style/Interview_Complete_Screen_Statistics_Counter"
+            local:MvxBind="Text NoTitle; Visibility InvertedVisibility(AllCount)" />
     
 </LinearLayout>
