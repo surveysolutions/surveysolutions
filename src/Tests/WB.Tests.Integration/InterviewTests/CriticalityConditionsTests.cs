@@ -48,7 +48,7 @@ public class CriticalityConditionsTests: InterviewTestsContext
                 
                 return new
                 {
-                    FailCriticalityConditions = interview.RunAndGetFailCriticalityConditions()
+                    FailCriticalityConditions = interview.RunAndGetFailCriticalRules()
                 };
             }
         });

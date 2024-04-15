@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             using (var eventContext = new EventContext())
             {
                 // Act
-                interview.Complete(Guid.NewGuid(), string.Empty, DateTime.UtcNow);
+                interview.Complete(Guid.NewGuid(), string.Empty, DateTime.UtcNow, null);
 
                 // Assert
                 eventContext.ShouldContainEvent<InterviewDeclaredInvalid>();

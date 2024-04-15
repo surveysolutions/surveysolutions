@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         }
 
         private void BecauseOf() =>
-            interview.Complete(Guid.NewGuid(), string.Empty, DateTime.UtcNow);
+            interview.Complete(Guid.NewGuid(), string.Empty, DateTime.UtcNow, null);
 
         [NUnit.Framework.Test] public void should_raise_AnswersDeclaredInvalid_event () =>
             eventContext.ShouldContainEvent<AnswersDeclaredInvalid>();

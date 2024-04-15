@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
         public void should_allow_approve_and_reject_for_completed_interview()
         {
             var interview = Create.AggregateRoot.StatefulInterview(interviewId: InterviewId);
-            interview.Complete(Id.gA, "", DateTime.UtcNow);
+            interview.Complete(Id.gA, "", DateTime.UtcNow, null);
 
             var statefulInterviewRepository = Abc.SetUp.StatefulInterviewRepository(interview);
             var viewModel = CreateViewModel(interviewRepository: statefulInterviewRepository);
@@ -78,7 +78,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             var interview = Create.AggregateRoot.StatefulInterview(interviewId: InterviewId);
             var interviewKey = Create.Entity.InterviewKey(5);
             interview.Apply(Create.Event.InterviewKeyAssigned(interviewKey));
-            interview.Complete(Id.gA, "", DateTime.UtcNow);
+            interview.Complete(Id.gA, "", DateTime.UtcNow, null);
 
             var statefulInterviewRepository = Abc.SetUp.StatefulInterviewRepository(interview);
             var viewModel = CreateViewModel(interviewRepository: statefulInterviewRepository,
@@ -106,7 +106,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             var interview = Create.AggregateRoot.StatefulInterview(interviewId: InterviewId);
             var interviewKey = Create.Entity.InterviewKey(5);
             interview.Apply(Create.Event.InterviewKeyAssigned(interviewKey));
-            interview.Complete(Id.gA, "", DateTime.UtcNow);
+            interview.Complete(Id.gA, "", DateTime.UtcNow, null);
 
             var statefulInterviewRepository = Abc.SetUp.StatefulInterviewRepository(interview);
             var viewModel = CreateViewModel(interviewRepository: statefulInterviewRepository,
@@ -208,7 +208,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             var interview = Create.AggregateRoot.StatefulInterview(interviewId: InterviewId);
             var interviewKey = Create.Entity.InterviewKey(5);
             interview.Apply(Create.Event.InterviewKeyAssigned(interviewKey));
-            interview.Complete(Id.gA, "", DateTime.UtcNow);
+            interview.Complete(Id.gA, "", DateTime.UtcNow, null);
             interview.Reject(Id.gA, "", DateTime.UtcNow);
 
             var statefulInterviewRepository = Abc.SetUp.StatefulInterviewRepository(interview);

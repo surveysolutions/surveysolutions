@@ -124,7 +124,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             }
 
             var criticalityConditions = new List<CriticalityConditionCheck>();
-            var failCriticalityConditions = interview.RunAndGetFailCriticalityConditions().ToList();
+            var failCriticalityConditions = interview.RunAndGetFailCriticalRules().ToList();
             foreach (var conditionId in failCriticalityConditions)
             {
                 var message = interviewEntityFactory.GetCriticalityConditionMessage(conditionId, interview, questionnaire, IsReviewMode());

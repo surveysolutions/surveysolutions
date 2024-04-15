@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var userId = Id.gA;
 
             var interview = Create.AggregateRoot.StatefulInterview(Id.g1, userId: userId, questionnaire: Create.Entity.QuestionnaireDocumentWithOneChapter());
-            interview.Complete(userId, null, DateTime.Now);
+            interview.Complete(userId, null, DateTime.Now, null);
 
             using (var eventContext = new EventContext())
             {

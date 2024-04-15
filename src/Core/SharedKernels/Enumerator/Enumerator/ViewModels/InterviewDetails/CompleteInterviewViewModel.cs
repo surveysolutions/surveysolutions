@@ -293,7 +293,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             : new CompleteInterviewCommand(
                 interviewId: this.interviewId,
                 userId: this.principal.CurrentUserIdentity.UserId,
-                comment: this.Comment);
+                comment: this.Comment,
+                criticalLevel: CriticalLevel.Error);
 
             try
             {

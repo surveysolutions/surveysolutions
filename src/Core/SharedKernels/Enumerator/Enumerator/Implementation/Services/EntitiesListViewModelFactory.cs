@@ -55,7 +55,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         public IEnumerable<FailCriticalityConditionViewModel> RunAndGetFailCriticalityConditions(string interviewId, NavigationState navigationState)
         {
             IStatefulInterview interview = this.interviewRepository.GetOrThrow(interviewId);
-            Guid[] ids = interview.RunAndGetFailCriticalityConditions().Take(this.maxNumberOfEntities).ToArray();
+            Guid[] ids = interview.RunAndGetFailCriticalRules().Take(this.maxNumberOfEntities).ToArray();
            
             var criticalityConditions = new List<FailCriticalityConditionViewModel>();
             foreach (var id in ids)
