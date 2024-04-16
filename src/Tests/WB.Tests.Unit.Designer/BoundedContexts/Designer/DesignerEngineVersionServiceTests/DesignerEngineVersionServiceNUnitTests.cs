@@ -311,5 +311,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
             //aaa
             Assert.That(contentVersion, Is.EqualTo(34));
         }
+        
+        [Test]
+        public void should_return_36_when_zero_is_used_for_CountOfDecimalPlaces()
+        {
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(
+                Create.NumericRealQuestion(Id.g1, decimalPlaces: 0));
+            
+            var service = CreateDesignerEngineVersionService();
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+            
+            Assert.That(contentVersion, Is.EqualTo(36));
+        }
     }
 }

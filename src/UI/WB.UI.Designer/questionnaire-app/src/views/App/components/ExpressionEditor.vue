@@ -71,6 +71,7 @@ export default {
     },
     methods: {
         onModeChanged(e, session) {
+            var self = this;
             if (session.$mode.$id !== 'ace/mode/csharp') return;
 
             var rules = session.$mode.$highlightRules.getRules();
@@ -83,7 +84,6 @@ export default {
                     if (mapperRule == undefined || mapperRule == null)
                         continue;
                     else {
-
                         var lastUpdated = null;
                         var keywordMapper = null;
 
@@ -120,7 +120,7 @@ export default {
             session.off("changeMode", this.onModeChanged);
         },
         editorInit(editor) {
-            self = this;
+            var self = this;
             var renderer = editor.renderer;
 
             if (this.usePadding == true)
@@ -129,6 +129,12 @@ export default {
                 renderer.setPadding(0);
 
             editor.$blockScrolling = Infinity;
+
+            editor.commands.bindKey("ctrl+f", null);
+            editor.commands.bindKey("ctrl+h", null);
+            editor.commands.bindKey("ctrl+b", null);
+            editor.commands.bindKey("ctrl+s", null);
+
             editor.commands.bindKey("tab", null);
             editor.commands.bindKey("shift+tab", null);
 

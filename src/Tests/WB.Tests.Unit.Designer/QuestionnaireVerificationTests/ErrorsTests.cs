@@ -208,7 +208,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 })
                 .ExpectError("WB0129");
 
-        [TestCase(0)]
+        [TestCase(-1)]
         [TestCase(16)]
         public void real_question_with_decimal_places_not_in_range_1_15(int countOfDecimalPlaces)
             => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]

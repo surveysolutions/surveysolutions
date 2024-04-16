@@ -3,7 +3,7 @@
         <perfect-scrollbar class="scroller">
             <h3>
                 <span>{{ $t('QuestionnaireEditor.SideBarSectionsCounter', {
-                    count: questionnaire.chapters.length
+                    count: questionnaire?.chapters?.length || 0
                 }) }}</span>
             </h3>
             <ul ui-tree-nodes class="chapters-list angular-ui-tree-nodes">
@@ -19,12 +19,12 @@
                                     <a class="handler" ui-tree-handle
                                         v-if="!isReadOnlyForUser && !node.isCover"><span></span></a>
                                     <router-link class="chapter-panel-item-body" :id="node.itemId" :to="{
-                                        name: 'group',
-                                        params: {
-                                            chapterId: node.itemId,
-                                            entityId: node.itemId,
-                                        }
-                                    }">
+                    name: 'group',
+                    params: {
+                        chapterId: node.itemId,
+                        entityId: node.itemId,
+                    }
+                }">
                                         <span v-dompurify-html="node.title"></span>
                                         <span>&nbsp;</span>
                                         <help link="coverPage" v-if="node.isCover" />
@@ -47,11 +47,11 @@
                                         <a @click.self="pasteAfterChapter(node)"
                                             :disabled="!readyToPaste ? 'disabled' : null"
                                             v-if="!isReadOnlyForUser && !node.isReadOnly">{{
-                                                $t('QuestionnaireEditor.PasteAfter') }}</a>
+                    $t('QuestionnaireEditor.PasteAfter') }}</a>
                                     </li>
                                     <li><a @click.self="deleteChapter(node, stat)"
                                             v-if="!isReadOnlyForUser && !node.isCover">{{
-                                                $t('QuestionnaireEditor.Delete') }}</a></li>
+                    $t('QuestionnaireEditor.Delete') }}</a></li>
                                 </ul>
                             </div>
                         </li>
@@ -67,7 +67,7 @@
         </perfect-scrollbar>
     </div>
 </template>
-  
+
 <style lang="scss">
 .chapters {
     .drag-placeholder {
@@ -86,6 +86,7 @@ import { pasteItemAfter, canPaste, copyItem } from '../../../../services/copyPas
 import { Draggable, dragContext, walkTreeData } from '@he-tree/vue';
 import Help from '../Help.vue';
 import { moveGroup } from '../../../../services/questionnaireService';
+import { deleteGroup } from '../../../../services/groupService';
 
 export default {
     name: 'Chapters',
@@ -190,24 +191,19 @@ export default {
 
             params.callback = confirm => {
                 if (confirm) {
-                    this.questionnaireStore
-                        .deleteSection(itemIdToDelete)
-                        .then(response => {
-                            this.$refs.chapters.remove(stat);
+                    deleteGroup(this.questionnaireId, itemIdToDelete);
 
-                            if (this.isCurrentChapter(chapter)) {
-                                const cover = this.questionnaire.chapters[0];
-                                this.$router.push({
-                                    name: 'group',
-                                    params: {
-                                        chapterId: cover.itemId,
-                                        entityId: cover.itemId
-                                    }
-                                });
+                    if (this.isCurrentChapter(chapter)) {
+                        const cover = this.questionnaire.chapters[0];
+                        this.$router.push({
+                            name: 'group',
+                            params: {
+                                chapterId: cover.itemId,
+                                entityId: cover.itemId
                             }
-
-                            this.closePanel();
                         });
+                    }
+                    this.closePanel();
                 }
             };
 
@@ -243,4 +239,3 @@ export default {
     }
 }
 </script>
-  
