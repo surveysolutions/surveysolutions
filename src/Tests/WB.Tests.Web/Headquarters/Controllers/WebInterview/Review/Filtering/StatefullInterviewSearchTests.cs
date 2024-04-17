@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Enumerator.Native.WebInterview;
 using WB.Tests.Abc;
 
 using WB.UI.Headquarters.API.WebInterview;
@@ -74,7 +75,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
                 TextInRosterFlagged
             });
 
-            Subject = new StatefulInterviewSearcher(interviewFactory);
+            Subject = new StatefulInterviewSearcher(interviewFactory, Mock.Of<IWebInterviewInterviewEntityFactory>());
         }
 
         private static readonly Identity[] AllQuestions = {

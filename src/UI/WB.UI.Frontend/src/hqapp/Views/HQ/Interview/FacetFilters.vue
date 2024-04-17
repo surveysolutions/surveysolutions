@@ -29,10 +29,10 @@
                     @change="change" />
             </filters-block>
 
-            <filters-block separate>
+            <filters-block separate v-if="isExistsCriticality">
                 <filter-item option="CriticalQuestions" :title="$t('WebInterview.Filters_CriticalQuestions')"
                     @change="change" />
-                <filter-item option="CriticalRules" :title="$t('WebInterview.Filters_CriticalRules')" :resetOther="true"
+                <filter-item option="CriticalRules" :title="$t('WebInterview.Filters_CriticalRules')"
                     @change="change" />
             </filters-block>
 
@@ -52,13 +52,13 @@ import FilterItem from './components/FilterItem'
 
 export default {
     computed: {
-        state() {
-            return this.$store.getters.filteringState
-        },
+        isExistsCriticality() {
+            return this.$store.state.webinterview.isExistsCriticality != false
+        }
     },
     methods: {
-        change({ id, value, resetOther }) {
-            this.$store.dispatch('applyFiltering', { filter: id, value, resetOther })
+        change({ id, value }) {
+            this.$store.dispatch('applyFiltering', { filter: id, value })
             this.$store.dispatch('fetchSearchResults')
         },
 

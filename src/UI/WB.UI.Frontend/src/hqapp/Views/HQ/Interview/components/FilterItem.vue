@@ -18,11 +18,6 @@ export default {
             type: String,
             required: true,
         },
-        resetOther: {
-            type: Boolean,
-            default: false,
-            required: false,
-        },
     },
 
     data() {
@@ -43,7 +38,7 @@ export default {
 
     methods: {
         change() {
-            this.$emit('change', { id: this.option, value: this.value, resetOther: this.resetOther })
+            this.$emit('change', { id: this.option, value: this.value })
         },
     },
 
@@ -52,7 +47,7 @@ export default {
             return this.$store.state.review.filters.stats[this.option]
         },
         state() {
-            return this.$store.getters.filteringState[this.option]
+            return this.$store.getters.filteringState[this.option].value
         },
     },
 }

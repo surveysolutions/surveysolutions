@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.API.WebInterview;
 
 namespace WB.UI.Headquarters.Services.Impl
@@ -14,11 +16,12 @@ namespace WB.UI.Headquarters.Services.Impl
     public class StatefulInterviewSearcher : IStatefulInterviewSearcher
     {
         private readonly IInterviewFactory interviewFactory;
+        private readonly IWebInterviewInterviewEntityFactory webNavigationService;
 
-        public StatefulInterviewSearcher(IInterviewFactory interviewFactory)
+        public StatefulInterviewSearcher(IInterviewFactory interviewFactory, IWebInterviewInterviewEntityFactory webNavigationService)
         {
             this.interviewFactory = interviewFactory;
-
+            this.webNavigationService = webNavigationService;
         }
 
         public SearchResults Search(IStatefulInterview interview, IQuestionnaire questionnaire, FilterOption[] flags, int skip, int take)
@@ -103,14 +106,46 @@ namespace WB.UI.Headquarters.Services.Impl
 
                     return null;
                 }
-
-                bool CanTake()
+            }
+            
+            foreach (var ruleId in nodesWithStats.Rules)
+            {
+                if (CanTake())
                 {
-                    if (skipped < skip) return false;
-                    if (taken < take) return true;
+                    if (currentResult != null)
+                    {
+                        results.Results.Add(currentResult);
+                    }
 
-                    return false;
+                    currentResult = new SearchResult
+                    {
+                        Id = searchResultId,
+                        SectionId = "critical-rules",
+                    };
+
+                    var message = webNavigationService.GetCriticalityConditionMessage(ruleId, interview, questionnaire, true);
+                    currentResult.Questions.Add(new Link
+                    {
+                        Target = ruleId.FormatGuid(),
+                        Title = message
+                    });
+
+                    taken++;
                 }
+                else
+                {
+                    skipped++;
+                }
+
+                total++;
+            }
+            
+            bool CanTake()
+            {
+                if (skipped < skip) return false;
+                if (taken < take) return true;
+
+                return false;
             }
 
             if (currentResult != null)

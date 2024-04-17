@@ -292,6 +292,12 @@
   <data name="Filters_NotFlagged" xml:space="preserve">
     <value>Без флага</value>
   </data>
+  <data name="Filters_CriticalQuestions" xml:space="preserve">
+    <value>Критические вопросы</value>
+  </data>
+  <data name="Filters_CriticalRules" xml:space="preserve">
+    <value>Критические правила</value>
+  </data>
   <data name="Filters_ClearSelection" xml:space="preserve">
     <value>Сбросить фильтры</value>
   </data>

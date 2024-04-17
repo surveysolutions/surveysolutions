@@ -298,6 +298,12 @@
   <data name="Filters_NotFlagged" xml:space="preserve">
     <value>No flag</value>
   </data>
+  <data name="Filters_CriticalQuestions" xml:space="preserve">
+    <value>Critical questions</value>
+  </data>
+  <data name="Filters_CriticalRules" xml:space="preserve">
+    <value>Critical rules</value>
+  </data>
   <data name="PoweredBy" xml:space="preserve">
     <value>Powered by</value>
   </data>
