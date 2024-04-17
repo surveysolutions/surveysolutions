@@ -160,4 +160,14 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
     {
         public List<QuestionnaireIdentity> Questionnaires { get; set; } = new List<QuestionnaireIdentity>();
     }
+    
+    public class GetQuestionnairesSettingsRequest: ICommunicationMessage { }
+
+    public class GetQuestionnairesSettingsResponse : ICommunicationMessage
+    {
+        public List<QuestionnaireIdentity> SwitchableToWeb { set; get; } = new List<QuestionnaireIdentity>();
+
+        public List<QuestionnaireCriticalityLevel> CriticalityLevel { set; get; } =
+            new List<QuestionnaireCriticalityLevel>();
+    }
 }

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
@@ -29,6 +30,9 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
 
         void StoreTranslations(QuestionnaireIdentity questionnaireIdentity, List<TranslationInstance> translationInstances);
 
+        //obsolete
         void UpdateQuestionnaireWebModeSwitch(List<QuestionnaireIdentity> enabledQuestionnaires);
+        
+        void UpdateQuestionnairesSettings(QuestionnairesSettingsApiView settings);
     }
 }

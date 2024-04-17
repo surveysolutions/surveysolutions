@@ -1,4 +1,4 @@
-﻿namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+﻿namespace WB.Core.SharedKernels.DataCollection.ValueObjects;
 
 public enum CriticalityLevel
 {

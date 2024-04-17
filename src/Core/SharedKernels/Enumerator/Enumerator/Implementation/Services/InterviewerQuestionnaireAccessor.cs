@@ -9,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -139,6 +140,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             foreach (var questionnaire in questionnaires)
             {
                 questionnaire.WebModeAllowed = enabledQuestionnaires.Contains(questionnaire.GetIdentity());
+            }
+            this.questionnaireViewRepository.Store(questionnaires);
+        }
+
+        public void UpdateQuestionnairesSettings(QuestionnairesSettingsApiView settings)
+        {
+            var questionnaires = this.questionnaireViewRepository.LoadAll();
+            foreach (var questionnaire in questionnaires)
+            {
+                questionnaire.WebModeAllowed = settings.SwitchableToWeb.Contains(questionnaire.GetIdentity());
+                questionnaire.CriticalityLevel = settings.CriticalityLevel.FirstOrDefault(x => x.Questionnaire == questionnaire.GetIdentity())?.CriticalityLevel;
             }
             this.questionnaireViewRepository.Store(questionnaires);
         }

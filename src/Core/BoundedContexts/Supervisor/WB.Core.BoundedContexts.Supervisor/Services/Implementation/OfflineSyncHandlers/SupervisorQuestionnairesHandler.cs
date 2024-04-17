@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -172,12 +173,39 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 .Where(x => x.WebModeAllowed == true)
                 .Select(x=>x.GetIdentity())
                 .Except(deleted)
-                
                 .ToList();
 
             return Task.FromResult(new GetQuestionnairesWebModeResponse
             {
                 Questionnaires = response
+            });
+        }
+        
+        public Task<GetQuestionnairesSettingsResponse> GetQuestionnairesSettings(GetQuestionnairesSettingsRequest arg)
+        {
+            var deleted = deletedQuestionnairesStorage.LoadAll()
+                .Select(q => QuestionnaireIdentity.Parse(q.Id))
+                .ToList();
+
+            var webMode = this.questionnaireViewRepository
+                .Where(x => x.WebModeAllowed == true)
+                .Select(x=>x.GetIdentity())
+                .Except(deleted)
+                .ToList();
+            
+            var criticalLevels = this.questionnaireViewRepository
+                .Where(x => x.CriticalityLevel != null)
+                .Select(x=> new QuestionnaireCriticalityLevel
+                {
+                    Questionnaire = x.GetIdentity(),
+                    CriticalityLevel = x.CriticalityLevel
+                })
+                .ToList();
+
+            return Task.FromResult(new GetQuestionnairesSettingsResponse
+            {
+                SwitchableToWeb = webMode,
+                CriticalityLevel = criticalLevels
             });
         }
     }

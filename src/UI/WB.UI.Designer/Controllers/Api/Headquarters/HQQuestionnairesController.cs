@@ -235,7 +235,8 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
                 Id = questionnaire.PublicKey,
                 Name = questionnaire.Title,
                 CreatedAt = listItem.CreationDate,
-                LastUpdatedAt = listItem.LastEntryDate
+                LastUpdatedAt = listItem.LastEntryDate,
+                HasCriticalityCheck = this.engineVersionService.DoesQuestionnaireSupportCriticality(questionnaireView.Source)
             };
 
             foreach (var questionnaireEntry in questionnaire.Source.Children.TreeToEnumerable(x => x.Children))

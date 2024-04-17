@@ -51,15 +51,37 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 
         public virtual ActionResult<List<QuestionnaireIdentity>> SwitchableToWeb()
         {
-            var questionnairesPermittedToSwitchToWebMode = questionnaireRepository
+            return GetSwitchableToWeb();
+        }
+
+        private List<QuestionnaireIdentity> GetSwitchableToWeb()
+        {
+            return questionnaireRepository
                 .Query(_ => _.Where(q => !q.Disabled)
                     .Select(w => w.Id)
                     .ToList()
                 ).Where(PermittedQuestionnaire)
                 .Select(QuestionnaireIdentity.Parse)
                 .ToList();
-
-            return questionnairesPermittedToSwitchToWebMode;
+        }
+        
+        public virtual ActionResult<QuestionnairesSettingsApiView> QuestionnairesSettings()
+        {
+            var criticalLevels = questionnaireRepository
+                .Query(_ => _.Where(q => !q.Disabled))
+                    .Select(x =>
+                        new QuestionnaireCriticalityLevel
+                        {
+                            Questionnaire = QuestionnaireIdentity.Parse(x.Id),
+                            CriticalityLevel = x.CriticalityLevel
+                    })
+                    .ToList();
+            
+            return new QuestionnairesSettingsApiView()
+            {
+                SwitchableToWeb = GetSwitchableToWeb(),
+                CriticalityLevel = criticalLevels
+            };
         }
 
         private bool PermittedQuestionnaire(string questionnaireId)
