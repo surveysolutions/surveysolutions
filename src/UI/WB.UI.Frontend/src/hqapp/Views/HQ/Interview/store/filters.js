@@ -23,6 +23,9 @@ export default {
 
             ForSupervisor: false,
             ForInterviewer: false,
+
+            CriticalQuestions: false,
+            CriticalRules: false,
         },
 
         stats: {
@@ -107,7 +110,13 @@ export default {
             state.search.skip = sum(state.search.results.map(r => r.questions.length))
         },
 
-        CHANGE_FILTERS(state, { filter, value }) {
+        CHANGE_FILTERS(state, { filter, value, resetOther }) {
+            if (resetOther === true) {
+                Object.keys(state.filter).forEach(key => {
+                    state.filter[key] = false
+                })
+            }
+
             state.filter[filter] = value
             state.search.needToClear = true
         },

@@ -141,6 +141,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.HasErrors = true;
         }
 
+        protected override void Apply(InterviewCriticalityChecked @event)
+        {
+            base.Apply(@event);
+            this.properties.FailedCriticalRules = @event.FailedCriticalRules;
+        }
+
         #endregion
 
         private InterviewTree sourceInterview;
@@ -178,7 +184,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         public bool HasErrors { get; private set; }
-
+        
         public bool IsCoverPageSupported() => GetQuestionnaireOrThrow().IsCoverPageSupported;
         public bool IsCompleted { get; private set; }
 
@@ -1110,6 +1116,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             var questionnaire = GetQuestionnaireOrThrow();
             return questionnaire.IsExistsCriticality();
+        }
+
+        public IEnumerable<Guid> GetFailedCriticalRules()
+        {
+            return this.properties.FailedCriticalRules;
         }
 
         private void Apply(InterviewPaused @event)

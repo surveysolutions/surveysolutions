@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -220,5 +221,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         
         string GetCriticalityConditionMessage(Guid criticalityConditionId);
         bool HasCriticalFeature();
+        IEnumerable<Guid> GetFailedCriticalRules();
     }
 }

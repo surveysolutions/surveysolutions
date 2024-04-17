@@ -125,7 +125,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         [Route("completeInterview")]
         public override IActionResult CompleteInterview(Guid interviewId, [FromBody]CompleteInterviewRequest completeInterviewRequest)
         {
-            CriticalLevel? criticalLevel = null;
+            CriticalLevel? criticalLevel = CriticalLevel.Warning;
             ICommand command = new CompleteInterviewCommand(interviewId, GetCommandResponsibleId(interviewId), completeInterviewRequest.Comment, criticalLevel);
             this.commandService.Execute(command);
             return Ok();
