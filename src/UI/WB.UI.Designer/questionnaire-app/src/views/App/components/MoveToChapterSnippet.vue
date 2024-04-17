@@ -48,7 +48,7 @@ export default {
     },
     computed: {
         currentChapterId() {
-            return this.currentChapter.chapter.itemId;
+            return (this.currentChapter.chapter || {}).itemId;
         }
     },
     methods: {

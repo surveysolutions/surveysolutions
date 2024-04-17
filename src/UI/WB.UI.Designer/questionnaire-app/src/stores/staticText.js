@@ -20,12 +20,12 @@ export const useStaticTextStore = defineStore('staticText', {
             emitter.on('staticTextDeleted', this.staticTextDeleted);
         },
         staticTextUpdated(payload) {
-            if ((this.staticText.id = payload.id)) {
+            if (this.staticText.id === payload.id) {
                 this.setStaticTextData(payload);
             }
         },
         staticTextDeleted(payload) {
-            if ((this.staticText.id = payload.id)) {
+            if (this.staticText.id === payload.id) {
                 this.clear();
             }
         },

@@ -372,20 +372,32 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             },
             new QuestionnaireContentVersion
             {
-                Version = ApiVersion.MaxQuestionnaireVersion,
+                Version = 35,
                 NewFeatures = new []
                 {
                     new QuestionnaireFeature
                     (
                         hasQuestionnaire: questionnaire => 
                             questionnaire.FirstOrDefault<IQuestion>(x => x.Properties?.IsCritical == true) != null,
-                        description: "Some question in questionnaire use criticality flag"
+                        description: "Some question in questionnaire is Critical"
                     ),
                     new QuestionnaireFeature
                     (
                         hasQuestionnaire: questionnaire => questionnaire.CriticalityConditions?.Count > 0,
-                        description: "This questionnaire use criticality conditions feature"
+                        description: "This questionnaire use Critical rules feature"
                     ),
+                }
+            },
+            new QuestionnaireContentVersion
+            {
+                Version = ApiVersion.MaxQuestionnaireVersion, 
+                NewFeatures = new []
+                {
+                    new QuestionnaireFeature
+                    (
+                        hasQuestionnaire : questionnaire => questionnaire.Find<NumericQuestion>(q => q is { IsInteger: false, CountOfDecimalPlaces: 0 } ).Any(),
+                        description : "Decimal question with zero decimal places"
+                    )
                 }
             },
         };

@@ -58,7 +58,7 @@ module.exports = class LocalizationBuilder {
 
             this.ensureDirectoryExistence(resultPath);
 
-            require('fs').writeFileSync(resultPath, fileBody);
+            fs.writeFileSync(resultPath, fileBody);
 
             response[language] = path
                 .join(folder, filename)
@@ -205,8 +205,6 @@ module.exports = class LocalizationBuilder {
 
     ensureDirectoryExistence(filePath) {
         var dirname = path.dirname(filePath);
-
-        const fs = require('fs');
 
         if (fs.existsSync(dirname)) {
             return true;

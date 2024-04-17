@@ -1,6 +1,6 @@
 <template>
-    <div class="section item" :class="itemClass" @mouseenter="is_highlighted = true" @mouseleave="is_highlighted = false"
-        v-contextmenu="'treeitem-context-menu-' + item.itemId">
+    <div class="section item" :class="itemClass" @mouseenter="is_highlighted = true"
+        @mouseleave="is_highlighted = false" v-contextmenu="'treeitem-context-menu-' + item.itemId">
         <span class="cursor"></span>
         <a class="handler angular-ui-tree-handle" ui-tree-handle></a>
 
@@ -11,55 +11,55 @@
                 <ul class="dropdown-menu" role="menu">
                     <li>
                         <a @click="addQuestion()" v-if="!questionnaire.isReadOnlyForUser &&
-                            !currentChapter.isReadOnly
-                            ">{{ isGroup()
+        !currentChapter.isReadOnly
+        ">{{ isGroup()
         ? $t('QuestionnaireEditor.TreeAddQuestion')
         : $t('QuestionnaireEditor.TreeAddQuestionAfter')
-    }}</a>
+                            }}</a>
                     </li>
                     <li>
                         <a @click="addGroup()" v-if="!questionnaire.isReadOnlyForUser &&
-                                !currentChapter.isReadOnly &&
-                                !currentChapter.isCover
-                                ">{{ isGroup()
-            ? $t('QuestionnaireEditor.TreeAddSection')
-            : $t('QuestionnaireEditor.TreeAddSectionAfter')
-        }}</a>
+        !currentChapter.isReadOnly &&
+        !currentChapter.isCover
+        ">{{ isGroup()
+        ? $t('QuestionnaireEditor.TreeAddSection')
+        : $t('QuestionnaireEditor.TreeAddSectionAfter')
+                            }}</a>
                     </li>
                     <li>
                         <a @click="addRoster()" v-if="!questionnaire.isReadOnlyForUser &&
-                                !currentChapter.isReadOnly &&
-                                !currentChapter.isCover
-                                ">{{ isGroup()
-            ? $t('QuestionnaireEditor.TreeAddRoster')
-            : $t('QuestionnaireEditor.TreeAddRosterAfter')
-        }}</a>
+        !currentChapter.isReadOnly &&
+        !currentChapter.isCover
+        ">{{ isGroup()
+        ? $t('QuestionnaireEditor.TreeAddRoster')
+        : $t('QuestionnaireEditor.TreeAddRosterAfter')
+                            }}</a>
                     </li>
                     <li>
                         <a @click="addStaticText()" v-if="!questionnaire.isReadOnlyForUser &&
-                                !currentChapter.isReadOnly
-                                ">{{ isGroup()
-            ? $t('QuestionnaireEditor.TreeAddStaticText')
-            : $t('QuestionnaireEditor.TreeAddStaticTextAfter')
-        }}</a>
+        !currentChapter.isReadOnly
+        ">{{ isGroup()
+        ? $t('QuestionnaireEditor.TreeAddStaticText')
+        : $t('QuestionnaireEditor.TreeAddStaticTextAfter')
+                            }}</a>
                     </li>
                     <li>
                         <a @click="addVariable()" v-if="!questionnaire.isReadOnlyForUser &&
-                                !currentChapter.isReadOnly
-                                ">{{ isGroup()
-            ? $t('QuestionnaireEditor.TreeAddVariable')
-            : $t('QuestionnaireEditor.TreeAddVariableAfter')
-        }}</a>
+        !currentChapter.isReadOnly
+        ">{{ isGroup()
+        ? $t('QuestionnaireEditor.TreeAddVariable')
+        : $t('QuestionnaireEditor.TreeAddVariableAfter')
+                            }}</a>
                     </li>
                     <li>
                         <a @click="copyItem()">{{
-                            $t('QuestionnaireEditor.Copy')
-                        }}</a>
+        $t('QuestionnaireEditor.Copy')
+    }}</a>
                     </li>
                     <li>
                         <a @click="pasteItemAfter()" :disabled="readyToPaste ? null : true" v-if="!questionnaire.isReadOnlyForUser &&
-                                !currentChapter.isReadOnly
-                                ">{{ $t('QuestionnaireEditor.PasteAfter') }}</a>
+        !currentChapter.isReadOnly
+        ">{{ $t('QuestionnaireEditor.PasteAfter') }}</a>
                     </li>
                     <li>
                         <a @click="deleteItem()" v-if="!questionnaire.isReadOnlyForUser &&
@@ -88,7 +88,10 @@ import { pasteItemAfter, canPaste, copyItem } from '../../../services/copyPasteS
 
 import { useQuestionnaireStore } from '../../../stores/questionnaire';
 import { useTreeStore } from '../../../stores/tree';
+
 import { useRosterStore } from '../../../stores/roster';
+import { deleteRoster } from '../../../services/rosterService';
+
 import { createQuestionForDeleteConfirmationPopup } from '../../../services/utilityService';
 
 import { addGroup } from '../../../services/groupService';
@@ -96,7 +99,6 @@ import { addQuestion } from '../../../services/questionService';
 import { addRoster } from '../../../services/rosterService';
 import { addStaticText } from '../../../services/staticTextService';
 import { addVariable } from '../../../services/variableService';
-
 
 export default {
     name: 'TreeItem',
@@ -245,7 +247,7 @@ export default {
             else if (this.item.itemType == 'Variable')
                 this.deleteVariable();
             else if (this.isGroup)
-                this.deleteGroup();
+                this.deleteGroupOrRoster();
         },
 
         deleteQuestion() {
@@ -305,9 +307,10 @@ export default {
             this.$confirm(params);
         },
 
-        deleteGroup() {
+        deleteGroupOrRoster() {
             var itemIdToDelete = this.item.itemId;
             var questionnaireId = this.questionnaire.questionnaireId;
+            var isRoster = this.item.isRoster;
 
             const params = createQuestionForDeleteConfirmationPopup(
                 this.item.title ||
@@ -316,7 +319,9 @@ export default {
 
             params.callback = confirm => {
                 if (confirm) {
-                    deleteGroup(questionnaireId, itemIdToDelete);
+                    isRoster
+                        ? deleteRoster(questionnaireId, itemIdToDelete)
+                        : deleteGroup(questionnaireId, itemIdToDelete);
                 }
             };
 

@@ -100,9 +100,9 @@ namespace WB.UI.Supervisor
             return new MvxIoCProviderWithParent(CreateIocOptions(),this.CreateAndInitializeIoc());
         }
 
-        protected override void InitializeApp(IMvxPluginManager pluginManager, IMvxApplication app)
+        protected override void InitializeApp(IMvxApplication app)
         {
-            base.InitializeApp(pluginManager, app);
+            base.InitializeApp(app);
 
             string appcenterKey = ApplicationContext.Resources.GetString(Resource.String.appcenter_key);
             if (!string.IsNullOrEmpty(appcenterKey))

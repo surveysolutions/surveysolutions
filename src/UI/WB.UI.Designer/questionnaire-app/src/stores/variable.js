@@ -19,12 +19,12 @@ export const useVariableStore = defineStore('variable', {
             emitter.on('variableDeleted', this.variableDeleted);
         },
         variableUpdated(payload) {
-            if ((this.variable.id = payload.id)) {
+            if (this.variable.id === payload.id) {
                 this.setVariableData(payload);
             }
         },
         variableDeleted(payload) {
-            if ((this.variable.id = payload.id)) {
+            if (this.variable.id === payload.id) {
                 this.clear();
             }
         },
