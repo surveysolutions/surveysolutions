@@ -27,6 +27,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public bool DoesBrokenPackageExist { get; set; }
         public long QuestionnaireVersion { get; set; }
         public bool IsExistsCriticality { get; set; }
+        public CriticalLevel CriticalityLevel { get; set; }
     }
 
     public class LanguageInfo

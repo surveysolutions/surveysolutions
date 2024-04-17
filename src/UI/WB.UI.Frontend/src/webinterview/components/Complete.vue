@@ -158,10 +158,18 @@ export default {
         isExistsCriticality() {
             return this.$store.state.webinterview.isExistsCriticality != false
         },
+        criticalityLevel() {
+            return this.$store.state.webinterview.criticalityLevel
+        },
         isAllowCompleteInterview() {
-            if (!this.isExistsCriticality)
-                return true;
-            return this.isReadyLastCriticalityInfo && this.criticalityInfo?.failCriticalQuestions?.length === 0 && this.criticalityInfo?.failCriticalityConditions?.length === 0
+            if (this.isExistsCriticality) {
+                if (this.criticalityLevel == 'Error') {
+                    return this.isReadyLastCriticalityInfo && this.criticalityInfo?.failCriticalQuestions?.length === 0 && this.criticalityInfo?.failCriticalityConditions?.length === 0
+                } else if (this.criticalityLevel == 'Warning') {
+                    return this.comment && this.comment.length > 0
+                }
+            }
+            return true;
         },
         shouldCloseWindow() {
             return this.$store.state.webinterview.interviewCompleted && this.$config.inWebTesterMode

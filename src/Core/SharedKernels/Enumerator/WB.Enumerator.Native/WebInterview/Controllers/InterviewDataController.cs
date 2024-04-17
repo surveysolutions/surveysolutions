@@ -100,7 +100,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 ReceivedByInterviewer = statefulInterview.ReceivedByInterviewer,
                 IsCurrentUserObserving = this.IsCurrentUserObserving(),
                 DoesBrokenPackageExist = false,
-                IsExistsCriticality =  questionnaire.IsExistsCriticality(),
+                IsExistsCriticality = questionnaire.IsExistsCriticality(),
+                CriticalityLevel = CriticalLevel.Warning,
             };
         }
         
