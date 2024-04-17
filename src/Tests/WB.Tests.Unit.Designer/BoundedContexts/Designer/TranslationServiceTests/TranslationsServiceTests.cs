@@ -638,22 +638,26 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         private static byte[] CreateExcelWithCategories(string categoriesName, string[][] data)
             => CreateExcel(new Dictionary<string, string[][]> {{$"@@@_{categoriesName}", data}});
 
-        private static byte[] CreateExcel(Dictionary<string,string[][]>  datas)
+        private const string NotoSansFontFamilyName = "Noto Sans";
+
+        private static byte[] CreateExcel(Dictionary<string, string[][]> datas)
         {
             var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
             
             using XLWorkbook package = new XLWorkbook(loadOptions);
+            package.Style.Font.FontName = FontsHelper.DefaultFontName;
 
             foreach (var data in datas)
             {
                 var worksheet = package.Worksheets.Add(data.Key);
 
                 for (var row = 0; row < data.Value.Length; row++)
-                for (var column = 0; column < data.Value[row].Length; column++)
-                {
-                    var value = data.Value[row][column];
-                    worksheet.Cell(row + 1, column + 1).SetValue(value);
-                }    
+                    for (var column = 0; column < data.Value[row].Length; column++)
+                    {
+                        var value = data.Value[row][column];
+                        worksheet.Cell(row + 1, column + 1).SetValue(value);
+                        worksheet.Cell(row + 1, column + 1).Style.Font.FontName = FontsHelper.DefaultFontName;
+                    }
             }
 
             using var stream = new MemoryStream();

@@ -348,7 +348,7 @@
                 </button>
                 <button type="button" v-if="!questionnaire.isReadOnlyForUser" id="edit-chapter-delete-button"
                     class="btn btn-lg btn-link" unsaved-warning-clear @click="deleteRoster()">{{
-        $t('QuestionnaireEditor.Delete') }}</button>
+                    $t('QuestionnaireEditor.Delete') }}</button>
                 <MoveToChapterSnippet :item-id="rosterId" :item-type="'Group'"
                     v-if="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly">
                 </MoveToChapterSnippet>
@@ -485,7 +485,7 @@ export default {
             this.useListAsRosterTitleEditor = true;
             this.stringifiedRosterTitlesValidity.valid = true;
 
-            this.showEnablingConditions = this.activeRoster.enablementCondition ? true : false;
+            this.showEnablingConditions = this.activeRoster?.enablementCondition ? true : false;
         },
         async saveRoster() {
             if (this.questionnaire.isReadOnlyForUser) return;

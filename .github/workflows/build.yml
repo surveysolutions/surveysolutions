@@ -12,7 +12,7 @@ on:
 env:
   REGISTRY: ghcr.io
   NODE_VERSION: 18
-  DOTNET_VERSION: '7.0.x'
+  DOTNET_VERSION: '8.0.x'
 
 jobs:
   prepare:
@@ -48,12 +48,13 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install Google Fonts
         run: |
-          wget -O Noto_Sans.zip https://fonts.google.com/download?family=Noto%20Sans
-          unzip -d noto_sans/ Noto_Sans.zip
-          mv noto_sans /usr/share/fonts/
+          #wget -O Noto_Sans.zip https://fonts.google.com/download?family=Noto%20Sans
+          #unzip -d noto_sans/ Noto_Sans.zip
+          #mv noto_sans /usr/share/fonts/
+          cp -r installer/src/SurveySolutionsProduct/Fonts/. /usr/share/fonts/
           fc-cache -fv      
       - name: Setup dotnet
-        uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
       - name: Headquarters unit tests
@@ -128,7 +129,7 @@ jobs:
         java-version: '11'
 
     - name: Setup .NET Core SDK
-      uses: actions/setup-dotnet@v2
+      uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
 
@@ -226,7 +227,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Setup dotnet
-        uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
@@ -307,7 +308,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v2
         with:
           name: Windows Installer
           path: ${{ steps.build-installer.outputs.filename }}

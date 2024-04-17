@@ -839,18 +839,18 @@
     <value>Questionnaire in old format. Please use "Generate cover" link on Cover section.</value>
   </data>
   <data name="WB0317_CriticalityIsNotAllowed" xml:space="preserve">
-    <value>Question may not require an answer if that question's scope is any of the following: hidden, supervisor.</value>
+    <value>Critical question's scope cannot be any of the following: hidden, supervisor.</value>
   </data>
   <data name="WB0318_CriticalityConditionExpressionHasIncorrectSyntax" xml:space="preserve">
-    <value>Criticality condition has a syntax error in expression.</value>
+    <value>Critical condition has a syntax error in expression.</value>
   </data>
   <data name="WB0319_CriticalityConditionExpressionIsEmpty" xml:space="preserve">
-    <value>Expression in criticality condition is empty.</value>
+    <value>Critical condition is empty.</value>
   </data>
   <data name="WB0320_CriticalityConditionExpressionIsEmpty" xml:space="preserve">
-    <value>Message in criticality condition is empty.</value>
+    <value>Message in critical rule is empty.</value>
   </data>
   <data name="WB0321_CriticalityConditionUsingForbiddenClasses" xml:space="preserve">
-    <value>Criticality condition is using forbidden type.</value>
+    <value>Critical condition is using forbidden type.</value>
   </data>
 </root>
