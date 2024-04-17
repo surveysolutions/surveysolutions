@@ -1076,6 +1076,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questions = base.GetNotAnsweredRequiredQuestions();
             return questions.Select(q => q.Identity);
         }
+        
+        public IEnumerable<Identity> GetAllUnansweredQuestions()
+        {
+            return this.Tree.FindQuestions()
+                .Where(question => !question.IsDisabled() && !question.IsAnswered() && !question.IsReadonly)
+                .Select(q => q.Identity);
+        }
 
         public bool HasCriticalFeature()
         {

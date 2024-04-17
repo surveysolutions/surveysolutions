@@ -2471,13 +2471,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questions = changedInterviewTree.AllNodes
                 .Where(n => n.NodeType == NodeType.Question)
                 .Cast<InterviewTreeQuestion>()
-                .Where(q => !q.IsDisabled());
-            
-            foreach (var question in questions)
-            {
-                if (questionnaire.IsCritical(question.Identity.Id) && !question.IsAnswered())
-                    yield return question;
-            }
+                .Where(question => !question.IsDisabled() 
+                            && !question.IsReadonly
+                            && !question.IsAnswered()
+                            && questionnaire.IsCritical(question.Identity.Id) 
+                            );
         }
         
         public string GetCriticalityConditionMessage(Guid criticalityConditionId)

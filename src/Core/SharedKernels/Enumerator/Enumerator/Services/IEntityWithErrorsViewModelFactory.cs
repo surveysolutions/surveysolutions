@@ -7,6 +7,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
     public interface IEntitiesListViewModelFactory
     {
         IEnumerable<EntityWithErrorsViewModel> GetEntitiesWithErrors(string interviewId, NavigationState navigationState);
+        IEnumerable<EntityWithErrorsViewModel> GetUnansweredQuestions(string interviewId, NavigationState navigationState);
         IEnumerable<EntityWithCommentsViewModel> GetEntitiesWithComments(string interviewId, NavigationState navigationState);
         IEnumerable<EntityWithErrorsViewModel> GetUnansweredCriticalQuestions(string interviewId, NavigationState navigationState);
         IEnumerable<FailCriticalityConditionViewModel> RunAndGetFailCriticalityConditions(string interviewId, NavigationState navigationState);

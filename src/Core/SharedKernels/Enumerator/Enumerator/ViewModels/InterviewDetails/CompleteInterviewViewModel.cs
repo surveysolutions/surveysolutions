@@ -74,20 +74,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             var questionsCount = InterviewState.QuestionsCount;
             this.AnsweredCount = InterviewState.AnsweredQuestionsCount;
-            var answersGroup = new CompleteGroup(new []
-            {
-                EntityWithErrorsViewModel.InitTitle(AnsweredCount + " " + UIResources.Interview_Complete_Answered)
-            })
-            {
-                AllCount = this.AnsweredCount,
-                Title = UIResources.Interview_Complete_Answered + ": " + AnsweredCount,
-                GroupContent = CompleteGroupContent.Answered,
-            };
+
             this.UnansweredCount = questionsCount - this.AnsweredCount;
-            var unansweredGroup = new CompleteGroup(new []
-            {
-                EntityWithErrorsViewModel.InitTitle(UnansweredCount + " " + UIResources.Interview_Complete_Unanswered)
-            })
+            var unansweredQuestions = this.entitiesListViewModelFactory.GetUnansweredQuestions(interviewId, navigationState).ToList();
+            var unansweredGroup = new CompleteGroup(unansweredQuestions)
             {
                 AllCount = this.UnansweredCount,
                 Title = UIResources.Interview_Complete_Unanswered + ": " + UnansweredCount,
@@ -99,34 +89,26 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.EntitiesWithErrorsDescription = EntitiesWithErrors.Count < this.ErrorsCount
                 ? string.Format(UIResources.Interview_Complete_First_n_Entities_With_Errors,
                     this.entitiesListViewModelFactory.MaxNumberOfEntities)
-                : UIResources.Interview_Complete_Entities_With_Errors;
-            if (this.EntitiesWithErrors.Count == 0)
-            {
-                //this.EntitiesWithErrors.Add(EntityWithErrorsViewModel.InitTitle());
-            }
+                : UIResources.Interview_Complete_Entities_With_Errors + " " + this.ErrorsCount;
             var errorsGroup = new CompleteGroup(EntitiesWithErrors)
             {
                 AllCount = this.ErrorsCount,
                 Title = this.EntitiesWithErrorsDescription,
                 GroupContent = CompleteGroupContent.Error,
             };
-
-
+            
             this.CompleteGroups = new MvxObservableCollection<CompleteGroup>()
             {
-                answersGroup,
-                unansweredGroup,
                 //unansweredCriticalQuestionsGroup,
                 //failCriticalityConditionsGroup,
+                unansweredGroup,
                 errorsGroup,
             };
-
 
             this.Comment = lastCompletionComments.Get(this.interviewId);
             this.CommentLabel = UIResources.Interview_Complete_Note_For_Supervisor;
 
             Task.Run(() => CollectCriticalityInfo(interviewId, navigationState));
-
         }
 
         private Task CollectCriticalityInfo(string interviewId, NavigationState navigationState)
@@ -144,18 +126,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 Title= string.Format(UIResources.Interview_Complete_CriticalUnanswered, this.UnansweredCriticalQuestions.Count),
                 GroupContent = CompleteGroupContent.Error,
             };
-            CompleteGroups.Insert(2, unansweredCriticalQuestionsGroup);
+            CompleteGroups.Insert(0, unansweredCriticalQuestionsGroup);
             
-            this.FailCriticalityConditions = this.entitiesListViewModelFactory.RunAndGetFailCriticalityConditions(interviewId, navigationState).ToList();
-            var results = this.FailCriticalityConditions.Select(i =>
+            this.FailedCriticalityRules = this.entitiesListViewModelFactory.RunAndGetFailCriticalityConditions(interviewId, navigationState).ToList();
+            var results = this.FailedCriticalityRules.Select(i =>
                 EntityWithErrorsViewModel.InitError(i.EntityTitle)).ToArray();
             var failCriticalityConditionsGroup = new CompleteGroup(results)
             {
-                AllCount = this.FailCriticalityConditions.Count,
-                Title = string.Format(UIResources.Interview_Complete_FailCriticalConditions, this.FailCriticalityConditions.Count),
+                AllCount = this.FailedCriticalityRules.Count,
+                Title = string.Format(UIResources.Interview_Complete_FailCriticalConditions, this.FailedCriticalityRules.Count),
                 GroupContent = CompleteGroupContent.Error,
             };
-            CompleteGroups.Insert(3, failCriticalityConditionsGroup);
+            CompleteGroups.Insert(1, failCriticalityConditionsGroup);
 
             IsAllowToCompleteInterview = UnansweredCriticalQuestionsCount > 0 || FailCriticalityConditionsCount > 0;
 
@@ -202,7 +184,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public int ErrorsCount { get; set; }
         public int UnansweredCriticalQuestionsCount => UnansweredCriticalQuestions.Count;
-        public int FailCriticalityConditionsCount => FailCriticalityConditions.Count;
+        public int FailCriticalityConditionsCount => FailedCriticalityRules.Count;
 
         public string EntitiesWithErrorsDescription { get; private set; }
 
@@ -222,7 +204,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public IList<EntityWithErrorsViewModel> EntitiesWithErrors { get; private set; }
         public IList<EntityWithErrorsViewModel> UnansweredCriticalQuestions { get; private set; }
-        public IList<FailCriticalityConditionViewModel> FailCriticalityConditions { get; private set; }
+        public IList<FailCriticalityConditionViewModel> FailedCriticalityRules { get; private set; }
 
         private IMvxAsyncCommand completeInterviewCommand;
         public IMvxAsyncCommand CompleteInterviewCommand
@@ -341,9 +323,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 }
             }
 
-            if (FailCriticalityConditions != null)
+            if (FailedCriticalityRules != null)
             {
-                var errors = FailCriticalityConditions.ToArray();
+                var errors = FailedCriticalityRules.ToArray();
                 foreach (var errorsViewModel in errors)
                 {
                     errorsViewModel?.DisposeIfDisposable();

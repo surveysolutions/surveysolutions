@@ -217,6 +217,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Guid> RunAndGetFailCriticalityConditions();
         
         IEnumerable<Identity> GetAllUnansweredCriticalQuestions();
+        IEnumerable<Identity> GetAllUnansweredQuestions();
         
         string GetCriticalityConditionMessage(Guid criticalityConditionId);
         bool HasCriticalFeature();
