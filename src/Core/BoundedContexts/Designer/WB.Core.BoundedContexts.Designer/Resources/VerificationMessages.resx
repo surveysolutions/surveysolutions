@@ -842,7 +842,7 @@
     <value>Critical question's scope cannot be any of the following: hidden, supervisor.</value>
   </data>
   <data name="WB0318_CriticalityConditionExpressionHasIncorrectSyntax" xml:space="preserve">
-    <value>Criticality condition has a syntax error in expression.</value>
+    <value>Critical condition has a syntax error in expression.</value>
   </data>
   <data name="WB0319_CriticalityConditionExpressionIsEmpty" xml:space="preserve">
     <value>Critical condition is empty.</value>
