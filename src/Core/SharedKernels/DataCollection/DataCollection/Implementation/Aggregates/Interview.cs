@@ -2476,6 +2476,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             && !question.IsAnswered()
                             && questionnaire.IsCritical(question.Identity.Id) 
                             );
+            return questions;
         }
         
         public string GetCriticalityConditionMessage(Guid criticalityConditionId)
