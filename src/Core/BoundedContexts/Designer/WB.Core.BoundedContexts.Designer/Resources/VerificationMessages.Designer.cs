@@ -2195,7 +2195,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Criticality condition has a syntax error in expression..
+        ///   Looks up a localized string similar to Critical condition has a syntax error in expression..
         /// </summary>
         public static string WB0318_CriticalityConditionExpressionHasIncorrectSyntax {
             get {

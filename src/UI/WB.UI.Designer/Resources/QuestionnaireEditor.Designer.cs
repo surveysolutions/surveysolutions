@@ -1168,7 +1168,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Condition of Critical rule..
+        ///   Looks up a localized string similar to A logical expression that evaluates the interview as a whole to determine whether it satisfies the critical rules (when this expression evaluates to &quot;True&quot;). It may refer to any questions or variables..
         /// </summary>
         public static string HelpCriticalityConditionExpression {
             get {
@@ -1177,7 +1177,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Critical rule message..
+        ///   Looks up a localized string similar to This message is shown when the critical condition evaluates to &quot;False&quot; or an exception occurs during expression evaluation. The message may utilize hyperlinks and text substitution..
         /// </summary>
         public static string HelpCriticalityConditionMessage {
             get {
@@ -3424,7 +3424,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Criticality condition.
+        ///   Looks up a localized string similar to Critical condition.
         /// </summary>
         public static string SideBarCriticalityConditionExpression {
             get {
