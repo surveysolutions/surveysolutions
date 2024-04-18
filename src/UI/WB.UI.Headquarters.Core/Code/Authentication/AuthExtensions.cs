@@ -62,7 +62,8 @@ namespace WB.UI.Headquarters.Code.Authentication
 
                 opt.ForwardDefaultSelector = ctx =>
                 {
-                    if (ctx.Request.Headers.ContainsKey(HeaderNames.Authorization))
+                    if (ctx.Request.Headers.ContainsKey(HeaderNames.Authorization) 
+                        && !string.IsNullOrEmpty(ctx.Request.Headers[HeaderNames.Authorization]))
                     {
                         AuthenticationHeaderValue authHeader =
                             AuthenticationHeaderValue.Parse(ctx.Request.Headers[HeaderNames.Authorization]);
