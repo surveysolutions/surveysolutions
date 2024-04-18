@@ -44,7 +44,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             ILastCompletionComments lastCompletionComments,
             InterviewStateViewModel interviewState,
             DynamicTextViewModel dynamicTextViewModel,
-            ILogger logger)
+            ILogger logger,
+            IUserInteractionService userInteractionService)
         {
             Messenger = Mvx.IoCProvider.GetSingleton<IMvxMessenger>();
             this.viewModelNavigationService = viewModelNavigationService;
@@ -56,9 +57,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.InterviewState = interviewState;
             this.Name = dynamicTextViewModel;
             this.logger = logger;
+            this.userInteractionService = userInteractionService;
         }
 
         protected readonly ILogger logger;
+        private readonly IUserInteractionService userInteractionService;
 
         protected Guid interviewId;
 
@@ -107,13 +110,30 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.Comment = lastCompletionComments.Get(this.interviewId);
             this.CommentLabel = UIResources.Interview_Complete_Note_For_Supervisor;
+            this.CompleteButtonComment = UIResources.Interview_Complete_Consequences_Instrunction;
 
             Task.Run(() => CollectCriticalityInfo(interviewId, navigationState));
         }
 
+        public enum CriticalityLevel
+        {
+            Ignore,
+            Warning,
+            Error
+        }
+        
+        CriticalityLevel criticalityLevel = CriticalityLevel.Warning;
+        
+        
         private Task CollectCriticalityInfo(string interviewId, NavigationState navigationState)
         {
             if (!this.entitiesListViewModelFactory.HasCriticalFeature(interviewId))
+            {
+                IsAllowToCompleteInterview = true;
+                return Task.CompletedTask;
+            }
+
+            if (criticalityLevel == CriticalityLevel.Ignore)
             {
                 IsAllowToCompleteInterview = true;
                 return Task.CompletedTask;
@@ -139,8 +159,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             };
             CompleteGroups.Insert(1, failCriticalityConditionsGroup);
 
-            IsAllowToCompleteInterview = UnansweredCriticalQuestionsCount > 0 || FailCriticalityConditionsCount > 0;
+            IsExistsCriticalityProblems = UnansweredCriticalQuestionsCount > 0 || FailCriticalityConditionsCount > 0;
+            IsAllowToCompleteInterview = criticalityLevel != CriticalityLevel.Error || !IsExistsCriticalityProblems;
 
+            if (criticalityLevel == CriticalityLevel.Warning)
+            {
+                this.IsAllowToCompleteInterview = !IsExistsCriticalityProblems || !string.IsNullOrWhiteSpace(Comment);
+                this.CommentLabel = UIResources.Interview_Complete_Note_For_Supervisor_with_Criticality;
+            }
+            else
+            {
+                this.CompleteButtonComment = UIResources.Interview_Complete_Consequences_Instrunction;
+                this.IsAllowToCompleteInterview = false;
+            }
+            
             return Task.CompletedTask;
         }
         
@@ -223,10 +255,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 comment = value;
                 this.lastCompletionComments.Store(this.interviewId, value);
+
+                if (IsExistsCriticalityProblems && criticalityLevel == CriticalityLevel.Warning)
+                {
+                    IsAllowToCompleteInterview = !string.IsNullOrWhiteSpace(Comment);
+                }
             }
         }
 
         public string CommentLabel { get; protected set; }
+        public string CompleteButtonComment { get; protected set; }
 
         private bool wasThisInterviewCompleted = false;
         public bool WasThisInterviewCompleted
@@ -248,12 +286,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
+        public bool IsExistsCriticalityProblems
+        {
+            get => isExistsCriticalityProblems;
+            set => SetProperty(ref isExistsCriticalityProblems, value);
+        }
+
 
         private string comment;
         private bool requestWebInterview;
         private bool canSwitchToWebMode;
         private bool isDisposed;
         private bool isAllowToCompleteInterview;
+        private bool isExistsCriticalityProblems;
 
         private async Task CompleteInterviewAsync()
         {
@@ -262,6 +307,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             
             if (this.WasThisInterviewCompleted)
                 return;
+
+            if (IsExistsCriticalityProblems)
+            {
+                var confirmResult = await userInteractionService.ConfirmAsync(UIResources.Interview_Complete_WithWarningCriticality,
+                    okButton: UIResources.Yes,
+                    cancelButton: UIResources.No);
+                
+                if (confirmResult == false)
+                    return;
+            }
 
             this.WasThisInterviewCompleted = true;
             await this.commandService.WaitPendingCommandsAsync();

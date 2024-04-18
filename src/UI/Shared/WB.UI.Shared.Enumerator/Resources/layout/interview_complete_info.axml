@@ -14,6 +14,12 @@
             <TextView style="@style/Interview_Complete_Screen_Text"
                       android:id="@+id/tv_Complete_Questions_Status"
                       local:MvxBind="Text Localization('Interview_Complete_Interview_Status')" />
+
+            <TextView
+                    style="@style/Interview_Complete_Screen_Text"
+                    android:id="@+id/tv_Complete_CriticalityNote"
+                    local:MvxBind="Text Localization('Interview_Complete_CriticalityIssuesDescription');
+                        Visible IsExistsCriticalityProblems" />
         </LinearLayout>
     </LinearLayout>
 
