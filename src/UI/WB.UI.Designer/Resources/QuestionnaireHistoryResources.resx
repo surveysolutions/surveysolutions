@@ -184,13 +184,13 @@
     <value>Categories {0} updated</value>
   </data>
   <data name="CriticalityCondition_Add" xml:space="preserve">
-    <value>Criticality condition {0} added</value>
+    <value>Critical condition {0} added</value>
   </data>
   <data name="CriticalityCondition_Delete" xml:space="preserve">
-    <value>Criticality condition {0} deleted</value>
+    <value>Critical condition {0} deleted</value>
   </data>
   <data name="CriticalityCondition_Update" xml:space="preserve">
-    <value>Criticality condition {0} updated</value>
+    <value>Critical condition {0} updated</value>
   </data>
   <data name="Translation_Delete" xml:space="preserve">
     <value>Translation {0} deleted</value>

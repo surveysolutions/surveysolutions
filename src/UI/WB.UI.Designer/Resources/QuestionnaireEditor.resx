@@ -290,7 +290,7 @@
     <value>add description</value>
   </data>
   <data name="SideBarCriticalityConditionExpression" xml:space="preserve">
-      <value>Criticality condition</value>
+      <value>Critical condition</value>
   </data>
   <data name="SideBarCriticalityConditionsCounter" xml:space="preserve">
       <value>{{count}} Critical rule:</value>
@@ -1650,9 +1650,9 @@ You entered an invalid input. Each line should follow the format: "Title...Paren
       <value>Questionnaire authors may indicate that the answer to a question is critical for interview submission.</value>
   </data>
   <data name="HelpCriticalityConditionExpression" xml:space="preserve">
-      <value>Condition of Critical rule.</value>
+      <value>A logical expression that evaluates the interview as a whole to determine whether it satisfies the critical rules (when this expression evaluates to "True"). It may refer to any questions or variables.</value>
   </data>
   <data name="HelpCriticalityConditionMessage" xml:space="preserve">
-      <value>Critical rule message.</value>
+      <value>This message is shown when the critical condition evaluates to "False" or an exception occurs during expression evaluation. The message may utilize hyperlinks and text substitution.</value>
   </data>
 </root>
