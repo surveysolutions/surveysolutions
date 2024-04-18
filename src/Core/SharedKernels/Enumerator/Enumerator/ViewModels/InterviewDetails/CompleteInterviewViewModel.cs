@@ -165,7 +165,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             if (criticalityLevel == CriticalityLevel.Warning)
             {
                 this.IsAllowToCompleteInterview = !IsExistsCriticalityProblems || !string.IsNullOrWhiteSpace(Comment);
-                this.CommentLabel = UIResources.Interview_Complete_Note_For_Supervisor_with_Criticality;
+                this.CompleteButtonComment = UIResources.Interview_Complete_Note_For_Supervisor_with_Criticality;
             }
             else
             {
