@@ -1806,13 +1806,16 @@
       <value>[вер. {1}] {0} </value>
   </data>
   <data name="Questionnaire_ChangeCriticalVerificationLevelTitle" xml:space="preserve">
-      <value>Смена уровня критических проверок</value>
+      <value>Установить действие при отправке</value>
   </data>
   <data name="Questionnaire_CriticalVerificationLevel" xml:space="preserve">
-      <value>Уровень критических проверок</value>
+      <value>Действие при отправке</value>
   </data>
   <data name="Questionnaire_ChangeCriticalityLevelExplanation" xml:space="preserve">
-      <value>Интервью, которое не проходит проверок в уровне Ошибка не будет разрешено к завершению </value>
+      <value>Выберете действие, при отправке интервью.
+	  Игнорировать - не проверять правила.
+	  Предупреждать - проверять правила и предупреждать пользователя.
+	  Блокировать - проверять и запрещать отправку, если не правила не выполнены</value>
   </data>
   <data name="Questionnaire_SupportCriticalVerifications" xml:space="preserve">
       <value>Критические проверки</value>
