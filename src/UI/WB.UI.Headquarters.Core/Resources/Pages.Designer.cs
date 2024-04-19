@@ -3867,18 +3867,6 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select what action should be done before the interview is submitted
-        ///        IGNORE - do not check any critical rules even when they are present.
-        ///        WARN - do check critical rules and warn the user before the interview is submitted.
-        ///        BLOCK - do check critical rules and prohibit submitting the interview when critical issues are present.
-        /// </summary>
-        public static string Questionnaire_ChangeCriticalityLevelExplanation {
-            get {
-                return ResourceManager.GetString("Questionnaire_ChangeCriticalityLevelExplanation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Set action at submission.
         /// </summary>
         public static string Questionnaire_ChangeCriticalVerificationLevelTitle {
@@ -3947,6 +3935,42 @@ namespace WB.UI.Headquarters.Resources {
         public static string Questionnaire_SectionsCount {
             get {
                 return ResourceManager.GetString("Questionnaire_SectionsCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select what action should be done before the interview is submitted.
+        /// </summary>
+        public static string Questionnaire_SetActionOnSubmissionExplanation {
+            get {
+                return ResourceManager.GetString("Questionnaire_SetActionOnSubmissionExplanation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to BLOCK - do check critical rules and prohibit submitting the interview when critical issues are present..
+        /// </summary>
+        public static string Questionnaire_SetActionOnSubmissionExplanationBlock {
+            get {
+                return ResourceManager.GetString("Questionnaire_SetActionOnSubmissionExplanationBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to IGNORE - do not check any critical rules even when they are present..
+        /// </summary>
+        public static string Questionnaire_SetActionOnSubmissionExplanationIgnore {
+            get {
+                return ResourceManager.GetString("Questionnaire_SetActionOnSubmissionExplanationIgnore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to WARN - do check critical rules and warn the user before the interview is submitted..
+        /// </summary>
+        public static string Questionnaire_SetActionOnSubmissionExplanationWarn {
+            get {
+                return ResourceManager.GetString("Questionnaire_SetActionOnSubmissionExplanationWarn", resourceCulture);
             }
         }
         

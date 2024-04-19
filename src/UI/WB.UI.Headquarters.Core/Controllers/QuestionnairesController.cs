@@ -106,8 +106,8 @@ namespace WB.UI.Headquarters.Controllers
                 CriticalityLevels = new[]
                 {
                     new ComboboxViewItem() { Key = ((int)CriticalityLevel.Ignore).ToString(), Value = CriticalityLevel.Ignore.ToString() },
-                    new ComboboxViewItem() { Key = ((int)CriticalityLevel.Warning).ToString(), Value = CriticalityLevel.Warning.ToString() },
-                    new ComboboxViewItem() { Key = ((int)CriticalityLevel.Error).ToString(), Value = CriticalityLevel.Error.ToString() },
+                    new ComboboxViewItem() { Key = ((int)CriticalityLevel.Warn).ToString(), Value = CriticalityLevel.Warn.ToString() },
+                    new ComboboxViewItem() { Key = ((int)CriticalityLevel.Block).ToString(), Value = CriticalityLevel.Block.ToString() },
                 },
                 IsObserving = this.authorizedUser.IsObserving,
                 DefaultLanguageName = questionnaire.DefaultLanguageName,

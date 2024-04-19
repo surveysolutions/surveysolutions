@@ -1752,10 +1752,16 @@
   <data name="Questionnaire_ChangeCriticalVerificationLevelTitle" xml:space="preserve">
       <value>Set action at submission</value>
   </data>
-  <data name="Questionnaire_ChangeCriticalityLevelExplanation" xml:space="preserve">
-      <value>Select what action should be done before the interview is submitted
-        IGNORE - do not check any critical rules even when they are present.
-        WARN - do check critical rules and warn the user before the interview is submitted.
-        BLOCK - do check critical rules and prohibit submitting the interview when critical issues are present</value>
+  <data name="Questionnaire_SetActionOnSubmissionExplanation" xml:space="preserve">
+      <value>Select what action should be done before the interview is submitted</value>
+  </data>
+    <data name="Questionnaire_SetActionOnSubmissionExplanationIgnore" xml:space="preserve">
+      <value>IGNORE - do not check any critical rules even when they are present.</value>
+  </data>
+    <data name="Questionnaire_SetActionOnSubmissionExplanationWarn" xml:space="preserve">
+      <value>WARN - do check critical rules and warn the user before the interview is submitted.</value>
+  </data>
+    <data name="Questionnaire_SetActionOnSubmissionExplanationBlock" xml:space="preserve">
+      <value>BLOCK - do check critical rules and prohibit submitting the interview when critical issues are present.</value>
   </data>
 </root>

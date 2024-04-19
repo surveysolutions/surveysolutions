@@ -222,7 +222,14 @@
 
             <ModalFrame ref="criticalityLevelModal"
                 :title="$t('Pages.Questionnaire_ChangeCriticalVerificationLevelTitle')">
-                <p>{{ $t('Pages.Questionnaire_ChangeCriticalityLevelExplanation') }}</p>
+
+                <div>
+                    <h3>{{ $t('Pages.Questionnaire_SetActionOnSubmissionExplanation') }}</h3>
+                    <p>{{ $t('Pages.Questionnaire_SetActionOnSubmissionExplanationIgnore') }}</p>
+                    <p>{{ $t('Pages.Questionnaire_SetActionOnSubmissionExplanationWarn') }}</p>
+                    <p>{{ $t('Pages.Questionnaire_SetActionOnSubmissionExplanationBlock') }}</p>
+                </div>
+
                 <form onsubmit="return false;">
                     <div class="form-group">
                         <Typeahead ref="criticalityLevel" control-id="criticalityLevel" no-clear

@@ -4,6 +4,6 @@ public enum CriticalityLevel
 {
     Unknown = 0,
     Ignore = 1,
-    Warning = 2,
-    Error = 3
+    Warn = 2,
+    Block = 3
 }
