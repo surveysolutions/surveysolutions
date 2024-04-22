@@ -2186,40 +2186,50 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question may not require an answer if that question&apos;s scope is any of the following: hidden, supervisor..
+        ///   Looks up a localized string similar to Critical question&apos;s scope cannot be any of the following: hidden, supervisor..
         /// </summary>
         public static string WB0317_CriticalityIsNotAllowed {
             get {
                 return ResourceManager.GetString("WB0317_CriticalityIsNotAllowed", resourceCulture);
             }
-        }        
-
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Critical condition has a syntax error in expression..
+        /// </summary>
         public static string WB0318_CriticalityConditionExpressionHasIncorrectSyntax {
             get {
                 return ResourceManager.GetString("WB0318_CriticalityConditionExpressionHasIncorrectSyntax", resourceCulture);
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to Critical condition is empty..
+        /// </summary>
         public static string WB0319_CriticalityConditionExpressionIsEmpty {
             get {
                 return ResourceManager.GetString("WB0319_CriticalityConditionExpressionIsEmpty", resourceCulture);
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to Message in critical rule is empty..
+        /// </summary>
         public static string WB0320_CriticalityConditionExpressionIsEmpty {
             get {
                 return ResourceManager.GetString("WB0320_CriticalityConditionExpressionIsEmpty", resourceCulture);
             }
         }
-
-        public static string WB0321_CriticalityConditionUsingForbiddenClasses
-        {
-            get
-            {
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Critical condition is using forbidden type..
+        /// </summary>
+        public static string WB0321_CriticalityConditionUsingForbiddenClasses {
+            get {
                 return ResourceManager.GetString("WB0321_CriticalityConditionUsingForbiddenClasses", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Only string variable type can be used as source of the attachment name.
         /// </summary>

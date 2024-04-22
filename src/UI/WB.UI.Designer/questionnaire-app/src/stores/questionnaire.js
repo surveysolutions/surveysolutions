@@ -8,7 +8,6 @@ import {
     findIndex,
     forEach,
     isEmpty,
-    map,
     filter,
     find,
     sortBy,
@@ -16,6 +15,8 @@ import {
     cloneDeep,
     isEqual
 } from 'lodash';
+
+import { addSectionGroup } from '../services/groupService';
 
 export const useQuestionnaireStore = defineStore('questionnaire', {
     state: () => ({
@@ -64,9 +65,17 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
 
             emitter.on('metadataUpdated', this.metadataUpdated);
 
+            emitter.on('questionAdded', this.questionAdded);
+            emitter.on('questionDeleted', this.questionDeleted);
+
+            emitter.on('chapterAdded', this.chapterAdded);
+
+            emitter.on('groupAdded', this.groupAdded);
             emitter.on('groupDeleted', this.groupDeleted);
             emitter.on('groupUpdated', this.groupUpdated);
 
+            emitter.on('rosterAdded', this.rosterAdded);
+            emitter.on('rosterDeleted', this.rosterDeleted);
             emitter.on('rosterUpdated', this.rosterUpdated);
 
             emitter.on('scenarioUpdated', this.scenarioUpdated);
@@ -243,14 +252,15 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
                 );
             }
         },
-        groupDeleted(event) {
-            var index = findIndex(this.info.chapters, function(i) {
-                return i.itemId === event.id.replaceAll('-', '');
-            });
 
-            if (index > -1) {
-                this.info.chapters.splice(index, 1);
-            }
+        chapterAdded(payload) {
+            this.info.groupsCount++;
+        },
+        groupAdded(payload) {
+            this.info.groupsCount++;
+        },
+        groupDeleted(event) {
+            this.fetchQuestionnaireInfo(this.info.questionnaireId);
         },
         groupUpdated(payload) {
             var index = findIndex(this.info.chapters, function(i) {
@@ -267,6 +277,12 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             }
         },
 
+        rosterAdded(payload) {
+            this.info.rostersCount++;
+        },
+        rosterDeleted(payload) {
+            this.fetchQuestionnaireInfo(this.info.questionnaireId);
+        },
         rosterUpdated(payload) {},
         attachmentDeleted(payload) {
             const index = findIndex(this.info.attachments, function(i) {
@@ -304,27 +320,13 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
         addSection(callback) {
             const section = this.createEmptySection();
 
-            var command = {
-                questionnaireId: this.info.questionnaireId,
-                groupId: section.itemId,
-                title: section.title,
-                condition: '',
-                hideIfDisabled: false,
-                isRoster: false,
-                rosterSizeQuestionId: null,
-                rosterSizeSource: 'Question',
-                rosterFixedTitles: null,
-                rosterTitleQuestionId: null,
-                parentGroupId: null,
-                variableName: null
-            };
-
-            return commandCall('AddGroup', command).then(result => {
-                const index = this.info.chapters.length;
-                this.info.chapters.splice(index, 0, section);
-                callback(section);
-                emitter.emit('chapterAdded');
-            });
+            return addSectionGroup(this.info.questionnaireId, section).then(
+                result => {
+                    const index = this.info.chapters.length;
+                    this.info.chapters.splice(index, 0, section);
+                    callback(section);
+                }
+            );
         },
         createEmptySection() {
             var newId = newGuid();
@@ -342,27 +344,6 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
                 rostersCount: 0
             };
             return emptySection;
-        },
-
-        deleteSection(chapterId) {
-            var command = {
-                questionnaireId: this.info.questionnaireId,
-                groupId: chapterId
-            };
-
-            return commandCall('DeleteGroup', command).then(result => {
-                const id = chapterId.replaceAll('-', '');
-
-                var index = findIndex(this.info.chapters, function(i) {
-                    return i.itemId === id;
-                });
-
-                this.info.chapters.splice(index, 1);
-
-                emitter.emit('chapterDeleted', {
-                    itemId: chapterId
-                });
-            });
         },
 
         categoriesUpdated(payload) {
@@ -391,6 +372,13 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             if (index !== -1) {
                 this.info.categories.splice(index, 1);
             }
+        },
+
+        questionAdded(payload) {
+            this.info.questionsCount++;
+        },
+        questionDeleted(payload) {
+            this.info.questionsCount--;
         },
 
         async discardMetadataChanges() {

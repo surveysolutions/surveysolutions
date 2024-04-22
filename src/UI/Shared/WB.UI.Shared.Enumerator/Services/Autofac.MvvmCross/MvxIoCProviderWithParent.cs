@@ -157,16 +157,6 @@ namespace WB.UI.Shared.Enumerator.Services.Autofac.MvvmCross
             return provider.IoCConstruct(type, arguments);
         }
 
-        public void CallbackWhenRegistered<T>(Action action)
-        {
-            provider.CallbackWhenRegistered<T>(action);
-        }
-
-        public void CallbackWhenRegistered(Type type, Action action)
-        {
-            provider.CallbackWhenRegistered(type, action);
-        }
-
         public void CleanAllResolvers()
         {
             provider.CleanAllResolvers();

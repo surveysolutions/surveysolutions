@@ -2,25 +2,23 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using MvvmCross;
 using MvvmCross.Commands;
-using MvvmCross.Plugin.WebBrowser;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
+using Xamarin.Essentials;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     public class BandwidthTestViewModel : MvxNotifyPropertyChanged
     {
-        private const int CountOfPingAttemps = 5;
+        private const int CountOfPingAttempts = 5;
 
         private readonly INetworkService networkService;
         private readonly IDeviceSettings deviceSettings;
         private readonly IRestService restService;
-        private readonly IMvxWebBrowserTask webBrowser;
 
         private bool isConnectionAbsent;
         private bool isBandwidthTested;
@@ -38,7 +36,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.networkService = networkService;
             this.deviceSettings = deviceSettings;
             this.restService = restService;
-            this.webBrowser = Mvx.IoCProvider.Resolve<IMvxWebBrowserTask>();
+
         }
 
         public bool IsConnectionAbsent
@@ -87,11 +85,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public IMvxAsyncCommand TestConnectionCommand => new MvxAsyncCommand(this.TestConnectionAsync, () => !string.IsNullOrEmpty(this.ServerUrl));
 
-        public IMvxCommand OpenSyncEndPointCommand => new MvxCommand(() =>
+        public IMvxCommand OpenSyncEndPointCommand => new MvxAsyncCommand(async () =>
         {
             if (Uri.TryCreate(this.deviceSettings.Endpoint, UriKind.Absolute, out Uri _))
             {
-                this.webBrowser.ShowWebPage(this.deviceSettings.Endpoint);
+                try
+                {
+                    await Browser.OpenAsync(this.deviceSettings.Endpoint, BrowserLaunchMode.SystemPreferred);
+                }
+                catch(Exception ex)
+                {
+                    // An unexpected error occured. No browser may be installed on the device.
+                    this.ConnectionDescription = ex.Message;
+                }
+                //this.webBrowser.ShowWebPage(this.deviceSettings.Endpoint);
             }
             else
             {
@@ -116,9 +123,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             this.IsInProgress = true;
             
-            var pingsInMilliseconds = new double[CountOfPingAttemps];
+            var pingsInMilliseconds = new double[CountOfPingAttempts];
             int countOfFailedPingAttemps = 0;
-            for (int pingIndex = 0; pingIndex < CountOfPingAttemps; pingIndex++)
+            for (int pingIndex = 0; pingIndex < CountOfPingAttempts; pingIndex++)
             {
                 try
                 {
@@ -142,7 +149,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.ConnectionType = this.networkService.GetNetworkType();
             this.NetworkName = this.networkService.GetNetworkName();
 
-            this.IsConnectionAbsent = countOfFailedPingAttemps == CountOfPingAttemps;
+            this.IsConnectionAbsent = countOfFailedPingAttemps == CountOfPingAttempts;
             this.ConnectionDescription = this.IsConnectionAbsent
                 ? this.ConnectionDescription =
                     EnumeratorUIResources.Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title

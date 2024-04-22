@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Configurations>Debug;Release;Debug-ESRI</Configurations>
   </PropertyGroup>
   <ItemGroup>
@@ -25,19 +25,19 @@
     <PackageReference Include="Iesi.Collections" Version="4.0.5" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Moq" Version="4.20.70" />
-    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="9.1.1" />
-    <PackageReference Include="NHibernate" Version="5.4.7" />
+    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="9.2.0" />
+    <PackageReference Include="NHibernate" Version="5.5.1" />
     <PackageReference Include="NSubstitute" Version="5.1.0" />
     <PackageReference Include="NUnit" Version="3.14.0" />
     <PackageReference Include="NUnit.Extension.NUnitProjectLoader" Version="3.7.1" />
     <PackageReference Include="NUnit.Extension.NUnitV2Driver" Version="3.9.0" />
     <PackageReference Include="NUnit.Extension.NUnitV2ResultWriter" Version="3.7.0" />
     <PackageReference Include="NUnit.Extension.TeamCityEventListener" Version="1.0.9" />
-    <PackageReference Include="Quartz" Version="3.8.0" />
+    <PackageReference Include="Quartz" Version="3.8.1" />
     <PackageReference Include="ReflectionMagic" Version="5.0.0" />
     <PackageReference Include="Remotion.Linq" Version="2.2.0" />
     <PackageReference Include="Remotion.Linq.EagerFetching" Version="2.2.0" />
     <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
-    <PackageReference Include="System.Collections.Immutable" Version="7.0.0" />
+    <PackageReference Include="System.Collections.Immutable" Version="8.0.0" />
   </ItemGroup>
 </Project>

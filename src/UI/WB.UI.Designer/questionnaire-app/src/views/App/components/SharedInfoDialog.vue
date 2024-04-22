@@ -20,12 +20,10 @@
                                 </a>
                             </li>
                             <li role="presentation" :class="{ active: !settings }">
-                                <a role="tab" data-toggle="tab" href="#shareTab" v-if="!questionnaire.isReadOnlyForUser ||
-            questionnaire.hasViewerAdminRights
-            " @click="togleTab(false)">
-                                    {{
-            $t('QuestionnaireEditor.AccessSettings')
-        }}
+                                <a role="tab" data-toggle="tab" href="#shareTab"
+                                    v-if="!questionnaire.isReadOnlyForUser || questionnaire.hasViewerAdminRights"
+                                    @click="togleTab(false)">
+                                    {{ $t('QuestionnaireEditor.AccessSettings') }}
                                 </a>
                             </li>
                         </ul>
@@ -72,11 +70,12 @@
                                             <button type="button" class="btn btn-lg update-button"
                                                 :class="{ 'btn-primary': dirty }" unsaved-warning-clear
                                                 v-if="!isReadOnlyForUser" :disabled="!dirty" @click="updateTitle()">
-                                                {{ $t('QuestionnaireEditor.Update') }}
+                                                {{ $t('QuestionnaireEditor.Save') }}
                                             </button>
                                             <button type="button" id="edit-chapter-cancel-button"
-                                                class="btn btn-lg btn-link" unsaved-warning-clear @click="cancel()">{{
-            $t('QuestionnaireEditor.Cancel') }}</button>
+                                                class="btn btn-lg btn-link" unsaved-warning-clear @click="cancel()">
+                                                {{ $t('QuestionnaireEditor.Cancel') }}
+                                            </button>
                                         </div>
 
                                     </div>
@@ -200,19 +199,17 @@
                                         </em>
                                         <br />
                                         <span>
-                                            {{
-            questionnaire.isAnonymouslyShared
-                ? $t('QuestionnaireEditor.SettingsStatusAllowAnonymousAccess')
-                : $t('QuestionnaireEditor.SettingsStatusDontAllowAnonymousAccess')
-        }}
+                                            {{ questionnaire.isAnonymouslyShared
+            ? $t('QuestionnaireEditor.SettingsStatusAllowAnonymousAccess')
+            : $t('QuestionnaireEditor.SettingsStatusDontAllowAnonymousAccess')
+                                            }}
                                         </span>
                                         <button v-if="isQuestionnaireOwner" class="btn btn-link answer"
                                             @click="updateAnonymousQuestionnaireSettings()">
-                                            {{
-            questionnaire.isAnonymouslyShared
-                ? $t('QuestionnaireEditor.SettingsTurnOffAnonymousAccess')
-                : $t('QuestionnaireEditor.SettingsTurnOnAnonymousAccess')
-        }}
+                                            {{ questionnaire.isAnonymouslyShared
+            ? $t('QuestionnaireEditor.SettingsTurnOffAnonymousAccess')
+            : $t('QuestionnaireEditor.SettingsTurnOnAnonymousAccess')
+                                            }}
                                         </button>
                                         <br />
                                         <div v-if="questionnaire.isAnonymouslyShared" class="row">
@@ -222,15 +219,14 @@
                                                 </div>
                                                 <a :href="getAnonymousQuestionnaireLink" style="word-break: break-word;"
                                                     title="link" onclick="return false;">
-                                                    {{
-            getAnonymousQuestionnaireLink
-        }}
+                                                    {{ getAnonymousQuestionnaireLink }}
                                                 </a>
                                                 <br />
                                                 <div>
-                                                    {{ $t('QuestionnaireEditor.AnonymousQuestionnaireGeneratedDate', {
-            datetime: anonymousQuestionnaireShareDate
-        })
+                                                    {{ $t('QuestionnaireEditor.AnonymousQuestionnaireGeneratedDate',
+            {
+                datetime: anonymousQuestionnaireShareDate
+            })
                                                     }}
                                                 </div>
                                                 <button class="btn btn-link answer" style="padding-left: 0px;"
@@ -252,10 +248,8 @@
                                         </div>
                                     </div>
 
-                                    <hr v-if="questionnaire.hasViewerAdminRights
-            " />
-                                    <div v-if="questionnaire.hasViewerAdminRights
-            ">
+                                    <hr v-if="questionnaire.hasViewerAdminRights" />
+                                    <div v-if="questionnaire.hasViewerAdminRights">
                                         <h2>
                                             {{ $t('QuestionnaireEditor.PublicAccessSettings') }}
                                         </h2>
@@ -264,16 +258,16 @@
                                         </em>
                                         <br />
                                         <span>
-                                            {{ questionnaire.isPublic ?
-            $t('QuestionnaireEditor.PublicAccessSettingsStatusOn') :
-            $t('QuestionnaireEditor.PublicAccessSettingsStatusOff') }}
+                                            {{ questionnaire.isPublic
+            ? $t('QuestionnaireEditor.PublicAccessSettingsStatusOn')
+            : $t('QuestionnaireEditor.PublicAccessSettingsStatusOff')
+                                            }}
                                         </span>
                                         <button class="btn btn-link answer" @click="togglePublicity()">
-                                            {{
-            questionnaire.isPublic
-                ? $t('QuestionnaireEditor.PublicAccessSettingsOff')
-                : $t('QuestionnaireEditor.PublicAccessSettingsOn')
-        }}
+                                            {{ questionnaire.isPublic
+                                            ? $t('QuestionnaireEditor.PublicAccessSettingsOff')
+                                            : $t('QuestionnaireEditor.PublicAccessSettingsOn')
+                                            }}
                                         </button>
                                     </div>
                                 </div>

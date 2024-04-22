@@ -33,7 +33,7 @@ export default defineConfig(({ mode, command }) => {
         base,
         plugins: [
             Vue(),
-            Vuetify({ autoImport: true }),
+            Vuetify({ autoImport: { labs: true } }),
             LocalizationPlugin({
                 noHash: true,
                 inline: true,

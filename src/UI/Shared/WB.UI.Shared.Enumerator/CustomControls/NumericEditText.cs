@@ -1,11 +1,9 @@
-using System;
 using System.Globalization;
 using Android.Content;
 using Android.Content.Res;
 using Android.Text;
 using Android.Text.Method;
 using Android.Util;
-using Android.Widget;
 using Java.Lang;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Utils;
@@ -44,8 +42,8 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             }
         }
 
-        private const int maxDigitsInDecimal = 28;
-        private const int maxFractionDigits = 15;
+        private const int MaxDigitsInDecimal = 28;
+        private const int MaxFractionDigits = 15;
 
         private int maxDigitsBeforeDecimal;
         /// <summary>
@@ -54,13 +52,13 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         /// <value>The maximum number of digits before the decimal point</value>
         public int MaxDigitsBeforeDecimal
         {
-            get { return this.maxDigitsBeforeDecimal; }
+            get => this.maxDigitsBeforeDecimal;
             set
             {
-                if (value + this.maxDigitsAfterDecimal > maxDigitsInDecimal)
+                if (value + (MaxDigitsAfterDecimal ?? 0)> MaxDigitsInDecimal)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(MaxDigitsAfterDecimal),
-                        $"Sum of digits before and after decimal seperator should be less than {maxDigitsInDecimal + 1}");
+                    throw new ArgumentOutOfRangeException(nameof(MaxDigitsBeforeDecimal),
+                        $"Sum of digits before and after decimal seperator should be less than {MaxDigitsInDecimal + 1}");
                 }
 
                 this.maxDigitsBeforeDecimal = value;
@@ -68,29 +66,26 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             }
         }
 
-        private int maxDigitsAfterDecimal;
+        private int? maxDigitsAfterDecimal;
 
         /// <summary>
         /// Gets or sets the maximum number of digits after the decimal point.
         /// </summary>
         /// <value>The maximum number of digits after the decimal point</value>
-        public int MaxDigitsAfterDecimal
+        public int? MaxDigitsAfterDecimal
         {
-            get
-            {
-                return this.maxDigitsAfterDecimal;
-            }
+            get => this.maxDigitsAfterDecimal;
             set
             {
-                if (value > maxFractionDigits)
+                if (value > MaxFractionDigits)
                 {
                     throw new ArgumentOutOfRangeException(nameof(MaxDigitsAfterDecimal),
-                        $"Number of digits after decimal seperator should be less than {maxFractionDigits + 1}");
+                        $"Number of digits after decimal seperator should be less than {MaxFractionDigits + 1}");
                 }
-                if (value + this.maxDigitsBeforeDecimal > maxDigitsInDecimal)
+                if (value.HasValue && value.Value + this.maxDigitsBeforeDecimal > MaxDigitsInDecimal)
                 {
                     throw new ArgumentOutOfRangeException(nameof(MaxDigitsAfterDecimal),
-                        $"Sum of digits before and after decimal seperator should be less than {maxDigitsInDecimal + 1}");
+                        $"Sum of digits before and after decimal seperator should be less than {MaxDigitsInDecimal + 1}");
                 }
 
                 this.maxDigitsAfterDecimal = value;
@@ -102,7 +97,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
         public bool UseGroupSeparator
         {
-            get { return this.useGroupSeparator; }
+            get => this.useGroupSeparator;
             set
             {
                 this.useGroupSeparator = value;
@@ -114,10 +109,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
         public bool NumbersOnly
         {
-            get
-            {
-                return this.numbersOnly;
-            }
+            get => this.numbersOnly;
             set
             {
                 this.numbersOnly = value;
@@ -229,8 +221,8 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             var numberOfInsertedOrDeletedChars = newTextLength - (this.previousText?.Length ?? 0);
             if (numberOfInsertedOrDeletedChars != 0)
             {
-                var cursorPositionAjustment = numberOfInsertedOrDeletedChars > 0 ? -1 : 1;
-                newSelectionStart += numberOfInsertedOrDeletedChars + cursorPositionAjustment;
+                var cursorPositionAdjustment = numberOfInsertedOrDeletedChars > 0 ? -1 : 1;
+                newSelectionStart += numberOfInsertedOrDeletedChars + cursorPositionAdjustment;
                 newSelectionStart = Math.Max(newSelectionStart, 0);
             }
             
@@ -246,9 +238,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         /// <returns>The decimal value represented by the text</returns>
         public decimal? GetValue()
         {
-            decimal value;
-
-            if (decimal.TryParse(this.Text, NumberStyles.Any, CultureInfo.CurrentCulture, out value))
+            if (decimal.TryParse(this.Text, NumberStyles.Any, CultureInfo.CurrentCulture, out var value))
                 return value;
 
             return null;

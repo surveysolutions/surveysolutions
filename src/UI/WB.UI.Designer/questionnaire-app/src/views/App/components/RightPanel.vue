@@ -3,7 +3,7 @@
         <router-view />
     </div>
 
-    <div class="comments-editor col-xs-6" ui-view="comments">
+    <div class="comments-editor col-xs-6" :class="{ hidden: !isCommentsBlockVisible }" ui-view="comments">
         <router-view name="comments"></router-view>>
     </div>
 </template>

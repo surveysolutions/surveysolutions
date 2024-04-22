@@ -4,7 +4,8 @@
             :class="{ 'has-error': hasPatternError, 'dragover': !translation.isOriginalTranslation && $refs.upload && $refs.upload.dropActive }"
             ngf-drop="" ngf-max-size="4MB" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
             <a href="javascript:void(0);" @click="deleteTranslation($event)"
-                v-if="!translation.isOriginalTranslation && !isReadOnlyForUser" class="btn delete-btn" tabindex="-1"></a>
+                v-if="!translation.isOriginalTranslation && !isReadOnlyForUser" class="btn delete-btn"
+                tabindex="-1"></a>
             <div class="translation-content">
                 <input focus-on-out="focusTranslation{{translation.translationId}}" required=""
                     :placeholder="$t('QuestionnaireEditor.SideBarTranslationName')" maxlength="32" spellcheck="false"
@@ -19,13 +20,13 @@
                             {{ $t('QuestionnaireEditor.Save') }}
                         </button>
                         <button type="button" class="btn lighter-hover" @click.self="cancel()">{{
-                            $t('QuestionnaireEditor.Cancel')
-                        }}</button>
+                $t('QuestionnaireEditor.Cancel')
+            }}</button>
                     </div>
 
                     <span class="default-label" v-if="translation.isDefault">{{
-                        $t('QuestionnaireEditor.Default')
-                    }}</span>
+                $t('QuestionnaireEditor.Default')
+            }}</span>
 
                     <button type="button" class="btn btn-default" v-if="!isReadOnlyForUser"
                         v-show="translation.isDefault && !translation.isOriginalTranslation"
@@ -41,11 +42,11 @@
 
                         <a v-if="downloadUrl" :href="downloadUrl" class="btn btn-default" target="_blank"
                             rel="noopener noreferrer">{{
-                                $t('QuestionnaireEditor.SideBarTranslationDownloadXlsx') }}</a>
+                $t('QuestionnaireEditor.SideBarTranslationDownloadXlsx') }}</a>
 
-                        <file-upload ref="upload" v-if="!isReadOnlyForUser" :input-id="'tfu' + translation.translationId"
-                            v-model="file" @input-file="fileSelected" :size="10 * 1024 * 1024" :drop="true"
-                            :drop-directory="false"
+                        <file-upload ref="upload" v-if="!isReadOnlyForUser"
+                            :input-id="'tfu' + translation.translationId" v-model="file" @input-file="fileSelected"
+                            :size="10 * 1024 * 1024" :drop="true" :drop-directory="false"
                             accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.txt,.tsv,.tab">
                         </file-upload>
                         <button v-show="!isDirty && !translation.isOriginalTranslation" v-if="!isReadOnlyForUser"
@@ -58,7 +59,7 @@
         </div>
     </form>
 </template>
-  
+
 <script>
 
 import { isUndefined, isNull, cloneDeep } from 'lodash'
@@ -152,7 +153,7 @@ export default {
             if (!this.translation.isOriginalTranslation) {
                 const response = await updateTranslation(this.questionnaireId, this.translation)
 
-                if (this.file.length > 0)
+                if (this.file.length > 0 && response != null)
                     notice(response);
 
                 this.translation.file = null;
@@ -203,4 +204,3 @@ export default {
     }
 }
 </script>
-  

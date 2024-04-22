@@ -70,12 +70,12 @@
                         $t('QuestionnaireEditor.Register') }}</a>
                 </div>
             </div>
-            <div class="questionnarie-title">
+            <div class="questionnarie-title" style="margin-right: 0!important;">
                 <div class="title">
                     <div class="questionnarie-title-text">
                         {{ questionnaire.title }}
                     </div>
-                    <div class="questionnarie-title-buttons">
+                    <div class="questionnarie-title-buttons" style="display: inline-block!important;">
                         <span class="text-muted" id="questionnaireStats">
                             {{
                         $t('QuestionnaireEditor.QuestionnaireSummary', {

@@ -136,7 +136,7 @@
     <value>Appendix {0} {1} special values</value>
   </data>
   <data name="Appendix_CriticalityConditions" xml:space="preserve">
-    <value>Appendix {0} {1} criticality conditions</value>
+    <value>Appendix {0} {1} critical rules</value>
   </data>
   <data name="Appendix_Validations" xml:space="preserve">
     <value>Appendix {0} {1} validation conditions and messages</value>
@@ -154,10 +154,10 @@
     <value>Enablement Condition:</value>
   </data>
   <data name="CriticalityCondition" xml:space="preserve">
-    <value>Criticality Condition:</value>
+    <value>Critical Condition:</value>
   </data>
   <data name="CriticalityMessage" xml:space="preserve">
-    <value>Criticality Message:</value>
+    <value>Message:</value>
   </data>
   <data name="Description" xml:space="preserve">
     <value>Description:</value>
