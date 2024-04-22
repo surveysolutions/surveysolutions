@@ -27,6 +27,7 @@
             android:id="@+id/tv_Complete_Groups_Information"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:childDivider="@android:color/transparent"
             local:MvxItemTemplate="@layout/interview_complete_child_item"
             local:MvxGroupItemTemplate="@layout/interview_complete_group_item"
             local:MvxBind="ItemsSource CompleteGroups" />
