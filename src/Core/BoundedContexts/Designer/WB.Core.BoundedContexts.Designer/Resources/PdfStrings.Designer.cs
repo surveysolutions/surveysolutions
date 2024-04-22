@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Appendix {0} {1} critical conditions.
+        ///   Looks up a localized string similar to Appendix {0} {1} critical rules.
         /// </summary>
         public static string Appendix_CriticalityConditions {
             get {
@@ -160,7 +160,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Critical Message:.
+        ///   Looks up a localized string similar to Message:.
         /// </summary>
         public static string CriticalityMessage {
             get {
