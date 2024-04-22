@@ -56,7 +56,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 lastCompletionComments,
                 interviewState,
                 dynamicTextViewModel,
-                logger)
+                logger,
+                userInteractionService
+                )
         {
             this.commandService = commandService;
             this.interviewRepository = interviewRepository;

@@ -178,38 +178,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         
         public MvxObservableCollection<CompleteGroup> CompleteGroups { get; set; }
 
-        public enum CompleteGroupContent
-        {
-            Unknown,
-            Error,
-            Answered,
-            Unanswered,
-        }
-        
-        public class CompleteGroup : MvxObservableCollection<EntityWithErrorsViewModel>
-        {
-            public CompleteGroup()
-            {
-            }
-
-            public CompleteGroup(IEnumerable<EntityWithErrorsViewModel> items) : base(items)
-            {
-            }
-
-            public int AllCount { get; set; }
-            public CompleteGroupContent GroupContent { get; set; }
-            
-            public string Title { get; set; }
-            public bool IsError => GroupContent == CompleteGroupContent.Error && AllCount > 0;
-            public bool IsAnswered => GroupContent == CompleteGroupContent.Answered && AllCount > 0;
-            public bool IsUnanswered => GroupContent == CompleteGroupContent.Unanswered && AllCount > 0;
-        }
-        
-        public class CompleteItem: MvxViewModel
-        {
-            public string Title { get; set; }
-        }
-
         public int AnsweredCount { get; set; }
 
         public int UnansweredCount { get; set; }
