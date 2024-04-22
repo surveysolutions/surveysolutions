@@ -144,13 +144,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.questionnaireViewRepository.Store(questionnaires);
         }
 
-        public void UpdateQuestionnairesSettings(QuestionnairesSettingsApiView settings)
+        public void UpdateQuestionnairesSettings(List<QuestionnaireSettingsApiView> settings)
         {
             var questionnaires = this.questionnaireViewRepository.LoadAll();
+            
             foreach (var questionnaire in questionnaires)
             {
-                questionnaire.WebModeAllowed = settings.SwitchableToWeb.Contains(questionnaire.GetIdentity());
-                questionnaire.CriticalityLevel = settings.CriticalityLevel.FirstOrDefault(x => x.Questionnaire == questionnaire.GetIdentity())?.CriticalityLevel;
+                var setting = 
+                    settings.FirstOrDefault(x => x.QuestionnaireIdentity == questionnaire.GetIdentity());
+                
+                questionnaire.WebModeAllowed = setting?.IsSwitchableToWeb ?? false;
+                questionnaire.CriticalityLevel = setting?.CriticalityLevel;
             }
             this.questionnaireViewRepository.Store(questionnaires);
         }

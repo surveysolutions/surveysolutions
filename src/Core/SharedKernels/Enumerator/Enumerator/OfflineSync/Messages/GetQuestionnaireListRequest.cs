@@ -165,9 +165,6 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
 
     public class GetQuestionnairesSettingsResponse : ICommunicationMessage
     {
-        public List<QuestionnaireIdentity> SwitchableToWeb { set; get; } = new List<QuestionnaireIdentity>();
-
-        public List<QuestionnaireCriticalityLevel> CriticalityLevel { set; get; } =
-            new List<QuestionnaireCriticalityLevel>();
+        public List<QuestionnaireSettingsApiView> QuestionnairesSettings { get; set; } = new List<QuestionnaireSettingsApiView>();
     }
 }

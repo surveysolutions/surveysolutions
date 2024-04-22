@@ -59,6 +59,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             requestHandler.RegisterHandler<GetAttachmentContentRequest, GetAttachmentContentResponse>(GetAttachmentContent);
             requestHandler.RegisterHandler<GetQuestionnaireReusableCategoriesRequest, GetQuestionnaireReusableCategoriesResponse>(GetQuestionnaireReusableCategories);
             requestHandler.RegisterHandler<GetQuestionnairesWebModeRequest, GetQuestionnairesWebModeResponse>(GetQuestionnairesWebMode);
+            requestHandler.RegisterHandler<GetQuestionnairesSettingsRequest, GetQuestionnairesSettingsResponse>(GetQuestionnairesSettings);
         }
 
         private async Task<GetAttachmentContentResponse> GetAttachmentContent(GetAttachmentContentRequest request)
@@ -183,29 +184,19 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         
         public Task<GetQuestionnairesSettingsResponse> GetQuestionnairesSettings(GetQuestionnairesSettingsRequest arg)
         {
-            var deleted = deletedQuestionnairesStorage.LoadAll()
-                .Select(q => QuestionnaireIdentity.Parse(q.Id))
-                .ToList();
-
-            var webMode = this.questionnaireViewRepository
-                .Where(x => x.WebModeAllowed == true)
-                .Select(x=>x.GetIdentity())
-                .Except(deleted)
-                .ToList();
-            
-            var criticalLevels = this.questionnaireViewRepository
-                .Where(x => x.CriticalityLevel != null)
-                .Select(x=> new QuestionnaireCriticalityLevel
+            var settings = this.questionnaireViewRepository
+                .Where(x => x!= null)    
+                .Select(x=> new QuestionnaireSettingsApiView
                 {
-                    Questionnaire = x.GetIdentity(),
-                    CriticalityLevel = x.CriticalityLevel
+                    QuestionnaireIdentity = x.GetIdentity(),
+                    CriticalityLevel = x.CriticalityLevel,
+                    IsSwitchableToWeb = x.WebModeAllowed
                 })
                 .ToList();
 
             return Task.FromResult(new GetQuestionnairesSettingsResponse
             {
-                SwitchableToWeb = webMode,
-                CriticalityLevel = criticalLevels
+                QuestionnairesSettings = settings
             });
         }
     }

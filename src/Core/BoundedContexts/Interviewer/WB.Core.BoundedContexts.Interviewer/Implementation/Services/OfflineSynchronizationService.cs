@@ -173,16 +173,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return response.Questionnaires;
         }
 
-        public async Task<QuestionnairesSettingsApiView> GetServerQuestionnairesSettingsAsync(CancellationToken cancellationToken = default)
+        public async Task<List<QuestionnaireSettingsApiView>> GetServerQuestionnairesSettingsAsync(CancellationToken cancellationToken = default)
         {
             var response = await this.syncClient.SendAsync<GetQuestionnairesSettingsRequest, GetQuestionnairesSettingsResponse>(
                 new GetQuestionnairesSettingsRequest { }, cancellationToken);
 
-            return new QuestionnairesSettingsApiView()
-            {
-                SwitchableToWeb = response.SwitchableToWeb,
-                CriticalityLevel = response.CriticalityLevel
-            };
+            return response.QuestionnairesSettings;
         }
 
         public async Task<List<TranslationDto>> GetQuestionnaireTranslationAsync(

@@ -33,6 +33,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
         //obsolete
         void UpdateQuestionnaireWebModeSwitch(List<QuestionnaireIdentity> enabledQuestionnaires);
         
-        void UpdateQuestionnairesSettings(QuestionnairesSettingsApiView settings);
+        void UpdateQuestionnairesSettings(List<QuestionnaireSettingsApiView> settings);
     }
 }

@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.UI.Headquarters.Code;
 
@@ -59,29 +60,25 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             return questionnaireRepository
                 .Query(_ => _.Where(q => !q.Disabled)
                     .Select(w => w.Id)
-                    .ToList()
-                ).Where(PermittedQuestionnaire)
+                    .ToList())
+                .Where(PermittedQuestionnaire)
                 .Select(QuestionnaireIdentity.Parse)
                 .ToList();
         }
         
-        public virtual ActionResult<QuestionnairesSettingsApiView> QuestionnairesSettings()
+        public virtual ActionResult<List<QuestionnaireSettingsApiView>> QuestionnairesSettings()
         {
-            var criticalLevels = questionnaireRepository
+            var settings = questionnaireRepository
                 .Query(_ => _.Where(q => !q.Disabled))
-                    .Select(x =>
-                        new QuestionnaireCriticalityLevel
-                        {
-                            Questionnaire = QuestionnaireIdentity.Parse(x.Id),
-                            CriticalityLevel = x.CriticalityLevel
+                    .Select(x => new QuestionnaireSettingsApiView ()
+                    {
+                        QuestionnaireIdentity = QuestionnaireIdentity.Parse(x.Id),
+                        CriticalityLevel = x.CriticalityLevel,
+                        IsSwitchableToWeb = PermittedQuestionnaire(x.Id)
                     })
                     .ToList();
             
-            return new QuestionnairesSettingsApiView()
-            {
-                SwitchableToWeb = GetSwitchableToWeb(),
-                CriticalityLevel = criticalLevels
-            };
+            return settings;
         }
 
         private bool PermittedQuestionnaire(string questionnaireId)

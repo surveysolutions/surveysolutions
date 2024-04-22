@@ -77,6 +77,6 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         
         [HttpGet]
         [Route("questionnaires/settings")]
-        public override ActionResult<QuestionnairesSettingsApiView> QuestionnairesSettings() => base.QuestionnairesSettings();
+        public override ActionResult<List<QuestionnaireSettingsApiView>> QuestionnairesSettings() => base.QuestionnairesSettings();
     }
 }
