@@ -5,22 +5,10 @@
       </DirectoryRef>
   </Fragment>
     <Fragment>
-        <ComponentGroup Id="FontFilesComponentGroup">
-		  <Component Id="cmpE9D7B935662923F2DF36DB99CC1BFEBA" Directory="FontsFolder" Guid="0FB92C5F-6B3E-4F74-851B-A4940EA309AA">
-            <File Id="fil944F3E72156164052C013C37BC49288A" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans_Condensed-Regular.ttf" />
-          </Component>
-          <Component Id="cmpC0C80B8C2D004AEF46D9FFC191A2405B" Directory="FontsFolder" Guid="FA2A67CC-4CD5-4067-9479-995BE2B0BB0B">
-            <File Id="filA8BDC97EF88D06DE984F7593502D145B" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans_ExtraCondensed-Regular.ttf" />
-          </Component>
-          <Component Id="cmpF4DC59CF41D08E4D39EC89D47B0D5851" Directory="FontsFolder" Guid="17E4F71D-CD3E-4CD5-9D14-D7050F236039">
-            <File Id="fil4F5C68E6942933BEE2BF860B2F19C26D" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-Black.ttf" />
-          </Component>
+        <ComponentGroup Id="FontFilesComponentGroup">		  
           <Component Id="cmp1B39366A55B9281DFDDA97B1D22CFB03" Directory="FontsFolder" Guid="22ADFABF-2659-44C2-ADE3-3F0D73D2B08E">
             <File Id="fil918A11A8D189EB59A3EA80E98D2BD99E" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-Bold.ttf" />
-          </Component>
-          <Component Id="cmpC6CA3C1B3E09D210E94239A26B08C22D" Directory="FontsFolder" Guid="EAF14885-F027-489A-B55F-2DAFAAF1F36B">
-            <File Id="fil8DC77A7D0A29F24CFB1E9CB10272107E" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-BoldItalic.ttf" />
-          </Component>
+          </Component>          
 		  <Component Id="cmp2BDF630196C64080F7CFC5C144408C72" Directory="FontsFolder" Guid="{FAC0C472-211A-4F77-B31A-F6841BEC535F}">
             <File Id="fil93126E6459F341DABE86E59D2BF78CD6" KeyPath="yes" TrueType="yes" Source="Fonts\NotoSans-Italic.ttf" />
           </Component>
