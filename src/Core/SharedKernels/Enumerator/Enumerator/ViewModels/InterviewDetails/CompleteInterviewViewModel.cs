@@ -79,7 +79,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.AnsweredCount = InterviewState.AnsweredQuestionsCount;
 
             this.UnansweredCount = questionsCount - this.AnsweredCount;
-            var unansweredQuestions = this.entitiesListViewModelFactory.GetUnansweredQuestions(interviewId, navigationState).ToList();
+            var unansweredQuestions = this.entitiesListViewModelFactory.GetTopUnansweredQuestions(interviewId, navigationState).ToList();
             var unansweredGroup = new CompleteGroup(unansweredQuestions)
             {
                 AllCount = this.UnansweredCount,
@@ -88,7 +88,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             };
 
             this.ErrorsCount = InterviewState.InvalidAnswersCount;
-            this.EntitiesWithErrors = this.entitiesListViewModelFactory.GetEntitiesWithErrors(interviewId, navigationState).ToList();
+            this.EntitiesWithErrors = this.entitiesListViewModelFactory.GetTopEntitiesWithErrors(interviewId, navigationState).ToList();
             this.EntitiesWithErrorsDescription = EntitiesWithErrors.Count < this.ErrorsCount
                 ? string.Format(UIResources.Interview_Complete_First_n_Entities_With_Errors,
                     this.entitiesListViewModelFactory.MaxNumberOfEntities)
@@ -103,7 +103,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.CompleteGroups = new MvxObservableCollection<CompleteGroup>()
             {
                 //unansweredCriticalQuestionsGroup,
-                //failCriticalityConditionsGroup,
+                //failedCriticalRulesGroup,
                 unansweredGroup,
                 errorsGroup,
             };
@@ -129,17 +129,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             if (!this.entitiesListViewModelFactory.HasCriticalFeature(interviewId))
             {
-                IsAllowToCompleteInterview = true;
+                IsCompletionAllowed = true;
                 return Task.CompletedTask;
             }
 
             if (criticalityLevel == CriticalityLevel.Ignore)
             {
-                IsAllowToCompleteInterview = true;
+                IsCompletionAllowed = true;
                 return Task.CompletedTask;
             }
             
-            this.UnansweredCriticalQuestions = this.entitiesListViewModelFactory.GetUnansweredCriticalQuestions(interviewId, navigationState).ToList();
+            this.UnansweredCriticalQuestions = this.entitiesListViewModelFactory.GetTopUnansweredCriticalQuestions(interviewId, navigationState).ToList();
             var unansweredCriticalQuestionsGroup = new CompleteGroup(UnansweredCriticalQuestions)
             {
                 AllCount = this.UnansweredCriticalQuestions.Count,
@@ -151,26 +151,26 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.FailedCriticalityRules = this.entitiesListViewModelFactory.GetTopFailedCriticalRules(interviewId, navigationState).ToList();
             var results = this.FailedCriticalityRules.Select(i =>
                 EntityWithErrorsViewModel.InitError(i.EntityTitle)).ToArray();
-            var failCriticalityConditionsGroup = new CompleteGroup(results)
+            var failedCriticalRulesGroup = new CompleteGroup(results)
             {
                 AllCount = this.FailedCriticalityRules.Count,
                 Title = string.Format(UIResources.Interview_Complete_FailCriticalConditions, this.FailedCriticalityRules.Count),
                 GroupContent = CompleteGroupContent.Error,
             };
-            CompleteGroups.Insert(1, failCriticalityConditionsGroup);
+            CompleteGroups.Insert(1, failedCriticalRulesGroup);
 
-            IsExistsCriticalityProblems = UnansweredCriticalQuestionsCount > 0 || FailCriticalityConditionsCount > 0;
-            IsAllowToCompleteInterview = criticalityLevel != CriticalityLevel.Error || !IsExistsCriticalityProblems;
+            HasCriticalIssues = UnansweredCriticalQuestionsCount > 0 || FailedCriticalRulesCount > 0;
+            IsCompletionAllowed = criticalityLevel != CriticalityLevel.Error || !HasCriticalIssues;
 
             if (criticalityLevel == CriticalityLevel.Warning)
             {
-                this.IsAllowToCompleteInterview = !IsExistsCriticalityProblems || !string.IsNullOrWhiteSpace(Comment);
+                this.IsCompletionAllowed = !HasCriticalIssues || !string.IsNullOrWhiteSpace(Comment);
                 this.CompleteButtonComment = UIResources.Interview_Complete_Note_For_Supervisor_with_Criticality;
             }
             else
             {
                 this.CompleteButtonComment = UIResources.Interview_Complete_Consequences_Instrunction;
-                this.IsAllowToCompleteInterview = false;
+                this.IsCompletionAllowed = false;
             }
             
             return Task.CompletedTask;
@@ -184,7 +184,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public int ErrorsCount { get; set; }
         public int UnansweredCriticalQuestionsCount => UnansweredCriticalQuestions.Count;
-        public int FailCriticalityConditionsCount => FailedCriticalityRules.Count;
+        public int FailedCriticalRulesCount => FailedCriticalityRules.Count;
 
         public string EntitiesWithErrorsDescription { get; private set; }
 
@@ -204,7 +204,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public IList<EntityWithErrorsViewModel> EntitiesWithErrors { get; private set; }
         public IList<EntityWithErrorsViewModel> UnansweredCriticalQuestions { get; private set; }
-        public IList<FailCriticalityConditionViewModel> FailedCriticalityRules { get; private set; }
+        public IList<FailedCriticalRuleViewModel> FailedCriticalityRules { get; private set; }
 
         private IMvxAsyncCommand completeInterviewCommand;
         public IMvxAsyncCommand CompleteInterviewCommand
@@ -212,7 +212,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             get
             {
                 return this.completeInterviewCommand ??= new MvxAsyncCommand(async () =>
-                    await this.CompleteInterviewAsync(), () => !WasThisInterviewCompleted && IsAllowToCompleteInterview);
+                    await this.CompleteInterviewAsync(), () => !WasThisInterviewCompleted && IsCompletionAllowed);
             }
         }
 
@@ -224,9 +224,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 comment = value;
                 this.lastCompletionComments.Store(this.interviewId, value);
 
-                if (IsExistsCriticalityProblems && criticalityLevel == CriticalityLevel.Warning)
+                if (HasCriticalIssues && criticalityLevel == CriticalityLevel.Warning)
                 {
-                    IsAllowToCompleteInterview = !string.IsNullOrWhiteSpace(Comment);
+                    IsCompletionAllowed = !string.IsNullOrWhiteSpace(Comment);
                 }
             }
         }
@@ -241,23 +241,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             set => this.RaiseAndSetIfChanged(ref this.wasThisInterviewCompleted, value);
         }
 
-        public bool IsAllowToCompleteInterview
+        public bool IsCompletionAllowed
         {
-            get => isAllowToCompleteInterview;
+            get => isCompletionAllowed;
             set
             {
-                if (value == isAllowToCompleteInterview) 
+                if (value == isCompletionAllowed) 
                     return;
-                isAllowToCompleteInterview = value;
-                RaisePropertyChanged(() => IsAllowToCompleteInterview);
+                isCompletionAllowed = value;
+                RaisePropertyChanged(() => IsCompletionAllowed);
                 RaisePropertyChanged(() => CompleteInterviewCommand);
             }
         }
 
-        public bool IsExistsCriticalityProblems
+        public bool HasCriticalIssues
         {
-            get => isExistsCriticalityProblems;
-            set => SetProperty(ref isExistsCriticalityProblems, value);
+            get => hasCriticalIssues;
+            set => SetProperty(ref hasCriticalIssues, value);
         }
 
 
@@ -265,18 +265,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private bool requestWebInterview;
         private bool canSwitchToWebMode;
         private bool isDisposed;
-        private bool isAllowToCompleteInterview;
-        private bool isExistsCriticalityProblems;
+        private bool isCompletionAllowed;
+        private bool hasCriticalIssues;
 
         private async Task CompleteInterviewAsync()
         {
-            if (!this.IsAllowToCompleteInterview)
+            if (!this.IsCompletionAllowed)
                 return;
             
             if (this.WasThisInterviewCompleted)
                 return;
 
-            if (IsExistsCriticalityProblems)
+            if (HasCriticalIssues)
             {
                 var confirmResult = await userInteractionService.ConfirmAsync(UIResources.Interview_Complete_WithWarningCriticality,
                     okButton: UIResources.Yes,

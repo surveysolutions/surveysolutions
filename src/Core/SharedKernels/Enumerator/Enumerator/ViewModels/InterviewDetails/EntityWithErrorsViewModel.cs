@@ -51,7 +51,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
     {
     }    
     
-    public class FailCriticalityConditionViewModel : BaseViewModel
+    public class FailedCriticalRuleViewModel : BaseViewModel
     {
         public string EntityTitle { get; private set; }
 

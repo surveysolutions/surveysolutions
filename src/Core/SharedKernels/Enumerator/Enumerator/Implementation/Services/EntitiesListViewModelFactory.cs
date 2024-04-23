@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.dynamicTextViewModelFactory = dynamicTextViewModelFactory;
         }
 
-        public IEnumerable<EntityWithErrorsViewModel> GetEntitiesWithErrors(string interviewId, NavigationState navigationState)
+        public IEnumerable<EntityWithErrorsViewModel> GetTopEntitiesWithErrors(string interviewId, NavigationState navigationState)
         {
             IStatefulInterview interview = this.interviewRepository.Get(interviewId);
             Identity[] invalidEntities = interview.GetInvalidEntitiesInInterview().Take(this.maxNumberOfEntities).ToArray();
@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return this.EntityWithErrorsViewModels<EntityWithErrorsViewModel>(interviewId, navigationState, invalidEntities, interview);
         }
 
-        public IEnumerable<EntityWithErrorsViewModel> GetUnansweredQuestions(string interviewId, NavigationState navigationState)
+        public IEnumerable<EntityWithErrorsViewModel> GetTopUnansweredQuestions(string interviewId, NavigationState navigationState)
         {
             IStatefulInterview interview = this.interviewRepository.Get(interviewId);
             Identity[] invalidEntities = interview.GetAllUnansweredQuestions().Take(this.maxNumberOfEntities).ToArray();
@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 });
         }
 
-        public IEnumerable<EntityWithCommentsViewModel> GetEntitiesWithComments(string interviewId, NavigationState navigationState)
+        public IEnumerable<EntityWithCommentsViewModel> GetTopEntitiesWithComments(string interviewId, NavigationState navigationState)
         {
             IStatefulInterview interview = this.interviewRepository.Get(interviewId);
             Identity[] commentedBySupervisorEntities = interview.GetCommentedBySupervisorQuestionsVisibleToInterviewer().Take(this.maxNumberOfEntities).ToArray();
@@ -57,7 +57,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return this.EntityWithErrorsViewModels<EntityWithCommentsViewModel>(interviewId, navigationState, commentedBySupervisorEntities, interview);
         }
 
-        public IEnumerable<EntityWithErrorsViewModel> GetUnansweredCriticalQuestions(string interviewId, NavigationState navigationState)
+        public IEnumerable<EntityWithErrorsViewModel> GetTopUnansweredCriticalQuestions(string interviewId, NavigationState navigationState)
         {
             IStatefulInterview interview = this.interviewRepository.GetOrThrow(interviewId);
             Identity[] invalidEntities = interview.GetAllUnansweredCriticalQuestions().Take(this.maxNumberOfEntities).ToArray();
@@ -66,16 +66,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return viewModels;
         }
 
-        public IEnumerable<FailCriticalityConditionViewModel> GetTopFailedCriticalRules(string interviewId, NavigationState navigationState)
+        public IEnumerable<FailedCriticalRuleViewModel> GetTopFailedCriticalRules(string interviewId, NavigationState navigationState)
         {
             IStatefulInterview interview = this.interviewRepository.GetOrThrow(interviewId);
             Guid[] ids = interview.CollectInvalidCriticalRules().Take(this.maxNumberOfEntities).ToArray();
            
-            var criticalityConditions = new List<FailCriticalityConditionViewModel>();
+            var criticalityConditions = new List<FailedCriticalRuleViewModel>();
             foreach (var id in ids)
             {
                 var criticalityConditionMessage = interview.GetCriticalRuleMessage(id);
-                var failCriticalityConditionViewModel = this.interviewViewModelFactory.GetNew<FailCriticalityConditionViewModel>();
+                var failCriticalityConditionViewModel = this.interviewViewModelFactory.GetNew<FailedCriticalRuleViewModel>();
                 
                 using (var title = this.dynamicTextViewModelFactory.CreateDynamicTextViewModel())
                 {
