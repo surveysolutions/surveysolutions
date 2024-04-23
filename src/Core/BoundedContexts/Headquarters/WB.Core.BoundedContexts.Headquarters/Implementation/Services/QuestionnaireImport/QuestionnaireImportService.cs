@@ -261,7 +261,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     questionnairePackage.QuestionnaireAssembly,
                     questionnairePackage.QuestionnaireContentVersion,
                     questionnaireIdentity.Version,
-                    comment));
+                    comment,
+                    questionnairePackage.HasCriticalityCheck));
                 questionnaireProgress.Report(80);
 
                 logger.Verbose($"UpdateRevisionMetadata: {questionnaire.Title}({questionnaire.PublicKey} rev.{questionnaire.Revision})");

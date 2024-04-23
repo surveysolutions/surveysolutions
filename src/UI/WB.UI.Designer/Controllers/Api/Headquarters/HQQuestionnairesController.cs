@@ -9,7 +9,6 @@ using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
-using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -175,13 +174,16 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             var readOnlyQuestionnaireDocument = new ReadOnlyQuestionnaireDocumentWithCache(questionnaireView.Source);
             questionnaire.ExpressionsPlayOrder = this.expressionsPlayOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
             questionnaire.DependencyGraph = this.expressionsPlayOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument);
-            questionnaire.ValidationDependencyGraph = this.expressionsPlayOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument).ToDictionary(x => x.Key, x => x.Value.ToArray());
+            questionnaire.ValidationDependencyGraph = 
+                this.expressionsPlayOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument)
+                    .ToDictionary(x => x.Key, x => x.Value.ToArray());
 
             return Ok(new QuestionnaireCommunicationPackage
             (
                 questionnaire : this.zipUtils.CompressString(this.serializer.Serialize(questionnaire)), // use binder to serialize to the old namespaces and assembly
                 questionnaireAssembly : resultAssembly,
-                questionnaireContentVersion : versionToCompileAssembly
+                questionnaireContentVersion : versionToCompileAssembly,
+                hasCriticalityCheck : this.engineVersionService.DoesQuestionnaireSupportCriticality(questionnaireView.Source)
             ));
         }
 
@@ -233,7 +235,8 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
                 Id = questionnaire.PublicKey,
                 Name = questionnaire.Title,
                 CreatedAt = listItem.CreationDate,
-                LastUpdatedAt = listItem.LastEntryDate
+                LastUpdatedAt = listItem.LastEntryDate,
+                HasCriticalityCheck = this.engineVersionService.DoesQuestionnaireSupportCriticality(questionnaireView.Source)
             };
 
             foreach (var questionnaireEntry in questionnaire.Source.Children.TreeToEnumerable(x => x.Children))

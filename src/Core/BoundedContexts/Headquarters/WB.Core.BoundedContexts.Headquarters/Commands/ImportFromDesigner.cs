@@ -6,7 +6,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Commands
     public class ImportFromDesigner : QuestionnaireCommand
     {
         public ImportFromDesigner(Guid createdBy, IQuestionnaireDocument source, bool allowCensusMode,
-            string supportingAssembly, long questionnaireContentVersion, long questionnaireVersion, string comment)
+            string supportingAssembly, long questionnaireContentVersion, long questionnaireVersion, string comment,
+            bool? criticalitySupport)
             : base(source.PublicKey, source.PublicKey)
         {
             this.AllowCensusMode = allowCensusMode;
@@ -16,7 +17,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Commands
             this.QuestionnaireContentVersion = questionnaireContentVersion;
             this.QuestionnaireVersion = questionnaireVersion;
             this.Comment = comment;
+            this.CriticalitySupport = criticalitySupport;
+            //this.CriticalityLevel = criticalityLevel;
         }
+
+        //public int CriticalityLevel { get; set; }
+
+        public bool? CriticalitySupport { get; set; }
 
         public string Comment { get; private set; }
 
