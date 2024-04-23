@@ -13,5 +13,6 @@ namespace WB.Core.SharedKernel.Structures.Synchronization.Designer
         public int RostersCount { get; set; }
         public int QuestionsCount { get; set; }
         public int QuestionsWithConditionsCount { get; set; }
+        public bool? HasCriticalityCheck { get; set; }
     }
 }

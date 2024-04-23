@@ -444,5 +444,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             return OldestQuestionnaireContentVersion;
         }
+        
+        public bool DoesQuestionnaireSupportCriticality(QuestionnaireDocument questionnaire)
+        {
+            return questionnaire.CriticalityConditions?.Count > 0 
+                   || questionnaire.FirstOrDefault<IQuestion>(x => x.Properties?.IsCritical == true) != null;
+        }
     }
 }

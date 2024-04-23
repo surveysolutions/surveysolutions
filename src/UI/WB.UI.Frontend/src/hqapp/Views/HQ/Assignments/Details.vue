@@ -24,17 +24,17 @@
                                             )
                                         }}:</span>
                                         <span class="data">{{
-                                            createdDate
-                                        }}</span>
+                                                createdDate
+                                            }}</span>
                                     </li>
                                     <li id="detailsInfo_responsibleListItem">
                                         <span class="data-label">{{
-                                            this.$t('Details.Responsible')
-                                        }}:
+                                                this.$t('Details.Responsible')
+                                            }}:
                                         </span>
                                         <span v-if="isInterviewerResponsible" class="data">
                                             <a v-bind:href="interviewerProfileUrl
-                                                " class="interviewer">{{ model.responsible.name }}</a>
+                                            " class="interviewer">{{ model.responsible.name }}</a>
                                         </span>
                                         <span v-else class="data supervisor">{{
                                             model.responsible.name
@@ -44,17 +44,18 @@
                                 <ul class="list-unstyled pull-left table-info">
                                     <li id="detailsInfo_lastUpdatedListItem">
                                         <span class="data-label">{{
-                                            this.$t('Details.LastUpdated')
-                                        }}:</span>
+                                                this.$t('Details.LastUpdated')
+                                            }}:</span>
                                         <span class="data">{{
-                                            updatedDate
-                                        }}</span>
+                                                updatedDate
+                                            }}</span>
                                     </li>
                                     <li>
                                         <span class="data-label">{{
-                                            $t('Common.CalendarEvent')
-                                        }}:</span>
-                                        <span class="data" data-toggle="tooltip" v-if="calendarEventComment != null" :title="calendarEventComment == null ||
+                                                $t('Common.CalendarEvent')
+                                            }}:</span>
+                                        <span class="data" data-toggle="tooltip" v-if="calendarEventComment != null"
+                                            :title="calendarEventComment == null ||
                                             calendarEventComment == ''
                                             ? this.$t(
                                                 'Assignments.NoComment',
@@ -70,8 +71,8 @@
                         <div class="questionnaire-details-actions clearfix">
                             <div class="buttons-container">
                                 <div class="dropdown aside-menu" :disabled="config.isObserving" v-if="showMoreButton">
-                                    <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                        class="btn btn-link" :disabled="config.isObserving">
+                                    <button type="button" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false" class="btn btn-link" :disabled="config.isObserving">
                                         <span></span>
                                     </button>
                                     <ul class="dropdown-menu context-menu-list context-menu-root">
@@ -93,8 +94,8 @@
                                         <li v-if="isHeadquarters && isArchived">
                                             <a href="#" @click="unarchiveSelected">
                                                 {{
-                                                    $t('Assignments.Unarchive')
-                                                }}
+                                            $t('Assignments.Unarchive')
+                                        }}
                                             </a>
                                         </li>
                                     </ul>
@@ -112,7 +113,8 @@
                         <a v-if="model.webMode && model.invitationToken" :href="webInterviewUrl" target="_blank">
                             <span :title="$t('Assignments.StartWebInterview')" class="glyphicon glyphicon-link" />
                         </a>
-                        <span v-if="this.model.isArchived" class="label label-default">{{ $t('Common.Archived') }}</span>
+                        <span v-if="this.model.isArchived" class="label label-default">{{ $t('Common.Archived')
+                            }}</span>
                     </h3>
                     <table class="table table-striped table-bordered">
                         <thead>
@@ -159,8 +161,8 @@
                                         <div class="item-content">
                                             <h4>
                                                 <span>{{
-                                                    question.title
-                                                }}</span>
+                                            question.title
+                                        }}</span>
                                             </h4>
                                             <div class="answer">
                                                 <div v-html="question.answer"></div>
@@ -171,11 +173,7 @@
                             </tr>
                             <tr>
                                 <td class="text-nowrap">
-                                    {{
-                                        $t(
-                                            'Assignments.IsAudioRecordingEnabled',
-                                        )
-                                    }}
+                                    {{ $t('Assignments.IsAudioRecordingEnabled') }}
                                 </td>
                                 <td class="pointer editable" @click="audioRecordingChange">
                                     {{ isAudioRecordingEnabled }}
@@ -224,21 +222,16 @@
                 <ModalFrame ref="assignModal" :title="$t('Common.Assign')">
                     <form onsubmit="return false;">
                         <div class="form-group" :class="{
-                            'has-warning': showWebModeReassignWarning,
-                        }">
-                            <label class="control-label" for="newResponsibleId">{{
-                                $t('Assignments.SelectResponsible')
-                            }}</label>
+                                            'has-warning': showWebModeReassignWarning,
+                                        }">
+                            <label class="control-label" for="newResponsibleId">
+                                {{ $t('Assignments.SelectResponsible') }}
+                            </label>
                             <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
                                 :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
                                 :fetch-url="config.api.responsible"></Typeahead>
                             <span class="help-block" v-if="showWebModeReassignWarning">
-                                {{
-                                    $t(
-                                        'Assignments.WebModeReassignToNonInterviewer',
-                                        { count: 1 },
-                                    )
-                                }}
+                                {{ $t('Assignments.WebModeReassignToNonInterviewer', { count: 1 }) }}
                             </span>
                         </div>
                         <div class="form-group">
@@ -274,10 +267,8 @@
                     </div>
                 </ModalFrame>
 
-                <ModalFrame ref="editAudioEnabledModal" :title="$t('Assignments.ChangeAudioRecordingModalTitle', {
-                    id: model.id,
-                })
-                    ">
+                <ModalFrame ref="editAudioEnabledModal"
+                    :title="$t('Assignments.ChangeAudioRecordingModalTitle', { id: model.id })">
                     <p>{{ $t('Assignments.AudioRecordingExplanation') }}</p>
                     <form onsubmit="return false;">
                         <div class="form-group">

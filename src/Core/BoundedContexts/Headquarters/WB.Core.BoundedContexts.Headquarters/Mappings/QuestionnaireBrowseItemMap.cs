@@ -1,7 +1,6 @@
 ﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
-using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Headquarters.Mappings
 {
@@ -31,7 +30,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.DisabledBy);
             Property(x => x.IsAudioRecordingEnabled);
             Property(x => x.Comment);
-
+            
+            Property(x=>x.CriticalitySupport, p=>p.Column("criticality_support"));
+            Property(x=>x.CriticalityLevel, p=>p.Column("criticality_level"));
+            
             List(x => x.FeaturedQuestions, listMap =>
             {
                 listMap.Table("FeaturedQuestions");

@@ -88,8 +88,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 await this.attachmentsCleanupService.RemovedOrphanedAttachmentsAsync();
             }
 
-            var serverQuestionnairesPermittedToSwitchToWebMode = await this.synchronizationService.GetServerQuestionnairesPermittedToSwitchToWebModeAsync(this.Context.CancellationToken);
-            this.questionnairesAccessor.UpdateQuestionnaireWebModeSwitch(serverQuestionnairesPermittedToSwitchToWebMode);
+            var serverQuestionnairesSettings = 
+                await this.synchronizationService.GetServerQuestionnairesSettingsAsync(this.Context.CancellationToken);
+            
+            this.questionnairesAccessor.UpdateQuestionnairesSettings(serverQuestionnairesSettings);
         }
     }
 }
