@@ -9,11 +9,13 @@ public class CompleteGroupToColorConverter : MvxValueConverter<CompleteGroup, in
 {
     protected override int Convert(CompleteGroup completeGroup, Type targetType, object parameter, CultureInfo culture)
     {
-        if (completeGroup.IsError)
+        if (completeGroup.AllCount == 0)
+            return Resource.Color.complete_screen_statistics_neutral_color;
+        if (completeGroup.GroupContent == CompleteGroupContent.Error)
             return Resource.Color.complete_screen_statistics_error_color;
-        if (completeGroup.IsAnswered)
+        if (completeGroup.GroupContent == CompleteGroupContent.Answered)
             return Resource.Color.complete_screen_statistics_answered_color;
-        if (completeGroup.IsUnanswered)
+        if (completeGroup.GroupContent == CompleteGroupContent.Unanswered)
             return Resource.Color.complete_screen_statistics_unanswered_color; 
         return Resource.Color.complete_screen_statistics_neutral_color;
     }

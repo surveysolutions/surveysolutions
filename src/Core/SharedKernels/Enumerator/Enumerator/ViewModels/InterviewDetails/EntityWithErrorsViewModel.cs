@@ -73,11 +73,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public int AllCount { get; set; }
         public CompleteGroupContent GroupContent { get; set; }
-            
+
+        public bool HasChildren => AllCount > 0;
+        public bool Expanded => false;
         public string Title { get; set; }
-        public bool IsError => GroupContent == CompleteGroupContent.Error && AllCount > 0;
-        public bool IsAnswered => GroupContent == CompleteGroupContent.Answered && AllCount > 0;
-        public bool IsUnanswered => GroupContent == CompleteGroupContent.Unanswered && AllCount > 0;
     }
     
     public enum CompleteGroupContent
