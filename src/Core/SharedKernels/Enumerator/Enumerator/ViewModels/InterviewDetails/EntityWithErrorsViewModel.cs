@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private string entityTitle;
         public string EntityTitle => this.entityTitle;
         
-        public bool IsError { get; private set; }
+        public bool IsError { get; set; }
 
         private NavigationIdentity entityIdentity;
 

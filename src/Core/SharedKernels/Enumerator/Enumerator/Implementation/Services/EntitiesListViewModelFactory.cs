@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -40,8 +41,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             IStatefulInterview interview = this.interviewRepository.Get(interviewId);
             Identity[] invalidEntities = interview.GetAllUnansweredQuestions().Take(this.maxNumberOfEntities).ToArray();
-           
-            return this.EntityWithErrorsViewModels<EntityWithErrorsViewModel>(interviewId, navigationState, invalidEntities, interview);
+            var viewModels = this.EntityWithErrorsViewModels<EntityWithErrorsViewModel>(interviewId, navigationState, invalidEntities, interview);
+            return viewModels.Select(vm =>
+                {
+                    vm.IsError = false;
+                    return vm;
+                });
         }
 
         public IEnumerable<EntityWithCommentsViewModel> GetEntitiesWithComments(string interviewId, NavigationState navigationState)
@@ -56,8 +61,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             IStatefulInterview interview = this.interviewRepository.GetOrThrow(interviewId);
             Identity[] invalidEntities = interview.GetAllUnansweredCriticalQuestions().Take(this.maxNumberOfEntities).ToArray();
-           
-            return this.EntityWithErrorsViewModels<EntityWithErrorsViewModel>(interviewId, navigationState, invalidEntities, interview);
+
+            var viewModels = this.EntityWithErrorsViewModels<EntityWithErrorsViewModel>(interviewId, navigationState, invalidEntities, interview);
+            return viewModels;
         }
 
         public IEnumerable<FailCriticalityConditionViewModel> RunAndGetFailCriticalityConditions(string interviewId, NavigationState navigationState)
