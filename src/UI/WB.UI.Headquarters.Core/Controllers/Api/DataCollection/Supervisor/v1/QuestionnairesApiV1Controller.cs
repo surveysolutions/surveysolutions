@@ -74,5 +74,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         [HttpGet]
         [Route("questionnaires/switchabletoweb")]
         public override ActionResult<List<QuestionnaireIdentity>> SwitchableToWeb() => base.SwitchableToWeb();
+        
+        [HttpGet]
+        [Route("questionnaires/settings")]
+        public override ActionResult<List<QuestionnaireSettingsApiView>> QuestionnairesSettings() => base.QuestionnairesSettings();
     }
 }

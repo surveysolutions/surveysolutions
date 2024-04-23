@@ -5,6 +5,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
@@ -85,5 +86,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
 
         public virtual bool IsAudioRecordingEnabled { get; set; }
         public virtual bool WebModeEnabled { get; set; }
+        
+        public virtual bool? CriticalitySupport { get; set; }
+        
+        public virtual CriticalityLevel? CriticalityLevel { get; set; }
     }
 }

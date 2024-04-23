@@ -12,5 +12,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
         bool IsClientVersionSupported(int clientVersion);
 
         IEnumerable<string> GetListOfNewFeaturesForClient(QuestionnaireDocument questionnaire, int clientVersion);
+
+        bool DoesQuestionnaireSupportCriticality(QuestionnaireDocument questionnaire);
     }
 }
