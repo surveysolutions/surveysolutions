@@ -1087,7 +1087,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public bool HasCriticalFeature()
         {
             var questionnaire = GetQuestionnaireOrThrow();
-            return questionnaire.IsExistsCriticality();
+            return questionnaire.DoesSupportCriticality();
         }
 
         private void Apply(InterviewPaused @event)
