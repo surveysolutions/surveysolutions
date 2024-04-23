@@ -1337,7 +1337,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             this.innerDocument.CriticalityConditions.First(cc => cc.Id == id).Message;
 
         public bool IsCritical(Guid questionId) => GetQuestion(questionId)?.Properties?.IsCritical ?? false;
-        public bool IsExistsCriticality()
+        public bool DoesSupportCriticality()
         {
             return innerDocument.CriticalityConditions?.Count > 0
                    || innerDocument.Find<IQuestion>(q => q.Properties?.IsCritical == true).Any();

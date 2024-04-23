@@ -1065,7 +1065,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ApplyEvent(new InterviewOpenedBySupervisor(command.UserId, command.OriginDate));
         }
 
-        public IEnumerable<Guid> RunAndGetFailCriticalityConditions()
+        public IEnumerable<Guid> CollectInvalidCriticalRules()
         {
             var criticalityChecks = base.RunCriticalityChecks();
             return criticalityChecks.Where(t => t.Item2 == false).Select(t => t.Item1);
