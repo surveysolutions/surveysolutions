@@ -1325,7 +1325,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public bool IsNeighboringSupport(Guid entityId)
             => GetQuestion(entityId)?.Properties?.GeometryOverlapDetection ?? false;
 
-        public Guid GetCriticalityConditionIdByIndex(int index)
+        public Guid GetCriticalRuleIdByIndex(int index)
         {
             if (this.innerDocument.CriticalityConditions.Count > index)
                 return this.innerDocument.CriticalityConditions[index].Id;
@@ -1333,10 +1333,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 $"Fail to resolve criticality condition with index {index} in questionnaire {innerDocument.Id}");
         }
 
-        public string GetCriticalityConditionMessage(Guid id) => 
+        public string GetCriticalRuleMessage(Guid id) => 
             this.innerDocument.CriticalityConditions.First(cc => cc.Id == id).Message;
 
-        public bool IsCritical(Guid questionId) => GetQuestion(questionId)?.Properties?.IsCritical ?? false;
+        public bool IsQuestionCritical(Guid questionId) => GetQuestion(questionId)?.Properties?.IsCritical ?? false;
         public bool DoesSupportCriticality()
         {
             return innerDocument.CriticalityConditions?.Count > 0

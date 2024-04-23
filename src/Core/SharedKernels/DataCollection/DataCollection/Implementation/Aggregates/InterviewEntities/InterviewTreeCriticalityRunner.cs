@@ -32,11 +32,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             if (rootLevel is ICriticalityConditionLevel criticalityConditionLevel)
             {
-                var conditions = criticalityConditionLevel.GetCriticalityConditions();
+                var conditions = criticalityConditionLevel.GetCriticalRules();
                 for (int i = 0; i < conditions.Length; i++)
                 {
                     var condition = conditions[i];
-                    var id = questionnaire.GetCriticalityConditionIdByIndex(i);
+                    var id = questionnaire.GetCriticalRuleIdByIndex(i);
                     var runResult = RunConditionExpression(condition);
                     yield return new Tuple<Guid, bool>(id, runResult);
                 }

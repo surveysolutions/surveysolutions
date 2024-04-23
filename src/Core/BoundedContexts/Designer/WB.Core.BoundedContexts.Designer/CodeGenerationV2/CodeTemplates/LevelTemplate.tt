@@ -67,7 +67,7 @@
 #>
 <#  if (Model.HasCriticalityConditions)
     {
-        foreach (var methodGroup in Storage.GetCriticalityConditions(Model.ClassName))
+        foreach (var methodGroup in Storage.GetCriticalRules(Model.ClassName))
         {
 #>            
             criticalityConditions = new Func<bool>[] { <#= string.Join(",", methodGroup.Value) #> };
@@ -128,7 +128,7 @@
         }
 
 <# if (Model.HasCriticalityConditions) { #>
-        public Func<bool>[] GetCriticalityConditions()
+        public Func<bool>[] GetCriticalRules()
         {
             return criticalityConditions;
         }

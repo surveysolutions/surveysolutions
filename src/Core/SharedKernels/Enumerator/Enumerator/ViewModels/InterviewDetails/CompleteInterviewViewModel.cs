@@ -148,7 +148,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             };
             CompleteGroups.Insert(0, unansweredCriticalQuestionsGroup);
             
-            this.FailedCriticalityRules = this.entitiesListViewModelFactory.RunAndGetFailCriticalityConditions(interviewId, navigationState).ToList();
+            this.FailedCriticalityRules = this.entitiesListViewModelFactory.GetTopFailedCriticalRules(interviewId, navigationState).ToList();
             var results = this.FailedCriticalityRules.Select(i =>
                 EntityWithErrorsViewModel.InitError(i.EntityTitle)).ToArray();
             var failCriticalityConditionsGroup = new CompleteGroup(results)

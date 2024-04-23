@@ -230,7 +230,7 @@ namespace WB.Infrastructure.Native.Questionnaire
             Variable = null,
             Type = TranslationType.CriticalityCondition.ToString("G"),
             OriginalText = criticalityCondition.Message,
-            Translation = translation.GetCriticalityConditionMessage(criticalityCondition.Id)
+            Translation = translation.GetCriticalRuleMessage(criticalityCondition.Id)
         };
 
         private static IEnumerable<TranslationRow> GetTranslatedValidationMessages(IValidatable validatable, ITranslation translation)

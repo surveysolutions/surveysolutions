@@ -4,7 +4,7 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
 {
     public interface ICriticalityConditionLevel
     {
-        Func<bool>[] GetCriticalityConditions();
+        Func<bool>[] GetCriticalRules();
     }
     
     

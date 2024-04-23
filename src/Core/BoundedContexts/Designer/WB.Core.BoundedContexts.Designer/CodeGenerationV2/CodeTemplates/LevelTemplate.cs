@@ -269,7 +269,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line 68 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
   if (Model.HasCriticalityConditions)
     {
-        foreach (var methodGroup in Storage.GetCriticalityConditions(Model.ClassName))
+        foreach (var methodGroup in Storage.GetCriticalRules(Model.ClassName))
         {
 
             
@@ -299,7 +299,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             
             #line default
             #line hidden
-            this.Write("        public Func<bool>[] GetCriticalityConditions()\n        {\n            return criticalityConditions;\n        }\n\n        private readonly Func<bool>[] criticalityConditions = new Func<bool>[0];\n");
+            this.Write("        public Func<bool>[] GetCriticalRules()\n        {\n            return criticalityConditions;\n        }\n\n        private readonly Func<bool>[] criticalityConditions = new Func<bool>[0];\n");
             
             #line 137 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
  } 

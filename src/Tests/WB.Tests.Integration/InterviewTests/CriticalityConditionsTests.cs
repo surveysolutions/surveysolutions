@@ -91,7 +91,7 @@ public class CriticalityConditionsTests: InterviewTestsContext
                 
                 return new
                 {
-                    CriticalityMessage = interview.GetCriticalityConditionMessage(Abc.Id.g1)
+                    CriticalityMessage = interview.GetCriticalRuleMessage(Abc.Id.g1)
                 };
             }
         });

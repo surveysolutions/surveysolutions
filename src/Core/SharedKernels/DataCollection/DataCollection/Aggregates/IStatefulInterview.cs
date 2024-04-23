@@ -219,7 +219,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Identity> GetAllUnansweredCriticalQuestions();
         IEnumerable<Identity> GetAllUnansweredQuestions();
         
-        string GetCriticalityConditionMessage(Guid criticalityConditionId);
+        string GetCriticalRuleMessage(Guid criticalityConditionId);
         bool HasCriticalFeature();
     }
 }

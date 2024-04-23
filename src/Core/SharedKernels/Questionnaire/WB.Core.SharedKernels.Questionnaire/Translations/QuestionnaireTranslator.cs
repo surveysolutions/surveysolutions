@@ -70,7 +70,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
         {
             criticalityCondition.Message = Translate(
                 original: criticalityCondition.Message,
-                translated: translation.GetCriticalityConditionMessage(criticalityCondition.Id));
+                translated: translation.GetCriticalRuleMessage(criticalityCondition.Id));
         }
 
         private static void TranslateAnswerOptions(IQuestion question, ITranslation translation)

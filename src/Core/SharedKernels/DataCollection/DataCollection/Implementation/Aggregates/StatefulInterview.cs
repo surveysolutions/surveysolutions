@@ -1073,7 +1073,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public IEnumerable<Identity> GetAllUnansweredCriticalQuestions()
         {
-            var questions = base.GetNotAnsweredRequiredQuestions();
+            var questions = base.GetUnansweredCriticalQuestions();
             return questions.Select(q => q.Identity);
         }
         

@@ -66,7 +66,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return viewModels;
         }
 
-        public IEnumerable<FailCriticalityConditionViewModel> RunAndGetFailCriticalityConditions(string interviewId, NavigationState navigationState)
+        public IEnumerable<FailCriticalityConditionViewModel> GetTopFailedCriticalRules(string interviewId, NavigationState navigationState)
         {
             IStatefulInterview interview = this.interviewRepository.GetOrThrow(interviewId);
             Guid[] ids = interview.CollectInvalidCriticalRules().Take(this.maxNumberOfEntities).ToArray();
@@ -74,7 +74,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var criticalityConditions = new List<FailCriticalityConditionViewModel>();
             foreach (var id in ids)
             {
-                var criticalityConditionMessage = interview.GetCriticalityConditionMessage(id);
+                var criticalityConditionMessage = interview.GetCriticalRuleMessage(id);
                 var failCriticalityConditionViewModel = this.interviewViewModelFactory.GetNew<FailCriticalityConditionViewModel>();
                 
                 using (var title = this.dynamicTextViewModelFactory.CreateDynamicTextViewModel())

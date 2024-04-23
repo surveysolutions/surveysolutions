@@ -68,7 +68,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
             return this.LinkedFilterMethodModel.Where(x => x.ClassName == className);
         }
 
-        public Dictionary<string, string[]> GetCriticalityConditions(string className)
+        public Dictionary<string, string[]> GetCriticalRules(string className)
         {
             return this.ExpressionMethodModel
                 .Where(x => x.Location.ExpressionType == ExpressionLocationType.CriticalityCondition)

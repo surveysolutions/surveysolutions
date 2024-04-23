@@ -2464,7 +2464,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return results;
         }
 
-        protected IEnumerable<InterviewTreeQuestion> GetNotAnsweredRequiredQuestions()
+        protected IEnumerable<InterviewTreeQuestion> GetUnansweredCriticalQuestions()
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             var changedInterviewTree = GetChangedTree();
@@ -2474,16 +2474,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Where(question => !question.IsDisabled() 
                             && !question.IsReadonly
                             && !question.IsAnswered()
-                            && questionnaire.IsCritical(question.Identity.Id) 
+                            && questionnaire.IsQuestionCritical(question.Identity.Id) 
                             );
             return questions;
         }
         
-        public string GetCriticalityConditionMessage(Guid criticalityConditionId)
+        public string GetCriticalRuleMessage(Guid criticalityConditionId)
         {
             var changedInterviewTree = GetChangedTree();
             var questionnaire = GetQuestionnaireOrThrow();
-            var message = questionnaire.GetCriticalityConditionMessage(criticalityConditionId);
+            var message = questionnaire.GetCriticalRuleMessage(criticalityConditionId);
             //var identity = new Identity(questionnaire.CoverPageSectionId, RosterVector.Empty);
             SubstitutionText title = substitutionTextFactory.CreateText(message, questionnaire);
             title.ReplaceSubstitutions(changedInterviewTree);

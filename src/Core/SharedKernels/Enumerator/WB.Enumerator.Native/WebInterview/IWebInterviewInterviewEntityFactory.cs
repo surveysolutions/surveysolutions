@@ -15,7 +15,7 @@ namespace WB.Enumerator.Native.WebInterview
         GroupStatus CalculateSimpleStatus(InterviewTreeGroup group, bool isReviewMode, IStatefulInterview interview, IQuestionnaire questionnaire);
         void ApplyValidity(Validity validity, GroupStatus status);
         Identity GetUIParent(IStatefulInterview interview, IQuestionnaire questionnaire, Identity identity);
-        string GetCriticalityConditionMessage(Guid id, IStatefulInterview interview, IQuestionnaire questionnaire, bool isReviewMode);
+        string GetCriticalRuleMessage(Guid id, IStatefulInterview interview, IQuestionnaire questionnaire, bool isReviewMode);
 
         InterviewEntityType GetEntityType(Identity identity, IQuestionnaire callerQuestionnaire,
             IStatefulInterview interview, bool isReviewMode, bool includeVariables);
