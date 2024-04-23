@@ -4,13 +4,15 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Java.Lang;
+using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Binding.Views;
 
 namespace WB.UI.Shared.Enumerator.CustomControls;
 
 public class AutosizeExpandableListView : MvxExpandableListView
 {
-    public AutosizeExpandableListView(Context context, IAttributeSet attrs) : base(context, attrs)
+    public AutosizeExpandableListView(Context context, IAttributeSet attrs) 
+        : base(context, attrs, new CompleteInformationAdapter(context))
     {
         Initialize();
     }
@@ -24,16 +26,23 @@ public class AutosizeExpandableListView : MvxExpandableListView
     {
         Initialize();
     }
+    
+    
+
+    public override void SetAdapter(IExpandableListAdapter adapter)
+    {
+        base.SetAdapter(adapter);
+    }
 
     public override bool CollapseGroup(int groupPos)
     {
-        ManageIndicatorVisibility();
+        //ManageIndicatorVisibility();
         return base.CollapseGroup(groupPos);
     }
 
     public override bool ExpandGroup(int groupPos)
     {
-        ManageIndicatorVisibility();
+        //ManageIndicatorVisibility();
         return base.ExpandGroup(groupPos);
     }
     

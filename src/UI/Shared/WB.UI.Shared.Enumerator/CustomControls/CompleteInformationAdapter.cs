@@ -5,6 +5,7 @@ using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Binding.Views;
 using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.UI.Shared.Enumerator.CustomControls;
 
@@ -25,6 +26,29 @@ public class CompleteInformationAdapter : MvxExpandableListAdapter
                 if (indicator.Visibility != newVisibilityState)
                     indicator.Visibility = newVisibilityState;
             }
+
+            /*var btnIndicator = (Button)view.FindViewById(Resource.Id.Complete_Group_Expand_Btn);
+            if (btnIndicator != null)
+            {
+                btnIndicator.Click += ((sender, args) =>
+                {
+                    //var group = GetGroup(groupPosition) as CompleteGroup;
+                    if (listView.IsGroupExpanded(groupPosition))
+                    {
+                        listView.CollapseGroup(groupPosition);
+                        btnIndicator.Text = "+";
+                    }
+                    else
+                    {
+                        listView.ExpandGroup(groupPosition);
+                        btnIndicator.Text = "-";
+                    }
+                });
+                
+                var newVisibilityState = hasChildren ? ViewStates.Visible : ViewStates.Invisible;
+                if (btnIndicator.Visibility != newVisibilityState)
+                    btnIndicator.Visibility = newVisibilityState;
+            }*/
         }
 
         return view;

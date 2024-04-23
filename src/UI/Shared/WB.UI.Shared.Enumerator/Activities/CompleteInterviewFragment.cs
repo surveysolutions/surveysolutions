@@ -20,14 +20,11 @@ namespace WB.UI.Shared.Enumerator.Activities
             //var view = base.OnCreateView(inflater, container, savedInstanceState);
             var view = this.BindingInflate(ViewResourceId, container, false);
             
-            var expandableListView = view.FindViewById<MvxExpandableListView>(Resource.Id.tv_Complete_Groups_Information);
             var adapter = new CompleteInformationAdapter(Context, (IMvxAndroidBindingContext)base.BindingContext);
+            //var expandableListView = view.FindViewById<MvxExpandableListView>(Resource.Id.tv_Complete_Groups_Information);
+            var expandableListView = view.FindViewById<AutosizeExpandableListView>(Resource.Id.tv_Complete_Groups_Information);
 
             expandableListView.SetAdapter(adapter);
-            /*var itemsSource = expandableListView.ItemsSource;
-            expandableListView.SetAdapter(adapter);
-            expandableListView.ItemsSource = itemsSource;
-            #1#
 
             return view;
         }*/

@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
      xmlns:local="http://schemas.android.com/apk/res-auto"
-    style="@style/VerticalFullWidthWrappingLayout"
-              android:orientation="vertical">
-    
+    style="@style/FullWidthWrappingLayout"
+              android:orientation="horizontal">
+
+    <Button style="@style/Interview_Sidebar_Sections_ToggleButton"
+            android:id="@+id/Complete_Group_Expand_Btn"
+            android:layout_height="wrap_content"
+            android:layout_width="@dimen/Interview_Complete_Group_left_offset"
+            local:MvxBind="Text '+';"/>
+
     <TextView
             android:id="@+id/Complete_AnsweredCount"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:gravity="fill"
             style="@style/Interview_Complete_Screen_Statistics_Counter"
             local:MvxBind="Text Title; Color CompleteGroupToColor(.)" />
     
