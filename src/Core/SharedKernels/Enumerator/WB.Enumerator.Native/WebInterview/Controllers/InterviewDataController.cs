@@ -100,7 +100,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 ReceivedByInterviewer = statefulInterview.ReceivedByInterviewer,
                 IsCurrentUserObserving = this.IsCurrentUserObserving(),
                 DoesBrokenPackageExist = false,
-                IsExistsCriticality =  questionnaire.IsExistsCriticality(),
+                IsExistsCriticality =  questionnaire.DoesSupportCriticality(),
             };
         }
         
@@ -123,13 +123,13 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 });
             }
 
-            var criticalityConditions = new List<CriticalityConditionCheck>();
-            var failCriticalityConditions = interview.RunAndGetFailCriticalityConditions().ToList();
-            foreach (var conditionId in failCriticalityConditions)
+            var criticalityConditions = new List<CriticalRuleResult>();
+            var failedCriticalityConditions = interview.CollectInvalidCriticalRules().ToList();
+            foreach (var conditionId in failedCriticalityConditions)
             {
                 var message = interviewEntityFactory.GetCriticalityConditionMessage(conditionId, interview, questionnaire, IsReviewMode());
                 //var message = interview.GetCriticalityConditionMessage(conditionId);
-                criticalityConditions.Add(new CriticalityConditionCheck()
+                criticalityConditions.Add(new CriticalRuleResult()
                 {
                     Id = conditionId.FormatGuid(),
                     Message = message, 
@@ -138,8 +138,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
             return new CriticalityCheckResult()
             {
-                FailCriticalityConditions = criticalityConditions.ToArray(),
-                FailCriticalQuestions = criticalQuestions.ToArray()
+                FailedCriticalRules = criticalityConditions.ToArray(),
+                UnansweredCriticalQuestions = criticalQuestions.ToArray()
             };
         }
 

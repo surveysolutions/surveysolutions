@@ -410,7 +410,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public string Message { get; set; }
     }
     
-    public class CriticalityConditionCheck
+    public class CriticalRuleResult
     {
         public string Id { get; set; }
         public string Message { get; set; }
@@ -418,8 +418,8 @@ namespace WB.Enumerator.Native.WebInterview.Models
     
     public class CriticalityCheckResult
     {
-        public CriticalityConditionCheck[] FailCriticalityConditions { get; set; }
-        public CriticalQuestionCheck[] FailCriticalQuestions { get; set; }
+        public CriticalRuleResult[] FailedCriticalRules { get; set; }
+        public CriticalQuestionCheck[] UnansweredCriticalQuestions { get; set; }
     }
 
 }

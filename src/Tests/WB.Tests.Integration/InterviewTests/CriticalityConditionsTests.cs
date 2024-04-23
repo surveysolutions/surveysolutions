@@ -48,16 +48,16 @@ public class CriticalityConditionsTests: InterviewTestsContext
                 
                 return new
                 {
-                    FailCriticalityConditions = interview.RunAndGetFailCriticalityConditions()
+                    FailedCriticalityConditions = interview.CollectInvalidCriticalRules()
                 };
             }
         });
 
         Assert.That(results, Is.Not.Null);
-        Assert.That(results.FailCriticalityConditions, Is.Not.Null);
-        Assert.That(results.FailCriticalityConditions.Count(), Is.EqualTo(2));
-        Assert.That(results.FailCriticalityConditions.First(), Is.EqualTo(Abc.Id.g1));
-        Assert.That(results.FailCriticalityConditions.Last(), Is.EqualTo(Abc.Id.g3));
+        Assert.That(results.FailedCriticalityConditions, Is.Not.Null);
+        Assert.That(results.FailedCriticalityConditions.Count(), Is.EqualTo(2));
+        Assert.That(results.FailedCriticalityConditions.First(), Is.EqualTo(Abc.Id.g1));
+        Assert.That(results.FailedCriticalityConditions.Last(), Is.EqualTo(Abc.Id.g3));
 
         appDomainContext.Dispose();
         appDomainContext = null;
