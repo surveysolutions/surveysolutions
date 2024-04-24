@@ -106,11 +106,13 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         
         public virtual CriticalityCheckResult GetCriticalityChecks(Guid interviewId)
         {
+            int count = 30;
+            
             var interview = statefulInterviewRepository.GetOrThrow(interviewId.FormatGuid());
             var questionnaire = questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
 
             var criticalQuestions = new List<CriticalQuestionCheck>();
-            var unansweredCriticalQuestions = interview.GetAllUnansweredCriticalQuestions().ToList();
+            var unansweredCriticalQuestions = interview.GetAllUnansweredCriticalQuestions().Take(count).ToList();
             foreach (var questionId in unansweredCriticalQuestions)
             {
                 var question = interview.GetQuestion(questionId);
@@ -124,7 +126,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             }
 
             var criticalityConditions = new List<CriticalRuleResult>();
-            var failedCriticalityConditions = interview.CollectInvalidCriticalRules().ToList();
+            var failedCriticalityConditions = interview.CollectInvalidCriticalRules().Take(count).ToList();
             foreach (var conditionId in failedCriticalityConditions)
             {
                 var message = interviewEntityFactory.GetCriticalRuleMessage(conditionId, interview, questionnaire, IsReviewMode());
