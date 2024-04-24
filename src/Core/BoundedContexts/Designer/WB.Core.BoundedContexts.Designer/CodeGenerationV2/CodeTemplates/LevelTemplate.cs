@@ -65,7 +65,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             this.Write("\n    ");
             
             #line 16 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
- } else if (Model.HasCriticalityConditions) { 
+ } else if (Model.HasCriticalRules) { 
             
             #line default
             #line hidden
@@ -267,7 +267,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line hidden
             
             #line 68 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
-  if (Model.HasCriticalityConditions)
+  if (Model.HasCriticalRules)
     {
         foreach (var methodGroup in Storage.GetCriticalRules(Model.ClassName))
         {
@@ -275,7 +275,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             
             #line default
             #line hidden
-            this.Write("            \n            criticalityConditions = new Func<bool>[] { ");
+            this.Write("            \n            criticalRules = new Func<bool>[] { ");
             
             #line 73 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(string.Join(",", methodGroup.Value)));
@@ -295,11 +295,11 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             this.Write("        }\n\n        public Func<IInterviewLevel, bool> GetLinkedQuestionFilter(Identity identity)\n        {\n            if (linkedFilters.TryGetValue(identity.Id, out var result))\n            {\n                return result;\n            }\n\n            return null;\n        }\n\n        public Func<bool> GetConditionExpression(Identity identity)\n        {\n            if (enablementConditions.TryGetValue(identity.Id, out var result))\n            {\n                return result;\n            }\n\n            return null;\n        }\n\n        public Func<bool>[] GetValidationExpressions(Identity identity)\n        {\n            if (validationConditions.TryGetValue(identity.Id, out var result))\n            {\n                return result;\n            }\n\n            return null;\n        }\n\n        public Func<object> GetVariableExpression(Identity identity)\n        {\n            if (variableExpressions.TryGetValue(identity.Id, out var result))\n            {\n                return result;\n            }\n\n            return null;\n        }\n\n        public Func<int, bool> GetCategoricalFilter(Identity identity)\n        {\n            if (categoricalFilters.TryGetValue(identity.Id, out var result))\n            {\n                return result;\n            }\n\n            return null;\n        }\n\n");
             
             #line 130 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
- if (Model.HasCriticalityConditions) { 
+ if (Model.HasCriticalRules) { 
             
             #line default
             #line hidden
-            this.Write("        public Func<bool>[] GetCriticalRules()\n        {\n            return criticalityConditions;\n        }\n\n        private readonly Func<bool>[] criticalityConditions = new Func<bool>[0];\n");
+            this.Write("        public Func<bool>[] GetCriticalRules()\n        {\n            return criticalRules;\n        }\n\n        private readonly Func<bool>[] criticalRules = new Func<bool>[0];\n");
             
             #line 137 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
  } 
