@@ -202,7 +202,7 @@ namespace WB.Infrastructure.Native.Questionnaire
                     yield return translatedOption;
             }
 
-            foreach (var criticalityCondition in questionnaire.CriticalityConditions)
+            foreach (var criticalityCondition in questionnaire.CriticalRules)
                 yield return GetTranslatedCriticalityCondition(criticalityCondition, translation);
         }
 
@@ -224,13 +224,13 @@ namespace WB.Infrastructure.Native.Questionnaire
             Translation = translation.GetInstruction(question.PublicKey)
         };
 
-        private static TranslationRow GetTranslatedCriticalityCondition(CriticalityCondition criticalityCondition, ITranslation translation) => new TranslationRow
+        private static TranslationRow GetTranslatedCriticalityCondition(CriticalRule criticalRule, ITranslation translation) => new TranslationRow
         {
-            EntityId = criticalityCondition.Id.FormatGuid(),
+            EntityId = criticalRule.Id.FormatGuid(),
             Variable = null,
             Type = TranslationType.CriticalityCondition.ToString("G"),
-            OriginalText = criticalityCondition.Message,
-            Translation = translation.GetCriticalityConditionMessage(criticalityCondition.Id)
+            OriginalText = criticalRule.Message,
+            Translation = translation.GetCriticalRuleMessage(criticalRule.Id)
         };
 
         private static IEnumerable<TranslationRow> GetTranslatedValidationMessages(IValidatable validatable, ITranslation translation)

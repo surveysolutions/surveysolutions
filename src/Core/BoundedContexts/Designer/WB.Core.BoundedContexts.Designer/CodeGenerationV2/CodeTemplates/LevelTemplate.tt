@@ -7,14 +7,15 @@
 <#@ import namespace="WB.Core.SharedKernels.DataCollection.ExpressionStorage" #>
 <#@ import namespace="WB.Core.SharedKernels.DataCollection.Portable" #>
 <#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Helpers" #>
 
     internal partial class <#=Model.ClassName #> : LevelFunctions, <#=nameof(IInterviewLevel) #>
      <# if (Model.RosterScope.Length > 0) 
     { 
         #> 
         , <#=nameof(IIndexedInterviewLevel) #>
-    <# } else if (Model.HasCriticalityConditions) { #>
-        , <#=nameof(ICriticalityConditionLevel) #>
+    <# } else if (Model.HasCriticalRules) { #>
+        , <#=nameof(ICriticalRuleLevel) #>
     <# } #>
     {
         
@@ -65,12 +66,12 @@
 <# 
     }
 #>
-<#  if (Model.HasCriticalityConditions)
+<#  if (Model.HasCriticalRules)
     {
-        foreach (var methodGroup in Storage.GetCriticalityConditions(Model.ClassName))
+        foreach (var criticalRuleTuple in Storage.GetCriticalRules(Model.ClassName))
         {
-#>            
-            criticalityConditions = new Func<bool>[] { <#= string.Join(",", methodGroup.Value) #> };
+#>
+            criticalRules.Add(<#= criticalRuleTuple.Key.AsBytesString() #> , <#= criticalRuleTuple.Value #>);
 <#
         }
     }
@@ -127,13 +128,18 @@
             return null;
         }
 
-<# if (Model.HasCriticalityConditions) { #>
-        public Func<bool>[] GetCriticalityConditions()
+<# if (Model.HasCriticalRules) { #>
+        public Func<bool> GetCriticalRule(Guid criticalRuleId)
         {
-            return criticalityConditions;
+            if (criticalRules.TryGetValue(criticalRuleId, out var result))
+            {
+                return result;
+            }
+
+            return null;
         }
 
-        private readonly Func<bool>[] criticalityConditions = new Func<bool>[0];
+        private readonly Dictionary<Guid, Func<bool>> criticalRules = new Dictionary<Guid, Func<bool>>();
 <# } #>
         private readonly Dictionary<Guid, Func<<#=typeof(IInterviewLevel).Name#>, bool>> linkedFilters = new Dictionary<Guid, Func<<#=typeof(IInterviewLevel).Name#>, bool>>();
         private readonly Dictionary<Guid, Func<int, bool>> categoricalFilters = new Dictionary<Guid, Func<int, bool>>();

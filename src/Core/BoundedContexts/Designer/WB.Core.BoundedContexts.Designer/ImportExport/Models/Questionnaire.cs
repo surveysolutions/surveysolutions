@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport.Models
         public CoverPage? CoverPage { get; set; }
         public List<Group> Children { get; set; } = new List<Group>();
         public List<Macro> Macros { get; set; } = new List<Macro>();
-        public List<CriticalityCondition> CriticalityConditions { get; set; } = new List<CriticalityCondition>();
+        public List<CriticalRule> CriticalRules { get; set; } = new List<CriticalRule>();
         public List<LookupTable> LookupTables { get; set; } = new List<LookupTable>();
         public List<Attachment> Attachments { get; set; } = new List<Attachment>();
         public Translations Translations { get; set; } = new Translations();

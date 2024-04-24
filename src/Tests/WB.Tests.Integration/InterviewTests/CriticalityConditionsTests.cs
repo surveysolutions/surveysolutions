@@ -36,9 +36,9 @@ public class CriticalityConditionsTests: InterviewTestsContext
                 }),
                 Abc.Create.Entity.Variable(variableId, VariableType.LongInteger, "v", "i")
             );
-            questionnaireDocument.CriticalityConditions.Add(new CriticalityCondition(Abc.Id.g1, "v == 6", "v == 6"));
-            questionnaireDocument.CriticalityConditions.Add(new CriticalityCondition(Abc.Id.g2, "v != 6", "v != 6"));
-            questionnaireDocument.CriticalityConditions.Add(new CriticalityCondition(Abc.Id.g3, "v != 1", "v != 1"));
+            questionnaireDocument.CriticalRules.Add(new CriticalRule(Abc.Id.g1, "v == 6", "v == 6"));
+            questionnaireDocument.CriticalRules.Add(new CriticalRule(Abc.Id.g2, "v != 6", "v != 6"));
+            questionnaireDocument.CriticalRules.Add(new CriticalRule(Abc.Id.g3, "v != 1", "v != 1"));
 
             var interview = SetupStatefullInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument, new List<object>());
 
@@ -81,7 +81,7 @@ public class CriticalityConditionsTests: InterviewTestsContext
             var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                 Abc.Create.Entity.TextQuestion(questionId, variable: "tt")
             );
-            questionnaireDocument.CriticalityConditions.Add(new CriticalityCondition(Abc.Id.g1, "tt == \"test\"", "check fail: %tt%"));
+            questionnaireDocument.CriticalRules.Add(new CriticalRule(Abc.Id.g1, "tt == \"test\"", "check fail: %tt%"));
 
             var interview = SetupStatefullInterviewWithExpressionStorage(appDomainContext.AssemblyLoadContext, questionnaireDocument, new List<object>());
 
@@ -91,7 +91,7 @@ public class CriticalityConditionsTests: InterviewTestsContext
                 
                 return new
                 {
-                    CriticalityMessage = interview.GetCriticalityConditionMessage(Abc.Id.g1)
+                    CriticalityMessage = interview.GetCriticalRuleMessage(Abc.Id.g1)
                 };
             }
         });

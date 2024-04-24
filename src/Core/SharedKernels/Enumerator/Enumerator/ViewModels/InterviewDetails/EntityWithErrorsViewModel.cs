@@ -1,4 +1,5 @@
-﻿using MvvmCross.Commands;
+﻿using System.Collections.Generic;
+using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
@@ -15,20 +16,75 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.navigationState = navigationState;
             this.entityIdentity = entityIdentity;
             this.entityTitle = entityTitle;
+            this.IsError = true;
         }
 
         private NavigationState navigationState;
 
         private string entityTitle;
         public string EntityTitle => this.entityTitle;
+        
+        public bool IsError { get; set; }
 
         private NavigationIdentity entityIdentity;
 
         public IMvxCommand NavigateToSectionCommand => 
-            new MvxAsyncCommand(async ()=> await this.navigationState.NavigateTo(this.entityIdentity));
+            new MvxAsyncCommand(async ()=> await this.navigationState.NavigateTo(this.entityIdentity), () => entityIdentity != null);
+
+        public static EntityWithErrorsViewModel InitTitle(string title)
+        {
+            var viewModel = new EntityWithErrorsViewModel();
+            viewModel.Init(null, title, null);
+            viewModel.IsError = false;
+            return viewModel;
+        }
+
+        public static EntityWithErrorsViewModel InitError(string title)
+        {
+            var viewModel = new EntityWithErrorsViewModel();
+            viewModel.Init(null, title, null);
+            return viewModel;
+        }
     }
 
     public class EntityWithCommentsViewModel : EntityWithErrorsViewModel
     {
+    }    
+    
+    public class FailedCriticalRuleViewModel : BaseViewModel
+    {
+        public string EntityTitle { get; private set; }
+
+        public void Init(string title)
+        {
+            this.EntityTitle = title;
+        }
     }
+    
+    public class CompleteGroup : MvxObservableCollection<EntityWithErrorsViewModel>
+    {
+        public CompleteGroup()
+        {
+        }
+
+        public CompleteGroup(IEnumerable<EntityWithErrorsViewModel> items) : base(items)
+        {
+        }
+
+        public int AllCount { get; set; }
+        public CompleteGroupContent GroupContent { get; set; }
+
+        public bool HasChildren => AllCount > 0;
+        public bool Expanded => false;
+        public string Title { get; set; }
+    }
+    
+    public enum CompleteGroupContent
+    {
+        Unknown,
+        Error,
+        Answered,
+        Unanswered,
+    }
+
 }

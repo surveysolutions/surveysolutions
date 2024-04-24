@@ -86,9 +86,9 @@ namespace WB.Core.BoundedContexts.Designer.Services
             => new ExpressionLocation(ExpressionLocationItemType.Roster, ExpressionLocationType.Condition, rosterId);
         
         
-        public static ExpressionLocation CriticalityCondition(Guid criticalityConditionId, int position)
-            => new ExpressionLocation(ExpressionLocationItemType.Questionnaire, ExpressionLocationType.CriticalityCondition, 
-                criticalityConditionId, position);
+        public static ExpressionLocation CriticalRule(Guid criticalRuleId, int position)
+            => new ExpressionLocation(ExpressionLocationItemType.Questionnaire, ExpressionLocationType.CriticalRule, 
+                criticalRuleId, position);
         
         public override string ToString()
         {

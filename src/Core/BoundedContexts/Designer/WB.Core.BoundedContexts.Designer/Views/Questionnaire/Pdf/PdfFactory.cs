@@ -143,7 +143,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 VariableWithLongExpressions = Find<IVariable>(allItems, x => x.Expression?.Length > this.pdfSettings.VariableExpressionExcerptLength).ToList(),
                 QuestionsWithLongSpecialValuesList = Find<IQuestion>(allItems, x => x.QuestionType == QuestionType.Numeric && x.Answers?.Count > this.pdfSettings.OptionsExcerptCount).ToList(),
                 CategoriesList = GetCategoriesList(questionnaire, translationData),
-                CriticalityConditions = questionnaire.CriticalityConditions,
+                CriticalityConditions = questionnaire.CriticalRules,
             };
 
             pdfView.FillStatistics(allItems, pdfView.Statistics);

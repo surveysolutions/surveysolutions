@@ -1073,10 +1073,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public IEnumerable<Identity> GetAllUnansweredCriticalQuestions()
         {
-            var questions = base.GetNotAnsweredRequiredQuestions();
+            var questions = base.GetUnansweredCriticalQuestions();
             return questions.Select(q => q.Identity);
         }
-
+        
+        public IEnumerable<Identity> GetAllUnansweredQuestions()
+        {
+            return this.Tree.FindQuestions()
+                .Where(question => !question.IsDisabled() && !question.IsAnswered() && !question.IsReadonly)
+                .Select(q => q.Identity);
+        }
+        
         private void Apply(InterviewPaused @event)
         {
             this.properties.LastPaused = @event.OriginDate;

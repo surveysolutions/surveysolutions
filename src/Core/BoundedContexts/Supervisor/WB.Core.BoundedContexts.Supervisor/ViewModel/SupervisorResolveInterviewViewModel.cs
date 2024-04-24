@@ -48,7 +48,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             IAuditLogService auditLogService,
             IPlainStorage<InterviewView> interviews,
             IUserInteractionService userInteractionService,
-            ICalendarEventStorage calendarEventStorage) : 
+            ICalendarEventStorage calendarEventStorage,
+            IQuestionnaireStorage questionnaireStorage) : 
                 base(navigationService,
                 commandService,
                 principal,
@@ -56,7 +57,11 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 lastCompletionComments,
                 interviewState,
                 dynamicTextViewModel,
-                logger)
+                logger,
+                userInteractionService,
+                interviewRepository,
+                questionnaireStorage
+                )
         {
             this.commandService = commandService;
             this.interviewRepository = interviewRepository;

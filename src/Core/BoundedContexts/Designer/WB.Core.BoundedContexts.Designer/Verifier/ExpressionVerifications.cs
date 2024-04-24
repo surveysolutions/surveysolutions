@@ -126,7 +126,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return CheckForbiddenClassesUsage(enablingCondition, questionnaire);
         }
 
-        private bool CriticalityConditionUsingForbiddenClasses(CriticalityCondition item, MultiLanguageQuestionnaireDocument questionnaire) 
+        private bool CriticalityConditionUsingForbiddenClasses(CriticalRule item, MultiLanguageQuestionnaireDocument questionnaire) 
             => CheckForbiddenClassesUsage(item.Expression, questionnaire);
 
         private bool CheckForbiddenClassesUsage(string? expression, MultiLanguageQuestionnaireDocument questionnaire)
@@ -439,11 +439,11 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private static bool ValidationConditionIsEmpty(IComposite question, ValidationCondition validationCondition, MultiLanguageQuestionnaireDocument questionnaire)
             => string.IsNullOrWhiteSpace(validationCondition.Expression);
 
-        private static bool CriticalityConditionExpressionIsEmpty(CriticalityCondition criticalityCondition, MultiLanguageQuestionnaireDocument questionnaire)
-            => string.IsNullOrWhiteSpace(criticalityCondition.Expression);
+        private static bool CriticalityConditionExpressionIsEmpty(CriticalRule criticalRule, MultiLanguageQuestionnaireDocument questionnaire)
+            => string.IsNullOrWhiteSpace(criticalRule.Expression);
 
-        private static bool CriticalityConditionMessageIsEmpty(CriticalityCondition criticalityCondition, MultiLanguageQuestionnaireDocument questionnaire)
-            => string.IsNullOrWhiteSpace(criticalityCondition.Message);
+        private static bool CriticalityConditionMessageIsEmpty(CriticalRule criticalRule, MultiLanguageQuestionnaireDocument questionnaire)
+            => string.IsNullOrWhiteSpace(criticalRule.Message);
         
 
         private static bool ValidationConditionIsTooLong(IComposite question, ValidationCondition validationCondition, MultiLanguageQuestionnaireDocument questionnaire)
@@ -605,7 +605,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         }
         
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> CriticalityConditionError(
-            Func<CriticalityCondition, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
+            Func<CriticalRule, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
         {
             return questionnaire =>
                 questionnaire.CriticalityConditions
@@ -615,7 +615,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         }
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> CriticalityConditionWarning(
-            Func<CriticalityCondition, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
+            Func<CriticalRule, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
         {
             return questionnaire =>
                 questionnaire.CriticalityConditions
