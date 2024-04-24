@@ -10,6 +10,7 @@ using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -45,7 +46,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             InterviewStateViewModel interviewState,
             DynamicTextViewModel dynamicTextViewModel,
             ILogger logger,
-            IUserInteractionService userInteractionService)
+            IUserInteractionService userInteractionService,
+            IStatefulInterviewRepository interviewRepository,
+            IQuestionnaireStorage questionnaireStorage)
         {
             Messenger = Mvx.IoCProvider.GetSingleton<IMvxMessenger>();
             this.viewModelNavigationService = viewModelNavigationService;
@@ -58,10 +61,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.Name = dynamicTextViewModel;
             this.logger = logger;
             this.userInteractionService = userInteractionService;
+            this.interviewRepository = interviewRepository;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
         protected readonly ILogger logger;
         private readonly IUserInteractionService userInteractionService;
+        private readonly IStatefulInterviewRepository interviewRepository;
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
         protected Guid interviewId;
 
@@ -127,7 +134,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         
         private Task CollectCriticalityInfo(string interviewId, NavigationState navigationState)
         {
-            if (!this.entitiesListViewModelFactory.HasCriticalFeature(interviewId))
+            if (!this.HasCriticalFeature(interviewId))
             {
                 IsCompletionAllowed = true;
                 return Task.CompletedTask;
@@ -174,6 +181,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
             
             return Task.CompletedTask;
+        }
+        
+        private bool HasCriticalFeature(string interviewId)
+        {
+            IStatefulInterview interview = this.interviewRepository.GetOrThrow(interviewId);
+            var questionnaire = questionnaireStorage.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, null);
+            return questionnaire.DoesSupportCriticality();
         }
         
         public MvxObservableCollection<CompleteGroup> CompleteGroups { get; set; }

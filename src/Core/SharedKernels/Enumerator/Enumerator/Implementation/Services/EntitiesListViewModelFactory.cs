@@ -114,10 +114,5 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         }
 
         public int MaxNumberOfEntities => this.maxNumberOfEntities;
-        public bool HasCriticalFeature(string interviewId)
-        {
-            IStatefulInterview interview = this.interviewRepository.GetOrThrow(interviewId);
-            return interview.HasCriticalFeature();
-        }
     }
 }

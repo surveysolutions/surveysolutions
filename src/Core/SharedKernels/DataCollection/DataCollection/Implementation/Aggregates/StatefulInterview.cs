@@ -1083,13 +1083,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Where(question => !question.IsDisabled() && !question.IsAnswered() && !question.IsReadonly)
                 .Select(q => q.Identity);
         }
-
-        public bool HasCriticalFeature()
-        {
-            var questionnaire = GetQuestionnaireOrThrow();
-            return questionnaire.DoesSupportCriticality();
-        }
-
+        
         private void Apply(InterviewPaused @event)
         {
             this.properties.LastPaused = @event.OriginDate;
