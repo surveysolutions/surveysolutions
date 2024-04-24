@@ -70,7 +70,7 @@ export default {
         state.isCurrentUserObserving = interviewInfo.isCurrentUserObserving
         state.doesBrokenPackageExist = interviewInfo.doesBrokenPackageExist
         state.canAddComments = interviewInfo.canAddComments
-        state.isExistsCriticality = interviewInfo.isExistsCriticality
+        state.doesSupportCriticality = interviewInfo.doesSupportCriticality
     },
     SET_COVER_INFO(state, coverInfo) {
         state.coverInfo = coverInfo

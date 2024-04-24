@@ -148,13 +148,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             };
             CompleteGroups.Insert(0, unansweredCriticalQuestionsGroup);
             
-            this.FailedCriticalityRules = this.entitiesListViewModelFactory.GetTopFailedCriticalRules(interviewId, navigationState).ToList();
-            var results = this.FailedCriticalityRules.Select(i =>
+            this.TopFailedCriticalRules = this.entitiesListViewModelFactory.GetTopFailedCriticalRules(interviewId, navigationState).ToList();
+            var results = this.TopFailedCriticalRules.Select(i =>
                 EntityWithErrorsViewModel.InitError(i.EntityTitle)).ToArray();
             var failedCriticalRulesGroup = new CompleteGroup(results)
             {
-                AllCount = this.FailedCriticalityRules.Count,
-                Title = string.Format(UIResources.Interview_Complete_FailCriticalConditions, this.FailedCriticalityRules.Count),
+                AllCount = this.TopFailedCriticalRules.Count,
+                Title = string.Format(UIResources.Interview_Complete_FailCriticalConditions, this.TopFailedCriticalRules.Count),
                 GroupContent = CompleteGroupContent.Error,
             };
             CompleteGroups.Insert(1, failedCriticalRulesGroup);
@@ -184,7 +184,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public int ErrorsCount { get; set; }
         public int UnansweredCriticalQuestionsCount => UnansweredCriticalQuestions.Count;
-        public int FailedCriticalRulesCount => FailedCriticalityRules.Count;
+        public int FailedCriticalRulesCount => TopFailedCriticalRules.Count;
 
         public string EntitiesWithErrorsDescription { get; private set; }
 
@@ -204,7 +204,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public IList<EntityWithErrorsViewModel> EntitiesWithErrors { get; private set; }
         public IList<EntityWithErrorsViewModel> UnansweredCriticalQuestions { get; private set; }
-        public IList<FailedCriticalRuleViewModel> FailedCriticalityRules { get; private set; }
+        public IList<FailedCriticalRuleViewModel> TopFailedCriticalRules { get; private set; }
 
         private IMvxAsyncCommand completeInterviewCommand;
         public IMvxAsyncCommand CompleteInterviewCommand
@@ -346,9 +346,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 }
             }
 
-            if (FailedCriticalityRules != null)
+            if (TopFailedCriticalRules != null)
             {
-                var errors = FailedCriticalityRules.ToArray();
+                var errors = TopFailedCriticalRules.ToArray();
                 foreach (var errorsViewModel in errors)
                 {
                     errorsViewModel?.DisposeIfDisposable();

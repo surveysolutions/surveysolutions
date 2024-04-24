@@ -155,11 +155,11 @@ export default {
         criticalityInfo() {
             return this.$store.state.webinterview.criticalityInfo
         },
-        isExistsCriticality() {
-            return this.$store.state.webinterview.isExistsCriticality != false
+        doesSupportCriticality() {
+            return this.$store.state.webinterview.doesSupportCriticality != false
         },
         isAllowCompleteInterview() {
-            if (!this.isExistsCriticality)
+            if (!this.doesSupportCriticality)
                 return true;
             return this.isReadyLastCriticalityInfo && this.criticalityInfo?.unansweredCriticalQuestions?.length === 0 && this.criticalityInfo?.failedCriticalRules?.length === 0
         },
@@ -223,7 +223,7 @@ export default {
         },
 
         fetchCriticalityInfo() {
-            if (!this.isExistsCriticality)
+            if (!this.doesSupportCriticality)
                 return;
 
             this.isReadyLastCriticalityInfo = false;

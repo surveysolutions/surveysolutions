@@ -10,13 +10,11 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
-    public class InterviewTreeCriticalRulesRunner : IInterviewTreeCriticalityRunner, IDisposable
+    public class InterviewTreeCriticalRulesRunner : IInterviewTreeCriticRulesRunner
     {
         private readonly IInterviewExpressionStorage expressionStorage;
         private readonly IQuestionnaire questionnaire;
         private readonly Identity questionnaireIdentity;
-
-        private readonly ConcurrentDictionary<Identity, IInterviewLevel> memoryCache = new ConcurrentDictionary<Identity, IInterviewLevel>();
 
         public InterviewTreeCriticalRulesRunner(IInterviewExpressionStorage expressionStorage, IQuestionnaire questionnaire)
         {
@@ -28,9 +26,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public IEnumerable<Tuple<Guid, bool>> RunCriticalRules()
         {
             var interviewLevel = this.expressionStorage.GetLevel(this.questionnaireIdentity);
-            var rootLevel = this.memoryCache.GetOrAdd(this.questionnaireIdentity, interviewLevel);
 
-            if (rootLevel is ICriticalRuleLevel criticalityConditionLevel)
+            if (interviewLevel is ICriticalRuleLevel criticalityConditionLevel)
             {
                 var criticalRulesIds = questionnaire.GetCriticalRulesIds();
                 foreach (var criticalRulesId in criticalRulesIds)
@@ -56,11 +53,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             {
                 return false;
             }
-        }
-
-        public void Dispose()
-        {
-            this.memoryCache.Clear();
         }
     }
 }

@@ -2458,8 +2458,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IInterviewExpressionStorage expressionStorage = this.GetExpressionStorage();
             var interviewPropertiesForExpressions = new InterviewPropertiesForExpressions(new InterviewProperties(this.EventSourceId), this.properties);
             expressionStorage.Initialize(new InterviewStateForExpressions(changedInterviewTree, interviewPropertiesForExpressions));
-            using var runner = new InterviewTreeCriticalRulesRunner(expressionStorage, questionnaire);
-
+            
+            var runner = new InterviewTreeCriticalRulesRunner(expressionStorage, questionnaire);
             var results = runner.RunCriticalRules();
             return results;
         }

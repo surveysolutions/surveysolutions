@@ -26,7 +26,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public bool IsCurrentUserObserving { get; set; }
         public bool DoesBrokenPackageExist { get; set; }
         public long QuestionnaireVersion { get; set; }
-        public bool IsExistsCriticality { get; set; }
+        public bool DoesSupportCriticality { get; set; }
     }
 
     public class LanguageInfo
