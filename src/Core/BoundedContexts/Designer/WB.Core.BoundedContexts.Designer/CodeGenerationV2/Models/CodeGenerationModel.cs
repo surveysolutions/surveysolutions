@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
         public List<LevelModel> Levels { get; } = new List<LevelModel>();
 
         public List<ConditionMethodModel> ExpressionMethodModel { get; } = new List<ConditionMethodModel>();
-
+        
         public List<OptionsFilterMethodModel> CategoricalOptionsFilterModel { get; } = new List<OptionsFilterMethodModel>();
 
         public List<LinkedFilterMethodModel> LinkedFilterMethodModel { get; } = new List<LinkedFilterMethodModel>();
@@ -68,13 +68,12 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
             return this.LinkedFilterMethodModel.Where(x => x.ClassName == className);
         }
 
-        public Dictionary<string, string[]> GetCriticalRules(string className)
+        public Dictionary<Guid, string> GetCriticalRules(string className)
         {
             return this.ExpressionMethodModel
-                .Where(x => x.Location.ExpressionType == ExpressionLocationType.CriticalityCondition)
+                .Where(x => x.Location.ExpressionType == ExpressionLocationType.CriticalRule)
                 .Where(x => x.ClassName == className)
-                .GroupBy(x => x.Variable)
-                .ToDictionary(x => x.Key, x => x.OrderBy(v => v.Location.ExpressionPosition).Select(v => v.MethodName).ToArray());
+                .ToDictionary(x => x.Location.Id, x => x.MethodName);
         }
     }
 }

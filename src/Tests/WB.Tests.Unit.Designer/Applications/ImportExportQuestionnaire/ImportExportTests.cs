@@ -280,10 +280,10 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             var questionnaireDocument = Create.QuestionnaireDocumentWithEmptyCoverPage(Id.g1,
                 Create.Chapter()
             );
-            questionnaireDocument.CriticalityConditions = new List<CriticalityCondition>()
+            questionnaireDocument.CriticalRules = new List<CriticalRule>()
             {
-                { new CriticalityCondition() { Message = "Message #1", Description = "Description 1", Expression = "Expression1"} },
-                { new CriticalityCondition() { Message = "Message #2", Description = "Description 2", Expression = "Expression2"} },
+                { new CriticalRule() { Message = "Message #1", Description = "Description 1", Expression = "Expression1"} },
+                { new CriticalRule() { Message = "Message #2", Description = "Description 2", Expression = "Expression2"} },
             };
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors);

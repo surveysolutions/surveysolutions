@@ -2,9 +2,9 @@ using System;
 
 namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
 {
-    public interface ICriticalityConditionLevel
+    public interface ICriticalRuleLevel
     {
-        Func<bool>[] GetCriticalRules();
+        Func<bool> GetCriticalRule(Guid criticalRuleId);
     }
     
     

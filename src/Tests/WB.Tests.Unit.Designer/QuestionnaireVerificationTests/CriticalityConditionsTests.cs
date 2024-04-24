@@ -58,7 +58,7 @@ public static class CriticalityConditionsTestsExtensions
     public static QuestionnaireDocument AddCriticalityCondition(
         this QuestionnaireDocument questionnaire, string expression = null, string message = null)
     {
-        questionnaire.CriticalityConditions.Add(new CriticalityCondition()
+        questionnaire.CriticalRules.Add(new CriticalRule()
         {
             Id = Guid.NewGuid(),
             Message = message,

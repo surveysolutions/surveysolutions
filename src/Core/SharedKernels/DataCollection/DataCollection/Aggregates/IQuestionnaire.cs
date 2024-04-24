@@ -333,9 +333,9 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         Guid GetEntityReferencedByLinkedQuestion(Guid linkedQuestionId);
         bool IsInsideRoster(Guid entityId);
         bool IsNeighboringSupport(Guid entityId);
-        Guid GetCriticalRuleIdByIndex(int index);
         string GetCriticalRuleMessage(Guid id);
         bool IsQuestionCritical(Guid identityId);
         bool DoesSupportCriticality();
+        IEnumerable<Guid> GetCriticalRulesIds();
     }
 }

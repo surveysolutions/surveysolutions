@@ -16,6 +16,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
     using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
     using WB.Core.SharedKernels.DataCollection.Portable;
     using System.Text.RegularExpressions;
+    using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Helpers;
     using System;
     
     /// <summary>
@@ -34,21 +35,21 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
         {
             this.Write("\n    internal partial class ");
             
-            #line 11 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 12 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.ClassName));
             
             #line default
             #line hidden
             this.Write(" : LevelFunctions, ");
             
-            #line 11 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 12 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(nameof(IInterviewLevel)));
             
             #line default
             #line hidden
             this.Write("\n     ");
             
-            #line 12 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 13 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
  if (Model.RosterScope.Length > 0) 
     { 
         
@@ -57,56 +58,56 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line hidden
             this.Write(" \n        , ");
             
-            #line 15 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 16 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(nameof(IIndexedInterviewLevel)));
             
             #line default
             #line hidden
             this.Write("\n    ");
             
-            #line 16 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 17 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
  } else if (Model.HasCriticalRules) { 
             
             #line default
             #line hidden
             this.Write("        , ");
             
-            #line 17 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(nameof(ICriticalityConditionLevel)));
+            #line 18 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(nameof(ICriticalRuleLevel)));
             
             #line default
             #line hidden
             this.Write("\n    ");
             
-            #line 18 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 19 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("    {\n        \n        public ");
             
-            #line 21 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 22 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.ClassName));
             
             #line default
             #line hidden
             this.Write("(RosterVector rosterVector, ");
             
-            #line 21 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 22 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Storage.ClassName));
             
             #line default
             #line hidden
             this.Write(" storage) \n        {\n            this._storage = storage;\n            this.Quest = new QuestionnaireRandom(storage.state.Properties);\n            this.RosterVector = rosterVector;\n            this.Identity = new Identity(IdOf.");
             
-            #line 26 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 27 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.Variable));
             
             #line default
             #line hidden
             this.Write(", this.RosterVector);\n\n");
             
-            #line 28 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 29 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
 
     foreach (var method in Storage.GetEnablementConditions(Model.ClassName)) 
     {
@@ -116,21 +117,21 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line hidden
             this.Write("            \n            enablementConditions.Add(IdOf.");
             
-            #line 32 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 33 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(method.Variable));
             
             #line default
             #line hidden
             this.Write(", ");
             
-            #line 32 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 33 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(method.MethodName));
             
             #line default
             #line hidden
             this.Write(");\n");
             
-            #line 33 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 34 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
  
     }
 
@@ -138,7 +139,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line default
             #line hidden
             
-            #line 36 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 37 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
 
     foreach (var methodGroup in Storage.GetValidationConditions(Model.ClassName)) 
     {
@@ -148,21 +149,21 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line hidden
             this.Write("            validationConditions.Add(IdOf.");
             
-            #line 40 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 41 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(methodGroup.Key));
             
             #line default
             #line hidden
             this.Write(", new Func<bool>[] { ");
             
-            #line 40 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 41 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(string.Join(",",  methodGroup.Value)));
             
             #line default
             #line hidden
             this.Write(" });\n");
             
-            #line 41 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 42 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
  
     }
 
@@ -170,7 +171,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line default
             #line hidden
             
-            #line 44 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 45 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
 
     foreach (var method in Storage.GetVariableExpressions(Model.ClassName)) 
     {
@@ -180,21 +181,21 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line hidden
             this.Write("            \n            variableExpressions.Add(IdOf.");
             
-            #line 48 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 49 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(method.Variable));
             
             #line default
             #line hidden
             this.Write(", ");
             
-            #line 48 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 49 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(method.MethodName));
             
             #line default
             #line hidden
             this.Write(");\n");
             
-            #line 49 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 50 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
  
     }
 
@@ -202,7 +203,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line default
             #line hidden
             
-            #line 52 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 53 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
 
     foreach (var method in Storage.GetCategoricalOptionsFilters(Model.ClassName)) 
     {
@@ -212,21 +213,21 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line hidden
             this.Write("            \n            categoricalFilters.Add(IdOf.");
             
-            #line 56 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 57 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(method.Variable));
             
             #line default
             #line hidden
             this.Write(", ");
             
-            #line 56 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 57 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(method.MethodName));
             
             #line default
             #line hidden
             this.Write(");\n");
             
-            #line 57 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 58 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
  
     }
 
@@ -234,7 +235,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line default
             #line hidden
             
-            #line 60 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 61 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
 
     foreach (var method in Storage.GetLinkedFilters(Model.ClassName)) 
     {
@@ -244,21 +245,21 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line hidden
             this.Write("            \n            linkedFilters.Add(IdOf.");
             
-            #line 64 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 65 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(method.Variable));
             
             #line default
             #line hidden
             this.Write(", ");
             
-            #line 64 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 65 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(method.MethodName));
             
             #line default
             #line hidden
             this.Write(");\n");
             
-            #line 65 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 66 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
  
     }
 
@@ -266,25 +267,32 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line default
             #line hidden
             
-            #line 68 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 69 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
   if (Model.HasCriticalRules)
     {
-        foreach (var methodGroup in Storage.GetCriticalRules(Model.ClassName))
+        foreach (var criticalRuleTuple in Storage.GetCriticalRules(Model.ClassName))
         {
 
             
             #line default
             #line hidden
-            this.Write("            \n            criticalRules = new Func<bool>[] { ");
+            this.Write("            criticalRules.Add(");
             
-            #line 73 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(string.Join(",", methodGroup.Value)));
+            #line 74 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(criticalRuleTuple.Key.AsBytesString()));
             
             #line default
             #line hidden
-            this.Write(" };\n");
+            this.Write(" , ");
             
             #line 74 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(criticalRuleTuple.Value));
+            
+            #line default
+            #line hidden
+            this.Write(");\n");
+            
+            #line 75 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
 
         }
     }
@@ -294,56 +302,56 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line hidden
             this.Write("        }\n\n        public Func<IInterviewLevel, bool> GetLinkedQuestionFilter(Identity identity)\n        {\n            if (linkedFilters.TryGetValue(identity.Id, out var result))\n            {\n                return result;\n            }\n\n            return null;\n        }\n\n        public Func<bool> GetConditionExpression(Identity identity)\n        {\n            if (enablementConditions.TryGetValue(identity.Id, out var result))\n            {\n                return result;\n            }\n\n            return null;\n        }\n\n        public Func<bool>[] GetValidationExpressions(Identity identity)\n        {\n            if (validationConditions.TryGetValue(identity.Id, out var result))\n            {\n                return result;\n            }\n\n            return null;\n        }\n\n        public Func<object> GetVariableExpression(Identity identity)\n        {\n            if (variableExpressions.TryGetValue(identity.Id, out var result))\n            {\n                return result;\n            }\n\n            return null;\n        }\n\n        public Func<int, bool> GetCategoricalFilter(Identity identity)\n        {\n            if (categoricalFilters.TryGetValue(identity.Id, out var result))\n            {\n                return result;\n            }\n\n            return null;\n        }\n\n");
             
-            #line 130 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 131 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
  if (Model.HasCriticalRules) { 
             
             #line default
             #line hidden
-            this.Write("        public Func<bool>[] GetCriticalRules()\n        {\n            return criticalRules;\n        }\n\n        private readonly Func<bool>[] criticalRules = new Func<bool>[0];\n");
+            this.Write("        public Func<bool> GetCriticalRule(Guid criticalRuleId)\n        {\n            if (criticalRules.TryGetValue(criticalRuleId, out var result))\n            {\n                return result;\n            }\n\n            return null;\n        }\n\n        private readonly Dictionary<Guid, Func<bool>> criticalRules = new Dictionary<Guid, Func<bool>>();\n");
             
-            #line 137 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 143 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("        private readonly Dictionary<Guid, Func<");
             
-            #line 138 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 144 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(typeof(IInterviewLevel).Name));
             
             #line default
             #line hidden
             this.Write(", bool>> linkedFilters = new Dictionary<Guid, Func<");
             
-            #line 138 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 144 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(typeof(IInterviewLevel).Name));
             
             #line default
             #line hidden
             this.Write(", bool>>();\n        private readonly Dictionary<Guid, Func<int, bool>> categoricalFilters = new Dictionary<Guid, Func<int, bool>>();\n        private readonly Dictionary<Guid, Func<bool>> enablementConditions = new Dictionary<Guid, Func<bool>>();\n        private readonly Dictionary<Guid, Func<bool>[]> validationConditions = new Dictionary<Guid, Func<bool>[]>();\n        private readonly Dictionary<Guid, Func<object>> variableExpressions = new Dictionary<Guid, Func<object>>();\n\n        private readonly ");
             
-            #line 144 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 150 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Storage.ClassName));
             
             #line default
             #line hidden
             this.Write(" _storage;\n\n        private ");
             
-            #line 146 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 152 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(typeof(IInterviewStateForExpressions).Name));
             
             #line default
             #line hidden
             this.Write(" _state => _storage.state;\n\n        private ");
             
-            #line 148 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 154 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(typeof(IInterviewPropertiesForExpressions).Name));
             
             #line default
             #line hidden
             this.Write(" properties => _state.Properties;\n\n        public RosterVector RosterVector { get; private set; }\n\n        public Identity Identity  { get; private set; }\n\n");
             
-            #line 154 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 160 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
 
     if (Model.RosterScope.Length > 0)
     {
@@ -353,14 +361,14 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line hidden
             this.Write("        public int @rowcode => this.RosterVector[this.RosterVector.Length - 1];\n\n        public int @rowindex => _state.GetRosterIndex(Identity);\n\n        public string @rowname => _state.GetRosterTitle(Identity);\n        \n        public int RowCode => @rowcode;\n\n        public int RowIndex => @rowindex;\n\n");
             
-            #line 168 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 174 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\n        // backward compatibility\n        private QuestionnaireRandom Quest;\t\t\n");
             
-            #line 172 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 178 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
 
     foreach (var question in Model.Questions) 
     {
@@ -370,42 +378,42 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line hidden
             this.Write("        public ");
             
-            #line 175 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 181 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.TypeName));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 175 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 181 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.Variable));
             
             #line default
             #line hidden
             this.Write(" => _state.GetAnswer<");
             
-            #line 175 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 181 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.TypeName));
             
             #line default
             #line hidden
             this.Write(">(IdOf.");
             
-            #line 175 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 181 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.Variable));
             
             #line default
             #line hidden
             this.Write(", ");
             
-            #line 175 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 181 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.RosterScope.Length > 0 ? "RosterVector.Take(" + question.RosterScope.Length + ")" : "RosterVector.Empty"));
             
             #line default
             #line hidden
             this.Write(");\n");
             
-            #line 177 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 183 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
  
     }
 
@@ -413,7 +421,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line default
             #line hidden
             
-            #line 180 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 186 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
 
     foreach (var variable in Model.Variables) 
     {
@@ -423,42 +431,42 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line hidden
             this.Write("        public ");
             
-            #line 183 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 189 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(variable.TypeName));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 183 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 189 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(variable.Variable));
             
             #line default
             #line hidden
             this.Write(" => _state.GetVariable<");
             
-            #line 183 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 189 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(variable.TypeName));
             
             #line default
             #line hidden
             this.Write(">(IdOf.");
             
-            #line 183 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 189 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(variable.Variable));
             
             #line default
             #line hidden
             this.Write(", ");
             
-            #line 183 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 189 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(variable.RosterScope.Length > 0 ? "RosterVector.Take(" + variable.RosterScope.Length + ")" : "RosterVector.Empty"));
             
             #line default
             #line hidden
             this.Write(");\n");
             
-            #line 185 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 191 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
  
     }
 
@@ -466,7 +474,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line default
             #line hidden
             
-            #line 188 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 194 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
 
     foreach (var roster in Model.Rosters) 
     {
@@ -476,42 +484,42 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line hidden
             this.Write("        public RostersCollection<");
             
-            #line 191 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 197 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(roster.ClassName));
             
             #line default
             #line hidden
             this.Write("> ");
             
-            #line 191 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 197 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(roster.Variable));
             
             #line default
             #line hidden
             this.Write(" => _storage.GetLevels<");
             
-            #line 191 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 197 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(roster.ClassName));
             
             #line default
             #line hidden
             this.Write(">(IdOf.");
             
-            #line 191 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 197 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(roster.Variable));
             
             #line default
             #line hidden
             this.Write(", ");
             
-            #line 191 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 197 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(roster.RosterScope.Length == 1? "null" : "Identity"));
             
             #line default
             #line hidden
             this.Write(");\n");
             
-            #line 192 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 198 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
  
     }
 
@@ -519,7 +527,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line default
             #line hidden
             
-            #line 195 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 201 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
 
     foreach (var table in Storage.LookupTables) 
     {
@@ -529,28 +537,28 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line hidden
             this.Write("        public static Dictionary<int, ");
             
-            #line 198 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 204 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(table.TypeName));
             
             #line default
             #line hidden
             this.Write("> ");
             
-            #line 198 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 204 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(table.TableName));
             
             #line default
             #line hidden
             this.Write(" => LookupTables.");
             
-            #line 198 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 204 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(table.TableName));
             
             #line default
             #line hidden
             this.Write(";\n");
             
-            #line 199 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 205 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
  
     }
 
@@ -558,7 +566,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line default
             #line hidden
             
-            #line 202 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 208 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
 
     foreach (var section in Model.Sections) 
     {
@@ -568,28 +576,28 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line hidden
             this.Write("        public Section ");
             
-            #line 205 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 211 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(section.Variable));
             
             #line default
             #line hidden
             this.Write(" => _state.GetSection(IdOf.");
             
-            #line 205 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 211 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(section.Variable));
             
             #line default
             #line hidden
             this.Write(", ");
             
-            #line 205 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 211 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(section.RosterScope.Length > 0 ? "RosterVector.Take(" + section.RosterScope.Length + ")" : "RosterVector.Empty"));
             
             #line default
             #line hidden
             this.Write(");\n");
             
-            #line 207 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
+            #line 213 "/Users/spuv/Work/SurveySolutions/surveysolutions/src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/CodeGenerationV2/CodeTemplates/LevelTemplate.tt"
  
     }
 

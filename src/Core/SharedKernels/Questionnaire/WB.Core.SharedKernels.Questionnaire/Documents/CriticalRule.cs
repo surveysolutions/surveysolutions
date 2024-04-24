@@ -2,13 +2,13 @@ using System;
 
 namespace WB.Core.SharedKernels.SurveySolutions.Documents
 {
-    public class CriticalityCondition
+    public class CriticalRule
     {
-        public CriticalityCondition()
+        public CriticalRule()
         {
         }
 
-        public CriticalityCondition(Guid id, string? expression, string? message)
+        public CriticalRule(Guid id, string? expression, string? message)
         {
             this.Id = id;
             this.Expression = expression;
@@ -20,9 +20,9 @@ namespace WB.Core.SharedKernels.SurveySolutions.Documents
         public string? Expression { get; set; }
         public string? Description { get; set; }
 
-        public CriticalityCondition Clone()
+        public CriticalRule Clone()
         {
-            return new CriticalityCondition
+            return new CriticalRule
             {
                 Id = this.Id,
                 Message = this.Message,

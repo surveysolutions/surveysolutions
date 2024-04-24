@@ -5,5 +5,5 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
 public interface IInterviewTreeCriticalityRunner
 {
-    IEnumerable<Tuple<Guid, bool>> RunCriticalityConditions();
+    IEnumerable<Tuple<Guid, bool>> RunCriticalRules();
 }
