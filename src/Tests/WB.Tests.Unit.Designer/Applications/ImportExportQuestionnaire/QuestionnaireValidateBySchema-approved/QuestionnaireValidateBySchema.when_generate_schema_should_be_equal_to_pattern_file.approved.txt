@@ -63,7 +63,7 @@
       ]
     },
     "CoverPage": {},
-    "CriticalityCondition": {
+    "CriticalRule": {
       "type": [
         "object",
         "null"
@@ -120,13 +120,13 @@
         "$ref": "#/definitions/Categories"
       }
     },
-    "List<CriticalityCondition>": {
+    "List<CriticalRule>": {
       "type": [
         "array",
         "null"
       ],
       "items": {
-        "$ref": "#/definitions/CriticalityCondition"
+        "$ref": "#/definitions/CriticalRule"
       }
     },
     "List<Group>": {
@@ -464,8 +464,8 @@
     "Macros": {
       "$ref": "#/definitions/List<Macro>"
     },
-    "CriticalityConditions": {
-      "$ref": "#/definitions/List<CriticalityCondition>"
+    "CriticalRules": {
+      "$ref": "#/definitions/List<CriticalRule>"
     },
     "LookupTables": {
       "$ref": "#/definitions/List<LookupTable>"
@@ -509,7 +509,7 @@
     "CoverPage",
     "Children",
     "Macros",
-    "CriticalityConditions",
+    "CriticalRules",
     "LookupTables",
     "Attachments",
     "Translations",

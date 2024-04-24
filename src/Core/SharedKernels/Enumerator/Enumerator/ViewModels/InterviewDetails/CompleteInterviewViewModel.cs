@@ -176,7 +176,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
             else
             {
-                this.CompleteButtonComment = UIResources.Interview_Complete_Consequences_Instrunction;
+                this.CompleteButtonComment = UIResources.Interview_Complete_CriticalIssues_Instrunction;
                 this.IsCompletionAllowed = false;
             }
             

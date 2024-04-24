@@ -356,7 +356,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Interview_Complete_Consequences_Instrunction" xml:space="preserve">
     <value>After you finish this interview it will be marked as completed and will be uploaded to supervisor during your next synchronization</value>
   </data>
-  <data name="Interview_Complete_Consequences_Instrunction" xml:space="preserve">
+  <data name="Interview_Complete_CriticalIssues_Instrunction" xml:space="preserve">
     <value>This button is disabled because submission of interviews with critical issues is not allowed</value>
   </data>
   <data name="Interview_Complete_Errors" xml:space="preserve">

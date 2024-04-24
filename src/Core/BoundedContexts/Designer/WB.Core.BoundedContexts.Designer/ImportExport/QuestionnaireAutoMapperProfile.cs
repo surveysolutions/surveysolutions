@@ -123,8 +123,8 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             this.CreateMap<Models.Macro, KeyValuePair<Guid, Documents.Macro>>()
                 .ConstructUsing((v, context) => new KeyValuePair<Guid, Documents.Macro>(Guid.NewGuid(), context.Mapper.Map<Models.Macro, Documents.Macro>(v)));
 
-            this.CreateMap<Documents.CriticalRule, Models.CriticalityCondition>();
-            this.CreateMap<Models.CriticalityCondition, Documents.CriticalRule>()
+            this.CreateMap<Documents.CriticalRule, Models.CriticalRule>();
+            this.CreateMap<Models.CriticalRule, Documents.CriticalRule>()
                 .ForMember(x => x.Id, x => x.MapFrom(s =>
                     s.Id.HasValue ? s.Id.Value : Guid.NewGuid()));
 

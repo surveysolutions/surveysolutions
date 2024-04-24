@@ -519,6 +519,12 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string Interview_Complete_CriticalIssues_Instrunction {
+            get {
+                return ResourceManager.GetString("Interview_Complete_CriticalIssues_Instrunction", resourceCulture);
+            }
+        }
+        
         public static string Interview_Complete_Errors {
             get {
                 return ResourceManager.GetString("Interview_Complete_Errors", resourceCulture);

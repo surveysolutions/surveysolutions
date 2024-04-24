@@ -46,10 +46,10 @@
         "$ref": "#/definitions/Categories"
       }
     },
-    "CriticalityConditions": {
+    "CriticalRules": {
       "type": "array",
       "items": {
-        "$ref": "#/definitions/CriticalityCondition"
+        "$ref": "#/definitions/CriticalRule"
       }
     },
     "Metadata": { "$ref": "#/definitions/QuestionnaireMetaInfo" }
@@ -162,7 +162,7 @@
       "required": ["FileName", "Name"]
     },
 
-    "CriticalityCondition": {
+    "CriticalRule": {
       "type": "object",
       "properties": {
         "Message": { "type": "string" },

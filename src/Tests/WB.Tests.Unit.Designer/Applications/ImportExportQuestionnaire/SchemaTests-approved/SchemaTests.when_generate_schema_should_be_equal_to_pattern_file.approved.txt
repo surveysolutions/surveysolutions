@@ -30,10 +30,10 @@
         "$ref": "#/definitions/Macro"
       }
     },
-    "CriticalityConditions": {
+    "CriticalRules": {
       "type": "array",
       "items": {
-        "$ref": "#/definitions/CriticalityCondition"
+        "$ref": "#/definitions/CriticalRule"
       }
     },
     "LookupTables": {
@@ -905,7 +905,7 @@
         }
       }
     },
-    "CriticalityCondition": {
+    "CriticalRule": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
