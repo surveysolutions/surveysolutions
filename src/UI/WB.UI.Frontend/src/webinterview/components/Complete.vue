@@ -33,21 +33,21 @@
                 </div>
             </div>
         </div>
-        <div class="wrapper-info" v-if="criticalityInfo?.failCriticalQuestions.length > 0">
+        <div class="wrapper-info" v-if="criticalityInfo?.unansweredCriticalQuestions.length > 0">
             <div class="container-info">
                 <h4 class="gray-uppercase">{{ $t('WebInterviewUI.CriticalQuestionErrors') }}</h4>
                 <ul class="list-unstyled marked-questions">
-                    <li v-for="check in criticalityInfo.failCriticalQuestions" :key="check.id">
+                    <li v-for="check in criticalityInfo.unansweredCriticalQuestions" :key="check.id">
                         <a href="javascript:void(0);" @click="navigateTo(check)" v-html="check.message"></a>
                     </li>
                 </ul>
             </div>
         </div>
-        <div class="wrapper-info" v-if="criticalityInfo?.failCriticalityConditions.length > 0">
+        <div class="wrapper-info" v-if="criticalityInfo?.failedCriticalRules.length > 0">
             <div class="container-info">
                 <h4 class="gray-uppercase">{{ $t('WebInterviewUI.CriticalityConditionsErrors') }}</h4>
                 <ul class="list-unstyled marked-questions">
-                    <li v-for="check in criticalityInfo.failCriticalityConditions" :key="check.id">
+                    <li v-for="check in criticalityInfo.failedCriticalRules" :key="check.id">
                         <span v-html="check.message"></span>
                     </li>
                 </ul>
@@ -161,7 +161,7 @@ export default {
         isAllowCompleteInterview() {
             if (!this.isExistsCriticality)
                 return true;
-            return this.isReadyLastCriticalityInfo && this.criticalityInfo?.failCriticalQuestions?.length === 0 && this.criticalityInfo?.failCriticalityConditions?.length === 0
+            return this.isReadyLastCriticalityInfo && this.criticalityInfo?.unansweredCriticalQuestions?.length === 0 && this.criticalityInfo?.failedCriticalRules?.length === 0
         },
         shouldCloseWindow() {
             return this.$store.state.webinterview.interviewCompleted && this.$config.inWebTesterMode
@@ -179,7 +179,7 @@ export default {
             return this.completeInfo.answeredCount > 0
         },
         hasCriticalErrors() {
-            return this.criticalityInfo?.failCriticalQuestions?.length > 0 || this.criticalityInfo?.failCriticalityConditions?.length > 0
+            return this.criticalityInfo?.unansweredCriticalQuestions?.length > 0 || this.criticalityInfo?.failedCriticalRules?.length > 0
         },
         isAllAnswered() {
             return this.completeInfo.unansweredCount == 0 && this.completeInfo.errorsCount == 0
@@ -198,7 +198,7 @@ export default {
         },
         errorsCount() {
             if (this.hasCriticalErrors)
-                return this.completeInfo.errorsCount + this.criticalityInfo.failCriticalQuestions.length + this.criticalityInfo.failCriticalityConditions.length
+                return this.completeInfo.errorsCount + this.criticalityInfo.unansweredCriticalQuestions.length + this.criticalityInfo.failedCriticalRules.length
             return this.completeInfo.errorsCount;
         },
         invalidQuestionsCountString() {
