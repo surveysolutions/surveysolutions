@@ -198,5 +198,9 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 
             return interviewDetails;
         }
+        
+        [HttpGet]
+        [Route("getCriticalityChecks")]
+        public override CriticalityCheckResult GetCriticalityChecks(Guid interviewId) => base.GetCriticalityChecks(interviewId);
     }
 }

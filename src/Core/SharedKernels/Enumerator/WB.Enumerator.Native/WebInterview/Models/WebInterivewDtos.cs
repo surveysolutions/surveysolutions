@@ -26,6 +26,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public bool IsCurrentUserObserving { get; set; }
         public bool DoesBrokenPackageExist { get; set; }
         public long QuestionnaireVersion { get; set; }
+        public bool IsExistsCriticality { get; set; }
     }
 
     public class LanguageInfo
@@ -400,4 +401,25 @@ namespace WB.Enumerator.Native.WebInterview.Models
     {
         public string Comment { get; set; }
     }
+
+    public class CriticalQuestionCheck
+    {
+        public string Id { get; set; }
+        public string ParentId { get; set; }
+        public bool IsPrefilled { get; set; }
+        public string Message { get; set; }
+    }
+    
+    public class CriticalRuleResult
+    {
+        public string Id { get; set; }
+        public string Message { get; set; }
+    }
+    
+    public class CriticalityCheckResult
+    {
+        public CriticalRuleResult[] FailedCriticalRules { get; set; }
+        public CriticalQuestionCheck[] UnansweredCriticalQuestions { get; set; }
+    }
+
 }

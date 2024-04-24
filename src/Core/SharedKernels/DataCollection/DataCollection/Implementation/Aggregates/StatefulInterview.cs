@@ -248,6 +248,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     : new InterviewDeclaredInvalid(originDate) as IEvent);
             }
         }
+        
         //Obsolete. Is used only in tests. Remove
         public void Synchronize(SynchronizeInterviewCommand command)
         {
@@ -1062,6 +1063,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             ApplyEvent(new InterviewOpenedBySupervisor(command.UserId, command.OriginDate));
+        }
+
+        public IEnumerable<Guid> CollectInvalidCriticalRules()
+        {
+            var criticalityChecks = base.RunCriticalityChecks();
+            return criticalityChecks.Where(t => t.Item2 == false).Select(t => t.Item1);
+        }
+
+        public IEnumerable<Identity> GetAllUnansweredCriticalQuestions()
+        {
+            var questions = base.GetNotAnsweredRequiredQuestions();
+            return questions.Select(q => q.Identity);
         }
 
         private void Apply(InterviewPaused @event)

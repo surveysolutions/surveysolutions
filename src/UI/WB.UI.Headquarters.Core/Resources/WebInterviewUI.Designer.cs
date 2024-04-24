@@ -501,6 +501,18 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
+        public static string CriticalQuestionErrors {
+            get {
+                return ResourceManager.GetString("CriticalQuestionErrors", resourceCulture);
+            }
+        }
+        
+        public static string CriticalityConditionsErrors {
+            get {
+                return ResourceManager.GetString("CriticalityConditionsErrors", resourceCulture);
+            }
+        }
+        
         public static string CompleteNoteToSupervisor {
             get {
                 return ResourceManager.GetString("CompleteNoteToSupervisor", resourceCulture);

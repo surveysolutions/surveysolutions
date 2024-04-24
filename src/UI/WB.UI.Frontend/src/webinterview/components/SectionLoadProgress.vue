@@ -15,6 +15,11 @@ export default {
             delay: 1000,
         }
     },
+    beforeMount() {
+        if (this.$store.state.webinterview.fetch.loadingProgress) {
+            this.timerId = delay(() => this.visible = true, this.delay)
+        }
+    },
     watch: {
         isLoading(to, from) {
             if (from === false) {

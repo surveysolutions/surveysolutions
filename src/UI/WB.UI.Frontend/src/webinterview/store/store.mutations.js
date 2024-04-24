@@ -70,12 +70,16 @@ export default {
         state.isCurrentUserObserving = interviewInfo.isCurrentUserObserving
         state.doesBrokenPackageExist = interviewInfo.doesBrokenPackageExist
         state.canAddComments = interviewInfo.canAddComments
+        state.isExistsCriticality = interviewInfo.isExistsCriticality
     },
     SET_COVER_INFO(state, coverInfo) {
         state.coverInfo = coverInfo
     },
     SET_COMPLETE_INFO(state, completeInfo) {
         Vue.set(state, 'completeInfo', completeInfo)
+    },
+    SET_CRITICALITY_INFO(state, info) {
+        Vue.set(state, 'criticalityInfo', info)
     },
     SET_INTERVIEW_STATUS(state, interviewState) {
         Vue.set(state, 'interviewState', interviewState)

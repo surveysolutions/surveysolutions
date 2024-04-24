@@ -296,6 +296,17 @@ export default {
         commit('SET_COMPLETE_INFO', completeInfo)
     }, 200),
 
+    fetchCriticalityInfo: debounce(async ({ commit }) => {
+        try {
+            commit('SET_LOADING_PROGRESS', true)
+        const reesult = await Vue.$api.interview.get('getCriticalityChecks')
+        commit('SET_CRITICALITY_INFO', reesult)
+        }
+        finally {
+            commit('SET_LOADING_PROGRESS', false)
+        }
+    }, 200),
+
     fetchInterviewStatus: debounce(async ({ commit }) => {
         const interviewState = await Vue.$api.interview.get('getInterviewStatus')
         commit('SET_INTERVIEW_STATUS', interviewState)

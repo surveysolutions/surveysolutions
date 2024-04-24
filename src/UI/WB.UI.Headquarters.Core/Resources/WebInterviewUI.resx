@@ -355,6 +355,12 @@
   <data name="CompleteErrors" xml:space="preserve">
     <value>Questions with errors:</value>
   </data>
+  <data name="CriticalQuestionErrors" xml:space="preserve">
+    <value>Require answers to this questions:</value>
+  </data>
+  <data name="CriticalityConditionsErrors" xml:space="preserve">
+    <value>Require to fix this errors:</value>
+  </data>
   <data name="CompleteNoteToSupervisor" xml:space="preserve">
     <value>Note for supervisor</value>
   </data>

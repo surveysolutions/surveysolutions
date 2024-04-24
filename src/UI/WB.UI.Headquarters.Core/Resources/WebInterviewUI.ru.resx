@@ -327,6 +327,12 @@
   <data name="CompleteErrors" xml:space="preserve">
     <value>Вопросы с ошибками</value>
   </data>
+  <data name="CriticalQuestionErrors" xml:space="preserve">
+    <value>Требуются ответы на эти вопросы:</value>
+  </data>
+  <data name="CriticalityConditionsErrors" xml:space="preserve">
+    <value>Требуется исправить эти ошибки:</value>
+  </data>
   <data name="GPSRecord" xml:space="preserve">
     <value>Записать GPS</value>
   </data>

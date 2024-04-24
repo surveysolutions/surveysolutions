@@ -26,7 +26,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
         private readonly IWebInterviewInterviewEntityFactory interviewEntityFactory;
-        
+
         protected abstract bool IncludeVariables { get; }
 
         public InterviewDataController(IQuestionnaireStorage questionnaireRepository,
@@ -83,7 +83,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             if (statefulInterview == null) return null;
 
             var questionnaire = this.GetCallerQuestionnaire(statefulInterview.QuestionnaireIdentity, statefulInterview.Language);
-
+        
             return new InterviewInfo
             {
                 QuestionnaireTitle = IsReviewMode()
@@ -99,7 +99,47 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 CanAddComments = statefulInterview.Status != InterviewStatus.ApprovedByHeadquarters && !this.IsCurrentUserObserving(),
                 ReceivedByInterviewer = statefulInterview.ReceivedByInterviewer,
                 IsCurrentUserObserving = this.IsCurrentUserObserving(),
-                DoesBrokenPackageExist = false
+                DoesBrokenPackageExist = false,
+                IsExistsCriticality =  questionnaire.DoesSupportCriticality(),
+            };
+        }
+        
+        public virtual CriticalityCheckResult GetCriticalityChecks(Guid interviewId)
+        {
+            var interview = statefulInterviewRepository.GetOrThrow(interviewId.FormatGuid());
+            var questionnaire = questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
+
+            var criticalQuestions = new List<CriticalQuestionCheck>();
+            var unansweredCriticalQuestions = interview.GetAllUnansweredCriticalQuestions().ToList();
+            foreach (var questionId in unansweredCriticalQuestions)
+            {
+                var question = interview.GetQuestion(questionId);
+                criticalQuestions.Add(new CriticalQuestionCheck()
+                {
+                    Id = questionId.ToString(),
+                    ParentId = question.Parent?.Identity.ToString(),
+                    IsPrefilled = question.IsPrefilled,
+                    Message = question.Title.BrowserReadyText, 
+                });
+            }
+
+            var criticalityConditions = new List<CriticalRuleResult>();
+            var failedCriticalityConditions = interview.CollectInvalidCriticalRules().ToList();
+            foreach (var conditionId in failedCriticalityConditions)
+            {
+                var message = interviewEntityFactory.GetCriticalityConditionMessage(conditionId, interview, questionnaire, IsReviewMode());
+                //var message = interview.GetCriticalityConditionMessage(conditionId);
+                criticalityConditions.Add(new CriticalRuleResult()
+                {
+                    Id = conditionId.FormatGuid(),
+                    Message = message, 
+                });
+            }
+
+            return new CriticalityCheckResult()
+            {
+                FailedCriticalRules = criticalityConditions.ToArray(),
+                UnansweredCriticalQuestions = criticalQuestions.ToArray()
             };
         }
 
