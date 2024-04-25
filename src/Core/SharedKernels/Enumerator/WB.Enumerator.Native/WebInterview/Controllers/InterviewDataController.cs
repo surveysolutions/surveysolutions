@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -26,18 +27,21 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
         private readonly IWebInterviewInterviewEntityFactory interviewEntityFactory;
+        private readonly IQuestionnaireSettings questionnaireSettings;
 
         protected abstract bool IncludeVariables { get; }
 
         public InterviewDataController(IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository statefulInterviewRepository,
             IWebInterviewNotificationService webInterviewNotificationService,
-            IWebInterviewInterviewEntityFactory interviewEntityFactory)
+            IWebInterviewInterviewEntityFactory interviewEntityFactory,
+            IQuestionnaireSettings questionnaireSettings)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.webInterviewNotificationService = webInterviewNotificationService;
             this.interviewEntityFactory = interviewEntityFactory;
+            this.questionnaireSettings = questionnaireSettings;
         }
 
         protected virtual bool IsReviewMode() => false;
@@ -101,7 +105,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 IsCurrentUserObserving = this.IsCurrentUserObserving(),
                 DoesBrokenPackageExist = false,
                 DoesSupportCriticality =  questionnaire.DoesSupportCriticality(),
-                CriticalityLevel = CriticalLevel.Warning,
+                CriticalityLevel = questionnaireSettings.GetCriticalityLevel(statefulInterview.QuestionnaireIdentity),
             };
         }
         

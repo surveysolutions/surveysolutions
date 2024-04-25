@@ -6,14 +6,14 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 {
     public class CompleteInterviewCommand : InterviewCommand
     {
-        public CompleteInterviewCommand(Guid interviewId, Guid userId, string comment, CriticalLevel? criticalLevel)
+        public CompleteInterviewCommand(Guid interviewId, Guid userId, string comment, CriticalityLevel? criticalityLevel)
             : base(interviewId, userId)
         {
             this.Comment = comment;
-            this.CriticalLevel = criticalLevel;
+            this.CriticalityLevel = criticalityLevel;
         }
 
         public string Comment { get; set; }
-        public CriticalLevel? CriticalLevel { get; }
+        public CriticalityLevel? CriticalityLevel { get; }
     }
 }

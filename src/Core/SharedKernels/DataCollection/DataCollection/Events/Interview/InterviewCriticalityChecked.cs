@@ -6,15 +6,15 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 public class InterviewCriticalityChecked : InterviewActiveEvent
 {
-    public CriticalLevel CriticalLevel { get; }
+    public CriticalityLevel CriticalityLevel { get; }
     public Guid[] FailedCriticalRules { get; }
     public Identity[] UnansweredCriticalQuestions { get; }
 
-    public InterviewCriticalityChecked(Guid userId, DateTimeOffset originDate, CriticalLevel criticalLevel, 
+    public InterviewCriticalityChecked(Guid userId, DateTimeOffset originDate, CriticalityLevel criticalityLevel, 
         Guid[] failedCriticalRules, Identity[] unansweredCriticalQuestions)
         : base(userId, originDate)
     {
-        CriticalLevel = criticalLevel;
+        CriticalityLevel = criticalityLevel;
         FailedCriticalRules = failedCriticalRules;
         UnansweredCriticalQuestions = unansweredCriticalQuestions;
     }

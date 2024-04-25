@@ -262,7 +262,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
                 interviewsList ?? stubInterviewsList,
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
                 Mock.Of<ICalendarEventStorage>(),
-                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>()
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
+                Mock.Of<IQuestionnaireSettings>()
                 );
         }
     }

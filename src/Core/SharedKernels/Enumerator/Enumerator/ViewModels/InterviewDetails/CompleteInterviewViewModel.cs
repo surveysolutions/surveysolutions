@@ -48,7 +48,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             ILogger logger,
             IUserInteractionService userInteractionService,
             IStatefulInterviewRepository interviewRepository,
-            IQuestionnaireStorage questionnaireStorage)
+            IQuestionnaireStorage questionnaireStorage,
+            IQuestionnaireSettings questionnaireSettings)
         {
             Messenger = Mvx.IoCProvider.GetSingleton<IMvxMessenger>();
             this.viewModelNavigationService = viewModelNavigationService;
@@ -63,12 +64,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.userInteractionService = userInteractionService;
             this.interviewRepository = interviewRepository;
             this.questionnaireStorage = questionnaireStorage;
+            this.questionnaireSettings = questionnaireSettings;
         }
 
         protected readonly ILogger logger;
         private readonly IUserInteractionService userInteractionService;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly IQuestionnaireSettings questionnaireSettings;
 
         protected Guid interviewId;
 
@@ -76,6 +79,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             this.interviewId = Guid.Parse(interviewId);
+            
+            IStatefulInterview interview = this.interviewRepository.GetOrThrow(interviewId);
+            this.criticalityLevel = questionnaireSettings.GetCriticalityLevel(interview.QuestionnaireIdentity);
 
             this.InterviewState.Init(interviewId, null);
             this.Name.InitAsStatic(UIResources.Interview_Complete_Screen_Title);
@@ -122,14 +128,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             Task.Run(() => CollectCriticalityInfo(interviewId, navigationState));
         }
 
-        public enum CriticalityLevel
-        {
-            Ignore,
-            Warning,
-            Error
-        }
-        
-        CriticalityLevel criticalityLevel = CriticalityLevel.Warning;
+        CriticalityLevel? criticalityLevel = null;
         
         
         private Task CollectCriticalityInfo(string interviewId, NavigationState navigationState)
@@ -167,9 +166,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             CompleteGroups.Insert(1, failedCriticalRulesGroup);
 
             HasCriticalIssues = UnansweredCriticalQuestionsCount > 0 || FailedCriticalRulesCount > 0;
-            IsCompletionAllowed = criticalityLevel != CriticalityLevel.Error || !HasCriticalIssues;
+            IsCompletionAllowed = criticalityLevel != CriticalityLevel.Block || !HasCriticalIssues;
 
-            if (criticalityLevel == CriticalityLevel.Warning)
+            if (criticalityLevel == CriticalityLevel.Warn)
             {
                 this.IsCompletionAllowed = !HasCriticalIssues || !string.IsNullOrWhiteSpace(Comment);
                 this.CompleteButtonComment = UIResources.Interview_Complete_Note_For_Supervisor_with_Criticality;
@@ -238,7 +237,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 comment = value;
                 this.lastCompletionComments.Store(this.interviewId, value);
 
-                if (HasCriticalIssues && criticalityLevel == CriticalityLevel.Warning)
+                if (HasCriticalIssues && criticalityLevel == CriticalityLevel.Warn)
                 {
                     IsCompletionAllowed = !string.IsNullOrWhiteSpace(Comment);
                 }
@@ -313,7 +312,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 interviewId: this.interviewId,
                 userId: this.principal.CurrentUserIdentity.UserId,
                 comment: this.Comment,
-                criticalLevel: CriticalLevel.Error);
+                criticalityLevel: CriticalityLevel.Block);
 
             try
             {

@@ -218,17 +218,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         #region Command handlers
 
 
-        public void Complete(Guid userId, string comment, DateTimeOffset originDate, CriticalLevel? criticalLevel)
+        public void Complete(Guid userId, string comment, DateTimeOffset originDate, CriticalityLevel? criticalityLevel)
         {
-            Complete(userId, comment, originDate, criticalLevel, true);
+            Complete(userId, comment, originDate, criticalityLevel, true);
         }
 
-        public void CompleteWithoutFirePassiveEvents(Guid userId, string comment, DateTimeOffset originDate, CriticalLevel? criticalLevel)
+        public void CompleteWithoutFirePassiveEvents(Guid userId, string comment, DateTimeOffset originDate, CriticalityLevel? criticalityLevel)
         {
-            Complete(userId, comment, originDate, criticalLevel, false);
+            Complete(userId, comment, originDate, criticalityLevel, false);
         }
 
-        private void Complete(Guid userId, string comment, DateTimeOffset originDate, CriticalLevel? criticalLevel, bool isNeedFirePassiveEvents)
+        private void Complete(Guid userId, string comment, DateTimeOffset originDate, CriticalityLevel? criticalityLevel, bool isNeedFirePassiveEvents)
         {
             var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
 
@@ -239,14 +239,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Guid[] criticalRules = [];
             Identity[] unansweredCriticalQuestions = [];
 
-            if (criticalLevel.HasValue && GetQuestionnaireOrThrow().DoesSupportCriticality())
+            if (criticalityLevel.HasValue && GetQuestionnaireOrThrow().DoesSupportCriticality())
             {
-                if (criticalLevel != CriticalLevel.Ignore)
+                if (criticalityLevel != CriticalityLevel.Ignore)
                 {
                     var cRules = CollectInvalidCriticalRules();
                     var cQuestions = GetAllUnansweredCriticalQuestions();
 
-                    if (criticalLevel == CriticalLevel.Error)
+                    if (criticalityLevel == CriticalityLevel.Block)
                     {
                         if (unansweredCriticalQuestions.Any())
                             throw new InterviewException("Interview can't be completed with unanswered critical questions", InterviewDomainExceptionType.UnansweredCriticalQuestion);
@@ -265,9 +265,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyPassiveEvents(treeDifference, originDate);
             }
 
-            if (criticalLevel.HasValue)
+            if (criticalityLevel.HasValue)
             {
-                this.ApplyEvent(new InterviewCriticalityChecked(userId, originDate, criticalLevel.Value, 
+                this.ApplyEvent(new InterviewCriticalityChecked(userId, originDate, criticalityLevel.Value, 
                     criticalRules, unansweredCriticalQuestions));
             }
             
