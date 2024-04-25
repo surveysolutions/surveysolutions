@@ -56,7 +56,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             
             // Act
             using var events = new EventContext(); 
-            interview.Complete(Id.gA, "", dateTimeOffset.AddSeconds(10));
+            interview.Complete(Id.gA, "", dateTimeOffset.AddSeconds(10), null);
             
             // Assert
             events.ShouldContainEvent<InterviewPaused>();

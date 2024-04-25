@@ -141,6 +141,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.HasErrors = true;
         }
 
+        protected override void Apply(InterviewCriticalityChecked @event)
+        {
+            base.Apply(@event);
+            this.properties.FailedCriticalRules = @event.FailedCriticalRules;
+        }
+
         #endregion
 
         private InterviewTree sourceInterview;
@@ -178,7 +184,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         public bool HasErrors { get; private set; }
-
+        
         public bool IsCoverPageSupported() => GetQuestionnaireOrThrow().IsCoverPageSupported;
         public bool IsCompleted { get; private set; }
 
@@ -212,17 +218,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         #region Command handlers
 
 
-        public void Complete(Guid userId, string comment, DateTimeOffset originDate)
+        public void Complete(Guid userId, string comment, DateTimeOffset originDate, CriticalityLevel? criticalityLevel)
         {
-            Complete(userId, comment, originDate, true);
+            Complete(userId, comment, originDate, criticalityLevel, true);
         }
 
-        public void CompleteWithoutFirePassiveEvents(Guid userId, string comment, DateTimeOffset originDate)
+        public void CompleteWithoutFirePassiveEvents(Guid userId, string comment, DateTimeOffset originDate, CriticalityLevel? criticalityLevel)
         {
-            Complete(userId, comment, originDate, false);
+            Complete(userId, comment, originDate, criticalityLevel, false);
         }
 
-        private void Complete(Guid userId, string comment, DateTimeOffset originDate, bool isNeedFirePassiveEvents)
+        private void Complete(Guid userId, string comment, DateTimeOffset originDate, CriticalityLevel? criticalityLevel, bool isNeedFirePassiveEvents)
         {
             var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
 
@@ -230,12 +236,41 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(
                 InterviewStatus.SupervisorAssigned, InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted, InterviewStatus.RejectedBySupervisor);
 
+            Guid[] criticalRules = [];
+            Identity[] unansweredCriticalQuestions = [];
+
+            if (criticalityLevel.HasValue && GetQuestionnaireOrThrow().DoesSupportCriticality())
+            {
+                if (criticalityLevel != CriticalityLevel.Ignore)
+                {
+                    var cRules = CollectInvalidCriticalRules();
+                    var cQuestions = GetAllUnansweredCriticalQuestions();
+
+                    if (criticalityLevel == CriticalityLevel.Block)
+                    {
+                        if (unansweredCriticalQuestions.Any())
+                            throw new InterviewException("Interview can't be completed with unanswered critical questions", InterviewDomainExceptionType.UnansweredCriticalQuestion);
+                        if (criticalRules.Any())
+                            throw new InterviewException("Interview can't be completed with fail critical rules", InterviewDomainExceptionType.FailCriticalRule);
+                    }
+
+                    criticalRules = cRules.ToArray();
+                    unansweredCriticalQuestions = cQuestions.ToArray();
+                }
+            }
+            
             if (isNeedFirePassiveEvents)
             {
                 var treeDifference = FindDifferenceBetweenTrees(this.sourceInterview, this.Tree);
                 this.ApplyPassiveEvents(treeDifference, originDate);
             }
 
+            if (criticalityLevel.HasValue)
+            {
+                this.ApplyEvent(new InterviewCriticalityChecked(userId, originDate, criticalityLevel.Value, 
+                    criticalRules, unansweredCriticalQuestions));
+            }
+            
             this.ApplyEvent(new InterviewCompleted(userId, originDate, comment));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment, previousStatus: this.properties.Status, originDate: originDate));
             this.ApplyEvent(new InterviewPaused(userId, originDate));
@@ -1083,7 +1118,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Where(question => !question.IsDisabled() && !question.IsAnswered() && !question.IsReadonly)
                 .Select(q => q.Identity);
         }
-        
+
+        public IEnumerable<Guid> GetFailedCriticalRules()
+        {
+            return this.properties.FailedCriticalRules;
+        }
+
         private void Apply(InterviewPaused @event)
         {
             this.properties.LastPaused = @event.OriginDate;

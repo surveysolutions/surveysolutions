@@ -589,6 +589,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.properties.IsValid = false;
         }
+        
+        protected virtual void Apply(InterviewCriticalityChecked @event) { }
+
 
         protected virtual void Apply(AnswersRemoved @event)
         {

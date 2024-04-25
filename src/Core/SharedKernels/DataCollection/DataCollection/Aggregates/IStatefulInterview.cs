@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -220,5 +221,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Identity> GetAllUnansweredQuestions();
         
         string GetCriticalRuleMessage(Guid criticalityConditionId);
+
+        IEnumerable<Guid> GetFailedCriticalRules();
     }
 }

@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
             var hqId = Id.gC;
 
             var interview = Create.AggregateRoot.StatefulInterview(interviewId, userId: interviewerId, supervisorId: supervisorId);
-            interview.Complete(interviewId, "", DateTimeOffset.Now);
+            interview.Complete(interviewId, "", DateTimeOffset.Now, null);
             interview.Approve(supervisorId, "", DateTimeOffset.Now);
             interview.HqReject(hqId, "", DateTimeOffset.Now);
 

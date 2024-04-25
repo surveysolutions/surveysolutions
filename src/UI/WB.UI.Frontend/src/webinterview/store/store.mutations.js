@@ -71,6 +71,8 @@ export default {
         state.doesBrokenPackageExist = interviewInfo.doesBrokenPackageExist
         state.canAddComments = interviewInfo.canAddComments
         state.doesSupportCriticality = interviewInfo.doesSupportCriticality
+        state.criticalityLevel = interviewInfo.criticalityLevel
+        Vue.set(state, 'isExistsCriticality', interviewInfo.isExistsCriticality)
     },
     SET_COVER_INFO(state, coverInfo) {
         state.coverInfo = coverInfo

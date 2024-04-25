@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Enumerator.Native.WebInterview;
 using WB.Tests.Abc;
 
 using WB.UI.Headquarters.API.WebInterview;
@@ -74,7 +75,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
                 TextInRosterFlagged
             });
 
-            Subject = new StatefulInterviewSearcher(interviewFactory);
+            Subject = new StatefulInterviewSearcher(interviewFactory, Mock.Of<IWebInterviewInterviewEntityFactory>());
         }
 
         private static readonly Identity[] AllQuestions = {
@@ -128,28 +129,28 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
             new FilterTestCase(FilterOption.WithComments).ExpectedQuestions(TextComment, TextCommentFlaggedAnswered),
             new FilterTestCase(FilterOption.Flagged, FilterOption.WithComments)
                 .ExpectedQuestions(TextCommentFlaggedAnswered)
-                .ExpectedStats(1, 0, 1, 0, 1, 1, 0, 0, 1),
+                .ExpectedStats(1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0),
             new FilterTestCase(FilterOption.Flagged, FilterOption.NotAnswered)
                 .ExpectedQuestions(TextFlagged, TextInRosterFlagged)
-                .ExpectedStats(2, 0, 0, 0, 2, 0, 2, 0, 2),
+                .ExpectedStats(2, 0, 0, 0, 2, 0, 2, 0, 2, 0, 0),
             new FilterTestCase(FilterOption.Flagged, FilterOption.Valid)
                 .ExpectedQuestions(TextFlagged, TextInRosterFlagged, TextCommentFlaggedAnswered)
-                .ExpectedStats(3, 0, 1, 0, 3, 1, 2, 0, 3),
+                .ExpectedStats(3, 0, 1, 0, 3, 1, 2, 0, 3, 0, 0),
             new FilterTestCase(FilterOption.NotFlagged, FilterOption.Invalid)
                 .ExpectedQuestions(TextAnsweredInvalid)
-                .ExpectedStats(0, 1, 0, 1, 0, 1, 0, 0, 1),
+                .ExpectedStats(0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0),
             new FilterTestCase(FilterOption.Valid, FilterOption.Invalid)
                 .ExpectedQuestions(AllQuestions)
-                .ExpectedStats(3, 5, 2, 2, 8, 2, 6, 2, 6),
+                .ExpectedStats(3, 5, 2, 2, 8, 2, 6, 2, 6, 0, 0),
             new FilterTestCase(FilterOption.Flagged, FilterOption.NotFlagged)
                 .ExpectedQuestions(AllQuestionsBut(StaticTextInvalid, StaticText))
-                .ExpectedStats(3, 5, 2, 1, 7, 2, 6, 2, 6),
+                .ExpectedStats(3, 5, 2, 1, 7, 2, 6, 2, 6, 0, 0),
             new FilterTestCase(FilterOption.Answered, FilterOption.NotAnswered)
                 .ExpectedQuestions(AllQuestionsBut(StaticTextInvalid, StaticText))
-                .ExpectedStats(3, 5, 2, 1, 7, 2, 6, 2, 6),
+                .ExpectedStats(3, 5, 2, 1, 7, 2, 6, 2, 6, 0, 0),
             new FilterTestCase(FilterOption.ForSupervisor, FilterOption.ForInterviewer)
                 .ExpectedQuestions(AllQuestionsBut(StaticTextInvalid, StaticText))
-                .ExpectedStats(3, 5, 2, 1, 7, 2, 6, 2, 6)
+                .ExpectedStats(3, 5, 2, 1, 7, 2, 6, 2, 6, 0, 0)
         };
 
         [TestCase(1, 2)]
