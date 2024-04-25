@@ -80,7 +80,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             this.interviewId = Guid.Parse(interviewId);
             
-            IStatefulInterview interview = this.interviewRepository.GetOrThrow(interviewId);
+            IStatefulInterview interview = this.interviewRepository.Get(interviewId);
             this.criticalityLevel = questionnaireSettings.GetCriticalityLevel(interview.QuestionnaireIdentity);
 
             this.InterviewState.Init(interviewId, null);
