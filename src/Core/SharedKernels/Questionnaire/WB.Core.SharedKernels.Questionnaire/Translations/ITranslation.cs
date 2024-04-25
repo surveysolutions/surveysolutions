@@ -8,7 +8,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
         string? GetInstruction(Guid questionId);
         string? GetAnswerOption(Guid questionId, string? answerOptionValue, string? answerParentValue);
         string? GetSpecialValue(Guid questionId, string? specialValue);
-        string? GetCriticalityConditionMessage(Guid criticalityConditionId);
+        string? GetCriticalRuleMessage(Guid criticalityConditionId);
         
         string? GetValidationMessage(Guid entityId, int validationOneBasedIndex);
         string? GetFixedRosterTitle(Guid rosterId, decimal fixedRosterTitleValue);

@@ -149,11 +149,10 @@
 
   <style name="Interview_Complete_Screen_Statistics_Counter" parent="FullWidthWrappingLayout">
     <item name="android:textStyle">bold</item>
-    <item name="android:textSize">@dimen/textsize_30</item>
+    <item name="android:textSize">@dimen/textsize_22</item>
     <item name="android:textColor">@color/complete_screen_statistics_neutral_color</item>
     <item name="android:layout_marginTop">@dimen/Interview_Entity_Title_margin_vertical</item>
     <item name="android:layout_marginBottom">@dimen/Interview_Entity_Title_margin_vertical</item>
-    <item name="android:layout_marginLeft">@dimen/Interview_Complete_Group_left_offset</item>
   </style>
 
   <style name="Interview_Complete_Screen_Statistics_Label" parent="FullWidthWrappingLayout">

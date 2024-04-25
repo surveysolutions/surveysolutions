@@ -272,7 +272,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                 if (!string.IsNullOrWhiteSpace(conditionExpression))
                 {
                     yield return new ConditionMethodModel(
-                        ExpressionLocation.CriticalityCondition(criticalityCondition.Id, index),
+                        ExpressionLocation.CriticalRule(criticalityCondition.Id, index),
                         levelClassNames.First().Value,
                         methodName,
                         conditionExpression,

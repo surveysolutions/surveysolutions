@@ -4,7 +4,6 @@ using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ImportExport;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -19,13 +18,13 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
 {
     [Route("api/hq/backup")]
     [Authorize]
-    public class HQQuestionnareBackupController : HQControllerBase
+    public class HqQuestionnaireBackupController : HQControllerBase
     {
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IVerificationErrorsMapper verificationErrorsMapper;
         private readonly IQuestionnaireHelper questionnaireHelper;
         private readonly IQuestionnaireExportService questionnaireExportService;
-        public HQQuestionnareBackupController(IQuestionnaireHelper questionnaireHelper, 
+        public HqQuestionnaireBackupController(IQuestionnaireHelper questionnaireHelper, 
             IQuestionnaireViewFactory questionnaireViewFactory,
             IVerificationErrorsMapper verificationErrorsMapper,
             IQuestionnaireExportService questionnaireExportService)

@@ -38,9 +38,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IAuditLogService auditLogService,
             IInterviewerSettings interviewerSettings,
             ILogger logger,
-            IPlainStorage<QuestionnaireView> interviewViewRepository)
+            IPlainStorage<QuestionnaireView> interviewViewRepository,
+            IUserInteractionService userInteractionService,
+            IQuestionnaireStorage questionnaireStorage)
             : base(viewModelNavigationService, commandService, principal, 
-                entitiesListViewModelFactory, lastCompletionComments,interviewState, dynamicTextViewModel, logger)
+                entitiesListViewModelFactory, lastCompletionComments,interviewState, dynamicTextViewModel, logger, 
+                userInteractionService, interviewRepository, questionnaireStorage)
         {
             this.interviewRepository = interviewRepository;
             this.auditLogService = auditLogService;

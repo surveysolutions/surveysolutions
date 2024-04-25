@@ -383,7 +383,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     ),
                     new QuestionnaireFeature
                     (
-                        hasQuestionnaire: questionnaire => questionnaire.CriticalityConditions?.Count > 0,
+                        hasQuestionnaire: questionnaire => questionnaire.CriticalRules?.Count > 0,
                         description: "This questionnaire use Critical rules feature"
                     ),
                 }
@@ -443,6 +443,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
 
             return OldestQuestionnaireContentVersion;
+        }
+        
+        public bool DoesQuestionnaireSupportCriticality(QuestionnaireDocument questionnaire)
+        {
+            return questionnaire.CriticalRules?.Count > 0 
+                   || questionnaire.FirstOrDefault<IQuestion>(x => x.Properties?.IsCritical == true) != null;
         }
     }
 }

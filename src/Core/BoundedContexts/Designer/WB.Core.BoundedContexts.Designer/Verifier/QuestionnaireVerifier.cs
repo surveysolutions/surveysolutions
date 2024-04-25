@@ -208,7 +208,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     reference = QuestionnaireEntityReference.CreateForVariable(expressionLocation.Id);
                     break;
                 case ExpressionLocationItemType.Questionnaire:
-                    if (expressionLocation.ExpressionType == ExpressionLocationType.CriticalityCondition)
+                    if (expressionLocation.ExpressionType == ExpressionLocationType.CriticalRule)
                     {
                         reference = QuestionnaireEntityReference.CreateForCriticalityCondition(expressionLocation.Id);
                         reference.IndexOfEntityInProperty = expressionLocation.ExpressionPosition;

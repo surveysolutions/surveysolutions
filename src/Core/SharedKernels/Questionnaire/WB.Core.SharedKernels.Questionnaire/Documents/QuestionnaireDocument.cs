@@ -34,7 +34,7 @@ namespace Main.Core.Documents
             this.Attachments = new List<Attachment>();
             this.Translations = new List<Translation>();
             this.Categories = new List<Categories>();
-            this.CriticalityConditions = new();
+            this.CriticalRules = new();
 
             if(children == null)
                 this.children = new List<IComposite>();
@@ -65,7 +65,7 @@ namespace Main.Core.Documents
 
         public Dictionary<Guid, Macro> Macros { get; set; }
 
-        public List<CriticalityCondition> CriticalityConditions { get; set; }
+        public List<CriticalRule> CriticalRules { get; set; }
 
         public Dictionary<Guid, LookupTable> LookupTables { get; set; }
 
@@ -571,8 +571,8 @@ namespace Main.Core.Documents
             doc.Categories = new List<Categories>();
             this.Categories.ForEach(x => doc.Categories.Add(x.Clone()));
 
-            doc.CriticalityConditions = new List<CriticalityCondition>();
-            this.CriticalityConditions.ForEach(x => doc.CriticalityConditions.Add(x.Clone()));
+            doc.CriticalRules = new List<CriticalRule>();
+            this.CriticalRules.ForEach(x => doc.CriticalRules.Add(x.Clone()));
 
             if(this.EntitiesIdMap != null)
                 doc.EntitiesIdMap = new Dictionary<Guid, int>(this.EntitiesIdMap);

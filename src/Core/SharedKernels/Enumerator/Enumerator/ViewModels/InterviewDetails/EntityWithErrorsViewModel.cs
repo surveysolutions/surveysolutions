@@ -1,4 +1,5 @@
-﻿using MvvmCross.Commands;
+﻿using System.Collections.Generic;
+using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
@@ -23,7 +24,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private string entityTitle;
         public string EntityTitle => this.entityTitle;
         
-        public bool IsError { get; private set; }
+        public bool IsError { get; set; }
 
         private NavigationIdentity entityIdentity;
 
@@ -50,7 +51,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
     {
     }    
     
-    public class FailCriticalityConditionViewModel : BaseViewModel
+    public class FailedCriticalRuleViewModel : BaseViewModel
     {
         public string EntityTitle { get; private set; }
 
@@ -59,4 +60,31 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.EntityTitle = title;
         }
     }
+    
+    public class CompleteGroup : MvxObservableCollection<EntityWithErrorsViewModel>
+    {
+        public CompleteGroup()
+        {
+        }
+
+        public CompleteGroup(IEnumerable<EntityWithErrorsViewModel> items) : base(items)
+        {
+        }
+
+        public int AllCount { get; set; }
+        public CompleteGroupContent GroupContent { get; set; }
+
+        public bool HasChildren => AllCount > 0;
+        public bool Expanded => false;
+        public string Title { get; set; }
+    }
+    
+    public enum CompleteGroupContent
+    {
+        Unknown,
+        Error,
+        Answered,
+        Unanswered,
+    }
+
 }

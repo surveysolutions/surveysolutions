@@ -2461,33 +2461,32 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IInterviewExpressionStorage expressionStorage = this.GetExpressionStorage();
             var interviewPropertiesForExpressions = new InterviewPropertiesForExpressions(new InterviewProperties(this.EventSourceId), this.properties);
             expressionStorage.Initialize(new InterviewStateForExpressions(changedInterviewTree, interviewPropertiesForExpressions));
-            using var runner = new InterviewTreeCriticalityRunner(expressionStorage, questionnaire);
-
-            var results = runner.RunCriticalityConditions();
+            
+            var runner = new InterviewTreeCriticalRulesRunner(expressionStorage, questionnaire);
+            var results = runner.RunCriticalRules();
             return results;
         }
 
-        protected IEnumerable<InterviewTreeQuestion> GetNotAnsweredRequiredQuestions()
+        protected IEnumerable<InterviewTreeQuestion> GetUnansweredCriticalQuestions()
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             var changedInterviewTree = GetChangedTree();
             var questions = changedInterviewTree.AllNodes
                 .Where(n => n.NodeType == NodeType.Question)
                 .Cast<InterviewTreeQuestion>()
-                .Where(q => !q.IsDisabled());
-            
-            foreach (var question in questions)
-            {
-                if (questionnaire.IsCritical(question.Identity.Id) && !question.IsAnswered())
-                    yield return question;
-            }
+                .Where(question => !question.IsDisabled() 
+                            && !question.IsReadonly
+                            && !question.IsAnswered()
+                            && questionnaire.IsQuestionCritical(question.Identity.Id) 
+                            );
+            return questions;
         }
         
-        public string GetCriticalityConditionMessage(Guid criticalityConditionId)
+        public string GetCriticalRuleMessage(Guid criticalityConditionId)
         {
             var changedInterviewTree = GetChangedTree();
             var questionnaire = GetQuestionnaireOrThrow();
-            var message = questionnaire.GetCriticalityConditionMessage(criticalityConditionId);
+            var message = questionnaire.GetCriticalRuleMessage(criticalityConditionId);
             //var identity = new Identity(questionnaire.CoverPageSectionId, RosterVector.Empty);
             SubstitutionText title = substitutionTextFactory.CreateText(message, questionnaire);
             title.ReplaceSubstitutions(changedInterviewTree);

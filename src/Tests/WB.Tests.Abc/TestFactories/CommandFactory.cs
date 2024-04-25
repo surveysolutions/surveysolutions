@@ -175,7 +175,8 @@ namespace WB.Tests.Abc.TestFactories
                 base64StringOfAssembly,
                 questionnaireContentVersion,
                 2,
-                comment: comment);
+                comment: comment,
+                false);
         
         public SynchronizeInterviewEventsCommand SynchronizeInterviewEventsCommand(
             Guid? interviewId = null,

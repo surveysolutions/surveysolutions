@@ -1,25 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
      xmlns:local="http://schemas.android.com/apk/res-auto"
-    style="@style/VerticalFullWidthWrappingLayout"
-              android:background="@color/complete_screen_statistics_group_background"
-              android:orientation="vertical">
-    
+    style="@style/FullWidthWrappingLayout"
+              android:orientation="horizontal">
+
+    <!--Button style="@style/Interview_Sidebar_Sections_ToggleButton"
+            android:id="@+id/Complete_Group_Expand_Btn"
+            android:layout_height="wrap_content"
+            android:layout_width="@dimen/Interview_Complete_Group_left_offset"
+            local:MvxBind="Text '+';"/-->
+
     <TextView
             android:id="@+id/Complete_AnsweredCount"
-            style="@style/Interview_Complete_Screen_Statistics_Answered_Counter"
-            local:MvxBind="Text Title; Visible IsAnswered" />
-    <TextView
-            android:id="@+id/Complete_AnsweredCount"
-            style="@style/Interview_Complete_Screen_Statistics_Unanswered_Counter"
-            local:MvxBind="Text Title; Visible IsUnanswered" />
-    <TextView
-            android:id="@+id/Complete_AnsweredCount"
-            style="@style/Interview_Complete_Screen_Statistics_Errors_Counter"
-            local:MvxBind="Text Title; Visible IsError" />
-    <TextView
-            android:id="@+id/Complete_AnsweredCount"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/Interview_Complete_Group_left_offset"
+            android:gravity="fill"
             style="@style/Interview_Complete_Screen_Statistics_Counter"
-            local:MvxBind="Text Title; Visibility InvertedVisibility(AllCount)" />
+            local:MvxBind="Text Title; Color CompleteGroupToColor(.)" />
     
 </LinearLayout>

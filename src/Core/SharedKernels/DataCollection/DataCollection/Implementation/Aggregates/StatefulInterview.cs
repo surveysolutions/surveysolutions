@@ -1100,7 +1100,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ApplyEvent(new InterviewOpenedBySupervisor(command.UserId, command.OriginDate));
         }
 
-        public IEnumerable<Guid> RunAndGetFailCriticalRules()
+        public IEnumerable<Guid> CollectInvalidCriticalRules()
         {
             var criticalityChecks = base.RunCriticalityChecks();
             return criticalityChecks.Where(t => t.Item2 == false).Select(t => t.Item1);
@@ -1108,14 +1108,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public IEnumerable<Identity> GetAllUnansweredCriticalQuestions()
         {
-            var questions = base.GetNotAnsweredRequiredQuestions();
+            var questions = base.GetUnansweredCriticalQuestions();
             return questions.Select(q => q.Identity);
         }
-
-        public bool HasCriticalFeature()
+        
+        public IEnumerable<Identity> GetAllUnansweredQuestions()
         {
-            var questionnaire = GetQuestionnaireOrThrow();
-            return questionnaire.IsExistsCriticality();
+            return this.Tree.FindQuestions()
+                .Where(question => !question.IsDisabled() && !question.IsAnswered() && !question.IsReadonly)
+                .Select(q => q.Identity);
         }
 
         public IEnumerable<Guid> GetFailedCriticalRules()

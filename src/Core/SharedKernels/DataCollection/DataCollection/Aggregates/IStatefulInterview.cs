@@ -215,12 +215,12 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         InterviewSimpleStatus GetInterviewSimpleStatus(bool includingSupervisorEntities);
         IEnumerable<Identity> GetNeighboringQuestionIdentities(Identity identity);
 
-        IEnumerable<Guid> RunAndGetFailCriticalRules();
+        IEnumerable<Guid> CollectInvalidCriticalRules();
         
         IEnumerable<Identity> GetAllUnansweredCriticalQuestions();
+        IEnumerable<Identity> GetAllUnansweredQuestions();
         
-        string GetCriticalityConditionMessage(Guid criticalityConditionId);
-        bool HasCriticalFeature();
+        string GetCriticalRuleMessage(Guid criticalityConditionId);        bool HasCriticalFeature();
         IEnumerable<Guid> GetFailedCriticalRules();
     }
 }

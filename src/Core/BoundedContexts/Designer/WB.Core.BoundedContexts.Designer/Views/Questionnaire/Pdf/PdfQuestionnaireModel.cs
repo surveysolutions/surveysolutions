@@ -110,7 +110,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public List<ICategoricalQuestion> QuestionsWithLongOptionsList { get; internal set; } = new List<ICategoricalQuestion>();
 
         public List<IQuestion> QuestionsWithLongSpecialValuesList { get; internal set; } = new List<IQuestion>();
-        public List<CriticalityCondition> CriticalityConditions { get; internal set; } = new List<CriticalityCondition>();
+        public List<CriticalRule> CriticalityConditions { get; internal set; } = new List<CriticalRule>();
         
         public List<IQuestion> QuestionsWithLongInstructions { get; internal set; } = new List<IQuestion>();
 

@@ -329,6 +329,9 @@
   <data name="Interview_Complete_Consequences_Instrunction" xml:space="preserve">
     <value>По закрытию этого интервью оно будет помечено как законченное и будет загружено супервизору во время вашей следующей синхронизации</value>
   </data>
+  <data name="Interview_Complete_CriticalIssues_Instrunction" xml:space="preserve">
+    <value>Эта кнопка отключена, поскольку оправка интервью с критическими проблемами запрещена</value>
+  </data>
   <data name="Interview_Complete_Errors" xml:space="preserve">
     <value>Ошибок</value>
   </data>
@@ -344,11 +347,20 @@
   <data name="Interview_Complete_Note_For_Supervisor" xml:space="preserve">
     <value>Заметка для супервизора</value>
   </data>
+  <data name="Interview_Complete_Note_For_Supervisor_with_Criticality" xml:space="preserve">
+    <value>Эта кнопка остается неактивной до тех пор, пока вы не укажете комментарий для критических вопросов, указанных выше</value>
+  </data>
+  <data name="Interview_Complete_WithWarningCriticality" xml:space="preserve">
+    <value>Пожалуйста, подтвердите, что вы хотите отправить это интервью с критическими проблемами.</value>
+  </data>
   <data name="Interview_Complete_Questions_Status" xml:space="preserve">
     <value>Статусы вопросов</value>
   </data>
   <data name="Interview_Complete_Interview_Status" xml:space="preserve">
-    <value>Статус интервью</value>
+    <value>Замечания по интервью:</value>
+  </data>
+  <data name="Interview_Complete_CriticalityIssuesDescription" xml:space="preserve">
+    <value>Пожалуйста, решите проблемы, ответив на критические вопросы и убедившись, что ответы удовлетворяют критическим правилам</value>
   </data>
   <data name="Interview_Complete_Unanswered" xml:space="preserve">
     <value>Неотвеченных</value>

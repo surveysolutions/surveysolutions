@@ -10,35 +10,31 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
-    public class InterviewTreeCriticalityRunner : IInterviewTreeCriticalityRunner, IDisposable
+    public class InterviewTreeCriticalRulesRunner : IInterviewTreeCriticRulesRunner
     {
         private readonly IInterviewExpressionStorage expressionStorage;
         private readonly IQuestionnaire questionnaire;
         private readonly Identity questionnaireIdentity;
 
-        private readonly ConcurrentDictionary<Identity, IInterviewLevel> memoryCache = new ConcurrentDictionary<Identity, IInterviewLevel>();
-
-        public InterviewTreeCriticalityRunner(IInterviewExpressionStorage expressionStorage, IQuestionnaire questionnaire)
+        public InterviewTreeCriticalRulesRunner(IInterviewExpressionStorage expressionStorage, IQuestionnaire questionnaire)
         {
             this.expressionStorage = expressionStorage;
             this.questionnaire = questionnaire;
             this.questionnaireIdentity = new Identity(questionnaire.QuestionnaireId, RosterVector.Empty);
         }
 
-        public IEnumerable<Tuple<Guid, bool>> RunCriticalityConditions()
+        public IEnumerable<Tuple<Guid, bool>> RunCriticalRules()
         {
             var interviewLevel = this.expressionStorage.GetLevel(this.questionnaireIdentity);
-            var rootLevel = this.memoryCache.GetOrAdd(this.questionnaireIdentity, interviewLevel);
 
-            if (rootLevel is ICriticalityConditionLevel criticalityConditionLevel)
+            if (interviewLevel is ICriticalRuleLevel criticalityConditionLevel)
             {
-                var conditions = criticalityConditionLevel.GetCriticalityConditions();
-                for (int i = 0; i < conditions.Length; i++)
+                var criticalRulesIds = questionnaire.GetCriticalRulesIds();
+                foreach (var criticalRulesId in criticalRulesIds)
                 {
-                    var condition = conditions[i];
-                    var id = questionnaire.GetCriticalityConditionIdByIndex(i);
+                    var condition = criticalityConditionLevel.GetCriticalRule(criticalRulesId);
                     var runResult = RunConditionExpression(condition);
-                    yield return new Tuple<Guid, bool>(id, runResult);
+                    yield return new Tuple<Guid, bool>(criticalRulesId, runResult);
                 }
             }
         }
@@ -49,19 +45,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             {
                 return expression == null || expression();
             }
-            catch (TypeLoadException)
-            {
-                throw;
-            }
             catch
             {
                 return false;
             }
-        }
-
-        public void Dispose()
-        {
-            this.memoryCache.Clear();
         }
     }
 }
