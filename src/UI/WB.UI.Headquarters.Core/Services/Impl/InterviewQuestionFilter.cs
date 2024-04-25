@@ -80,7 +80,7 @@ namespace WB.UI.Headquarters.Services.Impl
                         case FilterOption.NotAnswered: return !question.IsAnswered();
                         case FilterOption.ForSupervisor: return question.IsSupervisors;
                         case FilterOption.ForInterviewer: return question.IsInterviewer && !question.IsReadonly;
-                        case FilterOption.CriticalQuestions: return questionnaire.IsCritical(question.Identity.Id);
+                        case FilterOption.CriticalQuestions: return questionnaire.IsQuestionCritical(question.Identity.Id);
                         default:
                             return @default;
                     }

@@ -220,7 +220,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Identity> GetAllUnansweredCriticalQuestions();
         IEnumerable<Identity> GetAllUnansweredQuestions();
         
-        string GetCriticalRuleMessage(Guid criticalityConditionId);        bool HasCriticalFeature();
+        string GetCriticalRuleMessage(Guid criticalityConditionId);
+
         IEnumerable<Guid> GetFailedCriticalRules();
     }
 }

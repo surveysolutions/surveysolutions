@@ -123,7 +123,7 @@ namespace WB.UI.Headquarters.Services.Impl
                         SectionId = "critical-rules",
                     };
 
-                    var message = webNavigationService.GetCriticalityConditionMessage(ruleId, interview, questionnaire, true);
+                    var message = webNavigationService.GetCriticalRuleMessage(ruleId, interview, questionnaire, true);
                     currentResult.Questions.Add(new Link
                     {
                         Target = ruleId.FormatGuid(),

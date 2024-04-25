@@ -239,11 +239,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Guid[] criticalRules = [];
             Identity[] unansweredCriticalQuestions = [];
 
-            if (criticalLevel.HasValue && HasCriticalFeature())
+            if (criticalLevel.HasValue && GetQuestionnaireOrThrow().DoesSupportCriticality())
             {
                 if (criticalLevel != CriticalLevel.Ignore)
                 {
-                    var cRules = RunAndGetFailCriticalRules();
+                    var cRules = CollectInvalidCriticalRules();
                     var cQuestions = GetAllUnansweredCriticalQuestions();
 
                     if (criticalLevel == CriticalLevel.Error)
