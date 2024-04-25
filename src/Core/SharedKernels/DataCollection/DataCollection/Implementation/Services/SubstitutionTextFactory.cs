@@ -61,7 +61,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
                 });
             }
 
-            if (this.substitutionService.ContainsRosterTitle(text))
+            if (identity != null && this.substitutionService.ContainsRosterTitle(text))
             {
                 if (questionnaire.IsRosterGroup(identity.Id))
                 {
