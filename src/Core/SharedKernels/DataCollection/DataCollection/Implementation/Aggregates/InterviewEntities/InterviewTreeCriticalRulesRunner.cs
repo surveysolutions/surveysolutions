@@ -25,6 +25,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public IEnumerable<Tuple<Guid, bool>> RunCriticalRules()
         {
+            if (!questionnaire.DoesSupportCriticality())
+                yield break;
+            
             var interviewLevel = this.expressionStorage.GetLevel(this.questionnaireIdentity);
 
             if (interviewLevel is ICriticalRuleLevel criticalityConditionLevel)
