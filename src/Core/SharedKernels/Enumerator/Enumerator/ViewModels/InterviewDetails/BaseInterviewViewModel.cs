@@ -308,7 +308,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public GroupStatus Status
         {
             get => this.status;
-            private set
+            protected set
             {
                 if (this.status != value)
                 {

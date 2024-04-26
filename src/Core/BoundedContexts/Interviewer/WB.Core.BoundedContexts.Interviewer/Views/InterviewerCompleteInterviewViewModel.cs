@@ -138,6 +138,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             HasCriticalIssues = UnansweredCriticalQuestionsCount > 0 || FailedCriticalRulesCount > 0;
             IsCompletionAllowed = criticalityLevel != CriticalityLevel.Block || !HasCriticalIssues;
 
+            if (HasCriticalIssues)
+                InterviewStatus = GroupStatus.CompletedInvalid; 
+
             if (criticalityLevel == CriticalityLevel.Warn)
             {
                 this.IsCompletionAllowed = !HasCriticalIssues || !string.IsNullOrWhiteSpace(Comment);

@@ -69,6 +69,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.interviewId = Guid.Parse(interviewId);
             
             this.InterviewState.Init(interviewId, null);
+            this.InterviewStatus = InterviewState.Status;
             this.Name.InitAsStatic(UIResources.Interview_Complete_Screen_Title);
 
             this.CompleteScreenTitle = UIResources.Interview_Complete_Screen_Description;
@@ -136,6 +137,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             get => isLoading;
             set => this.RaiseAndSetIfChanged(ref this.isLoading, value);
+        }
+
+        private GroupStatus interviewStatus;
+        public GroupStatus InterviewStatus
+        {
+            get => interviewStatus;
+            set => this.RaiseAndSetIfChanged(ref this.interviewStatus, value);
         }
 
         public string WebInterviewUrl { get; set; }

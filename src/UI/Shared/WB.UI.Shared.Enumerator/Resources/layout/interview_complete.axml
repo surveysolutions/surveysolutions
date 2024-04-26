@@ -62,7 +62,7 @@
               local:MvxBind="HideKeyboardOnClick .; 
                           Click CompleteInterviewCommand; 
                           Text Localization('Interview_Complete_Button'); 
-                          ButtonGroupStyle InterviewState.Status; 
+                          ButtonGroupStyle InterviewStatus; 
                           " />
       <TextView
           style="@style/Interview_Complete_Screen_Text"

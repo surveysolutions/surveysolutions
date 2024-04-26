@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.Commands;
@@ -102,10 +103,24 @@ namespace WB.UI.Interviewer.ViewModel
                 case ScreenType.Complete:
                     var completeInterviewViewModel =
                         this.interviewViewModelFactory.GetNew<InterviewerCompleteInterviewViewModel>();
+                    completeInterviewViewModel.PropertyChanged += ChangeInterviewStatus;
                     completeInterviewViewModel.Configure(this.InterviewId, this.NavigationState);
                     return completeInterviewViewModel;
                 default:
                     return base.UpdateCurrentScreenViewModel(eventArgs);
+            }
+        }
+
+        private void ChangeInterviewStatus(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != nameof(InterviewerCompleteInterviewViewModel.IsLoading))
+                return;
+            
+            var completeInterviewViewModel = (InterviewerCompleteInterviewViewModel)sender;
+            if (!completeInterviewViewModel.IsLoading)
+            {
+                completeInterviewViewModel.PropertyChanged -= ChangeInterviewStatus;
+                Status = completeInterviewViewModel.InterviewStatus;
             }
         }
 
