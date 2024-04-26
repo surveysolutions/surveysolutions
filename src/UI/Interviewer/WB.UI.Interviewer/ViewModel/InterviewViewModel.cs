@@ -120,7 +120,7 @@ namespace WB.UI.Interviewer.ViewModel
             if (!completeInterviewViewModel.IsLoading)
             {
                 completeInterviewViewModel.PropertyChanged -= ChangeInterviewStatus;
-                Status = completeInterviewViewModel.InterviewStatus;
+                Status = completeInterviewViewModel.CompleteStatus;
             }
         }
 

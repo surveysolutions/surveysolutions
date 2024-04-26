@@ -139,7 +139,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IsCompletionAllowed = criticalityLevel != CriticalityLevel.Block || !HasCriticalIssues;
 
             if (HasCriticalIssues)
-                InterviewStatus = GroupStatus.CompletedInvalid; 
+                CompleteStatus = GroupStatus.CompletedInvalid; 
 
             if (criticalityLevel == CriticalityLevel.Warn)
             {
