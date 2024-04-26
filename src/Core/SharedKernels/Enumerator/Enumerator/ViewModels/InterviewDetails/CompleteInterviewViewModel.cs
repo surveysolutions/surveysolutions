@@ -97,14 +97,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 Title = this.EntitiesWithErrorsDescription,
                 GroupContent = CompleteGroupContent.Error,
             };
-            
-            this.CompleteGroups = new MvxObservableCollection<CompleteGroup>()
-            {
-                //unansweredCriticalQuestionsGroup,
-                //failedCriticalRulesGroup,
-                unansweredGroup,
-                errorsGroup,
-            };
+
+            this.CompleteGroups = new MvxObservableCollection<CompleteGroup>();
+            if (UnansweredCount > 0)
+                CompleteGroups.Add(unansweredGroup);
+            if (ErrorsCount > 0)
+                CompleteGroups.Add(errorsGroup);
 
             this.Comment = lastCompletionComments.Get(this.interviewId);
             this.CommentLabel = UIResources.Interview_Complete_Note_For_Supervisor;
@@ -131,6 +129,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             get => requestWebInterview;
             set => this.RaiseAndSetIfChanged(ref this.requestWebInterview, value);
+        }
+
+        private bool isLoading = true;
+        public bool IsLoading
+        {
+            get => isLoading;
+            set => this.RaiseAndSetIfChanged(ref this.isLoading, value);
         }
 
         public string WebInterviewUrl { get; set; }

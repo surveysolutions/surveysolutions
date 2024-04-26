@@ -93,6 +93,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
             var interviewView = this.interviews.GetById(interviewId);
             this.receivedByInterviewerTabletAt = interviewView.ReceivedByInterviewerAtUtc;
+            IsLoading = false;
         }
 
         public IMvxAsyncCommand Approve => new MvxAsyncCommand(async () =>

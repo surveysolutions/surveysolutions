@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using MvvmCross.Plugin.Messenger;
 using System.Threading.Tasks;
 using MvvmCross.Base;
@@ -101,37 +102,38 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         
         private Task CollectCriticalityInfo(string interviewId, NavigationState navigationState)
         {
-            if (!this.HasCriticalFeature(interviewId))
+            if (!this.HasCriticalFeature(interviewId) || criticalityLevel == CriticalityLevel.Ignore)
             {
                 IsCompletionAllowed = true;
-                return Task.CompletedTask;
-            }
-
-            if (criticalityLevel == CriticalityLevel.Ignore)
-            {
-                IsCompletionAllowed = true;
+                IsLoading = false;
                 return Task.CompletedTask;
             }
             
             this.TopUnansweredCriticalQuestions = this.entitiesListViewModelFactory.GetTopUnansweredCriticalQuestions(interviewId, navigationState).ToList();
-            var unansweredCriticalQuestionsGroup = new CompleteGroup(TopUnansweredCriticalQuestions)
+            if (TopUnansweredCriticalQuestions.Count > 0)
             {
-                AllCount = this.TopUnansweredCriticalQuestions.Count,
-                Title= string.Format(UIResources.Interview_Complete_CriticalUnanswered, this.TopUnansweredCriticalQuestions.Count),
-                GroupContent = CompleteGroupContent.Error,
-            };
-            CompleteGroups.Insert(0, unansweredCriticalQuestionsGroup);
+                var unansweredCriticalQuestionsGroup = new CompleteGroup(TopUnansweredCriticalQuestions)
+                {
+                    AllCount = this.TopUnansweredCriticalQuestions.Count,
+                    Title= string.Format(UIResources.Interview_Complete_CriticalUnanswered, this.TopUnansweredCriticalQuestions.Count),
+                    GroupContent = CompleteGroupContent.Error,
+                };
+                CompleteGroups.Insert(0, unansweredCriticalQuestionsGroup);
+            }
             
             this.TopFailedCriticalRules = this.entitiesListViewModelFactory.GetTopFailedCriticalRules(interviewId, navigationState).ToList();
-            var results = this.TopFailedCriticalRules.Select(i =>
-                EntityWithErrorsViewModel.InitError(i.EntityTitle)).ToArray();
-            var failedCriticalRulesGroup = new CompleteGroup(results)
+            if (TopFailedCriticalRules.Count > 0)
             {
-                AllCount = this.TopFailedCriticalRules.Count,
-                Title = string.Format(UIResources.Interview_Complete_FailCriticalConditions, this.TopFailedCriticalRules.Count),
-                GroupContent = CompleteGroupContent.Error,
-            };
-            CompleteGroups.Insert(1, failedCriticalRulesGroup);
+                var results = this.TopFailedCriticalRules.Select(i =>
+                    EntityWithErrorsViewModel.InitError(i.EntityTitle)).ToArray();
+                var failedCriticalRulesGroup = new CompleteGroup(results)
+                {
+                    AllCount = this.TopFailedCriticalRules.Count,
+                    Title = string.Format(UIResources.Interview_Complete_FailCriticalConditions, this.TopFailedCriticalRules.Count),
+                    GroupContent = CompleteGroupContent.Error,
+                };
+                CompleteGroups.Insert(1, failedCriticalRulesGroup);
+            }
 
             HasCriticalIssues = UnansweredCriticalQuestionsCount > 0 || FailedCriticalRulesCount > 0;
             IsCompletionAllowed = criticalityLevel != CriticalityLevel.Block || !HasCriticalIssues;
@@ -147,6 +149,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 this.IsCompletionAllowed = false;
             }
             
+            IsLoading = false;
             return Task.CompletedTask;
         }
         
