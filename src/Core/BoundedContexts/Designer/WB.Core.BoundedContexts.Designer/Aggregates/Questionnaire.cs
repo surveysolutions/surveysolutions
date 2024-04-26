@@ -2075,7 +2075,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         
         private void ThrowDomainExceptionIfCriticalityConditionAlreadyExist(Guid id)
         {
-            if (this.innerDocument.CriticalRules.Any(cc => cc.Id == id))
+            if (this.innerDocument.CriticalRules.Exists(cc => cc.Id == id))
             {
                 throw new QuestionnaireException(DomainExceptionType.CriticalityConditionAlreadyExist, ExceptionMessages.CriticalityConditionAlreadyExist);
             }
@@ -2083,7 +2083,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void ThrowDomainExceptionIfCriticalityConditionIsAbsent(Guid id)
         {
-            if (this.innerDocument.CriticalRules.All(cc => cc.Id != id))
+            if (this.innerDocument.CriticalRules.TrueForAll(cc => cc.Id != id))
             {
                 throw new QuestionnaireException(DomainExceptionType.CriticalityConditionIsAbsent, ExceptionMessages.CriticalityConditionIsAbsent);
             }

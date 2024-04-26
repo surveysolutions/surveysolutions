@@ -614,19 +614,10 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                         QuestionnaireEntityReference.CreateForCriticalityCondition(cc.Id)));
         }
 
-        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> CriticalityConditionWarning(
-            Func<CriticalRule, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
-        {
-            return questionnaire =>
-                questionnaire.CriticalityConditions
-                    .Where(cc => hasError(cc, questionnaire))
-                    .Select(cc => QuestionnaireVerificationMessage.Warning(code, message,
-                        QuestionnaireEntityReference.CreateForCriticalityCondition(cc.Id)));
-        }
-
-
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error<TEntity, TSubEntity>(
-            Func<TEntity, IEnumerable<TSubEntity>> getSubEntities, Func<TEntity, TSubEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex, VerificationMessageLevel level = VerificationMessageLevel.General)
+            Func<TEntity, IEnumerable<TSubEntity>> getSubEntities, 
+            Func<TEntity, TSubEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string code, 
+            Func<int, string> getMessageBySubEntityIndex, VerificationMessageLevel level = VerificationMessageLevel.General)
             where TEntity : class, IComposite
         {
             return questionnaire =>

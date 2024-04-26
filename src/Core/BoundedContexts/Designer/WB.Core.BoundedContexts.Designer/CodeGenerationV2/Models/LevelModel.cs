@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
         public void Init(ReadOnlyQuestionnaireDocument questionnaire, Dictionary<RosterScope, string> levelClassNames, IQuestionTypeToCSharpTypeMapper questionTypeMapper)
         {
             if (RosterScope.Length == 0)
-                this.HasCriticalRules = questionnaire.CriticalityConditions.Any();
+                this.HasCriticalRules = questionnaire.CriticalityConditions.Count != 0;
             
             this.CreateQuestionsForCurrentAndParentLevels(questionnaire, questionTypeMapper);
 

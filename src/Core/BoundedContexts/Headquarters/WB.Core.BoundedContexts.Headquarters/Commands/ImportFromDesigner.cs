@@ -18,10 +18,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Commands
             this.QuestionnaireVersion = questionnaireVersion;
             this.Comment = comment;
             this.CriticalitySupport = criticalitySupport;
-            //this.CriticalityLevel = criticalityLevel;
         }
-
-        //public int CriticalityLevel { get; set; }
 
         public bool? CriticalitySupport { get; set; }
 
