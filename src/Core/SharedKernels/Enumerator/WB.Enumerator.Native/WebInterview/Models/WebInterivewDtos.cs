@@ -368,7 +368,8 @@ namespace WB.Enumerator.Native.WebInterview.Models
 
         public int ErrorsCount { get; set; }
 
-        public EntityWithError[] EntitiesWithError { get;set; }
+        public EntityWithError[] EntitiesWithError { get; set; }
+        public EntityWithError[] UnansweredQuestions { get; set; }
     }
 
     public class EntityWithError : QuestionReference { }
@@ -408,13 +409,13 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public string Id { get; set; }
         public string ParentId { get; set; }
         public bool IsPrefilled { get; set; }
-        public string Message { get; set; }
+        public string Title { get; set; }
     }
     
     public class CriticalRuleResult
     {
         public string Id { get; set; }
-        public string Message { get; set; }
+        public string Title { get; set; }
     }
     
     public class CriticalityCheckResult

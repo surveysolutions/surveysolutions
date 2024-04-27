@@ -1,5 +1,5 @@
 <template>
-    <div class="unit-section first-last-chapter" v-if="hasCompleteInfo"
+    <div class="unit-section first-last-chapter complete" v-if="hasCompleteInfo"
         v-bind:class="{ 'section-with-error': hasErrors, 'complete-section': isAllAnswered }">
         <div class="unit-title">
             <wb-humburger></wb-humburger>
@@ -33,7 +33,30 @@
                 </div>
             </div>
         </div>
-        <div class="wrapper-info" v-if="criticalityInfo?.unansweredCriticalQuestions.length > 0">
+
+
+
+
+
+        <template v-for="group in completeGroups">
+            <ExpandableList :title="group.title">
+                <!--h4 class="gray-uppercase">{{ $t('WebInterviewUI.CriticalQuestionErrors') }}</h4-->
+                <ul class="list-unstyled marked-questions">
+                    <li v-for="item in group.items" :key="item.id">
+                        <a v-if="item.parentId || item.isPrefilled" href="javascript:void(0);" @click="navigateTo(item)"
+                            v-html="item.title"></a>
+                        <span v-else v-html="item.title"></span>
+                    </li>
+                </ul>
+            </ExpandableList>
+        </template>
+
+
+
+
+
+
+        <!--div class="wrapper-info" v-if="criticalityInfo?.unansweredCriticalQuestions.length > 0">
             <div class="container-info">
                 <h4 class="gray-uppercase">{{ $t('WebInterviewUI.CriticalQuestionErrors') }}</h4>
                 <ul class="list-unstyled marked-questions">
@@ -64,7 +87,7 @@
                     </li>
                 </ul>
             </div>
-        </div>
+        </div-->
         <div class="wrapper-info">
             <div class="container-info">
                 <label class="gray-uppercase" for="comment-for-supervisor">
@@ -104,7 +127,7 @@
         'btn-primary': hasUnansweredQuestions,
         'btn-danger': hasErrors,
         'disabled': !isAllowCompleteInterview,
-                        }" @click="completeInterview">{{ competeButtonTitle }}</a>
+    }" @click="completeInterview">{{ competeButtonTitle }}</a>
             </div>
         </div>
         <SectionLoadingProgress />
@@ -115,17 +138,20 @@
 import modal from '@/shared/modal'
 import Vue from 'vue'
 import SectionProgress from './SectionLoadProgress'
+import ExpandableList from '../../hqapp/components/ExpandableList.vue';
 
 export default {
     name: 'complete-view',
     components: {
         SectionLoadingProgress: SectionProgress,
+        ExpandableList: ExpandableList,
     },
     data() {
         return {
             comment: '',
             switchToWeb: false,
             isReadyLastCriticalityInfo: false,
+            //completeGroups: []
         }
     },
     beforeMount() {
@@ -155,6 +181,43 @@ export default {
         criticalityInfo() {
             return this.$store.state.webinterview.criticalityInfo
         },
+        completeGroups() {
+            let groups = []
+
+            if (this.criticalityInfo?.unansweredCriticalQuestions.length > 0) {
+                groups.push({
+                    title: this.$t('WebInterviewUI.CriticalQuestionErrors'),
+                    items: this.criticalityInfo.unansweredCriticalQuestions,
+                })
+            }
+
+            if (this.criticalityInfo?.failedCriticalRules.length > 0) {
+                groups.push({
+                    title: this.$t('WebInterviewUI.CriticalityConditionsErrors'),
+                    items: this.criticalityInfo.failedCriticalRules,
+                })
+            }
+
+            if (this.completeInfo.unansweredCount > 0) {
+                groups.push({
+                    title: this.$t('WebInterviewUI.CompleteErrors'),
+                    items: this.completeInfo.unansweredQuestions,
+                })
+            }
+
+            if (this.completeInfo.errorsCount > 0) {
+                const title = this.doesShowErrorsCommentWithCount
+                    ? this.$t('WebInterviewUI.CompleteFirstErrors', { count: this.completeInfo.entitiesWithError.length })
+                    : this.$t('WebInterviewUI.CompleteErrors')
+
+                groups.push({
+                    title: title,
+                    items: this.completeInfo.entitiesWithError,
+                })
+            }
+
+            return groups;
+        },
         doesSupportCriticality() {
             return this.$store.state.webinterview.doesSupportCriticality != false
         },
@@ -162,8 +225,10 @@ export default {
             return this.$store.state.webinterview.criticalityLevel
         },
         isAllowCompleteInterview() {
-            if (this.doesSupportCriticality) {                if (this.criticalityLevel == 'Error') {
-                    return this.isReadyLastCriticalityInfo && this.criticalityInfo?.unansweredCriticalQuestions?.length === 0 && this.criticalityInfo?.failedCriticalRules?.length === 0                } else if (this.criticalityLevel == 'Warning') {
+            if (this.doesSupportCriticality) {
+                if (this.criticalityLevel == 'Error') {
+                    return this.isReadyLastCriticalityInfo && this.criticalityInfo?.unansweredCriticalQuestions?.length === 0 && this.criticalityInfo?.failedCriticalRules?.length === 0
+                } else if (this.criticalityLevel == 'Warning') {
                     return this.comment && this.comment.length > 0
                 }
             }

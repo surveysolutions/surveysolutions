@@ -126,7 +126,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                     Id = questionId.ToString(),
                     ParentId = question.Parent?.Identity.ToString(),
                     IsPrefilled = question.IsPrefilled,
-                    Message = question.Title.BrowserReadyText, 
+                    Title = question.Title.BrowserReadyText, 
                 });
             }
 
@@ -138,7 +138,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 criticalityConditions.Add(new CriticalRuleResult()
                 {
                     Id = conditionId.FormatGuid(),
-                    Message = message, 
+                    Title = message, 
                 });
             }
 
@@ -607,30 +607,41 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             var questionsCount = interview.CountActiveQuestionsInInterview();
             var answeredQuestionsCount = interview.CountActiveAnsweredQuestionsInInterview();
             var invalidAnswersCount = interview.CountInvalidEntitiesInInterview();
+            
             Identity[] invalidEntityIds = interview.GetInvalidEntitiesInInterview().Take(30).ToArray();
-            var invalidEntities = invalidEntityIds.Select(identity =>
-            {
-                var titleText = HtmlRemovalRegex.Replace(interview.GetTitleText(identity), string.Empty);
-                var isPrefilled = interview.IsQuestionPrefilled(identity);
-                var parentId = interviewEntityFactory.GetUIParent(interview, questionnaire, identity);
-                return new EntityWithError
-                {
-                    Id = identity.ToString(),
-                    ParentId = parentId.ToString(),
-                    Title = titleText,
-                    IsPrefilled = isPrefilled
-                };
-            }).ToArray();
+            var invalidEntities = invalidEntityIds.Select(identity => 
+                GetEntityWithError(interview, questionnaire, identity)
+            ).ToArray();
+            
+            Identity[] unansweredIds = interview.GetAllUnansweredQuestions().Take(30).ToArray();
+            var unansweredQuestions = unansweredIds.Select(identity => 
+                GetEntityWithError(interview, questionnaire, identity)
+            ).ToArray();
 
             var completeInfo = new CompleteInfo
             {
                 AnsweredCount = answeredQuestionsCount,
                 ErrorsCount = invalidAnswersCount,
                 UnansweredCount = questionsCount - answeredQuestionsCount,
-                EntitiesWithError = invalidEntities
+                EntitiesWithError = invalidEntities,
+                UnansweredQuestions = unansweredQuestions,
             };
 
             return completeInfo;
+        }
+        
+        private EntityWithError GetEntityWithError(IStatefulInterview interview, IQuestionnaire questionnaire, Identity identity)
+        {
+            var titleText = HtmlRemovalRegex.Replace(interview.GetTitleText(identity), string.Empty);
+            var isPrefilled = interview.IsQuestionPrefilled(identity);
+            var parentId = interviewEntityFactory.GetUIParent(interview, questionnaire, identity);
+            return new EntityWithError
+            {
+                Id = identity.ToString(),
+                ParentId = parentId.ToString(),
+                Title = titleText,
+                IsPrefilled = isPrefilled
+            };
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
