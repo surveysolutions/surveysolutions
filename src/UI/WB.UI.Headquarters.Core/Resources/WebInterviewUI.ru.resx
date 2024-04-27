@@ -333,6 +333,9 @@
   <data name="CriticalityConditionsErrors" xml:space="preserve">
     <value>Требуется исправить эти ошибки:</value>
   </data>
+  <data name="UnansweredQuestions" xml:space="preserve">
+    <value>Вопросы без ответа:</value>
+  </data>
   <data name="GPSRecord" xml:space="preserve">
     <value>Записать GPS</value>
   </data>

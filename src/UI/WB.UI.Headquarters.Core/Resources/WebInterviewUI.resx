@@ -361,6 +361,9 @@
   <data name="CriticalityConditionsErrors" xml:space="preserve">
     <value>Require to fix this errors:</value>
   </data>
+  <data name="UnansweredQuestions" xml:space="preserve">
+    <value>Unanswered questions:</value>
+  </data>
   <data name="CompleteNoteToSupervisor" xml:space="preserve">
     <value>Note for supervisor</value>
   </data>

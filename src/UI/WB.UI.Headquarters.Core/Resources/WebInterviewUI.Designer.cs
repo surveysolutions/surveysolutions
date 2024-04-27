@@ -513,6 +513,12 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
+        public static string UnansweredQuestions {
+            get {
+                return ResourceManager.GetString("UnansweredQuestions", resourceCulture);
+            }
+        }
+        
         public static string CompleteNoteToSupervisor {
             get {
                 return ResourceManager.GetString("CompleteNoteToSupervisor", resourceCulture);

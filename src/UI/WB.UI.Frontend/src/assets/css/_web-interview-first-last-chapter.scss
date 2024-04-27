@@ -91,6 +91,34 @@
 		}
 	}
 }
+.wrapper-info
+{
+    .errors {
+        h4 {
+            color: $red_error;
+        }
+        .marked-questions
+        {
+            li {
+                a, span {
+                    color: $red_error;
+                }
+            }
+        }
+    }
+    .unanswered {
+        h4 {
+            color: $gray_text;
+        }
+        .marked-questions {
+            li {
+                a, span {
+                    color: $gray_text;
+                }
+            }
+        }
+    }
+}
 .container-info p + h4{
 	margin-top: 30px;
 }

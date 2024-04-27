@@ -34,13 +34,8 @@
             </div>
         </div>
 
-
-
-
-
         <template v-for="group in completeGroups">
-            <ExpandableList :title="group.title">
-                <!--h4 class="gray-uppercase">{{ $t('WebInterviewUI.CriticalQuestionErrors') }}</h4-->
+            <ExpandableList :title="group.title" :cssClass="group.cssClass">
                 <ul class="list-unstyled marked-questions">
                     <li v-for="item in group.items" :key="item.id">
                         <a v-if="item.parentId || item.isPrefilled" href="javascript:void(0);" @click="navigateTo(item)"
@@ -51,43 +46,6 @@
             </ExpandableList>
         </template>
 
-
-
-
-
-
-        <!--div class="wrapper-info" v-if="criticalityInfo?.unansweredCriticalQuestions.length > 0">
-            <div class="container-info">
-                <h4 class="gray-uppercase">{{ $t('WebInterviewUI.CriticalQuestionErrors') }}</h4>
-                <ul class="list-unstyled marked-questions">
-                    <li v-for="check in criticalityInfo.unansweredCriticalQuestions" :key="check.id">
-                        <a href="javascript:void(0);" @click="navigateTo(check)" v-html="check.message"></a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="wrapper-info" v-if="criticalityInfo?.failedCriticalRules.length > 0">
-            <div class="container-info">
-                <h4 class="gray-uppercase">{{ $t('WebInterviewUI.CriticalityConditionsErrors') }}</h4>
-                <ul class="list-unstyled marked-questions">
-                    <li v-for="check in criticalityInfo.failedCriticalRules" :key="check.id">
-                        <span v-html="check.message"></span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="wrapper-info" v-if="completeInfo.entitiesWithError.length > 0">
-            <div class="container-info">
-                <h4 class="gray-uppercase">{{ doesShowErrorsCommentWithCount
-        ? $t('WebInterviewUI.CompleteFirstErrors', { count: completeInfo.entitiesWithError.length })
-        : $t('WebInterviewUI.CompleteErrors') }}</h4>
-                <ul class="list-unstyled marked-questions">
-                    <li v-for="entity in completeInfo.entitiesWithError" :key="entity.id">
-                        <a href="javascript:void(0);" @click="navigateTo(entity)" v-html="entity.title"></a>
-                    </li>
-                </ul>
-            </div>
-        </div-->
         <div class="wrapper-info">
             <div class="container-info">
                 <label class="gray-uppercase" for="comment-for-supervisor">
@@ -188,6 +146,7 @@ export default {
                 groups.push({
                     title: this.$t('WebInterviewUI.CriticalQuestionErrors'),
                     items: this.criticalityInfo.unansweredCriticalQuestions,
+                    cssClass: 'errors'
                 })
             }
 
@@ -195,13 +154,15 @@ export default {
                 groups.push({
                     title: this.$t('WebInterviewUI.CriticalityConditionsErrors'),
                     items: this.criticalityInfo.failedCriticalRules,
+                    cssClass: 'errors'
                 })
             }
 
             if (this.completeInfo.unansweredCount > 0) {
                 groups.push({
-                    title: this.$t('WebInterviewUI.CompleteErrors'),
+                    title: this.$t('WebInterviewUI.UnansweredQuestions'),
                     items: this.completeInfo.unansweredQuestions,
+                    cssClass: 'unanswered'
                 })
             }
 
@@ -213,6 +174,7 @@ export default {
                 groups.push({
                     title: title,
                     items: this.completeInfo.entitiesWithError,
+                    cssClass: 'errors'
                 })
             }
 

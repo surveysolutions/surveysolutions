@@ -1,6 +1,6 @@
 <template>
     <div class="wrapper-info">
-        <div class="container-info">
+        <div class="container-info" :class="[cssClass]">
             <button class="btn btn-link btn-plus" v-if="hasChild" :class="{ collapsed: !isExpanded }" type="button"
                 @click="() => (isExpanded = !isExpanded)">
                 <span></span>
@@ -28,11 +28,11 @@ export default {
     data() {
         return {
             isExpanded: false,
-            toggletText: ["show", "hide"],
         }
     },
     props: {
         title: { type: String, default: '' },
+        cssClass: { type: String, default: null },
         hasChild: { type: Boolean, default: true },
     },
     methods: {
