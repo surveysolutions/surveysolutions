@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -66,11 +65,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return viewModels;
         }
 
-        public IEnumerable<FailedCriticalRuleViewModel> GetTopFailedCriticalRules(string interviewId, NavigationState navigationState)
+        
+        private IEnumerable<FailedCriticalRuleViewModel> GetFailedCriticalRules(IStatefulInterview interview, Guid[] ids)
         {
-            IStatefulInterview interview = this.interviewRepository.GetOrThrow(interviewId);
-            Guid[] ids = interview.CollectInvalidCriticalRules().Take(this.maxNumberOfEntities).ToArray();
-           
             var criticalRules = new List<FailedCriticalRuleViewModel>();
             foreach (var id in ids)
             {
@@ -87,6 +84,22 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
             
             return criticalRules;
+        }
+        
+        public IEnumerable<FailedCriticalRuleViewModel> GetTopFailedCriticalRules(string interviewId, NavigationState navigationState)
+        {
+            IStatefulInterview interview = this.interviewRepository.GetOrThrow(interviewId);
+            Guid[] ids = interview.CollectInvalidCriticalRules().Take(this.maxNumberOfEntities).ToArray();
+
+            return GetFailedCriticalRules(interview, ids);
+        }
+
+        public IEnumerable<FailedCriticalRuleViewModel> GetTopFailedCriticalRulesFromState(string interviewId, NavigationState navigationState)
+        {
+            IStatefulInterview interview = this.interviewRepository.GetOrThrow(interviewId);
+            Guid[] ids = interview.GetFailedCriticalRules().Take(this.maxNumberOfEntities).ToArray();
+
+            return GetFailedCriticalRules(interview, ids);
         }
 
         private IEnumerable<T> EntityWithErrorsViewModels<T>(string interviewId, NavigationState navigationState,

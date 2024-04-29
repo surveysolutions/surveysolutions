@@ -251,7 +251,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         if (unansweredCriticalQuestions.Any())
                             throw new InterviewException("Interview can't be completed with unanswered critical questions", InterviewDomainExceptionType.UnansweredCriticalQuestion);
                         if (criticalRules.Any())
-                            throw new InterviewException("Interview can't be completed with fail critical rules", InterviewDomainExceptionType.FailCriticalRule);
+                            throw new InterviewException("Interview can't be completed with failed critical rules", InterviewDomainExceptionType.FailCriticalRule);
                     }
 
                     criticalRules = cRules.ToArray();

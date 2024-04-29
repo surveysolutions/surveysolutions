@@ -366,7 +366,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Critical unanswered questions: {0}</value>
   </data>
   <data name="Interview_Complete_FailCriticalConditions" xml:space="preserve">
-    <value>Fail critical rules: {0}</value>
+    <value>Failed critical rules: {0}</value>
   </data>
   <data name="Interview_Complete_No" xml:space="preserve">
     <value>No</value>
