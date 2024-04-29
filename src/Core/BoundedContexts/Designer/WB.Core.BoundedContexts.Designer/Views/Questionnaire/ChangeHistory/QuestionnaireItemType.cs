@@ -15,6 +15,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         Translation,
         Metadata,
         Categories,
-        CriticalityCondition,
+        CriticalRule,
     }
 }

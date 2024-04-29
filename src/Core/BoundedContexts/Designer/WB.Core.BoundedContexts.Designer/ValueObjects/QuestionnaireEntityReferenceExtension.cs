@@ -84,14 +84,14 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
                 );
             }
 
-            if (reference.Type == QuestionnaireVerificationReferenceType.CriticalityCondition)
+            if (reference.Type == QuestionnaireVerificationReferenceType.CriticalRule)
             {
-                var criticalityCondition = questionnaireDocument.CriticalityConditions.First(x => x.Id == reference.Id);
+                var criticalRule = questionnaireDocument.CriticalRules.First(x => x.Id == reference.Id);
                 return new QuestionnaireEntityExtendedReference
                 (
                     itemId : reference.Id.FormatGuid(),
-                    type : QuestionnaireVerificationReferenceType.CriticalityCondition,
-                    title : criticalityCondition.Message ?? string.Empty
+                    type : QuestionnaireVerificationReferenceType.CriticalRule,
+                    title : criticalRule.Message ?? string.Empty
                 );
             }
 

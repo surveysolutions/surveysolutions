@@ -110,7 +110,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public List<ICategoricalQuestion> QuestionsWithLongOptionsList { get; internal set; } = new List<ICategoricalQuestion>();
 
         public List<IQuestion> QuestionsWithLongSpecialValuesList { get; internal set; } = new List<IQuestion>();
-        public List<CriticalRule> CriticalityConditions { get; internal set; } = new List<CriticalRule>();
+        public List<CriticalRule> CriticalRules { get; internal set; } = new List<CriticalRule>();
         
         public List<IQuestion> QuestionsWithLongInstructions { get; internal set; } = new List<IQuestion>();
 
@@ -531,7 +531,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public bool IsOptionsAppendixEmpty => QuestionsWithLongOptionsList.Count == 0 && CategoriesList.Count == 0;
         public bool IsVariablesAppendixEmpty => VariableWithLongExpressions.Count == 0;
         public bool IsSpecialValuesAppendixEmpty => QuestionsWithLongSpecialValuesList.Count == 0;
-        public bool IsCriticalityConditionsAppendixEmpty => CriticalityConditions.Count == 0;
+        public bool IsCriticalRuleAppendixEmpty => CriticalRules.Count == 0;
 
         public char ConditionsAppendixIndex => 'A';
         public char ValidationsAppendixIndex => IsConditionsAppendixEmpty ? ConditionsAppendixIndex : (char)(ConditionsAppendixIndex + 1);

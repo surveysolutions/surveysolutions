@@ -10,6 +10,6 @@
         FixedRosterTitle = 5,
         SpecialValue = 6,
         Categories = 7,
-        CriticalityCondition = 8,
+        CriticalRule = 8,
     }
 }

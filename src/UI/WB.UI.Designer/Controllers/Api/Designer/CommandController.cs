@@ -19,7 +19,7 @@ using WB.Core.BoundedContexts.Designer.Commands;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.CriticalityConditions;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.CriticalRules;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
@@ -494,10 +494,10 @@ namespace WB.UI.Designer.Controllers.Api.Designer
              //Categories commands
              { "AddOrUpdateCategories", typeof (AddOrUpdateCategories) },
              { "DeleteCategories", typeof (DeleteCategories) },
-             //CriticalityConditions commands
-             { "AddCriticalityCondition", typeof (AddCriticalityCondition) },
-             { "UpdateCriticalityCondition", typeof (UpdateCriticalityCondition) },
-             { "DeleteCriticalityCondition", typeof (DeleteCriticalityCondition) },
+             //CriticalRules commands
+             { "AddCriticalRule", typeof (AddCriticalRule) },
+             { "UpdateCriticalRule", typeof (UpdateCriticalRule) },
+             { "DeleteCriticalRule", typeof (DeleteCriticalRule) },
          };
 
         private Type GetTypeOfResultCommandOrThrowArgumentException(string commandType)

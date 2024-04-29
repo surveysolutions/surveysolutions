@@ -131,13 +131,13 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             }
 
             var criticalityConditions = new List<CriticalRuleResult>();
-            var failedCriticalityConditions = interview.CollectInvalidCriticalRules().Take(count).ToList();
-            foreach (var conditionId in failedCriticalityConditions)
+            var failedCriticalRules = interview.CollectInvalidCriticalRules().Take(count).ToList();
+            foreach (var ruleId in failedCriticalRules)
             {
-                var message = interviewEntityFactory.GetCriticalRuleMessage(conditionId, interview, questionnaire, IsReviewMode());
+                var message = interviewEntityFactory.GetCriticalRuleMessage(ruleId, interview, questionnaire, IsReviewMode());
                 criticalityConditions.Add(new CriticalRuleResult()
                 {
-                    Id = conditionId.FormatGuid(),
+                    Id = ruleId.FormatGuid(),
                     Title = message, 
                 });
             }

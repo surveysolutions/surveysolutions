@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
         public const string EnablementPrefix = "IsEnabled__";
         public const string OptionsFilterPrefix = "FilterOption__";
         public const string VariablePrefix = "Variable__";
-        public const string CriticalityConditionPrefix = "Criticality__";
+        public const string CriticalRulePrefix = "CriticalRule__";
         
         public const string ValidationPrefix = "IsValid__";
         public const string LinkedFilterPrefix = "FilterForLinkedQuestion__";

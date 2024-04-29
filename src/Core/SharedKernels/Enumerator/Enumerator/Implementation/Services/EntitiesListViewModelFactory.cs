@@ -71,22 +71,22 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             IStatefulInterview interview = this.interviewRepository.GetOrThrow(interviewId);
             Guid[] ids = interview.CollectInvalidCriticalRules().Take(this.maxNumberOfEntities).ToArray();
            
-            var criticalityConditions = new List<FailedCriticalRuleViewModel>();
+            var criticalRules = new List<FailedCriticalRuleViewModel>();
             foreach (var id in ids)
             {
                 var criticalityConditionMessage = interview.GetCriticalRuleMessage(id);
-                var failCriticalityConditionViewModel = this.interviewViewModelFactory.GetNew<FailedCriticalRuleViewModel>();
+                var failedCriticalRuleViewModel = this.interviewViewModelFactory.GetNew<FailedCriticalRuleViewModel>();
                 
                 using (var title = this.dynamicTextViewModelFactory.CreateDynamicTextViewModel())
                 {
                     title.InitAsStatic(criticalityConditionMessage);
-                    failCriticalityConditionViewModel.Init(title.PlainText);
+                    failedCriticalRuleViewModel.Init(title.PlainText);
                 }
 
-                criticalityConditions.Add(failCriticalityConditionViewModel);
+                criticalRules.Add(failedCriticalRuleViewModel);
             }
             
-            return criticalityConditions;
+            return criticalRules;
         }
 
         private IEnumerable<T> EntityWithErrorsViewModels<T>(string interviewId, NavigationState navigationState,

@@ -7,7 +7,7 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.CriticalityConditions;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.CriticalRules;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
@@ -45,9 +45,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, AddMacro>,
         ICommandPostProcessor<Questionnaire, UpdateMacro>,
         ICommandPostProcessor<Questionnaire, DeleteMacro>,
-        ICommandPostProcessor<Questionnaire, AddCriticalityCondition>,
-        ICommandPostProcessor<Questionnaire, UpdateCriticalityCondition>,
-        ICommandPostProcessor<Questionnaire, DeleteCriticalityCondition>,
+        ICommandPostProcessor<Questionnaire, AddCriticalRule>,
+        ICommandPostProcessor<Questionnaire, UpdateCriticalRule>,
+        ICommandPostProcessor<Questionnaire, DeleteCriticalRule>,
         ICommandPostProcessor<Questionnaire, AddOrUpdateAttachment>,
         ICommandPostProcessor<Questionnaire, DeleteAttachment>,
         ICommandPostProcessor<Questionnaire, AddOrUpdateTranslation>,
@@ -344,9 +344,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         public void Process(Questionnaire aggregate, AddMacro command) => this.Update(command.QuestionnaireId.FormatGuid());
         public void Process(Questionnaire aggregate, UpdateMacro command) => this.Update(command.QuestionnaireId.FormatGuid());
         public void Process(Questionnaire aggregate, DeleteMacro command) => this.Update(command.QuestionnaireId.FormatGuid());
-        public void Process(Questionnaire aggregate, AddCriticalityCondition command) => this.Update(command.QuestionnaireId.FormatGuid());
-        public void Process(Questionnaire aggregate, UpdateCriticalityCondition command) => this.Update(command.QuestionnaireId.FormatGuid());
-        public void Process(Questionnaire aggregate, DeleteCriticalityCondition command) => this.Update(command.QuestionnaireId.FormatGuid());
+        public void Process(Questionnaire aggregate, AddCriticalRule command) => this.Update(command.QuestionnaireId.FormatGuid());
+        public void Process(Questionnaire aggregate, UpdateCriticalRule command) => this.Update(command.QuestionnaireId.FormatGuid());
+        public void Process(Questionnaire aggregate, DeleteCriticalRule command) => this.Update(command.QuestionnaireId.FormatGuid());
         public void Process(Questionnaire aggregate, AddOrUpdateAttachment command) => this.Update(command.QuestionnaireId.FormatGuid());
         public void Process(Questionnaire aggregate, DeleteAttachment command) => this.Update(command.QuestionnaireId.FormatGuid());
         public void Process(Questionnaire aggregate, AddOrUpdateTranslation command) => this.Update(command.QuestionnaireId.FormatGuid());

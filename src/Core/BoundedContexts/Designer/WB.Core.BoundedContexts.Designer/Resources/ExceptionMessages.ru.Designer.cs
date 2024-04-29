@@ -159,15 +159,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
             }
         }
         
-        public static string CriticalityConditionAlreadyExist {
+        public static string CriticalRuleAlreadyExist {
             get {
-                return ResourceManager.GetString("CriticalityConditionAlreadyExist", resourceCulture);
+                return ResourceManager.GetString("CriticalRuleAlreadyExist", resourceCulture);
             }
         }
         
-        public static string CriticalityConditionIsAbsent {
+        public static string CriticalRuleIsAbsent {
             get {
-                return ResourceManager.GetString("CriticalityConditionIsAbsent", resourceCulture);
+                return ResourceManager.GetString("CriticalRuleIsAbsent", resourceCulture);
             }
         }
         

@@ -46,9 +46,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             ExpressionWarning(this.BitwiseAnd, "WB0237", VerificationMessages.WB0237_BitwiseAnd),
             ExpressionWarning(this.BitwiseOr, "WB0238", VerificationMessages.WB0238_BitwiseOr),
 
-            CriticalityConditionError(CriticalityConditionExpressionIsEmpty, "WB0319", VerificationMessages.WB0319_CriticalityConditionExpressionIsEmpty),
-            CriticalityConditionError(CriticalityConditionMessageIsEmpty, "WB0320", VerificationMessages.WB0320_CriticalityConditionExpressionIsEmpty),
-            CriticalityConditionError(CriticalityConditionUsingForbiddenClasses, "WB0321", VerificationMessages.WB0321_CriticalityConditionUsingForbiddenClasses),
+            CriticalRuleError(CriticalRuleExpressionIsEmpty, "WB0319", VerificationMessages.WB0319_CriticalityConditionExpressionIsEmpty),
+            CriticalRuleError(CriticalRuleMessageIsEmpty, "WB0320", VerificationMessages.WB0320_CriticalityConditionExpressionIsEmpty),
+            CriticalRuleError(CriticalRuleUsingForbiddenClasses, "WB0321", VerificationMessages.WB0321_CriticalityConditionUsingForbiddenClasses),
 
             Critical<IVariable>(VariableExpressionHasLengthMoreThan10000Characters, "WB0005", string.Format(VerificationMessages.WB0005_VariableExpressionHasLengthMoreThan10000Characters, MaxExpressionLength)),
             Error<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationConditionUsesForbiddenDateTimeProperties, "WB0118", index => string.Format(WB0118_ExpressionReferencingForbiddenDateTimeProperies, index)),
@@ -126,7 +126,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return CheckForbiddenClassesUsage(enablingCondition, questionnaire);
         }
 
-        private bool CriticalityConditionUsingForbiddenClasses(CriticalRule item, MultiLanguageQuestionnaireDocument questionnaire) 
+        private bool CriticalRuleUsingForbiddenClasses(CriticalRule item, MultiLanguageQuestionnaireDocument questionnaire) 
             => CheckForbiddenClassesUsage(item.Expression, questionnaire);
 
         private bool CheckForbiddenClassesUsage(string? expression, MultiLanguageQuestionnaireDocument questionnaire)
@@ -439,10 +439,10 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private static bool ValidationConditionIsEmpty(IComposite question, ValidationCondition validationCondition, MultiLanguageQuestionnaireDocument questionnaire)
             => string.IsNullOrWhiteSpace(validationCondition.Expression);
 
-        private static bool CriticalityConditionExpressionIsEmpty(CriticalRule criticalRule, MultiLanguageQuestionnaireDocument questionnaire)
+        private static bool CriticalRuleExpressionIsEmpty(CriticalRule criticalRule, MultiLanguageQuestionnaireDocument questionnaire)
             => string.IsNullOrWhiteSpace(criticalRule.Expression);
 
-        private static bool CriticalityConditionMessageIsEmpty(CriticalRule criticalRule, MultiLanguageQuestionnaireDocument questionnaire)
+        private static bool CriticalRuleMessageIsEmpty(CriticalRule criticalRule, MultiLanguageQuestionnaireDocument questionnaire)
             => string.IsNullOrWhiteSpace(criticalRule.Message);
         
 
@@ -596,22 +596,22 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     yield return QuestionnaireVerificationMessage.VerificationMessage(messageLevel, code, message, QuestionnaireEntityReference.CreateForVariable(variable.PublicKey)); 
             }
 
-            foreach (var criticalityCondition in questionnaire.CriticalityConditions)
+            foreach (var criticalityCondition in questionnaire.CriticalRules)
             {
                 if (!string.IsNullOrEmpty(criticalityCondition.Expression) && hasError(criticalityCondition.Expression, questionnaire))
                     yield return QuestionnaireVerificationMessage.VerificationMessage(messageLevel, code, message, 
-                        QuestionnaireEntityReference.CreateForCriticalityCondition(criticalityCondition.Id)); 
+                        QuestionnaireEntityReference.CreateForCriticalRule(criticalityCondition.Id)); 
             }
         }
         
-        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> CriticalityConditionError(
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> CriticalRuleError(
             Func<CriticalRule, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
         {
             return questionnaire =>
-                questionnaire.CriticalityConditions
+                questionnaire.CriticalRules
                     .Where(cc => hasError(cc, questionnaire))
                     .Select(cc => QuestionnaireVerificationMessage.Error(code, message,
-                        QuestionnaireEntityReference.CreateForCriticalityCondition(cc.Id)));
+                        QuestionnaireEntityReference.CreateForCriticalRule(cc.Id)));
         }
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error<TEntity, TSubEntity>(

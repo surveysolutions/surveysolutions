@@ -51,7 +51,7 @@ namespace WB.UI.Designer.Code
                         switch (record.TargetType)
                         {
                             case QuestionnaireItemType.Categories:
-                            case QuestionnaireItemType.CriticalityCondition:
+                            case QuestionnaireItemType.CriticalRule:
                             case QuestionnaireItemType.Translation:
                             case QuestionnaireItemType.Attachment:
                             case QuestionnaireItemType.Macro:

@@ -1,12 +1,12 @@
 ﻿using System;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 
-namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.CriticalityConditions
+namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.CriticalRules
 {
     [Serializable]
-    public class UpdateCriticalityCondition : QuestionnaireCommand
+    public class UpdateCriticalRule : QuestionnaireCommand
     {
-        public UpdateCriticalityCondition(Guid questionnaireId, Guid id, string message, string expression, string description, Guid responsibleId)
+        public UpdateCriticalRule(Guid questionnaireId, Guid id, string message, string expression, string description, Guid responsibleId)
             : base(responsibleId: responsibleId, questionnaireId: questionnaireId)
         {
             this.Id = id;

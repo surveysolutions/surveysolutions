@@ -263,11 +263,11 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                 }
             }
 
-            for (int index = 0; index < questionnaire.CriticalityConditions.Count; index++)
+            for (int index = 0; index < questionnaire.CriticalRules.Count; index++)
             {
-                var criticalityCondition = questionnaire.CriticalityConditions[index];
+                var criticalityCondition = questionnaire.CriticalRules[index];
                 var conditionExpression = this.macrosSubstitutionService.InlineMacros(criticalityCondition.Expression, questionnaire.Macros.Values);
-                var methodName = CodeGeneratorV2.CriticalityConditionPrefix + criticalityCondition.Id.FormatGuid();
+                var methodName = CodeGeneratorV2.CriticalRulePrefix + criticalityCondition.Id.FormatGuid();
                 
                 if (!string.IsNullOrWhiteSpace(conditionExpression))
                 {

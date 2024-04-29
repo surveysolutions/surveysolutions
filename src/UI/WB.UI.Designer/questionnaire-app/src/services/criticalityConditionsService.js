@@ -10,7 +10,7 @@ export function addCriticalityCondition(
         id: criticalityConditionId
     };
 
-    return commandCall('AddCriticalityCondition', command).then(response => {
+    return commandCall('AddCriticalRule', command).then(response => {
         emitter.emit('criticalityConditionAdded', {
             message: '',
             expression: '',
@@ -33,7 +33,7 @@ export function updateCriticalityCondition(
         description: criticalityCondition.description
     };
 
-    return commandCall('UpdateCriticalityCondition', command).then(response => {
+    return commandCall('UpdateCriticalRule', command).then(response => {
         emitter.emit('criticalityConditionUpdated', {
             message: criticalityCondition.message,
             expression: criticalityCondition.expression,
@@ -52,7 +52,7 @@ export function deleteCriticalityCondition(
         id: criticalityConditionId
     };
 
-    return commandCall('DeleteCriticalityCondition', command).then(response => {
+    return commandCall('DeleteCriticalRule', command).then(response => {
         emitter.emit('criticalityConditionDeleted', {
             questionnaireId: questionnaireId,
             id: criticalityConditionId

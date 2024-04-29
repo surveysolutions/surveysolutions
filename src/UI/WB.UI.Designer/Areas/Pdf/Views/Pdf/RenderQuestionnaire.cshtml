@@ -188,7 +188,7 @@
 					<a href="#special_values_appendix" class="section_name appendix">@Pdf.Format(PdfStrings.Appendix_SpecialValues, questionnaire.SpecialValuesAppendixIndex, "&#8212;")</a>
 				</dd>
 				}
-				@if (!questionnaire.IsCriticalityConditionsAppendixEmpty)
+				@if (!questionnaire.IsCriticalRuleAppendixEmpty)
 				{
 				<dt>&nbsp;</dt>
 				<dd>
@@ -580,15 +580,15 @@
 	</article>
 }
 
-@if (!questionnaire.IsCriticalityConditionsAppendixEmpty)
+@if (!questionnaire.IsCriticalRuleAppendixEmpty)
 {
 	<article class="appendix_section">
         <h2 id="criticality_conditions_appendix">@Pdf.Format(PdfStrings.Appendix_CriticalityConditions, questionnaire.CriticalityConditionsAppendixIndex, "&#8212;")</h2>
         
         <ul class="container">
-            @for (var i = 0; i < questionnaire.CriticalityConditions.Count; i++)
+            @for (var i = 0; i < questionnaire.CriticalRules.Count; i++)
             {
-                var criticalityCondition = questionnaire.CriticalityConditions[i];
+                var criticalityCondition = questionnaire.CriticalRules[i];
                 <li>
                     <span class="number">[@(i + 1)]</span>
                     <div class="appendix_detail">

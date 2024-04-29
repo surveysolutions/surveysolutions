@@ -44,9 +44,9 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
                 }
             }
 
-            foreach (var criticalityCondition in translatedDocument.CriticalRules)
+            foreach (var criticalRule in translatedDocument.CriticalRules)
             {
-                TranslateCriticalityCondition(criticalityCondition, translation);
+                TranslateCriticalRule(criticalRule, translation);
             }
 
             return translatedDocument;
@@ -66,7 +66,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
                 translated: translation.GetInstruction(question.PublicKey));
         }
 
-        private static void TranslateCriticalityCondition(CriticalRule criticalRule, ITranslation translation)
+        private static void TranslateCriticalRule(CriticalRule criticalRule, ITranslation translation)
         {
             criticalRule.Message = Translate(
                 original: criticalRule.Message,

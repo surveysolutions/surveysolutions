@@ -17,7 +17,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.CriticalityConditions;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.CriticalRules;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
@@ -294,20 +294,20 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #endregion
         
-        #region CriticalityCondition command handlers
+        #region CriticalRule command handlers
 
-        public void AddCriticalityCondition(AddCriticalityCondition command)
+        public void AddCriticalRule(AddCriticalRule command)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
-            this.ThrowDomainExceptionIfCriticalityConditionAlreadyExist(command.Id);
+            this.ThrowDomainExceptionIfCriticalRuleAlreadyExist(command.Id);
 
             this.innerDocument.CriticalRules.Add(new CriticalRule() { Id = command.Id });
         }
 
-        public void UpdateCriticalityCondition(UpdateCriticalityCondition command)
+        public void UpdateCriticalRule(UpdateCriticalRule command)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
-            this.ThrowDomainExceptionIfCriticalityConditionIsAbsent(command.Id);
+            this.ThrowDomainExceptionIfCriticalRuleIsAbsent(command.Id);
             
             var criticalityCondition = this.innerDocument.CriticalRules.Single(ss => ss.Id == command.Id);
             criticalityCondition.Message = command.Message;
@@ -315,10 +315,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             criticalityCondition.Description = command.Description;
         }
 
-        public void DeleteCriticalityCondition(DeleteCriticalityCondition command)
+        public void DeleteCriticalRule(DeleteCriticalRule command)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
-            this.ThrowDomainExceptionIfCriticalityConditionIsAbsent(command.Id);
+            this.ThrowDomainExceptionIfCriticalRuleIsAbsent(command.Id);
 
             innerDocument.CriticalRules.RemoveAll(cc => cc.Id == command.Id);
         }
@@ -2073,19 +2073,19 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
         
-        private void ThrowDomainExceptionIfCriticalityConditionAlreadyExist(Guid id)
+        private void ThrowDomainExceptionIfCriticalRuleAlreadyExist(Guid id)
         {
             if (this.innerDocument.CriticalRules.Exists(cc => cc.Id == id))
             {
-                throw new QuestionnaireException(DomainExceptionType.CriticalityConditionAlreadyExist, ExceptionMessages.CriticalityConditionAlreadyExist);
+                throw new QuestionnaireException(DomainExceptionType.CriticalRuleAlreadyExist, ExceptionMessages.CriticalRuleAlreadyExist);
             }
         }
 
-        private void ThrowDomainExceptionIfCriticalityConditionIsAbsent(Guid id)
+        private void ThrowDomainExceptionIfCriticalRuleIsAbsent(Guid id)
         {
             if (this.innerDocument.CriticalRules.TrueForAll(cc => cc.Id != id))
             {
-                throw new QuestionnaireException(DomainExceptionType.CriticalityConditionIsAbsent, ExceptionMessages.CriticalityConditionIsAbsent);
+                throw new QuestionnaireException(DomainExceptionType.CriticalRuleIsAbsent, ExceptionMessages.CriticalRuleIsAbsent);
             }
         }
 
