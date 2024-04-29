@@ -533,19 +533,19 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     .Select(entity => QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity)));
         }
 
-        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> ExpressionError(
+        private Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> ExpressionError(
             Func<string, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
         {
             return questionnaire => ExpressionCheckImpl(questionnaire, VerificationMessageLevel.General, hasError, code, message);
         }
 
-        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> ExpressionWarning(
+        private Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> ExpressionWarning(
             Func<string, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
         {
             return questionnaire => ExpressionCheckImpl(questionnaire, VerificationMessageLevel.Warning, hasError, code, message);
         }
 
-        private static IEnumerable<QuestionnaireVerificationMessage> ExpressionCheckImpl(MultiLanguageQuestionnaireDocument questionnaire,
+        private IEnumerable<QuestionnaireVerificationMessage> ExpressionCheckImpl(MultiLanguageQuestionnaireDocument questionnaire,
             VerificationMessageLevel messageLevel,
                 Func<string, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
         {
@@ -554,15 +554,20 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             foreach (var entitiesWithCondition in entitiesWithConditions)
             {
-                if (entitiesWithCondition is IConditional conditional && hasError(conditional.ConditionExpression, questionnaire))
-                    yield return QuestionnaireVerificationMessage.VerificationMessage(messageLevel, code, message, CreateReference(entitiesWithCondition, property: QuestionnaireVerificationReferenceProperty.EnablingCondition)); 
+                if (entitiesWithCondition is IConditional conditional)
+                {
+                    var expressionWithInlinedMacros = this.macrosSubstitutionService.InlineMacros(conditional.ConditionExpression, questionnaire.Macros.Values);
+                    if (hasError(expressionWithInlinedMacros, questionnaire)) 
+                        yield return QuestionnaireVerificationMessage.VerificationMessage(messageLevel, code, message, CreateReference(entitiesWithCondition, property: QuestionnaireVerificationReferenceProperty.EnablingCondition));
+                }
             }
 
             var questionsWithFilter = questionnaire.Find<IQuestion>(c => !string.IsNullOrEmpty(c.Properties?.OptionsFilterExpression));
             foreach (var question in questionsWithFilter)
             {
                 var filter = question.Properties?.OptionsFilterExpression;
-                if (filter != null && hasError(filter, questionnaire))
+                var filterWithInlinedMacros = this.macrosSubstitutionService.InlineMacros(filter, questionnaire.Macros.Values);
+                if (filter != null && hasError(filterWithInlinedMacros, questionnaire))
                     yield return QuestionnaireVerificationMessage.VerificationMessage(messageLevel, code, message, CreateReference(question, property: QuestionnaireVerificationReferenceProperty.OptionsFilter)); 
             }
 
@@ -570,7 +575,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             foreach (var question in questionsWithLinkedFilter)
             {
                 var filter = question.LinkedFilterExpression;
-                if (filter != null && hasError(filter, questionnaire))
+                var filterWithInlinedMacros = this.macrosSubstitutionService.InlineMacros(filter, questionnaire.Macros.Values);
+                if (filter != null && hasError(filterWithInlinedMacros, questionnaire))
                     yield return QuestionnaireVerificationMessage.VerificationMessage(messageLevel, code, message, CreateReference(question)); 
             }
             
@@ -584,7 +590,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 for(var index = 0; index < entity.ValidationConditions.Count; index++)
                 {
                     var validationCondition = entity.ValidationConditions[index];
-                    if (!string.IsNullOrWhiteSpace(validationCondition.Expression) && hasError(validationCondition.Expression, questionnaire))
+                    var validationWithInlinedMacros = this.macrosSubstitutionService.InlineMacros(validationCondition.Expression, questionnaire.Macros.Values);
+                    if (!string.IsNullOrWhiteSpace(validationWithInlinedMacros) && hasError(validationCondition.Expression, questionnaire))
                         yield return QuestionnaireVerificationMessage.VerificationMessage(messageLevel, code, message, CreateReference(entity, index, QuestionnaireVerificationReferenceProperty.ValidationExpression)); 
                 }
             }
@@ -592,15 +599,23 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             var variables = questionnaire.Find<IVariable>(v => !string.IsNullOrEmpty(v.Expression));
             foreach (var variable in variables)
             {
-                if (!string.IsNullOrWhiteSpace(variable.Expression) && hasError(variable.Expression, questionnaire))
-                    yield return QuestionnaireVerificationMessage.VerificationMessage(messageLevel, code, message, QuestionnaireEntityReference.CreateForVariable(variable.PublicKey)); 
+                if (!string.IsNullOrWhiteSpace(variable.Expression))
+                {
+                    var variableWithInlinedMacros = this.macrosSubstitutionService.InlineMacros(variable.Expression, questionnaire.Macros.Values);
+                    if (hasError(variableWithInlinedMacros, questionnaire)) 
+                        yield return QuestionnaireVerificationMessage.VerificationMessage(messageLevel, code, message, QuestionnaireEntityReference.CreateForVariable(variable.PublicKey));
+                }
             }
 
-            foreach (var criticalityCondition in questionnaire.CriticalRules)
+            foreach (var criticalRule in questionnaire.CriticalRules)
             {
-                if (!string.IsNullOrEmpty(criticalityCondition.Expression) && hasError(criticalityCondition.Expression, questionnaire))
-                    yield return QuestionnaireVerificationMessage.VerificationMessage(messageLevel, code, message, 
-                        QuestionnaireEntityReference.CreateForCriticalRule(criticalityCondition.Id)); 
+                if (!string.IsNullOrEmpty(criticalRule.Expression))
+                {
+                    var criticalRuleWithInlinedMacros = this.macrosSubstitutionService.InlineMacros(criticalRule.Expression, questionnaire.Macros.Values);
+                    if (hasError(criticalRuleWithInlinedMacros, questionnaire))
+                        yield return QuestionnaireVerificationMessage.VerificationMessage(messageLevel, code, message, 
+                            QuestionnaireEntityReference.CreateForCriticalRule(criticalRule.Id));
+                }
             }
         }
         
