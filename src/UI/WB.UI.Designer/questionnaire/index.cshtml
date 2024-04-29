@@ -25,13 +25,13 @@
     <link rel="apple-touch-icon-precomposed" href="~/favicon-designer-180x180.png">
 
     <!-- libs:css -->
-    <link rel="stylesheet" href="~/css/libs-38bd6e5dad.css">
+    <link rel="stylesheet" href="~/css/libs.css">
     <!-- endinject -->
     <!-- markup:css -->
-    <link rel="stylesheet" href="~/css/markup-77a85d1396.css">
+    <link rel="stylesheet" href="~/css/markup.css">
     <!-- endinject -->
     <!-- manifest:json -->
-    <script>window.localization = {"QuestionnaireEditor.en.json":"../../resx/QuestionnaireEditor-5031f776de.en.json","QuestionnaireEditor.ar.json":"../../resx/QuestionnaireEditor-4d8fdc6cc8.ar.json","QuestionnaireEditor.cs.json":"../../resx/QuestionnaireEditor-93fe1031a5.cs.json","QuestionnaireEditor.es.json":"../../resx/QuestionnaireEditor-e9fb576cc5.es.json","QuestionnaireEditor.fr.json":"../../resx/QuestionnaireEditor-f84a6c5e04.fr.json","QuestionnaireEditor.ro.json":"../../resx/QuestionnaireEditor-49b3f51834.ro.json","QuestionnaireEditor.ru.json":"../../resx/QuestionnaireEditor-7a728f0224.ru.json","QuestionnaireEditor.sq.json":"../../resx/QuestionnaireEditor-77b121ecd7.sq.json","QuestionnaireEditor.uk.json":"../../resx/QuestionnaireEditor-fdb949ba9c.uk.json","QuestionnaireEditor.zh.json":"../../resx/QuestionnaireEditor-5e6db351e7.zh.json"}</script>@{ var locales_json = @"{""QuestionnaireEditor.en.json"":""../../resx/QuestionnaireEditor-5031f776de.en.json"",""QuestionnaireEditor.ar.json"":""../../resx/QuestionnaireEditor-4d8fdc6cc8.ar.json"",""QuestionnaireEditor.cs.json"":""../../resx/QuestionnaireEditor-93fe1031a5.cs.json"",""QuestionnaireEditor.es.json"":""../../resx/QuestionnaireEditor-e9fb576cc5.es.json"",""QuestionnaireEditor.fr.json"":""../../resx/QuestionnaireEditor-f84a6c5e04.fr.json"",""QuestionnaireEditor.ro.json"":""../../resx/QuestionnaireEditor-49b3f51834.ro.json"",""QuestionnaireEditor.ru.json"":""../../resx/QuestionnaireEditor-7a728f0224.ru.json"",""QuestionnaireEditor.sq.json"":""../../resx/QuestionnaireEditor-77b121ecd7.sq.json"",""QuestionnaireEditor.uk.json"":""../../resx/QuestionnaireEditor-fdb949ba9c.uk.json"",""QuestionnaireEditor.zh.json"":""../../resx/QuestionnaireEditor-5e6db351e7.zh.json""}"; }
+    <script>window.localization = {"QuestionnaireEditor.en.json":"../../resx/QuestionnaireEditor-f6a3a2612e.en.json","QuestionnaireEditor.ar.json":"../../resx/QuestionnaireEditor-4d8fdc6cc8.ar.json","QuestionnaireEditor.cs.json":"../../resx/QuestionnaireEditor-8a5bd29288.cs.json","QuestionnaireEditor.es.json":"../../resx/QuestionnaireEditor-e9fb576cc5.es.json","QuestionnaireEditor.fr.json":"../../resx/QuestionnaireEditor-f84a6c5e04.fr.json","QuestionnaireEditor.ro.json":"../../resx/QuestionnaireEditor-8c18e3756e.ro.json","QuestionnaireEditor.ru.json":"../../resx/QuestionnaireEditor-7a728f0224.ru.json","QuestionnaireEditor.sq.json":"../../resx/QuestionnaireEditor-77b121ecd7.sq.json","QuestionnaireEditor.uk.json":"../../resx/QuestionnaireEditor-d7056fba16.uk.json","QuestionnaireEditor.zh.json":"../../resx/QuestionnaireEditor-5e6db351e7.zh.json"}</script>@{ var locales_json = @"{""QuestionnaireEditor.en.json"":""../../resx/QuestionnaireEditor-f6a3a2612e.en.json"",""QuestionnaireEditor.ar.json"":""../../resx/QuestionnaireEditor-4d8fdc6cc8.ar.json"",""QuestionnaireEditor.cs.json"":""../../resx/QuestionnaireEditor-8a5bd29288.cs.json"",""QuestionnaireEditor.es.json"":""../../resx/QuestionnaireEditor-e9fb576cc5.es.json"",""QuestionnaireEditor.fr.json"":""../../resx/QuestionnaireEditor-f84a6c5e04.fr.json"",""QuestionnaireEditor.ro.json"":""../../resx/QuestionnaireEditor-8c18e3756e.ro.json"",""QuestionnaireEditor.ru.json"":""../../resx/QuestionnaireEditor-7a728f0224.ru.json"",""QuestionnaireEditor.sq.json"":""../../resx/QuestionnaireEditor-77b121ecd7.sq.json"",""QuestionnaireEditor.uk.json"":""../../resx/QuestionnaireEditor-d7056fba16.uk.json"",""QuestionnaireEditor.zh.json"":""../../resx/QuestionnaireEditor-5e6db351e7.zh.json""}"; }
     <!-- endinject -->
     @{
         var locales = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(locales_json) ?? new Dictionary<string, string>();
@@ -45,16 +45,74 @@
     <div id="designer-editor" class="container" ui-view>
     </div>
     <!-- libs:js -->
-    <script src="~/js/libs-bd650b3c1a.js"></script>
+    <script src="~/js/libs.js"></script>
     <!-- endinject -->
     <!-- app:js -->  
-    <script defer src="~/js/app-561eb796f1.js"></script>  
+    <script defer src="~/js/app/app.js"></script>  
+    <script defer src="~/js/app/ui-js.js"></script>  
+    <script defer src="~/js/app/directives/animations.js"></script>  
+    <script defer src="~/js/app/directives/directives.js"></script>  
+    <script defer src="~/js/app/directives/help.js"></script>  
+    <script defer src="~/js/app/directives/itemBreadcrumbs.js"></script>  
+    <script defer src="~/js/app/directives/matchOptionsPattern.js"></script>  
+    <script defer src="~/js/app/filters/escapeFilter.js"></script>  
+    <script defer src="~/js/app/controllers/addClassification.js"></script>  
+    <script defer src="~/js/app/controllers/alert.js"></script>  
+    <script defer src="~/js/app/controllers/attachments.js"></script>  
+    <script defer src="~/js/app/controllers/categories.js"></script>  
+    <script defer src="~/js/app/controllers/chapters.js"></script>  
+    <script defer src="~/js/app/controllers/comments.js"></script>  
+    <script defer src="~/js/app/controllers/commentsEditor.js"></script>  
+    <script defer src="~/js/app/controllers/confirm.js"></script>  
+    <script defer src="~/js/app/controllers/findReplace.js"></script>  
+    <script defer src="~/js/app/controllers/group.js"></script>  
+    <script defer src="~/js/app/controllers/leftMenu.js"></script>  
+    <script defer src="~/js/app/controllers/lookupTables.js"></script>  
+    <script defer src="~/js/app/controllers/macros.js"></script>  
+    <script defer src="~/js/app/controllers/main.js"></script>  
+    <script defer src="~/js/app/controllers/metadata.js"></script>  
+    <script defer src="~/js/app/controllers/pdf.js"></script>  
+    <script defer src="~/js/app/controllers/question.js"></script>  
+    <script defer src="~/js/app/controllers/roster.js"></script>  
+    <script defer src="~/js/app/controllers/scenarios.js"></script>  
+    <script defer src="~/js/app/controllers/searchForQuestion.js"></script>  
+    <script defer src="~/js/app/controllers/senarioEditor.js"></script>  
+    <script defer src="~/js/app/controllers/share.js"></script>  
+    <script defer src="~/js/app/controllers/staticText.js"></script>  
+    <script defer src="~/js/app/controllers/translations.js"></script>  
+    <script defer src="~/js/app/controllers/tree.js"></script>  
+    <script defer src="~/js/app/controllers/variable.js"></script>  
+    <script defer src="~/js/app/decorators/exceptionhandlerdecorator.js"></script>  
+    <script defer src="~/js/app/modules/ng-context-menu.js"></script>  
+    <script defer src="~/js/app/modules/perfect_scrollbar.js"></script>  
+    <script defer src="~/js/app/modules/positionCalculator.js"></script>  
+    <script defer src="~/js/app/modules/ui-ace.js"></script>  
+    <script defer src="~/js/app/services/agular-notify.js"></script>  
+    <script defer src="~/js/app/services/alertService.js"></script>  
+    <script defer src="~/js/app/services/authorizationinterceptor.js"></script>  
+    <script defer src="~/js/app/services/commandService.js"></script>  
+    <script defer src="~/js/app/services/commentsService.js"></script>  
+    <script defer src="~/js/app/services/confirmService.js"></script>  
+    <script defer src="~/js/app/services/errorReportingService.js"></script>  
+    <script defer src="~/js/app/services/helpMessages.js"></script>  
+    <script defer src="~/js/app/services/optionsService.js"></script>  
+    <script defer src="~/js/app/services/pdfService.js"></script>  
+    <script defer src="~/js/app/services/questionnaireService.js"></script>  
+    <script defer src="~/js/app/services/shareService.js"></script>  
+    <script defer src="~/js/app/services/translate.js"></script>  
+    <script defer src="~/js/app/services/userService.js"></script>  
+    <script defer src="~/js/app/services/utilityService.js"></script>  
+    <script defer src="~/js/app/services/verificationService.js"></script>  
+    <script defer src="~/js/app/services/webTesterService.js"></script>  
+    <script defer src="~/js/app/extensions/ace/mode-csharp-extended.js"></script>  
+    <script defer src="~/js/app/extensions/ace/mode-text-extended.js"></script>  
+    <script defer src="~/js/app/extensions/ace/theme-github-extended.js"></script>  
     <!-- endinject -->
     <!-- templates:js -->
-    <script defer src="~/js/templates-e303341e20.js"></script>
+    <script defer src="~/js/templates.js"></script>
     <!-- endinject -->
     <!-- utils:js -->
-    <script defer src="~/js/utils-4470179707.js"></script>
+    <script defer src="~/js/utils.js"></script>
     <!-- endinject -->
 </body>
 </html>
