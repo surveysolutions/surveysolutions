@@ -310,7 +310,7 @@
     <value>Нет</value>
   </data>
   <data name="CompleteNoteToSupervisor" xml:space="preserve">
-    <value>Заметка для супервизора</value>
+      <value>Коментарий</value>
   </data>
   <data name="PhotoIsNotImage" xml:space="preserve">
     <value>Загружать можно только изображения</value>
@@ -401,6 +401,18 @@
   </data>
   <data name="WebTesterSessionOverMessage" xml:space="preserve">
     <value>Пожалуйста закройте окно тестера.</value>
+  </data>
+  <data name="CompleteCommentCriticalityLevelBlock" xml:space="preserve">
+    <value>Эта кнопка отключена, поскольку подача интервью с критическими проблемами запрещена</value>
+  </data>
+  <data name="CompleteCommentCriticalityLevelWarn" xml:space="preserve">
+    <value>Эта кнопка остается неактивной до тех пор, пока вы не укажете комментарий для критических проблем, указанных выше</value>
+  </data>
+  <data name="CompleteNoteCommentCriticality" xml:space="preserve">
+    <value>Пожалуйста, решите проблемы, ответив на критические вопросы и убедившись, что ответы удовлетворяют важнейшим правилам</value>
+  </data>
+  <data name="CompleteCriticalityWarnConfirmation" xml:space="preserve">
+    <value>Пожалуйста, подтвердите, что вы хотите отправить это интервью с критическими проблемами.</value>
   </data>
   <data name="LoadingQuestionnaire" xml:space="preserve">
     <value>Загружаем опросник. Пожалуйста подождите...</value>

@@ -193,7 +193,7 @@
     <value>Premières {{count}} entités avec des erreurs:</value>
   </data>
   <data name="CompleteNoteToSupervisor" xml:space="preserve">
-    <value>Commentaires à l'attention du chef d'équipe</value>
+      <value>Commentaires</value>
   </data>
   <data name="CompleteQuestionsAnswered" xml:space="preserve">
     <value>Renseignées</value>

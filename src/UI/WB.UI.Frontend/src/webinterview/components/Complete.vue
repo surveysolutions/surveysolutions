@@ -86,6 +86,7 @@
         'btn-danger': hasErrors,
         'disabled': !isAllowCompleteInterview,
     }" @click="completeInterview">{{ competeButtonTitle }}</a>
+                <div class="red-uppercase">{{ completeButtionComment }}</div>
             </div>
         </div>
         <SectionLoadingProgress />
@@ -188,13 +189,21 @@ export default {
         },
         isAllowCompleteInterview() {
             if (this.doesSupportCriticality) {
-                if (this.criticalityLevel == 'Error') {
+                if (this.criticalityLevel == 'Block') {
                     return this.isReadyLastCriticalityInfo && this.criticalityInfo?.unansweredCriticalQuestions?.length === 0 && this.criticalityInfo?.failedCriticalRules?.length === 0
-                } else if (this.criticalityLevel == 'Warning') {
+                } else if (this.criticalityLevel == 'Warn') {
                     return this.comment && this.comment.length > 0
                 }
             }
             return true;
+        },
+        completeButtionComment() {
+            if (this.criticalityLevel == 'Block') {
+                return this.$t('WebInterviewUI.CompleteCommentCriticalityLevelBlock')
+            } else if (this.criticalityLevel == 'Warn') {
+                return this.$t('WebInterviewUI.CompleteCommentCriticalityLevelWarn')
+            }
+            return '';
         },
         shouldCloseWindow() {
             return this.$store.state.webinterview.interviewCompleted && this.$config.inWebTesterMode
@@ -256,7 +265,9 @@ export default {
         },
 
         fetchCriticalityInfo() {
-            if (!this.doesSupportCriticality)
+            if (this.doesSupportCriticality == false)
+                return;
+            if (this.criticalityLevel != undefined && (this.criticalityLevel == null || this.criticalityLevel == 'Ignore'))
                 return;
 
             this.isReadyLastCriticalityInfo = false;
@@ -281,8 +292,32 @@ export default {
             }
             if (this.switchToWeb)
                 this.$store.dispatch('requestWebInterview', this.comment)
-            else
-                this.$store.dispatch('completeInterview', this.comment)
+            else {
+                if (this.criticalityLevel == 'Warn') {
+                    modal.dialog({
+                        message: `<p style="color: red;"> ${this.$t('WebInterviewUI.CompleteCriticalityWarnConfirmation')}</p>`,
+                        onEscape: true,
+                        closeButton: true,
+                        buttons: {
+                            cancel: {
+                                label: this.$t('Common.No'),
+                            },
+
+                            success: {
+                                label: this.$t('Common.Yes'),
+                                callback: async () => {
+                                    this.$store.dispatch('completeInterview', this.comment)
+                                },
+                            },
+                        },
+                    })
+
+                    return
+                }
+                else {
+                    this.$store.dispatch('completeInterview', this.comment)
+                }
+            }
         },
 
         navigateTo(entityWithError) {

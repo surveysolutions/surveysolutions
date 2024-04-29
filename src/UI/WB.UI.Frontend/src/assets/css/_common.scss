@@ -258,6 +258,13 @@ h5, .h5{
 	color: $gray-highlight-font;
 	margin: 0 0 20px;
 }
+.red-uppercase{
+	font: 12px/14px $trebuchet !important;
+	text-transform: uppercase;
+	letter-spacing: 0.13em;
+	color: $red-error;
+	margin: 10px 0 20px;
+}
 .info-block{
     font: 14px/16px "RobotoRegular";
  	margin-bottom: 20px;

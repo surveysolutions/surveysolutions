@@ -192,9 +192,6 @@
   <data name="CompleteFirstErrors" xml:space="preserve">
     <value>أول {{count}} مادة/مواد تنطوي على أخطاء:</value>
   </data>
-  <data name="CompleteNoteToSupervisor" xml:space="preserve">
-    <value>ملاحظة للمشرف</value>
-  </data>
   <data name="CompleteQuestionsAnswered" xml:space="preserve">
     <value>تمت الاجابة</value>
   </data>

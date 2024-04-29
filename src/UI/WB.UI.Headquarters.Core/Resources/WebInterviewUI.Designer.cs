@@ -639,6 +639,30 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
+        public static string CompleteCommentCriticalityLevelBlock {
+            get {
+                return ResourceManager.GetString("CompleteCommentCriticalityLevelBlock", resourceCulture);
+            }
+        }
+        
+        public static string CompleteCommentCriticalityLevelWarn {
+            get {
+                return ResourceManager.GetString("CompleteCommentCriticalityLevelWarn", resourceCulture);
+            }
+        }
+        
+        public static string CompleteNoteCommentCriticality {
+            get {
+                return ResourceManager.GetString("CompleteNoteCommentCriticality", resourceCulture);
+            }
+        }
+        
+        public static string CompleteCriticalityWarnConfirmation {
+            get {
+                return ResourceManager.GetString("CompleteCriticalityWarnConfirmation", resourceCulture);
+            }
+        }
+        
         public static string LoadingQuestionnaire {
             get {
                 return ResourceManager.GetString("LoadingQuestionnaire", resourceCulture);

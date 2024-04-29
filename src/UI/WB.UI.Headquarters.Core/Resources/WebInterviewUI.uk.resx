@@ -208,7 +208,7 @@
     <value>Перші {{count}} елементів з помилками:</value>
   </data>
   <data name="CompleteNoteToSupervisor" xml:space="preserve">
-    <value>Примітка для супервізора</value>
+      <value>Примітка</value>
   </data>
   <data name="CompleteQuestionsAnswered" xml:space="preserve">
     <value>З відповіддю</value>
