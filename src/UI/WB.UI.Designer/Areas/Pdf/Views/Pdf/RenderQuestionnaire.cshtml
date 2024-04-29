@@ -192,7 +192,7 @@
 				{
 				<dt>&nbsp;</dt>
 				<dd>
-					<a href="#criticality_conditions_appendix" class="section_name appendix">@Pdf.Format(PdfStrings.Appendix_CriticalityConditions, questionnaire.CriticalityConditionsAppendixIndex, "&#8212;")</a>
+					<a href="#critical_rules_appendix" class="section_name appendix">@Pdf.Format(PdfStrings.Appendix_CriticalRules, questionnaire.CriticalRulesAppendixIndex, "&#8212;")</a>
 				</dd>
 				}
 				<dt>&nbsp;</dt>
@@ -583,7 +583,7 @@
 @if (!questionnaire.IsCriticalRuleAppendixEmpty)
 {
 	<article class="appendix_section">
-        <h2 id="criticality_conditions_appendix">@Pdf.Format(PdfStrings.Appendix_CriticalityConditions, questionnaire.CriticalityConditionsAppendixIndex, "&#8212;")</h2>
+        <h2 id="critical_rules_appendix">@Pdf.Format(PdfStrings.Appendix_CriticalRules, questionnaire.CriticalRulesAppendixIndex, "&#8212;")</h2>
         
         <ul class="container">
             @for (var i = 0; i < questionnaire.CriticalRules.Count; i++)

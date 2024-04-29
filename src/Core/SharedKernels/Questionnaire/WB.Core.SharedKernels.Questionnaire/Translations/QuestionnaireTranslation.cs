@@ -45,7 +45,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
             => this.GetTranslationByTypeAndIndex(questionId, answerOptionValue, TranslationType.SpecialValue);
 
         public string? GetCriticalRuleMessage(Guid criticalityConditionId) 
-            => this.GetUniqueTranslationByType(criticalityConditionId, TranslationType.CriticalRule);
+            => this.GetUniqueTranslationByType(criticalityConditionId, TranslationType.CriticalRuleMessage);
 
         public string? GetValidationMessage(Guid entityId, int validationOneBasedIndex)
             => this.GetTranslationByTypeAndIndex(

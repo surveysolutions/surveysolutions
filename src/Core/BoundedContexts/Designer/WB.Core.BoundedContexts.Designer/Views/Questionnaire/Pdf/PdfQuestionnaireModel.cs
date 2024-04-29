@@ -539,8 +539,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public char OptionsAppendixIndex => IsInstructionsAppendixEmpty ? InstructionsAppendixIndex : (char)(InstructionsAppendixIndex + 1);
         public char VariablesAppendixIndex => IsOptionsAppendixEmpty ? OptionsAppendixIndex : (char)(OptionsAppendixIndex + 1);
         public char OptionsFilterAppendixIndex => IsVariablesAppendixEmpty ? VariablesAppendixIndex : (char)(VariablesAppendixIndex + 1);
-        public char SpecialValuesAppendixIndex => IsOptionsAppendixEmpty ? OptionsFilterAppendixIndex : (char)(OptionsFilterAppendixIndex + 1);
-        public char CriticalityConditionsAppendixIndex => IsSpecialValuesAppendixEmpty ? SpecialValuesAppendixIndex : (char)(SpecialValuesAppendixIndex + 1);
+        public char SpecialValuesAppendixIndex => IsOptionsFilterAppendixEmpty ? OptionsFilterAppendixIndex : (char)(OptionsFilterAppendixIndex + 1);
+        public char CriticalRulesAppendixIndex => IsSpecialValuesAppendixEmpty ? SpecialValuesAppendixIndex : (char)(SpecialValuesAppendixIndex + 1);
         public int TimezoneOffsetMinutes { get; set; }
     }
 }

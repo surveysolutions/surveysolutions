@@ -135,7 +135,7 @@
   <data name="Appendix_SpecialValues" xml:space="preserve">
     <value>Appendix {0} {1} special values</value>
   </data>
-  <data name="Appendix_CriticalityConditions" xml:space="preserve">
+  <data name="Appendix_CriticalRules" xml:space="preserve">
     <value>Appendix {0} {1} critical rules</value>
   </data>
   <data name="Appendix_Validations" xml:space="preserve">

@@ -228,7 +228,7 @@ namespace WB.Infrastructure.Native.Questionnaire
         {
             EntityId = criticalRule.Id.FormatGuid(),
             Variable = null,
-            Type = TranslationType.CriticalRule.ToString("G"),
+            Type = TranslationType.CriticalRuleMessage.ToString("G"),
             OriginalText = criticalRule.Message,
             Translation = translation.GetCriticalRuleMessage(criticalRule.Id)
         };

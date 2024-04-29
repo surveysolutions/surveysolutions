@@ -135,7 +135,7 @@
   <data name="Appendix_SpecialValues" xml:space="preserve">
     <value>Приложение {0} {1} специальные значения</value>
   </data>
-  <data name="Appendix_CriticalityConditions" xml:space="preserve">
+  <data name="Appendix_CriticalRules" xml:space="preserve">
     <value>Приложение {0} {1} критические условия</value>
   </data>
   <data name="Appendix_Validations" xml:space="preserve">
