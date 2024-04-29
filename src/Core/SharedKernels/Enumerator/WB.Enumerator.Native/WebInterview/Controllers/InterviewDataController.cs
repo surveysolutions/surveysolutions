@@ -352,7 +352,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 button.Id = id;
                 button.Target = target?.Identity.ToString();
                 button.Status = button.Type == ButtonType.Complete
-                    ? statefulInterview.GetInterviewSimpleStatus(IsReviewMode()).Status
+                    ? GroupStatus.Started// statefulInterview.GetInterviewSimpleStatus(IsReviewMode()).Status
                     : this.interviewEntityFactory.CalculateSimpleStatus(target, IsReviewMode(), statefulInterview, questionnaire);
 
                 this.interviewEntityFactory.ApplyValidity(button.Validity, button.Status);
