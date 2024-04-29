@@ -5,7 +5,7 @@ namespace WB.Services.Export.Events.Interview
 {
     public class InterviewReceivedBySupervisor : InterviewPassiveEvent
     {
-        protected InterviewReceivedBySupervisor(DateTimeOffset? originDate)
+        public InterviewReceivedBySupervisor(DateTimeOffset? originDate)
         {
             if (originDate != default(DateTimeOffset))
             {
