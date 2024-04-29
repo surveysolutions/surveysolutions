@@ -160,8 +160,8 @@
                     :title="$t('QuestionnaireEditor.SideBarCommentsTitle')"></a>
             </li>
             <li>
-                <a class="left-menu-criticality-conditions" v-if="!questionnaire.isReadOnlyForUser"
-                    :class="{ unfolded: isUnfoldedCriticalityConditions }" @click="unfoldCriticalityConditions();"
+                <a class="left-menu-criticality-conditions" :class="{ unfolded: isUnfoldedCriticalityConditions }"
+                    @click="unfoldCriticalityConditions();"
                     :title="$t('QuestionnaireEditor.SideBarCriticalityConditionsTitle')"></a>
             </li>
         </ul>
