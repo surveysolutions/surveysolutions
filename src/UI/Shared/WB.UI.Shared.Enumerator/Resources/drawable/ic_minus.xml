@@ -4,7 +4,7 @@
         android:viewportWidth="24"
         android:viewportHeight="24">
     <path
-            android:fillColor="@color/sections_list_text_color"
+            android:fillColor="@color/complete_screen_title_text"
             android:pathData="M8.55,11.58 h6.9 v0.84 h-6.9 z"
             />
 </vector>
