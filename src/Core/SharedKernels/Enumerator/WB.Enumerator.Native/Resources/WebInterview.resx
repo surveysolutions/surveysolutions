@@ -375,7 +375,7 @@ We would appreciate if you try addressing all issues marked in your response and
 Thank you for your cooperation!</value>
   </data>
   <data name="NoteForSupervisor" xml:space="preserve">
-    <value>Note for supervisor</value>
+    <value>Comment</value>
   </data>
   <data name="Complete" xml:space="preserve">
     <value>Complete</value>

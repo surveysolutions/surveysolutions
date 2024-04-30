@@ -373,7 +373,7 @@
     <value>Завершить</value>
   </data>
   <data name="NoteForSupervisor" xml:space="preserve">
-    <value>Комментарий для супервизора</value>
+      <value>Комментарий</value>
   </data>
   <data name="EnterPasswordText" xml:space="preserve">
     <value>Эта ссылка защищена паролем, который распространяется вместе со ссылкой. Пожалуйста введите его</value>

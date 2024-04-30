@@ -296,7 +296,7 @@ Vă mulțumim pentru cooperare!</value>
     <value>Ați fost invitat să participați la următorul sondaj: „%QUESTIONNAIRE%”</value>
   </data>
   <data name="NoteForSupervisor" xml:space="preserve">
-    <value>Notă pentru supervizor</value>
+      <value>Notă</value>
   </data>
   <data name="NotStartedText" xml:space="preserve">
     <value>Nu a fost început</value>
