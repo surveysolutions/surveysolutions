@@ -123,7 +123,7 @@
     <color name="complete_screen_title_text">#747474</color>
     <color name="complete_screen_statistics_border">#dadada</color>
     <color name="complete_screen_statistics_answered_color">#2a81cb</color>
-    <color name="complete_screen_statistics_unanswered_color">#000000</color>
+    <color name="complete_screen_statistics_unanswered_color">#2a81cb</color>
     <color name="complete_screen_statistics_error_color">#e64a19</color>
     <color name="complete_screen_statistics_neutral_color">#9a9a9a</color>
     <color name="complete_screen_statistics_web_interview_link_color">#000000</color>

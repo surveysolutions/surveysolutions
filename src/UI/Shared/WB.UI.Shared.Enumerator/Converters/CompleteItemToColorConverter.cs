@@ -10,6 +10,6 @@ public class CompleteItemToColorConverter : MvxValueConverter<EntityWithErrorsVi
     {
         if (item.IsError)
             return Resource.Color.complete_screen_statistics_error_color; 
-        return Resource.Color.complete_screen_statistics_neutral_color;
+        return Resource.Color.complete_screen_statistics_unanswered_color;
     }
 }
