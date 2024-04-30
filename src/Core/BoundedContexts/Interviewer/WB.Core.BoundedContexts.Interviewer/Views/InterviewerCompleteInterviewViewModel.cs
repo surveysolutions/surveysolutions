@@ -115,7 +115,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 var unansweredCriticalQuestionsGroup = new CompleteGroup(TopUnansweredCriticalQuestions)
                 {
                     AllCount = this.TopUnansweredCriticalQuestions.Count,
-                    Title= string.Format(UIResources.Interview_Complete_CriticalUnanswered, this.TopUnansweredCriticalQuestions.Count),
+                    Title= string.Format(UIResources.Interview_Complete_CriticalUnanswered, MoreThan(this.TopUnansweredCriticalQuestions.Count)),
                     GroupContent = CompleteGroupContent.Error,
                 };
                 CompleteGroups.Insert(0, unansweredCriticalQuestionsGroup);
@@ -129,7 +129,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 var failedCriticalRulesGroup = new CompleteGroup(results)
                 {
                     AllCount = this.TopFailedCriticalRules.Count,
-                    Title = string.Format(UIResources.Interview_Complete_FailCriticalConditions, this.TopFailedCriticalRules.Count),
+                    Title = string.Format(UIResources.Interview_Complete_FailCriticalConditions, MoreThan(this.TopFailedCriticalRules.Count)),
                     GroupContent = CompleteGroupContent.Error,
                 };
                 CompleteGroups.Insert(1, failedCriticalRulesGroup);

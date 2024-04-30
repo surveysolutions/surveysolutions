@@ -82,16 +82,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var unansweredGroup = new CompleteGroup(unansweredQuestions)
             {
                 AllCount = this.UnansweredCount,
-                Title = UIResources.Interview_Complete_Unanswered + ": " + UnansweredCount,
+                Title = UIResources.Interview_Complete_Unanswered + ": " + MoreThan(UnansweredCount),
                 GroupContent = CompleteGroupContent.Unanswered,
             };
 
             this.ErrorsCount = InterviewState.InvalidAnswersCount;
             this.EntitiesWithErrors = this.entitiesListViewModelFactory.GetTopEntitiesWithErrors(interviewId, navigationState).ToList();
-            this.EntitiesWithErrorsDescription = EntitiesWithErrors.Count < this.ErrorsCount
-                ? string.Format(UIResources.Interview_Complete_First_n_Entities_With_Errors,
-                    this.entitiesListViewModelFactory.MaxNumberOfEntities)
-                : UIResources.Interview_Complete_Entities_With_Errors + " " + this.ErrorsCount;
+            this.EntitiesWithErrorsDescription = UIResources.Interview_Complete_Entities_With_Errors + " " + MoreThan(this.ErrorsCount);
             var errorsGroup = new CompleteGroup(EntitiesWithErrors)
             {
                 AllCount = this.ErrorsCount,
@@ -263,5 +260,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             
             base.Dispose();
         }
+
+        protected string MoreThan(int count)
+            => count >= this.entitiesListViewModelFactory.MaxNumberOfEntities 
+                ? this.entitiesListViewModelFactory.MaxNumberOfEntities + "+" 
+                : count.ToString();
     }
 }
