@@ -8,6 +8,7 @@
         <div class="wrapper-info">
             <div class="container-info">
                 <h2>{{ $t('WebInterviewUI.CompleteAbout') }}</h2>
+                <h2>{{ $store.state.webinterview.interviewKey }}</h2>
             </div>
         </div>
         <div class="wrapper-info">
