@@ -133,17 +133,14 @@
                             </tr>
                             <tr>
                                 <td class="text-nowrap">
-                                    {{ $t('Pages.Questionnaire_SupportCriticalVerifications') }}
-                                </td>
-                                <td>{{ model.criticalitySupport === true ? this.$t('Common.Yes') : this.$t('Common.No')
-                                    }}</td>
-                            </tr>
-                            <tr v-if="model.criticalitySupport === true">
-                                <td class="text-nowrap">
                                     {{ $t('Pages.Questionnaire_CriticalVerificationLevel') }}
                                 </td>
-                                <td class="pointer editable" @click="criticalityLevelChange">
+                                <td v-if="model.criticalitySupport === true" class="pointer editable"
+                                    @click="criticalityLevelChange">
                                     {{ criticalityLevelDisplay }}
+                                </td>
+                                <td v-else>
+                                    {{ $t('Pages.Filters_None') }}
                                 </td>
                             </tr>
                             <tr>
@@ -233,9 +230,9 @@
                 <form onsubmit="return false;">
                     <div class="form-group">
                         <Typeahead ref="criticalityLevel" control-id="criticalityLevel" no-clear
-                            :placeholder="$t('Pages.Questionnaire_CriticalityLevel')" data-vv-name="criticalityLevel"
-                            data-vv-as="criticalityLevel" v-on:selected="criticalityLevelSelected" no-search
-                            :value="criticalityLevel" :values="this.$config.model.criticalityLevels">
+                            data-vv-name="criticalityLevel" data-vv-as="criticalityLevel"
+                            v-on:selected="criticalityLevelSelected" no-search :value="criticalityLevel"
+                            :values="this.$config.model.criticalityLevels">
                         </Typeahead>
                     </div>
                 </form>
