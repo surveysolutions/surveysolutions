@@ -114,6 +114,10 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             int count = 30;
             
             var interview = statefulInterviewRepository.GetOrThrow(interviewId.FormatGuid());
+            var criticalityLevel = questionnaireSettings.GetCriticalityLevel(interview.QuestionnaireIdentity);
+            if (criticalityLevel == null || criticalityLevel == CriticalityLevel.Ignore)
+                return new CriticalityCheckResult();
+            
             var questionnaire = questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
 
             var criticalQuestions = new List<CriticalQuestionCheck>();
@@ -121,12 +125,13 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             foreach (var questionId in unansweredCriticalQuestions)
             {
                 var question = interview.GetQuestion(questionId);
+                var title = interviewEntityFactory.SubstituteText(question.Title.BrowserReadyText, questionId, interview, questionnaire, IsReviewMode());
                 criticalQuestions.Add(new CriticalQuestionCheck()
                 {
                     Id = questionId.ToString(),
                     ParentId = question.Parent?.Identity.ToString(),
                     IsPrefilled = question.IsPrefilled,
-                    Title = question.Title.BrowserReadyText, 
+                    Title = title, 
                 });
             }
 

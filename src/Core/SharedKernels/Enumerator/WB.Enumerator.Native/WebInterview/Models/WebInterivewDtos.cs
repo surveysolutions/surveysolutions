@@ -420,8 +420,8 @@ namespace WB.Enumerator.Native.WebInterview.Models
     
     public class CriticalityCheckResult
     {
-        public CriticalRuleResult[] FailedCriticalRules { get; set; }
-        public CriticalQuestionCheck[] UnansweredCriticalQuestions { get; set; }
+        public CriticalRuleResult[] FailedCriticalRules { get; set; } = [];
+        public CriticalQuestionCheck[] UnansweredCriticalQuestions { get; set; } = [];
     }
 
 }

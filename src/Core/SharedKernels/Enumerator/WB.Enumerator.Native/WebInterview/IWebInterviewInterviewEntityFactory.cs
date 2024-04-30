@@ -16,8 +16,7 @@ namespace WB.Enumerator.Native.WebInterview
         void ApplyValidity(Validity validity, GroupStatus status);
         Identity GetUIParent(IStatefulInterview interview, IQuestionnaire questionnaire, Identity identity);
         string GetCriticalRuleMessage(Guid id, IStatefulInterview interview, IQuestionnaire questionnaire, bool isReviewMode);
-
-        InterviewEntityType GetEntityType(Identity identity, IQuestionnaire callerQuestionnaire,
-            IStatefulInterview interview, bool isReviewMode, bool includeVariables);
+        string SubstituteText(string text, Identity entityId, IStatefulInterview interview, IQuestionnaire questionnaire, bool isReview);
+        InterviewEntityType GetEntityType(Identity identity, IQuestionnaire callerQuestionnaire, IStatefulInterview interview, bool isReviewMode, bool includeVariables);
     }
 }

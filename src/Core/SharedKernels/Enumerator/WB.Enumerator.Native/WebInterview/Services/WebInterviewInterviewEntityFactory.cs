@@ -596,6 +596,11 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 .MakeNavigationLinks(message, new Identity(interview.Id, RosterVector.Empty), questionnaire, interview, WebLinksVirtualDirectory(isReview));
         }
 
+        public string SubstituteText(string text, Identity entityId, IStatefulInterview interview, IQuestionnaire questionnaire, bool isReview)
+        {
+            return this.webNavigationService.MakeNavigationLinks(text, entityId, questionnaire, interview, WebLinksVirtualDirectory(isReview));
+        }
+
         public InterviewEntityType GetEntityType(Identity identity, IQuestionnaire callerQuestionnaire,
             IStatefulInterview interview, bool isReviewMode, bool includeVariables)
         {
