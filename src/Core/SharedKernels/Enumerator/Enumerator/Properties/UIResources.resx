@@ -486,10 +486,10 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Tap to record current time</value>
   </data>
   <data name="Interview_Complete_Entities_With_Errors" xml:space="preserve">
-    <value>Entities with errors:</value>
+    <value>Questions with errors:</value>
   </data>
   <data name="Interview_Complete_First_n_Entities_With_Errors" xml:space="preserve">
-    <value>First {0} entities with errors:</value>
+    <value>First {0} questions with errors:</value>
   </data>
   <data name="Messages_WaitPendingOperation" xml:space="preserve">
     <value>Please wait until the current operation is completed</value>

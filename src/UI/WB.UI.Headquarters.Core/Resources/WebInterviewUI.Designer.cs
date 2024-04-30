@@ -866,5 +866,35 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("AssignmentLimitError", resourceCulture);
             }
         }
+        
+        public static string CompleteInterviewStatus {
+            get {
+                return ResourceManager.GetString("CompleteInterviewStatus", resourceCulture);
+            }
+        }
+        
+        public static string Complete_CriticalUnansweredQuestions {
+            get {
+                return ResourceManager.GetString("Complete_CriticalUnansweredQuestions", resourceCulture);
+            }
+        }
+        
+        public static string Complete_FailedCriticalRules {
+            get {
+                return ResourceManager.GetString("Complete_FailedCriticalRules", resourceCulture);
+            }
+        }
+        
+        public static string Complete_UnansweredQuestions {
+            get {
+                return ResourceManager.GetString("Complete_UnansweredQuestions", resourceCulture);
+            }
+        }
+        
+        public static string Complete_QuestionsWithErrors {
+            get {
+                return ResourceManager.GetString("Complete_QuestionsWithErrors", resourceCulture);
+            }
+        }
     }
 }

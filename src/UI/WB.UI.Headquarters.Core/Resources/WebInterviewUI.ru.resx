@@ -530,4 +530,19 @@ Oбратитесь в тех. поддержку за помощью</value>
   <data name="AssignmentLimitError" xml:space="preserve">
     <value>Вы не можите создать интервью из этого задания</value>
   </data>
+  <data name="CompleteInterviewStatus" xml:space="preserve">
+      <value>Замечания по интервью:</value>
+  </data>
+  <data name="Complete_CriticalUnansweredQuestions" xml:space="preserve">
+      <value>Критические вопросы без ответов: {{count}}</value>
+  </data>
+  <data name="Complete_FailedCriticalRules" xml:space="preserve">
+      <value>Неуспешные критические правила: {{count}}</value>
+  </data>
+  <data name="Complete_UnansweredQuestions" xml:space="preserve">
+      <value>Вопросы без ответов: {{count}}</value>
+  </data>
+  <data name="Complete_QuestionsWithErrors" xml:space="preserve">
+      <value>Вопросы с ошибками: {{count}}</value>
+  </data>
 </root>

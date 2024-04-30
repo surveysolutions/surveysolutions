@@ -13,24 +13,11 @@
         <div class="wrapper-info">
             <div class="container-info">
                 <h4 class="gray-uppercase">
-                    {{ $t('WebInterviewUI.CompleteQuestionsStatus') }}
+                    {{ $t('WebInterviewUI.CompleteInterviewStatus') }}
                 </h4>
-                <div class="question-status">
-                    <ul class="list-inline clearfix">
-                        <li class="answered" v-bind:class="{ 'has-value': hasAnsweredQuestions }">{{
-        answeredQuestionsCountString }}
-                            <span>{{ $t('WebInterviewUI.CompleteQuestionsAnswered') }}</span>
-                        </li>
-                        <li class="unanswered" v-bind:class="{ 'has-value': hasUnansweredQuestions }">{{
-        unansweredQuestionsCountString }}
-                            <span>{{ $t('WebInterviewUI.CompleteQuestionsUnanswered') }}</span>
-                        </li>
-                        <li class="errors" v-bind:class="{ 'has-value': hasErrors }">{{
-        invalidQuestionsCountString }}
-                            <span>{{ $t('WebInterviewUI.Error', { count: errorsCount }) }}</span>
-                        </li>
-                    </ul>
-                </div>
+                <h4 class="gray-uppercase" v-if="hasCriticalErrors">
+                    {{ $t('WebInterviewUI.CompleteNoteCommentCriticality') }}
+                </h4>
             </div>
         </div>
 
@@ -145,7 +132,7 @@ export default {
 
             if (this.criticalityInfo?.unansweredCriticalQuestions.length > 0) {
                 groups.push({
-                    title: this.$t('WebInterviewUI.CriticalQuestionErrors'),
+                    title: this.$t('WebInterviewUI.Complete_CriticalUnansweredQuestions', { count: this.moreThen30(this.criticalityInfo.unansweredCriticalQuestions.length) }),
                     items: this.criticalityInfo.unansweredCriticalQuestions,
                     cssClass: 'errors'
                 })
@@ -153,7 +140,7 @@ export default {
 
             if (this.criticalityInfo?.failedCriticalRules.length > 0) {
                 groups.push({
-                    title: this.$t('WebInterviewUI.CriticalityConditionsErrors'),
+                    title: this.$t('WebInterviewUI.Complete_FailedCriticalRules', { count: this.moreThen30(this.criticalityInfo.failedCriticalRules.length) }),
                     items: this.criticalityInfo.failedCriticalRules,
                     cssClass: 'errors'
                 })
@@ -161,19 +148,15 @@ export default {
 
             if (this.completeInfo.unansweredCount > 0) {
                 groups.push({
-                    title: this.$t('WebInterviewUI.UnansweredQuestions'),
+                    title: this.$t('WebInterviewUI.Complete_UnansweredQuestions', { count: this.moreThen30(this.completeInfo.unansweredCount) }),
                     items: this.completeInfo.unansweredQuestions,
                     cssClass: 'unanswered'
                 })
             }
 
             if (this.completeInfo.errorsCount > 0) {
-                const title = this.doesShowErrorsCommentWithCount
-                    ? this.$t('WebInterviewUI.CompleteFirstErrors', { count: this.completeInfo.entitiesWithError.length })
-                    : this.$t('WebInterviewUI.CompleteErrors')
-
                 groups.push({
-                    title: title,
+                    title: this.$t('WebInterviewUI.Complete_QuestionsWithErrors', { count: this.moreThen30(this.completeInfo.errorsCount) }),
                     items: this.completeInfo.entitiesWithError,
                     cssClass: 'errors'
                 })
@@ -337,6 +320,12 @@ export default {
 
             this.$router.push(navigateToEntity)
         },
+
+        moreThen30(value) {
+            if (value >= 30)
+                return '30+'
+            return value + ''
+        }
     },
 }
 
