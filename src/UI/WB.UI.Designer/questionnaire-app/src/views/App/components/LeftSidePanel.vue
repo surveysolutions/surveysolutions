@@ -248,7 +248,7 @@ export default {
         this.$emitter.on('openComments', this.setCommentsPanel);
         this.$emitter.on('openScenariosList', this.setScenariosPanel);
         this.$emitter.on('openMacrosList', this.setMacrosesPanel);
-        this.$emitter.on('openCriticalityConditions', this.setCriticalityConditionsPanel);
+        this.$emitter.on('openCriticalRules', this.setCriticalityConditionsPanel);
 
         this.$emitter.on('closeCategories', this.closeAllPanel);
         this.$emitter.on('closeChaptersList', this.closeAllPanel);
@@ -273,7 +273,7 @@ export default {
         this.$emitter.off('openComments', this.setCommentsPanel);
         this.$emitter.off('openScenariosList', this.setScenariosPanel);
         this.$emitter.off('openMacrosList', this.setMacrosesPanel);
-        this.$emitter.off('openCriticalityConditions', this.setCriticalityConditionsPanel);
+        this.$emitter.off('openCriticalRules', this.setCriticalityConditionsPanel);
 
         this.$emitter.off('closeCategories', this.closeAllPanel);
         this.$emitter.off('closeChaptersList', this.closeAllPanel);
@@ -466,7 +466,7 @@ export default {
 
             this.closeOpenPanelIfAny();
             this.setCriticalityConditionsPanel();
-            this.$emitter.emit("openCriticalityConditions", {});
+            this.$emitter.emit("openCriticalRules", {});
         },
         setCriticalityConditionsPanel() { this.openPanel = 'criticalityconditions'; },
     }
