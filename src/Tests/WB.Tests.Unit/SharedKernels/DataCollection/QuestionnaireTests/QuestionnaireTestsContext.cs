@@ -40,7 +40,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                     1 , 
                     1, 
                     null,
-                    false));
+                    false,
+                    null));
 
             return questionnaire;
         }
