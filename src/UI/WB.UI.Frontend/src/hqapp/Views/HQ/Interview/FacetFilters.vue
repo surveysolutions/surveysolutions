@@ -29,7 +29,7 @@
                     @change="change" />
             </filters-block>
 
-            <filters-block separate v-if="isExistsCriticality">
+            <filters-block separate v-if="doesSupportCriticality">
                 <filter-item option="CriticalQuestions" :title="$t('WebInterview.Filters_CriticalQuestions')"
                     @change="change" />
                 <filter-item option="CriticalRules" :title="$t('WebInterview.Filters_CriticalRules')"
@@ -52,8 +52,8 @@ import FilterItem from './components/FilterItem'
 
 export default {
     computed: {
-        isExistsCriticality() {
-            return this.$store.state.webinterview.isExistsCriticality != false
+        doesSupportCriticality() {
+            return this.$store.state.webinterview.doesSupportCriticality != false
         }
     },
     methods: {
