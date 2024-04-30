@@ -80,7 +80,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
                 userId: command.CreatedBy, 
                 false,
                 command.CriticalitySupport,
-                CriticalityLevel.Ignore);
+                command.CriticalitySupport == true ? (command.CriticalityLevel ?? CriticalityLevel.Ignore) : null);
         }
 
         public void CloneQuestionnaire(CloneQuestionnaire command)

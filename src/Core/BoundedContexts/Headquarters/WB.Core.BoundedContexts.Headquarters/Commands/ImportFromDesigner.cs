@@ -1,5 +1,6 @@
 using System;
 using Main.Core.Documents;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Commands
 {
@@ -7,7 +8,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Commands
     {
         public ImportFromDesigner(Guid createdBy, IQuestionnaireDocument source, bool allowCensusMode,
             string supportingAssembly, long questionnaireContentVersion, long questionnaireVersion, string comment,
-            bool? criticalitySupport)
+            bool? criticalitySupport, CriticalityLevel? criticalityLevel)
             : base(source.PublicKey, source.PublicKey)
         {
             this.AllowCensusMode = allowCensusMode;
@@ -18,9 +19,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Commands
             this.QuestionnaireVersion = questionnaireVersion;
             this.Comment = comment;
             this.CriticalitySupport = criticalitySupport;
+            this.CriticalityLevel = criticalityLevel;
         }
 
         public bool? CriticalitySupport { get; set; }
+
+        public CriticalityLevel? CriticalityLevel { set; get; }
 
         public string Comment { get; private set; }
 
