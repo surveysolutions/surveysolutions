@@ -108,12 +108,12 @@
     }
     .unanswered {
         h4 {
-            color: $gray_text;
+            color: $blue;
         }
         .marked-questions {
             li {
                 a, span {
-                    color: $gray_text;
+                    color: $blue;
                 }
             }
         }
