@@ -215,6 +215,38 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         }
         
         /// <summary>
+        /// Gets audio recording enabled setting for provided questionnaire
+        /// </summary>
+        /// <param name="id">Questionnaire guid</param>
+        /// <param name="version">Questionnaire version</param>
+        /// <response code="404">Questionnaire cannot be found</response>
+        [HttpGet]
+        [Route("{id:guid}/{version:long}/recordAudio", Name = "GetRecordAudioSetting")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [Authorize(Roles = "ApiUser, Administrator, Headquarter")]
+        [ObservingNotAllowed]
+        public ActionResult<AudioRecordingEnabled> GetRecordAudio(Guid id, long version)
+        {
+            var questionnaire = 
+                this.questionnaireBrowseItems.Query(_ => _.FirstOrDefault(
+                    x => x.QuestionnaireId == id
+                         && x.Version == version
+                         && x.IsDeleted == false
+                         && x.Disabled == false
+                ));
+
+            if (questionnaire == null)
+            {
+                return NotFound();
+            }
+
+            return new JsonResult(new AudioRecordingEnabled
+            {
+                Enabled = questionnaire.IsAudioRecordingEnabled
+            });
+        }
+        
+        /// <summary>
         /// Sets criticality level setting for questionnaire
         /// </summary>
         /// <param name="id">Questionnaire guid</param>
@@ -225,7 +257,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPost]
         [Route("{id:guid}/{version:long}/criticalityLevel", Name = "SetCriticalityLevelSetting")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status406NotAcceptable)]
         [Consumes(MediaTypeNames.Application.Json)]
         [Authorize(Roles = "ApiUser, Administrator, Headquarter")]
         [ObservingNotAllowed]
@@ -247,41 +281,49 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             {
                 return NotFound();
             }
+            
+            if (requestData.CriticalityLevel == Core.SharedKernels.DataCollection.ValueObjects.Interview.CriticalityLevel.Unknown)
+                return StatusCode(StatusCodes.Status406NotAcceptable, 
+                    $@"Invalid value for criticality level: {requestData.CriticalityLevel}");
 
+            if (questionnaire.CriticalitySupport != true)
+                return StatusCode(StatusCodes.Status406NotAcceptable,
+                    $@"Criticality level is not supported for this questionnaire");
+            
             questionnaire.CriticalityLevel = requestData.CriticalityLevel;
 
             return NoContent();
         }
-
+        
         /// <summary>
-        /// Gets audio recording enabled setting for provided questionnaire
+        /// Gets criticality level setting for questionnaire
         /// </summary>
         /// <param name="id">Questionnaire guid</param>
         /// <param name="version">Questionnaire version</param>
         /// <response code="404">Questionnaire cannot be found</response>
         [HttpGet]
-        [Route("{id:guid}/{version:long}/recordAudio", Name = "GetRecordAudioSetting")]
+        [Route("{id:guid}/{version:long}/criticalityLevel", Name = "GetCriticalityLevelSetting")]
         [Produces(MediaTypeNames.Application.Json)]
         [Authorize(Roles = "ApiUser, Administrator, Headquarter")]
         [ObservingNotAllowed]
-        public ActionResult<AudioRecordingEnabled> GetRecordAudio(Guid id, long version)
+        public ActionResult<AudioRecordingEnabled> GetCriticalityLevel(Guid id, long version)
         {
             var questionnaire = 
                 this.questionnaireBrowseItems.Query(_ => _.FirstOrDefault(
                     x => x.QuestionnaireId == id
-                        && x.Version == version
-                        && x.IsDeleted == false
-                        && x.Disabled == false
-            ));
+                         && x.Version == version
+                         && x.IsDeleted == false
+                         && x.Disabled == false
+                ));
 
             if (questionnaire == null)
             {
                 return NotFound();
             }
 
-            return new JsonResult(new AudioRecordingEnabled
+            return new JsonResult(new CriticalityLevelSettings
             {
-               Enabled = questionnaire.IsAudioRecordingEnabled
+                CriticalityLevel = questionnaire.CriticalityLevel
             });
         }
     }
