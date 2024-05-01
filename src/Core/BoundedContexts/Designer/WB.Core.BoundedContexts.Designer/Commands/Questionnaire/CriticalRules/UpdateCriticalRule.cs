@@ -10,9 +10,9 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.CriticalRules
             : base(responsibleId: responsibleId, questionnaireId: questionnaireId)
         {
             this.Id = id;
-            this.Message = message;
+            this.Message = CommandUtils.SanitizeHtml(message);
             this.Expression = expression;
-            this.Description = description;
+            this.Description = CommandUtils.SanitizeHtml(description, removeAllTags: true);
         }
 
         public Guid Id { get; private set; }
