@@ -621,6 +621,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 UnansweredCount = questionsCount - answeredQuestionsCount,
                 EntitiesWithError = invalidEntities,
                 UnansweredQuestions = unansweredQuestions,
+                CriticalityLevel = questionnaireSettings.GetCriticalityLevel(interview.QuestionnaireIdentity),
             };
 
             return completeInfo;

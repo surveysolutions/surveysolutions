@@ -80,6 +80,9 @@ export default {
     },
     SET_COMPLETE_INFO(state, completeInfo) {
         Vue.set(state, 'completeInfo', completeInfo)
+
+        if (state.criticalityLevel && completeInfo.criticalityLevel != state.criticalityLevel)
+            Vue.set(state, 'criticalityLevel', completeInfo.criticalityLevel)
     },
     SET_CRITICALITY_INFO(state, info) {
         Vue.set(state, 'criticalityInfo', info)

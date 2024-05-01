@@ -370,6 +370,8 @@ namespace WB.Enumerator.Native.WebInterview.Models
 
         public EntityWithError[] EntitiesWithError { get; set; }
         public EntityWithError[] UnansweredQuestions { get; set; }
+        
+        public CriticalityLevel? CriticalityLevel { get; set; }
     }
 
     public class EntityWithError : QuestionReference { }
