@@ -11,7 +11,7 @@
                 <h2>{{ $store.state.webinterview.interviewKey }}</h2>
             </div>
         </div>
-        <div class="wrapper-info">
+        <div class="wrapper-info" v-if="completeGroups.length > 0">
             <div class="container-info">
                 <h4 class="gray-uppercase">
                     {{ $t('WebInterviewUI.CompleteInterviewStatus') }}
