@@ -17,7 +17,7 @@
 
     <LinearLayout style="@style/Interview_Question" 
                   android:orientation="vertical"
-                  local:MvxBind="Visible Not(IsLoading)">
+                  local:MvxBind="Visible And(Not(IsLoading), HasCompleteGroups)">
         <LinearLayout style="@style/Interview_Question_Header">
             <TextView style="@style/Interview_Complete_Screen_Text"
                       android:id="@+id/tv_Complete_Questions_Status"

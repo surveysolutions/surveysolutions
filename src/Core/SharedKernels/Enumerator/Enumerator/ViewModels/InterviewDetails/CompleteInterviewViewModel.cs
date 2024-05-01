@@ -107,6 +107,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.CompleteButtonComment = UIResources.Interview_Complete_Consequences_Instrunction;
         }
 
+        public bool HasCompleteGroups => CompleteGroups.Count > 0;
         public MvxObservableCollection<CompleteGroup> CompleteGroups { get; set; }
 
         public int AnsweredCount { get; set; }
