@@ -243,8 +243,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 if (criticalityLevel != CriticalityLevel.Ignore)
                 {
-                    var cRules = CollectInvalidCriticalRules();
-                    var cQuestions = GetAllUnansweredCriticalQuestions();
+                    criticalRules = CollectInvalidCriticalRules().ToArray();
+                    unansweredCriticalQuestions = GetAllUnansweredCriticalQuestions().ToArray();
 
                     if (criticalityLevel == CriticalityLevel.Block)
                     {
@@ -253,9 +253,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         if (criticalRules.Any())
                             throw new InterviewException("Interview can't be completed with failed critical rules", InterviewDomainExceptionType.FailCriticalRule);
                     }
-
-                    criticalRules = cRules.ToArray();
-                    unansweredCriticalQuestions = cQuestions.ToArray();
                 }
             }
             
