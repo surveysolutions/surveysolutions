@@ -109,6 +109,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 return Task.CompletedTask;
             }
             
+            this.TopFailedCriticalRules = this.entitiesListViewModelFactory.GetTopFailedCriticalRules(interviewId, navigationState).ToList();
+            if (TopFailedCriticalRules.Count > 0)
+            {
+                var results = this.TopFailedCriticalRules.Select(i =>
+                    EntityWithErrorsViewModel.InitError(i.EntityTitle)).ToArray();
+                var failedCriticalRulesGroup = new CompleteGroup(results)
+                {
+                    AllCount = this.TopFailedCriticalRules.Count,
+                    Title = string.Format(UIResources.Interview_Complete_FailCriticalConditions, MoreThan(this.TopFailedCriticalRules.Count)),
+                    GroupContent = CompleteGroupContent.Error,
+                };
+                CompleteGroups.Insert(0, failedCriticalRulesGroup);
+            }
+            
             this.TopUnansweredCriticalQuestions = this.entitiesListViewModelFactory.GetTopUnansweredCriticalQuestions(interviewId, navigationState).ToList();
             if (TopUnansweredCriticalQuestions.Count > 0)
             {
@@ -121,20 +135,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 CompleteGroups.Insert(0, unansweredCriticalQuestionsGroup);
             }
             
-            this.TopFailedCriticalRules = this.entitiesListViewModelFactory.GetTopFailedCriticalRules(interviewId, navigationState).ToList();
-            if (TopFailedCriticalRules.Count > 0)
-            {
-                var results = this.TopFailedCriticalRules.Select(i =>
-                    EntityWithErrorsViewModel.InitError(i.EntityTitle)).ToArray();
-                var failedCriticalRulesGroup = new CompleteGroup(results)
-                {
-                    AllCount = this.TopFailedCriticalRules.Count,
-                    Title = string.Format(UIResources.Interview_Complete_FailCriticalConditions, MoreThan(this.TopFailedCriticalRules.Count)),
-                    GroupContent = CompleteGroupContent.Error,
-                };
-                CompleteGroups.Insert(1, failedCriticalRulesGroup);
-            }
-
             HasCriticalIssues = UnansweredCriticalQuestionsCount > 0 || FailedCriticalRulesCount > 0;
             IsCompletionAllowed = criticalityLevel != CriticalityLevel.Block || !HasCriticalIssues;
 
