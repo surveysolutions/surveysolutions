@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         private readonly IUserInteractionService userInteractionService;
         private readonly ICalendarEventStorage calendarEventStorage;
         
-        public IList<FailedCriticalRuleViewModel> TopFailedCriticalRules { get; private set; }
+        public IList<EntityWithErrorsViewModel> TopFailedCriticalRules { get; private set; }
 
         public SupervisorResolveInterviewViewModel(
             ICommandService commandService, 
@@ -114,9 +114,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             this.TopFailedCriticalRules = this.entitiesListViewModelFactory.GetTopFailedCriticalRulesFromState(interviewId, navigationState).ToList();
             if (TopFailedCriticalRules.Count > 0)
             {
-                var results = this.TopFailedCriticalRules.Select(i =>
-                    EntityWithErrorsViewModel.InitError(i.EntityTitle)).ToArray();
-                var failedCriticalRulesGroup = new CompleteGroup(results)
+                var failedCriticalRulesGroup = new CompleteGroup(TopFailedCriticalRules)
                 {
                     AllCount = this.TopFailedCriticalRules.Count,
                     Title = string.Format(UIResources.Interview_Complete_FailCriticalConditions, this.TopFailedCriticalRules.Count),

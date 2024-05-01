@@ -1,36 +1,36 @@
 ﻿using System.Collections.Generic;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public abstract class ListEntityViewModel : BaseViewModel
     {
-        public abstract void Init(NavigationIdentity entityIdentity, string entityTitle, NavigationState navigationState);
+        public abstract void Init(NavigationIdentity entityIdentity, string title, NavigationState navigationState);
     }
 
-    public class EntityWithErrorsViewModel : ListEntityViewModel
+    public class EntityWithErrorsViewModel : ListEntityViewModel, IInterviewEntity
     {
-        public override void Init(NavigationIdentity entityIdentity, string entityTitle, NavigationState navigationState)
+        public override void Init(NavigationIdentity entityIdentity, string title, NavigationState navigationState)
         {
-            this.navigationState = navigationState;
+            this.NavigationState = navigationState;
             this.entityIdentity = entityIdentity;
-            this.entityTitle = entityTitle;
+            this.entityTitle = title;
             this.IsError = true;
         }
 
-        private NavigationState navigationState;
-
         private string entityTitle;
+        private NavigationIdentity entityIdentity;
         public string EntityTitle => this.entityTitle;
         
         public bool IsError { get; set; }
 
-        private NavigationIdentity entityIdentity;
-
         public IMvxCommand NavigateToSectionCommand => 
-            new MvxAsyncCommand(async ()=> await this.navigationState.NavigateTo(this.entityIdentity), () => entityIdentity != null);
+            new MvxAsyncCommand(async ()=> await this.NavigationState.NavigateTo(this.entityIdentity), () => HasNavigation);
 
+        public bool HasNavigation => entityIdentity != null;
+        
         public static EntityWithErrorsViewModel InitTitle(string title)
         {
             var viewModel = new EntityWithErrorsViewModel();
@@ -45,21 +45,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             viewModel.Init(null, title, null);
             return viewModel;
         }
+
+        public string InterviewId { get; set; }
+        public Identity Identity { get; set; }
+        public NavigationState NavigationState { get; set; }
+
+        public void AllowInnerLinks(string intrviewId, Identity identity)
+        {
+            this.InterviewId = intrviewId;
+            this.Identity = identity;
+        }
     }
 
     public class EntityWithCommentsViewModel : EntityWithErrorsViewModel
     {
     }    
-    
-    public class FailedCriticalRuleViewModel : BaseViewModel
-    {
-        public string EntityTitle { get; private set; }
-
-        public void Init(string title)
-        {
-            this.EntityTitle = title;
-        }
-    }
     
     public class CompleteGroup : MvxObservableCollection<EntityWithErrorsViewModel>
     {

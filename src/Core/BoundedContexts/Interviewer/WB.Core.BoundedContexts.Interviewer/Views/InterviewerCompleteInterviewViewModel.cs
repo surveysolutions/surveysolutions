@@ -61,11 +61,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.questionnaireSettings = questionnaireSettings;
 
             TopUnansweredCriticalQuestions = new List<EntityWithErrorsViewModel>();
-            TopFailedCriticalRules = new List<FailedCriticalRuleViewModel>();
+            TopFailedCriticalRules = new List<EntityWithErrorsViewModel>();
         }
 
         public IList<EntityWithErrorsViewModel> TopUnansweredCriticalQuestions { get; private set; } 
-        public IList<FailedCriticalRuleViewModel> TopFailedCriticalRules { get; private set; }
+        public IList<EntityWithErrorsViewModel> TopFailedCriticalRules { get; private set; }
         public int UnansweredCriticalQuestionsCount => TopUnansweredCriticalQuestions.Count;
         public int FailedCriticalRulesCount => TopFailedCriticalRules.Count;
 
@@ -112,9 +112,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.TopFailedCriticalRules = this.entitiesListViewModelFactory.GetTopFailedCriticalRules(interviewId, navigationState).ToList();
             if (TopFailedCriticalRules.Count > 0)
             {
-                var results = this.TopFailedCriticalRules.Select(i =>
-                    EntityWithErrorsViewModel.InitError(i.EntityTitle)).ToArray();
-                var failedCriticalRulesGroup = new CompleteGroup(results)
+                var failedCriticalRulesGroup = new CompleteGroup(TopFailedCriticalRules)
                 {
                     AllCount = this.TopFailedCriticalRules.Count,
                     Title = string.Format(UIResources.Interview_Complete_FailCriticalConditions, MoreThan(this.TopFailedCriticalRules.Count)),

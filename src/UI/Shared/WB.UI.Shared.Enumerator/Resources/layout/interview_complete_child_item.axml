@@ -10,5 +10,12 @@
            style="@style/Interview_Complete_Screen_Statistics_Errors_Label"  
            android:layout_marginTop="@dimen/Interview_Entity_Title_margin_vertical"
            android:layout_marginLeft="@dimen/Interview_Complete_Group_left_offset"
-           local:MvxBind="Html EntityTitle; Color CompleteItemToColor(.)" />
+           local:MvxBind="Visible Not(HasNavigation);
+                          HtmlWithLinks MakeMarkdownLinksExecutable(EntityTitle, .); 
+                          Color CompleteItemToColor(.);" />
+  <TextView
+           style="@style/Interview_Complete_Screen_Statistics_Errors_Label"  
+           android:layout_marginTop="@dimen/Interview_Entity_Title_margin_vertical"
+           android:layout_marginLeft="@dimen/Interview_Complete_Group_left_offset"
+           local:MvxBind="Visible HasNavigation; Html EntityTitle; Color CompleteItemToColor(.)" />
 </LinearLayout>

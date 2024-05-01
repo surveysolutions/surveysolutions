@@ -277,5 +277,16 @@ namespace WB.UI.Shared.Enumerator
                 typeof(EnumeratorUIModule).Assembly,
             };
         }
+
+        protected override void FillValueCombiners(IMvxValueCombinerRegistry registry)
+        {
+            registry.AddOrOverwrite("MakeMarkdownLinksExecutable", new MakeMarkdownLinksExecutableValueCombiner());
+            registry.AddOrOverwrite("NotValue", new NotValueCombiner());
+            registry.AddOrOverwrite("LayoutBackgroundStyle", new LayoutBackgroundStyleValueCombiner());
+            registry.AddOrOverwrite("SpannableGroupTitle", new SpannableGroupTitleValueCombiner());
+            registry.AddOrOverwrite("LayoutOptionBackgroundStyle", new LayoutOptionBackgroundStyleValueCombiner());
+            
+            base.FillValueCombiners(registry);
+        }
     }
 }

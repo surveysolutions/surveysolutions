@@ -10,8 +10,8 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         IEnumerable<EntityWithErrorsViewModel> GetTopUnansweredQuestions(string interviewId, NavigationState navigationState);
         IEnumerable<EntityWithCommentsViewModel> GetTopEntitiesWithComments(string interviewId, NavigationState navigationState);
         IEnumerable<EntityWithErrorsViewModel> GetTopUnansweredCriticalQuestions(string interviewId, NavigationState navigationState);
-        IEnumerable<FailedCriticalRuleViewModel> GetTopFailedCriticalRules(string interviewId, NavigationState navigationState);
-        IEnumerable<FailedCriticalRuleViewModel> GetTopFailedCriticalRulesFromState(string interviewId, NavigationState navigationState);
+        IEnumerable<EntityWithErrorsViewModel> GetTopFailedCriticalRules(string interviewId, NavigationState navigationState);
+        IEnumerable<EntityWithErrorsViewModel> GetTopFailedCriticalRulesFromState(string interviewId, NavigationState navigationState);
         int MaxNumberOfEntities { get; }
     }
 }
