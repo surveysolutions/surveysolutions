@@ -16,7 +16,7 @@
                 <h4 class="gray-uppercase">
                     {{ $t('WebInterviewUI.CompleteInterviewStatus') }}
                 </h4>
-                <h4 class="gray-uppercase" v-if="hasCriticalErrors">
+                <h4 class="gray-uppercase" v-if="hasCriticalIssues">
                     {{ $t('WebInterviewUI.CompleteNoteCommentCriticality') }}
                 </h4>
             </div>
@@ -172,20 +172,28 @@ export default {
             return this.$store.state.webinterview.criticalityLevel
         },
         isAllowCompleteInterview() {
-            if (this.doesSupportCriticality) {
-                if (this.criticalityLevel == 'Block') {
-                    return this.isReadyLastCriticalityInfo && this.criticalityInfo?.unansweredCriticalQuestions?.length === 0 && this.criticalityInfo?.failedCriticalRules?.length === 0
-                } else if (this.criticalityLevel == 'Warn') {
-                    return this.comment && this.comment.length > 0
+            if (this.doesSupportCriticality != false) {
+                if (!this.isReadyLastCriticalityInfo)
+                    return false;
+
+                if (this.hasCriticalIssues) {
+                    if (this.criticalityLevel == 'Block') {
+                        return false;
+                    }
+                    if (this.criticalityLevel == 'Warn') {
+                        return this.comment && this.comment.length > 0
+                    }
                 }
             }
             return true;
         },
         completeButtionComment() {
-            if (this.criticalityLevel == 'Block') {
-                return this.$t('WebInterviewUI.CompleteCommentCriticalityLevelBlock')
-            } else if (this.criticalityLevel == 'Warn') {
-                return this.$t('WebInterviewUI.CompleteCommentCriticalityLevelWarn')
+            if (this.hasCriticalIssues) {
+                if (this.criticalityLevel == 'Block') {
+                    return this.$t('WebInterviewUI.CompleteCommentCriticalityLevelBlock')
+                } else if (this.criticalityLevel == 'Warn') {
+                    return this.$t('WebInterviewUI.CompleteCommentCriticalityLevelWarn')
+                }
             }
             return '';
         },
@@ -204,7 +212,7 @@ export default {
         hasAnsweredQuestions() {
             return this.completeInfo.answeredCount > 0
         },
-        hasCriticalErrors() {
+        hasCriticalIssues() {
             return this.criticalityInfo?.unansweredCriticalQuestions?.length > 0 || this.criticalityInfo?.failedCriticalRules?.length > 0
         },
         isAllAnswered() {
@@ -220,10 +228,10 @@ export default {
             return this.hasUnansweredQuestions ? this.completeInfo.unansweredCount : this.$t('WebInterviewUI.No')
         },
         hasErrors() {
-            return this.completeInfo.errorsCount > 0 || this.hasCriticalErrors
+            return this.completeInfo.errorsCount > 0 || this.hasCriticalIssues
         },
         errorsCount() {
-            if (this.hasCriticalErrors)
+            if (this.hasCriticalIssues)
                 return this.completeInfo.errorsCount + this.criticalityInfo.unansweredCriticalQuestions.length + this.criticalityInfo.failedCriticalRules.length
             return this.completeInfo.errorsCount;
         },
@@ -231,7 +239,7 @@ export default {
             return this.hasErrors ? this.errorsCount : this.$t('WebInterviewUI.No')
         },
         criticalErrorsCountString() {
-            return this.hasCriticalErrors ? this.criticalityInfo.failChecks.length : this.$t('WebInterviewUI.No')
+            return this.hasCriticalIssues ? this.criticalityInfo.failChecks.length : this.$t('WebInterviewUI.No')
         },
         doesShowErrorsCommentWithCount() {
             return this.completeInfo.entitiesWithError.length < this.completeInfo.errorsCount

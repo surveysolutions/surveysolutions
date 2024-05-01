@@ -139,18 +139,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IsCompletionAllowed = criticalityLevel != CriticalityLevel.Block || !HasCriticalIssues;
 
             if (HasCriticalIssues)
-                CompleteStatus = GroupStatus.CompletedInvalid; 
+            {
+                CompleteStatus = GroupStatus.CompletedInvalid;
 
-            if (criticalityLevel == CriticalityLevel.Warn)
-            {
-                this.IsCompletionAllowed = !HasCriticalIssues || !string.IsNullOrWhiteSpace(Comment);
-                this.CompleteButtonComment = UIResources.Interview_Complete_Note_For_Supervisor_with_Criticality;
-            }
-            else
-            {
-                this.CompleteButtonComment = UIResources.Interview_Complete_CriticalIssues_Instrunction;
-                this.IsCompletionAllowed = false;
-            }
+                if (criticalityLevel == CriticalityLevel.Warn)
+                {
+                    this.IsCompletionAllowed = !HasCriticalIssues || !string.IsNullOrWhiteSpace(Comment);
+                    this.CompleteButtonComment = UIResources.Interview_Complete_Note_For_Supervisor_with_Criticality;
+                }
+                else
+                {
+                    this.CompleteButtonComment = UIResources.Interview_Complete_CriticalIssues_Instrunction;
+                    this.IsCompletionAllowed = false;
+                }
+            } 
+
             
             IsLoading = false;
             return Task.CompletedTask;
