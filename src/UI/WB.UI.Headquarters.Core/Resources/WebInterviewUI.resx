@@ -438,6 +438,9 @@ Contact support for assistance.</value>
   <data name="CompleteCriticalityWarnConfirmation" xml:space="preserve">
     <value>Please confirm you want to submit this interview with critical issues.</value>
   </data>
+  <data name="ConfirmationNeededTitle" xml:space="preserve">
+    <value>Confirmation Needed</value>
+  </data>
   <data name="LoadingQuestionnaire" xml:space="preserve">
     <value>Loading questionnaire. Please wait...</value>
   </data>

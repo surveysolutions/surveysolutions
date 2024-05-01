@@ -414,6 +414,9 @@
   <data name="CompleteCriticalityWarnConfirmation" xml:space="preserve">
     <value>Пожалуйста, подтвердите, что вы хотите отправить это интервью с критическими проблемами.</value>
   </data>
+  <data name="ConfirmationNeededTitle" xml:space="preserve">
+    <value>Требуется подтверждение</value>
+  </data>
   <data name="LoadingQuestionnaire" xml:space="preserve">
     <value>Загружаем опросник. Пожалуйста подождите...</value>
   </data>

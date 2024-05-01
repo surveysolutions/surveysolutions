@@ -286,17 +286,18 @@ export default {
                 this.$store.dispatch('requestWebInterview', this.comment)
             else {
                 if (this.criticalityLevel == 'Warn') {
+
                     modal.dialog({
-                        message: `<p style="color: red;"> ${this.$t('WebInterviewUI.CompleteCriticalityWarnConfirmation')}</p>`,
+                        title: `<h2> ${this.$t('WebInterviewUI.ConfirmationNeededTitle')}</h2>`,
+                        message: `<p> ${this.$t('WebInterviewUI.CompleteCriticalityWarnConfirmation')}</p>`,
                         onEscape: true,
                         closeButton: true,
                         buttons: {
                             cancel: {
-                                label: this.$t('Common.No'),
+                                label: this.$t('Common.Cancel'),
                             },
-
                             success: {
-                                label: this.$t('Common.Yes'),
+                                label: this.$t('Common.Ok'),
                                 callback: async () => {
                                     this.$store.dispatch('completeInterview', this.comment)
                                 },

@@ -663,6 +663,12 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
+        public static string ConfirmationNeededTitle {
+            get {
+                return ResourceManager.GetString("ConfirmationNeededTitle", resourceCulture);
+            }
+        }
+        
         public static string LoadingQuestionnaire {
             get {
                 return ResourceManager.GetString("LoadingQuestionnaire", resourceCulture);
