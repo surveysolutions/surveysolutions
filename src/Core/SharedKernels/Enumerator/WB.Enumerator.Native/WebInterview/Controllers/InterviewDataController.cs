@@ -120,37 +120,28 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             
             var questionnaire = questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
 
-            var criticalQuestions = new List<CriticalQuestionCheck>();
-            var unansweredCriticalQuestions = interview.GetAllUnansweredCriticalQuestions().Take(count).ToList();
-            foreach (var questionId in unansweredCriticalQuestions)
-            {
-                var question = interview.GetQuestion(questionId);
-                var title = interviewEntityFactory.SubstituteText(question.Title.BrowserReadyText, questionId, interview, questionnaire, IsReviewMode());
-                criticalQuestions.Add(new CriticalQuestionCheck()
-                {
-                    Id = questionId.ToString(),
-                    ParentId = question.Parent?.Identity.ToString(),
-                    IsPrefilled = question.IsPrefilled,
-                    Title = title, 
-                });
-            }
+            var unansweredCriticalQuestions = interview.GetAllUnansweredCriticalQuestions()
+                .Select(identity => GetQuestionReference<CriticalQuestionCheck>(interview, questionnaire, identity))
+                .Take(count)
+                .ToArray();
 
-            var criticalityConditions = new List<CriticalRuleResult>();
-            var failedCriticalRules = interview.CollectInvalidCriticalRules().Take(count).ToList();
-            foreach (var ruleId in failedCriticalRules)
-            {
-                var message = interviewEntityFactory.GetCriticalRuleMessage(ruleId, interview, questionnaire, IsReviewMode());
-                criticalityConditions.Add(new CriticalRuleResult()
+            var failedCriticalRules = interview.CollectInvalidCriticalRules()
+                .Select(ruleId =>
                 {
-                    Id = ruleId.FormatGuid(),
-                    Title = message, 
-                });
-            }
+                    var message = interviewEntityFactory.GetCriticalRuleMessage(ruleId, interview, questionnaire, IsReviewMode());
+                    return new CriticalRuleResult()
+                    {
+                        Id = ruleId.FormatGuid(),
+                        Title = message,
+                    };
+                })
+                .Take(count)
+                .ToArray();
 
             return new CriticalityCheckResult()
             {
-                FailedCriticalRules = criticalityConditions.ToArray(),
-                UnansweredCriticalQuestions = criticalQuestions.ToArray()
+                FailedCriticalRules = failedCriticalRules,
+                UnansweredCriticalQuestions = unansweredCriticalQuestions
             };
         }
 
@@ -615,12 +606,12 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             
             Identity[] invalidEntityIds = interview.GetInvalidEntitiesInInterview().Take(30).ToArray();
             var invalidEntities = invalidEntityIds.Select(identity => 
-                GetEntityWithError(interview, questionnaire, identity)
+                GetQuestionReference<EntityWithError>(interview, questionnaire, identity)
             ).ToArray();
             
             Identity[] unansweredIds = interview.GetAllUnansweredQuestions().Take(30).ToArray();
             var unansweredQuestions = unansweredIds.Select(identity => 
-                GetEntityWithError(interview, questionnaire, identity)
+                GetQuestionReference<EntityWithError>(interview, questionnaire, identity)
             ).ToArray();
 
             var completeInfo = new CompleteInfo
@@ -635,12 +626,13 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return completeInfo;
         }
         
-        private EntityWithError GetEntityWithError(IStatefulInterview interview, IQuestionnaire questionnaire, Identity identity)
+        private T GetQuestionReference<T>(IStatefulInterview interview, IQuestionnaire questionnaire, Identity identity)
+            where T: QuestionReference, new()
         {
             var titleText = HtmlRemovalRegex.Replace(interview.GetTitleText(identity), string.Empty);
             var isPrefilled = interview.IsQuestionPrefilled(identity);
             var parentId = interviewEntityFactory.GetUIParent(interview, questionnaire, identity);
-            return new EntityWithError
+            return new T
             {
                 Id = identity.ToString(),
                 ParentId = parentId.ToString(),
@@ -663,20 +655,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             var commentedQuestionsCount = allCommented.Count;
             var commentedQuestions = allCommented.Take(30).ToArray();
 
-            var entitiesWithComments = commentedQuestions.Select(identity =>
-            {
-                var titleText = HtmlRemovalRegex.Replace(interview.GetTitleText(identity), string.Empty);
-                var isPrefilled = interview.IsQuestionPrefilled(identity);
-                var parentId = interviewEntityFactory.GetUIParent(interview, questionnaire, identity);
-                return new EntityWithComment
-                {
-                    Id = identity.ToString(),
-                    ParentId = parentId.ToString(),
-                    Title = titleText,
-                    IsPrefilled = isPrefilled
-                };
-
-            }).ToArray();
+            var entitiesWithComments = commentedQuestions.Select(identity => 
+                GetQuestionReference<EntityWithComment>(interview, questionnaire, identity)).ToArray();
 
             var coverInfo = new CoverInfo
             {

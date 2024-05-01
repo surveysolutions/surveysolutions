@@ -404,12 +404,8 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public string Comment { get; set; }
     }
 
-    public class CriticalQuestionCheck
+    public class CriticalQuestionCheck : QuestionReference
     {
-        public string Id { get; set; }
-        public string ParentId { get; set; }
-        public bool IsPrefilled { get; set; }
-        public string Title { get; set; }
     }
     
     public class CriticalRuleResult

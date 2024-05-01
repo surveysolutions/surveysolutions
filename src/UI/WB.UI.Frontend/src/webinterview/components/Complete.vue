@@ -143,7 +143,7 @@ export default {
                 groups.push({
                     title: this.$t('WebInterviewUI.Complete_FailedCriticalRules', { count: this.moreThen30(this.criticalityInfo.failedCriticalRules.length) }),
                     items: this.criticalityInfo.failedCriticalRules,
-                    cssClass: 'errors'
+                    cssClass: 'critical-rule-errors'
                 })
             }
 

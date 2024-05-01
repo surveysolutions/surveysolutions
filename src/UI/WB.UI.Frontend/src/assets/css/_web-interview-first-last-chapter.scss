@@ -93,6 +93,11 @@
 }
 .wrapper-info
 {
+    .critical-rule-errors {
+        h4 {
+            color: $red_error;
+        }
+    }
     .errors {
         h4 {
             color: $red_error;
