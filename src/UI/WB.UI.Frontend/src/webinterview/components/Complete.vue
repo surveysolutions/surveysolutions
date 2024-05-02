@@ -40,8 +40,9 @@
                     {{ noteToSupervisor }}
                 </label>
                 <div class="field">
-                    <textarea class="field-to-fill" id="comment-for-supervisor"
-                        :placeholder="$t('WebInterviewUI.TextEnter')" v-model="comment" maxlength="750"></textarea>
+                    <textarea-autosize class="field-to-fill" id="comment-for-supervisor"
+                        :placeholder="$t('WebInterviewUI.TextEnter')" v-model="comment"
+                        maxlength="750"></textarea-autosize>
                     <button type="submit" class="btn btn-link btn-clear">
                         <span></span>
                     </button>
