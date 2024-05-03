@@ -1,11 +1,13 @@
 <template>
     <div class="wrapper-info">
         <div class="container-info" :class="[cssClass]">
-            <button class="btn btn-link btn-plus" v-if="hasChild" :class="{ collapsed: !isExpanded }" type="button"
-                @click="() => (isExpanded = !isExpanded)">
-                <span></span>
-            </button>
-            <h4 class="gray-uppercase" @click="() => (isExpanded = !isExpanded)">{{ title }}</h4>
+            <h4 >
+                <button class="btn btn-link btn-plus" v-if="hasChild" :class="{ collapsed: !isExpanded }" type="button"
+                    @click="() => (isExpanded = !isExpanded)">
+                    <span></span>
+                </button>
+                <span @click="() => (isExpanded = !isExpanded)">{{ title }}</span>
+            </h4>
             <div class="list-item-body p-8" v-show="isExpanded">
                 <slot />
             </div>
@@ -18,8 +20,16 @@
     display: inline;
     position: absolute;
     left: 35px;
-    padding-top: 0px;
+    padding-top: 6px;    
 }
+.complete .unanswered .btn-plus:after, .complete .unanswered .btn-plus:before {
+    background-color: #2a81cb;
+}
+
+.complete .errors .btn-plus:after, .complete .errors .btn-plus:before, .complete .critical-rule-errors .btn-plus:after, .complete .critical-rule-errors .btn-plus:before {
+    background-color: #e74924;
+}
+
 </style>
 
 <script type="text/javascript">

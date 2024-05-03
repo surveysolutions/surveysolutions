@@ -12,13 +12,13 @@
             </div>
         </div>
         <div class="wrapper-info" v-if="completeGroups.length > 0">
-            <div class="container-info">
-                <h4 class="gray-uppercase">
+            <div class="container-info info-block">
+                <div class="gray-uppercase">
                     {{ $t('WebInterviewUI.CompleteInterviewStatus') }}
-                </h4>
-                <h4 class="gray-uppercase" v-if="hasCriticalIssues">
+                </div>
+                <div class="gray-uppercase" v-if="hasCriticalIssues">
                     {{ $t('WebInterviewUI.CompleteNoteCommentCriticality') }}
-                </h4>
+                </div>
             </div>
         </div>
 
@@ -36,7 +36,7 @@
 
         <div class="wrapper-info">
             <div class="container-info">
-                <label class="gray-uppercase" for="comment-for-supervisor">
+                <label class="info-block gray-uppercase" for="comment-for-supervisor">
                     {{ noteToSupervisor }}
                 </label>
                 <div class="field">
@@ -59,7 +59,7 @@
                 </label>
             </div>
             <div class="container-info action-block" v-if="switchToWeb">
-                <p calss="gray-uppercase">
+                <p calss="info-block gray-uppercase">
                     {{ $t('WebInterviewUI.SwitchToWebMode_LinkDescription') }}
                 </p>
                 <p class="font-bold">
@@ -75,7 +75,7 @@
         'btn-danger': hasErrors,
         'disabled': !isAllowCompleteInterview,
     }" @click="completeInterview">{{ competeButtonTitle }}</a>
-                <div class="red-uppercase">{{ completeButtionComment }}</div>
+                <div class="info-block red-uppercase">{{ completeButtionComment }}</div>
             </div>
         </div>
         <SectionLoadingProgress />
