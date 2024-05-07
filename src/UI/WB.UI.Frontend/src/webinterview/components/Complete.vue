@@ -73,9 +73,9 @@
         'btn-success': isAllAnswered,
         'btn-primary': hasUnansweredQuestions,
         'btn-danger': hasErrors,
-        'disabled': !isAllowCompleteInterview,
+        'disabled': !isCompletionPermitted,
     }" @click="completeInterview">{{ competeButtonTitle }}</a>
-                <div class="info-block red-uppercase">{{ completeButtionComment }}</div>
+                <div class="info-block gray-uppercase" style="margin-top:10px;">{{ completeButtionComment }}</div>
             </div>
         </div>
         <SectionLoadingProgress />
@@ -172,8 +172,8 @@ export default {
         criticalityLevel() {
             return this.$store.state.webinterview.criticalityLevel
         },
-        isAllowCompleteInterview() {
-            if (this.doesSupportCriticality != false) {
+        isCompletionPermitted() {
+            if (this.doesSupportCriticality !== false) {
                 if (!this.isReadyLastCriticalityInfo)
                     return false;
 

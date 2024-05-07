@@ -427,10 +427,10 @@ Contact support for assistance.</value>
     <value>Please close this page. You may open new one by returning to Designer site</value>
   </data>
   <data name="CompleteCommentCriticalityLevelBlock" xml:space="preserve">
-    <value>This button is disabled because submission of interviews with critical issues is not allowed</value>
+    <value>To activate the button, please resolve the critical issues</value>
   </data>
   <data name="CompleteCommentCriticalityLevelWarn" xml:space="preserve">
-    <value>This button remains disabled until you specify a comment for the critical issues above</value>
+    <value>To activate the button, please resolve the critical issues or provide an explanation in the comment box above</value>
   </data>
   <data name="CompleteNoteCommentCriticality" xml:space="preserve">
     <value>Please resolve the issues by answering critical questions and making sure the answers satisfy the critical rules</value>
