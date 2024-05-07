@@ -403,10 +403,10 @@
     <value>Пожалуйста закройте окно тестера.</value>
   </data>
   <data name="CompleteCommentCriticalityLevelBlock" xml:space="preserve">
-    <value>Эта кнопка отключена, поскольку подача интервью с критическими проблемами запрещена</value>
+    <value>Чтобы активировать кнопку, пожалуйста, решите критические проблемы</value>
   </data>
   <data name="CompleteCommentCriticalityLevelWarn" xml:space="preserve">
-    <value>Эта кнопка остается неактивной до тех пор, пока вы не укажете комментарий для критических проблем, указанных выше</value>
+    <value>Чтобы активировать кнопку, пожалуйста, решите критические проблемы или предоставьте объяснение в комментариях выше</value>        
   </data>
   <data name="CompleteNoteCommentCriticality" xml:space="preserve">
     <value>Пожалуйста, решите проблемы, ответив на критические вопросы и убедившись, что ответы удовлетворяют важнейшим правилам</value>
