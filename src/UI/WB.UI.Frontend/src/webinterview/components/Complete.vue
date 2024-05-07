@@ -167,7 +167,7 @@ export default {
             return groups;
         },
         doesSupportCriticality() {
-            return this.$store.state.webinterview.doesSupportCriticality != false
+            return this.$store.state.webinterview.doesSupportCriticality == true
         },
         criticalityLevel() {
             return this.$store.state.webinterview.criticalityLevel
@@ -258,10 +258,12 @@ export default {
         },
 
         fetchCriticalityInfo() {
-            if (this.doesSupportCriticality == false)
+            if (this.doesSupportCriticality == false 
+            || (this.criticalityLevel != undefined && (this.criticalityLevel == null || this.criticalityLevel == 'Ignore')))
+            {
+                this.isReadyLastCriticalityInfo = true;
                 return;
-            if (this.criticalityLevel != undefined && (this.criticalityLevel == null || this.criticalityLevel == 'Ignore'))
-                return;
+            }
 
             this.isReadyLastCriticalityInfo = false;
             this.$store.dispatch('fetchCriticalityInfo')
