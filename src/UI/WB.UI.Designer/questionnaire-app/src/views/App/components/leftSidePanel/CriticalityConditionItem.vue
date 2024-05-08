@@ -1,6 +1,7 @@
 <template>
     <div class="form-group validation-group" style="background:000;">
         <div>
+            <div class="criticality-group-marker"></div>
             <label>
                 {{ $t('QuestionnaireEditor.SideBarCriticalityConditionExpression') }} {{ index + 1 }}
                 <help link="criticalityConditionExpression" />
