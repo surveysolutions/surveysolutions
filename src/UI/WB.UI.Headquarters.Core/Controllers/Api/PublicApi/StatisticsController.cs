@@ -200,7 +200,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         }
 
         /// <summary>
-        /// Generate report report based on provided query paramters.
+        /// Generate report based on provided query parameters.
         /// </summary>
         /// <param name="query">input data</param>
         /// <returns>Report view of selected type (JSON by default)</returns>
