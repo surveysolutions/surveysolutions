@@ -84,7 +84,6 @@
 
 <script lang="js">
 import modal from '@/shared/modal'
-import Vue from 'vue'
 import SectionProgress from './SectionLoadProgress'
 import ExpandableList from '../../hqapp/components/ExpandableList.vue';
 
@@ -97,30 +96,21 @@ export default {
     data() {
         return {
             comment: '',
-            switchToWeb: false,
-            isReadyLastCriticalityInfo: false,
-            //completeGroups: []
+            switchToWeb: false
         }
     },
     beforeMount() {
         this.fetchCompleteInfo()
-        this.fetchCriticalityInfo()
     },
     watch: {
         $route(to, from) {
-            this.fetchCompleteInfo()
-            this.fetchCriticalityInfo()
+            this.fetchCompleteInfo()        
         },
         shouldCloseWindow(to) {
             if (to === true) {
                 this.completeInterview()
             }
-        },
-        criticalityInfo(to, from) {
-            if (to) {
-                this.isReadyLastCriticalityInfo = true;
-            }
-        }
+        },        
     },
     computed: {
         completeInfo() {
@@ -174,9 +164,7 @@ export default {
         },
         isCompletionPermitted() {
             if (this.doesSupportCriticality !== false) {
-                if (!this.isReadyLastCriticalityInfo)
-                    return false;
-
+                
                 if (this.hasCriticalIssues) {
                     if (this.criticalityLevel == 'Block') {
                         return false;
@@ -255,19 +243,7 @@ export default {
     methods: {
         fetchCompleteInfo() {
             this.$store.dispatch('fetchCompleteInfo')
-        },
-
-        fetchCriticalityInfo() {
-            if (this.doesSupportCriticality == false 
-            || (this.criticalityLevel != undefined && (this.criticalityLevel == null || this.criticalityLevel == 'Ignore')))
-            {
-                this.isReadyLastCriticalityInfo = true;
-                return;
-            }
-
-            this.isReadyLastCriticalityInfo = false;
-            this.$store.dispatch('fetchCriticalityInfo')
-        },
+        },        
 
         completeInterview() {
             if (!this.isAllowCompleteInterview)
