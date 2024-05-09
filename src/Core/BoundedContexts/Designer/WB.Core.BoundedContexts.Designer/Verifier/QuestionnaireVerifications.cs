@@ -287,7 +287,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             MultiLanguageQuestionnaireDocument.TranslatedEntity<CriticalRule> criticalRule, 
                 string entityMessage, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            string[] substitutionReferences = this.substitutionService.GetAllSubstitutionVariableNames(entityMessage, "__questionnaire");
+            string[] substitutionReferences = 
+                this.substitutionService.GetAllSubstitutionVariableNames(entityMessage, "__questionnaire");
 
             if (!substitutionReferences.Any())
                 yield break;
@@ -305,15 +306,43 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private QuestionnaireVerificationMessage? GetCriticalRuleErrorsBySubstitutionReferenceOrNull(
             MultiLanguageQuestionnaireDocument.TranslatedEntity<CriticalRule> criticalRule, 
-            string identifier, RosterScope empty, MultiLanguageQuestionnaireDocument questionnaire)
+            string identifier, RosterScope emptyScope, MultiLanguageQuestionnaireDocument questionnaire)
         {
+            var referenceToEntityWithSubstitution = QuestionnaireEntityReference.CreateForCriticalRule(criticalRule.Entity.Id);
             var entityToSubstitute = GetEntityByVariable(identifier, questionnaire);
             if (entityToSubstitute == null)
             {
                 return QuestionnaireVerificationMessage.Error("WB0017",
                     VerificationMessages.WB0017_SubstitutionReferencesNotExistingQuestionOrVariable,
                     criticalRule.TranslationName,
-                    QuestionnaireEntityReference.CreateForCriticalRule(criticalRule.Entity.Id));
+                    referenceToEntityWithSubstitution);
+            }
+            
+            var referenceToEntityBeingSubstituted = CreateReference(entityToSubstitute);
+
+            var isVariable = entityToSubstitute is IVariable;
+            var isQuestion = entityToSubstitute is IQuestion;
+            var isRoster = (entityToSubstitute as IGroup)?.IsRoster ?? false;
+            var isNotVariableOrQuestionOrRoster = !(isVariable || isQuestion || isRoster);
+            var isQuestionOfNotSupportedType = isQuestion && !QuestionTypesValidToBeSubstitutionReferences.Contains(((IQuestion)entityToSubstitute).QuestionType);
+            if (isNotVariableOrQuestionOrRoster || isQuestionOfNotSupportedType)
+            {
+                return QuestionnaireVerificationMessage.Error("WB0018",
+                    VerificationMessages.WB0018_SubstitutionReferencesUnsupportedEntity,
+                    criticalRule.TranslationName,
+                    referenceToEntityWithSubstitution,
+                    referenceToEntityBeingSubstituted);
+            }
+
+            var entityToSubstituteRosterScope = questionnaire.Questionnaire.GetRosterScope(entityToSubstitute);
+
+            if (!entityToSubstituteRosterScope.IsSameOrParentScopeFor(emptyScope))
+            {
+                return QuestionnaireVerificationMessage.Error("WB0019",
+                    VerificationMessages.WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel,
+                    criticalRule.TranslationName,
+                    referenceToEntityWithSubstitution,
+                    referenceToEntityBeingSubstituted);
             }
 
             return null;

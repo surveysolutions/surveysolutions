@@ -1509,5 +1509,17 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0321_CriticalityConditionUsingForbiddenClasses", resourceCulture);
             }
         }
+        
+        public static string WB0322_CriticalRuleExpressionIsTooLong {
+            get {
+                return ResourceManager.GetString("WB0322_CriticalRuleExpressionIsTooLong", resourceCulture);
+            }
+        }
+        
+        public static string WB0323_CriticalRuleMessageIsTooLong {
+            get {
+                return ResourceManager.GetString("WB0323_CriticalRuleMessageIsTooLong", resourceCulture);
+            }
+        }
     }
 }

@@ -50,6 +50,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             CriticalRuleError(CriticalRuleMessageIsEmpty, "WB0320", VerificationMessages.WB0320_CriticalityConditionExpressionIsEmpty),
             CriticalRuleError(CriticalRuleUsingForbiddenClasses, "WB0321", VerificationMessages.WB0321_CriticalityConditionUsingForbiddenClasses),
 
+            CriticalRuleError(CriticalRuleExpressionHasLengthMoreThanLimitLength, "WB0322", string.Format(VerificationMessages.WB0322_CriticalRuleExpressionIsTooLong, MaxExpressionLength)),
+            CriticalRuleError(CriticalRuleMessageLengthMoreThanLimitLength, "WB0323", string.Format(VerificationMessages.WB0323_CriticalRuleMessageIsTooLong, MaxValidationMessageLength)),
+            
             Critical<IVariable>(VariableExpressionHasLengthMoreThan10000Characters, "WB0005", string.Format(VerificationMessages.WB0005_VariableExpressionHasLengthMoreThan10000Characters, MaxExpressionLength)),
             Error<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationConditionUsesForbiddenDateTimeProperties, "WB0118", index => string.Format(WB0118_ExpressionReferencingForbiddenDateTimeProperies, index)),
             Error<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationConditionIsTooLong, "WB0104", index => string.Format(VerificationMessages.WB0104_ValidationConditionIsTooLong, index, MaxExpressionLength), VerificationMessageLevel.Critical),
@@ -80,6 +83,12 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<IQuestion>(FilterExpressionUsingForbiddenClasses, "WB0275", VerificationMessages.WB0275_FilterExpressionIsUsingForbiddenClasses),
             Error<IComposite>(ConditionsContainsRowname, "WB0276", VerificationMessages.WB0276_RownameIsNotSupported)
         };
+
+        private bool CriticalRuleMessageLengthMoreThanLimitLength(CriticalRule rule, MultiLanguageQuestionnaireDocument questionnaire)
+            => rule.Message?.Length > MaxValidationMessageLength;
+
+        private bool CriticalRuleExpressionHasLengthMoreThanLimitLength(CriticalRule rule, MultiLanguageQuestionnaireDocument questionnaire)
+            => rule.Expression?.Length > MaxExpressionLength;
 
         private bool ConditionsContainsRowname(IComposite node, MultiLanguageQuestionnaireDocument questionnaire)
         {

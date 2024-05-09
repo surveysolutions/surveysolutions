@@ -866,4 +866,10 @@
   <data name="WB0321_CriticalityConditionUsingForbiddenClasses" xml:space="preserve">
     <value>Критическое условие использует запрещённый тип.</value>
   </data>
+    <data name="WB0322_CriticalRuleExpressionIsTooLong" xml:space="preserve">
+    <value>Выражение критического правила содержит более {0} символов.</value>
+  </data>
+    <data name="WB0323_CriticalRuleMessageIsTooLong" xml:space="preserve">
+    <value>Сообщение критического правила содержит более {0} символов.</value>
+  </data>
 </root>

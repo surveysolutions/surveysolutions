@@ -853,4 +853,10 @@
   <data name="WB0321_CriticalityConditionUsingForbiddenClasses" xml:space="preserve">
     <value>Critical condition is using forbidden type.</value>
   </data>
+  <data name="WB0322_CriticalRuleExpressionIsTooLong" xml:space="preserve">
+    <value>Critical rule expression has more than {0} characters.</value>
+  </data>
+  <data name="WB0323_CriticalRuleMessageIsTooLong" xml:space="preserve">
+    <value>Critical condition message more than {0} characters.</value>
+  </data>
 </root>
