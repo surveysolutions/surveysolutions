@@ -400,10 +400,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                             QuestionnaireEntityReference.CreateForCriticalRule(criticalRule.Entity.Id))
                     );
                 }
-                
-                if (!string.IsNullOrWhiteSpace(criticalRule.Entity.Message))
-                    foundErrors.AddRange(this.GetErrorsBySubstitutionsInCriticalRule(criticalRule,
-                        criticalRule.Entity.Message, questionnaire));
             }
 
             return foundErrors.Distinct(new QuestionnaireVerificationMessage.CodeAndReferencesAndTranslationComparer());
