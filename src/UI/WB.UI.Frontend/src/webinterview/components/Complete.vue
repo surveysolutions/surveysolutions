@@ -96,7 +96,8 @@ export default {
     data() {
         return {
             comment: '',
-            switchToWeb: false
+            switchToWeb: false,
+            isReadyLastCriticalityInfo: false,
         }
     },
     beforeMount() {
@@ -110,7 +111,12 @@ export default {
             if (to === true) {
                 this.completeInterview()
             }
-        },        
+        },
+        criticalityInfo(to, from) {
+            if (to) {
+                this.isReadyLastCriticalityInfo = true;
+            }
+        }
     },
     computed: {
         completeInfo() {
@@ -163,8 +169,7 @@ export default {
             return this.$store.state.webinterview.criticalityLevel
         },
         isCompletionPermitted() {
-            if (this.doesSupportCriticality !== false) {
-                
+            if (this.doesSupportCriticality !== false) {                
                 if (this.hasCriticalIssues) {
                     if (this.criticalityLevel == 'Block') {
                         return false;
@@ -246,7 +251,7 @@ export default {
         },        
 
         completeInterview() {
-            if (!this.isAllowCompleteInterview)
+            if (!this.isCompletionPermitted)
                 return;
 
             if (this.shouldCloseWindow) {
