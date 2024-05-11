@@ -97,10 +97,11 @@ export default {
         return {
             comment: '',
             switchToWeb: false,
-            isReadyLastCriticalityInfo: false,
+            wasCriticalityInfoLoaded: false,
         }
     },
     beforeMount() {
+        this.wasCriticalityInfoLoaded = false;
         this.fetchCompleteInfo()
     },
     watch: {
@@ -114,7 +115,7 @@ export default {
         },
         criticalityInfo(to, from) {
             if (to) {
-                this.isReadyLastCriticalityInfo = true;
+                this.wasCriticalityInfoLoaded = true;
             }
         }
     },
@@ -169,6 +170,10 @@ export default {
             return this.$store.state.webinterview.criticalityLevel
         },
         isCompletionPermitted() {
+            if(this.wasCriticalityInfoLoaded === false) {
+                return false;
+            }
+
             if (this.doesSupportCriticality !== false) {                
                 if (this.hasCriticalIssues) {
                     if (this.criticalityLevel == 'Block') {
