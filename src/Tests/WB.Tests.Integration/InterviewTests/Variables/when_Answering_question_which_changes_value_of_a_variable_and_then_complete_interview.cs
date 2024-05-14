@@ -36,7 +36,7 @@ namespace WB.Tests.Integration.InterviewTests.Variables
                 using (var eventContext = new EventContext())
                 {
                     // act
-                    interview.CompleteWithoutFirePassiveEvents(userId, String.Empty, DateTime.UtcNow);
+                    interview.CompleteWithoutFirePassiveEvents(userId, String.Empty, DateTime.UtcNow, null);
 
                     // assert
                     eventContext.ShouldNotContainEvent<VariablesChanged>();

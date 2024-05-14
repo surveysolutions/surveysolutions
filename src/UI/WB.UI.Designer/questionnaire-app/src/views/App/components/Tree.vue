@@ -39,8 +39,8 @@
                 <div class="qname-block chapter-condition-block">
                     <div class="conditions-block">
                         <div class="enabling-group-marker"
-                            :class="{ 'hide-if-disabled': currentChapter.hideIfDisabled }"
-                            v-if="currentChapter.hasCondition">
+                            :class="{ 'hide-if-disabled': currentChapterData.hideIfDisabled }"
+                            v-if="currentChapterData.hasCondition">
                         </div>
                     </div>
                 </div>

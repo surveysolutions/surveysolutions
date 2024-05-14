@@ -310,7 +310,7 @@
     <value>Нет</value>
   </data>
   <data name="CompleteNoteToSupervisor" xml:space="preserve">
-    <value>Заметка для супервизора</value>
+      <value>Коментарий</value>
   </data>
   <data name="PhotoIsNotImage" xml:space="preserve">
     <value>Загружать можно только изображения</value>
@@ -326,6 +326,15 @@
   </data>
   <data name="CompleteErrors" xml:space="preserve">
     <value>Вопросы с ошибками</value>
+  </data>
+  <data name="CriticalQuestionErrors" xml:space="preserve">
+    <value>Требуются ответы на эти вопросы:</value>
+  </data>
+  <data name="CriticalityConditionsErrors" xml:space="preserve">
+    <value>Требуется исправить эти ошибки:</value>
+  </data>
+  <data name="UnansweredQuestions" xml:space="preserve">
+    <value>Вопросы без ответа:</value>
   </data>
   <data name="GPSRecord" xml:space="preserve">
     <value>Записать GPS</value>
@@ -392,6 +401,21 @@
   </data>
   <data name="WebTesterSessionOverMessage" xml:space="preserve">
     <value>Пожалуйста закройте окно тестера.</value>
+  </data>
+  <data name="CompleteCommentCriticalityLevelBlock" xml:space="preserve">
+    <value>Чтобы активировать кнопку, пожалуйста, решите критические проблемы</value>
+  </data>
+  <data name="CompleteCommentCriticalityLevelWarn" xml:space="preserve">
+    <value>Чтобы активировать кнопку, пожалуйста, решите критические проблемы или предоставьте объяснение в комментариях выше</value>        
+  </data>
+  <data name="CompleteNoteCommentCriticality" xml:space="preserve">
+    <value>Пожалуйста, решите проблемы, ответив на критические вопросы и убедившись, что ответы удовлетворяют важнейшим правилам</value>
+  </data>
+  <data name="CompleteCriticalityWarnConfirmation" xml:space="preserve">
+    <value>Пожалуйста, подтвердите, что вы хотите отправить это интервью с критическими проблемами.</value>
+  </data>
+  <data name="ConfirmationNeededTitle" xml:space="preserve">
+    <value>Требуется подтверждение</value>
   </data>
   <data name="LoadingQuestionnaire" xml:space="preserve">
     <value>Загружаем опросник. Пожалуйста подождите...</value>
@@ -508,5 +532,20 @@ Oбратитесь в тех. поддержку за помощью</value>
   </data>
   <data name="AssignmentLimitError" xml:space="preserve">
     <value>Вы не можите создать интервью из этого задания</value>
+  </data>
+  <data name="CompleteInterviewStatus" xml:space="preserve">
+      <value>Замечания по интервью:</value>
+  </data>
+  <data name="Complete_CriticalUnansweredQuestions" xml:space="preserve">
+      <value>Критические вопросы без ответов: {{count}}</value>
+  </data>
+  <data name="Complete_FailedCriticalRules" xml:space="preserve">
+      <value>Неуспешные критические правила: {{count}}</value>
+  </data>
+  <data name="Complete_UnansweredQuestions" xml:space="preserve">
+      <value>Вопросы без ответов: {{count}}</value>
+  </data>
+  <data name="Complete_QuestionsWithErrors" xml:space="preserve">
+      <value>Вопросы с ошибками: {{count}}</value>
   </data>
 </root>

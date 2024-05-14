@@ -21,6 +21,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             this.LookupTables = new List<LookupTableView>();
             this.Attachments = new List<AttachmentView>();
             this.Translations = new List<TranslationView>();
+            this.CriticalityConditions = new List<CriticalityConditionView>();
 
 
             Metadata = new MetadataView();
@@ -64,6 +65,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         public List<AttachmentView> Attachments { get; set; }
 
         public List<TranslationView> Translations { get; set; }
+
+        public List<CriticalityConditionView> CriticalityConditions { get; set; }
 
         public MetadataView Metadata { get; set; }
 

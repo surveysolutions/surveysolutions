@@ -311,7 +311,7 @@
     <value>Посилання на приклад цільової сторінки веб-інтерв'ю</value>
   </data>
   <data name="NoteForSupervisor" xml:space="preserve">
-    <value>Примітка для супервізора</value>
+      <value>Примітка</value>
   </data>
   <data name="NotStartedText" xml:space="preserve">
     <value>Не розпочато</value>

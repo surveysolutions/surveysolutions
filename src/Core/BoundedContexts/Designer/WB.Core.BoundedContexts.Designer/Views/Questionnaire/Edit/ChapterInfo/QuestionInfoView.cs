@@ -22,6 +22,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         public bool HideIfDisabled { get; set; }
 
         public bool HasValidation { get; set; }
+        
+        public bool IsCritical { get; set; }
 
         public List<IQuestionnaireItem> Items
         {

@@ -254,6 +254,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 })
                 .ToList();
 
+            questionnaireInfoView.CriticalityConditions = questionnaireDocument
+                .CriticalRules
+                .Select(x => new CriticalityConditionView { Id = x.Id.FormatGuid(), Message = x.Message, Description = x.Description, Expression = x.Expression })
+                .ToList();
+
             
             var anonymousQuestionnaire = dbContext.AnonymousQuestionnaires
                 .FirstOrDefault(a => a.QuestionnaireId == questionnaireRevision.QuestionnaireId);

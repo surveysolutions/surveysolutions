@@ -129,9 +129,6 @@
   <data name="CompleteAbout" xml:space="preserve">
     <value>Chystáte se dokončit tento rozhovor</value>
   </data>
-  <data name="CompleteNoteToSupervisor" xml:space="preserve">
-    <value>Poznámka pro garanta</value>
-  </data>
   <data name="CoverSupervisorNote" xml:space="preserve">
     <value>Poznámka od garanta:</value>
   </data>

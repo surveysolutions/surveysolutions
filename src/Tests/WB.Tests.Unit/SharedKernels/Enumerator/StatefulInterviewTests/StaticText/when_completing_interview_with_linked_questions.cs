@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticTe
             BecauseOf();
         }
 
-        private void BecauseOf() => statefulInterview.Complete(Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"), "", DateTime.Now);
+        private void BecauseOf() => statefulInterview.Complete(Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"), "", DateTime.Now, null);
 
         [NUnit.Framework.Test] public void should_raize_linked_option_changed_aggregated_event_event () => eventContext.ShouldContainEvent<LinkedOptionsChanged>();
 

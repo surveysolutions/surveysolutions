@@ -18,5 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
         public GeometryInputMode? GeometryInputMode { get; set; }
         
         public bool? GeometryOverlapDetection { get; set; }
+        
+        public bool IsCritical { get; set; }
     }
 }

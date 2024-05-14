@@ -289,6 +289,42 @@
   <data name="SideBarMacroShowDescription" xml:space="preserve">
     <value>add description</value>
   </data>
+  <data name="SideBarCriticalityConditionExpression" xml:space="preserve">
+      <value>Critical condition</value>
+  </data>
+  <data name="SideBarCriticalityConditionsCounter" xml:space="preserve">
+      <value>{{count}} Critical rule:</value>
+  </data>
+  <data name="SideBarCriticalityConditionsCounter_plural" xml:space="preserve">
+      <value>{{count}} Critical rules:</value>
+  </data>
+  <data name="SideBarCriticalityConditionDescription" xml:space="preserve">
+      <value>Description</value>
+  </data>
+  <data name="SideBarCriticalityConditionsEmptyLine1" xml:space="preserve">
+    <value>Use this tab to define critical rules.</value>
+  </data>
+  <data name="SideBarCriticalityConditionsEmptyLine2" xml:space="preserve">
+    <value>Each critical rule consists of a condition and a message. Critical conditions may refer to any questions or variables and must be satisfied (evaluate to true). Treatment of interviews with unsatisfied critical conditions is determined during import of the questionnaire to the data server.</value>
+  </data>
+  <data name="SideBarCriticalityConditionsEmptyLine3" xml:space="preserve">
+    <value>Include a message for the interviewer (respondent) to explain what needs to be changed in the interview (the message is displayed when the critical condition is not satisfied). Including hyperlinks to questions in the message is useful for navigation.</value>
+  </data>
+  <data name="SideBarHideDescription" xml:space="preserve">
+    <value>hide description</value>
+  </data>
+  <data name="SideBarCriticalityConditionMessage" xml:space="preserve">
+      <value>Message</value>
+  </data>
+  <data name="SideBarShowDescription" xml:space="preserve">
+    <value>add description</value>
+  </data>
+  <data name="SideBarAddCriticalityCondition" xml:space="preserve">
+    <value>add new critical rule</value>
+  </data>
+  <data name="SideBarCriticalityConditionNoMessage" xml:space="preserve">
+    <value>Critical rule with no message</value>
+  </data>
   <data name="SideBarScenarioCounter" xml:space="preserve">
     <value>{{count}} Scenario:</value>
   </data>
@@ -417,6 +453,9 @@
   </data>
   <data name="SideBarCommentsTitle" xml:space="preserve">
     <value>Comments</value>
+  </data>
+  <data name="SideBarCriticalityConditionsTitle" xml:space="preserve">
+    <value>Critical rules</value>
   </data>
   <data name="SideBarMetadataHeader" xml:space="preserve">
     <value>Questionnaire description and survey info</value>
@@ -605,7 +644,7 @@
     <value>Flat mode</value>
   </data>
   <data name="AddValidationRule" xml:space="preserve">
-    <value>Add new validation rule</value>
+    <value>Add new validation condition</value>
   </data>
   <data name="EnteredMoreThanAllowed" xml:space="preserve">
     <value>You entered more than maximum allowed {{max}}</value>
@@ -1603,5 +1642,17 @@ You entered an invalid input. Each line should follow the format: "Title...Paren
   </data>
   <data name="No" xml:space="preserve">
       <value>No</value>
+  </data>
+  <data name="QuestionIsCritical" xml:space="preserve">
+      <value>This is a critical question</value>
+  </data>
+  <data name="HelpIsCritical" xml:space="preserve">
+      <value>Questionnaire authors may indicate that the answer to a question is critical for interview submission.</value>
+  </data>
+  <data name="HelpCriticalityConditionExpression" xml:space="preserve">
+      <value>A logical expression that evaluates the interview as a whole to determine whether it satisfies the critical rules (when this expression evaluates to "True"). It may refer to any questions or variables.</value>
+  </data>
+  <data name="HelpCriticalityConditionMessage" xml:space="preserve">
+      <value>This message is shown when the critical condition evaluates to "False" or an exception occurs during expression evaluation. The message may utilize hyperlinks and text substitution.</value>
   </data>
 </root>

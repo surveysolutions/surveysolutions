@@ -8,7 +8,7 @@ namespace WB.UI.Headquarters.API.WebInterview
     {
         SearchResults Search(IStatefulInterview interview, IQuestionnaire questionnaire, FilterOption[] flags, int skip, int take);
 
-        Dictionary<FilterOption, int> GetStatistics(IStatefulInterview interview);
+        Dictionary<FilterOption, int> GetStatistics(IStatefulInterview interview, IQuestionnaire questionnaire);
     }
 
     public enum FilterOption
@@ -21,6 +21,8 @@ namespace WB.UI.Headquarters.API.WebInterview
         Answered,
         NotAnswered,
         ForSupervisor,
-        ForInterviewer
+        ForInterviewer,
+        CriticalQuestions,
+        CriticalRules,
     }
 }

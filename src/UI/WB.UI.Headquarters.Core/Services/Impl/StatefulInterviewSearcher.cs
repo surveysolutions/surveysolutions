@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.API.WebInterview;
 
 namespace WB.UI.Headquarters.Services.Impl
@@ -13,16 +16,17 @@ namespace WB.UI.Headquarters.Services.Impl
     public class StatefulInterviewSearcher : IStatefulInterviewSearcher
     {
         private readonly IInterviewFactory interviewFactory;
+        private readonly IWebInterviewInterviewEntityFactory webNavigationService;
 
-        public StatefulInterviewSearcher(IInterviewFactory interviewFactory)
+        public StatefulInterviewSearcher(IInterviewFactory interviewFactory, IWebInterviewInterviewEntityFactory webNavigationService)
         {
             this.interviewFactory = interviewFactory;
-
+            this.webNavigationService = webNavigationService;
         }
 
         public SearchResults Search(IStatefulInterview interview, IQuestionnaire questionnaire, FilterOption[] flags, int skip, int take)
         {
-            var nodesWithStats = GetFilteredNodesWithStats(flags, interview);
+            var nodesWithStats = GetFilteredNodesWithStats(flags, interview, questionnaire);
 
             int taken = 0, skipped = 0, total = 0;
             int searchResultId = 0;
@@ -102,14 +106,46 @@ namespace WB.UI.Headquarters.Services.Impl
 
                     return null;
                 }
-
-                bool CanTake()
+            }
+            
+            foreach (var ruleId in nodesWithStats.Rules)
+            {
+                if (CanTake())
                 {
-                    if (skipped < skip) return false;
-                    if (taken < take) return true;
+                    if (currentResult != null)
+                    {
+                        results.Results.Add(currentResult);
+                    }
 
-                    return false;
+                    currentResult = new SearchResult
+                    {
+                        Id = searchResultId,
+                        SectionId = "critical-rules",
+                    };
+
+                    var message = webNavigationService.GetCriticalRuleMessage(ruleId, interview, questionnaire, true);
+                    currentResult.Questions.Add(new Link
+                    {
+                        Target = ruleId.FormatGuid(),
+                        Title = message
+                    });
+
+                    taken++;
                 }
+                else
+                {
+                    skipped++;
+                }
+
+                total++;
+            }
+            
+            bool CanTake()
+            {
+                if (skipped < skip) return false;
+                if (taken < take) return true;
+
+                return false;
             }
 
             if (currentResult != null)
@@ -122,9 +158,9 @@ namespace WB.UI.Headquarters.Services.Impl
             return results;
         }
 
-        public Dictionary<FilterOption, int> GetStatistics(IStatefulInterview interview)
+        public Dictionary<FilterOption, int> GetStatistics(IStatefulInterview interview, IQuestionnaire questionnaire)
         {
-            var result = this.GetFilteredNodesWithStats(Array.Empty<FilterOption>(), interview);
+            var result = this.GetFilteredNodesWithStats(Array.Empty<FilterOption>(), interview, questionnaire);
             return result.Stats;
         }
 
@@ -133,12 +169,13 @@ namespace WB.UI.Headquarters.Services.Impl
             && node.Or(FilterOption.Flagged, FilterOption.NotFlagged)
             && node.Or(FilterOption.Valid, FilterOption.Invalid)
             && node.Or(FilterOption.Answered, FilterOption.NotAnswered)
-            && node.Or(FilterOption.ForSupervisor, FilterOption.ForInterviewer);
+            && node.Or(FilterOption.ForSupervisor, FilterOption.ForInterviewer)
+            && node.Or(FilterOption.CriticalQuestions, FilterOption.CriticalRules);
 
         private static readonly FilterOption[] AllFilterOptions =
             Enum.GetValues(typeof(FilterOption)).Cast<FilterOption>().ToArray();
 
-        private FilteredNodesWithStats GetFilteredNodesWithStats(FilterOption[] flags, IStatefulInterview interview)
+        private FilteredNodesWithStats GetFilteredNodesWithStats(FilterOption[] flags, IStatefulInterview interview, IQuestionnaire questionnaire)
         {
             var result = new FilteredNodesWithStats();
             
@@ -151,7 +188,7 @@ namespace WB.UI.Headquarters.Services.Impl
             
             var rule = new InterviewQuestionFilter(
                 new HashSet<Identity>(flagged), 
-                FilteringRule);
+                FilteringRule, questionnaire);
 
             var nodes = interview.GetAllInterviewNodes()
                 .Where(n => n is InterviewTreeQuestion || n is InterviewTreeStaticText);
@@ -170,6 +207,13 @@ namespace WB.UI.Headquarters.Services.Impl
                 }
             }
 
+            if (flags.Length == 0 || flags.Contains(FilterOption.CriticalRules))
+            {
+                var failedCriticalRules = interview.GetFailedCriticalRules();
+                result.Rules = failedCriticalRules.ToList();
+                result.Stats[FilterOption.CriticalRules] = result.Rules.Count;
+            }
+            
             void UpdateStats()
             {
                 foreach (var option in AllFilterOptions)
@@ -190,7 +234,10 @@ namespace WB.UI.Headquarters.Services.Impl
         {
             Stats = new Dictionary<FilterOption, int>();
             Nodes = new List<IInterviewTreeNode>();
+            Rules = new List<Guid>();
         }
+
+        public List<Guid> Rules { get; set; }
 
         public Dictionary<FilterOption, int> Stats { get; }
 

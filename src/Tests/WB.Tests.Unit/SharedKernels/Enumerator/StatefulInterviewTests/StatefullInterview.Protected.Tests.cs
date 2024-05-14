@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             using (var eventContext = new EventContext())
             { 
                 //act
-                interview.Complete(userId, "comment", DateTime.UtcNow);
+                interview.Complete(userId, "comment", DateTime.UtcNow, null);
 
                 eventContext.ShouldNotContainEvent<AnswersMarkedAsProtected>();
             }
@@ -92,7 +92,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             using (var eventContext = new EventContext())
             {
                 //act
-                interview.Complete(userId, "comment", DateTime.UtcNow);
+                interview.Complete(userId, "comment", DateTime.UtcNow, null);
 
                 eventContext.ShouldNotContainEvent<AnswersMarkedAsProtected>();
             }
@@ -129,7 +129,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             using (var eventContext = new EventContext())
             {
                 //act
-                interview.Complete(userId, "comment", DateTime.UtcNow);
+                interview.Complete(userId, "comment", DateTime.UtcNow, null);
 
                 eventContext.ShouldNotContainEvent<AnswersMarkedAsProtected>();
             }
@@ -171,7 +171,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             using (var eventContext = new EventContext())
             {
                 //act
-                interview.Complete(userId, "comment", DateTime.UtcNow);
+                interview.Complete(userId, "comment", DateTime.UtcNow, null);
 
                 eventContext.ShouldNotContainEvent<AnswersMarkedAsProtected>();
             }

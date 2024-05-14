@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticTe
             BecauseOf();
         }
 
-        private void BecauseOf() => statefulInterview.Complete(Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"), "", DateTime.Now);
+        private void BecauseOf() => statefulInterview.Complete(Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"), "", DateTime.Now, null);
 
         [NUnit.Framework.Test] public void should_raize_variable_disabled_event () => eventContext.ShouldContainEvent<VariablesDisabled>(v=>v.Variables[0]==variableIdentity);
         [NUnit.Framework.Test] public void should_not_raize_variable_enabled_event () => eventContext.ShouldNotContainEvent<VariablesEnabled>();

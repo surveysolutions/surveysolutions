@@ -14,6 +14,7 @@ import DatePicker from './DatePicker'
 import FormGroup from './FormGroup'
 import FilterInput from './FilterInput'
 import InlineSelector from './InlineSelector'
+import ExpandableList from './ExpandableList.vue'
 
 Vue.component('Confirm', Confirm)
 Vue.component('DataTables', () => import('./DataTables'))
@@ -29,6 +30,8 @@ Vue.component('DatePicker', DatePicker)
 Vue.component('form-group', FormGroup)
 Vue.component('FilterInput', FilterInput)
 Vue.component('InlineSelector', InlineSelector)
+Vue.component('ExpandableList', ExpandableList)
+
 
 // export default {
 //     Confirm,

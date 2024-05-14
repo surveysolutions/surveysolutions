@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -213,5 +214,14 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         InterviewSimpleStatus GetInterviewSimpleStatus(bool includingSupervisorEntities);
         IEnumerable<Identity> GetNeighboringQuestionIdentities(Identity identity);
+
+        IEnumerable<Guid> CollectInvalidCriticalRules();
+        
+        IEnumerable<Identity> GetAllUnansweredCriticalQuestions();
+        IEnumerable<Identity> GetAllUnansweredQuestions();
+        
+        string GetCriticalRuleMessage(Guid criticalityConditionId);
+
+        IEnumerable<Guid> GetFailedCriticalRules();
     }
 }

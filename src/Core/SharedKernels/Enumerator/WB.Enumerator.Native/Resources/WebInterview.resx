@@ -298,6 +298,12 @@
   <data name="Filters_NotFlagged" xml:space="preserve">
     <value>No flag</value>
   </data>
+  <data name="Filters_CriticalQuestions" xml:space="preserve">
+    <value>Critical questions</value>
+  </data>
+  <data name="Filters_CriticalRules" xml:space="preserve">
+    <value>Critical rules</value>
+  </data>
   <data name="PoweredBy" xml:space="preserve">
     <value>Powered by</value>
   </data>
@@ -369,7 +375,7 @@ We would appreciate if you try addressing all issues marked in your response and
 Thank you for your cooperation!</value>
   </data>
   <data name="NoteForSupervisor" xml:space="preserve">
-    <value>Note for supervisor</value>
+    <value>Comment</value>
   </data>
   <data name="Complete" xml:space="preserve">
     <value>Complete</value>

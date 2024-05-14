@@ -13,8 +13,9 @@ namespace WB.UI.WebTester.Controllers
     public class InterviewDataController : Enumerator.Native.WebInterview.Controllers.InterviewDataController
     {
         public InterviewDataController(IQuestionnaireStorage questionnaireRepository, IStatefulInterviewRepository statefulInterviewRepository, 
-            IWebInterviewNotificationService webInterviewNotificationService, IWebInterviewInterviewEntityFactory interviewEntityFactory) 
-            : base(questionnaireRepository, statefulInterviewRepository, webInterviewNotificationService, interviewEntityFactory)
+            IWebInterviewNotificationService webInterviewNotificationService, IWebInterviewInterviewEntityFactory interviewEntityFactory,
+            IQuestionnaireSettings questionnaireSettings) 
+            : base(questionnaireRepository, statefulInterviewRepository, webInterviewNotificationService, interviewEntityFactory, questionnaireSettings)
         {
         }
 
@@ -100,5 +101,9 @@ namespace WB.UI.WebTester.Controllers
         [HttpGet]
         [Route("getInterviewDetails")]
         public override InterviewInfo GetInterviewDetails(Guid interviewId) => base.GetInterviewDetails(interviewId);
+
+        [HttpGet]
+        [Route("getCriticalityChecks")]
+        public override CriticalityCheckResult GetCriticalityChecks(Guid interviewId) => base.GetCriticalityChecks(interviewId);
     }
 }

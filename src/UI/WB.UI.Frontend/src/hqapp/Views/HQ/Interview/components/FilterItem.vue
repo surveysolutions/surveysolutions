@@ -1,12 +1,8 @@
 <template>
     <div class="form-group">
-        <input class="checkbox-filter"
-            :id="option"
-            type="checkbox"
-            v-model="value"
-            @change="change">
+        <input class="checkbox-filter" :id="option" type="checkbox" v-model="value" @change="change">
         <label :for="option">
-            <span class="tick"></span>{{title}} ({{ found }})
+            <span class="tick"></span>{{ title }} ({{ found }})
         </label>
     </div>
 </template>
@@ -36,7 +32,7 @@ export default {
         },
     },
 
-    created(){
+    created() {
         this.value = this.state
     },
 
@@ -51,7 +47,7 @@ export default {
             return this.$store.state.review.filters.stats[this.option]
         },
         state() {
-            return  this.$store.getters.filteringState[this.option]
+            return this.$store.getters.filteringState[this.option].value
         },
     },
 }

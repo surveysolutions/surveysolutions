@@ -21,5 +21,7 @@
         InterviewHasIncompatibleMode,
         QuestionnaireDeleted,
         AssignmentLimitReached,
+        FailCriticalRule,
+        UnansweredCriticalQuestion,
     }
 }

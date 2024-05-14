@@ -199,7 +199,7 @@
     <value>{{count}} entitetet e para me gabime:</value>
   </data>
   <data name="CompleteNoteToSupervisor" xml:space="preserve">
-    <value>Shënim për supervizorin</value>
+      <value>Shënim</value>
   </data>
   <data name="CompleteQuestionsAnswered" xml:space="preserve">
     <value>Me përgjigje</value>

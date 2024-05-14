@@ -37,7 +37,13 @@
 }
 <div class="question-container">
     <div class="question">
-        <div class="question-title" id="@questionnaire.GetItemRef(question.PublicKey)">@Html.Raw(questionnaire.GetQuestionTitle(question))</div>
+        <div class="question-title" id="@questionnaire.GetItemRef(question.PublicKey)">
+            @if (question.Properties?.IsCritical ?? false)
+            {
+                <span>C</span>
+            }
+            @Html.Raw(questionnaire.GetQuestionTitle(question))
+        </div>
         <div class="common-info">
             @if (questionnaire.QuestionHasInstructions(question))
             {

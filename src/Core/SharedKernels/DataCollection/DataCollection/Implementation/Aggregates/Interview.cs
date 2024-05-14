@@ -589,6 +589,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.properties.IsValid = false;
         }
+        
+        protected virtual void Apply(InterviewCriticalityChecked @event) { }
+
 
         protected virtual void Apply(AnswersRemoved @event)
         {
@@ -2442,6 +2445,52 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (!question.IsInterviewer) return;
 
             this.properties.StartedDate = answerDate;
+        }
+        
+        protected IEnumerable<Tuple<Guid, bool>> RunCriticalityChecks()
+        {
+            var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
+
+            propertiesInvariants.ThrowIfInterviewHardDeleted();
+            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(
+                InterviewStatus.SupervisorAssigned, InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted, InterviewStatus.RejectedBySupervisor);
+
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            var changedInterviewTree = GetChangedTree();
+            
+            IInterviewExpressionStorage expressionStorage = this.GetExpressionStorage();
+            var interviewPropertiesForExpressions = new InterviewPropertiesForExpressions(new InterviewProperties(this.EventSourceId), this.properties);
+            expressionStorage.Initialize(new InterviewStateForExpressions(changedInterviewTree, interviewPropertiesForExpressions));
+            
+            var runner = new InterviewTreeCriticalRulesRunner(expressionStorage, questionnaire);
+            var results = runner.RunCriticalRules();
+            return results;
+        }
+
+        protected IEnumerable<InterviewTreeQuestion> GetUnansweredCriticalQuestions()
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            var changedInterviewTree = GetChangedTree();
+            var questions = changedInterviewTree.AllNodes
+                .Where(n => n.NodeType == NodeType.Question)
+                .Cast<InterviewTreeQuestion>()
+                .Where(question => !question.IsDisabled() 
+                            && !question.IsReadonly
+                            && !question.IsAnswered()
+                            && questionnaire.IsQuestionCritical(question.Identity.Id) 
+                            );
+            return questions;
+        }
+        
+        public string GetCriticalRuleMessage(Guid criticalityConditionId)
+        {
+            var changedInterviewTree = GetChangedTree();
+            var questionnaire = GetQuestionnaireOrThrow();
+            var message = questionnaire.GetCriticalRuleMessage(criticalityConditionId);
+            //var identity = new Identity(questionnaire.CoverPageSectionId, RosterVector.Empty);
+            SubstitutionText title = substitutionTextFactory.CreateText(message, questionnaire);
+            title.ReplaceSubstitutions(changedInterviewTree);
+            return title.BrowserReadyText;
         }
     }
 }

@@ -46,6 +46,12 @@
         "$ref": "#/definitions/Categories"
       }
     },
+    "CriticalRules": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/CriticalRule"
+      }
+    },
     "Metadata": { "$ref": "#/definitions/QuestionnaireMetaInfo" }
   },
 
@@ -79,6 +85,7 @@
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
         "HideInstructions": { "type": "boolean", "default": false },
+        "IsCritical": { "type": "boolean", "default": false },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
@@ -132,6 +139,7 @@
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
         "HideInstructions": { "type": "boolean", "default": false },
+        "IsCritical": { "type": "boolean", "default": false },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
@@ -154,6 +162,18 @@
       "required": ["FileName", "Name"]
     },
 
+    "CriticalRule": {
+      "type": "object",
+      "properties": {
+        "Message": { "type": "string" },
+        "Expression": { "type": "string" },
+        "Description": { "type": "string" },
+        "Id": { "$ref": "#/definitions/GUID" }
+      },
+      "additionalProperties": false,
+      "required": ["Message", "Expression"]
+    },
+
     "DateTimeQuestion": {
       "type": "object",
       "properties": {
@@ -162,6 +182,7 @@
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
         "HideInstructions": { "type": "boolean", "default": false },
+        "IsCritical": { "type": "boolean", "default": false },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
@@ -194,6 +215,7 @@
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
         "HideInstructions": { "type": "boolean", "default": false },
+        "IsCritical": { "type": "boolean", "default": false },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
@@ -372,6 +394,7 @@
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
         "HideInstructions": { "type": "boolean", "default": false },
+        "IsCritical": { "type": "boolean", "default": false },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
@@ -393,6 +416,7 @@
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
         "HideInstructions": { "type": "boolean", "default": false },
+        "IsCritical": { "type": "boolean", "default": false },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
@@ -429,6 +453,7 @@
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
         "HideInstructions": { "type": "boolean", "default": false },
+        "IsCritical": { "type": "boolean", "default": false },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
@@ -453,6 +478,7 @@
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
         "HideInstructions": { "type": "boolean", "default": false },
+        "IsCritical": { "type": "boolean", "default": false },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
@@ -482,6 +508,7 @@
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
         "HideInstructions": { "type": "boolean", "default": false },
+        "IsCritical": { "type": "boolean", "default": false },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
@@ -553,6 +580,7 @@
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
         "HideInstructions": { "type": "boolean", "default": false },
+        "IsCritical": { "type": "boolean", "default": false },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
@@ -574,6 +602,7 @@
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
         "HideInstructions": { "type": "boolean", "default": false },
+        "IsCritical": { "type": "boolean", "default": false },
         "QuestionScope": { "$ref": "#/definitions/QuestionScope" },
         "QuestionText": { "type": "string" },
         "VariableLabel": { "$ref": "#/definitions/VariableLabel" },
