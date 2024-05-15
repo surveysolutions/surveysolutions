@@ -21,15 +21,16 @@
             <div class="button-holder">
                 <p>
                     <span>{{ $t('QuestionnaireEditor.SideBarTranslationGetTemplate') }}</span>
-                    <a class="btn btn-default" :href="downloadBaseUrl + '/' + questionnaire.questionnaireId + '/template'"
-                        target="_blank" rel="noopener">
+                    <a class="btn btn-default"
+                        :href="downloadBaseUrl + '/' + questionnaire.questionnaireId + '/template'" target="_blank"
+                        rel="noopener">
                         {{ $t('QuestionnaireEditor.SideBarTranslationGetTemplateLinkTextXlsx') }}
                     </a>
                 </p>
                 <p>
                     <input type="button" :value="$t('QuestionnaireEditor.SideBarTranslationsUploadNew')"
-                        @click.stop="openFileDialog()" value="Upload new categories" class="btn lighter-hover" ngf-select
-                        v-if="!isReadOnlyForUser" capture />
+                        @click.stop="openFileDialog()" value="Upload new categories" class="btn lighter-hover"
+                        ngf-select v-if="!isReadOnlyForUser" capture />
 
                     <file-upload ref="upload" v-if="!isReadOnlyForUser" :input-id="'tfunew'" v-model="file"
                         :size="10 * 1024 * 1024" :drop="false" :drop-directory="false" @input-file="createAndUploadFile"
@@ -40,7 +41,7 @@
         </perfect-scrollbar>
     </div>
 </template>
-  
+
 <script>
 
 import { reactive } from 'vue';
@@ -78,7 +79,7 @@ export default {
     },
     computed: {
         translations() {
-            return this.questionnaireStore.getInfo.translations;
+            return this.questionnaireStore.getInfo.translations || [];
         },
 
         defaultTranslation() {
@@ -148,4 +149,3 @@ export default {
     },
 }
 </script>
-  
