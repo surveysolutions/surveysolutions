@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:local="http://schemas.android.com/apk/res-auto"
+    style="@style/VerticalFullWidthWrappingLayout"
+              android:background="@color/complete_screen_statistics_group_background"
+              android:orientation="vertical" 
+              clickable="true" 
+              local:MvxBind="Click NavigateToSectionCommand;">
+  <TextView
+           style="@style/Interview_Complete_Screen_Statistics_Errors_Label"  
+           android:layout_marginTop="@dimen/Interview_Entity_Title_margin_vertical"
+           android:layout_marginLeft="@dimen/Interview_Complete_Group_left_offset"
+           local:MvxBind="HtmlWithLinks MakeMarkdownLinksExecutable(EntityTitle, .); 
+                          Color CompleteItemToColor(.);" />
+</LinearLayout>

@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Verifier;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Questionnaire.Categories;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
@@ -609,6 +610,22 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                     }),
                 })
                 .ExpectNoWarning("WB0203");
+
+        [Test]
+        public void when_question_in_critical_and_in_hidden_scope()
+            => QuestionnaireDocumentWithCoverPage(new[]
+                {
+                    Create.Question(scope: QuestionScope.Hidden, properties: Create.QuestionProperties(isCritical: true))
+                })
+                .ExpectError("WB0317");
+
+        [Test]
+        public void when_question_in_critical_and_in_supervisor_scope()
+            => QuestionnaireDocumentWithCoverPage(new[]
+                {
+                    Create.Question(scope: QuestionScope.Supervisor, properties: Create.QuestionProperties(isCritical: true))
+                })
+                .ExpectError("WB0317");
 
     }
 }

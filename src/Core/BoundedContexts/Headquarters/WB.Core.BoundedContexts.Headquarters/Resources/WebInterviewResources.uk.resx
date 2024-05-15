@@ -139,7 +139,7 @@
     <value>Привіт і ласкаво просимо до веб-опитування Survey Solutions</value>
   </data>
   <data name="NoteForSupervisor" xml:space="preserve">
-    <value>Примітка для супервізора</value>
+      <value>Примітка</value>
   </data>
   <data name="Resume_InvitationText" xml:space="preserve">
     <value>Ви можете перейти до інтерв'ю в наступному опитуванні: "%QUESTIONNAIRE%"</value>

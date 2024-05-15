@@ -18,7 +18,9 @@ using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.BoundedContexts.Headquarters.Designer;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
@@ -117,8 +119,9 @@ namespace WB.UI.Headquarters.Controllers
             QuestionnaireIdentity.TryParse(request.MigrateFrom, out var migrateFrom);
 
             var model = await this.GetImportModel(id);
-            var result = await this.importService.ImportAndMigrateAssignments(id, model.QuestionnaireInfo?.Name, false,
-                request.Comment, Request.GetDisplayUrl(), true, request.ShouldMigrateAssignments, migrateFrom);
+            var result = await this.importService.ImportAndMigrateAssignments(id, model.QuestionnaireInfo?.Name,
+                false, request.Comment, Request.GetDisplayUrl(), true, 
+                request.ShouldMigrateAssignments, migrateFrom, request.CriticalityLevel);
 
             return ImportStatusImpl(result);
         }
@@ -171,6 +174,12 @@ namespace WB.UI.Headquarters.Controllers
                 ListOfMyQuestionnaires = Url.Action("Import"),
                 NewVersionNumber = this.questionnaireVersionProvider.GetNextVersion(id),
                 CheckImportingStatus = Url.Action("ImportStatus"),
+                CriticalityLevels = new[]
+                {
+                    new ComboboxViewItem() { Key = ((int)CriticalityLevel.Ignore).ToString(), Value = CriticalityLevel.Ignore.ToString() },
+                    new ComboboxViewItem() { Key = ((int)CriticalityLevel.Warn).ToString(), Value = CriticalityLevel.Warn.ToString() },
+                    new ComboboxViewItem() { Key = ((int)CriticalityLevel.Block).ToString(), Value = CriticalityLevel.Block.ToString() },
+                },
             };
             model.QuestionnairesToUpgradeFrom =
                 this.questionnaires.GetOlderQuestionnairesWithPendingAssignments(id, model.NewVersionNumber)
@@ -276,5 +285,7 @@ namespace WB.UI.Headquarters.Controllers
         public bool ShouldMigrateAssignments { get; set; }
         public string MigrateFrom { get; set; }
         public string Comment { get; set; }
+
+        public CriticalityLevel? CriticalityLevel { set; get; }
     }
 }

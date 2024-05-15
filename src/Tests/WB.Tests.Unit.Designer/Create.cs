@@ -181,9 +181,12 @@ namespace WB.Tests.Unit.Designer
                 new QuestionTypeToCSharpTypeMapper()));
         }
 
-        public static QuestionProperties QuestionProperties()
+        public static QuestionProperties QuestionProperties(bool? isCritical = null)
         {
-            return new QuestionProperties(false, false);
+            return new QuestionProperties(false, false)
+            {
+                IsCritical = isCritical ?? false
+            };
         }
 
         public static DateTimeQuestion DateTimeQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
@@ -419,7 +422,7 @@ namespace WB.Tests.Unit.Designer
         public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = null, string enablementCondition = null,
             string validationExpression = null, QuestionScope scope = QuestionScope.Interviewer, bool isPrefilled = false,
             bool hideIfDisabled = false, IEnumerable<ValidationCondition> validationConditions = null, Guid? linkedToRosterId = null,
-            string title = "test", string variableLabel = null, Option[] options = null)
+            string title = "test", string variableLabel = null, Option[] options = null, bool? isCritical = null)
         {
             var publicKey = id ?? Guid.NewGuid();
             var stataExportCaption = variable ?? "numeric_question"+publicKey;
@@ -442,7 +445,8 @@ namespace WB.Tests.Unit.Designer
                         AnswerText = x.Title, 
                         ParentValue = x.ParentValue, 
                         AttachmentName = x.AttachmentName}).ToList()
-                    : Enumerable.Empty<Answer>().ToList()
+                    : Enumerable.Empty<Answer>().ToList(),
+                Properties = Create.QuestionProperties(isCritical)
             };
         }
 
@@ -581,6 +585,7 @@ namespace WB.Tests.Unit.Designer
                         QuestionScope = scope,
                         LinkedToRosterId = linkedToRoster,
                         LinkedToQuestionId = linkedToQuestion,
+                        Properties = properties
                     };
                 case QuestionType.Multimedia:
                     return new MultimediaQuestion()
@@ -598,6 +603,7 @@ namespace WB.Tests.Unit.Designer
                         QuestionScope = scope,
                         LinkedToRosterId = linkedToRoster,
                         LinkedToQuestionId = linkedToQuestion,
+                        Properties = properties
                     };
                 case QuestionType.Numeric:
                     return new NumericQuestion()
@@ -615,6 +621,7 @@ namespace WB.Tests.Unit.Designer
                         QuestionScope = scope,
                         LinkedToRosterId = linkedToRoster,
                         LinkedToQuestionId = linkedToQuestion,
+                        Properties = properties
                     };
                 case QuestionType.DateTime:
                     return new DateTimeQuestion()
@@ -632,6 +639,7 @@ namespace WB.Tests.Unit.Designer
                         QuestionScope = scope,
                         LinkedToRosterId = linkedToRoster,
                         LinkedToQuestionId = linkedToQuestion,
+                        Properties = properties
                     };
                 case QuestionType.GpsCoordinates:
                     return new GpsCoordinateQuestion()
@@ -649,6 +657,7 @@ namespace WB.Tests.Unit.Designer
                         QuestionScope = scope,
                         LinkedToRosterId = linkedToRoster,
                         LinkedToQuestionId = linkedToQuestion,
+                        Properties = properties
                     };
                 case QuestionType.MultyOption:
                     return new MultyOptionsQuestion()
@@ -666,6 +675,7 @@ namespace WB.Tests.Unit.Designer
                         QuestionScope = scope,
                         LinkedToRosterId = linkedToRoster,
                         LinkedToQuestionId = linkedToQuestion,
+                        Properties = properties
                     };
                 case QuestionType.SingleOption:
                     return new SingleQuestion()
@@ -683,6 +693,7 @@ namespace WB.Tests.Unit.Designer
                         QuestionScope = scope,
                         LinkedToRosterId = linkedToRoster,
                         LinkedToQuestionId = linkedToQuestion,
+                        Properties = properties
                     };
                 case QuestionType.TextList:
                     return new TextListQuestion()
@@ -700,6 +711,7 @@ namespace WB.Tests.Unit.Designer
                         QuestionScope = scope,
                         LinkedToRosterId = linkedToRoster,
                         LinkedToQuestionId = linkedToQuestion,
+                        Properties = properties
                     };
                 case QuestionType.QRBarcode:
                     return new QRBarcodeQuestion()
@@ -717,6 +729,7 @@ namespace WB.Tests.Unit.Designer
                         QuestionScope = scope,
                         LinkedToRosterId = linkedToRoster,
                         LinkedToQuestionId = linkedToQuestion,
+                        Properties = properties
                     };
                 case QuestionType.Text:
                     default:
@@ -736,6 +749,7 @@ namespace WB.Tests.Unit.Designer
                         QuestionScope = scope,
                         LinkedToRosterId = linkedToRoster,
                         LinkedToQuestionId = linkedToQuestion,
+                        Properties = properties
                     };
             }
             
@@ -1229,7 +1243,8 @@ namespace WB.Tests.Unit.Designer
             string label = null,
             string instruction = null,
             IEnumerable<ValidationCondition> validationConditions = null,
-            bool hideIfDisabled = false)
+            bool hideIfDisabled = false,
+            bool? isCritical = null)
 
         {
             var publicKey = questionId ?? Guid.NewGuid();
@@ -1249,7 +1264,7 @@ namespace WB.Tests.Unit.Designer
                 VariableLabel = label,
                 Instructions = instruction,
                 ValidationConditions = validationConditions?.ToList().ConcatWithOldConditionIfNotEmpty(validationExpression, validationMessage),
-                
+                Properties = Create.QuestionProperties(isCritical)
             };
         }
 

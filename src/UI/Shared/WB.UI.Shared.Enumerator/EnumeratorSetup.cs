@@ -160,6 +160,8 @@ namespace WB.UI.Shared.Enumerator
             registry.AddOrOverwrite("InterviewStatusToColor", new InterviewStatusToColorConverter());
             registry.AddOrOverwrite("InterviewStatusToDrawable", new InterviewStatusToDrawableConverter());
             registry.AddOrOverwrite("InterviewStatusToButton", new InterviewStatusToButtonConverter());
+            registry.AddOrOverwrite("CompleteGroupToColor", new CompleteGroupToColorConverter());
+            registry.AddOrOverwrite("CompleteItemToColor", new CompleteItemToColorConverter());
             registry.AddOrOverwrite("IsCoverVariableToColor", new IsCoverVariableToColorConverter());
             registry.AddOrOverwrite("SynchronizationStatusToDrawable", new SynchronizationStatusToDrawableConverter());
             registry.AddOrOverwrite("ValidationStyleBackground", new TextEditValidationStyleBackgroundConverter());
@@ -181,6 +183,7 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<TextInputLayout>("Hint", (view) => new TextInputLayoutHintBinding(view));
             registry.RegisterCustomBindingFactory<TextInputLayout>("EndIconClick", (view) => new TextInputLayoutEndIconClickBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("Html", (view) => new TextViewHtmlBinding(view));
+            registry.RegisterCustomBindingFactory<TextView>("Color", (view) => new TextViewColorBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("TextFormatted", (view) => new TextViewTextFormattedBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("IsSelectedYesNoOptionColor", (view) => new TextViewIsSelectedYesNoOptionColorBinding(view));
             registry.RegisterCustomBindingFactory<MaskedEditText>("IsMaskedQuestionAnswered", (editText) => new MaskedEditTextIsMaskedQuestionAnsweredBinding(editText));
@@ -273,6 +276,17 @@ namespace WB.UI.Shared.Enumerator
                 typeof(EnumeratorSharedKernelModule).Assembly,
                 typeof(EnumeratorUIModule).Assembly,
             };
+        }
+
+        protected override void FillValueCombiners(IMvxValueCombinerRegistry registry)
+        {
+            registry.AddOrOverwrite("MakeMarkdownLinksExecutable", new MakeMarkdownLinksExecutableValueCombiner());
+            registry.AddOrOverwrite("NotValue", new NotValueCombiner());
+            registry.AddOrOverwrite("LayoutBackgroundStyle", new LayoutBackgroundStyleValueCombiner());
+            registry.AddOrOverwrite("SpannableGroupTitle", new SpannableGroupTitleValueCombiner());
+            registry.AddOrOverwrite("LayoutOptionBackgroundStyle", new LayoutOptionBackgroundStyleValueCombiner());
+            
+            base.FillValueCombiners(registry);
         }
     }
 }

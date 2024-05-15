@@ -112,8 +112,10 @@ namespace WB.Tests.Abc.TestFactories
                 new Identity(id ?? Guid.NewGuid(), rosterVector ?? new decimal[0]), 
             }, originDate?? DateTimeOffset.Now);
 
-        public ImportFromDesigner ImportFromDesigner(Guid responsibleId, QuestionnaireDocument questionnaire, bool allowCensus, string assembly, long contentVersion, string comment = null)
-            => new ImportFromDesigner(responsibleId, questionnaire, allowCensus, assembly, contentVersion, 1, comment);
+        public ImportFromDesigner ImportFromDesigner(Guid responsibleId, QuestionnaireDocument questionnaire, 
+            bool allowCensus, string assembly, long contentVersion, string comment = null)
+            => new ImportFromDesigner(responsibleId, questionnaire, allowCensus, assembly, 
+                contentVersion, 1, comment, false, null);
 
         public InterviewCreated InterviewCreated(Guid? questionnaireId = null, long? questionnaireVersion = null,
             DateTimeOffset? originDate = null, int? assignmentId = null)

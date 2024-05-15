@@ -66,7 +66,7 @@
                                     </div>
                                 </div>
                                 <div class="row-element mb-40">
-                                    <div class="h2 gray-uppercase">
+                                    <div class="h2 info-block gray-uppercase">
                                         {{ previewText(webInterviewPageMessages['completeNoteToSupervisor'].text) }}
                                     </div>
                                     <input type="text" :placeholder="$t('WebInterviewUI.TextEnter')" class="form-control" />

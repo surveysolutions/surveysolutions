@@ -16,6 +16,9 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void SetValueToView(Button control, GroupStatus value)
         {
+            if (!control.Enabled)
+                return;
+             
             var groupBackgroundResourceId = GetGroupBackgroundResourceIdByStatus(value);
 
             var color = ContextCompat.GetColor(control.Context, groupBackgroundResourceId);

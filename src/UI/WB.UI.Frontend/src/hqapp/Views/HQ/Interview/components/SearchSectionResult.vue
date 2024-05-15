@@ -1,14 +1,10 @@
 <template>
     <div class="unit-section">
-        <search-breabcrumbs :sections="search.sections"/>
+        <search-breabcrumbs :sections="search.sections" />
 
-        <a href="javascript:void(0)"
-            v-for="link in search.questions"
-            :key="link.target"
-            class="question short-row"
+        <a href="javascript:void(0)" v-for="link in search.questions" :key="link.target" class="question short-row"
             @click="navigate(link)">
-            <span
-                v-html="link.title"/>
+            <span v-html="link.title" />
         </a>
     </div>
 </template>
@@ -26,11 +22,14 @@ export default {
     components: { SearchBreabcrumbs },
     methods: {
         navigate(link) {
+            if (this.search.sectionId == 'critical-rules')
+                return;
+
             var self = this
             this.$router.push(
                 { name: 'section', params: { sectionId: this.search.sectionId }, hash: '#' + link.target },
                 undefined,
-                () => { self.$store.dispatch('sectionRequireScroll', {id: '#' + link.target}) }
+                () => { self.$store.dispatch('sectionRequireScroll', { id: '#' + link.target }) }
             )
         },
     },

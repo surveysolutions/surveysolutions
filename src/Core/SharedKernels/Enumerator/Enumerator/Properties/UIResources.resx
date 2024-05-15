@@ -356,8 +356,17 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Interview_Complete_Consequences_Instrunction" xml:space="preserve">
     <value>After you finish this interview it will be marked as completed and will be uploaded to supervisor during your next synchronization</value>
   </data>
+  <data name="Interview_Complete_CriticalIssues_Instrunction" xml:space="preserve">
+    <value>This button is disabled because submission of interviews with critical issues is not allowed</value>
+  </data>
   <data name="Interview_Complete_Errors" xml:space="preserve">
     <value>Error(s)</value>
+  </data>
+  <data name="Interview_Complete_CriticalUnanswered" xml:space="preserve">
+    <value>Critical unanswered questions: {0}</value>
+  </data>
+  <data name="Interview_Complete_FailCriticalConditions" xml:space="preserve">
+    <value>Failed critical rules: {0}</value>
   </data>
   <data name="Interview_Complete_No" xml:space="preserve">
     <value>No</value>
@@ -365,8 +374,20 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Interview_Complete_Note_For_Supervisor" xml:space="preserve">
     <value>Note for supervisor</value>
   </data>
+  <data name="Interview_Complete_WithWarningCriticality" xml:space="preserve">
+    <value>Please confirm you want to submit this interview with critical issues.</value>
+  </data>
+  <data name="Interview_Complete_Note_For_Supervisor_with_Criticality" xml:space="preserve">
+    <value>This button remains disabled until you specify a comment for the critical issues above</value>
+  </data>
   <data name="Interview_Complete_Questions_Status" xml:space="preserve">
     <value>Questions status</value>
+  </data>
+  <data name="Interview_Complete_Interview_Status" xml:space="preserve">
+    <value>Interview issues:</value>
+  </data>
+  <data name="Interview_Complete_CriticalityIssuesDescription" xml:space="preserve">
+    <value>Please resolve the issues by answering critical questions and making sure the answers satisfy the critical rules</value>
   </data>
   <data name="Interview_Complete_Unanswered" xml:space="preserve">
     <value>Unanswered</value>
@@ -465,10 +486,10 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Tap to record current time</value>
   </data>
   <data name="Interview_Complete_Entities_With_Errors" xml:space="preserve">
-    <value>Entities with errors:</value>
+    <value>Questions with errors:</value>
   </data>
   <data name="Interview_Complete_First_n_Entities_With_Errors" xml:space="preserve">
-    <value>First {0} entities with errors:</value>
+    <value>First {0} questions with errors:</value>
   </data>
   <data name="Messages_WaitPendingOperation" xml:space="preserve">
     <value>Please wait until the current operation is completed</value>

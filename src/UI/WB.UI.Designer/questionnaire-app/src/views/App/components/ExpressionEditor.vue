@@ -11,7 +11,8 @@
         showLineNumbers: false,
         showGutter: false,
         useWorker: true,
-        wrap: true
+        wrap: true,
+        placeholder: this.placeholder,
     }" />
     </div>
 </template>
@@ -39,6 +40,8 @@ export default {
         modelValue: { type: String, required: true },
         mode: { type: String, default: 'substitutions' },
         focusable: { type: String, default: 'true' },
+        placeholder: { type: String, required: false, default: null },
+        usePadding: { type: Boolean, required: false, default: true },
     },
     data() {
         return {};
@@ -119,7 +122,11 @@ export default {
         editorInit(editor) {
             var self = this;
             var renderer = editor.renderer;
-            renderer.setPadding(12);
+
+            if (this.usePadding == true)
+                renderer.setPadding(12);
+            else
+                renderer.setPadding(0);
 
             editor.$blockScrolling = Infinity;
 

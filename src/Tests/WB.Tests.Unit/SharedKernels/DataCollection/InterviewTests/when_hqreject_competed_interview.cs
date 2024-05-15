@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview = Create.AggregateRoot.StatefulInterview(questionnaire: Create.Entity.QuestionnaireDocumentWithOneChapter());
             interview.AssignSupervisor(hqId, supervisorId, DateTime.Now);
             interview.AssignInterviewer(supervisorId, interId, DateTime.Now);
-            interview.Complete(interId, null, DateTime.Now);
+            interview.Complete(interId, null, DateTime.Now, null);
 
             eventContext = new EventContext();
             //act

@@ -83,9 +83,9 @@ export default {
                 to: {
                     name: 'complete',
                 },
-                status: this.interviewState ? this.interviewState.status : null,
+                status: null, //this.interviewState ? this.interviewState.status : null,
                 validity: {
-                    isValid: this.interviewState ? !(this.interviewState.status == GroupStatus.StartedInvalid || this.interviewState.status == GroupStatus.CompletedInvalid) : true,
+                    isValid: true,//this.interviewState ? !(this.interviewState.status == GroupStatus.StartedInvalid || this.interviewState.status == GroupStatus.CompletedInvalid) : true,
                 },
             }
         },

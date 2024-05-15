@@ -25,5 +25,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport.Models.Question
         public string? VariableLabel { get; set; }
 
         public IList<ValidationCondition>? ValidationConditions { get; set; } 
+        
+        public bool IsCritical { get; set; }
     }
 }

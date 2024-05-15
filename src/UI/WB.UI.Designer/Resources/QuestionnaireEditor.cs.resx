@@ -145,7 +145,7 @@
     <value>Přidat podsekci</value>
   </data>
   <data name="AddValidationRule" xml:space="preserve">
-    <value>Přidat nové ověřovací pravidlo</value>
+      <value>Přidat ověřovací pravidlo</value>
   </data>
   <data name="AddVariable" xml:space="preserve">
     <value>Přidat proměnnou</value>

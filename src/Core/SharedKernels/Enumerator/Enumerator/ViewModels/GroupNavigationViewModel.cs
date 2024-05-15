@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -165,13 +166,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 case NavigationGroupType.ToParentGroup:
                 case NavigationGroupType.Section:
                     this.navigateToGroupState = this.interviewViewModelFactory.GetNew<GroupStateViewModel>();
+                    this.navigateToGroupState.Init(this.interviewId, this.groupOrSectionToNavigateIdentity);
                     break;
                 case NavigationGroupType.LastSection:
                     this.navigateToGroupState = this.interviewViewModelFactory.GetNew<InterviewStateViewModel>();
+                    this.navigateToGroupState.Status = GroupStatus.Started;
+                    this.navigateToGroupState.SimpleStatus = SimpleGroupStatus.Other;
                     break;
             }
 
-            this.navigateToGroupState.Init(this.interviewId, this.groupOrSectionToNavigateIdentity);
             this.RaisePropertyChanged(() => this.NavigateToGroupState);
         }
  

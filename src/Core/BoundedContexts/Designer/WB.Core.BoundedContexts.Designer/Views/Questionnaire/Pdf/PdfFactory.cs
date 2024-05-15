@@ -142,7 +142,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 QuestionsWithLongOptionsList = Find<ICategoricalQuestion>(allItems, x => !x.CategoriesId.HasValue && x.Answers?.Count > this.pdfSettings.OptionsExcerptCount).ToList(),
                 VariableWithLongExpressions = Find<IVariable>(allItems, x => x.Expression?.Length > this.pdfSettings.VariableExpressionExcerptLength).ToList(),
                 QuestionsWithLongSpecialValuesList = Find<IQuestion>(allItems, x => x.QuestionType == QuestionType.Numeric && x.Answers?.Count > this.pdfSettings.OptionsExcerptCount).ToList(),
-                CategoriesList = GetCategoriesList(questionnaire, translationData)
+                CategoriesList = GetCategoriesList(questionnaire, translationData),
+                CriticalRules = questionnaire.CriticalRules,
             };
 
             pdfView.FillStatistics(allItems, pdfView.Statistics);

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using MvvmCross.Base;
 using MvvmCross.Commands;
-using MvvmCross.Plugin.Messenger;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -34,6 +36,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         private readonly IPlainStorage<InterviewView> interviews;
         private readonly IUserInteractionService userInteractionService;
         private readonly ICalendarEventStorage calendarEventStorage;
+        
+        public IList<EntityWithErrorsViewModel> TopFailedCriticalRules { get; private set; }
 
         public SupervisorResolveInterviewViewModel(
             ICommandService commandService, 
@@ -92,6 +96,34 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
             var interviewView = this.interviews.GetById(interviewId);
             this.receivedByInterviewerTabletAt = interviewView.ReceivedByInterviewerAtUtc;
+            
+            
+            var TopUnansweredCriticalQuestions = 
+                this.entitiesListViewModelFactory.GetTopUnansweredCriticalQuestions(interviewId, navigationState).ToList();
+            if (TopUnansweredCriticalQuestions.Count > 0)
+            {
+                var unansweredCriticalQuestionsGroup = new CompleteGroup(TopUnansweredCriticalQuestions)
+                {
+                    AllCount = TopUnansweredCriticalQuestions.Count,
+                    Title= string.Format(UIResources.Interview_Complete_CriticalUnanswered, TopUnansweredCriticalQuestions.Count),
+                    GroupContent = CompleteGroupContent.Error,
+                };
+                CompleteGroups.Insert(0, unansweredCriticalQuestionsGroup);
+            }
+            
+            this.TopFailedCriticalRules = this.entitiesListViewModelFactory.GetTopFailedCriticalRulesFromState(interviewId, navigationState).ToList();
+            if (TopFailedCriticalRules.Count > 0)
+            {
+                var failedCriticalRulesGroup = new CompleteGroup(TopFailedCriticalRules)
+                {
+                    AllCount = this.TopFailedCriticalRules.Count,
+                    Title = string.Format(UIResources.Interview_Complete_FailCriticalConditions, this.TopFailedCriticalRules.Count),
+                    GroupContent = CompleteGroupContent.Error,
+                };
+                CompleteGroups.Insert(1, failedCriticalRulesGroup);
+            }
+            
+            IsLoading = false;
         }
 
         public IMvxAsyncCommand Approve => new MvxAsyncCommand(async () =>
@@ -177,5 +209,19 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         private Task SelectInterviewer() =>
             viewModelNavigationService.NavigateToAsync<SelectResponsibleForAssignmentViewModel, SelectResponsibleForAssignmentArgs>(
                     new SelectResponsibleForAssignmentArgs(this.interviewId));
+        
+        public override void Dispose()
+        {
+            if (TopFailedCriticalRules != null)
+            {
+                var errors = TopFailedCriticalRules.ToArray();
+                foreach (var errorsViewModel in errors)
+                {
+                    errorsViewModel?.DisposeIfDisposable();
+                }
+            }
+            
+            base.Dispose();
+        }
     }
 }

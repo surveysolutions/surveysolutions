@@ -27,7 +27,9 @@
                             class="form-control" type="text" />
                     </div>
                     <div class="divider"></div>
-                    <ExpressionEditor v-model="macro.editMacro.content" mode="expression" focusable="false" />
+                    <div class="macro-editor">
+                        <ExpressionEditor v-model="macro.editMacro.content" mode="expression" focusable="false" />
+                    </div>
                     <div v-if="isDescriptionVisible(macro)">
                         <div class="divider"></div>
                         <textarea :placeholder="$t('QuestionnaireEditor.SideBarMacroDescription')" type="text"

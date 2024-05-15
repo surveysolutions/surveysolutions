@@ -42,11 +42,18 @@
             <div class="form-group">
                 <label for="edit-group-condition">{{ $t('QuestionnaireEditor.VariableExpression') }}
                     <help link="expression" />
-                </label>
-                <input id="cb-do-not-export" type="checkbox" class="wb-checkbox" v-model="activeVariable.doNotExport" />
-                <label for="cb-do-not-export"><span></span>{{ $t('QuestionnaireEditor.VariableNoExport') }}</label>
-                <help link="doNotExport"></help>
+                </label>                
                 <ExpressionEditor id="edit-group-condition" v-model="activeVariable.expression" mode="expression" />
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="checkbox-in-column">
+                        <input id="cb-do-not-export" type="checkbox" class="wb-checkbox" v-model="activeVariable.doNotExport" />
+                        <label for="cb-do-not-export"><span></span>{{ $t('QuestionnaireEditor.VariableNoExport') }}</label>
+                        <help link="doNotExport"></help>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="form-buttons-holder">
