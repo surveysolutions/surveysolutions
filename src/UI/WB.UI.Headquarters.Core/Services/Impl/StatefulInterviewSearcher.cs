@@ -100,8 +100,10 @@ namespace WB.UI.Headquarters.Services.Impl
                 {
                     switch (node)
                     {
-                        case InterviewTreeQuestion q: return q.Title.ToString();
-                        case InterviewTreeStaticText st: return st.Title.ToString();
+                        case InterviewTreeQuestion q: 
+                            return Constants.HtmlRemovalRegex.Replace( q.Title.ToString(), string.Empty);
+                        case InterviewTreeStaticText st: 
+                            return Constants.HtmlRemovalRegex.Replace( st.Title.ToString(), string.Empty);
                     }
 
                     return null;

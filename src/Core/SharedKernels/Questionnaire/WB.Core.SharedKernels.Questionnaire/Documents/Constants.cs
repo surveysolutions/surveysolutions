@@ -1,4 +1,7 @@
-﻿namespace WB.Core.SharedKernels.SurveySolutions.Documents
+﻿using System;
+using System.Text.RegularExpressions;
+
+namespace WB.Core.SharedKernels.SurveySolutions.Documents
 {
     public class Constants
     {
@@ -14,5 +17,7 @@
         public const int MaxInterviewsCountByAssignment = 10000;
         public const int MaxTotalRosterPropagationLimit = 80000;
         public const int DefaultCascadingAsListThreshold = 50;
+        
+        public static readonly Regex HtmlRemovalRegex = new Regex(HtmlRemovalPattern, RegexOptions.Compiled, TimeSpan.FromMinutes(2));
     }
 }
