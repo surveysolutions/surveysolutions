@@ -47,6 +47,13 @@ class QuestionnaireApi {
         })
     }
 
+    CriticalityLevel(criticalityLevel) {
+        const url = `${this.base}${this.questionnaireId}/${this.version}/criticalityLevel`
+        return this.http.post(url, {
+            criticalityLevel: criticalityLevel,
+        })
+    }
+
     async ExposedVariables(id) {
         const response = await this.http.get(`api/QuestionnairesApi/GetQuestionnaireExposedVariables?id=${id}`,
             {

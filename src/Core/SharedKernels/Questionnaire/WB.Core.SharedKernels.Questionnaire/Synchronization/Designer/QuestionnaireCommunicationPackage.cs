@@ -4,12 +4,16 @@ namespace WB.Core.SharedKernel.Structures.Synchronization.Designer
 {
     public class QuestionnaireCommunicationPackage
     {
-        public QuestionnaireCommunicationPackage(string questionnaire, string questionnaireAssembly, long questionnaireContentVersion)
+        public QuestionnaireCommunicationPackage(string questionnaire, string questionnaireAssembly,
+            long questionnaireContentVersion, bool hasCriticalityCheck)
         {
             Questionnaire = questionnaire;
             QuestionnaireAssembly = questionnaireAssembly;
             QuestionnaireContentVersion = questionnaireContentVersion;
+            HasCriticalityCheck = hasCriticalityCheck;
         }
+
+        public bool? HasCriticalityCheck { get; set; }
 
         public string Questionnaire { get; set; }
         public string QuestionnaireAssembly { get; set; }

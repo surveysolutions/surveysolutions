@@ -39,6 +39,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<IQuestion>("WB0090", LinkedQuestionIsInterviewersOnly, VerificationMessages.WB0090_LinkedQuestionIsInterviewersOnly),
             Error<IQuestion>("WB0100", (q, document) => RosterSizeQuestionMaxValueCouldBeInRange1And60(q, document,GetMaxNumberOfAnswersForRosterSizeQuestionWhenMore200Options), string.Format(VerificationMessages.WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200,MaxRosterSizeAnswer)),
             Error<IQuestion>("WB0269", QuestionTitleEmpty, VerificationMessages.WB0269_QuestionTitleIsEmpty, QuestionnaireVerificationReferenceProperty.Title),
+            Error<IQuestion>("WB0317", CriticalityIsNotAllowed, VerificationMessages.WB0317_CriticalityIsNotAllowed),
             Error<ICategoricalQuestion>("WB0075", FilteredComboboxContainsMoreThanMaxOptions, string.Format(VerificationMessages.WB0075_FilteredComboboxContainsMoreThan5000Options, MaxOptionsCountInFilteredComboboxQuestion)),
             Error<SingleQuestion>("WB0086", CascadingQuestionReferencesMissingParent, VerificationMessages.WB0086_ParentCascadingQuestionShouldExist),
             Error<SingleQuestion>("WB0088", CascadingQuestionHasMoreThanAllowedOptions, string.Format(VerificationMessages.WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers, MaxOptionsCountInFilteredComboboxQuestion)),
@@ -579,6 +580,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private static bool QuestionTitleEmpty(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
             => string.IsNullOrWhiteSpace(question.QuestionText);
+
+        private static bool CriticalityIsNotAllowed(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+            => (question.Properties?.IsCritical ?? false) && (question.QuestionScope == QuestionScope.Hidden || question.QuestionScope == QuestionScope.Supervisor);
 
         private static bool CountOfDecimalPlacesIsInRange1_15(INumericQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {

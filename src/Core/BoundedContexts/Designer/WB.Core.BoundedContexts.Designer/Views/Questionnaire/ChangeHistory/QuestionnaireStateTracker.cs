@@ -16,6 +16,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         public Dictionary<Guid, string?> StaticTextState { get; set; } = new Dictionary<Guid, string?>();
         public Dictionary<Guid, string?> VariableState { get; set; } = new Dictionary<Guid, string?>();
         public Dictionary<Guid, string?> MacroState { get; set; } = new Dictionary<Guid, string?>();
+        public Dictionary<Guid, string?> CriticalRuleState { get; set; } = new Dictionary<Guid, string?>();
         public Dictionary<Guid, string?> LookupState { get; set; } = new Dictionary<Guid, string?>();
         public Dictionary<Guid, string?> AttachmentState { get; set; } = new Dictionary<Guid, string?>();
         public Dictionary<Guid, string?> TranslationState { get; set; } = new Dictionary<Guid, string?>();

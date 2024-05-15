@@ -66,14 +66,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         public GroupStatus Status
         {
             get => this.status;
-            protected set => this.RaiseAndSetIfChanged(ref this.status, value);
+            set => this.RaiseAndSetIfChanged(ref this.status, value);
         }
 
         private SimpleGroupStatus simpleStatus;
         public SimpleGroupStatus SimpleStatus
         {
-            get => this.simpleStatus;
-            protected set => this.RaiseAndSetIfChanged(ref this.simpleStatus, value);
+            get => this.simpleStatus; 
+            set => this.RaiseAndSetIfChanged(ref this.simpleStatus, value);
         }
 
         public virtual void UpdateFromGroupModel()

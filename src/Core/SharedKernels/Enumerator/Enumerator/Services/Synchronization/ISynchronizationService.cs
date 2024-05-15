@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
         Task<List<QuestionnaireIdentity>> GetServerQuestionnairesAsync(CancellationToken token = default);
         
         Task<List<QuestionnaireIdentity>> GetServerQuestionnairesPermittedToSwitchToWebModeAsync(CancellationToken token = default);
-
+        Task<List<QuestionnaireSettingsApiView>> GetServerQuestionnairesSettingsAsync(CancellationToken cancellationToken = default);
         Task<List<TranslationDto>> GetQuestionnaireTranslationAsync(QuestionnaireIdentity questionnaireIdentity, CancellationToken token = default);
 
         Task<CompanyLogoInfo> GetCompanyLogo(string storedClientEtag, CancellationToken cancellationToken);

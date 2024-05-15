@@ -75,9 +75,13 @@
 	li{
 		border-top: 1px solid $gray-form;
 		padding: 15px 40px 15px 0;
-		a{
+		a, span{
 			color: $red_error;
 			font-weight: bold;
+
+            a {
+                color: #2a81cb;
+            }
 		}
 		&:first-child{
 			border-left: none;
@@ -86,6 +90,39 @@
 			padding-bottom: 0;
 		}
 	}
+}
+.wrapper-info
+{
+    .critical-rule-errors {
+        h4 {
+            color: $red_error;
+        }
+    }
+    .errors {
+        h4 {
+            color: $red_error;
+        }
+        .marked-questions
+        {
+            li {
+                a, span {
+                    color: $red_error;
+                }
+            }
+        }
+    }
+    .unanswered {
+        h4 {
+            color: $blue;
+        }
+        .marked-questions {
+            li {
+                a, span {
+                    color: $blue;
+                }
+            }
+        }
+    }
 }
 .container-info p + h4{
 	margin-top: 30px;

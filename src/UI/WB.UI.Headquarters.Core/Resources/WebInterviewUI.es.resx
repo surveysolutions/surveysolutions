@@ -193,7 +193,7 @@
     <value>Primeras {{count}} entidades con errores:</value>
   </data>
   <data name="CompleteNoteToSupervisor" xml:space="preserve">
-    <value>Nota para el supervisor</value>
+      <value>Nota</value>
   </data>
   <data name="CompleteQuestionsAnswered" xml:space="preserve">
     <value>Contestada</value>

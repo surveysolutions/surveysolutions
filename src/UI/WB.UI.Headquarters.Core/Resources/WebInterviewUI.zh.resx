@@ -198,9 +198,6 @@
   <data name="CompleteFirstErrors" xml:space="preserve">
     <value>最初的{{count}}个实体出现错误：</value>
   </data>
-  <data name="CompleteNoteToSupervisor" xml:space="preserve">
-    <value>给督导员的备注</value>
-  </data>
   <data name="CompleteQuestionsAnswered" xml:space="preserve">
     <value>已回答</value>
   </data>

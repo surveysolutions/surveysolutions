@@ -6,9 +6,11 @@ using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -34,11 +36,21 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         private readonly IUserViewFactory userViewFactory;
         private readonly ICalendarEventService calendarEventService;
         private readonly IAssignmentsService assignmentsStorage;
+        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage;
 
-        public InterviewCommandsController(ICommandService commandService, IImageFileStorage imageFileStorage, IAudioFileStorage audioFileStorage, 
-            IQuestionnaireStorage questionnaireRepository, IStatefulInterviewRepository statefulInterviewRepository, 
-            IWebInterviewNotificationService webInterviewNotificationService, IAuthorizedUser authorizedUser, IInterviewFactory interviewFactory,
-            IUserViewFactory userViewFactory, ICalendarEventService calendarEventService, IAssignmentsService assignmentsStorage) 
+        public InterviewCommandsController(ICommandService commandService, 
+            IImageFileStorage imageFileStorage, 
+            IAudioFileStorage audioFileStorage, 
+            IQuestionnaireStorage questionnaireRepository,
+            IStatefulInterviewRepository statefulInterviewRepository, 
+            IWebInterviewNotificationService webInterviewNotificationService, 
+            IAuthorizedUser authorizedUser, 
+            IInterviewFactory interviewFactory,
+            IUserViewFactory userViewFactory, 
+            ICalendarEventService calendarEventService, 
+            IAssignmentsService assignmentsStorage,
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage
+            ) 
             : base(commandService, imageFileStorage, audioFileStorage, questionnaireRepository, statefulInterviewRepository, webInterviewNotificationService)
         {
             this.authorizedUser = authorizedUser;
@@ -46,6 +58,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             this.userViewFactory = userViewFactory;
             this.calendarEventService = calendarEventService;
             this.assignmentsStorage = assignmentsStorage;
+            this.questionnaireBrowseItemStorage = questionnaireBrowseItemStorage;
         }
 
         protected bool IsReviewMode() =>
@@ -125,7 +138,13 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         [Route("completeInterview")]
         public override IActionResult CompleteInterview(Guid interviewId, [FromBody]CompleteInterviewRequest completeInterviewRequest)
         {
-            ICommand command = new CompleteInterviewCommand(interviewId, GetCommandResponsibleId(interviewId), completeInterviewRequest.Comment);
+            var interview = statefulInterviewRepository.Get(interviewId.FormatGuid());
+            if (interview == null)
+                return NotFound();
+            var questionnaireBrowseItem = questionnaireBrowseItemStorage.GetById(interview.QuestionnaireIdentity.ToString());
+            CriticalityLevel? criticalLevel = questionnaireBrowseItem.CriticalityLevel;
+            
+            ICommand command = new CompleteInterviewCommand(interviewId, GetCommandResponsibleId(interviewId), completeInterviewRequest.Comment, criticalLevel);
             this.commandService.Execute(command);
             return Ok();
         }

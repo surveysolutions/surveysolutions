@@ -208,6 +208,13 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     reference = QuestionnaireEntityReference.CreateForVariable(expressionLocation.Id);
                     break;
                 case ExpressionLocationItemType.Questionnaire:
+                    if (expressionLocation.ExpressionType == ExpressionLocationType.CriticalRule)
+                    {
+                        reference = QuestionnaireEntityReference.CreateForCriticalRule(expressionLocation.Id);
+                        reference.IndexOfEntityInProperty = expressionLocation.ExpressionPosition;
+                        return QuestionnaireVerificationMessage.Error("WB0318",
+                            VerificationMessages.WB0318_CriticalityConditionExpressionHasIncorrectSyntax, compilationErrorMessages, reference);
+                    }
                     return QuestionnaireVerificationMessage.Error("WB0096", VerificationMessages.WB0096_GeneralCompilationError);
                 default:
                     throw new ArgumentException("expressionLocation");

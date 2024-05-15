@@ -26,7 +26,7 @@
 
         <div class="wrapper-info" v-if="hasSupervisorComment">
             <div class="container-info">
-                <h4 class="gray-uppercase">
+                <h4 class="info-block gray-uppercase">
                     {{ $t('WebInterviewUI.CoverSupervisorNote') }}
                 </h4>
                 <p>
@@ -37,7 +37,7 @@
 
         <div class="wrapper-info" v-if="commentedQuestions.length > 0">
             <div class="container-info">
-                <h4 class="gray-uppercase">
+                <h4 class="info-block gray-uppercase">
                     {{ commentsTitle }}
                 </h4>
                 <ul class="list-unstyled marked-questions">

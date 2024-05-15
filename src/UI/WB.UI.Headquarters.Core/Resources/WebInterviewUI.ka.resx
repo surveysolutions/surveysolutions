@@ -192,9 +192,6 @@
   <data name="CompleteFirstErrors" xml:space="preserve">
     <value>პირველი {{count}} სუბიექტები შეცდომებით:</value>
   </data>
-  <data name="CompleteNoteToSupervisor" xml:space="preserve">
-    <value>შენიშვნა ზედამხედველისთვის</value>
-  </data>
   <data name="CompleteQuestionsAnswered" xml:space="preserve">
     <value>უპასუხა</value>
   </data>

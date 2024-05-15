@@ -291,9 +291,22 @@ export default {
         commit('SET_BREADCRUMPS', crumps)
     }, 200),
 
-    fetchCompleteInfo: debounce(async ({ commit }) => {
+    fetchCompleteInfo: debounce(async ({ commit, dispatch }) => {
+        commit('SET_LOADING_PROGRESS', true)
         const completeInfo = await Vue.$api.interview.get('getCompleteInfo')
         commit('SET_COMPLETE_INFO', completeInfo)
+        
+        dispatch('_fetchCriticalityInfo')                      
+    }, 200),
+
+    _fetchCriticalityInfo: debounce(async ({ commit }) => {
+        try {        
+            const result = await Vue.$api.interview.get('getCriticalityChecks')
+            commit('SET_CRITICALITY_INFO', result)
+        }
+        finally {
+            commit('SET_LOADING_PROGRESS', false)
+        }
     }, 200),
 
     fetchInterviewStatus: debounce(async ({ commit }) => {

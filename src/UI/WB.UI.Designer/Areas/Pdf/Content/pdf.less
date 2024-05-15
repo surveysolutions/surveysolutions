@@ -275,6 +275,7 @@ article {
     line-height: 18px;
     margin-bottom: 10px;
     word-break: break-all;
+    position: relative;
 }
 
 .answer {
@@ -527,7 +528,7 @@ input[type=date] {
     min-height: 14px;
 }
 
-.condition span, .instructions span, .validation-expression span, .validation-message span {
+.condition span, .instructions span, .validation-expression span, .validation-message span, .question-title span {
     position: absolute;
     display: block;
     min-width: 40px;
@@ -536,7 +537,11 @@ input[type=date] {
     left: -50px;
 }
 
-.condition span, .validation-expression span {
+.question-title span {
+  font-size: 12px;
+}
+
+.condition span, .validation-expression span, .question-title span {
     font-family: @font-light;
     top: -1px;
 }

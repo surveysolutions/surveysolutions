@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             BecauseOf();
         }
 
-        private void BecauseOf() => interview.Complete(Guid.NewGuid(), string.Empty, DateTime.UtcNow);
+        private void BecauseOf() => interview.Complete(Guid.NewGuid(), string.Empty, DateTime.UtcNow, null);
 
         [NUnit.Framework.Test] public void should_raise_substitutions_changed_event_with_all_changed_entities () 
         {

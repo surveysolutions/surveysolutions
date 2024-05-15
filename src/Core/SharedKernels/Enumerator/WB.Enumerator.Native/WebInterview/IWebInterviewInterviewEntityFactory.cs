@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -14,8 +15,8 @@ namespace WB.Enumerator.Native.WebInterview
         GroupStatus CalculateSimpleStatus(InterviewTreeGroup group, bool isReviewMode, IStatefulInterview interview, IQuestionnaire questionnaire);
         void ApplyValidity(Validity validity, GroupStatus status);
         Identity GetUIParent(IStatefulInterview interview, IQuestionnaire questionnaire, Identity identity);
-
-        InterviewEntityType GetEntityType(Identity identity, IQuestionnaire callerQuestionnaire,
-            IStatefulInterview interview, bool isReviewMode, bool includeVariables);
+        string GetCriticalRuleMessage(Guid id, IStatefulInterview interview, IQuestionnaire questionnaire, bool isReviewMode);
+        string SubstituteText(string text, Identity entityId, IStatefulInterview interview, IQuestionnaire questionnaire, bool isReview);
+        InterviewEntityType GetEntityType(Identity identity, IQuestionnaire callerQuestionnaire, IStatefulInterview interview, bool isReviewMode, bool includeVariables);
     }
 }

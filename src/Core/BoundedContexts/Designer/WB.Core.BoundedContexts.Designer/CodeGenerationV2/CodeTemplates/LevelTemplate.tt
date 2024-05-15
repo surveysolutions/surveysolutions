@@ -7,12 +7,15 @@
 <#@ import namespace="WB.Core.SharedKernels.DataCollection.ExpressionStorage" #>
 <#@ import namespace="WB.Core.SharedKernels.DataCollection.Portable" #>
 <#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Helpers" #>
 
     internal partial class <#=Model.ClassName #> : LevelFunctions, <#=nameof(IInterviewLevel) #>
      <# if (Model.RosterScope.Length > 0) 
     { 
         #> 
         , <#=nameof(IIndexedInterviewLevel) #>
+    <# } else if (Model.HasCriticalRules) { #>
+        , <#=nameof(ICriticalRuleLevel) #>
     <# } #>
     {
         
@@ -61,6 +64,16 @@
 #>            
             linkedFilters.Add(IdOf.<#=method.Variable#>, <#=method.MethodName#>);
 <# 
+    }
+#>
+<#  if (Model.HasCriticalRules)
+    {
+        foreach (var criticalRuleTuple in Storage.GetCriticalRules(Model.ClassName))
+        {
+#>
+            criticalRules.Add(<#= criticalRuleTuple.Key.AsBytesString() #> , <#= criticalRuleTuple.Value #>);
+<#
+        }
     }
 #>
         }
@@ -115,6 +128,19 @@
             return null;
         }
 
+<# if (Model.HasCriticalRules) { #>
+        public Func<bool> GetCriticalRule(Guid criticalRuleId)
+        {
+            if (criticalRules.TryGetValue(criticalRuleId, out var result))
+            {
+                return result;
+            }
+
+            return null;
+        }
+
+        private readonly Dictionary<Guid, Func<bool>> criticalRules = new Dictionary<Guid, Func<bool>>();
+<# } #>
         private readonly Dictionary<Guid, Func<<#=typeof(IInterviewLevel).Name#>, bool>> linkedFilters = new Dictionary<Guid, Func<<#=typeof(IInterviewLevel).Name#>, bool>>();
         private readonly Dictionary<Guid, Func<int, bool>> categoricalFilters = new Dictionary<Guid, Func<int, bool>>();
         private readonly Dictionary<Guid, Func<bool>> enablementConditions = new Dictionary<Guid, Func<bool>>();

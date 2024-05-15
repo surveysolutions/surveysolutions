@@ -1324,6 +1324,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool IsNeighboringSupport(Guid entityId)
             => GetQuestion(entityId)?.Properties?.GeometryOverlapDetection ?? false;
+        
+        public string GetCriticalRuleMessage(Guid id) => 
+            this.innerDocument.CriticalRules.First(cc => cc.Id == id).Message;
+
+        public bool IsQuestionCritical(Guid questionId) => GetQuestion(questionId)?.Properties?.IsCritical ?? false;
+        public bool DoesSupportCriticality()
+        {
+            return innerDocument.CriticalRules?.Count > 0
+                   || innerDocument.Find<IQuestion>(q => q.Properties?.IsCritical == true).Any();
+        }
+
+        public IEnumerable<Guid> GetCriticalRulesIds()
+            => innerDocument.CriticalRules.Select(cr => cr.Id);
 
         public Guid GetQuestionReferencedByLinkedQuestion(Guid linkedQuestionId)
         {

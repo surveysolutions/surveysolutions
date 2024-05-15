@@ -14,6 +14,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Verifier
 {
@@ -270,8 +271,81 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                         foundErrors.AddRange(this.GetErrorsBySubstitutionsInEntityTitleOrInstructions(translatedEntity, entityAsQuestion.Instructions, questionnaire));
                 }
             }
+            
+            var criticalRulesSupportingSubstitutions = questionnaire.GetCriticalRulesWithTranslations().ToList();
+            foreach (var criticalRule in criticalRulesSupportingSubstitutions)
+            {
+                if (!string.IsNullOrWhiteSpace(criticalRule.Entity.Message))
+                    foundErrors.AddRange(this.GetErrorsBySubstitutionsInCriticalRule(criticalRule,
+                        criticalRule.Entity.Message, questionnaire));
+            }
 
             return foundErrors.Distinct(new QuestionnaireVerificationMessage.CodeAndReferencesAndTranslationComparer());
+        }
+
+        private IEnumerable<QuestionnaireVerificationMessage> GetErrorsBySubstitutionsInCriticalRule(
+            MultiLanguageQuestionnaireDocument.TranslatedEntity<CriticalRule> criticalRule, 
+                string entityMessage, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            string[] substitutionReferences = 
+                this.substitutionService.GetAllSubstitutionVariableNames(entityMessage, "__questionnaire");
+
+            if (!substitutionReferences.Any())
+                yield break;
+            
+            IEnumerable<QuestionnaireVerificationMessage?> entityErrors = substitutionReferences
+                .Select(identifier => this.GetCriticalRuleErrorsBySubstitutionReferenceOrNull(
+                    criticalRule, identifier, RosterScope.Empty, questionnaire));
+
+            foreach (var questionnaireVerificationMessage in entityErrors)
+            {
+                if (questionnaireVerificationMessage != null)
+                    yield return questionnaireVerificationMessage;
+            }
+        }
+
+        private QuestionnaireVerificationMessage? GetCriticalRuleErrorsBySubstitutionReferenceOrNull(
+            MultiLanguageQuestionnaireDocument.TranslatedEntity<CriticalRule> criticalRule, 
+            string identifier, RosterScope emptyScope, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var referenceToEntityWithSubstitution = QuestionnaireEntityReference.CreateForCriticalRule(criticalRule.Entity.Id);
+            var entityToSubstitute = GetEntityByVariable(identifier, questionnaire);
+            if (entityToSubstitute == null)
+            {
+                return QuestionnaireVerificationMessage.Error("WB0017",
+                    VerificationMessages.WB0017_SubstitutionReferencesNotExistingQuestionOrVariable,
+                    criticalRule.TranslationName,
+                    referenceToEntityWithSubstitution);
+            }
+            
+            var referenceToEntityBeingSubstituted = CreateReference(entityToSubstitute);
+
+            var isVariable = entityToSubstitute is IVariable;
+            var isQuestion = entityToSubstitute is IQuestion;
+            var isRoster = (entityToSubstitute as IGroup)?.IsRoster ?? false;
+            var isNotVariableOrQuestionOrRoster = !(isVariable || isQuestion || isRoster);
+            var isQuestionOfNotSupportedType = isQuestion && !QuestionTypesValidToBeSubstitutionReferences.Contains(((IQuestion)entityToSubstitute).QuestionType);
+            if (isNotVariableOrQuestionOrRoster || isQuestionOfNotSupportedType)
+            {
+                return QuestionnaireVerificationMessage.Error("WB0018",
+                    VerificationMessages.WB0018_SubstitutionReferencesUnsupportedEntity,
+                    criticalRule.TranslationName,
+                    referenceToEntityWithSubstitution,
+                    referenceToEntityBeingSubstituted);
+            }
+
+            var entityToSubstituteRosterScope = questionnaire.Questionnaire.GetRosterScope(entityToSubstitute);
+
+            if (!entityToSubstituteRosterScope.IsSameOrParentScopeFor(emptyScope))
+            {
+                return QuestionnaireVerificationMessage.Error("WB0019",
+                    VerificationMessages.WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel,
+                    criticalRule.TranslationName,
+                    referenceToEntityWithSubstitution,
+                    referenceToEntityBeingSubstituted);
+            }
+
+            return null;
         }
 
         private IEnumerable<QuestionnaireVerificationMessage> ErrorsByMarkdownText(MultiLanguageQuestionnaireDocument questionnaire)
@@ -311,7 +385,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 if (TextHasMarkdownLinkToHiddenVariable(title, allHiddenVariableNames))
                 {
                     foundErrors.Add(
-                        QuestionnaireVerificationMessage.Error("WB0310", VerificationMessages.WB3010_LinkToHiddenQuestionNotAllowed, CreateReference(staticTextOrQuestion))
+                        QuestionnaireVerificationMessage.Error("WB0310", 
+                            VerificationMessages.WB3010_LinkToHiddenQuestionNotAllowed, 
+                            CreateReference(staticTextOrQuestion))
                     );
                 }
 
@@ -327,10 +403,31 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                         if (TextHasMarkdownLinkToHiddenVariable(validationCondition.Message, allHiddenVariableNames))
                         {
                             foundErrors.Add(
-                                QuestionnaireVerificationMessage.Error("WB0310", VerificationMessages.WB3010_LinkToHiddenQuestionNotAllowed, CreateReference(staticTextOrQuestion, validationConditionIndex))
+                                QuestionnaireVerificationMessage.Error("WB0310", 
+                                    VerificationMessages.WB3010_LinkToHiddenQuestionNotAllowed, 
+                                    CreateReference(staticTextOrQuestion, validationConditionIndex))
                             );
                         }
                     }
+                }
+            }
+            
+            var criticalRulesSupportingSubstitutions = questionnaire.GetCriticalRulesWithTranslations().ToList();
+            foreach (var criticalRule in criticalRulesSupportingSubstitutions)
+            {
+                if (TextHasMarkdownLinkWithUnknownVariable(criticalRule.Entity.Message, allAllowedVariableNames))
+                    foundErrors.Add(
+                        QuestionnaireVerificationMessage.Error("WB0280", 
+                            VerificationMessages.WB0280_TextContainsLinkToUnknownQuestionOrGroup, 
+                            QuestionnaireEntityReference.CreateForCriticalRule(criticalRule.Entity.Id)));
+                        
+                if (TextHasMarkdownLinkToHiddenVariable(criticalRule.Entity.Message, allHiddenVariableNames))
+                {
+                    foundErrors.Add(
+                        QuestionnaireVerificationMessage.Error("WB0310", 
+                            VerificationMessages.WB3010_LinkToHiddenQuestionNotAllowed, 
+                            QuestionnaireEntityReference.CreateForCriticalRule(criticalRule.Entity.Id))
+                    );
                 }
             }
 
@@ -338,7 +435,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         }
 
         private static QuestionnaireVerificationMessage GetErrorMessageByMarkdownLink(IComposite entity, int? validationConditionIndex = null) 
-            => QuestionnaireVerificationMessage.Error("WB0280", VerificationMessages.WB0280_TextContainsLinkToUnknownQuestionOrGroup, CreateReference(entity, validationConditionIndex));
+            => QuestionnaireVerificationMessage.Error("WB0280", 
+                VerificationMessages.WB0280_TextContainsLinkToUnknownQuestionOrGroup, 
+                CreateReference(entity, validationConditionIndex));
 
         private static bool TextHasMarkdownLinkToHiddenVariable(string? text, HashSet<string> hiddenVariables)
         {
@@ -401,7 +500,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             }
         }
 
-        private IEnumerable<QuestionnaireVerificationMessage> GetErrorsBySubstitutionsInEntityTitleOrInstructions(MultiLanguageQuestionnaireDocument.TranslatedEntity<IComposite> translatedEntity, string title, MultiLanguageQuestionnaireDocument questionnaire)
+        private IEnumerable<QuestionnaireVerificationMessage> GetErrorsBySubstitutionsInEntityTitleOrInstructions(
+            MultiLanguageQuestionnaireDocument.TranslatedEntity<IComposite> translatedEntity, string title, 
+            MultiLanguageQuestionnaireDocument questionnaire)
         {
             string[] substitutionReferences = this.substitutionService.GetAllSubstitutionVariableNames(title, translatedEntity.Entity.VariableName);
 

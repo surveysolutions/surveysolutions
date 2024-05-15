@@ -145,7 +145,7 @@
     <value>Додати підрозділ</value>
   </data>
   <data name="AddValidationRule" xml:space="preserve">
-    <value>Додати нове правило перевірки</value>
+      <value>Додати правило перевірки</value>
   </data>
   <data name="AddVariable" xml:space="preserve">
     <value>Додати змінну</value>

@@ -152,6 +152,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 Dictionary<Guid, bool> idsOfAllQuestionnaireEntities = questionnaire.Source.Children.TreeToEnumerable(x => x.Children)
                     .ToDictionary(composite => composite.PublicKey, x => x is Group);
                 idsOfAllQuestionnaireEntities[questionnaireId] = true;
+                questionnaire.Source.CriticalRules?.ForEach(cc => idsOfAllQuestionnaireEntities[cc.Id] = false);
 
                 var translationInstances = new List<TranslationInstance>();
                 foreach (var translationWithHeaderMap in translationsWithHeaderMap)

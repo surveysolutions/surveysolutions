@@ -519,9 +519,27 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string Interview_Complete_CriticalIssues_Instrunction {
+            get {
+                return ResourceManager.GetString("Interview_Complete_CriticalIssues_Instrunction", resourceCulture);
+            }
+        }
+        
         public static string Interview_Complete_Errors {
             get {
                 return ResourceManager.GetString("Interview_Complete_Errors", resourceCulture);
+            }
+        }
+        
+        public static string Interview_Complete_CriticalUnanswered {
+            get {
+                return ResourceManager.GetString("Interview_Complete_CriticalUnanswered", resourceCulture);
+            }
+        }
+        
+        public static string Interview_Complete_FailCriticalConditions {
+            get {
+                return ResourceManager.GetString("Interview_Complete_FailCriticalConditions", resourceCulture);
             }
         }
         
@@ -537,9 +555,33 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string Interview_Complete_WithWarningCriticality {
+            get {
+                return ResourceManager.GetString("Interview_Complete_WithWarningCriticality", resourceCulture);
+            }
+        }
+        
+        public static string Interview_Complete_Note_For_Supervisor_with_Criticality {
+            get {
+                return ResourceManager.GetString("Interview_Complete_Note_For_Supervisor_with_Criticality", resourceCulture);
+            }
+        }
+        
         public static string Interview_Complete_Questions_Status {
             get {
                 return ResourceManager.GetString("Interview_Complete_Questions_Status", resourceCulture);
+            }
+        }
+        
+        public static string Interview_Complete_Interview_Status {
+            get {
+                return ResourceManager.GetString("Interview_Complete_Interview_Status", resourceCulture);
+            }
+        }
+        
+        public static string Interview_Complete_CriticalityIssuesDescription {
+            get {
+                return ResourceManager.GetString("Interview_Complete_CriticalityIssuesDescription", resourceCulture);
             }
         }
         

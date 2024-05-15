@@ -135,6 +135,9 @@
   <data name="Appendix_SpecialValues" xml:space="preserve">
     <value>Приложение {0} {1} специальные значения</value>
   </data>
+  <data name="Appendix_CriticalRules" xml:space="preserve">
+    <value>Приложение {0} {1} критические условия</value>
+  </data>
   <data name="Appendix_Validations" xml:space="preserve">
     <value>Приложение {0} {1} проверочные условия и сообщения об ошибках</value>
   </data>
@@ -149,6 +152,15 @@
   </data>
   <data name="EnablementCondition" xml:space="preserve">
     <value>Условие включения:</value>
+  </data>
+  <data name="CriticalityCondition" xml:space="preserve">
+    <value>Критическое условие:</value>
+  </data>
+  <data name="CriticalityMessage" xml:space="preserve">
+    <value>Критическое сообщение:</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Описание:</value>
   </data>
   <data name="GeneratedBy" xml:space="preserve">
     <value>Сгенерирован: {0}</value>
