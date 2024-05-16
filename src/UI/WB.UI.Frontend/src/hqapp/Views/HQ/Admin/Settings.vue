@@ -85,7 +85,7 @@
                     </button>
                     <span class="text-success" v-if="globalNoticeUpdated">{{
                         $t('Settings.GlobalNoteSaved')
-                    }}</span>
+                        }}</span>
                 </div>
             </form>
         </div>
@@ -284,7 +284,7 @@
                                     'Settings.EsriApiKey',
                                 )
                             }}
-                            <p style="font-weight: normal">
+                            <p class="error" style="font-weight: normal">
                                 {{
                                     $t(
                                         'Settings.EsriApiKeyDescription',
