@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Services
 {
@@ -10,7 +11,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
     {
         void ExportStared(string processName, DataExportFormat format);
         void QuestionnaireDeleted(string title, QuestionnaireIdentity questionnaire);
-        void QuestionnaireImported(string title, QuestionnaireIdentity questionnaire, Guid userId, string userName);
+        void QuestionnaireImported(string title, QuestionnaireIdentity questionnaire, 
+            Guid userId, string userName, CriticalityLevel? level = null);
         void UserCreated(UserRoles role, string userName);
         void UserPasswordChanged(string currentUser, string userName);
         void UserPasswordChangeFailed(string currentUser, string userName);
@@ -33,5 +35,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         void WorkspaceDisabled(string workspaceName);
         void WorkspaceUserAssigned(string userName, ICollection<string> workspaces);
         void WorkspaceUserUnAssigned(string userName, ICollection<string> workspaces);
+        
+        void CriticalityLevelChanged(QuestionnaireIdentity questionnaire, CriticalityLevel level);
+        
     }
 }

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -32,18 +33,21 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly IAllInterviewsFactory allInterviewsViewFactory;
         private readonly ISerializer serializer;
         protected readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly ISystemLog systemLog;
 
         public QuestionnairesPublicApiController(IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IAllInterviewsFactory allInterviewsViewFactory,
             ISerializer serializer,
             IQuestionnaireStorage questionnaireStorage, 
-            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItems)
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItems,
+            ISystemLog systemLog)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.allInterviewsViewFactory = allInterviewsViewFactory;
             this.serializer = serializer;
             this.questionnaireStorage = questionnaireStorage;
             this.questionnaireBrowseItems = questionnaireBrowseItems;
+            this.systemLog = systemLog;
         }
 
         /// <summary>
@@ -291,6 +295,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     $@"Criticality level is not supported for this questionnaire");
             
             questionnaire.CriticalityLevel = requestData.CriticalityLevel;
+            
+            this.systemLog.CriticalityLevelChanged(questionnaire.Identity() ,questionnaire.CriticalityLevel);
 
             return NoContent();
         }
