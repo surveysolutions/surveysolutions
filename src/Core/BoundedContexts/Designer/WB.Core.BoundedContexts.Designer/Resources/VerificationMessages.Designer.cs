@@ -322,12 +322,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
             }
         }
         
-        public static string WB0068_RosterHasMoreThanAllowedChildElements {
-            get {
-                return ResourceManager.GetString("WB0068_RosterHasMoreThanAllowedChildElements", resourceCulture);
-            }
-        }
-        
         public static string WB0070_RosterHasVariableNameEqualToQuestionnaireTitle {
             get {
                 return ResourceManager.GetString("WB0070_RosterHasVariableNameEqualToQuestionnaireTitle", resourceCulture);
@@ -853,18 +847,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string WB0260_GroupTitleIsTooLong {
             get {
                 return ResourceManager.GetString("WB0260_GroupTitleIsTooLong", resourceCulture);
-            }
-        }
-        
-        public static string WB0080_LongRosterCannotHaveNestedRosters {
-            get {
-                return ResourceManager.GetString("WB0080_LongRosterCannotHaveNestedRosters", resourceCulture);
-            }
-        }
-        
-        public static string WB0081_LongRosterCannotBeNested {
-            get {
-                return ResourceManager.GetString("WB0081_LongRosterCannotBeNested", resourceCulture);
             }
         }
         

@@ -637,9 +637,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         private InterviewQuestionInvariants RequireRosterSizeAnswerRespectsMaxRosterRowCount(int answer)
         {
-            int maxRosterRowCount = this.Questionnaire.IsQuestionIsRosterSizeForLongRoster(this.QuestionId)
-                ? this.Questionnaire.GetMaxLongRosterRowCount()
-                : this.Questionnaire.GetMaxRosterRowCount();
+            int maxRosterRowCount = this.Questionnaire.GetMaxRosterRowCount();
 
             if (!this.Questionnaire.IsRosterSizeQuestion(this.QuestionId))
                 return this;

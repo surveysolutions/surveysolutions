@@ -255,9 +255,6 @@
   <data name="WB0067_VariableNameIsEmpty" xml:space="preserve">
     <value>Valid variable or roster ID name should not be empty.</value>
   </data>
-  <data name="WB0068_RosterHasMoreThanAllowedChildElements" xml:space="preserve">
-    <value>Roster cannot have more than {0} child elements</value>
-  </data>
   <data name="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" xml:space="preserve">
     <value>Roster has roster ID equal to questionnaire title.</value>
   </data>
@@ -521,12 +518,6 @@
   </data>
   <data name="WB0260_GroupTitleIsTooLong" xml:space="preserve">
     <value>Title is too long. It should be no longer than {0} characters.</value>
-  </data>
-  <data name="WB0080_LongRosterCannotHaveNestedRosters" xml:space="preserve">
-    <value>Roster with more than {0} rows cannot have nested rosters</value>
-  </data>
-  <data name="WB0081_LongRosterCannotBeNested" xml:space="preserve">
-    <value>Roster with more than {0} rows cannot be nested</value>
   </data>
   <data name="WB0082_RosterSizeMultiOptionQuestionShouldBeLimited" xml:space="preserve">
     <value>Multi-select roster source question should have a maximum number of answers set.</value>
