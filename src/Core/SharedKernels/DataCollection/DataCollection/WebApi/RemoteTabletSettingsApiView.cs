@@ -18,5 +18,7 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public string WebInterviewUrlTemplate { get; set; }
         public int GeographyQuestionAccuracyInMeters { get; set; }
         public int GeographyQuestionPeriodInSeconds { get; set; }
+        
+        public string EsriApiKey { get; set; } = string.Empty;
     }
 }

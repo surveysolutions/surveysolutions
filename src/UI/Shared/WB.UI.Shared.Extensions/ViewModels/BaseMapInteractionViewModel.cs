@@ -36,6 +36,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         private readonly IMapUtilityService mapUtilityService;
         protected readonly IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher;
         private readonly IPermissionsService permissionsService;
+        private readonly IEnumeratorSettings settings;
 
         protected BaseMapInteractionViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
@@ -45,7 +46,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
             IEnumeratorSettings enumeratorSettings,
             IMapUtilityService mapUtilityService,
             IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher,
-            IPermissionsService permissionsService) 
+            IPermissionsService permissionsService,
+            IEnumeratorSettings settings) 
             : base(principal, viewModelNavigationService)
         {
             this.UserInteractionService = userInteractionService;
@@ -56,6 +58,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             this.mapUtilityService = mapUtilityService;
             this.mainThreadAsyncDispatcher = mainThreadAsyncDispatcher;
             this.permissionsService = permissionsService;
+            this.settings = settings;
         }
 
         public abstract Task OnMapLoaded();
@@ -71,8 +74,11 @@ namespace WB.UI.Shared.Extensions.ViewModels
             {
                 this.AvailableShapefiles =
                     new MvxObservableCollection<ShapefileDescription>(this.mapService.GetAvailableShapefiles());
+
+                var includeOnlineMaps = !string.IsNullOrEmpty(settings.EsriApiKey);
+                ArcGISRuntimeEnvironment.ApiKey = includeOnlineMaps ? settings.EsriApiKey : String.Empty;
                 
-                var localMaps = this.mapService.GetAvailableMaps(true);
+                var localMaps = this.mapService.GetAvailableMaps(includeOnlineMaps);
                 var defaultMap = this.mapService.PrepareAndGetDefaultMapOrNull();
                 if (defaultMap != null)
                 {

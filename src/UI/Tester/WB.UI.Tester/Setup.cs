@@ -57,18 +57,6 @@ namespace WB.UI.Tester
                 CrashReporting.Init(appcenterKey);
             }
             
-            string arcgisruntimeKey = ApplicationContext.Resources.GetString(Resource.String.arcgisruntime_key);
-            if (!string.IsNullOrEmpty(arcgisruntimeKey))
-            {
-                ServiceLocator.Current.GetInstance<IMapInteractionService>().SetLicenseKey(arcgisruntimeKey);
-            }
-            
-            string arcgisruntimeApiKey = ApplicationContext.Resources.GetString(Resource.String.arcgisruntime_api_key);
-            if (!string.IsNullOrEmpty(arcgisruntimeApiKey))
-            {
-                ServiceLocator.Current.GetInstance<IMapInteractionService>().SetApiKey(arcgisruntimeApiKey);
-            }
-
             var status = new UnderConstructionInfo();
             status.Run();
 

@@ -69,7 +69,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public int UnansweredCriticalQuestionsCount => TopUnansweredCriticalQuestions.Count;
         public int FailedCriticalRulesCount => TopFailedCriticalRules.Count;
 
-
         public override void Configure(string interviewUid, NavigationState navigationState)
         {
             if (interviewUid == null) throw new ArgumentNullException(nameof(interviewUid));
