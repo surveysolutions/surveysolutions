@@ -149,6 +149,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
             this.Append(LogEntryType.WorkspaceUserUnAssigned, userName, string.Join(", ", workspaces));
         }
 
+        public void EsriApiKeyChanged(bool isEmpty)
+        {
+            this.Append(LogEntryType.EsriApiKeyChanged, "ESRI API key", "changed", $"{(isEmpty ? "empty" : "not empty")}'");
+        }
+
         private void Append(LogEntryType type, string target, string action, string args = null, string responsibleName = null, Guid? responsibleUserId = null)
         {
             AppendLogEntry(responsibleUserId ?? this.authorizedUser.Id,

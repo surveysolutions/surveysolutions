@@ -159,7 +159,8 @@
                 <div class="block-filter">
                     <div class="form-group">
                         <input class="checkbox-filter single-checkbox" v-model="isPartialSynchronizationEnabled"
-                            @change="updateDeviceSettings" id="interviewerPartialSynchronizationEnabled" type="checkbox" />
+                            @change="updateDeviceSettings" id="interviewerPartialSynchronizationEnabled"
+                            type="checkbox" />
                         <label for="interviewerPartialSynchronizationEnabled" style="font-weight: bold">
                             <span class="tick"></span>
                             {{
@@ -198,12 +199,12 @@
                     <div class="form-group">
                         <div class="input-group input-group-save">
                             <input class="form-control number" v-model.number="geographyQuestionAccuracyInMeters
-                                    " v-validate="{
-            numeric: true,
-            required: true,
-            min_value: 1,
-            max_value: 1000,
-        }" name="accuracy" id="interviewerGeographyQuestionAccuracyInMeters" type="number" />
+                                " v-validate="{
+                                    numeric: true,
+                                    required: true,
+                                    min_value: 1,
+                                    max_value: 1000,
+                                }" name="accuracy" id="interviewerGeographyQuestionAccuracyInMeters" type="number" />
                         </div>
                         <button type="button" class="btn btn-success" :disabled="geographyQuestionAccuracyInMeters ==
                             geographyQuestionAccuracyInMetersCancel ||
@@ -246,12 +247,12 @@
                     <div class="form-group">
                         <div class="input-group input-group-save">
                             <input class="form-control number" v-model.number="geographyQuestionPeriodInSeconds
-                                    " v-validate="{
-            numeric: true,
-            required: true,
-            min_value: 5,
-            max_value: 1000,
-        }" id="interviewerGeographyQuestionPeriodInSeconds" name="period" type="number" />
+                                " v-validate="{
+                                    numeric: true,
+                                    required: true,
+                                    min_value: 5,
+                                    max_value: 1000,
+                                }" id="interviewerGeographyQuestionPeriodInSeconds" name="period" type="number" />
                         </div>
                         <button type="button" class="btn btn-success" :disabled="geographyQuestionPeriodInSeconds ==
                             geographyQuestionPeriodInSecondsCancel ||
@@ -270,6 +271,49 @@
                     <div class="error" v-show="errors.has('period')">
                         {{ errors.first('period') }}
                     </div>
+                </div>
+            </div>
+
+            <div class="col-sm-7">
+                <div class="block-filter" style="padding-left: 30px">
+                    <div class="form-group">
+                        <label for="esriApiKey" style="font-weight: bold">
+                            <span class="tick"></span>
+                            {{
+                                $t(
+                                    'Settings.EsriApiKey',
+                                )
+                            }}
+                            <p style="font-weight: normal">
+                                {{
+                                    $t(
+                                        'Settings.EsriApiKeyDescription',
+                                    )
+                                }}
+                            </p>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group input-group-save">
+                            <input class="form-control number" type="password" v-model="esriApiKey" id="esriApiKey"
+                                name="esriKey" />
+                        </div>
+                        <button type="button" class="btn btn-success" :disabled="esriApiKey ==
+                            esriApiKeyInitial" @click="updateEsriKApiKey">
+                            {{ $t('Common.Save') }}
+                        </button>
+                        <button type="button" class="btn btn-link" :disabled="esriApiKey ==
+                            esriApiKeyInitial" @click="cancelEsriKApiKey">
+                            {{ $t('Common.Cancel') }}
+                        </button>
+                    </div>
+                </div>
+                <div class="block-filter" style="padding-left: 30px">
+                    <input id="ShowKey" type="checkbox"
+                        onclick="var pass = document.getElementById('esriApiKey');pass.type = (pass.type === 'text' ? 'password' : 'text');">
+                    <label for="ShowKey" style="padding-left:5px;">
+                        <span></span>{{ $t('Pages.ShowKey') }}
+                    </label>
                 </div>
             </div>
         </div>
@@ -410,7 +454,9 @@ export default {
             allowToRemoveExportCache: true,
             statusDropExportCache: 'NotStarted',
             dropSchemaTimer: null,
-            dropSchemaDots: 1
+            dropSchemaDots: 1,
+            esriApiKey: null,
+            esriApiKeyInitial: null,
         }
     },
     mounted() {
@@ -418,38 +464,30 @@ export default {
     },
     methods: {
         async getFormData() {
-            const response = await this.$hq.ExportSettings.getEncryption()
-            this.encryptionEnabled = response.data.isEnabled
-            this.encryptionPassword = response.data.password
 
-            const globalNoticeResponse =
-                await this.$hq.AdminSettings.getGlobalNotice()
-            this.globalNotice = globalNoticeResponse.data.globalNotice
-
-            const profile = await this.$hq.AdminSettings.getProfileSettings()
-            this.isAllowInterviewerUpdateProfile =
-                profile.data.allowInterviewerUpdateProfile
-
-            const interviewerSettings =
-                await this.$hq.AdminSettings.getInterviewerSettings()
+            const workspaceSettings = await this.$hq.AdminSettings.getWorkspaceSettings()
             this.isInterviewerAutomaticUpdatesEnabled =
-                interviewerSettings.data.interviewerAutoUpdatesEnabled
+                workspaceSettings.data.interviewerAutoUpdatesEnabled
             this.isDeviceNotificationsEnabled =
-                interviewerSettings.data.notificationsEnabled
+                workspaceSettings.data.notificationsEnabled
             this.isPartialSynchronizationEnabled =
-                interviewerSettings.data.partialSynchronizationEnabled
+                workspaceSettings.data.partialSynchronizationEnabled
             this.geographyQuestionAccuracyInMeters =
-                interviewerSettings.data.geographyQuestionAccuracyInMeters
+                workspaceSettings.data.geographyQuestionAccuracyInMeters
             this.geographyQuestionPeriodInSeconds =
-                interviewerSettings.data.geographyQuestionPeriodInSeconds
+                workspaceSettings.data.geographyQuestionPeriodInSeconds
             this.geographyQuestionAccuracyInMetersCancel =
-                interviewerSettings.data.geographyQuestionAccuracyInMeters
+                workspaceSettings.data.geographyQuestionAccuracyInMeters
             this.geographyQuestionPeriodInSecondsCancel =
-                interviewerSettings.data.geographyQuestionPeriodInSeconds
+                workspaceSettings.data.geographyQuestionPeriodInSeconds
 
-            const webInterviewSettings =
-                await this.$hq.AdminSettings.getWebInterviewSettings()
-            this.isEmailAllowed = webInterviewSettings.data.allowEmails
+            this.esriApiKey = workspaceSettings.data.esriApiKey
+            this.esriApiKeyInitial = workspaceSettings.data.esriApiKey
+            this.encryptionEnabled = workspaceSettings.data.exportSettings.isEnabled
+            this.encryptionPassword = workspaceSettings.data.exportSettings.password
+            this.globalNotice = workspaceSettings.data.globalNotice
+            this.isAllowInterviewerUpdateProfile = workspaceSettings.data.allowInterviewerUpdateProfile
+            this.isEmailAllowed = workspaceSettings.data.allowEmails
         },
         regenPassword() {
             const self = this
@@ -526,6 +564,14 @@ export default {
                 this.isAllowInterviewerUpdateProfile,
             )
         },
+        async updateEsriKApiKey() {
+            return this.$hq.AdminSettings.setEsriApiKey(
+                this.esriApiKey,
+            ).then(() => {
+                this.esriApiKeyInitial = this.esriApiKey
+            })
+        },
+        cancelEsriKApiKey() { this.esriApiKey = this.esriApiKeyInitial },
         updateDeviceSettings() {
             return this.$hq.AdminSettings.setInterviewerSettings(
                 this.isInterviewerAutomaticUpdatesEnabled,

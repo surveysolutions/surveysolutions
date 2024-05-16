@@ -33,5 +33,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         void WorkspaceDisabled(string workspaceName);
         void WorkspaceUserAssigned(string userName, ICollection<string> workspaces);
         void WorkspaceUserUnAssigned(string userName, ICollection<string> workspaces);
+        void EsriApiKeyChanged(bool isEmpty);
     }
 }

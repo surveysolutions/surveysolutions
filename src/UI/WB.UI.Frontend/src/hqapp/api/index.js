@@ -586,11 +586,7 @@ class AdminSettings {
     constructor(http) {
         this.http = http
         this.base = 'api/AdminSettings'
-    }
-
-    getGlobalNotice() {
-        return this.http.get(`${this.base}/GlobalNoticeSettings`)
-    }
+    }    
     setGlobalNotice(newNotice) {
         return this.http({
             method: 'post',
@@ -599,9 +595,7 @@ class AdminSettings {
             data: {GlobalNotice: newNotice}
         })
     }
-    getProfileSettings() {
-        return this.http.get(`${this.base}/ProfileSettings`)
-    }
+    
     setProfileSettings(allowInterviewerUpdateProfile) {
         return this.http({
             method: 'post',
@@ -638,12 +632,19 @@ class AdminSettings {
             data: { geographyQuestionPeriodInSeconds: geographyQuestionPeriodInSeconds }
         })        
     }
-    getInterviewerSettings() {
-        return this.http.get(`${this.base}/InterviewerSettings`)
+    setEsriApiKey(esriApiKey) {
+        return this.http({
+            method: 'post',
+            url: `${this.base}/UpdateEsriApiKey`,
+            headers: {'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie()},
+            data: { esriApiKey: esriApiKey }
+        })        
+    }   
+    
+    getWorkspaceSettings() {
+        return this.http.get(`${this.base}/WorkspaceSettings`)
     }
-    getWebInterviewSettings() {
-        return this.http.get(`${this.base}/WebInterviewSettings`)
-    }
+
     setWebInterviewSettings(allowEmails) {
         return this.http({
             method: 'post',
