@@ -62,7 +62,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                     Create.NumericIntegerQuestion(Id.g1, options: Create.Options(
                         Create.Option(1, "A"),
                         Create.Option(2, "B"),
-                        Create.Option(61, "C")
+                        Create.Option(201, "C")
                     )),
                     Create.NumericRoster(Id.g2, variable:"parent", rosterSizeQuestionId: Id.g1, children: new IComposite[]
                     {

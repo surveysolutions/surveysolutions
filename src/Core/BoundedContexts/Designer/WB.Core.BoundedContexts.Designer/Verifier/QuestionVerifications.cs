@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             Error<ITextListQuestion>("WB0039", TextListQuestionCannotBePrefilled, VerificationMessages.WB0039_TextListQuestionCannotBePrefilled),
             Error<ITextListQuestion>("WB0040", TextListQuestionCannotBeFilledBySupervisor, VerificationMessages.WB0040_TextListQuestionCannotBeFilledBySupervisor),
-            Error<ITextListQuestion>("WB0042", TextListQuestionMaxAnswerNotInRange1And200, string.Format(VerificationMessages.WB0042_TextListQuestionMaxAnswerInRange1And200,Constants.MaxLongRosterRowCount, Constants.MinLongRosterRowCount)),
+            Error<ITextListQuestion>("WB0042", TextListQuestionMaxAnswerNotInRange1And200, string.Format(VerificationMessages.WB0042_TextListQuestionMaxAnswerInRange1And200,Constants.MaxRosterRowCount, Constants.MinRosterRowCount)),
             Error<ITextListQuestion>("WB0093", RosterSizeListQuestionShouldBeLimited, VerificationMessages.WB0093_RosterSizeListOptionQuestionShouldBeLimit),
             Error<IQRBarcodeQuestion>("WB0049", QRBarcodeQuestionIsSupervisorQuestion, VerificationMessages.WB0049_QRBarcodeQuestionIsSupervisorQuestion),
             Error<IQRBarcodeQuestion>("WB0050", QRBarcodeQuestionIsPreFilledQuestion, VerificationMessages.WB0050_QRBarcodeQuestionIsPreFilledQuestion),
@@ -619,7 +619,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             if (question.Answers.Count == 0)
                 return false;
 
-            var rosterLimit = questionnaire.Questionnaire.IsTriggerForLongRoster(question) ? Constants.MaxLongRosterRowCount : Constants.MaxRosterRowCount;
+            var rosterLimit = Constants.MaxRosterRowCount;
 
             return question.Answers.Any(x => x.GetParsedValue() > rosterLimit);
         }
@@ -634,14 +634,14 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             var rosterSizeQuestionMaxValue = getRosterSizeQuestionMaxValue(question);
             if (!rosterSizeQuestionMaxValue.HasValue)
                 return false;
-            return !Enumerable.Range(1, Constants.MaxLongRosterRowCount).Contains(rosterSizeQuestionMaxValue.Value);
+            return !Enumerable.Range(1, Constants.MaxRosterRowCount).Contains(rosterSizeQuestionMaxValue.Value);
         }
 
 
         private static int? GetMaxNumberOfAnswersForRosterSizeQuestionWhenMore200Options(IQuestion question)
         {
             var multyOptionQuestion = question as IMultyOptionsQuestion;
-            if (multyOptionQuestion != null && multyOptionQuestion.Answers.Count > Constants.MaxLongRosterRowCount)
+            if (multyOptionQuestion != null && multyOptionQuestion.Answers.Count > Constants.MaxRosterRowCount)
                 return multyOptionQuestion.MaxAllowedAnswers;
             return null;
         }

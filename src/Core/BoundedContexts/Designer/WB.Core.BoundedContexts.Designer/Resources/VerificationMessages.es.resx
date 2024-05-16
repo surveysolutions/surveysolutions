@@ -312,9 +312,6 @@
   <data name="WB0067_VariableNameIsEmpty" xml:space="preserve">
     <value>Variable válida o identificador de roster no debe estar vacío</value>
   </data>
-  <data name="WB0068_RosterHasMoreThanAllowedChildElements" xml:space="preserve">
-    <value>El roster no puede tener más de {0} elementos hijos</value>
-  </data>
   <data name="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" xml:space="preserve">
     <value>El roster tiene un identificador igual al título del cuestionario</value>
   </data>
@@ -344,12 +341,6 @@
   </data>
   <data name="WB0079_MultimediaShouldNotHaveValidationExpression" xml:space="preserve">
     <value>Las preguntas de tipo imagen no soportan condiciones de habilitación</value>
-  </data>
-  <data name="WB0080_LongRosterCannotHaveNestedRosters" xml:space="preserve">
-    <value>Los roters con más de {0} filas no pueden contener rosters anidados</value>
-  </data>
-  <data name="WB0081_LongRosterCannotBeNested" xml:space="preserve">
-    <value>Listas con más de {0} filas no pueden anidarse otras</value>
   </data>
   <data name="WB0082_RosterSizeMultiOptionQuestionShouldBeLimited" xml:space="preserve">
     <value>Las preguntas categóricas de selección múltiple que sean enlazadas a rosters deben constar con un límite máximo de respuestas.</value>

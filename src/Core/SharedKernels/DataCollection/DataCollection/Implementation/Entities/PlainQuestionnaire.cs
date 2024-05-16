@@ -531,7 +531,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         }
 
         public int GetMaxRosterRowCount() => Constants.MaxRosterRowCount;
-        public int GetMaxLongRosterRowCount() => Constants.MaxLongRosterRowCount;
 
         public bool IsQuestion(Guid entityId) => this.HasQuestion(entityId);
         public bool IsStaticText(Guid entityId)
@@ -1242,31 +1241,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.innerDocument.Translations.SingleOrDefault(t =>
                 t.Id == this.innerDocument.DefaultTranslation)?.Name;
         }
-
-        public bool IsQuestionIsRosterSizeForLongRoster(Guid questionId)
-        {
-            var rosters = GetRosterGroupsByRosterSizeQuestion(questionId).ToArray();
-            if (!rosters.Any())
-                return false;
-
-            int childItemsCount = 0;
-
-            foreach (var roster in rosters)
-            {
-                if (GetRosterLevelForEntity(roster) > 1)
-                    return false;
-                if (GetAllUnderlyingChildRosters(roster).Any())
-                    return false;
-
-                childItemsCount += GetGroupOrThrow(roster).Children.TreeToEnumerable(x => x.Children).Count();
-
-                if (childItemsCount > Constants.MaxAmountOfItemsInLongRoster)
-                    return false;
-            }
-
-            return true;
-        }
-
+        
         public IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId)
         {
             if (!this.cacheOfUnderlyingGroupsAndRosters.ContainsKey(groupId))

@@ -315,9 +315,6 @@
   <data name="WB0067_VariableNameIsEmpty" xml:space="preserve">
     <value>Emërtimi i variablit të vlefshëm ose identifikuesit të të rosterit nuk duhet të jetë bosh.</value>
   </data>
-  <data name="WB0068_RosterHasMoreThanAllowedChildElements" xml:space="preserve">
-    <value>Rosteri nuk mund të ketë më shumë se {0} elemente bijë</value>
-  </data>
   <data name="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" xml:space="preserve">
     <value>Rosteri ka identifikues rosteri të barabartë me titullin e pyetësorit.</value>
   </data>
@@ -347,12 +344,6 @@
   </data>
   <data name="WB0079_MultimediaShouldNotHaveValidationExpression" xml:space="preserve">
     <value>Pyetja me foto nuk mund të ketë kusht validimi.</value>
-  </data>
-  <data name="WB0080_LongRosterCannotHaveNestedRosters" xml:space="preserve">
-    <value>Rosteri me më shumë se {0} rreshta nuk mund të ketë rostera të përsëritur </value>
-  </data>
-  <data name="WB0081_LongRosterCannotBeNested" xml:space="preserve">
-    <value>Rosteri me më shumë se {0} rreshta nuk mund të brendavendoset </value>
   </data>
   <data name="WB0082_RosterSizeMultiOptionQuestionShouldBeLimited" xml:space="preserve">
     <value>Pyetja me zgjedhje të shumëfishtë për madhësinë e rosterit duhet të ketë kufi</value>

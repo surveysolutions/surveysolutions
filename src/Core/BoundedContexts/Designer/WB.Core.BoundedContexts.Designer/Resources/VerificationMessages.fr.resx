@@ -309,9 +309,6 @@
   <data name="WB0066_QuestionTypeIsNotAllowed" xml:space="preserve">
     <value>Une question de ce type n'est pas pris en charge.</value>
   </data>
-  <data name="WB0068_RosterHasMoreThanAllowedChildElements" xml:space="preserve">
-    <value>Le roster ne peut pas contenir plus de {0} éléments enfants</value>
-  </data>
   <data name="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" xml:space="preserve">
     <value>Le roster a un ID de roster égal au titre du questionnaire.</value>
   </data>
@@ -341,12 +338,6 @@
   </data>
   <data name="WB0079_MultimediaShouldNotHaveValidationExpression" xml:space="preserve">
     <value>La question de type image ne peut pas avoir de condition de validation.</value>
-  </data>
-  <data name="WB0080_LongRosterCannotHaveNestedRosters" xml:space="preserve">
-    <value>Roster avec plus de {0} lignes ne peut pas avoir des rosters imbriqués</value>
-  </data>
-  <data name="WB0081_LongRosterCannotBeNested" xml:space="preserve">
-    <value>Roster avec plus de {0} lignes ne peut pas être imbriquée</value>
   </data>
   <data name="WB0082_RosterSizeMultiOptionQuestionShouldBeLimited" xml:space="preserve">
     <value>La catégorielle à réponse multiple qui définie la taille du roster devrait avoir une limite au nombre de modalités</value>

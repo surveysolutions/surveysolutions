@@ -156,7 +156,7 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
                 .Where(x => x.Parent == classificationId)
                 .OrderBy(x => x.Index)
                 .ThenBy(x => x.Value)
-                .Take(Constants.MaxLongRosterRowCount)
+                .Take(Constants.MaxRosterRowCount)
                 .ToListAsync();
 
             var categories = dbEntities.Select(x => new Category

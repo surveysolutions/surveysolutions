@@ -315,9 +315,6 @@
   <data name="WB0067_VariableNameIsEmpty" xml:space="preserve">
     <value>Platný název proměnné nebo ID soupisky by neměl být prázdný.</value>
   </data>
-  <data name="WB0068_RosterHasMoreThanAllowedChildElements" xml:space="preserve">
-    <value>Seznam nesmí obsahovat více než {0} podřízených prvků</value>
-  </data>
   <data name="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" xml:space="preserve">
     <value>Soupiska má ID soupisky rovnající se názvu dotazníku.</value>
   </data>
@@ -347,12 +344,6 @@
   </data>
   <data name="WB0079_MultimediaShouldNotHaveValidationExpression" xml:space="preserve">
     <value>Obrázková otázka nemůže mít podmínku ověření.</value>
-  </data>
-  <data name="WB0080_LongRosterCannotHaveNestedRosters" xml:space="preserve">
-    <value>Soupiska s více než {0} řádky nemůže mít vnořené soupisky</value>
-  </data>
-  <data name="WB0081_LongRosterCannotBeNested" xml:space="preserve">
-    <value>Seznam s více než {0} řádky nelze vnořovat</value>
   </data>
   <data name="WB0082_RosterSizeMultiOptionQuestionShouldBeLimited" xml:space="preserve">
     <value>Otázka s vícenásobným výběrem soupisky by měla mít nastaven maximální počet odpovědí.</value>

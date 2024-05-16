@@ -155,9 +155,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
 
             this.isRosterSizeQuestion = questionnaire.IsRosterSizeQuestion(entityIdentity.Id);
-            var isRosterSizeOfLongRoster = questionnaire.IsQuestionIsRosterSizeForLongRoster(entityIdentity.Id);
-
-            this.answerMaxValue = isRosterSizeOfLongRoster ? Constants.MaxLongRosterRowCount : Constants.MaxRosterRowCount;
+            this.answerMaxValue = Constants.MaxRosterRowCount;
             this.ProtectedAnswer = answerModel.ProtectedAnswer?.Value;
 
             InitSpecialValues(interviewId, entityIdentity);

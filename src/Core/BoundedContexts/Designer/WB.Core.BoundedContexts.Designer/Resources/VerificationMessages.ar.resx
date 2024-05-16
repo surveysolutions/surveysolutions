@@ -297,9 +297,6 @@
   <data name="WB0067_VariableNameIsEmpty" xml:space="preserve">
     <value>يجب ألا يكون اسم  المتغير أو القائمة فارغا </value>
   </data>
-  <data name="WB0068_RosterHasMoreThanAllowedChildElements" xml:space="preserve">
-    <value>لا يمكن أن تحتوي القائمة على أكثر من {0} عناصر فرعية</value>
-  </data>
   <data name="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" xml:space="preserve">
     <value>يوجد في القائمة رقم تعريف يساوي عنوان الاستبيان.</value>
   </data>
@@ -329,12 +326,6 @@
   </data>
   <data name="WB0079_MultimediaShouldNotHaveValidationExpression" xml:space="preserve">
     <value>سؤال الصورة لا يمكن أن يحنتوي على شرط للتحقق من الصحة.</value>
-  </data>
-  <data name="WB0080_LongRosterCannotHaveNestedRosters" xml:space="preserve">
-    <value> القوائم التي تحتوي على أكثر من {0} صفوف لا يمكن أن تحتوي على قوائم متداخلة</value>
-  </data>
-  <data name="WB0081_LongRosterCannotBeNested" xml:space="preserve">
-    <value>لا يمكن تداخل القائمة مع أكثر من {0} صفوف</value>
   </data>
   <data name="WB0082_RosterSizeMultiOptionQuestionShouldBeLimited" xml:space="preserve">
     <value>يجب أن يكون هنالك حد لحجم سؤال الاختيار المتعدد</value>

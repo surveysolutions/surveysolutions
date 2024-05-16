@@ -315,9 +315,6 @@
   <data name="WB0067_VariableNameIsEmpty" xml:space="preserve">
     <value>Имя переменной или ID ростера не должны быть пустыми.</value>
   </data>
-  <data name="WB0068_RosterHasMoreThanAllowedChildElements" xml:space="preserve">
-    <value>Ростер не может содержать более {0} дочерних элементов.</value>
-  </data>
   <data name="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" xml:space="preserve">
     <value>ID ростера совпадает с именем опросника.</value>
   </data>
@@ -347,12 +344,6 @@
   </data>
   <data name="WB0079_MultimediaShouldNotHaveValidationExpression" xml:space="preserve">
     <value>Фото-вопрос не может имет проверочных выражений.</value>
-  </data>
-  <data name="WB0080_LongRosterCannotHaveNestedRosters" xml:space="preserve">
-    <value>Ростер с более чем {0} строк не может содержать вложенные ростеры.</value>
-  </data>
-  <data name="WB0081_LongRosterCannotBeNested" xml:space="preserve">
-    <value>Ростер с более чем {0} строк не может быть вложенным.</value>
   </data>
   <data name="WB0082_RosterSizeMultiOptionQuestionShouldBeLimited" xml:space="preserve">
     <value>Многовариантный вопрос являющийся управляющим для ростера должен иметь предел.</value>
