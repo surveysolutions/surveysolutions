@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
             this.Append(LogEntryType.QuestionnaireImported, $"(ver. {questionnaire.Version}) {title}", "imported",
                 level != null ? $"Criticality level: {level}" : null,
                 responsibleName: importUserName,
-                responsibleUserId: userId);ß
+                responsibleUserId: userId);
         }
 
         public void AssignmentsUpgradeStarted(string title, long fromVersion, long toVersion, Guid userId, string userName)
@@ -152,7 +152,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
             this.Append(LogEntryType.WorkspaceUserUnAssigned, userName, string.Join(", ", workspaces));
         }
 
-        public void CriticalityLevelChanged(QuestionnaireIdentity questionnaire, CriticalityLevel level)
+        public void CriticalityLevelChanged(QuestionnaireIdentity questionnaire, CriticalityLevel? level)
         {
             this.Append(LogEntryType.CriticalityLevelChanged, $"(ver. {questionnaire.Version})", 
                 "criticality level changed", level.ToString());

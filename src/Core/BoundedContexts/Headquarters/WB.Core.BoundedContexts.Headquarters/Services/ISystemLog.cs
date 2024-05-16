@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         void WorkspaceUserAssigned(string userName, ICollection<string> workspaces);
         void WorkspaceUserUnAssigned(string userName, ICollection<string> workspaces);
         
-        void CriticalityLevelChanged(QuestionnaireIdentity questionnaire, CriticalityLevel level);
+        void CriticalityLevelChanged(QuestionnaireIdentity questionnaire, CriticalityLevel? level);
         
     }
 }
