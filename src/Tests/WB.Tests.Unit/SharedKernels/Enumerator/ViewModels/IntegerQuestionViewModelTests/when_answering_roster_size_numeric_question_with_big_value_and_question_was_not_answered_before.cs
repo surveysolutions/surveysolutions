@@ -34,17 +34,17 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
 
             integerModel.Init(interviewId, questionIdentity, navigationState);
 
-            integerModel.Answer = 70;
+            integerModel.Answer = 210;
             // Act
             await integerModel.ValueChangeCommand.ExecuteAsync();
 
             // Assert
-            ValidityModelMock.Verify(x => x.MarkAnswerAsNotSavedWithMessage("Answer '70' is incorrect because answer is greater than Roster upper bound '60'."),
+            ValidityModelMock.Verify(x => x.MarkAnswerAsNotSavedWithMessage("Answer '210' is incorrect because answer is greater than Roster upper bound '200'."),
                 Times.Once);
 
             AnsweringViewModelMock.Verify(x => x.SendQuestionCommandAsync(It.IsAny<AnswerNumericIntegerQuestionCommand>()), Times.Never);
 
-            integerModel.Answer.Should().Be(70);
+            integerModel.Answer.Should().Be(210);
         }
 
     }

@@ -34,13 +34,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
 
             integerModel.Init(interviewId, questionIdentity, navigationState);
         
-            integerModel.Answer = 70;
+            integerModel.Answer = 210;
             await integerModel.ValueChangeCommand.ExecuteAsync();
         }
 
         [Test]
         public void  should_mark_question_as_invalid_with_message() =>
-            ValidityModelMock.Verify(x => x.MarkAnswerAsNotSavedWithMessage("Answer '70' is incorrect because answer is greater than Roster upper bound '60'."), Times.Once);
+            ValidityModelMock.Verify(x => x.MarkAnswerAsNotSavedWithMessage("Answer '210' is incorrect because answer is greater than Roster upper bound '200'."), Times.Once);
 
         [Test]
         public void  should_not_send_answer_command() =>
