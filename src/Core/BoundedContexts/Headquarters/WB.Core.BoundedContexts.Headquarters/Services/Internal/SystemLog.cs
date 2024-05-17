@@ -151,7 +151,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
 
         public void EsriApiKeyChanged(bool isEmpty)
         {
-            this.Append(LogEntryType.EsriApiKeyChanged, "ESRI API key", "changed", $"{(isEmpty ? "empty" : "not empty")}'");
+            this.Append(LogEntryType.EsriApiKeyChanged, "ESRI API key", "changed", $"{(isEmpty ? "empty" : "not empty")}");
         }
 
         private void Append(LogEntryType type, string target, string action, string args = null, string responsibleName = null, Guid? responsibleUserId = null)
