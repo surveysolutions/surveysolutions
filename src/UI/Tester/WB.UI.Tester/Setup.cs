@@ -57,6 +57,12 @@ namespace WB.UI.Tester
                 CrashReporting.Init(appcenterKey);
             }
             
+            string arcgisruntimeKey = ApplicationContext.Resources.GetString(Resource.String.arcgisruntime_key);
+            if (!string.IsNullOrEmpty(arcgisruntimeKey))
+            {
+                ServiceLocator.Current.GetInstance<IMapInteractionService>().SetLicenseKey(arcgisruntimeKey);
+            }
+            
             var status = new UnderConstructionInfo();
             status.Run();
 
