@@ -134,7 +134,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
             
             HasCriticalIssues = UnansweredCriticalQuestionsCount > 0 || FailedCriticalRulesCount > 0;
-            IsCompletionAllowed = criticalityLevel != CriticalityLevel.Block || !HasCriticalIssues;
 
             if (HasCriticalIssues)
             {
@@ -142,17 +141,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 if (criticalityLevel == CriticalityLevel.Warn)
                 {
-                    this.IsCompletionAllowed = !HasCriticalIssues || !string.IsNullOrWhiteSpace(Comment);
                     this.CompleteButtonComment = UIResources.Interview_Complete_Note_For_Supervisor_with_Criticality;
                 }
                 else
                 {
                     this.CompleteButtonComment = UIResources.Interview_Complete_CriticalIssues_Instrunction;
-                    this.IsCompletionAllowed = false;
                 }
-            } 
+            }
 
-            
+            IsCompletionAllowed = CalculateIsCompletionAllowed();
             IsLoading = false;
             return Task.CompletedTask;
         }
@@ -170,11 +167,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             set
             {
                 base.Comment = value;
-
-                if (HasCriticalIssues && criticalityLevel == CriticalityLevel.Warn)
-                {
-                    IsCompletionAllowed = !string.IsNullOrWhiteSpace(Comment);
-                }
+                IsCompletionAllowed = CalculateIsCompletionAllowed();
             }
         }
 
@@ -239,6 +232,39 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
             
             base.Dispose();
+        }
+        
+        public override bool RequestWebInterview
+        {
+            get => base.RequestWebInterview;
+            set
+            {
+                base.RequestWebInterview = value;
+                IsCompletionAllowed = CalculateIsCompletionAllowed();
+            }
+        }
+
+        public bool CalculateIsCompletionAllowed()
+        {
+            if (this.RequestWebInterview)
+                return true;
+
+            if (!this.HasCriticalFeature(interviewId.FormatGuid()) || criticalityLevel == CriticalityLevel.Ignore)
+                return true;
+                
+            if (HasCriticalIssues)
+            {
+                if (criticalityLevel == CriticalityLevel.Warn)
+                {
+                    return !string.IsNullOrWhiteSpace(Comment);
+                }
+                else
+                {
+                    return false;
+                }
+            } 
+                
+            return true;
         }
     }
 }
