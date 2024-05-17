@@ -154,7 +154,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
 
         public void CriticalityLevelChanged(QuestionnaireIdentity questionnaire, CriticalityLevel? level)
         {
-            this.Append(LogEntryType.CriticalityLevelChanged, $"(ver. {questionnaire.Version})", 
+            this.Append(LogEntryType.CriticalityLevelChanged, 
+                $"{questionnaire.QuestionnaireId}(ver. {questionnaire.Version})", 
                 "criticality level changed", level.ToString());
         }
 
