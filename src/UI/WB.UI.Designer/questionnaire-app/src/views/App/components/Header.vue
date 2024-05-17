@@ -4,10 +4,6 @@
         <div class="header-line">
             <div class="header-menu">
                 <div class="buttons">
-                    <a class="btn btn-primary" :href="sanitizeUrl('/questionnaire/details/' + questionnaireId)"
-                        style="margin-right: 10px;">
-                        {{ $t('QuestionnaireEditor.OldUi') }}</a>
-
                     <a class="btn" href="http://support.mysurvey.solutions/designer" target="_blank" rel="noopener">{{
                         $t('QuestionnaireEditor.Help') }}</a>
                     <a class="btn" href="https://forum.mysurvey.solutions" target="_blank" rel="noopener">{{
@@ -38,28 +34,28 @@
                             $t('QuestionnaireEditor.HellowMessageBtn', {
                                 currentUserName: currentUser.userName
                             })
-                            }}</a>
+                        }}</a>
                         <a class="btn btn-default" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="caret"></span>
                             <span class="sr-only">{{
                                 $t('QuestionnaireEditor.ToggleDropdown')
-                                }}</span>
+                            }}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-right">
                             <li>
                                 <a href="/identity/account/manage">{{
                                     $t('QuestionnaireEditor.ManageAccount')
-                                    }}</a>
+                                }}</a>
                             </li>
                             <li>
                                 <a href="/identity/account/manage/changepassword">{{
                                     $t('QuestionnaireEditor.ChangePassword')
-                                    }}</a>
+                                }}</a>
                             </li>
                             <li>
                                 <a href="/identity/account/logout">{{
                                     $t('QuestionnaireEditor.LogOut')
-                                    }}</a>
+                                }}</a>
                             </li>
                         </ul>
                     </div>
@@ -100,7 +96,7 @@
                                             {
                                                 count: errorsCount
                                             }
-                                    )
+                                        )
                                     }}
                                 </a>
                             </span>
@@ -112,7 +108,7 @@
                                             {
                                                 count: warningsCount
                                             }
-                                    )
+                                        )
                                     }}
                                 </a>
                             </span>
