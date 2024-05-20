@@ -27,5 +27,7 @@
         WorkspaceUpdated = 22,
         UserPasswordChanged = 23,
         UserPasswordChangeFailed = 24,
+        
+        CriticalityLevelChanged = 26
     }
 }

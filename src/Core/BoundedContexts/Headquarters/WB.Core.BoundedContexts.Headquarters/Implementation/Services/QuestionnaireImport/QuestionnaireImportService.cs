@@ -281,7 +281,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     });
                 questionnaireProgress.Report(95);
 
-                auditLog.QuestionnaireImported(questionnaire.Title, questionnaireIdentity, userId, userName);
+                auditLog.QuestionnaireImported(questionnaire.Title, questionnaireIdentity, userId, userName, criticalityLevel);
                 questionnaireProgress.Report(100);
 
                 questionnaireImportResult.ProgressPercent = 100;

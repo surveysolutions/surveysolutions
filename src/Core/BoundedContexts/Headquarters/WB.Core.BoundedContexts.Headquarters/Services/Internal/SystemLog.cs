@@ -7,6 +7,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
 {
@@ -35,9 +36,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
             this.Append(LogEntryType.QuestionnaireDeleted, $"(ver. {questionnaire.Version}) {title}", "deleted");
         }
 
-        public void QuestionnaireImported(string title, QuestionnaireIdentity questionnaire, Guid userId, string importUserName)
+        public void QuestionnaireImported(string title, QuestionnaireIdentity questionnaire, Guid userId, 
+            string importUserName, CriticalityLevel? level = null)
         {
             this.Append(LogEntryType.QuestionnaireImported, $"(ver. {questionnaire.Version}) {title}", "imported",
+                level != null ? $"Criticality level: {level}" : null,
                 responsibleName: importUserName,
                 responsibleUserId: userId);
         }
@@ -147,6 +150,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
         public void WorkspaceUserUnAssigned(string userName, ICollection<string> workspaces)
         {
             this.Append(LogEntryType.WorkspaceUserUnAssigned, userName, string.Join(", ", workspaces));
+        }
+
+        public void CriticalityLevelChanged(QuestionnaireIdentity questionnaire, CriticalityLevel? level)
+        {
+            this.Append(LogEntryType.CriticalityLevelChanged, 
+                $"{questionnaire.QuestionnaireId}(ver. {questionnaire.Version})", 
+                "criticality level changed", level.ToString());
         }
 
         private void Append(LogEntryType type, string target, string action, string args = null, string responsibleName = null, Guid? responsibleUserId = null)
