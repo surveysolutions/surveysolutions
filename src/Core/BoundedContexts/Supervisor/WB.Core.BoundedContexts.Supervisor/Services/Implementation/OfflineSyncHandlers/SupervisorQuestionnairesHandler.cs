@@ -185,7 +185,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         public Task<GetQuestionnairesSettingsResponse> GetQuestionnairesSettings(GetQuestionnairesSettingsRequest arg)
         {
             var settings = this.questionnaireViewRepository
-                .Where(x => x!= null)    
+                .Where(x => true)    
                 .Select(x=> new QuestionnaireSettingsApiView
                 {
                     QuestionnaireIdentity = x.GetIdentity(),
