@@ -59,10 +59,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void Init(NavigationState navigationState, string interviewId, string itemText)
         {
             this.Title.InitAsStatic(itemText);
-            //this.SideBarGroupState.Init(interviewId, null);
-            this.SideBarGroupState.SimpleStatus = SimpleGroupStatus.Other;
-            this.SideBarGroupState.Status = GroupStatus.NotStarted;
-
+            this.SideBarGroupState.InitStatic(SimpleGroupStatus.Other, GroupStatus.NotStarted);
 
             this.navigationState = navigationState;
             this.navigationState.ScreenChanged += this.OnScreenChanged;
