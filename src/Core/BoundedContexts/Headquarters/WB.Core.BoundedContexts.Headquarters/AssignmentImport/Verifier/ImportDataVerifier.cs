@@ -328,7 +328,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Error<AssignmentResponsible>(Responsible_IsLocked, "PL0027", messages.PL0027_ResponsibleIsLocked),
             Error<AssignmentResponsible>(Responsible_HasInvalidRole, "PL0028", messages.PL0028_UserIsNotHQOrSupervisorOrInterviewer),
             Error<AssignmentIntegerAnswer>(Integer_ExceededRosterSize, "PL0029", string.Format(messages.PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40, Constants.MaxRosterRowCount)),
-            Error<AssignmentIntegerAnswer>(Integer_ExceededLongRosterSize, "PL0029", string.Format(messages.PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40, Constants.MaxLongRosterRowCount)),
             Errors<AssignmentGpsAnswer>(Gps_DontHaveLongitudeOrLatitude, "PL0030", messages.PL0030_GpsMandatoryFilds),
             Errors<AssignmentGpsAnswer>(Gps_LatitudeMustBeGreaterThenN90AndLessThen90, "PL0032", messages.PL0032_LatitudeMustBeGeaterThenN90AndLessThen90),
             Errors<AssignmentGpsAnswer>(Gps_LongitudeMustBeGreaterThenN180AndLessThen180, "PL0033", messages.PL0033_LongitudeMustBeGeaterThenN180AndLessThen180),
@@ -971,17 +970,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             if (!questionId.HasValue) return false;
             if (!questionnaire.IsRosterSizeQuestion(questionId.Value)) return false;
 
-            return !questionnaire.IsQuestionIsRosterSizeForLongRoster(questionId.Value) &&
-                answer.Answer.HasValue && answer.Answer > questionnaire.GetMaxRosterRowCount();
-        }
-
-        private bool Integer_ExceededLongRosterSize(AssignmentIntegerAnswer answer, IQuestionnaire questionnaire)
-        {
-            var questionId = questionnaire.GetQuestionIdByVariable(answer.VariableName);
-            if (!questionId.HasValue) return false;
-
-            return questionnaire.IsQuestionIsRosterSizeForLongRoster(questionId.Value) &&
-                   answer.Answer.HasValue && answer.Answer > questionnaire.GetMaxLongRosterRowCount();
+            return answer.Answer.HasValue && answer.Answer > questionnaire.GetMaxRosterRowCount();
         }
 
         private bool Integer_IsNegativeRosterSize(AssignmentIntegerAnswer answer, IQuestionnaire questionnaire)

@@ -8,7 +8,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
-    internal class when_answer_61_on_numeric_int_question_which_triggers_roster: InterviewTestsContext
+    internal class when_answer_201_on_numeric_int_question_which_triggers_roster: InterviewTestsContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireId = Guid.Parse("10000000000000000000000000000000");
@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         }
 
         public void BecauseOf() =>
-            exception =  NUnit.Framework.Assert.Throws<AnswerNotAcceptedException>(() => interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, new decimal[0], DateTime.Now, 61));
+            exception =  NUnit.Framework.Assert.Throws<AnswerNotAcceptedException>(() => interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, new decimal[0], DateTime.Now, 201));
 
         [NUnit.Framework.Test] public void should_throw_InterviewException () =>
             exception.Should().NotBeNull();

@@ -101,9 +101,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         int? GetMaxSelectedAnswerOptions(Guid questionId);
 
         int GetMaxRosterRowCount();
-
-        int GetMaxLongRosterRowCount();
-
+        
         bool IsQuestion(Guid entityId);
 
         bool IsStaticText(Guid entityId);
@@ -279,7 +277,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         decimal[] GetFixedRosterCodes(Guid rosterId);
         IReadOnlyCollection<string> GetTranslationLanguages();
         string GetDefaultTranslation();
-        bool IsQuestionIsRosterSizeForLongRoster(Guid questionId);
         bool IsSubSection(Guid groupId);
         bool IsVariable(Guid id);
         bool HasCustomRosterTitle(Guid id);

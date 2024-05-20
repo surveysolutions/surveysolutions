@@ -36,20 +36,13 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<IGroup>(FixedRosterTitlesHasEmptyTitles, "WB0037", VerificationMessages.WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles),
             Error<IGroup>(FixedRosterHasDuplicateValues, "WB0041", VerificationMessages.WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues),
             Error<IGroup>(FixedRosterHasNonIntegerValues, "WB0115", VerificationMessages.WB0115_FixRosterSupportsOnlyIntegerTitleValues),
-            Error<IGroup>(FixedRosterHasMoreThanAllowedItems, "WB0038", string.Format(VerificationMessages.WB0038_RosterFixedTitlesHaveMoreThan200Items, Constants.MaxLongRosterRowCount)),
+            Error<IGroup>(FixedRosterHasMoreThanAllowedItems, "WB0038", string.Format(VerificationMessages.WB0038_RosterFixedTitlesHaveMoreThan200Items, Constants.MaxRosterRowCount)),
             Error<IGroup, IComposite>(RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster, "WB0054", VerificationMessages.WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster),
             Error<IGroup>(RosterLevelIsMoreThan4, "WB0055", string.Format(VerificationMessages.WB0055_RosterHasRosterLevelMoreThan4, MaxNestedRostersCount)),
             Error<IGroup>(RostersVariableEqualsToQuestionnaireTitle, "WB0070", VerificationMessages.WB0070_RosterHasVariableNameEqualToQuestionnaireTitle),
             Error<IGroup>(GroupHasLevelDepthMoreThan10, "WB0101", string.Format(VerificationMessages.WB0101_GroupHasLevelDepthMoreThan10, MaxNestedSubsectionsCount)),
             ErrorForTranslation<IGroup>(GroupTitleIsTooLong, "WB0260", string.Format(VerificationMessages.WB0260_GroupTitleIsTooLong, MaxTitleLength)),
             ErrorForTranslation<IGroup>(GroupTitleIsEmpty, "WB0120", VerificationMessages.WB0120_GroupTitleIsEmpty),
-            Error<IGroup>(LongMultiRosterCannotBeNested, "WB0081", string.Format(VerificationMessages.WB0081_LongRosterCannotBeNested, Constants.MaxRosterRowCount)),
-            Error<IGroup>(LongListRosterCannotBeNested, "WB0081", string.Format(VerificationMessages.WB0081_LongRosterCannotBeNested, Constants.MaxRosterRowCount)),
-            Error<IGroup>(LongFixedRosterCannotBeNested, "WB0081", string.Format(VerificationMessages.WB0081_LongRosterCannotBeNested, Constants.MaxRosterRowCount)),
-            Error<IGroup>(LongFixedRosterCannotHaveNestedRosters, "WB0080", string.Format(VerificationMessages.WB0080_LongRosterCannotHaveNestedRosters,Constants.MaxRosterRowCount)),
-            Error<IGroup>(LongMultiRosterCannotHaveNestedRosters, "WB0080", string.Format(VerificationMessages.WB0080_LongRosterCannotHaveNestedRosters,Constants.MaxRosterRowCount)),
-            Error<IGroup>(LongListRosterCannotHaveNestedRosters, "WB0080", string.Format(VerificationMessages.WB0080_LongRosterCannotHaveNestedRosters,Constants.MaxRosterRowCount)),
-            Error<IGroup>(LongRosterHasMoreThanAllowedChildElements, "WB0068", string.Format(VerificationMessages.WB0068_RosterHasMoreThanAllowedChildElements,Constants.MaxAmountOfItemsInLongRoster)),
             Error<IGroup, IComposite>(QuestionsCannotBeUsedAsRosterTitle, "WB0083", VerificationMessages.WB0083_QuestionCannotBeUsedAsRosterTitle),
             //Error<IGroup>(FirstChapterHasEnablingCondition, "WB0263", VerificationMessages.WB0263_FirstChapterHasEnablingCondition),
             //Do not reuse WB0263
@@ -362,7 +355,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             if (!questionnaire.Questionnaire.IsFixedRoster(group))
                 return false;
 
-            return group.FixedRosterTitles.Length > Constants.MaxLongRosterRowCount;
+            return group.FixedRosterTitles.Length > Constants.MaxRosterRowCount;
         }
 
         private static bool RosterLevelIsMoreThan4(IGroup roster, MultiLanguageQuestionnaireDocument questionnaire)
@@ -384,75 +377,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 return false;
 
             return !questionnaire.Questionnaire.IsQuestionAllowedToBeRosterSizeSource(rosterSizeQuestion);
-        }
-
-        private static bool LongMultiRosterCannotBeNested(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            return questionnaire.Questionnaire.IsRosterByQuestion(@group) && IsLongRosterNested(group, questionnaire, (g, q) => (questionnaire.Questionnaire.GetRosterSizeQuestion(g) as MultyOptionsQuestion)?.MaxAllowedAnswers);
-        }
-
-        private static bool LongListRosterCannotBeNested(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            return questionnaire.Questionnaire.IsRosterByQuestion(@group) && IsLongRosterNested(group, questionnaire, (g, q) => (questionnaire.Questionnaire.GetRosterSizeQuestion(g) as TextListQuestion)?.MaxAnswerCount);
-        }
-
-        private static bool LongFixedRosterCannotBeNested(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            return questionnaire.Questionnaire.IsFixedRoster(group) && IsLongRosterNested(group, questionnaire, (g, q) => group.FixedRosterTitles.Length);
-        }
-
-        private static bool LongMultiRosterCannotHaveNestedRosters(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            return questionnaire.Questionnaire.IsRosterByQuestion(@group) && IsLongRosterHasNestedRosters(group, questionnaire, (g, q) => (questionnaire.Questionnaire.GetRosterSizeQuestion(g) as MultyOptionsQuestion)?.MaxAllowedAnswers);
-        }
-
-        private static bool LongListRosterCannotHaveNestedRosters(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            return questionnaire.Questionnaire.IsRosterByQuestion(@group) 
-                   && IsLongRosterHasNestedRosters(group, questionnaire, 
-                       (g, q) => (questionnaire.Questionnaire.GetRosterSizeQuestion(g) as TextListQuestion)?.MaxAnswerCount);
-        }
-
-        private static bool LongFixedRosterCannotHaveNestedRosters(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            return questionnaire.Questionnaire.IsFixedRoster(group) && IsLongRosterHasNestedRosters(group, questionnaire, (g, q) => @group.FixedRosterTitles.Length);
-        }
-
-        private static bool LongRosterHasMoreThanAllowedChildElements(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            return IsLongRoster(@group, questionnaire)
-                   && questionnaire.FindInGroup<IComposite>(@group.PublicKey).Count(c => !(c is IVariable)) > Constants.MaxAmountOfItemsInLongRoster;
-        }
-
-        private static bool IsLongRoster(IGroup roster, MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            return GetRosterMaxPropagationCount(roster, questionnaire) > Constants.MaxRosterRowCount;
-        }
-
-        private static bool IsLongRosterNested(IGroup group, MultiLanguageQuestionnaireDocument questionnaire,
-            Func<IGroup, MultiLanguageQuestionnaireDocument, int?> getRosterSizeLimitSetByUser)
-        {
-            var rosterSizeLimitSetByUser = getRosterSizeLimitSetByUser(@group, questionnaire);
-            if (rosterSizeLimitSetByUser == null)
-                return false;
-
-            return rosterSizeLimitSetByUser > Constants.MaxRosterRowCount && questionnaire.Questionnaire.GetRosterScope(@group).Length > 1;
-        }
-
-        private static bool IsLongRosterHasNestedRosters(IGroup group, MultiLanguageQuestionnaireDocument questionnaire,
-            Func<IGroup, MultiLanguageQuestionnaireDocument, int?> getRosterSizeLimitSetByUser)
-        {
-            var rosterSizeLimitSetByUser = getRosterSizeLimitSetByUser(@group, questionnaire);
-            if (rosterSizeLimitSetByUser == null)
-                return false;
-
-            return rosterSizeLimitSetByUser > Constants.MaxRosterRowCount && GroupHasNestedRosters(@group, questionnaire);
-        }
-
-        private static bool GroupHasNestedRosters(IGroup @group, MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            var findInGroup = questionnaire.FindInGroup<IGroup>(@group.PublicKey);
-            return findInGroup.Any(x => questionnaire.Questionnaire.IsRoster(x));
         }
 
         private static bool QuestionTriggeredRosterHasFixedTitles(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
