@@ -106,7 +106,7 @@ export default {
     },
     watch: {
         $route(to, from) {
-            this.fetchCompleteInfo()        
+            this.fetchCompleteInfo()
         },
         shouldCloseWindow(to) {
             if (to === true) {
@@ -170,11 +170,14 @@ export default {
             return this.$store.state.webinterview.criticalityLevel
         },
         isCompletionPermitted() {
-            if(this.wasCriticalityInfoLoaded === false) {
+            if (this.mayBeSwitchedToWebMode && this.switchToWeb)
+                return true;
+
+            if (this.wasCriticalityInfoLoaded === false) {
                 return false;
             }
 
-            if (this.doesSupportCriticality !== false) {                
+            if (this.doesSupportCriticality !== false) {
                 if (this.hasCriticalIssues) {
                     if (this.criticalityLevel == 'Block') {
                         return false;
@@ -253,7 +256,7 @@ export default {
     methods: {
         fetchCompleteInfo() {
             this.$store.dispatch('fetchCompleteInfo')
-        },        
+        },
 
         completeInterview() {
             if (!this.isCompletionPermitted)
