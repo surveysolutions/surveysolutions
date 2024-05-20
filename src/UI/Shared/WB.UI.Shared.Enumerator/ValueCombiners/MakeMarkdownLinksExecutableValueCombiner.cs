@@ -27,13 +27,15 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
             var interviewEntity = (IInterviewEntity) values[1];
 
             if (interviewEntity == null) return new SpannableString(htmlText);
-            if (interviewEntity.InterviewId == null) return new SpannableString(htmlText);
 
 #pragma warning disable CA1416 // Validate platform compatibility
             ICharSequence sequence = Build.VERSION.SdkInt >= BuildVersionCodes.N
                 ? Html.FromHtml(htmlText, FromHtmlOptions.ModeLegacy)
                 : Html.FromHtml(htmlText);
 #pragma warning restore CA1416 // Validate platform compatibility
+
+            if (interviewEntity.InterviewId == null) 
+                return new SpannableString(sequence);
 
             var strBuilder = new SpannableStringBuilder(sequence);
 

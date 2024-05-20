@@ -124,7 +124,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             set => this.RaiseAndSetIfChanged(ref this.canSwitchToWebMode, value);
         }
 
-        public bool RequestWebInterview
+        public virtual bool RequestWebInterview
         {
             get => requestWebInterview;
             set => this.RaiseAndSetIfChanged(ref this.requestWebInterview, value);
