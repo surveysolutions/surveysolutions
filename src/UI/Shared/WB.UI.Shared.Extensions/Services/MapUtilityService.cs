@@ -31,12 +31,16 @@ namespace WB.UI.Shared.Extensions.Services
 
         public MapUtilityService(IFileSystemAccessor fileSystemAccessor,
             IEnumeratorArchiveUtils archiveUtils,
+            IUserInteractionService userInteractionService,
             ILogger logger)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.archiveUtils = archiveUtils;
             this.logger = logger;
+            this.UserInteractionService = userInteractionService;
         }
+
+        public IUserInteractionService UserInteractionService { get; set; }
 
         private async Task<Basemap> GetLocalMap(MapDescription existingMap)
         {
@@ -126,6 +130,7 @@ namespace WB.UI.Shared.Extensions.Services
             catch (Exception e)
             {
                 logger.Error("Cant load online map " + existingMap.MapType, e);
+                this.UserInteractionService.ShowToast("Map is not available. Try a different map or retry later");
             }
             
             return null;
