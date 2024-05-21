@@ -130,7 +130,7 @@ namespace WB.UI.Shared.Extensions.Services
             catch (Exception e)
             {
                 logger.Error("Cant load online map " + existingMap.MapType, e);
-                this.UserInteractionService.ShowToast("Map is not available. Try a different map or retry later");
+                this.UserInteractionService.ShowToast("The map is not available. Please select a different map or retry later");
             }
             
             return null;
