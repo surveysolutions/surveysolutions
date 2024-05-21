@@ -1,15 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using Android.Widget;
 using Autofac;
 using Autofac.Features.ResolveAnything;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.Converters;
 using MvvmCross.IoC;
 using MvvmCross.Platforms.Android.Presenters;
-using MvvmCross.Plugin;
 using MvvmCross.ViewModels;
 using MvvmCross.Views;
 using WB.Core.BoundedContexts.Interviewer;
@@ -53,8 +48,6 @@ namespace WB.UI.Interviewer
 
         public Setup()
         {
-            
-         
         }
         
         protected override IMvxViewsContainer InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup, IMvxIoCProvider iocProvider)
@@ -119,12 +112,6 @@ namespace WB.UI.Interviewer
             if (!string.IsNullOrEmpty(arcgisruntimeKey))
             {
                 ServiceLocator.Current.GetInstance<IMapInteractionService>().SetLicenseKey(arcgisruntimeKey);
-            }
-            
-            string arcgisruntimeApiKey = ApplicationContext.Resources.GetString(Resource.String.arcgisruntime_api_key);
-            if (!string.IsNullOrEmpty(arcgisruntimeApiKey))
-            {
-                ServiceLocator.Current.GetInstance<IMapInteractionService>().SetApiKey(arcgisruntimeApiKey);
             }
             
             var status = new UnderConstructionInfo();

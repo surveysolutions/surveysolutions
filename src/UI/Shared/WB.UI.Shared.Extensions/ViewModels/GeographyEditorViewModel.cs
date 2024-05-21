@@ -41,9 +41,11 @@ namespace WB.UI.Shared.Extensions.ViewModels
             IEnumeratorSettings enumeratorSettings, IMapUtilityService mapUtilityService,
             IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher,
             IVirbationService vibrationService,
-            IPermissionsService permissionsService)
+            IPermissionsService permissionsService,
+            IEnumeratorSettings settings
+            )
             : base(principal, viewModelNavigationService, mapService, userInteractionService, logger,
-                enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher, permissionsService)
+                enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher, permissionsService, settings)
         {
             VibrationService = vibrationService;
         }

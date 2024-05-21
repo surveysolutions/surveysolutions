@@ -46,9 +46,11 @@ namespace WB.UI.Shared.Extensions.ViewModels
             IMapUtilityService mapUtilityService,
             IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher,
             IDashboardViewModelFactory dashboardViewModelFactory, 
-            IPermissionsService permissionsService) 
+            IPermissionsService permissionsService,
+            IEnumeratorSettings settings) 
             : base(principal, viewModelNavigationService, mapService, userInteractionService, logger, 
-                   enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher, permissionsService)
+                   enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher, permissionsService, 
+                   settings)
         {
             this.AssignmentsRepository = assignmentsRepository;
             this.InterviewViewRepository = interviewViewRepository;

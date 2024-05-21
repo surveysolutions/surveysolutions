@@ -27,7 +27,7 @@
         WorkspaceUpdated = 22,
         UserPasswordChanged = 23,
         UserPasswordChangeFailed = 24,
-        
+        EsriApiKeyChanged = 25,        
         CriticalityLevelChanged = 26
     }
 }
