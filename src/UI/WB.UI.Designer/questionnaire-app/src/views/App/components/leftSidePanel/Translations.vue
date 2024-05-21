@@ -21,9 +21,7 @@
             <div class="button-holder">
                 <p>
                     <span>{{ $t('QuestionnaireEditor.SideBarTranslationGetTemplate') }}</span>
-                    <a class="btn btn-default"
-                        :href="downloadBaseUrl + '/' + questionnaire.questionnaireId + '/template'" target="_blank"
-                        rel="noopener">
+                    <a class="btn btn-default" :href="downloadTemplateUrl" target="_blank" rel="noopener">
                         {{ $t('QuestionnaireEditor.SideBarTranslationGetTemplateLinkTextXlsx') }}
                     </a>
                 </p>
@@ -97,6 +95,10 @@ export default {
 
             return reactive(translation);
         },
+
+        downloadTemplateUrl() {
+            return `${this.downloadBaseUrl}/${this.questionnaire.questionnaireId}/template`
+        }
     },
 
     methods: {
