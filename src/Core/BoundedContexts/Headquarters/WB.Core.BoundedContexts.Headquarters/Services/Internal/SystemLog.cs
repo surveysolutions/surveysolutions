@@ -163,10 +163,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
                 $"{(isEmpty ? "empty" : "not empty")}");
         }
 
-        public void CriticalityLevelChanged(QuestionnaireIdentity questionnaire, CriticalityLevel? level)
+        public void CriticalityLevelChanged(string title, QuestionnaireIdentity questionnaire, CriticalityLevel? level)
         {
                 this.Append(LogEntryType.CriticalityLevelChanged,
-                    $"{questionnaire.QuestionnaireId}(ver. {questionnaire.Version})",
+                    $"{questionnaire.QuestionnaireId}(ver. {questionnaire.Version}) {title}",
                     "criticality level changed", level.ToString()); 
         }
         private void Append(LogEntryType type, string target, string action, string args = null,
