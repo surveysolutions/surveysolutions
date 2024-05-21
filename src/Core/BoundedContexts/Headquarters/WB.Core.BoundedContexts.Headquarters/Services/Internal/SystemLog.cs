@@ -165,9 +165,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
 
         public void CriticalityLevelChanged(string title, QuestionnaireIdentity questionnaire, CriticalityLevel? level)
         {
-                this.Append(LogEntryType.CriticalityLevelChanged,
+                this.Append(LogEntryType.ActionOnSubmissionChanged,
                     $"(ver. {questionnaire.Version}) {title}",
-                    "criticality level changed", level.ToString()); 
+                    "action type on submission changed", level.ToString()); 
         }
         private void Append(LogEntryType type, string target, string action, string args = null,
                 string responsibleName = null, Guid? responsibleUserId = null) 

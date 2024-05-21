@@ -28,6 +28,6 @@
         UserPasswordChanged = 23,
         UserPasswordChangeFailed = 24,
         EsriApiKeyChanged = 25,        
-        CriticalityLevelChanged = 26
+        ActionOnSubmissionChanged = 26
     }
 }
