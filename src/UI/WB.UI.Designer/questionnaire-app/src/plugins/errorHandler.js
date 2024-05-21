@@ -59,6 +59,8 @@ export function setupErrorHandler(app) {
     };*/
 
     window.addEventListener('error', function(e) {
+        if (e.error) return false;
+
         var errorDetails = {
             message: e.error.message,
 
