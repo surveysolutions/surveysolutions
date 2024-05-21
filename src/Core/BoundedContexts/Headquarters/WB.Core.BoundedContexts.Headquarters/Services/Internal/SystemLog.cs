@@ -39,8 +39,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
         public void QuestionnaireImported(string title, QuestionnaireIdentity questionnaire, Guid userId,
             string importUserName, CriticalityLevel? level = null)
         {
-            this.Append(LogEntryType.QuestionnaireImported, $"(ver. {questionnaire.Version}) {title}", "imported",
-                level != null ? $"Criticality level: {level}" : null,
+            this.Append(LogEntryType.QuestionnaireImported, $"(ver. {questionnaire.Version}) {title}", "imported", 
+                "Criticality level: " + (level != null ? level.ToString() : "None"),
                 responsibleName: importUserName,
                 responsibleUserId: userId);
         }
@@ -166,7 +166,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
         public void CriticalityLevelChanged(string title, QuestionnaireIdentity questionnaire, CriticalityLevel? level)
         {
                 this.Append(LogEntryType.CriticalityLevelChanged,
-                    $"{questionnaire.QuestionnaireId}(ver. {questionnaire.Version}) {title}",
+                    $"(ver. {questionnaire.Version}) {title}",
                     "criticality level changed", level.ToString()); 
         }
         private void Append(LogEntryType type, string target, string action, string args = null,
