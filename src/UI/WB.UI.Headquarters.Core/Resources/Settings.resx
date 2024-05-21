@@ -382,6 +382,6 @@ Possible reasons:
       <value>ESRI API Key</value>
   </data>
   <data name="EsriApiKeyDescription" xml:space="preserve">
-      <value>This key will allow to use online maps on devices. Be advised that usage of this service could require extra cost coverage. Please consult with service provider</value>
+      <value>This key will allow to use online maps on devices. Be advised that usage of this service could cost you extra money. Please consult with service provider</value>
   </data>
 </root>
