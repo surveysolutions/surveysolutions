@@ -70,6 +70,7 @@
     "svgo": "2.8.0",
     "trim-newlines": "4.0.2",
     "vite": "^5.1.7",
+    "vite-plugin-pwa": "^0.20.0",
     "vite-plugin-vuetify": "^2.0.2",
     "xmldoc": "1.2.0"
   },

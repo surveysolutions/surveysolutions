@@ -21,6 +21,8 @@ import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css';
 import VueUploadComponent from 'vue-upload-component';
 import Notifications from '@kyvg/vue3-notification';
 
+import { registerSW } from 'virtual:pwa-register';
+
 //import * as uiv from 'uiv';
 
 import directives from './directives/';
@@ -76,4 +78,16 @@ directives(vue);
 // Run!
 router.isReady().then(() => {
     vue.mount('#app');
+
+    const updateSW = registerSW({
+        onNeedRefresh() {
+            console.log('New content available. Refresh?');
+            if (confirm('New content available. Refresh?')) {
+                updateSW(true);
+            }
+        },
+        onOfflineReady() {
+            console.log('App is ready to work offline.2');
+        }
+    });
 });

@@ -7,6 +7,7 @@ import Vue from '@vitejs/plugin-vue';
 import LocalizationPlugin from './tools/vite-plugin-localization';
 //import { VuetifyResolver } from 'unplugin-vue-components/resolvers'
 import Vuetify from 'vite-plugin-vuetify';
+import { VitePWA } from 'vite-plugin-pwa';
 
 const baseDir = path.resolve(__dirname, './');
 const join = path.join.bind(path, baseDir);
@@ -33,6 +34,13 @@ export default defineConfig(({ mode, command }) => {
         base,
         plugins: [
             Vue(),
+            VitePWA({
+                registerType: 'autoUpdate',
+                workbox: {
+                    clientsClaim: true,
+                    skipWaiting: true
+                }
+            }),
             Vuetify({ autoImport: { labs: true } }),
             LocalizationPlugin({
                 noHash: true,
