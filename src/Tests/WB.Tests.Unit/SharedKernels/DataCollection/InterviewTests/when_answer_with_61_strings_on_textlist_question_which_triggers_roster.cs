@@ -10,7 +10,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
-    internal class when_answer_with_61_strings_on_textlist_question_which_triggers_short_roster : InterviewTestsContext
+    internal class when_answer_with_201_strings_on_textlist_question_which_triggers_short_roster : InterviewTestsContext
     {
         [NUnit.Framework.OneTimeSetUp] 
         public void context () {
@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
-            answers=new Tuple<decimal, string>[61];
+            answers=new Tuple<decimal, string>[201];
             for (int i = 0; i < answers.Length; i++)
             {
                 answers[i] = new Tuple<decimal, string>(i, i.ToString());
@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             exception.Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_throw_InterviewException_with_explanation () =>
-           exception.Message.ToLower().ToSeparateWords().Should().Contain("answer", "'61'", "question", "roster", "greater", "60");
+           exception.Message.ToLower().ToSeparateWords().Should().Contain("answer", "'201'", "question", "roster", "greater", "200");
 
         private static Interview interview;
         private static Guid userId;

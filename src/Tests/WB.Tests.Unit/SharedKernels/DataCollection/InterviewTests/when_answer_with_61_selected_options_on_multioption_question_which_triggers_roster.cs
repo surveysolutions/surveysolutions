@@ -8,7 +8,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
-    internal class when_answer_with_61_selected_options_on_multioption_question_which_triggers_roster : InterviewTestsContext
+    internal class when_answer_with_201_selected_options_on_multioption_question_which_triggers_roster : InterviewTestsContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireId = Guid.Parse("10000000000000000000000000000000");
@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             rosterSizeQuestionId = Guid.Parse("33333333333333333333333333333333");
 
-            answers = new int[61];
+            answers = new int[201];
             for (int i = 0; i < answers.Length; i++)
             {
                 answers[i] = i;

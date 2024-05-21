@@ -545,9 +545,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             }
             return interviewEntities.ToArray();
         }
-
-        private static readonly Regex HtmlRemovalRegex = new Regex(Constants.HtmlRemovalPattern, RegexOptions.Compiled);
-
+        
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public virtual bool HasCoverPage(Guid interviewId)
         {
@@ -630,7 +628,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         private T GetQuestionReference<T>(IStatefulInterview interview, IQuestionnaire questionnaire, Identity identity)
             where T: QuestionReference, new()
         {
-            var titleText = HtmlRemovalRegex.Replace(interview.GetTitleText(identity), string.Empty);
+            var titleText = Constants.HtmlRemovalRegex.Replace(interview.GetTitleText(identity), string.Empty);
             var isPrefilled = interview.IsQuestionPrefilled(identity);
             var parentId = interviewEntityFactory.GetUIParent(interview, questionnaire, identity);
             return new T

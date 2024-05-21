@@ -100,7 +100,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var answerViewModels = this.Answers.OfType<TextListItemViewModel>().ToList();
 
             bool denyAddNewItem = (this.maxAnswerCount.HasValue && answerViewModels.Count >= maxAnswerCount.Value) ||
-                                  (this.isRosterSizeQuestion && answerViewModels.Count >= Constants.MaxLongRosterRowCount);
+                                  (this.isRosterSizeQuestion && answerViewModels.Count >= Constants.MaxRosterRowCount);
 
             if (denyAddNewItem && this.addNewItemViewModel != null)
             {

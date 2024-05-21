@@ -308,10 +308,10 @@ namespace WB.Tests.Unit.Designer.ClassificationsTests
                 Entity.Classification.Group(id: Id.g1, title: "A"),
                 Entity.Classification.Classification(id: Id.g2, title: "B", userId: Id.gA, parent: Id.g1)
             };
-            var orders = Enumerable.Range(1, Constants.MaxLongRosterRowCount + 10).OrderBy(x => Guid.NewGuid()).ToArray();
+            var orders = Enumerable.Range(1, Constants.MaxRosterRowCount + 10).OrderBy(x => Guid.NewGuid()).ToArray();
             entities.AddRange(
                 Enumerable
-                    .Range(1, Constants.MaxLongRosterRowCount + 10)
+                    .Range(1, Constants.MaxRosterRowCount + 10)
                     .Select(i => Entity.Classification.Category(title: $"c {i}", parent: Id.g2, index: orders[i-1], value: i)));
 
             var storage = Create.ClassificationsAccessor(entities.ToArray());
@@ -321,9 +321,9 @@ namespace WB.Tests.Unit.Designer.ClassificationsTests
 
             var categories = (await classificationStorage.GetCategories(Id.g2)).ToList();
 
-            Assert.That(categories.Count, Is.EqualTo(Constants.MaxLongRosterRowCount));
+            Assert.That(categories.Count, Is.EqualTo(Constants.MaxRosterRowCount));
             CollectionAssert.IsOrdered(categories.Select(x => x.Order));
-            Assert.That(categories.Max(x => x.Order), Is.EqualTo(Constants.MaxLongRosterRowCount));
+            Assert.That(categories.Max(x => x.Order), Is.EqualTo(Constants.MaxRosterRowCount));
             Assert.That(categories.Min(x => x.Order), Is.EqualTo(1));
             CollectionAssert.AllItemsAreInstancesOfType(categories,  typeof(Category));
         }

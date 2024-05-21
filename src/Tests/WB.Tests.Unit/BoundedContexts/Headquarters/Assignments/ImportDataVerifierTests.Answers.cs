@@ -456,7 +456,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             // arrange
             var fileName = "mainfile.tab";
             string variableName = "rsq";
-            int answer = 61;
+            int answer = 201;
 
             var rosterSizeQuestionId = Guid.Parse("11111111111111111111111111111111");
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(

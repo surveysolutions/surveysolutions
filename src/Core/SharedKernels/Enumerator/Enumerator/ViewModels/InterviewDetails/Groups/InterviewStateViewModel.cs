@@ -29,6 +29,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         public override void UpdateFromGroupModel()
         {           
+            if (interviewId == null)
+                return;
+            
             IStatefulInterview interview = this.interviewRepository.Get(this.interviewId);
             var interviewSimpleStatus = this.interviewStateCalculationStrategy.GetInterviewSimpleStatus(interview);
 

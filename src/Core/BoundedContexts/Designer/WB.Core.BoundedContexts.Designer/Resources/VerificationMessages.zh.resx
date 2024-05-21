@@ -312,9 +312,6 @@
   <data name="WB0067_VariableNameIsEmpty" xml:space="preserve">
     <value>有效的变量或二维表ID名称不能为空。</value>
   </data>
-  <data name="WB0068_RosterHasMoreThanAllowedChildElements" xml:space="preserve">
-    <value>二维表不能有超过{0}个子元素。</value>
-  </data>
   <data name="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" xml:space="preserve">
     <value>二维表的ID相当于问卷的名称。</value>
   </data>
@@ -344,12 +341,6 @@
   </data>
   <data name="WB0079_MultimediaShouldNotHaveValidationExpression" xml:space="preserve">
     <value>图片型的问题只有有一个验证性条件。</value>
-  </data>
-  <data name="WB0080_LongRosterCannotHaveNestedRosters" xml:space="preserve">
-    <value>有超过{0}行的二维表不能有嵌套的二维表</value>
-  </data>
-  <data name="WB0081_LongRosterCannotBeNested" xml:space="preserve">
-    <value>有超过{0}行的二维表不能被嵌套</value>
   </data>
   <data name="WB0082_RosterSizeMultiOptionQuestionShouldBeLimited" xml:space="preserve">
     <value>二维表大小多选题应该有限制</value>

@@ -11,6 +11,6 @@ namespace Main.Core.Entities.SubEntities.Question
 
         public int? MaxAnswerCount { get; set; }
         
-        public static int MaxAnswerCountLimit => Constants.MaxLongRosterRowCount;
+        public static int MaxAnswerCountLimit => Constants.MaxRosterRowCount;
     }
 }
