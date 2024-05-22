@@ -175,7 +175,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
                 AppendLogEntry(responsibleUserId ?? this.authorizedUser.Id,
                     responsibleName ?? this.authorizedUser.UserName,
                     type,
-                    $"{target}: {action}; {args ?? string.Empty}");
+                    $"{target}: {action}" + (args != null?";":"") + $"{args ?? string.Empty}");
         }
 
         private void AppendLogEntry(Guid? userid, string userName, LogEntryType type, string log)
