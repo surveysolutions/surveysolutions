@@ -1183,10 +1183,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.QuestionnaireIdentity = command.QuestionnaireId;
             InterviewTree changedInterviewTree = GetChangedTree();
 
-            this.PutAnswers(changedInterviewTree, command.Answers, command.AssignmentId, command.OriginDate);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            this.PutAnswers(questionnaire, changedInterviewTree, command.Answers, command.AssignmentId, command.OriginDate);
             this.ProtectAnswers(changedInterviewTree, command.ProtectedVariables);
 
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, entityIdentity: null, command.OriginDate);
             IReadOnlyCollection<InterviewTreeNodeDiff> treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
@@ -1253,13 +1253,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        protected void PutAnswers(InterviewTree changedInterviewTree,
+        protected void PutAnswers(IQuestionnaire questionnaire,
+            InterviewTree changedInterviewTree,
             IEnumerable<InterviewAnswer> answers,
             int? commandAssignmentId,
             DateTimeOffset originDate)
         {
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-
             List<InterviewAnswer>[] answersGroupedByLevels = answers
                 .GroupBy(x => x.Identity.RosterVector.Length)
                 .Select(x => new { Depth = x.Key, Answers = x.ToList() })
@@ -1273,7 +1272,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             foreach (var answersInLevel in answersGroupedByLevels)
             {
-                foreach (InterviewAnswer answer in answersInLevel)
+                var answersInCascadingOrder = SortAnswersInCascadingOrder(answersInLevel, questionnaire);
+                
+                foreach (InterviewAnswer answer in answersInCascadingOrder)
                 {
                     var interviewTreeQuestion = changedInterviewTree.GetQuestion(answer.Identity);
                     // answers were not parsed correctly
@@ -1296,6 +1297,42 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
+        private IEnumerable<InterviewAnswer> SortAnswersInCascadingOrder(List<InterviewAnswer> answersInLevel, IQuestionnaire questionnaire)
+        {
+            var answersCache = answersInLevel
+                .ToDictionary(x => x.Identity.Id, x => x);
+            
+            var questionsWithCascadingParent = answersInLevel
+                .ToDictionary(x => x.Identity.Id, x => questionnaire.GetCascadingQuestionParentId(x.Identity.Id));
+
+            var sortedAnswers = new List<InterviewAnswer>();
+            foreach (var item in answersInLevel)
+            {
+                ProcessItem(item, sortedAnswers, answersCache, questionnaire);
+            }
+
+            return sortedAnswers;
+        }
+
+        private void ProcessItem(InterviewAnswer item, List<InterviewAnswer> sortedAnswers, 
+            Dictionary<Guid, InterviewAnswer> answersCache, IQuestionnaire questionnaire)
+        {
+            //item was already added
+            if (answersCache[item.Identity.Id] == null)
+                return;
+            var parent = questionnaire.GetCascadingQuestionParentId(item.Identity.Id);
+
+            if (parent != null)
+            {
+                if (answersCache.ContainsKey(parent.Value))
+                {
+                    ProcessItem(answersCache[parent.Value], sortedAnswers, answersCache, questionnaire);
+                }
+            }
+
+            sortedAnswers.Add(item);
+            answersCache[item.Identity.Id] = null;
+        }
 
         public void ReevaluateInterview(Guid responsibleId, DateTimeOffset originDate)
         {
