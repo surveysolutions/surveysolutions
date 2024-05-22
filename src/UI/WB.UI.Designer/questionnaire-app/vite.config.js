@@ -39,6 +39,20 @@ export default defineConfig(({ mode, command }) => {
                 workbox: {
                     clientsClaim: true,
                     skipWaiting: true
+                    /*runtimeCaching: [
+                        {
+                            urlPattern: ({ url }) =>
+                                url.origin === self.location.origin,
+                            handler: 'NetworkFirst',
+                            options: {
+                                cacheName: 'dynamic-content',
+                                expiration: {
+                                    maxEntries: 50,
+                                    maxAgeSeconds: 24 //* 60 * 60 // 1 день
+                                }
+                            }
+                        }
+                    ]*/
                 }
             }),
             Vuetify({ autoImport: { labs: true } }),

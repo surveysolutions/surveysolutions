@@ -87,7 +87,62 @@ router.isReady().then(() => {
             }
         },
         onOfflineReady() {
-            console.log('App is ready to work offline.2');
-        }
+            console.log('App is ready to work offlin22222222222.');
+        },
+        scope: '/assets/',
+        url: '/assets/sw.js'
     });
+
+    /*if ('serviceWorker' in navigator) {
+        navigator.serviceWorker
+            .register('/assets/sw.js')
+            .then(registration => {
+                console.log(
+                    'Service Worker registered with scope:',
+                    registration.scope
+                );
+                console.log(
+                    'Service Worker registered with url:',
+                    registration.url
+                );
+            })
+            .catch(error => {
+                console.log('Service Worker registration failed:', error);
+            });
+    }*/
+
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker
+            .register('/assets/sw.js')
+            .then(registration => {
+                console.log(
+                    'Service Worker registered with scope:',
+                    registration.scope
+                );
+                registration.addEventListener('updatefound', () => {
+                    const installingWorker = registration.installing;
+                    installingWorker.onstatechange = () => {
+                        if (installingWorker.state === 'installed') {
+                            if (navigator.serviceWorker.controller) {
+                                console.log(
+                                    'New content is available; please refresh.'
+                                );
+                                if (
+                                    confirm('New content available. Refresh?')
+                                ) {
+                                    window.location.reload();
+                                }
+                            } else {
+                                console.log(
+                                    'Content is cached for offline use.'
+                                );
+                            }
+                        }
+                    };
+                });
+            })
+            .catch(error => {
+                console.log('Service Worker registration failed:', error);
+            });
+    }
 });
