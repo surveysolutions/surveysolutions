@@ -2,8 +2,9 @@
     <div class="unit-section">
         <search-breabcrumbs :sections="search.sections" />
 
-        <a href="javascript:void(0)" v-for="link in search.questions" :key="link.target" class="question short-row"
-            @click="navigate(link)">
+        <a href="javascript:void(0)" v-for="link in search.questions" :key="link.target" class="question" :class='{
+            "short-row": search.sectionId != "critical-rules"
+        }' @click="navigate(link)">
             <span v-html="link.title" />
         </a>
     </div>
