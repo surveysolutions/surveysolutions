@@ -40,7 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
             string importUserName, CriticalityLevel? level = null)
         {
             this.Append(LogEntryType.QuestionnaireImported, $"(ver. {questionnaire.Version}) {title}", "imported", 
-                "Criticality level: " + (level != null ? level.ToString() : "None"),
+                "Action type on submission: " + (level != null ? level.ToString() : "None"),
                 responsibleName: importUserName,
                 responsibleUserId: userId);
         }
