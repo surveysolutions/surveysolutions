@@ -184,7 +184,6 @@
 
   <style name="Interview_Complete_Screen_Statistics_Errors_Label" parent="Interview_Complete_Screen_Statistics_Label">
     <item name="android:textColor">@color/complete_screen_statistics_error_color</item>
-    <item name="android:maxLines">1</item>
     <item name="android:ellipsize">end</item>
   </style>
 
