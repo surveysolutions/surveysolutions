@@ -183,23 +183,6 @@ export default {
             this.$store.dispatch('fetchBreadcrumbs')
             this.$store.dispatch('fetchSectionEntities')
         },
-        getGpsUrl(question) {
-            return `http://maps.google.com/maps?q=${question.answer}`
-        },
-        getAttachment(question) {
-            if (!question.answer) return null
-
-            const details =
-                this.$store.state.webinterview.entityDetails[question.identity]
-            if (details && details.options) {
-                const option = details.options.find(
-                    (o) => o.value === details.answer,
-                )
-                if (option) return option.attachmentName
-            }
-
-            return null
-        },
         navigateTo(commentedQuestion) {
             if (commentedQuestion.isPrefilled && !this.navigateToPrefilled) {
                 this.$router.push({ name: 'prefilled' })
@@ -214,7 +197,7 @@ export default {
                 name: routeName,
                 params: {
                     sectionId: commentedQuestion.parentId,
-                    interviewId: this.$route.params.interviewId,
+                    interviewId: this.interviewId,
                 },
                 hash: '#' + commentedQuestion.id,
             }
