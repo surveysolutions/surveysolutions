@@ -1299,11 +1299,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private IEnumerable<InterviewAnswer> SortAnswersInCascadingOrder(List<InterviewAnswer> answersInLevel, IQuestionnaire questionnaire)
         {
-            var answersCache = answersInLevel
-                .ToDictionary(x => x.Identity.Id, x => x);
-            
-            var questionsWithCascadingParent = answersInLevel
-                .ToDictionary(x => x.Identity.Id, x => questionnaire.GetCascadingQuestionParentId(x.Identity.Id));
+            var answersCache = new Dictionary<Identity, InterviewAnswer>();
+            foreach (var interviewAnswer in answersInLevel)
+            {
+                answersCache.TryAdd(interviewAnswer.Identity, interviewAnswer);
+            }
 
             var sortedAnswers = new List<InterviewAnswer>();
             foreach (var item in answersInLevel)
@@ -1315,23 +1315,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void ProcessItem(InterviewAnswer item, List<InterviewAnswer> sortedAnswers, 
-            Dictionary<Guid, InterviewAnswer> answersCache, IQuestionnaire questionnaire)
+            Dictionary<Identity, InterviewAnswer> answersCache, IQuestionnaire questionnaire)
         {
             //item was already added
-            if (answersCache[item.Identity.Id] == null)
+            if (answersCache[item.Identity] == null)
                 return;
             var parent = questionnaire.GetCascadingQuestionParentId(item.Identity.Id);
 
             if (parent != null)
             {
-                if (answersCache.ContainsKey(parent.Value))
+                var parentIdentity = new Identity(parent.Value, item.Identity.RosterVector);
+                if (answersCache.ContainsKey(parentIdentity))
                 {
-                    ProcessItem(answersCache[parent.Value], sortedAnswers, answersCache, questionnaire);
+                    ProcessItem(answersCache[parentIdentity], sortedAnswers, answersCache, questionnaire);
                 }
             }
 
             sortedAnswers.Add(item);
-            answersCache[item.Identity.Id] = null;
+            answersCache[item.Identity] = null;
         }
 
         public void ReevaluateInterview(Guid responsibleId, DateTimeOffset originDate)
