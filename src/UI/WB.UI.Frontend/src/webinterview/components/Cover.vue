@@ -207,8 +207,6 @@ export default {
                 hash: '#' + commentedQuestion.id,
             }
 
-            debugger;
-
             if (this.$route.params.sectionId == commentedQuestion.parentId) {
                 this.$router.replace(navigateToEntity)
                 this.$store.dispatch('sectionRequireScroll', { id: navigateToEntity.hash })
