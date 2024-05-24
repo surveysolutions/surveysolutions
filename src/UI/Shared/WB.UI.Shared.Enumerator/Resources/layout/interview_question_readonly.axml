@@ -6,6 +6,11 @@
     <TextView
         style="@style/Interview_Question_Title"
         local:MvxBind="Html QuestionState.Header.Title.HtmlText;" />
+    <MvxFrameControl
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            local:MvxTemplate="@layout/interview_question__instructions"
+            local:MvxBind="DataContext InstructionViewModel" />
     <LinearLayout
         style="@style/Interview_Readonly_Question_Layout">
         <ImageView
@@ -16,6 +21,7 @@
             local:MvxBind="Text Answer;" />
     </LinearLayout>
     <include layout="@layout/interview__attachment" />
+    
     <MvxFrameControl
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
