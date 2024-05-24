@@ -27,6 +27,7 @@ Vue.component('Variable', () => import( './Variable'))
 Vue.component('TableRoster', () => import( './TableRoster'))
 Vue.component('MatrixRoster', () => import( './MatrixRoster'))
 Vue.component('Unsupported', () => import( './Unsupported'))
+Vue.component('ReadonlyQuestion', () => import( './ReadonlyQuestion'))
 
 Vue.component('TableRoster_TextQuestion', () => import( './TableRoster.TextQuestion'))
 Vue.component('TableRoster_Integer', () => import( './TableRoster.Integer'))

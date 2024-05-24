@@ -56,42 +56,11 @@
         </div>
 
         <template v-for="entity in entities">
-            <div
-                class="wrapper-info"
-                v-if="entity.isReadonly"
-                :key="entity.identity"
-            >
-                <div class="container-info" :id="entity.identity">
-                    <h5 v-html="entity.title"></h5>
-                    <p>
-                        <b v-if="entity.entityType == 'Gps'">
-                            <a :href="getGpsUrl(entity)" target="_blank">{{
-                                entity.answer
-                            }}</a>
-                            <br />
-                        </b>
-                        <b
-                            v-else-if="entity.entityType == 'DateTime'"
-                            v-dateTimeFormatting
-                            v-html="entity.answer"
-                        >
-                        </b>
-                        <b v-else>{{ entity.answer }}</b>
-                        <wb-attachment
-                            :attachmentName="getAttachment(entity)"
-                            :interviewId="interviewId"
-                            customCssClass="static-text-image"
-                            v-if="getAttachment(entity)"
-                        />
-                    </p>
-                </div>
-            </div>
-            <component
-                v-else
-                :key="`${entity.identity}-${entity.entityType}`"
-                :is="entity.entityType"
-                :id="entity.identity"
-            ></component>
+            <ReadonlyQuestion v-if="entity.isReadonly" :key="entity.identity" :id="entity.identity">
+            </ReadonlyQuestion>
+
+            <component v-else :key="`${entity.identity}-${entity.entityType}`" :is="entity.entityType"
+                :id="entity.identity"></component>
         </template>
     </div>
 </template>
@@ -238,7 +207,14 @@ export default {
                 hash: '#' + commentedQuestion.id,
             }
 
-            this.$router.push(navigateToEntity)
+            debugger;
+
+            if (this.$route.params.sectionId == commentedQuestion.parentId) {
+                this.$router.replace(navigateToEntity)
+                this.$store.dispatch('sectionRequireScroll', { id: navigateToEntity.hash })
+            } else {
+                this.$router.push(navigateToEntity)
+            }
         },
     },
 }
