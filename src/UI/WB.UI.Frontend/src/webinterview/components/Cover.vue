@@ -83,6 +83,14 @@ export default {
         },
     },
 
+    watch: {
+        ['$route.hash'](to) {
+            if (to != null) {
+                this.$store.dispatch('sectionRequireScroll', { id: to })
+            }
+        },
+    },
+
     beforeMount() {
         this.fetch()
     },
@@ -198,8 +206,12 @@ export default {
                 return
             }
 
+            const routeName = this.$route.params.sectionId == commentedQuestion.parentId
+                ? 'cover'
+                : 'section'
+
             const navigateToEntity = {
-                name: 'section',
+                name: routeName,
                 params: {
                     sectionId: commentedQuestion.parentId,
                     interviewId: this.$route.params.interviewId,
@@ -207,12 +219,7 @@ export default {
                 hash: '#' + commentedQuestion.id,
             }
 
-            if (this.$route.params.sectionId == commentedQuestion.parentId) {
-                this.$router.replace(navigateToEntity)
-                this.$store.dispatch('sectionRequireScroll', { id: navigateToEntity.hash })
-            } else {
-                this.$router.push(navigateToEntity)
-            }
+            this.$router.push(navigateToEntity)
         },
     },
 }

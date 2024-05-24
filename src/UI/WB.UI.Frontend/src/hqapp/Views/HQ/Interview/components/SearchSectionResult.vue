@@ -26,11 +26,17 @@ export default {
             if (this.search.sectionId == 'critical-rules')
                 return;
 
-            var self = this
+            const coverPageId = this.$config.coverPageId == undefined
+                ? this.$config.model.coverPageId
+                : this.$config.coverPageId
+            const routeName = coverPageId == this.search.sectionId
+                ? 'cover'
+                : 'section'
+
             this.$router.push(
-                { name: 'section', params: { sectionId: this.search.sectionId }, hash: '#' + link.target },
+                { name: routeName, params: { sectionId: this.search.sectionId }, hash: '#' + link.target },
                 undefined,
-                () => { self.$store.dispatch('sectionRequireScroll', { id: '#' + link.target }) }
+                () => { this.$store.dispatch('sectionRequireScroll', { id: '#' + link.target }) }
             )
         },
     },
