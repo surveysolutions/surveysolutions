@@ -13,6 +13,7 @@
             android:visibility="visible"
             android:max="100"
             style="@style/LoadingProgressIndicator"
+            android:layout_marginBottom="@dimen/Interview_Entity_margin_vertical"
             local:MvxBind="IndeterminateMode true; Visible IsLoading" />
 
     <LinearLayout style="@style/Interview_Question" 
