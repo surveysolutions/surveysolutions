@@ -202,13 +202,13 @@
     <value>错误</value>
   </data>
   <data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
-    <value>您的用户账号被锁定。请联系support@mysurvey.solutions。</value>
+    <value>您的用户帐户已被锁定。请联系支持人员。</value>
   </data>
   <data name="ErrorMessage_AccountIsNotApprovedOnServer" xml:space="preserve">
     <value>您的账户尚未被批准。请先确认账户。</value>
   </data>
   <data name="ErrorMessage_InternalServerError" xml:space="preserve">
-    <value>服务器错误。请联系support@mysurvey.solutions.</value>
+    <value>服务器错误。请联系.</value>
   </data>
   <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
     <value>提供的Survey Solutions Designer URL非法，请检查设置。</value>

@@ -213,13 +213,13 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Eroare</value>
   </data>
   <data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
-    <value>Contul dvs. este blocat. Vă rugăm să contactați echipa de suport la support@mysurvey.solutions.</value>
+    <value>Contul dvs. este blocat. Vă rugăm să contactați echipa de suport.</value>
   </data>
   <data name="ErrorMessage_AccountIsNotApprovedOnServer" xml:space="preserve">
     <value>Contul dvs. nu a fost aprobat. Vă rugăm să îl confirmați mai întâi.</value>
   </data>
   <data name="ErrorMessage_InternalServerError" xml:space="preserve">
-    <value>Eroare de server. Vă rugăm să contactați echipa de suport la support@mysurvey.solutions</value>
+    <value>Eroare de server. Vă rugăm să contactați echipa de suport</value>
   </data>
   <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
     <value>Adresa URL introdusă pentru Survey Solutions Designer nu este validă. Verificați setările.</value>

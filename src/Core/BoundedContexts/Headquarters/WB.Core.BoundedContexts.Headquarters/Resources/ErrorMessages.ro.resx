@@ -130,7 +130,7 @@
     <value>Eroare de conexiune la Designer. Verificați conexiunea la Internet.</value>
   </data>
   <data name="ServerError" xml:space="preserve">
-    <value>Eroare de conexiune la server. Contactați echipa de suport Survey Solutions la support@mysurvey.solutions.</value>
+    <value>Eroare de conexiune la server. Contactați echipa de suport.</value>
   </data>
   <data name="ServiceUnavailable" xml:space="preserve">
     <value>Aplicația Designer indisponibilă. Asigurați-vă că nu este în mentenanță.</value>

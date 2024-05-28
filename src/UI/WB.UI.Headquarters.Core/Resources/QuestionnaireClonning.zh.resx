@@ -127,6 +127,6 @@
     <value>复制问卷</value>
   </data>
   <data name="UnexpectedError" xml:space="preserve">
-    <value>发生了未知错误。很抱歉给您带来不便。请联系support@mysurvey.solutions或稍后再试。</value>
+    <value>发生未知错误。我们对由此造成的不便深表歉意。请联系客服或稍后重试。</value>
   </data>
 </root>
