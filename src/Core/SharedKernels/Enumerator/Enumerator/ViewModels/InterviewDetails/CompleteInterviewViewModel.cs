@@ -190,6 +190,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 isCompletionAllowed = value;
                 RaisePropertyChanged(() => IsCompletionAllowed);
                 RaisePropertyChanged(() => CompleteInterviewCommand);
+                RaisePropertyChanged(() => CompleteStatus);
             }
         }
 
