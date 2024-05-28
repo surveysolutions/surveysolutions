@@ -183,7 +183,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             if (this.WasThisInterviewCompleted)
                 return;
 
-            if (HasCriticalIssues)
+            if (HasCriticalIssues && !this.RequestWebInterview)
             {
                 var confirmResult = await userInteractionService.ConfirmAsync(UIResources.Interview_Complete_WithWarningCriticality,
                     okButton: UIResources.Yes,
