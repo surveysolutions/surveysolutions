@@ -399,7 +399,7 @@
     <value>Недостаточно свободного места на выбранном внешнем хранилище. Освободите место, запустите экспорт заново или выберите другого провайдера.</value>
   </data>
   <data name="Error_Unhandled" xml:space="preserve">
-    <value>Во время экспорта произошла непредвиденная ошибка. Приносим извинения за неудобства. Пожалуйста, свяжитесь со службой поддержки support@mysurvey.solutions (https://support.mysurvey.solutions/headquarters/config/standalone-server-errors/).</value>
+    <value>Во время экспорта произошла непредвиденная ошибка. Приносим извинения за неудобства. Пожалуйста, свяжитесь со службой поддержки вашего сервера. Больше информации по адресу https://support.mysurvey.solutions/headquarters/config/standalone-server-errors/.</value>
   </data>
   <data name="AllStatuses" xml:space="preserve">
     <value>любом статусе</value>

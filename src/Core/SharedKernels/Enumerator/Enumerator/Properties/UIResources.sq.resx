@@ -232,13 +232,13 @@
     <value>Gabim</value>
   </data>
   <data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
-    <value>Llogaria juaj e përdoruesit është bllokuar. Ju lutemi, kontaktoni ekipin e mbështetjes në support@mysurvey.solutions.</value>
+    <value>Llogaria juaj e përdoruesit është bllokuar. Ju lutemi, kontaktoni ekipin e mbështetjes.</value>
   </data>
   <data name="ErrorMessage_AccountIsNotApprovedOnServer" xml:space="preserve">
     <value>Llogaria juaj nuk u miratua. Ju lutemi, konfirmoni në fillim llogarinë tuaj.</value>
   </data>
   <data name="ErrorMessage_InternalServerError" xml:space="preserve">
-    <value>Gabim i serverit. Ju lutemi, kontaktoni ekipin e mbështetës në support@mysurvey.solutions</value>
+    <value>Gabim i serverit. Ju lutemi, kontaktoni ekipin e mbështetës</value>
   </data>
   <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
     <value>URL-ja e dhënë e Survey Solutions Designer është e pavlefshme.</value>

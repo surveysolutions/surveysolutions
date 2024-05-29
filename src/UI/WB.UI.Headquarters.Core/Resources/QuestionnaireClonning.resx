@@ -127,6 +127,6 @@
     <value>Copy</value>
   </data>
   <data name="UnexpectedError" xml:space="preserve">
-    <value>Unexpected error occurred. Sorry for the inconvenience. Please contact support@mysurvey.solutions or try again later.</value>
+    <value>Unexpected error occurred. Sorry for the inconvenience. Please contact support or try again later.</value>
   </data>
 </root>

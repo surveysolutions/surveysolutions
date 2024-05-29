@@ -121,7 +121,7 @@
     <value>Arhivele protejate cu parolă nu sunt suportate</value>
   </data>
   <data name="PL0002_MoreThenOneLevel" xml:space="preserve">
-    <value>[PL0002] N/A Contactați echipa de suport la support@mysurvey.solutions</value>
+    <value>[PL0002] N/A Contactați echipa de suport.ß</value>
   </data>
   <data name="PL0003_ColumnWasntMappedOnQuestion" xml:space="preserve">
     <value>Coloana nu poate fi reprodusă pentru orice întrebare din chestionar.</value>

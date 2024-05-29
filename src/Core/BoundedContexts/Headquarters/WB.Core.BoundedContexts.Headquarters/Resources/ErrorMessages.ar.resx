@@ -130,7 +130,7 @@
     <value>انتهت مهلة عند محاولة الاتصال بالمصمم. الرجاء التحقق من اتصال الانترنت الخاص بك</value>
   </data>
   <data name="ServerError" xml:space="preserve">
-    <value>حدث خطأ داخلي في الخادم. يرجى الاتصال بفريق دعم عملاء Survey Solutions على support@mysurvey.solutions.</value>
+    <value>حدث خطأ داخلي في الخادم. يرجى الاتصال بفريق دعم عملاء</value>
   </data>
   <data name="ServiceUnavailable" xml:space="preserve">
     <value>المصمم غير موجود. الرجاء التأكد من أن المصمم ليس في وضع الصيانة</value>

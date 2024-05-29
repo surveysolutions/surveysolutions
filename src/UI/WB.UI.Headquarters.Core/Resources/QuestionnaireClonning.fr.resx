@@ -127,6 +127,6 @@
     <value>Cloner le questionnaire</value>
   </data>
   <data name="UnexpectedError" xml:space="preserve">
-    <value>Une erreur inattendue s'est produite. Désolé pour le désagrément. Veuillez contacter support@mysurvey.solutions ou réessayer plus tard.</value>
+    <value>Une erreur inattendue s'est produite. Désolé pour le désagrément. Veuillez contacter l'assistance ou réessayer plus tard.</value>
   </data>
 </root>
