@@ -97,8 +97,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             Task.Run(() => CollectCriticalityInfo(interviewUid, navigationState));
         }
         
-        CriticalityLevel? criticalityLevel = null;
-        
         private Task CollectCriticalityInfo(string interviewId, NavigationState navigationState)
         {
             if (!this.HasCriticalFeature(interviewId) || criticalityLevel == CriticalityLevel.Ignore)
