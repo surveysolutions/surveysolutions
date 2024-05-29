@@ -1302,7 +1302,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var answersCache = new Dictionary<Identity, InterviewAnswer>();
             foreach (var interviewAnswer in answersInLevel)
             {
-                answersCache.TryAdd(interviewAnswer.Identity, interviewAnswer);
+                answersCache.Add(interviewAnswer.Identity, interviewAnswer);
             }
 
             var sortedAnswers = new List<InterviewAnswer>();
