@@ -144,13 +144,13 @@
     <value>แอดเดรสสำหรับเว็บเซอร์วิส</value>
   </data>
   <data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
-    <value>บัญชีผู้ใช้ถูกล็อก กรุณาติดต่อทีมสนับสนุนที่ support@mysurvey.solutions</value>
+    <value>บัญชีผู้ใช้ถูกล็อก กรุณาติดต่อทีมสนับสนุนที่</value>
   </data>
   <data name="ErrorMessage_AccountIsNotApprovedOnServer" xml:space="preserve">
     <value>บัญชีผู้ใช้ไม่ได้รับการอนุมัติ กรุณายืนยันบัญชีผู้ใช้ก่อน</value>
   </data>
   <data name="ErrorMessage_InternalServerError" xml:space="preserve">
-    <value>ข้อผิดพลาดของเซิร์ฟเวอร์ กรุณาติดต่อทีมสนับสนุนที่ support@mysurvey.solutions</value>
+    <value>ข้อผิดพลาดของเซิร์ฟเวอร์ กรุณาติดต่อทีมสนับสนุนที่</value>
   </data>
   <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
     <value>แอดเดรสของ Survey Solutions Designer ไม่ถูกต้อง กรุณาตรวจสอบการตั้งค่า</value>

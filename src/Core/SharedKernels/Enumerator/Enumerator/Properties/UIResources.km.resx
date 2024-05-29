@@ -143,13 +143,13 @@
     <value>ចំនុចបញ្ចប់ សេវាweb</value>
   </data>
   <data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
-    <value>គណនីអ្នកប្រើបានចាក់សោរ។ សូមទាក់ទងទៅក្រុមជំនួយ តាមអ៊ីមែល​៖ support@mysurvey.solutions</value>
+    <value>គណនីអ្នកប្រើបានចាក់សោរ។ សូមទាក់ទងទៅក្រុមជំនួយ</value>
   </data>
   <data name="ErrorMessage_AccountIsNotApprovedOnServer" xml:space="preserve">
     <value>គណនីរបស់អ្នកមិនដំណើរការ។ សូមបញ្ជាក់គណនីដំបូងរបស់អ្នក</value>
   </data>
   <data name="ErrorMessage_InternalServerError" xml:space="preserve">
-    <value>Server មិនដំណើរការ។ សូមទាក់ទងទៅក្រុមជំនួយ តាមអ៊ីមែល​៖ support@mysurvey.solutions</value>
+    <value>Server មិនដំណើរការ។ សូមទាក់ទងទៅក្រុមជំនួយ</value>
   </data>
   <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
     <value>Survey Solutions Designer URL មិនមានដំណើរការ។ សូមពិនិត្យទៅ ស៊ីតធីង</value>

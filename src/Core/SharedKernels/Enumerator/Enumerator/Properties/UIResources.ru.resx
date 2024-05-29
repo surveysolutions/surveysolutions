@@ -417,7 +417,7 @@
     <value>Ваша учетная запись уже привязана к другому устройству</value>
   </data>
   <data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
-    <value>Ваша учетная запись заблокирована. Обратитесь в службу поддержки по адресу support@mysurvey.solutions.</value>
+    <value>Ваша учетная запись заблокирована. Обратитесь в службу поддержки.</value>
   </data>
   <data name="ErrorMessage_UpgradeRequired" xml:space="preserve">
     <value>Выпущена новая версия приложения. Обновитесь, пожалуйста.</value>

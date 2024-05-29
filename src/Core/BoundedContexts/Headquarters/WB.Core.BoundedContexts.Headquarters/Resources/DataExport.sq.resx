@@ -268,7 +268,7 @@
     <value>Memoria e ruajtjes së të dhënave në re nuk ka hapësirë të mjaftueshme. Ju lutemi, lironi hapësirë dhe vazhdoni punën ose zgjidhni një ofrues tjetër.</value>
   </data>
   <data name="Error_Unhandled" xml:space="preserve">
-    <value>Gjatë eksportit ndodhi një gabim i papritur. Na falni për shqetësimin. Ju lutemi, kontaktoni me ekipin mbështetës support@mysurvey.solutions.</value>
+    <value>Gjatë eksportit ndodhi një gabim i papritur. Na falni për shqetësimin. Ju lutemi, kontaktoni me ekipin mbështetës.</value>
   </data>
   <data name="ErrorThereAreRunningProcesses" xml:space="preserve">
     <value>Nuk mund të ndryshoni cilësimet e eksportit, pasi procesi i eksportimit është duke u ekzekutuar tashmë.</value>
