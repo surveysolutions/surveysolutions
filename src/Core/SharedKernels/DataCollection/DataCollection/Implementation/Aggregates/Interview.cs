@@ -1325,7 +1325,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (parent != null)
             {
                 var parentIdentity = new Identity(parent.Value, item.Identity.RosterVector);
-                if (answersCache.ContainsKey(parentIdentity))
+                if (answersCache.ContainsKey(parentIdentity) && answersCache[parentIdentity] != null)
                 {
                     ProcessItem(answersCache[parentIdentity], sortedAnswers, answersCache, questionnaire);
                 }

@@ -49,6 +49,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Preloading
                         Create.Entity.Answer("EnValue1", 1, 1),
                         Create.Entity.Answer("EnValue2", 2, 2),
                     }),
+                Create.Entity.SingleOptionQuestion(questionId: singleOptionLevel41,
+                    cascadeFromQuestionId: singleOptionLevel3,
+                    variable: "singleOptionLevel41",
+                    answers: new List<Answer>()
+                    {
+                        Create.Entity.Answer("EnValue1", 1, 1),
+                        Create.Entity.Answer("EnValue2", 2, 2),
+                    }),
                 Create.Entity.SingleOptionQuestion(questionId: singleOption,
                     variable: "singleOption",
                     answers: new List<Answer>()
@@ -66,6 +74,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Preloading
             {
                 Create.Entity.PreloadedLevelDto(Create.Entity.RosterVector(),
                     new PreloadedAnswer(singleOptionLevel4, Create.Entity.SingleOptionAnswer(2))),
+                
+                Create.Entity.PreloadedLevelDto(Create.Entity.RosterVector(),
+                    new PreloadedAnswer(singleOptionLevel41, Create.Entity.SingleOptionAnswer(2))),
                 
                 Create.Entity.PreloadedLevelDto(Create.Entity.RosterVector(),
                     new PreloadedAnswer(singleOption, Create.Entity.SingleOptionAnswer(2))),
@@ -114,6 +125,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Preloading
         static readonly Guid singleOptionLevel2 = Guid.Parse("22222222222222222222222222222222");
         static readonly Guid singleOptionLevel3 = Guid.Parse("33333333333333333333333333333333");
         static readonly Guid singleOptionLevel4 = Guid.Parse("44444444444444444444444444444444");
+        static readonly Guid singleOptionLevel41 = Guid.Parse("44444444444444444444444444444441");
         static readonly Guid singleOption = Guid.Parse("55555555555555555555555555555555");
         
         static CreateInterview command;
