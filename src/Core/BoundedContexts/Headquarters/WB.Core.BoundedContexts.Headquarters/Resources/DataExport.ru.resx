@@ -431,4 +431,7 @@
   <data name="SurveyQuestionnaireTranslation" xml:space="preserve">
       <value>Перевод</value>
   </data>
+  <data name="RemoveExportCacheGeneratingFail" xml:space="preserve">
+      <value>Удаление кеша было неуспешно</value>
+  </data>
 </root>
