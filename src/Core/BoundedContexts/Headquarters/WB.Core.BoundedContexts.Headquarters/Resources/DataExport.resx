@@ -420,7 +420,4 @@
   <data name="SurveyQuestionnaireTranslation" xml:space="preserve">
       <value>Translation</value>
   </data>
-  <data name="RemoveExportCacheGeneratingFail" xml:space="preserve">
-      <value>Export cache removal failed</value>
-  </data>
 </root>

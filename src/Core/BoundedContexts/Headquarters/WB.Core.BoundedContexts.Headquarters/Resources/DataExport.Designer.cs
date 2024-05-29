@@ -650,11 +650,5 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
                 return ResourceManager.GetString("SurveyQuestionnaireTranslation", resourceCulture);
             }
         }
-        
-        public static string RemoveExportCacheGeneratingFail {
-            get {
-                return ResourceManager.GetString("RemoveExportCacheGeneratingFail", resourceCulture);
-            }
-        }
     }
 }

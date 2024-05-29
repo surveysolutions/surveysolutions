@@ -15,6 +15,7 @@ using WB.Core.Infrastructure.Domain;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.Models;
+using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers.Api
 {
@@ -98,11 +99,11 @@ namespace WB.UI.Headquarters.Controllers.Api
         public async Task<IActionResult> RemoveExportCache()
         {
             if (await this.IsExistsDataExportInProgress())
-                return StatusCode((int)HttpStatusCode.Forbidden,new {message = DataExport.RemoveExportCacheGeneratingFail});
+                return StatusCode((int)HttpStatusCode.Forbidden,new {message = Settings.RemoveExportCacheGeneratingFail});
 
             var status = await exportServiceApi.DroppingTenantStatus();
             if (status.Status == DropTenantStatus.Removing)
-                return StatusCode((int)HttpStatusCode.Forbidden,new {message = DataExport.RemoveExportCacheGeneratingFail});
+                return StatusCode((int)HttpStatusCode.Forbidden,new {message = Settings.RemoveExportCacheGeneratingFail});
 
             Task.Run(RunClearExportData).Wait(TimeSpan.FromSeconds(2));
 
