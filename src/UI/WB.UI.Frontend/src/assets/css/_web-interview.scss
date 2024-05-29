@@ -510,6 +510,12 @@
 }
 
 .question-editor {
+    .readonly-answer-group {
+        position: relative;
+        padding-left: 10px;
+        margin-bottom: 0px;
+    }
+
     .options-group {
         position: relative;
         padding: 10px;
