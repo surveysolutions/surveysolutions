@@ -277,7 +277,7 @@ export default {
             if (this.switchToWeb)
                 this.$store.dispatch('requestWebInterview', this.comment)
             else {
-                if (this.criticalityLevel == 'Warn') {
+                if (this.hasCriticalIssues && this.criticalityLevel == 'Warn') {
 
                     modal.dialog({
                         title: `<h2> ${this.$t('WebInterviewUI.ConfirmationNeededTitle')}</h2>`,
