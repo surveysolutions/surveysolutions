@@ -21,6 +21,8 @@ namespace WB.UI.Shared.Enumerator.Activities
 
             var recyclerView = view.FindViewById<MvxRecyclerView>(Resource.Id.tv_Complete_Groups);
             recyclerView.SetLayoutManager(new LinearLayoutManager(Context));
+            
+            recyclerView.SetItemAnimator(new NoAnimationItemAnimator());
 
             return view;
         }
