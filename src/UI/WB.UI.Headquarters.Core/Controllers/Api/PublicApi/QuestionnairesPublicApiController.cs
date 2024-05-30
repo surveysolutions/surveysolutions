@@ -296,7 +296,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             
             questionnaire.CriticalityLevel = requestData.CriticalityLevel;
             
-            this.systemLog.CriticalityLevelChanged(questionnaire.Identity(), questionnaire.CriticalityLevel);
+            this.systemLog.CriticalityLevelChanged(questionnaire.Title, questionnaire.Identity(), questionnaire.CriticalityLevel);
 
             return NoContent();
         }

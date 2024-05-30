@@ -15,8 +15,8 @@ import 'bootstrap';
 
 import ConfirmDialog from './plugins/confirm';
 
-import PerfectScrollbar from 'vue3-perfect-scrollbar';
-import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css';
+import { PerfectScrollbarPlugin } from 'vue3-perfect-scrollbar';
+import 'vue3-perfect-scrollbar/style.css';
 
 import VueUploadComponent from 'vue-upload-component';
 import Notifications from '@kyvg/vue3-notification';
@@ -48,7 +48,7 @@ vue.use(pinia);
 vue.use(I18NextVue, { i18next });
 //vue.use(uiv);
 vue.use(vuetify); //reqired by options component. consider either remove or use.
-vue.use(PerfectScrollbar);
+vue.use(PerfectScrollbarPlugin);
 vue.use(VueDOMPurifyHTML);
 vue.component('file-upload', VueUploadComponent);
 vue.use(Notifications);

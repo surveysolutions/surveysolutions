@@ -390,4 +390,10 @@
   <data name="LogoSettings_Description1" xml:space="preserve">
       <value>Нажмите кнопку «Выбрать файл», чтобы загрузить изображение со своего компьютера на сервер.</value>
   </data>
+  <data name="EsriApiKey" xml:space="preserve">
+      <value>ESRI API ключ</value>
+  </data>
+  <data name="EsriApiKeyDescription" xml:space="preserve">
+      <value>Позволит использовать карты из Интернета</value>
+  </data>
 </root>

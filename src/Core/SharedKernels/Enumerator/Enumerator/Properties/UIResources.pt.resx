@@ -144,13 +144,13 @@ Pode criar ou editar seus questionários em Survey Solutions Designer</value>
     <value>Ponto de extremidade de serviço Web:</value>
   </data>
   <data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
-    <value>Sua conta de usuário está bloqueada. Favor de entrar em contato com a equipe de suporte em support@mysurvey.solutions.</value>
+    <value>Sua conta de usuário está bloqueada. Favor de entrar em contato com a equipe de suporte.</value>
   </data>
   <data name="ErrorMessage_AccountIsNotApprovedOnServer" xml:space="preserve">
     <value>Sua conta não é aprovada. Por favor, confirme sua conta primeiro.</value>
   </data>
   <data name="ErrorMessage_InternalServerError" xml:space="preserve">
-    <value>Erro de servidor. Favor de entrar em contato com a equipe de suporte em support@mysurvey.solutions</value>
+    <value>Erro de servidor. Favor de entrar em contato com a equipe de suporte</value>
   </data>
   <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
     <value>Survey Solutions Designer URL fornecido é inválido. Verifique as configurações.</value>

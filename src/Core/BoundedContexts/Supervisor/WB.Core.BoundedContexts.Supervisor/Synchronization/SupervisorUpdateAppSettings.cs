@@ -27,6 +27,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
             supervisorSettings.SetWebInterviewUrlTemplate(tabletSettings.WebInterviewUrlTemplate);
             supervisorSettings.SetGeographyQuestionAccuracyInMeters(tabletSettings.GeographyQuestionAccuracyInMeters);
             supervisorSettings.SetGeographyQuestionPeriodInSeconds(tabletSettings.GeographyQuestionPeriodInSeconds);
+            supervisorSettings.SetEsriApiKey(tabletSettings.EsriApiKey);
             supervisorSettings.SetNotifications(tabletSettings.NotificationsEnabled);
         }
     }

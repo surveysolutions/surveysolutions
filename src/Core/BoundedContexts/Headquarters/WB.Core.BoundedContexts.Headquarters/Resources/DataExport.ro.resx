@@ -370,7 +370,7 @@
     <value>Nu este suficient spațiu pentru stocarea în cloud selectată. Eliberați spațiu și reporniți lucrarea sau alegeți un alt furnizor.</value>
   </data>
   <data name="Error_Unhandled" xml:space="preserve">
-    <value>A apărut o eroare neașteptată în timpul exportului. Regretăm neplăcerile produse. Vă rugăm să contactați echipa de asistență la emailul: support@mysurvey.solutions și să furnizați fișierele jurnal * .log care sunt stocate în folderul aplicației. Informații suplimentare despre această problemă sunt disponibile la pagina de asistență: https://support.mysurvey.solutions/headquarters/config/standalone-server-errors/.</value>
+    <value>A apărut o eroare neașteptată în timpul exportului. Regretăm neplăcerile produse. Vă rugăm să contactați echipa de asistență. Informații suplimentare despre această problemă sunt disponibile la pagina de asistență: https://support.mysurvey.solutions/headquarters/config/standalone-server-errors/.</value>
   </data>
   <data name="FilterTitle" xml:space="preserve">
     <value>Filtrul pentru interviurile de exportat</value>

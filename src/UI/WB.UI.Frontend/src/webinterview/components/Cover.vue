@@ -56,42 +56,11 @@
         </div>
 
         <template v-for="entity in entities">
-            <div
-                class="wrapper-info"
-                v-if="entity.isReadonly"
-                :key="entity.identity"
-            >
-                <div class="container-info" :id="entity.identity">
-                    <h5 v-html="entity.title"></h5>
-                    <p>
-                        <b v-if="entity.entityType == 'Gps'">
-                            <a :href="getGpsUrl(entity)" target="_blank">{{
-                                entity.answer
-                            }}</a>
-                            <br />
-                        </b>
-                        <b
-                            v-else-if="entity.entityType == 'DateTime'"
-                            v-dateTimeFormatting
-                            v-html="entity.answer"
-                        >
-                        </b>
-                        <b v-else>{{ entity.answer }}</b>
-                        <wb-attachment
-                            :attachmentName="getAttachment(entity)"
-                            :interviewId="interviewId"
-                            customCssClass="static-text-image"
-                            v-if="getAttachment(entity)"
-                        />
-                    </p>
-                </div>
-            </div>
-            <component
-                v-else
-                :key="`${entity.identity}-${entity.entityType}`"
-                :is="entity.entityType"
-                :id="entity.identity"
-            ></component>
+            <ReadonlyQuestion v-if="entity.isReadonly" :key="entity.identity" :id="entity.identity">
+            </ReadonlyQuestion>
+
+            <component v-else :key="`${entity.identity}-${entity.entityType}`" :is="entity.entityType"
+                :id="entity.identity"></component>
         </template>
     </div>
 </template>
@@ -111,6 +80,14 @@ export default {
         showHumburger: {
             type: Boolean,
             default: true,
+        },
+    },
+
+    watch: {
+        ['$route.hash'](to) {
+            if (to != null) {
+                this.$store.dispatch('sectionRequireScroll', { id: to })
+            }
         },
     },
 
@@ -206,34 +183,21 @@ export default {
             this.$store.dispatch('fetchBreadcrumbs')
             this.$store.dispatch('fetchSectionEntities')
         },
-        getGpsUrl(question) {
-            return `http://maps.google.com/maps?q=${question.answer}`
-        },
-        getAttachment(question) {
-            if (!question.answer) return null
-
-            const details =
-                this.$store.state.webinterview.entityDetails[question.identity]
-            if (details && details.options) {
-                const option = details.options.find(
-                    (o) => o.value === details.answer,
-                )
-                if (option) return option.attachmentName
-            }
-
-            return null
-        },
         navigateTo(commentedQuestion) {
             if (commentedQuestion.isPrefilled && !this.navigateToPrefilled) {
                 this.$router.push({ name: 'prefilled' })
                 return
             }
 
+            const routeName = this.$route.params.sectionId == commentedQuestion.parentId
+                ? 'cover'
+                : 'section'
+
             const navigateToEntity = {
-                name: 'section',
+                name: routeName,
                 params: {
                     sectionId: commentedQuestion.parentId,
-                    interviewId: this.$route.params.interviewId,
+                    interviewId: this.interviewId,
                 },
                 hash: '#' + commentedQuestion.id,
             }

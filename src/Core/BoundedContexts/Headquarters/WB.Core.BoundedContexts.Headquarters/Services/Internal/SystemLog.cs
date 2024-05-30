@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
         private readonly IInScopeExecutor<IPlainStorageAccessor<SystemLogEntry>> inScopeExecutor;
         private readonly ILogger logger;
 
-        public SystemLog(IAuthorizedUser authorizedUser, 
+        public SystemLog(IAuthorizedUser authorizedUser,
             IInScopeExecutor<IPlainStorageAccessor<SystemLogEntry>> inScopeExecutor,
             ILogger logger)
         {
@@ -36,16 +36,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
             this.Append(LogEntryType.QuestionnaireDeleted, $"(ver. {questionnaire.Version}) {title}", "deleted");
         }
 
-        public void QuestionnaireImported(string title, QuestionnaireIdentity questionnaire, Guid userId, 
+        public void QuestionnaireImported(string title, QuestionnaireIdentity questionnaire, Guid userId,
             string importUserName, CriticalityLevel? level = null)
         {
-            this.Append(LogEntryType.QuestionnaireImported, $"(ver. {questionnaire.Version}) {title}", "imported",
-                level != null ? $"Criticality level: {level}" : null,
+            this.Append(LogEntryType.QuestionnaireImported, $"(ver. {questionnaire.Version}) {title}", "imported", 
+                "Action type on submission: " + (level != null ? level.ToString() : "None"),
                 responsibleName: importUserName,
                 responsibleUserId: userId);
         }
 
-        public void AssignmentsUpgradeStarted(string title, long fromVersion, long toVersion, Guid userId, string userName)
+        public void AssignmentsUpgradeStarted(string title, long fromVersion, long toVersion, Guid userId,
+            string userName)
         {
             this.Append(LogEntryType.AssignmentsUpgradeStarted, "Assignments", "Upgrade",
                 $"From (ver. {fromVersion}) to (ver. {toVersion}) {title}",
@@ -55,7 +56,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
 
         public void EmailProviderWasChanged(string previousProvider, string currentProvider)
         {
-            this.Append(LogEntryType.EmailProviderChanged, "Update", $"Previous provider was {previousProvider}, current provider is {currentProvider}");
+            this.Append(LogEntryType.EmailProviderChanged, "Update",
+                $"Previous provider was {previousProvider}, current provider is {currentProvider}");
         }
 
         public void UsersImported(int importedSupervisors, int importedInterviewers, string responsibleName)
@@ -109,12 +111,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
 
         public void ExportEncryptionChanged(bool enabled)
         {
-            this.Append(LogEntryType.ExportEncryptionChanged, "Export encryption", "changed", $"{(enabled ? "enabled" : "disabled")}'");
+            this.Append(LogEntryType.ExportEncryptionChanged, "Export encryption", "changed",
+                $"{(enabled ? "enabled" : "disabled")}'");
         }
 
-        public void UserMovedToAnotherTeam(string interviewerName, string newSupervisorName, string previousSupervisorName)
+        public void UserMovedToAnotherTeam(string interviewerName, string newSupervisorName,
+            string previousSupervisorName)
         {
-            this.Append(LogEntryType.UserMovedToAnotherTeam, $"User {interviewerName}", "moved", $"From team {previousSupervisorName}' to {newSupervisorName}");
+            this.Append(LogEntryType.UserMovedToAnotherTeam, $"User {interviewerName}", "moved",
+                $"From team {previousSupervisorName}' to {newSupervisorName}");
         }
 
         public void WorkspaceCreated(string workspaceName, string displayName)
@@ -144,7 +149,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
 
         public void WorkspaceUserAssigned(string userName, ICollection<string> workspaces)
         {
-            this.Append(LogEntryType.WorkspaceUserAssigned,userName, string.Join(", ", workspaces));
+            this.Append(LogEntryType.WorkspaceUserAssigned, userName, string.Join(", ", workspaces));
         }
 
         public void WorkspaceUserUnAssigned(string userName, ICollection<string> workspaces)
@@ -152,43 +157,51 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
             this.Append(LogEntryType.WorkspaceUserUnAssigned, userName, string.Join(", ", workspaces));
         }
 
-        public void CriticalityLevelChanged(QuestionnaireIdentity questionnaire, CriticalityLevel? level)
+        public void EsriApiKeyChanged(bool isEmpty)
         {
-            this.Append(LogEntryType.CriticalityLevelChanged, 
-                $"{questionnaire.QuestionnaireId}(ver. {questionnaire.Version})", 
-                "criticality level changed", level.ToString());
+            this.Append(LogEntryType.EsriApiKeyChanged, "ESRI API key", "changed",
+                $"{(isEmpty ? "empty" : "not empty")}");
         }
 
-        private void Append(LogEntryType type, string target, string action, string args = null, string responsibleName = null, Guid? responsibleUserId = null)
+        public void CriticalityLevelChanged(string title, QuestionnaireIdentity questionnaire, CriticalityLevel? level)
         {
-            AppendLogEntry(responsibleUserId ?? this.authorizedUser.Id,
-                responsibleName ?? this.authorizedUser.UserName,
-                type,
-                $"{target}: {action}; {args ?? string.Empty}");
+                this.Append(LogEntryType.ActionOnSubmissionChanged,
+                    $"(ver. {questionnaire.Version}) {title}",
+                    "action type on submission changed", level.ToString()); 
+        }
+        private void Append(LogEntryType type, string target, string action, string args = null,
+                string responsibleName = null, Guid? responsibleUserId = null) 
+        {
+                AppendLogEntry(responsibleUserId ?? this.authorizedUser.Id,
+                    responsibleName ?? this.authorizedUser.UserName,
+                    type,
+                    $"{target}: {action}" + (args != null ? $"; {args}" : ""));
         }
 
         private void AppendLogEntry(Guid? userid, string userName, LogEntryType type, string log)
         {
-            inScopeExecutor.Execute(systemLogStorage =>
-            {
-                var logEntry = new SystemLogEntry
+                inScopeExecutor.Execute(systemLogStorage =>
                 {
-                    Type = type,
-                    UserName = userName,
-                    UserId = userid,
-                    LogDate = DateTime.UtcNow,
-                    Log = log
-                };
+                    var logEntry = new SystemLogEntry
+                    {
+                        Type = type,
+                        UserName = userName,
+                        UserId = userid,
+                        LogDate = DateTime.UtcNow,
+                        Log = log
+                    };
 
-                try
-                {
-                    systemLogStorage.Store(logEntry, logEntry.Id);
-                }
-                catch (Exception e)
-                {
-                    logger.Error("Error on system log writing", e);
-                }
-            });
+                    try
+                    {
+                        systemLogStorage.Store(logEntry, logEntry.Id);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error("Error on system log writing", e);
+                    }
+                });
         }
+        
     }
+    
 }

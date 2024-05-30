@@ -1826,4 +1826,7 @@
   <data name="Questionnaire_SupportCriticalVerifications" xml:space="preserve">
       <value>Критические проверки</value>
   </data>
+  <data name="ShowKey" xml:space="preserve">
+      <value>Показать ключ</value>
+  </data>
 </root>

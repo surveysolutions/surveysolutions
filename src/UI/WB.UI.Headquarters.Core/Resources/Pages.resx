@@ -1764,4 +1764,7 @@
     <data name="Questionnaire_SetActionOnSubmissionExplanationBlock" xml:space="preserve">
       <value>BLOCK - do check critical rules and prohibit submitting the interview when critical issues are present.</value>
   </data>
+  <data name="ShowKey" xml:space="preserve">
+      <value>Show key</value>
+  </data>
 </root>

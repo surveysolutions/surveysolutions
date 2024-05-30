@@ -36,6 +36,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public InterviewStateViewModel InterviewState { get; set; }
         public DynamicTextViewModel Name { get; }
         public string CompleteScreenTitle { get; set; }
+        protected CriticalityLevel? criticalityLevel = null;
+
 
         public CompleteInterviewViewModel(
             IViewModelNavigationService viewModelNavigationService,
@@ -218,7 +220,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 interviewId: this.interviewId,
                 userId: this.principal.CurrentUserIdentity.UserId,
                 comment: this.Comment,
-                criticalityLevel: CriticalityLevel.Block);
+                criticalityLevel: criticalityLevel);
 
             try
             {

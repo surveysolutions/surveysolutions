@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <resources>
   <dimen name="Interview_Complete_Group_left_offset">58dp</dimen>
+  <dimen name="Interview_Complete_Item_left_offset">87dp</dimen>
     
   <dimen name="Interview_Entity_margin_left">56dp</dimen>
   <dimen name="Interview_Entity_margin_right">74dp</dimen>

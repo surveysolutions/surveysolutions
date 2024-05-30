@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
-    <value>Your user account is locked. Please contact the support team at support@mysurvey.solutions.</value>
+    <value>Your user account is locked. Please contact the support team.</value>
   </data>
   <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
     <value>My</value>
@@ -139,7 +139,7 @@
     <value>New version of application was released. Please, update the application</value>
   </data>
   <data name="ErrorMessage_InternalServerError" xml:space="preserve">
-    <value>Server error. Please contact the support team at support@mysurvey.solutions</value>
+    <value>Server error. Please contact the support</value>
   </data>
   <data name="LoginNameHint" xml:space="preserve">
     <value>Your login</value>

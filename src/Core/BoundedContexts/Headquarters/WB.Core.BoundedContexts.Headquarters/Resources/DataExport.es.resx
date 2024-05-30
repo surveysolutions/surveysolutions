@@ -349,7 +349,7 @@
     <value>No hay suficiente espacio para el almacenamiento de nube seleccionado. Libere espacio y reinicie el trabajo o elija otro proveedor.</value>
   </data>
   <data name="Error_Unhandled" xml:space="preserve">
-    <value>Se produjo un error inesperado durante la exportación. Disculpe las molestias. Póngase en contacto con el equipo de soporte support@mysurvey.solutions con los archivos de registro * .log que están almacenados en la carpeta de la aplicación. Información adicional sobre este problema está disponible en la página de soporte: https://support.mysurvey.solutions/headquarters/config/standalone-server-errors/.</value>
+    <value>Se produjo un error inesperado durante la exportación. Disculpe las molestias. Póngase en contacto con el equipo de soporte. Información adicional sobre este problema está disponible en la página de soporte: https://support.mysurvey.solutions/headquarters/config/standalone-server-errors/.</value>
   </data>
   <data name="ExportBtn" xml:space="preserve">
     <value>Exportar</value>

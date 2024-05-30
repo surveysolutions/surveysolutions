@@ -150,13 +150,13 @@
     <value>Адреса веб-сервісу:</value>
   </data>
   <data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
-    <value>Ваш обліковий запис заблоковано. Будь ласка, зверніться до служби підтримки за адресою support@mysurvey.solutions.</value>
+    <value>Ваш обліковий запис заблоковано. Будь ласка, зверніться до служби підтримки.</value>
   </data>
   <data name="ErrorMessage_AccountIsNotApprovedOnServer" xml:space="preserve">
     <value>Ваш обліковий запис не підтверджено. Будь ласка, спочатку, підтвердіть свій обліковий запис.</value>
   </data>
   <data name="ErrorMessage_InternalServerError" xml:space="preserve">
-    <value>Помилка сервера. Будь ласка, зверніться до служби підтримки за адресою support@mysurvey.solutions</value>
+    <value>Помилка сервера. Будь ласка, зверніться до служби підтримки</value>
   </data>
   <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
     <value>Надана URL-адреса Survey Solutions Designer є невірною. Перевірте налаштування.</value>

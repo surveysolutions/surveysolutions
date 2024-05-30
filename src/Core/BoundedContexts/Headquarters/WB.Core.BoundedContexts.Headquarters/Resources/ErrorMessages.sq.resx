@@ -130,7 +130,7 @@
     <value>Koha përfundoi gjatë përpjekjes për t’u lidhur me Designer. Ju lutemi, kontrolloni lidhjen tuaj të internetit.</value>
   </data>
   <data name="ServerError" xml:space="preserve">
-    <value>Ndodhi një gabim i brendshëm i serverit. Ju lutemi, kontaktoni ekipin për kujdesin ndaj klientit të Survey Solutions në support@mysurvey.solutions.</value>
+    <value>Ndodhi një gabim i brendshëm i serverit. Ju lutemi, kontaktoni ekipin për kujdesin.</value>
   </data>
   <data name="ServiceUnavailable" xml:space="preserve">
     <value>Designer është i padisponueshëm. Ju lutemi, sigurohuni që Designer nuk është në modalitet mirëmbajtjeje </value>

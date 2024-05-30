@@ -181,5 +181,11 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
         {
             throw new NotImplementedException();
         }
+
+        public string EsriApiKey { get; }
+        public void SetEsriApiKey(string EsriApiKey)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

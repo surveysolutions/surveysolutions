@@ -96,6 +96,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             
             NotificationsEnabled = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings)
                 .IsDeviceNotificationsEnabled(),
+            
+            EsriApiKey = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings).GetEsriApiKey()
         };
     }
 }
