@@ -1,10 +1,14 @@
 using Android.Content;
 using Android.Runtime;
 using Android.Views;
+using AndroidX.RecyclerView.Widget;
+using MvvmCross.DroidX.RecyclerView;
+using MvvmCross.DroidX.RecyclerView.ItemTemplates;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Binding.Views;
 using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.UI.Shared.Enumerator.CustomControls;
@@ -67,111 +71,59 @@ public class CompleteInformationAdapter : MvxExpandableListAdapter
     }
 }
 
-public class CompleteInformationAdapter2 : MvxExpandableListAdapter
+
+public class ExpandableAdapter : MvxRecyclerAdapter
 {
-    private readonly Context context;
-
-    public override int ItemTemplateId => Resource.Layout.interview_complete_group_item;
-
-    public override int DropDownItemTemplateId => Resource.Layout.interview_complete_child_item;
-
-    IList<CompleteGroupInfo> GroupItems
+    public ExpandableAdapter(IMvxAndroidBindingContext bindingContext)
+        : base(bindingContext)
     {
-        get => (IList<CompleteGroupInfo>)ItemsSource;
-    }
-    
-    public CompleteInformationAdapter2(Context context, IMvxAndroidBindingContext bindingContext)
-        : base(context, bindingContext)
-    {
-        this.context = context;
     }
 
-    public override int Count => GroupItems?.Count ?? 0;
-
-    protected override IMvxListItemView CreateBindableView(object dataContext, ViewGroup parent, int templateId)
+    public override int GetItemViewType(int position)
     {
-        return base.CreateBindableView(dataContext, parent, templateId);
+        var item = GetItem(position);
+        return item is CompleteGroup ? 0 : 1;
     }
 
-    /*public override Java.Lang.Object GetGroup(int groupPosition)
+    public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
     {
-        return GroupItems[groupPosition];
-    }*/
-
-    public override long GetGroupId(int groupPosition)
-    {
-        return groupPosition;
-    }
-
-    public override View GetGroupView(int groupPosition, bool isExpanded, View convertView, ViewGroup parent)
-    {
-        var group = GroupAt(groupPosition);
-        var view = GetOrCreateViewForBindingContext(group, convertView, parent, Resource.Layout.interview_complete_group_item);
-        return view;
-    }
-
-    public override int GetChildrenCount(int groupPosition)
-    {
-        return GroupItems[groupPosition]?.Count ?? 0;
-    }
-
-    /*public override Java.Lang.Object GetChild(int groupPosition, int childPosition)
-    {
-        return GroupItems[groupPosition][childPosition];
-    }*/
-    
-    public CompleteChildInfo ChildAt(int groupPosition, int childPosition)
-    {
-        return GroupItems.ElementAt(groupPosition).ElementAt(childPosition);
-    }
-    
-    public CompleteGroupInfo GroupAt(int groupPosition)
-    {
-        return GroupItems.ElementAt(groupPosition);
-    }
-
-    public override long GetChildId(int groupPosition, int childPosition)
-    {
-        return childPosition;
-    }
-
-    public override View GetChildView(int groupPosition, int childPosition, bool isLastChild, View convertView, ViewGroup parent)
-    {
-        var child = ChildAt(groupPosition, childPosition);
-        var view = GetOrCreateViewForBindingContext(child, convertView, parent, Resource.Layout.interview_complete_child_item);
-        return view;
-    }
-
-    public override bool IsChildSelectable(int groupPosition, int childPosition)
-    {
-        return true;
-    }
-
-    private View GetOrCreateViewForBindingContext(object dataContext, View convertView, ViewGroup parent, int templateId)
-    {
-        if (convertView == null)
+        if (viewType == 0)
         {
-            var inflater = (IMvxLayoutInflaterHolder)context.GetSystemService(Context.LayoutInflaterService); /*LayoutInflater*/;
-            var bindingContext = new MvxAndroidBindingContext(context, inflater, dataContext);
-            convertView = bindingContext.BindingInflate(templateId, parent, false);
+            var itemView = LayoutInflater.From(parent.Context).Inflate(Resource.Layout.interview_complete_group_item, parent, false);
+            return new MvxRecyclerViewHolder(itemView, BindingContext);
         }
         else
         {
-            var bindingContext = MvxAndroidBindingContextHelpers.Current();
-            bindingContext.DataContext = dataContext;
+            var itemView = LayoutInflater.From(parent.Context).Inflate(Resource.Layout.interview_complete_child_item, parent, false);
+            return new MvxRecyclerViewHolder(itemView, BindingContext);
         }
-        return convertView;
     }
 }
 
-
-public class CompleteGroupInfo : MvxObservableCollection<CompleteChildInfo>
+public class ExpandableTemplateSelector : IMvxTemplateSelector
 {
-    public string Title { get; set; }
-    //public List<CompleteChildInfo> Children { get; set; }
-}
+    private static readonly Type ParentType = typeof(CompleteGroup);
+    private static readonly Type ChildtType = typeof(EntityWithErrorsViewModel);
 
-public class CompleteChildInfo : MvxViewModel
-{
-    public string Title { get; set; }
+    public int GetItemViewType(object forItemObject)
+    {
+        if (forItemObject == null) return -1;
+
+        var typeOfViewModel = forItemObject.GetType();
+
+        if (typeOfViewModel == ParentType)
+            return Resource.Layout.interview_complete_group_item;
+
+        if (typeOfViewModel == ChildtType)
+            return Resource.Layout.interview_complete_child_item;
+
+        return -1;
+    }
+
+    public int GetItemLayoutId(int fromViewType)
+    {
+        return fromViewType;
+    }
+
+    public int ItemTemplateId { get; set; }
 }

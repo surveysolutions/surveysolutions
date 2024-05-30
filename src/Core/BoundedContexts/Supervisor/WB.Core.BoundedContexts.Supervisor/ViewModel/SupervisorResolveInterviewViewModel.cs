@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.Commands;
+using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -21,6 +22,7 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -97,20 +99,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             var interviewView = this.interviews.GetById(interviewId);
             this.receivedByInterviewerTabletAt = interviewView.ReceivedByInterviewerAtUtc;
             
-            
-            var TopUnansweredCriticalQuestions = 
-                this.entitiesListViewModelFactory.GetTopUnansweredCriticalQuestions(interviewId, navigationState).ToList();
-            if (TopUnansweredCriticalQuestions.Count > 0)
-            {
-                var unansweredCriticalQuestionsGroup = new CompleteGroup(TopUnansweredCriticalQuestions)
-                {
-                    AllCount = TopUnansweredCriticalQuestions.Count,
-                    Title= string.Format(UIResources.Interview_Complete_CriticalUnanswered, TopUnansweredCriticalQuestions.Count),
-                    GroupContent = CompleteGroupContent.Error,
-                };
-                CompleteGroups.Insert(0, unansweredCriticalQuestionsGroup);
-            }
-            
             this.TopFailedCriticalRules = this.entitiesListViewModelFactory.GetTopFailedCriticalRulesFromState(interviewId, navigationState).ToList();
             if (TopFailedCriticalRules.Count > 0)
             {
@@ -120,7 +108,21 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                     Title = string.Format(UIResources.Interview_Complete_FailCriticalConditions, this.TopFailedCriticalRules.Count),
                     GroupContent = CompleteGroupContent.Error,
                 };
-                CompleteGroups.Insert(1, failedCriticalRulesGroup);
+                CompleteGroups.InsertCollection(0, failedCriticalRulesGroup.Items);
+                CompleteGroups.InsertCollection(0, new CovariantObservableCollection<MvxViewModel>() { failedCriticalRulesGroup });
+            }
+            
+            var TopUnansweredCriticalQuestions = this.entitiesListViewModelFactory.GetTopUnansweredCriticalQuestions(interviewId, navigationState).ToList();
+            if (TopUnansweredCriticalQuestions.Count > 0)
+            {
+                var unansweredCriticalQuestionsGroup = new CompleteGroup(TopUnansweredCriticalQuestions)
+                {
+                    AllCount = TopUnansweredCriticalQuestions.Count,
+                    Title= string.Format(UIResources.Interview_Complete_CriticalUnanswered, TopUnansweredCriticalQuestions.Count),
+                    GroupContent = CompleteGroupContent.Error,
+                };
+                CompleteGroups.InsertCollection(0, unansweredCriticalQuestionsGroup.Items);
+                CompleteGroups.InsertCollection(0, new CovariantObservableCollection<MvxViewModel>() { unansweredCriticalQuestionsGroup });
             }
             
             IsLoading = false;

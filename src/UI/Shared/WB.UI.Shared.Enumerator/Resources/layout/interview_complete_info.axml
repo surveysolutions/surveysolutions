@@ -32,11 +32,21 @@
         </LinearLayout>
     </LinearLayout>
 
+    <MvxRecyclerView
+            android:id="@+id/tv_Complete_Groups"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="false"
+            android:nestedScrollingEnabled="false"
+            hasFixedSize="false"
+            local:MvxTemplateSelector="WB.UI.Shared.Enumerator.CustomControls.ExpandableTemplateSelector, WB.UI.Shared.Enumerator"
+            local:MvxBind="ItemsSource CompleteGroups; Visible Not(IsLoading)" />/>
+
     <!--<Mvx.MvxExpandableListView-->
     <!--
                 android:groupIndicator="@drawable/expand_list_indicator"
     -->
-    <AutosizeExpandableListView
+    <!--AutosizeExpandableListView
             android:id="@+id/tv_Complete_Groups_Information"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -44,7 +54,7 @@
             android:groupIndicator="@drawable/expand_list_indicator"
             local:MvxItemTemplate="@layout/interview_complete_child_item"
             local:MvxGroupItemTemplate="@layout/interview_complete_group_item"
-            local:MvxBind="ItemsSource CompleteGroups; Visible Not(IsLoading)" />
+            local:MvxBind="ItemsSource CompleteGroups; Visible Not(IsLoading)" /-->
     
     <View style="@style/Interview_Entity_Divider" />
 

@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
@@ -98,11 +99,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 GroupContent = CompleteGroupContent.Error,
             };
 
-            this.CompleteGroups = new MvxObservableCollection<CompleteGroup>();
+            this.CompleteGroups = new CompositeCollection<MvxViewModel>();
             if (UnansweredCount > 0)
-                CompleteGroups.Add(unansweredGroup);
+            {
+                CompleteGroups.AddCollection(new CovariantObservableCollection<MvxViewModel>() { unansweredGroup });
+                CompleteGroups.AddCollection(unansweredGroup.Items);
+            }
+
             if (ErrorsCount > 0)
-                CompleteGroups.Add(errorsGroup);
+            {
+                CompleteGroups.AddCollection(new CovariantObservableCollection<MvxViewModel>() { errorsGroup });
+                CompleteGroups.AddCollection(errorsGroup.Items);
+            }
 
             this.Comment = lastCompletionComments.Get(this.interviewId);
             this.CommentLabel = UIResources.Interview_Complete_Note_For_Supervisor;
@@ -110,7 +118,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         }
 
         public bool HasCompleteGroups => CompleteGroups.Count > 0;
-        public MvxObservableCollection<CompleteGroup> CompleteGroups { get; set; }
+        public CompositeCollection<MvxViewModel> CompleteGroups { get; set; }
 
         public int AnsweredCount { get; set; }
 
