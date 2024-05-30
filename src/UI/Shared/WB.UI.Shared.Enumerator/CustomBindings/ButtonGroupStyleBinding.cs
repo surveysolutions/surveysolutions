@@ -16,17 +16,17 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void SetValueToView(Button control, GroupStatus value)
         {
-            if (!control.Enabled)
-                return;
-             
-            var groupBackgroundResourceId = GetGroupBackgroundResourceIdByStatus(value);
+            var groupBackgroundResourceId = GetGroupBackgroundResourceIdByStatus(control, value);
 
             var color = ContextCompat.GetColor(control.Context, groupBackgroundResourceId);
             control.SetBackgroundColor(new Color(color));
         }
 
-        private int GetGroupBackgroundResourceIdByStatus(GroupStatus status)
+        private int GetGroupBackgroundResourceIdByStatus(Button control, GroupStatus status)
         {
+            if (!control.Enabled)
+                return Resource.Color.group_disabled;;
+             
             switch (status)
             {
                 case GroupStatus.Completed:

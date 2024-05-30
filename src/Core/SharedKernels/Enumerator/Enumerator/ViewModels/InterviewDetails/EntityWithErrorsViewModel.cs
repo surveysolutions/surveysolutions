@@ -2,6 +2,7 @@
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
@@ -61,22 +62,53 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
     {
     }    
     
-    public class CompleteGroup : MvxObservableCollection<EntityWithErrorsViewModel>
+    public class CompleteGroup : MvxViewModel
     {
+        private readonly IObservableCollection<MvxViewModel> items;
+        private bool expanded;
+        public CompositeCollection<MvxViewModel> Items { get; set; } = new CompositeCollection<MvxViewModel>();
+
         public CompleteGroup()
         {
         }
 
-        public CompleteGroup(IEnumerable<EntityWithErrorsViewModel> items) : base(items)
+        public CompleteGroup(IEnumerable<EntityWithErrorsViewModel> items) : base()
         {
+            this.items = new CovariantObservableCollection<MvxViewModel>(items);
         }
 
         public int AllCount { get; set; }
         public CompleteGroupContent GroupContent { get; set; }
 
         public bool HasChildren => AllCount > 0;
-        public bool Expanded => false;
+
+        public bool Expanded
+        {
+            get => expanded;
+            set
+            {
+                if (value == expanded) return;
+                expanded = value;
+                RaisePropertyChanged(() => Expanded);
+            }
+        }
+
         public string Title { get; set; }
+
+        public IMvxCommand ToggleCommand => new MvxCommand(() => this.Toggle());
+        public void Toggle()
+        {
+            Expanded = !Expanded;
+            
+            if (Expanded)
+            {
+                Items.AddCollection(items);
+            }
+            else
+            {
+                Items.RemoveCollection(items);
+            }
+        }
     }
     
     public enum CompleteGroupContent
@@ -86,5 +118,4 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         Answered,
         Unanswered,
     }
-
 }

@@ -67,7 +67,7 @@
       <TextView
           style="@style/Interview_Complete_Screen_Text"
           android:id="@+id/tv_Complete_Instruction"
-          local:MvxBind="Text CompleteButtonComment" />
+          local:MvxBind="Text CompleteButtonComment; Visible Not(RequestWebInterview)" />
     </LinearLayout>
 
   </LinearLayout>

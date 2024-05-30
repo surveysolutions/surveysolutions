@@ -5,6 +5,7 @@ using System.Threading;
 using MvvmCross.Plugin.Messenger;
 using System.Threading.Tasks;
 using MvvmCross.Base;
+using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -16,6 +17,7 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -115,7 +117,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     Title = string.Format(UIResources.Interview_Complete_FailCriticalConditions, MoreThan(this.TopFailedCriticalRules.Count)),
                     GroupContent = CompleteGroupContent.Error,
                 };
-                CompleteGroups.Insert(0, failedCriticalRulesGroup);
+                CompleteGroups.InsertCollection(0, failedCriticalRulesGroup.Items);
+                CompleteGroups.InsertCollection(0, new CovariantObservableCollection<MvxViewModel>() { failedCriticalRulesGroup });
             }
             
             this.TopUnansweredCriticalQuestions = this.entitiesListViewModelFactory.GetTopUnansweredCriticalQuestions(interviewId, navigationState).ToList();
@@ -127,7 +130,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     Title= string.Format(UIResources.Interview_Complete_CriticalUnanswered, MoreThan(this.TopUnansweredCriticalQuestions.Count)),
                     GroupContent = CompleteGroupContent.Error,
                 };
-                CompleteGroups.Insert(0, unansweredCriticalQuestionsGroup);
+                CompleteGroups.InsertCollection(0, unansweredCriticalQuestionsGroup.Items);
+                CompleteGroups.InsertCollection(0, new CovariantObservableCollection<MvxViewModel>() { unansweredCriticalQuestionsGroup });
             }
             
             HasCriticalIssues = UnansweredCriticalQuestionsCount > 0 || FailedCriticalRulesCount > 0;
@@ -183,7 +187,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             if (this.WasThisInterviewCompleted)
                 return;
 
-            if (HasCriticalIssues)
+            if (HasCriticalIssues && !this.RequestWebInterview)
             {
                 var confirmResult = await userInteractionService.ConfirmAsync(UIResources.Interview_Complete_WithWarningCriticality,
                     okButton: UIResources.Yes,
