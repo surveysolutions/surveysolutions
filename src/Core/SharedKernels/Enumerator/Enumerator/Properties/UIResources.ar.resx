@@ -205,13 +205,13 @@
     <value>خطأ</value>
   </data>
   <data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
-    <value>تم قفل حساب المستخدم. يرجى الاتصال بفريق الدعم على support@mysurvey.solutions.</value>
+    <value>تم قفل حساب المستخدم. يرجى الاتصال بفريق الدعم على.</value>
   </data>
   <data name="ErrorMessage_AccountIsNotApprovedOnServer" xml:space="preserve">
     <value>لم تتم الموافقة على حسابك. الرجاء تأكيد حسابك أولا.</value>
   </data>
   <data name="ErrorMessage_InternalServerError" xml:space="preserve">
-    <value>خطأ في الخادم .الرجاء التواصل مع فريق الدعم عن طريقsupport@mysurvey.solutions</value>
+    <value>خطأ في الخادم .الرجاء التواصل مع فريق الدعم عن طريق</value>
   </data>
   <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
     <value>عنوان مصمم Survey Solutions المقدم URL غير صالح. تحقق من الإعدادات.</value>

@@ -127,7 +127,7 @@
     <value>Délai d'expiration lors de la tentative de connexion au Designer est atteint. Veuillez vérifier votre connexion internet.</value>
   </data>
   <data name="ServerError" xml:space="preserve">
-    <value>Une erreur interne au serveur s'est produite. Veuillez contacter l'équipe de support technique de Survey Solutions à l'adresse support@mysurvey.solutions.</value>
+    <value>Une erreur interne au serveur s'est produite. Veuillez contacter l'équipe de support technique.</value>
   </data>
   <data name="ServiceUnavailable" xml:space="preserve">
     <value>Designer indisponible. Assurez-vous que le Designer n'est pas en mode de maintenance</value>

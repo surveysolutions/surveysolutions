@@ -127,6 +127,6 @@
     <value>Clonar cuestionario</value>
   </data>
   <data name="UnexpectedError" xml:space="preserve">
-    <value>Ocurrió un error inesperado. Sentimos los inconvenientes ocasionados. Favor ponerse en contacto con support@mysurvey.solutions o volver a intentarlo más tarde.</value>
+    <value>Ocurrió un error inesperado. Sentimos los inconvenientes ocasionados. Favor ponerse en contacto con el servicio de asistencia técnica o volver a intentarlo más tarde.</value>
   </data>
 </root>

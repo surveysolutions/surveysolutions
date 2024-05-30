@@ -36,8 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             validEmails.Add("\"john..doe\"@example.com");  // Quoted content should be permitted
             //validEmails.Add("postmaster@.");             // Microsoft disallows this. Only one reference on StackOverflow that this may be a valid email. 
 
-            validEmails.Add("support@mysurvey.solutions");
-
+            
             foreach (var email in validEmails)
             {
                 Assert.IsTrue(email.IsValidEmail());

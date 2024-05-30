@@ -26,16 +26,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public AttachmentViewModel Attachment { get; }
         public IQuestionStateViewModel QuestionState { get; }
-        
+        public QuestionInstructionViewModel InstructionViewModel { get; private set; }
+
         public ReadOnlyQuestionViewModel(
             IStatefulInterviewRepository interviewRepository,
             IQuestionnaireStorage questionnaireRepository,
             AttachmentViewModel attachmentViewModel,
-            ReadonlyQuestionStateViewModel questionStateViewModelBase)
+            ReadonlyQuestionStateViewModel questionStateViewModelBase,
+            QuestionInstructionViewModel instructionViewModel)
         {
             this.interviewRepository = interviewRepository;
             this.questionnaireRepository = questionnaireRepository;
             this.QuestionState = questionStateViewModelBase;
+            this.InstructionViewModel = instructionViewModel;
             this.Attachment = attachmentViewModel;
         }
 
@@ -47,6 +50,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.Identity = entityIdentity;
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            
+            this.InstructionViewModel.Init(interviewId, entityIdentity, navigationState);
 
             var question = interview.GetQuestion(entityIdentity);
             if (question.IsAnswered())

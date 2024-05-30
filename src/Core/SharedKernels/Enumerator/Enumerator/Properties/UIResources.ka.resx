@@ -204,13 +204,13 @@
     <value>შეცდომა</value>
   </data>
   <data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
-    <value>თქვენი მომხმარებლის ანგარიში დაბლოკილია. დაუკავშირდით მხარდაჭერის გუნდს ელექტრონულ ფოსტაზე: support@mysurvey.solutions </value>
+    <value>თქვენი მომხმარებლის ანგარიში დაბლოკილია. დაუკავშირდით მხარდაჭერის გუნდს.</value>
   </data>
   <data name="ErrorMessage_AccountIsNotApprovedOnServer" xml:space="preserve">
     <value>თქვენი ანგარიში არ არის დამტკიცებული. გთხოვთ, პირველ რიგში დაადასტუროთ თქვენი ანგარიში</value>
   </data>
   <data name="ErrorMessage_InternalServerError" xml:space="preserve">
-    <value>სერვერის შეცდომა. დაუკავშირდით მხარდაჭერის გუნდს ელექტრონულ ფოსტაზე: support@mysurvey.solutions </value>
+    <value>სერვერის შეცდომა. დაუკავშირდით მხარდაჭერის გუნდს.</value>
   </data>
   <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
     <value>მოცემული Survey Solutions Designer-ის ვებ-მისამართი არასწორია. შეამოწმეთ პარამეტრები</value>
