@@ -96,8 +96,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 );
             }
             
-            CollectCriticalityInfo(interviewUid, navigationState);
-            //Task.Run(() => CollectCriticalityInfo(interviewUid, navigationState));
+            Task.Run(() => CollectCriticalityInfo(interviewUid, navigationState));
         }
         
         private Task CollectCriticalityInfo(string interviewId, NavigationState navigationState)
