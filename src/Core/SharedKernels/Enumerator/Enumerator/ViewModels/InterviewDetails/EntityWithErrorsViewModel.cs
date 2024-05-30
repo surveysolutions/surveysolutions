@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Utils;
 
@@ -121,5 +118,4 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         Answered,
         Unanswered,
     }
-
 }

@@ -22,9 +22,6 @@ namespace WB.UI.Shared.Enumerator.Activities
             var recyclerView = view.FindViewById<MvxRecyclerView>(Resource.Id.tv_Complete_Groups);
             recyclerView.SetLayoutManager(new LinearLayoutManager(Context));
 
-            //var adapter = new ExpandableAdapter((IMvxAndroidBindingContext)BindingContext);
-            //recyclerView.Adapter = adapter;
-
             return view;
         }
     }
