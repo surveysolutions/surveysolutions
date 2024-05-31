@@ -31,7 +31,7 @@
                         Visible HasCriticalIssues" />
         </LinearLayout>
     </LinearLayout>
-
+    
     <MvxRecyclerView
             android:id="@+id/tv_Complete_Groups"
             android:layout_width="match_parent"
@@ -40,7 +40,7 @@
             android:nestedScrollingEnabled="false"
             hasFixedSize="false"
             local:MvxTemplateSelector="WB.UI.Shared.Enumerator.CustomControls.ExpandableTemplateSelector, WB.UI.Shared.Enumerator"
-            local:MvxBind="ItemsSource CompleteGroups; Visible Not(IsLoading)" />/>
+            local:MvxBind="ItemsSource CompleteGroups; Visible Not(IsLoading)" />
 
     <View style="@style/Interview_Entity_Divider" />
 
