@@ -1,18 +1,17 @@
 <template>
     <wb-question :question="$me" questionCssClassName="text-question" :no-comments="noComments">
         <div class="readonly-answer-group">
-            <div class="container-info" :id="$me.identity">
+            <div class="container-info" :id="$me.id">
                 <p>
-                    {{ $me.identity }}
-                    <b v-if="$me.entityType == 'Gps'">
-                        <a :href="getGpsUrl($me)" target="_blank">{{ $me.answer }}</a>
+                    <b v-if="entity.entityType == 'Gps'">
+                        <a :href="getGpsUrl(entity)" target="_blank">{{ entity.answer }}</a>
                         <br />
                     </b>
-                    <b v-else-if="$me.entityType == 'DateTime'" v-dateTimeFormatting v-html="$me.answer">
+                    <b v-else-if="entity.entityType == 'DateTime'" v-dateTimeFormatting v-html="entity.answer">
                     </b>
-                    <b v-else>{{ $me.answer }}</b>
-                    <wb-attachment :attachmentName="getAttachment($me)" :interviewId="interviewId"
-                        customCssClass="static-text-image" v-if="getAttachment($me)" />
+                    <b v-else>{{ entity.answer }}</b>
+                    <wb-attachment :attachmentName="getAttachment(entity)" :interviewId="interviewId"
+                        customCssClass="static-text-image" v-if="getAttachment(entity)" />
                 </p>
             </div>
         </div>
@@ -21,6 +20,7 @@
 
 <script lang="js">
 import { entityDetails } from '../mixins'
+import { find } from 'lodash'
 
 export default {
     name: 'ReadonlyQuestion',
@@ -30,6 +30,9 @@ export default {
         interviewId() {
             return this.$route.params.interviewId
         },
+        entity() {
+            return find(this.$store.state.webinterview.entities, d => d.identity == this.id)
+        }
     },
     methods: {
         getGpsUrl(question) {
@@ -38,8 +41,7 @@ export default {
         getAttachment(question) {
             if (!question.answer) return null
 
-            const details =
-                this.$store.state.webinterview.entityDetails[question.identity]
+            const details = this.$store.state.webinterview.entityDetails[question.identity]
             if (details && details.options) {
                 const option = details.options.find(
                     (o) => o.value === details.answer,
