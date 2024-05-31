@@ -580,6 +580,15 @@ class ControlPanel {
     getMetricsState() {
         return this.http.get(`${this.base}/GetMetricsState`)
     }
+
+    async getServerResponseStatus(requestedStatus) {
+        try {
+            const response = await this.http.get(`${this.base}/GetServerResponseByStatusCode?responseCode=${requestedStatus}`)
+            return response.status
+        } catch (error) {
+            return error.response.status
+        }
+    }
 }
 
 class AdminSettings {
