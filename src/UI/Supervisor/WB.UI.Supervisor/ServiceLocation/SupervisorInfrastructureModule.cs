@@ -62,6 +62,7 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.Bind<IInterviewEventStreamOptimizer, InterviewEventStreamOptimizer>();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
             registry.Bind<IQuestionnaireStorage, QuestionnaireStorage>();
+            registry.Bind<IQuestionnaireSettings, EnumeratorQuestionnaireSettings>();
             registry.Bind<IInterviewerQuestionnaireAccessor, SupervisorQuestionnaireAccessor>();
             registry.BindAsSingleton<IAssignmentDocumentsStorage, AssignmentDocumentsStorage>();
             registry.Bind<ITabletInfoService, TabletInfoService>();
@@ -88,6 +89,7 @@ namespace WB.UI.Supervisor.ServiceLocation
 
             registry.BindAsSingleton<IPlainStorage<SupervisorIdentity>, SqlitePlainStorage<SupervisorIdentity>>();
             registry.BindAsSingleton<IPlainStorage<WorkspaceView>, SqlitePlainStorage<WorkspaceView>>();
+            registry.BindAsSingleton<ILastCompletionComments, LastCompletionComments>();
         }
     }
 }

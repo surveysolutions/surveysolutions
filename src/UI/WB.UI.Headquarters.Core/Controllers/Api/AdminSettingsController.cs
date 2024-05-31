@@ -1,16 +1,12 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Amazon;
-using CsvHelper;
-using CsvHelper.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
@@ -26,6 +22,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.SystemLog;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Headquarters.Resources;
 using WebInterviewSettings = WB.Core.BoundedContexts.Headquarters.DataExport.Security.WebInterviewSettings;
@@ -79,11 +76,17 @@ namespace WB.UI.Headquarters.Controllers.Api
             public string Email{ get; set; }
         }
 
+        public class EsriApiKeyModel
+        {
+            public string EsriApiKey { get; set; }
+        }
+        
         private readonly IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage;
         private readonly IPlainKeyValueStorage<GlobalNotice> appSettingsStorage;
         private readonly IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage;
         private readonly IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage;
         private readonly IPlainKeyValueStorage<WebInterviewSettings> webInterviewSettingsStorage;
+        private readonly IExportSettings exportSettings;
 
         private readonly IEmailService emailService;
         private readonly ISystemLog auditLog;
@@ -102,7 +105,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             ISystemLogViewFactory systemLogViewFactory,
             IWebInterviewEmailRenderer emailRenderer,
             IExportFactory exportFactory,
-            ILogger<AdminSettingsController> logger)
+            ILogger<AdminSettingsController> logger,
+            IExportSettings exportSettings)
         {
             this.appSettingsStorage = appSettingsStorage ?? throw new ArgumentNullException(nameof(appSettingsStorage));
             this.interviewerSettingsStorage = interviewerSettingsStorage ?? throw new ArgumentNullException(nameof(interviewerSettingsStorage));
@@ -117,15 +121,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             this.emailRenderer = emailRenderer ?? throw new ArgumentNullException(nameof(emailRenderer));
             this.exportFactory = exportFactory ?? throw new ArgumentNullException(nameof(exportFactory));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        }
-
-        [HttpGet]
-        public ActionResult<GlobalNoticeModel> GlobalNoticeSettings()
-        {
-            return new GlobalNoticeModel
-            {
-                GlobalNotice = this.appSettingsStorage.GetById(AppSetting.GlobalNoticeKey)?.Message,
-            };
+            this.exportSettings = exportSettings ?? throw new ArgumentNullException(nameof(exportSettings));
         }
 
         [HttpPost]
@@ -149,7 +145,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpGet]
-        public ActionResult<object> InterviewerSettings()
+        public ActionResult<object> WorkspaceSettings()
         {
             var interviewerSettings = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
 
@@ -160,6 +156,11 @@ namespace WB.UI.Headquarters.Controllers.Api
                 PartialSynchronizationEnabled = interviewerSettings.IsPartialSynchronizationEnabled(),
                 GeographyQuestionAccuracyInMeters = interviewerSettings.GetGeographyQuestionAccuracyInMeters(),
                 GeographyQuestionPeriodInSeconds = interviewerSettings.GetGeographyQuestionPeriodInSeconds(),
+                EsriApiKey = interviewerSettings.GetEsriApiKey(),
+                GlobalNotice = this.appSettingsStorage.GetById(AppSetting.GlobalNoticeKey)?.Message,
+                AllowEmails = this.webInterviewSettingsStorage.GetById(AppSetting.WebInterviewSettings)?.AllowEmails ?? false,
+                AllowInterviewerUpdateProfile = this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false,
+                ExportSettings = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword())
             };
         }
 
@@ -221,17 +222,6 @@ namespace WB.UI.Headquarters.Controllers.Api
             return Ok(new {sucess = true});
         }
 
-        [HttpGet]
-        public ActionResult<WebInterviewSettingsModel> WebInterviewSettings()
-        {
-            var webInterviewSettings = this.webInterviewSettingsStorage.GetById(AppSetting.WebInterviewSettings);
-
-            return new WebInterviewSettingsModel
-            {
-                AllowEmails = webInterviewSettings?.AllowEmails ?? false
-            };
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult WebInterviewSettings([FromBody] WebInterviewSettingsModel message)
@@ -247,18 +237,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             return Ok();
         }
-
-        [HttpGet]
-        public ActionResult<ProfileSettingsModel> ProfileSettings()
-        {
-            var profileSettings = this.profileSettingsStorage.GetById(AppSetting.ProfileSettings);
-
-            return new ProfileSettingsModel
-            {
-                AllowInterviewerUpdateProfile = profileSettings?.AllowInterviewerUpdateProfile ?? false
-            };
-        }
-
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult ProfileSettings([FromBody] ProfileSettingsModel message)
@@ -275,6 +254,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             return Ok(new {sucess = true});
         }
 
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult UpdateEmailProviderSettings([FromBody]EmailProviderSettings settings)
@@ -290,6 +270,23 @@ namespace WB.UI.Headquarters.Controllers.Api
             {
                 auditLog.EmailProviderWasChanged((currentsSettings?.Provider ?? EmailProvider.None).ToString(), settings.Provider.ToString());
             }
+
+            return Ok(new {sucess = true});
+        }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdateEsriApiKey([FromBody]EsriApiKeyModel key)
+        {
+            if (!ModelState.IsValid)
+                return Ok(new {sucess = false});
+
+            UpdateInterviewerSettings(settings =>
+            {
+                settings.EsriApiKey = key.EsriApiKey;
+            });
+            
+            this.auditLog.EsriApiKeyChanged(String.IsNullOrEmpty(key.EsriApiKey));
 
             return Ok(new {sucess = true});
         }

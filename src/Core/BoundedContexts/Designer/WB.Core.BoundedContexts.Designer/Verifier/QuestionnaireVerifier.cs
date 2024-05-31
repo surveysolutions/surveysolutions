@@ -208,6 +208,13 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     reference = QuestionnaireEntityReference.CreateForVariable(expressionLocation.Id);
                     break;
                 case ExpressionLocationItemType.Questionnaire:
+                    if (expressionLocation.ExpressionType == ExpressionLocationType.CriticalRule)
+                    {
+                        reference = QuestionnaireEntityReference.CreateForCriticalRule(expressionLocation.Id);
+                        reference.IndexOfEntityInProperty = expressionLocation.ExpressionPosition;
+                        return QuestionnaireVerificationMessage.Error("WB0318",
+                            VerificationMessages.WB0318_CriticalityConditionExpressionHasIncorrectSyntax, compilationErrorMessages, reference);
+                    }
                     return QuestionnaireVerificationMessage.Error("WB0096", VerificationMessages.WB0096_GeneralCompilationError);
                 default:
                     throw new ArgumentException("expressionLocation");
@@ -217,18 +224,23 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             {
                 case ExpressionLocationType.Validation:
                     reference.IndexOfEntityInProperty = expressionLocation.ExpressionPosition;
+                    reference.Property = QuestionnaireVerificationReferenceProperty.ValidationExpression;
                     return QuestionnaireVerificationMessage.Error("WB0002",
                         VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax, compilationErrorMessages, reference);
                 case ExpressionLocationType.Condition:
+                    reference.Property = QuestionnaireVerificationReferenceProperty.EnablingCondition;
                     return QuestionnaireVerificationMessage.Error("WB0003",
                         VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax, compilationErrorMessages, reference);
                 case ExpressionLocationType.Filter:
+                    reference.Property = QuestionnaireVerificationReferenceProperty.OptionsFilter;
                     return QuestionnaireVerificationMessage.Error("WB0110",
                         VerificationMessages.WB0110_LinkedQuestionFilterExpresssionHasIncorrectSyntax, compilationErrorMessages, reference);
                 case ExpressionLocationType.Expression:
+                    reference.Property = QuestionnaireVerificationReferenceProperty.VariableContent;
                     return QuestionnaireVerificationMessage.Error("WB0027",
                         VerificationMessages.WB0027_VariableExpresssionHasIncorrectSyntax, compilationErrorMessages, reference);
                 case ExpressionLocationType.CategoricalFilter:
+                    reference.Property = QuestionnaireVerificationReferenceProperty.OptionsFilter;
                     return QuestionnaireVerificationMessage.Error("WB0062",
                         VerificationMessages.WB0062_OptionFilterExpresssionHasIncorrectSyntax, compilationErrorMessages, reference);
             }

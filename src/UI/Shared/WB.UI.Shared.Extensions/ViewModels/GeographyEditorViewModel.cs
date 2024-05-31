@@ -41,9 +41,11 @@ namespace WB.UI.Shared.Extensions.ViewModels
             IEnumeratorSettings enumeratorSettings, IMapUtilityService mapUtilityService,
             IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher,
             IVirbationService vibrationService,
-            IPermissionsService permissionsService)
+            IPermissionsService permissionsService,
+            IEnumeratorSettings settings
+            )
             : base(principal, viewModelNavigationService, mapService, userInteractionService, logger,
-                enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher, permissionsService)
+                enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher, permissionsService, settings)
         {
             VibrationService = vibrationService;
         }
@@ -115,20 +117,20 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             if (args.PropertyName != nameof(GeometryEditor.Geometry))
                 return;
-                
-            //var geometry = args.NewGeometry;
+
+            if (this.MapView.GeometryEditor == null) return;
+            
             var geometry = this.MapView.GeometryEditor.Geometry;
             try
             {
                 this.UpdateLabels(geometry);
                 await UpdateDrawNeighborsAsync(geometry, this.GeographyNeighbors).ConfigureAwait(false);
-                
+
                 CanUndo = this.MapView.GeometryEditor.CanUndo;
-                CanSave = this.MapView.GeometryEditor.IsStarted && !this.MapView.GeometryEditor.Geometry.IsEmpty;
+                CanSave = this.MapView.GeometryEditor.IsStarted
+                          && CalculateCanSave(new GeometryByTypeBuilder(geometry).PointCount);
             }
-            catch
-            {
-            }
+            catch { }
         }
 
         private async Task StartEditingGeometry()
@@ -211,7 +213,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
             {
                 if (this.MapView.GeometryEditor != null)
                 {
-                    if (this.MapView.GeometryEditor.IsStarted && !this.MapView.GeometryEditor.Geometry.IsEmpty)
+                    if (this.MapView.GeometryEditor.IsStarted && 
+                        CalculateCanSave(new GeometryByTypeBuilder(this.MapView.GeometryEditor.Geometry).PointCount))
                     {
                         this.MapView.GeometryEditor.Stop();
                     }
@@ -964,7 +967,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             if (geometry != null)
             {
-                if (geometry is MapPoint point)
+                if (geometry is MapPoint point && !point.IsEmpty)
                     await this.MapView.SetViewpointCenterAsync(point).ConfigureAwait(false);
                 else
                 {

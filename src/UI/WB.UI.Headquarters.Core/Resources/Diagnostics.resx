@@ -210,4 +210,7 @@
   <data name="Connectivity" xml:space="preserve">
     <value>Web socket connectivity</value>
   </data>
+  <data name="ServerStatuses" xml:space="preserve">
+      <value>Response statuses</value>
+  </data>
 </root>

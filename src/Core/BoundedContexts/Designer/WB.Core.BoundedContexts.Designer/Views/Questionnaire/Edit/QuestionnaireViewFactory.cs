@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         QuestionnaireView? Load(QuestionnaireViewInputModel input);
         QuestionnaireView? Load(QuestionnaireRevision revision);
 
-        bool HasUserAccessToQuestionnaire(Guid questionnaireId, Guid? userId);
+        bool HasUserAccessToQuestionnaire(QuestionnaireRevision id, Guid? userId);
 
         bool HasUserChangeAccessToQuestionnaire(Guid questionnaireId, Guid userId);
         bool HasUserAccessToEditComments(QuestionnaireChangeRecord changeRecord, QuestionnaireDocument questionnaire, Guid userId);
@@ -53,14 +53,25 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return doc == null ? null : new QuestionnaireView(doc, sharedPersons, compileQuestionnaireId);
         }
 
-        public bool HasUserAccessToQuestionnaire(Guid questionnaireId, Guid? userId)
+        public bool HasUserAccessToQuestionnaire(QuestionnaireRevision id, Guid? userId)
         {
-            var questionnaire = this.questionnaireStorage.Get(questionnaireId);
+            var questionnaire = this.questionnaireStorage.Get(id.QuestionnaireId);
             if (questionnaire == null || questionnaire.IsDeleted)
             {
-                if (IsAnonymousQuestionnaire(questionnaireId, out var originQuestionnaireId))
+                if (IsAnonymousQuestionnaire(id.QuestionnaireId, out var originQuestionnaireId))
                 {
                     return true;
+                }
+
+                if (id.Revision.HasValue && questionnaire is { CreatedBy: not null } &&
+                    questionnaire.CreatedBy.Value == userId)
+                {
+                    var questionnaireChangeRecord = this.dbContext.QuestionnaireChangeRecords.Find(id.Revision.Value.FormatGuid());
+                    if (questionnaireChangeRecord == null)
+                        return false;
+
+                    if (questionnaireChangeRecord.ActionType == QuestionnaireActionType.ImportToHq)
+                        return true;
                 }
                 
                 return false;
@@ -73,7 +84,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 return true;
 
             var questionnaireListItem = this.dbContext.Questionnaires
-                .Where(x => x.QuestionnaireId == questionnaireId.FormatGuid())
+                .Where(x => x.QuestionnaireId == id.QuestionnaireId.FormatGuid())
                 .Include(x => x.SharedPersons).FirstOrDefault();
 
             if (questionnaireListItem == null)
@@ -100,7 +111,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             var listViewItem = this.dbContext.Questionnaires.Include(x => x.SharedPersons)
                 .FirstOrDefault(x => x.QuestionnaireId == questionnaireId.FormatGuid());
 
-            if (listViewItem == null) return false;
+            if (listViewItem == null || listViewItem.IsDeleted) return false;
             
             var sharedPersons = listViewItem.SharedPersons;
             return sharedPersons.Any(x => x.UserId == userId && x.ShareType == ShareType.Edit);

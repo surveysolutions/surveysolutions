@@ -157,7 +157,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             questionnaireInfoView.SharedPersons = sharedPersons;
 
             questionnaireInfoView.PreviewRevision = questionnaireRevision.Version;
-            if (questionnaireRevision.Revision != null)
+            if (questionnaireRevision.Revision != null || questionnaireDocument.IsDeleted)
             {
                 questionnaireInfoView.IsReadOnlyForUser = true;
                 questionnaireInfoView.PreviewRevision = questionnaireRevision.Version;
@@ -252,6 +252,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                     Id = s.Id,
                     Title = s.Title
                 })
+                .ToList();
+
+            questionnaireInfoView.CriticalityConditions = questionnaireDocument
+                .CriticalRules
+                .Select(x => new CriticalityConditionView { Id = x.Id.FormatGuid(), Message = x.Message, Description = x.Description, Expression = x.Expression })
                 .ToList();
 
             

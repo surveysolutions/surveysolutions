@@ -199,7 +199,7 @@
     <value>Primele {{count}} entități cu erori:</value>
   </data>
   <data name="CompleteNoteToSupervisor" xml:space="preserve">
-    <value>Notă pentru supervizor</value>
+      <value>Notă</value>
   </data>
   <data name="CompleteQuestionsAnswered" xml:space="preserve">
     <value>Răspunse</value>

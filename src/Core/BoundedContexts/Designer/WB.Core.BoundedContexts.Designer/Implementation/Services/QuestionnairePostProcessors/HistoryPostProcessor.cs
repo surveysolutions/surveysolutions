@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.CriticalRules;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
@@ -47,6 +48,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, AddMacro>,
         ICommandPostProcessor<Questionnaire, UpdateMacro>,
         ICommandPostProcessor<Questionnaire, DeleteMacro>,
+        ICommandPostProcessor<Questionnaire, AddCriticalRule>,
+        ICommandPostProcessor<Questionnaire, UpdateCriticalRule>,
+        ICommandPostProcessor<Questionnaire, DeleteCriticalRule>,
         ICommandPostProcessor<Questionnaire, AddOrUpdateAttachment>,
         ICommandPostProcessor<Questionnaire, DeleteAttachment>,
         ICommandPostProcessor<Questionnaire, AddOrUpdateTranslation>,
@@ -70,6 +74,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, UpdateTextQuestion>,
         ICommandPostProcessor<Questionnaire, UpdateMultiOptionQuestion>,
         ICommandPostProcessor<Questionnaire, UpdateFilteredComboboxOptions>,
+        ICommandPostProcessor<Questionnaire, UpdateCascadingComboboxOptions>,
+        ICommandPostProcessor<Questionnaire, ReplaceOptionsWithClassification>,
         ICommandPostProcessor<Questionnaire, UpdateSingleOptionQuestion>,
         ICommandPostProcessor<Questionnaire, AddLookupTable>,
         ICommandPostProcessor<Questionnaire, UpdateLookupTable>,
@@ -325,6 +331,28 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         public void Process(Questionnaire aggregate, DeleteMacro command)
             => this.DeleteItemFromStateAndUpdateHistory(command.QuestionnaireId, q => q.MacroState, command.MacroId,
                 QuestionnaireItemType.Macro, command.ResponsibleId, aggregate.QuestionnaireDocument);
+
+        #endregion
+        
+        #region CriticalRules
+        public void Process(Questionnaire aggregate, AddCriticalRule command)
+        {
+            this.AddOrUpdateCriticalRuleState(command.QuestionnaireId, command.Id, string.Empty);
+
+            this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Add,
+                QuestionnaireItemType.CriticalRule, command.Id, null, aggregate.QuestionnaireDocument);
+        }
+
+        public void Process(Questionnaire aggregate, UpdateCriticalRule command)
+        {
+            this.AddOrUpdateCriticalRuleState(command.QuestionnaireId, command.Id, command.Message);
+            this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Update,
+                QuestionnaireItemType.CriticalRule, command.Id, command.Message, aggregate.QuestionnaireDocument);
+        }
+
+        public void Process(Questionnaire aggregate, DeleteCriticalRule command)
+            => this.DeleteItemFromStateAndUpdateHistory(command.QuestionnaireId, q => q.CriticalRuleState, command.Id,
+                QuestionnaireItemType.CriticalRule, command.ResponsibleId, aggregate.QuestionnaireDocument);
 
         #endregion
 
@@ -654,19 +682,24 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             this.questionnaireStateTrackerStorage.Store(questionnaire, command.QuestionnaireId.FormatGuid());
         }
 
-        public void Process(Questionnaire aggregate, UpdateFilteredComboboxOptions command)
+        public void Process(Questionnaire aggregate, UpdateFilteredComboboxOptions command) => AddQuestionOptionsChanges(aggregate, command);
+
+        public void Process(Questionnaire aggregate, UpdateCascadingComboboxOptions command) => AddQuestionOptionsChanges(aggregate, command);
+        
+        public void Process(Questionnaire aggregate, ReplaceOptionsWithClassification command) => AddQuestionOptionsChanges(aggregate, command);
+
+        private void AddQuestionOptionsChanges(Questionnaire aggregate, QuestionCommand command)
         {
             var questionnaire = questionnaireStateTrackerStorage.GetById(command.QuestionnaireId.FormatGuid());
             if (questionnaire == null)
                 return;
-
+            
             questionnaire.QuestionsState.TryGetValue(command.QuestionId, out var questionTitle);
 
             this.AddOrUpdateQuestionState(command.QuestionnaireId, command.QuestionId, questionTitle, parentId: null);
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Update,
                 QuestionnaireItemType.Question, command.QuestionId, questionTitle, aggregate.QuestionnaireDocument);
         }
-
 
         public void Process(Questionnaire aggregate, MoveQuestion command)
             => this.MoveEntity(command.QuestionnaireId, command.QuestionId, command.TargetGroupId, command.ResponsibleId, aggregate.QuestionnaireDocument);
@@ -936,6 +969,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         {
             AddOrUpdateQuestionnaireStateItem(questionnaireId, itemId, itemTitle,
                 parentId: null, setAction: (s, id, title) => s.MacroState[id] = title);
+        }
+
+        private void AddOrUpdateCriticalRuleState(Guid questionnaireId, Guid itemId, string? itemTitle)
+        {
+            AddOrUpdateQuestionnaireStateItem(questionnaireId, itemId, itemTitle,
+                parentId: null, setAction: (s, id, title) => s.CriticalRuleState[id] = title);
         }
 
         private void AddOrUpdateStaticTextState(Guid questionnaireId, Guid itemId, string? itemTitle, Guid? parentId)

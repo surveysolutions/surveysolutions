@@ -51,6 +51,7 @@ namespace WB.UI.Designer.Code
                         switch (record.TargetType)
                         {
                             case QuestionnaireItemType.Categories:
+                            case QuestionnaireItemType.CriticalRule:
                             case QuestionnaireItemType.Translation:
                             case QuestionnaireItemType.Attachment:
                             case QuestionnaireItemType.Macro:
@@ -185,12 +186,12 @@ namespace WB.UI.Designer.Code
                 return new HtmlString(entityTitle);
 
             if (type == QuestionnaireItemType.Questionnaire)
-                return new HtmlString($"<a href='{urlHelper.Content($"~/questionnaire/details/{itemId.FormatGuid()}")}'>{entityTitle}</a>");
+                return new HtmlString($"<a href='{urlHelper.Content($"~/q/details/{itemId.FormatGuid()}")}'>{entityTitle}</a>");
 
             if (type == QuestionnaireItemType.Person || !chapterId.HasValue)
                 return new HtmlString(entityTitle);
 
-            var url = urlHelper.Content(string.Format("~/questionnaire/details/{0}/chapter/{1}/{3}/{2}",
+            var url = urlHelper.Content(string.Format("~/q/details/{0}/chapter/{1}/{3}/{2}",
                 questionnaireId.FormatGuid(), chapterId.FormatGuid(), itemId.FormatGuid(),
                 GetNavigationItemType(type)));
 

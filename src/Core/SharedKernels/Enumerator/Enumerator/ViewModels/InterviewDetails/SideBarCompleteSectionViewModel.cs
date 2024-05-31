@@ -7,6 +7,7 @@ using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
@@ -58,7 +59,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void Init(NavigationState navigationState, string interviewId, string itemText)
         {
             this.Title.InitAsStatic(itemText);
-            this.SideBarGroupState.Init(interviewId, null);
+            this.SideBarGroupState.InitStatic(SimpleGroupStatus.Other, GroupStatus.NotStarted);
 
             this.navigationState = navigationState;
             this.navigationState.ScreenChanged += this.OnScreenChanged;

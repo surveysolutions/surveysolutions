@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -8,22 +7,18 @@ using ClosedXML.Excel;
 using ClosedXML.Graphics;
 using CsvHelper;
 using CsvHelper.Configuration;
-using Main.Core.Documents;
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using NSubstitute.Extensions;
 using NUnit.Framework;
 using SixLabors.Fonts;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
 using WB.Core.BoundedContexts.Designer.DataAccess;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 using WB.Infrastructure.Native.Questionnaire;
+using WB.Infrastructure.Native.Utils;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Designer.Services
@@ -31,6 +26,8 @@ namespace WB.Tests.Unit.Designer.Services
     [TestOf(typeof(ReusableCategoriesService))]
     internal class CategoriesServiceTests
     {
+        private const string NotoSansFontFamilyName = "Noto Sans";
+
         private static ReusableCategoriesService CreateCategoriesService(DesignerDbContext dbContext = null, 
             IQuestionnaireViewFactory questionnaireStorage = null)
         {
@@ -64,16 +61,19 @@ namespace WB.Tests.Unit.Designer.Services
 
         private static Stream CreateExcelFile(string[][] data)
         {
-            //non windows fonts
-            var firstFont = SystemFonts.Collection.Families.First();
-            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(firstFont.Name) };
+            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
+
             
             using XLWorkbook package = new XLWorkbook(loadOptions);
+            
             var worksheet = package.Worksheets.Add("Categories");
 
             for (var row = 0; row < data.Length; row++)
-            for (var column = 0; column < data[row].Length; column++)
-                worksheet.Cell(row + 1, column + 1).Value = data[row][column];
+                for (var column = 0; column < data[row].Length; column++) {
+                    worksheet.Cell(row + 1, column + 1).Value = data[row][column];
+                    worksheet.Cell(row + 1, column + 1).Style.Font.FontName = FontsHelper.DefaultFontName;
+                }
+            package.Style.Font.FontName = FontsHelper.DefaultFontName;     
 
             var ms = new MemoryStream();
             package.SaveAs(ms);
@@ -86,19 +86,19 @@ namespace WB.Tests.Unit.Designer.Services
             var ms = new MemoryStream();
 
             using (var sw = new StreamWriter(ms, Encoding.UTF8, 4096, true))
-            using (var csvWriter = new CsvSerializer(sw, new CsvConfiguration(CultureInfo.InvariantCulture)
+            using (var csvWriter = new CsvWriter(sw, new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = false,
                 TrimOptions = TrimOptions.Trim,
-                IgnoreQuotes = false,
+                Mode = CsvMode.RFC4180,
                 Delimiter = "\t"
 
             }, true))
             {
                 foreach (var row in data)
                 {
-                    csvWriter.Write(row);
-                    csvWriter.WriteLine();
+                    csvWriter.WriteField(row);
+                    csvWriter.NextRecord();
                 }
 
                 sw.Flush();

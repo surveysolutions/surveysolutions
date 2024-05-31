@@ -17,6 +17,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.CriticalRules;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
@@ -174,12 +175,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     lookupTableService.CloneLookupTable(document.PublicKey, lookupTable.Key,  this.Id, lookupTable.Key);
                 }
             }
-
-            foreach (var attachment in clonedDocument.Attachments)
+            
+            if(document.IsDeleted)
+                clonedDocument.Attachments = new List<Attachment>();
+            else
             {
-                var newAttachmentId = Guid.NewGuid();
-                this.attachmentService.CloneMeta(attachment.AttachmentId, newAttachmentId, clonedDocument.PublicKey);
-                attachment.AttachmentId = newAttachmentId;
+                foreach (var attachment in clonedDocument.Attachments)
+                {
+                    var newAttachmentId = Guid.NewGuid();
+                    this.attachmentService.CloneMeta(attachment.AttachmentId, newAttachmentId,
+                        clonedDocument.PublicKey);
+                    attachment.AttachmentId = newAttachmentId;
+                }
             }
 
             foreach (var translation in clonedDocument.Translations)
@@ -283,6 +290,37 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfMacroIsAbsent(command.MacroId);
 
             innerDocument.Macros.Remove(command.MacroId);
+        }
+
+        #endregion
+        
+        #region CriticalRule command handlers
+
+        public void AddCriticalRule(AddCriticalRule command)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+            this.ThrowDomainExceptionIfCriticalRuleAlreadyExist(command.Id);
+
+            this.innerDocument.CriticalRules.Add(new CriticalRule() { Id = command.Id });
+        }
+
+        public void UpdateCriticalRule(UpdateCriticalRule command)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+            this.ThrowDomainExceptionIfCriticalRuleIsAbsent(command.Id);
+            
+            var criticalityCondition = this.innerDocument.CriticalRules.Single(ss => ss.Id == command.Id);
+            criticalityCondition.Message = command.Message;
+            criticalityCondition.Expression = command.Expression;
+            criticalityCondition.Description = command.Description;
+        }
+
+        public void DeleteCriticalRule(DeleteCriticalRule command)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+            this.ThrowDomainExceptionIfCriticalRuleIsAbsent(command.Id);
+
+            innerDocument.CriticalRules.RemoveAll(cc => cc.Id == command.Id);
         }
 
         #endregion
@@ -925,6 +963,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (command.CategoriesId.HasValue)
                 answers = Array.Empty<Answer>();
+
+            if (command is { CascadeFromQuestionId: not null, Properties.OptionsFilterExpression: not null })
+                command.Properties.OptionsFilterExpression = null;
+            
+            string? linkedFilterExpression = command is { CascadeFromQuestionId: not null, LinkedFilterExpression: not null }
+                ? null
+                : command.LinkedFilterExpression;
             
             var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
             IQuestion newQuestion = CreateQuestion(command.QuestionId,
@@ -948,7 +993,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 command.CascadeFromQuestionId,
                 null,
                 command.ValidationConditions,
-                command.LinkedFilterExpression,
+                linkedFilterExpression,
                 false,
                 showAsList:command.ShowAsList,
                 showAsListThreshold: command.ShowAsListThreshold,
@@ -2027,9 +2072,30 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(DomainExceptionType.MacroIsAbsent, ExceptionMessages.MacroIsAbsent);
             }
         }
+        
+        private void ThrowDomainExceptionIfCriticalRuleAlreadyExist(Guid id)
+        {
+            if (this.innerDocument.CriticalRules.Exists(cc => cc.Id == id))
+            {
+                throw new QuestionnaireException(DomainExceptionType.CriticalRuleAlreadyExist, ExceptionMessages.CriticalRuleAlreadyExist);
+            }
+        }
+
+        private void ThrowDomainExceptionIfCriticalRuleIsAbsent(Guid id)
+        {
+            if (this.innerDocument.CriticalRules.TrueForAll(cc => cc.Id != id))
+            {
+                throw new QuestionnaireException(DomainExceptionType.CriticalRuleIsAbsent, ExceptionMessages.CriticalRuleIsAbsent);
+            }
+        }
 
         private void ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(Guid viewerId) 
         {
+            if (this.innerDocument.IsDeleted)
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.QuestionnaireIsDeleted, ExceptionMessages.NoPremissionsToEditQuestionnaire);
+            }
             if (this.innerDocument.CreatedBy != viewerId && !this.SharedUsersIds.Contains(viewerId))
             {
                 throw new QuestionnaireException(

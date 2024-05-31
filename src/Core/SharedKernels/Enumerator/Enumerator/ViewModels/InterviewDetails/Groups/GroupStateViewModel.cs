@@ -38,6 +38,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.UpdateFromGroupModel();
         }
 
+        public virtual void InitStatic(SimpleGroupStatus simpleGroupStatus, GroupStatus groupStatus)
+        {
+            this.interviewId = null;
+            this.SimpleStatus = simpleGroupStatus;
+            this.Status = groupStatus;
+        }
+
         private int answeredQuestionsCount; 
         public int AnsweredQuestionsCount 
         {
@@ -66,18 +73,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         public GroupStatus Status
         {
             get => this.status;
-            protected set => this.RaiseAndSetIfChanged(ref this.status, value);
+            set => this.RaiseAndSetIfChanged(ref this.status, value);
         }
 
         private SimpleGroupStatus simpleStatus;
         public SimpleGroupStatus SimpleStatus
         {
-            get => this.simpleStatus;
-            protected set => this.RaiseAndSetIfChanged(ref this.simpleStatus, value);
+            get => this.simpleStatus; 
+            set => this.RaiseAndSetIfChanged(ref this.simpleStatus, value);
         }
 
         public virtual void UpdateFromGroupModel()
         {
+            if (this.interviewId == null)
+                return;
+            
             IStatefulInterview interview = this.interviewRepository.Get(this.interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
             this.QuestionsCount = interview.CountEnabledQuestions(this.group);

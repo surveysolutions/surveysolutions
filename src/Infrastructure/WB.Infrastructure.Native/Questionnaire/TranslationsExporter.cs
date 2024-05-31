@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Infrastructure.Native.Utils;
 
 namespace WB.Infrastructure.Native.Questionnaire
 {
@@ -70,9 +71,7 @@ namespace WB.Infrastructure.Native.Questionnaire
 
         private byte[] GetExcelFileContentEEPlus(QuestionnaireDocument questionnaire, ITranslation translation, ICategories categoriesService)
         {
-            //non windows fonts
-            var firstFont = SystemFonts.Collection.Families.First();
-            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(firstFont.Name) };
+            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
             
             using (XLWorkbook excelPackage = new XLWorkbook(loadOptions))
             {
@@ -202,6 +201,9 @@ namespace WB.Infrastructure.Native.Questionnaire
                 foreach (var translatedOption in GetTranslatedOptions(categories, translation, categoriesService))
                     yield return translatedOption;
             }
+
+            foreach (var criticalityCondition in questionnaire.CriticalRules)
+                yield return GetTranslatedCriticalityCondition(criticalityCondition, translation);
         }
 
         private static TranslationRow GetTranslatedTitle(IComposite entity, ITranslation translation) => new TranslationRow
@@ -220,6 +222,15 @@ namespace WB.Infrastructure.Native.Questionnaire
             Type = TranslationType.Instruction.ToString("G"),
             OriginalText = question.Instructions,
             Translation = translation.GetInstruction(question.PublicKey)
+        };
+
+        private static TranslationRow GetTranslatedCriticalityCondition(CriticalRule criticalRule, ITranslation translation) => new TranslationRow
+        {
+            EntityId = criticalRule.Id.FormatGuid(),
+            Variable = null,
+            Type = TranslationType.CriticalRuleMessage.ToString("G"),
+            OriginalText = criticalRule.Message,
+            Translation = translation.GetCriticalRuleMessage(criticalRule.Id)
         };
 
         private static IEnumerable<TranslationRow> GetTranslatedValidationMessages(IValidatable validatable, ITranslation translation)

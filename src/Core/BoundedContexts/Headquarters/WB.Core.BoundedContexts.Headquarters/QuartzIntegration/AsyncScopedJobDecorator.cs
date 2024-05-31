@@ -35,7 +35,9 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
                 return;
             }
 
-            var jobWorkspace = context.MergedJobDataMap.GetString(WorkspaceConstants.QuartzJobKey);
+            var jobWorkspace = context.MergedJobDataMap.ContainsKey(WorkspaceConstants.QuartzJobKey) 
+                ? context.MergedJobDataMap.GetString(WorkspaceConstants.QuartzJobKey)
+                : null;
 
             if (!string.IsNullOrWhiteSpace(jobWorkspace))
             {

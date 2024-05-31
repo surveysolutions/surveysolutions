@@ -74,7 +74,7 @@
     <value>Stažení</value>
   </data>
   <data name="DownloadSupervisor" xml:space="preserve">
-    <value>Stáhnout aplikaci Garant</value>
+    <value>Stáhnout mobilní garantskou aplikaci Survey Solutions</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Název</value>
@@ -107,7 +107,7 @@
     <value>Admin</value>
   </data>
   <data name="AllAssignments" xml:space="preserve">
-    <value>Všechny dotazníky</value>
+    <value>Všechny žádanky</value>
   </data>
   <data name="AllGpsQuestions" xml:space="preserve">
     <value>Všechny dotazy ohledně GPS</value>
@@ -122,7 +122,7 @@
     <value>Všechny statusy</value>
   </data>
   <data name="AllSupervisors" xml:space="preserve">
-    <value>Všichni Garanti</value>
+    <value>Všichni garanti</value>
   </data>
   <data name="AllVersions" xml:space="preserve">
     <value>Všechny verze</value>
@@ -143,10 +143,10 @@
     <value>Přiřadit</value>
   </data>
   <data name="Assignment" xml:space="preserve">
-    <value>ID dotazníku</value>
+    <value>Žádanka</value>
   </data>
   <data name="Assignments" xml:space="preserve">
-    <value>Dotazníky</value>
+    <value>Žádanky</value>
   </data>
   <data name="AuditLog" xml:space="preserve">
     <value>Protokol auditu</value>
@@ -235,11 +235,11 @@
   <data name="NothingSelected" xml:space="preserve">
     <value>Není nic vybráno</value>
   </data>
-    <data name="Ok" xml:space="preserve">
-        <value>OK</value>
+  <data name="Ok" xml:space="preserve">
+        <value>Ok</value>
     </data>
   <data name="OpenAssignment" xml:space="preserve">
-    <value>Otevřít dotazník</value>
+    <value>Otevřít žádanku</value>
   </data>
   <data name="OpenResponsiblesProfile" xml:space="preserve">
     <value>Otevřít profil zodpovědného uživatele</value>
@@ -326,13 +326,13 @@
     <value>Obsahuje Chyby</value>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Jasný</value>
+    <value>Vymazat</value>
   </data>
   <data name="Disable" xml:space="preserve">
-    <value>Vypnout</value>
+    <value>Deaktivovat</value>
   </data>
   <data name="Enable" xml:space="preserve">
-    <value>Zapnout</value>
+    <value>Aktivovat</value>
   </data>
   <data name="LinkedUsers" xml:space="preserve">
     <value>Propojení uživatelé</value>

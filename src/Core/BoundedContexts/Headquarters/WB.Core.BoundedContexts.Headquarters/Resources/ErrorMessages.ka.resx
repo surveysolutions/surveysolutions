@@ -130,7 +130,7 @@
     <value>დიზაინერთან დაკავშირებისას მოხდა დაყოვნება. გთხოვთ, გადაამოწმოთ ინტერნეტთან კავშირი</value>
   </data>
   <data name="ServerError" xml:space="preserve">
-    <value>წარმოიქმნა სერვერის შიდა შეცდომა. გთხოვთ, დაუკავშირდეთ Survey Solutions-ის მომხმარებელთა მხარდაჭერის ჯგუფს ელ-ფოსტაზე support@mysurvey.solutions.</value>
+    <value>წარმოიქმნა სერვერის შიდა შეცდომა. გთხოვთ, დაუკავშირდეთ მხარდაჭერის ჯგუფს.</value>
   </data>
   <data name="ServiceUnavailable" xml:space="preserve">
     <value>დიზაინერი მიუწვდომელია. გთხოვთ, დარწმუნდეთ, რომ დიზაინერი მომსახურების რეჟიმში არ არის</value>

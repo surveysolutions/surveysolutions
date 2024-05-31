@@ -121,7 +121,7 @@
     <value>Vyberte typ dotazníku, který chcete importovat</value>
   </data>
   <data name="QuestionnaireCannotBeFound" xml:space="preserve">
-    <value>Požadovaný typ dotazníku nelze nalézt. Obnovte prosím seznam typů dotazníků</value>
+    <value>Požadovaný typ dotazníku nelze nalézt. Obnovte  seznam typů dotazníků</value>
   </data>
   <data name="SignedInBlock" xml:space="preserve">
     <value>V aplikaci Designer jste přihlášeni jako {{user}}.</value>

@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
@@ -20,6 +21,8 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
@@ -96,9 +99,17 @@ namespace WB.UI.Headquarters.Controllers
                 WebMode = this.webInterviewConfigProvider.Get(questionnaireIdentity).Started,
                 AudioAudit = browseItem.IsAudioRecordingEnabled,
                 DesignerUrl = this.restServiceSettings.Endpoint.TrimEnd('/') +
-                              $"/questionnaire/details/{questionnaire.QuestionnaireId:N}${questionnaire.Revision}",
+                              $"/q/details/{questionnaire.QuestionnaireId:N}${questionnaire.Revision}",
                 Comment = browseItem.Comment,
                 Variable = browseItem.Variable,
+                CriticalitySupport = browseItem.CriticalitySupport,
+                CriticalityLevel = browseItem.CriticalityLevel.HasValue ?((int) browseItem.CriticalityLevel.Value).ToString() : "",
+                CriticalityLevels = new[]
+                {
+                    new ComboboxViewItem() { Key = ((int)CriticalityLevel.Ignore).ToString(), Value = CriticalityLevel.Ignore.ToString() },
+                    new ComboboxViewItem() { Key = ((int)CriticalityLevel.Warn).ToString(), Value = CriticalityLevel.Warn.ToString() },
+                    new ComboboxViewItem() { Key = ((int)CriticalityLevel.Block).ToString(), Value = CriticalityLevel.Block.ToString() },
+                },
                 IsObserving = this.authorizedUser.IsObserving,
                 DefaultLanguageName = questionnaire.DefaultLanguageName,
                 ExposedVariablesUrl = Url.Action("ExposedVariables", "Questionnaires"),
@@ -234,7 +245,7 @@ namespace WB.UI.Headquarters.Controllers
                 IsObserving = this.authorizedUser.IsObserving,
                 DataUrl = Url.Action("GetQuestionnaireVariables", "QuestionnairesApi"),
                 DesignerUrl = this.restServiceSettings.Endpoint.TrimEnd('/') +
-                              $"/questionnaire/details/{questionnaire.QuestionnaireId:N}${questionnaire.Revision}",
+                              $"/q/details/{questionnaire.QuestionnaireId:N}${questionnaire.Revision}",
 
             };
 

@@ -6,14 +6,19 @@ using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
+using MvvmCross.ViewModels;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
@@ -23,7 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         protected readonly IViewModelNavigationService viewModelNavigationService;
         
         private readonly ICommandService commandService;
-        private readonly IEntitiesListViewModelFactory entitiesListViewModelFactory;
+        protected readonly IEntitiesListViewModelFactory entitiesListViewModelFactory;
         private readonly ILastCompletionComments lastCompletionComments;
         protected readonly IPrincipal principal;
 
@@ -32,6 +37,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public InterviewStateViewModel InterviewState { get; set; }
         public DynamicTextViewModel Name { get; }
         public string CompleteScreenTitle { get; set; }
+        protected CriticalityLevel? criticalityLevel = null;
+
 
         public CompleteInterviewViewModel(
             IViewModelNavigationService viewModelNavigationService,
@@ -59,33 +66,59 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         protected Guid interviewId;
 
-        public virtual void Configure(string interviewId,
-            NavigationState navigationState)
+        public virtual void Configure(string interviewId, NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             this.interviewId = Guid.Parse(interviewId);
-
+            
             this.InterviewState.Init(interviewId, null);
+            this.CompleteStatus = InterviewState.Status;
             this.Name.InitAsStatic(UIResources.Interview_Complete_Screen_Title);
 
             this.CompleteScreenTitle = UIResources.Interview_Complete_Screen_Description;
 
             var questionsCount = InterviewState.QuestionsCount;
             this.AnsweredCount = InterviewState.AnsweredQuestionsCount;
-            this.ErrorsCount = InterviewState.InvalidAnswersCount;
+
             this.UnansweredCount = questionsCount - this.AnsweredCount;
+            var unansweredQuestions = this.entitiesListViewModelFactory.GetTopUnansweredQuestions(interviewId, navigationState).ToList();
+            var unansweredGroup = new CompleteGroup(unansweredQuestions)
+            {
+                AllCount = this.UnansweredCount,
+                Title = UIResources.Interview_Complete_Unanswered + ": " + MoreThan(UnansweredCount),
+                GroupContent = CompleteGroupContent.Unanswered,
+            };
 
-            this.EntitiesWithErrors =
-                    this.entitiesListViewModelFactory.GetEntitiesWithErrors(interviewId, navigationState).ToList();
+            this.ErrorsCount = InterviewState.InvalidAnswersCount;
+            this.EntitiesWithErrors = this.entitiesListViewModelFactory.GetTopEntitiesWithErrors(interviewId, navigationState).ToList();
+            this.EntitiesWithErrorsDescription = UIResources.Interview_Complete_Entities_With_Errors + " " + MoreThan(this.ErrorsCount);
+            var errorsGroup = new CompleteGroup(EntitiesWithErrors)
+            {
+                AllCount = this.ErrorsCount,
+                Title = this.EntitiesWithErrorsDescription,
+                GroupContent = CompleteGroupContent.Error,
+            };
 
-            this.EntitiesWithErrorsDescription = EntitiesWithErrors.Count < this.ErrorsCount
-                ? string.Format(UIResources.Interview_Complete_First_n_Entities_With_Errors,
-                    this.entitiesListViewModelFactory.MaxNumberOfEntities)
-                : UIResources.Interview_Complete_Entities_With_Errors;
+            this.CompleteGroups = new CompositeCollection<MvxViewModel>();
+            if (UnansweredCount > 0)
+            {
+                CompleteGroups.AddCollection(new CovariantObservableCollection<MvxViewModel>() { unansweredGroup });
+                CompleteGroups.AddCollection(unansweredGroup.Items);
+            }
+
+            if (ErrorsCount > 0)
+            {
+                CompleteGroups.AddCollection(new CovariantObservableCollection<MvxViewModel>() { errorsGroup });
+                CompleteGroups.AddCollection(errorsGroup.Items);
+            }
 
             this.Comment = lastCompletionComments.Get(this.interviewId);
             this.CommentLabel = UIResources.Interview_Complete_Note_For_Supervisor;
+            this.CompleteButtonComment = UIResources.Interview_Complete_Consequences_Instrunction;
         }
+
+        public bool HasCompleteGroups => CompleteGroups.Count > 0;
+        public CompositeCollection<MvxViewModel> CompleteGroups { get; set; }
 
         public int AnsweredCount { get; set; }
 
@@ -101,10 +134,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             set => this.RaiseAndSetIfChanged(ref this.canSwitchToWebMode, value);
         }
 
-        public bool RequestWebInterview
+        public virtual bool RequestWebInterview
         {
             get => requestWebInterview;
             set => this.RaiseAndSetIfChanged(ref this.requestWebInterview, value);
+        }
+
+        private bool isLoading = true;
+        public bool IsLoading
+        {
+            get => isLoading;
+            set => this.RaiseAndSetIfChanged(ref this.isLoading, value);
+        }
+
+        private GroupStatus completeStatus;
+        public GroupStatus CompleteStatus
+        {
+            get => completeStatus;
+            set => this.RaiseAndSetIfChanged(ref this.completeStatus, value);
         }
 
         public string WebInterviewUrl { get; set; }
@@ -117,11 +164,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             get
             {
                 return this.completeInterviewCommand ??= new MvxAsyncCommand(async () =>
-                    await this.CompleteInterviewAsync(), () => !WasThisInterviewCompleted);
+                    await this.CompleteInterviewAsync(), () => !WasThisInterviewCompleted && IsCompletionAllowed);
             }
         }
 
-        public string Comment
+        public virtual string Comment
         {
             get => comment;
             set
@@ -132,6 +179,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         }
 
         public string CommentLabel { get; protected set; }
+        public string CompleteButtonComment { get; protected set; }
 
         private bool wasThisInterviewCompleted = false;
         public bool WasThisInterviewCompleted
@@ -140,16 +188,34 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             set => this.RaiseAndSetIfChanged(ref this.wasThisInterviewCompleted, value);
         }
 
+        public bool IsCompletionAllowed
+        {
+            get => isCompletionAllowed;
+            set
+            {
+                if (value == isCompletionAllowed) 
+                    return;
+                isCompletionAllowed = value;
+                RaisePropertyChanged(() => IsCompletionAllowed);
+                RaisePropertyChanged(() => CompleteInterviewCommand);
+                RaisePropertyChanged(() => CompleteStatus);
+            }
+        }
+
         private string comment;
         private bool requestWebInterview;
         private bool canSwitchToWebMode;
         private bool isDisposed;
+        private bool isCompletionAllowed;
 
-        private async Task CompleteInterviewAsync()
+        protected virtual async Task CompleteInterviewAsync()
         {
+            if (!this.IsCompletionAllowed)
+                return;
+            
             if (this.WasThisInterviewCompleted)
                 return;
-
+            
             this.WasThisInterviewCompleted = true;
             await this.commandService.WaitPendingCommandsAsync();
 
@@ -162,7 +228,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             : new CompleteInterviewCommand(
                 interviewId: this.interviewId,
                 userId: this.principal.CurrentUserIdentity.UserId,
-                comment: this.Comment);
+                comment: this.Comment,
+                criticalityLevel: criticalityLevel);
 
             try
             {
@@ -191,19 +258,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             isDisposed = true;
             
             this.Name?.Dispose();
-
-            if (EntitiesWithErrors != null)
-            {
-                var entitiesWithErrors = EntitiesWithErrors.ToArray();
-                foreach (var entityWithErrorsViewModel in entitiesWithErrors)
-                {
-                    entityWithErrorsViewModel?.DisposeIfDisposable();
-                }
-            }
+            
+            CompleteGroups.Dispose();
 
             this.InterviewState?.DisposeIfDisposable();
             
             base.Dispose();
         }
+
+        protected string MoreThan(int count)
+            => count >= this.entitiesListViewModelFactory.MaxNumberOfEntities 
+                ? this.entitiesListViewModelFactory.MaxNumberOfEntities + "+" 
+                : count.ToString();
     }
 }

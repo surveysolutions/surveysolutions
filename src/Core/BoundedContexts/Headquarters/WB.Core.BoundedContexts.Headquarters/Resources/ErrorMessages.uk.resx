@@ -133,7 +133,7 @@
     <value>Будь ласка, заповніть поле captcha</value>
   </data>
   <data name="Questionnaire_verification_failed" xml:space="preserve">
-    <value>Анкета"{0}" має помилки компіляції. Будь ласка, виправте їх у Дизайнері.</value>
+    <value>Анкета "{0}" має помилки компіляції. Будь ласка, виправте їх у Дизайнері.</value>
   </data>
   <data name="QuestionnaireAlreadyImporting" xml:space="preserve">
     <value>Інша анкета зараз імпортується до Headquarters.</value>

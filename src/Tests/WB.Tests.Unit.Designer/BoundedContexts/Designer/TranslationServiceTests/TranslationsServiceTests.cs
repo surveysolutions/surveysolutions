@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Infrastructure.Native.Utils;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTests
@@ -552,6 +553,67 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             //assert
             Assert.That(act, Throws.Nothing);
         }
+        
+        [Test]
+        public void when_storing_translations_from_excel_file_with_2_categories_with_the_same_name()
+        {
+            //assert
+            Guid questionnaireId = Id.gB;
+            Guid translationId = Id.gC;
+            var categoriesId1 = Id.gD;
+            var categoriesId2 = Id.gE;
+            var categoriesName = "duplicate";
+
+            byte[] fileStream = CreateExcelWithHeader(categoriesName, new[]
+            {
+                new[]
+                {
+                    "1$1", "original text", "translation"
+                }
+            });
+
+            var plainStorageAccessor = Create.InMemoryDbContext();
+
+            var questionnaire = Create.QuestionnaireDocument(questionnaireId);
+            questionnaire.Categories = new List<Categories>
+            {
+                new Categories{ Id = categoriesId1, Name = categoriesName},
+                new Categories{ Id = categoriesId2, Name = categoriesName},
+            };
+
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
+
+            var cat = new Mock<IReusableCategoriesService>();
+            cat.Setup(x => x.GetCategoriesById(questionnaire.PublicKey, categoriesId1))
+                .Returns(new List<CategoriesItem>(){new CategoriesItem(){Id = 1, Text = "one"}}.AsQueryable);
+            cat.Setup(x => x.GetCategoriesById(questionnaire.PublicKey, categoriesId2))
+                .Returns(new List<CategoriesItem>(){new CategoriesItem(){Id = 2, Text = "two"}}.AsQueryable);
+            
+            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object, reusableCategoriesService: cat.Object);
+
+            //act
+            service.Store(questionnaireId, translationId, fileStream);
+
+            //assert
+            Assert.That(plainStorageAccessor.TranslationInstances.Count(), Is.EqualTo(2));
+
+            var translations = plainStorageAccessor.TranslationInstances.ToArray();
+            
+            var translationInstance1 = translations.First();
+            Assert.That(translationInstance1.Value, Is.EqualTo("translation"));
+            Assert.That(translationInstance1.QuestionnaireEntityId, Is.EqualTo(categoriesId1));
+            Assert.That(translationInstance1.Type, Is.EqualTo(TranslationType.Categories));
+            Assert.That(translationInstance1.QuestionnaireId, Is.EqualTo(questionnaireId));
+            Assert.That(translationInstance1.TranslationIndex, Is.EqualTo("1$1"));
+            
+            var translationInstance2 = translations.Second();
+            Assert.That(translationInstance2.Value, Is.EqualTo("translation"));
+            Assert.That(translationInstance2.QuestionnaireEntityId, Is.EqualTo(categoriesId2));
+            Assert.That(translationInstance2.Type, Is.EqualTo(TranslationType.Categories));
+            Assert.That(translationInstance2.QuestionnaireId, Is.EqualTo(questionnaireId));
+            Assert.That(translationInstance2.TranslationIndex, Is.EqualTo("1$1"));
+        }
 
         private byte[] GetEmbendedFileContent(string fileName)
         {
@@ -576,24 +638,26 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         private static byte[] CreateExcelWithCategories(string categoriesName, string[][] data)
             => CreateExcel(new Dictionary<string, string[][]> {{$"@@@_{categoriesName}", data}});
 
-        private static byte[] CreateExcel(Dictionary<string,string[][]>  datas)
+        private const string NotoSansFontFamilyName = "Noto Sans";
+
+        private static byte[] CreateExcel(Dictionary<string, string[][]> datas)
         {
-            //non windows fonts
-            var firstFont = SystemFonts.Collection.Families.First();
-            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(firstFont.Name) };
+            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
             
             using XLWorkbook package = new XLWorkbook(loadOptions);
+            package.Style.Font.FontName = FontsHelper.DefaultFontName;
 
             foreach (var data in datas)
             {
                 var worksheet = package.Worksheets.Add(data.Key);
 
                 for (var row = 0; row < data.Value.Length; row++)
-                for (var column = 0; column < data.Value[row].Length; column++)
-                {
-                    var value = data.Value[row][column];
-                    worksheet.Cell(row + 1, column + 1).SetValue(value);
-                }    
+                    for (var column = 0; column < data.Value[row].Length; column++)
+                    {
+                        var value = data.Value[row][column];
+                        worksheet.Cell(row + 1, column + 1).SetValue(value);
+                        worksheet.Cell(row + 1, column + 1).Style.Font.FontName = FontsHelper.DefaultFontName;
+                    }
             }
 
             using var stream = new MemoryStream();

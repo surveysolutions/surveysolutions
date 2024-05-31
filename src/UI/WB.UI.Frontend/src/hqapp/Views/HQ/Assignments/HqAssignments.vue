@@ -128,19 +128,20 @@
             </div>
         </ModalFrame>
 
-        <ModalFrame ref="editQuantityModal" :title="$t('Assignments.ChangeSizeModalTitle', { assignmentId: editedRowId })">
-            <p>{{ $t("Assignments.SizeExplanation") }}</p>
+        <ModalFrame ref="editQuantityModal"
+            :title="$t('Assignments.ChangeExpectedModalTitle', { assignmentId: editedRowId })">
+            <p>{{ $t("Assignments.ExpectedExplanation") }}</p>
             <p v-if="!canEditQuantity">
-                <b>{{ $t("Assignments.AssignmentSizeInWebMode") }}</b>
+                <b>{{ $t("Assignments.AssignmentExpectedInWebMode") }}</b>
             </p>
             <form onsubmit="return false;">
                 <div class="form-group" v-bind:class="{ 'has-error': errors.has('editedQuantity') }">
                     <label class="control-label" for="newQuantity">
-                        {{ $t("Assignments.Size") }}
+                        {{ $t("Assignments.Expected") }}
                     </label>
 
                     <input type="text" class="form-control" v-model.trim="editedQuantity" name="editedQuantity"
-                        v-validate="quantityValidations" :data-vv-as="$t('Assignments.Size')" maxlength="5"
+                        v-validate="quantityValidations" :data-vv-as="$t('Assignments.Expected')" maxlength="5"
                         autocomplete="off" @keyup.enter="updateQuantity" id="newQuantity" placeholder="1"
                         :disabled="!canEditQuantity" />
                     <span class="text-danger">{{ errors.first('editedQuantity') }}</span>
@@ -328,8 +329,8 @@ export default {
                     class: 'type-numeric pointer editable',
                     searchHighlight: false,
                     searchable: false,
-                    title: this.$t('Assignments.Size'),
-                    tooltip: this.$t('Assignments.Tooltip_Table_Size'),
+                    title: this.$t('Assignments.Expected'),
+                    tooltip: this.$t('Assignments.Tooltip_Table_ExpectedValue'),
                     if() {
                         return self.config.isHeadquarter
                     },

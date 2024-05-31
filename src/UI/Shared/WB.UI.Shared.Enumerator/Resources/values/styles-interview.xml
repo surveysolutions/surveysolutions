@@ -147,17 +147,18 @@
     <item name="android:orientation">vertical</item>
   </style>
 
-  <style name="Interview_Complete_Screen_Statistics_Counter" parent="FullWidthWrappingLayout">
-    <item name="android:textStyle">bold</item>
-    <item name="android:textSize">@dimen/textsize_30</item>
+  <style name="Interview_Complete_Screen_Statistics_Counter" parent="FullWidthWrappingLayout">    
+    <item name="android:textSize">@dimen/textsize_28</item>
     <item name="android:textColor">@color/complete_screen_statistics_neutral_color</item>
     <item name="android:layout_marginTop">@dimen/Interview_Entity_Title_margin_vertical</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Entity_Title_margin_vertical</item>
   </style>
 
   <style name="Interview_Complete_Screen_Statistics_Label" parent="FullWidthWrappingLayout">
     <item name="android:textStyle">bold</item>
     <item name="android:textSize">@dimen/textsize_16</item>
     <item name="android:textColor">@color/complete_screen_statistics_neutral_color</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Entity_Title_margin_vertical</item>
     <item name="android:layout_marginBottom">@dimen/Interview_Entity_Title_margin_vertical</item>
   </style>
 
@@ -183,7 +184,6 @@
 
   <style name="Interview_Complete_Screen_Statistics_Errors_Label" parent="Interview_Complete_Screen_Statistics_Label">
     <item name="android:textColor">@color/complete_screen_statistics_error_color</item>
-    <item name="android:maxLines">1</item>
     <item name="android:ellipsize">end</item>
   </style>
 

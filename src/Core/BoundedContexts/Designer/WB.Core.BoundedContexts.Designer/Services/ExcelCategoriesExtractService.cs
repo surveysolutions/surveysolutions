@@ -13,11 +13,14 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.ReusableCategories;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
+using WB.Infrastructure.Native.Utils;
 
 namespace WB.Core.BoundedContexts.Designer.Services
 {
     internal class ExcelCategoriesExtractService : ICategoriesExtractService
     {
+        private const string NotoSansFontFamilyName = "Noto Sans";
+
         private readonly ICategoriesVerifier verifier;
         private readonly ICategoriesExportService categoriesExportService;
 
@@ -30,9 +33,8 @@ namespace WB.Core.BoundedContexts.Designer.Services
         
         public byte[] GetTemplateFile(bool isCascading)
         {
-            //non windows fonts
-            var firstFont = SystemFonts.Collection.Families.First();
-            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(firstFont.Name) };
+
+            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
             
             using XLWorkbook excelPackage = new XLWorkbook(loadOptions);
             var worksheet = excelPackage.Worksheets.Add("Categories");
@@ -78,9 +80,8 @@ namespace WB.Core.BoundedContexts.Designer.Services
 
         private List<CategoriesRow> ExtractCategoriesFromExcelFile(Stream xmlFile)
         {
-            //non windows fonts
-            var firstFont = SystemFonts.Collection.Families.First();
-            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(firstFont.Name) };
+
+            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
             
             var categories = new List<CategoriesRow>();
             using XLWorkbook package = new XLWorkbook(xmlFile, loadOptions);

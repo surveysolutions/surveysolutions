@@ -206,7 +206,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
                 Mock.Of<IStatefulInterviewSearcher>(),
                 Mock.Of<IInterviewFactory>(),
                 Mock.Of<IChangeStatusFactory>(),
-                Mock.Of<IInterviewBrokenPackagesService>());
+                Mock.Of<IInterviewBrokenPackagesService>(),
+                Mock.Of<IQuestionnaireSettings>());
 
             return controller;
         }

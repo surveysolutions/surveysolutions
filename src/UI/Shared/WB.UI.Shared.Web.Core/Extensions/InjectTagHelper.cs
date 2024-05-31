@@ -30,7 +30,7 @@ namespace WB.UI.Shared.Web.Extensions
         [HtmlAttributeName("path")]
         public string Path { get; set; } = "locale/";
 
-        private static readonly Regex ComponentMatcher = new Regex(@"(?<component>[\w\d-]*)\.([\da-f]*)?\.?(min\.)?(json)", RegexOptions.Compiled);
+        private static readonly Regex ComponentMatcher = new Regex(@"(?<component>[\w\d-]*)\.([\da-f]*)?\.?(min\.)?(js)", RegexOptions.Compiled);
 
         public override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
@@ -54,8 +54,8 @@ namespace WB.UI.Shared.Web.Extensions
                     localeFiles.Add(match.Groups["component"].Value, '/' + folder + '/' + file.Name);
                 }
 
-                entry.SetAbsoluteExpiration(TimeSpan.FromMinutes(1));
-                entry.AddExpirationToken(webHostEnvironment.WebRootFileProvider.Watch(folder + "/" + "*.json"));
+                entry.SetAbsoluteExpiration(TimeSpan.FromMinutes(5));
+                entry.AddExpirationToken(webHostEnvironment.WebRootFileProvider.Watch(folder + "/" + "*.js"));
                 return localeFiles;
             });
 

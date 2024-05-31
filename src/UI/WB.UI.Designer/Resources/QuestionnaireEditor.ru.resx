@@ -265,6 +265,42 @@
   <data name="SideBarMacroShowDescription" xml:space="preserve">
     <value>добавить описание</value>
   </data>
+  <data name="SideBarCriticalityConditionExpression" xml:space="preserve">
+    <value>выражение</value>
+  </data>
+  <data name="SideBarCriticalityConditionsCounter" xml:space="preserve">
+      <value>{{count}} Критическое условие:</value>
+  </data>
+  <data name="SideBarCriticalityConditionsCounter_plural" xml:space="preserve">
+      <value>{{count}} Критические условия:</value>
+  </data>
+  <data name="SideBarCriticalityConditionDescription" xml:space="preserve">
+    <value>описание</value>
+  </data>
+  <data name="SideBarCriticalityConditionsEmptyLine1" xml:space="preserve">
+    <value>Используйте вкладку для определения критических условий.</value>
+  </data>
+  <data name="SideBarCriticalityConditionsEmptyLine2" xml:space="preserve">
+    <value>Критическое условие - это ...</value>
+  </data>
+  <data name="SideBarCriticalityConditionsEmptyLine3" xml:space="preserve">
+    <value>еще описание</value>
+  </data>
+  <data name="SideBarHideDescription" xml:space="preserve">
+    <value>cкрыть описание</value>
+  </data>
+  <data name="SideBarCriticalityConditionMessage" xml:space="preserve">
+    <value>сообщение</value>
+  </data>
+  <data name="SideBarShowDescription" xml:space="preserve">
+    <value>добавить описание</value>
+  </data>
+  <data name="SideBarAddCriticalityCondition" xml:space="preserve">
+    <value>добавить критическое условие</value>
+  </data>
+  <data name="SideBarCriticalityConditionNoMessage" xml:space="preserve">
+    <value>критическое условие без сообщение</value>
+  </data>
   <data name="SideBarSectionsCounter" xml:space="preserve">
     <value>{{count}} Секция:</value>
   </data>
@@ -981,6 +1017,12 @@
   <data name="UnMarkAsDefault" xml:space="preserve">
     <value>Не использовать по умолчанию</value>
   </data>
+  <data name="Default" xml:space="preserve">
+    <value>По умолчанию</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Сбросить</value>
+  </data>
   <data name="PleaseWait" xml:space="preserve">
     <value>Ожидайте...</value>
   </data>
@@ -1188,6 +1230,9 @@
   </data>
   <data name="SideBarCommentsTitle" xml:space="preserve">
     <value>Комментарии</value>
+  </data>
+  <data name="SideBarCriticalityConditionsTitle" xml:space="preserve">
+    <value>Критические условия</value>
   </data>
   <data name="VariableVariableName" xml:space="preserve">
     <value>Имя переменной</value>
@@ -1598,5 +1643,32 @@
   </data>
   <data name="ManageAccount" xml:space="preserve">
       <value>Управление учётной записью</value>
+  </data>
+  <data name="OldUi" xml:space="preserve">
+      <value>Старый UI</value>
+  </data>
+  <data name="ShowList" xml:space="preserve">
+      <value>Показать списком</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+      <value>Логин</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+      <value>Зарегистрироваться</value>
+  </data>
+  <data name="No" xml:space="preserve">
+      <value>Нет</value>
+  </data>
+  <data name="QuestionIsCritical" xml:space="preserve">
+      <value>Это критический вопрос</value>
+  </data>
+  <data name="HelpIsCritical" xml:space="preserve">
+      <value>Авторы анкеты могут указать, что ответ на этот вопрос имеет критическое значение для завершения интервью.</value>
+  </data>
+  <data name="HelpCriticalityConditionExpression" xml:space="preserve">
+      <value>Выражение критического условия.</value>
+  </data>
+  <data name="HelpCriticalityConditionMessage" xml:space="preserve">
+      <value>Сообщение критического условия.</value>
   </data>
 </root>

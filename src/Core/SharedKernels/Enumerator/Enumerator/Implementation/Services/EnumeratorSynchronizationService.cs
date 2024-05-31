@@ -295,6 +295,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<QuestionnaireIdentity>>(
                 url: string.Concat(this.QuestionnairesController, "/switchabletoweb"), credentials: this.restCredentials, token: cancellationToken));
         }
+        
+        public Task<List<QuestionnaireSettingsApiView>> GetServerQuestionnairesSettingsAsync(CancellationToken cancellationToken)
+        {
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<QuestionnaireSettingsApiView>>(
+                url: string.Concat(this.QuestionnairesController, "/settings"), 
+                credentials: this.restCredentials, token: cancellationToken));
+        }
       
         public Task<List<MapView>> GetMapList(CancellationToken cancellationToken)
         {

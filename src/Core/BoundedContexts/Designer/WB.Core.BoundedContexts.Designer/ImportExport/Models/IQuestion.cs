@@ -9,5 +9,6 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport.Models
         string? QuestionText { get; set; }
         QuestionScope QuestionScope { get; set; }
         string? VariableLabel { get; set; }
+        bool IsCritical { get; set; }
     }
 }

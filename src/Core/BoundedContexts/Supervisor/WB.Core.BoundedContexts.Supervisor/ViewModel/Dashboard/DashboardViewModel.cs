@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross;
@@ -45,7 +46,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         public IDashboardItemsAccessor DashboardItemsAccessor { get; }
         public LocalSynchronizationViewModel Synchronization { get; set; }
 
-        public string DashboardTitle
+        public string? DashboardTitle
         {
             get => dashboardTitle;
             set => SetProperty(ref dashboardTitle, value);
@@ -67,10 +68,12 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             IPlainStorage<SupervisorIdentity> supervisorPlainStorage,
             IWorkspaceMemoryCacheSource memoryCacheSource,
             IMapInteractionService mapInteractionService,
-            IUserInteractionService userInteractionService)
+            IUserInteractionService userInteractionService,
+            IMvxNavigationService mvxNavigationService,
+            IMvxMessenger messenger)
             : base(principal, viewModelNavigationService)
         {
-            this.mvxNavigationService = Mvx.IoCProvider.Resolve<IMvxNavigationService>();
+            this.mvxNavigationService = mvxNavigationService;
             this.workspaceService = workspaceService;
             this.supervisorSynchronizationService = supervisorSynchronizationService;
             this.supervisorPlainStorage = supervisorPlainStorage;
@@ -85,12 +88,12 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             this.mvxNavigationService.DidNavigate += OnAfterNavigate;
             this.Synchronization.OnProgressChanged += SynchronizationOnProgressChanged;
 
-            messengerSubscribtion = Mvx.IoCProvider.GetSingleton<IMvxMessenger>().Subscribe<RequestSynchronizationMsg>(msg => SynchronizationCommand.Execute());
+            messengerSubscription = messenger.Subscribe<RequestSynchronizationMsg>(msg => SynchronizationCommand.Execute());
         }
 
         public DashboardNotificationsViewModel DashboardNotifications { get; set; }
 
-        private void OnAfterNavigate(object sender, IMvxNavigateEventArgs args)
+        private void OnAfterNavigate(object? sender, IMvxNavigateEventArgs args)
         {
             if (args.ViewModel is InterviewTabPanel interviewTabPanel)
             {
@@ -99,9 +102,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             }
         }
 
-        private readonly MvxSubscriptionToken messengerSubscribtion;
-        private string dashboardTitle;
-        private DashboardGroupType typeOfInterviews;
+        private readonly MvxSubscriptionToken messengerSubscription;
+        private string? dashboardTitle;
+        private DashboardGroupType typeOfInterviews = DashboardGroupType.None;
 
         public override void Prepare(DashboardViewModelArgs parameter)
         {
@@ -220,21 +223,21 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         protected override void SaveStateToBundle(IMvxBundle bundle)
         {
             base.SaveStateToBundle(bundle);
-            if (this.LastVisitedInterviewId != null)
+            if (this.LastVisitedInterviewId.HasValue)
             {
-                bundle.Data[nameof(LastVisitedInterviewId)] = this.LastVisitedInterviewId.ToString();
+                bundle.Data[nameof(LastVisitedInterviewId)] = this.LastVisitedInterviewId.Value.ToString();
             }
         }
 
         public override void Dispose()
         {
             base.Dispose();
-            messengerSubscribtion.Dispose();
+            messengerSubscription.Dispose();
             this.mvxNavigationService.DidNavigate -= OnAfterNavigate;
             this.Synchronization.OnProgressChanged -= SynchronizationOnProgressChanged;
         }
 
-        private void SynchronizationOnProgressChanged(object sender, SyncProgressInfo e)
+        private void SynchronizationOnProgressChanged(object? sender, SyncProgressInfo e)
         {
             if (e.Status == SynchronizationStatus.Fail
                 || e.Status == SynchronizationStatus.Canceled
@@ -245,7 +248,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             }
         }
 
-        public string CurrentWorkspace => Principal.CurrentUserIdentity.Workspace;
+        public string? CurrentWorkspace => Principal?.CurrentUserIdentity?.Workspace;
         public bool DoesSupportMaps => mapInteractionService.DoesSupportMaps;
 
         public WorkspaceView[] GetWorkspaces()
@@ -266,7 +269,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             ViewModelNavigationService.NavigateToDashboardAsync();
         }
 
-        public event EventHandler WorkspaceListUpdated;
+        public event EventHandler? WorkspaceListUpdated;
         
         public async Task RefreshWorkspaces()
         {
@@ -311,7 +314,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         }
         
         public IMvxAsyncCommand NavigateToMapDashboardCommand =>
-            new MvxAsyncCommand(async () => await NavigateToMapDashboard(), () => !string.IsNullOrEmpty(this.Principal.CurrentUserIdentity.Workspace));
+            new MvxAsyncCommand(async () => await NavigateToMapDashboard(), 
+                () => !string.IsNullOrEmpty(CurrentWorkspace));
 
         private async Task NavigateToMapDashboard()
         {

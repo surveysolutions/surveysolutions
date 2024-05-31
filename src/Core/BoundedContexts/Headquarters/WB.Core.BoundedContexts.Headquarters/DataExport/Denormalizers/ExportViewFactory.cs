@@ -523,7 +523,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 : question.Answers.Count;
 
             if (question.IsFilteredCombobox ?? false)
-                return Math.Min(question.MaxAllowedAnswers ?? Constants.MaxLongRosterRowCount, optionCount);
+                return Math.Min(question.MaxAllowedAnswers ?? Constants.MaxRosterRowCount, optionCount);
 
             return optionCount;
         }

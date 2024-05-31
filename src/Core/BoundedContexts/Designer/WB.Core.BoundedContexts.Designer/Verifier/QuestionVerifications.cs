@@ -38,7 +38,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             //Error<IQuestion>("WB0077", QuestionHasInvalidVariableName, VerificationMessages.WB0077_QuestionHasInvalidVariableName),
             Error<IQuestion>("WB0090", LinkedQuestionIsInterviewersOnly, VerificationMessages.WB0090_LinkedQuestionIsInterviewersOnly),
             Error<IQuestion>("WB0100", (q, document) => RosterSizeQuestionMaxValueCouldBeInRange1And60(q, document,GetMaxNumberOfAnswersForRosterSizeQuestionWhenMore200Options), string.Format(VerificationMessages.WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200,MaxRosterSizeAnswer)),
-            Error<IQuestion>("WB0269", QuestionTitleEmpty, VerificationMessages.WB0269_QuestionTitleIsEmpty),
+            Error<IQuestion>("WB0269", QuestionTitleEmpty, VerificationMessages.WB0269_QuestionTitleIsEmpty, QuestionnaireVerificationReferenceProperty.Title),
+            Error<IQuestion>("WB0317", CriticalityIsNotAllowed, VerificationMessages.WB0317_CriticalityIsNotAllowed),
             Error<ICategoricalQuestion>("WB0075", FilteredComboboxContainsMoreThanMaxOptions, string.Format(VerificationMessages.WB0075_FilteredComboboxContainsMoreThan5000Options, MaxOptionsCountInFilteredComboboxQuestion)),
             Error<SingleQuestion>("WB0086", CascadingQuestionReferencesMissingParent, VerificationMessages.WB0086_ParentCascadingQuestionShouldExist),
             Error<SingleQuestion>("WB0088", CascadingQuestionHasMoreThanAllowedOptions, string.Format(VerificationMessages.WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers, MaxOptionsCountInFilteredComboboxQuestion)),
@@ -55,7 +56,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             Error<ITextListQuestion>("WB0039", TextListQuestionCannotBePrefilled, VerificationMessages.WB0039_TextListQuestionCannotBePrefilled),
             Error<ITextListQuestion>("WB0040", TextListQuestionCannotBeFilledBySupervisor, VerificationMessages.WB0040_TextListQuestionCannotBeFilledBySupervisor),
-            Error<ITextListQuestion>("WB0042", TextListQuestionMaxAnswerNotInRange1And200, string.Format(VerificationMessages.WB0042_TextListQuestionMaxAnswerInRange1And200,Constants.MaxLongRosterRowCount, Constants.MinLongRosterRowCount)),
+            Error<ITextListQuestion>("WB0042", TextListQuestionMaxAnswerNotInRange1And200, string.Format(VerificationMessages.WB0042_TextListQuestionMaxAnswerInRange1And200,Constants.MaxRosterRowCount, Constants.MinRosterRowCount)),
             Error<ITextListQuestion>("WB0093", RosterSizeListQuestionShouldBeLimited, VerificationMessages.WB0093_RosterSizeListOptionQuestionShouldBeLimit),
             Error<IQRBarcodeQuestion>("WB0049", QRBarcodeQuestionIsSupervisorQuestion, VerificationMessages.WB0049_QRBarcodeQuestionIsSupervisorQuestion),
             Error<IQRBarcodeQuestion>("WB0050", QRBarcodeQuestionIsPreFilledQuestion, VerificationMessages.WB0050_QRBarcodeQuestionIsPreFilledQuestion),
@@ -580,6 +581,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private static bool QuestionTitleEmpty(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
             => string.IsNullOrWhiteSpace(question.QuestionText);
 
+        private static bool CriticalityIsNotAllowed(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+            => (question.Properties?.IsCritical ?? false) && (question.QuestionScope == QuestionScope.Hidden || question.QuestionScope == QuestionScope.Supervisor);
+
         private static bool CountOfDecimalPlacesIsInRange1_15(INumericQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (question.IsInteger)
@@ -615,7 +619,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             if (question.Answers.Count == 0)
                 return false;
 
-            var rosterLimit = questionnaire.Questionnaire.IsTriggerForLongRoster(question) ? Constants.MaxLongRosterRowCount : Constants.MaxRosterRowCount;
+            var rosterLimit = Constants.MaxRosterRowCount;
 
             return question.Answers.Any(x => x.GetParsedValue() > rosterLimit);
         }
@@ -630,14 +634,14 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             var rosterSizeQuestionMaxValue = getRosterSizeQuestionMaxValue(question);
             if (!rosterSizeQuestionMaxValue.HasValue)
                 return false;
-            return !Enumerable.Range(1, Constants.MaxLongRosterRowCount).Contains(rosterSizeQuestionMaxValue.Value);
+            return !Enumerable.Range(1, Constants.MaxRosterRowCount).Contains(rosterSizeQuestionMaxValue.Value);
         }
 
 
         private static int? GetMaxNumberOfAnswersForRosterSizeQuestionWhenMore200Options(IQuestion question)
         {
             var multyOptionQuestion = question as IMultyOptionsQuestion;
-            if (multyOptionQuestion != null && multyOptionQuestion.Answers.Count > Constants.MaxLongRosterRowCount)
+            if (multyOptionQuestion != null && multyOptionQuestion.Answers.Count > Constants.MaxRosterRowCount)
                 return multyOptionQuestion.MaxAllowedAnswers;
             return null;
         }

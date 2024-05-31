@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Questionnaire",
   "type": "object",
@@ -28,6 +28,12 @@
       "type": "array",
       "items": {
         "$ref": "#/definitions/Macro"
+      }
+    },
+    "CriticalRules": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/CriticalRule"
       }
     },
     "LookupTables": {
@@ -230,6 +236,9 @@
               "items": {
                 "$ref": "#/definitions/ValidationCondition"
               }
+            },
+            "IsCritical": {
+              "type": "boolean"
             }
           }
         }
@@ -893,6 +902,37 @@
         },
         "Content": {
           "type": "string"
+        }
+      }
+    },
+    "CriticalRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Id": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "format": "guid"
+        },
+        "Message": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "Expression": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "Description": {
+          "type": [
+            "null",
+            "string"
+          ]
         }
       }
     },

@@ -3,7 +3,7 @@ import { capitalize, sum, unionBy, find } from 'lodash'
 
 function getSelectedFlags(state) {
     const flags = Object.keys(state.filter)
-        .filter((flag) => state.filter[flag])
+        .filter((flag) => state.filter[flag].value)
         .map(capitalize)
     return flags
 }
@@ -11,18 +11,21 @@ function getSelectedFlags(state) {
 export default {
     state: {
         filter: {
-            Flagged: false,
-            NotFlagged: false,
-            WithComments: false,
+            Flagged: { value: false },
+            NotFlagged: { value: false },
+            WithComments: { value: false },
 
-            Invalid: false,
-            Valid: false,
+            Invalid: { value: false },
+            Valid: { value: false },
 
-            Answered: false,
-            NotAnswered: false,
+            Answered: { value: false },
+            NotAnswered: { value: false },
 
-            ForSupervisor: false,
-            ForInterviewer: false,
+            ForSupervisor: { value: false },
+            ForInterviewer: { value: false },
+
+            CriticalQuestions: { value: false },
+            CriticalRules: { value: false, resetOther: true },
         },
 
         stats: {
@@ -53,7 +56,7 @@ export default {
 
             var hasFilter = false
             Object.keys(state.filter).forEach(key => {
-                if (state.filter[key] != false) {
+                if (state.filter[key].value != false) {
                     hasFilter = true
                 }
             })
@@ -108,7 +111,17 @@ export default {
         },
 
         CHANGE_FILTERS(state, { filter, value }) {
-            state.filter[filter] = value
+            const resetOther = state.filter[filter].resetOther;
+
+            Object.keys(state.filter).forEach(key => {
+                const currectFilter = state.filter[key];
+                if (resetOther === true)
+                    currectFilter.value = false
+                else if (currectFilter.resetOther === true)
+                    currectFilter.value = false
+            })
+
+            state.filter[filter].value = value
             state.search.needToClear = true
         },
 
@@ -118,9 +131,9 @@ export default {
 
         RESET_FILTERS(state) {
             Object.keys(state.filter).forEach(key => {
-                if (state.filter[key] != false)
+                if (state.filter[key].value != false)
                     state.search.needToClear = true
-                Vue.set(state.filter, key, false)
+                Vue.set(state.filter[key], 'value', false)
             })
         },
     },

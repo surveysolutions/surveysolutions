@@ -12,9 +12,6 @@ namespace WB.UI.Shared.Web.CommandDeserialization
             : base(message) {}
 
         public CommandDeserializationException(string message, Exception innerException)
-            : base(message, innerException) {}
-
-        protected CommandDeserializationException(SerializationInfo info, StreamingContext context)
-            : base(info, context) {}
+            : base(message, innerException) {}        
     }
 }

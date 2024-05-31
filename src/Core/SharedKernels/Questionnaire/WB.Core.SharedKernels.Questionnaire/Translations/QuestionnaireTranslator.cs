@@ -44,6 +44,11 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
                 }
             }
 
+            foreach (var criticalRule in translatedDocument.CriticalRules)
+            {
+                TranslateCriticalRule(criticalRule, translation);
+            }
+
             return translatedDocument;
         }
 
@@ -59,6 +64,13 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
             question.Instructions = Translate(
                 original: question.Instructions,
                 translated: translation.GetInstruction(question.PublicKey));
+        }
+
+        private static void TranslateCriticalRule(CriticalRule criticalRule, ITranslation translation)
+        {
+            criticalRule.Message = Translate(
+                original: criticalRule.Message,
+                translated: translation.GetCriticalRuleMessage(criticalRule.Id));
         }
 
         private static void TranslateAnswerOptions(IQuestion question, ITranslation translation)

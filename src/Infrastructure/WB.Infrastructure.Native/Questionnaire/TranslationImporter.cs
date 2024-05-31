@@ -12,6 +12,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Enumerator.Native.Questionnaire;
+using WB.Infrastructure.Native.Utils;
 
 namespace WB.Infrastructure.Native.Questionnaire
 {
@@ -37,9 +38,7 @@ namespace WB.Infrastructure.Native.Questionnaire
 
             try
             {
-                //non windows fonts
-                var firstFont = SystemFonts.Collection.Families.First();
-                var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(firstFont.Name) };
+                var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
                 
                 using var package = new XLWorkbook(stream, loadOptions);
 
@@ -177,9 +176,9 @@ namespace WB.Infrastructure.Native.Questionnaire
         private TranslationInstance GetCategoriesTranslation(QuestionnaireIdentity questionnaireIdentity, Guid translationId,
             Guid categoriesId, TranslationRow extractedTranslation) =>
             new TranslationInstance
-            {
-                        //Id = Guid.NewGuid(),
-                        QuestionnaireId = questionnaireIdentity,
+            { 
+                //Id = Guid.NewGuid(),
+                QuestionnaireId = questionnaireIdentity,
                 TranslationId = translationId,
                 QuestionnaireEntityId = categoriesId,
                 Value = extractedTranslation.Translation,

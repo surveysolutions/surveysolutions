@@ -357,7 +357,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             NewEditQuestionView? result = MapQuestionFields(question);
             if (result != null)
             {
-                result.Options = Array.Empty<CategoricalOption>();
+                result.Options ??= Array.Empty<CategoricalOption>();
                 result.OptionsCount = result.Options.Length;
                 result.Breadcrumbs = this.GetBreadcrumbs(questionnaire, question);
                 result.SourceOfLinkedEntities = this.GetSourcesOfLinkedQuestionBriefs(questionnaire, questionId);
@@ -567,7 +567,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     .Select(a => new SelectOption() {Text = a.AnswerText, Value = a.AnswerValue}).ToArray(),
                 geometryType : question.Properties?.GeometryType ?? GeometryType.Polygon,
                 geometryInputMode: question.Properties?.GeometryInputMode ?? GeometryInputMode.Manual,
-                geometryOverlapDetection: question.Properties?.GeometryOverlapDetection
+                geometryOverlapDetection: question.Properties?.GeometryOverlapDetection,
+                isCritical: question.Properties?.IsCritical
             );
             questionView.ValidationConditions.AddRange(question.ValidationConditions);
 

@@ -144,13 +144,13 @@
   <data name="Action_Deleted" xml:space="preserve">
     <value>U fshi</value>
   </data>
-  <data name="Action_QuantityChanged" xml:space="preserve">
+  <data name="Action_ExpectedValueChanged" xml:space="preserve">
     <value>Madhësia ndryshoi</value>
   </data>
-  <data name="Action_QuantityChanged_To" xml:space="preserve">
+  <data name="Action_ExpectedValueChanged_To" xml:space="preserve">
     <value>Madhësia ndryshoi në {{quantity}}</value>
   </data>
-  <data name="Action_QuantityChanged_To_Unlimited" xml:space="preserve">
+  <data name="Action_ExpectedValueChanged_To_Unlimited" xml:space="preserve">
     <value>Madhësia ndryshoi në të Pakufizuar </value>
   </data>
   <data name="Action_Reassigned" xml:space="preserve">
@@ -213,7 +213,7 @@
   <data name="AssignmentsHeader" xml:space="preserve">
     <value>Detyrat</value>
   </data>
-  <data name="AssignmentSizeInWebMode" xml:space="preserve">
+  <data name="AssignmentExpectedInWebMode" xml:space="preserve">
     <value>Madhësia nuk mund të ndryshohet për modalitetin Ueb.</value>
   </data>
   <data name="AssignmentsSelected" xml:space="preserve">
@@ -234,7 +234,7 @@
   <data name="ChangeAudioRecordingModalTitle" xml:space="preserve">
     <value>Cilësimet e regjistrimit audio për detyrën {{id}}</value>
   </data>
-  <data name="ChangeSizeModalTitle" xml:space="preserve">
+  <data name="ChangeExpectedModalTitle" xml:space="preserve">
     <value>Korrigjo madhësinë për detyrën {{assignmentId}}</value>
   </data>
   <data name="Close" xml:space="preserve">
@@ -306,13 +306,13 @@
   <data name="InvalidPassword" xml:space="preserve">
     <value>Fjalëkalimi është i pavlefshëm</value>
   </data>
-  <data name="InvalidSize" xml:space="preserve">
+  <data name="InvalidExpected" xml:space="preserve">
     <value>Fusha e Madhësisë duhet të jetë -1 ose më shumë.</value>
   </data>
-  <data name="InvalidSizeMessage" xml:space="preserve">
+  <data name="InvalidExpectedMessage" xml:space="preserve">
     <value>Madhësia është e pavlefshme</value>
   </data>
-  <data name="InvalidSizeWithEmail" xml:space="preserve">
+  <data name="InvalidExpectedWithEmail" xml:space="preserve">
     <value>Për detyrat me email-in e dhënë, madhësia është 1</value>
   </data>
   <data name="IsAudioRecordingEnabled" xml:space="preserve">
@@ -372,16 +372,16 @@
   <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
     <value>Madhësia e detyrës së përzgjedhur {{id}} do të ndryshojë nga {{quantity}} në {{collected}} (numri i intervistave të mbledhura aktualisht)</value>
   </data>
-  <data name="Size" xml:space="preserve">
+  <data name="Expected" xml:space="preserve">
     <value>Madhësia</value>
   </data>
-  <data name="SizeExplanation" xml:space="preserve">
+  <data name="ExpectedExplanation" xml:space="preserve">
     <value>Specifiko numrin maksimal të intervistave që do të gjenerohen për këtë detyrë. Vlerat e lejuara: -1 është për Detyrën e pakufizuar, 0 është për Detyrën bosh, numrat për madhësinë e detyrës</value>
   </data>
-  <data name="SizeForWebMode" xml:space="preserve">
+  <data name="ExpectedForWebMode" xml:space="preserve">
     <value>Detyra me madhësi 1 për modalitetin ueb duhet të ketë email ose fjalëkalim të dhënë </value>
   </data>
-  <data name="SizeInstructions" xml:space="preserve">
+  <data name="ExpectedInstructions" xml:space="preserve">
     <value>Duhet të jetë një numër, -1 për të pakufizuar, 1 nëse email-i është specifikuar </value>
   </data>
   <data name="Stop" xml:space="preserve">
@@ -420,7 +420,7 @@
   <data name="Tooltip_Table_Responsible" xml:space="preserve">
     <value>Përdoruesi aktualisht përgjegjës për detyrën. Klikoni mbi ikonën e renditjes për të renditur sipas emrit të përdoruesit.</value>
   </data>
-  <data name="Tooltip_Table_Size" xml:space="preserve">
+  <data name="Tooltip_Table_ExpectedValue" xml:space="preserve">
     <value>Numri maksimal i intervistave që mund të zhvillohen për këtë detyrë. Klikoni mbi secilën qelizë për të ndryshuar këtë numër. Klikoni mbi ikonën “rendit” për të renditur sipas madhësisë.</value>
   </data>
   <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">

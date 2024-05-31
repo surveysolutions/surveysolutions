@@ -124,7 +124,7 @@
     <value>The questionnaire "{0}" has compilation errors. Please correct them in Designer.</value>
   </data>
   <data name="ServerError" xml:space="preserve">
-    <value>Internal server error occurred. Please contact the Survey Solutions customer support team at support@mysurvey.solutions.</value>
+    <value>Internal server error occurred. Please contact your support team.</value>
   </data>
   <data name="RequestTimeout" xml:space="preserve">
     <value>Timeout when attempting to connect to Designer. Please check your internet connection.</value>

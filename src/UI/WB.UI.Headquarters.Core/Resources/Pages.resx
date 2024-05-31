@@ -973,7 +973,7 @@
     <value>If the interviewer has completed interviews on his tablet then the data will be lost.</value>
   </data>
   <data name="Users_ArchiveUsersConfirmMessage" xml:space="preserve">
-    <value>You will archive supervisors and interviewers within theirs team. Interviewers assigned to archived supervisor will be also archived in all workspaces. If interviewers have any non synchronized data on tablets it will be deleted.</value>
+    <value>You will archive supervisors and interviewers within their teams. Interviewers assigned to archived supervisors will be archived in ALL workspaces. Any remaining non synchronized data at the devices of archived users (interviewers or supervisors) will not be transmitted to the server.</value>
   </data>
   <data name="Supervisors_Selected" xml:space="preserve">
     <value>supervisor(s) selected</value>
@@ -1742,5 +1742,29 @@
   </data>
   <data name="QuestionnaireVersionAndName" xml:space="preserve">
       <value>[ver. {1}] {0}</value>
+  </data>
+  <data name="Questionnaire_SupportCriticalVerifications" xml:space="preserve">
+      <value>Critical verifications</value>
+  </data>
+  <data name="Questionnaire_CriticalVerificationLevel" xml:space="preserve">
+      <value>Action at submission</value>
+  </data>
+  <data name="Questionnaire_ChangeCriticalVerificationLevelTitle" xml:space="preserve">
+      <value>Set action at submission</value>
+  </data>
+  <data name="Questionnaire_SetActionOnSubmissionExplanation" xml:space="preserve">
+      <value>Select what action should be done before the interview is submitted</value>
+  </data>
+    <data name="Questionnaire_SetActionOnSubmissionExplanationIgnore" xml:space="preserve">
+      <value>IGNORE - do not check any critical rules even when they are present.</value>
+  </data>
+    <data name="Questionnaire_SetActionOnSubmissionExplanationWarn" xml:space="preserve">
+      <value>WARN - do check critical rules and warn the user before the interview is submitted.</value>
+  </data>
+    <data name="Questionnaire_SetActionOnSubmissionExplanationBlock" xml:space="preserve">
+      <value>BLOCK - do check critical rules and prohibit submitting the interview when critical issues are present.</value>
+  </data>
+  <data name="ShowKey" xml:space="preserve">
+      <value>Show key</value>
   </data>
 </root>

@@ -144,13 +144,13 @@ Anda dapat membuat atau menyunting kuesioner Anda pada Desainer Survey Solutions
     <value>Web layanan Endpoint:</value>
   </data>
   <data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
-    <value>Akun pengguna Anda terkunci. Silahkan hubungi tim pendukung di support@mysurvey.solutions.</value>
+    <value>Akun pengguna Anda terkunci. Silahkan hubungi tim pendukung.</value>
   </data>
   <data name="ErrorMessage_AccountIsNotApprovedOnServer" xml:space="preserve">
     <value>Akun Anda tidak disetujui. Silahkan, konfirmasi akun Anda terlebih dulu.</value>
   </data>
   <data name="ErrorMessage_InternalServerError" xml:space="preserve">
-    <value>Server error. Silahkan hubungi tim pendukung di support@mysurvey.solutions.</value>
+    <value>Server error. Silahkan hubungi tim pendukung.</value>
   </data>
   <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
     <value>Url untuk Desainer Survey Solutions yang disediakan tidak valid. Periksa pengaturan.</value>

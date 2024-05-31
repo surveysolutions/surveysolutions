@@ -54,7 +54,8 @@ namespace WB.Tests.Web.TestFactories
         public StatefulInterviewSearcher StatefullInterviewSearcher()
         {
             return new StatefulInterviewSearcher(Mock.Of<IInterviewFactory>(x =>
-                x.GetFlaggedQuestionIds(It.IsAny<Guid>()) == new Identity[] { }));
+                x.GetFlaggedQuestionIds(It.IsAny<Guid>()) == new Identity[] { }),
+                Mock.Of<IWebInterviewInterviewEntityFactory>());
         }
 
         public IWebInterviewInterviewEntityFactory WebInterviewInterviewEntityFactory(IMapper autoMapper = null,

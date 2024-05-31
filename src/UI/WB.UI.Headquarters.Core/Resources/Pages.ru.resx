@@ -968,8 +968,7 @@
     <comment>Если интервьюер имеет законченные интервью в режиме переписи на это планшете, то они будут потерянны.</comment>
   </data>
   <data name="Users_ArchiveUsersConfirmMessage" xml:space="preserve">
-    <value>Будут заархивированы интервьюверы и супервизоры с их командами. Интервьюверы супервизора будут заархивированы во всех рабочих областях. Если интервьюеры имеют не просинхронизированные данные на на планшетах, то они будут удалены.</value>
-
+      <value>Супервизоры и интервьюверы, выходящие в их команды, будут заархивированы во всех рабочих областях. Если интервьюеры имеют не синхронизированные данные на планшетах, то они не будут переданы на сервер.</value>
   </data>
   <data name="Supervisors_Archive" xml:space="preserve">
     <value>Архивировать</value>
@@ -1805,5 +1804,29 @@
   </data>
   <data name="QuestionnaireVersionAndName" xml:space="preserve">
       <value>[вер. {1}] {0} </value>
+  </data>
+  <data name="Questionnaire_ChangeCriticalVerificationLevelTitle" xml:space="preserve">
+      <value>Установить действие при отправке</value>
+  </data>
+  <data name="Questionnaire_CriticalVerificationLevel" xml:space="preserve">
+      <value>Действие при отправке</value>
+  </data>
+  <data name="Questionnaire_SetActionOnSubmissionExplanation" xml:space="preserve">
+      <value>Выберете действие, при отправке интервью.</value>
+  </data>
+    <data name="Questionnaire_SetActionOnSubmissionExplanationIgnore" xml:space="preserve">
+      <value>Игнорировать - не проверять правила.</value>
+  </data>
+    <data name="Questionnaire_SetActionOnSubmissionExplanationWarn" xml:space="preserve">
+      <value>Предупреждать - проверять правила и предупреждать пользователя.</value>
+  </data>
+    <data name="Questionnaire_SetActionOnSubmissionExplanationBlock" xml:space="preserve">
+      <value>Блокировать - проверять и запрещать отправку, если не правила не выполнены.</value>
+  </data>
+  <data name="Questionnaire_SupportCriticalVerifications" xml:space="preserve">
+      <value>Критические проверки</value>
+  </data>
+  <data name="ShowKey" xml:space="preserve">
+      <value>Показать ключ</value>
   </data>
 </root>

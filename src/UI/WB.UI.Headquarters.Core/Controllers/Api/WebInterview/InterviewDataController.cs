@@ -37,8 +37,9 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         public InterviewDataController(IQuestionnaireStorage questionnaireRepository, IStatefulInterviewRepository statefulInterviewRepository,
             IWebInterviewNotificationService webInterviewNotificationService, IWebInterviewInterviewEntityFactory interviewEntityFactory,
             IAuthorizedUser authorizedUser, IInterviewOverviewService overviewService, IStatefulInterviewSearcher statefulInterviewSearcher,
-            IInterviewFactory interviewFactory, IChangeStatusFactory changeStatusFactory, IInterviewBrokenPackagesService interviewBrokenPackagesService) 
-            : base(questionnaireRepository, statefulInterviewRepository, webInterviewNotificationService, interviewEntityFactory)
+            IInterviewFactory interviewFactory, IChangeStatusFactory changeStatusFactory, IInterviewBrokenPackagesService interviewBrokenPackagesService,
+            IQuestionnaireSettings questionnaireSettings) 
+            : base(questionnaireRepository, statefulInterviewRepository, webInterviewNotificationService, interviewEntityFactory, questionnaireSettings)
         {
             this.authorizedUser = authorizedUser;
             this.overviewService = overviewService;
@@ -198,5 +199,9 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 
             return interviewDetails;
         }
+        
+        [HttpGet]
+        [Route("getCriticalityChecks")]
+        public override CriticalityCheckResult GetCriticalityChecks(Guid interviewId) => base.GetCriticalityChecks(interviewId);
     }
 }

@@ -315,9 +315,6 @@
   <data name="WB0067_VariableNameIsEmpty" xml:space="preserve">
     <value>Дійсна змінна або ім'я ідентифікатора ростеру не повинно бути порожнім.</value>
   </data>
-  <data name="WB0068_RosterHasMoreThanAllowedChildElements" xml:space="preserve">
-    <value>Ростер не може мати більше {0} дочірніх елементів</value>
-  </data>
   <data name="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" xml:space="preserve">
     <value>Ростер має ідентифікатор, що дорівнює назві анкети.</value>
   </data>
@@ -347,12 +344,6 @@
   </data>
   <data name="WB0079_MultimediaShouldNotHaveValidationExpression" xml:space="preserve">
     <value>Питання з зображенням не може мати умови перевірки.</value>
-  </data>
-  <data name="WB0080_LongRosterCannotHaveNestedRosters" xml:space="preserve">
-    <value>Ростер з більш ніж {0} рядків не може мати вкладених ростерів</value>
-  </data>
-  <data name="WB0081_LongRosterCannotBeNested" xml:space="preserve">
-    <value>Ростер з більш ніж {0} рядків не може бути вкладеним</value>
   </data>
   <data name="WB0082_RosterSizeMultiOptionQuestionShouldBeLimited" xml:space="preserve">
     <value>Якщо джерело ростра це питання з множинним вибором, то воно повинно мати максимальну кількість варіантів відповідей.</value>

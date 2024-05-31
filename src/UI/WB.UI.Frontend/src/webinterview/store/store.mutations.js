@@ -27,6 +27,12 @@ export default {
         })
         state.entities = sectionData
     },
+    CLEAR_SECTION_ENTITIES(state) {
+        forEach(state.entities, entity => {
+            Vue.delete(state.entities, entity.identity)
+            Vue.delete(state.entityDetails, entity.identity)
+        })
+    },
     CLEAR_ENTITIES(state, { ids }) {
         forEach(ids, id => {
             Vue.delete(state.entityDetails, id)
@@ -64,12 +70,22 @@ export default {
         state.isCurrentUserObserving = interviewInfo.isCurrentUserObserving
         state.doesBrokenPackageExist = interviewInfo.doesBrokenPackageExist
         state.canAddComments = interviewInfo.canAddComments
+        //state.doesSupportCriticality = interviewInfo.doesSupportCriticality
+        //state.criticalityLevel = interviewInfo.criticalityLevel
+        Vue.set(state, 'doesSupportCriticality', interviewInfo.doesSupportCriticality)
+        Vue.set(state, 'criticalityLevel', interviewInfo.criticalityLevel)
     },
     SET_COVER_INFO(state, coverInfo) {
         state.coverInfo = coverInfo
     },
     SET_COMPLETE_INFO(state, completeInfo) {
         Vue.set(state, 'completeInfo', completeInfo)
+
+        if (state.criticalityLevel && completeInfo.criticalityLevel != state.criticalityLevel)
+            Vue.set(state, 'criticalityLevel', completeInfo.criticalityLevel)
+    },
+    SET_CRITICALITY_INFO(state, info) {
+        Vue.set(state, 'criticalityInfo', info)
     },
     SET_INTERVIEW_STATUS(state, interviewState) {
         Vue.set(state, 'interviewState', interviewState)

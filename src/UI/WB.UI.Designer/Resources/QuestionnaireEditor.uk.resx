@@ -145,7 +145,7 @@
     <value>Додати підрозділ</value>
   </data>
   <data name="AddValidationRule" xml:space="preserve">
-    <value>Додати нове правило перевірки</value>
+      <value>Додати правило перевірки</value>
   </data>
   <data name="AddVariable" xml:space="preserve">
     <value>Додати змінну</value>
@@ -1579,5 +1579,11 @@
   </data>
   <data name="ManageAccount" xml:space="preserve">
       <value>Керування обліковим записом</value>
+  </data>
+  <data name="OldUi" xml:space="preserve">
+      <value>Старий UI</value>
+  </data>
+  <data name="ShowList" xml:space="preserve">
+      <value>Відобразити списком</value>
   </data>
 </root>

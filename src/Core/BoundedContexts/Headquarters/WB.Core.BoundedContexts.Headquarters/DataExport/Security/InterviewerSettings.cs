@@ -1,3 +1,4 @@
+using System;
 using WB.Core.BoundedContexts.Headquarters.Views;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
@@ -15,6 +16,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
         public bool? PartialSynchronizationEnabled { get; set; }
         public int? GeographyQuestionAccuracyInMeters { get; set; }
         public int? GeographyQuestionPeriodInSeconds { get; set; }
+        
+        public string EsriApiKey { get; set; }
     }
 
     public static class InterviewerSettingsExtensions
@@ -56,6 +59,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
                 return InterviewerSettings.GeographyQuestionPeriodInSecondsDefault;
 
             return settings.GeographyQuestionPeriodInSeconds.Value;
+        }
+        
+        public static string GetEsriApiKey(this InterviewerSettings settings)
+        {
+            if (settings?.EsriApiKey == null)
+                return String.Empty;
+
+            return settings.EsriApiKey;
         }
     }
 }

@@ -7,7 +7,6 @@ using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.PdfInterview;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
-using WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -21,6 +20,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Workspaces;
 using WB.Tests.Abc.Storage;
@@ -28,6 +28,7 @@ using WB.Tests.Web;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2;
 using WB.UI.Headquarters.Controllers.Api.PublicApi;
+using IAuditLogService = WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog.IAuditLogService;
 using UsersController = WB.UI.Headquarters.Controllers.Api.PublicApi.UsersController;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
@@ -60,14 +61,16 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
             ILogger logger = null,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewViewFactory = null,
             IAllInterviewsFactory allInterviewsViewFactory = null,
-            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItems = null)
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItems = null,
+            ISystemLog log = null)
         {
             var questionnairesController = new QuestionnairesPublicApiController(
                 questionnaireBrowseViewViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(),
                 allInterviewsViewFactory ?? Mock.Of<IAllInterviewsFactory>(),
                 serializer: Mock.Of<ISerializer>(),
                 questionnaireStorage: Mock.Of<IQuestionnaireStorage>(),
-                questionnaireBrowseItems ?? new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>());
+                questionnaireBrowseItems ?? new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>(),
+                log ?? Mock.Of<ISystemLog>());
             return questionnairesController;
         }
 

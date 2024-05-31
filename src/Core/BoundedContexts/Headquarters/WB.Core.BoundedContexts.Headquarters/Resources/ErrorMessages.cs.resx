@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApiUserIsNotAllowedToSignIn" xml:space="preserve">
-    <value>Uživatel rozhraní API se nesmí přihlašovat pomocí uživatelského rozhraní</value>
+    <value>API uživatel se nemůže přihlásit pomocí uživatelského rozhraní</value>
   </data>
   <data name="IncorrectUserNameOrPassword" xml:space="preserve">
     <value>Nesprávné uživatelské jméno nebo heslo.</value>
@@ -133,24 +133,24 @@
     <value>Vyplňte prosím pole captcha</value>
   </data>
   <data name="Questionnaire_verification_failed" xml:space="preserve">
-    <value>Dotazník "{0}" obsahuje chyby kompilace. Opravte je prosím v Designeru.</value>
+    <value>Typ dotazníku „{0}“ obsahuje chyby při kompilaci. Opravte je v aplikaci Designer.</value>
   </data>
   <data name="QuestionnaireAlreadyImporting" xml:space="preserve">
-    <value>Další dotazník se nyní importuje do centrály.</value>
+    <value>Do ústředí se nyní importuje jiný typ dotazníku.</value>
   </data>
   <data name="RequestTimeout" xml:space="preserve">
-    <value>Časový limit při pokusu o připojení k Designeru. Zkontrolujte prosím připojení k internetu.</value>
+    <value>Při pokusu o připojení k aplikaci Designer vypršel časový limit. Zkontrolujte prosím své internetové připojení.</value>
   </data>
   <data name="ServerError" xml:space="preserve">
-    <value>Došlo k vnitřní chybě serveru. Obraťte se na tým zákaznické podpory společnosti Survey Solutions na adrese support@mysurvey.solutions.</value>
+    <value>Došlo k interní chybě serveru. Kontaktujte Administrátora.</value>
   </data>
   <data name="ServiceUnavailable" xml:space="preserve">
-    <value>Návrhář není k dispozici.  Ujistěte se, že aplikace Designer není v režimu údržby</value>
+    <value>Aplikace Designer není k dispozici. Ujistěte se, že aplikace není v režimu údržby</value>
   </data>
   <data name="SiteAccessNotAllowed" xml:space="preserve">
-    <value>Nemáte oprávnění k přístupu na tyto stránky. Obraťte se na správce.</value>
+    <value>Nemáte oprávnění pro přístup k tomuto webu. Kontaktujte svého Administrátora.</value>
   </data>
   <data name="TemplateNotFound" xml:space="preserve">
-    <value>Dotazník "{0}" nebyl nalezen. Aktualizujte prosím seznam dotazníků.</value>
+    <value>Typ dotazníku „{0}“ nebyl nalezen. Obnovte prosím seznam typů dotazníků.</value>
   </data>
 </root>

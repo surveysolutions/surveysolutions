@@ -474,8 +474,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             bool IsFound(IInterviewTreeNode entity)
             {
-                return entity.Identity.Equals(entityId, questionIdentity.RosterVector,
-                    entity.Identity.RosterVector.Length);
+                var rosterVector = questionIdentity == null ? RosterVector.Empty : questionIdentity.RosterVector;
+                return entity.Identity.Equals(entityId, rosterVector, entity.Identity.RosterVector.Length);
             }
 
             if (foundEntities is List<IInterviewTreeNode> foundList)

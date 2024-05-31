@@ -143,13 +143,13 @@ Bạn có thể tạo hoặc chỉnh sửa bộ câu hỏi trong Survey Solution
     <value>Web dịch vụ điểm cuối:</value>
   </data>
   <data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
-    <value>Tài khoản của bạn đã bị khóa. Vui lòng liên hệ với nhóm hỗ trợ tại support@mysurvey.solutions.</value>
+    <value>Tài khoản của bạn đã bị khóa. Vui lòng liên hệ với nhóm hỗ trợ.</value>
   </data>
   <data name="ErrorMessage_AccountIsNotApprovedOnServer" xml:space="preserve">
     <value>Tài khoản của bạn chưa được chấp thuận. Vui lòng xác nhận tài khoản.</value>
   </data>
   <data name="ErrorMessage_InternalServerError" xml:space="preserve">
-    <value>Lỗi máy chủ. Vui lòng liên hệ với nhóm hỗ trợ tại support@mysurvey.solutions</value>
+    <value>Lỗi máy chủ. Vui lòng liên hệ với nhóm hỗ trợ</value>
   </data>
   <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
     <value>Trang web Survey Solutions Designer được cung cấp không phù hợp. Kiểm tra cài đặt.</value>

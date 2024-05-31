@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -42,8 +43,8 @@ namespace WB.Infrastructure.Native.Questionnaire.Impl
                                     AnswerCode = option.Id,
                                     AnswerText = option.Text,
                                     ParentCode = option.ParentId,
-                                    ParentValue = option.ParentId?.ToString(),
-                                    AnswerValue = option.Id.ToString(),
+                                    ParentValue = option.ParentId?.ToString(CultureInfo.InvariantCulture),
+                                    AnswerValue = option.Id.ToString(CultureInfo.InvariantCulture),
                                     AttachmentName = option.AttachmentName
                                 }).ToList();
                             });

@@ -123,10 +123,11 @@
     <color name="complete_screen_title_text">#747474</color>
     <color name="complete_screen_statistics_border">#dadada</color>
     <color name="complete_screen_statistics_answered_color">#2a81cb</color>
-    <color name="complete_screen_statistics_unanswered_color">#000000</color>
+    <color name="complete_screen_statistics_unanswered_color">#2a81cb</color>
     <color name="complete_screen_statistics_error_color">#e64a19</color>
     <color name="complete_screen_statistics_neutral_color">#9a9a9a</color>
     <color name="complete_screen_statistics_web_interview_link_color">#000000</color>
+    <color name="complete_screen_statistics_group_background">#f2f2f2</color>
 
     <color name="interview_question_yes_no">#36AEE5</color>
     <color name="interview_question_yesno_selected_text">#3f3f3f</color>
@@ -154,6 +155,9 @@
     <color name="offline_sync_complete_text">#1f9500</color>
     <color name="offline_sync_waitingdevice_text">#2a81cb</color>
     <color name="offline_sync_error_text">#e4512b</color>
+
+    <color name="exo_video_bar_text">#FFBEBEBE</color>
+    <color name="exo_video_bar_background">#CC000000</color>
 
     <color name="exo_player_text">#333333</color>
     <color name="exo_player_button_tint">#000</color>

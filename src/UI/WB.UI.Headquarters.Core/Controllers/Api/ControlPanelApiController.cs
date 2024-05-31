@@ -46,9 +46,9 @@ namespace WB.UI.Headquarters.Controllers.Api
             "Captcha:SecretKey", "Captcha:SiteKey",
             "ASPNETCORE_TOKEN",
             "ExternalStorages:OAuth2:Dropbox:ClientId", "ExternalStorages:OAuth2:Dropbox:ClientSecret",
-            "ExternalStorages:OAuth2:GoogleDrive:ClientId", "ExternalStorages:GoogleDrive:Dropbox:ClientSecret",
+            "ExternalStorages:OAuth2:GoogleDrive:ClientId", "ExternalStorages:OAuth2:GoogleDrive:ClientSecret",
             "ExternalStorages:OAuth2:OneDrive:ClientId", "ExternalStorages:OAuth2:OneDrive:ClientSecret",
-            "GoogleMap:ApiKey",
+            "GoogleMap:ApiKey", "JwtBearer:SecretKey",
         };
 
         private readonly ITabletInformationService tabletInformationService;
@@ -306,7 +306,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             var report = await healthCheckService.CheckHealthAsync(c => !c.Tags.Contains("ready"), token);
             return report;
         }
-
+        
         [HttpGet]
         public ServerStatusResponse GetMetricsState()
         {
@@ -315,6 +315,13 @@ namespace WB.UI.Headquarters.Controllers.Api
                 LastUpdateTime = DateTime.UtcNow,
                 Metrics = new List<MetricState>()
             };
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult GetServerResponseByStatusCode(int responseCode)
+        {
+            return StatusCode(responseCode);
         }
 
         public class ReprocessSelectedBrokenPackagesRequestView

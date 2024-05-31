@@ -33,6 +33,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public List<Attachment> Attachments => this.Questionnaire.Attachments;
         public List<Translation> Translations => this.Questionnaire.Translations;
         public List<Categories> Categories => this.Questionnaire.Categories;
+        public List<CriticalRule> CriticalRules => this.Questionnaire.CriticalRules;
         public string Title => this.Questionnaire.Title;
         public Guid PublicKey => this.Questionnaire.PublicKey;
         public string VariableName => this.Questionnaire.VariableName;
@@ -271,25 +272,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public bool IsLinked(IQuestion question)
         {
             return question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue;
-        }
-
-        public bool IsTriggerForLongRoster(INumericQuestion question)
-        {
-            var rosters = this.Find<IGroup>(group => group.RosterSizeQuestionId == question.PublicKey).ToList();
-
-            if (rosters.Any(x => this.GetRosterScope(x).Length > 1)) return false;
-
-            foreach (var roster in rosters)
-            {
-                var entitiesInRoster = FindInGroup<IComposite>(roster.PublicKey).ToList();
-
-                if (entitiesInRoster.Count > Constants.MaxAmountOfItemsInLongRoster)
-                    return false;
-                if (entitiesInRoster.Any(x => (x as Group)?.IsRoster ?? false))
-                    return false;
-            }
-
-            return true;
         }
 
         public bool IsCoverPage(Guid publicKey) => Questionnaire.IsCoverPage(publicKey);

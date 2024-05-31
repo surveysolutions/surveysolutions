@@ -47,9 +47,9 @@ namespace WB.UI.Tester
             return CreateAndInitializeIoc();
         }
 
-        protected override void InitializeApp(IMvxPluginManager pluginManager, IMvxApplication app)
+        protected override void InitializeApp(IMvxApplication app)
         {
-            base.InitializeApp(pluginManager, app);
+            base.InitializeApp(app);
 
             string appcenterKey = ApplicationContext.Resources.GetString(Resource.String.appcenter_key);
             if (!string.IsNullOrEmpty(appcenterKey))
@@ -63,12 +63,6 @@ namespace WB.UI.Tester
                 ServiceLocator.Current.GetInstance<IMapInteractionService>().SetLicenseKey(arcgisruntimeKey);
             }
             
-            string arcgisruntimeApiKey = ApplicationContext.Resources.GetString(Resource.String.arcgisruntime_api_key);
-            if (!string.IsNullOrEmpty(arcgisruntimeApiKey))
-            {
-                ServiceLocator.Current.GetInstance<IMapInteractionService>().SetApiKey(arcgisruntimeApiKey);
-            }
-
             var status = new UnderConstructionInfo();
             status.Run();
 

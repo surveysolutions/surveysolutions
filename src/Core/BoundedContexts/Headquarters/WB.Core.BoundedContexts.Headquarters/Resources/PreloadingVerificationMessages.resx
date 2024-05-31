@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="PL0002_MoreThenOneLevel" xml:space="preserve">
-    <value>[PL0002] N/A. Contact the support team at support@mysurvey.solutions</value>
+    <value>[PL0002] N/A. Contact your server support.</value>
   </data>
   <data name="PL0003_ColumnWasntMappedOnQuestion" xml:space="preserve">
     <value>Column cannot be mapped to any question in the questionnaire.</value>

@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Android.App;
-using Android.Content.PM;
+﻿using Android.Content.PM;
+using Android.Gms.Common;
 using Android.OS;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Shared.Enumerator.Utils;
@@ -132,6 +128,7 @@ namespace WB.UI.Shared.Enumerator.Services
                                                          $"Device model: {this.GetDeviceModel()} {Environment.NewLine}" +
                                                          $"Device type: {this.GetDeviceType()} {Environment.NewLine}" +
                                                          $"Android version: {GetAndroidVersion()} {Environment.NewLine}" +
+                                                         $"Google Play services version: {GetGooglePlayServicesVersion()} {Environment.NewLine}"+
                                                          $"DeviceId: {this.GetDeviceId()} {Environment.NewLine}" +
                                                          $"RAM: {GetRAMInformation()} {Environment.NewLine}" +
                                                          $"Disk: {GetDiskInformation()} {Environment.NewLine}" +
@@ -151,6 +148,23 @@ namespace WB.UI.Shared.Enumerator.Services
         public string GetDeviceType() => Xamarin.Essentials.DeviceInfo.Idiom.ToString();
 
         public string GetAndroidVersion() => Build.VERSION.Release;
+
+        public string GetGooglePlayServicesVersion()
+        {
+            try
+            {
+                PackageInfo pi =
+                    Application.Context.PackageManager.GetPackageInfo(GoogleApiAvailability.GooglePlayServicesPackage,
+                        0);
+                if (pi == null)
+                    return String.Empty;
+
+                return pi.VersionName;
+            }
+            catch { }
+
+            return string.Empty;
+        }
 
         public void SetEventChunkSize(int eventChunkSize)
         {
@@ -221,7 +235,7 @@ namespace WB.UI.Shared.Enumerator.Services
         private string GetRAMInformation()
             => AndroidInformationUtils.GetRAMInformation();
 
-        private string GetDiskInformation()
+        public string GetDiskInformation()
             => AndroidInformationUtils.GetDiskInformation();
 
         public string GetDataBaseSize() => 
@@ -250,6 +264,12 @@ namespace WB.UI.Shared.Enumerator.Services
         public void SetWebInterviewUrlTemplate(string webInterviewUriTemplate)
         {
             this.SaveCurrentSettings(settings => settings.WebInterviewUriTemplate = webInterviewUriTemplate);
+        }
+
+        public string EsriApiKey => this.CurrentWorkspaceSettings.EsriApiKey;
+        public void SetEsriApiKey(string esriApiKey)
+        {
+            this.SaveCurrentSettings(settings => settings.EsriApiKey = esriApiKey);
         }
     }
 }

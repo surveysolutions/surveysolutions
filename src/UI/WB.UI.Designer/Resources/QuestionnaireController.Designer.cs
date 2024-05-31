@@ -168,6 +168,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You are creating a copy of deleted questionnaire. Some parts might be lost..
+        /// </summary>
+        public static string CloneDeletedWarning {
+            get {
+                return ResourceManager.GetString("CloneDeletedWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         public static string Close {

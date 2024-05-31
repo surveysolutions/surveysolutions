@@ -2,6 +2,15 @@
 {
     public class ExportServiceConfig
     {
+        public ExportMode ExportMode { get; set; }
+        public int ExportPort { get; set; } = 0;
         public string ExportServiceUrl { get; set; }
+    }
+
+    public enum ExportMode
+    {
+        Auto = 0, // default
+        Client,   // don't launch export, use url to use export 
+        Provider, // open export outside by port
     }
 }

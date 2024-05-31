@@ -131,7 +131,7 @@
     <value>Вы были приглашены для участия в следующем опросе: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="NoteForSupervisor" xml:space="preserve">
-    <value>Комментарий для супервизора</value>
+      <value>Комментарий</value>
   </data>
   <data name="Resume_InvitationText" xml:space="preserve">
     <value>Вы можете перейти к интервью в следующем опросе: "%QUESTIONNAIRE%"</value>

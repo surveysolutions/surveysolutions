@@ -1,5 +1,5 @@
 .btn {
-  padding: 5px 6px;
+  padding: 5px 6px;  
   border: none;
   background-color: @inline-button-bg-color;
   font-style: normal;
@@ -24,6 +24,15 @@
   }
 }
 
+.vapp{
+  .btn{
+    margin-right: 5px;
+  }
+  #verification-button {
+    margin-left: 5px;
+  }
+}
+
 .btn-lg {
   &, &:hover, &:focus, &:active, &.active {
     padding: 17px;
@@ -35,6 +44,10 @@
 .btn-primary {
   background-color: @inline-button-medium-bg-color;
   &:hover { background-color: darken(@inline-button-medium-bg-color, 5%); }
+  &:active { 
+    background-color: darken(@inline-button-medium-bg-color, 5%); 
+    &:hover { background-color: darken(@inline-button-medium-bg-color, 5%); }
+  }
   .inline-button-fontstyle();
   text-transform: uppercase;
   color: @inline-button-medium-fg-color;
