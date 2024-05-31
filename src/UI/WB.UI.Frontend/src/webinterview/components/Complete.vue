@@ -75,7 +75,9 @@
         'btn-danger': hasErrors,
         'disabled': !isCompletionPermitted,
     }" @click="completeInterview">{{ competeButtonTitle }}</a>
-                <div class="info-block gray-uppercase" style="margin-top:10px;">{{ completeButtionComment }}</div>
+                <div class="info-block gray-uppercase" v-if="doesShowCompleteComment" style="margin-top:10px;">{{
+        completeButtionComment }}
+                </div>
             </div>
         </div>
         <SectionLoadingProgress />
@@ -252,6 +254,9 @@ export default {
         webLink() {
             return this.$config.webInterviewUrl ?? ''
         },
+        doesShowCompleteComment() {
+            return !this.switchToWeb
+        }
     },
     methods: {
         fetchCompleteInfo() {
