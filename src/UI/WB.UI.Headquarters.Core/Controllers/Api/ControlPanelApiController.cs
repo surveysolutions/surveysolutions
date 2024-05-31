@@ -319,9 +319,9 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult GetServerResponseByStatusCode(int responseCode)
+        public IActionResult GetServerResponseByStatusCode(int statusCode)
         {
-            return StatusCode(responseCode);
+            return StatusCode(statusCode);
         }
 
         public class ReprocessSelectedBrokenPackagesRequestView

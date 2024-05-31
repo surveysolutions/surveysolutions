@@ -583,7 +583,7 @@ class ControlPanel {
 
     async getServerResponseStatus(requestedStatus) {
         try {
-            const response = await this.http.get(`${this.base}/GetServerResponseByStatusCode?responseCode=${requestedStatus}`)
+            const response = await this.http.get(`${this.base}/GetServerResponseByStatusCode?statusCode=${requestedStatus}`)
             return response.status
         } catch (error) {
             return error.response.status
