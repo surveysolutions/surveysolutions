@@ -45,7 +45,7 @@ namespace WB.UI.Tester.Implementation.Services
         }
 
         public override async Task<bool> NavigateToPrefilledQuestionsAsync(string interviewId) => 
-            await NavigateToAsync<InterviewViewModel, InterviewViewModelArgs>(new InterviewViewModelArgs
+            await NavigateToAsync<TesterInterviewViewModel, InterviewViewModelArgs>(new InterviewViewModelArgs
             {
                 InterviewId = interviewId,
                 NavigationIdentity = NavigationIdentity.CreateForCoverScreen()
@@ -58,7 +58,7 @@ namespace WB.UI.Tester.Implementation.Services
         => throw new NotImplementedException();
 
         public override async Task<bool> NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity)
-            => await NavigateToAsync<InterviewViewModel, InterviewViewModelArgs>(new InterviewViewModelArgs
+            => await NavigateToAsync<TesterInterviewViewModel, InterviewViewModelArgs>(new InterviewViewModelArgs
             {
                 InterviewId = interviewId,
                 NavigationIdentity = navigationIdentity

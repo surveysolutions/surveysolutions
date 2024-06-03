@@ -11,12 +11,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
     {
         private readonly IInterviewStateCalculationStrategy interviewStateCalculationStrategy;
 
-        protected InterviewStateViewModel()
-        {
-        }
-
-        public InterviewStateViewModel(IStatefulInterviewRepository interviewRepository, IInterviewStateCalculationStrategy interviewStateCalculationStrategy)
-            :base(interviewRepository, null, null)
+        public InterviewStateViewModel(IStatefulInterviewRepository interviewRepository, 
+            IInterviewStateCalculationStrategy interviewStateCalculationStrategy,
+            IQuestionnaireStorage questionnaireRepository)
+            :base(interviewRepository, null, questionnaireRepository)
         {
             this.interviewStateCalculationStrategy = interviewStateCalculationStrategy;
         }
@@ -44,6 +42,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
                 : (int)Math.Round((double)(this.AnsweredQuestionsCount * 100)/ this.QuestionsCount);
             this.SimpleStatus = interviewSimpleStatus.SimpleStatus;
             this.Status = interviewSimpleStatus.Status;
+        }
+        
+        public bool HasCriticalFeature(string interviewId)
+        {
+            var interview = this.interviewRepository.GetOrThrow(interviewId);
+            var questionnaire = questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, null);
+            return questionnaire.DoesSupportCriticality();
         }
     }
 }

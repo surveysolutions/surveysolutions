@@ -38,8 +38,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         private readonly IPlainStorage<InterviewView> interviews;
         private readonly IUserInteractionService userInteractionService;
         private readonly ICalendarEventStorage calendarEventStorage;
-        
-        public IList<EntityWithErrorsViewModel> TopFailedCriticalRules { get; private set; }
 
         public SupervisorResolveInterviewViewModel(
             ICommandService commandService, 
@@ -112,7 +110,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 CompleteGroups.InsertCollection(0, new CovariantObservableCollection<MvxViewModel>() { failedCriticalRulesGroup });
             }
             
-            var TopUnansweredCriticalQuestions = this.entitiesListViewModelFactory.GetTopUnansweredCriticalQuestions(interviewId, navigationState).ToList();
+            this.TopUnansweredCriticalQuestions = this.entitiesListViewModelFactory.GetTopUnansweredCriticalQuestions(interviewId, navigationState).ToList();
             if (TopUnansweredCriticalQuestions.Count > 0)
             {
                 var unansweredCriticalQuestionsGroup = new CompleteGroup(TopUnansweredCriticalQuestions)
@@ -147,20 +145,20 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                         }
                     }
 
-                    var command = new ApproveInterviewCommand(interviewId, this.principal.CurrentUserIdentity.UserId,
+                    var command = new ApproveInterviewCommand(InterviewId, this.principal.CurrentUserIdentity.UserId,
                         Comment);
                     await this.commandService.ExecuteAsync(command);
-                    auditLogService.Write(new ApproveInterviewAuditLogEntity(this.interviewId, interview.GetInterviewKey().ToString()));
+                    auditLogService.Write(new ApproveInterviewAuditLogEntity(this.InterviewId, interview.GetInterviewKey().ToString()));
 
                     CompleteCalendarEventIfExists();
                 }
             }
             catch (InterviewException e)
             {
-                logger.Warn($"Error on Interview Approve. Interview: {interviewId}", e);
+                Logger.Warn($"Error on Interview Approve. Interview: {InterviewId}", e);
             }
 
-            await viewModelNavigationService.NavigateToDashboardAsync(interviewId.FormatGuid());
+            await viewModelNavigationService.NavigateToDashboardAsync(InterviewId.FormatGuid());
         }, () => this.status == InterviewStatus.Completed || 
                  this.status == InterviewStatus.RejectedByHeadquarters ||
                  this.status == InterviewStatus.RejectedBySupervisor);
@@ -171,10 +169,10 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             {
                 if (this.interview.Status != InterviewStatus.RejectedBySupervisor)
                 {
-                    var command = new RejectInterviewCommand(interviewId, this.principal.CurrentUserIdentity.UserId,
+                    var command = new RejectInterviewCommand(InterviewId, this.principal.CurrentUserIdentity.UserId,
                         Comment);
                     await this.commandService.ExecuteAsync(command);
-                    auditLogService.Write(new RejectInterviewAuditLogEntity(this.interviewId,
+                    auditLogService.Write(new RejectInterviewAuditLogEntity(this.InterviewId,
                         interview.GetInterviewKey().ToString()));
 
                     CompleteCalendarEventIfExists();
@@ -182,16 +180,16 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             }
             catch (InterviewException e)
             {
-                logger.Warn($"Error on Interview Reject. Interview: {interviewId}", e);
+                Logger.Warn($"Error on Interview Reject. Interview: {InterviewId}", e);
             }
 
-            await viewModelNavigationService.NavigateToDashboardAsync(interviewId.FormatGuid());
+            await viewModelNavigationService.NavigateToDashboardAsync(InterviewId.FormatGuid());
         }, () => this.status == InterviewStatus.Completed || 
                  this.status == InterviewStatus.RejectedByHeadquarters);
 
         private void CompleteCalendarEventIfExists()
         {
-            var calendarEvent = calendarEventStorage.GetCalendarEventForInterview(interviewId);
+            var calendarEvent = calendarEventStorage.GetCalendarEventForInterview(InterviewId);
             if (calendarEvent == null)
                 return;
 
@@ -200,7 +198,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 );
             this.commandService.Execute(command);
 
-            logger.Info($"Calendar event {calendarEvent.Id} completed after approve/reject interview {interview.GetInterviewKey()?.ToString()} ({interviewId})");
+            Logger.Info($"Calendar event {calendarEvent.Id} completed after approve/reject interview {interview.GetInterviewKey()?.ToString()} ({InterviewId})");
         }
 
         public IMvxAsyncCommand Assign => new MvxAsyncCommand(SelectInterviewer, () => 
@@ -210,7 +208,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         private Task SelectInterviewer() =>
             viewModelNavigationService.NavigateToAsync<SelectResponsibleForAssignmentViewModel, SelectResponsibleForAssignmentArgs>(
-                    new SelectResponsibleForAssignmentArgs(this.interviewId));
+                    new SelectResponsibleForAssignmentArgs(this.InterviewId));
         
         public override void Dispose()
         {

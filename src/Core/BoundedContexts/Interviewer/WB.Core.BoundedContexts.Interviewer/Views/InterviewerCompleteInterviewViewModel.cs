@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using MvvmCross.Plugin.Messenger;
 using System.Threading.Tasks;
 using MvvmCross.Base;
-using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -17,7 +14,6 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -30,9 +26,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IAuditLogService auditLogService;
         private readonly IInterviewerSettings interviewerSettings;
-        private readonly IPlainStorage<QuestionnaireView> interviewViewRepository;
+        private readonly IPlainStorage<QuestionnaireView> questionnaireViewRepository;
         private readonly IUserInteractionService userInteractionService;
-        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IQuestionnaireSettings questionnaireSettings;
 
         public InterviewerCompleteInterviewViewModel(
@@ -47,9 +42,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IAuditLogService auditLogService,
             IInterviewerSettings interviewerSettings,
             ILogger logger,
-            IPlainStorage<QuestionnaireView> interviewViewRepository,
+            IPlainStorage<QuestionnaireView> questionnaireViewRepository,
             IUserInteractionService userInteractionService,
-            IQuestionnaireStorage questionnaireStorage,
             IQuestionnaireSettings questionnaireSettings)
             : base(viewModelNavigationService, commandService, principal, 
                 entitiesListViewModelFactory, lastCompletionComments,interviewState, dynamicTextViewModel, logger)
@@ -57,26 +51,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.interviewRepository = interviewRepository;
             this.auditLogService = auditLogService;
             this.interviewerSettings = interviewerSettings;
-            this.interviewViewRepository = interviewViewRepository;
+            this.questionnaireViewRepository = questionnaireViewRepository;
             this.userInteractionService = userInteractionService;
-            this.questionnaireStorage = questionnaireStorage;
             this.questionnaireSettings = questionnaireSettings;
 
             TopUnansweredCriticalQuestions = new List<EntityWithErrorsViewModel>();
             TopFailedCriticalRules = new List<EntityWithErrorsViewModel>();
         }
-
-        public IList<EntityWithErrorsViewModel> TopUnansweredCriticalQuestions { get; private set; } 
-        public IList<EntityWithErrorsViewModel> TopFailedCriticalRules { get; private set; }
-        public int UnansweredCriticalQuestionsCount => TopUnansweredCriticalQuestions.Count;
-        public int FailedCriticalRulesCount => TopFailedCriticalRules.Count;
-
         public override void Configure(string interviewUid, NavigationState navigationState)
         {
             if (interviewUid == null) throw new ArgumentNullException(nameof(interviewUid));
             
             var interview = this.interviewRepository.GetOrThrow(interviewUid);
-            this.criticalityLevel = questionnaireSettings.GetCriticalityLevel(interview.QuestionnaireIdentity);
+            this.CriticalityLevel = questionnaireSettings.GetCriticalityLevel(interview.QuestionnaireIdentity);
 
             base.Configure(interviewUid, navigationState);
             
@@ -85,7 +72,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 ? UIResources.Interview_Complete_Screen_Description
                 : string.Format(UIResources.Interview_Complete_Screen_DescriptionWithInterviewKey, interviewKey);
 
-            var questionnaireView = interviewViewRepository.GetById(interview.QuestionnaireIdentity.ToString());
+            var questionnaireView = questionnaireViewRepository.GetById(interview.QuestionnaireIdentity.ToString());
             if (questionnaireView.WebModeAllowed && interviewerSettings.WebInterviewUriTemplate != null && interview.GetAssignmentId() != null)
             {
                 this.CanSwitchToWebMode = true;
@@ -96,70 +83,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 );
             }
             
-            Task.Run(() => CollectCriticalityInfo(interviewUid, navigationState));
-        }
-        
-        private Task CollectCriticalityInfo(string interviewId, NavigationState navigationState)
-        {
-            if (!this.HasCriticalFeature(interviewId) || criticalityLevel == CriticalityLevel.Ignore)
+            if (!this.InterviewState.HasCriticalFeature(interviewUid) 
+                || CriticalityLevel == SharedKernels.DataCollection.ValueObjects.Interview.CriticalityLevel.Ignore)
             {
                 IsCompletionAllowed = true;
                 IsLoading = false;
-                return Task.CompletedTask;
             }
-            
-            this.TopFailedCriticalRules = this.entitiesListViewModelFactory.GetTopFailedCriticalRules(interviewId, navigationState).ToList();
-            if (TopFailedCriticalRules.Count > 0)
-            {
-                var failedCriticalRulesGroup = new CompleteGroup(TopFailedCriticalRules)
-                {
-                    AllCount = this.TopFailedCriticalRules.Count,
-                    Title = string.Format(UIResources.Interview_Complete_FailCriticalConditions, MoreThan(this.TopFailedCriticalRules.Count)),
-                    GroupContent = CompleteGroupContent.Error,
-                };
-                CompleteGroups.InsertCollection(0, failedCriticalRulesGroup.Items);
-                CompleteGroups.InsertCollection(0, new CovariantObservableCollection<MvxViewModel>() { failedCriticalRulesGroup });
-            }
-            
-            this.TopUnansweredCriticalQuestions = this.entitiesListViewModelFactory.GetTopUnansweredCriticalQuestions(interviewId, navigationState).ToList();
-            if (TopUnansweredCriticalQuestions.Count > 0)
-            {
-                var unansweredCriticalQuestionsGroup = new CompleteGroup(TopUnansweredCriticalQuestions)
-                {
-                    AllCount = this.TopUnansweredCriticalQuestions.Count,
-                    Title= string.Format(UIResources.Interview_Complete_CriticalUnanswered, MoreThan(this.TopUnansweredCriticalQuestions.Count)),
-                    GroupContent = CompleteGroupContent.Error,
-                };
-                CompleteGroups.InsertCollection(0, unansweredCriticalQuestionsGroup.Items);
-                CompleteGroups.InsertCollection(0, new CovariantObservableCollection<MvxViewModel>() { unansweredCriticalQuestionsGroup });
-            }
-            
-            HasCriticalIssues = UnansweredCriticalQuestionsCount > 0 || FailedCriticalRulesCount > 0;
-
-            if (HasCriticalIssues)
-            {
-                CompleteStatus = GroupStatus.CompletedInvalid;
-
-                if (criticalityLevel == CriticalityLevel.Warn)
-                {
-                    this.CompleteButtonComment = UIResources.Interview_Complete_Note_For_Supervisor_with_Criticality;
-                }
-                else
-                {
-                    this.CompleteButtonComment = UIResources.Interview_Complete_CriticalIssues_Instrunction;
-                }
-            }
-
-            IsCompletionAllowed = CalculateIsCompletionAllowed();
-            IsLoading = false;
-            return Task.CompletedTask;
-        }
-        
-        private bool HasCriticalFeature(string interviewId)
-        {
-            var interview = this.interviewRepository.GetOrThrow(interviewId);
-            var questionnaire = questionnaireStorage.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, null);
-            return questionnaire.DoesSupportCriticality();
+            else
+                Task.Run(() => CollectCriticalityInfo(interviewUid, navigationState));
         }
         
         public override string Comment
@@ -171,14 +102,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 IsCompletionAllowed = CalculateIsCompletionAllowed();
             }
         }
-
-        private bool hasCriticalIssues;
-        public bool HasCriticalIssues
-        {
-            get => hasCriticalIssues;
-            set => SetProperty(ref hasCriticalIssues, value);
-        }
-
+        
         protected override async Task CompleteInterviewAsync()
         {
             if (!this.IsCompletionAllowed)
@@ -202,12 +126,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         
         protected override Task CloseInterviewAfterComplete(bool switchInterviewToCawiMode)
         {
-            var statefulInterview = this.interviewRepository.GetOrThrow(this.interviewId.FormatGuid());
+            var statefulInterview = this.interviewRepository.GetOrThrow(this.InterviewId.FormatGuid());
 
             if(switchInterviewToCawiMode)            
-                auditLogService.Write(new SwitchInterviewModeAuditLogEntity(this.interviewId, statefulInterview.GetInterviewKey().ToString(), InterviewMode.CAWI));
+                auditLogService.Write(new SwitchInterviewModeAuditLogEntity(this.InterviewId, statefulInterview.GetInterviewKey().ToString(), InterviewMode.CAWI));
             else
-                auditLogService.Write(new CompleteInterviewAuditLogEntity(this.interviewId, statefulInterview.GetInterviewKey().ToString()));
+                auditLogService.Write(new CompleteInterviewAuditLogEntity(this.InterviewId, statefulInterview.GetInterviewKey().ToString()));
             
             return base.CloseInterviewAfterComplete(switchInterviewToCawiMode);
         }
@@ -245,17 +169,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
         }
 
-        public bool CalculateIsCompletionAllowed()
+        protected override bool CalculateIsCompletionAllowed()
         {
             if (this.RequestWebInterview)
                 return true;
 
-            if (!this.HasCriticalFeature(interviewId.FormatGuid()) || criticalityLevel == CriticalityLevel.Ignore)
+            if (!this.InterviewState.HasCriticalFeature(InterviewId.FormatGuid()) 
+                || CriticalityLevel == SharedKernels.DataCollection.ValueObjects.Interview.CriticalityLevel.Ignore)
                 return true;
                 
             if (HasCriticalIssues)
             {
-                if (criticalityLevel == CriticalityLevel.Warn)
+                if (CriticalityLevel == SharedKernels.DataCollection.ValueObjects.Interview.CriticalityLevel.Warn)
                 {
                     return !string.IsNullOrWhiteSpace(Comment);
                 }

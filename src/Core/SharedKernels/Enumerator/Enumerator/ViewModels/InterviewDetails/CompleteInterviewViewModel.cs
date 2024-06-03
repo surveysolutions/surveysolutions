@@ -37,8 +37,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public InterviewStateViewModel InterviewState { get; set; }
         public DynamicTextViewModel Name { get; }
         public string CompleteScreenTitle { get; set; }
-        protected CriticalityLevel? criticalityLevel = null;
-
+        
+        protected CriticalityLevel? CriticalityLevel = null;
+        
+        public IList<EntityWithErrorsViewModel> TopUnansweredCriticalQuestions { get; protected set; } 
+        public IList<EntityWithErrorsViewModel> TopFailedCriticalRules { get; protected set; }
 
         public CompleteInterviewViewModel(
             IViewModelNavigationService viewModelNavigationService,
@@ -59,17 +62,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.InterviewState = interviewState;
             this.Name = dynamicTextViewModel;
-            this.logger = logger;
+            this.Logger = logger;
         }
 
-        protected readonly ILogger logger;
-
-        protected Guid interviewId;
+        protected readonly ILogger Logger;
+        protected Guid InterviewId { set; get; }
 
         public virtual void Configure(string interviewId, NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
-            this.interviewId = Guid.Parse(interviewId);
+            this.InterviewId = Guid.Parse(interviewId);
             
             this.InterviewState.Init(interviewId, null);
             this.CompleteStatus = InterviewState.Status;
@@ -112,7 +114,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 CompleteGroups.AddCollection(errorsGroup.Items);
             }
 
-            this.Comment = lastCompletionComments.Get(this.interviewId);
+            this.Comment = lastCompletionComments.Get(this.InterviewId);
             this.CommentLabel = UIResources.Interview_Complete_Note_For_Supervisor;
             this.CompleteButtonComment = UIResources.Interview_Complete_Consequences_Instrunction;
         }
@@ -174,7 +176,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             set
             {
                 comment = value;
-                this.lastCompletionComments.Store(this.interviewId, value);
+                this.lastCompletionComments.Store(this.InterviewId, value);
             }
         }
 
@@ -207,7 +209,71 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private bool canSwitchToWebMode;
         private bool isDisposed;
         private bool isCompletionAllowed;
+        
+        private bool hasCriticalIssues;
+        public bool HasCriticalIssues
+        {
+            get => hasCriticalIssues;
+            set => SetProperty(ref hasCriticalIssues, value);
+        }
+        
+        public int UnansweredCriticalQuestionsCount => TopUnansweredCriticalQuestions.Count;
+        public int FailedCriticalRulesCount => TopFailedCriticalRules.Count;
 
+        protected virtual bool CalculateIsCompletionAllowed()
+        {
+            return true;
+        }
+
+        protected Task CollectCriticalityInfo(string interviewId, NavigationState navigationState)
+        {
+            this.TopFailedCriticalRules = this.entitiesListViewModelFactory.GetTopFailedCriticalRules(interviewId, navigationState).ToList();
+            if (TopFailedCriticalRules.Count > 0)
+            {
+                var failedCriticalRulesGroup = new CompleteGroup(TopFailedCriticalRules)
+                {
+                    AllCount = this.TopFailedCriticalRules.Count,
+                    Title = string.Format(UIResources.Interview_Complete_FailCriticalConditions, MoreThan(this.TopFailedCriticalRules.Count)),
+                    GroupContent = CompleteGroupContent.Error,
+                };
+                CompleteGroups.InsertCollection(0, failedCriticalRulesGroup.Items);
+                CompleteGroups.InsertCollection(0, new CovariantObservableCollection<MvxViewModel>() { failedCriticalRulesGroup });
+            }
+            
+            this.TopUnansweredCriticalQuestions = this.entitiesListViewModelFactory.GetTopUnansweredCriticalQuestions(interviewId, navigationState).ToList();
+            if (TopUnansweredCriticalQuestions.Count > 0)
+            {
+                var unansweredCriticalQuestionsGroup = new CompleteGroup(TopUnansweredCriticalQuestions)
+                {
+                    AllCount = this.TopUnansweredCriticalQuestions.Count,
+                    Title= string.Format(UIResources.Interview_Complete_CriticalUnanswered, MoreThan(this.TopUnansweredCriticalQuestions.Count)),
+                    GroupContent = CompleteGroupContent.Error,
+                };
+                CompleteGroups.InsertCollection(0, unansweredCriticalQuestionsGroup.Items);
+                CompleteGroups.InsertCollection(0, new CovariantObservableCollection<MvxViewModel>() { unansweredCriticalQuestionsGroup });
+            }
+            
+            HasCriticalIssues = UnansweredCriticalQuestionsCount > 0 || FailedCriticalRulesCount > 0;
+
+            if (HasCriticalIssues)
+            {
+                CompleteStatus = GroupStatus.CompletedInvalid;
+
+                if (CriticalityLevel == SharedKernels.DataCollection.ValueObjects.Interview.CriticalityLevel.Warn)
+                {
+                    this.CompleteButtonComment = UIResources.Interview_Complete_Note_For_Supervisor_with_Criticality;
+                }
+                else
+                {
+                    this.CompleteButtonComment = UIResources.Interview_Complete_CriticalIssues_Instrunction;
+                }
+            }
+
+            IsCompletionAllowed = CalculateIsCompletionAllowed();
+            IsLoading = false;
+            return Task.CompletedTask;
+        }
+        
         protected virtual async Task CompleteInterviewAsync()
         {
             if (!this.IsCompletionAllowed)
@@ -221,15 +287,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             ICommand completeInterview = this.RequestWebInterview
             ? new ChangeInterviewModeCommand(
-                interviewId: this.interviewId,
+                interviewId: this.InterviewId,
                 userId: this.principal.CurrentUserIdentity.UserId,
                 InterviewMode.CAWI,
                 comment: this.Comment)
             : new CompleteInterviewCommand(
-                interviewId: this.interviewId,
+                interviewId: this.InterviewId,
                 userId: this.principal.CurrentUserIdentity.UserId,
                 comment: this.Comment,
-                criticalityLevel: criticalityLevel);
+                criticalityLevel: CriticalityLevel);
 
             try
             {
@@ -237,7 +303,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
             catch (InterviewException e)
             {
-                logger.Warn("Interview has unexpected status", e);
+                Logger.Warn("Interview has unexpected status", e);
             }
 
             await this.CloseInterviewAfterComplete(this.RequestWebInterview);
@@ -245,7 +311,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         protected virtual async Task CloseInterviewAfterComplete(bool switchInterviewToCawiMode)
         {
-            await this.viewModelNavigationService.NavigateToDashboardAsync(this.interviewId.ToString());
+            await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId.ToString());
             Dispose();
             Messenger.Publish(new InterviewCompletedMessage(this));
         }

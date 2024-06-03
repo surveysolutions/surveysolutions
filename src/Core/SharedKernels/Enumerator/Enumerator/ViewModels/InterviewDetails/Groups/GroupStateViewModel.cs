@@ -14,10 +14,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         protected readonly IQuestionnaireStorage questionnaireRepository;
         protected readonly IGroupStateCalculationStrategy groupStateCalculationStrategy;
 
-        protected GroupStateViewModel()
-        {
-        }
-
         public GroupStateViewModel(IStatefulInterviewRepository interviewRepository,
             IGroupStateCalculationStrategy groupStateCalculationStrategy,
             IQuestionnaireStorage questionnaireRepository)
@@ -114,7 +110,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             }
         }
 
-        private GroupStatus CalculateDetailedStatus(Identity groupIdentity, IStatefulInterview interview, IQuestionnaire questionnaire)
+        private GroupStatus CalculateDetailedStatus(Identity groupIdentity, IStatefulInterview interview, 
+            IQuestionnaire questionnaire)
         {
             return this.groupStateCalculationStrategy.CalculateDetailedStatus(groupIdentity, interview, questionnaire);
         }
