@@ -3,7 +3,6 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 {
@@ -11,12 +10,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
     {
         private readonly IInterviewStateCalculationStrategy interviewStateCalculationStrategy;
 
-        protected InterviewStateViewModel()
-        {
-        }
-
-        public InterviewStateViewModel(IStatefulInterviewRepository interviewRepository, IInterviewStateCalculationStrategy interviewStateCalculationStrategy)
-            :base(interviewRepository, null, null)
+        public InterviewStateViewModel(IStatefulInterviewRepository interviewRepository, 
+            IInterviewStateCalculationStrategy interviewStateCalculationStrategy,
+            IQuestionnaireStorage questionnaireRepository)
+            :base(interviewRepository, null, questionnaireRepository)
         {
             this.interviewStateCalculationStrategy = interviewStateCalculationStrategy;
         }

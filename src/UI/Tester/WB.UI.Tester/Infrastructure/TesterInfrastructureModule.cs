@@ -49,7 +49,7 @@ namespace WB.UI.Tester.Infrastructure
             registry.Bind<LoginViewModel>();
             registry.Bind<DashboardViewModel>();
             registry.Bind<QuestionnaireDownloadViewModel>();
-            registry.Bind<InterviewViewModel>();
+            registry.Bind<TesterInterviewViewModel>();
 
             registry.BindToConstant(() => new SqliteSettings
             {

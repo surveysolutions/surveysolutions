@@ -11,10 +11,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
     {
         private bool isCoverPageSupported = false;
 
-        protected CoverStateViewModel()
-        {
-        }
-
         public CoverStateViewModel(IStatefulInterviewRepository interviewRepository,
             IGroupStateCalculationStrategy groupStateCalculationStrategy,
             IQuestionnaireStorage questionnaireRepository)

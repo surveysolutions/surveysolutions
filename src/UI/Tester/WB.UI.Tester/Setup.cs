@@ -12,6 +12,7 @@ using MvvmCross.ViewModels;
 using MvvmCross.Views;
 using WB.Core.BoundedContexts.Tester;
 using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.Core.BoundedContexts.Tester.Views;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
@@ -118,9 +119,9 @@ namespace WB.UI.Tester
             var viewModelViewLookup1 = new Dictionary<Type, Type>()
             {
                 {typeof (LoginViewModel), typeof (LoginActivity)},
-                {typeof (InterviewViewModel), typeof (InterviewActivity)},
+                {typeof (TesterInterviewViewModel), typeof (InterviewActivity)},
                 {typeof (DashboardViewModel), typeof (DashboardActivity)},
-                {typeof (CompleteInterviewViewModel), typeof (CompleteInterviewFragment)},
+                {typeof (TesterCompleteInterviewViewModel), typeof (CompleteInterviewFragment)},
                 {typeof (PhotoViewViewModel), typeof(PhotoViewActivity) },
 #if !EXCLUDEEXTENSIONS
                 { typeof (WB.UI.Shared.Extensions.ViewModels.GeographyEditorViewModel), typeof (WB.UI.Shared.Extensions.Activities.GeographyEditorActivity)}

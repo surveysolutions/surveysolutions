@@ -14,7 +14,7 @@ namespace WB.UI.Tester.Activities
         WindowSoftInputMode = SoftInput.StateAlwaysHidden | SoftInput.AdjustPan,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize,
         Exported = false)]
-    public class InterviewActivity : BaseInterviewActivity<InterviewViewModel>
+    public class InterviewActivity : BaseInterviewActivity<TesterInterviewViewModel>
     {
         protected override int LanguagesMenuGroupId => Resource.Id.interview_languages;
         protected override int OriginalLanguageMenuItemId => Resource.Id.interview_language_original;
