@@ -411,7 +411,9 @@ namespace WB.UI.Shared.Enumerator.Services
         {
             if (!this.secureStorage.Contains(RsaEncryptionService.PublicKey)) return;
 
-            this.fileSystemAccessor.DeleteFile(this.fileSystemAccessor.CombinePath(backupFolderFilesPath, "keystore.dat"));
+            var keyStorePath = this.fileSystemAccessor.CombinePath(backupFolderFilesPath, "keystore.dat");
+            if(File.Exists(keyStorePath))
+                this.fileSystemAccessor.DeleteFile(keyStorePath);
 
             var securedKeyChain = new KeyChain
             {
