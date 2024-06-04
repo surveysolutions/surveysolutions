@@ -11,11 +11,15 @@ export function getSilently(url, queryParams) {
     return getImpl(url, queryParams, true);
 }
 
+export function getSilentlyText(url, queryParams) {
+    return getImpl(url, queryParams, true, 'text');
+}
+
 export function get(url, queryParams) {
     return getImpl(url, queryParams, false);
 }
 
-function getImpl(url, queryParams, silent = false) {
+function getImpl(url, queryParams, silent = false, responseAs = 'json') {
     const progressStore = useProgressStore();
     const blockUI = useBlockUIStore();
 
@@ -29,7 +33,8 @@ function getImpl(url, queryParams, silent = false) {
         return api
             .get(url, {
                 headers: headers,
-                query: queryParams
+                query: queryParams,
+                responseAs: responseAs
             })
             .then(response => {
                 if (!silent) {
@@ -48,7 +53,7 @@ function getImpl(url, queryParams, silent = false) {
     }
 
     return api
-        .get(url, { headers: headers })
+        .get(url, { headers: headers, responseAs: responseAs })
         .then(response => {
             if (!silent) {
                 blockUI.stop();
