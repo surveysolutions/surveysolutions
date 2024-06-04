@@ -260,6 +260,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
                 commandService ?? Create.Service.CommandService(),
                 principal ?? Mock.Of<IPrincipal>(x => x.IsAuthenticated == true && x.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Id.gA)),
                 interviewRepositoryImpl,
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 entitiesListViewModelFactory ?? Mock.Of<IEntitiesListViewModelFactory>(),
                 lastCompletionComments ?? Mock.Of<ILastCompletionComments>(),
                 interviewState ?? new InterviewStateViewModel(

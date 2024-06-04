@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Base;
@@ -34,7 +33,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
     {
         private readonly IAuditLogService auditLogService;
         private readonly ICommandService commandService;
-        private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IPlainStorage<InterviewView> interviews;
         private readonly IUserInteractionService userInteractionService;
         private readonly ICalendarEventStorage calendarEventStorage;
@@ -43,6 +41,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             ICommandService commandService, 
             IPrincipal principal, 
             IStatefulInterviewRepository interviewRepository,
+            IQuestionnaireStorage questionnaireRepository,
             IEntitiesListViewModelFactory entitiesListViewModelFactory, 
             ILastCompletionComments lastCompletionComments, 
             InterviewStateViewModel interviewState, 
@@ -60,10 +59,11 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 lastCompletionComments,
                 interviewState,
                 dynamicTextViewModel,
+                interviewRepository,
+                questionnaireRepository,
                 logger)
         {
             this.commandService = commandService;
-            this.interviewRepository = interviewRepository;
             this.auditLogService = auditLogService;
             this.interviews = interviews;
             this.userInteractionService = userInteractionService;

@@ -23,7 +23,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 {
     public class InterviewerCompleteInterviewViewModel : CompleteInterviewViewModel
     {
-        private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IAuditLogService auditLogService;
         private readonly IInterviewerSettings interviewerSettings;
         private readonly IPlainStorage<QuestionnaireView> questionnaireViewRepository;
@@ -35,6 +34,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             ICommandService commandService,
             IPrincipal principal,
             IStatefulInterviewRepository interviewRepository,
+            IQuestionnaireStorage questionnaireRepository,
             InterviewStateViewModel interviewState,
             IEntitiesListViewModelFactory entitiesListViewModelFactory,
             DynamicTextViewModel dynamicTextViewModel,
@@ -46,9 +46,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IUserInteractionService userInteractionService,
             IQuestionnaireSettings questionnaireSettings)
             : base(viewModelNavigationService, commandService, principal, 
-                entitiesListViewModelFactory, lastCompletionComments,interviewState, dynamicTextViewModel, logger)
+                entitiesListViewModelFactory, lastCompletionComments,interviewState, dynamicTextViewModel,
+                interviewRepository,
+                questionnaireRepository,
+                logger)
         {
-            this.interviewRepository = interviewRepository;
             this.auditLogService = auditLogService;
             this.interviewerSettings = interviewerSettings;
             this.questionnaireViewRepository = questionnaireViewRepository;
@@ -83,7 +85,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 );
             }
             
-            if (!this.InterviewState.HasCriticalFeature(interviewUid) 
+            if (!this.HasCriticalFeature(interviewUid) 
                 || CriticalityLevel == SharedKernels.DataCollection.ValueObjects.Interview.CriticalityLevel.Ignore)
             {
                 IsCompletionAllowed = true;
@@ -174,7 +176,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             if (this.RequestWebInterview)
                 return true;
 
-            if (!this.InterviewState.HasCriticalFeature(InterviewId.FormatGuid()) 
+            if (!this.HasCriticalFeature(InterviewId.FormatGuid()) 
                 || CriticalityLevel == SharedKernels.DataCollection.ValueObjects.Interview.CriticalityLevel.Ignore)
                 return true;
                 

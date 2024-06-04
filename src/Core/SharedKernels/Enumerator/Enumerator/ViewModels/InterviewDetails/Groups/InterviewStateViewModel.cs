@@ -3,7 +3,6 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 {
@@ -42,13 +41,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
                 : (int)Math.Round((double)(this.AnsweredQuestionsCount * 100)/ this.QuestionsCount);
             this.SimpleStatus = interviewSimpleStatus.SimpleStatus;
             this.Status = interviewSimpleStatus.Status;
-        }
-        
-        public bool HasCriticalFeature(string interviewId)
-        {
-            var interview = this.interviewRepository.GetOrThrow(interviewId);
-            var questionnaire = questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, null);
-            return questionnaire.DoesSupportCriticality();
         }
     }
 }

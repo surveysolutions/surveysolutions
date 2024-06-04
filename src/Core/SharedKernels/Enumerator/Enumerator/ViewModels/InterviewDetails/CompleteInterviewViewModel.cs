@@ -7,10 +7,8 @@ using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -31,6 +29,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         protected readonly IEntitiesListViewModelFactory entitiesListViewModelFactory;
         private readonly ILastCompletionComments lastCompletionComments;
         protected readonly IPrincipal principal;
+        
+        protected readonly IStatefulInterviewRepository interviewRepository;
+        protected readonly IQuestionnaireStorage questionnaireRepository;
 
         protected readonly IMvxMessenger Messenger;
         
@@ -51,6 +52,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             ILastCompletionComments lastCompletionComments,
             InterviewStateViewModel interviewState,
             DynamicTextViewModel dynamicTextViewModel,
+            IStatefulInterviewRepository interviewRepository, 
+            IQuestionnaireStorage questionnaireRepository,
             ILogger logger)
         {
             Messenger = Mvx.IoCProvider.GetSingleton<IMvxMessenger>();
@@ -60,6 +63,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.entitiesListViewModelFactory = entitiesListViewModelFactory;
             this.lastCompletionComments = lastCompletionComments;
 
+            this.interviewRepository = interviewRepository;
+            this.questionnaireRepository = questionnaireRepository;
             this.InterviewState = interviewState;
             this.Name = dynamicTextViewModel;
             this.Logger = logger;
@@ -307,6 +312,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
 
             await this.CloseInterviewAfterComplete(this.RequestWebInterview);
+        }
+        
+        public bool HasCriticalFeature(string interviewId)
+        {
+            var interview = this.interviewRepository.GetOrThrow(interviewId);
+            var questionnaire = questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, null);
+            return questionnaire.DoesSupportCriticality();
         }
 
         protected virtual async Task CloseInterviewAfterComplete(bool switchInterviewToCawiMode)
