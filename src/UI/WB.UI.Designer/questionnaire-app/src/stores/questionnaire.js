@@ -264,7 +264,7 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
         },
         groupUpdated(payload) {
             var index = findIndex(this.info.chapters, function(i) {
-                return i.itemId === payload.group.id.replaceAll('-', '');
+                return i.itemId === payload.group.id.split('-').join('');
             });
 
             if (index > -1) {

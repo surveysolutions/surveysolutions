@@ -209,7 +209,7 @@ export default {
 
         staticTextUpdated(payload) {
             const index = _.findIndex(this.commentThreads, function (i) {
-                return payload.id && i.entity.itemId === payload.id.replaceAll('-', '');
+                return payload.id && i.entity.itemId === payload.id.split('-').join('');
             });
             if (index !== -1) {
                 this.commentThreads[index].entity.title = payload.text;
@@ -217,7 +217,7 @@ export default {
         },
 
         groupUpdated(payload) {
-            var id = payload.group.id.replaceAll('-', '');
+            var id = payload.group.id.split('-').join('');
             const index = _.findIndex(this.commentThreads, function (i) {
                 return i.entity.itemId === id
             });
@@ -229,7 +229,7 @@ export default {
         },
 
         rosterUpdated(payload) {
-            var id = payload.roster.itemId.replaceAll('-', '');
+            var id = payload.roster.itemId.split('-').join('');
             const index = _.findIndex(this.commentThreads, function (i) {
                 return i.entity.itemId === id;
             });
@@ -249,7 +249,7 @@ export default {
             }
         },
         questionUpdated(payload) {
-            const id = payload.id.replaceAll('-', '');
+            const id = payload.id.split('-').join('');
             const index = _.findIndex(this.commentThreads, function (i) {
                 return i.entity.itemId === id;
             });
@@ -262,7 +262,7 @@ export default {
         entityDeleted(payload) {
             var id = payload.itemId ?? payload.id;
             if (id) {
-                id = id.replaceAll('-', '');
+                id = id.split('-').join('');
                 const index = _.findIndex(this.commentThreads, function (i) {
                     return i.entity.itemId === id;
                 });

@@ -201,7 +201,7 @@ export default {
         },
         isChapter() {
             if (this.currentChapter && this.currentChapter.chapter && this.activeGroup.id)
-                return this.activeGroup.id.replaceAll('-', '') == this.currentChapter.chapter.itemId;
+                return this.activeGroup.id.split('-').join('') == this.currentChapter.chapter.itemId;
             return true;
         },
         isCoverPage() {
