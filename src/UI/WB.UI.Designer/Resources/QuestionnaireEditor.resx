@@ -1420,6 +1420,12 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   <data name="DeleteCommentConfirm" xml:space="preserve">
     <value>Are you sure you want to delete comment?</value>
   </data>
+  <data name="RefreshPageConfirm" xml:space="preserve">
+    <value>We've updated this site, please refresh page, or you may experience unexpected</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
   <data name="NotSupportedAttachment" xml:space="preserve">
     <value>Selected file is not supported as attachment</value>
   </data>

@@ -1312,6 +1312,12 @@
   <data name="DeleteCommentConfirm" xml:space="preserve">
     <value>Вы уверены, что хотите удалить комментарий?</value>
   </data>
+  <data name="RefreshPageConfirm" xml:space="preserve">
+    <value>Мы обновили этот сайт, пожалуйста, обновите страницу, иначе вы можете столкнуться с неожиданными проблемами.</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Обновить</value>
+  </data>
   <data name="QuestionDefaultDate" xml:space="preserve">
     <value>Дата по умолчанию</value>
   </data>
