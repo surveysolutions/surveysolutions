@@ -65,6 +65,14 @@ namespace WB.Tests.Abc.TestFactories
                 substitutionService: Create.Service.SubstitutionService(),
                 questionnaireStorage: questionnaireStorage ?? SetUp.QuestionnaireRepositoryWithOneQuestionnaire(Mock.Of<IQuestionnaire>()));
 
+        public InterviewStateViewModel InterviewStateViewModel(
+            IStatefulInterviewRepository interviewRepository = null,
+            IInterviewStateCalculationStrategy interviewStateCalculationStrategy = null,
+            IQuestionnaireStorage questionnaireRepository = null)
+        => new InterviewStateViewModel( interviewRepository,
+             interviewStateCalculationStrategy,
+             questionnaireRepository: questionnaireRepository ?? SetUp.QuestionnaireRepositoryWithOneQuestionnaire(Mock.Of<IQuestionnaire>()));
+
         public ErrorMessageViewModel ErrorMessageViewModel(
             IViewModelEventRegistry eventRegistry = null,
             IStatefulInterviewRepository interviewRepository = null,
@@ -514,7 +522,7 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new SideBarCompleteSectionViewModel(
                 Create.ViewModel.DynamicTextViewModel(),
-                Mock.Of<InterviewStateViewModel>(),
+                Create.ViewModel.InterviewStateViewModel(),
                 Create.Entity.AnswerNotifier(Create.Service.LiteEventRegistry()));
         }
 
