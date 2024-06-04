@@ -1,4 +1,9 @@
 import { mande } from 'mande';
+import {
+    getOnlineVersion,
+    getCurrentVersion
+} from '../services/designerService';
+import { i18n } from './localization';
 
 const api = mande('/error/report');
 
@@ -15,7 +20,10 @@ export function setupErrorHandler(app) {
         const status = err.response?.status;
 
         if (status && ignoreStatusCodes.includes(status)) return false;
-        if (err.message && ignoredMessages.includes(err.message)) return false;
+        if (err.message && ignoredMessages.includes(err.message)) {
+            checkIsNeedUpdate();
+            return false;
+        }
 
         var errorDetails = {
             message: err.message,
@@ -82,7 +90,10 @@ export function setupErrorHandler(app) {
         const message = e.reason?.body?.message ?? e.reason?.message;
 
         if (status && ignoreStatusCodes.includes(status)) return false;
-        if (message && ignoredMessages.includes(message)) return false;
+        if (message && ignoredMessages.includes(message)) {
+            checkIsNeedUpdate();
+            return false;
+        }
 
         var errorDetails = {
             message: message,
@@ -103,6 +114,35 @@ export function setupErrorHandler(app) {
 
         return false;
     });
+
+    window.addEventListener('vite:preloadError', event => {
+        checkIsNeedUpdate();
+    });
+
+    async function checkIsNeedUpdate() {
+        try {
+            const versionFromInternet = await getOnlineVersion();
+            const currentVersion = getCurrentVersion();
+
+            if (versionFromInternet != currentVersion) {
+                const params = {
+                    title: i18n.t('QuestionnaireEditor.RefreshPageConfirm'),
+                    okButtonTitle: i18n.t('QuestionnaireEditor.Refresh'),
+                    cancelButtonTitle: i18n.t('QuestionnaireEditor.Cancel'),
+                    isReadOnly: false,
+                    callback: async confirm => {
+                        if (confirm) {
+                            location.reload();
+                        }
+                    }
+                };
+
+                app.config.globalProperties.$confirm(params);
+            }
+        } catch {
+            // ignore
+        }
+    }
 
     function getNestedErrorDetails(error) {
         let errorDetails = '';
