@@ -24,7 +24,7 @@
           RepairCommand="/repair /quiet /norestart /log &quot;[WindowsDotNetHosting501Log]&quot;"
           UninstallCommand="/uninstall /quiet /norestart /log &quot;[WindowsDotNetHosting501Log]&quot;"
           PerMachine="yes"
-          DetectCondition="WindowsIISHostingModuleExists AND WindowsIISHostingModuleVersion &gt;= 18.0.24141.6"
+          DetectCondition="WindowsIISHostingModuleExists AND WindowsIISHostingModuleVersion &gt;= v18.0.24141.6"
           InstallCondition="!(wix.WindowsDotNetHosting501InstalledInstallCondition)"
           Vital="yes"
           Permanent="yes"
