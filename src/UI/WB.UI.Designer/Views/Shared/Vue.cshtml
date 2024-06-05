@@ -1,3 +1,4 @@
+@inject WB.Core.Infrastructure.Versions.IProductVersion ProductVersion
 @{
     Layout = null;
 }
@@ -12,6 +13,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Designer</title>
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta name="version" content="@(ProductVersion.ToString())">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <link rel="icon" type="image/png" sizes="192x192" href="/favicon-designer-192x192.png?v=2">
     <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/favicon-designer-180x180.png">

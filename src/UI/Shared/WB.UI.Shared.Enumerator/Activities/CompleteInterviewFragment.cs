@@ -1,4 +1,5 @@
 ﻿using System.Collections.Specialized;
+using System.ComponentModel;
 using Android.Runtime;
 using Android.Views;
 using AndroidX.RecyclerView.Widget;
@@ -55,9 +56,17 @@ namespace WB.UI.Shared.Enumerator.Activities
 
             return totalHeight;
         }
-
+        
         private void AdjustRecyclerViewHeight(object sender, NotifyCollectionChangedEventArgs e)
         {
+            RecalculateRecyclerViewHeight();
+        }
+
+        private void RecalculateRecyclerViewHeight()
+        {
+            if (recyclerView.Visibility != ViewStates.Visible)
+                return;
+            
             recyclerView.Post(() =>
             {
                 var layoutParams = recyclerView.LayoutParameters;

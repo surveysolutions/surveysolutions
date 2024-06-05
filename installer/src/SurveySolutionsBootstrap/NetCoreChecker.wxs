@@ -14,31 +14,32 @@
 
       <!-- aspnetcorev2.dll version is v16.0.22335.13 for Bundle 6.0.13 -->
       <!-- aspnetcorev2.dll version is v17.0.22323.1 for Bundle 7.0.10 -->
-	  <!-- aspnetcorev2.dll version is v18.0.24080.4 for Bundle 8.0.4 -->	  
+	  <!-- aspnetcorev2.dll version is v18.0.24080.4 for Bundle 8.0.4 -->
+	  <!-- aspnetcorev2.dll version is v18.0.24141.6 for Bundle 8.0.6 -->
 	  
       <PackageGroup Id="WindowsDotNetHosting501">
         <ExePackage
-          Name="dotnet-hosting-8.0.4-win.exe"
+          Name="dotnet-hosting-8.0.6-win.exe"
           InstallCommand="/install /quiet /norestart /log &quot;[WindowsDotNetHosting501Log]&quot;"
           RepairCommand="/repair /quiet /norestart /log &quot;[WindowsDotNetHosting501Log]&quot;"
           UninstallCommand="/uninstall /quiet /norestart /log &quot;[WindowsDotNetHosting501Log]&quot;"
           PerMachine="yes"
-          DetectCondition="WindowsIISHostingModuleExists AND WindowsIISHostingModuleVersion &gt;= v18.0.24080.4"
+          DetectCondition="WindowsIISHostingModuleExists AND WindowsIISHostingModuleVersion &gt;= v18.0.24141.6"
           InstallCondition="!(wix.WindowsDotNetHosting501InstalledInstallCondition)"
           Vital="yes"
           Permanent="yes"
           Protocol="burn"
-          DownloadUrl="https://download.visualstudio.microsoft.com/download/pr/00397fee-1bd9-44ef-899b-4504b26e6e96/ab9c73409659f3238d33faee304a8b7c/dotnet-hosting-8.0.4-win.exe"
+          DownloadUrl="https://download.visualstudio.microsoft.com/download/pr/751d3fcd-72db-4da2-b8d0-709c19442225/33cc492bde704bfd6d70a2b9109005a0/dotnet-hosting-8.0.6-win.exe"
           LogPathVariable="WindowsDotNetHosting501Log"
           Compressed="no">
         <!-- heat.exe payload "dotnet-hosting-3.1.1-win.exe" -o "dotnet-hosting.wxs" -->
-		  <RemotePayload CertificatePublicKey="7F26B48DA3B4A59D2AD0B7D1CB3C081359B4D820" 
+		<RemotePayload 
+		  CertificatePublicKey="7F26B48DA3B4A59D2AD0B7D1CB3C081359B4D820" 
 		  CertificateThumbprint="F9A7CF9FBE13BAC767F4781061332DA6E8B4E0EE" 
-		  Description="Microsoft .NET 8.0.4 - Windows Server Hosting" 
-		  Hash="A34A11CBFFB6156768AB69281D84857FD1757C67" 
-		  ProductName="Microsoft .NET 8.0.4 - Windows Server Hosting" 
-		  Size="113594200" 
-		  Version="8.0.4.24170" />           
+		  Description="Microsoft .NET 8.0.6 - Windows Server Hosting" 
+		  Hash="DD67F44E2DEDB0F17AD208B4E359D7E7696910D7" 
+		  ProductName="Microsoft .NET 8.0.6 - Windows Server Hosting" 
+		  Size="113750176" Version="8.0.6.24269" />           
       </ExePackage>
     </PackageGroup>
   </Fragment>

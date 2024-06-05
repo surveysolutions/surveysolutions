@@ -366,12 +366,12 @@ namespace WB.UI.Shared.Enumerator.Services
 
         private void CreateFilesListInfoFile()
         {
-            var internalFiles = this.fileSystemAccessor.CombinePath(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+            var internalDirectory = AndroidPathUtils.GetPathToInternalDirectory();
             var tabletInfoFilePath = this.fileSystemAccessor.CombinePath(this.privateStorage, "files.info");
 
-            var files = this.fileSystemAccessor.GetFilesInDirectory(internalFiles, true);
+            var files = this.fileSystemAccessor.GetFilesInDirectory(internalDirectory, true);
             var sb = new StringBuilder();
-            sb.AppendLine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + " files list:");
+            sb.AppendLine(internalDirectory + " files list:");
             sb.AppendLine();
 
             foreach(var file in files)
@@ -411,7 +411,9 @@ namespace WB.UI.Shared.Enumerator.Services
         {
             if (!this.secureStorage.Contains(RsaEncryptionService.PublicKey)) return;
 
-            this.fileSystemAccessor.DeleteFile(this.fileSystemAccessor.CombinePath(backupFolderFilesPath, "keystore.dat"));
+            var keyStorePath = this.fileSystemAccessor.CombinePath(backupFolderFilesPath, "keystore.dat");
+            if(File.Exists(keyStorePath))
+                this.fileSystemAccessor.DeleteFile(keyStorePath);
 
             var securedKeyChain = new KeyChain
             {

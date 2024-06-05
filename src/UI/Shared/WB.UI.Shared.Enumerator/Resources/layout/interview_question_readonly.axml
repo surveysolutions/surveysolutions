@@ -10,7 +10,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             local:MvxTemplate="@layout/interview_question__instructions"
-            local:MvxBind="DataContext InstructionViewModel" />
+            local:MvxBind="DataContext InstructionViewModel; Visible InstructionViewModel.HasInstructions;" />
     <LinearLayout
         style="@style/Interview_Readonly_Question_Layout">
         <ImageView
@@ -38,7 +38,7 @@
         local:MvxTemplate="@layout/interview_question__comments"
         local:MvxBind="DataContext QuestionState.Comments" />
 
-    <View style="@style/Readonly_Devider_Spacer"  />
+    
     <View style="@style/Interview_Entity_Divider" />
 
 </LinearLayout>
