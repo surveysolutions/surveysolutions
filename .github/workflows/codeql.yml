@@ -60,10 +60,6 @@ jobs:
       with:
         dotnet-version: '8.0.x'
 
-    - name: Install dependencies
-      if: matrix.language == 'csharp'
-      run: dotnet restore
-
     - name: Build project
       if: matrix.language == 'csharp'
       run: dotnet build --no-restore
