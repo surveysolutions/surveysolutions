@@ -94,7 +94,7 @@ namespace WB.UI.Supervisor.Services.Implementation
             this.SaveCurrentSettings(settings => settings.NotificationsEnabled = notificationsEnabled);
 
         public string InterviewerApplicationsDirectory =>
-            this.fileSystemAccessor.CombinePath(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "patches");
+            this.fileSystemAccessor.CombinePath(AndroidPathUtils.GetPathToInternalDirectory(), "patches");
 
         public bool DownloadUpdatesForInterviewerApp => this.currentSettings.DownloadUpdatesForInterviewerApp ?? true;
 
