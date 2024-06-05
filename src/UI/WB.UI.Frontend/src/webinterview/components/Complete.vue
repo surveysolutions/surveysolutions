@@ -1,5 +1,5 @@
 <template>
-    <div class="unit-section first-last-chapter complete" v-if="hasCompleteInfo"
+    <div class="unit-section first-last-chapter complete-section" v-if="hasCompleteInfo"
         v-bind:class="{ 'section-with-error': hasErrors, 'complete-section': isAllAnswered }">
         <div class="unit-title">
             <wb-humburger></wb-humburger>
@@ -70,13 +70,13 @@
         <div class="wrapper-info">
             <div class="container-info">
                 <a href="javascript:void(0);" id="btnComplete" class="btn btn-lg" v-bind:class="{
-        'btn-success': isAllAnswered,
-        'btn-primary': hasUnansweredQuestions,
-        'btn-danger': hasErrors,
-        'disabled': !isCompletionPermitted,
-    }" @click="completeInterview">{{ competeButtonTitle }}</a>
+                    'btn-success': isAllAnswered,
+                    'btn-primary': hasUnansweredQuestions,
+                    'btn-danger': hasErrors,
+                    'disabled': !isCompletionPermitted,
+                }" @click="completeInterview">{{ competeButtonTitle }}</a>
                 <div class="info-block gray-uppercase" v-if="doesShowCompleteComment" style="margin-top:10px;">{{
-        completeButtionComment }}
+                    completeButtionComment }}
                 </div>
             </div>
         </div>

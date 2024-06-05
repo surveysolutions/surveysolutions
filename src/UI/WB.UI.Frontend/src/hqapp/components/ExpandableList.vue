@@ -16,15 +16,15 @@
 </template>
 
 <style>
-.complete .unanswered .btn-plus:after,
-.complete .unanswered .btn-plus:before {
+.complete-section .unanswered .btn-plus:after,
+.complete-section .unanswered .btn-plus:before {
     background-color: #2a81cb;
 }
 
-.complete .errors .btn-plus:after,
-.complete .errors .btn-plus:before,
-.complete .critical-rule-errors .btn-plus:after,
-.complete .critical-rule-errors .btn-plus:before {
+.complete-section .errors .btn-plus:after,
+.complete-section .errors .btn-plus:before,
+.complete-section .critical-rule-errors .btn-plus:after,
+.complete-section .critical-rule-errors .btn-plus:before {
     background-color: #e74924;
 }
 </style>
