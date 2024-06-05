@@ -68,8 +68,9 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public MapDescription? PrepareAndGetDefaultMapOrNull()
         {
-            var basePath = Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.Personal))
-                ? Environment.GetFolderPath(Environment.SpecialFolder.Personal)
+            var localApplicationDataDirectory = AndroidPathUtils.GetPathToLocalApplicationDataDirectory();
+            var basePath = Directory.Exists(localApplicationDataDirectory)
+                ? localApplicationDataDirectory
                 : AndroidPathUtils.GetPathToExternalDirectory();
 
             string mapFolderPath = this.fileSystemAccessor.CombinePath(basePath, "maps");
