@@ -60,10 +60,6 @@ jobs:
       with:
         dotnet-version: '8.0.x'
 
-    - name: Build project
-      if: matrix.language == 'csharp'
-      run: dotnet build --no-restore
-
     # Restore workload to build android
     - name: Install android workload
       run: dotnet workload install android
