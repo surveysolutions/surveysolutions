@@ -79,10 +79,7 @@ namespace WB.UI.Tester
 
         private IMvxIoCProvider CreateAndInitializeIoc()
         {
-            var localApplicationDataDirectory = AndroidPathUtils.GetPathToLocalApplicationDataDirectory();
-            var basePath = Directory.Exists(localApplicationDataDirectory)
-               ? localApplicationDataDirectory
-               : AndroidPathUtils.GetPathToExternalDirectory();
+            var basePath = AndroidPathUtils.GetPathToInternalOrExternalDirectory();
 
             this.modules = new IModule[]
             {

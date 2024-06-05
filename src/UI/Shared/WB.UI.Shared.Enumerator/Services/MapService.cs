@@ -68,10 +68,7 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public MapDescription? PrepareAndGetDefaultMapOrNull()
         {
-            var localApplicationDataDirectory = AndroidPathUtils.GetPathToLocalApplicationDataDirectory();
-            var basePath = Directory.Exists(localApplicationDataDirectory)
-                ? localApplicationDataDirectory
-                : AndroidPathUtils.GetPathToExternalDirectory();
+            var basePath = AndroidPathUtils.GetPathToInternalOrExternalDirectory();
 
             string mapFolderPath = this.fileSystemAccessor.CombinePath(basePath, "maps");
             string mapPath = this.fileSystemAccessor.CombinePath(mapFolderPath, "worldmap(default).tpk");
