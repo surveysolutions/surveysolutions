@@ -53,6 +53,20 @@ jobs:
 
         # Details on CodeQL's query packs refer to : https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
         # queries: security-extended,security-and-quality
+    
+    - name: Set up .NET Core
+      if: matrix.language == 'csharp'
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Install dependencies
+      if: matrix.language == 'csharp'
+      run: dotnet restore
+
+    - name: Build project
+      if: matrix.language == 'csharp'
+      run: dotnet build --no-restore
 
     # Restore workload to build android
     - name: Install android workload
