@@ -202,7 +202,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                             requestedFrequency: (requestedGeometryMode is GeometryInputMode.Manual or GeometryInputMode.Semiautomatic) ? null : Settings.GeographyQuestionPeriodInSeconds,
                             geographyNeighbors: neighbors,
                             title: question.Parent.Title.Text
-                            ))
+                            ), Settings.SupportOfflineMaps)
                     .ConfigureAwait(false);
 
                 if (answerArea != null)
