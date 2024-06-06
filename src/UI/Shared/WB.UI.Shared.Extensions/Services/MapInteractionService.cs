@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using Esri.ArcGISRuntime;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -40,10 +38,12 @@ namespace WB.UI.Shared.Extensions.Services
             this.viewModelNavigationService = viewModelNavigationService;
         }
 
-        public async Task<AreaEditResult> EditAreaAsync(EditAreaArgs args)
+        public async Task<AreaEditResult> EditAreaAsync(EditAreaArgs args, bool supportOfflineMaps)
         {
             await this.permissions.AssureHasPermissionOrThrow<Permissions.LocationWhenInUse>().ConfigureAwait(false);
-            await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
+            
+            if(supportOfflineMaps)
+                await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
 
             return await this.EditAreaImplAsync(args);
         }

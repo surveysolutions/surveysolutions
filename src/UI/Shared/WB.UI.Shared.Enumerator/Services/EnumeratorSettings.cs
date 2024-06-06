@@ -1,4 +1,5 @@
-﻿using Android.Content.PM;
+﻿using System.Data.SqlTypes;
+using Android.Content.PM;
 using Android.Gms.Common;
 using Android.OS;
 using WB.Core.GenericSubdomains.Portable;
@@ -271,5 +272,7 @@ namespace WB.UI.Shared.Enumerator.Services
         {
             this.SaveCurrentSettings(settings => settings.EsriApiKey = esriApiKey);
         }
+
+        public bool SupportOfflineMaps => true;
     }
 }
