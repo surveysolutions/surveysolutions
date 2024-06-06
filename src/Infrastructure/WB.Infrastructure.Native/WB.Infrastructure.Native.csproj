@@ -35,8 +35,9 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NHibernate" Version="5.5.1" />
     <PackageReference Include="Npgsql" Version="8.0.3" />
-    <PackageReference Include="prometheus-net" Version="8.0.1" />
-    <PackageReference Include="SixLabors.Fonts" Version="2.0.1" />
+    <PackageReference Include="prometheus-net" Version="8.2.1" />
+    <PackageReference Include="SixLabors.Fonts" Version="2.0.3" />
+    <PackageReference Include="SkiaSharp" Version="2.88.8" />
     <PackageReference Include="System.IO.Packaging" Version="8.0.0" />
   </ItemGroup>
 </Project>
