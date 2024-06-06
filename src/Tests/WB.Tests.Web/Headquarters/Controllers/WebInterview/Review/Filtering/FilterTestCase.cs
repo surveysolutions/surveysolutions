@@ -43,10 +43,11 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
             public FilterTestCase ExpectedStats(
                 int flagged, int notFlagged, int withComments,
                 int invalid, int valid, int answered, int notAnswered,
-                int forSupervisor, int forInterviewer)
+                int forSupervisor, int forInterviewer, 
+                int criticalQuestions, int criticalRules)
             {
                 StatsCounter = new[]
-                    {flagged, notFlagged, withComments, invalid, valid, answered, notAnswered, forSupervisor, forInterviewer};
+                    {flagged, notFlagged, withComments, invalid, valid, answered, notAnswered, forSupervisor, forInterviewer, criticalQuestions, criticalRules};
                 return this;
             }
         }

@@ -34,6 +34,9 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
                 : Html.FromHtml(htmlText);
 #pragma warning restore CA1416 // Validate platform compatibility
 
+            if (interviewEntity.InterviewId == null) 
+                return new SpannableString(sequence);
+
             var strBuilder = new SpannableStringBuilder(sequence);
 
             var urlSpans = strBuilder.GetSpans(0, sequence.Length(), Class.FromType(typeof(URLSpan)));

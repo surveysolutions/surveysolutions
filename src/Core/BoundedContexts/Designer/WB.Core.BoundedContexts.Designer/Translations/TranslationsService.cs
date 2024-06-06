@@ -44,6 +44,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             public string? TranslationIndex { get; set; }
         }
 
+        private const string NotoSansFontFamilyName = "Noto Sans";
         private readonly TranslationType[] translationTypesWithIndexes =
         {
             TranslationType.FixedRosterTitle,
@@ -120,6 +121,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
             try
             {
+
                 var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
                 
                 using var package = new XLWorkbook(stream, loadOptions);
@@ -150,6 +152,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 Dictionary<Guid, bool> idsOfAllQuestionnaireEntities = questionnaire.Source.Children.TreeToEnumerable(x => x.Children)
                     .ToDictionary(composite => composite.PublicKey, x => x is Group);
                 idsOfAllQuestionnaireEntities[questionnaireId] = true;
+                questionnaire.Source.CriticalRules?.ForEach(cc => idsOfAllQuestionnaireEntities[cc.Id] = false);
 
                 var translationInstances = new List<TranslationInstance>();
                 foreach (var translationWithHeaderMap in translationsWithHeaderMap)

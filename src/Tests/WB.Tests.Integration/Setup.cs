@@ -7,9 +7,12 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -78,36 +81,57 @@ namespace WB.Tests.Integration
                 {
                     NavigationState = navigationState,
                 };
+
+            var interviewStateViewModel = new InterviewStateViewModel(
+                interviewsRepository,
+                Mock.Of<IInterviewStateCalculationStrategy>(_ => 
+                    _.GetInterviewSimpleStatus(It.IsAny<IStatefulInterview>()) == new InterviewSimpleStatus() ),
+                questionnaireRepository);
            
-            SetUp.InstanceToMockedServiceLocator<CoverStateViewModel>(Mock.Of<CoverStateViewModel>());
-            SetUp.InstanceToMockedServiceLocator<GroupStateViewModel>(Mock.Of<GroupStateViewModel>());
+            var coverStateViewModel = new CoverStateViewModel(
+                interviewsRepository,
+                Mock.Of<IGroupStateCalculationStrategy>(),
+                questionnaireRepository);
+            
+            var groupStateViewModel = new GroupStateViewModel(
+                interviewsRepository,
+                Mock.Of<IGroupStateCalculationStrategy>(),
+                questionnaireRepository);
+            
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<CoverStateViewModel>())
+                .Returns(() => coverStateViewModel);
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<GroupStateViewModel>())
+                .Returns(() => groupStateViewModel);
+            
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<SideBarSectionViewModel>())
                 .Returns(sideBarSectionViewModel);
 
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<SideBarVirtualCoverSectionViewModel>())
-                .Returns(()=>new SideBarVirtualCoverSectionViewModel( Create.ViewModel.DynamicTextViewModel(
+                .Returns(() => new SideBarVirtualCoverSectionViewModel( Create.ViewModel.DynamicTextViewModel(
                         liteEventRegistry,
-                        interviewRepository: interviewsRepository), Mock.Of<CoverStateViewModel>()));
+                        interviewRepository: interviewsRepository), coverStateViewModel));
 
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<SideBarCompleteSectionViewModel>())
                 .Returns(() => new SideBarCompleteSectionViewModel( Create.ViewModel.DynamicTextViewModel(
                         liteEventRegistry,
-                        interviewRepository: interviewsRepository), Mock.Of<InterviewStateViewModel>(),
+                        interviewRepository: interviewsRepository), interviewStateViewModel,
                         IntegrationCreate.AnswerNotifier(liteEventRegistry)));
 
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<SideBarOverviewViewModel>())
                 .Returns(() => new SideBarOverviewViewModel( Create.ViewModel.DynamicTextViewModel(
                     liteEventRegistry,
-                    interviewRepository: interviewsRepository), Mock.Of<InterviewStateViewModel>(), Mock.Of<AnswerNotifier>()));
+                    interviewRepository: interviewsRepository), interviewStateViewModel, Mock.Of<AnswerNotifier>()));
 
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<SideBarSectionViewModel>())
                 .Returns(sideBarSectionViewModel);
-            SetUp.InstanceToMockedServiceLocator<InterviewStateViewModel>(Mock.Of<InterviewStateViewModel>());
+            SetUp.InstanceToMockedServiceLocator<InterviewStateViewModel>(interviewStateViewModel);
 
             var sidebarViewModel = new SideBarSectionsViewModel(
                 statefulInterviewRepository: interviewsRepository,

@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -26,18 +27,21 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
         private readonly IWebInterviewInterviewEntityFactory interviewEntityFactory;
-        
+        private readonly IQuestionnaireSettings questionnaireSettings;
+
         protected abstract bool IncludeVariables { get; }
 
         public InterviewDataController(IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository statefulInterviewRepository,
             IWebInterviewNotificationService webInterviewNotificationService,
-            IWebInterviewInterviewEntityFactory interviewEntityFactory)
+            IWebInterviewInterviewEntityFactory interviewEntityFactory,
+            IQuestionnaireSettings questionnaireSettings)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.webInterviewNotificationService = webInterviewNotificationService;
             this.interviewEntityFactory = interviewEntityFactory;
+            this.questionnaireSettings = questionnaireSettings;
         }
 
         protected virtual bool IsReviewMode() => false;
@@ -83,7 +87,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             if (statefulInterview == null) return null;
 
             var questionnaire = this.GetCallerQuestionnaire(statefulInterview.QuestionnaireIdentity, statefulInterview.Language);
-
+        
             return new InterviewInfo
             {
                 QuestionnaireTitle = IsReviewMode()
@@ -99,7 +103,45 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 CanAddComments = statefulInterview.Status != InterviewStatus.ApprovedByHeadquarters && !this.IsCurrentUserObserving(),
                 ReceivedByInterviewer = statefulInterview.ReceivedByInterviewer,
                 IsCurrentUserObserving = this.IsCurrentUserObserving(),
-                DoesBrokenPackageExist = false
+                DoesBrokenPackageExist = false,
+                DoesSupportCriticality =  questionnaire.DoesSupportCriticality(),
+                CriticalityLevel = questionnaireSettings.GetCriticalityLevel(statefulInterview.QuestionnaireIdentity),
+            };
+        }
+        
+        public virtual CriticalityCheckResult GetCriticalityChecks(Guid interviewId)
+        {
+            int count = 30;
+            
+            var interview = statefulInterviewRepository.GetOrThrow(interviewId.FormatGuid());
+            var criticalityLevel = questionnaireSettings.GetCriticalityLevel(interview.QuestionnaireIdentity);
+            if (criticalityLevel == null || criticalityLevel == CriticalityLevel.Ignore)
+                return new CriticalityCheckResult();
+            
+            var questionnaire = questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
+
+            var unansweredCriticalQuestions = interview.GetAllUnansweredCriticalQuestions()
+                .Select(identity => GetQuestionReference<CriticalQuestionCheck>(interview, questionnaire, identity))
+                .Take(count)
+                .ToArray();
+
+            var failedCriticalRules = interview.CollectInvalidCriticalRules()
+                .Select(ruleId =>
+                {
+                    var message = interviewEntityFactory.GetCriticalRuleMessage(ruleId, interview, questionnaire, IsReviewMode());
+                    return new CriticalRuleResult()
+                    {
+                        Id = ruleId.FormatGuid(),
+                        Title = message,
+                    };
+                })
+                .Take(count)
+                .ToArray();
+
+            return new CriticalityCheckResult()
+            {
+                FailedCriticalRules = failedCriticalRules,
+                UnansweredCriticalQuestions = unansweredCriticalQuestions
             };
         }
 
@@ -306,7 +348,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 button.Id = id;
                 button.Target = target?.Identity.ToString();
                 button.Status = button.Type == ButtonType.Complete
-                    ? statefulInterview.GetInterviewSimpleStatus(IsReviewMode()).Status
+                    ? GroupStatus.Started// statefulInterview.GetInterviewSimpleStatus(IsReviewMode()).Status
                     : this.interviewEntityFactory.CalculateSimpleStatus(target, IsReviewMode(), statefulInterview, questionnaire);
 
                 this.interviewEntityFactory.ApplyValidity(button.Validity, button.Status);
@@ -503,9 +545,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             }
             return interviewEntities.ToArray();
         }
-
-        private static readonly Regex HtmlRemovalRegex = new Regex(Constants.HtmlRemovalPattern, RegexOptions.Compiled);
-
+        
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public virtual bool HasCoverPage(Guid interviewId)
         {
@@ -561,30 +601,43 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             var questionsCount = interview.CountActiveQuestionsInInterview();
             var answeredQuestionsCount = interview.CountActiveAnsweredQuestionsInInterview();
             var invalidAnswersCount = interview.CountInvalidEntitiesInInterview();
+            
             Identity[] invalidEntityIds = interview.GetInvalidEntitiesInInterview().Take(30).ToArray();
-            var invalidEntities = invalidEntityIds.Select(identity =>
-            {
-                var titleText = HtmlRemovalRegex.Replace(interview.GetTitleText(identity), string.Empty);
-                var isPrefilled = interview.IsQuestionPrefilled(identity);
-                var parentId = interviewEntityFactory.GetUIParent(interview, questionnaire, identity);
-                return new EntityWithError
-                {
-                    Id = identity.ToString(),
-                    ParentId = parentId.ToString(),
-                    Title = titleText,
-                    IsPrefilled = isPrefilled
-                };
-            }).ToArray();
+            var invalidEntities = invalidEntityIds.Select(identity => 
+                GetQuestionReference<EntityWithError>(interview, questionnaire, identity)
+            ).ToArray();
+            
+            Identity[] unansweredIds = interview.GetAllUnansweredQuestions().Take(30).ToArray();
+            var unansweredQuestions = unansweredIds.Select(identity => 
+                GetQuestionReference<EntityWithError>(interview, questionnaire, identity)
+            ).ToArray();
 
             var completeInfo = new CompleteInfo
             {
                 AnsweredCount = answeredQuestionsCount,
                 ErrorsCount = invalidAnswersCount,
                 UnansweredCount = questionsCount - answeredQuestionsCount,
-                EntitiesWithError = invalidEntities
+                EntitiesWithError = invalidEntities,
+                UnansweredQuestions = unansweredQuestions,
+                CriticalityLevel = questionnaireSettings.GetCriticalityLevel(interview.QuestionnaireIdentity),
             };
 
             return completeInfo;
+        }
+        
+        private T GetQuestionReference<T>(IStatefulInterview interview, IQuestionnaire questionnaire, Identity identity)
+            where T: QuestionReference, new()
+        {
+            var titleText = Constants.HtmlRemovalRegex.Replace(interview.GetTitleText(identity), string.Empty);
+            var isPrefilled = interview.IsQuestionPrefilled(identity);
+            var parentId = interviewEntityFactory.GetUIParent(interview, questionnaire, identity);
+            return new T
+            {
+                Id = identity.ToString(),
+                ParentId = parentId.ToString(),
+                Title = titleText,
+                IsPrefilled = isPrefilled
+            };
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
@@ -601,20 +654,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             var commentedQuestionsCount = allCommented.Count;
             var commentedQuestions = allCommented.Take(30).ToArray();
 
-            var entitiesWithComments = commentedQuestions.Select(identity =>
-            {
-                var titleText = HtmlRemovalRegex.Replace(interview.GetTitleText(identity), string.Empty);
-                var isPrefilled = interview.IsQuestionPrefilled(identity);
-                var parentId = interviewEntityFactory.GetUIParent(interview, questionnaire, identity);
-                return new EntityWithComment
-                {
-                    Id = identity.ToString(),
-                    ParentId = parentId.ToString(),
-                    Title = titleText,
-                    IsPrefilled = isPrefilled
-                };
-
-            }).ToArray();
+            var entitiesWithComments = commentedQuestions.Select(identity => 
+                GetQuestionReference<EntityWithComment>(interview, questionnaire, identity)).ToArray();
 
             var coverInfo = new CoverInfo
             {

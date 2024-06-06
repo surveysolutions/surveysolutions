@@ -43,7 +43,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 using (var eventContext = new EventContext())
                 {
                     interview.AnswerTextQuestion(Id.gB, Id.gA, RosterVector.Empty, DateTime.UtcNow, "c");
-                    interview.Complete(Guid.NewGuid(), string.Empty, DateTime.UtcNow);
+                    interview.Complete(Guid.NewGuid(), string.Empty, DateTime.UtcNow, null);
 
                     return new InvokeResults
                     {

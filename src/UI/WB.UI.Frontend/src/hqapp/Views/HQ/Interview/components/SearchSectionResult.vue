@@ -1,14 +1,11 @@
 <template>
     <div class="unit-section">
-        <search-breabcrumbs :sections="search.sections"/>
+        <search-breabcrumbs :sections="search.sections" />
 
-        <a href="javascript:void(0)"
-            v-for="link in search.questions"
-            :key="link.target"
-            class="question short-row"
-            @click="navigate(link)">
-            <span
-                v-html="link.title"/>
+        <a href="javascript:void(0)" v-for="link in search.questions" :key="link.target" class="question" :class='{
+            "short-row": search.sectionId != "critical-rules"
+        }' @click="navigate(link)">
+            <span v-html="link.title" />
         </a>
     </div>
 </template>
@@ -26,11 +23,20 @@ export default {
     components: { SearchBreabcrumbs },
     methods: {
         navigate(link) {
-            var self = this
+            if (this.search.sectionId == 'critical-rules')
+                return;
+
+            const coverPageId = this.$config.coverPageId == undefined
+                ? this.$config.model.coverPageId
+                : this.$config.coverPageId
+            const routeName = coverPageId == this.search.sectionId
+                ? 'cover'
+                : 'section'
+
             this.$router.push(
-                { name: 'section', params: { sectionId: this.search.sectionId }, hash: '#' + link.target },
+                { name: routeName, params: { sectionId: this.search.sectionId }, hash: '#' + link.target },
                 undefined,
-                () => { self.$store.dispatch('sectionRequireScroll', {id: '#' + link.target}) }
+                () => { this.$store.dispatch('sectionRequireScroll', { id: '#' + link.target }) }
             )
         },
     },

@@ -315,9 +315,6 @@
   <data name="WB0067_VariableNameIsEmpty" xml:space="preserve">
     <value>Numele identificatorului listei sau al variabilei nu poate fi gol</value>
   </data>
-  <data name="WB0068_RosterHasMoreThanAllowedChildElements" xml:space="preserve">
-    <value>Lista nu poate avea mai mult de {0} liste la nivelul ierarhic inferior</value>
-  </data>
   <data name="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" xml:space="preserve">
     <value>Lista are identificatorul identic cu titlul chestionarului</value>
   </data>
@@ -347,12 +344,6 @@
   </data>
   <data name="WB0079_MultimediaShouldNotHaveValidationExpression" xml:space="preserve">
     <value>Întrebarea cu imagini nu poate avea condiții de validare</value>
-  </data>
-  <data name="WB0080_LongRosterCannotHaveNestedRosters" xml:space="preserve">
-    <value>Lista cu mai mult de {0} întrebări nu poate conține alte liste </value>
-  </data>
-  <data name="WB0081_LongRosterCannotBeNested" xml:space="preserve">
-    <value>Lista cu mai mult de {0} întrebări nu poate fi inclusă în altă listă</value>
   </data>
   <data name="WB0082_RosterSizeMultiOptionQuestionShouldBeLimited" xml:space="preserve">
     <value>Întrebarea cu variante de răspuns multiple care este sursa acestei liste trebuie să aibă definit un număr maxim de întrebări</value>

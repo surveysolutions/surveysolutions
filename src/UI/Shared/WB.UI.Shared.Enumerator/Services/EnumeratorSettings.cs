@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Android.App;
-using Android.Content.PM;
+﻿using Android.Content.PM;
 using Android.Gms.Common;
 using Android.OS;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Shared.Enumerator.Utils;
@@ -269,6 +264,12 @@ namespace WB.UI.Shared.Enumerator.Services
         public void SetWebInterviewUrlTemplate(string webInterviewUriTemplate)
         {
             this.SaveCurrentSettings(settings => settings.WebInterviewUriTemplate = webInterviewUriTemplate);
+        }
+
+        public string EsriApiKey => this.CurrentWorkspaceSettings.EsriApiKey;
+        public void SetEsriApiKey(string esriApiKey)
+        {
+            this.SaveCurrentSettings(settings => settings.EsriApiKey = esriApiKey);
         }
     }
 }

@@ -33,6 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public DateTimeOffset? InterviewerAssignedDateTime { get; set; }
         public int? AssignmentId { get; set; }
         public InterviewMode Mode { get; set; }
+        public Guid[] FailedCriticalRules { get; set; } = [];
 
         private Guid? supervisorId;
 

@@ -144,13 +144,13 @@ Vous pouvez créer ou modifier vos questionnaires dans au site Designer de Surve
     <value>Point du service web :</value>
   </data>
   <data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
-    <value>Votre compte d'utilisateur est verrouillé. Veuillez contacter l'équipe de soutien à support@mysurvey.solutions.</value>
+    <value>Votre compte d'utilisateur est verrouillé. Veuillez contacter l'équipe de soutien.</value>
   </data>
   <data name="ErrorMessage_AccountIsNotApprovedOnServer" xml:space="preserve">
     <value>Votre compte n'est pas approuvé. Veuillez vérifier votre compte d'abord.</value>
   </data>
   <data name="ErrorMessage_InternalServerError" xml:space="preserve">
-    <value>Erreur du serveur. Veuillez contacter l'équipe de soutien à support@mysurvey.solutions</value>
+    <value>Erreur du serveur. Veuillez contacter l'équipe de soutien</value>
   </data>
   <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
     <value>L'URL de Survey Solutions Designer n'est pas valide. Vérifiez l'adresse dans les paramètres.</value>

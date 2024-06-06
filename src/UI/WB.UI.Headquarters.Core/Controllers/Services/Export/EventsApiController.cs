@@ -32,7 +32,7 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
         [Route("interview/events", Name = "EventsFeed")]
         [HttpGet]
         [ResponseCache(NoStore = true)]
-        public async Task<ActionResult> Get(int sequence = 0, int pageSize = 500)
+        public async Task<ActionResult> Get(long sequence = 0, int pageSize = 500)
         {
             var maximum = await this.headquartersEventStore.GetMaximumGlobalSequence();
 

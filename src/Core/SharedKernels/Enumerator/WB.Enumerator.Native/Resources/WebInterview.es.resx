@@ -322,7 +322,7 @@
     <value>La entrevista contiene el número total de instancias de la lista y preguntas que exceden los límites del sistema.</value>
   </data>
   <data name="NoteForSupervisor" xml:space="preserve">
-    <value>Nota para el supervisor</value>
+      <value>Nota</value>
   </data>
   <data name="ResumeInterview" xml:space="preserve">
     <value>Reanudar entrevista</value>

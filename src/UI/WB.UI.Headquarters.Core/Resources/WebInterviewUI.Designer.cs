@@ -501,6 +501,24 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
+        public static string CriticalQuestionErrors {
+            get {
+                return ResourceManager.GetString("CriticalQuestionErrors", resourceCulture);
+            }
+        }
+        
+        public static string CriticalityConditionsErrors {
+            get {
+                return ResourceManager.GetString("CriticalityConditionsErrors", resourceCulture);
+            }
+        }
+        
+        public static string UnansweredQuestions {
+            get {
+                return ResourceManager.GetString("UnansweredQuestions", resourceCulture);
+            }
+        }
+        
         public static string CompleteNoteToSupervisor {
             get {
                 return ResourceManager.GetString("CompleteNoteToSupervisor", resourceCulture);
@@ -618,6 +636,36 @@ namespace WB.UI.Headquarters.Resources {
         public static string WebTesterSessionOverMessage {
             get {
                 return ResourceManager.GetString("WebTesterSessionOverMessage", resourceCulture);
+            }
+        }
+        
+        public static string CompleteCommentCriticalityLevelBlock {
+            get {
+                return ResourceManager.GetString("CompleteCommentCriticalityLevelBlock", resourceCulture);
+            }
+        }
+        
+        public static string CompleteCommentCriticalityLevelWarn {
+            get {
+                return ResourceManager.GetString("CompleteCommentCriticalityLevelWarn", resourceCulture);
+            }
+        }
+        
+        public static string CompleteNoteCommentCriticality {
+            get {
+                return ResourceManager.GetString("CompleteNoteCommentCriticality", resourceCulture);
+            }
+        }
+        
+        public static string CompleteCriticalityWarnConfirmation {
+            get {
+                return ResourceManager.GetString("CompleteCriticalityWarnConfirmation", resourceCulture);
+            }
+        }
+        
+        public static string ConfirmationNeededTitle {
+            get {
+                return ResourceManager.GetString("ConfirmationNeededTitle", resourceCulture);
             }
         }
         
@@ -822,6 +870,36 @@ namespace WB.UI.Headquarters.Resources {
         public static string AssignmentLimitError {
             get {
                 return ResourceManager.GetString("AssignmentLimitError", resourceCulture);
+            }
+        }
+        
+        public static string CompleteInterviewStatus {
+            get {
+                return ResourceManager.GetString("CompleteInterviewStatus", resourceCulture);
+            }
+        }
+        
+        public static string Complete_CriticalUnansweredQuestions {
+            get {
+                return ResourceManager.GetString("Complete_CriticalUnansweredQuestions", resourceCulture);
+            }
+        }
+        
+        public static string Complete_FailedCriticalRules {
+            get {
+                return ResourceManager.GetString("Complete_FailedCriticalRules", resourceCulture);
+            }
+        }
+        
+        public static string Complete_UnansweredQuestions {
+            get {
+                return ResourceManager.GetString("Complete_UnansweredQuestions", resourceCulture);
+            }
+        }
+        
+        public static string Complete_QuestionsWithErrors {
+            get {
+                return ResourceManager.GetString("Complete_QuestionsWithErrors", resourceCulture);
             }
         }
     }

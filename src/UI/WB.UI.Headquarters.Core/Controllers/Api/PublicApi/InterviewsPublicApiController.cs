@@ -154,7 +154,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return NotFound();
             }
 
-            var statistics = this.statefulInterviewSearcher.GetStatistics(interview);
+            var questionnaire = questionnaireStorage.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, null);
+
+            var statistics = this.statefulInterviewSearcher.GetStatistics(interview, questionnaire);
             var diagnosticsInfo = diagnosticsFactory.GetById(id);
 
             InterviewSummary interviewSummary = this.allInterviewsViewFactory.Load(id);

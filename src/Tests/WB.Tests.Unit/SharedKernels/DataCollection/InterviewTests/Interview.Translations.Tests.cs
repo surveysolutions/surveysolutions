@@ -170,10 +170,20 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                     new KeyValuePair<string, IComposite[]>(null, new IComposite[]
                     {
                         Create.Entity.SingleOptionQuestion(questionIdentity.Id, "combobox",
-                            answers: new List<Answer> {Create.Entity.Answer("EnValue1", 1), Create.Entity.Answer("EnvValue2", 2)}),
-                        Create.Entity.SingleOptionQuestion(cascadingIdentity.Id, "cascading", cascadeFromQuestionId: questionIdentity.Id,
-                            answers: new List<Answer> {Create.Entity.Answer("Default language %combobox% 1", 1, 1), Create.Entity.Answer("Default %combobox% value 2", 2, 2)}),
-                        Create.Entity.TextQuestion(substituteIdentity.Id, "subst", text: "Sub me, and then, %combobox% и %cascading%")
+                            answers: new List<Answer>
+                            {
+                                Create.Entity.Answer("EnValue1", 1), 
+                                Create.Entity.Answer("EnvValue2", 2)
+                            }),
+                        Create.Entity.SingleOptionQuestion(cascadingIdentity.Id, "cascading", 
+                            cascadeFromQuestionId: questionIdentity.Id,
+                            answers: new List<Answer>
+                            {
+                                Create.Entity.Answer("Default language %combobox% 1", 1, 1), 
+                                Create.Entity.Answer("Default %combobox% value 2", 2, 2)
+                            }),
+                        Create.Entity.TextQuestion(substituteIdentity.Id, "subst", 
+                            text: "Sub me, and then, %combobox% и %cascading%")
                     }),
 
                     new KeyValuePair<string, IComposite[]>(ruTranslationName, new IComposite[]

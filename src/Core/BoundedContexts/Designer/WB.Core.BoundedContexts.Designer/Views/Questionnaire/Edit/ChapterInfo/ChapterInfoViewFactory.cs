@@ -194,7 +194,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 Type = question.QuestionType,
                 LinkedToQuestionId = question.LinkedToQuestionId?.FormatGuid(),
                 LinkedToRosterId = question.LinkedToRosterId?.FormatGuid(),
-                LinkedFilterExpression = question.LinkedFilterExpression
+                LinkedFilterExpression = question.LinkedFilterExpression,
+                IsCritical = question.Properties?.IsCritical ?? false,
             };
         }
 

@@ -262,6 +262,24 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                         formattedId);
                 }
             }
+
+            for (int index = 0; index < questionnaire.CriticalRules.Count; index++)
+            {
+                var criticalityCondition = questionnaire.CriticalRules[index];
+                var conditionExpression = this.macrosSubstitutionService.InlineMacros(criticalityCondition.Expression, questionnaire.Macros.Values);
+                var methodName = CodeGeneratorV2.CriticalRulePrefix + criticalityCondition.Id.FormatGuid();
+                
+                if (!string.IsNullOrWhiteSpace(conditionExpression))
+                {
+                    yield return new ConditionMethodModel(
+                        ExpressionLocation.CriticalRule(criticalityCondition.Id, index),
+                        levelClassNames.First().Value,
+                        methodName,
+                        conditionExpression,
+                        false,
+                        CodeGeneratorV2.QuestionnaireIdName);
+                }
+            }
         }
 
         public IEnumerable<LookupTableTemplateModel> CreateLookupModels(QuestionnaireCodeGenerationPackage package)

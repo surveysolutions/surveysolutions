@@ -20,6 +20,7 @@ using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage.Postgre;
 
@@ -65,7 +66,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             string comment, string requestUrl, bool includePdf = true)
         {
             return ImportAndMigrateAssignments(questionnaireId, name, isCensusMode, comment, requestUrl, includePdf,
-                false, null);
+                false, null, null);
         }
 
         public async Task<QuestionnaireImportResult> ImportAndMigrateAssignments(Guid questionnaireId, 
@@ -75,7 +76,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             string requestUrl, 
             bool includePdf, 
             bool shouldMigrateAssignments, 
-            QuestionnaireIdentity migrateFrom)
+            QuestionnaireIdentity migrateFrom,
+            CriticalityLevel? criticalityLevel)
         {
             var userId = authorizedUser.Id;
             var userName = authorizedUser.UserName;
@@ -114,7 +116,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         var questionnaireImportService = (QuestionnaireImportService)serviceLocatorLocal.GetInstance<IQuestionnaireImportService>();
                         var result = await questionnaireImportService.ImportImpl(designerCredentials, serviceLocatorLocal, userId, userName, 
                             questionnaireId, questionnaireImportResult, name, isCensusMode, comment, requestUrl, 
-                            shouldMigrateAssignments, migrateFrom, includePdf);
+                            shouldMigrateAssignments, migrateFrom, includePdf, criticalityLevel);
                         return result;
                     }
                     finally
@@ -163,7 +165,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IServiceLocator serviceLocator, Guid userId, string userName, Guid questionnaireId, 
             QuestionnaireImportResult questionnaireImportResult, string name, bool isCensusMode,
             string comment, string requestUrl, bool shouldMigrateAssignments, 
-            QuestionnaireIdentity migrateFrom, bool includePdf = true)
+            QuestionnaireIdentity migrateFrom, bool includePdf = true,
+            CriticalityLevel? criticalityLevel = null)
         {
             var designerApi = serviceLocator.GetInstance<IDesignerApi>();
 
@@ -261,7 +264,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     questionnairePackage.QuestionnaireAssembly,
                     questionnairePackage.QuestionnaireContentVersion,
                     questionnaireIdentity.Version,
-                    comment));
+                    comment,
+                    questionnairePackage.HasCriticalityCheck,
+                    criticalityLevel));
                 questionnaireProgress.Report(80);
 
                 logger.Verbose($"UpdateRevisionMetadata: {questionnaire.Title}({questionnaire.PublicKey} rev.{questionnaire.Revision})");
@@ -276,7 +281,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     });
                 questionnaireProgress.Report(95);
 
-                auditLog.QuestionnaireImported(questionnaire.Title, questionnaireIdentity, userId, userName);
+                auditLog.QuestionnaireImported(questionnaire.Title, questionnaireIdentity, userId, userName, criticalityLevel);
                 questionnaireProgress.Report(100);
 
                 questionnaireImportResult.ProgressPercent = 100;

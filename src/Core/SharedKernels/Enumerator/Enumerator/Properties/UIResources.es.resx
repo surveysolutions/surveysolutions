@@ -142,13 +142,13 @@
     <value>Extremo de servicio Web:</value>
   </data>
   <data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
-    <value>Su cuenta de usuario está bloqueada. Por favor, póngase en contacto con el equipo de soporte escribiendo a support@mysurvey.solutions.</value>
+    <value>Su cuenta de usuario está bloqueada. Por favor, póngase en contacto con el equipo de soporte.</value>
   </data>
   <data name="ErrorMessage_AccountIsNotApprovedOnServer" xml:space="preserve">
     <value>Su cuenta no está aprobada. Por favor, confirme su cuenta primero.</value>
   </data>
   <data name="ErrorMessage_InternalServerError" xml:space="preserve">
-    <value>Error del servidor. Por favor, póngase en contacto con el equipo de soporte escribiendo a support@mysurvey.solutions</value>
+    <value>Error del servidor. Por favor, póngase en contacto con el equipo de soporte.</value>
   </data>
   <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
     <value>La URL de Survey Solutions Designer no es válida. Compruebe la configuración.</value>

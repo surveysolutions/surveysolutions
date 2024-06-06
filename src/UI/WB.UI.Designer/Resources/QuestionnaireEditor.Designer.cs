@@ -11,7 +11,7 @@ namespace WB.UI.Designer.Resources {
     using System;
     
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class QuestionnaireEditor {
@@ -387,6 +387,78 @@ namespace WB.UI.Designer.Resources {
             }
         }
         
+        public static string SideBarCriticalityConditionExpression {
+            get {
+                return ResourceManager.GetString("SideBarCriticalityConditionExpression", resourceCulture);
+            }
+        }
+        
+        public static string SideBarCriticalityConditionsCounter {
+            get {
+                return ResourceManager.GetString("SideBarCriticalityConditionsCounter", resourceCulture);
+            }
+        }
+        
+        public static string SideBarCriticalityConditionsCounter_plural {
+            get {
+                return ResourceManager.GetString("SideBarCriticalityConditionsCounter_plural", resourceCulture);
+            }
+        }
+        
+        public static string SideBarCriticalityConditionDescription {
+            get {
+                return ResourceManager.GetString("SideBarCriticalityConditionDescription", resourceCulture);
+            }
+        }
+        
+        public static string SideBarCriticalityConditionsEmptyLine1 {
+            get {
+                return ResourceManager.GetString("SideBarCriticalityConditionsEmptyLine1", resourceCulture);
+            }
+        }
+        
+        public static string SideBarCriticalityConditionsEmptyLine2 {
+            get {
+                return ResourceManager.GetString("SideBarCriticalityConditionsEmptyLine2", resourceCulture);
+            }
+        }
+        
+        public static string SideBarCriticalityConditionsEmptyLine3 {
+            get {
+                return ResourceManager.GetString("SideBarCriticalityConditionsEmptyLine3", resourceCulture);
+            }
+        }
+        
+        public static string SideBarHideDescription {
+            get {
+                return ResourceManager.GetString("SideBarHideDescription", resourceCulture);
+            }
+        }
+        
+        public static string SideBarCriticalityConditionMessage {
+            get {
+                return ResourceManager.GetString("SideBarCriticalityConditionMessage", resourceCulture);
+            }
+        }
+        
+        public static string SideBarShowDescription {
+            get {
+                return ResourceManager.GetString("SideBarShowDescription", resourceCulture);
+            }
+        }
+        
+        public static string SideBarAddCriticalityCondition {
+            get {
+                return ResourceManager.GetString("SideBarAddCriticalityCondition", resourceCulture);
+            }
+        }
+        
+        public static string SideBarCriticalityConditionNoMessage {
+            get {
+                return ResourceManager.GetString("SideBarCriticalityConditionNoMessage", resourceCulture);
+            }
+        }
+        
         public static string SideBarScenarioCounter {
             get {
                 return ResourceManager.GetString("SideBarScenarioCounter", resourceCulture);
@@ -642,6 +714,12 @@ namespace WB.UI.Designer.Resources {
         public static string SideBarCommentsTitle {
             get {
                 return ResourceManager.GetString("SideBarCommentsTitle", resourceCulture);
+            }
+        }
+        
+        public static string SideBarCriticalityConditionsTitle {
+            get {
+                return ResourceManager.GetString("SideBarCriticalityConditionsTitle", resourceCulture);
             }
         }
         
@@ -2559,6 +2637,18 @@ namespace WB.UI.Designer.Resources {
             }
         }
         
+        public static string RefreshPageConfirm {
+            get {
+                return ResourceManager.GetString("RefreshPageConfirm", resourceCulture);
+            }
+        }
+        
+        public static string Refresh {
+            get {
+                return ResourceManager.GetString("Refresh", resourceCulture);
+            }
+        }
+        
         public static string NotSupportedAttachment {
             get {
                 return ResourceManager.GetString("NotSupportedAttachment", resourceCulture);
@@ -3000,6 +3090,30 @@ namespace WB.UI.Designer.Resources {
         public static string No {
             get {
                 return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        public static string QuestionIsCritical {
+            get {
+                return ResourceManager.GetString("QuestionIsCritical", resourceCulture);
+            }
+        }
+        
+        public static string HelpIsCritical {
+            get {
+                return ResourceManager.GetString("HelpIsCritical", resourceCulture);
+            }
+        }
+        
+        public static string HelpCriticalityConditionExpression {
+            get {
+                return ResourceManager.GetString("HelpCriticalityConditionExpression", resourceCulture);
+            }
+        }
+        
+        public static string HelpCriticalityConditionMessage {
+            get {
+                return ResourceManager.GetString("HelpCriticalityConditionMessage", resourceCulture);
             }
         }
     }

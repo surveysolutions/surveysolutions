@@ -41,5 +41,8 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         void SetGeographyQuestionAccuracyInMeters(int geographyQuestionAccuracyInMeters);
         int GeographyQuestionPeriodInSeconds { get; }
         void SetGeographyQuestionPeriodInSeconds(int geographyQuestionPeriodInSeconds);
+        
+        string EsriApiKey { get; }
+        void SetEsriApiKey(string esriApiKey);
     }
 }

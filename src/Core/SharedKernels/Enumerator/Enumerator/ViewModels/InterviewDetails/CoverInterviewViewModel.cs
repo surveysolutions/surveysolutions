@@ -110,7 +110,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.AssignmentId = !assignmentId.HasValue ? null : string.Format(UIResources.AssignmentN, assignmentId);
 
             this.CountOfCommentedQuestions = interview.GetCommentedBySupervisorQuestionsVisibleToInterviewer().Count();
-            this.CommentedEntities = entitiesListViewModelFactory.GetEntitiesWithComments(interviewId, navigationState).ToList();
+            this.CommentedEntities = entitiesListViewModelFactory.GetTopEntitiesWithComments(interviewId, navigationState).ToList();
 
             this.CommentedEntitiesDescription = CountOfCommentedQuestions == 0
                 ? UIResources.Interview_Cover_Supervisor_Comments_does_not_exists

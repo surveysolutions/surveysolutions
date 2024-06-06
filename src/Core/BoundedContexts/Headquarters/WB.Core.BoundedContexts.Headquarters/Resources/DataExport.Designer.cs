@@ -51,12 +51,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
             }
         }
         
-        public static string RemoveExportCacheGeneratingFail {
-            get {
-                return ResourceManager.GetString("RemoveExportCacheGeneratingFail", resourceCulture);
-            }
-        }
-        
         public static string DataExport_Header {
             get {
                 return ResourceManager.GetString("DataExport_Header", resourceCulture);

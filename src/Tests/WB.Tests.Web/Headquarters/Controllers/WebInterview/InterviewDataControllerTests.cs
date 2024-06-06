@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Controllers;
 using WB.Enumerator.Native.WebInterview.Models;
@@ -68,7 +69,8 @@ namespace WB.Tests.Web.Headquarters.Controllers.WebInterview
                 Mock.Of<IStatefulInterviewSearcher>(),
                 Mock.Of<IInterviewFactory>(),
                 Mock.Of<IChangeStatusFactory>(),
-                Mock.Of<IInterviewBrokenPackagesService>());
+                Mock.Of<IInterviewBrokenPackagesService>(),
+                Mock.Of<IQuestionnaireSettings>());
 
             return controller;
         }

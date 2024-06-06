@@ -30,6 +30,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public List<Attachment> Attachments => this.Questionnaire.Attachments;
         public List<Translation> Translations => this.Questionnaire.Translations;
         public List<Categories> Categories => this.Questionnaire.Categories;
+        public List<CriticalRule> CriticalRules => this.Questionnaire.CriticalRules;
         public string Title => this.Questionnaire.Title;
         public string VariableName => this.Questionnaire.VariableName;
         public Guid PublicKey => this.Questionnaire.PublicKey;
@@ -74,6 +75,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
         }
 
+        public IEnumerable<TranslatedEntity<CriticalRule>> GetCriticalRulesWithTranslations()
+        {
+            var allQuestionnaires = this.Questionnaire.ToEnumerable().Union(this.TranslatedQuestionnaires);
+            foreach (var questionnaire in allQuestionnaires)
+            {
+                foreach (var entity in questionnaire.CriticalRules)
+                {
+                    yield return new TranslatedEntity<CriticalRule>(entity, questionnaire.Translation); 
+                }
+            }
+        }
+        
         public IEnumerable<QuestionnaireItemTypeReference> GetAllEntitiesIdAndTypePairsInQuestionnaireFlowOrder()
             => Questionnaire.GetAllEntitiesIdAndTypePairsInQuestionnaireFlowOrder();
 

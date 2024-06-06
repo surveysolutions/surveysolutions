@@ -14,10 +14,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         protected readonly IQuestionnaireStorage questionnaireRepository;
         protected readonly IGroupStateCalculationStrategy groupStateCalculationStrategy;
 
-        protected GroupStateViewModel()
-        {
-        }
-
         public GroupStateViewModel(IStatefulInterviewRepository interviewRepository,
             IGroupStateCalculationStrategy groupStateCalculationStrategy,
             IQuestionnaireStorage questionnaireRepository)
@@ -36,6 +32,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.interviewId = interviewId;
             this.group = groupIdentity;
             this.UpdateFromGroupModel();
+        }
+
+        public virtual void InitStatic(SimpleGroupStatus simpleGroupStatus, GroupStatus groupStatus)
+        {
+            this.interviewId = null;
+            this.SimpleStatus = simpleGroupStatus;
+            this.Status = groupStatus;
         }
 
         private int answeredQuestionsCount; 
@@ -66,18 +69,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         public GroupStatus Status
         {
             get => this.status;
-            protected set => this.RaiseAndSetIfChanged(ref this.status, value);
+            set => this.RaiseAndSetIfChanged(ref this.status, value);
         }
 
         private SimpleGroupStatus simpleStatus;
         public SimpleGroupStatus SimpleStatus
         {
-            get => this.simpleStatus;
-            protected set => this.RaiseAndSetIfChanged(ref this.simpleStatus, value);
+            get => this.simpleStatus; 
+            set => this.RaiseAndSetIfChanged(ref this.simpleStatus, value);
         }
 
         public virtual void UpdateFromGroupModel()
         {
+            if (this.interviewId == null)
+                return;
+            
             IStatefulInterview interview = this.interviewRepository.Get(this.interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
             this.QuestionsCount = interview.CountEnabledQuestions(this.group);
@@ -104,7 +110,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             }
         }
 
-        private GroupStatus CalculateDetailedStatus(Identity groupIdentity, IStatefulInterview interview, IQuestionnaire questionnaire)
+        private GroupStatus CalculateDetailedStatus(Identity groupIdentity, IStatefulInterview interview, 
+            IQuestionnaire questionnaire)
         {
             return this.groupStateCalculationStrategy.CalculateDetailedStatus(groupIdentity, interview, questionnaire);
         }

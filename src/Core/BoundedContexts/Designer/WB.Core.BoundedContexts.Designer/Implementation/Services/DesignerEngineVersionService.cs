@@ -278,7 +278,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             },
             new QuestionnaireContentVersion
             {
-                Version = ApiVersion.MaxQuestionnaireVersion,
+                Version = 34,
                 NewFeatures = new []
                 {
                     new QuestionnaireFeature
@@ -370,6 +370,36 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     ),
                 }
             },
+            new QuestionnaireContentVersion
+            {
+                Version = 35,
+                NewFeatures = new []
+                {
+                    new QuestionnaireFeature
+                    (
+                        hasQuestionnaire: questionnaire => 
+                            questionnaire.FirstOrDefault<IQuestion>(x => x.Properties?.IsCritical == true) != null,
+                        description: "Some question in questionnaire is Critical"
+                    ),
+                    new QuestionnaireFeature
+                    (
+                        hasQuestionnaire: questionnaire => questionnaire.CriticalRules?.Count > 0,
+                        description: "This questionnaire use Critical rules feature"
+                    ),
+                }
+            },
+            new QuestionnaireContentVersion
+            {
+                Version = ApiVersion.MaxQuestionnaireVersion, 
+                NewFeatures = new []
+                {
+                    new QuestionnaireFeature
+                    (
+                        hasQuestionnaire : questionnaire => questionnaire.Find<NumericQuestion>(q => q is { IsInteger: false, CountOfDecimalPlaces: 0 } ).Any(),
+                        description : "Decimal question with zero decimal places"
+                    )
+                }
+            },
         };
 
         private bool HasTranslatedTitle(QuestionnaireDocument questionnaire)
@@ -413,6 +443,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
 
             return OldestQuestionnaireContentVersion;
+        }
+        
+        public bool DoesQuestionnaireSupportCriticality(QuestionnaireDocument questionnaire)
+        {
+            return questionnaire.CriticalRules?.Count > 0 
+                   || questionnaire.FirstOrDefault<IQuestion>(x => x.Properties?.IsCritical == true) != null;
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.UI.Headquarters.API.WebInterview;
 
@@ -10,14 +11,16 @@ namespace WB.UI.Headquarters.Services.Impl
     public class InterviewQuestionFilter
     {
         private readonly Func<InterviewQuestionFilter, bool> rule;
+        private readonly IQuestionnaire questionnaire;
         private readonly HashSet<Identity> flaggedQuestionsSet;
         private HashSet<FilterOption> filters;
         private IInterviewTreeNode node;
 
         public InterviewQuestionFilter(HashSet<Identity> flaggedQuestionsSetQuestions,
-            Func<InterviewQuestionFilter, bool> rule)
+            Func<InterviewQuestionFilter, bool> rule, IQuestionnaire questionnaire)
         {
             this.rule = rule;
+            this.questionnaire = questionnaire;
             this.flaggedQuestionsSet = flaggedQuestionsSetQuestions;
             
         }
@@ -77,6 +80,7 @@ namespace WB.UI.Headquarters.Services.Impl
                         case FilterOption.NotAnswered: return !question.IsAnswered();
                         case FilterOption.ForSupervisor: return question.IsSupervisors;
                         case FilterOption.ForInterviewer: return question.IsInterviewer && !question.IsReadonly;
+                        case FilterOption.CriticalQuestions: return questionnaire.IsQuestionCritical(question.Identity.Id);
                         default:
                             return @default;
                     }

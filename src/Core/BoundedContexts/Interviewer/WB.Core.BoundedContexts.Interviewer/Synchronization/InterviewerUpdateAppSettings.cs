@@ -27,6 +27,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
             interviewerSettings.SetWebInterviewUrlTemplate(tabletSettings.WebInterviewUrlTemplate);
             interviewerSettings.SetGeographyQuestionAccuracyInMeters(tabletSettings.GeographyQuestionAccuracyInMeters);
             interviewerSettings.SetGeographyQuestionPeriodInSeconds(tabletSettings.GeographyQuestionPeriodInSeconds);
+            interviewerSettings.SetEsriApiKey(tabletSettings.EsriApiKey);
             interviewerSettings.SetNotifications(tabletSettings.NotificationsEnabled);
         }
     }

@@ -6,5 +6,6 @@ namespace WB.Core.SharedKernels.DataCollection.Services
     public interface ISubstitutionTextFactory
     {
         SubstitutionText CreateText(Identity identity, string text, IQuestionnaire questionnaire);
+        SubstitutionText CreateText(string text, IQuestionnaire questionnaire);
     }
 }

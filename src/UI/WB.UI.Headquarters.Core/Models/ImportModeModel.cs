@@ -26,5 +26,7 @@ namespace WB.UI.Headquarters.Models
         public string SurveySetupUrl { get; set; }
         public string ListOfMyQuestionnaires { get; set; }
         public string CheckImportingStatus { get; set; }
+        
+        public ComboboxViewItem[] CriticalityLevels { get; set; }
     }
 }

@@ -71,7 +71,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
         {
             var questionnaire = Mock.Of<IQuestionnaire>(_
                 => _.IsRosterSizeQuestion(questionIdentity.Id) == isRosterSize
-                && _.IsQuestionIsRosterSizeForLongRoster(questionIdentity.Id) == isLongRosterSize
             );
             return Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
         }

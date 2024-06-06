@@ -302,7 +302,7 @@ Děkujeme za spolupráci!</value>
     <value>Byli jste pozváni k účasti v následujícím šetření: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="NoteForSupervisor" xml:space="preserve">
-    <value>Poznámka pro garanta</value>
+      <value>Poznámka</value>
   </data>
   <data name="NotStartedText" xml:space="preserve">
     <value>Ještě nezačaté</value>

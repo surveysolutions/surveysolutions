@@ -126,7 +126,7 @@ export const useTreeStore = defineStore('tree', {
         },
 
         questionUpdated(data) {
-            const itemId = data.id.replaceAll('-', '');
+            const itemId = data.id.split('-').join('');
             var question = this.findTreeItem(itemId);
             if (isNull(question) || isUndefined(question)) return;
 
@@ -141,6 +141,7 @@ export const useTreeStore = defineStore('tree', {
             question.isInteger = data.isInteger;
             question.yesNoView = data.yesNoView;
             question.hideIfDisabled = data.hideIfDisabled;
+            question.isCritical = data.isCritical;
 
             const varType = this.getUnderlyingQuestionType(question);
             this.updateVariableName(itemId, data.variableName, varType);
@@ -188,7 +189,7 @@ export const useTreeStore = defineStore('tree', {
         },
 
         staticTextUpdated(event) {
-            const itemId = event.id.replaceAll('-', '');
+            const itemId = event.id.split('-').join('');
             var staticText = this.findTreeItem(itemId);
             if (isNull(staticText) || isUndefined(staticText)) return;
             staticText.text = event.text;
@@ -230,7 +231,7 @@ export const useTreeStore = defineStore('tree', {
         },
 
         groupUpdated(payload) {
-            const itemId = payload.group.id.replaceAll('-', '');
+            const itemId = payload.group.id.split('-').join('');
             const hasCondition =
                 payload.group.enablementCondition !== null &&
                 /\S/.test(payload.group.enablementCondition);
@@ -261,7 +262,7 @@ export const useTreeStore = defineStore('tree', {
                 data.roster.enablementCondition !== null &&
                 /\S/.test(data.roster.enablementCondition);
 
-            const itemId = data.roster.itemId.replaceAll('-', '');
+            const itemId = data.roster.itemId.split('-').join('');
             var roster = this.findTreeItem(itemId);
             if (isNull(roster) || isUndefined(roster)) return;
             roster.title = data.roster.title;
@@ -273,7 +274,7 @@ export const useTreeStore = defineStore('tree', {
         },
 
         updateVariableName(id, newName, type) {
-            const trimId = id.replaceAll('-', '');
+            const trimId = id.split('-').join('');
             var index = findIndex(this.info.variableNames, function(i) {
                 return i.id === trimId;
             });
@@ -291,7 +292,7 @@ export const useTreeStore = defineStore('tree', {
         },
         removeVariableName(id) {
             var index = findIndex(this.info.variableNames, function(i) {
-                return i.id === id.replaceAll('-', '');
+                return i.id === id.split('-').join('');
             });
             if (index > -1) {
                 this.info.variableNames.splice(index, 1);
@@ -360,7 +361,7 @@ export const useTreeStore = defineStore('tree', {
             this.fetchTree(this.questionnaireId, this.chapterId);
         },
         deleteTreeNode(itemId) {
-            const id = itemId.replaceAll('-', '');
+            const id = itemId.split('-').join('');
             var parent = this.findTreeItemParent(id);
             if (isNull(parent) || isUndefined(parent)) return;
 
@@ -410,7 +411,7 @@ export const useTreeStore = defineStore('tree', {
             this.treeItemMoved(event.itemId, event.newParentId, event.newIndex);
         },
         treeItemMoved(itemId, newParentId, newIndex) {
-            const id = itemId.replaceAll('-', '');
+            const id = itemId.split('-').join('');
             var treeItem = this.findTreeItem(id);
             if (isNull(treeItem) || isUndefined(treeItem)) {
                 return;

@@ -12,6 +12,7 @@ using MvvmCross.ViewModels;
 using MvvmCross.Views;
 using WB.Core.BoundedContexts.Tester;
 using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.Core.BoundedContexts.Tester.Views;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
@@ -47,9 +48,9 @@ namespace WB.UI.Tester
             return CreateAndInitializeIoc();
         }
 
-        protected override void InitializeApp(IMvxPluginManager pluginManager, IMvxApplication app)
+        protected override void InitializeApp(IMvxApplication app)
         {
-            base.InitializeApp(pluginManager, app);
+            base.InitializeApp(app);
 
             string appcenterKey = ApplicationContext.Resources.GetString(Resource.String.appcenter_key);
             if (!string.IsNullOrEmpty(appcenterKey))
@@ -63,12 +64,6 @@ namespace WB.UI.Tester
                 ServiceLocator.Current.GetInstance<IMapInteractionService>().SetLicenseKey(arcgisruntimeKey);
             }
             
-            string arcgisruntimeApiKey = ApplicationContext.Resources.GetString(Resource.String.arcgisruntime_api_key);
-            if (!string.IsNullOrEmpty(arcgisruntimeApiKey))
-            {
-                ServiceLocator.Current.GetInstance<IMapInteractionService>().SetApiKey(arcgisruntimeApiKey);
-            }
-
             var status = new UnderConstructionInfo();
             status.Run();
 
@@ -84,9 +79,7 @@ namespace WB.UI.Tester
 
         private IMvxIoCProvider CreateAndInitializeIoc()
         {
-            var basePath = Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.Personal))
-               ? Environment.GetFolderPath(Environment.SpecialFolder.Personal)
-               : AndroidPathUtils.GetPathToExternalDirectory();
+            var basePath = AndroidPathUtils.GetPathToInternalOrExternalDirectory();
 
             this.modules = new IModule[]
             {
@@ -124,9 +117,9 @@ namespace WB.UI.Tester
             var viewModelViewLookup1 = new Dictionary<Type, Type>()
             {
                 {typeof (LoginViewModel), typeof (LoginActivity)},
-                {typeof (InterviewViewModel), typeof (InterviewActivity)},
+                {typeof (TesterInterviewViewModel), typeof (InterviewActivity)},
                 {typeof (DashboardViewModel), typeof (DashboardActivity)},
-                {typeof (CompleteInterviewViewModel), typeof (CompleteInterviewFragment)},
+                {typeof (TesterCompleteInterviewViewModel), typeof (CompleteInterviewFragment)},
                 {typeof (PhotoViewViewModel), typeof(PhotoViewActivity) },
 #if !EXCLUDEEXTENSIONS
                 { typeof (WB.UI.Shared.Extensions.ViewModels.GeographyEditorViewModel), typeof (WB.UI.Shared.Extensions.Activities.GeographyEditorActivity)}

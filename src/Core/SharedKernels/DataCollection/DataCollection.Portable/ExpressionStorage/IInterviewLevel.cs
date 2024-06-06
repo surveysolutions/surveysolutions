@@ -2,6 +2,12 @@ using System;
 
 namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
 {
+    public interface ICriticalRuleLevel
+    {
+        Func<bool> GetCriticalRule(Guid criticalRuleId);
+    }
+    
+    
     public interface IInterviewLevel
     {
         Func<bool> GetConditionExpression(Identity entitIdentity);

@@ -1805,4 +1805,28 @@
   <data name="QuestionnaireVersionAndName" xml:space="preserve">
       <value>[вер. {1}] {0} </value>
   </data>
+  <data name="Questionnaire_ChangeCriticalVerificationLevelTitle" xml:space="preserve">
+      <value>Установить действие при отправке</value>
+  </data>
+  <data name="Questionnaire_CriticalVerificationLevel" xml:space="preserve">
+      <value>Действие при отправке</value>
+  </data>
+  <data name="Questionnaire_SetActionOnSubmissionExplanation" xml:space="preserve">
+      <value>Выберете действие, при отправке интервью.</value>
+  </data>
+    <data name="Questionnaire_SetActionOnSubmissionExplanationIgnore" xml:space="preserve">
+      <value>Игнорировать - не проверять правила.</value>
+  </data>
+    <data name="Questionnaire_SetActionOnSubmissionExplanationWarn" xml:space="preserve">
+      <value>Предупреждать - проверять правила и предупреждать пользователя.</value>
+  </data>
+    <data name="Questionnaire_SetActionOnSubmissionExplanationBlock" xml:space="preserve">
+      <value>Блокировать - проверять и запрещать отправку, если не правила не выполнены.</value>
+  </data>
+  <data name="Questionnaire_SupportCriticalVerifications" xml:space="preserve">
+      <value>Критические проверки</value>
+  </data>
+  <data name="ShowKey" xml:space="preserve">
+      <value>Показать ключ</value>
+  </data>
 </root>

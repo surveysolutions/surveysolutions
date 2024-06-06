@@ -127,6 +127,6 @@
     <value>დაკლონეთ კითხვარი</value>
   </data>
   <data name="UnexpectedError" xml:space="preserve">
-    <value>მოულოდნელი შეცდომა მოხდა.  დაუკავშირდით support@mysurvey.solutions ან მოგვიანებით სცადეთ.</value>
+    <value>მოხდა მოულოდნელი შეცდომა. დაუკავშირდით მხარდაჭერას ან სცადეთ მოგვიანებით.</value>
   </data>
 </root>

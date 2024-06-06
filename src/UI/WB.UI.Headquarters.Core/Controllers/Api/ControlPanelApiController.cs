@@ -306,7 +306,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             var report = await healthCheckService.CheckHealthAsync(c => !c.Tags.Contains("ready"), token);
             return report;
         }
-
+        
         [HttpGet]
         public ServerStatusResponse GetMetricsState()
         {
@@ -315,6 +315,13 @@ namespace WB.UI.Headquarters.Controllers.Api
                 LastUpdateTime = DateTime.UtcNow,
                 Metrics = new List<MetricState>()
             };
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult GetServerResponseByStatusCode(int statusCode)
+        {
+            return StatusCode(statusCode);
         }
 
         public class ReprocessSelectedBrokenPackagesRequestView

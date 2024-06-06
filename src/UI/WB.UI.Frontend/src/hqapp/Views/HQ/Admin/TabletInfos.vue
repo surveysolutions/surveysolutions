@@ -1,24 +1,14 @@
 <template>
     <HqLayout tag="tablet-infos-page">
         <div class="row">
-            <form
-                method="post"
-                ref="frm"
-                class="topic-with-button"
-                enctype="multipart/form-data">
+            <form method="post" ref="frm" class="topic-with-button" enctype="multipart/form-data">
                 <label class="btn btn-success btn-file">
                     {{ $t('Pages.Upload_Upload') }}
-                    <input
-                        ref="uploader"
-                        name="file"
-                        @change="onFileChange"
-                        type="file"
-                        accept=".zip"
-                        value=""/>
+                    <input ref="uploader" name="file" @change="onFileChange" type="file" accept=".zip" value="" />
                 </label>
+                <input name="__RequestVerificationToken" type="hidden" :value="this.$hq.Util.getCsrfCookie()" />
             </form>
-            <DataTables ref="table"
-                :tableOptions="tableOptions"></DataTables>
+            <DataTables ref="table" :tableOptions="tableOptions"></DataTables>
         </div>
     </HqLayout>
 </template>
@@ -40,7 +30,7 @@ export default {
                     data: 'androidId',
                     name: 'AndroidId',
                     title: this.$t('Pages.PackagesInfo_DeviceId'),
-                    render: function(data, type, row){
+                    render: function (data, type, row) {
                         return escape(data)
                     },
                 },
@@ -48,7 +38,7 @@ export default {
                     data: 'creationDate',
                     name: 'CreationDate',
                     title: this.$t('Pages.PackagesInfo_UploadDate'),
-                    render: function(data, type, row) {
+                    render: function (data, type, row) {
                         return new moment(data).format(DateFormats.dateTime)
                     },
                 },
@@ -66,7 +56,7 @@ export default {
                     data: 'size',
                     name: 'Size',
                     title: this.$t('Pages.PackagesInfo_Size'),
-                    render: function(data, _, row) {
+                    render: function (data, _, row) {
                         return `<a href=${row.downloadUrl}>${humanFileSize(
                             data
                         )} <span class="glyphicon glyphicon-download"></span></a>`

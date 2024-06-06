@@ -36,11 +36,19 @@ namespace WB.UI.Shared.Enumerator.Services
             return pathToSubfolderInLocalDirectory;
         }
 
-        public static string GetPathToInternalDirectory()
-            => Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        public static string GetPathToInternalDirectory() => 
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        
+        public static string GetPathToExternalDirectory() => 
+            Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
 
-        public static string GetPathToExternalDirectory()
-            => Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
+        public static string GetPathToInternalOrExternalDirectory()
+        {
+            var localApplicationDataDirectory = GetPathToInternalDirectory();
+            return Directory.Exists(localApplicationDataDirectory)
+                ? localApplicationDataDirectory
+                : GetPathToExternalDirectory();
+        }
 
         public static string GetPathToSubfolderInExternalDirectory(string subFolderName)
         {

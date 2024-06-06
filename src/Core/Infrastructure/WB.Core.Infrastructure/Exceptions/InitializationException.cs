@@ -25,13 +25,7 @@ namespace WB.Infrastructure.Native
         {
             this.Subsystem = subsystem;
         }
-
-        protected InitializationException(
-            SerializationInfo info,
-            StreamingContext context)
-            : base(info, context)
-        {
-        }
+        
 
         /// <summary>
         /// Specifies whether the exception is considered transient, that is, whether retrying to operation could

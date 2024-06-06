@@ -192,8 +192,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
                             if (isRosterSize)
                             {
-                                var isRosterSizeOfLongRoster = callerQuestionnaire.IsQuestionIsRosterSizeForLongRoster(identity.Id);
-                                interviewIntegerQuestion.AnswerMaxValue = isRosterSizeOfLongRoster ? Constants.MaxLongRosterRowCount : Constants.MaxRosterRowCount;
+                                interviewIntegerQuestion.AnswerMaxValue = Constants.MaxRosterRowCount;
                             }
                             interviewIntegerQuestion.Options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200, null);
 
@@ -587,6 +586,18 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 parent = interview.GetParentGroup(parent);
             }
             return parent;
+        }
+
+        public string GetCriticalRuleMessage(Guid conditionId, IStatefulInterview interview, IQuestionnaire questionnaire, bool isReview)
+        {
+            var message = interview.GetCriticalRuleMessage(conditionId);
+            return this.webNavigationService
+                .MakeNavigationLinks(message, new Identity(interview.Id, RosterVector.Empty), questionnaire, interview, WebLinksVirtualDirectory(isReview));
+        }
+
+        public string SubstituteText(string text, Identity entityId, IStatefulInterview interview, IQuestionnaire questionnaire, bool isReview)
+        {
+            return this.webNavigationService.MakeNavigationLinks(text, entityId, questionnaire, interview, WebLinksVirtualDirectory(isReview));
         }
 
         public InterviewEntityType GetEntityType(Identity identity, IQuestionnaire callerQuestionnaire,

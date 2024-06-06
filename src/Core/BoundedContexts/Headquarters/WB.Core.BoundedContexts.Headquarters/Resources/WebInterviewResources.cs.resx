@@ -127,7 +127,7 @@
     <value>Webový dotazník</value>
   </data>
   <data name="NoteForSupervisor" xml:space="preserve">
-    <value>Poznámka pro garanta</value>
+      <value>Poznámka</value>
   </data>
   <data name="StartNewInterview" xml:space="preserve">
     <value>Zahájení nového rozhovoru</value>
