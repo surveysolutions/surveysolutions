@@ -58,7 +58,7 @@ jobs:
 
     # Restore workload to build android
     - name: Install android workload
-      run: dotnet workload install android
+      run: dotnet workload restore
 
     #  Autobuild attempts to build any compiled languages  (C/C++, C#, Go, or Java).
     #  If this step fails, then you should remove it and run the build manually (see below)
