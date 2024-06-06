@@ -4,7 +4,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
 {
     public interface IMapInteractionService
     {
-        Task<AreaEditResult> EditAreaAsync(EditAreaArgs args);
+        Task<AreaEditResult> EditAreaAsync(EditAreaArgs args, bool supportOfflineMaps);
         Task OpenInterviewerMapDashboardAsync();
         Task OpenSupervisorMapDashboardAsync();
 

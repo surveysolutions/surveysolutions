@@ -187,5 +187,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
         {
             throw new NotImplementedException();
         }
+
+        public bool SupportOfflineMaps => false;
     }
 }

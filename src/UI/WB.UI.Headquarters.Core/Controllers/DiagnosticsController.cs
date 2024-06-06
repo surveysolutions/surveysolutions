@@ -50,6 +50,7 @@ namespace WB.UI.Headquarters.Controllers
         [ActivePage(MenuItem.Administration_InterviewPackages)]
         public IActionResult InterviewPackages() => View();
 
+        [AntiForgeryFilter]
         [ActivePage(MenuItem.Administration_TabletInfo)]
         public IActionResult TabletInfos() => View();
 
