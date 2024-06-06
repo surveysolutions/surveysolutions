@@ -32,11 +32,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'csharp', 'javascript' ]
-        # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
-        # Use only 'java' to analyze code written in Java, Kotlin or both
-        # Use only 'javascript' to analyze code written in JavaScript, TypeScript or both
-        # Learn more about CodeQL language support at https://aka.ms/codeql-docs/language-support
+        include:
+        - language: csharp
+          build-mode: autobuild
+        - language: javascript-typescript
+          build-mode: none
 
     steps:
     - name: Checkout repository
@@ -47,27 +47,24 @@ jobs:
       uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
+        build-mode: ${{ matrix.build-mode }}
         # If you wish to specify custom queries, you can do so here or in a config file.
         # By default, queries listed here will override any specified in a config file.
         # Prefix the list here with "+" to use these queries and those in the config file.
 
-        # Details on CodeQL's query packs refer to : https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
+        # For more details on CodeQL's query packs, refer to: https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
         # queries: security-extended,security-and-quality
     
-    #- name: Set up .NET Core
-    #  if: matrix.language == 'csharp'
-    #  uses: actions/setup-dotnet@v3
-    #  with:
-    #    dotnet-version: '8.0.x'
 
     # Restore workload to build android
-    # - name: Install android workload
-    #  run: dotnet workload install android
+    - if: matrix.blanguage == 'csharp'
+      name: Install android workload
+        run: dotnet workload install android
 
-    # Autobuild attempts to build any compiled languages  (C/C++, C#, Go, or Java).
-    # If this step fails, then you should remove it and run the build manually (see below)
-    # - name: Autobuild
-    #  uses: github/codeql-action/autobuild@v3
+    #  Autobuild attempts to build any compiled languages  (C/C++, C#, Go, or Java).
+    #  If this step fails, then you should remove it and run the build manually (see below)
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v3
 
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
