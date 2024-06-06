@@ -6,7 +6,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
 {
     public class DummyMapInteractionService : IMapInteractionService
     {
-        public Task<AreaEditResult> EditAreaAsync(EditAreaArgs args)
+        public Task<AreaEditResult> EditAreaAsync(EditAreaArgs args, bool supportOfflineMaps)
         {
             throw new NotImplementedException("This functionality is not available");
         }
