@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
@@ -24,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         
         private readonly string[] permittedFileExtensions = { TabExportFile.Extention.ToLower(), TextExportFile.Extension.ToLower() };
 
-        private PreloadingRow ToRow(int rowIndex, ExpandoObject record)
+        private PreloadingRow ToRow(int rowIndex, IEnumerable<KeyValuePair<string, object>> record)
         {
             var cells = new Dictionary<string, List<PreloadingValue>>();
             
@@ -86,12 +87,17 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             FileInfo = this.ReadTextFileInfo(inputStream, fileName),
             Rows = this.csvReader.GetRecords(inputStream, TabExportFile.Delimiter)
                 .Select((record, rowIndex) =>
-                    Path.GetFileNameWithoutExtension(fileName).Equals(ServiceFiles.ProtectedVariables, StringComparison.OrdinalIgnoreCase)
-                        ? (PreloadingRow) this.ToProtectedVariablesRow(rowIndex + 1, record)
-                        : (PreloadingRow) this.ToRow(rowIndex + 1, record)).ToArray()
+                {
+                    var enumerable = (IEnumerable<KeyValuePair<string, object>>)record;
+                    var variablesRow = Path.GetFileNameWithoutExtension(fileName).Equals(ServiceFiles.ProtectedVariables,
+                        StringComparison.OrdinalIgnoreCase)
+                        ? this.ToProtectedVariablesRow(rowIndex + 1, enumerable)
+                        : this.ToRow(rowIndex + 1, enumerable);
+                    return variablesRow;
+                }).ToArray()
         };
 
-        private PreloadingRow ToProtectedVariablesRow(int rowIndex, ExpandoObject record) => new PreloadingRow
+        private PreloadingRow ToProtectedVariablesRow(int rowIndex, IEnumerable<KeyValuePair<string, object>> record) => new PreloadingRow
         {
             RowIndex = rowIndex,
             Cells = record
