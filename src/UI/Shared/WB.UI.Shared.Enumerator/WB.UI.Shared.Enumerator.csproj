@@ -181,10 +181,10 @@
       <Version>1.10.0.2</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.GooglePlayServices.Maps">
-      <Version>118.2.0</Version>
+      <Version>118.2.0.3</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.GooglePlayServices.Nearby">
-      <Version>119.0.0</Version>
+      <Version>119.1.0.1</Version>
     </PackageReference>
     <PackageReference Include="ZXing.Net.Mobile">
       <Version>3.0.0-beta5</Version>
