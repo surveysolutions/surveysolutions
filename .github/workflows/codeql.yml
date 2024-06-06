@@ -58,8 +58,7 @@ jobs:
 
     # Restore workload to build android
     - if: matrix.blanguage == 'csharp'
-      name: Install android workload
-        run: dotnet workload install android
+      run: dotnet workload install android
 
     #  Autobuild attempts to build any compiled languages  (C/C++, C#, Go, or Java).
     #  If this step fails, then you should remove it and run the build manually (see below)
