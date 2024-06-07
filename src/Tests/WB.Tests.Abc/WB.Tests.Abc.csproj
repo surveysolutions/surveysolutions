@@ -28,7 +28,7 @@
     <PackageReference Include="MvvmCross.Plugin.Messenger" Version="9.2.0" />
     <PackageReference Include="NHibernate" Version="5.5.1" />
     <PackageReference Include="NSubstitute" Version="5.1.0" />
-    <PackageReference Include="NUnit" Version="3.14.0" />
+    <PackageReference Include="NUnit" Version="4.1.0" />
     <PackageReference Include="NUnit.Extension.NUnitProjectLoader" Version="3.7.1" />
     <PackageReference Include="NUnit.Extension.NUnitV2Driver" Version="3.9.0" />
     <PackageReference Include="NUnit.Extension.NUnitV2ResultWriter" Version="3.7.0" />

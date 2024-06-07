@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
+using NUnit.Framework.Legacy;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Tests.Abc;
@@ -49,15 +50,15 @@ namespace WB.Tests.Unit.GenericSubdomains
             );
 
             var breadthFirst = tree.TreeToEnumerable(n => n.Childrens).Select(n => n.Id).ToArray();
-            Assert.True(breadthFirst.SequenceEqual(new long[] { 1, 11, 12, 13, 111, 112, 113, 121, 122, 123, 131, 132, 133, 1331 }),
+            ClassicAssert.True(breadthFirst.SequenceEqual(new long[] { 1, 11, 12, 13, 111, 112, 113, 121, 122, 123, 131, 132, 133, 1331 }),
                 "Actual: {0}", string.Join(", ", breadthFirst));
 
             var newDepthFirstStack = tree.TreeToEnumerableDepthFirst(n => n.Childrens).Select(n => n.Id).ToArray();
-            Assert.True(newDepthFirstStack.SequenceEqual(new long[] { 1, 11, 111, 112, 113, 12, 121, 122, 123, 13, 131, 132, 133, 1331 }),
+            ClassicAssert.True(newDepthFirstStack.SequenceEqual(new long[] { 1, 11, 111, 112, 113, 12, 121, 122, 123, 13, 131, 132, 133, 1331 }),
                 "Actual: {0}", string.Join(", ", newDepthFirstStack));
 
             var newEnumerableDepthFirstStack = tree.Childrens.TreeToEnumerableDepthFirst(n => n.Childrens).Select(n => n.Id).ToArray();
-            Assert.True(newEnumerableDepthFirstStack.SequenceEqual(new long[] { 11, 111, 112, 113, 12, 121, 122, 123, 13, 131, 132, 133, 1331 }),
+            ClassicAssert.True(newEnumerableDepthFirstStack.SequenceEqual(new long[] { 11, 111, 112, 113, 12, 121, 122, 123, 13, 131, 132, 133, 1331 }),
                 "Actual: {0}", string.Join(", ", newEnumerableDepthFirstStack));
         }
 

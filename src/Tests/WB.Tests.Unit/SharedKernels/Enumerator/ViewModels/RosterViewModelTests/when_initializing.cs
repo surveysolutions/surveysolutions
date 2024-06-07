@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Main.Core.Entities.Composite;
 using Moq;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -74,7 +75,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
 
             // assert
             Assert.That(rosterModel.Count, Is.EqualTo(4));
-            Assert.AreEqual(new int[] {1, 2, 3, 4}, rosterIds);
+            ClassicAssert.AreEqual(new int[] {1, 2, 3, 4}, rosterIds);
         }
 
         [Test]
@@ -122,7 +123,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
 
             // assert
             Assert.That(rosterModel.Count, Is.EqualTo(4));
-            Assert.AreEqual(new int[] { 1, 2, 3, 4 }, rosterIds);
+            ClassicAssert.AreEqual(new int[] { 1, 2, 3, 4 }, rosterIds);
         }
 
         [Test]
@@ -160,7 +161,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
 
             // assert
             Assert.That(rosterModel.Count, Is.EqualTo(4));
-            Assert.AreEqual(new int[] { 3, 1, 4, 2 }, rosterIds);
+            ClassicAssert.AreEqual(new int[] { 3, 1, 4, 2 }, rosterIds);
         }
 
         [Test]
@@ -208,7 +209,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
 
             // assert
             Assert.That(rosterModel.Count, Is.EqualTo(4));
-            Assert.AreEqual(new int[] { 3, 1, 4, 2 }, rosterIds);
+            ClassicAssert.AreEqual(new int[] { 3, 1, 4, 2 }, rosterIds);
         }
 
         static readonly Guid roster1Id = Guid.Parse("11111111111111111111111111111111");

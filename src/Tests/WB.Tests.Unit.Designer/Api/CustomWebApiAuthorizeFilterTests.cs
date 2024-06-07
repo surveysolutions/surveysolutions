@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.Designer.Api
 
     //        filter.OnAuthorization(context);
 
-    //        Assert.AreEqual(context.Response.StatusCode, HttpStatusCode.Unauthorized);
+    //        ClassicAssert.AreEqual(context.Response.StatusCode, HttpStatusCode.Unauthorized);
     //        Mock.Get(membershipUserService).Verify(x => x.Logout(), Times.Once);
     //    }
 
@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.Designer.Api
 
     //        filter.OnAuthorization(context);
 
-    //        Assert.AreEqual(context.Response.StatusCode, HttpStatusCode.Unauthorized);
+    //        ClassicAssert.AreEqual(context.Response.StatusCode, HttpStatusCode.Unauthorized);
     //        Mock.Get(membershipUserService).Verify(x => x.Logout(), Times.Once);
     //    }
 
@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.Designer.Api
 
     //        filter.OnAuthorization(context);
 
-    //        Assert.Null(context.Response);
+    //        ClassicAssert.Null(context.Response);
     //    }
     //}
 }

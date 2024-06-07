@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Dapper;
 using NHibernate.Mapping.ByCode.Conformist;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 
@@ -75,7 +76,7 @@ namespace WB.Tests.Integration.PostgreSQLTests
             {
                 var item = u.Session.Get<TestClass>(test.Id);
                 Assert.That(item.Duration, Is.EqualTo(test.Duration));
-                Assert.Null(item.DurationNull);
+                ClassicAssert.Null(item.DurationNull);
             }
         }
 

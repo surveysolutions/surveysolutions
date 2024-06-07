@@ -2,6 +2,7 @@
 using System.Linq;
 using Main.Core.Entities.Composite;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
@@ -39,8 +40,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
 
             var subsections = plainQuestionnaire.GetSubSectionsWithEnablementCondition(parentGroup);
 
-            Assert.AreEqual(subsections.Count, 1);
-            Assert.AreEqual(subsections.Single(), groupWithEnablement);
+            ClassicAssert.AreEqual(subsections.Count, 1);
+            ClassicAssert.AreEqual(subsections.Single(), groupWithEnablement);
         }
     }
 }

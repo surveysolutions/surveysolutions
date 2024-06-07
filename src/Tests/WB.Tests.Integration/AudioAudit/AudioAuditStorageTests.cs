@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using NHibernate;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -82,7 +83,7 @@ namespace WB.Tests.Integration.AudioAudit
 
             var hasAuditFiles = await auditFileStorage.HasAnyAudioAuditFilesStoredAsync(this.questionnaireId);
 
-            Assert.True(hasAuditFiles);
+            ClassicAssert.True(hasAuditFiles);
         }
 
         [Test]
@@ -95,7 +96,7 @@ namespace WB.Tests.Integration.AudioAudit
 
             var hasAuditFiles = await auditFileStorage.HasAnyAudioAuditFilesStoredAsync(Create.Entity.QuestionnaireIdentity());
 
-            Assert.False(hasAuditFiles);
+            ClassicAssert.False(hasAuditFiles);
         }
     }
 }

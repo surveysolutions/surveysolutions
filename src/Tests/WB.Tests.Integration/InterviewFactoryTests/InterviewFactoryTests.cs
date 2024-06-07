@@ -2,6 +2,7 @@ using System;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
@@ -60,7 +61,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             var flaggedIdentites = factory.GetFlaggedQuestionIds(interviewId);
 
             //assert
-            Assert.AreEqual(2, flaggedIdentites.Length);
+            ClassicAssert.AreEqual(2, flaggedIdentites.Length);
             Assert.That(flaggedIdentites, Is.EquivalentTo(questionIdentities));
         }
 
@@ -107,7 +108,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             var flaggedIdentites = factory.GetFlaggedQuestionIds(interviewId);
 
             //assert
-            Assert.AreEqual(1, flaggedIdentites.Length);
+            ClassicAssert.AreEqual(1, flaggedIdentites.Length);
             Assert.That(flaggedIdentites, Is.EquivalentTo(new[] {questionIdentities[1]}));
         }
 
