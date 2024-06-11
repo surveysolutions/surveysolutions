@@ -361,22 +361,27 @@ input FloatOperationFilterInput {
   nlte: Float
 }
 
-input IdentifyEntityValueFilterInput {
-  and: [IdentifyEntityValueFilterInput!]
-  or: [IdentifyEntityValueFilterInput!]
-  id: IntOperationFilterInput
-  entity: QuestionFilter
-  value: StringOperationFilterInput
-  valueLowerCase: StringOperationFilterInput
+input IdentifyEntityValueFilter {
+  and: [IdentifyEntityValueFilter!]
+  or: [IdentifyEntityValueFilter!]
+  "Code of answer for categorical question"
   answerCode: DecimalOperationFilterInput
-  interviewSummary: InterviewsFilter
-  position: IntOperationFilterInput
-  valueDate: DateTimeOperationFilterInput
+  "Answer value, supports case sensitive operations"
+  value: StringOperationFilterInput
+  "Answer value in lower case, supports case insensitive operations"
+  valueLowerCase: StringOperationFilterInput
+  "Question or variable entity"
+  entity: QuestionnaireItemsFilter
+  "Boolean answer value"
   valueBool: BooleanOperationFilterInput
+  "Date answer value"
+  valueDate: DateTimeOperationFilterInput
+  "Double answer value"
   valueDouble: FloatOperationFilterInput
+  "Long answer value"
   valueLong: LongOperationFilterInput
+  "Shows if this value enabled"
   isEnabled: BooleanOperationFilterInput
-  identifying: BooleanOperationFilterInput
 }
 
 input IntOperationFilterInput {
@@ -449,9 +454,9 @@ input InterviewsFilter {
 }
 
 input ListFilterInputTypeOfIdentifyEntityValueFilterInput {
-  all: IdentifyEntityValueFilterInput
-  none: IdentifyEntityValueFilterInput
-  some: IdentifyEntityValueFilterInput
+  all: IdentifyEntityValueFilter
+  none: IdentifyEntityValueFilter
+  some: IdentifyEntityValueFilter
   any: Boolean
 }
 
@@ -725,7 +730,12 @@ enum VariableType {
   STRING
 }
 
+directive @allowAnonymous repeatable on FIELD_DEFINITION
+
 directive @authorize("The name of the authorization policy that determines access to the annotated resource." policy: String "Roles that are allowed to access the annotated resource." roles: [String!] "Defines when when the authorize directive shall be applied.By default the authorize directives are applied during the validation phase." apply: ApplyPolicy! = BEFORE_RESOLVER) repeatable on OBJECT | FIELD_DEFINITION
+
+"The `@specifiedBy` directive is used within the type system definition language to provide a URL for specifying the behavior of custom scalar definitions."
+directive @specifiedBy("The specifiedBy URL points to a human-readable specification. This field will only read a result for scalar types." url: String!) on SCALAR
 
 scalar Any
 
