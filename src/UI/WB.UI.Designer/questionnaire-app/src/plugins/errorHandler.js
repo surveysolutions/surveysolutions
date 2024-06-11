@@ -4,7 +4,6 @@ import {
     getCurrentVersion
 } from '../services/designerService';
 import { i18n } from './localization';
-import { getCurrentVersion } from '../services/designerService';
 
 const api = mande('/error/report');
 
