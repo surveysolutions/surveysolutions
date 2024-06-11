@@ -133,13 +133,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
                 .FirstOrDefault();
             if (map == null)
             {
-                throw new GraphQLException(new[]
-                {
+                throw new GraphQLException(
                     ErrorBuilder.New()
                         .SetMessage("Can't found map")
                         .SetCode(ErrorCodes.Execution.QueryNotFound)
                         .Build()
-                });
+                );
             }
         }
 
@@ -151,13 +150,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
                 .FirstOrDefault();
             if (user == null)
             {
-                throw new GraphQLException(new[]
-                {
+                throw new GraphQLException(
                     ErrorBuilder.New()
                         .SetMessage("Can't found user")
                         .SetCode(ErrorCodes.Execution.QueryNotFound)
                         .Build()
-                });
+                );
             }
         }
 
