@@ -4,6 +4,7 @@ import {
     getCurrentVersion
 } from '../services/designerService';
 import { i18n } from './localization';
+import { getCurrentVersion } from '../services/designerService';
 
 const api = mande('/error/report');
 
@@ -32,7 +33,8 @@ export function setupErrorHandler(app) {
                 component: vm?.$options?.name || 'unknown',
                 route: vm?.$route.fullPath,
                 info,
-                stack: err.stack ? getNestedErrorDetails(err) : ''
+                stack: err.stack ? getNestedErrorDetails(err) : '',
+                version: getCurrentVersion()
             }
         };
 
@@ -74,7 +76,8 @@ export function setupErrorHandler(app) {
 
             additionalData: {
                 source: 'error event',
-                stack: getNestedErrorDetails(e.error)
+                stack: getNestedErrorDetails(e.error),
+                version: getCurrentVersion()
             }
         };
 
@@ -104,7 +107,8 @@ export function setupErrorHandler(app) {
                 stack:
                     e.reason instanceof Error
                         ? getNestedErrorDetails(e.reason)
-                        : e.reason?.stack
+                        : e.reason?.stack,
+                version: getCurrentVersion()
             }
         };
 
