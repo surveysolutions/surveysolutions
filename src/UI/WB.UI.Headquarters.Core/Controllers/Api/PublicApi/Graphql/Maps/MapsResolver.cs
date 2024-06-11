@@ -87,6 +87,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
             [Service] IUnitOfWork unitOfWork,
             [Service] IAuthorizedUser authorizedUser)
         {
+            CheckUserExistsOrThrow(userName, unitOfWork);
+            CheckMapExistsOrThrow(fileName, unitOfWork);
+
             if (authorizedUser.IsSupervisor)
             {
                 //limit by team
@@ -121,6 +124,40 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
             }
             
             return mapStorageService.AddUserToMap(fileName, userName);
+        }
+
+        private static void CheckMapExistsOrThrow(string fileName, IUnitOfWork unitOfWork)
+        {
+            var map = unitOfWork.Session.Query<MapBrowseItem>()
+                .Where(a => fileName == a.FileName);
+            if (map == null)
+            {
+                throw new GraphQLException(new[]
+                {
+                    ErrorBuilder.New()
+                        .SetMessage("Can't found map")
+                        .SetCode(ErrorCodes.Execution.QueryNotFound)
+                        .Build()
+                });
+            }
+        }
+
+        private static void CheckUserExistsOrThrow(string userName, IUnitOfWork unitOfWork)
+        {
+            var user = unitOfWork.Session.Query<HqUser>()
+                .Where(x => x.UserName == userName)
+                .Select(x=> x.UserName)
+                .FirstOrDefault();
+            if (user == null)
+            {
+                throw new GraphQLException(new[]
+                {
+                    ErrorBuilder.New()
+                        .SetMessage("Can't found user")
+                        .SetCode(ErrorCodes.Execution.QueryNotFound)
+                        .Build()
+                });
+            }
         }
 
         [RequestSizeLimit(500 * 1024 * 1024)]
