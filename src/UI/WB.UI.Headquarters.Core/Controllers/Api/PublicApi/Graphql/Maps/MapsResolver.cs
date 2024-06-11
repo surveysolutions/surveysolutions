@@ -129,7 +129,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
         private static void CheckMapExistsOrThrow(string fileName, IUnitOfWork unitOfWork)
         {
             var map = unitOfWork.Session.Query<MapBrowseItem>()
-                .Where(a => fileName == a.FileName);
+                .Where(a => fileName == a.FileName)
+                .FirstOrDefault();
             if (map == null)
             {
                 throw new GraphQLException(new[]
