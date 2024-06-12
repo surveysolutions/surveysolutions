@@ -1,28 +1,14 @@
 <template>
-    <div
-        class="question table-view scroller"
-        :id="hash"
-        v-if="rowData.length > 0"
-    >
+    <div class="question table-view scroller" :id="hash" v-if="rowData.length > 0">
         <div class="question-editor">
             <h5 v-dateTimeFormatting v-html="title"></h5>
             <div class="information-block instruction" v-if="instructions">
                 <p v-dateTimeFormatting v-html="instructions"></p>
             </div>
         </div>
-        <ag-grid-vue
-            ref="matrixRoster"
-            class="ag-theme-customStyles roster-matrix"
-            domLayout="autoHeight"
-            rowHeight="40"
-            headerHeight="50"
-            :defaultColDef="defaultColDef"
-            :columnDefs="columnDefs"
-            :rowData="rowData"
-            :grid-options="gridOptions"
-            @grid-ready="onGridReady"
-            @column-resized="autosizeHeaders"
-        ></ag-grid-vue>
+        <ag-grid-vue ref="matrixRoster" class="ag-theme-customStyles roster-matrix" domLayout="autoHeight"
+            rowHeight="40" headerHeight="50" :defaultColDef="defaultColDef" :columnDefs="columnDefs" :rowData="rowData"
+            :grid-options="gridOptions" @grid-ready="onGridReady" @column-resized="autosizeHeaders"></ag-grid-vue>
     </div>
 </template>
 
@@ -30,8 +16,7 @@
 /* eslint-disable vue/no-unused-components */
 import Vue from 'vue'
 import { entityDetails } from '../mixins'
-import { GroupStatus } from './index'
-import { debounce, every, some, map } from 'lodash'
+import { debounce, map } from 'lodash'
 import { AgGridVue } from 'ag-grid-vue'
 
 import MatrixRoster_QuestionEditor from './MatrixRoster.QuestionEditor'

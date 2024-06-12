@@ -2,93 +2,47 @@
     <HqLayout :hasFilter="true" :hasHeader="false">
         <Filters slot="filters">
             <FilterBlock :title="$t('Common.Questionnaire')">
-                <Typeahead
-                    control-id="questionnaireId"
-                    :placeholder="$t('Common.AllQuestionnaires')"
-                    :ajax-params="{}"
-                    :fetch-url="model.questionnaires"
-                    :value="selectedQuestionnaireId"
-                    :selectedKey="this.query.questionnaireId"
-                    v-on:selected="selectQuestionnaire"
-                />
+                <Typeahead control-id="questionnaireId" :placeholder="$t('Common.AllQuestionnaires')" :ajax-params="{}"
+                    :fetch-url="model.questionnaires" :value="selectedQuestionnaireId"
+                    :selectedKey="this.query.questionnaireId" v-on:selected="selectQuestionnaire" />
             </FilterBlock>
             <FilterBlock :title="$t('Common.QuestionnaireVersion')">
-                <Typeahead
-                    control-id="questionnaireVersion"
-                    :placeholder="$t('Common.AllVersions')"
-                    :value="selectedVersion"
-                    :values="
-                        selectedQuestionnaireId == null
-                            ? null
-                            : selectedQuestionnaireId.versions
-                    "
-                    v-on:selected="selectQuestionnaireVersion"
-                    :disabled="selectedQuestionnaireId == null"
-                />
+                <Typeahead control-id="questionnaireVersion" :placeholder="$t('Common.AllVersions')"
+                    :value="selectedVersion" :values="selectedQuestionnaireId == null
+                        ? null
+                        : selectedQuestionnaireId.versions
+                        " v-on:selected="selectQuestionnaireVersion" :disabled="selectedQuestionnaireId == null" />
             </FilterBlock>
-            <FilterBlock
-                :title="$t('Common.Responsible')"
-                v-if="model.userRole != 'Interviewer'"
-            >
-                <Typeahead
-                    control-id="responsibleId"
-                    :placeholder="$t('Common.AllResponsible')"
-                    :value="responsibleId"
-                    :ajax-params="responsibleParams"
-                    :selectedValue="this.query.responsible"
-                    v-on:selected="selectResponsible"
-                    :fetch-url="model.responsible"
-                ></Typeahead>
+            <FilterBlock :title="$t('Common.Responsible')" v-if="model.userRole != 'Interviewer'">
+                <Typeahead control-id="responsibleId" :placeholder="$t('Common.AllResponsible')" :value="responsibleId"
+                    :ajax-params="responsibleParams" :selectedValue="this.query.responsible"
+                    v-on:selected="selectResponsible" :fetch-url="model.responsible"></Typeahead>
             </FilterBlock>
             <FilterBlock :title="$t('Pages.Filters_Assignment')">
                 <div class="input-group">
-                    <input
-                        class="form-control with-clear-btn number"
-                        :placeholder="$t('Common.AllAssignments')"
-                        type="number"
-                        v-model.number="assignmentId"
-                        v-validate="{ numeric: true }"
-                    />
+                    <input class="form-control with-clear-btn number" :placeholder="$t('Common.AllAssignments')"
+                        type="number" v-model.number="assignmentId" v-validate="{ numeric: true }" />
                     <div class="input-group-btn" @click="clearAssignmentFilter">
                         <div class="btn btn-default">
-                            <span
-                                class="glyphicon glyphicon-remove"
-                                aria-hidden="true"
-                            ></span>
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                         </div>
                     </div>
                 </div>
             </FilterBlock>
             <FilterBlock :title="$t('Pages.Filters_Shapefiles')">
-                <Typeahead
-                    control-id="shapefileName"
-                    :placeholder="$t('Pages.Filters_None')"
-                    :ajax-params="{}"
-                    :fetch-url="model.shapefiles"
-                    :value="shapefileName"
-                    v-on:selected="selectedShapefileName"
-                />
+                <Typeahead control-id="shapefileName" :placeholder="$t('Pages.Filters_None')" :ajax-params="{}"
+                    :fetch-url="model.shapefiles" :value="shapefileName" v-on:selected="selectedShapefileName" />
             </FilterBlock>
             <FilterBlock v-if="isLoading" :title="$t('Reports.MapDataLoading')">
                 <div class="progress">
-                    <div
-                        class="progress-bar progress-bar-striped active"
-                        role="progressbar"
-                        aria-valuenow="100"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                        style="width: 100%"
-                    ></div>
+                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100"
+                        aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
                 </div>
             </FilterBlock>
             <div class="preset-filters-container">
                 <div class="center-block" style="margin-left: 0">
-                    <button
-                        class="btn btn-default btn-lg"
-                        id="reloadMarkersInBounds"
-                        v-if="readyToUpdate"
-                        @click="reloadMarkersInBounds"
-                    >
+                    <button class="btn btn-default btn-lg" id="reloadMarkersInBounds" v-if="readyToUpdate"
+                        @click="reloadMarkersInBounds">
                         {{ $t('MapReport.ReloadMarkers') }}
                     </button>
                 </div>
@@ -116,111 +70,66 @@
                     <strong>{{ $t('Reports.LastUpdatedDate') }}:</strong>
                     &nbsp;{{ selectedTooltip.lastUpdatedDate }}
                 </div>
-                <div
-                    class="row-fluid"
-                    v-for="answer in selectedTooltip.identifyingData"
-                >
+                <div class="row-fluid" v-for="answer in selectedTooltip.identifyingData">
                     <strong>{{ answer.title }}:</strong>
                     &nbsp;{{ answer.answer || $t('Details.NoAnswer') }}
                 </div>
 
-                <div
-                    class="row-fluid"
-                    v-if="model.userRole != 'Interviewer'"
-                    style="white-space: nowrap"
-                >
-                    <strong>{{ $t('MapReport.ViewInterviewContent') }}:</strong
-                    >&nbsp;
-                    <a
-                        v-bind:href="
-                            api.GetInterviewDetailsUrl(
-                                selectedTooltip.interviewId
-                            )
-                        "
-                        target="_blank"
-                        >{{ $t('MapReport.details') }}</a
-                    >
+                <div class="row-fluid" v-if="model.userRole != 'Interviewer'" style="white-space: nowrap">
+                    <strong>{{ $t('MapReport.ViewInterviewContent') }}:</strong>&nbsp;
+                    <a v-bind:href="api.GetInterviewDetailsUrl(
+                        selectedTooltip.interviewId
+                    )
+                        " target="_blank">{{ $t('MapReport.details') }}</a>
                 </div>
-                <div
-                    class="row-fluid tooltip-buttons"
-                    style="white-space: nowrap"
-                    v-if="!model.isObserving"
-                >
-                    <button
-                        class="btn btn-sm btn-primary"
-                        v-if="
-                            model.userRole == 'Interviewer' &&
-                            (selectedTooltip.status == 'InterviewerAssigned' ||
-                                selectedTooltip.status ==
-                                    'RejectedBySupervisor')
-                        "
-                        click="openInterview"
-                    >
+                <div class="row-fluid tooltip-buttons" style="white-space: nowrap" v-if="!model.isObserving">
+                    <button class="btn btn-sm btn-primary" v-if="
+                        model.userRole == 'Interviewer' &&
+                        (selectedTooltip.status == 'InterviewerAssigned' ||
+                            selectedTooltip.status ==
+                            'RejectedBySupervisor')
+                    " click="openInterview">
                         {{ $t('Common.Open') }}
                     </button>
-                    <button
-                        class="btn btn-sm btn-primary"
-                        v-if="canAssign"
-                        click="assignInterview"
-                    >
+                    <button class="btn btn-sm btn-primary" v-if="canAssign" click="assignInterview">
                         {{ $t('Common.Assign') }}
                     </button>
-                    <button
-                        class="btn btn-sm btn-primary"
-                        v-if="
-                            model.userRole == 'Supervisor' &&
-                            (selectedTooltip.status == 'Completed' ||
-                                selectedTooltip.status ==
-                                    'RejectedByHeadquarters')
-                        "
-                        click="approveSvInterview"
-                    >
+                    <button class="btn btn-sm btn-primary" v-if="
+                        model.userRole == 'Supervisor' &&
+                        (selectedTooltip.status == 'Completed' ||
+                            selectedTooltip.status ==
+                            'RejectedByHeadquarters')
+                    " click="approveSvInterview">
                         {{ $t('Common.Approve') }}
                     </button>
-                    <button
-                        class="btn btn-sm reject"
-                        v-if="
-                            model.userRole == 'Supervisor' &&
-                            (selectedTooltip.status == 'Completed' ||
-                                selectedTooltip.status ==
-                                    'RejectedByHeadquarters')
-                        "
-                        click="rejectSvInterview"
-                    >
+                    <button class="btn btn-sm reject" v-if="
+                        model.userRole == 'Supervisor' &&
+                        (selectedTooltip.status == 'Completed' ||
+                            selectedTooltip.status ==
+                            'RejectedByHeadquarters')
+                    " click="rejectSvInterview">
                         {{ $t('Common.Reject') }}
                     </button>
-                    <button
-                        class="btn btn-sm btn-primary"
-                        v-if="
-                            model.userRole == 'Headquarter' &&
-                            (selectedTooltip.status == 'Completed' ||
-                                selectedTooltip.status ==
-                                    'ApprovedBySupervisor')
-                        "
-                        click="approveHqInterview"
-                    >
+                    <button class="btn btn-sm btn-primary" v-if="
+                        model.userRole == 'Headquarter' &&
+                        (selectedTooltip.status == 'Completed' ||
+                            selectedTooltip.status ==
+                            'ApprovedBySupervisor')
+                    " click="approveHqInterview">
                         {{ $t('Common.Approve') }}
                     </button>
-                    <button
-                        class="btn btn-sm reject"
-                        v-if="
-                            model.userRole == 'Headquarter' &&
-                            (selectedTooltip.status == 'Completed' ||
-                                selectedTooltip.status ==
-                                    'ApprovedBySupervisor')
-                        "
-                        click="rejectHqInterview"
-                    >
+                    <button class="btn btn-sm reject" v-if="
+                        model.userRole == 'Headquarter' &&
+                        (selectedTooltip.status == 'Completed' ||
+                            selectedTooltip.status ==
+                            'ApprovedBySupervisor')
+                    " click="rejectHqInterview">
                         {{ $t('Common.Reject') }}
                     </button>
-                    <button
-                        class="btn btn-sm btn-primary"
-                        v-if="
-                            model.userRole == 'Headquarter' &&
-                            selectedTooltip.status == 'ApprovedByHeadquarters'
-                        "
-                        click="unapproveInterview"
-                    >
+                    <button class="btn btn-sm btn-primary" v-if="
+                        model.userRole == 'Headquarter' &&
+                        selectedTooltip.status == 'ApprovedByHeadquarters'
+                    " click="unapproveInterview">
                         {{ $t('Common.Unapprove') }}
                     </button>
                 </div>
@@ -239,52 +148,28 @@
                     <strong>{{ $t('Reports.LastUpdatedDate') }}:</strong>
                     &nbsp;{{ selectedTooltip.lastUpdatedDate }}
                 </div>
-                <div
-                    class="row-fluid"
-                    v-for="answer in selectedTooltip.identifyingData"
-                >
+                <div class="row-fluid" v-for="answer in selectedTooltip.identifyingData">
                     <strong>{{ answer.title }}:</strong>
                     &nbsp;{{ answer.answer || $t('Details.NoAnswer') }}
                 </div>
 
-                <div
-                    class="row-fluid"
-                    v-if="model.userRole != 'Interviewer'"
-                    style="white-space: nowrap"
-                >
-                    <strong>{{ $t('Common.ViewAssignmentDetails') }}:</strong
-                    >&nbsp;
-                    <a
-                        v-bind:href="
-                            api.GetAssignmentDetailsUrl(
-                                selectedTooltip.assignmentId
-                            )
-                        "
-                        target="_blank"
-                        >{{ $t('MapReport.details') }}</a
-                    >
+                <div class="row-fluid" v-if="model.userRole != 'Interviewer'" style="white-space: nowrap">
+                    <strong>{{ $t('Common.ViewAssignmentDetails') }}:</strong>&nbsp;
+                    <a v-bind:href="api.GetAssignmentDetailsUrl(
+                        selectedTooltip.assignmentId
+                    )
+                        " target="_blank">{{ $t('MapReport.details') }}</a>
                 </div>
-                <div
-                    class="row-fluid tooltip-buttons"
-                    style="white-space: nowrap"
-                    v-if="!model.isObserving"
-                >
-                    <button
-                        class="btn btn-sm btn-primary"
-                        v-if="
-                            model.userRole == 'Supervisor' ||
-                            model.userRole == 'Headquarter'
-                        "
-                        click="assignAssignment"
-                    >
+                <div class="row-fluid tooltip-buttons" style="white-space: nowrap" v-if="!model.isObserving">
+                    <button class="btn btn-sm btn-primary" v-if="
+                        model.userRole == 'Supervisor' ||
+                        model.userRole == 'Headquarter'
+                    " click="assignAssignment">
                         {{ $t('Common.Assign') }}
                     </button>
 
-                    <button
-                        class="btn btn-sm btn-assignment"
-                        v-if="model.userRole == 'Interviewer'"
-                        click="createInterview"
-                    >
+                    <button class="btn btn-sm btn-assignment" v-if="model.userRole == 'Interviewer'"
+                        click="createInterview">
                         {{ $t('Common.Create') }}
                     </button>
                 </div>
@@ -294,17 +179,11 @@
                 <div class="row-fluid">
                     <strong>{{ $t('Reports.ClusterInfo') }}</strong>
                 </div>
-                <div
-                    class="row-fluid"
-                    v-if="selectedTooltip.interviewsCount > 0"
-                >
+                <div class="row-fluid" v-if="selectedTooltip.interviewsCount > 0">
                     <strong>{{ $t('Common.Interviews') }}:</strong>
                     &nbsp;{{ selectedTooltip.interviewsCount }}
                 </div>
-                <div
-                    class="row-fluid"
-                    v-if="selectedTooltip.assignmentsCount > 0"
-                >
+                <div class="row-fluid" v-if="selectedTooltip.assignmentsCount > 0">
                     <strong>{{ $t('Common.Assignments') }}:</strong>
                     &nbsp;{{ selectedTooltip.assignmentsCount }}
                 </div>
@@ -318,27 +197,15 @@
                     <label class="control-label" for="newResponsibleId">{{
                         $t('Assignments.SelectResponsible')
                     }}</label>
-                    <Typeahead
-                        control-id="newResponsibleId"
-                        :placeholder="$t('Common.Responsible')"
-                        :value="newResponsibleId"
-                        :ajax-params="{}"
-                        @selected="newResponsibleSelected"
-                        :fetch-url="model.responsible"
-                    ></Typeahead>
+                    <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
+                        :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
+                        :fetch-url="model.responsible"></Typeahead>
                 </div>
                 <div v-if="selectedTooltip.isReceivedByTablet">
                     <br />
-                    <input
-                        type="checkbox"
-                        id="reassignReceivedByTablet"
-                        v-model="isReassignReceivedByTablet"
-                        class="checkbox-filter"
-                    />
-                    <label
-                        for="reassignReceivedByTablet"
-                        style="font-weight: normal"
-                    >
+                    <input type="checkbox" id="reassignReceivedByTablet" v-model="isReassignReceivedByTablet"
+                        class="checkbox-filter" />
+                    <label for="reassignReceivedByTablet" style="font-weight: normal">
                         <span class="tick"></span>
                         {{ $t('Reports.AssignReceivedConfirm', 1) }}
                     </label>
@@ -349,21 +216,11 @@
                 </div>
             </form>
             <div slot="actions">
-                <button
-                    type="button"
-                    class="btn btn-primary"
-                    role="confirm"
-                    @click="assign"
-                    :disabled="!canClickAssign"
-                >
+                <button type="button" class="btn btn-primary" role="confirm" @click="assign"
+                    :disabled="!canClickAssign">
                     {{ $t('Common.Assign') }}
                 </button>
-                <button
-                    type="button"
-                    class="btn btn-link"
-                    data-dismiss="modal"
-                    role="cancel"
-                >
+                <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">
                     {{ $t('Common.Cancel') }}
                 </button>
             </div>
@@ -420,10 +277,10 @@
     margin-right: 10px;
 }
 </style>
+
 <script>
-import * as toastr from 'toastr'
 import Vue from 'vue'
-import { isNull, chain, debounce, delay, forEach, find } from 'lodash'
+import { debounce, delay, forEach, find } from 'lodash'
 import routeSync from '~/shared/routeSync'
 
 export default {
@@ -546,8 +403,8 @@ export default {
         openInterview() {
             window.open(
                 this.$hq.basePath +
-                    'InterviewerHq/OpenInterview/' +
-                    this.selectedTooltip.interviewId,
+                'InterviewerHq/OpenInterview/' +
+                this.selectedTooltip.interviewId,
                 '_blank'
             )
         },

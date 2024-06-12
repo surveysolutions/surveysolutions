@@ -32,12 +32,14 @@
                 </Typeahead>
             </FilterBlock>
 
-            <FilterBlock :title="$t('Assignments.ReceivedByTablet')" :tooltip="$t('Assignments.Tooltip_Filter_Received')">
+            <FilterBlock :title="$t('Assignments.ReceivedByTablet')"
+                :tooltip="$t('Assignments.Tooltip_Filter_Received')">
                 <Typeahead control-id="recieved-by-tablet" noSearch noClear :values="ddlReceivedByTablet"
                     :value="receivedByTablet" v-on:selected="receivedByTabletSelected" />
             </FilterBlock>
 
-            <FilterBlock :title="$t('Assignments.ShowArchived')" :tooltip="$t('Assignments.Tooltip_Filter_ArchivedStatus')">
+            <FilterBlock :title="$t('Assignments.ShowArchived')"
+                :tooltip="$t('Assignments.Tooltip_Filter_ArchivedStatus')">
                 <Typeahead control-id="show_archived" noSearch noClear :values="ddlShowArchive" :value="showArchive"
                     v-on:selected="showArchiveSelected" />
             </FilterBlock>
@@ -63,7 +65,8 @@
                         @click="assignSelected">{{ $t("Common.Assign") }}</button>
 
                     <button class="btn btn-lg btn-warning" id="btnCloseSelected"
-                        v-if="config.isHeadquarter && !showArchive.key" @click="closeSelected">{{ $t("Assignments.Close")
+                        v-if="config.isHeadquarter && !showArchive.key" @click="closeSelected">{{
+                            $t("Assignments.Close")
                         }}</button>
 
                     <button class="btn btn-lg btn-danger" id="btnArchiveSelected"
@@ -77,7 +80,8 @@
             <p>{{ $t("Assignments.NumberOfAssignmentsAffected", { count: selectedRows.length }) }}</p>
             <form onsubmit="return false;">
                 <div class="form-group" :class="{ 'has-warning': showWebModeReassignWarning }">
-                    <label class="control-label" for="newResponsibleId">{{ $t("Assignments.SelectResponsible") }}</label>
+                    <label class="control-label" for="newResponsibleId">{{ $t("Assignments.SelectResponsible")
+                        }}</label>
                     <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
                         :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
                         :fetch-url="config.api.responsible"></Typeahead>
@@ -184,7 +188,7 @@
 
 <script>
 import * as toastr from 'toastr'
-import { isEqual, map, join, assign, findIndex, includes } from 'lodash'
+import { isEqual, map, join, assign, findIndex } from 'lodash'
 import moment from 'moment'
 import { DateFormats } from '~/shared/helpers'
 import { RoleNames } from '~/shared/constants'

@@ -14,14 +14,16 @@
 
         <Filters slot="filters">
             <FilterBlock :title="$t('Pages.UsersManage_WorkspacesFilterTitle')">
-                <Typeahead control-id="workspaceSelector" :placeholder="$t('Pages.UsersManage_WorkspacesFilterPlaceholder')"
-                    :value="selectedWorkspace" :ajax-params="{ includeDisabled: true }"
-                    :fetch-url="this.$config.model.workspacesUrl" v-on:selected="onWorkspaceSelected" />
+                <Typeahead control-id="workspaceSelector"
+                    :placeholder="$t('Pages.UsersManage_WorkspacesFilterPlaceholder')" :value="selectedWorkspace"
+                    :ajax-params="{ includeDisabled: true }" :fetch-url="this.$config.model.workspacesUrl"
+                    v-on:selected="onWorkspaceSelected" />
             </FilterBlock>
 
             <FilterBlock :title="$t('Pages.AccountManage_Role')" v-if="this.$config.model.roles.length > 0">
-                <Typeahead no-search control-id="roleSelector" :placeholder="$t('Pages.UsersManage_RoleFilterPlaceholder')"
-                    :value="selectedRole" :values="this.$config.model.roles" v-on:selected="onRoleSelected" />
+                <Typeahead no-search control-id="roleSelector"
+                    :placeholder="$t('Pages.UsersManage_RoleFilterPlaceholder')" :value="selectedRole"
+                    :values="this.$config.model.roles" v-on:selected="onRoleSelected" />
             </FilterBlock>
 
             <FilterBlock :title="$t('Pages.UsersManage_TeamFilter')" v-if="this.selectedWorkspace">
@@ -31,8 +33,8 @@
 
             <FilterBlock :title="$t('Pages.AccountManage_ShowUsers')" v-if="this.$config.model.filters.length > 0">
                 <Typeahead no-search control-id="filterSelector"
-                    :placeholder="$t('Pages.UsersManage_ShowUsersFilterPlaceholder')" :values="this.$config.model.filters"
-                    :value="selectedFilter" v-on:selected="onFilterSelected" />
+                    :placeholder="$t('Pages.UsersManage_ShowUsersFilterPlaceholder')"
+                    :values="this.$config.model.filters" :value="selectedFilter" v-on:selected="onFilterSelected" />
             </FilterBlock>
 
             <FilterBlock :title="$t('Pages.Interviewers_ArchiveStatusTitle')">
@@ -46,7 +48,8 @@
 
         <DataTables ref="table" data-suso="usermanagement-list" :tableOptions="tableOptions"
             :addParamsToRequest="addParamsToRequest" :selectable="canManageUsers"
-            @selectedRowsChanged="rows => selectedRows = rows" mutliRowSelect :selectableId="'userId'" :noPaging="false">
+            @selectedRowsChanged="rows => selectedRows = rows" mutliRowSelect :selectableId="'userId'"
+            :noPaging="false">
             <div class="panel panel-table" v-if="selectedRows.length > 0" id="pnlInterviewContextActions">
                 <div class="panel-body">
                     <input class="double-checkbox-white" id="q1az" type="checkbox" checked disabled="disabled" />
@@ -54,8 +57,9 @@
                         <span class="tick"></span>
                         {{ selectedRows.length + " " + $t("Pages.UserManagement_UsersSelected") }}
                     </label>
-                    <button class="btn btn-lg btn-success" :disabled="filteredToAdd.length == 0" @click="addToWorkspace">{{
-                        $t("Pages.UserManagement_AddToWorkspace") }}</button>
+                    <button class="btn btn-lg btn-success" :disabled="filteredToAdd.length == 0"
+                        @click="addToWorkspace">{{
+                            $t("Pages.UserManagement_AddToWorkspace") }}</button>
                     <button class="btn btn-lg btn-success" :disabled="filteredToAdd.length == 0"
                         @click="removeFromWorkspace">{{ $t("Pages.UserManagement_RemoveFromWorkspace") }}</button>
                     <button type="button" v-if="isVisibleArchive" class="btn btn-default btn-danger"
@@ -93,7 +97,7 @@
 
 <script>
 import * as toastr from 'toastr'
-import { keyBy, map, find, filter, escape } from 'lodash'
+import { map, find, filter } from 'lodash'
 import routeSync from '~/shared/routeSync'
 import WorkspaceManager from './WorkspaceManager.vue'
 import AddInterviewerToWorkspace from './AddInterviewerToWorkspace'

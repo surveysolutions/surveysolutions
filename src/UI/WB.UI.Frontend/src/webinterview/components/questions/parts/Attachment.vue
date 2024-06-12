@@ -1,66 +1,42 @@
 <template>
     <div class="attachment">
-        <div
-            v-if="localContentType === 'image'"
-            class="image-zoom-box image-wrapper"
-            :class="customCssClass">
-            <img
-                :src="thumbPath"
-                alt="custom photo"
-                class="zoomImg"
-                @load="imageLoaded"
-                @click="showModal(true)"
-                :style="previewStyle"/>
+        <div v-if="localContentType === 'image'" class="image-zoom-box image-wrapper" :class="customCssClass">
+            <img :src="thumbPath" alt="custom photo" class="zoomImg" @load="imageLoaded" @click="showModal(true)"
+                :style="previewStyle" />
             <portal to="body">
-                <div class="modal-img"
-                    v-if="modal"
-                    :style="modalView"
-                    @click="showModal(false)">
+                <div class="modal-img" v-if="modal" :style="modalView" @click="showModal(false)">
                     <span class="close-zoomming-img">×</span>
-                    <img class="modal-img-content"
-                        :src="fullPath"
-                        alt />
+                    <img class="modal-img-content" :src="fullPath" alt />
                     <span class="caption"></span>
                 </div>
             </portal>
         </div>
         <div v-if="localContentType === 'audio'">
             <div class="instructions-wrapper">
-                <a class="btn btn-link"
-                    :href="contentUrl"
-                    target="_blank">
-                    {{$t("Common.Download")}}
+                <a class="btn btn-link" :href="contentUrl" target="_blank">
+                    {{ $t("Common.Download") }}
                 </a>
             </div>
             <div>
-                <audio
-                    controls
-                    preload="auto"
-                    :src="contentUrl">{{ $t('WebInterviewUI.MultimediaNotSupported') }}</audio>
+                <audio controls preload="auto" :src="contentUrl">{{ $t('WebInterviewUI.MultimediaNotSupported')
+                    }}</audio>
             </div>
         </div>
         <div v-if="localContentType === 'video'">
             <div class="instructions-wrapper">
-                <a class="btn btn-link"
-                    :href="contentUrl"
-                    target="_blank">
-                    {{$t("Common.Download")}}
+                <a class="btn btn-link" :href="contentUrl" target="_blank">
+                    {{ $t("Common.Download") }}
                 </a>
             </div>
             <div>
-                <video
-                    controls
-                    preload="auto"
-                    style="width:300px"
-                    :src="contentUrl">{{ $t('WebInterviewUI.MultimediaNotSupported') }}</video>
+                <video controls preload="auto" style="width:300px" :src="contentUrl">{{
+                    $t('WebInterviewUI.MultimediaNotSupported') }}</video>
             </div>
         </div>
         <div v-if="localContentType === 'pdf'">
             <div class="instructions-wrapper">
-                <a class="btn btn-link"
-                    :href="contentUrl"
-                    target="_blank">
-                    {{$t("Common.Download")}}
+                <a class="btn btn-link" :href="contentUrl" target="_blank">
+                    {{ $t("Common.Download") }}
                 </a>
             </div>
         </div>
@@ -69,9 +45,7 @@
 <script lang="js">
 import axios from 'axios'
 import appendquery from 'append-query'
-import {
-    startsWith
-} from 'lodash'
+import { startsWith } from 'lodash'
 
 function appendSearchParam(uri, name, value) {
     const args = {
@@ -140,10 +114,10 @@ export default {
         return this.fetchContentType()
     },
     watch: {
-        contentId(){
+        contentId() {
             this.fetchContentType()
         },
-        attachmentName(){
+        attachmentName() {
             this.fetchContentType()
         },
     },
@@ -204,7 +178,7 @@ export default {
     },
     methods: {
         async fetchContentType() {
-            if(this.thumb || this.filename) {
+            if (this.thumb || this.filename) {
                 this.contentType = 'image'
             }
             else {

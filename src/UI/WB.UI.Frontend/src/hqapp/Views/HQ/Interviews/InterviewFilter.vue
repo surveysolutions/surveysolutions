@@ -1,46 +1,33 @@
 <template>
-    <div class="block-filter"
-        v-if="item != null && isSupported">
+    <div class="block-filter" v-if="item != null && isSupported">
         <h5 :title="sanitizeHtml(item.label || item.title)">
-            {{sanitizeHtml(item.label || item.title)}}
+            {{ sanitizeHtml(item.label || item.title) }}
             <div>
-                <inline-selector :options="fieldOptions"
-                    no-empty
-                    :id="`filter_selector_${condition.variable}`"
-                    v-if="fieldOptions != null"
-                    v-model="field" />
+                <inline-selector :options="fieldOptions" no-empty :id="`filter_selector_${condition.variable}`"
+                    v-if="fieldOptions != null" v-model="field" />
             </div>
         </h5>
 
-        <Typeahead
-            v-if="item.type == 'SINGLEOPTION'"
-            :control-id="'filter_input_' + condition.variable"
-            :placeholder="$t('Common.SelectOption')"
-            :values="options"
-            :value="selectedOption"
-            v-on:selected="optionSelected"/>
+        <Typeahead v-if="item.type == 'SINGLEOPTION'" :control-id="'filter_input_' + condition.variable"
+            :placeholder="$t('Common.SelectOption')" :values="options" :value="selectedOption"
+            v-on:selected="optionSelected" />
 
-        <filter-input v-if="item.type == 'TEXT' || item.entityType == 'VARIABLE'"
-            :value="condition.value"
-            @input="input"
-            :id="'filter_input_' + condition.variable" />
+        <filter-input v-if="item.type == 'TEXT' || item.entityType == 'VARIABLE'" :value="condition.value"
+            @input="input" :id="'filter_input_' + condition.variable" />
 
-        <filter-input v-if="item.type == 'NUMERIC'"
-            :value="condition.value"
-            type="number"
-            @input="input"
+        <filter-input v-if="item.type == 'NUMERIC'" :value="condition.value" type="number" @input="input"
             :id="'filter_input_' + condition.variable" />
 
     </div>
 </template>
 <script>
 
-import { find, sortBy } from 'lodash'
-import sanitizeHtml  from 'sanitize-html'
+import { find } from 'lodash'
+import sanitizeHtml from 'sanitize-html'
 
 export default {
     props: {
-        item: {type: Object },
+        item: { type: Object },
 
         /** @type: {variable: string, value: string} */
         condition: { type: Object },
@@ -98,7 +85,7 @@ export default {
 
         selectedOption() {
             let key = this.condition.value
-            if(key != null) key = key.toString()
+            if (key != null) key = key.toString()
             return find(this.options, { key })
         },
 
@@ -117,7 +104,7 @@ export default {
                 ]
             }
 
-            switch(this.item.type) {
+            switch (this.item.type) {
                 case 'SINGLEOPTION': return [
                     { id: 'answerCode|eq', value: this.$t('Common.EqualValues') },
                     { id: 'answerCode|neq', value: this.$t('Common.NotEquals') },
@@ -128,8 +115,9 @@ export default {
 
                 ]
                 case 'NUMERIC': return [
-                    { id: 'value|eq', value: this.$t('Common.EqualValues')},
-                ]}
+                    { id: 'value|eq', value: this.$t('Common.EqualValues') },
+                ]
+            }
             return null
         },
     },
