@@ -1,5 +1,6 @@
 using FluentAssertions;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Tests.Abc;
 
@@ -13,7 +14,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             var controller = CreateQuestionnaireController();
             var result = controller.EditOptions(new QuestionnaireRevision(Id.g1), Id.g2, null);
             
-            Assert.NotNull(result.Value.Errors);
+            ClassicAssert.NotNull(result.Value.Errors);
             result.Value.Errors[0].Should().Be("Choose tab-separated values file to upload, please");
         }
     }

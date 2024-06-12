@@ -6,6 +6,7 @@ using SQLite;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Tests.Abc;
 using System.Collections.Generic;
+using NUnit.Framework.Legacy;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -88,7 +89,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             var stored = this.storage.LoadAll().First();
 
-            Assert.IsNull(stored.Answers);
+            ClassicAssert.IsNull(stored.Answers);
             Assert.That(stored.IdentifyingAnswers, Has.Count.EqualTo(3));
 
             this.storage.FetchPreloadedData(stored);

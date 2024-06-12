@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Core.SharedKernels.DataCollection.MaskFormatter;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.MaskedFormatterTests
@@ -19,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.MaskedFormatterTests
         {
             var isTextMaskMatched = MaskedFormatter.IsTextMaskMatched(value , mask);
 
-            Assert.AreEqual(isTextMaskMatched, isMatched);
+            ClassicAssert.AreEqual(isTextMaskMatched, isMatched);
         }
 
         [Test]

@@ -1,5 +1,6 @@
 using System;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
@@ -37,8 +38,8 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             var exportedAudioAnswer = CreateFilledExportedQuestion(QuestionType.Audio, audioAnswer);
 
             //assert
-            Assert.AreEqual(1, exportedAudioAnswer.Length);
-            Assert.AreEqual(audioAnswer.FileName, exportedAudioAnswer[0]);
+            ClassicAssert.AreEqual(1, exportedAudioAnswer.Length);
+            ClassicAssert.AreEqual(audioAnswer.FileName, exportedAudioAnswer[0]);
         }
     }
 }

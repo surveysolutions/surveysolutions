@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Moq;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
@@ -108,7 +109,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Clustering
 
             Assert.That(zoomedPoints, Has.Count.EqualTo(2));
 
-            Assert.True(zoomedPoints.All(z => z.Properties.ContainsKey("interviewId")), "All returned points are not clusters");
+            ClassicAssert.True(zoomedPoints.All(z => z.Properties.ContainsKey("interviewId")), "All returned points are not clusters");
         }
     }
 }
