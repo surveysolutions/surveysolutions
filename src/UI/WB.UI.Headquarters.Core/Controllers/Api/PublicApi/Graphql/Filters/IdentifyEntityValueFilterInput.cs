@@ -27,8 +27,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Filters
                 .Description("Double answer value");
             descriptor.Field(x => x.ValueLong)
                 .Description("Long answer value");
-
-            
             
             descriptor.Field(x => x.IsEnabled)
                 .Description("Shows if this value enabled");
