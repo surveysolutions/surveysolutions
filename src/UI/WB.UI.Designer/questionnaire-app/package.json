@@ -58,7 +58,7 @@
     "eslint-plugin-standard": "5.0.0",
     "eslint-plugin-vue": "9.9.0",
     "glob-parent": "^6.0.0",
-    "globby": "9.2.0",
+    "globby": "14.0.1",
     "is-svg": "^4.2.2",
     "normalize-url": "^6.1.0",
     "postcss": "^8.4.35",
