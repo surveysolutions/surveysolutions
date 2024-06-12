@@ -2,6 +2,7 @@
 using AutoBogus;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Services.Export.Events;
 using WB.Services.Export.Events.Interview;
 using WB.Services.Infrastructure.EventSourcing;
@@ -178,7 +179,7 @@ namespace WB.Services.Export.Tests.Services.TenantApi
             var envelop = JsonConvert.DeserializeObject<Event>(json);
             var @event =  envelop.Payload as StaticTextsDeclaredInvalid;
             
-            Assert.NotNull(@event?.FailedValidationConditions);
+            ClassicAssert.NotNull(@event?.FailedValidationConditions);
             Assert.That(@event?.FailedValidationConditions[0].Key, Is.EqualTo(Create.Identity("ed668113-2534-36a1-318c-6ba1ab8233ea")));
         }
 

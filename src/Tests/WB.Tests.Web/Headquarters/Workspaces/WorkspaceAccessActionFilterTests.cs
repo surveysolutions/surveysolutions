@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
 using Moq;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Infrastructure.Native.Workspaces;
@@ -67,7 +68,7 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             var context = Act();
 
             // assert
-            Assert.Null(context.Result);
+            ClassicAssert.Null(context.Result);
         }
 
         [Test]
@@ -93,7 +94,7 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             var context = Act();
 
             // assert
-            Assert.Null(context.Result);
+            ClassicAssert.Null(context.Result);
         }
 
         [Test]
@@ -107,7 +108,7 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             var context = Act();
 
             // assert
-            Assert.Null(context.Result);
+            ClassicAssert.Null(context.Result);
         }
 
         [Test]
@@ -135,7 +136,7 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             var context = Act();
 
             // assert
-            Assert.Null(context.Result);
+            ClassicAssert.Null(context.Result);
         }
 
         [Test]
@@ -149,7 +150,7 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             var context = Act();
 
             // assert
-            Assert.Null(context.Result);
+            ClassicAssert.Null(context.Result);
         }
 
         [Test]
@@ -166,7 +167,7 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             var context = Act();
 
             // assert
-            Assert.Null(context.Result);
+            ClassicAssert.Null(context.Result);
         }
 
         [Test]
@@ -215,7 +216,7 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             var context = Act();
 
             // assert
-            Assert.Null(context.Result);
+            ClassicAssert.Null(context.Result);
         }
 
         [Test]
@@ -247,7 +248,7 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             var context = Act();
 
             // assert
-            Assert.Null(context.Result);
+            ClassicAssert.Null(context.Result);
         }
 
         [Test]
@@ -263,7 +264,7 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             var context = Act();
 
             // assert
-            Assert.Null(context.Result);
+            ClassicAssert.Null(context.Result);
         }
 
         [Test]
@@ -291,7 +292,7 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             var context = Act();
 
             // assert
-            Assert.Null(context.Result);
+            ClassicAssert.Null(context.Result);
         }
 
 

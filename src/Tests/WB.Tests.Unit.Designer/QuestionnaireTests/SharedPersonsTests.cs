@@ -2,6 +2,7 @@
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 
@@ -26,7 +27,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             // assert
             var person = questionnaire.SharedPersons.Single(p => p.UserId == personId);
 
-            Assert.IsNotNull(person);
+            ClassicAssert.NotNull(person);
             Assert.That(person.UserId, Is.EqualTo(personId));
             Assert.That(person.Email, Is.EqualTo(email));
             Assert.That(person.ShareType, Is.EqualTo(shareType));
@@ -47,7 +48,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             // assert
             var isExistsPerson = questionnaire.SharedPersons.Any(p => p.UserId == personId);
-            Assert.IsFalse(isExistsPerson);
+            ClassicAssert.IsFalse(isExistsPerson);
         }
 
         [Test]
@@ -65,7 +66,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             // assert
             var isExistsPerson = questionnaire.SharedPersons.Any(p => p.UserId == personId);
-            Assert.IsFalse(isExistsPerson);
+            ClassicAssert.IsFalse(isExistsPerson);
         }
 
         [Test]
@@ -188,7 +189,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             Assert.That(questionnaire.SharedPersons.First(), Has.Property(nameof(SharedPerson.ShareType)).EqualTo(ShareType.Edit),
                 "old owner of questionnaire has edit permissions on questionnaire");
                         
-            Assert.Null(questionnaire.SharedPersons.SingleOrDefault(p => p.UserId == newOwnerId),
+            ClassicAssert.Null(questionnaire.SharedPersons.SingleOrDefault(p => p.UserId == newOwnerId),
                 "questionnaire is no longer shared to new owner");
         }        
     }

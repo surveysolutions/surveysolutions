@@ -2,6 +2,7 @@
 using Moq;
 using Ncqrs.Spec;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -63,8 +64,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             questionnaire.DeleteQuestionnaire(Create.Command.DeleteQuestionnaire(questionnaireId, questionnaireVersion, responsibleId));
 
             // assert
-            Assert.AreEqual(questionnaireDocument.IsDeleted, true);
-            Assert.AreEqual(questionnaireBrowseItem.IsDeleted, true);
+            ClassicAssert.AreEqual(questionnaireDocument.IsDeleted, true);
+            ClassicAssert.AreEqual(questionnaireBrowseItem.IsDeleted, true);
         }
 
         [Test]

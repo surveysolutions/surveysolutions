@@ -2,6 +2,7 @@
 using System.Linq;
 using Moq;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
@@ -34,9 +35,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
         }
 
         [Test]
-        public void should_set_readonly_flag() => Assert.True(view.IsReadOnlyForUser);
+        public void should_set_readonly_flag() => ClassicAssert.True(view.IsReadOnlyForUser);
 
         [Test]
-        public void should_set_empty_shared_list() => Assert.False(view.SharedPersons.Any());
+        public void should_set_empty_shared_list() => ClassicAssert.False(view.SharedPersons.Any());
     }
 }

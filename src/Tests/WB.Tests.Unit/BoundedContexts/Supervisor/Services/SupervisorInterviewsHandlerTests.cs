@@ -5,6 +5,7 @@ using FluentAssertions;
 using Main.Core.Events;
 using Moq;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers;
 using WB.Core.BoundedContexts.Supervisor.Views;
@@ -316,7 +317,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
         [Test]
         public void UnknownExceptionType_are_equal_in_SupervisorInterviewsHandler_and_InterviewPackagesService()
         {
-            Assert.AreEqual(SupervisorInterviewsHandler.UnknownExceptionType, InterviewPackagesService.UnknownExceptionType);
+            ClassicAssert.AreEqual(SupervisorInterviewsHandler.UnknownExceptionType, InterviewPackagesService.UnknownExceptionType);
         }
 
         [Test]

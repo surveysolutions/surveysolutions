@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewEntities
@@ -35,16 +36,16 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewEntities
 
             var diff = Create.Entity.InterviewTreeVariableDiff(sourceVariable, targetVariable);
 
-            Assert.AreEqual(diff.IsValueChanged, isChangedResult);
+            ClassicAssert.AreEqual(diff.IsValueChanged, isChangedResult);
         }
 
         [Test]
         public void IsValueChanged_when_compare_datetime_variables_values()
         {
-            Assert.AreEqual(IsValueChanged(DateTime.Now, null), true);
-            Assert.AreEqual(IsValueChanged(null, DateTime.Now), true);
-            Assert.AreEqual(IsValueChanged(DateTime.MinValue, DateTime.MinValue), false);
-            Assert.AreEqual(IsValueChanged(DateTime.MinValue, DateTime.Now), true);
+            ClassicAssert.AreEqual(IsValueChanged(DateTime.Now, null), true);
+            ClassicAssert.AreEqual(IsValueChanged(null, DateTime.Now), true);
+            ClassicAssert.AreEqual(IsValueChanged(DateTime.MinValue, DateTime.MinValue), false);
+            ClassicAssert.AreEqual(IsValueChanged(DateTime.MinValue, DateTime.Now), true);
         }
 
         private bool IsValueChanged(object sourceValue, object targetValue)

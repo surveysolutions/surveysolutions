@@ -7,6 +7,7 @@ using System.Threading;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -84,11 +85,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             var errors = userImportService.VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt", "space").ToArray();
 
             //assert
-            Assert.AreEqual(1, errors.Length);
-            Assert.AreEqual("PLU0001", errors[0].Code);
-            Assert.AreEqual(2, errors[0].RowNumber);
-            Assert.AreEqual("Login", errors[0].ColumnName);
-            Assert.AreEqual(userName, errors[0].CellValue);
+            ClassicAssert.AreEqual(1, errors.Length);
+            ClassicAssert.AreEqual("PLU0001", errors[0].Code);
+            ClassicAssert.AreEqual(2, errors[0].RowNumber);
+            ClassicAssert.AreEqual("Login", errors[0].ColumnName);
+            ClassicAssert.AreEqual(userName, errors[0].CellValue);
         }
 
         [Test]
@@ -104,9 +105,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
                 new MemoryStream(new byte[0]), "file.txt", "space").ToArray();
 
             //assert
-            Assert.AreEqual(1, errors.Length);
-            Assert.AreEqual("PLU0022", errors[0].Code);
-            Assert.AreEqual(workspace, errors[0].CellValue);
+            ClassicAssert.AreEqual(1, errors.Length);
+            ClassicAssert.AreEqual("PLU0022", errors[0].Code);
+            ClassicAssert.AreEqual(workspace, errors[0].CellValue);
         }
         
         [Test]
@@ -123,16 +124,16 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
                 new MemoryStream(new byte[0]), "file.txt", "space").ToArray();
 
             //assert
-            Assert.AreEqual(2, errors.Length);
-            Assert.AreEqual("PLU0002", errors[0].Code);
-            Assert.AreEqual(2, errors[0].RowNumber);
-            Assert.AreEqual("Login", errors[0].ColumnName);
-            Assert.AreEqual(userName, errors[0].CellValue);
+            ClassicAssert.AreEqual(2, errors.Length);
+            ClassicAssert.AreEqual("PLU0002", errors[0].Code);
+            ClassicAssert.AreEqual(2, errors[0].RowNumber);
+            ClassicAssert.AreEqual("Login", errors[0].ColumnName);
+            ClassicAssert.AreEqual(userName, errors[0].CellValue);
 
-            Assert.AreEqual("PLU0002", errors[1].Code);
-            Assert.AreEqual(3, errors[1].RowNumber);
-            Assert.AreEqual("Login", errors[1].ColumnName);
-            Assert.AreEqual(userName, errors[1].CellValue);
+            ClassicAssert.AreEqual("PLU0002", errors[1].Code);
+            ClassicAssert.AreEqual(3, errors[1].RowNumber);
+            ClassicAssert.AreEqual("Login", errors[1].ColumnName);
+            ClassicAssert.AreEqual(userName, errors[1].CellValue);
         }
 
         [Test]
@@ -153,11 +154,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
                 new MemoryStream(new byte[0]), "file.txt", "space").ToArray();
 
             //assert
-            Assert.AreEqual(1, errors.Length);
-            Assert.AreEqual("PLU0010", errors[0].Code);
-            Assert.AreEqual(2, errors[0].RowNumber);
-            Assert.AreEqual("Supervisor", errors[0].ColumnName);
-            Assert.AreEqual(supervisor, errors[0].CellValue);
+            ClassicAssert.AreEqual(1, errors.Length);
+            ClassicAssert.AreEqual("PLU0010", errors[0].Code);
+            ClassicAssert.AreEqual(2, errors[0].RowNumber);
+            ClassicAssert.AreEqual("Supervisor", errors[0].ColumnName);
+            ClassicAssert.AreEqual(supervisor, errors[0].CellValue);
         }
 
         [Test]
@@ -179,11 +180,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             var errors = userImportService.VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt", "space").ToArray();
 
             //assert
-            Assert.AreEqual(1, errors.Length);
-            Assert.AreEqual("PLU0003", errors[0].Code);
-            Assert.AreEqual(2, errors[0].RowNumber);
-            Assert.AreEqual("Login", errors[0].ColumnName);
-            Assert.AreEqual(userName, errors[0].CellValue);
+            ClassicAssert.AreEqual(1, errors.Length);
+            ClassicAssert.AreEqual("PLU0003", errors[0].Code);
+            ClassicAssert.AreEqual(2, errors[0].RowNumber);
+            ClassicAssert.AreEqual("Login", errors[0].ColumnName);
+            ClassicAssert.AreEqual(userName, errors[0].CellValue);
         }
 
         [Test]
@@ -203,11 +204,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             var errors = userImportService.VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt", "space").ToArray();
 
             //assert
-            Assert.AreEqual(1, errors.Length);
-            Assert.AreEqual("PLU0004", errors[0].Code);
-            Assert.AreEqual(2, errors[0].RowNumber);
-            Assert.AreEqual("Login", errors[0].ColumnName);
-            Assert.AreEqual(userName, errors[0].CellValue);
+            ClassicAssert.AreEqual(1, errors.Length);
+            ClassicAssert.AreEqual("PLU0004", errors[0].Code);
+            ClassicAssert.AreEqual(2, errors[0].RowNumber);
+            ClassicAssert.AreEqual("Login", errors[0].ColumnName);
+            ClassicAssert.AreEqual(userName, errors[0].CellValue);
         }
 
         [Test]
@@ -223,11 +224,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             var errors = userImportService.VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt", "space").ToArray();
 
             //assert
-            Assert.AreEqual(1, errors.Length);
-            Assert.AreEqual("PLU0005", errors[0].Code);
-            Assert.AreEqual(2, errors[0].RowNumber);
-            Assert.AreEqual("Login", errors[0].ColumnName);
-            Assert.AreEqual(userName, errors[0].CellValue);
+            ClassicAssert.AreEqual(1, errors.Length);
+            ClassicAssert.AreEqual("PLU0005", errors[0].Code);
+            ClassicAssert.AreEqual(2, errors[0].RowNumber);
+            ClassicAssert.AreEqual("Login", errors[0].ColumnName);
+            ClassicAssert.AreEqual(userName, errors[0].CellValue);
         }
 
         [TestCase("", "PLU0021")] //empty
@@ -249,9 +250,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             //assert
             Assert.That(errors, Has.Length.EqualTo(1));
             Assert.That(errors[0].Code, Is.EqualTo(expectedCode));
-            Assert.AreEqual(2, errors[0].RowNumber);
-            Assert.AreEqual("Password", errors[0].ColumnName);
-            Assert.AreEqual(password, errors[0].CellValue);
+            ClassicAssert.AreEqual(2, errors[0].RowNumber);
+            ClassicAssert.AreEqual("Password", errors[0].ColumnName);
+            ClassicAssert.AreEqual(password, errors[0].CellValue);
         }
 
         [Test]
@@ -267,11 +268,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             var errors = userImportService.VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt", "space").ToArray();
 
             //assert
-            Assert.AreEqual(1, errors.Length);
-            Assert.AreEqual("PLU0007", errors[0].Code);
-            Assert.AreEqual(2, errors[0].RowNumber);
-            Assert.AreEqual("Email", errors[0].ColumnName);
-            Assert.AreEqual(email, errors[0].CellValue);
+            ClassicAssert.AreEqual(1, errors.Length);
+            ClassicAssert.AreEqual("PLU0007", errors[0].Code);
+            ClassicAssert.AreEqual(2, errors[0].RowNumber);
+            ClassicAssert.AreEqual("Email", errors[0].ColumnName);
+            ClassicAssert.AreEqual(email, errors[0].CellValue);
         }
 
         [Test]
@@ -287,11 +288,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             var errors = userImportService.VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt", "space").ToArray();
 
             //assert
-            Assert.AreEqual(1, errors.Length);
-            Assert.AreEqual("PLU0008", errors[0].Code);
-            Assert.AreEqual(2, errors[0].RowNumber);
-            Assert.AreEqual("PhoneNumber", errors[0].ColumnName);
-            Assert.AreEqual(phoneNumber, errors[0].CellValue);
+            ClassicAssert.AreEqual(1, errors.Length);
+            ClassicAssert.AreEqual("PLU0008", errors[0].Code);
+            ClassicAssert.AreEqual(2, errors[0].RowNumber);
+            ClassicAssert.AreEqual("PhoneNumber", errors[0].ColumnName);
+            ClassicAssert.AreEqual(phoneNumber, errors[0].CellValue);
         }
 
         [Test]
@@ -307,11 +308,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             var errors = userImportService.VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt", "space").ToArray();
 
             //assert
-            Assert.AreEqual(1, errors.Length);
-            Assert.AreEqual("PLU0009", errors[0].Code);
-            Assert.AreEqual(2, errors[0].RowNumber);
-            Assert.AreEqual("Role", errors[0].ColumnName);
-            Assert.AreEqual(undefinedRole, errors[0].CellValue);
+            ClassicAssert.AreEqual(1, errors.Length);
+            ClassicAssert.AreEqual("PLU0009", errors[0].Code);
+            ClassicAssert.AreEqual(2, errors[0].RowNumber);
+            ClassicAssert.AreEqual("Role", errors[0].ColumnName);
+            ClassicAssert.AreEqual(undefinedRole, errors[0].CellValue);
         }
 
         [Test]
@@ -328,11 +329,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             var errors = userImportService.VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt", "space").ToArray();
 
             //assert
-            Assert.AreEqual(1, errors.Length);
-            Assert.AreEqual("PLU0010", errors[0].Code);
-            Assert.AreEqual(2, errors[0].RowNumber);
-            Assert.AreEqual("Supervisor", errors[0].ColumnName);
-            Assert.AreEqual(supervisorName, errors[0].CellValue);
+            ClassicAssert.AreEqual(1, errors.Length);
+            ClassicAssert.AreEqual("PLU0010", errors[0].Code);
+            ClassicAssert.AreEqual(2, errors[0].RowNumber);
+            ClassicAssert.AreEqual("Supervisor", errors[0].ColumnName);
+            ClassicAssert.AreEqual(supervisorName, errors[0].CellValue);
         }
 
         [Test]
@@ -348,11 +349,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             var errors = userImportService.VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt", "space").ToArray();
 
             //assert
-            Assert.AreEqual(1, errors.Length);
-            Assert.AreEqual("PLU0010", errors[0].Code);
-            Assert.AreEqual(2, errors[0].RowNumber);
-            Assert.AreEqual("Supervisor", errors[0].ColumnName);
-            Assert.AreEqual("", errors[0].CellValue);
+            ClassicAssert.AreEqual(1, errors.Length);
+            ClassicAssert.AreEqual("PLU0010", errors[0].Code);
+            ClassicAssert.AreEqual(2, errors[0].RowNumber);
+            ClassicAssert.AreEqual("Supervisor", errors[0].ColumnName);
+            ClassicAssert.AreEqual("", errors[0].CellValue);
         }
 
         [Test]
@@ -369,11 +370,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             var errors = userImportService.VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt", "space").ToArray();
 
             //assert
-            Assert.AreEqual(1, errors.Length);
-            Assert.AreEqual("PLU0011", errors[0].Code);
-            Assert.AreEqual(2, errors[0].RowNumber);
-            Assert.AreEqual("Supervisor", errors[0].ColumnName);
-            Assert.AreEqual(supervisorCellValue, errors[0].CellValue);
+            ClassicAssert.AreEqual(1, errors.Length);
+            ClassicAssert.AreEqual("PLU0011", errors[0].Code);
+            ClassicAssert.AreEqual(2, errors[0].RowNumber);
+            ClassicAssert.AreEqual("Supervisor", errors[0].ColumnName);
+            ClassicAssert.AreEqual(supervisorCellValue, errors[0].CellValue);
         }
 
         [Test]
@@ -389,11 +390,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             var errors = userImportService.VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt", "space").ToArray();
 
             //assert
-            Assert.AreEqual(1, errors.Length);
-            Assert.AreEqual("PLU0012", errors[0].Code);
-            Assert.AreEqual(2, errors[0].RowNumber);
-            Assert.AreEqual("FullName", errors[0].ColumnName);
-            Assert.AreEqual(fullName, errors[0].CellValue);
+            ClassicAssert.AreEqual(1, errors.Length);
+            ClassicAssert.AreEqual("PLU0012", errors[0].Code);
+            ClassicAssert.AreEqual(2, errors[0].RowNumber);
+            ClassicAssert.AreEqual("FullName", errors[0].ColumnName);
+            ClassicAssert.AreEqual(fullName, errors[0].CellValue);
         }
 
         [Test]
@@ -409,11 +410,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             var errors = userImportService.VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt", "space").ToArray();
 
             //assert
-            Assert.AreEqual(1, errors.Length);
-            Assert.AreEqual("PLU0013", errors[0].Code);
-            Assert.AreEqual(2, errors[0].RowNumber);
-            Assert.AreEqual("PhoneNumber", errors[0].ColumnName);
-            Assert.AreEqual(phone, errors[0].CellValue);
+            ClassicAssert.AreEqual(1, errors.Length);
+            ClassicAssert.AreEqual("PLU0013", errors[0].Code);
+            ClassicAssert.AreEqual(2, errors[0].RowNumber);
+            ClassicAssert.AreEqual("PhoneNumber", errors[0].ColumnName);
+            ClassicAssert.AreEqual(phone, errors[0].CellValue);
         }
 
         [Test]
@@ -429,11 +430,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             var errors = userImportService.VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt", "space").ToArray();
 
             //assert
-            Assert.AreEqual(1, errors.Length);
-            Assert.AreEqual("PLU0014", errors[0].Code);
-            Assert.AreEqual(2, errors[0].RowNumber);
-            Assert.AreEqual("FullName", errors[0].ColumnName);
-            Assert.AreEqual(fullName, errors[0].CellValue);
+            ClassicAssert.AreEqual(1, errors.Length);
+            ClassicAssert.AreEqual("PLU0014", errors[0].Code);
+            ClassicAssert.AreEqual(2, errors[0].RowNumber);
+            ClassicAssert.AreEqual("FullName", errors[0].ColumnName);
+            ClassicAssert.AreEqual(fullName, errors[0].CellValue);
         }
 
         [Test]

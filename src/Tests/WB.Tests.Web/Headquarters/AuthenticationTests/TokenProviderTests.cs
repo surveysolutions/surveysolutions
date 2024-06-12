@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Moq;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Headquarters.Code.Authentication;
@@ -41,7 +42,7 @@ namespace WB.Tests.Web.Headquarters.AuthenticationTests
             var provider = TokenProvider(userStore.Object);
 
             var result = await provider.ValidateJtiAsync(user, testToken);
-            Assert.IsTrue(result);
+            ClassicAssert.IsTrue(result);
         }
         
         [Test]
@@ -68,7 +69,7 @@ namespace WB.Tests.Web.Headquarters.AuthenticationTests
             var provider = TokenProvider(userStore.Object);
 
             var result = await provider.ValidateJtiAsync(user, testToken + "11");
-            Assert.IsFalse(result);
+            ClassicAssert.IsFalse(result);
         }
         
         [Test]
@@ -123,7 +124,7 @@ namespace WB.Tests.Web.Headquarters.AuthenticationTests
             var provider = TokenProvider(userStore.Object);
 
             var result = await provider.DoesTokenExist(user);
-            Assert.IsTrue(result);
+            ClassicAssert.IsTrue(result);
         }
         
         [Test]
@@ -150,7 +151,7 @@ namespace WB.Tests.Web.Headquarters.AuthenticationTests
             var provider = TokenProvider(userStore.Object);
 
             var result = await provider.DoesTokenExist(user);
-            Assert.IsFalse(result);
+            ClassicAssert.IsFalse(result);
         }
         
         [Test]

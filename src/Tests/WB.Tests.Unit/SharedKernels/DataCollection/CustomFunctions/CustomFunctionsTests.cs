@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
 using WB.Core.SharedKernels.DataCollection.V2.CustomFunctions;
@@ -31,13 +32,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         [Test]
         public void Test_InRange()
         {
-            Assert.IsTrue(1.InRange(0, 10));
-            Assert.IsFalse(1.InRange(3, 10));
-            Assert.IsFalse(13.InRange(3, 10));
+            ClassicAssert.IsTrue(1.InRange(0, 10));
+            ClassicAssert.IsFalse(1.InRange(3, 10));
+            ClassicAssert.IsFalse(13.InRange(3, 10));
 
-            Assert.IsTrue( ((double?)1d).InRange(0.0, 10.0));
-            Assert.IsFalse(((double?)1d).InRange(3.0, 10.0));
-            Assert.IsFalse(((double?)13d).InRange(3.0, 10.0));
+            ClassicAssert.IsTrue( ((double?)1d).InRange(0.0, 10.0));
+            ClassicAssert.IsFalse(((double?)1d).InRange(3.0, 10.0));
+            ClassicAssert.IsFalse(((double?)13d).InRange(3.0, 10.0));
 
             decimal? ten = 10;
             decimal? three = 3;
@@ -45,33 +46,33 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             decimal? zero = 0;
             decimal? thirteen = 13;
 
-            Assert.IsTrue(one.InRange(zero, ten));
-            Assert.IsFalse(one.InRange(three, ten));
-            Assert.IsFalse(thirteen.InRange(three, ten));
+            ClassicAssert.IsTrue(one.InRange(zero, ten));
+            ClassicAssert.IsFalse(one.InRange(three, ten));
+            ClassicAssert.IsFalse(thirteen.InRange(three, ten));
 
-            Assert.IsTrue(one.InRange(zero, ten));
-            Assert.IsFalse(one.InRange(three, ten));
-            Assert.IsFalse(thirteen.InRange(three, ten));
+            ClassicAssert.IsTrue(one.InRange(zero, ten));
+            ClassicAssert.IsFalse(one.InRange(three, ten));
+            ClassicAssert.IsFalse(thirteen.InRange(three, ten));
 
-            Assert.IsFalse(((int?)null).InRange(0, 10));
-            Assert.IsFalse(((int?)1).InRange(null, 10));
-            Assert.IsFalse(((int?)1).InRange(2, (int?)null));
+            ClassicAssert.IsFalse(((int?)null).InRange(0, 10));
+            ClassicAssert.IsFalse(((int?)1).InRange(null, 10));
+            ClassicAssert.IsFalse(((int?)1).InRange(2, (int?)null));
             
-            Assert.IsFalse(((long?)null).InRange(0, 10));
-            Assert.IsFalse(((long?)1).InRange(null, 10));
-            Assert.IsFalse(((long?)1).InRange(2, (int?)null));
+            ClassicAssert.IsFalse(((long?)null).InRange(0, 10));
+            ClassicAssert.IsFalse(((long?)1).InRange(null, 10));
+            ClassicAssert.IsFalse(((long?)1).InRange(2, (int?)null));
 
-            Assert.IsFalse(((double?)null).InRange(0, 10));
-            Assert.IsFalse(((double?)1).InRange(null, 10));
-            Assert.IsFalse(((double?)1).InRange(2, (int?)null));
+            ClassicAssert.IsFalse(((double?)null).InRange(0, 10));
+            ClassicAssert.IsFalse(((double?)1).InRange(null, 10));
+            ClassicAssert.IsFalse(((double?)1).InRange(2, (int?)null));
             
-            Assert.IsFalse(((decimal?)null).InRange(0, 10));
-            Assert.IsFalse(((decimal?)1).InRange(null, 10));
-            Assert.IsFalse(((decimal?)1).InRange(2, (int?)null));
+            ClassicAssert.IsFalse(((decimal?)null).InRange(0, 10));
+            ClassicAssert.IsFalse(((decimal?)1).InRange(null, 10));
+            ClassicAssert.IsFalse(((decimal?)1).InRange(2, (int?)null));
             
             
-            Assert.IsFalse(((long?)11).InRange(0, 10));
-            Assert.IsFalse(((double?)11).InRange(0, 10));
+            ClassicAssert.IsFalse(((long?)11).InRange(0, 10));
+            ClassicAssert.IsFalse(((double?)11).InRange(0, 10));
         }
         
         [Test]
@@ -81,14 +82,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             DateTime? date2 = new DateTime(2002, 2, 2);
             DateTime? date3 = new DateTime(2003, 3, 3);
 
-            Assert.IsTrue(date2.InRange(date1, date3));
-            Assert.IsFalse(date1.InRange(date2, date3));
-            Assert.IsFalse(date3.InRange(date1, date2));
+            ClassicAssert.IsTrue(date2.InRange(date1, date3));
+            ClassicAssert.IsFalse(date1.InRange(date2, date3));
+            ClassicAssert.IsFalse(date3.InRange(date1, date2));
 
             DateTime? date0 = null;
-            Assert.IsFalse(date0.InRange(date1, date3));
-            Assert.IsFalse(date2.InRange(null, date3));
-            Assert.IsFalse(date2.InRange(date1, null));
+            ClassicAssert.IsFalse(date0.InRange(date1, date3));
+            ClassicAssert.IsFalse(date2.InRange(null, date3));
+            ClassicAssert.IsFalse(date2.InRange(date1, null));
         }
 
 
@@ -96,32 +97,32 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         public void Test_InList()
         {
             long? d = 2;
-            Assert.IsFalse(d.InList());
-            Assert.IsTrue(Extensions.InList(1, 1, 2, 3, 4));
-            Assert.IsFalse(Extensions.InList(0, 1, 2, 3, 4));
-            Assert.IsFalse(Extensions.InList(null, 1, 2, 3, 4));
-            Assert.IsTrue(Extensions.InList(null, 1, 2, 3, 4, null));
+            ClassicAssert.IsFalse(d.InList());
+            ClassicAssert.IsTrue(Extensions.InList(1, 1, 2, 3, 4));
+            ClassicAssert.IsFalse(Extensions.InList(0, 1, 2, 3, 4));
+            ClassicAssert.IsFalse(Extensions.InList(null, 1, 2, 3, 4));
+            ClassicAssert.IsTrue(Extensions.InList(null, 1, 2, 3, 4, null));
         }
 
         [Test]
         public void Test_InListStr()
         {
             string name = "Washington";
-            Assert.IsTrue(name.InList("Jackson", "Washington", "Bush"));
-            Assert.IsFalse(name.InList("Jackson", "Clinton", "Bush"));
-            Assert.IsFalse(String.Empty.InList("Jackson", "Clinton", "Bush"));
-            Assert.IsFalse(name.InList());
+            ClassicAssert.IsTrue(name.InList("Jackson", "Washington", "Bush"));
+            ClassicAssert.IsFalse(name.InList("Jackson", "Clinton", "Bush"));
+            ClassicAssert.IsFalse(String.Empty.InList("Jackson", "Clinton", "Bush"));
+            ClassicAssert.IsFalse(name.InList());
         }
 
         [Test]
         public void Test_InListDouble()
         {
             double? d = 2.0;
-            Assert.IsFalse(d.InList());
-            Assert.IsTrue(Extensions.InList(1.0, 1.0, 2.0, 3.0, 4.0));
-            Assert.IsFalse(Extensions.InList(0.0, 1.0, 2.0, 3.0, 4.0));
-            Assert.IsFalse(Extensions.InList(null, 1.0, 2.0, 3.0, 4.0));
-            Assert.IsTrue(Extensions.InList(null, 1.0, 2.0, 3.0, 4.0, null));
+            ClassicAssert.IsFalse(d.InList());
+            ClassicAssert.IsTrue(Extensions.InList(1.0, 1.0, 2.0, 3.0, 4.0));
+            ClassicAssert.IsFalse(Extensions.InList(0.0, 1.0, 2.0, 3.0, 4.0));
+            ClassicAssert.IsFalse(Extensions.InList(null, 1.0, 2.0, 3.0, 4.0));
+            ClassicAssert.IsTrue(Extensions.InList(null, 1.0, 2.0, 3.0, 4.0, null));
         }
 
         [Test]
@@ -133,82 +134,82 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             decimal? two = 2;
             decimal? three = 3;
             decimal? four = 4;
-            Assert.IsFalse(d.InList());
-            Assert.IsTrue(Extensions.InList(one, one, two, three, four));
-            Assert.IsFalse(Extensions.InList(zero, one, two, three, four));
-            Assert.IsFalse(Extensions.InList(null, one, two, three, four));
-            Assert.IsTrue(Extensions.InList(null, one, two, three, four, null));
+            ClassicAssert.IsFalse(d.InList());
+            ClassicAssert.IsTrue(Extensions.InList(one, one, two, three, four));
+            ClassicAssert.IsFalse(Extensions.InList(zero, one, two, three, four));
+            ClassicAssert.IsFalse(Extensions.InList(null, one, two, three, four));
+            ClassicAssert.IsTrue(Extensions.InList(null, one, two, three, four, null));
         }
 
         [Test]
         public void Test_ContainsAny()
         {
-            Assert.IsTrue(_mc123.ContainsAny(2, 0));
-            Assert.IsFalse(_mc123.ContainsAny(5, 10));
+            ClassicAssert.IsTrue(_mc123.ContainsAny(2, 0));
+            ClassicAssert.IsFalse(_mc123.ContainsAny(5, 10));
 
-            Assert.IsTrue(_mc123.ContainsAny(2));
+            ClassicAssert.IsTrue(_mc123.ContainsAny(2));
 
-            Assert.IsTrue(_mc123.ContainsAny(null));
-            Assert.IsTrue(_mc123.ContainsAny(new int[0]));
+            ClassicAssert.IsTrue(_mc123.ContainsAny(null));
+            ClassicAssert.IsTrue(_mc123.ContainsAny(new int[0]));
 
             decimal[] empty = null;
-            Assert.IsFalse(empty.ContainsAny(2));
-            Assert.IsFalse(empty.ContainsAny(null));
+            ClassicAssert.IsFalse(empty.ContainsAny(2));
+            ClassicAssert.IsFalse(empty.ContainsAny(null));
 
             empty = new decimal[0];
-            Assert.IsFalse(empty.ContainsAny(2));
+            ClassicAssert.IsFalse(empty.ContainsAny(2));
         }
 
         [Test]
         public void Test_ContainsOnly()
         {
-            Assert.IsFalse(_mc123.ContainsOnly(1));   // False because also contains 2 and 3
-            Assert.IsFalse(_mc123.ContainsOnly(2));   // False because also contains 1 and 3
-            Assert.IsFalse(_mc123.ContainsOnly(3));   // False because also contains 1 and 2
-            Assert.IsFalse(_mc123.ContainsOnly(1, 2));   // False because also contains 3
-            Assert.IsTrue(_mc123.ContainsOnly(1, 2, 3)); // True because contains each of the items and no other items.
+            ClassicAssert.IsFalse(_mc123.ContainsOnly(1));   // False because also contains 2 and 3
+            ClassicAssert.IsFalse(_mc123.ContainsOnly(2));   // False because also contains 1 and 3
+            ClassicAssert.IsFalse(_mc123.ContainsOnly(3));   // False because also contains 1 and 2
+            ClassicAssert.IsFalse(_mc123.ContainsOnly(1, 2));   // False because also contains 3
+            ClassicAssert.IsTrue(_mc123.ContainsOnly(1, 2, 3)); // True because contains each of the items and no other items.
 
-            Assert.IsFalse(_mc3.ContainsOnly(1)); // False because contains a different item
-            Assert.IsTrue(_mc3.ContainsOnly(3)); // True because contains exactly this item
+            ClassicAssert.IsFalse(_mc3.ContainsOnly(1)); // False because contains a different item
+            ClassicAssert.IsTrue(_mc3.ContainsOnly(3)); // True because contains exactly this item
 
             decimal[] empty = null;
-            Assert.IsFalse(empty.ContainsOnly(2));     // nothing does not contain 2
-            //Assert.IsFalse(empty.ContainsOnly(null));       // nothing consists of nothing
+            ClassicAssert.IsFalse(empty.ContainsOnly(2));     // nothing does not contain 2
+            //ClassicAssert.IsFalse(empty.ContainsOnly(null));       // nothing consists of nothing
         }
 
         [Test]
         public void Test_ContainsAll()
         {
-            Assert.IsTrue(_mc123.ContainsAll(1));
-            Assert.IsTrue(_mc123.ContainsAll(2));
-            Assert.IsTrue(_mc123.ContainsAll(3));
+            ClassicAssert.IsTrue(_mc123.ContainsAll(1));
+            ClassicAssert.IsTrue(_mc123.ContainsAll(2));
+            ClassicAssert.IsTrue(_mc123.ContainsAll(3));
 
-            Assert.IsTrue(_mc123.ContainsAll(1, 2));
-            Assert.IsTrue(_mc123.ContainsAll(1, 3));
-            Assert.IsTrue(_mc123.ContainsAll(2, 3));
+            ClassicAssert.IsTrue(_mc123.ContainsAll(1, 2));
+            ClassicAssert.IsTrue(_mc123.ContainsAll(1, 3));
+            ClassicAssert.IsTrue(_mc123.ContainsAll(2, 3));
 
-            Assert.IsTrue(_mc123.ContainsAll(1, 2, 3));
+            ClassicAssert.IsTrue(_mc123.ContainsAll(1, 2, 3));
 
             // Order does not matter!
-            Assert.IsTrue(_mc123.ContainsAll(2, 1));
-            Assert.IsTrue(_mc123.ContainsAll(3, 1));
-            Assert.IsTrue(_mc123.ContainsAll(3, 2));
+            ClassicAssert.IsTrue(_mc123.ContainsAll(2, 1));
+            ClassicAssert.IsTrue(_mc123.ContainsAll(3, 1));
+            ClassicAssert.IsTrue(_mc123.ContainsAll(3, 2));
 
-            Assert.IsTrue(_mc123.ContainsAll(3, 2, 1));
+            ClassicAssert.IsTrue(_mc123.ContainsAll(3, 2, 1));
 
-            Assert.IsFalse(_mc123.ContainsAll(3, 9));
+            ClassicAssert.IsFalse(_mc123.ContainsAll(3, 9));
 
-            Assert.IsTrue(_mc123.ContainsAll((decimal[])null));
-            Assert.IsTrue(_mc123.ContainsAll((int[])null));
+            ClassicAssert.IsTrue(_mc123.ContainsAll((decimal[])null));
+            ClassicAssert.IsTrue(_mc123.ContainsAll((int[])null));
             
-            Assert.IsTrue(_mc123.ContainsAll(new decimal[0]));
+            ClassicAssert.IsTrue(_mc123.ContainsAll(new decimal[0]));
 
 
             decimal[] empty = null;
-            Assert.IsFalse(empty.ContainsAll(1));
+            ClassicAssert.IsFalse(empty.ContainsAll(1));
 
             decimal[] empty2 = new decimal[0];
-            Assert.IsFalse(empty2.ContainsAll(1));
+            ClassicAssert.IsFalse(empty2.ContainsAll(1));
         }
 
 
@@ -216,13 +217,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         public void Test_IsNoneOf()
         {
             decimal? educ = 4;
-            Assert.IsTrue(educ.IsNoneOf(2, 3, 11)); // bacause value of educ is not blacklisted
-            Assert.IsFalse(educ.IsNoneOf(2, 3, 4)); // because 4 is blacklisted but is the current value of educ
-            Assert.IsTrue(educ.IsNoneOf());         // because the blacklist is empty
-            Assert.IsTrue(educ.IsNoneOf(null));
+            ClassicAssert.IsTrue(educ.IsNoneOf(2, 3, 11)); // bacause value of educ is not blacklisted
+            ClassicAssert.IsFalse(educ.IsNoneOf(2, 3, 4)); // because 4 is blacklisted but is the current value of educ
+            ClassicAssert.IsTrue(educ.IsNoneOf());         // because the blacklist is empty
+            ClassicAssert.IsTrue(educ.IsNoneOf(null));
 
             decimal? none = null;
-            Assert.IsTrue(none.IsNoneOf(2, 3, 4));
+            ClassicAssert.IsTrue(none.IsNoneOf(2, 3, 4));
         }
 
         [Test]
@@ -238,11 +239,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             decimal? q8 = null;
 
 
-            Assert.AreEqual(1, new AbstractConditionalLevelInstanceFunctions().CountValue(1, q1, q2, q3, q4, q5, q6, q7));
-            Assert.AreEqual(4, new AbstractConditionalLevelInstanceFunctions().CountValue(2, q1, q2, q3, q4, q5, q6, q7));
-            Assert.AreEqual(2, new AbstractConditionalLevelInstanceFunctions().CountValue(3, q1, q2, q3, q4, q5, q6, q7));
-            Assert.AreEqual(0, new AbstractConditionalLevelInstanceFunctions().CountValue(4, q1, q2, q3, q4, q5, q6, q7));
-            Assert.AreEqual(4, new AbstractConditionalLevelInstanceFunctions().CountValue(2, q1, q2, q3, q4, q5, q6, q7, q8));
+            ClassicAssert.AreEqual(1, new AbstractConditionalLevelInstanceFunctions().CountValue(1, q1, q2, q3, q4, q5, q6, q7));
+            ClassicAssert.AreEqual(4, new AbstractConditionalLevelInstanceFunctions().CountValue(2, q1, q2, q3, q4, q5, q6, q7));
+            ClassicAssert.AreEqual(2, new AbstractConditionalLevelInstanceFunctions().CountValue(3, q1, q2, q3, q4, q5, q6, q7));
+            ClassicAssert.AreEqual(0, new AbstractConditionalLevelInstanceFunctions().CountValue(4, q1, q2, q3, q4, q5, q6, q7));
+            ClassicAssert.AreEqual(4, new AbstractConditionalLevelInstanceFunctions().CountValue(2, q1, q2, q3, q4, q5, q6, q7, q8));
         }
 
         [Test]
@@ -250,55 +251,55 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         {
             var _mc123_1 = new decimal[] { 1, 2, 3 };
 
-            Assert.AreEqual(1, _mc123_1.CountValues(1));
-            Assert.AreEqual(1, _mc123_1.CountValues(2));
-            Assert.AreEqual(1, _mc123_1.CountValues(3));
-            Assert.AreEqual(2, _mc123_1.CountValues(1, 2));
-            Assert.AreEqual(2, _mc123_1.CountValues(1, 3));
-            Assert.AreEqual(3, _mc123_1.CountValues(1, 2, 3));
-            Assert.AreEqual(3, _mc123_1.CountValues(1, 2, 3, 4));
-            Assert.AreEqual(0, _mc123_1.CountValues());
-            Assert.AreEqual(0, _mc123_1.CountValues(null));
+            ClassicAssert.AreEqual(1, _mc123_1.CountValues(1));
+            ClassicAssert.AreEqual(1, _mc123_1.CountValues(2));
+            ClassicAssert.AreEqual(1, _mc123_1.CountValues(3));
+            ClassicAssert.AreEqual(2, _mc123_1.CountValues(1, 2));
+            ClassicAssert.AreEqual(2, _mc123_1.CountValues(1, 3));
+            ClassicAssert.AreEqual(3, _mc123_1.CountValues(1, 2, 3));
+            ClassicAssert.AreEqual(3, _mc123_1.CountValues(1, 2, 3, 4));
+            ClassicAssert.AreEqual(0, _mc123_1.CountValues());
+            ClassicAssert.AreEqual(0, _mc123_1.CountValues(null));
 
             decimal[] empty = null;
-            Assert.AreEqual(0, empty.CountValues(1, 2, 3));
+            ClassicAssert.AreEqual(0, empty.CountValues(1, 2, 3));
 
             decimal[] empty2 = new decimal[0];
-            Assert.AreEqual(0, empty2.CountValues(2, 3, 4));
+            ClassicAssert.AreEqual(0, empty2.CountValues(2, 3, 4));
 
         }
 
         [Test]
         public void Test_CenturyMonthCode()
         {
-            Assert.AreEqual(11, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(11, 1900));
-            Assert.AreEqual(1383, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(3, 2015));
+            ClassicAssert.AreEqual(11, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(11, 1900));
+            ClassicAssert.AreEqual(1383, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(3, 2015));
 
-            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(11, null));
-            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(null, 2015));
-            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(null, null));
+            ClassicAssert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(11, null));
+            ClassicAssert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(null, 2015));
+            ClassicAssert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(null, null));
 
-            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(13, 2015));
-            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(0, 2015));
-            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(6, 1812));
+            ClassicAssert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(13, 2015));
+            ClassicAssert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(0, 2015));
+            ClassicAssert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(6, 1812));
         }
 
         [Test]
         public void Test_CenturyMonthCodeDouble()
         {
-            Assert.AreEqual(11, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(11.0, 1900.0));
-            Assert.AreEqual(1383, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(3.0, 2015.0));
+            ClassicAssert.AreEqual(11, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(11.0, 1900.0));
+            ClassicAssert.AreEqual(1383, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(3.0, 2015.0));
 
-            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(11.0, null));
-            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(null, 2015.0));
-            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(null, null));
+            ClassicAssert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(11.0, null));
+            ClassicAssert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(null, 2015.0));
+            ClassicAssert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(null, null));
 
-            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(13.0, 2015.0));
-            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(0.0, 2015.0));
-            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(6.0, 1812.0));
+            ClassicAssert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(13.0, 2015.0));
+            ClassicAssert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(0.0, 2015.0));
+            ClassicAssert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(6.0, 1812.0));
 
-            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(2.2, 2015.0));
-            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(6.0, 1812.3));
+            ClassicAssert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(2.2, 2015.0));
+            ClassicAssert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(6.0, 1812.3));
         }
 
         [Test]
@@ -310,82 +311,82 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
 
             decimal m11 = 11;
 
-            Assert.AreEqual(11, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(m11, yr1900));
-            Assert.AreEqual(1383, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(3, yr2015));
+            ClassicAssert.AreEqual(11, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(m11, yr1900));
+            ClassicAssert.AreEqual(1383, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(3, yr2015));
 
-            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(m11, null));
-            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(null, yr2015));
-            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(null, null));
+            ClassicAssert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(m11, null));
+            ClassicAssert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(null, yr2015));
+            ClassicAssert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(null, null));
 
-            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(13, yr2015));
-            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(0, yr2015));
-            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(6, yr1812));
+            ClassicAssert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(13, yr2015));
+            ClassicAssert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(0, yr2015));
+            ClassicAssert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(6, yr1812));
         }
 
         [Test]
         public void Test_IsDate()
         {
-            Assert.IsTrue(new AbstractConditionalLevelInstanceFunctions().IsDate((decimal)2010, 12, 31));
-            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate((decimal)2010, 2, 31));
+            ClassicAssert.IsTrue(new AbstractConditionalLevelInstanceFunctions().IsDate((decimal)2010, 12, 31));
+            ClassicAssert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate((decimal)2010, 2, 31));
 
-            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate(null, (decimal)12, 31));
-            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate((decimal)2010, null, 31));
-            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate((decimal)2010, 12, null));
+            ClassicAssert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate(null, (decimal)12, 31));
+            ClassicAssert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate((decimal)2010, null, 31));
+            ClassicAssert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate((decimal)2010, 12, null));
 
-            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate((decimal)2010, 12, null));
-            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate((decimal)2010.2, 12, 10));
-            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate((decimal)2010, (decimal)12.2, 10));
-            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate((decimal)2010, 12, (decimal)10.2));
+            ClassicAssert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate((decimal)2010, 12, null));
+            ClassicAssert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate((decimal)2010.2, 12, 10));
+            ClassicAssert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate((decimal)2010, (decimal)12.2, 10));
+            ClassicAssert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate((decimal)2010, 12, (decimal)10.2));
         }
 
         [Test]
         public void Test_IsDateDouble()
         {
-            Assert.IsTrue(new AbstractConditionalLevelInstanceFunctions().IsDate(2010.0, 12, 31));
-            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate(2010.0, 2, 31));
+            ClassicAssert.IsTrue(new AbstractConditionalLevelInstanceFunctions().IsDate(2010.0, 12, 31));
+            ClassicAssert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate(2010.0, 2, 31));
 
-            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate(null, 12, 31.0));
-            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate(2010.0, null, 31));
-            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate(2010.0, 12, null));
+            ClassicAssert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate(null, 12, 31.0));
+            ClassicAssert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate(2010.0, null, 31));
+            ClassicAssert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate(2010.0, 12, null));
 
-            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate(2010.0, 12, null));
-            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate(2010.2, 12, 10));
-            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate(2010, 12.2, 10));
-            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate(2010, 12, 10.2));
+            ClassicAssert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate(2010.0, 12, null));
+            ClassicAssert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate(2010.2, 12, 10));
+            ClassicAssert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate(2010, 12.2, 10));
+            ClassicAssert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate(2010, 12, 10.2));
         }
 
         [Test]
         public void Test_IsMilitaryTime()
         {
-            Assert.IsTrue(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime("0600"));
-            Assert.IsTrue(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime("2323"));
-            Assert.IsTrue(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime("0600"));
-            Assert.IsTrue(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime("2323"));
+            ClassicAssert.IsTrue(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime("0600"));
+            ClassicAssert.IsTrue(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime("2323"));
+            ClassicAssert.IsTrue(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime("0600"));
+            ClassicAssert.IsTrue(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime("2323"));
 
-            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime(""));
-            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime("0090"));
-            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime("2500"));
-            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime("2525"));
-            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime("545")); // leading zeroes are required
-            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime("5:45")); // delimiters are not allowed
-            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime("15.3")); // only digits are allowed
+            ClassicAssert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime(""));
+            ClassicAssert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime("0090"));
+            ClassicAssert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime("2500"));
+            ClassicAssert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime("2525"));
+            ClassicAssert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime("545")); // leading zeroes are required
+            ClassicAssert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime("5:45")); // delimiters are not allowed
+            ClassicAssert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime("15.3")); // only digits are allowed
         }
 
         [Test]
         public void Test_IsMilitaryTimeZ()
         {
-            Assert.IsTrue(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ("0600Z"));
-            Assert.IsTrue(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ("2323J"));
-            Assert.IsTrue(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ("0600Z"));
-            Assert.IsTrue(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ("2323J"));
+            ClassicAssert.IsTrue(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ("0600Z"));
+            ClassicAssert.IsTrue(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ("2323J"));
+            ClassicAssert.IsTrue(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ("0600Z"));
+            ClassicAssert.IsTrue(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ("2323J"));
 
-            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ(""));
-            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ("0090A"));
-            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ("2500Z"));
-            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ("2525B"));
-            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ("0630q")); // small letters not allowed, capital letters are required
-            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ("0630")); // time zone is required
-            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ("545A")); // leading zeroes are required
+            ClassicAssert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ(""));
+            ClassicAssert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ("0090A"));
+            ClassicAssert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ("2500Z"));
+            ClassicAssert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ("2525B"));
+            ClassicAssert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ("0630q")); // small letters not allowed, capital letters are required
+            ClassicAssert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ("0630")); // time zone is required
+            ClassicAssert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ("545A")); // leading zeroes are required
         }
 
         [Test]
@@ -408,24 +409,24 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             return new AbstractConditionalLevelInstanceFunctions().FullYearsBetween(first, second);
 
             
-            /*Assert.AreEqual(level.FullYearsBetween(d11, d12), 0);
-            Assert.AreEqual(level.FullYearsBetween(d11, d13), 1);
-            Assert.AreEqual(level.FullYearsBetween(d11, d14), 3);
-            Assert.AreEqual(level.FullYearsBetween(d11, d15), 4);
-            Assert.AreEqual(level.FullYearsBetween(d11, d16), 4);
+            /*ClassicAssert.AreEqual(level.FullYearsBetween(d11, d12), 0);
+            ClassicAssert.AreEqual(level.FullYearsBetween(d11, d13), 1);
+            ClassicAssert.AreEqual(level.FullYearsBetween(d11, d14), 3);
+            ClassicAssert.AreEqual(level.FullYearsBetween(d11, d15), 4);
+            ClassicAssert.AreEqual(level.FullYearsBetween(d11, d16), 4);
             */
 
 
 
             /*
-            Assert.AreEqual(13, level.FullYearsBetween(d1, d2));
-            Assert.AreEqual(1, level.FullYearsBetween(d3, d2));
-            Assert.AreEqual(0, level.FullYearsBetween(d2, d4));
+            ClassicAssert.AreEqual(13, level.FullYearsBetween(d1, d2));
+            ClassicAssert.AreEqual(1, level.FullYearsBetween(d3, d2));
+            ClassicAssert.AreEqual(0, level.FullYearsBetween(d2, d4));
 
-            Assert.AreEqual(-9998, level.FullYearsBetween(d4, d2));
-            Assert.AreEqual(-9999, level.FullYearsBetween(d4, null));
-            Assert.AreEqual(-9999, level.FullYearsBetween(null, d4));
-            Assert.AreEqual(-9999, level.FullYearsBetween(null, null));
+            ClassicAssert.AreEqual(-9998, level.FullYearsBetween(d4, d2));
+            ClassicAssert.AreEqual(-9999, level.FullYearsBetween(d4, null));
+            ClassicAssert.AreEqual(-9999, level.FullYearsBetween(null, d4));
+            ClassicAssert.AreEqual(-9999, level.FullYearsBetween(null, null));
             */
 
         }
@@ -436,63 +437,63 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             DateTime? d1 = new DateTime(2000, 1, 1);
             DateTime? d2 = new DateTime(1990, 1, 1);
 
-            Assert.AreEqual(10, d1.FullYearsSince(d2));
+            ClassicAssert.AreEqual(10, d1.FullYearsSince(d2));
         }
 
         [Test]
         public void Test_SelectKish1949()
         {
-            Assert.AreEqual(5, new AbstractConditionalLevelInstanceFunctions().SelectKish1949(8, 5));
-            Assert.AreEqual(1, new AbstractConditionalLevelInstanceFunctions().SelectKish1949(8, 1));
-            Assert.AreEqual(2, new AbstractConditionalLevelInstanceFunctions().SelectKish1949(3, 20));
+            ClassicAssert.AreEqual(5, new AbstractConditionalLevelInstanceFunctions().SelectKish1949(8, 5));
+            ClassicAssert.AreEqual(1, new AbstractConditionalLevelInstanceFunctions().SelectKish1949(8, 1));
+            ClassicAssert.AreEqual(2, new AbstractConditionalLevelInstanceFunctions().SelectKish1949(3, 20));
 
-            Assert.AreEqual(-9999, new AbstractConditionalLevelInstanceFunctions().SelectKish1949(8, null)); // undefined household size
-            Assert.AreEqual(-9998, new AbstractConditionalLevelInstanceFunctions().SelectKish1949(10, 3)); // invalid table number
-            Assert.AreEqual(-9997, new AbstractConditionalLevelInstanceFunctions().SelectKish1949(8, 0));
+            ClassicAssert.AreEqual(-9999, new AbstractConditionalLevelInstanceFunctions().SelectKish1949(8, null)); // undefined household size
+            ClassicAssert.AreEqual(-9998, new AbstractConditionalLevelInstanceFunctions().SelectKish1949(10, 3)); // invalid table number
+            ClassicAssert.AreEqual(-9997, new AbstractConditionalLevelInstanceFunctions().SelectKish1949(8, 0));
         }
 
         [Test]
         public void Test_SelectKishIlo()
         {
-            Assert.AreEqual(1, new AbstractConditionalLevelInstanceFunctions().SelectKishIlo(121, 8));
-            Assert.AreEqual(1, new AbstractConditionalLevelInstanceFunctions().SelectKishIlo(1210, 8));
-            Assert.AreEqual(5, new AbstractConditionalLevelInstanceFunctions().SelectKishIlo(555, 5));
-            Assert.AreEqual(1, new AbstractConditionalLevelInstanceFunctions().SelectKishIlo(121, 12));
-            Assert.AreEqual(-9997, new AbstractConditionalLevelInstanceFunctions().SelectKishIlo(121, 0));
-            Assert.AreEqual(-9998, new AbstractConditionalLevelInstanceFunctions().SelectKishIlo(0, 1));
-            Assert.AreEqual(-9999, new AbstractConditionalLevelInstanceFunctions().SelectKishIlo(121, null));
+            ClassicAssert.AreEqual(1, new AbstractConditionalLevelInstanceFunctions().SelectKishIlo(121, 8));
+            ClassicAssert.AreEqual(1, new AbstractConditionalLevelInstanceFunctions().SelectKishIlo(1210, 8));
+            ClassicAssert.AreEqual(5, new AbstractConditionalLevelInstanceFunctions().SelectKishIlo(555, 5));
+            ClassicAssert.AreEqual(1, new AbstractConditionalLevelInstanceFunctions().SelectKishIlo(121, 12));
+            ClassicAssert.AreEqual(-9997, new AbstractConditionalLevelInstanceFunctions().SelectKishIlo(121, 0));
+            ClassicAssert.AreEqual(-9998, new AbstractConditionalLevelInstanceFunctions().SelectKishIlo(0, 1));
+            ClassicAssert.AreEqual(-9999, new AbstractConditionalLevelInstanceFunctions().SelectKishIlo(121, null));
         }
 
         [Test]
         public void Test_Concat()
         {
-            Assert.AreEqual("George Washington", new AbstractConditionalLevelInstanceFunctions().Concat("George", " ", "Washington"));
-            Assert.AreEqual("Washington", new AbstractConditionalLevelInstanceFunctions().Concat("Washington"));
-            Assert.AreEqual("", new AbstractConditionalLevelInstanceFunctions().Concat(null));
-            Assert.AreEqual("George", new AbstractConditionalLevelInstanceFunctions().Concat("", "George", "", null));
+            ClassicAssert.AreEqual("George Washington", new AbstractConditionalLevelInstanceFunctions().Concat("George", " ", "Washington"));
+            ClassicAssert.AreEqual("Washington", new AbstractConditionalLevelInstanceFunctions().Concat("Washington"));
+            ClassicAssert.AreEqual("", new AbstractConditionalLevelInstanceFunctions().Concat(null));
+            ClassicAssert.AreEqual("George", new AbstractConditionalLevelInstanceFunctions().Concat("", "George", "", null));
         }
 
         [Test]
         public void Test_IsLike()
         {
-            Assert.IsTrue("abcdefgh".IsLike("abcdefgh"));
-            Assert.IsTrue("abcdefgh".IsLike("ab?defgh"));
-            Assert.IsTrue("abcdefgh".IsLike("a*h"));
-            Assert.IsTrue("abcdefgh".IsLike("a*"));
-            Assert.IsTrue("abcdefgh".IsLike("*h"));
-            Assert.IsTrue("abcdefgh".IsLike("ab?d*"));
-            Assert.IsTrue("abcdefgh".IsLike("ab????gh"));
-            Assert.IsTrue("abcdefgh".IsLike("*abcdefgh"));
-            Assert.IsTrue("abcdefgh".IsLike("abcdefgh*"));
+            ClassicAssert.IsTrue("abcdefgh".IsLike("abcdefgh"));
+            ClassicAssert.IsTrue("abcdefgh".IsLike("ab?defgh"));
+            ClassicAssert.IsTrue("abcdefgh".IsLike("a*h"));
+            ClassicAssert.IsTrue("abcdefgh".IsLike("a*"));
+            ClassicAssert.IsTrue("abcdefgh".IsLike("*h"));
+            ClassicAssert.IsTrue("abcdefgh".IsLike("ab?d*"));
+            ClassicAssert.IsTrue("abcdefgh".IsLike("ab????gh"));
+            ClassicAssert.IsTrue("abcdefgh".IsLike("*abcdefgh"));
+            ClassicAssert.IsTrue("abcdefgh".IsLike("abcdefgh*"));
 
-            Assert.IsFalse("abcdefgh".IsLike("bacdefgh"));
-            Assert.IsFalse("abcdefgh".IsLike("?abcdefgh"));
-            Assert.IsFalse("abcdefgh".IsLike("abcdefgh?"));
-            Assert.IsFalse("abcdefgh".IsLike("?c?"));
-            Assert.IsTrue("".IsLike(""));
-            Assert.IsFalse("".IsLike("*"));
+            ClassicAssert.IsFalse("abcdefgh".IsLike("bacdefgh"));
+            ClassicAssert.IsFalse("abcdefgh".IsLike("?abcdefgh"));
+            ClassicAssert.IsFalse("abcdefgh".IsLike("abcdefgh?"));
+            ClassicAssert.IsFalse("abcdefgh".IsLike("?c?"));
+            ClassicAssert.IsTrue("".IsLike(""));
+            ClassicAssert.IsFalse("".IsLike("*"));
 
-            Assert.IsFalse("abcdefgh".IsLike("abcde*efgh"));
+            ClassicAssert.IsFalse("abcdefgh".IsLike("abcde*efgh"));
         }
 
         [Test]
@@ -504,36 +505,36 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         [Test]
         public void Test_IsLike3()
         {
-            Assert.IsTrue("abc".IsLike("abc"));
-            Assert.IsFalse("abc".IsLike("Abc"));
-            Assert.IsTrue("abc".IsLike("a?c"));
-            Assert.IsTrue("abc".IsLike("a*c"));
-            Assert.IsTrue("abc".IsLike("a*"));
-            Assert.IsTrue("abc".IsLike("*bc"));
-            Assert.IsFalse("abc".IsLike("?abc"));
+            ClassicAssert.IsTrue("abc".IsLike("abc"));
+            ClassicAssert.IsFalse("abc".IsLike("Abc"));
+            ClassicAssert.IsTrue("abc".IsLike("a?c"));
+            ClassicAssert.IsTrue("abc".IsLike("a*c"));
+            ClassicAssert.IsTrue("abc".IsLike("a*"));
+            ClassicAssert.IsTrue("abc".IsLike("*bc"));
+            ClassicAssert.IsFalse("abc".IsLike("?abc"));
         }
 
         [Test]
         public void Test_Left()
         {
-            Assert.AreEqual(null, "abcdefgh".Left(null));
-            Assert.AreEqual("", "abcdefgh".Left(0));
-            Assert.AreEqual("ab", "abcdefgh".Left(2));
-            Assert.AreEqual("abcdefgh", "abcdefgh".Left(222));
-            Assert.AreEqual("", "".Left(2));
-            Assert.AreEqual("", "abcdefg".Left(-2));
+            ClassicAssert.AreEqual(null, "abcdefgh".Left(null));
+            ClassicAssert.AreEqual("", "abcdefgh".Left(0));
+            ClassicAssert.AreEqual("ab", "abcdefgh".Left(2));
+            ClassicAssert.AreEqual("abcdefgh", "abcdefgh".Left(222));
+            ClassicAssert.AreEqual("", "".Left(2));
+            ClassicAssert.AreEqual("", "abcdefg".Left(-2));
         }
 
         [Test]
         public void Test_LeftDouble()
         {
             double? n = null;
-            Assert.AreEqual(null, "abcdefgh".Left(n));
-            Assert.AreEqual("", "abcdefgh".Left(0.0));
-            Assert.AreEqual("ab", "abcdefgh".Left(2.0));
-            Assert.AreEqual("abcdefgh", "abcdefgh".Left(222.0));
-            Assert.AreEqual("", "".Left(2.0));
-            Assert.AreEqual("", "abcdefg".Left(-2.0));
+            ClassicAssert.AreEqual(null, "abcdefgh".Left(n));
+            ClassicAssert.AreEqual("", "abcdefgh".Left(0.0));
+            ClassicAssert.AreEqual("ab", "abcdefgh".Left(2.0));
+            ClassicAssert.AreEqual("abcdefgh", "abcdefgh".Left(222.0));
+            ClassicAssert.AreEqual("", "".Left(2.0));
+            ClassicAssert.AreEqual("", "abcdefg".Left(-2.0));
         }
 
         [Test]
@@ -541,35 +542,35 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         {
             decimal? n = null;
 
-            Assert.AreEqual(null, "abcdefgh".Left(n));
-            Assert.AreEqual("", "abcdefgh".Left((decimal)0));
-            Assert.AreEqual("ab", "abcdefgh".Left((decimal)2));
-            Assert.AreEqual("abcdefgh", "abcdefgh".Left((decimal)222));
-            Assert.AreEqual("", "".Left((decimal)2));
-            Assert.AreEqual("", "abcdefg".Left((decimal)-2));
+            ClassicAssert.AreEqual(null, "abcdefgh".Left(n));
+            ClassicAssert.AreEqual("", "abcdefgh".Left((decimal)0));
+            ClassicAssert.AreEqual("ab", "abcdefgh".Left((decimal)2));
+            ClassicAssert.AreEqual("abcdefgh", "abcdefgh".Left((decimal)222));
+            ClassicAssert.AreEqual("", "".Left((decimal)2));
+            ClassicAssert.AreEqual("", "abcdefg".Left((decimal)-2));
         }
 
 
         [Test]
         public void Test_Right()
         {
-            Assert.AreEqual(null, "abcdefgh".Right(null));
-            Assert.AreEqual("", "abcdefgh".Right(0));
-            Assert.AreEqual("gh", "abcdefgh".Right(2));
-            Assert.AreEqual("abcdefgh", "abcdefgh".Right(222));
-            Assert.AreEqual("", "".Right(2));
-            Assert.AreEqual("", "abcde".Right(-2));
+            ClassicAssert.AreEqual(null, "abcdefgh".Right(null));
+            ClassicAssert.AreEqual("", "abcdefgh".Right(0));
+            ClassicAssert.AreEqual("gh", "abcdefgh".Right(2));
+            ClassicAssert.AreEqual("abcdefgh", "abcdefgh".Right(222));
+            ClassicAssert.AreEqual("", "".Right(2));
+            ClassicAssert.AreEqual("", "abcde".Right(-2));
         }
 
         [Test]
         public void Test_RightDouble()
         {
             double? n = null;
-            Assert.AreEqual(null, "abcdefgh".Right(n));
-            Assert.AreEqual("", "abcdefgh".Right(0.0));
-            Assert.AreEqual("gh", "abcdefgh".Right(2.0));
-            Assert.AreEqual("abcdefgh", "abcdefgh".Right(222.0));
-            Assert.AreEqual("", "".Right(2.0));
+            ClassicAssert.AreEqual(null, "abcdefgh".Right(n));
+            ClassicAssert.AreEqual("", "abcdefgh".Right(0.0));
+            ClassicAssert.AreEqual("gh", "abcdefgh".Right(2.0));
+            ClassicAssert.AreEqual("abcdefgh", "abcdefgh".Right(222.0));
+            ClassicAssert.AreEqual("", "".Right(2.0));
         }
 
         [Test]
@@ -577,66 +578,66 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         {
             decimal? n = null;
 
-            Assert.AreEqual(null, "abcdefgh".Right(n));
-            Assert.AreEqual("", "abcdefgh".Right((decimal)0));
-            Assert.AreEqual("gh", "abcdefgh".Right((decimal)2));
-            Assert.AreEqual("abcdefgh", "abcdefgh".Right((decimal)222));
-            Assert.AreEqual("", "".Right((decimal)2));
+            ClassicAssert.AreEqual(null, "abcdefgh".Right(n));
+            ClassicAssert.AreEqual("", "abcdefgh".Right((decimal)0));
+            ClassicAssert.AreEqual("gh", "abcdefgh".Right((decimal)2));
+            ClassicAssert.AreEqual("abcdefgh", "abcdefgh".Right((decimal)222));
+            ClassicAssert.AreEqual("", "".Right((decimal)2));
         }
 
 
         [Test]
         public void Test_IsIntegerNumber()
         {
-            Assert.AreEqual(true, "12".IsIntegerNumber());
-            Assert.AreEqual(true, "-120".IsIntegerNumber());
-            Assert.AreEqual(false, "12.5".IsIntegerNumber());
-            Assert.AreEqual(false, "abc".IsIntegerNumber());
-            Assert.AreEqual(false, "".IsIntegerNumber());
+            ClassicAssert.AreEqual(true, "12".IsIntegerNumber());
+            ClassicAssert.AreEqual(true, "-120".IsIntegerNumber());
+            ClassicAssert.AreEqual(false, "12.5".IsIntegerNumber());
+            ClassicAssert.AreEqual(false, "abc".IsIntegerNumber());
+            ClassicAssert.AreEqual(false, "".IsIntegerNumber());
         }
 
         [Test]
         [SetCulture("en-US")]
         public void Test_IsNumber()
         {
-            Assert.AreEqual(true, "3.1415".IsNumber());
-            Assert.AreEqual(true, "-3.1415".IsNumber());
-            Assert.AreEqual(false, "3.14.15".IsNumber());
-            Assert.AreEqual(false, "3FA2".IsNumber());
-            Assert.AreEqual(false, "".IsNumber());
+            ClassicAssert.AreEqual(true, "3.1415".IsNumber());
+            ClassicAssert.AreEqual(true, "-3.1415".IsNumber());
+            ClassicAssert.AreEqual(false, "3.14.15".IsNumber());
+            ClassicAssert.AreEqual(false, "3FA2".IsNumber());
+            ClassicAssert.AreEqual(false, "".IsNumber());
         }
 
         [Test]
         public void Test_IsAlphaLatin()
         {
-            Assert.IsTrue("".IsAlphaLatin());
-            Assert.IsTrue("ABC".IsAlphaLatin());
-            Assert.IsTrue("xyz".IsAlphaLatin());
-            Assert.IsTrue("ABCxyz".IsAlphaLatin());
-            Assert.IsFalse("abc.".IsAlphaLatin());
+            ClassicAssert.IsTrue("".IsAlphaLatin());
+            ClassicAssert.IsTrue("ABC".IsAlphaLatin());
+            ClassicAssert.IsTrue("xyz".IsAlphaLatin());
+            ClassicAssert.IsTrue("ABCxyz".IsAlphaLatin());
+            ClassicAssert.IsFalse("abc.".IsAlphaLatin());
         }
 
         [Test]
         public void Test_IsAlphaLatinOrDelimiter()
         {
-            Assert.IsTrue("".IsAlphaLatinOrDelimiter());
-            Assert.IsTrue("ABC".IsAlphaLatinOrDelimiter());
-            Assert.IsTrue("xyz".IsAlphaLatinOrDelimiter());
-            Assert.IsTrue("ABCxyz".IsAlphaLatinOrDelimiter());
-            Assert.IsTrue("abc.".IsAlphaLatinOrDelimiter());
-            Assert.IsFalse("abc(def)gh".IsAlphaLatinOrDelimiter());
+            ClassicAssert.IsTrue("".IsAlphaLatinOrDelimiter());
+            ClassicAssert.IsTrue("ABC".IsAlphaLatinOrDelimiter());
+            ClassicAssert.IsTrue("xyz".IsAlphaLatinOrDelimiter());
+            ClassicAssert.IsTrue("ABCxyz".IsAlphaLatinOrDelimiter());
+            ClassicAssert.IsTrue("abc.".IsAlphaLatinOrDelimiter());
+            ClassicAssert.IsFalse("abc(def)gh".IsAlphaLatinOrDelimiter());
         }
 
         [Test]
         public void Test_ConsistsOf()
         {
-            Assert.IsTrue("abcdefgabcdefg".ConsistsOf("gfedcba"));
-            Assert.IsFalse("987".ConsistsOf("01"));
-            Assert.IsTrue("George Washington".ConsistsOf("Georg Washint"));
-            Assert.IsFalse("George Washington".ConsistsOf("Geor washint"));
+            ClassicAssert.IsTrue("abcdefgabcdefg".ConsistsOf("gfedcba"));
+            ClassicAssert.IsFalse("987".ConsistsOf("01"));
+            ClassicAssert.IsTrue("George Washington".ConsistsOf("Georg Washint"));
+            ClassicAssert.IsFalse("George Washington".ConsistsOf("Geor washint"));
 
             string tst = null;
-            Assert.IsTrue(tst.ConsistsOf("ABCDEF"));
+            ClassicAssert.IsTrue(tst.ConsistsOf("ABCDEF"));
         }
 
         [Test]
@@ -646,14 +647,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             var p2 = new GeoLocation(39.9500, -75.1667, 15, 15);
 
             var d = Extensions.GpsDistance(p1, p2);
-            Assert.IsTrue(Math.Abs(196800 - d) < 100);   // meters
+            ClassicAssert.IsTrue(Math.Abs(196800 - d) < 100);   // meters
 
             p1.Latitude = 36.12;
             p1.Longitude = -86.67;
             p2.Latitude = 33.94;
             p2.Longitude = -118.4;
 
-            Assert.IsTrue(Math.Abs(2887259.95060711 - p1.GpsDistance(p2)) < 0.001);
+            ClassicAssert.IsTrue(Math.Abs(2887259.95060711 - p1.GpsDistance(p2)) < 0.001);
         }
 
         [Test]
@@ -661,7 +662,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         {
             var p1 = new GeoLocation(38.9047, -77.0164, 15, 15);
             var d = Extensions.GpsDistance(p1, 39.9500, -75.1667);
-            Assert.IsTrue(Math.Abs(196800 - d) < 100); // meters
+            ClassicAssert.IsTrue(Math.Abs(196800 - d) < 100); // meters
         }
 
 
@@ -672,14 +673,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             var p2 = new GeoLocation(39.9500, -75.1667, 15, 15);
 
             var d = Extensions.GpsDistanceKm(p1, p2);
-            Assert.IsTrue(Math.Abs(196.8 - d) < 0.1);   // kilometers
+            ClassicAssert.IsTrue(Math.Abs(196.8 - d) < 0.1);   // kilometers
 
             p1.Latitude = 36.12;
             p1.Longitude = -86.67;
             p2.Latitude = 33.94;
             p2.Longitude = -118.4;
 
-            Assert.IsTrue(Math.Abs(2887.25995060711 - p1.GpsDistanceKm(p2)) < 1);
+            ClassicAssert.IsTrue(Math.Abs(2887.25995060711 - p1.GpsDistanceKm(p2)) < 1);
         }
 
         [Test]
@@ -687,25 +688,25 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         {
             var p1 = new GeoLocation(38.9047, -77.0164, 15, 15);
             var d = Extensions.GpsDistanceKm(p1, 39.9500, -75.1667);
-            Assert.IsTrue(Math.Abs(196.8 - d) < 0.1); // kilometers
+            ClassicAssert.IsTrue(Math.Abs(196.8 - d) < 0.1); // kilometers
         }
 
         [Test]
         public void Test_InRectangle()
         {
             var point = new GeoLocation(20, 20, 0, 0);
-            Assert.IsTrue(point.InRectangle(30, 0, 10, 40));   // Ok
-            Assert.IsFalse(point.InRectangle(15, 0, 10, 40));  // point too far North
-            Assert.IsFalse(point.InRectangle(30, 25, 10, 40));  // point too far West
-            Assert.IsFalse(point.InRectangle(30, 0, 25, 40));  // point too far South
-            Assert.IsFalse(point.InRectangle(30, 0, 10, 15));  // point too far East
+            ClassicAssert.IsTrue(point.InRectangle(30, 0, 10, 40));   // Ok
+            ClassicAssert.IsFalse(point.InRectangle(15, 0, 10, 40));  // point too far North
+            ClassicAssert.IsFalse(point.InRectangle(30, 25, 10, 40));  // point too far West
+            ClassicAssert.IsFalse(point.InRectangle(30, 0, 25, 40));  // point too far South
+            ClassicAssert.IsFalse(point.InRectangle(30, 0, 10, 15));  // point too far East
         }
 
 
         [Test]
         public void Test_Bmi()
         {
-            Assert.AreEqual(24.98, (double)new AbstractConditionalLevelInstanceFunctions().Bmi(68, 1.65), 0.05);
+            ClassicAssert.AreEqual(24.98, (double)new AbstractConditionalLevelInstanceFunctions().Bmi(68, 1.65), 0.05);
         }
 
         #endregion
@@ -717,16 +718,16 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         {
             var delta = 0.1;
 
-            Assert.AreEqual(2, ZScore.Bmifa(20, false, 18.7), delta);
-            Assert.AreEqual(2, ZScore.Hcfa(20, false, 49.4), delta);
-            Assert.AreEqual(2, ZScore.Lhfa(20, false, 88.7), delta);
-            Assert.AreEqual(2, ZScore.Wfa(20, false, 13.7), delta);
+            ClassicAssert.AreEqual(2, ZScore.Bmifa(20, false, 18.7), delta);
+            ClassicAssert.AreEqual(2, ZScore.Hcfa(20, false, 49.4), delta);
+            ClassicAssert.AreEqual(2, ZScore.Lhfa(20, false, 88.7), delta);
+            ClassicAssert.AreEqual(2, ZScore.Wfa(20, false, 13.7), delta);
 
-            Assert.AreEqual(2, ZScore.Wfl(99.5, false, 18.0), delta);
-            Assert.AreEqual(2, ZScore.Ssfa(20, true, 9.0), delta);
-            Assert.AreEqual(2, ZScore.Acfa(20, true, 17.4), delta);
-            Assert.AreEqual(2, ZScore.Tsfa(50, true, 12.9), delta);
-            Assert.AreEqual(2, ZScore.Wfh(85, true, 13.8), delta);
+            ClassicAssert.AreEqual(2, ZScore.Wfl(99.5, false, 18.0), delta);
+            ClassicAssert.AreEqual(2, ZScore.Ssfa(20, true, 9.0), delta);
+            ClassicAssert.AreEqual(2, ZScore.Acfa(20, true, 17.4), delta);
+            ClassicAssert.AreEqual(2, ZScore.Tsfa(50, true, 12.9), delta);
+            ClassicAssert.AreEqual(2, ZScore.Wfh(85, true, 13.8), delta);
 
         }
 
@@ -735,11 +736,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         {
             var ht = 1.00;
             var wt = 12.8;
-            Assert.AreEqual(-2, ZScore.Bmifa(50, false, wt, ht), 0.02);
+            ClassicAssert.AreEqual(-2, ZScore.Bmifa(50, false, wt, ht), 0.02);
 
             wt = 17.7;
             ht = 1.00;
-            Assert.AreEqual(1, ZScore.Bmifa(16, true, wt, ht), 0.02);
+            ClassicAssert.AreEqual(1, ZScore.Bmifa(16, true, wt, ht), 0.02);
         }
 
 
@@ -895,7 +896,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             
             foreach (var v in validEmails)
             {
-                Assert.IsTrue(v.IsValidEmail());
+                ClassicAssert.IsTrue(v.IsValidEmail());
             }
         }
         [Test]
@@ -916,7 +917,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
 
             foreach (var v in invalidEmails)
             {
-                Assert.IsFalse(v.IsValidEmail());
+                ClassicAssert.IsFalse(v.IsValidEmail());
             }
         }
 
@@ -928,39 +929,39 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         [Test]
         public void Test_IsDateLong()
         {
-            Assert.IsTrue(new LevelFunctions().IsDate((long)2010, 12, 31));
-            Assert.IsFalse(new LevelFunctions().IsDate((long)2010, 2, 31));
+            ClassicAssert.IsTrue(new LevelFunctions().IsDate((long)2010, 12, 31));
+            ClassicAssert.IsFalse(new LevelFunctions().IsDate((long)2010, 2, 31));
 
-            Assert.IsFalse(new LevelFunctions().IsDate(null, (long)12, 31));
-            Assert.IsFalse(new LevelFunctions().IsDate((long)2010, null, 31));
-            Assert.IsFalse(new LevelFunctions().IsDate((long)2010, 12, null));
+            ClassicAssert.IsFalse(new LevelFunctions().IsDate(null, (long)12, 31));
+            ClassicAssert.IsFalse(new LevelFunctions().IsDate((long)2010, null, 31));
+            ClassicAssert.IsFalse(new LevelFunctions().IsDate((long)2010, 12, null));
 
-            Assert.IsFalse(new LevelFunctions().IsDate((long)2010, 12, null));
-            Assert.IsFalse(new LevelFunctions().IsDate((long)2010, 13, 10));
-            Assert.IsFalse(new LevelFunctions().IsDate((long)2010, 12, 32));
+            ClassicAssert.IsFalse(new LevelFunctions().IsDate((long)2010, 12, null));
+            ClassicAssert.IsFalse(new LevelFunctions().IsDate((long)2010, 13, 10));
+            ClassicAssert.IsFalse(new LevelFunctions().IsDate((long)2010, 12, 32));
 
-            Assert.IsFalse(new LevelFunctions().IsDate((long)2010, 12, -1));
-            Assert.IsFalse(new LevelFunctions().IsDate((long)2010, -12, 1));
-            Assert.IsFalse(new LevelFunctions().IsDate((long)-2010, 12, 1));
+            ClassicAssert.IsFalse(new LevelFunctions().IsDate((long)2010, 12, -1));
+            ClassicAssert.IsFalse(new LevelFunctions().IsDate((long)2010, -12, 1));
+            ClassicAssert.IsFalse(new LevelFunctions().IsDate((long)-2010, 12, 1));
         }
 
         [Test]
         public void Test_IsDateInt()
         {
-            Assert.IsTrue(new LevelFunctions().IsDate((int)2010, 12, 31));
-            Assert.IsFalse(new LevelFunctions().IsDate((int)2010, 2, 31));
+            ClassicAssert.IsTrue(new LevelFunctions().IsDate((int)2010, 12, 31));
+            ClassicAssert.IsFalse(new LevelFunctions().IsDate((int)2010, 2, 31));
 
-            Assert.IsFalse(new LevelFunctions().IsDate(null, (int)12, 31));
-            Assert.IsFalse(new LevelFunctions().IsDate((int)2010, null, 31));
-            Assert.IsFalse(new LevelFunctions().IsDate((int)2010, 12, null));
+            ClassicAssert.IsFalse(new LevelFunctions().IsDate(null, (int)12, 31));
+            ClassicAssert.IsFalse(new LevelFunctions().IsDate((int)2010, null, 31));
+            ClassicAssert.IsFalse(new LevelFunctions().IsDate((int)2010, 12, null));
 
-            Assert.IsFalse(new LevelFunctions().IsDate((int)2010, 12, null));
-            Assert.IsFalse(new LevelFunctions().IsDate((int)2010, 13, 10));
-            Assert.IsFalse(new LevelFunctions().IsDate((int)2010, 12, 32));
+            ClassicAssert.IsFalse(new LevelFunctions().IsDate((int)2010, 12, null));
+            ClassicAssert.IsFalse(new LevelFunctions().IsDate((int)2010, 13, 10));
+            ClassicAssert.IsFalse(new LevelFunctions().IsDate((int)2010, 12, 32));
 
-            Assert.IsFalse(new LevelFunctions().IsDate((int)2010, 12, -1));
-            Assert.IsFalse(new LevelFunctions().IsDate((int)2010, -12, 1));
-            Assert.IsFalse(new LevelFunctions().IsDate((int)-2010, 12, 1));
+            ClassicAssert.IsFalse(new LevelFunctions().IsDate((int)2010, 12, -1));
+            ClassicAssert.IsFalse(new LevelFunctions().IsDate((int)2010, -12, 1));
+            ClassicAssert.IsFalse(new LevelFunctions().IsDate((int)-2010, 12, 1));
         }
 
         [Test]
@@ -971,17 +972,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             DateTime? d3 = new DateTime(2016, 02, 27);
             DateTime? d4 = new DateTime(2000, 01, 01);
 
-            Assert.AreEqual(1, new LevelFunctions().DaysBetweenDates(d1, d2));
-            Assert.AreEqual(3, new LevelFunctions().DaysBetweenDates(d3, d1));
-            Assert.AreEqual(4, new LevelFunctions().DaysBetweenDates(d3, d2));
+            ClassicAssert.AreEqual(1, new LevelFunctions().DaysBetweenDates(d1, d2));
+            ClassicAssert.AreEqual(3, new LevelFunctions().DaysBetweenDates(d3, d1));
+            ClassicAssert.AreEqual(4, new LevelFunctions().DaysBetweenDates(d3, d2));
 
-            Assert.AreEqual(5904, new LevelFunctions().DaysBetweenDates(d4, d1)); //confirmed with Gnumeric
+            ClassicAssert.AreEqual(5904, new LevelFunctions().DaysBetweenDates(d4, d1)); //confirmed with Gnumeric
 
-            Assert.AreEqual(-9998, new LevelFunctions().DaysBetweenDates(d2, d1));
+            ClassicAssert.AreEqual(-9998, new LevelFunctions().DaysBetweenDates(d2, d1));
 
-            Assert.AreEqual(-9999, new LevelFunctions().DaysBetweenDates(null, d2));
-            Assert.AreEqual(-9999, new LevelFunctions().DaysBetweenDates(d1, null));
-            Assert.AreEqual(-9999, new LevelFunctions().DaysBetweenDates(null, null));
+            ClassicAssert.AreEqual(-9999, new LevelFunctions().DaysBetweenDates(null, d2));
+            ClassicAssert.AreEqual(-9999, new LevelFunctions().DaysBetweenDates(d1, null));
+            ClassicAssert.AreEqual(-9999, new LevelFunctions().DaysBetweenDates(null, null));
         }
 
         [Test]
@@ -993,13 +994,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             var cmc4 = new LevelFunctions().CenturyMonthCode(3, 2016); // mar2016
             var cmc5 = new LevelFunctions().CenturyMonthCode(1, 1946); // jan1946
 
-            Assert.AreEqual(1900, new LevelFunctions().YearOfCmc(cmc1));
-            Assert.AreEqual(1900, new LevelFunctions().YearOfCmc(cmc2));
-            Assert.AreEqual(1901, new LevelFunctions().YearOfCmc(cmc3));
-            Assert.AreEqual(2016, new LevelFunctions().YearOfCmc(cmc4));
-            Assert.AreEqual(1946, new LevelFunctions().YearOfCmc(cmc5));
+            ClassicAssert.AreEqual(1900, new LevelFunctions().YearOfCmc(cmc1));
+            ClassicAssert.AreEqual(1900, new LevelFunctions().YearOfCmc(cmc2));
+            ClassicAssert.AreEqual(1901, new LevelFunctions().YearOfCmc(cmc3));
+            ClassicAssert.AreEqual(2016, new LevelFunctions().YearOfCmc(cmc4));
+            ClassicAssert.AreEqual(1946, new LevelFunctions().YearOfCmc(cmc5));
 
-            Assert.AreEqual(-9999, new LevelFunctions().YearOfCmc(-1));
+            ClassicAssert.AreEqual(-9999, new LevelFunctions().YearOfCmc(-1));
         }
 
         [Test]
@@ -1015,31 +1016,31 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             var cmc7 = new LevelFunctions().CenturyMonthCode(2, 2000); // feb2000
             var cmc8 = new LevelFunctions().CenturyMonthCode(11, 2016); // nov2016
 
-            Assert.AreEqual(31, new LevelFunctions().DaysInMonth(cmc1));
-            Assert.AreEqual(31, new LevelFunctions().DaysInMonth(cmc2));
-            Assert.AreEqual(31, new LevelFunctions().DaysInMonth(cmc3));
-            Assert.AreEqual(31, new LevelFunctions().DaysInMonth(cmc4));
-            Assert.AreEqual(31, new LevelFunctions().DaysInMonth(cmc5));
-            Assert.AreEqual(28, new LevelFunctions().DaysInMonth(cmc6));
-            Assert.AreEqual(29, new LevelFunctions().DaysInMonth(cmc7));
-            Assert.AreEqual(30, new LevelFunctions().DaysInMonth(cmc8));
+            ClassicAssert.AreEqual(31, new LevelFunctions().DaysInMonth(cmc1));
+            ClassicAssert.AreEqual(31, new LevelFunctions().DaysInMonth(cmc2));
+            ClassicAssert.AreEqual(31, new LevelFunctions().DaysInMonth(cmc3));
+            ClassicAssert.AreEqual(31, new LevelFunctions().DaysInMonth(cmc4));
+            ClassicAssert.AreEqual(31, new LevelFunctions().DaysInMonth(cmc5));
+            ClassicAssert.AreEqual(28, new LevelFunctions().DaysInMonth(cmc6));
+            ClassicAssert.AreEqual(29, new LevelFunctions().DaysInMonth(cmc7));
+            ClassicAssert.AreEqual(30, new LevelFunctions().DaysInMonth(cmc8));
 
-            Assert.AreEqual(-9999, new LevelFunctions().DaysInMonth(-1));
+            ClassicAssert.AreEqual(-9999, new LevelFunctions().DaysInMonth(-1));
         }
 
         [Test]
         public void Test_DaysInMonth3()
         {
-            Assert.AreEqual(31, new LevelFunctions().DaysInMonth(new DateTime(1900, 1, 9)));
-            Assert.AreEqual(31, new LevelFunctions().DaysInMonth(new DateTime(1900, 12, 9)));
-            Assert.AreEqual(31, new LevelFunctions().DaysInMonth(new DateTime(1901, 1, 9)));
-            Assert.AreEqual(31, new LevelFunctions().DaysInMonth(new DateTime(2016, 3, 9)));
-            Assert.AreEqual(31, new LevelFunctions().DaysInMonth(new DateTime(1946, 1, 9)));
-            Assert.AreEqual(28, new LevelFunctions().DaysInMonth(new DateTime(1900, 2, 9)));
-            Assert.AreEqual(29, new LevelFunctions().DaysInMonth(new DateTime(2000, 2, 9)));
-            Assert.AreEqual(30, new LevelFunctions().DaysInMonth(new DateTime(2016, 11, 9)));
+            ClassicAssert.AreEqual(31, new LevelFunctions().DaysInMonth(new DateTime(1900, 1, 9)));
+            ClassicAssert.AreEqual(31, new LevelFunctions().DaysInMonth(new DateTime(1900, 12, 9)));
+            ClassicAssert.AreEqual(31, new LevelFunctions().DaysInMonth(new DateTime(1901, 1, 9)));
+            ClassicAssert.AreEqual(31, new LevelFunctions().DaysInMonth(new DateTime(2016, 3, 9)));
+            ClassicAssert.AreEqual(31, new LevelFunctions().DaysInMonth(new DateTime(1946, 1, 9)));
+            ClassicAssert.AreEqual(28, new LevelFunctions().DaysInMonth(new DateTime(1900, 2, 9)));
+            ClassicAssert.AreEqual(29, new LevelFunctions().DaysInMonth(new DateTime(2000, 2, 9)));
+            ClassicAssert.AreEqual(30, new LevelFunctions().DaysInMonth(new DateTime(2016, 11, 9)));
 
-            Assert.AreEqual(-9999, new LevelFunctions().DaysInMonth(null));
+            ClassicAssert.AreEqual(-9999, new LevelFunctions().DaysInMonth(null));
         }
 
         [Test]
@@ -1051,131 +1052,131 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             var cmc4 = new LevelFunctions().CenturyMonthCode(3, 2016); // mar2016
             var cmc5 = new LevelFunctions().CenturyMonthCode(1, 1946); // jan1946
 
-            Assert.AreEqual(1, new LevelFunctions().MonthOfCmc(cmc1));
-            Assert.AreEqual(12, new LevelFunctions().MonthOfCmc(cmc2));
-            Assert.AreEqual(1, new LevelFunctions().MonthOfCmc(cmc3));
-            Assert.AreEqual(3, new LevelFunctions().MonthOfCmc(cmc4));
-            Assert.AreEqual(1, new LevelFunctions().MonthOfCmc(cmc5));
+            ClassicAssert.AreEqual(1, new LevelFunctions().MonthOfCmc(cmc1));
+            ClassicAssert.AreEqual(12, new LevelFunctions().MonthOfCmc(cmc2));
+            ClassicAssert.AreEqual(1, new LevelFunctions().MonthOfCmc(cmc3));
+            ClassicAssert.AreEqual(3, new LevelFunctions().MonthOfCmc(cmc4));
+            ClassicAssert.AreEqual(1, new LevelFunctions().MonthOfCmc(cmc5));
 
-            Assert.AreEqual(-9999, new LevelFunctions().MonthOfCmc(-1));
+            ClassicAssert.AreEqual(-9999, new LevelFunctions().MonthOfCmc(-1));
         }
 
         [Test]
         public void Test_ContainsAnyOtherThan()
         {
-            Assert.IsTrue(_mc123.ContainsAnyOtherThan(2)); // Contains 1, 3
-            Assert.IsTrue(_mc123.ContainsAnyOtherThan(2, 0)); // Contains 1, 3; 0 is irrelevant
-            Assert.IsTrue(_mc123.ContainsAnyOtherThan(5, 10)); // Contains 1,2,3
-            Assert.IsTrue(_mc123.ContainsAnyOtherThan(null)); // Contains 1,2,3
-            Assert.IsTrue(_mc123.ContainsAnyOtherThan(new int[0])); // Contains 1,2,3
-            Assert.IsFalse(_mc123.ContainsAnyOtherThan(1, 2, 3)); // No, does not contain anything else
-            Assert.IsFalse(_mc123.ContainsAnyOtherThan(1, 2, 3, 4, 5)); // No, does not contain anything else, couple of irrelevant options
+            ClassicAssert.IsTrue(_mc123.ContainsAnyOtherThan(2)); // Contains 1, 3
+            ClassicAssert.IsTrue(_mc123.ContainsAnyOtherThan(2, 0)); // Contains 1, 3; 0 is irrelevant
+            ClassicAssert.IsTrue(_mc123.ContainsAnyOtherThan(5, 10)); // Contains 1,2,3
+            ClassicAssert.IsTrue(_mc123.ContainsAnyOtherThan(null)); // Contains 1,2,3
+            ClassicAssert.IsTrue(_mc123.ContainsAnyOtherThan(new int[0])); // Contains 1,2,3
+            ClassicAssert.IsFalse(_mc123.ContainsAnyOtherThan(1, 2, 3)); // No, does not contain anything else
+            ClassicAssert.IsFalse(_mc123.ContainsAnyOtherThan(1, 2, 3, 4, 5)); // No, does not contain anything else, couple of irrelevant options
 
             int[] empty = null;
-            Assert.IsFalse(empty.ContainsAnyOtherThan(2)); // No, empty does not contain any other
-            Assert.IsFalse(empty.ContainsAnyOtherThan(null));
+            ClassicAssert.IsFalse(empty.ContainsAnyOtherThan(2)); // No, empty does not contain any other
+            ClassicAssert.IsFalse(empty.ContainsAnyOtherThan(null));
 
             empty = new int[0];
-            Assert.IsFalse(empty.ContainsAnyOtherThan(2)); // No, empty does nto contain any other
+            ClassicAssert.IsFalse(empty.ContainsAnyOtherThan(2)); // No, empty does nto contain any other
 
             var trivial = new int[] { 0 };
-            Assert.IsTrue(trivial.ContainsAnyOtherThan(2)); // Yes, contains 0
+            ClassicAssert.IsTrue(trivial.ContainsAnyOtherThan(2)); // Yes, contains 0
         }
 
         [Test]
         public void Test_BracketIndexLeftDouble()
         {
-            Assert.AreEqual(0, new LevelFunctions().BracketIndexLeft(-1.2, 1, 2, 3));
-            Assert.AreEqual(0, new LevelFunctions().BracketIndexLeft(1.0, 1, 2, 3));
-            Assert.AreEqual(1, new LevelFunctions().BracketIndexLeft(1.2, 1, 2, 3));
-            Assert.AreEqual(1, new LevelFunctions().BracketIndexLeft(2.0, 1, 2, 3));
-            Assert.AreEqual(2, new LevelFunctions().BracketIndexLeft(2.2, 1, 2, 3));
-            Assert.AreEqual(2, new LevelFunctions().BracketIndexLeft(3.0, 1, 2, 3));
-            Assert.AreEqual(3, new LevelFunctions().BracketIndexLeft(3.3, 1, 2, 3));
+            ClassicAssert.AreEqual(0, new LevelFunctions().BracketIndexLeft(-1.2, 1, 2, 3));
+            ClassicAssert.AreEqual(0, new LevelFunctions().BracketIndexLeft(1.0, 1, 2, 3));
+            ClassicAssert.AreEqual(1, new LevelFunctions().BracketIndexLeft(1.2, 1, 2, 3));
+            ClassicAssert.AreEqual(1, new LevelFunctions().BracketIndexLeft(2.0, 1, 2, 3));
+            ClassicAssert.AreEqual(2, new LevelFunctions().BracketIndexLeft(2.2, 1, 2, 3));
+            ClassicAssert.AreEqual(2, new LevelFunctions().BracketIndexLeft(3.0, 1, 2, 3));
+            ClassicAssert.AreEqual(3, new LevelFunctions().BracketIndexLeft(3.3, 1, 2, 3));
         }
 
         [Test]
         public void Test_BracketIndexRightDouble()
         {
-            Assert.AreEqual(0, new LevelFunctions().BracketIndexRight(-1.2, 1, 2, 3));
-            Assert.AreEqual(1, new LevelFunctions().BracketIndexRight(1.0, 1, 2, 3));
-            Assert.AreEqual(1, new LevelFunctions().BracketIndexRight(1.2, 1, 2, 3));
-            Assert.AreEqual(2, new LevelFunctions().BracketIndexRight(2.0, 1, 2, 3));
-            Assert.AreEqual(2, new LevelFunctions().BracketIndexRight(2.2, 1, 2, 3));
-            Assert.AreEqual(3, new LevelFunctions().BracketIndexRight(3.0, 1, 2, 3));
-            Assert.AreEqual(3, new LevelFunctions().BracketIndexRight(3.3, 1, 2, 3));
+            ClassicAssert.AreEqual(0, new LevelFunctions().BracketIndexRight(-1.2, 1, 2, 3));
+            ClassicAssert.AreEqual(1, new LevelFunctions().BracketIndexRight(1.0, 1, 2, 3));
+            ClassicAssert.AreEqual(1, new LevelFunctions().BracketIndexRight(1.2, 1, 2, 3));
+            ClassicAssert.AreEqual(2, new LevelFunctions().BracketIndexRight(2.0, 1, 2, 3));
+            ClassicAssert.AreEqual(2, new LevelFunctions().BracketIndexRight(2.2, 1, 2, 3));
+            ClassicAssert.AreEqual(3, new LevelFunctions().BracketIndexRight(3.0, 1, 2, 3));
+            ClassicAssert.AreEqual(3, new LevelFunctions().BracketIndexRight(3.3, 1, 2, 3));
         }
 
         [Test]
         public void Test_BracketIndexLeftDecimal()
         {
-            Assert.AreEqual(0, new LevelFunctions().BracketIndexLeft(-1.2m, 1, 2, 3));
-            Assert.AreEqual(0, new LevelFunctions().BracketIndexLeft(1.0m, 1, 2, 3));
-            Assert.AreEqual(1, new LevelFunctions().BracketIndexLeft(1.2m, 1, 2, 3));
-            Assert.AreEqual(1, new LevelFunctions().BracketIndexLeft(2.0m, 1, 2, 3));
-            Assert.AreEqual(2, new LevelFunctions().BracketIndexLeft(2.2m, 1, 2, 3));
-            Assert.AreEqual(2, new LevelFunctions().BracketIndexLeft(3.0m, 1, 2, 3));
-            Assert.AreEqual(3, new LevelFunctions().BracketIndexLeft(3.3m, 1, 2, 3));
+            ClassicAssert.AreEqual(0, new LevelFunctions().BracketIndexLeft(-1.2m, 1, 2, 3));
+            ClassicAssert.AreEqual(0, new LevelFunctions().BracketIndexLeft(1.0m, 1, 2, 3));
+            ClassicAssert.AreEqual(1, new LevelFunctions().BracketIndexLeft(1.2m, 1, 2, 3));
+            ClassicAssert.AreEqual(1, new LevelFunctions().BracketIndexLeft(2.0m, 1, 2, 3));
+            ClassicAssert.AreEqual(2, new LevelFunctions().BracketIndexLeft(2.2m, 1, 2, 3));
+            ClassicAssert.AreEqual(2, new LevelFunctions().BracketIndexLeft(3.0m, 1, 2, 3));
+            ClassicAssert.AreEqual(3, new LevelFunctions().BracketIndexLeft(3.3m, 1, 2, 3));
         }
 
         [Test]
         public void Test_BracketIndexRightDecimal()
         {
-            Assert.AreEqual(0, new LevelFunctions().BracketIndexRight(-1.2m, 1, 2, 3));
-            Assert.AreEqual(1, new LevelFunctions().BracketIndexRight(1.0m, 1, 2, 3));
-            Assert.AreEqual(1, new LevelFunctions().BracketIndexRight(1.2m, 1, 2, 3));
-            Assert.AreEqual(2, new LevelFunctions().BracketIndexRight(2.0m, 1, 2, 3));
-            Assert.AreEqual(2, new LevelFunctions().BracketIndexRight(2.2m, 1, 2, 3));
-            Assert.AreEqual(3, new LevelFunctions().BracketIndexRight(3.0m, 1, 2, 3));
-            Assert.AreEqual(3, new LevelFunctions().BracketIndexRight(3.3m, 1, 2, 3));
+            ClassicAssert.AreEqual(0, new LevelFunctions().BracketIndexRight(-1.2m, 1, 2, 3));
+            ClassicAssert.AreEqual(1, new LevelFunctions().BracketIndexRight(1.0m, 1, 2, 3));
+            ClassicAssert.AreEqual(1, new LevelFunctions().BracketIndexRight(1.2m, 1, 2, 3));
+            ClassicAssert.AreEqual(2, new LevelFunctions().BracketIndexRight(2.0m, 1, 2, 3));
+            ClassicAssert.AreEqual(2, new LevelFunctions().BracketIndexRight(2.2m, 1, 2, 3));
+            ClassicAssert.AreEqual(3, new LevelFunctions().BracketIndexRight(3.0m, 1, 2, 3));
+            ClassicAssert.AreEqual(3, new LevelFunctions().BracketIndexRight(3.3m, 1, 2, 3));
         }
 
         [Test]
         public void Test_BracketIndexLeftLong()
         {
-            Assert.AreEqual(0, new LevelFunctions().BracketIndexLeft((long)-12, 10, 20, 30));
-            Assert.AreEqual(0, new LevelFunctions().BracketIndexLeft((long)10, 10, 20, 30));
-            Assert.AreEqual(1, new LevelFunctions().BracketIndexLeft((long)12, 10, 20, 30));
-            Assert.AreEqual(1, new LevelFunctions().BracketIndexLeft((long)20, 10, 20, 30));
-            Assert.AreEqual(2, new LevelFunctions().BracketIndexLeft((long)22, 10, 20, 30));
-            Assert.AreEqual(2, new LevelFunctions().BracketIndexLeft((long)30, 10, 20, 30));
-            Assert.AreEqual(3, new LevelFunctions().BracketIndexLeft((long)33, 10, 20, 30));
+            ClassicAssert.AreEqual(0, new LevelFunctions().BracketIndexLeft((long)-12, 10, 20, 30));
+            ClassicAssert.AreEqual(0, new LevelFunctions().BracketIndexLeft((long)10, 10, 20, 30));
+            ClassicAssert.AreEqual(1, new LevelFunctions().BracketIndexLeft((long)12, 10, 20, 30));
+            ClassicAssert.AreEqual(1, new LevelFunctions().BracketIndexLeft((long)20, 10, 20, 30));
+            ClassicAssert.AreEqual(2, new LevelFunctions().BracketIndexLeft((long)22, 10, 20, 30));
+            ClassicAssert.AreEqual(2, new LevelFunctions().BracketIndexLeft((long)30, 10, 20, 30));
+            ClassicAssert.AreEqual(3, new LevelFunctions().BracketIndexLeft((long)33, 10, 20, 30));
         }
 
         [Test]
         public void Test_BracketIndexRightLong()
         {
-            Assert.AreEqual(0, new LevelFunctions().BracketIndexRight((long)-12, 10, 20, 30));
-            Assert.AreEqual(1, new LevelFunctions().BracketIndexRight((long)10, 10, 20, 30));
-            Assert.AreEqual(1, new LevelFunctions().BracketIndexRight((long)12, 10, 20, 30));
-            Assert.AreEqual(2, new LevelFunctions().BracketIndexRight((long)20, 10, 20, 30));
-            Assert.AreEqual(2, new LevelFunctions().BracketIndexRight((long)22, 10, 20, 30));
-            Assert.AreEqual(3, new LevelFunctions().BracketIndexRight((long)30, 10, 20, 30));
-            Assert.AreEqual(3, new LevelFunctions().BracketIndexRight((long)33, 10, 20, 30));
+            ClassicAssert.AreEqual(0, new LevelFunctions().BracketIndexRight((long)-12, 10, 20, 30));
+            ClassicAssert.AreEqual(1, new LevelFunctions().BracketIndexRight((long)10, 10, 20, 30));
+            ClassicAssert.AreEqual(1, new LevelFunctions().BracketIndexRight((long)12, 10, 20, 30));
+            ClassicAssert.AreEqual(2, new LevelFunctions().BracketIndexRight((long)20, 10, 20, 30));
+            ClassicAssert.AreEqual(2, new LevelFunctions().BracketIndexRight((long)22, 10, 20, 30));
+            ClassicAssert.AreEqual(3, new LevelFunctions().BracketIndexRight((long)30, 10, 20, 30));
+            ClassicAssert.AreEqual(3, new LevelFunctions().BracketIndexRight((long)33, 10, 20, 30));
         }
 
         [Test]
         public void Test_BracketIndexLeftInt()
         {
-            Assert.AreEqual(0, new LevelFunctions().BracketIndexLeft((int)-12, 10, 20, 30));
-            Assert.AreEqual(0, new LevelFunctions().BracketIndexLeft((int)10, 10, 20, 30));
-            Assert.AreEqual(1, new LevelFunctions().BracketIndexLeft((int)12, 10, 20, 30));
-            Assert.AreEqual(1, new LevelFunctions().BracketIndexLeft((int)20, 10, 20, 30));
-            Assert.AreEqual(2, new LevelFunctions().BracketIndexLeft((int)22, 10, 20, 30));
-            Assert.AreEqual(2, new LevelFunctions().BracketIndexLeft((int)30, 10, 20, 30));
-            Assert.AreEqual(3, new LevelFunctions().BracketIndexLeft((int)33, 10, 20, 30));
+            ClassicAssert.AreEqual(0, new LevelFunctions().BracketIndexLeft((int)-12, 10, 20, 30));
+            ClassicAssert.AreEqual(0, new LevelFunctions().BracketIndexLeft((int)10, 10, 20, 30));
+            ClassicAssert.AreEqual(1, new LevelFunctions().BracketIndexLeft((int)12, 10, 20, 30));
+            ClassicAssert.AreEqual(1, new LevelFunctions().BracketIndexLeft((int)20, 10, 20, 30));
+            ClassicAssert.AreEqual(2, new LevelFunctions().BracketIndexLeft((int)22, 10, 20, 30));
+            ClassicAssert.AreEqual(2, new LevelFunctions().BracketIndexLeft((int)30, 10, 20, 30));
+            ClassicAssert.AreEqual(3, new LevelFunctions().BracketIndexLeft((int)33, 10, 20, 30));
         }
 
         [Test]
         public void Test_BracketIndexRightInt()
         {
-            Assert.AreEqual(0, new LevelFunctions().BracketIndexRight((int)-12, 10, 20, 30));
-            Assert.AreEqual(1, new LevelFunctions().BracketIndexRight((int)10, 10, 20, 30));
-            Assert.AreEqual(1, new LevelFunctions().BracketIndexRight((int)12, 10, 20, 30));
-            Assert.AreEqual(2, new LevelFunctions().BracketIndexRight((int)20, 10, 20, 30));
-            Assert.AreEqual(2, new LevelFunctions().BracketIndexRight((int)22, 10, 20, 30));
-            Assert.AreEqual(3, new LevelFunctions().BracketIndexRight((int)30, 10, 20, 30));
-            Assert.AreEqual(3, new LevelFunctions().BracketIndexRight((int)33, 10, 20, 30));
+            ClassicAssert.AreEqual(0, new LevelFunctions().BracketIndexRight((int)-12, 10, 20, 30));
+            ClassicAssert.AreEqual(1, new LevelFunctions().BracketIndexRight((int)10, 10, 20, 30));
+            ClassicAssert.AreEqual(1, new LevelFunctions().BracketIndexRight((int)12, 10, 20, 30));
+            ClassicAssert.AreEqual(2, new LevelFunctions().BracketIndexRight((int)20, 10, 20, 30));
+            ClassicAssert.AreEqual(2, new LevelFunctions().BracketIndexRight((int)22, 10, 20, 30));
+            ClassicAssert.AreEqual(3, new LevelFunctions().BracketIndexRight((int)30, 10, 20, 30));
+            ClassicAssert.AreEqual(3, new LevelFunctions().BracketIndexRight((int)33, 10, 20, 30));
         }
 
         #endregion
