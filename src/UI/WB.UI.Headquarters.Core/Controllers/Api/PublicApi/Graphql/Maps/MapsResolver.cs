@@ -135,8 +135,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
             {
                 throw new GraphQLException(
                     ErrorBuilder.New()
-                        .SetMessage("Can't found map")
-                        .SetCode(ErrorCodes.Execution.QueryNotFound)
+                        .SetMessage("Map was not found")
+                        .SetCode(GraphQLErrorCodes.EntityNotFound)
                         .Build()
                 );
             }
@@ -152,8 +152,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
             {
                 throw new GraphQLException(
                     ErrorBuilder.New()
-                        .SetMessage("Can't found user")
-                        .SetCode(ErrorCodes.Execution.QueryNotFound)
+                        .SetMessage("User was not found")
+                        .SetCode(GraphQLErrorCodes.EntityNotFound)
                         .Build()
                 );
             }
