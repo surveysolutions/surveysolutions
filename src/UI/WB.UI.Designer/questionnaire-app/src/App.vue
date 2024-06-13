@@ -3,6 +3,9 @@
 </template>
 
 <script>
+
+import '../content/libs.css'
+
 export default {
     name: 'App'
 };
