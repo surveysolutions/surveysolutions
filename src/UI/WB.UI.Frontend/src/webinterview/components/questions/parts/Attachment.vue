@@ -50,7 +50,7 @@ import { startsWith } from 'lodash'
 function appendSearchParam(uri, name, value) {
     const args = {
         [name]: value,
-    } // keep in separate line to make IE happy
+    } // keep in separate line to make IE happy 
     return appendquery(uri, args)
 }
 

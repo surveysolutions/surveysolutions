@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite';
-import path from 'path';
+import path  from 'path';
 import vue from '@vitejs/plugin-vue2'
 import envCompatible from 'vite-plugin-env-compatible';
 import mpaPlugin from 'vite-plugin-mpa-plus'
@@ -9,6 +9,8 @@ import LocalizationPlugin  from './tools/vite-plugin-localization'
 import inject from '@rollup/plugin-inject';
 import vitePluginRequire from "vite-plugin-require";
 //import eslintPlugin from 'vite-plugin-eslint';
+
+//import ViteFilemanager from 'filemanager-plugin'
 
 const ViteFilemanager = require('filemanager-plugin').ViteFilemanager;
 
@@ -186,7 +188,7 @@ return {
 		cleanPlugin({
 		  targetFiles: fileTargets.map(target => target.destination)
 		}),
-		ViteFilemanager({
+	    ViteFilemanager({
 		  customHooks: [
 			{
 			  hookName: 'options',
