@@ -16,7 +16,7 @@
     "autoprefixer": "^10.2.5",
     "browser-sync": "^2.27.12",
     "glob": "^8.0.3",
-    "gulp": "^4.0.2",
+    "gulp": "^5.0.0",
     "gulp-angular-templatecache": "^3.0.0",
     "gulp-append-prepend": "^1.0.9",
     "gulp-babel": "^8.0.0",
