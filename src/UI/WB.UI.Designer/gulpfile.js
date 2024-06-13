@@ -2,7 +2,7 @@ const { series, parallel, watch } = require('gulp');
 const path = require('path');
 
 const vendor = require('./build/vendor');
-//const questionnaire = require("./build/questionnaire");
+const questionnaire = require('./build/questionnaire');
 const bundler = require('./build/bundler');
 const vue = require('./build/vue');
 
@@ -16,7 +16,7 @@ module.exports = Object.assign(
     helper.flatten(
         {
             vendor,
-            //questionnaire,
+            questionnaire,
             bundler,
             vue,
         },
@@ -26,8 +26,8 @@ module.exports = Object.assign(
     {
         default: series(
             cleanup,
-            parallel(vendor.default, bundler.default, vue.default)
-            //questionnaire.default
+            parallel(vendor.default, bundler.default, vue.default),
+            questionnaire.default
         ),
         cleanup,
     }
