@@ -1,8 +1,6 @@
 {
   "dist": "wwwroot",
   "questionnaire": {
-    "htmls": ["questionnaire/views/**/*.html"],
-    "scripts": ["questionnaire/scripts/**/*.js"],
     "static": [
       "questionnaire/content/fonts/**/*",
       "questionnaire/content/i/**/*",
