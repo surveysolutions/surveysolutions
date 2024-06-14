@@ -76,7 +76,6 @@
     "jquery.ui.position": "^1.11.4",
     "lodash": "4.17.21",
     "moment": "^2.29.4",
-    "ng-i18next": "^1.0.6",
     "perfect-scrollbar": "^0.8.1",
     "roboto-fontface": "^0.10.0",
     "vee-validate": "2.2.15",
