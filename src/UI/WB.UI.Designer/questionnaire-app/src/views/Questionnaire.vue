@@ -96,7 +96,6 @@ import { useMagicKeys } from '@vueuse/core';
 import '../../content/external/angular-block-ui.css';
 import '../../content/external/hotkeys.css';
 import '../../content/external/loading-bar.css';
-import '../../content/external/perfect-scrollbar.css';
 import '../../content/external/pnotify.css';
 import '../../content/external/pnotify.buttons.css';
 import '../../content/external/angular-ui-tree.css';
