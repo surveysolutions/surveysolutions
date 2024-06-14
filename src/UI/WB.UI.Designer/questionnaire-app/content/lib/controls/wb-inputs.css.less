@@ -1,0 +1,89 @@
+.width100 {
+  width: 100%;
+}
+
+.wb-input {
+  border-radius: 4px;
+  .wb-input-text-fontstyle();
+  padding: 0 15px;
+  height: 37px;
+  &.bg-white {
+    background-color: white;
+    border: solid #dbdfe2 2px;
+  }
+
+  &.width-auto {
+    width: 100%;
+  }
+}
+
+.checkbox {
+  padding-left: 0;
+}
+
+input.wb-checkbox, input.wb-radio {
+  display: none;
+
+  & + label {
+    margin: 4px 6px 4px 0;
+    .wb-checkbox-fontstyle();
+  }
+
+  & + label > span {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    background: transparent url(../../i/pretty-checkable-sprites.png) no-repeat;
+    vertical-align: middle;
+  }
+}
+
+input.wb-checkbox {
+  & + label > span { background-position: 0 0;  }
+  &:checked + label > span { background-position: -60px 0; }
+  &:disabled + label > span { background-position: -30px 0; }
+  &:checked:disabled + label > span { background-position: -90px 0; }
+}
+
+input.wb-radio {
+  & + label > span { background-position: -180 0;  }
+  &:checked + label > span { background-position: -240px 0; }
+  &:disabled + label > span { background-position: -210px 0; }
+  &:checked:disabled + label > span { background-position: -270px 0; }
+}
+
+.form-control {
+  border-width: 2px;
+  color: #000000;
+  .placeholder-style() {
+    .lucida-console-font();
+    font-size: 16px;
+    color: #c1c7cb;
+  }
+
+  &::-moz-placeholder { .placeholder-style(); }
+  &:-ms-input-placeholder { .placeholder-style(); }
+  &::-webkit-input-placeholder { .placeholder-style(); }
+}
+
+.form-group.input-variable-name {
+  position: relative;
+    
+  > input {
+    color: @qname-color;
+  }
+}
+
+textarea {
+  resize: vertical;
+}
+input[type=number] {
+    -moz-appearance:textfield;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+}
