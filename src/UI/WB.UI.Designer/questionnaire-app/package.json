@@ -60,6 +60,8 @@
     "glob-parent": "^6.0.0",
     "globby": "9.2.0",
     "is-svg": "^4.2.2",
+    "less": "^4.2.0",
+    "less-loader": "^12.2.0",
     "normalize-url": "^6.1.0",
     "postcss": "^8.4.35",
     "postcss-svgo": "5.1.0",

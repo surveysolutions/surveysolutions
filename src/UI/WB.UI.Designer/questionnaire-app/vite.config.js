@@ -50,6 +50,15 @@ export default defineConfig(({ mode, command }) => {
             //resolvers: [VuetifyResolver()],
             //}),
         ],
+        css: {
+            preprocessorOptions: {
+                less: {
+                    additionalData: '@icon-font-path: "/fonts/";',
+                    relativeUrls: true,
+                    rootpath: '../'
+                }
+            }
+        },
         server: {
             host: 'localhost',
             strictPort: true,

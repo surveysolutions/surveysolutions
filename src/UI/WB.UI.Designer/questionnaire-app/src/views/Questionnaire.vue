@@ -93,6 +93,9 @@ import { useHotkeysStore } from '../stores/hotkeys';
 import { useUnsavedChanges } from '../stores/unsavedChanges';
 import { useMagicKeys } from '@vueuse/core';
 
+//import '../../content/markup.less'
+import '../../../questionnaire/content/markup.less'
+
 export default {
     name: 'QuestionnaireApp',
     components: {},
