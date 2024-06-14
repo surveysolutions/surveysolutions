@@ -14,7 +14,6 @@ const ngAnnotate = require('gulp-ng-annotate-patched');
 const gulpInject = require('gulp-inject');
 const rename = require('gulp-rename');
 const rev = require('gulp-rev');
-const templateCache = require('gulp-angular-templatecache');
 const terser = require('gulp-terser');
 const cleanCss = require('gulp-clean-css');
 const manifest = require('./plugins/manifest');
