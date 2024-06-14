@@ -54,44 +54,31 @@ const staticContent = () =>
     );
 
 const inject = () =>
-    injectSections(
-        src([
-            'questionnaire-app/index.html',
-            'Views/Shared/Vue.cshtml' /* temp hack to inject styles and scripts*/,
-        ]),
-        dist,
-        {
-            quiet: true,
+    injectSections(src(['questionnaire-app/index.html']), dist, {
+        quiet: true,
 
-            //addPrefix: PRODUCTION ? "~" : "~/src",
-            transform(filepath, file) {
-                if (
-                    filepath.endsWith('.js') &&
-                    filepath.indexOf('cat__') >= 0
-                ) {
-                    var fileName = filepath.slice(0, -3).substring(1);
-                    var varName = fileName.split('-')[0].split('/').join('_');
-                    return (
-                        '<script> var ' +
-                        varName +
-                        "_path ='" +
-                        fileName +
-                        "';</script>"
-                    );
-                } else if (
-                    filepath.endsWith('.js') &&
-                    filepath.indexOf('libs') < 0
-                ) {
-                    return '<script defer src="' + filepath + '"></script>';
-                }
-
-                return gulpInject.transform.apply(
-                    gulpInject.transform,
-                    arguments
+        //addPrefix: PRODUCTION ? "~" : "~/src",
+        transform(filepath, file) {
+            if (filepath.endsWith('.js') && filepath.indexOf('cat__') >= 0) {
+                var fileName = filepath.slice(0, -3).substring(1);
+                var varName = fileName.split('-')[0].split('/').join('_');
+                return (
+                    '<script> var ' +
+                    varName +
+                    "_path ='" +
+                    fileName +
+                    "';</script>"
                 );
-            },
-        }
-    )
+            } else if (
+                filepath.endsWith('.js') &&
+                filepath.indexOf('libs') < 0
+            ) {
+                return '<script defer src="' + filepath + '"></script>';
+            }
+
+            return gulpInject.transform.apply(gulpInject.transform, arguments);
+        },
+    })
         .pipe(
             gulpInject(src('node_modules/.cache/rev-manifest.json'), {
                 name: 'manifest',
