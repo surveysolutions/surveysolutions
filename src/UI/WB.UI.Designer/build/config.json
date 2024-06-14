@@ -34,9 +34,7 @@
     "files": [
       "node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.css",
       "node_modules/pnotify/dist/pnotify.css",
-      "node_modules/pnotify/dist/pnotify.buttons.css",
-      "node_modules/zebra_datepicker/dist/css/bootstrap/icons.png",
-      "node_modules/zebra_datepicker/dist/css/bootstrap/zebra_datepicker.min.css"
+      "node_modules/pnotify/dist/pnotify.buttons.css"
     ]
   },
   "bundle": [    

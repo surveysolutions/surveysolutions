@@ -100,8 +100,6 @@ import '../../content/external/perfect-scrollbar.css';
 import '../../content/external/pnotify.css';
 import '../../content/external/pnotify.buttons.css';
 import '../../content/external/angular-ui-tree.css';
-import '../../content/external/icons.png';
-import '../../content/external/zebra_datepicker.css';
 
 
 export default {
