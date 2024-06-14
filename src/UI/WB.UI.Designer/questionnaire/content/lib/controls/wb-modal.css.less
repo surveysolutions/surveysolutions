@@ -1,0 +1,125 @@
+.popover {
+    max-width: inherit;
+}
+
+
+.share-window.modal {
+    overflow: auto;
+    .modal-dialog {
+        width: 650px;
+    }
+}
+
+.modal {
+    overflow-y: inherit;
+
+    .modal-dialog {
+        > .arrow {
+            position: absolute;
+            top: -20px;
+            left: 100px;
+            width: 42px;
+            height: 21px;
+            background: url(../../i/popover-arrow.png) center no-repeat;
+            z-index: 100;
+        }
+
+        .modal-header {
+            border-radius: 5px 5px 0 0;
+
+            &.blue-strip {
+                border-top: 8px solid #d7e4ee;
+            }
+
+            h1 {
+                .opensanslight-font();
+                margin: 0;
+            }
+
+
+
+            h2 {
+                .arial-font();
+                font-size: 18px;
+                color: #3f3f3f;
+
+                small {
+                    .lucida-console-font();
+                    font-size: 14px;
+                    color: #b9c3ca;
+                }
+            }
+        }
+
+        .modal-body h3 {
+            .arial-font();
+            font-size: 18px;
+            font-weight: bold;
+        }
+    }
+}
+
+.modal-header {
+    border-top: 8px solid #d7e4ee;
+    border-bottom: 2px solid @verification-modal-content-border-color;
+
+    button.close {
+        @s: 40px;
+        position: absolute;
+        z-index: 100;
+        right: 4px;
+        width: @s;
+        height: @s;
+        background: url(../../i/cross.png) 0 0 no-repeat;
+
+        &:hover {
+            background-position: 0 -40px;
+        }
+    }
+}
+
+.modal-title {
+    .confirm-title();
+    line-height: 1;
+}
+
+.modal-body {
+    .arial-font();
+    color: #000;
+}
+
+.modal-footer {
+    text-align: left; // right align buttons
+    border-top: none;
+}
+
+.alert {
+    border: none;
+    margin-bottom: 0;
+}
+
+.alert-warning, .alert-info, .alert-success, .alert-danger {
+    background-color: #ffffff;
+    color: #000000;
+    border-top: 8px solid transparent;
+}
+
+.alert-warning {
+    border-top-color: #2a81cb;
+}
+
+.alert-info {
+    border-top-color: #2a81cb;
+}
+
+.alert-success {
+    border-top-color: #2fc507;
+}
+
+.alert-danger {
+    border-top-color: #ff2b2b;
+}
+
+.ui-pnotify .ui-pnotify-shadow {
+    box-shadow: 0 0 30px rgba(50, 50, 50, 1);
+}
