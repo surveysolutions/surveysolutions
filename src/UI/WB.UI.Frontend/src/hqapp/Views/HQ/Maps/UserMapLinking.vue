@@ -1,52 +1,47 @@
 <template>
-    <HqLayout :hasFilter="false" >
-        <div slot="headers">
-            <ol class="breadcrumb">
-                <li>
-                    <a :href="$config.model.mapsUrl">{{$t("Pages.MapList_Title")}}</a>
-                </li>
-                <li>
-                    <a :href="$config.model.userMapsUrl">{{$t('Pages.MapList_UserMapsLink')}}</a>
-                </li>
-            </ol>
-            <h1>{{$t("Pages.MapLinking_DescriptionTitle")}}</h1>
+    <HqLayout :hasFilter="false">
+        <template v-slot:headers>
+            <div>
+                <ol class="breadcrumb">
+                    <li>
+                        <a :href="$config.model.mapsUrl">{{ $t("Pages.MapList_Title") }}</a>
+                    </li>
+                    <li>
+                        <a :href="$config.model.userMapsUrl">{{ $t('Pages.MapList_UserMapsLink') }}</a>
+                    </li>
+                </ol>
+                <h1>{{ $t("Pages.MapLinking_DescriptionTitle") }}</h1>
 
-            <p>{{$t("Pages.MapLinking_Description")}}</p>
-        </div>
+                <p>{{ $t("Pages.MapLinking_Description") }}</p>
+            </div>
+        </template>
         <div class="row flex-row">
             <div class="flex-block">
                 <div class="selection-box reset-margin">
                     <div class="block">
-                        <h3>{{$t("Pages.MapLinking_UploadDescriptionTitle")}}</h3>
-                        <p>{{$t("Pages.MapLinking_UploadDescription")}}</p>
+                        <h3>{{ $t("Pages.MapLinking_UploadDescriptionTitle") }}</h3>
+                        <p>{{ $t("Pages.MapLinking_UploadDescription") }}</p>
                     </div>
                     <div>
                         <a :href="$config.model.downloadAllUrl">
-                            {{$t("Pages.MapLinking_DownloadExisting")}}
+                            {{ $t("Pages.MapLinking_DownloadExisting") }}
                         </a>
-                        <div class="info-block"
-                            v-if="actionsAlowed">
+                        <div class="info-block" v-if="actionsAlowed">
                             <label class="btn btn-success btn-file">
-                                {{$t("Pages.MapLinking_UploadFile")}}
-                                <input :accept="$config.model.fileExtension"
-                                    ref="uploader"
-                                    id="File"
-                                    name="File"
-                                    @change="onFileChange"
-                                    type="file"
-                                    value="" />
+                                {{ $t("Pages.MapLinking_UploadFile") }}
+                                <input :accept="$config.model.fileExtension" ref="uploader" id="File" name="File"
+                                    @change="onFileChange" type="file" value="" />
                             </label>
 
                         </div>
-                        <div class="info-block"
-                            v-if="actionsAlowed">
-                            <div ref="status" >
-                                <p>{{statusMessage}}</p>
+                        <div class="info-block" v-if="actionsAlowed">
+                            <div ref="status">
+                                <p>{{ statusMessage }}</p>
                             </div>
                         </div>
                         <div>
-                            <p>{{$t("Pages.MapLinking_UploadFileDescription")}}</p>
-                            <p>{{$t("Pages.MapLinking_UploadFileDescription1")}}</p>
+                            <p>{{ $t("Pages.MapLinking_UploadFileDescription") }}</p>
+                            <p>{{ $t("Pages.MapLinking_UploadFileDescription1") }}</p>
                         </div>
                     </div>
                 </div>
@@ -56,25 +51,25 @@
 </template>
 <script>
 export default {
-    data: function(){
+    data: function () {
         return {
             statusMessage: '',
         }
     },
-    mounted() {},
+    mounted() { },
     computed: {
-        config(){
+        config() {
             return this.$config.model
         },
         actionsAlowed() {
             return !this.config.isObserver && !this.config.isObserving
         },
     },
-    methods:{
-        updateStatus(newMessage){
+    methods: {
+        updateStatus(newMessage) {
             this.statusMessage = this.$t('Pages.Map_Status') + ': ' + newMessage
         },
-        onFileChange(e){
+        onFileChange(e) {
             const files = e.target.files || e.dataTransfer.files
 
             if (!files.length) {
@@ -103,11 +98,11 @@ export default {
                 processData: false,
                 contentType: false,
                 type: 'POST',
-                success: function(data) {
+                success: function (data) {
                     statusupdater(data)
                     self.$refs.uploader.value = ''
                 },
-                error : function(error){
+                error: function (error) {
                     statusupdater(uploadingErrorMessage)
                 },
             })

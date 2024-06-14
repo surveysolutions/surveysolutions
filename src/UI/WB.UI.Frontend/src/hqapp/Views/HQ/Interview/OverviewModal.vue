@@ -1,8 +1,10 @@
 <template>
     <ModalFrame ref="modal" id="overview">
-        <div slot="title">
-            <h3>{{ $t("Pages.InterviewOverview") }}</h3>
-        </div>
+        <template v-slot:title>
+            <div>
+                <h3>{{ $t("Pages.InterviewOverview") }}</h3>
+            </div>
+        </template>
 
         <OverviewItem v-for="item in items" :key="item.id" :item="item" @showAdditionalInfo="onShowAdditionalInfo" />
 
@@ -12,14 +14,16 @@
             <span slot="no-results"></span>
         </infinite-loading>
 
-        <div slot="actions">
-            <button type="button" class="btn btn-link" @click="hide">
-                {{ $t("Pages.CloseLabel") }}
-            </button>
-            <button type="button" class="btn btn-link" style="float:right" @click="print">
-                {{ $t("Pages.Print") }}
-            </button>
-        </div>
+        <template v-slot:actions>
+            <div>
+                <button type="button" class="btn btn-link" @click="hide">
+                    {{ $t("Pages.CloseLabel") }}
+                </button>
+                <button type="button" class="btn btn-link" style="float:right" @click="print">
+                    {{ $t("Pages.Print") }}
+                </button>
+            </div>
+        </template>
     </ModalFrame>
 </template>
 

@@ -1,37 +1,41 @@
 <template>
     <HqLayout :hasFilter="false" :title="$t('Pages.MapList_Title')">
-        <div slot="headers">
-            <div class="topic-with-button">
-                <h1>{{ $t('Pages.MapList_Title') }}</h1>
-                <label class="btn btn-success btn-file" v-if="actionsAlowed">
-                    {{ $t('Pages.MapList_Upload') }}
-                    <input accept=".zip" ref="uploader" id="File" name="File" @change="onFileChange" type="file" value="" />
-                </label>
-            </div>
-            <div ref="status">
-                <p>{{ statusMessage }}</p>
-            </div>
-            <div ref="errors" class="alert alert-danger">
-                <div v-for="error in errorList" :key="error">
-                    {{ error }}
+        <template v-slot:headers>
+            <div>
+                <div class="topic-with-button">
+                    <h1>{{ $t('Pages.MapList_Title') }}</h1>
+                    <label class="btn btn-success btn-file" v-if="actionsAlowed">
+                        {{ $t('Pages.MapList_Upload') }}
+                        <input accept=".zip" ref="uploader" id="File" name="File" @change="onFileChange" type="file"
+                            value="" />
+                    </label>
                 </div>
+                <div ref="status">
+                    <p>{{ statusMessage }}</p>
+                </div>
+                <div ref="errors" class="alert alert-danger">
+                    <div v-for="error in errorList" :key="error">
+                        {{ error }}
+                    </div>
+                </div>
+                <ol class="list-unstyled" v-if="!isSupervisor">
+                    <li>{{ $t('Pages.MapList_UploadDescription') }} </li>
+                    <li>{{ $t('Pages.MapList_UploadDescriptionExtra') }}</li>
+                </ol>
+                <p v-if="!isSupervisor">
+                    <a :href="$config.model.userMapsUrl">{{ $t('Pages.MapList_UserMapsLink') }}</a>
+                </p>
+                <p v-if="!isSupervisor">
+                    <a :href="$config.model.userMapLinkingUrl">{{ $t('Pages.MapList_UserLinking') }}</a>
+                </p>
             </div>
-            <ol class="list-unstyled" v-if="!isSupervisor">
-                <li>{{ $t('Pages.MapList_UploadDescription') }} </li>
-                <li>{{ $t('Pages.MapList_UploadDescriptionExtra') }}</li>
-            </ol>
-            <p v-if="!isSupervisor">
-                <a :href="$config.model.userMapsUrl">{{ $t('Pages.MapList_UserMapsLink') }}</a>
-            </p>
-            <p v-if="!isSupervisor">
-                <a :href="$config.model.userMapLinkingUrl">{{ $t('Pages.MapList_UserLinking') }}</a>
-            </p>
-        </div>
+        </template>
         <DataTables ref="table" :tableOptions="tableOptions" :contextMenuItems="contextMenuItems"
             :supportContextMenu="actionsAlowed">
         </DataTables>
 
-        <Confirm ref="confirmDiscard" id="discardConfirm" :okTitle="$t('Common.Delete')" okClass="btn-danger" slot="modals">
+        <Confirm ref="confirmDiscard" id="discardConfirm" :okTitle="$t('Common.Delete')" okClass="btn-danger"
+            slot="modals">
             {{ deleteDialogBody }}
         </Confirm>
     </HqLayout>

@@ -19,12 +19,15 @@
                 </FilterBlock>
             </div>
         </form>
-        <div slot="actions">
-            <button :disabled="!supervisor" type="button" data-suso="btn-add-user" class="btn btn-primary " @click="add"
-                role="confirm">{{ $t("Common.Add") }}</button>
-            <button type="button" class="btn btn-link" data-suso="btn-cancel-user" data-dismiss="modal" role="cancel">{{
-                $t("Common.Cancel") }}</button>
-        </div>
+        <template v-slot:actions>
+            <div>
+                <button :disabled="!supervisor" type="button" data-suso="btn-add-user" class="btn btn-primary "
+                    @click="add" role="confirm">{{ $t("Common.Add") }}</button>
+                <button type="button" class="btn btn-link" data-suso="btn-cancel-user" data-dismiss="modal"
+                    role="cancel">{{
+                        $t("Common.Cancel") }}</button>
+            </div>
+        </template>
     </ModalFrame>
 </template>
 

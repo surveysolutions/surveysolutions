@@ -1,18 +1,20 @@
 <template>
     <HqLayout :title="title" :hasFilter="true" :topicButton="$t('Assignments.NewAssignment')"
         :topicButtonRef="config.isSupervisor ? null : config.api.surveySetup">
-        <div slot="headers" class="topic-with-button">
-            <h1 v-html='title'></h1>
-            <a href="MapDashboard" class="btn" style="margin-right:30px;padding:0;">
-                <img style="padding-top:2px;" height="26px;" src="/img/google-maps-markers/map.png" alt="Map Dashboard"
-                    :title="$t('Common.MapDashboard')" />
-            </a>
-            <a v-if="!config.isSupervisor" class="btn btn-success"
-                :href="config.isSupervisor ? null : config.api.surveySetup">
-                {{ $t('Assignments.NewAssignment') }}
-            </a>
-            <div class="search-pusher"></div>
-        </div>
+        <template v-slot:headers>
+            <div class="topic-with-button">
+                <h1 v-html='title'></h1>
+                <a href="MapDashboard" class="btn" style="margin-right:30px;padding:0;">
+                    <img style="padding-top:2px;" height="26px;" src="/img/google-maps-markers/map.png"
+                        alt="Map Dashboard" :title="$t('Common.MapDashboard')" />
+                </a>
+                <a v-if="!config.isSupervisor" class="btn btn-success"
+                    :href="config.isSupervisor ? null : config.api.surveySetup">
+                    {{ $t('Assignments.NewAssignment') }}
+                </a>
+                <div class="search-pusher"></div>
+            </div>
+        </template>
         <Filters slot="filters">
             <FilterBlock :title="$t('Common.Questionnaire')" :tooltip="$t('Assignments.Tooltip_Filter_Questionnaire')">
                 <Typeahead control-id="questionnaireId" :placeholder="$t('Common.AllQuestionnaires')"
@@ -98,22 +100,27 @@
                         class="form-control" />
                 </div>
             </form>
-            <div slot="actions">
-                <button type="button" class="btn btn-primary" @click="assign" :disabled="!newResponsibleId">{{
-                    $t("Common.Assign") }}</button>
-                <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
-            </div>
+            <template v-slot:actions>
+                <div>
+                    <button type="button" class="btn btn-primary" @click="assign" :disabled="!newResponsibleId">{{
+                        $t("Common.Assign") }}</button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+                </div>
+            </template>
         </ModalFrame>
 
         <ModalFrame ref="closeModal" :title="$t('Pages.ConfirmationNeededTitle')">
             <p v-if="selectedRows.length === 1">{{ singleCloseMessage }}</p>
             <p v-else>{{ $t("Assignments.MultipleAssignmentsClose", { count: selectedRows.length }) }}</p>
 
-            <div slot="actions">
-                <button type="button" class="btn btn-primary" :disabled="isWebModeAssignmentSelected" @click="close">{{
-                    $t("Assignments.Close") }}</button>
-                <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
-            </div>
+            <template v-slot:actions>
+                <div>
+                    <button type="button" class="btn btn-primary" :disabled="isWebModeAssignmentSelected"
+                        @click="close">{{
+                            $t("Assignments.Close") }}</button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+                </div>
+            </template>
         </ModalFrame>
 
         <ModalFrame ref="editAudioEnabledModal"
@@ -125,11 +132,14 @@
                         v-model="editedAudioRecordingEnabled" />
                 </div>
             </form>
-            <div slot="actions">
-                <button type="button" class="btn btn-primary" @click="upateAudioRecording" :disabled="!showSelectors">{{
-                    $t("Common.Save") }}</button>
-                <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
-            </div>
+            <template v-slot:actions>
+                <div>
+                    <button type="button" class="btn btn-primary" @click="upateAudioRecording"
+                        :disabled="!showSelectors">{{
+                            $t("Common.Save") }}</button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+                </div>
+            </template>
         </ModalFrame>
 
         <ModalFrame ref="editQuantityModal"
@@ -151,11 +161,13 @@
                     <span class="text-danger">{{ errors.first('editedQuantity') }}</span>
                 </div>
             </form>
-            <div slot="actions">
-                <button type="button" class="btn btn-primary" :disabled="!showSelectors || !canEditQuantity"
-                    @click="updateQuantity">{{ $t("Common.Save") }}</button>
-                <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
-            </div>
+            <template v-slot:actions>
+                <div>
+                    <button type="button" class="btn btn-primary" :disabled="!showSelectors || !canEditQuantity"
+                        @click="updateQuantity">{{ $t("Common.Save") }}</button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+                </div>
+            </template>
         </ModalFrame>
 
         <!-- <ModalFrame
@@ -171,7 +183,8 @@
                         v-model="mode"/>
                 </div>
             </form>
-            <div slot="actions">
+            <template v-slot:actions>
+                <div>
                 <button
                     type="button"
                     class="btn btn-primary"
@@ -182,6 +195,7 @@
                     class="btn btn-link"
                     data-dismiss="modal">{{$t("Common.Cancel")}}</button>
             </div>
+            </template>
         </ModalFrame> -->
     </HqLayout>
 </template>

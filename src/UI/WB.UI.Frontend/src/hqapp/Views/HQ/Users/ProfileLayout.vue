@@ -18,22 +18,26 @@
                 </div>
             </div>
         </div>
-        <div slot="headers">
-            <ol class="breadcrumb" v-if="!isOwnProfile">
-                <li>
-                    <a v-bind:href="referrerUrl">{{ referrerTitle }}</a>
-                </li>
-            </ol>
-            <h1>{{ $t('Strings.HQ_Views_Manage_Title') }}<b v-if="!isOwnProfile">
-                    : {{ userName }}
-                </b></h1>
-        </div>
+        <template v-slot:headers>
+            <div>
+                <ol class="breadcrumb" v-if="!isOwnProfile">
+                    <li>
+                        <a v-bind:href="referrerUrl">{{ referrerTitle }}</a>
+                    </li>
+                </ol>
+                <h1>{{ $t('Strings.HQ_Views_Manage_Title') }}<b v-if="!isOwnProfile">
+                        : {{ userName }}
+                    </b></h1>
+            </div>
+        </template>
         <div class="extra-margin-bottom">
             <div class="profile">
                 <ul class="nav nav-tabs extra-margin-bottom">
-                    <li class="nav-item" v-if="!forceChangePassword" v-bind:class="{ 'active': currentTab == 'account' }">
-                        <a class="nav-link" id="profile" v-bind:href="getUrl('Manage')">{{ $t('Pages.AccountManage_Profile')
-                        }}</a>
+                    <li class="nav-item" v-if="!forceChangePassword"
+                        v-bind:class="{ 'active': currentTab == 'account' }">
+                        <a class="nav-link" id="profile" v-bind:href="getUrl('Manage')">{{
+                            $t('Pages.AccountManage_Profile')
+                            }}</a>
                     </li>
                     <li class="nav-item" v-if="showWorkspaces && !forceChangePassword"
                         v-bind:class="{ 'active': currentTab == 'workspaces' }">

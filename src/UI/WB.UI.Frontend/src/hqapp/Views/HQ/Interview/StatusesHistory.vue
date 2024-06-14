@@ -1,51 +1,50 @@
 <template>
-    <ModalFrame ref="modal"
-        id="statusesHistoryModal">
+    <ModalFrame ref="modal" id="statusesHistoryModal">
         <div slot="title">
-            <h3>{{$t("Pages.HistoryOfStatuses_Interview")}} {{$config.model.key}}</h3>
+            <h3>{{ $t("Pages.HistoryOfStatuses_Interview") }} {{ $config.model.key }}</h3>
             <p>
-                {{this.$t('Details.Responsible')}}: <span v-bind:class="[this.$config.model.responsibleRole.toLowerCase()]">{{this.$config.model.responsible}}</span>
+                {{ this.$t('Details.Responsible') }}: <span
+                    v-bind:class="[this.$config.model.responsibleRole.toLowerCase()]">{{ this.$config.model.responsible }}</span>
             </p>
         </div>
-        <h3>{{$t("Pages.HistoryOfStatuses_Title")}}</h3>
+        <h3>{{ $t("Pages.HistoryOfStatuses_Title") }}</h3>
         <div class="table-with-scroll">
             <table class="table table-striped history">
                 <thead>
                     <tr>
-                        <td>{{$t("Pages.HistoryOfStatuses_State")}}</td>
-                        <td>{{$t("Pages.HistoryOfStatuses_On")}}</td>
-                        <td>{{$t("Pages.HistoryOfStatuses_By")}}</td>
-                        <td>{{$t("Pages.HistoryOfStatuses_AssignedTo")}}</td>
-                        <td>{{$t("Pages.HistoryOfStatuses_Comment")}}</td>
+                        <td>{{ $t("Pages.HistoryOfStatuses_State") }}</td>
+                        <td>{{ $t("Pages.HistoryOfStatuses_On") }}</td>
+                        <td>{{ $t("Pages.HistoryOfStatuses_By") }}</td>
+                        <td>{{ $t("Pages.HistoryOfStatuses_AssignedTo") }}</td>
+                        <td>{{ $t("Pages.HistoryOfStatuses_Comment") }}</td>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="item in items"
-                        :key="item.id">
-                        <td>{{item.statusHumanized}}</td>
+                    <tr v-for="item in items" :key="item.id">
+                        <td>{{ item.statusHumanized }}</td>
                         <td class="date">
-                            {{formatDate(item.date)}}
+                            {{ formatDate(item.date) }}
                         </td>
                         <td>
-                            <span v-bind:class="[item.responsibleRole]">{{item.responsible}}</span>
+                            <span v-bind:class="[item.responsibleRole]">{{ item.responsible }}</span>
                         </td>
                         <td>
-                            <span v-bind:class="[item.assigneeRole]">{{item.assignee}}</span>
+                            <span v-bind:class="[item.assigneeRole]">{{ item.assignee }}</span>
                         </td>
                         <td data-bind="text: Comment">
-                            {{item.comment}}
+                            {{ item.comment }}
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <div slot="actions">
-            <button type="button"
-                class="btn btn-link"
-                @click="hide">
-                {{ $t("Pages.CloseLabel") }}
-            </button>
-        </div>
+        <template v-slot:actions>
+            <div>
+                <button type="button" class="btn btn-link" @click="hide">
+                    {{ $t("Pages.CloseLabel") }}
+                </button>
+            </div>
+        </template>
     </ModalFrame>
 </template>
 
@@ -55,7 +54,7 @@ import Vue from 'vue'
 import moment from 'moment'
 
 export default {
-    data: function() {
+    data: function () {
         return {
             items: null,
         }
@@ -68,7 +67,7 @@ export default {
             $(this.$refs.modal).modal('hide')
         },
         async show() {
-            if (this.items == null){
+            if (this.items == null) {
                 this.items = await Vue.$api.interview.get('getStatusesHistory')
             }
 

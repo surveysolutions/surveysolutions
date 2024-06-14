@@ -1,16 +1,18 @@
 <template>
     <HqLayout :hasFilter="true">
-        <div slot="headers" class="topic-with-button">
-            <h1 v-html="$t('Users.UsersTitle')"></h1>
-            <a class="btn btn-success" v-if="model.canAddUsers" :href="this.$config.model.createUrl">
-                {{ $t('Users.AddUser') }}
-            </a>
-            <a class="btn btn-success" style="margin-left:10px" v-if="model.canAddUsers"
-                :href="this.$hq.basePath + 'Upload'">
-                {{ $t('Users.UploadUsers') }}
-            </a>
-            <div class="search-pusher"></div>
-        </div>
+        <template v-slot:headers>
+            <div class="topic-with-button">
+                <h1 v-html="$t('Users.UsersTitle')"></h1>
+                <a class="btn btn-success" v-if="model.canAddUsers" :href="this.$config.model.createUrl">
+                    {{ $t('Users.AddUser') }}
+                </a>
+                <a class="btn btn-success" style="margin-left:10px" v-if="model.canAddUsers"
+                    :href="this.$hq.basePath + 'Upload'">
+                    {{ $t('Users.UploadUsers') }}
+                </a>
+                <div class="search-pusher"></div>
+            </div>
+        </template>
 
         <Filters slot="filters">
             <FilterBlock :title="$t('Pages.UsersManage_WorkspacesFilterTitle')">
@@ -61,9 +63,11 @@
                         @click="addToWorkspace">{{
                             $t("Pages.UserManagement_AddToWorkspace") }}</button>
                     <button class="btn btn-lg btn-success" :disabled="filteredToAdd.length == 0"
-                        @click="removeFromWorkspace">{{ $t("Pages.UserManagement_RemoveFromWorkspace") }}</button>
+                        @click="removeFromWorkspace">{{
+                            $t("Pages.UserManagement_RemoveFromWorkspace") }}</button>
                     <button type="button" v-if="isVisibleArchive" class="btn btn-default btn-danger"
-                        @click="archiveUsers">{{ $t("Pages.Interviewers_Archive") }}</button>
+                        @click="archiveUsers">{{
+                            $t("Pages.Interviewers_Archive") }}</button>
                     <button type="button" v-if="isVisibleUnarchive" class="btn btn-default btn-success"
                         @click="unarchiveUsers">{{ $t("Pages.Interviewers_Unarchive") }}</button>
                     <button type="button" class="btn btn-default btn-warning last-btn"

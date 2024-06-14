@@ -196,7 +196,7 @@
                 <div class="form-group">
                     <label class="control-label" for="newResponsibleId">{{
                         $t('Assignments.SelectResponsible')
-                    }}</label>
+                        }}</label>
                     <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
                         :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
                         :fetch-url="model.responsible"></Typeahead>
@@ -215,15 +215,17 @@
                     </span>
                 </div>
             </form>
-            <div slot="actions">
-                <button type="button" class="btn btn-primary" role="confirm" @click="assign"
-                    :disabled="!canClickAssign">
-                    {{ $t('Common.Assign') }}
-                </button>
-                <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">
-                    {{ $t('Common.Cancel') }}
-                </button>
-            </div>
+            <template v-slot:actions>
+                <div>
+                    <button type="button" class="btn btn-primary" role="confirm" @click="assign"
+                        :disabled="!canClickAssign">
+                        {{ $t('Common.Assign') }}
+                    </button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">
+                        {{ $t('Common.Cancel') }}
+                    </button>
+                </div>
+            </template>
         </ModalFrame>
     </HqLayout>
 </template>

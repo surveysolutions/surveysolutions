@@ -1,13 +1,15 @@
 <template>
     <HqLayout :title="title" :hasFilter="true">
-        <div slot="headers" class="topic-with-button">
-            <h1>{{ title }}</h1>
-            <a href="MapDashboard" class="btn" style="margin-right: 30px; padding: 0">
-                <img style="padding-top: 2px" height="26px;" src="/img/google-maps-markers/map.png"
-                    :title="$t('Common.MapDashboard')" />
-            </a>
-            <div class="search-pusher"></div>
-        </div>
+        <template v-slot:headers>
+            <div class="topic-with-button">
+                <h1>{{ title }}</h1>
+                <a href="MapDashboard" class="btn" style="margin-right: 30px; padding: 0">
+                    <img style="padding-top: 2px" height="26px;" src="/img/google-maps-markers/map.png"
+                        :title="$t('Common.MapDashboard')" />
+                </a>
+                <div class="search-pusher"></div>
+            </div>
+        </template>
 
         <Filters slot="filters">
             <FilterBlock :title="$t('Common.Questionnaire')">
@@ -49,19 +51,23 @@
             </FilterBlock>
 
             <FilterBlock :title="$t('Pages.Filters_InterviewMode')">
-                <Typeahead no-search control-id="responsibleId" :placeholder="$t('Pages.Filters_InterviewModePlaceHolder')"
-                    :value="interviewMode" :values="interviewModes" v-on:selected="inteviewModeSelected"></Typeahead>
+                <Typeahead no-search control-id="responsibleId"
+                    :placeholder="$t('Pages.Filters_InterviewModePlaceHolder')" :value="interviewMode"
+                    :values="interviewModes" v-on:selected="inteviewModeSelected"></Typeahead>
             </FilterBlock>
 
-            <InterviewFilter slot="additional" :questionnaireId="where.questionnaireId"
-                :questionnaireVersion="where.questionnaireVersion" :value="conditions"
-                :exposedValuesFilter="exposedValuesFilter" @change="questionFilterChanged"
-                @changeFilter="changeExposedValuesFilter" />
+            <template v-slot:additional>
+                <InterviewFilter :questionnaireId="where.questionnaireId"
+                    :questionnaireVersion="where.questionnaireVersion" :value="conditions"
+                    :exposedValuesFilter="exposedValuesFilter" @change="questionFilterChanged"
+                    @changeFilter="changeExposedValuesFilter" />
+            </template>
+
         </Filters>
 
         <DataTables ref="table" :tableOptions="tableOptions" :contextMenuItems="contextMenuItems"
-            @selectedRowsChanged="(rows) => (selectedRows = rows)" @page="resetSelection" @ajaxComplete="isLoading = false"
-            :selectable="showSelectors" :selectableId="'id'">
+            @selectedRowsChanged="(rows) => (selectedRows = rows)" @page="resetSelection"
+            @ajaxComplete="isLoading = false" :selectable="showSelectors" :selectableId="'id'">
             <div class="panel panel-table" v-if="selectedRows.length" id="pnlInterviewContextActions">
                 <div class="panel-body">
                     <input class="double-checkbox-white" id="q1az" type="checkbox" checked disabled="disabled" />
@@ -110,7 +116,7 @@
                 <div class="form-group" v-if="getFilteredToAssign().length > 0">
                     <label class="control-label" for="newResponsibleId">{{
                         $t('Assignments.SelectResponsible')
-                    }}</label>
+                        }}</label>
                     <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
                         :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
                         :fetch-url="config.api.responsible"></Typeahead>
@@ -154,15 +160,17 @@
                     </span>
                 </div>
             </form>
-            <div slot="actions">
-                <button type="button" class="btn btn-primary" role="confirm" @click="assign" :disabled="!newResponsibleId || getFilteredToAssign().length == 0
-                    ">
-                    {{ $t('Common.Assign') }}
-                </button>
-                <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">
-                    {{ $t('Common.Cancel') }}
-                </button>
-            </div>
+            <template v-slot:actions>
+                <div>
+                    <button type="button" class="btn btn-primary" role="confirm" @click="assign" :disabled="!newResponsibleId || getFilteredToAssign().length == 0
+                        ">
+                        {{ $t('Common.Assign') }}
+                    </button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">
+                        {{ $t('Common.Cancel') }}
+                    </button>
+                </div>
+            </template>
         </ModalFrame>
         <ModalFrame ref="deleteModal" :title="$t('Common.Delete')">
             <div class="action-container">
@@ -173,15 +181,17 @@
                 })
                     "></p>
             </div>
-            <div slot="actions">
-                <button type="button" class="btn btn-danger" role="confirm" @click="deleteInterviews"
-                    :disabled="getFilteredToDelete().length == 0">
-                    {{ $t('Common.Delete') }}
-                </button>
-                <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">
-                    {{ $t('Common.Cancel') }}
-                </button>
-            </div>
+            <template v-slot:actions>
+                <div>
+                    <button type="button" class="btn btn-danger" role="confirm" @click="deleteInterviews"
+                        :disabled="getFilteredToDelete().length == 0">
+                        {{ $t('Common.Delete') }}
+                    </button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">
+                        {{ $t('Common.Cancel') }}
+                    </button>
+                </div>
+            </template>
         </ModalFrame>
         <ModalFrame ref="approveModal" :title="$t('Common.Approve')">
             <form onsubmit="return false;">
@@ -230,20 +240,22 @@
                 <div>
                     <label for="txtStatusApproveComment">{{
                         $t('Pages.ApproveRejectPartialView_CommentLabel')
-                    }}:</label>
+                        }}:</label>
                     <textarea class="form-control" rows="10" maxlength="200" name="txtStatusChangeComment"
                         id="txtStatusApproveComment" v-model="statusChangeComment"></textarea>
                 </div>
             </form>
-            <div slot="actions">
-                <button type="button" class="btn btn-primary" role="confirm" @click="approveInterviews"
-                    :disabled="getFilteredToApprove().length == 0">
-                    {{ $t('Common.Approve') }}
-                </button>
-                <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">
-                    {{ $t('Common.Cancel') }}
-                </button>
-            </div>
+            <template v-slot:actions>
+                <div>
+                    <button type="button" class="btn btn-primary" role="confirm" @click="approveInterviews"
+                        :disabled="getFilteredToApprove().length == 0">
+                        {{ $t('Common.Approve') }}
+                    </button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">
+                        {{ $t('Common.Cancel') }}
+                    </button>
+                </div>
+            </template>
         </ModalFrame>
         <ModalFrame ref="rejectModal" :title="$t('Common.Reject')" id="rejectModel">
             <form onsubmit="return false;">
@@ -264,8 +276,8 @@
 
                 <div>
                     <div class="options-group">
-                        <Radio :label="$t('Interviews.RejectToOriginal')" :radioGroup="false" name="rejectToNewResponsible"
-                            :value="rejectToNewResponsible" @input="
+                        <Radio :label="$t('Interviews.RejectToOriginal')" :radioGroup="false"
+                            name="rejectToNewResponsible" :value="rejectToNewResponsible" @input="
                                 rejectToNewResponsible = false
                             newResponsibleId = null
                                 " />
@@ -283,24 +295,26 @@
                 <div>
                     <label for="txtStatusChangeComment">{{
                         $t('Pages.ApproveRejectPartialView_CommentLabel')
-                    }}
+                        }}
                         :</label>
                     <textarea class="form-control" rows="10" maxlength="200" id="txtStatusChangeComment"
                         v-model="statusChangeComment"></textarea>
                 </div>
             </form>
-            <div slot="actions">
-                <button id="rejectOk" type="button" class="btn btn-lg btn-danger" role="confirm" @click="rejectInterviews"
-                    :disabled="getFilteredToReject().length == 0 ||
-                        (rejectToNewResponsible == true &&
-                            newResponsibleId == null)
-                        ">
-                    {{ $t('Common.Reject') }}
-                </button>
-                <button id="rejectCancel" type="button" class="btn btn-link" data-dismiss="modal" role="cancel">
-                    {{ $t('Common.Cancel') }}
-                </button>
-            </div>
+            <template v-slot:actions>
+                <div>
+                    <button id="rejectOk" type="button" class="btn btn-lg btn-danger" role="confirm"
+                        @click="rejectInterviews" :disabled="getFilteredToReject().length == 0 ||
+                            (rejectToNewResponsible == true &&
+                                newResponsibleId == null)
+                            ">
+                        {{ $t('Common.Reject') }}
+                    </button>
+                    <button id="rejectCancel" type="button" class="btn btn-link" data-dismiss="modal" role="cancel">
+                        {{ $t('Common.Cancel') }}
+                    </button>
+                </div>
+            </template>
         </ModalFrame>
         <ModalFrame ref="unapproveModal" :title="$t('Common.Unapprove')">
             <form onsubmit="return false;">
@@ -312,27 +326,30 @@
                         "></p>
                 </div>
             </form>
-            <div slot="actions">
-                <button type="button" class="btn btn-primary" role="confirm" @click="unapproveInterviews"
-                    :disabled="getFilteredToUnApprove().length == 0">
-                    {{ $t('Common.Unapprove') }}
-                </button>
-                <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">
-                    {{ $t('Common.Cancel') }}
-                </button>
-            </div>
+            <template v-slot:actions>
+                <div>
+                    <button type="button" class="btn btn-primary" role="confirm" @click="unapproveInterviews"
+                        :disabled="getFilteredToUnApprove().length == 0">
+                        {{ $t('Common.Unapprove') }}
+                    </button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">
+                        {{ $t('Common.Cancel') }}
+                    </button>
+                </div>
+            </template>
         </ModalFrame>
         <ModalFrame ref="statusHistory" :title="$t('Pages.HistoryOfStatuses_Title')">
             <div class="action-container">
                 <p>
                     <a class="interview-id title-row" @click="viewInterview" href="javascript:void(0)">{{ interviewKey
-                    }}</a>
+                        }}</a>
                     by
                     <span :class="responsibleClass" v-html="responsibleLink"></span>
                 </p>
             </div>
             <div class="table-with-scroll">
-                <table class="table table-striped table-condensed table-hover table-break-words history" id="statustable">
+                <table class="table table-striped table-condensed table-hover table-break-words history"
+                    id="statustable">
                     <thead>
                         <tr>
                             <td>{{ $t('Pages.HistoryOfStatuses_State') }}</td>
@@ -346,14 +363,16 @@
                     </thead>
                 </table>
             </div>
-            <div slot="actions">
-                <button type="button" class="btn btn-link" role="confirm" @click="viewInterview">
-                    {{ $t('Pages.HistoryOfStatuses_ViewInterview') }}
-                </button>
-                <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">
-                    {{ $t('Common.Cancel') }}
-                </button>
-            </div>
+            <template v-slot:actions>
+                <div>
+                    <button type="button" class="btn btn-link" role="confirm" @click="viewInterview">
+                        {{ $t('Pages.HistoryOfStatuses_ViewInterview') }}
+                    </button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">
+                        {{ $t('Common.Cancel') }}
+                    </button>
+                </div>
+            </template>
         </ModalFrame>
         <ChangeToCapi ref="modalChangeToCAWI" :modalId="'switchToCawi_id'" :title="$t('Common.ChangeToCAWI')"
             :confirmMessage="$t('Common.ChangeToCAWIConfirmHQ', {

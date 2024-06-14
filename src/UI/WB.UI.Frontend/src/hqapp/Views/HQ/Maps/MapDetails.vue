@@ -8,7 +8,8 @@
                     <li v-if="!$config.model.shapesCount"><strong>{{
                         $t("Pages.MapDetails_MinScale") }}:</strong> <span>{{ $config.model.minScale }}</span></li>
                     <li v-if="$config.model.shapeType"><strong>{{
-                        $t("Pages.MapDetails_ShapeType") }}:</strong> <span>{{ $config.model.shapeType }}</span></li>
+                        $t("Pages.MapDetails_ShapeType") }}:</strong> <span>{{ $config.model.shapeType }}</span>
+                    </li>
                     <li v-if="$config.model.shapesCount"><strong>{{
                         $t("Pages.MapDetails_ShapesCount") }}:</strong> <span>{{ $config.model.shapesCount }}</span>
                     </li>
@@ -20,52 +21,57 @@
                         importDate }}</span>
                     </li>
                     <li v-if="$config.model.uploadedBy"><strong>
-                            {{ $t("Pages.MapDetails_UploadedBy") }}:</strong> <span>{{ $config.model.uploadedBy }}</span>
+                            {{ $t("Pages.MapDetails_UploadedBy") }}:</strong> <span>{{ $config.model.uploadedBy
+                            }}</span>
                     </li>
                 </ul>
             </FilterBlock>
 
-            <div class="filters-container" id="linkedUsers" slot="additional">
-                <h4>
-                    {{ $t('Common.LinkedUsers') }}
-                </h4>
-                <div class="block-filter">
+            <template v-slot:additional>
+                <div class="filters-container" id="linkedUsers">
+                    <h4>
+                        {{ $t('Common.LinkedUsers') }}
+                    </h4>
+                    <div class="block-filter">
 
-                    <h5>{{ $t("Pages.MapDetails_SelectUser") }}</h5>
-                    <div class="input-group">
-                        <Typeahead control-id="newLikedUserId" :placeholder="$t('Common.LinkUser')" :value="newLikedUserId"
-                            :ajax-params="{}" @selected="newLinkedUserSelected" :fetch-url="config.api.users"
-                            class="with-extra-btn">
-                        </Typeahead>
+                        <h5>{{ $t("Pages.MapDetails_SelectUser") }}</h5>
+                        <div class="input-group">
+                            <Typeahead control-id="newLikedUserId" :placeholder="$t('Common.LinkUser')"
+                                :value="newLikedUserId" :ajax-params="{}" @selected="newLinkedUserSelected"
+                                :fetch-url="config.api.users" class="with-extra-btn">
+                            </Typeahead>
 
-                        <div class="input-group-btn">
-                            <button class="btn btn-success" @click="linkUserToMap" :disabled="!newLikedUserId">
-                                <span aria-hidden="true" class="glyphicon add"></span>
-                            </button>
+                            <div class="input-group-btn">
+                                <button class="btn btn-success" @click="linkUserToMap" :disabled="!newLikedUserId">
+                                    <span aria-hidden="true" class="glyphicon add"></span>
+                                </button>
+                            </div>
+
                         </div>
 
+                        <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addParamsToRequest"
+                            :contextMenuItems="contextMenuItems" style="margin-left: 0px;">
+                        </DataTables>
+
+                        <Confirm ref="confirmDiscard" id="discardConfirm" slot="modals"
+                            :okTitle="$t('Pages.MapDetails_Unlink')" okClass="btn-danger">
+                            <p>{{ $t("Pages.MapUserLink_DiscardConfirm") }} </p>
+                            <p class="text-danger">{{ $t("Pages.MapUserLink_DiscardConfirm1") }} </p>
+                        </Confirm>
                     </div>
-
-                    <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addParamsToRequest"
-                        :contextMenuItems="contextMenuItems" style="margin-left: 0px;">
-                    </DataTables>
-
-                    <Confirm ref="confirmDiscard" id="discardConfirm" slot="modals" :okTitle="$t('Pages.MapDetails_Unlink')"
-                        okClass="btn-danger">
-                        <p>{{ $t("Pages.MapUserLink_DiscardConfirm") }} </p>
-                        <p class="text-danger">{{ $t("Pages.MapUserLink_DiscardConfirm1") }} </p>
-                    </Confirm>
                 </div>
-            </div>
+            </template>
         </Filters>
-        <div slot="headers">
-            <ol class="breadcrumb">
-                <li>
-                    <a :href="$config.model.mapsUrl">{{ $t("Pages.MapList_Title") }}</a>
-                </li>
-            </ol>
-            <h1>{{ $config.model.fileName }}</h1>
-        </div>
+        <template v-slot:headers>
+            <div>
+                <ol class="breadcrumb">
+                    <li>
+                        <a :href="$config.model.mapsUrl">{{ $t("Pages.MapList_Title") }}</a>
+                    </li>
+                </ol>
+                <h1>{{ $config.model.fileName }}</h1>
+            </div>
+        </template>
         <div style="display: flex; width: 100%; height: 100%; flex-direction: column;">
             <iframe title="Map preview" style="flex-grow: 1; border: none; margin: 0; padding: 0; min-height: 550px;"
                 id="map-iframe" :src="$config.model.mapPreviewUrl"></iframe>
