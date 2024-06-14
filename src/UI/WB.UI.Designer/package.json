@@ -65,7 +65,6 @@
     "axios": "^1.6.5",
     "bootstrap": "3.4.1",
     "bootstrap-select": "^1.13.18",
-    "es5-shim": "^4.6.7",
     "es6-promise": "^4.2.8",
     "html5shiv": "^3.7.3",
     "i18next-browser-languagedetector": "^3.0.3",
