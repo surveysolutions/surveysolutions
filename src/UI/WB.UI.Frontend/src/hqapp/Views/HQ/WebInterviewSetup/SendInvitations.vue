@@ -25,13 +25,15 @@
                     <p>
                         <span v-if="sentInvitationsCount > 0">{{ $t('WebInterviewSetup.Invitations_Sent', {
                             count:
-                            sentInvitationsCount})}}</span>
+                                sentInvitationsCount
+                        }) }}</span>
                         <span v-else>{{ $t('WebInterviewSetup.Invitations_NothingSent') }}</span>
                     </p>
                     <p v-if="notSentInvitationsCount" class="success-text">{{ $t('WebInterviewSetup.Invitations_ToSend',
                         {
                             count:
-                        notSentInvitationsCount})}}</p>
+                                notSentInvitationsCount
+                        }) }}</p>
                     <p v-else class="error-text">{{ $t('WebInterviewSetup.Invitations_NothingToSend') }}</p>
                 </div>
             </div>
@@ -44,7 +46,8 @@
                                 {{ $t('WebInterviewSetup.Invitations_EmailIsNotSetUp') }}
                                 <span v-if="$config.model.isAdmin"
                                     v-html="$t('WebInterviewSetup.Invitations_ChangeEmailSettingsAdmin', { url: emailProviderUrl })"></span>
-                                <span v-else>{{ $t('WebInterviewSetup.Invitations_ChangeEmailSettingsNotAdmin') }}</span>
+                                <span v-else>{{ $t('WebInterviewSetup.Invitations_ChangeEmailSettingsNotAdmin')
+                                    }}</span>
                             </li>
                             <li v-if="!started">SI002: <span
                                     v-html="$t('WebInterviewSetup.Invitations_SurveyIsNotStarted', { url: webSettingsUrl })"></span>
@@ -64,7 +67,8 @@
                         class="btn btn-success ">
                         {{ $t('WebInterviewSetup.Invitations_SendAction', {
                             count: notSentInvitationsCount > 0 ?
-                        notSentInvitationsCount: "" })}}
+                                notSentInvitationsCount : ""
+                        }) }}
                     </button>
                     <a :href="$config.model.api.surveySetupUrl" class="back-link">
                         {{ $t('WebInterviewSetup.BackToQuestionnaires') }}
@@ -72,9 +76,11 @@
                 </div>
             </form>
         </div>
-        <Confirm ref="sendInvitationsConfirmation" id="sendInvitationsConfirmation" slot="modals">
-            {{ $t("Pages.WebInterviewSetup_SendInvitationsConfirmation") }}
-        </Confirm>
+        <template v-slot:modals>
+            <Confirm ref="sendInvitationsConfirmation" id="sendInvitationsConfirmation">
+                {{ $t("Pages.WebInterviewSetup_SendInvitationsConfirmation") }}
+            </Confirm>
+        </template>
     </HqLayout>
 </template>
 <script>

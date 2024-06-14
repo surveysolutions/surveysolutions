@@ -1,47 +1,52 @@
 <template>
     <HqLayout :title="title" :hasFilter="true">
-        <Filters slot="filters">
-            <FilterBlock :title="$t('Common.Questionnaire')">
-                <Typeahead control-id="questionnaireId" data-vv-name="questionnaireId" data-vv-as="questionnaire"
-                    :placeholder="$t('Common.AllQuestionnaires')" :value="questionnaireId"
-                    :values="this.$config.model.questionnaires" v-on:selected="questionnaireSelected" />
-            </FilterBlock>
+        <template v-slot:filters>
+            <Filters>
+                <FilterBlock :title="$t('Common.Questionnaire')">
+                    <Typeahead control-id="questionnaireId" data-vv-name="questionnaireId" data-vv-as="questionnaire"
+                        :placeholder="$t('Common.AllQuestionnaires')" :value="questionnaireId"
+                        :values="this.$config.model.questionnaires" v-on:selected="questionnaireSelected" />
+                </FilterBlock>
 
-            <FilterBlock :title="$t('Common.QuestionnaireVersion')">
-                <Typeahead control-id="questionnaireVersion" data-vv-name="questionnaireVersion"
-                    data-vv-as="questionnaireVersion" :placeholder="$t('Common.AllVersions')"
-                    :disabled="questionnaireId == null" :value="questionnaireVersion"
-                    :values="questionnaireId == null ? [] : questionnaireId.versions"
-                    v-on:selected="questionnaireVersionSelected" />
-            </FilterBlock>
-            <FilterBlock :title="$t('Pages.Filters_Assignment')">
-                <div class="input-group">
-                    <input class="form-control with-clear-btn" :placeholder="$t('Common.AllAssignments')" type="text"
-                        v-model="assignmentId" />
-                    <div class="input-group-btn" @click="clearAssignmentFilter">
-                        <div class="btn btn-default">
-                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                <FilterBlock :title="$t('Common.QuestionnaireVersion')">
+                    <Typeahead control-id="questionnaireVersion" data-vv-name="questionnaireVersion"
+                        data-vv-as="questionnaireVersion" :placeholder="$t('Common.AllVersions')"
+                        :disabled="questionnaireId == null" :value="questionnaireVersion"
+                        :values="questionnaireId == null ? [] : questionnaireId.versions"
+                        v-on:selected="questionnaireVersionSelected" />
+                </FilterBlock>
+                <FilterBlock :title="$t('Pages.Filters_Assignment')">
+                    <div class="input-group">
+                        <input class="form-control with-clear-btn" :placeholder="$t('Common.AllAssignments')"
+                            type="text" v-model="assignmentId" />
+                        <div class="input-group-btn" @click="clearAssignmentFilter">
+                            <div class="btn btn-default">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </FilterBlock>
-        </Filters>
+                </FilterBlock>
+            </Filters>
+        </template>
 
         <DataTables ref="table" :tableOptions="tableOptions" :contextMenuItems="contextMenuItems" />
 
-        <Confirm ref="confirmRestart" id="restartModal" slot="modals">
-            {{ $t("Pages.InterviewerHq_RestartConfirm") }}
-            <FilterBlock>
-                <div class="form-group">
-                    <div class="field">
-                        <input class="form-control with-clear-btn" type="text" v-model="restart_comment" />
+        <template v-slot:modals>
+            <Confirm ref="confirmRestart" id="restartModal">
+                {{ $t("Pages.InterviewerHq_RestartConfirm") }}
+                <FilterBlock>
+                    <div class="form-group">
+                        <div class="field">
+                            <input class="form-control with-clear-btn" type="text" v-model="restart_comment" />
+                        </div>
                     </div>
-                </div>
-            </FilterBlock>
-        </Confirm>
+                </FilterBlock>
+            </Confirm>
 
-        <Confirm ref="confirmDiscard" id="discardConfirm" slot="modals">{{ $t("Pages.InterviewerHq_DiscardConfirm") }}
-        </Confirm>
+            <Confirm ref="confirmDiscard" id="discardConfirm">
+                {{ $t("Pages.InterviewerHq_DiscardConfirm") }}
+            </Confirm>
+        </template>
 
         <ModalFrame ref="editCalendarModal" :title="$t('Common.EditCalendarEvent')">
             <form onsubmit="return false;">

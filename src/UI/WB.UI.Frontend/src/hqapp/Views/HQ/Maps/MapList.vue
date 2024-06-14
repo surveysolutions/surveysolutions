@@ -33,11 +33,11 @@
         <DataTables ref="table" :tableOptions="tableOptions" :contextMenuItems="contextMenuItems"
             :supportContextMenu="actionsAlowed">
         </DataTables>
-
-        <Confirm ref="confirmDiscard" id="discardConfirm" :okTitle="$t('Common.Delete')" okClass="btn-danger"
-            slot="modals">
-            {{ deleteDialogBody }}
-        </Confirm>
+        <template v-slot:modals>
+            <Confirm ref="confirmDiscard" id="discardConfirm" :okTitle="$t('Common.Delete')" okClass="btn-danger">
+                {{ deleteDialogBody }}
+            </Confirm>
+        </template>
     </HqLayout>
 </template>
 

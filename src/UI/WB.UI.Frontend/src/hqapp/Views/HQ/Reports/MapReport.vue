@@ -1,115 +1,78 @@
 <template>
-    <HqLayout :hasFilter="true"
-        :hasHeader="false">
-        <Filters slot="filters">
-            <FilterBlock :title="$t('Common.Questionnaire')">
-                <Typeahead
-                    control-id="questionnaireId"
-                    no-clear
-                    :placeholder="$t('Common.SelectQuestionnaire')"
-                    :value="selectedQuestionnaireId"
-                    :values="questionnaires"
-                    v-on:selected="selectQuestionnaire"/>
-            </FilterBlock>
-            <FilterBlock :title="$t('Common.QuestionnaireVersion')">
-                <Typeahead
-                    control-id="questionnaireVersion"
-                    :placeholder="$t('Common.AllVersions')"
-                    :value="selectedVersion"
-                    :values="selectedQuestionnaireId == null ? null : selectedQuestionnaireId.versions"
-                    v-on:selected="selectQuestionnaireVersion"
-                    :disabled="selectedQuestionnaireId == null"/>
-            </FilterBlock>
-            <FilterBlock :title="$t('Reports.Variables')">
-                <Typeahead
-                    control-id="gpsQuestion"
-                    :placeholder="$t('Common.AllGpsQuestions')"
-                    no-search
-                    no-clear
-                    :values="gpsQuestions"
-                    :value="selectedQuestion"
-                    @selected="selectGpsQuestion"/>
-            </FilterBlock>
-            <FilterBlock>
-                <div class="center-block">
-                    <Checkbox
-                        :label="$t('Reports.HeatMapView')"
-                        name="pivot"
-                        v-model="showHeatmap"/>
-                </div>
-            </FilterBlock>
-            <FilterBlock :title="$t('Reports.HeatRadius')"
-                v-if="showHeatmap">
-                <input
-                    type="range"
-                    min="1"
-                    max="200"
-                    value="50"
-                    class="slider"
-                    id="myRange"
-                    v-model="heatMapOptions.radius"
-                    @change="updateHeatMap"/>
-            </FilterBlock>
-            <FilterBlock v-if="isLoading"
-                :title="$t('Reports.MapDataLoading')">
-                <div class="progress">
-                    <div
-                        class="progress-bar progress-bar-striped active"
-                        role="progressbar"
-                        aria-valuenow="100"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                        style="width: 100%"></div>
-                </div>
-            </FilterBlock>
+    <HqLayout :hasFilter="true" :hasHeader="false">
+        <template v-slot:filters>
+            <Filters>
+                <FilterBlock :title="$t('Common.Questionnaire')">
+                    <Typeahead control-id="questionnaireId" no-clear :placeholder="$t('Common.SelectQuestionnaire')"
+                        :value="selectedQuestionnaireId" :values="questionnaires" v-on:selected="selectQuestionnaire" />
+                </FilterBlock>
+                <FilterBlock :title="$t('Common.QuestionnaireVersion')">
+                    <Typeahead control-id="questionnaireVersion" :placeholder="$t('Common.AllVersions')"
+                        :value="selectedVersion"
+                        :values="selectedQuestionnaireId == null ? null : selectedQuestionnaireId.versions"
+                        v-on:selected="selectQuestionnaireVersion" :disabled="selectedQuestionnaireId == null" />
+                </FilterBlock>
+                <FilterBlock :title="$t('Reports.Variables')">
+                    <Typeahead control-id="gpsQuestion" :placeholder="$t('Common.AllGpsQuestions')" no-search no-clear
+                        :values="gpsQuestions" :value="selectedQuestion" @selected="selectGpsQuestion" />
+                </FilterBlock>
+                <FilterBlock>
+                    <div class="center-block">
+                        <Checkbox :label="$t('Reports.HeatMapView')" name="pivot" v-model="showHeatmap" />
+                    </div>
+                </FilterBlock>
+                <FilterBlock :title="$t('Reports.HeatRadius')" v-if="showHeatmap">
+                    <input type="range" min="1" max="200" value="50" class="slider" id="myRange"
+                        v-model="heatMapOptions.radius" @change="updateHeatMap" />
+                </FilterBlock>
+                <FilterBlock v-if="isLoading" :title="$t('Reports.MapDataLoading')">
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100"
+                            aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                    </div>
+                </FilterBlock>
 
-            <InterviewFilter slot="additional"
-                :questionnaireId="where.questionnaireId"
-                :questionnaireVersion="where.questionnaireVersion"
-                :value="conditions"
-                :exposedValuesFilter="exposedValuesFilter"
-                @change="questionFilterChanged"
-                @changeFilter="changeExposedValuesFilter" />
+                <template v-slot:additional>
+                    <InterviewFilter :questionnaireId="where.questionnaireId"
+                        :questionnaireVersion="where.questionnaireVersion" :value="conditions"
+                        :exposedValuesFilter="exposedValuesFilter" @change="questionFilterChanged"
+                        @changeFilter="changeExposedValuesFilter" />
+                </template>
 
-            <div class="preset-filters-container">
-                <div class="center-block"
-                    style="margin-left: 0">
-                    <button
-                        class="btn btn-default btn-lg"
-                        id="reloadMarkersInBounds"
-                        v-if="readyToUpdate"
-                        @click="reloadMarkersInBounds">{{$t("MapReport.ReloadMarkers")}}</button>
+                <div class="preset-filters-container">
+                    <div class="center-block" style="margin-left: 0">
+                        <button class="btn btn-default btn-lg" id="reloadMarkersInBounds" v-if="readyToUpdate"
+                            @click="reloadMarkersInBounds">{{ $t("MapReport.ReloadMarkers") }}</button>
+                    </div>
                 </div>
-            </div>
-        </Filters>
+            </Filters>
+        </template>
         <div style="display:none;">
             <div ref="tooltip">
                 <div class="row-fluid">
-                    <strong>{{$t("Common.InterviewKey")}}:</strong>
-                    &nbsp;{{selectedTooltip.interviewKey}}
+                    <strong>{{ $t("Common.InterviewKey") }}:</strong>
+                    &nbsp;{{ selectedTooltip.interviewKey }}
                 </div>
                 <div class="row-fluid">
-                    <strong>{{$t("Common.Responsible")}}:</strong>
-                    &nbsp;{{selectedTooltip.interviewerName}}
+                    <strong>{{ $t("Common.Responsible") }}:</strong>
+                    &nbsp;{{ selectedTooltip.interviewerName }}
                 </div>
                 <div class="row-fluid">
-                    <strong>{{$t("Users.Supervisor")}}:</strong>
-                    &nbsp;{{selectedTooltip.supervisorName}}
+                    <strong>{{ $t("Users.Supervisor") }}:</strong>
+                    &nbsp;{{ selectedTooltip.supervisorName }}
                 </div>
                 <div class="row-fluid">
-                    <strong>{{$t("Common.Status")}}:</strong>
-                    &nbsp;{{selectedTooltip.lastStatus}}
+                    <strong>{{ $t("Common.Status") }}:</strong>
+                    &nbsp;{{ selectedTooltip.lastStatus }}
                 </div>
                 <div class="row-fluid">
-                    <strong>{{$t("Reports.LastUpdatedDate")}}:</strong>
-                    &nbsp;{{selectedTooltip.lastUpdatedDate}}
+                    <strong>{{ $t("Reports.LastUpdatedDate") }}:</strong>
+                    &nbsp;{{ selectedTooltip.lastUpdatedDate }}
                 </div>
-                <div class="row-fluid"
-                    style="white-space:nowrap;">
-                    <strong>{{$t("MapReport.ViewInterviewContent")}}:</strong>&nbsp;
-                    <a
-                        v-bind:href="api.GetInterviewDetailsUrl(selectedTooltip.interviewId)"
-                        target="_blank">{{$t("MapReport.details")}}</a>
+                <div class="row-fluid" style="white-space:nowrap;">
+                    <strong>{{ $t("MapReport.ViewInterviewContent") }}:</strong>&nbsp;
+                    <a v-bind:href="api.GetInterviewDetailsUrl(selectedTooltip.interviewId)"
+                        target="_blank">{{ $t("MapReport.details") }}</a>
                 </div>
             </div>
         </div>
@@ -139,12 +102,15 @@
     0% {
         content: '...';
     }
+
     25% {
         content: '';
     }
+
     50% {
         content: '.';
     }
+
     75% {
         content: '..';
     }
@@ -154,7 +120,7 @@
 import * as toastr from 'toastr'
 import Vue from 'vue'
 import gql from 'graphql-tag'
-import {isNull, chain, debounce, delay, forEach, find, flatten, toNumber,isEqual, isNumber} from 'lodash'
+import { isNull, chain, debounce, delay, forEach, find, flatten, toNumber, isEqual, isNumber } from 'lodash'
 import routeSync from '~/shared/routeSync'
 import InterviewFilter from '../Interviews/InterviewQuestionsFilters'
 
@@ -331,7 +297,7 @@ export default {
                 question: this.query.question,
             }
 
-            if(this.conditions.length > 0) {
+            if (this.conditions.length > 0) {
                 query.conditions = conditionToQueryString(this.conditions)
             }
 
@@ -358,7 +324,7 @@ export default {
 
         selectedQuestion() {
             if (this.query.question == null || this.gpsQuestions == null) return null
-            return find(this.gpsQuestions, {key: this.query.question})
+            return find(this.gpsQuestions, { key: this.query.question })
         },
         where() {
             const data = {}
@@ -370,13 +336,13 @@ export default {
         },
         whereQuery() {
             const and = []
-            if(this.conditions != null && this.conditions.length > 0) {
+            if (this.conditions != null && this.conditions.length > 0) {
 
                 var identifyingData = []
                 this.conditions.forEach(cond => {
-                    if(cond.value == null) return
+                    if (cond.value == null) return
 
-                    const value_filter = { entity: {variable: {eq: cond.variable}}}
+                    const value_filter = { entity: { variable: { eq: cond.variable } } }
                     const value = isNumber(cond.value) ? cond.value : cond.value.toLowerCase()
 
                     var field_values = cond.field.split('|')
@@ -384,12 +350,12 @@ export default {
                     value_part[field_values[1]] = value
                     value_filter[field_values[0]] = value_part
 
-                    and.push({identifyingData : {some: value_filter}})
+                    and.push({ identifyingData: { some: value_filter } })
                 })
 
             }
 
-            if(this.exposedValuesFilter != null) {
+            if (this.exposedValuesFilter != null) {
                 and.push(this.exposedValuesFilter)
             }
 
@@ -409,7 +375,7 @@ export default {
             this.selectQuestionnaire(this.selectedQuestionnaireId)
         }
 
-        if(this.query.conditions != null) {
+        if (this.query.conditions != null) {
             this.conditions = queryStringToCondition(flatten([this.query.conditions]))
         }
     },
@@ -443,7 +409,7 @@ export default {
             this.onChange(s => (s.version = value == null ? null : value.key))
 
             this.conditions = []
-            this.queryExposedVariables = { logicalOperator : 'all', children : [] }
+            this.queryExposedVariables = { logicalOperator: 'all', children: [] }
 
             this.loadQuestions()
         },
@@ -452,7 +418,7 @@ export default {
             this.questionnaireId = value
 
             if (this.$route.query.name !== value.value) this.selectQuestionnaireVersion(null)
-            else this.selectQuestionnaireVersion(this.$route.query.version ? {key: this.$route.query.version} : null)
+            else this.selectQuestionnaireVersion(this.$route.query.version ? { key: this.$route.query.version } : null)
 
             this.selectGpsQuestion(null)
             this.gpsQuestions = []
@@ -462,7 +428,7 @@ export default {
             })
 
             this.conditions = []
-            this.queryExposedVariables = { logicalOperator : 'all', children : [] }
+            this.queryExposedVariables = { logicalOperator: 'all', children: [] }
 
             if (isNull(value)) return
             this.loadQuestions().then(() => this.onChange(s => (s.name = value.value)))
@@ -477,7 +443,7 @@ export default {
                     this.gpsQuestions = chain(response.data)
                         .filter(d => d != null && d != '')
                         .map(d => {
-                            return {key: d, value: d}
+                            return { key: d, value: d }
                         })
                         .value()
 
@@ -551,7 +517,7 @@ export default {
                 delayedMapReload()
             })
 
-            this.map.data.setStyle(function(feature) {
+            this.map.data.setStyle(function (feature) {
                 const styles = mapStyles
                 const count = feature.getProperty('count')
 
@@ -598,7 +564,7 @@ export default {
 
                         self.selectedTooltip = data
 
-                        Vue.nextTick(function() {
+                        Vue.nextTick(function () {
                             self.infoWindow.setContent($(self.$refs.tooltip).html())
                             self.infoWindow.setPosition(event.latLng)
                             self.infoWindow.setOptions({
@@ -626,7 +592,7 @@ export default {
             }
         },
 
-        updateRouteAndreloadMarkersInBounds(){
+        updateRouteAndreloadMarkersInBounds() {
             this.reloadMarkersInBounds()
             this.addParamsToQueryString()
         },
@@ -648,11 +614,11 @@ export default {
         },
 
         addParamsToQueryString() {
-            const query = Object.assign({} , this.queryString)
+            const query = Object.assign({}, this.queryString)
 
             if (!isEqual(this.$route.query, query)) {
                 this.$router.push({ query })
-                    .catch(() => {})
+                    .catch(() => { })
             }
         },
 
@@ -671,7 +637,7 @@ export default {
 
             var request = {
                 variable: this.selectedQuestion.key,
-                questionnaireId: this.selectedQuestionnaireId.key.replaceAll('-',''),
+                questionnaireId: this.selectedQuestionnaireId.key.replaceAll('-', ''),
                 questionnaireVersion: this.selectedVersionValue ? toNumber(this.selectedVersionValue) : null,
                 zoom: this.showHeatmap && zoom != -1 ? zoom + 3 : zoom,
                 east,
@@ -694,8 +660,8 @@ export default {
                 and: [...self.whereQuery],
             }
 
-            if(where.and.length > 0) {
-                request.where = {interviewFilter : where}
+            if (where.and.length > 0) {
+                request.where = { interviewFilter: where }
             }
 
             const report = await this.$apollo.query({
@@ -706,8 +672,7 @@ export default {
 
             var mapReport = report.data.mapReport.report
             forEach(mapReport.featureCollection.features, feature => {
-                if(!Array.isArray(feature.geometry.coordinates))
-                {
+                if (!Array.isArray(feature.geometry.coordinates)) {
                     var coordinates = feature.geometry.coordinates
                     feature.geometry.coordinates = [coordinates.longitude, coordinates.latitude]
                 }
@@ -726,7 +691,7 @@ export default {
 
             this.totalAnswers = data.totalPoint
             const features = data.featureCollection.features
-            const heatmapData = {data: []}
+            const heatmapData = { data: [] }
 
             this.map.data.forEach(feature => {
                 //toRemove[feature.getId()] = feature

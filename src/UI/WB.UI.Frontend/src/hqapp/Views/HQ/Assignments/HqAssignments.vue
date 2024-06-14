@@ -15,37 +15,43 @@
                 <div class="search-pusher"></div>
             </div>
         </template>
-        <Filters slot="filters">
-            <FilterBlock :title="$t('Common.Questionnaire')" :tooltip="$t('Assignments.Tooltip_Filter_Questionnaire')">
-                <Typeahead control-id="questionnaireId" :placeholder="$t('Common.AllQuestionnaires')"
-                    :value="questionnaireId" :values="config.questionnaires" v-on:selected="questionnaireSelected" />
-            </FilterBlock>
+        <template v-slot:filters>
+            <Filters>
+                <FilterBlock :title="$t('Common.Questionnaire')"
+                    :tooltip="$t('Assignments.Tooltip_Filter_Questionnaire')">
+                    <Typeahead control-id="questionnaireId" :placeholder="$t('Common.AllQuestionnaires')"
+                        :value="questionnaireId" :values="config.questionnaires"
+                        v-on:selected="questionnaireSelected" />
+                </FilterBlock>
 
-            <FilterBlock :title="$t('Common.QuestionnaireVersion')"
-                :tooltip="$t('Assignments.Tooltip_Filter_QuestionnaireVersion')">
-                <Typeahead control-id="questionnaireVersion" :placeholder="$t('Common.AllVersions')"
-                    :values="questionnaireId == null ? null : questionnaireId.versions" :value="questionnaireVersion"
-                    :disabled="questionnaireId == null" v-on:selected="questionnaireVersionSelected" />
-            </FilterBlock>
+                <FilterBlock :title="$t('Common.QuestionnaireVersion')"
+                    :tooltip="$t('Assignments.Tooltip_Filter_QuestionnaireVersion')">
+                    <Typeahead control-id="questionnaireVersion" :placeholder="$t('Common.AllVersions')"
+                        :values="questionnaireId == null ? null : questionnaireId.versions"
+                        :value="questionnaireVersion" :disabled="questionnaireId == null"
+                        v-on:selected="questionnaireVersionSelected" />
+                </FilterBlock>
 
-            <FilterBlock :title="$t('Common.Responsible')" :tooltip="$t('Assignments.Tooltip_Filter_Responsible')">
-                <Typeahead control-id="responsibleId" :placeholder="$t('Common.AllResponsible')" :value="responsibleId"
-                    :ajax-params="responsibleParams" v-on:selected="userSelected" :fetch-url="config.api.responsible">
-                </Typeahead>
-            </FilterBlock>
+                <FilterBlock :title="$t('Common.Responsible')" :tooltip="$t('Assignments.Tooltip_Filter_Responsible')">
+                    <Typeahead control-id="responsibleId" :placeholder="$t('Common.AllResponsible')"
+                        :value="responsibleId" :ajax-params="responsibleParams" v-on:selected="userSelected"
+                        :fetch-url="config.api.responsible">
+                    </Typeahead>
+                </FilterBlock>
 
-            <FilterBlock :title="$t('Assignments.ReceivedByTablet')"
-                :tooltip="$t('Assignments.Tooltip_Filter_Received')">
-                <Typeahead control-id="recieved-by-tablet" noSearch noClear :values="ddlReceivedByTablet"
-                    :value="receivedByTablet" v-on:selected="receivedByTabletSelected" />
-            </FilterBlock>
+                <FilterBlock :title="$t('Assignments.ReceivedByTablet')"
+                    :tooltip="$t('Assignments.Tooltip_Filter_Received')">
+                    <Typeahead control-id="recieved-by-tablet" noSearch noClear :values="ddlReceivedByTablet"
+                        :value="receivedByTablet" v-on:selected="receivedByTabletSelected" />
+                </FilterBlock>
 
-            <FilterBlock :title="$t('Assignments.ShowArchived')"
-                :tooltip="$t('Assignments.Tooltip_Filter_ArchivedStatus')">
-                <Typeahead control-id="show_archived" noSearch noClear :values="ddlShowArchive" :value="showArchive"
-                    v-on:selected="showArchiveSelected" />
-            </FilterBlock>
-        </Filters>
+                <FilterBlock :title="$t('Assignments.ShowArchived')"
+                    :tooltip="$t('Assignments.Tooltip_Filter_ArchivedStatus')">
+                    <Typeahead control-id="show_archived" noSearch noClear :values="ddlShowArchive" :value="showArchive"
+                        v-on:selected="showArchiveSelected" />
+                </FilterBlock>
+            </Filters>
+        </template>
 
         <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addParamsToRequest"
             :wrapperClass="{ 'table-wrapper': true }" @cell-clicked="cellClicked"

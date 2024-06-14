@@ -1,23 +1,25 @@
 <template>
     <HqLayout :hasFilter="false">
-        <div slot="filters">
-            <div v-if="isRestricted" id="restricted" class="alerts">
-                <div class="alert alert-warning">
-                    <button class="close" data-dismiss="alert" aria-hidden="true">
-                        ×
-                    </button>
-                    {{ $t('FieldsAndValidations.RestrictedAccount') }}
+        <template v-slot:filters>
+            <div>
+                <div v-if="isRestricted" id="restricted" class="alerts">
+                    <div class="alert alert-warning">
+                        <button class="close" data-dismiss="alert" aria-hidden="true">
+                            ×
+                        </button>
+                        {{ $t('FieldsAndValidations.RestrictedAccount') }}
+                    </div>
+                </div>
+                <div v-if="successMessage != null" id="alerts" class="alerts">
+                    <div class="alert alert-success">
+                        <button class="close" data-dismiss="alert" aria-hidden="true">
+                            ×
+                        </button>
+                        {{ successMessage }}
+                    </div>
                 </div>
             </div>
-            <div v-if="successMessage != null" id="alerts" class="alerts">
-                <div class="alert alert-success">
-                    <button class="close" data-dismiss="alert" aria-hidden="true">
-                        ×
-                    </button>
-                    {{ successMessage }}
-                </div>
-            </div>
-        </div>
+        </template>
         <template v-slot:headers>
             <div>
                 <ol class="breadcrumb" v-if="!isOwnProfile">
@@ -37,7 +39,7 @@
                         v-bind:class="{ 'active': currentTab == 'account' }">
                         <a class="nav-link" id="profile" v-bind:href="getUrl('Manage')">{{
                             $t('Pages.AccountManage_Profile')
-                            }}</a>
+                        }}</a>
                     </li>
                     <li class="nav-item" v-if="showWorkspaces && !forceChangePassword"
                         v-bind:class="{ 'active': currentTab == 'workspaces' }">

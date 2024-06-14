@@ -11,59 +11,63 @@
             </div>
         </template>
 
-        <Filters slot="filters">
-            <FilterBlock :title="$t('Common.Questionnaire')">
-                <Typeahead ref="questionnaireIdControl" control-id="questionnaireId" data-vv-name="questionnaireId"
-                    data-vv-as="questionnaire" :placeholder="$t('Common.AllQuestionnaires')" :value="questionnaireId"
-                    :values="this.$config.model.questionnaires" v-on:selected="questionnaireSelected" />
-            </FilterBlock>
+        <template v-slot:filters>
+            <Filters>
+                <FilterBlock :title="$t('Common.Questionnaire')">
+                    <Typeahead ref="questionnaireIdControl" control-id="questionnaireId" data-vv-name="questionnaireId"
+                        data-vv-as="questionnaire" :placeholder="$t('Common.AllQuestionnaires')"
+                        :value="questionnaireId" :values="this.$config.model.questionnaires"
+                        v-on:selected="questionnaireSelected" />
+                </FilterBlock>
 
-            <FilterBlock :title="$t('Common.QuestionnaireVersion')">
-                <Typeahead ref="questionnaireVersionControl" control-id="questionnaireVersion"
-                    data-vv-name="questionnaireVersion" data-vv-as="questionnaireVersion"
-                    :placeholder="$t('Common.AllVersions')" :disabled="questionnaireId == null"
-                    :value="questionnaireVersion" :values="questionnaireId == null ? [] : questionnaireId.versions
-                        " v-on:selected="questionnaireVersionSelected" />
-            </FilterBlock>
+                <FilterBlock :title="$t('Common.QuestionnaireVersion')">
+                    <Typeahead ref="questionnaireVersionControl" control-id="questionnaireVersion"
+                        data-vv-name="questionnaireVersion" data-vv-as="questionnaireVersion"
+                        :placeholder="$t('Common.AllVersions')" :disabled="questionnaireId == null"
+                        :value="questionnaireVersion" :values="questionnaireId == null ? [] : questionnaireId.versions
+                            " v-on:selected="questionnaireVersionSelected" />
+                </FilterBlock>
 
-            <FilterBlock :title="$t('Common.Status')">
-                <Typeahead control-id="status" :selectedKey="selectedStatus" data-vv-name="status" data-vv-as="status"
-                    :placeholder="$t('Common.AllStatuses')" :value="status" :values="statuses"
-                    v-on:selected="statusSelected" />
-            </FilterBlock>
+                <FilterBlock :title="$t('Common.Status')">
+                    <Typeahead control-id="status" :selectedKey="selectedStatus" data-vv-name="status"
+                        data-vv-as="status" :placeholder="$t('Common.AllStatuses')" :value="status" :values="statuses"
+                        v-on:selected="statusSelected" />
+                </FilterBlock>
 
-            <FilterBlock :title="$t('Common.Responsible')">
-                <Typeahead control-id="responsibleId" :placeholder="$t('Common.AllResponsible')" :value="responsibleId"
-                    :ajax-params="responsibleParams" v-on:selected="userSelected" :fetch-url="config.api.responsible">
-                </Typeahead>
-            </FilterBlock>
+                <FilterBlock :title="$t('Common.Responsible')">
+                    <Typeahead control-id="responsibleId" :placeholder="$t('Common.AllResponsible')"
+                        :value="responsibleId" :ajax-params="responsibleParams" v-on:selected="userSelected"
+                        :fetch-url="config.api.responsible">
+                    </Typeahead>
+                </FilterBlock>
 
-            <FilterBlock :title="$t('Pages.Filters_Assignment')">
-                <div class="input-group">
-                    <input class="form-control with-clear-btn" :placeholder="$t('Common.AllAssignments')" type="text"
-                        v-model="assignmentId" />
-                    <div class="input-group-btn" @click="clearAssignmentFilter">
-                        <div class="btn btn-default">
-                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                <FilterBlock :title="$t('Pages.Filters_Assignment')">
+                    <div class="input-group">
+                        <input class="form-control with-clear-btn" :placeholder="$t('Common.AllAssignments')"
+                            type="text" v-model="assignmentId" />
+                        <div class="input-group-btn" @click="clearAssignmentFilter">
+                            <div class="btn btn-default">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </FilterBlock>
+                </FilterBlock>
 
-            <FilterBlock :title="$t('Pages.Filters_InterviewMode')">
-                <Typeahead no-search control-id="responsibleId"
-                    :placeholder="$t('Pages.Filters_InterviewModePlaceHolder')" :value="interviewMode"
-                    :values="interviewModes" v-on:selected="inteviewModeSelected"></Typeahead>
-            </FilterBlock>
+                <FilterBlock :title="$t('Pages.Filters_InterviewMode')">
+                    <Typeahead no-search control-id="responsibleId"
+                        :placeholder="$t('Pages.Filters_InterviewModePlaceHolder')" :value="interviewMode"
+                        :values="interviewModes" v-on:selected="inteviewModeSelected"></Typeahead>
+                </FilterBlock>
 
-            <template v-slot:additional>
-                <InterviewFilter :questionnaireId="where.questionnaireId"
-                    :questionnaireVersion="where.questionnaireVersion" :value="conditions"
-                    :exposedValuesFilter="exposedValuesFilter" @change="questionFilterChanged"
-                    @changeFilter="changeExposedValuesFilter" />
-            </template>
+                <template v-slot:additional>
+                    <InterviewFilter :questionnaireId="where.questionnaireId"
+                        :questionnaireVersion="where.questionnaireVersion" :value="conditions"
+                        :exposedValuesFilter="exposedValuesFilter" @change="questionFilterChanged"
+                        @changeFilter="changeExposedValuesFilter" />
+                </template>
 
-        </Filters>
+            </Filters>
+        </template>
 
         <DataTables ref="table" :tableOptions="tableOptions" :contextMenuItems="contextMenuItems"
             @selectedRowsChanged="(rows) => (selectedRows = rows)" @page="resetSelection"
@@ -116,7 +120,7 @@
                 <div class="form-group" v-if="getFilteredToAssign().length > 0">
                     <label class="control-label" for="newResponsibleId">{{
                         $t('Assignments.SelectResponsible')
-                        }}</label>
+                    }}</label>
                     <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
                         :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
                         :fetch-url="config.api.responsible"></Typeahead>
@@ -240,7 +244,7 @@
                 <div>
                     <label for="txtStatusApproveComment">{{
                         $t('Pages.ApproveRejectPartialView_CommentLabel')
-                        }}:</label>
+                    }}:</label>
                     <textarea class="form-control" rows="10" maxlength="200" name="txtStatusChangeComment"
                         id="txtStatusApproveComment" v-model="statusChangeComment"></textarea>
                 </div>
@@ -295,7 +299,7 @@
                 <div>
                     <label for="txtStatusChangeComment">{{
                         $t('Pages.ApproveRejectPartialView_CommentLabel')
-                        }}
+                    }}
                         :</label>
                     <textarea class="form-control" rows="10" maxlength="200" id="txtStatusChangeComment"
                         v-model="statusChangeComment"></textarea>

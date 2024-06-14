@@ -1,52 +1,58 @@
 <template>
     <HqLayout :title="$t('Pages.Admin_InterviewPackages_Title', { count: totalCount })"
         :subtitle="$t('Pages.Admin_InterviewPackages_Subtitle')" :hasFilter="true">
-        <Filters slot="filters">
-            <FilterBlock :title="$t('Pages.Admin_InterviewPackages_Type')">
-                <input type="radio" name="type" id="typeBroken" :value="false" v-model="returnOnlyUnknownExceptionType">
-                <label for="typeBroken">
-                    {{ $t('Pages.Admin_InterviewPackages_Broken') }}
-                </label>
-                <input type="radio" id="typeRejected" name="type" :value="true"
-                    v-model="returnOnlyUnknownExceptionType">
-                <label for="typeRejected">
-                    {{ $t('Pages.Admin_InterviewPackages_Rejected') }}
-                </label>
-            </FilterBlock>
-            <FilterBlock :title="$t('Pages.Admin_InterviewPackages_Interviewer')">
-                <Typeahead control-id="responsibleSelector"
-                    :placeholder="$t('Pages.Admin_InterviewPackages_SelectInterviewer')" :value="responsible"
-                    v-on:selected="selectResponsible"
-                    :fetch-url="`${this.$hq.basePath}api/Teams/InterviewersCombobox`" />
-            </FilterBlock>
-            <FilterBlock :title="$t('Pages.Admin_InterviewPackages_Questionnaire')">
-                <Typeahead control-id="questionnaireSelector"
-                    :placeholder="$t('Pages.Admin_InterviewPackages_SelectQuestionnaire')"
-                    :value="questionnaireIdentity" v-on:selected="selectQuestionnaire"
-                    :fetch-url="`${this.$hq.basePath}api/QuestionnairesApi/QuestionnairesCombobox`" />
-            </FilterBlock>
-            <FilterBlock v-if="returnOnlyUnknownExceptionType"
-                :title="$t('Pages.Admin_InterviewPackages_ExceptionType')">
-                <Typeahead control-id="exceptionTypeSelector"
-                    :placeholder="$t('Pages.Admin_InterviewPackages_SelectExceptionType')" :value="exceptionType"
-                    v-on:selected="selectExceptionType"
-                    :fetch-url="`${this.$hq.basePath}api/ControlPanelApi/ExceptionTypes`" />
-            </FilterBlock>
-            <FilterBlock :title="$t('Pages.Admin_InterviewPackages_Period')">
-                <DatePicker :config="datePickerConfig" :value="selectedDateRange" :withClear="true"
-                    v-on:clear="clearDateRange"></DatePicker>
-            </FilterBlock>
-        </Filters>
+        <template v-slot:filters>
+            <Filters>
+                <FilterBlock :title="$t('Pages.Admin_InterviewPackages_Type')">
+                    <input type="radio" name="type" id="typeBroken" :value="false"
+                        v-model="returnOnlyUnknownExceptionType">
+                    <label for="typeBroken">
+                        {{ $t('Pages.Admin_InterviewPackages_Broken') }}
+                    </label>
+                    <input type="radio" id="typeRejected" name="type" :value="true"
+                        v-model="returnOnlyUnknownExceptionType">
+                    <label for="typeRejected">
+                        {{ $t('Pages.Admin_InterviewPackages_Rejected') }}
+                    </label>
+                </FilterBlock>
+                <FilterBlock :title="$t('Pages.Admin_InterviewPackages_Interviewer')">
+                    <Typeahead control-id="responsibleSelector"
+                        :placeholder="$t('Pages.Admin_InterviewPackages_SelectInterviewer')" :value="responsible"
+                        v-on:selected="selectResponsible"
+                        :fetch-url="`${this.$hq.basePath}api/Teams/InterviewersCombobox`" />
+                </FilterBlock>
+                <FilterBlock :title="$t('Pages.Admin_InterviewPackages_Questionnaire')">
+                    <Typeahead control-id="questionnaireSelector"
+                        :placeholder="$t('Pages.Admin_InterviewPackages_SelectQuestionnaire')"
+                        :value="questionnaireIdentity" v-on:selected="selectQuestionnaire"
+                        :fetch-url="`${this.$hq.basePath}api/QuestionnairesApi/QuestionnairesCombobox`" />
+                </FilterBlock>
+                <FilterBlock v-if="returnOnlyUnknownExceptionType"
+                    :title="$t('Pages.Admin_InterviewPackages_ExceptionType')">
+                    <Typeahead control-id="exceptionTypeSelector"
+                        :placeholder="$t('Pages.Admin_InterviewPackages_SelectExceptionType')" :value="exceptionType"
+                        v-on:selected="selectExceptionType"
+                        :fetch-url="`${this.$hq.basePath}api/ControlPanelApi/ExceptionTypes`" />
+                </FilterBlock>
+                <FilterBlock :title="$t('Pages.Admin_InterviewPackages_Period')">
+                    <DatePicker :config="datePickerConfig" :value="selectedDateRange" :withClear="true"
+                        v-on:clear="clearDateRange"></DatePicker>
+                </FilterBlock>
+            </Filters>
+        </template>
 
         <DataTables ref="table" :tableOptions="tableOptions" :selectable="true" selectableId="id"
             @selectedRowsChanged="rows => (selectedPackages = rows)" @totalRows="rows => (totalCount = rows)"
             @page="resetSelection" :addParamsToRequest="addParamsToRequest" mutliRowSelect :noPaging="false">
         </DataTables>
 
-        <Confirm ref="confirmReprocessSelected" id="confirmReprocessSelected" slot="modals">
-            {{ $t('Pages.Admin_InterviewPackages_ReprocessSelectedConfirmation') }}</Confirm>
+        <template v-slot:modals>
+            <Confirm ref="confirmReprocessSelected" id="confirmReprocessSelected">
+                {{ $t('Pages.Admin_InterviewPackages_ReprocessSelectedConfirmation') }}</Confirm>
+        </template>
         <ModalFrame ref="putReasonModal" :title="$t('Pages.ConfirmationNeededTitle')">
-            <p>{{ $t("Pages.Admin_InterviewPackages_NumberOfPackagesAffected", { count: selectedPackages.length }) }}</p>
+            <p>{{ $t("Pages.Admin_InterviewPackages_NumberOfPackagesAffected", { count: selectedPackages.length }) }}
+            </p>
             <form onsubmit="return false;">
                 <div class="form-group">
                     <label class="control-label" for="reasonId">{{ $t("Pages.Admin_InterviewPackages_Reason") }}</label>
@@ -69,12 +75,12 @@
                 <label for="q1az">
                     <span class="tick"></span>
                     <span>{{ $t('Pages.Admin_InterviewPackages_SelectedPackagesCount',
-                        { count:selectedPackages.length})}}</span>
+                        { count: selectedPackages.length }) }}</span>
                 </label>
-                <button type="button" class="btn btn-primary"
-                    @click="reprocessSelected">{{ $t('Pages.Admin_InterviewPackages_Reprocess') }}</button>
-                <button type="button" class="btn btn-primary"
-                    @click="showReasonModal">{{ $t('Pages.Admin_InterviewPackages_PutReason') }}</button>
+                <button type="button" class="btn btn-primary" @click="reprocessSelected">{{
+                    $t('Pages.Admin_InterviewPackages_Reprocess') }}</button>
+                <button type="button" class="btn btn-primary" @click="showReasonModal">{{
+                    $t('Pages.Admin_InterviewPackages_PutReason') }}</button>
             </div>
         </div>
     </HqLayout>

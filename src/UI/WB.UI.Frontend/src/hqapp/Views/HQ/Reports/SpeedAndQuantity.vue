@@ -1,48 +1,55 @@
 <template>
     <HqLayout :title="title" :subtitle="reportDescription" :hasFilter="true">
-        <div slot="subtitle">
-            <a v-if="this.model.canNavigateToQuantityBySupervisors" :href="getSupervisorsUrl" class="btn btn-default">
-                <span class="glyphicon glyphicon-arrow-left"></span>
-                {{ $t('PeriodicStatusReport.BackToSupervisors') }}
-            </a>
-        </div>
+        <template v-slot:subtitle>
+            <div>
+                <a v-if="this.model.canNavigateToQuantityBySupervisors" :href="getSupervisorsUrl"
+                    class="btn btn-default">
+                    <span class="glyphicon glyphicon-arrow-left"></span>
+                    {{ $t('PeriodicStatusReport.BackToSupervisors') }}
+                </a>
+            </div>
+        </template>
+        <template v-slot:filters>
+            <Filters>
+                <FilterBlock :title="$t('PeriodicStatusReport.InterviewActions')">
+                    <Typeahead ref="reportTypeControl" control-id="reportTypeId" no-clear data-vv-name="reportTypeId"
+                        data-vv-as="reportType" :placeholder="$t('PeriodicStatusReport.InterviewActions')"
+                        :value="reportTypeId" :values="this.$config.model.reportTypes"
+                        v-on:selected="reportTypeSelected" />
+                </FilterBlock>
 
-        <Filters slot="filters">
-            <FilterBlock :title="$t('PeriodicStatusReport.InterviewActions')">
-                <Typeahead ref="reportTypeControl" control-id="reportTypeId" no-clear data-vv-name="reportTypeId"
-                    data-vv-as="reportType" :placeholder="$t('PeriodicStatusReport.InterviewActions')"
-                    :value="reportTypeId" :values="this.$config.model.reportTypes" v-on:selected="reportTypeSelected" />
-            </FilterBlock>
+                <FilterBlock :title="$t('Common.Questionnaire')">
+                    <Typeahead ref="questionnaireIdControl" control-id="questionnaireId" data-vv-name="questionnaireId"
+                        data-vv-as="questionnaire" :placeholder="$t('Common.AllQuestionnaires')"
+                        :value="questionnaireId" :values="this.$config.model.questionnaires"
+                        v-on:selected="questionnaireSelected" />
+                </FilterBlock>
 
-            <FilterBlock :title="$t('Common.Questionnaire')">
-                <Typeahead ref="questionnaireIdControl" control-id="questionnaireId" data-vv-name="questionnaireId"
-                    data-vv-as="questionnaire" :placeholder="$t('Common.AllQuestionnaires')" :value="questionnaireId"
-                    :values="this.$config.model.questionnaires" v-on:selected="questionnaireSelected" />
-            </FilterBlock>
+                <FilterBlock :title="$t('Common.QuestionnaireVersion')">
+                    <Typeahead ref="questionnaireVersionControl" control-id="questionnaireVersion"
+                        data-vv-name="questionnaireVersion" data-vv-as="questionnaireVersion"
+                        :placeholder="$t('Common.AllVersions')" :disabled="questionnaireId == null"
+                        :value="questionnaireVersion" :values="questionnaireId == null ? [] : questionnaireId.versions"
+                        v-on:selected="questionnaireVersionSelected" />
+                </FilterBlock>
+                <FilterBlock :title="$t('PeriodicStatusReport.OverTheLast')">
+                    <Typeahead ref="overTheLast" control-id="overTheLast" no-clear data-vv-name="overTheLast"
+                        data-vv-as="overTheLast" :placeholder="$t('PeriodicStatusReport.OverTheLast')"
+                        :value="overTheLast" :values="this.$config.model.overTheLasts"
+                        v-on:selected="overTheLastSelected" />
+                </FilterBlock>
 
-            <FilterBlock :title="$t('Common.QuestionnaireVersion')">
-                <Typeahead ref="questionnaireVersionControl" control-id="questionnaireVersion"
-                    data-vv-name="questionnaireVersion" data-vv-as="questionnaireVersion"
-                    :placeholder="$t('Common.AllVersions')" :disabled="questionnaireId == null"
-                    :value="questionnaireVersion" :values="questionnaireId == null ? [] : questionnaireId.versions"
-                    v-on:selected="questionnaireVersionSelected" />
-            </FilterBlock>
-            <FilterBlock :title="$t('PeriodicStatusReport.OverTheLast')">
-                <Typeahead ref="overTheLast" control-id="overTheLast" no-clear data-vv-name="overTheLast"
-                    data-vv-as="overTheLast" :placeholder="$t('PeriodicStatusReport.OverTheLast')" :value="overTheLast"
-                    :values="this.$config.model.overTheLasts" v-on:selected="overTheLastSelected" />
-            </FilterBlock>
+                <FilterBlock :title="$t('PeriodicStatusReport.PeriodUnit')">
+                    <Typeahead ref="period" control-id="period" no-clear
+                        :placeholder="$t('PeriodicStatusReport.Period')" data-vv-name="period" data-vv-as="period"
+                        v-on:selected="periodSelected" :value="period" :values="this.$config.model.periods"></Typeahead>
+                </FilterBlock>
 
-            <FilterBlock :title="$t('PeriodicStatusReport.PeriodUnit')">
-                <Typeahead ref="period" control-id="period" no-clear :placeholder="$t('PeriodicStatusReport.Period')"
-                    data-vv-name="period" data-vv-as="period" v-on:selected="periodSelected" :value="period"
-                    :values="this.$config.model.periods"></Typeahead>
-            </FilterBlock>
-
-            <FilterBlock :title="$t('PeriodicStatusReport.LastDateToShowLabel')">
-                <DatePicker :config="datePickerConfig" :value="selectedDate"></DatePicker>
-            </FilterBlock>
-        </Filters>
+                <FilterBlock :title="$t('PeriodicStatusReport.LastDateToShowLabel')">
+                    <DatePicker :config="datePickerConfig" :value="selectedDate"></DatePicker>
+                </FilterBlock>
+            </Filters>
+        </template>
 
         <div class="clearfix">
             <div class="col-sm-8">

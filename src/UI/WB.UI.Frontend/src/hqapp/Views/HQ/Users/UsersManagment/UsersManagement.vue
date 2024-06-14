@@ -14,39 +14,41 @@
             </div>
         </template>
 
-        <Filters slot="filters">
-            <FilterBlock :title="$t('Pages.UsersManage_WorkspacesFilterTitle')">
-                <Typeahead control-id="workspaceSelector"
-                    :placeholder="$t('Pages.UsersManage_WorkspacesFilterPlaceholder')" :value="selectedWorkspace"
-                    :ajax-params="{ includeDisabled: true }" :fetch-url="this.$config.model.workspacesUrl"
-                    v-on:selected="onWorkspaceSelected" />
-            </FilterBlock>
+        <template v-slot:filters>
+            <Filters>
+                <FilterBlock :title="$t('Pages.UsersManage_WorkspacesFilterTitle')">
+                    <Typeahead control-id="workspaceSelector"
+                        :placeholder="$t('Pages.UsersManage_WorkspacesFilterPlaceholder')" :value="selectedWorkspace"
+                        :ajax-params="{ includeDisabled: true }" :fetch-url="this.$config.model.workspacesUrl"
+                        v-on:selected="onWorkspaceSelected" />
+                </FilterBlock>
 
-            <FilterBlock :title="$t('Pages.AccountManage_Role')" v-if="this.$config.model.roles.length > 0">
-                <Typeahead no-search control-id="roleSelector"
-                    :placeholder="$t('Pages.UsersManage_RoleFilterPlaceholder')" :value="selectedRole"
-                    :values="this.$config.model.roles" v-on:selected="onRoleSelected" />
-            </FilterBlock>
+                <FilterBlock :title="$t('Pages.AccountManage_Role')" v-if="this.$config.model.roles.length > 0">
+                    <Typeahead no-search control-id="roleSelector"
+                        :placeholder="$t('Pages.UsersManage_RoleFilterPlaceholder')" :value="selectedRole"
+                        :values="this.$config.model.roles" v-on:selected="onRoleSelected" />
+                </FilterBlock>
 
-            <FilterBlock :title="$t('Pages.UsersManage_TeamFilter')" v-if="this.selectedWorkspace">
-                <Typeahead control-id="teamSelector" :placeholder="$t('Pages.UsersManage_TeamFilterPlaceHolder')"
-                    :value="selectedTeam" :fetch-url="supervisorsUri" v-on:selected="onTeamSelected" />
-            </FilterBlock>
+                <FilterBlock :title="$t('Pages.UsersManage_TeamFilter')" v-if="this.selectedWorkspace">
+                    <Typeahead control-id="teamSelector" :placeholder="$t('Pages.UsersManage_TeamFilterPlaceHolder')"
+                        :value="selectedTeam" :fetch-url="supervisorsUri" v-on:selected="onTeamSelected" />
+                </FilterBlock>
 
-            <FilterBlock :title="$t('Pages.AccountManage_ShowUsers')" v-if="this.$config.model.filters.length > 0">
-                <Typeahead no-search control-id="filterSelector"
-                    :placeholder="$t('Pages.UsersManage_ShowUsersFilterPlaceholder')"
-                    :values="this.$config.model.filters" :value="selectedFilter" v-on:selected="onFilterSelected" />
-            </FilterBlock>
+                <FilterBlock :title="$t('Pages.AccountManage_ShowUsers')" v-if="this.$config.model.filters.length > 0">
+                    <Typeahead no-search control-id="filterSelector"
+                        :placeholder="$t('Pages.UsersManage_ShowUsersFilterPlaceholder')"
+                        :values="this.$config.model.filters" :value="selectedFilter" v-on:selected="onFilterSelected" />
+                </FilterBlock>
 
-            <FilterBlock :title="$t('Pages.Interviewers_ArchiveStatusTitle')">
-                <Typeahead ref="archiveStatusControl" control-id="archiveStatus" no-clear :noPaging="false"
-                    data-vv-name="archive" data-vv-as="archive" :value="selectedArchive"
-                    :values="this.$config.model.archiveStatuses" :selectedKey="this.query.archive" :selectFirst="true"
-                    v-on:selected="onArchiveStatusSelected" />
-            </FilterBlock>
+                <FilterBlock :title="$t('Pages.Interviewers_ArchiveStatusTitle')">
+                    <Typeahead ref="archiveStatusControl" control-id="archiveStatus" no-clear :noPaging="false"
+                        data-vv-name="archive" data-vv-as="archive" :value="selectedArchive"
+                        :values="this.$config.model.archiveStatuses" :selectedKey="this.query.archive"
+                        :selectFirst="true" v-on:selected="onArchiveStatusSelected" />
+                </FilterBlock>
 
-        </Filters>
+            </Filters>
+        </template>
 
         <DataTables ref="table" data-suso="usermanagement-list" :tableOptions="tableOptions"
             :addParamsToRequest="addParamsToRequest" :selectable="canManageUsers"
@@ -82,16 +84,18 @@
 
         <AddInterviewerToWorkspace ref="addInterviewerToWorkspace" @addInterviewerWorkspace="addInterviewerWorkspace" />
 
-        <Confirm ref="confirmArchive" id="confirmArchive" slot="modals">
-            {{ $t('Pages.Users_ArchiveUsersConfirmMessage') }}
-            <br /> <br />
-            {{ $t('Pages.Users_UsersConfirm') }}
-        </Confirm>
-        <Confirm ref="confirmUnarchive" id="confirmUnarchive" slot="modals">
-            {{ $t('Pages.Users_UnarchiveUsersWarning') }}
-            <br /> <br />
-            {{ $t('Pages.Users_UsersConfirm') }}
-        </Confirm>
+        <template v-slot:modals>
+            <Confirm ref="confirmArchive" id="confirmArchive" slot="modals">
+                {{ $t('Pages.Users_ArchiveUsersConfirmMessage') }}
+                <br /> <br />
+                {{ $t('Pages.Users_UsersConfirm') }}
+            </Confirm>
+            <Confirm ref="confirmUnarchive" id="confirmUnarchive" slot="modals">
+                {{ $t('Pages.Users_UnarchiveUsersWarning') }}
+                <br /> <br />
+                {{ $t('Pages.Users_UsersConfirm') }}
+            </Confirm>
+        </template>
 
         <InterviewersMoveToOtherTeam ref="interviewersMoveToOtherTeam" @moveInterviewersCompleted="loadData">
         </InterviewersMoveToOtherTeam>

@@ -14,8 +14,9 @@
             </div>
         </template>
         <DataTables ref="table" :tableOptions="tableOptions"></DataTables>
-
-        <Confirm ref="confirmDiscard" id="discardConfirm" slot="modals">{{ $t("Pages.Map_DiscardConfirm") }}</Confirm>
+        <template v-slot:models>
+            <Confirm ref="confirmDiscard" id="discardConfirm">{{ $t("Pages.Map_DiscardConfirm") }}</Confirm>
+        </template>
     </HqLayout>
 </template>
 

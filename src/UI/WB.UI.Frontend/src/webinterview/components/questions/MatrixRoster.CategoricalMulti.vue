@@ -3,7 +3,7 @@
         <popover class="tooltip-wrapper" trigger="hover-focus" append-to="body"
             :enable="!question.isDisabled && (question.validity.messages.length > 0 || question.validity.warnings.length > 0)">
             <a class="cell-content has-tooltip" type="primary" data-role="trigger"></a>
-            <template slot="popover">
+            <template v-slot:popover>
                 <div class="error-tooltip" v-if="!question.validity.isValid">
                     <h6 style="text-transform:uppercase;" v-if="question.validity.errorMessage">{{
                         $t("WebInterviewUI.AnswerWasNotSaved") }}</h6>

@@ -1,18 +1,23 @@
 <template>
     <HqLayout :title="$t('Pages.SurveysAndStatuses_Overview')"
         :subtitle="$t('Pages.SurveysAndStatuses_HeadquartersDescription')" :hasFilter="true">
-        <div slot="subtitle">
-            <p v-if="questionnaireId != null">
-                <a id="lnkBackToQuestionnaires" :href="$config.model.selfUrl">{{ $t('Reports.ToAllQuestionnaires') }}</a>
-            </p>
-        </div>
-        <Filters slot="filters">
-            <FilterBlock :title="$t('Pages.SurveysAndStatuses_SupervisorTitle')">
-                <Typeahead control-id="responsibleSelector" ref="responsibleIdControl" data-vv-name="responsibleId"
-                    data-vv-as="responsible" :placeholder="$t('Strings.AllTeams')" :value="responsible"
-                    v-on:selected="selectResponsible" :fetch-url="$config.model.responsiblesUrl" />
-            </FilterBlock>
-        </Filters>
+        <template v-slot:subtitle>
+            <div>
+                <p v-if="questionnaireId != null">
+                    <a id="lnkBackToQuestionnaires" :href="$config.model.selfUrl">{{ $t('Reports.ToAllQuestionnaires')
+                        }}</a>
+                </p>
+            </div>
+        </template>
+        <template v-slot:filters>
+            <Filters>
+                <FilterBlock :title="$t('Pages.SurveysAndStatuses_SupervisorTitle')">
+                    <Typeahead control-id="responsibleSelector" ref="responsibleIdControl" data-vv-name="responsibleId"
+                        data-vv-as="responsible" :placeholder="$t('Strings.AllTeams')" :value="responsible"
+                        v-on:selected="selectResponsible" :fetch-url="$config.model.responsiblesUrl" />
+                </FilterBlock>
+            </Filters>
+        </template>
 
         <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addFilteringParams" :no-search="true"
             exportable :hasTotalRow="questionnaireId != null"></DataTables>

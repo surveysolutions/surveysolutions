@@ -1,34 +1,39 @@
 <template>
     <HqLayout :hasFilter="true" :title="title">
-        <div slot="subtitle">
-            <div class="neighbor-block-to-search">
-                <ol class="list-unstyled">
-                    <li>{{ $t('Pages.Users_Interviewers_Instruction2') }}</li>
-                </ol>
+
+        <template v-slot:subtitle>
+            <div>
+                <div class="neighbor-block-to-search">
+                    <ol class="list-unstyled">
+                        <li>{{ $t('Pages.Users_Interviewers_Instruction2') }}</li>
+                    </ol>
+                </div>
             </div>
-        </div>
+        </template>
 
-        <Filters slot="filters">
-            <FilterBlock v-if="model.showSupervisorColumn" :title="$t('Pages.Interviewers_SupervisorTitle')">
-                <Typeahead ref="supervisorControl" control-id="supervisor" data-vv-name="supervisor"
-                    data-vv-as="supervisor" :placeholder="$t('Common.AllSupervisors')" :value="supervisor"
-                    :fetch-url="$config.model.supervisorsUrl" :selectedValue="this.query.supervisor"
-                    v-on:selected="supervisorSelected" />
-            </FilterBlock>
+        <template v-slot:filters>
+            <Filters>
+                <FilterBlock v-if="model.showSupervisorColumn" :title="$t('Pages.Interviewers_SupervisorTitle')">
+                    <Typeahead ref="supervisorControl" control-id="supervisor" data-vv-name="supervisor"
+                        data-vv-as="supervisor" :placeholder="$t('Common.AllSupervisors')" :value="supervisor"
+                        :fetch-url="$config.model.supervisorsUrl" :selectedValue="this.query.supervisor"
+                        v-on:selected="supervisorSelected" />
+                </FilterBlock>
 
-            <FilterBlock :title="$t('Users.InterviewerIssues')">
-                <Typeahead ref="facetControl" control-id="facet" no-clear data-vv-name="facet" data-vv-as="facet"
-                    :value="facet" :values="this.$config.model.interviewerIssues" :selectedKey="this.query.facet"
-                    :selectFirst="true" v-on:selected="facetSelected" />
-            </FilterBlock>
+                <FilterBlock :title="$t('Users.InterviewerIssues')">
+                    <Typeahead ref="facetControl" control-id="facet" no-clear data-vv-name="facet" data-vv-as="facet"
+                        :value="facet" :values="this.$config.model.interviewerIssues" :selectedKey="this.query.facet"
+                        :selectFirst="true" v-on:selected="facetSelected" />
+                </FilterBlock>
 
-            <FilterBlock :title="$t('Pages.Interviewers_ArchiveStatusTitle')">
-                <Typeahead ref="archiveStatusControl" control-id="archiveStatus" no-clear :noPaging="false"
-                    data-vv-name="archiveStatus" data-vv-as="archiveStatus" :value="archiveStatus"
-                    :values="this.$config.model.archiveStatuses" :selectedKey="this.query.archive" :selectFirst="true"
-                    v-on:selected="archiveStatusSelected" />
-            </FilterBlock>
-        </Filters>
+                <FilterBlock :title="$t('Pages.Interviewers_ArchiveStatusTitle')">
+                    <Typeahead ref="archiveStatusControl" control-id="archiveStatus" no-clear :noPaging="false"
+                        data-vv-name="archiveStatus" data-vv-as="archiveStatus" :value="archiveStatus"
+                        :values="this.$config.model.archiveStatuses" :selectedKey="this.query.archive"
+                        :selectFirst="true" v-on:selected="archiveStatusSelected" />
+                </FilterBlock>
+            </Filters>
+        </template>
 
         <DataTables ref="table" :tableOptions="tableOptions" @ajaxComplete="onTableReload" exportable mutliRowSelect
             :selectableId="'userId'" @selectedRowsChanged="rows => selectedInterviewers = rows"
