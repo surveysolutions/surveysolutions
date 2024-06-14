@@ -32,9 +32,7 @@
   "vendor": {
     "favicons": ["Content/identity/favicon-*.png"],
     "files": [
-      "node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.css",
-      "node_modules/pnotify/dist/pnotify.css",
-      "node_modules/pnotify/dist/pnotify.buttons.css"
+      "node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.css"
     ]
   },
   "bundle": [    

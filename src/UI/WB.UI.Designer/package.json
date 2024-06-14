@@ -82,7 +82,6 @@
     "moment": "^2.29.4",
     "ng-i18next": "^1.0.6",
     "perfect-scrollbar": "^0.8.1",
-    "pnotify": "^3.2.1",
     "roboto-fontface": "^0.10.0",
     "underscore": "^1.13.6",
     "vee-validate": "2.2.15",
