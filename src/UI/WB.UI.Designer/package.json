@@ -62,7 +62,6 @@
   "dependencies": {
     "@babel/node": "^7.20.7",
     "@mdi/font": "^5.2.45",
-    "ace-builds": "^1.15.0",
     "axios": "^1.6.5",
     "bootstrap": "3.4.1",
     "bootstrap-select": "^1.13.18",
