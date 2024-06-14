@@ -32,13 +32,9 @@
   "vendor": {
     "favicons": ["Content/identity/favicon-*.png"],
     "files": [
-      "node_modules/angular-block-ui/dist/angular-block-ui.css",
-      "node_modules/angular-hotkeys/build/hotkeys.css",
-      "node_modules/angular-loading-bar/build/loading-bar.css",
       "node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.css",
       "node_modules/pnotify/dist/pnotify.css",
       "node_modules/pnotify/dist/pnotify.buttons.css",
-      "node_modules/angular-ui-tree/dist/angular-ui-tree.css",
       "node_modules/zebra_datepicker/dist/css/bootstrap/icons.png",
       "node_modules/zebra_datepicker/dist/css/bootstrap/zebra_datepicker.min.css"
     ]
