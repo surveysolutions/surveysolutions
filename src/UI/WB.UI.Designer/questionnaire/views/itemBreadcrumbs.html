@@ -1,9 +1,0 @@
-﻿<ul>
-    <li ng-repeat="breadcrumb in crumbs">
-        <a ng-if="$first" ui-sref="questionnaire.chapter.group({chapterId: breadcrumb.id, itemId: breadcrumb.id})">{{breadcrumb.title}}</a>
-
-        <a ng-if="!$first && !breadcrumb.isRoster" ui-sref="questionnaire.chapter.group({itemId: breadcrumb.id})">{{breadcrumb.title}}</a>
-
-        <a ng-if="!$first && breadcrumb.isRoster" ui-sref="questionnaire.chapter.roster({itemId: breadcrumb.id})">{{breadcrumb.title}}</a>
-    </li>
-</ul>
