@@ -6,6 +6,7 @@
 
 @form-btns-hldr-height: 66px;
 @form-holder-height: calc(~"100%" - (@form-btns-hldr-height));
+@min-width-calc: ((1280px / 2) - @left-menu-width - @foldback-button-size);
 
 .opacity (@opacity: 0.5) {
     -webkit-opacity: @opacity;
@@ -434,7 +435,7 @@
 }
 
 .categories-panel {
-    min-width: (1280px) / 2 - @left-menu-width - @foldback-button-size;
+    min-width: @min-width-calc;
 
     @attachments-panel-padding-left: 20px;
     @attachments-panel-table-item-bg: #fff;
@@ -538,7 +539,7 @@
 }
 
 .translations-panel {
-    min-width: (1280px) / 2 - @left-menu-width - @foldback-button-size;
+    min-width: @min-width-calc;
 
     @attachments-panel-padding-left: 20px;
     @attachments-panel-table-item-bg: #fff;
@@ -647,7 +648,7 @@
 }
 
 .attachments-panel {
-    min-width: (1280px) / 2 - @left-menu-width - @foldback-button-size;
+    min-width: @min-width-calc;
 
     @attachments-panel-padding-left: 20px;
     @attachments-panel-table-item-bg: #fff;

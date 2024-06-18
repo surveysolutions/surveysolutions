@@ -68,35 +68,6 @@ export function focusout(name) {
     });
 }
 
-export async function moveFocusAndAddOptionIfNeeded(
-    targetDomElement,
-    optionEditorClassName,
-    optionVauleEditorClassName,
-    options,
-    addOptionCallBack,
-    optionPropertyName
-) {
-    var target = targetDomElement;
-    if (target.parents(optionEditorClassName).length <= 0) {
-        return;
-    }
-
-    var optionScope = angular.element(target).scope()[optionPropertyName];
-    var indexOfOption = options.indexOf(optionScope);
-    if (indexOfOption < 0) return;
-
-    if (indexOfOption === options.length - 1) {
-        addOptionCallBack();
-    }
-
-    await nextTick();
-
-    var questionOptionValueEditor = $(optionVauleEditorClassName);
-    var optionValueInput = $(questionOptionValueEditor[indexOfOption + 1]);
-    optionValueInput.focus();
-    optionValueInput.select();
-}
-
 export function sanitize(input) {
     if (input) {
         var html = filterXSS(input, {
