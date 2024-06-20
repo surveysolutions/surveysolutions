@@ -99,9 +99,8 @@ const inject = () =>
         .pipe(dest((f) => f.base));
 
 module.exports = {
-    styles,
     staticContent,
     ResourcesFromResx,
     inject,
-    default: series(parallel(styles, staticContent, ResourcesFromResx), inject),
+    default: series(parallel(staticContent, ResourcesFromResx), inject),
 };
