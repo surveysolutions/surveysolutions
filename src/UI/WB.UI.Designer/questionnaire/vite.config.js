@@ -55,7 +55,7 @@ export default defineConfig(({ mode, command }) => {
                 less: {
                     additionalData: '@icon-font-path: "/fonts/";',
                     relativeUrls: true,
-                    rootpath: '../'
+                    rootpath: '../../'
                 }
             }
         },
