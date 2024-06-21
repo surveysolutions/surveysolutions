@@ -93,6 +93,14 @@ import { useHotkeysStore } from '../stores/hotkeys';
 import { useUnsavedChanges } from '../stores/unsavedChanges';
 import { useMagicKeys } from '@vueuse/core';
 
+import '../../content/external/angular-block-ui.css';
+import '../../content/external/hotkeys.css';
+import '../../content/external/loading-bar.css';
+import '../../content/external/pnotify.css';
+import '../../content/external/pnotify.buttons.css';
+import '../../content/external/angular-ui-tree.css';
+
+
 export default {
     name: 'QuestionnaireApp',
     components: {},
