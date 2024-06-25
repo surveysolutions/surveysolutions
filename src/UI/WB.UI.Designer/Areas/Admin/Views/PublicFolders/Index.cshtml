@@ -4,30 +4,30 @@
     Layout = "Layout.ControlPanel";
 }
 
-<!-- folders:css -->
+
 <link rel="stylesheet" href="~/css/folders.css">
-<!-- endinject -->
-<!-- folders:js -->
+
+
 <script src="~/js/folders.js"></script>
-<!-- endinject -->
+
 
 <script type="text/javascript">
-        $(function () {
-            var localization = {
-                CreateSubFolder: "@Html.Raw(QuestionnaireController.CreateSubFolder)",
-                Edit: '@Html.Raw(QuestionnaireController.Rename)',
-                Delete: "@Html.Raw(QuestionnaireController.Delete)",
-                DeleteConfirmation: "@Html.Raw(QuestionnaireController.DeleteFolderConfirmation)",
-                NewFolderName: "@Html.Raw(QuestionnaireController.NewFolder)"
-            };
-            var subFoldersUrl  = '@Url.Action("GetFolders", "PublicFolders")';
-            var rootFoldersUrl = '@Url.Action("GetRootFolders", "PublicFolders")';
-            var addNodeUrl     = '@Url.Action("CreateFolder", "PublicFolders")';
-            var renameNodeUrl  = '@Url.Action("RenameFolder", "PublicFolders")';
-            var removeNodeUrl  = '@Url.Action("RemoveFolder", "PublicFolders")';
+    $(function () {
+        var localization = {
+            CreateSubFolder: "@Html.Raw(QuestionnaireController.CreateSubFolder)",
+            Edit: '@Html.Raw(QuestionnaireController.Rename)',
+            Delete: "@Html.Raw(QuestionnaireController.Delete)",
+            DeleteConfirmation: "@Html.Raw(QuestionnaireController.DeleteFolderConfirmation)",
+            NewFolderName: "@Html.Raw(QuestionnaireController.NewFolder)"
+        };
+        var subFoldersUrl = '@Url.Action("GetFolders", "PublicFolders")';
+        var rootFoldersUrl = '@Url.Action("GetRootFolders", "PublicFolders")';
+        var addNodeUrl = '@Url.Action("CreateFolder", "PublicFolders")';
+        var renameNodeUrl = '@Url.Action("RenameFolder", "PublicFolders")';
+        var removeNodeUrl = '@Url.Action("RemoveFolder", "PublicFolders")';
 
-            window.foldersModel = new FoldersModel($("#jstree"), localization, rootFoldersUrl, subFoldersUrl, addNodeUrl, renameNodeUrl, removeNodeUrl);
-        });
+        window.foldersModel = new FoldersModel($("#jstree"), localization, rootFoldersUrl, subFoldersUrl, addNodeUrl, renameNodeUrl, removeNodeUrl);
+    });
 </script>
 
 
@@ -40,4 +40,3 @@
 
 <div id="jstree" class="folder-tree disableSelection">
 </div>
-

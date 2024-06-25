@@ -15,15 +15,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Designer</title>
     @Html.GenerateFavicon(Url.Content("~/favicon"))
-    <!-- logon:css -->
+    
     <link rel="stylesheet" href="~/css/logon.css">
-    <!-- endinject -->
+    
 
     @RenderSection("Styles", required: false)
 
-    <!-- simplepage:js -->
+    
     <script src="~/js/simplepage.js"></script>
-    <!-- endinject -->
+    
 
     <script type="text/javascript">
         function FrameCheck() {
@@ -57,7 +57,7 @@
                         }
                         <div class="form-row">
                             <div class="form-left">
-                                <img src="~/i/designer-logo.png" />
+                                <img src="~/i/designer-logo.png" >
                                 <p>
                                     @AccountResources.AppDescription
                                 </p>
@@ -80,10 +80,11 @@
     </section>
 
 <footer>
-    <partial name="_CommonFooter"/>
+    <partial name="_CommonFooter"></partial>
 </footer>
 
-<!-- Site version is: @(ProductVersion.ToString()) --> 
+ 
 
 </body>
 </html>
+</UiConfig>
