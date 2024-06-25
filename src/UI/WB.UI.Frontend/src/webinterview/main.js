@@ -1,24 +1,42 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+//import Vue from 'vue'
+//import Vuex from 'vuex'
 
-import { sync } from 'vuex-router-sync'
+import { createApp } from 'vue';
+//import { createPinia } from 'pinia';
+import App from './App.vue';
+import { setupErrorHandler } from './errors';
+
+//import { sync } from 'vuex-router-sync'
+//TODO: MIGRATION, fix old usage of vuex-router-sync
 
 import * as toastr from 'toastr'
 toastr.options.escapeHtml = true
 
-Vue.use(Vuex)
+//const pinia = createPinia();
+// pinia.use(({ store }) => {
+//     if (store.setupListeners && typeof store.setupListeners === 'function') {
+//         store.setupListeners();
+//     }
+// });
+
+const vue = createApp(App)
+setupErrorHandler(vue)
+
+//vue.use(Vuex)
+//vue.use(pinia)
 
 import config from '~/shared/config'
-Vue.use(config)
+vue.use(config)
+
 
 import VueTextareaAutosize from 'vue-textarea-autosize'
-Vue.use(VueTextareaAutosize)
+vue.use(VueTextareaAutosize)
 
 import PortalVue from 'portal-vue'
-Vue.use(PortalVue)
+vue.use(PortalVue)
 
 import { Popover } from 'uiv'
-Vue.component('popover', Popover)
+vue.component('popover', Popover)
 
 import Vuei18n from '~/shared/plugins/locale'
 import { browserLanguage } from '~/shared/helpers'
@@ -28,23 +46,25 @@ import './init'
 import './errors'
 import box from '@/shared/modal'
 
-import './componentsRegistry'
+import { registerGlobalComponents } from './componentsRegistry'
+registerGlobalComponents(vue)
 
 import createRouter from './router'
 
-import webinterviewStore from './store'
+import webinterviewStore from './stores'
 
-const store = new Vuex.Store({
+import { createStore } from 'vuex';
+const store = createStore({
     modules: {
-        webinterview: webinterviewStore,
+        webinterview: webinterviewStore(app),
     },
 })
 
 const router = createRouter(store)
 
-sync(store, router)
+//sync(store, router)
+//TODO: MIGRATION
 
-import App from './App'
 
 box.init(i18n, browserLanguage)
 
@@ -53,12 +73,7 @@ window._api = {
     router,
 }
 
-export default new Vue({
-    el: '#app',
-    render: h => h(App),
-    components: {
-        App,
-    },
-    store,
-    router,
-})
+// Run!
+router.isReady().then(() => {
+    vue.mount('#app');
+});

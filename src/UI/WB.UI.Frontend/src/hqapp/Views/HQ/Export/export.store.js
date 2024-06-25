@@ -1,4 +1,6 @@
-import Vue from 'vue'
+//import Vue from 'vue'
+//TODO: MIGRATION
+
 import { find, findIndex, chunk } from 'lodash'
 import moment from 'moment'
 import { DateFormats } from '~/shared/helpers'
@@ -17,15 +19,16 @@ export default {
 
     actions: {
         async getExportStatus({ state, dispatch, commit }) {
+            var self = this
 
             if (state._exportStatusUpdateInProgres) return
             commit('SET_UPDATE_IN_PROGRESS', true)
 
-            const api = Vue.$config.model.api
+            const api = this.$config.model.api
             const jobsToUpdate = []
 
             try {
-                const response = await Vue.$http.get(api.statusUrl)
+                const response = await this.$http.get(api.statusUrl)
 
                 if (response.data == null) {
                     commit('SET_SERVICE_STATE', false)
@@ -59,7 +62,7 @@ export default {
                 if (error && error.response && error.response.status === 401)
                     location.reload()
                 else
-                    Vue.config.errorHandler(error)
+                    self.$errorHandler(error)
             } finally {
                 await new Promise(r => setTimeout(r, jobsToUpdate.length > 0 ? 1000 : 2000))
                 commit('SET_UPDATE_IN_PROGRESS', false)

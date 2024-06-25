@@ -2,8 +2,10 @@ import { browserLanguage } from '~/shared/helpers'
 import 'bootstrap'
 import 'flatpickr/dist/flatpickr.css'
 import 'toastr/build/toastr.css'
-import 'ag-grid-community/dist/styles/ag-grid.css'
-import 'ag-grid-community/dist/styles/ag-theme-bootstrap.css'
+
+//TODO: MIGRATION, fix styles refs
+//import '@ag-grid-community/styles/ag-grid.css'
+//import '@ag-grid-community/styles/ag-theme-bootstrap.css'
 
 window.jQuery = require('jquery')
 

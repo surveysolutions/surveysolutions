@@ -1,6 +1,6 @@
 <template>
     <HqLayout :hasFilter="false">
-        <template slot="headers">
+        <template v-slot:headers>
             <ol class="breadcrumb">
                 <li>
                     <a href="/SurveySetup">{{ $t('MainMenu.SurveySetup') }}</a>

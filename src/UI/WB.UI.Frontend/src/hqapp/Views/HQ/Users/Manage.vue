@@ -5,7 +5,8 @@
         :canGenerateToken="userInfo.canGetApiToken" :isRestricted="userInfo.isRestricted">
         <div>
             <form-group :label="$t('FieldsAndValidations.PersonNameFieldName')" :error="modelState['PersonName']">
-                <TextInput v-model.trim="personName" :haserror="modelState['PersonName'] !== undefined" id="PersonName" />
+                <TextInput v-model.trim="personName" :haserror="modelState['PersonName'] !== undefined"
+                    id="PersonName" />
             </form-group>
             <form-group :label="$t('FieldsAndValidations.EmailFieldName')" :error="modelState['Email']">
                 <TextInput v-model.trim="email" :haserror="modelState['Email'] !== undefined" id="Email" />
@@ -70,7 +71,9 @@
 </template>
 
 <script>
-import Vue from 'vue'
+//import Vue from 'vue'
+//TODO: MIGRATION
+
 import { each } from 'lodash'
 
 export default {
@@ -145,13 +148,13 @@ export default {
     },
     watch: {
         personName: function (val) {
-            Vue.delete(this.modelState, 'PersonName')
+            delete this.modelState['PersonName']
         },
         email: function (val) {
-            Vue.delete(this.modelState, 'Email')
+            delete this.modelState['Email']
         },
         phoneNumber: function (val) {
-            Vue.delete(this.modelState, 'PhoneNumber')
+            delete this.modelState['PhoneNumber']
         },
     },
     methods: {

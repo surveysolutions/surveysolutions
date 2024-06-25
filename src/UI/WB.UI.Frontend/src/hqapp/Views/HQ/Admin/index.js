@@ -1,7 +1,7 @@
 import EmailProviders from './EmailProviders'
 import TabletLogs from './TabletLogs'
 import Settings from './Settings'
-import Vue from 'vue'
+//import Vue from 'vue'
 import AuditLog from './AuditLog'
 import TabletInfos from './TabletInfos'
 const InterviewPackages = () => import('./InterviewPackages')
@@ -39,13 +39,9 @@ export default class AdminComponent {
         ]
     }
 
-    initialize() {
-        const VeeValidate = require('vee-validate')
-        Vue.use(VeeValidate)
-        // const installApi = require("~/webinterview/api").install
-
-        // installApi(Vue, {
-        //     store: this.rootStore
-        // });
-    }
+    // initialize() {
+    //     const VeeValidate = require('vee-validate')
+    //     Vue.use(VeeValidate)
+    // }
+    //TODO: MIGRATION
 }

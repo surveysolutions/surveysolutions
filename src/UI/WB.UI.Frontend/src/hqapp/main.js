@@ -4,33 +4,48 @@ import 'bootstrap-select'
 import '../assets/css/markup.scss'
 import '../assets/css/markup-specific.scss'
 
-import Vue from 'vue'
-import Vuei18n from '~/shared/plugins/locale'
-import { browserLanguage } from '~/shared/helpers'
-const i18n = Vuei18n.initialize(browserLanguage)
+import { createApp } from 'vue'
+//import { createPinia } from 'pinia'
+
+import App from './App.vue';
+
+//import Vuei18n from '~/shared/plugins/locale'
+//import { browserLanguage } from '~/shared/helpers'
+//const i18n = Vuei18n.initialize(browserLanguage)
+
+//const pinia = createPinia()
+const app = createApp(App)
+//vue.use(pinia)
 
 import VueApollo from 'vue-apollo'
-Vue.use(VueApollo)
-import { sync } from 'vuex-router-sync'
+app.use(VueApollo)
+//import { sync } from 'vuex-router-sync'
+//TODO: MIGRATION, fix old usage of vuex-router-sync 
 
+//plugin registration in Vue
 import http from '~/shared/plugins/http'
 import config from '~/shared/config'
-import store from './store'
+
+import { registerStore } from './store'
+const store = registerStore(app)
+
 import moment from 'moment'
 moment.locale(browserLanguage)
 
-import './components'
+import { registerComponents } from './components'
+registerComponents(app)
+
 import './compatibility.js'
 import '~/webinterview/componentsRegistry'
 
 import VueTextareaAutosize from 'vue-textarea-autosize'
-Vue.use(VueTextareaAutosize)
+app.use(VueTextareaAutosize)
 
 import PortalVue from 'portal-vue'
-Vue.use(PortalVue)
+app.use(PortalVue)
 
 import { Popover } from 'uiv'
-Vue.component('popover', Popover)
+app.component('popover', Popover)
 
 import box from '@/shared/modal'
 import 'flatpickr/dist/flatpickr.css'
@@ -45,13 +60,12 @@ import hqApi from './api'
 import apolloClient from './api/graphql'
 
 
-
-Vue.use(config)
-Vue.use(http)
-Vue.use(hqApi)
+app.use(config)
+app.use(http)
+app.use(hqApi)
 
 import viewsProvider from './Views'
-import Router from './router'
+import Router from './router/index.js'
 
 const views = viewsProvider(store)
 
@@ -59,11 +73,19 @@ const router = new Router({
     routes: views.routes,
 }).router
 
-sync(store, router)
+app.use(router)
+
+//sync(store, router)
+//TODO: MIGRATION
+
+import VuePageTitle from 'vue-page-title'
+app.use(VuePageTitle, {})
+
 
 box.init(i18n, browserLanguage)
 
-Vue.prototype.$eventHub = new Vue()
+app.config.globalProperties.$eventHub = app
+//TODO: MIGRATION. 
 
 export default new Vue({
     el: '#vueApp',

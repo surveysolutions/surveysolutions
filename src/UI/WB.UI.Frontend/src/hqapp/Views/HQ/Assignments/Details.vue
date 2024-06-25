@@ -298,7 +298,7 @@
 </template>
 
 <script>
-import Vue from 'vue'
+import { nextTick } from 'vue'
 import { DateFormats, convertToLocal } from '~/shared/helpers'
 import { RoleNames } from '~/shared/constants'
 
@@ -669,7 +669,7 @@ export default {
         },
     },
     mounted() {
-        Vue.nextTick(() => {
+        nextTick(() => {
             window.ajustNoticeHeight()
             window.ajustDetailsPanelHeight()
         })

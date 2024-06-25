@@ -18,14 +18,15 @@
             <div v-if="additionalInfo.warnings && additionalInfo.warnings.length > 0">
                 <div class="information-block text-warning">
                     <h6>{{ $t("WebInterviewUI.WarningsHeader") }}</h6>
-                    <p v-for="(warning, index) in additionalInfo.warnings" :key="index"><span v-html="warning"></span></p>
+                    <p v-for="(warning, index) in additionalInfo.warnings" :key="index"><span v-html="warning"></span>
+                    </p>
                 </div>
                 <hr />
             </div>
             <div class="information-block comments-block">
-                <template v-for="comment in additionalInfo.comments">
-                    <wb-comment-item :userRole="comment.userRole" :text="comment.text" :isOwnComment="comment.isOwnComment"
-                        :resolved="comment.resolved" :key="comment.commentTimeUtc"
+                <template v-for="comment in additionalInfo.comments" :key="comment.commentTimeUtc">
+                    <wb-comment-item :userRole="comment.userRole" :text="comment.text"
+                        :isOwnComment="comment.isOwnComment" :resolved="comment.resolved"
                         :commentOnPreviousAnswer="comment.commentOnPreviousAnswer" />
                 </template>
                 <div class="comment" v-if="isCommentFormIsVisible">

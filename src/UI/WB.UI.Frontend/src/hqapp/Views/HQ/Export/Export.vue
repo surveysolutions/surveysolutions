@@ -44,12 +44,12 @@
                                                     'Common.AllQuestionnaires',
                                                 )
                                                     " :fetch-url="questionnaireFetchUrl
-                                                    " :selectedKey="pageState.id" data-vv-name="questionnaireId"
+                                                        " :selectedKey="pageState.id" data-vv-name="questionnaireId"
                                                 data-vv-as="questionnaire" v-validate="'required'" v-on:selected="questionnaireSelected
                                                     " />
                                             <span class="help-block">{{
                                                 errors.first('questionnaireId')
-                                                }}</span>
+                                            }}</span>
                                         </div>
                                         <h5>
                                             {{
@@ -69,9 +69,9 @@
                                                 data-vv-as="questionnaire version" :selectedKey="pageState.version"
                                                 v-validate="'required'" :value="questionnaireVersion" :fetch-url="questionnaireVersionFetchUrl
                                                     " v-on:selected="questionnaireVersionSelected
-                                                    " :disabled="questionnaireVersionFetchUrl ==
-                                                    null
-                                                    " :selectFirst="true" />
+                                                        " :disabled="questionnaireVersionFetchUrl ==
+                                                            null
+                                                            " :selectFirst="true" />
                                             <span class="help-block">{{
                                                 errors.first(
                                                     'questionnaireVersion',
@@ -92,10 +92,10 @@
                                                     'DataExport.QuestionnaireTranslation',
                                                 )
                                                     " :selectedKey="pageState.translation
-                                                    " :value="questionnaireTranslation
-                                                    " :values="translations" :disabled="questionnaireVersion == null
-                                                    " v-on:selected="translationSelected
-                                                    " />
+                                                        " :value="questionnaireTranslation
+                                                            " :values="translations" :disabled="questionnaireVersion == null
+                                                                " v-on:selected="translationSelected
+                                                                " />
                                         </div>
                                     </div>
 
@@ -134,7 +134,7 @@
                                         <span class="tick"></span>
                                         <span class="format-data Binary">{{
                                             $t('DataExport.DataType_Binary')
-                                            }}</span>
+                                        }}</span>
                                     </label>
                                 </div>
                                 <div class="radio-btn-row" v-if="hasInterviews">
@@ -144,7 +144,7 @@
                                         <span class="tick"></span>
                                         <span class="format-data Tabular">{{
                                             $t('DataExport.DataType_Paradata')
-                                            }}</span>
+                                        }}</span>
                                     </label>
                                 </div>
                             </div>
@@ -198,7 +198,7 @@
                                         <span class="tick"></span>
                                         <span class="format-data Tabular">{{
                                             $t('DataExport.DataFormat_Tab')
-                                            }}</span>
+                                        }}</span>
                                     </label>
                                 </div>
                                 <div class="radio-btn-row">
@@ -208,7 +208,7 @@
                                         <span class="tick"></span>
                                         <span class="format-data STATA">{{
                                             $t('DataExport.DataFormat_Stata')
-                                            }}</span>
+                                        }}</span>
                                     </label>
                                 </div>
                                 <div class="radio-btn-row">
@@ -218,7 +218,7 @@
                                         <span class="tick"></span>
                                         <span class="format-data SPSS">{{
                                             $t('DataExport.DataFormat_Spss')
-                                            }}</span>
+                                        }}</span>
                                     </label>
                                 </div>
                             </div>
@@ -233,7 +233,7 @@
                                         <span class="tick"></span>
                                         <span class="export-destination">{{
                                             $t('DataExport.DataDestination_Zip')
-                                            }}</span>
+                                        }}</span>
                                     </label>
                                 </div>
                                 <div class="radio-btn-row" v-if="isOneDriveSetUp">
@@ -323,7 +323,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import ExportProcessCard from './ExportProcessCard'
 import gql from 'graphql-tag'
 import { filter, toNumber, map } from 'lodash'
@@ -453,7 +452,7 @@ export default {
                         self.updateExportStatus()
                     })
                     .catch(function (error) {
-                        Vue.config.errorHandler(error, self)
+                        self.$errorHandler(error, self)
                     })
                     .then(function () {
                         self.$store.dispatch('hideProgress')
@@ -658,7 +657,7 @@ export default {
                     }
                 })
                 .catch((error) => {
-                    Vue.config.errorHandler(error, self)
+                    self.$errorHandler(error, self)
                 })
                 .then(() => {
                     this.isUpdatingDataAvailability = false

@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import { nextTick } from 'vue'
 import { isEqual, isNaN, clone, assign } from 'lodash'
 
 export default {
@@ -27,7 +27,7 @@ export default {
             const self = this
 
             if (wereEmpty) {
-                Vue.nextTick(() => {
+                nextTick(() => {
                     const changes = self.changesQueue
                     self.changesQueue = []
 

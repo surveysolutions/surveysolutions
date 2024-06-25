@@ -1,6 +1,7 @@
 import Workspaces from './Workspaces'
-import Vue from 'vue'
-import { Validator } from 'vee-validate'
+//import { Validator } from 'vee-validate'
+//TODO: MIGRATION
+
 export default class MapComponent {
     get routes() {
         return [{
@@ -13,10 +14,10 @@ export default class MapComponent {
         const dict = {
             custom: {
                 workspaceName: {
-                    regex: Vue.$t('Workspaces.InvalidName'),
+                    regex: $t('Workspaces.InvalidName'),
                 },
             },
         }
-        Validator.localize('en', dict)
+        //Validator.localize('en', dict)
     }
 }

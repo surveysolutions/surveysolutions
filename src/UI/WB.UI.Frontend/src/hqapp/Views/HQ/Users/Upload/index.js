@@ -1,4 +1,5 @@
-import Vue from 'vue'
+//import Vue from 'vue'
+//TODO: MIGRATION
 
 import Layout from './Layout'
 import Upload from './Upload'
@@ -22,7 +23,7 @@ export default class UploadComponent {
                     {
                         name: 'upload', path: '', component: Upload,
                         beforeEnter: (to, from, next) => {
-                            Vue.$http
+                            this.$http
                                 .get(config.model.api.importUsersStatusUrl)
                                 .then(response => {
                                     self.rootStore.dispatch('setUploadStatus', response.data)
@@ -45,7 +46,7 @@ export default class UploadComponent {
                     {
                         name: 'uploadprogress', path: 'Progress', component: UploadProgress,
                         beforeEnter: (to, from, next) => {
-                            Vue.$http
+                            this.$http
                                 .get(config.model.api.importUsersStatusUrl)
                                 .then(response => {
                                     if (!response.data.isInProgress || !response.data.isOwnerOfRunningProcess)

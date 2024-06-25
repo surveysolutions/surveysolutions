@@ -1,4 +1,4 @@
-import Vue from 'vue'
+//import Vue from 'vue'
 
 import Confirm from './Confirm'
 // import DataTables from "./DataTables"
@@ -16,33 +16,21 @@ import FilterInput from './FilterInput'
 import InlineSelector from './InlineSelector'
 import ExpandableList from './ExpandableList.vue'
 
-Vue.component('Confirm', Confirm)
-Vue.component('DataTables', () => import('./DataTables'))
-Vue.component('FilterBlock', FilterBlock)
-Vue.component('Filters', Filters)
-Vue.component('HqLayout', HqLayout)
-Vue.component('ModalFrame', ModalFrame)
-Vue.component('Typeahead', Typeahead)
-Vue.component('TextInput', TextInput)
-Vue.component('Checkbox', Checkbox)
-Vue.component('Radio', Radio)
-Vue.component('DatePicker', DatePicker)
-Vue.component('form-group', FormGroup)
-Vue.component('FilterInput', FilterInput)
-Vue.component('InlineSelector', InlineSelector)
-Vue.component('ExpandableList', ExpandableList)
+export function registerComponents(vue) {
 
-
-// export default {
-//     Confirm,
-//     DataTables,
-//     FilterBlock,
-//     Filters,
-//     HqLayout,
-//     ModalFrame,
-//     Typeahead,
-//     TextInput,
-//     Checkbox,
-//     Radio,
-//     DatePicker
-// }
+    vue.component('Confirm', Confirm)
+    vue.component('DataTables', () => import('./DataTables'))
+    vue.component('FilterBlock', FilterBlock)
+    vue.component('Filters', Filters)
+    vue.component('HqLayout', HqLayout)
+    vue.component('ModalFrame', ModalFrame)
+    vue.component('Typeahead', Typeahead)
+    vue.component('TextInput', TextInput)
+    vue.component('Checkbox', Checkbox)
+    vue.component('Radio', Radio)
+    vue.component('DatePicker', DatePicker)
+    vue.component('form-group', FormGroup)
+    vue.component('FilterInput', FilterInput)
+    vue.component('InlineSelector', InlineSelector)
+    vue.component('ExpandableList', ExpandableList)
+}

@@ -283,7 +283,7 @@
 </style>
 
 <script>
-import Vue from 'vue'
+import { nextTick } from 'vue'
 import { debounce, delay, forEach, find } from 'lodash'
 import routeSync from '~/shared/routeSync'
 
@@ -420,7 +420,7 @@ export default {
                 {
                     url: 'InterviewerHq/StartNewInterview/' + assignmentId,
                     headers: {
-                        'X-CSRF-TOKEN': Vue.$hq.Util.getCsrfCookie(),
+                        'X-CSRF-TOKEN': self.$hq.Util.getCsrfCookie(),
                     },
                 },
                 (response) => {
@@ -530,7 +530,7 @@ export default {
                 data['marker'] = marker
                 self.selectedTooltip = data
 
-                Vue.nextTick(function () {
+                nextTick(function () {
                     self.infoWindow.setContent(
                         $(self.$refs.interviewTooltip).html()
                     )
@@ -552,7 +552,7 @@ export default {
                 data['marker'] = marker
                 self.selectedTooltip = data
 
-                Vue.nextTick(function () {
+                nextTick(function () {
                     self.infoWindow.setContent(
                         $(self.$refs.assignmentTooltip).html()
                     )
@@ -884,7 +884,7 @@ export default {
 
                                 self.selectedTooltip = data
 
-                                Vue.nextTick(function () {
+                                nextTick(function () {
                                     self.infoWindow.setContent(
                                         $(self.$refs.clusterTooltip).html()
                                     )
@@ -917,7 +917,7 @@ export default {
 
                         self.selectedTooltip = data
 
-                        Vue.nextTick(function () {
+                        nextTick(function () {
                             self.infoWindow.setContent(
                                 $(self.$refs.interviewTooltip).html()
                             )
@@ -939,7 +939,7 @@ export default {
 
                     self.selectedTooltip = data
 
-                    Vue.nextTick(function () {
+                    nextTick(function () {
                         self.infoWindow.setContent(
                             $(self.$refs.assignmentTooltip).html()
                         )
@@ -953,7 +953,7 @@ export default {
 
                 const label = event.feature.getProperty('label')
                 if (label) {
-                    Vue.nextTick(function () {
+                    nextTick(function () {
                         self.infoWindow.setContent(label)
                         self.infoWindow.setPosition(event.latLng)
                         self.infoWindow.open(self.map)

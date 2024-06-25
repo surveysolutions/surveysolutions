@@ -17,7 +17,8 @@
                     {{ $t('QuestionnaireClonning.ToCloneQuestionnaire') }}
                     <b>{{ $t('Pages.QuestionnaireNameFormat', {
                         name: this.$config.model.originalTitle, version:
-                            this.$config.model.version}) }}</b>
+                            this.$config.model.version
+                    }) }}</b>
                 </h2>
             </div>
         </div>
@@ -63,9 +64,10 @@
 </template>
 <script>
 
-import Vue from 'vue'
-import VeeValidate from 'vee-validate'
-Vue.use(VeeValidate)
+// import Vue from 'vue'
+// import VeeValidate from 'vee-validate'
+// Vue.use(VeeValidate)
+//TODO: MIGRATION
 
 export default {
     methods: {

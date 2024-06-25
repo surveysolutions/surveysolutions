@@ -14,10 +14,9 @@
 
 <script lang="js">
 /* eslint-disable vue/no-unused-components */
-import Vue from 'vue'
 import { entityDetails } from '../mixins'
 import { debounce, map } from 'lodash'
-import { AgGridVue } from 'ag-grid-vue'
+import { AgGridVue } from '@ag-grid-community/vue3'
 
 import MatrixRoster_QuestionEditor from './MatrixRoster.QuestionEditor'
 import MatrixRoster_RosterTitle from './MatrixRoster.RosterTitle'

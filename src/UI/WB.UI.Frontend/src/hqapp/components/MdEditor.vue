@@ -1,33 +1,29 @@
 <template>
-    <md-editor
-        v-bind:initialValue="initialValue"
-        v-on:change="onEditorChange"
-        v-bind="$attrs"
-        initialEditType="markdown"
-        ref="mdEditor"
-        previewStyle="global"
-        :options="editorOptions"
-        v-on="$listeners" >
+    <md-editor v-bind:initialValue="initialValue" v-on:change="onEditorChange" v-bind="$attrs"
+        initialEditType="markdown" ref="mdEditor" previewStyle="global" :options="editorOptions" v-on="$listeners">
     </md-editor>
 </template>
 <script>
-import 'codemirror/lib/codemirror.css'
+
+//TODO: MIGRATION. styles were comming from @toast-ui/vue-editor
+//import 'codemirror/lib/codemirror.css'
+
 import '@toast-ui/editor/dist/toastui-editor.css'
 
-import { Editor } from '@toast-ui/vue-editor'
+import { Editor } from '@toast-ui/editor'
 import _sanitizeHtml from 'sanitize-html'
-const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
+const sanitizeHtml = text => _sanitizeHtml(text, { allowedTags: [], allowedAttributes: [] })
 import { escape, unescape } from 'lodash'
 
 
 export default {
-    components:{
+    components: {
         mdEditor: Editor,
     },
 
-    props:{
-        value: {type: String, required: true},
-        supportHtml: {type: Boolean, required: false, default:false},
+    props: {
+        value: { type: String, required: true },
+        supportHtml: { type: Boolean, required: false, default: false },
     },
     data() {
         return {
@@ -63,7 +59,7 @@ export default {
         }
         this.$refs.mdEditor.invoke('setMarkdown', val)
     },
-    watch:{
+    watch: {
         value(newValue, oldValue) {
             let val = newValue
             if (val != this.value || val == this.initialValue) {
@@ -83,7 +79,7 @@ export default {
                 markDown = escape(markDown)
             }
 
-            if(this.value != markDown) {
+            if (this.value != markDown) {
                 this.$emit('input', markDown)
             }
         },

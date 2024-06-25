@@ -87,7 +87,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import moment from 'moment'
 import { DateFormats, humanFileSize } from '~/shared/helpers'
 export default {

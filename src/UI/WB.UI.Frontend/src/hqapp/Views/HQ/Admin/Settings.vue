@@ -85,7 +85,7 @@
                     </button>
                     <span class="text-success" v-if="globalNoticeUpdated">{{
                         $t('Settings.GlobalNoteSaved')
-                        }}</span>
+                    }}</span>
                 </div>
             </form>
         </div>
@@ -431,7 +431,6 @@
 </style>
 
 <script>
-import Vue from 'vue'
 import modal from '@/shared/modal'
 
 export default {

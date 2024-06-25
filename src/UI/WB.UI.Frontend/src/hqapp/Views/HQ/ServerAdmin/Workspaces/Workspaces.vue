@@ -102,8 +102,6 @@
 </template>
 
 <script>
-
-import Vue from 'vue'
 import * as toastr from 'toastr'
 import DeleteWorkspaceModal from './DeleteWorkspaceModal'
 import moment from 'moment'
@@ -141,7 +139,7 @@ export default {
         async updateWorkspace() {
             try {
                 this.inProgress = true
-                await Vue.$http.patch(`${this.$config.model.dataUrl}/${this.editedRowId}`, {
+                await this.$http.patch(`${this.$config.model.dataUrl}/${this.editedRowId}`, {
                     displayName: this.editedDisplayName,
                 })
                 this.$refs.editWorkspaceModal.modal('hide')
@@ -154,7 +152,7 @@ export default {
         async disableWorkspace() {
             try {
                 this.inProgress = true
-                await Vue.$http.post(`${this.$config.model.dataUrl}/${this.editedRowId}/disable`)
+                await this.$http.post(`${this.$config.model.dataUrl}/${this.editedRowId}/disable`)
                 this.$refs.disableWorkspaceModal.modal('hide')
 
                 this.loadData()
@@ -179,7 +177,7 @@ export default {
 
             try {
                 this.inProgress = true
-                await Vue.$http.post(this.$config.model.dataUrl, {
+                await this.$http.post(this.$config.model.dataUrl, {
                     displayName: this.editedDisplayName,
                     name: this.newWorkspaceName,
                 })
@@ -229,7 +227,7 @@ export default {
                     name: this.$t('Workspaces.Enable'),
                     className: 'suso-enable',
                     callback: (_, opt) => {
-                        Vue.$http.post(`${this.$config.model.dataUrl}/${rowData.Name}/enable`)
+                        this.$http.post(`${this.$config.model.dataUrl}/${rowData.Name}/enable`)
                             .then(() => {
                                 this.loadData()
                             })

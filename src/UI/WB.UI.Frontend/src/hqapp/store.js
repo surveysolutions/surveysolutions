@@ -1,14 +1,19 @@
-import Vue from 'vue'
+//import Vue from 'vue'
 import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-const store = new Vuex.Store({
-    getters:{
-        workspace(){
-            return window.CONFIG.workspace
-        },
-    },
-})
+export function registerStore(vue) {
 
-export default store
+    const store = new Vuex.Store({
+        getters: {
+            workspace() {
+                return window.CONFIG.workspace
+            },
+        },
+    })
+
+    vue.use(store)
+
+    return store
+}

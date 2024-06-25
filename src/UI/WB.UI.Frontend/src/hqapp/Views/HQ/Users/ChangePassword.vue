@@ -1,8 +1,9 @@
 <template>
     <ProfileLayout ref="profile" :role="userInfo.role" :isOwnProfile="userInfo.isOwnProfile"
         :forceChangePassword="userInfo.forceChangePassword" :canChangePassword="userInfo.canChangePassword"
-        :userName="userInfo.userName" :userId="userInfo.userId" :currentTab="currentTab" :successMessage="successMessage"
-        :canGenerateToken="userInfo.canGetApiToken" :isRestricted="userInfo.isRestricted">
+        :userName="userInfo.userName" :userId="userInfo.userId" :currentTab="currentTab"
+        :successMessage="successMessage" :canGenerateToken="userInfo.canGetApiToken"
+        :isRestricted="userInfo.isRestricted">
         <div>
             <div v-if="userInfo.forceChangePassword && userInfo.isOwnProfile" class="alerts form-group"
                 style="margin-left:-10px">
@@ -13,14 +14,15 @@
             </div>
             <form-group v-if="isOwnProfile" :label="$t('FieldsAndValidations.OldPasswordFieldName')"
                 :error="modelState['OldPassword']">
-                <TextInput type="password" v-model.trim="oldPassword" :haserror="modelState['OldPassword'] !== undefined"
-                    id="OldPassword" />
+                <TextInput type="password" v-model.trim="oldPassword"
+                    :haserror="modelState['OldPassword'] !== undefined" id="OldPassword" />
             </form-group>
             <form-group :label="$t('FieldsAndValidations.NewPasswordFieldName')" :error="modelState['Password']">
                 <TextInput type="password" v-model.trim="password" :haserror="modelState['Password'] !== undefined"
                     id="Password" />
             </form-group>
-            <form-group :label="$t('FieldsAndValidations.ConfirmPasswordFieldName')" :error="modelState['ConfirmPassword']">
+            <form-group :label="$t('FieldsAndValidations.ConfirmPasswordFieldName')"
+                :error="modelState['ConfirmPassword']">
                 <TextInput type="password" v-model.trim="confirmPassword"
                     :haserror="modelState['ConfirmPassword'] !== undefined" id="ConfirmPassword" />
             </form-group>
@@ -49,7 +51,7 @@
 </template>
 
 <script>
-import Vue from 'vue'
+//import Vue from 'vue'
 import { each } from 'lodash'
 
 export default {
@@ -87,13 +89,13 @@ export default {
     },
     watch: {
         oldPassword: function (val) {
-            Vue.delete(this.modelState, 'OldPassword')
+            delete this.modelState['OldPassword']
         },
         password: function (val) {
-            Vue.delete(this.modelState, 'Password')
+            delete this.modelState['Password']
         },
         confirmPassword: function (val) {
-            Vue.delete(this.modelState, 'ConfirmPassword')
+            delete this.modelState['ConfirmPassword']
         },
     },
     methods: {

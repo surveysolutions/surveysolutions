@@ -1,5 +1,5 @@
 import Export from './Export'
-import Vue from 'vue'
+//import Vue from 'vue'
 import store from './export.store.js'
 
 export default class ExportComponent {
@@ -15,10 +15,11 @@ export default class ExportComponent {
         ]
     }
 
-    initialize() {
-        const VeeValidate = require('vee-validate')
-        Vue.use(VeeValidate)
-    }
+    // initialize() {
+    //     const VeeValidate = require('vee-validate')
+    //     Vue.use(VeeValidate)
+    // }
+    //TODO: MIGRATION
 
     get modules() {
         return {

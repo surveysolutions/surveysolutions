@@ -2,7 +2,7 @@ import axios from 'axios'
 import config from '~/shared/config'
 
 const httpPlugin = {
-    install(Vue, { store }) {
+    install(app, { store }) {
 
         const http = axios.create({
             baseURL: store.getters.basePath,
@@ -30,8 +30,8 @@ const httpPlugin = {
             return Promise.reject(error)
         })
 
-        if (!Object.prototype.hasOwnProperty.call(Vue, '$api')) {
-            Vue.$api = {}
+        if (!Object.prototype.hasOwnProperty.call(app, '$api')) {
+            app.$api = {}
         }
 
         async function query(id, params, action) {
@@ -103,7 +103,7 @@ const httpPlugin = {
                 const fd = new FormData()
                 fd.append('questionId', id)
                 fd.append('file', file)
-                if(duration)
+                if (duration)
                     fd.append('duration', duration)
                 dispatch('uploadProgress', { id, now: 0, total: 100 })
 
@@ -122,9 +122,11 @@ const httpPlugin = {
             },
         }
 
-        Object.defineProperty(Vue.$api, 'interview', {
-            get() { return api },
-        })
+        app.$api.interview = api
+
+        // Object.defineProperty(app.$api, 'interview', {
+        //     get() { return api },
+        // })
     },
 }
 

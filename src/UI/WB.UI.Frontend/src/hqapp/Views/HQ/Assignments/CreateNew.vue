@@ -53,9 +53,9 @@
                                 <div class="form-group">
                                     <div class="field answered">
                                         <input v-model="sizeQuestion.answer"
-                                            :title="this.$t('Assignments.ExpectedExplanation')" v-validate="sizeValidations"
-                                            name="size" maxlength="5" type="text" autocomplete="off" inputmode="numeric"
-                                            class="field-to-fill">
+                                            :title="this.$t('Assignments.ExpectedExplanation')"
+                                            v-validate="sizeValidations" name="size" maxlength="5" type="text"
+                                            autocomplete="off" inputmode="numeric" class="field-to-fill">
                                     </div>
                                 </div>
                             </div>
@@ -77,7 +77,8 @@
                                 <div class="form-group">
                                     <div class="field answered">
                                         <input id="webModeId" @change="webModeChange" checked="checked"
-                                            v-model="webMode.answer" data-val="true" type="checkbox" class="wb-checkbox">
+                                            v-model="webMode.answer" data-val="true" type="checkbox"
+                                            class="wb-checkbox">
                                         <label for="webModeId">
                                             <span class="tick"></span>
                                             {{ $t("Assignments.CawiActivated") }}
@@ -97,8 +98,8 @@
                                     <div class="field answered">
                                         <input v-model="emailQuestion.answer"
                                             :title="this.$t('Assignments.EmailExplanation')"
-                                            :placeholder="$t('Assignments.EnterEmail')" v-validate="'email'" name="email"
-                                            type="text" autocomplete="off" class="field-to-fill">
+                                            :placeholder="$t('Assignments.EnterEmail')" v-validate="'email'"
+                                            name="email" type="text" autocomplete="off" class="field-to-fill">
                                     </div>
                                 </div>
                             </div>
@@ -123,8 +124,8 @@
                                         <input v-model="passwordQuestion.answer"
                                             :placeholder="$t('Assignments.EnterPassword')"
                                             :title="this.$t('Assignments.PasswordExplanation')"
-                                            v-validate="passwordValidations" name="password" type="text" autocomplete="off"
-                                            class="field-to-fill">
+                                            v-validate="passwordValidations" name="password" type="text"
+                                            autocomplete="off" class="field-to-fill">
                                     </div>
                                 </div>
                             </div>
@@ -219,7 +220,7 @@
 </style>
 
 <script>
-import Vue from 'vue'
+import { nextTick } from 'vue'
 import { Validator } from 'vee-validate'
 import * as toastr from 'toastr'
 import http from '~/webinterview/api/http'
@@ -230,7 +231,7 @@ import '@/assets/css/markup-web-interview.scss'
 const validationTranslations = {
     custom: {
         newResponsibleId: {
-            required: () => Vue.$t('Assignments.ResponsibleRequired'),
+            required: () => $t('Assignments.ResponsibleRequired'),
         },
     },
 }
@@ -239,7 +240,7 @@ Validator.localize('en', validationTranslations)
 
 const emailOrPasswordRequired = {
     getMessage() {
-        return Vue.$t('Assignments.ExpectedForWebMode')
+        return $t('Assignments.ExpectedForWebMode')
     },
     validate(value, [email, password]) {
         return (email !== null && email !== '') || (password !== null && password !== '')
@@ -249,7 +250,7 @@ const emailOrPasswordRequired = {
 
 const emailShouldBeEmpty = {
     getMessage() {
-        return Vue.$t('Assignments.InvalidExpectedWithEmail')
+        return $t('Assignments.InvalidExpectedWithEmail')
     },
     validate(value, [email]) {
         return email === null || email === ''
@@ -262,7 +263,7 @@ Validator.extend('emailShouldBeEmpty', emailShouldBeEmpty)
 
 Validator.extend('responsibleShouldBeInterviewer', {
     getMessage() {
-        return Vue.$t('Assignments.WebModeNonInterviewer')
+        return $t('Assignments.WebModeNonInterviewer')
     },
     validate(value, [webMode]) {
         if (!webMode) return true
@@ -270,8 +271,6 @@ Validator.extend('responsibleShouldBeInterviewer', {
         return value.iconClass.toLowerCase() == RoleNames.INTERVIEWER.toLowerCase()
     },
 })
-
-
 
 export default {
     data() {
@@ -484,7 +483,7 @@ export default {
     },
 
     updated() {
-        Vue.nextTick(() => {
+        nextTick(() => {
             window.ajustNoticeHeight()
             window.ajustDetailsPanelHeight()
         })

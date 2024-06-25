@@ -1,7 +1,7 @@
 <template>
-    <ProfileLayout ref="profile" :role="userInfo.role" :isOwnProfile="userInfo.isOwnProfile" :userName="userInfo.userName"
-        :canChangePassword="userInfo.canChangePassword" :userId="userInfo.userId" :currentTab="currentTab"
-        :canGenerateToken="userInfo.canGetApiToken" :isRestricted="userInfo.isRestricted">
+    <ProfileLayout ref="profile" :role="userInfo.role" :isOwnProfile="userInfo.isOwnProfile"
+        :userName="userInfo.userName" :canChangePassword="userInfo.canChangePassword" :userId="userInfo.userId"
+        :currentTab="currentTab" :canGenerateToken="userInfo.canGetApiToken" :isRestricted="userInfo.isRestricted">
         <div>
             <div>
                 <h2>{{ $t('Strings.HQ_Views_EnableAuthenticator_Title') }}</h2>
@@ -52,7 +52,9 @@
 </template>
 
 <script>
-import Vue from 'vue'
+//import Vue from 'vue'
+//TODO: MIGRATION
+
 import { each } from 'lodash'
 import QRCode from 'qrcode'
 
@@ -89,7 +91,7 @@ export default {
     },
     watch: {
         verificationCode: function (val) {
-            Vue.delete(this.modelState, 'VerificationCode')
+            delete this.modelState['VerificationCode']
         },
     },
     methods: {
