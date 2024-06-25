@@ -1,0 +1,89 @@
+@using Microsoft.Extensions.Options
+@using WB.Core.Infrastructure.Versions
+@using WB.UI.Designer.Extensions
+@using WB.UI.Designer.Models
+@using WB.UI.Shared.Web.Extensions
+
+@inject IOptions<UiConfig> uiConfig
+@inject IProductVersion ProductVersion
+
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Designer</title>
+    @Html.GenerateFavicon(Url.Content("~/favicon"))
+    <!-- logon:css -->
+    <link rel="stylesheet" href="~/css/logon.css">
+    <!-- endinject -->
+
+    @RenderSection("Styles", required: false)
+
+    <!-- simplepage:js -->
+    <script src="~/js/simplepage.js"></script>
+    <!-- endinject -->
+
+    <script type="text/javascript">
+        function FrameCheck() {
+            if (top != self)
+                top.location.replace(self.location.href);
+        }
+    </script>    
+    @RenderSection("Scripts", required: false)
+</head>
+<body onload="FrameCheck();">
+    <header>
+        <a href="http://www.worldbank.org" class="logo"></a>
+        <nav>
+            <a class="btn btn-default" href="@uiConfig.Value.DesignerHelpUrl" target="_blank">@AccountResources.Help</a>
+            <a class="btn btn-default" href="@uiConfig.Value.ForumUrl" target="_blank">@AccountResources.Forum</a>
+            <a class="btn btn-default" asp-page="/Account/Register" asp-area="Identity">@AccountResources.Register</a>
+            <a class="btn btn-default" asp-page="/Account/Login" asp-area="Identity">@AccountResources.Login</a>
+        </nav>
+    </header>
+
+    <section id="start-page">
+        <div class="content-holder-outer">
+            <div class="content-holder-inner">
+                <div class="content-block">
+                    <div class="form-holder">
+                        @if (!string.IsNullOrWhiteSpace(ViewData["UserNotification"] as string))
+                        {
+                            <div id="notification-message" class="alert alert-info">
+                                @Html.Raw(ViewData["UserNotification"])
+                            </div>
+                        }
+                        <div class="form-row">
+                            <div class="form-left">
+                                <img src="~/i/designer-logo.png" />
+                                <p>
+                                    @AccountResources.AppDescription
+                                </p>
+                            </div>
+                            <div class="form-splitter">
+                                <div class="vline"></div>
+                            </div>
+                            <div class="form-right">
+                                @if (TempData.ContainsKey(Alerts.SUCCESS))
+                                {
+                                    <div class="alert alert-success header">@Html.Raw(TempData[Alerts.SUCCESS])</div>
+                                }
+                                @RenderBody()
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<footer>
+    <partial name="_CommonFooter"/>
+</footer>
+
+<!-- Site version is: @(ProductVersion.ToString()) --> 
+
+</body>
+</html>
