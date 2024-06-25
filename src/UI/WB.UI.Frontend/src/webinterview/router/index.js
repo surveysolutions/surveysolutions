@@ -1,7 +1,7 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+//import Vue from 'vue'
+import { createRouter, createWebHistory } from 'vue-router'
 
-Vue.use(VueRouter)
+//Vue.use(VueRouter)
 
 import Complete from '../components/Complete'
 import Cover from '../components/Cover'
@@ -13,9 +13,9 @@ const Interview = () => import('~/webinterview/components/Interview.vue')
 
 function NewRouter(store) {
 
-    const router = new VueRouter({
-        base: Vue.$config.virtualPath,
-        mode: 'history',
+    const router = createRouter({
+
+        history: createWebHistory(this.$config.virtualPath),
         routes: [
             {
                 name: 'finish',

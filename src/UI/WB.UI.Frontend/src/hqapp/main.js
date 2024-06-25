@@ -64,22 +64,24 @@ app.use(config)
 app.use(http)
 app.use(hqApi)
 
-import viewsProvider from './Views'
-import Router from './router/index.js'
+// import viewsProvider from './Views'
+// import Router from './router/index.js'
 
-const views = viewsProvider(store)
+// const views = viewsProvider(store)
 
-const router = new Router({
-    routes: views.routes,
-}).router
+// const router = new Router({
+//     routes: views.routes,
+// }).router
 
+
+import router from './router';
 app.use(router)
 
 //sync(store, router)
 //TODO: MIGRATION
 
-import VuePageTitle from 'vue-page-title'
-app.use(VuePageTitle, {})
+import { pageTitle } from 'vue-page-title'
+app.use(pageTitle)
 
 
 box.init(i18n, browserLanguage)

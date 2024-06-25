@@ -6,15 +6,16 @@
 
 // //Vue.use(VueRouter)
 
+const routes = []
 
 
+const router = createRouter({
+    history: createWebHistory(),
+    //base: import.meta.env.BASE_URL,
+    routes
+});
 
-// const router = createRouter({
-//     history: createWebHistory(),
-//     //base: import.meta.env.BASE_URL,
-//     routes
-// });
-
+export default router;
 
 // export default class HqRouter {
 //     constructor(options) {
