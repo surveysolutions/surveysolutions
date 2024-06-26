@@ -25,6 +25,8 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             GeolocationRequest geolocationRequest = new GeolocationRequest(geolocationAccuracy);
             var position = await Geolocation.GetLocationAsync(
                 geolocationRequest, cancellationToken.Token).ConfigureAwait(false);
+            if (position == null)
+                return null;
 
             return new GpsLocation(position.Accuracy, position.Altitude, position.Latitude, position.Longitude, position.Timestamp);
         }

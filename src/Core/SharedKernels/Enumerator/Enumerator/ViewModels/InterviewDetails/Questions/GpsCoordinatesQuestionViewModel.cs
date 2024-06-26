@@ -144,13 +144,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.Answering.StartInProgressIndicator();
             this.userInterfaceStateService.NotifyRefreshStarted();
+            
             try
             {
                 var mvxGeoLocation = await this.locationService.GetLocation(this.settings.GpsReceiveTimeoutSec,
                     this.settings.GpsDesiredAccuracy).ConfigureAwait(false);
-
-                this.userInterfaceStateService.NotifyRefreshFinished();
-                await this.SetGeoLocationAnswerAsync(mvxGeoLocation);
+                
+                if (mvxGeoLocation == null)
+                {
+                    await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.GpsQuestion_Timeout);
+                }
+                else
+                {
+                    await this.SetGeoLocationAnswerAsync(mvxGeoLocation);
+                }
             }
             catch (PermissionException)
             {
