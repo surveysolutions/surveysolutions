@@ -30,13 +30,14 @@ export default {
             },
         }
 
-        if (!Object.prototype.hasOwnProperty.call(Vue, '$api')) {
-            Vue.$api = {}
-        }
+        // if (!Object.prototype.hasOwnProperty.call(Vue, '$api')) {
+        //     Vue.$api = {}
+        // }
 
-        Object.defineProperty(Vue.$api, 'hub', {
-            get() { return api },
-        })
+        // Object.defineProperty(Vue.$api, 'hub', {
+        //     get() { return api },
+        // })
+        //TODO: MIGRATION. move registration
 
         connection.on('refreshEntities', (questions) => {
             this.$store.dispatch('refreshEntities', questions)

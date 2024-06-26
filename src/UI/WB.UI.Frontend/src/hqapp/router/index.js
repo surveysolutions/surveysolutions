@@ -1,6 +1,6 @@
 // //import Vue from 'vue'
 
-// import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 // import VueRouter from 'vue-router'
 // import { assign } from 'lodash'
 

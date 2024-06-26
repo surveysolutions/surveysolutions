@@ -30,9 +30,9 @@ const httpPlugin = {
             return Promise.reject(error)
         })
 
-        if (!Object.prototype.hasOwnProperty.call(app, '$api')) {
-            app.$api = {}
-        }
+        // if (!Object.prototype.hasOwnProperty.call(app, '$api')) {
+        //     app.$api = {}
+        // }
 
         async function query(id, params, action) {
             if (config.splashScreen) return
