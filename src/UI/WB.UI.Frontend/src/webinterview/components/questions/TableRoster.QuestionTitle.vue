@@ -1,19 +1,13 @@
 <template>
-    <popover class="w-100 d-block"
-        :enable="hasInstructions"
-        trigger="hover-focus"
-        append-to="body">
-        <div class="ag-cell-label-container"
-            v-bind:class="{ 'has-instruction' : hasInstructions }">
+    <popover class="w-100 d-block" :enable="hasInstructions" trigger="hover-focus" append-to="body">
+        <div class="ag-cell-label-container" v-bind:class="{ 'has-instruction': hasInstructions }">
             <div class="ag-header-cell-label">
-                <span class="ag-header-cell-text"
-                    v-html="title"></span>
+                <span class="ag-header-cell-text" v-html="title"></span>
             </div>
         </div>
-        <template slot="popover">
+        <template v-slot:popover>
             <div class="instruction-tooltip">
-                <span v-dateTimeFormatting
-                    v-html="instruction"></span>
+                <span v-dateTimeFormatting v-html="instruction"></span>
             </div>
         </template>
     </popover>
@@ -47,21 +41,10 @@ export default {
     watch: {
         ['params.context.componentParent.$me.questions']() {
             var self = this
-            var question = find(self.params.context.componentParent.$me.questions, function(o) { return o.id == self.questionId })
-            if(question !== undefined)
+            var question = find(self.params.context.componentParent.$me.questions, function (o) { return o.id == self.questionId })
+            if (question !== undefined)
                 this.instruction = question.instruction
         },
     },
 }
 </script>
-
-
-
-
-
-
-
-
-
-
-

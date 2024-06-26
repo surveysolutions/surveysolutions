@@ -1,37 +1,23 @@
 <template>
-    <wb-question :question="$me"
-        :questionCssClassName="$me.ordered ? 'ordered-question' : 'multiselect-question'">
+    <wb-question :question="$me" :questionCssClassName="$me.ordered ? 'ordered-question' : 'multiselect-question'">
         <div class="question-unit">
-            <div class="options-group"
-                v-bind:class="{ 'dotted': noOptions }">
-                <div class="form-group"
-                    v-for="option in answeredOrAllOptions"
-                    :key="$me.id + '_' + option.value">
-                    <input class="wb-checkbox"
-                        type="checkbox"
-                        :id="$me.id + '_' + option.value"
-                        :name="$me.id"
-                        :value="option.value"
-                        :disabled="!$me.acceptAnswer"
-                        v-model="answer"
-                        v-disabledWhenUnchecked="{maxAnswerReached: allAnswersGiven, answerNotAllowed: !$me.acceptAnswer}">
+            <div class="options-group" v-bind:class="{ 'dotted': noOptions }">
+                <div class="form-group" v-for="option in answeredOrAllOptions" :key="$me.id + '_' + option.value">
+                    <input class="wb-checkbox" type="checkbox" :id="$me.id + '_' + option.value" :name="$me.id"
+                        :value="option.value" :disabled="!$me.acceptAnswer" v-model="answer"
+                        v-disabledWhenUnchecked="{ maxAnswerReached: allAnswersGiven, answerNotAllowed: !$me.acceptAnswer }">
                     <label :for="$me.id + '_' + option.value">
-                        <span class="tick"></span> {{option.title}}
+                        <span class="tick"></span> {{ option.title }}
                     </label>
-                    <div class="badge"
-                        v-if="$me.ordered">
-                        {{getAnswerOrder(option.value)}}
+                    <div class="badge" v-if="$me.ordered">
+                        {{ getAnswerOrder(option.value) }}
                     </div>
                 </div>
-                <button type="button"
-                    class="btn btn-link btn-horizontal-hamburger"
-                    @click="toggleOptions"
-                    v-if="shouldShowAnsweredOptionsOnly && !showAllOptions"
-                    :id="`btn_${$me.id}_ShowAllOptions`">
+                <button type="button" class="btn btn-link btn-horizontal-hamburger" @click="toggleOptions"
+                    v-if="shouldShowAnsweredOptionsOnly && !showAllOptions" :id="`btn_${$me.id}_ShowAllOptions`">
                     <span></span>
                 </button>
-                <div v-if="noOptions"
-                    class="options-not-available">
+                <div v-if="noOptions" class="options-not-available">
                     {{ $t("WebInterviewUI.OptionsAvailableAfterAnswer") }}
                 </div>
                 <wb-lock />
@@ -39,29 +25,29 @@
         </div>
     </wb-question>
 </template>
+
 <script lang="js">
 import { entityDetails } from '../mixins'
-
 import { map, find, isEqual, filter } from 'lodash'
 import { shouldShowAnsweredOptionsOnlyForMulti } from './question_helpers'
 
 export default {
     name: 'LinkedMulti',
-    data(){
+    data() {
         return {
             showAllOptions: false,
         }
     },
     computed: {
-        shouldShowAnsweredOptionsOnly(){
+        shouldShowAnsweredOptionsOnly() {
             return shouldShowAnsweredOptionsOnlyForMulti(this)
         },
-        answeredOrAllOptions(){
-            if(!this.shouldShowAnsweredOptionsOnly)
+        answeredOrAllOptions() {
+            if (!this.shouldShowAnsweredOptionsOnly)
                 return this.$me.options
 
             var self = this
-            return filter(this.$me.options, function(o) {
+            return filter(this.$me.options, function (o) {
                 return find(self.$me.answer, (a) => {
                     return isEqual(a, o.rosterVector)
                 })
@@ -91,7 +77,7 @@ export default {
             var answerIndex = this.answer.indexOf(answerValue)
             return answerIndex > -1 ? answerIndex + 1 : ''
         },
-        toggleOptions(){
+        toggleOptions() {
             this.showAllOptions = !this.showAllOptions
         },
     },

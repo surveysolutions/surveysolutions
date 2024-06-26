@@ -1,79 +1,60 @@
 <template>
     <HqLayout :title="title">
-        <DataTables ref="table"
-            :tableOptions="tableOptions"
-            :contextMenuItems="contextMenuItems"></DataTables>
+        <DataTables ref="table" :tableOptions="tableOptions" :contextMenuItems="contextMenuItems"></DataTables>
 
-        <ModalFrame ref="editCalendarModal"
-            :title="$t('Common.EditCalendarEvent')">
+        <ModalFrame ref="editCalendarModal" :title="$t('Common.EditCalendarEvent')">
             <form onsubmit="return false;">
 
                 <div class="form-group">
-                    <DatePicker :config="datePickerConfig"
-                        :value="selectedDate">
+                    <DatePicker :config="datePickerConfig" :value="selectedDate">
                     </DatePicker>
-                    <div  v-if="dateInPast">
+                    <div v-if="dateInPast">
                         <span class="text-danger">{{ $t("Assignments.DateFromPast") }}</span>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label"
-                        for="commentsId">
+                    <label class="control-label" for="commentsId">
                         {{ $t("Assignments.Comments") }}
                     </label>
-                    <textarea
-                        control-id="commentsId"
-                        v-model="editCalendarComment"
-                        :placeholder="$t('Assignments.EnterComments')"
-                        name="comments"
-                        rows="6"
-                        maxlength="500"
-                        class="form-control"/>
+                    <textarea control-id="commentsId" v-model="editCalendarComment"
+                        :placeholder="$t('Assignments.EnterComments')" name="comments" rows="6" maxlength="500"
+                        class="form-control" />
                 </div>
             </form>
-            <div slot="actions">
-                <button
-                    type="button"
-                    class="btn btn-primary"
-                    role="confirm"
-                    @disable="saveDisabled"
-                    @click="updateCalendarEvent">
-                    {{ $t("Common.Save") }}</button>
-                <button
-                    type="button"
-                    class="btn btn-link"
-                    data-dismiss="modal"
-                    role="cancel">{{ $t("Common.Cancel") }}</button>
-                <button
-                    type="button"
-                    class="btn btn-danger pull-right"
-                    role="delete"
-                    v-if="calendarEventId != null"
-                    @click="deleteCalendarEvent">
-                    {{ $t("Common.Delete") }}</button>
-            </div>
+            <template v-slot:actions>
+                <div>
+                    <button type="button" class="btn btn-primary" role="confirm" @disable="saveDisabled"
+                        @click="updateCalendarEvent">
+                        {{ $t("Common.Save") }}</button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">{{ $t("Common.Cancel")
+                        }}</button>
+                    <button type="button" class="btn btn-danger pull-right" role="delete" v-if="calendarEventId != null"
+                        @click="deleteCalendarEvent">
+                        {{ $t("Common.Delete") }}</button>
+                </div>
+            </template>
         </ModalFrame>
     </HqLayout>
 </template>
 
 <script>
-import {DateFormats, convertToLocal} from '~/shared/helpers'
-import {updateCalendarEvent, addAssignmentCalendarEvent, deleteCalendarEvent } from './calendarEventsHelper'
+import { DateFormats, convertToLocal } from '~/shared/helpers'
+import { updateCalendarEvent, addAssignmentCalendarEvent, deleteCalendarEvent } from './calendarEventsHelper'
 import moment from 'moment-timezone'
-import {map, join, escape } from 'lodash'
+import { map, join, escape } from 'lodash'
 
 import _sanitizeHtml from 'sanitize-html'
-const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
+const sanitizeHtml = text => _sanitizeHtml(text, { allowedTags: [], allowedAttributes: [] })
 
 export default {
     data() {
         return {
             editCalendarComment: null,
-            newCalendarStart : null,
-            newCalendarStarTimezone : null,
-            calendarEventId : null,
-            calendarAssinmentId : null,
+            newCalendarStart: null,
+            newCalendarStarTimezone: null,
+            calendarEventId: null,
+            calendarAssinmentId: null,
         }
     },
 
@@ -104,7 +85,7 @@ export default {
                 sDom: 'rf<"table-with-scroll"t>ip',
             }
         },
-        selectedDate(){
+        selectedDate() {
             return this.newCalendarStart
         },
         datePickerConfig() {
@@ -117,16 +98,16 @@ export default {
                 onChange: (selectedDates, dateStr, instance) => {
                     const start = selectedDates.length > 0 ? moment(selectedDates[0]).format(DateFormats.dateTime) : null
 
-                    if(start != null && start != self.newCalendarStart){
+                    if (start != null && start != self.newCalendarStart) {
                         self.newCalendarStart = start
                     }
                 },
             }
         },
-        dateInPast(){
+        dateInPast() {
             return moment(this.selectedDate) < moment()
         },
-        saveDisabled(){
+        saveDisabled() {
             return !this.newCalendarStart
         },
     },
@@ -135,7 +116,7 @@ export default {
         reload() {
             this.$refs.table.reload()
         },
-        contextMenuItems({rowData}) {
+        contextMenuItems({ rowData }) {
             return [
                 {
                     name: this.$t('Assignments.CreateInterview'),
@@ -195,7 +176,7 @@ export default {
                     orderable: false,
                     searchable: false,
                     render(data) {
-                        var questionsWithTitles = map(data, function(question) {
+                        var questionsWithTitles = map(data, function (question) {
                             return question.title + ': ' + sanitizeHtml(question.answer)
                         })
                         return join(questionsWithTitles, ', ')
@@ -217,7 +198,7 @@ export default {
                     name: 'CreatedAtUtc',
                     title: this.$t('Assignments.CreatedAt'),
                     searchable: false,
-                    render: function(data) {
+                    render: function (data) {
                         var date = moment.utc(data)
                         return date.local().format(DateFormats.dateTimeInList)
                     },
@@ -234,14 +215,14 @@ export default {
                     title: this.$t('Common.CalendarEvent'),
                     orderable: false,
                     searchable: false,
-                    render: function(data) {
-                        if(data != null && data.startUtc != null) {
+                    render: function (data) {
+                        if (data != null && data.startUtc != null) {
                             var hasComment = !(data.comment == null || data.comment == '')
                             return '<span data-toggle="tooltip" title="'
-                                + ( hasComment ? escape(data.comment) : self.$t('Assignments.NoComment'))
+                                + (hasComment ? escape(data.comment) : self.$t('Assignments.NoComment'))
                                 + '">'
                                 + convertToLocal(data.startUtc, data.startTimezone)
-                                + ( hasComment ? ('<br/>' + escape(data.comment)).replaceAll('\n', '<br/>') : '')
+                                + (hasComment ? ('<br/>' + escape(data.comment)).replaceAll('\n', '<br/>') : '')
                                 + '</span>'
                         }
                         return ''
@@ -257,7 +238,7 @@ export default {
             this.$refs.editCalendarModal.hide()
 
             deleteCalendarEvent(self.$apollo, {
-                'publicKey' : self.calendarEventId == null ? null : self.calendarEventId.replaceAll('-',''),
+                'publicKey': self.calendarEventId == null ? null : self.calendarEventId.replaceAll('-', ''),
                 workspace: self.$store.getters.workspace,
             }, self.reload)
         },
@@ -268,7 +249,7 @@ export default {
             this.editCalendarComment = calendarEvent?.comment
             this.newCalendarStart = calendarEvent?.startUtc ?? moment().add(1, 'days').hours(10).startOf('hour').format(DateFormats.dateTime)
             this.newCalendarStarTimezone = calendarEvent?.startTimezone
-            this.$refs.editCalendarModal.modal({keyboard: false})
+            this.$refs.editCalendarModal.modal({ keyboard: false })
         },
         updateCalendarEvent() {
             const self = this
@@ -277,20 +258,20 @@ export default {
             const startDate = moment(self.newCalendarStart).format('YYYY-MM-DD[T]HH:mm:ss.SSSZ')
 
             const variables = {
-                newStart : startDate,
-                comment : self.editCalendarComment,
+                newStart: startDate,
+                comment: self.editCalendarComment,
                 startTimezone: moment.tz.guess(),
                 workspace: self.$store.getters.workspace,
             }
 
 
-            if(self.calendarEventId != null){
-                variables.publicKey = self.calendarEventId.replaceAll('-',''),
-                updateCalendarEvent(self.$apollo, variables, self.reload)
+            if (self.calendarEventId != null) {
+                variables.publicKey = self.calendarEventId.replaceAll('-', ''),
+                    updateCalendarEvent(self.$apollo, variables, self.reload)
             }
-            else{
+            else {
                 variables.assignmentId = self.calendarAssinmentId,
-                addAssignmentCalendarEvent(self.$apollo, variables, self.reload)
+                    addAssignmentCalendarEvent(self.$apollo, variables, self.reload)
             }
         },
     },

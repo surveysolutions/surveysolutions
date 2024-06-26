@@ -1,25 +1,28 @@
 <template>
     <HqLayout :hasFilter="false">
-        <div slot="headers">
-            <ol class="breadcrumb">
-                <li>
-                    <a href="../../../SurveySetup">{{ $t('MainMenu.SurveySetup') }}</a>
-                </li>
-                <li>
-                    <a :href="assignmentsUploadUrl">{{ $t('BatchUpload.BreadCrumbs_CreatingMultipleInterviews') }}</a>
-                </li>
-            </ol>
-            <h1>{{ $t('BatchUpload.CreatingMultipleAssignments') }}</h1>
-        </div>
+        <template v-slot:headers>
+            <div>
+                <ol class="breadcrumb">
+                    <li>
+                        <a href="../../../SurveySetup">{{ $t('MainMenu.SurveySetup') }}</a>
+                    </li>
+                    <li>
+                        <a :href="assignmentsUploadUrl">{{ $t('BatchUpload.BreadCrumbs_CreatingMultipleInterviews')
+                            }}</a>
+                    </li>
+                </ol>
+                <h1>{{ $t('BatchUpload.CreatingMultipleAssignments') }}</h1>
+            </div>
+        </template>
         <div class="row">
             <div class="col-sm-7">
                 <h3>
                     {{ $t('BatchUpload.ImportAssignmentsFor', {
-        title: $t('Pages.QuestionnaireNameFormat', {
-            name:
-                questionnaire.title, version: questionnaire.version
-        })
-    }) }}
+                        title: $t('Pages.QuestionnaireNameFormat', {
+                            name:
+                                questionnaire.title, version: questionnaire.version
+                    })
+                    }) }}
                     <router-link :to="{ name: 'questionnairedetails', params: { questionnaireId: questionnaire.id } }"
                         target='_blank'>
                         <span :title="$t('Details.ShowQuestionnaireDetails')" class="glyphicon glyphicon-link" />
@@ -33,9 +36,9 @@
                     <p v-if="isInProgress">
                         {{ $t('BatchUpload.Importing') }}
                         {{ $t('BatchUpload.ImportProgressFormat', {
-        createdCount: status.processedCount,
-        totalCount: status.totalCount
-    }) }}
+                            createdCount: status.processedCount,
+                            totalCount: status.totalCount
+                        }) }}
                     </p>
                     <p v-if="!isInProgress">{{ $t('BatchUpload.ImportInterviews_Done') }}</p>
                     <p class="success-text" v-if="processedWithoutErrorsCount == 1">
@@ -47,10 +50,11 @@
                     <p class="error-text" v-if="status.withErrorsCount == 1">
                         {{ $t('BatchUpload.SingleAssignmentFailedToBeCreated') }}</p>
                     <p class="error-text" v-if="status.withErrorsCount > 1">
-                        {{ $t('BatchUpload.MultipleAssignmentFailedToBeCreated', { count: status.withErrorsCount }) }}</p>
+                        {{ $t('BatchUpload.MultipleAssignmentFailedToBeCreated', { count: status.withErrorsCount }) }}
+                    </p>
                 </div>
-                <a v-if="!isInProgress && status.withErrorsCount > 0"
-                    :href="model.api.invalidAssignmentsUrl">{{ $t('BatchUpload.DownloadInvalidAssignments') }}</a>
+                <a v-if="!isInProgress && status.withErrorsCount > 0" :href="model.api.invalidAssignmentsUrl">{{
+                    $t('BatchUpload.DownloadInvalidAssignments') }}</a>
                 <div class="cancelable-progress" v-if="isInProgress">
                     <div class="progress">
                         <div class="progress-bar progress-bar-success"
@@ -65,7 +69,7 @@
                     <a class="btn btn-primary" href="../../../Assignments">{{ $t('MainMenu.Assignments') }}</a>
                     <a class="btn btn-primary" href="../../../SurveySetup">{{ $t('MainMenu.SurveySetup') }}</a>
 
-                    <a class="back-link" :href="assignmentsUploadUrl">{{$t('BatchUpload.BackToImport')}}</a>
+                    <a class="back-link" :href="assignmentsUploadUrl">{{ $t('BatchUpload.BackToImport') }}</a>
                 </div>
             </div>
         </div>

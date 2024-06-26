@@ -1,58 +1,34 @@
 <template>
-    <div :class="questionStyle"
-        :id="`mr_view_${questionId}`">
-        <popover
-            class="tooltip-wrapper"
-            trigger="hover-focus"
-            append-to="body"
+    <div :class="questionStyle" :id="`mr_view_${questionId}`">
+        <popover class="tooltip-wrapper" trigger="hover-focus" append-to="body"
             :enable="!question.isDisabled && (question.validity.messages.length > 0 || question.validity.warnings.length > 0)">
-            <a class="cell-content has-tooltip"
-                type="primary"
-                data-role="trigger"></a>
-            <template slot="popover">
-                <div class="error-tooltip"
-                    v-if="!question.validity.isValid">
-                    <h6
-                        style="text-transform:uppercase;"
-                        v-if="question.validity.errorMessage">{{ $t("WebInterviewUI.AnswerWasNotSaved") }}</h6>
+            <a class="cell-content has-tooltip" type="primary" data-role="trigger"></a>
+            <template v-slot:popover>
+                <div class="error-tooltip" v-if="!question.validity.isValid">
+                    <h6 style="text-transform:uppercase;" v-if="question.validity.errorMessage">{{
+                        $t("WebInterviewUI.AnswerWasNotSaved") }}</h6>
                     <template v-for="message in question.validity.messages">
-                        <div v-dateTimeFormatting
-                            v-html="message"
-                            :key="message"></div>
+                        <div v-dateTimeFormatting v-html="message" :key="message"></div>
                     </template>
                 </div>
-                <div class="warning-tooltip"
-                    v-else-if="question.validity.warnings.length > 0">
+                <div class="warning-tooltip" v-else-if="question.validity.warnings.length > 0">
                     <template v-for="message in question.validity.warnings">
-                        <div v-dateTimeFormatting
-                            v-html="message"
-                            :key="message"></div>
+                        <div v-dateTimeFormatting v-html="message" :key="message"></div>
                     </template>
                 </div>
             </template>
         </popover>
-        <div
-            class="cell-bordered d-flex"
-            style="align-items:center;width:180px !important;max-width:180px;"
-            v-for="option in editorParams.question.options"
-            :key="$me.id + '_' + option.value"
+        <div class="cell-bordered d-flex" style="align-items:center;width:180px !important;max-width:180px;"
+            v-for="option in editorParams.question.options" :key="$me.id + '_' + option.value"
             v-bind:class="{ 'unavailable-option locked-option': isProtected(option.value) }">
-            <div class="field"
-                style="width:180px;">
-                <input
-                    class="wb-checkbox"
-                    type="checkbox"
-                    :id="$me.id + '_' + option.value"
-                    :name="$me.id"
-                    :value="option.value"
-                    v-model="answer"
-                    @change="change"
-                    v-disabledWhenUnchecked="{
+            <div class="field" style="width:180px;">
+                <input class="wb-checkbox" type="checkbox" :id="$me.id + '_' + option.value" :name="$me.id"
+                    :value="option.value" v-model="answer" @change="change" v-disabledWhenUnchecked="{
                         maxAnswerReached: allAnswersGiven,
                         answerNotAllowed: disabled,
-                        forceDisabled: isProtected(option.value) }"/>
-                <label :for="$me.id + '_' + option.value" 
-                    style="padding-top:10px;padding-bottom: 10px;">
+                        forceDisabled: isProtected(option.value)
+                    }" />
+                <label :for="$me.id + '_' + option.value" style="padding-top:10px;padding-bottom: 10px;">
                     <span class="tick"></span>
                 </label>
             </div>
@@ -61,8 +37,7 @@
 </template>
 
 <script lang="js">
-import Vue from 'vue'
-import { filter, find, difference, join} from 'lodash'
+import { find, difference, join } from 'lodash'
 import { entityDetails, tableCellEditor } from '../mixins'
 import modal from '@/shared/modal'
 
@@ -109,12 +84,12 @@ export default {
         },
         questionStyle() {
             return [{
-                'disabled-element' : this.question.isDisabled,
-                'has-error' : !this.question.isDisabled && !this.question.validity.isValid,
-                'has-warnings' : !this.question.isDisabled && this.question.validity.warnings.length > 0,
-                'not-applicable' : this.question.isLocked,
+                'disabled-element': this.question.isDisabled,
+                'has-error': !this.question.isDisabled && !this.question.validity.isValid,
+                'has-warnings': !this.question.isDisabled && this.question.validity.warnings.length > 0,
+                'not-applicable': this.question.isLocked,
                 'syncing': this.isFetchInProgress,
-            }, 'cell-unit', 'options-group', ' h-100',' d-flex']
+            }, 'cell-unit', 'options-group', ' h-100', ' d-flex']
         },
     },
     methods: {
@@ -151,7 +126,7 @@ export default {
 
             const confirmMessage = this.$t('WebInterviewUI.Interview_Questions_RemoveRowFromRosterMessage', {
                 rosterTitle,
-            } )
+            })
 
             modal.confirm(confirmMessage, result => {
                 if (result) {
@@ -163,7 +138,7 @@ export default {
                 }
             })
         },
-        toggleOptions(){
+        toggleOptions() {
             this.showAllOptions = !this.showAllOptions
         },
         isProtected(answerValue) {

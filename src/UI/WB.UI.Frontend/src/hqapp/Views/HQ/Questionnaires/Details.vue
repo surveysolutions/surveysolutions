@@ -9,10 +9,10 @@
                                 {{ this.$t('Pages.Questionnaire_Info') }}:
                                 <b>
                                     {{ $t('Pages.QuestionnaireNameVersionFirst',
-                                    {
-                                        name: model.title,
-                                        version: model.version,
-                                    }) }}
+                                        {
+                                            name: model.title,
+                                            version: model.version,
+                                        }) }}
                                     <a :href="model.designerUrl" target="_blank" v-if="model.designerUrl != null">
                                         <span :title="$t('Dashboard.ShowOnDesigner')" class="glyphicon glyphicon-link">
                                         </span>
@@ -93,11 +93,11 @@
                                 <td>{{ $t('Dashboard.ImportedBy') }}</td>
                                 <td>
                                     {{ model.importedBy != null
-                                    ? $t('Dashboard.ImportedByText', {
-                                        role: $t('Roles.' + model.importedBy.role),
-                                        name: model.importedBy.name
-                                    })
-                                    : ''
+                                        ? $t('Dashboard.ImportedByText', {
+                                            role: $t('Roles.' + model.importedBy.role),
+                                            name: model.importedBy.name
+                                        })
+                                        : ''
                                     }}
                                 </td>
                             </tr>
@@ -206,15 +206,17 @@
             </div>
             <ModalFrame ref="audioAuditModal" :title="$t('Pages.ConfirmationNeededTitle')" :canClose="false">
                 <p>{{ $t('Pages.GlobalSettings_TurningAudioAuditOn') }}</p>
-                <div slot="actions">
-                    <button type="button" class="btn btn-danger" v-bind:disabled="model.isObserving"
-                        @click="recordAudioSend">
-                        {{ $t('Common.Ok') }}
-                    </button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal" @click="cancelSetAudio">
-                        {{ $t('Common.Cancel') }}
-                    </button>
-                </div>
+                <template v-slot:actions>
+                    <div>
+                        <button type="button" class="btn btn-danger" v-bind:disabled="model.isObserving"
+                            @click="recordAudioSend">
+                            {{ $t('Common.Ok') }}
+                        </button>
+                        <button type="button" class="btn btn-link" data-dismiss="modal" @click="cancelSetAudio">
+                            {{ $t('Common.Cancel') }}
+                        </button>
+                    </div>
+                </template>
             </ModalFrame>
 
             <ModalFrame ref="criticalityLevelModal"
@@ -236,15 +238,17 @@
                         </Typeahead>
                     </div>
                 </form>
-                <div slot="actions">
-                    <button type="button" class="btn btn-primary" @click="updateCriticalityLevel"
-                        :disabled="!showSelectors">
-                        {{ $t('Common.Save') }}
-                    </button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal">
-                        {{ $t('Common.Cancel') }}
-                    </button>
-                </div>
+                <template v-slot:actions>
+                    <div>
+                        <button type="button" class="btn btn-primary" @click="updateCriticalityLevel"
+                            :disabled="!showSelectors">
+                            {{ $t('Common.Save') }}
+                        </button>
+                        <button type="button" class="btn btn-link" data-dismiss="modal">
+                            {{ $t('Common.Cancel') }}
+                        </button>
+                    </div>
+                </template>
             </ModalFrame>
         </div>
     </main>

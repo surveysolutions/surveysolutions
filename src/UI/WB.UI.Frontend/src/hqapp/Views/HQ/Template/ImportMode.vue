@@ -1,13 +1,13 @@
 <template>
     <HqLayout :hasFilter="false" :fixedWidth="true" :hasRow="false">
-        <template slot="headers">
+        <template v-slot:headers>
             <ol class="breadcrumb">
                 <li>
                     <a :href="this.$config.model.surveySetupUrl">{{ this.$t('MainMenu.SurveySetup') }}</a>
                 </li>
                 <li>
                     <a :href="this.$config.model.listOfMyQuestionnaires">{{
-        this.$t('QuestionnaireImport.ListOfMyQuestionnaires') }}</a>
+                        this.$t('QuestionnaireImport.ListOfMyQuestionnaires') }}</a>
                 </li>
             </ol>
             <h1>{{ this.$t('QuestionnaireImport.ImportModePageTitle') }}</h1>
@@ -52,9 +52,9 @@
                         {{ $t('QuestionnaireImport.Questions') }}:
                         <span>{{ $config.model.questionnaireInfo.questionsCount }}</span>
                         ({{ $t('QuestionnaireImport.QuestionsWithConditions', {
-        count:
-            $config.model.questionnaireInfo.questionsWithConditionsCount
-    }) }})
+                            count:
+                                $config.model.questionnaireInfo.questionsWithConditionsCount
+                        }) }})
                     </li>
                 </ul>
             </div>
@@ -77,10 +77,10 @@
                                 <label for="imortAsNewVersion">
                                     <span class="tick"></span>
                                     {{ $t('QuestionnaireImport.ImportAsNewVersion',
-        {
-            version:
-                $config.model.newVersionNumber
-        }) }}
+                                        {
+                                            version:
+                                    $config.model.newVersionNumber
+                                    }) }}
                                 </label>
                             </div>
                         </div>
@@ -150,7 +150,7 @@
         </form>
         <div class="row col-sm-12" v-if="errorMessage">
             <div class="alert alert-danger">
-                {{errorMessage}}
+                {{ errorMessage }}
             </div>
         </div>
     </HqLayout>
