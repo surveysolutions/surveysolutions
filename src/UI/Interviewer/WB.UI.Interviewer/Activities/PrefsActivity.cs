@@ -1,5 +1,6 @@
 using System.Globalization;
 using Android.App;
+using Android.Content.PM;
 using Android.OS;
 using AndroidX.AppCompat.App;
 using AndroidX.Preference;
@@ -15,6 +16,7 @@ namespace WB.UI.Interviewer.Activities
     [Activity(Label = "Preferences activity", 
         NoHistory = false, 
         Theme = "@style/GrayAppTheme",
+        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize,
         Exported = false)]
     public class PrefsActivity : AppCompatActivity
     {
