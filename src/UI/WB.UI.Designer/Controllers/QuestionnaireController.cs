@@ -45,7 +45,7 @@ namespace WB.UI.Designer.Controllers
     [AuthorizeOrAnonymousQuestionnaire]
     [ResponseCache(NoStore = true)]
     [QuestionnairePermissions]
-    public partial class QuestionnaireController : Controller
+    public partial class QuestionnaireController : QControllerBase
     {
         public class QuestionnaireCloneModel
         {
@@ -83,14 +83,12 @@ namespace WB.UI.Designer.Controllers
 
         private readonly ICommandService commandService;
         private readonly IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory;
-        private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ILookupTableService lookupTableService;
         private readonly IQuestionnaireInfoFactory questionnaireInfoFactory;
         private readonly ILogger<QuestionnaireController> logger;
         private readonly IQuestionnaireInfoViewFactory questionnaireInfoViewFactory;
         private readonly ICategoricalOptionsImportService categoricalOptionsImportService;
-        private readonly DesignerDbContext dbContext;
         private readonly IReusableCategoriesService reusableCategoriesService;
         private readonly IEmailSender emailSender;
         private readonly IViewRenderService viewRenderService;
@@ -121,8 +119,8 @@ namespace WB.UI.Designer.Controllers
             IWebHostEnvironment webHost,
             IOptions<ViteTagOptions> options,
             IMemoryCache memoryCache)
+            : base(dbContext, questionnaireViewFactory)
         {
-            this.questionnaireViewFactory = questionnaireViewFactory;
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
             this.questionnaireInfoFactory = questionnaireInfoFactory;
@@ -131,7 +129,6 @@ namespace WB.UI.Designer.Controllers
             this.questionnaireInfoViewFactory = questionnaireInfoViewFactory;
             this.categoricalOptionsImportService = categoricalOptionsImportService;
             this.commandService = commandService;
-            this.dbContext = dbContext;
             this.reusableCategoriesService = reusableCategoriesService;
             this.emailSender = emailSender;
             this.viewRenderService = viewRenderService;
@@ -183,46 +180,6 @@ namespace WB.UI.Designer.Controllers
             return (User.IsAdmin() || this.UserHasAccessToEditOrViewQuestionnaire(id))
                 ? this.View("~/questionnaire/index.cshtml")
                 : this.LackOfPermits();
-        }
-
-        private bool ShouldRedirectToOriginalId(QuestionnaireRevision id)
-        {
-            if (!id.OriginalQuestionnaireId.HasValue || id.QuestionnaireId == id.OriginalQuestionnaireId)
-                return false;
-
-            if (User.Identity?.IsAuthenticated != true)
-                return false;
-
-            var userId = User.GetIdOrNull();
-            if (!userId.HasValue)
-                return false;
-
-            if (User.IsAdmin())
-                return true;
-
-            var questionnaireId = id.OriginalQuestionnaireId.Value;
-            var questionnaireListItem = this.dbContext.Questionnaires
-                .Where(x => x.QuestionnaireId == questionnaireId.FormatGuid())
-                .Include(x => x.SharedPersons).FirstOrDefault();
-
-            if (questionnaireListItem == null)
-                return false;
-
-            if (questionnaireListItem.OwnerId == userId)
-                return true;
-
-            if (questionnaireListItem.IsPublic)
-                return true;
-
-            if (questionnaireListItem.SharedPersons.Any(x => x.UserId == userId))
-                return true;
-
-            return false;
-        }
-
-        private bool UserHasAccessToEditOrViewQuestionnaire(QuestionnaireRevision id)
-        {
-            return this.questionnaireViewFactory.HasUserAccessToQuestionnaire(id, User.GetIdOrNull());
         }
 
         [Authorize]
@@ -427,13 +384,6 @@ namespace WB.UI.Designer.Controllers
         {
             QuestionnaireView? questionnaire = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
             return questionnaire;
-        }
-
-        [Authorize]
-        public IActionResult LackOfPermits()
-        {
-            this.Error(Resources.QuestionnaireController.Forbidden);
-            return this.RedirectToAction("Index", "QuestionnaireList");
         }
 
         [HttpPost]
