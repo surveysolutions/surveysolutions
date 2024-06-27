@@ -72,7 +72,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                 .AddConvention<INamingConventions>(new CompatibilityNamingConvention())
                 .BindRuntimeType<string, CustomStringOperationFilterInput>()
                 .BindRuntimeType<IdentifyEntityValue, IdentifyEntityValueFilterInput>()
+                .AddType<IdentifyEntityValueFilterInput>()
                 .BindRuntimeType<QuestionnaireCompositeItem, QuestionnaireItemsFilterType>()
+                .AddType<QuestionnaireItemsFilterType>()
                 .AddSorting();
         }
 
