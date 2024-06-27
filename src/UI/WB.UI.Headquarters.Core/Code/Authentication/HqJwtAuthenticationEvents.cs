@@ -17,19 +17,19 @@ namespace WB.UI.Headquarters.Code.Authentication
 {
     public class HqJwtAuthenticationEvents : JwtBearerEvents  
     {
-        private readonly IInScopeExecutor<IUserRepository> userRepository;
         private readonly IUserClaimsPrincipalFactory<HqUser> claimFactory;
-        
         private readonly ITokenProvider tokenProvider;
+        private readonly IInScopeExecutor executor;
         private const string FailureMessage = "Invalid user";
 
-        public HqJwtAuthenticationEvents(IInScopeExecutor<IUserRepository> userRepository, 
+        public HqJwtAuthenticationEvents(
             IUserClaimsPrincipalFactory<HqUser> claimFactory,
+            IInScopeExecutor executor,
             ITokenProvider tokenProvider)
         {
-            this.userRepository = userRepository;
             this.claimFactory = claimFactory;
             this.tokenProvider = tokenProvider;
+            this.executor = executor;
         }
 
         public override async Task TokenValidated(TokenValidatedContext context)
@@ -54,9 +54,10 @@ namespace WB.UI.Headquarters.Code.Authentication
                     return;
                 }
                 
-                await this.userRepository.ExecuteAsync(async u =>
+                await this.executor.ExecuteAsync(async (sl) =>
                 {
-                    var hqUser = await u.FindByIdAsync(userId);
+                    var userRepository = sl.GetInstance<IUserRepository>();
+                    var hqUser = await userRepository.FindByIdAsync(userId);
                 
                     if (!await this.tokenProvider.ValidateJtiAsync(hqUser, GetFirstClaim(JwtRegisteredClaimNames.Jti)?.Value))
                     {
