@@ -1,14 +1,13 @@
 import path from 'path';
 import { defineConfig } from 'vite';
-import { sync } from 'rimraf';
-import fs from 'fs';
+//import { sync } from 'rimraf';
+//import fs from 'fs';
 import Vue from '@vitejs/plugin-vue';
 // import Components from 'unplugin-vue-components/vite';
 import LocalizationPlugin from './questionnaire/tools/vite-plugin-localization';
 //import { VuetifyResolver } from 'unplugin-vue-components/resolvers'
-import Vuetify from 'vite-plugin-vuetify';
+///import Vuetify from 'vite-plugin-vuetify';
 import mpaPlugin from 'vite-plugin-mpa-plus';
-import multiInput from 'rollup-plugin-multi-input';
 
 const ViteFilemanager = require('filemanager-plugin').ViteFilemanager;
 
@@ -17,12 +16,42 @@ console.log(baseDir);
 const join = path.join.bind(path, baseDir);
 
 const outDir = path.resolve(__dirname, './wwwroot/assets');
+//const outDir = path.resolve(__dirname, './dist');
 console.log(outDir);
 
 const resxFiles = [
     join('../Resources/QuestionnaireEditor.resx'),
     join('../Resources/QuestionnaireEditor.*.resx'),
 ];
+
+function logFilePaths() {
+    return {
+        name: 'log-file-paths',
+        configResolved(config) {
+            console.log('Resolved Vite Configuration:', config);
+        },
+        buildStart() {
+            console.log('Starting Vite build...');
+        },
+        generateBundle(outputOptions, bundle) {
+            console.log('Output Options:', outputOptions);
+            console.log('Generated Bundle:', bundle);
+        },
+        transformIndexHtml(html, { path }) {
+            console.log(`Processing HTML file: ${path}`);
+            return html;
+        },
+        writeBundle(outputOptions, bundle) {
+            console.log('Writing Bundle:');
+            console.log('Output Directory:', outputOptions.dir);
+            for (const [fileName, chunkInfo] of Object.entries(bundle)) {
+                console.log(`File: ${fileName}, Type: ${chunkInfo.type}`);
+            }
+        },
+    };
+}
+
+console.log('!!!!ssss: ' + path.join(baseDir, 'build', 'entries', 'logon.js'));
 
 const pages = {
     logon: {
@@ -44,10 +73,10 @@ const pages = {
             'Pages',
             'Layout.Account.Template.cshtml'
         ),
-        //template: "../../Areas/Identity/Pages/Layout.Account.Template.html",
+        //template: '/Areas/Identity/Pages/Layout.Account.Template.html',
     },
     folders: {
-        entry: 'build/entries/folders.js',
+        entry: './build/entries/folders.js',
         filename: path.join(
             baseDir,
             'Areas',
@@ -63,6 +92,17 @@ const pages = {
             'Views',
             'PublicFolders',
             'Index.Template.cshtml'
+        ),
+    },
+    validationIdentity: {
+        entry: 'build/entries/validation.js',
+        filename: path.join(
+            baseDir,
+            'Areas/Identity/Pages/_ValidationScriptsPartial.cshtml'
+        ),
+        template: path.join(
+            baseDir,
+            'Areas/Identity/Pages/_ValidationScriptsPartial.Template.cshtml'
         ),
     },
 };
@@ -127,16 +167,16 @@ export default defineConfig(({ mode, command }) => {
 
     const base = command == 'serve' ? '/.vite/' : '/assets/';
 
-    if (command == 'serve' && mode != 'test') {
+    /*if (command == 'serve' && mode != 'test') {
         sync(outDir);
         fs.mkdirSync(outDir);
-    }
+    }*/
 
     return {
         base,
         plugins: [
             Vue(),
-            Vuetify({ autoImport: { labs: true } }),
+            //Vuetify({ autoImport: { labs: true } }),
             ViteFilemanager({
                 customHooks: [
                     {
@@ -173,9 +213,10 @@ export default defineConfig(({ mode, command }) => {
                     '.': ['QuestionnaireEditor'],
                 },
             }),*/
-            {
+            //logFilePaths(),
+            /*{
                 name: 'CopyManifest',
-            },
+            },*/
             //Components({
             //resolvers: [VuetifyResolver()],
             //}),
@@ -192,7 +233,7 @@ export default defineConfig(({ mode, command }) => {
                 }, 
             })*/
         ],
-        css: {
+        /*css: {
             preprocessorOptions: {
                 less: {
                     additionalData: '@icon-font-path: "/fonts/";',
@@ -201,7 +242,20 @@ export default defineConfig(({ mode, command }) => {
                     javascriptEnabled: true,
                 },
             },
-        },
+        },*/
+        /*resolve: {
+            alias: [
+                {
+                    find: '@',
+                    replacement: path.resolve(__dirname, './'),
+                },
+                {
+                    find: '~',
+                    replacement: path.resolve(__dirname, './'),
+                },
+            ],
+            extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
+        },*/
         server: {
             host: 'localhost',
             strictPort: true,
@@ -211,19 +265,18 @@ export default defineConfig(({ mode, command }) => {
                 ignored: ['**/src/locale/**'],
             },
         },
-        assetsInclude: ['**/*.cshtml'],
+        //assetsInclude: ['**/*.cshtml'],
         build: {
             minify: isProdMode,
             outDir,
             manifest: true,
             rollupOptions: {
-                //input: 'questionnaire/src/main.js',
-                //input: 'src/main.js',
-                preserveEntrySignatures: true,
+                //preserveEntrySignatures: true,
                 cache: false,
+                //input: 'build/entries/logon.js',
 
                 output: {
-                    /*assetFileNames: (assetInfo) => {
+                    assetFileNames: (assetInfo) => {
                         let extType = assetInfo.name.split('.').at(1);
                         if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
                             extType = 'img';
@@ -244,17 +297,10 @@ export default defineConfig(({ mode, command }) => {
                     entryFileNames: (chunkInfo) => {
                         if (isDevMode) return 'js/[name].js';
                         return 'js/[name]-[hash].js';
-                    },*/
+                    },
                     //manualChunks: id => {}
                 },
             },
-        },
-        resolve: {
-            alias: {
-                // eslint-disable-next-line no-undef
-                '@': path.resolve(__dirname, './'),
-            },
-            extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
         },
     };
 });

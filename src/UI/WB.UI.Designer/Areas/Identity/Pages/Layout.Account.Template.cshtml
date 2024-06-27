@@ -9,30 +9,29 @@
 
 <!DOCTYPE html>
 <html>
+
 <head lang="en">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Designer</title>
     @Html.GenerateFavicon(Url.Content("~/favicon"))
-    <!-- logon:css -->
-    <link rel="stylesheet" href="~/css/logon.css">
-    <!-- endinject -->
+
+    <script type="module" src="/build/entries/logon.js"></script>
 
     @RenderSection("Styles", required: false)
 
-    <!-- simplepage:js -->
-    <script src="~/js/simplepage.js"></script>
-    <!-- endinject -->
+    <script type="module" src="/build/entries/simplepage.js"></script>
 
     <script type="text/javascript">
         function FrameCheck() {
             if (top != self)
                 top.location.replace(self.location.href);
         }
-    </script>    
+    </script>
     @RenderSection("Scripts", required: false)
 </head>
+
 <body onload="FrameCheck();">
     <header>
         <a href="http://www.worldbank.org" class="logo"></a>
@@ -79,11 +78,12 @@
         </div>
     </section>
 
-<footer>
-    <partial name="_CommonFooter"/>
-</footer>
+    <footer>
+        <partial name="_CommonFooter" />
+    </footer>
 
-<!-- Site version is: @(ProductVersion.ToString()) --> 
+    <!-- Site version is: @(ProductVersion.ToString()) -->
 
 </body>
+
 </html>
