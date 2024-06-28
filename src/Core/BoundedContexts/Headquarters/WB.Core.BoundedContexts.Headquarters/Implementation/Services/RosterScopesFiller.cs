@@ -121,8 +121,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IQuestion question;
             if (this.questionsByPublicKeyDictionary.TryGetValue(questionId.Value, out question))
             {
-                return new RosterTitleQuestionDescription(question.PublicKey,
-                   this.questionsByPublicKeyDictionary[questionId.Value].Answers.ToDictionary(a => a.GetParsedValue(), a => a.AnswerText));
+                return new RosterTitleQuestionDescription(question.PublicKey);
             }
 
             return null;
