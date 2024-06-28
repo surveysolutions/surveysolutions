@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
+using WB.UI.Designer.Controllers.Api.Designer;
 using WB.UI.Designer.Filters;
 
 namespace WB.UI.Designer.Controllers;
@@ -31,6 +32,7 @@ public class QController : QControllerBase
         tagHelperComponentManager.Components.Add(new ViteTagHelperComponent(webHost, options, memoryCache));
     }
     
+    [QuestionnairePermissions]
     [Route("details/{id}")]
     [Route("details/{id}/chapter/{chapterId}/{entityType}/{entityId}")]
     public IActionResult Details(QuestionnaireRevision? id, Guid? chapterId, string entityType, Guid? entityid)
