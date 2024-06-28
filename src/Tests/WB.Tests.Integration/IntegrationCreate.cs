@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Autofac;
+using Autofac.Core;
 using Humanizer;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Ncqrs.Eventing;
@@ -444,10 +444,31 @@ namespace WB.Tests.Integration
         {
             var sessionFactory = new Lazy<ISessionFactory>(() => factory);
             
+            IComponentRegistration componentRegistration = new Mock<IComponentRegistration>().Object;
+            var componentRegistry = new Mock<IComponentRegistry>();
+            
+            ServiceRegistration serviceRegistration = new ServiceRegistration();
+            
+            componentRegistry.Setup(x =>
+                    x.TryGetServiceRegistration(It.IsAny<Service>(), out serviceRegistration))
+                .Returns(true);
+            
+            var container = new Mock<ILifetimeScope>();
+            container.Setup(x => x.BeginLifetimeScope(It.IsAny<string>())).Returns(container.Object);
+            container.SetupGet(x => x.ComponentRegistry).Returns(componentRegistry.Object);
+            container.Setup(x => x.ResolveComponent( It.IsAny<ResolveRequest>()))
+                .Returns(sessionFactory);
+            
             return new UnitOfWork( 
-                Mock.Of<ILogger<UnitOfWork>>(),  
+                Mock.Of<ILogger<UnitOfWork>>(),
                 workspaceContextAccessor ?? Create.Service.WorkspaceContextAccessor(), 
-                Mock.Of<ILifetimeScope>( x => x.Resolve<Lazy<ISessionFactory>>() == sessionFactory));
+                
+                container.Object);
+                // Mock.Of<ILifetimeScope>(
+                //     x => 
+                //         //x.Resolve<Lazy<ISessionFactory>>() == new Lazy<ISessionFactory>(() => factory) && 
+                //                               x.Resolve<ISessionFactory>() == factory
+                //         ));
         }
 
         private static HbmMapping GetMappingsFor(IEnumerable<Type> painStorageEntityMapTypes, string schemaName = null)
