@@ -155,6 +155,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 var mvxGeoLocation = await this.locationService.GetLocation(
                     this.settings.GpsDesiredAccuracy, cts.Token).ConfigureAwait(false);
                 
+                this.userInterfaceStateService.NotifyRefreshFinished();
+                
                 if (mvxGeoLocation == null)
                 {
                     await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.GpsQuestion_Timeout);
