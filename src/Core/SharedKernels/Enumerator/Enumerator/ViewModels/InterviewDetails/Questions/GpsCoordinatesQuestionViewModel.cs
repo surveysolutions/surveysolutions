@@ -234,6 +234,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             isDisposed = true;
             
             cts?.Cancel();
+            cts?.Dispose();
             
             this.liteEventRegistry.Unsubscribe(this);
             this.QuestionState.Dispose();
