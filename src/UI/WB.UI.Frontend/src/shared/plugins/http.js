@@ -6,7 +6,7 @@ export default {
         /*  determine options  */
 
 
-        vue.config.globslProperties.$http = axios
+        vue.config.globalProperties.$http = axios
 
         // // /*  expose a global API method  */
         // Object.defineProperty(vue, '$http', {

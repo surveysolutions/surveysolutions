@@ -10,15 +10,16 @@ import { createApp } from 'vue'
 import App from './App.vue';
 
 //import Vuei18n from '~/shared/plugins/locale'
-//import { browserLanguage } from '~/shared/helpers'
+import { browserLanguage } from '~/shared/helpers'
 //const i18n = Vuei18n.initialize(browserLanguage)
 
 //const pinia = createPinia()
 const app = createApp(App)
 //vue.use(pinia)
 
-import VueApollo from 'vue-apollo'
-app.use(VueApollo)
+//import VueApollo from 'vue-apollo'
+//app.use(VueApollo)
+
 //import { sync } from 'vuex-router-sync'
 //TODO: MIGRATION, fix old usage of vuex-router-sync 
 
@@ -58,7 +59,11 @@ poly.polyfill()
 
 import hqApi from './api'
 import apolloClient from './api/graphql'
-
+import { createApolloProvider } from '@vue/apollo-option'
+const apolloProvider = createApolloProvider({
+    defaultClient: apolloClient,
+})
+app.use(apolloProvider)
 
 app.use(config)
 app.use(http)
@@ -84,17 +89,23 @@ import { pageTitle } from 'vue-page-title'
 app.use(pageTitle)
 
 
-box.init(i18n, browserLanguage)
+//box.init(i18n, browserLanguage)
 
 app.config.globalProperties.$eventHub = app
 //TODO: MIGRATION. 
 
-export default new Vue({
-    el: '#vueApp',
-    render: h => h('router-view'),
-    store,
-    router,
-    apolloProvider: new VueApollo({
-        defaultClient: apolloClient,
-    }),
-})
+// export default new Vue({
+//     el: '#vueApp',
+//     render: h => h('router-view'),
+//     store,
+//     router,
+//     // apolloProvider: new VueApollo({
+//     //     defaultClient: apolloClient,
+//     // }),
+// })
+
+
+// Run!
+router.isReady().then(() => {
+    app.mount('#app');
+});
