@@ -18,7 +18,6 @@ namespace WB.UI.Headquarters.Code.Authentication
     public class BasicAuthenticationHandler : AuthenticationHandler<BasicAuthenticationSchemeOptions>
     {
         private const string FailureMessage = "Incorrect user name or password";
-        private readonly SignInManager<HqUser> signInManager;
         private readonly IUserClaimsPrincipalFactory<HqUser> claimFactory;
         private readonly IInScopeExecutor executor;
         private bool isUserLocked;
@@ -28,11 +27,9 @@ namespace WB.UI.Headquarters.Code.Authentication
             ILoggerFactory logger,
             UrlEncoder encoder,
             ISystemClock clock,
-            SignInManager<HqUser> signInManager,
             IUserClaimsPrincipalFactory<HqUser> claimFactory,
             IInScopeExecutor executor) : base(options, logger, encoder, clock)
         {
-            this.signInManager = signInManager;
             this.claimFactory = claimFactory;
             this.executor = executor;
         }

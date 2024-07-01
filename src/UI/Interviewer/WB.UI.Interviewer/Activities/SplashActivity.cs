@@ -9,6 +9,7 @@ namespace WB.UI.Interviewer.Activities
     [Activity(NoHistory = true, 
         MainLauncher = true, 
         ScreenOrientation = ScreenOrientation.Portrait, 
+        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize,
         Theme = "@style/AppTheme")]
     public class SplashActivity : MvxStartActivity
     {

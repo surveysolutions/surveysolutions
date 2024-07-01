@@ -56,7 +56,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 Connection.Execute($"SET LOCAL search_path = {connectionBuilder.SearchPath},{WorkspaceContext.Default.SchemaName}");
             }
 
-            string queryResult = Connection.QueryFirstOrDefault<string>(
+            string? queryResult = Connection.QueryFirstOrDefault<string>(
                 $"SELECT value FROM {TableName} WHERE id = @id", new { id });
 
             if (AllowReadFallback)

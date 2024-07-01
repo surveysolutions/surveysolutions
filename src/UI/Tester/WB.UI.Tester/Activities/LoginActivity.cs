@@ -1,4 +1,5 @@
 using Android.Content;
+using Android.Content.PM;
 using Android.Views;
 using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.ViewModels;
@@ -10,6 +11,7 @@ namespace WB.UI.Tester.Activities
 {
     [Activity(WindowSoftInputMode = SoftInput.StateHidden, 
         Theme = "@style/GrayAppTheme",
+        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize,
         Exported = false)]
     public class LoginActivity : BaseActivity<LoginViewModel>
     {

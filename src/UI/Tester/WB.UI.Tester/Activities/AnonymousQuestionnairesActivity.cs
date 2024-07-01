@@ -1,5 +1,6 @@
 ﻿using Android.App;
 using Android.Content;
+using Android.Content.PM;
 using Android.OS;
 using Android.Views;
 using AndroidX.AppCompat.Widget;
@@ -16,8 +17,7 @@ namespace WB.UI.Tester.Activities
     [Activity(Label = "",
         Theme = "@style/GrayAppTheme",
         WindowSoftInputMode = SoftInput.StateHidden,
-        ConfigurationChanges =
-            Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize,
+        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize,
         Exported = false)]
     public class AnonymousQuestionnairesActivity : BaseActivity<AnonymousQuestionnairesViewModel>
     {

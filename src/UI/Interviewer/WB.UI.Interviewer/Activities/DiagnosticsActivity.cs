@@ -1,8 +1,6 @@
-﻿using Android.App;
-using Android.Content;
-using Android.OS;
+﻿using Android.Content;
+using Android.Content.PM;
 using Android.Views;
-using AndroidX.AppCompat.Widget;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Shared.Enumerator.Activities;
@@ -10,7 +8,8 @@ using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
 
 namespace WB.UI.Interviewer.Activities
 {
-    [Activity(WindowSoftInputMode = SoftInput.StateHidden, 
+    [Activity(WindowSoftInputMode = SoftInput.StateHidden,
+        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize,
         Theme = "@style/GrayAppTheme",
         Exported = false)]
     public class DiagnosticsActivity : BaseActivity<DiagnosticsViewModel>

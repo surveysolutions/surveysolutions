@@ -39,7 +39,8 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.2" />
     <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="8.0.4" />
-    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.5.1" />
+    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="7.6.2" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.6.2" />
     <PackageReference Include="prometheus-net.AspNetCore" Version="8.1.1" />
     <PackageReference Include="NodaTime" Version="3.1.9" />
     <PackageReference Include="Quartz" Version="3.8.1" />
