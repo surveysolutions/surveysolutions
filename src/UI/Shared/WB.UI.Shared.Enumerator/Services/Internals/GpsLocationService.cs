@@ -17,14 +17,13 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             this.permissions = permissions;
         }
 
-        public async Task<GpsLocation> GetLocation(int timeoutSec, double desiredAccuracy)
+        public async Task<GpsLocation> GetLocation(double desiredAccuracy, CancellationToken cancellationToken)
         {
             await this.permissions.AssureHasPermissionOrThrow<Permissions.LocationWhenInUse>();
-            var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(timeoutSec));
             var geolocationAccuracy = GetGeolocationAccuracy(desiredAccuracy);
             GeolocationRequest geolocationRequest = new GeolocationRequest(geolocationAccuracy);
             var position = await Geolocation.GetLocationAsync(
-                geolocationRequest, cancellationToken.Token).ConfigureAwait(false);
+                geolocationRequest, cancellationToken).ConfigureAwait(false);
             if (position == null)
                 return null;
 

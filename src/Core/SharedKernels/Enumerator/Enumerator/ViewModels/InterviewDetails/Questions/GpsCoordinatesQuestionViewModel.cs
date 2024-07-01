@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
@@ -140,6 +141,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
+        private CancellationTokenSource cts;
+
         private async Task SaveAnswerAsync()
         {
             this.Answering.StartInProgressIndicator();
@@ -147,8 +150,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             
             try
             {
-                var mvxGeoLocation = await this.locationService.GetLocation(this.settings.GpsReceiveTimeoutSec,
-                    this.settings.GpsDesiredAccuracy).ConfigureAwait(false);
+                cts = new CancellationTokenSource(TimeSpan.FromSeconds(this.settings.GpsReceiveTimeoutSec));
+                
+                var mvxGeoLocation = await this.locationService.GetLocation(
+                    this.settings.GpsDesiredAccuracy, cts.Token).ConfigureAwait(false);
                 
                 if (mvxGeoLocation == null)
                 {
@@ -227,6 +232,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 return;
             
             isDisposed = true;
+            
+            cts?.Cancel();
             
             this.liteEventRegistry.Unsubscribe(this);
             this.QuestionState.Dispose();
