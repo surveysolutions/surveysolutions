@@ -1,0 +1,160 @@
+@using WB.UI.Designer.Extensions
+
+@{
+    ViewBag.Title = QuestionnaireController.MyQuestionnaires;
+}
+
+@section Styles{
+    <script type="module" src="/build/entries/classifications.js"></script>
+}
+@section Scripts {
+
+    <script type="module" src="/build/entries/list.js"></script>
+    <script type="module" src="/build/entries/vue.js"></script>
+
+    <script type="text/javascript">
+        var ClassificationsConfig = {};
+        ClassificationsConfig.install = function(Vue, options) {
+            Object.defineProperty(Vue, '$config', { get: function() { return options; } });
+            Object.defineProperty(Vue.prototype, '$config', { get: function() { return options; } });
+        };
+
+        Vue.use(ClassificationsConfig,
+            {
+                isAdmin: @User.IsAdmin().ToString().ToLower(),
+                userId: '@User.GetId()',
+                optionsParseRegex: new RegExp(/^(.+?)[\…\.\s]+([-+]?\d+)\s*$/)
+            });
+    </script>
+}
+<div class="slider" v-if="isLoading"><div class="line"></div><div class="subline inc"></div><div class="subline dec"></div></div>
+<div class="classifications-wrapper">
+    <div class="classifications-block">
+        <div class="col-xs-3 column classification-groups">
+            <div class="classification-list-wrapper">
+                <div class="scroller">
+                    <ul class="breadcrumb">
+                        <li class="active">@QuestionnaireEditor.ClassificationGroupBreadcrumbs</li>
+                    </ul>
+                    <ul class="list-unstyled classification-list">
+                        <li v-for="(group, index) in groups" :key="group.id" :class="{'active': group.isActive }">
+                            <group-editor :group="group" :index="index"></group-editor>
+                        </li>
+                    </ul>
+                    <button type="button" class="btn lighter-hover" @@click="addGroup()" v-if="isAdmin">@QuestionnaireEditor.ClassificationAddGroup</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-4 column classifications">
+            <div class="classification-list-wrapper">
+                <div class="scroller">
+                    <ul class="breadcrumb">
+                        <li class="active">{{activeGroup.title}}</li>
+                    </ul>
+                    <ul class="list-unstyled classification-list">
+                        <li v-for="(classification, index) in classifications" :key="classification.id" :class="{'active': classification.isActive }">
+                            <classification-editor :classification="classification" :index="index"></classification-editor>
+                        </li>
+                    </ul>
+                    <button v-if="activeGroup.id" type="button" class="btn lighter-hover" @@click="addClassification()">@QuestionnaireEditor.ClassificationAdd</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-5 column categories-groups">
+            <categories-editor></categories-editor>
+        </div>
+    </div>
+</div>
+
+@section Modal
+{
+    <script type="x/template" id="categories-editor-template">
+        <form>
+            <div class="scroller">
+                <ul class="breadcrumb">
+                    <li>{{activeGroup.title}}</li>
+                    <li class="active">{{activeClassification.title}}</li>
+                </ul>
+                <div class="categories-holder" v-if="activeClassification.id">
+                    <div v-if="!isEditMode" class="categories-holder-body readonly">
+                        <div class="option-cell" v-for="(category, index) in categories" :key="category.id">
+                            <span>{{category.title}} <span>...</span></span>
+                            <span>{{category.value}}</span>
+                        </div>
+                    </div>
+                    <div v-else class="categories-holder-body">
+                        <div class="options-editor" v-if="optionsMode">
+                            <div class="option-line" v-for="(category, index) in categories" :key="category.id">
+                                <div class="input-group">
+                                    <div class="option-cell" :class="{'has-error': errors.has('value'+category.id)}">
+                                        <input :name="'value'+category.id" v-on:keyup.enter="moveFocus" v-validate="'required|integer'" key="value" type="number" v-model="category.value" class="form-control" placeholder="@Html.Raw(QuestionnaireEditor.OptionsUploadValue)">
+                                    </div>
+                                    <div class="option-cell" :class="{'has-error': errors.has('title'+category.id)}">
+                                        <input :name="'title'+category.id" v-on:keyup.enter="moveFocus" v-validate="'required'" key="title" type="text" v-model="category.title" class="form-control" placeholder="@Html.Raw(QuestionnaireEditor.OptionsUploadTitle)">
+                                    </div>
+                                    <div class="input-group-btn">
+                                        <button @@click="deleteCategory(index)" type="button" class="btn btn-link btn-delete">
+                                            <svg width="20" height="20">
+                                                <polyline points="0,0 20,20"></polyline>
+                                                <polyline points="20,0 0,20"></polyline>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else class="form-group" :class="{'has-error': errors.has('stringifiedOptions')}">
+                            <textarea name="stringifiedOptions" v-elastic v-model="stringifiedOptions" v-validate="'stringOptions'" key="stringifiedOptions" class="form-control js-elasticArea" placeholder="@Html.Raw(QuestionnaireEditor.ClassificationsStringOptionsEditorPlaceholder)"></textarea>
+                            <p v-if="errors.has('stringifiedOptions')" class="text-danger">{{ errors.first('stringifiedOptions')}}</p>
+                        </div>
+                    </div>
+                    <div v-if="isEditMode" class="categories-holder-footer clearfix">
+                        <button v-if="optionsMode" type="button" class="btn btn-link pull-left" @@click="addCategory">@QuestionnaireEditor.QuestionAddOption</button>
+                        <button v-if="optionsMode" type="button" class="btn btn-link pull-right show-strings" @@click="showStrings">@QuestionnaireEditor.StringsView</button>
+                        <button v-else type="button" class="btn btn-link pull-left" @@click="showList">@QuestionnaireEditor.TableView</button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-buttons-holder">
+                <input type="hidden" name="collectionSizeTracker" v-validate />
+                <button type="button" class="btn btn-lg" :class="{'btn-success' : isFormDirty }" :disabled="!isFormDirty" @@click="save">@QuestionnaireEditor.Save</button>
+            </div>
+        </form>
+    </script>
+    <script type="x/template" id="group-editor-template">
+        <div>
+            <div v-if="isEditMode" class="edit-classification-group-name">
+                <form>
+                    <div class="form-group" :class="{'has-error': errors.has('title')}">
+                        <textarea v-elastic name="title" type="text" v-validate="'required'" required v-model="title" class="form-control" placeholder="@Html.Raw(QuestionnaireEditor.ClassificationGroupTitle)"></textarea>
+                        <span class="help-block" v-show="errors.has('title')">{{ errors.first('title') }}</span>
+                    </div>
+                    <button type="button" :disabled="!isFormDirty" @@click="save" class="btn btn-success">@QuestionnaireEditor.Save</button>
+                    <button type="button" @@click="cancel()" class="btn btn-link">@QuestionnaireEditor.Cancel</button>
+
+                </form>
+            </div>
+            <div v-else class="line-wrapper">
+                <a @@click="select()">{{ title }} <span class="badge pull-right">{{group.count}}</span></a>
+            </div>
+        </div>
+    </script>
+    <script type="x/template" id="classification-editor-template">
+        <div>
+            <div v-if="isEditMode" class="edit-classification-group-name">
+                <form>
+                    <div class="form-group">
+                        <textarea v-elastic name="title" type="text" v-validate="'required'" required v-model="title" class="form-control" placeholder="@Html.Raw(QuestionnaireEditor.ClassificationTitle)"></textarea>
+                    </div>
+                    <button type="button" :disabled="!isFormDirty" @@click="save" class="btn btn-success">@QuestionnaireEditor.Save</button>
+                    <button type="button" @@click="cancel()" class="btn btn-link">@QuestionnaireEditor.Cancel</button>
+
+                </form>
+            </div>
+            <div v-else class="line-wrapper" :class="{'private': isPrivate}">
+                <a @@click="select()">{{ title }} <span class="badge pull-right">{{classification.count}}</span></a>
+            </div>
+        </div>
+    </script>
+}
+

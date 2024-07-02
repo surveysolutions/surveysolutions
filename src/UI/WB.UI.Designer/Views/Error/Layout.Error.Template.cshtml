@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@(!string.IsNullOrEmpty(ViewBag.Title) ? ViewBag.Title : "Designer")</title>
+    @Html.GenerateFavicon(Url.Content("~/favicon"))
+
+    <script type="module" src="/build/entries/logon.js"></script>
+   
+    @RenderSection("Styles", required: false)
+
+    <script type="module" src="/build/entries/simplepage.js"></script>
+
+    @RenderSection("Scripts", required: false)
+
+    <script type="text/javascript">
+        function FrameCheck() {
+            if (top != self)
+                top.location.replace(self.location.href);
+        }
+
+
+/**/</script>
+</head>
+<body onload="FrameCheck();">
+    <header>
+        <a href="http://www.worldbank.org" class="logo"></a>
+    </header>
+
+    <section id="start-page">
+        <div class="content-holder-outer">
+            <div class="content-holder-inner">
+                <div class="content-block">
+                    <div class="form-holder">
+                        <div class="form-row">
+                            <div class="form-left">
+                                <img src="~/i/designer-logo.png" />
+                                <p>
+                                    This is a tool for creating surveys for The&nbsp;World&nbsp;Bank’s CAPI platform with collaboration capabilities and export to PDF.
+                                </p>
+                            </div>
+                            <div class="form-splitter">
+                                <div class="vline"></div>
+                            </div>
+                            <div class="form-right">
+                                @RenderBody()
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <partial name="_commonFooter"/>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,1 @@
+import '/Content/admin.css';
