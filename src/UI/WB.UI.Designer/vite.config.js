@@ -12,12 +12,13 @@ import mpaPlugin from 'vite-plugin-mpa-plus';
 const ViteFilemanager = require('filemanager-plugin').ViteFilemanager;
 
 const baseDir = path.resolve(__dirname, './');
-console.log(baseDir);
+//console.log(baseDir);
 const join = path.join.bind(path, baseDir);
 
-const outDir = path.resolve(__dirname, './wwwroot/assets');
+const outDir = path.resolve(__dirname, './wwwroot');
+//const outDir = path.resolve(__dirname, './wwwroot/assets');
 //const outDir = path.resolve(__dirname, './dist');
-console.log(outDir);
+//console.log(outDir);
 
 const resxFiles = [
     join('../Resources/QuestionnaireEditor.resx'),
@@ -105,11 +106,90 @@ const pages = {
             'Areas/Identity/Pages/_ValidationScriptsPartial.Template.cshtml'
         ),
     },
+    classifications: {
+        entry: 'build/entries/classifications.js',
+        filename: path.join(baseDir, 'Views/Classifications/Index.cshtml'),
+        template: path.join(
+            baseDir,
+            'Views/Classifications/Index.Template.cshtml'
+        ),
+    },
+    questionnaireList: {
+        entry: 'build/entries/questionnaireList.js',
+        filename: path.join(baseDir, 'Views/QuestionnaireList/Public.cshtml'),
+        template: path.join(
+            baseDir,
+            'Views/QuestionnaireList/Public.Template.cshtml'
+        ),
+    },
+    validationScriptsPartial: {
+        entry: 'build/entries/validation.js',
+        filename: path.join(
+            baseDir,
+            'Views/Shared/_ValidationScriptsPartial.cshtml'
+        ),
+        template: path.join(
+            baseDir,
+            'Views/Shared/_ValidationScriptsPartial.Template.cshtml'
+        ),
+    },
+    sharedLayout: {
+        entry: 'build/entries/validation.js',
+        filename: path.join(baseDir, 'Views/Shared/Layout.cshtml'),
+        template: path.join(baseDir, 'Views/Shared/Layout.Template.cshtml'),
+    },
+    errorLayout: {
+        entry: 'build/entries/validation.js',
+        filename: path.join(baseDir, 'Views/Error/Layout.Error.cshtml'),
+        template: path.join(
+            baseDir,
+            'Views/Error/Layout.Error.Template.cshtml'
+        ),
+    },
+    controlPanel: {
+        entry: 'build/entries/validation.js',
+        filename: path.join(
+            baseDir,
+            'Areas/Admin/Views/Shared/Layout.ControlPanel.cshtml'
+        ),
+        template: path.join(
+            baseDir,
+            'Areas/Admin/Views/Shared/Layout.ControlPanel.Template.cshtml'
+        ),
+    },
 };
-console.log(pages.logon.filename);
-console.log(pages.logon.template);
 
 const fileTargets = [
+    {
+        source: join('questionnaire', 'content', 'i', '*.*'),
+        destination: path.join(outDir, 'i'),
+        isFlat: false,
+    },
+    {
+        source: join('questionnaire', 'content', 'fonts', '*.*'),
+        destination: path.join(outDir, 'fonts'),
+        isFlat: false,
+    },
+    {
+        source: join('Content', 'images', '*.*'),
+        destination: path.join(outDir, 'images'),
+        isFlat: false,
+    },
+    {
+        source: join('Content', 'fonts', '*.*'),
+        destination: path.join(outDir, 'fonts'),
+        isFlat: false,
+    },
+    {
+        source: join('Content', 'identity', '*.*'),
+        destination: outDir,
+        isFlat: false,
+    },
+    {
+        source: join('Content', 'qbank', '*.*'),
+        destination: path.join(outDir, 'qbank'),
+        isFlat: false,
+    },
     /*{ source: join(".resources", "**", "*.js"), destination: join("dist", "locale"), isFlat: false  },
 
     { source: join("dist", "img", "**", "*.*"), destination: path.join(hqDist, "wwwroot", "img"), isFlat: false },
@@ -125,6 +205,8 @@ const fileTargets = [
     { source: join("dist", "js", "*.*"), destination: path.join(webTesterDist, "wwwroot", "js") },
     { source: join("dist", "locale", "webtester", "*.*"), destination: path.join(webTesterDist, "wwwroot", "locale", "webtester") },*/
 ];
+console.log(fileTargets[0].source);
+console.log(fileTargets[0].destination);
 
 var pagesSources = [];
 var pagesTargets = [];
@@ -165,7 +247,8 @@ export default defineConfig(({ mode, command }) => {
     const isDevMode = mode === 'development';
     const isProdMode = !isDevMode;
 
-    const base = command == 'serve' ? '/.vite/' : '/assets/';
+    //const base = command == 'serve' ? '/.vite/' : '/assets/';
+    const base = command == 'serve' ? '/.vite/' : '/';
 
     /*if (command == 'serve' && mode != 'test') {
         sync(outDir);
@@ -191,7 +274,9 @@ export default defineConfig(({ mode, command }) => {
                     {
                         hookName: 'closeBundle',
                         commands: {
-                            copy: { items: pagesTargets.concat(fileTargets) },
+                            copy: {
+                                items: pagesTargets.concat(fileTargets),
+                            },
                             del: {
                                 items: ['./.templates', outDir + '/.templates'],
                             },
@@ -277,9 +362,9 @@ export default defineConfig(({ mode, command }) => {
 
                 output: {
                     assetFileNames: (assetInfo) => {
-                        let extType = assetInfo.name.split('.').at(1);
+                        let extType = assetInfo.name.split('.').slice(-1);
                         if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
-                            extType = 'img';
+                            extType = 'i';
                         }
                         if (/ttf|woff|woff2|eot/i.test(extType)) {
                             extType = 'fonts';
