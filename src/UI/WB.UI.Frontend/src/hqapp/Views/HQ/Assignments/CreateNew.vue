@@ -221,7 +221,9 @@
 
 <script>
 import { nextTick } from 'vue'
-import { Validator } from 'vee-validate'
+//import { Validator } from 'vee-validate'
+//TODO: MIGRATION
+
 import * as toastr from 'toastr'
 import http from '~/webinterview/api/http'
 import { RoleNames } from '~/shared/constants'
@@ -236,7 +238,7 @@ const validationTranslations = {
     },
 }
 
-Validator.localize('en', validationTranslations)
+//Validator.localize('en', validationTranslations)
 
 const emailOrPasswordRequired = {
     getMessage() {
@@ -258,19 +260,19 @@ const emailShouldBeEmpty = {
     hasTarget: true,
 }
 
-Validator.extend('emailOrPasswordRequired', emailOrPasswordRequired)
-Validator.extend('emailShouldBeEmpty', emailShouldBeEmpty)
+//Validator.extend('emailOrPasswordRequired', emailOrPasswordRequired)
+//Validator.extend('emailShouldBeEmpty', emailShouldBeEmpty)
 
-Validator.extend('responsibleShouldBeInterviewer', {
-    getMessage() {
-        return $t('Assignments.WebModeNonInterviewer')
-    },
-    validate(value, [webMode]) {
-        if (!webMode) return true
+// Validator.extend('responsibleShouldBeInterviewer', {
+//     getMessage() {
+//         return $t('Assignments.WebModeNonInterviewer')
+//     },
+//     validate(value, [webMode]) {
+//         if (!webMode) return true
 
-        return value.iconClass.toLowerCase() == RoleNames.INTERVIEWER.toLowerCase()
-    },
-})
+//         return value.iconClass.toLowerCase() == RoleNames.INTERVIEWER.toLowerCase()
+//     },
+// })
 
 export default {
     data() {
@@ -493,9 +495,10 @@ export default {
         signalr: () => import('~/webinterview/components/signalr/core.signalr'),
     },
 
-    beforeMount() {
-        Vue.use(http, { store: this.$store })
-    },
+    // beforeMount() {
+    //     Vue.use(http, { store: this.$store })
+    // },
+    //TODO: MIGRATION
 
     beforeDestroy() {
         window.removeEventListener('resize', this.onResize)

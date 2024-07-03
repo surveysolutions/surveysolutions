@@ -14,11 +14,11 @@ import { browserLanguage } from '~/shared/helpers'
 //const i18n = Vuei18n.initialize(browserLanguage)
 
 //const pinia = createPinia()
-const app = createApp(App)
+const vue = createApp(App)
 //vue.use(pinia)
 
 //import VueApollo from 'vue-apollo'
-//app.use(VueApollo)
+//vue.use(VueApollo)
 
 //import { sync } from 'vuex-router-sync'
 //TODO: MIGRATION, fix old usage of vuex-router-sync 
@@ -28,25 +28,25 @@ import http from '~/shared/plugins/http'
 import config from '~/shared/config'
 
 import { registerStore } from './store'
-const store = registerStore(app)
+const store = registerStore(vue)
 
 import moment from 'moment'
 moment.locale(browserLanguage)
 
 import { registerComponents } from './components'
-registerComponents(app)
+registerComponents(vue)
 
 import './compatibility.js'
 import '~/webinterview/componentsRegistry'
 
 import VueTextareaAutosize from 'vue-textarea-autosize'
-app.use(VueTextareaAutosize)
+vue.use(VueTextareaAutosize)
 
 import PortalVue from 'portal-vue'
-app.use(PortalVue)
+vue.use(PortalVue)
 
 import { Popover } from 'uiv'
-app.component('popover', Popover)
+vue.component('popover', Popover)
 
 import box from '@/shared/modal'
 import 'flatpickr/dist/flatpickr.css'
@@ -63,35 +63,35 @@ import { createApolloProvider } from '@vue/apollo-option'
 const apolloProvider = createApolloProvider({
     defaultClient: apolloClient,
 })
-app.use(apolloProvider)
+vue.use(apolloProvider)
 
-app.use(config)
-app.use(http)
-app.use(hqApi)
+vue.use(config)
+vue.use(http)
+vue.use(hqApi)
 
-// import viewsProvider from './Views'
-// import Router from './router/index.js'
+import viewsProvider from './Views'
+import router from './router'
 
 // const views = viewsProvider(store)
 
 // const router = new Router({
-//     routes: views.routes,
+//     routes: views.routes
 // }).router
 
 
-import router from './router';
-app.use(router)
+//import router from './router';
+vue.use(router)
 
 //sync(store, router)
 //TODO: MIGRATION
 
 import { pageTitle } from 'vue-page-title'
-app.use(pageTitle)
+vue.use(pageTitle)
 
 
 //box.init(i18n, browserLanguage)
 
-app.config.globalProperties.$eventHub = app
+vue.config.globalProperties.$eventHub = vue
 //TODO: MIGRATION. 
 
 // export default new Vue({
@@ -107,5 +107,5 @@ app.config.globalProperties.$eventHub = app
 
 // Run!
 router.isReady().then(() => {
-    app.mount('#app');
+    vue.mount('#vueApp');
 });

@@ -1,27 +1,20 @@
 <template>
-    <main class="web-interview web-interview-for-supervisor"
-        :class="classes">
+    <main class="web-interview web-interview-for-supervisor" :class="classes">
         <div class="container-fluid">
             <div class="row">
                 <DetailsInfo />
                 <Facets />
                 <SearchResults />
-                <Sidebar :showComplete="false"
-                    :show-foldback-button-as-hamburger="false" />
+                <Sidebar :showComplete="false" :show-foldback-button-as-hamburger="false" />
                 <section class="questionnaire details-interview">
-                    <Interview :interviewId="interviewId"
-                        mode="review"
-                        @connected="connected" />
+                    <Interview :interviewId="interviewId" mode="review" @connected="connected" />
                 </section>
             </div>
         </div>
         <IdleTimeoutService />
-        <portal-target name="body"
-            multiple >
+        <portal-target name="body" multiple>
         </portal-target>
-        <span id="loadingPixel"
-            style="display:none"
-            :data-loading="isLoading"></span>
+        <span id="loadingPixel" style="display:none" :data-loading="isLoading"></span>
     </main>
 </template>
 
@@ -30,7 +23,9 @@ import Facets from './Facets'
 import SearchResults from './SearchResults'
 import Sidebar from '~/webinterview/components/Sidebar'
 import DetailsInfo from './DetailsInfo.vue'
-import Vue from 'vue'
+import { nextTick } from 'vue'
+//TODO: MIGRATION
+
 import http from '~/webinterview/api/http'
 
 import '@/assets/css/markup-web-interview.scss'
@@ -40,7 +35,7 @@ export default {
     watch: {
         ['$route.hash'](to) {
             if (to != null) {
-                this.$store.dispatch('sectionRequireScroll', {id: to})
+                this.$store.dispatch('sectionRequireScroll', { id: to })
             }
         },
     },
@@ -79,21 +74,22 @@ export default {
         },
     },
 
-    beforeMount() {
-        Vue.use(http, { store: this.$store })
-    },
+    // beforeMount() {
+    //     Vue.use(http, { store: this.$store })
+    // },
+    //TODO: MIGRATION
 
     mounted() {
         const self = this
 
-        this.$nextTick(function() {
+        this.$nextTick(function () {
             window.addEventListener('resize', self.onResize)
             self.onResize()
         })
     },
 
     updated() {
-        Vue.nextTick(() => {
+        nextTick(() => {
             window.ajustNoticeHeight()
             window.ajustDetailsPanelHeight()
         })

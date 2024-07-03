@@ -75,5 +75,5 @@ window._api = {
 
 // Run!
 router.isReady().then(() => {
-    vue.mount('#app');
+    vue.mount('#vueApp');
 });

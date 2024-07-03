@@ -10,7 +10,11 @@ const Overview = () => import('./Overview')
 export default class ReviewComponent {
     constructor(rootStore) {
         this.rootStore = rootStore
-        this.config = this.$config.model || {}
+        this.config =
+            //this.$config.model || {}
+            //TODO:MIGRATION
+            window.CONFIG.model || {}
+
     }
 
     get routes() {

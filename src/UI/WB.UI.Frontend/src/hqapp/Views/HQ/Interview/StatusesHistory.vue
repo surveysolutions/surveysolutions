@@ -53,7 +53,8 @@
 
 <script>
 import { DateFormats } from '~/shared/helpers'
-import Vue from 'vue'
+//import Vue from 'vue'
+//TODO: MIGRATION
 import moment from 'moment'
 
 export default {
@@ -71,7 +72,7 @@ export default {
         },
         async show() {
             if (this.items == null) {
-                this.items = await Vue.$api.interview.get('getStatusesHistory')
+                this.items = await this.$api.interview.get('getStatusesHistory')
             }
 
             this.$refs.modal.modal()

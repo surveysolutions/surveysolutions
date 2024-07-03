@@ -4,10 +4,45 @@ import { createRouter, createWebHistory } from 'vue-router';
 // import VueRouter from 'vue-router'
 // import { assign } from 'lodash'
 
+
+
 // //Vue.use(VueRouter)
+//import UsersManagement from '../Views/HQ/Users/UsersManagment/UsersManagement.vue'
 
-const routes = []
+const UsersManagement = () => import('../Views/HQ/Users/UsersManagment/UsersManagement.vue')
 
+const routes = [
+    {
+        path: '/users/UsersManagement',
+        component: UsersManagement,
+        // props: route => ({
+        //     //questionnaireRev: route.params.questionnaireId,
+        //     id: route.query.id,
+        //     //isCategory: true,
+        //     //cascading: route.query.cascading == 'true'
+        // })
+    },
+    {
+        path: '/UsersManagement',
+        component: UsersManagement,
+        // props: route => ({
+        //     //questionnaireRev: route.params.questionnaireId,
+        //     id: route.query.id,
+        //     //isCategory: true,
+        //     //cascading: route.query.cascading == 'true'
+        // })
+    },
+    {
+        path: '/*',
+        component: UsersManagement,
+        // props: route => ({
+        //     //questionnaireRev: route.params.questionnaireId,
+        //     id: route.query.id,
+        //     //isCategory: true,
+        //     //cascading: route.query.cascading == 'true'
+        // })
+    },
+]
 
 const router = createRouter({
     history: createWebHistory(),
@@ -16,6 +51,19 @@ const router = createRouter({
 });
 
 export default router;
+
+// export default class HqRouter {
+//     constructor(routes) {
+//         this.routes = routes
+//     }
+//     get router() {
+//         return createRouter({
+//             history: createWebHistory(),
+//             routes//: Object.entries(this.routes)[0][1]
+//             //TODO: MIGRATION
+//         })
+//     }
+// }
 
 // export default class HqRouter {
 //     constructor(options) {
