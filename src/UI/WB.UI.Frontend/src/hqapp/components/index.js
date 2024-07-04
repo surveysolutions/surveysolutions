@@ -1,7 +1,7 @@
 //import Vue from 'vue'
 
 import Confirm from './Confirm'
-// import DataTables from "./DataTables"
+import DataTables from "./DataTables"
 import FilterBlock from './FilterBlock'
 import Filters from './Filters'
 import HqLayout from './HqLayout'
@@ -19,7 +19,7 @@ import ExpandableList from './ExpandableList.vue'
 export function registerComponents(vue) {
 
     vue.component('Confirm', Confirm)
-    vue.component('DataTables', () => import('./DataTables'))
+    vue.component('DataTables', DataTables)
     vue.component('FilterBlock', FilterBlock)
     vue.component('Filters', Filters)
     vue.component('HqLayout', HqLayout)

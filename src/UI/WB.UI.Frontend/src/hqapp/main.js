@@ -13,9 +13,17 @@ import App from './App.vue';
 import { browserLanguage } from '~/shared/helpers'
 //const i18n = Vuei18n.initialize(browserLanguage)
 
+
 //const pinia = createPinia()
 const vue = createApp(App)
 //vue.use(pinia)
+
+//temp reg
+//remove after migration to vue 3 & i18next
+vue.config.globalProperties.$t = function (literal) {
+    return literal;
+}
+
 
 //import VueApollo from 'vue-apollo'
 //vue.use(VueApollo)
@@ -70,13 +78,13 @@ vue.use(http)
 vue.use(hqApi)
 
 import viewsProvider from './Views'
-import router from './router'
+import Router from './router'
 
-// const views = viewsProvider(store)
+const views = viewsProvider(store)
 
-// const router = new Router({
-//     routes: views.routes
-// }).router
+const router = new Router({
+    routes: views.routes
+}).router
 
 
 //import router from './router';

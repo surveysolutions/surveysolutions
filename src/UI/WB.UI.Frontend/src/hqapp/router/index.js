@@ -4,66 +4,62 @@ import { createRouter, createWebHistory } from 'vue-router';
 // import VueRouter from 'vue-router'
 // import { assign } from 'lodash'
 
-
-
 // //Vue.use(VueRouter)
-//import UsersManagement from '../Views/HQ/Users/UsersManagment/UsersManagement.vue'
+// const UsersManagement = () => import('../Views/HQ/Users/UsersManagment/UsersManagement.vue')
 
-const UsersManagement = () => import('../Views/HQ/Users/UsersManagment/UsersManagement.vue')
+// const Manage = () => import('../Views/HQ/Users/Manage.vue')
 
-const routes = [
-    {
-        path: '/users/UsersManagement',
-        component: UsersManagement,
-        // props: route => ({
-        //     //questionnaireRev: route.params.questionnaireId,
-        //     id: route.query.id,
-        //     //isCategory: true,
-        //     //cascading: route.query.cascading == 'true'
-        // })
-    },
-    {
-        path: '/UsersManagement',
-        component: UsersManagement,
-        // props: route => ({
-        //     //questionnaireRev: route.params.questionnaireId,
-        //     id: route.query.id,
-        //     //isCategory: true,
-        //     //cascading: route.query.cascading == 'true'
-        // })
-    },
-    {
-        path: '/*',
-        component: UsersManagement,
-        // props: route => ({
-        //     //questionnaireRev: route.params.questionnaireId,
-        //     id: route.query.id,
-        //     //isCategory: true,
-        //     //cascading: route.query.cascading == 'true'
-        // })
-    },
-]
+// const routes = [
+//     {
+//         path: '/users/UsersManagement',
+//         component: UsersManagement,
+//         // props: route => ({
+//         //     //questionnaireRev: route.params.questionnaireId,
+//         //     id: route.query.id,
+//         //     //isCategory: true,
+//         //     //cascading: route.query.cascading == 'true'
+//         // })
+//     },
+//     {
+//         path: '/UsersManagement',
+//         component: UsersManagement,
+//         // props: route => ({
+//         //     //questionnaireRev: route.params.questionnaireId,
+//         //     id: route.query.id,
+//         //     //isCategory: true,
+//         //     //cascading: route.query.cascading == 'true'
+//         // })
+//     },
 
-const router = createRouter({
-    history: createWebHistory(),
-    //base: import.meta.env.BASE_URL,
-    routes
-});
 
-export default router;
+//     // {
+//     //     path: '/Manage/:userId', component: Manage, name: 'usersManage',
+//     // },
+//     // {
+//     //     path: '/Manage/', component: Manage,
+//     // },
 
-// export default class HqRouter {
-//     constructor(routes) {
-//         this.routes = routes
-//     }
-//     get router() {
-//         return createRouter({
-//             history: createWebHistory(),
-//             routes//: Object.entries(this.routes)[0][1]
-//             //TODO: MIGRATION
-//         })
-//     }
-// }
+//     {
+//         path: '/users/Manage/:userId', component: Manage, name: 'usersManage',
+//     },
+//     {
+//         path: '/users/Manage/', component: Manage,
+//     },
+// ]
+
+
+export default class HqRouter {
+    constructor(routes) {
+        this.routes = routes
+    }
+    get router() {
+        return createRouter({
+            history: createWebHistory(window.CONFIG.basePath),
+            routes: Object.entries(this.routes)[0][1]
+            //TODO: MIGRATION
+        })
+    }
+}
 
 // export default class HqRouter {
 //     constructor(options) {

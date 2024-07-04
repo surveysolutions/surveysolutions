@@ -11,13 +11,13 @@ export default class MapComponent {
         }]
     }
     initialize() {
-        const dict = {
-            custom: {
-                workspaceName: {
-                    regex: $t('Workspaces.InvalidName'),
-                },
-            },
-        }
+        // const dict = {
+        //     custom: {
+        //         workspaceName: {
+        //             regex: $t('Workspaces.InvalidName'),
+        //         },
+        //     },
+        // }
         //Validator.localize('en', dict)
     }
 }
