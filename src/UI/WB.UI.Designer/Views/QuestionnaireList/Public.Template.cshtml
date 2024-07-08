@@ -8,7 +8,7 @@
 
     bool? isSupportAssignFolders = Model!.IsSupportAssignFolders;
 }
-@section Scripts {
+
     @if (isSupportAssignFolders == true)
     {
         <script type="module" src="/build/entries/folders.js"></script>
@@ -26,7 +26,6 @@
             ajusteHeight();
         });
     </script>
-}
 
 <ol class="breadcrumb public-questionnaires-breadcrumb">
     @foreach (var folder in Model.Breadcrumbs)

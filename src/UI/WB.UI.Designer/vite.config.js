@@ -2,12 +2,14 @@ import path from 'path';
 import { defineConfig } from 'vite';
 //import { sync } from 'rimraf';
 //import fs from 'fs';
-import Vue from '@vitejs/plugin-vue';
+//import Vue from '@vitejs/plugin-vue';
 // import Components from 'unplugin-vue-components/vite';
 import LocalizationPlugin from './questionnaire/tools/vite-plugin-localization';
 //import { VuetifyResolver } from 'unplugin-vue-components/resolvers'
 ///import Vuetify from 'vite-plugin-vuetify';
 import mpaPlugin from 'vite-plugin-mpa-plus';
+import inject from '@rollup/plugin-inject';
+import injectAssetsPlugin from './build/plugins/vite-inject-assets-plugin';
 
 const ViteFilemanager = require('filemanager-plugin').ViteFilemanager;
 
@@ -166,6 +168,11 @@ const fileTargets = [
         isFlat: false,
     },
     {
+        source: join('questionnaire', 'content', 'lib', 'i', '*.*'),
+        destination: path.join(outDir, 'i'),
+        isFlat: false,
+    },
+    {
         source: join('questionnaire', 'content', 'fonts', '*.*'),
         destination: path.join(outDir, 'fonts'),
         isFlat: false,
@@ -177,6 +184,11 @@ const fileTargets = [
     },
     {
         source: join('Content', 'fonts', '*.*'),
+        destination: path.join(outDir, 'fonts'),
+        isFlat: false,
+    },
+    {
+        source: join('node_modules/@mdi/font/fonts', '*.*'),
         destination: path.join(outDir, 'fonts'),
         isFlat: false,
     },
@@ -250,15 +262,20 @@ export default defineConfig(({ mode, command }) => {
     //const base = command == 'serve' ? '/.vite/' : '/assets/';
     const base = command == 'serve' ? '/.vite/' : '/';
 
-    /*if (command == 'serve' && mode != 'test') {
+    if (command == 'serve' && mode != 'test') {
         sync(outDir);
         fs.mkdirSync(outDir);
-    }*/
+    }
 
     return {
         base,
+        optimizeDeps: {
+            exclude: ['**/*'],
+            //exclude: ['jquery'],
+        },
         plugins: [
-            Vue(),
+            //Vue(),
+            //injectAssetsPlugin(),
             //Vuetify({ autoImport: { labs: true } }),
             ViteFilemanager({
                 customHooks: [
@@ -285,8 +302,8 @@ export default defineConfig(({ mode, command }) => {
                 ],
                 options: {
                     parallel: 1,
-                    log: 'all',
-                    //log: 'error'
+                    //log: 'all',
+                    log: 'error',
                 },
             }),
             /*LocalizationPlugin({
@@ -352,15 +369,40 @@ export default defineConfig(({ mode, command }) => {
         },
         //assetsInclude: ['**/*.cshtml'],
         build: {
+            target: 'es2018',
+            /*lib: {
+                entry: '/build/entries/list.js',
+                name: 'list',
+                formats: ['iife'],
+            },*/
             minify: isProdMode,
             outDir,
             manifest: true,
             rollupOptions: {
+                //external: ['jquery'],
                 //preserveEntrySignatures: true,
                 cache: false,
                 //input: 'build/entries/logon.js',
-
+                //maxParallelFileOps: 2,
+                plugins: [
+                    inject({
+                        $: 'jquery',
+                        jQuery: 'jquery',
+                    }),
+                ],
+                input: {
+                    list: '/build/entries/list.js',
+                    simplepage: '/build/entries/simplepage.js',
+                    utils: '/build/entries/utils.js',
+                },
                 output: {
+                    inlineDynamicImports: false,
+                    manualChunks: undefined,
+                    format: 'es',
+                    scriptType: 'text/javascript',
+                    //globals: {
+                    //    jquery: '$', // global variable name for the external library
+                    //},
                     assetFileNames: (assetInfo) => {
                         let extType = assetInfo.name.split('.').slice(-1);
                         if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {

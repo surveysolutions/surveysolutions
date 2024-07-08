@@ -13,7 +13,7 @@
     "@babel/plugin-transform-runtime": "^7.19.6",
     "@babel/preset-env": "^7.20.2",
     "@babel/runtime": "^7.20.13",
-    "@vitejs/plugin-vue": "^5.0.5",
+    "@rollup/plugin-inject": "^5.0.5",
     "autoprefixer": "^10.2.5",
     "browser-sync": "^2.27.12",
     "filemanager-plugin": "^2.9.0",
@@ -57,7 +57,6 @@
     "vite-plugin-clean": "^1.0.0",
     "vite-plugin-mpa-plus": "^0.6.0",
     "vite-plugin-require": "^1.2.14",
-    "vite-plugin-vuetify": "^2.0.3",
     "xmldoc": "^1.1.2"
   },
   "scripts": {
@@ -80,6 +79,7 @@
     "i18next": "^17.3.1",
     "i18next-browser-languagedetector": "^3.0.3",
     "i18next-http-backend": "^1.4.0",
+    "jquery": "^3.7.1",
     "jquery-contextmenu": "^2.9.2",
     "jquery-mousewheel": "^3.1.13",
     "jquery-validation": "^1.20.0",
@@ -91,9 +91,9 @@
     "perfect-scrollbar": "^0.8.1",
     "roboto-fontface": "^0.10.0",
     "vee-validate": "2.2.15",
-    "vue": "^3.4.30",
-    "vuetify": "^3.6.10",
-    "vuex": "^4.1.0"
+    "vue": "^2.7.14",
+    "vuetify": "^2.6.14",
+    "vuex": "^3.6.2"
   },
   "overrides": {
     "@babel/traverse": ">=7.23.3",

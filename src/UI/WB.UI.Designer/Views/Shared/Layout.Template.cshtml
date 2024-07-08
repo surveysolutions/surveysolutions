@@ -4,6 +4,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>@this.ViewBag.Title</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,13 +13,13 @@
     @Html.GenerateFavicon(Url.Content("~/favicon"))
 
     <script type="module" src="/build/entries/list.js"></script>
-    
+
     @this.RenderSection("Styles", required: false)
 
     <script type="module" src="/build/entries/simplepage.js"></script>
 
     <script type="module" src="/build/entries/utils.js"></script>
-    
+
     @this.RenderSection("Scripts", required: false)
 
     <script type="text/javascript">
@@ -26,22 +27,10 @@
             if (top != self)
                 top.location.replace(self.location.href);
         }
-
-        $(function() {
-            if (window.moment) {
-                moment.locale('@CultureInfo.CurrentUICulture');
-
-                $('time').each(function () {
-                    var me = $(this);
-                    var date = me.attr('datetime') || me.attr('time');
-                    var momentDate = moment.utc(date).local().format('MMM DD, YYYY HH:mm');
-                    me.text(momentDate);
-                });
-            }
-        });
     </script>
 
 </head>
+
 <body onload="FrameCheck();">
     <div class="container-wb-list">
         <div class="header-wb-list">
@@ -52,31 +41,43 @@
                         <img src="~/i/logo.png" alt="Survey Solutions" class="pull-left">
                         <span class="pull-left">Survey<br>Solutions</span>
                     </a>
-                    @Html.ActionLink(QuestionnaireController.Designer, "Index", "QuestionnaireList", null, new { @class = "navbar-text" })
+                    @Html.ActionLink(QuestionnaireController.Designer, "Index", "QuestionnaireList", null, new
+                        {
+                            @class
+                             = "navbar-text"
+                        })
                 </div>
 
                 <ul class="nav nav-tabs">
-                    <menu-item asp-controller="Questionnaire" asp-action="My">@QuestionnaireController.MyQuestionnaires</menu-item>
-                    <menu-item asp-controller="Questionnaire" asp-action="Shared">@QuestionnaireController.SharedQuestionnaires</menu-item>
-                    <menu-item asp-controller="Questionnaire" asp-action="Public">@QuestionnaireController.PublicQuestionnaires</menu-item>
-                    <menu-item asp-controller="Classifications" asp-action="Index">@QuestionnaireController.Classifications</menu-item>
-                    <menu-item asp-area="Admin" asp-page="/Users" asp-if="@User.IsAdmin()">@QuestionnaireController.ManageUsers</menu-item>
-                    <menu-item asp-controller="Questionnaire" asp-action="Create" class="create">@QuestionnaireController.CreateNew</menu-item>
+                    <menu-item asp-controller="Questionnaire"
+                        asp-action="My">@QuestionnaireController.MyQuestionnaires</menu-item>
+                    <menu-item asp-controller="Questionnaire"
+                        asp-action="Shared">@QuestionnaireController.SharedQuestionnaires</menu-item>
+                    <menu-item asp-controller="Questionnaire"
+                        asp-action="Public">@QuestionnaireController.PublicQuestionnaires</menu-item>
+                    <menu-item asp-controller="Classifications"
+                        asp-action="Index">@QuestionnaireController.Classifications</menu-item>
+                    <menu-item asp-area="Admin" asp-page="/Users"
+                        asp-if="@User.IsAdmin()">@QuestionnaireController.ManageUsers</menu-item>
+                    <menu-item asp-controller="Questionnaire" asp-action="Create"
+                        class="create">@QuestionnaireController.CreateNew</menu-item>
                 </ul>
                 <nav>
                     <a class="btn btn-default" target="_blank"
-                       href="@UiConfig.Value.DesignerHelpUrl">@AccountResources.Help</a>
-                    <a class="btn btn-default" href="@UiConfig.Value.ForumUrl" target="_blank">@AccountResources.Forum</a>
+                        href="@UiConfig.Value.DesignerHelpUrl">@AccountResources.Help</a>
+                    <a class="btn btn-default" href="@UiConfig.Value.ForumUrl"
+                        target="_blank">@AccountResources.Forum</a>
                     @if (User.IsAdmin())
                     {
-                    <a class="btn btn-default"
-                       asp-action="Index" asp-controller="ControlPanel" asp-area="Admin">
-                        @QuestionnaireController.ControlPanel
-                    </a>
+                        <a class="btn btn-default" asp-action="Index" asp-controller="ControlPanel" asp-area="Admin">
+                            @QuestionnaireController.ControlPanel
+                        </a>
                     }
                     <div class="btn-group">
-                        <a class="btn btn-default">@string.Format(QuestionnaireController.Hello, User.Identity!.Name)</a>
-                        <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="btn btn-default">@string.Format(QuestionnaireController.Hello,
+                            User.Identity!.Name)</a>
+                        <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
                             <span class="caret"></span>
                             <span class="sr-only"></span>
                         </a>
@@ -107,5 +108,23 @@
         </section>
     </div>
     @this.RenderSection("Modal", required: false)
+
+
+    <script type="text/javascript">
+        $(function () {
+            if (window.moment) {
+                moment.locale('@CultureInfo.CurrentUICulture');
+
+                $('time').each(function () {
+                    var me = $(this);
+                    var date = me.attr('datetime') || me.attr('time');
+                    var momentDate = moment.utc(date).local().format('MMM DD, YYYY HH:mm');
+                    me.text(momentDate);
+                });
+            }
+        });
+    </script>
+
 </body>
+
 </html>
