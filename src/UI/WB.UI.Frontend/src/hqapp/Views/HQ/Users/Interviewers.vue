@@ -1,98 +1,57 @@
 <template>
-    <HqLayout
-        :hasFilter="true"
-        :title="title">
-        <div slot="subtitle">
-            <div class="neighbor-block-to-search">
-                <ol class="list-unstyled">
-                    <li>{{ $t('Pages.Users_Interviewers_Instruction2') }}</li>
-                </ol>
+    <HqLayout :hasFilter="true" :title="title">
+
+        <template v-slot:subtitle>
+            <div>
+                <div class="neighbor-block-to-search">
+                    <ol class="list-unstyled">
+                        <li>{{ $t('Pages.Users_Interviewers_Instruction2') }}</li>
+                    </ol>
+                </div>
             </div>
-        </div>
+        </template>
 
-        <Filters slot="filters">
-            <FilterBlock
-                v-if="model.showSupervisorColumn"
-                :title="$t('Pages.Interviewers_SupervisorTitle')">
-                <Typeahead
-                    ref="supervisorControl"
-                    control-id="supervisor"
-                    data-vv-name="supervisor"
-                    data-vv-as="supervisor"
-                    :placeholder="$t('Common.AllSupervisors')"
-                    :value="supervisor"
-                    :fetch-url="$config.model.supervisorsUrl"
-                    :selectedValue="this.query.supervisor"
-                    v-on:selected="supervisorSelected"/>
-            </FilterBlock>
+        <template v-slot:filters>
+            <Filters>
+                <FilterBlock v-if="model.showSupervisorColumn" :title="$t('Pages.Interviewers_SupervisorTitle')">
+                    <Typeahead ref="supervisorControl" control-id="supervisor" data-vv-name="supervisor"
+                        data-vv-as="supervisor" :placeholder="$t('Common.AllSupervisors')" :value="supervisor"
+                        :fetch-url="$config.model.supervisorsUrl" :selectedValue="this.query.supervisor"
+                        v-on:selected="supervisorSelected" />
+                </FilterBlock>
 
-            <FilterBlock :title="$t('Users.InterviewerIssues')">
-                <Typeahead
-                    ref="facetControl"
-                    control-id="facet"
-                    no-clear
-                    data-vv-name="facet"
-                    data-vv-as="facet"
-                    :value="facet"
-                    :values="this.$config.model.interviewerIssues"
-                    :selectedKey="this.query.facet"
-                    :selectFirst="true"
-                    v-on:selected="facetSelected"/>
-            </FilterBlock>
+                <FilterBlock :title="$t('Users.InterviewerIssues')">
+                    <Typeahead ref="facetControl" control-id="facet" no-clear data-vv-name="facet" data-vv-as="facet"
+                        :value="facet" :values="this.$config.model.interviewerIssues" :selectedKey="this.query.facet"
+                        :selectFirst="true" v-on:selected="facetSelected" />
+                </FilterBlock>
 
-            <FilterBlock :title="$t('Pages.Interviewers_ArchiveStatusTitle')">
-                <Typeahead
-                    ref="archiveStatusControl"
-                    control-id="archiveStatus"
-                    no-clear
-                    :noPaging="false"
-                    data-vv-name="archiveStatus"
-                    data-vv-as="archiveStatus"
-                    :value="archiveStatus"
-                    :values="this.$config.model.archiveStatuses"
-                    :selectedKey="this.query.archive"
-                    :selectFirst="true"
-                    v-on:selected="archiveStatusSelected"/>
-            </FilterBlock>
-        </Filters>
+                <FilterBlock :title="$t('Pages.Interviewers_ArchiveStatusTitle')">
+                    <Typeahead ref="archiveStatusControl" control-id="archiveStatus" no-clear :noPaging="false"
+                        data-vv-name="archiveStatus" data-vv-as="archiveStatus" :value="archiveStatus"
+                        :values="this.$config.model.archiveStatuses" :selectedKey="this.query.archive"
+                        :selectFirst="true" v-on:selected="archiveStatusSelected" />
+                </FilterBlock>
+            </Filters>
+        </template>
 
-        <DataTables
-            ref="table"
-            :tableOptions="tableOptions"
-            @ajaxComplete="onTableReload"
-            exportable
-            mutliRowSelect
-            :selectableId="'userId'"
-            @selectedRowsChanged="rows => selectedInterviewers = rows"
+        <DataTables ref="table" :tableOptions="tableOptions" @ajaxComplete="onTableReload" exportable mutliRowSelect
+            :selectableId="'userId'" @selectedRowsChanged="rows => selectedInterviewers = rows"
             :addParamsToRequest="addParamsToRequest">
-            <div class="panel panel-table"
-                v-if="selectedInterviewers.length">
+            <div class="panel panel-table" v-if="selectedInterviewers.length">
                 <div class="panel-body">
-                    <input
-                        class="double-checkbox-white"
-                        id="q1az"
-                        type="checkbox"
-                        checked
-                        disabled="disabled"/>
+                    <input class="double-checkbox-white" id="q1az" type="checkbox" checked disabled="disabled" />
                     <label for="q1az">
                         <span class="tick"></span>
                         {{ selectedInterviewers.length + " " + $t("Pages.Interviewers_Selected") }}
                     </label>
-                    <button
-                        type="button"
-                        v-if="isVisibleArchive"
-                        class="btn btn-default btn-danger"
+                    <button type="button" v-if="isVisibleArchive" class="btn btn-default btn-danger"
                         @click="archiveInterviewers">{{ $t("Pages.Interviewers_Archive") }}</button>
-                    <button
-                        type="button"
-                        v-if="isVisibleUnarchive"
-                        class="btn btn-default btn-success"
+                    <button type="button" v-if="isVisibleUnarchive" class="btn btn-default btn-success"
                         @click="unarchiveInterviewers">{{ $t("Pages.Interviewers_Unarchive") }}</button>
-                    <button
-                        type="button"
-                        class="btn btn-default btn-warning last-btn"
-                        v-if="selectedInterviewers.length"
-                        @click="moveToAnotherTeam">{{ $t("Pages.Interviewers_MoveToAnotherTeam") }}</button>
+                    <button type="button" class="btn btn-default btn-warning last-btn"
+                        v-if="selectedInterviewers.length" @click="moveToAnotherTeam">{{
+                            $t("Pages.Interviewers_MoveToAnotherTeam") }}</button>
                 </div>
             </div>
         </DataTables>
@@ -100,11 +59,10 @@
 </template>
 
 <script>
-import * as toastr from 'toastr'
 import moment from 'moment'
-import {formatNumber} from './formatNumber'
+import { formatNumber } from './formatNumber'
 import routeSync from '~/shared/routeSync'
-import {map, find} from 'lodash'
+import { map, find } from 'lodash'
 import { DateFormats } from '~/shared/helpers'
 
 export default {
@@ -166,7 +124,7 @@ export default {
             return this.$config.model
         },
         title() {
-            return this.$t('Users.InterviewersCountDescription', {count: this.usersCount})
+            return this.$t('Users.InterviewersCountDescription', { count: this.usersCount })
         },
         selectedInterviewersFullInfo() {
             var self = this
@@ -183,7 +141,7 @@ export default {
                     name: 'UserName',
                     title: this.$t('Pages.Interviewers_UserNameTitle'),
                     className: 'nowrap',
-                    render: function(data, type, row) {
+                    render: function (data, type, row) {
                         var tdHtml = !row.isArchived
                             ? `<a href='${self.model.interviewerProfile}/${row.userId}'>${data}</a>`
                             : data
@@ -206,7 +164,7 @@ export default {
                     className: 'changed-recently',
                     title: this.$t('Pages.Interviewers_CreationDateTitle'),
                     tooltip: this.$t('Pages.Interviewers_CreationDateTooltip'),
-                    render: function(data, type, row) {
+                    render: function (data, type, row) {
                         var localDate = moment.utc(data).local()
                         return localDate.format(DateFormats.dateTimeInList)
                     },
@@ -216,7 +174,7 @@ export default {
                     name: 'Email',
                     className: 'changed-recently',
                     title: this.$t('Pages.Interviewers_EmailTitle'),
-                    render: function(data, type, row) {
+                    render: function (data, type, row) {
                         return data ? '<a href=\'mailto:' + data + '\'>' + data + '</a>' : ''
                     },
                 },
@@ -226,8 +184,8 @@ export default {
                     className: 'changed-recently',
                     title: this.$t('Pages.Interviewers_LastLoginDateTitle'),
                     tooltip: this.$t('Pages.Interviewers_LastLoginDateTooltip'),
-                    render: function(data, type, row) {
-                        if(data == null)
+                    render: function (data, type, row) {
+                        if (data == null)
                             return ''
                         var localDate = moment.utc(data).local()
                         return localDate.format(DateFormats.dateTimeInList)
@@ -254,7 +212,7 @@ export default {
                 tooltip: this.$t('Pages.Interviewers_InterviewerVersionTooltip'),
                 defaultContent: this.$t('Pages.Interviewers_InterviewerNeverConnected'),
                 orderable: true,
-                createdCell: function(td, cellData, rowData, row, col) {
+                createdCell: function (td, cellData, rowData, row, col) {
                     if (cellData) {
                         $(td).css('color', rowData.isUpToDate ? 'green' : 'red')
                     }
@@ -268,7 +226,7 @@ export default {
                 title: this.$t('Pages.InterviewerProfile_TotalTrafficUsed'),
                 tooltip: this.$t('Pages.InterviewerProfile_TotalTrafficUsedTooltip'),
                 orderable: false,
-                render: function(data, type, row) {
+                render: function (data, type, row) {
                     var formattedKB = data.toLocaleString()
                     return data > 0 ? formattedKB + ' Kb' : '0'
                 },
@@ -277,7 +235,7 @@ export default {
             return {
                 deferLoading: 0,
                 columns: columns,
-                createdRow: function(row, data) {
+                createdRow: function (row, data) {
                     if (data.isLocked) {
                         var jqCell = $(row.cells[1])
                         jqCell.addClass('locked-user')

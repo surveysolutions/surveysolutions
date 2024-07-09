@@ -8,9 +8,11 @@
         <div class="block-filter">
             <h3>
                 {{ $t('Pages.AccountManage_Status2fa') }}
-                <span style="color:green;" v-if="is2faEnabled"> {{ $t('Strings.HQ_Views_TwoFactorAuthentication_Enabled') }}
+                <span style="color:green;" v-if="is2faEnabled"> {{
+                    $t('Strings.HQ_Views_TwoFactorAuthentication_Enabled') }}
                 </span>
-                <span style="color:red;" v-if="!is2faEnabled"> {{ $t('Strings.HQ_Views_TwoFactorAuthentication_Disabled') }}
+                <span style="color:red;" v-if="!is2faEnabled"> {{
+                    $t('Strings.HQ_Views_TwoFactorAuthentication_Disabled') }}
                 </span>
             </h3>
         </div>
@@ -28,12 +30,14 @@
                     <div class="block">
                         <div class="block-filter">
                             <h3>{{ $t('Pages.SetupAuthenticator') }}</h3>
-                            <span>{{ $t('Strings.HQ_Views_TwoFactorAuthentication_SetupAuthenticator_Description') }}</span>
+                            <span>{{ $t('Strings.HQ_Views_TwoFactorAuthentication_SetupAuthenticator_Description')
+                                }}</span>
                         </div>
                         <div>
                             <button id="enable-authenticator" type="submit" @click="navigateTo('SetupAuthenticator')"
                                 style="display: inline-block;"
-                                v-bind:disabled="userInfo.isObserving || userInfo.isRestricted" class="btn btn-success">{{
+                                v-bind:disabled="userInfo.isObserving || userInfo.isRestricted"
+                                class="btn btn-success">{{
                                     $t('Pages.SetupAuthenticator') }}</button>
                         </div>
                     </div>
@@ -44,12 +48,14 @@
                     <div class="block">
                         <div class="block-filter">
                             <h3>{{ $t('Pages.ResetAuthenticator') }}</h3>
-                            <span>{{ $t('Strings.HQ_Views_TwoFactorAuthentication_ResetAuthenticator_Description') }}</span>
+                            <span>{{ $t('Strings.HQ_Views_TwoFactorAuthentication_ResetAuthenticator_Description')
+                                }}</span>
                         </div>
                         <div>
                             <button id="reset-authenticator" type="submit" @click="navigateTo('ResetAuthenticator')"
                                 style="display: inline-block;"
-                                v-bind:disabled="userInfo.isObserving || userInfo.isRestricted" class="btn btn-success">{{
+                                v-bind:disabled="userInfo.isObserving || userInfo.isRestricted"
+                                class="btn btn-success">{{
                                     $t('Pages.ResetAuthenticator') }}
                             </button>
                         </div>
@@ -61,12 +67,14 @@
                     <div class="block">
                         <div class="block-filter">
                             <h3>{{ $t('Pages.ResetRecoveryCodes') }}</h3>
-                            <span>{{ $t('Strings.HQ_Views_TwoFactorAuthentication_ResetRecoveryCodes_Description') }}</span>
+                            <span>{{ $t('Strings.HQ_Views_TwoFactorAuthentication_ResetRecoveryCodes_Description')
+                                }}</span>
                         </div>
                         <div>
                             <button id="reset-codes" type="submit" @click="navigateTo('ResetRecoveryCodes')"
                                 style="display: inline-block;"
-                                v-bind:disabled="userInfo.isObserving || userInfo.isRestricted" class="btn btn-success">{{
+                                v-bind:disabled="userInfo.isObserving || userInfo.isRestricted"
+                                class="btn btn-success">{{
                                     $t('Pages.ResetRecoveryCodes') }} </button>
                         </div>
                     </div>
@@ -83,9 +91,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import { each } from 'lodash'
-
 export default {
     data() {
         return {

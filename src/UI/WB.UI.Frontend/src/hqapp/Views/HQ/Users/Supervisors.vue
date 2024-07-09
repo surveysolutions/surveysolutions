@@ -1,28 +1,22 @@
 <template>
     <HqLayout :hasFilter="false">
-        <div slot="subtitle">
-            <div class="neighbor-block-to-search">
-                <div class="topic-with-button">
-                    <h1>{{ $t('Users.SupervisorsCountDescription', {count: this.usersCount}) }}</h1>
+        <template v-slot:subtitle>
+            <div>
+                <div class="neighbor-block-to-search">
+                    <div class="topic-with-button">
+                        <h1>{{ $t('Users.SupervisorsCountDescription', { count: this.usersCount }) }}</h1>
+                    </div>
+                    <ol v-if="!user.isObserver && !user.isObserving" class="list-unstyled">
+                        <li>{{ $t('Pages.Users_Supervisors_Instruction2') }}</li>
+                    </ol>
                 </div>
-                <ol v-if="!user.isObserver && !user.isObserving"
-                    class="list-unstyled">
-                    <li>{{ $t('Pages.Users_Supervisors_Instruction2') }}</li>
-                </ol>
             </div>
-        </div>
+        </template>
 
-        <DataTables
-            ref="table"
-            :tableOptions="tableOptions"
-            :contextMenuItems="contextMenuItems"
-            :supportContextMenu="user.isObserver && !user.isObserving"
-            selectableId="userId"
-            @selectedRowsChanged="rows => selectedSupervisors = rows"
-            @totalRows="(rows) => usersCount = rows"
-            @page="resetSelection"
-            mutliRowSelect
-            :noPaging="false"></DataTables>
+        <DataTables ref="table" :tableOptions="tableOptions" :contextMenuItems="contextMenuItems"
+            :supportContextMenu="user.isObserver && !user.isObserving" selectableId="userId"
+            @selectedRowsChanged="rows => selectedSupervisors = rows" @totalRows="(rows) => usersCount = rows"
+            @page="resetSelection" mutliRowSelect :noPaging="false"></DataTables>
 
     </HqLayout>
 </template>
@@ -47,7 +41,7 @@ export default {
                 this.$refs.table.reload()
             }
         },
-        contextMenuItems({rowData, rowIndex}) {
+        contextMenuItems({ rowData, rowIndex }) {
             if (!this.user.isObserver || this.user.isObserving) return null
 
             const self = this
@@ -86,7 +80,7 @@ export default {
                         title: this.$t('Users.UserName'),
                         orderable: true,
                         className: 'nowrap',
-                        render: function(data, type, row) {
+                        render: function (data, type, row) {
                             return row.isArchived ? data : `<a href='/users/Manage/${row.userId}'>${data}</a>`
                         },
                     },
@@ -97,7 +91,7 @@ export default {
                         title: this.$t('Users.CreationDate'),
                         tooltip: this.$t('Users.AccountCreationDateTooltip'),
                         orderable: true,
-                        render: function(data, type, row) {
+                        render: function (data, type, row) {
                             var localDate = moment.utc(data).local()
                             return localDate.format(DateFormats.dateTimeInList)
                         },
@@ -108,7 +102,7 @@ export default {
                         className: 'date',
                         title: this.$t('Users.SupervisorEmail'),
                         orderable: true,
-                        render: function(data, type, row) {
+                        render: function (data, type, row) {
                             return data ? '<a href=\'mailto:' + data + '\'>' + data + '</a>' : ''
                         },
                     },
@@ -118,7 +112,7 @@ export default {
                         title: this.$t('Users.ArchivingStatusTitle'),
                         tooltip: this.$t('Users.ArchivingStatusTitle'),
                         orderable: true,
-                        render: function(data, type, row) {
+                        render: function (data, type, row) {
                             return data ? self.$t('Common.Yes') : self.$t('Common.No')
                         },
                     },

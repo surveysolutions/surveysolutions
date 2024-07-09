@@ -14,7 +14,7 @@ RUN NODE_OPTIONS="--max-old-space-size=3072" npm run build
 RUN mkdir -p /dist/Areas && cp -r Areas /dist/
 RUN mkdir -p /dist/Views && cp -r Views /dist/
 RUN mkdir -p /dist/wwwroot && cp -r wwwroot /dist/
-RUN mkdir -p /dist/questionnaire &&cp questionnaire/index.cshtml /dist/questionnaire/index.cshtml
+RUN mkdir -p /dist/questionnaire
 
 FROM node:${NODE} as questionnaire-app
 WORKDIR /app

@@ -1,71 +1,49 @@
 <template>
-    <wb-question :question="$me"
-        questionCssClassName=" audio-question">
+    <wb-question :question="$me" questionCssClassName=" audio-question">
         <div class="question-unit">
             <div class="options-group">
-                <button type="button"
-                    class="btn btn-default btn-lg btn-action-questionnaire"
-                    v-if="!isRecording && !$me.isAnswered"
-                    v-on:click="startRecording"
-                    :disabled="!$me.acceptAnswer"><span></span>{{ $t('WebInterviewUI.AudioClickRecord')}}</button>
-                <div class="field answered"
-                    v-if="$me.isAnswered">
+                <button type="button" class="btn btn-default btn-lg btn-action-questionnaire"
+                    v-if="!isRecording && !$me.isAnswered" v-on:click="startRecording"
+                    :disabled="!$me.acceptAnswer"><span></span>{{ $t('WebInterviewUI.AudioClickRecord') }}</button>
+                <div class="field answered" v-if="$me.isAnswered">
                     <ul class="block-with-data list-unstyled">
-                        <li :id="answerHolderId">{{ $t("WebInterviewUI.AudioRecordingDuration", { humanizedLength: humanizedLength, formattedLength }) }}</li>
+                        <li :id="answerHolderId">{{ $t("WebInterviewUI.AudioRecordingDuration", {
+                            humanizedLength:
+                            humanizedLength, formattedLength }) }}</li>
                     </ul>
                     <wb-remove-answer />
                 </div>
-                <div v-if="$me.isAnswered"
-                    class="action-btn-holder time-question">
-                    <audio controls
-                        preload="auto"
-                        style="width:300px"
-                        :src="audioRecordPath">
+                <div v-if="$me.isAnswered" class="action-btn-holder time-question">
+                    <audio controls preload="auto" style="width:300px" :src="audioRecordPath">
                     </audio>
                 </div>
                 <wb-lock />
             </div>
         </div>
-        <div class="modal fade"
-            tabindex="-1"
-            role="dialog">
-            <div class="modal-dialog"
-                role="document">
-                <div class="modal-content"
-                    :id="modalId">
+        <div class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" :id="modalId">
                     <div class="modal-header">
-                        <button type="button"
-                            v-on:click="cancelRecording"
-                            class="close"
-                            data-dismiss="modal"
+                        <button type="button" v-on:click="cancelRecording" class="close" data-dismiss="modal"
                             aria-label="Close">
                             <span aria-hidden="true"></span>
                         </button>
                         <h4 class="modal-title">
                             {{ $t("WebInterviewUI.AudioRecording") }}
                         </h4>
-                        <h5 v-dateTimeFormatting
-                            v-html="$me.title"></h5>
+                        <h5 v-dateTimeFormatting v-html="$me.title"></h5>
                     </div>
                     <div class="modal-body">
-                        <canvas class="analyser"
-                            width="100"
-                            height="100"></canvas>
+                        <canvas class="analyser" width="100" height="100"></canvas>
                     </div>
                     <div class="modal-footer">
                         <div class="recordign-time">
-                            {{formattedTimer}}
+                            {{ formattedTimer }}
                         </div>
-                        <button type="button"
-                            v-on:click="stopRecording"
-                            class="btn btn-primary"
-                            v-if="isRecording">
+                        <button type="button" v-on:click="stopRecording" class="btn btn-primary" v-if="isRecording">
                             {{ $t("WebInterviewUI.Done") }}
                         </button>
-                        <button type="button"
-                            v-on:click="cancelRecording"
-                            class="btn btn-link "
-                            data-dismiss="modal">
+                        <button type="button" v-on:click="cancelRecording" class="btn btn-link " data-dismiss="modal">
                             {{ $t("WebInterviewUI.Cancel") }}
                         </button>
                     </div>
@@ -74,13 +52,13 @@
             </div>
             <!-- /.modal-dialog -->
         </div>
-        <div class="modal-backdrop in"
-            style="display: none"></div>
+        <div class="modal-backdrop in" style="display: none"></div>
         <!-- /.modal -->
-        <li slot="sideMenu">
-            <a :href="audioRecordPath"
-                v-if="isRecorded">{{$t("Common.Download")}}</a>
-        </li>
+        <template v-slot:sideMenu>
+            <li>
+                <a :href="audioRecordPath" v-if="isRecorded">{{ $t("Common.Download") }}</a>
+            </li>
+        </template>
     </wb-question>
 </template>
 <script lang="js">
@@ -108,24 +86,24 @@ export default {
         }
     },
     computed: {
-        answerHolderId(){
+        answerHolderId() {
             return `audio_answer_${this.$me.id}`
         },
-        modalId(){
+        modalId() {
             return `audio_dialog_${this.$me.id}`
         },
         audioRecordPath() {
             return api.resources.audioRecordUri(this.interviewId, this.$me.filename) + '#' + this.$me.updatedAt.getTime()
         },
         formattedLength() {
-            if (this.$me.isAnswered){
+            if (this.$me.isAnswered) {
                 var d = moment.utc(this.$me.answer)
                 return d.format('mm:ss')
             }
             return ''
         },
         humanizedLength() {
-            if (this.$me.isAnswered){
+            if (this.$me.isAnswered) {
                 return moment.duration(this.$me.answer, 'milliseconds').humanize()
             }
             return ''
@@ -184,7 +162,7 @@ export default {
                         self.$store.dispatch('answerAudioQuestion', {
                             identity: self.id,
                             file: blob,
-                            duration : duration,
+                            duration: duration,
                         })
                     },
                 })

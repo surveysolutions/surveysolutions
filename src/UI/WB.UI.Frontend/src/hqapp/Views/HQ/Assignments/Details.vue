@@ -24,17 +24,17 @@
                                             )
                                         }}:</span>
                                         <span class="data">{{
-                                                createdDate
+                                            createdDate
                                             }}</span>
                                     </li>
                                     <li id="detailsInfo_responsibleListItem">
                                         <span class="data-label">{{
-                                                this.$t('Details.Responsible')
+                                            this.$t('Details.Responsible')
                                             }}:
                                         </span>
                                         <span v-if="isInterviewerResponsible" class="data">
                                             <a v-bind:href="interviewerProfileUrl
-                                            " class="interviewer">{{ model.responsible.name }}</a>
+                                                " class="interviewer">{{ model.responsible.name }}</a>
                                         </span>
                                         <span v-else class="data supervisor">{{
                                             model.responsible.name
@@ -44,24 +44,24 @@
                                 <ul class="list-unstyled pull-left table-info">
                                     <li id="detailsInfo_lastUpdatedListItem">
                                         <span class="data-label">{{
-                                                this.$t('Details.LastUpdated')
+                                            this.$t('Details.LastUpdated')
                                             }}:</span>
                                         <span class="data">{{
-                                                updatedDate
+                                            updatedDate
                                             }}</span>
                                     </li>
                                     <li>
                                         <span class="data-label">{{
-                                                $t('Common.CalendarEvent')
+                                            $t('Common.CalendarEvent')
                                             }}:</span>
                                         <span class="data" data-toggle="tooltip" v-if="calendarEventComment != null"
                                             :title="calendarEventComment == null ||
-                                            calendarEventComment == ''
-                                            ? this.$t(
-                                                'Assignments.NoComment',
-                                            )
-                                            : calendarEventComment
-                                            ">
+                                                calendarEventComment == ''
+                                                ? this.$t(
+                                                    'Assignments.NoComment',
+                                                )
+                                                : calendarEventComment
+                                                ">
                                             {{ calendarEventTime }}
                                         </span>
                                     </li>
@@ -94,8 +94,8 @@
                                         <li v-if="isHeadquarters && isArchived">
                                             <a href="#" @click="unarchiveSelected">
                                                 {{
-                                            $t('Assignments.Unarchive')
-                                        }}
+                                                    $t('Assignments.Unarchive')
+                                                }}
                                             </a>
                                         </li>
                                     </ul>
@@ -161,8 +161,8 @@
                                         <div class="item-content">
                                             <h4>
                                                 <span>{{
-                                            question.title
-                                        }}</span>
+                                                    question.title
+                                                }}</span>
                                             </h4>
                                             <div class="answer">
                                                 <div v-html="question.answer"></div>
@@ -222,8 +222,8 @@
                 <ModalFrame ref="assignModal" :title="$t('Common.Assign')">
                     <form onsubmit="return false;">
                         <div class="form-group" :class="{
-                                            'has-warning': showWebModeReassignWarning,
-                                        }">
+                            'has-warning': showWebModeReassignWarning,
+                        }">
                             <label class="control-label" for="newResponsibleId">
                                 {{ $t('Assignments.SelectResponsible') }}
                             </label>
@@ -243,28 +243,32 @@
                                 class="form-control" />
                         </div>
                     </form>
-                    <div slot="actions">
-                        <button type="button" class="btn btn-primary" @click="assign" :disabled="!newResponsibleId">
-                            {{ $t('Common.Assign') }}
-                        </button>
-                        <button type="button" class="btn btn-link" data-dismiss="modal">
-                            {{ $t('Common.Cancel') }}
-                        </button>
-                    </div>
+                    <template v-slot:actions>
+                        <div>
+                            <button type="button" class="btn btn-primary" @click="assign" :disabled="!newResponsibleId">
+                                {{ $t('Common.Assign') }}
+                            </button>
+                            <button type="button" class="btn btn-link" data-dismiss="modal">
+                                {{ $t('Common.Cancel') }}
+                            </button>
+                        </div>
+                    </template>
                 </ModalFrame>
 
                 <ModalFrame ref="closeModal" :title="$t('Pages.ConfirmationNeededTitle')">
                     <p>{{ singleCloseMessage }}</p>
 
-                    <div slot="actions">
-                        <button type="button" class="btn btn-primary" :disabled="isWebModeAssignmentSelected"
-                            @click="close">
-                            {{ $t('Assignments.Close') }}
-                        </button>
-                        <button type="button" class="btn btn-link" data-dismiss="modal">
-                            {{ $t('Common.Cancel') }}
-                        </button>
-                    </div>
+                    <template v-slot:actions>
+                        <div>
+                            <button type="button" class="btn btn-primary" :disabled="isWebModeAssignmentSelected"
+                                @click="close">
+                                {{ $t('Assignments.Close') }}
+                            </button>
+                            <button type="button" class="btn btn-link" data-dismiss="modal">
+                                {{ $t('Common.Cancel') }}
+                            </button>
+                        </div>
+                    </template>
                 </ModalFrame>
 
                 <ModalFrame ref="editAudioEnabledModal"
@@ -276,15 +280,17 @@
                                 v-model="editedAudioRecordingEnabled" />
                         </div>
                     </form>
-                    <div slot="actions">
-                        <button type="button" class="btn btn-primary" @click="upateAudioRecording"
-                            :disabled="!showSelectors">
-                            {{ $t('Common.Save') }}
-                        </button>
-                        <button type="button" class="btn btn-link" data-dismiss="modal">
-                            {{ $t('Common.Cancel') }}
-                        </button>
-                    </div>
+                    <template v-slot:actions>
+                        <div>
+                            <button type="button" class="btn btn-primary" @click="upateAudioRecording"
+                                :disabled="!showSelectors">
+                                {{ $t('Common.Save') }}
+                            </button>
+                            <button type="button" class="btn btn-link" data-dismiss="modal">
+                                {{ $t('Common.Cancel') }}
+                            </button>
+                        </div>
+                    </template>
                 </ModalFrame>
             </div>
         </div>
@@ -297,7 +303,7 @@ import { DateFormats, convertToLocal } from '~/shared/helpers'
 import { RoleNames } from '~/shared/constants'
 
 import moment from 'moment-timezone'
-import { escape, assign } from 'lodash'
+import { escape } from 'lodash'
 
 import '@/assets/css/markup-web-interview.scss'
 import '@/assets/css/markup-interview-review.scss'

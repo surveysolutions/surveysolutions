@@ -1,18 +1,13 @@
 <template>
-    <div class="ag-input-text-wrapper"
-        :id="hash">
-        <component ref='editQuestionComponent'
-            :key="question.identity"
-            v-bind:is="'MatrixRoster_' + question.entityType"
-            v-bind:id="question.identity"
-            :editorParams="params">
+    <div class="ag-input-text-wrapper" :id="hash">
+        <component ref='editQuestionComponent' :key="question.identity"
+            v-bind:is="'MatrixRoster_' + question.entityType" v-bind:id="question.identity" :editorParams="params">
         </component>
         <wb-progress :visible="isFetchInProgress" />
     </div>
 </template>
 
 <script lang="js">
-import Vue from 'vue'
 import { getLocationHash } from '~/shared/helpers'
 import { debounce } from 'lodash'
 
@@ -69,15 +64,15 @@ export default {
             if (this.$refs.editQuestionComponent.destroy)
                 this.$refs.editQuestionComponent.destroy()
         },
-        doScroll: debounce(function() {
-            if(this.$store.getters.scrollState ==  '#' + this.id){
+        doScroll: debounce(function () {
+            if (this.$store.getters.scrollState == '#' + this.id) {
                 window.scroll({ top: this.$parent.$parent.$el.offsetTop, behavior: 'smooth' })
                 this.$store.dispatch('resetScroll')
             }
         }, 200),
 
         scroll() {
-            if(this.$store && this.$store.state.route.hash === '#' + this.id) {
+            if (this.$store && this.$store.state.route.hash === '#' + this.id) {
                 this.doScroll()
             }
         },

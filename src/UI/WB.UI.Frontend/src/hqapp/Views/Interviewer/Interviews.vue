@@ -1,133 +1,96 @@
 <template>
-    <HqLayout :title="title"
-        :hasFilter="true">
-        <Filters slot="filters">
-            <FilterBlock :title="$t('Common.Questionnaire')">
-                <Typeahead
-                    control-id="questionnaireId"
-                    data-vv-name="questionnaireId"
-                    data-vv-as="questionnaire"
-                    :placeholder="$t('Common.AllQuestionnaires')"
-                    :value="questionnaireId"
-                    :values="this.$config.model.questionnaires"
-                    v-on:selected="questionnaireSelected"/>
-            </FilterBlock>
+    <HqLayout :title="title" :hasFilter="true">
+        <template v-slot:filters>
+            <Filters>
+                <FilterBlock :title="$t('Common.Questionnaire')">
+                    <Typeahead control-id="questionnaireId" data-vv-name="questionnaireId" data-vv-as="questionnaire"
+                        :placeholder="$t('Common.AllQuestionnaires')" :value="questionnaireId"
+                        :values="this.$config.model.questionnaires" v-on:selected="questionnaireSelected" />
+                </FilterBlock>
 
-            <FilterBlock :title="$t('Common.QuestionnaireVersion')">
-                <Typeahead
-                    control-id="questionnaireVersion"
-                    data-vv-name="questionnaireVersion"
-                    data-vv-as="questionnaireVersion"
-                    :placeholder="$t('Common.AllVersions')"
-                    :disabled="questionnaireId == null "
-                    :value="questionnaireVersion"
-                    :values="questionnaireId == null ? [] : questionnaireId.versions"
-                    v-on:selected="questionnaireVersionSelected"/>
-            </FilterBlock>
-            <FilterBlock :title="$t('Pages.Filters_Assignment')">
-                <div class="input-group">
-                    <input
-                        class="form-control with-clear-btn"
-                        :placeholder="$t('Common.AllAssignments')"
-                        type="text"
-                        v-model="assignmentId"/>
-                    <div class="input-group-btn"
-                        @click="clearAssignmentFilter">
-                        <div class="btn btn-default">
-                            <span class="glyphicon glyphicon-remove"
-                                aria-hidden="true"></span>
+                <FilterBlock :title="$t('Common.QuestionnaireVersion')">
+                    <Typeahead control-id="questionnaireVersion" data-vv-name="questionnaireVersion"
+                        data-vv-as="questionnaireVersion" :placeholder="$t('Common.AllVersions')"
+                        :disabled="questionnaireId == null" :value="questionnaireVersion"
+                        :values="questionnaireId == null ? [] : questionnaireId.versions"
+                        v-on:selected="questionnaireVersionSelected" />
+                </FilterBlock>
+                <FilterBlock :title="$t('Pages.Filters_Assignment')">
+                    <div class="input-group">
+                        <input class="form-control with-clear-btn" :placeholder="$t('Common.AllAssignments')"
+                            type="text" v-model="assignmentId" />
+                        <div class="input-group-btn" @click="clearAssignmentFilter">
+                            <div class="btn btn-default">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </FilterBlock>
-        </Filters>
+                </FilterBlock>
+            </Filters>
+        </template>
 
-        <DataTables
-            ref="table"
-            :tableOptions="tableOptions"
-            :contextMenuItems="contextMenuItems" />
+        <DataTables ref="table" :tableOptions="tableOptions" :contextMenuItems="contextMenuItems" />
 
-        <Confirm ref="confirmRestart"
-            id="restartModal"
-            slot="modals">
-            {{ $t("Pages.InterviewerHq_RestartConfirm") }}
-            <FilterBlock>
-                <div class="form-group">
-                    <div class="field">
-                        <input
-                            class="form-control with-clear-btn"
-                            type="text"
-                            v-model="restart_comment"/>
+        <template v-slot:modals>
+            <Confirm ref="confirmRestart" id="restartModal">
+                {{ $t("Pages.InterviewerHq_RestartConfirm") }}
+                <FilterBlock>
+                    <div class="form-group">
+                        <div class="field">
+                            <input class="form-control with-clear-btn" type="text" v-model="restart_comment" />
+                        </div>
                     </div>
-                </div>
-            </FilterBlock>
-        </Confirm>
+                </FilterBlock>
+            </Confirm>
 
-        <Confirm
-            ref="confirmDiscard"
-            id="discardConfirm"
-            slot="modals">{{ $t("Pages.InterviewerHq_DiscardConfirm") }}</Confirm>
+            <Confirm ref="confirmDiscard" id="discardConfirm">
+                {{ $t("Pages.InterviewerHq_DiscardConfirm") }}
+            </Confirm>
+        </template>
 
-        <ModalFrame ref="editCalendarModal"
-            :title="$t('Common.EditCalendarEvent')">
+        <ModalFrame ref="editCalendarModal" :title="$t('Common.EditCalendarEvent')">
             <form onsubmit="return false;">
 
                 <div class="form-group">
-                    <DatePicker :config="datePickerConfig"
-                        :value="selectedDate">
+                    <DatePicker :config="datePickerConfig" :value="selectedDate">
                     </DatePicker>
-                    <div  v-if="dateInPast">
+                    <div v-if="dateInPast">
                         <span class="text-danger">{{ $t("Assignments.DateFromPast") }}</span>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label"
-                        for="commentsId">
+                    <label class="control-label" for="commentsId">
                         {{ $t("Assignments.Comments") }}
                     </label>
-                    <textarea
-                        control-id="commentsId"
-                        v-model="editCalendarComment"
-                        :placeholder="$t('Assignments.EnterComments')"
-                        name="comments"
-                        rows="6"
-                        maxlength="500"
-                        class="form-control"/>
+                    <textarea control-id="commentsId" v-model="editCalendarComment"
+                        :placeholder="$t('Assignments.EnterComments')" name="comments" rows="6" maxlength="500"
+                        class="form-control" />
                 </div>
             </form>
-            <div slot="actions">
-                <button
-                    type="button"
-                    class="btn btn-primary"
-                    role="confirm"
-                    @click="updateCalendarEvent">
-                    {{ $t("Common.Save") }}</button>
-                <button
-                    type="button"
-                    class="btn btn-link"
-                    data-dismiss="modal"
-                    role="cancel">{{ $t("Common.Cancel") }}</button>
-                <button
-                    type="button"
-                    class="btn btn-danger pull-right"
-                    role="delete"
-                    v-if="calendarEventId != null"
-                    @click="deleteCalendarEvent">
-                    {{ $t("Common.Delete") }}</button>
-            </div>
+            <template v-slot:actions>
+                <div>
+                    <button type="button" class="btn btn-primary" role="confirm" @click="updateCalendarEvent">
+                        {{ $t("Common.Save") }}</button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">{{ $t("Common.Cancel")
+                        }}</button>
+                    <button type="button" class="btn btn-danger pull-right" role="delete" v-if="calendarEventId != null"
+                        @click="deleteCalendarEvent">
+                        {{ $t("Common.Delete") }}</button>
+                </div>
+            </template>
         </ModalFrame>
     </HqLayout>
 </template>
 
 <script>
-import {DateFormats, convertToLocal} from '~/shared/helpers'
+import { DateFormats, convertToLocal } from '~/shared/helpers'
 import moment from 'moment-timezone'
-import {updateCalendarEvent, addInterviewCalendarEvent, deleteCalendarEvent } from './calendarEventsHelper'
-import {map, join, toNumber, filter, escape} from 'lodash'
+import { updateCalendarEvent, addInterviewCalendarEvent, deleteCalendarEvent } from './calendarEventsHelper'
+import { map, join, toNumber, filter, escape } from 'lodash'
 import gql from 'graphql-tag'
 import _sanitizeHtml from 'sanitize-html'
-const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
+const sanitizeHtml = text => _sanitizeHtml(text, { allowedTags: [], allowedAttributes: [] })
 
 
 const query = gql`query interviews($workspace: String!, $order: [InterviewSort!], $skip: Int, $take: Int, $where: InterviewsFilter) {
@@ -167,24 +130,24 @@ export default {
             questionnaireVersion: null,
             assignmentId: null,
             editCalendarComment: null,
-            newCalendarStart : null,
-            newCalendarStarTimezone : null,
-            calendarEventId : null,
-            calendarInterviewId : null,
-            calendarInterviewKey : null,
-            calendarAssinmentId : null,
+            newCalendarStart: null,
+            newCalendarStarTimezone: null,
+            calendarEventId: null,
+            calendarInterviewId: null,
+            calendarInterviewKey: null,
+            calendarAssinmentId: null,
             draw: 0,
         }
     },
 
     watch: {
-        questionnaireId: function() {
+        questionnaireId: function () {
             this.reload()
         },
-        questionnaireVersion: function() {
+        questionnaireVersion: function () {
             this.reload()
         },
-        assignmentId: function() {
+        assignmentId: function () {
             this.reload()
         },
     },
@@ -205,18 +168,18 @@ export default {
         whereQuery() {
             const and = []
 
-            if(this.where.questionnaireId) {
-                and.push({questionnaireId: {eq : this.where.questionnaireId.replaceAll('-','')}})
+            if (this.where.questionnaireId) {
+                and.push({ questionnaireId: { eq: this.where.questionnaireId.replaceAll('-', '') } })
 
-                if(this.where.questionnaireVersion) {
-                    and.push({questionnaireVersion: {eq : this.where.questionnaireVersion}})
+                if (this.where.questionnaireVersion) {
+                    and.push({ questionnaireVersion: { eq: this.where.questionnaireVersion } })
                 }
             }
-            if(this.where.assignmentId){
-                and.push({assignmentId: {eq : this.where.assignmentId}})
+            if (this.where.assignmentId) {
+                and.push({ assignmentId: { eq: this.where.assignmentId } })
             }
 
-            and.push({ status : {in: this.$config.model.statuses}})
+            and.push({ status: { in: this.$config.model.statuses } })
 
             return and
         },
@@ -249,17 +212,17 @@ export default {
 
                     const search = data.search.value
 
-                    if(search && search != '') {
+                    if (search && search != '') {
                         where.and.push(
                             {
                                 or: [
-                                    { key: {startsWith: search.toLowerCase()}},
-                                    { identifyingData: {some: {valueLowerCase: {startsWith: search.toLowerCase()}}}},
+                                    { key: { startsWith: search.toLowerCase() } },
+                                    { identifyingData: { some: { valueLowerCase: { startsWith: search.toLowerCase() } } } },
                                 ],
                             })
                     }
 
-                    if(where.and.length > 0) {
+                    if (where.and.length > 0) {
                         variables.where = where
                     }
 
@@ -293,7 +256,7 @@ export default {
                 sDom: 'rf<"table-with-scroll"t>ip',
             }
         },
-        selectedDate(){
+        selectedDate() {
             return this.newCalendarStart
         },
         datePickerConfig() {
@@ -306,16 +269,16 @@ export default {
                 onChange: (selectedDates, dateStr, instance) => {
                     const start = selectedDates.length > 0 ? moment(selectedDates[0]).format(DateFormats.dateTime) : null
 
-                    if(start != null && start != self.newCalendarStart){
+                    if (start != null && start != self.newCalendarStart) {
                         self.newCalendarStart = start
                     }
                 },
             }
         },
-        dateInPast(){
+        dateInPast() {
             return moment(this.selectedDate) < moment()
         },
-        saveDisabled(){
+        saveDisabled() {
             return !this.newCalendarStart
         },
     },
@@ -342,7 +305,7 @@ export default {
             this.editCalendarComment = calendarEvent?.comment
             this.newCalendarStart = calendarEvent?.startUtc ?? moment().add(1, 'days').hours(10).startOf('hour').format(DateFormats.dateTime)
             this.newCalendarStarTimezone = calendarEvent?.startTimezone
-            this.$refs.editCalendarModal.modal({keyboard: false})
+            this.$refs.editCalendarModal.modal({ keyboard: false })
         },
 
         updateCalendarEvent() {
@@ -353,19 +316,19 @@ export default {
             const startDate = moment(self.newCalendarStart).format('YYYY-MM-DD[T]HH:mm:ss.SSSZ')
 
             const variables = {
-                newStart : startDate,
-                comment : self.editCalendarComment,
+                newStart: startDate,
+                comment: self.editCalendarComment,
                 startTimezone: moment.tz.guess(),
                 workspace: self.$store.getters.workspace,
             }
 
-            if(self.calendarEventId != null){
-                variables.publicKey = self.calendarEventId.replaceAll('-',''),
-                updateCalendarEvent(self.$apollo, variables, self.reload)
+            if (self.calendarEventId != null) {
+                variables.publicKey = self.calendarEventId.replaceAll('-', ''),
+                    updateCalendarEvent(self.$apollo, variables, self.reload)
             }
-            else{
+            else {
                 variables.interviewId = self.calendarInterviewId,
-                addInterviewCalendarEvent(self.$apollo, variables, self.reload)
+                    addInterviewCalendarEvent(self.$apollo, variables, self.reload)
             }
         },
         deleteCalendarEvent() {
@@ -373,12 +336,12 @@ export default {
             this.$refs.editCalendarModal.hide()
 
             deleteCalendarEvent(self.$apollo, {
-                'publicKey' : self.calendarEventId == null ? null : self.calendarEventId.replaceAll('-',''),
+                'publicKey': self.calendarEventId == null ? null : self.calendarEventId.replaceAll('-', ''),
                 workspace: self.$store.getters.workspace,
             }, self.reload)
 
         },
-        contextMenuItems({rowData, rowIndex}) {
+        contextMenuItems({ rowData, rowIndex }) {
             const menu = []
             const self = this
 
@@ -408,7 +371,7 @@ export default {
                 })
             }
 
-            const canCalendarBeEdited =  rowData.actionFlags.indexOf('CANBEOPENED') >= 0
+            const canCalendarBeEdited = rowData.actionFlags.indexOf('CANBEOPENED') >= 0
             menu.push({
                 name: self.$t('Common.EditCalendarEvent'),
                 className: canCalendarBeEdited ? 'primary-text' : '',
@@ -438,14 +401,14 @@ export default {
             self.$refs.confirmRestart.promt(ok => {
                 if (ok) {
                     $.post({
-                        url:this.$config.model.interviewerHqEndpoint + '/RestartInterview/' + interviewId,
-                        data:{comment: self.restart_comment},
+                        url: this.$config.model.interviewerHqEndpoint + '/RestartInterview/' + interviewId,
+                        data: { comment: self.restart_comment },
                         headers: {
                             'X-CSRF-TOKEN': self.$hq.Util.getCsrfCookie(),
                         },
                     }
                     )
-                        .done(function( data ) {
+                        .done(function (data) {
                             self.restart_comment = ''
                             self.$store.dispatch('openInterview', interviewId)
                         })
@@ -537,14 +500,14 @@ export default {
                     title: this.$t('Common.CalendarEvent'),
                     orderable: false,
                     searchable: false,
-                    render: function(data) {
-                        if(data != null && data.startUtc != null) {
+                    render: function (data) {
+                        if (data != null && data.startUtc != null) {
                             var hasComment = !(data.comment == null || data.comment == '')
                             return '<span data-toggle="tooltip" title="'
-                                + ( hasComment ? escape(data.comment) : self.$t('Assignments.NoComment'))
+                                + (hasComment ? escape(data.comment) : self.$t('Assignments.NoComment'))
                                 + '">'
                                 + convertToLocal(data.startUtc, data.startTimezone)
-                                + ( hasComment ? ('<br/>' + escape(data.comment)).replaceAll('\n', '<br/>') : '')
+                                + (hasComment ? ('<br/>' + escape(data.comment)).replaceAll('\n', '<br/>') : '')
                                 + '</span>'
                         }
                         return ''
