@@ -36,6 +36,10 @@ moment.locale(browserLanguage)
 import { registerComponents } from './components'
 registerComponents(vue)
 
+//TODO: MIGRATION. move it
+import ProfileLayout from './Views/HQ/Users/ProfileLayout.vue'
+vue.component('ProfileLayout', ProfileLayout)
+
 import './compatibility.js'
 import '~/webinterview/componentsRegistry'
 
