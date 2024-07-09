@@ -13,11 +13,6 @@ const join = path.join.bind(path, baseDir);
 
 const outDir = path.resolve(__dirname + '/../wwwroot/assets');
 
-const resxFiles = [
-    join('../Resources/QuestionnaireEditor.resx'),
-    join('../Resources/QuestionnaireEditor.*.resx')
-];
-
 export default defineConfig(({ mode, command }) => {
     const isDevMode = mode === 'development';
     const isProdMode = !isDevMode;
@@ -37,10 +32,21 @@ export default defineConfig(({ mode, command }) => {
             LocalizationPlugin({
                 noHash: true,
                 inline: true,
-                patterns: resxFiles,
+                patterns: [
+                    join('../Resources/QuestionnaireEditor.resx'),
+                    join('../Resources/QuestionnaireEditor.*.resx'),
+                    join('../Resources/AccountResources.resx'),
+                    join('../Resources/AccountResources.*.resx'),
+                    join('../Resources/QuestionnaireController.resx'),
+                    join('../Resources/QuestionnaireController.*.resx')
+                ],
                 destination: './src/locale',
                 locales: {
-                    '.': ['QuestionnaireEditor']
+                    '.': [
+                        'QuestionnaireEditor',
+                        'AccountResources',
+                        'QuestionnaireController'
+                    ]
                 }
             }),
             {
