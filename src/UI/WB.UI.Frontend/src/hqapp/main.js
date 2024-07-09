@@ -9,21 +9,13 @@ import { createApp } from 'vue'
 
 import App from './App.vue';
 
-//import Vuei18n from '~/shared/plugins/locale'
-import { browserLanguage } from '~/shared/helpers'
-//const i18n = Vuei18n.initialize(browserLanguage)
-
-
 //const pinia = createPinia()
 const vue = createApp(App)
 //vue.use(pinia)
 
-//temp reg
-//remove after migration to vue 3 & i18next
-vue.config.globalProperties.$t = function (literal) {
-    return literal;
-}
-
+import Vuei18n from '~/shared/plugins/locale'
+import { browserLanguage } from '~/shared/helpers'
+const i18n = Vuei18n.initialize(browserLanguage, vue)
 
 //import VueApollo from 'vue-apollo'
 //vue.use(VueApollo)

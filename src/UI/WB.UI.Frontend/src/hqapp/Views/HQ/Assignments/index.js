@@ -9,7 +9,7 @@ import localStore from './store'
 
 import config from '~/shared/config'
 
-import Vue from 'vue'
+//import Vue from 'vue'
 export default class AssignmentsComponent {
     constructor(rootStore) {
         this.rootStore = rootStore

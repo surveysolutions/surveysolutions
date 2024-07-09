@@ -19,8 +19,7 @@ export default {
     props: {
         //title: { type: String, default: () => this.$t('Pages.FilterTitle') },
         //TODO:MIGRATION
-        title: { type: String, default: 'Pages.FilterTitle' },
+        title: { type: String, default: () => 'Pages.FilterTitle' },
     },
-
 }
 </script>

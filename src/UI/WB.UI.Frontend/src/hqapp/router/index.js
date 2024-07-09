@@ -5,48 +5,6 @@ import { createRouter, createWebHistory } from 'vue-router';
 // import { assign } from 'lodash'
 
 // //Vue.use(VueRouter)
-// const UsersManagement = () => import('../Views/HQ/Users/UsersManagment/UsersManagement.vue')
-
-// const Manage = () => import('../Views/HQ/Users/Manage.vue')
-
-// const routes = [
-//     {
-//         path: '/users/UsersManagement',
-//         component: UsersManagement,
-//         // props: route => ({
-//         //     //questionnaireRev: route.params.questionnaireId,
-//         //     id: route.query.id,
-//         //     //isCategory: true,
-//         //     //cascading: route.query.cascading == 'true'
-//         // })
-//     },
-//     {
-//         path: '/UsersManagement',
-//         component: UsersManagement,
-//         // props: route => ({
-//         //     //questionnaireRev: route.params.questionnaireId,
-//         //     id: route.query.id,
-//         //     //isCategory: true,
-//         //     //cascading: route.query.cascading == 'true'
-//         // })
-//     },
-
-
-//     // {
-//     //     path: '/Manage/:userId', component: Manage, name: 'usersManage',
-//     // },
-//     // {
-//     //     path: '/Manage/', component: Manage,
-//     // },
-
-//     {
-//         path: '/users/Manage/:userId', component: Manage, name: 'usersManage',
-//     },
-//     {
-//         path: '/users/Manage/', component: Manage,
-//     },
-// ]
-
 
 export default class HqRouter {
     constructor(routes) {

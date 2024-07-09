@@ -14,7 +14,7 @@ export default {
 
     computed: {
         query() {
-            return this.$store.state.route.query
+            return this.$route.query
         },
     },
 

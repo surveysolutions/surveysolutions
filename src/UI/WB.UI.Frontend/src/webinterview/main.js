@@ -38,9 +38,9 @@ vue.use(PortalVue)
 import { Popover } from 'uiv'
 vue.component('popover', Popover)
 
-import Vuei18n from '~/shared/plugins/localization'
+import Vuei18n from '~/shared/plugins/locale'
 import { browserLanguage } from '~/shared/helpers'
-const i18n = Vuei18n.initialize(browserLanguage)
+const i18n = Vuei18n.initialize(browserLanguage, vue)
 
 import './init'
 import './errors'
