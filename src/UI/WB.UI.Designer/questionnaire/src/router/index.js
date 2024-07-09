@@ -17,9 +17,23 @@ const Roster = () => import('../views/App/components/Roster.vue');
 const QuestionnaireHeader = () => import('../views/App/components/Header.vue');
 const Comments = () => import('../views/App/components/Comments.vue');
 
+const DesignerLayout = () => import('../views/Designer/Layout.vue');
+const Classifications = () =>
+    import('../views/Designer/pages/Classifications.vue');
+
 import { useUnsavedChanges } from '../stores/unsavedChanges';
 
 const routes = [
+    {
+        path: '/classifications',
+        component: DesignerLayout,
+        children: [
+            {
+                path: '',
+                component: Classifications
+            }
+        ]
+    },
     {
         path: '/questionnaire/editcategories/:questionnaireId',
         component: OptionsEditor,

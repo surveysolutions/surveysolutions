@@ -73,6 +73,9 @@ vue.component('confirm-dialog', ConfirmDialog.default);
 
 directives(vue);
 
+import store from './views/Designer/pages/classifications/store';
+vue.use(store);
+
 // Run!
 router.isReady().then(() => {
     vue.mount('#app');
