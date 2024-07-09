@@ -94,7 +94,7 @@ import { useUnsavedChanges } from '../stores/unsavedChanges';
 import { useMagicKeys } from '@vueuse/core';
 
 //import '../../content/markup.less'
-import '../../content/markup.less'
+//import '../../content/markup.less'
 
 export default {
     name: 'QuestionnaireApp',
