@@ -21,7 +21,7 @@ import 'vue3-perfect-scrollbar/style.css';
 import VueUploadComponent from 'vue-upload-component';
 import Notifications from '@kyvg/vue3-notification';
 
-//import * as uiv from 'uiv';
+import './extensions';
 
 import directives from './directives/';
 

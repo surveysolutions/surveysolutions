@@ -90,7 +90,7 @@ export default {
     },
 
     mounted() {
-        if (window.moment) {
+        /*if (window.moment) {
             moment.locale('@CultureInfo.CurrentUICulture');
 
             $('time').each(function () {
@@ -99,7 +99,7 @@ export default {
                 var momentDate = moment.utc(date).local().format('MMM DD, YYYY HH:mm');
                 me.text(momentDate);
             });
-        }
+        }*/
     },
 
     methods: {

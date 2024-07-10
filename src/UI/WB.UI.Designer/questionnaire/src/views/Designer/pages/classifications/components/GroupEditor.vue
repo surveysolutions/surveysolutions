@@ -34,7 +34,7 @@ export default {
     mounted: function () {
         var self = this;
 
-        if (!Vue.$config.isAdmin) return;
+        if (!this.$store.state.isAdmin) return;
 
         this.$nextTick(function () {
             $(this.$el).contextMenu({
@@ -58,7 +58,7 @@ export default {
     methods: {
         cancel() {
             if (this.group.isNew) {
-                store.dispatch('deleteGroup', this.index);
+                this.$store.dispatch('deleteGroup', this.index);
             } else {
                 this.title = this.group.title;
                 this.isEditMode = false;
@@ -68,7 +68,7 @@ export default {
             this.isEditMode = true;
         },
         select() {
-            store.dispatch('selectGroup', this.index);
+            this.$store.dispatch('selectGroup', this.index);
         },
         deleteItem() {
             if (
@@ -76,7 +76,7 @@ export default {
                     `Are you sure you want to delete classification group '${this.title}'?`
                 )
             ) {
-                store.dispatch('deleteGroup', this.index);
+                this.$store.dispatch('deleteGroup', this.index);
             }
         },
         save() {
@@ -90,7 +90,7 @@ export default {
 
             this.$validator.validate().then(function (result) {
                 if (result) {
-                    store.dispatch('updateGroup', group).then(function () {
+                    this.$store.dispatch('updateGroup', group).then(function () {
                         self.isEditMode = false;
                     });
                 }

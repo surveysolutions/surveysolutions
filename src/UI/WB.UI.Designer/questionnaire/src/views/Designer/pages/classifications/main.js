@@ -1,4 +1,4 @@
-﻿$(function() {
+﻿/*$(function() {
     VeeValidate.Validator.extend('stringOptions', {
         getMessage(field, args, data) {
             return (
@@ -31,7 +31,7 @@
     var app = new Vue({
         store: store,
         el: '#designer-list'
-        /*data: {
+        data: {
             isAdmin: Vue.$config.isAdmin
         },
         created() {
@@ -68,6 +68,7 @@
                 this.$store.dispatch('addClassification',
                     { id: guid(), isNew: true, title: '', parent: this.activeGroup.id, userId: Vue.$config.userId, count: 0 });
             }
-        }*/
+        }
     });
 });
+*/

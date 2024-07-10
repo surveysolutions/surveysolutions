@@ -40,12 +40,12 @@
                             </div>
                         </div>
                     </div>
-                    <div v-else class="form-group" :class="{ 'has-error': errors.has('stringifiedOptions') }">
+                    <div v-else class="form-group" :class="{ 'has-error': !validateStringOptions(stringifiedOptions) }">
                         <textarea name="stringifiedOptions" v-elastic v-model="stringifiedOptions"
-                            v-validate="'stringOptions'" key="stringifiedOptions" class="form-control js-elasticArea"
+                            key="stringifiedOptions" class="form-control js-elasticArea"
                             :placeholder="$t('QuestionnaireEditor.ClassificationsStringOptionsEditorPlaceholder')"></textarea>
-                        <p v-if="errors.has('stringifiedOptions')" class="text-danger">{{
-                    errors.first('stringifiedOptions') }}</p>
+                        <p v-if="!validateStringOptions(stringifiedOptions)" class="text-danger">{{
+                    getMessageStringOptions(validateStringOptions(stringifiedOptions).data) }}</p>
                     </div>
                 </div>
                 <div v-if="isEditMode" class="categories-holder-footer clearfix">
@@ -67,13 +67,14 @@
 </template>
 
 <script>
+
 export default {
     name: 'CategoriesEditor',
     data: function () {
         return {
             optionsMode: true,
-            regex: Vue.$config.optionsParseRegex,
-            stringifiedOptions: ''
+            stringifiedOptions: '',
+            optionsParseRegex: new RegExp(/^(.+?)[\…\.\s]+([-+]?\d+)\s*$/),
         };
     },
     computed: {
@@ -82,9 +83,8 @@ export default {
         },
         isEditMode() {
             return (
-                Vue.$config.isAdmin ||
-                Vue.$config.userId ===
-                this.$store.state.activeClassification.userId
+                this.$store.state.isAdmin ||
+                this.$store.state.userId === this.$store.state.activeClassification.userId
             );
         },
         activeGroup() {
@@ -107,7 +107,7 @@ export default {
     },
     methods: {
         validateOptionAsText(option) {
-            return this.regex.test(option || '');
+            return this.optionsParseRegex.test(option || '');
         },
 
         stringifyCategories() {
@@ -140,7 +140,7 @@ export default {
             });
 
             var options = _.map(optionsStringList, function (item) {
-                var matches = item.match(self.regex);
+                var matches = item.match(self.optionsParseRegex);
                 return {
                     value: matches[2] * 1,
                     title: matches[1]
@@ -267,8 +267,8 @@ export default {
                 var options = (value || '').split('\n');
                 var matchPattern = true;
                 var invalidLines = [];
-                _.forEach(options, function (option, index) {
-                    var currentLineValidationResult = Vue.$config.optionsParseRegex.test(
+                _.forEach(options, (option, index) => {
+                    var currentLineValidationResult = optionsParseRegex.test(
                         option || ''
                     );
                     matchPattern = matchPattern && currentLineValidationResult;
