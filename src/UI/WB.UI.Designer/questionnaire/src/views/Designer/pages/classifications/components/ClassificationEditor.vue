@@ -32,8 +32,8 @@ export default {
         var self = this;
 
         if (
-            !Vue.$config.isAdmin &&
-            Vue.$config.userId !== this.classification.userId
+            !this.$store.state.isAdmin &&
+            this.$store.state.userId !== this.classification.userId
         )
             return;
 
@@ -56,7 +56,7 @@ export default {
             return Object.keys(this.fields).some(key => this.fields[key].dirty);
         },
         isPrivate() {
-            return Vue.$config.userId === this.classification.userId;
+            return this.$store.state.userId === this.classification.userId;
         }
     },
     methods: {

@@ -8,7 +8,7 @@
         <div class="classifications-block">
             <div class="col-xs-3 column classification-groups">
                 <div class="classification-list-wrapper">
-                    <div class="scroller">
+                    <perfect-scrollbar class="scroller">
                         <ul class="breadcrumb">
                             <li class="active">{{ $t('QuestionnaireEditor.ClassificationGroupBreadcrumbs') }}</li>
                         </ul>
@@ -19,12 +19,12 @@
                         </ul>
                         <button type="button" class="btn lighter-hover" @click="addGroup()" v-if="isAdmin">{{
         $t('QuestionnaireEditor.ClassificationAddGroup') }}</button>
-                    </div>
+                    </perfect-scrollbar>
                 </div>
             </div>
             <div class="col-xs-4 column classifications">
                 <div class="classification-list-wrapper">
-                    <div class="scroller">
+                    <perfect-scrollbar class="scroller">
                         <ul class="breadcrumb">
                             <li class="active">{{ activeGroup.title }}</li>
                         </ul>
@@ -37,7 +37,7 @@
                         </ul>
                         <button v-if="activeGroup.id" type="button" class="btn lighter-hover"
                             @click="addClassification()">{{ $t('QuestionnaireEditor.ClassificationAdd') }}</button>
-                    </div>
+                    </perfect-scrollbar>
                 </div>
             </div>
             <div class="col-xs-5 column categories-groups">
@@ -55,23 +55,30 @@
 
 <script>
 
+import { newGuid } from '../../../helpers/guid'
+
 import CategoriesEditor from './classifications/components/CategoriesEditor.vue'
 import ClassificationEditor from './classifications/components/ClassificationEditor.vue'
 import GroupEditor from './classifications/components/GroupEditor.vue'
 
+import '../../../../../Content/classifications.css';
+
 export default {
     name: 'Classifications',
     components: { CategoriesEditor, ClassificationEditor, GroupEditor },
-    data: {
-        isAdmin: Vue.$config.isAdmin
+    data() {
+        return {
+
+        }
     },
     created() {
+        this.$store.dispatch('getUserInfo');
         this.$store.dispatch('loadGroups');
-        Vue.nextTick(function () {
-            $('.scroller').perfectScrollbar();
-        });
     },
     computed: {
+        isAdmin() {
+            return this.$store.state.isAdmin;
+        },
         isLoading() {
             return this.$store.state.isLoading;
         },
@@ -93,11 +100,11 @@ export default {
     },
     methods: {
         addGroup() {
-            this.$store.dispatch('addGroup', { id: guid(), isNew: true, title: '', count: 0 });
+            this.$store.dispatch('addGroup', { id: newGuid(), isNew: true, title: '', count: 0 });
         },
         addClassification() {
             this.$store.dispatch('addClassification',
-                { id: guid(), isNew: true, title: '', parent: this.activeGroup.id, userId: Vue.$config.userId, count: 0 });
+                { id: newGuid(), isNew: true, title: '', parent: this.activeGroup.id, userId: this.$store.state.userId, count: 0 });
         }
     }
 };

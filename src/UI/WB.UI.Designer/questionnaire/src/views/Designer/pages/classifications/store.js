@@ -1,4 +1,49 @@
 ﻿import { createStore } from 'vuex';
+import axios from 'axios';
+
+const routes = {
+    userInfo: 'user',
+    groups: 'groups',
+    createGroup: 'group',
+    updateGroup: 'group/{0}',
+    deleteGroup: 'group/{0}',
+    classifications: 'classifications',
+    createClassification: 'classification',
+    updateClassification: 'classification/{0}',
+    deleteClassification: 'classification/{0}',
+    categories: 'classification/{0}/categories',
+    updateCategories: 'classification/{0}/categories'
+};
+
+const $http = axios.create({
+    baseURL: './api/classifications'
+});
+
+// Add a request interceptor
+$http.interceptors.request.use(
+    function(config) {
+        store.commit('start_loading');
+        return config;
+    },
+    function(error) {
+        store.commit('finish_loading');
+        console.log(error);
+        return Promise.reject(error);
+    }
+);
+
+// Add a response interceptor
+$http.interceptors.response.use(
+    function(response) {
+        store.commit('finish_loading');
+        return response;
+    },
+    function(error) {
+        store.commit('finish_loading');
+        console.log(error);
+        return Promise.reject(error);
+    }
+);
 
 const store = createStore({
     state() {
@@ -9,7 +54,8 @@ const store = createStore({
             categories: [],
             activeGroup: {},
             activeClassification: {},
-            userId: Vue.$config.userId
+            userId: null,
+            isAdmin: false
         };
     },
     mutations: {
@@ -84,9 +130,18 @@ const store = createStore({
             var category = state.categories[changes.index];
             category.title = changes.title;
             category.value = changes.value;
+        },
+        updateUserInfo: function(state, info) {
+            state.userId = info.userId;
+            state.isAdmin = info.isAdmin;
         }
     },
     actions: {
+        getUserInfo(context) {
+            $http.get(routes.userInfo, {}).then(response => {
+                context.commit('updateUserInfo', response.data);
+            });
+        },
         updateCategory(context, changes) {
             context.commit('updateCategory', changes);
         },
