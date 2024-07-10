@@ -27,6 +27,9 @@ const routes = [
     {
         path: '/classifications',
         component: DesignerLayout,
+        props: route => ({
+            activePage: 'classifications'
+        }),
         children: [
             {
                 path: '',
