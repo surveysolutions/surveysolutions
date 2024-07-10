@@ -8,6 +8,9 @@ import UploadProgress from './UploadProgress'
 import UploadComplete from './UploadComplete'
 import upload from './store'
 
+//TODO: MIGRATION. Remove after migration to mande
+import axios from 'axios'
+
 import config from '~/shared/config'
 
 export default class UploadComponent {
@@ -23,7 +26,7 @@ export default class UploadComponent {
                     {
                         name: 'upload', path: '', component: Upload,
                         beforeEnter: (to, from, next) => {
-                            this.$http
+                            axios
                                 .get(config.model.api.importUsersStatusUrl)
                                 .then(response => {
                                     self.rootStore.dispatch('setUploadStatus', response.data)
@@ -46,7 +49,7 @@ export default class UploadComponent {
                     {
                         name: 'uploadprogress', path: 'Progress', component: UploadProgress,
                         beforeEnter: (to, from, next) => {
-                            this.$http
+                            axios
                                 .get(config.model.api.importUsersStatusUrl)
                                 .then(response => {
                                     if (!response.data.isInProgress || !response.data.isOwnerOfRunningProcess)

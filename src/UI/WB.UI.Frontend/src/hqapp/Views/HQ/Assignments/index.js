@@ -9,6 +9,9 @@ import localStore from './store'
 
 import config from '~/shared/config'
 
+//TODO: MIGRATION. Remove after migration to mande
+import axios from 'axios'
+
 //import Vue from 'vue'
 export default class AssignmentsComponent {
     constructor(rootStore) {
@@ -40,7 +43,7 @@ export default class AssignmentsComponent {
                                 component: Upload,
                                 name: 'assignments-upload',
                                 beforeEnter: (to, from, next) => {
-                                    this.$http
+                                    axios
                                         .get(config.model.api.importStatusUrl)
                                         .then(response => {
                                             if (response.data) {
@@ -78,7 +81,7 @@ export default class AssignmentsComponent {
                                 component: UploadVerification,
                                 name: 'assignments-upload-verification',
                                 beforeEnter: (to, from, next) => {
-                                    this.$http
+                                    axios
                                         .get(config.model.api.importStatusUrl)
                                         .then(response => {
                                             self.rootStore.dispatch('setUploadStatus', response.data)
@@ -99,7 +102,7 @@ export default class AssignmentsComponent {
                                 component: UploadProgress,
                                 name: 'assignments-upload-progress',
                                 beforeEnter: (to, from, next) => {
-                                    this.$http
+                                    axios
                                         .get(config.model.api.importStatusUrl)
                                         .then(response => {
                                             self.rootStore.dispatch('setUploadStatus', response.data)

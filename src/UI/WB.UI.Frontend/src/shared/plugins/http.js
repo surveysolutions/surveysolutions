@@ -1,3 +1,4 @@
+//TODO: MIGRATION. Remove after migration to mande
 import axios from 'axios'
 
 /*  the Plugin */

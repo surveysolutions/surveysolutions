@@ -218,7 +218,7 @@ export default {
                             }
                             message += stateError
                         })
-                        vm.$set(vm.modelState, state.key, message)
+                        vm.modelState[state.key] = message
                     }
                 })
             }
