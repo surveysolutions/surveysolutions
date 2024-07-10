@@ -13,15 +13,20 @@
                 </div>
 
                 <ul class="nav nav-tabs">
-                    <li role="presentation"><a href="/questionnaire/my">{{
-                        $t('QuestionnaireController.MyQuestionnaires') }}</a></li>
-                    <li role="presentation"><a href="/questionnaire/shared">{{
-                        $t('QuestionnaireController.SharedQuestionnaires') }}</a></li>
-                    <li role="presentation"><a href="/questionnaire/public">{{
-                        $t('QuestionnaireController.PublicQuestionnaires') }}</a></li>
-                    <li role="presentation" class="active"><a href="/classifications">{{
-                        $t('QuestionnaireController.Classifications') }}</a></li>
-                    <li role="presentation"><a href="/Admin/Users">{{ $t('QuestionnaireController.ManageUsers') }}</a>
+                    <li role="presentation">
+                        <a href="/questionnaire/my">{{ $t('QuestionnaireController.MyQuestionnaires') }}</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="/questionnaire/shared">{{ $t('QuestionnaireController.SharedQuestionnaires') }}</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="/questionnaire/public">{{ $t('QuestionnaireController.PublicQuestionnaires') }}</a>
+                    </li>
+                    <li role="presentation" :class="{ active: activePage == 'classifications' }">
+                        <a href="/classifications">{{ $t('QuestionnaireController.Classifications') }}</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="/Admin/Users">{{ $t('QuestionnaireController.ManageUsers') }}</a>
                     </li>
                     <li class="create" role="presentation"><a href="/questionnaire/create">{{
                         $t('QuestionnaireController.CreateNew') }}</a></li>
@@ -55,7 +60,7 @@
                             </li>
                             <li>
                                 <a href="/identity/account/logout">{{
-                                    $t('AccountResources.LogOut')
+                            $t('AccountResources.LogOut')
                                     }}</a>
                             </li>
                         </ul>
@@ -78,6 +83,10 @@ import '../../../../Styles/designer-list.less';
 
 export default {
     name: 'DesignerLayout',
+
+    props: {
+        activePage: { type: String, required: true },
+    },
 
     data() {
         return {
