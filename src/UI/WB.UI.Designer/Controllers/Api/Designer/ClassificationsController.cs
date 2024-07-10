@@ -24,6 +24,13 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         }
 
         [HttpGet]
+        [Route("user")]
+        public IActionResult UserInfo(Guid groupId)
+        {
+            return new JsonResult(new { userId = User.GetId(), isAdmin = User.IsAdmin() });
+        }
+        
+        [HttpGet]
         [Route("classifications")]
         public Task<IEnumerable<Classification>> GetClassifications(Guid groupId)
         {
