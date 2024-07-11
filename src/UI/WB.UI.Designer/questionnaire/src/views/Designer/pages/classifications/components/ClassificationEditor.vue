@@ -2,7 +2,7 @@
     <div v-contextmenu="'classification-context-menu-' + index" menu-item-class="context-menu-item">
         <div v-if="isEditMode" class="edit-classification-group-name">
             <vee-form ref="form" v-slot="{ errors, meta }">
-                <div class="form-group">
+                <div class="form-group" :class="{ 'has-error': errors.title }">
                     <vee-field as="textarea" v-autosize name="title" type="text" required v-model="title"
                         rules="required" class="form-control" :validateOnInput="true"
                         :placeholder="$t('QuestionnaireEditor.ClassificationTitle')" />
