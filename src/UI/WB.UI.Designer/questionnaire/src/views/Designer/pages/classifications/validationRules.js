@@ -1,5 +1,9 @@
 import { defineRule } from 'vee-validate';
-import { forEach, isEmpty } from 'lodash';
+import { required } from '@vee-validate/rules';
+
+defineRule('required', required);
+
+/*import { forEach, isEmpty } from 'lodash';
 import { optionsParseRegex } from './helper';
 
 defineRule('stringOptions', value => {
@@ -22,4 +26,4 @@ defineRule('stringOptions', value => {
         );
     }
     return true;
-});
+});*/
