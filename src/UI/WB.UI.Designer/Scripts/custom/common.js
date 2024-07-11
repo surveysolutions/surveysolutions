@@ -88,9 +88,9 @@
 		        for (var i = 0; i < result.length; i++) {
 		            var translationItem = result[i];
 		            typeaheadCtrl.append('<li><a href="javascript:void(0)" value="' +
-		                translationItem.value +
+                        self.sanitize(translationItem.value) +
 		                '">' +
-		                translationItem.name +
+                        self.sanitize(translationItem.name) +
 		                '</a></li>');
 		        }
 
@@ -195,7 +195,7 @@
 
         for (var i = 0; i < translationList.length; i++) {
             var translationItem = translationList[i];
-            typeaheadCtrl.append('<li><a href="javascript:void(0)" value="' + translationItem.value + '">' + translationItem.name + '</a></li>');
+            typeaheadCtrl.append('<li><a href="javascript:void(0)" value="' + self.sanitize(translationItem.value) + '">' + self.sanitize(translationItem.name) + '</a></li>');
         }
 
         typeaheadCtrl.unbind('click');
@@ -224,6 +224,16 @@
 		    self.ExportDialogClosed = true;
 			self.setPdfMessage('');
 		});
+    }
+    
+    self.sanitize = function(input) {
+        if (input) {
+            return filterXSS(input, {
+                whiteList: [],        
+                stripIgnoreTag: true  
+            });
+        }
+        return input || '';
     }
 }
 
