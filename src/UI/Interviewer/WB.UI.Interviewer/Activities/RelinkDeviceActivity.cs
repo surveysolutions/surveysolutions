@@ -1,4 +1,5 @@
 using Android.App;
+using Android.Content.PM;
 using Android.OS;
 using Android.Views;
 using AndroidX.AppCompat.Widget;
@@ -12,6 +13,7 @@ namespace WB.UI.Interviewer.Activities
 {
     [Activity(WindowSoftInputMode = SoftInput.StateHidden,
         Theme = "@style/GrayAppTheme",
+        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize,
         NoHistory = true,
         Exported = false)]
     public class RelinkDeviceActivity : BaseActivity<RelinkDeviceViewModel>

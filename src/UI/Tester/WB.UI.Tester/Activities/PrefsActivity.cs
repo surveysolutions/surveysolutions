@@ -15,6 +15,7 @@ namespace WB.UI.Tester.Activities
     [Activity(Label = "Preferences activity", 
         NoHistory = false, 
         Name = "org.worldbank.solutions.Vtester.PrefsActivity",
+        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize,
         Exported = false)]
     public class PrefsActivity : AppCompatActivity
     {

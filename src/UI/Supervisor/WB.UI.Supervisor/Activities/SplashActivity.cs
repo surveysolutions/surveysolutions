@@ -9,6 +9,7 @@ namespace WB.UI.Supervisor.Activities
     [Activity(NoHistory = true, 
         MainLauncher = true, 
         ScreenOrientation = ScreenOrientation.Portrait, 
+        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize,
         Theme = "@style/AppTheme")]
     [MvxActivityPresentation]
     public class SplashActivity : MvxStartActivity

@@ -1,14 +1,11 @@
-using Android.App;
 using Android.Content;
-using Android.OS;
+using Android.Content.PM;
 using Android.Views;
-using AndroidX.AppCompat.Widget;
 using Java.Interop;
 using MvvmCross;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Shared.Enumerator.Activities;
-using WB.UI.Shared.Enumerator.Activities.Callbacks;
 using WB.UI.Shared.Enumerator.Services.Notifications;
 using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
 
@@ -16,6 +13,7 @@ namespace WB.UI.Interviewer.Activities
 {
     [Activity(WindowSoftInputMode = SoftInput.StateHidden, 
         Theme = "@style/GrayAppTheme",
+        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize,
         Exported = false)]
     public class LoginActivity : BaseActivity<LoginViewModel>
     {
