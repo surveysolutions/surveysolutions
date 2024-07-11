@@ -4,7 +4,7 @@
             <vee-form ref="form" v-slot="{ errors, meta }">
                 <div class="form-group" :class="{ 'has-error': errors.title }">
                     <vee-field as="textarea" v-autosize name="title" type="text" rules="required" required
-                        v-model="title" class="form-control" v-validate="'required'" :validateOnChange="true"
+                        v-model="title" class="form-control" v-validate="'required'" :validateOnInput="true"
                         :placeholder="$t('QuestionnaireEditor.ClassificationGroupTitle')" />
                     <span class="help-block" v-show="errors.title">{{ errors.title }}</span>
                 </div>
@@ -91,7 +91,7 @@ export default {
             };
 
             this.$refs.form.validate().then(function (result) {
-                if (result) {
+                if (result.valid) {
                     self.$store.dispatch('updateGroup', group).then(function () {
                         self.isEditMode = false;
                     });

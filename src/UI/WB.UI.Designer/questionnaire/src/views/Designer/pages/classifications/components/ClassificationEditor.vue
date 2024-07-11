@@ -4,7 +4,7 @@
             <vee-form ref="form" v-slot="{ errors, meta }">
                 <div class="form-group">
                     <vee-field as="textarea" v-autosize name="title" type="text" required v-model="title"
-                        rules="required" class="form-control"
+                        rules="required" class="form-control" :validateOnInput="true"
                         :placeholder="$t('QuestionnaireEditor.ClassificationTitle')" />
                     <span class="help-block" v-show="errors.title">{{ errors.title }}</span>
                 </div>
@@ -99,7 +99,7 @@ export default {
             };
 
             this.$refs.form.validate().then(result => {
-                if (result) {
+                if (result.valid) {
                     self.$store
                         .dispatch('updateClassification', classification)
                         .then(function () {

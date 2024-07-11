@@ -19,13 +19,13 @@
                                 <div class="option-cell" :class="{ 'has-error': errors['value' + category.id] }">
                                     <vee-field :name="'value' + category.id" v-on:keyup.enter="moveFocus"
                                         v-validate="'required|integer'" key="value" type="number"
-                                        v-model="category.value" class="form-control"
+                                        v-model="category.value" class="form-control" :validateOnInput="true"
                                         :placeholder="$t('QuestionnaireEditor.OptionsUploadValue')" />
                                 </div>
                                 <div class="option-cell" :class="{ 'has-error': errors['title' + category.id] }">
                                     <vee-field :name="'title' + category.id" v-on:keyup.enter="moveFocus"
                                         v-validate="'required'" key="title" type="text" v-model="category.title"
-                                        class="form-control"
+                                        class="form-control" :validateOnInput="true"
                                         :placeholder="$t('QuestionnaireEditor.OptionsUploadTitle')" />
                                 </div>
                                 <div class="input-group-btn">
@@ -43,6 +43,7 @@
                     <div v-else class="form-group" :class="{ 'has-error': errors.stringifiedOptions }">
                         <vee-field as="textarea" name="stringifiedOptions" v-autosize v-model="stringifiedOptions"
                             :rules="validateStringOptions" key="stringifiedOptions" class="form-control js-elasticArea"
+                            :validateOnInput="true"
                             :placeholder="$t('QuestionnaireEditor.ClassificationsStringOptionsEditorPlaceholder')" />
                         <p v-if="errors.stringifiedOptions" class="text-danger">{{ errors.stringifiedOptions }}</p>
                     </div>
@@ -69,7 +70,6 @@
 
 import { newGuid } from '../../../../../helpers/guid'
 import { Form, Field, ErrorMessage } from 'vee-validate';
-//import { optionsParseRegex } from '../helper';
 import _ from 'lodash'
 
 export default {
@@ -83,7 +83,6 @@ export default {
         return {
             optionsMode: true,
             stringifiedOptions: '',
-            //optionsParseRegex: optionsParseRegex,
             optionsParseRegex: new RegExp(/^(.+?)[\…\.\s]+([-+]?\d+)\s*$/)
         };
     },
@@ -156,21 +155,6 @@ export default {
 
             return options;
         },
-        /*moveFocus($event) {
-            var parentCell = $($event.target).closest('div.option-cell');
-            var nextCell = parentCell.next('div.option-cell');
-
-            if (nextCell.length != 0) {
-                nextCell.find('input').focus();
-            } else {
-                $($event.target)
-                    .closest('div.option-line')
-                    .next('div.option-line')
-                    .find('input')
-                    .first()
-                    .focus();
-            }
-        },*/
         moveFocus(event) {
             var parentCell = event.target.closest('div.option-cell');
             var nextCell = parentCell.nextElementSibling;
@@ -202,7 +186,6 @@ export default {
         },
         deleteCategory(index) {
             this.$store.dispatch('deleteCategory', index);
-            this.validator.flag('collectionSizeTracker', { dirty: true });
         },
         showStrings() {
             this.stringifyCategories();
@@ -211,7 +194,7 @@ export default {
         showList() {
             var self = this;
             this.validator.validate().then(function (result) {
-                if (self.validator.errors.has('stringifiedOptions')) {
+                if (self.validator.errors.stringifiedOptions) {
                 } else {
                     var parsedCategories = self.parseOptions();
 
@@ -267,21 +250,15 @@ export default {
 
             var self = this;
             this.$refs.form.validate().then(function (result) {
-                if (result) {
+                if (result.valid) {
                     self.$store
                         .dispatch(
                             'updateCategories',
                             self.$store.state.activeClassification.id
                         )
                         .then(function () {
-                            self.validator.pause();
                             self.$nextTick(() => {
-                                self.validator.fields.items.forEach(field =>
-                                    field.reset()
-                                );
-                                self.validator.reset();
-                                self.validator.errors.clear();
-                                self.validator.resume();
+                                self.validator.resetForm();
                             });
                         });
                 }
@@ -295,7 +272,6 @@ export default {
                 value: null,
                 parent: this.$store.state.activeClassification.id
             });
-            this.validator.flag('collectionSizeTracker', { dirty: true });
         },
 
         validateStringOptions(value) {
@@ -304,15 +280,16 @@ export default {
                 var matchPattern = true;
                 var invalidLines = [];
                 _.forEach(options, (option, index) => {
-                    var currentLineValidationResult = optionsParseRegex.test(
+                    var currentLineValidationResult = this.optionsParseRegex.test(
                         option || ''
                     );
                     matchPattern = matchPattern && currentLineValidationResult;
                     if (!currentLineValidationResult)
                         invalidLines.push(index + 1);
                 });
-                //return { valid: matchPattern, data: invalidLines };
-                return this.getMessageStringOptions(invalidLines)
+                return invalidLines.length > 0
+                    ? this.getMessageStringOptions(invalidLines)
+                    : matchPattern
             }
             return true;
         },
