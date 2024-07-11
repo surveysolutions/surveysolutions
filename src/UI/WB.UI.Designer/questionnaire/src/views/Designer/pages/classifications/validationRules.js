@@ -1,7 +1,8 @@
 import { defineRule } from 'vee-validate';
-import { required } from '@vee-validate/rules';
+import { required, integer } from '@vee-validate/rules';
 
 defineRule('required', required);
+defineRule('integer', integer);
 
 /*import { forEach, isEmpty } from 'lodash';
 import { optionsParseRegex } from './helper';

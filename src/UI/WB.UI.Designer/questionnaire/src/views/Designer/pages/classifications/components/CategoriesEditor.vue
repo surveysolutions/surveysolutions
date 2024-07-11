@@ -19,13 +19,14 @@
                                 <div class="option-cell" :class="{ 'has-error': errors['value' + category.id] }">
                                     <vee-field :name="'value' + category.id" v-on:keyup.enter="moveFocus"
                                         v-validate="'required|integer'" key="value" type="number"
-                                        v-model="category.value" class="form-control" :validateOnInput="true"
+                                        rules="required|integer" v-model="category.value" class="form-control"
+                                        :validateOnInput="true"
                                         :placeholder="$t('QuestionnaireEditor.OptionsUploadValue')" />
                                 </div>
                                 <div class="option-cell" :class="{ 'has-error': errors['title' + category.id] }">
                                     <vee-field :name="'title' + category.id" v-on:keyup.enter="moveFocus"
                                         v-validate="'required'" key="title" type="text" v-model="category.title"
-                                        class="form-control" :validateOnInput="true"
+                                        rules="required" class="form-control" :validateOnInput="true"
                                         :placeholder="$t('QuestionnaireEditor.OptionsUploadTitle')" />
                                 </div>
                                 <div class="input-group-btn">
@@ -83,7 +84,7 @@ export default {
         return {
             optionsMode: true,
             stringifiedOptions: '',
-            optionsParseRegex: new RegExp(/^(.+?)[\…\.\s]+([-+]?\d+)\s*$/)
+            optionsParseRegex: new RegExp(/^(.+?)[\…\.\s]+([-+]?\d+)\s*$/),
         };
     },
     computed: {
@@ -102,7 +103,7 @@ export default {
         activeClassification() {
             return this.$store.state.activeClassification;
         },
-        validator() {
+        form() {
             return this.$refs.form;
         }
     },
@@ -186,6 +187,7 @@ export default {
         },
         deleteCategory(index) {
             this.$store.dispatch('deleteCategory', index);
+            this.form.setFieldValue('collectionSizeTracker', this.categories.length);
         },
         showStrings() {
             this.stringifyCategories();
@@ -193,8 +195,8 @@ export default {
         },
         showList() {
             var self = this;
-            this.validator.validate().then(function (result) {
-                if (self.validator.errors.stringifiedOptions) {
+            this.form.validate().then(function (result) {
+                if (self.form.errors.stringifiedOptions) {
                 } else {
                     var parsedCategories = self.parseOptions();
 
@@ -258,7 +260,7 @@ export default {
                         )
                         .then(function () {
                             self.$nextTick(() => {
-                                self.validator.resetForm();
+                                self.form.resetForm();
                             });
                         });
                 }
@@ -272,6 +274,7 @@ export default {
                 value: null,
                 parent: this.$store.state.activeClassification.id
             });
+            this.form.setFieldValue('collectionSizeTracker', this.categories.length);
         },
 
         validateStringOptions(value) {
