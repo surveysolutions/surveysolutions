@@ -168,8 +168,14 @@
         const generatePdf = function(evn) {
             self.startExportProcess(self.selectedTransalation);
         };
+        
+        const selectTranslation = function(link) {
+            self.selectedTransalation = link.attr('value');
+            $('#dropdownMenuButton').text(link.text());
+            $('#pdfGenerateButton').prop('disabled', false);
+        }
 
-        self.initLanguageComboBox(translationList, generatePdf)
+        self.initLanguageComboBox(translationList, ".languages-combobox", '#pdfGenerateButton', selectTranslation, generatePdf)
     }
 
     self.initLanguageComboBoxHtml = function (translationList) {
@@ -177,12 +183,19 @@
             window.open(self.htmlDownloadUrl + '?translation=' + self.selectedTransalationHtml, '_blank');
             $('#mExportHtml').modal("hide");
         };
-        
-        self.initLanguageComboBox(translationList, generateHtml)
+
+        const selectTranslation = function(link) {
+            self.selectedTransalationHtml = link.attr('value');
+            $('#dropdownMenuButtonHtml').text(link.text());
+            $('#htmlGenerateButton').prop('disabled', false);
+        }
+
+        self.initLanguageComboBox(translationList, ".languages-combobox-html", '#htmlGenerateButton', selectTranslation, generateHtml)
     }
 
-    self.initLanguageComboBox = function (translationList, clickFunc) {
-        var typeaheadCtrl = $(".languages-combobox");
+    self.initLanguageComboBox = function (translationList, ulClass, btnSelector, selectTranslationFunc, clickFunc) {
+
+        var typeaheadCtrl = $(ulClass);
         typeaheadCtrl.empty();
 
         for (var i = 0; i < translationList.length; i++) {
@@ -202,14 +215,12 @@
         typeaheadCtrl.unbind('click');
         typeaheadCtrl.click(function (evn) {
             var link = $(evn.target);
-            self.selectedTransalation = link.attr('value');
-            $('#dropdownMenuButton').text(link.text());
-            $('#pdfGenerateButton').prop('disabled', false);
+            selectTranslationFunc(link);
         });
 
-        $('#pdfGenerateButton').prop('disabled', true);
-        $('#pdfGenerateButton').unbind('click');
-        $('#pdfGenerateButton').click(function(evn) {
+        $(btnSelector).prop('disabled', true);
+        $(btnSelector).unbind('click');
+        $(btnSelector).click(function(evn) {
             clickFunc();
         });
 	}
