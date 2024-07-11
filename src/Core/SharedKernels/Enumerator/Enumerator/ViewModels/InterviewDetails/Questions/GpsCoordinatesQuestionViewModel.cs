@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
@@ -140,17 +141,30 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
+        private CancellationTokenSource cts;
+
         private async Task SaveAnswerAsync()
         {
             this.Answering.StartInProgressIndicator();
             this.userInterfaceStateService.NotifyRefreshStarted();
+            
             try
             {
-                var mvxGeoLocation = await this.locationService.GetLocation(this.settings.GpsReceiveTimeoutSec,
-                    this.settings.GpsDesiredAccuracy).ConfigureAwait(false);
-
+                cts = new CancellationTokenSource(TimeSpan.FromSeconds(this.settings.GpsReceiveTimeoutSec));
+                
+                var mvxGeoLocation = await this.locationService.GetLocation(
+                    this.settings.GpsDesiredAccuracy, cts.Token).ConfigureAwait(false);
+                
                 this.userInterfaceStateService.NotifyRefreshFinished();
-                await this.SetGeoLocationAnswerAsync(mvxGeoLocation);
+                
+                if (mvxGeoLocation == null)
+                {
+                    await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.GpsQuestion_Timeout);
+                }
+                else
+                {
+                    await this.SetGeoLocationAnswerAsync(mvxGeoLocation);
+                }
             }
             catch (PermissionException)
             {
@@ -220,6 +234,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 return;
             
             isDisposed = true;
+            
+            cts?.Cancel();
+            cts?.Dispose();
             
             this.liteEventRegistry.Unsubscribe(this);
             this.QuestionState.Dispose();
