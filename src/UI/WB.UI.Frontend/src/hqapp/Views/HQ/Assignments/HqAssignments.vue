@@ -155,12 +155,9 @@
             <p v-if="!canEditQuantity">
                 <b>{{ $t("Assignments.AssignmentExpectedInWebMode") }}</b>
             </p>
-            <Form onsubmit="return false;">
+            <Form onsubmit="return false;" v-slot="{ meta }">
 
-                <!-- TODO:MIGRATION -->
-                <!-- v-bind:class="{ 'has-error': errors.has('editedQuantity') }" -->
-
-                <div class="form-group">
+                <div class="form-group" v-bind:class="{ 'has-error': meta.valid == false }">
                     <label class="control-label" for="newQuantity">
                         {{ $t("Assignments.Expected") }}
                     </label>
@@ -708,11 +705,13 @@ export default {
         },
 
         async updateQuantity() {
-            const validationResult = await this.$validator.validateAll()
+            //TODO: MIGRATION
+            //
+            //const validationResult = await this.$validator.validateAll()
 
-            if (validationResult == false) {
-                return false
-            }
+            //if (validationResult == false) {
+            //    return false
+            //}
 
             let targetQuantity = null
 
@@ -786,6 +785,8 @@ export default {
         },
 
         validateQuantity(value) {
+
+            //TODO: MIGRATION
             const regex = /^-?([0-9]+)$/i;
 
             if (!regex.test(value)) {
@@ -793,10 +794,10 @@ export default {
             }
 
             if (value <= -2)
-                return 'This field must be greater than -1';
+                return 'This field must be greater or equal to -1';
 
             if (value > this.config.maxInterviewsByAssignment)
-                return 'This field must be greater than -1';
+                return 'This field must be less than limit';
 
             return true;
 
