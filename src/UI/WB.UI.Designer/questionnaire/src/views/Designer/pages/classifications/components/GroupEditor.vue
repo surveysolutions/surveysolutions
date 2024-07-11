@@ -1,7 +1,7 @@
 ﻿<template>
     <div>
         <div v-if="isEditMode" class="edit-classification-group-name">
-            <v-form v-slot="{ errors, meta }">
+            <vee-form v-slot="{ errors, meta }">
                 <div class="form-group" :class="{ 'has-error': errors.title }">
                     <textarea v-elastic name="title" type="text" v-validate="'required'" required v-model="title"
                         class="form-control"
@@ -13,7 +13,7 @@
                 <button type="button" @click="cancel()" class="btn btn-link">{{ $t('QuestionnaireEditor.Cancel')
                     }}</button>
 
-            </v-form>
+            </vee-form>
         </div>
         <div v-else class="line-wrapper">
             <a @click="select()">{{ title }} <span class="badge pull-right">{{ group.count }}</span></a>
@@ -27,7 +27,7 @@ import { Form, Field, ErrorMessage } from 'vee-validate';
 export default {
     name: 'GroupEditor',
     components: {
-        VForm: Form,
+        VeeForm: Form,
         VField: Field,
         ErrorMessage: ErrorMessage,
     },

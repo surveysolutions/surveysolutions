@@ -1,5 +1,5 @@
 ﻿<template>
-    <v-form v-slot="{ errors, meta }">
+    <vee-form v-slot="{ errors, meta }">
         <div class="scroller">
             <ul class="breadcrumb">
                 <li>{{ activeGroup.title }}</li>
@@ -63,7 +63,7 @@
             <button type="button" class="btn btn-lg" :class="{ 'btn-success': meta.dirty }" :disabled="!meta.dirty"
                 @click="save">{{ $t('QuestionnaireEditor.Save') }}</button>
         </div>
-    </v-form>
+    </vee-form>
 </template>
 
 <script>
@@ -75,7 +75,7 @@ import _ from 'lodash'
 export default {
     name: 'CategoriesEditor',
     components: {
-        VForm: Form,
+        VeeForm: Form,
         VField: Field,
         ErrorMessage: ErrorMessage,
     },
