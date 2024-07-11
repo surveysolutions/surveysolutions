@@ -73,6 +73,7 @@ vue.component('confirm-dialog', ConfirmDialog.default);
 
 directives(vue);
 
+//import './views/Designer/pages/classifications/validationRules';
 import store from './views/Designer/pages/classifications/store';
 vue.use(store);
 
