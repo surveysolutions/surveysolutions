@@ -62,7 +62,7 @@
     "dependencies": {
         "@babel/node": "^7.20.7",
         "@mdi/font": "^5.2.45",
-        "axios": "^1.6.5",
+        "axios": "^1.7.0",
         "bootstrap": "3.4.1",
         "bootstrap-select": "^1.13.18",
         "es6-promise": "^4.2.8",
