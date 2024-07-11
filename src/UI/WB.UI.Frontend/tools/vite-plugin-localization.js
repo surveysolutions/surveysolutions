@@ -1,4 +1,4 @@
-import LocalizationBuilder from './localization.js';
+import LocalizationBuilder from './localization.cjs';
 
 export default (userOptions = {}) => {
     return {

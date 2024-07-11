@@ -3,16 +3,16 @@
         <template slot="headers">
             <ol class="breadcrumb">
                 <li>
-                    <a href="/SurveySetup">{{$t('MainMenu.SurveySetup')}}</a>
+                    <a href="/SurveySetup">{{ $t('MainMenu.SurveySetup') }}</a>
                 </li>
             </ol>
-            <h1>{{$t('Pages.Questionnaire_Exposed_Variables')}}</h1>
+            <h1>{{ $t('Pages.Questionnaire_Exposed_Variables') }}</h1>
         </template>
 
         <div class="row">
             <div class="col-sm-8">
                 <h2>
-                    {{$t('Pages.QuestionnaireNameFormat', { name : model.title, version : model.version})}}
+                    {{ $t('Pages.QuestionnaireNameFormat', { name: model.title, version: model.version }) }}
                 </h2>
             </div>
         </div>
@@ -20,7 +20,7 @@
         <div class="row">
             <div class="col-sm-6 col-xs-10 info-block">
                 <p>
-                    {{$t('Pages.Exposed_Variables_Description')}}
+                    {{ $t('Pages.Exposed_Variables_Description') }}
                 </p>
             </div>
         </div>
@@ -30,25 +30,20 @@
                 <div class="page-header">
                     <div class="neighbor-block-to-search">
                         <h3>
-                            {{$t('Pages.Exposed_Variables_AvailableVariablesTitle')}}
+                            {{ $t('Pages.Exposed_Variables_AvailableVariablesTitle') }}
                         </h3>
                     </div>
                 </div>
 
-                <DataTables
-                    id="id-table"
-                    ref="table"
-                    :tableOptions="tableOptions"
-                    noSelect
-                    @cell-clicked="cellAllClicked"
-                    :noPaging="false">
+                <DataTables id="id-table" ref="table" :tableOptions="tableOptions" noSelect
+                    @cell-clicked="cellAllClicked" :noPaging="false">
                 </DataTables>
             </div>
             <div class="col-sm-6">
                 <div class="page-header">
                     <div class="neighbor-block-to-search">
                         <h3>
-                            {{$t('Pages.Exposed_Variables_SelectedVariablesTitle')}}
+                            {{ $t('Pages.Exposed_Variables_SelectedVariablesTitle') }}
                         </h3>
                     </div>
                 </div>
@@ -57,27 +52,23 @@
                         <tr>
                             <th style="width: 5%"></th>
                             <th style="width: 35%">
-                                {{this.$t('Pages.ExposedVariables_VariableName')}}
+                                {{ this.$t('Pages.ExposedVariables_VariableName') }}
                             </th>
                             <!-- <th>{{this.$t('Pages.ExposedVariables_VariableLabel')}}</th> -->
                             <th style="width: 60%">
-                                {{this.$t('Pages.ExposedVariables_VariableDisplayTitle')}}
+                                {{ this.$t('Pages.ExposedVariables_VariableDisplayTitle') }}
                             </th>
 
                         </tr>
                     </thead>
                     <tbody>
-                        <tr
-                            v-for="variable in exposedVariables"
-                            :key="'id' + '__' + variable.id">
+                        <tr v-for="variable in exposedVariables" :key="'id' + '__' + variable.id">
                             <td>{{ getEntityDisplayType(variable.entityType) }}</td>
                             <td>{{ variable.variable }}</td>
                             <!-- <td>{{ variable.label }}</td> -->
                             <td>{{ getVariableLabel(variable) }}</td>
                             <td>
-                                <button
-                                    style="font-size:19px;"
-                                    class="close"
+                                <button style="font-size:19px;" class="close"
                                     @click="removeExposedClicked(variable.id)">&times;</button>
                             </td>
                         </tr>
@@ -85,47 +76,34 @@
                 </table>
 
                 <div class="action-buttons">
-                    <button
-                        @click="saveVariables"
-                        :disabled="saveDisabled"
-                        class="btn btn-success">
-                        {{$t('Common.Save')}}
+                    <button @click="saveVariables" :disabled="saveDisabled" class="btn btn-success">
+                        {{ $t('Common.Save') }}
                     </button>
                 </div>
             </div>
         </div>
 
-        <ModalFrame ref="exposedChangeModal"
-            :title="$t('Pages.ConfirmationNeededTitle')">
-            <p>{{ $t("Pages.ExposedVariables_ChangeMessage" )}}</p>
-            <div slot="actions">
-                <button
-                    type="button"
-                    class="btn btn-success"
-                    v-bind:disabled="model.isObserving"
-                    @click="changeExposedStatusSend">{{ $t("Common.Save") }}</button>
-                <button
-                    type="button"
-                    class="btn btn-link"
-                    data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
-            </div>
+        <ModalFrame ref="exposedChangeModal" :title="$t('Pages.ConfirmationNeededTitle')">
+            <p>{{ $t("Pages.ExposedVariables_ChangeMessage") }}</p>
+            <template v-slot:actions>
+                <div>
+                    <button type="button" class="btn btn-success" v-bind:disabled="model.isObserving"
+                        @click="changeExposedStatusSend">{{ $t("Common.Save") }}</button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+                </div>
+            </template>
         </ModalFrame>
 
 
-        <ModalFrame ref="exposedRemoveModal"
-            :title="$t('Pages.ConfirmationNeededTitle')">
-            <p>{{ $t("Pages.ExposedVariables_RemoveMessage" )}}</p>
-            <div slot="actions">
-                <button
-                    type="button"
-                    class="btn btn-danger"
-                    v-bind:disabled="model.isObserving"
-                    @click="removeExposedVariable">{{ $t("Common.Remove") }}</button>
-                <button
-                    type="button"
-                    class="btn btn-link"
-                    data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
-            </div>
+        <ModalFrame ref="exposedRemoveModal" :title="$t('Pages.ConfirmationNeededTitle')">
+            <p>{{ $t("Pages.ExposedVariables_RemoveMessage") }}</p>
+            <template v-slot:actions>
+                <div>
+                    <button type="button" class="btn btn-danger" v-bind:disabled="model.isObserving"
+                        @click="removeExposedVariable">{{ $t("Common.Remove") }}</button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+                </div>
+            </template>
         </ModalFrame>
 
     </HqLayout>
@@ -134,7 +112,7 @@
 <script>
 import { map } from 'lodash'
 import _sanitizeHtml from 'sanitize-html'
-const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
+const sanitizeHtml = text => _sanitizeHtml(text, { allowedTags: [], allowedAttributes: [] })
 
 export default {
 
@@ -184,7 +162,7 @@ export default {
                     },
 
                 ],
-                rowId: function(row) {
+                rowId: function (row) {
                     return row.id
                 },
                 ajax: {
@@ -196,19 +174,18 @@ export default {
                 responsive: false,
                 'ordering': false,
                 sDom: 'rf<"table-with-scroll"t>ip',
-                createdRow: function(row, data) {
-                    if(self.exposedVariables.findIndex(v => v.id === data.id) != -1)
+                createdRow: function (row, data) {
+                    if (self.exposedVariables.findIndex(v => v.id === data.id) != -1)
                         $(row).addClass('disabled')
                 },
             }
         },
-        saveDisabled(){
-            if(this.initialSet.length !== this.exposedVariables.length)
+        saveDisabled() {
+            if (this.initialSet.length !== this.exposedVariables.length)
                 return false
-            else{
-                for(var i = 0; i< this.initialSet.length; i++ )
-                {
-                    if(this.initialSet[i].id !== this.exposedVariables[i].id)
+            else {
+                for (var i = 0; i < this.initialSet.length; i++) {
+                    if (this.initialSet[i].id !== this.exposedVariables[i].id)
                         return false
                 }
             }
@@ -234,19 +211,19 @@ export default {
     },
     methods: {
         sanitizeHtml: sanitizeHtml,
-        replaceSubstitutions(value){
-            if(value == null)
+        replaceSubstitutions(value) {
+            if (value == null)
                 return null
             return value.replace(/%[\w_]+%/g, '[..]')
         },
 
-        saveVariables(){
-            this.$refs.exposedChangeModal.modal({keyboard: false})
+        saveVariables() {
+            this.$refs.exposedChangeModal.modal({ keyboard: false })
 
         },
 
-        getEntityDisplayType(type){
-            switch(type){
+        getEntityDisplayType(type) {
+            switch (type) {
                 case 'Question':
                     return 'Q'
                 case 'Variable':
@@ -258,7 +235,7 @@ export default {
 
         async changeExposedStatusSend() {
             const response = await this.$hq.Questionnaire(this.model.questionnaireId, this.model.version)
-                .ChangeVariableExposeStatus(this.$config.model.questionnaireIdentity, this.exposedVariables.map(s=>s.id))
+                .ChangeVariableExposeStatus(this.$config.model.questionnaireIdentity, this.exposedVariables.map(s => s.id))
             this.initialSet = [...this.exposedVariables]
             this.$refs.exposedChangeModal.modal('hide')
         },
@@ -266,13 +243,13 @@ export default {
         cellAllClicked(columnName, rowId, cellData) {
             const parsedRowId = rowId.replace('id__', '')
 
-            var row = this.$refs.table.table.row('#'+rowId)
-            if(this.exposedVariables.length >= 15)
+            var row = this.$refs.table.table.row('#' + rowId)
+            if (this.exposedVariables.length >= 15)
                 return
 
             var index = this.exposedVariables.findIndex(x => x.id == parsedRowId)
-            if(index === -1){
-                for (var i = 0; i < this.exposedVariables.length && this.exposedVariables[i].id < parsedRowId; i++) {/**/}
+            if (index === -1) {
+                for (var i = 0; i < this.exposedVariables.length && this.exposedVariables[i].id < parsedRowId; i++) {/**/ }
 
                 var rowData = row.data()
                 this.exposedVariables.splice(i, 0, {
@@ -285,28 +262,27 @@ export default {
                 row.nodes().to$().addClass('disabled')
             }
         },
-        removeExposedClicked(id)
-        {
+        removeExposedClicked(id) {
             this.idToRemove = id
-            this.$refs.exposedRemoveModal.modal({keyboard: false})
+            this.$refs.exposedRemoveModal.modal({ keyboard: false })
 
         },
-        removeExposedVariable(){
+        removeExposedVariable() {
             var index = this.exposedVariables.findIndex(x => x.id == this.idToRemove)
-            this.exposedVariables.splice(index,1)
+            this.exposedVariables.splice(index, 1)
 
-            var row = this.$refs.table.table.row('#'+this.idToRemove)
-            if(row != null)
+            var row = this.$refs.table.table.row('#' + this.idToRemove)
+            if (row != null)
                 row.nodes().to$().removeClass('disabled')
             this.$refs.exposedRemoveModal.modal('hide')
         },
-        getVariableLabel(variable){
+        getVariableLabel(variable) {
             return variable.label ? this.getDisplayTitle(variable.label)
                 : (variable.title ? this.getDisplayTitle(variable.title) : variable.variable)
         },
-        getDisplayTitle(title){
+        getDisplayTitle(title) {
             var transformedTitle = sanitizeHtml(title).replace(/%[\w_]+%/g, '[..]')
-            return transformedTitle.length  >= 57 ? transformedTitle.substring(0,54) + '...' : transformedTitle
+            return transformedTitle.length >= 57 ? transformedTitle.substring(0, 54) + '...' : transformedTitle
         },
     },
 }

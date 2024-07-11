@@ -1,17 +1,19 @@
 <template>
     <HqLayout :hasFilter="false" tag="workspaces-page">
-        <div slot="headers">
-            <div class="topic-with-button">
-                <h1 v-html="$t('MainMenu.Workspaces')"></h1>
-                <button type="button" v-if="this.$config.model.canManage" class="btn btn-success"
-                    data-suso="create-new-workspace" @click="createNewWorkspace">
-                    {{ $t('Workspaces.AddNew') }}
-                </button>
+        <template v-slot:headers>
+            <div>
+                <div class="topic-with-button">
+                    <h1 v-html="$t('MainMenu.Workspaces')"></h1>
+                    <button type="button" v-if="this.$config.model.canManage" class="btn btn-success"
+                        data-suso="create-new-workspace" @click="createNewWorkspace">
+                        {{ $t('Workspaces.AddNew') }}
+                    </button>
+                </div>
+                <i v-html="$t('Workspaces.WorkspacesSubtitle')">
+                </i>
+                <div class="search-pusher"></div>
             </div>
-            <i v-html="$t('Workspaces.WorkspacesSubtitle')">
-            </i>
-            <div class="search-pusher"></div>
-        </div>
+        </template>
         <DataTables ref="table" data-suso="workspaces-list" :tableOptions="tableOptions" noSelect :noPaging="false"
             :contextMenuItems="contextMenuItems" :supportContextMenu="this.$config.model.canManage">
         </DataTables>
@@ -39,19 +41,21 @@
                     </label>
 
                     <input type="text" class="form-control" v-model.trim="editedDisplayName" name="workspaceDisplayName"
-                        v-validate="displayNameValidations" :data-vv-as="$t('Workspaces.DisplayName')" autocomplete="off"
-                        @keyup.enter="createWorkspace" id="newDescription" />
+                        v-validate="displayNameValidations" :data-vv-as="$t('Workspaces.DisplayName')"
+                        autocomplete="off" @keyup.enter="createWorkspace" id="newDescription" />
                     <p class="help-block" v-if="!errors.has('workspaceDisplayName')">
                         {{ $t('Workspaces.DisplayNameHelpText') }}
                     </p>
                     <span v-else class="text-danger">{{ errors.first('workspaceDisplayName') }}</span>
                 </div>
             </form>
-            <div slot="actions">
-                <button type="button" data-suso="workspace-create-save" v-bind:disabled="inProgress" class="btn btn-primary"
-                    @click="createWorkspace">{{ $t("Common.Save") }}</button>
-                <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
-            </div>
+            <template v-slot:actions>
+                <div>
+                    <button type="button" data-suso="workspace-create-save" v-bind:disabled="inProgress"
+                        class="btn btn-primary" @click="createWorkspace">{{ $t("Common.Save") }}</button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+                </div>
+            </template>
         </ModalFrame>
 
         <ModalFrame ref="editWorkspaceModal" data-suso="workspaces-edit-dialog"
@@ -63,17 +67,19 @@
                     </label>
 
                     <input type="text" class="form-control" v-model.trim="editedDisplayName" name="workspaceDisplayName"
-                        v-validate="displayNameValidations" :data-vv-as="$t('Workspaces.DisplayName')" autocomplete="off"
-                        @keyup.enter="updateWorkspace" id="editDescription" />
+                        v-validate="displayNameValidations" :data-vv-as="$t('Workspaces.DisplayName')"
+                        autocomplete="off" @keyup.enter="updateWorkspace" id="editDescription" />
                     <span class="text-danger">{{ errors.first('workspaceDisplayName') }}</span>
                 </div>
             </form>
-            <div slot="actions">
-                <button type="button" data-suso="workspace-edit-save" class="btn btn-primary" v-bind:disabled="inProgress"
-                    @click="updateWorkspace">{{ $t("Common.Save") }}</button>
-                <button type="button" class="btn btn-link" data-suso="workspace-cancel" data-dismiss="modal">{{
-                    $t("Common.Cancel") }}</button>
-            </div>
+            <template v-slot:actions>
+                <div>
+                    <button type="button" data-suso="workspace-edit-save" class="btn btn-primary"
+                        v-bind:disabled="inProgress" @click="updateWorkspace">{{ $t("Common.Save") }}</button>
+                    <button type="button" class="btn btn-link" data-suso="workspace-cancel" data-dismiss="modal">{{
+                        $t("Common.Cancel") }}</button>
+                </div>
+            </template>
         </ModalFrame>
 
         <ModalFrame ref="disableWorkspaceModal" data-suso="workspaces-disable-dialog"
@@ -81,12 +87,14 @@
             <form onsubmit="return false;">
                 <p>{{ $t("Workspaces.DisableExplanation") }}</p>
             </form>
-            <div slot="actions">
-                <button type="button" data-suso="workspace-disable-ok" class="btn btn-danger" v-bind:disabled="inProgress"
-                    @click="disableWorkspace">{{ $t("Common.Ok") }}</button>
-                <button type="button" class="btn btn-link" data-suso="workspace-cancel" data-dismiss="modal">{{
-                    $t("Common.Cancel") }}</button>
-            </div>
+            <template v-slot:actions>
+                <div>
+                    <button type="button" data-suso="workspace-disable-ok" class="btn btn-danger"
+                        v-bind:disabled="inProgress" @click="disableWorkspace">{{ $t("Common.Ok") }}</button>
+                    <button type="button" class="btn btn-link" data-suso="workspace-cancel" data-dismiss="modal">{{
+                        $t("Common.Cancel") }}</button>
+                </div>
+            </template>
         </ModalFrame>
 
         <DeleteWorkspaceModal ref="deleteWorkspaceModal" @workspace:deleted="loadData"></DeleteWorkspaceModal>

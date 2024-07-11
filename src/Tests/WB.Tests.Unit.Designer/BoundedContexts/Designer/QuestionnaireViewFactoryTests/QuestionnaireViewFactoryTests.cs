@@ -3,6 +3,7 @@ using DocumentFormat.OpenXml.Office2010.Excel;
 using Main.Core.Documents;
 using Moq;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
@@ -36,7 +37,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireViewFacto
             QuestionnaireRevision questionnaireRevision = new QuestionnaireRevision(questionnaireId);
             var result = factory.HasUserAccessToQuestionnaire(questionnaireRevision, userId);
 
-            Assert.True(result);
+            ClassicAssert.True(result);
         }
         
         [Test]
@@ -66,7 +67,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireViewFacto
             QuestionnaireRevision questionnaireRevision = new QuestionnaireRevision(questionnaireId, revision: revision);
             var result = factory.HasUserAccessToQuestionnaire(questionnaireRevision, userId);
 
-            Assert.True(result);
+            ClassicAssert.True(result);
         }
     }
 }

@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace WB.Tests.Integration.ResourcesTranslationTests
 {
@@ -29,8 +30,8 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                 from inconsistentResource in GetTranslatedResourcesNotCorrespondingToOriginalByStringFormat(translatedResourceFile)
                 select $"{resourceFileName}: {inconsistentResource}";
 
-            Assert.IsNotEmpty(translatedResourceFiles);
-            Assert.IsEmpty(translatedResourceStringsNotCorrespondingToOriginal);
+            ClassicAssert.IsNotEmpty(translatedResourceFiles);
+            ClassicAssert.IsEmpty(translatedResourceStringsNotCorrespondingToOriginal);
         }
 
         private IEnumerable<string> GetTranslatedResourcesNotCorrespondingToOriginalByStringFormat(string translatedResourceFile)

@@ -7,6 +7,7 @@ using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
@@ -46,7 +47,7 @@ namespace WB.Tests.Unit.Infrastructure.Native
 
             var entity = repo.GetLatest(typeof(IEventSourcedAggregateRoot), Id.g1);
 
-            Assert.IsNotNull(entity);
+            ClassicAssert.IsNotNull(entity);
             var entityMock = Mock.Get(entity);
 
             // Apply version change for existing Id.g1 entity and mark it as DIRTY

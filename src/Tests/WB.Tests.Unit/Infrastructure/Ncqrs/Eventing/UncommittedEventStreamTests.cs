@@ -1,6 +1,7 @@
 using System;
 using Ncqrs.Eventing;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace Ncqrs.Tests.Eventing
@@ -20,7 +21,7 @@ namespace Ncqrs.Tests.Eventing
         public void When_empty_should_indicate_a_single_source()
         {
             var sut = new UncommittedEventStream(Guid.NewGuid(), null);
-            Assert.IsTrue(sut.HasSingleSource);
+            ClassicAssert.IsTrue(sut.HasSingleSource);
         }
 
         [Test]
@@ -28,7 +29,7 @@ namespace Ncqrs.Tests.Eventing
         {
             var sut = new UncommittedEventStream(Guid.NewGuid(), null);
             sut.Append(new UncommittedEvent(Guid.NewGuid(), Guid.NewGuid(), 0, 0, DateTime.UtcNow, new DummyEvent()));
-            Assert.IsTrue(sut.HasSingleSource);
+            ClassicAssert.IsTrue(sut.HasSingleSource);
         }
 
         [Test]
@@ -38,7 +39,7 @@ namespace Ncqrs.Tests.Eventing
             var eventSourceId = Guid.NewGuid();
             sut.Append(CreateEvent(eventSourceId));
             sut.Append(CreateEvent(eventSourceId));
-            Assert.IsTrue(sut.HasSingleSource);
+            ClassicAssert.IsTrue(sut.HasSingleSource);
         }
 
         [Test]
@@ -47,7 +48,7 @@ namespace Ncqrs.Tests.Eventing
             var sut = new UncommittedEventStream(Guid.NewGuid(), null);
             sut.Append(CreateEvent(Guid.NewGuid()));
             sut.Append(CreateEvent(Guid.NewGuid()));
-            Assert.IsFalse(sut.HasSingleSource);
+            ClassicAssert.IsFalse(sut.HasSingleSource);
         }
 
         private static UncommittedEvent CreateEvent(Guid eventSourceId)

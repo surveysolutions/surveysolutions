@@ -1,57 +1,44 @@
 <template>
-    <HqLayout
-        has-filter
-        :title="$t('MainMenu.SurveyStatistics')"
-        :subtitle="$t('Pages.SurveyStatisticsDescription')">
+    <HqLayout has-filter :title="$t('MainMenu.SurveyStatistics')" :subtitle="$t('Pages.SurveyStatisticsDescription')">
         <div class="clearfix">
             <div class="col-sm-8">
-                <h4>{{this.filter.questionnaire == null ? $t('Common.AllQuestionnaires') : this.filter.questionnaire.Title}},
-                    {{this.filter.version == null ? $t('Common.AllVersions').toLowerCase() : ('ver. ' + this.filter.version)}}</h4>
+                <h4>{{ this.filter.questionnaire == null ? $t('Common.AllQuestionnaires') :
+                    this.filter.questionnaire.Title}},
+                    {{ this.filter.version == null ? $t('Common.AllVersions').toLowerCase() : ('ver. ' +
+                        this.filter.version)}}</h4>
             </div>
         </div>
         <div>
             <div class="row">
                 <div class="col-md-6">
-                    <QuestionDetail :question="filter.question"
-                        :title="$t('Reports.Question')"></QuestionDetail>
+                    <QuestionDetail :question="filter.question" :title="$t('Reports.Question')"></QuestionDetail>
                 </div>
                 <div class="col-md-6">
-                    <QuestionDetail
-                        :question="filter.condition"
-                        :title="$t('Reports.ConditionQuestion')"></QuestionDetail>
+                    <QuestionDetail :question="filter.condition" :title="$t('Reports.ConditionQuestion')">
+                    </QuestionDetail>
                 </div>
             </div>
         </div>
 
-        <Filters slot="filters">
-            <SurveyStatisticsFilter
-                @input="filterChanged"
-                @mounted="filtersLoaded"
-                :isSupervisor="isSupervisor"/>
-        </Filters>
-        <div
-            class="alert-warning"
-            v-if="warnings.length > 0">{{ $t('Reports.QuestionnaireCompatibilityIssues_UnknownAnswer')}}</div>
+        <template v-slot:filters>
+            <Filters>
+                <SurveyStatisticsFilter @input="filterChanged" @mounted="filtersLoaded" :isSupervisor="isSupervisor" />
+            </Filters>
+        </template>
+        <div class="alert-warning" v-if="warnings.length > 0">{{
+            $t('Reports.QuestionnaireCompatibilityIssues_UnknownAnswer')}}
+        </div>
 
-        <DataTables
-            ref="table"
-            v-if="isFiltersLoaded"
-            noSearch
-            exportable
-            multiorder
-            hasTotalRow
-            noSelect
-            :tableOptions="tableOptions"
-            :pageLength="isPivot ? this.filter.condition.Answers.length : 15"
-            @ajaxComplete="onTableReload"
-            :addParamsToRequest="addFilteringParams"></DataTables>
+        <DataTables ref="table" v-if="isFiltersLoaded" noSearch exportable multiorder hasTotalRow noSelect
+            :tableOptions="tableOptions" :pageLength="isPivot ? this.filter.condition.Answers.length : 15"
+            @ajaxComplete="onTableReload" :addParamsToRequest="addFilteringParams"></DataTables>
     </HqLayout>
 </template>
 
 <script>
 import QuestionDetail from './QuestionDetail'
 import SurveyStatisticsFilter from './SurveyStatisticsFilter'
-import {map, round, concat} from 'lodash'
+import { map, round, concat } from 'lodash'
 
 export default {
     components: {
@@ -144,15 +131,15 @@ export default {
             if (this.filter.question != null) {
                 if (this.filter.question.Type == 'Numeric') {
                     return [
-                        {name: this.$t('Reports.Count'), data: 'count'},
-                        {name: this.$t('Reports.Average'), data: 'average'},
-                        {name: this.$t('Reports.Median'), data: 'median'},
-                        {name: this.$t('Reports.Sum'), data: 'sum'},
-                        {name: this.$t('Reports.Min'), data: 'min'},
-                        {name: this.$t('Reports.Percentile05'), data: 'percentile_05'},
-                        {name: this.$t('Reports.Percentile50'), data: 'percentile_50'},
-                        {name: this.$t('Reports.Percentile95'), data: 'percentile_95'},
-                        {name: this.$t('Reports.Max'), data: 'max'},
+                        { name: this.$t('Reports.Count'), data: 'count' },
+                        { name: this.$t('Reports.Average'), data: 'average' },
+                        { name: this.$t('Reports.Median'), data: 'median' },
+                        { name: this.$t('Reports.Sum'), data: 'sum' },
+                        { name: this.$t('Reports.Min'), data: 'min' },
+                        { name: this.$t('Reports.Percentile05'), data: 'percentile_05' },
+                        { name: this.$t('Reports.Percentile50'), data: 'percentile_50' },
+                        { name: this.$t('Reports.Percentile95'), data: 'percentile_95' },
+                        { name: this.$t('Reports.Max'), data: 'max' },
                     ].map(a => ({
                         class: 'type-numeric',
                         title: a.name,

@@ -1,32 +1,35 @@
 <template>
     <HqLayout :hasFilter="true" :title="$t('Reports.CumulativeInterviewChart')"
         :subtitle="$t('Reports.CumulativeInterviewChartSubtitle')">
-        <Filters slot="filters">
-            <FilterBlock :title="$t('Common.Questionnaire')">
-                <Typeahead control-id="questionnaireId" :placeholder="$t('Common.AllQuestionnaires')"
-                    :value="selectedQuestionnaire" :values="model.templates" v-on:selected="selectQuestionnaire" />
-            </FilterBlock>
+        <template v-slot:filters>
+            <Filters>
+                <FilterBlock :title="$t('Common.Questionnaire')">
+                    <Typeahead control-id="questionnaireId" :placeholder="$t('Common.AllQuestionnaires')"
+                        :value="selectedQuestionnaire" :values="model.templates" v-on:selected="selectQuestionnaire" />
+                </FilterBlock>
 
-            <FilterBlock :title="$t('Common.QuestionnaireVersion')">
-                <Typeahead control-id="questionnaireVersion" :placeholder="$t('Common.AllVersions')"
-                    :value="selectedVersion" :values="selectedQuestionnaire == null ? null : selectedQuestionnaire.versions"
-                    v-on:selected="selectQuestionnaireVersion" :disabled="selectedQuestionnaire == null" />
-            </FilterBlock>
+                <FilterBlock :title="$t('Common.QuestionnaireVersion')">
+                    <Typeahead control-id="questionnaireVersion" :placeholder="$t('Common.AllVersions')"
+                        :value="selectedVersion"
+                        :values="selectedQuestionnaire == null ? null : selectedQuestionnaire.versions"
+                        v-on:selected="selectQuestionnaireVersion" :disabled="selectedQuestionnaire == null" />
+                </FilterBlock>
 
-            <FilterBlock :title="$t('Reports.DatesRange')">
-                <DatePicker :config="datePickerConfig" :value="selectedDateRange"></DatePicker>
-            </FilterBlock>
+                <FilterBlock :title="$t('Reports.DatesRange')">
+                    <DatePicker :config="datePickerConfig" :value="selectedDateRange"></DatePicker>
+                </FilterBlock>
 
-            <FilterBlock :title="$t('Reports.QuickRanges')">
-                <ul class="list-group small input-group">
-                    <li class="list-group-item pointer" v-for="range in quickRanges" :key="range.title"
-                        :class="{ 'list-group-item-success': isSelectedRange(range) }" @click="quickRange(range)">{{
-                            range.title }}</li>
-                </ul>
-                <Checkbox name="relativeRange" :label="$t('Reports.RangeRelativeToData')" v-model="relativeToData">
-                </Checkbox>
-            </FilterBlock>
-        </Filters>
+                <FilterBlock :title="$t('Reports.QuickRanges')">
+                    <ul class="list-group small input-group">
+                        <li class="list-group-item pointer" v-for="range in quickRanges" :key="range.title"
+                            :class="{ 'list-group-item-success': isSelectedRange(range) }" @click="quickRange(range)">{{
+                                range.title }}</li>
+                    </ul>
+                    <Checkbox name="relativeRange" :label="$t('Reports.RangeRelativeToData')" v-model="relativeToData">
+                    </Checkbox>
+                </FilterBlock>
+            </Filters>
+        </template>
         <div class="clearfix">
             <div class="col-sm-8">
                 <h2 v-if="!hasData">
@@ -84,8 +87,8 @@ export default {
 
         chartTitle() {
             return `${this.selectedQuestionnaire == null
-                    ? this.$t('Common.AllQuestionnaires')
-                    : this.selectedQuestionnaire.value
+                ? this.$t('Common.AllQuestionnaires')
+                : this.selectedQuestionnaire.value
                 }, ${this.selectedVersion == null ? this.$t('Common.AllVersions').toLowerCase() : this.selectedVersion.value
                 }`
         },

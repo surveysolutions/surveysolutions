@@ -1,4 +1,3 @@
-// import * as forEach from "lodash/foreach"
 import Vue from 'vue'
 import { DateFormats } from '~/shared/helpers'
 import { forEach } from 'lodash'

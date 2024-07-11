@@ -5,6 +5,7 @@ using FluentAssertions;
 using Moq;
 using MvvmCross.Tests;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -111,7 +112,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
             // Assert
             var itemsCount = outbox.Count;
             var repositoryCount = accessor.OutboxCount();
-            Assert.AreEqual(itemsCount, repositoryCount);
+            ClassicAssert.AreEqual(itemsCount, repositoryCount);
 
             var items = outbox.Cast<SupervisorInterviewDashboardViewModel>().ToList();
 

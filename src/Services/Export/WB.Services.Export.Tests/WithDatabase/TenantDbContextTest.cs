@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace WB.Services.Export.Tests.WithDatabase
 {
@@ -18,7 +19,7 @@ namespace WB.Services.Export.Tests.WithDatabase
             var cs1 = GetConnectionString();
             var cs2 = GetConnectionString();
 
-            Assert.AreSame(cs1, cs2);
+            ClassicAssert.AreSame(cs1, cs2);
         }
     }
 }

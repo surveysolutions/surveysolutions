@@ -8,6 +8,7 @@ using MvvmCross.Core;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.Tests;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -70,7 +71,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.InterviewViewModelFact
             
             //assert
             Assert.That(entities.Count, Is.EqualTo(1));
-            Assert.IsAssignableFrom<TextQuestionViewModel>(entities[0]);
+            ClassicAssert.IsAssignableFrom<TextQuestionViewModel>(entities[0]);
         }
     }
 }

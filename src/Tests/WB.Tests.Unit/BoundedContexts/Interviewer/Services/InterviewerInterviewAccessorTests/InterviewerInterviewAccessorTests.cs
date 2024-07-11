@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Moq;
 using Ncqrs.Eventing;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
@@ -61,7 +62,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
 
             var check = subject.GetInterviewEventStreamContainer(interviewId, false, new SyncInfoPackageResponse()).Tag;
 
-            Assert.Null(check);
+            ClassicAssert.Null(check);
         }
     }
 }

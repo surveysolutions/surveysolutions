@@ -148,7 +148,7 @@ namespace WB.UI.Designer.Controllers
             {
                 // get section id and redirect
                 var sectionId = questionnaireInfoFactory.GetSectionIdForItem(id, entityid);
-                return RedirectToActionPermanent("Details", new RouteValueDictionary
+                return RedirectToActionPermanent("Index", "Q", new RouteValueDictionary
                 {
                     { "id", id.ToString() }, {"chapterId", sectionId.FormatGuid()},{ "entityType", entityType},{ "entityid", entityid.FormatGuid()}
                 });
@@ -171,14 +171,15 @@ namespace WB.UI.Designer.Controllers
 
             if (ShouldRedirectToOriginalId(id))
             {
-                return RedirectToAction("Details", new RouteValueDictionary
+                //return Redirect($"/q/details/{sid}");
+                return RedirectToAction("Index", "Q", new RouteValueDictionary
                 {
                     { "id", id.OriginalQuestionnaireId.FormatGuid() }, { "chapterId", chapterId?.FormatGuid() }, { "entityType", entityType }, { "entityid", entityid?.FormatGuid() }
                 });
             }
 
             return (User.IsAdmin() || this.UserHasAccessToEditOrViewQuestionnaire(id))
-                ? this.View("~/questionnaire/index.cshtml")
+                ? RedirectPermanent($"/q/details/{id}")
                 : this.LackOfPermits();
         }
 

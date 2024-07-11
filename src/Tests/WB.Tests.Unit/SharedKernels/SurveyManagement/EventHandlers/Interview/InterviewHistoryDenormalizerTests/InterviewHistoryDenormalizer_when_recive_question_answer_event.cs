@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -103,8 +104,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             interviewExportedDataDenormalizer.Update(interviewHistoryView, dateTimeQuestionAnswered);
 
             var recordView = interviewHistoryView.Records[0];
-            Assert.AreEqual(recordView.Action, InterviewHistoricalAction.AnswerSet);
-            Assert.AreEqual(recordView.Parameters["answer"], answer.ToString(DateTimeFormat.DateFormat));
+            ClassicAssert.AreEqual(recordView.Action, InterviewHistoricalAction.AnswerSet);
+            ClassicAssert.AreEqual(recordView.Parameters["answer"], answer.ToString(DateTimeFormat.DateFormat));
         }
     }
 }

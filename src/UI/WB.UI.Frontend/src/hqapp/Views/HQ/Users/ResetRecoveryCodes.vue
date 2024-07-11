@@ -1,7 +1,7 @@
 <template>
-    <ProfileLayout ref="profile" :role="userInfo.role" :isOwnProfile="userInfo.isOwnProfile" :userName="userInfo.userName"
-        :canChangePassword="userInfo.canChangePassword" :userId="userInfo.userId" :currentTab="currentTab"
-        :canGenerateToken="userInfo.canGetApiToken" :isRestricted="userInfo.isRestricted">
+    <ProfileLayout ref="profile" :role="userInfo.role" :isOwnProfile="userInfo.isOwnProfile"
+        :userName="userInfo.userName" :canChangePassword="userInfo.canChangePassword" :userId="userInfo.userId"
+        :currentTab="currentTab" :canGenerateToken="userInfo.canGetApiToken" :isRestricted="userInfo.isRestricted">
 
         <div>
             <h2>{{ $t('Strings.HQ_Views_ResetRecoveryCodes_Title') }}</h2>
@@ -36,9 +36,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import { each } from 'lodash'
-
 export default {
     data() {
         return {

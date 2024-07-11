@@ -1,13 +1,12 @@
 <script>
-import {Line} from 'vue-chartjs'
-import Vue from 'vue'
-import {assign} from 'lodash'
+import { Line } from 'vue-chartjs'
+import { assign } from 'lodash'
 
 const chartOptions = {
     chartId: 'interviewChart',
     elements: {
-        point: {radius: 0},
-        line: {fill: true, tension: 0},
+        point: { radius: 0 },
+        line: { fill: true, tension: 0 },
     },
     responsive: true,
     maintainAspectRatio: false,
@@ -48,7 +47,7 @@ const chartOptions = {
         ],
         yAxes: [
             {
-                afterDataLimits: function(axis) {
+                afterDataLimits: function (axis) {
                     axis.max += 1 // add 1px to top
                     axis.min = 0
                 },
@@ -56,7 +55,7 @@ const chartOptions = {
                 stacked: true,
                 ticks: {
                     beginAtZero: true,
-                    userCallback: function(label, index, labels) {
+                    userCallback: function (label, index, labels) {
                         // when the floored value is the same as the value we have a whole number
                         if (Math.floor(label) === label) {
                             return label
@@ -71,8 +70,8 @@ const chartOptions = {
 export default {
     extends: Line,
     props: {
-        options: {required: false},
-        height: {default: 600},
+        options: { required: false },
+        height: { default: 600 },
     },
 
     mounted() {

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers;
 using WB.Core.GenericSubdomains.Portable;
@@ -116,7 +117,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var response = await handler.CanSynchronize(new CanSynchronizeRequest(buildNumber, userId, "new token", null));
 
             Assert.That(response, Has.Property(nameof(response.CanSyncronize)).False);
-            Assert.AreEqual(response.Reason, SyncDeclineReason.InvalidPassword);
+            ClassicAssert.AreEqual(response.Reason, SyncDeclineReason.InvalidPassword);
         }
 
         [Test]
@@ -138,7 +139,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
                 new CanSynchronizeRequest(buildNumber, userId, String.Empty, interviewerLastHqTimestamp));
 
             Assert.That(response, Has.Property(nameof(response.CanSyncronize)).False);
-            Assert.AreEqual(response.Reason, SyncDeclineReason.SupervisorRequireOnlineSync);
+            ClassicAssert.AreEqual(response.Reason, SyncDeclineReason.SupervisorRequireOnlineSync);
         }
 
         [Test]
@@ -157,7 +158,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var response = await handler.CanSynchronize(new CanSynchronizeRequest(buildNumber, userId, "new token", null));
 
             Assert.That(response, Has.Property(nameof(response.CanSyncronize)).False);
-            Assert.AreEqual(response.Reason, SyncDeclineReason.SupervisorRequireOnlineSync);
+            ClassicAssert.AreEqual(response.Reason, SyncDeclineReason.SupervisorRequireOnlineSync);
         }
 
         [Test]
@@ -175,7 +176,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var response = await handler.CanSynchronize(new CanSynchronizeRequest(interviewerAppBuildNumber, Guid.NewGuid(), String.Empty, null));
 
             Assert.That(response, Has.Property(nameof(response.CanSyncronize)).False);
-            Assert.AreEqual(response.Reason, SyncDeclineReason.NotATeamMember);
+            ClassicAssert.AreEqual(response.Reason, SyncDeclineReason.NotATeamMember);
         }
 
         [Test]

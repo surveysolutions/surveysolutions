@@ -1,38 +1,44 @@
 <template>
     <HqLayout :hasFilter="false">
-        <div slot="filters">
-            <div v-if="isRestricted" id="restricted" class="alerts">
-                <div class="alert alert-warning">
-                    <button class="close" data-dismiss="alert" aria-hidden="true">
-                        ×
-                    </button>
-                    {{ $t('FieldsAndValidations.RestrictedAccount') }}
+        <template v-slot:filters>
+            <div>
+                <div v-if="isRestricted" id="restricted" class="alerts">
+                    <div class="alert alert-warning">
+                        <button class="close" data-dismiss="alert" aria-hidden="true">
+                            ×
+                        </button>
+                        {{ $t('FieldsAndValidations.RestrictedAccount') }}
+                    </div>
+                </div>
+                <div v-if="successMessage != null" id="alerts" class="alerts">
+                    <div class="alert alert-success">
+                        <button class="close" data-dismiss="alert" aria-hidden="true">
+                            ×
+                        </button>
+                        {{ successMessage }}
+                    </div>
                 </div>
             </div>
-            <div v-if="successMessage != null" id="alerts" class="alerts">
-                <div class="alert alert-success">
-                    <button class="close" data-dismiss="alert" aria-hidden="true">
-                        ×
-                    </button>
-                    {{ successMessage }}
-                </div>
+        </template>
+        <template v-slot:headers>
+            <div>
+                <ol class="breadcrumb" v-if="!isOwnProfile">
+                    <li>
+                        <a v-bind:href="referrerUrl">{{ referrerTitle }}</a>
+                    </li>
+                </ol>
+                <h1>{{ $t('Strings.HQ_Views_Manage_Title') }}<b v-if="!isOwnProfile">
+                        : {{ userName }}
+                    </b></h1>
             </div>
-        </div>
-        <div slot="headers">
-            <ol class="breadcrumb" v-if="!isOwnProfile">
-                <li>
-                    <a v-bind:href="referrerUrl">{{ referrerTitle }}</a>
-                </li>
-            </ol>
-            <h1>{{ $t('Strings.HQ_Views_Manage_Title') }}<b v-if="!isOwnProfile">
-                    : {{ userName }}
-                </b></h1>
-        </div>
+        </template>
         <div class="extra-margin-bottom">
             <div class="profile">
                 <ul class="nav nav-tabs extra-margin-bottom">
-                    <li class="nav-item" v-if="!forceChangePassword" v-bind:class="{ 'active': currentTab == 'account' }">
-                        <a class="nav-link" id="profile" v-bind:href="getUrl('Manage')">{{ $t('Pages.AccountManage_Profile')
+                    <li class="nav-item" v-if="!forceChangePassword"
+                        v-bind:class="{ 'active': currentTab == 'account' }">
+                        <a class="nav-link" id="profile" v-bind:href="getUrl('Manage')">{{
+                            $t('Pages.AccountManage_Profile')
                         }}</a>
                     </li>
                     <li class="nav-item" v-if="showWorkspaces && !forceChangePassword"

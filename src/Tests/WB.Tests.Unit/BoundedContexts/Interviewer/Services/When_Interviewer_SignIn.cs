@@ -5,6 +5,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using System.Linq.Expressions;
+using NUnit.Framework.Legacy;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Tests.Abc;
@@ -54,7 +55,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
         {
             SetupInterviewerIdentity("Adams", null, hashedPassword);
 
-            Assert.True(this.principal.SignIn("Adams", password, true));
+            ClassicAssert.True(this.principal.SignIn("Adams", password, true));
 
             this.interviewStorageMock.Verify(v => v.Store(It.IsAny<InterviewerIdentity>()), 
                 Times.Never, "Should not store user with updated password");
@@ -74,7 +75,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
 
             this.passwordHasher.Setup(ph => ph.Hash(password)).Returns("NEWHASH");
 
-            Assert.True(this.principal.SignIn("Adams", password, true));
+            ClassicAssert.True(this.principal.SignIn("Adams", password, true));
 
             this.interviewStorageMock.Verify(v => v.Store(
                     It.Is<InterviewerIdentity>(u => u.PasswordHash == "NEWHASH")),
@@ -91,7 +92,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
               .Setup(storage => storage.Where(It.IsAny<Expression<Func<InterviewerIdentity, bool>>>()))
               .Returns(new List<InterviewerIdentity>());
 
-            Assert.False(this.principal.SignIn("Adamsy", password, true));
+            ClassicAssert.False(this.principal.SignIn("Adamsy", password, true));
         }
 
         [Test]
@@ -99,7 +100,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
         {
             SetupInterviewerIdentity("Adamsy", null, hashedPassword);
 
-            Assert.False(this.principal.SignIn("Adamsy", "wrong password", true));
+            ClassicAssert.False(this.principal.SignIn("Adamsy", "wrong password", true));
 
             this.interviewStorageMock.Verify(v => v.Store(It.IsAny<InterviewerIdentity>()),
                 Times.Never, "Should not store any user updates");
@@ -112,7 +113,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
         {
             SetupInterviewerIdentity("Adamsy", password, null);
 
-            Assert.False(this.principal.SignIn("Adamsy", "wrong password", true));
+            ClassicAssert.False(this.principal.SignIn("Adamsy", "wrong password", true));
 
             this.interviewStorageMock.Verify(v => v.Store(It.IsAny<InterviewerIdentity>()),
 
