@@ -1,7 +1,7 @@
 ﻿<template>
     <div>
         <div v-if="isEditMode" class="edit-classification-group-name">
-            <v-form v-slot="{ meta }">
+            <vee-form v-slot="{ meta }">
                 <div class="form-group">
                     <textarea v-elastic name="title" type="text" v-validate="'required'" required v-model="title"
                         class="form-control" :placeholder="$t('QuestionnaireEditor.ClassificationTitle')"></textarea>
@@ -10,7 +10,7 @@
             $t('QuestionnaireEditor.Save') }}</button>
                 <button type="button" @click="cancel()" class="btn btn-link">{{ $t('QuestionnaireEditor.Cancel')
                     }}</button>
-            </v-form>
+            </vee-form>
         </div>
         <div v-else class="line-wrapper" :class="{ 'private': isPrivate }">
             <a @click="select()">{{ title }} <span class="badge pull-right">{{ classification.count }}</span></a>
@@ -24,7 +24,7 @@ import { Form, Field, ErrorMessage } from 'vee-validate';
 export default {
     name: 'ClassificationEditor',
     components: {
-        VForm: Form,
+        VeeForm: Form,
         VField: Field,
         ErrorMessage: ErrorMessage,
     },
@@ -66,7 +66,7 @@ export default {
     methods: {
         cancel() {
             if (this.classification.isNew) {
-                store.dispatch('deleteClassification', this.index);
+                this.$store.dispatch('deleteClassification', this.index);
             } else {
                 this.title = this.classification.title;
                 this.isEditMode = false;
@@ -76,7 +76,7 @@ export default {
             this.isEditMode = true;
         },
         select() {
-            store.dispatch('selectClassification', this.index);
+            this.$store.dispatch('selectClassification', this.index);
         },
         deleteItem() {
             if (
@@ -84,7 +84,7 @@ export default {
                     `Are you sure you want to delete classification '${this.title}'?`
                 )
             ) {
-                store.dispatch('deleteClassification', this.index);
+                this.$store.dispatch('deleteClassification', this.index);
             }
         },
         save() {
