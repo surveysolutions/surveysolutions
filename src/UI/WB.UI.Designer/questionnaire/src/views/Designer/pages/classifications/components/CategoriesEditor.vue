@@ -1,5 +1,5 @@
 ﻿<template>
-    <vee-form v-slot="{ errors, meta }">
+    <vee-form ref="form" v-slot="{ errors, meta }">
         <div class="scroller">
             <ul class="breadcrumb">
                 <li>{{ activeGroup.title }}</li>
@@ -17,13 +17,13 @@
                         <div class="option-line" v-for="(category, index) in categories" :key="category.id">
                             <div class="input-group">
                                 <div class="option-cell" :class="{ 'has-error': errors['value' + category.id] }">
-                                    <v-field :name="'value' + category.id" v-on:keyup.enter="moveFocus"
+                                    <vee-field :name="'value' + category.id" v-on:keyup.enter="moveFocus"
                                         v-validate="'required|integer'" key="value" type="number"
                                         v-model="category.value" class="form-control"
                                         :placeholder="$t('QuestionnaireEditor.OptionsUploadValue')" />
                                 </div>
                                 <div class="option-cell" :class="{ 'has-error': errors['title' + category.id] }">
-                                    <v-field :name="'title' + category.id" v-on:keyup.enter="moveFocus"
+                                    <vee-field :name="'title' + category.id" v-on:keyup.enter="moveFocus"
                                         v-validate="'required'" key="title" type="text" v-model="category.title"
                                         class="form-control"
                                         :placeholder="$t('QuestionnaireEditor.OptionsUploadTitle')" />
@@ -40,12 +40,11 @@
                             </div>
                         </div>
                     </div>
-                    <div v-else class="form-group" :class="{ 'has-error': !validateStringOptions(stringifiedOptions) }">
-                        <textarea name="stringifiedOptions" v-elastic v-model="stringifiedOptions"
+                    <div v-else class="form-group" :class="{ 'has-error': errors.stringifiedOptions }">
+                        <vee-field as="textarea" name="stringifiedOptions" v-autosize v-model="stringifiedOptions"
                             :rules="validateStringOptions" key="stringifiedOptions" class="form-control js-elasticArea"
-                            :placeholder="$t('QuestionnaireEditor.ClassificationsStringOptionsEditorPlaceholder')"></textarea>
-                        <p v-if="!validateStringOptions(stringifiedOptions)" class="text-danger">{{
-        getMessageStringOptions(validateStringOptions(stringifiedOptions).data) }}</p>
+                            :placeholder="$t('QuestionnaireEditor.ClassificationsStringOptionsEditorPlaceholder')" />
+                        <p v-if="errors.stringifiedOptions" class="text-danger">{{ errors.stringifiedOptions }}</p>
                     </div>
                 </div>
                 <div v-if="isEditMode" class="categories-holder-footer clearfix">
@@ -59,15 +58,16 @@
             </div>
         </div>
         <div class="form-buttons-holder">
-            <input type="hidden" name="collectionSizeTracker" v-validate />
-            <button type="button" class="btn btn-lg" :class="{ 'btn-success': meta.dirty }" :disabled="!meta.dirty"
-                @click="save">{{ $t('QuestionnaireEditor.Save') }}</button>
+            <vee-field type="hidden" name="collectionSizeTracker" v-validate />
+            <button type="button" class="btn btn-lg" :class="{ 'btn-success': meta.dirty }"
+                :disabled="!meta.dirty ? 'disabled' : null" @click="save">{{ $t('QuestionnaireEditor.Save') }}</button>
         </div>
     </vee-form>
 </template>
 
 <script>
 
+import { newGuid } from '../../../../../helpers/guid'
 import { Form, Field, ErrorMessage } from 'vee-validate';
 //import { optionsParseRegex } from '../helper';
 import _ from 'lodash'
@@ -76,7 +76,7 @@ export default {
     name: 'CategoriesEditor',
     components: {
         VeeForm: Form,
-        VField: Field,
+        VeeField: Field,
         ErrorMessage: ErrorMessage,
     },
     data: function () {
@@ -104,7 +104,7 @@ export default {
             return this.$store.state.activeClassification;
         },
         validator() {
-            return this.$validator;
+            return this.$refs.form;
         }
     },
     watch: {
@@ -156,7 +156,7 @@ export default {
 
             return options;
         },
-        moveFocus($event) {
+        /*moveFocus($event) {
             var parentCell = $($event.target).closest('div.option-cell');
             var nextCell = parentCell.next('div.option-cell');
 
@@ -170,10 +170,39 @@ export default {
                     .first()
                     .focus();
             }
+        },*/
+        moveFocus(event) {
+            var parentCell = event.target.closest('div.option-cell');
+            var nextCell = parentCell.nextElementSibling;
+
+            while (nextCell && !nextCell.classList.contains('option-cell')) {
+                nextCell = nextCell.nextElementSibling;
+            }
+
+            if (nextCell) {
+                var input = nextCell.querySelector('input');
+                if (input) {
+                    input.focus();
+                }
+            } else {
+                var parentLine = parentCell.closest('div.option-line');
+                var nextLine = parentLine.nextElementSibling;
+
+                while (nextLine && !nextLine.classList.contains('option-line')) {
+                    nextLine = nextLine.nextElementSibling;
+                }
+
+                if (nextLine) {
+                    var firstInput = nextLine.querySelector('input');
+                    if (firstInput) {
+                        firstInput.focus();
+                    }
+                }
+            }
         },
         deleteCategory(index) {
             this.$store.dispatch('deleteCategory', index);
-            this.$validator.flag('collectionSizeTracker', { dirty: true });
+            this.validator.flag('collectionSizeTracker', { dirty: true });
         },
         showStrings() {
             this.stringifyCategories();
@@ -181,8 +210,8 @@ export default {
         },
         showList() {
             var self = this;
-            this.$validator.validate().then(function (result) {
-                if (self.$validator.errors.has('stringifiedOptions')) {
+            this.validator.validate().then(function (result) {
+                if (self.validator.errors.has('stringifiedOptions')) {
                 } else {
                     var parsedCategories = self.parseOptions();
 
@@ -206,7 +235,7 @@ export default {
                             i++
                         ) {
                             self.$store.dispatch('addCategory', {
-                                id: guid(),
+                                id: newGuid(),
                                 isNew: true,
                                 title: parsedCategories[i].title,
                                 value: parsedCategories[i].value,
@@ -237,7 +266,7 @@ export default {
             }
 
             var self = this;
-            this.$validator.validate().then(function (result) {
+            this.$refs.form.validate().then(function (result) {
                 if (result) {
                     self.$store
                         .dispatch(
@@ -245,14 +274,14 @@ export default {
                             self.$store.state.activeClassification.id
                         )
                         .then(function () {
-                            self.$validator.pause();
+                            self.validator.pause();
                             self.$nextTick(() => {
-                                self.$validator.fields.items.forEach(field =>
+                                self.validator.fields.items.forEach(field =>
                                     field.reset()
                                 );
-                                self.$validator.reset();
-                                self.$validator.errors.clear();
-                                self.$validator.resume();
+                                self.validator.reset();
+                                self.validator.errors.clear();
+                                self.validator.resume();
                             });
                         });
                 }
@@ -260,13 +289,13 @@ export default {
         },
         addCategory() {
             this.$store.dispatch('addCategory', {
-                id: guid(),
+                id: newGuid(),
                 isNew: true,
                 title: '',
                 value: null,
                 parent: this.$store.state.activeClassification.id
             });
-            this.$validator.flag('collectionSizeTracker', { dirty: true });
+            this.validator.flag('collectionSizeTracker', { dirty: true });
         },
 
         validateStringOptions(value) {

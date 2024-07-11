@@ -62,6 +62,8 @@ import ClassificationEditor from './classifications/components/ClassificationEdi
 import GroupEditor from './classifications/components/GroupEditor.vue'
 
 import '../../../../../Content/classifications.css';
+import '../../../../../Content/plugins/jquery.contextMenu.min.css';
+
 
 export default {
     name: 'Classifications',

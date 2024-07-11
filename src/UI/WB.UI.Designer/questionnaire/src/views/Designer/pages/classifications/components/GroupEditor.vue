@@ -1,24 +1,35 @@
 ﻿<template>
-    <div>
+    <div v-contextmenu="'group-context-menu-' + index" menu-item-class="context-menu-item">
         <div v-if="isEditMode" class="edit-classification-group-name">
-            <vee-form v-slot="{ errors, meta }">
+            <vee-form ref="form" v-slot="{ errors, meta }">
                 <div class="form-group" :class="{ 'has-error': errors.title }">
-                    <textarea v-elastic name="title" type="text" v-validate="'required'" required v-model="title"
-                        class="form-control"
-                        :placeholder="$t('QuestionnaireEditor.ClassificationGroupTitle')"></textarea>
+                    <vee-field as="textarea" v-autosize name="title" type="text" rules="required" required
+                        v-model="title" class="form-control" v-validate="'required'" :validateOnChange="true"
+                        :placeholder="$t('QuestionnaireEditor.ClassificationGroupTitle')" />
                     <span class="help-block" v-show="errors.title">{{ errors.title }}</span>
                 </div>
-                <button type="button" :disabled="!meta.dirty" @click="save" class="btn btn-success">{{
-            $t('QuestionnaireEditor.Save') }}</button>
+                <button type="button" :disabled="!meta.dirty ? 'disabled' : null" @click="save"
+                    class="btn btn-success">{{ $t('QuestionnaireEditor.Save') }}</button>
                 <button type="button" @click="cancel()" class="btn btn-link">{{ $t('QuestionnaireEditor.Cancel')
                     }}</button>
-
             </vee-form>
         </div>
         <div v-else class="line-wrapper">
             <a @click="select()">{{ title }} <span class="badge pull-right">{{ group.count }}</span></a>
         </div>
     </div>
+    <Teleport to="body">
+        <ul v-if="isContextMenuSupport" class="context-menu-list context-menu-root" :id="'group-context-menu-' + index"
+            style="z-index: 2;">
+            <li class="context-menu-item context-menu-icon context-menu-icon-edit context-menu-visible" @click="edit()">
+                <span>Edit</span>
+            </li>
+            <li class="context-menu-item context-menu-separator context-menu-not-selectable"></li>
+            <li class="context-menu-item context-menu-icon context-menu-icon-delete" @click="deleteItem()">
+                <span>Delete</span>
+            </li>
+        </ul>
+    </Teleport>
 </template>
 <script>
 
@@ -28,7 +39,7 @@ export default {
     name: 'GroupEditor',
     components: {
         VeeForm: Form,
-        VField: Field,
+        VeeField: Field,
         ErrorMessage: ErrorMessage,
     },
     data: function () {
@@ -39,26 +50,12 @@ export default {
     },
     props: ['group', 'index'],
     mounted: function () {
-        var self = this;
 
-        if (!this.$store.state.isAdmin) return;
-
-        this.$nextTick(function () {
-            $(this.$el).contextMenu({
-                selector: 'a',
-                callback: function (key, options) {
-                    self[key]();
-                },
-                items: {
-                    edit: { name: 'Edit', icon: 'edit' },
-                    sep1: '---------',
-                    deleteItem: { name: 'Delete', icon: 'delete' }
-                }
-            });
-        });
     },
     computed: {
-
+        isContextMenuSupport() {
+            return this.$store.state.isAdmin
+        }
     },
     methods: {
         cancel() {
@@ -93,9 +90,9 @@ export default {
                 index: this.index
             };
 
-            this.$validator.validate().then(function (result) {
+            this.$refs.form.validate().then(function (result) {
                 if (result) {
-                    this.$store.dispatch('updateGroup', group).then(function () {
+                    self.$store.dispatch('updateGroup', group).then(function () {
                         self.isEditMode = false;
                     });
                 }

@@ -1,13 +1,16 @@
 ﻿<template>
-    <div>
+    <div v-contextmenu="'classification-context-menu-' + index" menu-item-class="context-menu-item">
         <div v-if="isEditMode" class="edit-classification-group-name">
-            <vee-form v-slot="{ meta }">
+            <vee-form ref="form" v-slot="{ errors, meta }">
                 <div class="form-group">
-                    <textarea v-elastic name="title" type="text" v-validate="'required'" required v-model="title"
-                        class="form-control" :placeholder="$t('QuestionnaireEditor.ClassificationTitle')"></textarea>
+                    <vee-field as="textarea" v-autosize name="title" type="text" required v-model="title"
+                        rules="required" class="form-control"
+                        :placeholder="$t('QuestionnaireEditor.ClassificationTitle')" />
+                    <span class="help-block" v-show="errors.title">{{ errors.title }}</span>
                 </div>
-                <button type="button" :disabled="!meta.dirty" @click="save" class="btn btn-success">{{
-            $t('QuestionnaireEditor.Save') }}</button>
+                <button type="button" :disabled="!meta.dirty ? 'disabled' : null" @click="save"
+                    class="btn btn-success">{{
+        $t('QuestionnaireEditor.Save') }}</button>
                 <button type="button" @click="cancel()" class="btn btn-link">{{ $t('QuestionnaireEditor.Cancel')
                     }}</button>
             </vee-form>
@@ -16,6 +19,18 @@
             <a @click="select()">{{ title }} <span class="badge pull-right">{{ classification.count }}</span></a>
         </div>
     </div>
+    <Teleport to="body">
+        <ul v-if="isContextMenuSupport" class="context-menu-list context-menu-root" style="z-index: 2;"
+            :id="'classification-context-menu-' + index">
+            <li class="context-menu-item context-menu-icon context-menu-icon-edit context-menu-visible" @click="edit()">
+                <span>Edit</span>
+            </li>
+            <li class="context-menu-item context-menu-separator context-menu-not-selectable"></li>
+            <li class="context-menu-item context-menu-icon context-menu-icon-delete" @click="deleteItem()">
+                <span>Delete</span>
+            </li>
+        </ul>
+    </Teleport>
 </template>
 <script>
 
@@ -25,42 +40,28 @@ export default {
     name: 'ClassificationEditor',
     components: {
         VeeForm: Form,
-        VField: Field,
+        VeeField: Field,
         ErrorMessage: ErrorMessage,
     },
     data: function () {
         return {
             isEditMode: this.classification.isNew,
-            title: this.classification.title
+            title: this.classification.title,
         };
     },
     props: ['classification', 'index'],
     mounted: function () {
-        var self = this;
 
-        if (
-            !this.$store.state.isAdmin &&
-            this.$store.state.userId !== this.classification.userId
-        )
-            return;
-
-        this.$nextTick(function () {
-            $(this.$el).contextMenu({
-                selector: 'a',
-                callback: function (key, options) {
-                    self[key]();
-                },
-                items: {
-                    edit: { name: 'Edit', icon: 'edit' },
-                    sep1: '---------',
-                    deleteItem: { name: 'Delete', icon: 'delete' }
-                }
-            });
-        });
     },
     computed: {
         isPrivate() {
             return this.$store.state.userId === this.classification.userId;
+        },
+        isContextMenuSupport() {
+            return !(
+                !this.$store.state.isAdmin &&
+                this.$store.state.userId !== this.classification.userId
+            )
         }
     },
     methods: {
@@ -97,9 +98,9 @@ export default {
                 parent: this.classification.parent
             };
 
-            this.$validator.validate().then(function (result) {
+            this.$refs.form.validate().then(result => {
                 if (result) {
-                    store
+                    self.$store
                         .dispatch('updateClassification', classification)
                         .then(function () {
                             self.isEditMode = false;
