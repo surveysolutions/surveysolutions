@@ -1,16 +1,16 @@
 ﻿<template>
     <div>
         <div v-if="isEditMode" class="edit-classification-group-name">
-            <form>
+            <v-form v-slot="{ meta }">
                 <div class="form-group">
                     <textarea v-elastic name="title" type="text" v-validate="'required'" required v-model="title"
                         class="form-control" :placeholder="$t('QuestionnaireEditor.ClassificationTitle')"></textarea>
                 </div>
-                <button type="button" :disabled="!isFormDirty" @click="save" class="btn btn-success">{{
+                <button type="button" :disabled="!meta.dirty" @click="save" class="btn btn-success">{{
             $t('QuestionnaireEditor.Save') }}</button>
                 <button type="button" @click="cancel()" class="btn btn-link">{{ $t('QuestionnaireEditor.Cancel')
                     }}</button>
-            </form>
+            </v-form>
         </div>
         <div v-else class="line-wrapper" :class="{ 'private': isPrivate }">
             <a @click="select()">{{ title }} <span class="badge pull-right">{{ classification.count }}</span></a>
@@ -19,8 +19,15 @@
 </template>
 <script>
 
+import { Form, Field, ErrorMessage } from 'vee-validate';
+
 export default {
     name: 'ClassificationEditor',
+    components: {
+        VForm: Form,
+        VField: Field,
+        ErrorMessage: ErrorMessage,
+    },
     data: function () {
         return {
             isEditMode: this.classification.isNew,
@@ -52,9 +59,6 @@ export default {
         });
     },
     computed: {
-        isFormDirty() {
-            return Object.keys(this.fields).some(key => this.fields[key].dirty);
-        },
         isPrivate() {
             return this.$store.state.userId === this.classification.userId;
         }

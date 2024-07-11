@@ -1,5 +1,5 @@
 ﻿<template>
-    <form>
+    <v-form v-slot="{ errors, meta }">
         <div class="scroller">
             <ul class="breadcrumb">
                 <li>{{ activeGroup.title }}</li>
@@ -16,17 +16,17 @@
                     <div class="options-editor" v-if="optionsMode">
                         <div class="option-line" v-for="(category, index) in categories" :key="category.id">
                             <div class="input-group">
-                                <div class="option-cell" :class="{ 'has-error': errors.has('value' + category.id) }">
-                                    <input :name="'value' + category.id" v-on:keyup.enter="moveFocus"
+                                <div class="option-cell" :class="{ 'has-error': errors['value' + category.id] }">
+                                    <v-field :name="'value' + category.id" v-on:keyup.enter="moveFocus"
                                         v-validate="'required|integer'" key="value" type="number"
                                         v-model="category.value" class="form-control"
-                                        :placeholder="$t('QuestionnaireEditor.OptionsUploadValue')">
+                                        :placeholder="$t('QuestionnaireEditor.OptionsUploadValue')" />
                                 </div>
-                                <div class="option-cell" :class="{ 'has-error': errors.has('title' + category.id) }">
-                                    <input :name="'title' + category.id" v-on:keyup.enter="moveFocus"
+                                <div class="option-cell" :class="{ 'has-error': errors['title' + category.id] }">
+                                    <v-field :name="'title' + category.id" v-on:keyup.enter="moveFocus"
                                         v-validate="'required'" key="title" type="text" v-model="category.title"
                                         class="form-control"
-                                        :placeholder="$t('QuestionnaireEditor.OptionsUploadTitle')">
+                                        :placeholder="$t('QuestionnaireEditor.OptionsUploadTitle')" />
                                 </div>
                                 <div class="input-group-btn">
                                     <button @click="deleteCategory(index)" type="button"
@@ -42,39 +42,49 @@
                     </div>
                     <div v-else class="form-group" :class="{ 'has-error': !validateStringOptions(stringifiedOptions) }">
                         <textarea name="stringifiedOptions" v-elastic v-model="stringifiedOptions"
-                            key="stringifiedOptions" class="form-control js-elasticArea"
+                            :rules="validateStringOptions" key="stringifiedOptions" class="form-control js-elasticArea"
                             :placeholder="$t('QuestionnaireEditor.ClassificationsStringOptionsEditorPlaceholder')"></textarea>
                         <p v-if="!validateStringOptions(stringifiedOptions)" class="text-danger">{{
-                    getMessageStringOptions(validateStringOptions(stringifiedOptions).data) }}</p>
+        getMessageStringOptions(validateStringOptions(stringifiedOptions).data) }}</p>
                     </div>
                 </div>
                 <div v-if="isEditMode" class="categories-holder-footer clearfix">
-                    <button v-if="optionsMode" type="button" class="btn btn-link pull-left" @@click="addCategory">{{
-                    $t('QuestionnaireEditor.QuestionAddOption') }}</button>
+                    <button v-if="optionsMode" type="button" class="btn btn-link pull-left" @click="addCategory">{{
+        $t('QuestionnaireEditor.QuestionAddOption') }}</button>
                     <button v-if="optionsMode" type="button" class="btn btn-link pull-right show-strings"
-                        @@click="showStrings">{{ $t('QuestionnaireEditor.StringsView') }}</button>
-                    <button v-else type="button" class="btn btn-link pull-left" @@click="showList">{{
-                    $t('QuestionnaireEditor.TableView') }}</button>
+                        @click="showStrings">{{ $t('QuestionnaireEditor.StringsView') }}</button>
+                    <button v-else type="button" class="btn btn-link pull-left" @click="showList">{{
+        $t('QuestionnaireEditor.TableView') }}</button>
                 </div>
             </div>
         </div>
         <div class="form-buttons-holder">
             <input type="hidden" name="collectionSizeTracker" v-validate />
-            <button type="button" class="btn btn-lg" :class="{ 'btn-success': isFormDirty }" :disabled="!isFormDirty"
-                @@click="save">{{ $t('QuestionnaireEditor.Save') }}</button>
+            <button type="button" class="btn btn-lg" :class="{ 'btn-success': meta.dirty }" :disabled="!meta.dirty"
+                @click="save">{{ $t('QuestionnaireEditor.Save') }}</button>
         </div>
-    </form>
+    </v-form>
 </template>
 
 <script>
 
+import { Form, Field, ErrorMessage } from 'vee-validate';
+//import { optionsParseRegex } from '../helper';
+import _ from 'lodash'
+
 export default {
     name: 'CategoriesEditor',
+    components: {
+        VForm: Form,
+        VField: Field,
+        ErrorMessage: ErrorMessage,
+    },
     data: function () {
         return {
             optionsMode: true,
             stringifiedOptions: '',
-            optionsParseRegex: new RegExp(/^(.+?)[\…\.\s]+([-+]?\d+)\s*$/),
+            //optionsParseRegex: optionsParseRegex,
+            optionsParseRegex: new RegExp(/^(.+?)[\…\.\s]+([-+]?\d+)\s*$/)
         };
     },
     computed: {
@@ -92,9 +102,6 @@ export default {
         },
         activeClassification() {
             return this.$store.state.activeClassification;
-        },
-        isFormDirty() {
-            return Object.keys(this.fields).some(key => this.fields[key].dirty);
         },
         validator() {
             return this.$validator;
@@ -275,7 +282,8 @@ export default {
                     if (!currentLineValidationResult)
                         invalidLines.push(index + 1);
                 });
-                return { valid: matchPattern, data: invalidLines };
+                //return { valid: matchPattern, data: invalidLines };
+                return this.getMessageStringOptions(invalidLines)
             }
             return true;
         },
