@@ -1,5 +1,5 @@
 {
-    "name": "suso-frontend",
+    "name": "survey.solutions-frontend",
     "version": "0.1.2",
     "private": true,
     "scripts": {
@@ -29,7 +29,7 @@
         "bootstrap": "^3.4.1",
         "bootstrap-sass": "^3.4.3",
         "bootstrap-select": "^1.13.18",
-        "chart.js": "^2.9.4",
+        "chart.js": "^4.4.3",
         "datatables.net": "^2.0.8",
         "datatables.net-select": "^2.0.3",
         "fast-glob": "^3.2.12",
@@ -57,7 +57,7 @@
         "vee-validate": "^4.13.1",
         "vite-plugin-require": "^1.1.14",
         "vue": "3.4.27",
-        "vue-chartjs": "^3.4.2",
+        "vue-chartjs": "^5.3.1",
         "vue-datatables-net": "^2.0.1",
         "vue-page-title": "^2.2.2",
         "vue-query-builder": "^0.8.2",
