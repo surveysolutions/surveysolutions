@@ -4,7 +4,7 @@ import { defineConfig } from 'vite';
 //import fs from 'fs';
 //import Vue from '@vitejs/plugin-vue';
 // import Components from 'unplugin-vue-components/vite';
-import LocalizationPlugin from './questionnaire/tools/vite-plugin-localization';
+//import LocalizationPlugin from './questionnaire/tools/vite-plugin-localization';
 //import { VuetifyResolver } from 'unplugin-vue-components/resolvers'
 ///import Vuetify from 'vite-plugin-vuetify';
 import mpaPlugin from 'vite-plugin-mpa-plus';
