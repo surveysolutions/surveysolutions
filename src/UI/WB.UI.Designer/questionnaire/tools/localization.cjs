@@ -1,4 +1,4 @@
-import globby from 'globby';
+import { globbySync } from 'globby';
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
@@ -70,7 +70,7 @@ module.exports = class LocalizationBuilder {
 
     getFiles() {
         const { patterns } = this.options;
-        let files = globby.sync(patterns, { onlyFiles: true });
+        let files = globbySync(patterns, { onlyFiles: true });
         return files;
     }
 
