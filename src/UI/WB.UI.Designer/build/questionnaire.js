@@ -54,7 +54,7 @@ const staticContent = () =>
     );
 
 const inject = () =>
-    injectSections(src(['questionnaire-app/index.html']), dist, {
+    injectSections(src(['questionnaire/index.html']), dist, {
         quiet: true,
 
         //addPrefix: PRODUCTION ? "~" : "~/src",

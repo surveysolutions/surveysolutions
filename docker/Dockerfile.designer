@@ -16,20 +16,20 @@ RUN mkdir -p /dist/Views && cp -r Views /dist/
 RUN mkdir -p /dist/wwwroot && cp -r wwwroot /dist/
 RUN mkdir -p /dist/questionnaire
 
-FROM node:${NODE} as questionnaire-app
+FROM node:${NODE} as questionnaire
 WORKDIR /app
 
-COPY src/UI/WB.UI.Designer/questionnaire-app/package*.json questionnaire-app/
-RUN cd questionnaire-app && npm ci
+COPY src/UI/WB.UI.Designer/questionnaire/package*.json questionnaire/
+RUN cd questionnaire && npm ci
 
-COPY src/UI/WB.UI.Designer/questionnaire-app questionnaire-app
+COPY src/UI/WB.UI.Designer/questionnaire questionnaire
 COPY src/UI/WB.UI.Designer/Resources Resources
 COPY src/UI/WB.UI.Designer/.editorconfig .editorconfig
 COPY src/UI/WB.UI.Designer/.prettierrc .prettierrc
 COPY src/UI/WB.UI.Designer/.jscsrc .jscsrc
 COPY src/UI/WB.UI.Designer/.jshintrc .jshintrc
 
-RUN cd questionnaire-app && npm run build
+RUN cd questionnaire && npm run build
 
 FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}${DOTNET_CA_PATCH} as builder
 ARG VERSION
@@ -90,7 +90,7 @@ COPY [ "src/UI/WB.UI.Designer",\
 # DESIGNER_FOLDERS_END
 
 COPY --from=designer_js /dist src/UI/WB.UI.Designer
-COPY --from=questionnaire-app /app/wwwroot/assets src/UI/WB.UI.Designer/wwwroot/assets
+COPY --from=questionnaire /app/wwwroot/assets src/UI/WB.UI.Designer/wwwroot/assets
 
 RUN dotnet publish src/UI/WB.UI.Designer --no-restore \
     -c Release -o /designer -p:SkipSpaBuild=True -p:Version="${VERSION}" -p:InformationalVersion="${INFO_VERSION}"
