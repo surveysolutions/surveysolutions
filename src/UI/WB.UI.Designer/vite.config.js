@@ -108,14 +108,6 @@ const pages = {
             'Areas/Identity/Pages/_ValidationScriptsPartial.Template.cshtml'
         ),
     },
-    classifications: {
-        entry: 'build/entries/classifications.js',
-        filename: path.join(baseDir, 'Views/Classifications/Index.cshtml'),
-        template: path.join(
-            baseDir,
-            'Views/Classifications/Index.Template.cshtml'
-        ),
-    },
     questionnaireList: {
         entry: 'build/entries/questionnaireList.js',
         filename: path.join(baseDir, 'Views/QuestionnaireList/Public.cshtml'),
