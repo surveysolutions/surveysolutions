@@ -55,7 +55,7 @@ namespace WB.UI.Designer
 {
     public class Startup
     {
-        private const string SpaRoot = "questionnaire-app";
+        private const string SpaRoot = "questionnaire";
         internal const string WebTesterCorsPolicy = "_webTester";
         private readonly IWebHostEnvironment hostingEnvironment;
 
