@@ -76,6 +76,7 @@
     "bootstrap": "3.4.1",
     "bootstrap-select": "^1.13.18",
     "es6-promise": "^4.2.8",
+    "globby": "^14.0.2",
     "i18next": "^17.3.1",
     "i18next-browser-languagedetector": "^3.0.3",
     "i18next-http-backend": "^1.4.0",
