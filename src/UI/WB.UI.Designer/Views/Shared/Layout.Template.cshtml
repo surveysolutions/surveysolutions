@@ -18,8 +18,6 @@
 
     <script type="module" src="/build/entries/simplepage.js"></script>
 
-    <script type="module" src="/build/entries/utils.js"></script>
-
     @this.RenderSection("Scripts", required: false)
 
     <script type="text/javascript">
@@ -108,23 +106,6 @@
         </section>
     </div>
     @this.RenderSection("Modal", required: false)
-
-
-    <script type="text/javascript">
-        $(function () {
-            if (window.moment) {
-                moment.locale('@CultureInfo.CurrentUICulture');
-
-                $('time').each(function () {
-                    var me = $(this);
-                    var date = me.attr('datetime') || me.attr('time');
-                    var momentDate = moment.utc(date).local().format('MMM DD, YYYY HH:mm');
-                    me.text(momentDate);
-                });
-            }
-        });
-    </script>
-
 </body>
 
 </html>
