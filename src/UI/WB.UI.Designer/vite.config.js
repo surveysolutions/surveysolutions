@@ -54,8 +54,6 @@ function logFilePaths() {
     };
 }
 
-console.log('!!!!ssss: ' + path.join(baseDir, 'build', 'entries', 'logon.js'));
-
 const pages = {
     logon: {
         entry: 'build/entries/logon.js',
@@ -194,23 +192,7 @@ const fileTargets = [
         destination: path.join(outDir, 'qbank'),
         isFlat: false,
     },
-    /*{ source: join(".resources", "**", "*.js"), destination: join("dist", "locale"), isFlat: false  },
-
-    { source: join("dist", "img", "**", "*.*"), destination: path.join(hqDist, "wwwroot", "img"), isFlat: false },
-    { source: join("dist", "fonts", "**", "*.*"), destination: path.join(hqDist, "wwwroot", "fonts") },
-    { source: join("dist", "css", "*.*"), destination: path.join(hqDist, "wwwroot", "css") },
-    { source: join("dist", "js", "*.*"), destination: path.join(hqDist, "wwwroot", "js") },
-    { source: join("dist", "locale", "hq", "*.*"), destination: path.join(hqDist, "wwwroot", "locale", "hq") },
-    { source: join("dist", "locale", "webinterview", "*.*"), destination: path.join(hqDist, "wwwroot", "locale", "webinterview") },
-
-    { source: join("dist", "img", "**", "*.*"), destination: path.join(webTesterDist, "wwwroot", "img"), isFlat: false },
-    { source: join("dist", "fonts", "*.*"), destination: path.join(webTesterDist, "wwwroot", "fonts") },
-    { source: join("dist", "css", "*.*"), destination: path.join(webTesterDist, "wwwroot", "css") },
-    { source: join("dist", "js", "*.*"), destination: path.join(webTesterDist, "wwwroot", "js") },
-    { source: join("dist", "locale", "webtester", "*.*"), destination: path.join(webTesterDist, "wwwroot", "locale", "webtester") },*/
 ];
-console.log(fileTargets[0].source);
-console.log(fileTargets[0].destination);
 
 var pagesSources = [];
 var pagesTargets = [];
