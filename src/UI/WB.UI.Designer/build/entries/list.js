@@ -17,7 +17,8 @@ if (lists.length > 0) {
 
 import moment from 'moment';
 window.moment = moment;
-//import '/node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.css';
+
+import '/node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.css';
 import '/questionnaire/content/designer-start/bootstrap-custom.less';
 import '/Styles/designer-list.less';
 import '/Scripts/custom/common.js';
