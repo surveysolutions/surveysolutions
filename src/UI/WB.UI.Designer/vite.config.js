@@ -78,6 +78,17 @@ const pages = {
         ),
         //template: '/Areas/Identity/Pages/Layout.Account.Template.html',
     },
+    validationIdentity: {
+        entry: 'build/entries/validation.js',
+        filename: path.join(
+            baseDir,
+            'Areas/Identity/Pages/_ValidationScriptsPartial.cshtml'
+        ),
+        template: path.join(
+            baseDir,
+            'Areas/Identity/Pages/_ValidationScriptsPartial.Template.cshtml'
+        ),
+    },
     folders: {
         entry: './build/entries/folders.js',
         filename: path.join(
@@ -95,17 +106,6 @@ const pages = {
             'Views',
             'PublicFolders',
             'Index.Template.cshtml'
-        ),
-    },
-    validationIdentity: {
-        entry: 'build/entries/validation.js',
-        filename: path.join(
-            baseDir,
-            'Areas/Identity/Pages/_ValidationScriptsPartial.cshtml'
-        ),
-        template: path.join(
-            baseDir,
-            'Areas/Identity/Pages/_ValidationScriptsPartial.Template.cshtml'
         ),
     },
     questionnaireList: {
@@ -266,9 +266,7 @@ export default defineConfig(({ mode, command }) => {
             //exclude: ['jquery'],
         },
         plugins: [
-            //Vue(),
             //injectAssetsPlugin(),
-            //Vuetify({ autoImport: { labs: true } }),
             ViteFilemanager({
                 customHooks: [
                     {
@@ -332,12 +330,12 @@ export default defineConfig(({ mode, command }) => {
                 less: {
                     additionalData: '@icon-font-path: "/fonts/";',
                     relativeUrls: true,
-                    rootpath: '../',
+                    rootpath: './',
                     javascriptEnabled: true,
                 },
             },
         },
-        /*resolve: {
+        resolve: {
             alias: [
                 {
                     find: '@',
@@ -349,7 +347,7 @@ export default defineConfig(({ mode, command }) => {
                 },
             ],
             extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
-        },*/
+        },
         server: {
             host: 'localhost',
             strictPort: true,
@@ -369,7 +367,7 @@ export default defineConfig(({ mode, command }) => {
             },*/
             minify: isProdMode,
             outDir,
-            manifest: true,
+            //manifest: true,
             rollupOptions: {
                 //external: ['jquery'],
                 //preserveEntrySignatures: true,
@@ -382,19 +380,18 @@ export default defineConfig(({ mode, command }) => {
                         jQuery: 'jquery',
                     }),
                 ],
-                input: {
+                /*input: {
                     list: '/build/entries/list.js',
                     simplepage: '/build/entries/simplepage.js',
                     utils: '/build/entries/utils.js',
-                },
+                },*/
                 output: {
                     inlineDynamicImports: false,
                     manualChunks: undefined,
                     format: 'es',
-                    scriptType: 'text/javascript',
-                    //globals: {
-                    //    jquery: '$', // global variable name for the external library
-                    //},
+                    globals: {
+                        jquery: '$', // global variable name for the external library
+                    },
                     assetFileNames: (assetInfo) => {
                         let extType = assetInfo.name.split('.').slice(-1);
                         if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
