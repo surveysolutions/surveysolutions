@@ -9,7 +9,7 @@ import LocalizationPlugin from './questionnaire/tools/vite-plugin-localization';
 ///import Vuetify from 'vite-plugin-vuetify';
 import mpaPlugin from 'vite-plugin-mpa-plus';
 import inject from '@rollup/plugin-inject';
-import injectAssetsPlugin from './build/plugins/vite-inject-assets-plugin';
+//import injectAssetsPlugin from './build/plugins/vite-inject-assets-plugin';
 
 const ViteFilemanager = require('filemanager-plugin').ViteFilemanager;
 
