@@ -335,7 +335,7 @@ export default defineConfig(({ mode, command }) => {
                 }, 
             })*/
         ],
-        /*css: {
+        css: {
             preprocessorOptions: {
                 less: {
                     additionalData: '@icon-font-path: "/fonts/";',
@@ -344,7 +344,7 @@ export default defineConfig(({ mode, command }) => {
                     javascriptEnabled: true,
                 },
             },
-        },*/
+        },
         /*resolve: {
             alias: [
                 {

@@ -12,12 +12,14 @@ const baseDir = path.resolve(__dirname, './');
 const join = path.join.bind(path, baseDir);
 
 const outDir = path.resolve(__dirname + '/../wwwroot/assets');
+//const outDir = path.resolve(__dirname + '/../wwwroot');
 
 export default defineConfig(({ mode, command }) => {
     const isDevMode = mode === 'development';
     const isProdMode = !isDevMode;
 
     const base = command == 'serve' ? '/.vite/' : '/assets/';
+    //const base = command == 'serve' ? '/.vite/' : '/';
 
     if (command == 'serve' && mode != 'test') {
         sync(outDir);
@@ -61,6 +63,7 @@ export default defineConfig(({ mode, command }) => {
                 less: {
                     additionalData: '@icon-font-path: "/fonts/";',
                     relativeUrls: true,
+                    //rootpath: '../../../'
                     rootpath: '../../'
                 }
             }
