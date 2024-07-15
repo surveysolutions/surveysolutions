@@ -197,6 +197,11 @@ const fileTargets = [
         destination: path.join(outDir, 'qbank'),
         isFlat: false,
     },
+    {
+        source: join('Areas', 'Pdf', 'Content', 'images', '*.*'),
+        destination: path.join(outDir, 'images'),
+        isFlat: false,
+    },
 ];
 
 var pagesSources = [];
