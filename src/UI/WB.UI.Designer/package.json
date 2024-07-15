@@ -1,6 +1,7 @@
 {
   "name": "questionnaire",
   "version": "4.0.0",
+  "type": "module",
   "private": true,
   "description": "Designer Editor",
   "main": "gulpfile.js",
@@ -72,6 +73,7 @@
   "dependencies": {
     "@babel/node": "^7.20.7",
     "@mdi/font": "^5.2.45",
+    "@originjs/vite-plugin-commonjs": "^1.0.3",
     "axios": "^1.6.5",
     "bootstrap": "3.4.1",
     "bootstrap-select": "^1.13.18",
@@ -89,7 +91,8 @@
     "lodash": "4.17.21",
     "moment": "^2.29.4",
     "perfect-scrollbar": "^0.8.1",
-    "roboto-fontface": "^0.10.0"
+    "roboto-fontface": "^0.10.0",
+    "vite-plugin-env-compatible": "^2.0.1"
   },
   "overrides": {
     "@babel/traverse": ">=7.23.3",
