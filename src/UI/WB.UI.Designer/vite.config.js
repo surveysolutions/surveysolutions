@@ -7,11 +7,15 @@ import { defineConfig } from 'vite';
 //import LocalizationPlugin from './questionnaire/tools/vite-plugin-localization';
 //import { VuetifyResolver } from 'unplugin-vue-components/resolvers'
 ///import Vuetify from 'vite-plugin-vuetify';
+import vitePluginRequire from 'vite-plugin-require';
+import envCompatible from 'vite-plugin-env-compatible';
+import { viteCommonjs } from '@originjs/vite-plugin-commonjs';
 import mpaPlugin from 'vite-plugin-mpa-plus';
 import inject from '@rollup/plugin-inject';
 //import injectAssetsPlugin from './build/plugins/vite-inject-assets-plugin';
 
-const ViteFilemanager = require('filemanager-plugin').ViteFilemanager;
+import { ViteFilemanager } from 'filemanager-plugin';
+//const ViteFilemanager = require('filemanager-plugin').ViteFilemanager;
 
 const baseDir = path.resolve(__dirname, './');
 //console.log(baseDir);
@@ -56,9 +60,7 @@ function logFilePaths() {
 
 const pages = {
     logon: {
-        entry: 'build/entries/logon.js',
-        //entry: path.join(baseDir, 'build', 'entries', 'logon.js'),
-        // "Areas/Identity/Pages/Layout.Account.cshtml",
+        entry: path.join(baseDir, 'build/entries/logon.js'),
         filename: path.join(
             baseDir,
             'Areas',
@@ -66,7 +68,6 @@ const pages = {
             'Pages',
             'Layout.Account.cshtml'
         ),
-        //template: path.join(baseDir, 'Areas', 'Identity', 'Pages', 'Layout.Account.cshtml'),
         template: path.join(
             baseDir,
             'Areas',
@@ -74,10 +75,9 @@ const pages = {
             'Pages',
             'Layout.Account.Template.cshtml'
         ),
-        //template: '/Areas/Identity/Pages/Layout.Account.Template.html',
     },
     validationIdentity: {
-        entry: 'build/entries/validation.js',
+        entry: path.join(baseDir, 'build/entries/validation.js'),
         filename: path.join(
             baseDir,
             'Areas/Identity/Pages/_ValidationScriptsPartial.cshtml'
@@ -88,7 +88,7 @@ const pages = {
         ),
     },
     folders: {
-        entry: './build/entries/folders.js',
+        entry: path.join(baseDir, 'build/entries/folders.js'),
         filename: path.join(
             baseDir,
             'Areas',
@@ -148,6 +148,11 @@ const pages = {
             baseDir,
             'Areas/Admin/Views/Shared/Layout.ControlPanel.Template.cshtml'
         ),
+    },
+    pdf: {
+        entry: 'build/entries/pdf.js',
+        filename: path.join(baseDir, 'Areas/Pdf/Views/Pdf/Pdf.empty.cshtml'),
+        template: path.join(baseDir, 'Areas/Pdf/Views/Pdf/Pdf.Template.cshtml'),
     },
 };
 
@@ -244,10 +249,14 @@ export default defineConfig(({ mode, command }) => {
     return {
         base,
         optimizeDeps: {
-            exclude: ['**/*'],
+            //exclude: ['**/*'],
+            include: ['jquery'],
             //exclude: ['jquery'],
         },
         plugins: [
+            vitePluginRequire.default(),
+            viteCommonjs(),
+            envCompatible(),
             //injectAssetsPlugin(),
             ViteFilemanager({
                 customHooks: [
@@ -297,6 +306,10 @@ export default defineConfig(({ mode, command }) => {
             mpaPlugin({
                 pages: pages,
             }),
+            inject({
+                jQuery: 'jquery',
+                $: 'jquery',
+            }),
             /*multiInput({ 
                 //relative: 'src/', 
                 transformOutputPath: (output, input) => { 
@@ -341,7 +354,7 @@ export default defineConfig(({ mode, command }) => {
         },
         //assetsInclude: ['**/*.cshtml'],
         build: {
-            target: 'es2018',
+            //target: 'es2018',
             /*lib: {
                 entry: '/build/entries/list.js',
                 name: 'list',
@@ -368,13 +381,16 @@ export default defineConfig(({ mode, command }) => {
                     utils: '/build/entries/utils.js',
                 },*/
                 output: {
-                    inlineDynamicImports: false,
-                    manualChunks: undefined,
-                    format: 'es',
-                    globals: {
-                        jquery: '$', // global variable name for the external library
-                    },
+                    //inlineDynamicImports: false,
+                    //manualChunks: undefined,
+                    //format: 'es',
+                    //globals: {
+                    //    jquery: '$', // global variable name for the external library
+                    //},
                     assetFileNames: (assetInfo) => {
+                        if (assetInfo.name == 'pdf.css') {
+                            return `css/[name][extname]`;
+                        }
                         let extType = assetInfo.name.split('.').slice(-1);
                         if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
                             extType = 'i';

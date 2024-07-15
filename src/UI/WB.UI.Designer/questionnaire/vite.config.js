@@ -64,7 +64,8 @@ export default defineConfig(({ mode, command }) => {
                     additionalData: '@icon-font-path: "/fonts/";',
                     relativeUrls: true,
                     //rootpath: '../../../'
-                    rootpath: '../../'
+                    rootpath: './',
+                    javascriptEnabled: true
                 }
             }
         },

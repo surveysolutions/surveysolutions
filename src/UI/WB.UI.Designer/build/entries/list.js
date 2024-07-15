@@ -23,6 +23,8 @@ import '/questionnaire/content/designer-start/bootstrap-custom.less';
 import '/Styles/designer-list.less';
 import '/Scripts/custom/common.js';
 
+import './simplepage';
+
 $(function () {
     if (window.moment) {
         moment.locale('@CultureInfo.CurrentUICulture');

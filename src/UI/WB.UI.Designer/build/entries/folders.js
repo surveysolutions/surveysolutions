@@ -1,3 +1,4 @@
+import 'jquery';
 //import '/node_modules/jquery.fancytree/dist/jquery.fancytree-all-deps.js';
 import 'jquery.fancytree';
 import '/questionnaire/external/jquery.fancytree.contextMenu.js';
