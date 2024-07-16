@@ -7,11 +7,15 @@ import { defineConfig } from 'vite';
 //import LocalizationPlugin from './questionnaire/tools/vite-plugin-localization';
 //import { VuetifyResolver } from 'unplugin-vue-components/resolvers'
 ///import Vuetify from 'vite-plugin-vuetify';
+import legacy from '@vitejs/plugin-legacy';
 import vitePluginRequire from 'vite-plugin-require';
 import envCompatible from 'vite-plugin-env-compatible';
-import { viteCommonjs } from '@originjs/vite-plugin-commonjs';
+//import { viteCommonjs } from '@originjs/vite-plugin-commonjs';
+import viteCommonjs from 'vite-plugin-commonjs';
 import mpaPlugin from 'vite-plugin-mpa-plus';
 import inject from '@rollup/plugin-inject';
+import commonjs from '@rollup/plugin-commonjs';
+import requireTransform from 'vite-plugin-require-transform';
 //import injectAssetsPlugin from './build/plugins/vite-inject-assets-plugin';
 
 import { ViteFilemanager } from 'filemanager-plugin';
@@ -259,9 +263,17 @@ export default defineConfig(({ mode, command }) => {
             //exclude: ['jquery'],
         },
         plugins: [
-            vitePluginRequire.default(),
+            //commonjs(),
+            //vitePluginRequire.default(),
+
             viteCommonjs(),
-            envCompatible(),
+            requireTransform({
+                fileRegex: /.\js$/,
+            }),
+            /*legacy({
+                targets: ['defaults', 'not IE 11'],
+            }),*/
+            //envCompatible(),
             //injectAssetsPlugin(),
             ViteFilemanager({
                 customHooks: [
@@ -345,9 +357,23 @@ export default defineConfig(({ mode, command }) => {
                     find: '~',
                     replacement: path.resolve(__dirname, './'),
                 },
+                //jquery: 'jquery/dist/jquery.min.js',
+                //'jquery-ui': 'jquery-ui-dist/jquery-ui.min.js',
+                {
+                    find: 'jquery',
+                    replacement: 'jquery/dist/jquery.min.js',
+                },
+                {
+                    find: 'jquery-ui',
+                    replacement: 'jquery-ui-dist/jquery-ui.js',
+                },
             ],
             extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
         },
+        /*define: {
+            'window.jQuery': 'jquery',
+            'window.$': 'jquery',
+        },*/
         server: {
             host: 'localhost',
             strictPort: true,
