@@ -7,7 +7,9 @@
 <script type="module" src="/build/entries/folders.js"></script>
 
 <script type="text/javascript">
-    $(function () {
+    //import $ from 'jquery';
+    document.addEventListener('DOMContentLoaded', function () {
+        //$(function () {
         var localization = {
             CreateSubFolder: "@Html.Raw(QuestionnaireController.CreateSubFolder)",
             Edit: '@Html.Raw(QuestionnaireController.Rename)',

@@ -1,3 +1,7 @@
+<script type="module" crossorigin src="/js/modulepreload-polyfill.js"></script>
+<script type="module" crossorigin src="/js/jquery.min.js"></script>
+<script type="module" crossorigin src="/js/folders2.js"></script>
+<link rel="stylesheet" crossorigin href="/css/folders.css">
 @using WB.UI.Designer.Resources
 @{
     ViewBag.Title = QuestionnaireController.QuestionnaireTreeFolders;
@@ -5,14 +9,10 @@
 }
 
 
-<link rel="stylesheet" href="~/css/folders.css">
-
-
-<script src="~/js/folders.js"></script>
-
-
 <script type="text/javascript">
-    $(function () {
+    //import $ from 'jquery';
+    document.addEventListener('DOMContentLoaded', function () {
+        //$(function () {
         var localization = {
             CreateSubFolder: "@Html.Raw(QuestionnaireController.CreateSubFolder)",
             Edit: '@Html.Raw(QuestionnaireController.Rename)',
