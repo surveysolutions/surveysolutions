@@ -20,7 +20,6 @@
         "less": "^4.2.0",
         "less-loader": "^12.2.0",
         "ng-annotate-patched": "^1.14.1",
-        "plugin-error": "^1.0.1",
         "postcss": "^8.4.33",
         "rimraf": "^3.0.2",
         "sass": "1.55.0",
@@ -43,7 +42,6 @@
     "dependencies": {
         "@babel/node": "^7.20.7",
         "@mdi/font": "^5.2.45",
-        "axios": "^1.6.5",
         "bootstrap": "3.4.1",
         "bootstrap-select": "^1.13.18",
         "es6-promise": "^4.2.8",
