@@ -148,7 +148,7 @@
     </div>
 }
 <script type="text/javascript">
-    $(function() {
+    document.addEventListener('DOMContentLoaded', function () {
         window.confirmRevert = function(date, revertId) {
             $('#version').text(date);
             $('#commandId').val(revertId);

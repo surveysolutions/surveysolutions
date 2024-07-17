@@ -12,21 +12,21 @@ Please wait while data is being loaded from server...
 @section scripts
 {
     <script type="text/javascript">
-        $(function() {
+        document.addEventListener('DOMContentLoaded', function () {
 
-            var versionsUrl = '@Url.Action("GetVersions","ControlPanel")';
+            var versionsUrl = '@Url.Action("GetVersions", "ControlPanel")';
 
-            var writeLine = function(line) {
+            var writeLine = function (line) {
                 $(".raw").text($(".raw").text() + line + "\n");
             }
 
-            $.getJSON(versionsUrl, function(data) {
+            $.getJSON(versionsUrl, function (data) {
                 $(".raw").text("");
-                $.each(data, function(key, val) {
+                $.each(data, function (key, val) {
                     if (val !== null && typeof val === 'object') {
                         writeLine("");
                         writeLine("[" + key + "]");
-                        $.each(val, function(subkey, subval) {
+                        $.each(val, function (subkey, subval) {
                             if (subkey !== '$type') {
                                 writeLine("    " + subkey + " -> " + subval);
                             }
